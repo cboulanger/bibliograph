@@ -1,0 +1,130 @@
+<?php
+/* ************************************************************************
+
+   qcl - the qooxdoo component library
+
+   http://qooxdoo.org/contrib/project/qcl/
+
+   Copyright:
+     2007-2014 Christian Boulanger
+
+   License:
+     LGPL: http://www.gnu.org/licenses/lgpl.html
+     EPL: http://www.eclipse.org/org/documents/epl-v10.php
+     See the LICENSE file in the project's top-level directory for details.
+
+   Authors:
+   *  Christian Boulanger (cboulanger)
+
+************************************************************************ */
+
+//-------------------------------------------------------------
+// PHP Errors
+//-------------------------------------------------------------
+
+error_reporting( E_ALL ^ E_NOTICE ^ E_STRICT ); //Leave this
+ini_set("display_errors",1);
+
+//-------------------------------------------------------------
+// If PHP complains about a missing timezone, set this
+//-------------------------------------------------------------
+
+//date_default_timezone_set("Europe/Berlin");
+
+//-------------------------------------------------------------
+// Configure paths to the various libraries used by the backend
+//-------------------------------------------------------------
+
+/**
+ * Server root path
+ * @var string
+ */
+define("SERVER_ROOT", realpath("."));
+
+/**
+ * Path to the qcl php library
+ * @var string
+ */
+define("QCL_CLASS_PATH", SERVER_ROOT . "/class/");
+
+/**
+ * Path to the application backend classes. Defaults to "./class". You
+ * shouldn't change this
+ * @var string
+ */
+define("APPLICATION_CLASS_PATH", SERVER_ROOT . "/class/");
+
+/*
+ * where should the application log to. By default
+ * the log file is "bibliograph.log" in the system temp folder.
+ */
+define( "QCL_LOG_FILE", sys_get_temp_dir() . "/bibliograph.log" );
+
+//-------------------------------------------------------------
+// Application-related configuration
+//-------------------------------------------------------------
+
+/**
+ * the path to a directory where backups are stored. By default,
+ * use the system temporary folder. If you want to store the backups
+ * somewhere else, make it world-writable.
+ */
+define("BIBLIOGRAPH_BACKUP_PATH", sys_get_temp_dir() );
+
+/**
+ * The path to the bibutils executables. Must contain a trailing slash
+ * since the exeuctable name is appended to the path. If not defined,
+ * the executables must be on the PATH
+ */
+define('BIBUTILS_PATH','/usr/local/bin/');
+
+/*
+ * The mail server. If not defined, localhost is used
+ */
+//define( "QCL_MAIL_SMTP_HOST", "localhost" );
+
+
+//-------------------------------------------------------------
+// Global settings for the JSON-RPC server
+//-------------------------------------------------------------
+
+/**
+ *  accessibility needed for server.php - "public" for development, "domain" for production use
+ */
+define( "defaultAccessibility", "domain" );
+
+/**
+ * whether the server should log the request
+ * You need this only for debugging
+ */
+define( "JsonRpcDebug", false );
+define( "JsonRpcDebugFile", SERVER_ROOT . "/log/server.log" );
+
+//-------------------------------------------------------------
+// Development & debugging (change this only if you know what you are doing)
+//-------------------------------------------------------------
+
+/*
+ * This can be used to automatically create github issues
+ */
+define("GITHUB_API_USER",null);
+define("GITHUB_API_TOKEN",null);
+
+/*
+ * log defaults. by default, no log messages
+ */
+define("APPLICATION_LOG_DEFAULT", serialize( array()));
+
+//-------------------------------------------------------------
+// DONT TOUCH
+//-------------------------------------------------------------
+
+ini_set('include_path', implode(
+  PATH_SEPARATOR,
+  array(
+    QCL_CLASS_PATH,
+    APPLICATION_CLASS_PATH,
+    ini_get("include_path")
+  )
+) );
+?>

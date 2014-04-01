@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<qxt:component
+  xmlns:qx="http://www.qxtransformer.org/qooxdoo/0.8"
+  xmlns:qxt="http://www.qxtransformer.org/extension/0.4"
+  xmlns:qcl="http://www.qooxdoo.org/contrib/qcl/trunk"
+  author="Christian Boulanger"
+  className="bibliograph.plugin.csl.FormattedViewUi"
+  extend="bibliograph.plugin.csl.FormattedView"
+  tagName="formattedView">
+  
+  <qx:composite>
+    <qx:vbox>
+    
+      <!-- view pane -->
+      <qx:embedHtml 
+        id="viewPane" qxt:scope="this"
+        selectable="true"
+        overflowY="auto"
+        padding="5"
+        qxt:flex="1">
+        <qxt:listener 
+          type="changeSelectedIds" 
+          addTo="this.getApplication()"
+          delegate="loadHtml"  />
+        <qxt:listener 
+          type="appear" 
+          delegate="_on_appear" />              
+      </qx:embedHtml>
+    
+      <!-- bottom menu -->      
+      <qx:menuBar 
+        id="menuBar" qxt:scope="this"
+        height="18">
+        
+        <qx:menuBarButton 
+          label="{js}this.tr('Style')">
+          <qx:menu id="styleMenu" qxt:scope="this"/>
+        </qx:menuBarButton>        
+        
+        <qx:menuBarButton 
+          label="{js}this.tr('All in folder')">
+          <qxt:listener type="click">
+            this.loadFolder();
+          </qxt:listener>
+        </qx:menuBarButton>        
+        
+        <qx:menuBarButton 
+          label="{js}this.tr('Print')">
+          <qxt:listener type="click">
+            this.getApplication().print(viewPane.getContentElement().getDomElement());
+          </qxt:listener>
+        </qx:menuBarButton>                
+        
+        <qx:menuBarButton 
+          label="{js}this.tr('Tabular View')">
+          <qxt:listener type="click"> 
+            this.getApplication().getWidgetById("itemView").showTabularView();
+          </qxt:listener>
+        </qx:menuBarButton>           
+          
+      </qx:menuBar>       
+              
+    </qx:vbox>               
+  </qx:composite>
+  
+</qxt:component>

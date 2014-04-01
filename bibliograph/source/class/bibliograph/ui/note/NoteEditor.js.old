@@ -1,0 +1,230 @@
+/* ************************************************************************
+
+  Bibliograph: Online Collaborative Reference Management
+
+   Copyright:
+     2007-2014 Christian Boulanger
+
+   License:
+     LGPL: http://www.gnu.org/licenses/lgpl.html
+     EPL: http://www.eclipse.org/org/documents/epl-v10.php
+     See the LICENSE file in the project's top-level directory for details.
+
+   Authors:
+     * Christian Boulanger (cboulanger)
+
+************************************************************************ */
+
+/**
+ * 
+ */
+qx.Class.define("bibliograph.ui.item.NoteEditor",
+{
+  extend : qx.ui.container.Composite,
+  
+  /*
+  *****************************************************************************
+     PROPERTIES
+  *****************************************************************************
+  */
+
+  properties :
+  {
+    /** 
+     * The datasource of the items displayed 
+     */
+    datasource :
+    {
+      check    : "String",
+      nullable : true,
+      event    : "changeDatasource"
+    },
+  
+    /** 
+     * The id of the currently displayed note.
+     */
+    noteId :
+    {
+      check    : "Integer",
+      nullable : true,
+      event    : "changeNoteId",
+      apply    : "_applyNoteId"
+    },
+    
+    /**
+     * Data of the child notes of the current note
+     */
+    childNoteData :
+    {
+      check    : "Array",
+      nullable : true,
+      event    : "changeChildNoteData",
+      apply    : "_applyChildNoteData"
+    }
+ 
+  },
+  
+  /*
+  *****************************************************************************
+      CONSTRUCTOR
+  *****************************************************************************
+  */
+
+  construct : function()
+  {  
+    this.base(arguments);
+  },
+  
+  /*
+  *****************************************************************************
+      MEMBERS
+  *****************************************************************************
+  */
+
+  members :
+  { 
+    /* 
+    ---------------------------------------------------------------------------
+       WIDGETS
+    ---------------------------------------------------------------------------
+    */
+    view : null,
+    editor : null,
+    store : null,
+    
+    /* 
+    ---------------------------------------------------------------------------
+       PRIVATE MEMBERS
+    ---------------------------------------------------------------------------
+    */       
+
+    
+    /* 
+    ---------------------------------------------------------------------------
+       APPLY METHODS
+    ---------------------------------------------------------------------------
+    */
+    
+    /**
+     * Applies the note id
+     */
+    _applyNoteId : function( value, old )
+    {
+      if( value )
+      {
+        this.editor.setValue("Loading...");
+        this.store.load('getData',[this.getDatasource(),value]);
+      }
+    },
+    
+    _applyChildNoteData : function( value, old )
+    {
+      if ( value && value.length )
+      {
+        var html = "";
+        if ( this.view.getHtml() )
+        {
+          html += "<hr/>";
+        }
+        html += "<ul>";
+        value.forEach( function( childData ){
+          html += "<li><a href='#' onclick='javascript:"; 
+          html += "qx.core.Init.getApplication().setNoteId(" + childData.getId() + ");";
+          html += "return false;'>";
+          html += childData.getTitle();
+          html += "</li>";
+        }, this );
+        html += "</ul>";
+        this.view.setHtml(this.view.getHtml() + html);
+      }
+    },
+    
+    /* 
+    ---------------------------------------------------------------------------
+       EVENT HANDLERS
+    ---------------------------------------------------------------------------
+    */    
+
+    /**
+     * Called when the user double-clicks on the view. Shows the
+     * editor
+     * @return {void}
+     */
+    _on_dblclick : function()
+    {
+      this.view.setVisibility("excluded");
+      this.editor.setVisibility("visible");      
+    },
+    
+    /**
+     * Called when the user clicks on the save button.
+     * @return {void}
+     */
+    _on_save : function( )
+    {
+    try{
+      var noteId = this.getApplication().getNoteId();
+      
+      /*
+       * don't save if no note id or if the editor content hasn't changed
+       */
+      if ( ! noteId  
+          || this.view.getHtml() == this.editor.getValue() )
+      {
+        return;
+      }
+      
+      var datasource= this.getDatasource(); 
+      this.store.execute(
+          'saveData',
+          [datasource,noteId,{ 'text' : this.editor.getValue() }], 
+          function(data)
+          {
+            try{
+            /*
+             * update transaction id so that note tree
+             * doesn't get out of sync
+             */
+            if( data && data.transactionId ) {
+              this.getApplication()
+                .getWidgetById('mainNoteTree')
+                .setTransactionId(data.transactionId);
+              this.view.setHtml( this.editor.getValue() );
+              this._applyChildNoteData( this.getChildNoteData() );
+            }
+            }catch(e){console.warn(e)};
+          },this
+       );
+      }catch(e){console.warn(e)};    
+    },
+    
+    /**
+     * Called when the user clicks on the "exit" button.
+     * Hides the editor and shows the view.
+     * @return
+     */
+    _on_exit : function()
+    {
+      this.editor.setVisibility("excluded");
+      this._on_save();
+      this.view.setVisibility("visible");      
+    }
+    
+
+
+  
+    /* 
+    ---------------------------------------------------------------------------
+       INTERNAL METHODS
+    ---------------------------------------------------------------------------
+    */ 
+    
+    /* 
+    ---------------------------------------------------------------------------
+       API METHODS
+    ---------------------------------------------------------------------------
+    */          
+    
+
+  }
+});

@@ -1,0 +1,29 @@
+<?xml version="1.0" standalone="yes"?>
+<root>
+    <model name="qcl_access_model_User">
+        <data>
+            <record namedId="admin">
+                <name>Administrator</name>
+                <password>admin</password>
+                <active>1</active>
+            </record>
+            <record namedId="manager">
+                <name>Manager</name>
+                <password>manager</password>
+                <active>1</active>
+            </record>
+            <record namedId="user">
+                <name>User</name>
+                <password>user</password>
+                <active>1</active>
+            </record>
+        </data>
+        <links>
+            <relation name="User_Role">
+                <link namedId="admin">admin,manager,user</link>
+                <link namedId="manager">manager,user</link>
+                <link namedId="user">user</link>
+            </relation>
+        </links>
+    </model>
+</root>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<explain>
+  <serverInfo protocol="Z39.50">
+    <host>Z3950cat.bl.uk</host>
+    <port>9909</port>
+    <database>BLAC</database>
+  </serverInfo>
+    <databaseInfo>
+      <title primary="true" lang="en">British Library</title>
+      <author>British Library</author>
+      <contact>John.Lowery@bl.uk</contact>
+   </databaseInfo>
+   <metaInfo>
+     <dateModified>2005-02-28T12:36:09ZCET</dateModified>
+   </metaInfo>
+    <indexInfo>
+      <index search="true">
+        <title primary="true" lang="en">Personal name</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">1</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Title</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">4</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Title series</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">5</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">ISBN</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">7</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">ISSN</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">8</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Local number</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">12</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Dewey classificat</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">13</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Subject heading</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">21</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">LC subject heading</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">27</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Date</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">30</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Date of publication</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">31</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Place publication</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">59</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Author</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">1003</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Author-name personal</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">1004</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Any</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">1016</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Server-choice</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">1017</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Publisher</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">1018</attr>
+        </map>
+      </index>
+    </indexInfo>
+   <recordInfo>
+     <recordSyntax name="SUTRS">
+       <elementSet name="F"></elementSet>
+     </recordSyntax>
+   </recordInfo>
+</explain>

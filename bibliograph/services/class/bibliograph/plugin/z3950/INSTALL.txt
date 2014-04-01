@@ -1,0 +1,9 @@
+Bibliograph Z39.50 plugin
+=========================
+
+This plugin has the following dependencies:
+
+- the PHP XSL extension
+- the PHP YAZ extension
+- the bibutils package  (http://www.scripps.edu/~cdputnam/software/bibutils)
+

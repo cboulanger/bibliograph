@@ -1,0 +1,70 @@
+<?xml version="1.0" standalone="yes"?>
+<root>
+  <model name="qcl_access_model_Permission">
+    <data>
+      <record namedId="*">
+        <description>Can do everything</description>
+      </record>
+      <record namedId="access.manage">
+        <description>Manage users, roles, permissions, and datasources</description>
+      </record>
+        <record namedId="application.reportBug"/>
+        <record namedId="backup.create"/>
+        <record namedId="backup.restore"/>
+        <record namedId="config.default.edit"/>
+        <record namedId="config.key.add"/>
+        <record namedId="config.key.edit"/>
+        <record namedId="config.value.edit"/>
+        <record namedId="folder.add"/>
+        <record namedId="folder.delete"/>
+        <record namedId="folder.edit"/>
+        <record namedId="folder.move"/>
+        <record namedId="folder.remove"/>
+        <record namedId="plugin.manage"/>
+        <record namedId="reference.add"/>
+        <record namedId="reference.batchedit"/>
+        <record namedId="reference.delete"/>
+        <record namedId="reference.edit"/>
+        <record namedId="reference.export"/>
+        <record namedId="reference.import"/>
+        <record namedId="reference.move"/>
+        <record namedId="reference.remove"/>
+        <record namedId="reference.search"/>
+        <record namedId="reference.view"/>
+        <record namedId="system.manage"/>
+        <record namedId="system.menu.view"/>
+        <record namedId="trash.empty"/>
+    </data>
+    <links>
+      <relation name="Permission_Role">
+          <link namedId="*">admin</link>
+          <link namedId="access.manage">admin</link>
+          <link namedId="application.reportBug">user</link>
+          <link namedId="backup.create">admin,manager</link>
+          <link namedId="backup.restore">admin</link>
+          <link namedId="config.default.edit">admin</link>
+          <link namedId="config.key.add">admin</link>
+          <link namedId="config.key.edit">admin</link>
+          <link namedId="config.value.edit">admin,anonymous,manager,user</link>
+          <link namedId="folder.add">user</link>
+          <link namedId="folder.delete">manager</link>
+          <link namedId="folder.edit">manager</link>
+          <link namedId="folder.move">user</link>
+          <link namedId="folder.remove">user</link>
+          <link namedId="plugin.manage">admin</link>
+          <link namedId="reference.add">user</link>
+          <link namedId="reference.batchedit">manager</link>
+          <link namedId="reference.delete">user</link>
+          <link namedId="reference.edit">user</link>
+          <link namedId="reference.export">anonymous,user</link>
+          <link namedId="reference.import">user</link>
+          <link namedId="reference.move">user</link>
+          <link namedId="reference.remove">user</link>
+          <link namedId="reference.search">anonymous,user</link>
+          <link namedId="reference.view">anonymous,user</link>
+          <link namedId="system.menu.view">manager</link>
+          <link namedId="trash.empty">manager</link>
+      </relation>
+    </links>
+  </model>
+</root>

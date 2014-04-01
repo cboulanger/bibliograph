@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="utf-8"?>
+<qxt:component
+  xmlns:qx="http://www.qxtransformer.org/qooxdoo/0.8"
+  xmlns:qxt="http://www.qxtransformer.org/extension/0.4"
+  xmlns:qcl="http://www.qooxdoo.org/contrib/qcl/trunk"
+  author="Christian Boulanger"
+  className="bibliograph.ui.window.AccessControlTool"
+  tagName="accessControlTool"> 
+  
+  <!-- A window with the available datasources -->
+  
+  <qx:window     
+    visibility="visible"
+    width="600">
+    <qx:vbox>
+    
+      <qxt:comment><![CDATA[
+===== Drag & Drop =====
+
+The next feature to implement is the possibility to drag elements from the right list into the tree. Please read the [[http://qooxdoo.org/documentation/1.0/ui_dragdrop|entry]] in the qooxdoo manual on D&D first. There are at least two bugs left in the qooxdoo framework concerning D&D in trees ( [[http://bugzilla.qooxdoo.org/show_bug.cgi?id=3297|here]] and [[http://bugzilla.qooxdoo.org/show_bug.cgi?id=3298|here]]), so we keep it simple. 
+
+First, we configure the tree to take drop events:
+
+<code xml>
+              <!-- the tree widget -->       
+              <qx:tree 
+                id="elementTree"
+                qxt:flex="1" 
+                droppable="true">
+                
+                <!-- the tree controller -->
+                <qcl:controller
+                  id="treeController" 
+                  iconPath="icon"
+                  store="treeStore"
+                  delegate="{ configureItem : function(item) {
+                    item.setOpen(true);
+                  }}" />
+                  
+                <!-- drag & drop listeners --> 
+
+                <qxt:listener type="dragover">
+                  var target = this.getRealTarget( e.getOriginalTarget() );
+                  if( target  ) 
+                  {
+                    // allow only dropping in folders with the same type
+                    var targetType  = target.getModel().getType();
+                    var sourceType  = e.getRelatedTarget().getSelection()[0].getModel().getType();
+                    if ( targetType != sourceType ) {
+                      e.preventDefault();
+                    }    
+                  }       
+                </qxt:listener>
+                
+                <qxt:listener type="drop">
+                  var target = this.getRealTarget( e.getOriginalTarget() );
+                  if( target  ) 
+                  {
+                    var targetType  = target.getModel().getType();
+                    var sourceType = e.getData("element")[0].getModel().getType();
+                    if ( sourceType != targetType ){
+                      alert("You cannot drop a "+sourceType+" on a "+targetType);
+                      return;
+                    }
+                    var namedIds=[];
+                    e.getData("element").forEach( function(element){
+                      namedIds.push( element.getModel().getValue() );
+                    })
+                    treeStore.execute("addElement",[ targetType, sourceType, namedIds ], function(){
+                      treeStore.reload();
+                    });
+                  }       
+                </qxt:listener>
+
+                
+              </qx:tree>
+
+<!-- ... -->
+
+      <!-- small helper script, put this at the end of the code  -->      
+      <qxt:script>
+        this.getRealTarget = function(target)
+        {
+          do {
+            switch ( target.classname )
+            {
+              case "qx.ui.tree.TreeFolder":
+              case "qx.ui.tree.TreeFile":
+                return target;
+              default:
+                target = target.getLayoutParent();
+            }
+          } while ( target );
+          return null;      
+        }
+      </qxt:script>
+
+    </qx:vbox>    
+  </qx:window>
+</qxt:component>
+
+</code>
+
+In this tutorial we're putting the event handling code into the xml for demonstratiop and convenience sake. Normally, you would put this application logic into the "code behind" class and use the "delegate" attribute of the qxt:listener tag to link to it. The helper script is necessary because e.getOriginalTarget() doesn't always return the tree node widget, but one of its child widgets. 
+
+The "dragover" event handler tries to ensure that only elements can be dropped that match the type of tree node. This doesn't always work, so we have to check again in the "drop" event handler. There, a server request is dispatched to add the element to the tree and then the tree is reloaded. 
+
+In a second step, the right list must be configured for D&D:
+
+<code xml>
+             <!-- right list containing the elements -->
+              <qx:list qxt:flex="1" 
+                id="rightList"
+                selectionMode="multi"
+                draggable="true">
+                
+                <!-- list controller -->
+                <qcl:controller
+                  id="rightListController" 
+                  store="rightListStore" />
+                  
+                <!-- drag listeners -->
+                <qxt:listener type="dragstart">
+                  e.addType("element");
+                  e.addAction("copy");
+                </qxt:listener>
+                <qxt:listener type="drag">
+                  var treeFolder = this.getRealTarget( e.getOriginalTarget() );
+                  var tree = e.getRelatedTarget();
+                  if ( tree &amp;&amp; treeFolder ) {
+                    tree.resetSelection();
+                    tree.addToSelection( treeFolder );
+                  }
+                </qxt:listener>
+                <qxt:listener type="droprequest">
+                  e.addData("element",rightList.getSelection());
+                </qxt:listener>                     
+
+              </qx:list>   
+</code>
+
+The only interesting part here is that the "drag" event handler selects the nodes that are hovered with the drag cursor.
+
+When you transform, generate, and load the app, you should have a working drag & drop from the right list to the tree.
+]]>
+      </qxt:comment>    
+    
+      <!-- store for the select boxes, automatically loaded-->
+      <qcl:jsonRpcStore 
+        id="selectBoxStore"
+        serviceName="bibliograph.model"
+        autoLoadMethod="getAccessElementTypes"
+        autoLoadParams="true"/>
+      
+      <!-- store for the left list, waits until autoLoadParams are set -->
+      <qcl:jsonRpcStore 
+        id="leftListStore"
+        serviceName="bibliograph.model"
+        autoLoadMethod="getAccessElements"/>
+        
+      <!-- store for the right list, waits until autoLoadParams are set -->
+      <qcl:jsonRpcStore 
+        id="rightListStore"
+        serviceName="bibliograph.model"
+        autoLoadMethod="getAccessElements"/>        
+  
+      <!-- store for the tree-->
+      <qcl:jsonRpcStore 
+        id="treeStore"
+        serviceName="bibliograph.model"
+        autoLoadMethod="getAccessElementTree"/>
+
+      <!-- the main panel -->
+      <qx:composite  allowStretchY="true">     
+        <qx:hbox spacing="10">
+        
+          <!-- first row: the edited element -->
+          <qx:composite qxt:flex="1">
+            <qx:vbox spacing="10">
+    
+              <!-- left select box containing the element type -->
+              <qx:selectBox>
+                <qcl:controller
+                  id="leftSelectBoxController" 
+                  store="selectBoxStore" />
+                <qxt:bind 
+                  propertyChain="selection"
+                  target="leftListStore"
+                  targetPropertyChain="autoLoadParams" 
+                  converter="function(sel){
+                    return sel.length ? sel[0].getModel().getValue() : null
+                  }"/>
+              </qx:selectBox>
+                      
+              <!-- left list containing the elements -->
+              <qx:list qxt:flex="1" >
+                <qcl:controller
+                  id="leftListController" 
+                  store="leftListStore" />
+                <qxt:bind 
+                  propertyChain="selection"
+                  target="treeStore"
+                  targetPropertyChain="autoLoadParams" 
+                  converter="function(sel){
+                    return sel.length ? sel[0].getModel().getParams() : null
+                  }"/>             
+              </qx:list>       
+              
+              <!-- buttons -->
+              <qx:composite>
+                <qx:hbox spacing="10">
+                  
+                  <qx:button qxt:flex="1" label="Add" />
+                  <qx:button qxt:flex="1" label="Delete" />
+                  <qx:button qxt:flex="1" label="Edit" />
+                               
+                </qx:hbox>
+              </qx:composite>
+              
+            </qx:vbox>
+          </qx:composite>
+                    
+          <!-- second row: the element tree -->
+          <qx:composite qxt:flex="1">
+            <qx:vbox spacing="10">
+              
+              <!-- the tree widget -->       
+              <qx:tree 
+                id="elementTree"
+                qxt:flex="1" 
+                droppable="true">
+                
+                <!-- the tree controller -->
+                <qcl:controller
+                  id="treeController" 
+                  iconPath="icon"
+                  store="treeStore"
+                  delegate="{ configureItem : function(item) {
+                    item.setOpen(true);
+                  }}" />
+                  
+                <!-- drag & drop listeners --> 
+
+                <qxt:listener type="dragover">
+                  var target = this.getRealTarget( e.getOriginalTarget() );
+                  if( target  ) 
+                  {
+                    // allow only dropping in folders with the same type
+                    var targetType  = target.getModel().getType();
+                    var sourceType  = e.getRelatedTarget().getSelection()[0].getModel().getType();
+                    if ( targetType != sourceType ) {
+                      e.preventDefault();
+                    }    
+                  }       
+                </qxt:listener>
+                
+                <qxt:listener type="drop">
+                  var target = this.getRealTarget( e.getOriginalTarget() );
+                  if( target  ) 
+                  {
+                    var targetType  = target.getModel().getType();
+                    var sourceType = e.getData("element")[0].getModel().getType();
+                    if ( sourceType != targetType ){
+                      dialog.alert("You cannot drop a "+sourceType+" on a "+targetType);
+                      return;
+                    }
+                    var namedIds=[];
+                    e.getData("element").forEach( function(element){
+                      namedIds.push( element.getModel().getValue() );
+                    })
+                    treeStore.execute("addElement",[ targetType, sourceType, namedIds ], function(){
+                      treeStore.reload();
+                    });
+                  }       
+                </qxt:listener>
+
+                
+              </qx:tree>
+
+              <!-- buttons -->
+              <qx:composite>
+                <qx:hbox spacing="10">
+                  
+                  <qx:button qxt:flex="1" label="Add" />
+                  <qx:button qxt:flex="1" label="Delete" />
+                  <qx:button qxt:flex="1" label="Edit" />
+                               
+                </qx:hbox>
+              </qx:composite>              
+              
+            </qx:vbox>
+          </qx:composite>
+          
+          <!-- third row: elements that can be added in the element tree -->
+          <qx:composite qxt:flex="1">
+            <qx:vbox spacing="10">
+    
+              <!-- right select box containing the element type -->
+              <qx:selectBox>
+                <qcl:controller
+                  id="rightSelectBoxController" 
+                  store="selectBoxStore" />
+                <qxt:bind 
+                  propertyChain="selection"
+                  target="rightListStore"
+                  targetPropertyChain="autoLoadParams" 
+                  converter="function(sel){
+                    return sel.length ? sel[0].getModel().getValue() : null
+                  }"/>                  
+              </qx:selectBox>
+                      
+              <!-- right list containing the elements -->
+              <qx:list qxt:flex="1" 
+                id="rightList"
+                selectionMode="multi"
+                draggable="true">
+                
+                <!-- list controller -->
+                <qcl:controller
+                  id="rightListController" 
+                  store="rightListStore" />
+                  
+                <!-- drag listeners -->
+                <qxt:listener type="dragstart">
+                  e.addType("element");
+                  e.addAction("copy");
+                </qxt:listener>
+                <qxt:listener type="drag">
+                  var treeFolder = this.getRealTarget( e.getOriginalTarget() );
+                  var tree = e.getRelatedTarget();
+                  if ( tree &amp;&amp; treeFolder ) {
+                    tree.resetSelection();
+                    tree.addToSelection( treeFolder );
+                  }
+                </qxt:listener>
+                <qxt:listener type="droprequest">
+                  e.addData("element",rightList.getSelection());
+                </qxt:listener>                     
+
+              </qx:list>    
+              
+              <!-- buttons -->
+              <qx:composite>
+                <qx:hbox spacing="10">
+                  
+                  <qx:spacer qxt:flex="2" />
+                  <qx:button qxt:flex="1" label="Close" />
+                               
+                </qx:hbox>
+              </qx:composite>                
+              
+            </qx:vbox>
+          </qx:composite>
+        
+        </qx:hbox>
+      </qx:composite>
+
+      <!-- small helper script -->      
+      <qxt:script>
+        this.getRealTarget = function(target)
+        {
+          do {
+            switch ( target.classname )
+            {
+              case "qx.ui.tree.TreeFolder":
+              case "qx.ui.tree.TreeFile":
+                return target;
+              default:
+                target = target.getLayoutParent();
+            }
+          } while ( target );
+          return null;      
+        }
+      </qxt:script>
+      
+
+    </qx:vbox>    
+  </qx:window>
+</qxt:component>

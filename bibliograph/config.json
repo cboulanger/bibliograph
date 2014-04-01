@@ -1,0 +1,122 @@
+{
+  "name"    : "bibliograph",
+
+  "include" :
+  [
+    {
+      "path" : "${QOOXDOO_PATH}/tool/data/config/application.json"
+    }
+  ],
+
+  "export" :
+  [
+    "api",
+    "build",
+    "clean",
+    "distclean",
+    "fix",
+    "inspector",
+    "lint",
+    "migration",
+    "pretty",
+    "profiling",
+    "source",
+    "source-hybrid",
+    "test",
+    "test-source",
+    "translation"
+  ],
+
+  "let" :
+  {
+
+    // qooxdoo
+    "APPLICATION"    : "bibliograph", 
+    "QOOXDOO_PATH"   : "../qooxdoo/2.1",
+    "QXTHEME"        : "bibliograph.theme.Theme",
+    "LOCALES"        : [ "en","de" ],
+    "ROOT"           : ".",
+    "OPTIMIZE"       : ["variables", "basecalls", "strings"],
+
+    // API Viewer
+    "API_INCLUDE" : [ "qx.*","${APPLICATION}.*", "qcl.*" ], 
+    "API_EXCLUDE" : ["qx.legacy.*","qx.test.*","htmleditor.*"]
+
+  },
+  
+  "jobs" :
+  {
+      
+    "libraries" : 
+    {
+      "library" :
+      [
+       // qcl-js
+       {
+         "manifest" : "contrib/qcl/0.2/Manifest.json"
+       },
+       // Dialogs 
+       {
+         "manifest" : "contrib/Dialog/trunk/Manifest.json"
+       },       
+       // Persist
+       {
+         "manifest" : "contrib/Persist/trunk/Manifest.json"
+       }, 
+       // VirtualData
+       {
+         "manifest" : "contrib/VirtualData/trunk/Manifest.json"
+       },
+       // Upload widget
+       {
+         "manifest" : "contrib/UploadWidget/Manifest.json"
+       }                              
+      ]
+    },
+    
+    // load third-party scripts before loading qooxdoo
+    "common":
+    {
+      "add-script" :
+      [
+        // persist library: http://pablotron.org/software/persist-js/
+        // you need to run ./generate build at least once before using the source version
+        { "uri" : "../build/resource/persist/persist-all-min.js" }
+      ]
+    },
+    
+    // source generation only
+    "source-script":
+    {
+      // download contrib code to location that is accessible to web server in source version
+      "cache" :
+      {
+        "downloads" : "contrib"
+      },
+      
+      // copy plugin development files
+      "copy-files" :
+      {
+        "files"     : [ 
+          "csl", 
+          "z3950" 
+        ],
+        "source" : "source/class/bibliograph/plugin",
+        "target" : "source/resource/bibliograph/plugin"
+      }
+    },
+    
+    // build generation only
+    "build" :
+    {
+      // don't optimize privates
+      "compile-options" :
+      { 
+        "code" :
+        {
+          "=optimize" : ["variables", "basecalls", "strings"]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,5 @@
+.idea
+qooxdoo
+bibliograph/build
+bibliograph/services/config/bibliograph.ini.php
+bibliograph/services/config/server.conf.php

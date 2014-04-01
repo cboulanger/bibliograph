@@ -1,0 +1,33 @@
+{
+  "info" : 
+  {
+    "name" : "bibliograph",
+
+    "summary" : "Bibliograph: Collaborative Online Reference Management",
+    "description" : "todo",
+    
+    "homepage" : "http://www.bibligraph.org/",
+
+    "license" : "SomeLicense",
+    "authors" : 
+    [
+      {
+        "name" : "Christian Boulanger (cboulanger)",
+        "email" : "c.boulanger@qxtransformer.org"
+      }
+    ],
+
+    "version" : "2.0pre",
+    "qooxdoo-versions": ["1.5"]
+  },
+  
+  "provides" : 
+  {
+    "namespace"   : "bibliograph",
+    "encoding"    : "utf-8",
+    "class"       : "source/class",
+    "resource"    : "source/resource",
+    "translation" : "source/translation",
+    "type"        : "application"
+  }
+}

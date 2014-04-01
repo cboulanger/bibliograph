@@ -1,0 +1,1020 @@
+/* ************************************************************************
+
+  Bibliograph: Online Collaborative Reference Management
+
+   Copyright:
+     2007-2014 Christian Boulanger
+
+   License:
+     LGPL: http://www.gnu.org/licenses/lgpl.html
+     EPL: http://www.eclipse.org/org/documents/epl-v10.php
+     See the LICENSE file in the project's top-level directory for details.
+
+   Authors:
+     * Christian Boulanger (cboulanger)
+
+************************************************************************ */
+
+/* ************************************************************************
+
+#asset(bibliograph/*)
+#require(bibliograph.theme.Assets);
+#require(qcl.ui.dialog.Dialog)
+#require(qx.ui.form.RadioGroup)
+#require(qx.ui.menu.RadioButton)
+
+************************************************************************ */
+
+/**
+ * The main application class
+ * @todo rename global widget ids
+ * @todo rewrite using core-sandbox-module pattern
+ */
+qx.Class.define("bibliograph.Main",
+{
+  extend : qx.application.Standalone,
+  include : [qcl.application.MAppManagerProvider, qcl.ui.MLoadingPopup],
+
+  /*
+  *****************************************************************************
+     PROPERTIES
+  *****************************************************************************
+  */
+  properties :
+  {
+    /**
+     * The name of the current datasource
+     */
+    datasource :
+    {
+      check : "String",
+      nullable : true,
+      apply : "_applyDatasource",
+      event : "changeDatasource"
+    },
+
+    /**
+     * The model of the current datasource
+     * @type
+     */
+    datasourceModel :
+    {
+      check : "qx.core.Object",
+      nullable : true,
+      event : "changeDatasourceModel"
+    },
+
+    /**
+     * The name of the datasource as it should appear in the UI
+     * @todo remove, use datasourceModel instead
+     */
+    datasourceLabel :
+    {
+      check : "String",
+      nullable : true,
+      event : "changeDatasourceLabel",
+      apply : "_applyDatasourceLabel"
+    },
+
+    /**
+     * The id of the currently displayed model record
+     */
+    modelId :
+    {
+      check : "Integer",
+      nullable : true,
+      apply : "_applyModelId",
+      event : "changeModelId"
+    },
+
+    /**
+     * The type of the currently displayed model record
+     */
+    modelType :
+    {
+      check : "String",
+      nullable : true,
+      apply : "_applyModelType",
+      event : "changeModelType"
+    },
+
+    /**
+     * The current folder id
+     */
+    folderId :
+    {
+      check : "Integer",
+      nullable : true,
+      apply : "_applyFolderId",
+      event : "changeFolderId"
+    },
+
+    /**
+     * The current query
+     */
+    query :
+    {
+      check : "String",
+      nullable : true,
+      apply : "_applyQuery",
+      event : "changeQuery"
+    },
+
+    /**
+     * The currently active item view
+     */
+    itemView :
+    {
+      check : "String",
+      nullable : true,
+      event : "changeItemView",
+      apply : "_applyItemView"
+    },
+
+    /**
+     * The ids of the currently selected rows
+     * @type Array|String|null
+     */
+    selectedIds :
+    {
+      check : "Array",
+      nullable : false,
+      event : "changeSelectedIds",
+      apply : "_applySelectedIds"
+    },
+
+    /**
+     * Target for inserting something from an external source into a
+     * TextField or TextArea widget
+     */
+    insertTarget :
+    {
+      check : "qx.ui.form.AbstractField",
+      nullable : true
+    }
+  },
+
+  /*
+  *****************************************************************************
+     MEMBERS
+  *****************************************************************************
+  */
+  members :
+  {
+    /*
+    ---------------------------------------------------------------------------
+       AUTHOR AND VERSION
+    ---------------------------------------------------------------------------
+    */
+    getVersion : function() {
+      return "v2.0 (31.03.2014)";
+    },
+    getCopyright : function() {
+      return "2003-2014 (c) Christian Boulanger";
+    },
+
+    /*
+    ---------------------------------------------------------------------------
+       PRIVATE MEMBERS
+    ---------------------------------------------------------------------------
+    */
+    __persistentStore : null,
+    __datasourceStore : null,
+    __itemView : null,
+    __selectedIds : null,
+
+    /*
+    ---------------------------------------------------------------------------
+       MAIN METHOD
+    ---------------------------------------------------------------------------
+    */
+
+    /**
+     * Initialize the application
+     *
+     * @return {void}
+     */
+    main : function()
+    {
+      /*
+       * logging
+       */
+      if ((qx.core.Environment.get("qx.debug"))) {
+        qx.log.appender.Native;
+      }
+
+      /*
+       * call parent class' main method
+       */
+      this.base(arguments);
+
+      /*
+       * Application id and name
+       */
+      this.setApplicationId("bibliograph");
+      this.setApplicationName("Bibliograph Online Bibliographic Data Manager");
+
+      /*
+       * creat popup and show splash screen
+       */
+      this.createPopup(
+      {
+        icon : "bibliograph/icon/bibliograph-logo.png",
+        iconPosition : "top",
+        width : 550,
+        height : 170
+      });
+      this.showPopup(this.getSplashMessage(), null);
+
+      /*
+       * define the service names and methods
+       * @todo remove this
+       */
+      this.defineServices();
+
+      /**
+       * initialize the managers
+       */
+      this.initializeManagers();
+
+      /*
+       * rpc
+       */
+      this.getRpcManager().setServerUrl("../services/server.php");
+      this.getRpcManager().getRpcObject().setTimeout(180000);  //3 Minutes
+
+      /*
+       * save some intial application states
+       * which would otherwise be overwritten
+       */
+      this.__itemView = this.getStateManager().getState("itemView");
+      this.__selectedIds = this.getStateManager().getState("selectedIds");
+      this.__folderId = this.getStateManager().getState("folderId");
+      this.__query = this.getStateManager().getState("query");
+      this.__modelId = this.getStateManager().getState("modelId");
+
+      /*
+       * Setup and start authentication and configuration
+       */
+      this.getAccessManager().init();
+      this.getConfigManager().init();
+      this.getAccessManager().setService("bibliograph.access");
+      this.getConfigManager().setService("bibliograph.config");
+
+      /*
+       *  allow incoming server dialogs
+       */
+      qcl.ui.dialog.Dialog.allowServerDialogs(true);
+
+      /*
+       * Setup event handler called when the datasource store is
+       * reloaded
+       * FIXME rename to datasourceListStore
+       */
+      this.getDatasourceStore().addListener("loaded", this._on_datasourceStore_loaded, this);
+
+      /*
+       * bind application title to datasource title
+       * FIXME move to datasource label itself
+       */
+      this.bind("datasourceModel.title", this, "datasourceLabel");
+
+      /*
+       * run setup, then authenticate
+       */
+      this.info("Setting up application...");
+      this.showPopup(this.getSplashMessage(this.tr("Setting up application...")));
+      this.getRpcManager().execute("bibliograph.setup", "setup", [], this._connect, this);
+    },
+
+    /**
+     * Connect to the server: authenticate and laod configuration
+     */
+    _connect : function()
+    {
+      this.info("Authenticating ...");
+
+      /*
+       * (re-) authenticate
+       */
+      this.showPopup(this.getSplashMessage(this.tr("Connecting with server...")));
+      this.getAccessManager().connect(function()
+      {
+        /*
+         * notify subscribers
+         */
+        qx.event.message.Bus.dispatch(new qx.event.message.Message("connected"));
+
+        /*
+         * when done, load config values and continue with loading datasources
+         */
+        this.showPopup(this.getSplashMessage(this.tr("Loading configuration ...")));
+        this.getConfigManager().load(this._loadDatasources, this);
+      }, this);
+    },
+
+    /**
+     * Load datasource data
+     */
+    _loadDatasources : function()
+    {
+      this.info("Loading datasources ...");
+
+      /*
+       * now load datasources and update app state to trigger
+       * ui changes. Afterwards, continue with state intialization
+       */
+      this.showPopup(this.getSplashMessage(this.tr("Loading datasources ...")));
+      this.getDatasourceStore().load("getDatasourceListData", [], this._initializeState, this);
+    },
+
+    /**
+     * Initializes the application state
+     */
+    _initializeState : function()
+    {
+      this.info("Initializing application state ...");
+
+      /*
+       * initialize application state
+       */
+      this.getStateManager().setHistorySupport(true);
+      this.getStateManager().updateState();
+      this._loadPlugins();
+    },
+
+    /**
+     * Loads the plugins
+     */
+    _loadPlugins : function()
+    {
+      this.info("Loading plugins...");
+      this.showPopup(this.getSplashMessage(this.tr("Loading plugins ...")));
+      this.getPluginManager().addListener("loadingPlugin", function(e)
+      {
+        var data = e.getData();
+        this.showPopup(this.getSplashMessage(this.tr("Loaded plugin %1 of %2 : %3 ...", data.count, data.sum, data.name)));
+      }, this);
+
+      /*
+       * load plugin code
+       */
+      this.getPluginManager().setPreventCache(true);
+      this.getPluginManager().loadPlugins(this._finalize, this);
+    },
+
+    /**
+     * Finalizes the application
+     */
+    _finalize : function()
+    {
+      this.info("Finalizing setup...");
+
+      /*
+       * reset popup to remove splash screen
+       */
+      this.hidePopup();
+      this.createPopup();
+
+      /*
+       * initialize message subscribers
+       */
+      this.initSubscribers();
+
+      /*
+       * restore application states
+       * TODO: why is that necessary? is that a workaround? don't remember
+       */
+      if (this.__itemView) {
+        this.setItemView(this.__itemView);
+      }
+      if (this.__selectedIds)
+      {
+        var selectedIds = [];
+        this.__selectedIds.split(",").forEach(function(id)
+        {
+          id = parseInt(id);
+          if (id && !isNaN(id))selectedIds.push(id);
+
+        }, this);
+        this.setSelectedIds(selectedIds);
+      }
+      if (this.__folderId && !isNaN(parseInt(this.__folderId))) {
+        this.setFolderId(parseInt(this.__folderId))
+      } else if (this.__query) {
+        this.setQuery(this.__query);
+      }
+
+      if (this.__modelId && !isNaN(parseInt(this.__modelId))) {
+        this.setModelId(parseInt(this.__modelId))
+      }
+
+      /*
+       * polling service to transport messages and ping server to keep
+       * session alive and to clean up dead sessions on the server.
+       * @todo unhardcode polling interval
+       */
+      setInterval(qx.lang.Function.bind(this._pollingService, this), 10000);
+    },
+
+    /**
+     * Polling service
+     * @private
+     */
+    _pollingService : function() {
+      this.getRpcManager().execute("bibliograph.access", "getMessages", [], null, this);
+    },
+
+    /**
+     * Returns the message displayed below the splash screen icon.
+     * By default, return the version and copyright text.
+     * @param text {String} Optional text appended to the splash message
+     * @return {String}
+     */
+    getSplashMessage : function(text) {
+      return this.getVersion() + "<br />" + this.getCopyright() + "<br />" + (text || "");
+    },
+
+    /**
+     * TODOC
+     *
+     * @return {void}
+     * @todo use statics instead
+     */
+    defineServices : function()
+    {
+      bibliograph.rpcservice =
+      {
+        'MODEL' : "bibliograph.model",
+        'REFERENCE' : "bibliograph.reference",
+        'FOLDER' : "bibliograph.folder"
+      };
+      bibliograph.rpcmethod =
+      {
+        'GET_DATA' : "getData",
+        'SAVE_DATA' : "saveData"
+      };
+    },
+
+    /**
+     * TODOC
+     *
+     * @return {void}
+     */
+    initSubscribers : function()
+    {
+      var bus = qx.event.message.Bus;
+
+      /*
+       * server message to set model type and id
+       */
+      bus.subscribe("bibliograph.setModel", function(e)
+      {
+        var data = e.getData();
+        if (data.datasource == this.getDatasource())
+        {
+          this.setModelType(data.modelType);
+          this.setModelId(data.modelId);
+        }
+      }, this);
+
+      // @todo rename?
+      bus.subscribe("openBrowserWindow", function(e)
+      {
+        var data = e.getData();
+        window.open(data.url);
+      }, this);
+      bus.subscribe("backup.restored", function(e)
+      {
+        var data = e.getData();
+        if (data.datasource !== this.getDatasource())return;
+
+        var msg = this.tr("The datasource has just been restored to a previous state and will be reloaded");
+        dialog.alert(msg, function()
+        {
+          this.getWidgetById("mainFolderTree").reload();
+          this.getWidgetById("mainListView").reload();
+          this.setModelId(0);
+        }, this);
+      }, this);
+    },
+
+    /*
+    ---------------------------------------------------------------------------
+       GETTERS
+    ---------------------------------------------------------------------------
+    */
+
+    /**
+     * Return the jsonrpc store for the datasource list
+     *
+     * @return {var} qcl.data.store.JsonRpc
+     */
+    getDatasourceStore : function()
+    {
+      if (!this.__datasourceStore)
+      {
+        this.__datasourceStore = new qcl.data.store.JsonRpc(null, bibliograph.rpcservice.MODEL, null);
+        qx.event.message.Bus.subscribe("reloadDatasources", function() {
+          this.__datasourceStore.reload();
+        }, this);
+      }
+      return this.__datasourceStore;
+    },
+
+    /**
+     * Return the persistent store used by this application
+     *
+     * @return {persist.Store} TODOC
+     */
+    getPersistentStore : function()
+    {
+      if (!this.__persistentStore) {
+        this.__persistentStore = new persist.Store('Bibliograph', 1);
+      }
+      return this.__persistentStore;
+    },
+
+    /*
+    ---------------------------------------------------------------------------
+       APPLY METHODS: synchronize state with property etc.
+    ---------------------------------------------------------------------------
+    */
+
+    /**
+     * TODOC
+     *
+     * @param value {var} TODOC
+     * @param old {var} TODOC
+     * @return {void}
+     */
+    _applyDatasource : function(value, old)
+    {
+      var stateMgr = this.getStateManager();
+
+      /*
+       * reset all states that have been connected
+       * with the datasource if a previous datasource
+       * has been loaded
+       * FIXME hide search box when no datasource is selected
+       */
+      if (old)
+      {
+        this.setModelId(0);
+        this.setFolderId(0);
+        this.setSelectedIds([]);
+        this.setQuery(null);
+        this.setDatasourceModel(null);
+      }
+      if (value)
+      {
+        /*
+         * set the application state
+         */
+        stateMgr.setState("datasource", value);
+
+        /*
+         * load datasource model from server
+         * @todo use store
+         */
+        this.showPopup(this.tr("Loading datasource information ..."));
+        this.getRpcManager().execute("bibliograph.model", "getDatasourceModelData", [value], function(data)
+        {
+          this.hidePopup();
+          var model = qx.data.marshal.Json.createModel(data);
+          this.setDatasourceModel(model);
+          this.setModelType(model.getTableModelType());
+        }, this);
+      } else
+      {
+        stateMgr.removeState("datasource");
+      }
+    },
+
+    /**
+     * FIXME use font, rename to application title
+     * @param value {var} TODOC
+     * @param old {var} TODOC
+     * @return {void}
+     */
+    _applyDatasourceLabel : function(value, old)
+    {
+      if (!value) {
+        value = this.getConfigManager().getKey("application.title");
+      }
+      window.document.title = value;
+      this.getWidgetById("applicationTitleLabel").setValue('<span style="font-size:1.2em;font-weight:bold">' + value + '</spsn>');
+    },
+
+    /**
+     * TODOC
+     *
+     * @param value {var} TODOC
+     * @param old {var} TODOC
+     * @return {void}
+     */
+    _applyFolderId : function(value, old)
+    {
+      var stmgr = this.getStateManager()
+      stmgr.setState("modelId", 0);
+      stmgr.setState("selectedIds", []);
+      if (value)
+      {
+        stmgr.setState("folderId", value);
+        stmgr.setState("query", "");
+        stmgr.removeState("query");
+      } else
+      {
+        stmgr.removeState("folderId");
+      }
+    },
+
+    /**
+     * TODOC
+     *
+     * @param value {var} TODOC
+     * @param old {var} TODOC
+     * @return {void}
+     * @todo Searchbox widget should observe query state instead of
+     * query state binding the searchbox.
+     */
+    _applyQuery : function(value, old)
+    {
+      this.getStateManager().setState("query", value);
+      if (value && this.getDatasource()) {
+        this.getWidgetById("searchBox").setValue(value);
+      } else {
+        this.getStateManager().removeState("query");
+        this.getWidgetById("searchBox").setValue("");
+      }
+    },
+
+    /**
+     * TODOC
+     *
+     * @param value {var} TODOC
+     * @param old {var} TODOC
+     * @return {void}
+     */
+    _applyModelType : function(value, old)
+    {
+      if (old) {
+        this.getStateManager().setState("modelId", 0);
+      }
+      if (value) {
+        this.getStateManager().setState("modelType", value);
+      } else {
+        this.getStateManager().removeState("modelType");
+      }
+    },
+
+    /**
+     * TODOC
+     *
+     * @param value {var} TODOC
+     * @param old {var} TODOC
+     * @return {void}
+     */
+    _applyModelId : function(value, old) {
+      if (value) {
+        this.getStateManager().setState("modelId", value);
+      } else {
+        this.getStateManager().removeState("modelId");
+      }
+    },
+
+    /**
+     * TODOC
+     *
+     * @param value {var} TODOC
+     * @param old {var} TODOC
+     * @return {void}
+     */
+    _applyItemView : function(value, old) {
+      if (value) {
+        this.getStateManager().setState("itemView", value);
+      } else {
+        this.getStateManager().removeState("itemView");
+      }
+    },
+
+    /**
+     * TODOC
+     *
+     * @param value {var} TODOC
+     * @param old {var} TODOC
+     * @return {void}
+     */
+    _applySelectedIds : function(value, old) {
+      if (value.length) {
+        this.getStateManager().setState("selectedIds", value);
+      } else {
+        this.getStateManager().removeState("selectedIds");
+      }
+    },
+
+    //
+
+    /*
+    ---------------------------------------------------------------------------
+       LOGIN & LOGOUT
+    ---------------------------------------------------------------------------
+    */
+
+    /**
+     * Called when the user presses the "login" button
+     */
+    login : function()
+    {
+      /*
+       * check if https login is enforced
+       */
+      var enforce_https = this.getConfigManager().getKey("access.enforce_https_login");
+      if (enforce_https && location.protocol != "https:") {
+        dialog.alert(this.tr("To log in, you need a secure connection. After you press 'OK', the application will be reloaded in secure mode. After the application finished loading, you can log in again."), function()
+        {
+          qx.core.Init.getApplication().setConfirmQuit(false);
+          location.href = "https://" + location.host + location.pathname + location.hash;
+        }, this);
+      } else {
+        /*
+         * check if access is restricted
+         */
+        if (this.getConfigManager().getKey("bibliograph.access.mode") == "readonly" && !this.__readonlyConfirmed)
+        {
+          var msg = this.tr("The application is currently in a read-only state. Only the administrator can log in.");
+          var explanation = this.getConfigManager().getKey("bibliograph.access.no-access-message");
+          if (explanation) {
+            msg += "\n" + explanation;
+          }
+          dialog.alert(msg, function() {
+            this.__readonlyConfirmed = true;
+          }, this);
+        } else
+        {
+          /*
+           * else show login dialog
+           */
+          this.getWidgetById("loginDialog").show();
+        }
+      }
+    },
+
+    /**
+     * Callback function that takes the username, password and
+     * another callback function with its context as parameters.
+     * The passed function is called with a boolean value
+     * (true=authenticated, false=authentication failed) and an
+     * optional string value which can contain an error message :
+     * callback.call( context, {Boolean} result, {String} message);
+     *
+     * @param username {String} TODOC
+     * @param password {String} TODOC
+     * @param callback {Function} The callback function
+     * @param context {Object} The execution context of the callback
+     * @return {void}
+     */
+    checkLogin : function(username, password, callback, context)
+    {
+      var app = qx.core.Init.getApplication();
+      app.showPopup(context.tr("Authenticating ..."));
+      app.getAccessManager().authenticate(username, password, function(data) {
+        if (data.error) {
+          callback.call(context, false, data.error);
+        } else {
+          /*
+           * login was successful
+           */
+          callback.call(context, true);
+
+          /*
+           * load configuration data for this user
+           */
+          app.getConfigManager().load(function() {
+            /*
+             * load datasources
+             */
+            app.getDatasourceStore().reload(function()
+            {
+              app.hidePopup();
+
+              /*
+               * notify subscribers
+               */
+              qx.event.message.Bus.dispatch(new qx.event.message.Message("authenticated"));
+            });
+          });
+        }
+      });
+    },
+
+    /**
+     * Log out the current user
+     *
+     * @return {void}
+     */
+    logout : function()
+    {
+      /*
+       * notify listeners
+       */
+      qx.event.message.Bus.dispatchByName("logout");
+
+      /*
+       * remove application state
+       */
+      var stateMgr = this.getStateManager();
+      stateMgr.setState("folderId", 0);
+      stateMgr.setState("referenceId", 0);
+      stateMgr.removeState("query");
+
+      /*
+       * call parent method to log out
+       */
+      this.showPopup("Logging out ...");
+      this.getAccessManager().logout(function() {
+        /*
+         * reload configuration data for anonymous
+         */
+        this.getConfigManager().load(function() {
+          /*
+           * load datasources
+           */
+          this.getDatasourceStore().reload(function()
+          {
+            this.hidePopup();
+
+            /*
+             * notify subscribers
+             */
+            qx.event.message.Bus.dispatch(new qx.event.message.Message("loggedOut"));
+          }, this);
+        }, this);
+      }, this);
+    },
+
+    /*
+    ---------------------------------------------------------------------------
+       EVENT LISTENERS
+    ---------------------------------------------------------------------------
+     */
+    _on_datasourceStore_loaded : function()
+    {
+      var datasourceCount = this.getDatasourceStore().getModel().length;
+
+      /*
+       * if we have no datasource loaded, no access
+       */
+      if (datasourceCount == 0) {
+        dialog.alert(this.tr("You don't have access to any datasource on the server."));
+      }/*
+       * if we have access to exactly one datasource, load this one
+       */
+       else if (datasourceCount == 1)
+      {
+        var item = this.getDatasourceStore().getModel().getItem(0);
+        this.setDatasource(item.getValue());
+        this.getStateManager().updateState();
+      }/*
+       * else, we have a choice of datasource
+       */
+       else
+      {
+        /*
+         * if there is one saved in the application state, use this
+         */
+        var datasource = this.getStateManager().getState("datasource");
+        if (!datasource)
+        {
+          this.setDatasourceLabel(this.getConfigManager().getKey("application.title"));
+          var dsWin = this.getWidgetById("datasourceWindow");
+          dsWin.open();
+          dsWin.center();
+        } else
+        {
+          this.setDatasource(datasource);
+          this.getStateManager().updateState();
+        }
+      }
+
+      /*
+       * show datasource button depending on whether there is a choice
+       */
+      this.getWidgetById("datasourceButton").setVisibility(datasourceCount > 1 ? "visible" : "excluded");
+    },
+
+    /*
+    ---------------------------------------------------------------------------
+       Toolbar commands
+    ---------------------------------------------------------------------------
+    */
+
+    /**
+     * opens a window with the online help
+     */
+    showHelpWindow : function() {
+      if (!this.__helpWindow)
+      {
+
+        this.__helpWindow = window.open("http://hilfe.bibliograph.org"); //todo: add link for english
+        if (!this.__helpWindow) {
+          dialog.alert(this.tr("Cannot open help window. Please disable the popup-blocker of your browser for this website."));
+        } else
+        {
+          // todo close window on terminate
+        }
+      } else
+      {
+        this.__helpWindow.focus();
+      }
+    },
+
+    /**
+     * Opens a server dialog to submit a bug.
+     */
+    reportBug : function()
+    {
+      this.showPopup(this.tr("Please wait ..."));
+      this.getRpcManager().execute("bibliograph.main", "reportBugDialog", [], function() {
+        this.hidePopup();
+      }, this);
+    },
+
+    /**
+     * Shows the "about" window
+     */
+    showAboutWindow : function() {
+      this.getWidgetById("aboutWindow").open();
+    },
+
+    /*
+    ---------------------------------------------------------------------------
+       HELPER METHODS
+    ---------------------------------------------------------------------------
+    */
+
+    /**
+     * Prints the content of the given dom element, by opening up a new window,
+     * copying the content of the element to this new window, and starting the
+     * print.
+     *
+     * @param domElement {Element}
+     */
+    print : function(domElement)
+    {
+      if (!domElement instanceof Element)
+      {
+        this.error("print() takes a DOM element as argument");
+        return;
+      }
+      var win = window.open();
+      win.document.open();
+      win.document.write(domElement.innerHTML);
+      win.document.close();
+      win.print();
+    },
+
+    /**
+     * Helper function for converters in list databinding. If a selected element
+     * exist, returns its model value, otherwise return null
+     *
+     * @param selection {Array} TODOC
+     * @return {String | null} TODOC
+     */
+    getSelectionValue : function(selection) {
+      return selection.length ? selection[0].getModel().getValue() : null;
+    },
+
+    /**
+     * Given a value, return the list element that has the
+     * matching model value wrapped in an array. If nothing
+     * has been found, return an empty array
+     *
+     * @param value {String} TODOC
+     * @return {qx.ui.form.ListItem[]|[]} TODOC
+     */
+    getModelValueListElement : function(value)
+    {
+      for (var i = 0, c = this.getChildren(); i < c.length; i++) {
+        if (c[i].getModel().getValue() == value) {
+          return [c[i]];
+        }
+      }
+
+      // console.warn( "Did not find " + value );
+      return [];
+    },
+    editUserData : function()
+    {
+      var activeUser = this.getAccessManager().getActiveUser();
+      if (activeUser.getEditable())
+      {
+        this.showPopup(this.tr("Retrieving user data..."));
+        this.getRpcManager().execute("bibliograph.actool", "editElement", ["user", activeUser.getNamedId()], function() {
+          this.hidePopup()
+        }, this);
+      }
+    },
+    endOfFile : true
+  }
+});

@@ -1,0 +1,16 @@
+Rewrite the way qcl handles queries based on the concept of a query tree based on triples,
+compare the CQL parser at http://www.csc.liv.ac.uk/~azaroth/stuff/, also look at RDF query 
+languages and converters between SPARQL and SQL
+
+qcl_data_query_AbstractParser
+qcl_data_query_AbstractQuery
+qcl_data_query_Triple
+qcl_data_query_Relation
+qcl_data_query_SearchTerm
+qcl_data_query_Predicate
+
+This will make it possible to translate from and to SQL using this query tree.
+
+http://code.google.com/p/rdflib/wiki/SQL_Backend
+http://www.castor.org/index.html
+http://www.fatdog.com/xsrql.html

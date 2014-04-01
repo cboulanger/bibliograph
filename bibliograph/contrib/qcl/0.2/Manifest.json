@@ -1,0 +1,34 @@
+{
+  "info" :
+  {
+    "name" : "qcl-js",
+    
+    "summary" : "qooxdoo component library - javascript classes",
+    "description" : "A couple of interoperating extensions that are useful for web application development",
+    
+    "homepage" : "http://qooxdoo.org/contrib/project/qcl",
+  
+    "license" : "LGPL/EPL",
+    "authors" : 
+    [
+      {
+        "name" : "Christian Boulanger",
+        "user" : "cboulanger",
+        "email" : "c DOT boulanger AT qxtransformer DOT org"
+      }
+    ],
+    
+    "version" : "0.2",
+    "qooxdoo-versions": ["1.0","1.1","1.2"]
+  },
+  
+  "provides" : 
+  {
+    "namespace"   : "qcl",
+    "encoding"    : "utf-8",
+    "class"       : "source/class",
+    "resource"    : "source/resource",
+    "translation" : "source/translation",
+    "type"        : "contribution"
+  }
+}
