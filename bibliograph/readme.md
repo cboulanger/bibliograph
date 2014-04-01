@@ -2,7 +2,7 @@ Bibliograph Online Reference Manager
 ====================================
 
 Bibliograph is a powerful open source web application for the collaborative collection, editing and publishing of
-bibliographic data.
+bibliographic data. See http://www.bibliograph.org
 
 Features
 --------
@@ -15,11 +15,10 @@ Prerequisites
 
 Preparations
 ------------
-- Create a user "bibliograph" in your MySql-database
-- Create the following databases: "bibliograph_admin", "bibliograph_tmp", "bibliograph_user".
-- Give the bibliograph user ALL rights for these databases
 - Rename services/config/bibliograph.ini.dist.php in services/config/bibliograph.ini.php
-- If the password of the "bibliograph" user is not "bibliograph", adapt it.
+- Create a user "bibliograph" in your MySql-database with password "bibliograph" (if you want to use a different password for security, enter it in the [database] section of bibliograph.ini.php.
+- Create the following databases: "bibliograph_admin", "bibliograph_tmp", "bibliograph_user". If you want to use different names or use only one database, adapt the settings in the [database] section of bibliograph.ini.php.
+- Give the bibliograph user ALL rights for these databases
 - Rename services/config/server.conf.dist.php in services/config/server.conf.php
 - Enter the email address of the administrator of the installation in the [admin.email] section
   in services/config/bibliograph.ini.php
