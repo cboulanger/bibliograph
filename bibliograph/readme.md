@@ -1,18 +1,20 @@
-=== Bibliograph Online Reference Manager ===
+Bibliograph Online Reference Manager
+====================================
 
 Bibliograph is a powerful open source web application for the collaborative collection, editing and publishing of
 bibliographic data.
 
-== Features ==
+Features
+--------
 - TODO
 
-== Prerequisites ==
-
+Prerequisites
+-------------
 - PHP 5.3
 - MySql 5.3+ with the following extensions: gettext, yaz/xsl (optional), ldap (optional), zip (optional)
 
-== Preparations ==
-
+Preparations
+------------
 - Create a user "bibliograph" in your MySql-database
 - Create the following databases: "bibliograph_admin", "bibliograph_tmp", "bibliograph_user".
 - Give the bibliograph user ALL rights for these databases
@@ -28,26 +30,25 @@ Optional:
   and the php-xsl extension (Debian: apt-get install php5-xsl)
 - to enable export and import of various bibliographic data formats, install the bibutils toolset
   (Debian: apt-get install bibutils) and adapt the BIBUTILS_PATH constant in config/server.conf.php
-- if you want to allow backups, install the php zip extension and grant the global "RELOAD" privilege to the "bibliograph"
+- if you want to allow backups, install the php zip extension and grant the global "RELOAD" privilege to the
+ "bibliograph"
   user. if the backups should not be stored in the system tempdir, adapt the BIBLIOGRAPH_BACKUP_PATH constant in
   config/server.conf.php.
 - you can connect a ldap server for authentication (adapt config/bibliograph.ini.php)
 
-== Building from Sources ==
+Built-step & Deployment
+-----------------------
+- Building the application requires the qooxdoo library (currently, version 2.1). Issue "./generate build" in the
+  "bibliograph" folder.
+- For deployment, you only need the bibliograph/build and bibliograph/services folders, the rest is only neccessary to build the app
+- Securing the Server: The PHP backend has one single entry-point: services/server.php. If you want to make sure no other PHP script is called from outside, restrict access to php files to this path.
+- It is recommended to create a redirection from the top-level path to the bibliograph/build folder
 
-- Building the application requires the qooxdoo library (currently, version 1.5). Issue "./generate build" in the
-  top "bibliograph" folder.
-
-== First run ==
-
+First run
+---------
 - open "build/index.html" folder in your browser and click somewhere outside the splash screen to make it disappear.
 - A message "Setup in progress..." appears. Click "OK" and wait.
 - A message "Setup has finished. Reload the application" is displayed.
 - Reload and login as "Admin"/"admin"
 - Got to System -> Plugins. Install the YAZ and bibutils plugins if you have enabled them.
 - Reload the application.
-
-== Securing the server ==
-
-- The PHP backend has one single entry-point: services/server.php. If you want to make sure no other PHP script
-  is called from outside, restrict access to php files to this path.
