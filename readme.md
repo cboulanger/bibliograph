@@ -2,7 +2,10 @@ Bibliograph Online Reference Manager
 ====================================
 
 Bibliograph is a powerful open source web application for the collaborative collection, editing and publishing of
-bibliographic data. See http://www.bibliograph.org
+bibliographic data.
+
+- Demo installation: http://demo.bibliograph.org
+- Documentation (currently only in German): http://www.bibliograph.org
 
 Features
 --------
