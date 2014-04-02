@@ -51,7 +51,7 @@ class qcl_data_file_PersistenceBehavior
     /*
      * create file
      */
-    $resourcePath = "file://" . sys_get_temp_dir() . "/qcl_data_model_file_PersistenceBehavior.tmp";
+    $resourcePath = "file://" . QCL_VAR_DIR . "/qcl_data_model_file_PersistenceBehavior.tmp";
     parent::__construct( $resourcePath );
 
     /*

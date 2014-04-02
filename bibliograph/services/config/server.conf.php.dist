@@ -60,6 +60,15 @@ define("APPLICATION_CLASS_PATH", SERVER_ROOT . "/class/");
  */
 define( "QCL_LOG_FILE", sys_get_temp_dir() . "/bibliograph.log" );
 
+/*
+ * The directory where persistent data is stored, for example, the data of persistent
+ * objects.
+ */
+if ( ! defined("QCL_VAR_DIR") )
+{
+  define( "QCL_VAR_DIR" ,  sys_get_temp_dir() );
+}
+
 //-------------------------------------------------------------
 // Application-related configuration
 //-------------------------------------------------------------

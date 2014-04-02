@@ -27,16 +27,15 @@ Preparations
 
 Optional
 --------
-- to import from library databases, you need to install the php YAZ extension (http://www.indexdata.com/phpyaz):
+- To import from library databases, you need to install the php YAZ extension (http://www.indexdata.com/phpyaz):
   https://code.google.com/p/list8d/wiki/InstallingYaz
   and the php-xsl extension (Debian: apt-get install php5-xsl)
-- to enable export and import of various bibliographic data formats, install the bibutils toolset
+- To enable export and import of various bibliographic data formats, install the bibutils toolset
   (Debian: apt-get install bibutils) and adapt the BIBUTILS_PATH constant in config/server.conf.php
-- if you want to allow backups, install the php zip extension and grant the global "RELOAD" privilege to the
- "bibliograph"
-  user. if the backups should not be stored in the system tempdir, adapt the BIBLIOGRAPH_BACKUP_PATH constant in
-  config/server.conf.php.
-- you can connect a ldap server for authentication (adapt config/bibliograph.ini.php)
+- If you want to allow backups, install the php zip extension and grant the global "RELOAD" privilege to the
+ "bibliograph" user. if the backups should not be stored in the system tempdir, adapt the BIBLIOGRAPH_BACKUP_PATH
+  constant in config/server.conf.php and point it to a world-writable folder outside the document root of the web server.
+- You can connect a ldap server for authentication (adapt config/bibliograph.ini.php)
 
 Building & Deployment
 -----------------------
@@ -45,11 +44,15 @@ Building & Deployment
 - Unzip the sdk into a top-level "qooxdoo" folder and rename it to "2.1". You can also adapt the path to the sdk in the
   bibliograph/config.json configuration file
 - Issue "./generate build" in the "bibliograph" folder.
-- For deployment, you only need the bibliograph/build and bibliograph/services folders, the rest is only neccessary to
-  build the app
+- For deployment, you only need to copy the bibliograph/build and bibliograph/services folders to the production server.
+  The rest is only necessary to build the application.
 - Securing the Server: The PHP backend has one single entry-point: services/server.php. If you want to make sure no
   other PHP script is called from outside, restrict access to php files to this path.
 - It is recommended to create a redirection from the top-level path to the bibliograph/build folder
+- By default, Bibliograph stores persistent data in the system temporary folder (on Linux, this is usually /tmp). This
+  is fine for testing the application, but can lead to the loss of data whenever this folder is automatically cleaned
+  up by the OS. For permanent production installations, you MUST change the QCL_VAR_DIR constant in
+  services/config/server.conf.php to a world-writable directory outside the document root of the web server.
 
 First run
 ---------

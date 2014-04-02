@@ -20,8 +20,7 @@
  * In this file, basic configuration settings and constants are
  * defined. This file MUST be included before including any other
  * qcl library file. You can override individual values by defining
- * them before incuding this file
- * @todo implement overriding, rework, rename constants
+ * them before including this file
  */
 
 /*
@@ -75,6 +74,17 @@ if ( ! defined("QCL_LOG_FILE") )
 if ( ! defined("QCL_LOG_MAX_FILESIZE") )
 {
   define( "QCL_LOG_MAX_FILESIZE" , 1024 * 500 );
+}
+
+/*
+ * The directory where persistent data is stored, for example, the data of persistent
+ * objects. Defaults to the system temp path. This is dangerous, however, because
+ * this path will be regularly purged and the data is lost. Use a different directory
+ * and make it writable.
+ */
+if ( ! defined("QCL_VAR_DIR") )
+{
+  define( "QCL_VAR_DIR" ,  sys_get_temp_dir() );
 }
 
 /*

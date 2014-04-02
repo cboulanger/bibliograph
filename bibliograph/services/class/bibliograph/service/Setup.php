@@ -164,10 +164,24 @@ class bibliograph_service_Setup
     {
       $this->log("Example datasources already exist.", QCL_LOG_SETUP );
     }
+
+    $this->log("Linking datasources to roles...", QCL_LOG_SETUP );
+    try
+    {
+      $ac = $this->getAccessController();
+      $ac->getDatasourceModel("database1")
+        ->linkModel($ac->getRoleModel("anonymous"))
+        ->linkModel($ac->getRoleModel("user"))
+        ->linkModel($ac->getRoleModel("admin"));
+      $ac->getDatasourceModel("database2")
+        ->linkModel($ac->getRoleModel("user"))
+        ->linkModel($ac->getRoleModel("admin"));
+    }
     catch(Exception $e)
     {
       $this->log("Problem linking datasources to roles: $e.", QCL_LOG_SETUP );
     }
+
 
     /*
      * create config value for https authentication
