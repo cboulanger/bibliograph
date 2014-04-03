@@ -141,12 +141,13 @@ qx.Class.define("qcl.application.PluginManager",
               'count' : count,
               'sum'   : sum
             });
-            var loader = new qx.io.ScriptLoader();
-            var url = self.getPreventCache() 
-              ? data.url + "?nocache=" + (new Date).getTime() 
-              : data.url;
-              
-            loader.load( url, loadScript );
+            var url = self.getPreventCache()
+                ? data.url + "?nocache=" + (new Date).getTime()
+                : data.url;
+            var loader = new qx.bom.request.Script();
+            loader.onload = loadScript;
+            loader.open("GET", url);
+            loader.send();
           })();
           
         },this
