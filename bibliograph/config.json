@@ -78,6 +78,14 @@
         }
       ]
     },
+
+//    "includes" : {
+//      "include" : [
+//        "qx.theme.Classic",
+//        "qx.theme.Indigo",
+//        "qx.theme.Simple"
+//      ]
+//    },
     
     // load third-party scripts before loading qooxdoo
     "common":

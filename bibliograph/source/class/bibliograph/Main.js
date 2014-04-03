@@ -142,6 +142,16 @@ qx.Class.define("bibliograph.Main",
     },
 
     /**
+     * The name of the theme
+     */
+    theme :
+    {
+      check : ["Modern","Simple","Indigo" ],
+      nullable : false,
+      apply : "_applyTheme"
+    },
+
+    /**
      * Target for inserting something from an external source into a
      * TextField or TextArea widget
      */
@@ -711,6 +721,16 @@ qx.Class.define("bibliograph.Main",
       }
     },
 
+    /**
+     * TODOC
+     *
+     * @param value {var} TODOC
+     * @param old {var} TODOC
+     * @return {void}
+     */
+    _applyTheme : function(value, old) {
+      qx.theme.manager.Meta.getInstance().setTheme(qx.theme[value]);
+    },
     //
 
     /*
