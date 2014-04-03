@@ -74,7 +74,7 @@
         },
         // qcl-js
         {
-          "manifest" : "contrib/qcl/0.2/Manifest.json"
+          "manifest" : "contrib/qcl/Manifest.json"
         }
       ]
     },
