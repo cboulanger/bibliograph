@@ -188,7 +188,7 @@ qx.Class.define("bibliograph.ui.item.DuplicatesView",
           }, this);
         }
       }, this);
-      dialog.confirm(message, handler);
+      dialog.Dialog.confirm(message, handler);
     },
     endOfFile : true
   }

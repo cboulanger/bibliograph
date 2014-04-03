@@ -279,15 +279,16 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
      */
     _createIndicator : function()
     {
-      this._indicator = new qx.ui.core.Widget();
-      this._indicator.set({
-        decorator  : new qx.ui.decoration.Single().set({top : [2, "solid", "#333"]}),
-        zIndex     : 100,
-        droppable  : true
-      });
-      this._hideIndicator();
-
-      this._getPaneClipper().add(this._indicator);
+// no longer works in qx >= 3.0
+//      this._indicator = new qx.ui.core.Widget();
+//      this._indicator.set({
+//        decorator  : new qx.ui.decoration.Single().set({top : [2, "solid", "#333"]}),
+//        zIndex     : 100,
+//        droppable  : true
+//      });
+//      this._hideIndicator();
+//
+//      this._getPaneClipper().add(this._indicator);
     },
 
     /**
@@ -638,27 +639,27 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
     {
       if( old && ! value )
       {
-        this.setDraggable(true);
-        this.setDroppable(true);
-        this.removeListener("dragstart",    this.__onDragStart,   this);
-        this.removeListener("drag",         this.__onDrag,        this);
-        this.removeListener("dragover",     this.__onDragOver,    this);
-        this.removeListener("dragend",      this.__onDragEnd,     this);
-        this.removeListener("dragleave",    this.__onDragEnd,     this);
-        this.removeListener("droprequest",  this.__onDropRequest, this);
+//        this.setDraggable(true);
+//        this.setDroppable(true);
+//        this.removeListener("dragstart",    this.__onDragStart,   this);
+//        this.removeListener("drag",         this.__onDrag,        this);
+//        this.removeListener("dragover",     this.__onDragOver,    this);
+//        this.removeListener("dragend",      this.__onDragEnd,     this);
+//        this.removeListener("dragleave",    this.__onDragEnd,     this);
+//        this.removeListener("droprequest",  this.__onDropRequest, this);
         
       }
 
       if( value && ! old )
       {
-        this.addListener("dragstart",   this.__onDragStart,   this);
-        this.addListener("dragover",    this.__onDragOver,    this); // dragover must be called *before* drag
-        this.addListener("dragleave",   this.__onDragEnd,     this);
-        this.addListener("drag",        this.__onDrag,        this);
-        this.addListener("dragend",     this.__onDragEnd,     this);
-        this.addListener("droprequest", this.__onDropRequest, this);
-        this.setDraggable(true);
-        this.setDroppable(true);     
+//        this.addListener("dragstart",   this.__onDragStart,   this);
+//        this.addListener("dragover",    this.__onDragOver,    this); // dragover must be called *before* drag
+//        this.addListener("dragleave",   this.__onDragEnd,     this);
+//        this.addListener("drag",        this.__onDrag,        this);
+//        this.addListener("dragend",     this.__onDragEnd,     this);
+//        this.addListener("droprequest", this.__onDropRequest, this);
+//        this.setDraggable(true);
+//        this.setDroppable(true);
       }
     },
     
@@ -674,221 +675,220 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
     ---------------------------------------------------------------------------
        EVENT HANDLERS
     ---------------------------------------------------------------------------
-     */
-
-    /**
-     * Handles event fired whem a drag session starts.
-     * @param event {Object} the drag event fired
-     */
-    __onDragStart : function(event)
-    {
-      
-      var selection = this.getDataModel().getSelectedNodes();
-      var types     = this.getAllowDragTypes();
-      
-      /*
-       * no drag types, no drag is allowed
-       */
-      if( types === null )
-      {
-        return event.preventDefault();
-      }
-      
-      /*
-       * check drag type
-       */
-      if( types[0] != "*" )
-      {
-        /*
-         * check for allowed types for all of the selection, i.e. if one
-         * doesn't match, drag is not allowed.
-         */
-        for(var i = 0; i < selection.length; i++)
-        {
-          var type = null;
-          try
-          {
-            type = selection[i].data.DragDrop.type;
-          }
-          catch(e) {}
-
-          /*
-           * type is not among the allowed types, do not allow drag
-           */
-          if(types.indexOf(type) < 0)
-          {
-            return event.preventDefault();
-          }
-        }
-      }
-
-      // prepare drag data, old style
-      var dragData = {
-        'nodeData'     : selection,
-        'sourceWidget' : this,
-        'action'       : this.getDragAction()
-      };
-      event.setUserData("treevirtualnode", dragData);
-      
-      /*
-       * drag data, new style
-       */
-      event.addAction(this.getDragAction());
-      event.addType("qx/treevirtual-node");
-    },
-    
-    /**
-     * Handles the event fired when a drag session ends (with or without drop).
-     */
-    __onDragEnd : function(e)
-    {
-      this._hideIndicator(); 
-    },    
-    
-    /**
-     * Fired when dragging over another widget. You'll need to attach
-     * this
-     * @param event {qx.event.type.Drag} the drag event fired
-     */
-    __onDragOver : function(e)
-    {
-      /*
-       * do not display an indicator if we have a related target,
-       * i.e. we are not hovering over this wiget
-       */
-      if ( ! e.getRelatedTarget() )
-      {
-        this.__onDragEnd(e);
-      }
-      else
-      {
-        this.__onDragAction(e);
-      }
-      return;
-    },    
-
-    /**
-     * Fired when dragging over the source widget. 
-     * Provides a check on whether drop is allowed, displaying a 
-     * insertion cursor for drop-between-nodes.
-     * 
-     * @param event {qx.event.type.Drag} the drag event fired
-     * @param forceDisplayIndicator {Boolean} Internal use only
-     */
-    __onDrag : function(e)
-    {
-      if ( ! e.getRelatedTarget() )
-      {
-        this.__onDragAction(e);
-      }
-      else
-      {
-        this.__onDragEnd(e);
-      }      
-    },
-    
-    /**
-     * Implementation of drag action for drag & dragover
-     * @param {} e
-     */
-    __onDragAction : function(e)
-    {
-      var target = e.getTarget();      
-      var sourceData  = e.getUserData("treevirtualnode");
-      var dragDetails = this._getDragDetails(e);
-      var valid = false;
-      
-      /*
-       * show indicator if we're within the available rows
-       */
-      if ( dragDetails.row < this.getDataModel().getRowCount() )
-      {
-        /*
-         * auto-scroll at the beginning and at the end of the column
-         */
-        this._processAutoscroll( dragDetails );
-        
-        /*
-         * show indicator and return the relative position
-         */
-        var dropTargetRelativePosition = 
-          this._processDragInBetween( dragDetails );
-  
-        /*
-         * check if the dragged item can be dropped at the current
-         * position and change drag cursor accordingly
-         */
-        var valid = this._checkDroppable(
-          sourceData, dropTargetRelativePosition, dragDetails
-        );
-      }
-     
-      /*
-       * set flag whether drop is allowed
-       */
-      e.getManager().setValidDrop(valid);
-      
-      /*
-       * drag curson
-       */
-      if(valid)
-      {
-        qx.ui.core.DragDropCursor.getInstance().setAction(e.getCurrentAction());
-      }
-      else
-      {
-        qx.ui.core.DragDropCursor.getInstance().resetAction();
-      }
-      //this.debug([e.getType(), dropTargetRelativePosition, valid, sourceData.action]);
-    },
-    
-    /**
-     * Drop request handler
-     * @param e {qx.event.type.Drag}
-     */
-    __onDropRequest :  function(e)
-    {
-      this.__onDragEnd(e);
-      var action = e.getCurrentAction();
-      var type   = e.getCurrentType();
-      var source = e.getCurrentTarget();
-      
-      if (type === "qx/treevirtual-node")
-      {
-        /*
-         * make a copy of the selection
-         */
-        var selection = this.getSelectedNodes();
-        var copy = [];
-        for (var i=0, l=selection.length; i<l; i++) 
-        {
-          if ( ! qx.lang.Type.isObject( selection[i] ) )
-          {
-            continue;
-          }
-          copy[i] = selection[i];
-        }        
-        
-        /*
-         * remove selection
-         */
-        this.getSelectionModel().resetSelection();
-        
-        /*
-         * Add data to manager
-         */
-        if ( copy.length )
-        {
-          e.addData(type, copy);  
-        }
-          
-        
-        return;
-      }
-      
-      this.error("Invalid type '" + type + "'");
-    
-    },
+//     */
+//
+//    /**
+//     * Handles event fired whem a drag session starts.
+//     * @param event {Object} the drag event fired
+//     */
+//    __onDragStart : function(event)
+//    {
+//
+//      var selection = this.getDataModel().getSelectedNodes();
+//      var types     = this.getAllowDragTypes();
+//
+//      /*
+//       * no drag types, no drag is allowed
+//       */
+//      if( types === null )
+//      {
+//        return event.preventDefault();
+//      }
+//
+//      /*
+//       * check drag type
+//       */
+//      if( types[0] != "*" )
+//      {
+//        /*
+//         * check for allowed types for all of the selection, i.e. if one
+//         * doesn't match, drag is not allowed.
+//         */
+//        for(var i = 0; i < selection.length; i++)
+//        {
+//          var type = null;
+//          try
+//          {
+//            type = selection[i].data.DragDrop.type;
+//          }
+//          catch(e) {}
+//
+//          /*
+//           * type is not among the allowed types, do not allow drag
+//           */
+//          if(types.indexOf(type) < 0)
+//          {
+//            return event.preventDefault();
+//          }
+//        }
+//      }
+//
+//      // prepare drag data, old style
+//      var dragData = {
+//        'nodeData'     : selection,
+//        'sourceWidget' : this,
+//        'action'       : this.getDragAction()
+//      };
+//      event.setUserData("treevirtualnode", dragData);
+//
+//      /*
+//       * drag data, new style
+//       */
+//      event.addAction(this.getDragAction());
+//      event.addType("qx/treevirtual-node");
+//    },
+//
+//    /**
+//     * Handles the event fired when a drag session ends (with or without drop).
+//     */
+//    __onDragEnd : function(e)
+//    {
+//      this._hideIndicator();
+//    },
+//
+//    /**
+//     * Fired when dragging over another widget. You'll need to attach
+//     * this
+//     * @param event {qx.event.type.Drag} the drag event fired
+//     */
+//    __onDragOver : function(e)
+//    {
+//      /*
+//       * do not display an indicator if we have a related target,
+//       * i.e. we are not hovering over this wiget
+//       */
+//      if ( ! e.getRelatedTarget() )
+//      {
+//        this.__onDragEnd(e);
+//      }
+//      else
+//      {
+//        this.__onDragAction(e);
+//      }
+//      return;
+//    },
+//
+//    /**
+//     * Fired when dragging over the source widget.
+//     * Provides a check on whether drop is allowed, displaying a
+//     * insertion cursor for drop-between-nodes.
+//     *
+//     * @param event {qx.event.type.Drag} the drag event fired
+//     */
+//    __onDrag : function(e)
+//    {
+//      if ( ! e.getRelatedTarget() )
+//      {
+//        this.__onDragAction(e);
+//      }
+//      else
+//      {
+//        this.__onDragEnd(e);
+//      }
+//    },
+//
+//    /**
+//     * Implementation of drag action for drag & dragover
+//     * @param {} e
+//     */
+//    __onDragAction : function(e)
+//    {
+//      var target = e.getTarget();
+//      var sourceData  = e.getUserData("treevirtualnode");
+//      var dragDetails = this._getDragDetails(e);
+//      var valid = false;
+//
+//      /*
+//       * show indicator if we're within the available rows
+//       */
+//      if ( dragDetails.row < this.getDataModel().getRowCount() )
+//      {
+//        /*
+//         * auto-scroll at the beginning and at the end of the column
+//         */
+//        this._processAutoscroll( dragDetails );
+//
+//        /*
+//         * show indicator and return the relative position
+//         */
+//        var dropTargetRelativePosition =
+//          this._processDragInBetween( dragDetails );
+//
+//        /*
+//         * check if the dragged item can be dropped at the current
+//         * position and change drag cursor accordingly
+//         */
+//        var valid = this._checkDroppable(
+//          sourceData, dropTargetRelativePosition, dragDetails
+//        );
+//      }
+//
+//      /*
+//       * set flag whether drop is allowed
+//       */
+//      e.getManager().setValidDrop(valid);
+//
+//      /*
+//       * drag curson
+//       */
+//      if(valid)
+//      {
+//        qx.ui.core.DragDropCursor.getInstance().setAction(e.getCurrentAction());
+//      }
+//      else
+//      {
+//        qx.ui.core.DragDropCursor.getInstance().resetAction();
+//      }
+//      //this.debug([e.getType(), dropTargetRelativePosition, valid, sourceData.action]);
+//    },
+//
+//    /**
+//     * Drop request handler
+//     * @param e {qx.event.type.Drag}
+//     */
+//    __onDropRequest :  function(e)
+//    {
+//      this.__onDragEnd(e);
+//      var action = e.getCurrentAction();
+//      var type   = e.getCurrentType();
+//      var source = e.getCurrentTarget();
+//
+//      if (type === "qx/treevirtual-node")
+//      {
+//        /*
+//         * make a copy of the selection
+//         */
+//        var selection = this.getSelectedNodes();
+//        var copy = [];
+//        for (var i=0, l=selection.length; i<l; i++)
+//        {
+//          if ( ! qx.lang.Type.isObject( selection[i] ) )
+//          {
+//            continue;
+//          }
+//          copy[i] = selection[i];
+//        }
+//
+//        /*
+//         * remove selection
+//         */
+//        this.getSelectionModel().resetSelection();
+//
+//        /*
+//         * Add data to manager
+//         */
+//        if ( copy.length )
+//        {
+//          e.addData(type, copy);
+//        }
+//
+//
+//        return;
+//      }
+//
+//      this.error("Invalid type '" + type + "'");
+//
+//    },
     
   
     /*

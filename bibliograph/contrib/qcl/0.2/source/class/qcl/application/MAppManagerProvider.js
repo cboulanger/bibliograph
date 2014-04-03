@@ -202,7 +202,7 @@ qx.Mixin.define("qcl.application.MAppManagerProvider",
     confirmQuit : 
     {
       check : "Boolean",
-      init : true
+      init : false
     }
     
   },

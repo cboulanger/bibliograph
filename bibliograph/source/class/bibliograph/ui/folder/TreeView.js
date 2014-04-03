@@ -129,7 +129,7 @@ qx.Class.define("bibliograph.ui.folder.TreeView",
         var node = e.getData();
         if (!node)
         {
-          dialog.alert(this.tr("No folder selected. Try again"));
+          dialog.Dialog.alert(this.tr("No folder selected. Try again"));
           return;
         }
         var message = this.tr("Do your really want to move folder '%1' to '%2'?", this.getSelectedNode().label, node.label);
@@ -142,7 +142,7 @@ qx.Class.define("bibliograph.ui.folder.TreeView",
             }, this);
           }
         }, this);
-        dialog.confirm(message, handler);
+        dialog.Dialog.confirm(message, handler);
       }, this);
       win.show();
     },
@@ -152,7 +152,7 @@ qx.Class.define("bibliograph.ui.folder.TreeView",
      * folder.
      */
     _emptyTrashDialog : function() {
-      dialog.confirm(this.tr("Do you really want to delete all references and folders in the trash folder? This cannot be undone."), qx.lang.Function.bind(function(answer) {
+      dialog.Dialog.confirm(this.tr("Do you really want to delete all references and folders in the trash folder? This cannot be undone."), qx.lang.Function.bind(function(answer) {
         if (answer == true)
         {
           this.getApplication().setModelId(0);

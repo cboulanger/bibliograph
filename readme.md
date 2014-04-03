@@ -42,10 +42,10 @@ Optional
 
 Building & Deployment
 -----------------------
-- Building the application requires the qooxdoo library (currently, version 2.1).
-- Download the sdk from http://sourceforge.net/projects/qooxdoo/files/qooxdoo-current/2.1.2/
-- Unzip the sdk into a top-level "qooxdoo" folder and rename it to "2.1". You can also adapt the path to the sdk in the
-  bibliograph/config.json configuration file
+- Building the application requires the qooxdoo library (version 3.5).
+- Download the sdk from http://sourceforge.net/projects/qooxdoo/files/qooxdoo-current/
+- Unzip the sdk into a top-level "qooxdoo" folder. You can also adapt the path to the sdk in the bibliograph/config.json
+  configuration file.
 - Issue "./generate build" in the "bibliograph" folder.
 - For deployment, you only need to copy the bibliograph/build and bibliograph/services folders to the production server.
   The rest is only necessary to build the application.

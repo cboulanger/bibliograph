@@ -27,8 +27,6 @@
 
 /**
  * The main application class
- * @todo rename global widget ids
- * @todo rewrite using core-sandbox-module pattern
  */
 qx.Class.define("bibliograph.Main",
 {
@@ -167,7 +165,7 @@ qx.Class.define("bibliograph.Main",
     ---------------------------------------------------------------------------
     */
     getVersion : function() {
-      return "v2.0 (31.03.2014)";
+      return "v2.1 (03.04.2014)";
     },
     getCopyright : function() {
       return "2003-2014 (c) Christian Boulanger";
@@ -490,7 +488,7 @@ qx.Class.define("bibliograph.Main",
         if (data.datasource !== this.getDatasource())return;
 
         var msg = this.tr("The datasource has just been restored to a previous state and will be reloaded");
-        dialog.alert(msg, function()
+        dialog.Dialog.alert(msg, function()
         {
           this.getWidgetById("mainFolderTree").reload();
           this.getWidgetById("mainListView").reload();
@@ -731,7 +729,7 @@ qx.Class.define("bibliograph.Main",
        */
       var enforce_https = this.getConfigManager().getKey("access.enforce_https_login");
       if (enforce_https && location.protocol != "https:") {
-        dialog.alert(this.tr("To log in, you need a secure connection. After you press 'OK', the application will be reloaded in secure mode. After the application finished loading, you can log in again."), function()
+        dialog.Dialog.alert(this.tr("To log in, you need a secure connection. After you press 'OK', the application will be reloaded in secure mode. After the application finished loading, you can log in again."), function()
         {
           qx.core.Init.getApplication().setConfirmQuit(false);
           location.href = "https://" + location.host + location.pathname + location.hash;
@@ -747,7 +745,7 @@ qx.Class.define("bibliograph.Main",
           if (explanation) {
             msg += "\n" + explanation;
           }
-          dialog.alert(msg, function() {
+          dialog.Dialog.alert(msg, function() {
             this.__readonlyConfirmed = true;
           }, this);
         } else
@@ -762,30 +760,29 @@ qx.Class.define("bibliograph.Main",
 
     /**
      * Callback function that takes the username, password and
-     * another callback function with its context as parameters.
+     * another callback function as parameters.
      * The passed function is called with a boolean value
      * (true=authenticated, false=authentication failed) and an
      * optional string value which can contain an error message :
-     * callback.call( context, {Boolean} result, {String} message);
+     * callback( {Boolean} result, {String} message);
      *
      * @param username {String} TODOC
      * @param password {String} TODOC
      * @param callback {Function} The callback function
-     * @param context {Object} The execution context of the callback
      * @return {void}
      */
-    checkLogin : function(username, password, callback, context)
+    checkLogin : function(username, password, callback)
     {
       var app = qx.core.Init.getApplication();
-      app.showPopup(context.tr("Authenticating ..."));
+      app.showPopup(app.tr("Authenticating ..."));
       app.getAccessManager().authenticate(username, password, function(data) {
         if (data.error) {
-          callback.call(context, false, data.error);
+          callback(false, data.error);
         } else {
           /*
            * login was successful
            */
-          callback.call(context, true);
+          callback(true);
 
           /*
            * load configuration data for this user
@@ -866,7 +863,7 @@ qx.Class.define("bibliograph.Main",
        * if we have no datasource loaded, no access
        */
       if (datasourceCount == 0) {
-        dialog.alert(this.tr("You don't have access to any datasource on the server."));
+        dialog.Dialog.alert(this.tr("You don't have access to any datasource on the server."));
       }/*
        * if we have access to exactly one datasource, load this one
        */
@@ -918,7 +915,7 @@ qx.Class.define("bibliograph.Main",
 
         this.__helpWindow = window.open("http://hilfe.bibliograph.org"); //todo: add link for english
         if (!this.__helpWindow) {
-          dialog.alert(this.tr("Cannot open help window. Please disable the popup-blocker of your browser for this website."));
+          dialog.Dialog.alert(this.tr("Cannot open help window. Please disable the popup-blocker of your browser for this website."));
         } else
         {
           // todo close window on terminate

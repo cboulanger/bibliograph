@@ -190,7 +190,7 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
         var type = leftSelectBox.getSelection()[0].getModel().getValue();
         var msg = this.tr("Please enter the id of the new '%1'-Object",   /* this.tr( */
         type/* ) */);
-        dialog.prompt(msg, function(name) {
+        dialog.Dialog.prompt(msg, function(name) {
           if (name) {
             leftListStore.execute("addElement", [type, name], function() {
               leftListStore.reload();
@@ -213,7 +213,7 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
         var name = itemModel.getValue();
         var type = itemModel.getType();
         var msg = this.tr("Do you really want to delete '%1'?", name);
-        dialog.confirm(msg, function(yes) {
+        dialog.Dialog.confirm(msg, function(yes) {
           if (yes) {
             leftListStore.execute("deleteElement", [type, name], function() {
               leftListStore.reload();
@@ -375,7 +375,7 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
         var type = elementTree.getSelection()[0].getModel().getType();
         var msg = this.tr("Please enter the id of the new '%1'-Object",   /* this.tr( */
         type/* ) */);
-        dialog.prompt(msg, function(name) {
+        dialog.Dialog.prompt(msg, function(name) {
           if (name) {
             rightListStore.execute("addElement", [type, name], function() {
               rightListStore.reload();
@@ -404,7 +404,7 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
           types.push(itemModel.getType());
         });
         var msg = this.tr("Do you really want to delete the objects '%1'?", names.join(", "));
-        dialog.confirm(msg, function(yes) {
+        dialog.Dialog.confirm(msg, function(yes) {
           if (yes) {
             rightListStore.execute("deleteElement", [types[0], names], function() {
               rightListStore.reload();

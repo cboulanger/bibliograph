@@ -187,7 +187,7 @@ qx.Class.define("bibliograph.plugin.csl.FormattedView",
       this.getApplication().getRpcManager().execute("bibliograph.plugin.csl.Service", "getStyleData", [], function(styleData)
       {
         if (!qx.lang.Type.isArray(styleData)) {
-          dialog.alert("Invalid style data.");
+          dialog.Dialog.alert("Invalid style data.");
         }
         styleData.forEach(function(style)
         {

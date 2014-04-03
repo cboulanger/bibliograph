@@ -48,8 +48,8 @@ qx.Class.define("bibliograph.Application",
       this.getRoot().add(qxComposite1, {
         edge : 0
       });
-      var qclLoginDialog1 = new qcl.ui.dialog.Login();
-      qclLoginDialog1.setCallback(this.checkLogin);
+      var qclLoginDialog1 = new dialog.Login();
+      qclLoginDialog1.setCheckCredentials(this.checkLogin);
       qclLoginDialog1.setWidgetId("loginDialog");
       qclLoginDialog1.setAllowCancel(true);
       qx.core.Init.getApplication().getConfigManager().addListener("ready", function() {

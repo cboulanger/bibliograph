@@ -142,13 +142,15 @@ class bibliograph_service_Backup
     /*
      * zipfile
      */
-    $path = BIBLIOGRAPH_BACKUP_PATH;
-    $zipfile = realpath( $path ) . "/" . $datasource . "_" . date("Y-m-d_H-i-s") . ".zip";
+    $backupPath = BIBLIOGRAPH_BACKUP_PATH;
+    $tmpPath    = QCL_TMP_PATH;
+
+    $zipfile = realpath( $backupPath ) . "/" . $datasource . "_" . date("Y-m-d_H-i-s") . ".zip";
     $zip = new ZipArchive();
     if ($zip->open($zipfile, ZIPARCHIVE::CREATE)!==TRUE)
     {
-      $this->warn("Cannot create file '$zipfile'");
-      throw new JsonRpcException("Cannot create backup archive");
+      $this->warn("Cannot create file '$zipfile' in '$backupPath'");
+      throw new JsonRpcException("Cannot create backup archive - please check file permissions.");
     }
 
     /*
@@ -159,7 +161,7 @@ class bibliograph_service_Backup
     {
       foreach( $tables as $table )
       {
-        $file = qcl_realpath( $path ) . "/" . $table . "-" . md5( microtime() );
+        $file = qcl_realpath( $tmpPath ) . "/" . $table . "-" . md5( microtime() );
         $adapter->exec( "SELECT * INTO OUTFILE '$file' FROM `$database`.`$table`");
         $zip->addFile( $file, $table . ".txt" );
         $files[] = $file;
@@ -169,7 +171,7 @@ class bibliograph_service_Backup
     {
       $zip->close();
       $this->warn( $e->getMessage() );
-      throw new JsonRpcException( "You don't seem to have the neccessary MySql Privileges to make a backup. You need at least the global 'SELECT' and 'FILE' privilege" );
+      throw new JsonRpcException( "You don't seem to have the necessary MySql Privileges to make a backup. You need at least the global 'SELECT' and 'FILE' privilege" );
     }
 
     $zip->close();
@@ -177,7 +179,13 @@ class bibliograph_service_Backup
     /*
      * delete files
      */
-    foreach( $files as $file ) unlink( $file );
+    foreach( $files as $file )
+    {
+      if ( ! @unlink( $file ) )
+      {
+        $this->warn("Cannot create delete '$zipfile'");
+      }
+    }
 
     /*
      * return the name of the backup file created
@@ -185,6 +193,10 @@ class bibliograph_service_Backup
     return basename( $zipfile );
   }
 
+  /**
+   * @param $datasource
+   * @return qcl_ui_dialog_Confirm
+   */
   public function method_dialogCreateBackup( $datasource )
   {
     qcl_import("qcl_ui_dialog_Confirm");
@@ -199,7 +211,7 @@ class bibliograph_service_Backup
    * Do the backup
    * @param $go
    * @param $datasource
-   * @return unknown_type
+   * @return qcl_ui_dialog_Alert
    */
   public function method_createBackup( $go, $datasource )
   {
@@ -225,6 +237,10 @@ class bibliograph_service_Backup
     );
   }
 
+  /**
+   * @param $datasource
+   * @return qcl_ui_dialog_Confirm
+   */
   public function method_dialogRestoreBackup( $datasource )
   {
     $this->checkBackupPrerequisites();
@@ -237,18 +253,24 @@ class bibliograph_service_Backup
     );
   }
 
-
+  /**
+   * Service to present the user with a choice of backups
+   * @param $form
+   * @param $datasource
+   * @return qcl_ui_dialog_Form|string
+   * @throws JsonRpcException
+   */
   public function method_dialogChooseBackup( $form, $datasource )
   {
-    if ( $form === null )
+    if ( $form === false )
     {
       return "ABORTED";
     }
 
     $this->checkBackupPrerequisites();
-    $path = BIBLIOGRAPH_BACKUP_PATH;
+    $backupPath = BIBLIOGRAPH_BACKUP_PATH;
     $options = array();
-    $files = scandir($path);
+    $files = scandir($backupPath);
     rsort( $files );
     foreach( $files as $file )
     {
@@ -284,6 +306,12 @@ class bibliograph_service_Backup
     );
   }
 
+  /**
+   * @param $data
+   * @param $datasource
+   * @return string
+   * @throws JsonRpcException
+   */
   public function method_restoreBackup( $data, $datasource )
   {
     if ( $data === null )
@@ -292,10 +320,14 @@ class bibliograph_service_Backup
     }
 
     $this->checkBackupPrerequisites();
-    $path = BIBLIOGRAPH_BACKUP_PATH;
-    $zipfile = $path . "/" . $data->file;
+
+    $backupPath = BIBLIOGRAPH_BACKUP_PATH;
+    $tmpPath    = QCL_TMP_PATH;
+
+    $zipfile = $backupPath . "/" . $data->file;
     if( ! file_exists( $zipfile ) )
     {
+      $this->warn("File '$zipfile' does not exist.");
       throw new JsonRpcException(_("Backup file does not exist."));
     }
 
@@ -306,31 +338,41 @@ class bibliograph_service_Backup
       throw new JsonRpcException("Cannot open backup archive");
     }
 
-    $lockfile = $path . "/$datasource.lock";
+    $lockfile = $backupPath . "/$datasource.lock";
     if( file_exists($lockfile) )
     {
       throw new JsonRpcException("Cannot restore backup. Backup is locked.");
     }
     touch( $lockfile );
 
-    $zip->extractTo( $path );
+    $zip->extractTo( $tmpPath );
 
     $dsModel = $this->getDatasourceModel( $datasource );
     $adapter = $dsModel->getQueryBehavior()->getAdapter();
     $database = $dsModel->getDatabase();
 
+    $problem = null;
     for ( $i=0; $i < $zip->numFiles; $i++ )
     {
       $name = $zip->getNameIndex( $i );
       $table = substr( $name, 0, -4 );
-      $file = "$path/$table.txt";
+      $file = "$tmpPath/$table.txt";
       $adapter->exec( "TRUNCATE TABLE `$database`.`$table`");
       $adapter->exec( "LOAD DATA INFILE '$file' INTO TABLE `$database`.`$table`");
-      unlink( $file );
+      if ( !@unlink( $file ) )
+      {
+        $problem = true;
+        $this->warn("Cannot delete temporary backup file '$file'");
+      }
     }
 
     $zip->close();
-    unlink( $lockfile );
+
+    if ( !@unlink( $lockfile ) )
+    {
+      $problem = true;
+      $this->warn("Cannot delete lockfile file '$lockfile'");
+    };
 
     /*
      * reset transaction ids
@@ -347,7 +389,13 @@ class bibliograph_service_Backup
     $this->broadcastClientMessage("backup.restored",array(
       "datasource" => $datasource
     ) );
-    return "OK";
+
+
+    $msg = $this->tr( "Backup has been restored." );
+    if ($problem ) $msg .= $this->tr( "Please check logfile for problems." );
+
+    qcl_import("qcl_ui_dialog_Alert");
+    return new qcl_ui_dialog_Alert($msg);
 
   }
 

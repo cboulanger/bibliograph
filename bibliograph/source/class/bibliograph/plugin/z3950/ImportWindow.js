@@ -83,7 +83,7 @@ qx.Class.define("bibliograph.plugin.z3950.ImportWindow",
       var ids = this.listView.getSelectedIds();
       if (!ids.length)
       {
-        dialog.alert(this.tr("You have to select one or more reference to import."));
+        dialog.Dialog.alert(this.tr("You have to select one or more reference to import."));
         return false;
       }
 
@@ -93,7 +93,7 @@ qx.Class.define("bibliograph.plugin.z3950.ImportWindow",
       var targetFolderId = app.getFolderId();
       if (!targetFolderId)
       {
-        dialog.alert(this.tr("Please select a folder first."));
+        dialog.Dialog.alert(this.tr("Please select a folder first."));
         return false;
       }
       var treeView = app.getWidgetById("mainFolderTree");
@@ -101,12 +101,12 @@ qx.Class.define("bibliograph.plugin.z3950.ImportWindow",
       var node = treeView.getTree().getDataModel().getData()[nodeId];
       if (!node)
       {
-        dialog.alert(this.tr("Cannot determine selected folder."));
+        dialog.Dialog.alert(this.tr("Cannot determine selected folder."));
         return false;
       }
       if (node.data.type != "folder")
       {
-        dialog.alert(this.tr("Invalid target folder. You can only import into normal folders."));
+        dialog.Dialog.alert(this.tr("Invalid target folder. You can only import into normal folders."));
         return false;
       }
 

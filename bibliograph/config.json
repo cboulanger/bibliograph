@@ -32,7 +32,7 @@
 
     // qooxdoo
     "APPLICATION"    : "bibliograph", 
-    "QOOXDOO_PATH"   : "../qooxdoo/2.1",
+    "QOOXDOO_PATH"   : "../qooxdoo/qooxdoo-3.5-sdk",
     "QXTHEME"        : "bibliograph.theme.Theme",
     "LOCALES"        : [ "en","de" ],
     "ROOT"           : ".",
@@ -51,26 +51,31 @@
     {
       "library" :
       [
-       // qcl-js
-       {
-         "manifest" : "contrib/qcl/0.2/Manifest.json"
-       },
-       // Dialogs 
-       {
-         "manifest" : "contrib/Dialog/trunk/Manifest.json"
-       },       
-       // Persist
-       {
+        // from contrib-catalog
+
+        // Dialogs
+        {
+         "manifest" : "contrib://Dialog/master/Manifest.json"
+        },
+        // Upload widget
+        {
+          "manifest" : "contrib://UploadWidget/trunk/Manifest.json"
+        },
+
+        // local legacy contribs
+
+        // Persist
+        {
          "manifest" : "contrib/Persist/trunk/Manifest.json"
-       }, 
-       // VirtualData
-       {
+        },
+        // VirtualData
+        {
          "manifest" : "contrib/VirtualData/trunk/Manifest.json"
-       },
-       // Upload widget
-       {
-         "manifest" : "contrib/UploadWidget/Manifest.json"
-       }
+        },
+        // qcl-js
+        {
+          "manifest" : "contrib/qcl/0.2/Manifest.json"
+        }
       ]
     },
     

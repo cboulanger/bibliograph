@@ -172,7 +172,7 @@ qx.Class.define("bibliograph.ui.item.RecordInfo",
           }, this);
         }
       }, this);
-      dialog.confirm(message, handler);
+      dialog.Dialog.confirm(message, handler);
     },
     endOfFile : true
   }

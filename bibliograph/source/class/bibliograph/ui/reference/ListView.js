@@ -887,7 +887,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
       var folderId = this.getFolderId();
       if (!folderId)
       {
-        dialog.alert(this.tr("You cannot create an item outside a folder"));
+        dialog.Dialog.alert(this.tr("You cannot create an item outside a folder"));
         return false;
       }
       var store = this.getStore();
@@ -908,7 +908,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
           this.modifyReferences("remove", null);
         }
       }, this);
-      dialog.confirm(message, handler);
+      dialog.Dialog.confirm(message, handler);
     },
 
     /**
@@ -923,7 +923,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
         var node = e.getData();
         if (!node)
         {
-          dialog.alert("No folder selected. Try again");
+          dialog.Dialog.alert("No folder selected. Try again");
           return;
         }
         var message = this.tr("Do your really want to move the selected references to '%1'?", [node.label]);
@@ -932,7 +932,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
             this.modifyReferences("move", parseInt(node.data.id));
           }
         }, this);
-        dialog.confirm(message, handler);
+        dialog.Dialog.confirm(message, handler);
       }, this);
       win.show();
     },
@@ -949,7 +949,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
         var node = e.getData();
         if (!node)
         {
-          dialog.alert("No folder selected. Try again");
+          dialog.Dialog.alert("No folder selected. Try again");
           return;
         }
         var message = this.tr("Do your really want to copy the selected referencesto '%1'?", [node.label]);
@@ -958,7 +958,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
             this.modifyReferences("copy", parseInt(node.data.id));
           }
         }, this);
-        dialog.confirm(message, handler);
+        dialog.Dialog.confirm(message, handler);
       }, this);
       win.show();
     },

@@ -68,7 +68,7 @@ qx.Class.define("bibliograph.ui.window.DatasourceListWindow",
         root.blockContent(this.getZIndex() - 1);
       }, this);
       dsList.addListener("disappear", function(e) {
-        this.getApplicationRoot().unblockContent();
+        //this.getApplicationRoot().unblockContent(); // not working with qx > 3.0
       }, this);
       var qxHbox1 = new qx.ui.layout.HBox(5, null, null);
       var qxComposite1 = new qx.ui.container.Composite();
