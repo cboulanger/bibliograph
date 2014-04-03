@@ -165,7 +165,7 @@ qx.Class.define("bibliograph.Main",
     ---------------------------------------------------------------------------
     */
     getVersion : function() {
-      return "v2.1 (03.04.2014)";
+      return "v2.1 RC1 (03.04.2014)";
     },
     getCopyright : function() {
       return "2003-2014 (c) Christian Boulanger";
@@ -776,6 +776,7 @@ qx.Class.define("bibliograph.Main",
       var app = qx.core.Init.getApplication();
       app.showPopup(app.tr("Authenticating ..."));
       app.getAccessManager().authenticate(username, password, function(data) {
+        app.hidePopup();
         if (data.error) {
           callback(false, data.error);
         } else {
@@ -804,6 +805,7 @@ qx.Class.define("bibliograph.Main",
         }
       });
     },
+
 
     /**
      * Log out the current user

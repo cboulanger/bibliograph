@@ -50,6 +50,11 @@ qx.Class.define("bibliograph.Application",
       });
       var qclLoginDialog1 = new dialog.Login();
       qclLoginDialog1.setCheckCredentials(this.checkLogin);
+      qclLoginDialog1.setCallback(function(loginSuccessful){
+        if(loginSuccessful){
+          qclLoginDialog1.hide();
+        }
+      });
       qclLoginDialog1.setWidgetId("loginDialog");
       qclLoginDialog1.setAllowCancel(true);
       qx.core.Init.getApplication().getConfigManager().addListener("ready", function() {

@@ -603,9 +603,13 @@ qx.Class.define("qcl.data.store.JsonRpc",
       /*
        * alert error if the dialog package is loaded
        */
-      if ( qx.lang.Type.isObject( window.dialog ) && qx.lang.Type.isFunction( dialog.alert ) )
+      try
       {
-        dialog.alert(ex.message);  
+        dialog.Dialog.alert(ex.message);
+      }
+      catch(e)
+      {
+        this.warn("Cannot alert exception.");
       }
     },
     
