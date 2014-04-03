@@ -7,9 +7,33 @@ bibliographic data.
 - Demo installation: http://demo.bibliograph.org
 - Documentation: http://www.bibliograph.org
 
+Bibliograph
+
+- is an application that lets you collect, edit, and publish bibliographic data collaboratively on the web.
+- has a modern and intuitive user interface that makes the daily life of working with bibliographies and library collections easy and fun.
+- allows researchers, librarians, teachers and students work together online without having to install software locally.
+- is fully open source and free to download and install.
+
+Bibliograph can be used by
+
+- scholars and librarians who want to publish a book collection or a thematic bibliography publicly online
+- groups of researchers who work together in a research project and want to collect and share bibliographic references
+- professors and teachers who want to share bibliographic information with their students
+
 Features
 --------
-- TODO
+- Organize bibliographic records in static folders or dynamic collections based on queries
+- Rich metadata, Autocompletion and duplicate detection
+- Allows natural language queries like "title contains hamlet and author beginswith shake"
+- Fine-grained access control system with users, roles, groups and permissions allows flexible user management and contol of who is allowed to view, enter, edit and delete data.
+- Unlimited amount of separate databases
+- Imports data from library catalogues (through Z39.50 interface) and from various file-based data formats (RIS, BibTeX, Endnote, MODS, and more)
+- Export data into open formats
+- Formats bibliographic records with various citation styles (APA, Chicago, ...) using CSL templates and the citeproc style processor (http://citationstyles.org)
+- Can create backup snapshots of databases and
+- LDAP integration to connect to existing LDAP servers
+- Fully open source, can be easily adapted and extended
+- Extensible data model allows easy modification of record fields and integration of a variety of backends (e.g., NoSql, xml, REST or binary backends)
 
 Prerequisites
 -------------
