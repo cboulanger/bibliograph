@@ -2,6 +2,7 @@
 .DS_Store
 qooxdoo
 bibliograph/build
+bibliograph/source/script/*
 bibliograph/services/config/bibliograph.ini.php
 bibliograph/services/config/server.conf.php
 bibliograph/contrib/Dialog
