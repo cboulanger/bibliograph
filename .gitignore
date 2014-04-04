@@ -1,8 +1,8 @@
 .idea
 .DS_Store
 qooxdoo
-bibliograph-mobile
-bibliograph/build
+build
+bibliograph-mobile/source/script/*
 bibliograph/source/script/*
 bibliograph/services/config/bibliograph.ini.php
 bibliograph/services/config/server.conf.php

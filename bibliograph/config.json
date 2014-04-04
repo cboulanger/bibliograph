@@ -110,10 +110,7 @@
       // copy plugin development files
       "copy-files" :
       {
-        "files"     : [ 
-          "csl", 
-          "z3950" 
-        ],
+        "files"     : ["csl","z3950","isbnscanner"],
         "source" : "source/class/bibliograph/plugin",
         "target" : "source/resource/bibliograph/plugin"
       }

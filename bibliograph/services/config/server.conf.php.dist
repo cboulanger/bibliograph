@@ -62,7 +62,9 @@ define( "QCL_LOG_FILE", sys_get_temp_dir() . "/bibliograph.log" );
 
 /*
  * The directory where persistent data is stored, for example, the data of persistent
- * objects.
+ * objects. You MUST change this path to a world-writable path outside the server
+ * document root before using the application in production, otherwise you risk losing
+ * data.
  */
 if ( ! defined("QCL_VAR_DIR") )
 {

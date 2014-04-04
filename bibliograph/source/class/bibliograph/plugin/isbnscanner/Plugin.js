@@ -16,12 +16,10 @@
 ************************************************************************ */
 
 /**
- * Z39.50 Plugin:
- *
- *    This plugin allows to import references from Z39.50 datasources
+ * ISBN scanner plugin
  *
  */
-qx.Class.define("bibliograph.plugin.z3950.Plugin",
+qx.Class.define("bibliograph.plugin.isbnscanner.Plugin",
 {
   extend : qx.core.Object,
   include : [qx.locale.MTranslation],
@@ -35,19 +33,17 @@ qx.Class.define("bibliograph.plugin.z3950.Plugin",
     init : function()
     {
       /*
-       * add window
-       */
-      var app = qx.core.Init.getApplication();
-      var importWindow = new bibliograph.plugin.z3950.ImportWindowUi();
-      app.getRoot().add(importWindow);
-
-      /*
        * add a new menu button
        */
       var importMenu = app.getWidgetById("importMenu");
-      var menuButton = new qx.ui.menu.Button(this.tr("Import from library catalogue"));
+      var menuButton = new qx.ui.menu.Button(this.tr("Scan ISBN barcode with iOS device"));
       menuButton.addListener("execute", function() {
-        importWindow.show();
+        var mailtoUrl = "mailto:your-email-here@your-mail-provider.com" +
+            "?Subject=Link to barcode scanner app" +
+            "&Body=". window.location.href;
+        dialog.Dialog.alert(
+            "Click on the following link to send an email to your mobile phone with a link to the " +
+                "ISBN barcode scanning app.");
       });
       importMenu.add(menuButton);
     }
@@ -57,4 +53,4 @@ qx.Class.define("bibliograph.plugin.z3950.Plugin",
 /*
  * initialize plugin
  */
-bibliograph.plugin.z3950.Plugin.getInstance().init();
+bibliograph.plugin.isbnscanner.Plugin.getInstance().init();

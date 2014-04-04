@@ -35,20 +35,16 @@ qx.Class.define("bibliograph.plugin.z3950.Plugin",
     init : function()
     {
       /*
-             * get the item view widget
-             */
+       * add window
+       */
       var app = qx.core.Init.getApplication();
-      var importMenu = app.getWidgetById("importMenu");
-
-      /*
-             * add window
-             */
       var importWindow = new bibliograph.plugin.z3950.ImportWindowUi();
       app.getRoot().add(importWindow);
 
       /*
-             * add a new menu button
-             */
+       * add a new menu button
+       */
+      var importMenu = app.getWidgetById("importMenu");
       var menuButton = new qx.ui.menu.Button(this.tr("Import from library catalogue"));
       menuButton.addListener("execute", function() {
         importWindow.show();

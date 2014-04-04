@@ -110,7 +110,7 @@ abstract class qcl_application_plugin_AbstractPlugin
    * Installs the plugin. If an error occurs, a qcl_application_plugin_Exception
    * must be thrown.
    * @throws qcl_core_NotImplementedException
-   * @return void
+   * @return void|string Can return a message that will be displayed after installation.
    */
   public function install()
   {
@@ -123,17 +123,19 @@ abstract class qcl_application_plugin_AbstractPlugin
    * Throws qcl_application_plugin_Exception if something goes wrong.
    *
    * @throws qcl_application_plugin_Exception
+   * @return void|string Can return a message that will be displayed after reinstallation.
    */
   public function reinstall()
   {
     $this->uninstall();
-    $this->install();
+    return $this->install();
   }
 
   /**
    * Uninstalls the plugin. Throws qcl_application_plugin_Exception if something
    * goes wrong
    * @throws qcl_application_plugin_Exception
+   * @return void|string Can return a message that will be displayed after uninstallation.
    */
   public function uninstall()
   {

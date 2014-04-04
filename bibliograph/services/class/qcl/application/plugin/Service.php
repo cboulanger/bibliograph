@@ -124,6 +124,7 @@ class qcl_application_plugin_Service
       $class  = $namedId ."_Plugin";
       $plugin = new $class();
       $msg = "";
+      $installMsg = "";
 
       switch ( $action )
       {
@@ -133,7 +134,7 @@ class qcl_application_plugin_Service
           ), QCL_LOG_PLUGIN );
           try
           {
-            $plugin->install();
+            $installMsg = $plugin->install();
             $registryModel->create( $namedId, array(
               'name'        => $plugin->getName(),
               'description' => $plugin->getDescription(),
@@ -161,7 +162,7 @@ class qcl_application_plugin_Service
           ), QCL_LOG_PLUGIN );
           try
           {
-            $plugin->reinstall();
+            $installMsg = $plugin->reinstall();
             $registryModel->load($namedId);
             $registryModel->set( array(
               'description' => $plugin->getDescription(),
@@ -190,7 +191,7 @@ class qcl_application_plugin_Service
           ), QCL_LOG_PLUGIN );
           try
           {
-            $plugin->uninstall();
+            $installMsg = $plugin->uninstall();
             $registryModel->load( $namedId );
             $registryModel->delete();
             $msg = sprintf(
@@ -209,8 +210,12 @@ class qcl_application_plugin_Service
           break;
       }
 
-      if ( $msg)
+      if ( $msg or $installMsg )
       {
+        if ( $installMsg )
+        {
+          $msg . "\n" . $installMsg;
+        }
         $messages[] = $msg;
       }
     }
