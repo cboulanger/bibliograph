@@ -45,6 +45,13 @@ class fieldsExtensionExmpl_Plugin
    */
   protected $description = "This is an example plugin which demonstrates how to extend the reference data schema.";
 
+  /**
+   * Flag to indicate whether the plugin is visible to the plugin manager.
+   * Set to false since this plugin is only an example and not meant to be used as is.
+   * @var bool
+   */
+  protected $visible = false;
+
  	/**
 	 * Installs the plugin. If an error occurs, a qcl_application_plugin_Exception
 	 * must be thrown.

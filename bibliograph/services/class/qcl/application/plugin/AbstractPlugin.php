@@ -59,6 +59,12 @@ abstract class qcl_application_plugin_AbstractPlugin
    */
   protected $data = array();
 
+  /**
+   * Flag to indicate whether the plugin is visible to the plugin manager
+   * @var bool
+   */
+  protected $visible = true;
+
   //-------------------------------------------------------------
   // properties
   //-------------------------------------------------------------
@@ -89,6 +95,15 @@ abstract class qcl_application_plugin_AbstractPlugin
   public function getData()
   {
     return $this->data;
+  }
+
+  /**
+   * Whether this plugin is visible or not.
+   * @return bool
+   */
+  public function isVisible()
+  {
+    return $this->visible;
   }
 
   /**

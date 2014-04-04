@@ -62,6 +62,13 @@ class qcl_application_plugin_Service
         require_once ( $file );
         $class  = "{$namedId}_Plugin";
         $plugin = new $class();
+
+        // if plugin is not meant to be visible, skip
+        if ( ! $plugin->isVisible() )
+        {
+          continue;
+        }
+
         $name   = $plugin->getName();
 
         if ( ! $registryModel->namedIdExists( $namedId ) )
