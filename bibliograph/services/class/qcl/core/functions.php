@@ -474,7 +474,7 @@ function qcl_assert_false( $value )
  * Asserts that the given string is a valid email address.
  * Returns the email address if successful.
  *
- * @param $email
+ * @param $email The email address
  * @return string
  * @throws InvalidArgumentException
  */

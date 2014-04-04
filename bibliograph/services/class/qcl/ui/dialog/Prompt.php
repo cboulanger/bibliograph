@@ -26,17 +26,19 @@ class qcl_ui_dialog_Prompt
    * Returns a message to the client which prompts the user with an message and
    * an input field.
    * @param string $message The message text
+   * @param string|null The default value
    * @param string $callbackService Optional service that will be called when the user clicks on the OK button
    * @param string $callbackMethod Optional service method
    * @param array $callbackParams Optional service params
    * @return \qcl_ui_dialog_Prompt
    */
-  function __construct( $message, $callbackService=null, $callbackMethod=null, $callbackParams=null )
+  function __construct( $message, $value, $callbackService=null, $callbackMethod=null, $callbackParams=null )
   {
     $this->dispatchDialogMessage( array(
       'type' => "prompt",
       'properties' => array(
-        'message' => $message
+        'message' => $message,
+        'value'   => $value
       ),
       'service' => $callbackService,
       'method'  => $callbackMethod,

@@ -50,6 +50,18 @@ qx.Class.define("bibmobile.Application",
       -------------------------------------------------------------------------
       */
 
+      // ugh. so much code just to get the querystring parameters
+      var urlParams;
+      var match,
+            pl     = /\+/g,  // Regex for replacing addition symbol with a space
+            search = /([^&=]+)=?([^&]*)/g,
+            decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
+            query  = window.location.search.substring(1);
+        urlParams = {};
+        while (match = search.exec(query))
+          urlParams[decode(match[1])] = decode(match[2]);
+
+
       var page1 = new qx.ui.mobile.page.NavigationPage();
       page1.setTitle("Bibliograph Mobile Client");
       page1.addListener("initialize", function()
@@ -79,8 +91,10 @@ qx.Class.define("bibmobile.Application",
 
         button.addListener("tap", function()
         {
+          var backendUrl = window.location.href.split(/\//);
+          backendUrl = backendUrl.slice(0, backendUrl.length-3).join("/") + "/bibliograph/services/server.php";
           var scannerUrl = "ilu://x-callback-url/scanner-go?x-source=Bibliograph&x-success=" +
-              document.location + "?&sg-result=k";
+              backendUrl + "?&sg-result=isbn";
           window.location.href = scannerUrl;
         }, this);
       },this);

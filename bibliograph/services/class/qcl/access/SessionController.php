@@ -426,12 +426,13 @@ class qcl_access_SessionController
   /**
    * Returns a new session id that depends on a parent session and
    * will be deleted when the parent session is deleted.
+   * @param string|null $parentSessionId If null, the current session id is used.
    */
-  public function createChildSession( $parentSessionId )
+  public function createChildSession( $parentSessionId=null )
   {
     if ( ! $parentSessionId )
     {
-      throw new InvalidArgumentException("Invalid parent session id.");
+      $parentSessionId = $this->getSessionId();
     }
 
     /*
