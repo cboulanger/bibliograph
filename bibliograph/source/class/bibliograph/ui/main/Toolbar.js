@@ -146,6 +146,10 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       qxMenuButton7.addListener("execute", function(e) {
         this.getApplication().getRpcManager().execute("bibliograph.backup", "dialogDeleteBackups", [this.getApplication().getDatasource()]);
       }, this);
+
+      /*
+       * Import Menu
+       */
       var qxToolBarMenuButton2 = new qx.ui.toolbar.MenuButton(this.tr('Import'), "icon/22/places/network-server.png", null);
       qxToolBarMenuButton2.setLabel(this.tr('Import'));
       qxToolBarMenuButton2.setIcon("icon/22/places/network-server.png");
@@ -156,12 +160,21 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       var qxMenu3 = new qx.ui.menu.Menu();
       qxMenu3.setWidgetId("importMenu");
       qxToolBarMenuButton2.setMenu(qxMenu3);
+
+      /*
+       * Import Text file
+       */
       var qxMenuButton8 = new qx.ui.menu.Button(this.tr('Import text file'), null, null, null);
       qxMenuButton8.setLabel(this.tr('Import text file'));
       qxMenu3.add(qxMenuButton8);
       qxMenuButton8.addListener("execute", function(e) {
         this.getApplication().getWidgetById("importWindow").show();
       }, this);
+
+
+      /*
+       * Help
+       */
       var qxToolBarMenuButton3 = new qx.ui.toolbar.MenuButton(this.tr('Help'), "icon/22/apps/utilities-help.png", null);
       qxToolBarMenuButton3.setLabel(this.tr('Help'));
       qxToolBarMenuButton3.setIcon("icon/22/apps/utilities-help.png");

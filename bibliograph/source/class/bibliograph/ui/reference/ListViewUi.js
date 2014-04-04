@@ -131,6 +131,10 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
       var qxMenu1 = new qx.ui.menu.Menu();
       qxMenu1.setPosition("top-left");
       qxMenuBarButton2.setMenu(qxMenu1);
+
+      /*
+       * Move references
+       */
       var qxMenuButton1 = new qx.ui.menu.Button(this.tr('Move reference(s)...'), null, null, null);
       qxMenuButton1.setLabel(this.tr('Move reference(s)...'));
       qxMenu1.add(qxMenuButton1);
@@ -141,6 +145,10 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
       qx.core.Init.getApplication().getAccessManager().getPermissionManager().create("reference.move").bind("state", qxMenuButton1, "visibility", {
         converter : qcl.bool2visibility
       });
+
+      /*
+       * Copy references
+       */
       var qxMenuButton2 = new qx.ui.menu.Button(this.tr('Copy reference(s)...'), null, null, null);
       qxMenuButton2.setLabel(this.tr('Copy reference(s)...'));
       qxMenu1.add(qxMenuButton2);
@@ -151,6 +159,10 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
       qx.core.Init.getApplication().getAccessManager().getPermissionManager().create("reference.move").bind("state", qxMenuButton2, "visibility", {
         converter : qcl.bool2visibility
       });
+
+      /*
+       * Export menu
+       */
       var qxMenuButton3 = new qx.ui.menu.Button(this.tr('Export references'), null, null, null);
       qxMenuButton3.setLabel(this.tr('Export references'));
       qxMenu1.add(qxMenuButton3);
@@ -159,6 +171,10 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
       });
       var qxMenu2 = new qx.ui.menu.Menu();
       qxMenuButton3.setMenu(qxMenu2);
+
+      /*
+       * Export selected references
+       */
       var qxMenuButton4 = new qx.ui.menu.Button(this.tr('Export selected references'), null, null, null);
       qxMenuButton4.setLabel(this.tr('Export selected references'));
       qxMenu2.add(qxMenuButton4);
@@ -168,12 +184,20 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
       qxMenuButton4.addListener("execute", function(e) {
         this.exportSelected()
       }, this);
+
+      /*
+       * Export folder
+       */
       var qxMenuButton5 = new qx.ui.menu.Button(this.tr('Export folder'), null, null, null);
       qxMenuButton5.setLabel(this.tr('Export folder'));
       qxMenu2.add(qxMenuButton5);
       qxMenuButton5.addListener("execute", function(e) {
         this.exportFolder()
       }, this);
+
+      /*
+       * Edit menu
+       */
       var qxMenuButton6 = new qx.ui.menu.Button(this.tr('Edit references'), null, null, null);
       qxMenuButton6.setLabel(this.tr('Edit references'));
       qxMenu1.add(qxMenuButton6);
@@ -182,6 +206,10 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
       });
       var qxMenu3 = new qx.ui.menu.Menu();
       qxMenuButton6.setMenu(qxMenu3);
+
+      /*
+       * Find/Replace Button
+       */
       var qxMenuButton7 = new qx.ui.menu.Button(this.tr('Find/Replace'), null, null, null);
       qxMenuButton7.setLabel(this.tr('Find/Replace'));
       qxMenu3.add(qxMenuButton7);
@@ -191,6 +219,11 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
       qxMenuButton7.addListener("execute", function(e) {
         this.findReplace()
       }, this);
+
+
+      /*
+       * Reload Button
+       */
       var qxMenuButton8 = new qx.ui.menu.Button(this.tr('Reload'), "bibliograph/icon/button-reload.png", null, null);
       qxMenuButton8.setLabel(this.tr('Reload'));
       qxMenuButton8.setIcon("bibliograph/icon/button-reload.png");
@@ -198,6 +231,10 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
       qxMenuButton8.addListener("execute", function(e) {
         this.reload()
       }, this);
+
+      /*
+       * Status bar
+       */
       var statusLabel = new qx.ui.basic.Label(null);
       statusLabel.setTextColor("#808080");
       statusLabel.setMargin(5);
@@ -208,7 +245,6 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
       statusLabel.addListener("changeValue", function(e) {
         qx.util.TimerManager.getInstance().start(function(value) {
           if (statusLabel.getValue() == value)statusLabel.setValue("");
-
         }, null, this, e.getData(), 5000);
       }, this);
     }
