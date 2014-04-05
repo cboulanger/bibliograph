@@ -15,18 +15,13 @@
 
 ************************************************************************ */
 
-/* ************************************************************************
-
-#asset(bibliograph/*)
-#require(bibliograph.theme.Assets);
-#require(qcl.ui.dialog.Dialog)
-#require(qx.ui.form.RadioGroup)
-#require(qx.ui.menu.RadioButton)
-
-************************************************************************ */
-
 /**
  * The main application class
+ * @asset(bibliograph/*)
+ * @require(bibliograph.theme.Assets);
+ * @require(qcl.ui.dialog.Dialog)
+ * @require(qx.ui.form.RadioGroup)
+ * @require(qx.ui.menu.RadioButton)
  */
 qx.Class.define("bibliograph.Main",
 {
@@ -246,7 +241,7 @@ qx.Class.define("bibliograph.Main",
       this.initializeManagers();
 
       /*
-       * rpc
+       * rpc endpoint and timeout
        */
       this.getRpcManager().setServerUrl("../services/server.php");
       this.getRpcManager().getRpcObject().setTimeout(180000);  //3 Minutes
@@ -277,13 +272,11 @@ qx.Class.define("bibliograph.Main",
       /*
        * Setup event handler called when the datasource store is
        * reloaded
-       * FIXME rename to datasourceListStore
        */
       this.getDatasourceStore().addListener("loaded", this._on_datasourceStore_loaded, this);
 
       /*
        * bind application title to datasource title
-       * FIXME move to datasource label itself
        */
       this.bind("datasourceModel.title", this, "datasourceLabel");
 
@@ -391,8 +384,7 @@ qx.Class.define("bibliograph.Main",
 
       /*
        * restore application states
-       * TODO: why is that necessary? is that a workaround? don't remember
-       */
+        */
       if (this.__itemView) {
         this.setItemView(this.__itemView);
       }
@@ -420,7 +412,6 @@ qx.Class.define("bibliograph.Main",
       /*
        * polling service to transport messages and ping server to keep
        * session alive and to clean up dead sessions on the server.
-       * @todo unhardcode polling interval
        */
       setInterval(qx.lang.Function.bind(this._pollingService, this), 10000);
     },

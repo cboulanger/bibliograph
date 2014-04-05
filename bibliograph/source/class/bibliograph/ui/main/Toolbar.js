@@ -31,6 +31,10 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       var qxToolBar1 = this;
       var qxToolBarPart1 = new qx.ui.toolbar.Part();
       qxToolBar1.add(qxToolBarPart1);
+
+      /*
+       * Login Button
+       */
       var loginButton = new qx.ui.toolbar.Button(this.tr('Login'), "icon/16/status/dialog-password.png", null);
       loginButton.setLabel(this.tr('Login'));
       loginButton.setVisibility("excluded");
@@ -44,6 +48,10 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       loginButton.addListener("execute", function(e) {
         this.getApplication().login();
       }, this);
+
+      /*
+       * Logout Button
+       */
       var logoutButton = new qx.ui.toolbar.Button(this.tr('Logout'), "icon/16/actions/application-exit.png", null);
       logoutButton.setLabel(this.tr('Logout'));
       logoutButton.setVisibility("excluded");
@@ -57,6 +65,10 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       logoutButton.addListener("execute", function(e) {
         this.getApplication().logout();
       }, this);
+
+      /*
+       * User button
+       */
       var qxToolBarButton1 = new qx.ui.toolbar.Button(this.tr('Loading...'), "icon/16/apps/preferences-users.png", null);
       qxToolBarButton1.setLabel(this.tr('Loading...'));
       qxToolBarButton1.setIcon("icon/16/apps/preferences-users.png");
@@ -72,8 +84,13 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       qxToolBarButton1.addListener("execute", function(e) {
         this.getApplication().editUserData();
       }, this);
+
       var qxToolBarPart2 = new qx.ui.toolbar.Part();
       qxToolBar1.add(qxToolBarPart2);
+
+      /*
+       * Datasources
+       */
       var qxToolBarButton2 = new qx.ui.toolbar.Button(this.tr('Datasources'), "icon/16/apps/utilities-archiver.png", null);
       qxToolBarButton2.setLabel(this.tr('Datasources'));
       qxToolBarButton2.setWidgetId("datasourceButton");

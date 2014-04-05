@@ -87,7 +87,7 @@ qx.Class.define("qcl.application.StateManager",
     stateSeparatorChar :
     {
       check : "String",
-      init : "^",
+      init : "!",
       nullable : false 
     },
     
@@ -99,7 +99,7 @@ qx.Class.define("qcl.application.StateManager",
     stateDefineChar :
     {
       check : "String",
-      init : "~",
+      init : ".",
       nullable : false
     },
     
@@ -113,19 +113,9 @@ qx.Class.define("qcl.application.StateManager",
       init : false,
       apply : "_applyHistorySupport",
       event : "changeHistorySupport"
-    },
-    
-    /**
-     * An array of names of the states that should be synchronized.
-     * with the server. By default, only the "sessionId" state is synchronized.
-     * @type Array
-     */
-    serverStateNames :
-    {
-      check : "Array",
-      event : "changeServerStateNames"
     }
-  
+    
+
   }, 
   
   /*
@@ -143,11 +133,7 @@ qx.Class.define("qcl.application.StateManager",
     this.__backHistoryStack = [];
     this.__forwardHistoryStack = [];
     
-    /*
-     * server states
-     */
-    this.setServerStateNames(["sessionId"]);
-  },  
+  },
 
   /*
   *****************************************************************************
@@ -370,7 +356,7 @@ qx.Class.define("qcl.application.StateManager",
           /*
            * placeholder to avoid page reload
            */
-          window.location.hash = "qcl=1";
+          window.location.hash = "";
         }
         
         /*
@@ -524,26 +510,6 @@ qx.Class.define("qcl.application.StateManager",
       return this._analyzeHashString();
     },
     
-    /**
-     * Returns a map with the application state values that
-     * should be tranparent to the server and will be synchronized
-     * with the server
-     * @return {Map}
-     */
-    getServerStates : function()
-    {
-      var states = this.getStates();
-      var names = this.getServerStateNames();
-      var serverStates = {};
-      for( key in states )
-      {
-        if ( qx.lang.Array.contains( names, key ) )
-        {
-          serverStates[key] = states[key];  
-        }
-      }
-      return serverStates;
-    },    
 
     /**
      * Updates the current state, firing all change events even if 

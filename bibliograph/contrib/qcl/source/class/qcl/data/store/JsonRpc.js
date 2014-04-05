@@ -357,16 +357,13 @@ qx.Class.define("qcl.data.store.JsonRpc",
       rpc.setCrossDomain( this.getAllowCrossDomainRequests() );
 
       /*
-       * Application state is sent as server data (piggybacking on the request
-       * to update the server about the state). (is ignored if application
-       * doesn't support application state) @todo rewrite, remove if we have a
-       * cometd implementation
+       * set server data (contains session id only)
        */
       if( qx.Class.hasMixin( 
             qx.Class.getByName( app.classname ), 
             qcl.application.MAppManagerProvider ) )
       {
-        rpc.setServerData( app.getStateManager().getServerStates() );  
+        rpc.setServerData( { sessionId : app.getSessionManager().getSessionId() } );
       }
 
       return rpc;
@@ -609,7 +606,7 @@ qx.Class.define("qcl.data.store.JsonRpc",
       }
       catch(e)
       {
-        this.warn("Cannot alert exception.");
+        alert(ex.message);
       }
     },
     

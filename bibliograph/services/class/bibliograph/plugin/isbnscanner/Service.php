@@ -60,10 +60,10 @@ class class_bibliograph_plugin_isbnscanner_Service
     $mail->setRecipientEmail($email);
     $mail->setSubject($this->tr("Link to Barcode Scanner App"));
 
-    $lbr         = "\n\n";
-    $sessionId   = $this->getAccessController()->createChildSession();
-    $appUrl      = dirname(dirname($this->getApplication()->getClientUrl())) .
-                   "/bibliograph-mobile/build?sessionId=" . $sessionId;
+    $lbr     = "\n\n";
+    $token   = $this->getAccessController()->createSiblingSessionToken();
+    $appUrl  = dirname(dirname($this->getApplication()->getClientUrl())) .
+                   "/bibliograph-mobile/build#sessionId." . $token;
     $appstoreUrl = "https://itunes.apple.com/de/app/scanner-go/id498868298?mt=8";
     $mail->setBody(
       $this->tr("Please open the following link in your iOS device.") .

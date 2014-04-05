@@ -267,7 +267,8 @@ qx.Mixin.define("qcl.application.MAppManagerProvider",
       var sid =  this.getStateManager().getState("sessionId");
       if ( sid )
       {
-        this.getSessionManager().setSessionId( sid );  
+        this.getSessionManager().setSessionId( sid );
+        this.getStateManager().removeState("sessionId");
       }      
     },
     

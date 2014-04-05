@@ -11,21 +11,36 @@
   "export" :
   [
     "api",
+    "api-data",
     "build",
     "clean",
     "distclean",
+    "dependencies",
     "fix",
-    "inspector",
+    "info",
     "lint",
     "migration",
     "pretty",
     "profiling",
+    "simulation-build",
+    "simulation-run",
     "source",
+    "source-all",
     "source-hybrid",
+    "source-server",
+    "source-server-reload",
+    "source-httpd-config",
     "test",
     "test-source",
-    "translation"
+    "test-mobile",
+    "test-mobile-source",
+    "translation",
+    "validate-config",
+    "validate-manifest",
+    "watch"
   ],
+
+  "default-job" : "source-hybrid",
 
   "let" :
   {

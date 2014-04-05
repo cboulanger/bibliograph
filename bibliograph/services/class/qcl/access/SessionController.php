@@ -158,7 +158,6 @@ class qcl_access_SessionController
     $this->registerSession();
   }
 
-
   /**
    * Authenticates with data in the request data, either by a given session id or
    * by a username - password combination.Supports child and sibling sessions
@@ -424,15 +423,24 @@ class qcl_access_SessionController
   }
 
   /**
+   * Creates a token which will be replaced with a child session id
+   * @return string
+   */
+  public function createChildSessionToken()
+  {
+    return "P_" . $this->getSessionId();
+  }
+
+  /**
    * Returns a new session id that depends on a parent session and
    * will be deleted when the parent session is deleted.
    * @param string|null $parentSessionId If null, the current session id is used.
    */
-  public function createChildSession( $parentSessionId=null )
+  public function createChildSession( $parentSessionId )
   {
     if ( ! $parentSessionId )
     {
-      $parentSessionId = $this->getSessionId();
+      throw new InvalidArgumentException("No parent session id.");
     }
 
     /*
@@ -478,19 +486,28 @@ class qcl_access_SessionController
 
     return $sessionId;
   }
-  
+
+  /**
+   * Creates a token which will be replaced with a sibling session id
+   * @return string
+   */
+  public function createSiblingSessionToken()
+  {
+    return "S_" . $this->getSessionId();
+  }
+
   /**
    * Returns a new session of the user that owns the given session id.
-   * @param string $siblingSessionId
+   * @param string $sessionId
    * @throws qcl_access_InvalidSessionException
    * @throws qcl_access_AccessDeniedException
    * @return int session id
    */
-  public function createSiblingSession( $siblingSessionId )
+  public function createSiblingSession( $siblingSessionId=null )
   {
     if ( ! $siblingSessionId )
     {
-      throw new qcl_access_InvalidSessionException("Invalid sibling session id.");
+      throw new InvalidArgumentException("No sibling session id.");
     }
 
     /*

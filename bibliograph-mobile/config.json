@@ -50,7 +50,7 @@
     "APPLICATION_PATH" : "bibmobile",
     "APPLICATION_CSS" : "${APPLICATION_PATH}/css/styles.css",  // resource id of custom css
     "QOOXDOO_PATH" : "../../qooxdoo/qooxdoo-3.5-sdk",
-    "LOCALES"      : [ "en" ],
+    "LOCALES"      : [ "en", "de" ],
     "CACHE"        : "${TMPDIR}/qx${QOOXDOO_VERSION}/cache",
     "MOBILE_THEME" : "custom",
     "MOBILE_THEME_PATH" : "${APPLICATION_PATH}/css/${MOBILE_THEME}.css",
@@ -79,21 +79,16 @@
 
   "jobs" :
   {
-    // Uncomment the following entry to add a contrib or library to your
-    // project; make sure to adapt the path to the Manifest.json; if you are
-    // using a contrib: library, it will be downloaded into the path specified
-    // by the 'cache/downloads' config key
-    /*
-    , "libraries" :
+    "libraries" :
     {
       "library" :
-      [
-        {
-          "manifest" : "contrib://SkeletonApplication/trunk/Manifest.json"
-        }
-      ]
+          [
+             // qcl-js
+            {
+              "manifest" : "../bibliograph/contrib/qcl/Manifest.json"
+            }
+          ]
     },
-    */
 
     "mobile-common" :
     {
