@@ -349,7 +349,7 @@ class qcl_access_Controller
    */
   public function destroySession( $sessionId )
   {
-    $this->log("Destroying old session #$sessionId",QCL_LOG_AUTHENTICATION);
+    $this->log("Destroying old Session $sessionId",QCL_LOG_AUTHENTICATION);
     session_destroy();
   }
 
@@ -380,27 +380,15 @@ class qcl_access_Controller
   }
 
   /**
-   * Gets the session id from the request, from a variety of alternative sources, in order:
-   *  - from the 'sessionId' key in the server data part of the json-rpc request (deprecated)
-   *  - from the 'x-qcl-sessionid' request header
-   *  - from the QCLSESSID in the request parameters
-   *  - from the QCLSESSID cookie
+   * Gets the session id from the 'sessionId' key in the server data
+   * part of the json-rpc request
    * @return string|null The session id, if it can be retrieved, otherwise null.
    * @todo move into request object
    */
   public function getSessionIdFromRequest()
   {
-    $sessionId = either(
-      qcl_server_Request::getInstance()->getServerData("sessionId"),
-      qcl_get_request_header('x-qcl-sessionid'),
-      $_REQUEST['QCLSESSID'],
-      $_COOKIE['QCLSESSID'],
-      null
-    );
-    if ( $sessionId )
-    {
-      $this->log("Got session id from request: #$sessionId", QCL_LOG_AUTHENTICATION );
-    }
+    $sessionId = qcl_server_Request::getInstance()->getServerData("sessionId");
+    $this->log("Got session id from request: #$sessionId", QCL_LOG_AUTHENTICATION );
     return $sessionId;
   }
 
@@ -617,7 +605,7 @@ class qcl_access_Controller
     $userId    = $activeUser->getId();
     $sessionId = $this->getSessionId();
 
-    $this->log("Logging out: user '$username' user #$userId, session #$sessionId.",QCL_LOG_AUTHENTICATION );
+    $this->log("Logging out: user '$username' user #$userId, Session $sessionId.",QCL_LOG_AUTHENTICATION );
     
     /*
      * delete user data if anonymous guest
@@ -694,7 +682,7 @@ class qcl_access_Controller
       }
       else
       {
-        $this->log("User #$userId already logged in. Continuing session #$sessionId.",QCL_LOG_AUTHENTICATION);
+        $this->log("User #$userId already logged in. Continuing Session $sessionId.",QCL_LOG_AUTHENTICATION);
         return;
       }
     }
@@ -716,7 +704,7 @@ class qcl_access_Controller
     /*
      * log message
      */
-    $this->log( "User #$userId/ (Session #$sessionId) sucessfully authenticated",QCL_LOG_AUTHENTICATION);
+    $this->log( "User #$userId/ (Session $sessionId) sucessfully authenticated",QCL_LOG_AUTHENTICATION);
   }
 
   /**

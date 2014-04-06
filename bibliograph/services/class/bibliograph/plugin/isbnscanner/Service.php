@@ -24,7 +24,7 @@ class class_bibliograph_plugin_isbnscanner_Service
   extends qcl_data_controller_Controller
 {
 
-  public function method_confirmEmailAddress()
+  public function method_confirmEmailAddress($datasource)
   {
     $this->requirePermission("reference.import");
     $activeUser = $this->getAccessController()->getActiveUser();
@@ -34,10 +34,10 @@ class class_bibliograph_plugin_isbnscanner_Service
     return new qcl_ui_dialog_Prompt(
       $msg, $email,
       $this->serviceName(),"sendEmailWithLink",
-      array());
+      array($datasource));
   }
 
-  public function method_sendEmailWithLink($email)
+  public function method_sendEmailWithLink($email, $datasource)
   {
     if( !$email ) return "ABORTED";
     $this->requirePermission("reference.import");
@@ -62,8 +62,9 @@ class class_bibliograph_plugin_isbnscanner_Service
 
     $lbr     = "\n\n";
     $token   = $this->getAccessController()->createSiblingSessionToken();
-    $appUrl  = dirname(dirname($this->getApplication()->getClientUrl())) .
-                   "/bibliograph-mobile/build#sessionId." . $token;
+    $appUrl  = dirname(dirname($this->getApplication()->getClientUrl())) . "/bibliograph-mobile/build#";
+    $appUrl .= "sessionId.$token!datasource.$datasource";
+
     $appstoreUrl = "https://itunes.apple.com/de/app/scanner-go/id498868298?mt=8";
     $mail->setBody(
       $this->tr("Please open the following link in your iOS device.") .

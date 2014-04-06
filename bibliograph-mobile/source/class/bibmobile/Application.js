@@ -46,13 +46,6 @@ qx.Class.define("bibmobile.Application",
       }
 
       /*
-      -------------------------------------------------------------------------
-        Below is your actual application code...
-        Remove or edit the following code to create your application.
-      -------------------------------------------------------------------------
-      */
-
-      /*
        * initialize the managers
        */
       this.initializeManagers();
@@ -61,7 +54,6 @@ qx.Class.define("bibmobile.Application",
        * does what it says
        */
       this.renderUI();
-
 
       /*
        * rpc endpoint and timeout
@@ -120,6 +112,11 @@ qx.Class.define("bibmobile.Application",
       page1.setTitle("Bibliograph Mobile Client");
       page1.addListener("initialize", function()
       {
+        var debuglabel = new qx.ui.mobile.basic.Label(
+            window.location.href
+        );
+        page1.getContent().add(debuglabel);
+
         var atom = new qx.ui.mobile.basic.Atom("Loading user data...");
         page1.getContent().add(atom);
 
@@ -150,10 +147,8 @@ qx.Class.define("bibmobile.Application",
 
         button.addListener("tap", function()
         {
-          var backendUrl = window.location.href.split(/\//);
-          backendUrl = backendUrl.slice(0, backendUrl.length-3).join("/") + "/bibliograph/services/server.php";
           var scannerUrl = "ilu://x-callback-url/scanner-go?x-source=Bibliograph&x-success=" +
-              backendUrl + "?&sg-result=isbn";
+              window.location.href + "?&sg-result=isbn";
           window.location.href = scannerUrl;
         }, this);
       },this);

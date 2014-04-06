@@ -172,29 +172,13 @@ class qcl_access_SessionController
      * if we have a session id in the request data, return it
      */
     $sessionId = parent::getSessionIdFromRequest();
-    
-   /*
-    * Sub-session of a parent session: creates a new session 
-    * from a parent session, for example, when opening
-    * child windows hat share the user's access rights, but has to have
-    * a different session to keep its data apart. The child windows session will be 
-    * deleted when the parent's session ends.
-    */
-    if( substr($sessionId,0,2) == "P_" )
-    {
-      $sessionId = $this->createChildSession( substr($sessionId,2) );
-    }
-    
+
     /*
-     * Creates a new session from a session, for example, when opening
-     * a new windows that share the user's access rights, but has to have
-     * a different session to keep its data apart. These session will continue
-     * to exist when the other session ends. 
-     * @return string
+     * get real session id if this is a token
      */
-    if( substr($sessionId,0,2) == "S_" )
+    if ( $this->checkToken( $sessionId ) )
     {
-      $sessionId = $this->createSiblingSession( substr($sessionId,2) );
+      $sessionId = $this->createSessionFromToken( $sessionId );
     }
     
     /*
@@ -325,7 +309,7 @@ class qcl_access_SessionController
   public function unregisterSession()
   {
     $sessionId = $this->getSessionId();
-    $this->log("Unregistering session #$sessionId.", QCL_LOG_AUTHENTICATION );
+    $this->log("Unregistering Session $sessionId.", QCL_LOG_AUTHENTICATION );
     $this->getSessionModel()->unregisterSession( $sessionId );
   }
 
@@ -351,7 +335,7 @@ class qcl_access_SessionController
     $activeUser   = $this->getActiveUser();
     $sessionId    = $this->getSessionId();
     $username     = $activeUser->username();
-    $this->log("Session #$sessionId ($username) is terminated.", QCL_LOG_AUTHENTICATION );
+    $this->log("Session $sessionId ($username) is terminated.", QCL_LOG_AUTHENTICATION );
     $this->logout();
   }
 
@@ -375,13 +359,13 @@ class qcl_access_SessionController
     }
     catch ( qcl_data_model_RecordNotFoundException $e )
     {
-      throw new qcl_access_InvalidSessionException("Session #$sessionId does not exist." );
+      throw new qcl_access_InvalidSessionException("Session $sessionId does not exist." );
     }
 
     $activeUserId = (int) $sessionModel->get( $this->getUserModel()->foreignKey() );
     if ( ! $activeUserId )
     {
-      throw new qcl_access_InvalidSessionException( "Session #$sessionId is not connected with a user id!");
+      throw new qcl_access_InvalidSessionException( "Session $sessionId is not connected with a user id!");
     }
 
     try
@@ -395,7 +379,7 @@ class qcl_access_SessionController
     }
     catch ( qcl_data_model_RecordNotFoundException $e )
     {
-      throw new qcl_access_InvalidSessionException("Session #$sessionId refers to a non-existing user.");
+      throw new qcl_access_InvalidSessionException("Session $sessionId refers to a non-existing user.");
     }
     return $activeUserId;
   }
@@ -420,6 +404,50 @@ class qcl_access_SessionController
        $userModel->set("online", false)->save();
        return false;
     }
+  }
+
+  /**
+   * Checks if session id is a token
+   * @param $sessionId
+   * @return bool
+   */
+  public function checkToken( $sessionId )
+  {
+    return ( substr($sessionId,0,2) == "P_" or  substr($sessionId,0,2) == "S_" );
+  }
+
+  /**
+   * Creates a child or sibling session based on the token. Returns the session id
+   * @param $token
+   * @return string
+   */
+  public function createSessionFromToken( $token )
+  {
+    /*
+       * Sub-session of a parent session: creates a new session
+       * from a parent session, for example, when opening
+       * child windows hat share the user's access rights, but has to have
+       * a different session to keep its data apart. The child windows session will be
+       * deleted when the parent's session ends.
+       */
+    if( substr($token,0,2) == "P_" )
+    {
+      $sessionId = $this->createChildSession( substr($token,2) );
+    }
+
+    /*
+     * Creates a new session from a session, for example, when opening
+     * a new windows that share the user's access rights, but has to have
+     * a different session to keep its data apart. These session will continue
+     * to exist when the other session ends.
+     * @return string
+     */
+    if( substr($token,0,2) == "S_" )
+    {
+      $sessionId = $this->createSiblingSession( substr($token,2) );
+    }
+
+    return $sessionId;
   }
 
   /**
@@ -468,7 +496,7 @@ class qcl_access_SessionController
     $sessionId = $this->createSessionId();
 
     $this->log( sprintf(
-      "Spawning child session #%s form parent session #%s",
+      "Spawning child Session %s form parent Session %s",
       $sessionId,$parentSessionId
     ), QCL_LOG_AUTHENTICATION );
 
@@ -486,6 +514,8 @@ class qcl_access_SessionController
 
     return $sessionId;
   }
+
+
 
   /**
    * Creates a token which will be replaced with a sibling session id
@@ -536,7 +566,7 @@ class qcl_access_SessionController
     $sessionId = $this->createSessionId();
 
     $this->log( sprintf(
-      "Spawning sibling session #%s from session #%s",
+      "Spawning sibling Session %s from Session %s",
       $sessionId,$siblingSessionId
     ), QCL_LOG_AUTHENTICATION );
 
@@ -583,7 +613,7 @@ class qcl_access_SessionController
         /*
          * purge sessions without an associated user
          */
-        $this->log("Session #$sessionId has no associated user - discarded.", QCL_LOG_AUTHENTICATION  );
+        $this->log("Session $sessionId has no associated user - discarded.", QCL_LOG_AUTHENTICATION  );
         $sessionModel->delete();
         continue;
       }
@@ -600,7 +630,7 @@ class qcl_access_SessionController
         //$this->debug("Anonymous session $sessionId is $ageInSeconds seconds old, timeout is " . QCL_ACCESS_ANONYMOUS_SESSION_LIFETIME);
         if ( $ageInSeconds > QCL_ACCESS_ANONYMOUS_SESSION_LIFETIME )
         {
-          $this->log("Anonymous session #$sessionId unmodified since $ageInSeconds seconds - discarded.", QCL_LOG_AUTHENTICATION  );
+          $this->log("Anonymous Session $sessionId unmodified since $ageInSeconds seconds - discarded.", QCL_LOG_AUTHENTICATION  );
           $sessionModel->delete();
         }
       }
@@ -611,7 +641,7 @@ class qcl_access_SessionController
 //        if ( $age > QCL_ACCESS_TIMEOUT )
 //        {
 //          $userId =$userModel->id();
-//          $this->log("Session #$sessionId of user $userId unmodified since $age seconds - discarded.", QCL_LOG_AUTHENTICATION  );
+//          $this->log("Session $sessionId of user $userId unmodified since $age seconds - discarded.", QCL_LOG_AUTHENTICATION  );
 //          $sessionModel->delete();
 //        }
       }
@@ -648,7 +678,7 @@ class qcl_access_SessionController
       catch( qcl_data_model_RecordNotFoundException $e)
       {
         $sessionId= $sessionModel->id();
-        $this->log("Session #$sessionId has no associated user - discarded.", QCL_LOG_AUTHENTICATION  );
+        $this->log("Session $sessionId has no associated user - discarded.", QCL_LOG_AUTHENTICATION  );
         $sessionModel->delete();
       }
     }

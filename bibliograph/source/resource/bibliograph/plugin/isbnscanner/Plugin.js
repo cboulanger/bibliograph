@@ -35,13 +35,13 @@ qx.Class.define("bibliograph.plugin.isbnscanner.Plugin",
       /*
        * add a new menu button
        */
-      var importMenu = qx.core.Init.getApplication().getWidgetById("importMenu");
+      var app = qx.core.Init.getApplication();
+      var importMenu = app.getWidgetById("importMenu");
       var menuButton = new qx.ui.menu.Button(this.tr("Scan ISBN barcode with iOS device"));
       menuButton.addListener("execute", function() {
-        var app = qx.core.Init.getApplication();
         app.showPopup(this.tr("Please wait ..."));
         app.getRpcManager().execute(
-            "bibliograph.plugin.isbnscanner.Service", "confirmEmailAddress", [],
+            "bibliograph.plugin.isbnscanner.Service", "confirmEmailAddress", [app.getDatasource()],
         function(data) {
           app.hidePopup();
         }, this);
