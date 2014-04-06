@@ -62,9 +62,6 @@ qx.Class.define("qcl.application.SessionManager",
     qx.event.message.Bus.subscribe( "setSessionId", function( e ){
       this.setSessionId( e.getData() );
     }, this);
-
-
-
   },
   
   /*
@@ -96,7 +93,7 @@ qx.Class.define("qcl.application.SessionManager",
     */   
     _applySessionId : function( sessionId, old )
     {
-      this.debug("Session id changed from " + old + " to " + sessionId);
+      this.info("Session id changed from " + old + " to " + sessionId);
     }
   }
 });

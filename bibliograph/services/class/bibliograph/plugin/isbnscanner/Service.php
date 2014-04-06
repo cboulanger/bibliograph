@@ -62,8 +62,10 @@ class class_bibliograph_plugin_isbnscanner_Service
 
     $lbr     = "\n\n";
     $token   = $this->getAccessController()->createSiblingSessionToken();
-    $appUrl  = dirname(dirname($this->getApplication()->getClientUrl())) . "/bibliograph-mobile/build#";
-    $appUrl .= "sessionId.$token!datasource.$datasource";
+    $appUrl  =
+      dirname(dirname($this->getApplication()->getClientUrl()))
+      . "/bibliograph-mobile/build/#"
+      . "sessionId.$token!datasource.$datasource";
 
     $appstoreUrl = "https://itunes.apple.com/de/app/scanner-go/id498868298?mt=8";
     $mail->setBody(
@@ -78,4 +80,13 @@ class class_bibliograph_plugin_isbnscanner_Service
     $msg = $this->tr("An email has been sent to '%s' with instructions.", $email);
     return new qcl_ui_dialog_Alert($msg);
   }
+
+  public function method_import( $isbn, $datasource)
+  {
+    $this->requirePermission("reference.import");
+    $number = 0;
+    $msg = $this->tr("%s publication has been imported.", $number);
+    return $msg;
+  }
+
 }

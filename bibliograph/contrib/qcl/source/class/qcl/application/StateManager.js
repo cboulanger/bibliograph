@@ -28,8 +28,7 @@
  * The syntax is the similar to the URL GET parameters, i.e. state values are
  * saved as key-value pairs. You can freely choose the characters that represent
  * the "equal" and "ampersand" characters (including those), however the default
- * are "~" and "~~~"   #key1~value1~~~key2~value2~~~key3~value3 etc. (The reason
- * for the tilde is that it is not percent-encoded).
+ * are "." and "!"   #key1.value1!key2.value2!key3.value3 etc.
  *  
  * Any change to the state values (for example, by using the back or forward 
  * buttons or by manually changing the URL) will update a corresponding property, 
@@ -241,8 +240,7 @@ qx.Class.define("qcl.application.StateManager",
     _analyzeHashString : function(string)
     { 
       var hash  = string || location.hash.substr(1) || "";
-      
-      
+
       /*
        * Safari bug
        */
@@ -251,8 +249,8 @@ qx.Class.define("qcl.application.StateManager",
         hash = hash.replace(/%25/g,"%");
       }
       
-      hash = decodeURIComponent(hash); 
-      
+      hash = decodeURIComponent(hash);
+
       var hashParams = {};
       if (hash)
       {

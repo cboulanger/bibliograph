@@ -412,6 +412,8 @@ qx.Class.define("bibliograph.Main",
       /*
        * polling service to transport messages and ping server to keep
        * session alive and to clean up dead sessions on the server.
+       * FIXME the polling interval must decrease with the number of connected sessions
+       * to avoid unneccarily heavy server load - us a config value for this.
        */
       setInterval(qx.lang.Function.bind(this._pollingService, this), 10000);
     },
