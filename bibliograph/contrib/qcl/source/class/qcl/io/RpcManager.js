@@ -83,10 +83,14 @@ qx.Class.define("qcl.io.RpcManager",
     /*
      * global rpc object to be reused by for all requests
      */
-    if ( ! this.getRpcObject() )
-    {
-      this.setRpcObject( new qx.io.remote.Rpc() );
-    }
+    this.setRpcObject( new qx.io.remote.Rpc() );
+
+    /*
+     * create all-purpose json store
+     */
+    this._appStore = new qcl.data.store.JsonRpc(
+        null, null, null, null, this.getRpcObject()
+    );
   },
   
   /*
@@ -129,7 +133,16 @@ qx.Class.define("qcl.io.RpcManager",
     ---------------------------------------------------------------------------
        API METHODS
     ---------------------------------------------------------------------------
-    */     
+    */
+
+    /**
+     * Returns the JsonRpc store
+     * @return {qcl.data.store.JsonRpc}
+     */
+    getStore : function()
+    {
+      return this._appStore;
+    },
         
     /**
      * Called when the page is closed and unregisteres stores on the server. 
@@ -169,17 +182,6 @@ qx.Class.define("qcl.io.RpcManager",
      */
     execute : function( serviceName, serviceMethod, params, callback, context )
     {
-      
-      /* 
-       * create all-purpose json store
-       */
-      if ( ! this._appStore )
-      {
-        this._appStore = new qcl.data.store.JsonRpc( 
-            null, null, null, null, this.getRpcObject() 
-        ); 
-      }
-      
       this._appStore.setServiceName(serviceName);
       this._appStore.execute( serviceMethod, params, callback, context);
     },

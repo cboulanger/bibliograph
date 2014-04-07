@@ -20,6 +20,7 @@
 
 /**
  * Base class for dialog widgets
+ * @require(dialog.Dialog)
  */
 qx.Class.define("qcl.ui.dialog.Dialog",
 {

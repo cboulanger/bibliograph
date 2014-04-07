@@ -20,11 +20,15 @@
 
 qcl_import("qcl_data_controller_Controller");
 
+/**
+ * Class providing methods and services to import bibliographic data from scanned ISBN numbers
+ * Requires the HTTP extension (pecl_http).
+ */
 class class_bibliograph_plugin_isbnscanner_Service
   extends qcl_data_controller_Controller
 {
 
-  public function method_confirmEmailAddress($datasource)
+  public function method_confirmEmailAddress($datasource, $folderId=null)
   {
     $this->requirePermission("reference.import");
     $activeUser = $this->getAccessController()->getActiveUser();
@@ -34,10 +38,10 @@ class class_bibliograph_plugin_isbnscanner_Service
     return new qcl_ui_dialog_Prompt(
       $msg, $email,
       $this->serviceName(),"sendEmailWithLink",
-      array($datasource));
+      array($datasource, $folderId));
   }
 
-  public function method_sendEmailWithLink($email, $datasource)
+  public function method_sendEmailWithLink($email, $datasource, $folderId=null )
   {
     if( !$email ) return "ABORTED";
     $this->requirePermission("reference.import");
@@ -64,8 +68,10 @@ class class_bibliograph_plugin_isbnscanner_Service
     $token   = $this->getAccessController()->createSiblingSessionToken();
     $appUrl  =
       dirname(dirname($this->getApplication()->getClientUrl()))
-      . "/bibliograph-mobile/build/#"
-      . "sessionId.$token!datasource.$datasource";
+      . "/bibliograph-mobile/build/"
+      . "#sessionId.$token"
+      . "!action.scanimport"
+      . "!datasource.$datasource!folderId.$folderId";
 
     $appstoreUrl = "https://itunes.apple.com/de/app/scanner-go/id498868298?mt=8";
     $mail->setBody(
@@ -81,12 +87,90 @@ class class_bibliograph_plugin_isbnscanner_Service
     return new qcl_ui_dialog_Alert($msg);
   }
 
-  public function method_import( $isbn, $datasource)
+  /**
+   * Imports a reference into the current database. For the moment, the worldcat XISBN service is used.
+   * Returns a message with information on the result.
+   * todo support different services.
+   * @param $isbn
+   * @param $datasource
+   * @return String
+   */
+  public function method_import( $isbn, $datasource, $folderId=null)
   {
     $this->requirePermission("reference.import");
-    $number = 0;
-    $msg = $this->tr("%s publication has been imported.", $number);
-    return $msg;
+
+    qcl_assert_valid_string( $isbn, "Missing ISBN" );
+    qcl_assert_valid_string( $datasource, "Missing datasource" );
+    //qcl_assert_integer( $folderId, "Invalid folder id" );
+
+    $xisbnUrl = sprintf(
+      "http://xisbn.worldcat.org/webservices/xid/isbn/%s?method=getMetadata&format=json&fl=*",
+      $isbn
+    );
+    $r = new HttpRequest($xisbnUrl);
+    $r->send();
+    if( $r->getResponseCode() != 200)
+    {
+      throw new JsonRpcException( "Could not retrieve data from ISBN service: " . $r->getResponseStatus() );
+    }
+    $json = json_decode( $r->getResponseBody(), true );
+    $records = $json['list'];
+    if( count($records) == 0 )
+    {
+      throw new JsonRpcException($this->tr("Could not find any data for ISBN %s.", $isbn));
+    }
+
+    $data = $records[0];
+    $ref = sprintf(
+      "%s (%s): %s. %s:%s. %s.",
+      $data['author'],
+      $data['year'],
+      $data['title'],
+      $data['city'],
+      $data['publisher'],
+      $data['ed']
+    );
+
+    return $ref;
+
+    qcl_import("bibliograph_service_Reference");
+    qcl_import("bibliograph_service_Folder");
+
+    $targetReferenceModel =
+      bibliograph_service_Reference::getInstance()
+        ->getReferenceModel($targetDatasource);
+
+    $targetFolderModel =
+      bibliograph_service_Folder::getInstance()
+        ->getFolderModel( $targetDatasource );
+
+    $targetFolderModel->load( $targetFolderId );
+
+    foreach( $ids as $id )
+    {
+      $sourceModel->load($id);
+      $targetReferenceModel->create();
+      $targetReferenceModel->copySharedProperties( $sourceModel );
+      $targetReferenceModel->save();
+      $targetFolderModel->linkModel( $targetReferenceModel );
+    }
+
+    /*
+     * update reference count
+     */
+    $referenceCount = count( $targetReferenceModel->linkedModelIds( $targetFolderModel ) );
+    $targetFolderModel->set( "referenceCount", $referenceCount );
+    $targetFolderModel->save();
+
+    /*
+     * reload references and select the new reference
+     */
+    $this->dispatchClientMessage("folder.reload", array(
+      'datasource'  => $targetDatasource,
+      'folderId'    => $targetFolderId
+    ) );
+
+    return "OK";
   }
 
 }

@@ -37,14 +37,20 @@ qx.Class.define("bibliograph.plugin.isbnscanner.Plugin",
        */
       var app = qx.core.Init.getApplication();
       var importMenu = app.getWidgetById("importMenu");
-      var menuButton = new qx.ui.menu.Button(this.tr("Scan ISBN barcode with iOS device"));
+      var menuButton = new qx.ui.menu.Button(this.tr("From ISBN barcode, scanned with iOS device"));
+      menuButton.setToolTip(new qx.ui.tooltip.ToolTip(this.tr("Please select a folder into which the item will be imported. Requires the Scanner Go app on the iOS device.")));
+      menuButton.setEnabled(false);
+      app.addListener("changeFolderId",function(folderId){
+        if(folderId)menuButton.setEnabled(true);
+      });
       menuButton.addListener("execute", function() {
         app.showPopup(this.tr("Please wait ..."));
         app.getRpcManager().execute(
-            "bibliograph.plugin.isbnscanner.Service", "confirmEmailAddress", [app.getDatasource()],
-        function(data) {
-          app.hidePopup();
-        }, this);
+            "bibliograph.plugin.isbnscanner.Service", "confirmEmailAddress",
+            [app.getDatasource(),app.getFolderId()],
+            function(data) {
+              app.hidePopup();
+            }, this);
       });
       importMenu.add(menuButton);
     }

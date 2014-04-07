@@ -90,24 +90,6 @@ class qcl_server_Server
     }
 
     /*
-     * if POST request, use post request server extension
-     */
-    elseif ( isset( $_REQUEST['service'] )  )
-    {
-      qcl_import( "qcl_server_JsonRpcRestServer" );
-      $serverObj = new qcl_server_JsonRpcRestServer();
-    }
-
-    /*
-     * if test data is provided, use the test server
-     */
-    elseif ( $testData !== null )
-    {
-      qcl_import( "qcl_server_JsonRpcTestServer" );
-      $serverObj = new qcl_server_JsonRpcTestServer( $testData );
-    }
-
-    /*
      * in all cases, use qcl jsonrpc server extension
      */
     else

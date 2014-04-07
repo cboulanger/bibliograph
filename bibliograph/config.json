@@ -51,7 +51,7 @@
     "QXTHEME"        : "bibliograph.theme.Theme",
     "LOCALES"        : [ "en","de" ],
     "ROOT"           : ".",
-    "OPTIMIZE"       : ["variables", "basecalls", "strings"],
+    "OPTIMIZE"       : ["basecalls", "comments", "strings", "variables", "variants"], // except privates & whitespace
 
     // API Viewer
     "API_INCLUDE" : [ "qx.*","${APPLICATION}.*", "qcl.*" ], 

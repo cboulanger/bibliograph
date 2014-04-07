@@ -27,6 +27,17 @@ qx.Class.define("bibmobile.Application",
 
   properties :
   {
+
+    /**
+     * the action to perform
+     */
+    action :
+    {
+      check : "String",
+      nullable : true,
+      event : "changeAction"
+    },
+
     /**
      * An isbn that has been scanned in
      */
@@ -46,6 +57,16 @@ qx.Class.define("bibmobile.Application",
       check : "String",
       nullable : true,
       event : "changeDatasource"
+    },
+
+    /**
+     * The current folderId
+     */
+    folderId :
+    {
+      check : "String",
+      nullable : true,
+      event : "changeFolderId"
     }
   },
 
@@ -57,6 +78,8 @@ qx.Class.define("bibmobile.Application",
 
   members :
   {
+
+
     /**
      * This method contains the initial application code and gets called 
      * during startup of the application
@@ -83,16 +106,25 @@ qx.Class.define("bibmobile.Application",
        */
       var localStorage = qx.bom.storage.Web.getLocal();
       var stateManager = this.getStateManager();
-      if( stateManager.getState("datasource") )
+
+      ["action","datasource","folderId"].forEach(function(name)
       {
-        var ds = stateManager.getState("datasource");
-        localStorage.setItem("bibliograph.datasource", ds);
-        this.setDatasource(ds);
-      }
-      else if (localStorage.getItem("bibliograph.datasource") )
-      {
-        this.setDatasource(localStorage.getItem("bibliograph.datasource") );
-      }
+        var valueFromState = stateManager.getState(name);
+        if( valueFromState )
+        {
+          localStorage.setItem("bibliograph."+name, valueFromState);
+          this.set(name, valueFromState);
+        }
+        else
+        {
+          var valueFromLocalStorage = localStorage.getItem("bibliograph."+name);
+          if ( valueFromLocalStorage )
+          {
+            this.set(name, valueFromLocalStorage );
+            stateManager.setState(name, valueFromLocalStorage);
+          }
+        }
+      }, this);
 
       /*
        * rpc endpoint and timeout
@@ -112,6 +144,7 @@ qx.Class.define("bibmobile.Application",
        * does what it says
        */
       this.renderUI();
+
 
       /*
        * connect to server for authentication
@@ -152,6 +185,11 @@ qx.Class.define("bibmobile.Application",
         this.getStateManager().updateState();
         if( this.getIsbn() )
         {
+          if( this.getAction() == "scanimport" )
+          {
+            this.importReferenceByIsbn( this.getIsbn(), this.getDatasource(), parseInt(this.getFolderId())  );
+            return;
+          }
           this.getPage(2).show();
         }
       }
@@ -189,6 +227,29 @@ qx.Class.define("bibmobile.Application",
     {
       return this.__pages[index];
     },
+
+    /**
+     * widgets needed to display a global busy indicator
+     */
+    __busyPopup : null,
+    __busyIndicator : null,
+
+    /**
+     * Getter for busy indicator widget
+     * @param {string} label Optional label for the busy indicator
+     * @returns qx.ui.mobile.dialog.Popup
+     */
+    getBusyIndicator : function(label)
+    {
+      if( !this.__busyPopup )
+      {
+        this.__busyIndicator  = new qx.ui.mobile.dialog.BusyIndicator();
+        this.__busyPopup = new qx.ui.mobile.dialog.Popup(this.__busyIndicator );
+      }
+      this.__busyIndicator.setLabel(label||this.tr("Please wait..."));
+      return this.__busyPopup;
+    },
+
 
 
     /**
@@ -270,7 +331,7 @@ qx.Class.define("bibmobile.Application",
             .bind("state", button, "visibility", {converter : qcl.bool2visibility});
 
         button.addListener("tap", function(){
-          this.importReferenceByIsbn( this.getIsbn(), this.getDatasource() );
+          this.importReferenceByIsbn( this.getIsbn(), this.getDatasource(), parseInt(this.getFolderId()) );
         },this);
 
       }, this);
@@ -301,8 +362,11 @@ qx.Class.define("bibmobile.Application",
         targetUrl  = targetUrl.substring( 0, targetUrl.lastIndexOf( "/" ) );
       }
       targetUrl += "/index.php"
-      var scannerUrl = "ilu://x-callback-url/scanner-go?x-source=Bibliograph&x-success=" +
-          targetUrl + "?&sg-result=isbn";
+      var scannerUrl = "ilu://x-callback-url/scanner-go" +
+            "?x-source=Bibliograph" +
+            "&x-success=" + targetUrl + "?" +
+            "sg-history=NO" +
+            "&sg-result=isbn";
       window.location.href = scannerUrl;
     },
 
@@ -310,15 +374,32 @@ qx.Class.define("bibmobile.Application",
      * import the data referenced by the isbn into the datasource on the server
      * @param {string} isbn
      * @param {string} datasource
+     * @param {string} folderId
      */
-    importReferenceByIsbn : function(isbn, datasource)
+    importReferenceByIsbn : function( isbn, datasource, folderId )
     {
+      this.getBusyIndicator().show();
+      this.getRpcManager().getStore().addListenerOnce("loaded",function(){
+        this.getBusyIndicator().hide();
+      },this);
       this.getRpcManager().execute("bibliograph.plugin.isbnscanner.Service", "import",
-          [isbn,datasource],
-          function(message){
-            alert(message);
+          [isbn,datasource,folderId],
+          function(ref){
             this.getStateManager().removeState("isbn");
-            this.getPage(1).show({reverse:true});
+            this.getBusyIndicator().hide();
+            qx.event.Timer.once(function(){
+              if (confirm(this.tr("Import '%1' ?", ref)))
+              {
+                qx.event.Timer.once(function(){
+                  alert("Not imported (only simulation).");
+                  this.getPage(1).show({reverse:true});
+                },this,1000);
+              }
+              else
+              {
+                this.getPage(1).show({reverse:true});
+              }
+            },this,0);
           }, this);
     },
 
@@ -341,6 +422,7 @@ qx.Class.define("bibmobile.Application",
     {
       if (!this.__datasourceStore)
       {
+
         this.__datasourceStore = new qcl.data.store.JsonRpc(null, "bibliograph.model", null);
         qx.event.message.Bus.subscribe("reloadDatasources", function() {
           this.__datasourceStore.reload();

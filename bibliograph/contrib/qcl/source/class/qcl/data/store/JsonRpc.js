@@ -478,9 +478,8 @@ qx.Class.define("qcl.data.store.JsonRpc",
               }
               catch(e)
               {
-                this.warn("Error during marshaling of data: ");
-                this.info(qx.dev.StackTrace.getStackTrace().join("\n")); 
-                this.error(e);
+                this.warn("Error during marshaling of data: " + e.message);
+                throw e;
                 return;
               }
               
@@ -501,8 +500,9 @@ qx.Class.define("qcl.data.store.JsonRpc",
               }
               catch(e)
               {
-                this.warn("Error in final callback: ");
-                this.error(e);
+                this.warn("Error in final callback: " + e.message);
+                this.info(qx.dev.StackTrace.getStackTrace().join("\n"));
+                throw e;
               }
             }            
           } 
