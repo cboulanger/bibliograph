@@ -88,6 +88,18 @@ if ( ! defined("QCL_VAR_DIR") )
 }
 
 /*
+ * Accept changing IPs. This should only be used during development (i.e. in the 
+ * cloud) when the requests might originate from different hosts. Never use this
+ * in production, since it will allow session takeover
+ */
+if ( ! defined("QCL_ACCESS_ALLOW_IP_MISMATCH") )
+{
+  define( "QCL_ACCESS_ALLOW_IP_MISMATCH" ,  false );
+}
+
+
+
+/*
  * load core functions
  */
 require_once "qcl/core/functions.php";

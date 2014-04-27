@@ -87,7 +87,7 @@ class qcl_access_SessionController
       }
       else
       {
-        throw new qcl_access_AccessDeniedException($this->tr("No valid session."));
+        throw new qcl_access_AccessDeniedException("No valid session.");
       }
     }
 
@@ -125,7 +125,7 @@ class qcl_access_SessionController
     /*
      * We have a valid user now.
      */
-    $this->log("Got user id from session: #$userId", QCL_LOG_AUTHENTICATION );
+    $this->log("Got user id from session $sessionId: $userId", QCL_LOG_AUTHENTICATION );
 
     /*
      * Check if the user's session has timed out
@@ -289,6 +289,7 @@ class qcl_access_SessionController
   /**
    * Registers the current session with the current user. Cleans up stale
    * sessions
+   * @return void
    */
   public function registerSession()
   {

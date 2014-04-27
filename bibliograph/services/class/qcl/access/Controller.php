@@ -288,6 +288,7 @@ class qcl_access_Controller
     {
       if ( $this->isAnonymousAccessAllowed() or $method=="authenticate" )
       {
+        $this->warn( $e->getMessage() );
         $this->log("No valid session, granting anonymous access", QCL_LOG_AUTHENTICATION );
         $this->grantAnonymousAccess();
       }
@@ -421,7 +422,7 @@ class qcl_access_Controller
        */
       if ( $sessionId != $this->getSessionId() )
       {
-        $this->warn("Invalid session id. Forcing logout...");
+        $this->warn("Invalid session id ($sessionId). Forcing logout...");
         $this->forceLogout();
         throw new JsonRpcException($this->tr("Access denied."));
       }

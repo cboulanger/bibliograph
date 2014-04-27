@@ -22,7 +22,9 @@
 ************************************************************************ */
 
 /**
- * Base class for virtual tree widgets which load their data from different datasources
+ * Base class for virtual tree widgets which load their data from different 
+ * datasources. The data is cached for performance, so that switching the 
+ * datasource won't result in expensive reloads.
  * 
  */
 qx.Class.define("qcl.ui.treevirtual.TreeView",

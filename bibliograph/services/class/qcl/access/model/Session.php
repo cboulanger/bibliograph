@@ -138,14 +138,22 @@ class qcl_access_model_Session
      * there is a security breach, unless the request was originated
      * on the local host
      */
-    $localhost    = ( $ip=="::1" or $ip=="127.0.0.1" );
+    $localhost    = ( $ip=="::1" or $ip=="127.0.0.1" or $ip=="0.0.0.0");
     $sessionMismatch = $this->countWhere( array(
       'namedId' => $sessionId,
       'ip'      => array( "!=", $ip )
     ) );
+    
     if ( ! $localhost and $sessionMismatch )
     {
-      throw new qcl_access_AccessDeniedException("Access denied");
+      if( QCL_ACCESS_ALLOW_IP_MISMATCH )
+      {
+        $this->warn( "Origin IP of session has changed to $ip. Ignored as per QCL_ACCESS_ALLOW_IP_MISMATCH setting.");
+      }
+      else
+      {
+        throw new qcl_access_AccessDeniedException("Potential security problem: Origin IP of session has changed to $ip");  
+      }
     }
 
     /*
