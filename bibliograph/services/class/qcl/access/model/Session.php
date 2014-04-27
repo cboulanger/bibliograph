@@ -148,7 +148,7 @@ class qcl_access_model_Session
     {
       if( QCL_ACCESS_ALLOW_IP_MISMATCH )
       {
-        $this->warn( "Origin IP of session has changed to $ip. Ignored as per QCL_ACCESS_ALLOW_IP_MISMATCH setting.");
+        $this->log( "Origin IP of session has changed to $ip. Ignored as per QCL_ACCESS_ALLOW_IP_MISMATCH setting.", QCL_LOG_AUTHENTICATION);
       }
       else
       {
