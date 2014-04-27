@@ -17,11 +17,6 @@
   
 ************************************************************************ */
 
-/* ************************************************************************
-#require(qcl.application.*)
-#require(qcl.access.*)
-************************************************************************ */
-
 /**
  * A mixin for the application instance that provides access to managers
  * that support:
@@ -38,6 +33,8 @@
  * the current application (not yet functional, depends on the resolution
  * of bug <a href="http://bugzilla.qooxdoo.org/show_bug.cgi?id=3086">3096</a>).</li>
  * </ul>
+ * @require(qcl.application.*)
+ * @require(qcl.access.*)
  */
 qx.Mixin.define("qcl.application.MAppManagerProvider",
 {

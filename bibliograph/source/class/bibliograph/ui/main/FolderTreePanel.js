@@ -45,10 +45,12 @@ qx.Class.define("bibliograph.ui.main.FolderTreePanel",
       this.getApplication().bind("folderId", treeWidget, "nodeId", {
 
       });
-      qx.core.Init.getApplication().getAccessManager().getPermissionManager().create("folder.move").bind("state", treeWidget, "enableDragDrop", {
-
-      });
-      qx.event.message.Bus.getInstance().subscribe("bibliograph.userquery", function(e) {
+      qx.core.Init.getApplication()
+        .getAccessManager()
+        .getPermissionManager()
+        .create("folder.move").bind("state", treeWidget, "enableDragDrop");
+        
+      qx.event.message.Bus.getInstance().subscribe("bibliograph.userquery", function() {
         try {
           treeWidget.getTree().resetSelection();
         }catch (e) {
