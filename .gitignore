@@ -1,6 +1,7 @@
+.c9
 .idea
 .DS_Store
-qooxdoo
+qooxdoo*
 build
 bibliograph-mobile/source/script/*
 bibliograph/source/script/*
