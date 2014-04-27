@@ -45,15 +45,13 @@
   "let" :
   {
 
-    // qooxdoo
     "APPLICATION"    : "bibliograph", 
-    "QOOXDOO_PATH"   : "../qooxdoo/qooxdoo-3.5-sdk",
+    "QOOXDOO_PATH"   : "../qooxdoo-3.5-sdk",
     "QXTHEME"        : "bibliograph.theme.Theme",
     "LOCALES"        : [ "en","de" ],
     "ROOT"           : ".",
     "OPTIMIZE"       : ["basecalls", "comments", "strings", "variables", "variants"], // except privates & whitespace
 
-    // API Viewer
     "API_INCLUDE" : [ "qx.*","${APPLICATION}.*", "qcl.*" ], 
     "API_EXCLUDE" : ["qx.legacy.*","qx.test.*","htmleditor.*"]
 

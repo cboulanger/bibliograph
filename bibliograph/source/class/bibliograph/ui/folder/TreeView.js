@@ -16,7 +16,8 @@
 ************************************************************************ */
 
 /**
- *
+ * The folder tree view. Most of the business logic is in {@see qcl.ui.treevirtual.TreeView},
+ * here we only add confirm dialogs.
  */
 qx.Class.define("bibliograph.ui.folder.TreeView",
 {
@@ -120,6 +121,11 @@ qx.Class.define("bibliograph.ui.folder.TreeView",
         this.hidePopup();
       }, this);
     },
+    
+    
+    /**
+     * Dialog to confim a folder move
+     */
     _moveFolderDialog : function()
     {
       var app = this.getApplication();

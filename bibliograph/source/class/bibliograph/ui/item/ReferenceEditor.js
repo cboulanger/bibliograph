@@ -15,13 +15,11 @@
 
 ************************************************************************ */
 
-/* *******
-#require(bibliograph.ui.item.view.FormRenderer)
-******* */
-
 /**
+ * The editor for individual entries
  * @todo rename to FieldEditor
  * @todo this has to be rewritten from scratch
+ * @require(bibliograph.ui.item.view.FormRenderer)
  */
 qx.Class.define("bibliograph.ui.item.ReferenceEditor",
 {
@@ -57,7 +55,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
     },
 
     /**
-     * The id of the currently displayed note.
+     * The id of the currently displayed item.
      * @todo rename to modelId
      */
     referenceId :
@@ -70,7 +68,6 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
 
     /**
      * The reference type of the record displayed
-     * FIXME remove
      */
     referenceType :
     {
@@ -228,10 +225,8 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
 
     /**
      * Initiates the display of the form with data
-     * @param referenceId
-     * @param old
-     * @return
-     * FIXME rename
+     * @param referenceId {Number} The current reference id
+     * @param old {Number} The previous reference id
      */
     _applyReferenceId : function(referenceId, old)
     {
@@ -250,9 +245,8 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
 
     /**
      * Applying the reference type shows the necessary form
-     * @param reftype
-     * @param old
-     * @return
+     * @param reftype {String} The current reference type
+     * @param old {String} The previous reference type
      */
     _applyReferenceType : function(reftype, old)
     {
@@ -462,10 +456,9 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
 
     /**
      * Apply the loaded model to the form controller
-     * @param reftype {String}
+     * @param reftype {String} The reference type
      * @param filter {Array|undefined}
      *    Optional array of field names to restrict the update to
-     * @return
      */
     _syncFormWithModel : function(reftype, filter)
     {
@@ -779,8 +772,6 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
 
     /**
      * Used as converter to prevent saving when setting new values
-     * @param {} value
-     * @return {}
      */
     _metadata_observer_converter : function(value)
     {
@@ -790,7 +781,6 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
 
     /**
      * Called when the annotation editor becomes visible
-     * @return
      */
     _on_annote_appear : function()
     {
@@ -802,7 +792,6 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
 
     /**
      * Called for the annotation editor when the record id changes
-     * @return
      */
     _on_annote_changeReferenceId : function()
     {
@@ -822,7 +811,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
       var oldDatasource = this.editor.getUserData("oldDatasource");
       if (oldId && oldValue != value)
       {
-        this.getStore().execute(bibliograph.rpcmethod.SAVE_DATA, [oldDatasource, oldId, {
+        this.getStore().execute("saveData", [oldDatasource, oldId, {
           "annote" : value
         }]);
         this._loadAnnotationEditor();
@@ -839,7 +828,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
     {
       var datasource = this.getDatasource();
       var referenceId = this.getReferenceId();
-      this.getApplication().getRpcManager().execute(bibliograph.rpcservice.REFERENCE, bibliograph.rpcmethod.GET_DATA, [datasource, referenceId, ["annote"]], function(data)
+      this.getApplication().getRpcManager().execute("bibliograph.reference", "getData", [datasource, referenceId, ["annote"]], function(data)
       {
         this.editor.setValue(data.annote);
         this.editor.setUserData("oldValue", data.annote);
@@ -850,7 +839,6 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
 
     /**
      * Called when user clicks on "save button"
-     * @return
      */
     _on_annote_save : function()
     {
@@ -872,9 +860,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
     */
 
     /**
-     * Shows the selecte d
-     * @param {} page
-     * @param {} button
+     * Shows the selected stack view
      */
     _showStackViewPage : function(page, button)
     {

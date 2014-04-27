@@ -48,8 +48,8 @@
   {
     "APPLICATION"  : "bibmobile",
     "APPLICATION_PATH" : "bibmobile",
-    "APPLICATION_CSS" : "${APPLICATION_PATH}/css/styles.css",  // resource id of custom css
-    "QOOXDOO_PATH" : "../../qooxdoo/qooxdoo-3.5-sdk",
+    "APPLICATION_CSS" : "${APPLICATION_PATH}/css/styles.css",
+    "QOOXDOO_PATH" : "../qooxdoo-3.5-sdk",
     "LOCALES"      : [ "en", "de" ],
     "CACHE"        : "${TMPDIR}/qx${QOOXDOO_VERSION}/cache",
     "MOBILE_THEME" : "custom",
@@ -57,7 +57,7 @@
     "CSS_COMB_URI" : "./resource/${APPLICATION_PATH}/css/${MOBILE_THEME}-style-min.css",
     "CSS_COMBINED" : "${BUILD_PATH}/${CSS_COMB_URI}",
     "ROOT"         : ".",
-    "QXTHEME"      : "", // preventing mobile app to load desktop icons
+    "QXTHEME"      : "", 
     "TEST_LOADER" : "testrunner.TestLoaderMobile"
   },
 
@@ -74,16 +74,12 @@
     ]
   },
 
-  // You only need to edit the reminder of this file, if you want to customize
-  // specific jobs, or add own job definitions.
-
   "jobs" :
   {
     "libraries" :
     {
       "library" :
           [
-             // qcl-js
             {
               "manifest" : "../bibliograph/contrib/qcl/Manifest.json"
             }
@@ -101,10 +97,6 @@
       {
         "qx.mobile.emulatetouch" : true,
         "qx.theme" : "${MOBILE_THEME}"
-        /* Remove following inline comment if you want to optimize code for webkit browsers.
-         Attention: if webkit engine optimization is enabled, mobile app will not be
-         usable in Firefox. */
-        // ,"engine.name" : "webkit"
       },
 
       "compile-options" :

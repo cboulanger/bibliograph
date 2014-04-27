@@ -48,7 +48,6 @@ qx.Class.define("bibliograph.Main",
 
     /**
      * The model of the current datasource
-     * @type
      */
     datasourceModel :
     {
@@ -126,7 +125,6 @@ qx.Class.define("bibliograph.Main",
 
     /**
      * The ids of the currently selected rows
-     * @type Array|String|null
      */
     selectedIds :
     {
@@ -229,11 +227,6 @@ qx.Class.define("bibliograph.Main",
       });
       this.showPopup(this.getSplashMessage(), null);
 
-      /*
-       * define the service names and methods
-       * @todo remove this
-       */
-      this.defineServices();
 
       /**
        * initialize the managers
@@ -440,27 +433,6 @@ qx.Class.define("bibliograph.Main",
      * TODOC
      *
      * @return {void}
-     * @todo use statics instead
-     */
-    defineServices : function()
-    {
-      bibliograph.rpcservice =
-      {
-        'MODEL' : "bibliograph.model",
-        'REFERENCE' : "bibliograph.reference",
-        'FOLDER' : "bibliograph.folder"
-      };
-      bibliograph.rpcmethod =
-      {
-        'GET_DATA' : "getData",
-        'SAVE_DATA' : "saveData"
-      };
-    },
-
-    /**
-     * TODOC
-     *
-     * @return {void}
      */
     initSubscribers : function()
     {
@@ -515,7 +487,7 @@ qx.Class.define("bibliograph.Main",
     {
       if (!this.__datasourceStore)
       {
-        this.__datasourceStore = new qcl.data.store.JsonRpc(null, bibliograph.rpcservice.MODEL, null);
+        this.__datasourceStore = new qcl.data.store.JsonRpc(null, "bibliograph.model", null);
         qx.event.message.Bus.subscribe("reloadDatasources", function() {
           this.__datasourceStore.reload();
         }, this);
@@ -1003,7 +975,7 @@ qx.Class.define("bibliograph.Main",
      * has been found, return an empty array
      *
      * @param value {String} TODOC
-     * @return {qx.ui.form.ListItem[]|[]} TODOC
+     * @return {Array} TODOC
      */
     getModelValueListElement : function(value)
     {

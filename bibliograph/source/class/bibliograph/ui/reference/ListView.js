@@ -15,13 +15,10 @@
 
 ************************************************************************ */
 
-/* *****
-#require(qx.ui.table.cellrenderer)
-#require(qx.ui.table.celleditor)
-***** */
-
 /**
  * Base class for Table widgets
+ * @require(qx.ui.table.cellrenderer)
+ * @require(qx.ui.table.celleditor)
  */
 qx.Class.define("bibliograph.ui.reference.ListView",
 {
@@ -90,7 +87,6 @@ qx.Class.define("bibliograph.ui.reference.ListView",
 
     /**
      * The ids of the currently selected rows
-     * @type
      */
     selectedIds :
     {
@@ -102,7 +98,6 @@ qx.Class.define("bibliograph.ui.reference.ListView",
 
     /**
      * The data of the currently selected rows
-     * @type
      */
     selectedRowData :
     {
@@ -212,6 +207,8 @@ qx.Class.define("bibliograph.ui.reference.ListView",
     */
     __tableReady : false,
     __tableModelTypes : null,
+    __loadingTableStructure : null,
+    
 
     /*
     ---------------------------------------------------------------------------
@@ -277,7 +274,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
         }
 
         // @todo this is not very elegant
-        var datasource = this.getDatasource();
+        //var datasource = this.getDatasource();
         var mainFolderTree = this.getApplication().getWidgetById("mainFolderTree");
         var selectedNode = mainFolderTree.getSelectedNode();
 
@@ -620,25 +617,18 @@ qx.Class.define("bibliograph.ui.reference.ListView",
     */
 
     /**
-     * Called when user clicks on a table cell
-     * @param table
-     * @param row
-     * @return
+     * Called when user clicks on a table cell. Does nothing currently
      */
-    _on_table_cellClick : function(table, row)
+    _on_table_cellClick : function(e)
     {
-      var table = event.getTarget();
-      var row = event.getRow();
-      var data = table.getUserData("data");
-
+      //var table = e.getTarget();
+      //var row = e.getRow();
+      //var data = table.getUserData("data");
       //console.log([table,data,row]);
     },
 
     /**
      * Called when the selection in the table changes
-     * @param datasource
-     * @param type
-     * @return
      */
     _on_table_changeSelection : function()
     {
@@ -673,7 +663,6 @@ qx.Class.define("bibliograph.ui.reference.ListView",
     /**
      * Called when a menu item in the "Add item" menu is clicked
      * @param e {qx.event.type.Event}
-     * @return
      */
     _on_addItemMenu_execute : function(e) {
       this.createReference(e.getTarget().getUserData("type"));
@@ -699,11 +688,11 @@ qx.Class.define("bibliograph.ui.reference.ListView",
     {
       var data = e.getData();
       var table = this.getTable();
-      if (!table)return;
+      if (!table){return;}
 
       var tableModel = table.getTableModel();
       var column = tableModel.getColumnIndexById(data.name);
-      if (column === undefined)return;
+      if (column === undefined) {return;}
 
       var row = tableModel.getRowById(data.referenceId);
       tableModel.setValue(column, row, data.value.replace(/\n/, "; "));
