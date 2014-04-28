@@ -87,7 +87,7 @@ class qcl_access_SessionController
       }
       else
       {
-        throw new qcl_access_AccessDeniedException("No valid session.");
+        throw new qcl_access_AccessDeniedException("No valid session id.");
       }
     }
 
@@ -100,7 +100,7 @@ class qcl_access_SessionController
     }
     catch( qcl_access_InvalidSessionException $e )
     {
-      $this->warn($e->getMessage(), QCL_LOG_AUTHENTICATION );
+      $this->log( $e->getMessage(), QCL_LOG_AUTHENTICATION );
 
       /*
        * if the application allows unauthenticated access,
