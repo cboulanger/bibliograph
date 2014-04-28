@@ -106,43 +106,68 @@ qx.Class.define("qcl.ui.dialog.Dialog",
         }
       }
       var widget = dialog.Dialog.getInstanceByType( data.type );
-      widget.set( data.properties );
       
       /*
        * hack to auto-submit the dialog input after the given 
        * timout in seconds
        */
-      if( qx.lang.Type.isNumber(data.properties.autoSubmitTimout) &&
-          data.properties.autoSubmitTimout > 0 )
+      
+      // function to call after timeout with closure vars
+      var type              = data.type;
+      var autoSubmitTimeout = data.properties.autoSubmitTimeout;
+      var requireInput      = data.properties.requireInput;      
+      function checkAutoSubmit()
       {
-        function checkAutoSubmit(){
-          switch( data.type )
-          {
-            /*
-             * prompt dialog will periodically check for input and submit it
-             * if it hasn't changed for the duration of the timeout
-             * this is quite hacky and undocumented...
-             */ 
-            case "prompt":
-              if( data.properties.requireInput )
+        switch( type )
+        {
+          /*
+           * prompt dialog will periodically check for input and submit it
+           * if it hasn't changed for the duration of the timeout
+           */ 
+          case "prompt":
+            if( requireInput )
+            {
+              var newValue = widget._textField.getValue();
+              var oldValue = widget._textField.getUserData("oldValue");
+              
+              console.log("old: '" + oldValue + "', new: '"+newValue+"'.");
+              
+              if ( newValue && newValue === oldValue  )
               {
-                var newValue = widget._textField.getValue();
-                var oldValue = widget._textField.getUserData("oldValue");
-                if ( newValue && newValue !== oldValue  )
-                {
-                  widget._handleOK();
-                } else if (widget.getVisibility()=="visible") {
-                  this._textField.setUserData("oldValue", newValue );
-                  qx.event.Timer.once(checkAutoSubmit,this,data.properties.autoSubmitTimout*1000);
-                }
-                return;
+                widget._handleOk();
+              } 
+              else if (widget.getVisibility()=="visible") 
+              {
+                widget._textField.setUserData("oldValue", newValue );
+                qx.event.Timer.once(checkAutoSubmit,this,autoSubmitTimeout*1000);
               }
-          }
-          widget._handleOK();
+              return;
+            }
         }
-        qx.event.Timer.once(checkAutoSubmit,this,data.properties.autoSubmitTimout*1000);
+        widget._handleOk();
       }
+      
+      // start timeout
+      if( qx.lang.Type.isNumber(autoSubmitTimeout) && autoSubmitTimeout > 0 )
+      {
+        qx.event.Timer.once(checkAutoSubmit,this,autoSubmitTimeout*1000);
+      }
+      
+      // remove the properties
+      delete data.properties.autoSubmitTimeout;
+      delete data.properties.requireInput;      
+      
+      widget.set( data.properties );
       widget.show();
     }
+  },
+  /*
+  *****************************************************************************
+     PROPERTIES
+  *****************************************************************************
+  */     
+  properties :
+  {
+  
   }
 });

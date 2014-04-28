@@ -6,7 +6,7 @@
    http://www.bibliograph.org
 
    Copyright:
-     2007-2010 Christian Boulanger
+     2007-2014 Christian Boulanger
 
    License:
      LGPL: http://www.gnu.org/licenses/lgpl.html
@@ -27,6 +27,37 @@ qcl_import("qcl_data_controller_Controller");
 class class_bibliograph_plugin_isbnscanner_Service
   extends qcl_data_controller_Controller
 {
+
+  public function method_enterIsbnDialog( $datasource, $folderId=null)
+  {
+    $this->requirePermission("reference.import");
+    $activeUser = $this->getAccessController()->getActiveUser();    
+    qcl_import("qcl_ui_dialog_Prompt");
+    $msg = $this->tr("Please enter the ISBN with a barcode scanner or manually. ") ;
+    return new qcl_ui_dialog_Prompt(
+      $msg, /*value*/ "",
+      $this->serviceName(),"displayIsbn",
+      array($datasource, $folderId),
+      /*require input*/ true, /*autosubmit after 2 seconds*/ 2
+    );    
+  }
+  
+  public function method_displayIsbn( $isbn, $datasource, $folderId=null)
+  {
+    if ( !$isbn ) return "ABORTED";
+    
+    $this->requirePermission("reference.import");
+    qcl_import("qcl_ui_dialog_Alert");
+    $msg = $this->tr("You entered the ISBN %s.", $isbn);
+    return new qcl_ui_dialog_Alert(
+      $msg, 
+      $this->serviceName(),"enterIsbnDialog",
+      array($datasource, $folderId)
+    );    
+  }
+  
+  
+
 
   public function method_confirmEmailAddress($datasource, $folderId=null)
   {
