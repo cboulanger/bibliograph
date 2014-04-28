@@ -11,7 +11,7 @@
  * Authors: Christian Boulanger (cboulanger)
  *
  ******************************************************************************/
-
+/*global qx qcl*/
 /**
  * Base class for Table widgets
  */
@@ -78,7 +78,7 @@ qx.Class.define("bibliograph.ui.main.ItemView",
 
     /**
      * Getter for view stack
-     * @return qx.ui.container.Stack
+     * @return {qx.ui.container.Stack}
      */
     getItemViewStack : function() {
       return this.itemViewStack;
@@ -188,45 +188,44 @@ qx.Class.define("bibliograph.ui.main.ItemView",
 
     /**
      * Prints the current item view
-     *
-     * @return
      */
     print : function() {
-      try {
-        switch (this.getItemView())
-        {
-          case "noteEditor":
-            // if ( this.getVisibility()!='visible' ) return;
-            var win = window.open();
-            var itemView = this.getCurrentView();
-            var content = itemView.view.getVisibility() == "visible" ? itemView.view.getHtml() : itemView.editor.getValue();
-            var title = itemView.store.getModel().getTitle();
-            win.document.write("<h1>" + title + "</h1>");
-            win.document.write(content);
-            var defaultFont = qx.theme.manager.Font.getInstance().resolve("default");
-            var styleString = "body { " + qx.bom.element.Style.compile(defaultFont.getStyles()) + "; padding-left: 100px; padding-right: 100px;" + "}";
-            var styleNode = win.document.createElement('style');
-            var titleNode = win.document.createElement('title');
-            styleNode.setAttribute("type", "text/css");
-            if (styleNode.styleSheet)
-            {  // IE
-              styleNode.styleSheet.cssText = def;
-              titleNode.text = title
-            } else
-            {  // the world
-              styleNode.appendChild(document.createTextNode(styleString));
-              titleNode.appendChild(document.createTextNode(title));
-            }
-            win.document.getElementsByTagName('head')[0].appendChild(styleNode);
-            win.document.getElementsByTagName('head')[0].appendChild(titleNode);
-            win.document.title = title;
-            win.stop();
-            win.print();
-            break;
-        }
-      }catch (e) {
-        alert(e);
-      }
+      
+      // try {
+      //   switch (this.getItemView())
+      //   {
+      //     case "noteEditor":
+      //       // if ( this.getVisibility()!='visible' ) return;
+      //       var win = window.open();
+      //       var itemView = this.getCurrentView();
+      //       var content = itemView.view.getVisibility() == "visible" ? itemView.view.getHtml() : itemView.editor.getValue();
+      //       var title = itemView.store.getModel().getTitle();
+      //       win.document.write("<h1>" + title + "</h1>");
+      //       win.document.write(content);
+      //       var defaultFont = qx.theme.manager.Font.getInstance().resolve("default");
+      //       var styleString = "body { " + qx.bom.element.Style.compile(defaultFont.getStyles()) + "; padding-left: 100px; padding-right: 100px;" + "}";
+      //       var styleNode = win.document.createElement('style');
+      //       var titleNode = win.document.createElement('title');
+      //       styleNode.setAttribute("type", "text/css");
+      //       if (styleNode.styleSheet)
+      //       {  // IE
+      //         styleNode.styleSheet.cssText = def;
+      //         titleNode.text = title
+      //       } else
+      //       {  // the world
+      //         styleNode.appendChild(document.createTextNode(styleString));
+      //         titleNode.appendChild(document.createTextNode(title));
+      //       }
+      //       win.document.getElementsByTagName('head')[0].appendChild(styleNode);
+      //       win.document.getElementsByTagName('head')[0].appendChild(titleNode);
+      //       win.document.title = title;
+      //       win.stop();
+      //       win.print();
+      //       break;
+      //   }
+      // }catch (e) {
+      //   alert(e);
+      // }
     }
   }
 });

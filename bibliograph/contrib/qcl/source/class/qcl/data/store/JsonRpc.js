@@ -17,6 +17,8 @@
 
  ************************************************************************ */
 
+/*global qx qcl dialog*/
+
 /**
  * 
  * The jsonrpc data store is responsible for fetching data from a json-rpc
@@ -90,12 +92,12 @@ qx.Class.define("qcl.data.store.JsonRpc",
      * set url, name and method of the service. If URL is null,
      * the server url is used
      */
-    if ( url != null) 
+    if ( url ) 
     {
       this.setUrl(url);
     }
     
-    if (serviceName != null) 
+    if (serviceName ) 
     {
       this.setServiceName( serviceName );
     }
@@ -309,7 +311,7 @@ qx.Class.define("qcl.data.store.JsonRpc",
     {
       if ( qx.lang.Type.isString( value ) )
       {
-        var value = value.split(",");
+        value = value.split(",");
       } 
       if (value && this.getAutoLoadMethod() )
       {
@@ -419,7 +421,7 @@ qx.Class.define("qcl.data.store.JsonRpc",
           /*
            * check for error
            */
-          if ( ex == null ) 
+          if ( ex === null ) 
           {  
   
             /* 
@@ -480,7 +482,6 @@ qx.Class.define("qcl.data.store.JsonRpc",
               {
                 this.warn("Error during marshaling of data: " + e.message);
                 throw e;
-                return;
               }
               
               /*
@@ -570,7 +571,7 @@ qx.Class.define("qcl.data.store.JsonRpc",
         data.events.forEach( function(event) {
           if (event.data) 
           {
-            var eventObj = new qx.event.type.Data;
+            var eventObj = new qx.event.type.Data();
             eventObj.init(event.data);
           }
           else
@@ -589,6 +590,7 @@ qx.Class.define("qcl.data.store.JsonRpc",
      * this method if you want to have a different error behavior.
      * @param ex {Object} Exception object
      * @param id {Integer} Request id
+     * @ignore(dialog.*)
      */
     _handleError : function( ex, id )
     {
@@ -623,7 +625,7 @@ qx.Class.define("qcl.data.store.JsonRpc",
         var type = ed.eventType;
         delete ed.eventType;
         
-        var event = new qx.event.type.Data;
+        var event = new qx.event.type.Data();
         event.init(ed);
         event.setType(type);
         event.setTarget(this);

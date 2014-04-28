@@ -17,6 +17,8 @@
   
 ************************************************************************ */
 
+/*global qx qcl*/
+
 /**
  * A mixin for the application instance that provides access to managers
  * that support:
@@ -33,8 +35,6 @@
  * the current application (not yet functional, depends on the resolution
  * of bug <a href="http://bugzilla.qooxdoo.org/show_bug.cgi?id=3086">3096</a>).</li>
  * </ul>
- * @require(qcl.application.*)
- * @require(qcl.access.*)
  */
 qx.Mixin.define("qcl.application.MAppManagerProvider",
 {
@@ -90,7 +90,6 @@ qx.Mixin.define("qcl.application.MAppManagerProvider",
     
     /**
      * The manager for rpc backend calls
-     * @type 
      */
     rpcManager :
     {
@@ -101,7 +100,6 @@ qx.Mixin.define("qcl.application.MAppManagerProvider",
     
     /**
      * The manager responsible for authentication
-     * @type 
      */
     accessManager :
     {
@@ -113,7 +111,6 @@ qx.Mixin.define("qcl.application.MAppManagerProvider",
     /**
      * The manager synchronizing configuration values between client and 
      * server 
-     * @type 
      */
     configManager :
     {
@@ -124,7 +121,6 @@ qx.Mixin.define("qcl.application.MAppManagerProvider",
     
     /**
      * The manager for state maintenance in the URL and application state history
-     * @type 
      */
     stateManager :
     {
@@ -136,7 +132,6 @@ qx.Mixin.define("qcl.application.MAppManagerProvider",
     /**
      * The manager for maintaining a central clipboard that interacts
      * with the clipboard of the OS
-     * @type 
      */
     clipboardManager :
     {
@@ -148,7 +143,6 @@ qx.Mixin.define("qcl.application.MAppManagerProvider",
     /**
      * The manager for loading the client-side code of the
      * plugins of the application
-     * @type 
      */
     pluginManager :
     {
@@ -159,7 +153,6 @@ qx.Mixin.define("qcl.application.MAppManagerProvider",
     
     /**
      * The manager for native child windows
-     * @type 
      */
     nativeWindowManager :
     {
@@ -170,7 +163,6 @@ qx.Mixin.define("qcl.application.MAppManagerProvider",
 
     /**
      * The manager for exchanging events and messages with the server
-     * @type 
      */
     eventTransportManager :
     {
@@ -182,7 +174,6 @@ qx.Mixin.define("qcl.application.MAppManagerProvider",
     /**
      * The manager for maintaining a central clipboard that interacts
      * with the clipboard of the OS
-     * @type 
      */
     clipboardManager :
     {
@@ -194,7 +185,6 @@ qx.Mixin.define("qcl.application.MAppManagerProvider",
     /**
      * Whether the application should ask users if they "really" want 
      * to quit the application.
-     * @type {Boolean} 
      */
     confirmQuit : 
     {
@@ -250,13 +240,13 @@ qx.Mixin.define("qcl.application.MAppManagerProvider",
       /*
        * setup managers
        */ 
-      this.setSessionManager( new qcl.application.SessionManager );
-      this.setStateManager( new qcl.application.StateManager );
-      this.setRpcManager( new qcl.io.RpcManager );
-      this.setAccessManager( new qcl.access.AccessManager );
-      this.setConfigManager( new qcl.application.ConfigManager );
-      this.setPluginManager( new qcl.application.PluginManager );
-      // this.setClipboardManager ( new qcl.application.ClipboardManager );
+      this.setSessionManager( new qcl.application.SessionManager() );
+      this.setStateManager( new qcl.application.StateManager() );
+      this.setRpcManager( new qcl.io.RpcManager() );
+      this.setAccessManager( new qcl.access.AccessManager() );
+      this.setConfigManager( new qcl.application.ConfigManager() );
+      this.setPluginManager( new qcl.application.PluginManager() );
+      // this.setClipboardManager ( new qcl.application.ClipboardManager() );
    
       /*
        * session id
@@ -306,7 +296,6 @@ qx.Mixin.define("qcl.application.MAppManagerProvider",
      * Store a reference to a widget linked to its id.
      * @param id {String}
      * @param widget {Object}
-     * @return void
      */
     setWidgetById : function(id,widget)
     {
@@ -316,7 +305,7 @@ qx.Mixin.define("qcl.application.MAppManagerProvider",
     /**
      * gets a reference to a widget by its id
      * @param id {String}
-     * @return widget {Object}
+     * @return {Object} TODOC
      */
     getWidgetById : function(id)
     {
@@ -332,7 +321,6 @@ qx.Mixin.define("qcl.application.MAppManagerProvider",
     /**
      * Called before the page is closed. If you would like to override this
      * method, define a close method in your main application. 
-     * @return
      */
     close : function()
     {  

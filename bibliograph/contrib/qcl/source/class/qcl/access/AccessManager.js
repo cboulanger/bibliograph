@@ -16,10 +16,7 @@
    *  Christian Boulanger (cboulanger)
   
 ************************************************************************ */
-
-/* ************************************************************************
-#require(qcl.application.*)
-************************************************************************ */
+/*global qx qcl*/
 
 /**
  * This object manages authentication and authorization issues.
@@ -69,7 +66,6 @@ qx.Class.define("qcl.access.AccessManager",
      
     /**
      * Flag to indicate if we have an authenticated user
-     * @type 
      */
     authenticatedUser :
     {

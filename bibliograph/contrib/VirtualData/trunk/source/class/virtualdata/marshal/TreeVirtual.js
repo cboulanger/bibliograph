@@ -16,9 +16,12 @@
  * Christian Boulanger (cboulanger)
 
  ************************************************************************ */
+/*global qx qcl virtualdata*/
 
 /**
  * Marshaler for data for qx.ui.treevirtual.TreeVirtual
+ * @ignore(qx.data.model.TreeVirtual)
+ * @ignore(qx.data.model.Table)
  */
 qx.Class.define("virtualdata.marshal.TreeVirtual", 
 {
@@ -149,11 +152,11 @@ qx.Class.define("virtualdata.marshal.TreeVirtual",
      * given.
      * 
      * @param data {Object} The object for which models should be created.
-     * @return {qx.data.model.TreeVirtual}
+     * @return {Object}
      */
     toModel: function(data) 
     {   
-      var model = new qx.data.model.TreeVirtual;
+      var model = new qx.data.model.TreeVirtual();
       model.set(data);
       return model;
     }    

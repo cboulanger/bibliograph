@@ -15,11 +15,10 @@
 
 ************************************************************************ */
 
+/*global qx qcl bibliograph*/
+
 /**
  * The editor for individual entries
- * @todo rename to FieldEditor
- * @todo this has to be rewritten from scratch
- * @require(bibliograph.ui.item.view.FormRenderer)
  */
 qx.Class.define("bibliograph.ui.item.ReferenceEditor",
 {
@@ -577,7 +576,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
             if (!value.match(/[0-9]{4}\-[0-9]{2}\-[0-9]{2}/))
             {
               this.warn("Invalid date value, must be YYYY-MM-DD: " + value);
-              value = nulll;
+              value = null;
             } else
             {
               var d = value.split("-");

@@ -15,14 +15,14 @@
 
 ************************************************************************ */
 
-/* ************************************************************************
-#asset(qx/icon/Tango/16/actions/document-save.png)
-#asset(qx/icon/Tango/16/actions/application-exit.png)
-************************************************************************ */
+/*global qx qcl bibliograph htmleditor*/
+
 qx.Theme.include(qx.theme.modern.Appearance, htmleditor.htmlarea.theme.Appearance);
 
 /**
- *
+ * A WYSIWYG editor view. Currently not functional and not used.
+ * @asset(qx/icon/Tango/16/actions/document-save.png)
+ * @asset(qx/icon/Tango/16/actions/application-exit.png)
  */
 qx.Class.define("bibliograph.ui.item.HtmlEditor",
 {

@@ -1,3 +1,19 @@
+/*******************************************************************************
+ *
+ * Bibliograph: Online Collaborative Reference Management
+ *
+ * Copyright: 2007-2014 Christian Boulanger
+ *
+ * License: LGPL: http://www.gnu.org/licenses/lgpl.html EPL:
+ * http://www.eclipse.org/org/documents/epl-v10.php See the LICENSE file in the
+ * project's top-level directory for details.
+ *
+ * Authors: Christian Boulanger (cboulanger)
+ *
+ ******************************************************************************/
+
+/*global qx qcl*/
+
 /**
  * @asset(qx/icon/${qx.icontheme}/22/categories/system.png)
  * @asset(qx/icon/${qx.icontheme}/16/status/dialog-password.png)
@@ -9,6 +25,7 @@
  * @asset(qx/icon/${qx.icontheme}/22/places/network-server.png)
  * @asset(qx/icon/${qx.icontheme}/16/actions/application-exit.png)
  * @asset(bibliograph/icon/16/cancel.png)
+ * @ignore(qcl.bool2visibility)
  */
 qx.Class.define("bibliograph.ui.main.Toolbar",
 {

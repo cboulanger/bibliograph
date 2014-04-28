@@ -16,16 +16,13 @@
    *  Christian Boulanger (cboulanger)
   
 ************************************************************************ */
-
-/* ************************************************************************
-#asset(persist/*)
-************************************************************************ */
+/*global qx qcl virtualdata dialog*/
 
 /**
  * Base class for virtual tree widgets which load their data from different 
  * datasources. The data is cached for performance, so that switching the 
  * datasource won't result in expensive reloads.
- * 
+ * @asset(persist/*)
  */
 qx.Class.define("qcl.ui.treevirtual.TreeView",
 {
@@ -57,8 +54,7 @@ qx.Class.define("qcl.ui.treevirtual.TreeView",
       init  : null,
       nullable : true,
       event : "changeDatasource",
-      apply : "_applyDatasource",
-      event : "changeDatasource"
+      apply : "_applyDatasource"
     },
 
     /** 
@@ -70,8 +66,7 @@ qx.Class.define("qcl.ui.treevirtual.TreeView",
       init  : null,
       nullable : true,
       event : "changeNodeId",
-      apply : "_applyNodeId",
-      event : "changeNodeId"
+      apply : "_applyNodeId"
     },
 
     /** 
@@ -324,19 +319,16 @@ qx.Class.define("qcl.ui.treevirtual.TreeView",
       
    /**
     * Data sent with automatic server requests
-    * @type mixed
     */
    __optionalRequestData : null,
    
    /**
     * reusable prompt box
-    * @type {dialog.Prompt}
     */
    __prompt : null,
    
    /**
     * Attempts to select a node
-    * @type Number
     */
    __selectAttempts : 0,    
    
@@ -362,9 +354,6 @@ qx.Class.define("qcl.ui.treevirtual.TreeView",
    
    /**
     * Applies the new tree view
-    * @param value
-    * @param old
-    * @return
     */
    _applyTree : function ( value, old )
    {
@@ -377,9 +366,6 @@ qx.Class.define("qcl.ui.treevirtual.TreeView",
    
    /**
     * Applies the node id
-    * @param value
-    * @param old
-    * @return
     */
    _applyNodeId : function ( value, old )
    {
@@ -407,7 +393,7 @@ qx.Class.define("qcl.ui.treevirtual.TreeView",
     */
    _getDatasourceObjects : function( datasource )
    {
-     if ( this.__datasources[datasource] == undefined )
+     if ( this.__datasources[datasource] === undefined )
      {
         this.__datasources[datasource] = {
           treeWidget : null,
@@ -432,7 +418,7 @@ qx.Class.define("qcl.ui.treevirtual.TreeView",
       */
      var tree = new qcl.ui.treevirtual.DragDropTree( 
       this.getColumnHeaders(),{
-       dataModel        : new virtualdata.model.SimpleTreeDataModel,
+       dataModel        : new virtualdata.model.SimpleTreeDataModel(),
        tableColumnModel : function(obj) { return new qx.ui.table.columnmodel.Resize(obj);}       
      } );
      tree.set({
@@ -543,22 +529,17 @@ qx.Class.define("qcl.ui.treevirtual.TreeView",
      */
      _loadTreeData : function( datasource, nodeId )
      {
-       if ( ! datasource )
-       {
-         this.error("Invalid arguments: no datasource given");
-       }
-       // @todo: get from datasource, passing the datasource argument makes no sense.
+       datasource = this.getDatasource(); // TODO fix parameter
+       
        var store = this.getStore();
        var tree  = this.getTree();
        var controller = this.getController();
-       var nodeId = nodeId || 0;
+       nodeId = nodeId || 0;
 
        /*
         * clear all bound trees
         */
        store.setModel(null);
-
-       var datasource = this.getDatasource();
        var storeId = store.getStoreId();
        this.clearSelection();
        
@@ -728,9 +709,9 @@ qx.Class.define("qcl.ui.treevirtual.TreeView",
     /**
      * Returns the cached tree data for a given datasource. 
      *
-     * @param transactionId
-     * @param callback Function called with the cached data
-     * @param context
+     * @param transactionId {Number} The transaction id
+     * @param callback {Function} Function called with the cached data
+     * @param context {Object}
      * @return {void}
      */
     getCachedTreeData : function( transactionId, callback, context )
@@ -787,13 +768,13 @@ qx.Class.define("qcl.ui.treevirtual.TreeView",
     
     /**
      * Save the tree data into the cache
-     * @param transactionId 
+     * @param transactionId {Number} TODOC
      * @return {void}
      */
     cacheTreeData : function( transactionId )
     {
        //console.warn("Saving tree cache with transaction id " + transactionId, "last transaction id:" + this.__lastTransactionId);
-       if ( this.getUseCache() && ( transactionId == 0 || transactionId > this.__lastTransactionId ) ) 
+       if ( this.getUseCache() && ( transactionId === 0 || transactionId > this.__lastTransactionId ) ) 
        {
          this.clearSelection();
          var storageId = this.getTreeCacheId( this.getDatasource() );
@@ -899,7 +880,7 @@ qx.Class.define("qcl.ui.treevirtual.TreeView",
       
 //      this.setSelectedNodeType( nodeType );
       
-      return;      
+      return;      // FIXME
       
       /*
        * load children only if the selection change was done by the user
@@ -1004,13 +985,14 @@ qx.Class.define("qcl.ui.treevirtual.TreeView",
         //console.warn( "adding node to #" + parentNodeId );
         if( parentNodeId )
         {
+          var nodeId;
           if ( data.nodeData.isBranch )
           {
-            var nodeId = dataModel.addBranch( parentNodeId );
+            nodeId = dataModel.addBranch( parentNodeId );
           }
           else
           {
-            var nodeId = dataModel.addLeaf( parentNodeId )
+            nodeId = dataModel.addLeaf( parentNodeId );
           }
           dataModel.setState( nodeId, data.nodeData );
           dataModel.setData();
@@ -1193,7 +1175,7 @@ qx.Class.define("qcl.ui.treevirtual.TreeView",
     /**
      * Selects a tree node by its server-side node id. If the tree is not
      * loaded, we wait for the "loaded" event first 
-     * @param {Integer} serverNodeId  
+     * @param serverNodeId {Integer} TODOC
      */
     selectByServerNodeId : function( serverNodeId )
     {
@@ -1212,7 +1194,7 @@ qx.Class.define("qcl.ui.treevirtual.TreeView",
     /**
      * Selects a tree node by its server-side node id. Implements 
      * the selectByServerNodeId() method.
-     * @param {Integer} serverNodeId  
+     * @param serverNodeId {Integer}  TODOC
      */
     _selectByServerNodeId : function( serverNodeId )
     {

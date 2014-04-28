@@ -16,9 +16,12 @@
  * Christian Boulanger (cboulanger)
 
  ************************************************************************ */
+ 
+/*global qx qcl*/
 
 /**
  * Marshaler for data for qx.ui.treevirtual.Table
+ * @ignore(qx.data.model.Table)
  */
 qx.Class.define("virtualdata.marshal.Table", 
 {

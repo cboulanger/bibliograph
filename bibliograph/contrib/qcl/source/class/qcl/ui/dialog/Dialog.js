@@ -16,11 +16,10 @@
    *  Christian Boulanger (cboulanger)
   
 ************************************************************************ */
-
+/*global qcl qx dialog*/
 
 /**
  * Base class for dialog widgets
- * @require(dialog.Dialog)
  */
 qx.Class.define("qcl.ui.dialog.Dialog",
 {
@@ -37,13 +36,13 @@ qx.Class.define("qcl.ui.dialog.Dialog",
     /**
      * Returns a instance of the dialog type
      * @param type {String}
-     * @return qcl.ui.dialog.Dialog
+     * @return {qcl.ui.dialog.Dialog}
      */
     getInstanceByType : function(type)
     {      
        try 
        {
-         return new qcl.ui.dialog[qx.lang.String.firstUp(type)];
+         return new qcl.ui.dialog[qx.lang.String.firstUp(type)]();
        }
        catch(e)
        {
@@ -108,8 +107,42 @@ qx.Class.define("qcl.ui.dialog.Dialog",
       }
       var widget = dialog.Dialog.getInstanceByType( data.type );
       widget.set( data.properties );
+      
+      /*
+       * hack to auto-submit the dialog input after the given 
+       * timout in seconds
+       */
+      if( qx.lang.Type.isNumber(data.properties.autoSubmitTimout) &&
+          data.properties.autoSubmitTimout > 0 )
+      {
+        function checkAutoSubmit(){
+          switch( data.type )
+          {
+            /*
+             * prompt dialog will periodically check for input and submit it
+             * if it hasn't changed for the duration of the timeout
+             * this is quite hacky and undocumented...
+             */ 
+            case "prompt":
+              if( data.properties.requireInput )
+              {
+                var newValue = widget._textField.getValue();
+                var oldValue = widget._textField.getUserData("oldValue");
+                if ( newValue && newValue !== oldValue  )
+                {
+                  widget._handleOK();
+                } else if (widget.getVisibility()=="visible") {
+                  this._textField.setUserData("oldValue", newValue );
+                  qx.event.Timer.once(checkAutoSubmit,this,data.properties.autoSubmitTimout*1000);
+                }
+                return;
+              }
+          }
+          widget._handleOK();
+        }
+        qx.event.Timer.once(checkAutoSubmit,this,data.properties.autoSubmitTimout*1000);
+      }
       widget.show();
-    
     }
   }
 });

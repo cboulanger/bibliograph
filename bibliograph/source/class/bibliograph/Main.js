@@ -14,6 +14,7 @@
      * Christian Boulanger (cboulanger)
 
 ************************************************************************ */
+/*global bibliograph qx qcl dialog*/
 
 /**
  * The main application class
@@ -694,7 +695,7 @@ qx.Class.define("bibliograph.Main",
      * @return {void}
      */
     _applyTheme : function(value, old) {
-      qx.theme.manager.Meta.getInstance().setTheme(qx.theme[value]);
+      //qx.theme.manager.Meta.getInstance().setTheme(qx.theme[value]);
     },
     //
 

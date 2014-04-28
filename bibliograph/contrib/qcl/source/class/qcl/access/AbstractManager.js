@@ -16,10 +16,7 @@
      * Christian Boulanger (cboulanger)
 
 ************************************************************************ */
-
-/* ************************************************************************
-#require(qcl.access.*)
-************************************************************************ */
+/*global qx qcl */
 
 /**
  * This manager is not to be used directly, but is exended by the Permission, Role and 
@@ -100,7 +97,7 @@ qx.Class.define("qcl.access.AbstractManager",
     * @return {var} TODOC
     */
    has : function(vObject) {
-     return this._objects[vObject.toHashCode()] != null;
+     return this._objects[vObject.toHashCode()] !== null;
    },  
 
    /**
@@ -227,6 +224,7 @@ qx.Class.define("qcl.access.AbstractManager",
   
   /**
    * This defer key is used to declare a couple of functions in the "qcl" scope.
+   * @ignore(qcl.*)
    */
   defer : function()
   {

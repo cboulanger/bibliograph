@@ -17,6 +17,7 @@
    *  saaj <mail@saaj.me>
   
 ************************************************************************ */
+/*global qx qcl virtualdata*/
 
 /**
  * Provides drag&drop to TreeVirtual. Currently, only the "move" action is
@@ -485,7 +486,7 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
       {
         var scroller = this._getTreePaneScroller();
 
-        if(!this.__scrollFunctionId && (details.topDelta > -1 && details.topDelta < 2) && details.row != 0)
+        if(!this.__scrollFunctionId && (details.topDelta > -1 && details.topDelta < 2) && details.row !== 0)
         {
           // scroll up if drag cursor at the top
           this.__scrollFunctionId = window.setInterval(function()
@@ -557,7 +558,7 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
       var paneClipperElem = this._getPaneClipper().getContentElement().getDomElement();
       var paneClipperTopY = qx.bom.element.Location.get(paneClipperElem, "box").top;
       var rowHeight       = scroller.getTable().getRowHeight();
-      var scrollY         = scroller.getScrollY();
+      var scrollY         = parseInt(scroller.getScrollY());
       if(scroller.getTable().getKeepFirstVisibleRowComplete())
       {
         scrollY = Math.floor(scrollY / rowHeight) * rowHeight;
@@ -571,7 +572,7 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
       var firstRow    = scroller.getChildControl("pane").getFirstVisibleRow();
       var rowCount    = scroller.getChildControl("pane").getVisibleRowCount();
       var lastRow     = firstRow + rowCount;
-      var scrollY     = parseInt(scroller.getScrollY());
+      //var scrollY     = parseInt(scroller.getScrollY());
       var topDelta    = row - firstRow;
       var bottomDelta = lastRow - row;
 
@@ -961,13 +962,14 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
           if( ! parentNode ) this.error("Cannot find the dropped node's parent node!");
           var pnc = parentNode.children;
           pnc.splice( pnc.indexOf( node.nodeId ), 1 );
+          var position;
           
           /*
            * drop on the node itself: add to the children of the target node
            */
           if ( dropPosition === 0 )
           {
-            var position = dropTarget.children;
+            position = dropTarget.children;
             dropTarget.children.push( node.nodeId  );
             node.parentNodeId = dropTarget.nodeId;
             this.fireDataEvent("changeNodePosition", {
@@ -985,7 +987,7 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
             if( ! targetParentNode ) this.error("Cannot find the target node's parent node!");
             var tpnc = targetParentNode.children;
             var delta = dropPosition > 0 ? 1 : 0;
-            var position = tpnc.indexOf(dropTarget.nodeId) + delta;
+            position = tpnc.indexOf(dropTarget.nodeId) + delta;
             tpnc.splice( position, 0, node.nodeId );
             node.parentNodeId = targetParentNode.nodeId;
             this.fireDataEvent("changeNodePosition", {
@@ -1070,7 +1072,7 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
         return false;
       }
       
-      if ( ! qx.lang.Type.isArray( nodes) )
+      if ( ! qx.lang.Type.isArray( nodes ) )
       {
         this.error("Invalid nodes data");
         return false;
@@ -1086,7 +1088,7 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
         /*
          * import the node into the tree's node array
          */
-        var nodeData = nodes[i];
+        var node = nodes[i];
         node.nodeId = nodeArr.length;
         nodeArr.push(node);
         
