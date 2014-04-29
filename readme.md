@@ -38,8 +38,7 @@ Features
 Prerequisites
 -------------
 - PHP 5.3
-- MySql 5.3+ with the following extensions: gettext, yaz/xsl (optional), ldap (optional), zip (optional),
-  pecl_http (v1.7.6,optional)
+- MySql 5.3+ with the following extensions: gettext, yaz/xsl (optional), ldap (optional), zip (optional)
 
 Preparations
 ------------
@@ -64,7 +63,6 @@ Optional
  "bibliograph" user. if the backups should not be stored in the system tempdir, adapt the BIBLIOGRAPH_BACKUP_PATH
   constant in config/server.conf.php and point it to a world-writable folder outside the document root of the web server.
 - You can connect a ldap server for authentication (adapt config/bibliograph.ini.php)
-- The ISBN-barcode plugin requires the pecl_http extension (http://pecl.php.net/package/pecl_http)
 
 Building & Deployment
 -----------------------
@@ -95,8 +93,3 @@ First run
 - Reload the application.
 
 
-Installation notes:
--------------------
-- installing the PHP5 HTTP extension can be tricky. You must use version 1.7.6, version 2 is not supported.
-  (`pecl install pecl_http-1.7.6`).
-- On Debian Squeeze, this required `apt-get install libpcre3-dev libcurl3 php5-dev libcurl4-gnutls-dev libmagic-dev`
