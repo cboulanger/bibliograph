@@ -128,9 +128,9 @@ qx.Class.define("qcl.ui.dialog.Dialog",
           app.hidePopup();
         }
         data.properties.callback(true);
+        return;
       }
-      
-      
+      app.hidePopup();
       
       /*
        * create dialog according to type
