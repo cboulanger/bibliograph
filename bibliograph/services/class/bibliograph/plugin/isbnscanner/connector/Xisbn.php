@@ -54,9 +54,21 @@ implements bibliograph_plugin_isbnscanner_IConnector
     $data = array();
     foreach( $records as $record )
     {
+      foreach( $record as $field => $value )
+      {
+        if( is_array($value) )
+        {
+          $record[$field] = join($value, " ");
+        }
+      }
+
       $record['address']  = $record['city']; unset( $record['city'] );
       $record['edition']  = $record['ed'];   unset( $record['ed'] );
       $record['language'] = $record['lang']; unset( $record['lang'] );
+
+      //AA (Audio), BA (Book), BB (Hardcover), BC (Paperback), DA (Digital),FA (Film or transparency), MA(Microform), VA(Video).
+      $record['reftype'] = "book"; unset($record['form']);
+
       $data[] = $record;
     }
     

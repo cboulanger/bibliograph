@@ -776,7 +776,7 @@ class bibliograph_service_Reference
    * @param $datasource
    * @param $folderId
    * @param $reftype
-   * @return unknown_type
+   * @return string
    * @todo update of reference count should be done in the folderModel!
    */
   public function method_create( $datasource, $folderId, $reftype )
