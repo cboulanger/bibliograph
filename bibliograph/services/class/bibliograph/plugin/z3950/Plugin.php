@@ -19,6 +19,7 @@
 ************************************************************************ */
 
 qcl_import("qcl_application_plugin_AbstractPlugin");
+qcl_import("bibliograph_plugin_z3950_DatasourceModel");
 
 /**
  * Plugin initializer for z3950 plugin
