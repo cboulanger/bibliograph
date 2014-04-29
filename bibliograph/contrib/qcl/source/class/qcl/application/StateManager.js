@@ -17,11 +17,6 @@
   
 ************************************************************************ */
 
-/* ************************************************************************
-
-
-************************************************************************ */
-
 /**
  * Provides synchronization between the application's properties and the 
  * application state saved in the URL hash.
@@ -270,7 +265,6 @@ qx.Class.define("qcl.application.StateManager",
     /**
      * Returns a specific parameter in the hash string
      *
-     * @type member
      * @param key {var} TODOC
      * @return {var} TODOC
      */
@@ -430,8 +424,6 @@ qx.Class.define("qcl.application.StateManager",
     /**
      * Sets a property of the main application instance, if it exists, 
      * casting values to the correct type, if necessary.
-     * @param name
-     * @param value
      * @return {void}
      */
     _set : function ( name, value )

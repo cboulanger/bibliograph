@@ -17,13 +17,10 @@
   
 ************************************************************************ */
 
-/* ************************************************************************
-#asset(qcl/ajax-loader.gif)
-************************************************************************ */
-
 /**
  * A mixin that provides a "Loading..." popup over a widget that is 
  * just requesting data from the server
+ * @asset(qcl/ajax-loader.gif)
  */
 qx.Mixin.define("qcl.ui.MLoadingPopup",
 {

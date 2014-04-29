@@ -350,7 +350,7 @@ qx.Class.define("qcl.application.ConfigManager",
      * @param targetPath {String}
      * @param updateSelfAlso {Boolean} Optional, default undefined. If true,
      *  change the config value if the target property changes
-     * @return
+     * @return {void}
      */
     bindKey : function( key, targetObject, targetPath, updateSelfAlso )
     {
