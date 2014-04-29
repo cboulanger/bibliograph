@@ -19,7 +19,7 @@
 /*global qcl qx dialog*/
 
 /**
- * Base class for dialog widgets
+ * Extends the dialog widget set to provide server-generated dialogs and popups
  */
 qx.Class.define("qcl.ui.dialog.Dialog",
 {
@@ -105,17 +105,47 @@ qx.Class.define("qcl.ui.dialog.Dialog",
           );
         }
       }
+      
+      /*
+       * turn popup on or off
+       */
+      var app = qx.core.Init.getApplication();
+      if (data.type === "popup" )
+      {
+        if ( typeof app.showPopup === undefined  )
+        {
+          this.warn("Cannot show popup.");
+          data.properties.callback(false);
+          return;
+        }
+        var msg = data.properties.message;
+        if( msg )
+        {
+          app.showPopup(msg);
+        }
+        else
+        {
+          app.hidePopup();
+        }
+        data.properties.callback(true);
+      }
+      
+      
+      
+      /*
+       * create dialog according to type
+       */
       var widget = dialog.Dialog.getInstanceByType( data.type );
       
       /*
-       * hack to auto-submit the dialog input after the given 
+       * auto-submit the dialog input after the given 
        * timout in seconds
        */
       
       // function to call after timeout with closure vars
       var type              = data.type;
       var autoSubmitTimeout = data.properties.autoSubmitTimeout;
-      var requireInput      = data.properties.requireInput;      
+      var requireInput      = data.properties.requireInput;
       function checkAutoSubmit()
       {
         switch( type )
@@ -130,7 +160,7 @@ qx.Class.define("qcl.ui.dialog.Dialog",
               var newValue = widget._textField.getValue();
               var oldValue = widget._textField.getUserData("oldValue");
               
-              console.log("old: '" + oldValue + "', new: '"+newValue+"'.");
+              //console.log("old: '" + oldValue + "', new: '"+newValue+"'."); 
               
               if ( newValue && newValue === oldValue  )
               {
