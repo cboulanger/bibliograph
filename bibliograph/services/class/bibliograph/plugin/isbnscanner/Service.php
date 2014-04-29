@@ -31,6 +31,11 @@ class class_bibliograph_plugin_isbnscanner_Service
   extends qcl_data_controller_Controller
 {
 
+  /**
+   * Service to display a dialog to enter an ISBN manually or with a barcode 
+   * scanner. Once an ISBN number is entered, the dialog will automatically
+   * submit the input after 2 seconds
+   */
   public function method_enterIsbnDialog( $datasource, $folderId=null)
   {
     $this->requirePermission("reference.import");
@@ -45,21 +50,103 @@ class class_bibliograph_plugin_isbnscanner_Service
       /*require input*/ true, /*autosubmit after 2 seconds*/ 2
     );    
   }
-  
-  public function method_displayIsbn( $isbn, $data )
+
+  /**
+   * Resolves the ISBN to reference data. For the moment, the worldcat XISBN service is used.
+   * Returns a message with information on the result.
+   * @param $isbn
+   * @param $datasource
+   * @return String
+   */
+  public function method_getReferenceDataByIsbn( $isbn, $data )
   {
-    if ( !$isbn ) return "ABORTED";
-    qcl_import("qcl_ui_dialog_Alert");
-    $msg = $this->tr("You entered the ISBN %s.", $isbn);
-    return new qcl_ui_dialog_Alert(
-      $msg, 
-      $this->serviceName(),"enterIsbnDialog",
-      array($datasource, $folderId)
-    );    
+    $this->requirePermission("reference.import");
+    qcl_assert_valid_string( $isbn, "Missing ISBN" );
+    
+    $connectors = array(
+      "Xisbn"
+    );
+    
+    return new qcl_ui_dialog_Popup(
+      $this->tr("Contacting webservices to resolve ISBN..."),
+      $this->serviceName(), "iterateConnectors",
+      array($connectors, $isbn, $data)
+    );
   }
   
+  /**
+   * Private function to return the connector object for a given name
+   * @return bibliograph_plugin_isbnscanner_IConnector
+   */
+  private function getConnectorObject( $connectorName )
+  {
+    $namespace = "bibliograph_plugin_isbnscanner_connector_";
+    $connectorClass = $namespace . $connectorName;
+    qcl_import($connectorClass);
+    return new $connectorClass();    
+  }
+  
+  
+  /**
+   * Service to iterate over the given connector names
+   */
+  public function method_iterateConnectors( $dummy, $connectors, $isbn, $data )
+  {  
+    $this->requirePermission("reference.import");
+    
+    if ( ! count($connectors) )
+    {
+      throw new JsonRpcException($this->tr("Could not find any data for ISBN %s.", $isbn));
+    }
+    
+    $connector = $this->getConnectorObject( $connectors[0] );
+    return new qcl_ui_dialog_Popup(
+      $this->tr("Contacting %s...", $connector->getDescription() ),
+      $this->serviceName(), "tryConnector",
+      array( $connectors, $isbn, $data )
+    );
+  }
+  
+  /**
+   * Service to try the first of the connector names in the given array
+   */
+  public function method_tryConnector( $dummy, $connectors, $isbn, $data )
+  {
 
-  public function method_confirmEmailAddress($data)
+    $connector = $this->getConnectorObject( $connectors[0] );
+    $records = $connector->getDataByIsbn( $isbn );
+    
+    if( count($records) == 0 )
+    {
+      array_shif($connectors);
+      return $this->method_iterateConnectors( null, $connectors, $isbn, $data );
+    }
+
+    $d = $records[0];
+    $ref = sprintf(
+      "%s (%s): %s. %s:%s. %s.",
+      $d['author'],
+      $d['year'],
+      $d['title'],
+      $d['address'],
+      $d['publisher'],
+      $d['editor']
+    );
+    
+    $message = $this->tr("Found the following data: %s. Import?", $ref);
+    qcl_import("qcl_ui_dialog_Confirm");
+    return new qcl_ui_dialog_Confirm(
+      $message, true,
+      $this->serviceName(),"import",
+      array($d, $data)
+    );
+  }
+  
+  
+ /**
+  * Service to ask for or confirm the email address to which to send an email
+  */
+ public function method_confirmEmailAddress($data)
   {
     $this->requirePermission("reference.import");
     $activeUser = $this->getAccessController()->getActiveUser();
@@ -68,9 +155,14 @@ class class_bibliograph_plugin_isbnscanner_Service
     return new qcl_ui_dialog_Prompt(
       $msg, $email,
       $this->serviceName(),"sendEmailWithLink",
-      array($data);
+      array($data)
+    );
   }
-
+  
+ /**
+  * Service for sending an email to a mobile device, containing the 
+  * link to the mobile web app
+  */
   public function method_sendEmailWithLink($email, $data )
   {
     if( !$email ) return "ABORTED";
@@ -115,117 +207,6 @@ class class_bibliograph_plugin_isbnscanner_Service
 
     $msg = $this->tr("An email has been sent to '%s' with instructions.", $email);
     return new qcl_ui_dialog_Alert($msg);
-  }
-
-  /**
-   * Resolves the ISBN to reference data. For the moment, the worldcat XISBN service is used.
-   * Returns a message with information on the result.
-   * @param $isbn
-   * @param $datasource
-   * @return String
-   */
-  public function method_getReferenceDataByIsbn( $isbn, $data )
-  {
-    $this->requirePermission("reference.import");
-    qcl_assert_valid_string( $isbn, "Missing ISBN" );
-    
-    $connectors = array(
-      "Xisbn"
-    );
-    
-    return new qcl_ui_dialog_Popup(
-      $this->tr("Contacting webservices to resolve ISBN..."),
-      $this->getServiceName(), "tryConnector",
-      array($connectors, $isbn, $data)
-    );
-  }
-  
-  public function method_tryConnector( $dummy, $connectors, $data )
-  {  
-    $this->requirePermission("reference.import");
-    
-    /*
-     * import and instantiate connector
-     */
-    $namespace = "bibliograph_plugin_isbnscanner_connector_";
-    $connectorname $namespace . array_pop($connectors);
-    qcl_import($connectorname);
-    $connector = new $connectorname();
-    
-throw new JsonRpcException("not implemented");
-    
-    if( count($records) == 0 )
-    {
-      throw new JsonRpcException($this->tr("Could not find any data for ISBN %s.", $isbn));
-    }
-
-    $data = $records[0];
-    $ref = sprintf(
-      "%s (%s): %s. %s:%s. %s.",
-      $data['author'],
-      $data['year'],
-      $data['title'],
-      $data['city'],
-      $data['publisher'],
-      $data['ed']
-    );
-
-    $message = $this->tr("Found the following data: %s. Import?", $ref);
-    
-    qcl_import("qcl_ui_dialog_Confirm");
-    return new qcl_ui_dialog_Confirm(
-      $message, true,
-      $this->serviceName(),"import",
-      array($isbn,$data,$datasource, $folderId)
-    );
-    
-  }
-  
-  public function method_import( $confirmed, $data, $datasource, $folderId )
-  {
-    return "ABORTED";
-    
-    /////////////////////////////
-    return $ref;
-
-    qcl_import("bibliograph_service_Reference");
-    qcl_import("bibliograph_service_Folder");
-
-    $targetReferenceModel =
-      bibliograph_service_Reference::getInstance()
-        ->getReferenceModel($targetDatasource);
-
-    $targetFolderModel =
-      bibliograph_service_Folder::getInstance()
-        ->getFolderModel( $targetDatasource );
-
-    $targetFolderModel->load( $targetFolderId );
-
-    foreach( $ids as $id )
-    {
-      $sourceModel->load($id);
-      $targetReferenceModel->create();
-      $targetReferenceModel->copySharedProperties( $sourceModel );
-      $targetReferenceModel->save();
-      $targetFolderModel->linkModel( $targetReferenceModel );
-    }
-
-    /*
-     * update reference count
-     */
-    $referenceCount = count( $targetReferenceModel->linkedModelIds( $targetFolderModel ) );
-    $targetFolderModel->set( "referenceCount", $referenceCount );
-    $targetFolderModel->save();
-
-    /*
-     * reload references and select the new reference
-     */
-    $this->dispatchClientMessage("folder.reload", array(
-      'datasource'  => $targetDatasource,
-      'folderId'    => $targetFolderId
-    ) );
-
-    return "OK";
-  }
+  }  
 
 }

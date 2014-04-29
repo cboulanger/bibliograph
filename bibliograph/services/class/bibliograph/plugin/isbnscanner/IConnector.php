@@ -23,7 +23,7 @@ interface bibliograph_plugin_isbnscanner_IConnector
   /**
    * Returns a description of the connector
    */
-  public function getDescription;
+  public function getDescription();
   
   /**
    * given an isbn, returns reference data
