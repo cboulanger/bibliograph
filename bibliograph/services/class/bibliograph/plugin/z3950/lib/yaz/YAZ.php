@@ -14,7 +14,7 @@
      See the LICENSE file in the project's top-level directory for details.
 
    Authors:
-     * Chritian Boulanger (cboulanger)
+     * Christian Boulanger (cboulanger)
 
    This code contains documentation taken from
    http://www.php.net/manual/en/book.yaz.php
@@ -149,7 +149,7 @@ class YAZ
 
   /**
    * Parses the content of an xml explain document
-   * @param string $path Must be the path to an exsisting valid
+   * @param string $path Must be the path to an existing valid
    * xml document that is sent as a response to a Z39.50 Explain request.
    * path can be local or remote as long as it is supported by PHP's
    * stream wrappers
@@ -291,6 +291,7 @@ class YAZ
    */
   public function ccl_parse( $query )
   {
+    /** @var $result array */
     if ( ! yaz_ccl_parse( $this->resource, $query, $result ) )
     {
       throw new YAZException(
