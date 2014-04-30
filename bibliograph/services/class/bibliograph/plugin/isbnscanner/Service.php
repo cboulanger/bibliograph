@@ -153,7 +153,7 @@ class class_bibliograph_plugin_isbnscanner_Service
       $record['title'],
       $record['address'],
       $record['publisher'],
-      $record['editor']
+      $record['edition']
     );
     
     $message = $this->tr("Found the following data: %s. Import?", $ref);
