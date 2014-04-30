@@ -323,7 +323,7 @@ class class_bibliograph_plugin_z3950_Service
        * them from the z39.50 database
        */
       $this->log("Getting row data from remote Z39.50 database ...", BIBLIOGRAPH_LOG_Z3950);
-      $path = realpath( dirname(__FILE__) . "/servers/z3950.gbv.de-20010-GVK-de.xml" );
+      $path = realpath( dirname(__FILE__) . "/servers/z3950.gbv.de-20010-GVK-de.xml" ); // todo: allow to choose other servers
       $yaz = new YAZ( $path );
       $yaz->connect();
       $this->configureCcl( $yaz, $datasource );

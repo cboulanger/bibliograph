@@ -832,7 +832,7 @@ class qcl_data_db_Query
     /*
      * if we have a string type where statement, return it. Use this with
      * caution, since the string is not sanitized
-     * FIXME: Remove this?
+     * todo: disallow?
      */
     if ( is_string( $where ) )
     {

@@ -55,9 +55,16 @@ class class_bibliograph_plugin_isbnscanner_Service
    * @param array $data Additional data
    * @return String
    */
-  public function method_getReferenceDataByIsbn( $isbn, array $data )
+  public function method_getReferenceDataByIsbn( $isbn, $data )
   {
     $this->requirePermission("reference.import");
+
+    // hack todo fix this!
+    if (! is_array($data) )
+    {
+      return "ABORTED: wrong signature, ignoring request";
+    }
+
 
     // cancel button
     if (! $isbn )
@@ -116,6 +123,25 @@ class class_bibliograph_plugin_isbnscanner_Service
       array( $connectors, $isbn, $data )
     );
   }
+
+  /**
+   * Given a record with BibTeX-conformant field names, return a formatted reference.
+   * Todo: use proper formatting
+   * @param array $record
+   * @return string
+   */
+  protected  function formatReference(array $record)
+  {
+    return sprintf(
+      "%s (%s): %s. %s:%s. %s.",
+      $record['author'],
+      $record['year'],
+      $record['title'],
+      $record['address'],
+      $record['publisher'],
+      $record['edition']
+    );
+  }
   
   /**
    * Service to try the first of the connector names in the given array
@@ -141,24 +167,61 @@ class class_bibliograph_plugin_isbnscanner_Service
       return $this->method_iterateConnectors( null, $connectors, $isbn, $data );
     }
 
+    $record = $records[0];
+
+    /*
+     * check for duplicates
+     */
+    $datasource = $data[0];
+    $dsModel = $this->getDatasourceModel($datasource);
+    $referenceModel = $dsModel->getInstanceOfType("reference");
+    $isbn = str_replace("-","",$isbn);
+
+    // try ISBN
+    $referenceModel->findWhere(array(
+      "isbn" => array("like","%$isbn%")
+    ));
+
+    // try title/year
+    if( $referenceModel->foundNothing() ) $referenceModel->findWhere(array(
+      "title" => array("like","%" . $record['title'] . "%"),
+      "year"  => $record['year']
+    ));
+
+    /*
+     * possible duplicates found
+     */
+    if( $referenceModel->foundSomething() )
+    {
+      $refs = array();
+      while( $referenceModel->loadNext() )
+      {
+        $refs[] = $this->formatReference( $referenceModel->data() );
+      }
+      $msg = $this->tr(
+        "Found: %s<br><br><b>Possible duplicates:</b><br>%s<br><br>Import?",
+        $this->formatReference( $record ),
+        join("<br>", $refs)
+      );
+    }
+
+    /*
+     * no duplicates
+     */
+    else
+    {
+      $msg = $this->tr(
+        "Found: %s<br><br>Import?",
+        $this->formatReference( $record )
+      );
+    }
+
     /*
      * display found record and confirm import
      */
-    $record = $records[0];
-    $ref = sprintf(
-      "%s (%s): %s. %s:%s. %s.",
-      $record['author'],
-      $record['year'],
-      $record['title'],
-      $record['address'],
-      $record['publisher'],
-      $record['edition']
-    );
-    
-    $message = $this->tr("Found the following data: %s. Import?", $ref);
     qcl_import("qcl_ui_dialog_Confirm");
     return new qcl_ui_dialog_Confirm(
-      $message, true,
+      $msg, true,
       $this->serviceName(),"importReferenceData",
       array($record, $data)
     );
