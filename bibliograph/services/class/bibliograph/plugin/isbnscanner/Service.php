@@ -25,7 +25,6 @@ qcl_import("qcl_ui_dialog_Popup");
 
 /**
  * Class providing methods and services to import bibliographic data from scanned ISBN numbers
- * Requires the HTTP extension (pecl_http).
  */
 class class_bibliograph_plugin_isbnscanner_Service
   extends qcl_data_controller_Controller
