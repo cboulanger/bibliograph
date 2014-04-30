@@ -41,7 +41,6 @@ class class_bibliograph_plugin_isbnscanner_Service
     $this->requirePermission("reference.import");
     # check data/folderid
     $activeUser = $this->getAccessController()->getActiveUser();    
-    qcl_import("qcl_ui_dialog_Prompt");
     $msg = $this->tr("Please enter the ISBN:") ;
     return new qcl_ui_dialog_Prompt(
       $msg, /*value*/ "",
@@ -139,7 +138,7 @@ class class_bibliograph_plugin_isbnscanner_Service
      */
     if( count($records) == 0 )
     {
-      array_shif($connectors);
+      array_shift($connectors);
       return $this->method_iterateConnectors( null, $connectors, $isbn, $data );
     }
 
