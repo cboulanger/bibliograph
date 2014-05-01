@@ -1,9 +1,0 @@
-{"id":1,"result":{
-  "mapValue" : {
-    "foo" : "foo",
-    "bar" : "bar"
-  },
-  "stringValue" : "stringValue",
-  "boolValue" : 1,
-  "arrayValue" : [ "a","b","c","d","e"]
-},"error":null}
