@@ -137,7 +137,7 @@ class bibliograph_Application
                 ->getRequest()
                 ->getService() != "bibliograph.setup" )
       {
-        throw new JsonRpcException($this->tr("Setup in progress..."));
+        throw new qcl_server_ServiceException($this->tr("Setup in progress..."),null,true);
       }
 
       /*

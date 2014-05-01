@@ -89,7 +89,7 @@ class JsonRpcError extends AbstractError
    * Sends text to the client
    * @param $reply
    * @param $scriptTransportId
-   * @return unknown_type
+   * @return void
    */
   public function sendReply( $reply )
   {

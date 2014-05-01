@@ -502,7 +502,7 @@ qx.Class.define("qcl.data.store.JsonRpc",
               catch(e)
               {
                 this.warn("Error in final callback: " + e.message);
-                this.info(qx.dev.StackTrace.getStackTrace().join("\n"));
+                this.info(qx.dev.StackTrace.getStackTrace().join("\n")); // todo revisit this
                 throw e;
               }
             }            
@@ -515,7 +515,7 @@ qx.Class.define("qcl.data.store.JsonRpc",
             this.fireDataEvent( "error", ex );
             
             /*
-             * handle event
+             * handle error
              */
             this._handleError( ex, id );
             
@@ -597,18 +597,31 @@ qx.Class.define("qcl.data.store.JsonRpc",
       /*
        * log warning to client log
        */
-      this.warn ( "Async exception (#" + id + "): " + ex.message );
-      
+      this.warn ( "JsonRpc Exception (#" + id + "): " + ex.message );
+
       /*
-       * alert error if the dialog package is loaded
+       * hide any popup that might have been shown before request
        */
-      try
+      var app = qx.core.Init.getApplication();
+      if ( typeof app.hidePopup == "function" )
       {
-        dialog.Dialog.alert(ex.message);
+        app.hidePopup();
       }
-      catch(e)
+
+      /*
+       * alert error if the dialog package is loaded, except when
+       * "silent" flag has been set
+       */
+      if( typeof ex.silent === undefined || ex.silent === false )
       {
-        alert(ex.message);
+        try
+        {
+          dialog.Dialog.alert(ex.message);
+        }
+        catch(e)
+        {
+          alert(ex.message);
+        }
       }
     },
     
