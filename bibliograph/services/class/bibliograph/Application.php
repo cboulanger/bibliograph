@@ -138,6 +138,7 @@ class bibliograph_Application
                 ->getService() != "bibliograph.setup" )
       {
         throw new qcl_server_ServiceException($this->tr("Setup in progress..."),null,true);
+
       }
 
       /*
