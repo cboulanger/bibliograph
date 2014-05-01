@@ -65,5 +65,6 @@ class qcl_server_ServiceException
   {
     $data = parent::getData();
     $data['silent'] = $this->silent;
+    return $data;
   }
 }

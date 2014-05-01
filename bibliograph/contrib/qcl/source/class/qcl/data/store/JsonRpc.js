@@ -464,14 +464,14 @@ qx.Class.define("qcl.data.store.JsonRpc",
                 var model = this.getMarshaler().toModel(data);
                 
                 /*
-                 * tear down old model?
+                 * tear down old model? doesn't work
                  */
-                if( this.getModel() )
-                {
-                  //this.getModel().removeAllBindings();
-                  //this.getModel().dispose();
-                  //debugger;
-                }
+                //if( this.getModel() )
+                //{
+                //  this.getModel().removeAllBindings();
+                //  this.getModel().dispose();
+                //  debugger;
+                //}
                 
                 /*
                  * set the initial data
@@ -517,7 +517,7 @@ qx.Class.define("qcl.data.store.JsonRpc",
             /*
              * handle error
              */
-            this._handleError( ex, id );
+            this._handleError( ex, id, serviceMethod, params );
             
             /*
              * notify that data has been received but failed
@@ -590,14 +590,21 @@ qx.Class.define("qcl.data.store.JsonRpc",
      * this method if you want to have a different error behavior.
      * @param ex {Object} Exception object
      * @param id {Integer} Request id
+     * @param serviceName {String} Name of the called service
+     * @param params {Array} Array of parameters passed to the service
      * @ignore(dialog.*)
      */
-    _handleError : function( ex, id )
+    _handleError : function( ex, id, serviceName, params )
     {
       /*
-       * log warning to client log
+       * log warning and information on the request to client log
        */
       this.warn ( "JsonRpc Exception (#" + id + "): " + ex.message );
+
+      if( typeof window.console == "object" )
+      {
+        console.log( {"Service Name" : serviceName, "Parameters" : params});
+      }
 
       /*
        * hide any popup that might have been shown before request
@@ -612,7 +619,7 @@ qx.Class.define("qcl.data.store.JsonRpc",
        * alert error if the dialog package is loaded, except when
        * "silent" flag has been set
        */
-      if( typeof ex.silent === undefined || ex.silent === false )
+      if( ! ex.silent )
       {
         try
         {
