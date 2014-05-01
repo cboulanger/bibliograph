@@ -83,8 +83,8 @@ Building & Deployment
 
 First run
 ---------
-- open "build/index.html" folder in your browser and click somewhere outside the splash screen to make it disappear.
-- A message "Setup in progress..." appears. Click "OK" and wait.
+- open "build/index.html" folder and wait. If problems with the setup occur, error messages will be
+  displayed and will tell you to fix the individual problems.
 - A message "Setup has finished. Reload the application" is displayed.
 - Reload and login as "Admin"/"admin"
 - Got to System -> Plugins. Install the YAZ and bibutils plugins if you have enabled them.
