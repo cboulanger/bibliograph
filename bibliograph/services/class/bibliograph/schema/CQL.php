@@ -66,7 +66,7 @@ class bibliograph_schema_CQL
    *    The model on which the query should be performed
    * @throws bibliograph_schema_Exception
    * @throws Exception
-   * @throws InvalidJsonRpcArgumentException
+   * @throws JsonRpcException
    * @return qcl_data_db_Query
    */
   public function addQueryConditions(
@@ -113,7 +113,7 @@ class bibliograph_schema_CQL
     $cqlObject = $parser->query();
     if ( $cqlObject instanceof cql_Diagnostic )
     {
-      throw new InvalidJsonRpcArgumentException( "Could not parse CQL query '$cqlQuery'" );
+      throw new JsonRpcException( "Could not parse CQL query '$cqlQuery'" );
     }
 
     /*
@@ -129,7 +129,7 @@ class bibliograph_schema_CQL
     }
     catch( Exception $e )
     {
-      throw new InvalidJsonRpcArgumentException( "Could not convert CQL query '$cqlQuery': " . $e->getMessage() );
+      throw new JsonRpcException( "Could not convert CQL query '$cqlQuery': " . $e->getMessage() );
     }
 
     return $qclQuery;

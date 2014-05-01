@@ -118,7 +118,7 @@ class bibliograph_service_ACLTool
    * Return ListItem data for access models
    *
    * @param $type
-   * @throws InvalidJsonRpcArgumentException
+   * @throws JsonRpcException
    * @return array
    */
   public function method_getAccessElements( $type )
@@ -155,7 +155,7 @@ class bibliograph_service_ACLTool
         $model->findAllOrderBy( $labelProp );
         break;
       default:
-        throw new InvalidJsonRpcArgumentException("Invalid type $type");
+        throw new JsonRpcException("Invalid type $type");
     }
 
     $result = array();
@@ -217,7 +217,7 @@ class bibliograph_service_ACLTool
   /**
    * Returns the model of a given element type
    * @param string $type
-   * @throws InvalidJsonRpcArgumentException
+   * @throws JsonRpcException
    * @return qcl_data_model_AbstractActiveRecord
    */
   protected function getElementModel( $type )
@@ -227,14 +227,14 @@ class bibliograph_service_ACLTool
     {
       return $models[$type]['model'];
     }
-    throw new InvalidJsonRpcArgumentException( "Invalid type '$type'" );
+    throw new JsonRpcException( "Invalid type '$type'" );
   }
 
   /**
    * Returns the tree of model relationships based on the selected element
    * @param $elementType
    * @param $namedId
-   * @throws InvalidJsonRpcArgumentException
+   * @throws JsonRpcException
    * @return unknown_type
    */
   public function method_getAccessElementTree( $elementType, $namedId )
@@ -260,7 +260,7 @@ class bibliograph_service_ACLTool
     $thisModel = $this->getElementModel( $elementType );
     if( ! $thisModel )
     {
-      throw new InvalidJsonRpcArgumentException("Invalid type argument $elementType");
+      throw new JsonRpcException("Invalid type argument $elementType");
     }
     $thisModel->load( $namedId );
 

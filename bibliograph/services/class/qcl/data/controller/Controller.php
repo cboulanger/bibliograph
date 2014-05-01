@@ -679,7 +679,7 @@ class qcl_data_controller_Controller
    *
    * @param string $datasource
    * @param $modelType
-   * @throws InvalidJsonRpcArgumentException
+   * @throws JsonRpcException
    * @return array
    */
   public function method_getModelInfo( $datasource, $modelType )
@@ -688,7 +688,7 @@ class qcl_data_controller_Controller
     $serviceName = $datasourceModel->getServiceNameForType( $modelType );
     if ( ! $serviceName )
     {
-      throw new InvalidJsonRpcArgumentException( sprintf(
+      throw new JsonRpcException( sprintf(
         "No service defined for datasource class %s, model type %s",
          $datasourceModel->className(), $modelType
       ) );
@@ -1160,7 +1160,7 @@ class qcl_data_controller_Controller
    * @param qcl_data_model_AbstractActiveRecord $model
    * @param object $data ;
    * @throws JsonRpcException
-   * @throws InvalidJsonRpcArgumentException
+   * @throws JsonRpcException
    * @throws InvalidArgumentException
    * @return array
    */
@@ -1180,7 +1180,7 @@ class qcl_data_controller_Controller
        */
       if (! isset( $modelFormData[$property] ) )
       {
-        throw new InvalidJsonRpcArgumentException( "Invalid form data property");
+        throw new JsonRpcException( "Invalid form data property");
       }
 
       /*

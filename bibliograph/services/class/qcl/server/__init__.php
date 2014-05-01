@@ -17,12 +17,6 @@
  */
 
 /**
- * Exception thrown when the request contains invalid arguments.
- * Does not generate a backtrace in the log.
- */
-class InvalidJsonRpcArgumentException extends JsonRpcException {}
-
-/**
  * Upload path constant
  */
 if ( ! defined("QCL_UPLOAD_PATH") )
