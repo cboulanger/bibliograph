@@ -189,6 +189,18 @@ qx.Class.define("qcl.ui.dialog.Dialog",
       
       widget.set( data.properties );
       widget.show();
+
+      /*
+       * focus, doesn't work yet
+       */
+      qx.lang.Function.delay(function(){
+        switch(type)
+        {
+          case "alert":
+          case "confirm":
+            widget._okButton.focus();
+        }
+      },1000,this);
     }
   },
   /*
