@@ -1,0 +1,954 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:modsrdf="http://www.loc.gov/mods/rdf/v1#"
+    xmlns:relators="http://id.loc.gov/vocabulary/relators/"
+    xmlns:classSchemes="http://id.loc.gov/vocabulary/classSchemes/"
+    xmlns:targetAudiences="http://id.loc.gov/vocabulary/targetAudiences/"
+    xmlns:madsrdf="http://www.loc.gov/mads/rdf/v1#"
+    xmlns:j.0="http://www.loc.gov/mods/rdf/"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:identifiers="http://id.loc.gov/vocabulary/identifiers/"
+    xmlns:access="http://id.loc.gov/vocabulary/access#"
+    xmlns:note="http://id.loc.gov/vocabulary/note#"
+    xmlns:resourceTypes="http://id.loc.gov/vocabulary/resourceTypes/"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:abstract="http://id.loc.gov/vocabulary/abstract#"
+    xmlns:ri="http://id.loc.gov/ontologies/RecordInfo#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xml:base="http://www.loc.gov/mods/rdf/v1">
+  <owl:Ontology rdf:about="">
+    <owl:imports rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+    <owl:imports rdf:resource="http://xmlns.com/foaf/0.1/"/>
+    <owl:imports rdf:resource="http://marklogic3.loc.gov:8281/ontologies/ClassificationSchemes"/>
+    <owl:imports rdf:resource="http://marklogic3.loc.gov:8281/ontologies/ResourceTypes"/>
+    <owl:imports rdf:resource="http://www.loc.gov/standards/mads/rdf/v1.rdf"/>
+    <owl:imports rdf:resource="http://purl.org/vocab/changeset/schema"/>
+    <owl:imports rdf:resource="http://vocab.org/changeset/"/>
+    <owl:imports rdf:resource="http://www.w3.org/2008/05/skos-xl"/>
+    <owl:imports rdf:resource="http://purl.org/dc/dcmitype/"/>
+    <owl:imports rdf:resource="http://marklogic3.loc.gov:8281/ontologies/Roles"/>
+    <owl:imports rdf:resource="http://purl.org/dc/elements/1.1/"/>
+    <owl:imports rdf:resource="http://marklogic3.loc.gov:8281/ontologies/TargetAudiences"/>
+    <owl:imports rdf:resource="http://www.loc.gov/mads/rdf/v1"/>
+    <owl:imports rdf:resource="http://marklogic3.loc.gov:8281/ontologies/Identifiers"/>
+    <owl:imports rdf:resource="http://purl.org/vocab/vann/"/>
+  </owl:Ontology>
+  <owl:Class rdf:about="ri:AdminMetadata">
+    <rdfs:label>Administrative Metadata</rdfs:label>
+    <rdfs:comment>Administrative metadata for the description</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="ModsResource">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >MODS - A  MODS Resource</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >
+The resource which is the subject of this description.
+  </rdfs:comment>
+    <owl:equivalentClass rdf:resource="http://id.loc.gov/vocabulary/resourceTypes/Res"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Cartographics">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >MODS - Cartographic Information</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Aggregates cartographic properties.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </owl:Class>
+  <owl:Class rdf:ID="NoteGroup">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >MODS - Note Typed</rdfs:label>
+    <rdfs:comment>Aggregates a note with its type.  </rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="Part">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >MODS - Part</rdfs:label>
+    <rdfs:comment xml:lang="en">An aggregator for part properties.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="RoleRelationship">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >MODS - Role Relationship</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Aggregates a name with its role. </rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="Location">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >MODS - Location</rdfs:label>
+    <rdfs:comment xml:lang="en">An aggregator for location properties.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="IdentifierGroup">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Used when the identifier type is not from the controlled list. Bundles together an identifier and its type.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >MODS - Identifier - Typed</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </owl:Class>
+  <owl:Class rdf:ID="ClassificationGroup">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >MODS - Classification Group</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >For a classification whose scheme is not part of the controlled vocabulary. Bundles together a classification number and scheme.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="LocationCopy">
+    <rdfs:comment> An aggregator for copy properties.</rdfs:comment>
+    <rdfs:label>MODS - Location - Copy</rdfs:label>
+  </owl:Class>
+  <owl:ObjectProperty rdf:ID="subjectTemporal">
+    <rdfs:range rdf:resource="http://www.loc.gov/mads/rdf/v1#Temporal"/>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:comment>A subject of the resource which is a temporal expression, expressed in terms of a MADS Temporal.</rdfs:comment>
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:ID="subject"/>
+    </rdfs:subPropertyOf>
+    <rdfs:label>Subject - Temporal</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="subjectComplex">
+    <rdfs:range rdf:resource="http://www.loc.gov/mads/rdf/v1#ComplexSubject"/>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:comment>A subject of the resource composed of several component subjects. </rdfs:comment>
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:about="#subject"/>
+    </rdfs:subPropertyOf>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Subject - Complex</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="subjectHierarchicalGeographic">
+    <rdfs:range rdf:resource="http://www.loc.gov/mads/rdf/v1#HierarchicalGeographic"/>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:comment>A subject of the resource which is a hierarchy of geographic entities expressed in terms of a MADS Geographics.</rdfs:comment>
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:about="#subject"/>
+    </rdfs:subPropertyOf>
+    <rdfs:label>Subject -  Hierarchical Geographic </rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="roleRelationship">
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:range rdf:resource="#RoleRelationship"/>
+    <rdfs:comment>Binds a name to the role that the named entity played for the resource. </rdfs:comment>
+    <rdfs:label>Role Relationship</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="titleUniform">
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:range rdf:resource="http://www.loc.gov/mads/rdf/v1#Title"/>
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:ID="title"/>
+    </rdfs:subPropertyOf>
+    <rdfs:comment>A title which has been distinguished as a uniform title. (This corresponds to a MODS XML titleInfo with 'type=uniform' attribute.) There should be no more than one uniform title.  Represented as a MADS Title, or, if there is a primary name, it is represented as a MADS NameTitle.  </rdfs:comment>
+    <rdfs:label>Title - Uniform</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="titlePrincipal">
+    <rdfs:range rdf:resource="http://www.loc.gov/mads/rdf/v1#Title"/>
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:about="#title"/>
+    </rdfs:subPropertyOf>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:comment>A title which has been distinguished as the principal  title. (This corresponds to a MODS XML titleInfo with  no type attribute.) There should be no more than one principal title. Represented as a MADS Title.</rdfs:comment>
+    <rdfs:label>Title - Principal</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="cartographics">
+    <rdfs:range rdf:resource="#Cartographics"/>
+    <rdfs:label>Cartographics </rdfs:label>
+    <rdfs:comment>A geographic entity expressed in cartographic terms.</rdfs:comment>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="relatedOriginal">
+    <rdfs:range rdf:resource="#ModsResource"/>
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:ID="relatedItem"/>
+    </rdfs:subPropertyOf>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:comment>Relates the described MODS resource to another MODS resource which is an original of the described resource.</rdfs:comment>
+    <rdfs:label>Related item - Original</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="placeOfOrigin">
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Place</rdfs:label>
+    <rdfs:range rdf:resource="http://www.loc.gov/mads/rdf/v1#Geographic"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Place of publication/origin. Used in connection with the origin of a resource, i.e., creation, publication, issuance, etc.  Represented as a MADS Geographic.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="namePrincipal">
+    <rdfs:range rdf:resource="http://www.loc.gov/mads/rdf/v1#Name"/>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:label>Name -  Principle</rdfs:label>
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:ID="name"/>
+    </rdfs:subPropertyOf>
+    <rdfs:comment>A name that has been distinguished as the principal name associated with the resource. There should be no more than one name principal name. (The rule for determining the principal name is as follows: If the role associated with the name is 'creator' AND if it is the only name whose role is 'creator' then it is the principal name. Thus if there are more than one name, or no name, whose role is 'creator', then there is no principal name.) If there is a principal name, and if there is a uniform title, then that name and title are to be combined into a nameTitle. </rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="relatedReferencedBy">
+    <rdfs:range rdf:resource="#ModsResource"/>
+    <rdfs:label>Related item - Referenced By</rdfs:label>
+    <rdfs:comment>Relates the described MODS resource to another MODS resource which references the described resource.</rdfs:comment>
+    <rdfs:comment></rdfs:comment>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:about="#relatedItem"/>
+    </rdfs:subPropertyOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#relatedItem">
+    <rdfs:range rdf:resource="#ModsResource"/>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:comment>Relates the described MODS resource to another, related MODS resource.</rdfs:comment>
+    <rdfs:label>Related Item</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="adminMetadata">
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:label>Administrative Metadata</rdfs:label>
+    <rdfs:comment>Administrative metadata for the MODS description, corresponds to recordInfo (MODS XML) which is, minimimally, a Class defined outside of the MADS/RDF namespace. The RecordInfo Class from the RecordInfo ontology is recommended.</rdfs:comment>
+    <rdfs:range rdf:resource="http://id.loc.gov/ontologies/RecordInfo#AdminMetadata"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="relatedVersion">
+    <rdfs:range rdf:resource="#ModsResource"/>
+    <rdfs:subPropertyOf rdf:resource="#relatedItem"/>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:comment>Relates the described MODS resource to another MODS resource which is a different version of the described resource.</rdfs:comment>
+    <rdfs:label>Related Item - Other Version</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="subjectGeographic">
+    <rdfs:range rdf:resource="http://www.loc.gov/mads/rdf/v1#Geographic"/>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:comment>A subject of the resource which is a geographic entity, expressed in terms of a MADS Geographic.</rdfs:comment>
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:about="#subject"/>
+    </rdfs:subPropertyOf>
+    <rdfs:label>Subject - Geographic </rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="locationCopy">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Location - Copy</rdfs:label>
+    <rdfs:comment>Information about a specific tangible instance of a bibliographic resource or set which comprises one or more pieces via indication of sublocation and/or locator.</rdfs:comment>
+    <rdfs:domain rdf:resource="#Location"/>
+    <rdfs:range rdf:resource="#LocationCopy"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="relatedConstituent">
+    <rdfs:range rdf:resource="#ModsResource"/>
+    <rdfs:subPropertyOf rdf:resource="#relatedItem"/>
+    <rdfs:label>Related item - Constituent</rdfs:label>
+    <rdfs:comment>Relates the described MODS resource to another MODS resource which is a constituent of the described resource. </rdfs:comment>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="subjectOccupation">
+    <rdfs:range rdf:resource="http://www.loc.gov/mads/rdf/v1#Occupation"/>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:comment>A subject of the resource which is an occupation, expressed in terms of a MADS Occupation.</rdfs:comment>
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:about="#subject"/>
+    </rdfs:subPropertyOf>
+    <rdfs:label>Subject - Occupation</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="publisher">
+    <rdfs:range rdf:resource="http://www.loc.gov/mads/rdf/v1#Name"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Publisher</rdfs:label>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The name of the entity that published, printed, distributed, released, issued, or produced the resource.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#subject">
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:label>Subject</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >An abstract property defined for which the various subject catergories (e.g. subjectGenre, subjectTitle) are subproperties.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="relatedReview">
+    <rdfs:range rdf:resource="#ModsResource"/>
+    <rdfs:subPropertyOf rdf:resource="#relatedItem"/>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:comment>Relates the described MODS resource to another MODS resource which is review of the described resource.</rdfs:comment>
+    <rdfs:label>Related item - Review</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="role">
+    <owl:equivalentProperty rdf:resource="http://id.loc.gov/vocabulary/relators/role"/>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:comment>role is an abstract property, for which all terms in the relator vocabulary of roles become subproperties.  Thus for example 'relator:artist' refers to the role 'artist' within that vocabulary. (The prefix 'relator:' is used to denote the namespace for the "relator" vocabulary. 
+
+The property 'relator:artist' relates the resource to an artist associated with the resource, represented as a mads name.</rdfs:comment>
+    <rdfs:label>Role (unbound)</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="subjectTitle">
+    <rdfs:range rdf:resource="http://www.loc.gov/mads/rdf/v1#Title"/>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:comment>A subject of the resource which is a title, expressed in terms of a MADS Title.</rdfs:comment>
+    <rdfs:subPropertyOf rdf:resource="#subject"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Subject - Title</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="subjectGeographicCode">
+    <rdfs:range rdf:resource="http://www.loc.gov/mads/rdf/v1#Geographic"/>
+    <rdfs:label>Subject - Geographic Code </rdfs:label>
+    <rdfs:comment>A subject of the resource which is a geographic entity, expressed as a geographic code and in terms of a MADS Geographic.</rdfs:comment>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:subPropertyOf rdf:resource="#subjectGeographic"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="noteGroup">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Note  Group</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Used for a note with a type (other than "statement of responsibility")</rdfs:comment>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:range rdf:resource="#NoteGroup"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="relatedHost">
+    <rdfs:range rdf:resource="#ModsResource"/>
+    <rdfs:subPropertyOf rdf:resource="#relatedItem"/>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:comment>Relates the described MODS resource to another MODS resource which is a host of the described resource.</rdfs:comment>
+    <rdfs:label>Related item - Host</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="subjectName">
+    <rdfs:range rdf:resource="http://www.loc.gov/mads/rdf/v1#Name"/>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:comment>A subject of the resource which is a name, expressed in terms of a MADS Name.</rdfs:comment>
+    <rdfs:subPropertyOf rdf:resource="#subject"/>
+    <rdfs:label>Subject - Name Subject</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="classificationGroup">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Classification Group</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Used when classification scheme is not in controlled vocabulary. Bundles together the classification number with its scheme.</rdfs:comment>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:range rdf:resource="#ClassificationGroup"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="part">
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:range rdf:resource="#Part"/>
+    <rdfs:comment>Information about a physical part of the resource, including the part number, its caption and title, and dimensions. </rdfs:comment>
+    <rdfs:label>Part</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#name">
+    <rdfs:range rdf:resource="http://www.loc.gov/mads/rdf/v1#Name"/>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:comment>A name  - personal, corporate, conference, or family - associated with the resource. Represented in the MADS namespace. </rdfs:comment>
+    <rdfs:label>Name</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="relatedSucceeding">
+    <rdfs:range rdf:resource="#ModsResource"/>
+    <rdfs:subPropertyOf rdf:resource="#relatedItem"/>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:label>Related item - Suceeding</rdfs:label>
+    <rdfs:comment>Relates the described resource to a another MODS resource which suceeded it.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="relatedInstantiation">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Related item - Instantiation</rdfs:label>
+    <rdfs:subPropertyOf rdf:resource="#relatedItem"/>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Relates the described resource to a another MODS resource with different origination information.</rdfs:comment>
+    <rdfs:range rdf:resource="#ModsResource"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="relatedReference">
+    <rdfs:range rdf:resource="#ModsResource"/>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Related item - Reference</rdfs:label>
+    <rdfs:subPropertyOf rdf:resource="#relatedItem"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Relates the described MODS resource to another MODS resource which the described resource references.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="roleRelationshipName">
+    <rdfs:range rdf:resource="http://www.loc.gov/mads/rdf/v1#Name"/>
+    <rdfs:label>Role Relationship - Name</rdfs:label>
+    <rdfs:comment>The name included in a roleRelationship.  The roleRelationship binds an name and a role, where the name is a name associated with the resource and is specified elsewhere via the hasName property.  This mechanism is used when the role is not part of a known vocabulary.  Otherwise, the relationship is expressed by using the role vocabulary term as the property; for example, see relator:creator.</rdfs:comment>
+    <rdfs:domain rdf:resource="#RoleRelationship"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#title">
+    <rdfs:range rdf:resource="http://www.loc.gov/mads/rdf/v1#Title"/>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:comment>A title for the resource. Represented as a MADS Title.</rdfs:comment>
+    <rdfs:label>Title</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="relatedFormat">
+    <rdfs:range rdf:resource="#ModsResource"/>
+    <rdfs:subPropertyOf rdf:resource="#relatedItem"/>
+    <rdfs:label>Related item - Other Format</rdfs:label>
+    <rdfs:comment>Relates the described MODS resource to a similar MODS resource of a different format.</rdfs:comment>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="genre">
+    <rdfs:range rdf:resource="http://www.loc.gov/mads/rdf/v1#GenreForm"/>
+    <rdfs:label>Genre</rdfs:label>
+    <rdfs:comment>The genre (or one of several genres) of the resource. Represented in the MADS namespace. </rdfs:comment>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="subjectTopic">
+    <rdfs:range rdf:resource="http://www.loc.gov/mads/rdf/v1#Topic"/>
+    <rdfs:subPropertyOf rdf:resource="#subject"/>
+    <rdfs:comment>A subject of the resource which is a topic, expressed in terms of a MADS Topic.</rdfs:comment>
+    <rdfs:label>Subject - Topic</rdfs:label>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="relatedSeries">
+    <rdfs:range rdf:resource="#ModsResource"/>
+    <rdfs:subPropertyOf rdf:resource="#relatedItem"/>
+    <rdfs:comment>Relates the described resource to a another MODS resource which is a series of which the described resource is a part.</rdfs:comment>
+    <rdfs:label>Related item - Series</rdfs:label>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="subjectGenre">
+    <rdfs:range rdf:resource="http://www.loc.gov/mads/rdf/v1#GenreForm"/>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:label>Subject - Genre Subject</rdfs:label>
+    <rdfs:subPropertyOf rdf:resource="#subject"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A subject of the resource which is a genre, expressed in terms of a MADS GenreForm.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="identifierGroup">
+    <rdfs:range rdf:resource="#IdentifierGroup"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Used when identifier type is not in controlled vocabulary. Bundles together the identifier with its type.</rdfs:comment>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Identifier Group</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="locationOfResource">
+    <rdfs:range rdf:resource="#Location"/>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:comment>The location (or one of several locations) at which the resource resides.</rdfs:comment>
+    <rdfs:label>Location</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="relatedPreceding">
+    <rdfs:range rdf:resource="#ModsResource"/>
+    <rdfs:subPropertyOf rdf:resource="#relatedItem"/>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:comment>Relates the described MODS resource to a MODS resource which preceded the described resource.</rdfs:comment>
+    <rdfs:label>Related item - Preceding</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:ID="partList">
+    <rdfs:domain rdf:resource="#Part"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>A property of a part - a textual listing of the units within the part.</rdfs:comment>
+    <rdfs:label>Part - List</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="identifierGroupValue">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Identifier Group - Value</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The identifier value	.</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#IdentifierGroup"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="partOrder">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:domain rdf:resource="#Part"/>
+    <rdfs:comment>An integer that designates the sequence of parts</rdfs:comment>
+    <rdfs:label>Part - Order</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="locationCopyNote">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A note pertaining to a specific copy.</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Location - Copy -- Note</rdfs:label>
+    <rdfs:domain rdf:resource="#LocationCopy"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="locationCopyEnumerationAndChronologySupplement">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label>Location - Copy  - Enumeration And Chronology -- Supplement</rdfs:label>
+    <rdfs:comment>One of three levels  of enumerationAndChronology:'supplement'</rdfs:comment>
+    <rdfs:domain rdf:resource="#LocationCopy"/>
+    <rdfs:subPropertyOf>
+      <owl:DatatypeProperty rdf:ID="locationCopyEnumerationAndChronology"/>
+    </rdfs:subPropertyOf>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="partEnd">
+    <rdfs:domain rdf:resource="#Part"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>The value of the end of a part. For example, if unit of the part has value 'page', this is the number of the last page. </rdfs:comment>
+    <rdfs:label>Part - End</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="physicalExtent">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Physical Extent</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >a statement of the number and specific material of the units of the resource that express physical extent.</rdfs:comment>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="locationCopyForm">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Location - Copy -- Form</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>The form of a particular copy may be indicated when the general description refers to multiple forms and there is different detailed holdings information associated with different forms.</rdfs:comment>
+    <rdfs:domain rdf:resource="#LocationCopy"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="partDetailType">
+    <rdfs:domain rdf:resource="#Part"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>The type of the resource part, e.g. volume, issue, page.</rdfs:comment>
+    <rdfs:label>Part - Detail Type</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#locationCopyEnumerationAndChronology">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label>Location - Copy  - Enumeration And Chronology</rdfs:label>
+    <rdfs:comment>A summary holdings statement for the copy. A string with information including volume or issue, date of publication or date of issue of a component of a multi-part resource, distinguishing it from other components of the same resource. </rdfs:comment>
+    <rdfs:domain rdf:resource="#LocationCopy"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="recordOrigin">
+    <rdfs:label>Record Origin</rdfs:label>
+    <rdfs:comment>Describes the origin or provenance of the description.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://id.loc.gov/ontologies/RecordInfo#AdminMetadata"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="accessCondition">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Information about restrictions imposed on access to  the resource.</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label>Access Condition</rdfs:label>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="cartographicsCoordinates">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Cartographics - Coordinates</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Cartographics"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="locationShelfLocator">
+    <rdfs:domain rdf:resource="#Location"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label>Location - Shelf Locator</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Shelfmark or other shelving designation</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="note">
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:comment>Textual information about the resource. This property is used when no type is specified. (In contrast to hasTypedNote, whose object is an aggregator that includes both the type and note.)</rdfs:comment>
+    <rdfs:label>Note</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="recordDescriptionStandard">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Record Description Standard</rdfs:label>
+    <rdfs:domain rdf:resource="http://id.loc.gov/ontologies/RecordInfo#AdminMetadata"/>
+    <rdfs:comment>Part of administrative metadata. The standard  which designates the rules used for the content of the description.</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="cartographicsProjection">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Cartographics - Projection</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Cartographics"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="classificationGroupValue">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The classification value</rdfs:comment>
+    <rdfs:domain rdf:resource="#ClassificationGroup"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Classification Group - Value</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="reformattingQuality">
+    <rdfs:label>Reformatting Quality</rdfs:label>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The reformatting quality;  e.g. access, preservation,  replacement.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="partStart">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Part"/>
+    <rdfs:comment>The beginning unit of the part.</rdfs:comment>
+    <rdfs:label>Part - Start</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="locationPhysical">
+    <rdfs:domain rdf:resource="#Location"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label>Location - Physical Location</rdfs:label>
+    <rdfs:comment>The institution or repository that holds the resource, or where it is available.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="digitalOrigin">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label>Digital Origin</rdfs:label>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >a designation of the source of a digital file important to its creation, use and management.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="partUnit">
+    <rdfs:domain rdf:resource="#Part"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label>Part - Unit</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >the unit -- e.g. page, chapter -- applying to the start, end, and total values.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="cartographicsScale">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Cartographics - Scale</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Cartographics"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="recordContentSource">
+    <rdfs:label>Record Content Source</rdfs:label>
+    <rdfs:comment>The code or name of the organization that either created the original description or modified it.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://id.loc.gov/ontologies/RecordInfo#AdminMetadata"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="tableOfContents">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Description of the contents of the resource.</rdfs:comment>
+    <rdfs:label>Table of Contents</rdfs:label>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="partNumber">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A string that designates the part number.</rdfs:comment>
+    <rdfs:domain rdf:resource="#Part"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Part - Number</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="statementOfResponsibility">
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label>Statement of Responsibility</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A note, when the note type is "statement of responsibility"</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="identifierGroupType">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The identifier type.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Identifier Group - Type</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#IdentifierGroup"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="locationCopySublocation">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Location - Copy -- Sublocation</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Department, division, or section of an institution holding a copy of the resource.</rdfs:comment>
+    <rdfs:domain rdf:resource="#LocationCopy"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="issuance">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Describes the issuance of the resource.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Issuance</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="noteGroupValue">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >NoteGroup - Value</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A property of noteGroup - used when a type is supplied for the note. The text of the note.</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#NoteGroup"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="abstract">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A summary of the content of the resource.</rdfs:comment>
+    <rdfs:label>Abstract</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="noteGroupType">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >NoteGroup - Type</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A property of NoteGroup - used when a type is supplied for the note.  The type.</rdfs:comment>
+    <rdfs:domain rdf:resource="#NoteGroup"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="recordIdentifier">
+    <rdfs:label>Record Identifier</rdfs:label>
+    <rdfs:comment>The system control number assigned by the organization creating, using, or distributing the description.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://id.loc.gov/ontologies/RecordInfo#AdminMetadata"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="locationCopyEnumerationAndChronologyIndex">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label>Location - Copy  - Enumeration And Chronology -- Index</rdfs:label>
+    <rdfs:comment>One of three levels of enumerationAndChronology:'index'</rdfs:comment>
+    <rdfs:domain rdf:resource="#LocationCopy"/>
+    <rdfs:subPropertyOf rdf:resource="#locationCopyEnumerationAndChronology"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="frequency">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Frequency</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >publication frequency</rdfs:comment>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="edition">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Edition</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Version of the resource.</rdfs:comment>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="locationUrl">
+    <rdfs:domain rdf:resource="#Location"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label>Location - URL</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Location of the resource (a URL)</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="partTotal">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#positiveInteger"/>
+    <rdfs:domain rdf:resource="#Part"/>
+    <rdfs:comment>The total number of units within a part.</rdfs:comment>
+    <rdfs:label>Part - Total</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="roleRelationshipRole">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#RoleRelationship"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Role Relationship -  Role</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The role associated with a name, where the name and role are bound together in a roleRelationship.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="identifierValue">
+    <rdfs:domain rdf:resource="#IdentifierGroup"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Identifier - Value</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Used in conjuction with identifierType, when the type is not from the controlled vocabulary.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="classificationGroupScheme">
+    <rdfs:domain rdf:resource="#ClassificationGroup"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The classification scheme</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Classification Group - Scheme</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="partType">
+    <rdfs:domain rdf:resource="#Part"/>
+    <rdfs:comment>The segment type of a part. (When parts are included, the resource is ususally a document, so the part type would be the segment type of the document.)</rdfs:comment>
+    <rdfs:label>Part - Type</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="partName">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Part - Name</rdfs:label>
+    <rdfs:domain rdf:resource="#Part"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A string that designates the part name.</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="partLevel">
+    <rdfs:domain rdf:resource="#Part"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#positiveInteger"/>
+    <rdfs:comment>A property of a part - the level of numbering in the host/parent item.</rdfs:comment>
+    <rdfs:label>Part - Level</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="locationCopyShelfLocator">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Location - Copy -- Shelf Locator</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Shelfmark or other shelving designation that indicates the location identifier for a copy.</rdfs:comment>
+    <rdfs:domain rdf:resource="#LocationCopy"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="targetAudience">
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The target audience of the resource. Examples: adolescent, adult, general, juvenile, preschool,  specialized.</rdfs:comment>
+    <rdfs:label>Target Audience</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="identifier">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >identifier is a property for which all terms in the "identifier" vocabulary become subproperties.  Thus for example 'identifer:isbn' is a subproperty saying in effect "has this ISBN" where 'isbn' is a term within that vocabulary. (The prefix 'identifier:' is used to denote the namespace for the "identifier" vocabulary.</rdfs:comment>
+    <rdfs:label>Identifier</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <owl:equivalentProperty rdf:resource="http://id.loc.gov/vocabulary/identifiers/id"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="locationCopyEnumerationAndChronologyBasic">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label>Location - Copy  - Enumeration And Chronology -- Basic</rdfs:label>
+    <rdfs:comment>One of three levels of enumerationAndChronology: 'basic'</rdfs:comment>
+    <rdfs:domain rdf:resource="#LocationCopy"/>
+    <rdfs:subPropertyOf rdf:resource="#locationCopyEnumerationAndChronology"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="physicalForm">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Physical Form</rdfs:label>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:comment>A particular physical presentation of the resource, including the physical form or medium of material for a resource. Example: oil paint</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="locationCopyElectronicLocator">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Location - Copy -- Electronic Locator</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>URI of the copy of the resource.</rdfs:comment>
+    <rdfs:domain rdf:resource="#LocationCopy"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="mediaType">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>An Internet Media (MIME) type e.g. text/html. </rdfs:comment>
+    <rdfs:label>Media Type</rdfs:label>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+  </owl:DatatypeProperty>
+  <owl:NamedIndividual rdf:ID="access">
+    <rdf:type rdf:resource="http://www.loc.gov/mods/rdf/ReformattingQuality"/>
+  </owl:NamedIndividual>
+  <owl:NamedIndividual rdf:ID="digitizedMicrofilm">
+    <rdf:type rdf:resource="http://www.loc.gov/mods/rdf/DigitalOrigin"/>
+  </owl:NamedIndividual>
+  <owl:AnnotationProperty rdf:ID="dateCapturedEnd">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Date Captured - End</rdfs:label>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >When there is both a start and end for the capture date this is the end  date.</rdfs:comment>
+    <rdfs:subPropertyOf>
+      <owl:AnnotationProperty rdf:ID="dateCaptured">
+        <rdfs:subPropertyOf>
+          <rdf:Description rdf:ID="date">
+            <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >An abstract property for which date properties in general are subproperties.</rdfs:comment>
+            <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Date</rdfs:label>
+            <rdfs:domain rdf:resource="#ModsResource"/>
+          </rdf:Description>
+        </rdfs:subPropertyOf>
+        <rdfs:domain rdf:resource="#ModsResource"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Date Captured</rdfs:label>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Date that the resource  was digitized or a subsequent snapshot was taken.</rdfs:comment>
+      </owl:AnnotationProperty>
+    </rdfs:subPropertyOf>
+  </owl:AnnotationProperty>
+  <owl:AnnotationProperty rdf:ID="dateModifiedEnd">
+    <rdfs:subPropertyOf>
+      <owl:AnnotationProperty rdf:ID="dateModified">
+        <rdfs:subPropertyOf rdf:resource="#date"/>
+        <rdfs:comment>Date when resource was modified.</rdfs:comment>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Date Modified</rdfs:label>
+        <rdfs:domain rdf:resource="#ModsResource"/>
+      </owl:AnnotationProperty>
+    </rdfs:subPropertyOf>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Date Modified - End</rdfs:label>
+    <rdfs:comment>When there is both a start and end for the modification date this is the end date.</rdfs:comment>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+  </owl:AnnotationProperty>
+  <owl:AnnotationProperty rdf:ID="partDate">
+    <rdfs:domain rdf:resource="#Part"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Part Date</rdfs:label>
+    <rdfs:subPropertyOf rdf:resource="#date"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Date associated with a part.</rdfs:comment>
+  </owl:AnnotationProperty>
+  <owl:NamedIndividual rdf:ID="serial">
+    <rdf:type rdf:resource="http://www.loc.gov/mods/rdf/Issuance"/>
+  </owl:NamedIndividual>
+  <owl:AnnotationProperty rdf:ID="dateCapturedStart">
+    <rdfs:comment>When there is both a start and end for the capture date this is the start date.</rdfs:comment>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:subPropertyOf rdf:resource="#dateCaptured"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Date Captured -  Start</rdfs:label>
+  </owl:AnnotationProperty>
+  <owl:AnnotationProperty rdf:ID="dateCreatedStart">
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:comment>When there is both a start and end for the creation date this is the start date.</rdfs:comment>
+    <rdfs:subPropertyOf>
+      <owl:AnnotationProperty rdf:ID="dateCreated">
+        <rdfs:subPropertyOf rdf:resource="#date"/>
+        <rdfs:comment>The resource's creation date.</rdfs:comment>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        > Date Created</rdfs:label>
+        <rdfs:domain rdf:resource="#ModsResource"/>
+      </owl:AnnotationProperty>
+    </rdfs:subPropertyOf>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Date Created -  Start</rdfs:label>
+  </owl:AnnotationProperty>
+  <owl:NamedIndividual rdf:ID="integratingResource">
+    <rdf:type rdf:resource="http://www.loc.gov/mods/rdf/Issuance"/>
+  </owl:NamedIndividual>
+  <owl:AnnotationProperty rdf:ID="dateOfCopyrightStart">
+    <rdfs:subPropertyOf>
+      <owl:AnnotationProperty rdf:ID="dateOfCopyright">
+        <rdfs:subPropertyOf rdf:resource="#date"/>
+        <rdfs:comment>Date when resource was copyrighted.</rdfs:comment>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Date of Copyright</rdfs:label>
+        <rdfs:domain rdf:resource="#ModsResource"/>
+      </owl:AnnotationProperty>
+    </rdfs:subPropertyOf>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Date of Copyright -  Start</rdfs:label>
+  </owl:AnnotationProperty>
+  <owl:AnnotationProperty rdf:ID="dateValidEnd">
+    <rdfs:comment>When the resource is valid over an interval with a start and end date, this is the end date. (When start and end date are given, it is an assertion that the information was valid over the course of this interval.  It does not necessarily assert that is was not valid before the start or after the end of the interval.)</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Date Valid - End</rdfs:label>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:subPropertyOf>
+      <owl:AnnotationProperty rdf:ID="dateValid">
+        <rdfs:subPropertyOf rdf:resource="#date"/>
+        <rdfs:comment>A date when resource was valid. (Not necessarily the first or last date, but this is an assertion that on that given date the information was valid.)</rdfs:comment>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Date Valid</rdfs:label>
+        <rdfs:domain rdf:resource="#ModsResource"/>
+      </owl:AnnotationProperty>
+    </rdfs:subPropertyOf>
+  </owl:AnnotationProperty>
+  <owl:AnnotationProperty rdf:ID="dateValidStart">
+    <rdfs:subPropertyOf rdf:resource="#dateValid"/>
+    <rdfs:comment>When the resource is valid over an interval with a start and end date, this is the start date. (When start and end date are given, it is an assertion that the information was valid over the course of this interval.  It does not necessarily assert that is was not valid before the start or after the end of the interval.)</rdfs:comment>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Date Valid -  Start</rdfs:label>
+  </owl:AnnotationProperty>
+  <owl:NamedIndividual rdf:ID="digitizedAnalog">
+    <rdf:type rdf:resource="http://www.loc.gov/mods/rdf/DigitalOrigin"/>
+  </owl:NamedIndividual>
+  <owl:AnnotationProperty rdf:ID="dateOfCopyrightEnd">
+    <rdfs:subPropertyOf rdf:resource="#dateOfCopyright"/>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Date of Copyright - End</rdfs:label>
+  </owl:AnnotationProperty>
+  <owl:AnnotationProperty rdf:ID="dateModifiedStart">
+    <rdfs:subPropertyOf rdf:resource="#dateModified"/>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:comment>When there is both a start and end for the modification date this is the start date.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Date Modified -  Start</rdfs:label>
+  </owl:AnnotationProperty>
+  <owl:AnnotationProperty rdf:ID="languageOfResource">
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <rdfs:comment>The language (or one of several languages) of the resource. </rdfs:comment>
+    <rdfs:label>Language of Resource</rdfs:label>
+  </owl:AnnotationProperty>
+  <owl:NamedIndividual rdf:ID="monographic">
+    <rdf:type rdf:resource="http://www.loc.gov/mods/rdf/Issuance"/>
+  </owl:NamedIndividual>
+  <owl:AnnotationProperty rdf:ID="dateCreatedEnd">
+    <rdfs:subPropertyOf rdf:resource="#dateCreated"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Date Created - End</rdfs:label>
+    <rdfs:comment>When there is both a start and end for the creation date this is the end date.</rdfs:comment>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+  </owl:AnnotationProperty>
+  <owl:NamedIndividual rdf:ID="reformattedDigital">
+    <rdf:type rdf:resource="http://www.loc.gov/mods/rdf/DigitalOrigin"/>
+  </owl:NamedIndividual>
+  <rdf:Description rdf:about="http://www.w3.org/2002/07/owl#topDataProperty">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <owl:AnnotationProperty rdf:ID="classification">
+    <rdfs:comment>A designation applied to the resource that indicates the subject by applying a formal system of coding and organizing resources according to subject areas.</rdfs:comment>
+    <rdfs:label>Classification</rdfs:label>
+    <rdfs:domain rdf:resource="#ModsResource"/>
+    <owl:equivalentProperty rdf:resource="http://id.loc.gov/vocabulary/classSchemes/classification"/>
+  </owl:AnnotationProperty>
+</rdf:RDF>
+
+<!-- Created with TopBraid -->
