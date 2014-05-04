@@ -1,0 +1,1953 @@
+{
+  "@graph": [
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#noteGroupValue",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "A property of noteGroup - used when a type is supplied for the note. The text of the note."
+      },
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#NoteGroup"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "NoteGroup - Value"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#adminMetadata",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "Administrative metadata for the MODS description, corresponds to recordInfo (MODS XML) which is, minimimally, a Class defined outside of the MADS/RDF namespace. The RecordInfo Class from the RecordInfo ontology is recommended.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Administrative Metadata",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://id.loc.gov/ontologies/RecordInfo#AdminMetadata"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#recordIdentifier",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "The system control number assigned by the organization creating, using, or distributing the description.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://id.loc.gov/ontologies/RecordInfo#AdminMetadata"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Record Identifier",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#partDetailType",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "The type of the resource part, e.g. volume, issue, page.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#Part"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Part - Detail Type",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#roleRelationshipName",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "The name included in a roleRelationship.  The roleRelationship binds an name and a role, where the name is a name associated with the resource and is specified elsewhere via the hasName property.  This mechanism is used when the role is not part of a known vocabulary.  Otherwise, the relationship is expressed by using the role vocabulary term as the property; for example, see relator:creator.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#RoleRelationship"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Role Relationship - Name",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.loc.gov/mads/rdf/v1#Name"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#partType",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "The segment type of a part. (When parts are included, the resource is ususally a document, so the part type would be the segment type of the document.)",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#Part"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Part - Type",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#subjectTitle",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "A subject of the resource which is a title, expressed in terms of a MADS Title.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Subject - Title"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.loc.gov/mads/rdf/v1#Title"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#subject"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#dateOfCopyrightStart",
+      "@type": "http://www.w3.org/2002/07/owl#AnnotationProperty",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Date of Copyright -  Start"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#dateOfCopyright"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#relatedSeries",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "Relates the described resource to a another MODS resource which is a series of which the described resource is a part.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Related item - Series",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#relatedItem"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#publisher",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "The name of the entity that published, printed, distributed, released, issued, or produced the resource."
+      },
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Publisher"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.loc.gov/mads/rdf/v1#Name"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#digitalOrigin",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "a designation of the source of a digital file important to its creation, use and management."
+      },
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Digital Origin",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#locationCopyEnumerationAndChronologyBasic",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "One of three levels of enumerationAndChronology: 'basic'",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#LocationCopy"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Location - Copy  - Enumeration And Chronology -- Basic",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#locationCopyEnumerationAndChronology"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#cartographics",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "A geographic entity expressed in cartographic terms.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Cartographics ",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#Cartographics"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#locationOfResource",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "The location (or one of several locations) at which the resource resides.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Location",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#Location"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#dateCreatedEnd",
+      "@type": "http://www.w3.org/2002/07/owl#AnnotationProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "When there is both a start and end for the creation date this is the end date.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Date Created - End"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#dateCreated"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#titleUniform",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "A title which has been distinguished as a uniform title. (This corresponds to a MODS XML titleInfo with 'type=uniform' attribute.) There should be no more than one uniform title.  Represented as a MADS Title, or, if there is a primary name, it is represented as a MADS NameTitle.  ",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Title - Uniform",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.loc.gov/mads/rdf/v1#Title"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#title"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#relatedReferencedBy",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": [
+        "Relates the described MODS resource to another MODS resource which references the described resource.",
+        ""
+      ],
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Related item - Referenced By",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#relatedItem"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#subjectName",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "A subject of the resource which is a name, expressed in terms of a MADS Name.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Subject - Name Subject",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.loc.gov/mads/rdf/v1#Name"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#subject"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#classificationGroupScheme",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "The classification scheme"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ClassificationGroup"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Classification Group - Scheme"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#partEnd",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "The value of the end of a part. For example, if unit of the part has value 'page', this is the number of the last page. ",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#Part"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Part - End",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#relatedReference",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Relates the described MODS resource to another MODS resource which the described resource references."
+      },
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Related item - Reference"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#relatedItem"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#partUnit",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "the unit -- e.g. page, chapter -- applying to the start, end, and total values."
+      },
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#Part"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Part - Unit",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#relatedConstituent",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "Relates the described MODS resource to another MODS resource which is a constituent of the described resource. ",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Related item - Constituent",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#relatedItem"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#identifierGroup",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Used when identifier type is not in controlled vocabulary. Bundles together the identifier with its type."
+      },
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Identifier Group"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#IdentifierGroup"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#dateCreatedStart",
+      "@type": "http://www.w3.org/2002/07/owl#AnnotationProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "When there is both a start and end for the creation date this is the start date.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Date Created -  Start"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#dateCreated"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#mediaType",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "An Internet Media (MIME) type e.g. text/html. ",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Media Type",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#titlePrincipal",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "A title which has been distinguished as the principal  title. (This corresponds to a MODS XML titleInfo with  no type attribute.) There should be no more than one principal title. Represented as a MADS Title.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Title - Principal",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.loc.gov/mads/rdf/v1#Title"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#title"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#locationCopyEnumerationAndChronology",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "A summary holdings statement for the copy. A string with information including volume or issue, date of publication or date of issue of a component of a multi-part resource, distinguishing it from other components of the same resource. ",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#LocationCopy"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Location - Copy  - Enumeration And Chronology",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#recordContentSource",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "The code or name of the organization that either created the original description or modified it.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://id.loc.gov/ontologies/RecordInfo#AdminMetadata"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Record Content Source",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#targetAudience",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "The target audience of the resource. Examples: adolescent, adult, general, juvenile, preschool,  specialized."
+      },
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Target Audience",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#locationCopyShelfLocator",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "Shelfmark or other shelving designation that indicates the location identifier for a copy.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#LocationCopy"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Location - Copy -- Shelf Locator"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#recordDescriptionStandard",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "Part of administrative metadata. The standard  which designates the rules used for the content of the description.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://id.loc.gov/ontologies/RecordInfo#AdminMetadata"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Record Description Standard"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#subjectOccupation",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "A subject of the resource which is an occupation, expressed in terms of a MADS Occupation.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Subject - Occupation",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.loc.gov/mads/rdf/v1#Occupation"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#subject"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#subject",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "An abstract property defined for which the various subject catergories (e.g. subjectGenre, subjectTitle) are subproperties."
+      },
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Subject"
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#dateOfCopyright",
+      "@type": "http://www.w3.org/2002/07/owl#AnnotationProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "Date when resource was copyrighted.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Date of Copyright"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#date"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#role",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "role is an abstract property, for which all terms in the relator vocabulary of roles become subproperties.  Thus for example 'relator:artist' refers to the role 'artist' within that vocabulary. (The prefix 'relator:' is used to denote the namespace for the \"relator\" vocabulary. \n\nThe property 'relator:artist' relates the resource to an artist associated with the resource, represented as a mads name.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Role (unbound)",
+      "http://www.w3.org/2002/07/owl#equivalentProperty": {
+        "@id": "http://id.loc.gov/vocabulary/relators/role"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#languageOfResource",
+      "@type": "http://www.w3.org/2002/07/owl#AnnotationProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "The language (or one of several languages) of the resource. ",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Language of Resource"
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#IdentifierGroup",
+      "@type": "http://www.w3.org/2002/07/owl#Class",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Used when the identifier type is not from the controlled list. Bundles together an identifier and its type."
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "MODS - Identifier - Typed"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subClassOf": {
+        "@id": "http://www.w3.org/2002/07/owl#Thing"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#digitizedMicrofilm",
+      "@type": [
+        "http://www.loc.gov/mods/rdf/DigitalOrigin",
+        "http://www.w3.org/2002/07/owl#NamedIndividual"
+      ]
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#subjectTopic",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "A subject of the resource which is a topic, expressed in terms of a MADS Topic.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Subject - Topic",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.loc.gov/mads/rdf/v1#Topic"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#subject"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#roleRelationshipRole",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "The role associated with a name, where the name and role are bound together in a roleRelationship."
+      },
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#RoleRelationship"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Role Relationship -  Role"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#Cartographics",
+      "@type": "http://www.w3.org/2002/07/owl#Class",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Aggregates cartographic properties."
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "MODS - Cartographic Information"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subClassOf": {
+        "@id": "http://www.w3.org/2002/07/owl#Thing"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#locationCopyEnumerationAndChronologyIndex",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "One of three levels of enumerationAndChronology:'index'",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#LocationCopy"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Location - Copy  - Enumeration And Chronology -- Index",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#locationCopyEnumerationAndChronology"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#partTotal",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "The total number of units within a part.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#Part"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Part - Total",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#positiveInteger"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#dateOfCopyrightEnd",
+      "@type": "http://www.w3.org/2002/07/owl#AnnotationProperty",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Date of Copyright - End"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#dateOfCopyright"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#subjectGeographic",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "A subject of the resource which is a geographic entity, expressed in terms of a MADS Geographic.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Subject - Geographic ",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.loc.gov/mads/rdf/v1#Geographic"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#subject"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#Part",
+      "@type": "http://www.w3.org/2002/07/owl#Class",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@language": "en",
+        "@value": "An aggregator for part properties."
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "MODS - Part"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#partName",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "A string that designates the part name."
+      },
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#Part"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Part - Name"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#serial",
+      "@type": [
+        "http://www.loc.gov/mods/rdf/Issuance",
+        "http://www.w3.org/2002/07/owl#NamedIndividual"
+      ]
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#noteGroupType",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "A property of NoteGroup - used when a type is supplied for the note.  The type."
+      },
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#NoteGroup"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "NoteGroup - Type"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#integratingResource",
+      "@type": [
+        "http://www.loc.gov/mods/rdf/Issuance",
+        "http://www.w3.org/2002/07/owl#NamedIndividual"
+      ]
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#name",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "A name  - personal, corporate, conference, or family - associated with the resource. Represented in the MADS namespace. ",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Name",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.loc.gov/mads/rdf/v1#Name"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#frequency",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "publication frequency"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Frequency"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#physicalForm",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "A particular physical presentation of the resource, including the physical form or medium of material for a resource. Example: oil paint",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Physical Form"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#accessCondition",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Information about restrictions imposed on access to  the resource."
+      },
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Access Condition",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#locationCopyElectronicLocator",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "URI of the copy of the resource.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#LocationCopy"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Location - Copy -- Electronic Locator"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#LocationCopy",
+      "@type": "http://www.w3.org/2002/07/owl#Class",
+      "http://www.w3.org/2000/01/rdf-schema#comment": " An aggregator for copy properties.",
+      "http://www.w3.org/2000/01/rdf-schema#label": "MODS - Location - Copy"
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#identifier",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "identifier is a property for which all terms in the \"identifier\" vocabulary become subproperties.  Thus for example 'identifer:isbn' is a subproperty saying in effect \"has this ISBN\" where 'isbn' is a term within that vocabulary. (The prefix 'identifier:' is used to denote the namespace for the \"identifier\" vocabulary."
+      },
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Identifier",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      },
+      "http://www.w3.org/2002/07/owl#equivalentProperty": {
+        "@id": "http://id.loc.gov/vocabulary/identifiers/id"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#partNumber",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "A string that designates the part number."
+      },
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#Part"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Part - Number"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#abstract",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "A summary of the content of the resource."
+      },
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Abstract",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#digitizedAnalog",
+      "@type": [
+        "http://www.w3.org/2002/07/owl#NamedIndividual",
+        "http://www.loc.gov/mods/rdf/DigitalOrigin"
+      ]
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#classification",
+      "@type": "http://www.w3.org/2002/07/owl#AnnotationProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "A designation applied to the resource that indicates the subject by applying a formal system of coding and organizing resources according to subject areas.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Classification",
+      "http://www.w3.org/2002/07/owl#equivalentProperty": {
+        "@id": "http://id.loc.gov/vocabulary/classSchemes/classification"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#classificationGroup",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Used when classification scheme is not in controlled vocabulary. Bundles together the classification number with its scheme."
+      },
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Classification Group"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ClassificationGroup"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#note",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "Textual information about the resource. This property is used when no type is specified. (In contrast to hasTypedNote, whose object is an aggregator that includes both the type and note.)",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Note",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#edition",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Version of the resource."
+      },
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Edition"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1",
+      "@type": "http://www.w3.org/2002/07/owl#Ontology",
+      "http://www.w3.org/2002/07/owl#imports": [
+        {
+          "@id": "http://marklogic3.loc.gov:8281/ontologies/Roles"
+        },
+        {
+          "@id": "http://www.loc.gov/standards/mads/rdf/v1.rdf"
+        },
+        {
+          "@id": "http://vocab.org/changeset/"
+        },
+        {
+          "@id": "http://purl.org/vocab/vann/"
+        },
+        {
+          "@id": "http://marklogic3.loc.gov:8281/ontologies/Identifiers"
+        },
+        {
+          "@id": "http://marklogic3.loc.gov:8281/ontologies/TargetAudiences"
+        },
+        {
+          "@id": "http://purl.org/dc/dcmitype/"
+        },
+        {
+          "@id": "http://www.w3.org/2004/02/skos/core"
+        },
+        {
+          "@id": "http://purl.org/dc/elements/1.1/"
+        },
+        {
+          "@id": "http://marklogic3.loc.gov:8281/ontologies/ResourceTypes"
+        },
+        {
+          "@id": "http://marklogic3.loc.gov:8281/ontologies/ClassificationSchemes"
+        },
+        {
+          "@id": "http://www.loc.gov/mads/rdf/v1"
+        },
+        {
+          "@id": "http://purl.org/vocab/changeset/schema"
+        },
+        {
+          "@id": "http://www.w3.org/2008/05/skos-xl"
+        },
+        {
+          "@id": "http://xmlns.com/foaf/0.1/"
+        }
+      ]
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#dateCreated",
+      "@type": "http://www.w3.org/2002/07/owl#AnnotationProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "The resource's creation date.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": " Date Created"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#date"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#locationShelfLocator",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Shelfmark or other shelving designation"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#Location"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Location - Shelf Locator",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#issuance",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Describes the issuance of the resource."
+      },
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Issuance"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#dateModifiedEnd",
+      "@type": "http://www.w3.org/2002/07/owl#AnnotationProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "When there is both a start and end for the modification date this is the end date.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Date Modified - End"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#dateModified"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#NoteGroup",
+      "@type": "http://www.w3.org/2002/07/owl#Class",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "Aggregates a note with its type.  ",
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "MODS - Note Typed"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#Location",
+      "@type": "http://www.w3.org/2002/07/owl#Class",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@language": "en",
+        "@value": "An aggregator for location properties."
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "MODS - Location"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#locationCopyNote",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "A note pertaining to a specific copy."
+      },
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#LocationCopy"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Location - Copy -- Note"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#ClassificationGroup",
+      "@type": "http://www.w3.org/2002/07/owl#Class",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "For a classification whose scheme is not part of the controlled vocabulary. Bundles together a classification number and scheme."
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "MODS - Classification Group"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subClassOf": {
+        "@id": "http://www.w3.org/2002/07/owl#Thing"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#identifierGroupType",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "The identifier type."
+      },
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#IdentifierGroup"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Identifier Group - Type"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#locationCopyEnumerationAndChronologySupplement",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "One of three levels  of enumerationAndChronology:'supplement'",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#LocationCopy"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Location - Copy  - Enumeration And Chronology -- Supplement",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#locationCopyEnumerationAndChronology"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#dateValidStart",
+      "@type": "http://www.w3.org/2002/07/owl#AnnotationProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "When the resource is valid over an interval with a start and end date, this is the start date. (When start and end date are given, it is an assertion that the information was valid over the course of this interval.  It does not necessarily assert that is was not valid before the start or after the end of the interval.)",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Date Valid -  Start"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#dateValid"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#recordOrigin",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "Describes the origin or provenance of the description.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://id.loc.gov/ontologies/RecordInfo#AdminMetadata"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Record Origin",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#partList",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "A property of a part - a textual listing of the units within the part.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#Part"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Part - List",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.w3.org/2002/07/owl#topDataProperty",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#access",
+      "@type": [
+        "http://www.loc.gov/mods/rdf/ReformattingQuality",
+        "http://www.w3.org/2002/07/owl#NamedIndividual"
+      ]
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#relatedSucceeding",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "Relates the described resource to a another MODS resource which suceeded it.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Related item - Suceeding",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#relatedItem"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#placeOfOrigin",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Place of publication/origin. Used in connection with the origin of a resource, i.e., creation, publication, issuance, etc.  Represented as a MADS Geographic."
+      },
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Place"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.loc.gov/mads/rdf/v1#Geographic"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#reformattingQuality",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "The reformatting quality;  e.g. access, preservation,  replacement."
+      },
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Reformatting Quality"
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#classificationGroupValue",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "The classification value"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ClassificationGroup"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Classification Group - Value"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#relatedPreceding",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "Relates the described MODS resource to a MODS resource which preceded the described resource.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Related item - Preceding",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#relatedItem"
+      }
+    },
+    {
+      "@id": "ri:AdminMetadata",
+      "@type": "http://www.w3.org/2002/07/owl#Class",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "Administrative metadata for the description",
+      "http://www.w3.org/2000/01/rdf-schema#label": "Administrative Metadata"
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#locationCopySublocation",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "Department, division, or section of an institution holding a copy of the resource.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#LocationCopy"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Location - Copy -- Sublocation"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#part",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "Information about a physical part of the resource, including the part number, its caption and title, and dimensions. ",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Part",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#Part"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#partStart",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "The beginning unit of the part.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#Part"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Part - Start",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#dateCapturedStart",
+      "@type": "http://www.w3.org/2002/07/owl#AnnotationProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "When there is both a start and end for the capture date this is the start date.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Date Captured -  Start"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#dateCaptured"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource",
+      "@type": "http://www.w3.org/2002/07/owl#Class",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "\nThe resource which is the subject of this description.\n  "
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "MODS - A  MODS Resource"
+      },
+      "http://www.w3.org/2002/07/owl#equivalentClass": {
+        "@id": "http://id.loc.gov/vocabulary/resourceTypes/Res"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#subjectComplex",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "A subject of the resource composed of several component subjects. ",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Subject - Complex"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.loc.gov/mads/rdf/v1#ComplexSubject"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#subject"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#physicalExtent",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "a statement of the number and specific material of the units of the resource that express physical extent."
+      },
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Physical Extent"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#partDate",
+      "@type": "http://www.w3.org/2002/07/owl#AnnotationProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Date associated with a part."
+      },
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#Part"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Part Date"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#date"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#relatedInstantiation",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Relates the described resource to a another MODS resource with different origination information."
+      },
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Related item - Instantiation"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#relatedItem"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#relatedFormat",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "Relates the described MODS resource to a similar MODS resource of a different format.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Related item - Other Format",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#relatedItem"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#locationPhysical",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "The institution or repository that holds the resource, or where it is available.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#Location"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Location - Physical Location",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#cartographicsCoordinates",
+      "@type": [
+        "http://www.w3.org/2002/07/owl#DatatypeProperty",
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+      ],
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#Cartographics"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Cartographics - Coordinates"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#dateModified",
+      "@type": "http://www.w3.org/2002/07/owl#AnnotationProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "Date when resource was modified.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Date Modified"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#date"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#reformattedDigital",
+      "@type": [
+        "http://www.loc.gov/mods/rdf/DigitalOrigin",
+        "http://www.w3.org/2002/07/owl#NamedIndividual"
+      ]
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#relatedVersion",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "Relates the described MODS resource to another MODS resource which is a different version of the described resource.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Related Item - Other Version",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#relatedItem"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#RoleRelationship",
+      "@type": "http://www.w3.org/2002/07/owl#Class",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Aggregates a name with its role. "
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "MODS - Role Relationship"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#subjectHierarchicalGeographic",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "A subject of the resource which is a hierarchy of geographic entities expressed in terms of a MADS Geographics.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Subject -  Hierarchical Geographic ",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.loc.gov/mads/rdf/v1#HierarchicalGeographic"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#subject"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#dateValidEnd",
+      "@type": "http://www.w3.org/2002/07/owl#AnnotationProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "When the resource is valid over an interval with a start and end date, this is the end date. (When start and end date are given, it is an assertion that the information was valid over the course of this interval.  It does not necessarily assert that is was not valid before the start or after the end of the interval.)",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Date Valid - End"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#dateValid"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#relatedItem",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "Relates the described MODS resource to another, related MODS resource.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Related Item",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#date",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "An abstract property for which date properties in general are subproperties."
+      },
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Date"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#relatedOriginal",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "Relates the described MODS resource to another MODS resource which is an original of the described resource.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Related item - Original",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#relatedItem"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#locationCopyForm",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "The form of a particular copy may be indicated when the general description refers to multiple forms and there is different detailed holdings information associated with different forms.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#LocationCopy"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Location - Copy -- Form"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#dateValid",
+      "@type": "http://www.w3.org/2002/07/owl#AnnotationProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "A date when resource was valid. (Not necessarily the first or last date, but this is an assertion that on that given date the information was valid.)",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Date Valid"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#date"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#dateModifiedStart",
+      "@type": "http://www.w3.org/2002/07/owl#AnnotationProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "When there is both a start and end for the modification date this is the start date.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Date Modified -  Start"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#dateModified"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#title",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "A title for the resource. Represented as a MADS Title.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Title",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.loc.gov/mads/rdf/v1#Title"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#dateCaptured",
+      "@type": "http://www.w3.org/2002/07/owl#AnnotationProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Date that the resource  was digitized or a subsequent snapshot was taken."
+      },
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Date Captured"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#date"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#namePrincipal",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "A name that has been distinguished as the principal name associated with the resource. There should be no more than one name principal name. (The rule for determining the principal name is as follows: If the role associated with the name is 'creator' AND if it is the only name whose role is 'creator' then it is the principal name. Thus if there are more than one name, or no name, whose role is 'creator', then there is no principal name.) If there is a principal name, and if there is a uniform title, then that name and title are to be combined into a nameTitle. ",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Name -  Principle",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.loc.gov/mads/rdf/v1#Name"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#name"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#subjectTemporal",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "A subject of the resource which is a temporal expression, expressed in terms of a MADS Temporal.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Subject - Temporal",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.loc.gov/mads/rdf/v1#Temporal"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#subject"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#locationCopy",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "Information about a specific tangible instance of a bibliographic resource or set which comprises one or more pieces via indication of sublocation and/or locator.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#Location"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Location - Copy"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#LocationCopy"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#genre",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "The genre (or one of several genres) of the resource. Represented in the MADS namespace. ",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Genre",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.loc.gov/mads/rdf/v1#GenreForm"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#identifierGroupValue",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "The identifier value\t."
+      },
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#IdentifierGroup"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Identifier Group - Value"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#statementOfResponsibility",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "A note, when the note type is \"statement of responsibility\""
+      },
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Statement of Responsibility",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#identifierValue",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Used in conjuction with identifierType, when the type is not from the controlled vocabulary."
+      },
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#IdentifierGroup"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Identifier - Value"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#subjectGenre",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "A subject of the resource which is a genre, expressed in terms of a MADS GenreForm."
+      },
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Subject - Genre Subject",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.loc.gov/mads/rdf/v1#GenreForm"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#subject"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#cartographicsScale",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#Cartographics"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Cartographics - Scale"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#relatedReview",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "Relates the described MODS resource to another MODS resource which is review of the described resource.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Related item - Review",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#relatedItem"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#dateCapturedEnd",
+      "@type": "http://www.w3.org/2002/07/owl#AnnotationProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "When there is both a start and end for the capture date this is the end  date."
+      },
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Date Captured - End"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#dateCaptured"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#roleRelationship",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "Binds a name to the role that the named entity played for the resource. ",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Role Relationship",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#RoleRelationship"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#tableOfContents",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "Description of the contents of the resource.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Table of Contents",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#monographic",
+      "@type": [
+        "http://www.w3.org/2002/07/owl#NamedIndividual",
+        "http://www.loc.gov/mods/rdf/Issuance"
+      ]
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#subjectGeographicCode",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "A subject of the resource which is a geographic entity, expressed as a geographic code and in terms of a MADS Geographic.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Subject - Geographic Code ",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.loc.gov/mads/rdf/v1#Geographic"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#subjectGeographic"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#partOrder",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "An integer that designates the sequence of parts",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#Part"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Part - Order",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#integer"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#noteGroup",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Used for a note with a type (other than \"statement of responsibility\")"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Note  Group"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#NoteGroup"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#partLevel",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "A property of a part - the level of numbering in the host/parent item.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#Part"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Part - Level",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#positiveInteger"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#locationUrl",
+      "@type": "http://www.w3.org/2002/07/owl#DatatypeProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Location of the resource (a URL)"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#Location"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Location - URL",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#relatedHost",
+      "@type": "http://www.w3.org/2002/07/owl#ObjectProperty",
+      "http://www.w3.org/2000/01/rdf-schema#comment": "Relates the described MODS resource to another MODS resource which is a host of the described resource.",
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": "Related item - Host",
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#ModsResource"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#relatedItem"
+      }
+    },
+    {
+      "@id": "http://www.loc.gov/mods/rdf/v1#cartographicsProjection",
+      "@type": [
+        "http://www.w3.org/2002/07/owl#DatatypeProperty",
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+      ],
+      "http://www.w3.org/2000/01/rdf-schema#domain": {
+        "@id": "http://www.loc.gov/mods/rdf/v1#Cartographics"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#label": {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Cartographics - Projection"
+      },
+      "http://www.w3.org/2000/01/rdf-schema#range": {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+      }
+    }
+  ]
+}
+
