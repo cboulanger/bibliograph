@@ -5,7 +5,7 @@ Frontend
 --------
 
 - Metadata is not updated when changing reference id
-- 
+- Replace persist.js library with qooxdoo localStorage Wrapper
 
 Backend
 -------
