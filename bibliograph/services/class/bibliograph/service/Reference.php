@@ -221,7 +221,7 @@ class bibliograph_service_Reference
    *    The query object used by the query behavior
    * @param qcl_data_model_AbstractActiveRecord $model
    *    The model on which the query should be performed
-   * @throws InvalidJsonRpcArgumentException
+   * @throws JsonRpcException
    * @return qcl_data_db_Query
    */
   public function addQueryConditions(
@@ -244,7 +244,7 @@ class bibliograph_service_Reference
     }
     else
     {
-      throw new InvalidJsonRpcArgumentException( "No recognized query format in request." );
+      throw new JsonRpcException( "No recognized query format in request." );
     }
   }
 
@@ -626,7 +626,7 @@ class bibliograph_service_Reference
    * @param $datasource
    * @param $referenceId
    * @param $data
-   * @throws InvalidJsonRpcArgumentException
+   * @throws JsonRpcException
    * @return unknown_type
    */
   public function method_saveData( $datasource, $referenceId, $data )
@@ -635,7 +635,7 @@ class bibliograph_service_Reference
 
     if ( ! is_object( $data ) )
     {
-      throw new InvalidJsonRpcArgumentException( "Invalid data object");
+      throw new JsonRpcException( "Invalid data object");
     }
 
     /*
@@ -776,7 +776,7 @@ class bibliograph_service_Reference
    * @param $datasource
    * @param $folderId
    * @param $reftype
-   * @return unknown_type
+   * @return string
    * @todo update of reference count should be done in the folderModel!
    */
   public function method_create( $datasource, $folderId, $reftype )
@@ -1479,7 +1479,7 @@ class bibliograph_service_Reference
         break;
 
       default:
-        throw new InvalidJsonRpcArgumentException("Invalid scope argument");
+        throw new JsonRpcException("Invalid scope argument");
     }
     qcl_import("qcl_ui_dialog_Alert");
     return new qcl_ui_dialog_Alert(

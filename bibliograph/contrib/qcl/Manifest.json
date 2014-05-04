@@ -14,12 +14,12 @@
       {
         "name" : "Christian Boulanger",
         "user" : "cboulanger",
-        "email" : "c DOT boulanger AT qxtransformer DOT org"
+        "email" : "info AT bibliograph DOT org"
       }
     ],
     
-    "version" : "0.2",
-    "qooxdoo-versions": ["1.0","1.1","1.2"]
+    "version" : "0.5",
+    "qooxdoo-versions": ["3.5","3.6"]
   },
   
   "provides" : 

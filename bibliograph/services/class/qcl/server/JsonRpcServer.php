@@ -88,7 +88,7 @@ class qcl_server_JsonRpcServer
   {
     if ( ! $this->controller )
     {
-      $this->raiseError("No controller set.");
+      throw new LogicException("No controller set.");
     }
     return $this->controller;
   }
@@ -420,6 +420,7 @@ class qcl_server_JsonRpcServer
     {
       $data = $data->toArray();
     }
+
     $response->setData( $data );
     return $this->json->encode( $response->toArray() );
   }

@@ -259,7 +259,6 @@ class class_bibliograph_plugin_z3950_Service
    *   )
    * )
    * @throws JsonRpcException
-   * @throws InvalidJsonRpcArgumentException
    * @return array Array containing the keys
    *                int     requestId   The request id identifying the request (mandatory)
    *                array   rowData     The actual row data (mandatory)
@@ -292,7 +291,7 @@ class class_bibliograph_plugin_z3950_Service
     }
     catch( qcl_data_model_RecordNotFoundException $e)
     {
-      throw new InvalidJsonRpcArgumentException("Invalid query. You have to call the getRowCount method first");
+      throw new JsonRpcException("Invalid query. You have to call the getRowCount method first");
     }
 
     try
@@ -323,7 +322,7 @@ class class_bibliograph_plugin_z3950_Service
        * them from the z39.50 database
        */
       $this->log("Getting row data from remote Z39.50 database ...", BIBLIOGRAPH_LOG_Z3950);
-      $path = realpath( dirname(__FILE__) . "/servers/z3950.gbv.de-20010-GVK-de.xml" );
+      $path = realpath( dirname(__FILE__) . "/servers/z3950.gbv.de-20010-GVK-de.xml" ); // todo: allow to choose other servers
       $yaz = new YAZ( $path );
       $yaz->connect();
       $this->configureCcl( $yaz, $datasource );

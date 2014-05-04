@@ -17,12 +17,9 @@
 
  ************************************************************************ */
 
-/* ************************************************************************
-#require(qcl.access.UserManager)
- ************************************************************************ */
-
 /**
  * A user object
+ * @require(qcl.access.UserManager)
  */
 qx.Class.define("qcl.access.User",
 {
@@ -166,7 +163,7 @@ qx.Class.define("qcl.access.User",
      * Adds a permission identified by its id, creating it if
      * it doesn't already exist.
      * @param names {Array} Array of strings
-     * @return
+     * @return {void}
      */
     addPermissionsByName : function( names )
     {

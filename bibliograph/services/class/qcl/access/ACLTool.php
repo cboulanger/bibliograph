@@ -212,7 +212,7 @@ class qcl_access_ACLTool
    * @param string $targetId
    * @param string $linkType
    * @return array
-   * @throws InvalidJsonRpcArgumentException
+   * @throws JsonRpcException
    */
   public function method_getLinkableElementModel( $targetType, $targetId, $linkType )
   {
@@ -257,7 +257,7 @@ class qcl_access_ACLTool
         $model->findAllOrderBy( $labelProp );
         break;
       default:
-        throw new InvalidJsonRpcArgumentException("Invalid type $type");
+        throw new JsonRpcException("Invalid type $type");
     }
 
     $result = array();
@@ -310,7 +310,7 @@ class qcl_access_ACLTool
   /**
    * Returns the model of a given element type
    * @param string $type
-   * @throws InvalidJsonRpcArgumentException
+   * @throws JsonRpcException
    * @return qcl_data_model_AbstractActiveRecord
    */
   protected function getElementModel( $type )
@@ -320,7 +320,7 @@ class qcl_access_ACLTool
     {
       return $models[$type]['model'];
     }
-    throw new InvalidJsonRpcArgumentException( "Invalid type '$type'" );
+    throw new JsonRpcException( "Invalid type '$type'" );
   }
 
   
@@ -345,7 +345,7 @@ class qcl_access_ACLTool
    * Returns the tree of model relationships based on the selected element
    * @param $elementType
    * @param $namedId
-   * @throws InvalidJsonRpcArgumentException
+   * @throws JsonRpcException
    * @return array
    */
   public function method_getTreeModel( $elementType, $namedId )
@@ -371,7 +371,7 @@ class qcl_access_ACLTool
     $thisModel = $this->getElementModel( $elementType );
     if( ! $thisModel )
     {
-      throw new InvalidJsonRpcArgumentException("Invalid type argument $elementType");
+      throw new JsonRpcException("Invalid type argument $elementType");
     }
     $thisModel->load( $namedId );
 

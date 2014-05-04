@@ -21,6 +21,8 @@
 qcl_import("qcl_data_controller_Controller");
 qcl_import( "bibliograph_ApplicationCache" );
 qcl_import("qcl_util_system_Lock");
+qcl_import("qcl_ui_dialog_Alert");
+qcl_import("qcl_ui_dialog_Popup");
 
 /**
  * Setup class. This class is called on application startup, i.e.
@@ -96,13 +98,12 @@ class bibliograph_service_Setup
       $this->setup();
       $cache->set("setup", true);
       $cache->savePersistenceData();
-      throw new JsonRpcException( "Setup has finished. Please reload the application" );
+      return new qcl_ui_dialog_Alert( $this->tr("Setup has finished. Please reload the application"));
     }
     catch( Exception $e )
     {
       throw $e;
     }
-
   }
 
   /**

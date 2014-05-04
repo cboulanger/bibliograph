@@ -137,11 +137,11 @@ class bibliograph_Application
                 ->getRequest()
                 ->getService() != "bibliograph.setup" )
       {
-        throw new JsonRpcException($this->tr("Setup in progress..."));
+        throw new qcl_server_ServiceException("Server busy. Setup in progress.",null,true);
       }
 
       /*
-       * Load initial access model data into models
+       * Load initial access model data into models, then go to setup service
        */
       if ( ! $cache->get("dataImported") )
       {

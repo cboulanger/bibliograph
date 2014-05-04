@@ -167,6 +167,7 @@ class JsonRpcServer extends AbstractServer
     catch( Exception $e )
     {
       $msg = $e->getMessage();
+
       /*
        * logging the error might produce other exceptions
        */
@@ -178,8 +179,25 @@ class JsonRpcServer extends AbstractServer
       {
         $msg = $e->getMessage();
       }
-      $jsonRpcError =  $this->getErrorBehavior();
-      $jsonRpcError->setError( $e->getCode(), $msg );
+
+      /*
+       * JsonRpcException and subclasses know how to format themselves
+       * for JSONRPC responses, others will be used by the
+       * standard error behavior.
+       */
+      if( $e instanceof JsonRpcException )
+      {
+        $jsonRpcError = $e;
+      }
+      else
+      {
+        $jsonRpcError =  $this->getErrorBehavior();
+        $jsonRpcError->setError( $e->getCode(), $msg );
+      }
+
+      /*
+       * send error data
+       */
       $jsonRpcError->sendAndExit();
 
       // shouldn't get here
@@ -344,12 +362,14 @@ class JsonRpcServer extends AbstractServer
    */
   function callServiceMethod( $serviceObject, $method, $params )
   {
+
     $result = parent::callServiceMethod( $serviceObject, $method, $params );
+
     /*
-     * See if the result of the function was actually an error, and if
-     * yes, add the script transport id.
+     * See if the result of the function was an error object thrown by the service method
+     * and if yes, add the script transport id.
      */
-    if ( is_a( $result, "JsonRpcError" ) )
+    if ( $result instanceof JsonRpcError )
     {
       $result->setScriptTransportId($this->getErrorBehavior()->getScriptTransportId() );
     }

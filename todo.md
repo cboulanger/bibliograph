@@ -14,4 +14,5 @@ Backend
   - dev = allow modification of models
   - prod = no modification
   - maintenance = temp. develop mode on production servers
-- Token (pre-created session) must replace on-the-fly session generation ("S_", "P_")
+- qcl: Token (pre-created session) must replace on-the-fly session generation ("S_", "P_")
+- Remove unnecessary Exceptions, reduce to a basic set

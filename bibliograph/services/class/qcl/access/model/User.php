@@ -594,7 +594,7 @@ class qcl_access_model_User
    * Function to check the match between the password and the repeated
    * password
    * @param $value
-   * @throws InvalidJsonRpcArgumentException
+   * @throws JsonRpcException
    * @return string
    */
   public function checkFormPassword ( $value )
@@ -605,7 +605,7 @@ class qcl_access_model_User
     }
     elseif ( $this->__password != $value )
     {
-      throw new InvalidJsonRpcArgumentException( "Passwords do not match..." );
+      throw new JsonRpcException( "Passwords do not match..." );
     }
     return $this->getApplication()->getAccessController()->generateHash( $value );
   }

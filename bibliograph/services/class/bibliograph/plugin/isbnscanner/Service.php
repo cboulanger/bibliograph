@@ -25,7 +25,6 @@ qcl_import("qcl_ui_dialog_Popup");
 
 /**
  * Class providing methods and services to import bibliographic data from scanned ISBN numbers
- * Requires the HTTP extension (pecl_http).
  */
 class class_bibliograph_plugin_isbnscanner_Service
   extends qcl_data_controller_Controller
@@ -41,8 +40,7 @@ class class_bibliograph_plugin_isbnscanner_Service
     $this->requirePermission("reference.import");
     # check data/folderid
     $activeUser = $this->getAccessController()->getActiveUser();    
-    qcl_import("qcl_ui_dialog_Prompt");
-    $msg = $this->tr("Please enter the ISBN with a barcode scanner or manually. ") ;
+    $msg = $this->tr("Please enter the ISBN:") ;
     return new qcl_ui_dialog_Prompt(
       $msg, /*value*/ "",
       $this->serviceName(),"getReferenceDataByIsbn",
@@ -52,16 +50,29 @@ class class_bibliograph_plugin_isbnscanner_Service
   }
 
   /**
-   * Resolves the ISBN to reference data. For the moment, the worldcat XISBN service is used.
-   * Returns a message with information on the result.
-   * @param $isbn
-   * @param $datasource
+   * Resolves the ISBN to reference data.
+   * @param string $isbn The ISBN
+   * @param array $data Additional data
    * @return String
    */
   public function method_getReferenceDataByIsbn( $isbn, $data )
   {
     $this->requirePermission("reference.import");
-    qcl_assert_valid_string( $isbn, "Missing ISBN" );
+
+    // hack todo fix this!
+    if (! is_array($data) )
+    {
+      return "ABORTED: wrong signature, ignoring request";
+    }
+
+
+    // cancel button
+    if (! $isbn )
+    {
+      return "CANCEL";
+    }
+
+    qcl_assert_valid_string( $isbn, "ISBN must be a non-empty string" );
     
     $connectors = array(
       "Xisbn"
@@ -76,6 +87,7 @@ class class_bibliograph_plugin_isbnscanner_Service
   
   /**
    * Private function to return the connector object for a given name
+   * @param string $connectorName The name of the connector
    * @return bibliograph_plugin_isbnscanner_IConnector
    */
   private function getConnectorObject( $connectorName )
@@ -89,11 +101,16 @@ class class_bibliograph_plugin_isbnscanner_Service
   
   /**
    * Service to iterate over the given connector names
+   * @param $dummy First parameter returned by client can be ignored
+   * @param array $connectors Array of connector names
+   * @param string $isbn The ISBN to search for
+   * @param array $data Additional data
+   * @return qcl_ui_dialog_Popup
    */
-  public function method_iterateConnectors( $dummy, $connectors, $isbn, $data )
+  public function method_iterateConnectors( $dummy, array $connectors, $isbn, array $data )
   {  
     $this->requirePermission("reference.import");
-    
+
     if ( ! count($connectors) )
     {
       throw new JsonRpcException($this->tr("Could not find any data for ISBN %s.", $isbn));
@@ -106,40 +123,177 @@ class class_bibliograph_plugin_isbnscanner_Service
       array( $connectors, $isbn, $data )
     );
   }
+
+  /**
+   * Given a record with BibTeX-conformant field names, return a formatted reference.
+   * Todo: use proper formatting
+   * @param array $record
+   * @return string
+   */
+  protected  function formatReference(array $record)
+  {
+    return sprintf(
+      "%s (%s): %s. %s:%s. %s.",
+      $record['author'],
+      $record['year'],
+      $record['title'],
+      $record['address'],
+      $record['publisher'],
+      $record['edition']
+    );
+  }
   
   /**
    * Service to try the first of the connector names in the given array
+   * @param $dummy First parameter returned by client can be ignored
+   * @param array $connectors Array of connector names
+   * @param string $isbn The ISBN to search for
+   * @param array $data Additional data
+   * @return qcl_ui_dialog_Popup
    */
   public function method_tryConnector( $dummy, $connectors, $isbn, $data )
   {
+    $this->requirePermission("reference.import");
 
     $connector = $this->getConnectorObject( $connectors[0] );
     $records = $connector->getDataByIsbn( $isbn );
-    
+
+    /*
+     * if no result, try next connector
+     */
     if( count($records) == 0 )
     {
-      array_shif($connectors);
+      array_shift($connectors);
       return $this->method_iterateConnectors( null, $connectors, $isbn, $data );
     }
 
-    $d = $records[0];
-    $ref = sprintf(
-      "%s (%s): %s. %s:%s. %s.",
-      $d['author'],
-      $d['year'],
-      $d['title'],
-      $d['address'],
-      $d['publisher'],
-      $d['editor']
-    );
-    
-    $message = $this->tr("Found the following data: %s. Import?", $ref);
+    $record = $records[0];
+
+    /*
+     * check for duplicates
+     */
+    $datasource = $data[0];
+    $dsModel = $this->getDatasourceModel($datasource);
+    $referenceModel = $dsModel->getInstanceOfType("reference");
+    $isbn = str_replace("-","",$isbn);
+
+    // try ISBN
+    $referenceModel->findWhere(array(
+      "isbn" => array("like","%$isbn%")
+    ));
+
+    // try title/year
+    if( $referenceModel->foundNothing() ) $referenceModel->findWhere(array(
+      "title" => array("like","%" . $record['title'] . "%"),
+      "year"  => $record['year']
+    ));
+
+    /*
+     * possible duplicates found
+     */
+    if( $referenceModel->foundSomething() )
+    {
+      $refs = array();
+      while( $referenceModel->loadNext() )
+      {
+        $refs[] = $this->formatReference( $referenceModel->data() );
+      }
+      $msg = $this->tr(
+        "Found: %s<br><br><b>Possible duplicates:</b><br>%s<br><br>Import?",
+        $this->formatReference( $record ),
+        join("<br>", $refs)
+      );
+    }
+
+    /*
+     * no duplicates
+     */
+    else
+    {
+      $msg = $this->tr(
+        "Found: %s<br><br>Import?",
+        $this->formatReference( $record )
+      );
+    }
+
+    /*
+     * display found record and confirm import
+     */
     qcl_import("qcl_ui_dialog_Confirm");
     return new qcl_ui_dialog_Confirm(
-      $message, true,
-      $this->serviceName(),"import",
-      array($d, $data)
+      $msg, true,
+      $this->serviceName(),"importReferenceData",
+      array($record, $data)
     );
+  }
+
+  /**
+   * Import the found reference data into the database
+   * @param null|bool $response
+   * @param object $record
+   * @param array $data
+   * @return qcl_ui_dialog_Prompt|string
+   */
+  public function method_importReferenceData( $response, $record, array $data )
+  {
+    // CANCEL button -> exit
+    if( $response === null )
+    {
+      return "CANCEL";
+    }
+
+    list( $datasource, $folderId ) = $data;
+
+    // NO button -> go back to entry
+    if ( $response === false )
+    {
+      return $this->method_enterIsbnDialog( $datasource, $folderId );
+    }
+
+    $this->requirePermission("reference.import");
+
+    /*
+     * import
+     */
+    $dsModel = $this->getDatasourceModel($datasource);
+    $referenceModel = $dsModel->getInstanceOfType("reference");
+
+    $record = object2array( $record );
+    $record['createdBy']= $this->getActiveUser()->namedId();
+    $referenceModel->create($record);
+
+    /*
+     * link to folder
+     */
+    $folderModel = $dsModel->getInstanceOfType("folder");
+    $folderModel->load( $folderId );
+    $folderModel->linkModel( $referenceModel );
+
+    /*
+     * update reference count
+     */
+    $referenceCount = count( $referenceModel->linkedModelIds( $folderModel ) );
+    $folderModel->set( "referenceCount", $referenceCount );
+    $folderModel->save();
+
+    /*
+     * reload references and select the new reference
+     */
+    $this->dispatchClientMessage("folder.reload", array(
+      'datasource'  => $datasource,
+      'folderId'    => $folderId
+    ) );
+
+    $this->dispatchClientMessage("bibliograph.setModel", array(
+      'datasource'    => $datasource,
+      'modelType'     => "reference",
+      'modelId'       => $referenceModel->id()
+    ) );
+
+    /*
+     * import next reference
+     */
+    return $this->method_enterIsbnDialog( $datasource, $folderId );
   }
   
   

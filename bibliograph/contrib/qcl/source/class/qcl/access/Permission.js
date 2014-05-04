@@ -17,16 +17,13 @@
 
 ************************************************************************ */
 
-/* ************************************************************************
-#require(qcl.access.PermissionManager)
-************************************************************************ */
-
 /**
  * A permission object. The object has a "granted" and a read-only "state" property. The "granted" property 
  * is set to true if the current user in priciple has the property. However, you
  * can attach condition functions to this object by the addCondition method. Only
  * if the "granted" property AND all of these conditions return true, the "state" 
  * property will be true.
+ * @require(qcl.access.PermissionManager)
  */
 qx.Class.define("qcl.access.Permission",
 {

@@ -887,14 +887,11 @@ class AbstractServer
 
     /*
      * catch exceptions caused by invalid data supplied by the client which are not
-     * runtime errors and do not require a trace
+     * runtime errors and do not require a stack trace
      */
     catch ( JsonRpcException $e )
     {
-      $result = $this->getErrorBehavior();
-      $result->SetError( $e->getCode(), $e->getMessage() );
-      $result->setId( $this->getId() );
-      $this->logError( $e->getMessage() );
+      return $e;
     }
 
     /*

@@ -16,13 +16,13 @@
    *  Christian Boulanger (cboulanger)
   
 ************************************************************************ */
+
 /*global qx qcl virtualdata dialog*/
 
 /**
  * Base class for virtual tree widgets which load their data from different 
  * datasources. The data is cached for performance, so that switching the 
  * datasource won't result in expensive reloads.
- * @asset(persist/*)
  */
 qx.Class.define("qcl.ui.treevirtual.TreeView",
 {
@@ -525,7 +525,6 @@ qx.Class.define("qcl.ui.treevirtual.TreeView",
      * attached trees
      * @param datasource {String}
      * @param nodeId {Integer}
-     * @return
      */
      _loadTreeData : function( datasource, nodeId )
      {

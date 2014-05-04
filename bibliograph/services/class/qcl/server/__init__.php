@@ -17,12 +17,6 @@
  */
 
 /**
- * Exception thrown when the request contains invalid arguments.
- * Does not generate a backtrace in the log.
- */
-class InvalidJsonRpcArgumentException extends JsonRpcException {}
-
-/**
  * Upload path constant
  */
 if ( ! defined("QCL_UPLOAD_PATH") )
@@ -43,5 +37,10 @@ if ( ! defined("QCL_UPLOAD_MAXFILESIZE") )
  */
 define("QCL_LOG_REQUEST", "request");
 qcl_log_Logger::getInstance()->registerFilter( QCL_LOG_REQUEST, "Request-related log messages",false);
+
+/*
+ * import service exception (no backtrace, option to suppress visible errors)
+ */
+qcl_import("qcl_server_ServiceException");
 
 ?>

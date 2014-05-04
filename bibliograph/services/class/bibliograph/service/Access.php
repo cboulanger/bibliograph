@@ -51,13 +51,13 @@ class bibliograph_service_Access
         }
         catch( InvalidArgumentException $e )
         {
-          throw new InvalidJsonRpcArgumentException( "Invalid user name '$username'. Name must only contain letters, numbers or '.-_'." );
+          throw new JsonRpcException( "Invalid user name '$username'. Name must only contain letters, numbers or '.-_'." );
         }
         $userModel = $this->getAccessController()->getUserModel();
 
         if ( $userModel->namedIdExists( $username ) )
         {
-          throw new InvalidJsonRpcArgumentException( "User '$username' exists." );
+          throw new JsonRpcException( "User '$username' exists." );
         }
 
         $userModel->create($username,array(
@@ -250,7 +250,7 @@ class bibliograph_service_Access
     $map = $app->getInitialDataMap();
     if ( ! isset( $map[$modelType] ) )
     {
-      throw new InvalidJsonRpcArgumentException("No data exists for '$modelType'");
+      throw new JsonRpcException("No data exists for '$modelType'");
     }
     $app->importInitialData(array(
       $modelType => $map[$modelType]

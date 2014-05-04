@@ -51,7 +51,6 @@ qx.Class.define("qcl.io.RpcManager",
      
      /**
       * The URL of the json-rpc server
-      * @type 
       */
      serverUrl :
      {

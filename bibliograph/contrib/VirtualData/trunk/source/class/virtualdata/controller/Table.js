@@ -18,12 +18,9 @@
 
 ************************************************************************ */
 
-/* *****
-#asset(virtualdata/ajax-loader.gif)
-*** */
-
 /**
  * Controller for Table widget
+ * @asset(virtualdata/ajax-loader.gif)
  */
 qx.Class.define("virtualdata.controller.Table", 
 {
@@ -37,8 +34,8 @@ qx.Class.define("virtualdata.controller.Table",
    */
    
    /**
-    * @param target { qx.ui.table.Table } The target table.
-    * @param store { Object?null } The store that retrieves the data
+    * @param target {qx.ui.table.Table} The target table.
+    * @param store {Object?null} The store that retrieves the data
     */
   construct : function( target, store )  
   {

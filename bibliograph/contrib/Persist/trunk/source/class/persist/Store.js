@@ -13,13 +13,11 @@
 
 ************************************************************************ */
 
-/* ************************************************************************
-#ignore(Persist.Store)
-#asset(persist/*)
-************************************************************************ */
 /**
  * This is a thin wrapper around the persistjs library
  * See http://pablotron.org/software/persist-js/
+ * @ignore(Persist.Store)
+ * @asset(persist/*)
  */
 qx.Class.define("persist.Store",
 {

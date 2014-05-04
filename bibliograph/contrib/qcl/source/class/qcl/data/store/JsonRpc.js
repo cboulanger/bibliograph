@@ -464,14 +464,14 @@ qx.Class.define("qcl.data.store.JsonRpc",
                 var model = this.getMarshaler().toModel(data);
                 
                 /*
-                 * tear down old model?
+                 * tear down old model? doesn't work
                  */
-                if( this.getModel() )
-                {
-                  //this.getModel().removeAllBindings();
-                  //this.getModel().dispose();
-                  //debugger;
-                }
+                //if( this.getModel() )
+                //{
+                //  this.getModel().removeAllBindings();
+                //  this.getModel().dispose();
+                //  debugger;
+                //}
                 
                 /*
                  * set the initial data
@@ -502,7 +502,7 @@ qx.Class.define("qcl.data.store.JsonRpc",
               catch(e)
               {
                 this.warn("Error in final callback: " + e.message);
-                this.info(qx.dev.StackTrace.getStackTrace().join("\n"));
+                this.info(qx.dev.StackTrace.getStackTrace().join("\n")); // todo revisit this
                 throw e;
               }
             }            
@@ -515,9 +515,9 @@ qx.Class.define("qcl.data.store.JsonRpc",
             this.fireDataEvent( "error", ex );
             
             /*
-             * handle event
+             * handle error
              */
-            this._handleError( ex, id );
+            this._handleError( ex, id, serviceMethod, params );
             
             /*
              * notify that data has been received but failed
@@ -590,25 +590,45 @@ qx.Class.define("qcl.data.store.JsonRpc",
      * this method if you want to have a different error behavior.
      * @param ex {Object} Exception object
      * @param id {Integer} Request id
+     * @param serviceName {String} Name of the called service
+     * @param params {Array} Array of parameters passed to the service
      * @ignore(dialog.*)
      */
-    _handleError : function( ex, id )
+    _handleError : function( ex, id, serviceName, params )
     {
       /*
-       * log warning to client log
+       * log warning and information on the request to client log
        */
-      this.warn ( "Async exception (#" + id + "): " + ex.message );
-      
-      /*
-       * alert error if the dialog package is loaded
-       */
-      try
+      this.warn ( "JsonRpc Exception (#" + id + "): " + ex.message );
+
+      if( typeof window.console == "object" )
       {
-        dialog.Dialog.alert(ex.message);
+        console.log( {"Service Name" : serviceName, "Parameters" : params});
       }
-      catch(e)
+
+      /*
+       * hide any popup that might have been shown before request
+       */
+      var app = qx.core.Init.getApplication();
+      if ( typeof app.hidePopup == "function" )
       {
-        alert(ex.message);
+        app.hidePopup();
+      }
+
+      /*
+       * alert error if the dialog package is loaded, except when
+       * "silent" flag has been set
+       */
+      if( ! ex.silent )
+      {
+        try
+        {
+          dialog.Dialog.alert(ex.message);
+        }
+        catch(e)
+        {
+          alert(ex.message);
+        }
       }
     },
     

@@ -18,11 +18,7 @@
 
 ************************************************************************ */
 
-/* ************************************************************************
-
-#module(treevirtual)
-
-************************************************************************ */
+/*global qx qcl virtualdata*/
 
 /**
  * A simple tree data model used as the table model
@@ -213,7 +209,6 @@ qx.Class.define("virtualdata.model.SimpleTreeDataModel",
      * rerendering the tree.
      * @param model {qx.data.Array}
      * @param old {qx.data.Array|null}
-     * @return
      */
     _applyModel: function(model,old)
     {

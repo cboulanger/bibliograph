@@ -18,10 +18,6 @@
 
 ************************************************************************ */
 
-/* ************************************************************************
-
-************************************************************************ */
-
 /**
  * An implementation of the abstract class qx.ui.table.model.Remote requests 
  * to load data are delegated to the data store through the controller.
@@ -104,8 +100,6 @@ qx.Class.define("virtualdata.model.Table",
     /** 
      * Reloads a section of the data only
      * @author Most of the code by Til Schneider 
-     * @param firstRowIndex
-     * @param lastRowIndex     
      */
     reloadRows : function(firstRowIndex, lastRowIndex )
     {

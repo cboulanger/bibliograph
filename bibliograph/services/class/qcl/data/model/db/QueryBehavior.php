@@ -379,7 +379,7 @@ class qcl_data_model_db_QueryBehavior
    * Sets up the indexes. This must be called from the init()
    * method, after the properties have been set up
    *
-   * @throws InvalidJsonRpcArgumentException
+   * @throws JsonRpcException
    * @return void.
    */
   public function setupIndexes()
@@ -402,7 +402,7 @@ class qcl_data_model_db_QueryBehavior
       }
       catch ( InvalidArgumentException $e )
       {
-        throw new InvalidJsonRpcArgumentException("Invalid index '$name': " . $e->getMessage() );
+        throw new JsonRpcException("Invalid index '$name': " . $e->getMessage() );
       }
 
       /*
@@ -435,7 +435,7 @@ class qcl_data_model_db_QueryBehavior
       $columns = array();
       if( ! is_array( $index['properties'] ) )
       {
-        throw new InvalidJsonRpcArgumentException("Invalid index '$name': properties must be an array." );
+        throw new JsonRpcException("Invalid index '$name': properties must be an array." );
       }
 
       foreach( $index['properties'] as $property )
