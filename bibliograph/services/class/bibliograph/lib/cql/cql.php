@@ -390,7 +390,7 @@ class Triple extends Prefixable {
 
     if ($this->sortKeys) {
       $txt .= "$space  <sortKeys>\n";
-      foreach ($sortkeys as $key) {
+      foreach ($this->sortKeys as $key) {
         $txt .= $key->toXCQL($depth+2);
       }
       $txt .= "$space  </sortKeys>\n";
@@ -453,7 +453,7 @@ class SearchClause extends Prefixable {
 
     if ($this->sortKeys) {
       $txt .= "$space  <sortKeys>\n";
-      foreach ($sortkeys as $key) {
+      foreach ($this->sortKeys as $key) {
         $txt .= $key->toXCQL($depth+2);
       }
       $txt .= "$space  </sortKeys>\n";
@@ -517,7 +517,7 @@ class Relation extends Prefixed {
 class Term extends CQLObject{
   function Term($data) {
     if ($data{0} == '"' && $data{strlen($data)-1} == '"') {
-      $data = substr($data, 1, strlen($identifier)-1);
+      $data = substr($data, 1, strlen($data)-1);
     }
     $this->value = $data;
   }

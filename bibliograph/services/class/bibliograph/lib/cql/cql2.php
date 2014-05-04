@@ -788,7 +788,7 @@ class cql_Triple extends cql_Prefixable
     if ($this->sortKeys)
     {
       $txt .= "$space  <sortKeys>\n";
-      foreach ($sortkeys as $key)
+      foreach ($this->sortKeys as $key)
       {
         $txt .= $key->toXCQL($depth+2);
       }
@@ -858,7 +858,7 @@ class cql_SearchClause extends cql_Prefixable
 
     if ($this->sortKeys) {
       $txt .= "$space  <sortKeys>\n";
-      foreach ($sortkeys as $key) {
+      foreach ($this->sortKeys as $key) {
         $txt .= $key->toXCQL($depth+2);
       }
       $txt .= "$space  </sortKeys>\n";
@@ -937,7 +937,7 @@ class cql_Term extends cql_Object
   {
     if ($data{0} == '"' && $data{strlen($data)-1} == '"')
     {
-      $data = substr($data, 1, strlen($identifier)-1);
+      $data = substr($data, 1, strlen($data)-1);
     }
     $this->value = $data;
   }
