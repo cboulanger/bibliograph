@@ -1,0 +1,19 @@
+{
+  "english,en" : {
+    "patterns":{
+      "separators" : [
+        "() and ()",
+        "(\w,)+ and (\w)"
+      ],
+      "editor" : [
+        "ed. by","edited by"
+      ]
+    }
+  },
+
+  "german,de" : {
+    "separators" : ["und"],
+    "editor" : ["(Hg.)","(Hrsg.)"]
+  }
+
+}

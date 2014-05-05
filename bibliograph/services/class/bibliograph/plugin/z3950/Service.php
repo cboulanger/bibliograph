@@ -6,7 +6,7 @@
    http://www.bibliograph.org
 
    Copyright:
-     2007-2010 Christian Boulanger
+     2007-2014 Christian Boulanger
 
    License:
      LGPL: http://www.gnu.org/licenses/lgpl.html
@@ -167,6 +167,7 @@ class class_bibliograph_plugin_z3950_Service
       "author"    => "1=1004",
       "keywords"  => "1=21",
       "year"      => "1=31",
+      "isbn"      => "1=7",
       "all"       => "1=1016"
     ) );
   }
