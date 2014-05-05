@@ -187,6 +187,10 @@ class bibliograph_model_ReferenceModel
         'check'    => "string",
         'sqltype'  => "varchar(255)"
     ),
+    'translator' => array(
+      'check'    => "string",
+      'sqltype'  => "varchar(100)"
+    ),
    'type' => array(
         'check'    => "string",
         'sqltype'  => "varchar(50)",

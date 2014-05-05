@@ -80,6 +80,7 @@ class bibliograph_schema_BibtexSchema
       'date',
       'month',
       'pages',
+      'translator',
       'url'
     ),
     'book' => array (
@@ -90,6 +91,7 @@ class bibliograph_schema_BibtexSchema
       'address',
       'publisher',
       'edition',
+      'translator',
       'url',
       'series',
       'volume',
@@ -149,6 +151,7 @@ class bibliograph_schema_BibtexSchema
       'crossref',
       'series',
       'volume',
+      'translator',
       'url'
     ),
     'incollection'  => array (
@@ -738,6 +741,16 @@ class bibliograph_schema_BibtexSchema
           ),
           'csl'       => 'title',
           'index'     => _('Title')
+        ),
+        'translator' => array(
+          'label'     => _('Translator'),
+          'type'      => 'string',
+          'bibtex'    => true,
+          'formData'  => array(
+            'type'          => 'textfield',
+            'fullWidth'     => true
+          ),
+          'csl'       => 'translator'
         ),
         'type' => array(
           'label'     => _('Type'),

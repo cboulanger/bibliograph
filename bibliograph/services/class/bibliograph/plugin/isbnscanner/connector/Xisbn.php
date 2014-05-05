@@ -52,14 +52,35 @@ implements bibliograph_plugin_isbnscanner_IConnector
     $records = $json['list'];
     
     $data = array();
+
+    // regular expressions to extract editor information
+    //@todo move into external file
+    $nameTypeRegExp = array(
+      "editor" => array(
+        "/(.+) \(Hg\.\)/",
+        "/(.+) \(Hrsg\.\)/",
+        "/hrsg\. von (.+)/i",
+        "/hg\. von (.+)/i",
+        "/(.+) \(ed\.\)/i",
+        "/(.+) \(eds\.\)/i",
+        "/ed\. by (.+)/i",
+        "/edited by (.+)/i",
+      ),
+      "translator" => array(
+        "/aus dem (?:.+) von (.+)/i"
+      )
+    );
+
     foreach( $records as $record )
     {
       foreach( $record as $field => $value )
       {
         if( is_array($value) )
         {
-          $record[$field] = join($value, " ");
+          $record[$field] = join($value, "; ");
         }
+        // remove trailing periods
+        $record[$field] = preg_replace("/((?:\.)+)$/","",$record[$field]);
       }
 
       $record['address']  = $record['city']; unset( $record['city'] );
@@ -68,6 +89,31 @@ implements bibliograph_plugin_isbnscanner_IConnector
 
       //AA (Audio), BA (Book), BB (Hardcover), BC (Paperback), DA (Digital),FA (Film or transparency), MA(Microform), VA(Video).
       $record['reftype'] = "book"; unset($record['form']);
+
+      /// remove elipsis from author field
+      $record['author']= str_replace("...","",$record['author']);
+
+      // extract translator
+      foreach($nameTypeRegExp['translator'] as $regExp )
+      {
+        if( preg_match($regExp, $record['author'], $matches ) )
+        {
+          $record['translator']= $matches[1];
+          $record['author']= str_replace($matches[0],"",$record['author']);
+        }
+      }
+
+      // check for edited volumes
+      foreach($nameTypeRegExp['editor'] as $regExp )
+      {
+        if( preg_match($regExp, $record['author'], $matches ) )
+        {
+          $record['author']= $matches[1];
+          $record['reftype'] = "collection";
+        }
+      }
+
+      $record['author'] = preg_replace("/([.,;\s]+)$/","",$record['author']);
 
       $data[] = $record;
     }
