@@ -86,7 +86,15 @@ class bibliograph_service_Setup
      */
     if ( $cache->get("setup") )
     {
+      /*
+       * cleanup sessions and users
+       */
       $this->getAccessController()->cleanup();
+
+      /*
+       * inform client about the application mode
+       */
+      $this->broadcastClientMessage("application.setMode",QCL_APPLICATION_MODE,false);
       return;
     }
 
@@ -106,7 +114,7 @@ class bibliograph_service_Setup
       /*
        * inform client about the application mode
        */
-      $this->broadcastClientMessage("application.state.")
+      $this->broadcastClientMessage("application.setMode",QCL_APPLICATION_MODE,false);
 
       /*
        * return a dialog

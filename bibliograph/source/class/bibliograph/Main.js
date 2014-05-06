@@ -137,6 +137,8 @@ qx.Class.define("bibliograph.Main",
 
     /**
      * The name of the theme
+     * currently not used, because only the modern theme functions
+     * correctly with the current UI
      */
     theme :
     {
@@ -169,7 +171,7 @@ qx.Class.define("bibliograph.Main",
     ---------------------------------------------------------------------------
     */
     getVersion : function() {
-      return "v2.1 RC1 (03.04.2014)";
+      return "v2.1 Beta2 (06.05.2014)";
     },
     getCopyright : function() {
       return "2003-2014 (c) Christian Boulanger";
@@ -452,12 +454,20 @@ qx.Class.define("bibliograph.Main",
         }
       }, this);
 
-      // @todo rename?
-      bus.subscribe("openBrowserWindow", function(e)
-      {
-        var data = e.getData();
-        window.open(data.url);
-      }, this);
+      /*
+       * opens a browser window with the given url
+       * currently not used
+       */
+//      bus.subscribe("openBrowserWindow", function(e)
+//      {
+//        var data = e.getData();
+//        window.open(data.url);
+//      }, this);
+
+
+      /*
+       * called after a backup has been restored
+       */
       bus.subscribe("backup.restored", function(e)
       {
         var data = e.getData();
@@ -471,6 +481,7 @@ qx.Class.define("bibliograph.Main",
           this.setModelId(0);
         }, this);
       }, this);
+
     },
 
     /*

@@ -88,8 +88,11 @@ First run
 - A message "Setup has finished. Reload the application" is displayed.
 - Reload and login as "Admin"/"admin"
 - Got to System -> Plugins. Install the YAZ and bibutils plugins if you have enabled them.
-- If you want to use the system in production, change the password of the "Admin" user, delete the "Manager" and "User"
-  users and configure your own users in the System > Acces Control tool.
 - Reload the application.
 
+Before using the system in production
+-------------------------------------
+- Change the password of the "Admin" user, delete the "Manager" and "User" users and configure your own users in the System > Acces Control tool.
+- Change the QCL_APPLICATION_MODE constant in config/server.conf.php to "production". When you need to apply updates,
+  change it back to "maintenance".
 
