@@ -11,5 +11,5 @@ Backend
 -------
 
 - Bug: Deleting reference doesn't move it into trash
-- Bug: qcl: Token (pre-created session) must replace on-the-fly session generation ("S_", "P_")
+- Bug: qcl: Token (pre-created session) lifetime handling
 - NTH: Remove unnecessary Exceptions, reduce to a basic set

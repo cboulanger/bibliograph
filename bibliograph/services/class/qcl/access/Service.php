@@ -86,18 +86,6 @@ class qcl_access_Service
     if ( is_null( $first )  or is_null( $password ) )
     {
       $sessionId = either( $first, $this->getSessionId() );
-      
-      /*
-       * parent and sibling session support
-       */
-      if( substr($sessionId,0,2) == "P_" )
-      {
-        $sessionId = $this->getAccessController()->createChildSession( substr($sessionId,2) );
-      }
-      if( substr($sessionId,0,2) == "S_" )
-      {
-        $sessionId = $this->getAccessController()->createSiblingSession( substr($sessionId,2) );
-      }      
 
       $this->log("Authenticating from existing session '$sessionId'...", QCL_LOG_AUTHENTICATION);
       try

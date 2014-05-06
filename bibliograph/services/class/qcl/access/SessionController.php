@@ -27,12 +27,6 @@ class qcl_access_SessionController
 {
 
   /**
-   * The id of the active user, determined from the
-   * session id
-   */
-  private $activeUserId;
-
-  /**
    * The session model object
    * @var qcl_access_model_Session
    */
@@ -160,7 +154,7 @@ class qcl_access_SessionController
 
   /**
    * Authenticates with data in the request data, either by a given session id or
-   * by a username - password combination.Supports child and sibling sessions
+   * by a username - password combination.
    * @throws JsonRpcException
    * @return string|null The session id, if it can be retrieved by the server data. Null if
    * no valid session id can be determined from the request
@@ -173,14 +167,6 @@ class qcl_access_SessionController
      */
     $sessionId = parent::getSessionIdFromRequest();
 
-    /*
-     * get real session id if this is a token
-     */
-    if ( $this->checkToken( $sessionId ) )
-    {
-      $sessionId = $this->createSessionFromToken( $sessionId );
-    }
-    
     /*
      * do we have a valid id already, return it
      */
@@ -408,181 +394,100 @@ class qcl_access_SessionController
   }
 
   /**
-   * Checks if session id is a token
-   * @param $sessionId
-   * @return bool
-   */
-  public function checkToken( $sessionId )
-  {
-    return ( substr($sessionId,0,2) == "P_" or  substr($sessionId,0,2) == "S_" );
-  }
-
-  /**
-   * Creates a child or sibling session based on the token. Returns the session id
-   * @param $token
-   * @return string
-   */
-  public function createSessionFromToken( $token )
-  {
-    /*
-       * Sub-session of a parent session: creates a new session
-       * from a parent session, for example, when opening
-       * child windows hat share the user's access rights, but has to have
-       * a different session to keep its data apart. The child windows session will be
-       * deleted when the parent's session ends.
-       */
-    if( substr($token,0,2) == "P_" )
-    {
-      $sessionId = $this->createChildSession( substr($token,2) );
-    }
-
-    /*
-     * Creates a new session from a session, for example, when opening
-     * a new windows that share the user's access rights, but has to have
-     * a different session to keep its data apart. These session will continue
-     * to exist when the other session ends.
-     * @return string
-     */
-    if( substr($token,0,2) == "S_" )
-    {
-      $sessionId = $this->createSiblingSession( substr($token,2) );
-    }
-
-    return $sessionId;
-  }
-
-  /**
-   * Creates a token which will be replaced with a child session id
-   * @return string
-   */
-  public function createChildSessionToken()
-  {
-    return "P_" . $this->getSessionId();
-  }
-
-  /**
-   * Returns a new session id that depends on a parent session and
-   * will be deleted when the parent session is deleted.
+   * Creates a new session of the user that owns the given session id that depends on a parent session and
+   * will be deleted when the parent session is deleted. Returns a token for this session
+   * that be used to authenticate the user in a different window, a different device, etc.
    * @param string|null $parentSessionId If null, the current session id is used.
+   * @return string Token
    */
-  public function createChildSession( $parentSessionId )
+  public function createChildSession( $parentSessionId=null )
   {
     if ( ! $parentSessionId )
     {
-      throw new InvalidArgumentException("No parent session id.");
+      $parentSessionId = $this->getSessionId();
     }
 
     /*
      * get user id from parent session
      */
-    $ip = qcl_server_Server::getInstance()->getServerInstance()->getRequest()->getIp();
     $sessionModel = $this->getSessionModel();
     try
     {
       $sessionModel->load( $parentSessionId );
-      if( $sessionModel->getIp() !== $ip )
-      {
-        throw new qcl_access_AccessDeniedException("Invalid IP");
-      }      
     }
     catch ( qcl_data_model_RecordNotFoundException $e )
     {
-      throw new qcl_access_InvalidSessionException("Parent session $parentSessionId not found...");
+      throw new LogicException("Parent session $parentSessionId not found...");
     }
     $userId = $sessionModel->get( $this->getUserModel()->foreignKey() );
 
     /*
-     * create random new session id and pass it to the client
+     * create random token
      */
-    $sessionId = $this->createSessionId();
-
-    $this->log( sprintf(
-      "Spawning child Session %s form parent Session %s",
-      $sessionId,$parentSessionId
-    ), QCL_LOG_AUTHENTICATION );
+    $token = md5( microtime() );
 
     /*
      * register new session
-     * FIXME this is a manual hack, use API for this
      */
-    $sessionModel->create($sessionId, array(
+    $sessionModel->create($token, array(
       'UserId'          => $userId,
-      'ip'              => qcl_server_Server::getInstance()->getServerInstance()->getRequest()->getIp(),
       'parentSessionId' => $parentSessionId
     ));
-    
-    $this->setSessionId($sessionId);
 
-    return $sessionId;
-  }
+    $this->log( sprintf(
+      "Created child session from parent session %s with token %s",
+      $parentSessionId, $token
+    ), QCL_LOG_AUTHENTICATION );
 
-
-
-  /**
-   * Creates a token which will be replaced with a sibling session id
-   * @return string
-   */
-  public function createSiblingSessionToken()
-  {
-    return "S_" . $this->getSessionId();
+    return $token;
   }
 
   /**
-   * Returns a new session of the user that owns the given session id.
-   * @param string $sessionId
-   * @throws qcl_access_InvalidSessionException
-   * @throws qcl_access_AccessDeniedException
-   * @return int session id
+   * Creates a new session of the user that owns the given session id. Returns a token for this session
+   * that be used to authenticate the user in a different window, a different device, etc.
+   * @param string|null $siblingSessionId If null, the current session id is used.
+   * @return string Token
    */
   public function createSiblingSession( $siblingSessionId=null )
   {
     if ( ! $siblingSessionId )
     {
-      throw new InvalidArgumentException("No sibling session id.");
+      $siblingSessionId = $this->getSessionId();
     }
 
     /*
      * get user id from sibling session
      */
-    $ip = qcl_server_Server::getInstance()->getServerInstance()->getRequest()->getIp();
     $sessionModel = $this->getSessionModel();
     try
     {
       $sessionModel->load( $siblingSessionId );
-      if( $sessionModel->getIp() !== $ip )
-      {
-        throw new qcl_access_AccessDeniedException("Invalid IP");
-      }
     }
     catch ( qcl_data_model_RecordNotFoundException $e )
     {
-      throw new qcl_access_InvalidSessionException("Sibling session $siblingSessionId not found...");
+      throw new LogicException("Sibling session $siblingSessionId not found...");
     }
       
     $userId = $sessionModel->get( $this->getUserModel()->foreignKey() );
 
     /*
-     * create random new session id and pass it to the client
+     * create random token
      */
-    $sessionId = $this->createSessionId();
-
-    $this->log( sprintf(
-      "Spawning sibling Session %s from Session %s",
-      $sessionId,$siblingSessionId
-    ), QCL_LOG_AUTHENTICATION );
+    $token = md5( microtime() );
 
     /*
      * register new session
-     * FIXME this is a manual hack, use API for this
      */
-    $sessionModel->create($sessionId, array(
-      'UserId'          => $userId,
-      'ip'              => $ip
+    $sessionModel->create($token, array(
+      'UserId'          => $userId
     ));
-    
-    $this->setSessionId($sessionId);
-    
-    return $sessionId;
+
+    $this->log( sprintf(
+      "Created sibling session from session %s with token %s",
+      $siblingSessionId, $token
+    ), QCL_LOG_AUTHENTICATION );
+
+    return $token;
   }
 
   /**
