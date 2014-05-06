@@ -89,7 +89,7 @@ class qcl_data_db_Table
    */
   private function checkApplicationState()
   {
-    if( QCL_APPLICATION_STATE == "production" )
+    if( QCL_APPLICATION_MODE == "production" )
     {
       throw new LogicError("Modification of Database schema not allowed.");
     }

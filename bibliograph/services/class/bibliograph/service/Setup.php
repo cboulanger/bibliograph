@@ -96,8 +96,21 @@ class bibliograph_service_Setup
     try
     {
       $this->setup();
+
+      /*
+       * mark setup as done
+       */
       $cache->set("setup", true);
       $cache->savePersistenceData();
+
+      /*
+       * inform client about the application mode
+       */
+      $this->broadcastClientMessage("application.state.")
+
+      /*
+       * return a dialog
+       */
       return new qcl_ui_dialog_Alert( $this->tr("Setup has finished. Please reload the application"));
     }
     catch( Exception $e )

@@ -113,13 +113,13 @@ if ( ! defined("QCL_ACCESS_ALLOW_IP_MISMATCH") )
  *      The application is deployed and in production. Security must be tighter.
  *      The database schema can not be modified. 
  */
-if ( ! defined( "QCL_APPLICATION_STATE") )
+if ( ! defined( "QCL_APPLICATION_MODE") )
 {
-  define( "QCL_APPLICATION_STATE", "maintenance" );
+  define( "QCL_APPLICATION_MODE", "maintenance" );
 }
-if ( !in_array( QCL_APPLICATION_STATE, array("development", "maintenance", "production")))
+if ( !in_array( QCL_APPLICATION_MODE, array("development", "maintenance", "production")))
 {
-  throw new LogicError('QCL_APPLICATION_STATE must be any of "development", "maintenance", "production"');
+  throw new LogicError('QCL_APPLICATION_MODE must be any of "development", "maintenance", "production"');
 }
 
 /*

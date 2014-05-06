@@ -84,6 +84,7 @@ class bibliograph_service_Access
 
     /*
      * check if authentication is allowed at all
+     * todo: is this necessary at all? We have application modes
      */
     $configModel =  $this->getApplication()->getConfigModel();
     if ( $password and $configModel->getKey("bibliograph.access.mode") == "readonly" )
