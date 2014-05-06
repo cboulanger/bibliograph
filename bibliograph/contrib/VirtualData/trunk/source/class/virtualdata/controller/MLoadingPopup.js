@@ -17,13 +17,10 @@
   
 ************************************************************************ */
 
-/* ************************************************************************
-#asset(virtualdata/ajax-loader.gif)
-************************************************************************ */
-
 /**
  * A mixin that provides a "Loading..." popup over a widget that is 
  * just requesting data from the server
+ * @asset(virtualdata/ajax-loader.gif)
  */
 qx.Mixin.define("virtualdata.controller.MLoadingPopup",
 {
