@@ -17,17 +17,31 @@
  */
 
 /*
- * constants
+ * the message lifetime in seconds
  */
-
-// the message lifetime in seconds
 if ( ! defined("QCL_EVENT_MESSAGE_LIFETIME") )
 {
   define( "QCL_EVENT_MESSAGE_LIFETIME" , 60 );
 }
 
 /*
-* log filters
-*/
+ * The interval in milliseconds in which the client polls for messages and events
+ */
+if ( ! defined("QCL_EVENT_MESSAGE_POLLING_INTERVAL") )
+{
+  define( "QCL_EVENT_MESSAGE_POLLING_INTERVAL" , 10000 );
+}
+
+/*
+ * The delay that is added per session, in milliseconds
+ */
+if ( ! defined("QCL_EVENT_MESSAGE_POLLING_DELAYPERSESSION") )
+{
+  define( "QCL_EVENT_MESSAGE_POLLING_DELAYPERSESSION" , 100 );
+}
+
+/*
+ * log filters
+ */
 define( "QCL_LOG_MESSAGE", "message" );
 qcl_log_Logger::getInstance()->registerFilter( QCL_LOG_MESSAGE, "Message system-related log messages", false);

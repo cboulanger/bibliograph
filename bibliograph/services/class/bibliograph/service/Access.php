@@ -211,13 +211,25 @@ class bibliograph_service_Access
   }
 
   /**
-   * Dummy service that returns the messages waiting for a particular connected session
-   * @return null
+   * Service to collect events and messages waiting for a particular connected session.
+   * Returns the number of milliseconds after which to poll again.
+   * @return int
    */
   public function method_getMessages()
   {
+    /*
+     * cleanup stale sessions
+     */
     $this->getAccessController()->cleanup();
-    return null;
+
+    /*
+     * determine the polling frequency based on the number of connected users
+     */
+    $sessionModel = $this->getAccessController()->getSessionModel();
+    $numberOfSessions = $sessionModel->countRecords();
+    $pollingFrequencyInMs = QCL_EVENT_MESSAGE_POLLING_INTERVAL + (QCL_EVENT_MESSAGE_POLLING_DELAYPERSESSION*($numberOfSessions-1));
+
+    return $pollingFrequencyInMs;
   }
 
   /*
