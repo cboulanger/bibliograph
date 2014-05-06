@@ -20,6 +20,11 @@
 
 qcl_import( "qcl_data_controller_TableController" );
 
+
+/**
+ * Provides services based on a generic model API, using datasource
+ * and modelType information
+ */
 class bibliograph_service_Model
   extends qcl_data_controller_TableController
 {

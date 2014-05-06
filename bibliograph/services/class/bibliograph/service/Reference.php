@@ -239,7 +239,7 @@ class bibliograph_service_Reference
       qcl_import( "bibliograph_schema_CQL" );
       $cql =  bibliograph_schema_CQL::getInstance();
       $q = $cql->addQueryConditions( $query, $qclQuery, $model );
-      $q->where['markedDeleted'] = false; // FIXME!
+      $q->where['markedDeleted'] = false; // todo: why is this?
       return $q;
     }
     else
@@ -434,7 +434,7 @@ class bibliograph_service_Reference
    * @internal param int $id
    * @internal param array $fields Optional array of reference fields  to retrieve
    * @return array
-   * FIXME this method is called with different signatures!
+   * todo: this method is called with different signatures!
    */
   function method_getData( $datasource, $arg2, $arg3= null, $arg4=null)
   {
@@ -505,7 +505,7 @@ class bibliograph_service_Reference
      */
     $reference = array(
       'datasource'  => $datasource,
-      'referenceId' => $id, // FIXME replace by "id"
+      'referenceId' => $id, // todo: replace by "id"
       'titleLabel'  => $this->getTitleLabel( $model )
     );
 
@@ -785,7 +785,7 @@ class bibliograph_service_Reference
      * check access
      */
     $this->checkDatasourceAccess( $datasource );
-    $this->requirePermission( "reference.add" ); // @todo rename permission to make it more portable
+    $this->requirePermission( "reference.add" ); // todo: rename permission to make it more portable
 
     /*
      * create reference
@@ -833,7 +833,7 @@ class bibliograph_service_Reference
    * Remove references from a folder
    * @param string $datasource
    * @param int $folderId
-   *    If 0, refence is not in a folder @todo should be NULL then
+   *    If 0, refence is not in a folder. todo: should be NULL then
    * @param int|null $targetFolderId
    * @param $ids
    * @return \qcl_ui_dialog_Confirm|string "OK"
@@ -968,7 +968,7 @@ class bibliograph_service_Reference
 
     /*
      * display change on connected clients
-     * @todo this doesn't work in the case of a search 
+     * todo: this doesn't work in the case of a search
      */
     if ( $folderId )
     {
@@ -1312,7 +1312,7 @@ class bibliograph_service_Reference
 
     /*
      * update trash folder reference count
-     * @todo there should be method to do that
+     * todo: there should be method to do that
      */
     qcl_import("bibliograph_service_Folder");
     $folderService = bibliograph_service_Folder::getInstance();
@@ -1460,7 +1460,7 @@ class bibliograph_service_Reference
             throw new JsonRpcException("Find/Replace in all columns not yet implemented");
 
           default:
-            //@todo check field
+            //todo: check field
             $table = $model->getQueryBehavior()->getTable();
             $count = $table->replace( $data->field, $data->find, $data->replace );
             break;

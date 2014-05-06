@@ -25,7 +25,6 @@ qcl_import("qcl_util_system_Lock");
 
 /**
  * Main application class
- * @todo move setup stuff into "call once per loading" service
  */
 class bibliograph_Application
   extends qcl_application_Application
@@ -96,8 +95,7 @@ class bibliograph_Application
   }
 
   /**
-   * Starts the application, does on-the-fly database setup
-   * objects
+   * Starts the application, performing on-the-fly database setup if necessary.
    */
   public function main()
   {
