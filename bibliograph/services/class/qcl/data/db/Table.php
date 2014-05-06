@@ -19,6 +19,12 @@
 
 qcl_import("qcl_data_db_adapter_IAdapter");
 
+/**
+ * This class is an abstraction of a relational database table with the features 
+ * needed to dynamically adapt the database schema. Using an adapter, pretty much
+ * any relational database should be able to be plugged in. It should also work
+ * with NOSQL databases.
+ */
 class qcl_data_db_Table
   extends qcl_core_Object
 {
@@ -77,6 +83,18 @@ class qcl_data_db_Table
     return "id";
   }
 
+  /**
+   * Checks the state of the application. If in "production" state,
+   * disallow any action that changes the database schema.
+   */
+  private function checkApplicationState()
+  {
+    if( QCL_APPLICATION_STATE == "production" )
+    {
+      throw new LogicError("Modification of Database schema not allowed.");
+    }
+  }
+
 
   //-------------------------------------------------------------
   // table setup
@@ -98,6 +116,7 @@ class qcl_data_db_Table
    */
   function create()
   {
+    $this->checkApplicationState();
     qcl_log_Logger::getInstance()->log( sprintf(
      "Creating table `%s`",  $this->getName() ), QCL_LOG_TABLES );
     try
@@ -131,6 +150,7 @@ class qcl_data_db_Table
    */
   public function addColumn( $column, $definition, $after="")
   {
+    $this->checkApplicationState();
     qcl_log_Logger::getInstance()->log( sprintf(
      "Adding column `%s` to table `%s` with definition '%s' %s",
       $column, $this->getName(), $definition, $after ? "AFTER $after":""
@@ -170,6 +190,7 @@ class qcl_data_db_Table
    */
   public function modifyColumn( $column, $definition, $after="" )
   {
+    $this->checkApplicationState();
     qcl_log_Logger::getInstance()->log( sprintf(
      "Modifying column `%s` in table `%s` with definition '%s' %s",
       $column, $this->getName(), $definition, $after ? "AFTER $after":""
@@ -189,6 +210,7 @@ class qcl_data_db_Table
    */
   public function renameColumn( $oldColumn, $newColumn, $definition, $after="" )
   {
+    $this->checkApplicationState();
     qcl_log_Logger::getInstance()->log( sprintf(
      "Renaming column `%s` to `%s` in table `%s` with definition '%s' %s",
       $oldColumn, $newColumn, $this->getName(), $definition, $after ? "AFTER $after":""
@@ -208,6 +230,7 @@ class qcl_data_db_Table
    */
   public function dropColumn( $column )
   {
+    $this->checkApplicationState();
     qcl_log_Logger::getInstance()->log( sprintf(
      "Dropping column `%s` from table `%s`.",
       $column, $this->getName()
@@ -231,6 +254,7 @@ class qcl_data_db_Table
    */
   public function addPrimaryKey( $columns )
   {
+    $this->checkApplicationState();
     return $this->getAdapter()->addPrimaryKey( $this->getName(), $columns );
   }
 
@@ -239,6 +263,7 @@ class qcl_data_db_Table
    */
   public function dropPrimaryKey()
   {
+    $this->checkApplicationState();
     return $this->getAdapter()->dropPrimaryKey( $this->getName() );
   }
 
@@ -248,6 +273,7 @@ class qcl_data_db_Table
    */
   public function modifyPrimaryKey($columns)
   {
+    $this->checkApplicationState();
     return $this->getAdapter()->modifyPrimaryKey( $this->getName(), $columns);
   }
 
@@ -258,6 +284,7 @@ class qcl_data_db_Table
    */
   public function dropIndex( $index )
   {
+    $this->checkApplicationState();
     $this->getAdapter()->dropIndex( $this->getName(), $index );
   }
 
@@ -302,6 +329,7 @@ class qcl_data_db_Table
    */
   public function addIndex( $type, $index, $columns )
   {
+    $this->checkApplicationState();
     if ( ! $type or !$index or ! is_array( $columns ) or ! count( $columns ) )
     {
       throw new InvalidArgumentException("Invalid arguments");
@@ -322,6 +350,7 @@ class qcl_data_db_Table
    */
   public function createTimestampTrigger( $column )
   {
+    $this->checkApplicationState();
     return $this->getAdapter()->createTimestampTrigger( $this->getName(), $column );
   }
 
@@ -331,6 +360,7 @@ class qcl_data_db_Table
    */
   public function createHashTriggers( $columns )
   {
+    $this->checkApplicationState();
     return $this->getAdapter()->createHashTriggers( $this->getName(), $columns );
   }
 
@@ -340,6 +370,7 @@ class qcl_data_db_Table
    */
   public function delete()
   {
+    $this->checkApplicationState();
     $this->getAdapter()->dropTable( $this->getName() );
   }
 

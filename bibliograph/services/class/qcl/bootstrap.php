@@ -28,7 +28,7 @@
  */
 set_time_limit(120);
 
-/**
+/*
  * Directory containing the service classes with trailing slash
  */
 if ( ! defined( "QCL_SERVICE_PATH") )
@@ -97,7 +97,30 @@ if ( ! defined("QCL_ACCESS_ALLOW_IP_MISMATCH") )
   define( "QCL_ACCESS_ALLOW_IP_MISMATCH" ,  false );
 }
 
-
+/*
+ * Current state of the application. Must be one of these values:
+ * "development": 
+ *      The application codebase is changing, the code is in a secure
+ *      location so that security rules can be relaxed. The database schema can
+ *      be changed. 
+ * "maintenance": 
+ *      The application is deployed, but needs maintenance (bug fixes, 
+ *      updates, etc.). This state can be alerted to the users of the application,
+ *      users can be prevented from accessing the application or the application
+ *      can be put in read-only mode. This is the default mode so that the 
+ *      application can be configured, the databases set up, etc. 
+ * "production":
+ *      The application is deployed and in production. Security must be tighter.
+ *      The database schema can not be modified. 
+ */
+if ( ! defined( "QCL_APPLICATION_STATE") )
+{
+  define( "QCL_APPLICATION_STATE", "maintenance" );
+}
+if ( !in_array( QCL_APPLICATION_STATE, array("development", "maintenance", "production")))
+{
+  throw new LogicError('QCL_APPLICATION_STATE must be any of "development", "maintenance", "production"');
+}
 
 /*
  * load core functions
