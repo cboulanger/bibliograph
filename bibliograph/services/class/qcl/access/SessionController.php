@@ -399,9 +399,11 @@ class qcl_access_SessionController
    * that be used to authenticate the user in a different window, a different device, etc.
    * @param string|null $parentSessionId If null, the current session id is used.
    * @return string Token
+   * todo implement
    */
   public function createChildSession( $parentSessionId=null )
   {
+    return new qcl_core_NotImplementedException(__METHOD__);
     if ( ! $parentSessionId )
     {
       $parentSessionId = $this->getSessionId();
@@ -450,6 +452,7 @@ class qcl_access_SessionController
    */
   public function createSiblingSession( $siblingSessionId=null )
   {
+    return new qcl_core_NotImplementedException(__METHOD__);
     if ( ! $siblingSessionId )
     {
       $siblingSessionId = $this->getSessionId();
@@ -491,12 +494,12 @@ class qcl_access_SessionController
   }
 
   /**
-   * Manually cleanup access data, which are a mess, unfortunately
+   * Manually cleanup access data
    * @throws LogicException
    */
   public function cleanup()
   {
-    $this->log("Cleaning up stale data ....", QCL_LOG_AUTHENTICATION );
+    $this->log("Cleaning up stale session data ....", QCL_LOG_AUTHENTICATION );
 
     $sessionModel = $this->getSessionModel();
     $userModel = $this->getUserModel();
@@ -536,12 +539,22 @@ class qcl_access_SessionController
         //$this->debug("Anonymous session $sessionId is $ageInSeconds seconds old, timeout is " . QCL_ACCESS_ANONYMOUS_SESSION_LIFETIME);
         if ( $ageInSeconds > QCL_ACCESS_ANONYMOUS_SESSION_LIFETIME )
         {
-          $this->log("Anonymous Session $sessionId unmodified since $ageInSeconds seconds - discarded.", QCL_LOG_AUTHENTICATION  );
+          $this->log("Anonymous Session $sessionId has expired.", QCL_LOG_AUTHENTICATION  );
           $sessionModel->delete();
         }
       }
       else
       {
+//        if( $sessionModel->isToken())
+//        {
+//          if ( $ageInSeconds > QCL_ACCESS_TOKEN_LIFETIME )
+//          {
+//            $this->log("Token $sessionId has expired.", QCL_LOG_AUTHENTICATION  );
+//            $sessionModel->delete();
+//           }
+//        }
+//        else
+//        {
         // todo: how to deal with expired user sessions
         //$this->debug(" session $sessionId is $age seconds old, timeout is " . QCL_ACCESS_TIMEOUT);
 //        if ( $age > QCL_ACCESS_TIMEOUT )
@@ -549,6 +562,7 @@ class qcl_access_SessionController
 //          $userId =$userModel->id();
 //          $this->log("Session $sessionId of user $userId unmodified since $age seconds - discarded.", QCL_LOG_AUTHENTICATION  );
 //          $sessionModel->delete();
+//        }
 //        }
       }
     }

@@ -40,7 +40,7 @@ class qcl_access_model_Session
 	
   /**
    * Properties of the model
-   * @var unknown_type
+   * @var array
    */
   private $properties = array(
   
@@ -54,6 +54,11 @@ class qcl_access_model_Session
       'check'     => QCL_PROPERTY_CHECK_STRING,
       'sqltype'   => "varchar(32)"
     )
+
+//    ,'isToken' => array(
+//      'check'     => QCL_PROPERTY_CHECK_BOOLEAN,
+//      'sqltype'   => "int(1) DEFAULT 0"
+//    )
   );
 
   /**
@@ -188,6 +193,16 @@ class qcl_access_model_Session
   }
 
   /**
+   * Returns true if the current record is a token (i.e. a session id which is passed around for later access)
+   * @return bool
+   */
+  function isToken()
+  {
+    return new qcl_core_NotImplementedException(__METHOD__);
+    //return (bool) $this->get("isToken");
+  }
+
+  /**
    * Unregisters a session. We cannot delete them right away since
    * the request has not completed yet, so we mark them to be deleted
    * when the next session is registered.
@@ -215,6 +230,7 @@ class qcl_access_model_Session
   /**
    * Overridden.
    * @see qcl_data_model_AbstractActiveRecord::checkExpiration()
+   * todo rename to isExpired()
    */
   protected function checkExpiration()
   {

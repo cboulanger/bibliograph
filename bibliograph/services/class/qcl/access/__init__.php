@@ -35,14 +35,6 @@ define( "QCL_ROLE_USER", "user" );
 define( "QCL_ROLE_ADMIN", "admin" );
 
 /*
- * Exceptions thrown in this class and subclasses
- */
-class qcl_access_AccessDeniedException extends JsonRpcException {}
-class qcl_access_AuthenticationException extends qcl_access_AccessDeniedException {}
-class qcl_access_InvalidSessionException extends qcl_access_AccessDeniedException {}
-class qcl_access_TimeoutException extends qcl_access_InvalidSessionException {}
-
-/*
  * the prefix for the anonymous user
  */
 if ( ! defined('QCL_ACCESS_ANONYMOUS_USER_PREFIX') )
@@ -51,7 +43,7 @@ if ( ! defined('QCL_ACCESS_ANONYMOUS_USER_PREFIX') )
 }
 
 /*
- * the timeout of a normal session, defaults to 60 minutes
+ * the timeout of a normal session, in seconds, Defaults to 60 minutes
  */
 if ( ! defined('QCL_ACCESS_TIMEOUT') )
 {
@@ -59,11 +51,20 @@ if ( ! defined('QCL_ACCESS_TIMEOUT') )
 }
 
 /*
- * The lifetime of an anonymous user session (if not refreshed), defaults to 1 minutes
+ * The lifetime of an anonymous user session (if not refreshed), in seconds. Defaults to 1 minute.
  */
 if ( ! defined("QCL_ACCESS_ANONYMOUS_SESSION_LIFETIME") )
 {
   define( "QCL_ACCESS_ANONYMOUS_SESSION_LIFETIME" , 60 );
+}
+
+/*
+ * The lifetime of a token (a distributable session id), in seconds. Defaults to 24h
+ * todo not yet used, implement
+ */
+if ( ! defined("QCL_ACCESS_TOKEN_LIFETIME") )
+{
+  define( "QCL_ACCESS_TOKEN_LIFETIME" , 60*60*24 );
 }
 
 /*
@@ -83,4 +84,11 @@ qcl_log_Logger::getInstance()->registerFilter(QCL_LOG_ACL,"Access-control-relate
 define("QCL_LOG_LDAP", "ldap");
 qcl_log_Logger::getInstance()->registerFilter(QCL_LOG_LDAP,"LDAP-related log messages",false);
 
-?>
+
+/*
+ * Exceptions thrown in this class and subclasses
+ */
+class qcl_access_AccessDeniedException extends JsonRpcException {}
+class qcl_access_AuthenticationException extends qcl_access_AccessDeniedException {}
+class qcl_access_InvalidSessionException extends qcl_access_AccessDeniedException {}
+class qcl_access_TimeoutException extends qcl_access_InvalidSessionException {}
