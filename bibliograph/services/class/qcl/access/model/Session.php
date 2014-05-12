@@ -157,7 +157,8 @@ class qcl_access_model_Session
       }
       else
       {
-        throw new qcl_access_AccessDeniedException("Potential security problem: Origin IP of session has changed to $ip");  
+        $this->warn( "Origin IP of session has changed to $ip. Access denied.");
+        throw new qcl_access_AccessDeniedException("IP Mismatch. Access denied.");
       }
     }
 
