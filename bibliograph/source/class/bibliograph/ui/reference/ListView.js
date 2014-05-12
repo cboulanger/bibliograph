@@ -82,7 +82,8 @@ qx.Class.define("bibliograph.ui.reference.ListView",
     {
       check : "Integer",
       nullable : true,
-      event : "changeModelId"
+      event : "changeModelId",
+      apply : "_applyModelId"
     },
 
     /**
@@ -132,29 +133,49 @@ qx.Class.define("bibliograph.ui.reference.ListView",
       check : "qx.ui.core.Widget",
       nullable : true
     },
+
+    /**
+     * The contrller of the table
+     */
     controller :
     {
       check : "qx.core.Object",
       nullable : true,
       event : "changeController"
     },
+
+    /**
+     * The table data marshaler
+     */
     marshaler :
     {
       check : "qx.core.Object",
       nullable : true,
       event : "changeMarshaler"
     },
+
+    /**
+     * The table data store
+     */
     store :
     {
       check : "qx.core.Object",
       nullable : true,
       event : "changeStore"
     },
+
+    /**
+     * The name of the service that suppies the table data
+     */
     serviceName :
     {
       check : "String",
       nullable : true
     },
+
+    /**
+     * The data object containing the query data
+     */
     queryData :
     {
       check : "Object",
@@ -191,6 +212,15 @@ qx.Class.define("bibliograph.ui.reference.ListView",
     qx.event.message.Bus.subscribe("reference.changeData", this._on_changeReferenceData, this);
     qx.event.message.Bus.subscribe("reference.removeFromFolder", this._on_removeRows, this);
     this.createPopup();
+
+    var timer = new qx.event.Timer(2000);
+    this.addListener("tableReady", function(){
+      timer.start();
+    }, this)
+    timer.addListener("interval",function(){
+      this._retryApplySelection();
+    },this);
+
   },
 
   /*
@@ -208,7 +238,8 @@ qx.Class.define("bibliograph.ui.reference.ListView",
     __tableReady : false,
     __tableModelTypes : null,
     __loadingTableStructure : null,
-    
+    __selectedIds : null,
+    __ignoreChangeSelection : false,
 
     /*
     ---------------------------------------------------------------------------
@@ -311,48 +342,117 @@ qx.Class.define("bibliograph.ui.reference.ListView",
         this.load();
       }, null, this, null, 500);
     },
+
+    /**
+     * Reloads the folder when the search query has changed
+     */
     _applyQuery : function(query, old) {
       if (query) {
         this.load();
       }
     },
+
+    /**
+     * Reacts to a change in the "selectedIds" state of the applicationby selecting
+     * the values
+     */
     _applySelectedIds : function(value, old) {
+
+      // should this remove the selection?
+      if (! value || ! value.length ) return;
+
       /*
-       * if the table is not set up, wait for corresponding event
+       * if the table is not set up, selection will be resumed later
        */
-      if (!this.isTableReady()) {
-        this.addListenerOnce("tableReady", function() {
-          this._selectIds(value);
-        }, this);
-      } else {
+      if ( this.isTableReady())
+      {
         this._selectIds(value);
       }
     },
+
+    /**
+     * Reacts to a change in the "modelId" state of the application by selecting the row
+     * that corresponds to the id.
+     */
+    _applyModelId : function(value, old)
+    {
+      if( value )
+      {
+        //console.log("Model id changed to " + value);
+        this._applySelectedIds([value]);
+
+      }
+    },
+
+    /**
+     * Tries to select the rows with the given ids
+     */
     _selectIds : function(ids)
     {
-      //      this.getController().addListenerOnce("blockLoaded", function(data){
+      if ( this.__ignoreChangeSelection )
+      {
+        return;
+      }
 
-      //        var count=0;
+      if( ! ids )
+      {
+        // remove selection?
+        return;
+      }
 
-      //        ids.forEach(function(id){
+      //console.log("old selection is " + this.__selectedIds + ", new selection is " + ids);
+      if( this.__selectedIds && ""+ids == ""+this.__selectedIds) // stringify arrays for comparison
+      {
+        //console.log("Same, same");
+        return;
+      }
+      this.__selectedIds = ids;
 
-      //          var row = this.getTable().getModel().getRowById(id);
+      //console.log("Selecting " + ids );
+      var table = this.getTable();
+      var selectionModel = table.getSelectionModel();
 
-      //          if ( row )
+      //selectionModel.resetSelection();
+      this.__ignoreChangeSelection = true;
 
-      //          {
+      ids.forEach(function(id){
+        var row = table.getTableModel().getRowById(id);
+        //console.log("Id " + id + " is row "+ row);
+        if ( row )
+        {
+          selectionModel.addSelectionInterval(row,row);
+          table.scrollCellVisible(0,row);
+        }
+        else
+        {
+          //this.info("Cannot select row with id " + id + ". Data not loaded yet.");
+          this.__selectedIds = null;
+        }
+      },this);
 
-      //            this.getTable().getSelectionModel().addSelectionInterval(row,row);
 
-      //            this.getTable().scrollCellVisible(0,row);
+      this.__ignoreChangeSelection = false;
 
-      //            count++;
+    },
 
-      //          }
+    /**
+     * does what it says.
+     * todo: cannot get selected ids and model ids from widget, why?
+     */
+    _retryApplySelection : function()
+    {
+      var app =qx.core.Init.getApplication();
+      var selectedIds = app.getSelectedIds();
+      var modelId = app.getModelId();
 
-      //        },this);
-
-      //      },this);
+      if( selectedIds && selectedIds.length )
+      {
+        this._selectIds( selectedIds );
+      }
+      else if (modelId)
+      {
+        this._selectIds( [modelId] );
+      }
     },
 
     /*
@@ -433,20 +533,16 @@ qx.Class.define("bibliograph.ui.reference.ListView",
     _createTableLayout : function(data)
     {
       /*
-       * @todo: Dispose old table and connected objects if they
+       * todo: Dispose old table and connected objects if they
        * exist. this will result in a fatal error if done as below
        */
       var table = this.getTable();
       if (table)
       {
         //        this.getController().dispose();
-
         //        this.getStore().dispose();
-
         //        this.getMarshaler().dispose();
-
         //        this.getTableContainer().remove( table );
-
         //        table.dispose();
       }
 
@@ -574,8 +670,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
       var table = new qx.ui.table.Table(tableModel, custom);
 
       /*
-       * Use special cell editors a
-       * nd cell renderers
+       * Use special cell editors and cell renderers
        */
       var tcm = table.getTableColumnModel();
       for (var i = 0; i < columnIds.length; i++)
@@ -607,8 +702,16 @@ qx.Class.define("bibliograph.ui.reference.ListView",
       table.setKeepFirstVisibleRowComplete(true);
       table.setShowCellFocusIndicator(false);
       table.setStatusBarVisible(false);
+
+      /*
+       * listeners
+       */
+      //tableModel.addListener("dataChanged", this._retryApplySelection, this);
+
       return table;
     },
+
+
 
     /*
     ---------------------------------------------------------------------------
@@ -627,11 +730,19 @@ qx.Class.define("bibliograph.ui.reference.ListView",
       //console.log([table,data,row]);
     },
 
+
+
+
     /**
      * Called when the selection in the table changes
      */
     _on_table_changeSelection : function()
     {
+      if( this.__ignoreChangeSelection )
+      {
+        return;
+      }
+
       var table = this.getTable();
 
       /*
@@ -656,7 +767,9 @@ qx.Class.define("bibliograph.ui.reference.ListView",
       this.setSelectedIds(selectedIds);
       this.setSelectedRowData(selectedRowData);
       if (selectedIds.length) {
+        this.__ignoreChangeSelection = true; // prevent infinite loop
         this.setModelId(selectedIds[0]);
+        this.__ignoreChangeSelection = false;
       }
     },
 
@@ -970,6 +1083,10 @@ qx.Class.define("bibliograph.ui.reference.ListView",
         this.hidePopup();
       }, this);
     },
+
+    /**
+     * Exports the selected references via jsonrpc service
+     */
     exportSelected : function()
     {
       var datasource = this.getDatasource();
@@ -979,6 +1096,10 @@ qx.Class.define("bibliograph.ui.reference.ListView",
         this.hidePopup();
       }, this);
     },
+
+    /**
+     * Exports the whole folder via service
+     */
     exportFolder : function()
     {
       var datasource = this.getDatasource();
@@ -988,6 +1109,10 @@ qx.Class.define("bibliograph.ui.reference.ListView",
         this.hidePopup();
       }, this);
     },
+
+    /**
+     * Finds and replaces text in the database using a service
+     */
     findReplace : function()
     {
       var datasource = this.getDatasource();

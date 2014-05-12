@@ -19,6 +19,8 @@
 ************************************************************************ */
 
 qcl_import("qcl_data_controller_Controller");
+qcl_import("qcl_ui_dialog_Confirm");
+qcl_import("qcl_ui_dialog_Select");
 qcl_import("qcl_ui_dialog_Prompt");
 qcl_import("qcl_ui_dialog_Alert");
 qcl_import("qcl_ui_dialog_Popup");
@@ -199,7 +201,7 @@ class class_bibliograph_plugin_isbnscanner_Service
         $refs[] = $this->formatReference( $referenceModel->data() );
       }
       $msg = $this->tr(
-        "Found: %s<br><br><b>Possible duplicates:</b><br>%s<br><br>Import?",
+        "Found: %s<br><br><b>Possible duplicates:</b><br>%s",
         $this->formatReference( $record ),
         join("<br>", $refs)
       );
@@ -211,17 +213,22 @@ class class_bibliograph_plugin_isbnscanner_Service
     else
     {
       $msg = $this->tr(
-        "Found: %s<br><br>Import?",
+        "Found: %s",
         $this->formatReference( $record )
       );
     }
 
+    $options = array(
+      array( "value" => "continue", "label" => $this->tr("Import and continue")),
+      array( "value" => "edit", "label" => $this->tr("Import and edit")),
+      array( "value" => "skip", "label" => $this->tr("Skip and continue"))
+    );
+
     /*
      * display found record and confirm import
      */
-    qcl_import("qcl_ui_dialog_Confirm");
-    return new qcl_ui_dialog_Confirm(
-      $msg, true,
+    return new qcl_ui_dialog_Select(
+      $msg, $options, true,
       $this->serviceName(),"importReferenceData",
       array($record, $data)
     );
@@ -237,15 +244,15 @@ class class_bibliograph_plugin_isbnscanner_Service
   public function method_importReferenceData( $response, $record, array $data )
   {
     // CANCEL button -> exit
-    if( $response === null )
+    if( ! $response )
     {
       return "CANCEL";
     }
 
     list( $datasource, $folderId ) = $data;
 
-    // NO button -> go back to entry
-    if ( $response === false )
+    // SKIP
+    if ( $response == "skip" )
     {
       return $this->method_enterIsbnDialog( $datasource, $folderId );
     }
@@ -284,11 +291,15 @@ class class_bibliograph_plugin_isbnscanner_Service
       'folderId'    => $folderId
     ) );
 
-    $this->dispatchClientMessage("bibliograph.setModel", array(
-      'datasource'    => $datasource,
-      'modelType'     => "reference",
-      'modelId'       => $referenceModel->id()
-    ) );
+    if ( $response == "edit" )
+    {
+      $this->dispatchClientMessage("bibliograph.setModel", array(
+        'datasource'    => $datasource,
+        'modelType'     => "reference",
+        'modelId'       => $referenceModel->id()
+      ) );
+      return "OK";
+    }
 
     /*
      * import next reference

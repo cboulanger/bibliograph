@@ -393,15 +393,19 @@ qx.Class.define("bibliograph.Main",
           if (id && !isNaN(id))selectedIds.push(id);
 
         }, this);
+        this.info("Restoring selected ids: " + selectedIds);
         this.setSelectedIds(selectedIds);
       }
       if (this.__folderId && !isNaN(parseInt(this.__folderId))) {
+        this.info("Restoring folder id: " + this.__folderId);
         this.setFolderId(parseInt(this.__folderId))
       } else if (this.__query) {
+        this.info("Restoring query: " + this.__query);
         this.setQuery(this.__query);
       }
 
       if (this.__modelId && !isNaN(parseInt(this.__modelId))) {
+        this.info("Restoring model id: " + this.__modelId);
         this.setModelId(parseInt(this.__modelId))
       }
 

@@ -49,13 +49,11 @@ qx.Class.define("qcl.application.PluginManager",
   {
     /**
      * Dispatched when the plugins have been loaded
-     * @type event
      */
     "loadingPlugin" : "qx.event.type.Data",
     
     /**
      * Dispatched when the plugins have been loaded
-     * @type message
      */
     "pluginsLoaded" : "qx.event.message.Message"
         
