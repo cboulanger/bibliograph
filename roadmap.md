@@ -5,6 +5,7 @@ Frontend
 --------
 
 - Replace persist.js library with qooxdoo localStorage Wrapper
+- move plugins out of bibliograph namespace into separate hierarchy containing frontend & backend code
 
 Backend
 -------
