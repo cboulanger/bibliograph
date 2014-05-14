@@ -50,6 +50,7 @@ qx.Class.define("bibliograph.plugin.isbnscanner.Plugin",
         if(folderId){menuButton1.setEnabled(true)};
       });
       menuButton1.addListener("execute", function() {
+        listener.stop_listening();
         app.showPopup(this.tr("Please wait ..."));
         app.getRpcManager().execute(
             "bibliograph.plugin.isbnscanner.Service", "enterIsbnDialog",
@@ -71,6 +72,7 @@ qx.Class.define("bibliograph.plugin.isbnscanner.Plugin",
         if(folderId){menuButton2.setEnabled(true)};
       });
       menuButton2.addListener("execute", function() {
+        listener.stop_listening();
         app.showPopup(this.tr("Please wait ..."));
         app.getRpcManager().execute(
             "bibliograph.plugin.isbnscanner.Service", "confirmEmailAddress",
@@ -86,8 +88,24 @@ qx.Class.define("bibliograph.plugin.isbnscanner.Plugin",
        */
       var listener = new window.keypress.Listener();
       listener.sequence_combo("9 7 8", function() {
-        alert("ISBN number!");
-      }, true);
+        listener.stop_listening();
+        app.showPopup(this.tr("ISBN input detected. Please wait for the input dialog and repeat the input ..."));
+        app.getRpcManager().execute(
+            "bibliograph.plugin.isbnscanner.Service", "enterIsbnDialog",
+            [app.getDatasource(),app.getFolderId()],
+            function(data) {
+              app.hidePopup();
+            }, this);
+      }.bind(this), true);
+
+      var bus = qx.event.message.Bus;
+      bus.subscribe("plugin.isbnscanner.ISBNInputListener.start", function(e){
+        listener.listen();
+      },this);
+      bus.subscribe("plugin.isbnscanner.ISBNInputListener.stop", function(e){
+        listener.stop_listening();
+      },this);
+
     }
   }
 });

@@ -246,6 +246,7 @@ class class_bibliograph_plugin_isbnscanner_Service
     // CANCEL button -> exit
     if( ! $response )
     {
+      $this->dispatchClientMessage("plugin.isbnscanner.ISBNInputListener.start");
       return "CANCEL";
     }
 
@@ -298,6 +299,7 @@ class class_bibliograph_plugin_isbnscanner_Service
         'modelType'     => "reference",
         'modelId'       => $referenceModel->id()
       ) );
+      $this->dispatchClientMessage("plugin.isbnscanner.ISBNInputListener.start");
       return "OK";
     }
 

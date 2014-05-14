@@ -19,6 +19,7 @@
 /**
  * The main application class
  * @asset(bibliograph/*)
+ * @asset(keypress/*)
  * @require(bibliograph.theme.Assets);
  * @require(qcl.ui.dialog.Dialog)
  * @require(qx.ui.form.RadioGroup)
