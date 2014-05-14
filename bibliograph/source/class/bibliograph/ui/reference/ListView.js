@@ -362,7 +362,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
       //console.log("Model id changed to " + value);
       if( value  )
       {
-        console.log("Trying to select id " + value);
+        //console.log("Trying to select id " + value);
         if ( this.isTableReady()  )
         {
           if( this._selectIds([value]) )
@@ -410,7 +410,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
 
       ids.forEach(function(id){
         var row = table.getTableModel().getRowById(id);
-        console.log("Id " + id + " is row "+ row);
+        //console.log("Id " + id + " is row "+ row);
         if ( row !== undefined )
         {
           selectionModel.addSelectionInterval(row,row);
