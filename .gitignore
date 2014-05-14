@@ -6,6 +6,7 @@ qooxdoo*
 build
 bibliograph-mobile/source/script/*
 bibliograph/source/script/*
+bibliograph/source/script/resource/plugin/*
 bibliograph/services/config/bibliograph.ini.php
 bibliograph/services/config/server.conf.php
 bibliograph/contrib/Dialog
