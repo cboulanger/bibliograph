@@ -80,6 +80,14 @@ qx.Class.define("bibliograph.plugin.isbnscanner.Plugin",
             }, this);
       });
       //importMenu.add(menuButton2);
+
+      /*
+       * setup global listener for input of isbn numbers (with scanner)
+       */
+      var listener = new window.keypress.Listener();
+      listener.sequence_combo("9 7 8", function() {
+        alert("ISBN number!");
+      }, true);
     }
   }
 });

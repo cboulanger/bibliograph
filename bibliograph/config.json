@@ -100,15 +100,27 @@
 //      ]
 //    },
     
-    // load third-party scripts before loading qooxdoo
+    // jobs for source & build version
     "common":
     {
+      // load third-party scripts before loading qooxdoo
       "add-script" :
       [
-        // persist library: http://pablotron.org/software/persist-js/
-        // you need to run ./generate build at least once before using the source version
-        { "uri" : "../build/resource/persist/persist-all-min.js" }
-      ]
+        // Persist.js library: http://pablotron.org/software/persist-js/
+        { "uri" : "../build/resource/persist/persist-all-min.js" },
+        // Keypress library: http://dmauro.github.io/Keypress/
+        { "uri" : "../build/resource/keypress/keypress-2.0.2.min.js" }
+      ],
+
+      // copy plugin development files
+      // you need to run ./generate.py build at least once to use them in the
+      // source version
+      "copy-files" :
+      {
+        "files"     : ["csl","z3950","isbnscanner"],
+        "source" : "source/class/bibliograph/plugin",
+        "target" : "source/resource/bibliograph/plugin"
+      }
     },
     
     // source generation only
@@ -118,14 +130,6 @@
       "cache" :
       {
         "downloads" : "contrib"
-      },
-      
-      // copy plugin development files
-      "copy-files" :
-      {
-        "files"     : ["csl","z3950","isbnscanner"],
-        "source" : "source/class/bibliograph/plugin",
-        "target" : "source/resource/bibliograph/plugin"
       }
     },
     
