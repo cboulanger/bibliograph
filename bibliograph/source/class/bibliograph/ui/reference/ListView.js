@@ -211,16 +211,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
     qx.event.message.Bus.subscribe("folder.reload", this._on_reloadFolder, this);
     qx.event.message.Bus.subscribe("reference.changeData", this._on_changeReferenceData, this);
     qx.event.message.Bus.subscribe("reference.removeFromFolder", this._on_removeRows, this);
-    this.createPopup();
-
-    var timer = new qx.event.Timer(2000);
-    this.addListener("tableReady", function(){
-      timer.start();
-    }, this)
-    timer.addListener("interval",function(){
-      this._retryApplySelection();
-    },this);
-
+    this.createPopup()
   },
 
   /*
@@ -354,20 +345,12 @@ qx.Class.define("bibliograph.ui.reference.ListView",
 
     /**
      * Reacts to a change in the "selectedIds" state of the applicationby selecting
-     * the values
+     * the values. does nothing at the moment, since async selection with the remote
+     * table model is very tricky.
      */
     _applySelectedIds : function(value, old) {
 
-      // should this remove the selection?
-      if (! value || ! value.length ) return;
-
-      /*
-       * if the table is not set up, selection will be resumed later
-       */
-      if ( this.isTableReady())
-      {
-        this._selectIds(value);
-      }
+      //
     },
 
     /**
@@ -376,16 +359,26 @@ qx.Class.define("bibliograph.ui.reference.ListView",
      */
     _applyModelId : function(value, old)
     {
-      if( value )
+      //console.log("Model id changed to " + value);
+      if( value  )
       {
-        //console.log("Model id changed to " + value);
-        this._applySelectedIds([value]);
-
+        console.log("Trying to select id " + value);
+        if ( this.isTableReady()  )
+        {
+          if( this._selectIds([value]) )
+          {
+            return; // successful
+          }
+        }
+        // otherwise, repeat after 1s until successful
+        qx.lang.Function.delay(this._applyModelId,1000,this, value, old);
       }
     },
 
     /**
-     * Tries to select the rows with the given ids
+     * Tries to select the rows with the given ids.
+     * @return {Boolean} Returns true if successful
+     * and false if the ids could not be determined
      */
     _selectIds : function(ids)
     {
@@ -417,8 +410,8 @@ qx.Class.define("bibliograph.ui.reference.ListView",
 
       ids.forEach(function(id){
         var row = table.getTableModel().getRowById(id);
-        //console.log("Id " + id + " is row "+ row);
-        if ( row )
+        console.log("Id " + id + " is row "+ row);
+        if ( row !== undefined )
         {
           selectionModel.addSelectionInterval(row,row);
           table.scrollCellVisible(0,row);
@@ -430,29 +423,10 @@ qx.Class.define("bibliograph.ui.reference.ListView",
         }
       },this);
 
-
       this.__ignoreChangeSelection = false;
 
-    },
+      return this.__selectedIds ? true: false;
 
-    /**
-     * does what it says.
-     * todo: cannot get selected ids and model ids from widget, why?
-     */
-    _retryApplySelection : function()
-    {
-      var app =qx.core.Init.getApplication();
-      var selectedIds = app.getSelectedIds();
-      var modelId = app.getModelId();
-
-      if( selectedIds && selectedIds.length )
-      {
-        this._selectIds( selectedIds );
-      }
-      else if (modelId)
-      {
-        this._selectIds( [modelId] );
-      }
     },
 
     /*

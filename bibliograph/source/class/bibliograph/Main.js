@@ -696,11 +696,11 @@ qx.Class.define("bibliograph.Main",
      * @return {void}
      */
     _applySelectedIds : function(value, old) {
-      if (value.length) {
-        this.getStateManager().setState("selectedIds", value);
-      } else {
-        this.getStateManager().removeState("selectedIds");
-      }
+//      if (value.length) {
+//        this.getStateManager().setState("selectedIds", value);
+//      } else {
+//        this.getStateManager().removeState("selectedIds");
+//      }
     },
 
     /**
