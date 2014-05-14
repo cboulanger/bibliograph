@@ -19,17 +19,13 @@
 ************************************************************************ */
 
 //-------------------------------------------------------------
-// PHP Errors
+// PHP configuration
 //-------------------------------------------------------------
 
 error_reporting( E_ALL ^ E_NOTICE ^ E_STRICT ); //Leave this
 ini_set("display_errors",1);
-
-//-------------------------------------------------------------
-// If PHP complains about a missing timezone, set this
-//-------------------------------------------------------------
-
-//date_default_timezone_set("Europe/Berlin");
+//ini_set('memory_limit', '512M'); // uncomment this if the backend runs out of memory
+//date_default_timezone_set("Europe/Berlin"); // uncomment this if PHP complains about a missing timezone
 
 //-------------------------------------------------------------
 // Configure paths to the various libraries used by the backend
