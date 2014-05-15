@@ -18,7 +18,6 @@
 
 /**
  * HTTP request model
- * @todo rewrite using HttpRequest class
  */
 class qcl_io_remote_HttpRequest
   extends qcl_core_Object

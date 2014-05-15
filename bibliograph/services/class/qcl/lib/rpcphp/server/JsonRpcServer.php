@@ -420,7 +420,14 @@ class JsonRpcServer extends AbstractServer
      * error handler function for php jsonrpc
      */
     set_exception_handler( array( $this, "jsonRpcExceptionHandler" ) );
+
     set_error_handler( array( $this,"jsonRpcErrorHandler" ) );
+//    set_error_handler(
+//      create_function(
+//        '$severity, $message, $file, $line',
+//        'throw new ErrorException($message, $severity, $severity, $file, $line);'
+//      )
+//    );
 
   }
 

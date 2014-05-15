@@ -16,12 +16,10 @@
  *  * Christian Boulanger (cboulanger)
  */
 
-/** @noinspection PhpIncludeInspection */
-require_once "qcl/lib/rpcphp/server/JsonRpcServer.php";
-
 qcl_import( "qcl_server_Request" );
 qcl_import( "qcl_server_Response" );
 qcl_import( "qcl_application_Application" );
+
 
 /**
  * A JSONRPC Server with a few extensions
@@ -436,4 +434,3 @@ class qcl_server_JsonRpcServer
     qcl_log_Logger::getInstance()->error( $msg, $includeBacktrace );
   }
 }
-?>

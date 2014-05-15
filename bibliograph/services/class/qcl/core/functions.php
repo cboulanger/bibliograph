@@ -17,8 +17,12 @@
  */
 
 /*
- * @todo rename functions to have a qcl_ prefix
- * @todo move assert functions to qcl_util_Assert class
+ * This collection of functions is a big mess that needs to be cleaned up. Naming is
+ * inconsistent, a lot of stuff is redundant or no longer necessary with PHP 5.3.
+ *
+ * - todo namespace functions and move them to where they belong, i.e. move assert functions to qcl_util_Assert class
+ * - todo clean up and move exceptions, replace by existing SPL exceptions
+ * - todo use filter functions http://phpro.org/tutorials/Filtering-Data-with-PHP.html#8
  */
 
 
@@ -469,6 +473,22 @@ function qcl_assert_false( $value )
   }
   return $value;
 }
+
+
+/**
+ * Asserts that the given string is a valid URL.
+ *
+ * @param string $url The URL
+ * @return void
+ * @throws InvalidArgumentException
+ */
+function qcl_assert_valid_url( $url )
+{
+  if (filter_var($url, FILTER_VALIDATE_URL) === FALSE) {
+    throw new InvalidArgumentException( "'$url ist not a valid url.'");
+  }
+}
+
 
 /**
  * Asserts that the given string is a valid email address.
