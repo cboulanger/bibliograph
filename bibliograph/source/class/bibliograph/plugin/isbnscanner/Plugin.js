@@ -99,8 +99,8 @@ qx.Class.define("bibliograph.plugin.isbnscanner.Plugin",
       }.bind(this), true);
 
       var bus = qx.event.message.Bus;
-      bus.subscribe("plugin.isbnscanner.ISBNInputListener.start", function(e){
-        listener.listen();
+      bus.subscribe(, function(e){
+        listener.listen();"plugin.isbnscanner.ISBNInputListener.start"
       },this);
       bus.subscribe("plugin.isbnscanner.ISBNInputListener.stop", function(e){
         listener.stop_listening();

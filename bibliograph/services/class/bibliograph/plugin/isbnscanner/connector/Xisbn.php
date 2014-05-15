@@ -18,7 +18,8 @@
 
 ************************************************************************ */
 
-qcl_import("bibliograph_plugin_isbnscanner_IConnector"); 
+qcl_import("bibliograph_plugin_isbnscanner_IConnector");
+qcl_import("bibliograph_webapis_disambiguation_Name");
 
 class bibliograph_plugin_isbnscanner_connector_Xisbn
 implements bibliograph_plugin_isbnscanner_IConnector
@@ -46,9 +47,8 @@ implements bibliograph_plugin_isbnscanner_IConnector
       "http://xisbn.worldcat.org/webservices/xid/isbn/%s?method=getMetadata&format=json&fl=*",
       $isbn
     );
-    
-    $result = file_get_contents($xisbnUrl);
-    $json   = json_decode($result , true );
+
+    $json = qcl_server_getJsonContent($xisbnUrl);
     $records = $json['list'];
     
     $data = array();
@@ -114,6 +114,11 @@ implements bibliograph_plugin_isbnscanner_IConnector
       }
 
       $record['author'] = preg_replace("/([.,;\s]+)$/","",$record['author']);
+
+      // normalize name
+      $service = bibliograph_webapis_disambiguation_Name::createInstance();
+      $record['author'] = $service->getNormalizedName($record['author']);
+
 
       $data[] = $record;
     }

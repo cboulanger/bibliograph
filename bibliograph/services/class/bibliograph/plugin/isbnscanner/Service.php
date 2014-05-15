@@ -71,6 +71,7 @@ class class_bibliograph_plugin_isbnscanner_Service
     // cancel button
     if (! $isbn )
     {
+      $this->dispatchClientMessage("plugin.isbnscanner.ISBNInputListener.start");
       return "CANCEL";
     }
 
@@ -169,6 +170,7 @@ class class_bibliograph_plugin_isbnscanner_Service
       return $this->method_iterateConnectors( null, $connectors, $isbn, $data );
     }
 
+    // take only the first entry, ignore others
     $record = $records[0];
 
     /*
@@ -198,6 +200,8 @@ class class_bibliograph_plugin_isbnscanner_Service
       $refs = array();
       while( $referenceModel->loadNext() )
       {
+        // ignore refs in the trash
+        if ( $referenceModel->get( "markedDeleted" ) ) continue;
         $refs[] = $this->formatReference( $referenceModel->data() );
       }
       $msg = $this->tr(
