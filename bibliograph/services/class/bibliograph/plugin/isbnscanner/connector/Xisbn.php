@@ -30,7 +30,7 @@ implements bibliograph_plugin_isbnscanner_IConnector
    */
   public function getDescription()
   {
-    return "xISBN Web Service";
+    return "xISBN/WorldCat Identities Web Services";
   }
   
   /**
@@ -61,6 +61,7 @@ implements bibliograph_plugin_isbnscanner_IConnector
         "/(.+) \(Hrsg\.\)/",
         "/hrsg\. von (.+)/i",
         "/hg\. von (.+)/i",
+        "/^Hrsg\. (.+)$/",
         "/(.+) \(ed\.\)/i",
         "/(.+) \(eds\.\)/i",
         "/ed\. by (.+)/i",

@@ -39,7 +39,8 @@ extends bibliograph_webapis_disambiguation_Name
    */
   function getNormalizedName($name)
   {
-    $xml = $this->getXmlContent( $this->url . $name );
+    $url = $this->url . urlencode($name);
+    $xml = $this->getXmlContent( $url );
     $node = $xml->xpath("match[@type='ExactMatches']");
     if( is_array($node) && count($node) )
     {

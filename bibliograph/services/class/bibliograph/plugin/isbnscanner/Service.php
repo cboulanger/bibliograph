@@ -121,7 +121,7 @@ class class_bibliograph_plugin_isbnscanner_Service
     
     $connector = $this->getConnectorObject( $connectors[0] );
     return new qcl_ui_dialog_Popup(
-      $this->tr("Contacting %s...", $connector->getDescription() ),
+      $this->tr("Contacting %s. Please wait...", $connector->getDescription() ),
       $this->serviceName(), "tryConnector",
       array( $connectors, $isbn, $data )
     );
