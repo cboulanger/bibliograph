@@ -41,7 +41,7 @@ implements bibliograph_plugin_isbnscanner_IConnector
    */
   public function getNameSeparators()
   {
-    return array(",","."," und ", " and ", "/");
+    return array(","," und ", " and ", ", and", " with ", "/");
   }
 
   /**

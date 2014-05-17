@@ -236,19 +236,19 @@ class class_bibliograph_plugin_isbnscanner_Service
      */
     return new qcl_ui_dialog_Select(
       $msg, $options, true,
-      $this->serviceName(),"importReferenceData",
+      $this->serviceName(),"handleConfirmImport",
       array($record, $data)
     );
   }
 
   /**
-   * Import the found reference data into the database
+   * Handle the response to the confirm dialog
    * @param null|bool $response
    * @param object $record
    * @param array $data
-   * @return qcl_ui_dialog_Prompt|string
+   * @return qcl_ui_dialog_Popup|string
    */
-  public function method_importReferenceData( $response, $record, array $data )
+  public function method_handleConfirmImport( $response, $record, array $data )
   {
     // CANCEL button -> exit
     if( ! $response )
@@ -265,20 +265,36 @@ class class_bibliograph_plugin_isbnscanner_Service
       return $this->method_enterIsbnDialog( $datasource, $folderId );
     }
 
+    $data[] = $response;
+
+    return new qcl_ui_dialog_Popup(
+      $this->tr("Converting data. Please wait..." ),
+      $this->serviceName(),"convertNames",
+      array($record, $data)
+    );
+  }
+
+
+  /**
+   * Convert names to sortable names
+   * @param null $dummy
+   * @param object $record
+   * @param array $data
+   * @return qcl_ui_dialog_Popup|string
+   */
+  public function method_convertNames( $dummy, $record, array $data )
+  {
     $this->requirePermission("reference.import");
     $record = object2array( $record );
+    list( $datasource, $folderId, $connectorName, $response ) = $data;
 
-    /*
-     * normalize names
-     */
     $namefields = array("author","editor","translator");
-    $connector = $this->getConnectorObject( $connectorName );
+    $connector  = $this->getConnectorObject( $connectorName );
     $nameformat = $connector->getNameFormat();
 
     if( ! ($nameformat & NAMEFORMAT_SORTABLE_FIRST) )
     {
       $separators = $connector->getNameSeparators();
-
 
       foreach( $namefields as $field )
       {
@@ -321,13 +337,36 @@ class class_bibliograph_plugin_isbnscanner_Service
             $this->warn( $e );
             break 2; // leave all foreach loops
           }
-          $normalizedNames[] = $sortableName;
+          if ( !empty(trim($sortableName) ) )
+          {
+            $normalizedNames[] = $sortableName;
+          }
         }
 
         // re-join names
-        $record[$field] = join(BIBLIOGRAPH_VALUE_SEPARATOR, $normalizedNames );
+        $record[$field] = join(BIBLIOGRAPH_VALUE_SEPARATOR, $normalizedNames ); // todo: this is schema-dependent!
       }
     }
+
+    return new qcl_ui_dialog_Popup(
+      $this->tr("Importing data. Please wait..." ),
+      $this->serviceName(),"importReferenceData",
+      array($record, $data)
+    );
+  }
+
+  /**
+   * Import the found reference data into the database
+   * @param null|bool $response
+   * @param object $record
+   * @param array $data
+   * @return qcl_ui_dialog_Prompt|string
+   */
+  public function method_importReferenceData( $dummy, $record, array $data )
+  {
+    $this->requirePermission("reference.import");
+    $record = object2array( $record );
+    list( $datasource, $folderId, $connectorName, $response ) = $data;
 
     /*
      * import

@@ -14,4 +14,5 @@ Backend
 - qcl: Remove unnecessary Exceptions, reduce to a basic set
 - qcl: Replace qcl_import with Autoloader
 - convert project to use PHP namespaces
+- replace defines with const
 - move authors & keywords to own tables to allow metadata connections
