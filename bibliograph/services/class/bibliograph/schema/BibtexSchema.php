@@ -469,7 +469,7 @@ class bibliograph_schema_BibtexSchema
             'lines'         => 3,
             'autocomplete'  => array(
               'enabled'   => true,
-              'separator' => '\n'
+              'separator' => "\n"
             )
           ),
           'csl'       => 'author',
@@ -538,7 +538,7 @@ class bibliograph_schema_BibtexSchema
             'lines'         => 3,
             'autocomplete'  => array(
               'enabled'   => true,
-              'separator' => '\n'
+              'separator' => "\n"
             )
           ),
           'csl'       => 'author',
@@ -607,7 +607,7 @@ class bibliograph_schema_BibtexSchema
             'lines'         => 3,
             'autocomplete'  => array(
               'enabled'       => true,
-              'separator'     => '\n'
+              'separator'     => "\n"
             )
           ),
           'csl'       => 'keyword',
