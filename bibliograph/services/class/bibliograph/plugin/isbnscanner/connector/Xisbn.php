@@ -24,15 +24,36 @@ qcl_import("bibliograph_webapis_disambiguation_Name");
 class bibliograph_plugin_isbnscanner_connector_Xisbn
 implements bibliograph_plugin_isbnscanner_IConnector
 {
-  
+
+  private $url = "http://xisbn.worldcat.org/webservices/xid/isbn/%s?method=getMetadata&format=json&fl=*";
+
   /**
    * Returns a description of the connector
    */
   public function getDescription()
   {
-    return "xISBN/WorldCat Identities Web Services";
+    return "xISBN Web Service";
   }
-  
+
+  /**
+   * Returns the delimiter(s) that separates names in the output of this webservice
+   * @return array
+   */
+  public function getNameSeparators()
+  {
+    return array(",","."," und ", " and ", "/");
+  }
+
+  /**
+   * Returns the format in which names are returned as an integer value that is mapped to the
+   * NAMEFORMAT_* constants
+   * @return int
+   */
+  public function getNameFormat()
+  {
+    return NAMEFORMAT_AS_WRITTEN;
+  }
+
   /**
    * given an isbn, returns reference data
    * @param string $isbn
@@ -43,18 +64,13 @@ implements bibliograph_plugin_isbnscanner_IConnector
    */ 
   public function getDataByIsbn( $isbn )
   {
-    $xisbnUrl = sprintf(
-      "http://xisbn.worldcat.org/webservices/xid/isbn/%s?method=getMetadata&format=json&fl=*",
-      $isbn
-    );
-
-    $json = qcl_server_getJsonContent($xisbnUrl);
+    $xIsbnUrl = sprintf( $this->url,$isbn );
+    $json = qcl_server_getJsonContent($xIsbnUrl);
     $records = $json['list'];
     
     $data = array();
 
     // regular expressions to extract editor information
-    //@todo move into external file
     $nameTypeRegExp = array(
       "editor" => array(
         "/(.+) \(Hg\.\)/",
@@ -78,7 +94,7 @@ implements bibliograph_plugin_isbnscanner_IConnector
       {
         if( is_array($value) )
         {
-          $record[$field] = join($value, "; ");
+          $record[$field] = join($value, BIBLIOGRAPH_VALUE_SEPARATOR );
         }
         // remove trailing periods
         $record[$field] = preg_replace("/((?:\.)+)$/","",$record[$field]);
@@ -115,11 +131,6 @@ implements bibliograph_plugin_isbnscanner_IConnector
       }
 
       $record['author'] = preg_replace("/([.,;\s]+)$/","",$record['author']);
-
-      // normalize name
-      $service = bibliograph_webapis_disambiguation_Name::createInstance();
-      $record['author'] = $service->getNormalizedName($record['author']);
-
 
       $data[] = $record;
     }

@@ -32,20 +32,26 @@ extends bibliograph_webapis_disambiguation_Name
   private $url = "http://www.worldcat.org/identities/find?fullName=";
 
   /**
-   * If the name is unique, return the normalized version (Lastname, Firstname).
-   * if there is no exact match, return an array of possible names
+   * If the name is unique, return the sortable version, normally: last/family name, first name(s).
+   * If there is no exact match, return an array of possible names.
+   * If no match exists, return false
    * @param string $name
-   * @return string|array
+   * @return false|string|array
    */
-  function getNormalizedName($name)
+  function getSortableName($name)
   {
     $url = $this->url . urlencode($name);
     $xml = $this->getXmlContent( $url );
     $node = $xml->xpath("match[@type='ExactMatches']");
     if( is_array($node) && count($node) )
     {
-      return (string) $node[0]->establishedForm;
+      // todo: return similar names as doc sais
+      $sortableName = trim ($node[0]->establishedForm);
+      if ( ! empty( $sortableName ) )
+      {
+        return $sortableName;
+      }
     }
-    return $name;
+    return false;
   }
 }

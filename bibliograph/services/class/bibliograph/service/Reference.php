@@ -431,8 +431,6 @@ class bibliograph_service_Reference
    * @param null $arg3
    * @param null $arg4
    * @throws InvalidArgumentException
-   * @internal param int $id
-   * @internal param array $fields Optional array of reference fields  to retrieve
    * @return array
    * todo: this method is called with different signatures!
    */

@@ -170,6 +170,9 @@ class class_bibliograph_plugin_isbnscanner_Service
       return $this->method_iterateConnectors( null, $connectors, $isbn, $data );
     }
 
+    // remember the connector name
+    $data[] = $connectors[0];
+
     // take only the first entry, ignore others
     $record = $records[0];
 
@@ -254,7 +257,7 @@ class class_bibliograph_plugin_isbnscanner_Service
       return "CANCEL";
     }
 
-    list( $datasource, $folderId ) = $data;
+    list( $datasource, $folderId, $connectorName ) = $data;
 
     // SKIP
     if ( $response == "skip" )
@@ -263,6 +266,68 @@ class class_bibliograph_plugin_isbnscanner_Service
     }
 
     $this->requirePermission("reference.import");
+    $record = object2array( $record );
+
+    /*
+     * normalize names
+     */
+    $namefields = array("author","editor","translator");
+    $connector = $this->getConnectorObject( $connectorName );
+    $nameformat = $connector->getNameFormat();
+
+    if( ! ($nameformat & NAMEFORMAT_SORTABLE_FIRST) )
+    {
+      $separators = $connector->getNameSeparators();
+
+
+      foreach( $namefields as $field )
+      {
+        $content = trim($record[$field]);
+        if( empty( $content) ) continue;
+
+        // replace separators with bibliograph name separator
+        foreach( $separators as $separator )
+        {
+          $content = str_replace($separator, BIBLIOGRAPH_VALUE_SEPARATOR, $content);
+        }
+
+        $names = explode(BIBLIOGRAPH_VALUE_SEPARATOR, $content );
+        $normalizedNames = array();
+        foreach( $names as $name )
+        {
+          $name = trim($name);
+          $this->debug("Name: $name");
+          try
+          {
+            $service = bibliograph_webapis_disambiguation_Name::createInstance();
+            $sortableName = $service->getSortableName($name);
+            if( $sortableName === false )
+            {
+              $this->debug("No match, keeping $name");
+              $sortableName = $name;
+            }
+            else if ( is_string( $sortableName) )
+            {
+              $this->debug("Normalized name: $sortableName");
+              if( strlen($sortableName) < strlen($name) )
+              {
+                $this->debug("Not usable, keeping $name");
+                $sortableName = $name;
+              }
+            }
+          }
+          catch(qcl_server_IOException $e)
+          {
+            $this->warn( $e );
+            break 2; // leave all foreach loops
+          }
+          $normalizedNames[] = $sortableName;
+        }
+
+        // re-join names
+        $record[$field] = join(BIBLIOGRAPH_VALUE_SEPARATOR, $normalizedNames );
+      }
+    }
 
     /*
      * import
@@ -270,7 +335,7 @@ class class_bibliograph_plugin_isbnscanner_Service
     $dsModel = $this->getDatasourceModel($datasource);
     $referenceModel = $dsModel->getInstanceOfType("reference");
 
-    $record = object2array( $record );
+
     $record['createdBy']= $this->getActiveUser()->namedId();
     $referenceModel->create($record);
 

@@ -18,13 +18,35 @@
 
 ************************************************************************ */
 
+/**
+ * constants
+ */
+const NAMEFORMAT_AS_WRITTEN = 0;
+const NAMEFORMAT_SORTABLE_FIRST = 1;
+
+/**
+ * Interface bibliograph_plugin_isbnscanner_IConnector
+ */
 interface bibliograph_plugin_isbnscanner_IConnector
 {
   /**
    * Returns a description of the connector
    */
   public function getDescription();
-  
+
+  /**
+   * Returns the delimiter(s) that separates names in the output of this webservice
+   * @return array
+   */
+  public function getNameSeparators();
+
+  /**
+   * Returns the format in which names are returned as an integer value that is mapped to the
+   * NAMEFORMAT_* constants
+   * @return int
+   */
+  public function getNameFormat();
+
   /**
    * given an isbn, returns reference data
    * @param string $isbn

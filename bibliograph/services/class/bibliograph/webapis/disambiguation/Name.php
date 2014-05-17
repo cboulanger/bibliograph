@@ -74,10 +74,11 @@ abstract class bibliograph_webapis_disambiguation_Name
   }
 
   /**
-   * If the name is unique, return the normalized version (Lastname, Firstname).
-   * if there is no exact match, return an array of possible names
+   * If the name is unique, return the sortable version, normally: last/family name, first name(s).
+   * If there is no exact match, return an array of possible names.
+   * If no match exists, return false
    * @param string $name
-   * @return string|array
+   * @return false|string|array
    */
-  abstract function getNormalizedName($name);
+  abstract function getSortableName($name);
 }

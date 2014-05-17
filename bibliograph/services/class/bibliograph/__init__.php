@@ -25,6 +25,8 @@ define( "BIBLIOGRAPH_ROLE_USER",    "user" );
 define( "BIBLIOGRAPH_ROLE_MANAGER", "manager" );
 define( "BIBLIOGRAPH_ROLE_ADMIN",   "admin" );
 
+const BIBLIOGRAPH_VALUE_SEPARATOR = "; "; // todo This cannot be a global value, dependent on record schema!
+
 /*
  * log filters
  */
