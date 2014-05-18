@@ -116,7 +116,11 @@ class class_bibliograph_plugin_isbnscanner_Service
 
     if ( ! count($connectors) )
     {
-      throw new JsonRpcException($this->tr("Could not find any data for ISBN %s.", $isbn));
+      return new qcl_ui_dialog_Alert(
+        $this->tr("Could not find any data for ISBN %s.", $isbn),
+        $this->serviceName(),"enterIsbnDialog",
+        $data
+      );
     }
     
     $connector = $this->getConnectorObject( $connectors[0] );
@@ -288,7 +292,7 @@ class class_bibliograph_plugin_isbnscanner_Service
     $record = object2array( $record );
     list( $datasource, $folderId, $connectorName, $response ) = $data;
 
-    $namefields = array("author","editor","translator");
+    $namefields = array("author","editor");
     $connector  = $this->getConnectorObject( $connectorName );
     $nameformat = $connector->getNameFormat();
 
@@ -308,26 +312,27 @@ class class_bibliograph_plugin_isbnscanner_Service
         }
 
         $names = explode(BIBLIOGRAPH_VALUE_SEPARATOR, $content );
-        $normalizedNames = array();
+        $sortableNames = array();
         foreach( $names as $name )
         {
           $name = trim($name);
-          $this->debug("Name: $name");
+          //$this->debug("Name: $name");
           try
           {
-            $service = bibliograph_webapis_disambiguation_Name::createInstance();
+            qcl_import("bibliograph_webapis_identity_AbstractIdentity");
+            $service = bibliograph_webapis_identity_AbstractIdentity::createInstance();
             $sortableName = $service->getSortableName($name);
             if( $sortableName === false )
             {
-              $this->debug("No match, keeping $name");
+              //$this->debug("No match, keeping $name");
               $sortableName = $name;
             }
             else if ( is_string( $sortableName) )
             {
-              $this->debug("Normalized name: $sortableName");
+              //$this->debug("Sortable name: $sortableName");
               if( strlen($sortableName) < strlen($name) )
               {
-                $this->debug("Not usable, keeping $name");
+                //$this->debug("Not usable, keeping $name");
                 $sortableName = $name;
               }
             }
@@ -337,14 +342,14 @@ class class_bibliograph_plugin_isbnscanner_Service
             $this->warn( $e );
             break 2; // leave all foreach loops
           }
-          if ( !empty(trim($sortableName) ) )
+          if ( !empty( trim($sortableName) ) )
           {
-            $normalizedNames[] = $sortableName;
+            $sortableNames[] = $sortableName;
           }
         }
 
         // re-join names
-        $record[$field] = join(BIBLIOGRAPH_VALUE_SEPARATOR, $normalizedNames ); // todo: this is schema-dependent!
+        $record[$field] = join(BIBLIOGRAPH_VALUE_SEPARATOR, $sortableNames ); // todo: this is schema-dependent!
       }
     }
 

@@ -19,7 +19,6 @@
 ************************************************************************ */
 
 qcl_import("bibliograph_plugin_isbnscanner_IConnector");
-qcl_import("bibliograph_webapis_disambiguation_Name");
 
 class bibliograph_plugin_isbnscanner_connector_Xisbn
 implements bibliograph_plugin_isbnscanner_IConnector
@@ -67,10 +66,14 @@ implements bibliograph_plugin_isbnscanner_IConnector
     $xIsbnUrl = sprintf( $this->url,$isbn );
     $json = qcl_server_getJsonContent($xIsbnUrl);
     $records = $json['list'];
-    
     $data = array();
 
-    // regular expressions to extract editor information
+    if(!count($records))
+    {
+      return array();
+    }
+
+      // regular expressions to extract editor information
     $nameTypeRegExp = array(
       "editor" => array(
         "/(.+) \(Hg\.\)/",

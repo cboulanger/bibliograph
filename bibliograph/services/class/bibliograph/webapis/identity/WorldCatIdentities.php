@@ -18,8 +18,10 @@
 
 ************************************************************************ */
 
-class bibliograph_webapis_disambiguation_WorldCatIdentities
-extends bibliograph_webapis_disambiguation_Name
+qcl_import("bibliograph_webapis_identity_AbstractIdentity");
+
+class bibliograph_webapis_identity_WorldCatIdentities
+extends bibliograph_webapis_identity_AbstractIdentity
 {
   /**
    * @var string
@@ -49,6 +51,8 @@ extends bibliograph_webapis_disambiguation_Name
       $sortableName = trim ($node[0]->establishedForm);
       if ( ! empty( $sortableName ) )
       {
+        // remove biographic information
+        $sortableName = trim(preg_replace("/[0-9]{4}\w*-\w*[0-9]{4}/","",$sortableName));
         return $sortableName;
       }
     }

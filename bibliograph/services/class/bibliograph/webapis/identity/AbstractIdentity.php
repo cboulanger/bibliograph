@@ -18,7 +18,10 @@
 
 ************************************************************************ */
 
-abstract class bibliograph_webapis_disambiguation_Name
+qcl_import("bibliograph_webapis_identity_IIdentity");
+
+abstract class bibliograph_webapis_identity_AbstractIdentity
+implements bibliograph_webapis_identity_IIdentity
 {
   /**
    * @var string The default service
@@ -28,12 +31,12 @@ abstract class bibliograph_webapis_disambiguation_Name
   /**
    * Create an instance of the default or particular service object
    * @param string|null $service The name of the service
-   * @return bibliograph_webapis_disambiguation_Name
+   * @return bibliograph_webapis_identity_AbstractIdentity
    */
   static function createInstance($service=null)
   {
     $service = $service ? $service : self::$defaultService;
-    $clazz = "bibliograph_webapis_disambiguation_$service";
+    $clazz = "bibliograph_webapis_identity_$service";
     qcl_import($clazz);
     return new $clazz;
   }
