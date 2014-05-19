@@ -56,12 +56,12 @@ qx.Class.define("bibliograph.ui.main.ReferenceListView",
       this.getApplication().bind("modelId", mainListView, "modelId", {
 
       });
-      mainListView.bind("selectedIds", this.getApplication(), "selectedIds", {
-
-      });
-      this.getApplication().bind("selectedIds", mainListView, "selectedIds", {
-
-      });
+//      mainListView.bind("selectedIds", this.getApplication(), "selectedIds", {
+//
+//      });
+//      this.getApplication().bind("selectedIds", mainListView, "selectedIds", {
+//
+//      });
     }
   }
 });
