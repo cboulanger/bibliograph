@@ -864,7 +864,7 @@ class bibliograph_service_Reference
      * check access
      */
     $this->checkDatasourceAccess( $datasource );
-    $this->requirePermission("reference.move");
+    $this->requirePermission("reference.remove");
     
     /*
      * go...
@@ -927,9 +927,9 @@ class bibliograph_service_Reference
     	}
     	
       /*
-       * move to trash only if it is not contained in any other folder
+       * move to trash only if it was contained in one or less folders
        */
-      if ( $folderCount == 0 )
+      if ( $folderCount < 2 )
       {
         /*
          * link with trash folder

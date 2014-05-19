@@ -953,11 +953,11 @@ qx.Class.define("bibliograph.ui.reference.ListView",
       }
     },
 
-    /*
-    ---------------------------------------------------------------------------
-       API METHODS
-    ---------------------------------------------------------------------------
-    */
+    resetSelection : function()
+    {
+      this.setSelectedIds([]);
+    },
+
     createReference : function(reftype)
     {
       var folderId = this.getFolderId();
@@ -982,6 +982,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
       var handler = qx.lang.Function.bind(function(result) {
         if (result === true) {
           this.modifyReferences("remove", null);
+          this.resetSelection();
         }
       }, this);
       dialog.Dialog.confirm(message, handler);
@@ -1006,6 +1007,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
         var handler = qx.lang.Function.bind(function(result) {
           if (result === true) {
             this.modifyReferences("move", parseInt(node.data.id));
+            this.resetSelection();
           }
         }, this);
         dialog.Dialog.confirm(message, handler);
