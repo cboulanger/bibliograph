@@ -799,7 +799,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
         if (!qx.lang.Type.isArray(data.ids)) {
           this.error("Invalid id data.")
         }
-        table.resetSelection();
+        this.resetSelection();
 
         /*
          * get row indexes from ids
@@ -816,8 +816,14 @@ qx.Class.define("bibliograph.ui.reference.ListView",
           return b - a
         });
         rows.forEach(function(row) {
-          tableModel.removeRow(row)
+          tableModel.removeRow(row);
         });
+
+        /*
+         * rebuild the row-id index because now rows are missing
+         */
+        tableModel.rebuildIndex();
+
       }
     },
 
@@ -956,6 +962,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
     resetSelection : function()
     {
       this.setSelectedIds([]);
+      this.getTable().resetSelection();
     },
 
     createReference : function(reftype)
@@ -982,7 +989,6 @@ qx.Class.define("bibliograph.ui.reference.ListView",
       var handler = qx.lang.Function.bind(function(result) {
         if (result === true) {
           this.modifyReferences("remove", null);
-          this.resetSelection();
         }
       }, this);
       dialog.Dialog.confirm(message, handler);
@@ -1007,7 +1013,6 @@ qx.Class.define("bibliograph.ui.reference.ListView",
         var handler = qx.lang.Function.bind(function(result) {
           if (result === true) {
             this.modifyReferences("move", parseInt(node.data.id));
-            this.resetSelection();
           }
         }, this);
         dialog.Dialog.confirm(message, handler);

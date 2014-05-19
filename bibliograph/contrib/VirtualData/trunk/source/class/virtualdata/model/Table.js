@@ -288,6 +288,19 @@ qx.Class.define("virtualdata.model.Table",
       
       this.__firstRow = null;
       this.__lastRow = null;      
+    },
+
+    /**
+     * Rebuilds the row-id map
+     * @private
+     */
+    rebuildIndex : function()
+    {
+      var idCol = this.getIdColumn();
+      this.__idIndex = [];
+      this.iterateCachedRows(function(index,data){
+        this.__idIndex[index] = data[idCol];
+      },this);
     }
     
   }

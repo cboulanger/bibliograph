@@ -394,8 +394,6 @@ qx.Class.define("bibliograph.Main",
           if (id && !isNaN(id))selectedIds.push(id);
 
         }, this);
-        this.info("Restoring selected ids: " + selectedIds);
-        this.setSelectedIds(selectedIds);
       }
       if (this.__folderId && !isNaN(parseInt(this.__folderId))) {
         this.info("Restoring folder id: " + this.__folderId);
