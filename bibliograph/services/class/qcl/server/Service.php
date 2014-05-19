@@ -122,6 +122,48 @@ class qcl_server_Service
   }
 
   //-------------------------------------------------------------
+  // methods to pass data between service methods
+  //-------------------------------------------------------------
+
+
+  /**
+   * Temporarily stores the supplied arguments on the server for retrieval
+   * by another service method. This storage is only guaranteed to last during
+   * the current session and is then discarded.
+   * @param mixed $varargs
+   *    The method can take a variable number of arguments
+   * @return string
+   *    The shelve id needed to retrieve the data later
+   */
+  public function shelve($varargs)
+  {
+    $shelveId = md5(microtime_float());
+    $_SESSION[$shelveId]=func_get_args();
+    return $shelveId;
+  }
+
+  /**
+   * Retrieve the data stored by the shelve() method.
+   * @param $shelveId
+   *    The id of the shelved data
+   * @param bool $keepCopy
+   *    If true, the data will be preserved and can be retrieved again.
+   *    If false or omitted, the data will be deleted.
+   * @return array
+   *    Returns an array of the elements passed to the shelve() method, which can be
+   *    extracted with the list() method.
+   */
+  public function unshelve( $shelveId, $keepCopy=false )
+  {
+    $args =  $_SESSION[$shelveId];
+    if ( !$keepCopy )
+    {
+      unset( $_SESSION[$shelveId] );
+    }
+    return $args;
+  }
+
+  //-------------------------------------------------------------
   // Introspection API
   //-------------------------------------------------------------
 
