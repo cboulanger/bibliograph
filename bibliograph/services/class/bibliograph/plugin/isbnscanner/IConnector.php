@@ -53,7 +53,7 @@ interface bibliograph_plugin_isbnscanner_IConnector
    *  ISBN string
    * @return array 
    *  Array of associative arrays, containing records matching the isbn with
-   *  BibTeX field names
+   *  BibTeX field names. Returns empty array if no match.
    */ 
   public function getDataByIsbn( $isbn );
 }

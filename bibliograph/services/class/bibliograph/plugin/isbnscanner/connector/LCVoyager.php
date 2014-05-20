@@ -53,23 +53,77 @@ implements bibliograph_plugin_isbnscanner_IConnector
     return NAMEFORMAT_SORTABLE_FIRST;
   }
 
+  private function getTextContent( $xml, $path )
+  {
+    $elemArr = $xml->xpath($path);
+    if( $elemArr === false ) return false;
+    return $this->removeCruft( (string) array_pop( $elemArr ) );
+  }
+
+  private function getArrTextContent( $xml, $path )
+  {
+    $elemArr = $xml->xpath($path);
+    if( $elemArr === false ) return false;
+    $contents=array();
+    foreach( $elemArr as $elem )
+    {
+      $contents[]= $this->removeCruft( (string) $elem);
+    }
+    return $contents;
+  }
+
+  private function removeCruft( $text )
+  {
+    return preg_replace("/[\.\/,]$/", "", $text);
+  }
+
+  private function getTextBefore($separator, $text )
+  {
+    $parts = explode($separator, $text);
+    return $parts[0];
+  }
+
+  private function getTextAfter($separator, $text )
+  {
+    $parts = explode($separator, $text);
+    return $parts[1];
+  }
+
   /**
    * given an isbn, returns reference data
    * @param string $isbn
    *  ISBN string
-   * @return array 
+   * @return array
    *  Array of associative arrays, containing records matching the isbn with
-   *  BibTeX field names
+   *  BibTeX field names. Returns empty array if no match.
    */ 
   public function getDataByIsbn( $isbn )
   {
     $url = sprintf( $this->url,$isbn );
+
     $xml = qcl_server_getXmlContent($url);
     $xml->registerXPathNamespace("dc", "http://purl.org/dc/elements/1.1/");
-    
-    $record = array();
-    $record['title'] = (string) array_pop( $xml->xpath("//dc:title"));
-    
-    return array();
+
+    $title = $this->getTextContent($xml, "//dc:title");
+    if( $title === false or empty(trim($title)))
+    {
+      return array();
+    }
+
+    $record = array(
+      "reftype"   => "book",
+      "title"     => $title,
+      "author"    => implode(BIBLIOGRAPH_VALUE_SEPARATOR, $this->getArrTextContent($xml, "//dc:creator") ),
+      "publisher" => $this->getTextAfter(" : ", $this->getTextContent($xml, "//dc:publisher") ),
+      "address"   => $this->getTextBefore(" : ", $this->getTextContent($xml, "//dc:publisher") ),
+      "year"      => str_replace("c", "", $this->getTextContent($xml,"//dc:date")),
+      "language"  => $this->getTextContent($xml,"//dc:language"),
+      "keywords"  => implode(BIBLIOGRAPH_VALUE_SEPARATOR, $this->getArrTextContent($xml, "//dc:subject") ),
+      "isbn"      => $isbn
+    );
+
+qcl_log_Logger::getInstance()->log(print_r($record,true),"warn");
+
+    return array($record);
   }
 }

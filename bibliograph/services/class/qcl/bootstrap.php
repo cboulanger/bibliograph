@@ -24,9 +24,10 @@
  */
 
 /*
- * set the default timeout for script execution
+ * PHP settings
  */
 set_time_limit(120);
+ini_set("html_errors",0);
 
 /*
  * Directory containing the service classes with trailing slash

@@ -82,7 +82,9 @@ qx.Class.define("qcl.ui.dialog.Dialog",
      */
     _onServerDialog : function( message )
     {
+      var app = qx.core.Init.getApplication();
       var data = message.getData();
+
       if ( data.service )
       {
         data.properties.callback = function( result )
@@ -109,7 +111,6 @@ qx.Class.define("qcl.ui.dialog.Dialog",
       /*
        * turn popup on or off
        */
-      var app = qx.core.Init.getApplication();
       if (data.type === "popup" )
       {
         if ( typeof app.showPopup === undefined  )
@@ -127,7 +128,10 @@ qx.Class.define("qcl.ui.dialog.Dialog",
         {
           app.hidePopup();
         }
-        data.properties.callback(true);
+        if( typeof data.properties.callback=="function" )
+        {
+          data.properties.callback(true);
+        }
         return;
       }
       app.hidePopup();

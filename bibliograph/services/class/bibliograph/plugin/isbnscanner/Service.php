@@ -67,7 +67,6 @@ class class_bibliograph_plugin_isbnscanner_Service
       return "ABORTED: wrong signature, ignoring request";
     }
 
-
     // cancel button
     if (! $isbn )
     {
@@ -78,7 +77,7 @@ class class_bibliograph_plugin_isbnscanner_Service
     qcl_assert_valid_string( $isbn, "ISBN must be a non-empty string" );
     
     $connectors = array(
-      "Xisbn"
+      "LCVoyager","Xisbn"
     );
 
     $shelveId = $this->shelve($connectors, $isbn, $data);
@@ -106,10 +105,8 @@ class class_bibliograph_plugin_isbnscanner_Service
   
   /**
    * Service to iterate over the given connector names
-   * @param $dummy First parameter returned by client can be ignored
-   * @param array $connectors Array of connector names
-   * @param string $isbn The ISBN to search for
-   * @param array $data Additional data
+   * @param null $dummy First parameter returned by client must be ignored
+   * @param string $shelveId The id of stored data
    * @return qcl_ui_dialog_Popup
    */
   public function method_iterateConnectors( $dummy, $shelveId )
@@ -128,15 +125,16 @@ class class_bibliograph_plugin_isbnscanner_Service
     }
     
     $connector = $this->getConnectorObject( $connectors[0] );
+
     return new qcl_ui_dialog_Popup(
       $this->tr("Contacting %s. Please wait...", $connector->getDescription() ),
       $this->serviceName(), "tryConnector",
-      array( $connectors, $isbn, $data )
+      array( $this->shelve( $connectors, $isbn, $data ) )
     );
   }
 
   /**
-   * Given a record with BibTeX-conformant field names, return a formatted reference.
+   * Given a record with BibTeX-conforming field names, return a formatted reference.
    * Todo: use proper formatting
    * @param array $record
    * @return string
@@ -156,15 +154,15 @@ class class_bibliograph_plugin_isbnscanner_Service
   
   /**
    * Service to try the first of the connector names in the given array
-   * @param $dummy First parameter returned by client can be ignored
-   * @param array $connectors Array of connector names
-   * @param string $isbn The ISBN to search for
-   * @param array $data Additional data
+   * @param null $dummy First parameter returned by client must be ignored
+   * @param string $shelveId The id of stored data
    * @return qcl_ui_dialog_Popup
    */
-  public function method_tryConnector( $dummy, $connectors, $isbn, $data )
+  public function method_tryConnector( $dummy, $shelveId )
   {
     $this->requirePermission("reference.import");
+
+    list($connectors, $isbn, $data) = $this->unshelve($shelveId);
 
     $connector = $this->getConnectorObject( $connectors[0] );
     $records = $connector->getDataByIsbn( $isbn );
@@ -175,7 +173,8 @@ class class_bibliograph_plugin_isbnscanner_Service
     if( count($records) == 0 )
     {
       array_shift($connectors);
-      return $this->method_iterateConnectors( null, $connectors, $isbn, $data );
+      $shelveId = $this->shelve( $connectors, $isbn, $data );
+      return $this->method_iterateConnectors( null, $shelveId );
     }
 
     // remember the connector name
@@ -215,11 +214,21 @@ class class_bibliograph_plugin_isbnscanner_Service
         if ( $referenceModel->get( "markedDeleted" ) ) continue;
         $refs[] = $this->formatReference( $referenceModel->data() );
       }
-      $msg = $this->tr(
-        "Found: %s<br><br><b>Possible duplicates:</b><br>%s",
-        $this->formatReference( $record ),
-        join("<br>", $refs)
-      );
+      if( count($refs) )
+      {
+        $msg = $this->tr(
+          "Found: %s<br><br><b>Possible duplicates:</b><br>%s",
+          $this->formatReference( $record ),
+          join("<br>", $refs)
+        );
+      }
+      else
+      {
+        $msg = $this->tr(
+          "Found: %s",
+          $this->formatReference( $record )
+        );
+      }
     }
 
     /*
@@ -245,19 +254,22 @@ class class_bibliograph_plugin_isbnscanner_Service
     return new qcl_ui_dialog_Select(
       $msg, $options, true,
       $this->serviceName(),"handleConfirmImport",
-      array($record, $data)
+      array( $this->shelve( $record, $data ) )
     );
   }
 
   /**
    * Handle the response to the confirm dialog
    * @param null|bool $response
-   * @param object $record
-   * @param array $data
+   * @param null $dummy First parameter returned by client must be ignored
+   * @param string $shelveId The id of stored data
    * @return qcl_ui_dialog_Popup|string
    */
-  public function method_handleConfirmImport( $response, $record, array $data )
+  public function method_handleConfirmImport( $response, $shelveId )
   {
+
+    list( $record, $data ) = $this->unshelve( $shelveId );
+
     // CANCEL button -> exit
     if( ! $response )
     {
@@ -274,11 +286,11 @@ class class_bibliograph_plugin_isbnscanner_Service
     }
 
     $data[] = $response;
-
+    $shelveId = $this->shelve( $record, $data );
     return new qcl_ui_dialog_Popup(
       $this->tr("Converting data. Please wait..." ),
       $this->serviceName(),"convertNames",
-      array($record, $data)
+      array($shelveId)
     );
   }
 
@@ -286,13 +298,15 @@ class class_bibliograph_plugin_isbnscanner_Service
   /**
    * Convert names to sortable names
    * @param null $dummy
-   * @param object $record
-   * @param array $data
+   * @param string $shelveId The id of stored data
    * @return qcl_ui_dialog_Popup|string
    */
-  public function method_convertNames( $dummy, $record, array $data )
+  public function method_convertNames( $dummy, $shelveId )
   {
     $this->requirePermission("reference.import");
+
+    // unpack stored variables
+    list( $record, $data ) = $this->unshelve( $shelveId );
     $record = object2array( $record );
     list( $datasource, $folderId, $connectorName, $response ) = $data;
 
@@ -356,24 +370,26 @@ class class_bibliograph_plugin_isbnscanner_Service
         $record[$field] = join(BIBLIOGRAPH_VALUE_SEPARATOR, $sortableNames ); // todo: this is schema-dependent!
       }
     }
-
+    $shelveId = $this->shelve( $record, $data );
     return new qcl_ui_dialog_Popup(
       $this->tr("Importing data. Please wait..." ),
       $this->serviceName(),"importReferenceData",
-      array($record, $data)
+      array($shelveId)
     );
   }
 
   /**
    * Import the found reference data into the database
    * @param null|bool $response
-   * @param object $record
-   * @param array $data
+   * @param string $shelveId The id of stored data
    * @return qcl_ui_dialog_Prompt|string
    */
-  public function method_importReferenceData( $dummy, $record, array $data )
+  public function method_importReferenceData( $dummy, $shelveId )
   {
     $this->requirePermission("reference.import");
+
+    // unpack stored variables
+    list( $record, $data ) = $this->unshelve( $shelveId );
     $record = object2array( $record );
     list( $datasource, $folderId, $connectorName, $response ) = $data;
 
@@ -382,10 +398,9 @@ class class_bibliograph_plugin_isbnscanner_Service
      */
     $dsModel = $this->getDatasourceModel($datasource);
     $referenceModel = $dsModel->getInstanceOfType("reference");
-
-
     $record['createdBy']= $this->getActiveUser()->namedId();
     $referenceModel->create($record);
+    $referenceModel->set("citekey", $referenceModel->computeCitekey() )->save();
 
     /*
      * link to folder
@@ -417,7 +432,7 @@ class class_bibliograph_plugin_isbnscanner_Service
         'modelId'       => $referenceModel->id()
       ) );
       $this->dispatchClientMessage("plugin.isbnscanner.ISBNInputListener.start");
-      return "OK";
+      return new qcl_ui_dialog_Popup(null);
     }
 
     /*

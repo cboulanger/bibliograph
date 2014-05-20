@@ -52,7 +52,7 @@ extends bibliograph_webapis_identity_AbstractIdentity
       if ( ! empty( $sortableName ) )
       {
         // remove biographic information
-        $sortableName = trim(preg_replace("/[0-9]{4}\w*-\w*[0-9]{4}/","",$sortableName));
+        $sortableName = trim(preg_replace("/[0-9]{4}\w*-(\w*[0-9]{4})?/","",$sortableName));
         return $sortableName;
       }
     }

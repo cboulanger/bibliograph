@@ -334,6 +334,70 @@ class bibliograph_model_ReferenceModel
 	  return parent::save();
 	}
 
+  /**
+   * @return string
+   */
+  function getAuthor()
+  {
+    return $this->_get("author");
+  }
+
+  /**
+   * @return string
+   */
+  function getTitle()
+  {
+    return $this->_get("title");
+  }
+
+  /**
+   * @return string
+   */
+  function getYear()
+  {
+    return $this->_get("year");
+  }
+
+  /**
+   * Returns author or editor depending on reference type
+   * @return string
+   */
+  function getCreator()
+  {
+    $author = $this->getAuthor();
+    return empty($author) ? $this->_get("editor") : $author;
+  }
+
+  /**
+   * Computes the citation key from the record data.
+   * The format is Author-Year-TitleWord or Author1+Author2+Author3-Year-Titleword
+   * @return string
+   */
+  function computeCiteKey()
+  {
+    $creators = explode(BIBLIOGRAPH_VALUE_SEPARATOR,$this->getCreator());
+    $lastNames = array();
+    foreach($creators as $name)
+    {
+      $parts = explode(",", $name);
+      $lastNames[] = trim($parts[0]);
+    }
+    $citekey = implode("+", $lastNames);
+
+    $citekey .= "-" . $this->getYear();
+
+    $titlewords = explode(" ",$this->getTitle());
+    while ( count($titlewords) and strlen($titlewords[0]) < 4 )
+    {
+      array_shift($titlewords);
+    }
+    if( count($titlewords) )
+    {
+      $citekey .=  "-" . $titlewords[0];
+    }
+    return $citekey;
+  }
+
 	/**
 	 * Selects potential duplicates
 	 * @return array

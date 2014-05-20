@@ -59,7 +59,7 @@ implements bibliograph_plugin_isbnscanner_IConnector
    *  ISBN string
    * @return array 
    *  Array of associative arrays, containing records matching the isbn with
-   *  BibTeX field names
+   *  BibTeX field names. Returns empty array if no match.
    */ 
   public function getDataByIsbn( $isbn )
   {
@@ -91,8 +91,10 @@ implements bibliograph_plugin_isbnscanner_IConnector
         "/ed\. by (.+)/i",
         "/edited by (.+)/i",
       ),
+
       "translator" => array(
-        "/aus dem (?:.+) von (.+)/i"
+        "/(?:Übers\.|Übersetzt)(?: aus dem (?:.+))? von (.+)/i",
+        "/(?:transl\.|translated)(?: from the (?:.+))? by (.+)/i",
       )
     );
 

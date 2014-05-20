@@ -93,6 +93,7 @@ function qcl_server_getXmlContent($url)
     )
   );
   $xml = qcl_server_getHttpContent($url,$opts);
+  //qcl_log_Logger::getInstance()->log($xml,"warn");
   return simplexml_load_string($xml);
 }
 

@@ -476,6 +476,7 @@ class class_bibliograph_plugin_z3950_Service
       $sourceModel->load($id);
       $targetReferenceModel->create();
       $targetReferenceModel->copySharedProperties( $sourceModel );
+      $targetReferenceModel->set("citekey", $targetReferenceModel->computeCiteKey());
       $targetReferenceModel->save();
       $targetReferenceModel->linkModel( $targetFolderModel );
     }
