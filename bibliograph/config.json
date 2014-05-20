@@ -68,11 +68,11 @@
 
         // Dialogs
         {
-         "manifest" : "contrib://Dialog/master/Manifest.json"
+         "manifest" : "contrib/Dialog/master/Manifest.json"
         },
         // Upload widget
         {
-          "manifest" : "contrib://UploadWidget/trunk/Manifest.json"
+          "manifest" : "contrib/UploadWidget/trunk/Manifest.json"
         },
 
         // local legacy contribs

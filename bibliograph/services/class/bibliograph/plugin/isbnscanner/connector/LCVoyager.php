@@ -105,7 +105,7 @@ implements bibliograph_plugin_isbnscanner_IConnector
     $xml->registerXPathNamespace("dc", "http://purl.org/dc/elements/1.1/");
 
     $title = $this->getTextContent($xml, "//dc:title");
-    if( $title === false or empty(trim($title)))
+    if( $title === false or ! trim($title))
     {
       return array();
     }

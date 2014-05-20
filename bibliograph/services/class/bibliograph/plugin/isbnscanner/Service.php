@@ -360,7 +360,7 @@ class class_bibliograph_plugin_isbnscanner_Service
             $this->warn( $e );
             break 2; // leave all foreach loops
           }
-          if ( !empty( trim($sortableName) ) )
+          if ( trim($sortableName) )
           {
             $sortableNames[] = $sortableName;
           }
