@@ -122,7 +122,7 @@ implements bibliograph_plugin_isbnscanner_IConnector
       "isbn"      => $isbn
     );
 
-qcl_log_Logger::getInstance()->log(print_r($record,true),"warn");
+    //qcl_log_Logger::getInstance()->log(print_r($record,true),"warn");
 
     return array($record);
   }
