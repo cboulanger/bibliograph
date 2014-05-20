@@ -75,6 +75,11 @@ implements bibliograph_plugin_isbnscanner_IConnector
 
       // regular expressions to extract editor information
     $nameTypeRegExp = array(
+      "author" => array(
+        "/^von (.+)/i",
+        "/^by (.+)/i"
+      ),
+
       "editor" => array(
         "/(.+) \(Hg\.\)/",
         "/(.+) \(Hrsg\.\)/",
@@ -130,6 +135,15 @@ implements bibliograph_plugin_isbnscanner_IConnector
         {
           $record['author']= $matches[1];
           $record['reftype'] = "collection";
+        }
+      }
+
+      // remove words preceeding author name
+      foreach($nameTypeRegExp['author'] as $regExp )
+      {
+        if( preg_match($regExp, $record['author'], $matches ) )
+        {
+          $record['author']= $matches[1];
         }
       }
 

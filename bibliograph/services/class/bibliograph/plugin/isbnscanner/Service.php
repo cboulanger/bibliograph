@@ -80,11 +80,13 @@ class class_bibliograph_plugin_isbnscanner_Service
     $connectors = array(
       "Xisbn"
     );
+
+    $shelveId = $this->shelve($connectors, $isbn, $data);
     
     return new qcl_ui_dialog_Popup(
       $this->tr("Contacting webservices to resolve ISBN..."),
       $this->serviceName(), "iterateConnectors",
-      array($connectors, $isbn, $data)
+      array($shelveId)
     );
   }
   
@@ -110,9 +112,11 @@ class class_bibliograph_plugin_isbnscanner_Service
    * @param array $data Additional data
    * @return qcl_ui_dialog_Popup
    */
-  public function method_iterateConnectors( $dummy, array $connectors, $isbn, array $data )
+  public function method_iterateConnectors( $dummy, $shelveId )
   {  
     $this->requirePermission("reference.import");
+
+    list($connectors, $isbn, $data) = $this->unshelve($shelveId);
 
     if ( ! count($connectors) )
     {

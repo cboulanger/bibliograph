@@ -62,26 +62,26 @@ qx.Class.define("bibliograph.plugin.isbnscanner.Plugin",
       importMenu.add(menuButton1);      
       
       
-      /*
-       * use iOD device to scan ISBN
-       */
-      var menuButton2 = new qx.ui.menu.Button(this.tr("From ISBN barcode, scanned with iOS device"));
-      menuButton2.setToolTip(new qx.ui.tooltip.ToolTip(this.tr("Please select a folder into which the item will be imported. Requires the Scanner Go app on the iOS device.")));
-      menuButton2.setEnabled(false);
-      app.addListener("changeFolderId",function(folderId){
-        if(folderId){menuButton2.setEnabled(true)};
-      });
-      menuButton2.addListener("execute", function() {
-        listener.stop_listening();
-        app.showPopup(this.tr("Please wait ..."));
-        app.getRpcManager().execute(
-            "bibliograph.plugin.isbnscanner.Service", "confirmEmailAddress",
-            [app.getDatasource(),app.getFolderId()],
-            function(data) {
-              app.hidePopup();
-            }, this);
-      });
-      //importMenu.add(menuButton2);
+//      /*
+//       * use iOD device to scan ISBN
+//       */
+//      var menuButton2 = new qx.ui.menu.Button(this.tr("From ISBN barcode, scanned with iOS device"));
+//      menuButton2.setToolTip(new qx.ui.tooltip.ToolTip(this.tr("Please select a folder into which the item will be imported. Requires the Scanner Go app on the iOS device.")));
+//      menuButton2.setEnabled(false);
+//      app.addListener("changeFolderId",function(folderId){
+//        if(folderId){menuButton2.setEnabled(true)};
+//      });
+//      menuButton2.addListener("execute", function() {
+//        listener.stop_listening();
+//        app.showPopup(this.tr("Please wait ..."));
+//        app.getRpcManager().execute(
+//            "bibliograph.plugin.isbnscanner.Service", "confirmEmailAddress",
+//            [app.getDatasource(),app.getFolderId()],
+//            function(data) {
+//              app.hidePopup();
+//            }, this);
+//      });
+//      importMenu.add(menuButton2);
 
       /*
        * setup global listener for input of isbn numbers (with scanner)
@@ -99,8 +99,8 @@ qx.Class.define("bibliograph.plugin.isbnscanner.Plugin",
       }.bind(this), true);
 
       var bus = qx.event.message.Bus;
-      bus.subscribe(, function(e){
-        listener.listen();"plugin.isbnscanner.ISBNInputListener.start"
+      bus.subscribe("plugin.isbnscanner.ISBNInputListener.start", function(e){
+        listener.listen();
       },this);
       bus.subscribe("plugin.isbnscanner.ISBNInputListener.stop", function(e){
         listener.stop_listening();

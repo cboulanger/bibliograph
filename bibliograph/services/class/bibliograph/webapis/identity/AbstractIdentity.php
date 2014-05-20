@@ -71,7 +71,7 @@ implements bibliograph_webapis_identity_IIdentity
     }
     catch ( qcl_server_IOException $e)
     {
-      throw new qcl_server_IOException( $this->tr( "Problem contacting %s.", $this->getDescription() ) );
+      throw new qcl_server_IOException( "Problem contacting %s.", $this->getDescription() );
     }
     return $xml;
   }
