@@ -357,10 +357,12 @@ qx.Class.define("bibliograph.ui.reference.ListView",
      * Reacts to a change in the "modelId" state of the application by selecting the row
      * that corresponds to the id.
      */
-    _applyModelId : function(value, old)
+    _applyModelId : function(value, old, counter)
     {
+      counter = counter ||0;
+
       //console.log("Model id changed to " + value);
-      if( value  )
+      if( value && value == this.getModelId() )
       {
         //console.log("Trying to select id " + value);
         if ( this.isTableReady()  )
@@ -370,8 +372,11 @@ qx.Class.define("bibliograph.ui.reference.ListView",
             return; // successful
           }
         }
-        // otherwise, repeat after 1s until successful
-        qx.lang.Function.delay(this._applyModelId,1000,this, value, old);
+        else if (counter < 10 )
+        {
+          // otherwise, repeat after 1s until max 10 times
+          qx.lang.Function.delay(this._applyModelId,1000,this, value, old, ++counter );
+        }
       }
     },
 
@@ -438,7 +443,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
     /**
      * Checks whether the table layout has to be created or recreated
      * due to changes in the datasource model. Loads table layout
-     * from the server if neccessary.
+     * from the server if necessary.
      */
     _checkTableLayout : function()
     {
