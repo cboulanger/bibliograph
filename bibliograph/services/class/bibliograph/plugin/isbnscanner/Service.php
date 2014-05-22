@@ -24,6 +24,8 @@ qcl_import("qcl_ui_dialog_Select");
 qcl_import("qcl_ui_dialog_Prompt");
 qcl_import("qcl_ui_dialog_Alert");
 qcl_import("qcl_ui_dialog_Popup");
+qcl_import("bibliograph_webapis_identity_WorldCatIdentities");
+qcl_import("bibliograph_webapis_identity_SimpleNameParser");
 
 /**
  * Class providing methods and services to import bibliographic data from scanned ISBN numbers
@@ -40,11 +42,15 @@ class class_bibliograph_plugin_isbnscanner_Service
   public function method_enterIsbnDialog( $datasource, $folderId=null)
   {
     $this->requirePermission("reference.import");
-    # check data/folderid
-    $activeUser = $this->getAccessController()->getActiveUser();    
-    $msg = $this->tr("Please enter the ISBN:") ;
+
+    $this->checkDatasourceAccess($datasource);
+    if (!$folderId)
+    {
+      throw new qcl_server_ServiceException($this->tr("No folder selected."));
+    }
+
     return new qcl_ui_dialog_Prompt(
-      $msg, /*value*/ "",
+      $this->tr("Please enter the ISBN:"), /*value*/ "",
       $this->serviceName(),"getReferenceDataByIsbn",
       array(array($datasource, $folderId)),
       /*require input*/ true, /*autosubmit after 2 seconds*/ 2
@@ -285,12 +291,26 @@ class class_bibliograph_plugin_isbnscanner_Service
       return $this->method_enterIsbnDialog( $datasource, $folderId );
     }
 
+
+    list( $datasource, $folderId, $connectorName ) = $data;
+    // append response
     $data[] = $response;
-    $shelveId = $this->shelve( $record, $data );
+
+    $connector  = $this->getConnectorObject( $connectorName );
+    $nameformat = $connector->getNameFormat();
+    if( $nameformat & NAMEFORMAT_SORTABLE_FIRST )
+    {
+      return new qcl_ui_dialog_Popup(
+        $this->tr("Importing data. Please wait..." ),
+        $this->serviceName(),"importReferenceData",
+        array($this->shelve( $record, $data ))
+      );
+    }
+
     return new qcl_ui_dialog_Popup(
-      $this->tr("Converting data. Please wait..." ),
-      $this->serviceName(),"convertNames",
-      array($shelveId)
+      $this->tr("Converting names. Please wait..." ),
+      $this->serviceName(),"convertToSortableNames",
+      array($this->shelve( $record, $data ))
     );
   }
 
@@ -301,7 +321,7 @@ class class_bibliograph_plugin_isbnscanner_Service
    * @param string $shelveId The id of stored data
    * @return qcl_ui_dialog_Popup|string
    */
-  public function method_convertNames( $dummy, $shelveId )
+  public function method_convertToSortableNames( $dummy, $shelveId )
   {
     $this->requirePermission("reference.import");
 
@@ -317,65 +337,90 @@ class class_bibliograph_plugin_isbnscanner_Service
     if( ! ($nameformat & NAMEFORMAT_SORTABLE_FIRST) )
     {
       $separators = $connector->getNameSeparators();
-
-      foreach( $namefields as $field )
+      try
       {
-        $content = trim($record[$field]);
-        if( empty( $content) ) continue;
-
-        // replace separators with bibliograph name separator
-        foreach( $separators as $separator )
-        {
-          $content = str_replace($separator, BIBLIOGRAPH_VALUE_SEPARATOR, $content);
-        }
-
-        $names = explode(BIBLIOGRAPH_VALUE_SEPARATOR, $content );
-        $sortableNames = array();
-        foreach( $names as $name )
-        {
-          $name = trim($name);
-          //$this->debug("Name: $name");
-          try
-          {
-            qcl_import("bibliograph_webapis_identity_AbstractIdentity");
-            $service = bibliograph_webapis_identity_AbstractIdentity::createInstance();
-            $sortableName = $service->getSortableName($name);
-            if( $sortableName === false )
-            {
-              //$this->debug("No match, keeping $name");
-              $sortableName = $name;
-            }
-            else if ( is_string( $sortableName) )
-            {
-              //$this->debug("Sortable name: $sortableName");
-              if( strlen($sortableName) < strlen($name) )
-              {
-                //$this->debug("Not usable, keeping $name");
-                $sortableName = $name;
-              }
-            }
-          }
-          catch(qcl_server_IOException $e)
-          {
-            $this->warn( $e );
-            break 2; // leave all foreach loops
-          }
-          if ( trim($sortableName) )
-          {
-            $sortableNames[] = $sortableName;
-          }
-        }
-
-        // re-join names
-        $record[$field] = join(BIBLIOGRAPH_VALUE_SEPARATOR, $sortableNames ); // todo: this is schema-dependent!
+        $record = $this->convertToSortable($namefields,$separators,$record);
+      }
+      catch(qcl_server_IOException $e)
+      {
+        $this->warn( $e );
       }
     }
-    $shelveId = $this->shelve( $record, $data );
+
     return new qcl_ui_dialog_Popup(
       $this->tr("Importing data. Please wait..." ),
       $this->serviceName(),"importReferenceData",
-      array($shelveId)
+      array($this->shelve( $record, $data ))
     );
+  }
+
+  /**
+   * Private function to convert the names of a record into a sortable format
+   * @param $namefields
+   * @param $separators
+   * @param $record
+   * @return mixed
+   */
+  private function convertToSortable($namefields, $separators, $record)
+  {
+    $engine = $this->getApplication()->getConfigModel()->getKey("bibliograph.sortableName.engine");
+    $service =
+      $engine == "web" ?
+        new bibliograph_webapis_identity_WorldCatIdentities() :
+        new bibliograph_webapis_identity_SimpleNameParser();
+
+    foreach( $namefields as $field )
+    {
+      $content = trim($record[$field]);
+      if( empty( $content) ) continue;
+
+      // replace separators with bibliograph name separator
+      foreach( $separators as $separator )
+      {
+        $content = str_replace($separator, BIBLIOGRAPH_VALUE_SEPARATOR, $content);
+      }
+
+      $sortableNames = array();
+      $names = explode(BIBLIOGRAPH_VALUE_SEPARATOR, $content );
+
+      foreach( $names as $name )
+      {
+        $name = trim($name);
+        //$this->debug("Name: $name");
+
+        $sortableName = $service->getSortableName($name);
+
+        if( $sortableName === false )
+        {
+          //$this->debug("No match, keeping $name");
+          $sortableName = $name;
+        }
+        elseif ( is_string( $sortableName) )
+        {
+          //$this->debug("Sortable name: $sortableName");
+          if( strlen($sortableName) < strlen($name) )
+          {
+            //$this->debug("Not usable, keeping $name");
+            $sortableName = $name;
+          }
+        }
+        elseif ( is_array( $sortableName) )
+        {
+          // for now, use the first
+          $sortableName = array_shift( $sortableName );
+        }
+        else
+        {
+          $sortableName = $name;
+        }
+
+        $sortableNames[] = $sortableName;
+      }
+
+      // re-join names
+      $record[$field] = join(BIBLIOGRAPH_VALUE_SEPARATOR, $sortableNames ); // todo: this is schema-dependent!
+    }
+    return $record;
   }
 
   /**
@@ -392,6 +437,9 @@ class class_bibliograph_plugin_isbnscanner_Service
     list( $record, $data ) = $this->unshelve( $shelveId );
     $record = object2array( $record );
     list( $datasource, $folderId, $connectorName, $response ) = $data;
+
+$this->debug($record);
+$this->debug($data);
 
     /*
      * import

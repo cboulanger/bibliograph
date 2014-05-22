@@ -38,6 +38,12 @@ qx.Class.define("bibliograph.plugin.isbnscanner.Plugin",
        * find menu to attach menu buttons to 
        */
       var app = qx.core.Init.getApplication();
+      var permMgr = app.getAccessManager().getPermissionManager();
+      var confMgr = app.getConfigManager();
+
+      /*
+       * Overlays for import menu
+       */
       var importMenu = app.getWidgetById("importMenu");
       
       /*
@@ -106,6 +112,52 @@ qx.Class.define("bibliograph.plugin.isbnscanner.Plugin",
         listener.stop_listening();
       },this);
 
+
+      /*
+       * Overlays for preference window
+       */
+      var prefsTabView = app.getWidgetById("bibliograph.preferences.tabView");
+      var pluginTab = new qx.ui.tabview.Page( this.tr('Import by ISBN') );
+      //pluginTab.setVisibility("hidden");
+      prefsTabView.add(pluginTab);
+      permMgr.create("reference.import").bind("state", pluginTab, "enabled");
+
+      var gridlayout = new qx.ui.layout.Grid(null, null);
+      gridlayout.setSpacing(5);
+      pluginTab.setLayout(gridlayout);
+      gridlayout.setColumnWidth(0, 200);
+      gridlayout.setColumnFlex(1, 2);
+
+      var msg= this.tr("How should names (e.g. William Shakespeare) be converted to a sortable format (Shakespeare, William)?");
+      var label1 = new qx.ui.basic.Label(msg);
+      label1.setRich(true);
+      pluginTab.add(label1,{row : 0, column : 0 });
+
+      var modelSelectBox = new qx.ui.form.SelectBox();
+      modelSelectBox.setMaxHeight(30);
+      pluginTab.add(modelSelectBox,{ row : 0, column : 1 });
+
+      var qxListItem1 = new qx.ui.form.ListItem(this.tr('Name parser (Fast, Correct for most western names)'));
+      modelSelectBox.add(qxListItem1);
+      qxListItem1.setUserData("value", "parser");
+
+      var qxListItem2 = new qx.ui.form.ListItem(this.tr('Webservice (Slower)'));
+      modelSelectBox.add(qxListItem2);
+      qxListItem2.setUserData("value", "web");
+
+      var prefName = "bibliograph.sortableName.engine";
+      modelSelectBox.addListener("appear", function(e)
+      {
+        var engine = confMgr.getKey(prefName);
+        modelSelectBox.getSelectables().forEach(function(elem) {
+          if (elem.getUserData("value") == engine) modelSelectBox.setSelection([elem]);
+        }, this);
+      }, this);
+      modelSelectBox.addListener("changeSelection", function(e) {
+        if (e.getData().length) confMgr.setKey(prefName, e.getData()[0].getUserData("value"));
+      }, this);
+
+      prefsTabView.setSelection([prefsTabView.getSelectables()[0]]);
     }
   }
 });

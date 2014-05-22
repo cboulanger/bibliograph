@@ -60,6 +60,9 @@ class isbnscanner_plugin
    */
   public function install()
   {
+    $this->getApplication()
+      ->getConfigModel()
+      ->createKeyIfNotExists("bibliograph.sortableName.engine",QCL_CONFIG_TYPE_STRING,true,"parser");
     return $this->tr("Please reload the application to finish installing.");
   }
 

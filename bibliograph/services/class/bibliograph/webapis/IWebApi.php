@@ -18,21 +18,24 @@
 
 ************************************************************************ */
 
-interface bibliograph_webapis_identity_IIdentity
+interface bibliograph_webapis_IWebApi
 {
 
   /**
+   * Returns the name of the Web API
    * @return string
-   * @throws LogicException
+   */
+  function getName();
+
+  /**
+   * Returns the description of the Web API
+   * @return string
    */
   function getDescription();
 
   /**
-   * If the name is unique, return the sortable version, normally: last/family name, first name(s).
-   * If there is no exact match, return an array of possible names.
-   * If no match exists, return false
-   * @param string $name
-   * @return false|string|array
+   * Returns one or several categories this API belongs to
+   * @return array
    */
-  function getSortableName($name);
+  function getCategories();
 }

@@ -20,24 +20,26 @@
 
 qcl_import("bibliograph_webapis_AbstractWebService");
 
-class bibliograph_webapis_identity_WorldCatIdentities
+/**
+ * Class bibliograph_webapis_identity_SimpleNameParser
+ * This is a primitive name parser which takes the last word of the string as the last name,
+ * appends a comma, and then the rest of the string. This works only for the majority of english and
+ * German names, but not for non-western or compound names. Must be replaced by a more sophisticated
+ * solution.
+ */
+class bibliograph_webapis_identity_SimpleNameParser
 extends bibliograph_webapis_AbstractWebService
 {
 
   /**
    * @var string
    */
-  protected $name = "WorldCat Identities Webservice";
+  protected $name = "Simple Name Parser";
 
   /**
    * @var array
    */
   protected $categories = array("identity","disambiguate-name");
-
-  /**
-   * @var string
-   */
-  private $url = "http://www.worldcat.org/identities/find?fullName=";
 
   /**
    * If the name is unique, return the sortable version, normally: last/family name, first name(s).
@@ -48,20 +50,7 @@ extends bibliograph_webapis_AbstractWebService
    */
   function getSortableName($name)
   {
-    $url = $this->url . urlencode($name);
-    $xml = $this->getXmlContent( $url );
-    $node = $xml->xpath("match[@type='ExactMatches']");
-    if( is_array($node) && count($node) )
-    {
-      // todo: return similar names as doc sais
-      $sortableName = trim ($node[0]->establishedForm);
-      if ( ! empty( $sortableName ) )
-      {
-        // remove biographic information
-        $sortableName = trim(preg_replace("/[0-9]{4}\w*-(\w*[0-9]{4})?/","",$sortableName));
-        return $sortableName;
-      }
-    }
-    return false;
+    $parts = explode(" ", $name );
+    return array_pop($parts) . ", " . implode(" ", $parts);
   }
 }
