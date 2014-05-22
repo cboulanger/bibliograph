@@ -37,7 +37,8 @@
     "translation",
     "validate-config",
     "validate-manifest",
-    "watch"
+    "watch",
+    "deploy-plugins"
   ],
 
   "default-job" : "source-hybrid",
@@ -99,7 +100,18 @@
 //        "qx.theme.Simple"
 //      ]
 //    },
-    
+
+    "deploy-plugins" :
+    {
+      "copy-files" :
+      {
+        "files"     : ["csl","z3950","isbnscanner"],
+        "source" : "source/class/bibliograph/plugin",
+        "target" : "build/resource/bibliograph/plugin"
+      }
+    },
+
+
     // jobs for source & build version
     "common":
     {
