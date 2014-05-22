@@ -25,7 +25,7 @@
 qx.Class.define("virtualdata.controller.Table", 
 {
   extend : qx.core.Object,
-  include: [ qx.data.controller.MSelection, virtualdata.controller.MLoadingPopup ],
+  include: [ qx.data.controller.MSelection ],
 
   /*
    *****************************************************************************
@@ -52,8 +52,6 @@ qx.Class.define("virtualdata.controller.Table",
     }     
      
     this.__currentRequestIds = [];
-     
-    this.createPopup(); 
   },
 
    /*
@@ -113,7 +111,12 @@ qx.Class.define("virtualdata.controller.Table",
     /**
      * Fired when a block has been loaded from the server
      */
-    "blockLoaded" : "qx.event.type.Data"
+    "blockLoaded" : "qx.event.type.Data",
+
+    /**
+     * Fired when a message should be displayed
+     */
+    "statusMessage" : "qx.event.type.Data"
   },
 
   /*
@@ -285,18 +288,13 @@ qx.Class.define("virtualdata.controller.Table",
       
        delete this.__firstRow;
        
-       /*
-        * show popup centered to table
-        */
-       this.showPopup( 
-          app.tr( "Getting number of rows..." ) /*, this.getTarget()*/ 
-       );
+      this.fireDataEvent("statusMessage", app.tr( "Getting number of rows..." ) );
 
        /*
         * load the row count and pass it to th model
         */
        store.load( marshaler.getMethodGetRowCount(), params, function(){
-         this.hidePopup();
+         this.fireDataEvent( "statusMessage", null );
          this.__rowCount = store.getModel().getRowCount();
          tableModel._onRowCountLoaded( this.__rowCount );
        },this );
@@ -343,10 +341,7 @@ qx.Class.define("virtualdata.controller.Table",
         */
        var params = [firstRow, lastRow, requestId].concat( marshaler.getQueryParams() );
          
-       /*
-        * show popup
-        */
-       this.showPopup( app.tr(
+       this.fireDataEvent("statusMessage", app.tr(
           "Loading rows %1 - %2 of %3 ...",
           firstRow, Math.min( lastRow, this.__rowCount), this.__rowCount 
         ) /*,this.getTarget() */);
@@ -358,8 +353,8 @@ qx.Class.define("virtualdata.controller.Table",
         */
        store.load( marshaler.getMethodGetRowData(), params, function()
        {
-        
-        this.hidePopup();
+
+         this.fireDataEvent("statusMessage",null);
         
         /*
          * check data

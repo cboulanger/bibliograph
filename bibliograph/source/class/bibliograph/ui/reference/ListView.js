@@ -23,7 +23,6 @@
 qx.Class.define("bibliograph.ui.reference.ListView",
 {
   extend : qx.ui.container.Composite,
-  include : [qcl.ui.MLoadingPopup],
 
   /*
   *****************************************************************************
@@ -211,7 +210,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
     qx.event.message.Bus.subscribe("folder.reload", this._on_reloadFolder, this);
     qx.event.message.Bus.subscribe("reference.changeData", this._on_changeReferenceData, this);
     qx.event.message.Bus.subscribe("reference.removeFromFolder", this._on_removeRows, this);
-    this.createPopup()
+
   },
 
   /*
@@ -440,6 +439,8 @@ qx.Class.define("bibliograph.ui.reference.ListView",
     ---------------------------------------------------------------------------
     */
 
+
+
     /**
      * Checks whether the table layout has to be created or recreated
      * due to changes in the datasource model. Loads table layout
@@ -482,12 +483,12 @@ qx.Class.define("bibliograph.ui.reference.ListView",
       this.setModelType(modelType);
       this.setServiceName(serviceName);
       this.__loadingTableStructure = true;
-      this.showPopup(this.tr("Loading table ..."));
+      this.showMessage(this.tr("Loading table ..."));
 
       //console.log([this.getServiceName(), this.getDatasource(), this.getModelType() ]);
       this.getApplication().getRpcManager().execute(this.getServiceName(), "getTableLayout", [this.getDatasource(), this.getModelType()], function(data)
       {
-        this.hidePopup();
+        this.showMessage("");
 
         /*
          * create the table
@@ -574,6 +575,11 @@ qx.Class.define("bibliograph.ui.reference.ListView",
        */
       var controller = new virtualdata.controller.Table(table, store);
       this.setController(controller);
+
+      // show status messages
+      controller.addListener("statusMessage", function(e){
+        this.showMessage(e.getData());
+      }, this);
 
       /*
        * buttons for add menu
@@ -709,9 +715,6 @@ qx.Class.define("bibliograph.ui.reference.ListView",
       //console.log([table,data,row]);
     },
 
-
-
-
     /**
      * Called when the selection in the table changes
      */
@@ -837,6 +840,21 @@ qx.Class.define("bibliograph.ui.reference.ListView",
        API METHODS
     ---------------------------------------------------------------------------
     */
+
+    /**
+     * Shows a status message
+     * @todo change the name
+     * @param msg
+     */
+    showMessage : function(msg)
+    {
+      this._statusLabel.setValue(msg);
+    },
+
+    /**
+     *
+     * @returns {boolean}
+     */
     isTableReady : function() {
       return this.__tableReady;
     },
@@ -1064,9 +1082,9 @@ qx.Class.define("bibliograph.ui.reference.ListView",
       var type = this.getModelType();
       var store = this.getStore();
       this.getApplication().setModelId(0);
-      this.showPopup(this.tr("Processing request..."));
-      store.execute(action + "References", [datasource, folderId, targetFolderId, selectedIds], function() {
-        this.hidePopup();
+      this.getApplication().showPopup(this.tr("Processing request..."));
+      this.getApplication().execute(action + "References", [datasource, folderId, targetFolderId, selectedIds], function() {
+        this.getApplication().hidePopup();
       }, this);
     },
 
@@ -1077,9 +1095,9 @@ qx.Class.define("bibliograph.ui.reference.ListView",
     {
       var datasource = this.getDatasource();
       var selectedIds = this.getSelectedIds();
-      this.showPopup(this.tr("Processing request..."));
+      this.getApplication().showPopup(this.tr("Processing request..."));
       this.getApplication().getRpcManager().execute("bibliograph.export", "exportReferencesDialog", [datasource, null, selectedIds], function() {
-        this.hidePopup();
+        this.getApplication().hidePopup();
       }, this);
     },
 
@@ -1090,9 +1108,9 @@ qx.Class.define("bibliograph.ui.reference.ListView",
     {
       var datasource = this.getDatasource();
       var folderId = this.getFolderId();
-      this.showPopup(this.tr("Processing request..."));
+      this.getApplication().showPopup(this.tr("Processing request..."));
       this.getApplication().getRpcManager().execute("bibliograph.export", "exportReferencesDialog", [datasource, folderId, null], function() {
-        this.hidePopup();
+        this.getApplication().hidePopup();
       }, this);
     },
 
@@ -1104,9 +1122,9 @@ qx.Class.define("bibliograph.ui.reference.ListView",
       var datasource = this.getDatasource();
       var folderId = this.getFolderId();
       var selectedIds = this.getSelectedIds();
-      this.showPopup(this.tr("Processing request..."));
+      this.getApplication().showPopup(this.tr("Processing request..."));
       this.getApplication().getRpcManager().execute("bibliograph.reference", "findReplaceDialog", [datasource, folderId, selectedIds], function() {
-        this.hidePopup();
+        this.getApplication().hidePopup();
       }, this);
     },
     dummy : null

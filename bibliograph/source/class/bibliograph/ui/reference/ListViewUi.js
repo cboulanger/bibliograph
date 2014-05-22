@@ -273,12 +273,11 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
        * Status bar
        */
       var statusLabel = new qx.ui.basic.Label(null);
+      this._statusLabel = statusLabel;
       statusLabel.setTextColor("#808080");
       statusLabel.setMargin(5);
       menuBar.add(statusLabel);
-      this.bind("store.model.statusText", statusLabel, "value", {
-
-      });
+      this.bind("store.model.statusText", statusLabel, "value");
       statusLabel.addListener("changeValue", function(e) {
         qx.util.TimerManager.getInstance().start(function(value) {
           if (statusLabel.getValue() == value)statusLabel.setValue("");
