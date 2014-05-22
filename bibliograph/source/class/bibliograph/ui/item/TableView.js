@@ -21,7 +21,6 @@
 qx.Class.define("bibliograph.ui.item.TableView",
 {
   extend : qx.ui.container.Composite,
-  include : [qcl.ui.MLoadingPopup],
 
   /*
     *****************************************************************************
@@ -40,7 +39,6 @@ qx.Class.define("bibliograph.ui.item.TableView",
   construct : function()
   {
     this.base(arguments);
-    this.createPopup();
   },
 
   /*
@@ -51,10 +49,10 @@ qx.Class.define("bibliograph.ui.item.TableView",
   members :
   {
     /*
-        ---------------------------------------------------------------------------
-           EVENT HANDLERS
-        ---------------------------------------------------------------------------
-        */
+    ---------------------------------------------------------------------------
+       EVENT HANDLERS
+    ---------------------------------------------------------------------------
+    */
 
     /**
      * TODOC
@@ -71,17 +69,12 @@ qx.Class.define("bibliograph.ui.item.TableView",
       }
     },
 
-    /*
-        ---------------------------------------------------------------------------
-           INTERNAL METHODS
-        ---------------------------------------------------------------------------
-        */
 
     /*
-        ---------------------------------------------------------------------------
-           API METHODS
-        ---------------------------------------------------------------------------
-        */
+    ---------------------------------------------------------------------------
+       API METHODS
+    ---------------------------------------------------------------------------
+    */
 
     /**
      * TODOC
@@ -101,11 +94,11 @@ qx.Class.define("bibliograph.ui.item.TableView",
         qx.event.Timer.once(function() {
           if (id == app.getModelId())
           {
-            this.showPopup(this.tr("Loading data..."));
+            app.showPopup(this.tr("Loading data..."));
             app.getRpcManager().execute("bibliograph.reference", "getHtml", [app.getDatasource(), id], function(data)
             {
               this.viewPane.setHtml(data.html);
-              this.hidePopup();
+              app.hidePopup();
             }, this);
           }
         }, this, 500);

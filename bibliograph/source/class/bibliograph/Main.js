@@ -248,7 +248,6 @@ qx.Class.define("bibliograph.Main",
        * which would otherwise be overwritten
        */
       this.__itemView = this.getStateManager().getState("itemView");
-      this.__selectedIds = this.getStateManager().getState("selectedIds");
       this.__folderId = this.getStateManager().getState("folderId");
       this.__query = this.getStateManager().getState("query");
       this.__modelId = this.getStateManager().getState("modelId");
@@ -606,7 +605,6 @@ qx.Class.define("bibliograph.Main",
     {
       var stmgr = this.getStateManager()
       stmgr.setState("modelId", 0);
-      stmgr.setState("selectedIds", []);
       if (value)
       {
         stmgr.setState("folderId", value);
@@ -695,11 +693,7 @@ qx.Class.define("bibliograph.Main",
      * @return {void}
      */
     _applySelectedIds : function(value, old) {
-//      if (value.length) {
-//        this.getStateManager().setState("selectedIds", value);
-//      } else {
-//        this.getStateManager().removeState("selectedIds");
-//      }
+      //
     },
 
     /**

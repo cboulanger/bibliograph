@@ -358,23 +358,18 @@ qx.Class.define("bibliograph.ui.reference.ListView",
      */
     _applyModelId : function(value, old, counter)
     {
-      counter = counter ||0;
+      if( counter == "modelId")
+      {
+        counter = 0;
+      }
 
       //console.log("Model id changed to " + value);
       if( value && value == this.getModelId() )
       {
-        //console.log("Trying to select id " + value);
-        if ( this.isTableReady()  )
+        //console.log("Trying to select id " + value + ", attempt " + counter);
+        if ( ( ! this.isTableReady() || this._selectIds( [value] ) === false) && counter < 10 )
         {
-          if( this._selectIds([value]) )
-          {
-            return; // successful
-          }
-        }
-        else if (counter < 10 )
-        {
-          // otherwise, repeat after 1s until max 10 times
-          qx.lang.Function.delay(this._applyModelId,1000,this, value, old, ++counter );
+          qx.lang.Function.delay(this._applyModelId, 1000, this, value, old, ++counter );
         }
       }
     },
@@ -409,7 +404,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
       var table = this.getTable();
       var selectionModel = table.getSelectionModel();
 
-      //selectionModel.resetSelection();
+      selectionModel.resetSelection();
       this.__ignoreChangeSelection = true;
 
       ids.forEach(function(id){
@@ -422,7 +417,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
         }
         else
         {
-          //this.info("Cannot select row with id " + id + ". Data not loaded yet.");
+          //console.log("Cannot select row with id " + id + ". Data not loaded yet.");
           this.__selectedIds = null;
         }
       },this);
@@ -1081,10 +1076,11 @@ qx.Class.define("bibliograph.ui.reference.ListView",
       var selectedIds = this.getSelectedIds();
       var type = this.getModelType();
       var store = this.getStore();
-      this.getApplication().setModelId(0);
-      this.getApplication().showPopup(this.tr("Processing request..."));
-      this.getApplication().execute(action + "References", [datasource, folderId, targetFolderId, selectedIds], function() {
-        this.getApplication().hidePopup();
+      var app = this.getApplication();
+      app.setModelId(0);
+      app.showPopup(this.tr("Processing request..."));
+      app.getRpcManager().execute(action + "References", [datasource, folderId, targetFolderId, selectedIds], function() {
+        app.hidePopup();
       }, this);
     },
 
@@ -1095,9 +1091,10 @@ qx.Class.define("bibliograph.ui.reference.ListView",
     {
       var datasource = this.getDatasource();
       var selectedIds = this.getSelectedIds();
-      this.getApplication().showPopup(this.tr("Processing request..."));
-      this.getApplication().getRpcManager().execute("bibliograph.export", "exportReferencesDialog", [datasource, null, selectedIds], function() {
-        this.getApplication().hidePopup();
+      var app = this.getApplication();
+      app.showPopup(this.tr("Processing request..."));
+      app.getRpcManager().execute("bibliograph.export", "exportReferencesDialog", [datasource, null, selectedIds], function() {
+        app.hidePopup();
       }, this);
     },
 
@@ -1108,9 +1105,10 @@ qx.Class.define("bibliograph.ui.reference.ListView",
     {
       var datasource = this.getDatasource();
       var folderId = this.getFolderId();
-      this.getApplication().showPopup(this.tr("Processing request..."));
-      this.getApplication().getRpcManager().execute("bibliograph.export", "exportReferencesDialog", [datasource, folderId, null], function() {
-        this.getApplication().hidePopup();
+      var app = this.getApplication();
+      app.showPopup(this.tr("Processing request..."));
+      app.getRpcManager().execute("bibliograph.export", "exportReferencesDialog", [datasource, folderId, null], function() {
+        app.hidePopup();
       }, this);
     },
 
@@ -1122,9 +1120,10 @@ qx.Class.define("bibliograph.ui.reference.ListView",
       var datasource = this.getDatasource();
       var folderId = this.getFolderId();
       var selectedIds = this.getSelectedIds();
-      this.getApplication().showPopup(this.tr("Processing request..."));
-      this.getApplication().getRpcManager().execute("bibliograph.reference", "findReplaceDialog", [datasource, folderId, selectedIds], function() {
-        this.getApplication().hidePopup();
+      var app = this.getApplication();
+      app.showPopup(this.tr("Processing request..."));
+      app.getRpcManager().execute("bibliograph.reference", "findReplaceDialog", [datasource, folderId, selectedIds], function() {
+        app.hidePopup();
       }, this);
     },
     dummy : null

@@ -38,30 +38,16 @@ qx.Class.define("bibliograph.ui.main.ReferenceListView",
       qxComposite1.add(mainListView, {
         flex : 1
       });
-      this.getApplication().bind("datasource", mainListView, "datasource", {
 
-      });
-      this.getApplication().bind("query", mainListView, "query", {
+      this.getApplication().bind("datasource", mainListView, "datasource");
+      this.getApplication().bind("query", mainListView, "query");
+      this.getApplication().bind("folderId", mainListView, "folderId");
+      this.getApplication().bind("modelType", mainListView, "modelType");
 
-      });
-      this.getApplication().bind("folderId", mainListView, "folderId", {
+      mainListView.bind("modelId", this.getApplication(), "modelId");
+      this.getApplication().bind("modelId", mainListView, "modelId");
 
-      });
-      this.getApplication().bind("modelType", mainListView, "modelType", {
-
-      });
-      mainListView.bind("modelId", this.getApplication(), "modelId", {
-
-      });
-      this.getApplication().bind("modelId", mainListView, "modelId", {
-
-      });
-//      mainListView.bind("selectedIds", this.getApplication(), "selectedIds", {
-//
-//      });
-//      this.getApplication().bind("selectedIds", mainListView, "selectedIds", {
-//
-//      });
+      mainListView.bind("selectedIds", this.getApplication(), "selectedIds");
     }
   }
 });

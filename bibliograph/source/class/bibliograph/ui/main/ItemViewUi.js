@@ -40,15 +40,11 @@ qx.Class.define("bibliograph.ui.main.ItemViewUi",
       referenceEditor.setVisibility("hidden");
       itemViewStack.add(referenceEditor);
       referenceEditor.setUserData("name", "referenceEditor");
-      this.getApplication().bind("datasource", referenceEditor, "datasource", {
 
-      });
-      this.getApplication().bind("modelType", referenceEditor, "modelType", {
+      this.getApplication().bind("datasource", referenceEditor, "datasource");
+      this.getApplication().bind("modelType", referenceEditor, "modelType");
+      this.getApplication().bind("modelId", referenceEditor, "referenceId");
 
-      });
-      this.getApplication().bind("modelId", referenceEditor, "referenceId", {
-
-      });
       var tableView = new bibliograph.ui.item.TableViewUi();
       tableView.setVisibility("hidden");
       itemViewStack.add(tableView);
