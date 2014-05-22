@@ -21,8 +21,6 @@
 qx.Class.define("bibliograph.plugin.csl.FormattedView",
 {
   extend : qx.ui.container.Composite,
-  include : [qcl.ui.MLoadingPopup],
-
   /*
   *****************************************************************************
      PROPERTIES
@@ -40,7 +38,6 @@ qx.Class.define("bibliograph.plugin.csl.FormattedView",
   construct : function()
   {
     this.base(arguments);
-    this.createPopup();
     this.loadStyles();
   },
 
@@ -135,19 +132,23 @@ qx.Class.define("bibliograph.plugin.csl.FormattedView",
           if (ids.length != selIds.length || ids[0] != selIds[0]) {
             return;
           }
-          this.showPopup(this.tr("Generate formatted citations ..."));
+          app.showPopup(this.tr("Generate formatted citations ..."));
           app.getRpcManager().execute("bibliograph.plugin.csl.Service", "render", [app.getDatasource(), ids, styleId], function(data)
           {
             this.viewPane.setHtml(data.html);
-            this.hidePopup();
+            app.hidePopup();
           }, this);
         }, this, 500);
       }
     },
+
+    /**
+     * Load the formatted text for the whole folder
+     */
     loadFolder : function()
     {
-      this.showPopup(this.tr("Generate formatted citations ..."));
       var app = this.getApplication();
+      app.showPopup(this.tr("Generate formatted citations ..."));
       var configManager = this.getApplication().getConfigManager();
       var styleId = configManager.getKey("csl.style.default");
       var folderId = app.getFolderId();
@@ -156,7 +157,7 @@ qx.Class.define("bibliograph.plugin.csl.FormattedView",
       app.getRpcManager().execute("bibliograph.plugin.csl.Service", "renderFolder", [app.getDatasource(), folderId, styleId], function(data)
       {
         this.viewPane.setHtml(data.html);
-        this.hidePopup();
+        app.hidePopup();
       }, this);
     },
 
