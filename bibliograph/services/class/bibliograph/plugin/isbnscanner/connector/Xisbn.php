@@ -60,6 +60,7 @@ implements bibliograph_plugin_isbnscanner_IConnector
    * @return array 
    *  Array of associative arrays, containing records matching the isbn with
    *  BibTeX field names. Returns empty array if no match.
+   * @throws qcl_server_IOException
    */ 
   public function getDataByIsbn( $isbn )
   {

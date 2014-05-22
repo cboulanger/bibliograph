@@ -65,6 +65,7 @@ class qcl_server_IOException extends qcl_server_ServiceException{}
  * @param array $opts
  *  Optional data passed to stream_context_create. See
  *  http://de1.php.net/manual/en/function.stream-context-create.php
+ * @throws qcl_server_IOException
  */
 function qcl_server_getHttpContent($url,$opts=null)
 {
@@ -83,6 +84,7 @@ function qcl_server_getHttpContent($url,$opts=null)
  * @param string $url
  *  The URL
  * @return SimpleXMLElement
+ * @throws qcl_server_IOException
  */
 function qcl_server_getXmlContent($url)
 {
@@ -102,6 +104,7 @@ function qcl_server_getXmlContent($url)
  * @param string $url
  *  The URL
  * @return array
+ * @throws qcl_server_IOException
  */
 function qcl_server_getJsonContent($url)
 {

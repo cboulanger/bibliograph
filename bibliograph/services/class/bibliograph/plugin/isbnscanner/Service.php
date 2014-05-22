@@ -171,7 +171,15 @@ class class_bibliograph_plugin_isbnscanner_Service
     list($connectors, $isbn, $data) = $this->unshelve($shelveId);
 
     $connector = $this->getConnectorObject( $connectors[0] );
-    $records = $connector->getDataByIsbn( $isbn );
+
+    try
+    {
+      $records = $connector->getDataByIsbn( $isbn );
+    }
+    catch(qcl_server_IOException $e)
+    {
+      $records = array();
+    }
 
     /*
      * if no result, try next connector
