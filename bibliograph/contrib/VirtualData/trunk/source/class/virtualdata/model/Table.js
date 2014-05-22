@@ -182,6 +182,7 @@ qx.Class.define("virtualdata.model.Table",
      */
     getRowById : function( id )
     {
+      if ( ! this.__idIndex ) return undefined;
       return this.__idIndex[id];
     },    
     
@@ -202,8 +203,12 @@ qx.Class.define("virtualdata.model.Table",
     removeRow : function( rowIndex )
     {
       var rowData = this.getRowData( rowIndex );
-      var idCol = this.getIdColumn();
-      delete this.__idIndex[rowData[idCol]];
+      if ( qx.lang.Type.isObject(rowData) )
+      {
+        var idCol = this.getIdColumn();
+        var id = rowData[idCol];
+        delete this.__idIndex[id];
+      }
       this.base(arguments, rowIndex);
     },
     
@@ -297,7 +302,7 @@ qx.Class.define("virtualdata.model.Table",
     rebuildIndex : function()
     {
       var idCol = this.getIdColumn();
-      this.__idIndex = [];
+      this.__idIndex = {};
       this.iterateCachedRows(function(index,data){
         this.__idIndex[index] = data[idCol];
       },this);

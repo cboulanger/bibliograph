@@ -809,7 +809,8 @@ qx.Class.define("bibliograph.ui.reference.ListView",
          */
         var rows = [];
         data.ids.forEach(function(id) {
-          rows.push(tableModel.getRowById(id))
+          row = tableModel.getRowById(id);
+          if( row !== undefined ) rows.push( row ); // FIXME this is a bug
         });
 
         /*
@@ -818,9 +819,17 @@ qx.Class.define("bibliograph.ui.reference.ListView",
         rows.sort(function(a, b) {
           return b - a
         });
-        rows.forEach(function(row) {
-          tableModel.removeRow(row);
-        });
+
+        if ( rows.length )
+        {
+          rows.forEach(function(row) {
+            tableModel.removeRow(row);
+          });
+        }
+        else
+        {
+          this.reload();
+        }
 
         /*
          * rebuild the row-id index because now rows are missing
@@ -1074,12 +1083,10 @@ qx.Class.define("bibliograph.ui.reference.ListView",
       var datasource = this.getDatasource();
       var folderId = this.getFolderId();
       var selectedIds = this.getSelectedIds();
-      var type = this.getModelType();
-      var store = this.getStore();
       var app = this.getApplication();
       app.setModelId(0);
       app.showPopup(this.tr("Processing request..."));
-      app.getRpcManager().execute(action + "References", [datasource, folderId, targetFolderId, selectedIds], function() {
+      app.getRpcManager().execute("bibliograph.reference", action + "References", [datasource, folderId, targetFolderId, selectedIds], function() {
         app.hidePopup();
       }, this);
     },
