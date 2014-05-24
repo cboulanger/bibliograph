@@ -3,6 +3,8 @@ Release notes
 
 Version 2.1 (May 2014)
 ----------------------
+Lots (really!) of changes, improvements and refactoring under the hood, but backwards-compatible as to database and
+plugins. Contains one new plugin (ISBN-Scanner). Details:
 - upgraded qooxdoo to version 3.5 on the frontend and to PHP 5.3. on the backend
 - removed dependency on qxtransformer during development - it's all pure javascript now
 - clean-up and refactoring of the backend (backwards-incompatible changes of the qcl library).
@@ -10,7 +12,7 @@ Version 2.1 (May 2014)
 Version 2.0 (2011)
 ------------------
 - based on qooxdoo 1.6 (having used every version from qoodoo 0.5 upwards)
-- was not released, but used in production at Humboldt University's Law School
+- was never publicly released, but used in production at Humboldt University's Law School
 - used its own backend library (qcl) and an xml to javascript compiler (qxtransformer).
 
 Version 1.0 (~2006)
@@ -20,4 +22,4 @@ Version 1.0 (~2006)
 
 Version 0.1 (~2003)
 -------------------
-- was a single long PHP file (that's how I learned to code).
+- was a single long PHP file.
