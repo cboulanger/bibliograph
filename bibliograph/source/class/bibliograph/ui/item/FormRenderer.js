@@ -1,22 +1,19 @@
-/* ************************************************************************
+/*******************************************************************************
+ *
+ * Bibliograph: Online Collaborative Reference Management
+ *
+ * Copyright: 2007-2014 Christian Boulanger
+ *
+ * License: LGPL: http://www.gnu.org/licenses/lgpl.html EPL:
+ * http://www.eclipse.org/org/documents/epl-v10.php See the LICENSE file in the
+ * project's top-level directory for details.
+ *
+ * Authors: Christian Boulanger (cboulanger)
+ *
+ ******************************************************************************/
 
-   qooxdoo - the new era of web development
+/*global qx qcl bibliograph*/
 
-   http://qooxdoo.org
-
-   Copyright:
-     2004-2009 1&1 Internet AG, Germany, http://www.1und1.de
-
-   License:
-     LGPL: http://www.gnu.org/licenses/lgpl.html
-     EPL: http://www.eclipse.org/org/documents/epl-v10.php
-     See the LICENSE file in the project's top-level directory for details.
-
-   Authors:
-     * Martin Wittemann (martinwittemann)
-     * Christian Boulanger (cboulanger)
-
-************************************************************************ */
 
 /**
  * Renderer for {@link qx.ui.form.Form}.

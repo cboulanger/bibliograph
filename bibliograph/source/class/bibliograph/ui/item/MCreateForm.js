@@ -16,7 +16,7 @@
 ************************************************************************ */
 
 /**
- *
+ * Mixin to create a form from user data
  */
 qx.Mixin.define("bibliograph.ui.item.MCreateForm",
 {
@@ -53,9 +53,7 @@ qx.Mixin.define("bibliograph.ui.item.MCreateForm",
        */
       var form = new qx.ui.form.Form();
       form._elements = [];
-      form.elements = {
-
-      };
+      form.elements = {};
 
       /*
        * loop through form data array
@@ -169,7 +167,6 @@ qx.Mixin.define("bibliograph.ui.item.MCreateForm",
              else if (!(validator instanceof qx.ui.form.validation.AsyncValidator) && typeof validator != "function") {
               this.error("Invalid validator.");
             }
-
           }
 
           /*
@@ -236,11 +233,6 @@ qx.Mixin.define("bibliograph.ui.item.MCreateForm",
          */
         var label = fieldData.label;
         form.add(formElement, label, validator, key);
-
-        /*
-         * form element is disabled by default
-         */
-        formElement.setEnabled(false);
 
         /*
          * save a reference

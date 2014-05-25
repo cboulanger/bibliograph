@@ -23,7 +23,7 @@
 qx.Class.define("bibliograph.ui.item.ReferenceEditor",
 {
   extend : qx.ui.container.Composite,
-  include : [bibliograph.ui.item.MCreateForm, qcl.ui.MLoadingPopup],
+  include : [bibliograph.ui.item.MCreateForm ],
 
   /*
   *****************************************************************************
@@ -117,7 +117,6 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
     this._forms = {
 
     };
-    this.createPopup();
 
     /*
      * create store and bind the application datasource model's
@@ -129,6 +128,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
 
     /*
      * listen for server messages to update single form fields
+     * todo: I cannot remember what this is for - remove?
      */
     qx.event.message.Bus.getInstance().subscribe("bibliograph/fieldeditor/update", function(e)
     {
@@ -216,6 +216,8 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
        APPLY METHODS
     ---------------------------------------------------------------------------
     */
+
+
     _applyDatasource : function(value, old) {
       if (old) {
         this.formStack.setSelection([]);
@@ -268,7 +270,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
        * show appropriate form in the stack
        */
       this.formStack.setSelection([formData.view]);
-      this._setFormElementsEnabled(reftype, true);
+      this.setEnabled(true);
       this.setVisibility("visible");
     },
 
@@ -277,16 +279,6 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
        INTERNAL METHODS
     ---------------------------------------------------------------------------
     */
-    _setFormElementsEnabled : function(reftype, value) {
-      if (reftype && this.getFormData(reftype)) {
-        // small timeout - why??
-        qx.util.TimerManager.getInstance().start(function() {
-          this.getFormData(reftype).form._elements.forEach(function(element) {
-            element.setEnabled(value);
-          }, this);
-        }, null, this, null, 50);
-      }
-    },
 
     /**
      * Load the reference data and create form if it doesn't exist
@@ -319,19 +311,19 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
        * disable the current form
        */
       if (this.getReferenceType()) {
-        this._setFormElementsEnabled(this.getReferenceType(), false);
+        this.setEnabled(false);
       }
 
       /*
        * load data
        */
-      this.showPopup(this.tr("Loading item data..."));
+      this.showMessage(this.tr("Loading item data..."));
       this.__isLoading = true;
       var datasource = this.getDatasource();
-      this.getStore().execute("getData", [datasource, referenceId], function(data)
+      this.getStore().load("getData", [datasource, referenceId], function(data)
       {
         this.__isLoading = false;
-        this.hidePopup();
+        this.showMessage(null);
         this.setData(data);
         this._populateForm();
       }, this);
@@ -371,26 +363,25 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
         /*
          * enable the form
          */
-        this._setFormElementsEnabled(reftype, true);
+        this.setEnabled(true);
       }/*
        * else, we need to get the form data first
        */
        else
       {
-        /*
-         * @todo cache the form data in a persistent storage
-         */
+         //todo cache the form data in a persistent storage
 
         /*
          * load
          */
-        this.showPopup(this.tr("Loading form data..."));
+        this.showMessage(this.tr("Loading form data..."));
         this.menuBar.setEnabled(false);
 
         /*
          * load form data first
          */
         this.getStore().execute("getFormLayout", [this.getDatasource(), reftype], function(formData) {
+          this.showMessage(null);
           this._createForm(reftype, formData);
         }, this);
       }
@@ -403,7 +394,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
      */
     _createForm : function(reftype, data)
     {
-      this.showPopup(this.tr("Creating form, please wait ..."));
+      this.showMessage(this.tr("Creating form, please wait ..."));
 
       /*
        * form object
@@ -449,7 +440,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
       /*
        * we're done
        */
-      this.hidePopup();
+      this.showMessage(null);
       this.menuBar.setEnabled(true);
     },
 
@@ -458,6 +449,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
      * @param reftype {String} The reference type
      * @param filter {Array|undefined}
      *    Optional array of field names to restrict the update to
+     * @todo this needs to be rewritten from scratch, maybe preventing changes while form is disabled
      */
     _syncFormWithModel : function(reftype, filter)
     {
@@ -473,9 +465,10 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
       {
         var formModel = controller.createModel(true);
         controller.setModel(formModel);
-      }/*
+      }
+
+      /*
        * else, remove change listener while form is populated
-       * @todo rewrite, maybe preventing changes while form is disabled
        */
        else
       {
@@ -489,27 +482,26 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
       var timer = qx.util.TimerManager.getInstance();
       for (var property in data)
       {
-        /*
-         * skip if filter is given and property is not in filter
-         * @todo rewrite with Array.filter or see here:
-         * http://phpjs.org/functions/array_intersect:318
-         */
-        if (filter instanceof Array && filter.indexOf(property) == -1) {
-          continue;
-        }
+        var value       = data[property];
+
+
         var formElement = form.getItems()[property];
 
+        //console.log("Setting field " + property + " to "+value + " in " + formElement + " with filter '" + filter + "'.");
+
         /*
-         * skip data that has no form element
+         * skip if filter is given and property is not in filter
+         */
+        if ( qx.lang.Type.isArray(filter) && filter.indexOf(property) == -1) {
+          continue;
+        }
+
+        /*
+         * skip if no matching form element
          */
         if (!formElement) {
           continue;
         }
-
-        /*
-         * get value
-         */
-        var value = data[property];
 
         /*
          * is it a single selection widget?
@@ -520,7 +512,6 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
 
           /*
            * the child elements have already been loaded
-           * @todo replace when selection binding is implemented
            */
           if (children.length) {
             children.forEach(function(child) {
@@ -531,10 +522,13 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
                 this.__preventDefault = false;
               }
             }, this);
-          }/*
-           * no, we have to wait for them to laod
+          }
+
+          /*
+           * no, we have to wait for them to load
            */
-           else {
+           else
+          {
             this.__deferReattachBubbleEvent++;
             var selectionHandler = qx.lang.Function.bind(function(property)
             {
@@ -557,7 +551,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
                 if (!this.__deferReattachBubbleEvent)
                 {
                   formModel.addListener("changeBubble", this._on_changeBubble, this);
-                  this._setFormElementsEnabled(reftype, true);
+                  this.setEnabled(true);
                 }
               }, null, this, null, 50);
             }, this, property);
@@ -567,10 +561,12 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
              */
             formElement.getUserData("controller").addListenerOnce("changeModel", selectionHandler);
           }
-        }/*
+        }
+
+        /*
          * Are we dealing with a date field?
          */
-         else if (formElement instanceof qx.ui.form.DateField)
+        else if (formElement instanceof qx.ui.form.DateField)
         {
           if (value !== null) {
             if (!value.match(/[0-9]{4}\-[0-9]{2}\-[0-9]{2}/))
@@ -584,14 +580,15 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
             }
           }
           controller.getModel().set(property, value);
-        }/*
+        }
+
+        /*
          * no, simple copy value
          */
          else
         {
           controller.getModel().set(property, value);
         }
-
       }
 
       /*
@@ -600,6 +597,8 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
       if (!this.__deferReattachBubbleEvent) {
         formModel.addListener("changeBubble", this._on_changeBubble, this);
       }
+
+
       bibliograph.ui.item.ReferenceEditor.__preventSave = false;  // @todo
     },
 
@@ -627,6 +626,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
      */
     _on_changeBubble : function(event)
     {
+
       /*
        * data
        */
@@ -634,9 +634,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
       var value = eventData.value;
       var old = eventData.old;
       var name = eventData.name;
-      var data = {
-
-      };
+      var data = {};
 
       /*
        * get value from selection models
@@ -692,16 +690,16 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
            * disable form if reftype changed
            */
           if (name == "reftype" && !this.__preventDefault) {
-            this._setFormElementsEnabled(this.getReferenceType(), false);
+            this.setEnabled(false);
           }
 
           /*
            * save to server
            */
-          this.showPopup(this.tr("Saving..."));
+          this.showMessage(this.tr("Saving..."));
           this.getStore().execute("saveData", [this.getData().datasource, this.getData().referenceId, data], function()
           {
-            this.hidePopup();
+            this.showMessage(null);
 
             /*
              * update data
@@ -752,14 +750,14 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
       qx.util.TimerManager.getInstance().start(function() {
         if (value == target.getValue())
         {
-          this.showPopup(this.tr("Saving..."));
+          this.showMessage(this.tr("Saving..."));
           var data = {
 
           };
           data[name] = value;
           this.getStore().execute("saveData", [this.getDatasource(), this.getReferenceId(), data], function()
           {
-            this.hidePopup();
+            this.showMessage(null);
             this.getData()[name] = value;
           }, this);
         } else
@@ -891,6 +889,15 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
      */
     reload : function() {
       this._load(this.getReferenceId());
+    },
+
+    /**
+     * Shows a status message
+     * @param msg
+     */
+    showMessage : function(msg)
+    {
+      this._statusLabel.setValue(msg);
     }
   }
 });

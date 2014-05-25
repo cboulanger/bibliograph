@@ -32,6 +32,10 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditorUi",
       var qxVbox1 = new qx.ui.layout.VBox(null, null, null);
       var qxComposite1 = this;
       this.setLayout(qxVbox1)
+
+      /*
+       * Top menu bar
+       */
       var qxMenuBar1 = new qx.ui.menubar.MenuBar();
       qxComposite1.add(qxMenuBar1);
       var itemViewTitleLabel = new qx.ui.basic.Label(null);
@@ -48,6 +52,19 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditorUi",
       qxMenuBar1.add(qxSpacer1, {
         flex : 1
       });
+
+      /*
+       * Status label
+       */
+      var statusLabel = new qx.ui.basic.Label(null);
+      this._statusLabel = statusLabel;
+      statusLabel.setTextColor("#808080");
+      statusLabel.setMargin(5);
+      qxMenuBar1.add(statusLabel);
+
+      /*
+       * Stack view
+       */
       var stackView = new qx.ui.container.Stack();
       this.stackView = stackView;
       qxComposite1.add(stackView, {
@@ -59,6 +76,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditorUi",
       mainPage.setLayout(qxVbox2)
       mainPage.setPadding(5);
       stackView.add(mainPage);
+
       var qxScroll1 = new qx.ui.container.Scroll();
       qxScroll1.setScrollbarY("on");
       mainPage.add(qxScroll1, {
@@ -70,11 +88,20 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditorUi",
       formStack.setHeight(500);
       qxScroll1.add(formStack);
       var qxHbox1 = new qx.ui.layout.HBox(5, null, null);
+
+
+      /*
+       * (more) Metatdata stack view
+       */
       var aboutPage = new qx.ui.container.Composite();
       aboutPage.setLayout(qxHbox1)
       aboutPage.setPadding(5);
       stackView.add(aboutPage);
       qxHbox1.setSpacing(5);
+
+      /*
+       * Abstract
+       */
       var qxVbox3 = new qx.ui.layout.VBox(5, null, null);
       var qxComposite2 = new qx.ui.container.Composite();
       qxComposite2.setLayout(qxVbox3)
@@ -95,6 +122,10 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditorUi",
       qxTextarea1.addListener("changeValue", function(e) {
         this._on_metadata_changeValue("abstract", e);
       }, this);
+
+      /*
+       * Keywords
+       */
       var qxVbox4 = new qx.ui.layout.VBox(5, null, null);
       var qxComposite3 = new qx.ui.container.Composite();
       qxComposite3.setLayout(qxVbox4)
@@ -124,6 +155,10 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditorUi",
         }, this)
       });
       store.bind("model", controller, "model");
+
+      /*
+       * Notes
+       */
       var qxVbox5 = new qx.ui.layout.VBox(5, null, null);
       var qxComposite4 = new qx.ui.container.Composite();
       qxComposite4.setLayout(qxVbox5)
@@ -145,6 +180,10 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditorUi",
         this._on_metadata_changeValue("note", e);
       }, this);
       var qxVbox6 = new qx.ui.layout.VBox(5, null, null);
+
+      /*
+       * Contents
+       */
       var contentsPage = new qx.ui.container.Composite();
       contentsPage.setLayout(qxVbox6)
       contentsPage.setPadding(5);
@@ -163,19 +202,35 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditorUi",
       qxTextarea3.addListener("changeValue", function(e) {
         this._on_metadata_changeValue("contents", e);
       }, this);
+
+      /*
+       * Record info stack view page
+       */
       var recordInfoPage = new bibliograph.ui.item.RecordInfoUi();
       recordInfoPage.setVisibility("hidden");
       stackView.add(recordInfoPage);
       recordInfoPage.setUserData("name", "recordInfo");
+
+      /*
+       * Duplicates stack view page
+       */
       var duplicatesViewPage = new bibliograph.ui.item.DuplicatesViewUi();
       duplicatesViewPage.setVisibility("hidden");
       stackView.add(duplicatesViewPage);
       duplicatesViewPage.setUserData("name", "recordInfo");
+
+      /*
+       * Bottom menu bar
+       */
       var menuBar = new qx.ui.menubar.MenuBar();
       this.menuBar = menuBar;
       menuBar.setEnabled(false);
       menuBar.setHeight(18);
       qxComposite1.add(menuBar);
+
+      /*
+       * Main button
+       */
       var mainButton = new qx.ui.menubar.Button(this.tr('Main'), null, null);
       mainButton.setRich(true);
       mainButton.setLabel(this.tr('Main'));
@@ -183,6 +238,10 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditorUi",
       mainButton.addListener("click", function(e) {
         this._showStackViewPage(mainPage, mainButton)
       }, this);
+
+      /*
+       * About button
+       */
       var aboutButton = new qx.ui.menubar.Button(this.tr('About'), null, null);
       aboutButton.setRich(true);
       aboutButton.setLabel(this.tr('About'));
@@ -190,6 +249,10 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditorUi",
       aboutButton.addListener("click", function(e) {
         this._showStackViewPage(aboutPage, aboutButton)
       }, this);
+
+      /*
+       * Contents button
+       */
       var contentsButton = new qx.ui.menubar.Button(this.tr('Contents'), null, null);
       contentsButton.setRich(true);
       contentsButton.setVisibility("excluded");
@@ -198,6 +261,10 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditorUi",
       contentsButton.addListener("click", function(e) {
         this._showStackViewPage(contentsPage, contentsButton)
       }, this);
+
+      /*
+       * Handler to react to reference Type change
+       */
       this.addListener("changeReferenceType", function(e)
       {
         var refType = e.getData();
@@ -213,6 +280,10 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditorUi",
       qx.core.Init.getApplication().getAccessManager().getPermissionManager().create("reference.remove").bind("state", recordInfoButton, "visibility", {
         converter : qcl.bool2visibility
       });
+
+      /*
+       * Duplicates button
+       */
       var duplicatesButton = new qx.ui.menubar.Button(this.tr('Duplicates'), null, null);
       duplicatesButton.setRich(true);
       duplicatesButton.setLabel(this.tr('Duplicates'));
