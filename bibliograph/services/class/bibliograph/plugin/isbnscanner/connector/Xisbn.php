@@ -141,7 +141,7 @@ implements bibliograph_plugin_isbnscanner_IConnector
         }
       }
 
-      // remove words preceeding author name
+      // remove words preceding author name
       foreach($nameTypeRegExp['author'] as $regExp )
       {
         if( preg_match($regExp, $record['author'], $matches ) )
@@ -151,6 +151,8 @@ implements bibliograph_plugin_isbnscanner_IConnector
       }
 
       $record['author'] = preg_replace("/([.,;\s]+)$/","",$record['author']);
+
+      unset($record['url']); // don't import link to Xisbn record
 
       $data[] = $record;
     }
