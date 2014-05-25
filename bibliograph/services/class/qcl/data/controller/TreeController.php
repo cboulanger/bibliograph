@@ -422,7 +422,7 @@ class qcl_data_controller_TreeController
    *
    * @param string $datasource The name of the datasource
    * @param int|array $ids A node id or array of node ids
-   * @param int $max The maximum number of queues to retrieve
+   * @param int $max The maximum number of queues to retrieve. If null, no limit
    * @param bool $recurse Whether recurse into the tree branch
    * @param string $storeId The id of the connected datastore
    * @param string|null $options Optional data, for example, when nodes
@@ -475,7 +475,6 @@ class qcl_data_controller_TreeController
       {
         $childId = array_shift( $childIds );
 
-
         /*
          * get child data
          */
@@ -490,7 +489,7 @@ class qcl_data_controller_TreeController
           continue;
         }
 
-        qcl_assert_array( $childData ); // FIXME assert keys
+        qcl_assert_array( $childData ); // todo assert keys
 
         /*
          * if the child has children itself, load those
@@ -513,6 +512,8 @@ class qcl_data_controller_TreeController
         $nodeArr[] = $childData;
         $counter++;
       }
+
+      // if a node limit is set, check for maximum number of nodes per request
       if ( $max and $counter > $max ) break;
     }
 

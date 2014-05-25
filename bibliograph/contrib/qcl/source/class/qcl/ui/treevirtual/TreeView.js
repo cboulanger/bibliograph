@@ -27,7 +27,6 @@
 qx.Class.define("qcl.ui.treevirtual.TreeView",
 {
   extend : qx.ui.container.Composite,
-  include : [qcl.ui.MLoadingPopup],
 
   /*
   *****************************************************************************
@@ -177,13 +176,13 @@ qx.Class.define("qcl.ui.treevirtual.TreeView",
    },      
    
    /**
-    * The number of nodes that are transmitted in each request
+    * The number of nodes that are transmitted in each request. If null, no limit
     */
    childrenPerRequest :
    {
       check : "Integer",
       nullable : false,
-      init : 50
+      init : null
    },
    
    /**
@@ -280,16 +279,13 @@ qx.Class.define("qcl.ui.treevirtual.TreeView",
     qx.event.message.Bus.subscribe("folder.node.delete",  this._deleteNode,this);
     qx.event.message.Bus.subscribe("folder.node.move",    this._moveNode,this);
     qx.event.message.Bus.subscribe("folder.node.reorder", this._reorderNodeChildren,this);
-    
+    qx.event.message.Bus.subscribe("folder.node.select",  this._selectNode,this);
+
     /*
      * drag & drop
      */
     this.setAllowReorderOnly(true);
     
-    /*
-     * pupup
-     */
-    this.createPopup();
   },
   
   /*
@@ -480,10 +476,7 @@ qx.Class.define("qcl.ui.treevirtual.TreeView",
      /*
       * Controller
       */
-     ds.controller = new virtualdata.controller.TreeVirtual( 
-         tree, 
-         ds.store
-     );
+     ds.controller = new virtualdata.controller.TreeVirtual( tree, ds.store );
     
      return ds;
       
@@ -507,9 +500,9 @@ qx.Class.define("qcl.ui.treevirtual.TreeView",
             loadData = true;
           }
           var ds = this._getDatasourceObjects( datasource );
-          this.setTree( ds.treeWidget );
           this.setStore( ds.store );
           this.setController( ds.controller );
+          this.setTree( ds.treeWidget );
   
           if ( doLoad && loadData )
           {
@@ -529,7 +522,8 @@ qx.Class.define("qcl.ui.treevirtual.TreeView",
      _loadTreeData : function( datasource, nodeId )
      {
        datasource = this.getDatasource(); // TODO fix parameter
-       
+
+       var app = qx.core.Init.getApplication();
        var store = this.getStore();
        var tree  = this.getTree();
        var controller = this.getController();
@@ -541,8 +535,8 @@ qx.Class.define("qcl.ui.treevirtual.TreeView",
        store.setModel(null);
        var storeId = store.getStoreId();
        this.clearSelection();
-       
-       this.showPopup("Loading folder data ...", this);
+
+       app.showPopup("Loading folder data ...", this);
        this.__loadingTreeData = true;
 
        /*
@@ -558,7 +552,7 @@ qx.Class.define("qcl.ui.treevirtual.TreeView",
           */
          if ( ! nodeCount )
          {
-            this.hidePopup();
+            app.hidePopup();
             this.__loadingTreeData = false;
             return;
          }
@@ -580,7 +574,7 @@ qx.Class.define("qcl.ui.treevirtual.TreeView",
              controller.remapNodeIds();
              this.__loadingTreeData = false;
              this.fireEvent("loaded");
-             this.hidePopup();
+             app.hidePopup();
              return;
            }
            
@@ -624,7 +618,7 @@ qx.Class.define("qcl.ui.treevirtual.TreeView",
                         && data.queue.length )
                {
                  counter += data.nodeData.length;
-                 this.showPopup("Loading folder data... " +  Math.floor( 100* (counter/nodeCount) ) + "%", this );
+                 app.showPopup("Loading folder data... " +  Math.floor( 100* (counter/nodeCount) ) + "%", this );
                  store.load(
                    this.getChildNodeDataMethod(), 
                    [ datasource, data.queue, this.getChildrenPerRequest(), 
@@ -641,7 +635,7 @@ qx.Class.define("qcl.ui.treevirtual.TreeView",
                 /*
                  * @todo: fire event
                  */
-                this.hidePopup();
+                app.hidePopup();
                 this.__loadingTreeData = false;
                }
 
@@ -660,7 +654,7 @@ qx.Class.define("qcl.ui.treevirtual.TreeView",
                   */
                  this.__loadingTreeData = false;                 
                  this.fireEvent("loaded")
-                 this.hidePopup();
+                 app.hidePopup();
                  
                } // end if
              }, this) )( true );  // end function loadTree
@@ -668,7 +662,7 @@ qx.Class.define("qcl.ui.treevirtual.TreeView",
          }, this ); // end method call this.getCachedTreeData
        }, this ); // end method call store.load
     },
-    
+
     /**
      * Returns the id used to cache tree data in the browser. Defaults
      * to datasource plus user name or anoymous.
@@ -940,10 +934,17 @@ qx.Class.define("qcl.ui.treevirtual.TreeView",
     
     /*
     ---------------------------------------------------------------------------
-       SERVER DATABINDING
+       SERVER DATABINDING EVENT HANDLERS
     ---------------------------------------------------------------------------
     */  
-    
+
+
+    _selectNode : function(e)
+    {
+      this.setNodeId(e.getData());
+    },
+
+
     /**
      * @todo rewrite the cache stuff! if the transaction id doesnt'change,
      * no need to update the cache!
@@ -1178,7 +1179,7 @@ qx.Class.define("qcl.ui.treevirtual.TreeView",
      */
     selectByServerNodeId : function( serverNodeId )
     {
-      if ( this.isLoading() )
+      if ( ! this.getTree() || this.isLoading() )
       {
         this.addListenerOnce("loaded",function(){
           this._selectByServerNodeId(serverNodeId);
@@ -1197,34 +1198,36 @@ qx.Class.define("qcl.ui.treevirtual.TreeView",
      */
     _selectByServerNodeId : function( serverNodeId )
     {
-//      var id    = this.getController().getClientNodeId( serverNodeId );
-//      if ( ! id ) return;
-//      var tree  = this.getTree);
-//      var model = tree.getDataModel();
-//      var node  = tree.nodeGet(id);
-//      
-//      /*
-//       * open the tree so that the node is rendered
-//       */
-//      for (var parentId = node.parentNodeId; parentId; parentId = node.parentNodeId)
-//      {
-//        node = tree.nodeGet(parentId);
-//        model.setState(node, { bOpened : true });
-//      }
-//      model.setData();
-//      
-//      /*
-//       * we need a timeout because tree rendering also uses
-//       * timeouts, so this is not synchronous
-//       */
-//      qx.event.Timer.once(function(){
-//        var row = model.getRowFromNodeId( id );
-//        if( row )
-//        {
-//          this.clearSelection();
-//          tree.getSelectionModel().setSelectionInterval( row, row );
-//        }
-//      },this,500);
+
+      var id    = this.getController().getClientNodeId( serverNodeId );
+      if ( ! id ) return;
+
+      var tree  = this.getTree();
+      var model = tree.getDataModel();
+      var node  = tree.nodeGet(id);
+
+      /*
+       * open the tree so that the node is rendered
+       */
+      for (var parentId = node.parentNodeId; parentId; parentId = node.parentNodeId)
+      {
+        node = tree.nodeGet(parentId);
+        model.setState(node, { bOpened : true });
+      }
+      model.setData();
+
+      /*
+       * we need a timeout because tree rendering also uses
+       * timeouts, so this is not synchronous
+       */
+      qx.event.Timer.once(function(){
+        var row = model.getRowFromNodeId( id );
+        if( row )
+        {
+          this.clearSelection();
+          tree.getSelectionModel().setSelectionInterval( row, row );
+        }
+      },this,500);
 
     },
     
