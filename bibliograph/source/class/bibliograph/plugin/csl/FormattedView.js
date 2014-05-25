@@ -39,6 +39,8 @@ qx.Class.define("bibliograph.plugin.csl.FormattedView",
   {
     this.base(arguments);
     this.loadStyles();
+    this.getApplication().addListener("changeSelectedIds", this.loadHtml, this);
+    this.addListener("appear", this._on_appear, this);
   },
 
   /*
@@ -87,7 +89,7 @@ qx.Class.define("bibliograph.plugin.csl.FormattedView",
      * Load the html code of the formatted reference which are currently
      * selected in the listview
      */
-    loadHtml : function()
+    loadHtml : function(value)
     {
       var app = this.getApplication();
       var configManager = this.getApplication().getConfigManager();
@@ -99,10 +101,17 @@ qx.Class.define("bibliograph.plugin.csl.FormattedView",
       /*
        * clear if no selection
        */
-      if (!ids.length)
+      if ( ids.length == 0 )
       {
-        this.viewPane.setHtml("");
-        return;
+        if( app.getModelId() )
+        {
+          ids = [app.getModelId()];
+        }
+        else
+        {
+          this.viewPane.setHtml("");
+          return;
+        }
       }
 
       /*
@@ -129,14 +138,20 @@ qx.Class.define("bibliograph.plugin.csl.FormattedView",
           var selIds = app.getSelectedIds().map(function(value) {
             return parseInt(value);
           }, this);
+          if( selIds.length==0 && app.getModelId() )
+          {
+            selIds = [app.getModelId()];
+          }
+
           if (ids.length != selIds.length || ids[0] != selIds[0]) {
             return;
           }
-          app.showPopup(this.tr("Generate formatted citations ..."));
+
+          this.setEnabled(false);
           app.getRpcManager().execute("bibliograph.plugin.csl.Service", "render", [app.getDatasource(), ids, styleId], function(data)
           {
             this.viewPane.setHtml(data.html);
-            app.hidePopup();
+            this.setEnabled(true);
           }, this);
         }, this, 500);
       }

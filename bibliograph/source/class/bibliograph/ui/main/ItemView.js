@@ -57,9 +57,7 @@ qx.Class.define("bibliograph.ui.main.ItemView",
   construct : function()
   {
     this.base(arguments);
-    this._itemViews = {
-
-    };
+    this._itemViews = {};
   },
 
   /*

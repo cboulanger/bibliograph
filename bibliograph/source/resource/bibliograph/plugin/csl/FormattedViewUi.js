@@ -29,6 +29,9 @@ qx.Class.define("bibliograph.plugin.csl.FormattedViewUi",
   members : {
     __qxtCreateUI : function()
     {
+      /*
+       * View
+       */
       var qxVbox1 = new qx.ui.layout.VBox(null, null, null);
       var qxComposite1 = this;
       this.setLayout(qxVbox1)
@@ -41,9 +44,9 @@ qx.Class.define("bibliograph.plugin.csl.FormattedViewUi",
         flex : 1
       });
 
-      this.getApplication().addListener("changeSelectedIds", this.loadHtml, this);
-
-      viewPane.addListener("appear", this._on_appear, this);
+      /*
+       * Menu bar
+       */
       var menuBar = new qx.ui.menubar.MenuBar();
       this.menuBar = menuBar;
       menuBar.setHeight(18);

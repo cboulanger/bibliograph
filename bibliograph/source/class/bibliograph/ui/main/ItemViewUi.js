@@ -31,24 +31,38 @@ qx.Class.define("bibliograph.ui.main.ItemViewUi",
       this.getApplication().addListener("changeModelId", function(e) {
         this.setVisibility(e.getData() ? "visible" : "hidden");
       }, this);
+
+      /*
+       * stack view
+       */
       var itemViewStack = new qx.ui.container.Stack();
       this.itemViewStack = itemViewStack;
       itemView.add(itemViewStack, {
         flex : 1
       });
+
+      /*
+       * reference editor
+       */
       var referenceEditor = new bibliograph.ui.item.ReferenceEditorUi();
       referenceEditor.setVisibility("hidden");
       itemViewStack.add(referenceEditor);
       referenceEditor.setUserData("name", "referenceEditor");
-
       this.getApplication().bind("datasource", referenceEditor, "datasource");
       this.getApplication().bind("modelType", referenceEditor, "modelType");
       this.getApplication().bind("modelId", referenceEditor, "referenceId");
 
+      /*
+       * display of reference as a table
+       */
       var tableView = new bibliograph.ui.item.TableViewUi();
       tableView.setVisibility("hidden");
       itemViewStack.add(tableView);
       tableView.setUserData("name", "tableView");
+
+      /*
+       * event handlers
+       */
       qx.event.message.Bus.getInstance().subscribe("authenticated", this.toggleReferenceView, this)
       qx.event.message.Bus.getInstance().subscribe("logout", function(e) {
         this.setView(null);
