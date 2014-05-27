@@ -4,7 +4,6 @@ Todos
 Frontend
 --------
 - Bug: Translations missing
-- Bug: Moving references doesn't work
 - Bug: Autocomplete doesn't work
 - Bug: disable clicking on column header in reference list since it breaks the view and cannot be implemented easily
 anyways.

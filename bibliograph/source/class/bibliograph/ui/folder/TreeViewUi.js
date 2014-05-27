@@ -185,6 +185,10 @@ qx.Class.define("bibliograph.ui.folder.TreeViewUi",
         this.clearTreeCache();
         this.reload();
       }, this);
+
+      /*
+       * Status label
+       */
       var _statusLabel = new qx.ui.basic.Label(null);
       this._statusLabel = _statusLabel;
       _statusLabel.setPadding(3);

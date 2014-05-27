@@ -202,7 +202,10 @@ qx.Class.define("qcl.ui.dialog.Dialog",
         {
           case "alert":
           case "confirm":
-            widget._okButton.focus();
+              try {
+                widget._okButton.focus();
+              } catch(e){}
+
         }
       },1000,this);
     }

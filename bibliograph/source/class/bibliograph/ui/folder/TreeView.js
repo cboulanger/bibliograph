@@ -121,8 +121,8 @@ qx.Class.define("bibliograph.ui.folder.TreeView",
         this.hidePopup();
       }, this);
     },
-    
-    
+
+
     /**
      * Dialog to confim a folder move
      */
@@ -173,6 +173,31 @@ qx.Class.define("bibliograph.ui.folder.TreeView",
         }
       }, this));
     },
+
+    /**
+     * Shows a status message
+     * @param msg
+     */
+    showMessage : function(msg)
+    {
+      this._statusLabel.setValue(msg);
+    },
+
+    /**
+     * Shows a popup message
+     * @param msg
+     */
+    showPopup : function(msg){
+      this.getApplication().showPopup(msg);
+    },
+
+    /**
+     * Hides the popup message
+     */
+    hidePopup : function(){
+      this.getApplication().hidePopup();
+    },
+
     endOfClass : true
   }
 });

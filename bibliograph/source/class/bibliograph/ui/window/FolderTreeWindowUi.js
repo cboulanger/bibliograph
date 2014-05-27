@@ -35,20 +35,29 @@ qx.Class.define("bibliograph.ui.window.FolderTreeWindowUi",
       folderTreeWindow.setCaption("Please select a folder");
       var qxGrow1 = new qx.ui.layout.Grow();
       folderTreeWindow.setLayout(qxGrow1);
+
+      // blocker
+      var root = qx.core.Init.getApplication().getRoot();
+      this.__blocker = new qx.ui.core.Blocker(root);
+      this.__blocker.setOpacity( 0.5 );
+      this.__blocker.setColor( "black" );
+
+      // events
       folderTreeWindow.addListener("appear", function(e)
       {
         this.center();
-        var root = this.getApplicationRoot();
-        root.setBlockerOpacity(0.5);
-        root.setBlockerColor("black");
-        root.blockContent(this.getZIndex() - 1);
+        this.__blocker.blockContent( this.getZIndex() - 1 );
       }, this);
+
       folderTreeWindow.addListener("disappear", function(e) {
-        this.getApplicationRoot().unblockContent();
+        this.__blocker.unblock();
       }, this);
+
       qx.event.message.Bus.getInstance().subscribe("logout", function(e) {
         folderTreeWindow.close()
       }, this)
+
+      // tree widget
       var treeWidget = new qcl.ui.treevirtual.TreeView();
       this.treeWidget = treeWidget;
       treeWidget.setServiceName("bibliograph.folder");
@@ -58,6 +67,7 @@ qx.Class.define("bibliograph.ui.window.FolderTreeWindowUi",
       treeWidget.addListener("appear", function(e) {
         this.treeWidget.setDatasource(this.getApplication().getDatasource());
       }, this);
+
       var qxVbox1 = new qx.ui.layout.VBox(5, null, null);
       qxVbox1.setSpacing(5);
       treeWidget.setLayout(qxVbox1);
@@ -74,7 +84,9 @@ qx.Class.define("bibliograph.ui.window.FolderTreeWindowUi",
       qxComposite1.setLayout(qxHbox1)
       treeWidget.add(qxComposite1);
       qxHbox1.setSpacing(5);
-      var qxButton1 = new qx.ui.form.Button(null, "bibliograph/icon/button-reload.png", null);
+
+      // Reload
+      var qxButton1 = new qx.ui.form.Button();
       qxButton1.setIcon("bibliograph/icon/button-reload.png");
       qxComposite1.add(qxButton1);
       qxButton1.addListener("execute", function(e)
@@ -82,17 +94,20 @@ qx.Class.define("bibliograph.ui.window.FolderTreeWindowUi",
         this.treeWidget.clearTreeCache();
         this.treeWidget.reload();
       }, this);
-      var qxButton2 = new qx.ui.form.Button(this.tr('Cancel'), null, null);
+
+      // Cancel
+      var qxButton2 = new qx.ui.form.Button();
       qxButton2.setLabel(this.tr('Cancel'));
       qxComposite1.add(qxButton2);
       qxButton2.addListener("execute", function(e) {
         this.hide();
       }, this);
-      var qxButton3 = new qx.ui.form.Button(this.tr('Select'), null, null);
+
+      // Select
+      var qxButton3 = new qx.ui.form.Button();
       qxButton3.setLabel(this.tr('Select'));
       qxComposite1.add(qxButton3);
-      qxButton3.addListener("execute", function(e)
-      {
+      qxButton3.addListener("execute", function(e){
         this.hide();
         this.fireDataEvent("nodeSelected", treeWidget.getSelectedNode());
       }, this);
