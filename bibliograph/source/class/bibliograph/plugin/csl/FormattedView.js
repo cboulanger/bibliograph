@@ -123,7 +123,7 @@ qx.Class.define("bibliograph.plugin.csl.FormattedView",
       this.__lastIds = ids;
 
       /*
-       * show with a small timeout
+       * show with a small timeout to avoid too many requests
        */
       if (this.isVisible() && app.getDatasource()) {
         qx.event.Timer.once(function()
@@ -148,11 +148,16 @@ qx.Class.define("bibliograph.plugin.csl.FormattedView",
           }
 
           this.setEnabled(false);
-          app.getRpcManager().execute("bibliograph.plugin.csl.Service", "render", [app.getDatasource(), ids, styleId], function(data)
-          {
-            this.viewPane.setHtml(data.html);
-            this.setEnabled(true);
-          }, this);
+          this.viewPane.setHtml("");
+          app.getRpcManager().execute(
+              "bibliograph.plugin.csl.Service", "render",
+              [app.getDatasource(), ids, styleId],
+              function(data)
+              {
+                this.viewPane.setHtml(data && data.html ? data.html : "");
+                this.setEnabled(true);
+              }, this);
+
         }, this, 500);
       }
     },
@@ -163,17 +168,20 @@ qx.Class.define("bibliograph.plugin.csl.FormattedView",
     loadFolder : function()
     {
       var app = this.getApplication();
-      app.showPopup(this.tr("Generate formatted citations ..."));
       var configManager = this.getApplication().getConfigManager();
       var styleId = configManager.getKey("csl.style.default");
       var folderId = app.getFolderId();
       if (!folderId)return;
-
-      app.getRpcManager().execute("bibliograph.plugin.csl.Service", "renderFolder", [app.getDatasource(), folderId, styleId], function(data)
-      {
-        this.viewPane.setHtml(data.html);
-        app.hidePopup();
-      }, this);
+      this.viewPane.setHtml(this.tr("Loading formatted citations..."));
+      this.setEnabled(false);
+      app.getRpcManager().execute(
+          "bibliograph.plugin.csl.Service", "renderFolder",
+          [app.getDatasource(), folderId, styleId],
+          function(data)
+          {
+            this.viewPane.setHtml(data && data.html ? data.html : "");
+            this.setEnabled(true);
+          }, this);
     },
 
     /**
