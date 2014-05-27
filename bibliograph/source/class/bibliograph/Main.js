@@ -815,14 +815,6 @@ qx.Class.define("bibliograph.Main",
       qx.event.message.Bus.dispatchByName("logout");
 
       /*
-       * remove application state
-       */
-      var stateMgr = this.getStateManager();
-      stateMgr.setState("folderId", 0);
-      stateMgr.setState("referenceId", 0);
-      stateMgr.removeState("query");
-
-      /*
        * call parent method to log out
        */
       this.showPopup("Logging out ...");
