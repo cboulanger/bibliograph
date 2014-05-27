@@ -285,14 +285,14 @@ qx.Class.define("qcl.data.controller.AutoComplete",
       var tf = this.getTextField();
       if ( old )
       {
-        tf.removeListener("keydown", this._handleTextFieldKeypress,this);
+        tf.removeListener("keypress", this._handleTextFieldKeypress,this);
         tf.removeListener("input",this._on_changeInput,this);
       }      
       
       if ( target )
       {
         this._lastKeyPress = (new Date).valueOf();
-        tf.addListener("keydown", this._handleTextFieldKeypress,this);
+        tf.addListener("keypress", this._handleTextFieldKeypress,this);
         tf.addListener("input",this._on_changeInput,this);
       }
 
@@ -447,6 +447,7 @@ qx.Class.define("qcl.data.controller.AutoComplete",
         }
         catch(e)
         {
+          this.warn(e);
           return;
         }
       }
@@ -461,10 +462,11 @@ qx.Class.define("qcl.data.controller.AutoComplete",
        */
       try
       {
-        var input = qx.lang.String.trim( content.substring( start, end ) );  
+        var input = qx.lang.String.trimLeft(qx.lang.String.trimRight( content.substring( start, end ) ));
       }
       catch(e)
       {
+        this.warn(e);
         return;
       }
       
@@ -473,7 +475,7 @@ qx.Class.define("qcl.data.controller.AutoComplete",
       /*
        * do not start query if only whitespace has been added
        */
-       if ( qx.lang.String.trim( input ) != input )
+       if ( qx.lang.String.trimLeft(qx.lang.String.trimRight( input ) ) !== input )
        {
          //console.log("Only whitespace added ...");
          return;
@@ -627,13 +629,12 @@ qx.Class.define("qcl.data.controller.AutoComplete",
       {
         start = 0;
         end   = content.length;
-        //match = qx.lang.String.trim( content.substring( start, end-1 ) );
       }
       
       /*
        * get text fragment
        */
-      match = qx.lang.String.trim( content.substring( start, end ) ); 
+      match = qx.lang.String.trimLeft(qx.lang.String.trimRight( content.substring( start, end ) ) );
       //console.log ("trying to match response '" +  match + "' with input '" + input  + "'." );
       
       /*

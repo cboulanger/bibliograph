@@ -206,10 +206,14 @@ qx.Mixin.define("bibliograph.ui.item.MCreateForm",
          * autocomplete
          */
         var ac = fieldData.autocomplete;
-        if (ac !== undefined && ac.enabled) {
-          if (!ac.service || !ac.method || !qx.lang.Type.isArray(ac.params)) {
+        if (qx.lang.Type.isObject(ac) && ac.enabled)
+        {
+          if (!ac.service || !ac.method || !qx.lang.Type.isArray(ac.params))
+          {
             this.warn("Invalid autocomplete service data for " + key);
-          } else {
+          }
+          else
+          {
             var controller = new qcl.data.controller.AutoComplete(null, formElement, ac.separator);
             var acStoreId = ac.service + ac.method;
             if (!this._stores[acStoreId])

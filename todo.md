@@ -3,8 +3,8 @@ Todos
 
 Frontend
 --------
+- Bug: Autocomplete doesn't work for Keyword field
 - Bug: Translations missing
-- Bug: Autocomplete doesn't work
 - Bug: disable clicking on column header in reference list since it breaks the view and cannot be implemented easily
 anyways.
 
