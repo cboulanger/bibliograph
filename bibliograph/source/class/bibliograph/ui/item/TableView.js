@@ -63,9 +63,12 @@ qx.Class.define("bibliograph.ui.item.TableView",
     {
       var app = this.getApplication();
       if (app.getDatasource() && app.getModelId()) {
-        app.getRpcManager().execute("bibliograph.reference", "getHtml", [app.getDatasource(), app.getModelId()], function(data) {
-          this.viewPane.setHtml(data.html);
-        }, this);
+        app.getRpcManager().execute(
+            "bibliograph.reference", "getHtml",
+            [app.getDatasource(), app.getModelId()],
+            function(data) {
+              this.viewPane.setHtml(qx.lang.Type.isObject(data) ? data.html : "");
+            }, this);
       }
     },
 
@@ -94,12 +97,15 @@ qx.Class.define("bibliograph.ui.item.TableView",
         qx.event.Timer.once(function() {
           if (id == app.getModelId())
           {
-            app.showPopup(this.tr("Loading data..."));
-            app.getRpcManager().execute("bibliograph.reference", "getHtml", [app.getDatasource(), id], function(data)
-            {
-              this.viewPane.setHtml(data.html);
-              app.hidePopup();
-            }, this);
+            this.setEnabled(false);
+            this.viewPane.setHtml("");
+            app.getRpcManager().execute(
+                "bibliograph.reference", "getHtml",
+                [app.getDatasource(), id],
+                function(data){
+                  this.viewPane.setHtml(qx.lang.Type.isObject(data) ? data.html : "");
+                  this.setEnabled(true);
+                }, this);
           }
         }, this, 500);
       }
