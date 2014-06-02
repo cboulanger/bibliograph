@@ -10,6 +10,5 @@ anyways.
 Backend
 -------
 - Bug: Translations missing
-- Bug: Duplicates detection stopped working
 - Update CiteProc engine
 - Cleanup: Remove all code problems resulting in currently suppressed E_STRICT & E_NOTICE errors

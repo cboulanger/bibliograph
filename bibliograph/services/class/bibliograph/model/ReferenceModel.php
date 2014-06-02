@@ -416,12 +416,14 @@ class bibliograph_model_ReferenceModel
       "basic", "$author $title $year", "fuzzy"
     );
     $table = $queryBehavior->getTableName();
-    $rows = $adapter->fetchAll("
+    $minScore = 10;
+    $sql = "
       SELECT id, $match AS score
       FROM $table
-      WHERE $match > 20
+      WHERE $match > $minScore
       ORDER BY score DESC
-    ");
+    ";
+    $rows = $adapter->fetchAll($sql);
     $ids = array();
     $scores = array();
     foreach( $rows as $row )
