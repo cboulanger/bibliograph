@@ -389,7 +389,7 @@ qx.Class.define("qcl.data.store.JsonRpc",
       /*
        * display a global cursor as long as a request is
        * underway
-       * @todo replace this with a more sophistaced system
+       * @todo replace this with a more sophisticated system
        */
       //qx.core.Init.getApplication().getRoot().setGlobalCursor("wait");
       this.__requestCounter++;
@@ -456,13 +456,18 @@ qx.Class.define("qcl.data.store.JsonRpc",
                 /*
                  * create the class if neccessary
                  */
-                this.getMarshaler().toClass( data, true);
+                if( ! qx.lang.Type.isObject( this.getMarshaler() ) )
+                {
+                  this.warn("Cannot marshal data - no marshaller set!");
+                  return;
+                }
+
+                this.getMarshaler().toClass( data, true );
 
                 /*
                  * create model
                  */
                 var model = this.getMarshaler().toModel(data);
-                
                 /*
                  * tear down old model? doesn't work
                  */
@@ -477,6 +482,7 @@ qx.Class.define("qcl.data.store.JsonRpc",
                  * set the initial data
                  */
                 this.setModel( model );
+
               }
               catch(e)
               {
@@ -495,16 +501,18 @@ qx.Class.define("qcl.data.store.JsonRpc",
              */
             if ( typeof finalCallback == "function" )
             {
-              try
-              {
-                finalCallback.call( context, data );
-              }
-              catch(e)
-              {
-                this.warn("Error in final callback: " + e.message);
-                this.info(qx.dev.StackTrace.getStackTrace().join("\n")); // todo revisit this
-                throw e;
-              }
+              // execute outside of the current stack so callback errors do not break the current execution context
+              qx.lang.Function.delay(finalCallback,0,context,data);
+
+//              try
+//              {
+//                finalCallback.call( context, data );
+//              }
+//              catch(e)
+//              {
+//                this.warn("Error in final callback: " + e.message);
+//                throw e;
+//              }
             }            
           } 
           else 
