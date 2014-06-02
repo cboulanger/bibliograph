@@ -52,7 +52,7 @@ class class_bibliograph_plugin_isbnscanner_Service
     return new qcl_ui_dialog_Prompt(
       $this->tr("Please enter the ISBN:"), /*value*/ "",
       $this->serviceName(),"getReferenceDataByIsbn",
-      array(array($datasource, $folderId)),
+      array($this->shelve($datasource, $folderId)),
       /*require input*/ true, /*autosubmit after 2 seconds*/ 2
     );    
   }
@@ -60,18 +60,14 @@ class class_bibliograph_plugin_isbnscanner_Service
   /**
    * Resolves the ISBN to reference data.
    * @param string $isbn The ISBN
-   * @param array $data Additional data
+   * @param string $shelveId Id of shelved data
    * @return String
    */
-  public function method_getReferenceDataByIsbn( $isbn, $data )
+  public function method_getReferenceDataByIsbn( $isbn, $shelveId )
   {
     $this->requirePermission("reference.import");
 
-    // hack todo fix this!
-    if (! is_array($data) )
-    {
-      return "ABORTED: wrong signature, ignoring request";
-    }
+    list($datasource, $folderId ) = $this->unshelve( $shelveId );
 
     // cancel button
     if (! $isbn )
@@ -86,12 +82,10 @@ class class_bibliograph_plugin_isbnscanner_Service
       "LCVoyager","Xisbn"
     );
 
-    $shelveId = $this->shelve($connectors, $isbn, $data);
-    
     return new qcl_ui_dialog_Popup(
       $this->tr("Contacting webservices to resolve ISBN..."),
       $this->serviceName(), "iterateConnectors",
-      array($shelveId)
+      array($this->shelve( $connectors, $isbn, $datasource, $folderId ))
     );
   }
   
@@ -119,14 +113,14 @@ class class_bibliograph_plugin_isbnscanner_Service
   {  
     $this->requirePermission("reference.import");
 
-    list($connectors, $isbn, $data) = $this->unshelve($shelveId);
+    list($connectors, $isbn, $datasource, $folderId ) = $this->unshelve($shelveId);
 
     if ( ! count($connectors) )
     {
       return new qcl_ui_dialog_Alert(
         $this->tr("Could not find any data for ISBN %s.", $isbn),
         $this->serviceName(),"enterIsbnDialog",
-        $data
+        array( $datasource, $folderId )
       );
     }
     
@@ -135,7 +129,7 @@ class class_bibliograph_plugin_isbnscanner_Service
     return new qcl_ui_dialog_Popup(
       $this->tr("Contacting %s. Please wait...", $connector->getDescription() ),
       $this->serviceName(), "tryConnector",
-      array( $this->shelve( $connectors, $isbn, $data ) )
+      array( $this->shelve( $connectors, $isbn, $datasource, $folderId ) )
     );
   }
 
@@ -168,9 +162,10 @@ class class_bibliograph_plugin_isbnscanner_Service
   {
     $this->requirePermission("reference.import");
 
-    list($connectors, $isbn, $data) = $this->unshelve($shelveId);
+    list( $connectors, $isbn, $datasource, $folderId ) = $this->unshelve($shelveId);
 
-    $connector = $this->getConnectorObject( $connectors[0] );
+    $connectorName = $connectors[0];
+    $connector = $this->getConnectorObject( $connectorName );
 
     try
     {
@@ -187,12 +182,9 @@ class class_bibliograph_plugin_isbnscanner_Service
     if( count($records) == 0 )
     {
       array_shift($connectors);
-      $shelveId = $this->shelve( $connectors, $isbn, $data );
+      $shelveId = $this->shelve( $connectors, $isbn, $datasource, $folderId );
       return $this->method_iterateConnectors( null, $shelveId );
     }
-
-    // remember the connector name
-    $data[] = $connectors[0];
 
     // take only the first entry, ignore others
     $record = $records[0];
@@ -200,7 +192,6 @@ class class_bibliograph_plugin_isbnscanner_Service
     /*
      * check for duplicates
      */
-    $datasource = $data[0];
     $dsModel = $this->getDatasourceModel($datasource);
     $referenceModel = $dsModel->getInstanceOfType("reference");
     $isbn = str_replace("-","",$isbn);
@@ -268,7 +259,7 @@ class class_bibliograph_plugin_isbnscanner_Service
     return new qcl_ui_dialog_Select(
       $msg, $options, true,
       $this->serviceName(),"handleConfirmImport",
-      array( $this->shelve( $record, $data ) )
+      array( $this->shelve( $record, $datasource, $folderId, $connectorName ) )
     );
   }
 
@@ -282,7 +273,7 @@ class class_bibliograph_plugin_isbnscanner_Service
   public function method_handleConfirmImport( $response, $shelveId )
   {
 
-    list( $record, $data ) = $this->unshelve( $shelveId );
+    list( $record, $datasource, $folderId, $connectorName ) = $this->unshelve( $shelveId );
 
     // CANCEL button -> exit
     if( ! $response )
@@ -291,34 +282,30 @@ class class_bibliograph_plugin_isbnscanner_Service
       return "CANCEL";
     }
 
-    list( $datasource, $folderId, $connectorName ) = $data;
-
     // SKIP
     if ( $response == "skip" )
     {
       return $this->method_enterIsbnDialog( $datasource, $folderId );
     }
 
-
-    list( $datasource, $folderId, $connectorName ) = $data;
-    // append response
-    $data[] = $response;
-
     $connector  = $this->getConnectorObject( $connectorName );
     $nameformat = $connector->getNameFormat();
+
+    $shelveId = $this->shelve( $record, $datasource, $folderId, $connectorName, $response );
+
     if( $nameformat & NAMEFORMAT_SORTABLE_FIRST )
     {
       return new qcl_ui_dialog_Popup(
         $this->tr("Importing data. Please wait..." ),
         $this->serviceName(),"importReferenceData",
-        array($this->shelve( $record, $data ))
+        array( $shelveId )
       );
     }
 
     return new qcl_ui_dialog_Popup(
       $this->tr("Converting names. Please wait..." ),
       $this->serviceName(),"convertToSortableNames",
-      array($this->shelve( $record, $data ))
+      array( $shelveId )
     );
   }
 
@@ -333,11 +320,11 @@ class class_bibliograph_plugin_isbnscanner_Service
   {
     $this->requirePermission("reference.import");
 
-    // unpack stored variables
-    list( $record, $data ) = $this->unshelve( $shelveId );
-    $record = object2array( $record );
-    list( $datasource, $folderId, $connectorName, $response ) = $data;
+    // unpack stored variables without deleting it
+    list( $record, $datasource, $folderId, $connectorName, $response ) =
+      $this->unshelve( $shelveId, true );
 
+    $record = object2array( $record );
     $namefields = array("author","editor");
     $connector  = $this->getConnectorObject( $connectorName );
     $nameformat = $connector->getNameFormat();
@@ -358,7 +345,7 @@ class class_bibliograph_plugin_isbnscanner_Service
     return new qcl_ui_dialog_Popup(
       $this->tr("Importing data. Please wait..." ),
       $this->serviceName(),"importReferenceData",
-      array($this->shelve( $record, $data ))
+      array( $shelveId )
     );
   }
 
@@ -442,12 +429,10 @@ class class_bibliograph_plugin_isbnscanner_Service
     $this->requirePermission("reference.import");
 
     // unpack stored variables
-    list( $record, $data ) = $this->unshelve( $shelveId );
-    $record = object2array( $record );
-    list( $datasource, $folderId, $connectorName, $response ) = $data;
+    list( $record, $datasource, $folderId, $connectorName, $response ) =
+      $this->unshelve( $shelveId );
 
-$this->debug($record);
-$this->debug($data);
+    $record = object2array( $record );
 
     /*
      * import
