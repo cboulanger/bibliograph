@@ -30,6 +30,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditorUi",
     __qxtCreateUI : function()
     {
       var qxVbox1 = new qx.ui.layout.VBox(null, null, null);
+      var app = qx.core.Init.getApplication();
       var qxComposite1 = this;
       this.setLayout(qxVbox1)
 
@@ -110,18 +111,10 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditorUi",
       });
       qxVbox3.setSpacing(5);
       var qxLabel1 = new qx.ui.basic.Label(this.tr('Abstract'));
-      qxLabel1.setValue(this.tr('Abstract'));
       qxComposite2.add(qxLabel1);
       var qxTextarea1 = new qx.ui.form.TextArea(null);
-      qxComposite2.add(qxTextarea1, {
-        flex : 1
-      });
-      this.bind("store.model.abstract", qxTextarea1, "value", {
-        converter : this._metadata_observer_converter
-      });
-      qxTextarea1.addListener("changeValue", function(e) {
-        this._on_metadata_changeValue("abstract", e);
-      }, this);
+      qxComposite2.add(qxTextarea1, { flex : 1 });
+      this._setupTextArea(qxTextarea1,"abstract");
 
       /*
        * Keywords
@@ -134,27 +127,12 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditorUi",
       });
       qxVbox4.setSpacing(5);
       var qxLabel2 = new qx.ui.basic.Label(this.tr('Keywords'));
-      qxLabel2.setValue(this.tr('Keywords'));
       qxComposite3.add(qxLabel2);
       var keywordsTextArea = new qx.ui.form.TextArea(null);
-      qxComposite3.add(keywordsTextArea, {
-        flex : 1
-      });
-      this.bind("store.model.keywords", keywordsTextArea, "value", {
-        converter : this._metadata_observer_converter
-      });
-      keywordsTextArea.addListener("changeValue", function(e) {
-        this._on_metadata_changeValue("keywords", e);
-      }, this);
-      var controller = new qcl.data.controller.AutoComplete(null, keywordsTextArea, "\n");
-      var store = new qcl.data.store.JsonRpc(null, "bibliograph.reference");
-      store.setAutoLoadMethod("getAutoCompleteData");
-      controller.bind("input", store, "autoLoadParams", {
-        'converter' : qx.lang.Function.bind(function(input) {
-          return input ? [this.getDatasource(), "keywords", input] : null
-        }, this)
-      });
-      store.bind("model", controller, "model");
+      qxComposite3.add(keywordsTextArea, { flex : 1 });
+
+      this._setupTextArea(keywordsTextArea,"keywords");
+      this._setupAutocomplete(keywordsTextArea,"keywords","\n");
 
       /*
        * Notes
@@ -162,28 +140,19 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditorUi",
       var qxVbox5 = new qx.ui.layout.VBox(5, null, null);
       var qxComposite4 = new qx.ui.container.Composite();
       qxComposite4.setLayout(qxVbox5)
-      aboutPage.add(qxComposite4, {
-        flex : 2
-      });
+      aboutPage.add(qxComposite4, { flex : 2 });
       qxVbox5.setSpacing(5);
       var qxLabel3 = new qx.ui.basic.Label(this.tr('Notes'));
-      qxLabel3.setValue(this.tr('Notes'));
       qxComposite4.add(qxLabel3);
       var qxTextarea2 = new qx.ui.form.TextArea(null);
-      qxComposite4.add(qxTextarea2, {
-        flex : 1
-      });
-      this.bind("store.model.note", qxTextarea2, "value", {
-        converter : this._metadata_observer_converter
-      });
-      qxTextarea2.addListener("changeValue", function(e) {
-        this._on_metadata_changeValue("note", e);
-      }, this);
-      var qxVbox6 = new qx.ui.layout.VBox(5, null, null);
+      qxComposite4.add(qxTextarea2, { flex : 1 });
+
+      this._setupTextArea(qxTextarea2,"note");
 
       /*
        * Contents
        */
+      var qxVbox6 = new qx.ui.layout.VBox(5, null, null);
       var contentsPage = new qx.ui.container.Composite();
       contentsPage.setLayout(qxVbox6)
       contentsPage.setPadding(5);
@@ -193,15 +162,9 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditorUi",
       qxLabel4.setValue(this.tr('Contents'));
       contentsPage.add(qxLabel4);
       var qxTextarea3 = new qx.ui.form.TextArea(null);
-      contentsPage.add(qxTextarea3, {
-        flex : 1
-      });
-      this.bind("store.model.contents", qxTextarea3, "value", {
-        converter : this._metadata_observer_converter
-      });
-      qxTextarea3.addListener("changeValue", function(e) {
-        this._on_metadata_changeValue("contents", e);
-      }, this);
+      contentsPage.add(qxTextarea3, { flex : 1 });
+
+      this._setupTextArea(qxTextarea3,"contents");
 
       /*
        * Record info stack view page

@@ -573,6 +573,8 @@ class bibliograph_service_Reference
    */
   public function method_getAutoCompleteData( $datasource, $field, $input )
   {
+
+    $this->debug(array( $datasource, $field, $input ));
     /*
      * check access
      */
@@ -584,13 +586,17 @@ class bibliograph_service_Reference
      */
     $model = $this->getControlledModel( $datasource );
     $fieldData = $model->getSchemaModel()->getFieldData( $field );
-    $separator = $fieldData['separator'];
+
+    $separator = isset( $fieldData['formData']['autocomplete']['separator']) ?
+      $fieldData['formData']['autocomplete']['separator'] :
+      $fieldData['separator'];
 
     if ( $separator )
     {
       $suggestionValues = $model->getQueryBehavior()->fetchValues($field,array(
         $field => array( "LIKE", "%$input%")
       ));
+
       $suggestions = array();
       foreach( $suggestionValues as $value )
       {

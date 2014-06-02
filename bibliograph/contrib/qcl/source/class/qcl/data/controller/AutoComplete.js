@@ -571,6 +571,7 @@ qx.Class.define("qcl.data.controller.AutoComplete",
      */  
     _handleModelChange : function ()
     {
+
       /*
        * compare the input that was used to query
        * the autocompletion data and the current input

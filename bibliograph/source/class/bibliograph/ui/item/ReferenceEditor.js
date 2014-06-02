@@ -717,138 +717,6 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
       }
     },
 
-    /**
-     * Save changes in the metadata fields (abstract, notes, etc...)
-     * @param name {String}
-     * @param e {qx.event.type.Data}
-     */
-    _on_metadata_changeValue : function(name, e)
-    {
-      if (!name) {
-        this.error("No property name given");
-      }
-      var target = e.getTarget();
-      if (!target) {
-        //console.warn("No valid target!");
-        return;
-      }
-      if (bibliograph.ui.item.ReferenceEditor.__preventSave === true)
-      {
-        //console.warn("Prevent save flag is on!");
-        bibliograph.ui.item.ReferenceEditor.__preventSave = false;
-        return;
-      }
-      var value = e.getData();
-      if (value === null) {
-        return;
-      }
-
-      /*
-       * wait some time before dispatching a request, so that
-       * we're not sending to many
-       */
-      qx.util.TimerManager.getInstance().start(function() {
-        if (value == target.getValue())
-        {
-          this.showMessage(this.tr("Saving..."));
-          var data = {
-
-          };
-          data[name] = value;
-          this.getStore().execute("saveData", [this.getDatasource(), this.getReferenceId(), data], function()
-          {
-            this.showMessage(null);
-            this.getData()[name] = value;
-          }, this);
-        } else
-        {
-          //console.warn("Not saving field '"+ name + "' value has changed");
-        }
-      }, null, this, null, 1000);
-    },
-
-    /**
-     * Used as converter to prevent saving when setting new values
-     */
-    _metadata_observer_converter : function(value)
-    {
-      bibliograph.ui.item.ReferenceEditor.__preventSave = true;
-      return value;
-    },
-
-    /**
-     * Called when the annotation editor becomes visible
-     */
-    _on_annote_appear : function()
-    {
-      if (!this.getReferenceId()) {
-        return;
-      }
-      this._on_annote_changeReferenceId();
-    },
-
-    /**
-     * Called for the annotation editor when the record id changes
-     */
-    _on_annote_changeReferenceId : function()
-    {
-      /*
-       * do nothing if editor is not visible
-       */
-      if (!this.annotationPage.isSeeable()) {
-        return;
-      }
-
-      /*
-       * check if content has changed
-       */
-      var value = this.editor.getValue();
-      var oldValue = this.editor.getUserData("oldValue");
-      var oldId = this.editor.getUserData("oldId");
-      var oldDatasource = this.editor.getUserData("oldDatasource");
-      if (oldId && oldValue != value)
-      {
-        this.getStore().execute("saveData", [oldDatasource, oldId, {
-          "annote" : value
-        }]);
-        this._loadAnnotationEditor();
-      } else
-      {
-        this._loadAnnotationEditor();
-      }
-    },
-
-    /**
-     * Load content of annotation
-     */
-    _loadAnnotationEditor : function()
-    {
-      var datasource = this.getDatasource();
-      var referenceId = this.getReferenceId();
-      this.getApplication().getRpcManager().execute("bibliograph.reference", "getData", [datasource, referenceId, ["annote"]], function(data)
-      {
-        this.editor.setValue(data.annote);
-        this.editor.setUserData("oldValue", data.annote);
-        this.editor.setUserData("oldId", referenceId);
-        this.editor.setUserData("oldDatasource", datasource);
-      }, this);
-    },
-
-    /**
-     * Called when user clicks on "save button"
-     */
-    _on_annote_save : function()
-    {
-      var value = this.editor.getValue();
-      this.getStore().execute("saveData", [this.getDatasource(), this.getReferenceId(), {
-        "annote" : value
-      }], function() {
-        this.editor.setUserData("oldValue", value);
-      }, this);
-    },
-    _on_annote_exit : function() {
-      this._on_annote_save();
-    },
 
     /*
     ---------------------------------------------------------------------------
@@ -868,6 +736,102 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
       button.setUserData("label", button.getLabel());
       button.setLabel("<u>" + button.getLabel() + "<u>");
       this.__button = button;
+    },
+
+    /**
+     * Sets up the TextArea widgets outside the server-generated form
+     * @param {qx.ui.form.TextArea} textarea
+     * @param {String} fieldname
+     * @private
+     */
+    _setupTextArea : function( textarea, fieldname )
+    {
+      var _this = this;
+      // bind the editor's model's store to the textarea's value
+      this.bind("store.model." + fieldname, textarea, "value", {
+        converter : function(value)
+        {
+          // prevent the saving of the new data
+          textarea.__preventSave = true;
+          textarea.__referenceId = _this.getReferenceId();
+          return value;
+        }
+      });
+
+      // setup a listener
+      textarea.addListener("changeValue", function changeValueListener(e)
+      {
+
+        //console.log( "Value of " + fieldname + " has changed to '" + e.getData() + "'");
+
+        // check if value has just been set
+        var textarea = e.getTarget();
+        if (textarea.__preventSave === true)
+        {
+          //console.warn("Prevent save flag is on. Not saving...");
+          textarea.__preventSave = false;
+          return;
+        }
+        if ( textarea.__referenceId != this.getReferenceId() )
+        {
+          //console.warn("Different reference id. Not saving...");
+          return;
+        }
+
+        // get value
+        var value = e.getData();
+        if (value === null) {
+          return;
+        }
+
+        var datasource  = this.getDatasource();
+        var referenceId = this.getReferenceId();
+
+        // wait some time before sending a request
+        qx.lang.Function.delay(function() {
+
+          // check if the id has changed in the meantime
+          if (value !== textarea.getValue() )
+          {
+            //console.warn("Not saving field '"+ name + "' value has changed");
+            return;
+          }
+
+          // save new value
+          this.showMessage(this.tr("Saving..."));
+          var data = {};
+          data[fieldname] = value;
+          this.getStore().execute(
+              "saveData",
+              [datasource, referenceId, data],
+              function() {
+                this.showMessage(null);
+                this.getData()[name] = value;
+              }, this);
+
+        }, 1000, this);
+      }, this);
+    },
+
+    /**
+     * Sets up autocomplete for a standalone TextField widget
+     * @param {qx.ui.form.TextField} widget
+     * @param {String} fieldname
+     * @param {String} separator
+     * @private
+     */
+    _setupAutocomplete : function(widget, fieldname, separator)
+    {
+      var _this = this;
+      var controller = new qcl.data.controller.AutoComplete(null, widget, separator);
+      var store = new qcl.data.store.JsonRpc(null, "bibliograph.reference");
+      store.setAutoLoadMethod("getAutoCompleteData");
+      controller.bind("input", store, "autoLoadParams", {
+        'converter' : function(input) {
+          return input ? [_this.getDatasource(), fieldname, input] : null
+        }
+      });
+      store.bind("model", controller, "model");
     },
 
     /*
