@@ -1628,6 +1628,7 @@ class qcl_data_model_AbstractActiveRecord
    *    Optional model instance or array of model instances on which the link
    *    between this model and the target model depends.
    * @return void
+   * @throws qcl_data_model_Exception if models are not linked
    */
   public function unlinkModel( $targetModel, $dependencies=null )
   {
