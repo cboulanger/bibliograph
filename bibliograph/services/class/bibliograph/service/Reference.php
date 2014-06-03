@@ -19,6 +19,8 @@
 ************************************************************************ */
 
 qcl_import( "qcl_data_controller_TableController" );
+qcl_import("qcl_ui_dialog_Confirm");
+qcl_import("bibliograph_service_Folder");
 
 /**
  * Controller that supplies data for the references
@@ -834,153 +836,166 @@ class bibliograph_service_Reference
 
 
   /**
-   * Remove references from a folder
-   * @param string $datasource
-   * @param int $folderId
-   *    If 0, refence is not in a folder. todo: should be NULL then
-   * @param int|null $targetFolderId
-   * @param $ids
+   * Remove references. If a folder id is given, remove from that folder
+   * @param string|bool $first
+   *    If boolean, the response to the confirmation dialog. Otherwise, the datasource name
+   * @param string|int
+   *    Optional. If string, the shelve id. Otherwise, the id of the folder from which to remove
+   *    the reference
+   * @param int $third
+   *    Optional. Dummy parameter required because of generic signature of the (move|remove|copy)Reference
+   *    methods.
+   * @param array $ids
+   *    If given, the ids of the references to remove
    * @return \qcl_ui_dialog_Confirm|string "OK"
    */
-  public function method_removeReferences( $datasource, $folderId, $targetFolderId=null, $ids )
+  public function method_removeReferences( $first, $second=null, $third=null, $ids=null )
   {
 		
   	/*
-  	 * handle response to the confirmation dialog
+  	 * check arguments and handle response to the confirmation dialog
   	 */
-  	qcl_import("qcl_ui_dialog_Confirm");
-  	$args = qcl_ui_dialog_Confirm::getArguments( func_get_args() );
-  	if( $args )
-  	{
-  		list( $datasource, $folderId, $targetFolderId, $ids, $confirmRemove ) = $args;
-  	}
-  	else
-  	{
-  		return "ABORTED";
-  	}
-  	
-    /*
-     * check arguments
-     */
-    qcl_assert_valid_string( $datasource );
-    qcl_assert_integer( $folderId );
-    qcl_assert_array( $ids );
 
-    /*
-     * check access
-     */
+    // removal cancelled
+  	if( $first === false )
+  	{
+  		return "CANCELLED";
+  	}
+
+    // removal confirmed
+    elseif ( $first === true and is_string( $second) )
+    {
+      $confirmRemove = true;
+      list( $datasource, $folderId, $ids ) = $this->unshelve( $second );
+    }
+
+    // API signature
+  	elseif ( is_string($first) and is_array( $ids) )
+    {
+      $confirmRemove = false;
+      $datasource = $first;
+      $folderId   = $second;
+    }
+
+    // wrong parameters
+    else
+    {
+      throw new JsonRpcException("Invalid arguments for bibliograph.reference.removeReferences");
+    }
+
+    // check access
     $this->checkDatasourceAccess( $datasource );
     $this->requirePermission("reference.remove");
     
-    /*
-     * go...
-     */
+    // go...
     $referenceModel = $this->getControlledModel( $datasource );
     $folderModel    = $this->getFolderModel( $datasource );
 
-    qcl_import("bibliograph_service_Folder");
-    $trashFolderId = bibliograph_service_Folder::getInstance()
-      ->getTrashFolderId( $datasource );
+    //$this->debug( array($datasource, $folderId, $ids) );
 
-    for ( $i=0; $i<count($ids); $i++ )
+    // use the first id
+    $id = intval( $ids[0] );
+
+    /*
+     * load record and count the number of links to folders
+     */
+    $referenceModel->load( $id );
+    $containedFolderIds = $folderModel->linkedModelIds( $referenceModel );
+    $folderCount = count( $containedFolderIds );
+
+    /*
+     * if we have no folder id and more than one folders contain the reference,
+     * we need to ask the user first
+     */
+    if ( ! $folderId )
     {
-    	$id = $ids[$i];
-    	
-    	/*
-    	 * load record and count the number of links to folders
-    	 */
-      $referenceModel->load( intval($id) );
-    	$folderCount = count( $folderModel->linkedModelIds( $referenceModel ) );
-
-    	/*
-    	 * if we have no folder id, we need to ask the user first
-    	 */
-    	if ( ! $folderId )
-    	{
-    		if ( ! $confirmRemove and $folderCount > 1 )
-    		{
-		      return new qcl_ui_dialog_Confirm(
-				    $this->tr(
-				    	"The selected record '%s' is contained in %s folders. Move to the trash anyways?",
-				    	( $referenceModel->getTitle() . " (" . $referenceModel->getYear() . ")" ),
-				    	$folderCount
-				    ),
-				    null,
-				    $this->serviceName(),
-				    $this->serviceMethod(),
-				    array( $datasource, $folderId, $targetFolderId, array_slice($ids, $i) )
-		      );
-    		}
-    		
-    		/*
-    		 * user confirmed to remove all links
-    		 */
-    		else 
-    		{
-    			$referenceModel->unlinkAll( $folderModel );
-    			$folderCount = 0;
-    			$confirmRemove = false;
-    		}
-    	}
-    	
-      /*
-       * unlink from folder if id is given.
-       */
-    	else 
-    	{
-				$folderModel->load( $folderId );
-		    $referenceModel->unlinkModel( $folderModel );    	
-    	}
-    	
-      /*
-       * move to trash only if it was contained in one or less folders
-       */
-      if ( $folderCount < 2 )
+      if ( $folderCount > 1 and ! $confirmRemove )
       {
-        /*
-         * link with trash folder
-         */
-        $folderModel->load( $trashFolderId );
-        $referenceModel->linkModel( $folderModel );
-
-        /*
-         * mark as deleted
-         */
-        $referenceModel->set("markedDeleted", true);
-        $referenceModel->save();
+        return new qcl_ui_dialog_Confirm(
+          $this->tr(
+            "The selected record '%s' is contained in %s folders. Move to the trash anyways?",
+            ( $referenceModel->getTitle() . " (" . $referenceModel->getYear() . ")" ),
+            $folderCount
+          ),
+          null,
+          $this->serviceName(),
+          $this->serviceMethod(),
+          array( $this->shelve( $datasource, $folderId, $ids ) )
+        );
       }
+
+      // confirmed
+      else
+      {
+        $referenceModel->unlinkAll( $folderModel );
+        $folderCount = 0;
+      }
+    }
+
+    /*
+     * unlink from folder if id is given.
+     */
+    else
+    {
+      $folderModel->load( $folderId );
+      try
+      {
+        $referenceModel->unlinkModel( $folderModel );
+      }
+      catch( qcl_data_model_Exception $e)
+      {
+        $this->warn($e->getMessage());
+      }
+    }
+
+    $foldersToUpdate = $containedFolderIds;
+
+    /*
+     * move to trash only if it was contained in one or less folders
+     */
+    if ( $folderCount < 2 )
+    {
+      // link with trash folder
+      $trashFolderId  = bibliograph_service_Folder::getInstance()->getTrashFolderId( $datasource );
+      $folderModel->load( $trashFolderId );
+      $referenceModel->linkModel( $folderModel );
+      $foldersToUpdate[] = $trashFolderId;
+
+      // mark as deleted
+      $referenceModel->set("markedDeleted", true);
+      $referenceModel->save();
     }
 
     /*
      * update reference count in source and target folders
      */
-    $folderIds = array( $trashFolderId );
-    if ( $folderId )
+    foreach( $foldersToUpdate as $fid )
     {
-    	$folderIds[] = $folderId;
-    }
-    foreach( $folderIds as $id )
-    {
-      if ( $id )
-      {
-        $folderModel->load( $id );
-        $referenceCount = count( $referenceModel->linkedModelIds( $folderModel ) );
-        $folderModel->set( "referenceCount", $referenceCount );
-        $folderModel->save();
-      }
+      $folderModel->load( $fid );
+      $referenceCount = count( $referenceModel->linkedModelIds( $folderModel ) );
+      $folderModel->set( "referenceCount", $referenceCount );
+      $folderModel->save();
     }
 
     /*
      * display change on connected clients
-     * todo: this doesn't work in the case of a search
      */
-    if ( $folderId )
+    foreach( $containedFolderIds as $fid )
     {
 	    $this->broadcastClientMessage("reference.removeFromFolder", array(
 	      'datasource' => $datasource,
-	      'folderId'   => $folderId,
-	      'ids'        => $ids
+	      'folderId'   => $fid,
+	      'ids'        => array($id)
 	    ) );
+    }
+
+    /*
+     * if there are references left, repeat
+     */
+    if ( count($ids) > 1 )
+    {
+      array_shift($ids);
+      return $this->method_removeReferences( $datasource, $folderId, null, $ids );
     }
     return "OK";
   }
@@ -1239,6 +1254,12 @@ class bibliograph_service_Reference
     );
   }
 
+  /**
+   * Returns data on folders that contain the given reference
+   * @param $datasource
+   * @param $modelId
+   * @return array
+   */
   public function method_getContainingFolderData( $datasource, $modelId )
   {
     qcl_assert_valid_string($datasource,"Invalid datasource");
@@ -1249,18 +1270,22 @@ class bibliograph_service_Reference
     $refModel->load($modelId);
     $fldController = bibliograph_service_Folder::getInstance();
     $fldModel = $fldController->getFolderModel( $datasource );
-    $fldModel->findLinked( $refModel );
-
     $data = array();
-    while( $fldModel->loadNext() )
+    try
     {
-      $data[] = array(
-        $fldModel->id(),
-        $fldController->getIcon("default"),
-        $fldModel->getLabelPath("/")
-      );
+      $fldModel->findLinked( $refModel );
+      while( $fldModel->loadNext() )
+      {
+        $data[] = array(
+          $fldModel->id(),
+          $fldController->getIcon("default"),
+          $fldModel->getLabelPath("/")
+        );
+      }
     }
-
+    catch( qcl_data_model_Exception $e ){
+      //
+    }
     return $data;
   }
 

@@ -868,6 +868,8 @@ qx.Class.define("bibliograph.ui.reference.ListView",
      */
     load : function()
     {
+      this.clearTable;
+
       if (!this.getModelType())
       {
         this.addListenerOnce("changeModelType", function() {
@@ -1011,7 +1013,9 @@ qx.Class.define("bibliograph.ui.reference.ListView",
      */
     _removeReference : function()
     {
-      var message = this.tr("Do your really want to remove the selected references?");
+      var message = this.getFolderId() ?
+          this.tr("Do your really want to remove the selected references?") :
+          this.tr("Do your really want to remove the selected references from this folder?");
       var handler = qx.lang.Function.bind(function(result) {
         if (result === true) {
           this.modifyReferences("remove", null);
@@ -1085,9 +1089,12 @@ qx.Class.define("bibliograph.ui.reference.ListView",
       var app = this.getApplication();
       app.setModelId(0);
       app.showPopup(this.tr("Processing request..."));
-      app.getRpcManager().execute("bibliograph.reference", action + "References", [datasource, folderId, targetFolderId, selectedIds], function() {
-        app.hidePopup();
-      }, this);
+      app.getRpcManager().execute(
+          "bibliograph.reference", action + "References",
+          [datasource, folderId, targetFolderId, selectedIds],
+          function() {
+            app.hidePopup();
+          }, this);
     },
 
     /**

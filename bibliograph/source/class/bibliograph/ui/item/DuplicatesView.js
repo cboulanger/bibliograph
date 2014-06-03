@@ -21,59 +21,11 @@
 qx.Class.define("bibliograph.ui.item.DuplicatesView",
 {
   extend : qx.ui.container.Composite,
-  include : [qcl.ui.MLoadingPopup],
 
-  /*
-    *****************************************************************************
-       PROPERTIES
-    *****************************************************************************
-    */
-  properties : {
-
-  },
-
-  /*
-    *****************************************************************************
-        CONSTRUCTOR
-    *****************************************************************************
-    */
-  construct : function()
-  {
-    this.base(arguments);
-    this.createPopup();
-  },
-
-  /*
-    *****************************************************************************
-        MEMBERS
-    *****************************************************************************
-    */
   members :
   {
-    /*
-        ---------------------------------------------------------------------------
-           WIDGETS
-        ---------------------------------------------------------------------------
-        */
     duplicatesTable : null,
 
-    /*
-        ---------------------------------------------------------------------------
-           PRIVATE MEMBERS
-        ---------------------------------------------------------------------------
-        */
-
-    /*
-        ---------------------------------------------------------------------------
-           APPLY METHODS
-        ---------------------------------------------------------------------------
-        */
-
-    /*
-        ---------------------------------------------------------------------------
-           EVENT HANDLERS
-        ---------------------------------------------------------------------------
-        */
 
     /**
      * TODOC
@@ -90,17 +42,12 @@ qx.Class.define("bibliograph.ui.item.DuplicatesView",
       }
     },
 
-    /*
-        ---------------------------------------------------------------------------
-           INTERNAL METHODS
-        ---------------------------------------------------------------------------
-        */
 
     /*
-        ---------------------------------------------------------------------------
-           API METHODS
-        ---------------------------------------------------------------------------
-        */
+    ---------------------------------------------------------------------------
+       API METHODS
+    ---------------------------------------------------------------------------
+    */
 
     /**
      * TODOC
@@ -117,7 +64,6 @@ qx.Class.define("bibliograph.ui.item.DuplicatesView",
       qx.event.Timer.once(function()
       {
         if (id != app.getModelId())return;
-
         this._reloadData();
       }, this, 100);
     },
@@ -131,23 +77,16 @@ qx.Class.define("bibliograph.ui.item.DuplicatesView",
     {
       var app = this.getApplication();
       this.duplicatesTable.getTableModel().setData([]);
-      this.showPopup(this.tr("Searching for duplicates..."));
-      app.getRpcManager().execute("bibliograph.reference", "getDuplicatesData", [app.getDatasource(), app.getModelId()], function(data)
-      {
-        this.hidePopup();
-        this.duplicatesTable.getTableModel().setData(data);
-      }, this);
+      app.showPopup(this.tr("Searching for duplicates..."));
+      app.getRpcManager().execute(
+          "bibliograph.reference", "getDuplicatesData",
+          [app.getDatasource(), app.getModelId()],
+          function(data) {
+            app.hidePopup();
+            this.duplicatesTable.getTableModel().setData(data);
+          }, this);
     },
 
-    /**
-     * TODOC
-     *
-     * @return {void}
-     */
-    inspectDuplicate : function() {
-    },
-
-    // @todo
 
     /**
      * TODOC
@@ -170,26 +109,33 @@ qx.Class.define("bibliograph.ui.item.DuplicatesView",
      *
      * @return {void}
      */
-    deleteDuplicate : function()
+    _deleteDuplicate : function()
     {
       var app = this.getApplication();
       var selectedRefIds = this.getSelectedRefIds();
       if (!selectedRefIds.length)return;
 
-      var message = this.tr("Do your really want to move the selected duplicates to the trash?");
-      var handler = qx.lang.Function.bind(function(result) {
-        if (result === true)
-        {
-          this.showPopup(this.tr("Processing request..."));
-          app.getRpcManager().execute("bibliograph.reference", "moveToTrash", [app.getDatasource(), selectedRefIds], function()
-          {
-            this.hidePopup();
+      app.showPopup(this.tr("Processing request..."));
+      app.getRpcManager().execute(
+          "bibliograph.reference", "removeReferences",
+          [app.getDatasource(), null, null, selectedRefIds],
+          function() {
+            app.hidePopup();
             this.reloadData();
           }, this);
-        }
-      }, this);
-      dialog.Dialog.confirm(message, handler);
     },
+
+
+    _displayDuplicate : function()
+    {
+      var app = this.getApplication();
+      var selectedRefIds = this.getSelectedRefIds();
+      if (!selectedRefIds.length)return;
+      app.set
+
+    },
+
+
     endOfFile : true
   }
 });
