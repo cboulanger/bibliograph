@@ -64,10 +64,11 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditorUi",
       qxMenuBar1.add(statusLabel);
 
       /*
-       * Stack view
+       * Reference editor stack view
        */
       var stackView = new qx.ui.container.Stack();
       this.stackView = stackView;
+      this.setWidgetId("referenceEditorStackView");
       qxComposite1.add(stackView, {
         flex : 1
       });
@@ -159,7 +160,6 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditorUi",
       stackView.add(contentsPage);
       qxVbox6.setSpacing(5);
       var qxLabel4 = new qx.ui.basic.Label(this.tr('Contents'));
-      qxLabel4.setValue(this.tr('Contents'));
       contentsPage.add(qxLabel4);
       var qxTextarea3 = new qx.ui.form.TextArea(null);
       contentsPage.add(qxTextarea3, { flex : 1 });
@@ -198,8 +198,9 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditorUi",
       mainButton.setRich(true);
       mainButton.setLabel(this.tr('Main'));
       menuBar.add(mainButton);
+      this._addStackViewPage("main",mainPage, mainButton);
       mainButton.addListener("click", function(e) {
-        this._showStackViewPage(mainPage, mainButton)
+        this._showStackViewPage("main")
       }, this);
 
       /*
@@ -209,8 +210,9 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditorUi",
       aboutButton.setRich(true);
       aboutButton.setLabel(this.tr('About'));
       menuBar.add(aboutButton);
+      this._addStackViewPage("about",aboutPage, aboutButton);
       aboutButton.addListener("click", function(e) {
-        this._showStackViewPage(aboutPage, aboutButton)
+        this._showStackViewPage("about")
       }, this);
 
       /*
@@ -221,8 +223,9 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditorUi",
       contentsButton.setVisibility("excluded");
       contentsButton.setLabel(this.tr('Contents'));
       menuBar.add(contentsButton);
+      this._addStackViewPage("contents",contentsPage, contentsButton);
       contentsButton.addListener("click", function(e) {
-        this._showStackViewPage(contentsPage, contentsButton)
+        this._showStackViewPage("contents")
       }, this);
 
       /*
@@ -233,12 +236,17 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditorUi",
         var refType = e.getData();
         contentsButton.setVisibility((refType == "book" || refType == "collection") ? "visible" : "excluded");
       }, this);
+
+      /*
+       * Record info button
+       */
       var recordInfoButton = new qx.ui.menubar.Button(this.tr('Record Info'), null, null);
       recordInfoButton.setRich(true);
       recordInfoButton.setLabel(this.tr('Record Info'));
       menuBar.add(recordInfoButton);
+      this._addStackViewPage("recordInfo",recordInfoPage, recordInfoButton);
       recordInfoButton.addListener("click", function(e) {
-        this._showStackViewPage(recordInfoPage, recordInfoButton)
+        this._showStackViewPage("recordInfo");
       }, this);
       qx.core.Init.getApplication().getAccessManager().getPermissionManager().create("reference.remove").bind("state", recordInfoButton, "visibility", {
         converter : qcl.bool2visibility
@@ -251,9 +259,17 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditorUi",
       duplicatesButton.setRich(true);
       duplicatesButton.setLabel(this.tr('Duplicates'));
       menuBar.add(duplicatesButton);
+      this._addStackViewPage("duplicates",duplicatesViewPage, duplicatesButton);
       duplicatesButton.addListener("click", function(e) {
-        this._showStackViewPage(duplicatesViewPage, duplicatesButton)
+        this._showStackViewPage("duplicates")
       }, this);
+      var numberOfDuplicates = new qx.ui.basic.Label();
+      menuBar.add(numberOfDuplicates,{});
+      duplicatesViewPage.bind( "numberOfDuplicates", numberOfDuplicates, "value", {
+        converter : function(value){
+          return value ? "(" + value + ")" : null
+        }
+      });
       qx.core.Init.getApplication().getAccessManager().getPermissionManager().create("reference.remove").bind("state", duplicatesButton, "visibility", {
         converter : qcl.bool2visibility
       });

@@ -103,6 +103,16 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
       check : "qx.core.Object",
       nullable : true,
       event : "changeModel"
+    },
+
+    /**
+     * The page of the stack view
+     */
+    page:
+    {
+      check : "String",
+      nullable : true,
+      apply : "_applyPage"
     }
   },
 
@@ -114,9 +124,10 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
   construct : function()
   {
     this.base(arguments);
-    this._forms = {
 
-    };
+    this._forms = {};
+    this.__pages = {};
+    this.__buttons = {};
 
     /*
      * create store and bind the application datasource model's
@@ -181,6 +192,8 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
     _lastRequest : null,
     __preventDefault : false,
     __deferReattachBubbleEvent : 0,
+    __pages : null,
+    __buttons : null,
 
     /*
     ---------------------------------------------------------------------------
@@ -274,9 +287,20 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
       this.setVisibility("visible");
     },
 
+    /**
+     * Shows the stack view page with the given name
+     * @param {String} value
+     * @param {String} old
+     * @private
+     */
+    _applyPage : function(value, old)
+    {
+      this._showStackViewPage(value);
+    },
+
     /*
     ---------------------------------------------------------------------------
-       INTERNAL METHODS
+       MAIN FORM
     ---------------------------------------------------------------------------
     */
 
@@ -725,17 +749,66 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
     */
 
     /**
-     * Shows the selected stack view
+     * Adds a stack view page by name
+     * @param {String} name
+     * @param {qx.ui.layout.VBox} page
+     * @param {qx.ui.menubar.Button} button
+     * @private
      */
-    _showStackViewPage : function(page, button)
+    _addStackViewPage : function(name,page,button)
     {
-      this.stackView.setSelection([page]);
-      if (this.__button) {
-        this.__button.setLabel(this.__button.getUserData("label"));
+      this.__pages[name] = page;
+      this.__buttons[name] = button;
+    },
+
+    /**
+     * Returns the stack view page by name
+     * @param {String} name
+     * @returns {qx.ui.layout.VBox}
+     * @private
+     */
+    _getStackViewPage : function(name)
+    {
+      return this.__pages[name];
+    },
+
+    /**
+     * Returns the menu button corresponding to a stack view page by name
+     * @param {String} name
+     * @returns {qx.ui.menubar.Button}
+     * @private
+     */
+    _getStackViewPageButton : function(name)
+    {
+      return this.__buttons[name];
+    },
+
+    /**
+     * Shows the given stack view page by name and highlights the corresponding button
+     * @param {String} name
+     * @private
+     */
+    _showStackViewPage : function(name)
+    {
+      var page = this._getStackViewPage(name);
+      var button = this._getStackViewPageButton(name);
+      if( page && button )
+      {
+        this.stackView.setSelection([page]);
+        if (this.__button) {
+          this.__button.setLabel(this.__button.getUserData("label"));
+        }
+        button.setUserData("label", button.getLabel());
+        button.setLabel("<u>" + button.getLabel() + "<u>");
+        this.__button = button;
+
+        // todo: bad hardwiring
+        qx.core.Init.getApplication().setItemView("referenceEditor-"+name);
       }
-      button.setUserData("label", button.getLabel());
-      button.setLabel("<u>" + button.getLabel() + "<u>");
-      this.__button = button;
+      else
+      {
+        this.warn("Stack view page '"+value+"' does not exist.");
+      }
     },
 
     /**

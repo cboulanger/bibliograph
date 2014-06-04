@@ -91,7 +91,9 @@ qx.Class.define("bibliograph.ui.main.ItemView",
     },
 
     /**
-     * Displays the item view of the given name
+     * Displays the item view of the given name. If the name contains a plus sign,
+     * use the part before the plus sign as item view name, the part after as
+     * the name of a subview.
      *
      * @param value
      *            {String}
@@ -99,13 +101,31 @@ qx.Class.define("bibliograph.ui.main.ItemView",
      *            {String|null}
      * @return {void}
      */
-    _applyView : function(value, old) {
+    _applyView : function(value, old)
+    {
       if (value)
       {
+        var subView;
+        if( value.indexOf("-") !== -1 )
+        {
+          var parts = value.split("-");
+          value = parts[0];
+          subView = parts[1];
+        }
         var itemViewWidget = this.getViewByName(value);
-        if (itemViewWidget) {
+        if (itemViewWidget)
+        {
           this.itemViewStack.setSelection([itemViewWidget]);
-        } else {
+          if( subView )
+          {
+            if( typeof itemViewWidget.setPage == "function" )
+            {
+              itemViewWidget.setPage(subView);
+            }
+          }
+        }
+        else
+        {
           this.error("Invalid item view name " + value);
         }
       } else

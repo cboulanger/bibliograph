@@ -22,6 +22,30 @@ qx.Class.define("bibliograph.ui.item.DuplicatesView",
 {
   extend : qx.ui.container.Composite,
 
+  /*
+   *****************************************************************************
+   PROPERTIES
+   *****************************************************************************
+   */
+  properties :
+  {
+    /**
+     * The number of potential duplicates of the current reference
+     */
+    numberOfDuplicates :
+    {
+      check : "Number",
+      nullable : false,
+      init : 0,
+      event : "changeNumberOfDuplicates"
+    }
+  },
+
+  /*
+   *****************************************************************************
+   MEMBERS
+   *****************************************************************************
+   */
   members :
   {
     duplicatesTable : null,
@@ -57,7 +81,7 @@ qx.Class.define("bibliograph.ui.item.DuplicatesView",
     reloadData : function()
     {
       var app = this.getApplication();
-      if (!this.isVisible() || !app.getModelId()) {
+      if ( !app.getModelId()) {
         return;
       }
       var id = app.getModelId();
@@ -77,13 +101,14 @@ qx.Class.define("bibliograph.ui.item.DuplicatesView",
     {
       var app = this.getApplication();
       this.duplicatesTable.getTableModel().setData([]);
-      app.showPopup(this.tr("Searching for duplicates..."));
+      this.setEnabled(false);
       app.getRpcManager().execute(
           "bibliograph.reference", "getDuplicatesData",
           [app.getDatasource(), app.getModelId()],
           function(data) {
-            app.hidePopup();
+            this.setEnabled(true);
             this.duplicatesTable.getTableModel().setData(data);
+            this.setNumberOfDuplicates(data.length);
           }, this);
     },
 
@@ -125,13 +150,22 @@ qx.Class.define("bibliograph.ui.item.DuplicatesView",
           }, this);
     },
 
-
+    /**
+     * Displays the selected duplicate
+     * @private
+     */
     _displayDuplicate : function()
     {
       var app = this.getApplication();
       var selectedRefIds = this.getSelectedRefIds();
       if (!selectedRefIds.length)return;
-      app.setQuery("id="+selectedRefIds[0]);
+      var id= selectedRefIds[0];
+      app.setQuery("id="+id);
+      app.setModelId(id);
+      qx.lang.Function.delay(function(){
+        app.setItemView("referenceEditor-recordInfo");
+      },100);
+
     },
 
 
