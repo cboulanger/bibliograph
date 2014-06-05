@@ -263,10 +263,11 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditorUi",
       duplicatesButton.addListener("click", function(e) {
         this._showStackViewPage("duplicates")
       }, this);
-      var numberOfDuplicates = new qx.ui.basic.Label();
-      menuBar.add(numberOfDuplicates,{});
-      duplicatesViewPage.bind( "numberOfDuplicates", numberOfDuplicates, "value", {
+      var duplNumLabel = new qx.ui.basic.Label();
+      duplicatesButton._addAt(duplNumLabel,1);
+      duplicatesViewPage.bind( "numberOfDuplicates", duplNumLabel, "value", {
         converter : function(value){
+          duplNumLabel.setMaxWidth(value ? null:0);
           return value ? "(" + value + ")" : null
         }
       });
