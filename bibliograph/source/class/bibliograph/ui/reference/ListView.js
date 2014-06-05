@@ -637,6 +637,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
        */
       for (var i = 0; i < columnIds.length; i++) {
         tableModel.setColumnEditable(i, columnLayout[columnIds[i]].editable || false);
+        tableModel.setColumnSortable(i,false);
       }
 
       /*

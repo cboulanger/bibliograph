@@ -4,8 +4,6 @@ Todos
 Frontend
 --------
 - Bug: Translations missing
-- Bug: disable clicking on column header in reference list since it breaks the view and cannot be implemented easily
-anyways.
 
 Backend
 -------
