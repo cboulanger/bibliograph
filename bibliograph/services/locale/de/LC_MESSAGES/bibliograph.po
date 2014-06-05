@@ -2,807 +2,1356 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Bibliograph 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-03 20:58+0100\n"
-"PO-Revision-Date: 2010-07-05 08:31+0100\n"
-"Last-Translator: Christian Boulanger <c.boulanger@qxtransformer.org>\n"
+"POT-Creation-Date: 2014-06-05 23:13+0100\n"
+"PO-Revision-Date: 2014-06-05 23:18+0100\n"
+"Last-Translator: Christian Boulanger <info@bibliograph.org>\n"
 "Language-Team: \n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop;tr;trn\n"
 "X-Poedit-Basepath: .\n"
-"X-Poedit-Language: German\n"
-"X-Poedit-SearchPath-0: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class\n"
+"X-Generator: Poedit 1.6.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SearchPath-0: ../../../class\n"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/model/FolderModel.php:146
+#: ../../../class/bibliograph/model/FolderModel.php:161
 msgid "Folder Title"
 msgstr "Ordnertitel"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/model/FolderModel.php:150
+#: ../../../class/bibliograph/model/FolderModel.php:165
+#: ../../../class/qcl/access/model/Group.php:98
+#: ../../../class/qcl/access/model/Permission.php:84
+#: ../../../class/qcl/access/model/Role.php:93
+#: ../../../class/qcl/data/datasource/DbModel.php:196
 msgid "Description"
 msgstr "Beschreibung"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/model/FolderModel.php:155
+#: ../../../class/bibliograph/model/FolderModel.php:170
 msgid "Is folder publically visible?"
 msgstr "Ist der Ordner öffentlich?"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/model/FolderModel.php:158
+#: ../../../class/bibliograph/model/FolderModel.php:173
+#: ../../../class/bibliograph/service/Reference.php:1411
+#: ../../../class/qcl/ui/dialog/Confirm.php:47
+#: ../../../class/qcl/ui/dialog/Confirm.php:51
 msgid "Yes"
 msgstr "Ja"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/model/FolderModel.php:159
+#: ../../../class/bibliograph/model/FolderModel.php:174
+#: ../../../class/bibliograph/service/Reference.php:1412
+#: ../../../class/qcl/ui/dialog/Confirm.php:47
+#: ../../../class/qcl/ui/dialog/Confirm.php:51
 msgid "No"
 msgstr "Nein"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/model/FolderModel.php:171
+#: ../../../class/bibliograph/model/FolderModel.php:186
 msgid "Search folder?"
 msgstr "Suchordner?"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/model/FolderModel.php:174
+#: ../../../class/bibliograph/model/FolderModel.php:189
 msgid "On, Use query to determine content"
 msgstr "Ja, mit Suchausdruck filtern"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/model/FolderModel.php:175
+#: ../../../class/bibliograph/model/FolderModel.php:190
 msgid "Off"
 msgstr "Aus"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/model/FolderModel.php:179
+#: ../../../class/bibliograph/model/FolderModel.php:194
 msgid "Query"
 msgstr "Suchausdruck"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/model/FolderModel.php:201
+#: ../../../class/bibliograph/model/FolderModel.php:216
 msgid "Opened?"
 msgstr "Geöffnet?"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/model/FolderModel.php:204
+#: ../../../class/bibliograph/model/FolderModel.php:219
 msgid "Folder is opened by default"
 msgstr "Ja, Ordner öffnet sich automatisch"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/model/FolderModel.php:205
+#: ../../../class/bibliograph/model/FolderModel.php:220
 msgid "Folder is closed by default"
 msgstr "Nein, Ordner ist geschlossen"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/model/FolderModel.php:251
+#: ../../../class/bibliograph/model/FolderModel.php:265
 msgid "Default Folder"
 msgstr "Hauptordner"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/model/FolderModel.php:261
+#: ../../../class/bibliograph/model/FolderModel.php:275
 msgid "Trash Folder"
 msgstr "Mülleimer"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/model/export/Bibtex.php:120
+#: ../../../class/bibliograph/model/export/Bibtex.php:121
 msgid "Special Issue"
 msgstr "Zeitschriftenausgabe"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/plugin/bookends/controller.php:181
-#, php-format
-msgid "Datasources '%s' and '%s' have never been synchronized before. Are you sure you want to proceed?"
-msgstr "Die Datenbanken '%s' und '%s' wurden noch nie synchronisiert. Sind Sie sicher, dass Sie fortfahren wollen?"
+#: ../../../class/bibliograph/plugin/bibutils/Plugin.php:79
+msgid ""
+"Could not call the bibutils commands through the shell. Please check your "
+"setup."
+msgstr ""
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/plugin/bookends/controller.php:285
+#: ../../../class/bibliograph/plugin/bookends/controller.php:172
+#, php-format
+msgid ""
+"Datasources '%s' and '%s' have never been synchronized before. Are you sure "
+"you want to proceed?"
+msgstr ""
+"Die Datenbanken '%s' und '%s' wurden noch nie synchronisiert. Sind Sie "
+"sicher, dass Sie fortfahren wollen?"
+
+#: ../../../class/bibliograph/plugin/bookends/controller.php:276
 #, php-format
 msgid "Do you really want to delete clear all synchronization for '%s'?"
-msgstr "Sind Sie sicher, dass sie alle Synchronisierungsdaten für '%s' löschen möchten?"
+msgstr ""
+"Sind Sie sicher, dass sie alle Synchronisierungsdaten für '%s' löschen "
+"möchten?"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/plugin/csl/Service.php:103
+#: ../../../class/bibliograph/plugin/csl/Service.php:103
 #, php-format
-msgid "More than %s references in the folder. Creating a bibliography would take too long."
-msgstr "Mehr als %s Datensätze im Ordner. Es würde zu lange dauern, daraus eine Bibliographie zu generieren. "
+msgid ""
+"More than %s references in the folder. Creating a bibliography would take "
+"too long."
+msgstr ""
+"Mehr als %s Datensätze im Ordner. Es würde zu lange dauern, daraus eine "
+"Bibliographie zu generieren. "
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/plugin/fieldsExtensionExmpl/Schema.php:51
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/plugin/fieldsExtensionExmpl/Schema.php:55
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/plugin/huBerlinRewi/Schema.php:52
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/plugin/huBerlinRewi/Schema.php:56
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/plugin/huBerlinRewi/Schema.php:69
+#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl/Schema.php:51
+#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl/Schema.php:55
+#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:52
+#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:56
+#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:69
+#: ../../../class/bibliograph/schema/BibtexSchema.php:756
+#: ../../../class/bibliograph/service/Folder.php:628
+#: ../../../class/qcl/data/datasource/DbModel.php:206
 msgid "Type"
 msgstr "Typ"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/plugin/fieldsExtensionExmpl/Schema.php:73
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/plugin/fieldsExtensionExmpl/Schema.php:77
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/plugin/huBerlinRewi/Schema.php:76
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/plugin/huBerlinRewi/Schema.php:80
+#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl/Schema.php:73
+#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl/Schema.php:77
+#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:76
+#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:80
 msgid "location"
 msgstr "Standort"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/plugin/fieldsExtensionExmpl/Schema.php:95
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/plugin/fieldsExtensionExmpl/Schema.php:99
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/plugin/huBerlinRewi/Schema.php:100
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/plugin/huBerlinRewi/Schema.php:104
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/plugin/huBerlinRewi/Schema.php:117
+#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl/Schema.php:95
+#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl/Schema.php:99
+#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:100
+#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:104
+#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:117
 msgid "Category"
 msgstr "Kategorie"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/plugin/fieldsExtensionExmpl/Schema.php:117
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/plugin/fieldsExtensionExmpl/Schema.php:121
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/plugin/huBerlinRewi/Schema.php:121
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/plugin/huBerlinRewi/Schema.php:125
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/plugin/huBerlinRewi/Schema.php:138
+#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl/Schema.php:117
+#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl/Schema.php:121
+#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:121
+#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:125
+#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:138
 msgid "Owner"
 msgstr "Eigentümer/in"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/plugin/fieldsExtensionExmpl/Schema.php:139
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/plugin/fieldsExtensionExmpl/Schema.php:143
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/plugin/huBerlinRewi/Schema.php:164
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/plugin/huBerlinRewi/Schema.php:168
+#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl/Schema.php:139
+#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl/Schema.php:143
+#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:164
+#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:168
 msgid "Date ordered"
 msgstr "Bestellt am"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/plugin/fieldsExtensionExmpl/Schema.php:152
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/plugin/fieldsExtensionExmpl/Schema.php:156
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/plugin/huBerlinRewi/Schema.php:173
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/plugin/huBerlinRewi/Schema.php:177
+#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl/Schema.php:152
+#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl/Schema.php:156
+#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:173
+#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:177
 msgid "Date received"
 msgstr "Eingang am"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/plugin/huBerlinRewi/Schema.php:93
+#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:93
+#: ../../../class/bibliograph/schema/BibtexSchema.php:632
+#: ../../../class/bibliograph/schema/BibtexSchema.php:636
 msgid "Location"
 msgstr "Standort"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/plugin/huBerlinRewi/Schema.php:143
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/plugin/huBerlinRewi/Schema.php:147
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/plugin/huBerlinRewi/Schema.php:160
+#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:143
+#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:147
+#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:160
 msgid "Source"
 msgstr "Quelle"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/plugin/huBerlinRewi/Schema.php:182
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/plugin/huBerlinRewi/Schema.php:186
+#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:182
+#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:186
 msgid "Reimb. requested"
 msgstr "Erstatt. beantr. am"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/plugin/huBerlinRewi/Schema.php:192
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/plugin/huBerlinRewi/Schema.php:196
+#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:192
+#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:196
 msgid "Inventory"
 msgstr "Vorhanden?"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:275
-msgid "Article"
-msgstr "Artikel"
+#: ../../../class/bibliograph/plugin/isbnscanner/Plugin.php:66
+msgid "Please reload the application to finish installing."
+msgstr ""
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:280
-msgid "Book (Monograph)"
-msgstr "Buch (Monographie)"
+#: ../../../class/bibliograph/plugin/isbnscanner/Plugin.php:77
+msgid "Please reload the application to finish uninstalling."
+msgstr ""
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:285
-msgid "Booklet"
-msgstr "Broschüre"
+#: ../../../class/bibliograph/plugin/isbnscanner/Service.php:49
+#, fuzzy
+msgid "No folder selected."
+msgstr "Bitte erst einen Ordner auswählen."
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:291
-msgid "Book (Edited)"
-msgstr "Sammelband"
+#: ../../../class/bibliograph/plugin/isbnscanner/Service.php:53
+msgid "Please enter the ISBN:"
+msgstr "Bitte die ISBN eingeben:"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:297
-msgid "Conference Paper"
-msgstr "Konferenzpapier"
+#: ../../../class/bibliograph/plugin/isbnscanner/Service.php:86
+msgid "Contacting webservices to resolve ISBN..."
+msgstr "Verbinde mit Webservices zum Auflösen der ISBN..."
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:302
-msgid "Book Chapter"
-msgstr "Buchkapitel"
+#: ../../../class/bibliograph/plugin/isbnscanner/Service.php:121
+#, php-format
+msgid "Could not find any data for ISBN %s."
+msgstr "Konnte keine Daten für ISBN %s finden."
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:308
-msgid "Chapter in Edited Book"
-msgstr "Kapitel in Sammelband"
+#: ../../../class/bibliograph/plugin/isbnscanner/Service.php:130
+#, fuzzy, php-format
+msgid "Contacting %s. Please wait..."
+msgstr "Bitte warten ..."
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:313
-msgid "Paper in Conference Proceedings"
-msgstr "Konferenzpapier"
+#: ../../../class/bibliograph/plugin/isbnscanner/Service.php:225
+#, php-format
+msgid "Found: %s<br><br><b>Possible duplicates:</b><br>%s"
+msgstr "Ergebnis: %s<br><br><b>Mögliche Duplikate:</b><br>%s"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:319
-msgid "Journal Issue"
-msgstr "Zeitschriftenausgabe"
+#: ../../../class/bibliograph/plugin/isbnscanner/Service.php:233
+#: ../../../class/bibliograph/plugin/isbnscanner/Service.php:245
+#, fuzzy, php-format
+msgid "Found: %s"
+msgstr "Daten für '%s' wurden nach '%s' exportiert."
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:325
-msgid "Handbook"
-msgstr "Handbuch"
+#: ../../../class/bibliograph/plugin/isbnscanner/Service.php:251
+#, fuzzy
+msgid "Import and continue"
+msgstr "Importieren"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:330
-msgid "Master's Thesis"
-msgstr "Masterarbeit"
+#: ../../../class/bibliograph/plugin/isbnscanner/Service.php:252
+#, fuzzy
+msgid "Import and edit"
+msgstr "Bearbeiten"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:335
-msgid "Miscellaneous"
-msgstr "Sonstige Veröffentlichung"
+#: ../../../class/bibliograph/plugin/isbnscanner/Service.php:253
+msgid "Skip and continue"
+msgstr "Überspringen und fortsetzen"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:340
-msgid "Ph.D. Thesis"
-msgstr "Doktorarbeit"
+#: ../../../class/bibliograph/plugin/isbnscanner/Service.php:299
+#: ../../../class/bibliograph/plugin/isbnscanner/Service.php:346
+#, fuzzy
+msgid "Importing data. Please wait..."
+msgstr "Bitte warten ..."
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:345
-msgid "Conference Proceedings"
-msgstr "Konferenzbeiträge"
+#: ../../../class/bibliograph/plugin/isbnscanner/Service.php:306
+#, fuzzy
+msgid "Converting names. Please wait..."
+msgstr "Bitte warten ..."
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:350
-msgid "Report/Working Paper"
-msgstr "Arbeitspapier/Report"
+#: ../../../class/bibliograph/plugin/isbnscanner/Service.php:494
+msgid ""
+"Bibliograph will send you an email with a link. Open this email on your iOS "
+"device and click on the link to get to the Barcode Scanner App. Please enter "
+"an email address that you check on your iOS device."
+msgstr ""
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:355
-msgid "Unpublished Manuscript"
-msgstr "Unveröffentlichtes Manuskript"
+#: ../../../class/bibliograph/plugin/isbnscanner/Service.php:517
+#, php-format
+msgid "'%s' is not a valid email address."
+msgstr ""
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:366
-msgid "Bibliographic Type"
-msgstr "Werktyp"
+#: ../../../class/bibliograph/plugin/isbnscanner/Service.php:527
+msgid "Link to Barcode Scanner App"
+msgstr ""
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:369
-msgid "reftype"
-msgstr "Werktyp"
+#: ../../../class/bibliograph/plugin/isbnscanner/Service.php:541
+msgid "Please open the following link in your iOS device."
+msgstr ""
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:373
-msgid "Citation Key"
-msgstr "Zitierschlüssel"
+#: ../../../class/bibliograph/plugin/isbnscanner/Service.php:543
+msgid "You need the Scanner Go app installed for this to work:"
+msgstr ""
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:376
-msgid "citekey"
-msgstr "Zitierschlüssel"
+#: ../../../class/bibliograph/plugin/isbnscanner/Service.php:548
+#, php-format
+msgid "An email has been sent to '%s' with instructions."
+msgstr ""
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:379
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:387
-msgid "Abstract"
-msgstr "Zusammenfassung"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:391
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:402
-msgid "Place"
-msgstr "Ort"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:405
-msgid "Affiliation"
-msgstr "Zugehörigkeit"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:412
-msgid "Annotation"
-msgstr "Annotationen"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:419
-msgid "Authors"
-msgstr "Autor/inn/en"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:420
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:421
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:422
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:492
-msgid "Editors"
-msgstr "Herausgeber/innen"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:436
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Import.php:102
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Reference.php:161
+#: ../../../class/bibliograph/plugin/z3950/Service.php:119
+#: ../../../class/bibliograph/schema/BibtexSchema.php:476
+#: ../../../class/bibliograph/service/Import.php:102
+#: ../../../class/bibliograph/service/Reference.php:194
 msgid "Author"
 msgstr "Autor/in"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:439
-msgid "Book Title"
-msgstr "Buchtitel"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:452
-msgid "booktitle"
-msgstr "Buchtitel"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:455
-msgid "Contents"
-msgstr "Inhaltsverzeichnis"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:461
-msgid "Copyright"
-msgstr "Urheberrechtsangaben"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:467
-msgid "Cross Reference"
-msgstr "Querverweis"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:480
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:732
-msgid "Date"
-msgstr "Datum"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:486
-msgid "Edition"
-msgstr "Auflage"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:505
-msgid "Editor"
-msgstr "Herausgeber/in"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:508
-msgid "Published As"
-msgstr "Publikationsangaben"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:514
-msgid "Institution"
-msgstr "Institution"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:527
-msgid "ISBN"
-msgstr "ISBN"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:533
-msgid "ISSN"
-msgstr "ISSN"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:539
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:551
-msgid "Journal"
-msgstr "Zeitschrift"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:555
-msgid "Key"
-msgstr "Schlüssel"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:561
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:574
-msgid "Keywords"
-msgstr "Schlagworte"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:577
-msgid "Language"
-msgstr "Sprache"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:584
-msgid "Call Number"
-msgstr "Signatur"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:588
-msgid "callnumber"
-msgstr "Signatur"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:599
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:603
-msgid "Month"
-msgstr "Monat"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:606
-msgid "Note"
-msgstr "Anmerkungen"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:612
-msgid "Number"
-msgstr "Nummer"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:618
-msgid "Organization"
-msgstr "Organisation"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:630
-msgid "Pages"
-msgstr "Seiten"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:636
-msgid "Price"
-msgstr "Preis"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:643
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:654
-msgid "Publisher"
-msgstr "Verlag"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:657
-msgid "University"
-msgstr "Universität"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:670
-msgid "Series"
-msgstr "Serie"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:683
-msgid "Size"
-msgstr "Größe"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:689
-msgid "Subtitle"
-msgstr "Untertitel"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:695
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:703
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Import.php:110
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Reference.php:169
-msgid "Title"
-msgstr "Titel"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:712
-msgid "Internet Link"
-msgstr "URL"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:722
-msgid "Volume"
-msgstr "Band"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:728
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/BibtexSchema.php:732
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Import.php:106
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Reference.php:165
+#: ../../../class/bibliograph/plugin/z3950/Service.php:123
+#: ../../../class/bibliograph/schema/BibtexSchema.php:778
+#: ../../../class/bibliograph/schema/BibtexSchema.php:782
+#: ../../../class/bibliograph/service/Import.php:106
+#: ../../../class/bibliograph/service/Reference.php:198
 msgid "Year"
 msgstr "Jahr"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/CQL.php:42
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Reference.php:1387
+#: ../../../class/bibliograph/plugin/z3950/Service.php:127
+#: ../../../class/bibliograph/schema/BibtexSchema.php:735
+#: ../../../class/bibliograph/schema/BibtexSchema.php:743
+#: ../../../class/bibliograph/service/Import.php:110
+#: ../../../class/bibliograph/service/Reference.php:202
+msgid "Title"
+msgstr "Titel"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:295
+msgid "Article"
+msgstr "Artikel"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:300
+msgid "Book (Monograph)"
+msgstr "Buch (Monographie)"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:305
+msgid "Booklet"
+msgstr "Broschüre"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:311
+msgid "Book (Edited)"
+msgstr "Sammelband"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:317
+msgid "Conference Paper"
+msgstr "Konferenzpapier"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:322
+msgid "Book Chapter"
+msgstr "Buchkapitel"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:328
+msgid "Chapter in Edited Book"
+msgstr "Kapitel in Sammelband"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:333
+msgid "Paper in Conference Proceedings"
+msgstr "Konferenzpapier"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:339
+msgid "Journal Issue"
+msgstr "Zeitschriftenausgabe"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:345
+msgid "Handbook"
+msgstr "Handbuch"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:350
+msgid "Master's Thesis"
+msgstr "Masterarbeit"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:355
+msgid "Miscellaneous"
+msgstr "Sonstige Veröffentlichung"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:360
+msgid "Ph.D. Thesis"
+msgstr "Doktorarbeit"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:365
+msgid "Conference Proceedings"
+msgstr "Konferenzbeiträge"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:370
+msgid "Report/Working Paper"
+msgstr "Arbeitspapier/Report"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:375
+msgid "Unpublished Manuscript"
+msgstr "Unveröffentlichtes Manuskript"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:390
+msgid "Bibliographic Type"
+msgstr "Werktyp"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:393
+msgid "reftype"
+msgstr "Werktyp"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:396
+msgid "Reference Type"
+msgstr "Werktyp"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:409
+msgid "Citation Key"
+msgstr "Zitierschlüssel"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:412
+msgid "citekey"
+msgstr "Zitierschlüssel"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:415
+msgid "Citation key"
+msgstr "Zitierschlüssel"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:419
+#: ../../../class/bibliograph/schema/BibtexSchema.php:427
+msgid "Abstract"
+msgstr "Zusammenfassung"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:431
+#: ../../../class/bibliograph/schema/BibtexSchema.php:442
+msgid "Place"
+msgstr "Ort"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:445
+msgid "Affiliation"
+msgstr "Zugehörigkeit"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:452
+msgid "Annotation"
+msgstr "Annotationen"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:459
+msgid "Authors"
+msgstr "Autor/inn/en"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:460
+#: ../../../class/bibliograph/schema/BibtexSchema.php:461
+#: ../../../class/bibliograph/schema/BibtexSchema.php:462
+#: ../../../class/bibliograph/schema/BibtexSchema.php:532
+msgid "Editors"
+msgstr "Herausgeber/innen"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:479
+msgid "Book Title"
+msgstr "Buchtitel"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:492
+msgid "booktitle"
+msgstr "Buchtitel"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:495
+msgid "Contents"
+msgstr "Inhaltsverzeichnis"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:501
+msgid "Copyright"
+msgstr "Urheberrechtsangaben"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:507
+msgid "Cross Reference"
+msgstr "Querverweis"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:520
+#: ../../../class/bibliograph/schema/BibtexSchema.php:782
+msgid "Date"
+msgstr "Datum"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:526
+msgid "Edition"
+msgstr "Auflage"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:545
+msgid "Editor"
+msgstr "Herausgeber/in"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:548
+msgid "Published As"
+msgstr "Publikationsangaben"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:554
+msgid "Institution"
+msgstr "Institution"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:567
+msgid "ISBN"
+msgstr "ISBN"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:573
+msgid "ISSN"
+msgstr "ISSN"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:579
+#: ../../../class/bibliograph/schema/BibtexSchema.php:591
+msgid "Journal"
+msgstr "Zeitschrift"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:595
+msgid "Key"
+msgstr "Schlüssel"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:601
+#: ../../../class/bibliograph/schema/BibtexSchema.php:614
+msgid "Keywords"
+msgstr "Schlagworte"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:617
+msgid "Language"
+msgstr "Sprache"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:624
+msgid "Call Number"
+msgstr "Signatur"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:628
+msgid "callnumber"
+msgstr "Signatur"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:639
+#: ../../../class/bibliograph/schema/BibtexSchema.php:643
+msgid "Month"
+msgstr "Monat"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:646
+msgid "Note"
+msgstr "Anmerkungen"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:652
+msgid "Number"
+msgstr "Nummer"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:658
+msgid "Organization"
+msgstr "Organisation"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:670
+msgid "Pages"
+msgstr "Seiten"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:676
+msgid "Price"
+msgstr "Preis"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:683
+#: ../../../class/bibliograph/schema/BibtexSchema.php:694
+msgid "Publisher"
+msgstr "Verlag"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:697
+msgid "University"
+msgstr "Universität"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:710
+msgid "Series"
+msgstr "Serie"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:723
+msgid "Size"
+msgstr "Größe"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:729
+msgid "Subtitle"
+msgstr "Untertitel"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:746
+msgid "Translator"
+msgstr "Übersetzer"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:762
+msgid "Internet Link"
+msgstr "URL"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:772
+msgid "Volume"
+msgstr "Band"
+
+#: ../../../class/bibliograph/schema/CQL.php:42
+#: ../../../class/bibliograph/service/Reference.php:1607
 msgid "and"
 msgstr "und"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/CQL.php:42
+#: ../../../class/bibliograph/schema/CQL.php:42
 msgid "or"
 msgstr "oder"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/CQL.php:42
+#: ../../../class/bibliograph/schema/CQL.php:42
 msgid "not"
 msgstr "nicht"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/CQL.php:44
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/CQL.php:211
+#: ../../../class/bibliograph/schema/CQL.php:44
+#: ../../../class/bibliograph/schema/CQL.php:220
 msgid "is"
 msgstr "ist"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/CQL.php:44
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/CQL.php:249
+#: ../../../class/bibliograph/schema/CQL.php:44
+#: ../../../class/bibliograph/schema/CQL.php:261
 msgid "isnot"
 msgstr "istnicht"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/CQL.php:44
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/CQL.php:226
+#: ../../../class/bibliograph/schema/CQL.php:44
+#: ../../../class/bibliograph/schema/CQL.php:236
 msgid "contains"
 msgstr "enthält"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/CQL.php:44
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/CQL.php:231
+#: ../../../class/bibliograph/schema/CQL.php:44
+#: ../../../class/bibliograph/schema/CQL.php:242
 msgid "notcontains"
 msgstr "enthältnicht"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/CQL.php:44
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/CQL.php:236
+#: ../../../class/bibliograph/schema/CQL.php:44
+#: ../../../class/bibliograph/schema/CQL.php:248
 msgid "startswith"
 msgstr "beginntmit"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/CQL.php:105
+#: ../../../class/bibliograph/schema/CQL.php:108
 msgid "sortby"
 msgstr "sortiere-nach"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/schema/CQL.php:195
+#: ../../../class/bibliograph/schema/CQL.php:203
 #, php-format
 msgid "Index '%s' does not exist."
 msgstr "Der Index '%s' existiert nicht."
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Access.php:93
-msgid "Application is in read-only state. Only the administrator can log in."
-msgstr "Das Programm ist im Nur-Lese-Modus. Nur der Administrator kann sich im Moment einloggen."
+#: ../../../class/bibliograph/service/ACLTool.php:47
+#: ../../../class/bibliograph/service/ACLTool.php:91
+#: ../../../class/qcl/access/ACLTool.php:50
+#: ../../../class/qcl/access/ACLTool.php:96
+#, fuzzy
+msgid "Users"
+msgstr "Wird den Benutzern im Nur-Lese-Modus und bei Zugangssperre angezeigt."
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Access.php:114
-msgid "Welcome to Bibliograph. After clicking 'OK', please enter your email address and a new password."
-msgstr "Willkommen in Bibliograph. Nachdem Sie \"OK\" geklickt haben, können Sie Ihre E-Mail-Adresse und ein neues Passwort eingeben."
+#: ../../../class/bibliograph/service/ACLTool.php:53
+#: ../../../class/bibliograph/service/ACLTool.php:96
+#: ../../../class/qcl/access/ACLTool.php:56
+#: ../../../class/qcl/access/ACLTool.php:101
+msgid "Roles"
+msgstr "Rollen"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Access.php:170
+#: ../../../class/bibliograph/service/ACLTool.php:59
+#: ../../../class/bibliograph/service/ACLTool.php:101
+#: ../../../class/qcl/access/ACLTool.php:62
+#: ../../../class/qcl/access/ACLTool.php:106
+msgid "Groups"
+msgstr "Gruppen"
+
+#: ../../../class/bibliograph/service/ACLTool.php:65
+#: ../../../class/bibliograph/service/ACLTool.php:106
+#: ../../../class/qcl/access/ACLTool.php:68
+#: ../../../class/qcl/access/ACLTool.php:111
+msgid "Permissions"
+msgstr "Berechtigungen"
+
+#: ../../../class/bibliograph/service/ACLTool.php:71
+#: ../../../class/bibliograph/service/ACLTool.php:111
+#: ../../../class/qcl/access/ACLTool.php:74
+#: ../../../class/qcl/access/ACLTool.php:116
+#, fuzzy
+msgid "Datasources"
+msgstr "Datenbanken"
+
+#: ../../../class/bibliograph/service/ACLTool.php:252
+#: ../../../class/qcl/access/ACLTool.php:363
+#, fuzzy
+msgid "Relations"
+msgstr "Standort"
+
+#: ../../../class/bibliograph/service/ACLTool.php:325
+#: ../../../class/qcl/access/ACLTool.php:436
+msgid "in"
+msgstr ""
+
+#: ../../../class/bibliograph/service/ACLTool.php:363
+#: ../../../class/qcl/access/ACLTool.php:474
+#, fuzzy
+msgid "In all groups"
+msgstr "Alle im Ordner"
+
+#: ../../../class/bibliograph/service/ACLTool.php:476
+#: ../../../class/qcl/access/ACLTool.php:588
+msgid "Do you want to remove only the datasource entry or all associated data?"
+msgstr ""
+"Wollen Sie nur die Datenquellen-Eintrag entfernen oder alle zugehörigen "
+"Daten löschen?"
+
+#: ../../../class/bibliograph/service/ACLTool.php:477
+#: ../../../class/qcl/access/ACLTool.php:589
+#, fuzzy
+msgid "All data"
+msgstr ""
+"Wollen Sie wirklich die Datenbank  '%s' wiederherstellen? Alle bestehenden "
+"Daten werden gelöscht!"
+
+#: ../../../class/bibliograph/service/ACLTool.php:477
+#: ../../../class/qcl/access/ACLTool.php:589
+#, fuzzy
+msgid "Entry only"
+msgstr "Nur-Lese-Modus"
+
+#: ../../../class/bibliograph/service/ACLTool.php:521
+#: ../../../class/qcl/access/ACLTool.php:633
 #, php-format
-msgid "Do you really want to reset/upgrade the '%s' data?"
-msgstr "Wollen Sie wirklich die Daten für '%s' zurücksetzen oder aktualisieren?"
+msgid "Deleting datasource '%s' failed... "
+msgstr "Das Löschen der Datenquelle '%s' ist fehlgeschlagen..."
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Access.php:196
+#: ../../../class/bibliograph/service/ACLTool.php:524
+#: ../../../class/qcl/access/ACLTool.php:636
 #, php-format
-msgid "'%s' data reset."
-msgstr "Daten für '%s' wurden zurückgesetzt"
+msgid "Datasource '%s' successfully deleted ... "
+msgstr "Datenquelle '%s' wurde erfolgreich gelöscht."
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Access.php:205
-#, php-format
-msgid "Do you really want to export the '%s' data to the filesystem?"
-msgstr "Wollen Sie wirklich die Daten für '%s' ins Dateisystem exportieren?"
+#: ../../../class/bibliograph/service/ACLTool.php:691
+#: ../../../class/qcl/access/ACLTool.php:851
+#, fuzzy
+msgid "Passwords do not match. Please try again"
+msgstr "Passwörter stimmen nicht überein"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Access.php:222
+#: ../../../class/bibliograph/service/ACLTool.php:728
+#: ../../../class/qcl/access/ACLTool.php:879
 #, php-format
-msgid "'%s' data exported to '%s'."
+msgid "An email has been sent to %s (%s) with information on the registration."
+msgstr ""
+
+#: ../../../class/bibliograph/service/ACLTool.php:736
+#: ../../../class/qcl/access/ACLTool.php:887
+#, php-format
+msgid ""
+"An email has been sent to %s (%s) to inform about the change of password."
+msgstr ""
+
+#: ../../../class/bibliograph/service/ACLTool.php:763
+#: ../../../class/qcl/access/ACLTool.php:919
+#, fuzzy, php-format
+msgid "Your registration at %s"
 msgstr "Daten für '%s' wurden nach '%s' exportiert."
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Application.php:42
+#: ../../../class/bibliograph/service/ACLTool.php:773
+#: ../../../class/bibliograph/service/ACLTool.php:812
+#: ../../../class/qcl/access/ACLTool.php:929
+#: ../../../class/qcl/access/ACLTool.php:968
+#, fuzzy, php-format
+msgid "Dear %s,"
+msgstr "Daten für '%s' wurden nach '%s' exportiert."
+
+#: ../../../class/bibliograph/service/ACLTool.php:774
+#: ../../../class/qcl/access/ACLTool.php:930
+#, php-format
+msgid "You have been registered as a user at  '%s'."
+msgstr ""
+
+#: ../../../class/bibliograph/service/ACLTool.php:775
+#: ../../../class/bibliograph/service/ACLTool.php:814
+#: ../../../class/qcl/access/ACLTool.php:931
+#: ../../../class/qcl/access/ACLTool.php:970
+#, php-format
+msgid "Your username is '%s' and your password is '%s'"
+msgstr ""
+
+#: ../../../class/bibliograph/service/ACLTool.php:776
+#: ../../../class/qcl/access/ACLTool.php:932
+msgid "Please confirm your account by visiting the following link:"
+msgstr ""
+
+#: ../../../class/bibliograph/service/ACLTool.php:778
+#: ../../../class/qcl/access/ACLTool.php:934
+#, fuzzy
+msgid "Thank you."
+msgstr "Vielen Dank für Ihre Meldung."
+
+#: ../../../class/bibliograph/service/ACLTool.php:807
+#: ../../../class/qcl/access/ACLTool.php:963
+#, fuzzy, php-format
+msgid "Password change at %s"
+msgstr "Sichtbarkeit verändern"
+
+#: ../../../class/bibliograph/service/ACLTool.php:813
+#: ../../../class/qcl/access/ACLTool.php:969
+#, php-format
+msgid "This is to inform you that your password has changed at '%s'."
+msgstr ""
+
+#: ../../../class/bibliograph/service/ACLTool.php:846
+#: ../../../class/qcl/access/ACLTool.php:1011
+#, php-format
+msgid "Thank you, %s, your email address has been confirmed."
+msgstr ""
+
+#: ../../../class/bibliograph/service/ACLTool.php:847
+#: ../../../class/qcl/access/ACLTool.php:1012
+#, php-format
+msgid "You can now log in at <a href='%s'>this link</a>"
+msgstr ""
+
+#: ../../../class/bibliograph/service/Access.php:94
+msgid "Application is in read-only state. Only the administrator can log in."
+msgstr ""
+"Das Programm ist im Nur-Lese-Modus. Nur der Administrator kann sich im "
+"Moment einloggen."
+
+#: ../../../class/bibliograph/service/Access.php:115
+msgid ""
+"Welcome to Bibliograph. After clicking 'OK', please enter your email address "
+"and a new password."
+msgstr ""
+"Willkommen in Bibliograph. Nachdem Sie \"OK\" geklickt haben, können Sie "
+"Ihre E-Mail-Adresse und ein neues Passwort eingeben."
+
+#: ../../../class/bibliograph/service/Access.php:150
+#, php-format
+msgid ""
+"This will purge all anonymous user data (do this only during maintenance "
+"periods) and export all access control data to the backup folder."
+msgstr ""
+
+#: ../../../class/bibliograph/service/Access.php:172
+msgid "All data exported to the backup directory."
+msgstr "Alle Daten wurden im Backup-Verzeichnis gesichtert."
+
+#: ../../../class/bibliograph/service/Application.php:45
 msgid "Thank you for taking time to make Bibliograph better."
 msgstr "Danke, dass Sie dazu beitragen, das Programm zu verbessern."
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Application.php:44
-msgid "After selecting the type of report (1), please provide a detailed description of the error or the requested feature (2). "
-msgstr "Nachdem sie die Art der Meldung gewählt haben (1), geben Sie uns bitte eine detaillierte Beschreibung des Fehlers oder der gewünschten Funktionalität (2)."
+#: ../../../class/bibliograph/service/Application.php:47
+msgid ""
+"After selecting the type of report (1), please provide a detailed "
+"description of the error or the requested feature (2). "
+msgstr ""
+"Nachdem sie die Art der Meldung gewählt haben (1), geben Sie uns bitte eine "
+"detaillierte Beschreibung des Fehlers oder der gewünschten Funktionalität "
+"(2)."
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Application.php:45
-msgid "If the application has reported an error, please copy & paste or write down the error message (3). "
-msgstr "Wenn die Anwendung einen Fehler gemeldet hat, geben Sie diesen im Feld (3) an."
+#: ../../../class/bibliograph/service/Application.php:48
+msgid ""
+"If the application has reported an error, please copy & paste or write down "
+"the error message (3). "
+msgstr ""
+"Wenn die Anwendung einen Fehler gemeldet hat, geben Sie diesen im Feld (3) "
+"an."
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Application.php:46
-msgid "Finally, If you want to be notified about the progress of your request, please provide your email address (4)."
-msgstr "Wenn Sie über den Fortschritt Ihrer Meldung informiert werden möchten, geben Sie bitte Ihre E-Mailadresse an (4)."
+#: ../../../class/bibliograph/service/Application.php:49
+msgid ""
+"Finally, If you want to be notified about the progress of your request, "
+"please provide your email address (4)."
+msgstr ""
+"Wenn Sie über den Fortschritt Ihrer Meldung informiert werden möchten, geben "
+"Sie bitte Ihre E-Mailadresse an (4)."
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Application.php:56
+#: ../../../class/bibliograph/service/Application.php:59
 msgid "Type of report"
 msgstr "Art der Meldung"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Application.php:58
+#: ../../../class/bibliograph/service/Application.php:61
 msgid "Problem/Bug report"
 msgstr "Fehlermeldung"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Application.php:59
+#: ../../../class/bibliograph/service/Application.php:62
 msgid "Feature request"
 msgstr "Verbesserungsvorschlag"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Application.php:63
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Application.php:98
+#: ../../../class/bibliograph/service/Application.php:66
 msgid "Problem"
 msgstr "Problem"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Application.php:69
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Application.php:100
+#: ../../../class/bibliograph/service/Application.php:72
 msgid "Error Message"
 msgstr "Fehlermeldung"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Application.php:74
+#: ../../../class/bibliograph/service/Application.php:77
 msgid "Email"
 msgstr "E-Mail"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Application.php:104
-msgid "Bibliograph bug report"
-msgstr "Bibliograph bug report"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Application.php:105
-msgid "Bibliograph feature request"
-msgstr "Bibliograph feature request"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Application.php:134
-msgid "Your problem report"
-msgstr "Ihre Fehlermeldung"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Application.php:135
-msgid "Your feature request"
-msgstr "Ihr Verbesserungsvorschlag"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Application.php:137
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Application.php:166
+#: ../../../class/bibliograph/service/Application.php:129
 msgid "Thank you for your report."
 msgstr "Vielen Dank für Ihre Meldung."
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Application.php:140
-msgid "We will try to get back to you as soon as we can."
-msgstr "Wir werden uns bemühen, uns möglichst bald darum zu kümmern."
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Application.php:142
-msgid "The Bibliograph team"
-msgstr "Das Bibliograph-Team"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Application.php:168
+#: ../../../class/bibliograph/service/Application.php:131
 msgid "You will be notified as soon as it can be considered."
 msgstr "Sie werden benachrichtigt, sobald wir dazu kommen."
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Backup.php:190
+#: ../../../class/bibliograph/service/Backup.php:204
 #, php-format
 msgid "Do you want to backup Database '%s'"
 msgstr "Wollen Sie Datenbank '%s' sichern?"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Backup.php:222
+#: ../../../class/bibliograph/service/Backup.php:236
 #, php-format
 msgid "Backup created in %s seconds"
 msgstr "Sicherung in %s Sekunden erstellt"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Backup.php:229
+#: ../../../class/bibliograph/service/Backup.php:247
 #, php-format
-msgid "Do you really want to restore Database '%s'? All existing data will be lost!"
-msgstr "Wollen Sie wirklich die Datenbank  '%s' wiederherstellen? Alle bestehenden Daten werden gelöscht!"
+msgid ""
+"Do you really want to restore Database '%s'? All existing data will be lost!"
+msgstr ""
+"Wollen Sie wirklich die Datenbank  '%s' wiederherstellen? Alle bestehenden "
+"Daten werden gelöscht!"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Backup.php:270
+#: ../../../class/bibliograph/service/Backup.php:294
 msgid "Backup from "
 msgstr "Sicherung vom"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Backup.php:278
+#: ../../../class/bibliograph/service/Backup.php:302
 #, php-format
 msgid "Please select the backup set to restore into database '%s'"
-msgstr "Bitte wählen sie die Sicherung, die für Datenbank '%s' wiederhergestellt werden soll."
+msgstr ""
+"Bitte wählen sie die Sicherung, die für Datenbank '%s' wiederhergestellt "
+"werden soll."
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Backup.php:297
+#: ../../../class/bibliograph/service/Backup.php:331
 msgid "Backup file does not exist."
 msgstr "Backupdatei existiert nicht."
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Export.php:66
+#: ../../../class/bibliograph/service/Backup.php:394
+msgid "Backup has been restored."
+msgstr "Die Sicherung wurde zurückgespielt."
+
+#: ../../../class/bibliograph/service/Backup.php:395
+msgid "Please check logfile for problems."
+msgstr ""
+
+#: ../../../class/bibliograph/service/Export.php:66
 msgid "Export references"
 msgstr "Datensätze exportieren"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Export.php:69
+#: ../../../class/bibliograph/service/Export.php:69
 msgid "Choose the export format"
 msgstr "Exportformat auswählen"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Folder.php:550
+#: ../../../class/bibliograph/service/Folder.php:553
 msgid "Change the visibility of the folder"
 msgstr "Die Sichtbarkeit des Ordners ändern"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Folder.php:553
+#: ../../../class/bibliograph/service/Folder.php:556
 msgid "State"
 msgstr "Status"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Folder.php:556
+#: ../../../class/bibliograph/service/Folder.php:559
 msgid "Folder is publically visible"
 msgstr "Ordner ist öffentlich sichtbar"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Folder.php:557
+#: ../../../class/bibliograph/service/Folder.php:560
 msgid "Folder is not publically visible"
 msgstr "Ordner ist nicht öffentlich sichtbar"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Folder.php:563
+#: ../../../class/bibliograph/service/Folder.php:566
 msgid "Depth"
 msgstr "Reichweite"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Folder.php:566
+#: ../../../class/bibliograph/service/Folder.php:569
 msgid "Apply only to the selected folder"
 msgstr "Nur auf den ausgewählten Ordner anwenden"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Folder.php:567
+#: ../../../class/bibliograph/service/Folder.php:570
 msgid "Apply to the selected folder and its subfolders"
 msgstr "Auf den ausgewählten Ordner und alle Unterordner anwenden"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Folder.php:617
+#: ../../../class/bibliograph/service/Folder.php:620
 msgid "Please enter the name and type of the new folder:"
 msgstr "Bitte wählen Sie den Namen und den Typ des neuen Ordners;"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Folder.php:620
+#: ../../../class/bibliograph/service/Folder.php:623
+#: ../../../class/qcl/access/model/Group.php:95
+#: ../../../class/qcl/access/model/Role.php:90
+#: ../../../class/qcl/data/datasource/DbModel.php:191
 msgid "Name"
 msgstr "Name"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Folder.php:628
+#: ../../../class/bibliograph/service/Folder.php:631
 msgid "Normal folder"
 msgstr "Normaler Ordner"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Folder.php:629
+#: ../../../class/bibliograph/service/Folder.php:632
 msgid "Search folder"
 msgstr "Suchordner"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Folder.php:701
+#: ../../../class/bibliograph/service/Folder.php:704
 #, php-format
 msgid "Do you really want to move the folder '%s' into the trash?"
 msgstr "Wollen Sie wirklich den Ordner '%s' in den Mülleimer legen?"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Import.php:134
+#: ../../../class/bibliograph/service/Import.php:134
 msgid "2. Choose import format"
 msgstr "2. Wählen Sie das Importformat aus"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Import.php:177
+#: ../../../class/bibliograph/service/Import.php:179
 #, php-format
-msgid "Format '%s' expects file extension '%s'. The file you uploaded has extension '%s'"
-msgstr "Format '%s' erwartet die Dateiendung '%s'. Die Datei, die Sie hochgeladen haben, hat die Dateiendung '%s'. Bitte nennen Sie die Datei um und laden Sie sie erneut hoch. "
+msgid ""
+"Format '%s' expects file extension '%s'. The file you uploaded has extension "
+"'%s'"
+msgstr ""
+"Format '%s' erwartet die Dateiendung '%s'. Die Datei, die Sie hochgeladen "
+"haben, hat die Dateiendung '%s'. Bitte nennen Sie die Datei um und laden Sie "
+"sie erneut hoch. "
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Reference.php:309
-msgid "Reference Type"
-msgstr "Werktyp"
+#: ../../../class/bibliograph/service/Reference.php:916
+#, php-format
+msgid ""
+"The selected record '%s' is contained in %s folders. Move to the trash "
+"anyways?"
+msgstr ""
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Reference.php:318
-msgid "Citation key"
-msgstr "Zitierschlüssel"
-
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Reference.php:1033
+#: ../../../class/bibliograph/service/Reference.php:1239
 msgid "Record is marked for deletion"
 msgstr "Der Datensatz ist zur Löschung vorgesehen."
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Reference.php:1037
+#: ../../../class/bibliograph/service/Reference.php:1243
 msgid "Reference id"
 msgstr "Datensatz-ID"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Reference.php:1038
+#: ../../../class/bibliograph/service/Reference.php:1244
 msgid "Created"
 msgstr "Angelegt am"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Reference.php:1040
+#: ../../../class/bibliograph/service/Reference.php:1246
 msgid "Created by"
 msgstr "Angelegt von"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Reference.php:1041
+#: ../../../class/bibliograph/service/Reference.php:1247
 msgid "Modified"
 msgstr "Verändert am"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Reference.php:1042
+#: ../../../class/bibliograph/service/Reference.php:1248
 msgid "Modified by"
 msgstr "Verändert von"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Reference.php:1043
+#: ../../../class/bibliograph/service/Reference.php:1249
+#: ../../../class/qcl/data/datasource/DbModel.php:245
 msgid "Status"
 msgstr "Status"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Reference.php:1157
+#: ../../../class/bibliograph/service/Reference.php:1373
 msgid "All fields"
 msgstr "Alle Felder"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Reference.php:1169
+#: ../../../class/bibliograph/service/Reference.php:1385
 msgid "Search in:"
 msgstr "Suchen in: "
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Reference.php:1172
+#: ../../../class/bibliograph/service/Reference.php:1388
 msgid "Whole database"
 msgstr "Gesamte Datenbank"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Reference.php:1173
+#: ../../../class/bibliograph/service/Reference.php:1389
 msgid "Selected records"
 msgstr "Ausgewählte Datensätze"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Reference.php:1174
+#: ../../../class/bibliograph/service/Reference.php:1390
 msgid "Selected folder"
 msgstr "Ausgewählte Ordner"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Reference.php:1179
+#: ../../../class/bibliograph/service/Reference.php:1395
 msgid "Replace in:"
 msgstr "Ersetzen in:"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Reference.php:1184
+#: ../../../class/bibliograph/service/Reference.php:1400
 msgid "Search expression:"
 msgstr "Suchausdruck:"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Reference.php:1188
+#: ../../../class/bibliograph/service/Reference.php:1404
 msgid "Replace with:"
 msgstr "Ersetzen mit:"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Reference.php:1192
+#: ../../../class/bibliograph/service/Reference.php:1408
 msgid "Create a backup?"
 msgstr "Eine Sicherung anlegen?"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Reference.php:1202
-msgid "You can do a 'find and replace' operation on all or selected records in the database. These changes cannot easily be undone, that is why it is recommended to create a backup."
-msgstr "Sie können eine \"Suchen und Ersetzen\"-Operation in allen oder ausgewählten Datensätzen der Datenbank durchführen. Diese Änderungen können nur sehr schwer oder gar nicht rückgängig gemacht werden, deswegen wird geraten, eine automatische Sicherung durchführen zu lassen. "
+#: ../../../class/bibliograph/service/Reference.php:1419
+msgid ""
+"You can do a 'find and replace' operation on all or selected records in the "
+"database. These changes cannot easily be undone, that is why it is "
+"recommended to create a backup."
+msgstr ""
+"Sie können eine \"Suchen und Ersetzen\"-Operation in allen oder ausgewählten "
+"Datensätzen der Datenbank durchführen. Diese Änderungen können nur sehr "
+"schwer oder gar nicht rückgängig gemacht werden, deswegen wird geraten, eine "
+"automatische Sicherung durchführen zu lassen. "
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Reference.php:1222
+#: ../../../class/bibliograph/service/Reference.php:1439
 msgid "in all records"
 msgstr "in allen Datensätzen"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Reference.php:1223
+#: ../../../class/bibliograph/service/Reference.php:1440
 msgid "in the selected records"
 msgstr "in den ausgewählten Datensätzen"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Reference.php:1224
+#: ../../../class/bibliograph/service/Reference.php:1441
 msgid "in the selected folder"
 msgstr "im ausgewählten Ordner"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Reference.php:1233
+#: ../../../class/bibliograph/service/Reference.php:1451
 msgid "all fields"
 msgstr "allen Feldern"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Reference.php:1234
+#: ../../../class/bibliograph/service/Reference.php:1452
 #, php-format
 msgid "field '%s'"
 msgstr "Feld '%s'"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Reference.php:1230
+#: ../../../class/bibliograph/service/Reference.php:1448
 #, php-format
 msgid "Are you sure you want to replace '%s' with '%s' in %s %s?"
 msgstr "Sind Sie sicher, dass Sie '%s' mit '%s' in %s %s ersetzen wollen?"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Reference.php:1301
+#: ../../../class/bibliograph/service/Reference.php:1519
 #, php-format
-msgid "In case you want to revert the changes, a backup file '%s' has been created."
-msgstr "Im Fall, dass Sie die Änderungen rückgängig machen wollen, wurde eine Sicherungsdatei '%s' erstellt. "
+msgid ""
+"In case you want to revert the changes, a backup file '%s' has been created."
+msgstr ""
+"Im Fall, dass Sie die Änderungen rückgängig machen wollen, wurde eine "
+"Sicherungsdatei '%s' erstellt. "
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Reference.php:1298
+#: ../../../class/bibliograph/service/Reference.php:1516
 #, php-format
 msgid "%s replacements made. Please reload to see the changes. %s"
-msgstr "Es wurden %s Ersetzungen vorgenommen. Bitte laden Sie die Daten neu, um die Änderungen zu sehen. %s"
+msgstr ""
+"Es wurden %s Ersetzungen vorgenommen. Bitte laden Sie die Daten neu, um die "
+"Änderungen zu sehen. %s"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Reference.php:1313
+#: ../../../class/bibliograph/service/Reference.php:1531
 msgid "You can use the search features of this application in two ways."
-msgstr "Sie können sie Suchfunktion dieser Anwendung auf zwei verschiedene Arten nutzen."
+msgstr ""
+"Sie können sie Suchfunktion dieser Anwendung auf zwei verschiedene Arten "
+"nutzen."
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Reference.php:1314
-msgid "Either you simply type in keywords like you would do in a google search."
-msgstr "Entweder tippen Sie einfach Schlagwörter in das Suchfeld, wie Sie es von einer Google-Suche gewöhnt sind."
+#: ../../../class/bibliograph/service/Reference.php:1532
+msgid ""
+"Either you simply type in keywords like you would do in a google search."
+msgstr ""
+"Entweder tippen Sie einfach Schlagwörter in das Suchfeld, wie Sie es von "
+"einer Google-Suche gewöhnt sind."
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Reference.php:1315
-msgid "Or you compose complex queries using field names, comparison operators, and boolean connectors (for example: title contains constitution and year=1981)."
-msgstr "Oder Sie erstellen komplexere Abfrage unter Verwendung von Feldnamen, Vergleichsoperatoren und logischen Verknüpfungen (Zum Beispiel: titel enthält verfassung und jahr = 1981)."
+#: ../../../class/bibliograph/service/Reference.php:1533
+msgid ""
+"Or you compose complex queries using field names, comparison operators, and "
+"boolean connectors (for example: title contains constitution and year=1981)."
+msgstr ""
+"Oder Sie erstellen komplexere Abfrage unter Verwendung von Feldnamen, "
+"Vergleichsoperatoren und logischen Verknüpfungen (Zum Beispiel: titel "
+"enthält verfassung und jahr = 1981)."
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Reference.php:1316
-msgid "You can use wildcard characters: '?' for a single character and '*' for any amount of characters."
-msgstr "Sie können auch Ersetzungszeichen verwenden: '?' für einen einzelnen Buchstaben und '*' für eine beliebige Anzahl von Buchstaben."
+#: ../../../class/bibliograph/service/Reference.php:1534
+msgid ""
+"You can use wildcard characters: '?' for a single character and '*' for any "
+"amount of characters."
+msgstr ""
+"Sie können auch Ersetzungszeichen verwenden: '?' für einen einzelnen "
+"Buchstaben und '*' für eine beliebige Anzahl von Buchstaben."
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Reference.php:1317
-msgid "When using more than one word, the phrase has to be quoted (For example, title startswith \"Recent developments\")."
-msgstr "Wenn Sie mehr als ein Wort verwenden, müssen sie den Ausdruck mit Anführungszeichen einschließen (Zum Beispiel: titel beginntmit \"Neuere Entwicklungen\")."
+#: ../../../class/bibliograph/service/Reference.php:1535
+msgid ""
+"When using more than one word, the phrase has to be quoted (For example, "
+"title startswith \"Recent developments\")."
+msgstr ""
+"Wenn Sie mehr als ein Wort verwenden, müssen sie den Ausdruck mit "
+"Anführungszeichen einschließen (Zum Beispiel: titel beginntmit \"Neuere "
+"Entwicklungen\")."
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Reference.php:1318
-msgid "You can click on any of the terms below to insert them into the query field."
-msgstr "Klicken Sie auf eine der Begriffe weiter unten, um diese in das Suchfeld einzufügen."
+#: ../../../class/bibliograph/service/Reference.php:1536
+msgid ""
+"You can click on any of the terms below to insert them into the query field."
+msgstr ""
+"Klicken Sie auf eine der Begriffe weiter unten, um diese in das Suchfeld "
+"einzufügen."
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Reference.php:1327
+#: ../../../class/bibliograph/service/Reference.php:1545
 msgid "Field names"
 msgstr "Feldnamen"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Reference.php:1361
+#: ../../../class/bibliograph/service/Reference.php:1581
 msgid "Comparison modifiers"
 msgstr "Vergleichsoperatoren"
 
-#: /Users/bibliograph/Sites/Bibliograph/bibliograph-2.0/bibliograph/services/class/bibliograph/service/Reference.php:1382
+#: ../../../class/bibliograph/service/Reference.php:1602
 msgid "Boolean operators"
 msgstr "Logische Verknüpfungen"
+
+#: ../../../class/bibliograph/service/Setup.php:122
+msgid "Setup has finished. Please reload the application"
+msgstr ""
+
+#: ../../../class/qcl/access/ACLTool.php:1020
+#, php-format
+msgid "The email address %s is invalid"
+msgstr ""
+
+#: ../../../class/qcl/access/Controller.php:427
+#, fuzzy
+msgid "Access denied."
+msgstr "Zugang"
+
+#: ../../../class/qcl/access/Controller.php:450
+msgid "Your session has expired."
+msgstr ""
+
+#: ../../../class/qcl/access/Controller.php:491
+#, fuzzy
+msgid "Invalid user name."
+msgstr "Name"
+
+#: ../../../class/qcl/access/Controller.php:506
+msgid "Wrong password."
+msgstr ""
+
+#: ../../../class/qcl/access/Service.php:78
+msgid ""
+"Authentication must be done through a secure connection, using the https:// "
+"protocol."
+msgstr ""
+
+#: ../../../class/qcl/access/model/Group.php:102
+#, fuzzy
+msgid "Default role for new users"
+msgstr "Hauptordner"
+
+#: ../../../class/qcl/access/model/Group.php:172
+msgid "No role"
+msgstr ""
+
+#: ../../../class/qcl/access/model/User.php:172
+#, fuzzy
+msgid "Full name"
+msgstr "Name"
+
+#: ../../../class/qcl/access/model/User.php:175
+#, fuzzy
+msgid "Email address"
+msgstr ""
+"Willkommen in Bibliograph. Nachdem Sie \"OK\" geklickt haben, können Sie "
+"Ihre E-Mail-Adresse und ein neues Passwort eingeben."
+
+#: ../../../class/qcl/access/model/User.php:176
+msgid "Enter a valid Email address"
+msgstr ""
+
+#: ../../../class/qcl/access/model/User.php:182
+#, fuzzy
+msgid "Password"
+msgstr ""
+"Willkommen in Bibliograph. Nachdem Sie \"OK\" geklickt haben, können Sie "
+"Ihre E-Mail-Adresse und ein neues Passwort eingeben."
+
+#: ../../../class/qcl/access/model/User.php:185
+msgid "Leave blank if you don't want to change the password"
+msgstr ""
+
+#: ../../../class/qcl/access/model/User.php:191
+#: ../../../class/qcl/access/model/User.php:195
+msgid "Repeat password"
+msgstr ""
+
+#: ../../../class/qcl/access/model/User.php:284
+#, fuzzy
+msgid "Anonymous User"
+msgstr "Lade Benutzerdaten ..."
+
+#: ../../../class/qcl/application/plugin/Service.php:77
+msgid "Plugin is not installed"
+msgstr ""
+
+#: ../../../class/qcl/application/plugin/Service.php:78
+msgid "Install plugin"
+msgstr ""
+
+#: ../../../class/qcl/application/plugin/Service.php:84
+msgid "Plugin is installed"
+msgstr ""
+
+#: ../../../class/qcl/application/plugin/Service.php:85
+msgid "Uninstall plugin"
+msgstr ""
+
+#: ../../../class/qcl/application/plugin/Service.php:86
+msgid "Reinstall plugin"
+msgstr ""
+
+#: ../../../class/qcl/application/plugin/Service.php:102
+#, fuzzy
+msgid "Please configure the plugins"
+msgstr "Plugins"
+
+#: ../../../class/qcl/config/Service.php:145
+#, fuzzy
+msgid "Log file deleted."
+msgstr "Lösche Ordner ..."
+
+#: ../../../class/qcl/data/controller/Controller.php:293
+#, fuzzy, php-format
+msgid "You don't have access to '%s'"
+msgstr "Sie haben keinen Zugang zu Datenbanken auf diesem Server."
+
+#: ../../../class/qcl/data/controller/TableController.php:112
+#, fuzzy, php-format
+msgid "%s records"
+msgstr "Ausgewählte Datensätze"
+
+#: ../../../class/qcl/data/datasource/DbModel.php:200
+msgid "Schema"
+msgstr ""
+
+#: ../../../class/qcl/data/datasource/DbModel.php:209
+#, fuzzy
+msgid "Server host"
+msgstr "Verbinde mit dem Server ..."
+
+#: ../../../class/qcl/data/datasource/DbModel.php:213
+#, fuzzy
+msgid "Server port"
+msgstr "Verbinde mit dem Server ..."
+
+#: ../../../class/qcl/data/datasource/DbModel.php:221
+#, fuzzy
+msgid "Database name"
+msgstr "Name"
+
+#: ../../../class/qcl/data/datasource/DbModel.php:228
+#, fuzzy
+msgid "Database user name"
+msgstr "Name"
+
+#: ../../../class/qcl/data/datasource/DbModel.php:231
+#, fuzzy
+msgid "Database user password"
+msgstr "Datenbank"
+
+#: ../../../class/qcl/data/datasource/DbModel.php:234
+#, fuzzy
+msgid "Database encoding"
+msgstr "Datenbank"
+
+#: ../../../class/qcl/data/datasource/DbModel.php:238
+#, fuzzy
+msgid "Datasource prefix"
+msgstr "Informationen zur Datenquelle werden abgerufen..."
+
+#: ../../../class/qcl/data/datasource/DbModel.php:241
+msgid "Resource path"
+msgstr ""
+
+#: ../../../class/qcl/server/Download.php:133
+#, fuzzy, php-format
+msgid "File '%s' does not exist in datasource '%s'"
+msgstr "Der Index '%s' existiert nicht."
+
+#~ msgid "Do you really want to reset/upgrade the '%s' data?"
+#~ msgstr ""
+#~ "Wollen Sie wirklich die Daten für '%s' zurücksetzen oder aktualisieren?"
+
+#~ msgid "'%s' data reset."
+#~ msgstr "Daten für '%s' wurden zurückgesetzt"
+
+#~ msgid "Do you really want to export the '%s' data to the filesystem?"
+#~ msgstr "Wollen Sie wirklich die Daten für '%s' ins Dateisystem exportieren?"
+
+#~ msgid "'%s' data exported to '%s'."
+#~ msgstr "Daten für '%s' wurden nach '%s' exportiert."
+
+#~ msgid "Bibliograph bug report"
+#~ msgstr "Bibliograph bug report"
+
+#~ msgid "Bibliograph feature request"
+#~ msgstr "Bibliograph feature request"
+
+#~ msgid "Your problem report"
+#~ msgstr "Ihre Fehlermeldung"
+
+#~ msgid "Your feature request"
+#~ msgstr "Ihr Verbesserungsvorschlag"
+
+#~ msgid "We will try to get back to you as soon as we can."
+#~ msgstr "Wir werden uns bemühen, uns möglichst bald darum zu kümmern."
+
+#~ msgid "The Bibliograph team"
+#~ msgstr "Das Bibliograph-Team"
 
 #~ msgid "abstract"
 #~ msgstr "Zusammenfassung"
@@ -885,9 +1434,6 @@ msgstr "Logische Verknüpfungen"
 
 #~ msgid "New"
 #~ msgstr "Neu"
-
-#~ msgid "Passwords do not match."
-#~ msgstr "Passwörter stimmen nicht überein"
 
 #~ msgid "Password field cannot be empty."
 #~ msgstr "Das Passwortfeld darf nicht leer sein."

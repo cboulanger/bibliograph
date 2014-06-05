@@ -3,7 +3,7 @@ Todos
 
 Frontend
 --------
-- Bug: Translations missing
+
 
 Backend
 -------
