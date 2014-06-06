@@ -576,7 +576,6 @@ class bibliograph_service_Reference
   public function method_getAutoCompleteData( $datasource, $field, $input )
   {
 
-    $this->debug(array( $datasource, $field, $input ));
     /*
      * check access
      */
@@ -589,9 +588,9 @@ class bibliograph_service_Reference
     $model = $this->getControlledModel( $datasource );
     $fieldData = $model->getSchemaModel()->getFieldData( $field );
 
-    $separator = isset( $fieldData['formData']['autocomplete']['separator']) ?
-      $fieldData['formData']['autocomplete']['separator'] :
-      $fieldData['separator'];
+    $separator = $fieldData['separator'];
+
+    //$this->debug(array( $datasource, $field, $input, $separator ));
 
     if ( $separator )
     {
@@ -643,12 +642,28 @@ class bibliograph_service_Reference
     {
       throw new JsonRpcException( "Invalid data object");
     }
+    
+    $model = $this->getControlledModel( $datasource );    
 
     /*
      * save user-supplied data
      */
     foreach( object2array($data) as $property => $value )
     {
+      // replace form separator with field separator
+      $fieldData = $model->getSchemaModel()->getFieldData( $property );
+      $fieldSeparator = isset( $fieldData['separator'] )
+        ? $fieldData['separator']
+        : null;
+      $formSeparator = isset( $fieldData['formData']['autocomplete']['separator'] )
+        ? $fieldData['formData']['autocomplete']['separator']
+        : null; 
+      if( $fieldSeparator && $formSeparator )
+      {
+        $value = str_replace( $formSeparator, $fieldSeparator, $value );
+      }
+      
+      // set value
       $this->method_setValue( $datasource, $this->getModelType(), $referenceId, $property, $value );
     }
 

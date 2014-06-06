@@ -8,7 +8,6 @@ Frontend
 Backend
 -------
 - Duplicates: increase threshold for matching or add user config. Add match score in table.
-- Bug: Keyword autocomplete still buggy - doesn't split keywords on separator
 - Bug: Translations missing
 - Update CiteProc engine
 - Move bibliograph-mobile to separate branch
