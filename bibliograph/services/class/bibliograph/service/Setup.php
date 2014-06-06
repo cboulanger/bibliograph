@@ -34,47 +34,17 @@ class bibliograph_service_Setup
 {
 
   /**
-   * Configuration keys to be created if they do not already
-   * exists.
-   * @var array
+   * Setup service, called during first page load
    */
-  private $configKeys = array(
-    "application.title" => array(
-      "type"      => "string",
-      "custom"    => false,
-      "default"   => "Bibliograph Online Bibliographic Data Manager",
-      "final"     => false
-    ),
-    "application.logo" => array(
-      "type"      => "string",
-      "custom"    => false,
-      "default"   => "bibliograph/icon/bibliograph-logo.png",
-      "final"     => false
-    ),
-    "bibliograph.access.mode" => array(
-      "type"      => "string",
-      "custom"    => false,
-      "default"   => "normal",
-      "final"     => false
-    ),
-    "bibliograph.access.no-access-message" => array(
-      "type"      => "string",
-      "custom"    => false,
-      "default"   => "",
-      "final"     => false
-    ),
-    // TODO: remove this
-    "plugin.csl.bibliography.maxfolderrecords" => array(
-      "type"      => "number",
-      "custom"    => false,
-      "default"   => 500,
-      "final"     => false
-    )
-  );
-
-
   public function method_setup()
   {
+
+    /*
+     * create config keys if not exists. 
+     */
+    $this->log("Setting up configuration keys ....", QCL_LOG_SETUP );
+    $app = $this->getApplication();
+    $app->setupConfigKeys( include( APPLICATION_CLASS_PATH . "/bibliograph/config.php" ) );
 
     /*
      * check whether the application has been set up
@@ -138,12 +108,6 @@ class bibliograph_service_Setup
      */
     $app = $this->getApplication();
     $cache = bibliograph_ApplicationCache::getInstance();
-
-    /*
-     * create config keys
-     */
-    $this->log("Setting up configuration keys ....", QCL_LOG_SETUP );
-    $app->setupConfigKeys( $this->configKeys );
 
     /**
      * register bibliograph datasource schema and create example datasource
