@@ -808,7 +808,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
         /*
          * get row indexes from ids
          */
-        var rows = [];
+        var row, rows = [];
         data.ids.forEach(function(id) {
           row = tableModel.getRowById(id);
           if( row !== undefined ) rows.push( row ); // FIXME this is a bug

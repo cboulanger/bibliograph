@@ -807,7 +807,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
       }
       else
       {
-        this.warn("Stack view page '"+value+"' does not exist.");
+        this.warn("Stack view page '"+name+"' does not exist.");
       }
     },
 
