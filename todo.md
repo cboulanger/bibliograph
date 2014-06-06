@@ -8,6 +8,11 @@ Frontend
 Backend
 -------
 - Duplicates: increase threshold for matching or add user config. Add match score in table.
+- Bug: Keyword autocomplete still buggy - doesn't split keywords on separator
 - Bug: Translations missing
 - Update CiteProc engine
-- Cleanup: Remove all code problems resulting in currently suppressed E_STRICT & E_NOTICE errors
+- Move bibliograph-mobile to separate branch
+- Rewrite setup to inform about progress
+- Persisted model data must be dependent on application.ini -> hash contents
+- Add check to avoid re-importing of initial user data
+

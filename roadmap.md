@@ -23,5 +23,5 @@ Backend
 - qcl: Replace qcl_import with Autoloader
 - convert project to use PHP namespaces
 - replace defines with const where appropriate
-
+- Cleanup: Remove all code problems resulting in currently suppressed E_STRICT & E_NOTICE errors
 
