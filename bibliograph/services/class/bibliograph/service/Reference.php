@@ -1315,9 +1315,11 @@ class bibliograph_service_Reference
   {
     qcl_assert_valid_string($datasource,"Invalid datasource");
     qcl_assert_integer($modelId,"Invalid model id");
+    
     $refModel = $this->getControlledModel( $datasource );
     $refModel->load( $modelId );
-    $refModel->findPotentialDuplicates();
+    $threshold = $this->getApplication()->getConfigModel()->getKey("bibliograph.duplicates.threshold");
+    $scores = $refModel->findPotentialDuplicates($threshold);
     $data = array();
     while( $refModel->loadNext() )
     {
@@ -1329,7 +1331,8 @@ class bibliograph_service_Reference
         $refModel->getSchemaModel()->getTypeLabel( $refModel->getReftype() ),
         $refModel->getAuthor(),
         $refModel->getYear(),
-        $refModel->getTitle()
+        $refModel->getTitle(),
+        array_shift( $scores )
       );
     }
     return $data;

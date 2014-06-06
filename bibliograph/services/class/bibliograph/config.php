@@ -28,6 +28,12 @@
       "default"   => "",
       "final"     => false
     ),
+    "bibliograph.duplicates.threshold" => array(
+      "type"      => "number",
+      "custom"    => true,
+      "default"   => 50,
+      "final"     => false
+    ),
     // TODO: remove this
     "plugin.csl.bibliography.maxfolderrecords" => array(
       "type"      => "number",

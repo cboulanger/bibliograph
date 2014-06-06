@@ -400,9 +400,10 @@ class bibliograph_model_ReferenceModel
 
 	/**
 	 * Selects potential duplicates
+	 * @param $threshold The threshold score to count as a duplicate
 	 * @return array
 	 */
-	function findPotentialDuplicates()
+	function findPotentialDuplicates($threshold=50)
 	{
     $queryBehavior = $this->getQueryBehavior();
     $adapter = $this->getQueryBehavior()->getAdapter();
@@ -416,14 +417,15 @@ class bibliograph_model_ReferenceModel
       "basic", "$author $title $year", "fuzzy"
     );
     $table = $queryBehavior->getTableName();
-    $minScore = 10;
     $sql = "
       SELECT id, $match AS score
       FROM $table
-      WHERE $match > $minScore
+      WHERE $match > $threshold
       ORDER BY score DESC
     ";
     $rows = $adapter->fetchAll($sql);
+    //qcl_log_Logger::getInstance()->info($sql);
+    //qcl_log_Logger::getInstance()->info(print_r($rows,true));
     $ids = array();
     $scores = array();
     foreach( $rows as $row )

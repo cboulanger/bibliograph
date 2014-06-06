@@ -89,7 +89,7 @@ qx.Class.define("bibliograph.ui.item.DuplicatesView",
       {
         if (id != app.getModelId())return;
         this._reloadData();
-      }, this, 100);
+      }, this, 500);
     },
 
     /**

@@ -39,6 +39,10 @@ qx.Class.define("bibliograph.ui.item.DuplicatesViewUi",
       qxVbox1.setSpacing(5);
       var qxLabel1 = new qx.ui.basic.Label(this.tr('This table shows potential duplicates of the current record.'));
       qxComposite1.add(qxLabel1);
+      
+      /*
+       * Table
+       */
       var table = new qx.ui.table.Table(null, {
         tableColumnModel : function(obj) {
           return new qx.ui.table.columnmodel.Resize(obj);
@@ -49,15 +53,18 @@ qx.Class.define("bibliograph.ui.item.DuplicatesViewUi",
       table.setStatusBarVisible(false);
       table.getSelectionModel().setSelectionMode(qx.ui.table.selection.Model.SINGLE_SELECTION);
       table.setKeepFirstVisibleRowComplete(true);
-      qxComposite1.add(table, {
-        flex : 1
-      });
+      qxComposite1.add(table, { flex : 1 });
 
-      // ------
       var qxTableModel1 = new qx.ui.table.model.Simple();
-      qxTableModel1.setColumns(["RID", this.tr('Type'), this.tr('Author'), this.tr('Date'), this.tr('Title'), "%"], ["refId", "type", "author", "date", "title", "score"]);
-
-      // -------
+      qxTableModel1.setColumns([
+        "RID", 
+        this.tr('Type'), 
+        this.tr('Author'), 
+        this.tr('Date'), 
+        this.tr('Title'), 
+        "%"], 
+        ["refId", "type", "author", "date", "title", "score"]
+      );
       table.setTableModel(qxTableModel1);
       table.getTableColumnModel().setColumnVisible(0, false);
       table.getTableColumnModel().setColumnWidth(0, 50);
@@ -71,30 +78,58 @@ qx.Class.define("bibliograph.ui.item.DuplicatesViewUi",
       this.getApplication().addListener("changeModelId", this.reloadData, this);
       table.addListener("appear", this._on_appear, this);
       var qxHbox1 = new qx.ui.layout.HBox(5, null, null);
-      var qxComposite2 = new qx.ui.container.Composite();
-      qxComposite2.setLayout(qxHbox1)
-      qxComposite2.setEnabled(false);
-      qxComposite1.add(qxComposite2);
+      var footer = new qx.ui.container.Composite();
+      footer.setLayout(qxHbox1)
+      qxComposite1.add(footer);
       qxHbox1.setSpacing(5);
 
       /*
-       * Display duplicate
+       * Button to display selected duplicate
        */
       var qxButton1 = new qx.ui.form.Button(this.tr('Display Duplicate'), null, null);
       qxButton1.setEnabled(true);
       //table.addListener("cellClick",function(e){},this);
-      qxComposite2.add(qxButton1);
+      footer.add(qxButton1);
       //permMgr.create("reference.remove").bind("state", qxButton1, "enabled");
       qxButton1.addListener("execute", this._displayDuplicate, this);
 
       /*
-       * Delete Duplicate
+       * Button to delete selected duplicate
        */
       var qxButton2 = new qx.ui.form.Button(this.tr('Delete Duplicate'), null, null);
       qxButton2.setEnabled(false);
-      qxComposite2.add(qxButton2);
+      footer.add(qxButton2);
       permMgr.create("reference.remove").bind("state", qxButton2, "enabled");
       qxButton2.addListener("execute", this._deleteDuplicate, this);
+      
+      /*
+       * Spinner to change score threshold
+       */
+      var label = new qx.ui.basic.Label(this.tr("Score threshold to count as duplicate:"));
+      label.setAlignY("middle");
+      footer.add( label );
+      var spinner = new qx.ui.form.Spinner();
+      spinner.set({
+        maximum: 100,
+        minimum: 10,
+        singleStep : 10
+      });
+      footer.add(spinner);
+      spinner.addListener("changeValue", function(e){
+        // small timeout to prevent to many reloads
+        qx.event.Timer.once(function(){
+          if ( e.getData() != spinner.getValue() )return;
+          this._reloadData();
+        }, this, 500);
+      }, this);
+      
+      // bind to config value
+      var app = qx.core.Init.getApplication();
+      var confMgr = app.getConfigManager();      
+      confMgr.addListener("ready", function() {
+        confMgr.bindKey("bibliograph.duplicates.threshold", spinner, "value", true);
+      });      
+      
     }
   }
 });
