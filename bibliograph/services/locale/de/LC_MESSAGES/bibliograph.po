@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Bibliograph 2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-06-05 23:13+0100\n"
-"PO-Revision-Date: 2014-06-05 23:18+0100\n"
+"PO-Revision-Date: 2014-06-06 07:49+0100\n"
 "Last-Translator: Christian Boulanger <info@bibliograph.org>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -196,7 +196,6 @@ msgid "Please reload the application to finish uninstalling."
 msgstr ""
 
 #: ../../../class/bibliograph/plugin/isbnscanner/Service.php:49
-#, fuzzy
 msgid "No folder selected."
 msgstr "Bitte erst einen Ordner auswählen."
 
@@ -214,9 +213,9 @@ msgid "Could not find any data for ISBN %s."
 msgstr "Konnte keine Daten für ISBN %s finden."
 
 #: ../../../class/bibliograph/plugin/isbnscanner/Service.php:130
-#, fuzzy, php-format
+#, php-format
 msgid "Contacting %s. Please wait..."
-msgstr "Bitte warten ..."
+msgstr "Anfrage an %s. Bitte warten ...\t"
 
 #: ../../../class/bibliograph/plugin/isbnscanner/Service.php:225
 #, php-format
@@ -225,19 +224,17 @@ msgstr "Ergebnis: %s<br><br><b>Mögliche Duplikate:</b><br>%s"
 
 #: ../../../class/bibliograph/plugin/isbnscanner/Service.php:233
 #: ../../../class/bibliograph/plugin/isbnscanner/Service.php:245
-#, fuzzy, php-format
+#, php-format
 msgid "Found: %s"
-msgstr "Daten für '%s' wurden nach '%s' exportiert."
+msgstr "Ergebnis: %s\t"
 
 #: ../../../class/bibliograph/plugin/isbnscanner/Service.php:251
-#, fuzzy
 msgid "Import and continue"
-msgstr "Importieren"
+msgstr "Importieren und weiter"
 
 #: ../../../class/bibliograph/plugin/isbnscanner/Service.php:252
-#, fuzzy
 msgid "Import and edit"
-msgstr "Bearbeiten"
+msgstr "Importieren und bearbeiten\t"
 
 #: ../../../class/bibliograph/plugin/isbnscanner/Service.php:253
 msgid "Skip and continue"
@@ -245,14 +242,12 @@ msgstr "Überspringen und fortsetzen"
 
 #: ../../../class/bibliograph/plugin/isbnscanner/Service.php:299
 #: ../../../class/bibliograph/plugin/isbnscanner/Service.php:346
-#, fuzzy
 msgid "Importing data. Please wait..."
-msgstr "Bitte warten ..."
+msgstr "Importiere die Daten. Bitte warten ..."
 
 #: ../../../class/bibliograph/plugin/isbnscanner/Service.php:306
-#, fuzzy
 msgid "Converting names. Please wait..."
-msgstr "Bitte warten ..."
+msgstr "Wandle Namen um. Bitte warten ..."
 
 #: ../../../class/bibliograph/plugin/isbnscanner/Service.php:494
 msgid ""
@@ -607,9 +602,8 @@ msgstr "Der Index '%s' existiert nicht."
 #: ../../../class/bibliograph/service/ACLTool.php:91
 #: ../../../class/qcl/access/ACLTool.php:50
 #: ../../../class/qcl/access/ACLTool.php:96
-#, fuzzy
 msgid "Users"
-msgstr "Wird den Benutzern im Nur-Lese-Modus und bei Zugangssperre angezeigt."
+msgstr "Benutzer/innen"
 
 #: ../../../class/bibliograph/service/ACLTool.php:53
 #: ../../../class/bibliograph/service/ACLTool.php:96
@@ -636,15 +630,13 @@ msgstr "Berechtigungen"
 #: ../../../class/bibliograph/service/ACLTool.php:111
 #: ../../../class/qcl/access/ACLTool.php:74
 #: ../../../class/qcl/access/ACLTool.php:116
-#, fuzzy
 msgid "Datasources"
-msgstr "Datenbanken"
+msgstr "Datenquellen\t"
 
 #: ../../../class/bibliograph/service/ACLTool.php:252
 #: ../../../class/qcl/access/ACLTool.php:363
-#, fuzzy
 msgid "Relations"
-msgstr "Standort"
+msgstr "Beziehungen\t"
 
 #: ../../../class/bibliograph/service/ACLTool.php:325
 #: ../../../class/qcl/access/ACLTool.php:436
@@ -653,9 +645,8 @@ msgstr ""
 
 #: ../../../class/bibliograph/service/ACLTool.php:363
 #: ../../../class/qcl/access/ACLTool.php:474
-#, fuzzy
 msgid "In all groups"
-msgstr "Alle im Ordner"
+msgstr "In allen Gruppen"
 
 #: ../../../class/bibliograph/service/ACLTool.php:476
 #: ../../../class/qcl/access/ACLTool.php:588
@@ -666,15 +657,11 @@ msgstr ""
 
 #: ../../../class/bibliograph/service/ACLTool.php:477
 #: ../../../class/qcl/access/ACLTool.php:589
-#, fuzzy
 msgid "All data"
-msgstr ""
-"Wollen Sie wirklich die Datenbank  '%s' wiederherstellen? Alle bestehenden "
-"Daten werden gelöscht!"
+msgstr "Alle Daten"
 
 #: ../../../class/bibliograph/service/ACLTool.php:477
 #: ../../../class/qcl/access/ACLTool.php:589
-#, fuzzy
 msgid "Entry only"
 msgstr "Nur-Lese-Modus"
 
@@ -692,9 +679,8 @@ msgstr "Datenquelle '%s' wurde erfolgreich gelöscht."
 
 #: ../../../class/bibliograph/service/ACLTool.php:691
 #: ../../../class/qcl/access/ACLTool.php:851
-#, fuzzy
 msgid "Passwords do not match. Please try again"
-msgstr "Passwörter stimmen nicht überein"
+msgstr "Passwörter stimmen nicht überein. Bitte erneut eingeben."
 
 #: ../../../class/bibliograph/service/ACLTool.php:728
 #: ../../../class/qcl/access/ACLTool.php:879
@@ -1165,18 +1151,16 @@ msgid "The email address %s is invalid"
 msgstr ""
 
 #: ../../../class/qcl/access/Controller.php:427
-#, fuzzy
 msgid "Access denied."
-msgstr "Zugang"
+msgstr "Zugang verweigert."
 
 #: ../../../class/qcl/access/Controller.php:450
 msgid "Your session has expired."
 msgstr ""
 
 #: ../../../class/qcl/access/Controller.php:491
-#, fuzzy
 msgid "Invalid user name."
-msgstr "Name"
+msgstr "Ungültiger Nutzername\t"
 
 #: ../../../class/qcl/access/Controller.php:506
 msgid "Wrong password."
@@ -1189,18 +1173,16 @@ msgid ""
 msgstr ""
 
 #: ../../../class/qcl/access/model/Group.php:102
-#, fuzzy
 msgid "Default role for new users"
-msgstr "Hauptordner"
+msgstr "Standardrolle für neue Benutzer/innen"
 
 #: ../../../class/qcl/access/model/Group.php:172
 msgid "No role"
 msgstr ""
 
 #: ../../../class/qcl/access/model/User.php:172
-#, fuzzy
 msgid "Full name"
-msgstr "Name"
+msgstr "Vollständiger Name"
 
 #: ../../../class/qcl/access/model/User.php:175
 #, fuzzy
