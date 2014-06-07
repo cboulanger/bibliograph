@@ -46,7 +46,7 @@ class bibliograph_Application
    * The version of the application
    * @var string
    */
-  protected $applicationVersion = "v 2.0";
+  protected $applicationVersion = "2.1";
 
   /**
    * The path to the application ini-file
@@ -158,20 +158,7 @@ class bibliograph_Application
     /**
      * Register the services provided by this application
      */
-    $this->registerServices( array(
-      "bibliograph.access"     => "bibliograph_service_Access",
-      "bibliograph.config"     => "qcl_config_Service",
-      "bibliograph.plugin"     => "qcl_application_plugin_Service",
-      "bibliograph.model"      => "bibliograph_service_Model",
-      "bibliograph.folder"     => "bibliograph_service_Folder",
-      "bibliograph.reference"  => "bibliograph_service_Reference",
-      "bibliograph.main"       => "bibliograph_service_Application",
-      "bibliograph.import"     => "bibliograph_service_Import",
-      "bibliograph.export"     => "bibliograph_service_Export",
-      "bibliograph.backup"     => "bibliograph_service_Backup",
-      "bibliograph.actool"     => "bibliograph_service_ACLTool",
-      "bibliograph.setup"      => "bibliograph_service_Setup"
-    ) );
+    $this->registerServices( include( dirname(__FILE__) . "/routes.php" ) );
 
     /**
      * Plugins
