@@ -3,11 +3,12 @@ Release notes
 
 Version 2.1 (May 2014)
 ----------------------
-Lots (really!) of changes, improvements and refactoring under the hood, but backwards-compatible as to database and
-plugins. Contains one new plugin (ISBN-Scanner). Details:
-- upgraded qooxdoo to version 3.5 on the frontend and to PHP 5.3. on the backend
+Lots (really!) of changes, fixes, improvements and refactoring under the hood, while staying
+backwards-compatible for database data and plugin code.
+- upgraded qooxdoo to version 3.5.1 on the frontend and to PHP 5.3. on the backend
 - removed dependency on qxtransformer during development - it's all pure javascript now
 - clean-up and refactoring of the backend (backwards-incompatible changes of the qcl library).
+- contains new ISBN-Scanner plugin
 
 Version 2.0 (2011)
 ------------------

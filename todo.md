@@ -3,7 +3,6 @@ Todos
 
 Frontend
 --------
-- Bug: Add reference menu is falsely placed
 - Auto-Generate Citation id
 
 Backend

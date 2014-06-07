@@ -577,17 +577,12 @@ qx.Class.define("bibliograph.ui.reference.ListView",
       }, this);
 
       /*
-       * buttons for add menu
+       * create reference type list
        */
-      if (data.addItems && data.addItems.length && this.listViewAddMenu && this.listViewAddMenuButton)
+      if (data.addItems && data.addItems.length)
       {
-        data.addItems.forEach(function(item)
-        {
-          var menuButton = new qx.ui.menu.Button(item.label, item.icon);
-          menuButton.setUserData("type", item.value);
-          menuButton.addListener("execute", this._on_addItemMenu_execute, this);
-          this.listViewAddMenu.add(menuButton);
-        }, this);
+        var model = qx.data.marshal.Json.createModel(data.addItems);
+        this.chooseRefTypeList.setModel(model);
         this.listViewAddMenuButton.setEnabled(true);
       }
     },

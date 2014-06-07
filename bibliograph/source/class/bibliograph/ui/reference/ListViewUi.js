@@ -32,8 +32,12 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
   members : {
     __qxtCreateUI : function()
     {
-      var permissionManager = qx.core.Init.getApplication().getAccessManager().getPermissionManager();
+      var app = qx.core.Init.getApplication();
+      var permissionManager = app.getAccessManager().getPermissionManager();
 
+      /*
+       * Main view & Layout
+       */
       var qxVbox1 = new qx.ui.layout.VBox(null, null, null);
       var qxComposite1 = this;
       this.setLayout(qxVbox1);
@@ -121,10 +125,9 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
       contentPane.add(menuBar);
 
       /*
-       * Add button
+       * "Add Reference" menubar button
        */
-      var listViewAddMenuButton = new qx.ui.menubar.Button(null, "bibliograph/icon/button-plus.png", null);
-      this.listViewAddMenuButton = listViewAddMenuButton;
+      var listViewAddMenuButton = new qx.ui.menubar.Button();
       listViewAddMenuButton.setWidth(16);
       listViewAddMenuButton.setIcon("bibliograph/icon/button-plus.png");
       listViewAddMenuButton.setEnabled(false);
@@ -133,15 +136,52 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
       permissionManager.create("reference.add").bind("state", listViewAddMenuButton, "visibility", {
         converter : qcl.bool2visibility
       });
-      var listViewAddMenu = new qx.ui.menu.Menu();
-      this.listViewAddMenu = listViewAddMenu;
-      //listViewAddMenu.setPosition("top-left"); //FIXME
-      listViewAddMenuButton.setMenu(listViewAddMenu);
+
+      // access
+      this.listViewAddMenuButton = listViewAddMenuButton;
+
+      /*
+       * Window to choose reference type
+       */
+      var win = new qx.ui.window.Window(this.tr("Create new reference type"));
+      win.setLayout(new qx.ui.layout.VBox(0));
+      win.set({
+        height: 300, width : 200,
+        showMinimize : false, showMaximize : false
+      });
+      win.addListener("appear", win.center, win);
+      listViewAddMenuButton.addListener("click", win.open, win);
+      app.getRoot().add(win);
+      this.chooseRefTypeWin = win;
+
+      /*
+       * List widget, will be populated later
+       */
+      var list = new qx.ui.list.List();
+      list.set({
+        iconPath : "icon", labelPath : "label"
+      });
+      win.add(list,{flex:1});
+      this.chooseRefTypeList = list;
+
+      // on selection change, create new reference of the selected type
+      list.getSelection().addListener("change", function(e) {
+        qx.lang.Function.delay(function(){
+          win.close();
+          app.setItemView("referenceEditor-main");
+          this.createReference(list.getSelection().getItem(0).getValue());
+        },100,this);
+      }, this);
+
+
+      /*
+       * Cancel button
+       */
 
       /*
        * Remove button
        */
-      var qxMenuBarButton1 = new qx.ui.menubar.Button(null, "bibliograph/icon/button-minus.png", null);
+      var qxMenuBarButton1 = new qx.ui.menubar.Button();
       qxMenuBarButton1.setWidth(16);
       qxMenuBarButton1.setHeight(16);
       qxMenuBarButton1.setEnabled(false);
@@ -174,12 +214,10 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
       qxMenuButton1.setLabel(this.tr('Move reference(s)...'));
       qxMenu1.add(qxMenuButton1);
       qxMenuButton1.addListener("execute", this._moveReference, this);
-      permissionManager.create("allowMoveReference").bind("state", qxMenuButton1, "enabled", {
-
-      });
-      permissionManager.create("reference.move").bind("state", qxMenuButton1, "visibility", {
-        converter : qcl.bool2visibility
-      });
+      permissionManager.create("allowMoveReference")
+          .bind("state", qxMenuButton1, "enabled");
+      permissionManager.create("reference.move")
+          .bind("state", qxMenuButton1, "visibility", { converter : qcl.bool2visibility });
 
       /*
        * Copy references
@@ -188,12 +226,10 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
       qxMenuButton2.setLabel(this.tr('Copy reference(s)...'));
       qxMenu1.add(qxMenuButton2);
       qxMenuButton2.addListener("execute", this._copyReference, this);
-      permissionManager.create("allowMoveReference").bind("state", qxMenuButton2, "enabled", {
-
-      });
-      permissionManager.create("reference.move").bind("state", qxMenuButton2, "visibility", {
-        converter : qcl.bool2visibility
-      });
+      permissionManager.create("allowMoveReference")
+          .bind("state", qxMenuButton2, "enabled");
+      permissionManager.create("reference.move")
+          .bind("state", qxMenuButton2, "visibility", { converter : qcl.bool2visibility });
 
       /*
        * Export menu
@@ -201,9 +237,8 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
       var qxMenuButton3 = new qx.ui.menu.Button(this.tr('Export references'), null, null, null);
       qxMenuButton3.setLabel(this.tr('Export references'));
       qxMenu1.add(qxMenuButton3);
-      permissionManager.create("reference.export").bind("state", qxMenuButton3, "visibility", {
-        converter : qcl.bool2visibility
-      });
+      permissionManager.create("reference.export")
+          .bind("state", qxMenuButton3, "visibility", { converter : qcl.bool2visibility });
       var qxMenu2 = new qx.ui.menu.Menu();
       qxMenuButton3.setMenu(qxMenu2);
 
@@ -213,9 +248,8 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
       var qxMenuButton4 = new qx.ui.menu.Button(this.tr('Export selected references'), null, null, null);
       qxMenuButton4.setLabel(this.tr('Export selected references'));
       qxMenu2.add(qxMenuButton4);
-      permissionManager.create("allowExportReference").bind("state", qxMenuButton4, "enabled", {
-
-      });
+      permissionManager.create("allowExportReference")
+          .bind("state", qxMenuButton4, "enabled");
       qxMenuButton4.addListener("execute", function(e) {
         this.exportSelected();
       }, this);
@@ -236,9 +270,8 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
       var qxMenuButton6 = new qx.ui.menu.Button(this.tr('Edit references'), null, null, null);
       qxMenuButton6.setLabel(this.tr('Edit references'));
       qxMenu1.add(qxMenuButton6);
-      permissionManager.create("reference.edit").bind("state", qxMenuButton6, "visibility", {
-        converter : qcl.bool2visibility
-      });
+      permissionManager.create("reference.edit")
+          .bind("state", qxMenuButton6, "visibility", { converter : qcl.bool2visibility });
       var qxMenu3 = new qx.ui.menu.Menu();
       qxMenuButton6.setMenu(qxMenu3);
 
@@ -248,9 +281,8 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
       var qxMenuButton7 = new qx.ui.menu.Button(this.tr('Find/Replace'), null, null, null);
       qxMenuButton7.setLabel(this.tr('Find/Replace'));
       qxMenu3.add(qxMenuButton7);
-      permissionManager.create("reference.batchedit").bind("state", qxMenuButton7, "visibility", {
-        converter : qcl.bool2visibility
-      });
+      permissionManager.create("reference.batchedit")
+          .bind("state", qxMenuButton7, "visibility", { converter : qcl.bool2visibility });
       qxMenuButton7.addListener("execute", function(e) {
         this.findReplace()
       }, this);
