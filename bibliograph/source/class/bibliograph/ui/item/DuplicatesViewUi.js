@@ -73,8 +73,8 @@ qx.Class.define("bibliograph.ui.item.DuplicatesViewUi",
       table.getTableColumnModel().getBehavior().setWidth(1, 150);
       table.getTableColumnModel().setColumnWidth(3, 50);
       table.getTableColumnModel().getBehavior().setWidth(3, 50);
-      table.getTableColumnModel().setColumnWidth(5, 30);
-      table.getTableColumnModel().getBehavior().setWidth(5, 30);
+      table.getTableColumnModel().setColumnWidth(5, 50);
+      table.getTableColumnModel().getBehavior().setWidth(5, 50);
       this.getApplication().addListener("changeModelId", this.reloadData, this);
       table.addListener("appear", this._on_appear, this);
       var qxHbox1 = new qx.ui.layout.HBox(5, null, null);
@@ -86,7 +86,7 @@ qx.Class.define("bibliograph.ui.item.DuplicatesViewUi",
       /*
        * Button to display selected duplicate
        */
-      var qxButton1 = new qx.ui.form.Button(this.tr('Display Duplicate'), null, null);
+      var qxButton1 = new qx.ui.form.Button(this.tr('Display'), null, null);
       qxButton1.setEnabled(true);
       //table.addListener("cellClick",function(e){},this);
       footer.add(qxButton1);
@@ -96,7 +96,7 @@ qx.Class.define("bibliograph.ui.item.DuplicatesViewUi",
       /*
        * Button to delete selected duplicate
        */
-      var qxButton2 = new qx.ui.form.Button(this.tr('Delete Duplicate'), null, null);
+      var qxButton2 = new qx.ui.form.Button(this.tr('Delete'), null, null);
       qxButton2.setEnabled(false);
       footer.add(qxButton2);
       permMgr.create("reference.remove").bind("state", qxButton2, "enabled");
@@ -116,9 +116,10 @@ qx.Class.define("bibliograph.ui.item.DuplicatesViewUi",
       });
       footer.add(spinner);
       spinner.addListener("changeValue", function(e){
+        var value = e.getData();
         // small timeout to prevent to many reloads
         qx.event.Timer.once(function(){
-          if ( e.getData() != spinner.getValue() )return;
+          if ( value != spinner.getValue() )return;
           this._reloadData();
         }, this, 500);
       }, this);

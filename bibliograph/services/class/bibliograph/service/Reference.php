@@ -1323,8 +1323,12 @@ class bibliograph_service_Reference
     $data = array();
     while( $refModel->loadNext() )
     {
+      $score = round(array_shift( $scores ));
       if ( $refModel->id() == $modelId or
-        $refModel->get( "markedDeleted" ) ) continue;
+        $refModel->get( "markedDeleted" ) )
+      {
+        continue;
+      }
 
       $data[] = array(
         $refModel->id(),
@@ -1332,7 +1336,7 @@ class bibliograph_service_Reference
         $refModel->getAuthor(),
         $refModel->getYear(),
         $refModel->getTitle(),
-        array_shift( $scores )
+        $score
       );
     }
     return $data;

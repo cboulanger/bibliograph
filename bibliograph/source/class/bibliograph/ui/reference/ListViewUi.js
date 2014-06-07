@@ -113,9 +113,7 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
       referenceViewLabel.setRich(true);
       qxMenuBar1.add(referenceViewLabel);
       var tableContainer = new qx.ui.container.Stack();
-      contentPane.add(tableContainer, {
-        flex : 1
-      });
+      contentPane.add(tableContainer, { flex : 1 });
       this.setTableContainer(tableContainer);
       var menuBar = new qx.ui.menubar.MenuBar();
       this.menuBar = menuBar;
@@ -137,7 +135,7 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
       });
       var listViewAddMenu = new qx.ui.menu.Menu();
       this.listViewAddMenu = listViewAddMenu;
-      listViewAddMenu.setPosition("top-left");
+      //listViewAddMenu.setPosition("top-left"); //FIXME
       listViewAddMenuButton.setMenu(listViewAddMenu);
 
       /*

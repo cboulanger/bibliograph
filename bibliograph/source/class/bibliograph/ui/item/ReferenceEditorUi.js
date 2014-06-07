@@ -29,8 +29,13 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditorUi",
   members : {
     __qxtCreateUI : function()
     {
+      var app     = qx.core.Init.getApplication();
+      var permMgr = app.getAccessManager().getPermissionManager();
+
+      /*
+       * Main view/layout
+       */
       var qxVbox1 = new qx.ui.layout.VBox(null, null, null);
-      var app = qx.core.Init.getApplication();
       var qxComposite1 = this;
       this.setLayout(qxVbox1)
 
@@ -50,9 +55,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditorUi",
         itemViewTitleLabel.setValue("");
       }, this)
       var qxSpacer1 = new qx.ui.core.Spacer(null, null);
-      qxMenuBar1.add(qxSpacer1, {
-        flex : 1
-      });
+      qxMenuBar1.add(qxSpacer1, { flex : 1 });
 
       /*
        * Status label
@@ -89,13 +92,12 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditorUi",
       formStack.setPadding(5);
       formStack.setHeight(500);
       qxScroll1.add(formStack);
-      var qxHbox1 = new qx.ui.layout.HBox(5, null, null);
-
 
       /*
        * (more) Metatdata stack view
        */
       var aboutPage = new qx.ui.container.Composite();
+      var qxHbox1 = new qx.ui.layout.HBox(5, null, null);
       aboutPage.setLayout(qxHbox1)
       aboutPage.setPadding(5);
       stackView.add(aboutPage);
@@ -248,7 +250,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditorUi",
       recordInfoButton.addListener("click", function(e) {
         this._showStackViewPage("recordInfo");
       }, this);
-      qx.core.Init.getApplication().getAccessManager().getPermissionManager().create("reference.remove").bind("state", recordInfoButton, "visibility", {
+      permMgr.create("reference.remove").bind("state", recordInfoButton, "visibility", {
         converter : qcl.bool2visibility
       });
 
@@ -271,9 +273,11 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditorUi",
           return value ? "(" + value + ")" : null
         }
       });
-      qx.core.Init.getApplication().getAccessManager().getPermissionManager().create("reference.remove").bind("state", duplicatesButton, "visibility", {
-        converter : qcl.bool2visibility
-      });
+      // todo: create separate permission for duplicates
+      permMgr.create("reference.remove").bind(
+          "state", duplicatesButton, "visibility",
+          { converter : qcl.bool2visibility }
+      );
     }
   }
 });

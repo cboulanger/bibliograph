@@ -402,6 +402,8 @@ class bibliograph_model_ReferenceModel
 	 * Selects potential duplicates
 	 * @param $threshold The threshold score to count as a duplicate
 	 * @return array
+   *    Returns an array of match scores in the order of the found records
+   * @todo this works only with MySQL, must be abstracted to support other backends
 	 */
 	function findPotentialDuplicates($threshold=50)
 	{
@@ -417,10 +419,16 @@ class bibliograph_model_ReferenceModel
       "basic", "$author $title $year", "fuzzy"
     );
     $table = $queryBehavior->getTableName();
+    $id = $this->id();
     $sql = "
-      SELECT id, $match AS score
-      FROM $table
-      WHERE $match > $threshold
+      SELECT id,
+        $match AS score,
+        ($match / maxScore)*100 AS normalisedScore
+      FROM $table,
+        (SELECT MAX($match) AS maxScore FROM $table) AS maxScoreTable
+      WHERE
+        $match
+      HAVING normalisedScore > $threshold AND id != $id
       ORDER BY score DESC
     ";
     $rows = $adapter->fetchAll($sql);
@@ -430,8 +438,8 @@ class bibliograph_model_ReferenceModel
     $scores = array();
     foreach( $rows as $row )
     {
-     $ids[]    = $row['id'];
-     $scores[] = $row['score'];
+        $ids[]    = $row['id'];
+        $scores[] = $row['normalisedScore'];
     }
     if( count($ids) )
     {

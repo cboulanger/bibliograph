@@ -3,11 +3,11 @@ Todos
 
 Frontend
 --------
-
+- Bug: Add reference menu is falsely placed
+- Auto-Generate Citation id
 
 Backend
 -------
-- Duplicates: increase threshold for matching or add user config. Add match score in table.
 - Bug: Translations missing
 - Update CiteProc engine
 - Move bibliograph-mobile to separate branch

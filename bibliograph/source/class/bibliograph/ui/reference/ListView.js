@@ -756,6 +756,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
      * @param e {qx.event.type.Event}
      */
     _on_addItemMenu_execute : function(e) {
+      qx.core.Init.getApplication().setItemView("referenceEditor-main");
       this.createReference(e.getTarget().getUserData("type"));
     },
 

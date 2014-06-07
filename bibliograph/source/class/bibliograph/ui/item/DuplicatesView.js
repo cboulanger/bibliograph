@@ -43,6 +43,18 @@ qx.Class.define("bibliograph.ui.item.DuplicatesView",
 
   /*
    *****************************************************************************
+   CONSTRUCTOR
+   *****************************************************************************
+   */
+
+  construct : function()
+  {
+    this.base(arguments);
+    qx.event.message.Bus.subscribe("reference.changeData",this.reloadData, this);
+  },
+
+  /*
+   *****************************************************************************
    MEMBERS
    *****************************************************************************
    */
@@ -81,9 +93,13 @@ qx.Class.define("bibliograph.ui.item.DuplicatesView",
     reloadData : function()
     {
       var app = this.getApplication();
-      if ( !app.getModelId()) {
+      var permMgr = app.getAccessManager().getPermissionManager();
+      if ( ! app.getModelId() ||
+           ! permMgr.getByName("reference.remove").isGranted() )  // todo permission name
+      {
         return;
       }
+
       var id = app.getModelId();
       qx.event.Timer.once(function()
       {
@@ -102,6 +118,7 @@ qx.Class.define("bibliograph.ui.item.DuplicatesView",
       var app = this.getApplication();
       this.duplicatesTable.getTableModel().setData([]);
       this.setEnabled(false);
+      if( !app.getDatasource() || !app.getModelId() ) return;
       app.getRpcManager().execute(
           "bibliograph.reference", "getDuplicatesData",
           [app.getDatasource(), app.getModelId()],
