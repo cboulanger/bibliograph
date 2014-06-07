@@ -175,11 +175,11 @@ qx.Class.define("bibliograph.ui.item.DuplicatesView",
      */
     _displayDuplicate : function()
     {
-      var app = this.getApplication();
       var selectedRefIds = this.getSelectedRefIds();
       if (!selectedRefIds.length)return;
       var id= selectedRefIds[0];
-      app.setQuery("id="+id);
+      var app = this.getApplication();
+      app.setQuery("id="+id); // todo: open in new window
       app.setModelId(id);
       this.duplicatesTable.getSelectionModel().resetSelection();
       qx.lang.Function.delay(function(){
