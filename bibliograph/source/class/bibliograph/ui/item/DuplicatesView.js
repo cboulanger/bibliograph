@@ -116,6 +116,7 @@ qx.Class.define("bibliograph.ui.item.DuplicatesView",
     _reloadData : function()
     {
       var app = this.getApplication();
+      this.duplicatesTable.getSelectionModel().resetSelection();
       this.duplicatesTable.getTableModel().setData([]);
       this.setEnabled(false);
       if( !app.getDatasource() || !app.getModelId() ) return;
@@ -158,6 +159,7 @@ qx.Class.define("bibliograph.ui.item.DuplicatesView",
       if (!selectedRefIds.length)return;
 
       app.showPopup(this.tr("Processing request..."));
+      this.duplicatesTable.getSelectionModel().resetSelection();
       app.getRpcManager().execute(
           "bibliograph.reference", "removeReferences",
           [app.getDatasource(), null, null, selectedRefIds],
@@ -179,6 +181,7 @@ qx.Class.define("bibliograph.ui.item.DuplicatesView",
       var id= selectedRefIds[0];
       app.setQuery("id="+id);
       app.setModelId(id);
+      this.duplicatesTable.getSelectionModel().resetSelection();
       qx.lang.Function.delay(function(){
         app.setItemView("referenceEditor-recordInfo");
       },100);

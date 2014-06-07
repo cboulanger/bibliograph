@@ -75,8 +75,23 @@ qx.Class.define("bibliograph.ui.item.DuplicatesViewUi",
       table.getTableColumnModel().getBehavior().setWidth(3, 50);
       table.getTableColumnModel().setColumnWidth(5, 50);
       table.getTableColumnModel().getBehavior().setWidth(5, 50);
-      this.getApplication().addListener("changeModelId", this.reloadData, this);
+
+      // appear event
       table.addListener("appear", this._on_appear, this);
+
+      // reference changes
+      this.getApplication().addListener("changeModelId", this.reloadData, this);
+
+      // selection change
+      table.getSelectionModel().addListener("changeSelection",function(){
+        var isRowSelected = this.getSelectedRefIds().length > 0;
+        qxButton1.setEnabled(isRowSelected);
+        qxButton2.setEnabled(isRowSelected && permMgr.getByName("reference.remove").isGranted());
+      }, this);
+
+      /*
+       * footer
+       */
       var qxHbox1 = new qx.ui.layout.HBox(5, null, null);
       var footer = new qx.ui.container.Composite();
       footer.setLayout(qxHbox1)
@@ -87,10 +102,8 @@ qx.Class.define("bibliograph.ui.item.DuplicatesViewUi",
        * Button to display selected duplicate
        */
       var qxButton1 = new qx.ui.form.Button(this.tr('Display'), null, null);
-      qxButton1.setEnabled(true);
-      //table.addListener("cellClick",function(e){},this);
+      qxButton1.setEnabled(false);
       footer.add(qxButton1);
-      //permMgr.create("reference.remove").bind("state", qxButton1, "enabled");
       qxButton1.addListener("execute", this._displayDuplicate, this);
 
       /*
@@ -99,7 +112,6 @@ qx.Class.define("bibliograph.ui.item.DuplicatesViewUi",
       var qxButton2 = new qx.ui.form.Button(this.tr('Delete'), null, null);
       qxButton2.setEnabled(false);
       footer.add(qxButton2);
-      permMgr.create("reference.remove").bind("state", qxButton2, "enabled");
       qxButton2.addListener("execute", this._deleteDuplicate, this);
       
       /*
@@ -118,6 +130,7 @@ qx.Class.define("bibliograph.ui.item.DuplicatesViewUi",
       spinner.addListener("changeValue", function(e){
         var value = e.getData();
         // small timeout to prevent to many reloads
+
         qx.event.Timer.once(function(){
           if ( value != spinner.getValue() )return;
           this._reloadData();
