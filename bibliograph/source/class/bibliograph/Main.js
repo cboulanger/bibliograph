@@ -187,6 +187,7 @@ qx.Class.define("bibliograph.Main",
     __datasourceStore : null,
     __itemView : null,
     __selectedIds : null,
+    __blocker : null,
 
     /*
     ---------------------------------------------------------------------------
@@ -231,8 +232,15 @@ qx.Class.define("bibliograph.Main",
       });
       this.showPopup(this.getSplashMessage(), null);
 
+      /*
+       * create central blocker for the application
+       */
+      var root = qx.core.Init.getApplication().getRoot();
+      this.__blocker = new qx.ui.core.Blocker(root);
+      this.__blocker.setOpacity( 0.5 );
+      this.__blocker.setColor( "black" );
 
-      /**
+      /*
        * initialize the managers
        */
       this.initializeManagers();
@@ -512,8 +520,7 @@ qx.Class.define("bibliograph.Main",
 
     /**
      * Return the persistent store used by this application
-     *
-     * @return {persist.Store} TODOC
+     * @return {persist.Store}
      */
     getPersistentStore : function()
     {
@@ -521,6 +528,15 @@ qx.Class.define("bibliograph.Main",
         this.__persistentStore = new persist.Store('Bibliograph', 1);
       }
       return this.__persistentStore;
+    },
+
+    /**
+     * Returns the central blocker for this app.
+     * @returns {qx.ui.core.Blocker}
+     */
+    getBlocker : function()
+    {
+      return this.__blocker;
     },
 
     /*
