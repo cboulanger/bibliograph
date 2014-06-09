@@ -34,18 +34,16 @@ qx.Class.define("qcl.ui.dialog.Progress",
   properties :
   {
     /**
-     * Whether the dialog is visible. This allows to turn the widget on or
-     * off with a boolean value rather than with the string values required
-     * by the "visibility" property.
+     * Whether the dialog is shown. If true, call the show() method. If false,
+     * call the hide() method.
      * (will be moved into the dialog.Dialog)
      */
-    visible :
+    show :
     {
       check    : "Boolean",
-      init     : true,
-      nullable : false,
-      event    : "changeVisible",
-      apply    : "_applyVisible"
+      nullable : true,
+      event    : "changeShow",
+      apply    : "_applyShow"
     },
 
     /**
@@ -54,8 +52,8 @@ qx.Class.define("qcl.ui.dialog.Progress",
     progress :
     {
       check    : function(value){ return value >= 0 && value <= 100 },
-      init     : null,
-      nullable : true,
+      init     : 0,
+      nullable : false,
       event    : "changeProgress"
     },
 
@@ -116,8 +114,8 @@ qx.Class.define("qcl.ui.dialog.Progress",
       event    : "changeOkButtonText",
       apply    : "_applyOkButtonText"
     }
-  },
 
+  },
 
   /*
    *****************************************************************************
@@ -136,11 +134,14 @@ qx.Class.define("qcl.ui.dialog.Progress",
     /**
      * Will be moved into dialog.Dialog
      */
-    _applyVisible : function(value,old)
+    _applyShow : function(value,old)
     {
-      value ? this.show() : this.hide();
+      if (value===true) {
+        this.show();
+      } else if ( value===false) {
+        this.hide();
+      }
     },
-
 
     /**
      * Adds new text to the log
@@ -189,9 +190,10 @@ qx.Class.define("qcl.ui.dialog.Progress",
        * groupbox
        */
       var container = new qx.ui.groupbox.GroupBox().set({
-        contentPadding: [16, 16, 16, 16]
+        contentPadding: [16, 16, 16, 16],
+        width : 300
       });
-      container.setLayout( new qx.ui.layout.VBox(10) );
+      container.setLayout( new qx.ui.layout.VBox(5) );
       this.add( container );
 
       /*
@@ -221,7 +223,7 @@ qx.Class.define("qcl.ui.dialog.Progress",
         visibility : "excluded"
       });
       hbox.add(cancelButton);
-      this.bind("showLog",hbox, "visibility",{
+      this.bind("showProgressBar",hbox, "visibility",{
         converter : function(v){ return v ? "visible" : "excluded"; }
       });
 

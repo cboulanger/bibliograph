@@ -20,6 +20,7 @@
 
 /**
  * Extends the dialog widget set to provide server-generated dialogs and popups
+ * @require(qcl.ui.dialog.Progress)
  */
 qx.Class.define("qcl.ui.dialog.Dialog",
 {
@@ -32,6 +33,8 @@ qx.Class.define("qcl.ui.dialog.Dialog",
   */     
   statics :
   {
+
+    __instances : [],
   
     /**
      * Returns a instance of the dialog type
@@ -85,6 +88,7 @@ qx.Class.define("qcl.ui.dialog.Dialog",
       var app = qx.core.Init.getApplication();
       var data = message.getData();
 
+      data.properties.callback = null;
       if ( data.service )
       {
         data.properties.callback = function( result )
@@ -139,8 +143,30 @@ qx.Class.define("qcl.ui.dialog.Dialog",
       /*
        * create dialog according to type
        */
-      var widget = dialog.Dialog.getInstanceByType( data.type );
-      
+      var isNew = false, widget = qcl.ui.dialog.Dialog.__instances[data.type];
+      if( ! widget )
+      {
+        var clazz = qx.lang.String.firstUp( data.type );
+        if ( qx.lang.Type.isFunction( dialog[clazz] ) )
+        {
+          widget = new dialog[clazz]();
+        }
+        else
+        {
+          if ( qx.lang.Type.isFunction( qcl.ui.dialog[clazz] ) )
+          {
+            widget = new qcl.ui.dialog[clazz]();
+          }
+          else
+          {
+            this.warn(data.type + " is not a valid dialog type");
+          }
+        }
+        qcl.ui.dialog.Dialog.__instances[data.type] = widget;
+        isNew = true;
+      }
+
+
       /*
        * auto-submit the dialog input after the given 
        * timout in seconds
@@ -192,7 +218,26 @@ qx.Class.define("qcl.ui.dialog.Dialog",
       delete data.properties.requireInput;      
       
       widget.set( data.properties );
-      widget.show();
+      //FIXME: this must be solved in the dialog contrib itself
+      if( isNew )
+      {
+        widget.show();
+      }
+      else if ( data.properties.show !== false )
+      {
+        widget.setVisibility("visible");
+      }
+
+      /*
+       * Progress widget executes callback immediately
+       */
+      if( data.type == "progress" )
+      {
+        if( qx.lang.Type.isFunction( widget.getCallback() ))
+        {
+          widget.getCallback()(true);
+        }
+      }
 
       /*
        * focus, doesn't work yet
