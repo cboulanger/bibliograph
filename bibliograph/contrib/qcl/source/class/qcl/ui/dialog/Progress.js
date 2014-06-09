@@ -267,3 +267,26 @@ qx.Class.define("qcl.ui.dialog.Progress",
     }
   }
 });
+
+//      var progressWidget = new qcl.ui.dialog.Progress({
+//        showLog : true,
+//        okButtonText : "Continue"
+//      });
+//      progressWidget.show();
+//
+//      var counter = 0;
+//      (function textProgress()
+//      {
+//        progressWidget.set({
+//          progress : counter,
+//          message  : counter + "% completed"
+//        });
+//
+//        if ( counter % 10 == 0 )
+//        {
+//          progressWidget.setNewLogText( counter + "% completed" );
+//        }
+//
+//        if( counter++ == 100 )return;
+//        qx.lang.Function.delay(textProgress,100,this);
+//      })();
