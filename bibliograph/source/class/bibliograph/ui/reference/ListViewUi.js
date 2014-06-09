@@ -144,13 +144,23 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
        * Window to choose reference type
        */
       var win = new qx.ui.window.Window(this.tr("Create new reference type"));
-      win.setLayout(new qx.ui.layout.VBox(0));
+      win.setLayout(new qx.ui.layout.VBox(5));
       win.set({
         height: 300, width : 200,
-        showMinimize : false, showMaximize : false
+        showMinimize : false, showMaximize : false,
+        modal : true
       });
-      win.addListener("appear", win.center, win);
-      listViewAddMenuButton.addListener("click", win.open, win);
+
+      // blocker
+      win.addListener("appear", function(){
+        win.center();
+        app.getBlocker().blockContent(win.getZIndex()-1);
+      },this);
+      win.addListener("disappear",function(){
+        app.getBlocker().unblock();
+      },this);
+
+      listViewAddMenuButton.addListener("execute", win.open, win);
       app.getRoot().add(win);
       this.chooseRefTypeWin = win;
 
@@ -164,19 +174,28 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
       win.add(list,{flex:1});
       this.chooseRefTypeList = list;
 
-      // on selection change, create new reference of the selected type
-      list.getSelection().addListener("change", function(e) {
+      /*
+       * OK button
+       */
+      var okButton = new qx.ui.form.Button( this.tr("Create") );
+      okButton.addListener("execute", function() {
+        var type = list.getSelection().getItem(0).getValue();
         qx.lang.Function.delay(function(){
           win.close();
           app.setItemView("referenceEditor-main");
-          this.createReference(list.getSelection().getItem(0).getValue());
+          this.createReference(type);
         },100,this);
       }, this);
-
+      win.add(okButton);
 
       /*
        * Cancel button
        */
+      var cancelButton = new qx.ui.form.Button(this.tr("Cancel"));
+      cancelButton.addListener("execute",function(){
+        win.close();
+      },this);
+      win.add(cancelButton);
 
       /*
        * Remove button
