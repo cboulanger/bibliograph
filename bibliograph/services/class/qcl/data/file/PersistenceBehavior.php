@@ -26,7 +26,7 @@ class qcl_data_file_PersistenceBehavior
   extends    qcl_io_filesystem_local_File
   implements qcl_core_IPersistenceBehavior
 {
-
+  
   //-------------------------------------------------------------
   // Static members
   //-------------------------------------------------------------
@@ -39,6 +39,7 @@ class qcl_data_file_PersistenceBehavior
   {
     return qcl_getInstance( __CLASS__ );
   }
+  
   //-------------------------------------------------------------
   // Constructor
   //-------------------------------------------------------------
@@ -46,21 +47,31 @@ class qcl_data_file_PersistenceBehavior
   /**
    * Constructor
    */
-  public function __construct ( )
+  public function __construct ( $name )
   {
     /*
      * create file
      */
-    $resourcePath = "file://" . QCL_VAR_DIR . "/qcl_data_model_file_PersistenceBehavior.tmp";
-    parent::__construct( $resourcePath );
+    
+    parent::__construct( $this->getResourcePath() );
 
     /*
-     * if temporary file doesn't already exist, save an empty array;
+     * if file doesn't already exist, save an empty array;
      */
     if ( ! $this->exists() )
     {
       $this->save(serialize(array()));
     }
+  }
+  
+  /**
+   * Return the path to the file in which the persistent data is stored.
+   * @return string
+   */
+  public function getResourcePath()
+  {
+    $app = qcl_application_Application::getInstance();
+    return "file://" . QCL_VAR_DIR . "/" . $app->name() . ".dat";
   }
 
   //-------------------------------------------------------------
