@@ -216,9 +216,12 @@ qx.Class.define("qcl.ui.dialog.Dialog",
       // remove the properties
       delete data.properties.autoSubmitTimeout;
       delete data.properties.requireInput;      
-      
+
+      // set all properties
       widget.set( data.properties );
-      //FIXME: this must be solved in the dialog contrib itself
+
+      //todo: show() must not create a new blocker.
+      // this must be solved in the dialog contrib itself
       if( isNew )
       {
         widget.show();
@@ -229,14 +232,14 @@ qx.Class.define("qcl.ui.dialog.Dialog",
       }
 
       /*
-       * Progress widget executes callback immediately
+       * Progress widget executes callback immediately, unless it is at 100% and
+       * the OK Button has been activated
        */
-      if( data.type == "progress" )
+      if( data.type == "progress"
+        && qx.lang.Type.isFunction( widget.getCallback() )
+        && ( widget.getProgress() != 100 || widget.getOkButtonText() === null ) )
       {
-        if( qx.lang.Type.isFunction( widget.getCallback() ))
-        {
-          widget.getCallback()(true);
-        }
+        widget.getCallback()(true);
       }
 
       /*

@@ -54,7 +54,8 @@ qx.Class.define("qcl.ui.dialog.Progress",
       check    : function(value){ return value >= 0 && value <= 100 },
       init     : 0,
       nullable : false,
-      event    : "changeProgress"
+      event    : "changeProgress",
+      apply    : "_applyProgress"
     },
 
     /**
@@ -113,6 +114,16 @@ qx.Class.define("qcl.ui.dialog.Progress",
       init     : null,
       event    : "changeOkButtonText",
       apply    : "_applyOkButtonText"
+    },
+
+    /**
+     * Whether to hide the widget when the progress is at 100%
+     */
+    hideWhenCompleted :
+    {
+      check    : "Boolean",
+      nullable : false,
+      init     : true
     }
 
   },
@@ -143,6 +154,17 @@ qx.Class.define("qcl.ui.dialog.Progress",
       }
     },
 
+    _applyProgress : function(value,old)
+    {
+      if (value==100)
+      {
+        if( this.isHideWhenCompleted() )
+        {
+          this.hide();
+        }
+      }
+    },
+
     /**
      * Adds new text to the log
      */
@@ -169,6 +191,7 @@ qx.Class.define("qcl.ui.dialog.Progress",
       }
       this._okButton.setLabel(value);
       this._okButton.show();
+      this.setHideWhenCompleted( false );
     },
 
     /*
