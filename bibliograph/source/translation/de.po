@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: you@your.org\n"
 "POT-Creation-Date: 2010-05-13 19:30+0100\n"
-"PO-Revision-Date: 2014-06-05 22:54+0100\n"
+"PO-Revision-Date: 2014-06-11 22:43+0100\n"
 "Last-Translator: Christian Boulanger <info@bibliograph.org>\n"
 "Language-Team: Team <yourteam@your.org>\n"
 "MIME-Version: 1.0\n"
@@ -13,31 +13,31 @@ msgstr ""
 "Language: de\n"
 "X-Generator: Poedit 1.6.5\n"
 
-#: bibliograph/Main.js:283
+#: bibliograph/Main.js:296
 msgid "Setting up application..."
 msgstr "Konfiguriere die Anwendung ..."
 
-#: bibliograph/Main.js:297
+#: bibliograph/Main.js:317
 msgid "Connecting with server..."
 msgstr "Verbinde mit dem Server ..."
 
-#: bibliograph/Main.js:308
+#: bibliograph/Main.js:328
 msgid "Loading configuration ..."
 msgstr "Lade Konfiguration ..."
 
-#: bibliograph/Main.js:324
+#: bibliograph/Main.js:344
 msgid "Loading datasources ..."
 msgstr "Lade Liste der Datenbanken ..."
 
-#: bibliograph/Main.js:349
+#: bibliograph/Main.js:369
 msgid "Loading plugins ..."
 msgstr "Plugins werden geladen ..."
 
-#: bibliograph/Main.js:353
+#: bibliograph/Main.js:373
 msgid "Loaded plugin %1 of %2 : %3 ..."
 msgstr "Lade Plugin %1 von %2 : %3 ..."
 
-#: bibliograph/Main.js:479
+#: bibliograph/Main.js:499
 msgid ""
 "The datasource has just been restored to a previous state and will be "
 "reloaded"
@@ -45,11 +45,11 @@ msgstr ""
 "Die Datenbank wurde gerade auf einen früheren Zustand zurückgesetzt wird "
 "jetzt neu geladen."
 
-#: bibliograph/Main.js:568
+#: bibliograph/Main.js:596
 msgid "Loading datasource information ..."
 msgstr "Informationen zur Datenquelle werden abgerufen..."
 
-#: bibliograph/Main.js:727
+#: bibliograph/Main.js:755
 msgid ""
 "To log in, you need a secure connection. After you press 'OK', the "
 "application will be reloaded in secure mode. After the application finished "
@@ -60,7 +60,7 @@ msgstr ""
 "geladen. Bitte melden Sie sich erneut an, sobald der Ladevorgang "
 "abgeschlossen ist."
 
-#: bibliograph/Main.js:738
+#: bibliograph/Main.js:766
 msgid ""
 "The application is currently in a read-only state. Only the administrator "
 "can log in."
@@ -68,15 +68,15 @@ msgstr ""
 "Das Programm ist gerade im Nur-Lese-Modus. Nur der Administrator kann sich "
 "einloggen. "
 
-#: bibliograph/Main.js:772
+#: bibliograph/Main.js:800
 msgid "Authenticating ..."
 msgstr "Anmeldung ..."
 
-#: bibliograph/Main.js:855
+#: bibliograph/Main.js:883
 msgid "You don't have access to any datasource on the server."
 msgstr "Sie haben keinen Zugang zu Datenbanken auf diesem Server."
 
-#: bibliograph/Main.js:907
+#: bibliograph/Main.js:935
 msgid ""
 "Cannot open help window. Please disable the popup-blocker of your browser "
 "for this website."
@@ -84,11 +84,11 @@ msgstr ""
 "Die Hilfeseite kann nicht aufgerufen werden. Bitte schalten Sie eventuelle "
 "Popup-Blockierer für diese Webseite ab. "
 
-#: bibliograph/plugin/isbnscanner/Plugin.js:60 bibliograph/Main.js:923
+#: bibliograph/plugin/isbnscanner/Plugin.js:60 bibliograph/Main.js:951
 msgid "Please wait ..."
 msgstr "Bitte warten ..."
 
-#: bibliograph/Main.js:998
+#: bibliograph/Main.js:1026
 msgid "Retrieving user data..."
 msgstr "Lade Benutzerdaten ..."
 
@@ -298,16 +298,16 @@ msgstr "Sichtbarkeit verändern"
 
 #: bibliograph/ui/folder/TreeViewUi.js:179
 #: bibliograph/ui/folder/TreeViewUi.js:180
-#: bibliograph/ui/reference/ListViewUi.js:264
-#: bibliograph/ui/reference/ListViewUi.js:265
+#: bibliograph/ui/reference/ListViewUi.js:313
+#: bibliograph/ui/reference/ListViewUi.js:314
 msgid "Reload"
 msgstr "Neu laden"
 
-#: bibliograph/ui/item/DuplicatesView.js:143
-#: bibliograph/ui/reference/ListView.js:1092
-#: bibliograph/ui/reference/ListView.js:1109
-#: bibliograph/ui/reference/ListView.js:1123
-#: bibliograph/ui/reference/ListView.js:1138
+#: bibliograph/ui/item/DuplicatesView.js:161
+#: bibliograph/ui/reference/ListView.js:1088
+#: bibliograph/ui/reference/ListView.js:1105
+#: bibliograph/ui/reference/ListView.js:1119
+#: bibliograph/ui/reference/ListView.js:1134
 #: bibliograph/ui/item/RecordInfo.js:167
 msgid "Processing request..."
 msgstr "Verarbeite die Anfrage ..."
@@ -316,36 +316,40 @@ msgstr "Verarbeite die Anfrage ..."
 msgid "This table shows potential duplicates of the current record."
 msgstr "Diese Tabelle zeigt potentielle Dubletten des ausgewählten Datensatzes"
 
-#: bibliograph/ui/item/DuplicatesViewUi.js:58
-msgid "Author"
-msgstr "Autor"
-
-#: bibliograph/ui/item/DuplicatesViewUi.js:58
-msgid "Date"
-msgstr "Datum"
-
-#: bibliograph/ui/item/DuplicatesViewUi.js:58
-msgid "Title"
-msgstr "Titel"
-
-#: bibliograph/ui/item/DuplicatesViewUi.js:58
+#: bibliograph/ui/item/DuplicatesViewUi.js:61
 msgid "Type"
 msgstr "Typ"
 
-#: bibliograph/ui/item/DuplicatesViewUi.js:83
-msgid "Display Duplicate"
-msgstr "Dublette anzeigen\t"
+#: bibliograph/ui/item/DuplicatesViewUi.js:62
+msgid "Author"
+msgstr "Autor"
 
-#: bibliograph/ui/item/DuplicatesViewUi.js:93
-msgid "Delete Duplicate"
-msgstr "Dubletten löschen"
+#: bibliograph/ui/item/DuplicatesViewUi.js:63
+msgid "Date"
+msgstr "Datum"
+
+#: bibliograph/ui/item/DuplicatesViewUi.js:64
+msgid "Title"
+msgstr "Titel"
+
+#: bibliograph/ui/item/DuplicatesViewUi.js:104
+msgid "Display"
+msgstr "Anzeigen"
+
+#: bibliograph/ui/item/DuplicatesViewUi.js:112
+msgid "Delete"
+msgstr "Löschen\t"
+
+#: bibliograph/ui/item/DuplicatesViewUi.js:120
+msgid "Score threshold to count as duplicate:"
+msgstr "Schwellenwert für Einordnung als Dublette"
 
 #: bibliograph/ui/item/RecordInfo.js:163
 msgid "Do you really want to remove the reference from folder '%1'?"
 msgstr "Wollen Sie wirklich diesen Datensatz aus Ordner '%1' entfernen?"
 
-#: bibliograph/ui/item/ReferenceEditorUi.js:243
 #: bibliograph/ui/item/ReferenceEditorUi.js:245
+#: bibliograph/ui/item/ReferenceEditorUi.js:247
 #: bibliograph/ui/item/RecordInfoUi.js:43
 #: bibliograph/ui/item/RecordInfoUi.js:45
 msgid "Record Info"
@@ -389,36 +393,36 @@ msgstr "Erzeuge das Formular, bitte warten ..."
 msgid "Saving..."
 msgstr "Speichern ..."
 
-#: bibliograph/ui/item/ReferenceEditorUi.js:114
+#: bibliograph/ui/item/ReferenceEditorUi.js:116
 msgid "Abstract"
 msgstr "Zusammenfassung"
 
-#: bibliograph/ui/item/ReferenceEditorUi.js:130
+#: bibliograph/ui/item/ReferenceEditorUi.js:132
 msgid "Keywords"
 msgstr "Schlagwörter"
 
-#: bibliograph/ui/item/ReferenceEditorUi.js:146
+#: bibliograph/ui/item/ReferenceEditorUi.js:148
 msgid "Notes"
 msgstr "Kommentar"
 
-#: bibliograph/ui/item/ReferenceEditorUi.js:162
-#: bibliograph/ui/item/ReferenceEditorUi.js:221
-#: bibliograph/ui/item/ReferenceEditorUi.js:224
+#: bibliograph/ui/item/ReferenceEditorUi.js:164
+#: bibliograph/ui/item/ReferenceEditorUi.js:223
+#: bibliograph/ui/item/ReferenceEditorUi.js:226
 msgid "Contents"
 msgstr "Inhaltsverzeichnis"
 
-#: bibliograph/ui/item/ReferenceEditorUi.js:197
 #: bibliograph/ui/item/ReferenceEditorUi.js:199
+#: bibliograph/ui/item/ReferenceEditorUi.js:201
 msgid "Main"
 msgstr "Stammdaten"
 
-#: bibliograph/ui/item/ReferenceEditorUi.js:209
 #: bibliograph/ui/item/ReferenceEditorUi.js:211
+#: bibliograph/ui/item/ReferenceEditorUi.js:213
 msgid "About"
 msgstr "Metadaten"
 
-#: bibliograph/ui/item/ReferenceEditorUi.js:258
 #: bibliograph/ui/item/ReferenceEditorUi.js:260
+#: bibliograph/ui/item/ReferenceEditorUi.js:262
 msgid "Duplicates"
 msgstr "Dubletten"
 
@@ -523,60 +527,73 @@ msgstr ""
 msgid "Loading table ..."
 msgstr "Lade Tabelle ..."
 
-#: bibliograph/ui/reference/ListView.js:1002
+#: bibliograph/ui/reference/ListView.js:998
 msgid "You cannot create an item outside a folder"
 msgstr "Sie können keinen Datensatz außerhalb eines Ordners erstellen"
 
-#: bibliograph/ui/reference/ListView.js:1018
+#: bibliograph/ui/reference/ListView.js:1014
 msgid "Do your really want to remove the selected references?"
 msgstr "Wollen Sie wirklich die ausgewählten Datensätze entfernen?"
 
-#: bibliograph/ui/reference/ListView.js:1019
+#: bibliograph/ui/reference/ListView.js:1015
 msgid "Do your really want to remove the selected references from this folder?"
 msgstr ""
 "Möchten Sie die ausgewählten Datensätze wirklich aus diesem Ordner entfernen?"
 "\t"
 
-#: bibliograph/ui/reference/ListView.js:1043
+#: bibliograph/ui/reference/ListView.js:1039
 msgid "Do your really want to move the selected references to '%1'?"
 msgstr "Wollen Sie wirklich die augewählten Datensätze nach '%1' verschieben?"
 
-#: bibliograph/ui/reference/ListView.js:1069
+#: bibliograph/ui/reference/ListView.js:1065
 msgid "Do your really want to copy the selected referencesto '%1'?"
 msgstr "Wollen Sie wirklich die ausgewählten Datensätze nach '%1' kopieren?"
 
-#: bibliograph/ui/reference/ListViewUi.js:175
-#: bibliograph/ui/reference/ListViewUi.js:176
+#: bibliograph/ui/reference/ListViewUi.js:146
+msgid "Create new reference type"
+msgstr "Neuen Datensatz anlegen"
+
+#: bibliograph/ui/reference/ListViewUi.js:180
+msgid "Create"
+msgstr "Anlegen"
+
+#: bibliograph/ui/window/FolderTreeWindowUi.js:100
+#: bibliograph/ui/reference/ListViewUi.js:194
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: bibliograph/ui/reference/ListViewUi.js:232
+#: bibliograph/ui/reference/ListViewUi.js:233
 msgid "Move reference(s)..."
 msgstr "Verschieben ..."
 
-#: bibliograph/ui/reference/ListViewUi.js:189
-#: bibliograph/ui/reference/ListViewUi.js:190
+#: bibliograph/ui/reference/ListViewUi.js:244
+#: bibliograph/ui/reference/ListViewUi.js:245
 msgid "Copy reference(s)..."
 msgstr "Kopieren ..."
 
-#: bibliograph/ui/reference/ListViewUi.js:203
-#: bibliograph/ui/reference/ListViewUi.js:204
+#: bibliograph/ui/reference/ListViewUi.js:256
+#: bibliograph/ui/reference/ListViewUi.js:257
 msgid "Export references"
 msgstr "Exportieren"
 
-#: bibliograph/ui/reference/ListViewUi.js:215
-#: bibliograph/ui/reference/ListViewUi.js:216
+#: bibliograph/ui/reference/ListViewUi.js:267
+#: bibliograph/ui/reference/ListViewUi.js:268
 msgid "Export selected references"
 msgstr "Ausgewählte Datensätze exportieren"
 
-#: bibliograph/ui/reference/ListViewUi.js:228
-#: bibliograph/ui/reference/ListViewUi.js:229
+#: bibliograph/ui/reference/ListViewUi.js:279
+#: bibliograph/ui/reference/ListViewUi.js:280
 msgid "Export folder"
 msgstr "Ordner exportieren"
 
-#: bibliograph/ui/reference/ListViewUi.js:238
-#: bibliograph/ui/reference/ListViewUi.js:239
+#: bibliograph/ui/reference/ListViewUi.js:289
+#: bibliograph/ui/reference/ListViewUi.js:290
 msgid "Edit references"
 msgstr "Bearbeiten"
 
-#: bibliograph/ui/reference/ListViewUi.js:250
-#: bibliograph/ui/reference/ListViewUi.js:251
+#: bibliograph/ui/reference/ListViewUi.js:300
+#: bibliograph/ui/reference/ListViewUi.js:301
 msgid "Find/Replace"
 msgstr "Suchen/Ersetzen"
 
@@ -654,10 +671,6 @@ msgstr "Bitte wählen Sie die Datenquelle aus"
 #: bibliograph/ui/window/DatasourceListWindow.js:97
 msgid "OK"
 msgstr "OK"
-
-#: bibliograph/ui/window/FolderTreeWindowUi.js:100
-msgid "Cancel"
-msgstr "Abbrechen"
 
 #: bibliograph/ui/window/FolderTreeWindowUi.js:108
 msgid "Select"
@@ -752,3 +765,9 @@ msgstr "Wird den Benutzern im Nur-Lese-Modus und bei Zugangssperre angezeigt."
 #: bibliograph/ui/window/SearchHelpWindow.js:25
 msgid "Search Help Window"
 msgstr "Hilfe für die Suche"
+
+#~ msgid "Display Duplicate"
+#~ msgstr "Dublette anzeigen\t"
+
+#~ msgid "Delete Duplicate"
+#~ msgstr "Dubletten löschen"
