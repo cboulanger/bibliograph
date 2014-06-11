@@ -69,20 +69,7 @@ class qcl_access_SessionController
     if ( ! $sessionId )
     {
       $this->log("Could not get session id from request...", QCL_LOG_AUTHENTICATION );
-
-      /*
-       * if the application allows unauthenticated access,
-       * try to use the PHP session id
-       */
-      if ( $this->getApplication()->skipAuthentication() )
-      {
-        $sessionId = session_id();
-        $this->log("Skipping authentication, using PHP session id: #$sessionId", QCL_LOG_AUTHENTICATION );
-      }
-      else
-      {
-        throw new qcl_access_AccessDeniedException("No valid session id.");
-      }
+      throw new qcl_access_AccessDeniedException("No valid session id.");
     }
 
     /*
@@ -104,7 +91,7 @@ class qcl_access_SessionController
        */
       if ( $this->getApplication()->isAnonymousAccessAllowed() )
       {
-        $userId = $this->grantAnonymousAccess();
+        return $this->grantAnonymousAccess();
       }
 
       /*
@@ -132,7 +119,7 @@ class qcl_access_SessionController
 
     /*
      * We have a valid session referring to a valid user.
-     * Set sessioniId and make a copy of the user object as the
+     * Set sessionId and make a copy of the user object as the
      * active user and return the user id.
      */
     $this->setSessionId( $sessionId );
@@ -216,8 +203,6 @@ class qcl_access_SessionController
     return $this->getSessionId();
   }
 
-
-  
   /**
    * Logs out a user
    * @return void
@@ -288,6 +273,11 @@ class qcl_access_SessionController
      */
     $this->log( sprintf("Registering session '%s', for %s from IP %s ", $sessionId, $user, $remoteIp ), QCL_LOG_AUTHENTICATION );
     $this->getSessionModel()->registerSession( $sessionId, $user, $remoteIp );
+
+    /*
+     * let the client know
+     */
+    $this->dispatchClientMessage("setSessionId", $sessionId );
   }
 
   /**

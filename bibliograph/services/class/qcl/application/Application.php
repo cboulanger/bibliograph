@@ -148,8 +148,6 @@ abstract class qcl_application_Application
     return $this->applicationVersion;
   }
 
-
-
   /**
    * Returns the path to the ini file containing initial configuration
    * such as database connectivity etc. if set by as a class property
@@ -215,8 +213,6 @@ abstract class qcl_application_Application
     return qcl_server_Server::getInstance()->getServerInstance();
   }
 
-
-
   /**
    * gets the locale controller and sets the default locale. default is
    * a qcl_locale_Manager (see there). if you want to use a different
@@ -238,7 +234,6 @@ abstract class qcl_application_Application
     qcl_import( "qcl_access_SessionController" );
     return qcl_access_SessionController::getInstance();
   }
-
 
   //-------------------------------------------------------------
   // event dispatcher and message bus
@@ -557,4 +552,3 @@ abstract class qcl_application_Application
     return qcl_server_Server::getUrl();
   }
 }
-?>

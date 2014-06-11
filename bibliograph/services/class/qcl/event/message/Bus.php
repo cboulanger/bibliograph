@@ -196,7 +196,7 @@ class qcl_event_message_Bus
         $subscriber = $this->getObjectById( $subscriberId );
         $subscriber->$method( $message );
       }
-      return true; // FIXME Should this really return here?
+      return true; // todo: Should this really return here?
     }
 
     /*
@@ -384,14 +384,6 @@ class qcl_event_message_Bus
   public function getClientMessages( $sessionId )
   {
     $app = $this->getApplication();
-
-    /*
-     * if no authentication occurred, do not check for client messages
-     */
-    if ($app->skipAuthentication()){
-      return array();
-    }
-
     $msgModel = $this->getModel();
     $sessionModel = $app->getAccessController()->getSessionModel();
 

@@ -91,6 +91,23 @@ class qcl_server_Service
   }
 
   //-------------------------------------------------------------
+  // authentication
+  //-------------------------------------------------------------
+
+
+  /**
+   * Override this method if you want to allow access to the class or single methods
+   * without authentication,
+   * @param string|null $method
+   * @return bool True if no authentication is required
+   */
+  public function skipAuthentication( $method = null )
+  {
+    return false;
+  }
+
+
+  //-------------------------------------------------------------
   // shorthand methods to get rpc request parameters
   //-------------------------------------------------------------
 

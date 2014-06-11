@@ -272,11 +272,11 @@ class qcl_access_Controller
     ), QCL_LOG_AUTHENTICATION );
 
     /*
-     * Check if application waives authentication for certain services
+     * Check if service waives authentication for a given method
      */
-    if( $this->getApplication()->skipAuthentication() ) // TODO: pass $serviceObject, $method
+    if( $serviceObject->skipAuthentication($method) )
     {
-      $this->log("Application mandates to skip authentication entirely for this service.", QCL_LOG_AUTHENTICATION );
+      $this->log("No authentication neccessary...", QCL_LOG_AUTHENTICATION );
       return;
     }
 
@@ -489,6 +489,14 @@ class qcl_access_Controller
     catch( qcl_data_model_RecordNotFoundException $e)
     {
       throw new qcl_access_AuthenticationException( $this->tr("Invalid user name.") );
+    }
+
+    /*
+     * inactive users cannot authenticate
+     */
+    if(!$userModel->getActive())
+    {
+      throw new qcl_access_AuthenticationException( $this->tr("User is deactivated.") );
     }
 
     /*

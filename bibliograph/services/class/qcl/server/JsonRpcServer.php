@@ -214,24 +214,14 @@ class qcl_server_JsonRpcServer
   /**
    * Starts or joins an existing php session. You can override
    * the cookie-based PHP session id by providing a 'sessionId'
-   * key in the server_data. Overridden to provide a temporary hack
-   * for the parent/sibling session management.
+   * key in the server_data.
    */
   public function startSession()
   {
     $serverData = $this->getServerData();
     if ( isset( $serverData->sessionId ) and $serverData->sessionId )
     {
-      // this is a hack, don't rely on it!
       $sessionId = $serverData->sessionId;
-      {
-        if ( substr( $sessionId, 0, 2  ) == "P_" or substr( $sessionId, 0, 2  ) == "S_" )
-        {
-          $this->debug( "Starting parent or sibling session...");
-          return; 
-        }
-      }
-      $this->debug( "Starting session '{$sessionId}' from server_data.");
       session_id( $sessionId );
     }
     else
