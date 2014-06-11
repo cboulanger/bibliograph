@@ -29,22 +29,48 @@ abstract class qcl_data_controller_ProgressController
   extends qcl_data_controller_Controller
 {
 
+  /**
+   * The number of the current step
+   * @var int
+   */
   protected $step = 0;
 
+  /**
+   * The properties of the progress dialog widget
+   * @var array
+   */
   protected $dialogProperties = array();
 
+  /**
+   * Returns a list of methods to be consecutively called.
+   * Abstract method to be implemented by the subclassed
+   * @return array
+   */
   abstract protected function getStepMethods();
 
+  /**
+   * Returns the number of steps to be completed. By default, returns
+   * the number of methods provided by getStepMethods()
+   * @return int
+   */
   protected function getStepCount()
   {
     return count($this->getStepMethods());
   }
 
+  /**
+   * getter for step property
+   * @return int
+   */
   protected function getStep()
   {
     return $this->step;
   }
 
+  /**
+   * getter for dialog properties which automatically updates the "progress" property value
+   * @return array
+   */
   protected function getDialogProperties()
   {
     $dialogProperties = $this->dialogProperties;
@@ -52,21 +78,40 @@ abstract class qcl_data_controller_ProgressController
     return $dialogProperties;
   }
 
+  /**
+   * Returns the progress percentage in a rounded number between 0 and 100.
+   * @return int
+   */
   protected function getProgress()
   {
     return round( ( $this->step / $this->getStepCount() ) *100 );
   }
 
+  /**
+   * Setter for message property of the dialog widget
+   * @param string $message
+   */
   protected function setMessage( $message )
   {
     $this->dialogProperties['message'] = $message;
   }
 
+  /**
+   * Adds a new line to the log in the progress dialog widget
+   * @param $text
+   */
   protected function addLogText ( $text )
   {
     $this->dialogProperties['newLogText'] = $text;
   }
 
+  /**
+   * The entry method for starting the progressive task.
+   * @param $message The message to display in the progress dialog widget
+   * @param mixed|null $data The data to pass to the first method
+   * @return qcl_ui_dialog_Progress
+   * @throws JsonRpcException
+   */
   public function method_start( $message, $data=null )
   {
     foreach ( $this->getStepMethods() as $method )
@@ -88,6 +133,14 @@ abstract class qcl_data_controller_ProgressController
     );
   }
 
+  /**
+   * The method that is called by the progress dialog widget on the client and
+   * which iterates over all the methods of the progressive task.
+   * @param $dummy
+   * @param $shelfId
+   * @param $step
+   * @return qcl_ui_dialog_Progress
+   */
   public function method_next( $dummy, $shelfId, $step )
   {
     $this->step = $step;
@@ -111,6 +164,11 @@ abstract class qcl_data_controller_ProgressController
     );
   }
 
+  /**
+   * The method called after the progressive task has completed. By default,
+   * dispatches a message to hide the progress dialog widget on the client.
+   * @return qcl_ui_dialog_Progress
+   */
   protected function finish()
   {
     return new qcl_ui_dialog_Progress( array( 'show' => false ), null, null, null );
