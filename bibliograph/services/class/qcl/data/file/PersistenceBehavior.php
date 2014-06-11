@@ -47,12 +47,11 @@ class qcl_data_file_PersistenceBehavior
   /**
    * Constructor
    */
-  public function __construct ( $name )
+  public function __construct ()
   {
     /*
      * create file
      */
-    
     parent::__construct( $this->getResourcePath() );
 
     /*
@@ -71,7 +70,7 @@ class qcl_data_file_PersistenceBehavior
   public function getResourcePath()
   {
     $app = qcl_application_Application::getInstance();
-    return "file://" . QCL_VAR_DIR . "/" . $app->name() . ".dat";
+    return "file://" . QCL_VAR_DIR . "/" . $app->id() . ".dat";
   }
 
   //-------------------------------------------------------------
