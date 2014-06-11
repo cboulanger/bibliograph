@@ -285,11 +285,23 @@ qx.Class.define("bibliograph.Main",
       this.bind("datasourceModel.title", this, "datasourceLabel");
 
       /*
-       * run setup, then authenticate
+       * run setup
        */
       this.info("Setting up application...");
+      this._startSetup();
+    },
+
+    _startSetup : function()
+    {
       this.showPopup(this.getSplashMessage(this.tr("Setting up application...")));
-      this.getRpcManager().execute("bibliograph.setup", "setup", [], this._connect, this);
+      qx.event.message.Bus.getInstance().subscribe("bibliograph.setup.done", this._setupDone, this);
+      this.getRpcManager().execute("bibliograph.setup", "setup", []);
+    },
+
+    _setupDone : function()
+    {
+      qx.event.message.Bus.getInstance().unsubscribe("bibliograph.setup.done", this._setupDone, this);
+      this._connect();
     },
 
     /**

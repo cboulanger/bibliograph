@@ -17,6 +17,11 @@
                 <password>user</password>
                 <active>1</active>
             </record>
+            <record namedId="setup">
+                <name>Setup User (do not delete)</name>
+                <password></password>
+                <active>0</active>
+            </record>
         </data>
         <links>
             <relation name="User_Role">

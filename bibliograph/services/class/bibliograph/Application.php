@@ -18,9 +18,9 @@
 
 ************************************************************************ */
 
-qcl_import( "qcl_application_Application" );
-qcl_import( "qcl_locale_Manager" );
-qcl_import("bibliograph_ApplicationCache");
+qcl_import("qcl_application_Application");
+qcl_import("qcl_locale_Manager");
+qcl_import("bibliograph_Cache");
 qcl_import("qcl_util_system_Lock");
 
 /**
@@ -60,20 +60,6 @@ class bibliograph_Application
    */
   protected $defaultSchema = "bibliograph.schema.bibliograph2";
 
-
-  /**
-   * A map with model types as keys and the path to xml files containing
-   * the model data as values.
-   * The order of importing matters!
-   * @var array
-   */
-  protected $initialDataMap = array(
-    'user'        => "bibliograph/data/User.xml",
-    'role'        => "bibliograph/data/Role.xml",
-    'permission'  => "bibliograph/data/Permission.xml",
-    'config'      => "bibliograph/data/Config.xml"
-   );
-
   /**
    * Returns the singleton instance of this class. Note that
    * qcl_application_Application::getInstance() stores the
@@ -83,15 +69,6 @@ class bibliograph_Application
   static public function getInstance()
   {
     return parent::getInstance();
-  }
-
-  /**
-   * Getter for map needed for loading the initial data
-   * @return array
-   */
-  public function getInitialDataMap()
-  {
-    return $this->initialDataMap;
   }
 
   /**
@@ -125,30 +102,16 @@ class bibliograph_Application
      * Check if this is the first time the application is called, or if
      * the application backend is currently being configured
      */
-    $cache = bibliograph_ApplicationCache::getInstance();
-    if ( ! $cache->get("setup") )
+    if ( ! bibliograph_Cache::getInstance()->getValue("setup") )
     {
-      /*
-       * no, then deny all requests except the one for the "setup" service
-       */
+      // no, then deny all requests except the one for the "setup" service
       if ( $this->getServerInstance()
                 ->getRequest()
                 ->getService() != "bibliograph.setup" )
       {
         throw new qcl_server_ServiceException("Server busy. Setup in progress.",null,true);
       }
-
-      /*
-       * Load initial access model data into models, then go to setup service
-       */
-      if ( ! $cache->get("dataImported") )
-      {
-        $this->log("Importing data ....", QCL_LOG_SETUP );
-        $this->importInitialData( $this->getInitialDataMap() );
-      }
-      $cache->set( "dataImported", true );
     }
-
 
     /*
      * initialize locale manager
@@ -185,23 +148,6 @@ class bibliograph_Application
     $configModel->createKeyIfNotExists( $key, QCL_CONFIG_TYPE_LIST, false, array() );
 
     return $datasource;
-  }
-
-  /**
-   * Overridden to skip authentication completely for selected services.
-   * @return bool
-   */
-  public function skipAuthentication()
-  {
-    $request = $this->getServerInstance()->getRequest();
-    $service = $request->getService() . "." . $request->getMethod();
-    switch( $service )
-    {
-      case "bibliograph.setup.setup":
-        return true;
-      default:
-        return false;
-    }
   }
 
   /**
