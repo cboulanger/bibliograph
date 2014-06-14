@@ -136,7 +136,7 @@ class bibliograph_service_Setup
     $adminEmail = $app->getIniValue("email.admin");
     if ( ! $adminEmail )
     {
-      $this->addLogText($this->tr("You haven't entered the administrator email address in the application.ini.php file (email.admin). The application won't be able to send you messages." );
+      $this->addLogText($this->tr("You haven't entered the administrator email address in the application.ini.php file (email.admin). The application won't be able to send you messages." ));
     }
     else
     {
