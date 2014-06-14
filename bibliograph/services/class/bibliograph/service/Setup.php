@@ -318,11 +318,13 @@ class bibliograph_service_Setup
     // next
     $this->setMessage($this->tr("Done ..."));
     $this->addLogText("\n" . $this->tr("Setup finished. Please reload the application"));
+    $this->getCache()->setValue("setup",true);
+    $this->getCache()->savePersistenceData();
   }
 
   protected function finish()
   {
-    $this->getCache()->setValue("setup",true);
+    $this->log("Setup completed.", QCL_LOG_SETUP );
   }
 }
 ?>
