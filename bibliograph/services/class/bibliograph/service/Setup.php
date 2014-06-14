@@ -98,6 +98,7 @@ class bibliograph_service_Setup
   protected function getStepMethods()
   {
     return array(
+      "checkAdminEmail",
       "createConfig",
       "registerDatasourceSchemas",
       "createExampleDatasources",
@@ -125,6 +126,29 @@ class bibliograph_service_Setup
       $this->getApplication()->importInitialData($dataPaths);
     }
   }
+  /**
+   * make sure an administrator email is specified and set admin
+   * email in the user model.
+   */  
+  protected function checkAdminEmail()
+  {
+    $app = $this->getApplication();
+    $adminEmail = $app->getIniValue("email.admin");
+    if ( ! $adminEmail )
+    {
+      $this->addLogText($this->tr("You haven't entered the administrator email address in the application.ini.php file (email.admin). The application won't be able to send you messages." );
+    }
+    else
+    {
+      $userModel = $app->getAccessController()->getUserModel();
+      $userModel->load( "admin" ); // will throw an error if user setup hasn't worked
+      $userModel->set( "email", $adminEmail );
+      $userModel->save();
+      $this->addLogText($this->tr("Administrator email has been set."));
+    }
+    // next
+    $this->setMessage($this->tr("Setting up configuration keys ..."));    
+  }
 
   protected function createConfig()
   {
@@ -140,7 +164,7 @@ class bibliograph_service_Setup
     // result
     $this->addLogText($this->tr("Configuration keys added."));
     // next
-    $this->setMessage($this->tr("Setting up configuration keys ..."));
+    $this->setMessage($this->tr("Registering datasource information ..."));
   }
 
   protected function registerDatasourceSchemas()
