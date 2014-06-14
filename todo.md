@@ -9,7 +9,6 @@ Frontend
 Backend
 -------
 - Bug: Translations missing
-- "setSessionId" message should only be sent when id changes
 
 Testing
 -------
