@@ -3,7 +3,6 @@ Todos
 
 Frontend
 --------
-- Auto-Generate Citation id
 - Remove generator warnings
 
 Backend

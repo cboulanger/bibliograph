@@ -679,6 +679,19 @@ class bibliograph_service_Reference
       ) );
       $model->save();
     }
+
+    $oldCitekey = $model->getCitekey();
+    $newCitekey = $model->computeCiteKey();
+    if( ! $oldCitekey and $model->getAuthor() and $model->getYear() and $model->getTitle() )
+    {
+      $data = array(
+        'datasource' => $datasource,
+        'modelType'  => "reference",
+        'modelId'    => $referenceId,
+        'data'       => array( "citekey" => $newCitekey )
+      );
+      $this->broadcastClientMessage("bibliograph/fieldeditor/update", $data );
+    }
     return "OK";
   }
 
