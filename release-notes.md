@@ -1,14 +1,16 @@
 Release notes
 =============
 
-Version 2.1 (May 2014)
-----------------------
-Lots (really!) of changes, fixes, improvements and refactoring under the hood, while staying
-backwards-compatible for database data and plugin code.
+Version 2.1 (June 2014)
+-----------------------
+A large number of changes, fixes, improvements and refactoring under the hood (>180 commits), 
+while staying backwards-compatible for database data and plugin code.
 - upgraded qooxdoo to version 3.5.1 on the frontend and to PHP 5.3. on the backend
+- clean-up and refactoring of the backend and the qcl library. Fixed various problems related to session management.
+- added a new plugin: Import references by ISBN using a barcode scanner
+- updated CiteProc engine
+- improved setup process
 - removed dependency on qxtransformer during development - it's all pure javascript now
-- clean-up and refactoring of the backend (backwards-incompatible changes of the qcl library).
-- contains new ISBN-Scanner plugin
 
 Version 2.0 (2011)
 ------------------
@@ -18,7 +20,7 @@ Version 2.0 (2011)
 
 Version 1.0 (~2006)
 -------------------
-- used NetWindows on the client, a one-man project by Alex Russel, who afterward co-founded the Dojo toolkit
+- used the NetWindows javascript library (a project by Alex Russel, who afterward co-founded the Dojo toolkit)
 - was used in a criminological research project
 
 Version 0.1 (~2003)
