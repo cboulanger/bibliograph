@@ -410,7 +410,9 @@ class qcl_server_JsonRpcServer
     }
 
     $response->setData( $data );
-    return $this->json->encode( $response->toArray() );
+    $json = $this->json->encode( $response->toArray() );
+    //qcl_log_Logger::getInstance()->info($json);
+    return $json;
   }
 
   /**

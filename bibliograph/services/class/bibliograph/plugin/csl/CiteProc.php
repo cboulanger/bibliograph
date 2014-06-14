@@ -18,7 +18,8 @@
 
 ************************************************************************ */
 
-require_once "lib/CiteProc.php";
+require_once "citeproc-php/CiteProc.php";
+//require_once "qcl/lib/portable-utf8.php";
 
 /**
  * Wrapper around citeproc-php, the php implementation of
@@ -56,6 +57,8 @@ class bibliograph_plugin_csl_CiteProc
      */
     $csl_file = dirname(__FILE__) . "/styles/$styleId.csl";
     $this->csl_data = file_get_contents( $csl_file );
+    
+    //$this->debug($csl_file);
 
     /*
      * create new processor
@@ -72,13 +75,16 @@ class bibliograph_plugin_csl_CiteProc
    */
   public function render( $data )
   {
-    $formatted = $this->citeproc->render( $data );
-    $formatted = str_replace( ". .",".", $formatted );
-    $formatted = str_replace( ", .",".", $formatted );
-    $formatted = str_replace( ", p. )",")", $formatted );
-    $formatted = str_replace( " (p. )","", $formatted );
-    $formatted = str_replace( ", S )",")", $formatted );
-    $formatted = str_replace( " (S )","", $formatted );
+    //$this->debug($data);
+    $formatted = $this->citeproc->render( $data, 'bibliography' );
+    // $formatted = str_replace( ". .",".", $formatted );
+    // $formatted = str_replace( ", .",".", $formatted );
+    // $formatted = str_replace( ", p. )",")", $formatted );
+    // $formatted = str_replace( " (p. )","", $formatted );
+    // $formatted = str_replace( ", S )",")", $formatted );
+    // $formatted = str_replace( " (S )","", $formatted );
+    //$formatted = utf8_clean($formatted);
+    //$this->debug($formatted);
     return $formatted;
   }
 }

@@ -19,6 +19,9 @@
 ************************************************************************ */
 
 qcl_import("qcl_data_controller_Controller");
+qcl_import("bibliograph_service_Reference");
+qcl_import("bibliograph_schema_BibtexSchema");
+qcl_import("bibliograph_plugin_csl_CiteProc");
 
 
 class class_bibliograph_plugin_csl_Service
@@ -66,8 +69,10 @@ class class_bibliograph_plugin_csl_Service
     qcl_assert_array( $ids, "Invalid ids argument");
     qcl_assert_valid_string( $style,"Invalid style argument." );
 
-    //return $this->render_debug( $datasource, $ids, $style );
-    return $this->render( $datasource, $ids, $style );
+    //$data = $this->render_debug( $datasource, $ids, $style );
+    $data = $this->render( $datasource, $ids, $style );
+    //$this->debug($data);
+    return $data;
   }
 
   /**
@@ -134,10 +139,6 @@ class class_bibliograph_plugin_csl_Service
     qcl_assert_valid_string( $datasource, "Invalid datasource argument!");
     qcl_assert_array( $ids, "Invalid 'ids' argument: must be array!" );
 
-    qcl_import("bibliograph_service_Reference");
-    qcl_import("bibliograph_schema_BibtexSchema");
-    qcl_import("bibliograph_plugin_csl_CiteProc");
-
     $refController = bibliograph_service_Reference::getInstance();
     $bibtexSchema = bibliograph_schema_BibtexSchema::getInstance();
     $citeproc = new bibliograph_plugin_csl_CiteProc( $style );
@@ -194,45 +195,6 @@ class class_bibliograph_plugin_csl_Service
     $result .= "<pre>" . json_format( $data ) ."</pre>";
     $result .= "<h3>CSL Data</h3>";
     $result .= "<pre>" . htmlentities( $citeproc->csl_data ) . "</pre>";
-
-    return array(
-      'html' => $result
-    );
-  }
-
-  /**
-   * @rpctest {
-   *   "label":"Test Citeproc",
-   *   "requestData":{
-   *     "service":"bibliograph.plugin.csl.Service",
-   *     "method":"test",
-   *     "params":[],
-   *     "serverData":{}
-   *   },
-   *    callback : function( result ){
-   *     var w = window.open();
-   *     w.document.open();
-   *     w.document.write(result);
-   *     w.document.close();
-   *   }
-   * }
-   *
-   */
-  public function method_test()
-  {
-
-    $test_data = file_get_contents( dirname(__FILE__) . "/lib/test_data.json");
-    $test_data = (array) json_decode($test_data);
-
-    $this->debug( $test_data );
-
-    qcl_import("bibliograph_plugin_csl_CiteProc");
-    $citeproc = new bibliograph_plugin_csl_CiteProc("apsa");
-
-    $result = "";
-    foreach( $test_data as $data) {
-      $result .= $citeproc->render($data) . "\n";
-    }
 
     return array(
       'html' => $result

@@ -309,7 +309,7 @@ class csl_format extends csl_rendering_element {
           break;
         case 'capitalize-all':
         case 'title':
-          $text = mb_convert_case($text, MB_CASE_TITLE);
+          //$text = mb_convert_case($text, MB_CASE_TITLE);
           break;
         case 'capitalize-first':
           $chr1 = mb_strtoupper(mb_substr($text, 0, 1));

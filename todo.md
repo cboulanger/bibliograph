@@ -9,7 +9,7 @@ Frontend
 Backend
 -------
 - Bug: Translations missing
-- Update CiteProc engine
+- "setSessionId" message should only be sent when id changes
 
 Testing
 -------
