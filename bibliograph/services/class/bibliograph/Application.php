@@ -46,7 +46,7 @@ class bibliograph_Application
    * The version of the application
    * @var string
    */
-  protected $applicationVersion = "2.1 RC1";
+  protected $applicationVersion = "2.1-RC1";
 
   /**
    * The path to the application ini-file

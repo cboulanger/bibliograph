@@ -4,10 +4,11 @@ Todos
 Frontend
 --------
 - Remove generator warnings
+- Add missing translations
 
 Backend
 -------
-- Bug: Translations missing
+- Add missing translations
 
 Testing
 -------
