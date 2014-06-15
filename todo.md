@@ -10,6 +10,7 @@ Backend
 -------
 - Bug: Translations missing
 - "setSessionId" message should only be sent when id changes
+- warn about unsafe settings during setup
 
 Testing
 -------

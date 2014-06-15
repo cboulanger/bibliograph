@@ -1,7 +1,19 @@
+Sponsor a feature
+=================
+If you need a particular feature, you can hire me to delevop it. Write to
+info at bibliograph dot org. Possible features are:
+- a Zotero.org backend
+- a library book checkout system
+- Sync with desktop reference managers
+but I'll be happy to develop a plugin for your particular need.
+
+Now come the features/changes that might be implemented or not, depending on
+my free time & sufficient interest.
+
 Version 2.2
 ===========
-This version will contain backwards-incompatible changes to the database and the plugin architecture.
-
+This version will contain backwards-incompatible changes to the database and the
+plugin architecture.
 
 Features:
 ---------
@@ -9,7 +21,8 @@ Features:
 
 Frontent/Backend
 ----------------
-- move plugins out of bibliograph namespace into separate hierarchy containing frontend & backend code
+- move plugins out of bibliograph namespace into separate hierarchy containing 
+  frontend & backend code
 
 Frontend
 --------
@@ -23,5 +36,7 @@ Backend
 - qcl: Replace qcl_import with Autoloader
 - convert project to use PHP namespaces
 - replace defines with const where appropriate
-- Cleanup: Remove all code problems resulting in currently suppressed E_STRICT & E_NOTICE errors
+- Cleanup: Remove all code problems resulting in currently suppressed E_STRICT &
+  E_NOTICE errors
+
 
