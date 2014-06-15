@@ -32,13 +32,12 @@
     "source-httpd-config",
     "test",
     "test-source",
-    "test-mobile",
-    "test-mobile-source",
     "translation",
     "validate-config",
     "validate-manifest",
     "watch",
-    "deploy-plugins"
+    "deploy-plugins",
+    "create-zip"
   ],
 
   "default-job" : "source-hybrid",
@@ -93,14 +92,6 @@
       ]
     },
 
-//    "includes" : {
-//      "include" : [
-//        "qx.theme.Classic",
-//        "qx.theme.Indigo",
-//        "qx.theme.Simple"
-//      ]
-//    },
-
     "deploy-plugins" :
     {
       "copy-files" :
@@ -110,7 +101,16 @@
         "target" : "build/resource/bibliograph/plugin"
       }
     },
-
+    
+    // Creates a zip file with a standalone build that can be deployed to a server.
+    "create-zip" :
+    {
+      "shell" :
+      {
+        "command": "mkdir -p bibliograph; cp -a ./build ./services ../readme.md ../release-notes.md bibliograph/; zip -qr ../bibliograph.zip ./bibliograph/ -x bibliograph.ini.php server.conf.php; rm -rf ./bibliograph",
+        "command-not-found" : "Could not create zip file. Please install the zip command."
+      }
+    },    
 
     // jobs for source & build version
     "common":
