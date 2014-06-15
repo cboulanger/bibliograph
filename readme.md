@@ -120,7 +120,8 @@ Support
 -------
 - For general questions, please write to info at bibliograph dot org. A support 
   mailing list may follow.
-- Paid support for installation or hosting is available.
+- Paid support for installation or hosting is available, also if you need a plugin
+  to support your particular collection.
 
 Development
 -----------

@@ -277,7 +277,10 @@ class qcl_access_SessionController
     /*
      * let the client know
      */
-    $this->dispatchClientMessage("setSessionId", $sessionId );
+    if( $sessionId != parent::getSessionIdFromRequest() )
+    {
+      $this->dispatchClientMessage("setSessionId", $sessionId );
+    }
   }
 
   /**
