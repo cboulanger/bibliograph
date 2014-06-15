@@ -118,8 +118,12 @@ Deployment
 
 Support
 -------
+- Online documentation is here: http://www.bibliograph.org. Most of it is still
+  in German, but English documentation will be added once there is some interest.
 - For general questions, please write to info at bibliograph dot org. A support 
   mailing list may follow.
+- Bugs and feature requests should be registered as github issues:
+  https://github.com/cboulanger/bibliograph/issues
 - Paid support for installation or hosting is available, also if you need a plugin
   to support your particular collection.
 
@@ -163,7 +167,7 @@ Open source libraries
 Partial funding was provided by
 - Juristische Fakultät (Department of Law), Humboldt-Universität zu Berlin
   http://www.rewi.hu-berlin.de
-- Organized Crime Research Project Assessing, Prof. Klaus von Lampe
+- Organized Crime Research Project, Dr. Klaus von Lampe
   http://www.organized-crime.de/
 
 The author wished to thank:
