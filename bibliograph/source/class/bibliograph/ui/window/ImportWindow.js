@@ -70,6 +70,10 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
       if (this.uploadButton)this.uploadButton.setEnabled(value !== null && this.file.getFieldValue != '');
 
     },
+    
+    /**
+     * Create upload widget
+     */
     createUploadWidget : function()
     {
       var url = this.getApplication().getRpcManager().getServerUrl();
@@ -123,9 +127,12 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
       }, this);
       return form;
     },
+    
+    
     _convertImportFilterSelection : function(s) {
       return (s.length ? s[0].getModel().getValue() : null);
     },
+    
     _on_uploadButton_execute : function()
     {
       this.importButton.setEnabled(false);

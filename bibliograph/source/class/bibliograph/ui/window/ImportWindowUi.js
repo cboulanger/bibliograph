@@ -75,6 +75,10 @@ qx.Class.define("bibliograph.ui.window.ImportWindowUi",
       importWindow.add(qxStack1, {
         flex : 1
       });
+      
+      /*
+       * Listview
+       */
       var listView = new bibliograph.ui.reference.ListView();
       this.listView = listView;
       listView.setServiceName("bibliograph.import");
@@ -82,20 +86,30 @@ qx.Class.define("bibliograph.ui.window.ImportWindowUi",
       listView.setDecorator("main");
       listView.setModelType("reference");
       qxStack1.add(listView);
+      
+      /*
+       * footer
+       */
       var qxHbox1 = new qx.ui.layout.HBox(5, null, null);
       var qxComposite1 = new qx.ui.container.Composite();
       qxComposite1.setLayout(qxHbox1)
       importWindow.add(qxComposite1);
       qxHbox1.setSpacing(5);
+      
+      /*
+       * Status label
+       */
       var statusTextLabel = new qx.ui.basic.Label(null);
+      this.listView._statusLabel = statusTextLabel; // todo this is a hack
       qxComposite1.add(statusTextLabel);
-      this.listView.bind("store.model.statusText", statusTextLabel, "value", {
-
-      });
+      this.listView.bind("store.model.statusText", statusTextLabel, "value");
+      
       var qxSpacer1 = new qx.ui.core.Spacer(null, null);
-      qxComposite1.add(qxSpacer1, {
-        flex : 10
-      });
+      qxComposite1.add(qxSpacer1, { flex : 10 });
+      
+      /*
+       * select all button
+       */
       var selectAllButton = new qx.ui.form.Button(this.tr('Select all'), null, null);
       this.selectAllButton = selectAllButton;
       selectAllButton.setLabel(this.tr('Select all'));
@@ -103,17 +117,23 @@ qx.Class.define("bibliograph.ui.window.ImportWindowUi",
       selectAllButton.addListener("execute", function(e) {
         listView.selectAll()
       }, this);
+      
+      /*
+       * import selected button
+       */
       var importButton = new qx.ui.form.Button(this.tr('Import selected records'), null, null);
       this.importButton = importButton;
       importButton.setEnabled(false);
       importButton.setLabel(this.tr('Import selected records'));
       qxComposite1.add(importButton);
-      importButton.bind("enabled", selectAllButton, "enabled", {
-
-      });
+      importButton.bind("enabled", selectAllButton, "enabled");
       importButton.addListener("execute", function(e) {
         this.importSelected()
       }, this);
+      
+      /*
+       * close button
+       */
       var qxButton1 = new qx.ui.form.Button(this.tr('Close'), null, null);
       qxButton1.setLabel(this.tr('Close'));
       qxComposite1.add(qxButton1);

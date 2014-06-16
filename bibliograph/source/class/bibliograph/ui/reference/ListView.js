@@ -257,7 +257,10 @@ qx.Class.define("bibliograph.ui.reference.ListView",
        */
       if (old)
       {
-        this.referenceViewLabel.setValue("");
+        if( this.referenceViewLabel )
+        {
+          this.referenceViewLabel.setValue("");  
+        }
 
         /*
          * clear table and mark as not ready so that
@@ -309,7 +312,10 @@ qx.Class.define("bibliograph.ui.reference.ListView",
            */
           var hierarchy = mainFolderTree.getTree().getHierarchy(selectedNode);
           hierarchy.unshift(this.getApplication().getDatasourceLabel());
-          this.referenceViewLabel.setValue(hierarchy.join(" > "));
+          if ( this.referenceViewLabel )
+          {
+            this.referenceViewLabel.setValue(hierarchy.join(" > "));  
+          }
 
           /*
            * is it a query?
@@ -848,7 +854,10 @@ qx.Class.define("bibliograph.ui.reference.ListView",
      */
     showMessage : function(msg)
     {
-      this._statusLabel.setValue(msg);
+      if( this._statusLabel )
+      {
+        this._statusLabel.setValue(msg);  
+      }
     },
 
     /**
