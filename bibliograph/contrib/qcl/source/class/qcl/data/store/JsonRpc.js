@@ -471,12 +471,12 @@ qx.Class.define("qcl.data.store.JsonRpc",
                 /*
                  * tear down old model? doesn't work
                  */
-                //if( this.getModel() )
-                //{
-                //  this.getModel().removeAllBindings();
-                //  this.getModel().dispose();
-                //  debugger;
-                //}
+                // if( this.getModel() )
+                // {
+                //   this.getModel().removeAllBindings();
+                //   this.getModel().dispose();
+                //   debugger;
+                // }
                 
                 /*
                  * set the initial data

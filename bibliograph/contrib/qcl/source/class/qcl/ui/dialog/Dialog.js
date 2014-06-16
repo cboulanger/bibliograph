@@ -144,7 +144,7 @@ qx.Class.define("qcl.ui.dialog.Dialog",
        * create dialog according to type
        */
       var isNew = false, widget = qcl.ui.dialog.Dialog.__instances[data.type];
-      if( ! widget )
+      if( ! widget ) 
       {
         var clazz = qx.lang.String.firstUp( data.type );
         if ( qx.lang.Type.isFunction( dialog[clazz] ) )
