@@ -68,7 +68,7 @@
 
         // Dialogs
         {
-         "manifest" : "contrib/Dialog/master/Manifest.json"
+         "manifest" : "contrib://Dialog/master/Manifest.json"
         },
         // Upload widget
         {
@@ -107,7 +107,7 @@
     {
       "shell" :
       {
-        "command": "mkdir -p bibliograph; cp -a ./build ./services ../readme.md ../release-notes.md bibliograph/; zip -qr ../bibliograph.zip ./bibliograph/ -x bibliograph.ini.php server.conf.php; rm -rf ./bibliograph",
+        "command": "rm -f ../bibliograph.zip; mkdir -p bibliograph; cp -a ./build ./services ../readme.md ../release-notes.md bibliograph/; rm -f ./bibliograph/services/config/bibliograph.ini.php ./bibliograph/services/config/server.conf.php; zip -qr ../bibliograph.zip ./bibliograph/; rm -rf ./bibliograph",
         "command-not-found" : "Could not create zip file. Please install the zip command."
       }
     },    
