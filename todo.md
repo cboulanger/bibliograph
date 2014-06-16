@@ -5,7 +5,6 @@ Frontend
 --------
 - Remove generator warnings
 - Add missing translations
-- Import from library catalog is broken
 
 Backend
 -------
