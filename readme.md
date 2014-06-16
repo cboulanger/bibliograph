@@ -1,11 +1,13 @@
-Bibliograph Online Reference Manager
-====================================
+Bibliograph: Open Source Online Citation & Library Management
+=============================================================
 
 Bibliograph is a powerful open source web application for the collaborative
 collection, editing and publishing of bibliographic data.
 
 - Demo installation: http://demo.bibliograph.org
 - Documentation: http://www.bibliograph.org
+- Download: http://sourceforge.net/projects/bibliograph/files/latest/download
+- Donate: http://sourceforge.net/p/bibliograph/donate/
 - The newest version of this readme: 
   https://github.com/cboulanger/bibliograph/blob/master/readme.md
 
@@ -130,7 +132,7 @@ Support
 Development
 -----------
 This is open source software, everybody is invited to hack on the code and help 
-make it better!
+make it better! Bug fixes and new plugins are very welcome.
 - Get the code by cloning it from git@github.com:cboulanger/bibliograph.git 
   (Most easily, by cloning it at GitHub itself).
 - Building the application requires the qooxdoo library (v3.5.1, v4.0 might work, 
@@ -152,6 +154,15 @@ Roadmap
   https://github.com/cboulanger/bibliograph/blob/master/roadmap.md
 - If you wish to sponsor a feature, please contact info@bibliograph.org
 
+I am not a developer. How can I contribute to the project?
+----------------------------------------------------------
+- You can donate and make sure development continues:
+  http://sourceforge.net/p/bibliograph/donate
+- You can help spread the word. The more people use the application, the more
+  likely it is that development continues and new features/plugins will be 
+  added.
+- You can provide feedback and suggest changes or features.
+
 Credits
 --------
 Open source libraries
@@ -170,7 +181,7 @@ Partial funding was provided by
 - Organized Crime Research Project, Dr. Klaus von Lampe
   http://www.organized-crime.de/
 
-The author wished to thank:
+The author wishes to thank:
 - Serge Barysiuk for providing assistance with UI generation, and for designing
   the application logo
 - Julika Rosenstock for writing the end user documentation. 
