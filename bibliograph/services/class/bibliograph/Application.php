@@ -43,10 +43,10 @@ class bibliograph_Application
   protected $applicationName = "Bibliograph: Online Bibliographic Data Manager";
 
   /**
-   * The version of the application
+   * The version of the application. Set dynamically.
    * @var string
    */
-  protected $applicationVersion = "2.1-RC1";
+  protected $applicationVersion = /*begin-version*/"(Development version)"/*end-version*/;
 
   /**
    * The path to the application ini-file

@@ -172,7 +172,7 @@ qx.Class.define("bibliograph.Main",
     ---------------------------------------------------------------------------
     */
     getVersion : function() {
-      return "v2.1-RC1 (14.06.2014)";
+      return /*begin-version*/"(Development version)"/*end-version*/;
     },
     getCopyright : function() {
       return "2003-2014 (c) Christian Boulanger";
