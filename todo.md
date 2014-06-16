@@ -5,16 +5,17 @@ Frontend
 --------
 - Remove generator warnings
 - Add missing translations
+- Import from library catalog is broken
 
 Backend
 -------
 - Translations missing
 - warn about unsafe settings during setup
 - add license text
+- Repair "Send Bug Report" feature
 
 Testing
 -------
-- Fresh install with empty databases
 - E-Mail-Registration/Password Change
 - Import/Export
 
