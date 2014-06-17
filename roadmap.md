@@ -5,7 +5,8 @@ info at bibliograph dot org. Possible features are:
 - a Zotero.org backend
 - a library book checkout system
 - Sync with desktop reference managers
-but I'll be happy to develop a plugin for your particular need.
+ 
+I'll be happy to develop a plugin for your particular need.
 
 Features/changes that might be implemented or not, depending on
 my free time & sufficient interest:
