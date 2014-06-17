@@ -23,8 +23,8 @@ Bibliograph
 
 Bibliograph can be used by
 
-- scholars and librarians who want to publish a book collection or a thematic 
-  bibliography publicly online
+- scholars and librarians who want to publish a library collection or a 
+  thematic bibliography online
 - groups of researchers who work together in a research project and want to 
   collect and share bibliographic references
 - professors and teachers who want to share bibliographic information with their
@@ -60,7 +60,7 @@ Prerequisites
 
 Preparations
 ------------
-- Rename services/config/bibliograph.ini.dist.php in 
+- Rename services/config/bibliograph.ini.dist.php to
   services/config/bibliograph.ini.php
 - Create a user "bibliograph" in your MySql-database with password "bibliograph"
   (if you want to use a different password for security, enter it in the 
