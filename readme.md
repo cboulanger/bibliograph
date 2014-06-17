@@ -50,7 +50,7 @@ Features
 - LDAP integration to connect to existing LDAP servers
 - Fully open source, can be easily adapted and extended
 - Extensible data model allows easy modification of record fields and integration 
-  of a variety of backends (e.g., NoSql, xml, REST or binary backends)
+  of a variety of backends (e.g., NoSql, xml, REST or binary backends such as IMAP)
 
 Prerequisites
 -------------
