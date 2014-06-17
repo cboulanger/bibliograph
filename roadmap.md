@@ -7,8 +7,8 @@ info at bibliograph dot org. Possible features are:
 - Sync with desktop reference managers
 but I'll be happy to develop a plugin for your particular need.
 
-Now come the features/changes that might be implemented or not, depending on
-my free time & sufficient interest.
+Features/changes that might be implemented or not, depending on
+my free time & sufficient interest:
 
 Version 2.2
 ===========
