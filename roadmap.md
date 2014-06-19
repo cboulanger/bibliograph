@@ -2,11 +2,12 @@ Sponsor a feature
 =================
 If you need a particular feature, you can hire me to delevop it. Write to
 info at bibliograph dot org. Possible features are:
-- a Zotero.org backend
+- a mobile version
+- a zotero.org backend
 - a library book checkout system
-- Sync with desktop reference managers
+- sync with desktop reference managers
  
-I'll be happy to develop a plugin for your particular need.
+and much more. I'll be happy to develop a plugin for your particular need.
 
 Features/changes that might be implemented or not, depending on
 my free time & sufficient interest:
