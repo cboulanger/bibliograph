@@ -46,7 +46,7 @@ Features
 - Export data into open formats
 - Formats bibliographic records with various citation styles (APA, Chicago, ...) 
   using CSL templates and the citeproc style processor (http://citationstyles.org)
-- Can create backup snapshots of databases and
+- Can create and restore snapshot backups of individual databases 
 - LDAP integration to connect to existing LDAP servers
 - Fully open source, can be easily adapted and extended
 - Extensible data model allows easy modification of record fields and integration 
