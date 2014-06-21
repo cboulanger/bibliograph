@@ -49,6 +49,7 @@ class qcl_data_db_Manager
 
   /**
    * Returns the type of the database, based on the dsn string
+   * @todo rename or purge, this looks like a getter method but is not one
    * @param $dsn
    * @return string
    */
@@ -71,8 +72,25 @@ class qcl_data_db_Manager
   {
     if ( $dsn === null )
     {
-      $dsn = $this->getApplication()->getIniValue("macros.dsn_admin");
-      $dsn = str_replace("&",";", $dsn );
+      $app = $this->getApplication();
+      if ( QCL_USE_EMBEDDED_DB and $app->useEmbeddedDatabase() )
+      {
+        if ( ! class_exists("SQLite3") )
+        {
+          throw new LogicException("Cannot use embedded database - SQLite3 is not available");
+        }
+        // use the file-based embedded SQLLite database
+        $appid  = $app->id();
+        $dbname = "main";
+        $dbfile =  QCL_VAR_DIR . "/$appid-$dbname.sqlite3";
+        $dsn    = "sqlite:$dbfile";  
+      }
+      else
+      {
+        // use the database specified in the ini file
+        $dsn = $this->getApplication()->getIniValue("macros.dsn_admin");
+        $dsn = str_replace("&",";", $dsn );        
+      }
     }
     elseif ( ! is_string( $dsn ) ) // @todo use regexp
     {
@@ -110,7 +128,7 @@ class qcl_data_db_Manager
        */
       if ( $user === null )
       {
-        // FIXME
+        // @tod we don't need admin rights for all queries
         $user = $this->getApplication()->getIniValue("database.adminname");
         $pass = $this->getApplication()->getIniValue("database.adminpassw");
       }

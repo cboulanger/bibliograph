@@ -211,16 +211,10 @@ class qcl_data_model_AbstractNamedActiveRecord
     $this->init();
 
     $bhv = $this->getQueryBehavior();
-    $rowCount = $bhv->select( new qcl_data_db_Query( array(
-      'select' => "id",
-      'where'  => array(
-        'namedId' => $namedId
-      )
-    ) ) );
-    if ( $rowCount )
+    $ids = $bhv->fetchValues( "id", array( 'namedId' => $namedId ) ); 
+    if ( count( $ids ) )
     {
-      $result = $bhv->fetch();
-      return (int) $result['id'];
+      return (int) $ids[0];
     }
     else
     {

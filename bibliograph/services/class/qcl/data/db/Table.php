@@ -330,11 +330,12 @@ class qcl_data_db_Table
   public function addIndex( $type, $index, $columns )
   {
     $this->checkApplicationState();
+    
     if ( ! $type or !$index or ! is_array( $columns ) or ! count( $columns ) )
     {
       throw new InvalidArgumentException("Invalid arguments");
     }
-
+    
     qcl_log_Logger::getInstance()->log( sprintf(
      "Adding '%s' index `%s` to table `%s` using columns %s.",
       $type, $index, $this->getName(), implode(",",$columns)

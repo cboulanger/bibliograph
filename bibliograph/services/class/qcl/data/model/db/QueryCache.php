@@ -15,6 +15,8 @@
  * Authors:
  *  * Christian Boulanger (cboulanger)
  */
+ 
+ qcl_import("qcl_core_PersistentObject");
 
 /**
  * Cache for query setup

@@ -19,7 +19,8 @@ qcl_import( "qcl_core_Object" );
 
 /**
  * abstract class for objects which do database queries
- * implemented by subclasses with specific database adapters
+ * implemented by subclasses with specific database adapters.
+ * todo refactor into abstract class
  */
 abstract class qcl_data_db_adapter_Abstract
   extends qcl_core_Object
@@ -231,6 +232,17 @@ abstract class qcl_data_db_adapter_Abstract
   {
     throw new qcl_core_NotImplementedException(__METHOD__);
   }
+  
+  /**
+   * internal log function
+   * @param string $msg The message to log
+   */
+  public function log( $msg )
+  {
+    if ( $this->getLogger()->isFilterEnabled( QCL_LOG_DB ) )
+    {
+      parent::log( $msg, QCL_LOG_DB );
+    }
+  }
+  
 }
-
-?>

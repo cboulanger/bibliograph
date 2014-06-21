@@ -19,7 +19,7 @@
 
 //qcl_import( "qcl_data_model_IQueryBehavior" );
 qcl_import( "qcl_data_db_Table" );
-
+qcl_import( "qcl_data_model_db_QueryCache" );
 
 /**
  * Query behavior for (PDO) database driver.
@@ -203,7 +203,6 @@ class qcl_data_model_db_QueryBehavior
   {
     if ( ! self::$cache )
     {
-      qcl_import( "qcl_data_model_db_QueryCache" );
       self::$cache = new qcl_data_model_db_QueryCache();
     }
     return self::$cache;
@@ -631,7 +630,7 @@ class qcl_data_model_db_QueryBehavior
      * use passed PDOStatement or simply the last one created
      */
     if ( $query instanceof qcl_data_db_Query
-    and $query->getPdoStatement() instanceof PDOStatement )
+       and $query->getPdoStatement() instanceof PDOStatement )
     {
       $result = $query->getPdoStatement()->fetch();
     }
@@ -647,13 +646,13 @@ class qcl_data_model_db_QueryBehavior
     /*
      * set the result
      */
-    if ( ! is_array( $result ) )
+    if ( ! is_array( $result ) ) // todo this should never be the case
     {
-      return null;
+      return array();
     }
     else
     {
-    	// FIXME test performance
+    	// todo test performance
     	foreach( $result as $key => $value )
     	{
     		$result[$key] = $this->getModel()->getPropertyBehavior()->typecast($key, $value);

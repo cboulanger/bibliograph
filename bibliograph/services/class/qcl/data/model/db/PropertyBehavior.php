@@ -243,7 +243,9 @@ class qcl_data_model_db_PropertyBehavior
     $table      = $qBehavior->getTable();
     $tableName  = $qBehavior->getTableName();
     $cache      = $this->cache();
-
+    
+    $createTrigger = false; 
+    
     /*
      * check table name
      */
@@ -261,12 +263,18 @@ class qcl_data_model_db_PropertyBehavior
     }
     $cachedProps = $cache->properties[$tableName];
 
+    $clazz = $model->className();
+    if( $this->hasLog() ) $this->log( "Setting up properties for class '$clazz'.");
+
     /*
      * setup table columns
      * @todo separate by task into individual methods
      */
     foreach( $properties as $property => $prop )
     {
+      
+      if( $this->hasLog() ) $this->log( "Setting up property '$property' ($clazz).");
+      
       /*
        * skip elements that are not in the filter if filter has been set
        */
@@ -334,6 +342,12 @@ class qcl_data_model_db_PropertyBehavior
       if( strtolower($sqltype) == "current_timestamp" )
       {
         $sqltype = $qBehavior->getAdapter()->currentTimestampSql();
+        // if this type is not available, try to create a trigger
+        if ( ! $sqltype )
+        {
+          $sqltype = "DATETIME";
+          $createTrigger = true;
+        }
       }
 
       /*
@@ -352,9 +366,28 @@ class qcl_data_model_db_PropertyBehavior
            }
            else
            {
-              $sqltype .= ' NOT NULL';
+              if ( ! isset( $prop['init'] ) )
+              {
+                throw new qcl_data_model_Exception( sprintf(
+                  "Property '%s.%s' must provide an init value in order to be 'not nullable'.",
+                  get_class( $this->model), $property
+                ) );
+              }
+              switch ( $prop['check'] )
+              {
+                case "boolean":
+                  $default = $prop['init'] ? 1 : 0;
+                  break;
+                case "integer":
+                  $default = $prop['init'];
+                  break;
+                default:  
+                  $default = "'" . $prop['init'] . "'";
+              }
+              $sqltype .= ' NOT NULL DEFAULT ' . $default;
            }
          }
+         
          /*
           * otherwise, by default add "NULL" to sql type
           */
@@ -387,7 +420,21 @@ class qcl_data_model_db_PropertyBehavior
          */
         if ( isset( $prop['unique'] ) and $prop['unique'] === true )
         {
-          $table->addIndex( "unique", "unique_{$column}", array( $column ) );
+          $indexName = "unique_{$column}";
+          if( ! $table->indexExists( $indexName ) )
+          {
+            $table->addIndex( "unique", $indexName, array( $column ) );  
+          }
+          else
+          {
+            if( $this->hasLog() ) $this->log( "Unique index for property '$prop' already exists.");
+          }
+        }
+        
+        // trigger
+        if( $createTrigger )
+        {
+          $qBehavior->getAdapter()->createTimestampTrigger( $tableName, $column );
         }
       }
 
@@ -409,6 +456,7 @@ class qcl_data_model_db_PropertyBehavior
           if( $this->hasLog() ) $this->log( "Column '$column' has not changed.");
         }
       }
+    
 
       /*
        * save in cache

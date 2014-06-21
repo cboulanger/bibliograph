@@ -17,7 +17,9 @@
  */
 
 qcl_import( "qcl_access_model_User" ); // this imports all the other required models
+qcl_import( "qcl_access_SessionController" );
 qcl_import( "qcl_application_ApplicationCache" );
+qcl_import( "qcl_locale_Manager" );
 
 /**
  * Base class for applications. This class mainly provides access to the
@@ -92,6 +94,14 @@ abstract class qcl_application_Application
    * @var string
    */
   protected $defaultSchema;
+  
+  /**
+   * If set to true, the database manager should use an embedded 
+   * database system (by default, the SQLite databse that comes with PHP5 )
+   * to store data. This is useful, for example, in a situation where the access
+   * to an external database does not exist or must be configured first.
+   */
+  protected $useEmbeddedDatabase = true;
 
   //-------------------------------------------------------------
   // authentication
@@ -115,6 +125,23 @@ abstract class qcl_application_Application
   public function skipAuthentication()
   {
     return $this->skipAuthentication;
+  }
+  
+  /**
+   * If called with a boolean argument, turn the use of 
+   * an embedded database on or off. If called with no
+   * arguments, return the current state (true if embedded database
+   * is used, false if not).
+   */
+  public function useEmbeddedDatabase()
+  {
+    if (func_num_args()==0)
+    {
+      return $this->useEmbeddedDatabase;
+    }
+    $value = func_get_arg(0);
+    qcl_assert_boolean( $value );
+    $this->useEmbeddedDatabase = $value;
   }
 
   //-------------------------------------------------------------
@@ -221,18 +248,7 @@ abstract class qcl_application_Application
    */
   public function getLocaleManager()
   {
-    qcl_import( "qcl_locale_Manager" );
     return qcl_locale_Manager::getInstance();
-  }
-
-  /**
-   * Sborthand getter for access behavior attached
-   * @return qcl_access_SessionController
-   */
-  public function getAccessController()
-  {
-    qcl_import( "qcl_access_SessionController" );
-    return qcl_access_SessionController::getInstance();
   }
 
   //-------------------------------------------------------------

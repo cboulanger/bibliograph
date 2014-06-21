@@ -18,6 +18,7 @@
 qcl_import("qcl_server_Service");
 qcl_import("qcl_server_Response");
 qcl_import("qcl_data_Result");
+qcl_import( "qcl_data_datasource_Manager" );
 
 /**
  * Common base class for controllers. Mainly contains convenience
@@ -1020,7 +1021,6 @@ class qcl_data_controller_Controller
    */
   public function getDatasourceManager()
   {
-    qcl_import( "qcl_data_datasource_Manager" );
     return qcl_data_datasource_Manager::getInstance();
   }
 

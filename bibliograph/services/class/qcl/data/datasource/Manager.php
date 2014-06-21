@@ -80,7 +80,7 @@ class qcl_data_datasource_Manager
 
     $class = $options['class'];
 
-    // FIXME decide if class must exists at time of registering so that we can do dependency checks or not
+    // todo: decide if class must exists at time of registering so that we can do dependency checks or not
     if ( ! is_string( $class) ) //or ! $class instanceof qcl_data_datasource_DbModel )
     {
       throw new InvalidArgumentException("Invalid class '$class'. Must implement qcl_data_datasource_IModel ");
@@ -91,7 +91,7 @@ class qcl_data_datasource_Manager
     /*
      * create schema
      */
-    return $this->getRegistryModel()->create( $schemaName, $options );
+    return $this->getRegistryModel()->createIfNotExists( $schemaName, $options );
   }
 
   /**

@@ -259,17 +259,17 @@ class qcl_data_db_adapter_PdoMysql
     /*
      * the type is the string before the first ":"
      */
-    $type = $dsn->substr( 0, $dsn->indexOf(":") );
+    $type = (string) $dsn->substr( 0, $dsn->indexOf(":") );
 
     /*
      * analyse the rest of the string by splitting it along first
      * the ";" and then the "="
      */
-    $rest = explode(";", $dsn->substr( $dsn->indexOf(":") ) );
+    $rest = explode(";", (string) $dsn->substr( $dsn->indexOf(":") +1 ) );
     foreach( $rest as $part )
     {
       $value = explode("=",$part);
-      $dsnprops[$value[0]] = $value[1];
+      $dsnprops[trim($value[0])] = trim($value[1]);
     }
 
     return array(
@@ -360,6 +360,13 @@ class qcl_data_db_adapter_PdoMysql
   {
     $this->execute("USE `$database`");
   }
+  
+  /**
+   * Tell driver to attach the given database. Does noting in MySQL
+   * @param $database
+   * @return void
+   */
+  protected function attachDatabase( $database ){}
 
   /**
    * Checks an sql WHERE statement. Raises an error if problems
@@ -395,11 +402,7 @@ class qcl_data_db_adapter_PdoMysql
     $pass    = $this->getPassword();
     $options = $this->getOptions();
 
-    if ( $this->getLogger()->isFilterEnabled( QCL_LOG_DB ) )
-    {
-        $this->log("Connecting to '$dsn' with user '$user', options: " . json_encode( $options ), QCL_LOG_DB );
-    }
-
+    $this->log("Connecting to '$dsn' with user '$user', options: " . json_encode( $options ), QCL_LOG_DB );
 
     /*
      * connect. this will throw a PDOException if unsuccesful
@@ -468,7 +471,6 @@ class qcl_data_db_adapter_PdoMysql
 		{
 	    $this->pdoStatement = $this->db()->query( $sql );
 		}
-
 		$this->pdoStatement->setFetchMode( PDO::FETCH_ASSOC );
 
 		return $this->pdoStatement;
@@ -1019,11 +1021,8 @@ class qcl_data_db_adapter_PdoMysql
    */
   public function columnExists( $table, $column, $useCache = true )
   {
-    $cache = &$_SESSION['qcl_data_db_adapter_PdoMysql_ColumnCache'];
-    if ( ! is_array( $cache ) )
-    {
-      $cache = array();
-    }
+    static $cache = array();
+    
     if ( $useCache === false or ! isset( $cache[$table][$column] ) )
     {
       $database = $this->getDatabase();
@@ -1344,7 +1343,7 @@ class qcl_data_db_adapter_PdoMysql
     }
     else
     {
-      $this->warn("Index $index already exists in table $table.");
+      throw new LogicException("Index $index already exists in table $table.");
     }
   }
 
@@ -1487,5 +1486,3 @@ class qcl_data_db_adapter_PdoMysql
   }
 
 }
-
-?>

@@ -84,11 +84,11 @@ class qcl_data_datasource_DbModel
     ),
     'schema' => array(
       'check'   => "string",
-      'sqltype' => "varchar(100) NOT NULL"
+      'sqltype' => "varchar(100)"
     ),
     'type' => array(
       'check'   => "string",
-      'sqltype' => "varchar(20) NOT NULL"
+      'sqltype' => "varchar(20)"
     ),
     'host' => array(
       'check'   => "string",
@@ -579,6 +579,8 @@ class qcl_data_datasource_DbModel
     return array_keys( $this->modelMap );
   }
 
+  
+
   /**
    * Return the shared model instance for the given type.
    * @param string $type
@@ -608,6 +610,21 @@ class qcl_data_datasource_DbModel
 
     return $this->modelMap[$type]['model']['instance'];
   }
+  
+/**
+   * Resets the shared model instance for the given type.
+   * @param string $type
+   * @throws InvalidArgumentException
+   * @return void
+   */
+  public function resetInstanceOfType( $type )
+  {
+    if ( ! isset( $this->modelMap[$type] ) )
+    {
+      throw new InvalidArgumentException("Model of type '$type' is not registered");
+    }
+    unset( $this->modelMap[$type]['model']['instance'] );
+  }  
 
   /**
    * Creates a model instance for the given type. Avoid using this

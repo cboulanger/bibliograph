@@ -38,7 +38,7 @@ class qcl_data_datasource_RegistryModel
   private $properties = array(
     'class' => array(
       'check'     => "string",
-      'sqltype'   => "varchar(100) NOT NULL"
+      'sqltype'   => "varchar(100) NULL"
     ),
     'description' => array(
       'check'     => "string",
