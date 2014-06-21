@@ -156,19 +156,19 @@ function qcl_is_file( $file )
   return true;
 }
 
+
+
+
 /**
- * Returns a reference to the singleton instance of the given class
+ * Returns a reference to the singleton instance of the given class.
+ * Shortcut for qcl_core_SingletonManager::createInstance( $clazz ),
+ * might be replaced by longer form.
  * @param string $clazz Class name
  * @return object
  */
 function qcl_getInstance( $clazz )
 {
-  static $singletons = array();
-  if ( ! isset( $singletons[ $clazz ] ) )
-  {
-    $singletons[ $clazz ] = new $clazz;
-  }
-  return $singletons[ $clazz ];
+  return qcl_core_SingletonManager::createInstance( $clazz );
 }
 
 

@@ -22,13 +22,21 @@
 define("QCL_ARGUMENT_NOT_SET", "QCL_ARGUMENT_NOT_SET");
 
 /*
+ * core package files
+ */
+require_once "qcl/core/functions.php";
+qcl_import("qcl_core_Object");
+qcl_import("qcl_core_SingletonManager");
+qcl_import("qcl_log_Logger");
+
+
+/*
  * create filters
  */
 $logger = qcl_log_Logger::getInstance();
 
 define("QCL_LOG_OBJECT","object");
 $logger->registerFilter( QCL_LOG_OBJECT, "Object-related debugging.",false);
-
 
 define("QCL_LOG_PERSISTENCE","persistence");
 $logger->registerFilter( QCL_LOG_PERSISTENCE, "Persistence-related debugging.",false);

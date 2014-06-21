@@ -29,6 +29,15 @@
 set_time_limit(120);
 ini_set("html_errors",0);
 
+/**
+ * Path to the qcl php library
+ * @var string
+ */
+if ( ! defined( "QCL_CLASS_PATH") )
+{
+  define("QCL_CLASS_PATH", realpath( dirname(__FILE__) ) );  
+}
+
 /*
  * Directory containing the service classes with trailing slash
  */
@@ -56,10 +65,23 @@ if ( ! defined("QCL_VAR_DIR") )
   define( "QCL_VAR_DIR" ,  sys_get_temp_dir() );
 }
 
+
+/*
+ * Whether or not to use the embedded database (SQLite3) that comes with PHP for
+ * the qcl model data. Will be automatically disabled when SQLite is not available
+ * (for example, in a vanilla Ubuntu install). You can disable it manually by setting
+ * this to false in your server.conf.php file.
+ */
+if ( ! defined("QCL_USE_EMBEDDED_DB") )
+{
+  define( "QCL_USE_EMBEDDED_DB" , false /*class_exists("SQLite3")*/ );
+}
+ 
+
 /*
  * load core functions
  */
-require_once "qcl/core/functions.php";
+require_once "qcl/core/__init__.php"; 
 require_once "qcl/lib/rpcphp/server/error/JsonRpcError.php";
 
 /*

@@ -16,12 +16,6 @@
  *  * Christian Boulanger (cboulanger)
  */
 
-/*
- * bootstrapping qcl
- */
-/** @noinspection PhpIncludeInspection */
-require_once "qcl/core/__init__.php";
-
 qcl_import( "qcl_core_IPropertyAccessors");
 qcl_import( "qcl_core_PropertyBehavior");
 
