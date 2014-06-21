@@ -67,6 +67,10 @@ class bibliograph_Cache
    */
   public function getValue( $key )
   {
+    if( ! isset($this->map[$key] ) )
+    {
+      $this->map[$key] = null;
+    }
     return $this->map[$key];
   }
 }

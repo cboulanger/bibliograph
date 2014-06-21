@@ -60,7 +60,7 @@ class bibliograph_service_Setup
    */
   protected function getCache()
   {
-    return bibliograph_Cache::getInstance();
+    return $this->getApplication()->getCache();
   }
 
   /**
@@ -71,13 +71,26 @@ class bibliograph_service_Setup
    */
   public function method_setup()
   {
+    
+    $app = $this->getApplication();
+    
     /*
      * If the app hasn't been set up, start progressive task
      */
     if ( ! $this->getCache()->getValue("setup") )
     {
-      $this->importInitialData();
-      $this->getAccessController()->createUserSession();
+      if ( QCL_USE_EMBEDDED_DB )
+      {
+        $this->log("Using embedded database for initial authentication ....", QCL_LOG_SETUP );
+        $this->useEmbeddedDatabase(true);
+        // importing role data to create an anonymous user session
+        $app->importInitialData(array('role'=> "bibliograph/data/Role.xml"));    
+      }
+      else
+      {
+        $this->importInitialData();  
+      }
+      $app->getAccessController()->createUserSession();
       return $this->method_start($this->tr("Starting setup ..."));
     }
 
@@ -98,16 +111,33 @@ class bibliograph_service_Setup
   protected function getStepMethods()
   {
     return array(
-      "checkAdminEmail",
+      //"importInitialData",
+      "checkConfiguration",
       "createConfig",
       "registerDatasourceSchemas",
       "createExampleDatasources",
       "createInternalDatasources",
     );
   }
+  
+  /**
+   * not yet used
+   */
+  protected function useEmbeddedDatabase($value)
+  {
+    if ( QCL_USE_EMBEDDED_DB )
+    {
+      qcl_data_model_db_ActiveRecord::resetBehaviors();
+      $this->getApplication()->useEmbeddedDatabase($value);
+    }
+  }
 
   protected function importInitialData()
   {
+    $app = $this->getApplication();
+    
+    $this->useEmbeddedDatabase(false);
+    
     // Check for setup user
     $userModel = qcl_access_model_User::getInstance();
     try
@@ -125,18 +155,31 @@ class bibliograph_service_Setup
       $this->log("Importing initial user data ....", QCL_LOG_SETUP );
       $this->getApplication()->importInitialData($dataPaths);
     }
+    
+    // result
+    $this->addLogText($this->tr("Initial user data imported."));
+    
+    // next
+    $this->setMessage($this->tr("Checking configuration ..."));  
+    
+    $this->useEmbeddedDatabase(true);
   }
+  
+  
   /**
-   * make sure an administrator email is specified and set admin
-   * email in the user model.
+   * Check configuration
    */  
-  protected function checkAdminEmail()
+  protected function checkConfiguration()
   {
+    $this->log("Checking configuration ...", QCL_LOG_SETUP );
+    
     $app = $this->getApplication();
+    $this->useEmbeddedDatabase(false);
+    
     $adminEmail = $app->getIniValue("email.admin");
     if ( ! $adminEmail )
     {
-      $this->addLogText($this->tr("You haven't entered the administrator email address in the application.ini.php file (email.admin). The application won't be able to send you messages." ));
+      $this->addLogText(">>> " .$this->tr("Please enter the administrator email address in the application.ini.php file (email.admin)." ));
     }
     else
     {
@@ -148,12 +191,17 @@ class bibliograph_service_Setup
     }
     // next
     $this->setMessage($this->tr("Setting up configuration keys ..."));    
+    
+    $this->useEmbeddedDatabase(true);
   }
 
   protected function createConfig()
   {
     $this->log("Adding configuration keys ...", QCL_LOG_SETUP );
+    
     $app = $this->getApplication();
+    $this->useEmbeddedDatabase(false);
+    
     $app->setupConfigKeys( include( APPLICATION_CLASS_PATH . "/bibliograph/config.php" ) );
 
     // access.enforce_https_login
@@ -165,11 +213,17 @@ class bibliograph_service_Setup
     $this->addLogText($this->tr("Configuration keys added."));
     // next
     $this->setMessage($this->tr("Registering datasource information ..."));
+    
+    $this->useEmbeddedDatabase(true);
   }
 
   protected function registerDatasourceSchemas()
   {
     $this->log("Registering bibliograph datasource schema ....", QCL_LOG_SETUP );
+    
+    $app = $this->getApplication();
+    $this->useEmbeddedDatabase(false);
+    
     $model = bibliograph_model_BibliographicDatasourceModel::getInstance();
     try
     {
@@ -183,10 +237,15 @@ class bibliograph_service_Setup
     $this->addLogText($this->tr("Added datasource schemas."));
     // next
     $this->setMessage($this->tr("Creating example datasources ..."));
+    
+    $this->useEmbeddedDatabase(true);
   }
 
   protected function createExampleDatasources()
   {
+    $app = $this->getApplication();
+    $this->useEmbeddedDatabase(false);
+    
     $dsModel = qcl_data_datasource_DbModel::getInstance();
     try
     {
@@ -200,7 +259,6 @@ class bibliograph_service_Setup
     catch( qcl_data_model_RecordNotFoundException $e){}
 
     // create example datasources and link them to roles
-    $app = $this->getApplication();
     $this->log("Creating example datasources ...", QCL_LOG_SETUP );
     try
     {
@@ -253,11 +311,16 @@ class bibliograph_service_Setup
     $this->addLogText($this->tr("Created example datasources."));
     // next
     $this->setMessage($this->tr("Creating internal datasources ..."));
+    
+    $this->useEmbeddedDatabase(true);
   }
 
 
   protected function createInternalDatasources()
   {
+    $app = $this->getApplication();
+    $this->useEmbeddedDatabase(false);    
+    
     /*
      * remote and local file storage datasources
      */
@@ -339,11 +402,15 @@ class bibliograph_service_Setup
 
     // result
     $this->addLogText($this->tr("Created internal datasources."));
+    
     // next
     $this->setMessage($this->tr("Done ..."));
     $this->addLogText("\n" . $this->tr("Setup finished. Please reload the application"));
-    $this->getCache()->setValue("setup",true);
-    $this->getCache()->savePersistenceData();
+    
+    // done!
+    $this->useEmbeddedDatabase(false); // now the external database can be used. 
+    $app->getCache()->setValue("setup",true);
+    $app->getCache()->savePersistenceData(); // todo: shouldn't be neccessary, but is - BUG?
   }
 
   protected function finish()
@@ -351,4 +418,3 @@ class bibliograph_service_Setup
     $this->log("Setup completed.", QCL_LOG_SETUP );
   }
 }
-?>

@@ -43,10 +43,11 @@ class bibliograph_Application
   protected $applicationName = "Bibliograph: Online Bibliographic Data Manager";
 
   /**
-   * The version of the application. Set dynamically.
+   * The version of the application. The version will be automatically replaced
+   * by the script that creates the distributable zip file. Do not change.
    * @var string
    */
-  protected $applicationVersion = /*begin-version*/"(Development version)"/*end-version*/;
+  protected $applicationVersion = /*begin-version*/"Development version"/*end-version*/;
 
   /**
    * The path to the application ini-file
@@ -70,7 +71,43 @@ class bibliograph_Application
   {
     return parent::getInstance();
   }
+  
+  /**
+   * Returns the application's cache object
+   * @return bibliograph_Cache
+   */
+  protected function getCache()
+  {
+    return bibliograph_Cache::getInstance();
+  }
+  
+  /**
+   * Getter for access controller
+   * @return qcl_access_SessionController
+   */
+  public function getAccessController()
+  {
+    return qcl_access_SessionController::getInstance();
+  }  
 
+  /**
+   * If called with a boolean argument, turn the use of 
+   * an embedded database on or off. If called with no
+   * arguments, return the current state (true if embedded database
+   * is used, false if not). Overridden to persist state. 
+   * Defaults to false
+   */
+  public function useEmbeddedDatabase()
+  {
+    if (func_num_args()==0)
+    {
+      return (bool) $this->getCache()->getValue("useEmbeddedDatabase");
+    }
+    $value = func_get_arg(0);
+    qcl_assert_boolean( $value );
+    return $this->getCache()->setValue("useEmbeddedDatabase",value);
+  }
+  
   /**
    * Starts the application, performing on-the-fly database setup if necessary.
    */
