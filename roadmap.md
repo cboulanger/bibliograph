@@ -32,10 +32,14 @@ Frontend
 
 Backend
 -------
-- qcl: implement Token (distributable session id)
+- qcl: rewrite test suites 
+- qcl: refactor sql queries using safe parameters 
 - qcl: Remove unnecessary Exceptions, reduce to a basic set
-- qcl: Overhaul error handling by backend in qcl/lib/rpcphp/server/JsonRpcServer.php
+- qcl: Integrate qcl/lib/rpcphp/server/JsonRpcServer.php and tidy up
+- qcl: Overhaul error handling by backend 
 - qcl: Replace qcl_import with Autoloader
+- qcl: Rename qcl_assert* functions
+- qcl: implement Token (distributable session id)
 - convert project to use PHP namespaces
 - replace defines with const where appropriate
 - Cleanup: Remove all code problems resulting in currently suppressed E_STRICT &
