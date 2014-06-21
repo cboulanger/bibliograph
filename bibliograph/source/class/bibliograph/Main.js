@@ -171,9 +171,20 @@ qx.Class.define("bibliograph.Main",
        AUTHOR AND VERSION
     ---------------------------------------------------------------------------
     */
+    
+    /**
+     * The version of the application. The version will be automatically replaced
+     * by the script that creates the distributable zip file. Do not change.
+     * @return {String}
+     */    
     getVersion : function() {
-      return /*begin-version*/"(Development version)"/*end-version*/;
+      return /*begin-version*/"Development version"/*end-version*/;
     },
+    
+    /**
+     * Copyright notice
+     * @return {String}
+     */
     getCopyright : function() {
       return "2003-2014 (c) Christian Boulanger";
     },
