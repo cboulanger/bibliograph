@@ -64,7 +64,7 @@ abstract class qcl_data_db_adapter_Abstract
    * @param string|null $options Optional options to pass to the driver
    * @return \qcl_data_db_adapter_Abstract
    */
-  function __construct( $dsn, $user, $pass, $options=null )
+  function __construct( $dsn, $user=null, $pass=null, $options=null )
   {
 
     /*

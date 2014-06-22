@@ -144,6 +144,15 @@ class qcl_data_db_adapter_PdoMysql
   {
     $this->database = $database;
   }
+  
+  /**
+   * Returns the last used PDO Statement
+   * @return PDOStatement
+   */
+  public function getPdoStatement()
+  {
+    return $this->pdoStatement;
+  }
 
   //-------------------------------------------------------------
   // Iterator API
@@ -945,11 +954,11 @@ class qcl_data_db_adapter_PdoMysql
   /**
    * Creates a table with an numeric, unique, self-incrementing id column,
    * which is also the primary key, with utf-8 as default character set. Throws
-   * an error if table already exists.
-   * WARNING: Input values are assumed to come from internal processing only and are therefore
-   * not sanitized. Make sure not to pass user-generated data to this method!
+   * an error if table already exists. Returns the instance to allow chaining. 
+   * @todo sanitize qcl string
    * @param string $table
    * @param string Optional id column name, defaults to 'id'
+   * @return qcl_data_db_adapter_PdoMysql 
    */
   public function createTable( $table, $idCol="id" )
   {
@@ -961,6 +970,7 @@ class qcl_data_db_adapter_PdoMysql
        PRIMARY KEY ($idCol)
       ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
     ");
+    return $this;
   }
 
   /**
@@ -1072,43 +1082,30 @@ class qcl_data_db_adapter_PdoMysql
   }
 
   /**
-   * Adds a column, throws error if column exists.
-   * WARNING: Input values are assumed to come from internal processing only and are therefore
-   * not sanitized. Make sure not to pass user-generated data to this method!
+   * Adds a column, throws error if column exists. Returns the instance to allow
+   * chaining
+   * @todo Sanitize sql string
    * @param string $table
    * @param string $column
    * @param string $definition
    * @param string $after Optional placement instruction. Must be one of (FIRST|AFTER xxx|LAST)
    * @throws Exception
    * @throws PDOException
+   * @return qcl_data_db_adapter_PdoMysql
    */
   public function addColumn( $table, $column, $definition, $after="")
   {
-    if ( ! $this->columnExists( $table, $column ) )
+    if ( $this->columnExists( $table, $column ) )
     {
-      $table  = $this->formatTableName( $table );
-      $column = $this->formatColumnName( $column );
-      try
-      {
-        $this->exec("
-          ALTER TABLE $table ADD COLUMN $column $definition $after;
-        ");
-        $this->log("Added $table.$column with definition '$definition'.",QCL_LOG_TABLES);
-      }
-      catch( PDOException $e )
-      {
-        if ( stristr( $e->getMessage(), "duplicate column name" ) )
-        {
-          $this->warn("Column '$table.$column' already exists.'");
-          return;
-        }
-        throw $e;
-      }
+      throw new LogicException("Column $column already exists in table $table.");
     }
-    else
-    {
-      $this->warn("Column $table.$column exists, not added.");
-    }
+    $table  = $this->formatTableName( $table );
+    $column = $this->formatColumnName( $column );
+    $this->exec("
+      ALTER TABLE $table ADD COLUMN $column $definition $after;
+    ");
+    $this->log("Added $table.$column with definition '$definition'.",QCL_LOG_TABLES);
+    return $this;
   }
 
   /**

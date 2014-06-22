@@ -15,6 +15,7 @@
  * Authors:
  *  * Christian Boulanger (cboulanger)
  */
+ 
 require_once dirname(__DIR__)."/bootstrap.php";
 qcl_import("qcl_test_TestRunner");
 

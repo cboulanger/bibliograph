@@ -26,7 +26,7 @@ qcl_import( "qcl_data_db_adapter_PdoMysql" );
  *
  * See http://www.php.net/manual/de/book.pdo.php
  */
-class qcl_data_db_adapter_PdoSQLite
+class qcl_data_db_adapter_PdoSqlite
   extends qcl_data_db_adapter_PdoMysql
 {
   
@@ -180,11 +180,11 @@ class qcl_data_db_adapter_PdoSQLite
   /**
    * Creates a table with an numeric, unique, self-incrementing id column,
    * which is also the primary key, with utf-8 as default character set. Throws
-   * an error if table already exists.
-   * WARNING: Input values are assumed to come from internal processing only and are therefore
-   * not sanitized. Make sure not to pass user-generated data to this method!
+   * an error if table already exists.Returns the instance to allow chaining. 
+   * @todo sanitize qcl string
    * @param string $table
    * @param string Optional id column name, defaults to 'id'
+   * @return qcl_data_db_adapter_PdoMSqlite 
    */
   public function createTable( $table, $idCol="id" )
   {
@@ -193,6 +193,7 @@ class qcl_data_db_adapter_PdoSQLite
     $this->exec("
       CREATE TABLE $table ( $idCol INTEGER PRIMARY KEY AUTOINCREMENT );
     ");
+    return $this;
   }
 
   /**
@@ -249,15 +250,16 @@ class qcl_data_db_adapter_PdoSQLite
   }
   
   /**
-   * Adds a column, throws error if column exists.
-   * WARNING: Input values are assumed to come from internal processing only and are therefore
-   * not sanitized. Make sure not to pass user-generated data to this method!
+   * Adds a column, throws error if column exists. Returns the instance to allow
+   * chaining
+   * @todo Sanitize sql string
    * @param string $table
    * @param string $column
    * @param string $definition
    * @param string $after Optional placement instruction. Must be one of (FIRST|AFTER xxx|LAST)
    * @throws Exception
    * @throws PDOException
+   * @return qcl_data_db_adapter_PdoSqlite
    */
   public function addColumn( $table, $column, $definition, $after="")
   {
@@ -269,6 +271,7 @@ class qcl_data_db_adapter_PdoSQLite
     $column = $this->formatColumnName( $column );
     $this->exec("ALTER TABLE $table ADD COLUMN $column $definition;");
     $this->log("Added $table.$column with definition '$definition'.",QCL_LOG_TABLES);
+    return $this;
   }
 
   /**
