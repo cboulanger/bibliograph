@@ -16,21 +16,29 @@
  *  * Christian Boulanger (cboulanger)
  */
 
-/** @noinspection PhpIncludeInspection */
-require_once "qcl/lib/rpcphp/server/access/IAccessibilityBehavior.php";
-
-qcl_import( "qcl_data_controller_Controller" );
-qcl_import( "qcl_util_registry_Session" );
+qcl_import("qcl_access_AbstractController");
+qcl_import("qcl_util_registry_Session");
 
 /**
- * Accessibility behavior class that handles authentication, access control
+ * Access controller that handles authentication, access control
  * and configuration
- *
  */
-class qcl_access_Controller
-  extends qcl_data_controller_Controller
-  implements IAccessibilityBehavior
+class qcl_access_UserController
+  extends qcl_access_AbstractController
 {
+
+  /**
+   * The id of the currently active user, determined from request or
+   * from session variable.
+   * @var int
+   */
+  private $activeUserId = null;
+
+  /**
+   * The active user object
+   * @var qcl_access_model_User
+   */
+  private $activeUser = null;
 
 	/**
    * Class-based access control list. 
@@ -73,19 +81,6 @@ class qcl_access_Controller
     )
   );
 
-  /**
-   * The id of the currently active user, determined from request or
-   * from session variable.
-   * @var int
-   */
-  private $activeUserId = null;
-
-  /**
-   * The active user object
-   * @var qcl_access_model_User
-   */
-  private $activeUser = null;
-
   //-------------------------------------------------------------
   // initialization
   //-------------------------------------------------------------
@@ -101,18 +96,44 @@ class qcl_access_Controller
      * instantiate the user model
      */
     qcl_access_model_User::getInstance();
-
+  }
+  
+  //-------------------------------------------------------------
+  // getters and setters
+  //-------------------------------------------------------------    
+  
+  /**
+   * Returns active user object
+   * @return qcl_access_model_User
+   */
+  public function getActiveUser()
+  {
+    return $this->activeUser;
   }
 
   /**
-   * Shorthand getter for access controller. Overridden to return itself
-   * when called from from subclasses
-   * @return qcl_access_Controller
+   * Sets the active user.
+   * @param qcl_access_model_User $userObject A user object or null to logout.
+   * @throws InvalidArgumentException
+   * @return void
    */
-  public function getAccessController()
+  public function setActiveUser( $userObject )
   {
-    return $this;
-  }
+    if ( $userObject === null )
+    {
+      $this->activeUser = null;
+    }
+    elseif ( $userObject instanceof qcl_access_model_User )
+    {
+      $activeUserClass = $userObject->className();
+      $this->activeUser = new $activeUserClass;
+      $this->activeUser->load( $userObject->namedId() );
+    }
+    else
+    {
+      throw new InvalidArgumentException("Invalid user object");
+    }
+  }  
 
   //-------------------------------------------------------------
   // model getters
@@ -197,48 +218,10 @@ class qcl_access_Controller
   {
     return qcl_config_ConfigModel::getInstance();
   }
-
-  //-------------------------------------------------------------
-  // active user
-  //-------------------------------------------------------------
-
-  /**
-   * Returns active user object
-   * @return qcl_access_model_User
-   */
-  public function getActiveUser()
-  {
-    return $this->activeUser;
-  }
-
-  /**
-   * Sets the active user.
-   * @param qcl_access_model_User $userObject A user object or null to logout.
-   * @throws InvalidArgumentException
-   * @return void
-   */
-  public function setActiveUser( $userObject )
-  {
-    if ( $userObject === null )
-    {
-      $this->activeUser = null;
-    }
-    elseif ( $userObject instanceof qcl_access_model_User )
-    {
-      $activeUserClass = $userObject->className();
-      $this->activeUser = new $activeUserClass;
-      $this->activeUser->load( $userObject->namedId() );
-    }
-    else
-    {
-      throw new InvalidArgumentException("Invalid user object");
-    }
-  }
-
+  
   //-------------------------------------------------------------
   // access control on the session level
   //-------------------------------------------------------------
-
 
   /**
    * Whether guest access to the service classes is allowed
@@ -298,7 +281,8 @@ class qcl_access_Controller
       }
     }
   }
-
+  
+  
   //-------------------------------------------------------------
   // session id
   //-------------------------------------------------------------
@@ -369,6 +353,12 @@ class qcl_access_Controller
     return $sessionId;
   }
 
+
+  //-------------------------------------------------------------
+  // authentication
+  //-------------------------------------------------------------
+
+
   /**
    * Get the active user id from the session id.
    * @param int $sessionId
@@ -379,7 +369,7 @@ class qcl_access_Controller
   {
     throw new qcl_access_InvalidSessionException("Controller does not support sessions");
   }
-
+  
   /**
    * Gets the session id from the 'sessionId' key in the server data
    * part of the json-rpc request
@@ -391,12 +381,7 @@ class qcl_access_Controller
     $sessionId = qcl_server_Request::getInstance()->getServerData("sessionId");
     $this->log("Got session id from request: #$sessionId", QCL_LOG_AUTHENTICATION );
     return $sessionId;
-  }
-
-  //-------------------------------------------------------------
-  // authentication
-  //-------------------------------------------------------------
-
+  }  
 
   /**
    * Checks if the requesting client is an authenticated user.
@@ -803,25 +788,4 @@ class qcl_access_Controller
   {
     $this->getEventDispatcher()->fireClientDataEvent( $this, $type, $data );
   }
-
-  //-------------------------------------------------------------
-  // IAccessibilityBehavior
-  //-------------------------------------------------------------
-
-  /**
-   * Unused, simply here for implementing IAccessibilityBehavior.
-   */
-  function getErrorMessage()
-  {
-    throw new Exception( __METHOD__ . " is not implemented");
-  }
-
-  /**
-   * Unused, simply here for implementing IAccessibilityBehavior.
-   */
-  function getErrorNumber()
-  {
-    throw new Exception( __METHOD__ . " is not implemented");
-  }
 }
-?>

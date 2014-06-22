@@ -15,7 +15,8 @@
  * Authors:
  *  * Christian Boulanger (cboulanger)
  */
-qcl_import( "qcl_access_Controller" );
+ 
+qcl_import( "qcl_access_UserController" );
 
 /**
  * Base class that keeps track of connected clients
@@ -23,7 +24,7 @@ qcl_import( "qcl_access_Controller" );
  * connection established by a particular browser instance.
  */
 class qcl_access_SessionController
-  extends qcl_access_Controller
+  extends qcl_access_UserController
 {
 
   /**

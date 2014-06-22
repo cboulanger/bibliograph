@@ -47,12 +47,6 @@ class qcl_test_application_Application
   protected $applicationVersion = "master";
 
   /**
-   * The path to the application ini-file
-   * @var string
-   */
-  protected $iniPath = __DIR__ . "test.ini.php";
-
-  /**
    * The default datasource schema used by the application
    * @var string
    */
