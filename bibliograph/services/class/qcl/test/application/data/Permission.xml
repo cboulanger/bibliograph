@@ -1,0 +1,20 @@
+<?xml version="1.0" standalone="yes"?>
+<root>
+  <model name="qcl_access_model_Permission">
+    <data>
+      <record namedId="viewRecord"/>
+      <record namedId="createRecord"/>
+      <record namedId="deleteRecord"/>
+      <record namedId="manageUsers"/>
+      <record namedId="manageConfig"/>
+    </data>
+    <links>
+      <relation name="Permission_Role">
+        <link namedId="viewRecord">anonymous,user</link>
+        <link namedId="createRecord">user</link>
+        <link namedId="deleteRecord">manager</link>
+        <link namedId="manageUsers">admin</link>
+      </relation>
+    </links>
+  </model>
+</root>

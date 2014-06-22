@@ -37,6 +37,16 @@ class qcl_test_TestRunner extends qcl_core_Object
     $this->lb = $chars; 
   }
   
+  public function info( $msg )
+  {
+    echo $this->lb .  "   - " . $msg;
+  }
+  
+  public function warn( $msg )
+  {
+    echo $this->lb . "   (!) " . $msg;
+  }
+  
   /**
    * Run test methods in this class. Test methods must be public and
    * prefixed by "test_" in order to be included in the test. 
@@ -78,6 +88,6 @@ class qcl_test_TestRunner extends qcl_core_Object
   protected function assert_handler($file, $line, $code, $description)
   {
     $this->failed = true;
-    echo $this->lb . "   !!! line $line: $description";
+    echo $this->lb . "  !!! line $line: $description";
   }
 }

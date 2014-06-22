@@ -88,7 +88,8 @@ qcl_log_Logger::getInstance()->registerFilter(QCL_LOG_LDAP,"LDAP-related log mes
 /*
  * Exceptions thrown in this class and subclasses
  */
-class qcl_access_AccessDeniedException extends JsonRpcException {}
+ qcl_import("qcl_server_ServiceException");
+class qcl_access_AccessDeniedException extends qcl_server_ServiceException {}
 class qcl_access_AuthenticationException extends qcl_access_AccessDeniedException {}
 class qcl_access_InvalidSessionException extends qcl_access_AccessDeniedException {}
 class qcl_access_TimeoutException extends qcl_access_InvalidSessionException {}

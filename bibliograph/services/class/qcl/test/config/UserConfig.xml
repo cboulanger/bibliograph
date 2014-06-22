@@ -1,0 +1,23 @@
+<?xml version="1.0" standalone="yes"?>
+<root>
+  <model name="config_UserConfig">
+    <data>
+      <record id="1">
+        <value>anonymous!</value>
+      </record>
+      <record id="2">
+        <value>user1</value>
+      </record>
+      <record id="3">
+        <value>user2</value>
+      </record>
+      <record id="4">
+        <value>user3</value>
+      </record>
+    </data>
+    <links>
+      <relation name="User_UserConfig"/>
+      <relation name="Config_UserConfig"/>
+    </links>
+  </model>
+</root>
