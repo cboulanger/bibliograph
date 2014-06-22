@@ -18,9 +18,9 @@
 
 require_once dirname(__DIR__)."/bootstrap.php"; 
 qcl_import( "qcl_test_TestRunner" );
-qcl_import( "qcl_application_Application" );
+qcl_import( "qcl_test_application_Application" );
 
-
+qcl_application_Application::setInstance(new qcl_test_application_Application);
 
 class qcl_test_event_Event
   extends qcl_test_TestRunner

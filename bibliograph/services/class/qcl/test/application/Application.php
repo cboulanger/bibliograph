@@ -19,6 +19,7 @@
 ************************************************************************ */
 
 qcl_import("qcl_application_Application");
+qcl_import("qcl_test_access_TestController");
 
 /**
  * Main application class
@@ -61,6 +62,15 @@ class qcl_test_application_Application
   static public function getInstance()
   {
     return parent::getInstance();
+  }
+  
+  /**
+   * Getter for access controller.
+   * @return qcl_test_access_TestController
+   */  
+  public function getAccessController()
+  {
+    return qcl_test_access_TestController::getInstance();
   }
   
   /**

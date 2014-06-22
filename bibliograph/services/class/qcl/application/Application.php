@@ -145,7 +145,7 @@ abstract class qcl_application_Application
   }
 
   //-------------------------------------------------------------
-  // property getters
+  // property getters todo: rename to use getX() syntax?
   //-------------------------------------------------------------
 
   /**
@@ -250,6 +250,13 @@ abstract class qcl_application_Application
   {
     return qcl_locale_Manager::getInstance();
   }
+  
+  /**
+   * Getter for access controller.
+   * @return qcl_access_AbstractController
+   */
+  abstract public function getAccessController();
+
 
   //-------------------------------------------------------------
   // event dispatcher and message bus
