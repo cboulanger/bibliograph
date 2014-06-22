@@ -605,7 +605,7 @@ class qcl_data_db_adapter_PdoMysql
    * @param array|null $parameter_types Optional, @see query()
 	 * @return array
 	 */
-	function getResultValues( $sql, $parameters=null, $parameter_types=null  )
+	function getResultValues( $sql=null, $parameters=null, $parameter_types=null  )
 	{
 		$result= array();
 		if ( $sql )
