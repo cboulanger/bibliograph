@@ -393,6 +393,15 @@ class qcl_data_db_adapter_PdoMysql
       throw new InvalidArgumentException("Invalid 'where' statement '$where'");
     }
   }
+  
+  /**
+   * Overridden to add filter
+   * @param string $msg
+   */
+  public function log( $msg )
+  {
+    parent::log($msg, QCL_LOG_DB );
+  }
 
   //-------------------------------------------------------------
   // IAdapter Interface
@@ -411,7 +420,7 @@ class qcl_data_db_adapter_PdoMysql
     $pass    = $this->getPassword();
     $options = $this->getOptions();
 
-    $this->log("Connecting to '$dsn' with user '$user', options: " . json_encode( $options ), QCL_LOG_DB );
+    $this->log("Connecting to '$dsn' with user '$user', options: " . json_encode( $options ));
 
     /*
      * connect. this will throw a PDOException if unsuccesful
@@ -442,18 +451,12 @@ class qcl_data_db_adapter_PdoMysql
    */
   public function query( $sql, $parameters=null, $parameter_types=null, $driver_options=array() )
 	{
-		/*
-		 * log
-		 */
-	  if ( $this->getLogger()->isFilterEnabled( QCL_LOG_DB ) ) // todo: cache result for better perfomance
-	  {
-  	  $this->log("query: $sql", QCL_LOG_DB );
-      if ( $parameters )
-      {
-        $this->log("Parameters:" . print_r($parameters,true) . "\nParameter types:" . print_r($parameter_types,true) , QCL_LOG_DB );
-      }
-	  }
-
+  	$this->log("query: $sql");
+    if ( $parameters )
+    {
+      $this->log("Parameters:" . json_encode($parameters) . "\nParameter types:" . json_encode($parameter_types,true) );
+    }
+	  
 		/*
 		 * bind values
 		 */
@@ -495,10 +498,7 @@ class qcl_data_db_adapter_PdoMysql
    */
   public function exec( $sql )
   {
-    if ( $this->getLogger()->isFilterEnabled( QCL_LOG_DB ) )
-    {
-      $this->log("exec: $sql", QCL_LOG_DB );
-    }
+    $this->log("exec: $sql");
     return $this->db()->exec( $sql );
   }
 
