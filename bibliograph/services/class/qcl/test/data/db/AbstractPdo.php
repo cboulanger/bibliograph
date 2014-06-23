@@ -137,6 +137,46 @@ abstract class qcl_test_data_db_AbstractPdo
     assert('$age==99',"Update row failed");
   }
   
+  public function test_deleteWhere()
+  {
+    $this->adapter->insertRow("test", 
+      array("firstname"=>"Pierre","lastname"=>"Richard","age"=>75));
+    $rowExists = $this->adapter->existsWhere("test","lastname='Richard'");
+    assert('$rowExists==true', "Insert failed");
+    $this->adapter->deleteWhere("test","lastname='Richard'");
+    $rowExists = $this->adapter->existsWhere("test","lastname='Richard'");
+    assert('$rowExists==false', "Delete failed");
+  }
+  
+  public function test_columnDefinition()
+  {
+    $def1 = "VARCHAR(20) NULL DEFAULT 'unkown'";
+    $this->adapter->addColumn("test","profession", $def1 );
+    $def2 = $this->adapter->getColumnDefinition("test","profession");
+    assert('$def1==$def2',"Wrong SQL Definition");
+  }
+  
+  public function test_createIndex()
+  {
+    $columns1 = array("firstname","lastname");
+    $this->adapter->addIndex( "test", "unique", "uniqueName", $columns1 );
+    $exists   = $this->adapter->indexExists( "test", "uniqueName" );
+    assert('$exists==true', "Problem creating index.");
+    $columns2 = $this->adapter->getIndexColumns( "test", "uniqueName" );
+    assert('$columns1==$columns2', "Problem with index columns.");
+    $this->info("Index created");
+    try
+    {
+      $this->adapter->insertRow("test",array("firstname"=>"John","lastname"=>"Doe"));
+      $this->warn("Unique index not working: no exeption thrown on duplicate entry.");
+    }
+    catch( PDOException $e)
+    {
+      $this->info("Expected exception thrown." );
+    }
+  }
+  
+  
   public function test_dropTable()
   {
     $this->adapter->dropTable("test");
@@ -152,10 +192,6 @@ abstract class qcl_test_data_db_AbstractPdo
   
   protected function cleanup()
   {
-    if( $this->adapter->getPdoStatement() )
-    {
-      $this->adapter->getPdoStatement()->closeCursor();
-    }
     if( $this->adapter->tableExists("test"))
     {
       $this->adapter->dropTable("test");

@@ -294,7 +294,7 @@ class qcl_data_db_adapter_PdoSqlite
     $table  = $this->formatTableName( $table );
     $column = $this->formatColumnName( $column );
     $this->exec("ALTER TABLE $table ADD COLUMN $column $definition;");
-    $this->log("Added $table.$column with definition '$definition'.",QCL_LOG_TABLES);
+    $this->log("Added $table.$column with definition '$definition'.");
     return $this;
   }
 
@@ -307,9 +307,24 @@ class qcl_data_db_adapter_PdoSqlite
    */
   public function getColumnDefinition( $table, $column )
   {
-    return $this->getResultValue("
-      select `sql` from sqlite_master 
-      WHERE type='index' and name='$column' and tbl_name='$table';" );
+    $table = $this->formatTableName($table);
+    $stm = $this->query("PRAGMA TABLE_INFO($table);");
+    while( $c = $stm->fetch() )
+    {
+      if ( $c['name'] == $column )
+      {
+        $definition = trim(str_replace("  "," ",implode(" ", array(
+          $c['type'],
+          ( ! $c['notnull']    ? "NULL": "NOT NULL" ),
+          ( ! $c['dflt_value'] ? ""    : "DEFAULT " . $c['dflt_value'] )
+        ))));
+      }
+    }
+    if ( ! $definition )
+    {
+      throw new LogicException("Column '$column' does not exist.");
+    }
+    return $definition;
   }
 
   /**

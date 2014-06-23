@@ -1104,7 +1104,7 @@ class qcl_data_db_adapter_PdoMysql
     $this->exec("
       ALTER TABLE $table ADD COLUMN $column $definition $after;
     ");
-    $this->log("Added $table.$column with definition '$definition'.",QCL_LOG_TABLES);
+    $this->log("Added $table.$column with definition '$definition'.");
     return $this;
   }
 

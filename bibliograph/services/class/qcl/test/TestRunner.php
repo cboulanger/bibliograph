@@ -120,6 +120,6 @@ class qcl_test_TestRunner extends qcl_core_Object
   protected function assert_handler($file, $line, $code, $description)
   {
     $this->failed = true;
-    $this->warn( $description );
+    $this->warn( $description . " in line $line.");
   }
 }
