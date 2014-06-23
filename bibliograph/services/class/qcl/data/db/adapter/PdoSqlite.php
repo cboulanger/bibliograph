@@ -208,6 +208,30 @@ class qcl_data_db_adapter_PdoSqlite
     $parts = explode(".", $table);
     return '"' . implode('"."', $parts ) . '"';
   }
+  
+  /**
+   * Deletes a table from the database.
+   * WARNING: Input values are assumed to come from internal processing only and are therefore
+   * not sanitized. Make sure not to pass user-generated data to this method!
+   * @param string|array $table Drop one or several tables
+   */
+  public function dropTable( $table )
+  {
+    if ( is_array($table) )
+    {
+      foreach( $table as $t )
+      {
+        $this->dropTable( $t );
+      }
+      return;
+    }
+    $table = $this->formatTableName( $table );
+    if( $this->pdoStatement )
+    {
+      $this->pdoStatement->closeCursor();
+    }
+    $this->exec("DROP TABLE $table" );
+  }  
 
   /**
    * Format a column name for use in the sql query.

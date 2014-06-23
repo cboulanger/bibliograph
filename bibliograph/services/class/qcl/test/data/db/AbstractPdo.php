@@ -128,6 +128,15 @@ abstract class qcl_test_data_db_AbstractPdo
     assert('$test2==false',"Assertion failed");
   }
   
+  public function test_updateRow()
+  {
+    $data = array( "age" => 99 );
+    $id = $this->adapter->getResultValue("SELECT id FROM test WHERE lastname='Doe';");
+    $this->adapter->updateRow( "test", $data, "id", $id );
+    $age = $this->adapter->getResultValue("SELECT age FROM test WHERE lastname='Doe';");
+    assert('$age==99',"Update row failed");
+  }
+  
   public function test_dropTable()
   {
     $this->adapter->dropTable("test");

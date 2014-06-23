@@ -50,7 +50,7 @@ class qcl_test_TestRunner extends qcl_core_Object
   public function error( $msg )
   {
     echo $this->lb . "   (X) " . $msg;
-    echo $this->lb . " - Aborted." . $msg;
+    echo $this->lb . "(X) Aborted.";
     echo $this->lb;
     $this->tearDown();
     exit();
@@ -84,7 +84,7 @@ class qcl_test_TestRunner extends qcl_core_Object
       }
       catch( Exception $e )
       {
-        $this->error( $e-getMessage() );
+        $this->error( $e->getMessage() );
       }
       
       if ( $this->failed )
@@ -100,7 +100,7 @@ class qcl_test_TestRunner extends qcl_core_Object
     }
     
     $this->tearDown();
-    echo "$lb - Done.";
+    echo "$lb(√) Done.";
     echo "$lb";
   }
   

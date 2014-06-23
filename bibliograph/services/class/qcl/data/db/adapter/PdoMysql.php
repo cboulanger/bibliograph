@@ -699,7 +699,7 @@ class qcl_data_db_adapter_PdoMysql
   		}
 		}
 
-		if ( ! is_integer( $id ) )
+		if ( ! is_integer( $id ) and  ! is_integer( (int) $id )  )
 		{
       throw new InvalidArgumentException("Invalid id:" . $id );
 		}
@@ -708,7 +708,7 @@ class qcl_data_db_adapter_PdoMysql
      * execute query
      */
     $idColumn = $this->formatColumnName( $idColumn );
-    $this->updateWhere( $table, $data, "$idColumn = :id", array( ':id' =>  $id ) );
+    $this->updateWhere( $table, $data, "$idColumn = :id", array( ':id' => (int) $id ) );
 		return (bool) $this->rowCount();
 	}
 
@@ -739,7 +739,7 @@ class qcl_data_db_adapter_PdoMysql
       $pairs[] = $columns[$i] . "=" . $names[$i];
     }
     $set = implode(",",$pairs);
-    $sql = "UPDATE $table SET $set WHERE $where";
+    $sql = "UPDATE $table SET $set WHERE $where;";
 
     /*
      * execute query
