@@ -34,7 +34,7 @@ class qcl_test_data_db_PdoSqlite
   
   private function getDbFile()
   {
-    return QCL_VAR_DIR . "/qcl-test.sqlite3";
+    return QCL_SQLITE_DB_DATA_DIR . "/qcl-test.sqlite3";
   }
   
   protected function getDsn()
@@ -53,7 +53,6 @@ class qcl_test_data_db_PdoSqlite
   
   protected function tearDown()
   {
-    parent::tearDown();
     unlink( $this->getDbFile() );
   }
 }

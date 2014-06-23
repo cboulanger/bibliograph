@@ -76,7 +76,15 @@ if ( ! defined("QCL_USE_EMBEDDED_DB") )
 {
   define( "QCL_USE_EMBEDDED_DB" , false /*class_exists("SQLite3")*/ );
 }
- 
+
+/*
+ * The directory in which the SQLite database files should be stored.
+ * Defaults to QCL_VAR_DIR 
+ */
+if ( ! defined("QCL_SQLITE_DB_DATA_DIR") )
+{
+  define( "QCL_SQLITE_DB_DATA_DIR" , QCL_VAR_DIR );
+}
 
 /*
  * load core functions

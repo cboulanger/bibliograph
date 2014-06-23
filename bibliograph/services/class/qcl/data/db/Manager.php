@@ -82,7 +82,7 @@ class qcl_data_db_Manager
         // use the file-based embedded SQLLite database
         $appid  = $app->id();
         $dbname = "main";
-        $dbfile =  QCL_VAR_DIR . "/$appid-$dbname.sqlite3";
+        $dbfile =  QCL_SQLITE_DB_DATA_DIR . "/$appid-$dbname.sqlite3";
         $dsn    = "sqlite:$dbfile";  
       }
       else
