@@ -27,8 +27,10 @@ cp -a ./build ./services ../readme.md ../release-notes.md \
 echo "$pretty" > ./bibliograph/version.txt
   
 # remove what shouldn't go in there  
-rm -f ./bibliograph/services/config/bibliograph.ini.php \
-      ./bibliograph/services/config/server.conf.php
+rm -rf \
+  ./bibliograph/services/config/bibliograph.ini.php \
+  ./bibliograph/services/config/server.conf.php \
+  ./bibliograph/services/class/qcl/test/
 
 # create the zip file
 zip -qr ../$filename.zip ./bibliograph/
