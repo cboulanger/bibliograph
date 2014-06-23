@@ -12,6 +12,7 @@ Backend
 - warn about unsafe settings during setup
 - add license text
 - Repair "Send Bug Report" feature
+- qcl: sanitize sql strings in adapters
 
 Testing
 -------
