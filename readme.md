@@ -122,8 +122,8 @@ Support
 -------
 - Online documentation is here: http://www.bibliograph.org. Most of it is still
   in German, but English documentation will be added once there is some interest.
-- For general questions, please write to info at bibliograph dot org. A support 
-  mailing list may follow.
+- For general questions, please write to info at bibliograph dot org or send 
+  a tweet to @bibliograph2. A support mailing list may follow.
 - Bugs and feature requests should be registered as github issues:
   https://github.com/cboulanger/bibliograph/issues
 - Paid support for installation or hosting is available, also if you need a plugin
