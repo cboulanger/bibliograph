@@ -176,6 +176,13 @@ abstract class qcl_test_data_db_AbstractPdo
     }
   }
   
+  function test_dropIndex()
+  {
+    $this->adapter->dropIndex("test","uniqueName");
+    $indexExists = $this->adapter->indexExists("test","uniqueName");
+    assert('$indexExists===false',"Problem dropping index.");
+  }
+  
   
   public function test_dropTable()
   {

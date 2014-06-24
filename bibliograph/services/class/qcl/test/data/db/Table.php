@@ -17,9 +17,11 @@
  *  * Christian Boulanger (cboulanger)
  */
 
-qcl_import( "qcl_test_TestRunner" );
-qcl_import( "qcl_data_db_adapter_PdoMysql" );
-qcl_import( "qcl_data_db_Table" );
+require_once dirname(dirname(__DIR__)) . "/bootstrap.php";
+
+qcl_import("qcl_test_TestRunner");
+qcl_import("qcl_data_db_adapter_Abstract");
+qcl_import("qcl_data_db_Table");
 
 /**
  * Service class containing test methods
@@ -27,30 +29,48 @@ qcl_import( "qcl_data_db_Table" );
 class qcl_test_data_db_Table
   extends qcl_test_TestRunner
 {
+  
+  protected $adapter = null;
+  
+  protected $table = null;
+  
+  function test_createAdapter()
+  {
+    $dsn = $_ENV['QCL_TEST_DSN'] ?
+      $_ENV['QCL_TEST_DSN'] : 
+      "sqlite:" . QCL_SQLITE_DB_DATA_DIR . "/qcl-test-db.sqlite3";
+    $this->adapter = qcl_data_db_adapter_Abstract::createAdapter( $dsn );
+    $this->info("Created adapter for DSN '$dsn'");
+  }
 
   public function test_testCreateTable()
   {
-    $this->startLogging();
-
-    list($dsn, $user, $pass) = $this->getDsnUserPassword();
-    $adapter = new qcl_data_db_adapter_PdoMysql( $dsn, $user, $pass );
-    $table   = new qcl_data_db_Table( "qcltest", $adapter );
+    //$this->startLogging();
+    $table   = new qcl_data_db_Table( "qcltest", $this->adapter );
     if ( $result = $table->exists() )
     {
       $this->info("Table exists, deleting...");
       $table->delete();
     }
+    
     $table->create();
+    assert('$table->exists()===true',"Problem creating table.");
+    
     $table->addColumn( "col1", "VARCHAR(32) NULL" );
+    assert('$table->columnExists("col1")===true',"Problem creating column.");
+    
     $table->addColumn( "col2", "INT(11) NOT NULL" );
     $table->addColumn( "col3", "INT(1) NULL" );
-
+    
     $table->insertRows( array(
       array( "col1" => "row1", "col2" => 1, "col3" => true ),
       array( "col1" => "row2", "col2" => 2, "col3" => false ),
       array( "col1" => "row3", "col2" => 3, "col3" => NULL )
     ) );
-
+  }
+    
+  function toBeRefactored()
+  {
     /*
      * test renaming
      */
@@ -76,19 +96,7 @@ class qcl_test_data_db_Table
     return "OK";
   }
 
-  /**
-   * Returns the dsn, user and password of the database used by the application
-   * @return array( dsn, user, password )
-   */
-  protected function getDsnUserPassword()
-  {
-    list( $user,$pass,$dbname, $dbtype, $host, $port )  =
-      $this->getApplication()->getIniValues(array(
-        "database.username","database.userpassw","database.admindb","database.type",
-        "database.host","database.port"
-      ) );
-    return array( "$dbtype:host=$host;port=$port;dbname=$dbname", $user, $pass) ;
-  }
+
 
   function startLogging()
   {
@@ -100,4 +108,5 @@ class qcl_test_data_db_Table
     $this->getLogger()->setFilterEnabled(array(QCL_LOG_DB,QCL_LOG_TABLES),false);
   }
 }
-?>
+
+qcl_test_data_db_Table::getInstance()->run();
