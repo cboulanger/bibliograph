@@ -358,24 +358,6 @@ class qcl_data_db_adapter_PdoMysql
     );
   }
 
-  /**
-   * Tell driver to use the given database. Since the database cannot be
-   * changed, the is s a protected function. Do not pass user-generated
-   * data to this method.
-   * @param $database
-   * @return void
-   */
-  protected function useDatabase( $database )
-  {
-    $this->execute("USE `$database`");
-  }
-  
-  /**
-   * Tell driver to attach the given database. Does noting in MySQL
-   * @param $database
-   * @return void
-   */
-  protected function attachDatabase( $database ){}
 
   /**
    * Checks an sql WHERE statement. Raises an error if problems
@@ -910,6 +892,49 @@ class qcl_data_db_adapter_PdoMysql
   //-------------------------------------------------------------
   // Database usage and introspection
   //-------------------------------------------------------------
+
+  /**
+   * Creates a new database
+   * @param string $database Database name
+   */
+  public function createDatabase( $database )
+  {
+    // todo: test and remove exception
+    throw new qcl_core_NotImplementedException(__METHOD__);
+    $this->exec("CREATE DATABASE :database",array( ":database" => $database) );
+  }
+
+  /**
+   * Deletes a database
+   * @param string $database Database name
+   */
+  public function dropDatabase( $database )
+  {
+    // todo: test and remove exception
+    throw new qcl_core_NotImplementedException(__METHOD__);
+    $this->exec("DROP DATABASE :database",array( ":database" => $database) );
+  }
+
+
+  /**
+   * Tell driver to use the given database. Since the database cannot be
+   * changed, the is s a protected function. Do not pass user-generated
+   * data to this method.
+   * @param $database
+   * @return void
+   */
+  public function useDatabase( $database )
+  {
+    $this->execute("USE `$database`");
+  }
+  
+  /**
+   * Tell driver to attach the given database. Does noting in MySQL
+   * @param $database
+   * @return void
+   */
+  public function attachDatabase( $database ){}
+  
 
   /**
    * Returns table structure as sql create statement

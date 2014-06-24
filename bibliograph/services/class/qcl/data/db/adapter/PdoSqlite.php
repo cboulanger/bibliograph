@@ -62,30 +62,6 @@ class qcl_data_db_adapter_PdoSqlite
     return $dsnprops;
   }  
 
-  /**
-   * Tell driver to use the given database. Does nothing in SQLite.
-   * @param $database
-   * @return void
-   */
-  protected function useDatabase( $database ){}
-
-  /**
-   * Tell driver to attach the given database. SQLite-only.
-   * @param $database
-   * @return void
-   */
-  protected function attachDatabase( $database )
-  {
-    if ( $database == $this->getDatabase() or in_array( $database, $this->attachedDatabases ) )
-    {
-      throw new LogicException("Database $database already attached");
-    }
-    $this->log("Attaching '$database'...");
-    $app = $this->getApplication();
-    $dbfile =  QCL_VAR_DIR . "/" . $app->id() . "-" . $database . ".sqlite3";
-    $this->execute("ATTACH '$dbfile' AS '$database';");
-    $this->attachedDatabases[] = $database;
-  }
 
   //-------------------------------------------------------------
   // special purpose sql statements
@@ -134,11 +110,67 @@ class qcl_data_db_adapter_PdoSqlite
     throw new qcl_core_NotImplementedException(__METHOD__);
   }
 
+  //-------------------------------------------------------------
+  // Databases
+  //-------------------------------------------------------------
+
+  /**
+   * Returns the path to the database file
+   * @return string
+   */
+  protected function getDbFilePath( $database )
+  {
+    return QCL_SQLITE_DB_DATA_DIR . "/" . 
+      $this->getApplication()->id() . "-" . $database . ".sqlite3";
+  }
+  
+  /**
+   * Creates a new database
+   * @param string $database Database name
+   */
+  public function createDatabase( $database )
+  {
+    throw new qcl_core_NotImplementedException(__METHOD__);
+  }
+
+  
+  /**
+   * Tell driver to use the given database. Does nothing in SQLite.
+   * @param $database
+   * @return void
+   */
+  public function useDatabase( $database ){}
+
+  /**
+   * Tell driver to attach the given database. SQLite-only.
+   * @param $database
+   * @return void
+   */
+  protected function attachDatabase( $database )
+  {
+    if ( $database == $this->getDatabase() or in_array( $database, $this->attachedDatabases ) )
+    {
+      throw new LogicException("Database $database already attached");
+    }
+    $this->log("Attaching '$database'...");
+    $dbfile = $this->getDbFilePath($database);
+    $this->execute("ATTACH '$dbfile' AS '$database';");
+    $this->attachedDatabases[] = $database;
+  }  
+
+  /**
+   * Deletes a database
+   * @param string $database Database name
+   */
+  public function dropDatabase( $database )
+  {
+    throw new qcl_core_NotImplementedException(__METHOD__);
+  }
 
   //-------------------------------------------------------------
   // Database usage and introspection
   //-------------------------------------------------------------
-
+  
   /**
    * Returns table structure as sql create statement
    * @param string $table table name
