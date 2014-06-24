@@ -68,7 +68,7 @@ interface qcl_data_db_adapter_IAdapter
    * @param $dsn
    * @return array
    */
-  public function extractDsnProperties( $dsn );
+  public static function extractDsnProperties( $dsn );
 
 
   /**

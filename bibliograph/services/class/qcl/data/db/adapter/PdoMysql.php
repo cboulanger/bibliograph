@@ -255,41 +255,6 @@ class qcl_data_db_adapter_PdoMysql
   }
 
   /**
-   * Extracts the values contained in the dsn into an associated array of
-   * key-value pairs that can be set as  properties of this object.
-   * @param $dsn
-   * @return array
-   */
-  public function extractDsnProperties( $dsn )
-  {
-    $dsn = new String( $dsn );
-    $dsnprops = array();
-
-    /*
-     * the type is the string before the first ":"
-     */
-    $type = (string) $dsn->substr( 0, $dsn->indexOf(":") );
-
-    /*
-     * analyse the rest of the string by splitting it along first
-     * the ";" and then the "="
-     */
-    $rest = explode(";", (string) $dsn->substr( $dsn->indexOf(":") +1 ) );
-    foreach( $rest as $part )
-    {
-      $value = explode("=",$part);
-      $dsnprops[trim($value[0])] = trim($value[1]);
-    }
-
-    return array(
-      'type'     => $type,
-      'host'     => either($dsnprops['host'],"localhost"),
-      'port'     => either($dsnprops['port'], 3306),
-      'database' => $dsnprops['dbname']
-    );
-  }
-
-  /**
    * Returns the default options for initiating a PDO connection
    * @return array
    */
@@ -888,9 +853,8 @@ class qcl_data_db_adapter_PdoMysql
     return $sql;
   }
 
-
   //-------------------------------------------------------------
-  // Database usage and introspection
+  // Databases
   //-------------------------------------------------------------
 
   /**
@@ -903,18 +867,6 @@ class qcl_data_db_adapter_PdoMysql
     throw new qcl_core_NotImplementedException(__METHOD__);
     $this->exec("CREATE DATABASE :database",array( ":database" => $database) );
   }
-
-  /**
-   * Deletes a database
-   * @param string $database Database name
-   */
-  public function dropDatabase( $database )
-  {
-    // todo: test and remove exception
-    throw new qcl_core_NotImplementedException(__METHOD__);
-    $this->exec("DROP DATABASE :database",array( ":database" => $database) );
-  }
-
 
   /**
    * Tell driver to use the given database. Since the database cannot be
@@ -935,7 +887,21 @@ class qcl_data_db_adapter_PdoMysql
    */
   public function attachDatabase( $database ){}
   
-
+  /**
+   * Deletes a database
+   * @param string $database Database name
+   */
+  public function dropDatabase( $database )
+  {
+    // todo: test and remove exception
+    throw new qcl_core_NotImplementedException(__METHOD__);
+    $this->exec("DROP DATABASE :database",array( ":database" => $database) );
+  }  
+  
+  //-------------------------------------------------------------
+  // Database usage and introspection
+  //-------------------------------------------------------------
+  
   /**
    * Returns table structure as sql create statement
    * @param string $table table name
@@ -945,7 +911,6 @@ class qcl_data_db_adapter_PdoMysql
   {
     return $this->getResultValue("SHOW CREATE TABLE " . $this->formatTableName( $table ) );
   }
-
 
   /**
    * Checks if table exists.

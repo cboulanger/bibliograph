@@ -54,7 +54,7 @@ class qcl_data_db_adapter_PdoSqlite
    * @param $dsn
    * @return array
    */
-  public function extractDsnProperties( $dsn )
+  public static function extractDsnProperties( $dsn )
   {
     $dsnprops = parent::extractDsnProperties( $dsn );
     unset( $dsnprops['host'] );
@@ -146,7 +146,7 @@ class qcl_data_db_adapter_PdoSqlite
    * @param $database
    * @return void
    */
-  protected function attachDatabase( $database )
+  public function attachDatabase( $database )
   {
     if ( $database == $this->getDatabase() or in_array( $database, $this->attachedDatabases ) )
     {

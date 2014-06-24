@@ -57,6 +57,20 @@ abstract class qcl_data_db_adapter_Abstract
    * An array of optional data for the connection
    */
   protected $options = array();
+  
+  
+  /**
+   * Static methods to create an adapter according to DSN
+   * @param string $dsn
+   * @return qcl_data_adapter_Abstract Adapter subclass instance configured for DSN
+   */
+  static public function createAdapter( $dsn )
+  {
+    $props = self::extractDsnProperties( $dsn );
+    $clazz = "qcl_data_db_adapter_Pdo" . ucfirst( $props['type'] );
+    qcl_import($clazz);
+    return new $clazz( $dsn );
+  }
 
   /**
    * Constructor. Initializes adapter.
@@ -88,7 +102,7 @@ abstract class qcl_data_db_adapter_Abstract
     /*
      * set properties from dsn
      */
-    $this->set( $this->extractDsnProperties( $dsn ) );
+    $this->set( self::extractDsnProperties( $dsn ) );
 
     /*
      * connect to the database
@@ -119,14 +133,13 @@ abstract class qcl_data_db_adapter_Abstract
   }
 
   /**
-   * sets and analyzes the dsn for this database
+   * sets the dsn for this database
    * @param $dsn
    * @internal param \dsn $string
    * @return void
    */
   public function setDsn($dsn)
   {
-    $this->extractDsnProperties( $dsn );
     $this->dsn = $dsn;
   }
 
@@ -227,13 +240,37 @@ abstract class qcl_data_db_adapter_Abstract
    * Extracts the values contained in the dsn into an associated array of
    * key-value pairs that can be set as  properties of this object.
    * @param $dsn
-   * @throws qcl_core_NotImplementedException
    * @return array
    */
-  public function extractDsnProperties( $dsn )
+  public static function extractDsnProperties( $dsn )
   {
-    throw new qcl_core_NotImplementedException(__METHOD__);
+    $dsn = new String( $dsn );
+    $dsnprops = array();
+
+    /*
+     * the type is the string before the first ":"
+     */
+    $type = (string) $dsn->substr( 0, $dsn->indexOf(":") );
+
+    /*
+     * analyse the rest of the string by splitting it along first
+     * the ";" and then the "="
+     */
+    $rest = explode(";", (string) $dsn->substr( $dsn->indexOf(":") +1 ) );
+    foreach( $rest as $part )
+    {
+      $value = explode("=",$part);
+      $dsnprops[trim($value[0])] = trim($value[1]);
+    }
+
+    return array(
+      'type'     => $type,
+      'host'     => either($dsnprops['host'],"localhost"),
+      'port'     => either($dsnprops['port'], 3306),
+      'database' => $dsnprops['dbname']
+    );
   }
+
   
   /**
    * internal log function
