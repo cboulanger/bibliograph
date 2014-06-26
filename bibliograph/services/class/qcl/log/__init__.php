@@ -23,9 +23,8 @@
  */
 if ( ! defined("QCL_LOG_PATH") )
 {
-  define ( "QCL_LOG_PATH", "./log/" );
+  define ( "QCL_LOG_PATH", QCL_VAR_DIR );
 }
-
 
 /*
  * The name of the log file
@@ -40,7 +39,7 @@ if ( ! defined("QCL_LOG_FILE_NAME") )
  */
 if ( ! defined("QCL_LOG_FILE") )
 {
-  define( "QCL_LOG_FILE" ,  QCL_LOG_PATH . QCL_LOG_FILE_NAME );
+  define( "QCL_LOG_FILE" ,  QCL_LOG_PATH . "/" . QCL_LOG_FILE_NAME );
 }
 
 /*
