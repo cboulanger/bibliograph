@@ -16,8 +16,11 @@
  *  * Christian Boulanger (cboulanger)
  */
 
-qcl_import( "qcl_test_TestRunner" );
-qcl_import( "qcl_data_model_Model" );
+require_once dirname(dirname(__DIR__)) . "/bootstrap.php";
+
+qcl_import("qcl_test_TestRunner");
+qcl_import("qcl_data_model_Model");
+qcl_import("qcl_data_db_Timestamp");
 
 class model_TestModel
   extends qcl_data_model_Model
@@ -57,38 +60,21 @@ class model_TestModel
 
     parent::__construct();
   }
-
-  function init()
-  {
-    parent::init();
-    $this->set("created", new qcl_data_db_Timestamp("2010-03-17 14:20:53") );
-  }
-
-  private function valueToString( $value )
-  {
-    if ( is_scalar( $value ) )
-    {
-      return "'$value' (" . gettype( $value ) . ")";
-    }
-    else
-    {
-      return typeof( $value, true );
-    }
-  }
+  
 
   public function _applyFoo($value, $old)
   {
-    $this->info("foo was " . $this->valueToString( $old ) . ", is now " . $this->valueToString( $value )  );
+    qcl_test_data_model_Model::getInstance()->_applyFoo($value, $old);
   }
 
   public function _applyBar($value, $old)
   {
-    $this->info("bar was " . $this->valueToString( $old ) . ", is now " . $this->valueToString( $value ) );
+    qcl_test_data_model_Model::getInstance()->_applyBar($value, $old);
   }
 
   public function _onChangeFoo( qcl_event_type_DataEvent $e )
   {
-    $this->info( "'changeFoo' event tells me that foo was changed to " . $this->valueToString( $e->getData() ) );
+    qcl_test_data_model_Model::getInstance()->_onChangeFoo( $e );
   }
 
 }
@@ -99,34 +85,83 @@ class model_TestModel
 class qcl_test_data_model_Model
   extends qcl_test_TestRunner
 {
-  public function test_testModel()
+  private $_applyFooWorked = false;
+  private $_applyBarWorked = false;
+  private $_onChangeFooWorked = false;
+  
+  public function test_setupModel()
   {
     $model = new model_TestModel();
-
-    assert('\1');
-    assert('\1');
-    assert('\1');
-
+    
+    $model->init(); // this sets up the property system
+    assert('$this->_applyFooWorked===true',"Apply function was not invoked.");
+    assert('$this->_applyBarWorked===true',"Apply function was not invoked.");
+    assert('$this->_onChangeFooWorked===true',"Change function was not invoked.");
+    
+    $model->set("created", new qcl_data_db_Timestamp("2010-03-17 14:20:53") );  
+    $created = (string) $model->getCreated();
+    assert('$created=="2010-03-17 14:20:53"', "Incorrect 'created' value: $crated");
+    
+    assert('$model->getFoo()=="foo"',"Incorrect 'foo' value");
+    assert('gettype( $model->getBar() )=="integer"' );
+  }
+  
+  public function test_setProperties()
+  {
+    $model = new model_TestModel();
     try
     {
       $model->setBar("boo"); // should raise an error
-      throw new qcl_test_AssertionException("Assigning the wrong value type to a property should throw an error!");
+      $this->warn("Assigning the wrong value type to a property should throw an error!");
     }
-    catch( qcl_core_PropertyBehaviorException $e ){}
+    catch( qcl_core_PropertyBehaviorException $e ){
+      $this->info("Wrong value detected");    
+    }
 
     // nullable
     $model->setFoo(null);
-    assert('\1');
+    assert('$model->getFoo()===null',"Failed to set property to null");
 
     try
     {
       $model->setBar(null); // should raise an error
-      throw new qcl_test_AssertionException("Assigning null to a non-nullable property should throw an error!");
+      $this->warn("Assigning null to a non-nullable property should throw an error!");
     }
-    catch( qcl_core_PropertyBehaviorException $e ){}
-
-    return "OK";
+    catch( qcl_core_PropertyBehaviorException $e )
+    {
+      $this->info("Incorrect null value detected");
+    }
   }
+  
+  public function _applyFoo($value,$old)
+  {
+    $this->_applyFooWorked = true;
+    //$this->info("foo was " . $this->valueToString( $old ) . ", is now " . $this->valueToString( $value )  );
+  }
+  
+  public function _applyBar($value, $old)
+  {
+    $this->_applyBarWorked = true;
+    //$this->info("bar was " . $this->valueToString( $old ) . ", is now " . $this->valueToString( $value ) );
+  }
+  
+  public function _onChangeFoo( qcl_event_type_DataEvent $e )
+  {
+    $this->_onChangeFooWorked = true;
+    //$this->info( "'changeFoo' event tells me that foo was changed to " . $this->valueToString( $e->getData() ) );
+  }  
+  
+  public function valueToString( $value )
+  {
+    if ( is_scalar( $value ) )
+    {
+      return "'$value' (" . gettype( $value ) . ")";
+    }
+    else
+    {
+      return typeof( $value, true );
+    }
+  }  
 }
 
-?>
+qcl_test_data_model_Model::getInstance()->run();

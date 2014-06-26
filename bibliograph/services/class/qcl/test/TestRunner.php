@@ -44,6 +44,7 @@ class qcl_test_TestRunner extends qcl_core_Object
 
   public function warn( $msg )
   {
+    $this->failed = true;
     echo $this->lb . "   (!) " . $msg;
   }
 
@@ -96,7 +97,6 @@ class qcl_test_TestRunner extends qcl_core_Object
       {
         echo " √";
       }
-
     }
     
     $this->tearDown();
@@ -119,7 +119,6 @@ class qcl_test_TestRunner extends qcl_core_Object
    */
   protected function assert_handler($file, $line, $code, $description)
   {
-    $this->failed = true;
-    $this->warn( $description . " in line $line.");
+    $this->warn( $description . "(assertion in line $line)");
   }
 }

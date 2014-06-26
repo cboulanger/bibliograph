@@ -75,7 +75,6 @@ class qcl_test_data_db_Table
      * test renaming
      */
     $col3def = $table->getColumnDefinition( "col3" );
-    assert('\1');
     $table->renameColumn( "col3", "colDrei", $col3def );
 
     /*
@@ -84,7 +83,7 @@ class qcl_test_data_db_Table
     $col1def = $table->getColumnDefinition( "col1" );
     $table->modifyColumn( "col1", "varchar(100) NOT NULL");
     $col1def = $table->getColumnDefinition( "col1" );
-    assert('\1');
+ 
 
     /*
      * delete table
