@@ -496,5 +496,28 @@ class qcl_data_model_db_PropertyBehavior
     $this->isInitialized = false;
     $this->cache()->reset();
   }
+  
+ /**
+   * Setups the primary index of the table
+   * @return void
+   */
+  public function setupPrimaryIndex()
+  {
+
+    $table = $this->getModel()->getQueryBehavior()->getTable();
+    //$tableName = $this->getModel()->getQueryBehavior()->getTableName();
+
+    $primaryIndexCols = $this->getModel()->getQueryBehavior()->getPrimaryIndexProperties();
+    $existingPrimaryKey = $table->getPrimaryKey();
+
+    if((count($existingPrimaryKey) == 0) && (count($primaryIndexCols) != 0)) {
+        // set new primary index
+        $table->addPrimaryKey($primaryIndexCols);
+    } elseif(count(array_diff($primaryIndexCols, $existingPrimaryKey)) != 0) {
+        // change existing primary index
+        $table->modifyPrimaryKey($primaryIndexCols);
+    }
+
+  }  
 }
 ?>

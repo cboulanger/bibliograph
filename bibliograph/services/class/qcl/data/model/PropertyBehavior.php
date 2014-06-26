@@ -457,36 +457,17 @@ class qcl_data_model_PropertyBehavior
   }
 
   /**
-   * Setups the primary index of the table
+   * Stub to be overridden, the memory-based model doesn't need a primary index.
    * @return void
    */
-  public function setupPrimaryIndex()
-  {
-
-    $table = $this->getModel()->getQueryBehavior()->getTable();
-    //$tableName = $this->getModel()->getQueryBehavior()->getTableName();
-
-    $primaryIndexCols = $this->getModel()->getQueryBehavior()->getPrimaryIndexProperties();
-    $existingPrimaryKey = $table->getPrimaryKey();
-
-    if((count($existingPrimaryKey) == 0) && (count($primaryIndexCols) != 0)) {
-        // set new primary index
-        $table->addPrimaryKey($primaryIndexCols);
-    } elseif(count(array_diff($primaryIndexCols, $existingPrimaryKey)) != 0) {
-        // change existing primary index
-        $table->modifyPrimaryKey($primaryIndexCols);
-    }
-
-  }
+  public function setupPrimaryIndex(){}
 
   /**
-   * Empty placeholder to be overridden
+   * Stub to be overridden, the memory-based model needs no special property 
+   * setup.
    * @return void
    */
-  public function setupProperties()
-  {
-    // does nothing currently
-  }
+  public function setupProperties(){}
 
   /**
    * Cast the given value to the correct php type according to its
