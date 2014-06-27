@@ -15,9 +15,10 @@
  * Authors:
  *  * Christian Boulanger (cboulanger)
  */
+require_once dirname(dirname(__DIR__)) . "/bootstrap.php";
 
-qcl_import( "qcl_test_TestRunner" );
-qcl_import( "qcl_data_model_PersistentModel" );
+qcl_import("qcl_test_TestRunner");
+qcl_import("qcl_data_model_PersistentModel");
 
 class persist_TestModel
   extends qcl_data_model_PersistentModel
@@ -25,16 +26,13 @@ class persist_TestModel
   private $properties = array(
     "foo" => array(
       "check"     => "string",
-      "apply"     => "_applyFoo",
-      "init"      => "foo",
-      "nullable"  => true,
-      "event"     => "changeFoo"
+       "init"      => "foo",
+      "nullable"  => true
     ),
     "bar"  => array(
       "check"     => "integer",
       "init"      => 1,
-      "nullable"  => false,
-      "apply"     => "_applyBar"
+      "nullable"  => false
     ),
     "baz"  => array(
       "check"     => "boolean",
@@ -49,46 +47,8 @@ class persist_TestModel
 
   function __construct()
   {
-    $this->addListener( "changeFoo", $this, "_onChangeFoo" );
     $this->addProperties( $this->properties );
-
     parent::__construct();
-  }
-
-  function init()
-  {
-    parent::init();
-    if ( $this->isNew() )
-    {
-      $this->set("created", new qcl_data_db_Timestamp("2010-03-17 14:20:53") );
-    }
-  }
-
-  private function valueToString( $value )
-  {
-    if ( is_scalar( $value ) )
-    {
-      return "'$value' (" . gettype( $value ) . ")";
-    }
-    else
-    {
-      return typeof( $value, true );
-    }
-  }
-
-  public function _applyFoo($value, $old)
-  {
-    $this->info("foo was " . $this->valueToString( $old ) . ", is now " . $this->valueToString( $value )  );
-  }
-
-  public function _applyBar($value, $old)
-  {
-    $this->info("bar was " . $this->valueToString( $old ) . ", is now " . $this->valueToString( $value ) );
-  }
-
-  public function _onChangeFoo( qcl_event_type_DataEvent $e )
-  {
-    $this->info( "'changeFoo' event tells me that foo was changed to " . $this->valueToString( $e->getData() ) );
   }
 }
 
@@ -104,27 +64,25 @@ class qcl_test_data_model_PersistentModel
   {
     $this->startLogging();
 
-    $this->info("*** Creating and saving data ... ");
+    $this->info("Creating and saving data");
     $model = new persist_TestModel();
     $model->setFoo("abcdef");
     $model->savePersistenceData();
 
-    $this->info("*** Deleting and recreating model.. ");
+    $this->info("Deleting and recreating model...");
     $model = null;
     $model = new persist_TestModel();
-    assert("abcdef",$model->getFoo() );
+    assert('$model->getFoo()=="abcdef"');
 
-    $this->info("*** Disposing data and recreating model.. ");
+    $this->info("Disposing data and recreating model...");
     $model->disposePersistenceData();
     $model = null;
     $model = new persist_TestModel();
-    assert("foo",$model->getFoo() );
+    assert('$model->getFoo()==="foo"');
 
-    $this->info("*** Disposing data and deleting model.. ");
+    $this->info("Disposing data and deleting model...");
     $model->disposePersistenceData();
     unset($model);
-
-    return "OK";
   }
 
   private function startLogging()
@@ -138,4 +96,4 @@ class qcl_test_data_model_PersistentModel
   }
 }
 
-?>
+qcl_test_data_model_PersistentModel::getInstance()->run();

@@ -16,6 +16,21 @@
  *  * Christian Boulanger (cboulanger)
  */
 
+/**
+ * Class qcl_test_TestRunner
+ * Extremely simple test class runner. Currently used only for running
+ * tests on the command line. Will execute all methods that are prefixed
+ * with "test_". Uses "assert()" to check for correct test results.
+ * Each test file must contain a class inheriting from this class and have
+ * a line as follows at the end of the file:
+ *
+ * name_of_class::getInstance()->run();
+ *
+ * The tests are then run with php -f /path/to/file.php. To batch run tests,
+ * use a simple bash file that (recursively) finds all the test files in a
+ * directory and runs them.
+ *
+ */
 class qcl_test_TestRunner extends qcl_core_Object
 {
   /**
