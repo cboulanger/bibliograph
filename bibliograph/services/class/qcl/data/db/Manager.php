@@ -53,9 +53,14 @@ class qcl_data_db_Manager
    * @param $dsn
    * @return string
    */
-  public function getDbType( $dsn )
+  protected function getDbType( $dsn )
   {
-    return substr( $dsn, 0, strpos( $dsn, ":" ) );
+    $type = substr( $dsn, 0, strpos( $dsn, ":" ) );
+    if (empty($type))
+    {
+      throw new LogicException("DSN '$dsn' is not valid - no db type information.");
+    }
+    return $type;
   }
 
   /**
@@ -66,44 +71,27 @@ class qcl_data_db_Manager
    * @param string $user user name used for accesing the database
    * @param string $pass password
    * @throws LogicException
-   * @return qcl_data_db_type_Abstract
+   * @return qcl_data_db_adapter_IAdapter
    */
   public function createAdapter( $dsn=null, $user=null, $pass=null )
   {
     if ( $dsn === null )
     {
-      $app = $this->getApplication();
-      if ( QCL_USE_EMBEDDED_DB and $app->useEmbeddedDatabase() )
-      {
-        if ( ! class_exists("SQLite3") )
-        {
-          throw new LogicException("Cannot use embedded database - SQLite3 is not available");
-        }
-        // use the file-based embedded SQLLite database
-        $appid  = $app->id();
-        $dbname = "main";
-        $dbfile =  QCL_SQLITE_DB_DATA_DIR . "/$appid-$dbname.sqlite3";
-        $dsn    = "sqlite:$dbfile";  
-      }
-      else
-      {
-        // use the database specified in the ini file
-        $dsn = $this->getApplication()->getIniValue("macros.dsn_admin");
-        $dsn = str_replace("&",";", $dsn );        
-      }
+      $dsn = $this->getApplication()->getDsn();
     }
     elseif ( ! is_string( $dsn ) ) // @todo use regexp
     {
       throw new LogicException("Invalid dsn '$dsn'.");
     }
-    //$this->debug("Using dsn '$dsn' ",__CLASS__,__LINE__);
+
+    $this->log("Using dsn '$dsn' ",QCL_LOG_DB);
 
     /*
      * pool connection objects
      */
     if ( isset( $this->cache[$dsn] ) )
     {
-      //$this->debug("Getting adapter from cache ",__CLASS__,__LINE__);
+      $this->log("Getting adapter from cache... ",QCL_LOG_DB);
       $adapter = $this->cache[$dsn];
     }
 
@@ -112,6 +100,8 @@ class qcl_data_db_Manager
      */
     else
     {
+      $this->log("Creating new adapter ... ",QCL_LOG_DB);
+
       /*
        * type and class of database adapter
        */
@@ -136,7 +126,6 @@ class qcl_data_db_Manager
       /*
        * create adapter
        */
-      //$this->debug("New Connection with '$user', '$pass ",__CLASS__,__LINE__);
       $adapter = new $class( $dsn, $user, $pass );
 
       /*
@@ -148,4 +137,3 @@ class qcl_data_db_Manager
     return $adapter;
   }
 }
-?>

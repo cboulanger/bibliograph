@@ -480,6 +480,38 @@ abstract class qcl_application_Application
   //-------------------------------------------------------------
 
   /**
+   * Returns the PDO DSN to use for the application.
+   * @return string
+   * @throws LogicException
+   */
+  public function getDsn()
+  {
+    if ( QCL_USE_EMBEDDED_DB and $this->useEmbeddedDatabase() )
+    {
+      if ( ! class_exists("SQLite3") )
+      {
+        throw new LogicException("Cannot use embedded database - SQLite3 is not available");
+      }
+      // use the file-based embedded SQLLite database
+      $appid  = $this->id();
+      $dbname = "main";
+      $dbfile =  QCL_SQLITE_DB_DATA_DIR . "/$appid-$dbname.sqlite3";
+      $dsn    = "sqlite:$dbfile";
+    }
+    else
+    {
+      // use the database specified in the ini file
+      $dsn = $this->getUserDsn();
+    }
+
+    if( !$dsn )
+    {
+      throw new LogicException("Could not determine application DSN");
+    }
+    return $dsn;
+  }
+
+  /**
    * Returns the DSN for the user database
    * @throws LogicException
    * @return string
