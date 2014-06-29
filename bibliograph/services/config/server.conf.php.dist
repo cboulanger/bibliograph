@@ -51,12 +51,6 @@ define("QCL_CLASS_PATH", SERVER_ROOT . "/class/");
 define("APPLICATION_CLASS_PATH", SERVER_ROOT . "/class/");
 
 /*
- * where should the application log to. By default
- * the log file is "bibliograph.log" in the system temp folder.
- */
-define( "QCL_LOG_FILE", sys_get_temp_dir() . "/bibliograph.log" );
-
-/*
  * The directory where persistent data is stored, for example, the data of persistent
  * objects. You MUST change this path to a world-writable path outside the server
  * document root before using the application in production, otherwise you risk losing
@@ -67,6 +61,12 @@ if ( ! defined("QCL_VAR_DIR") )
   define( "QCL_VAR_DIR" ,  sys_get_temp_dir() );
 }
 
+/*
+ * where should the application log to. By default
+ * the log file is "bibliograph.log" in the system temp folder.
+ */
+define( "QCL_LOG_FILE", QCL_VAR_DIR . "/bibliograph.log" );
+
 //-------------------------------------------------------------
 // Application-related configuration
 //-------------------------------------------------------------
@@ -76,7 +76,7 @@ if ( ! defined("QCL_VAR_DIR") )
  * use the system temporary folder. If you want to store the backups
  * somewhere else, make it world-writable.
  */
-define("BIBLIOGRAPH_BACKUP_PATH", sys_get_temp_dir() );
+define("BIBLIOGRAPH_BACKUP_PATH", QCL_VAR_DIR );
 
 /**
  * The path to the bibutils executables. Must contain a trailing slash
@@ -113,22 +113,6 @@ if ( ! defined( "QCL_APPLICATION_MODE") )
 
 
 //-------------------------------------------------------------
-// Global settings for the JSON-RPC server
-//-------------------------------------------------------------
-
-/**
- *  accessibility needed for server.php - "public" for development, "domain" for production use
- */
-define( "defaultAccessibility", "domain" );
-
-/**
- * whether the server should log the request
- * You need this only for debugging
- */
-define( "JsonRpcDebug", false );
-define( "JsonRpcDebugFile", SERVER_ROOT . "/log/server.log" );
-
-//-------------------------------------------------------------
 // Development & debugging (change this only if you know what you are doing)
 //-------------------------------------------------------------
 
@@ -155,4 +139,3 @@ ini_set('include_path', implode(
     ini_get("include_path")
   )
 ) );
-?>

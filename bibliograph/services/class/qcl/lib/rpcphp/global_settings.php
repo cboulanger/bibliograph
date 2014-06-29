@@ -26,7 +26,7 @@
 /*
  * default accessibility mode for the services, defaults to "domain"
  */
-define( "defaultAccessibility", "public" );
+//define( "defaultAccessibility", "domain" );
 
 /*
  * if the service classes are not in the class/ folder,
@@ -58,7 +58,7 @@ define( "defaultAccessibility", "public" );
 /*
  * log file
  */
-//define( "JsonRpcDebugFile", "/tmp/jsonrpc.log");
+define( "JsonRpcDebugFile", QCL_VAR_DIR . "/jsonrpc.log" );
 
 /*
  * Whether to encode and decode Date objects the "qooxdoo way"
