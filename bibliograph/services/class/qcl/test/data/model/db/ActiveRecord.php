@@ -17,9 +17,12 @@
  *  * Christian Boulanger (cboulanger)
  */
 
-qcl_import( "qcl_test_TestRunner");
-qcl_import( "qcl_data_model_db_ActiveRecord" );
-qcl_import( "qcl_data_db_Timestamp" );
+require_once dirname(dirname(dirname(__DIR__))) . "/bootstrap.php";
+
+qcl_import("qcl_test_TestRunner");
+qcl_import("qcl_test_application_Application");
+qcl_import("qcl_data_model_db_ActiveRecord");
+qcl_import("qcl_data_db_Timestamp");
 
 class active_Member
   extends qcl_data_model_db_ActiveRecord
@@ -70,37 +73,59 @@ class active_Member
 class qcl_test_data_model_db_ActiveRecord
   extends qcl_test_TestRunner
 {
+
   /**
-   * @rpctest OK
+   * @var active_Member
    */
-  public function test_testModel()
+  protected $member = null;
+
+  public function test_createModel()
   {
+
+    qcl_application_Application::setInstance(new qcl_test_application_Application());
     qcl_data_model_db_ActiveRecord::resetBehaviors();
 
     //$this->startLogging();
 
-    $member = new active_Member();
+    /*
+     * create model object
+     */
+    $this->member = new active_Member();
 
-//    try
-//    {
-//      $member->set("name","Foo");
-//      throw new qcl_test_AssertionException( "Unloaded Record must throw exception" );
-//    }
-//    catch( qcl_data_model_NoRecordLoadedException $e )
-//    {
-//      //
-//    }
+    $dsn = "sqlite:" . QCL_SQLITE_DB_DATA_DIR . "/qcl-test-model.sqlite3"; // todo get from environment!
 
-    $member->deleteAll();
+    $this->member->getQueryBehavior()->setAdapter(
+      qcl_data_db_Manager::getInstance()->createAdapter($dsn)
+    );
+    $this->info("DSN: $dsn");
 
-    $randomdata = file( qcl_realpath("qcl/test/data/model/data/randomdata.csv") );
+    try
+    {
+      $this->member->set("name","Foo");
+      $this->warn( "Unloaded model must throw exception" );
+    }
+    catch( qcl_data_model_NoRecordLoadedException $e )
+    {
+      $this->info("Trying to set property on unloaded model correctly threw exception.");
+    }
+  }
+
+  public function test_loadData()
+  {
+    $this->info("Deleting all data...");
+    $this->member->deleteAll();
+
+    $this->info("Loading new data...");
+    $data = file( qcl_realpath("qcl/test/data/model/data/data.csv") );
+
     $subscriber = false;
-    foreach( $randomdata as $line )
+
+    foreach( $data as $line )
     {
       if ( ! trim( $line ) ) continue;
       $columns = explode( ";", $line );
-      $member->create();
-      $member->set( array(
+      $this->member->create();
+      $this->member->set( array(
         "name"        => trim($columns[0]),
         "email"       => trim($columns[1]),
         "address"     => trim($columns[2]),
@@ -108,41 +133,44 @@ class qcl_test_data_model_db_ActiveRecord
         "country"     => trim($columns[4]),
         "newsletter"  => $subscriber = ! $subscriber
       ));
-      $member->save();
+      $this->member->save();
     }
 
-    $member = new active_Member();
-    $query = $member->findWhere( array(
+    assert('$this->member->countRecords()==200',"Incorrect number of records");
+    $this->info("Created 200 records.");
+  }
+
+  public function test_testModel()
+  {
+    //$this->startLogging();
+    $this->member->findWhere( array(
       "name"        => array( "LIKE" , "B%"),
       "newsletter"  => true
     ) );
-    $count = $query->getRowCount();
+    $count = $this->member->rowCount();
+    //$this->endLogging();
 
     $this->info( "We have $count newsletter subscribers that start with 'B':");
-    assert(7,$count,"Expected :7, got: $count",__CLASS__,__LINE__);
+    assert('$count==7',"Expected :7, got: $count");
 
     /*
      * querying records
      */
     $subscribers = array();
-    while( $member->loadNext() )
+    while( $this->member->loadNext() )
     {
-      $subscribers[] = $member->getName() . " <" . $member->getEmail() . ">";
+      $subscribers[] = $this->member->getName() . " <" . $this->member->getEmail() . ">";
     }
     $subscribers = implode(", ", $subscribers );
-    $this->info($subscribers);
 
     $expected = "Bailey, Madaline O. <amet.consectetuer@nullaante.ca>, Buck, Gabriel R. <molestie.in@eu.com>, Bolton, Graham D. <Proin@cursus.org>, Baxter, Samson V. <lobortis.mauris@odioNaminterdum.edu>, Bender, Lisandra C. <Suspendisse@Donec.edu>, Bullock, Thaddeus I. <augue.ut.lacus@eget.com>, Benson, Erin M. <at.pede.Cras@acipsum.edu>";
-    assert(
-      $expected,$subscribers,
-      "Expected: '$expected'\nGot:      '$subscribers'",
-      __CLASS__,__LINE__
-    );
+    assert('$expected==$subscribers', "Expected: '$expected'\n      Got:'$subscribers'");
+
     /*
      * updating across records without changing the active record
      */
     $this->info("Making all members from China subscriber");
-    $newSubscribers = $member->updateWhere(
+    $newSubscribers = $this->member->updateWhere(
       array( "newsletter" => true ),
       array( "country"    => "China" )
     );
@@ -151,7 +179,7 @@ class qcl_test_data_model_db_ActiveRecord
     /*
      * deleting records: we don't like ".com" addresses from germany
      */
-    $count = $member->deleteWhere(array(
+    $count = $this->member->deleteWhere(array(
       "email" => array( "LIKE", "%.com" ),
       "country" => "Germany"
     ));
@@ -160,9 +188,8 @@ class qcl_test_data_model_db_ActiveRecord
     /*
      * cleanup
      */
-    $member->destroy();
-
-    return "OK";
+    $this->info("Cleaning up...");
+    //$this->member->destroy();
   }
 
 
@@ -185,4 +212,4 @@ class qcl_test_data_model_db_ActiveRecord
   }
 }
 
-?>
+qcl_test_data_model_db_ActiveRecord::getInstance()->run();

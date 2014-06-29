@@ -72,12 +72,4 @@ class qcl_test_application_Application
   {
     return qcl_test_access_TestController::getInstance();
   }
-  
-  /**
-   * Starts the application, performing on-the-fly database setup if necessary.
-   */
-  public function main()
-  {
-    parent::main();
-  }
 }

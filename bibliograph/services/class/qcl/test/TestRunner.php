@@ -18,9 +18,15 @@
 
 /**
  * Class qcl_test_TestRunner
+ *
  * Extremely simple test class runner. Currently used only for running
  * tests on the command line. Will execute all methods that are prefixed
- * with "test_". Uses "assert()" to check for correct test results.
+ * with "test_". Uses "assert()" to check for correct test results. In
+ * addition, you can use the warn() method to signal that a test has
+ * failed and to inform the developer about the cause of the failure.
+ * If a fatal error condition exists, use the error() method to inform
+ * about the condition and abort the tests in this class.
+ *
  * Each test file must contain a class inheriting from this class and have
  * a line as follows at the end of the file:
  *
@@ -100,7 +106,8 @@ class qcl_test_TestRunner extends qcl_core_Object
       }
       catch( Exception $e )
       {
-        $this->error( $e->getMessage() );
+        $this->getLogger()->error($e->getMessage() . "\n" . $e->getTraceAsString());
+        return $this->error( $e->getMessage() );
       }
       
       if ( $this->failed )
