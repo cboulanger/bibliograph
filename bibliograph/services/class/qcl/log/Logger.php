@@ -19,19 +19,10 @@
 /**
  * path to log file
  */
-if ( ! defined( "QCL_LOG_PATH") )
-{
-  throw new JsonRpcException("You must define the QCL_LOG_PATH constant.");
-}
-
-/**
- * path to log file
- */
 if ( ! defined( "QCL_LOG_FILE") )
 {
-  define( "QCL_LOG_FILE" ,  QCL_LOG_PATH . "qcl.log" );
+  throw new JsonRpcException("You must define the QCL_LOG_FILE constant.");
 }
-
 
 /*
  * Default logger: logs to filesystem
