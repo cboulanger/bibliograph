@@ -243,9 +243,7 @@ class qcl_data_model_db_PropertyBehavior
     $table      = $qBehavior->getTable();
     $tableName  = $qBehavior->getTableName();
     $cache      = $this->cache();
-    
-    $createTrigger = false; 
-    
+
     /*
      * check table name
      */
@@ -272,7 +270,8 @@ class qcl_data_model_db_PropertyBehavior
      */
     foreach( $properties as $property => $prop )
     {
-      
+      $createTrigger = false;
+
       if( $this->hasLog() ) $this->log( "Setting up property '$property' ($clazz).");
       
       /*

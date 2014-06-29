@@ -19,7 +19,6 @@
 
 /**
  * Interface for database adapter
- * TODO: Add thrown exceptions
  */
 interface qcl_data_db_adapter_IAdapter
   extends Iterator
@@ -38,7 +37,7 @@ interface qcl_data_db_adapter_IAdapter
    * @param string|null $options Optional options to pass to the driver
    * @return \qcl_data_db_adapter_IAdapter
    */
-  function __construct( $dsn, $user, $pass, $options=null );
+  function __construct( $dsn, $user=null, $pass=null, $options=null );
 
   /**
    * Hook for initialization stuff called from the constructor.
@@ -141,10 +140,16 @@ interface qcl_data_db_adapter_IAdapter
 
   /**
    * Returns the number of rows affected by the last SQL statement (INSERT, UPDATE,
-   * DELETE, SELECT)
+   * DELETE). For MySql, this also returns the number of records found in the
+   * last SELECT query. For other drivers, a similar behavior might have to be
+   * simulated otherwise.
+   * @param string|null $sql Optional sql needed in case the driver doesn't support
+   * row count for select queries.
+   * @param array|null $parameters
+   * @param array|null $parameter_types
    * @return int
    */
-  public function rowCount();
+  public function rowCount($sql=null,$parameters=null,$parameter_types=null);
 
   /**
    * Fetches the first or next row from a result set
@@ -305,6 +310,14 @@ interface qcl_data_db_adapter_IAdapter
   //-------------------------------------------------------------
   // Database usage and introspection
   //-------------------------------------------------------------
+
+  /**
+   * Returns true if PDOStatement::rowCount() returns the number
+   * of rows found by the last SELECT command. True for MySQL,
+   * false for most other systems.
+   * @return bool
+   */
+  public function supportRowCountForQueries();
 
   /**
    * Returns table structure as sql create statement
@@ -490,20 +503,6 @@ interface qcl_data_db_adapter_IAdapter
   public function createLimitStatement( $first, $second=null );
 
   /**
-   * Creates a trigger that inserts a timestamp on
-   * each newly created record.
-   * @param string $table Name of table
-   * @param string $column Name of column that gets the timestamp
-   */
-  public function createTimestampTrigger( $table, $column );
-
-  /**
-   * Creates triggers that will automatically create
-   * a md5 hash string over a set of columns
-   */
-  public function createHashTriggers( $table, $columns );
-
-  /**
    * Returns the current time from the database
    * @return string
    */
@@ -518,11 +517,5 @@ interface qcl_data_db_adapter_IAdapter
    */
   public function getSecondsSince( $timestamp );
 
-  /**
-   * Updates table information schema of the backend. This is necessary
-   * for MySql after deleting tables. Requires administrative privileges.
-   * @return void
-   */
-  public function flush();
 }
 ?>

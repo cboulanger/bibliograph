@@ -21,6 +21,7 @@
 
 /**
  * Class responsible for managing relationships between models
+ * @todo create interface
  *
  */
 class qcl_data_model_db_RelationBehavior

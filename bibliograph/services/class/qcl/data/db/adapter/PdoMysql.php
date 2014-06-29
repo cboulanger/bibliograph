@@ -466,9 +466,13 @@ class qcl_data_db_adapter_PdoMysql
    * DELETE). For MySql, this also returns the number of records found in the
    * last SELECT query. For other drivers, a similar behavior might have to be
    * simulated otherwise.
+   * @param string|null $sql Optional sql needed in case the driver doesn't support
+   * row count for select queries.
+   * @param array|null $parameters
+   * @param array|null $parameter_types
    * @return int
    */
-  public function rowCount()
+  public function rowCount($sql=null,$parameters=null,$parameter_types=null)
   {
     return $this->pdoStatement->rowCount();
   }
@@ -901,7 +905,18 @@ class qcl_data_db_adapter_PdoMysql
   //-------------------------------------------------------------
   // Database usage and introspection
   //-------------------------------------------------------------
-  
+
+  /**
+   * Returns true if PDOStatement::rowCount() returns the number
+   * of rows found by the last SELECT command. True for MySQL,
+   * false for most other systems.
+   * @return bool
+   */
+  public function supportRowCountForQueries()
+  {
+    return true;
+  }
+
   /**
    * Returns table structure as sql create statement
    * @param string $table table name

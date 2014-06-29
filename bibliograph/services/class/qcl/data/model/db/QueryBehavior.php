@@ -46,7 +46,7 @@ class qcl_data_model_db_QueryBehavior
   protected $getDefaultTablePrefix = "data_";
 
   /**
-   * The database driver adapter. Acces with getAdapter()
+   * The database driver adapter. Access with getAdapter()
    */
   private $adapter;
 
@@ -226,7 +226,7 @@ class qcl_data_model_db_QueryBehavior
   /**
    * Returns the database connection adapter for this model, which is
    * taken from the datasource object or from the framework.
-   * @return qcl_data_db_adapter_PdoMysql
+   * @return qcl_data_db_adapter_IAdapter
    * @throws LogicException
    */
   public function getAdapter()
@@ -259,6 +259,15 @@ class qcl_data_model_db_QueryBehavior
       }
     }
     return $this->adapter;
+  }
+
+  /**
+   * Sets the database adapter
+   * @param qcl_data_db_adapter_IAdapter $adapter
+   */
+  public function setAdapter( qcl_data_db_adapter_IAdapter $adapter )
+  {
+    $this->adapter = $adapter;
   }
 
   /**
@@ -490,6 +499,8 @@ class qcl_data_model_db_QueryBehavior
    * Runs a query on the table managed by this behavior. Stores a
    * reference to the result PDO statement in the query, so that
    * it can be used by the fetch() command.
+   * @todo should not return the number of rows but, as selectWhere,
+   * the query object.
    *
    * @param qcl_data_db_Query $query
    *    The query object
@@ -498,11 +509,18 @@ class qcl_data_model_db_QueryBehavior
    */
   public function select( qcl_data_db_Query $query)
   {
+    $adapter = $this->getAdapter();
     $sql = $query->toSql( $this->getModel() );
-    $query->pdoStatement = $this->getAdapter()->query(
-      $sql, $query->getParameters(), $query->getParameterTypes()
-    );
-    $query->rowCount = $this->getAdapter()->rowCount();
+    if ( $adapter->supportRowCountForQueries() )
+    {
+      $query->pdoStatement = $adapter->query( $sql, $query->getParameters(), $query->getParameterTypes() );
+      $query->rowCount = $adapter->rowCount();
+    }
+    else
+    {
+      $query->rowCount = (int) $adapter->rowCount($sql, $query->getParameters(), $query->getParameterTypes());
+      $query->pdoStatement = $adapter->query( $sql, $query->getParameters(), $query->getParameterTypes() );
+    }
     return $query->rowCount;
   }
 
@@ -761,6 +779,7 @@ class qcl_data_model_db_QueryBehavior
 
   /**
    * Returns the number of records found in the last query.
+   * @todo move logic from query() to here
    * @return int
    */
   public function rowCount()

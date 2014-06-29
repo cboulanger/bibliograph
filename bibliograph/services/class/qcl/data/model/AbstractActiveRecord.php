@@ -28,9 +28,10 @@ qcl_import( "qcl_data_model_IRelationalModel" );
  * than one record is retrieved by a query to the data container. The
  * implementing class must implement the getQueryBehaviorMethod() returning
  * an instance of the behavior class that implements qcl_model_IQueryBehavior.
+ * @todo convert into abstract class
  */
 
-class qcl_data_model_AbstractActiveRecord
+abstract class qcl_data_model_AbstractActiveRecord
   extends qcl_data_model_Model
   implements qcl_data_model_IActiveRecord, qcl_data_model_IRelationalModel
 {
@@ -305,6 +306,7 @@ class qcl_data_model_AbstractActiveRecord
    * Returns the text for a 'label' that is used in a visual widget
    * to represent the model record. Must be implemented if used.
    * @throws qcl_core_NotImplementedException
+   * @todo make abstract?
    * @return string
    */
   public function label()
@@ -384,13 +386,9 @@ class qcl_data_model_AbstractActiveRecord
 
   /**
    * Returns the query behavior. Must be implemented by the subclass.
-   * @throws qcl_core_NotImplementedException
    * @return qcl_data_model_db_QueryBehavior
    */
-  public function getQueryBehavior()
-  {
-    throw new qcl_core_NotImplementedException(__METHOD__);
-  }
+  abstract public function getQueryBehavior();
 
   /**
    * Add indexes to the backend database.
@@ -1300,33 +1298,36 @@ class qcl_data_model_AbstractActiveRecord
   /**
    * Returns the model that keeps transactions ids for other models
    * @return qcl_data_model_db_TransactionModel
+   * @todo should be abstact method
    */
-  public function getTransactionModel()
-  {
-    qcl_import("qcl_data_model_db_TransactionModel");
-    return qcl_data_model_db_TransactionModel::getInstance();
-  }
+  abstract public function getTransactionModel();
 
   /**
-   * Use transaction model to get transaction id of this model
-   * @return int The current transaction id
+   * Use transaction model to get transaction id of this model.
+   * @return int The current transaction id or 0 if transaction
+   * ids are disabled
    */
   public function getTransactionId()
   {
-    return $this->getTransactionModel()->getTransactionIdFor( $this );
+    if ( $this->incrementTransactionIdAfterUpdate )
+    {
+      return $this->getTransactionModel()->getTransactionIdFor( $this );
+    }
+    return 0;
   }
 
   /**
    * Use transaction model to increment transaction id of this model
-   * @return int The current transaction id
+   * @return int The current transaction id or 0 if transaction ids
+   * are disabled.
    */
   public function incrementTransactionId()
   {
-    if ($this->incrementTransactionIdAfterUpdate )
+    if ( $this->incrementTransactionIdAfterUpdate )
     {
       return $this->getTransactionModel()->incrementTransactionIdFor( $this );
     }
-    return $this->getTransactionId();
+    return 0;
   }
 
   /**
@@ -1352,7 +1353,7 @@ class qcl_data_model_AbstractActiveRecord
     {
       return $this->lastQuery->getRowCount();
     }
-    return $this->getQueryBehavior()->rowCount();
+    throw new LogicException("No query exists for which to count rows.");
   }
 
   /**
@@ -1410,13 +1411,10 @@ class qcl_data_model_AbstractActiveRecord
 
   /**
    * Returns the relation behavior
-   * @throws qcl_core_NotImplementedException
    * @return qcl_data_model_db_RelationBehavior
+   * @todo create interface
    */
-  function getRelationBehavior()
-  {
-    throw new qcl_core_NotImplementedException(__METHOD__);
-  }
+  abstract function getRelationBehavior();
 
   /**
    * Add the definition of relations of this model for use in

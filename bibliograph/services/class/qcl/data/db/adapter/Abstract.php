@@ -271,7 +271,7 @@ abstract class qcl_data_db_adapter_Abstract
     );
   }
 
-  
+
   /**
    * internal log function
    * @param string $msg The message to log

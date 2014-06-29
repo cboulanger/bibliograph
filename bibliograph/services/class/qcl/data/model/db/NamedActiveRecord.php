@@ -121,6 +121,20 @@ class qcl_data_model_db_NamedActiveRecord
     return $this->tableName;
   }
 
+  /**
+   * Returns the model that keeps transactions ids for other models. The
+   * transaction model always has the same database adapter as the model.
+   * @return qcl_data_model_db_TransactionModel
+   */
+  public function getTransactionModel()
+  {
+    $transactionModel =  qcl_data_model_db_TransactionModel::getInstance();
+    $transactionModel->getQueryBehavior()->setAdapter(
+      $this->getQueryBehavior()->getAdapter()
+    );
+    return $transactionModel;
+  }
+
   //-------------------------------------------------------------
   // Behaviours
   //-------------------------------------------------------------

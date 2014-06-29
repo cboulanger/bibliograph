@@ -102,20 +102,19 @@ class qcl_data_model_db_TransactionModel
   {
     $class      = $model->className();
     $datasource = $model->datasourceModel() ? $model->datasourceModel()->namedId() : null;
+
+    $data = $datasource ?
+      array('class'=> $class,'datasource' => $datasource):
+      array('class'=> $class);
+
     try
     {
-      $this->loadWhere( array(
-        'class'       => $class,
-        'datasource'  => $datasource
-      ) );
+      $this->loadWhere( $data );
     }
     catch ( qcl_data_model_RecordNotFoundException $e)
     {
-      $this->create( array(
-        'class'         => $class,
-        'datasource'    => $datasource,
-        'transactionId' => 0
-      ) );
+      $where['transactionId']=0;
+      $this->create( $data );
     }
 
     return (int) $this->_get("transactionId");

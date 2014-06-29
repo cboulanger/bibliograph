@@ -149,10 +149,13 @@ class qcl_core_Object
    */
   public function getApplication()
   {
-    $app = qcl_application_Application::getInstance();
-    if ( $app )
+    if( class_exists("qcl_application_Application") )
     {
-      return $app;
+      $app = qcl_application_Application::getInstance();
+      if ( $app )
+      {
+        return $app;
+      }
     }
     throw new LogicException("No application instance is available. Please check your setup.");
   }

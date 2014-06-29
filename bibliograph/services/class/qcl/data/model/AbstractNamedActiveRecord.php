@@ -24,9 +24,9 @@ qcl_import( "qcl_data_model_INamedActiveRecord" );
  * methods that add a "named id" to the model, i.e. a unique
  * string-type name that identifies the model locally or globally,
  * as opposed to the numeric id which is specific to the table.
- * FIXME constructor and properties are missing
+ * @todo constructor and properties are missing
  */
-class qcl_data_model_AbstractNamedActiveRecord
+abstract class qcl_data_model_AbstractNamedActiveRecord
   extends qcl_data_model_AbstractActiveRecord
 {
 
@@ -291,4 +291,3 @@ class qcl_data_model_AbstractNamedActiveRecord
     return sprintf( "[%s%s/%s]", ( $ds ? $ds->namedId() . "/" : "" ) , $this->className(),  ( $namedId ? $namedId : "--" ) );
   }
 }
-?>

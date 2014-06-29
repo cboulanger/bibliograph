@@ -16,12 +16,13 @@
  *  * Christian Boulanger (cboulanger)
  */
 
-qcl_import( "qcl_data_model_AbstractActiveRecord" );
-qcl_import( "qcl_data_model_IActiveRecord" );
-qcl_import( "qcl_data_model_db_PropertyBehavior" );
-qcl_import( "qcl_data_model_db_QueryBehavior" );
-qcl_import( "qcl_data_model_IRelationalModel" );
-qcl_import( "qcl_data_model_db_RelationBehavior" );
+qcl_import("qcl_data_model_AbstractActiveRecord");
+qcl_import("qcl_data_model_IActiveRecord");
+qcl_import("qcl_data_model_db_PropertyBehavior");
+qcl_import("qcl_data_model_db_QueryBehavior");
+qcl_import("qcl_data_model_IRelationalModel");
+qcl_import("qcl_data_model_db_RelationBehavior");
+qcl_import("qcl_data_model_db_TransactionModel");
 
 /**
  * Abstrac class for models that are based on a relational
@@ -134,6 +135,20 @@ class qcl_data_model_db_ActiveRecord
   public function tableName()
   {
     return $this->tableName;
+  }
+
+  /**
+   * Returns the model that keeps transactions ids for other models. The
+   * transaction model always has the same database adapter as the model.
+   * @return qcl_data_model_db_TransactionModel
+   */
+  public function getTransactionModel()
+  {
+    $transactionModel =  qcl_data_model_db_TransactionModel::getInstance();
+    $transactionModel->getQueryBehavior()->setAdapter(
+      $this->getQueryBehavior()->getAdapter()
+    );
+    return $transactionModel;
   }
 
   //-------------------------------------------------------------

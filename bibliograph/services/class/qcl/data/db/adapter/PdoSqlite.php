@@ -170,7 +170,18 @@ class qcl_data_db_adapter_PdoSqlite
   //-------------------------------------------------------------
   // Database usage and introspection
   //-------------------------------------------------------------
-  
+
+  /**
+   * Returns true if PDOStatement::rowCount() returns the number
+   * of rows found by the last SELECT command. True for MySQL,
+   * false for most other systems.
+   * @return bool
+   */
+  public function supportRowCountForQueries()
+  {
+    return false;
+  }
+
   /**
    * Returns table structure as sql create statement
    * @param string $table table name
@@ -222,9 +233,7 @@ class qcl_data_db_adapter_PdoSqlite
   {
     $table    = $this->formatTableName( $table );
     $idCol    = $this->formatColumnName( $idCol );
-    $this->exec("
-      CREATE TABLE $table ( $idCol INTEGER PRIMARY KEY AUTOINCREMENT );
-    ");
+    $this->exec("CREATE TABLE $table ( $idCol INTEGER PRIMARY KEY AUTOINCREMENT );");
     return $this;
   }
 
@@ -262,7 +271,7 @@ class qcl_data_db_adapter_PdoSqlite
     {
       $this->pdoStatement->closeCursor();
     }
-    $this->exec("DROP TABLE $table" );
+    $this->exec("DROP TABLE $table;" );
   }  
 
   /**
@@ -524,25 +533,23 @@ class qcl_data_db_adapter_PdoSqlite
   /**
    * Creates a trigger that inserts a timestamp on
    * each newly created record.
-   * @todo not yet implemented for SQLite
+   * Do not use this with user-generated data.
    * @param string $table Name of table
    * @param string $column Name of column that gets the timestamp
    */
   public function createTimestampTrigger( $table, $column )
   {
     // http://stackoverflow.com/questions/6578439/on-update-current-timestamp-with-sqlite
-    $this->execute("
-      CREATE TRIGGER IF NOT EXISTS :trigger
-      AFTER UPDATE ON :table FOR EACH ROW
+    $trigger = "update_" . $table . "_" . $column;
+    $this->exec("
+      CREATE TRIGGER IF NOT EXISTS `$trigger`
+             AFTER UPDATE ON `$table`
+             FOR EACH ROW
       BEGIN
-        UPDATE :table SET :column = CURRENT_TIMESTAMP WHERE id = old.id;
-      END;
-      ", 
-      array(
-        ":trigger" => "update_modified_timestamp_" . $column,
-        ":table"   => $table,
-        ":column"  => $column 
-      )
+          UPDATE `$table`
+             SET `$column` = CURRENT_TIMESTAMP
+           WHERE id = old.id;
+      END;"
     );
   }
 
@@ -587,7 +594,7 @@ class qcl_data_db_adapter_PdoSqlite
   function truncate( $table )
   {
     $table = $this->formatTableName( $table );
-    $this->execute( "DELETE FROM $table;");
+    $this->exec( "DELETE FROM $table;");
     return true;
   }
 
@@ -596,4 +603,37 @@ class qcl_data_db_adapter_PdoSqlite
    * @return void.
    */
   public function flush(){}
+
+  //-------------------------------------------------------------
+  // IAdapter Interface
+  //-------------------------------------------------------------
+
+  /**
+   * Returns the number of rows affected by the last SQL statement (INSERT, UPDATE,
+   * DELETE). For MySql, this also returns the number of records found in the
+   * last SELECT query. For other drivers, a similar behavior might have to be
+   * simulated otherwise.
+   * @param string|null $sql Optional sql needed in case the driver doesn't support
+   * row count for select queries.
+   * @param array|null $parameters
+   * @param array|null $parameter_types
+   * @return int
+   */
+  public function rowCount($sql=null,$parameters=null,$parameter_types=null)
+  {
+    if( $sql !== null)
+    {
+      if (! stristr( $sql,"select") )
+      {
+        throw new InvalidArgumentException("SQL string argument must contain 'SELECT', not allowed for other queries.");
+      }
+      $sql = preg_replace("/select\b([\s\S]+)\bfrom/mi",'SELECT COUNT(*) FROM', $sql);
+      $rowCount =  $this->getResultValue($sql,$parameters,$parameter_types);
+    }
+    else
+    {
+      $rowCount = $this->pdoStatement->rowCount();
+    }
+    return $rowCount;
+  }
 }
