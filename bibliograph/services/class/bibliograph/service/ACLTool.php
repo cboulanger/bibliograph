@@ -45,30 +45,35 @@ class bibliograph_service_ACLTool
       'user'        => array(
         'model'       => $this->getAccessController()->getUserModel(),
         'label'       => $this->tr("Users"),
+        'dialogLabel' => $this->tr("User"),
         'labelProp'   => "name",
         'icon'        => "icon/16/apps/preferences-users.png"
       ),
       'role'        => array(
         'model'       => $this->getAccessController()->getRoleModel(),
         'label'       => $this->tr("Roles"),
+        'dialogLabel' => $this->tr("Role"),
         'labelProp'   => "name",
         'icon'        => "icon/16/apps/internet-feed-reader.png"
       ),
       'group'        => array(
         'model'       => $this->getAccessController()->getGroupModel(),
         'label'       => $this->tr("Groups"),
+        'dialogLabel' => $this->tr("Group"),
         'labelProp'   => "name",
         'icon'        => "icon/16/actions/address-book-new.png"
       ),
       'permission'  => array(
         'model'       => $this->getAccessController()->getPermissionModel(),
         'label'       => $this->tr("Permissions"),
+        'dialogLabel' => $this->tr("Permission"),
         'labelProp'   => "namedId",
         'icon'        => "icon/16/apps/preferences-security.png"
       ),
       'datasource'  => array(
         'model'       => $this->getDatasourceModel(),
         'label'       => $this->tr("Datasources"),
+        'dialogLabel' => $this->tr("Datasource"),
         'labelProp'   => "title",
         'icon'        => "icon/16/apps/internet-transfer.png"
       )
@@ -647,7 +652,8 @@ class bibliograph_service_ACLTool
     $model = $this->getElementModel( $type );
     $model->load( $namedId );
     $formData = $this->createFormData( $model );
-    $message = "<h3>" . $this->tr( $type ) . " '" . $namedId . "'</h3>";
+    $modelMap = $this->modelMap();
+    $message = "<h3>" . $this->tr( $modelMap[$type]['dialogLabel'] ) . " '" . $namedId . "'</h3>";
     qcl_import("qcl_ui_dialog_Form");
     return new qcl_ui_dialog_Form(
       $message, $formData, true,
