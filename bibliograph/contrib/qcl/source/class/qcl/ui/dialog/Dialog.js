@@ -20,7 +20,6 @@
 
 /**
  * Extends the dialog widget set to provide server-generated dialogs and popups
- * @require(qcl.ui.dialog.Progress)
  */
 qx.Class.define("qcl.ui.dialog.Dialog",
 {
@@ -144,7 +143,15 @@ qx.Class.define("qcl.ui.dialog.Dialog",
        * create dialog according to type
        */
       var isNew = false, widget = qcl.ui.dialog.Dialog.__instances[data.type];
-      if( ! widget ) 
+
+      // reusing forms doesn't work
+      if( widget && data.type == "form" )
+      {
+        //widget.dispose();
+        widget = null;
+      }
+
+      if( ! widget )
       {
         var clazz = qx.lang.String.firstUp( data.type );
         if ( qx.lang.Type.isFunction( dialog[clazz] ) )
