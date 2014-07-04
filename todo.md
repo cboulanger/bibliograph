@@ -8,7 +8,8 @@ Frontend
 
 Backend
 -------
-- Translations missing
+- Admin data is put into user database
+- Locale is not correctly set
 - warn about unsafe settings during setup
 - add license text
 - Repair "Send Bug Report" feature
@@ -16,12 +17,11 @@ Backend
 
 Testing
 -------
-- E-Mail-Registration/Password Change
 - Import/Export
 
 Documentation
 -------------
 - Update readme: Separate core features from plugin features
-- Add Admin documentation
+
 
 

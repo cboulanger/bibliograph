@@ -33,7 +33,8 @@ Frontend
 Backend
 -------
 - qcl: rewrite test suites 
-- qcl: refactor sql queries using safe parameters 
+- qcl: refactor sql queries using safe parameters
+- qcl: refactor qcl_data_model_db_QueryBehavior to deal with rowCount problems
 - qcl: Remove unnecessary Exceptions, reduce to a basic set
 - qcl: Integrate qcl/lib/rpcphp/server/JsonRpcServer.php and tidy up
 - qcl: Overhaul error handling by backend 
