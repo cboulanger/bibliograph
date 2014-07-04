@@ -90,6 +90,15 @@ class qcl_server_Server
     }
 
     /*
+     * if GET/POST request, use REST server
+     */
+    elseif ( isset( $_REQUEST['service'] )  )
+    {
+      qcl_import( "qcl_server_JsonRpcRestServer" );
+      $serverObj = new qcl_server_JsonRpcRestServer();
+    }
+
+    /*
      * in all cases, use qcl jsonrpc server extension
      */
     else
