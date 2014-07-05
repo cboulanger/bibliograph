@@ -78,6 +78,7 @@ abstract class qcl_data_db_adapter_Abstract
    * @param string $user
    * @param string $pass
    * @param string|null $options Optional options to pass to the driver
+   * @throws PDOException
    * @return \qcl_data_db_adapter_Abstract
    */
   function __construct( $dsn, $user=null, $pass=null, $options=null )
@@ -105,7 +106,7 @@ abstract class qcl_data_db_adapter_Abstract
     $this->set( self::extractDsnProperties( $dsn ) );
 
     /*
-     * connect to the database
+     * connect to the database, will throw if unsuccessful
      */
     $this->connect();
   }

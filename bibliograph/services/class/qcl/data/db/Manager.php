@@ -126,7 +126,15 @@ class qcl_data_db_Manager
       /*
        * create adapter
        */
-      $adapter = new $class( $dsn, $user, $pass );
+      try
+      {
+        $adapter = new $class( $dsn, $user, $pass );
+      }
+      catch( PDOException $e)
+      {
+        $this->warn("Error trying to connect to $dsn with user $user: " . $e->getMessage());
+        throw new qcl_server_ServiceException("Could not connect to database.");
+      }
 
       /*
        * save adapter
