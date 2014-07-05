@@ -241,7 +241,7 @@ class qcl_access_SessionController
     if ( $this->sessionModel === null )
     {
        qcl_import( "qcl_access_model_Session" );
-       $this->sessionModel = new qcl_access_model_Session();
+       $this->sessionModel = $this->getAccessDatasource()->getSessionModel();
     }
     return $this->sessionModel;
   }

@@ -65,6 +65,9 @@ class qcl_data_model_db_TransactionModel
     parent::__construct();
     $this->addProperties( $this->properties );
     $this->addIndexes( $this->indexes );
+
+    // use the datasource model of the access controller
+    $this->setDatasourceModel($this->getApplication()->getAccessController()->getDatasourceModel());
   }
 
   /**

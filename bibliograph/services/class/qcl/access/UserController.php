@@ -159,13 +159,12 @@ class qcl_access_UserController
    * @param string|int $id Load record if given. Deprecated.
    * @return qcl_access_model_User
    * @todo Do not pass id as argument
-   * @todo Get from access datasource
    * @todo Remove argument
    */
   public function getUserModel( $id=null )
   {
-    $userModel = qcl_access_model_User::getInstance();
-    if ( $id ) $userModel->load( $id );
+    $userModel = $this->getAccessDatasource()->getUserModel();
+    if ( $id ) throw new InvalidArgumentException("passing id to " . __METHOD__ . " is deprecated." );
     return $userModel;
   }
 
@@ -174,13 +173,12 @@ class qcl_access_UserController
    * @param string|int $id Load record if given.Deprecated.
    * @return qcl_access_model_Permission
    * @todo Do not pass id as argument
-   * @todo Get from access datasource
    * @todo Remove argument
    */
   public function getPermissionModel( $id = null)
   {
-    $permModel = qcl_access_model_Permission::getInstance();
-    if ( $id ) $permModel->load( $id );
+    $permModel = $this->getAccessDatasource()->getPermissionModel();
+    if ( $id ) throw new InvalidArgumentException("passing id to " . __METHOD__ . " is deprecated." );
     return $permModel;
   }
 
@@ -189,25 +187,22 @@ class qcl_access_UserController
    * @param string|int $id Load record if given.Deprecated.
    * @return qcl_access_model_Role
    * todo Do not pass id as argument
-   * todo Get from access datasource
    * todo Remove argument
    */
   public function getRoleModel( $id=null )
   {
-    $roleModel = qcl_access_model_Role::getInstance();
-    if ( $id ) $roleModel->load( $id );
+    $roleModel = $this->getAccessDatasource()->getRoleModel();
+    if ( $id ) throw new InvalidArgumentException("passing id to " . __METHOD__ . " is deprecated." );
     return $roleModel;
   }
 
   /**
    * Gets the group data model
    * @return qcl_access_model_Group
-   * todo Do not pass id as argument
-   * todo Get from access datasource
    */
   public function getGroupModel()
   {
-    return qcl_access_model_Group::getInstance();
+    return $this->getAccessDatasource()->getGroupModel();
   }
 
   /**
@@ -216,7 +211,7 @@ class qcl_access_UserController
    */
   public function getConfigModel()
   {
-    return qcl_config_ConfigModel::getInstance();
+    return $this->getAccessDatasource()->getConfigModel();
   }
   
   //-------------------------------------------------------------

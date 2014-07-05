@@ -77,6 +77,7 @@ class qcl_access_DatasourceModel
         'config'      => array( 'class' => "qcl_config_ConfigModel" ),
         'userConfig'  => array( 'class' => "qcl_config_UserConfigModel" )
       ) );
+      $this->load("access");
     }
   }
 
@@ -160,4 +161,3 @@ class qcl_access_DatasourceModel
     return $this->getInstanceOfType("userConfig");
   }
 }
-?>

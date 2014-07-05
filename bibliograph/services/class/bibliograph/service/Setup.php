@@ -82,7 +82,7 @@ class bibliograph_service_Setup
       if ( QCL_USE_EMBEDDED_DB )
       {
         $this->log("Using embedded database for initial authentication ....", QCL_LOG_SETUP );
-        $this->useEmbeddedDatabase(true);
+        //$this->useEmbeddedDatabase(true);
         // importing role data to create an anonymous user session
         $app->importInitialData(array('role'=> "bibliograph/data/Role.xml"));    
       }
@@ -136,10 +136,19 @@ class bibliograph_service_Setup
   {
     $app = $this->getApplication();
     
-    $this->useEmbeddedDatabase(false);
-    
-    // Check for setup user
-    $userModel = qcl_access_model_User::getInstance();
+    //$this->useEmbeddedDatabase(false);
+
+    /*
+     * setup access datasource
+     */
+    $accessDatasource = $this->getAccessController()->getAccessDatasource();
+    $accessDatasource->init();
+    $accessDatasource->setDsn($app->getDsn());
+
+    /*
+     * check if "setup" user exists, if not, import user data
+     */
+    $userModel = $accessDatasource->getUserModel();
     try
     {
       $userModel->load("setup");
@@ -162,7 +171,7 @@ class bibliograph_service_Setup
     // next
     $this->setMessage($this->tr("Checking configuration ..."));  
     
-    $this->useEmbeddedDatabase(true);
+    //$this->useEmbeddedDatabase(true);
   }
   
   
@@ -174,7 +183,7 @@ class bibliograph_service_Setup
     $this->log("Checking configuration ...", QCL_LOG_SETUP );
     
     $app = $this->getApplication();
-    $this->useEmbeddedDatabase(false);
+    //$this->useEmbeddedDatabase(false);
     
     $adminEmail = $app->getIniValue("email.admin");
     if ( ! $adminEmail )
@@ -192,7 +201,7 @@ class bibliograph_service_Setup
     // next
     $this->setMessage($this->tr("Setting up configuration keys ..."));    
     
-    $this->useEmbeddedDatabase(true);
+    //$this->useEmbeddedDatabase(true);
   }
 
   protected function createConfig()
@@ -200,7 +209,7 @@ class bibliograph_service_Setup
     $this->log("Adding configuration keys ...", QCL_LOG_SETUP );
     
     $app = $this->getApplication();
-    $this->useEmbeddedDatabase(false);
+    //$this->useEmbeddedDatabase(false);
     
     $app->setupConfigKeys( include( APPLICATION_CLASS_PATH . "/bibliograph/config.php" ) );
 
@@ -214,7 +223,7 @@ class bibliograph_service_Setup
     // next
     $this->setMessage($this->tr("Registering datasource information ..."));
     
-    $this->useEmbeddedDatabase(true);
+    //$this->useEmbeddedDatabase(true);
   }
 
   protected function registerDatasourceSchemas()
@@ -222,7 +231,7 @@ class bibliograph_service_Setup
     $this->log("Registering bibliograph datasource schema ....", QCL_LOG_SETUP );
     
     $app = $this->getApplication();
-    $this->useEmbeddedDatabase(false);
+    //$this->useEmbeddedDatabase(false);
     
     $model = bibliograph_model_BibliographicDatasourceModel::getInstance();
     try
@@ -238,13 +247,13 @@ class bibliograph_service_Setup
     // next
     $this->setMessage($this->tr("Creating example datasources ..."));
     
-    $this->useEmbeddedDatabase(true);
+    //$this->useEmbeddedDatabase(true);
   }
 
   protected function createExampleDatasources()
   {
     $app = $this->getApplication();
-    $this->useEmbeddedDatabase(false);
+    //$this->useEmbeddedDatabase(false);
     
     $dsModel = qcl_data_datasource_DbModel::getInstance();
     try
@@ -312,14 +321,14 @@ class bibliograph_service_Setup
     // next
     $this->setMessage($this->tr("Creating internal datasources ..."));
     
-    $this->useEmbeddedDatabase(true);
+    //$this->useEmbeddedDatabase(true);
   }
 
 
   protected function createInternalDatasources()
   {
     $app = $this->getApplication();
-    $this->useEmbeddedDatabase(false);    
+    //$this->useEmbeddedDatabase(false);    
     
     /*
      * remote and local file storage datasources
@@ -408,7 +417,7 @@ class bibliograph_service_Setup
     $this->addLogText("\n" . $this->tr("Setup finished. Please reload the application"));
     
     // done!
-    $this->useEmbeddedDatabase(false); // now the external database can be used. 
+    //$this->useEmbeddedDatabase(false); // now the external database can be used. 
     $app->getCache()->setValue("setup",true);
     $app->getCache()->savePersistenceData(); // todo: shouldn't be neccessary, but is - BUG?
   }

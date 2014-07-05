@@ -8,7 +8,6 @@ Frontend
 
 Backend
 -------
-- Admin data is put into user database
 - Locale is not correctly set
 - warn about unsafe settings during setup
 - add license text

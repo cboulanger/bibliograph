@@ -501,7 +501,7 @@ abstract class qcl_application_Application
     else
     {
       // use the database specified in the ini file
-      $dsn = $this->getUserDsn();
+      $dsn = $this->getAdminDsn();
     }
 
     if( !$dsn )
