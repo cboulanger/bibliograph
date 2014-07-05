@@ -18,14 +18,6 @@
 
 ************************************************************************ */
 
-//-------------------------------------------------------------
-// PHP configuration
-//-------------------------------------------------------------
-
-error_reporting( E_ALL ^ E_NOTICE ^ E_STRICT ); //Leave this
-ini_set("display_errors",1);
-//ini_set('memory_limit', '512M'); // uncomment this if the backend runs out of memory
-//date_default_timezone_set("Europe/Berlin"); // uncomment this if PHP complains about a missing timezone
 
 //-------------------------------------------------------------
 // Configure paths to the various libraries used by the backend
@@ -128,8 +120,20 @@ define("GITHUB_API_TOKEN",null);
 define("APPLICATION_LOG_DEFAULT", serialize( array()));
 
 //-------------------------------------------------------------
-// DONT TOUCH
+// PHP configuration
 //-------------------------------------------------------------
+
+//ini_set('memory_limit', '512M'); // uncomment this if the backend runs out of memory
+//date_default_timezone_set("Europe/Berlin"); // uncomment and correct this if PHP complains about a missing timezone
+
+//-------------------------------------------------------------
+// DON'T TOUCH
+//-------------------------------------------------------------
+
+error_reporting( E_ALL ^ E_NOTICE ^ E_STRICT );
+ini_set("display_errors",false);
+ini_set("error_log",QCL_LOG_FILE);
+ini_set("log_errors",true);
 
 ini_set('include_path', implode(
   PATH_SEPARATOR,

@@ -49,3 +49,8 @@ if ( ! defined("QCL_LOG_MAX_FILESIZE") )
 {
   define( "QCL_LOG_MAX_FILESIZE" , 1024 * 500 );
 }
+
+/*
+ * log PHP errors to logfile
+ */
+ini_set("error_log",QCL_LOG_FILE);

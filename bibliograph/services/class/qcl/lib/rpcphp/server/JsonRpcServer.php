@@ -395,19 +395,18 @@ class JsonRpcServer extends AbstractServer
 
   /**
    * Setup error handling to prevent PHP from messing up the json
-   * response.
+   * response. This is only necessary if display_errors = ON.
    */
   function setupErrorHandling()
   {
 
     /*
-     * This will not always work, so do some more hacking to
-     * comment out uncaught errors. You'll need to examine the
-     * http response to see the uncaught errors!
+     * This will only work if the php error contains no double quotation marks and no
+     * characters that need to be escaped (e.g., newline).
      */
-    ini_set('error_prepend_string', '/*');
-    ini_set('error_append_string', '*/{' .
-        '  error:' .
+    ini_set('error_prepend_string', '{"phperror":"');
+    ini_set('error_append_string', '",' .
+        '  "error":' .
         '  {' .
         '    "origin":' . JsonRpcError_Origin_Server . ',' .
         '    "code":' .  JsonRpcError_ScriptError . ',' .
