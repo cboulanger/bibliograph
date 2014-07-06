@@ -592,10 +592,10 @@ class qcl_access_model_User
 
   /**
    * Function to check the match between the password and the repeated
-   * password
+   * password. Returns the hashed password.
    * @param $value
    * @throws JsonRpcException
-   * @return string
+   * @return string|null
    */
   public function checkFormPassword ( $value )
   {
@@ -605,9 +605,13 @@ class qcl_access_model_User
     }
     elseif ( $this->__password != $value )
     {
-      throw new JsonRpcException( "Passwords do not match..." );
+      throw new JsonRpcException( $this->tr("Passwords do not match...") );
     }
-    return $this->getApplication()->getAccessController()->generateHash( $value );
+    if ( $value and strlen($value) < 8 )
+    {
+      throw new JsonRpcException( $this->tr("Password must be at least 8 characters long") );
+    }
+    return $value ? $this->getApplication()->getAccessController()->generateHash( $value ) : null;
   }
   
   /**

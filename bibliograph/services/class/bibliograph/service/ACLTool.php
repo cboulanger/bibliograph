@@ -19,6 +19,8 @@
 ************************************************************************ */
 
 qcl_import("qcl_data_controller_Controller");
+qcl_import("qcl_ui_dialog_Alert");
+qcl_import("qcl_ui_dialog_Confirm");
 
 /**
  * Backend service class for the access control tool widget
@@ -461,7 +463,7 @@ class bibliograph_service_ACLTool
         $models[$type]['labelProp'] => $namedId
       ));
     }
-    return "OK";
+    return $this->method_editElement($type,$namedId);
   }
 
   /**
@@ -616,9 +618,10 @@ class bibliograph_service_ACLTool
 
   /**
    * Edit the element data by returning a form to the user
-   * @param $first
-   * @param $second
-   * @param null $third
+   * @param string|bool $first The type of the element or boolean true
+   * @param string $second The namedId of the element
+   * @param null|string $third If the first argument is boolean true, then the second and third
+   * arguments are the normal signature
    * @internal param $type
    * @internal param $namedId
    * @return array
@@ -652,6 +655,13 @@ class bibliograph_service_ACLTool
     $model = $this->getElementModel( $type );
     $model->load( $namedId );
     $formData = $this->createFormData( $model );
+
+    if ( $type == "user")
+    {
+      $formData['password']['value'] = null;
+      $formData['password2']['value'] = null;
+    }
+
     $modelMap = $this->modelMap();
     $message = "<h3>" . $this->tr( $modelMap[$type]['dialogLabel'] ) . " '" . $namedId . "'</h3>";
     qcl_import("qcl_ui_dialog_Form");
@@ -692,7 +702,6 @@ class bibliograph_service_ACLTool
     {
       if ( ! isset($data->password2) or $data->password != $data->password2 )
       {
-        qcl_import("qcl_ui_dialog_Alert");
         return new qcl_ui_dialog_Alert(
           $this->tr("Passwords do not match. Please try again"),
           $this->serviceName(), "editElement", array( "user", $namedId )
@@ -711,48 +720,95 @@ class bibliograph_service_ACLTool
       throw new JsonRpcException("LDAP user data cannot be edited.");
     }
 
-    $parsed = (object) $this->parseFormData( $model, $data );
-
-    /*
-     * user model:
-     * as long as the user is not confirmed, a password must be specified
-     * and will be sent to the user
-     */
-    if ( $type == "user" )
+    try
     {
-      if ( ! $data->password and ! $model->getPassword() )
-      {
-        $data->password = $parsed->password = qcl_generate_password(5);
-      }
-      if ( $data->password and $parsed->password != $model->getPassword() )
-      {
-        if ( ! $model->get("confirmed") )
-        {
-          $this->sendConfirmationLinkEmail( $data->email, $namedId, $data->name, $data->password );
-          qcl_import("qcl_ui_dialog_Alert");
-          new qcl_ui_dialog_Alert(
-            $this->tr("An email has been sent to %s (%s) with information on the registration.", $data->name, $data->email)
-          );
-        }
-        else
-        {
-          $this->sendPasswordChangeEmail( $data->email, $namedId, $data->name, $data->password );
-          qcl_import("qcl_ui_dialog_Alert");
-          new qcl_ui_dialog_Alert(
-            $this->tr("An email has been sent to %s (%s) to inform about the change of password.", $data->name, $data->email)
-          );
-        }
-      }
+      $parsed = (object) $this->parseFormData( $model, $data );
+    }
+    catch( JsonRpcException $e)
+    {
+      return new qcl_ui_dialog_Alert(
+        $e->getMessage(),
+        $this->serviceName(), "editElement", array( "user", $namedId )
+      );
     }
 
     /*
      * set data
      */
-    $model->set( $parsed );
-    $model->save();
+    $oldData = (object) $model->data();
+    $model->set( $parsed )->save();
 
-    return "OK";
+    /*
+     * user model
+     */
+    if ( $type == "user" and ! $model->get("ldap") )
+    {
+      /*
+       * enforce setting of password
+       */
+      if ( ! $data->password and ! $model->getPassword() )
+      {
+        return new qcl_ui_dialog_Confirm(
+          $this->tr("You must set a password. Generate a random one?"), true,
+          $this->serviceName(), "handleMissingPasswordDialog", array( $namedId )
+        );
+      }
+
+      /*
+       * if password has changed, inform user
+       */
+      if ( $data->password and $parsed->password != $oldData->password )
+      {
+        return $this->sendInformationEmail( $model->data(), $data->password );
+      }
+    }
+    return new qcl_ui_dialog_Alert($this->tr("The data has been saved."));
   }
+
+  /**
+   * Sends an email to the user, either a confirmation email if email has not yet been confirmed, or an information on
+   * change of the password
+   * @param array|object $data
+   * @return qcl_ui_dialog_Alert
+   */
+  protected function sendInformationEmail( $data, $password )
+  {
+    $data = (object) $data;
+    if ( ! $data->confirmed )
+    {
+      $this->sendConfirmationLinkEmail( $data->email, $data->namedId, $data->name, $password );
+      return new qcl_ui_dialog_Alert(
+        $this->tr("An email has been sent to %s (%s) with information on the registration.", $data->name, $data->email)
+      );
+    }
+    else
+    {
+      $this->sendPasswordChangeEmail( $data->email, $data->namedId, $data->name, $password );
+      return new qcl_ui_dialog_Alert(
+        $this->tr("An email has been sent to %s (%s) to inform about the change of password.", $data->name, $data->email)
+      );
+    }
+  }
+
+  public function method_handleMissingPasswordDialog( $answer, $namedId )
+  {
+    if ($answer === null ) return "CANCELLED";
+
+    if( $answer === true )
+    {
+      $password = qcl_generate_password(8);
+      $model = $this->getElementModel( "user" );
+      $model->load( $namedId )
+        ->set("password", $password )
+        ->save();
+      return $this->sendInformationEmail( $model->data(), $password );
+    }
+    else
+    {
+      return $this->method_editElement( "user", $namedId );
+    }
+  }
+
 
   protected function sendConfirmationLinkEmail( $email, $username, $name, $password )
   {
@@ -774,7 +830,7 @@ class bibliograph_service_ACLTool
     $confirmationLink = qcl_server_Server::getUrl() .
       "?service="   . $this->serviceName() .
       "&method="    . "confirmEmail" .
-      "&params="    . $email;
+      "&params="    . $username;
 
     $body  = $this->tr("Dear %s,", $name);
     $body .= "\n\n" . $this->tr("You have been registered as a user at  '%s'.", $applicationTitle );
@@ -834,14 +890,14 @@ class bibliograph_service_ACLTool
     $mail->send();
   }
 
-  public function method_confirmEmail( $email )
+  public function method_confirmEmail( $namedId )
   {
     $app = $this->getApplication();
     $userModel = $app->getAccessController()->getUserModel();
     try
     {
       $userModel->findWhere( array(
-        'email' => $email
+        'namedId' => $namedId
       ));
       while( $userModel->loadNext() )
       {
@@ -851,14 +907,15 @@ class bibliograph_service_ACLTool
 
       $msg1 = $this->tr( "Thank you, %s, your email address has been confirmed.", $userModel->getName() );
       $msg2 = $this->tr( "You can now log in at <a href='%s'>this link</a>", $app->getClientUrl() );
-      echo "<p>$msg1<p>";
-      echo "<p>$msg2</p>";
+      header('Content-Type: text/html; charset=utf-8');
+      echo "<html><p>$msg1<p>";
+      echo "<p>$msg2</p></html>";
       exit;
     }
     catch( qcl_data_model_RecordNotFoundException $e )
     {
       // should never be the case
-      echo "Invalid email $email";
+      echo "Invalid username '$namedId'";
       exit;
     }
   }

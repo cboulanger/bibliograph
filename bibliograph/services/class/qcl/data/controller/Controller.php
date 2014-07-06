@@ -1160,7 +1160,6 @@ class qcl_data_controller_Controller
    * @param qcl_data_model_AbstractActiveRecord $model
    * @param object $data ;
    * @throws JsonRpcException
-   * @throws JsonRpcException
    * @throws InvalidArgumentException
    * @return array
    */
