@@ -58,6 +58,12 @@ abstract class qcl_data_model_AbstractActiveRecord
   protected $lastQuery;
 
   /**
+   * The original data loaded from the database
+   * @var array
+   */
+  protected $_data = array();
+
+  /**
    * Whether model record data is loaded
    * @var bool
    */
@@ -273,6 +279,16 @@ abstract class qcl_data_model_AbstractActiveRecord
   {
     $this->checkLoaded();
     return parent::data( $options );
+  }
+
+  /**
+   * Returns the data that was originally loaded from the database. Can be used
+   * to see whether data has changed in the meantime.
+   * @return array
+   */
+  public function originalData()
+  {
+    return $this->_data;
   }
 
   /**
@@ -1034,8 +1050,6 @@ abstract class qcl_data_model_AbstractActiveRecord
 
     $oldData = $this->_data;
     $newData = $this->data();
-
-    if($this instanceof qcl_data_model_db_TransactionModel ) $this->debug($newData);
 
     $data = array(
       'id'  => $newData['id']

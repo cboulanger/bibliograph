@@ -255,7 +255,12 @@ abstract class qcl_data_model_AbstractNamedActiveRecord
         /*
          * Mark that we're loaded
          */
-        $this->_loaded = true;           
+        $this->_loaded = true;
+
+        /*
+         * save a copy so we can check whether properties have changed
+         */
+        $this->_data = $this->data();
 
         /*
          * return myself
