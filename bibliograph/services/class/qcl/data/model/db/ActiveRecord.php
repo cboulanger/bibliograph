@@ -22,7 +22,6 @@ qcl_import("qcl_data_model_db_PropertyBehavior");
 qcl_import("qcl_data_model_db_QueryBehavior");
 qcl_import("qcl_data_model_IRelationalModel");
 qcl_import("qcl_data_model_db_RelationBehavior");
-qcl_import("qcl_data_model_db_TransactionModel");
 
 /**
  * Abstrac class for models that are based on a relational
@@ -144,6 +143,7 @@ class qcl_data_model_db_ActiveRecord
    */
   public function getTransactionModel()
   {
+    qcl_import("qcl_data_model_db_TransactionModel");
     $transactionModel =  qcl_data_model_db_TransactionModel::getInstance();
     $transactionModel->getQueryBehavior()->setAdapter(
       $this->getQueryBehavior()->getAdapter()
