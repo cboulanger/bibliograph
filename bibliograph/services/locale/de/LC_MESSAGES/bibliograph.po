@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Bibliograph 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-04 22:42+0100\n"
-"PO-Revision-Date: 2014-07-04 22:45+0100\n"
+"POT-Creation-Date: 2014-07-06 23:08+0100\n"
+"PO-Revision-Date: 2014-07-06 23:10+0100\n"
 "Last-Translator: Christian Boulanger <info@bibliograph.org>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -601,118 +601,128 @@ msgstr "sortiere-nach"
 msgid "Index '%s' does not exist."
 msgstr "Der Index '%s' existiert nicht."
 
-#: ../../../class/bibliograph/service/ACLTool.php:47
-#: ../../../class/bibliograph/service/ACLTool.php:96
+#: ../../../class/bibliograph/service/ACLTool.php:49
+#: ../../../class/bibliograph/service/ACLTool.php:98
 #: ../../../class/qcl/access/ACLTool.php:50
 #: ../../../class/qcl/access/ACLTool.php:96
 msgid "Users"
 msgstr "Benutzer/innen"
 
-#: ../../../class/bibliograph/service/ACLTool.php:48
+#: ../../../class/bibliograph/service/ACLTool.php:50
 msgid "User"
 msgstr "Benutzer/in"
 
-#: ../../../class/bibliograph/service/ACLTool.php:54
-#: ../../../class/bibliograph/service/ACLTool.php:101
+#: ../../../class/bibliograph/service/ACLTool.php:56
+#: ../../../class/bibliograph/service/ACLTool.php:103
 #: ../../../class/qcl/access/ACLTool.php:56
 #: ../../../class/qcl/access/ACLTool.php:101
 msgid "Roles"
 msgstr "Rollen"
 
-#: ../../../class/bibliograph/service/ACLTool.php:55
+#: ../../../class/bibliograph/service/ACLTool.php:57
 msgid "Role"
 msgstr "Rolle\t"
 
-#: ../../../class/bibliograph/service/ACLTool.php:61
-#: ../../../class/bibliograph/service/ACLTool.php:106
+#: ../../../class/bibliograph/service/ACLTool.php:63
+#: ../../../class/bibliograph/service/ACLTool.php:108
 #: ../../../class/qcl/access/ACLTool.php:62
 #: ../../../class/qcl/access/ACLTool.php:106
 msgid "Groups"
 msgstr "Gruppen"
 
-#: ../../../class/bibliograph/service/ACLTool.php:62
+#: ../../../class/bibliograph/service/ACLTool.php:64
 msgid "Group"
 msgstr "Gruppe"
 
-#: ../../../class/bibliograph/service/ACLTool.php:68
-#: ../../../class/bibliograph/service/ACLTool.php:111
+#: ../../../class/bibliograph/service/ACLTool.php:70
+#: ../../../class/bibliograph/service/ACLTool.php:113
 #: ../../../class/qcl/access/ACLTool.php:68
 #: ../../../class/qcl/access/ACLTool.php:111
 msgid "Permissions"
 msgstr "Berechtigungen"
 
-#: ../../../class/bibliograph/service/ACLTool.php:69
+#: ../../../class/bibliograph/service/ACLTool.php:71
 msgid "Permission"
 msgstr "Berechtigung"
 
-#: ../../../class/bibliograph/service/ACLTool.php:75
-#: ../../../class/bibliograph/service/ACLTool.php:116
+#: ../../../class/bibliograph/service/ACLTool.php:77
+#: ../../../class/bibliograph/service/ACLTool.php:118
 #: ../../../class/qcl/access/ACLTool.php:74
 #: ../../../class/qcl/access/ACLTool.php:116
 msgid "Datasources"
 msgstr "Datenquellen\t"
 
-#: ../../../class/bibliograph/service/ACLTool.php:76
+#: ../../../class/bibliograph/service/ACLTool.php:78
 msgid "Datasource"
 msgstr "Datenquelle"
 
-#: ../../../class/bibliograph/service/ACLTool.php:257
+#: ../../../class/bibliograph/service/ACLTool.php:259
 #: ../../../class/qcl/access/ACLTool.php:363
 msgid "Relations"
 msgstr "Beziehungen\t"
 
-#: ../../../class/bibliograph/service/ACLTool.php:330
+#: ../../../class/bibliograph/service/ACLTool.php:332
 #: ../../../class/qcl/access/ACLTool.php:436
 msgid "in"
 msgstr "in\t"
 
-#: ../../../class/bibliograph/service/ACLTool.php:368
+#: ../../../class/bibliograph/service/ACLTool.php:370
 #: ../../../class/qcl/access/ACLTool.php:474
 msgid "In all groups"
 msgstr "In allen Gruppen"
 
-#: ../../../class/bibliograph/service/ACLTool.php:481
+#: ../../../class/bibliograph/service/ACLTool.php:483
 #: ../../../class/qcl/access/ACLTool.php:588
 msgid "Do you want to remove only the datasource entry or all associated data?"
 msgstr ""
 "Wollen Sie nur die Datenquellen-Eintrag entfernen oder alle zugehörigen "
 "Daten löschen?"
 
-#: ../../../class/bibliograph/service/ACLTool.php:482
+#: ../../../class/bibliograph/service/ACLTool.php:484
 #: ../../../class/qcl/access/ACLTool.php:589
 msgid "All data"
 msgstr "Alle Daten"
 
-#: ../../../class/bibliograph/service/ACLTool.php:482
+#: ../../../class/bibliograph/service/ACLTool.php:484
 #: ../../../class/qcl/access/ACLTool.php:589
 msgid "Entry only"
 msgstr "Nur-Lese-Modus"
 
-#: ../../../class/bibliograph/service/ACLTool.php:526
+#: ../../../class/bibliograph/service/ACLTool.php:528
 #: ../../../class/qcl/access/ACLTool.php:633
 #, php-format
 msgid "Deleting datasource '%s' failed... "
 msgstr "Das Löschen der Datenquelle '%s' ist fehlgeschlagen..."
 
-#: ../../../class/bibliograph/service/ACLTool.php:529
+#: ../../../class/bibliograph/service/ACLTool.php:531
 #: ../../../class/qcl/access/ACLTool.php:636
 #, php-format
 msgid "Datasource '%s' successfully deleted ... "
 msgstr "Datenquelle '%s' wurde erfolgreich gelöscht."
 
-#: ../../../class/bibliograph/service/ACLTool.php:697
+#: ../../../class/bibliograph/service/ACLTool.php:706
 #: ../../../class/qcl/access/ACLTool.php:851
 msgid "Passwords do not match. Please try again"
 msgstr "Passwörter stimmen nicht überein. Bitte erneut eingeben."
 
-#: ../../../class/bibliograph/service/ACLTool.php:734
+#: ../../../class/bibliograph/service/ACLTool.php:752
+msgid "You must set a password. Generate a random one?"
+msgstr ""
+"Sie müssen ein Passwort eingeben. Soll ein zufälliges Passwort generiert "
+"werden?\t"
+
+#: ../../../class/bibliograph/service/ACLTool.php:765
+msgid "The data has been saved."
+msgstr "Die Änderungen wurden gespeichert. "
+
+#: ../../../class/bibliograph/service/ACLTool.php:781
 #: ../../../class/qcl/access/ACLTool.php:879
 #, php-format
 msgid "An email has been sent to %s (%s) with information on the registration."
 msgstr ""
 "Eine Email mit Informationen zur Registrierung wurde an %s (%s) gesendet."
 
-#: ../../../class/bibliograph/service/ACLTool.php:742
+#: ../../../class/bibliograph/service/ACLTool.php:788
 #: ../../../class/qcl/access/ACLTool.php:887
 #, php-format
 msgid ""
@@ -720,52 +730,52 @@ msgid ""
 msgstr ""
 "Eine Email mit Informationen zur Passwortänderung wurde an %s (%s) gesendet."
 
-#: ../../../class/bibliograph/service/ACLTool.php:769
+#: ../../../class/bibliograph/service/ACLTool.php:825
 #: ../../../class/qcl/access/ACLTool.php:919
 #, php-format
 msgid "Your registration at %s"
 msgstr "Ihre Registrierung bei %s"
 
-#: ../../../class/bibliograph/service/ACLTool.php:779
-#: ../../../class/bibliograph/service/ACLTool.php:818
+#: ../../../class/bibliograph/service/ACLTool.php:835
+#: ../../../class/bibliograph/service/ACLTool.php:874
 #: ../../../class/qcl/access/ACLTool.php:929
 #: ../../../class/qcl/access/ACLTool.php:968
 #, php-format
 msgid "Dear %s,"
 msgstr "Sehr geehrte/r %s,"
 
-#: ../../../class/bibliograph/service/ACLTool.php:780
+#: ../../../class/bibliograph/service/ACLTool.php:836
 #: ../../../class/qcl/access/ACLTool.php:930
 #, php-format
 msgid "You have been registered as a user at  '%s'."
 msgstr "Sie wurden als Nutzer von  '%s' registriert."
 
-#: ../../../class/bibliograph/service/ACLTool.php:781
-#: ../../../class/bibliograph/service/ACLTool.php:820
+#: ../../../class/bibliograph/service/ACLTool.php:837
+#: ../../../class/bibliograph/service/ACLTool.php:876
 #: ../../../class/qcl/access/ACLTool.php:931
 #: ../../../class/qcl/access/ACLTool.php:970
 #, php-format
 msgid "Your username is '%s' and your password is '%s'"
 msgstr "Ihr Nutzername ist '%s' und Ihr Passwort ist '%s'"
 
-#: ../../../class/bibliograph/service/ACLTool.php:782
+#: ../../../class/bibliograph/service/ACLTool.php:838
 #: ../../../class/qcl/access/ACLTool.php:932
 msgid "Please confirm your account by visiting the following link:"
 msgstr ""
 "Bitte bestätigen Sie Ihr Konto, indem sie auf den folgenden Link klicken:"
 
-#: ../../../class/bibliograph/service/ACLTool.php:784
+#: ../../../class/bibliograph/service/ACLTool.php:840
 #: ../../../class/qcl/access/ACLTool.php:934
 msgid "Thank you."
 msgstr "Vielen Dank."
 
-#: ../../../class/bibliograph/service/ACLTool.php:813
+#: ../../../class/bibliograph/service/ACLTool.php:869
 #: ../../../class/qcl/access/ACLTool.php:963
 #, php-format
 msgid "Password change at %s"
 msgstr "Passwortänderung bei %s"
 
-#: ../../../class/bibliograph/service/ACLTool.php:819
+#: ../../../class/bibliograph/service/ACLTool.php:875
 #: ../../../class/qcl/access/ACLTool.php:969
 #, php-format
 msgid "This is to inform you that your password has changed at '%s'."
@@ -773,13 +783,13 @@ msgstr ""
 "Hiermit möchten wir Sie informieren, dass Ihr Passwort bei '%s' geändert "
 "worden ist."
 
-#: ../../../class/bibliograph/service/ACLTool.php:852
+#: ../../../class/bibliograph/service/ACLTool.php:908
 #: ../../../class/qcl/access/ACLTool.php:1011
 #, php-format
 msgid "Thank you, %s, your email address has been confirmed."
 msgstr "Danke, %s, Ihre E-Mailadresse wurde bestätigt."
 
-#: ../../../class/bibliograph/service/ACLTool.php:853
+#: ../../../class/bibliograph/service/ACLTool.php:909
 #: ../../../class/qcl/access/ACLTool.php:1012
 #, php-format
 msgid "You can now log in at <a href='%s'>this link</a>"
@@ -1177,15 +1187,15 @@ msgstr "Logische Verknüpfungen"
 msgid "Starting setup ..."
 msgstr "Die Anwendung wird konfiguriert ..."
 
-#: ../../../class/bibliograph/service/Setup.php:160
+#: ../../../class/bibliograph/service/Setup.php:169
 msgid "Initial user data imported."
 msgstr "Benutzerdaten wurden importier."
 
-#: ../../../class/bibliograph/service/Setup.php:163
+#: ../../../class/bibliograph/service/Setup.php:172
 msgid "Checking configuration ..."
 msgstr "Überprüfe Konfiguration ..."
 
-#: ../../../class/bibliograph/service/Setup.php:182
+#: ../../../class/bibliograph/service/Setup.php:191
 msgid ""
 "Please enter the administrator email address in the application.ini.php file "
 "(email.admin)."
@@ -1193,47 +1203,47 @@ msgstr ""
 "Bitte tragen sie die Emailadresse des Administrators in der Datei "
 "application.ini.php ein (unter email.admin)."
 
-#: ../../../class/bibliograph/service/Setup.php:190
+#: ../../../class/bibliograph/service/Setup.php:199
 msgid "Administrator email has been set."
 msgstr "Die Administratoren-Email wurde gespeichert.\t"
 
-#: ../../../class/bibliograph/service/Setup.php:193
+#: ../../../class/bibliograph/service/Setup.php:202
 msgid "Setting up configuration keys ..."
 msgstr "Konfigurationsdaten werden hinzugefügt ..."
 
-#: ../../../class/bibliograph/service/Setup.php:213
+#: ../../../class/bibliograph/service/Setup.php:222
 msgid "Configuration keys added."
 msgstr "Konfigurationsdaten hinzugefügt."
 
-#: ../../../class/bibliograph/service/Setup.php:215
+#: ../../../class/bibliograph/service/Setup.php:224
 msgid "Registering datasource information ..."
 msgstr "Speichere Informationen zu den Datenquellen ..."
 
-#: ../../../class/bibliograph/service/Setup.php:237
+#: ../../../class/bibliograph/service/Setup.php:246
 msgid "Added datasource schemas."
 msgstr "Datenquellenschemata hinzugefügt."
 
-#: ../../../class/bibliograph/service/Setup.php:239
+#: ../../../class/bibliograph/service/Setup.php:248
 msgid "Creating example datasources ..."
 msgstr "Erzeuge Beispiel-Datenquellen ..."
 
-#: ../../../class/bibliograph/service/Setup.php:311
+#: ../../../class/bibliograph/service/Setup.php:320
 msgid "Created example datasources."
 msgstr "Beispiel-Datenquellen erzeugt."
 
-#: ../../../class/bibliograph/service/Setup.php:313
+#: ../../../class/bibliograph/service/Setup.php:322
 msgid "Creating internal datasources ..."
 msgstr "Lege interne Datenquellen an ..."
 
-#: ../../../class/bibliograph/service/Setup.php:404
+#: ../../../class/bibliograph/service/Setup.php:413
 msgid "Created internal datasources."
 msgstr "Interne Datenbanken wurden angelegt. "
 
-#: ../../../class/bibliograph/service/Setup.php:407
+#: ../../../class/bibliograph/service/Setup.php:416
 msgid "Done ..."
 msgstr "Fertig ..."
 
-#: ../../../class/bibliograph/service/Setup.php:408
+#: ../../../class/bibliograph/service/Setup.php:417
 msgid "Setup finished. Please reload the application"
 msgstr ""
 "Die Einrichtung von Bibliograph ist abgeschlossen. Bitte laden Sie "
@@ -1252,23 +1262,23 @@ msgstr ""
 "Die Anmeldung muss über eine sichere Verbindung erfolgen, d.h. über eine "
 "Adresse, die mit \"https\" beginnt."
 
-#: ../../../class/qcl/access/UserController.php:412
+#: ../../../class/qcl/access/UserController.php:407
 msgid "Access denied."
 msgstr "Zugang verweigert."
 
-#: ../../../class/qcl/access/UserController.php:435
+#: ../../../class/qcl/access/UserController.php:430
 msgid "Your session has expired."
 msgstr "Ihre Sitzung ist abgelaufen."
 
-#: ../../../class/qcl/access/UserController.php:476
+#: ../../../class/qcl/access/UserController.php:471
 msgid "Invalid user name."
 msgstr "Ungültiger Nutzername\t"
 
-#: ../../../class/qcl/access/UserController.php:484
+#: ../../../class/qcl/access/UserController.php:479
 msgid "User is deactivated."
 msgstr "Dieser Benutzer ist deaktiviert."
 
-#: ../../../class/qcl/access/UserController.php:499
+#: ../../../class/qcl/access/UserController.php:494
 msgid "Wrong password."
 msgstr "Das Passwort ist falsch."
 
@@ -1308,6 +1318,14 @@ msgstr "Passwort wiederholen"
 #: ../../../class/qcl/access/model/User.php:284
 msgid "Anonymous User"
 msgstr "Gastbenutzer"
+
+#: ../../../class/qcl/access/model/User.php:608
+msgid "Passwords do not match..."
+msgstr "Passwörter stimmen nicht überein.\t"
+
+#: ../../../class/qcl/access/model/User.php:612
+msgid "Password must be at least 8 characters long"
+msgstr "Das Passwort muss mindestens 8 Zeichen lang sein."
 
 #: ../../../class/qcl/application/plugin/Service.php:77
 msgid "Plugin is not installed"
