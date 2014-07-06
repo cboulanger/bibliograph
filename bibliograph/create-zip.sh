@@ -5,8 +5,16 @@ hash=$(git log --pretty=format:'%h' -n 1)
 pretty="$version ($today)"
 filename="bibliograph-$version"
 
+# this requires the GNU-sed
+if [ -f '/usr/local/opt/gnu-sed/bin/sed' ]
+then
+    sedcmd='/usr/local/opt/gnu-sed/bin/sed' # we're on a mac with GNU sed installe via HomeBrew
+else
+    sedcmd='sed' # this is normal linux
+fi
+
 # update version information in files
-sed -i -r "s|(/\*begin-version\*/)(.+)(/\*end-version\*/)|\1\"$pretty\"\3|g" \
+$sedcmd -i -r "s|(/\*begin-version\*/)(.+)(/\*end-version\*/)|\1\"$pretty\"\3|g" \
   ./source/class/bibliograph/Main.js \
   ./services/class/bibliograph/Application.php
   
@@ -39,6 +47,6 @@ zip -qr ../$filename.zip ./bibliograph/
 rm -rf ./bibliograph
 
 # remove version information from source code
-sed -i -r "s|(/\*begin-version\*/)(.+)(/\*end-version\*/)|\1\"Development version\"\3|g" \
+$sedcmd -i -r "s|(/\*begin-version\*/)(.+)(/\*end-version\*/)|\1\"Development version\"\3|g" \
   ./source/class/bibliograph/Main.js \
   ./services/class/bibliograph/Application.php
