@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
@@ -13,31 +13,31 @@ msgstr ""
 "Language: de\n"
 "X-Generator: Poedit 1.6.5\n"
 
-#: bibliograph/Main.js:296
+#: bibliograph/Main.js:307
 msgid "Setting up application..."
 msgstr "Konfiguriere die Anwendung ..."
 
-#: bibliograph/Main.js:317
+#: bibliograph/Main.js:328
 msgid "Connecting with server..."
 msgstr "Verbinde mit dem Server ..."
 
-#: bibliograph/Main.js:328
+#: bibliograph/Main.js:339
 msgid "Loading configuration ..."
 msgstr "Lade Konfiguration ..."
 
-#: bibliograph/Main.js:344
+#: bibliograph/Main.js:355
 msgid "Loading datasources ..."
 msgstr "Lade Liste der Datenbanken ..."
 
-#: bibliograph/Main.js:369
+#: bibliograph/Main.js:380
 msgid "Loading plugins ..."
 msgstr "Plugins werden geladen ..."
 
-#: bibliograph/Main.js:373
+#: bibliograph/Main.js:384
 msgid "Loaded plugin %1 of %2 : %3 ..."
 msgstr "Lade Plugin %1 von %2 : %3 ..."
 
-#: bibliograph/Main.js:499
+#: bibliograph/Main.js:510
 msgid ""
 "The datasource has just been restored to a previous state and will be "
 "reloaded"
@@ -45,11 +45,11 @@ msgstr ""
 "Die Datenbank wurde gerade auf einen früheren Zustand zurückgesetzt wird "
 "jetzt neu geladen."
 
-#: bibliograph/Main.js:596
+#: bibliograph/Main.js:607
 msgid "Loading datasource information ..."
 msgstr "Informationen zur Datenquelle werden abgerufen..."
 
-#: bibliograph/Main.js:755
+#: bibliograph/Main.js:766
 msgid ""
 "To log in, you need a secure connection. After you press 'OK', the "
 "application will be reloaded in secure mode. After the application finished "
@@ -60,7 +60,7 @@ msgstr ""
 "geladen. Bitte melden Sie sich erneut an, sobald der Ladevorgang "
 "abgeschlossen ist."
 
-#: bibliograph/Main.js:766
+#: bibliograph/Main.js:777
 msgid ""
 "The application is currently in a read-only state. Only the administrator "
 "can log in."
@@ -68,15 +68,15 @@ msgstr ""
 "Das Programm ist gerade im Nur-Lese-Modus. Nur der Administrator kann sich "
 "einloggen. "
 
-#: bibliograph/Main.js:800
+#: bibliograph/Main.js:811
 msgid "Authenticating ..."
 msgstr "Anmeldung ..."
 
-#: bibliograph/Main.js:883
+#: bibliograph/Main.js:894
 msgid "You don't have access to any datasource on the server."
 msgstr "Sie haben keinen Zugang zu Datenbanken auf diesem Server."
 
-#: bibliograph/Main.js:935
+#: bibliograph/Main.js:946
 msgid ""
 "Cannot open help window. Please disable the popup-blocker of your browser "
 "for this website."
@@ -84,11 +84,11 @@ msgstr ""
 "Die Hilfeseite kann nicht aufgerufen werden. Bitte schalten Sie eventuelle "
 "Popup-Blockierer für diese Webseite ab. "
 
-#: bibliograph/plugin/isbnscanner/Plugin.js:60 bibliograph/Main.js:951
+#: bibliograph/plugin/isbnscanner/Plugin.js:60 bibliograph/Main.js:962
 msgid "Please wait ..."
 msgstr "Bitte warten ..."
 
-#: bibliograph/Main.js:1026
+#: bibliograph/Main.js:1037
 msgid "Retrieving user data..."
 msgstr "Lade Benutzerdaten ..."
 
@@ -138,11 +138,11 @@ msgstr ""
 
 #: bibliograph/plugin/isbnscanner/Plugin.js:98
 msgid ""
-"ISBN input detected. Please wait for the input dialog and repeat the "
-"input ..."
+"ISBN input detected. Please wait for the input dialog and repeat the input "
+"..."
 msgstr ""
-"ISBN Eingabe erkannt. Bitte warten Sie auf den Eingabedialog und wiederholen "
-"Sie die Eingabe ..."
+"ISBN Eingabe erkannt. Bitte warten Sie auf den Eingabedialog und wiederholen"
+" Sie die Eingabe ..."
 
 #: bibliograph/plugin/isbnscanner/Plugin.js:120
 msgid "Import by ISBN"
@@ -166,27 +166,27 @@ msgid "Webservice (Slower)"
 msgstr "Webservice (Langsamer)"
 
 #: bibliograph/plugin/z3950/ImportWindow.js:86
-#: bibliograph/ui/window/ImportWindow.js:169
+#: bibliograph/ui/window/ImportWindow.js:176
 msgid "You have to select one or more reference to import."
 msgstr "Sie müssen eine oder mehr Datensätze zum importieren auswählen."
 
 #: bibliograph/plugin/z3950/ImportWindow.js:96
-#: bibliograph/ui/window/ImportWindow.js:179
+#: bibliograph/ui/window/ImportWindow.js:186
 msgid "Please select a folder first."
 msgstr "Bitte wählen sie einen Ordner aus, in den importiert werden soll. "
 
 #: bibliograph/plugin/z3950/ImportWindow.js:104
-#: bibliograph/ui/window/ImportWindow.js:187
+#: bibliograph/ui/window/ImportWindow.js:194
 msgid "Cannot determine selected folder."
 msgstr "Kann den gewählten Ordner nicht finden."
 
 #: bibliograph/plugin/z3950/ImportWindow.js:109
-#: bibliograph/ui/window/ImportWindow.js:192
+#: bibliograph/ui/window/ImportWindow.js:199
 msgid "Invalid target folder. You can only import into normal folders."
 msgstr "Ungültiger Zielordner. Sie können nur in normale Ordner importieren."
 
 #: bibliograph/plugin/z3950/ImportWindow.js:118
-#: bibliograph/ui/window/ImportWindow.js:201
+#: bibliograph/ui/window/ImportWindow.js:208
 msgid "Importing references..."
 msgstr "Importiere die Datensätze ..."
 
@@ -208,15 +208,15 @@ msgstr "Bitte geben sie einen Suchausdruck ein"
 
 #: bibliograph/plugin/z3950/ImportWindowUi.js:88
 #: bibliograph/plugin/z3950/ImportWindowUi.js:91
-#: bibliograph/ui/window/ImportWindowUi.js:106
-#: bibliograph/ui/window/ImportWindowUi.js:109
+#: bibliograph/ui/window/ImportWindowUi.js:124
+#: bibliograph/ui/window/ImportWindowUi.js:127
 msgid "Import selected records"
 msgstr "Augewählte Datensätze importieren"
 
 #: bibliograph/plugin/z3950/ImportWindowUi.js:96
 #: bibliograph/plugin/z3950/ImportWindowUi.js:97
-#: bibliograph/ui/window/ImportWindowUi.js:117
-#: bibliograph/ui/window/ImportWindowUi.js:118
+#: bibliograph/ui/window/ImportWindowUi.js:137
+#: bibliograph/ui/window/ImportWindowUi.js:138
 msgid "Close"
 msgstr "Schließen"
 
@@ -262,8 +262,8 @@ msgstr "Verschiebe Ordner ..."
 
 #: bibliograph/ui/folder/TreeView.js:161
 msgid ""
-"Do you really want to delete all references and folders in the trash folder? "
-"This cannot be undone."
+"Do you really want to delete all references and folders in the trash folder?"
+" This cannot be undone."
 msgstr ""
 "Wollen sie wirklich alle Datensätze und Ordner im Mülleimer endgültig "
 "löschen? Das kann nicht rückgängig gemacht werden."
@@ -304,17 +304,18 @@ msgid "Reload"
 msgstr "Neu laden"
 
 #: bibliograph/ui/item/DuplicatesView.js:161
-#: bibliograph/ui/reference/ListView.js:1088
-#: bibliograph/ui/reference/ListView.js:1105
-#: bibliograph/ui/reference/ListView.js:1119
-#: bibliograph/ui/reference/ListView.js:1134
+#: bibliograph/ui/reference/ListView.js:1097
+#: bibliograph/ui/reference/ListView.js:1114
+#: bibliograph/ui/reference/ListView.js:1128
+#: bibliograph/ui/reference/ListView.js:1143
 #: bibliograph/ui/item/RecordInfo.js:167
 msgid "Processing request..."
 msgstr "Verarbeite die Anfrage ..."
 
 #: bibliograph/ui/item/DuplicatesViewUi.js:40
 msgid "This table shows potential duplicates of the current record."
-msgstr "Diese Tabelle zeigt potentielle Dubletten des ausgewählten Datensatzes"
+msgstr ""
+"Diese Tabelle zeigt potentielle Dubletten des ausgewählten Datensatzes"
 
 #: bibliograph/ui/item/DuplicatesViewUi.js:61
 msgid "Type"
@@ -523,29 +524,30 @@ msgstr ""
 "Die Anwendung ist zurzeit im Entwicklungsmodus. Auf einem öffentlichen "
 "Server darf das nie der Fall sein. "
 
-#: bibliograph/ui/reference/ListView.js:481
+#: bibliograph/ui/reference/ListView.js:487
 msgid "Loading table ..."
 msgstr "Lade Tabelle ..."
 
-#: bibliograph/ui/reference/ListView.js:998
+#: bibliograph/ui/reference/ListView.js:1007
 msgid "You cannot create an item outside a folder"
 msgstr "Sie können keinen Datensatz außerhalb eines Ordners erstellen"
 
-#: bibliograph/ui/reference/ListView.js:1014
+#: bibliograph/ui/reference/ListView.js:1023
 msgid "Do your really want to remove the selected references?"
 msgstr "Wollen Sie wirklich die ausgewählten Datensätze entfernen?"
 
-#: bibliograph/ui/reference/ListView.js:1015
-msgid "Do your really want to remove the selected references from this folder?"
+#: bibliograph/ui/reference/ListView.js:1024
+msgid ""
+"Do your really want to remove the selected references from this folder?"
 msgstr ""
-"Möchten Sie die ausgewählten Datensätze wirklich aus diesem Ordner entfernen?"
-"\t"
+"Möchten Sie die ausgewählten Datensätze wirklich aus diesem Ordner "
+"entfernen?\t"
 
-#: bibliograph/ui/reference/ListView.js:1039
+#: bibliograph/ui/reference/ListView.js:1048
 msgid "Do your really want to move the selected references to '%1'?"
 msgstr "Wollen Sie wirklich die augewählten Datensätze nach '%1' verschieben?"
 
-#: bibliograph/ui/reference/ListView.js:1065
+#: bibliograph/ui/reference/ListView.js:1074
 msgid "Do your really want to copy the selected referencesto '%1'?"
 msgstr "Wollen Sie wirklich die ausgewählten Datensätze nach '%1' kopieren?"
 
@@ -676,15 +678,15 @@ msgstr "OK"
 msgid "Select"
 msgstr "Auswählen"
 
-#: bibliograph/ui/window/ImportWindow.js:90
+#: bibliograph/ui/window/ImportWindow.js:94
 msgid "1. Choose file"
 msgstr "1. Datei auswählen"
 
-#: bibliograph/ui/window/ImportWindow.js:107
+#: bibliograph/ui/window/ImportWindow.js:111
 msgid "Uploading file..."
 msgstr "Lade Datei auf den Server ..."
 
-#: bibliograph/ui/window/ImportWindow.js:142
+#: bibliograph/ui/window/ImportWindow.js:149
 msgid "Processing references..."
 msgstr "Verarbeite die Dateisätze ..."
 
@@ -697,8 +699,8 @@ msgstr "Aus Datei importieren"
 msgid "3. Upload file"
 msgstr "3. Datei hochladen"
 
-#: bibliograph/ui/window/ImportWindowUi.js:99
-#: bibliograph/ui/window/ImportWindowUi.js:101
+#: bibliograph/ui/window/ImportWindowUi.js:113
+#: bibliograph/ui/window/ImportWindowUi.js:115
 msgid "Select all"
 msgstr "Alle auswählen"
 
@@ -766,8 +768,8 @@ msgstr "Wird den Benutzern im Nur-Lese-Modus und bei Zugangssperre angezeigt."
 msgid "Search Help Window"
 msgstr "Hilfe für die Suche"
 
-#~ msgid "Display Duplicate"
-#~ msgstr "Dublette anzeigen\t"
-
 #~ msgid "Delete Duplicate"
 #~ msgstr "Dubletten löschen"
+
+#~ msgid "Display Duplicate"
+#~ msgstr "Dublette anzeigen\t"

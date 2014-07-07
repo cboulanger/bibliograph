@@ -1,9 +1,9 @@
 Release notes
 =============
 
-Version 2.1 (June 2014)
+Version 2.1 (Mid-2014)
 -----------------------
-A large number of changes, fixes, improvements and refactoring under the hood (>180 commits), 
+A large number of changes, fixes, improvements and refactoring under the hood,
 while staying backwards-compatible for database data and plugin code.
 - upgraded qooxdoo to version 3.5.1 on the frontend and to PHP 5.3. on the backend
 - clean-up and refactoring of the backend and the qcl library. Fixed various problems related to session management.

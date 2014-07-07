@@ -11,72 +11,72 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: bibliograph/Main.js:296
+#: bibliograph/Main.js:307
 msgid "Setting up application..."
 msgstr ""
 
-#: bibliograph/Main.js:317
+#: bibliograph/Main.js:328
 msgid "Connecting with server..."
 msgstr ""
 
-#: bibliograph/Main.js:328
+#: bibliograph/Main.js:339
 msgid "Loading configuration ..."
 msgstr ""
 
-#: bibliograph/Main.js:344
+#: bibliograph/Main.js:355
 msgid "Loading datasources ..."
 msgstr ""
 
-#: bibliograph/Main.js:369
+#: bibliograph/Main.js:380
 msgid "Loading plugins ..."
 msgstr ""
 
-#: bibliograph/Main.js:373
+#: bibliograph/Main.js:384
 msgid "Loaded plugin %1 of %2 : %3 ..."
 msgstr ""
 
-#: bibliograph/Main.js:499
+#: bibliograph/Main.js:510
 msgid ""
 "The datasource has just been restored to a previous state and will be "
 "reloaded"
 msgstr ""
 
-#: bibliograph/Main.js:596
+#: bibliograph/Main.js:607
 msgid "Loading datasource information ..."
 msgstr ""
 
-#: bibliograph/Main.js:755
+#: bibliograph/Main.js:766
 msgid ""
 "To log in, you need a secure connection. After you press 'OK', the "
 "application will be reloaded in secure mode. After the application finished "
 "loading, you can log in again."
 msgstr ""
 
-#: bibliograph/Main.js:766
+#: bibliograph/Main.js:777
 msgid ""
 "The application is currently in a read-only state. Only the administrator "
 "can log in."
 msgstr ""
 
-#: bibliograph/Main.js:800
+#: bibliograph/Main.js:811
 msgid "Authenticating ..."
 msgstr ""
 
-#: bibliograph/Main.js:883
+#: bibliograph/Main.js:894
 msgid "You don't have access to any datasource on the server."
 msgstr ""
 
-#: bibliograph/Main.js:935
+#: bibliograph/Main.js:946
 msgid ""
 "Cannot open help window. Please disable the popup-blocker of your browser "
 "for this website."
 msgstr ""
 
-#: bibliograph/plugin/isbnscanner/Plugin.js:60 bibliograph/Main.js:951
+#: bibliograph/plugin/isbnscanner/Plugin.js:60 bibliograph/Main.js:962
 msgid "Please wait ..."
 msgstr ""
 
-#: bibliograph/Main.js:1026
+#: bibliograph/Main.js:1037
 msgid "Retrieving user data..."
 msgstr ""
 
@@ -147,27 +147,27 @@ msgid "Webservice (Slower)"
 msgstr ""
 
 #: bibliograph/plugin/z3950/ImportWindow.js:86
-#: bibliograph/ui/window/ImportWindow.js:169
+#: bibliograph/ui/window/ImportWindow.js:176
 msgid "You have to select one or more reference to import."
 msgstr ""
 
 #: bibliograph/plugin/z3950/ImportWindow.js:96
-#: bibliograph/ui/window/ImportWindow.js:179
+#: bibliograph/ui/window/ImportWindow.js:186
 msgid "Please select a folder first."
 msgstr ""
 
 #: bibliograph/plugin/z3950/ImportWindow.js:104
-#: bibliograph/ui/window/ImportWindow.js:187
+#: bibliograph/ui/window/ImportWindow.js:194
 msgid "Cannot determine selected folder."
 msgstr ""
 
 #: bibliograph/plugin/z3950/ImportWindow.js:109
-#: bibliograph/ui/window/ImportWindow.js:192
+#: bibliograph/ui/window/ImportWindow.js:199
 msgid "Invalid target folder. You can only import into normal folders."
 msgstr ""
 
 #: bibliograph/plugin/z3950/ImportWindow.js:118
-#: bibliograph/ui/window/ImportWindow.js:201
+#: bibliograph/ui/window/ImportWindow.js:208
 msgid "Importing references..."
 msgstr ""
 
@@ -189,15 +189,15 @@ msgstr ""
 
 #: bibliograph/plugin/z3950/ImportWindowUi.js:88
 #: bibliograph/plugin/z3950/ImportWindowUi.js:91
-#: bibliograph/ui/window/ImportWindowUi.js:106
-#: bibliograph/ui/window/ImportWindowUi.js:109
+#: bibliograph/ui/window/ImportWindowUi.js:124
+#: bibliograph/ui/window/ImportWindowUi.js:127
 msgid "Import selected records"
 msgstr ""
 
 #: bibliograph/plugin/z3950/ImportWindowUi.js:96
 #: bibliograph/plugin/z3950/ImportWindowUi.js:97
-#: bibliograph/ui/window/ImportWindowUi.js:117
-#: bibliograph/ui/window/ImportWindowUi.js:118
+#: bibliograph/ui/window/ImportWindowUi.js:137
+#: bibliograph/ui/window/ImportWindowUi.js:138
 msgid "Close"
 msgstr ""
 
@@ -283,10 +283,10 @@ msgid "Reload"
 msgstr ""
 
 #: bibliograph/ui/item/DuplicatesView.js:161
-#: bibliograph/ui/reference/ListView.js:1088
-#: bibliograph/ui/reference/ListView.js:1105
-#: bibliograph/ui/reference/ListView.js:1119
-#: bibliograph/ui/reference/ListView.js:1134
+#: bibliograph/ui/reference/ListView.js:1097
+#: bibliograph/ui/reference/ListView.js:1114
+#: bibliograph/ui/reference/ListView.js:1128
+#: bibliograph/ui/reference/ListView.js:1143
 #: bibliograph/ui/item/RecordInfo.js:167
 msgid "Processing request..."
 msgstr ""
@@ -499,28 +499,28 @@ msgid ""
 "case on a public server."
 msgstr ""
 
-#: bibliograph/ui/reference/ListView.js:481
+#: bibliograph/ui/reference/ListView.js:487
 msgid "Loading table ..."
 msgstr ""
 
-#: bibliograph/ui/reference/ListView.js:998
+#: bibliograph/ui/reference/ListView.js:1007
 msgid "You cannot create an item outside a folder"
 msgstr ""
 
-#: bibliograph/ui/reference/ListView.js:1014
+#: bibliograph/ui/reference/ListView.js:1023
 msgid "Do your really want to remove the selected references?"
 msgstr ""
 
-#: bibliograph/ui/reference/ListView.js:1015
+#: bibliograph/ui/reference/ListView.js:1024
 msgid ""
 "Do your really want to remove the selected references from this folder?"
 msgstr ""
 
-#: bibliograph/ui/reference/ListView.js:1039
+#: bibliograph/ui/reference/ListView.js:1048
 msgid "Do your really want to move the selected references to '%1'?"
 msgstr ""
 
-#: bibliograph/ui/reference/ListView.js:1065
+#: bibliograph/ui/reference/ListView.js:1074
 msgid "Do your really want to copy the selected referencesto '%1'?"
 msgstr ""
 
@@ -651,15 +651,15 @@ msgstr ""
 msgid "Select"
 msgstr ""
 
-#: bibliograph/ui/window/ImportWindow.js:90
+#: bibliograph/ui/window/ImportWindow.js:94
 msgid "1. Choose file"
 msgstr ""
 
-#: bibliograph/ui/window/ImportWindow.js:107
+#: bibliograph/ui/window/ImportWindow.js:111
 msgid "Uploading file..."
 msgstr ""
 
-#: bibliograph/ui/window/ImportWindow.js:142
+#: bibliograph/ui/window/ImportWindow.js:149
 msgid "Processing references..."
 msgstr ""
 
@@ -672,8 +672,8 @@ msgstr ""
 msgid "3. Upload file"
 msgstr ""
 
-#: bibliograph/ui/window/ImportWindowUi.js:99
-#: bibliograph/ui/window/ImportWindowUi.js:101
+#: bibliograph/ui/window/ImportWindowUi.js:113
+#: bibliograph/ui/window/ImportWindowUi.js:115
 msgid "Select all"
 msgstr ""
 
@@ -741,8 +741,8 @@ msgstr ""
 msgid "Search Help Window"
 msgstr ""
 
-#~ msgid "Display Duplicate"
+#~ msgid "Delete Duplicate"
 #~ msgstr ""
 
-#~ msgid "Delete Duplicate"
+#~ msgid "Display Duplicate"
 #~ msgstr ""

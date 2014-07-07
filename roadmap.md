@@ -17,23 +17,15 @@ Version 2.2
 This version will contain backwards-incompatible changes to the database and the
 plugin architecture.
 
-Features:
----------
+Major changes:
+--------------
 - move authors & keywords to own tables to allow metadata connections
-
-Frontent/Backend
-----------------
-- move plugins out of bibliograph namespace into separate hierarchy containing 
+- move plugins out of bibliograph namespace into separate hierarchy containing
   frontend & backend code
 
-Frontend
---------
+Technical stuff
+---------------
 - Replace persist.js library with qooxdoo localStorage Wrapper
-
-Backend
--------
-- qcl: rewrite test suites 
-- qcl: refactor sql queries using safe parameters
 - qcl: refactor qcl_data_model_db_QueryBehavior to deal with rowCount problems
 - qcl: Remove unnecessary Exceptions, reduce to a basic set
 - qcl: Integrate qcl/lib/rpcphp/server/JsonRpcServer.php and tidy up

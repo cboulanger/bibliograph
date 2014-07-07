@@ -4,11 +4,9 @@ Todos
 Frontend
 --------
 - Remove generator warnings
-- Add missing translations
 
 Backend
 -------
-- Locale is not correctly set
 - warn about unsafe settings during setup
 - add license text
 - Repair "Send Bug Report" feature
