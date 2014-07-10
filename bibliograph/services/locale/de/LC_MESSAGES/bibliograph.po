@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Bibliograph 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-06 23:08+0100\n"
-"PO-Revision-Date: 2014-07-06 23:10+0100\n"
+"POT-Creation-Date: 2014-07-10 23:48+0100\n"
+"PO-Revision-Date: 2014-07-10 23:49+0100\n"
 "Last-Translator: Christian Boulanger <info@bibliograph.org>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop;tr;trn\n"
 "X-Poedit-Basepath: .\n"
-"X-Generator: Poedit 1.6.5\n"
+"X-Generator: Poedit 1.6.6\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SearchPath-0: ../../../class\n"
 
@@ -1262,25 +1262,36 @@ msgstr ""
 "Die Anmeldung muss über eine sichere Verbindung erfolgen, d.h. über eine "
 "Adresse, die mit \"https\" beginnt."
 
+#: ../../../class/qcl/access/SessionController.php:117
 #: ../../../class/qcl/access/UserController.php:407
-msgid "Access denied."
-msgstr "Zugang verweigert."
+#: ../../../class/qcl/access/UserController.php:429
+msgid "Please log in again."
+msgstr "Bitte erneut anmelden.\t"
 
-#: ../../../class/qcl/access/UserController.php:430
-msgid "Your session has expired."
+#: ../../../class/qcl/access/SessionController.php:117
+#: ../../../class/qcl/access/UserController.php:429
+msgid "Session has expired. "
 msgstr "Ihre Sitzung ist abgelaufen."
 
-#: ../../../class/qcl/access/UserController.php:471
+#: ../../../class/qcl/access/UserController.php:407
+msgid "Invalid session. "
+msgstr "Ungültige Sitzungskennung."
+
+#: ../../../class/qcl/access/UserController.php:470
 msgid "Invalid user name."
 msgstr "Ungültiger Nutzername\t"
 
-#: ../../../class/qcl/access/UserController.php:479
+#: ../../../class/qcl/access/UserController.php:478
 msgid "User is deactivated."
 msgstr "Dieser Benutzer ist deaktiviert."
 
-#: ../../../class/qcl/access/UserController.php:494
+#: ../../../class/qcl/access/UserController.php:493
 msgid "Wrong password."
 msgstr "Das Passwort ist falsch."
+
+#: ../../../class/qcl/access/UserController.php:571
+msgid "You will be logged out. Please reload the application and start again."
+msgstr "Sie werden abgemeldet. Bitte laden Sie die Anwendung erneut."
 
 #: ../../../class/qcl/access/model/Group.php:102
 msgid "Default role for new users"
@@ -1405,6 +1416,9 @@ msgstr "Pfad"
 #, php-format
 msgid "File '%s' does not exist in datasource '%s'"
 msgstr "Die Datei '%s' existiert in der Datenquelle '%s' nicht."
+
+#~ msgid "Access denied."
+#~ msgstr "Zugang verweigert."
 
 #~ msgid "Do you really want to reset/upgrade the '%s' data?"
 #~ msgstr ""
