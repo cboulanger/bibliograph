@@ -11,72 +11,76 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: bibliograph/Main.js:307
+#: bibliograph/Main.js:210
+msgid "No internet connection."
+msgstr ""
+
+#: bibliograph/Main.js:317
 msgid "Setting up application..."
 msgstr ""
 
-#: bibliograph/Main.js:328
+#: bibliograph/Main.js:338
 msgid "Connecting with server..."
 msgstr ""
 
-#: bibliograph/Main.js:339
+#: bibliograph/Main.js:349
 msgid "Loading configuration ..."
 msgstr ""
 
-#: bibliograph/Main.js:355
+#: bibliograph/Main.js:365
 msgid "Loading datasources ..."
 msgstr ""
 
-#: bibliograph/Main.js:380
+#: bibliograph/Main.js:390
 msgid "Loading plugins ..."
 msgstr ""
 
-#: bibliograph/Main.js:384
+#: bibliograph/Main.js:394
 msgid "Loaded plugin %1 of %2 : %3 ..."
 msgstr ""
 
-#: bibliograph/Main.js:510
+#: bibliograph/Main.js:528
 msgid ""
 "The datasource has just been restored to a previous state and will be "
 "reloaded"
 msgstr ""
 
-#: bibliograph/Main.js:607
+#: bibliograph/Main.js:625
 msgid "Loading datasource information ..."
 msgstr ""
 
-#: bibliograph/Main.js:766
+#: bibliograph/Main.js:784
 msgid ""
 "To log in, you need a secure connection. After you press 'OK', the "
 "application will be reloaded in secure mode. After the application finished "
 "loading, you can log in again."
 msgstr ""
 
-#: bibliograph/Main.js:777
+#: bibliograph/Main.js:795
 msgid ""
 "The application is currently in a read-only state. Only the administrator "
 "can log in."
 msgstr ""
 
-#: bibliograph/Main.js:811
+#: bibliograph/Main.js:829
 msgid "Authenticating ..."
 msgstr ""
 
-#: bibliograph/Main.js:894
+#: bibliograph/Main.js:912
 msgid "You don't have access to any datasource on the server."
 msgstr ""
 
-#: bibliograph/Main.js:946
+#: bibliograph/Main.js:964
 msgid ""
 "Cannot open help window. Please disable the popup-blocker of your browser "
 "for this website."
 msgstr ""
 
-#: bibliograph/plugin/isbnscanner/Plugin.js:60 bibliograph/Main.js:962
+#: bibliograph/plugin/isbnscanner/Plugin.js:60 bibliograph/Main.js:980
 msgid "Please wait ..."
 msgstr ""
 
-#: bibliograph/Main.js:1037
+#: bibliograph/Main.js:1055
 msgid "Retrieving user data..."
 msgstr ""
 

@@ -69,7 +69,6 @@
 qx.Class.define("qcl.data.store.JsonRpc", 
 {
   extend : qx.core.Object,
-  include : [qx.locale.MTranslation],
 
  /**  
   * @param url {String|null} The url of the jsonrpc service. If no url is
@@ -612,7 +611,7 @@ qx.Class.define("qcl.data.store.JsonRpc",
        */
       if ( ex.code == 0 )
       {
-        ex.message = this.tr("No internet connection.");
+        ex.message = app.tr("No internet connection.");
       }
 
       /*

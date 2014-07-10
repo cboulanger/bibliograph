@@ -1,43 +1,47 @@
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: you@your.org\n"
 "POT-Creation-Date: 2010-05-13 19:30+0100\n"
-"PO-Revision-Date: 2014-06-11 22:43+0100\n"
+"PO-Revision-Date: 2014-07-10 23:48+0100\n"
 "Last-Translator: Christian Boulanger <info@bibliograph.org>\n"
 "Language-Team: Team <yourteam@your.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: de\n"
-"X-Generator: Poedit 1.6.5\n"
+"X-Generator: Poedit 1.6.6\n"
 
-#: bibliograph/Main.js:307
+#: bibliograph/Main.js:210
+msgid "No internet connection."
+msgstr "Keine Internetverbindung."
+
+#: bibliograph/Main.js:317
 msgid "Setting up application..."
 msgstr "Konfiguriere die Anwendung ..."
 
-#: bibliograph/Main.js:328
+#: bibliograph/Main.js:338
 msgid "Connecting with server..."
 msgstr "Verbinde mit dem Server ..."
 
-#: bibliograph/Main.js:339
+#: bibliograph/Main.js:349
 msgid "Loading configuration ..."
 msgstr "Lade Konfiguration ..."
 
-#: bibliograph/Main.js:355
+#: bibliograph/Main.js:365
 msgid "Loading datasources ..."
 msgstr "Lade Liste der Datenbanken ..."
 
-#: bibliograph/Main.js:380
+#: bibliograph/Main.js:390
 msgid "Loading plugins ..."
 msgstr "Plugins werden geladen ..."
 
-#: bibliograph/Main.js:384
+#: bibliograph/Main.js:394
 msgid "Loaded plugin %1 of %2 : %3 ..."
 msgstr "Lade Plugin %1 von %2 : %3 ..."
 
-#: bibliograph/Main.js:510
+#: bibliograph/Main.js:528
 msgid ""
 "The datasource has just been restored to a previous state and will be "
 "reloaded"
@@ -45,11 +49,11 @@ msgstr ""
 "Die Datenbank wurde gerade auf einen früheren Zustand zurückgesetzt wird "
 "jetzt neu geladen."
 
-#: bibliograph/Main.js:607
+#: bibliograph/Main.js:625
 msgid "Loading datasource information ..."
 msgstr "Informationen zur Datenquelle werden abgerufen..."
 
-#: bibliograph/Main.js:766
+#: bibliograph/Main.js:784
 msgid ""
 "To log in, you need a secure connection. After you press 'OK', the "
 "application will be reloaded in secure mode. After the application finished "
@@ -60,7 +64,7 @@ msgstr ""
 "geladen. Bitte melden Sie sich erneut an, sobald der Ladevorgang "
 "abgeschlossen ist."
 
-#: bibliograph/Main.js:777
+#: bibliograph/Main.js:795
 msgid ""
 "The application is currently in a read-only state. Only the administrator "
 "can log in."
@@ -68,15 +72,15 @@ msgstr ""
 "Das Programm ist gerade im Nur-Lese-Modus. Nur der Administrator kann sich "
 "einloggen. "
 
-#: bibliograph/Main.js:811
+#: bibliograph/Main.js:829
 msgid "Authenticating ..."
 msgstr "Anmeldung ..."
 
-#: bibliograph/Main.js:894
+#: bibliograph/Main.js:912
 msgid "You don't have access to any datasource on the server."
 msgstr "Sie haben keinen Zugang zu Datenbanken auf diesem Server."
 
-#: bibliograph/Main.js:946
+#: bibliograph/Main.js:964
 msgid ""
 "Cannot open help window. Please disable the popup-blocker of your browser "
 "for this website."
@@ -84,11 +88,11 @@ msgstr ""
 "Die Hilfeseite kann nicht aufgerufen werden. Bitte schalten Sie eventuelle "
 "Popup-Blockierer für diese Webseite ab. "
 
-#: bibliograph/plugin/isbnscanner/Plugin.js:60 bibliograph/Main.js:962
+#: bibliograph/plugin/isbnscanner/Plugin.js:60 bibliograph/Main.js:980
 msgid "Please wait ..."
 msgstr "Bitte warten ..."
 
-#: bibliograph/Main.js:1037
+#: bibliograph/Main.js:1055
 msgid "Retrieving user data..."
 msgstr "Lade Benutzerdaten ..."
 
@@ -138,11 +142,11 @@ msgstr ""
 
 #: bibliograph/plugin/isbnscanner/Plugin.js:98
 msgid ""
-"ISBN input detected. Please wait for the input dialog and repeat the input "
-"..."
+"ISBN input detected. Please wait for the input dialog and repeat the "
+"input ..."
 msgstr ""
-"ISBN Eingabe erkannt. Bitte warten Sie auf den Eingabedialog und wiederholen"
-" Sie die Eingabe ..."
+"ISBN Eingabe erkannt. Bitte warten Sie auf den Eingabedialog und wiederholen "
+"Sie die Eingabe ..."
 
 #: bibliograph/plugin/isbnscanner/Plugin.js:120
 msgid "Import by ISBN"
@@ -262,8 +266,8 @@ msgstr "Verschiebe Ordner ..."
 
 #: bibliograph/ui/folder/TreeView.js:161
 msgid ""
-"Do you really want to delete all references and folders in the trash folder?"
-" This cannot be undone."
+"Do you really want to delete all references and folders in the trash folder? "
+"This cannot be undone."
 msgstr ""
 "Wollen sie wirklich alle Datensätze und Ordner im Mülleimer endgültig "
 "löschen? Das kann nicht rückgängig gemacht werden."
@@ -314,8 +318,7 @@ msgstr "Verarbeite die Anfrage ..."
 
 #: bibliograph/ui/item/DuplicatesViewUi.js:40
 msgid "This table shows potential duplicates of the current record."
-msgstr ""
-"Diese Tabelle zeigt potentielle Dubletten des ausgewählten Datensatzes"
+msgstr "Diese Tabelle zeigt potentielle Dubletten des ausgewählten Datensatzes"
 
 #: bibliograph/ui/item/DuplicatesViewUi.js:61
 msgid "Type"
@@ -537,11 +540,10 @@ msgid "Do your really want to remove the selected references?"
 msgstr "Wollen Sie wirklich die ausgewählten Datensätze entfernen?"
 
 #: bibliograph/ui/reference/ListView.js:1024
-msgid ""
-"Do your really want to remove the selected references from this folder?"
+msgid "Do your really want to remove the selected references from this folder?"
 msgstr ""
-"Möchten Sie die ausgewählten Datensätze wirklich aus diesem Ordner "
-"entfernen?\t"
+"Möchten Sie die ausgewählten Datensätze wirklich aus diesem Ordner entfernen?"
+"\t"
 
 #: bibliograph/ui/reference/ListView.js:1048
 msgid "Do your really want to move the selected references to '%1'?"
