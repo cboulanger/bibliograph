@@ -769,6 +769,11 @@ class qcl_config_ConfigModel
 
     foreach ( $this->keys() as $key )
     {
+      if( ! $key )
+      {
+        $this->warn("Empty config key!");
+        continue;
+      }
       $keys[]   = $key;
       $values[] = $this->getKey( $key, $userId );
       $types[]  = $this->keyType();
