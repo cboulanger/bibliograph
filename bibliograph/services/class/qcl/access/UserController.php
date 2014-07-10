@@ -18,6 +18,7 @@
 
 qcl_import("qcl_access_AbstractController");
 qcl_import("qcl_util_registry_Session");
+qcl_import("qcl_ui_dialog_Alert");
 
 /**
  * Access controller that handles authentication, access control
@@ -403,8 +404,7 @@ class qcl_access_UserController
       if ( $sessionId != $this->getSessionId() )
       {
         $this->warn("Invalid session id ($sessionId). Forcing logout...");
-        $this->forceLogout();
-        throw new JsonRpcException($this->tr("Access denied."));
+        $this->forceLogout($this->tr("Invalid session." . " " . $this->tr("Please log in again.")));
       }
 
       /*
@@ -426,8 +426,7 @@ class qcl_access_UserController
           /*
            * force log out because of timeout
            */
-          $this->forceLogout();
-          throw new JsonRpcException($this->tr("Your session has expired."));
+          $this->forceLogout($this->tr("Session has expired." . " " . $this->tr("Please log in again.")));
         }
       }
     }
@@ -562,13 +561,14 @@ class qcl_access_UserController
   }
 
   /**
-   * Forces a logout on client and server
-   * @return unknown_type
+   * Forces a logout on client by printing the required json response and exiting.
+   * @param string|null $msg If given, show an alert dialog with the message.
+   * @return void
    */
-  public function forceLogout()
+  public function forceLogout($msg="")
   {
-    $this->fireClientEvent("logout");
     $this->logout();
+    throw new JsonRpcException( $msg . " " . $this->tr("You will be logged out. Please reload the application and start again."));
   }
 
   /**
@@ -604,8 +604,6 @@ class qcl_access_UserController
       $activeUser->delete();
     }
     
-        
-
     /*
      * unset active user
      */
@@ -647,6 +645,7 @@ class qcl_access_UserController
    * Creates a valid user session for the given user id, i.e. creates
    * the user object if needed. A valid session must already exist.
    * @param $userId
+   * @throws qcl_access_AccessDeniedException
    * @return void
    */
   public function createUserSessionByUserId( $userId )

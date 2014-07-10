@@ -70,7 +70,7 @@ class qcl_access_SessionController
     if ( ! $sessionId )
     {
       $this->log("Could not get session id from request...", QCL_LOG_AUTHENTICATION );
-      throw new qcl_access_AccessDeniedException("No valid session id.");
+      throw new qcl_access_InvalidSessionException("No valid session id.");
     }
 
     /*
@@ -100,7 +100,7 @@ class qcl_access_SessionController
        */
       else
       {
-        throw new qcl_access_AccessDeniedException("Invalid session id.");
+        throw $e;
       }
     }
 
@@ -114,8 +114,7 @@ class qcl_access_SessionController
      */
     if ( ! $this->checkTimeout( $userId ) )
     {
-      $this->forceLogout();
-      throw new qcl_access_AccessDeniedException("Session timed out.");
+      $this->forceLogout($this->tr("Session has expired." . " " . $this->tr("Please log in again.")));
     }
 
     /*
@@ -132,6 +131,7 @@ class qcl_access_SessionController
    * Creates a valid user session for the given user id, i.e. creates
    * the user object and the session. Overridden to create session record.
    * @param $userId
+   * @throws qcl_access_AccessDeniedException
    * @return void
    */
   public function createUserSessionByUserId( $userId )
@@ -261,6 +261,7 @@ class qcl_access_SessionController
   /**
    * Registers the current session with the current user. Cleans up stale
    * sessions
+   * @throws qcl_access_AccessDeniedException
    * @return void
    */
   public function registerSession()
@@ -273,7 +274,15 @@ class qcl_access_SessionController
      * register current session
      */
     $this->log( sprintf("Registering session '%s', for %s from IP %s ", $sessionId, $user, $remoteIp ), QCL_LOG_AUTHENTICATION );
-    $this->getSessionModel()->registerSession( $sessionId, $user, $remoteIp );
+
+    try
+    {
+      $this->getSessionModel()->registerSession( $sessionId, $user, $remoteIp );
+    }
+    catch ( qcl_access_InvalidSessionException $e)
+    {
+      $this->forceLogout( $e->getMessage() );
+    }
 
     /*
      * let the client know

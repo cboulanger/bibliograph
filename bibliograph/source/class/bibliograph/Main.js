@@ -476,6 +476,14 @@ qx.Class.define("bibliograph.Main",
       var bus = qx.event.message.Bus;
 
       /*
+       * server message to force logout the user
+       */
+      bus.subscribe("client.logout", function(e)
+      {
+        this.logout();
+      }, this);
+
+      /*
        * server message to set model type and id
        */
       bus.subscribe("bibliograph.setModel", function(e)

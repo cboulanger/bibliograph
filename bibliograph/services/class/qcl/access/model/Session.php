@@ -133,7 +133,7 @@ class qcl_access_model_Session
    * @param qcl_access_model_User $user
    * @param string $ip The IP address of the requesting client. This makes sure
    * session ids cannot be "stolen" by an intercepting party
-   * @throws qcl_access_AccessDeniedException
+   * @throws qcl_access_InvalidSessionException
    */
   function registerSession( $sessionId, qcl_access_model_User $user, $ip )
   {
@@ -142,25 +142,26 @@ class qcl_access_model_Session
      * if session id is present but linked to a different IP
      * there is a security breach, unless the request was originated
      * on the local host
+     * DISABLED
      */
-    $localhost    = ( $ip=="::1" or $ip=="127.0.0.1" or $ip=="0.0.0.0");
-    $sessionMismatch = $this->countWhere( array(
-      'namedId' => $sessionId,
-      'ip'      => array( "!=", $ip )
-    ) );
-    
-    if ( ! $localhost and $sessionMismatch )
-    {
-      if( QCL_ACCESS_ALLOW_IP_MISMATCH )
-      {
-        $this->log( "Origin IP of session has changed to $ip. Ignored as per QCL_ACCESS_ALLOW_IP_MISMATCH setting.", QCL_LOG_AUTHENTICATION);
-      }
-      else
-      {
-        $this->warn( "Origin IP of session has changed to $ip. Access denied.");
-        throw new qcl_access_AccessDeniedException("IP Mismatch. Access denied.");
-      }
-    }
+//    $localhost    = ( $ip=="::1" or $ip=="127.0.0.1" or $ip=="0.0.0.0");
+//    $sessionMismatch = $this->countWhere( array(
+//      'namedId' => $sessionId,
+//      'ip'      => array( "!=", $ip )
+//    ) );
+//
+//    if ( 0 or ! $localhost and $sessionMismatch )
+//    {
+//      if( QCL_ACCESS_ALLOW_IP_MISMATCH )
+//      {
+//        $this->log( "Origin IP of session has changed to $ip. Ignored as per QCL_ACCESS_ALLOW_IP_MISMATCH setting.", QCL_LOG_AUTHENTICATION);
+//      }
+//      else
+//      {
+//        $this->warn( "Origin IP of session has changed to $ip. Access denied.");
+//        throw new qcl_access_InvalidSessionException($this->tr("Your IP has changed."));
+//      }
+//    }
 
     /*
      * create new session data if it doesn't already exist
