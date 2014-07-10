@@ -69,6 +69,7 @@
 qx.Class.define("qcl.data.store.JsonRpc", 
 {
   extend : qx.core.Object,
+  include : [qx.locale.MTranslation],
 
  /**  
   * @param url {String|null} The url of the jsonrpc service. If no url is
@@ -604,20 +605,29 @@ qx.Class.define("qcl.data.store.JsonRpc",
      */
     _handleError : function( ex, id, serviceName, params )
     {
+      var app = qx.core.Init.getApplication();
+
+      /*
+       * offline, no internet connection
+       */
+      if ( ex.code == 0 )
+      {
+        ex.message = this.tr("No internet connection.");
+      }
+
       /*
        * log warning and information on the request to client log
        */
-      this.warn ( "JsonRpc Exception (#" + id + "): " + ex.message );
+      this.warn ( "JsonRpc Exception (#" + id + "): " + ex.message + " (" + ex.code + ")" );
 
-      if( typeof window.console == "object" )
-      {
-        console.log( {"Service Name" : serviceName, "Parameters" : params});
-      }
+//      if( typeof window.console == "object" )
+//      {
+//        console.log( {"Service Name" : serviceName, "Parameters" : params});
+//      }
 
       /*
        * hide any popup that might have been shown before request
        */
-      var app = qx.core.Init.getApplication();
       if ( typeof app.hidePopup == "function" )
       {
         app.hidePopup();
