@@ -38,6 +38,17 @@ class JsonRpcError extends AbstractError
   private $scriptTransportId = ScriptTransport_NotInUse;
 
   /**
+   * Constructor
+   * @param string $message
+   * @param int $code
+   */
+  function __construct( $message = "JSONRPC Error",
+                        $code = JsonRpcError_ScriptError)
+  {
+    parent::__construct($message, $code );
+  }
+
+  /**
    * Setter for script transport id
    * @param $id
    * @return unknown_type
@@ -112,6 +123,3 @@ class JsonRpcError extends AbstractError
     }
   }
 }
-
-
-?>

@@ -1,4 +1,4 @@
-<?php
+ <?php
 /*
  * qcl - the qooxdoo component library
  *
