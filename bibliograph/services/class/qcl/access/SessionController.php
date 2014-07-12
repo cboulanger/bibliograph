@@ -164,43 +164,11 @@ class qcl_access_SessionController
     }
     
     /*
-     * otherwise, try getting a session id from authenticating a
-     * user on-the-fly
+     * get session id from PHP session
      */
-    $username = qcl_server_Request::getInstance()->getServerData("username");
-    $password = qcl_server_Request::getInstance()->getServerData("password");
-
-    if ( $username and $password )
-    {
-      $this->log("Authenticating from server data, user '$username'", QCL_LOG_AUTHENTICATION );
-
-      /*
-       * can we authenticate with the server data?
-       */
-      try
-      {
-        $userId = $this->authenticate( $username, $password );
-        $this->createUserSessionByUserId( $userId );
-      }
-      catch(qcl_access_AuthenticationException $e) //TODO: do we need both AuthenticationException and AccesDeniedException?
-      {
-        throw new JsonRpcException($e->getMessage());
-      }
-    }
-    
-    /*
-     * getting it from the PHP session id
-     */
-    else
-    {
-      $this->log(sprintf(
-        "Getting session id from PHP session: '%s'", $this->getSessionId()
-      ), QCL_LOG_AUTHENTICATION );
-    }
-
-    /*
-     * return the (new) session id
-     */
+    $this->log(sprintf(
+      "Getting session id from PHP session: '%s'", $this->getSessionId()
+    ), QCL_LOG_AUTHENTICATION );
     return $this->getSessionId();
   }
 
@@ -339,7 +307,7 @@ class qcl_access_SessionController
   {
     if ( ! $sessionId )
     {
-      throw new qcl_access_InvalidSessionException( "Missing session id.");
+      throw new InvalidArgumentException( "Missing session id.");
     }
 
     $sessionModel = $this->getSessionModel();
@@ -361,10 +329,7 @@ class qcl_access_SessionController
     try
     {
       $this->getUserModel()->load( $activeUserId );
-      
-      /*
-       * mark user as online
-       */
+      // mark user as online
       $this->getUserModel()->set("online",true);
     }
     catch ( qcl_data_model_RecordNotFoundException $e )
@@ -376,14 +341,22 @@ class qcl_access_SessionController
 
   /**
    * Checks if any session exists that are connected to the user id. 
-   * If not, set the user's online status to false
+   * If not, set the user's online status to false.
    * @param integer $userId
-   * @return boolean
-   * @throws qcl_data_model_RecordNotFoundException if invalid user id is given
+   * @return boolean Whether the user is online or not.
+   * @throws LogicException if user does not exist.
    */
   public function checkOnlineStatus( $userId )
   {
-    $userModel = $this->getUserModel()->load( $userId );
+    try
+    {
+      $userModel = $this->getUserModel()->load( $userId );
+    }
+    catch(qcl_data_model_RecordNotFoundException $e)
+    {
+      throw new LogicException( "User #$userId does not exist." );
+    }
+
     try
     {
       $this->getSessionModel()->findLinked($userModel);
