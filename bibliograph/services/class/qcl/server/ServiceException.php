@@ -39,7 +39,7 @@ class qcl_server_ServiceException
    * @param int $origin
    */
   function __construct( $message = "Unspecified error",
-                        $code = JsonRpcError_Unknown,
+                        $code = JsonRpcError_ScriptError,
                         $silent = false,
                         $origin = JsonRpcError_Origin_Application)
   {
