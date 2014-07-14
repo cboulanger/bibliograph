@@ -2,40 +2,36 @@ msgid ""
 msgstr ""
 "Project-Id-Version: qcl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-10 07:28+0100\n"
-"PO-Revision-Date: 2010-10-10 07:30+0100\n"
-"Last-Translator: Christian Boulanger <c.boulanger@qxtransformer.org>\n"
+"POT-Creation-Date: 2014-07-14 08:13+0100\n"
+"PO-Revision-Date: 2014-07-14 08:15+0100\n"
+"Last-Translator: Christian Boulanger <info@bibliograph.org>\n"
 "Language-Team: \n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop;tr;trn;marktr\n"
 "X-Poedit-Basepath: .\n"
-"X-Poedit-Language: de\n"
+"X-Generator: Poedit 1.6.6\n"
 "X-Poedit-SearchPath-0: ../../..\n"
 
-#: ../../../access/ACLTool.php:50
-#: ../../../access/ACLTool.php:96
+#: ../../../access/ACLTool.php:50 ../../../access/ACLTool.php:96
 msgid "Users"
 msgstr "Benutzer/innen"
 
-#: ../../../access/ACLTool.php:56
-#: ../../../access/ACLTool.php:101
+#: ../../../access/ACLTool.php:56 ../../../access/ACLTool.php:101
 msgid "Roles"
 msgstr "Rollen"
 
-#: ../../../access/ACLTool.php:62
-#: ../../../access/ACLTool.php:106
+#: ../../../access/ACLTool.php:62 ../../../access/ACLTool.php:106
 msgid "Groups"
 msgstr "Gruppen"
 
-#: ../../../access/ACLTool.php:68
-#: ../../../access/ACLTool.php:111
+#: ../../../access/ACLTool.php:68 ../../../access/ACLTool.php:111
 msgid "Permissions"
 msgstr "Erlaubnisse"
 
-#: ../../../access/ACLTool.php:74
-#: ../../../access/ACLTool.php:116
+#: ../../../access/ACLTool.php:74 ../../../access/ACLTool.php:116
 msgid "Datasources"
 msgstr "Datenquellen"
 
@@ -59,157 +55,160 @@ msgstr "Erlaubnis"
 msgid "datasource"
 msgstr "Datenquelle"
 
-#: ../../../access/ACLTool.php:357
+#: ../../../access/ACLTool.php:363
 msgid "Relations"
 msgstr "Beziehungen"
 
-#: ../../../access/ACLTool.php:430
+#: ../../../access/ACLTool.php:436
 msgid "in"
 msgstr "in"
 
-#: ../../../access/ACLTool.php:468
+#: ../../../access/ACLTool.php:474
 msgid "In all groups"
 msgstr "In allen Gruppen"
 
-#: ../../../access/ACLTool.php:582
+#: ../../../access/ACLTool.php:588
 msgid "Do you want to remove only the datasource entry or all associated data?"
-msgstr "Wollen Sie nur den Datenquellen-Eintrag löschen oder auch die zugehörigen Daten?"
+msgstr ""
+"Wollen Sie nur den Datenquellen-Eintrag löschen oder auch die zugehörigen "
+"Daten?"
 
-#: ../../../access/ACLTool.php:583
+#: ../../../access/ACLTool.php:589
 msgid "All data"
 msgstr "Alle Daten"
 
-#: ../../../access/ACLTool.php:583
+#: ../../../access/ACLTool.php:589
 msgid "Entry only"
 msgstr "Nur den Eintrag"
 
-#: ../../../access/ACLTool.php:627
+#: ../../../access/ACLTool.php:633
 #, php-format
 msgid "Deleting datasource '%s' failed... "
 msgstr "Das Löschen der Datenquelle '%s' war nicht erfolgreich ..."
 
-#: ../../../access/ACLTool.php:630
+#: ../../../access/ACLTool.php:636
 #, php-format
 msgid "Datasource '%s' successfully deleted ... "
 msgstr "Datenquelle '%s' wurde gelöscht ..."
 
-#: ../../../access/ACLTool.php:838
+#: ../../../access/ACLTool.php:851
 msgid "Passwords do not match. Please try again"
 msgstr "Die Passwörter stimmen nicht überein"
 
-#: ../../../access/ACLTool.php:866
+#: ../../../access/ACLTool.php:879
 #, php-format
 msgid "An email has been sent to %s (%s) with information on the registration."
-msgstr "Eine Email mit Informationen zur Registrierung wurde an %s (%s) gesendet."
+msgstr ""
+"Eine Email mit Informationen zur Registrierung wurde an %s (%s) gesendet."
 
-#: ../../../access/ACLTool.php:874
+#: ../../../access/ACLTool.php:887
 #, php-format
-msgid "An email has been sent to %s (%s) to inform about the change of password."
+msgid ""
+"An email has been sent to %s (%s) to inform about the change of password."
 msgstr "%s (%s) wurde über die Änderung des Passworts per E-Mail informiert. "
 
-#: ../../../access/ACLTool.php:906
+#: ../../../access/ACLTool.php:919
 #, php-format
 msgid "Your registration at %s"
 msgstr "Ihre Registrierung bei %s"
 
-#: ../../../access/ACLTool.php:916
-#: ../../../access/ACLTool.php:955
+#: ../../../access/ACLTool.php:929 ../../../access/ACLTool.php:968
 #, php-format
 msgid "Dear %s,"
 msgstr "Sehr geehrte/r %s,"
 
-#: ../../../access/ACLTool.php:917
+#: ../../../access/ACLTool.php:930
 #, php-format
 msgid "You have been registered as a user at  '%s'."
 msgstr "Sie wurden auf bei '%s' als Benutzer/in registriert."
 
-#: ../../../access/ACLTool.php:918
-#: ../../../access/ACLTool.php:957
+#: ../../../access/ACLTool.php:931 ../../../access/ACLTool.php:970
 #, php-format
 msgid "Your username is '%s' and your password is '%s'"
-msgstr "Ihr Benutzername ist '%s' und Ihr Passwort ist '%s'. Nach dem Einloggen können Sie das Passwort verändern."
+msgstr ""
+"Ihr Benutzername ist '%s' und Ihr Passwort ist '%s'. Nach dem Einloggen "
+"können Sie das Passwort verändern."
 
-#: ../../../access/ACLTool.php:919
+#: ../../../access/ACLTool.php:932
 msgid "Please confirm your account by visiting the following link:"
-msgstr "Bitte bestätigen Sie Ihr Konto, in dem Sie den folgenden Link besuchen:"
+msgstr ""
+"Bitte bestätigen Sie Ihr Konto, in dem Sie den folgenden Link besuchen:"
 
-#: ../../../access/ACLTool.php:921
+#: ../../../access/ACLTool.php:934
 msgid "Thank you."
 msgstr "Vielen Dank."
 
-#: ../../../access/ACLTool.php:950
+#: ../../../access/ACLTool.php:963
 #, php-format
 msgid "Password change at %s"
 msgstr "Passwortänderung %s"
 
-#: ../../../access/ACLTool.php:956
+#: ../../../access/ACLTool.php:969
 #, php-format
 msgid "This is to inform you that your password has changed at '%s'."
-msgstr "Hiermit möchten wir Sie darüber benachrichtigen, dass Ihr Passwort bei '%s' geändert wurde."
+msgstr ""
+"Hiermit möchten wir Sie darüber benachrichtigen, dass Ihr Passwort bei '%s' "
+"geändert wurde."
 
-#: ../../../access/ACLTool.php:997
+#: ../../../access/ACLTool.php:1011
 #, php-format
 msgid "Thank you, %s, your email address has been confirmed."
 msgstr "Vielen Dank, %s, Ihre E-Mailadresse wurde bestätigt."
 
-#: ../../../access/ACLTool.php:998
+#: ../../../access/ACLTool.php:1012
 #, php-format
 msgid "You can now log in at <a href='%s'>this link</a>"
 msgstr "Sie können sich nun unter <a href='%s'>diesem Link</a> einloggen. "
 
-#: ../../../access/ACLTool.php:1006
+#: ../../../access/ACLTool.php:1020
 #, php-format
 msgid "The email address %s is invalid"
 msgstr "Die E-Mailadresse %s ist ungültig."
 
-#: ../../../access/ACLTool.php:1010
-msgid "Unknown error."
-msgstr "Unbekannter Fehler"
+#: ../../../access/Service.php:78
+msgid ""
+"Authentication must be done through a secure connection, using the https:// "
+"protocol."
+msgstr "Die Anmeldung muss über eine sichere Verbindung erfolgen (https:)."
 
-#: ../../../access/ACLTool.php:1045
-#, php-format
-msgid "Do you really want to reset/upgrade the '%s' data?"
-msgstr "Wollen Sie wirklich die Daten '%s' zurücksetzen/aktualisieren?"
+#: ../../../access/SessionController.php:117
+#: ../../../access/UserController.php:407
+#: ../../../access/UserController.php:429
+msgid "Please log in again."
+msgstr "Bitte erneut anmelden.\t"
 
-#: ../../../access/ACLTool.php:1071
-#, php-format
-msgid "'%s' data reset."
-msgstr "'%s' - Daten aktualisiert/zurückgesetzt."
+#: ../../../access/SessionController.php:117
+#: ../../../access/UserController.php:429
+msgid "Session has expired. "
+msgstr "Ihre Sitzung ist abgelaufen."
 
-#: ../../../access/ACLTool.php:1080
-#, php-format
-msgid "Do you really want to export the '%s' data to the filesystem?"
-msgstr "Wollen Sie wirklich die '%'-Daten exportieren?"
+#: ../../../access/UserController.php:407
+msgid "Invalid session. "
+msgstr "Ungültige Sitzung."
 
-#: ../../../access/ACLTool.php:1097
-#, php-format
-msgid "'%s' data exported to '%s'."
-msgstr "'%s' wurde nach '%s' exportiert."
-
-#: ../../../access/Controller.php:476
+#: ../../../access/UserController.php:470
 msgid "Invalid user name."
 msgstr "Ungültiger Benutzer/innen/name"
 
-#: ../../../access/Controller.php:491
+#: ../../../access/UserController.php:478
+msgid "User is deactivated."
+msgstr "Der Benutzer ist deaktiviert."
+
+#: ../../../access/UserController.php:493
 msgid "Wrong password."
 msgstr "Ungültiges Passwort"
 
-#: ../../../access/Service.php:78
-msgid "Authentication must be done through a secure connection, using the https:// protocol."
-msgstr "Die Anmeldung muss über eine sichere Verbindung erfolgen (https:)."
+#: ../../../access/UserController.php:571
+msgid "You will be logged out. Please reload the application and start again."
+msgstr "Sie werden abgemeldet. Bitte laden Sie die Anwendung neu."
 
-#: ../../../access/SessionController.php:94
-msgid "No valid session."
-msgstr "Ungültige Sitzung."
-
-#: ../../../access/model/Group.php:95
-#: ../../../access/model/Role.php:90
+#: ../../../access/model/Group.php:95 ../../../access/model/Role.php:90
+#: ../../../data/datasource/DbModel.php:191
 msgid "Name"
 msgstr "Name"
 
-#: ../../../access/model/Group.php:98
-#: ../../../access/model/Permission.php:84
-#: ../../../access/model/Role.php:93
+#: ../../../access/model/Group.php:98 ../../../access/model/Permission.php:84
+#: ../../../access/model/Role.php:93 ../../../data/datasource/DbModel.php:196
 msgid "Description"
 msgstr "Beschreibung"
 
@@ -221,69 +220,76 @@ msgstr "Standardrolle für neue Benutzer/innen"
 msgid "No role"
 msgstr "Keine Rolle"
 
-#: ../../../access/model/User.php:166
+#: ../../../access/model/User.php:172
 msgid "Full name"
 msgstr "Vollständiger Name"
 
-#: ../../../access/model/User.php:169
+#: ../../../access/model/User.php:175
 msgid "Email address"
 msgstr "E-Mailadresse"
 
-#: ../../../access/model/User.php:170
+#: ../../../access/model/User.php:176
 msgid "Enter a valid Email address"
 msgstr "Geben Sie eine gültige E-Mailadresse ein"
 
-#: ../../../access/model/User.php:176
+#: ../../../access/model/User.php:182
 msgid "Password"
 msgstr "Passwort"
 
-#: ../../../access/model/User.php:179
+#: ../../../access/model/User.php:185
 msgid "Leave blank if you don't want to change the password"
 msgstr "Bitte leer lassen, wenn Sie das Passwort nicht ändern möchten"
 
-#: ../../../access/model/User.php:185
-#: ../../../access/model/User.php:189
+#: ../../../access/model/User.php:191 ../../../access/model/User.php:195
 msgid "Repeat password"
 msgstr "Passwort wiederholen"
 
-#: ../../../access/model/User.php:277
+#: ../../../access/model/User.php:284
 msgid "Anonymous User"
 msgstr "Anonyme/r Benutzer/in"
 
-#: ../../../application/plugin/Service.php:70
+#: ../../../access/model/User.php:608
+msgid "Passwords do not match..."
+msgstr "Passwörter stimmen nicht überein.\t"
+
+#: ../../../access/model/User.php:612
+msgid "Password must be at least 8 characters long"
+msgstr "Das Passwort muss mindestens 8 Zeichen lang sein."
+
+#: ../../../application/plugin/Service.php:77
 msgid "Plugin is not installed"
 msgstr "Plugin nicht installiert"
 
-#: ../../../application/plugin/Service.php:71
+#: ../../../application/plugin/Service.php:78
 msgid "Install plugin"
 msgstr "Plugin installieren"
 
-#: ../../../application/plugin/Service.php:77
+#: ../../../application/plugin/Service.php:84
 msgid "Plugin is installed"
 msgstr "Plugin ist installiert"
 
-#: ../../../application/plugin/Service.php:78
+#: ../../../application/plugin/Service.php:85
 msgid "Uninstall plugin"
 msgstr "Plugin deinstallieren"
 
-#: ../../../application/plugin/Service.php:79
+#: ../../../application/plugin/Service.php:86
 msgid "Reinstall plugin"
 msgstr "Plugin reinstallieren"
 
-#: ../../../application/plugin/Service.php:95
+#: ../../../application/plugin/Service.php:102
 msgid "Please configure the plugins"
 msgstr "Bitte konfigurieren sie die Plugins"
 
-#: ../../../config/Service.php:147
+#: ../../../config/Service.php:145
 msgid "Log file deleted."
 msgstr "Die Logdatei wurde gelöscht"
 
-#: ../../../data/controller/Controller.php:254
+#: ../../../data/controller/Controller.php:294
 #, php-format
 msgid "You don't have access to '%s'"
 msgstr "Sie haben keinen Zugang zu '%s'"
 
-#: ../../../data/controller/TableController.php:109
+#: ../../../data/controller/TableController.php:112
 #, php-format
 msgid "%s records"
 msgstr "%s Datensätze"
@@ -332,18 +338,30 @@ msgstr "Ressourcenpfad"
 msgid "Status"
 msgstr "Status"
 
-#: ../../../server/Download.php:132
+#: ../../../server/Download.php:133
 #, php-format
 msgid "File '%s' does not exist in datasource '%s'"
 msgstr "Datei '%s' existiert nicht in Datenquelle '%s'"
 
-#: ../../../ui/dialog/Confirm.php:47
-#: ../../../ui/dialog/Confirm.php:51
+#: ../../../ui/dialog/Confirm.php:47 ../../../ui/dialog/Confirm.php:51
 msgid "Yes"
 msgstr "Ja"
 
-#: ../../../ui/dialog/Confirm.php:47
-#: ../../../ui/dialog/Confirm.php:51
+#: ../../../ui/dialog/Confirm.php:47 ../../../ui/dialog/Confirm.php:51
 msgid "No"
 msgstr "Nein"
 
+#~ msgid "Unknown error."
+#~ msgstr "Unbekannter Fehler"
+
+#~ msgid "Do you really want to reset/upgrade the '%s' data?"
+#~ msgstr "Wollen Sie wirklich die Daten '%s' zurücksetzen/aktualisieren?"
+
+#~ msgid "'%s' data reset."
+#~ msgstr "'%s' - Daten aktualisiert/zurückgesetzt."
+
+#~ msgid "Do you really want to export the '%s' data to the filesystem?"
+#~ msgstr "Wollen Sie wirklich die '%'-Daten exportieren?"
+
+#~ msgid "'%s' data exported to '%s'."
+#~ msgstr "'%s' wurde nach '%s' exportiert."

@@ -55,7 +55,7 @@ Features
 Prerequisites
 -------------
 - PHP 5.3
-- MySql 5.3+ with the following extensions: gettext, yaz/xsl (optional), ldap 
+- MySql 5.3+ with the following extensions: intl, gettext, yaz/xsl (optional), ldap
   (optional), zip (optional)
 
 Preparations

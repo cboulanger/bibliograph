@@ -18,10 +18,10 @@
 
 
 /**
- * Manages locales and translations. uses the php gettext
- * extension by default.
- * @see http://mel.melaxis.com/devblog/2005/08/06/localizing-php-web-sites-using-gettext/
- * TODO: we need only one persistent object per user, but this is instantiated for each and every request.
+ * Manages locales and translations. uses the php gettext extension by default.
+ * Language switch is not done via setting locales, but using textdomains, to avoid
+ * the problems with gettext. Locale is set to "C"
+ * see http://stackoverflow.com/questions/15541747/use-php-gettext-without-having-to-install-locales
  */
 class qcl_locale_Manager extends qcl_core_Object
 {
@@ -35,6 +35,12 @@ class qcl_locale_Manager extends qcl_core_Object
    * @var string
    */
   public $default_locale = "en";
+
+  /**
+   * The default path to the locale files
+   * @var string
+   */
+  protected $messages_path = 'locale/C.UTF-8/LC_MESSAGES';
 
   /**
    * The curren locale
@@ -62,43 +68,23 @@ class qcl_locale_Manager extends qcl_core_Object
 	  parent::__construct();
 
 	  /*
-	   * bind textdomains and set application textdomain
-	   * as default domain
+	   * set default locale
 	   */
-    $appId = $this->getApplication()->id();
-    $i18nAppPath = './locale';
-    if( is_dir($i18nAppPath) )
+    if( is_dir( $this->messages_path ) )
     {
-
-      $path = bindtextdomain( $appId, $i18nAppPath );
-      if( function_exists("bind_textdomain_codeset") ) // PHP on Mac Bug
-      {
-        bind_textdomain_codeset( $appId, 'UTF-8');
-      }
-      textdomain($appId);
-      if ( $this->hasLog() ) $this->log( "textdomain path for '$appId': '$path'", QCL_LOG_LOCALE );
-
-      /*
-       * bind qcl textdomain
-       */
-      $path = bindtextdomain( "qcl", dirname(__FILE__) );
-      if( function_exists("bind_textdomain_codeset") ) // PHP on Mac Bug
-      {
-        bind_textdomain_codeset( "qcl", 'UTF-8');
-      }
-      if ( $this->hasLog() ) $this->log( "qcl textdomain path: '$path'", QCL_LOG_LOCALE );
-
-      /*
-       *  automatically determine locale
-       */
+      setlocale( LC_ALL, 'C.UTF-8' );
+      putenv("LANG=C.UTF-8");
       $this->setLocale();
+      if( $this->hasLog() ) $this->logLocaleInfo();
     }
     else
     {
-      if ( $this->hasLog() ) $this->log( sprintf(
-        'Directory %s missing in services directory for i18n.',
-        $i18nAppPath
-      ), QCL_LOG_LOCALE );
+      if ( $this->hasLog() ) {
+        $this->log( sprintf(
+          'Locale directory %s does not exist.',
+          realpath( $this->messages_path )
+        ), QCL_LOG_LOCALE );
+      }
     }
 	}
 
@@ -136,32 +122,31 @@ class qcl_locale_Manager extends qcl_core_Object
    */
 	public function setLocale($locale=null)
 	{
+    /*
+     * application textdomain
+     */
     $locale = either( $locale, $this->getUserLocale() );
-    $locales = array( $locale );
-    if ( ! strstr( $locale, "_" ) )
+    $textdomain = $this->getApplication()->id() . "_" . $locale;
+    bindtextdomain( $textdomain, dirname(dirname($this->messages_path)));
+    if( function_exists("bind_textdomain_codeset") ) // PHP on Mac Bug
     {
-      $loc = $locale . "_" . strtoupper( $locale );
-      $locales[] = $loc;
-      $locales[] = $loc . ".UTF8";
+      bind_textdomain_codeset( $textdomain, 'UTF-8');
     }
-    else
+    // set default for _("...") function
+    textdomain($textdomain);
+
+    /*
+     * qcl textdomain,
+     */
+    $qcl_textdomain = "qcl_" . $locale;
+    bindtextdomain( $qcl_textdomain, dirname(__FILE__) );
+    if( function_exists("bind_textdomain_codeset") ) // PHP on Mac Bug
     {
-      $locales[] = $locale . ".UTF8";
+      bind_textdomain_codeset( $qcl_textdomain, 'UTF-8');
     }
 
-    if ( ! $systemLocale = setlocale( LC_MESSAGES, $locales ) )
-    {
-    	$this->log( "setlocale() returned false for '" . implode( ",", $locales ) . "' - check your server's i18n settings! Falling back to '$locale'", QCL_LOG_LOCALE);
-    	$systemLocale = $locale;
-    }
-    
-    putenv("LC_MESSAGES=$systemLocale");
-    $this->locale = $systemLocale;
-    if ( $this->hasLog() )
-    {
-      $this->log( "Setting locale '$systemLocale'", QCL_LOG_LOCALE);
-      $this->logLocaleInfo();
-    }
+    $this->locale = $locale;
+    if( $this->hasLog()) $this->log( "Setting locale '$locale'", QCL_LOG_LOCALE);
 	}
 
 	/**
@@ -174,39 +159,26 @@ class qcl_locale_Manager extends qcl_core_Object
 	}
 
   /**
-   * determines the user locale from the system or browser
+   * determines the user locale from the browser
    * @return
    */
   public function getUserLocale()
   {
-    $browser_locales = explode(",", $_SERVER["HTTP_ACCEPT_LANGUAGE"] );
-    $locale = null;
-    foreach ( $browser_locales as $brlc )
+    $browser_locale = Locale::acceptFromHttp($_SERVER["HTTP_ACCEPT_LANGUAGE"]);
+    if( $browser_locale )
     {
-      $lc = strtolower( substr( $brlc, 0, 2 ) );
-      if ( in_array( $lc, $this->getAvailableLocales() ) )
+      $locale = substr( $browser_locale, 0, 2); // we need only the first two
+      if( ! in_array( $locale, $this->getAvailableLocales() ) )
       {
-        $locale = $lc;
-        break;
+        $locale = $this->default_locale;
       }
     }
-
-    if ( ! $locale )
-    {
-       $system_locale = getenv("LANGUAGE");
-       if ( $system_locale )
-       {
-         $locale = substr( $system_locale, 0, 2 );
-       }
-    }
-
-    if ( ! $locale )
+    else
     {
       $locale = $this->default_locale;
     }
     return $locale;
   }
-
 
   /**
    * Return the available application locales
@@ -217,16 +189,18 @@ class qcl_locale_Manager extends qcl_core_Object
     static $availableLocales = null;
     if ( $availableLocales === null )
     {
+      $app_id = $this->getApplication()->id();
+      $id_len = strlen($app_id);
       $availableLocales = array();
-      foreach ( scandir( "./locale" ) as $dir )
+      foreach ( scandir( $this->messages_path ) as $file )
       {
-        if ( $dir[0] != "." )
+        if ( substr($file,0, $id_len) == $app_id )
         {
-          $availableLocales[] = $dir;
+          $availableLocales[] = substr($file, $id_len+1, 2);
         }
       }
     }
-    return $availableLocales;
+    return array_unique($availableLocales);
   }
 
   /**
@@ -301,7 +275,6 @@ class qcl_locale_Manager extends qcl_core_Object
     $this->info( "Locale information: ");
     $this->info( "  Available locales:  " . implode(",", $this->getAvailableLocales() ) );
     $this->info( "  Browser locales :   " . $_SERVER["HTTP_ACCEPT_LANGUAGE"]  );
-    $this->info( "  System locale :     " . getenv("LANGUAGE") );
     $this->info( "  User locale:        " . $this->getUserLocale() );
     $this->info( "  Current locale:     " . $this->getLocale() );
   }

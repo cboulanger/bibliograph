@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Bibliograph 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-10 23:48+0100\n"
-"PO-Revision-Date: 2014-07-10 23:49+0100\n"
+"POT-Creation-Date: 2014-07-12 14:28+0100\n"
+"PO-Revision-Date: 2014-07-12 16:53+0100\n"
 "Last-Translator: Christian Boulanger <info@bibliograph.org>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -554,49 +554,44 @@ msgstr "URL"
 msgid "Volume"
 msgstr "Band"
 
-#: ../../../class/bibliograph/schema/CQL.php:42
+#: ../../../class/bibliograph/schema/CQL.php:47
 #: ../../../class/bibliograph/service/Reference.php:1642
 msgid "and"
 msgstr "und"
 
-#: ../../../class/bibliograph/schema/CQL.php:42
+#: ../../../class/bibliograph/schema/CQL.php:47
 msgid "or"
 msgstr "oder"
 
-#: ../../../class/bibliograph/schema/CQL.php:42
+#: ../../../class/bibliograph/schema/CQL.php:47
 msgid "not"
 msgstr "nicht"
 
-#: ../../../class/bibliograph/schema/CQL.php:44
-#: ../../../class/bibliograph/schema/CQL.php:220
+#: ../../../class/bibliograph/schema/CQL.php:48
 msgid "is"
 msgstr "ist"
 
-#: ../../../class/bibliograph/schema/CQL.php:44
-#: ../../../class/bibliograph/schema/CQL.php:261
+#: ../../../class/bibliograph/schema/CQL.php:48
 msgid "isnot"
-msgstr "istnicht"
+msgstr "ist nicht"
 
-#: ../../../class/bibliograph/schema/CQL.php:44
-#: ../../../class/bibliograph/schema/CQL.php:236
+#: ../../../class/bibliograph/schema/CQL.php:48
 msgid "contains"
 msgstr "enthält"
 
-#: ../../../class/bibliograph/schema/CQL.php:44
-#: ../../../class/bibliograph/schema/CQL.php:242
+#: ../../../class/bibliograph/schema/CQL.php:48
 msgid "notcontains"
-msgstr "enthältnicht"
+msgstr "enthält nicht"
 
-#: ../../../class/bibliograph/schema/CQL.php:44
-#: ../../../class/bibliograph/schema/CQL.php:248
+#: ../../../class/bibliograph/schema/CQL.php:48
 msgid "startswith"
-msgstr "beginntmit"
+msgstr "beginnt mit"
 
-#: ../../../class/bibliograph/schema/CQL.php:108
+#: ../../../class/bibliograph/schema/CQL.php:154
 msgid "sortby"
 msgstr "sortiere-nach"
 
-#: ../../../class/bibliograph/schema/CQL.php:203
+#: ../../../class/bibliograph/schema/CQL.php:249
 #, php-format
 msgid "Index '%s' does not exist."
 msgstr "Der Index '%s' existiert nicht."
