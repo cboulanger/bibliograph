@@ -1625,14 +1625,12 @@ class bibliograph_service_Reference
     sort( $modifiers );
     foreach( $modifiers as $modifier )
     {
-      /*
-       * don't show already translated field names
-       */
+      $modifier = _($modifier);
       $html .= "<span style='$style' value='$modifier'>$modifier</span> ";
     }
 
-      /*
-     * modifiers
+    /*
+     * booleans
      */
     $html .= "</p><h4>" . _("Boolean operators") . "</h4>";
     $html .= "<p style='line-height:2em'>";

@@ -21,6 +21,7 @@
 require_once "bibliograph/lib/cql/cql2.php";
 
 qcl_import("bibliograph_schema_BibtexSchema");
+qcl_import("qcl_locale_Manager");
 
 /**
  * Singleton object which acts as a tool for working with the CQL query
@@ -32,17 +33,54 @@ class bibliograph_schema_CQL
   extends qcl_core_Object
 {
 
-  public $booleans;
+  public $booleans = array();
 
-  public $modifiers;
+  public $modifiers = array();
 
+  public $dictionary = array();
+
+  /**
+   * Exists only for POEditor to pick up the translation messages.
+   */
+  function marktranslations()
+  {
+    _("and"); _("or"); _("not");
+    _("is"); _("isnot"); _("contains"); _("notcontains"); _("startswith");
+  }
+
+
+  /**
+   * Constructor
+   */
   public function __construct()
   {
     parent::__construct();
-    $this->booleans = array( "and", _("and"), "or", _("or"), "not", _("not") );
+    $localeMgr = qcl_locale_Manager::getInstance();
+      
+    $availableLocales = $localeMgr->getAvailableLocales();
+
+    // boolean conditions
+    $this->booleans = array( "and", "or", "not" );
+    // operators
     $this->modifiers = array(
-      "=",  _("is"), _("isnot"), _("contains"),  _("notcontains"), _("startswith"), ">", ">=", "<", "<=", "<>"
+      "is", "isnot","contains", "notcontains", "startswith",
+      "=", ">", ">=", "<", "<=", "<>"
     );
+
+    // translate into lookup dictionary
+    foreach( array_merge($this->modifiers, $this->booleans) as $word )
+    {
+      // skip non-words
+      if( strtolower($word) == strtoupper($word) ) continue;
+      foreach( $availableLocales as $locale)
+      {
+        $localeMgr->setLocale($locale);
+        $translated = $localeMgr->tr($word);
+        $this->dictionary[$translated]=$word;
+      }
+    }
+    // revert to standard locale
+    $localeMgr->setLocale();
   }
 
 
@@ -83,11 +121,20 @@ class bibliograph_schema_CQL
     $cqlQuery = trim($query->cql);
 
     /*
-     * queries that don't contain an operator or boolean must be
-     * quoted
+     * Translate operators and booleans
+     */
+    $cqlQuery = str_ireplace(
+      array_keys( $this->dictionary ),
+      array_values( $this->dictionary ),
+      $cqlQuery
+    );
+    
+    /*
+     * Queries that don't contain any operators or booleans are converted into a
+     * query connected by "AND"
      */
     $found = false;
-    foreach( array_merge( $this->booleans, $this->modifiers ) as $find )
+    foreach( array_values($this->dictionary) as $find )
     {
       if ( strstr( $cqlQuery, $find ) )
       {
@@ -105,7 +152,9 @@ class bibliograph_schema_CQL
     $parser = new cql_Parser( $cqlQuery );
     $parser->setBooleans( $this->booleans );
     $parser->setModifiers( $this->modifiers );
-    $parser->setSortWords( array("sortby", _("sortby") ) );
+    $parser->setSortWords( array("sortby" ) );
+
+    //$this->debug( $cqlQuery );
 
     /*
      * parse CQL string
@@ -113,7 +162,7 @@ class bibliograph_schema_CQL
     $cqlObject = $parser->query();
     if ( $cqlObject instanceof cql_Diagnostic )
     {
-      throw new JsonRpcException( "Could not parse CQL query '$cqlQuery'" );
+      throw new qcl_server_ServiceException( "Could not parse query." );
     }
 
     /*
@@ -129,7 +178,7 @@ class bibliograph_schema_CQL
     }
     catch( Exception $e )
     {
-      throw new JsonRpcException( "Could not convert CQL query '$cqlQuery': " . $e->getMessage() );
+      throw new qcl_server_ServiceException( "Could not convert query: " . $e->getMessage() );
     }
 
     return $qclQuery;
@@ -217,7 +266,6 @@ class bibliograph_schema_CQL
          */
         case "=":
         case "is":
-        case _("is"):
           if( is_numeric($term) )
           {
             $operator = "=";
@@ -233,19 +281,16 @@ class bibliograph_schema_CQL
          * containing values
          */
         case "contains":
-        case _("contains"):
           $operator = "LIKE";
           $term = "%$term%";
           break;
 
         case "notcontains":
-        case _("notcontains"):
           $operator = "NOT LIKE";
           $term = "%$term%";
           break;
 
         case "startswith":
-        case _("startswith"):
           $operator = "LIKE";
           $term = "$term%";
           break;
@@ -258,7 +303,6 @@ class bibliograph_schema_CQL
           break;
 
         case "<>":
-        case _("isnot"):
         case "isnot":
           $operator = "!=";
           break;

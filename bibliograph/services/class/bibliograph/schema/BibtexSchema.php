@@ -520,7 +520,8 @@ class bibliograph_schema_BibtexSchema
           'label'     => _('Date'),
           'type'      => 'date',
           'bibtex'    => true,
-          'csl'       => false // @todo index
+          'csl'       => false,
+          'index'     => _('Date')
         ),
         'edition' => array(
           'label'     => _('Edition'),
