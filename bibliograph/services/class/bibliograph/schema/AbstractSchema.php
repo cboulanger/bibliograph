@@ -335,13 +335,21 @@ abstract class bibliograph_schema_AbstractSchema
         {
           foreach( (array)  $data['index'] as $index )
           {
-            $index = strtolower( $index );
             $indexMap[ $index ][] = $field;
           }
         }
       }
     }
     return $indexMap;
+  }
+
+  /**
+   * Returns the index names for this schema (lower case!).
+   * @return array Array of index names
+   */
+  public function getIndexNames()
+  {
+    return array_keys( $this->getIndexMap() );
   }
 
   /**
@@ -352,7 +360,6 @@ abstract class bibliograph_schema_AbstractSchema
   public function hasIndex( $index )
   {
     $indexMap = $this->getIndexMap();
-    $index = strtolower( $index );
     return isset( $indexMap[ $index ] );
   }
 
@@ -365,14 +372,13 @@ abstract class bibliograph_schema_AbstractSchema
   public function getIndexFields( $index )
   {
     $indexMap = $this->getIndexMap();
-    $index = strtolower( $index );
     if ( isset( $indexMap[ $index ] ) )
     {
       return $indexMap[ $index ];
     }
     else
     {
-      throw new InvalidArgumentException("'$index' is not a valid index");
+      throw new LogicException("'$index' is not a valid index");
     }
   }
 }

@@ -33,11 +33,14 @@ class bibliograph_schema_CQL
   extends qcl_core_Object
 {
 
-  public $booleans = array();
+  protected $booleans = array( "and", "or", "not" );
 
-  public $modifiers = array();
+  protected $modifiers = array(
+    "is", "isnot","contains", "notcontains", "startswith",
+    "=", ">", ">=", "<", "<=", "<>"
+  );
 
-  public $dictionary = array();
+  protected $dictionary = array();
 
   /**
    * Exists only for POEditor to pick up the translation messages.
@@ -47,42 +50,6 @@ class bibliograph_schema_CQL
     _("and"); _("or"); _("not");
     _("is"); _("isnot"); _("contains"); _("notcontains"); _("startswith");
   }
-
-
-  /**
-   * Constructor
-   */
-  public function __construct()
-  {
-    parent::__construct();
-    $localeMgr = qcl_locale_Manager::getInstance();
-      
-    $availableLocales = $localeMgr->getAvailableLocales();
-
-    // boolean conditions
-    $this->booleans = array( "and", "or", "not" );
-    // operators
-    $this->modifiers = array(
-      "is", "isnot","contains", "notcontains", "startswith",
-      "=", ">", ">=", "<", "<=", "<>"
-    );
-
-    // translate into lookup dictionary
-    foreach( array_merge($this->modifiers, $this->booleans) as $word )
-    {
-      // skip non-words
-      if( strtolower($word) == strtoupper($word) ) continue;
-      foreach( $availableLocales as $locale)
-      {
-        $localeMgr->setLocale($locale);
-        $translated = $localeMgr->tr($word);
-        $this->dictionary[$translated]=$word;
-      }
-    }
-    // revert to standard locale
-    $localeMgr->setLocale();
-  }
-
 
   /**
    * Returns singleton sinstance
@@ -94,13 +61,61 @@ class bibliograph_schema_CQL
   }
 
   /**
+   * Returns the dictionary of words to be translated into english
+   * booleans, modifiers or object properties
+   * @param bibliograph_model_ReferenceModel $model
+   * @return array The dictionary for the model
+   */
+  protected function getDictionary(bibliograph_model_ReferenceModel $model)
+  {
+    $modelClass = $model->className();
+    if( ! $this->dictionary[ $modelClass ] )
+    {
+      $localeMgr = qcl_locale_Manager::getInstance();
+      $availableLocales = $localeMgr->getAvailableLocales();
+      $dict = array();
+
+      // translate words for each locale
+      foreach( $availableLocales as $locale)
+      {
+        $localeMgr->setLocale($locale);
+
+        // modifiers and booleans
+        foreach( array_merge($this->modifiers, $this->booleans) as $word)
+        {
+          // skip non-words
+          if( strtolower($word) == strtoupper($word) ) continue;
+          $translated = $localeMgr->tr($word);
+          $dict[$translated]=$word;
+        }
+
+        // model indexes
+        foreach ( $model->getSchemaModel()->getIndexNames() as $index )
+        {
+          $fields = $model->getSchemaModel()->getIndexFields( $index );
+          // @todo we only use the first, but it should really search all of them
+          $property = $fields[0];
+          $translated = $localeMgr->tr($index);
+          $dict[$translated]=$property;
+        }
+      }
+      // revert to standard locale
+      $localeMgr->setLocale();
+
+      $this->dictionary[ $modelClass ] = $dict;
+    }
+    return $this->dictionary[ $modelClass ];
+  }
+
+
+  /**
    * Adds conditions to a DB query object from a qcl query
    *
    * @param stdClass $query
    *    The query data object from the json-rpc request
    * @param qcl_data_db_Query $qclQuery
    *    The query object used by the query behavior
-   * @param qcl_data_model_AbstractActiveRecord $model
+   * @param bibliograph_model_ReferenceModel $model
    *    The model on which the query should be performed
    * @throws bibliograph_schema_Exception
    * @throws Exception
@@ -110,7 +125,7 @@ class bibliograph_schema_CQL
   public function addQueryConditions(
     stdClass $query,
     qcl_data_db_Query $qclQuery,
-    qcl_data_model_AbstractActiveRecord $model
+    bibliograph_model_ReferenceModel $model
   ){
     /*
      * get qcl query
@@ -121,22 +136,26 @@ class bibliograph_schema_CQL
     $cqlQuery = trim($query->cql);
 
     /*
-     * Translate operators and booleans
+     * Translate operators, booleans and indexes.
+     * @todo This will also translate search words which really shouldn't be translated because they are search expressions
      */
+    $dict = $this->getDictionary($model);
+    $this->debug($dict);
     $cqlQuery = str_ireplace(
-      array_keys( $this->dictionary ),
-      array_values( $this->dictionary ),
+      array_keys( $dict ),
+      array_values( $dict ),
       $cqlQuery
     );
-    
+
     /*
      * Queries that don't contain any operators or booleans are converted into a
      * query connected by "AND"
      */
     $found = false;
-    foreach( array_values($this->dictionary) as $find )
+    $operators = array_merge($this->booleans,$this->modifiers);
+    foreach( $operators as $find )
     {
-      if ( strstr( $cqlQuery, $find ) )
+      if ( strstr( $cqlQuery, $find ) ) // @todo more efficient lookup
       {
         $found=true; break;
       }
@@ -154,7 +173,7 @@ class bibliograph_schema_CQL
     $parser->setModifiers( $this->modifiers );
     $parser->setSortWords( array("sortby" ) );
 
-    //$this->debug( $cqlQuery );
+    $this->debug( $cqlQuery );
 
     /*
      * parse CQL string
@@ -168,18 +187,7 @@ class bibliograph_schema_CQL
     /*
      * populate query object
      */
-    try
-    {
-      $this->convertCqlObjectToQclQuery( $cqlObject, $qclQuery, $model );
-    }
-    catch ( bibliograph_schema_Exception $e )
-    {
-      throw $e;
-    }
-    catch( Exception $e )
-    {
-      throw new qcl_server_ServiceException( "Could not convert query: " . $e->getMessage() );
-    }
+    $this->convertCqlObjectToQclQuery( $cqlObject, $qclQuery, $model );
 
     return $qclQuery;
   }
@@ -192,7 +200,7 @@ class bibliograph_schema_CQL
    *
    * @param cql_Object $cqlObject
    * @param qcl_data_db_Query $qclQuery
-   * @param qcl_data_model_AbstractActiveRecord $model
+   * @param bibliograph_model_ReferenceModel $model
    * @throws LogicException
    * @throws JsonRpcException
    * @throws bibliograph_schema_Exception
@@ -203,7 +211,7 @@ class bibliograph_schema_CQL
   protected function convertCqlObjectToQclQuery(
     cql_Object $cqlObject,
     qcl_data_db_Query $qclQuery,
-    qcl_data_model_AbstractActiveRecord $model
+    bibliograph_model_ReferenceModel $model
   ){
     if ( $cqlObject instanceof cql_Triple )
     {
@@ -224,33 +232,17 @@ class bibliograph_schema_CQL
       }
 
       /*
-       * else, translate index into propery
+       * else, translate index into property
        */
       else
       {
-        /*
-         * check if a translated index name is used
-         */
-        if ( $model->getSchemaModel()->hasIndex( $index ) )
+        if( $model->hasProperty( $index ) )
         {
-          $fields = $model->getSchemaModel()->getIndexFields( $index );
-          // @todo for the moment, just use the first
-          $property = $fields[0];
+          $property = $index;
         }
-
-        /*
-         * no, use property name
-         */
         else
         {
-          if( $model->hasProperty( $index ) )
-          {
-            $property = $index;
-          }
-          else
-          {
-            throw new bibliograph_schema_Exception($this->tr("Index '%s' does not exist.", $index ) );
-          }
+          throw new bibliograph_schema_Exception($this->tr("Index '%s' does not exist.", $index ) );
         }
         $index = null;
       }

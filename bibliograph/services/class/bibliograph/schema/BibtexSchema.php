@@ -390,7 +390,7 @@ class bibliograph_schema_BibtexSchema
           'label'     => _('Bibliographic Type'),
           'type'      => 'string',
           'csl'       => 'type',
-          'index'     => _('reftype'),
+          'index'     => 'reftype',
           'formData'  => array(
             'type'  => 'selectbox',
             'label' => $this->tr( 'Reference Type' ),
@@ -409,10 +409,10 @@ class bibliograph_schema_BibtexSchema
           'label'     => _('Citation Key'),
           'type'      => 'string',
           'csl'       => 'id',
-          'index'     => _('citekey'),
+          'index'     => 'Citation key',
           'formData'  => array(
             'type'    => 'textfield',
-            'label'   => $this->tr('Citation key')
+            'label'   => _('Citation key')
           )
         ),
         'abstract' => array(
@@ -424,7 +424,7 @@ class bibliograph_schema_BibtexSchema
             'lines'     => 3
           ),
           'csl'       => 'abstract',
-          'index'     => _('Abstract')
+          'index'     => 'Abstract'
         ),
         // this is used for publisher-place or for author address
         'address' => array(
@@ -439,7 +439,7 @@ class bibliograph_schema_BibtexSchema
             )
           ),
           'csl'       => 'publisher-place',
-          'index'     => _('Place')
+          'index'     => 'Place'
         ),
         'affiliation' => array(
           'label'     => _('Affiliation'),
@@ -473,7 +473,7 @@ class bibliograph_schema_BibtexSchema
             )
           ),
           'csl'       => 'author',
-          'index'     => _('Author')
+          'index'     => 'Author'
         ),
         'booktitle' => array(
           'label'     => _('Book Title'),
@@ -489,7 +489,7 @@ class bibliograph_schema_BibtexSchema
             )
           ),
           'csl'       => 'container-title',
-          'index'     => _('booktitle')
+          'index'     => 'Booktitle'
         ),
         'contents' => array(
           'label'     => _('Contents'),
@@ -521,7 +521,7 @@ class bibliograph_schema_BibtexSchema
           'type'      => 'date',
           'bibtex'    => true,
           'csl'       => false,
-          'index'     => _('Date')
+          'index'     => 'Date'
         ),
         'edition' => array(
           'label'     => _('Edition'),
@@ -543,7 +543,7 @@ class bibliograph_schema_BibtexSchema
             )
           ),
           'csl'       => 'author',
-          'index'     => _('Editor')
+          'index'     => 'Editor'
         ),
         'howpublished' => array(
           'label'     => _('Published As'),
@@ -589,7 +589,7 @@ class bibliograph_schema_BibtexSchema
             )
           ),
           'csl'       => 'container-title',
-          'index'     => _('Journal')
+          'index'     => 'Journal'
         ),
         // don't know what this is for, anyways
         'key' => array(
@@ -612,7 +612,7 @@ class bibliograph_schema_BibtexSchema
             )
           ),
           'csl'       => 'keyword',
-          'index'     => _('Keywords')
+          'index'     => 'Keywords'
         ),
         'language' => array(
           'label'     => _('Language'),
@@ -626,7 +626,7 @@ class bibliograph_schema_BibtexSchema
           'type'      => 'string',
           'bibtex'    => true,
           'csl'       => 'call-number',
-          'index'     => _('callnumber')
+          'index'     => 'Call number'
         ),
         // field to store where the book is kept
         'location' => array(
@@ -634,14 +634,14 @@ class bibliograph_schema_BibtexSchema
           'type'      => 'string',
           'bibtex'    => true,
           'csl'       => false,
-          'index'     => _('Location')
+          'index'     => 'Location'
         ),
         'month' => array(
           'label'     => _('Month'),
           'type'      => 'string',
           'bibtex'    => true,
           'csl'       => false,
-          'index'     => _('Month')
+          'index'     => 'Month'
         ),
         'note' => array(
           'label'     => _('Note'),
@@ -692,7 +692,7 @@ class bibliograph_schema_BibtexSchema
             )
           ),
           'csl'       => 'publisher',
-          'index'     => _('Publisher')
+          'index'     => 'Publisher'
         ),
         'school' => array(
           'label'         => _('University'),
@@ -741,7 +741,7 @@ class bibliograph_schema_BibtexSchema
             'fullWidth'     => true
           ),
           'csl'       => 'title',
-          'index'     => _('Title')
+          'index'     => 'Title'
         ),
         'translator' => array(
           'label'     => _('Translator'),
@@ -780,7 +780,7 @@ class bibliograph_schema_BibtexSchema
           'type'      => 'int',
           'bibtex'    => true,
           'csl'       => 'issued',
-          'index'     => array( _('Year'),_('Date'), 'date' ) // @todo date?
+          'index'     => array('Year','Date')
         )
       );
 

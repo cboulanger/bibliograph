@@ -240,13 +240,20 @@ class bibliograph_service_Reference
     {
       qcl_import( "bibliograph_schema_CQL" );
       $cql =  bibliograph_schema_CQL::getInstance();
-      $q = $cql->addQueryConditions( $query, $qclQuery, $model );
-      $q->where['markedDeleted'] = false; // todo: why is this?
+      try
+      {
+        $q = $cql->addQueryConditions( $query, $qclQuery, $model );
+      }
+      catch( bibliograph_schema_Exception $e)
+      {
+        throw new qcl_server_ServiceException($e->getMessage());
+      }
+      $q->where['markedDeleted'] = false;
       return $q;
     }
     else
     {
-      throw new JsonRpcException( "No recognized query format in request." );
+      throw new qcl_server_ServiceException( "No recognized query format in request." );
     }
   }
 
