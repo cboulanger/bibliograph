@@ -1603,7 +1603,7 @@ class bibliograph_service_Reference
         }
         foreach( (array) $data['index'] as $index )
         {
-          $indexes[] = $index;
+          $indexes[] = _($index);
         }
       }
     }

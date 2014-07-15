@@ -489,7 +489,7 @@ class bibliograph_schema_BibtexSchema
             )
           ),
           'csl'       => 'container-title',
-          'index'     => 'Booktitle'
+          'index'     => 'Book Title'
         ),
         'contents' => array(
           'label'     => _('Contents'),
@@ -626,7 +626,7 @@ class bibliograph_schema_BibtexSchema
           'type'      => 'string',
           'bibtex'    => true,
           'csl'       => 'call-number',
-          'index'     => 'Call number'
+          'index'     => 'Call Number'
         ),
         // field to store where the book is kept
         'location' => array(

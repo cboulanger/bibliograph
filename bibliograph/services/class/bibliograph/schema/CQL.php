@@ -33,9 +33,9 @@ class bibliograph_schema_CQL
   extends qcl_core_Object
 {
 
-  protected $booleans = array( "and", "or", "not" );
+  public $booleans = array( "and", "or", "not" );
 
-  protected $modifiers = array(
+  public $modifiers = array(
     "is", "isnot","contains", "notcontains", "startswith",
     "=", ">", ">=", "<", "<=", "<>"
   );
