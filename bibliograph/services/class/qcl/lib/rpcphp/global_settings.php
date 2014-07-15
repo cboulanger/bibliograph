@@ -58,7 +58,10 @@
 /*
  * log file
  */
-define( "JsonRpcDebugFile", QCL_VAR_DIR . "/jsonrpc.log" );
+if ( ! defined("JsonRpcDebugFile") )
+{
+  define( "JsonRpcDebugFile", QCL_VAR_DIR . "/jsonrpc.log" );
+}
 
 /*
  * Whether to encode and decode Date objects the "qooxdoo way"

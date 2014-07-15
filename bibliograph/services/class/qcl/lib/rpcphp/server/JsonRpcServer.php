@@ -191,8 +191,10 @@ class JsonRpcServer extends AbstractServer
       }
       else
       {
+        // do not send error code 0, because client thinks that's "no internet connection"
+        $error_code = $e->getCode() ? $e->getCode() : 9999;
         $jsonRpcError =  $this->getErrorBehavior();
-        $jsonRpcError->setError( $e->getCode(), $msg );
+        $jsonRpcError->setError( $error_code, $msg );
       }
 
       /*

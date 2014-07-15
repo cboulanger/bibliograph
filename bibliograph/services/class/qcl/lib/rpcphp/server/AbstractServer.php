@@ -602,11 +602,16 @@ class AbstractServer
     {
       /*
        * Yup, it was. Set the origin to application and return the error
+       * @todo this is totally broken
        */
+      $code    = either( $result->getCode(), JsonRpcError_ScriptError);
+      $message = either( $result->getMessage(), "Unknown Error");
+
       $result->setId( $this->getId() );
       $result->setOrigin( JsonRpcError_Origin_Application );
+      $result->setError( $code, $message );
 
-      $this->debug("### Error: " . $result->getMessage() );
+      $this->debug("### Error: $message (#$code)." );
 
       $result->sendAndExit();
       /* never gets here */
@@ -888,10 +893,14 @@ class AbstractServer
     /*
      * catch exceptions caused by invalid data supplied by the client which are not
      * runtime errors and do not require a stack trace
+     * FIXME THIS IS A MESS
      */
     catch ( JsonRpcException $e )
     {
-      return $e;
+      $result = $this->getErrorBehavior();
+      $result->SetError( either($e->getCode(),JsonRpcError_ScriptError), $e->getMessage() );
+      $result->setId( $this->getId() );
+      $result->sendAndExit();
     }
 
     /*
@@ -900,11 +909,11 @@ class AbstractServer
     catch ( Exception $e )
     {
       $result = $this->getErrorBehavior();
-      $result->SetError( $e->getCode(), $e->getMessage() );
+      $result->SetError( either($e->getCode(),JsonRpcError_ScriptError), $e->getMessage() );
       $result->setId( $this->getId() );
       $this->logError( $e->getMessage() ."\n" . $e->getTraceAsString() );
+      $result->sendAndExit();
     }
-
     return $result;
   }
 
