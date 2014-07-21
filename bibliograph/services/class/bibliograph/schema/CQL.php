@@ -148,8 +148,6 @@ class bibliograph_schema_CQL
       return sprintf($regExp, $word );
     }, array_keys( $dict ) );
     $replace = array_values( $dict );
-
-    $this->debug($search);
     $cqlQuery = preg_replace($search, $replace, $cqlQuery);
 
     /*
