@@ -139,7 +139,7 @@ class bibliograph_schema_CQL
      * Translate operators, booleans and indexes.
      */
     $dict = $this->getDictionary($model);
-    $this->debug($dict);
+    //$this->debug($dict);
 
     // regular expression to find thing that are not inside quotation marks
     // see http://stackoverflow.com/questions/11324749/a-regex-to-detect-string-not-enclosed-in-double-quotes
