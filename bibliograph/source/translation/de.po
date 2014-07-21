@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: you@your.org\n"
 "POT-Creation-Date: 2010-05-13 19:30+0100\n"
-"PO-Revision-Date: 2014-07-10 23:48+0100\n"
+"PO-Revision-Date: 2014-07-21 19:34+0100\n"
 "Last-Translator: Christian Boulanger <info@bibliograph.org>\n"
 "Language-Team: Team <yourteam@your.org>\n"
 "MIME-Version: 1.0\n"
@@ -14,8 +14,8 @@ msgstr ""
 "X-Generator: Poedit 1.6.6\n"
 
 #: bibliograph/Main.js:210
-msgid "No internet connection."
-msgstr "Keine Internetverbindung."
+msgid "No connection to server."
+msgstr "Keine Verbindung zum Server."
 
 #: bibliograph/Main.js:317
 msgid "Setting up application..."
@@ -775,3 +775,6 @@ msgstr "Hilfe für die Suche"
 
 #~ msgid "Display Duplicate"
 #~ msgstr "Dublette anzeigen\t"
+
+#~ msgid "No internet connection."
+#~ msgstr "Keine Internetverbindung."

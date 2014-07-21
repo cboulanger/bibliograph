@@ -611,7 +611,7 @@ qx.Class.define("qcl.data.store.JsonRpc",
        */
       if ( ex.code == 0 )
       {
-        ex.message = app.tr("No internet connection.");
+        ex.message = app.tr("No connection to server.");
       }
 
       /*

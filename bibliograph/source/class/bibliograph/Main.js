@@ -207,7 +207,7 @@ qx.Class.define("bibliograph.Main",
     */
     markForTranslation : function()
     {
-      this.tr("No internet connection.");
+      this.tr("No connection to server.");
     },
 
     /*

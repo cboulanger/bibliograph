@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: bibliograph/Main.js:210
-msgid "No internet connection."
+msgid "No connection to server."
 msgstr ""
 
 #: bibliograph/Main.js:317
@@ -749,4 +749,7 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Display Duplicate"
+#~ msgstr ""
+
+#~ msgid "No internet connection."
 #~ msgstr ""
