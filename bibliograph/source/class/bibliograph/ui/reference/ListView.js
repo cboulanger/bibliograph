@@ -781,13 +781,13 @@ qx.Class.define("bibliograph.ui.reference.ListView",
     {
       var data = e.getData();
       var table = this.getTable();
-      if (!table){return;}
-
+      if (!table) return;
       var tableModel = table.getTableModel();
       var column = tableModel.getColumnIndexById(data.name);
-      if (column === undefined) {return;}
-
+      if (column === undefined) return;
       var row = tableModel.getRowById(data.referenceId);
+      this.warn([data.referenceId, row]);
+      if( row === undefined ) return;
       tableModel.setValue(column, row, data.value.replace(/\n/, "; "));
     },
 

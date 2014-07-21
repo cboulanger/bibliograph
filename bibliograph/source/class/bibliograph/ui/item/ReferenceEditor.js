@@ -672,7 +672,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
        */
       qx.event.message.Bus.dispatch(new qx.event.message.Message("reference.changeData",
       {
-        'referenceId' : this.getReferenceId(),
+        'referenceId' : this.getData().referenceId,
         'name' : name,
         'value' : value,
         'old' : old
