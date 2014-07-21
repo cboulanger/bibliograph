@@ -37,7 +37,8 @@
     "validate-manifest",
     "watch",
     "deploy-plugins",
-    "create-zip"
+    "create-zip",
+    "deploy"
   ],
 
   "default-job" : "source-hybrid",
@@ -107,7 +108,15 @@
         "command": "bash ./create-zip.sh",
         "command-not-found" : "Could not create zip file. Please install the zip command."
       }
-    },    
+    },
+
+    "deploy" :
+    {
+      "shell" :
+      {
+        "command": "bash ./deploy.sh"
+      }
+    },
 
     // jobs for source & build version
     "common":

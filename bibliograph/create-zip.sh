@@ -1,3 +1,4 @@
+#!/bin/bash
 # the variables we'll need
 version=$(cat version.txt)
 today=$(date +"%Y-%m-%d")
@@ -38,7 +39,8 @@ echo "$pretty" > ./bibliograph/version.txt
 rm -rf \
   ./bibliograph/services/config/bibliograph.ini.php \
   ./bibliograph/services/config/server.conf.php \
-  ./bibliograph/services/class/qcl/test/
+  ./bibliograph/services/class/qcl/test/ \
+  ./bibliograph/services/class/bibliograph/plugin/csl/citeproc-php/tests/
 
 # create the zip file
 zip -qr ../$filename.zip ./bibliograph/
