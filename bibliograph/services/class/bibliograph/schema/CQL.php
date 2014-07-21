@@ -141,11 +141,17 @@ class bibliograph_schema_CQL
      */
     $dict = $this->getDictionary($model);
     $this->debug($dict);
-    $cqlQuery = str_ireplace(
-      array_keys( $dict ),
-      array_values( $dict ),
-      $cqlQuery
-    );
+
+    // regular expression to find thing that are not inside quotation marks
+    // see http://stackoverflow.com/questions/11324749/a-regex-to-detect-string-not-enclosed-in-double-quotes
+    $regExp = '@(?<![\S"])(\b%s\b)(?![\S"])@i';
+    $search = array_map( function( $word ) use ($regExp) {
+      return sprintf($regExp, $word );
+    }, array_keys( $dict ) );
+    $replace = array_values( $dict );
+
+    $this->debug($search);
+    $cqlQuery = preg_replace($search, $replace, $cqlQuery);
 
     /*
      * Queries that don't contain any operators or booleans are converted into a
@@ -173,7 +179,7 @@ class bibliograph_schema_CQL
     $parser->setModifiers( $this->modifiers );
     $parser->setSortWords( array("sortby" ) );
 
-    $this->debug( $cqlQuery );
+    //$this->debug( $cqlQuery );
 
     /*
      * parse CQL string
