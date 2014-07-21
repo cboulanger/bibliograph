@@ -137,7 +137,6 @@ class bibliograph_schema_CQL
 
     /*
      * Translate operators, booleans and indexes.
-     * @todo This will also translate search words which really shouldn't be translated because they are search expressions
      */
     $dict = $this->getDictionary($model);
     $this->debug($dict);

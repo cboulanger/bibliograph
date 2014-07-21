@@ -786,7 +786,6 @@ qx.Class.define("bibliograph.ui.reference.ListView",
       var column = tableModel.getColumnIndexById(data.name);
       if (column === undefined) return;
       var row = tableModel.getRowById(data.referenceId);
-      this.warn([data.referenceId, row]);
       if( row === undefined ) return;
       tableModel.setValue(column, row, data.value.replace(/\n/, "; "));
     },
