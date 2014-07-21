@@ -22,15 +22,9 @@ qx.Mixin.define("bibliograph.ui.item.MCreateForm",
 {
   construct : function()
   {
-    this._stores = {
-
-    };
-    this._controllers = {
-
-    };
-    this.elements = {
-
-    };
+    this._stores = {};
+    this._controllers = {};
+    this.elements = {};
   },
 
   /*

@@ -65,30 +65,27 @@
       "library" :
       [
         // from contrib-catalog
-
-        // Dialogs
         {
-         "manifest" : "contrib://Dialog/1.1/Manifest.json"
+         "manifest" : "contrib/Dialog/1.1/Manifest.json"
         },
-        // Upload widget
         {
           "manifest" : "contrib/UploadWidget/trunk/Manifest.json"
         },
+//        { //todo: contrib structure does not conform to generator expectations!
+//          "manifest" : "contrib/TokenField/0.5/TokenField/trunk/Manifest.json"
+//        },
 
-        // local legacy contribs
-
-        // Persist
+        // local legacy contrib
         {
          "manifest" : "contrib/Persist/trunk/Manifest.json"
         },
-        // VirtualData
         {
          "manifest" : "contrib/VirtualData/trunk/Manifest.json"
         },
-        // qcl-js
         {
           "manifest" : "contrib/qcl/Manifest.json"
         }
+
       ]
     },
 

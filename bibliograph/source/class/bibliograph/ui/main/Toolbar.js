@@ -361,6 +361,34 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
           }
         }, null, this, null, 5000);
       }, this);
+
+//      /*
+//       * Experimental
+//       */
+////      var tokenfield = new tokenfield.Token();
+//      tokenfield
+//        .setLabelPath("name")
+//        .setHintText(this.tr('Enter search term'));
+//      qxToolBar1.add(tokenfield, { flex : 1 });
+//      tokenfield.addListener("loadData", function(e)
+//      {
+//        var str = e.getData();
+//        var data = [];
+//        for (var i = 0; i < mockdata.length; i++) {
+//          if( mockdata[i].name.toLowerCase().indexOf(str.toLowerCase()) !== -1 )
+//          {
+//            data.push(mockdata[i]);
+//          }
+//        }
+//        qx.util.TimerManager.getInstance().start(function() {
+//          t.populateList(str, data);
+//        }, null, this, null, 500);
+//      }, this);
+
+
+      /*
+       * Buttons
+       */
       var qxToolBarButton3 = new qx.ui.toolbar.Button(null, "bibliograph/icon/16/search.png", null);
       qxToolBarButton3.setIcon("bibliograph/icon/16/search.png");
       qxToolBar1.add(qxToolBarButton3);
