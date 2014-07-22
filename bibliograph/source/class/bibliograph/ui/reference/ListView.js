@@ -209,7 +209,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
     };
     qx.event.message.Bus.subscribe("folder.reload", this._on_reloadFolder, this);
     qx.event.message.Bus.subscribe("reference.changeData", this._on_changeReferenceData, this);
-    qx.event.message.Bus.subscribe("reference.removeFromFolder", this._on_removeRows, this);
+    qx.event.message.Bus.subscribe("reference.removeRows", this._on_removeRows, this);
 
   },
 
@@ -797,48 +797,51 @@ qx.Class.define("bibliograph.ui.reference.ListView",
     _on_removeRows : function(e)
     {
       var data = e.getData();
-      if (data.datasource == this.getDatasource() && data.folderId == this.getFolderId())
-      {
-        var table = this.getTable();
-        var tableModel = table.getTableModel();
-        if (!qx.lang.Type.isArray(data.ids)) {
-          this.error("Invalid id data.")
-        }
-        this.resetSelection();
 
-        /*
-         * get row indexes from ids
-         */
-        var row, rows = [];
-        data.ids.forEach(function(id) {
-          row = tableModel.getRowById(id);
-          if( row !== undefined ) rows.push( row ); // FIXME this is a bug
-        });
+      // is this message really for me?
+      if ( data.datasource != this.getDatasource() ) return;
+      if ( data.folderId && data.folderId != this.getFolderId()) return
+      if ( data.query && data.query != this.getQuery() ) return;
 
-        /*
-         * sort row indexes descending and remove them
-         */
-        rows.sort(function(a, b) {
-          return b - a
-        });
-
-        if ( rows.length )
-        {
-          rows.forEach(function(row) {
-            tableModel.removeRow(row);
-          });
-        }
-        else
-        {
-          this.reload();
-        }
-
-        /*
-         * rebuild the row-id index because now rows are missing
-         */
-        tableModel.rebuildIndex();
-
+      var table = this.getTable();
+      var tableModel = table.getTableModel();
+      if (!qx.lang.Type.isArray(data.ids)) {
+        this.error("Invalid id data.")
       }
+      this.resetSelection();
+
+      /*
+       * get row indexes from ids
+       */
+      var row, rows = [];
+      data.ids.forEach(function(id) {
+        row = tableModel.getRowById(id);
+        if( row !== undefined ) rows.push( row ); // FIXME this is a bug
+      });
+
+      /*
+       * sort row indexes descending and remove them
+       */
+      rows.sort(function(a, b) {
+        return b - a
+      });
+
+      if ( rows.length )
+      {
+        rows.forEach(function(row) {
+          tableModel.removeRow(row);
+        });
+      }
+      else
+      {
+        this.reload();
+      }
+
+      /*
+       * rebuild the row-id index because now rows are missing
+       */
+      tableModel.rebuildIndex();
+
     },
 
     /*
@@ -1019,8 +1022,8 @@ qx.Class.define("bibliograph.ui.reference.ListView",
     _removeReference : function()
     {
       var message = this.getFolderId() ?
-          this.tr("Do your really want to remove the selected references?") :
-          this.tr("Do your really want to remove the selected references from this folder?");
+          this.tr("Do your really want to remove the selected references from this folder?"):
+          this.tr("Do your really want to remove the selected references?");
       var handler = qx.lang.Function.bind(function(result) {
         if (result === true) {
           this.modifyReferences("remove", null);
@@ -1091,12 +1094,13 @@ qx.Class.define("bibliograph.ui.reference.ListView",
       var datasource = this.getDatasource();
       var folderId = this.getFolderId();
       var selectedIds = this.getSelectedIds();
+      var query = this.getQuery()||null;
       var app = this.getApplication();
       app.setModelId(0);
       app.showPopup(this.tr("Processing request..."));
       app.getRpcManager().execute(
           "bibliograph.reference", action + "References",
-          [datasource, folderId, targetFolderId, selectedIds],
+          [datasource, query||folderId, targetFolderId, selectedIds],
           function() {
             app.hidePopup();
           }, this);

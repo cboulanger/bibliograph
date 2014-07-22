@@ -918,6 +918,14 @@ class bibliograph_service_Reference
       throw new JsonRpcException("Invalid arguments for bibliograph.reference.removeReferences");
     }
 
+    // folderId vs query
+    $query = null;
+    if( ! is_integer($folderId) )
+    {
+      $query = $folderId;
+      $folderId = null;
+    }
+
     // check access
     $this->checkDatasourceAccess( $datasource );
     $this->requirePermission("reference.remove");
@@ -955,7 +963,7 @@ class bibliograph_service_Reference
           null,
           $this->serviceName(),
           $this->serviceMethod(),
-          array( $this->shelve( $datasource, $folderId, $ids ) )
+          array( $this->shelve( $datasource, $query, $ids ) )
         );
       }
 
@@ -1017,11 +1025,21 @@ class bibliograph_service_Reference
      */
     foreach( $containedFolderIds as $fid )
     {
-	    $this->broadcastClientMessage("reference.removeFromFolder", array(
+	    $this->broadcastClientMessage("reference.removeRows", array(
 	      'datasource' => $datasource,
 	      'folderId'   => $fid,
+        'query'      => null,
 	      'ids'        => array($id)
 	    ) );
+    }
+    if( $query )
+    {
+      $this->broadcastClientMessage("reference.removeRows", array(
+        'datasource' => $datasource,
+        'folderId'   => null,
+        'query'      => $query,
+        'ids'        => array($id)
+      ) );
     }
 
     /*
@@ -1084,9 +1102,9 @@ class bibliograph_service_Reference
     /*
      * check arguments
      */
-    qcl_assert_valid_string( $datasource );
-    qcl_assert_integer( $folderId );
-    qcl_assert_integer( $targetFolderId );
+    qcl_assert_valid_string( $datasource, _("Invalid datasource.") );
+    qcl_assert_integer( $folderId, _("Invalid source folder.") );
+    qcl_assert_integer( $targetFolderId, _("Invalid target folder.") );
     qcl_assert_array( $ids );
 
     /*
@@ -1103,33 +1121,12 @@ class bibliograph_service_Reference
 
     foreach( $ids as $id )
     {
-      /*
-       * load the reference record
-       */
+      //unlink from source folder
       $referenceModel->load( intval($id) );
+      $folderModel->load( $folderId );
+      $referenceModel->unlinkModel( $folderModel );
 
-      /*
-       * if the folder id is zero, this means the reference is the
-       * result of a search -> we remove it from all folders,
-       * or is not linked to any folder.
-       */
-      if ( $folderId === 0 )
-      {
-        $referenceModel->unlinkAll( $folderModel );
-      }
-
-      /*
-       * else, unlink from folder
-       */
-      else
-      {
-        $folderModel->load( $folderId );
-        $referenceModel->unlinkModel( $folderModel );
-      }
-
-      /*
-       * link with target folder
-       */
+      // link with target folder
       $folderModel->load( $targetFolderId );
       try
       {
@@ -1137,9 +1134,7 @@ class bibliograph_service_Reference
       }
       catch( qcl_data_model_RecordExistsException $e)
       {
-        /*
-         * remove id
-         */
+        // remove id from list
         $ids = array_diff( $ids, array($id) );
       }
     }
@@ -1163,9 +1158,10 @@ class bibliograph_service_Reference
      */
     if( count( $ids ) )
     {
-      $this->broadcastClientMessage("reference.removeFromFolder", array(
+      $this->broadcastClientMessage("reference.removeRows", array(
         'datasource' => $datasource,
         'folderId'   => $folderId,
+        'query'      => null,
         'ids'        => $ids
       ) );
     }
@@ -1189,9 +1185,8 @@ class bibliograph_service_Reference
     /*
      * check arguments
      */
-    qcl_assert_valid_string( $datasource );
-    qcl_assert_integer( $folderId );
-    qcl_assert_integer( $targetFolderId );
+    qcl_assert_valid_string( $datasource, _("Invalid datasource.") );
+    qcl_assert_integer( $targetFolderId, _("Invalid target folder.") );
     qcl_assert_array( $ids );
 
     /*
@@ -1229,6 +1224,8 @@ class bibliograph_service_Reference
     $referenceCount = count( $referenceModel->linkedModelIds( $folderModel ) );
     $folderModel->set( "referenceCount", $referenceCount );
     $folderModel->save();
+
+    // todo: reload target folder
 
     return "OK";
   }
