@@ -478,21 +478,40 @@ class bibliograph_service_ACLTool
     switch( $type )
     {
       case "datasource":
-        qcl_import("qcl_ui_dialog_Confirm");
         return new qcl_ui_dialog_Confirm(
           $this->tr("Do you want to remove only the datasource entry or all associated data?"),
           array( $this->tr("All data"), $this->tr("Entry only"), true),
           $this->serviceName(), "deleteDatasource", array($ids)
         );
 
-      default:
-        foreach ( (array) $ids as $namedId )
+      case "user":
+        if( min( (array) $ids) < 2 )
         {
-          //$models = $this->modelMap();
-          $model = $this->getElementModel( $type );
-          $model->load( $namedId );
-          $model->delete();
+          throw new qcl_server_ServiceException(_("Deleting admin user is not allowed."));
         }
+        break;
+
+      case "permission":
+        if( min( (array) $ids) < 29 )
+        {
+          throw new qcl_server_ServiceException(_("Deleting system permissions is not allowed."));
+        }
+        break;
+
+      case "role":
+        if( min( (array) $ids) < 5 )
+        {
+          throw new qcl_server_ServiceException(_("Deleting system roles is not allowed."));
+        }
+        break;
+    }
+
+    foreach ( (array) $ids as $namedId )
+    {
+      //$models = $this->modelMap();
+      $model = $this->getElementModel( $type );
+      $model->load( $namedId );
+      $model->delete();
     }
 
     return "OK";
