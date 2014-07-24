@@ -193,7 +193,15 @@ class class_bibliograph_plugin_isbnscanner_Service
      * check for duplicates
      */
     $dsModel = $this->getDatasourceModel($datasource);
-    $referenceModel = $dsModel->getInstanceOfType("reference");
+    try
+    {
+      $referenceModel = $dsModel->getInstanceOfType("reference");
+    }
+    catch(InvalidArgumentException $e)
+    {
+      $this->warn("Problem with datasource $datasource, ds-model" . $dsModel->className() );
+      throw new qcl_server_ServiceException("Problem with importing into '$datasource'");
+    }
     $isbn = str_replace("-","",$isbn);
 
     // try ISBN
