@@ -475,6 +475,7 @@ class bibliograph_service_ACLTool
   public function method_deleteElement( $type, $ids )
   {
     $this->requirePermission("access.manage");
+    $minId = null;
     switch( $type )
     {
       case "datasource":
@@ -485,24 +486,15 @@ class bibliograph_service_ACLTool
         );
 
       case "user":
-        if( min( (array) $ids) < 2 )
-        {
-          throw new qcl_server_ServiceException(_("Deleting admin user is not allowed."));
-        }
+        $minId = 2; // todo should not be hardcoded
         break;
 
       case "permission":
-        if( min( (array) $ids) < 29 )
-        {
-          throw new qcl_server_ServiceException(_("Deleting system permissions is not allowed."));
-        }
+        $minId = 29; // todo should not be hardcoded
         break;
 
       case "role":
-        if( min( (array) $ids) < 5 )
-        {
-          throw new qcl_server_ServiceException(_("Deleting system roles is not allowed."));
-        }
+        $minId = 5; // todo should not be hardcoded
         break;
     }
 
@@ -511,6 +503,10 @@ class bibliograph_service_ACLTool
       //$models = $this->modelMap();
       $model = $this->getElementModel( $type );
       $model->load( $namedId );
+      if( $minId and $model->id() < $minId )
+      {
+        throw new qcl_server_ServiceException( $this->tr("Deleting element '%s' of type '%s' is not allowed.", $namedId, $type));
+      }
       $model->delete();
     }
 
