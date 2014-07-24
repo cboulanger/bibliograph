@@ -687,10 +687,10 @@ class bibliograph_service_Reference
       $model->save();
     }
 
-    $oldCitekey = $model->getCitekey();
-    $newCitekey = $model->computeCiteKey();
-    if( ! $oldCitekey and $model->getAuthor() and $model->getYear() and $model->getTitle() )
+    // citation key
+    if( ! trim($model->getCitekey()) and $model->getCreator() and $model->getYear() and $model->getTitle() )
     {
+      $newCitekey = $model->computeCiteKey();
       $data = array(
         'datasource' => $datasource,
         'modelType'  => "reference",
@@ -698,6 +698,7 @@ class bibliograph_service_Reference
         'data'       => array( "citekey" => $newCitekey )
       );
       $this->broadcastClientMessage("bibliograph/fieldeditor/update", $data );
+      $model->set("citekey", $newCitekey)->save();
     }
     return "OK";
   }

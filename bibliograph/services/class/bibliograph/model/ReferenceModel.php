@@ -375,7 +375,7 @@ class bibliograph_model_ReferenceModel
    */
   function computeCiteKey()
   {
-    $creators = explode(BIBLIOGRAPH_VALUE_SEPARATOR,$this->getCreator());
+    $creators = explode(trim(BIBLIOGRAPH_VALUE_SEPARATOR),$this->getCreator());
     $lastNames = array();
     foreach($creators as $name)
     {
