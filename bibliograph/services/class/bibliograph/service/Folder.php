@@ -733,16 +733,20 @@ class bibliograph_service_Folder
     /*
      * move folder into trash
      */
+    $trashFolderId = $this->getTrashfolderId( $datasource );
     $model = $this->getFolderModel( $datasource );
     $model->load( $folderId );
-    $model->set("parentId", $this->getTrashfolderId( $datasource ) );
-    $model->save();
-
-    /*
-     * mark deleted
-     */
-    $this->setFolderMarkedDeleted( $model, true);
-
+    if ( $model->getParentId() ==  $trashFolderId )
+    {
+      // it is already in the trash, delete right away
+      $model->delete();
+    }
+    else
+    {
+      // move to trash and mark as deleted
+      $model->setParentId( $trashFolderId )->save();
+      $this->setFolderMarkedDeleted( $model, true);
+    }
     return "OK";
   }
 
@@ -800,7 +804,7 @@ class bibliograph_service_Folder
      * change folder parent
      */
     $model->load( $folderId );
-    $model->set("parentId", $parentId );
+    $model->setParentId( $parentId );
     $model->save();
 
     /*
@@ -863,7 +867,7 @@ class bibliograph_service_Folder
      * mark folder (un)deleted
      */
     //$this->debug("Marking $folderModel deleted " . boolString($value),__CLASS__,__LINE__);
-    $folderModel->set("markedDeleted", $value );
+    $folderModel->set("markedDeleted", $value )->save();
 
     /*
      * handle contained referenced
