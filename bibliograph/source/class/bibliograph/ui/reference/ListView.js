@@ -1115,23 +1115,29 @@ qx.Class.define("bibliograph.ui.reference.ListView",
       var selectedIds = this.getSelectedIds();
       var app = this.getApplication();
       app.showPopup(this.tr("Processing request..."));
-      app.getRpcManager().execute("bibliograph.export", "exportReferencesDialog", [datasource, null, selectedIds], function() {
-        app.hidePopup();
-      }, this);
+      app.getRpcManager().execute(
+          "bibliograph.export", "exportReferencesDialog",
+          [datasource, selectedIds],
+          function() {
+            app.hidePopup();
+          }, this
+      );
     },
 
     /**
-     * Exports the whole folder via service
+     * Exports the whole folder or query
      */
     exportFolder : function()
     {
-      var datasource = this.getDatasource();
-      var folderId = this.getFolderId();
       var app = this.getApplication();
       app.showPopup(this.tr("Processing request..."));
-      app.getRpcManager().execute("bibliograph.export", "exportReferencesDialog", [datasource, folderId, null], function() {
-        app.hidePopup();
-      }, this);
+      app.getRpcManager().execute(
+          "bibliograph.export", "exportReferencesDialog",
+          [this.getDatasource(), this.getFolderId()||this.getQuery() ],
+          function() {
+            app.hidePopup();
+          }, this
+      );
     },
 
     /**

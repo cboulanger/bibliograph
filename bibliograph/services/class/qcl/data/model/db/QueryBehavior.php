@@ -658,7 +658,7 @@ class qcl_data_model_db_QueryBehavior
     }
     else
     {
-      throw new InvalidArgumentException("Argument must be instanceof qcl_data_db_Query or null");
+      throw new InvalidArgumentException("Argument must be null or instanceof qcl_data_db_Query with a valid PdoStatement property");
     }
 
     /*

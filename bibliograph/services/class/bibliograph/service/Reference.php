@@ -213,7 +213,7 @@ class bibliograph_service_Reference
   }
 
   /**
-   * Overridden to create qcl-compliant 'where' struncture from a
+   * Overridden to create qcl-compliant 'where' structure from a
    * pseudo- CQL query string.
    *
    * @see http://www.loc.gov/standards/sru/resources/cql-context-set-v1-2.html
@@ -254,7 +254,7 @@ class bibliograph_service_Reference
     }
     else
     {
-      throw new qcl_server_ServiceException( "No recognized query format in request." );
+      throw new qcl_server_ServiceException( _("No recognized query format in request.") );
     }
   }
 

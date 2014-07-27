@@ -39,48 +39,48 @@ msgstr ""
 msgid "Loaded plugin %1 of %2 : %3 ..."
 msgstr ""
 
-#: bibliograph/Main.js:528
+#: bibliograph/Main.js:527
 msgid ""
 "The datasource has just been restored to a previous state and will be "
 "reloaded"
 msgstr ""
 
-#: bibliograph/Main.js:625
+#: bibliograph/Main.js:634
 msgid "Loading datasource information ..."
 msgstr ""
 
-#: bibliograph/Main.js:784
+#: bibliograph/Main.js:793
 msgid ""
 "To log in, you need a secure connection. After you press 'OK', the "
 "application will be reloaded in secure mode. After the application finished "
 "loading, you can log in again."
 msgstr ""
 
-#: bibliograph/Main.js:795
+#: bibliograph/Main.js:804
 msgid ""
 "The application is currently in a read-only state. Only the administrator "
 "can log in."
 msgstr ""
 
-#: bibliograph/Main.js:829
+#: bibliograph/Main.js:838
 msgid "Authenticating ..."
 msgstr ""
 
-#: bibliograph/Main.js:912
+#: bibliograph/Main.js:921
 msgid "You don't have access to any datasource on the server."
 msgstr ""
 
-#: bibliograph/Main.js:964
+#: bibliograph/Main.js:973
 msgid ""
 "Cannot open help window. Please disable the popup-blocker of your browser "
 "for this website."
 msgstr ""
 
-#: bibliograph/plugin/isbnscanner/Plugin.js:60 bibliograph/Main.js:980
+#: bibliograph/plugin/isbnscanner/Plugin.js:60 bibliograph/Main.js:989
 msgid "Please wait ..."
 msgstr ""
 
-#: bibliograph/Main.js:1055
+#: bibliograph/Main.js:1064
 msgid "Retrieving user data..."
 msgstr ""
 
@@ -287,10 +287,10 @@ msgid "Reload"
 msgstr ""
 
 #: bibliograph/ui/item/DuplicatesView.js:161
-#: bibliograph/ui/reference/ListView.js:1097
-#: bibliograph/ui/reference/ListView.js:1114
-#: bibliograph/ui/reference/ListView.js:1128
-#: bibliograph/ui/reference/ListView.js:1143
+#: bibliograph/ui/reference/ListView.js:1100
+#: bibliograph/ui/reference/ListView.js:1117
+#: bibliograph/ui/reference/ListView.js:1133
+#: bibliograph/ui/reference/ListView.js:1152
 #: bibliograph/ui/item/RecordInfo.js:167
 msgid "Processing request..."
 msgstr ""
@@ -507,24 +507,24 @@ msgstr ""
 msgid "Loading table ..."
 msgstr ""
 
-#: bibliograph/ui/reference/ListView.js:1007
+#: bibliograph/ui/reference/ListView.js:1009
 msgid "You cannot create an item outside a folder"
 msgstr ""
 
-#: bibliograph/ui/reference/ListView.js:1023
-msgid "Do your really want to remove the selected references?"
-msgstr ""
-
-#: bibliograph/ui/reference/ListView.js:1024
+#: bibliograph/ui/reference/ListView.js:1025
 msgid ""
 "Do your really want to remove the selected references from this folder?"
 msgstr ""
 
-#: bibliograph/ui/reference/ListView.js:1048
+#: bibliograph/ui/reference/ListView.js:1026
+msgid "Do your really want to remove the selected references?"
+msgstr ""
+
+#: bibliograph/ui/reference/ListView.js:1050
 msgid "Do your really want to move the selected references to '%1'?"
 msgstr ""
 
-#: bibliograph/ui/reference/ListView.js:1074
+#: bibliograph/ui/reference/ListView.js:1076
 msgid "Do your really want to copy the selected referencesto '%1'?"
 msgstr ""
 
@@ -562,6 +562,9 @@ msgid "Export selected references"
 msgstr ""
 
 #: bibliograph/ui/reference/ListViewUi.js:279
+msgid "Export all references"
+msgstr ""
+
 #: bibliograph/ui/reference/ListViewUi.js:280
 msgid "Export folder"
 msgstr ""

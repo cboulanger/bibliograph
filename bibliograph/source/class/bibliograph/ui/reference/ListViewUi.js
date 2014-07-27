@@ -276,7 +276,7 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
       /*
        * Export folder
        */
-      var qxMenuButton5 = new qx.ui.menu.Button(this.tr('Export folder'), null, null, null);
+      var qxMenuButton5 = new qx.ui.menu.Button(this.tr('Export all references'), null, null, null);
       qxMenuButton5.setLabel(this.tr('Export folder'));
       qxMenu2.add(qxMenuButton5);
       qxMenuButton5.addListener("execute", function(e) {

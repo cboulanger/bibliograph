@@ -19,6 +19,8 @@
 ************************************************************************ */
 
 qcl_import( "qcl_data_controller_Controller" );
+qcl_import("qcl_ui_dialog_Form");
+qcl_import("bibliograph_model_export_RegistryModel");
 
 /**
  *
@@ -28,40 +30,12 @@ class bibliograph_service_Export
 {
 
   /**
-   * Exports the given references to a file in temporary system folder.
-   * You need to supply either a folder id or an array of reference ids
-   * as second and third argument. If both are provided, the folder id takes
-   * precedence. The method returns the name of the file. You can then
-   * download the file using the qcl_server_Upload with the "bibliograph_export"
-   * datasource and the filename.
-   *
-   * @param string $datasource
-   *    Required name of datasource
-   * @param int $folderId
-   *    The id of the folder to export
-   * @param array $ids
-   *    The ids of the references to export.
-   * @return string
-   *    Name of file
+   * Returns a dialog to export references
+   * @see bibliograph_service_Export::exportReferences for signature
+   * @return qcl_ui_dialog_Form
    */
-  public function method_exportReferencesDialog( $datasource, $folderId, $ids )
+  public function method_exportReferencesDialog( $datasource, $selector )
   {
-    /*
-     * check values
-     */
-    if ( $folderId )
-    {
-      qcl_assert_integer( $folderId, "Invalid folder id.");
-    }
-    else
-    {
-      qcl_assert_array( $ids, "Invalid ids argument" );
-    }
-
-    /*
-     * return form
-     */
-    qcl_import("qcl_ui_dialog_Form");
     return new qcl_ui_dialog_Form(
       "<b>" . _("Export references") . "</b>",
       array(
@@ -86,7 +60,6 @@ class bibliograph_service_Export
    */
   protected function getFormatListData()
   {
-    qcl_import( "bibliograph_model_export_RegistryModel" );
     $exportRegistry = bibliograph_model_export_RegistryModel::getInstance();
 
     /*
@@ -105,21 +78,18 @@ class bibliograph_service_Export
   }
 
   /**
-   * Handles the dialog data from method_exportReferencesDialog()
-   * @param $data
-   * @param $datasource
-   * @param $folderId
-   * @param $ids
-   * @return string
+   * Handles the dialog data from method_exportReferencesDialog().
+   * @see bibliograph_service_Export::exportReferences for signature
+   * @return string The name of the file to download
    */
-  public function method_exportReferencesHandleDialogData( $data, $datasource, $folderId, $ids )
+  public function method_exportReferencesHandleDialogData( $data, $datasource, $selector )
   {
     if ( $data===null )
     {
       return "ABORTED";
     }
 
-    $file = $this->exportReferences( $data->format, $datasource, $folderId, $ids );
+    $file = $this->exportReferences( $data->format, $datasource, $selector);
     $name = explode("_",$file);
     $url  = $this->getServerInstance()->getUrl() .
       "?download=true" .
@@ -137,9 +107,7 @@ class bibliograph_service_Export
 
   /**
    * Exports the given references to a file in temporary system folder.
-   * You need to supply either a folder id or an array of reference ids
-   * as second and third argument. If both are provided, the folder id takes
-   * precedence. The method returns the name of the file. You can then
+   * The method returns the name of the file. You can then
    * download the file using the qcl_server_Upload with the "bibliograph_export"
    * datasource and the filename.
    *
@@ -147,19 +115,17 @@ class bibliograph_service_Export
    *    Required fomat of the export
    * @param string $datasource
    *    Required name of datasource
-   * @param int $folderId
-   *    The id of the folder to export
-   * @param array $ids
-   *    The ids of the references to export.
+   * @param int|string|array $selector
+   *    If integer, the id of the folder. If string, a query. If an array, the ids
+   *    of the references to export
    * @return string
    *    Name of file
    */
-  public function exportReferences( $format, $datasource, $folderId, $ids )
+  public function exportReferences( $format, $datasource, $selector )
   {
     qcl_assert_valid_string( $format );
     qcl_assert_valid_string( $datasource );
 
-    qcl_import("bibliograph_model_export_RegistryModel");
     $exportRegistry = bibliograph_model_export_RegistryModel::getInstance();
     $exporter = $exportRegistry->getExporter( $format );
 
@@ -178,15 +144,37 @@ class bibliograph_service_Export
     /*
      * select records
      */
-    if ( $folderId )
+    if ( is_integer( $selector ) and $selector > 0 )
     {
       $fldModel = $dsModel->getInstanceOfType("folder");
-      $fldModel->load( $folderId );
+      $fldModel->load( (int) $selector );
       $query = $refModel->findLinked( $fldModel );
+    }
+    elseif ( is_array( $selector) )
+    {
+      $query = $refModel->getQueryBehavior()->selectIds( $selector );
+    }
+    elseif ( is_string( $selector ) )
+    {
+      qcl_import( "bibliograph_schema_CQL" );
+      try
+      {
+        $query = bibliograph_schema_CQL::getInstance()->addQueryConditions(
+          (object) array( 'cql' => $selector ),
+          new qcl_data_db_Query(),
+          $refModel
+        );
+      }
+      catch( bibliograph_schema_Exception $e)
+      {
+        throw new qcl_server_ServiceException($e->getMessage());
+      }
+      $query->where['markedDeleted'] = false;
+      $refModel->getQueryBehavior()->select( $query );
     }
     else
     {
-      $query = $refModel->getQueryBehavior()->selectIds( $ids );
+      throw new InvalidArgumentException("Invalid parameters");
     }
 
     /*
