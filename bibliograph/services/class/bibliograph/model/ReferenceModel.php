@@ -380,7 +380,7 @@ class bibliograph_model_ReferenceModel
     foreach($creators as $name)
     {
       $parts = explode(",", $name);
-      $lastNames[] = trim($parts[0]);
+      $lastNames[] = str_replace( " ", "-" , trim($parts[0]) );
     }
     $citekey = implode("+", $lastNames);
 
