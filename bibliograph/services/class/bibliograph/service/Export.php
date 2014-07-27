@@ -129,7 +129,7 @@ class bibliograph_service_Export
       "&name=" . $name[1] .
       "&id=$file&delete=true";
 
-    $this->dispatchClientMessage("openBrowserWindow", array(
+    $this->dispatchClientMessage("window.location.replace", array(
       'url' => $url
     ) );
     return "";

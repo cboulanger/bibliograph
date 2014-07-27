@@ -507,13 +507,12 @@ qx.Class.define("bibliograph.Main",
       }, this);
 
       /*
-       * opens a browser window with the given url
-       * used by the export function
+       * used by the bibliograph.export.exportReferencesHandleDialogData
        */
-      bus.subscribe("openBrowserWindow", function(e)
+      bus.subscribe("window.location.replace", function(e)
       {
         var data = e.getData();
-        window.open(data.url);
+        window.location.replace(data.url);
       }, this);
 
 
