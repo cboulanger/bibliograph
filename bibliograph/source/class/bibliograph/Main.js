@@ -534,6 +534,16 @@ qx.Class.define("bibliograph.Main",
         }, this);
       }, this);
 
+      /*
+       * reload the main list view
+       */
+      bus.subscribe("mainListView.reload", function(e)
+      {
+        var data = e.getData();
+        if (data.datasource !== this.getDatasource())return;
+        this.getWidgetById("mainListView").reload();
+      }, this);
+
     },
 
     /*
@@ -662,7 +672,7 @@ qx.Class.define("bibliograph.Main",
     {
       var stmgr = this.getStateManager()
       stmgr.setState("modelId", 0);
-      if (value)
+      if (parseInt(value))
       {
         stmgr.setState("folderId", value);
         stmgr.setState("query", "");
@@ -720,7 +730,7 @@ qx.Class.define("bibliograph.Main",
      * @return {void}
      */
     _applyModelId : function(value, old) {
-      if (value) {
+      if (parseInt(value)) {
         this.getStateManager().setState("modelId", value);
       } else {
         this.getStateManager().removeState("modelId");

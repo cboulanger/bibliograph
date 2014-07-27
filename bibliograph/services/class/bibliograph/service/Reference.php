@@ -18,7 +18,8 @@
 
 ************************************************************************ */
 
-qcl_import( "qcl_data_controller_TableController" );
+qcl_import("qcl_data_controller_TableController");
+qcl_import("qcl_ui_dialog_Alert");
 qcl_import("qcl_ui_dialog_Confirm");
 qcl_import("bibliograph_service_Folder");
 
@@ -1409,13 +1410,18 @@ class bibliograph_service_Reference
      */
     $schemaModel = $this->getControlledModel( $datasource )->getSchemaModel();
     $fields = $schemaModel->fields();
-    $fieldOptions = array(
-      array( 'value' => "all", 'label' => _("All fields") )
-    );
+    $fieldOptions = array();
+//    $fieldOptions[] = array( 'value' => "all", 'label' => _("All fields") ); // not implemented yet
+
     foreach( $fields as $field )
     {
       $fieldOptions[] = array( 'value' => $field, 'label' => $schemaModel->getFieldLabel($field) );
     }
+
+    // sort fields by label
+    usort( $fieldOptions, function($a,$b){
+      return strcmp($a['label'], $b['label']);
+    });
 
     /*
      * form data
@@ -1481,11 +1487,10 @@ class bibliograph_service_Reference
       'folder'    => _("in the selected folder")
     );
     $schemaModel = $this->getControlledModel( $datasource )->getSchemaModel();
-    qcl_import("qcl_ui_dialog_Confirm");
+
     $args =  func_get_args();
     return new qcl_ui_dialog_Confirm(
-      $this->tr(
-       "Are you sure you want to replace '%s' with '%s' in %s %s?",
+      $this->tr("Are you sure you want to replace '%s' with '%s' in %s %s?",
        $data->find, $data->replace,
        $data->field == "all"
          ? _("all fields")
@@ -1550,10 +1555,19 @@ class bibliograph_service_Reference
       default:
         throw new JsonRpcException("Invalid scope argument");
     }
-    qcl_import("qcl_ui_dialog_Alert");
+
+    /*
+     * reload listview
+     */
+    $this->broadcastClientMessage("mainListView.reload",array(
+      "datasource" => $datasource
+    ) );
+
+    /*
+     * show alert
+     */
     return new qcl_ui_dialog_Alert(
-      $this->tr(
-        "%s replacements made. Please reload to see the changes. %s",
+      $this->tr("%s replacements made. %s",
         $count,
         $data->backup
            ? $this->tr("In case you want to revert the changes, a backup file '%s' has been created.",$zipfile)
