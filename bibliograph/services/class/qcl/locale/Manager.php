@@ -205,9 +205,8 @@ class qcl_locale_Manager extends qcl_core_Object
 
   /**
    * Translates a message and applies sprintf formatting to it.
-   * The gettext domain is taken from the first segment of the class
-   * name. Class foo_bar_Baz will use translations of
-   * domain "foo", stored in "foo/class/locale/xx/LC_MESSAGES/foo.po".
+   * If a class name is given, the textdomain will be computed from the the class'
+   * root namespace plus underscore plus locale name.
    *
    * @param string $messageId
    *    Message id (may contain format strings)
@@ -220,13 +219,17 @@ class qcl_locale_Manager extends qcl_core_Object
    */
   public function tr( $messageId, $varargs=array(), $className=null )
   {
+
     if ( $className and ( count( $segments = explode( "_", $className) ) > 1 ) )
     {
-      $translation = dgettext( $segments[0], $messageId );
-      //if ( $this->hasLog() ) $this->log( "Translating '$messageId' into '$translation' using domain '$segments[0]'", QCL_LOG_LOCALE);
+      // use textdomain bound to class
+      $textdomain = $segments[0] . "_" . $this->getUserLocale();
+      $translation = dgettext( $textdomain, $messageId );
+      //if ( $this->hasLog() ) $this->log( "Translating '$messageId' into '$translation' using domain '$textdomain'", QCL_LOG_LOCALE);
     }
     else
     {
+      // use default textdomain
       $translation = gettext( $messageId );
       //if ( $this->hasLog() ) $this->log( "Translating '$messageId' into '$translation'.", QCL_LOG_LOCALE);
     }
@@ -256,10 +259,13 @@ class qcl_locale_Manager extends qcl_core_Object
   {
     if ( $className and ( count( $segments = explode( "_", $className) ) > 1 ) )
     {
-      $translation =  dngettext( $segments[0], $singularMessageId, $pluralMessageId, $count );
+      // use textdomain bound to class
+      $textdomain = $segments[0] . "_" . $this->getUserLocale();
+      $translation = dngettext( $textdomain, $singularMessageId, $pluralMessageId, $count );
     }
     else
     {
+      // use default textdomain
       $translation =  ngettext( $singularMessageId, $pluralMessageId, $count );
     }
     array_unshift( $varargs, $translation );
