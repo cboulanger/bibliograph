@@ -508,13 +508,13 @@ qx.Class.define("bibliograph.Main",
 
       /*
        * opens a browser window with the given url
-       * currently not used
+       * used by the export function
        */
-//      bus.subscribe("openBrowserWindow", function(e)
-//      {
-//        var data = e.getData();
-//        window.open(data.url);
-//      }, this);
+      bus.subscribe("openBrowserWindow", function(e)
+      {
+        var data = e.getData();
+        window.open(data.url);
+      }, this);
 
 
       /*

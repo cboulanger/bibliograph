@@ -341,12 +341,12 @@ class bibliograph_service_Setup
     }
     catch( qcl_data_model_RecordExistsException $e){}
 
-    try
-    {
-      //qcl_import("qcl_io_filesystem_remote_Datasource");
-      //qcl_io_filesystem_remote_Datasource::getInstance()->registerSchema();
-    }
-    catch( qcl_data_model_RecordExistsException $e){}
+//    try
+//    {
+//      qcl_import("qcl_io_filesystem_remote_Datasource");
+//      qcl_io_filesystem_remote_Datasource::getInstance()->registerSchema();
+//    }
+//    catch( qcl_data_model_RecordExistsException $e){}
 
     /*
      * create datasource for importing records from
@@ -384,7 +384,6 @@ class bibliograph_service_Setup
         "bibliograph_export",
         "qcl.schema.filesystem.local",
          array(
-          'dsn'    => str_replace("&",";",$this->getApplication()->getIniValue("macros.dsn_tmp")), // ini-file data cannot contain ";"
           'hidden' => true
         )
       );
