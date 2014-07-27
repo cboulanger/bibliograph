@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Bibliograph 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-27 17:34+0100\n"
-"PO-Revision-Date: 2014-07-27 17:36+0100\n"
+"POT-Creation-Date: 2014-07-27 22:51+0100\n"
+"PO-Revision-Date: 2014-07-27 22:53+0100\n"
 "Last-Translator: Christian Boulanger <info@bibliograph.org>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -890,11 +890,11 @@ msgstr "Die Sicherung wurde zurückgespielt."
 msgid "Please check logfile for problems."
 msgstr "Bitte sehen Sie im Logfile nach, welche Probleme aufgetreten sind. "
 
-#: ../../../class/bibliograph/service/Export.php:66
+#: ../../../class/bibliograph/service/Export.php:40
 msgid "Export references"
 msgstr "Datensätze exportieren"
 
-#: ../../../class/bibliograph/service/Export.php:69
+#: ../../../class/bibliograph/service/Export.php:43
 msgid "Choose the export format"
 msgstr "Exportformat auswählen"
 
@@ -945,10 +945,29 @@ msgstr "Normaler Ordner"
 msgid "Search folder"
 msgstr "Suchordner"
 
-#: ../../../class/bibliograph/service/Folder.php:704
+#: ../../../class/bibliograph/service/Folder.php:699
+#: ../../../class/bibliograph/service/Folder.php:745
+msgid "Top folders cannot be deleted."
+msgstr "Die obersten Ordner können nicht gelöscht werden."
+
+#: ../../../class/bibliograph/service/Folder.php:706
 #, php-format
 msgid "Do you really want to move the folder '%s' into the trash?"
 msgstr "Wollen Sie wirklich den Ordner '%s' in den Mülleimer legen?"
+
+#: ../../../class/bibliograph/service/Folder.php:780
+msgid "Folder cannot be moved on itself."
+msgstr "Ein Ordner kann nicht auf sich selbst verschoben werden."
+
+#: ../../../class/bibliograph/service/Folder.php:807
+msgid "Parent node cannot be moved on a child node"
+msgstr ""
+"Ein übergeordneter Ordner kann nicht in einen untergeordneten Ordner "
+"verschoben werden. "
+
+#: ../../../class/bibliograph/service/Folder.php:820
+msgid "Top folders cannot be moved."
+msgstr "Die obersten Ordner können nicht verschoben werden."
 
 #: ../../../class/bibliograph/service/Import.php:134
 msgid "2. Choose import format"
@@ -963,6 +982,10 @@ msgstr ""
 "Format '%s' erwartet die Dateiendung '%s'. Die Datei, die Sie hochgeladen "
 "haben, hat die Dateiendung '%s'. Bitte nennen Sie die Datei um und laden Sie "
 "sie erneut hoch. "
+
+#: ../../../class/bibliograph/service/Reference.php:257
+msgid "No recognized query format in request."
+msgstr "Das Abfrageformat kann nicht erkannt werden."
 
 #: ../../../class/bibliograph/service/Reference.php:961
 #, php-format
@@ -1208,15 +1231,15 @@ msgstr "Beispiel-Datenquellen erzeugt."
 msgid "Creating internal datasources ..."
 msgstr "Lege interne Datenquellen an ..."
 
-#: ../../../class/bibliograph/service/Setup.php:413
+#: ../../../class/bibliograph/service/Setup.php:412
 msgid "Created internal datasources."
 msgstr "Interne Datenbanken wurden angelegt. "
 
-#: ../../../class/bibliograph/service/Setup.php:416
+#: ../../../class/bibliograph/service/Setup.php:415
 msgid "Done ..."
 msgstr "Fertig ..."
 
-#: ../../../class/bibliograph/service/Setup.php:417
+#: ../../../class/bibliograph/service/Setup.php:416
 msgid "Setup finished. Please reload the application"
 msgstr ""
 "Die Einrichtung von Bibliograph ist abgeschlossen. Bitte laden Sie "

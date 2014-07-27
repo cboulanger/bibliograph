@@ -681,23 +681,25 @@ class bibliograph_service_Folder
    */
   public function method_removeFolderDialog( $datasource, $folderId )
   {
-    /*
-     * check arguments
-     */
+    // check arguments
     qcl_assert_valid_string( $datasource );
     qcl_assert_integer( $folderId );
 
-    /*
-     * check access
-     */
+    // check access
     $this->checkDatasourceAccess( $datasource );
     $this->requirePermission("folder.remove");
 
-    /*
-     * create dialog
-     */
+    // model
     $model = $this->getFolderModel( $datasource );
     $model->load( $folderId );
+
+    // root folder?
+    if( $model->getParentId() == 0 )
+    {
+      throw new qcl_server_ServiceException(_("Top folders cannot be deleted."));
+    }
+
+    // create dialog
     $label = $model->getLabel();
     qcl_import("qcl_ui_dialog_Confirm");
     return new qcl_ui_dialog_Confirm(
@@ -736,6 +738,13 @@ class bibliograph_service_Folder
     $trashFolderId = $this->getTrashfolderId( $datasource );
     $model = $this->getFolderModel( $datasource );
     $model->load( $folderId );
+
+    // root folder?
+    if( $model->getParentId() == 0 )
+    {
+      throw new qcl_server_ServiceException(_("Top folders cannot be deleted."));
+    }
+
     if ( $model->getParentId() ==  $trashFolderId )
     {
       // it is already in the trash, delete right away
@@ -768,7 +777,7 @@ class bibliograph_service_Folder
     qcl_assert_integer( $parentId );
     if( $folderId == $parentId )
     {
-      throw new JsonRpcException("Folder cannot be moved on itself.");
+      throw new qcl_server_ServiceException(_("Folder cannot be moved on itself."));
     }
 
     /*
@@ -792,10 +801,10 @@ class bibliograph_service_Folder
       {
         break;
       }
-      $id = $model->get("parentId");
+      $id = $model->getParentId();
       if( $id == $folderId )
       {
-        throw new JsonRpcException("Parent node cannot be moved on a child node");
+        throw new qcl_server_ServiceException(_("Parent node cannot be moved on a child node"));
       }
     }
     while ( $id !== 0 );
@@ -804,6 +813,13 @@ class bibliograph_service_Folder
      * change folder parent
      */
     $model->load( $folderId );
+
+    // root folder?
+    if( $model->getParentId() == 0 )
+    {
+      throw new qcl_server_ServiceException(_("Top folders cannot be moved."));
+    }
+
     $model->setParentId( $parentId );
     $model->save();
 
