@@ -94,13 +94,15 @@ class bibliograph_service_Setup
       return $this->method_start($this->tr("Starting setup ..."));
     }
 
-    /*
-     * if we're already set up, cleanup sessions and users and inform client about application mode
-     */
+    // if we're already set up, cleanup sessions and users
     $this->getAccessController()->createUserSession();
     $this->getAccessController()->cleanup();
+
+    // client messages
+    $this->dispatchClientMessage("ldap.enabled", (bool) $app->getIniValue("ldap.enabled") );
     $this->dispatchClientMessage("bibliograph.setup.done");
     $this->broadcastClientMessage("application.setMode",QCL_APPLICATION_MODE,false);
+
     return "OK";
   }
 

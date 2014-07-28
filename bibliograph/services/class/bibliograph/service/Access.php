@@ -19,7 +19,9 @@
 ************************************************************************ */
 
 qcl_import("qcl_access_Service");
-
+qcl_import("qcl_ui_dialog_Alert");
+qcl_import("qcl_ui_dialog_Prompt");
+qcl_import("qcl_ui_dialog_Confirm");
 
 /**
  * The class used for authentication of users. Adds LDAP authentication
@@ -29,6 +31,26 @@ class bibliograph_service_Access
 {
 
   /**
+   * Service to collect events and messages waiting for a particular connected session.
+   * Returns the number of milliseconds after which to poll again.
+   * @return int
+   */
+  public function method_getMessages()
+  {
+    // cleanup stale sessions
+    $this->getAccessController()->cleanup();
+
+    // determine the polling frequency based on the number of connected users
+    $sessionModel = $this->getAccessController()->getSessionModel();
+    $numberOfSessions = $sessionModel->countRecords();
+    $pollingFrequencyInMs =
+      QCL_EVENT_MESSAGE_POLLING_INTERVAL +
+      (QCL_EVENT_MESSAGE_POLLING_DELAYPERSESSION*($numberOfSessions-1));
+
+    return $pollingFrequencyInMs;
+  }
+
+  /**
    * overridden to allow on-the-fly registration
    */
   public function method_authenticate( $first=null, $password=null )
@@ -36,46 +58,50 @@ class bibliograph_service_Access
     /*
      * on-the-fly registration and authentication with the
      * self-register- password
-     * @todo replace with a more sophisticated system
+     * todo: reuse this code for user creation
      */
-    if ( defined("BIBLIOGRAPH_SELF_REGISTER_PASSWORD") )
-    {
-      if ( $password == BIBLIOGRAPH_SELF_REGISTER_PASSWORD )
-      {
-        $username = trim( $first );
-
-        try
-        {
-          qcl_assert_valid_string( $username );
-          qcl_assert_regexp( "/[a-zA-Z0-9\.\-\_]+/", $username );
-        }
-        catch( InvalidArgumentException $e )
-        {
-          throw new JsonRpcException( "Invalid user name '$username'. Name must only contain letters, numbers or '.-_'." );
-        }
-        $userModel = $this->getAccessController()->getUserModel();
-
-        if ( $userModel->namedIdExists( $username ) )
-        {
-          throw new JsonRpcException( "User '$username' exists." );
-        }
-
-        $userModel->create($username,array(
-          'name'      => $username,
-          'password'  => $password
-        ) );
-
-        /*
-         * link with user role
-         */
-        $roleModel = $this->getAccessController()->getRoleModel();
-        $roleModel->load( BIBLIOGRAPH_ROLE_USER );
-        $userModel->linkModel( $roleModel );
-
-        $this->newUser = $username;
-        $first = $username;
-      }
-    }
+//    if ( defined("BIBLIOGRAPH_SELF_REGISTER_PASSWORD") )
+//    {
+//      if ( $password == BIBLIOGRAPH_SELF_REGISTER_PASSWORD )
+//      {
+//        $username = trim( $first );
+//
+//        try
+//        {
+//          qcl_assert_valid_string( $username );
+//          qcl_assert_regexp( "/[a-zA-Z0-9\.\-\_]+/", $username );
+//        }
+//        catch( InvalidArgumentException $e )
+//        {
+//          throw new qcl_server_ServiceException(
+//            $this->tr("Invalid user name '%s'. Name must only contain letters, numbers or '.-_'.", $username)
+//          );
+//        }
+//        $userModel = $this->getAccessController()->getUserModel();
+//
+//        if ( $userModel->namedIdExists( $username ) )
+//        {
+//          throw new qcl_server_ServiceException(
+//            $this->tr("Username '%s' has already been taken. Please use a different one.", $username )
+//          );
+//        }
+//
+//        $userModel->create($username,array(
+//          'name'      => $username,
+//          'password'  => $password
+//        ) );
+//
+//        /*
+//         * link with user role
+//         */
+//        $roleModel = $this->getAccessController()->getRoleModel();
+//        $roleModel->load( BIBLIOGRAPH_ROLE_USER );
+//        $userModel->linkModel( $roleModel );
+//
+//        $this->newUser = $username;
+//        $first = $username;
+//      }
+//    }
 
     /*
      * do the authentication
@@ -84,7 +110,6 @@ class bibliograph_service_Access
 
     /*
      * check if authentication is allowed at all
-     * todo: is this necessary at all? We have application modes
      */
     $configModel =  $this->getApplication()->getConfigModel();
     if ( $password and $configModel->getKey("bibliograph.access.mode") == "readonly" )
@@ -105,17 +130,26 @@ class bibliograph_service_Access
      * create dialog that asks user to fill out their user information
      * if the new user is not from LDAP authentication
      */
-    if ( $this->newUser and ! $this->ldapAuth )
+//    if ( $this->newUser and ! $this->ldapAuth )
+//    {
+//      new qcl_ui_dialog_Alert(
+//        _("Welcome to Bibliograph. After clicking 'OK', please enter your email address and a new password."),
+//        "bibliograph.model", "editElement", array( "user", $this->newUser )
+//      );
+//    }
+
+    /*
+     * create dialog that asks user to fill out their user information
+     * if the new user is not from LDAP authentication
+     */
+    if ( strlen($password) == 7 )
     {
-      /*
-       * alert
-       */
-      qcl_import("qcl_ui_dialog_Alert");
       new qcl_ui_dialog_Alert(
-        _("Welcome to Bibliograph. After clicking 'OK', please enter your email address and a new password."),
-        "bibliograph.model", "editElement", array( "user", $this->newUser )
+        $this->tr("You need to set a new password."),
+        "bibliograph.actool", "editElement", array( "user", $first )
       );
     }
+
     return $response;
   }
 
@@ -124,7 +158,7 @@ class bibliograph_service_Access
    * @param string $username
    * @param string $password
    * @param array $data Optional user data
-   * @return unknown_type
+   * @return string
    */
   public function method_register( $username, $password, $data=array() )
   {
@@ -138,14 +172,13 @@ class bibliograph_service_Access
   }
 
   /**
+   * Dialog to export ACL data (ACL Tool)
    * @param $modelType
    * @return qcl_ui_dialog_Confirm
    */
   public function method_exportAccessModelDialog( $modelType )
   {
     $this->requirePermission("access.manage");
-    qcl_import("qcl_ui_dialog_Confirm");
-
     return new qcl_ui_dialog_Confirm(
       sprintf( _( "This will purge all anonymous user data (do this only during maintenance periods) and export all access control data to the backup folder.") , $modelType ),
       null,
@@ -154,6 +187,7 @@ class bibliograph_service_Access
   }
 
   /**
+   * Service to export ACL data
    * @param $answer
    * @param $modelType
    * @return qcl_ui_dialog_Alert|string
@@ -173,6 +207,7 @@ class bibliograph_service_Access
   }
 
   /**
+   * Export ACL data to backup dir
    * @param null $models
    * @return string
    * @throws JsonRpcException
@@ -208,28 +243,6 @@ class bibliograph_service_Access
       chmod( $file, 0666 );
     }
     return $dir;
-  }
-
-  /**
-   * Service to collect events and messages waiting for a particular connected session.
-   * Returns the number of milliseconds after which to poll again.
-   * @return int
-   */
-  public function method_getMessages()
-  {
-    /*
-     * cleanup stale sessions
-     */
-    $this->getAccessController()->cleanup();
-
-    /*
-     * determine the polling frequency based on the number of connected users
-     */
-    $sessionModel = $this->getAccessController()->getSessionModel();
-    $numberOfSessions = $sessionModel->countRecords();
-    $pollingFrequencyInMs = QCL_EVENT_MESSAGE_POLLING_INTERVAL + (QCL_EVENT_MESSAGE_POLLING_DELAYPERSESSION*($numberOfSessions-1));
-
-    return $pollingFrequencyInMs;
   }
 
   /*
@@ -274,8 +287,5 @@ class bibliograph_service_Access
 
 
   */
-
-
-
 }
 ?>

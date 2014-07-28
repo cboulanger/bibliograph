@@ -21,9 +21,12 @@
 qcl_import("qcl_data_controller_Controller");
 qcl_import("qcl_ui_dialog_Alert");
 qcl_import("qcl_ui_dialog_Confirm");
+qcl_import("qcl_ui_dialog_Prompt");
+qcl_import("qcl_util_system_Mail");
 
 /**
  * Backend service class for the access control tool widget
+ * @todo move back to qcl
  */
 class bibliograph_service_ACLTool
   extends qcl_data_controller_Controller
@@ -38,7 +41,7 @@ class bibliograph_service_ACLTool
   /**
    * Returns a map of data on the models that are used for the various xxxElement
    * methods
-   * FIXME Use 'access' datasource!
+   * @todo Use 'access' datasource!
    * @return array
    */
   protected function modelMap()
@@ -81,7 +84,6 @@ class bibliograph_service_ACLTool
       )
     );
   }
-
 
   /**
    * Retuns ListItem data for the types of access models
@@ -242,7 +244,7 @@ class bibliograph_service_ACLTool
    * @param $elementType
    * @param $namedId
    * @throws JsonRpcException
-   * @return unknown_type
+   * @return array
    */
   public function method_getAccessElementTree( $elementType, $namedId )
   {
@@ -732,7 +734,7 @@ class bibliograph_service_ACLTool
      */
     if ( $type == "user" and $model->get("ldap") )
     {
-      throw new JsonRpcException("LDAP user data cannot be edited.");
+      throw new qcl_server_ServiceException($this->tr("User data is from an LDAP server and cannot be changed."));
     }
 
     try
@@ -774,7 +776,7 @@ class bibliograph_service_ACLTool
        */
       if ( $data->password and $parsed->password != $oldData->password )
       {
-        return $this->sendInformationEmail( $model->data(), $data->password );
+        return $this->sendInformationEmail( $model->data() );
       }
     }
     return new qcl_ui_dialog_Alert($this->tr("The data has been saved."));
@@ -786,19 +788,19 @@ class bibliograph_service_ACLTool
    * @param array|object $data
    * @return qcl_ui_dialog_Alert
    */
-  protected function sendInformationEmail( $data, $password )
+  protected function sendInformationEmail( $data )
   {
     $data = (object) $data;
     if ( ! $data->confirmed )
     {
-      $this->sendConfirmationLinkEmail( $data->email, $data->namedId, $data->name, $password );
+      $this->sendConfirmationLinkEmail( $data->email, $data->namedId, $data->name );
       return new qcl_ui_dialog_Alert(
         $this->tr("An email has been sent to %s (%s) with information on the registration.", $data->name, $data->email)
       );
     }
     else
     {
-      $this->sendPasswordChangeEmail( $data->email, $data->namedId, $data->name, $password );
+      $this->sendPasswordChangeEmail( $data->email, $data->namedId, $data->name );
       return new qcl_ui_dialog_Alert(
         $this->tr("An email has been sent to %s (%s) to inform about the change of password.", $data->name, $data->email)
       );
@@ -825,40 +827,30 @@ class bibliograph_service_ACLTool
   }
 
 
-  protected function sendConfirmationLinkEmail( $email, $username, $name, $password )
+  /**
+   * Sends an email to confirm the registration
+   * @param $email
+   * @param $username
+   */
+  protected function sendConfirmationLinkEmail( $email, $username, $name )
   {
     $app = $this->getApplication();
-
-    /*
-     * mail subject
-     */
-    $configModel = $app->getConfigModel();
-    $applicationTitle =
-      $configModel->keyExists("application.title")
-        ? $configModel->getKey("application.title")
-        : $app->name();
-    $subject = $this->tr("Your registration at %s", $applicationTitle );
-
-    /*
-     * mail body
-     */
+    $applicationTitle = $this->getApplicationTitle();
+    $adminEmail  = $app->getIniValue("email.admin");
     $confirmationLink = qcl_server_Server::getUrl() .
       "?service="   . $this->serviceName() .
       "&method="    . "confirmEmail" .
       "&params="    . $username;
 
+    // compose mail
+    $subject = $this->tr("Your registration at %s", $applicationTitle );
     $body  = $this->tr("Dear %s,", $name);
-    $body .= "\n\n" . $this->tr("You have been registered as a user at  '%s'.", $applicationTitle );
-    $body .= "\n\n" . $this->tr("Your username is '%s' and your password is '%s'", $username, $password );
+    $body .= "\n\n" . $this->tr("You have been registered as user '%s' at '%s'.", $username, $applicationTitle );
     $body .= "\n\n" . $this->tr("Please confirm your account by visiting the following link:" );
     $body .= "\n\n" . $confirmationLink;
     $body .= "\n\n" . $this->tr("Thank you." );
 
-    /*
-     * send mail
-     */
-    qcl_import("qcl_util_system_Mail");
-    $adminEmail  = $app->getIniValue("email.admin");
+    // send mail
     $mail = new qcl_util_system_Mail( array(
       'senderEmail'     => $adminEmail,
       'recipient'       => $name,
@@ -869,32 +861,31 @@ class bibliograph_service_ACLTool
     $mail->send();
   }
 
-  protected function sendPasswordChangeEmail( $email, $username, $name, $password )
+  /**
+   * Sends an email with information on the change of password.
+   * @param $email
+   * @param $username
+   * @param $name
+   * @param $password
+   */
+  protected function sendPasswordChangeEmail( $email, $username, $name, $password=null )
   {
     $app = $this->getApplication();
-
-    /*
-     * mail subject
-     */
-    $configModel = $app->getConfigModel();
-    $applicationTitle =
-      $configModel->keyExists("application.title")
-        ? $configModel->getKey("application.title")
-        : $app->name();
-    $subject = $this->tr("Password change at %s", $applicationTitle );
-
-    /*
-     * mail body
-     */
-    $body  = $this->tr("Dear %s,", $name);
-    $body .= "\n\n" . $this->tr("This is to inform you that your password has changed at '%s'.", $applicationTitle );
-    $body .= "\n\n" . $this->tr("Your username is '%s' and your password is '%s'", $username, $password );
-
-    /*
-     * send mail
-     */
-    qcl_import("qcl_util_system_Mail");
+    $applicationTitle = $this->getApplicationTitle();
     $adminEmail  = $app->getIniValue("email.admin");
+
+    // compose mail
+    $subject = $this->tr("Password change at %s", $applicationTitle );
+    $body  = $this->tr("Dear %s,", $name);
+    $body .= "\n\n" . $this->tr("This is to inform you that you or somebody else has changed the password at %s.", $applicationTitle );
+    if( $password )
+    {
+      $body .= "\n\n" . $this->tr("Your username is '%s' and your password is '%s'.", $username, $password );
+    }
+    $body .= "\n\n" . $this->tr("If this is not what you wanted, please reset your password immediately by clicking on the following link:");
+    $body .= "\n\n" . $this->generateResetPasswordURL($email);
+
+    // send email
     $mail = new qcl_util_system_Mail( array(
       'senderEmail'     => $adminEmail,
       'recipient'       => $name,
@@ -905,10 +896,15 @@ class bibliograph_service_ACLTool
     $mail->send();
   }
 
+  /**
+   * Service to confirm a registration via email
+   * @param $namedId
+   */
   public function method_confirmEmail( $namedId )
   {
     $app = $this->getApplication();
     $userModel = $app->getAccessController()->getUserModel();
+    header('Content-Type: text/html; charset=utf-8');
     try
     {
       $userModel->findWhere( array(
@@ -919,10 +915,8 @@ class bibliograph_service_ACLTool
         $userModel->set("confirmed", true);
         $userModel->save();
       }
-
       $msg1 = $this->tr( "Thank you, %s, your email address has been confirmed.", $userModel->getName() );
       $msg2 = $this->tr( "You can now log in at <a href='%s'>this link</a>", $app->getClientUrl() );
-      header('Content-Type: text/html; charset=utf-8');
       echo "<html><p>$msg1<p>";
       echo "<p>$msg2</p></html>";
       exit;
@@ -935,5 +929,164 @@ class bibliograph_service_ACLTool
     }
   }
 
+  /**
+   * Displays a dialog to reset the password
+   * @return qcl_ui_dialog_Prompt
+   */
+  public function method_resetPasswordDialog()
+  {
+    $msg = $this->tr("Please enter your email address. You will receive a message with a link to reset your password.");
+    return new qcl_ui_dialog_Prompt($msg, "", $this->serviceName(), "sendPasswortResetEmail");
+  }
+
+  /**
+   * Service to send password reset email
+   * @param $email
+   * @return string
+   * @throws qcl_server_ServiceException
+   */
+  public function method_sendPasswortResetEmail($email)
+  {
+    if( $email == false ) return "CANCELLED";
+
+    $userModel = $this->getUserModelFromEmail($email);
+    $name = $userModel->get("name");
+    $adminEmail = $this->getApplication()->getIniValue("email.admin");
+    $applicationTitle = $this->getApplicationTitle();
+
+    // compose mail
+    $subject = $this->tr("Password reset at %s", $applicationTitle);
+    $body  = $this->tr("Dear %s,", $name);
+    $body .= "\n\n" . $this->tr("This is to inform you that you or somebody else has requested a password reset at %s.", $applicationTitle );
+    $body .= "\n\n" . $this->tr("If this is not what you wanted, you can ignore this email. Your account is safe.");
+    $body .= "\n\n" . $this->tr("If you have requested the reset, please click on the following link:");
+    $body .= "\n\n" . $this->generateResetPasswordURL($email);
+
+    // send
+    $mail = new qcl_util_system_Mail( array(
+      'senderEmail'     => $adminEmail,
+      'recipient'       => $name,
+      'recipientEmail'  => $email,
+      'subject'         => $subject,
+      'body'            => $body
+    ) );
+    $mail->send();
+
+    return new qcl_ui_dialog_Alert(
+      $this->tr("An email has been sent with information on the password reset.")
+    );
+  }
+
+  /**
+   * Service to reset email. Called by a REST request
+   * @param $email
+   * @param $nonce
+   */
+  public function method_resetPassword( $email, $nonce )
+  {
+    $storedNonce = $this->retrieveAndDestroyStoredNonce();
+    header('Content-Type: text/html; charset=utf-8');
+    if( !$storedNonce or $storedNonce != $nonce )
+    {
+      echo $this->tr("Access denied.");
+      exit;
+    }
+
+    // set new temporary password with length 7 (this will enforce a password change)
+    $password = qcl_generate_password(7);
+    $userModel = $this->getUserModelFromEmail( $email );
+    $userModel->set("password", $password )->save();
+
+    // message to the user
+    $url = $this->getApplication()->getClientUrl();
+    $name = $userModel->getNamedId();
+    $msg = $this->tr( "%s, your password has been reset.", $userModel->get("name") );
+    $msg .= "\n\n" . $this->tr( "Your username is '%s' and your temporary password is '%s'.",  $name, $password);
+    $msg .= "\n\n" . $this->tr( "Please <a href='%s'>log in</a> and change the password now.",  $url);
+    echo "<html>" . nl2br($msg) . "</html>";
+    exit;
+  }
+
+  /**
+   * Create nonce and store it in the PHP session
+   * @return string The nonce
+   */
+  protected function createAndStoreNonce()
+  {
+    $nonce = md5(uniqid(rand(), true));
+    $_SESSION['EMAIl_RESET_NONCE'] = $nonce;
+    return $nonce;
+  }
+
+  /**
+   * Retrieves the stored nonce and destroys in the PHP session.
+   * @return string
+   */
+  protected function retrieveAndDestroyStoredNonce()
+  {
+    $storedNonce = $_SESSION['EMAIl_RESET_NONCE'];
+    unset($_SESSION['EMAIl_RESET_NONCE']);
+    return $storedNonce;
+  }
+
+  /**
+   * Returns an URL which can be used to reset the password.
+   * @param $email
+   * @return string
+   */
+  protected function generateResetPasswordURL($email)
+  {
+    return qcl_server_Server::getUrl() .
+      "?service="   . $this->serviceName() .
+      "&method="    . "resetPassword" .
+      "&params="    . $email . "," . $this->createAndStoreNonce() .
+      "&sessionId=" . $this->getSessionId();
+  }
+
+  /**
+   * Returns the (custom) title of the application
+   * @return string
+   */
+  protected function getApplicationTitle()
+  {
+    $app = $this->getApplication();
+    $configModel = $app->getConfigModel();
+    return
+      $configModel->keyExists("application.title")
+        ? $configModel->getKey("application.title")
+        : $app->name();
+  }
+
+  /**
+   * Given an email address, returns the (first) user record that matches this address
+   * @param $email
+   * @return qcl_access_model_User
+   * @throws qcl_server_ServiceException
+   */
+  protected function getUserModelFromEmail( $email )
+  {
+    try
+    {
+      qcl_assert_valid_email($email);
+    }
+    catch( InvalidArgumentException $e)
+    {
+      throw new qcl_server_ServiceException(
+        $this->tr("%s is not a valid email address",$email)
+      );
+    }
+    $userModel = $this->getAccessController()->getUserModel();
+    try
+    {
+      $userModel->loadWhere( array( "email" => $email ) );
+    }
+    catch( qcl_data_model_RecordNotFoundException $e)
+    {
+      throw new qcl_server_ServiceException(
+        $this->tr("No user found for email address %s", $email)
+      );
+    }
+    return $userModel;
+  }
 }
 ?>

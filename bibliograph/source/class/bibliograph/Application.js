@@ -28,6 +28,9 @@ qx.Class.define("bibliograph.Application",
     {
       this.base(arguments);
 
+      var app = qx.core.Init.getApplication();
+      var bus = qx.event.message.Bus.getInstance();
+
       /*
        * Datasource list window
        */
@@ -93,20 +96,32 @@ qx.Class.define("bibliograph.Application",
       /*
        * Login Dialog
        */
-      var qclLoginDialog1 = new dialog.Login();
-      qclLoginDialog1.setCheckCredentials(this.checkLogin);
-      qclLoginDialog1.setCallback(function(loginSuccessful){
+      var loginDialog = new dialog.Login();
+      loginDialog.set({
+        widgetId : "loginDialog",
+        allowCancel : true,
+        checkCredentials : this.checkLogin,
+        showForgotPassword : false,
+        forgotPasswordHandler : this.forgotPassword.bind(this)
+      });
+
+      loginDialog.setCallback(function(loginSuccessful){
         if(loginSuccessful){
-          qclLoginDialog1.hide();
+          loginDialog.hide();
         }
       });
-      qclLoginDialog1.setWidgetId("loginDialog");
-      qclLoginDialog1.setAllowCancel(true);
-      qx.core.Init.getApplication().getConfigManager().addListener("ready", function() {
-        qx.core.Init.getApplication().getConfigManager().bindKey("application.title", qclLoginDialog1, "text", false);
+
+      // hide forgot password button if ldap is enabled
+      bus.subscribe("ldap.enabled",function(e){
+        loginDialog.setShowForgotPassword(!e.getData());
+      }, this);
+
+      // bind messages to configuration values
+      app.getConfigManager().addListener("ready", function() {
+        app.getConfigManager().bindKey("application.title", loginDialog, "text", false);
       });
-      qx.core.Init.getApplication().getConfigManager().addListener("ready", function() {
-        qx.core.Init.getApplication().getConfigManager().bindKey("application.logo", qclLoginDialog1, "image", false);
+      app.getConfigManager().addListener("ready", function() {
+        app.getConfigManager().bindKey("application.logo", loginDialog, "image", false);
       });
 
       /*

@@ -20,9 +20,10 @@
  * This collection of functions is a big mess that needs to be cleaned up. Naming is
  * inconsistent, a lot of stuff is redundant or no longer necessary with PHP 5.3.
  *
- * - todo namespace functions and move them to where they belong, i.e. move assert functions to qcl_util_Assert class
- * - todo clean up and move exceptions, replace by existing SPL exceptions
- * - todo use filter functions http://phpro.org/tutorials/Filtering-Data-with-PHP.html#8
+ * - todo: namespace functions and move them to where they belong, i.e. move assert functions to qcl_util_Assert class
+ * - todo: clean up and move exceptions, replace by existing SPL exceptions
+ * - todo: use filter functions http://phpro.org/tutorials/Filtering-Data-with-PHP.html#8
+ * - todo: assert functions should throw LogicException, not InvalidArgumentException, and they should be called "assert"
  */
 
 

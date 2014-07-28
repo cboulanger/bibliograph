@@ -483,7 +483,7 @@ qx.Class.define("bibliograph.Main",
      */
     initSubscribers : function()
     {
-      var bus = qx.event.message.Bus;
+      var bus = qx.event.message.Bus.getInstance();
 
       /*
        * server message to force logout the user
@@ -541,6 +541,14 @@ qx.Class.define("bibliograph.Main",
         var data = e.getData();
         if (data.datasource !== this.getDatasource())return;
         this.getWidgetById("mainListView").reload();
+      }, this);
+
+      /*
+       * show the login dialog
+       */
+      bus.subscribe("loginDialog.show", function()
+      {
+        this.getWidgetById("loginDialog").show();
       }, this);
 
     },
@@ -865,6 +873,17 @@ qx.Class.define("bibliograph.Main",
           });
         }
       });
+    },
+
+    /**
+     * called when user clicks on the "forgot password?" button
+     */
+    forgotPassword : function()
+    {
+      this.showPopup(this.tr("Please wait ..."));
+      this.getRpcManager().execute("bibliograph.actool", "resetPasswordDialog", [], function() {
+        this.hidePopup();
+      }, this);
     },
 
 
