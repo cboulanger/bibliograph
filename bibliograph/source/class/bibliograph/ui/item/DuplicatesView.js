@@ -101,11 +101,12 @@ qx.Class.define("bibliograph.ui.item.DuplicatesView",
       }
 
       var id = app.getModelId();
-      qx.event.Timer.once(function()
+      var timeoutId = qx.lang.Function.delay(function()
       {
-        if (id != app.getModelId())return;
+        if (id != app.getModelId() || timeoutId != this.__timeoutId) return;
         this._reloadData();
-      }, this, 500);
+      }, 500, this);
+      this.__timeoutId = timeoutId;
     },
 
     /**
