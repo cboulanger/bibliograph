@@ -491,70 +491,70 @@ class class_bibliograph_plugin_isbnscanner_Service
   }
   
   
- /**
-  * Service to ask for or confirm the email address to which to send an email
-  */
- public function method_confirmEmailAddress($data)
-  {
-    $this->requirePermission("reference.import");
-    $activeUser = $this->getAccessController()->getActiveUser();
-    $email = $activeUser->get("email");
-    $msg = $this->tr("Bibliograph will send you an email with a link. Open this email on your iOS device and click on the link to get to the Barcode Scanner App. Please enter an email address that you check on your iOS device.") ;
-    return new qcl_ui_dialog_Prompt(
-      $msg, $email,
-      $this->serviceName(),"sendEmailWithLink",
-      array($data)
-    );
-  }
-  
- /**
-  * Service for sending an email to a mobile device, containing the 
-  * link to the mobile web app
-  */
-  public function method_sendEmailWithLink($email, $data )
-  {
-    if( !$email ) return "ABORTED";
-    $this->requirePermission("reference.import");
-    try
-    {
-      qcl_assert_valid_email( $email );
-    }
-    catch( InvalidArgumentException $e )
-    {
-      throw new JsonRpcException(sprintf(
-        $this->tr("'%s' is not a valid email address.", $email)
-      ));
-    }
-    $activeUser = $this->getAccessController()->getActiveUser();
-    qcl_import("qcl_util_system_Mail");
-    $mail = new qcl_util_system_Mail();
-    $mail->setSender("Bibliograph");
-    $mail->setSenderEmail("donotreply@bibliograph.org");
-    $mail->setRecipient($activeUser->get("name"));
-    $mail->setRecipientEmail($email);
-    $mail->setSubject($this->tr("Link to Barcode Scanner App"));
-
-    $lbr     = "\n\n";
-    $token   = $this->getAccessController()->createSiblingSessionToken();
-    list($datasource,$folderId) = $data;
-    $appUrl  =
-      dirname(dirname($this->getApplication()->getClientUrl()))
-      . "/bibliograph-mobile/build/"
-      . "#sessionId.$token"
-      . "!action.scanimport"
-      . "!datasource.$datasource!folderId.$folderId";
-
-    $appstoreUrl = "https://itunes.apple.com/de/app/scanner-go/id498868298?mt=8";
-    $mail->setBody(
-      $this->tr("Please open the following link in your iOS device.") .
-      $lbr . $appUrl . $lbr .
-      $this->tr("You need the Scanner Go app installed for this to work:") .
-      $lbr . $appstoreUrl
-    );
-    $mail->send();
-
-    $msg = $this->tr("An email has been sent to '%s' with instructions.", $email);
-    return new qcl_ui_dialog_Alert($msg);
-  }  
+// /**
+//  * Service to ask for or confirm the email address to which to send an email
+//  */
+// public function method_confirmEmailAddress($data)
+//  {
+//    $this->requirePermission("reference.import");
+//    $activeUser = $this->getAccessController()->getActiveUser();
+//    $email = $activeUser->get("email");
+//    $msg = $this->tr("Bibliograph will send you an email with a link. Open this email on your iOS device and click on the link to get to the Barcode Scanner App. Please enter an email address that you check on your iOS device.") ;
+//    return new qcl_ui_dialog_Prompt(
+//      $msg, $email,
+//      $this->serviceName(),"sendEmailWithLink",
+//      array($data)
+//    );
+//  }
+//
+// /**
+//  * Service for sending an email to a mobile device, containing the
+//  * link to the mobile web app
+//  */
+//  public function method_sendEmailWithLink($email, $data )
+//  {
+//    if( !$email ) return "ABORTED";
+//    $this->requirePermission("reference.import");
+//    try
+//    {
+//      qcl_assert_valid_email( $email );
+//    }
+//    catch( InvalidArgumentException $e )
+//    {
+//      throw new JsonRpcException(sprintf(
+//        $this->tr("'%s' is not a valid email address.", $email)
+//      ));
+//    }
+//    $activeUser = $this->getAccessController()->getActiveUser();
+//    qcl_import("qcl_util_system_Mail");
+//    $mail = new qcl_util_system_Mail();
+//    $mail->setSender("Bibliograph");
+//    $mail->setSenderEmail("donotreply@bibliograph.org");
+//    $mail->setRecipient($activeUser->get("name"));
+//    $mail->setRecipientEmail($email);
+//    $mail->setSubject($this->tr("Link to Barcode Scanner App"));
+//
+//    $lbr     = "\n\n";
+//    $token   = $this->getAccessController()->createSiblingSessionToken();
+//    list($datasource,$folderId) = $data;
+//    $appUrl  =
+//      dirname(dirname($this->getApplication()->getClientUrl()))
+//      . "/bibliograph-mobile/build/"
+//      . "#sessionId.$token"
+//      . "!action.scanimport"
+//      . "!datasource.$datasource!folderId.$folderId";
+//
+//    $appstoreUrl = "https://itunes.apple.com/de/app/scanner-go/id498868298?mt=8";
+//    $mail->setBody(
+//      $this->tr("Please open the following link in your iOS device.") .
+//      $lbr . $appUrl . $lbr .
+//      $this->tr("You need the Scanner Go app installed for this to work:") .
+//      $lbr . $appstoreUrl
+//    );
+//    $mail->send();
+//
+//    $msg = $this->tr("An email has been sent to '%s' with instructions.", $email);
+//    return new qcl_ui_dialog_Alert($msg);
+//  }
 
 }
