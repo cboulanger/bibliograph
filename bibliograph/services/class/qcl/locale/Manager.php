@@ -234,7 +234,12 @@ class qcl_locale_Manager extends qcl_core_Object
       //if ( $this->hasLog() ) $this->log( "Translating '$messageId' into '$translation'.", QCL_LOG_LOCALE);
     }
     array_unshift( $varargs, $translation );
-    return call_user_func_array('sprintf',$varargs);
+    $result = @call_user_func_array('sprintf',$varargs);
+    if( ! $result )
+    {
+      throw new LogicException("Invalid translation message or parameters.");
+    }
+    return $result;
   }
 
   /**
