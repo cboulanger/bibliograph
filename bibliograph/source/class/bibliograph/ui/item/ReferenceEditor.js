@@ -650,26 +650,18 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
      */
     _on_changeBubble : function(event)
     {
-
-      /*
-       * data
-       */
       var eventData = event.getData();
       var value = eventData.value;
       var old = eventData.old;
       var name = eventData.name;
       var data = {};
 
-      /*
-       * get value from selection models
-       */
+      // get value from selection models
       if (value instanceof qx.core.Object) {
         value = value.getValue();
       }
 
-      /*
-       * dispatch message
-       */
+      // dispatch message
       qx.event.message.Bus.dispatch(new qx.event.message.Message("reference.changeData",
       {
         'referenceId' : this.getData().referenceId,
@@ -678,67 +670,75 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
         'old' : old
       }));
 
+      // if no change, do nothing
+      if (this.getData()[name] == value) return;
+
       /*
-       * if changed, save change to server and update listview
+       * wait some time before dispatching a request, so that
+       * we're not sending to many
        */
-      if (this.getData()[name] !== value) {
-        /*
-         * wait some time before dispatching a request, so that
-         * we're not sending to many
-         */
-        qx.util.TimerManager.getInstance().start(function()
+      var timeoutId = qx.lang.Function.delay(function()
+      {
+
+        // check if the id has changed in the meantime
+        if ( timeoutId != this.__timeoutId )
         {
-          var target = this.getFormData(this.getReferenceType()).form.elements[name];
+          //console.warn("Not saving field '"+ name + "' - other save operation in progress...");
+          return;
+        }
+
+        var target = this.getFormData(this.getReferenceType()).form.elements[name];
+
+        /*
+         * if value has changed in the meantime, don't save
+         */
+        if (target.getValue && value != target.getValue() && !value instanceof Date) {
+          //console.warn("Not saving field '"+ name + "' value has changed");
+          return;
+        }
+
+        /*
+         * if value is a Date object, serialize it
+         */
+        if (value instanceof Date) {
+          value = value.getFullYear() + "-" + value.getMonth() + "-" + value.getDate();
+        }
+
+        /*
+         * create map
+         */
+        data[name] = value;
+
+        /*
+         * disable form if reftype changed
+         */
+        if (name == "reftype" && !this.__preventDefault) {
+          this.setEnabled(false);
+        }
+
+        /*
+         * save to server
+         */
+        this.showMessage(this.tr("Saving..."));
+        this.getStore().execute("saveData", [this.getData().datasource, this.getData().referenceId, data], function()
+        {
+          this.showMessage(null);
 
           /*
-           * if value has changed in the meantime, don't save
+           * update data
            */
-          if (target.getValue && value != target.getValue() && !value instanceof Date) {
-            //console.warn("Not saving field '"+ name + "' value has changed");
-            return;
-          }
+          this.getData()[name] = value;
 
           /*
-           * if value is a Date object, serialize it
-           */
-          if (value instanceof Date) {
-            value = value.getFullYear() + "-" + value.getMonth() + "-" + value.getDate();
-          }
-
-          /*
-           * create map
-           */
-          data[name] = value;
-
-          /*
-           * disable form if reftype changed
+           * reload data if reftype changed
            */
           if (name == "reftype" && !this.__preventDefault) {
-            this.setEnabled(false);
+            this.reload();
           }
+        }, this);
 
-          /*
-           * save to server
-           */
-          this.showMessage(this.tr("Saving..."));
-          this.getStore().execute("saveData", [this.getData().datasource, this.getData().referenceId, data], function()
-          {
-            this.showMessage(null);
-
-            /*
-             * update data
-             */
-            this.getData()[name] = value;
-
-            /*
-             * reload data if reftype changed
-             */
-            if (name == "reftype" && !this.__preventDefault) {
-              this.reload();
-            }
-          }, this);
-        }, null, this, null, 500);
-      }
+      }, 500, this);
+      this.__timeoutId = timeoutId;
     },
 
 
@@ -825,7 +825,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
         converter : function(value)
         {
           // prevent the saving of the new data
-          textarea.__preventSave = true;
+          textarea.__value = value;
           textarea.__referenceId = _this.getReferenceId();
           return value;
         }
@@ -839,10 +839,12 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
 
         // check if value has just been set
         var textarea = e.getTarget();
-        if (textarea.__preventSave === true)
+        var value = e.getData();
+
+        if (textarea.__value === value)
         {
-          //console.warn("Prevent save flag is on. Not saving...");
-          textarea.__preventSave = false;
+          //console.warn("Not saving server values...");
+          textarea.__value = null;
           return;
         }
         if ( textarea.__referenceId != this.getReferenceId() )
@@ -851,8 +853,6 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
           return;
         }
 
-        // get value
-        var value = e.getData();
         if (value === null) {
           return;
         }
@@ -861,12 +861,12 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
         var referenceId = this.getReferenceId();
 
         // wait some time before sending a request
-        qx.lang.Function.delay(function() {
+        var timeoutId = qx.lang.Function.delay(function() {
 
           // check if the id has changed in the meantime
-          if (value !== textarea.getValue() )
+          if ( timeoutId != this.__timeoutId )
           {
-            //console.warn("Not saving field '"+ name + "' value has changed");
+            //console.warn("Not saving field '"+ fieldname + "' - other save operation in progress...");
             return;
           }
 
@@ -882,7 +882,9 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
                 this.getData()[name] = value;
               }, this);
 
-        }, 1000, this);
+        }, 500, this);
+
+        this.__timeoutId = timeoutId;
       }, this);
     },
 
