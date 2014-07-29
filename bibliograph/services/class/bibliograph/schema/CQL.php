@@ -33,10 +33,20 @@ class bibliograph_schema_CQL
   extends qcl_core_Object
 {
 
-  public $booleans = array( "and", "or", "not" );
+  /**
+   * Booleans
+   * @var array
+   */
+  public $booleans = array( "and" /*, "or", "not"*/ ); // currently, only "and" is supported
 
+  /**
+   * Modifiers. Make sure that longer expressions that contain other expressions ("isnot" - "is")
+   * appear first, otherwise the shorter ones will be substituted first, making the longer ones
+   * unparsable.
+   * @var array
+   */
   public $modifiers = array(
-    "is", "isnot","contains", "notcontains", "startswith",
+    "isnot", "is", "notcontains", "contains", "startswith",
     "=", ">", ">=", "<", "<=", "<>"
   );
 
@@ -48,7 +58,8 @@ class bibliograph_schema_CQL
   function marktranslations()
   {
     _("and"); _("or"); _("not");
-    _("is"); _("isnot"); _("contains"); _("notcontains"); _("startswith");
+    _("is"); _("isnot"); _("contains"); _("notcontains");
+    _("startswith");
   }
 
   /**
@@ -80,6 +91,21 @@ class bibliograph_schema_CQL
       {
         $localeMgr->setLocale($locale);
 
+        // model indexes
+        foreach ( $model->getSchemaModel()->getIndexNames() as $index )
+        {
+          $fields = $model->getSchemaModel()->getIndexFields( $index );
+          // @todo we only use the first, but it should really search all of them
+          $property = $fields[0];
+          $translated = $localeMgr->tr($index);
+          $dict[$translated]=$property;
+          // add the root form of German gendered words ("Autor/in"=> "Autor")
+          if( $pos = strpos( $translated, "/" ) )
+          {
+            $dict[substr($translated,0,$pos)] = $property;
+          }
+        }
+
         // modifiers and booleans
         foreach( array_merge($this->modifiers, $this->booleans) as $word)
         {
@@ -89,15 +115,6 @@ class bibliograph_schema_CQL
           $dict[$translated]=$word;
         }
 
-        // model indexes
-        foreach ( $model->getSchemaModel()->getIndexNames() as $index )
-        {
-          $fields = $model->getSchemaModel()->getIndexFields( $index );
-          // @todo we only use the first, but it should really search all of them
-          $property = $fields[0];
-          $translated = $localeMgr->tr($index);
-          $dict[$translated]=$property;
-        }
       }
       // revert to standard locale
       $localeMgr->setLocale();
@@ -176,7 +193,7 @@ class bibliograph_schema_CQL
     $parser->setModifiers( $this->modifiers );
     $parser->setSortWords( array("sortby" ) );
 
-    //$this->debug( $cqlQuery );
+    $this->debug( $cqlQuery );
 
     /*
      * parse CQL string
