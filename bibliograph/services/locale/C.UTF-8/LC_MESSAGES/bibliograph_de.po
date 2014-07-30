@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Bibliograph 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-29 20:04+0100\n"
-"PO-Revision-Date: 2014-07-29 21:06+0100\n"
+"POT-Creation-Date: 2014-07-30 20:15+0100\n"
+"PO-Revision-Date: 2014-07-30 20:17+0100\n"
 "Last-Translator: Christian Boulanger <info@bibliograph.org>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -493,40 +493,40 @@ msgstr "URL"
 msgid "Volume"
 msgstr "Band"
 
-#: ../../../class/bibliograph/schema/CQL.php:50
+#: ../../../class/bibliograph/schema/CQL.php:60
 #: ../../../class/bibliograph/service/Reference.php:1659
 msgid "and"
 msgstr "und"
 
-#: ../../../class/bibliograph/schema/CQL.php:50
+#: ../../../class/bibliograph/schema/CQL.php:60
 msgid "or"
 msgstr "oder"
 
-#: ../../../class/bibliograph/schema/CQL.php:50
+#: ../../../class/bibliograph/schema/CQL.php:60
 msgid "not"
 msgstr "nicht"
 
-#: ../../../class/bibliograph/schema/CQL.php:51
+#: ../../../class/bibliograph/schema/CQL.php:61
 msgid "is"
 msgstr "ist"
 
-#: ../../../class/bibliograph/schema/CQL.php:51
+#: ../../../class/bibliograph/schema/CQL.php:61
 msgid "isnot"
 msgstr "ist nicht"
 
-#: ../../../class/bibliograph/schema/CQL.php:51
+#: ../../../class/bibliograph/schema/CQL.php:61
 msgid "contains"
 msgstr "enthält"
 
-#: ../../../class/bibliograph/schema/CQL.php:51
+#: ../../../class/bibliograph/schema/CQL.php:61
 msgid "notcontains"
 msgstr "enthält nicht"
 
-#: ../../../class/bibliograph/schema/CQL.php:51
+#: ../../../class/bibliograph/schema/CQL.php:62
 msgid "startswith"
 msgstr "beginnt mit"
 
-#: ../../../class/bibliograph/schema/CQL.php:248
+#: ../../../class/bibliograph/schema/CQL.php:265
 #, php-format
 msgid "Index '%s' does not exist."
 msgstr "Der Index '%s' existiert nicht."
@@ -900,17 +900,17 @@ msgstr "Vielen Dank für Ihre Meldung."
 msgid "You will be notified as soon as it can be considered."
 msgstr "Sie werden benachrichtigt, sobald wir dazu kommen."
 
-#: ../../../class/bibliograph/service/Backup.php:204
+#: ../../../class/bibliograph/service/Backup.php:205
 #, php-format
 msgid "Do you want to backup Database '%s'"
 msgstr "Wollen Sie Datenbank '%s' sichern?"
 
-#: ../../../class/bibliograph/service/Backup.php:236
+#: ../../../class/bibliograph/service/Backup.php:237
 #, php-format
 msgid "Backup created in %s seconds"
 msgstr "Sicherung in %s Sekunden erstellt"
 
-#: ../../../class/bibliograph/service/Backup.php:247
+#: ../../../class/bibliograph/service/Backup.php:248
 #, php-format
 msgid ""
 "Do you really want to restore Database '%s'? All existing data will be lost!"
@@ -918,28 +918,43 @@ msgstr ""
 "Wollen Sie wirklich die Datenbank  '%s' wiederherstellen? Alle bestehenden "
 "Daten werden gelöscht!"
 
-#: ../../../class/bibliograph/service/Backup.php:294
+#: ../../../class/bibliograph/service/Backup.php:295
 msgid "Backup from "
 msgstr "Sicherung vom"
 
-#: ../../../class/bibliograph/service/Backup.php:302
+#: ../../../class/bibliograph/service/Backup.php:303
 #, php-format
 msgid "Please select the backup set to restore into database '%s'"
 msgstr ""
 "Bitte wählen sie die Sicherung, die für Datenbank '%s' wiederhergestellt "
 "werden soll."
 
-#: ../../../class/bibliograph/service/Backup.php:331
+#: ../../../class/bibliograph/service/Backup.php:332
 msgid "Backup file does not exist."
 msgstr "Backupdatei existiert nicht."
 
-#: ../../../class/bibliograph/service/Backup.php:394
+#: ../../../class/bibliograph/service/Backup.php:395
 msgid "Backup has been restored."
 msgstr "Die Sicherung wurde zurückgespielt."
 
-#: ../../../class/bibliograph/service/Backup.php:395
+#: ../../../class/bibliograph/service/Backup.php:396
 msgid "Please check logfile for problems."
 msgstr "Bitte sehen Sie im Logfile nach, welche Probleme aufgetreten sind. "
+
+#: ../../../class/bibliograph/service/Backup.php:409
+msgid "All backups older than one day will be deleted. Proceed?"
+msgstr ""
+"Alle Sicherungen, die älter als ein Tag sind, Werden gelöscht. Fortfahren?"
+
+#: ../../../class/bibliograph/service/Backup.php:445
+#, php-format
+msgid "%s backups were deleted."
+msgstr "%s Sicherungen wurden gelöscht."
+
+#: ../../../class/bibliograph/service/Backup.php:446
+msgid "There was a problem. Please examine the log file."
+msgstr ""
+"Es ist ein Problem aufgetreten. Es wurde in der Logdatei aufgezeichnet."
 
 #: ../../../class/bibliograph/service/Export.php:40
 msgid "Export references"

@@ -19,6 +19,8 @@
 ************************************************************************ */
 
 qcl_import("qcl_data_controller_Controller");
+qcl_import("qcl_ui_dialog_Confirm");
+qcl_import("qcl_ui_dialog_Alert");
 
 class bibliograph_service_Backup
   extends qcl_data_controller_Controller
@@ -199,7 +201,6 @@ class bibliograph_service_Backup
    */
   public function method_dialogCreateBackup( $datasource )
   {
-    qcl_import("qcl_ui_dialog_Confirm");
     return new qcl_ui_dialog_Confirm(
       $this->tr("Do you want to backup Database '%s'", $datasource),
       null,
@@ -231,7 +232,7 @@ class bibliograph_service_Backup
 
     $timer->stop();
 
-    qcl_import("qcl_ui_dialog_Alert");
+
     return new qcl_ui_dialog_Alert(
       $this->tr( "Backup created in %s seconds" , $timer->getElapsedTime() )
     );
@@ -394,19 +395,57 @@ class bibliograph_service_Backup
     $msg = $this->tr( "Backup has been restored." );
     if ($problem ) $msg .= $this->tr( "Please check logfile for problems." );
 
-    qcl_import("qcl_ui_dialog_Alert");
     return new qcl_ui_dialog_Alert($msg);
 
   }
 
   /**
-   * FIXME implement
-   * @throws JsonRpcException
-   * @return unknown_type
+   * Confirmation dialog for deleting backups
    */
-  public function method_dialogDeleteBackups()
+  public function method_dialogDeleteBackups($datasource)
   {
-    throw new JsonRpcException("Not implemented yet.");
+    $this->requirePermission("backup.delete");
+    return new qcl_ui_dialog_Confirm(
+      $this->tr("All backups older than one day will be deleted. Proceed?"),
+      null,
+      $this->serviceName(), "deleteBackups", array( $datasource )
+    );
   }
+
+  /**
+   * Service to delete all backups of this datasource older than one day
+   */
+  public function method_deleteBackups( $confirmed, $datasource )
+  {
+    if( ! $confirmed ) return "CANCELLED";
+
+    $this->requirePermission("backup.delete");
+
+    $backupPath = BIBLIOGRAPH_BACKUP_PATH;
+    $filesDeleted = 0;
+    $problem = false;
+    foreach( scandir($backupPath) as $file )
+    {
+      if ( $file[0] == "." ) continue;
+      if ( substr( $file, -4) != ".zip" ) continue;
+      $name = explode( "_", substr( basename($file),0, -4) );
+      if ( $name[0] != $datasource ) continue;
+      if ( $name[1] != date("Y-m-d") ){
+        if ( !@unlink( "$backupPath/$file" ) )
+        {
+          $problem = true;
+          $this->warn("Cannot delete backup file '$file'");
+        }
+        else
+        {
+          $filesDeleted++;
+        }
+      }
+    }
+    $msg = $this->tr("%s backups were deleted.", $filesDeleted);
+    if( $problem ) $msg .= $this->tr("There was a problem. Please examine the log file.");
+    return new qcl_ui_dialog_Alert($msg);
+  }
+
 }
 ?>
