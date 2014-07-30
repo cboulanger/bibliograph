@@ -60,9 +60,14 @@ class isbnscanner_plugin
    */
   public function install()
   {
-    $this->getApplication()
+    bibliograph_Application::getInstance()
       ->getConfigModel()
-      ->createKeyIfNotExists("bibliograph.sortableName.engine",QCL_CONFIG_TYPE_STRING,true,"parser");
+      ->createKeyIfNotExists("bibliograph.sortableName.engine",QCL_CONFIG_TYPE_STRING,true,"parser"); // todo rename
+
+    bibliograph_Application::getInstance()
+      ->getAccessController()
+      ->getPermissionModel()
+      ->createIfNotExists("isbnscanner.import");
     return $this->tr("Please reload the application to finish installing.");
   }
 
@@ -74,6 +79,11 @@ class isbnscanner_plugin
    */
   public function uninstall()
   {
+    bibliograph_Application::getInstance()
+      ->getAccessController()
+      ->getPermissionModel()
+      ->load("isbnscanner.import")
+      ->delete();
     return $this->tr("Please reload the application to finish uninstalling.");
   }
 }

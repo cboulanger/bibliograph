@@ -51,7 +51,8 @@ qx.Class.define("bibliograph.plugin.isbnscanner.Plugin",
        */
       var menuButton1 = new qx.ui.menu.Button(this.tr("From ISBN, using barcode scanner or manual input"));
       menuButton1.setToolTip(new qx.ui.tooltip.ToolTip(this.tr("Please select a folder into which the item will be imported. Requires a barcode scanner in keyboard mode")));
-      menuButton1.setEnabled(true); 
+      menuButton1.setEnabled(false);
+      menuButton1.setVisibility("excluded");
       app.addListener("changeFolderId",function(folderId){
         if(folderId){menuButton1.setEnabled(true)};
       });
@@ -65,7 +66,10 @@ qx.Class.define("bibliograph.plugin.isbnscanner.Plugin",
               app.hidePopup();
             }, this);
       });
-      importMenu.add(menuButton1);      
+      permMgr.create("isbnscanner.import").bind("state", menuButton1, "visibility", {
+        converter : function(v){ return v ? "visible" : "excluded" }
+      });
+      importMenu.add(menuButton1);
       
       
 //      /*
@@ -105,7 +109,7 @@ qx.Class.define("bibliograph.plugin.isbnscanner.Plugin",
       }.bind(this), true);
 
       var bus = qx.event.message.Bus;
-      bus.subscribe("plugin.isbnscanner.ISBNInputListener.start", function(e){
+      bus.subscribe("plugin.isbnscanner.ISBNInputListener.start", function(e){ // todo rename
         listener.listen();
       },this);
       bus.subscribe("plugin.isbnscanner.ISBNInputListener.stop", function(e){
@@ -118,9 +122,11 @@ qx.Class.define("bibliograph.plugin.isbnscanner.Plugin",
        */
       var prefsTabView = app.getWidgetById("bibliograph.preferences.tabView");
       var pluginTab = new qx.ui.tabview.Page( this.tr('Import by ISBN') );
-      //pluginTab.setVisibility("hidden");
+      pluginTab.setVisibility("excluded");
       prefsTabView.add(pluginTab);
-      permMgr.create("reference.import").bind("state", pluginTab, "enabled");
+      permMgr.create("isbnscanner.import").bind("state", pluginTab, "visibility", {
+        converter : function(v){ return v ? "visible" : "excluded" }
+      });
 
       var gridlayout = new qx.ui.layout.Grid(null, null);
       gridlayout.setSpacing(5);
