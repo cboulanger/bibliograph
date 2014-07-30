@@ -20,6 +20,7 @@
 
 qcl_import( "qcl_data_controller_Controller" );
 qcl_import("qcl_ui_dialog_Form");
+qcl_import("qcl_ui_dialog_Popup");
 qcl_import("bibliograph_model_export_RegistryModel");
 
 /**
@@ -80,7 +81,7 @@ class bibliograph_service_Export
   /**
    * Handles the dialog data from method_exportReferencesDialog().
    * @see bibliograph_service_Export::exportReferences for signature
-   * @return string The name of the file to download
+   * @return qcl_ui_dialog_Popup
    */
   public function method_exportReferencesHandleDialogData( $data, $datasource, $selector )
   {
@@ -88,6 +89,23 @@ class bibliograph_service_Export
     {
       return "ABORTED";
     }
+    return new qcl_ui_dialog_Popup(
+      $this->tr("Preparing export data. Please wait..."),
+      $this->serviceName(), "exportReferencesStartExport",
+      array($this->shelve($data, $datasource, $selector))
+    );
+  }
+
+  /**
+   * Service to create a file with the export data for download by the client.
+   * Dispatches a message which will trigger the download
+   * @param $dummy
+   * @param $shelfId
+   * @return string
+   */
+  public function method_exportReferencesStartExport( $dummy, $shelfId )
+  {
+    list( $data, $datasource, $selector ) = $this->unshelve( $shelfId );
 
     $file = $this->exportReferences( $data->format, $datasource, $selector);
     $name = explode("_",$file);
@@ -99,10 +117,11 @@ class bibliograph_service_Export
       "&name=" . $name[1] .
       "&id=$file&delete=true";
 
+    new qcl_ui_dialog_Popup(""); // hide the popup
     $this->dispatchClientMessage("window.location.replace", array(
       'url' => $url
     ) );
-    return "";
+    return "OK";
   }
 
   /**
