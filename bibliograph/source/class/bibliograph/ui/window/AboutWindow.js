@@ -58,7 +58,7 @@ qx.Class.define("bibliograph.ui.window.AboutWindow",
       qxPage1.add(qxImage1);
       var qxLabel1 = new qx.ui.basic.Label(null);
       qxLabel1.setRich(true);
-      qxLabel1.setValue("                <b>Bibliograph Online Bibliographic Data Manager</b>              ");
+      qxLabel1.setValue("<b>Bibliograph Online Bibliographic Data Manager</b>              ");
       qxPage1.add(qxLabel1);
       var qxLabel2 = new qx.ui.basic.Label(this.getApplication().getApplication().getVersion());
       qxLabel2.setValue(this.getApplication().getApplication().getVersion());
@@ -75,7 +75,17 @@ qx.Class.define("bibliograph.ui.window.AboutWindow",
       qxPage2.setLayout(qxVbox2);
       var qxLabel4 = new qx.ui.basic.Label(null);
       qxLabel4.setRich(true);
-      qxLabel4.setValue("                <p style='font-weight:bold'>Open source libraries</p>                <ul>                  <li><a href=\"http://www.qooxdoo.org\" target=\"_blank\">qooxdoo</a> JavaScript framework: (c)&nbsp;<a href=\"http://www.1und1.de\">1&1 Internet AG</a></li>                  <li><a href=\"http://qooxdoo.org/contrib/project/qcl\" target=\"_blank\">qooxdoo component library</a> (qcl) JavaScript/PHP framework (c)&nbsp;Christian Boulanger</li>                  <li><a href=\"http://citationstyles.org/\" target=\"_blank\">CSL - The Citation Style Language</a>. (c)&nbsp;Bruce D'Arcus and others</li>                  <li><a href=\"http://bytebucket.org/rjerome/citeproc-php\" target=\"_blank\">CiteProc-PHP</a>. (c)&nbsp;Ron Jerome</li>                  <li><a href=\"http://www.csc.liv.ac.uk/~azaroth/\" target=\"_blank\">CQL-PHP</a>. (c)&nbsp;Robert Sanderson</li>                </ul>                <p style='font-weight:bold'>Partial funding was provided by</p>                <ul>                  <li>                    <a href=\"http://www.rewi.hu-berlin.de/\">Juristische Fakultät (Department of Law)</a>,                      <a href=\"http://www.hu-berlin.de/\">Humboldt-Universität zu Berlin</a>                  </li>                  <li>Research Project                     <a href=\"http://www.organized-crime.de/dtindex.htm\">Assessing Organized Crime</a>,                      <a href=\"http://www.fu-berlin.de\">Freie Universität Berlin</a>                  </li>                </ul>                <p style='font-weight:bold'>Acknowledgements</p>                <ul>                  <li>Documentation: Julika Rosenstock</li>                  <li>Application icon: Siarhei Barysiuk</li>                </ul>              ");
+      qxLabel4.setValue(
+          "<p style='font-weight:bold'>Open source libraries</p><ul>"+
+            "<li><a href=\"http://www.qooxdoo.org\" target=\"_blank\">qooxdoo</a> JavaScript framework: (c)&nbsp;<a href=\"http://www.1und1.de\">1&1 Internet AG</a></li>"+
+            "<li><a href=\"http://citationstyles.org/\" target=\"_blank\">CSL - The Citation Style Language</a>. (c)&nbsp;Bruce D'Arcus and others</li>"+
+            "<li><a href=\"http://bytebucket.org/rjerome/citeproc-php\" target=\"_blank\">CiteProc-PHP</a>. (c)&nbsp;Ron Jerome</li>"+
+          "<li><a href=\"http://www.csc.liv.ac.uk/~azaroth/\" target=\"_blank\">CQL-PHP</a>. (c)&nbsp;Robert Sanderson</li></ul>"+
+          "<p style='font-weight:bold'>Partial funding was provided by</p><ul>"+
+            "<li><a href=\"http://www.rewi.hu-berlin.de/\">Juristische Fakultät (Department of Law)</a>,<a href=\"http://www.hu-berlin.de/\">Humboldt-Universität zu Berlin</a>  </li></ul>"+
+          "<p style='font-weight:bold'>Acknowledgements</p><ul>"+
+              "<li>Documentation: Julika Rosenstock</li>"+
+              "<li>Application icon: Siarhei Barysiuk</li></ul>");
       qxPage2.add(qxLabel4);
     }
   }
