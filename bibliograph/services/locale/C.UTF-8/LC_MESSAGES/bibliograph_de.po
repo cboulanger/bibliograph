@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Bibliograph 2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-07-30 20:15+0100\n"
-"PO-Revision-Date: 2014-07-30 20:17+0100\n"
+"PO-Revision-Date: 2014-07-30 21:31+0100\n"
 "Last-Translator: Christian Boulanger <info@bibliograph.org>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -379,7 +379,7 @@ msgstr "Herausgeber/innen"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:479
 msgid "Book Title"
-msgstr "Buchtitel"
+msgstr "Titel des Sammelbandes"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:495
 msgid "Contents"
