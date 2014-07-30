@@ -110,8 +110,8 @@ qx.Class.define("bibliograph.ui.window.PreferencesWindow",
       var qxPage2 = new qx.ui.tabview.Page(null);
       qxPage2.setLabel(this.tr('Fields'));
       tabView.add(qxPage2);
-      permMgr.create("bibliograph.fields.manage").bind("state", qxPage2, "enabled", {
-
+      permMgr.create("bibliograph.fields.manage").bind("state", qxPage2, "visibility", {
+        converter : function(v){ return v? "visible" : "excluded" }
       });
       var qxGrid2 = new qx.ui.layout.Grid(null, null);
       qxGrid2.setSpacing(5);
