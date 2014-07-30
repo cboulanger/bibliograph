@@ -894,15 +894,15 @@ qx.Class.define("bibliograph.Main",
      */
     logout : function()
     {
-      /*
-       * notify listeners
-       */
+      // notify listeners
       qx.event.message.Bus.dispatchByName("logout");
 
-      /*
-       * call parent method to log out
-       */
-      this.showPopup("Logging out ...");
+      // remove state
+      this.setFolderId(null);
+      this.setModelId(null);
+
+      // log out on server
+      this.showPopup( this.tr("Logging out ...") );
       this.getAccessManager().logout(function() {
         /*
          * reload configuration data for anonymous

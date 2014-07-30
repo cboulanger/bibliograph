@@ -210,6 +210,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
     qx.event.message.Bus.subscribe("folder.reload", this._on_reloadFolder, this);
     qx.event.message.Bus.subscribe("reference.changeData", this._on_changeReferenceData, this);
     qx.event.message.Bus.subscribe("reference.removeRows", this._on_removeRows, this);
+    qx.event.message.Bus.subscribe("logout", this._on_logout, this);
 
   },
 
@@ -701,6 +702,11 @@ qx.Class.define("bibliograph.ui.reference.ListView",
     ---------------------------------------------------------------------------
     */
 
+    _on_logout : function()
+    {
+      this.clearTable();
+    },
+
     /**
      * Called when user clicks on a table cell. Does nothing currently
      */
@@ -876,7 +882,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
      */
     load : function()
     {
-      this.clearTable;
+      this.clearTable();
 
       if (!this.getModelType())
       {
