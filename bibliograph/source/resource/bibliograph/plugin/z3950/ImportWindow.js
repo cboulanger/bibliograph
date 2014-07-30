@@ -30,12 +30,27 @@ qx.Class.define("bibliograph.plugin.z3950.ImportWindow",
   */
 
   /**
-   * @todo rewrite the cache stuff!
+   * Constructor
    */
   construct : function()
   {
     this.base(arguments);
     this.createPopup();
+    qx.lang.Function.delay(function(){
+      this.listView.addListenerOnce("tableReady", function() {
+        var controller = this.listView.getController();
+        controller.addListener("blockLoaded", function(){
+          this.importButton.setEnabled(true);
+          this.searchButton.setEnabled(true);
+          this.listView.setEnabled(true);
+          this.hidePopup();
+        }, this);
+        // show status messages
+        controller.addListener("statusMessage", function(e){
+          this.showPopup(e.getData());
+        }, this);
+      }, this);
+    },100,this);
   },
 
   /*
@@ -48,6 +63,8 @@ qx.Class.define("bibliograph.plugin.z3950.ImportWindow",
     listView : null,
     datasourceSelectBox : null,
     searchBox : null,
+    searchButton : null,
+    statusTextLabel : null,
 
     /**
      * Called when the user presses a key in the search box
@@ -56,18 +73,21 @@ qx.Class.define("bibliograph.plugin.z3950.ImportWindow",
     _on_keypress : function(e) {
       if (e.getKeyIdentifier() == "Enter")
       {
-        this.listView.clearTable();
-
-        //this.importButton.setEnabled(false);
-
-        // @todo We should disable the import button during search, but this needs a closer look.
-        this.listView.addListenerOnce("tableReady", function() {
-          this.listView.getTable().addListenerOnce("cellClick", function() {
-            this.importButton.setEnabled(true);
-          }, this);
-        }, this);
-        this.listView.setQuery(this.searchBox.getValue());
+        this.startSearch();
       }
+    },
+
+    /**
+     * Starts the search
+     */
+    startSearch : function()
+    {
+      this.listView.clearTable();
+      this.importButton.setEnabled(false);
+      this.searchButton.setEnabled(false);
+      this.listView.setEnabled(false);
+      this.listView.setQuery(null);
+      this.listView.setQuery(this.searchBox.getValue());
     },
 
     /**

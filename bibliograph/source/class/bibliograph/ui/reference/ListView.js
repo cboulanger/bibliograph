@@ -704,7 +704,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
 
     _on_logout : function()
     {
-      this.clearTable();
+      this.clearTa
     },
 
     /**
