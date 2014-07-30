@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: qcl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-14 08:13+0100\n"
-"PO-Revision-Date: 2014-07-14 08:15+0100\n"
+"POT-Creation-Date: 2014-07-30 21:00+0100\n"
+"PO-Revision-Date: 2014-07-30 21:02+0100\n"
 "Last-Translator: Christian Boulanger <info@bibliograph.org>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop;tr;trn;marktr\n"
 "X-Poedit-Basepath: .\n"
-"X-Generator: Poedit 1.6.6\n"
+"X-Generator: Poedit 1.6.7\n"
 "X-Poedit-SearchPath-0: ../../..\n"
 
 #: ../../../access/ACLTool.php:50 ../../../access/ACLTool.php:96
@@ -279,6 +279,36 @@ msgstr "Plugin reinstallieren"
 #: ../../../application/plugin/Service.php:102
 msgid "Please configure the plugins"
 msgstr "Bitte konfigurieren sie die Plugins"
+
+#: ../../../application/plugin/Service.php:144
+#, php-format
+msgid "Installed plugin '%s'"
+msgstr "Plugin '%s' wurde installiert."
+
+#: ../../../application/plugin/Service.php:148
+#, php-format
+msgid "Installation of plugin '%s' failed: %s"
+msgstr "Die Installation von Plugin '%s' war nicht erfolgreich: %s"
+
+#: ../../../application/plugin/Service.php:167
+#, php-format
+msgid "Reinstalled plugin '%s'"
+msgstr "Das Plugin '%s' wurde erneut installiert. "
+
+#: ../../../application/plugin/Service.php:172
+#, php-format
+msgid "Re-Installation of plugin '%s' failed: %s"
+msgstr "Die erneute Installation von Plugin '%s' war nicht erfolgreich: %s"
+
+#: ../../../application/plugin/Service.php:189
+#, php-format
+msgid "Uninstalled plugin '%s'"
+msgstr "Das Plugin '%s' wurde deinstalliert."
+
+#: ../../../application/plugin/Service.php:196
+#, php-format
+msgid "Uninstallation of plugin '%s' failed: %s"
+msgstr "Die Deinstallation von Plugin '%s' war nicht erfolgreich: %s"
 
 #: ../../../config/Service.php:145
 msgid "Log file deleted."

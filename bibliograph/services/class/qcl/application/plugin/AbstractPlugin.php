@@ -112,10 +112,8 @@ abstract class qcl_application_plugin_AbstractPlugin
    * @throws qcl_core_NotImplementedException
    * @return void|string Can return a message that will be displayed after installation.
    */
-  public function install()
-  {
-    throw new qcl_core_NotImplementedException(__METHOD__);
-  }
+  abstract public function install();
+
 
   /**
    * Re-installs the plugin. If not overridden, this simply calls the
@@ -137,9 +135,6 @@ abstract class qcl_application_plugin_AbstractPlugin
    * @throws qcl_application_plugin_Exception
    * @return void|string Can return a message that will be displayed after uninstallation.
    */
-  public function uninstall()
-  {
-    throw new qcl_core_NotImplementedException(__METHOD__);
-  }
+  abstract public function uninstall();
 }
 ?>

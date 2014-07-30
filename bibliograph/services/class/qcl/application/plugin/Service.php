@@ -141,17 +141,11 @@ class qcl_application_plugin_Service
               'data'        => $plugin->getData(),
               'active'      => true
             ));
-            $msg = sprintf(
-              "Installed plugin '%s'",
-              $plugin->getName()
-            );
+            $msg = $this->tr("Installed plugin '%s'",$plugin->getName());
           }
           catch( qcl_application_plugin_Exception $e )
           {
-            $msg = sprintf(
-              "Installation of plugin '%s' failed: %s",
-              $plugin->getName(), $e->getMessage()
-            );
+            $msg = $this->tr("Installation of plugin '%s' failed: %s", $plugin->getName(), $e->getMessage());
             $this->getLogger()->log($msg, QCL_LOG_PLUGIN );
           }
           break;
@@ -170,14 +164,11 @@ class qcl_application_plugin_Service
               'active'      => true
             ) );
             $registryModel->save();
-            $msg = sprintf(
-              "Reinstalled plugin '%s'",
-              $plugin->getName()
-            );
+            $msg = $this->tr("Reinstalled plugin '%s'",$plugin->getName());
           }
           catch( qcl_application_plugin_Exception $e )
           {
-            $msg = sprintf(
+            $msg = $this->tr(
               "Re-Installation of plugin '%s' failed: %s",
               $plugin->getName(), $e->getMessage()
             );
@@ -194,14 +185,14 @@ class qcl_application_plugin_Service
             $installMsg = $plugin->uninstall();
             $registryModel->load( $namedId );
             $registryModel->delete();
-            $msg = sprintf(
+            $msg = $this->tr(
               "Uninstalled plugin '%s'",
               $plugin->getName()
             );
           }
           catch( qcl_application_plugin_Exception $e )
           {
-            $msg = sprintf(
+            $msg = $this->tr(
               "Uninstallation of plugin '%s' failed: %s",
               $plugin->getName(), $e->getMessage()
             );
@@ -214,7 +205,7 @@ class qcl_application_plugin_Service
       {
         if ( $installMsg )
         {
-          $msg . "\n" . $installMsg;
+          $msg .= ": " . $installMsg;
         }
         $messages[] = $msg;
       }
