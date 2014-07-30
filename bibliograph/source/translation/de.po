@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: you@your.org\n"
 "POT-Creation-Date: 2010-05-13 19:30+0100\n"
-"PO-Revision-Date: 2014-07-30 22:15+0100\n"
+"PO-Revision-Date: 2014-07-30 23:35+0100\n"
 "Last-Translator: Christian Boulanger <info@bibliograph.org>\n"
 "Language-Team: Team <yourteam@your.org>\n"
 "MIME-Version: 1.0\n"
@@ -174,60 +174,65 @@ msgstr ""
 msgid "Webservice (Slower)"
 msgstr "Webservice (Langsamer)"
 
-#: bibliograph/plugin/z3950/ImportWindow.js:86
+#: bibliograph/plugin/z3950/ImportWindow.js:106
 #: bibliograph/ui/window/ImportWindow.js:176
 msgid "You have to select one or more reference to import."
 msgstr "Sie müssen eine oder mehr Datensätze zum importieren auswählen."
 
-#: bibliograph/plugin/z3950/ImportWindow.js:96
+#: bibliograph/plugin/z3950/ImportWindow.js:116
 #: bibliograph/ui/window/ImportWindow.js:186
 msgid "Please select a folder first."
 msgstr "Bitte wählen sie einen Ordner aus, in den importiert werden soll. "
 
-#: bibliograph/plugin/z3950/ImportWindow.js:104
+#: bibliograph/plugin/z3950/ImportWindow.js:124
 #: bibliograph/ui/window/ImportWindow.js:194
 msgid "Cannot determine selected folder."
 msgstr "Kann den gewählten Ordner nicht finden."
 
-#: bibliograph/plugin/z3950/ImportWindow.js:109
+#: bibliograph/plugin/z3950/ImportWindow.js:129
 #: bibliograph/ui/window/ImportWindow.js:199
 msgid "Invalid target folder. You can only import into normal folders."
 msgstr "Ungültiger Zielordner. Sie können nur in normale Ordner importieren."
 
-#: bibliograph/plugin/z3950/ImportWindow.js:118
+#: bibliograph/plugin/z3950/ImportWindow.js:138
 #: bibliograph/ui/window/ImportWindow.js:208
 msgid "Importing references..."
 msgstr "Importiere die Datensätze ..."
 
-#: bibliograph/plugin/z3950/Plugin.js:48
-#: bibliograph/plugin/z3950/ImportWindowUi.js:22
-#: bibliograph/plugin/z3950/ImportWindow.js:126
+#: bibliograph/plugin/z3950/ImportWindowUi.js:38
+#: bibliograph/plugin/z3950/ImportWindow.js:146
 msgid "Import from library catalogue"
 msgstr "Aus Bibliothekskatalog importieren"
 
-#: bibliograph/plugin/z3950/ImportWindowUi.js:42
-#: bibliograph/plugin/z3950/ImportWindowUi.js:43
+#: bibliograph/plugin/z3950/ImportWindowUi.js:68
+#: bibliograph/plugin/z3950/ImportWindowUi.js:69
 msgid "GBV Katalog"
 msgstr "GBV Katalog"
 
 #: bibliograph/ui/main/Toolbar.js:325
-#: bibliograph/plugin/z3950/ImportWindowUi.js:56
+#: bibliograph/plugin/z3950/ImportWindowUi.js:85
 msgid "Enter search term"
 msgstr "Bitte geben sie einen Suchausdruck ein"
 
-#: bibliograph/plugin/z3950/ImportWindowUi.js:88
-#: bibliograph/plugin/z3950/ImportWindowUi.js:91
+#: bibliograph/plugin/z3950/ImportWindowUi.js:94
+msgid "Search"
+msgstr "Suchen"
+
+#: bibliograph/plugin/z3950/ImportWindowUi.js:131
 #: bibliograph/ui/window/ImportWindowUi.js:124
 #: bibliograph/ui/window/ImportWindowUi.js:127
 msgid "Import selected records"
 msgstr "Augewählte Datensätze importieren"
 
-#: bibliograph/plugin/z3950/ImportWindowUi.js:96
-#: bibliograph/plugin/z3950/ImportWindowUi.js:97
+#: bibliograph/plugin/z3950/ImportWindowUi.js:140
 #: bibliograph/ui/window/ImportWindowUi.js:137
 #: bibliograph/ui/window/ImportWindowUi.js:138
 msgid "Close"
 msgstr "Schließen"
+
+#: bibliograph/plugin/z3950/Plugin.js:48
+msgid "Import from library catalog"
+msgstr "Aus einem Bibliothekskatalog importieren\t"
 
 #: bibliograph/theme/Assets.js:77
 msgid "Generate formatted citations ..."
