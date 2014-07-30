@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: you@your.org\n"
 "POT-Creation-Date: 2010-05-13 19:30+0100\n"
-"PO-Revision-Date: 2014-07-27 22:27+0100\n"
+"PO-Revision-Date: 2014-07-30 22:15+0100\n"
 "Last-Translator: Christian Boulanger <info@bibliograph.org>\n"
 "Language-Team: Team <yourteam@your.org>\n"
 "MIME-Version: 1.0\n"
@@ -49,11 +49,11 @@ msgstr ""
 "Die Datenbank wurde gerade auf einen früheren Zustand zurückgesetzt wird "
 "jetzt neu geladen."
 
-#: bibliograph/Main.js:634
+#: bibliograph/Main.js:642
 msgid "Loading datasource information ..."
 msgstr "Informationen zur Datenquelle werden abgerufen..."
 
-#: bibliograph/Main.js:793
+#: bibliograph/Main.js:801
 msgid ""
 "To log in, you need a secure connection. After you press 'OK', the "
 "application will be reloaded in secure mode. After the application finished "
@@ -64,7 +64,7 @@ msgstr ""
 "geladen. Bitte melden Sie sich erneut an, sobald der Ladevorgang "
 "abgeschlossen ist."
 
-#: bibliograph/Main.js:804
+#: bibliograph/Main.js:812
 msgid ""
 "The application is currently in a read-only state. Only the administrator "
 "can log in."
@@ -72,15 +72,24 @@ msgstr ""
 "Das Programm ist gerade im Nur-Lese-Modus. Nur der Administrator kann sich "
 "einloggen. "
 
-#: bibliograph/Main.js:838
+#: bibliograph/Main.js:846
 msgid "Authenticating ..."
 msgstr "Anmeldung ..."
 
-#: bibliograph/Main.js:921
+#: bibliograph/plugin/isbnscanner/Plugin.js:61 bibliograph/Main.js:883
+#: bibliograph/Main.js:1008
+msgid "Please wait ..."
+msgstr "Bitte warten ..."
+
+#: bibliograph/Main.js:905
+msgid "Logging out ..."
+msgstr "Abmelden ..."
+
+#: bibliograph/Main.js:940
 msgid "You don't have access to any datasource on the server."
 msgstr "Sie haben keinen Zugang zu Datenbanken auf diesem Server."
 
-#: bibliograph/Main.js:973
+#: bibliograph/Main.js:992
 msgid ""
 "Cannot open help window. Please disable the popup-blocker of your browser "
 "for this website."
@@ -88,11 +97,7 @@ msgstr ""
 "Die Hilfeseite kann nicht aufgerufen werden. Bitte schalten Sie eventuelle "
 "Popup-Blockierer für diese Webseite ab. "
 
-#: bibliograph/plugin/isbnscanner/Plugin.js:60 bibliograph/Main.js:989
-msgid "Please wait ..."
-msgstr "Bitte warten ..."
-
-#: bibliograph/Main.js:1064
+#: bibliograph/Main.js:1083
 msgid "Retrieving user data..."
 msgstr "Lade Benutzerdaten ..."
 
@@ -140,7 +145,7 @@ msgstr ""
 "Bitte wählen Sie einen Ordner aus, in den der Datensatz importiert werden "
 "soll. Erfordert einen Strichcode-Scanner im Tastaturmodus."
 
-#: bibliograph/plugin/isbnscanner/Plugin.js:98
+#: bibliograph/plugin/isbnscanner/Plugin.js:102
 msgid ""
 "ISBN input detected. Please wait for the input dialog and repeat the "
 "input ..."
@@ -148,11 +153,11 @@ msgstr ""
 "ISBN Eingabe erkannt. Bitte warten Sie auf den Eingabedialog und wiederholen "
 "Sie die Eingabe ..."
 
-#: bibliograph/plugin/isbnscanner/Plugin.js:120
+#: bibliograph/plugin/isbnscanner/Plugin.js:124
 msgid "Import by ISBN"
 msgstr "Import über ISBN-Nummer"
 
-#: bibliograph/plugin/isbnscanner/Plugin.js:131
+#: bibliograph/plugin/isbnscanner/Plugin.js:137
 msgid ""
 "How should names (e.g. William Shakespeare) be converted to a sortable "
 "format (Shakespeare, William)?"
@@ -160,12 +165,12 @@ msgstr ""
 "Wie sollen Namen (z.B. Johann Wolfgang von Goethe) in ein sortierbares "
 "Format (Goethe, Johann Wolfgang von) umgewandelt werden?"
 
-#: bibliograph/plugin/isbnscanner/Plugin.js:140
+#: bibliograph/plugin/isbnscanner/Plugin.js:146
 msgid "Name parser (Fast, Correct for most western names)"
 msgstr ""
 "Mit Nameparser (schnell und zuverlässig für die meisten westlichen Namen)"
 
-#: bibliograph/plugin/isbnscanner/Plugin.js:144
+#: bibliograph/plugin/isbnscanner/Plugin.js:150
 msgid "Webservice (Slower)"
 msgstr "Webservice (Langsamer)"
 
@@ -307,11 +312,11 @@ msgstr "Sichtbarkeit verändern"
 msgid "Reload"
 msgstr "Neu laden"
 
-#: bibliograph/ui/item/DuplicatesView.js:161
-#: bibliograph/ui/reference/ListView.js:1100
-#: bibliograph/ui/reference/ListView.js:1117
-#: bibliograph/ui/reference/ListView.js:1133
-#: bibliograph/ui/reference/ListView.js:1152
+#: bibliograph/ui/item/DuplicatesView.js:162
+#: bibliograph/ui/reference/ListView.js:1106
+#: bibliograph/ui/reference/ListView.js:1123
+#: bibliograph/ui/reference/ListView.js:1139
+#: bibliograph/ui/reference/ListView.js:1158
 #: bibliograph/ui/item/RecordInfo.js:167
 msgid "Processing request..."
 msgstr "Verarbeite die Anfrage ..."
@@ -392,7 +397,7 @@ msgstr "Lade Editor ..."
 msgid "Creating form, please wait ..."
 msgstr "Erzeuge das Formular, bitte warten ..."
 
-#: bibliograph/ui/item/ReferenceEditor.js:723
+#: bibliograph/ui/item/ReferenceEditor.js:722
 #: bibliograph/ui/item/ReferenceEditor.js:874
 msgid "Saving..."
 msgstr "Speichern ..."
@@ -527,29 +532,29 @@ msgstr ""
 "Die Anwendung ist zurzeit im Entwicklungsmodus. Auf einem öffentlichen "
 "Server darf das nie der Fall sein. "
 
-#: bibliograph/ui/reference/ListView.js:487
+#: bibliograph/ui/reference/ListView.js:488
 msgid "Loading table ..."
 msgstr "Lade Tabelle ..."
 
-#: bibliograph/ui/reference/ListView.js:1009
+#: bibliograph/ui/reference/ListView.js:1015
 msgid "You cannot create an item outside a folder"
 msgstr "Sie können keinen Datensatz außerhalb eines Ordners erstellen"
 
-#: bibliograph/ui/reference/ListView.js:1025
+#: bibliograph/ui/reference/ListView.js:1031
 msgid "Do your really want to remove the selected references from this folder?"
 msgstr ""
 "Möchten Sie die ausgewählten Datensätze wirklich aus diesem Ordner entfernen?"
 "\t"
 
-#: bibliograph/ui/reference/ListView.js:1026
+#: bibliograph/ui/reference/ListView.js:1032
 msgid "Do your really want to remove the selected references?"
 msgstr "Wollen Sie wirklich die ausgewählten Datensätze entfernen?"
 
-#: bibliograph/ui/reference/ListView.js:1050
+#: bibliograph/ui/reference/ListView.js:1056
 msgid "Do your really want to move the selected references to '%1'?"
 msgstr "Wollen Sie wirklich die augewählten Datensätze nach '%1' verschieben?"
 
-#: bibliograph/ui/reference/ListView.js:1076
+#: bibliograph/ui/reference/ListView.js:1082
 msgid "Do your really want to copy the selected referencesto '%1'?"
 msgstr "Wollen Sie wirklich die ausgewählten Datensätze nach '%1' kopieren?"
 

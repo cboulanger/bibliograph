@@ -45,42 +45,47 @@ msgid ""
 "reloaded"
 msgstr ""
 
-#: bibliograph/Main.js:634
+#: bibliograph/Main.js:642
 msgid "Loading datasource information ..."
 msgstr ""
 
-#: bibliograph/Main.js:793
+#: bibliograph/Main.js:801
 msgid ""
 "To log in, you need a secure connection. After you press 'OK', the "
 "application will be reloaded in secure mode. After the application finished "
 "loading, you can log in again."
 msgstr ""
 
-#: bibliograph/Main.js:804
+#: bibliograph/Main.js:812
 msgid ""
 "The application is currently in a read-only state. Only the administrator "
 "can log in."
 msgstr ""
 
-#: bibliograph/Main.js:838
+#: bibliograph/Main.js:846
 msgid "Authenticating ..."
 msgstr ""
 
-#: bibliograph/Main.js:921
+#: bibliograph/plugin/isbnscanner/Plugin.js:61 bibliograph/Main.js:883
+#: bibliograph/Main.js:1008
+msgid "Please wait ..."
+msgstr ""
+
+#: bibliograph/Main.js:905
+msgid "Logging out ..."
+msgstr ""
+
+#: bibliograph/Main.js:940
 msgid "You don't have access to any datasource on the server."
 msgstr ""
 
-#: bibliograph/Main.js:973
+#: bibliograph/Main.js:992
 msgid ""
 "Cannot open help window. Please disable the popup-blocker of your browser "
 "for this website."
 msgstr ""
 
-#: bibliograph/plugin/isbnscanner/Plugin.js:60 bibliograph/Main.js:989
-msgid "Please wait ..."
-msgstr ""
-
-#: bibliograph/Main.js:1064
+#: bibliograph/Main.js:1083
 msgid "Retrieving user data..."
 msgstr ""
 
@@ -126,27 +131,27 @@ msgid ""
 "barcode scanner in keyboard mode"
 msgstr ""
 
-#: bibliograph/plugin/isbnscanner/Plugin.js:98
+#: bibliograph/plugin/isbnscanner/Plugin.js:102
 msgid ""
 "ISBN input detected. Please wait for the input dialog and repeat the input "
 "..."
 msgstr ""
 
-#: bibliograph/plugin/isbnscanner/Plugin.js:120
+#: bibliograph/plugin/isbnscanner/Plugin.js:124
 msgid "Import by ISBN"
 msgstr ""
 
-#: bibliograph/plugin/isbnscanner/Plugin.js:131
+#: bibliograph/plugin/isbnscanner/Plugin.js:137
 msgid ""
 "How should names (e.g. William Shakespeare) be converted to a sortable "
 "format (Shakespeare, William)?"
 msgstr ""
 
-#: bibliograph/plugin/isbnscanner/Plugin.js:140
+#: bibliograph/plugin/isbnscanner/Plugin.js:146
 msgid "Name parser (Fast, Correct for most western names)"
 msgstr ""
 
-#: bibliograph/plugin/isbnscanner/Plugin.js:144
+#: bibliograph/plugin/isbnscanner/Plugin.js:150
 msgid "Webservice (Slower)"
 msgstr ""
 
@@ -286,11 +291,11 @@ msgstr ""
 msgid "Reload"
 msgstr ""
 
-#: bibliograph/ui/item/DuplicatesView.js:161
-#: bibliograph/ui/reference/ListView.js:1100
-#: bibliograph/ui/reference/ListView.js:1117
-#: bibliograph/ui/reference/ListView.js:1133
-#: bibliograph/ui/reference/ListView.js:1152
+#: bibliograph/ui/item/DuplicatesView.js:162
+#: bibliograph/ui/reference/ListView.js:1106
+#: bibliograph/ui/reference/ListView.js:1123
+#: bibliograph/ui/reference/ListView.js:1139
+#: bibliograph/ui/reference/ListView.js:1158
 #: bibliograph/ui/item/RecordInfo.js:167
 msgid "Processing request..."
 msgstr ""
@@ -371,7 +376,7 @@ msgstr ""
 msgid "Creating form, please wait ..."
 msgstr ""
 
-#: bibliograph/ui/item/ReferenceEditor.js:723
+#: bibliograph/ui/item/ReferenceEditor.js:722
 #: bibliograph/ui/item/ReferenceEditor.js:874
 msgid "Saving..."
 msgstr ""
@@ -503,28 +508,28 @@ msgid ""
 "case on a public server."
 msgstr ""
 
-#: bibliograph/ui/reference/ListView.js:487
+#: bibliograph/ui/reference/ListView.js:488
 msgid "Loading table ..."
 msgstr ""
 
-#: bibliograph/ui/reference/ListView.js:1009
+#: bibliograph/ui/reference/ListView.js:1015
 msgid "You cannot create an item outside a folder"
 msgstr ""
 
-#: bibliograph/ui/reference/ListView.js:1025
+#: bibliograph/ui/reference/ListView.js:1031
 msgid ""
 "Do your really want to remove the selected references from this folder?"
 msgstr ""
 
-#: bibliograph/ui/reference/ListView.js:1026
+#: bibliograph/ui/reference/ListView.js:1032
 msgid "Do your really want to remove the selected references?"
 msgstr ""
 
-#: bibliograph/ui/reference/ListView.js:1050
+#: bibliograph/ui/reference/ListView.js:1056
 msgid "Do your really want to move the selected references to '%1'?"
 msgstr ""
 
-#: bibliograph/ui/reference/ListView.js:1076
+#: bibliograph/ui/reference/ListView.js:1082
 msgid "Do your really want to copy the selected referencesto '%1'?"
 msgstr ""
 
