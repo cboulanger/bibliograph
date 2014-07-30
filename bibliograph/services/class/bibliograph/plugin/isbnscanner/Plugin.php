@@ -79,11 +79,15 @@ class isbnscanner_plugin
    */
   public function uninstall()
   {
-    bibliograph_Application::getInstance()
-      ->getAccessController()
-      ->getPermissionModel()
-      ->load("isbnscanner.import")
-      ->delete();
+    try
+    {
+      bibliograph_Application::getInstance()
+        ->getAccessController()
+        ->getPermissionModel()
+        ->load("isbnscanner.import")
+        ->delete();
+    }
+    catch( qcl_data_model_RecordNotFoundException $e) {}
     return $this->tr("Please reload the application to finish uninstalling.");
   }
 }
