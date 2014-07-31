@@ -298,43 +298,36 @@ qx.Class.define("bibliograph.ui.reference.ListView",
           return;
         }
 
-        // @todo this is not very elegant
-        //var datasource = this.getDatasource();
+        /*
+         * show breadcrumb
+         */
         var mainFolderTree = this.getApplication().getWidgetById("mainFolderTree");
         var selectedNode = mainFolderTree.getSelectedNode();
-
-        /*
-         * if a folder has been selected in the main tree
-         */
         if (selectedNode && selectedNode.data.id == folderId)
         {
-          /*
-           * we can get the folder hierarchy for the caption
-           */
+          // we can get the folder hierarchy for the breadcrumb
           var hierarchy = mainFolderTree.getTree().getHierarchy(selectedNode);
           hierarchy.unshift(this.getApplication().getDatasourceLabel());
-          if ( this.referenceViewLabel )
+          var breadcrumb = hierarchy.join(" > ");
+
+          // is it a query?
+          var query = selectedNode.data.query;
+          if (query)
           {
-            this.referenceViewLabel.setValue(hierarchy.join(" > "));  
+            // append query to breadcrumb
+            //breadcrumb += " (" + query + ")";
+            this.setQuery(query);
+            this.setFolderId(null);
           }
 
-          /*
-           * is it a query?
-           * @todo - rewrite this
-           */
-          var query = selectedNode.data.query;
-          if (qx.lang.Type.isString(query) && query != "")
+          if ( this.referenceViewLabel )
           {
-            this.getApplication().setQuery(query);
-            return;
-          } else
-          {
-            this.getApplication().setQuery("");
+            this.referenceViewLabel.setValue(breadcrumb);
           }
         }
 
         /*
-         * otherwise, load folder
+         * load folder
          */
         this.load();
       }, null, this, null, 500);
@@ -345,6 +338,11 @@ qx.Class.define("bibliograph.ui.reference.ListView",
      */
     _applyQuery : function(query, old) {
       if (query) {
+        var breadcrumb = this.tr("Query") + ": " + query;
+        if ( this.referenceViewLabel )
+        {
+          this.referenceViewLabel.setValue(breadcrumb);
+        }
         this.load();
       }
     },
@@ -704,7 +702,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
 
     _on_logout : function()
     {
-      this.clearTa
+      this.clearTable();
     },
 
     /**

@@ -194,22 +194,22 @@ class bibliograph_model_FolderModel
         'label'     => _("Query"),
         'type'      => "TextArea",
         'lines'     => 3
-        ,'events'    => array(
-          'focus'    =>  "function(e){
-                            var hwin = this.getApplication().getWidgetById('searchHelpWindow');
-                            this.getApplication().setInsertTarget(e.getTarget());
-                            this.getApplicationRoot().unblockContent();
-                            hwin.set({maxWidth:250});
-                            hwin.moveTo(10,10);
-                            hwin.show();
-
-                          }",
-          'disappear'    =>  "function(){
-                            var hwin = this.getApplication().getWidgetById('searchHelpWindow');
-                            hwin.setMaxWidth(400);
-                            hwin.hide();
-                          }"
-        )
+//        ,'events'    => array(
+//          'focus'    =>  "function(e){
+//                            var hwin = this.getApplication().getWidgetById('searchHelpWindow');
+//                            this.getApplication().setInsertTarget(e.getTarget());
+//                            hwin.setZIndex(2147483647);
+//                            hwin.set({maxWidth:250});
+//                            hwin.moveTo(10,10);
+//                            hwin.show();
+//
+//                          }"
+//          ,'blur'    =>  "function(){
+//                            var hwin = this.getApplication().getWidgetById('searchHelpWindow');
+//                            hwin.setMaxWidth(400);
+//                            hwin.hide();
+//                          }"
+//        )
       ),
 
       'opened'  => array(
