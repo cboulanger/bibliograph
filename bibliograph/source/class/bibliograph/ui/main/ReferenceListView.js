@@ -35,9 +35,7 @@ qx.Class.define("bibliograph.ui.main.ReferenceListView",
       this.mainListView = mainListView;
       mainListView.setWidgetId("mainListView");
       mainListView.setAllowStretchY(true);
-      qxComposite1.add(mainListView, {
-        flex : 1
-      });
+      qxComposite1.add(mainListView, {flex : 1});
 
       this.getApplication().bind("datasource", mainListView, "datasource");
       this.getApplication().bind("query", mainListView, "query");
