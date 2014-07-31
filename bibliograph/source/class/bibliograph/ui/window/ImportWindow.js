@@ -36,6 +36,21 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
   {
     this.base(arguments);
     this.createPopup();
+    qx.lang.Function.delay(function(){
+      this.listView.addListenerOnce("tableReady", function() {
+        var controller = this.listView.getController();
+        function enableButtons (){
+          this.importButton.setEnabled(true);
+          this.listView.setEnabled(true);
+          this.hidePopup();
+        }
+        controller.addListener("blockLoaded", enableButtons, this);
+        controller.addListener("statusMessage", function(e){
+          this.showPopup(e.getData());
+          qx.lang.Function.delay( enableButtons, 1000, this);
+        }, this);
+      }, this);
+    },100,this);
   },
 
   /*
@@ -66,8 +81,16 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
     listView : null,
     toolBar : null,
     importButton : null,
+
+
+    /**
+     * Apply filter property
+     */
     _applyFilter : function(value, old) {
-      if (this.uploadButton)this.uploadButton.setEnabled(value !== null && this.file.getFieldValue != '');
+      if (this.uploadButton)
+      {
+        this.uploadButton.setEnabled(value !== null && this.file.getFieldValue != '');
+      }
 
     },
     
@@ -78,46 +101,33 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
     {
       var url = this.getApplication().getRpcManager().getServerUrl();
 
-      /*
-       * form
-       */
+      // form
       var form = new uploadwidget.UploadForm('uploadFrm', url);
       this.form = form;
       form.setParameter('application', 'bibliograph');
-      form.setParameter('sessionId', this.getApplication().getSessionManager().getSessionId());
       form.setParameter('replace', true);
       form.setLayout(new qx.ui.layout.HBox());
 
-      /*
-       * upload button
-       */
-      var file = new uploadwidget.UploadField('uploadfile', this.tr('1. Choose file'));
-      this.file = file;
-      form.add(file, {
-        flex : 1
-      });
+      // upload button
+      var uploadField = new uploadwidget.UploadField('uploadfile', this.tr('1. Choose file'));
+      this.file = uploadField;
+      form.add(uploadField, { flex : 1 });
 
-      /*
-       * callback when file is selected
-       */
-      file.addListener('changeFieldValue', function(e) {
+      // callback when file is selected
+      uploadField.addListener('changeFileName', function(e) {
+        form.setParameter('sessionId', this.getApplication().getSessionManager().getSessionId());
         this.uploadButton.setEnabled(e.getData() != '' && this.getFilter() !== null);
       }, this);
 
-      /*
-       * callback when file is sent to server
-       */
+      // callback when file is sent to server
       form.addListener('sending', function(e) {
         this.showPopup(this.tr('Uploading file...'));
       }, this);
 
-      /*
-       * callback when upload is completed
-       */
-      form.addListener('completed', function(e)
-      {
+      // callback when upload is completed
+      form.addListener('completed', function(e) {
         this.hidePopup();
-        file.setFieldValue('');
+        uploadField.setFileName('');
         var response = form.getIframeHtmlContent();
         if (response.search(/qcl_file/) == -1) {
           dialog.Dialog.alert(response);
@@ -127,12 +137,21 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
       }, this);
       return form;
     },
-    
-    
+
+    /**
+     * converter for import filter selection
+     * @param s {Object}
+     * @returns {int|null}
+     * @private
+     */
     _convertImportFilterSelection : function(s) {
       return (s.length ? s[0].getModel().getValue() : null);
     },
-    
+
+    /**
+     * called when the upload button is clicked
+     * @private
+     */
     _on_uploadButton_execute : function()
     {
       this.importButton.setEnabled(false);
@@ -147,17 +166,23 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
     processUpload : function(file)
     {
       this.showPopup(this.tr("Processing references..."));
-      this.importButton.setEnabled(false);
       var app = this.getApplication();
-      app.getRpcManager().execute("bibliograph.import", "processUpload", [file, this.getFilter()], function(data)
-      {
-        this.hidePopup();
-        this.importButton.setEnabled(true);
-        this.uploadButton.setEnabled(true);
-        var sessionId = app.getSessionManager().getSessionId();
-        this.listView.setFolderId(data.folderId);
-        this.listView.load();
-      }, this);
+      app.getRpcManager().execute(
+          "bibliograph.import", "processUpload",
+          [file, this.getFilter()],
+          this.uploadFinished, this
+      );
+    },
+
+    /**
+     * Called when the upload is finished
+     * @param data {Object}
+     */
+    uploadFinished : function(data)
+    {
+      this.listView.setFolderId(data.folderId);
+      this.showPopup("Loading imported references ...");
+      this.listView.load();
     },
 
     /**
@@ -191,7 +216,7 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
       var node = treeView.getTree().getDataModel().getData()[nodeId];
       if (!node)
       {
-        dialog.Dialog.alert(this.tr("Cannot determine selected folder."));
+        dialog.Dialog.alert(this.tr("Cannot determine selected folder. Please reload the folders."));
         return false;
       }
       if (node.data.type != "folder")

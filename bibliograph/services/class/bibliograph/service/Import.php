@@ -170,18 +170,17 @@ class bibliograph_service_Import
     $importRegistry = bibliograph_model_import_RegistryModel::getInstance();
     $importer = $importRegistry->getImporter( $format );
 
-    $extension = either( get_file_extension( $file ), $format);
-    
-
-    if( $extension !== $importer->getExtension() )
-    {
-      throw new JsonRpcException(sprintf(
-        _("Format '%s' expects file extension '%s'. The file you uploaded has extension '%s'"),
-        $importer->getName(),
-        $importer->getExtension(),
-        $extension
-      ));
-    }
+//    $extension = either( get_file_extension( $file ), $format);
+//
+//    if( $extension !== $importer->getExtension() )
+//    {
+//      throw new JsonRpcException(sprintf(
+//        _("Format '%s' expects file extension '%s'. The file you uploaded has extension '%s'"),
+//        $importer->getName(),
+//        $importer->getExtension(),
+//        $extension
+//      ));
+//    }
 
     /*
      * get the folder and reference models

@@ -122,7 +122,7 @@ qx.Class.define("bibliograph.plugin.z3950.ImportWindow",
       var node = treeView.getTree().getDataModel().getData()[nodeId];
       if (!node)
       {
-        dialog.Dialog.alert(this.tr("Cannot determine selected folder."));
+        dialog.Dialog.alert(this.tr("Cannot determine selected folder. Please reload the folders."));
         return false;
       }
       if (node.data.type != "folder")
