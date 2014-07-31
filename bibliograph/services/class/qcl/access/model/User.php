@@ -182,7 +182,7 @@ class qcl_access_model_User
         'label'       => $this->tr("Password"),
         'type'        => "PasswordField",
         'value'       => "",
-        'placeholder' => $this->tr("Leave blank if you don't want to change the password"),
+        'placeholder' => $this->tr("To change the password, enter new password."),
         'marshaler'   => array(
           'unmarshal'  => array( 'callback' => array( "this", "checkFormPassword" ) )
         )
@@ -192,7 +192,7 @@ class qcl_access_model_User
         'type'        => "PasswordField",
         'value'       => "",
         'ignore'      => true,
-        'placeholder' => $this->tr("Repeat password"),
+        'placeholder' => $this->tr("To change the password, repeat new password"),
         'marshaler'   => array(
           'unmarshal'  => array( 'callback' => array( "this", "checkFormPassword" ) )
         )

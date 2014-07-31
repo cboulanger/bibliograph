@@ -266,38 +266,38 @@ msgstr ""
 msgid "Purging deleted references ..."
 msgstr ""
 
-#: bibliograph/ui/folder/TreeViewUi.js:142
-#: bibliograph/ui/folder/TreeViewUi.js:143
+#: bibliograph/ui/folder/TreeViewUi.js:145
+#: bibliograph/ui/folder/TreeViewUi.js:146
 msgid "Empty trash..."
 msgstr ""
 
-#: bibliograph/ui/folder/TreeViewUi.js:149
-#: bibliograph/ui/folder/TreeViewUi.js:150
+#: bibliograph/ui/folder/TreeViewUi.js:152
+#: bibliograph/ui/folder/TreeViewUi.js:153
 msgid "Move folder..."
 msgstr ""
 
-#: bibliograph/ui/folder/TreeViewUi.js:159
-#: bibliograph/ui/folder/TreeViewUi.js:160
+#: bibliograph/ui/folder/TreeViewUi.js:162
+#: bibliograph/ui/folder/TreeViewUi.js:163
 msgid "Edit folder data"
 msgstr ""
 
-#: bibliograph/ui/folder/TreeViewUi.js:169
-#: bibliograph/ui/folder/TreeViewUi.js:170
+#: bibliograph/ui/folder/TreeViewUi.js:172
+#: bibliograph/ui/folder/TreeViewUi.js:173
 msgid "Change visibility"
 msgstr ""
 
-#: bibliograph/ui/folder/TreeViewUi.js:179
-#: bibliograph/ui/folder/TreeViewUi.js:180
+#: bibliograph/ui/folder/TreeViewUi.js:182
+#: bibliograph/ui/folder/TreeViewUi.js:183
 #: bibliograph/ui/reference/ListViewUi.js:313
 #: bibliograph/ui/reference/ListViewUi.js:314
 msgid "Reload"
 msgstr ""
 
 #: bibliograph/ui/item/DuplicatesView.js:162
-#: bibliograph/ui/reference/ListView.js:1106
-#: bibliograph/ui/reference/ListView.js:1123
-#: bibliograph/ui/reference/ListView.js:1139
-#: bibliograph/ui/reference/ListView.js:1158
+#: bibliograph/ui/reference/ListView.js:1104
+#: bibliograph/ui/reference/ListView.js:1121
+#: bibliograph/ui/reference/ListView.js:1137
+#: bibliograph/ui/reference/ListView.js:1156
 #: bibliograph/ui/item/RecordInfo.js:167
 msgid "Processing request..."
 msgstr ""
@@ -345,7 +345,7 @@ msgstr ""
 msgid "Record Info"
 msgstr ""
 
-#: bibliograph/ui/main/FolderTreePanel.js:35
+#: bibliograph/ui/main/FolderTreePanel.js:43
 #: bibliograph/ui/item/RecordInfoUi.js:59
 #: bibliograph/ui/item/RecordInfoUi.js:60
 msgid "Folders"
@@ -510,28 +510,32 @@ msgid ""
 "case on a public server."
 msgstr ""
 
-#: bibliograph/ui/reference/ListView.js:488
+#: bibliograph/ui/reference/ListView.js:341
+msgid "Query"
+msgstr ""
+
+#: bibliograph/ui/reference/ListView.js:486
 msgid "Loading table ..."
 msgstr ""
 
-#: bibliograph/ui/reference/ListView.js:1015
+#: bibliograph/ui/reference/ListView.js:1013
 msgid "You cannot create an item outside a folder"
 msgstr ""
 
-#: bibliograph/ui/reference/ListView.js:1031
+#: bibliograph/ui/reference/ListView.js:1029
 msgid ""
 "Do your really want to remove the selected references from this folder?"
 msgstr ""
 
-#: bibliograph/ui/reference/ListView.js:1032
+#: bibliograph/ui/reference/ListView.js:1030
 msgid "Do your really want to remove the selected references?"
 msgstr ""
 
-#: bibliograph/ui/reference/ListView.js:1056
+#: bibliograph/ui/reference/ListView.js:1054
 msgid "Do your really want to move the selected references to '%1'?"
 msgstr ""
 
-#: bibliograph/ui/reference/ListView.js:1082
+#: bibliograph/ui/reference/ListView.js:1080
 msgid "Do your really want to copy the selected referencesto '%1'?"
 msgstr ""
 

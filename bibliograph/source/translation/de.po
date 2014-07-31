@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: you@your.org\n"
 "POT-Creation-Date: 2010-05-13 19:30+0100\n"
-"PO-Revision-Date: 2014-07-31 21:31+0100\n"
+"PO-Revision-Date: 2014-07-31 22:29+0100\n"
 "Last-Translator: Christian Boulanger <info@bibliograph.org>\n"
 "Language-Team: Team <yourteam@your.org>\n"
 "MIME-Version: 1.0\n"
@@ -287,38 +287,38 @@ msgstr "Lösche Ordner ..."
 msgid "Purging deleted references ..."
 msgstr "Lösche Datensätze ..."
 
-#: bibliograph/ui/folder/TreeViewUi.js:142
-#: bibliograph/ui/folder/TreeViewUi.js:143
+#: bibliograph/ui/folder/TreeViewUi.js:145
+#: bibliograph/ui/folder/TreeViewUi.js:146
 msgid "Empty trash..."
 msgstr "Den Papierkorb leeren ..."
 
-#: bibliograph/ui/folder/TreeViewUi.js:149
-#: bibliograph/ui/folder/TreeViewUi.js:150
+#: bibliograph/ui/folder/TreeViewUi.js:152
+#: bibliograph/ui/folder/TreeViewUi.js:153
 msgid "Move folder..."
 msgstr "Ordner verschieben ..."
 
-#: bibliograph/ui/folder/TreeViewUi.js:159
-#: bibliograph/ui/folder/TreeViewUi.js:160
+#: bibliograph/ui/folder/TreeViewUi.js:162
+#: bibliograph/ui/folder/TreeViewUi.js:163
 msgid "Edit folder data"
 msgstr "Ordnereigenschaften bearbeiten"
 
-#: bibliograph/ui/folder/TreeViewUi.js:169
-#: bibliograph/ui/folder/TreeViewUi.js:170
+#: bibliograph/ui/folder/TreeViewUi.js:172
+#: bibliograph/ui/folder/TreeViewUi.js:173
 msgid "Change visibility"
 msgstr "Sichtbarkeit verändern"
 
-#: bibliograph/ui/folder/TreeViewUi.js:179
-#: bibliograph/ui/folder/TreeViewUi.js:180
+#: bibliograph/ui/folder/TreeViewUi.js:182
+#: bibliograph/ui/folder/TreeViewUi.js:183
 #: bibliograph/ui/reference/ListViewUi.js:313
 #: bibliograph/ui/reference/ListViewUi.js:314
 msgid "Reload"
 msgstr "Neu laden"
 
 #: bibliograph/ui/item/DuplicatesView.js:162
-#: bibliograph/ui/reference/ListView.js:1106
-#: bibliograph/ui/reference/ListView.js:1123
-#: bibliograph/ui/reference/ListView.js:1139
-#: bibliograph/ui/reference/ListView.js:1158
+#: bibliograph/ui/reference/ListView.js:1104
+#: bibliograph/ui/reference/ListView.js:1121
+#: bibliograph/ui/reference/ListView.js:1137
+#: bibliograph/ui/reference/ListView.js:1156
 #: bibliograph/ui/item/RecordInfo.js:167
 msgid "Processing request..."
 msgstr "Verarbeite die Anfrage ..."
@@ -366,7 +366,7 @@ msgstr "Wollen Sie wirklich diesen Datensatz aus Ordner '%1' entfernen?"
 msgid "Record Info"
 msgstr "Datensatzinfo"
 
-#: bibliograph/ui/main/FolderTreePanel.js:35
+#: bibliograph/ui/main/FolderTreePanel.js:43
 #: bibliograph/ui/item/RecordInfoUi.js:59
 #: bibliograph/ui/item/RecordInfoUi.js:60
 msgid "Folders"
@@ -534,29 +534,33 @@ msgstr ""
 "Die Anwendung ist zurzeit im Entwicklungsmodus. Auf einem öffentlichen "
 "Server darf das nie der Fall sein. "
 
-#: bibliograph/ui/reference/ListView.js:488
+#: bibliograph/ui/reference/ListView.js:341
+msgid "Query"
+msgstr "Suchausdruck"
+
+#: bibliograph/ui/reference/ListView.js:486
 msgid "Loading table ..."
 msgstr "Lade Tabelle ..."
 
-#: bibliograph/ui/reference/ListView.js:1015
+#: bibliograph/ui/reference/ListView.js:1013
 msgid "You cannot create an item outside a folder"
 msgstr "Sie können keinen Datensatz außerhalb eines Ordners erstellen"
 
-#: bibliograph/ui/reference/ListView.js:1031
+#: bibliograph/ui/reference/ListView.js:1029
 msgid "Do your really want to remove the selected references from this folder?"
 msgstr ""
 "Möchten Sie die ausgewählten Datensätze wirklich aus diesem Ordner entfernen?"
 "\t"
 
-#: bibliograph/ui/reference/ListView.js:1032
+#: bibliograph/ui/reference/ListView.js:1030
 msgid "Do your really want to remove the selected references?"
 msgstr "Wollen Sie wirklich die ausgewählten Datensätze entfernen?"
 
-#: bibliograph/ui/reference/ListView.js:1056
+#: bibliograph/ui/reference/ListView.js:1054
 msgid "Do your really want to move the selected references to '%1'?"
 msgstr "Wollen Sie wirklich die augewählten Datensätze nach '%1' verschieben?"
 
-#: bibliograph/ui/reference/ListView.js:1082
+#: bibliograph/ui/reference/ListView.js:1080
 msgid "Do your really want to copy the selected referencesto '%1'?"
 msgstr "Wollen Sie wirklich die ausgewählten Datensätze nach '%1' kopieren?"
 
