@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: qcl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-30 21:00+0100\n"
-"PO-Revision-Date: 2014-07-30 21:02+0100\n"
+"POT-Creation-Date: 2014-07-31 22:35+0100\n"
+"PO-Revision-Date: 2014-07-31 22:37+0100\n"
 "Last-Translator: Christian Boulanger <info@bibliograph.org>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -237,12 +237,16 @@ msgid "Password"
 msgstr "Passwort"
 
 #: ../../../access/model/User.php:185
-msgid "Leave blank if you don't want to change the password"
-msgstr "Bitte leer lassen, wenn Sie das Passwort nicht ändern möchten"
+msgid "To change the password, enter new password."
+msgstr "Zum ändern bitte ein neues Passwort eingeben."
 
-#: ../../../access/model/User.php:191 ../../../access/model/User.php:195
+#: ../../../access/model/User.php:191
 msgid "Repeat password"
 msgstr "Passwort wiederholen"
+
+#: ../../../access/model/User.php:195
+msgid "To change the password, repeat new password"
+msgstr "Zum Ändern bitte das neue Passwort wiederholen."
 
 #: ../../../access/model/User.php:284
 msgid "Anonymous User"
@@ -380,6 +384,9 @@ msgstr "Ja"
 #: ../../../ui/dialog/Confirm.php:47 ../../../ui/dialog/Confirm.php:51
 msgid "No"
 msgstr "Nein"
+
+#~ msgid "Leave blank if you don't want to change the password"
+#~ msgstr "Bitte leer lassen, wenn Sie das Passwort nicht ändern möchten"
 
 #~ msgid "Unknown error."
 #~ msgstr "Unbekannter Fehler"

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Bibliograph 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-30 20:15+0100\n"
-"PO-Revision-Date: 2014-07-30 21:31+0100\n"
+"POT-Creation-Date: 2014-07-31 22:29+0100\n"
+"PO-Revision-Date: 2014-07-31 22:37+0100\n"
 "Last-Translator: Christian Boulanger <info@bibliograph.org>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -188,11 +188,11 @@ msgstr "Erstatt. beantr. am"
 msgid "Inventory"
 msgstr "Vorhanden?"
 
-#: ../../../class/bibliograph/plugin/isbnscanner/Plugin.php:66
+#: ../../../class/bibliograph/plugin/isbnscanner/Plugin.php:71
 msgid "Please reload the application to finish installing."
 msgstr "Bitte die Anwendung erneut laden, um die Installation abzuschließen."
 
-#: ../../../class/bibliograph/plugin/isbnscanner/Plugin.php:77
+#: ../../../class/bibliograph/plugin/isbnscanner/Plugin.php:91
 msgid "Please reload the application to finish uninstalling."
 msgstr "Bitte die Anwendung erneut laden, um die Deinstallation abzuschließen."
 
@@ -216,7 +216,7 @@ msgstr "Konnte keine Daten für ISBN %s finden."
 #: ../../../class/bibliograph/plugin/isbnscanner/Service.php:130
 #, php-format
 msgid "Contacting %s. Please wait..."
-msgstr "Anfrage an %s. Bitte warten ...\t"
+msgstr "Anfrage an %s. Bitte warten ..."
 
 #: ../../../class/bibliograph/plugin/isbnscanner/Service.php:233
 #, php-format
@@ -227,7 +227,7 @@ msgstr "Ergebnis: %s<br><br><b>Mögliche Duplikate:</b><br>%s"
 #: ../../../class/bibliograph/plugin/isbnscanner/Service.php:253
 #, php-format
 msgid "Found: %s"
-msgstr "Ergebnis: %s\t"
+msgstr "Ergebnis: %s"
 
 #: ../../../class/bibliograph/plugin/isbnscanner/Service.php:259
 msgid "Import and continue"
@@ -235,7 +235,7 @@ msgstr "Importieren und weiter"
 
 #: ../../../class/bibliograph/plugin/isbnscanner/Service.php:260
 msgid "Import and edit"
-msgstr "Importieren und bearbeiten\t"
+msgstr "Importieren und bearbeiten"
 
 #: ../../../class/bibliograph/plugin/isbnscanner/Service.php:261
 msgid "Skip and continue"
@@ -823,7 +823,7 @@ msgstr ""
 
 #: ../../../class/bibliograph/service/Access.php:148
 msgid "You need to set a new password."
-msgstr "Sie müssen ein neues Passwort eingeben.\t"
+msgstr "Sie müssen ein neues Passwort eingeben."
 
 #: ../../../class/bibliograph/service/Access.php:183
 #, php-format
@@ -956,13 +956,17 @@ msgid "There was a problem. Please examine the log file."
 msgstr ""
 "Es ist ein Problem aufgetreten. Es wurde in der Logdatei aufgezeichnet."
 
-#: ../../../class/bibliograph/service/Export.php:40
+#: ../../../class/bibliograph/service/Export.php:41
 msgid "Export references"
 msgstr "Datensätze exportieren"
 
-#: ../../../class/bibliograph/service/Export.php:43
+#: ../../../class/bibliograph/service/Export.php:44
 msgid "Choose the export format"
 msgstr "Exportformat auswählen"
+
+#: ../../../class/bibliograph/service/Export.php:93
+msgid "Preparing export data. Please wait..."
+msgstr "Exportdaten werden verarbeitet. Bitte warten..."
 
 #: ../../../class/bibliograph/service/Folder.php:553
 msgid "Change the visibility of the folder"
@@ -1038,16 +1042,6 @@ msgstr "Die obersten Ordner können nicht verschoben werden."
 #: ../../../class/bibliograph/service/Import.php:134
 msgid "2. Choose import format"
 msgstr "2. Wählen Sie das Importformat aus"
-
-#: ../../../class/bibliograph/service/Import.php:179
-#, php-format
-msgid ""
-"Format '%s' expects file extension '%s'. The file you uploaded has extension "
-"'%s'"
-msgstr ""
-"Format '%s' erwartet die Dateiendung '%s'. Die Datei, die Sie hochgeladen "
-"haben, hat die Dateiendung '%s'. Bitte nennen Sie die Datei um und laden Sie "
-"sie erneut hoch. "
 
 #: ../../../class/bibliograph/service/Reference.php:257
 msgid "No recognized query format in request."
@@ -1398,13 +1392,16 @@ msgid "Password"
 msgstr "Passwort"
 
 #: ../../../class/qcl/access/model/User.php:185
-msgid "Leave blank if you don't want to change the password"
-msgstr "Frei lassen wenn Sie das Passwort nicht ändern möchten. "
+msgid "To change the password, enter new password."
+msgstr "Zum ändern bitte ein neues Passwort eingeben."
 
 #: ../../../class/qcl/access/model/User.php:191
-#: ../../../class/qcl/access/model/User.php:195
 msgid "Repeat password"
 msgstr "Passwort wiederholen"
+
+#: ../../../class/qcl/access/model/User.php:195
+msgid "To change the password, repeat new password"
+msgstr "Zum ändern bitte das neue Passwort wiederholen."
 
 #: ../../../class/qcl/access/model/User.php:284
 msgid "Anonymous User"
@@ -1441,6 +1438,36 @@ msgstr "Plugin erneut installieren"
 #: ../../../class/qcl/application/plugin/Service.php:102
 msgid "Please configure the plugins"
 msgstr "Bitte konfigurieren Sie die Plugins."
+
+#: ../../../class/qcl/application/plugin/Service.php:144
+#, php-format
+msgid "Installed plugin '%s'"
+msgstr "Plugin '%s' wurde installiert."
+
+#: ../../../class/qcl/application/plugin/Service.php:148
+#, php-format
+msgid "Installation of plugin '%s' failed: %s"
+msgstr "Die Installation von Plugin '%s' war nicht erfolgreich: %s"
+
+#: ../../../class/qcl/application/plugin/Service.php:167
+#, php-format
+msgid "Reinstalled plugin '%s'"
+msgstr "Das Plugin '%s' wurde erneut installiert. "
+
+#: ../../../class/qcl/application/plugin/Service.php:172
+#, php-format
+msgid "Re-Installation of plugin '%s' failed: %s"
+msgstr "Die erneute Installation von Plugin '%s' war nicht erfolgreich: %s"
+
+#: ../../../class/qcl/application/plugin/Service.php:189
+#, php-format
+msgid "Uninstalled plugin '%s'"
+msgstr "Das Plugin '%s' wurde deinstalliert."
+
+#: ../../../class/qcl/application/plugin/Service.php:196
+#, php-format
+msgid "Uninstallation of plugin '%s' failed: %s"
+msgstr "Die Deinstallation von Plugin '%s' war nicht erfolgreich: %s"
 
 #: ../../../class/qcl/config/Service.php:145
 msgid "Log file deleted."
@@ -1496,6 +1523,17 @@ msgstr "Pfad"
 #, php-format
 msgid "File '%s' does not exist in datasource '%s'"
 msgstr "Die Datei '%s' existiert in der Datenquelle '%s' nicht."
+
+#~ msgid ""
+#~ "Format '%s' expects file extension '%s'. The file you uploaded has "
+#~ "extension '%s'"
+#~ msgstr ""
+#~ "Format '%s' erwartet die Dateiendung '%s'. Die Datei, die Sie hochgeladen "
+#~ "haben, hat die Dateiendung '%s'. Bitte nennen Sie die Datei um und laden "
+#~ "Sie sie erneut hoch. "
+
+#~ msgid "Leave blank if you don't want to change the password"
+#~ msgstr "Frei lassen wenn Sie das Passwort nicht ändern möchten. "
 
 #~ msgid "'%s' is not a valid email address."
 #~ msgstr "'%s' ist keine gültige Emailadresse."
