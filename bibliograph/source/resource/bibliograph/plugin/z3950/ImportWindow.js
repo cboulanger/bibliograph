@@ -39,15 +39,16 @@ qx.Class.define("bibliograph.plugin.z3950.ImportWindow",
     qx.lang.Function.delay(function(){
       this.listView.addListenerOnce("tableReady", function() {
         var controller = this.listView.getController();
-        controller.addListener("blockLoaded", function(){
+        function enableButtons (){
           this.importButton.setEnabled(true);
           this.searchButton.setEnabled(true);
           this.listView.setEnabled(true);
           this.hidePopup();
-        }, this);
-        // show status messages
+        }
+        controller.addListener("blockLoaded", enableButtons, this);
         controller.addListener("statusMessage", function(e){
           this.showPopup(e.getData());
+          qx.lang.Function.delay( enableButtons, 1000, this);
         }, this);
       }, this);
     },100,this);
@@ -87,7 +88,7 @@ qx.Class.define("bibliograph.plugin.z3950.ImportWindow",
       this.searchButton.setEnabled(false);
       this.listView.setEnabled(false);
       this.listView.setQuery(null);
-      this.listView.setQuery(this.searchBox.getValue());
+      this.listView.setQuery( this.normalizeForSearch ( this.searchBox.getValue() ) );
     },
 
     /**
@@ -121,7 +122,7 @@ qx.Class.define("bibliograph.plugin.z3950.ImportWindow",
       var node = treeView.getTree().getDataModel().getData()[nodeId];
       if (!node)
       {
-        dialog.Dialog.alert(this.tr("Cannot determine selected folder."));
+        dialog.Dialog.alert(this.tr("Cannot determine selected folder. Please reload the folders."));
         return false;
       }
       if (node.data.type != "folder")
@@ -143,7 +144,83 @@ qx.Class.define("bibliograph.plugin.z3950.ImportWindow",
       }, this);
     },
     markForTranslation : function() {
-      this.tr("Import from library catalogue");
+      this.tr("Import from library catalog");
+    },
+
+    /**
+     * from https://github.com/ikr/normalize-for-search/blob/master/src/normalize.js
+     * MIT licence
+     * @param s
+     * @returns {string}
+     */
+    normalizeForSearch : function (s) {
+
+      // ES6:
+      //var combining = /[\u0300-\u036F]/g;
+      // return s.normalize('NFKD').replace(combining, ''));
+
+      function filter(c) {
+        switch (c) {
+          case 'ä':
+            return 'ae';
+
+          case 'å':
+            return 'aa';
+
+          case 'á':
+          case 'à':
+          case 'ã':
+          case 'â':
+            return 'a';
+
+          case 'ç':
+          case 'č':
+            return 'c';
+
+          case 'é':
+          case 'ê':
+          case 'è':
+            return 'e';
+
+          case 'ï':
+          case 'í':
+            return 'i';
+
+          case 'ö':
+            return 'oe';
+
+          case 'ó':
+          case 'õ':
+          case 'ô':
+            return 'o';
+
+          case 'ś':
+          case 'š':
+            return 's';
+
+          case 'ü':
+            return 'ue';
+
+          case 'ú':
+            return 'u';
+
+          case 'ß':
+            return 'ss';
+
+          case 'ё':
+            return 'е';
+
+          default:
+            return c;
+        }
+      }
+
+      var normalized = '', i, l;
+      s = s.toLowerCase();
+      for (i = 0, l = s.length; i < l; i = i + 1) {
+        normalized = normalized + filter(s.charAt(i));
+      }
+      return normalized;
     }
   }
 });

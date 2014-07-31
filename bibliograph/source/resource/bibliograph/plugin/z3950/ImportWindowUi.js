@@ -35,7 +35,7 @@ qx.Class.define("bibliograph.plugin.z3950.ImportWindowUi",
        */
       var importWindow = this;
       importWindow.setWidth(700);
-      importWindow.setCaption(this.tr('Import from library catalogue'));
+      importWindow.setCaption(this.tr('Import from library catalog'));
       importWindow.setShowMinimize(false);
       importWindow.setVisibility("excluded");
       importWindow.setHeight(500);
@@ -76,9 +76,7 @@ qx.Class.define("bibliograph.plugin.z3950.ImportWindowUi",
       var qxComposite1 = new qx.ui.container.Composite();
       qxComposite1.setLayout(qxHbox1)
       qxComposite1.setPadding(4);
-      qxToolBar1.add(qxComposite1, {
-        flex : 1
-      });
+      qxToolBar1.add(qxComposite1, { flex : 1 });
       var searchBox = new qx.ui.form.TextField(null);
       this.searchBox = searchBox;
       searchBox.setPadding(2);
@@ -91,24 +89,22 @@ qx.Class.define("bibliograph.plugin.z3950.ImportWindowUi",
       }, this);
 
       // button
-      this.searchButton = new qx.ui.form.Button(this.tr("Search"));
+      this.searchButton = new qx.ui.form.Button(this.tr('Search'));
       this.searchButton.addListener("execute", function(e) {
         this.startSearch();
       }, this);
       qxComposite1.add(this.searchButton);
 
-      /*
-       * listview
-       */
+      // listview
       var listView = new bibliograph.ui.reference.ListView();
       this.listView = listView;
       listView.setDatasource("z3950_gbv");
       listView.setDecorator("main");
       listView.setModelType("record");
       listView.setServiceName("bibliograph.plugin.z3950.Service");
-      importWindow.add(listView, {
-        flex : 1
-      });
+      importWindow.add(listView, { flex : 1 });
+
+      // footer
       var qxHbox2 = new qx.ui.layout.HBox(5, null, null);
       var qxComposite2 = new qx.ui.container.Composite();
       qxComposite2.setLayout(qxHbox2)

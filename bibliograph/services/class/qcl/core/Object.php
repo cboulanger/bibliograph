@@ -924,7 +924,14 @@ class qcl_core_Object
       $msg = print_r($msg,true);
     }
     $m = ">>> DEBUG <<< ";
-    if ($class and $line) $m .= "$class:$line: ";
+    if ( !($class and $line))
+    {
+      $bt = debug_backtrace();
+      $caller = array_shift($bt);
+      $class = $caller['file'];
+      $line  = $caller['line'];
+    }
+    $m .= $class ."[" .$line . "]: ";
     $m .= $msg;
     $this->info ( $m, "info" );
   }
