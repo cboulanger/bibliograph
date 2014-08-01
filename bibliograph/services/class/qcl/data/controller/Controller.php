@@ -1179,7 +1179,7 @@ class qcl_data_controller_Controller
        */
       if (! isset( $modelFormData[$property] ) )
       {
-        throw new JsonRpcException( "Invalid form data property");
+        throw new JsonRpcException( "Invalid form data property '$property'");
       }
 
       /*

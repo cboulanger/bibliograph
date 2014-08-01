@@ -22,6 +22,7 @@ qcl_import("qcl_data_controller_Controller");
 qcl_import("qcl_ui_dialog_Alert");
 qcl_import("qcl_ui_dialog_Confirm");
 qcl_import("qcl_ui_dialog_Prompt");
+qcl_import("qcl_ui_dialog_Form");
 qcl_import("qcl_util_system_Mail");
 
 /**
@@ -681,7 +682,7 @@ class bibliograph_service_ACLTool
 
     $modelMap = $this->modelMap();
     $message = "<h3>" . $this->tr( $modelMap[$type]['dialogLabel'] ) . " '" . $namedId . "'</h3>";
-    qcl_import("qcl_ui_dialog_Form");
+
     return new qcl_ui_dialog_Form(
       $message, $formData, true,
       $this->serviceName(), "saveFormData",
@@ -765,16 +766,17 @@ class bibliograph_service_ACLTool
        */
       if ( ! $data->password and ! $model->getPassword() )
       {
-        return new qcl_ui_dialog_Confirm(
-          $this->tr("You must set a password. Generate a random one?"), true,
+        return new qcl_ui_dialog_Alert(
+          $this->tr("You must set a password."),
           $this->serviceName(), "handleMissingPasswordDialog", array( $namedId )
         );
       }
 
       /*
-       * if password has changed, inform user
+       * if password has changed, inform user, unless the old password was a
+       * temporary pasword
        */
-      if ( $data->password and $parsed->password != $oldData->password )
+      if ( $data->password and $parsed->password != $oldData->password and strlen($oldData->password) > 7 )
       {
         return $this->sendInformationEmail( $model->data() );
       }
@@ -807,23 +809,9 @@ class bibliograph_service_ACLTool
     }
   }
 
-  public function method_handleMissingPasswordDialog( $answer, $namedId )
+  public function method_handleMissingPasswordDialog( $namedId )
   {
-    if ($answer === null ) return "CANCELLED";
-
-    if( $answer === true )
-    {
-      $password = qcl_generate_password(8);
-      $model = $this->getElementModel( "user" );
-      $model->load( $namedId )
-        ->set("password", $password )
-        ->save();
-      return $this->sendInformationEmail( $model->data(), $password );
-    }
-    else
-    {
-      return $this->method_editElement( "user", $namedId );
-    }
+    return $this->method_editElement( "user", $namedId );
   }
 
 
@@ -831,8 +819,10 @@ class bibliograph_service_ACLTool
    * Sends an email to confirm the registration
    * @param $email
    * @param $username
+   * @param $name
+   * @param $tmpPasswd
    */
-  protected function sendConfirmationLinkEmail( $email, $username, $name )
+  protected function sendConfirmationLinkEmail( $email, $username, $name, $tmpPasswd=null )
   {
     $app = $this->getApplication();
     $applicationTitle = $this->getApplicationTitle();
@@ -846,6 +836,10 @@ class bibliograph_service_ACLTool
     $subject = $this->tr("Your registration at %s", $applicationTitle );
     $body  = $this->tr("Dear %s,", $name);
     $body .= "\n\n" . $this->tr("You have been registered as user '%s' at '%s'.", $username, $applicationTitle );
+    if( $tmpPasswd )
+    {
+      $body .= "\n\n" . $this->tr( "Your temporary password is '%s'. You will be asked to change it after your first login.", $tmpPasswd);
+    }
     $body .= "\n\n" . $this->tr("Please confirm your account by visiting the following link:" );
     $body .= "\n\n" . $confirmationLink;
     $body .= "\n\n" . $this->tr("Thank you." );
@@ -866,9 +860,8 @@ class bibliograph_service_ACLTool
    * @param $email
    * @param $username
    * @param $name
-   * @param $password
    */
-  protected function sendPasswordChangeEmail( $email, $username, $name, $password=null )
+  protected function sendPasswordChangeEmail( $email, $username, $name )
   {
     $app = $this->getApplication();
     $applicationTitle = $this->getApplicationTitle();
@@ -878,10 +871,6 @@ class bibliograph_service_ACLTool
     $subject = $this->tr("Password change at %s", $applicationTitle );
     $body  = $this->tr("Dear %s,", $name);
     $body .= "\n\n" . $this->tr("This is to inform you that you or somebody else has changed the password at %s.", $applicationTitle );
-    if( $password )
-    {
-      $body .= "\n\n" . $this->tr("Your username is '%s' and your password is '%s'.", $username, $password );
-    }
     $body .= "\n\n" . $this->tr("If this is not what you wanted, please reset your password immediately by clicking on the following link:");
     $body .= "\n\n" . $this->generateResetPasswordURL($email);
 
@@ -916,7 +905,10 @@ class bibliograph_service_ACLTool
         $userModel->save();
       }
       $msg1 = $this->tr( "Thank you, %s, your email address has been confirmed.", $userModel->getName() );
-      $msg2 = $this->tr( "You can now log in at <a href='%s'>this link</a>", $app->getClientUrl() );
+      $msg2 = $this->tr(
+        "You can now log in as user '%s' at <a href='%s'>this link</a>",
+        $userModel->namedId(), $app->getClientUrl()
+      );
       echo "<html><p>$msg1<p>";
       echo "<p>$msg2</p></html>";
       exit;
@@ -1087,6 +1079,145 @@ class bibliograph_service_ACLTool
       );
     }
     return $userModel;
+  }
+
+  public function method_newUserDialog()
+  {
+    $message = $this->tr("Please enter the user data. A random password will be generated and sent to the user.");
+    $formData = array(
+      'namedId'        => array(
+        'label'       => $this->tr("Login name"),
+        'type'        => "textfield",
+        'placeholder' => $this->tr("Enter the short login name"),
+        'validation'  => array(
+          'required'  => true,
+          'validator'   => "string"
+        )
+      ),
+      'name'        => array(
+        'type'        => "textfield",
+        'label'       => $this->tr("Full name"),
+        'placeholder' => $this->tr("Enter the full name of the user"),
+        'validation'  => array(
+          'required'  => true,
+          'validator'   => "string"
+        )
+      ),
+      'email'       => array(
+        'type'        => "textfield",
+        'label'       => $this->tr("Email address"),
+        'placeholder' => $this->tr("Enter a valid Email address"),
+        'validation'  => array(
+          'required'    => true,
+          'validator'   => "email"
+        )
+      ),
+    );
+
+    return new qcl_ui_dialog_Form(
+      $message, $formData, true,
+      $this->serviceName(), "addNewUser", array()
+    );
+  }
+
+  public function method_addNewUser( $data )
+  {
+    $this->requirePermission("access.manage");
+
+    if ( $data === null ) return "CANCEL";
+
+    qcl_assert_valid_string( $data->namedId, "Invalid login name");
+
+    $model = $this->getElementModel( "user" );
+
+    try
+    {
+      $model->create( $data->namedId );
+      unset( $data->namedId );
+    }
+    catch ( qcl_data_model_RecordExistsException $e)
+    {
+      return new qcl_ui_dialog_Alert( $this->tr("Login name '%s' already exists. Please choose a different one.", $data->namedId ) );
+    }
+
+    $model->set( $data )->save();
+
+    // make it a normal user
+    $this->getElementModel( "role" )->load(QCL_ROLE_USER)->linkModel($model);
+
+    // generate temporary password
+    $tmpPasswd = qcl_generate_password(7);
+    $model->set("password", $tmpPasswd )->save();
+
+    $data = (object) $model->data();
+    $this->sendConfirmationLinkEmail( $data->email, $data->namedId, $data->name, $tmpPasswd );
+
+    $this->dispatchClientMessage("accessControlTool.reloadLeftList");
+
+    return new qcl_ui_dialog_Alert(
+      $this->tr("An email has been sent to %s (%s) with information on the registration.", $data->name, $data->email)
+    );
+
+  }
+
+  public function method_newDatasourceDialog()
+  {
+    $message = $this->tr("Please enter the information on the new datasource.");
+    $formData = array(
+      'namedId'        => array(
+        'label'       => $this->tr("Name"),
+        'type'        => "textfield",
+        'placeholder' => $this->tr("The short name, e.g. researchgroup1"),
+        'validation'  => array(
+          'required'  => true,
+          'validator'   => "string"
+        )
+      ),
+      'title'        => array(
+        'width'       => 500,
+        'type'        => "textfield",
+        'label'       => $this->tr("Title"),
+        'placeholder' => $this->tr("A descriptive title, e.g. Database of Research Group 1"),
+        'validation'  => array(
+          'required'  => true,
+          'validator'   => "string"
+        )
+      )
+    );
+
+    return new qcl_ui_dialog_Form(
+      $message, $formData, true,
+      $this->serviceName(), "addNewDatasource", array()
+    );
+  }
+
+  public function method_addNewDatasource( $data )
+  {
+    $this->requirePermission("access.manage");
+
+    if ( $data === null ) return "CANCEL";
+
+    qcl_assert_valid_string( $data->namedId, "Invalid datasource name");
+
+    $model = $this->getElementModel( "datasource" );
+
+    try
+    {
+      $this->getApplication()->createDatasource( $data->namedId, array( 'title' => $data->title ) );
+    }
+    catch ( qcl_data_model_RecordExistsException $e)
+    {
+      return new qcl_ui_dialog_Alert( $this->tr("Datasource name '%s' already exists. Please choose a different one.", $data->namedId ) );
+    }
+
+    $this->dispatchClientMessage("accessControlTool.reloadLeftList");
+    return new qcl_ui_dialog_Alert(
+      $this->tr(
+        "Datasource '%s' has been created. By default, it will not be visible to anyone. You have to link it with a group, a role, or a user first.",
+        $data->namedId
+      )
+    );
+
   }
 }
 ?>

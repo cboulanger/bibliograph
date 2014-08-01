@@ -26,6 +26,13 @@ qcl_import( "qcl_data_controller_Controller" );
 class bibliograph_service_Application
   extends qcl_data_controller_Controller
 {
+  protected $help_topics = array(
+    "access-control" => array(
+      "de"  => "verwaltung/verwaltung-der-zugangskontrolle",
+      "en"  => "administration/access-control"
+    )
+  );
+
 
   /*
   ---------------------------------------------------------------------------
@@ -33,10 +40,14 @@ class bibliograph_service_Application
   ---------------------------------------------------------------------------
   */
 
-  public function method_getOnlineHelpUrl($topic)
+  public function method_getOnlineHelpUrl($topic=null)
   {
     $locale = $this->getApplication()->getLocaleManager()->getLocale();
     $url = "https://sites.google.com/a/bibliograph.org/docs-v2-" . $locale;
+    if( $topic and  isset( $this->help_topics[$topic][$locale] ) )
+    {
+      $url .= "/" . $this->help_topics[$topic][$locale];
+    }
     header("location: $url");
     exit;
   }

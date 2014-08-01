@@ -48,6 +48,7 @@
  * @asset(qx/icon/${qx.icontheme}/22/apps/preferences-security.png)
  * @asset(qx/icon/${qx.icontheme}/22/apps/utilities-archiver.png)
  * @asset(qx/icon/${qx.icontheme}/22/apps/utilities-help.png)
+ * @asset(qx/icon/${qx.icontheme}/22/apps/internet-transfer.png)
  * @asset(qx/icon/${qx.icontheme}/22/actions/dialog-cancel.png)
  * @asset(qx/icon/${qx.icontheme}/22/categories/system.png)
  * @asset(qx/icon/${qx.icontheme}/22/places/network-server.png)

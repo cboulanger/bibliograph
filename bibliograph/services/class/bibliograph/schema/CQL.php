@@ -193,7 +193,7 @@ class bibliograph_schema_CQL
     $parser->setModifiers( $this->modifiers );
     $parser->setSortWords( array("sortby" ) );
 
-    $this->debug( $cqlQuery );
+    //$this->debug( $cqlQuery );
 
     /*
      * parse CQL string

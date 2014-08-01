@@ -22,6 +22,7 @@
  * @asset(keypress/*)
  * @require(bibliograph.theme.Assets);
  * @require(qcl.ui.dialog.Dialog)
+ * @require(dialog.Progress)
  * @require(qx.ui.form.RadioGroup)
  * @require(qx.ui.menu.RadioButton)
  */
@@ -178,7 +179,7 @@ qx.Class.define("bibliograph.Main",
      * @return {String}
      */    
     getVersion : function() {
-      return /*begin-version*/"Development version"/*end-version*/;
+      return /*begin-version*/"v2.1-RC3-pre (2014-08-02)"/*end-version*/;
     },
     
     /**
@@ -605,11 +606,7 @@ qx.Class.define("bibliograph.Main",
     */
 
     /**
-     * TODOC
-     *
-     * @param value {var} TODOC
-     * @param old {var} TODOC
-     * @return {void}
+     * Applies the datasource property
      */
     _applyDatasource : function(value, old)
     {
@@ -619,7 +616,7 @@ qx.Class.define("bibliograph.Main",
        * reset all states that have been connected
        * with the datasource if a previous datasource
        * has been loaded
-       * FIXME hide search box when no datasource is selected
+       * @todo hide search box when no datasource is selected
        */
       if (old)
       {
@@ -631,34 +628,28 @@ qx.Class.define("bibliograph.Main",
       }
       if (value)
       {
-        /*
-         * set the application state
-         */
+        // set the application state
         stateMgr.setState("datasource", value);
 
-        /*
-         * load datasource model from server
-         * @todo use store
-         */
+        // load datasource model from server
         this.showPopup(this.tr("Loading datasource information ..."));
-        this.getRpcManager().execute("bibliograph.model", "getDatasourceModelData", [value], function(data)
-        {
-          this.hidePopup();
-          var model = qx.data.marshal.Json.createModel(data);
-          this.setDatasourceModel(model);
-          this.setModelType(model.getTableModelType());
-        }, this);
-      } else
+        this.getRpcManager().execute(
+            "bibliograph.model", "getDatasourceModelData", [value],
+            function(data) {
+              this.hidePopup();
+              var model = qx.data.marshal.Json.createModel(data);
+              this.setDatasourceModel(model);
+              this.setModelType(model.getTableModelType());
+            }, this);
+      }
+      else
       {
         stateMgr.removeState("datasource");
       }
     },
 
     /**
-     * FIXME use font, rename to application title
-     * @param value {var} TODOC
-     * @param old {var} TODOC
-     * @return {void}
+     * @todo rename to application title
      */
     _applyDatasourceLabel : function(value, old)
     {
@@ -670,11 +661,7 @@ qx.Class.define("bibliograph.Main",
     },
 
     /**
-     * TODOC
-     *
-     * @param value {var} TODOC
-     * @param old {var} TODOC
-     * @return {void}
+     * Applies the folderId property
      */
     _applyFolderId : function(value, old)
     {
@@ -692,11 +679,7 @@ qx.Class.define("bibliograph.Main",
     },
 
     /**
-     * TODOC
-     *
-     * @param value {var} TODOC
-     * @param old {var} TODOC
-     * @return {void}
+     * Applies the query property
      * @todo Searchbox widget should observe query state instead of
      * query state binding the searchbox.
      */
@@ -712,11 +695,7 @@ qx.Class.define("bibliograph.Main",
     },
 
     /**
-     * TODOC
-     *
-     * @param value {var} TODOC
-     * @param old {var} TODOC
-     * @return {void}
+     * Applies the modelType property
      */
     _applyModelType : function(value, old)
     {
@@ -731,11 +710,7 @@ qx.Class.define("bibliograph.Main",
     },
 
     /**
-     * TODOC
-     *
-     * @param value {var} TODOC
-     * @param old {var} TODOC
-     * @return {void}
+     * Applies the modelId property
      */
     _applyModelId : function(value, old) {
       if (parseInt(value)) {
@@ -746,11 +721,7 @@ qx.Class.define("bibliograph.Main",
     },
 
     /**
-     * TODOC
-     *
-     * @param value {var} TODOC
-     * @param old {var} TODOC
-     * @return {void}
+     * Applies the itemView property
      */
     _applyItemView : function(value, old) {
       if (value) {
@@ -761,22 +732,14 @@ qx.Class.define("bibliograph.Main",
     },
 
     /**
-     * TODOC
-     *
-     * @param value {var} TODOC
-     * @param old {var} TODOC
-     * @return {void}
+     * Applies the selectedIds property. Does nothing.
      */
     _applySelectedIds : function(value, old) {
       //
     },
 
     /**
-     * TODOC
-     *
-     * @param value {var} TODOC
-     * @param old {var} TODOC
-     * @return {void}
+     * Applies the theme property. Does nothing.
      */
     _applyTheme : function(value, old) {
       //qx.theme.manager.Meta.getInstance().setTheme(qx.theme[value]);
@@ -984,22 +947,20 @@ qx.Class.define("bibliograph.Main",
     /**
      * opens a window with the online help
      */
-    showHelpWindow : function() {
+    showHelpWindow : function(topic) {
+      var url = this.getRpcManager().getServerUrl() +
+          "?sessionId=" + this.getSessionManager().getSessionId() +
+          "&service=bibliograph.main&method=getOnlineHelpUrl&params=" + (topic||"home");
       if (!this.__helpWindow)
       {
-        
-        var url = this.getRpcManager().getServerUrl() + 
-          "?sessionId=" + this.getSessionManager().getSessionId() +
-          "&service=bibliograph.main&method=getOnlineHelpUrl&params=home";
         this.__helpWindow = window.open(url);
         if (!this.__helpWindow) {
           dialog.Dialog.alert(this.tr("Cannot open help window. Please disable the popup-blocker of your browser for this website."));
-        } else
-        {
-          // todo close window on terminate
         }
-      } else
+      }
+      else
       {
+        this.__helpWindow.location = url;
         this.__helpWindow.focus();
       }
     },
