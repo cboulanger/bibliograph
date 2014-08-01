@@ -33,6 +33,14 @@ class bibliograph_service_Application
   ---------------------------------------------------------------------------
   */
 
+  public function method_getOnlineHelpUrl($topic)
+  {
+    $locale = $this->getApplication()->getLocaleManager()->getLocale();
+    $url = "https://sites.google.com/a/bibliograph.org/docs-v2-" . $locale;
+    header("location: $url");
+    exit;
+  }
+
   public function method_reportBugDialog()
   {
     if ( ! defined("GITHUB_API_TOKEN") )

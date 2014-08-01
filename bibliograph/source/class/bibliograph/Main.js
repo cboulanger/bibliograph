@@ -208,6 +208,7 @@ qx.Class.define("bibliograph.Main",
     markForTranslation : function()
     {
       this.tr("No connection to server.");
+      this.tr("Loading folder data ...");
     },
 
     /*
@@ -986,8 +987,11 @@ qx.Class.define("bibliograph.Main",
     showHelpWindow : function() {
       if (!this.__helpWindow)
       {
-
-        this.__helpWindow = window.open("http://hilfe.bibliograph.org"); //todo: add link for english
+        
+        var url = this.getRpcManager().getServerUrl() + 
+          "?sessionId=" + this.getSessionManager().getSessionId() +
+          "&service=bibliograph.main&method=getOnlineHelpUrl&params=home";
+        this.__helpWindow = window.open(url);
         if (!this.__helpWindow) {
           dialog.Dialog.alert(this.tr("Cannot open help window. Please disable the popup-blocker of your browser for this website."));
         } else
