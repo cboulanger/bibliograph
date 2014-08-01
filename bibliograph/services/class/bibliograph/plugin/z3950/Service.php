@@ -476,7 +476,19 @@ class class_bibliograph_plugin_z3950_Service
       $sourceModel->load($id);
       $targetReferenceModel->create();
       $targetReferenceModel->copySharedProperties( $sourceModel );
+      
+      // compute citation key
       $targetReferenceModel->set("citekey", $targetReferenceModel->computeCiteKey());
+      
+      // rmove leading "c" and other characters in year data
+      $year = $targetReferenceModel->get("year");
+      if( $year[0] = "c" )
+      {
+         $year = trim(substr($year,1));
+      }
+      $year = preg_replace("/[\{\[\\]\}\(\)]/",'',$year);
+      $targetReferenceModel->set("year", $year);
+      
       $targetReferenceModel->save();
       $targetReferenceModel->linkModel( $targetFolderModel );
     }
