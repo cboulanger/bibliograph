@@ -11,81 +11,87 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: bibliograph/Main.js:210
+#: bibliograph/Main.js:211
 msgid "No connection to server."
 msgstr ""
 
-#: bibliograph/Main.js:317
+#: bibliograph/Main.js:212
+msgid "Loading folder data ..."
+msgstr ""
+
+#: bibliograph/Main.js:319
 msgid "Setting up application..."
 msgstr ""
 
-#: bibliograph/Main.js:338
+#: bibliograph/Main.js:340
 msgid "Connecting with server..."
 msgstr ""
 
-#: bibliograph/Main.js:349
+#: bibliograph/Main.js:351
 msgid "Loading configuration ..."
 msgstr ""
 
-#: bibliograph/Main.js:365
+#: bibliograph/Main.js:367
 msgid "Loading datasources ..."
 msgstr ""
 
-#: bibliograph/Main.js:390
+#: bibliograph/Main.js:392
 msgid "Loading plugins ..."
 msgstr ""
 
-#: bibliograph/Main.js:394
+#: bibliograph/Main.js:396
 msgid "Loaded plugin %1 of %2 : %3 ..."
 msgstr ""
 
-#: bibliograph/Main.js:527
+#: bibliograph/Main.js:529
 msgid ""
 "The datasource has just been restored to a previous state and will be "
 "reloaded"
 msgstr ""
 
-#: bibliograph/Main.js:642
+#: bibliograph/Main.js:635
 msgid "Loading datasource information ..."
 msgstr ""
 
-#: bibliograph/Main.js:801
+#: bibliograph/Main.js:765
 msgid ""
 "To log in, you need a secure connection. After you press 'OK', the "
 "application will be reloaded in secure mode. After the application finished "
 "loading, you can log in again."
 msgstr ""
 
-#: bibliograph/Main.js:812
+#: bibliograph/Main.js:776
 msgid ""
 "The application is currently in a read-only state. Only the administrator "
 "can log in."
 msgstr ""
 
-#: bibliograph/Main.js:846
+#: bibliograph/Main.js:810
 msgid "Authenticating ..."
 msgstr ""
 
-#: bibliograph/plugin/isbnscanner/Plugin.js:61 bibliograph/Main.js:883
-#: bibliograph/Main.js:1008
+#: bibliograph/ui/window/AccessControlTool.js:96
+#: bibliograph/ui/window/AccessControlTool.js:112
+#: bibliograph/plugin/isbnscanner/Plugin.js:61 bibliograph/Main.js:847
+#: bibliograph/Main.js:975
 msgid "Please wait ..."
 msgstr ""
 
-#: bibliograph/Main.js:905
+#: bibliograph/Main.js:869
 msgid "Logging out ..."
 msgstr ""
 
-#: bibliograph/Main.js:940
+#: bibliograph/Main.js:904
 msgid "You don't have access to any datasource on the server."
 msgstr ""
 
-#: bibliograph/Main.js:992
+#: bibliograph/Main.js:959
 msgid ""
 "Cannot open help window. Please disable the popup-blocker of your browser "
 "for this website."
 msgstr ""
 
-#: bibliograph/Main.js:1083
+#: bibliograph/Main.js:1050
 msgid "Retrieving user data..."
 msgstr ""
 
@@ -598,60 +604,61 @@ msgstr ""
 msgid "Credits"
 msgstr ""
 
-#: bibliograph/ui/window/AccessControlTool.js:40
+#: bibliograph/ui/window/AccessControlTool.js:46
 msgid "Access control tool"
 msgstr ""
 
-#: bibliograph/ui/window/AccessControlTool.js:56
-#: bibliograph/ui/window/AccessControlTool.js:59
-msgid "Reload from filesystem"
+#: bibliograph/ui/window/AccessControlTool.js:89
+msgid "New User"
 msgstr ""
 
-#: bibliograph/ui/window/AccessControlTool.js:71
-#: bibliograph/ui/window/AccessControlTool.js:74
+#: bibliograph/ui/window/AccessControlTool.js:105
+msgid "New Datasource"
+msgstr ""
+
+#: bibliograph/ui/window/AccessControlTool.js:117
 msgid "Export to filesystem"
 msgstr ""
 
-#: bibliograph/ui/window/AccessControlTool.js:87
-#: bibliograph/ui/window/AccessControlTool.js:89
+#: bibliograph/ui/window/AccessControlTool.js:136
 msgid "Exit"
 msgstr ""
 
-#: bibliograph/ui/window/AccessControlTool.js:203
-#: bibliograph/ui/window/AccessControlTool.js:388
+#: bibliograph/ui/window/AccessControlTool.js:257
+#: bibliograph/ui/window/AccessControlTool.js:442
 msgid "Please enter the id of the new '%1'-Object"
 msgstr ""
 
-#: bibliograph/ui/window/AccessControlTool.js:227
+#: bibliograph/ui/window/AccessControlTool.js:281
 msgid "Do you really want to delete '%1'?"
 msgstr ""
 
-#: bibliograph/ui/window/AccessControlTool.js:252
-#: bibliograph/ui/window/AccessControlTool.js:443
+#: bibliograph/ui/window/AccessControlTool.js:306
+#: bibliograph/ui/window/AccessControlTool.js:497
 msgid "Loading data ..."
 msgstr ""
 
-#: bibliograph/ui/window/AccessControlTool.js:270
-#: bibliograph/ui/window/AccessControlTool.js:271
+#: bibliograph/ui/window/AccessControlTool.js:324
+#: bibliograph/ui/window/AccessControlTool.js:325
 msgid "Edited element"
 msgstr ""
 
-#: bibliograph/ui/window/AccessControlTool.js:310
-#: bibliograph/ui/window/AccessControlTool.js:312
+#: bibliograph/ui/window/AccessControlTool.js:364
+#: bibliograph/ui/window/AccessControlTool.js:366
 msgid "Link"
 msgstr ""
 
-#: bibliograph/ui/window/AccessControlTool.js:326
-#: bibliograph/ui/window/AccessControlTool.js:328
+#: bibliograph/ui/window/AccessControlTool.js:380
+#: bibliograph/ui/window/AccessControlTool.js:382
 msgid "Unlink"
 msgstr ""
 
-#: bibliograph/ui/window/AccessControlTool.js:349
-#: bibliograph/ui/window/AccessControlTool.js:350
+#: bibliograph/ui/window/AccessControlTool.js:403
+#: bibliograph/ui/window/AccessControlTool.js:404
 msgid "Linkable items"
 msgstr ""
 
-#: bibliograph/ui/window/AccessControlTool.js:418
+#: bibliograph/ui/window/AccessControlTool.js:472
 msgid "Do you really want to delete the objects '%1'?"
 msgstr ""
 
@@ -772,4 +779,7 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "No internet connection."
+#~ msgstr ""
+
+#~ msgid "Reload from filesystem"
 #~ msgstr ""
