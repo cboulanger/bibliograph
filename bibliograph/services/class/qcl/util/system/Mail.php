@@ -39,6 +39,12 @@ class qcl_util_system_Mail
   public $senderEmail;
 
   /**
+   * Reply to address, if different from sender
+   * @var string
+   */
+  public $replyTo;
+
+  /**
    * The name of the recipient
    * @var string
    */
@@ -261,7 +267,7 @@ class qcl_util_system_Mail
      * additional headers
      */
     $this->addHeader("From: $sender" );
-    $this->addHeader("Reply-To: $sender");
+    $this->addHeader("Reply-To: " . either( $this->replyTo, $sender ) );
     $headers = implode("\r\n", $this->additionalHeaders ) . "\r\n";
 
     $this->log( sprintf(

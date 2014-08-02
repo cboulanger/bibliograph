@@ -19,6 +19,9 @@
 ************************************************************************ */
 
 qcl_import( "qcl_data_controller_Controller" );
+qcl_import("qcl_ui_dialog_Alert");
+qcl_import("qcl_ui_dialog_Form");
+qcl_import("qcl_util_system_Mail");
 
 /**
  *
@@ -54,11 +57,7 @@ class bibliograph_service_Application
 
   public function method_reportBugDialog()
   {
-    if ( ! defined("GITHUB_API_TOKEN") )
-    {
-      throw new JsonRpcException("No Github API key defined!");
-    }    
-    
+
     $message = implode("",array(
       "<p style='font-weight:bold'>",
       _("Thank you for taking time to make Bibliograph better."),
@@ -69,7 +68,6 @@ class bibliograph_service_Application
       "</p>"
     ));
 
-    qcl_import("qcl_ui_dialog_Form");
     return new qcl_ui_dialog_Form(
       $message,
       array(
@@ -114,36 +112,30 @@ class bibliograph_service_Application
     }
     
     $this->requirePermission("application.reportBug");
-
-    $title = 'New ' . $data->reportType;
+    $app = $this->getApplication();
+    $configModel = $app->getConfigModel();
+    $applicationTitle = $configModel->keyExists("application.title")
+      ? $configModel->getKey("application.title")
+      : $app->name();
+    $adminEmail  = $app->getIniValue("email.admin");
+    $subject = $applicationTitle . ': New ' . $data->reportType;
     $body  = "Problem: \n\n" . $data->problem;
-    
-    if( trim( $data->error) )
-    {
-      $body .= "\n\nError message:\n\n" . $data->error;
-    }
+    $body .= "\n\nError message:\n\n" . $data->error;
 
-    if( trim( $data->email) )
-    {
-      $body .= "\n\nContact: " . $data->email;
-    }    
-    /*
-     * submit to github
-     */
-    require "qcl/lib/Github//Autoloader.php";
-    Github_Autoloader::register();
-    $github = new Github_Client();
-    $github->authenticate(GITHUB_API_USER, GITHUB_API_TOKEN);
-    $info = $github->getIssueApi()->open('cboulanger', 'bibliograph', $title, $body);
-    $github->getIssueApi()->addLabel('cboulanger', 'bibliograph', $data->reportType, $info['number']);
-    $github->getIssueApi()->addLabel('cboulanger', 'bibliograph', "User-contributed", $info['number']);
-    $github->deauthenticate();
-    //$url = $info['html_url'];
+    // send email
+    $mail = new qcl_util_system_Mail( array(
+      'senderEmail'     => $adminEmail,
+      'replyTo'         => either( trim($data->email), $adminEmail ),
+      'recipient'       => "Bibliograph Developer",
+      'recipientEmail'  => $adminEmail,
+      'subject'         => $subject,
+      'body'            => $body
+    ) );
+    $mail->send();
     
     /*
      * return the alert
      */
-    qcl_import("qcl_ui_dialog_Alert");
     return new qcl_ui_dialog_Alert(
       _("Thank you for your report.") .
       ( isset( $data->email )

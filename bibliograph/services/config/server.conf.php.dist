@@ -109,12 +109,6 @@ if ( ! defined( "QCL_APPLICATION_MODE") )
 //-------------------------------------------------------------
 
 /*
- * This can be used to automatically create github issues
- */
-define("GITHUB_API_USER",null);
-define("GITHUB_API_TOKEN",null);
-
-/*
  * log defaults. by default, no log messages
  */
 define("APPLICATION_LOG_DEFAULT", serialize( array()));
