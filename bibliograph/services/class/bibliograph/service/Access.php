@@ -142,7 +142,7 @@ class bibliograph_service_Access
      * create dialog that asks user to fill out their user information
      * if the new user is not from LDAP authentication
      */
-    if ( strlen($password) == 7 )
+    if ( strlen($password) == 7 and ! $this->ldapAuth )
     {
       new qcl_ui_dialog_Alert(
         $this->tr("You need to set a new password."),

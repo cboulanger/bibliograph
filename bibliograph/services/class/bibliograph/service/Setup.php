@@ -141,16 +141,9 @@ class bibliograph_service_Setup
     //$this->useEmbeddedDatabase(false);
 
     /*
-     * setup access datasource
-     */
-    $accessDatasource = $this->getAccessController()->getAccessDatasource();
-    $accessDatasource->init();
-    $accessDatasource->setDsn($app->getDsn());
-
-    /*
      * check if "setup" user exists, if not, import user data
      */
-    $userModel = $accessDatasource->getUserModel();
+    $userModel = qcl_access_model_User::getInstance();
     try
     {
       $userModel->load("setup");
@@ -277,12 +270,12 @@ class bibliograph_service_Setup
       $dsModel2 = $app->createDatasource( "database2", array( 'title' => "Database 2" ) );
       $ac = $this->getAccessController();
       $dsModel1
-        ->linkModel($ac->getRoleModel("anonymous"))
-        ->linkModel($ac->getRoleModel("user"))
-        ->linkModel($ac->getRoleModel("admin"));
+        ->linkModel($ac->getRoleModel()->load("anonymous"))
+        ->linkModel($ac->getRoleModel()->load("user"))
+        ->linkModel($ac->getRoleModel()->load("admin"));
       $dsModel2
-        ->linkModel($ac->getRoleModel("user"))
-        ->linkModel($ac->getRoleModel("admin"));
+        ->linkModel($ac->getRoleModel()->load("user"))
+        ->linkModel($ac->getRoleModel()->load("admin"));
     }
     catch(qcl_data_model_RecordExistsException $e)
     {
@@ -294,12 +287,12 @@ class bibliograph_service_Setup
     {
       $ac = $this->getAccessController();
       $ac->getDatasourceModel("database1")
-        ->linkModel($ac->getRoleModel("anonymous"))
-        ->linkModel($ac->getRoleModel("user"))
-        ->linkModel($ac->getRoleModel("admin"));
+        ->linkModel($ac->getRoleModel()->load("anonymous"))
+        ->linkModel($ac->getRoleModel()->load("user"))
+        ->linkModel($ac->getRoleModel()->load("admin"));
       $ac->getDatasourceModel("database2")
-        ->linkModel($ac->getRoleModel("user"))
-        ->linkModel($ac->getRoleModel("admin"));
+        ->linkModel($ac->getRoleModel()->load("user"))
+        ->linkModel($ac->getRoleModel()->load("admin"));
     }
     catch(qcl_data_model_RecordExistsException $e)
     {

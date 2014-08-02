@@ -179,7 +179,7 @@ qx.Class.define("bibliograph.Main",
      * @return {String}
      */    
     getVersion : function() {
-      return /*begin-version*/"v2.1-RC3-pre (2014-08-02)"/*end-version*/;
+      return /*begin-version*/"Development version"/*end-version*/;
     },
     
     /**

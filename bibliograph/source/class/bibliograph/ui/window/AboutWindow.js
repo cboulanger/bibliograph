@@ -84,7 +84,7 @@ qx.Class.define("bibliograph.ui.window.AboutWindow",
           "<p style='font-weight:bold'>Partial funding was provided by</p><ul>"+
             "<li><a href=\"http://www.rewi.hu-berlin.de/\">Juristische Fakultät (Department of Law)</a>,<a href=\"http://www.hu-berlin.de/\">Humboldt-Universität zu Berlin</a>  </li></ul>"+
           "<p style='font-weight:bold'>Acknowledgements</p><ul>"+
-              "<li>Documentation: Julika Rosenstock</li>"+
+              "<li>Documentation & Testing: Julika Rosenstock, Till Rathschlag, Anna Lütkefend</li>"+
               "<li>Application icon: Siarhei Barysiuk</li></ul>");
       qxPage2.add(qxLabel4);
     }
