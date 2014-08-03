@@ -20,7 +20,9 @@
 
 qcl_import("qcl_data_controller_Controller");
 qcl_import("qcl_util_system_Executable");
-
+qcl_import("bibliograph_service_Reference");
+qcl_import("bibliograph_service_Folder");
+    
 require_once "lib/yaz/YAZ.php";
 /** @noinspection PhpIncludeInspection */
 require_once "bibliograph/lib/bibtex/BibtexParser.php";
@@ -458,8 +460,6 @@ class class_bibliograph_plugin_z3950_Service
     qcl_assert_array( $ids );
     qcl_assert_valid_string( $targetDatasource );
     qcl_assert_integer( $targetFolderId );
-    qcl_import("bibliograph_service_Reference");
-    qcl_import("bibliograph_service_Folder");
 
     $sourceModel = $this->getModel( $sourceDatasource, "record" );
 
@@ -482,7 +482,7 @@ class class_bibliograph_plugin_z3950_Service
       
       // rmove leading "c" and other characters in year data
       $year = $targetReferenceModel->get("year");
-      if( $year[0] = "c" )
+      if( $year[0] == "c" )
       {
          $year = trim(substr($year,1));
       }
