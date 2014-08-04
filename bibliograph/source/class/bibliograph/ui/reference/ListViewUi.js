@@ -229,8 +229,7 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
       /*
        * Move references
        */
-      var qxMenuButton1 = new qx.ui.menu.Button(this.tr('Move reference(s)...'), null, null, null);
-      qxMenuButton1.setLabel(this.tr('Move reference(s)...'));
+      var qxMenuButton1 = new qx.ui.menu.Button(this.tr('Move reference(s)...'));
       qxMenu1.add(qxMenuButton1);
       qxMenuButton1.addListener("execute", this._moveReference, this);
       permissionManager.create("allowMoveReference")
@@ -241,8 +240,7 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
       /*
        * Copy references
        */
-      var qxMenuButton2 = new qx.ui.menu.Button(this.tr('Copy reference(s)...'), null, null, null);
-      qxMenuButton2.setLabel(this.tr('Copy reference(s)...'));
+      var qxMenuButton2 = new qx.ui.menu.Button(this.tr('Copy reference(s)...'));
       qxMenu1.add(qxMenuButton2);
       qxMenuButton2.addListener("execute", this._copyReference, this);
       permissionManager.create("allowMoveReference")
@@ -253,8 +251,7 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
       /*
        * Export menu
        */
-      var qxMenuButton3 = new qx.ui.menu.Button(this.tr('Export references'), null, null, null);
-      qxMenuButton3.setLabel(this.tr('Export references'));
+      var qxMenuButton3 = new qx.ui.menu.Button(this.tr('Export references'));
       qxMenu1.add(qxMenuButton3);
       permissionManager.create("reference.export")
           .bind("state", qxMenuButton3, "visibility", { converter : qcl.bool2visibility });
@@ -264,8 +261,7 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
       /*
        * Export selected references
        */
-      var qxMenuButton4 = new qx.ui.menu.Button(this.tr('Export selected references'), null, null, null);
-      qxMenuButton4.setLabel(this.tr('Export selected references'));
+      var qxMenuButton4 = new qx.ui.menu.Button(this.tr('Export selected references'));
       qxMenu2.add(qxMenuButton4);
       permissionManager.create("allowExportReference")
           .bind("state", qxMenuButton4, "enabled");
@@ -276,11 +272,33 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
       /*
        * Export folder
        */
-      var qxMenuButton5 = new qx.ui.menu.Button(this.tr('Export all references'), null, null, null);
-      qxMenuButton5.setLabel(this.tr('Export folder'));
+      var qxMenuButton5 = new qx.ui.menu.Button(this.tr('Export folder'));
       qxMenu2.add(qxMenuButton5);
       qxMenuButton5.addListener("execute", function(e) {
         this.exportFolder();
+      }, this);
+      
+      
+      /*
+       * Share menu -> will go into plugin
+       */
+      var shareButton = new qx.ui.menu.Button(this.tr('Share ...'));
+      qxMenu1.add(shareButton);
+      permissionManager.create("reference.share")
+          .bind("state", shareButton, "visibility", { converter : qcl.bool2visibility });
+      var shareMenu = new qx.ui.menu.Menu();
+      shareButton.setMenu(shareMenu);
+      
+      // Stabi -> will go into plugin
+      var stabiButton = new qx.ui.menu.Button(this.tr('Look up in Staatsbibliothek Berlin'));
+      shareMenu.add(stabiButton);
+      stabiButton.addListener("execute", function(e) {
+        var url = "http://stabikat.de/DB=1/SET=2/TTL=2/CMD?ACT=SRCHA&IKT=1007&SRT=YOP&TRM=";
+        var model = this.getApplication().getWidgetById("referenceEditor").getStore().getModel();
+        if( model && model.getIsbn() )
+        {
+          window.open(url + model.getIsbn() );
+        }
       }, this);
 
       /*
