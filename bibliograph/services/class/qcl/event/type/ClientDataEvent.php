@@ -21,4 +21,3 @@ qcl_import("qcl_event_type_DataEvent");
  * A server data event which will be forwarded to the client
  */
 class qcl_event_type_ClientDataEvent extends qcl_event_type_DataEvent{}
-?>

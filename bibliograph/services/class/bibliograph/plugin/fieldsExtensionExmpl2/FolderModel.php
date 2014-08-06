@@ -25,4 +25,3 @@ qcl_import( "bibliograph_model_FolderModel" );
  */
 class bibliograph_plugin_fieldsExtensionExmpl2_FolderModel
   extends bibliograph_model_FolderModel {}
-?>

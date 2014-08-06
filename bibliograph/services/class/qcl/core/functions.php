@@ -1372,4 +1372,3 @@ if(!function_exists('date_diff')) {
 		return $diff;
 	}
 }
-?>

@@ -103,4 +103,3 @@ class qcl_io_filesystem_local_Resource
     return filectime( $this->filePath() );
   }
 }
-?>

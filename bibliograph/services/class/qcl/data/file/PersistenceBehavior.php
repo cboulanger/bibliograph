@@ -135,4 +135,3 @@ class qcl_data_file_PersistenceBehavior
     $this->save(serialize($data));
   }
 }
-?>

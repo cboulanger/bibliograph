@@ -113,4 +113,3 @@ class qcl_data_model_db_Model
     throw new qcl_core_NotImplementedException(__METHOD__);
   }
 }
-?>

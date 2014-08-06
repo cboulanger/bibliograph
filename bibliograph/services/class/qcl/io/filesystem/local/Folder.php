@@ -199,4 +199,3 @@ class qcl_io_filesystem_local_Folder
     $this->_dir->close();
   }
 }
-?>

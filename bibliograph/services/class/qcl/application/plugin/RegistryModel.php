@@ -56,4 +56,3 @@ class qcl_application_plugin_RegistryModel
     $this->addProperties( $this->properties );
   }
 }
-?>

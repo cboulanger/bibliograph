@@ -114,4 +114,3 @@ class PostRpcServer extends JsonRpcServer
     return $output;
   }
 }
-?>

@@ -201,4 +201,3 @@ class class_bibliograph_plugin_csl_Service
     );
   }
 }
-?>

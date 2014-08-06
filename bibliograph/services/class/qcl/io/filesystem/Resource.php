@@ -240,4 +240,3 @@ class qcl_io_filesystem_Resource
     return $this->resourcePath();
   }
 }
-?>

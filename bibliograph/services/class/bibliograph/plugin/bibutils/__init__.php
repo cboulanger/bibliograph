@@ -27,4 +27,3 @@ if( !defined('BIBUTILS_PATH') )
 {
   define('BIBUTILS_PATH','');
 }
-?>

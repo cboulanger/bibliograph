@@ -154,4 +154,3 @@ class Crypt_HMAC
 
 }
 
-?>

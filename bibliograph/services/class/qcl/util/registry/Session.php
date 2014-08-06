@@ -69,4 +69,3 @@ class qcl_util_registry_Session
     return isset( $_SESSION[ self::KEY ][$key] );
   }
 }
-?>

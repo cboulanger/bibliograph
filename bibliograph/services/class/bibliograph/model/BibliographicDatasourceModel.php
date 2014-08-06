@@ -106,4 +106,3 @@ class bibliograph_model_BibliographicDatasourceModel
     }
   }
 }
-?>

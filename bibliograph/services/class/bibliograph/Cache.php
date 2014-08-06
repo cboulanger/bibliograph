@@ -74,4 +74,3 @@ class bibliograph_Cache
     return $this->map[$key];
   }
 }
-?>

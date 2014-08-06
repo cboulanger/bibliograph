@@ -86,4 +86,3 @@ class qcl_event_message_db_Message
     return qcl_getInstance( __CLASS__ );
   }
 }
-?>

@@ -628,4 +628,3 @@ class qcl_access_model_User
   	return false;
   }
 }
-?>

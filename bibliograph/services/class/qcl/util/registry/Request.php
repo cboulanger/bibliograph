@@ -85,4 +85,3 @@ class qcl_util_registry_Request
     return isset( $_this->registry[$key] );
   }
 }
-?>

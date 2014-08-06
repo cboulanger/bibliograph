@@ -192,4 +192,3 @@ class qcl_server_Download
     return $ctype;
   }
 }
-?>

@@ -272,4 +272,3 @@ class qcl_test_data_datasource_DatasourceTest
   }
 }
 
-?>

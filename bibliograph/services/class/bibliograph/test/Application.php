@@ -25,4 +25,3 @@ class bibliograph_test_Application
 {
   protected $skipAuthentication = true;
 }
-?>

@@ -72,4 +72,3 @@ interface qcl_data_controller_IItemController
    */
   function method_delete( $datasource, $id, $options=null );
 }
-?>

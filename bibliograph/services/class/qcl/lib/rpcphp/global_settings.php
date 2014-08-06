@@ -72,4 +72,4 @@ if ( ! defined("handleQooxdooDates") )
   define( "handleQooxdooDates", true );
 }
 
-?>
+

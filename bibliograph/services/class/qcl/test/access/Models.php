@@ -406,4 +406,3 @@ class qcl_test_access_Models
     $this->getLogger()->setFilterEnabled( QCL_LOG_MODEL_RELATIONS, false );
   }
 }
-?>

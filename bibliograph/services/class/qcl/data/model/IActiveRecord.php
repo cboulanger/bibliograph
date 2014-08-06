@@ -214,4 +214,3 @@ interface qcl_data_model_IActiveRecord
    */
   public function countWhere( $where );
 }
-?>

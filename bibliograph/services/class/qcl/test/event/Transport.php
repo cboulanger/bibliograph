@@ -20,4 +20,3 @@ class qcl_test_event_Transport
     return true;
   }
 }
-?>

@@ -155,4 +155,3 @@ interface qcl_config_IConfigModel
    */
   public function getAccessibleKeys( $mask=null );
 }
-?>

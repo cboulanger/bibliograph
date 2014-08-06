@@ -26,4 +26,3 @@ qcl_log_Logger::getInstance()->registerFilter(QCL_LOG_PLUGIN,"Plugin-related log
  * Exception
  */
 class qcl_application_plugin_Exception extends JsonRpcException {}
-?>

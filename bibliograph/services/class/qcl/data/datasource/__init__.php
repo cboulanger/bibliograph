@@ -26,4 +26,3 @@ if ( ! defined("QCL_LOG_DATASOURCE") )
 qcl_log_Logger::getInstance()->registerFilter(QCL_LOG_DATASOURCE,"Datasource-related log messages",false);
 
 
-?>

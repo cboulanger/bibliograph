@@ -99,4 +99,3 @@ class bibliograph_plugin_fieldsExtensionExmpl2_ReferenceModel
 	  return $schemaModel;
 	}
 }
-?>

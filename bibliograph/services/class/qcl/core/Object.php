@@ -1176,4 +1176,3 @@ class qcl_core_Object
     return var_export( $this, true );
   }
 }
-?>

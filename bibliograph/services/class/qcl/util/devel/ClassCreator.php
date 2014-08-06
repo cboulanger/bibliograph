@@ -147,7 +147,7 @@ extends qcl_data_model_db_ActiveRecord
   */
 
 }
-?>
+
 EOF;
 		$this->info($code);
 		return "OK";

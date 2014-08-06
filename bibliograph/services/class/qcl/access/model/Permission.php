@@ -95,4 +95,3 @@ class qcl_access_model_Permission
     return qcl_getInstance(__CLASS__);
   }
 }
-?>

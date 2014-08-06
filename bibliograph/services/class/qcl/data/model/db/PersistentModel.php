@@ -92,4 +92,3 @@ class qcl_data_model_db_PersistentModel
     return $this->getPersistenceBehavior()->getQueryBehavior();
   }
 }
-?>

@@ -700,4 +700,3 @@ class qcl_data_model_PropertyBehavior
     return $this->properties[$property]['init'];
   }
 }
-?>

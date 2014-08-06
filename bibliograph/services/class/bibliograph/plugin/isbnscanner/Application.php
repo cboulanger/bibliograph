@@ -22,4 +22,3 @@ qcl_import("bibliograph_Application");
 
 class bibliograph_plugin_isbnscanner_Application
   extends bibliograph_Application {}
-?>

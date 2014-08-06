@@ -51,4 +51,3 @@ class qcl_ui_dialog_Wizard
     ));
   }
 }
-?>

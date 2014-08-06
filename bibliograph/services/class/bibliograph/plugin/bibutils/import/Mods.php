@@ -95,4 +95,3 @@ class bibliograph_plugin_bibutils_import_Mods
     return $import;
   }
 }
-?>

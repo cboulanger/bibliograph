@@ -136,4 +136,3 @@ class qcl_server_Server
   }
 
 }
-?>

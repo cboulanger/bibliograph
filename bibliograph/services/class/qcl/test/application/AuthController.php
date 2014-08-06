@@ -25,4 +25,3 @@ qcl_import( "qcl_access_Service" );
  */
 class qcl_test_application_AuthController
   extends qcl_access_Service {}
-?>

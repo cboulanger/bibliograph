@@ -74,4 +74,3 @@ class bibliograph_plugin_z3950_ResultModel
     $this->addRelations( $this->relations, __CLASS__ );
   }
 }
-?>

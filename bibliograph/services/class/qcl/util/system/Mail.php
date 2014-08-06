@@ -393,4 +393,3 @@ class qcl_util_system_Mail
      $headers .= "Content-Type: multipart/alternative;boundary=\"$boundary\";\n\n";
    */
 }
-?>

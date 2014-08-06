@@ -20,4 +20,3 @@ define( "QCL_PROPERTY_CHECK_STRING",  "string" ); // todo: rename to QCL_PROPERT
 define( "QCL_PROPERTY_CHECK_INTEGER", "integer" );
 define( "QCL_PROPERTY_CHECK_BOOLEAN", "boolean" );
 
-?>

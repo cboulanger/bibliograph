@@ -280,4 +280,3 @@ class bibliograph_model_FolderModel
     ));
   }
 }
-?>

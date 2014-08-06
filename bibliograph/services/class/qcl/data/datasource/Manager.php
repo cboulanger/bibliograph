@@ -384,4 +384,3 @@ class qcl_data_datasource_Manager
   }
 
 }
-?>

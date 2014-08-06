@@ -69,4 +69,3 @@ class bibliograph_plugin_z3950_SearchModel
     $this->addRelations( $this->relations, __CLASS__ );
   }
 }
-?>

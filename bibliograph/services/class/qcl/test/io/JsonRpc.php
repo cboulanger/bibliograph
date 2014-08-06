@@ -29,4 +29,3 @@ class qcl_test_data_jsonrpc
 
 }
 
-?>

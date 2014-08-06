@@ -99,4 +99,3 @@ class qcl_event_message_ClientMessage
   	return $this->acl;
   }
 }
-?>

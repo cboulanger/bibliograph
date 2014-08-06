@@ -29,4 +29,3 @@ class qcl_util_registry_PageLoad
 {
   const KEY = "QCL_UTIL_REGISTRY_PAGELOAD_KEY";
 }
-?>

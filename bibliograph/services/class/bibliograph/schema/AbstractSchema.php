@@ -382,4 +382,3 @@ abstract class bibliograph_schema_AbstractSchema
     }
   }
 }
-?>

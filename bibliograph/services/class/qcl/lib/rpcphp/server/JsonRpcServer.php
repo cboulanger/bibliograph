@@ -549,4 +549,3 @@ class JsonRpcServer extends AbstractServer
     exit;
   }
 }
-?>

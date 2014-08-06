@@ -121,4 +121,3 @@ interface qcl_data_controller_ITreeController
   function method_createPath( $datasource, $path, $separator="/" );
 
 }
-?>

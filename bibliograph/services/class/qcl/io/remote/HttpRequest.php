@@ -398,4 +398,3 @@ class qcl_io_remote_HttpRequest
     return $response;
   }
 }
-?>

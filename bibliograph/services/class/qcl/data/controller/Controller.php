@@ -1230,4 +1230,3 @@ class qcl_data_controller_Controller
     return $data;
   }
 }
-?>

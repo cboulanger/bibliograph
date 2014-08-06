@@ -88,4 +88,3 @@ class bibliograph_plugin_csl_CiteProc
     return $formatted;
   }
 }
-?>

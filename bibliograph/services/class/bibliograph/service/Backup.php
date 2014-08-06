@@ -448,4 +448,3 @@ class bibliograph_service_Backup
   }
 
 }
-?>

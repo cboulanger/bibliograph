@@ -254,4 +254,3 @@ class qcl_test_config_ConfigModel
     $this->getLogger()->setFilterEnabled( QCL_LOG_MODEL_RELATIONS, false );
   }
 }
-?>

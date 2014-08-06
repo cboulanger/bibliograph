@@ -61,4 +61,3 @@ interface qcl_data_controller_ITableController
    */
   function method_getRowData( $firstRow, $lastRow, $queryData=null );
 }
-?>

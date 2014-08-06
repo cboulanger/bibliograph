@@ -518,4 +518,3 @@ interface qcl_data_db_adapter_IAdapter
   public function getSecondsSince( $timestamp );
 
 }
-?>

@@ -64,4 +64,3 @@ interface qcl_access_IAccessService
    */
   function method_terminate();
 }
-?>

@@ -847,4 +847,3 @@ class gs3_IO {
 }
 
 stream_wrapper_register("s3","gs3_IO") or trigger_error("Failed to register protocol gS3");
-?>

@@ -240,4 +240,3 @@ class qcl_data_xml_SimpleXMLElement
 
 }
 
-?>

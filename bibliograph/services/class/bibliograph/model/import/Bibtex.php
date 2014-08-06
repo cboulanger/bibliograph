@@ -94,4 +94,3 @@ class bibliograph_model_import_Bibtex
     return $result;  //
   }
 }
-?>

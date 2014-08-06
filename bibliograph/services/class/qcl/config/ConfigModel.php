@@ -786,4 +786,3 @@ class qcl_config_ConfigModel
 		);
 	}
 }
-?>

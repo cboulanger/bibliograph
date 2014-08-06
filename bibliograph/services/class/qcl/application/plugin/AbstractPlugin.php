@@ -137,4 +137,3 @@ abstract class qcl_application_plugin_AbstractPlugin
    */
   abstract public function uninstall();
 }
-?>

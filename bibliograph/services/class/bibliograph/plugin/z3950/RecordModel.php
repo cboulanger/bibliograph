@@ -231,4 +231,3 @@ class bibliograph_plugin_z3950_RecordModel
 
 
 }
-?>

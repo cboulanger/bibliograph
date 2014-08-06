@@ -34,4 +34,3 @@ interface qcl_data_model_IModel
   public function addProperties( $properties );
 
 }
-?>

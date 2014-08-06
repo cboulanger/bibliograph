@@ -556,4 +556,3 @@ class qcl_data_controller_TreeController
     return $this->getNodeData( $datasource, $nodeId, $parentId, $options );
   }
 }
-?>

@@ -59,4 +59,3 @@ class bibliograph_plugin_bibutils_export_Ris
     $this->exporter = new qcl_util_system_Executable( BIBUTILS_PATH . "xml2ris");
   }
 }
-?>

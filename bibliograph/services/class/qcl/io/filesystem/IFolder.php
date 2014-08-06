@@ -74,4 +74,3 @@ interface qcl_io_filesystem_IFolder
 
 
 }
-?>

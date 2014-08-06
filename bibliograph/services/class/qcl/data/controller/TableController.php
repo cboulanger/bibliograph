@@ -203,4 +203,3 @@ class qcl_data_controller_TableController
     return $qclQuery;
   }
 }
-?>

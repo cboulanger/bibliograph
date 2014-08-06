@@ -58,4 +58,3 @@ if( ! defined( 'QCL_MAIL_SENDER' ) )
   define( 'QCL_MAIL_SENDER', $_SERVER["SERVER_ADMIN"] );
 }
 ini_set('sendmail_from', QCL_MAIL_SENDER );
-?>

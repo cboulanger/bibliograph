@@ -288,4 +288,3 @@ class bibliograph_service_Access
 
   */
 }
-?>

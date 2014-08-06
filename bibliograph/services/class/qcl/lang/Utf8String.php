@@ -343,4 +343,3 @@ class Utf8String
     }
 
 }
-?>

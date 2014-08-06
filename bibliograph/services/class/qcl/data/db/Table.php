@@ -602,4 +602,3 @@ class qcl_data_db_Table
     return $pdoStmt->rowCount();
   }
 }
-?>

@@ -60,4 +60,3 @@ class bibliograph_plugin_bibutils_import_Ris
     $this->importer = new qcl_util_system_Executable( BIBUTILS_PATH . "ris2xml");
   }
 }
-?>

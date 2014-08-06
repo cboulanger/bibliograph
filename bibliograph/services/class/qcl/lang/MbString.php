@@ -233,4 +233,3 @@ class qcl_MbString
     return $this->string;
   }
 }
-?>

@@ -246,4 +246,3 @@ class qcl_test_access_ModelAccessControl
     return "OK";
   }
 }
-?>

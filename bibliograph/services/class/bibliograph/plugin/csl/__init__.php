@@ -20,4 +20,3 @@
 
 define( "CSL_STYLE_DIR", dirname(__FILE__) . "/styles" );
 
-?>

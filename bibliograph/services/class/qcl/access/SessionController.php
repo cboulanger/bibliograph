@@ -587,4 +587,3 @@ class qcl_access_SessionController
   }
 
 }
-?>

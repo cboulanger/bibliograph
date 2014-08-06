@@ -144,4 +144,3 @@ class bibliograph_service_Application
     );
   }
 }
-?>

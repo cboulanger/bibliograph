@@ -29,4 +29,3 @@ class qcl_io_filesystem_NoFileLoadedException extends qcl_io_filesystem_Exceptio
  */
 define("QCL_LOG_FILESYSTEM","filesystem");
 qcl_log_Logger::getInstance()->registerFilter( QCL_LOG_FILESYSTEM, "Messages concerning filesystems", false);
-?>

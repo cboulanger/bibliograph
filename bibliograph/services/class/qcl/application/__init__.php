@@ -61,4 +61,3 @@ define("QCL_LOG_SETUP","setup");
 qcl_log_Logger::getInstance()->registerFilter( QCL_LOG_SETUP, "Setup-related log messages",false);
 define("QCL_LOG_APPLICATION","application");
 qcl_log_Logger::getInstance()->registerFilter( QCL_LOG_APPLICATION, "Application-related log messages",false);
-?>

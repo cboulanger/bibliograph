@@ -184,4 +184,3 @@ class qcl_access_model_Group
     return $listData;
   }
 }
-?>

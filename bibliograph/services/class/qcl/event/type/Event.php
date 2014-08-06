@@ -83,4 +83,3 @@ class qcl_event_type_Event
   }
 
 }
-?>

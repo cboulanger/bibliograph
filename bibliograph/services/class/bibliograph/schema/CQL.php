@@ -352,4 +352,3 @@ class bibliograph_schema_CQL
     }
   }
 }
-?>

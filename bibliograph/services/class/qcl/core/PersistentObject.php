@@ -163,4 +163,3 @@ class qcl_core_PersistentObject
     }
   }
 }
-?>

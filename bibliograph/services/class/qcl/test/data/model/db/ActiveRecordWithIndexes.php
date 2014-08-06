@@ -121,4 +121,3 @@ class qcl_test_data_model_db_ActiveRecordWithIndexes
   }
 }
 
-?>

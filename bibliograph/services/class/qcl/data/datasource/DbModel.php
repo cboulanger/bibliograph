@@ -891,4 +891,4 @@ class qcl_data_datasource_DbModel
     $this->getManager()->deleteDatasource( $this->namedId(), false );
   }
 }
-?>
+
