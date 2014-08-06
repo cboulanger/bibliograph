@@ -12,7 +12,7 @@
  *
  ******************************************************************************/
 
-/*global qx qcl bibliograph*/
+/*global qx qcl dialog bibliograph*/
 
 /**
  * @asset(bibliograph/icon/button-plus.png)
@@ -300,6 +300,24 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
           window.open(url + model.getIsbn() );
         }
       }, this);
+      
+      /**
+       * Testing
+       */
+      var testButton = new qx.ui.menu.Button(this.tr('Test Progress Bar'));
+      shareMenu.add(testButton);
+      var testProgress = new dialog.Progress();
+      testButton.setWidgetId("testProgress");
+      var testIframe = new qx.html.Iframe();
+      testIframe.hide();
+      app.getRoot().getContentElement().add(testIframe);
+      var sessMgr = app.getSessionManager();
+      var source  = app.getRpcManager().getServerUrl() +
+          "?service=bibliograph.backup&method=testProgress&params=&sessionId=";
+      testButton.addListener("execute", function(e) {
+        testIframe.setSource( source + sessMgr.getSessionId() );
+        testProgress.show();
+      }, this);      
 
       /*
        * Edit menu
