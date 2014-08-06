@@ -881,4 +881,3 @@ class bibliograph_schema_BibtexSchema
   }
 
 }
-?>

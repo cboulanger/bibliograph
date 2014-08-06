@@ -78,4 +78,3 @@ class qcl_test_data_ControllerModel
     return $result->queryResultToModel($testMap);
   }
 }
-?>

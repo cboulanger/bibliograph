@@ -124,4 +124,3 @@ class qcl_io_remote_JsonRpc
     return json_decode($result);
   }
 }
-?>

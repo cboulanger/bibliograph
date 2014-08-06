@@ -1511,4 +1511,3 @@ class cql_Config
     }
   }
 }
-?>

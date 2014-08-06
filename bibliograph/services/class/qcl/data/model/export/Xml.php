@@ -180,4 +180,3 @@ class qcl_data_model_export_Xml
     return $xmlDoc->asXML(null,true);
   }
 }
-?>

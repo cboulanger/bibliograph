@@ -227,4 +227,3 @@ class qcl_io_filesystem_remote_File
     throw new qcl_core_NotImplementedException(__METHOD__);
   }
 }
-?>

@@ -290,4 +290,3 @@ class qcl_locale_Manager extends qcl_core_Object
     $this->info( "  Current locale:     " . $this->getLocale() );
   }
 }
-?>

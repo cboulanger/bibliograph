@@ -54,4 +54,3 @@ class qcl_core_NotImplementedException extends LogicException
     parent::__construct("Method $method not implemented");
   }
 }
-?>

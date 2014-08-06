@@ -26,4 +26,3 @@ class qcl_data_xml_Exception extends JsonRpcException {}
  */
 qcl_log_Logger::getInstance()->registerFilter("xml","XML-related debugging.",false);
 
-?>

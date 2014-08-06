@@ -46,4 +46,3 @@ class qcl_data_store_keyvalue_Session
     unset($_SESSION[__CLASS__][$key]);
   }
 }
-?>

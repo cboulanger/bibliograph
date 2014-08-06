@@ -905,4 +905,3 @@ class CQLConfig
   }
 
 }
-?>

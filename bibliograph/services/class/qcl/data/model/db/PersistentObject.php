@@ -70,4 +70,3 @@ class qcl_data_model_db_PersistentObject
     return qcl_data_model_db_PersistenceBehavior::getInstance();
   }
 }
-?>

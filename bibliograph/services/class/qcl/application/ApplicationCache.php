@@ -32,4 +32,3 @@ class qcl_application_ApplicationCache
     return qcl_getInstance( __CLASS__ );
   }
 }
-?>

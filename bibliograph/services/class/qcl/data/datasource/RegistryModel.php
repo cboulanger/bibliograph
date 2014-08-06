@@ -74,4 +74,3 @@ class qcl_data_datasource_RegistryModel
     return qcl_getInstance(__CLASS__);
   }
 }
-?>

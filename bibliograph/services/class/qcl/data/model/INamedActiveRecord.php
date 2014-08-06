@@ -72,4 +72,3 @@ interface qcl_data_model_INamedActiveRecord
    */
   public function load( $id );
 }
-?>

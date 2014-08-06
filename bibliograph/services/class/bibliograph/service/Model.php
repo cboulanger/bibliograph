@@ -255,4 +255,3 @@ class bibliograph_service_Model
   }
 
 }
-?>

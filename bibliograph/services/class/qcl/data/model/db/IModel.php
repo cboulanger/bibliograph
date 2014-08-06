@@ -48,4 +48,3 @@ interface qcl_data_model_db_IModel
   public function getQueryBehavior();
 
 }
-?>

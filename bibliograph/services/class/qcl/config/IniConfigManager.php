@@ -189,4 +189,3 @@ class qcl_config_IniConfigManager
   }
 
 }
-?>

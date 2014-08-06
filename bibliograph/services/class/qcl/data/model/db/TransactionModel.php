@@ -148,4 +148,3 @@ class qcl_data_model_db_TransactionModel
     $this->save();
   }
 }
-?>

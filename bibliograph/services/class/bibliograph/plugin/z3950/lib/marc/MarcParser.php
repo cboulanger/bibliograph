@@ -131,4 +131,3 @@ class MarcParser
     return $output;
   }
 }
-?>

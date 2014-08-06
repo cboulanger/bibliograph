@@ -23,4 +23,3 @@
  */
 class bibliograph_schema_Exception extends LogicException {}
 
-?>

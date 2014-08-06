@@ -83,4 +83,3 @@ class BibtexItem
     return $this->properties;
   }
 }
-?>

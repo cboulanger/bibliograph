@@ -99,4 +99,3 @@ class bibliograph_plugin_bookends_DatasourceModel
 
 }
 
-?>

@@ -987,4 +987,3 @@ class qcl_data_model_db_QueryBehavior
     $this->getModel()->log( $msg, $filters );
   }
 }
-?>

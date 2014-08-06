@@ -102,4 +102,3 @@ class csl_Plugin
     // @todo remove config keys?
   }
 }
-?>

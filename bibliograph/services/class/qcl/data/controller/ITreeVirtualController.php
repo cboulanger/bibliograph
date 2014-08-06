@@ -87,4 +87,3 @@ interface qcl_data_controller_ITreeVirtualController
     $datasource, $ids, $max=null, $recurse=false, $storeId=null, $options=null );
 
 }
-?>

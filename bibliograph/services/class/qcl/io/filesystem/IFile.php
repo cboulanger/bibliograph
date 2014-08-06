@@ -75,4 +75,3 @@ interface qcl_io_filesystem_IFile
   public function size();
 
 }
-?>

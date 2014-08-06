@@ -56,4 +56,3 @@ class qcl_test_data_db_PdoMysql
   }
 
 }
-?>

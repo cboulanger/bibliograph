@@ -32,4 +32,3 @@ class qcl_data_model_db_QueryCache
     $this->savePersistenceData();
   }
 }
-?>

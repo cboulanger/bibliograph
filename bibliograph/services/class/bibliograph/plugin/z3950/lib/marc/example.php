@@ -83,4 +83,3 @@ print "\n\n";
 print $record->ffield("245", "Formatted output: Title: <b>%a</b>, Remainder of title: <b>%b</b>, Responsibility: <b>%c</b>\n");
 print "</pre>";
 
-?>

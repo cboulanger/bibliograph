@@ -173,4 +173,3 @@ interface qcl_core_IPropertyAccessors
   public function unserialize( $data );
 
 }
-?>

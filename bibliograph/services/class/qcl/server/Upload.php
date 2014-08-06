@@ -378,4 +378,3 @@ class qcl_server_Upload
     }
   }
 }
-?>

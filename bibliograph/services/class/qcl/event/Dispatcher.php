@@ -293,4 +293,3 @@ class qcl_event_Dispatcher
     );
   }
 }
-?>

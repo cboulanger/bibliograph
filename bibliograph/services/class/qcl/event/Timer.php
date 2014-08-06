@@ -57,4 +57,3 @@ class qcl_event_Timer
 
 }
 
-?>

@@ -101,4 +101,3 @@ class bibliograph_plugin_bibutils_export_Endnote
     return $export;
   }
 }
-?>

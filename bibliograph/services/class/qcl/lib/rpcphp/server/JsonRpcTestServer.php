@@ -69,4 +69,3 @@ class JsonRpcTestServer extends JsonRpcServer
     return $input;
   }
 }
-?>

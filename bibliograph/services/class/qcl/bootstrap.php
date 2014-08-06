@@ -99,4 +99,3 @@ qcl_import("qcl_log_Logger");
 qcl_import("qcl_lang_String");
 qcl_import("qcl_lang_ArrayList");
 
-?>

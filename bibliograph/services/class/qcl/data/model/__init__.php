@@ -44,4 +44,3 @@ qcl_log_Logger::getInstance()->registerFilter( QCL_LOG_MODEL, "Messages concerni
 define("QCL_LOG_MODEL_RELATIONS","relations");
 qcl_log_Logger::getInstance()->registerFilter( QCL_LOG_MODEL_RELATIONS, "Model relations", false);
 
-?>

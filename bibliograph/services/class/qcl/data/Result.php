@@ -69,4 +69,3 @@ class qcl_data_Result
     return $this;
   }
 }
-?>

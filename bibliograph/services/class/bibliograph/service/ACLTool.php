@@ -1220,4 +1220,3 @@ class bibliograph_service_ACLTool
 
   }
 }
-?>

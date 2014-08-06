@@ -997,4 +997,3 @@ class YAZ_OaiMarcXmlResult extends YAZ_MarcXmlResult
   }
 }
 
-?>

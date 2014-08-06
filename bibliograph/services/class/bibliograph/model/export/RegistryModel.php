@@ -139,4 +139,3 @@ class bibliograph_model_export_RegistryModel
     }
   }
 }
-?>

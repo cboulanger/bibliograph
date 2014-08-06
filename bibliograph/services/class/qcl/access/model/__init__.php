@@ -39,4 +39,3 @@ if ( ! defined("QCL_ACCESS_ALLOW_IP_MISMATCH") )
   define( "QCL_ACCESS_ALLOW_IP_MISMATCH" ,  false );
 }
 
-?>

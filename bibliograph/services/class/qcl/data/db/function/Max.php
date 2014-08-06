@@ -61,4 +61,4 @@ class qcl_data_db_function_Max implements qcl_data_db_function_ISqlFunction {
 
 
 }
-?>
+

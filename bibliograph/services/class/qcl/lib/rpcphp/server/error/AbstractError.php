@@ -262,4 +262,3 @@ class AbstractError extends Exception
     trigger_error("Not implemented.");
   }
 }
-?>

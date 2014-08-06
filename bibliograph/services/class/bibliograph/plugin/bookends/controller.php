@@ -355,4 +355,3 @@ class class_bibliograph_plugins_bookends_controller extends bibliograph_controll
 
 }
 
-?>

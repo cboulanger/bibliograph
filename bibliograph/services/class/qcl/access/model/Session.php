@@ -259,4 +259,3 @@ class qcl_access_model_Session
   	return false;
   }
 }
-?>

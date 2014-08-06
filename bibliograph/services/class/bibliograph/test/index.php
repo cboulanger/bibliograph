@@ -49,4 +49,3 @@ require QCL_TEST_SERVER_DIR . "/config.php";
  * load the script that creates the test data
  */
 require "qcl/test/testdata.php";
-?>

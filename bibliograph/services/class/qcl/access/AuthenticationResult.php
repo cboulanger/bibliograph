@@ -69,4 +69,3 @@ class qcl_access_AuthenticationResult
     */
    public $editable = false;
 }
-?>

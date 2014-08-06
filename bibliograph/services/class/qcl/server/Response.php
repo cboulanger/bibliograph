@@ -112,4 +112,3 @@ class qcl_server_Response
     }
   }
 }
-?>

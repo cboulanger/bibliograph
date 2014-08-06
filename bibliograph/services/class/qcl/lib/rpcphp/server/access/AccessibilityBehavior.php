@@ -229,4 +229,3 @@ class AccessibilityBehavior implements IAccessibilityBehavior
     return $this->error_number;
   }
 }
-?>

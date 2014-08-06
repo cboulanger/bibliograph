@@ -108,4 +108,3 @@ class bibliograph_plugin_fieldsExtensionExmpl2_DatasourceModel
     }
   }
 }
-?>

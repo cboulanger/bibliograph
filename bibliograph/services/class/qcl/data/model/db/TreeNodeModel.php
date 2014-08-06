@@ -330,4 +330,3 @@ class qcl_data_model_db_TreeNodeModel
     throw new qcl_core_NotImplementedException(__METHOD__);
   }
 }
-?>

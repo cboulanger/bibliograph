@@ -34,4 +34,3 @@ define("QCL_LOG_TABLES","tables");
 $logger->registerFilter( QCL_LOG_TABLES, "Modification of table schemas in an sql database",false);
 
 
-?>

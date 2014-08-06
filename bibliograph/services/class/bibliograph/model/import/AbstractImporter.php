@@ -107,4 +107,3 @@ abstract class bibliograph_model_import_AbstractImporter
   abstract function import( $data );
 
 }
-?>

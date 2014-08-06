@@ -73,4 +73,3 @@ class fieldsExtensionExmpl2_Plugin
     bibliograph_plugin_fieldsExtensionExmpl2_DatasourceModel::getInstance()->unregisterSchema();
   }
 }
-?>

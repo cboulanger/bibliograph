@@ -35,4 +35,3 @@ class qcl_data_file_PersistentObject
     return qcl_data_file_PersistenceBehavior::getInstance();
   }
 }
-?>

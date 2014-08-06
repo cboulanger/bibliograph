@@ -53,4 +53,3 @@ class qcl_util_encoding_Converter
 	}
 
 }
-?>

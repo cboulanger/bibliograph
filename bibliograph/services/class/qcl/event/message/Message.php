@@ -125,4 +125,3 @@ class qcl_event_message_Message
     return $this->getObjectById( $this->getSenderId() );
   }
 }
-?>

@@ -127,4 +127,3 @@ class qcl_server_Request
     return $_SERVER['REMOTE_ADDR'];
   }
 }
-?>

@@ -64,4 +64,3 @@ class class_bibliograph_test_OdfExport
     exit;
   }
 }
-?>

@@ -72,4 +72,3 @@ class qcl_data_model_Model
     $this->getPropertyBehavior()->add( $properties );
   }
 }
-?>

@@ -58,4 +58,3 @@ interface qcl_core_IPersistenceBehavior
   public function dispose( $object, $id );
 
 }
-?>

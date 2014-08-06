@@ -446,7 +446,7 @@ class bibliograph_service_Backup
     if( $problem ) $msg .= $this->tr("There was a problem. Please examine the log file.");
     return new qcl_ui_dialog_Alert($msg);
   }
-  
+
   function method_testProgress()
   {
     die("***");

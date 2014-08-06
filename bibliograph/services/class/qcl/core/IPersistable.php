@@ -64,4 +64,3 @@ interface qcl_core_IPersistable
    */
   function __destruct();
 }
-?>

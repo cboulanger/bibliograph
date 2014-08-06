@@ -81,4 +81,3 @@ class qcl_config_UserConfigModel
     return qcl_getInstance( __CLASS__ );
   }
 }
-?>

@@ -275,4 +275,3 @@ class ArrayList
     return implode($glue,$this->arrayList);
   }
 }
-?>

@@ -104,4 +104,3 @@ class bibliograph_plugin_bibutils_import_Endnote
     return $import;
   }
 }
-?>

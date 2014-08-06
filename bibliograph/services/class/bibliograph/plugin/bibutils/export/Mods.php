@@ -93,4 +93,3 @@ class bibliograph_plugin_bibutils_export_Mods
     return $export;
   }
 }
-?>

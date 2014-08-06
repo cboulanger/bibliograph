@@ -22,4 +22,3 @@ qcl_import("qcl_event_type_Event");
  * A server event which will be forwarded to the client
  */
 class qcl_event_type_ClientEvent extends qcl_event_type_Event {}
-?>

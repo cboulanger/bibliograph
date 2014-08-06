@@ -226,4 +226,3 @@ class qcl_server_Service
     return $serviceIntrospection->method_methodHelp( $method );
   }
 }
-?>

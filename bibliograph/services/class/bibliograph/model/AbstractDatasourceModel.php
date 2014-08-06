@@ -72,4 +72,3 @@ abstract class bibliograph_model_AbstractDatasourceModel
    */
   public function setTransactionId(){}
 }
-?>

@@ -88,4 +88,3 @@ class qcl_util_registry_Persist
     return isset( $obj->registry[$key] );
   }
 }
-?>

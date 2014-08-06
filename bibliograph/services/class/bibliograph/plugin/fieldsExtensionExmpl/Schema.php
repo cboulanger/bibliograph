@@ -167,4 +167,3 @@ class bibliograph_plugin_fieldsExtensionExmpl_Schema
     ));
   }
 }
-?>

@@ -43,4 +43,3 @@ interface qcl_data_db_adapter_IRemoteHostAdapter
 }
 
 
-?>

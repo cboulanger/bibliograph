@@ -328,4 +328,3 @@ class_System::getInstance()->addCapability(
   array(),
   array("listMethods","methodSignature","methodHelp")
 );
-?>

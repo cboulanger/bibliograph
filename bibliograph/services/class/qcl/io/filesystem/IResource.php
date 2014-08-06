@@ -94,4 +94,3 @@ interface qcl_io_filesystem_IResource
   public function __toString();
 }
 
-?>

@@ -50,4 +50,4 @@ interface qcl_data_db_function_ISqlFunction {
      */
 	public function toSql($properties);
 }
-?>
+

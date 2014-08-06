@@ -60,4 +60,3 @@ class bibliograph_plugin_bibutils_import_Isi
     $this->importer = new qcl_util_system_Executable( BIBUTILS_PATH . "isi2xml");
   }
 }
-?>

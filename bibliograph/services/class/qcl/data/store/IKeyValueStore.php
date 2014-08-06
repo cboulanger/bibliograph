@@ -30,4 +30,3 @@ interface qcl_data_store_IKeyValueStore
   public function delete( $key );
   
 }
-?>

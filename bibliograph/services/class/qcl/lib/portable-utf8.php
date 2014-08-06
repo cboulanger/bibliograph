@@ -2049,4 +2049,3 @@
     {
         return utf8_strrpos( utf8_strtolower( $haystack ) , utf8_strtolower( $needle ) , $offset );
     }
-?>

@@ -87,4 +87,3 @@ class class_System
     return  $this->capabilities[$name];
   }
 }
-?>

@@ -54,4 +54,3 @@ class qcl_io_filesystem_local_TempFile
     $this->delete();
   }
 }
-?>

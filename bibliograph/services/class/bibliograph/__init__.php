@@ -32,4 +32,3 @@ const BIBLIOGRAPH_VALUE_SEPARATOR = "; "; // todo This cannot be a global value,
  */
 define( "BIBLIOGRAPH_LOG_APPLICATION", "bibliograph" );
 qcl_log_Logger::getInstance()->registerFilter( BIBLIOGRAPH_LOG_APPLICATION, "", false );
-?>

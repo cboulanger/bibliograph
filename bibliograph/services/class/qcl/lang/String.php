@@ -356,4 +356,3 @@ class String
       return empty($this->_value);
     }
 }
-?>

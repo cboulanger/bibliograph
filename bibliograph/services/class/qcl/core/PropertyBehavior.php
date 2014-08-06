@@ -390,4 +390,3 @@ class qcl_core_PropertyBehavior
     // do nothing
   }
 }
-?>

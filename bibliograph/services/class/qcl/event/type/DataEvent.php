@@ -57,4 +57,3 @@ class qcl_event_type_DataEvent
     $this->data = $data;
   }
 }
-?>

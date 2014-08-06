@@ -94,4 +94,3 @@ class qcl_core_PersistenceBehavior
     unset( $_SESSION[ self::KEY ] );
   }
 }
-?>

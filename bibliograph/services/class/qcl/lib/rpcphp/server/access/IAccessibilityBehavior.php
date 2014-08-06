@@ -24,4 +24,3 @@ interface IAccessibilityBehavior
 
   function getErrorNumber();
 }
-?>

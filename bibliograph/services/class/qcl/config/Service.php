@@ -146,4 +146,3 @@ class qcl_config_Service
   }
 
 }
-?>

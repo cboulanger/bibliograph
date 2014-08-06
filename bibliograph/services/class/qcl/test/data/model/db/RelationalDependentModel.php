@@ -366,4 +366,3 @@ class qcl_test_data_model_db_RelationalDependentModel
     $this->getLogger()->setFilterEnabled( QCL_LOG_MODEL_RELATIONS, false );
   }
 }
-?>

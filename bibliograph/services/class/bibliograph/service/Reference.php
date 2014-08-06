@@ -1672,4 +1672,3 @@ class bibliograph_service_Reference
     return $html;
   }
 }
-?>

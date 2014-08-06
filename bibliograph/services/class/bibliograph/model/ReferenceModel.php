@@ -448,4 +448,3 @@ class bibliograph_model_ReferenceModel
     return $scores;
 	}
 }
-?>

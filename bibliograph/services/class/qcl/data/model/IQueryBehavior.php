@@ -277,4 +277,3 @@ interface qcl_data_model_IQueryBehavior
    */
   public function reset();
 }
-?>

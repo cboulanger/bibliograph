@@ -220,4 +220,3 @@ class bibliograph_model_export_Bibtex
     return $xml;
   }
 }
-?>

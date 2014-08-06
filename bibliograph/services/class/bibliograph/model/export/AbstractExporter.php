@@ -110,4 +110,3 @@ abstract class bibliograph_model_export_AbstractExporter
   abstract function export( $data, $exclude=null );
 
 }
-?>

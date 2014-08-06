@@ -140,4 +140,3 @@ class bibliograph_model_import_RegistryModel
     }
   }
 }
-?>

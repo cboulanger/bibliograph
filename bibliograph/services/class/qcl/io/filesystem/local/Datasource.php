@@ -134,4 +134,3 @@ class qcl_io_filesystem_local_Datasource
     return array( "host", "port", "username", "password", "database", "prefix");
   }
 }
-?>

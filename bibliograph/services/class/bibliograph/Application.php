@@ -198,4 +198,3 @@ class bibliograph_Application
     return true;
   }
 }
-?>

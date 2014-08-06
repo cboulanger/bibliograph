@@ -249,4 +249,3 @@ class class_bibliograph_plugins_bookends_Test
   
 }
 
-?>

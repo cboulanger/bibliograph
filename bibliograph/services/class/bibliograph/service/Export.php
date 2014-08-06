@@ -215,4 +215,3 @@ class bibliograph_service_Export
     return $filename;
   }
 }
-?>

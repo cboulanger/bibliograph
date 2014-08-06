@@ -33,4 +33,3 @@ abstract class qcl_data_model_AbstractImporter
   abstract public function import( qcl_data_model_AbstractActiveRecord $model );
 
 }
-?>

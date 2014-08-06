@@ -36,4 +36,3 @@ abstract class qcl_data_model_AbstractExporter
   abstract public function export( qcl_data_model_AbstractActiveRecord $model );
 
 }
-?>

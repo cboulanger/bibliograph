@@ -119,4 +119,3 @@ interface qcl_data_model_ITreeNodeModel
   function createPath( $path, $separator="/" );
 
 }
-?>

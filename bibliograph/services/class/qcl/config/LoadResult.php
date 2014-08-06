@@ -43,4 +43,3 @@ class qcl_config_LoadResult
    public $types;
 
 }
-?>

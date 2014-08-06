@@ -292,4 +292,3 @@ class bibliograph_service_Import
     $this->info( "stderr: " . $xml2bib->getStdErr() );
   }
 }
-?>

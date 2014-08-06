@@ -234,4 +234,3 @@ class qcl_application_plugin_Service
     return $data;
   }
 }
-?>
