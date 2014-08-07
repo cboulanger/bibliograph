@@ -449,13 +449,12 @@ class bibliograph_service_Backup
 
   function method_testProgress()
   {
-    die("***");
-    qcl_import("qcl_ui_dialog_ScriptProgress");
-    $progress = new qcl_ui_dialog_ScriptProgress("testProgress");
+    qcl_import("qcl_ui_dialog_ServerProgress");
+    $progress = new qcl_ui_dialog_ServerProgress("testProgress");
     for ( $i=0; $i<101; $i++)
     {
       $progress->setProgress($i,"Message$i");
-      //usleep(pow(2,rand(10,15)));
+      usleep(pow(2,rand(12,18)));
     }
     $progress->complete();
   }

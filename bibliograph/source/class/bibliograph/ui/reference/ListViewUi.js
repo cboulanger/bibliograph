@@ -306,17 +306,12 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
        */
       var testButton = new qx.ui.menu.Button(this.tr('Test Progress Bar'));
       shareMenu.add(testButton);
-      var testProgress = new dialog.Progress();
-      testButton.setWidgetId("testProgress");
-      var testIframe = new qx.html.Iframe();
-      testIframe.hide();
-      app.getRoot().getContentElement().add(testIframe);
-      var sessMgr = app.getSessionManager();
-      var source  = app.getRpcManager().getServerUrl() +
-          "?service=bibliograph.backup&method=testProgress&params=&sessionId=";
+      var testProgress = new qcl.ui.dialog.ServerProgress("testProgress","bibliograph.backup","testProgress");
+      testProgress.set({
+        hideWhenCompleted : true
+      });
       testButton.addListener("execute", function(e) {
-        testIframe.setSource( source + sessMgr.getSessionId() );
-        testProgress.show();
+        testProgress.start();
       }, this);      
 
       /*
