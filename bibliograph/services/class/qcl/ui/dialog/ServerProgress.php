@@ -42,6 +42,7 @@ class qcl_ui_dialog_ServerProgress
     header("Transfer-encoding: chunked");
     flush();
     @apache_setenv('no-gzip', 1);
+    @ini_set('output_buffering', 0);
     @ini_set('zlib.output_compression', 0);
     @ini_set('implicit_flush', 1);
     flush();
@@ -52,6 +53,11 @@ class qcl_ui_dialog_ServerProgress
    */
   protected function send($chunk)
   {
+    // add padding to force Safari and IE to render
+    if( strlen($chunk) < 1024)
+    {
+      $chunk = str_repeat(" ", 1024 - strlen($chunk)) . "\r\n" . $chunk;
+    }
     echo sprintf("%x\r\n", strlen($chunk));
     echo $chunk;
     echo "\r\n";
@@ -66,14 +72,14 @@ class qcl_ui_dialog_ServerProgress
   public function setProgress($value, $message=null, $newLogText=null)
   {
     $nl = "\n";
-    $js = '<script type="text/javascript">' .
+    $js = '<script type="text/javascript">';
     //$js .= $nl . sprintf('console.log("%d, %s, %s");',$value, $message, $newLogText);
-    $js .= $nl . 'top.qx.core.Init.getApplication()';
+    $js .= $nl . 'window.top.qx.core.Init.getApplication()';
     $js .= $nl . sprintf( '.getWidgetById("%s").set({', $this->widgetId );
     $js .= $nl . sprintf( 'progress:%d',$value);            
     if( $message )    $js .= sprintf(',message:"%s"', $message);
     if( $newLogText)  $js .= sprintf(',newLogText:"%s"', $newLogText);
-    $js .= $nl . '});</script>';
+    $js .= $nl . '});</script>' . $nl;
     $this->send( $js );
   }
   

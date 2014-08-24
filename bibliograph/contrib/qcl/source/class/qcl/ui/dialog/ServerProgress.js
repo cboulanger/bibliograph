@@ -24,8 +24,9 @@
  * <pre>
  * <script type="text/javascript">
  *    top.qx.core.Init.getApplication()
- *     .getWidgetById("testProgress").set({
- *        progress:3,message:"Message3"
+ *     .getWidgetById("(widget id)").set({
+ *        progress:(progress in percent, integer),
+ *        message:"(optional message)"
  *      });
  *  </script>
  * </pre>
