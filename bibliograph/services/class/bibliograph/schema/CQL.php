@@ -19,6 +19,7 @@
 ************************************************************************ */
 
 require_once "bibliograph/lib/cql/cql2.php";
+require_once "bibliograph/schema/Tokenizer.php";
 
 qcl_import("bibliograph_schema_BibtexSchema");
 qcl_import("qcl_locale_Manager");
@@ -72,6 +73,15 @@ class bibliograph_schema_CQL
   }
 
   /**
+   * @overridden
+   * @param mixed $msg
+   */
+  public function log( $msg )
+  {
+    parent::log( $msg, BIBLIOGRAPH_LOG_SCHEMA);
+  }
+
+  /**
    * Returns the dictionary of words to be translated into english
    * booleans, modifiers or object properties
    * @param bibliograph_model_ReferenceModel $model
@@ -97,7 +107,7 @@ class bibliograph_schema_CQL
           $fields = $model->getSchemaModel()->getIndexFields( $index );
           // @todo we only use the first, but it should really search all of them
           $property = $fields[0];
-          $translated = $localeMgr->tr($index);
+          $translated = mb_strtolower( $localeMgr->tr($index), 'UTF-8');
           $dict[$translated]=$property;
           // add the root form of German gendered words ("Autor/in"=> "Autor")
           if( $pos = strpos( $translated, "/" ) )
@@ -111,7 +121,7 @@ class bibliograph_schema_CQL
         {
           // skip non-words
           if( strtolower($word) == strtoupper($word) ) continue;
-          $translated = $localeMgr->tr($word);
+          $translated = mb_strtolower( $localeMgr->tr($word), 'UTF-8' );
           $dict[$translated]=$word;
         }
 
@@ -155,34 +165,66 @@ class bibliograph_schema_CQL
     /*
      * Translate operators, booleans and indexes.
      */
-    $dict = $this->getDictionary($model);
-    //$this->debug($dict);
+    $tokenizer    = new bibliograph\schema\Tokenizer($cqlQuery);
+    $tokens       = $tokenizer->tokenize();
+    $dict         = $this->getDictionary($model);
+    $operators    = array_merge($this->booleans,$this->modifiers);
+    $hasOperator  = false;
+    $translTokens = array();
 
-    // regular expression to find thing that are not inside quotation marks
-    // see http://stackoverflow.com/questions/11324749/a-regex-to-detect-string-not-enclosed-in-double-quotes
-    $regExp = '@(?<![\S"])(\b%s\b)(?![\S"])@i';
-    $search = array_map( function( $word ) use ($regExp) {
-      return sprintf($regExp, $word );
-    }, array_keys( $dict ) );
-    $replace = array_values( $dict );
-    $cqlQuery = preg_replace($search, $replace, $cqlQuery);
-
-    /*
-     * Queries that don't contain any operators or booleans are converted into a
-     * query connected by "AND"
-     */
-    $found = false;
-    $operators = array_merge($this->booleans,$this->modifiers);
-    foreach( $operators as $find )
+    do
     {
-      if ( strstr( $cqlQuery, $find ) ) // @todo more efficient lookup
+      $token = array_shift( $tokens );
+
+      // do not translate quoted expressions
+      if ( $token[0] == '"' )
       {
-        $found=true; break;
+        $translTokens[] = $token;
+        continue;
       }
+
+      // translate from dictionary
+
+      // simple case: direct match
+      if ( isset($dict[$token]) )
+      {
+        $token = $dict[$token];
+      }
+
+      // try the combination with next token
+      elseif( count($tokens) > 0 )
+      {
+        $extToken = $token . " " . $tokens[0];
+        if ( isset($dict[$extToken]) )
+        {
+          $token = $dict[$extToken];
+          array_shift( $tokens );
+        }
+      }
+
+      // check if token is an operator
+      if( in_array( $token, $operators ) )
+      {
+        $hasOperator = true;
+      }
+
+      $translTokens[] = $token;
     }
-    if ( ! $found )
+    while( count( $tokens ) );
+
+    $this->log( "Translated tokens: " . implode(" ", $translTokens ) );
+
+    // Re-assemble translated query string
+    if ( $hasOperator )
     {
-      $cqlQuery = implode( " and ", explode(" ", trim( $cqlQuery ) ) );
+      $cqlQuery = implode( " ", $translTokens );
+    }
+
+    // Queries that don't contain any operators or booleans are converted into a
+    // query connected by "AND"
+    else
+    {
+      $cqlQuery = implode( " and ", $translTokens );
     }
 
     /*
@@ -192,8 +234,6 @@ class bibliograph_schema_CQL
     $parser->setBooleans( $this->booleans );
     $parser->setModifiers( $this->modifiers );
     $parser->setSortWords( array("sortby" ) );
-
-    //$this->debug( $cqlQuery );
 
     /*
      * parse CQL string
@@ -208,6 +248,8 @@ class bibliograph_schema_CQL
      * populate query object
      */
     $this->convertCqlObjectToQclQuery( $cqlObject, $qclQuery, $model );
+
+    $this->log( "'Where' structure: " . json_encode($qclQuery->where) );
 
     return $qclQuery;
   }
@@ -268,7 +310,7 @@ class bibliograph_schema_CQL
       }
 
       $relation = strtolower($cqlObject->relation->value);
-      $term     = $cqlObject->term->value;
+      $term     = str_replace('"',"", $cqlObject->term->value);
 
       switch( $relation )
       {
