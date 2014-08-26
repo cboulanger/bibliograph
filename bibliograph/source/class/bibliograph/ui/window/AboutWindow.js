@@ -85,7 +85,11 @@ qx.Class.define("bibliograph.ui.window.AboutWindow",
             "<li><a href=\"http://www.rewi.hu-berlin.de/\">Juristische Fakultät (Department of Law)</a>,<a href=\"http://www.hu-berlin.de/\">Humboldt-Universität zu Berlin</a>  </li></ul>"+
           "<p style='font-weight:bold'>Acknowledgements</p><ul>"+
               "<li>Documentation & Testing: Julika Rosenstock, Till Rathschlag, Anna Lütkefend</li>"+
-              "<li>Application icon: Siarhei Barysiuk</li></ul>");
+              "<li>Application icon: Siarhei Barysiuk</li>"+
+              "<li>Coded with <a href=\"http://www.jetbrains.com/webstorm/\" target=\"_blank\">WebStorm JavaScript IDE</a> and "+
+              "<a href=\"https://c9.io/\" target=\"_blank\">Cloud9 IDE</a></li>"+
+              "</ul>"
+       );
       qxPage2.add(qxLabel4);
     }
   }
