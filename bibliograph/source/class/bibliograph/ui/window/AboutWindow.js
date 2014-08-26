@@ -80,7 +80,7 @@ qx.Class.define("bibliograph.ui.window.AboutWindow",
             "<li><a href=\"http://www.qooxdoo.org\" target=\"_blank\">qooxdoo</a> JavaScript framework: (c)&nbsp;<a href=\"http://www.1und1.de\">1&1 Internet AG</a></li>"+
             "<li><a href=\"http://citationstyles.org/\" target=\"_blank\">CSL - The Citation Style Language</a>. (c)&nbsp;Bruce D'Arcus and others</li>"+
             "<li><a href=\"http://bytebucket.org/rjerome/citeproc-php\" target=\"_blank\">CiteProc-PHP</a>. (c)&nbsp;Ron Jerome</li>"+
-          "<li><a href=\"http://www.csc.liv.ac.uk/~azaroth/\" target=\"_blank\">CQL-PHP</a>. (c)&nbsp;Robert Sanderson</li></ul>"+
+          "<li><a href=\"https://github.com/simar0at/sru-cql-parser\" target=\"_blank\">SRU/QCL Parser</a>. (c)&nbsp;Robert Sanderson</li></ul>"+
           "<p style='font-weight:bold'>Partial funding was provided by</p><ul>"+
             "<li><a href=\"http://www.rewi.hu-berlin.de/\">Juristische Fakultät (Department of Law)</a>,<a href=\"http://www.hu-berlin.de/\">Humboldt-Universität zu Berlin</a>  </li></ul>"+
           "<p style='font-weight:bold'>Acknowledgements</p><ul>"+
