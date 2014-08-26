@@ -951,18 +951,11 @@ qx.Class.define("bibliograph.Main",
       var url = this.getRpcManager().getServerUrl() +
           "?sessionId=" + this.getSessionManager().getSessionId() +
           "&service=bibliograph.main&method=getOnlineHelpUrl&params=" + (topic||"home");
-      if (!this.__helpWindow)
-      {
-        this.__helpWindow = window.open(url);
-        if (!this.__helpWindow) {
-          dialog.Dialog.alert(this.tr("Cannot open help window. Please disable the popup-blocker of your browser for this website."));
-        }
+      this.__helpWindow = window.open(url,"bibliograph-help-window");
+      if (!this.__helpWindow) {
+        dialog.Dialog.alert(this.tr("Cannot open help window. Please disable the popup-blocker of your browser for this website."));
       }
-      else
-      {
-        this.__helpWindow.location = url;
-        this.__helpWindow.focus();
-      }
+      this.__helpWindow.focus();
     },
 
     /**
