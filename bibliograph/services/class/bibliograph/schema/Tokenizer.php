@@ -114,6 +114,7 @@ class Tokenizer
       // if we have a word outside a quotation, begin a new token
       if( $isWord and ! $isQuoted and strlen($token) > 0 )
       {
+        if( $char == "/" ) { $token .= $char; continue; }
         $tokens[] = $token;
         $token = "";
       }
