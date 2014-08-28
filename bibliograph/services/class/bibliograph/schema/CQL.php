@@ -174,7 +174,7 @@ class bibliograph_schema_CQL
 
     do
     {
-      $token = array_shift( $tokens );
+      $token = mb_strtolower( array_shift( $tokens ), "UTF-8" );
 
       // do not translate quoted expressions
       if ( $token[0] == '"' )
