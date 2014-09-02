@@ -1,0 +1,38 @@
+{
+  "info" :
+  {
+    "name" : "isbnscanner",
+    "category" : [],
+
+    "summary" : "isbnscanner Contribution",
+    "description" : "This is a skeleton for a qooxdoo contribution.",
+
+    "homepage" : "http://contrib.qooxdoo.org/project/isbnscanner",
+
+    "license" : "LGPL/EPL",
+    "authors" :
+    [
+      {
+        "name" : "Christian Boulanger (cboulanger)",
+        "email" : "info@bibliograph.org"
+      }
+    ],
+
+    "version" : "trunk",
+    "qooxdoo-versions": ["3.5.1"],
+
+    "download" : "",
+    "checksum" : ""
+  },
+
+  "provides" :
+  {
+    "namespace"   : "isbnscanner",
+    "encoding"    : "utf-8",
+    "class"       : "source/class",
+    "resource"    : "source/resource",
+    "translation" : "source/translation",
+    "type"        : "contribution"
+  }
+}
+
