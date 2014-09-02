@@ -5,6 +5,7 @@
 qooxdoo*
 build
 cache
+node_modules
 bibliograph-mobile/source/script/*
 bibliograph/source/script/*
 bibliograph/source/script/resource/plugin/*
