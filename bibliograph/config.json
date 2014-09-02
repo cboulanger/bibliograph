@@ -36,7 +36,6 @@
     "validate-config",
     "validate-manifest",
     "watch",
-    "deploy-plugins",
     "create-zip",
     "deploy"
   ],
@@ -66,38 +65,20 @@
       "library" :
       [
         // from contrib-catalog
-        {
-         "manifest" : "contrib/Dialog/1.2/Manifest.json"
-        },
-        {
-          "manifest" : "contrib/UploadWidget/trunk/Manifest.json"
-        },
-//        { //todo: contrib structure does not conform to generator expectations!
-//          "manifest" : "contrib/TokenField/0.5/TokenField/trunk/Manifest.json"
-//        },
+        { "manifest" : "contrib/Dialog/1.2/Manifest.json" },
+        { "manifest" : "contrib/UploadWidget/trunk/Manifest.json" },
 
         // local legacy contrib
-        {
-         "manifest" : "contrib/Persist/trunk/Manifest.json"
-        },
-        {
-         "manifest" : "contrib/VirtualData/trunk/Manifest.json"
-        },
-        {
-          "manifest" : "contrib/qcl/Manifest.json"
-        }
+        { "manifest" : "contrib/Persist/trunk/Manifest.json" },
+        { "manifest" : "contrib/VirtualData/trunk/Manifest.json" },
+        { "manifest" : "contrib/qcl/Manifest.json" }
+        
+        // plugins
+        { "manifest" : "plugins/csl/Manifest.json" },
+        { "manifest" : "plugins/z3950/Manifest.json" },
+        { "manifest" : "plugins/isbnscanner/Manifest.json" }
 
       ]
-    },
-
-    "deploy-plugins" :
-    {
-      "copy-files" :
-      {
-        "files"     : ["csl","z3950","isbnscanner"],
-        "source" : "source/class/bibliograph/plugin",
-        "target" : "build/resource/bibliograph/plugin"
-      }
     },
     
     // Creates a zip file with a standalone build that can be deployed to a server.
@@ -128,17 +109,7 @@
         { "uri" : "../build/resource/persist/persist-all-min.js" },
         // Keypress library: http://dmauro.github.io/Keypress/
         { "uri" : "../build/resource/keypress/keypress-2.0.2.min.js" }
-      ],
-
-      // copy plugin development files
-      // you need to run ./generate.py build at least once to use them in the
-      // source version
-      "copy-files" :
-      {
-        "files"     : ["csl","z3950","isbnscanner"],
-        "source" : "source/class/bibliograph/plugin",
-        "target" : "source/resource/bibliograph/plugin"
-      }
+      ]
     },
     
     // source generation only
@@ -164,4 +135,40 @@
       }
     }
   }
+  
+  "parts-config":
+  {
+    "packages" :
+    {
+      "parts"  :
+      {
+        "boot"     :
+        {
+          "include" : [ "${QXTHEME}", "bibliograph.Application" ]
+        },
+        "plugin.csl" :
+        {
+          "include" : [ "csl.*" ]
+        },
+        "plugin.z3950" :
+        {
+          "include" : [ "z3950.*" ]
+        },
+        "plugin.isbnscanner" :
+        {
+          "include" : [ "isbnscanner.*" ]
+        }
+      }
+    }
+  },
+  
+  "source" :
+  {
+    "extend" : [ "parts-config" ]
+  },
+  
+  "build" :
+  {
+    "extend" : [ "parts-config" ]
+  }  
 }

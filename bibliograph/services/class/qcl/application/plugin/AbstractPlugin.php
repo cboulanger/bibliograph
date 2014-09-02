@@ -49,9 +49,16 @@ abstract class qcl_application_plugin_AbstractPlugin
    * <pre>
    * array(
    *   'name'  => "Name of the plugin",
-   *   'url' => 'resource/yourapp/plugin/pluginname/Plugin.js'
+   *   'url' => 'resource/yourapp/plugin/pluginname/Plugin.js', // or
+   *   'part' => 'part-name' // provide either 'url' or 'part', not both
    * ),
    * </pre>
+   * 
+   * As stated in the comments, you can provide either the url from which
+   * to load the plugin code OR the name of the qooxdoo application part
+   * as defined in config.json. The "url" information takes precedence if
+   * you provide both. 
+   * 
    * As you can see from the url, it is suggested to put the plugin
    * code into a subfolder of the resource folder.
    *
@@ -91,6 +98,7 @@ abstract class qcl_application_plugin_AbstractPlugin
   /**
    * Getter for plugin data
    * @return array
+   * @todo add validation of the data
    */
   public function getData()
   {

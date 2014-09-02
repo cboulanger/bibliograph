@@ -17,8 +17,10 @@
   
 ************************************************************************ */
 
+/*global bibliograph qx qcl dialog*/
+
 /**
- * 
+ * Plugin Manager Class 
  */
 qx.Class.define("qcl.application.PluginManager",
 {
@@ -135,17 +137,35 @@ qx.Class.define("qcl.application.PluginManager",
             count++;
             self.fireDataEvent("loadingPlugin", {
               'name'  : data.name,
-              'url'   : data.url,
               'count' : count,
               'sum'   : sum
             });
-            var url = self.getPreventCache()
-                ? data.url + "?nocache=" + (new Date).getTime()
-                : data.url;
-            var loader = new qx.bom.request.Script();
-            loader.onload = loadScript;
-            loader.open("GET", url);
-            loader.send();
+            
+            if( data.url )
+            {
+              var url = self.getPreventCache()
+                  ? data.url + "?nocache=" + (new Date()).getTime()
+                  : data.url;
+              var loader = new qx.bom.request.Script();
+              loader.onload = loadScript;
+              loader.open("GET", url);
+              loader.send();
+            }
+            
+            else if ( data.part )
+            {
+              if( typeof data.part == "string" )
+              {
+                data.part = [data.part]
+              }
+              qx.io.PartLoader.require(data.part, loadScript);
+            }
+                
+            else
+            {
+              self.error("Plugin '" + data.name + "' has no url or part property.");
+            }
+
           })();
           
         },this

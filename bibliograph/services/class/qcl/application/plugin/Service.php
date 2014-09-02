@@ -32,9 +32,47 @@ class qcl_application_plugin_Service
    * Returns a new instance of the registry model
    * @return qcl_application_plugin_RegistryModel
    */
-  public function getRegistryModel()
+  protected function getRegistryModel()
   {
     return new qcl_application_plugin_RegistryModel();
+  }
+  
+  
+  /**
+   * Given a named id, return the class path of the plugin
+   * @param string $namedId
+   * @return string
+   */
+  public function getClassPath( $namedId )
+  {
+    return $this->getApplication()->pluginPath() . "$namedId/services/class";
+  }
+
+  /**
+   * Adds the given path to the PHP include_path
+   * @param string $path
+   * @return void
+   */
+  protected function addIncludePath( $path )
+  {
+    ini_set('include_path', implode( PATH_SEPARATOR, array( $path, ini_get("include_path") ) ) );
+  }
+  
+  /**
+   * Loads the plugin setup class, instantiates the class and returns the instance.
+   * Returns boolean false if the class file doesn't exist
+   * @param string $namedId The named id of the plugin
+   * @return qcl_application_plugin_AbstractPlugin|false
+   */
+  protected function getSetupInstance( $namedId )
+  {
+    $classpath = $this->getClassPath( $namedId );
+    $file = "$classpath/$namedId/Plugin.php";
+    if( ! file_exists( $file ) ) return false;
+    $this->addIncludePath( $classpath );
+    require_once ( $file );
+    $class  = "{$namedId}_Plugin";
+    return new $class();    
   }
 
   /**
@@ -56,45 +94,41 @@ class qcl_application_plugin_Service
     {
       if ( $namedId[0] == "." ) continue;
 
-      $file = "$plugin_path/$namedId/Plugin.php";
-      if ( qcl_file_exists( $file) )
+      // instantiate plugin setup class
+      $plugin = $this->getSetupInstance( $namedId );
+      if ( $plugin === false ) continue;
+
+      // if plugin is not meant to be visible, skip
+      if ( ! $plugin->isVisible() )
       {
-        require_once ( $file );
-        $class  = "{$namedId}_Plugin";
-        $plugin = new $class();
+        continue;
+      }
 
-        // if plugin is not meant to be visible, skip
-        if ( ! $plugin->isVisible() )
-        {
-          continue;
-        }
+      $name = $plugin->getName();
 
-        $name   = $plugin->getName();
-
-        if ( ! $registryModel->namedIdExists( $namedId ) )
-        {
-          $options = array(
-            array( 'label'  => $this->tr("Plugin is not installed"), 'value' => "" ),
-            array( 'label'  => $this->tr("Install plugin"), 'value' => "install" )
-          );
-        }
-        else
-        {
-          $options = array(
-            array( 'label'  => $this->tr("Plugin is installed"), 'value' => "" ),
-            array( 'label'  => $this->tr("Uninstall plugin"), 'value' => "uninstall" ),
-            array( 'label'  => $this->tr("Reinstall plugin"), 'value' => "reinstall" )
-          );
-        }
-
-        $formData[$namedId] = array(
-          'type'    => "selectbox",
-          'width'   => 300,
-          'options' => $options,
-          'label'   => $name,
-          'value'   => $namedId
+      if ( ! $registryModel->namedIdExists( $namedId ) )
+      {
+        $options = array(
+          array( 'label'  => $this->tr("Plugin is not installed"), 'value' => "" ),
+          array( 'label'  => $this->tr("Install plugin"), 'value' => "install" )
         );
       }
+      else
+      {
+        $options = array(
+          array( 'label'  => $this->tr("Plugin is installed"), 'value' => "" ),
+          array( 'label'  => $this->tr("Uninstall plugin"), 'value' => "uninstall" ),
+          array( 'label'  => $this->tr("Reinstall plugin"), 'value' => "reinstall" )
+        );
+      }
+
+      $formData[$namedId] = array(
+        'type'    => "selectbox",
+        'width'   => 300,
+        'options' => $options,
+        'label'   => $name,
+        'value'   => $namedId
+      );
     }
 
     qcl_import("qcl_ui_dialog_Form");
@@ -105,6 +139,9 @@ class qcl_application_plugin_Service
     );
   }
 
+  /**
+   * Service method to handle the user action in the plugin dialog
+   */
   public function method_handlePluginForm( $data )
   {
     if ( $data === null )
@@ -117,12 +154,9 @@ class qcl_application_plugin_Service
 
     foreach( $data as $namedId => $action )
     {
-      $plugin_path = $this->getApplication()->pluginPath();
-      $file = "$plugin_path/$namedId/Plugin.php";
-      require_once ( $file );
-
-      $class  = $namedId ."_Plugin";
-      $plugin = new $class();
+      // instantiale plugin setup class
+      $plugin = $this->getSetupInstance( $namedId );
+      
       $msg = "";
       $installMsg = "";
 
@@ -232,5 +266,39 @@ class qcl_application_plugin_Service
       $data = array_merge( $data, $registryModel->get("data") );
     }
     return $data;
+  }
+  
+  /**
+   * Register services provided by plugins
+   */
+  public function registerPluginServices()
+  {
+    //return;
+    $app = $this->getApplication();
+    $registryModel = $this->getRegistryModel();
+    
+    $registryModel->findWhere( array( 'active' => true ) );
+    while( $registryModel->loadNext() )
+    {
+      $namedId = $registryModel->namedId();
+      $classpath = $this->getClassPath( $namedId );
+      
+      // if exists, add classpath for this plugin so that the service classes can be found
+      if ( is_dir( $classpath ) )
+      {
+        // add to include_path
+        $this->addIncludePath( $classpath );
+        
+        // add to service paths
+        $app->getServerInstance()->servicePaths[] = $classpath; // todo: there should be an API for this  
+        
+        // add routes
+        $routefile = "$classpath/$namedId/routes.php";
+        if ( file_exists( $routefile ) )
+        {
+          $app->registerServices( include( $routefile ) );
+        }
+      }
+    }
   }
 }

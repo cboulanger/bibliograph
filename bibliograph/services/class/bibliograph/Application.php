@@ -22,6 +22,7 @@ qcl_import("qcl_application_Application");
 qcl_import("qcl_locale_Manager");
 qcl_import("bibliograph_Cache");
 qcl_import("qcl_util_system_Lock");
+qcl_import("qcl_application_plugin_Service");
 
 /**
  * Main application class
@@ -156,14 +157,14 @@ class bibliograph_Application
     qcl_locale_Manager::getInstance();
 
     /**
-     * Register the services provided by this application
+     * Register services provided by this application
      */
     $this->registerServices( include( dirname(__FILE__) . "/routes.php" ) );
-
+    
     /**
-     * Plugins
+     * Register services provided by plugins
      */
-    $this->pluginPath = dirname(__FILE__) . "/plugin/";
+    qcl_application_plugin_Service::getInstance()->registerPluginServices();
 
   }
 

@@ -30,8 +30,7 @@ require "config/server.conf.php";
 require_once "qcl/server/Server.php";
 
 /*
- * Start server with paths to the service classes, i.e.
- * qcl and application classes
+ * Start server with paths to the service classes
  */
 qcl_server_Server::run( array(
   QCL_CLASS_PATH,

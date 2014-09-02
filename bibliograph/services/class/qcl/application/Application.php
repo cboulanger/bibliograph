@@ -186,7 +186,8 @@ abstract class qcl_application_Application
   }
 
   /**
-   * Returns the path to the folder containing the plugins
+   * Returns the path to the folder containing the plugins. Defaults to 
+   * a "plugins" subfolder of the top folder.
    * @throws qcl_application_plugin_Exception
    * @return string
    */
@@ -194,7 +195,7 @@ abstract class qcl_application_Application
   {
     if ( ! $this->pluginPath )
     {
-      throw new qcl_application_plugin_Exception("No plugin path defined");
+      $this->pluginPath = dirname(SERVER_ROOT) . "/plugins/";
     }
     return $this->pluginPath;
   }
