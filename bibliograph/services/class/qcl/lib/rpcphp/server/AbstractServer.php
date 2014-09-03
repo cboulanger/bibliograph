@@ -237,12 +237,19 @@ class AbstractServer
    * @var AccessibilityBehavior
    */
   private $accessibilityBehavior;
+  
+  /**
+   * timestamp recording the time the server was initiatized
+   * @var int
+   */
+  private $startTime;
 
   /**
    * Constructor
    */
   function __construct()
   {
+
     if ( get_class( $this ) == __CLASS__ )
     {
       trigger_error("You must subclass AbstractServer in order to use it.");
@@ -260,6 +267,8 @@ class AbstractServer
      * Hook for subclasses to do initialization stuff.
      */
     $this->initializeServer();
+    
+    
   }
 
   /**
@@ -458,6 +467,9 @@ class AbstractServer
    */
   public function start()
   {
+    
+    // create timestamp
+    $this->startTime = microtime(true);
 
     /**
      * error behavior
@@ -937,6 +949,10 @@ class AbstractServer
    */
   public function log( $msg )
   {
+    $msg = date( "H:i:s" ) . 
+      " [" . $this->getService() . "." . $this->getMethod() .
+      " @ " . round( microtime(true) - $this->startTime, 1 )  . "]" .
+      ": " . $msg;
     if ( ( file_exists( JsonRpcDebugFile )
          && is_writable( JsonRpcDebugFile ) )
          || is_writable( dirname( JsonRpcDebugFile ) ) )
@@ -957,7 +973,7 @@ class AbstractServer
    */
   public function logError( $msg, $includeBacktrace = false )
   {
-    $this->log("$msg");
+    $this->log($msg);
   }
 
   /**

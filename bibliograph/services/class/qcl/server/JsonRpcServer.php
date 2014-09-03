@@ -223,6 +223,7 @@ class qcl_server_JsonRpcServer
     {
       $sessionId = $serverData->sessionId;
       session_id( $sessionId );
+      $this->debug( "Starting session '$sessionId' from server_data.");
     }
     else
     {
