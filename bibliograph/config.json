@@ -71,7 +71,7 @@
         // local legacy contrib
         { "manifest" : "contrib/Persist/trunk/Manifest.json" },
         { "manifest" : "contrib/VirtualData/trunk/Manifest.json" },
-        { "manifest" : "contrib/qcl/Manifest.json" }
+        { "manifest" : "contrib/qcl/Manifest.json" },
         
         // plugins
         { "manifest" : "plugins/csl/Manifest.json" },
@@ -79,6 +79,20 @@
         { "manifest" : "plugins/isbnscanner/Manifest.json" }
 
       ]
+    },
+    
+    "parts-config":
+    {
+      "packages" :
+      {
+        "parts"  :
+        {
+          "boot": { "include" : [ "${QXTHEME}", "bibliograph.Application" ] },
+          "plugin.csl"          : { "include" : [ "csl.*" ] },
+          "plugin.z3950"        : { "include" : [ "z3950.*" ] },
+          "plugin.isbnscanner"  : { "include" : [ "isbnscanner.*" ] }
+        }
+      }
     },
     
     // Creates a zip file with a standalone build that can be deployed to a server.
@@ -102,7 +116,7 @@
     // jobs for source & build version
     "common":
     {
-      // load third-party scripts before loading qooxdoo
+      // load third-party scripts before loading qooxdoo, run build at least once before source
       "add-script" :
       [
         // Persist.js library: http://pablotron.org/software/persist-js/
@@ -112,7 +126,11 @@
       ]
     },
     
-    // source generation only
+    "source" :
+    {
+      "extend" : [ "parts-config" ]
+    },       
+    
     "source-script":
     {
       // download contrib code to location that is accessible to web server in source version
@@ -122,53 +140,14 @@
       }
     },
     
-    // build generation only
     "build" :
     {
-      // don't optimize privates
+      "extend" : [ "parts-config" ],
       "compile-options" :
-      { 
-        "code" :
-        {
-          "=optimize" : ["variables", "basecalls", "strings"]
-        }
+      {
+        // don't optimize privates, neccessary because we need to call internal function
+        "code" : { "=optimize" : ["variables", "basecalls", "strings"] }
       }
     }
   }
-  
-  "parts-config":
-  {
-    "packages" :
-    {
-      "parts"  :
-      {
-        "boot"     :
-        {
-          "include" : [ "${QXTHEME}", "bibliograph.Application" ]
-        },
-        "plugin.csl" :
-        {
-          "include" : [ "csl.*" ]
-        },
-        "plugin.z3950" :
-        {
-          "include" : [ "z3950.*" ]
-        },
-        "plugin.isbnscanner" :
-        {
-          "include" : [ "isbnscanner.*" ]
-        }
-      }
-    }
-  },
-  
-  "source" :
-  {
-    "extend" : [ "parts-config" ]
-  },
-  
-  "build" :
-  {
-    "extend" : [ "parts-config" ]
-  }  
 }
