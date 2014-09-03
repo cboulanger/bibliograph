@@ -55,7 +55,7 @@ class qcl_application_plugin_Service
    */
   protected function addIncludePath( $path )
   {
-    ini_set('include_path', implode( PATH_SEPARATOR, array( $path, ini_get("include_path") ) ) );
+    ini_set('include_path', implode( PATH_SEPARATOR, array( ini_get("include_path"), $path ) ) );
   }
   
   /**
@@ -273,7 +273,6 @@ class qcl_application_plugin_Service
    */
   public function registerPluginServices()
   {
-    //return;
     $app = $this->getApplication();
     $registryModel = $this->getRegistryModel();
     

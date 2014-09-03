@@ -158,6 +158,7 @@ qx.Class.define("qcl.application.PluginManager",
               {
                 data.part = [data.part]
               }
+              this.info("Loading plugin " + data.part );
               qx.io.PartLoader.require(data.part, loadScript);
             }
                 
