@@ -14,11 +14,12 @@
      * Christian Boulanger (cboulanger)
 
 ************************************************************************ */
+/*global qx qcl bibliograph*/
 
 /**
  * Base class for Table widgets
- * @require(qx.ui.table.cellrenderer)
- * @require(qx.ui.table.celleditor)
+ * @use(qx.ui.table.cellrenderer.*)
+ * @use(qx.ui.table.celleditor.*)
  */
 qx.Class.define("bibliograph.ui.reference.ListView",
 {

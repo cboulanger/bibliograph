@@ -88,9 +88,9 @@
         "parts"  :
         {
           "boot": { "include" : [ "${QXTHEME}", "bibliograph.Application" ] },
-          "plugin.csl"          : { "include" : [ "csl.*" ] },
-          "plugin.z3950"        : { "include" : [ "z3950.*" ] },
-          "plugin.isbnscanner"  : { "include" : [ "isbnscanner.*" ] }
+          "csl"          : { "include" : [ "csl.Plugin" ] },
+          "z3950"        : { "include" : [ "z3950.Plugin" ] },
+          "isbnscanner"  : { "include" : [ "isbnscanner.Plugin" ] }
         }
       }
     },

@@ -23,7 +23,8 @@
  *    This plugin allows to display the currently selected reference(s)
  *    formatted according to a citation style, based on the CSL formatting
  *    language and a compatible citation processor.
- *
+ * 
+ * @require(csl.*)
  */
 qx.Class.define("csl.Plugin",
 {
@@ -58,7 +59,3 @@ qx.Class.define("csl.Plugin",
   }
 });
 
-/*
- * initialize plugin
- */
-csl.Plugin.getInstance().init();

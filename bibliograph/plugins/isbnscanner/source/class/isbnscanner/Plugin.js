@@ -19,7 +19,7 @@
 
 /**
  * ISBN scanner plugin
- *
+ * @use(isbnscanner.*)
  */
 qx.Class.define("isbnscanner.Plugin",
 {
@@ -167,8 +167,3 @@ qx.Class.define("isbnscanner.Plugin",
     }
   }
 });
-
-/*
- * initialize plugin
- */
-isbnscanner.Plugin.getInstance().init();

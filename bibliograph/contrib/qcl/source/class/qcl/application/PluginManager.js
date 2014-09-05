@@ -150,23 +150,32 @@ qx.Class.define("qcl.application.PluginManager",
               loader.onload = loadScript;
               loader.open("GET", url);
               loader.send();
+              return;
             }
             
             else if ( data.part )
             {
-              if( typeof data.part == "string" )
+              if( ! qx.lang.Type.isString(data.namespace) )
               {
-                data.part = [data.part]
+                self.warn("Plugin '" + data.name + "' has no namespace property. Not installed.");
+                loadScript();
               }
-              this.info("Loading plugin " + data.part );
-              qx.io.PartLoader.require(data.part, loadScript);
-            }
-                
-            else
-            {
-              self.error("Plugin '" + data.name + "' has no url or part property.");
-            }
 
+              qx.io.PartLoader.require(data.part, function(){
+                try
+                {
+                  window[data.namespace].Plugin.getInstance().init();
+                }
+                catch(e)
+                {
+                  self.warn("Plugin '" + data.name + "': Error initializing: " + e);
+                }
+                loadScript();
+              });  
+              return;
+            }
+            self.warn("Plugin '" + data.name + "' has no valid url or part property. Not installed.");
+            loadScript();
           })();
           
         },this

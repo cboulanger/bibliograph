@@ -47,8 +47,9 @@ class z3950_plugin
    */
   protected $data = array(
      array(
-      'name'  => "Z39.50 Plugin",
-      'part'  => 'plugin.z3950'
+      'name'      => "Z39.50 Plugin",
+      'part'      => 'plugin.z3950',
+      'namespace' => 'z3950'
     )
   );
 

@@ -46,8 +46,9 @@ class isbnscanner_plugin
    */
   protected $data = array(
     array(
-      'name'  => "ISBN Scanner Plugin",
-      'part'  => 'plugin.isbnscanner'
+      'name'      => "ISBN Scanner Plugin",
+      'part'      => 'plugin.isbnscanner', 
+      'namespace' => 'isbnscanner'
     )
   );
 
