@@ -65,8 +65,8 @@
       "library" :
       [
         // from contrib-catalog
-        { "manifest" : "contrib/Dialog/1.2/Manifest.json" },
-        { "manifest" : "contrib/UploadWidget/trunk/Manifest.json" },
+        { "manifest" : "contrib://Dialog/1.2/Manifest.json" },
+        { "manifest" : "contrib://UploadWidget/trunk/Manifest.json" },
 
         // local legacy contrib
         { "manifest" : "contrib/Persist/trunk/Manifest.json" },
@@ -88,9 +88,9 @@
         "parts"  :
         {
           "boot": { "include" : [ "${QXTHEME}", "bibliograph.Application" ] },
-          "csl"          : { "include" : [ "csl.Plugin" ] },
-          "z3950"        : { "include" : [ "z3950.Plugin" ] },
-          "isbnscanner"  : { "include" : [ "isbnscanner.Plugin" ] }
+          "plugin.csl"          : { "include" : [ "csl.Plugin" ] },
+          "plugin.z3950"        : { "include" : [ "z3950.Plugin" ] },
+          "plugin.isbnscanner"  : { "include" : [ "isbnscanner.Plugin" ] }
         }
       }
     },
