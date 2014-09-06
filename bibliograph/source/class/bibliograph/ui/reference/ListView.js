@@ -857,7 +857,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
 
     /**
      * Shows a status message
-    * @param msg
+    * @param msg {String}
      */
     showMessage : function(msg)
     {

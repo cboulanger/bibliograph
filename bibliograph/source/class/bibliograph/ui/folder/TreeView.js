@@ -176,7 +176,7 @@ qx.Class.define("bibliograph.ui.folder.TreeView",
 
     /**
      * Shows a status message
-     * @param msg
+     * @param msg {String}
      */
     showMessage : function(msg)
     {
@@ -185,7 +185,7 @@ qx.Class.define("bibliograph.ui.folder.TreeView",
 
     /**
      * Shows a popup message
-     * @param msg
+     * @param msg {String}
      */
     showPopup : function(msg){
       this.getApplication().showPopup(msg);

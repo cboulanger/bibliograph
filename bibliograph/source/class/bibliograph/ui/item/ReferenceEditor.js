@@ -289,8 +289,6 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
 
     /**
      * Shows the stack view page with the given name
-     * @param {String} value
-     * @param {String} old
      * @private
      */
     _applyPage : function(value, old)
@@ -750,9 +748,9 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
 
     /**
      * Adds a stack view page by name
-     * @param {String} name
-     * @param {qx.ui.layout.VBox} page
-     * @param {qx.ui.menubar.Button} button
+     * @param name {String}
+     * @param page {qx.ui.layout.VBox}
+     * @param button {qx.ui.menubar.Button}
      * @private
      */
     _addStackViewPage : function(name,page,button)
@@ -763,7 +761,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
 
     /**
      * Returns the stack view page by name
-     * @param {String} name
+     * @param name {String}
      * @returns {qx.ui.layout.VBox}
      * @private
      */
@@ -774,7 +772,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
 
     /**
      * Returns the menu button corresponding to a stack view page by name
-     * @param {String} name
+     * @param name {String}
      * @returns {qx.ui.menubar.Button}
      * @private
      */
@@ -785,7 +783,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
 
     /**
      * Shows the given stack view page by name and highlights the corresponding button
-     * @param {String} name
+     * @param name {String}
      * @private
      */
     _showStackViewPage : function(name)
@@ -813,8 +811,8 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
 
     /**
      * Sets up the TextArea widgets outside the server-generated form
-     * @param {qx.ui.form.TextArea} textarea
-     * @param {String} fieldname
+     * @param textarea {qx.ui.form.TextArea}
+     * @param fieldname {String}
      * @private
      */
     _setupTextArea : function( textarea, fieldname )
@@ -890,9 +888,9 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
 
     /**
      * Sets up autocomplete for a standalone TextField widget
-     * @param {qx.ui.form.TextField} widget
-     * @param {String} fieldname
-     * @param {String} separator
+     * @param widget {qx.ui.form.TextField}
+     * @param fieldname {String}
+     * @param separator {String}
      * @private
      */
     _setupAutocomplete : function(widget, fieldname, separator)
@@ -932,7 +930,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
 
     /**
      * Shows a status message
-     * @param msg
+     * @param msg {String}
      */
     showMessage : function(msg)
     {

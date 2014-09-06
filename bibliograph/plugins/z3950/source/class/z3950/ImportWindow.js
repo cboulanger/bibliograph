@@ -152,8 +152,8 @@ qx.Class.define("z3950.ImportWindow",
     /**
      * from https://github.com/ikr/normalize-for-search/blob/master/src/normalize.js
      * MIT licence
-     * @param s
-     * @returns {string}
+     * @param s {string}
+     * @return {string}
      */
     normalizeForSearch : function (s) {
 
