@@ -18,8 +18,8 @@
 
 /**
  * Base class for Table widgets
- * @use(qx.ui.table.cellrenderer.*)
- * @use(qx.ui.table.celleditor.*)
+ * @require(qx.ui.table.cellrenderer.String)
+ * @require(qx.ui.table.celleditor.TextField)
  */
 qx.Class.define("bibliograph.ui.reference.ListView",
 {
