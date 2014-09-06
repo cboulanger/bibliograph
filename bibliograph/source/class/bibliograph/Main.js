@@ -17,7 +17,8 @@
 /*global bibliograph qx qcl dialog*/
 
 /**
- * The main application class
+ * The main application class.
+ * 
  * @asset(bibliograph/*)
  * @asset(keypress/*)
  * @require(bibliograph.theme.Assets);
@@ -25,6 +26,7 @@
  * @require(dialog.Progress)
  * @require(qx.ui.form.RadioGroup)
  * @require(qx.ui.menu.RadioButton)
+ * 
  */
 qx.Class.define("bibliograph.Main",
 {
@@ -225,6 +227,7 @@ qx.Class.define("bibliograph.Main",
      */
     main : function()
     {
+ 
       /*
        * logging
        */

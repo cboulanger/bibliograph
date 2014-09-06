@@ -212,7 +212,7 @@ qx.Class.define("csl.FormattedView",
       this.getApplication().getRpcManager().execute("csl.Service", "getStyleData", [], function(styleData)
       {
         if (!qx.lang.Type.isArray(styleData)) {
-          dialog.Dialog.alert("Invalid style data.");
+         // dialog.Dialog.alert("Invalid style data.");
         }
         styleData.forEach(function(style)
         {

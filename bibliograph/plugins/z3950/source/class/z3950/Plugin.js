@@ -21,7 +21,6 @@
  * Z39.50 Plugin:
  *    This plugin allows to import references from Z39.50 datasources
  * 
- * @use(z3950.*)
  */
 qx.Class.define("z3950.Plugin",
 {

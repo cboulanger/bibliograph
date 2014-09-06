@@ -161,17 +161,7 @@ qx.Class.define("qcl.application.PluginManager",
                 loadScript();
               }
 
-              qx.io.PartLoader.require(data.part, function(){
-                try
-                {
-                  window[data.namespace].Plugin.getInstance().init();
-                }
-                catch(e)
-                {
-                  self.warn("Plugin '" + data.name + "': Error initializing: " + e);
-                }
-                loadScript();
-              });  
+              this._loadPart(data, loadScript);
               return;
             }
             self.warn("Plugin '" + data.name + "' has no valid url or part property. Not installed.");
@@ -180,6 +170,33 @@ qx.Class.define("qcl.application.PluginManager",
           
         },this
       );
+    },
+    
+    /**
+     * Load the plugin as a qooxdoo part
+     * @param data {Object} plugin data
+     * @param next {Function} callback
+     */
+    _loadPart : function( data, next )
+    {
+      qx.io.PartLoader.require(data.part, function() {
+        // classes must be included here literally otherwise generator doesn't pick up the
+        // dependency. todo: file bug
+        var plugins= {
+          "plugin_csl"          : csl.Plugin,
+          "plugin_z3950"        : z3950.Plugin,
+          "plugin_isbnscanner"  : isbnscanner.Plugin
+        };
+        try
+        {
+          plugins[data.part].getInstance().init();
+        }
+        catch(e)
+        {
+          self.warn("Plugin '" + data.name + "': Error initializing: " + e);
+        }
+        next();
+      });
     }
   }
 });

@@ -19,7 +19,6 @@
 
 /**
  * ISBN scanner plugin
- * @use(isbnscanner.*)
  */
 qx.Class.define("isbnscanner.Plugin",
 {

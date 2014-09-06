@@ -24,7 +24,6 @@
  *    formatted according to a citation style, based on the CSL formatting
  *    language and a compatible citation processor.
  * 
- * @require(csl.*)
  */
 qx.Class.define("csl.Plugin",
 {

@@ -46,7 +46,7 @@
   {
 
     "APPLICATION"    : "bibliograph", 
-    "QOOXDOO_PATH"   : "../qooxdoo-3.5.1-sdk",
+    "QOOXDOO_PATH"   : "../qooxdoo",
     "QXTHEME"        : "bibliograph.theme.Theme",
     "LOCALES"        : [ "en","de" ],
     "ROOT"           : ".",
@@ -65,7 +65,7 @@
       "library" :
       [
         // from contrib-catalog
-        { "manifest" : "contrib://Dialog/1.2/Manifest.json" },
+        { "manifest" : "contrib/Dialog/1.2/Manifest.json" },
         { "manifest" : "contrib://UploadWidget/trunk/Manifest.json" },
 
         // local legacy contrib
@@ -88,9 +88,9 @@
         "parts"  :
         {
           "boot": { "include" : [ "${QXTHEME}", "bibliograph.Application" ] },
-          "plugin.csl"          : { "include" : [ "csl.Plugin" ] },
-          "plugin.z3950"        : { "include" : [ "z3950.Plugin" ] },
-          "plugin.isbnscanner"  : { "include" : [ "isbnscanner.Plugin" ] }
+          "plugin_csl"          : { "include" : [ "csl.Plugin" ] },
+          "plugin_z3950"        : { "include" : [ "z3950.Plugin" ] },
+          "plugin_isbnscanner"  : { "include" : [ "isbnscanner.Plugin" ] }
         }
       }
     },
@@ -116,6 +116,9 @@
     // jobs for source & build version
     "common":
     {
+      // configure part loading 
+      "extend" : [ "parts-config" ],
+      
       // load third-party scripts before loading qooxdoo, run build at least once before source
       "add-script" :
       [
@@ -125,19 +128,11 @@
         { "uri" : "../build/resource/keypress/keypress-2.0.2.min.js" }
       ]
     },
-    
-    "source" :
-    {
-      "extend" : [ "parts-config" ]
-    },       
-    
+
     "source-script":
     {
       // download contrib code to location that is accessible to web server in source version
-      "cache" :
-      {
-        "downloads" : "contrib"
-      }
+      "cache" : { "downloads" : "contrib" }
     },
     
     "build" :

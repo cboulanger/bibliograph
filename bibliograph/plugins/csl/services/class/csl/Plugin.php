@@ -51,7 +51,7 @@ class csl_Plugin
   protected $data = array(
      array(
       'name'      => "CSL Plugin",
-      'part'      => 'plugin.csl', 
+      'part'      => 'plugin_csl', 
       'namespace' => 'csl'
     )
   );
