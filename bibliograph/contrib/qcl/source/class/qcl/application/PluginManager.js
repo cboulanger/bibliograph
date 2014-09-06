@@ -25,7 +25,7 @@
 qx.Class.define("qcl.application.PluginManager",
 {
   extend : qx.core.Object,
-  
+
   /*
   *****************************************************************************
      PROPERTIES
@@ -107,6 +107,7 @@ qx.Class.define("qcl.application.PluginManager",
            * @todo: why not load them in parallel? what if plugins
            * are dependent on each other?
            */
+          var self = this;
           (function loadScript(){
             
             /*
@@ -161,7 +162,7 @@ qx.Class.define("qcl.application.PluginManager",
                 loadScript();
               }
 
-              this._loadPart(data, loadScript);
+              self._loadPart(data, loadScript);
               return;
             }
             self.warn("Plugin '" + data.name + "' has no valid url or part property. Not installed.");
@@ -177,26 +178,26 @@ qx.Class.define("qcl.application.PluginManager",
      * @param data {Object} plugin data
      * @param next {Function} callback
      */
-    _loadPart : function( data, next )
+    _loadPart : function( data, next, self )
     {
-      qx.io.PartLoader.require(data.part, function() {
-        // classes must be included here literally otherwise generator doesn't pick up the
-        // dependency. todo: file bug
-        var plugins= {
-          "plugin_csl"          : csl.Plugin,
-          "plugin_z3950"        : z3950.Plugin,
-          "plugin_isbnscanner"  : isbnscanner.Plugin
-        };
-        try
-        {
-          plugins[data.part].getInstance().init();
-        }
-        catch(e)
-        {
-          self.warn("Plugin '" + data.name + "': Error initializing: " + e);
-        }
-        next();
-      });
+      this.error("You must extend qcl.application.PluginManager and provide your own _loadPart method containing your parts and plugin classes.");
+//      var self = this;
+//      qx.io.PartLoader.require(data.part, function() {
+//        var plugins= {
+//          // "part-name-1" : plugin1.Plugin,
+//          // "part-name-2" : plugin2.Plugin,
+//          // ....
+//        };
+//        try
+//        {
+//          plugins[data.part].getInstance().init();
+//        }
+//        catch(e)
+//        {
+//          self.warn("Plugin '" + data.name + "': Error initializing: " + e);
+//        }
+//        next();
+//      });
     }
   }
 });

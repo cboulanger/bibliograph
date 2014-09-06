@@ -26,7 +26,7 @@
  * @require(dialog.Progress)
  * @require(qx.ui.form.RadioGroup)
  * @require(qx.ui.menu.RadioButton)
- * 
+ *
  */
 qx.Class.define("bibliograph.Main",
 {
@@ -270,6 +270,7 @@ qx.Class.define("bibliograph.Main",
        * initialize the managers
        */
       this.initializeManagers();
+      this.setPluginManager( new bibliograph.PluginManager() );
 
       /*
        * rpc endpoint and timeout

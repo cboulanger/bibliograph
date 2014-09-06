@@ -139,7 +139,7 @@ qx.Mixin.define("qcl.application.MAppManagerProvider",
       nullable : false,
       event    : "changeClipboardManager"
     },
-    
+
     /**
      * The manager for loading the client-side code of the
      * plugins of the application
@@ -149,8 +149,8 @@ qx.Mixin.define("qcl.application.MAppManagerProvider",
       check    : "qx.core.Object", // @todo: create interface
       nullable : false,
       event    : "changePluginManager"
-    },    
-    
+    },
+
     /**
      * The manager for native child windows
      */
@@ -245,7 +245,6 @@ qx.Mixin.define("qcl.application.MAppManagerProvider",
       this.setRpcManager( new qcl.io.RpcManager() );
       this.setAccessManager( new qcl.access.AccessManager() );
       this.setConfigManager( new qcl.application.ConfigManager() );
-      this.setPluginManager( new qcl.application.PluginManager() );
       // this.setClipboardManager ( new qcl.application.ClipboardManager() );
    
       /*
