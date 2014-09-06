@@ -195,7 +195,7 @@ abstract class qcl_application_Application
   {
     if ( ! $this->pluginPath )
     {
-      $this->pluginPath = dirname(SERVER_ROOT) . "/plugins/";
+      $this->pluginPath = dirname(SERVER_ROOT) . "/plugins";
     }
     return $this->pluginPath;
   }

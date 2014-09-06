@@ -45,7 +45,7 @@ class qcl_application_plugin_Service
    */
   public function getClassPath( $namedId )
   {
-    return $this->getApplication()->pluginPath() . "$namedId/services/class";
+    return $this->getApplication()->pluginPath() . "/$namedId/services/class";
   }
 
   /**
