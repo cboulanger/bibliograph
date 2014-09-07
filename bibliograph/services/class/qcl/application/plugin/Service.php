@@ -48,16 +48,7 @@ class qcl_application_plugin_Service
     return $this->getApplication()->pluginPath() . "/$namedId/services/class";
   }
 
-  /**
-   * Adds the given path to the PHP include_path
-   * @param string $path
-   * @return void
-   */
-  protected function addIncludePath( $path )
-  {
-    ini_set('include_path', implode( PATH_SEPARATOR, array( ini_get("include_path"), $path ) ) );
-  }
-  
+
   /**
    * Loads the plugin setup class, instantiates the class and returns the instance.
    * Returns boolean false if the class file doesn't exist
@@ -266,38 +257,5 @@ class qcl_application_plugin_Service
       $data = array_merge( $data, $registryModel->get("data") );
     }
     return $data;
-  }
-  
-  /**
-   * Register services provided by plugins
-   */
-  public function registerPluginServices()
-  {
-    $app = $this->getApplication();
-    $registryModel = $this->getRegistryModel();
-    
-    $registryModel->findWhere( array( 'active' => true ) );
-    while( $registryModel->loadNext() )
-    {
-      $namedId = $registryModel->namedId();
-      $classpath = $this->getClassPath( $namedId );
-      
-      // if exists, add classpath for this plugin so that the service classes can be found
-      if ( is_dir( $classpath ) )
-      {
-        // add to include_path
-        $this->addIncludePath( $classpath );
-        
-        // add to service paths
-        $app->getServerInstance()->servicePaths[] = $classpath; // todo: there should be an API for this  
-        
-        // add routes
-        $routefile = "$classpath/$namedId/routes.php";
-        if ( file_exists( $routefile ) )
-        {
-          $app->registerServices( include( $routefile ) );
-        }
-      }
-    }
   }
 }

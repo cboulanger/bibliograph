@@ -159,7 +159,7 @@ class AbstractServer
    * you can also manually populate it.
    * @var array
    */
-  public $servicePaths;
+  protected $servicePaths = array();
 
   /**
    * The request of the id.
@@ -407,12 +407,22 @@ class AbstractServer
     $this->servicePaths = $sp;
   }
 
+  public function addServicePath( $path )
+  {
+    if ( ! is_dir( $path ) )
+    {
+      trigger_error( "'$path' is not a directory." );
+    }
+    $this->servicePaths[]=$path;
+  }
+
   /**
    * Getter for service paths
+   * @return array Array of service paths
    */
   public function getServicePaths()
   {
-    return $this->servicePaths;
+    return array_unique( $this->servicePaths );
   }
 
   /**
@@ -706,50 +716,13 @@ class AbstractServer
   }
 
   /**
-   * Loads the file containing the service class definition
+   * Loads the file containing the service class definition. Must be impelemented by subclass.
    * @param string $service
-   * @return string|false The name of the file if it was found, false if not.
+   * @return string|false The path of the file if it was found
    */
   public function loadServiceClass( $service )
   {
-    /*
-     * check service paths
-     */
-    if ( ! is_array( $this->servicePaths ) )
-    {
-      trigger_error("servicePaths property must be set with an array of paths");
-    }
-
-    /*
-     * Replace all dots with slashes in the service name so we can
-     * locate the service script.
-     */
-    $serviceComponents = $this->getServiceComponents( $service );
-    $path = implode( "/", $serviceComponents );
-    $packagePath = implode( "/", array_slice( $serviceComponents, 0, -1 ) );
-
-    /*
-     * Try to load the requested service
-     */
-    foreach( $this->servicePaths as $prefix )
-    {
-      $classFile = "$prefix/$path.php";
-      if ( file_exists( $classFile ) )
-      {
-        $this->debug("Loading class file '$classFile'...");
-        require_once $classFile;
-        return $classFile;
-      }
-    }
-
-    /*
-     * Couldn't find the requested service
-     */
-    $serviceName = implode( ".", $serviceComponents );
-    throw new AbstractError(
-      "Service `$serviceName` not found.",
-      JsonRpcError_ServiceNotFound
-    );
+    trigger_error(__METHOD__ . " is abstract and must be implemented by subclass.");
   }
 
   /**
@@ -771,8 +744,6 @@ class AbstractServer
    * possible class name variations can be passed to this as a
    * parent method.
    * @return string|false The name of the class it exists, otherwise false
-   * @author Derrell Lipman
-   * @author Christian Boulanger
    */
   public function getServiceClass( $service, $classes = array() )
   {

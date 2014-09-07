@@ -53,6 +53,13 @@ if ( !in_array( QCL_APPLICATION_MODE, array("development", "maintenance", "produ
   throw new LogicError('QCL_APPLICATION_MODE must be any of "development", "maintenance", "production"');
 }
 
+/**
+ * The central directory in which all application plugins are stored.
+ */
+if ( ! defined( "QCL_PLUGIN_DIR") )
+{
+  define( "QCL_PLUGIN_DIR", dirname(SERVER_ROOT) . "/plugins" );
+}
 
 /*
  * log filters

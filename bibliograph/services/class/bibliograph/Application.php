@@ -156,17 +156,8 @@ class bibliograph_Application
      */
     qcl_locale_Manager::getInstance();
 
-    /**
-     * Register services provided by this application
-     */
-    $this->registerServices( include( dirname(__FILE__) . "/routes.php" ) );
-    
-    /**
-     * Register services provided by plugins
-     */
-    qcl_application_plugin_Service::getInstance()->registerPluginServices();
-
   }
+
 
   /**
    * Overridden to create config key

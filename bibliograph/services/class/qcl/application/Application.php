@@ -78,12 +78,6 @@ abstract class qcl_application_Application
   private $iniManager;
 
   /**
-   * The path to the plugin directory. Must be explicitly set
-   * @var string
-   */
-  protected $pluginPath;
-
-  /**
    * The current application instance
    * @var qcl_application_Application
    */
@@ -188,17 +182,36 @@ abstract class qcl_application_Application
   /**
    * Returns the path to the folder containing the plugins. Defaults to 
    * a "plugins" subfolder of the top folder.
-   * @throws qcl_application_plugin_Exception
    * @return string
    */
   public function pluginPath()
   {
-    if ( ! $this->pluginPath )
-    {
-      $this->pluginPath = dirname(SERVER_ROOT) . "/plugins";
-    }
-    return $this->pluginPath;
+    return QCL_PLUGIN_DIR;
   }
+
+
+  /**
+   * Returns an associative array that maps service names to class names.
+   * By default, check if a file name "routes.php" exists in the same
+   * directory as the calling application class. If yes, return the content of this file.
+   * @param string $subclassFile Pass __FILE__
+   * @return array
+   */
+  public function routes($subclassFile)
+  {
+    $routeFile    = dirname($subclassFile) . "/routes.php";
+    if( file_exists( $routeFile ) )
+    {
+      $routes =  include( $routeFile );
+      if ( is_array( $routes ) )
+      {
+        return $routes;
+      }
+      throw new LogicException("Routefile '$routeFile' does not contain array data.");
+    }
+    return array();
+  }
+
 
   /**
    * Returns the default datasource schema of the application
@@ -208,6 +221,8 @@ abstract class qcl_application_Application
   {
     return $this->defaultSchema;
   }
+
+
 
   //-------------------------------------------------------------
   // object getters
@@ -454,27 +469,6 @@ abstract class qcl_application_Application
     }
   }
 
-  //-------------------------------------------------------------
-  // services that belong to this application
-  //-------------------------------------------------------------
-
-  /**
-   * Registers service names that will be used by this application and
-   * maps them to the classes that implement them. Takes an asoociative
-   * array. The keys are the service names, the values the implementing
-   * classes.
-   *
-   * @param array $serviceClassMap
-   * @return unknown_type
-   */
-  public function registerServices( $serviceClassMap )
-  {
-    $server = qcl_server_Server::getInstance()->getServerInstance();
-    foreach( $serviceClassMap as $service => $class )
-    {
-      $server->mapServiceToClass( $service, $class );
-    }
-  }
 
   //-------------------------------------------------------------
   // database connectivity

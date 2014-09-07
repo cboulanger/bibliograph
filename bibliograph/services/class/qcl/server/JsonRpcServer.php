@@ -34,12 +34,6 @@ class qcl_server_JsonRpcServer
    */
   private $controller = null;
 
-
-  /**
-   * An array mapping services to service classes
-   */
-  private $serviceClassMap = array();
-
   //-------------------------------------------------------------
   // initialization & startup
   //-------------------------------------------------------------
@@ -112,59 +106,10 @@ class qcl_server_JsonRpcServer
 
   /**
    * Returns the current application or false if no application exists.
-   * @throws qcl_InvalidClassException
    * @return qcl_application_Application|false
    */
   public function getApplication()
   {
-
-    if ( qcl_application_Application::getInstance() === null )
-    {
-      /*
-       * determine application class name
-       */
-      $request = qcl_server_Request::getInstance();
-      $service = new String( $request->getService() );
-      $appClass = (string) $service
-        ->substr( 0, $service->lastIndexOf(".") )
-        ->replace("/\./","_")
-        ->concat( "_Application" );
-
-      try
-      {
-        /*
-         * import class file
-         */
-        qcl_import( $appClass );
-
-        /*
-         * instantiate new application object
-         */
-        $app = new $appClass;
-        if ( ! $app instanceof qcl_application_Application )
-        {
-          throw new qcl_InvalidClassException(
-            "Application class '$appClass' must be a subclass of 'qcl_application_Application'"
-          );
-        }
-
-        /*
-         * store application instance
-         */
-        qcl_application_Application::setInstance( $app );
-
-        /*
-         * call main() method to start application
-         */
-        $app->main();
-
-      }
-      catch( qcl_FileNotFoundException $e )
-      {
-        qcl_log_Logger::getInstance()->warn( "No or unfunctional application: " . $e->getMessage() );
-        qcl_application_Application::setInstance( false );
-      }
-    }
     return qcl_application_Application::getInstance();
   }
 
@@ -188,22 +133,6 @@ class qcl_server_JsonRpcServer
     {
       return $this->getAccessibilityBehavior();
     }
-  }
-
-  /**
-   * Maps a service to a class
-   * @param $service
-   * @param $class
-   * @return void
-   */
-  public function mapServiceToClass( $service, $class )
-  {
-    if ( ! is_string( $service ) or ! is_string( $class ) )
-    {
-      trigger_error("Involid arguments");
-    }
-    $this->debug("Mapping service 'service' to class '$class'");
-    $this->serviceClassMap[$service] = $class;
   }
 
 
@@ -255,12 +184,6 @@ class qcl_server_JsonRpcServer
     $request->set( $input );
 
     /*
-     * call the application so that the service->class mapping
-     * is setup before the services are called.
-     */
-    $this->getApplication();
-
-    /*
      * return the input
      */
     return $input;
@@ -290,42 +213,113 @@ class qcl_server_JsonRpcServer
   }
 
   /**
-   * Overridden to allow mapping of services to classes
-   * @param string $service
-   * @param array $classes
-   * @return string|false The name of the class it exists, otherwise false
+   * Adds the given path to the PHP include_path
+   * @param string $path
+   * @return void
    */
-  function getServiceClass( $service, $classes = array() )
+  protected function addIncludePath( $path )
   {
-    if ( isset( $this->serviceClassMap[$service] ) )
-    {
-      $class = $this->serviceClassMap[$service];
-      $this->debug( "Service '$service' is implemented by class/service '$class'");
-      return parent::getServiceClass( $class, array( $class ) );
-    }
-    else
-    {
-      return parent::getServiceClass( $service, array() );
-    }
+    ini_set('include_path', implode( PATH_SEPARATOR, array( ini_get("include_path"), $path ) ) );
   }
 
   /**
-   * Overridden to allow mapping of services to classes
+   * Overridden to allow mapping of services to classes and to load and start  main application
    * @param string $service
    * @return string|false The name of the file if it was found, false if not.
    */
   public function loadServiceClass( $service )
   {
-    if ( isset( $this->serviceClassMap[$service] ) )
+
+    // is this a plugin service?
+    $serviceNamespace = $this->serviceComponents[0];
+    $pluginServicePath = QCL_PLUGIN_DIR . "/$serviceNamespace/services/class";
+    if( is_dir( $pluginServicePath ) )
     {
-      $class = $this->serviceClassMap[$service];
-      $this->debug( "Loading class/service '$class' for requested service '$service'");
-      return parent::loadServiceClass( $class );
+      $this->addIncludePath( $pluginServicePath );
+      $servicePath = $pluginServicePath;
     }
+    // no, an application service
     else
     {
-      return parent::loadServiceClass( $service );
+      $servicePath = APPLICATION_CLASS_PATH;
     }
+
+    // import application class file
+    $appFile = "$servicePath/$serviceNamespace/Application.php";
+    if( ! is_file( $appFile ) )
+    {
+      qcl_log_Logger::getInstance()->warn( "Could not find application file for service $service." );
+      return false;
+    }
+    require_once $appFile;
+
+    // instantiate application object
+    $appClassName = $serviceNamespace . "_Application";
+
+    if( ! class_exists( $appClassName ) )
+    {
+      throw new LogicException(
+        "Application file '$appFile' does not contain definition of class '$appClassName'"
+      );
+    }
+    $app = new $appClassName;
+    if ( ! $app instanceof qcl_application_Application )
+    {
+      throw new LogicException(
+        "Application class '$appClassName' must be a subclass of 'qcl_application_Application'"
+      );
+    }
+
+    // store application instance and call main method
+    qcl_application_Application::setInstance( $app );
+    $this->debug("Loaded service application class '$appClassName'. Running main()...");
+    $app->main();
+
+    // get class name from route data if exists
+    $routes = $app->routes($appFile);
+    $this->debug("Routes: " . json_encode($routes) );
+
+    if ( isset( $routes[$service] ) )
+    {
+      $serviceClass     = $routes[$service];
+      $serviceClassFile = $servicePath . "/" . str_replace( "_", "/", $serviceClass ) . ".php";
+    }
+    // else, use service name as given
+    else
+    {
+      $serviceClass     = JsonRpcClassPrefix . str_replace( ".", "_", $service );
+      $serviceClassFile = $servicePath . "/" . str_replace( ".", "/", $service ) . ".php";
+    }
+    $this->serviceClass = $serviceClass;
+    $this->debug( "Loading file '$serviceClassFile', containing class '$serviceClass' for requested service '$service'");
+
+    if( ! file_exists($serviceClassFile) )
+    {
+      throw new AbstractError( "Service '$service' not found.", JsonRpcError_ServiceNotFound );
+    }
+
+    // load service class definition
+    require_once $serviceClassFile;
+    if( ! class_exists( $serviceClass ) )
+    {
+      throw new LogicException("File '$serviceClassFile' does not contain definition for class '$serviceClass'");
+    }
+
+    return $serviceClassFile;
+  }
+
+  /**
+   * Returns the real service class name. There are a couple of variants
+   * possible
+   * @param string $service
+   * @param array $classes When overriding this method, an array of
+   * possible class name variations can be passed to this as a
+   * parent method.
+   * @return string|false The name of the class it exists, otherwise false
+   */
+  public function getServiceClass( $service, $classes = array() )
+  {
+    return $this->serviceClass;
   }
 
   /**

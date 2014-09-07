@@ -932,7 +932,7 @@ class qcl_core_Object
       $line  = $caller['line'];
     }
     $m .= $class ."[" .$line . "]: ";
-    $m .= $msg;
+    $m .= "\n" . $msg;
     $this->info ( $m, "info" );
   }
 
