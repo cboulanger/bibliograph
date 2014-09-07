@@ -2,6 +2,7 @@
 .hg
 .idea
 .DS_Store
+*.mo
 qooxdoo*
 build
 cache
