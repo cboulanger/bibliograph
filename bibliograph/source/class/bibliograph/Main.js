@@ -247,7 +247,7 @@ qx.Class.define("bibliograph.Main",
       this.setApplicationName("Bibliograph Online Bibliographic Data Manager");
 
       /*
-       * creat popup and show splash screen
+       * create popup and show splash screen
        */
       this.createPopup(
       {
@@ -260,6 +260,7 @@ qx.Class.define("bibliograph.Main",
 
       /*
        * create central blocker for the application
+       * todo move into qcl
        */
       var root = qx.core.Init.getApplication().getRoot();
       this.__blocker = new qx.ui.core.Blocker(root);
@@ -584,12 +585,13 @@ qx.Class.define("bibliograph.Main",
 
     /**
      * Return the persistent store used by this application
+     * Disabled FIXME
      * @return {persist.Store}
      */
     getPersistentStore : function()
     {
       if (!this.__persistentStore) {
-        this.__persistentStore = new persist.Store('Bibliograph', 1);
+        //this.__persistentStore = new persist.Store('Bibliograph', 1);
       }
       return this.__persistentStore;
     },

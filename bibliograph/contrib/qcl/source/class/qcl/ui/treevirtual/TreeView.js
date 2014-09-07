@@ -709,6 +709,9 @@ qx.Class.define("qcl.ui.treevirtual.TreeView",
      */
     getCachedTreeData : function( transactionId, callback, context )
     {
+      // caching of data disabled FIXME
+      return callback.call( context, null );
+
        /*
         * don't use a cache
         */
@@ -766,6 +769,7 @@ qx.Class.define("qcl.ui.treevirtual.TreeView",
      */
     cacheTreeData : function( transactionId )
     {
+      return; // FIXME
        //console.warn("Saving tree cache with transaction id " + transactionId, "last transaction id:" + this.__lastTransactionId);
        if ( this.getUseCache() && ( transactionId === 0 || transactionId > this.__lastTransactionId ) ) 
        {
@@ -788,6 +792,7 @@ qx.Class.define("qcl.ui.treevirtual.TreeView",
      */
     clearTreeCache : function()
     {
+      return; // FIXME
       var storageId = this.getTreeCacheId( this.getDatasource() );
       var persistentStore = this.getApplication().getPersistentStore();
       persistentStore.save( storageId, "" );
