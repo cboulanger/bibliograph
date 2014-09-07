@@ -30,11 +30,11 @@
   {
     "APPLICATION"  : "isbnscanner",
     "APPLICATION_MAIN_CLASS" : "${APPLICATION}.demo.Demo",
-    "QOOXDOO_PATH" : "../../../../qooxdoo-3.5.1-sdk",
+    "QOOXDOO_PATH" : "../../../qooxdoo-3.5.1-sdk",
     //"QXTHEME"      : "isbnscanner.theme.modern.Theme",
     "QXTHEME"      : "qx.theme.Modern",
     "API_EXCLUDE"  : ["qx.test.*", "isbnscanner.demo.*", "${APPLICATION}.theme.*", "${APPLICATION}.test.*"],
-    "LOCALES"      : [ "en" ],
+    "LOCALES"      : [ "en","de" ],
     "CACHE"        : "${TMPDIR}/qx${QOOXDOO_VERSION}/cache",
     "ROOT"         : "."
   },

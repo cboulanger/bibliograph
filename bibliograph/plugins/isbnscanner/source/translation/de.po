@@ -1,0 +1,58 @@
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"Report-Msgid-Bugs-To: you@your.org\n"
+"POT-Creation-Date: 2014-09-07 22:46+0100\n"
+"PO-Revision-Date: 2014-09-07 22:51+0100\n"
+"Last-Translator: Christian Boulanger <info@bibliograph.org>\n"
+"Language-Team: Team <yourteam@your.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+"X-Generator: Poedit 1.6.7\n"
+
+#: isbnscanner/Plugin.js:51
+msgid "From ISBN, using barcode scanner or manual input"
+msgstr "Von ISBN importieren, mit Strichcode-Lesegerät oder von Hand\t"
+
+#: isbnscanner/Plugin.js:52
+msgid ""
+"Please select a folder into which the item will be imported. Requires a "
+"barcode scanner in keyboard mode"
+msgstr ""
+"Bitte wählen sie einen Ordner, in den importiert werden soll. Erfordert "
+"einen Strichcodeleser im \"Keyboard\"-Modus.\t"
+
+#: isbnscanner/Plugin.js:60
+msgid "Please wait ..."
+msgstr "Bitte warten ..."
+
+#: isbnscanner/Plugin.js:101
+msgid ""
+"ISBN input detected. Please wait for the input dialog and repeat the input "
+"..."
+msgstr ""
+"Es wurde eine ISBN-Nummer eingegeben. Bitte warten Sie auf den Eingabedialog"
+" und wiederholen Sie die Eingabe."
+
+#: isbnscanner/Plugin.js:123
+msgid "Import by ISBN"
+msgstr "ISBN-Import\t"
+
+#: isbnscanner/Plugin.js:136
+msgid ""
+"How should names (e.g. William Shakespeare) be converted to a sortable "
+"format (Shakespeare, William)?"
+msgstr ""
+"Wie sollen Namen (z.B. Friedrich Schiller) in ein sortierbares Format "
+"(Schiller, Friedrich) gebracht werden?\t"
+
+#: isbnscanner/Plugin.js:145
+msgid "Name parser (Fast, Correct for most western names)"
+msgstr "Automatisch (Schnell, korrekt für die meisten westlichen Namen)"
+
+#: isbnscanner/Plugin.js:149
+msgid "Webservice (Slower)"
+msgstr "Über einen Webservice (langsamer)"
