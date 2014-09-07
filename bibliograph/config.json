@@ -46,7 +46,7 @@
   {
 
     "APPLICATION"    : "bibliograph", 
-    "QOOXDOO_PATH"   : "../qooxdoo",
+    "QOOXDOO_PATH"   : "../qooxdoo-4.0.1-sdk",
     "QXTHEME"        : "bibliograph.theme.Theme",
     "LOCALES"        : [ "en","de" ],
     "ROOT"           : ".",
@@ -69,7 +69,6 @@
         { "manifest" : "contrib://UploadWidget/trunk/Manifest.json" },
 
         // local legacy contrib
-        { "manifest" : "contrib/Persist/trunk/Manifest.json" },
         { "manifest" : "contrib/VirtualData/trunk/Manifest.json" },
         { "manifest" : "contrib/qcl/Manifest.json" },
         
@@ -119,13 +118,11 @@
       // configure part loading 
       "extend" : [ "parts-config" ],
       
-      // load third-party scripts before loading qooxdoo, run build at least once before source
+      // load third-party scripts before loading qooxdoo
       "add-script" :
       [
-        // Persist.js library: http://pablotron.org/software/persist-js/
-        { "uri" : "../build/resource/persist/persist-all-min.js" },
         // Keypress library: http://dmauro.github.io/Keypress/
-        { "uri" : "../build/resource/keypress/keypress-2.0.2.min.js" }
+        { "uri" : "../source/resource/keypress/keypress-2.0.2.min.js" }
       ]
     },
 
@@ -142,7 +139,14 @@
       {
         // don't optimize privates, neccessary because we need to call internal function
         "code" : { "=optimize" : ["variables", "basecalls", "strings"] }
-      }
+      },
+
+      // load third-party scripts before loading qooxdoo
+      "add-script" :
+        [
+          // Keypress library: http://dmauro.github.io/Keypress/
+          { "uri" : "../build/resource/keypress/keypress-2.0.2.min.js" }
+        ]
     }
   }
 }
