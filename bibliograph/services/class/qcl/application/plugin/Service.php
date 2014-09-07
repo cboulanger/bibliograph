@@ -48,6 +48,15 @@ class qcl_application_plugin_Service
     return $this->getApplication()->pluginPath() . "/$namedId/services/class";
   }
 
+  /**
+   * Adds the given path to the PHP include_path
+   * @param string $path
+   * @return void
+   */
+  protected function addIncludePath( $path )
+  {
+    ini_set('include_path', implode( PATH_SEPARATOR, array( ini_get("include_path"), $path ) ) );
+  }
 
   /**
    * Loads the plugin setup class, instantiates the class and returns the instance.
@@ -257,5 +266,17 @@ class qcl_application_plugin_Service
       $data = array_merge( $data, $registryModel->get("data") );
     }
     return $data;
+  }
+
+  public function addPluginIncludePaths()
+  {
+    $registryModel = $this->getRegistryModel();
+    $registryModel->findWhere( array( 'active' => true ) );
+    while( $registryModel->loadNext() )
+    {
+      $pluginNamespace = $registryModel->getNamedId();
+      $pluginServicePath = QCL_PLUGIN_DIR . "/$pluginNamespace/services/class";
+      $this->addIncludePath( $pluginServicePath );
+    }
   }
 }

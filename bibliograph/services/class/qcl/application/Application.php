@@ -553,7 +553,6 @@ abstract class qcl_application_Application
         $logger->setFilterEnabled( constant($const), $value );
       }
     }
-
   }
 
   //-------------------------------------------------------------

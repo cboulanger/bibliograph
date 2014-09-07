@@ -156,6 +156,11 @@ class bibliograph_Application
      */
     qcl_locale_Manager::getInstance();
 
+    /*
+     * add include paths for the plugins
+     */
+    qcl_application_plugin_Service::getInstance()->addPluginIncludePaths();
+
   }
 
 
