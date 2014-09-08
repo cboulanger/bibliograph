@@ -26,7 +26,7 @@
  * @require(dialog.Progress)
  * @require(qx.ui.form.RadioGroup)
  * @require(qx.ui.menu.RadioButton)
- *
+ * 
  */
 qx.Class.define("bibliograph.Main",
 {
@@ -247,7 +247,7 @@ qx.Class.define("bibliograph.Main",
       this.setApplicationName("Bibliograph Online Bibliographic Data Manager");
 
       /*
-       * create popup and show splash screen
+       * creat popup and show splash screen
        */
       this.createPopup(
       {
@@ -260,7 +260,6 @@ qx.Class.define("bibliograph.Main",
 
       /*
        * create central blocker for the application
-       * todo move into qcl
        */
       var root = qx.core.Init.getApplication().getRoot();
       this.__blocker = new qx.ui.core.Blocker(root);
@@ -272,6 +271,7 @@ qx.Class.define("bibliograph.Main",
        */
       this.initializeManagers();
       this.setPluginManager( new bibliograph.PluginManager() );
+
 
       /*
        * rpc endpoint and timeout
@@ -585,7 +585,6 @@ qx.Class.define("bibliograph.Main",
 
     /**
      * Return the persistent store used by this application
-     * Disabled FIXME
      * @return {persist.Store}
      */
     getPersistentStore : function()

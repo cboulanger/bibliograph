@@ -30,7 +30,7 @@ qx.Class.define("bibliograph.PluginManager",
      * @param data {Object} plugin data
      * @param next {Function} callback
      */
-    _loadPart : function( data, next, self )
+    _loadPart : function( data, next )
     {
       var self = this;
       qx.io.PartLoader.require(data.part, function() {
