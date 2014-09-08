@@ -640,7 +640,12 @@ qx.Class.define("qcl.data.store.JsonRpc",
       {
         try
         {
-          dialog.Dialog.alert(ex.message);
+          if ( ! this.__errorDialog )
+          {
+            this.__errorDialog = new dialog.Alert({"image" : "icon/48/status/dialog-error.png"});
+          }
+          this.__errorDialog.setMessage(ex.message);
+          this.__errorDialog.show();
         }
         catch(e)
         {
