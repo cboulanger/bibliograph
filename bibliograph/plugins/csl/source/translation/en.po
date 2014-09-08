@@ -1,0 +1,36 @@
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"Report-Msgid-Bugs-To: you@your.org\n"
+"POT-Creation-Date: 2014-09-08 18:56+0100\n"
+"PO-Revision-Date: 2014-09-08 18:56+0100\n"
+"Last-Translator: you <you@your.org>\n"
+"Language-Team: Team <yourteam@your.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: csl/Plugin.js:47 csl/Plugin.js:52 csl/FormattedView.js:80
+msgid "Formatted View"
+msgstr ""
+
+#: csl/FormattedView.js:176
+msgid "Loading formatted citations..."
+msgstr ""
+
+#: csl/FormattedViewUi.js:56 csl/FormattedViewUi.js:57
+msgid "Style"
+msgstr ""
+
+#: csl/FormattedViewUi.js:62 csl/FormattedViewUi.js:63
+msgid "All in folder"
+msgstr ""
+
+#: csl/FormattedViewUi.js:68 csl/FormattedViewUi.js:69
+msgid "Print"
+msgstr ""
+
+#: csl/FormattedViewUi.js:74 csl/FormattedViewUi.js:75
+msgid "Tabular View"
+msgstr ""

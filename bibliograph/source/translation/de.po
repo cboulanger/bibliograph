@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
@@ -13,39 +13,39 @@ msgstr ""
 "Language: de\n"
 "X-Generator: Poedit 1.6.7\n"
 
-#: bibliograph/Main.js:211
+#: bibliograph/Main.js:213
 msgid "No connection to server."
 msgstr "Keine Verbindung zum Server."
 
-#: bibliograph/Main.js:212
+#: bibliograph/Main.js:214
 msgid "Loading folder data ..."
 msgstr "Lade die Ordner ..."
 
-#: bibliograph/Main.js:319
+#: bibliograph/Main.js:324
 msgid "Setting up application..."
 msgstr "Konfiguriere die Anwendung ..."
 
-#: bibliograph/Main.js:340
+#: bibliograph/Main.js:345
 msgid "Connecting with server..."
 msgstr "Verbinde mit dem Server ..."
 
-#: bibliograph/Main.js:351
+#: bibliograph/Main.js:356
 msgid "Loading configuration ..."
 msgstr "Lade Konfiguration ..."
 
-#: bibliograph/Main.js:367
+#: bibliograph/Main.js:372
 msgid "Loading datasources ..."
 msgstr "Lade Liste der Datenbanken ..."
 
-#: bibliograph/Main.js:392
+#: bibliograph/Main.js:397
 msgid "Loading plugins ..."
 msgstr "Plugins werden geladen ..."
 
-#: bibliograph/Main.js:396
+#: bibliograph/Main.js:401
 msgid "Loaded plugin %1 of %2 : %3 ..."
 msgstr "Lade Plugin %1 von %2 : %3 ..."
 
-#: bibliograph/Main.js:529
+#: bibliograph/Main.js:534
 msgid ""
 "The datasource has just been restored to a previous state and will be "
 "reloaded"
@@ -53,11 +53,11 @@ msgstr ""
 "Die Datenbank wurde gerade auf einen früheren Zustand zurückgesetzt wird "
 "jetzt neu geladen."
 
-#: bibliograph/Main.js:635
+#: bibliograph/Main.js:641
 msgid "Loading datasource information ..."
 msgstr "Informationen zur Datenquelle werden abgerufen..."
 
-#: bibliograph/Main.js:765
+#: bibliograph/Main.js:771
 msgid ""
 "To log in, you need a secure connection. After you press 'OK', the "
 "application will be reloaded in secure mode. After the application finished "
@@ -68,7 +68,7 @@ msgstr ""
 "geladen. Bitte melden Sie sich erneut an, sobald der Ladevorgang "
 "abgeschlossen ist."
 
-#: bibliograph/Main.js:776
+#: bibliograph/Main.js:782
 msgid ""
 "The application is currently in a read-only state. Only the administrator "
 "can log in."
@@ -76,26 +76,25 @@ msgstr ""
 "Das Programm ist gerade im Nur-Lese-Modus. Nur der Administrator kann sich "
 "einloggen. "
 
-#: bibliograph/Main.js:810
+#: bibliograph/Main.js:816
 msgid "Authenticating ..."
 msgstr "Anmeldung ..."
 
 #: bibliograph/ui/window/AccessControlTool.js:96
-#: bibliograph/ui/window/AccessControlTool.js:112
-#: bibliograph/plugin/isbnscanner/Plugin.js:61 bibliograph/Main.js:847
-#: bibliograph/Main.js:975
+#: bibliograph/ui/window/AccessControlTool.js:111 bibliograph/Main.js:853
+#: bibliograph/Main.js:972
 msgid "Please wait ..."
 msgstr "Bitte warten ..."
 
-#: bibliograph/Main.js:869
+#: bibliograph/Main.js:875
 msgid "Logging out ..."
 msgstr "Abmelden ..."
 
-#: bibliograph/Main.js:904
+#: bibliograph/Main.js:910
 msgid "You don't have access to any datasource on the server."
 msgstr "Sie haben keinen Zugang zu Datenbanken auf diesem Server."
 
-#: bibliograph/Main.js:959
+#: bibliograph/Main.js:962
 msgid ""
 "Cannot open help window. Please disable the popup-blocker of your browser "
 "for this website."
@@ -103,149 +102,40 @@ msgstr ""
 "Die Hilfeseite kann nicht aufgerufen werden. Bitte schalten Sie eventuelle "
 "Popup-Blockierer für diese Webseite ab. "
 
-#: bibliograph/Main.js:1050
+#: bibliograph/Main.js:1047
 msgid "Retrieving user data..."
 msgstr "Lade Benutzerdaten ..."
 
-#: bibliograph/theme/Assets.js:76 bibliograph/plugin/csl/Plugin.js:45
-#: bibliograph/plugin/csl/Plugin.js:50
-#: bibliograph/plugin/csl/FormattedView.js:79
-msgid "Formatted View"
-msgstr "Formatierte Ansicht"
-
-#: bibliograph/plugin/csl/FormattedView.js:175
-msgid "Loading formatted citations..."
-msgstr "Lade formatierte Zitierweise..."
-
-#: bibliograph/plugin/csl/FormattedViewUi.js:54
-#: bibliograph/plugin/csl/FormattedViewUi.js:55 bibliograph/theme/Assets.js:73
-msgid "Style"
-msgstr "Zitierstil"
-
-#: bibliograph/plugin/csl/FormattedViewUi.js:60
-#: bibliograph/plugin/csl/FormattedViewUi.js:61 bibliograph/theme/Assets.js:74
-msgid "All in folder"
-msgstr "Alle im Ordner"
-
-#: bibliograph/plugin/csl/FormattedViewUi.js:66
-#: bibliograph/plugin/csl/FormattedViewUi.js:67
 #: bibliograph/ui/item/TableViewUi.js:48 bibliograph/ui/item/TableViewUi.js:50
-#: bibliograph/theme/Assets.js:72
+#: bibliograph/theme/Assets.js:71
 msgid "Print"
 msgstr "Drucken"
 
-#: bibliograph/plugin/csl/FormattedViewUi.js:72
-#: bibliograph/plugin/csl/FormattedViewUi.js:73 bibliograph/theme/Assets.js:75
+#: bibliograph/theme/Assets.js:72
+msgid "Style"
+msgstr "Zitierstil"
+
+#: bibliograph/theme/Assets.js:73
+msgid "All in folder"
+msgstr "Alle im Ordner"
+
+#: bibliograph/theme/Assets.js:74
 msgid "Tabular View"
 msgstr "Tabellarische Ansicht"
 
-#: bibliograph/plugin/isbnscanner/Plugin.js:52
-msgid "From ISBN, using barcode scanner or manual input"
-msgstr "Von ISBN-Nummer mit Strichcode-Scanner oder manueller Eingabe"
+#: bibliograph/theme/Assets.js:75
+msgid "Formatted View"
+msgstr "Formatierte Ansicht"
 
-#: bibliograph/plugin/isbnscanner/Plugin.js:53
-msgid ""
-"Please select a folder into which the item will be imported. Requires a "
-"barcode scanner in keyboard mode"
-msgstr ""
-"Bitte wählen Sie einen Ordner aus, in den der Datensatz importiert werden "
-"soll. Erfordert einen Strichcode-Scanner im Tastaturmodus."
-
-#: bibliograph/plugin/isbnscanner/Plugin.js:102
-msgid ""
-"ISBN input detected. Please wait for the input dialog and repeat the "
-"input ..."
-msgstr ""
-"ISBN Eingabe erkannt. Bitte warten Sie auf den Eingabedialog und wiederholen "
-"Sie die Eingabe ..."
-
-#: bibliograph/plugin/isbnscanner/Plugin.js:124
-msgid "Import by ISBN"
-msgstr "Import über ISBN-Nummer"
-
-#: bibliograph/plugin/isbnscanner/Plugin.js:137
-msgid ""
-"How should names (e.g. William Shakespeare) be converted to a sortable "
-"format (Shakespeare, William)?"
-msgstr ""
-"Wie sollen Namen (z.B. Johann Wolfgang von Goethe) in ein sortierbares "
-"Format (Goethe, Johann Wolfgang von) umgewandelt werden?"
-
-#: bibliograph/plugin/isbnscanner/Plugin.js:146
-msgid "Name parser (Fast, Correct for most western names)"
-msgstr ""
-"Mit Nameparser (schnell und zuverlässig für die meisten westlichen Namen)"
-
-#: bibliograph/plugin/isbnscanner/Plugin.js:150
-msgid "Webservice (Slower)"
-msgstr "Webservice (Langsamer)"
-
-#: bibliograph/plugin/z3950/ImportWindow.js:107
-#: bibliograph/ui/window/ImportWindow.js:201
-msgid "You have to select one or more reference to import."
-msgstr "Sie müssen eine oder mehr Datensätze zum importieren auswählen."
-
-#: bibliograph/plugin/z3950/ImportWindow.js:117
-#: bibliograph/ui/window/ImportWindow.js:211
-msgid "Please select a folder first."
-msgstr "Bitte wählen sie einen Ordner aus, in den importiert werden soll. "
-
-#: bibliograph/plugin/z3950/ImportWindow.js:125
-#: bibliograph/ui/window/ImportWindow.js:219
-msgid "Cannot determine selected folder. Please reload the folders."
-msgstr "Kann den ausgewählten Ordner nicht finden. Bitte die Ordner neu laden."
-
-#: bibliograph/plugin/z3950/ImportWindow.js:130
-#: bibliograph/ui/window/ImportWindow.js:224
-msgid "Invalid target folder. You can only import into normal folders."
-msgstr "Ungültiger Zielordner. Sie können nur in normale Ordner importieren."
-
-#: bibliograph/plugin/z3950/ImportWindow.js:139
-#: bibliograph/ui/window/ImportWindow.js:233
-msgid "Importing references..."
-msgstr "Importiere die Datensätze ..."
-
-#: bibliograph/plugin/z3950/Plugin.js:48
-#: bibliograph/plugin/z3950/ImportWindowUi.js:38
-#: bibliograph/plugin/z3950/ImportWindow.js:147
-msgid "Import from library catalog"
-msgstr "Aus einem Bibliothekskatalog importieren\t"
-
-#: bibliograph/plugin/z3950/ImportWindowUi.js:68
-#: bibliograph/plugin/z3950/ImportWindowUi.js:69
-msgid "GBV Katalog"
-msgstr "GBV Katalog"
-
-#: bibliograph/ui/main/Toolbar.js:325
-#: bibliograph/plugin/z3950/ImportWindowUi.js:83
-msgid "Enter search term"
-msgstr "Bitte geben sie einen Suchausdruck ein"
-
-#: bibliograph/plugin/z3950/ImportWindowUi.js:92
-msgid "Search"
-msgstr "Suchen"
-
-#: bibliograph/plugin/z3950/ImportWindowUi.js:127
-#: bibliograph/ui/window/ImportWindowUi.js:124
-#: bibliograph/ui/window/ImportWindowUi.js:127
-msgid "Import selected records"
-msgstr "Augewählte Datensätze importieren"
-
-#: bibliograph/plugin/z3950/ImportWindowUi.js:136
-#: bibliograph/ui/window/ImportWindowUi.js:137
-#: bibliograph/ui/window/ImportWindowUi.js:138
-msgid "Close"
-msgstr "Schließen"
-
-#: bibliograph/theme/Assets.js:77
+#: bibliograph/theme/Assets.js:76
 msgid "Generate formatted citations ..."
 msgstr "Formatiere die Datensätze ..."
 
-#: bibliograph/theme/Assets.js:82
+#: bibliograph/theme/Assets.js:81
 msgid "Loading rows %1 - %2 of %3 ..."
 msgstr "Lade Datensätze %1 - %2 von %3 ..."
 
-#: bibliograph/theme/Assets.js:83
+#: bibliograph/theme/Assets.js:82
 msgid "Getting number of rows..."
 msgstr "Ermittle Anzahl der Datensätze ..."
 
@@ -279,8 +169,8 @@ msgstr "Verschiebe Ordner ..."
 
 #: bibliograph/ui/folder/TreeView.js:161
 msgid ""
-"Do you really want to delete all references and folders in the trash folder? "
-"This cannot be undone."
+"Do you really want to delete all references and folders in the trash folder?"
+" This cannot be undone."
 msgstr ""
 "Wollen sie wirklich alle Datensätze und Ordner im Mülleimer endgültig "
 "löschen? Das kann nicht rückgängig gemacht werden."
@@ -315,23 +205,24 @@ msgstr "Sichtbarkeit verändern"
 
 #: bibliograph/ui/folder/TreeViewUi.js:182
 #: bibliograph/ui/folder/TreeViewUi.js:183
-#: bibliograph/ui/reference/ListViewUi.js:313
-#: bibliograph/ui/reference/ListViewUi.js:314
+#: bibliograph/ui/reference/ListViewUi.js:344
+#: bibliograph/ui/reference/ListViewUi.js:345
 msgid "Reload"
 msgstr "Neu laden"
 
 #: bibliograph/ui/item/DuplicatesView.js:162
-#: bibliograph/ui/reference/ListView.js:1104
-#: bibliograph/ui/reference/ListView.js:1121
-#: bibliograph/ui/reference/ListView.js:1137
-#: bibliograph/ui/reference/ListView.js:1156
+#: bibliograph/ui/reference/ListView.js:1105
+#: bibliograph/ui/reference/ListView.js:1122
+#: bibliograph/ui/reference/ListView.js:1138
+#: bibliograph/ui/reference/ListView.js:1157
 #: bibliograph/ui/item/RecordInfo.js:167
 msgid "Processing request..."
 msgstr "Verarbeite die Anfrage ..."
 
 #: bibliograph/ui/item/DuplicatesViewUi.js:40
 msgid "This table shows potential duplicates of the current record."
-msgstr "Diese Tabelle zeigt potentielle Dubletten des ausgewählten Datensatzes"
+msgstr ""
+"Diese Tabelle zeigt potentielle Dubletten des ausgewählten Datensatzes"
 
 #: bibliograph/ui/item/DuplicatesViewUi.js:61
 msgid "Type"
@@ -393,20 +284,20 @@ msgstr "Ordner öffnen"
 msgid "Remove from folder"
 msgstr "Aus dem Ordner entfernen"
 
-#: bibliograph/ui/item/ReferenceEditor.js:344
+#: bibliograph/ui/item/ReferenceEditor.js:342
 msgid "Loading item data..."
 msgstr "Lade Datensatz ..."
 
-#: bibliograph/ui/item/ReferenceEditor.js:401
+#: bibliograph/ui/item/ReferenceEditor.js:399
 msgid "Loading form data..."
 msgstr "Lade Editor ..."
 
-#: bibliograph/ui/item/ReferenceEditor.js:421
+#: bibliograph/ui/item/ReferenceEditor.js:419
 msgid "Creating form, please wait ..."
 msgstr "Erzeuge das Formular, bitte warten ..."
 
-#: bibliograph/ui/item/ReferenceEditor.js:722
-#: bibliograph/ui/item/ReferenceEditor.js:874
+#: bibliograph/ui/item/ReferenceEditor.js:720
+#: bibliograph/ui/item/ReferenceEditor.js:872
 msgid "Saving..."
 msgstr "Speichern ..."
 
@@ -501,6 +392,7 @@ msgid "Import text file"
 msgstr "Aus Text/Datei importieren"
 
 #: bibliograph/ui/main/Toolbar.js:226 bibliograph/ui/main/Toolbar.js:227
+#: bibliograph/ui/window/AccessControlTool.js:116
 msgid "Help"
 msgstr "Hilfe"
 
@@ -540,33 +432,38 @@ msgstr ""
 "Die Anwendung ist zurzeit im Entwicklungsmodus. Auf einem öffentlichen "
 "Server darf das nie der Fall sein. "
 
-#: bibliograph/ui/reference/ListView.js:341
+#: bibliograph/ui/main/Toolbar.js:325
+msgid "Enter search term"
+msgstr "Bitte geben sie einen Suchausdruck ein"
+
+#: bibliograph/ui/reference/ListView.js:342
 msgid "Query"
 msgstr "Suchausdruck"
 
-#: bibliograph/ui/reference/ListView.js:486
+#: bibliograph/ui/reference/ListView.js:487
 msgid "Loading table ..."
 msgstr "Lade Tabelle ..."
 
-#: bibliograph/ui/reference/ListView.js:1013
+#: bibliograph/ui/reference/ListView.js:1014
 msgid "You cannot create an item outside a folder"
 msgstr "Sie können keinen Datensatz außerhalb eines Ordners erstellen"
 
-#: bibliograph/ui/reference/ListView.js:1029
-msgid "Do your really want to remove the selected references from this folder?"
-msgstr ""
-"Möchten Sie die ausgewählten Datensätze wirklich aus diesem Ordner entfernen?"
-"\t"
-
 #: bibliograph/ui/reference/ListView.js:1030
+msgid ""
+"Do your really want to remove the selected references from this folder?"
+msgstr ""
+"Möchten Sie die ausgewählten Datensätze wirklich aus diesem Ordner "
+"entfernen?\t"
+
+#: bibliograph/ui/reference/ListView.js:1031
 msgid "Do your really want to remove the selected references?"
 msgstr "Wollen Sie wirklich die ausgewählten Datensätze entfernen?"
 
-#: bibliograph/ui/reference/ListView.js:1054
+#: bibliograph/ui/reference/ListView.js:1055
 msgid "Do your really want to move the selected references to '%1'?"
 msgstr "Wollen Sie wirklich die augewählten Datensätze nach '%1' verschieben?"
 
-#: bibliograph/ui/reference/ListView.js:1080
+#: bibliograph/ui/reference/ListView.js:1081
 msgid "Do your really want to copy the selected referencesto '%1'?"
 msgstr "Wollen Sie wirklich die ausgewählten Datensätze nach '%1' kopieren?"
 
@@ -584,40 +481,44 @@ msgid "Cancel"
 msgstr "Abbrechen"
 
 #: bibliograph/ui/reference/ListViewUi.js:232
-#: bibliograph/ui/reference/ListViewUi.js:233
 msgid "Move reference(s)..."
 msgstr "Verschieben ..."
 
-#: bibliograph/ui/reference/ListViewUi.js:244
-#: bibliograph/ui/reference/ListViewUi.js:245
+#: bibliograph/ui/reference/ListViewUi.js:243
 msgid "Copy reference(s)..."
 msgstr "Kopieren ..."
 
-#: bibliograph/ui/reference/ListViewUi.js:256
-#: bibliograph/ui/reference/ListViewUi.js:257
+#: bibliograph/ui/reference/ListViewUi.js:254
 msgid "Export references"
 msgstr "Exportieren"
 
-#: bibliograph/ui/reference/ListViewUi.js:267
-#: bibliograph/ui/reference/ListViewUi.js:268
+#: bibliograph/ui/reference/ListViewUi.js:264
 msgid "Export selected references"
 msgstr "Ausgewählte Datensätze exportieren"
 
-#: bibliograph/ui/reference/ListViewUi.js:279
-msgid "Export all references"
-msgstr "Alle Datensätze exportieren\t"
-
-#: bibliograph/ui/reference/ListViewUi.js:280
+#: bibliograph/ui/reference/ListViewUi.js:275
 msgid "Export folder"
 msgstr "Ordner exportieren"
 
-#: bibliograph/ui/reference/ListViewUi.js:289
-#: bibliograph/ui/reference/ListViewUi.js:290
+#: bibliograph/ui/reference/ListViewUi.js:285
+msgid "Share ..."
+msgstr ""
+
+#: bibliograph/ui/reference/ListViewUi.js:293
+msgid "Look up in Staatsbibliothek Berlin"
+msgstr ""
+
+#: bibliograph/ui/reference/ListViewUi.js:307
+msgid "Test Progress Bar"
+msgstr ""
+
+#: bibliograph/ui/reference/ListViewUi.js:320
+#: bibliograph/ui/reference/ListViewUi.js:321
 msgid "Edit references"
 msgstr "Bearbeiten"
 
-#: bibliograph/ui/reference/ListViewUi.js:300
-#: bibliograph/ui/reference/ListViewUi.js:301
+#: bibliograph/ui/reference/ListViewUi.js:331
+#: bibliograph/ui/reference/ListViewUi.js:332
 msgid "Find/Replace"
 msgstr "Suchen/Ersetzen"
 
@@ -637,53 +538,53 @@ msgstr "Zugangskontrollwerkzeug"
 msgid "New User"
 msgstr "Neue/r Benutzer/in"
 
-#: bibliograph/ui/window/AccessControlTool.js:105
+#: bibliograph/ui/window/AccessControlTool.js:104
 msgid "New Datasource"
 msgstr "Neue Datenbank"
 
-#: bibliograph/ui/window/AccessControlTool.js:117
+#: bibliograph/ui/window/AccessControlTool.js:123
 msgid "Export to filesystem"
 msgstr "Ins Dateisystem exportieren"
 
-#: bibliograph/ui/window/AccessControlTool.js:136
+#: bibliograph/ui/window/AccessControlTool.js:142
 msgid "Exit"
 msgstr "Schließen"
 
-#: bibliograph/ui/window/AccessControlTool.js:257
-#: bibliograph/ui/window/AccessControlTool.js:442
+#: bibliograph/ui/window/AccessControlTool.js:263
+#: bibliograph/ui/window/AccessControlTool.js:448
 msgid "Please enter the id of the new '%1'-Object"
 msgstr "Bitte geben sie die ID für das neue '%1'-Objekt ein"
 
-#: bibliograph/ui/window/AccessControlTool.js:281
+#: bibliograph/ui/window/AccessControlTool.js:287
 msgid "Do you really want to delete '%1'?"
 msgstr "Wollen Sie wirklich '%1' löschen?"
 
-#: bibliograph/ui/window/AccessControlTool.js:306
-#: bibliograph/ui/window/AccessControlTool.js:497
+#: bibliograph/ui/window/AccessControlTool.js:312
+#: bibliograph/ui/window/AccessControlTool.js:503
 msgid "Loading data ..."
 msgstr "Lade die Daten ..."
 
-#: bibliograph/ui/window/AccessControlTool.js:324
-#: bibliograph/ui/window/AccessControlTool.js:325
+#: bibliograph/ui/window/AccessControlTool.js:330
+#: bibliograph/ui/window/AccessControlTool.js:331
 msgid "Edited element"
 msgstr "Bearbeitetes Element"
 
-#: bibliograph/ui/window/AccessControlTool.js:364
-#: bibliograph/ui/window/AccessControlTool.js:366
+#: bibliograph/ui/window/AccessControlTool.js:370
+#: bibliograph/ui/window/AccessControlTool.js:372
 msgid "Link"
 msgstr "Verknüpfen"
 
-#: bibliograph/ui/window/AccessControlTool.js:380
-#: bibliograph/ui/window/AccessControlTool.js:382
+#: bibliograph/ui/window/AccessControlTool.js:386
+#: bibliograph/ui/window/AccessControlTool.js:388
 msgid "Unlink"
 msgstr "Lösen"
 
-#: bibliograph/ui/window/AccessControlTool.js:403
-#: bibliograph/ui/window/AccessControlTool.js:404
+#: bibliograph/ui/window/AccessControlTool.js:409
+#: bibliograph/ui/window/AccessControlTool.js:410
 msgid "Linkable items"
 msgstr "Verknüpfbare Elemente"
 
-#: bibliograph/ui/window/AccessControlTool.js:472
+#: bibliograph/ui/window/AccessControlTool.js:478
 msgid "Do you really want to delete the objects '%1'?"
 msgstr "Wollen Sie wirklich die Objekte '%1' löschen?"
 
@@ -713,6 +614,27 @@ msgstr "Lade Datei auf den Server ..."
 msgid "Processing references..."
 msgstr "Verarbeite die Dateisätze ..."
 
+#: bibliograph/ui/window/ImportWindow.js:201
+msgid "You have to select one or more reference to import."
+msgstr "Sie müssen eine oder mehr Datensätze zum importieren auswählen."
+
+#: bibliograph/ui/window/ImportWindow.js:211
+msgid "Please select a folder first."
+msgstr "Bitte wählen sie einen Ordner aus, in den importiert werden soll. "
+
+#: bibliograph/ui/window/ImportWindow.js:219
+msgid "Cannot determine selected folder. Please reload the folders."
+msgstr ""
+"Kann den ausgewählten Ordner nicht finden. Bitte die Ordner neu laden."
+
+#: bibliograph/ui/window/ImportWindow.js:224
+msgid "Invalid target folder. You can only import into normal folders."
+msgstr "Ungültiger Zielordner. Sie können nur in normale Ordner importieren."
+
+#: bibliograph/ui/window/ImportWindow.js:233
+msgid "Importing references..."
+msgstr "Importiere die Datensätze ..."
+
 #: bibliograph/ui/window/ImportWindowUi.js:33
 msgid "Import from file"
 msgstr "Aus Datei importieren"
@@ -726,6 +648,16 @@ msgstr "3. Datei hochladen"
 #: bibliograph/ui/window/ImportWindowUi.js:115
 msgid "Select all"
 msgstr "Alle auswählen"
+
+#: bibliograph/ui/window/ImportWindowUi.js:124
+#: bibliograph/ui/window/ImportWindowUi.js:127
+msgid "Import selected records"
+msgstr "Augewählte Datensätze importieren"
+
+#: bibliograph/ui/window/ImportWindowUi.js:137
+#: bibliograph/ui/window/ImportWindowUi.js:138
+msgid "Close"
+msgstr "Schließen"
 
 #: bibliograph/ui/window/PreferencesWindow.js:67
 msgid "Appearance"
@@ -800,6 +732,52 @@ msgstr "Hilfe für die Suche"
 #~ msgid "Display Duplicate"
 #~ msgstr "Dublette anzeigen\t"
 
+#~ msgid "Loading formatted citations..."
+#~ msgstr "Lade formatierte Zitierweise..."
+
+#~ msgid ""
+#~ "ISBN input detected. Please wait for the input dialog and repeat the input "
+#~ "..."
+#~ msgstr ""
+#~ "ISBN Eingabe erkannt. Bitte warten Sie auf den Eingabedialog und wiederholen"
+#~ " Sie die Eingabe ..."
+
+#~ msgid "Import by ISBN"
+#~ msgstr "Import über ISBN-Nummer"
+
+#~ msgid ""
+#~ "How should names (e.g. William Shakespeare) be converted to a sortable "
+#~ "format (Shakespeare, William)?"
+#~ msgstr ""
+#~ "Wie sollen Namen (z.B. Johann Wolfgang von Goethe) in ein sortierbares "
+#~ "Format (Goethe, Johann Wolfgang von) umgewandelt werden?"
+
+#~ msgid "Name parser (Fast, Correct for most western names)"
+#~ msgstr ""
+#~ "Mit Nameparser (schnell und zuverlässig für die meisten westlichen Namen)"
+
+#~ msgid "Webservice (Slower)"
+#~ msgstr "Webservice (Langsamer)"
+
+#~ msgid "From ISBN, using barcode scanner or manual input"
+#~ msgstr "Von ISBN-Nummer mit Strichcode-Scanner oder manueller Eingabe"
+
+#~ msgid ""
+#~ "Please select a folder into which the item will be imported. Requires a "
+#~ "barcode scanner in keyboard mode"
+#~ msgstr ""
+#~ "Bitte wählen Sie einen Ordner aus, in den der Datensatz importiert werden "
+#~ "soll. Erfordert einen Strichcode-Scanner im Tastaturmodus."
+
+#~ msgid "Import from library catalog"
+#~ msgstr "Aus einem Bibliothekskatalog importieren\t"
+
+#~ msgid "GBV Katalog"
+#~ msgstr "GBV Katalog"
+
+#~ msgid "Export all references"
+#~ msgstr "Alle Datensätze exportieren\t"
+
 #~ msgid "Import from library catalogue"
 #~ msgstr "Aus Bibliothekskatalog importieren"
 
@@ -808,3 +786,6 @@ msgstr "Hilfe für die Suche"
 
 #~ msgid "Reload from filesystem"
 #~ msgstr "Aus dem Dateisystem neu laden"
+
+#~ msgid "Search"
+#~ msgstr "Suchen"

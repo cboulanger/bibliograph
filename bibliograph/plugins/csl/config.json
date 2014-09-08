@@ -1,0 +1,35 @@
+{
+  "name"    : "csl",
+
+  "include" :
+  [
+    {
+      "path" : "${QOOXDOO_PATH}/tool/data/config/application.json"
+    }
+  ],
+
+  "export" :
+  [
+    "api",
+    "api-data",
+    "clean",
+    "distclean",
+    "dependencies",
+    "fix",
+    "info",
+    "lint",
+    "migration",
+    "pretty",
+    "translation"
+  ],
+
+  "let" :
+  {
+    "APPLICATION"    : "csl",
+    "QOOXDOO_PATH" : "../../../qooxdoo-4.0.1-sdk",
+    "QXTHEME"      : "qx.theme.Modern",
+    "LOCALES"      : [ "en","de" ],
+    "CACHE"        : "${TMPDIR}/qx${QOOXDOO_VERSION}/cache",
+    "ROOT"         : "."
+  }
+}

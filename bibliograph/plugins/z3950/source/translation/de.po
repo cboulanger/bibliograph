@@ -1,0 +1,56 @@
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"Report-Msgid-Bugs-To: you@your.org\n"
+"POT-Creation-Date: 2014-09-08 18:50+0100\n"
+"PO-Revision-Date: 2014-09-08 18:50+0100\n"
+"Last-Translator: you <you@your.org>\n"
+"Language-Team: Team <yourteam@your.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: z3950/ImportWindow.js:109
+msgid "You have to select one or more reference to import."
+msgstr "Sie müssen zunächst einen oder mehrere Datensätze zum Importieren auswählen"
+
+#: z3950/ImportWindow.js:119
+msgid "Please select a folder first."
+msgstr "Bitte markieren Sie einen Ordner, in den importiert werden soll"
+
+#: z3950/ImportWindow.js:127
+msgid "Cannot determine selected folder. Please reload the folders."
+msgstr "Kann Ordner nicht finden (vielleicht neu angelegt?) Bitte Ordner neu laden."
+
+#: z3950/ImportWindow.js:132
+msgid "Invalid target folder. You can only import into normal folders."
+msgstr "Der Zielordner ist ungültig. Sie können nur in normale Ordner importieren"
+
+#: z3950/ImportWindow.js:141
+msgid "Importing references..."
+msgstr "Die Datensätze werden importiert"
+
+#: z3950/ImportWindow.js:149 z3950/Plugin.js:49 z3950/ImportWindowUi.js:40
+msgid "Import from library catalog"
+msgstr "Aus einem Bibliothekskatalog importieren"
+
+#: z3950/ImportWindowUi.js:70 z3950/ImportWindowUi.js:71
+msgid "GBV Katalog"
+msgstr ""
+
+#: z3950/ImportWindowUi.js:85
+msgid "Enter search term"
+msgstr "Bitte Suchausdruck eingeben"
+
+#: z3950/ImportWindowUi.js:94
+msgid "Search"
+msgstr "Suche"
+
+#: z3950/ImportWindowUi.js:129
+msgid "Import selected records"
+msgstr "Ausgewählte importieren"
+
+#: z3950/ImportWindowUi.js:138
+msgid "Close"
+msgstr "Schließen"
