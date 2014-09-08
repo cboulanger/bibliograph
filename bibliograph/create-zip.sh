@@ -31,7 +31,12 @@ mkdir -p bibliograph
 # assemble the contents
 cp -a ./build ./services ../readme.md ../release-notes.md \
   bibliograph/
-  
+mkdir bibliograph/plugins
+for name in $(ls -d -- ./plugins/*/); do
+  mkdir -p bibliograph/$name/services
+  cp -a $name/services/* bibliograph/$name/services
+done
+
 # add a version file
 echo "$pretty" > ./bibliograph/version.txt
   
