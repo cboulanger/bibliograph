@@ -15,7 +15,7 @@
 
 ************************************************************************ */
 
-/*global qx z3950*/
+/*global qx qcl z3950 dialog*/
 
 /**
  * Z39.50 Plugin: Application logic
@@ -145,6 +145,7 @@ qx.Class.define("z3950.ImportWindow",
         this.hidePopup();
       }, this);
     },
+    
     markForTranslation : function() {
       this.tr("Import from library catalog");
     },
@@ -152,8 +153,8 @@ qx.Class.define("z3950.ImportWindow",
     /**
      * from https://github.com/ikr/normalize-for-search/blob/master/src/normalize.js
      * MIT licence
-     * @param s {string}
-     * @return {string}
+     * @param s {String}
+     * @return {String}
      */
     normalizeForSearch : function (s) {
 

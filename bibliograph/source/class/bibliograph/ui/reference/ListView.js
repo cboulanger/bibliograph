@@ -14,7 +14,7 @@
      * Christian Boulanger (cboulanger)
 
 ************************************************************************ */
-/*global qx qcl bibliograph*/
+/*global qx qcl bibliograph virtualdata*/
 
 /**
  * Base class for Table widgets
@@ -857,7 +857,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
 
     /**
      * Shows a status message
-    * @param msg {String}
+     * @param msg {String}
      */
     showMessage : function(msg)
     {
