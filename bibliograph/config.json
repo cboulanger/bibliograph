@@ -142,7 +142,7 @@
       },
 
       // load third-party scripts before loading qooxdoo
-      "add-script" :
+      "=add-script" :
         [
           // Keypress library: http://dmauro.github.io/Keypress/
           { "uri" : "../build/resource/keypress/keypress-2.0.2.min.js" }
