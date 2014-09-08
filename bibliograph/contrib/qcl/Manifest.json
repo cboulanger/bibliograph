@@ -28,7 +28,6 @@
     "encoding"    : "utf-8",
     "class"       : "source/class",
     "resource"    : "source/resource",
-    "translation" : "source/translation",
     "type"        : "contribution"
   }
 }
