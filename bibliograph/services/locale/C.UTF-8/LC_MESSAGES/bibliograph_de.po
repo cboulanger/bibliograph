@@ -380,7 +380,7 @@ msgstr "Herausgeber/innen"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:479
 msgid "Book Title"
-msgstr "Titel des Sammelbandes"
+msgstr "Sammelbandtitel"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:495
 msgid "Contents"
