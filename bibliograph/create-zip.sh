@@ -45,7 +45,8 @@ rm -rf \
   ./bibliograph/services/config/bibliograph.ini.php \
   ./bibliograph/services/config/server.conf.php \
   ./bibliograph/services/class/qcl/test/ \
-  ./bibliograph/services/class/bibliograph/plugin/csl/citeproc-php/tests/
+  ./bibliograph/services/class/bibliograph/plugin/csl/citeproc-php/tests/ \
+  ./bibliograph/plugins/template 
 
 # create the zip file
 zip -qr ../$filename.zip ./bibliograph/
