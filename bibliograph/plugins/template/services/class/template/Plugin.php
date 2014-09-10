@@ -27,6 +27,13 @@ qcl_import("qcl_application_plugin_AbstractPlugin");
 class template_plugin
   extends qcl_application_plugin_AbstractPlugin
 {
+  
+  /**
+   * Flag to indicate whether the plugin is visible to the plugin manager.
+   * Change to true to activate plugin.
+   * @var bool
+   */
+  protected $visible = false;
 
   /**
    * The descriptive name of the plugin
@@ -45,7 +52,9 @@ class template_plugin
    * the plugin is installed and sent to the client. Usually, only one map is needed.
    * The map contains the following keys: 'name' (the descriptive name of the plugin),
    * 'url' (url to load a javascript file from) OR 'part' (name of the part that is loaded
-   * during application startup) and 'namespace' (the top namespace of the plugin)
+   * during application startup) and 'namespace' (the top namespace of the plugin).
+   * If your plugin has no frontend code that needs to be loaded, the data array
+   * can be empty.
    * @var array
    */
   protected $data = array(

@@ -46,4 +46,8 @@ echo "    \"plugin_$namespace\"  : window.$namespace ? $namespace.Plugin : null"
 echo 
 echo "    Otherwise, you can delete the 'source' folder."
 echo
+echo "    To activate the plugin and make it visible to the plugin manager,"
+echo "    change the \$visible property to true in"
+echo "    plugins/$namespace/services/class/$namespace/Plugin.php"
+echo
 
