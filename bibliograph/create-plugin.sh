@@ -36,10 +36,14 @@ find ./plugins/$namespace -type f -regex ".*/.*\.\(json\|js\|php\)" \
     -exec sed -i'' -e "s/template/$namespace/g" '{}' +
     
 echo ">>> Skeleton for '$namespace'-Plugin has been created."
-echo "    Please add the following code:"
+echo "    If your plugin has a javascript frontend, please add the following code:"
 echo
 echo "    config.json/jobs/parts-config/packages/parts:"
 echo "    \"plugin_$namespace\"  : { \"include\" : [ \"$namespace.Plugin\" ] }"
 echo 
 echo "    source/class/bibliograph/PluginManager.js:after 'var plugins= {':"
 echo "    \"plugin_$namespace\"  : window.$namespace ? $namespace.Plugin : null"
+echo 
+echo "    Otherwise, you can delete the 'source' folder."
+echo
+
