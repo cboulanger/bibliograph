@@ -263,7 +263,10 @@ class qcl_application_plugin_Service
     $registryModel->findWhere( array( 'active' => true ) );
     while( $registryModel->loadNext() )
     {
-      $data = array_merge( $data, $registryModel->get("data") );
+      $pluginData = $registryModel->get("data");
+      $pluginData['name']     = $registryModel->get("name");
+      $pluginData['namespace'] = $registryModel->getNamedId();
+      array_push($data, $pluginData);
     }
     return $data;
   }

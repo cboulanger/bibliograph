@@ -48,22 +48,25 @@ class template_plugin
   protected $description  = "The skeleton of a Bibliograph plugin";
 
   /**
-   * An array of maps of key-value pairs containing data on the plugin that is saved when
-   * the plugin is installed and sent to the client. Usually, only one map is needed.
-   * The map contains the following keys: 'name' (the descriptive name of the plugin),
-   * 'url' (url to load a javascript file from) OR 'part' (name of the part that is loaded
-   * during application startup) and 'namespace' (the top namespace of the plugin).
-   * If your plugin has no frontend code that needs to be loaded, the data array
-   * can be empty.
+   * An associative array containing data on the plugin that is saved when
+   * the plugin is installed and that is also sent to the client during application 
+   * startup.
+   * 
+   * The array contains the following keys and values: 
+   * 'source'     - (string) url to load a javascript file from
+   * 'part'       - (string) name of the part to load at application startup
+   * 'provides'   - (array) map of key - value pairs that describe the features that this
+   *                plugin provides. The key is the id of the feature, the value
+   *                is a short description of the implementation of this feature
+   * 
    * @var array
    */
   protected $data = array(
-     array(
-      'name'      => "Unfinished Bibliograph Plugin",
-      // 'url'       => "",
-      'part'      => 'plugin_template', 
-      'namespace' => 'template'
-    )
+      // ,'source'  => "https://code.jquery.com/jquery-2.1.1.min.js",
+      // ,'part'    => 'plugin_template', 
+      // ,'provides'   => array( 
+      //    'backup'    => "Very special backup implementation"
+      // )
   );
 
   /**

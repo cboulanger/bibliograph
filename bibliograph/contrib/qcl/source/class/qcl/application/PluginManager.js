@@ -136,17 +136,21 @@ qx.Class.define("qcl.application.PluginManager",
              */
             var data = pluginData.shift();
             count++;
-            self.fireDataEvent("loadingPlugin", {
-              'name'  : data.name,
-              'count' : count,
-              'sum'   : sum
-            });
             
-            if( data.url )
+            if( data.source || data.part )
+            {
+              self.fireDataEvent("loadingPlugin", {
+                'name'  : data.name,
+                'count' : count,
+                'sum'   : sum
+              });              
+            }
+            
+            if( data.source )
             {
               var url = self.getPreventCache()
-                  ? data.url + "?nocache=" + (new Date()).getTime()
-                  : data.url;
+                  ? data.source + "?nocache=" + (new Date()).getTime()
+                  : data.source;
               var loader = new qx.bom.request.Script();
               loader.onload = loadScript;
               loader.open("GET", url);
@@ -165,7 +169,6 @@ qx.Class.define("qcl.application.PluginManager",
               self._loadPart(data, loadScript);
               return;
             }
-            self.warn("Plugin '" + data.name + "' has no valid url or part property. Not installed.");
             loadScript();
           })();
           

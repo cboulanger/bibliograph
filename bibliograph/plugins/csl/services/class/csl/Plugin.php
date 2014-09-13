@@ -44,16 +44,13 @@ class csl_Plugin
   protected $description = "...";
 
   /**
-   * An array of urls to load with contain client-side plugin
-   * code
+   * An associative array containing data on the plugin that is saved when
+   * the plugin is installed and that is sent to the client during application 
+   * startup.
    * @var array
    */
   protected $data = array(
-     array(
-      'name'      => "CSL Plugin",
-      'part'      => 'plugin_csl', 
-      'namespace' => 'csl'
-    )
+    'part'      => 'plugin_csl'
   );
 
   /**

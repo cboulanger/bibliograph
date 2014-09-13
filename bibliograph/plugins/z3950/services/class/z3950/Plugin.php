@@ -41,16 +41,13 @@ class z3950_plugin
   protected $description  = "A plugin providing models for a Z39.50 connection";
 
   /**
-   * An array of urls to load with contain client-side plugin
-   * code
+   * An associative array containing data on the plugin that is saved when
+   * the plugin is installed and that is sent to the client during application 
+   * startup.
    * @var array
    */
   protected $data = array(
-     array(
-      'name'      => "Z39.50 Plugin",
-      'part'      => 'plugin_z3950',
-      'namespace' => 'z3950'
-    )
+    'part'      => 'plugin_z3950'
   );
 
   /**

@@ -40,16 +40,13 @@ class isbnscanner_plugin
   protected $description  = "A plugin providing the backend for the mobile ISBN scanner application";
 
   /**
-   * An array of urls to load with contain client-side plugin
-   * code
+   * An associative array containing data on the plugin that is saved when
+   * the plugin is installed and that is sent to the client during application 
+   * startup.
    * @var array
    */
   protected $data = array(
-    array(
-      'name'      => "ISBN Scanner Plugin",
-      'part'      => 'plugin_isbnscanner', 
-      'namespace' => 'isbnscanner'
-    )
+    'part'      => 'plugin_isbnscanner'
   );
 
   /**
