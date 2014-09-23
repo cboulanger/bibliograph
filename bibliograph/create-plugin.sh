@@ -36,16 +36,20 @@ find ./plugins/$namespace -type f -regex ".*/.*\.\(json\|js\|php\)" \
     -exec sed -i'' -e "s/template/$namespace/g" '{}' +
     
 echo ">>> Skeleton for '$namespace'-Plugin has been created."
+echo "    ------------------------------------------------------------------------"
 echo "    If your plugin has a javascript frontend, please add the following code:"
-echo
-echo "    config.json/jobs/parts-config/packages/parts:"
-echo "    \"plugin_$namespace\"  : { \"include\" : [ \"$namespace.Plugin\" ] }"
-echo 
-echo "    source/class/bibliograph/PluginManager.js:after 'var plugins= {':"
-echo "    \"plugin_$namespace\"  : window.$namespace ? $namespace.Plugin : null"
-echo 
-echo "    Otherwise, you can delete the 'source' folder."
-echo
+echo "      config.json/jobs/libraries/library:"
+echo "          { \"manifest\" : \"plugins/$namespace/Manifest.json\" },"
+echo "      config.json/jobs/parts-config/packages/parts:"
+echo "          \"plugin_$namespace\"  : { \"include\" : [ \"$namespace.Plugin\" ] },"
+echo "      source/class/bibliograph/PluginManager.js:after 'var plugins= {':"
+echo "          \"plugin_$namespace\"  : window.$namespace ? $namespace.Plugin : null,"
+echo "    Insert plugin initialization code in source/class/$namespace/Plugin.js"
+echo "    If no frontend is needed, you can delete the 'source' folder."
+echo "    ------------------------------------------------------------------------"
+echo "    If your plugin provides JSONRPC services, please configure the routes in"
+echo "    plugins/$namespace/services/class/$namespace/routes.php"
+echo "    ------------------------------------------------------------------------"
 echo "    To activate the plugin and make it visible to the plugin manager,"
 echo "    change the \$visible property to true in"
 echo "    plugins/$namespace/services/class/$namespace/Plugin.php"

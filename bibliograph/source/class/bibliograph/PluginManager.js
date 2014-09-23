@@ -35,6 +35,7 @@ qx.Class.define("bibliograph.PluginManager",
       var self = this;
       qx.io.PartLoader.require(data.part, function() {
         var plugins= {
+          "plugin_mdbackup"     : window.mdbackup ? mdbackup.Plugin : null,
           "plugin_csl"          : window.csl ? csl.Plugin : null,
           "plugin_z3950"        : window.z3950 ? z3950.Plugin : null,
           "plugin_isbnscanner"  : window.isbnscanner ? isbnscanner.Plugin : null

@@ -55,17 +55,16 @@ class template_plugin
    * The array contains the following keys and values: 
    * 'source'     - (string) url to load a javascript file from
    * 'part'       - (string) name of the part to load at application startup
-   * 'provides'   - (array) map of key - value pairs that describe the features that this
-   *                plugin provides. The key is the id of the feature, the value
-   *                is a short description of the implementation of this feature
+   * 'provides'   - (array) an associative array. Currently, only the key "feature"
+   *                is used and takes and array of feature names.
    * 
    * @var array
    */
   protected $data = array(
-      // ,'source'  => "https://code.jquery.com/jquery-2.1.1.min.js",
-      // ,'part'    => 'plugin_template', 
-      // ,'provides'   => array( 
-      //    'backup'    => "Very special backup implementation"
+      // 'source'  => "https://code.jquery.com/jquery-2.1.1.min.js",
+      // 'part'    => 'plugin_template', 
+      // 'provides'   => array( 
+      //    'feature'    => array("backup")
       // )
   );
 

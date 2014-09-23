@@ -194,12 +194,12 @@ abstract class qcl_application_Application
    * Returns an associative array that maps service names to class names.
    * By default, check if a file name "routes.php" exists in the same
    * directory as the calling application class. If yes, return the content of this file.
-   * @param string $subclassFile Pass __FILE__
+   * @param string $subclassFile Must be the path to the file subclassing this class TODO
    * @return array
    */
   public function routes($subclassFile)
   {
-    $routeFile    = dirname($subclassFile) . "/routes.php";
+    $routeFile    = dirname($subclassFile) . "/". QCL_APPLICATION_ROUTEFILE_NAME;
     if( file_exists( $routeFile ) )
     {
       $routes =  include( $routeFile );
@@ -553,6 +553,102 @@ abstract class qcl_application_Application
         $logger->setFilterEnabled( constant($const), $value );
       }
     }
+  }
+  
+  //----------------------------------------------------------------
+  // convenience methods concerning access control and configuration
+  //----------------------------------------------------------------  
+
+  /**
+   * Returns true if a permission with the given named id exists and false if
+   * not. 
+   * @param string $namedId The named id of the permission
+   * @return bool
+   */
+  public function hasPermission( $namedId )
+  {
+    return $this->getAccessController()->getPermissionModel()->namedIdExists($namedId);
+  }
+
+  /**
+   * Creates a permission with the given named id if it doesn't
+   * already exist. 
+   * @param array|string $namedId The named id(s) of the permission(s)
+   * @param string $description Optional description of the permission. 
+   *    Only used when first argument is a string.
+   * @return void
+   */
+  public function addPermission( $namedId, $description=null )
+  {
+    if ( is_array($namedId) )
+    {
+      foreach( $namedId as $id )
+      {
+        $this->addPermission( $id );
+      }
+      return;
+    }
+    $this->getAccessController()->getPermissionModel()
+      ->createIfNotExists($namedId, array( "description" => $description ));
+  }
+
+  /**
+   * Removes a permission with the given named id. Silently fails if the 
+   * permission doesn't exist.
+   * @param array|string $namedId The named id(s) of the permission(s)
+   * @return void
+   */
+  public function removePermission( $namedId )
+  {
+    if ( is_array($namedId) )
+    {
+      foreach( $namedId as $id )
+      {
+        $this->removePermission( $id );
+      }
+      return;
+    }    
+    try
+    {
+      $this->getAccessController()->getPermissionModel()->load($namedId)->delete();  
+    }
+    catch( qcl_data_model_RecordNotFoundException $e){}
+  }
+  
+  /**
+   * Creates a preference enty with the given properties
+	 * @param $key
+	 *     The name ("key") of the config value
+   * @param mixed $default
+   *     The default value
+   * @param boolean $customize
+   *     If true, allow users to create their
+   *     own variant of the configuration setting
+	 * @param bool $final
+	 *     If true, the value cannot be modified after creation
+	 */
+  public function addPreference( $key, $default, $customize=false,  $final=false )
+  {
+    switch( gettype( $default) )
+    {
+      case "boolean": $type = QCL_CONFIG_TYPE_BOOLEAN; break;
+      case "integer": 
+      case "double":  
+        $type = QCL_CONFIG_TYPE_NUMBER; break;
+      case "string": $type = QCL_CONFIG_TYPE_STRING; break;
+      case "array": $type = QCL_CONFIG_TYPE_LIST; break;
+      default: 
+        throw new LogicException("Invalid default value for preference key '$key'");
+    }
+    $this->getConfigModel()->createKeyIfNotExists($key, $type, $customize, $default, $final);
+  }
+  
+  /**
+   * Returns the value of the given preference key
+   */
+  public function getPreference( $key )
+  {
+    return $this->getConfigModel()->getKey( $key );
   }
 
   //-------------------------------------------------------------

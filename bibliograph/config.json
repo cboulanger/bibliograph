@@ -37,7 +37,8 @@
     "validate-manifest",
     "watch",
     "create-zip",
-    "deploy"
+    "deploy",
+    "create-plugin"
   ],
 
   "default-job" : "source-hybrid",
@@ -95,22 +96,13 @@
     },
     
     // Creates a zip file with a standalone build that can be deployed to a server.
-    "create-zip" :
-    {
-      "shell" :
-      {
-        "command": "bash ./create-zip.sh",
-        "command-not-found" : "Could not create zip file. Please install the zip command."
-      }
-    },
+    "create-zip" : { "shell" : { "command": "bash ./create-zip.sh" } },
 
-    "deploy" :
-    {
-      "shell" :
-      {
-        "command": "bash ./deploy.sh"
-      }
-    },
+    // deploys the current state of the app to a development server
+    "deploy" : { "shell" : { "command": "bash ./deploy.sh" } },
+    
+    // Creates a plugin from the plugin template.
+    "create-plugin" : { "shell" : { "command": "bash ./create-plugin.sh" } },
 
     // jobs for source & build version
     "common":

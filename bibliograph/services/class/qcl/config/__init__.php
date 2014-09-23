@@ -29,6 +29,7 @@ define( "QCL_CONFIG_TYPE_NUMBER",   "number");
 define( "QCL_CONFIG_TYPE_BOOLEAN",  "boolean");
 define( "QCL_CONFIG_TYPE_LIST",     "list");
 
+
 /*
  * exceptions
  */

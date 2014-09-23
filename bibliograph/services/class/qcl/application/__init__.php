@@ -61,6 +61,15 @@ if ( ! defined( "QCL_PLUGIN_DIR") )
   define( "QCL_PLUGIN_DIR", dirname(SERVER_ROOT) . "/plugins" );
 }
 
+/**
+ * Name or the file in which the service routes are stored as an array
+ */
+if ( ! defined( "QCL_APPLICATION_ROUTEFILE_NAME") )
+{
+  define( "QCL_APPLICATION_ROUTEFILE_NAME", "routes.php" );
+}
+
+
 /*
  * log filters
  */

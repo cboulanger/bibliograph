@@ -404,18 +404,15 @@ class JsonRpcServer extends AbstractServer
 
     /*
      * This will only work if the php error contains no double quotation marks and no
-     * characters that need to be escaped (e.g., newline).
+     * characters that need to be escaped (e.g., newline). 
+     * DOES NOT WORK since PHP always inserts newlines before and after the error message
      */
-    ini_set('error_prepend_string', '{"phperror":"');
-    ini_set('error_append_string', '",' .
-        '  "error":' .
-        '  {' .
-        '    "origin":' . JsonRpcError_Origin_Server . ',' .
-        '    "code":' .  JsonRpcError_ScriptError . ',' .
-        '    "message":"Fatal PHP Error. See response content for error description ' .
-        ' "}' .
-        '}'
+    ini_set('error_prepend_string', '{"error":{' .
+        '"origin":' . JsonRpcError_Origin_Server . ',' .
+        '"code":' .  JsonRpcError_ScriptError . ',' .
+        '"message":"'
     );
+    ini_set('error_append_string', '"}}');
 
     /*
      * error handler function for php jsonrpc
