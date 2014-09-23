@@ -115,23 +115,24 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       /*
        * System
        */
-      var qxToolBarMenuButton1 = new qx.ui.toolbar.MenuButton(this.tr('System'), "icon/22/categories/system.png", null);
-      qxToolBarMenuButton1.setIcon("icon/22/categories/system.png");
-      qxToolBarMenuButton1.setVisibility("excluded");
-      qxToolBarMenuButton1.setLabel(this.tr('System'));
-      qxToolBarPart2.add(qxToolBarMenuButton1);
-      qx.core.Init.getApplication().getAccessManager().getPermissionManager().create("system.menu.view").bind("state", qxToolBarMenuButton1, "visibility", {
+      var systemButton = new qx.ui.toolbar.MenuButton();
+      systemButton.setIcon("icon/22/categories/system.png");
+      systemButton.setVisibility("excluded");
+      systemButton.setLabel(this.tr('System'));
+      qxToolBarPart2.add(systemButton);
+      qx.core.Init.getApplication().getAccessManager().getPermissionManager().create("system.menu.view").bind("state", systemButton, "visibility", {
         converter : qcl.bool2visibility
       });
+      var systemMenu = new qx.ui.menu.Menu();
+      systemButton.setMenu(systemMenu);
+      systemMenu.setWidgetId("bibliograph-menu-system");
 
       /*
        * Preferences
        */
-      var qxMenu1 = new qx.ui.menu.Menu();
-      qxToolBarMenuButton1.setMenu(qxMenu1);
-      var qxMenuButton1 = new qx.ui.menu.Button(this.tr('Preferences'), null, null, null);
+      var qxMenuButton1 = new qx.ui.menu.Button();
       qxMenuButton1.setLabel(this.tr('Preferences'));
-      qxMenu1.add(qxMenuButton1);
+      systemMenu.add(qxMenuButton1);
       qx.core.Init.getApplication().getAccessManager().getPermissionManager().create("preferences.view").bind("state", qxMenuButton1, "visibility", {
         converter : qcl.bool2visibility
       });
@@ -142,9 +143,9 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       /*
        * Access management
        */
-      var qxMenuButton2 = new qx.ui.menu.Button(this.tr('Access management'), null, null, null);
+      var qxMenuButton2 = new qx.ui.menu.Button();
       qxMenuButton2.setLabel(this.tr('Access management'));
-      qxMenu1.add(qxMenuButton2);
+      systemMenu.add(qxMenuButton2);
       qx.core.Init.getApplication().getAccessManager().getPermissionManager().create("access.manage").bind("state", qxMenuButton2, "visibility", {
         converter : qcl.bool2visibility
       });
@@ -155,9 +156,9 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       /*
        * Plugins
        */
-      var qxMenuButton3 = new qx.ui.menu.Button(this.tr('Plugins'), null, null, null);
+      var qxMenuButton3 = new qx.ui.menu.Button();
       qxMenuButton3.setLabel(this.tr('Plugins'));
-      qxMenu1.add(qxMenuButton3);
+      systemMenu.add(qxMenuButton3);
       qx.core.Init.getApplication().getAccessManager().getPermissionManager().create("plugin.manage").bind("state", qxMenuButton3, "visibility", {
         converter : qcl.bool2visibility
       });
@@ -166,39 +167,9 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       }, this);
 
       /*
-       * Backup menu
-       */
-      var qxMenuButton4 = new qx.ui.menu.Button(this.tr('Backup'), null, null, null);
-      qxMenuButton4.setLabel(this.tr('Backup'));
-      qxMenu1.add(qxMenuButton4);
-      qx.core.Init.getApplication().getAccessManager().getPermissionManager().create("backup.create").bind("state", qxMenuButton4, "visibility", {
-        converter : qcl.bool2visibility
-      });
-      var qxMenu2 = new qx.ui.menu.Menu();
-      qxMenuButton4.setMenu(qxMenu2);
-      var qxMenuButton5 = new qx.ui.menu.Button(this.tr('Create Backup'), null, null, null);
-      qxMenuButton5.setLabel(this.tr('Create Backup'));
-      qxMenu2.add(qxMenuButton5);
-      qxMenuButton5.addListener("execute", function(e) {
-        this.getApplication().getRpcManager().execute("bibliograph.backup", "dialogCreateBackup", [this.getApplication().getDatasource()]);
-      }, this);
-      var qxMenuButton6 = new qx.ui.menu.Button(this.tr('Restore Backup'), null, null, null);
-      qxMenuButton6.setLabel(this.tr('Restore Backup'));
-      qxMenu2.add(qxMenuButton6);
-      qxMenuButton6.addListener("execute", function(e) {
-        this.getApplication().getRpcManager().execute("bibliograph.backup", "dialogRestoreBackup", [this.getApplication().getDatasource()]);
-      }, this);
-      var qxMenuButton7 = new qx.ui.menu.Button(this.tr('Delete old backups'), null, null, null);
-      qxMenuButton7.setLabel(this.tr('Delete old backups'));
-      qxMenu2.add(qxMenuButton7);
-      qxMenuButton7.addListener("execute", function(e) {
-        this.getApplication().getRpcManager().execute("bibliograph.backup", "dialogDeleteBackups", [this.getApplication().getDatasource()]);
-      }, this);
-
-      /*
        * Import Menu
        */
-      var qxToolBarMenuButton2 = new qx.ui.toolbar.MenuButton(this.tr('Import'), "icon/22/places/network-server.png", null);
+      var qxToolBarMenuButton2 = new qx.ui.toolbar.MenuButton();
       qxToolBarMenuButton2.setLabel(this.tr('Import'));
       qxToolBarMenuButton2.setIcon("icon/22/places/network-server.png");
       qxToolBar1.add(qxToolBarMenuButton2);

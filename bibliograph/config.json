@@ -76,7 +76,8 @@
         // plugins
         { "manifest" : "plugins/csl/Manifest.json" },
         { "manifest" : "plugins/z3950/Manifest.json" },
-        { "manifest" : "plugins/isbnscanner/Manifest.json" }
+        { "manifest" : "plugins/isbnscanner/Manifest.json" },
+        { "manifest" : "plugins/mdbackup/Manifest.json" }
 
       ]
     },
@@ -90,7 +91,8 @@
           "boot": { "include" : [ "${QXTHEME}", "bibliograph.Application" ] },
           "plugin_csl"          : { "include" : [ "csl.Plugin" ] },
           "plugin_z3950"        : { "include" : [ "z3950.Plugin" ] },
-          "plugin_isbnscanner"  : { "include" : [ "isbnscanner.Plugin" ] }
+          "plugin_isbnscanner"  : { "include" : [ "isbnscanner.Plugin" ] },
+          "plugin_mdbackup"     : { "include" : [ "mdbackup.Plugin" ] }
         }
       }
     },

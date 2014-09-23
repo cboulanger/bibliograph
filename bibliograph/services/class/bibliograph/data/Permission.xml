@@ -9,8 +9,6 @@
         <description>Manage users, roles, permissions, and datasources</description>
       </record>
         <record namedId="application.reportBug"/>
-        <record namedId="backup.create"/>
-        <record namedId="backup.restore"/>
         <record namedId="config.default.edit"/>
         <record namedId="config.key.add"/>
         <record namedId="config.key.edit"/>

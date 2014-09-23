@@ -21,8 +21,9 @@
 qcl_import("qcl_data_controller_Controller");
 qcl_import("qcl_ui_dialog_Confirm");
 qcl_import("qcl_ui_dialog_Alert");
+qcl_import("bibliograph_service_Access");
 
-class bibliograph_service_Backup
+class mdbackup_Backup
   extends qcl_data_controller_Controller
 {
 
@@ -57,45 +58,7 @@ class bibliograph_service_Backup
    */
   public function checkDatasourceAccess( $datasource )
   {
-    qcl_import("bibliograph_service_Access");
     bibliograph_service_Access::getInstance()->checkDatasourceAccess( $datasource );
-  }
-
-  /**
-   * Check if we can make or restore backups
-   * @throws JsonRpcException
-   * @return void
-   */
-  public function checkBackupPrerequisites()
-  {
-
-    /*
-     * permission
-     */
-    $this->requirePermission("backup.create");
-
-    /*
-     * zipped file
-     */
-    if( ! class_exists("ZipArchive") )
-    {
-      $this->warn("You must install the ZIP extension in order to create backups");
-      throw new JsonRpcException("Cannot create backup archive.");
-    }
-
-    /*
-     * backup path
-     */
-    if ( ! defined("BIBLIOGRAPH_BACKUP_PATH") )
-    {
-      $this->warn("You must define the BIBLIOGRAPH_BACKUP_PATH constant." );
-      throw new JsonRpcException("Cannot create backup archive.");
-    }
-    if ( ! file_exists( BIBLIOGRAPH_BACKUP_PATH ) or ! is_writable( BIBLIOGRAPH_BACKUP_PATH ) )
-    {
-      $this->warn("Directory '" . BIBLIOGRAPH_BACKUP_PATH . "' needs to exist and be writable" );
-      throw new JsonRpcException("Cannot create backup archive.");
-    }
   }
 
 
@@ -221,7 +184,7 @@ class bibliograph_service_Backup
       return "ABORTED";
     }
 
-    $this->checkBackupPrerequisites();
+    $this->requirePermission("mdbackup.create");
     qcl_assert_valid_string( $datasource );
 
     qcl_import("qcl_event_Timer");
@@ -244,7 +207,7 @@ class bibliograph_service_Backup
    */
   public function method_dialogRestoreBackup( $datasource )
   {
-    $this->checkBackupPrerequisites();
+    $this->requirePermission("mdbackup.restore");
     $msg = $this->tr("Do you really want to restore Database '%s'? All existing data will be lost!", $datasource);
     qcl_import("qcl_ui_dialog_Confirm");
     return new qcl_ui_dialog_Confirm(
@@ -268,7 +231,7 @@ class bibliograph_service_Backup
       return "ABORTED";
     }
 
-    $this->checkBackupPrerequisites();
+    $this->requirePermission("mdbackup.restore");
     $backupPath = BIBLIOGRAPH_BACKUP_PATH;
     $options = array();
     $files = scandir($backupPath);
@@ -320,7 +283,7 @@ class bibliograph_service_Backup
       return "ABORTED";
     }
 
-    $this->checkBackupPrerequisites();
+    $this->requirePermission("mdbackup.restore");
 
     $backupPath = BIBLIOGRAPH_BACKUP_PATH;
     $tmpPath    = QCL_TMP_PATH;
@@ -402,11 +365,12 @@ class bibliograph_service_Backup
   /**
    * Confirmation dialog for deleting backups
    */
-  public function method_dialogDeleteBackups($datasource)
+  public function method_dialogDeleteBackups( $datasource )
   {
-    $this->requirePermission("backup.delete");
+    $this->requirePermission("mdbackup.delete");
+    $days = $this->getApplication()->getPreference("mdbackup.daysToKeepBackupFor");
     return new qcl_ui_dialog_Confirm(
-      $this->tr("All backups older than one day will be deleted. Proceed?"),
+      $this->tr("All backups older than %s days will be deleted. Proceed?", $days),
       null,
       $this->serviceName(), "deleteBackups", array( $datasource )
     );
@@ -419,7 +383,7 @@ class bibliograph_service_Backup
   {
     if( ! $confirmed ) return "CANCELLED";
 
-    $this->requirePermission("backup.delete");
+    $this->requirePermission("mdbackup.delete");
 
     $backupPath = BIBLIOGRAPH_BACKUP_PATH;
     $filesDeleted = 0;
