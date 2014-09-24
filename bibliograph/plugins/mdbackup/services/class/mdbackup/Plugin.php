@@ -55,8 +55,6 @@ class mdbackup_plugin
    * The array contains the following keys and values: 
    * 'source'     - (string) url to load a javascript file from
    * 'part'       - (string) name of the part to load at application startup
-   * 'provides'   - (array) an associative array. Currently, only the key "feature"
-   *                is used and takes and array of feature names.
    * 
    * @var array
    */
@@ -98,8 +96,12 @@ class mdbackup_plugin
     $app = $this->getApplication();
     $app->addPreference( "mdbackup.daysToKeepBackupFor", 3 );
     $app->addPermission(array("mdbackup.create","mdbackup.restore","mdbackup.delete"));
+    foreach( array("admin", "manager" ) as $role )
+    {
+      $app->giveRolePermission( $role, array("mdbackup.create","mdbackup.restore","mdbackup.delete") );
+    }
     
-    return $this->tr("Reload application to finish installation");
+    return $this->tr("Reload application to finish installation.");
   }
 
   /**

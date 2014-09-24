@@ -19,7 +19,6 @@
 
 /**
  * Plugin Initializer Class
- * 
  */
 qx.Class.define("mdbackup.Plugin",
 {
@@ -37,7 +36,7 @@ qx.Class.define("mdbackup.Plugin",
       
       // add backup menu
       var qxMenuButton4 = new qx.ui.menu.Button();
-      qxMenuButton4.setLabel(this.tr('Backup'));
+      qxMenuButton4.setLabel(this.tr('Backup (Mysqldump)'));
       systemMenu.add(qxMenuButton4);
       permMgr.create("mdbackup.create").bind("state", qxMenuButton4, "visibility", {
         converter : qcl.bool2visibility
