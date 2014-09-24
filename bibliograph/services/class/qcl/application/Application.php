@@ -616,6 +616,36 @@ abstract class qcl_application_Application
   }
   
   /**
+   * Assign the given role the given permissions
+   * @param string $roleId The named id of the role
+   * @param string|array $permissions The named id(s) of the permissions
+   * @throws LogicException 
+   */
+  public function giveRolePermission( $roleId, $permissions )
+  {
+    try
+    {
+      $roleModel = $this->getAccessController()->getRoleModel()->load( $roleId );  
+    }
+    catch( qcl_data_model_RecordNotFoundException $e )
+    {
+      throw new LogicException("Unknown role '$roleId'");
+    }
+    $permissionModel = $this->getAccessController()->getPermissionModel();
+    foreach( (array) $permissions as $permissionId )
+    {
+      try
+      {
+        $roleModel->linkModel( $permissionModel->load( $permissionId ) );   
+      }
+      catch( qcl_data_model_RecordNotFoundException $e )
+      {
+        throw new LogicException("Unknown permission '$permissionId'");
+      }
+    }
+  }
+  
+  /**
    * Creates a preference enty with the given properties
 	 * @param $key
 	 *     The name ("key") of the config value
