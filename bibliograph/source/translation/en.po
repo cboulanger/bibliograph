@@ -49,48 +49,48 @@ msgid ""
 "reloaded"
 msgstr ""
 
-#: bibliograph/Main.js:641
+#: bibliograph/Main.js:640
 msgid "Loading datasource information ..."
 msgstr ""
 
-#: bibliograph/Main.js:771
+#: bibliograph/Main.js:770
 msgid ""
 "To log in, you need a secure connection. After you press 'OK', the "
 "application will be reloaded in secure mode. After the application finished "
 "loading, you can log in again."
 msgstr ""
 
-#: bibliograph/Main.js:782
+#: bibliograph/Main.js:781
 msgid ""
 "The application is currently in a read-only state. Only the administrator "
 "can log in."
 msgstr ""
 
-#: bibliograph/Main.js:816
+#: bibliograph/Main.js:815
 msgid "Authenticating ..."
 msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:96
-#: bibliograph/ui/window/AccessControlTool.js:111 bibliograph/Main.js:853
-#: bibliograph/Main.js:972
+#: bibliograph/ui/window/AccessControlTool.js:111 bibliograph/Main.js:852
+#: bibliograph/Main.js:971
 msgid "Please wait ..."
 msgstr ""
 
-#: bibliograph/Main.js:875
+#: bibliograph/Main.js:874
 msgid "Logging out ..."
 msgstr ""
 
-#: bibliograph/Main.js:910
+#: bibliograph/Main.js:909
 msgid "You don't have access to any datasource on the server."
 msgstr ""
 
-#: bibliograph/Main.js:962
+#: bibliograph/Main.js:961
 msgid ""
 "Cannot open help window. Please disable the popup-blocker of your browser "
 "for this website."
 msgstr ""
 
-#: bibliograph/Main.js:1047
+#: bibliograph/Main.js:1046
 msgid "Retrieving user data..."
 msgstr ""
 
@@ -196,12 +196,12 @@ msgstr ""
 msgid "Reload"
 msgstr ""
 
-#: bibliograph/ui/item/DuplicatesView.js:162
 #: bibliograph/ui/reference/ListView.js:1105
 #: bibliograph/ui/reference/ListView.js:1122
 #: bibliograph/ui/reference/ListView.js:1138
 #: bibliograph/ui/reference/ListView.js:1157
 #: bibliograph/ui/item/RecordInfo.js:167
+#: bibliograph/ui/item/DuplicatesView.js:162
 msgid "Processing request..."
 msgstr ""
 
@@ -335,86 +335,70 @@ msgstr ""
 msgid "Datasources"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:118 bibliograph/ui/main/Toolbar.js:121
+#: bibliograph/ui/main/Toolbar.js:121
 msgid "System"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:132 bibliograph/ui/main/Toolbar.js:133
+#: bibliograph/ui/main/Toolbar.js:134
 #: bibliograph/ui/window/PreferencesWindow.js:39
 msgid "Preferences"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:145 bibliograph/ui/main/Toolbar.js:146
+#: bibliograph/ui/main/Toolbar.js:147
 msgid "Access management"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:158 bibliograph/ui/main/Toolbar.js:159
+#: bibliograph/ui/main/Toolbar.js:160
 msgid "Plugins"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:171 bibliograph/ui/main/Toolbar.js:172
-msgid "Backup"
-msgstr ""
-
-#: bibliograph/ui/main/Toolbar.js:179 bibliograph/ui/main/Toolbar.js:180
-msgid "Create Backup"
-msgstr ""
-
-#: bibliograph/ui/main/Toolbar.js:185 bibliograph/ui/main/Toolbar.js:186
-msgid "Restore Backup"
-msgstr ""
-
-#: bibliograph/ui/main/Toolbar.js:191 bibliograph/ui/main/Toolbar.js:192
-msgid "Delete old backups"
-msgstr ""
-
-#: bibliograph/ui/main/Toolbar.js:201 bibliograph/ui/main/Toolbar.js:202
+#: bibliograph/ui/main/Toolbar.js:173
 msgid "Import"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:215 bibliograph/ui/main/Toolbar.js:216
+#: bibliograph/ui/main/Toolbar.js:186 bibliograph/ui/main/Toolbar.js:187
 msgid "Import text file"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:226 bibliograph/ui/main/Toolbar.js:227
+#: bibliograph/ui/main/Toolbar.js:197 bibliograph/ui/main/Toolbar.js:198
 #: bibliograph/ui/window/AccessControlTool.js:116
 msgid "Help"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:236 bibliograph/ui/main/Toolbar.js:237
+#: bibliograph/ui/main/Toolbar.js:207 bibliograph/ui/main/Toolbar.js:208
 msgid "Online Help"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:246 bibliograph/ui/main/Toolbar.js:248
+#: bibliograph/ui/main/Toolbar.js:217 bibliograph/ui/main/Toolbar.js:219
 msgid "Report a problem or request a feature"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:260 bibliograph/ui/main/Toolbar.js:261
+#: bibliograph/ui/main/Toolbar.js:231 bibliograph/ui/main/Toolbar.js:232
 #: bibliograph/ui/window/AboutWindow.js:34
 msgid "About Bibliograph"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:298
+#: bibliograph/ui/main/Toolbar.js:269
 msgid "Maintenance Mode"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:299
+#: bibliograph/ui/main/Toolbar.js:270
 msgid ""
 "The application is currently in maintenance mode. You might experience "
 "problems. Please come back later."
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:303
+#: bibliograph/ui/main/Toolbar.js:274
 msgid "Development Mode"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:304
+#: bibliograph/ui/main/Toolbar.js:275
 msgid ""
 "The application is currently in development mode. This should never be the "
 "case on a public server."
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:325
+#: bibliograph/ui/main/Toolbar.js:296
 msgid "Enter search term"
 msgstr ""
 
@@ -702,16 +686,39 @@ msgstr ""
 msgid "Search Help Window"
 msgstr ""
 
+#~ msgid "Backup"
+#~ msgstr ""
+
 #~ msgid "Cannot determine selected folder."
+#~ msgstr ""
+
+#~ msgid "Create Backup"
 #~ msgstr ""
 
 #~ msgid "Delete Duplicate"
 #~ msgstr ""
 
+#~ msgid "Restore Backup"
+#~ msgstr ""
+
+#~ msgid "Delete old backups"
+#~ msgstr ""
+
 #~ msgid "Display Duplicate"
 #~ msgstr ""
 
-#~ msgid "Loading formatted citations..."
+#~ msgid "Export all references"
+#~ msgstr ""
+
+#~ msgid "From ISBN, using barcode scanner or manual input"
+#~ msgstr ""
+
+#~ msgid "GBV Katalog"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "How should names (e.g. William Shakespeare) be converted to a sortable "
+#~ "format (Shakespeare, William)?"
 #~ msgstr ""
 
 #~ msgid ""
@@ -722,18 +729,19 @@ msgstr ""
 #~ msgid "Import by ISBN"
 #~ msgstr ""
 
-#~ msgid ""
-#~ "How should names (e.g. William Shakespeare) be converted to a sortable "
-#~ "format (Shakespeare, William)?"
+#~ msgid "Import from library catalog"
+#~ msgstr ""
+
+#~ msgid "Import from library catalogue"
+#~ msgstr ""
+
+#~ msgid "Loading formatted citations..."
 #~ msgstr ""
 
 #~ msgid "Name parser (Fast, Correct for most western names)"
 #~ msgstr ""
 
-#~ msgid "Webservice (Slower)"
-#~ msgstr ""
-
-#~ msgid "From ISBN, using barcode scanner or manual input"
+#~ msgid "No internet connection."
 #~ msgstr ""
 
 #~ msgid ""
@@ -741,23 +749,11 @@ msgstr ""
 #~ "barcode scanner in keyboard mode"
 #~ msgstr ""
 
-#~ msgid "Import from library catalog"
-#~ msgstr ""
-
-#~ msgid "GBV Katalog"
-#~ msgstr ""
-
-#~ msgid "Export all references"
-#~ msgstr ""
-
-#~ msgid "Import from library catalogue"
-#~ msgstr ""
-
-#~ msgid "No internet connection."
-#~ msgstr ""
-
 #~ msgid "Reload from filesystem"
 #~ msgstr ""
 
 #~ msgid "Search"
+#~ msgstr ""
+
+#~ msgid "Webservice (Slower)"
 #~ msgstr ""
