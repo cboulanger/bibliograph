@@ -15,7 +15,7 @@
 
 ************************************************************************ */
 
-/*global qx template*/
+/*global qx qcl bibliograph dialog template*/
 
 /**
  * Plugin Initializer Class
