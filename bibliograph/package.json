@@ -1,0 +1,27 @@
+{
+  "name": "bibliograph",
+  "version": "2.1.0-pre",
+  "description": "Bibliograph - Online bibliographic data manager",
+  "main": "-",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cboulanger/bibliograph"
+  },
+  "keywords": [
+    "bibliography",
+    "reference manager"
+  ],
+  "author": "Christian Boulanger",
+  "license": "GPL",
+  "bugs": {
+    "url": "https://github.com/cboulanger/bibliograph/issues"
+  },
+  "homepage": "https://github.com/cboulanger/bibliograph",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-phpdocumentor": "^0.4.1"
+  }
+}
