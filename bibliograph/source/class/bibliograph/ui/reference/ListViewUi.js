@@ -300,19 +300,7 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
           window.open(url + model.getIsbn() );
         }
       }, this);
-      
-      /**
-       * Testing
-       */
-      var testButton = new qx.ui.menu.Button(this.tr('Test Progress Bar'));
-      shareMenu.add(testButton);
-      var testProgress = new qcl.ui.dialog.ServerProgress("testProgress","bibliograph.backup","testProgress");
-      testProgress.set({
-        hideWhenCompleted : true
-      });
-      testButton.addListener("execute", function(e) {
-        testProgress.start();
-      }, this);      
+           
 
       /*
        * Edit menu
