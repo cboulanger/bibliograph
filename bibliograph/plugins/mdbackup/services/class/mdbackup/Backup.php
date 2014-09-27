@@ -42,6 +42,13 @@ class mdbackup_Backup
    * @var bool
    */
   protected $controlDatasourceAccess = true;
+  
+  
+  /**
+   * The extension of the backup file. Must contain the preceding period.
+   * @var string
+   */
+  protected $backup_file_extension = ".mdbackup.zip";
 
   /*
   ---------------------------------------------------------------------------
@@ -110,7 +117,10 @@ class mdbackup_Backup
     $backupPath = BIBLIOGRAPH_BACKUP_PATH;
     $tmpPath    = QCL_TMP_PATH;
 
-    $zipfile = realpath( $backupPath ) . "/" . $datasource . "_" . date("Y-m-d_H-i-s") . ".zip";
+    $zipfile = 
+      realpath( $backupPath ) . "/" . $datasource . 
+      "_" . date("Y-m-d_H-i-s") . $this->backup_file_extension;
+      
     $zip = new ZipArchive();
     if ($zip->open($zipfile, ZIPARCHIVE::CREATE)!==TRUE)
     {
@@ -186,18 +196,10 @@ class mdbackup_Backup
 
     $this->requirePermission("mdbackup.create");
     qcl_assert_valid_string( $datasource );
-
-    qcl_import("qcl_event_Timer");
-    $timer = new qcl_event_Timer();
-    $timer->start();
-
     $this->createBackup( $datasource );
 
-    $timer->stop();
-
-
     return new qcl_ui_dialog_Alert(
-      $this->tr( "Backup created in %s seconds" , $timer->getElapsedTime() )
+      $this->tr( "Backup has been created." )
     );
   }
 
@@ -239,7 +241,7 @@ class mdbackup_Backup
     foreach( $files as $file )
     {
       if ( $file[0] == "." ) continue;
-      if ( substr( $file, -4) != ".zip" ) continue;
+      if ( substr( $file, -4) != $this->backup_file_extension ) continue;
       $name = explode( "_", substr( basename($file),0, -4) );
       if ( $name[0] != $datasource ) continue;
       $options[] = array(
@@ -391,7 +393,7 @@ class mdbackup_Backup
     foreach( scandir($backupPath) as $file )
     {
       if ( $file[0] == "." ) continue;
-      if ( substr( $file, -4) != ".zip" ) continue;
+      if ( substr( $file, -4) != $this->backup_file_extension ) continue;
       $name = explode( "_", substr( basename($file),0, -4) );
       if ( $name[0] != $datasource ) continue;
       if ( $name[1] != date("Y-m-d") ){
@@ -409,17 +411,5 @@ class mdbackup_Backup
     $msg = $this->tr("%s backups were deleted.", $filesDeleted);
     if( $problem ) $msg .= $this->tr("There was a problem. Please examine the log file.");
     return new qcl_ui_dialog_Alert($msg);
-  }
-
-  function method_testProgress()
-  {
-    qcl_import("qcl_ui_dialog_ServerProgress");
-    $progress = new qcl_ui_dialog_ServerProgress("testProgress");
-    for ( $i=0; $i<101; $i++)
-    {
-      $progress->setProgress($i,"Message$i");
-      usleep(pow(2,rand(12,18)));
-    }
-    $progress->complete();
   }
 }

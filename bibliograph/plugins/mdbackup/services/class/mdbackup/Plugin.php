@@ -45,7 +45,7 @@ class mdbackup_plugin
    * The detailed description of the plugin
    * @var string
    */
-  protected $description  = "Fast backup implementation using Mysql's native export feature";
+  protected $description  = "Fast backup implementation using Mysql's native export feature. Requires special MySql privileges.";
 
   /**
    * An associative array containing data on the plugin that is saved when
@@ -59,21 +59,18 @@ class mdbackup_plugin
    * @var array
    */
   protected $data = array(
-    'part'      => 'plugin_mdbackup', 
-    'provides'  => array( 'feature' => array("backup") )
+    'part'      => 'plugin_mdbackup'
   );
 
   /**
    * Installs the plugin. 
    * @throws qcl_application_plugin_Exception if an error occurs
    * @return void
+   * @todo check MySql privileges
    */
   public function install()
   {
-    /*
-     * Check prerequisites
-     */
-     
+    // Check prerequisites
     $error = array();
     if( ! class_exists("ZipArchive") )
     {
