@@ -33,7 +33,7 @@ class mdbackup_plugin
    * Change to true to activate plugin.
    * @var bool
    */
-  protected $visible = true;
+  protected $visible = false;
 
   /**
    * The descriptive name of the plugin
