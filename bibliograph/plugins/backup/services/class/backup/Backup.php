@@ -19,8 +19,10 @@
 ************************************************************************ */
 
 qcl_import("qcl_data_controller_Controller");
+qcl_import("qcl_ui_dialog_Form");
 qcl_import("qcl_ui_dialog_Confirm");
 qcl_import("qcl_ui_dialog_Alert");
+qcl_import("qcl_ui_dialog_ServerProgress");
 qcl_import("bibliograph_service_Access");
 
 class backup_Backup
@@ -74,43 +76,26 @@ class backup_Backup
   */
 
   /**
-   * @param $datasource
-   * @return qcl_ui_dialog_Confirm
+   * Start the backup
+   * @param string $datasource
+   * @param string $progressWidgetId
    */
-  public function method_dialogCreateBackup( $datasource )
+  public function method_createBackup( $datasource, $progressWidgetId  )
   {
-    return new qcl_ui_dialog_Confirm(
-      $this->tr("Do you want to backup Database '%s'", $datasource),
-      null,
-      $this->serviceName(), "createBackup", array( $datasource )
-    );
-  }
-
-  /**
-   * Do the backup
-   * @param $go
-   * @param $datasource
-   * @return qcl_ui_dialog_Alert
-   */
-  public function method_createBackup( $go, $datasource )
-  {
-    if ( ! $go )
-    {
-      return "ABORTED";
-    }
-
     $this->requirePermission("backup.create");
     qcl_assert_valid_string( $datasource );
-
-    $this->createBackup( $datasource );
-
-
-    return new qcl_ui_dialog_Alert(
-      $this->tr( "Backup created." )
-    );
+    $progressBar = new qcl_ui_dialog_ServerProgress($progressWidgetId );
+    try
+    {
+      $zipfile = $this->createBackup( $datasource, $progressBar );  
+    }
+    catch( Exception $e)
+    {
+      $progressBar->error( $e->getMessage() );  
+    }
+    $progressBar->complete("Created Backup ZIP archive '$zipfile'.");
   }
   
-
   /**
    * Method to create a backup of a datasource
    * @param $datasource
@@ -118,45 +103,43 @@ class backup_Backup
    * @return string
    *    Returns the name of the ZIP-Archive with the backups
    */
-  public function createBackup( $datasource )
+  public function createBackup( $datasource, qcl_ui_dialog_ServerProgress $progressBar=null )
   {
-    $backupPath = BIBLIOGRAPH_BACKUP_PATH;
-    $tmpPath    = QCL_TMP_PATH;
-
+    $dsModel = $this->getDatasourceModel( $datasource );
     $zipfile = 
-      realpath( $backupPath ) . "/" . $datasource . 
-      "_" . date("Y-m-d_H-i-s") . "." . $this->backup_file_extension;
+      BIBLIOGRAPH_BACKUP_PATH . "/" . $datasource . 
+      "_" . date("Y-m-d_H-i-s") . $this->backup_file_extension;
       
     $zip = new ZipArchive();
-    if ($zip->open($zipfile, ZIPARCHIVE::CREATE)!==TRUE)
-    {
-      $this->warn("Cannot create file '$zipfile' in '$backupPath'");
-      throw new JsonRpcException("Cannot create backup archive - please check file permissions.");
-    }
+    $zip->open($zipfile, ZIPARCHIVE::CREATE);
 
     // create temporary file with model data serialized as CSV
-    $dsModel = $this->getDatasourceModel( $datasource );
-    foreach( $dsModel->modelTypes() as $type )
+    $modelTypes = $dsModel->modelTypes();
+    $step1 = 100/count( $modelTypes );
+    foreach( $modelTypes  as $index1 => $type )
     {
       $model = $dsModel->getInstanceOfType( $type );
       $tmpFileHandle = tmpfile();
       $metaDatas = stream_get_meta_data($tmpFileHandle);
       $tmpFilename = $metaDatas['uri'];
       
+      $step2 = $step1/$model->countRecords();
+      
       $model->findAll();
+      $index2 = 0;
       while( $model->loadNext() )
       {
         fputcsv( $tmpFileHandle, $model->data() );
+        if( $progressBar )
+        {
+          $progress = $step1*$index1 + $step2*$index2;
+          $progressBar->setProgress($progress,"Backing up '$type' ...");          
+        }
       }
       $zip->addFile( $tmpFilename, $type . ".csv" );
       fclose( $tmpFileHandle );
     }
-
     $zip->close();
-
-    /*
-     * return the name of the backup file created
-     */
     return basename( $zipfile );
   }
   
@@ -169,7 +152,7 @@ class backup_Backup
   {
     $this->requirePermission("backup.restore");
     $msg = $this->tr("Do you really want to restore Database '%s'? All existing data will be lost!", $datasource);
-    qcl_import("qcl_ui_dialog_Confirm");
+    
     return new qcl_ui_dialog_Confirm(
       $msg,
       null,
@@ -221,7 +204,7 @@ class backup_Backup
         'width'   => 200,
       )
     );
-    qcl_import("qcl_ui_dialog_Form");
+    
     return new qcl_ui_dialog_Form(
       $this->tr("Please select the backup set to restore into database '%s'",$datasource),
       $formData,
@@ -373,7 +356,7 @@ class backup_Backup
 
   function method_testProgress()
   {
-    qcl_import("qcl_ui_dialog_ServerProgress");
+    
     $progress = new qcl_ui_dialog_ServerProgress("testProgress");
     for ( $i=0; $i<101; $i++)
     {

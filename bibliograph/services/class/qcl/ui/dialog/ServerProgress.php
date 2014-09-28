@@ -84,11 +84,36 @@ class qcl_ui_dialog_ServerProgress
   }
   
   /**
+   * API function to trigger an error alert
+   * @param string $message
+   */
+  public function error($message)
+  {
+    $nl = "\n";
+    $js = '<script type="text/javascript">';
+    $js .= $nl . 'window.top.dialog.Dialog.error("' . $message . '");';
+    $js .= $nl . 'window.top.qx.core.Init.getApplication()';
+    $js .= $nl . sprintf( '.getWidgetById("%s").hide();', $this->widgetId );    
+    $js .= $nl . '</script>' . $nl;
+    $this->send( $js );
+    $this->send("");
+    exit; 
+  }  
+  
+  /**
    * Must be called on completion of the script
    */
-  public function complete()
+  public function complete($message=null)
   {
     $this->setProgress(100);
+    if ( $message )
+    {
+      $nl = "\n";
+      $js = '<script type="text/javascript">';
+      $js .= $nl . 'window.top.dialog.Dialog.alert("' . $message . '");';
+      $js .= $nl . '</script>' . $nl;
+      $this->send( $js );      
+    }
     $this->send("");
     exit(); // necessary to not mess up the http response
   }

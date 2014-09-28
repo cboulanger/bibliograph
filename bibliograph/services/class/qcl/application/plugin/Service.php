@@ -104,7 +104,7 @@ class qcl_application_plugin_Service
         continue;
       }
 
-      $name = $plugin->getName();
+      $label = $plugin->getName();// . "<br/>" . $plugin->getDescription();
 
       if ( ! $registryModel->namedIdExists( $namedId ) )
       {
@@ -126,14 +126,14 @@ class qcl_application_plugin_Service
         'type'    => "selectbox",
         'width'   => 300,
         'options' => $options,
-        'label'   => $name,
+        'label'   => $label,
         'value'   => $namedId
       );
     }
 
     qcl_import("qcl_ui_dialog_Form");
     return new qcl_ui_dialog_Form(
-      $this->tr("Please configure the plugins"),
+      "<h3>" . $this->tr("Please configure the plugins") . "</h3>",
       $formData, true,
       $this->serviceName(), "handlePluginForm"
     );

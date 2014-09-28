@@ -36,14 +36,14 @@ qx.Class.define("backup.Plugin",
       var rpcMgr      = app.getRpcManager();
       
       // add backup menu
-      var qxMenuButton4 = new qx.ui.menu.Button();
-      qxMenuButton4.setLabel(this.tr('Backup'));
-      systemMenu.add(qxMenuButton4);
-      permMgr.create("mdbackup.create").bind("state", qxMenuButton4, "visibility", {
-        converter : qcl.bool2visibility
+      var backupMenuButton = new qx.ui.menu.Button();
+      backupMenuButton.setLabel(this.tr('Backup'));
+      permMgr.create("backup.create").bind("state", backupMenuButton, "visibility", {
+        converter : function(v) {return v ? "visible" : "excluded" }
       });
-      var qxMenu2 = new qx.ui.menu.Menu();
-      qxMenuButton4.setMenu(qxMenu2);
+      var backupMenu = new qx.ui.menu.Menu();
+      backupMenuButton.setMenu(backupMenu);
+      systemMenu.add(backupMenuButton);
       
       // backup progress widget
       var backupProgress = new qcl.ui.dialog.ServerProgress(
@@ -54,30 +54,33 @@ qx.Class.define("backup.Plugin",
       });      
       
       // create backup button
-      var qxMenuButton5 = new qx.ui.menu.Button();
-      qxMenuButton5.setLabel(this.tr('Create Backup'));
-      qxMenu2.add(qxMenuButton5);
+      var createBackupButton = new qx.ui.menu.Button();
+      createBackupButton.setLabel(this.tr('Create Backup'));
+      backupMenu.add(createBackupButton);
       
-      qxMenuButton5.addListener("execute", function(e) {
+      createBackupButton.addListener("execute", function(e) {
         var params = [this.getApplication().getDatasource(),"backupProgress"].join(",")
         backupProgress.start(params);
       }, this);
       
-      var qxMenuButton6 = new qx.ui.menu.Button(this.tr('Restore Backup'), null, null, null);
-      qxMenuButton6.setLabel(this.tr('Restore Backup'));
-      qxMenu2.add(qxMenuButton6);
-      qxMenuButton6.addListener("execute", function(e) {
+      // restore Backup
+      var restoreBackupButton = new qx.ui.menu.Button();
+      restoreBackupButton.setLabel(this.tr('Restore Backup'));
+      backupMenu.add(restoreBackupButton);
+      restoreBackupButton.addListener("execute", function(e) {
         rpcMgr.execute("backup.backup", "dialogRestoreBackup", 
           [this.getApplication().getDatasource()]
         );
       }, this);
-      var qxMenuButton7 = new qx.ui.menu.Button(this.tr('Delete old backups'), null, null, null);
-      permMgr.create("mdbackup.delete").bind("state", qxMenuButton7, "visibility", {
-        converter : qcl.bool2visibility
+      
+      // delete Backup
+      var deleteBackupButton = new qx.ui.menu.Button();
+      deleteBackupButton.setLabel(this.tr('Delete old backups'));
+      permMgr.create("backup.delete").bind("state", deleteBackupButton, "visibility", {
+        converter : function(v) {return v ? "visible" : "excluded" }
       });      
-      qxMenuButton7.setLabel(this.tr('Delete old backups'));
-      qxMenu2.add(qxMenuButton7);
-      qxMenuButton7.addListener("execute", function(e) {
+      backupMenu.add(deleteBackupButton);
+      deleteBackupButton.addListener("execute", function(e) {
         rpcMgr.execute("backup.backup", "dialogDeleteBackups", 
           [this.getApplication().getDatasource()]
         );

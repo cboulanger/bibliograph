@@ -94,6 +94,8 @@ class backup_plugin
       }
       else
       {
+        $zip->addFile( QCL_LOG_FILE );
+        $zip->close();
         if ( @unlink( $testfile ) === false )
         {
           array_push( $error, "Cannot delete files in backup folder - please check file permissions.");

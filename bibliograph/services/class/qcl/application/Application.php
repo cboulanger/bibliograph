@@ -638,6 +638,7 @@ abstract class qcl_application_Application
       {
         $roleModel->linkModel( $permissionModel->load( $permissionId ) );   
       }
+      catch( qcl_data_model_RecordExistsException $e ) {}
       catch( qcl_data_model_RecordNotFoundException $e )
       {
         throw new LogicException("Unknown permission '$permissionId'");
