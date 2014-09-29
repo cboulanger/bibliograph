@@ -77,10 +77,6 @@ qx.Mixin.define("qcl.ui.form.MSingleSelectionValue",
     /**
      * Sets the selection of the widget by examining the "value" property
      * of the bound model item.
-     * 
-     * @param value
-     * @param old
-     * @return
      */
     _applySelectedValue : function( value, old )
     {
