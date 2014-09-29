@@ -50,7 +50,8 @@ qx.Class.define("backup.Plugin",
         "backupProgress","backup.backup","createBackup"
       );
       backupProgress.set({
-        hideWhenCompleted : true
+        hideWhenCompleted : true,
+        message: this.tr("Preparing backup...")
       });      
       
       // create backup button

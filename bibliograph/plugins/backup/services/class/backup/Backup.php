@@ -93,7 +93,7 @@ class backup_Backup
     {
       $progressBar->error( $e->getMessage() );  
     }
-    $progressBar->complete("Created Backup ZIP archive '$zipfile'.");
+    $progressBar->complete("Created backup.");
   }
   
   /**
@@ -105,25 +105,32 @@ class backup_Backup
    */
   public function createBackup( $datasource, qcl_ui_dialog_ServerProgress $progressBar=null )
   {
-    $dsModel = $this->getDatasourceModel( $datasource );
-    $zipfile = 
-      BIBLIOGRAPH_BACKUP_PATH . "/" . $datasource . 
-      "_" . date("Y-m-d_H-i-s") . $this->backup_file_extension;
-      
-    $zip = new ZipArchive();
-    $zip->open($zipfile, ZIPARCHIVE::CREATE);
-
-    // create temporary file with model data serialized as CSV
+    $dsModel    = $this->getDatasourceModel( $datasource );
     $modelTypes = $dsModel->modelTypes();
+    
+    $timestamp   = time();
+    $zipFileName = "{$datasource}_{$timestamp}{$this->backup_file_extension}";
+    $zipFilePath = BIBLIOGRAPH_BACKUP_PATH . "/$zipFileName";
+    
+    $zip = new ZipArchive();
+    $res = $zip->open( $zipFilePath, ZipArchive::CREATE );
+    if( $res !== true )
+    {
+      throw new Exception( "Could not create zip archive: " . $zip->getStatusString() );
+    }
+    
+    $tmpFiles = array();    
     $step1 = 100/count( $modelTypes );
     foreach( $modelTypes  as $index1 => $type )
     {
       $model = $dsModel->getInstanceOfType( $type );
-      $tmpFileHandle = tmpfile();
-      $metaDatas = stream_get_meta_data($tmpFileHandle);
-      $tmpFilename = $metaDatas['uri'];
-      
-      $step2 = $step1/$model->countRecords();
+      $tmpFileName  = QCL_TMP_PATH . "/" . md5( microtime() );
+      $tmpFileHandle = fopen( $tmpFileName, "w");
+      $tmpFiles[] = $tmpFileName;
+
+      $count = 1;
+      $total = $model->countRecords();
+      $step2 = $step1/$total;
       
       $model->findAll();
       $index2 = 0;
@@ -133,14 +140,30 @@ class backup_Backup
         if( $progressBar )
         {
           $progress = $step1*$index1 + $step2*$index2;
-          $progressBar->setProgress($progress,"Backing up '$type' ...");          
+          $progressBar->setProgress( 
+            $progress, 
+            sprintf( "Backing up '%s', %d/%d ... ", $type, $count++, $total )
+          );          
+          $index2++;
         }
       }
-      $zip->addFile( $tmpFilename, $type . ".csv" );
       fclose( $tmpFileHandle );
+      $zip->addFile( $tmpFileName, $type . ".csv" );
     }
-    $zip->close();
-    return basename( $zipfile );
+    
+    $res = $zip->close();
+    
+    foreach( $tmpFiles as $file )
+    {
+      @unlink( $file );
+    }
+    
+    if( $res === false )
+    {
+      throw new Exception( "Failed to create zip archive" );
+    }
+    
+    return $zipFileName;
   }
   
 
@@ -177,16 +200,16 @@ class backup_Backup
     $this->requirePermission("backup.restore");
     $backupPath = BIBLIOGRAPH_BACKUP_PATH;
     $options = array();
-    $files = scandir($backupPath);
+    $ext = $this->backup_file_extension;
+    $files = glob("{$backupPath}/{$datasource}_*$ext");
     rsort( $files );
     foreach( $files as $file )
     {
-      if ( $file[0] == "." ) continue;
-      if ( substr( $file, -4) != $this->backup_file_extension ) continue;
-      $name = explode( "_", substr( basename($file),0, -4) );
-      if ( $name[0] != $datasource ) continue;
+      $name = explode( "_", substr( basename($file), 0, -strlen($ext) ) );
+      $datetime = new DateTime();
+      $datetime->setTimestamp($name[1]);
       $options[] = array(
-        'label'   => $name[1] . ", " . $name[2],
+        'label'   => $datetime->format('Y-m-d H:i:s'),
         'value'   => $file
       );
     }
