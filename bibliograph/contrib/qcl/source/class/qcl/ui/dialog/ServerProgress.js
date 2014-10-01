@@ -43,7 +43,25 @@ qx.Class.define("qcl.ui.dialog.ServerProgress",
   */     
   properties :
   {
-
+    /**
+     * The service name
+     */
+    service :
+    {
+      check : "String",
+      nullable : true,
+      event : "changeService"
+    },
+    
+    /**
+     * The method name
+     */
+    method :
+    {
+      check : "String",
+      nullable : true,
+      event : "changeMethod"
+    }
   },
  
    /*
@@ -55,8 +73,8 @@ qx.Class.define("qcl.ui.dialog.ServerProgress",
   {
     this.base(arguments);
     this.setWidgetId( widgetId );
-    this.__service = service;
-    this.__method = method;
+    this.setService( service || null );
+    this.setMethod( method || null );
     this.__iframe = new qx.html.Iframe();
     this.__iframe.hide();
     var app = qx.core.Init.getApplication();
@@ -74,8 +92,6 @@ qx.Class.define("qcl.ui.dialog.ServerProgress",
   {
     __iframe : null,
     __sourceTemplate : "",
-    __service : "",
-    __method : "",
     
     /*
     ---------------------------------------------------------------------------
@@ -98,8 +114,8 @@ qx.Class.define("qcl.ui.dialog.ServerProgress",
       // format source string
       var source = qx.lang.String.format(
         this.__sourceTemplate, [
-          this.__service,
-          this.__method,
+          this.getService(),
+          this.getMethod(),
           params || "",
           qx.core.Init.getApplication().getSessionManager().getSessionId(),
           (new Date()).getTime() 

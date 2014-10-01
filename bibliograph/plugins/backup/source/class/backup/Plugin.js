@@ -47,11 +47,10 @@ qx.Class.define("backup.Plugin",
       
       // backup progress widget
       var backupProgress = new qcl.ui.dialog.ServerProgress(
-        "backupProgress","backup.backup","createBackup"
+        "backupProgress","backup.backup"
       );
       backupProgress.set({
-        hideWhenCompleted : true,
-        message: this.tr("Preparing backup...")
+        hideWhenCompleted : true
       });      
       
       // create backup button
@@ -60,7 +59,9 @@ qx.Class.define("backup.Plugin",
       backupMenu.add(createBackupButton);
       
       createBackupButton.addListener("execute", function(e) {
-        var params = [this.getApplication().getDatasource(),"backupProgress"].join(",")
+        var params = [this.getApplication().getDatasource(),"backupProgress"].join(",");
+        backupProgress.setMessage(this.tr("Saving backup..."));
+        backupProgress.setMethod("createBackup");
         backupProgress.start(params);
       }, this);
       
@@ -69,10 +70,24 @@ qx.Class.define("backup.Plugin",
       restoreBackupButton.setLabel(this.tr('Restore Backup'));
       backupMenu.add(restoreBackupButton);
       restoreBackupButton.addListener("execute", function(e) {
+        var token = Math.random().toString().substring(2);
+        this.__token= token;
         rpcMgr.execute("backup.backup", "dialogRestoreBackup", 
-          [this.getApplication().getDatasource()]
+          [this.getApplication().getDatasource(),token]
         );
       }, this);
+      qx.event.message.Bus.getInstance().subscribe("backup.restore", function(e){
+        var data = e.getData();
+        if ( data.token != this.__token ) 
+        {
+          this.warn("Invalid message token.");
+          return;
+        }
+        var params = [data.datasource, data.file,"backupProgress"].join(",")
+        backupProgress.setMessage(this.tr("Restoring backup..."));
+        backupProgress.setMethod("restoreBackup");
+        backupProgress.start(params);
+      },this);
       
       // delete Backup
       var deleteBackupButton = new qx.ui.menu.Button();
