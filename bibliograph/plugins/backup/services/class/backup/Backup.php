@@ -272,7 +272,7 @@ class backup_Backup
 
     $formData = array(
       'file'  => array(
-        'label'   => _("Backup from "),
+        'label'   => $this->tr("Backup from "),
         'type'    => "selectbox",
         'options' => $options,
         'width'   => 200,
@@ -335,7 +335,7 @@ class backup_Backup
     
     if( ! file_exists( $zipFilePath ) )
     {
-      throw new Exception(_("Backup file does not exist."));
+      throw new Exception($this->tr("Backup file does not exist."));
     }
 
     $zip = new ZipArchive();
@@ -431,24 +431,42 @@ class backup_Backup
   {
     $this->requirePermission("backup.delete");
     $days = $this->getApplication()->getPreference("backup.daysToKeepBackupFor");
-    return new qcl_ui_dialog_Confirm(
-      $this->tr("All backups older than %s days will be deleted. Proceed?", $days),
-      null,
-      $this->serviceName(), "deleteBackups", array( $datasource )
+    $timestamp = time() - ( $days * 84400 ); 
+
+    $formData = array(
+      'date'  => array(
+        'label'   => $this->tr("Delete backups older than"),
+        'type'    => "datefield",
+        'value'   => $timestamp * 1000,
+        'width'   => 200
+      )
+    );
+    
+    return new qcl_ui_dialog_Form(
+      $this->tr("Delete backups of datasource '%s':",$datasource),
+      $formData,
+      true,
+      $this->serviceName(), "deleteBackups", 
+      array( $datasource )
     );
   }
 
   /**
    * Service to delete all backups of this datasource older than one day
    */
-  public function method_deleteBackups( $confirmed, $datasource )
+  public function method_deleteBackups( $data, $datasource )
   {
-    if( ! $confirmed ) return "CANCELLED";
+    if( ! $data ) return "CANCELLED";
 
     $this->requirePermission("backup.delete");
+    
+    $this->debug( $data );
 
-    $backupPath = BIBLIOGRAPH_BACKUP_PATH;
     $filesDeleted = 0;
+    if( false )
+    {
+    $backupPath = BIBLIOGRAPH_BACKUP_PATH;
+    
     $problem = false;
     foreach( scandir($backupPath) as $file )
     {
@@ -468,20 +486,9 @@ class backup_Backup
         }
       }
     }
-    $msg = $this->tr("%s backups were deleted.", $filesDeleted);
+    }
+    $msg = $this->tr("%d backups were deleted.", $filesDeleted);
     if( $problem ) $msg .= $this->tr("There was a problem. Please examine the log file.");
     return new qcl_ui_dialog_Alert($msg);
-  }
-
-  function method_testProgress()
-  {
-    
-    $progress = new qcl_ui_dialog_ServerProgress("testProgress");
-    for ( $i=0; $i<101; $i++)
-    {
-      $progress->setProgress($i,"Message$i");
-      usleep(pow(2,rand(12,18)));
-    }
-    $progress->complete();
   }
 }

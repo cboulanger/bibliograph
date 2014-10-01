@@ -172,6 +172,19 @@ qx.Class.define("qcl.ui.dialog.Dialog",
         qcl.ui.dialog.Dialog.__instances[data.type] = widget;
         isNew = true;
       }
+      
+      /*
+       * marshal special datefield values
+       * TODO check values
+       */
+      if( data.type == "datefield" )
+      {
+        if ( data.properties.dateFormat )
+        {
+          data.properties.dateFormat = new qx.util.format.DateFormat(data.properties.dateFormat);
+        }
+        data.properties.value = new Date(data.properties.value);
+      }
 
 
       /*
@@ -187,6 +200,7 @@ qx.Class.define("qcl.ui.dialog.Dialog",
       {
         switch( type )
         {
+
           /*
            * prompt dialog will periodically check for input and submit it
            * if it hasn't changed for the duration of the timeout
