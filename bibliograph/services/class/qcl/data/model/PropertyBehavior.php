@@ -362,7 +362,7 @@ class qcl_data_model_PropertyBehavior
     /*
      * dispatch event
      */
-    if ( $event )
+    if ( $event and $value !== $old )
     {
       $this->getModel()->fireDataEvent( $event, $value );
     }

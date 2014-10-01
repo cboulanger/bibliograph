@@ -303,7 +303,7 @@ class qcl_core_Object
    * Generic setter for properties.
    * @param string|array $property
    *    If string, set the corresponding property to $value.
-   *    If array, assume it is a map and set each key-value pair. Returns the object.
+   *    If array, assume it is a map and set each key-value pair.
    * @param mixed $value
    * @return qcl_core_Object
    */
@@ -323,9 +323,13 @@ class qcl_core_Object
   /**
    * Sets the property directly. Internal method used to skip overridden
    * property setters. Returns the object itself for chaining
+   * @param string|array $property
+   *    If string, set the corresponding property to $value.
+   *    If array, assume it is a map and set each key-value pair. 
+   * @param mixed $value
    * @return qcl_core_Object
    */
-  public function _set( $property,  $value )
+  public function _set( $property,  $value=null )
   {
     return $this->getPropertyBehavior()->_set( $property, $value );
   }

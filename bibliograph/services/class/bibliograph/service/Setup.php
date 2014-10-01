@@ -379,7 +379,8 @@ class bibliograph_service_Setup
         "bibliograph_export",
         "qcl.schema.filesystem.local",
          array(
-          'hidden' => true
+          'hidden' => true,
+          'type'   => "file"
         )
       );
       $dsModel->setResourcepath( QCL_TMP_PATH );

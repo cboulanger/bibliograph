@@ -83,6 +83,15 @@ class bibliograph_Application
   }
   
   /**
+   * returns the version of the application
+   * @return string
+   */
+  public function version()
+  {
+    return trim(file_get_contents("../../../version.txt"));
+  }
+  
+  /**
    * Getter for access controller
    * @return qcl_access_SessionController
    */
