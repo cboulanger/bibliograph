@@ -73,6 +73,7 @@ qx.Class.define("qcl.ui.dialog.ServerProgress",
   {
     this.base(arguments);
     this.setWidgetId( widgetId );
+    qcl["__"+widgetId]=this;
     this.setService( service || null );
     this.setMethod( method || null );
     this.__iframe = new qx.html.Iframe();

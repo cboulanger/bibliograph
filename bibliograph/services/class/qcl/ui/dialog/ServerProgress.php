@@ -74,8 +74,7 @@ class qcl_ui_dialog_ServerProgress
     $nl = "\n";
     $js = '<script type="text/javascript">';
     //$js .= $nl . sprintf('console.log("%d, %s, %s");',$value, $message, $newLogText);
-    $js .= $nl . 'window.top.qx.core.Init.getApplication()';
-    $js .= $nl . sprintf( '.getWidgetById("%s").set({', $this->widgetId );
+    $js .= $nl . "window.top.qcl.__{$this->widgetId}.set({";
     $js .= $nl . sprintf( 'progress:%d',$value);            
     if( $message )    $js .= sprintf(',message:"%s"', $message);
     if( $newLogText)  $js .= sprintf(',newLogText:"%s"', $newLogText);
@@ -92,8 +91,7 @@ class qcl_ui_dialog_ServerProgress
     $nl = "\n";
     $js = '<script type="text/javascript">';
     $js .= $nl . 'window.top.dialog.Dialog.error("' . $message . '");';
-    $js .= $nl . 'window.top.qx.core.Init.getApplication()';
-    $js .= $nl . sprintf( '.getWidgetById("%s").hide();', $this->widgetId );    
+    $js .= $nl . "window.top.qcl.__{$this->widgetId}.hide();";    
     $js .= $nl . '</script>' . $nl;
     $this->send( $js );
     $this->send("");
