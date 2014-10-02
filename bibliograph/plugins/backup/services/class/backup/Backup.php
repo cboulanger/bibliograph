@@ -446,7 +446,7 @@ class backup_Backup
       $this->tr("Delete backups of datasource '%s':",$datasource),
       $formData,
       true,
-      $this->serviceName(), "deleteBackups", 
+      $this->serviceName(), "confirmDeleteBackups", 
       array( $datasource )
     );
   }
@@ -454,38 +454,59 @@ class backup_Backup
   /**
    * Service to delete all backups of this datasource older than one day
    */
-  public function method_deleteBackups( $data, $datasource )
+  public function method_confirmDeleteBackups( $data, $datasource )
   {
     if( ! $data ) return "CANCELLED";
 
     $this->requirePermission("backup.delete");
     
-    $this->debug( $data );
+    $date = strtotime($data->date);
 
-    $filesDeleted = 0;
-    if( false )
-    {
-    $backupPath = BIBLIOGRAPH_BACKUP_PATH;
+    $backupPath   = BIBLIOGRAPH_BACKUP_PATH;
+    $ext          = $this->backup_file_extension;
+    $files        = glob("{$backupPath}/{$datasource}_*$ext");
     
-    $problem = false;
-    foreach( scandir($backupPath) as $file )
+    $filesToDelete = array();
+    foreach( $files as $file )
     {
-      if ( $file[0] == "." ) continue;
-      if ( substr( $file, -4) != $this->backup_file_extension ) continue;
-      $name = explode( "_", substr( basename($file),0, -4) );
-      if ( $name[0] != $datasource ) continue;
-      if ( $name[1] != date("Y-m-d") ){
-        if ( !@unlink( "$backupPath/$file" ) )
-        {
-          $problem = true;
-          $this->warn("Cannot delete backup file '$file'");
-        }
-        else
-        {
-          $filesDeleted++;
-        }
+      list(, $timestamp) = $this->parseBackupFilename( $file );
+      if( $timestamp < $date )
+      {
+        $filesToDelete[] = $file;
       }
     }
+    
+    if (count($filesToDelete) == 0 )
+    {
+      return new qcl_ui_dialog_Alert($this->tr("No backups found."));
+    }
+    
+    return new qcl_ui_dialog_Confirm(
+      $this->tr("Really delete %d backups?", count($filesToDelete) ),
+      null,
+      $this->serviceName(), "deleteBackups", 
+      array( $this->shelve( $filesToDelete ) )
+    );
+  }
+  
+  public function method_deleteBackups( $ok, $shelfId )
+  {
+    if( ! $ok ) return "CANCELLED";
+    
+    list($files) = $this->unshelve( $shelfId );
+    
+    $problem = false;
+    foreach( $files as $file )
+    {
+      if ( !@unlink( $file ) )
+      {
+        $problem = true;
+        $this->warn("Cannot delete backup file '$file'");
+      }
+      else
+      {
+        $filesDeleted++;
+      }
     }
     $msg = $this->tr("%d backups were deleted.", $filesDeleted);
     if( $problem ) $msg .= $this->tr("There was a problem. Please examine the log file.");
