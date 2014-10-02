@@ -177,15 +177,22 @@ qx.Class.define("qcl.ui.dialog.Dialog",
        * marshal special datefield values
        * TODO check values
        */
-      if( data.type == "datefield" )
+      if( data.type == "form" )
       {
-        if ( data.properties.dateFormat )
+        if ( ! qx.lang.Type.isObject( data.properties.formData ) )
         {
-          data.properties.dateFormat = new qx.util.format.DateFormat(data.properties.dateFormat);
+          this.error("No form data in json response.");
         }
-        data.properties.value = new Date(data.properties.value);
+        for ( fieldName in data.properties.formData )
+        {
+          var fieldData = data.properties.formData[fieldName];
+          if ( fieldData.dateFormat )
+          {
+            fieldData.dateFormat = new qx.util.format.DateFormat(fieldData.dateFormat);
+          }
+          fieldData.value = new Date(fieldData.value);
+        }
       }
-
 
       /*
        * auto-submit the dialog input after the given 
