@@ -100,6 +100,19 @@ qx.Class.define("backup.Plugin",
         rpcMgr.execute("backup.backup", "dialogDeleteBackups", 
           [this.getApplication().getDatasource()]
         );
+      }, this);      
+      
+      // download Backup
+      var downloadBackupButton = new qx.ui.menu.Button();
+      downloadBackupButton.setLabel(this.tr('Download backup'));
+      permMgr.create("backup.download").bind("state", downloadBackupButton, "visibility", {
+        converter : function(v) {return v ? "visible" : "excluded" }
+      });      
+      backupMenu.add(downloadBackupButton);
+      downloadBackupButton.addListener("execute", function(e) {
+        rpcMgr.execute("backup.backup", "dialogDownloadBackup", 
+          [this.getApplication().getDatasource()]
+        );
       }, this);
     }
   }

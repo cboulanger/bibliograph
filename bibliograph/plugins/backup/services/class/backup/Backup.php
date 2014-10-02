@@ -18,17 +18,18 @@
 
 ************************************************************************ */
 
+require_once( __DIR__ . "/__init__.php"); // TODO this should not be neccessary
 qcl_import("qcl_data_controller_Controller");
 qcl_import("qcl_ui_dialog_Form");
 qcl_import("qcl_ui_dialog_Confirm");
 qcl_import("qcl_ui_dialog_Alert");
 qcl_import("qcl_ui_dialog_ServerProgress");
 qcl_import("bibliograph_service_Access");
+qcl_import("qcl_ui_dialog_Popup");
 
 class backup_Backup
   extends qcl_data_controller_Controller
 {
-
 
   /*
   ---------------------------------------------------------------------------
@@ -76,33 +77,6 @@ class backup_Backup
     bibliograph_service_Access::getInstance()->checkDatasourceAccess( $datasource );
   }
 
-  /*
-  ---------------------------------------------------------------------------
-     API
-  ---------------------------------------------------------------------------
-  */
-
-  /**
-   * Start the backup
-   * @param string $datasource
-   * @param string $progressWidgetId
-   */
-  public function method_createBackup( $datasource, $progressWidgetId  )
-  {
-    $this->requirePermission("backup.create");
-    qcl_assert_valid_string( $datasource );
-    $progressBar = new qcl_ui_dialog_ServerProgress($progressWidgetId );
-    try
-    {
-      $zipfile = $this->createBackup( $datasource, $progressBar );  
-    }
-    catch( Exception $e)
-    {
-      $progressBar->error( $e->getMessage() );  
-    }
-    $progressBar->complete( $this->tr("Backup has been created.") );
-  }
-  
   /**
    * Returns all model objects that belong to a datasource, including the 
    * models joining the main models
@@ -127,6 +101,77 @@ class backup_Backup
   }
   
   /**
+   * Parses the name of the backup file and returns the elements
+   * @return array
+   */
+  protected function parseBackupFilename( $filename )
+  {
+    return explode( "_", substr( basename($filename), 0, -strlen( $this->backup_file_extension ) ) );
+  }  
+  
+  /**
+   * Returns a list of backup files for the given datasource
+   * @param string $datasource Name of datasource
+   */
+  protected function listBackupFiles($datasource)
+  {
+    $backupPath = BACKUP_PATH;
+    $ext = $this->backup_file_extension;
+    $files = glob("{$backupPath}/{$datasource}_*$ext");
+    return $files;
+  }
+  
+  /**
+   * Returns an array of options for use in form data
+   * @param array $files An array of file paths
+   * @return array
+   */
+  protected function createFormOptions( array $files )
+  {
+    $options = array();
+    foreach( $files as $file )
+    {
+      list($datasource, $timestamp) = $this->parseBackupFilename( $file );
+      $datetime = new DateTime();
+      $datetime->setTimestamp($timestamp);
+      $options[] = array(
+        'label'   => $datetime->format('Y-m-d H:i:s'),
+        'value'   => basename($file)
+      );
+    }
+    return $options;
+  }
+  
+  
+  /*
+  ---------------------------------------------------------------------------
+     API
+  ---------------------------------------------------------------------------
+  */
+
+  /**
+   * Service to backup a datasource's model data
+   * @param string $datasource Name of the datasource
+   * @param string $progressWidgetId The widgetId of the widget displaying
+   *    the progress of the backup
+   */
+  public function method_createBackup( $datasource, $progressWidgetId  )
+  {
+    $this->requirePermission("backup.create");
+    qcl_assert_valid_string( $datasource );
+    $progressBar = new qcl_ui_dialog_ServerProgress($progressWidgetId );
+    try
+    {
+      $zipfile = $this->createBackup( $datasource, $progressBar );  
+    }
+    catch( Exception $e)
+    {
+      $progressBar->error( $e->getMessage() );  
+    }
+    $progressBar->complete( $this->tr("Backup has been created.") );
+  }
+  
+  /**
    * Method to create a backup of a datasource
    * @param string $datasource
    * @param qcl_ui_dialog_ServerProgress $progressBar
@@ -137,8 +182,8 @@ class backup_Backup
   {
     $timestamp   = time();
     $zipFileName = "{$datasource}_{$timestamp}{$this->backup_file_extension}";
-    $zipFilePath = BIBLIOGRAPH_BACKUP_PATH . "/$zipFileName";
-    
+    $zipFilePath = BACKUP_PATH . "/$zipFileName";
+
     $zip = new ZipArchive();
     $res = $zip->open( $zipFilePath, ZipArchive::CREATE );
     if( $res !== true )
@@ -168,7 +213,6 @@ class backup_Backup
       fputcsv( $tmpFileHandle, $header );
       
       // records
-      
       $count = 1;
       $step2 = $step1/$total;
       $index2 = 0;
@@ -220,18 +264,9 @@ class backup_Backup
     return new qcl_ui_dialog_Confirm(
       $msg,
       null,
-      $this->serviceName(), "dialogChooseBackup", 
+      $this->serviceName(), "dialogChooseBackupToRestore", 
       array( $datasource, $token )
     );
-  }
-  
-  /**
-   * Parses the name of the backup file and returns the elements
-   * @return array
-   */
-  protected function parseBackupFilename( $filename )
-  {
-    return explode( "_", substr( basename($filename), 0, -strlen( $this->backup_file_extension ) ) );
   }
 
   /**
@@ -241,7 +276,7 @@ class backup_Backup
    * @return qcl_ui_dialog_Form|string
    * @throws JsonRpcException
    */
-  public function method_dialogChooseBackup( $form, $datasource, $token )
+  public function method_dialogChooseBackupToRestore( $form, $datasource, $token )
   {
     if ( $form === false )
     {
@@ -249,22 +284,11 @@ class backup_Backup
     }
 
     $this->requirePermission("backup.restore");
-    $backupPath = BIBLIOGRAPH_BACKUP_PATH;
-    $options = array();
-    $ext = $this->backup_file_extension;
-    $files = glob("{$backupPath}/{$datasource}_*$ext");
+    
+    $files = $this->listBackupFiles( $datasource );
     rsort( $files );
-    foreach( $files as $file )
-    {
-      list($datasource, $timestamp) = $this->parseBackupFilename( $file );
-      $datetime = new DateTime();
-      $datetime->setTimestamp($timestamp);
-      $options[] = array(
-        'label'   => $datetime->format('Y-m-d H:i:s'),
-        'value'   => basename($file)
-      );
-    }
-
+    
+    $options = $this->createFormOptions( $files );
     if( ! count( $options) )
     {
       throw new JsonRpcException("No backup sets available.");
@@ -283,7 +307,7 @@ class backup_Backup
       $this->tr("Please select the backup set to restore into database '%s'",$datasource),
       $formData,
       true,
-      $this->serviceName(), "handleDialogChooseBackup", 
+      $this->serviceName(), "handleDialogChooseBackupToRestore", 
       array( $datasource, $token )
     );
   }
@@ -293,7 +317,7 @@ class backup_Backup
    * @param $datasource
    * @return string
    */
-  public function method_handleDialogChooseBackup( $data, $datasource, $token )
+  public function method_handleDialogChooseBackupToRestore( $data, $datasource, $token )
   {
     if ( $data === null )
     {
@@ -330,7 +354,7 @@ class backup_Backup
    */
   protected function restoreBackup( $datasource, $file, qcl_ui_dialog_ServerProgress $progressBar=null )
   {
-    $zipFilePath = BIBLIOGRAPH_BACKUP_PATH . "/$file";
+    $zipFilePath = BACKUP_PATH . "/$file";
     list($datasource, $timestamp) = $this->parseBackupFilename( $file );
     
     if( ! file_exists( $zipFilePath ) )
@@ -461,12 +485,9 @@ class backup_Backup
     $this->requirePermission("backup.delete");
     
     $date = strtotime($data->date);
-
-    $backupPath   = BIBLIOGRAPH_BACKUP_PATH;
-    $ext          = $this->backup_file_extension;
-    $files        = glob("{$backupPath}/{$datasource}_*$ext");
-    
+    $files = $this->listBackupFiles( $datasource );
     $filesToDelete = array();
+    
     foreach( $files as $file )
     {
       list(, $timestamp) = $this->parseBackupFilename( $file );
@@ -512,4 +533,65 @@ class backup_Backup
     if( $problem ) $msg .= $this->tr("There was a problem. Please examine the log file.");
     return new qcl_ui_dialog_Alert($msg);
   }
+  
+  /**
+   * Service to present the user with a choice of backups
+   * @param $form
+   * @param $datasource
+   * @return qcl_ui_dialog_Form|string
+   * @throws JsonRpcException
+   */
+  public function method_dialogDownloadBackup( $datasource )
+  {
+    $this->requirePermission("backup.download");
+    
+    $files = $this->listBackupFiles( $datasource );
+    rsort( $files );
+    
+    $options = $this->createFormOptions( $files );
+    if( ! count( $options) )
+    {
+      throw new JsonRpcException("No backup sets available.");
+    }
+
+    $formData = array(
+      'file'  => array(
+        'label'   => $this->tr("Choose file:"),
+        'type'    => "selectbox",
+        'options' => $options,
+        'width'   => 200,
+      )
+    );
+    
+    return new qcl_ui_dialog_Form(
+      $this->tr("Please select the backup set of datasource '%s' to download",$datasource),
+      $formData,
+      true,
+      $this->serviceName(), "startDownloadBackup", 
+      array( $datasource )
+    );
+  }  
+  
+  /**
+   * Service to trigger download of backup file by the client.
+   * @param object $data Form data from the previous dialog
+   * @param string $datasource
+   * @return string
+   */
+  public function method_startDownloadBackup( $data, $datasource )
+  {
+    $file = basename($data->file);
+    $url  = $this->getServerInstance()->getUrl() .
+      "?download=true" .
+      "&application=bibliograph" .
+      "&sessionId=" . $this->getSessionId() .
+      "&datasource=backup_files" .
+      "&name=$file&id=$file";
+$this->debug($url);
+    new qcl_ui_dialog_Popup(""); // hide the popup
+    $this->dispatchClientMessage("window.location.replace", array(
+      'url' => $url
+    ) );
+    return "OK";
+  }  
 }

@@ -18,6 +18,7 @@
 
 ************************************************************************ */
 
+require_once( __DIR__ . "/__init__.php"); // TODO this should not be neccessary
 qcl_import("qcl_application_plugin_AbstractPlugin");
 
 
@@ -75,19 +76,19 @@ class backup_plugin
     {
       array_push( $error, "You must install the ZIP extension.");
     }
-    if ( ! defined("BIBLIOGRAPH_BACKUP_PATH") )
+    if ( ! defined("BACKUP_PATH") )
     {
-      array_push( $error, "You must define the BIBLIOGRAPH_BACKUP_PATH constant.");
+      array_push( $error, "You must define the BACKUP_PATH constant.");
     }
     
-    if ( ! file_exists( BIBLIOGRAPH_BACKUP_PATH ) or ! is_writable( BIBLIOGRAPH_BACKUP_PATH ) )
+    if ( ! file_exists( BACKUP_PATH ) or ! is_writable( BACKUP_PATH ) )
     {
-      array_push( $error, "Directory '" . BIBLIOGRAPH_BACKUP_PATH . "' needs to exist and be writable");
+      array_push( $error, "Directory '" . BACKUP_PATH . "' needs to exist and be writable");
     }
     if ( count($error) == 0 )
     {
       $zip = new ZipArchive();
-      $testfile = BIBLIOGRAPH_BACKUP_PATH."/test.zip";
+      $testfile = BACKUP_PATH."/test.zip";
       if ( $zip->open( $testfile, ZIPARCHIVE::CREATE)!==TRUE)
       {
         array_push( $error, "Cannot create backup archive in backup folder - please check file permissions.");
@@ -103,6 +104,26 @@ class backup_plugin
       }
     }
     
+    $manager = qcl_data_datasource_Manager::getInstance();
+    try
+    {
+      $dsModel = $manager->createDatasource(
+        "backup_files",
+        "qcl.schema.filesystem.local",
+         array(
+          'hidden'      => true,
+          'type'        => "file",
+          'description' => "Datasource containing backup files."
+        )
+      );
+      $dsModel->setResourcepath( BACKUP_PATH );
+      $dsModel->save();
+    }
+    catch( qcl_data_model_RecordExistsException $e )
+    {
+      $this->warn("Backup datasource already exists.");
+    }
+    
     if( count($error) )
     {
       throw new qcl_application_plugin_Exception( implode(" ", $error) );
@@ -111,10 +132,14 @@ class backup_plugin
     // preferences and permissions
     $app = $this->getApplication();
     $app->addPreference( "backup.daysToKeepBackupFor", 3 );
-    $app->addPermission(array("backup.create","backup.restore","backup.delete"));
+    $app->addPermission( array(
+      "backup.create","backup.restore","backup.delete", "backup.download","backup.upload"
+    ) );
     foreach( array("admin", "manager" ) as $role )
     {
-      $app->giveRolePermission( $role, array("backup.create","backup.restore","backup.delete") );
+      $app->giveRolePermission( $role, array(
+        "backup.create","backup.restore","backup.delete", "backup.download","backup.upload"
+      ) );
     }
     
     return $this->tr("Reload application to finish installation.");
@@ -126,7 +151,9 @@ class backup_plugin
    */
   public function uninstall()
   {
-    $this->getApplication()->removePermission(array("backup.create","backup.restore","backup.delete"));
+    $this->getApplication()->removePermission(array(
+      "backup.create","backup.restore","backup.delete", "backup.download","backup.upload"
+    ));
     return $this->tr("Reload application to finish uninstallation");
   }
 }
