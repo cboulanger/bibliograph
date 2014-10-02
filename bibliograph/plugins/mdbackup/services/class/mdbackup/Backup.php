@@ -114,7 +114,7 @@ class mdbackup_Backup
     /*
      * zipfile
      */
-    $backupPath = BIBLIOGRAPH_BACKUP_PATH;
+    $backupPath = BACKUP_PATH;
     $tmpPath    = QCL_TMP_PATH;
 
     $zipfile = 
@@ -234,7 +234,7 @@ class mdbackup_Backup
     }
 
     $this->requirePermission("mdbackup.restore");
-    $backupPath = BIBLIOGRAPH_BACKUP_PATH;
+    $backupPath = BACKUP_PATH;
     $options = array();
     $files = scandir($backupPath);
     rsort( $files );
@@ -287,7 +287,7 @@ class mdbackup_Backup
 
     $this->requirePermission("mdbackup.restore");
 
-    $backupPath = BIBLIOGRAPH_BACKUP_PATH;
+    $backupPath = BACKUP_PATH;
     $tmpPath    = QCL_TMP_PATH;
 
     $zipfile = $backupPath . "/" . $data->file;
@@ -387,7 +387,7 @@ class mdbackup_Backup
 
     $this->requirePermission("mdbackup.delete");
 
-    $backupPath = BIBLIOGRAPH_BACKUP_PATH;
+    $backupPath = BACKUP_PATH;
     $filesDeleted = 0;
     $problem = false;
     foreach( scandir($backupPath) as $file )

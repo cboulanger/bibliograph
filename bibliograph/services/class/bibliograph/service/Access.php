@@ -217,7 +217,7 @@ class bibliograph_service_Access
     $this->requirePermission("access.manage");
 
     // data will be exported to the backup
-    $dir = BIBLIOGRAPH_BACKUP_PATH;
+    $dir = BACKUP_PATH;
     if ( ! is_writable($dir) )
     {
       throw new JsonRpcException("'$dir' needs to exist and must be writable.");

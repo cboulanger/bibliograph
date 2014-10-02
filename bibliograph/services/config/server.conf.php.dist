@@ -64,13 +64,6 @@ define( "QCL_LOG_FILE", QCL_VAR_DIR . "/bibliograph.log" );
 //-------------------------------------------------------------
 
 /**
- * the path to a directory where backups are stored. By default,
- * use the system temporary folder. If you want to store the backups
- * somewhere else, make it world-writable.
- */
-define("BIBLIOGRAPH_BACKUP_PATH", QCL_VAR_DIR );
-
-/**
  * The path to the bibutils executables. Must contain a trailing slash
  * since the exeuctable name is appended to the path. If not defined,
  * the executables must be on the PATH

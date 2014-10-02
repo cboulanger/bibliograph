@@ -76,13 +76,13 @@ class mdbackup_plugin
     {
       array_push( $error, "You must install the ZIP extension.");
     }
-    if ( ! defined("BIBLIOGRAPH_BACKUP_PATH") )
+    if ( ! defined("BACKUP_PATH") )
     {
-      array_push( $error, "You must define the BIBLIOGRAPH_BACKUP_PATH constant.");
+      array_push( $error, "You must define the BACKUP_PATH constant.");
     }
-    if ( ! file_exists( BIBLIOGRAPH_BACKUP_PATH ) or ! is_writable( BIBLIOGRAPH_BACKUP_PATH ) )
+    if ( ! file_exists( BACKUP_PATH ) or ! is_writable( BACKUP_PATH ) )
     {
-      array_push( $error, "Directory '" . BIBLIOGRAPH_BACKUP_PATH . "' needs to exist and be writable");
+      array_push( $error, "Directory '" . BACKUP_PATH . "' needs to exist and be writable");
     }
     if( count($error) )
     {

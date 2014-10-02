@@ -17,7 +17,7 @@
      * Chritian Boulanger (cboulanger)
 
 ************************************************************************ */
-
+require_once( __DIR__ . "/__init__.php");
 qcl_import("bibliograph_Application");
 
 class mdbackup_Application

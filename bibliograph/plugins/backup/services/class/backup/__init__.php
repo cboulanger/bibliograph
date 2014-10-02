@@ -20,3 +20,10 @@
 
 // for the definition of constants, log filters, exceptions
 
+/**
+ * the path to a directory where backups are stored by default
+ */
+ if ( ! defined("BACKUP_PATH") )
+ {
+   define("BACKUP_PATH", QCL_VAR_DIR );
+ }
