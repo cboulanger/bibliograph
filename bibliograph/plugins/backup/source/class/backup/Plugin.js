@@ -114,6 +114,21 @@ qx.Class.define("backup.Plugin",
           [this.getApplication().getDatasource()]
         );
       }, this);
+
+      // called after a backup has been restored
+      qx.event.message.Bus.getInstance().subscribe("backup.restored", function(e)
+      {
+        var data = e.getData();
+        if (data.datasource !== app.getDatasource())return;
+
+        var msg = this.tr("The datasource has just been restored to a previous state and will now be reloaded.");
+        dialog.Dialog.alert(msg, function()
+        {
+          app.getWidgetById("mainFolderTree").reload();
+          app.getWidgetById("mainListView").reload();
+          app.setModelId(0);
+        }, this);
+      }, this);
     }
   }
 });

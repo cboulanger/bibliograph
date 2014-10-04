@@ -522,24 +522,6 @@ qx.Class.define("bibliograph.Main",
         window.location.replace(data.url);
       }, this);
 
-
-      /*
-       * called after a backup has been restored
-       */
-      bus.subscribe("backup.restored", function(e)
-      {
-        var data = e.getData();
-        if (data.datasource !== this.getDatasource())return;
-
-        var msg = this.tr("The datasource has just been restored to a previous state and will be reloaded");
-        dialog.Dialog.alert(msg, function()
-        {
-          this.getWidgetById("mainFolderTree").reload();
-          this.getWidgetById("mainListView").reload();
-          this.setModelId(0);
-        }, this);
-      }, this);
-
       /*
        * reload the main list view
        */
