@@ -22,13 +22,16 @@ echo ">>> Creating plugin '$namespace'..."
 mkdir plugins/$namespace
 cp -a plugins/template/* plugins/$namespace/
 
-# rename directories
+# rename directories and files
 mv plugins/$namespace/services/class/template \
-    plugins/$namespace/services/class/$namespace 
+    plugins/$namespace/services/class/$namespace
+mv plugins/$namespace/services/locale/C.UTF-8/LC_MESSAGES/template_en.po \
+    plugins/$namespace/services/locale/C.UTF-8/LC_MESSAGES/${namespace}_en.po
 mv plugins/$namespace/source/class/template \
     plugins/$namespace/source/class/$namespace 
 mv plugins/$namespace/source/resource/template \
-    plugins/$namespace/source/resource/$namespace 
+    plugins/$namespace/source/resource/$namespace
+
     
 # replace "template" with namespace in files
 
