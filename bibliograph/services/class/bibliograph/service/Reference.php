@@ -21,6 +21,7 @@
 qcl_import("qcl_data_controller_TableController");
 qcl_import("qcl_ui_dialog_Alert");
 qcl_import("qcl_ui_dialog_Confirm");
+qcl_import("qcl_ui_dialog_Form");
 qcl_import("bibliograph_service_Folder");
 
 /**
@@ -1459,14 +1460,20 @@ class bibliograph_service_Reference
         )
       ),
     );
-    qcl_import("qcl_ui_dialog_Form");
-    $args = func_get_args();
+    
+    qcl_import("qcl_application_plugin_Manager");
+    if ( ! qcl_application_plugin_Manager::getInstance()->isInstalled("backup") )
+    {
+      unset( $formData['backup'] );
+    }
+    
+    
     return new qcl_ui_dialog_Form(
       _("You can do a 'find and replace' operation on all or selected records in the database. These changes cannot easily be undone, that is why it is recommended to create a backup."),
       $formData,
       true,
       $this->serviceName(), "confirmFindReplace",
-      $args
+      func_get_args()
     );
   }
 
