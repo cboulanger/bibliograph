@@ -1,0 +1,46 @@
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"Report-Msgid-Bugs-To: you@your.org\n"
+"POT-Creation-Date: 2014-10-04 21:20+0100\n"
+"PO-Revision-Date: 2014-10-04 21:20+0100\n"
+"Last-Translator: you <you@your.org>\n"
+"Language-Team: Team <yourteam@your.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: backup/Plugin.js:40
+msgid "Backup"
+msgstr ""
+
+#: backup/Plugin.js:58
+msgid "Create Backup"
+msgstr ""
+
+#: backup/Plugin.js:63
+msgid "Saving backup..."
+msgstr ""
+
+#: backup/Plugin.js:70
+msgid "Restore Backup"
+msgstr ""
+
+#: backup/Plugin.js:87
+msgid "Restoring backup..."
+msgstr ""
+
+#: backup/Plugin.js:94
+msgid "Delete old backups"
+msgstr ""
+
+#: backup/Plugin.js:107
+msgid "Download backup"
+msgstr ""
+
+#: backup/Plugin.js:124
+msgid ""
+"The datasource has just been restored to a previous state and will now be "
+"reloaded."
+msgstr ""

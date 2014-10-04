@@ -269,7 +269,7 @@ class backup_Backup
   public function method_dialogRestoreBackup( $datasource, $token )
   {
     $this->requirePermission("backup.restore");
-    $msg = $this->tr("Do you really want to restore Database '%s'? All existing data will be lost!", $datasource);
+    $msg = $this->tr("Do you really want to replace Database '%s' with a backup?", $datasource);
     
     return new qcl_ui_dialog_Confirm(
       $msg,
@@ -352,7 +352,8 @@ class backup_Backup
     {
       $progressBar->error( $e->getMessage() );  
     }
-    $this->broadcastClientMessage("backup.restored",array("datasource" => $datasource ) );
+    $this->broadcastClientMessage("backup.restored",array("datasource" => $datasource ), true );
+    $progressBar->dispatchClientMessage( "backup.restored",array("datasource" => $datasource ) );
     $progressBar->complete();
   }
   
