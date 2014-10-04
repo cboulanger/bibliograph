@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Bibliograph 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-01 23:53+0100\n"
-"PO-Revision-Date: 2014-08-01 23:59+0100\n"
+"POT-Creation-Date: 2014-10-04 22:50+0100\n"
+"PO-Revision-Date: 2014-10-04 22:50+0100\n"
 "Last-Translator: Christian Boulanger <info@bibliograph.org>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop;tr;trn\n"
 "X-Poedit-Basepath: .\n"
-"X-Generator: Poedit 1.6.7\n"
+"X-Generator: Poedit 1.6.9\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SearchPath-0: ../../../class\n"
 
@@ -33,14 +33,14 @@ msgid "Is folder publically visible?"
 msgstr "Ist der Ordner öffentlich?"
 
 #: ../../../class/bibliograph/model/FolderModel.php:173
-#: ../../../class/bibliograph/service/Reference.php:1457
+#: ../../../class/bibliograph/service/Reference.php:1458
 #: ../../../class/qcl/ui/dialog/Confirm.php:47
 #: ../../../class/qcl/ui/dialog/Confirm.php:51
 msgid "Yes"
 msgstr "Ja"
 
 #: ../../../class/bibliograph/model/FolderModel.php:174
-#: ../../../class/bibliograph/service/Reference.php:1458
+#: ../../../class/bibliograph/service/Reference.php:1459
 #: ../../../class/qcl/ui/dialog/Confirm.php:47
 #: ../../../class/qcl/ui/dialog/Confirm.php:51
 msgid "No"
@@ -85,191 +85,6 @@ msgstr "Mülleimer"
 #: ../../../class/bibliograph/model/export/Bibtex.php:121
 msgid "Special Issue"
 msgstr "Zeitschriftenausgabe"
-
-#: ../../../class/bibliograph/plugin/bibutils/Plugin.php:79
-msgid ""
-"Could not call the bibutils commands through the shell. Please check your "
-"setup."
-msgstr ""
-"Konnte die bibutils Kommandos nicht in der Shell ausführen. Bitte überprüfen "
-"Sie die Einstellungen auf dem Server."
-
-#: ../../../class/bibliograph/plugin/bookends/controller.php:172
-#, php-format
-msgid ""
-"Datasources '%s' and '%s' have never been synchronized before. Are you sure "
-"you want to proceed?"
-msgstr ""
-"Die Datenbanken '%s' und '%s' wurden noch nie synchronisiert. Sind Sie "
-"sicher, dass Sie fortfahren wollen?"
-
-#: ../../../class/bibliograph/plugin/bookends/controller.php:276
-#, php-format
-msgid "Do you really want to delete clear all synchronization for '%s'?"
-msgstr ""
-"Sind Sie sicher, dass sie alle Synchronisierungsdaten für '%s' löschen "
-"möchten?"
-
-#: ../../../class/bibliograph/plugin/csl/Service.php:108
-#, php-format
-msgid ""
-"More than %s references in the folder. Creating a bibliography would take "
-"too long."
-msgstr ""
-"Mehr als %s Datensätze im Ordner. Es würde zu lange dauern, daraus eine "
-"Bibliographie zu generieren. "
-
-#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl/Schema.php:51
-#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl/Schema.php:55
-#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:52
-#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:56
-#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:69
-#: ../../../class/bibliograph/schema/BibtexSchema.php:757
-#: ../../../class/bibliograph/service/Folder.php:628
-#: ../../../class/qcl/data/datasource/DbModel.php:206
-msgid "Type"
-msgstr "Typ"
-
-#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl/Schema.php:73
-#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl/Schema.php:77
-#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:76
-#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:80
-msgid "location"
-msgstr "Standort"
-
-#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl/Schema.php:95
-#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl/Schema.php:99
-#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:100
-#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:104
-#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:117
-msgid "Category"
-msgstr "Kategorie"
-
-#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl/Schema.php:117
-#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl/Schema.php:121
-#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:121
-#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:125
-#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:138
-msgid "Owner"
-msgstr "Eigentümer/in"
-
-#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl/Schema.php:139
-#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl/Schema.php:143
-#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:164
-#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:168
-msgid "Date ordered"
-msgstr "Bestellt am"
-
-#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl/Schema.php:152
-#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl/Schema.php:156
-#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:173
-#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:177
-msgid "Date received"
-msgstr "Eingang am"
-
-#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:93
-#: ../../../class/bibliograph/schema/BibtexSchema.php:633
-msgid "Location"
-msgstr "Standort"
-
-#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:143
-#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:147
-#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:160
-msgid "Source"
-msgstr "Quelle"
-
-#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:182
-#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:186
-msgid "Reimb. requested"
-msgstr "Erstatt. beantr. am"
-
-#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:192
-#: ../../../class/bibliograph/plugin/fieldsExtensionExmpl2/Schema.php:196
-msgid "Inventory"
-msgstr "Vorhanden?"
-
-#: ../../../class/bibliograph/plugin/isbnscanner/Plugin.php:71
-msgid "Please reload the application to finish installing."
-msgstr "Bitte die Anwendung erneut laden, um die Installation abzuschließen."
-
-#: ../../../class/bibliograph/plugin/isbnscanner/Plugin.php:91
-msgid "Please reload the application to finish uninstalling."
-msgstr "Bitte die Anwendung erneut laden, um die Deinstallation abzuschließen."
-
-#: ../../../class/bibliograph/plugin/isbnscanner/Service.php:49
-msgid "No folder selected."
-msgstr "Bitte erst einen Ordner auswählen."
-
-#: ../../../class/bibliograph/plugin/isbnscanner/Service.php:53
-msgid "Please enter the ISBN:"
-msgstr "Bitte die ISBN eingeben:"
-
-#: ../../../class/bibliograph/plugin/isbnscanner/Service.php:86
-msgid "Contacting webservices to resolve ISBN..."
-msgstr "Verbinde mit Webservices zum Auflösen der ISBN..."
-
-#: ../../../class/bibliograph/plugin/isbnscanner/Service.php:121
-#, php-format
-msgid "Could not find any data for ISBN %s."
-msgstr "Konnte keine Daten für ISBN %s finden."
-
-#: ../../../class/bibliograph/plugin/isbnscanner/Service.php:130
-#, php-format
-msgid "Contacting %s. Please wait..."
-msgstr "Anfrage an %s. Bitte warten ..."
-
-#: ../../../class/bibliograph/plugin/isbnscanner/Service.php:233
-#, php-format
-msgid "Found: %s<br><br><b>Possible duplicates:</b><br>%s"
-msgstr "Ergebnis: %s<br><br><b>Mögliche Duplikate:</b><br>%s"
-
-#: ../../../class/bibliograph/plugin/isbnscanner/Service.php:241
-#: ../../../class/bibliograph/plugin/isbnscanner/Service.php:253
-#, php-format
-msgid "Found: %s"
-msgstr "Ergebnis: %s"
-
-#: ../../../class/bibliograph/plugin/isbnscanner/Service.php:259
-msgid "Import and continue"
-msgstr "Importieren und weiter"
-
-#: ../../../class/bibliograph/plugin/isbnscanner/Service.php:260
-msgid "Import and edit"
-msgstr "Importieren und bearbeiten"
-
-#: ../../../class/bibliograph/plugin/isbnscanner/Service.php:261
-msgid "Skip and continue"
-msgstr "Überspringen und fortsetzen"
-
-#: ../../../class/bibliograph/plugin/isbnscanner/Service.php:307
-#: ../../../class/bibliograph/plugin/isbnscanner/Service.php:354
-msgid "Importing data. Please wait..."
-msgstr "Importiere die Daten. Bitte warten ..."
-
-#: ../../../class/bibliograph/plugin/isbnscanner/Service.php:314
-msgid "Converting names. Please wait..."
-msgstr "Wandle Namen um. Bitte warten ..."
-
-#: ../../../class/bibliograph/plugin/z3950/Service.php:119
-#: ../../../class/bibliograph/service/Import.php:102
-#: ../../../class/bibliograph/service/Reference.php:195
-msgid "Author"
-msgstr "Autor/in"
-
-#: ../../../class/bibliograph/plugin/z3950/Service.php:123
-#: ../../../class/bibliograph/schema/BibtexSchema.php:779
-#: ../../../class/bibliograph/service/Import.php:106
-#: ../../../class/bibliograph/service/Reference.php:199
-msgid "Year"
-msgstr "Jahr"
-
-#: ../../../class/bibliograph/plugin/z3950/Service.php:127
-#: ../../../class/bibliograph/schema/BibtexSchema.php:736
-#: ../../../class/bibliograph/service/ACLTool.php:1179
-#: ../../../class/bibliograph/service/Import.php:110
-#: ../../../class/bibliograph/service/Reference.php:203
-msgid "Title"
-msgstr "Titel"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:295
 msgid "Article"
@@ -438,6 +253,10 @@ msgstr "Sprache"
 msgid "Call Number"
 msgstr "Signatur"
 
+#: ../../../class/bibliograph/schema/BibtexSchema.php:633
+msgid "Location"
+msgstr "Standort"
+
 #: ../../../class/bibliograph/schema/BibtexSchema.php:640
 msgid "Month"
 msgstr "Monat"
@@ -482,9 +301,22 @@ msgstr "Größe"
 msgid "Subtitle"
 msgstr "Untertitel"
 
+#: ../../../class/bibliograph/schema/BibtexSchema.php:736
+#: ../../../class/bibliograph/service/ACLTool.php:1179
+#: ../../../class/bibliograph/service/Import.php:110
+#: ../../../class/bibliograph/service/Reference.php:204
+msgid "Title"
+msgstr "Titel"
+
 #: ../../../class/bibliograph/schema/BibtexSchema.php:747
 msgid "Translator"
 msgstr "Übersetzer"
+
+#: ../../../class/bibliograph/schema/BibtexSchema.php:757
+#: ../../../class/bibliograph/service/Folder.php:628
+#: ../../../class/qcl/data/datasource/DbModel.php:206
+msgid "Type"
+msgstr "Typ"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:763
 msgid "Internet Link"
@@ -494,40 +326,46 @@ msgstr "URL"
 msgid "Volume"
 msgstr "Band"
 
-#: ../../../class/bibliograph/schema/CQL.php:60
-#: ../../../class/bibliograph/service/Reference.php:1659
+#: ../../../class/bibliograph/schema/BibtexSchema.php:779
+#: ../../../class/bibliograph/service/Import.php:106
+#: ../../../class/bibliograph/service/Reference.php:200
+msgid "Year"
+msgstr "Jahr"
+
+#: ../../../class/bibliograph/schema/CQL.php:61
+#: ../../../class/bibliograph/service/Reference.php:1666
 msgid "and"
 msgstr "und"
 
-#: ../../../class/bibliograph/schema/CQL.php:60
+#: ../../../class/bibliograph/schema/CQL.php:61
 msgid "or"
 msgstr "oder"
 
-#: ../../../class/bibliograph/schema/CQL.php:60
+#: ../../../class/bibliograph/schema/CQL.php:61
 msgid "not"
 msgstr "nicht"
 
-#: ../../../class/bibliograph/schema/CQL.php:61
+#: ../../../class/bibliograph/schema/CQL.php:62
 msgid "is"
 msgstr "ist"
 
-#: ../../../class/bibliograph/schema/CQL.php:61
+#: ../../../class/bibliograph/schema/CQL.php:62
 msgid "isnot"
 msgstr "ist nicht"
 
-#: ../../../class/bibliograph/schema/CQL.php:61
+#: ../../../class/bibliograph/schema/CQL.php:62
 msgid "contains"
 msgstr "enthält"
 
-#: ../../../class/bibliograph/schema/CQL.php:61
+#: ../../../class/bibliograph/schema/CQL.php:62
 msgid "notcontains"
 msgstr "enthält nicht"
 
-#: ../../../class/bibliograph/schema/CQL.php:62
+#: ../../../class/bibliograph/schema/CQL.php:63
 msgid "startswith"
 msgstr "beginnt mit"
 
-#: ../../../class/bibliograph/schema/CQL.php:265
+#: ../../../class/bibliograph/schema/CQL.php:307
 #, php-format
 msgid "Index '%s' does not exist."
 msgstr "Der Index '%s' existiert nicht."
@@ -922,11 +760,11 @@ msgstr ""
 msgid "All data exported to the backup directory."
 msgstr "Alle Daten wurden im Backup-Verzeichnis gesichtert."
 
-#: ../../../class/bibliograph/service/Application.php:53
+#: ../../../class/bibliograph/service/Application.php:60
 msgid "Thank you for taking time to make Bibliograph better."
 msgstr "Danke, dass Sie dazu beitragen, das Programm zu verbessern."
 
-#: ../../../class/bibliograph/service/Application.php:55
+#: ../../../class/bibliograph/service/Application.php:62
 msgid ""
 "After selecting the type of report (1), please provide a detailed "
 "description of the error or the requested feature (2). "
@@ -935,7 +773,7 @@ msgstr ""
 "detaillierte Beschreibung des Fehlers oder der gewünschten Funktionalität "
 "(2)."
 
-#: ../../../class/bibliograph/service/Application.php:56
+#: ../../../class/bibliograph/service/Application.php:63
 msgid ""
 "If the application has reported an error, please copy & paste or write down "
 "the error message (3). "
@@ -943,7 +781,7 @@ msgstr ""
 "Wenn die Anwendung einen Fehler gemeldet hat, geben Sie diesen im Feld (3) "
 "an."
 
-#: ../../../class/bibliograph/service/Application.php:57
+#: ../../../class/bibliograph/service/Application.php:64
 msgid ""
 "Finally, If you want to be notified about the progress of your request, "
 "please provide your email address (4)."
@@ -951,27 +789,27 @@ msgstr ""
 "Wenn Sie über den Fortschritt Ihrer Meldung informiert werden möchten, geben "
 "Sie bitte Ihre E-Mailadresse an (4)."
 
-#: ../../../class/bibliograph/service/Application.php:67
+#: ../../../class/bibliograph/service/Application.php:73
 msgid "Type of report"
 msgstr "Art der Meldung"
 
-#: ../../../class/bibliograph/service/Application.php:69
+#: ../../../class/bibliograph/service/Application.php:75
 msgid "Problem/Bug report"
 msgstr "Fehlermeldung"
 
-#: ../../../class/bibliograph/service/Application.php:70
+#: ../../../class/bibliograph/service/Application.php:76
 msgid "Feature request"
 msgstr "Verbesserungsvorschlag"
 
-#: ../../../class/bibliograph/service/Application.php:74
+#: ../../../class/bibliograph/service/Application.php:80
 msgid "Problem"
 msgstr "Problem"
 
-#: ../../../class/bibliograph/service/Application.php:80
+#: ../../../class/bibliograph/service/Application.php:86
 msgid "Error Message"
 msgstr "Fehlermeldung"
 
-#: ../../../class/bibliograph/service/Application.php:85
+#: ../../../class/bibliograph/service/Application.php:91
 msgid "Email"
 msgstr "E-Mail"
 
@@ -982,62 +820,6 @@ msgstr "Vielen Dank für Ihre Meldung."
 #: ../../../class/bibliograph/service/Application.php:139
 msgid "You will be notified as soon as it can be considered."
 msgstr "Sie werden benachrichtigt, sobald wir dazu kommen."
-
-#: ../../../class/bibliograph/service/Backup.php:205
-#, php-format
-msgid "Do you want to backup Database '%s'"
-msgstr "Wollen Sie Datenbank '%s' sichern?"
-
-#: ../../../class/bibliograph/service/Backup.php:237
-#, php-format
-msgid "Backup created in %s seconds"
-msgstr "Sicherung in %s Sekunden erstellt"
-
-#: ../../../class/bibliograph/service/Backup.php:248
-#, php-format
-msgid ""
-"Do you really want to restore Database '%s'? All existing data will be lost!"
-msgstr ""
-"Wollen Sie wirklich die Datenbank  '%s' wiederherstellen? Alle bestehenden "
-"Daten werden gelöscht!"
-
-#: ../../../class/bibliograph/service/Backup.php:295
-msgid "Backup from "
-msgstr "Sicherung vom"
-
-#: ../../../class/bibliograph/service/Backup.php:303
-#, php-format
-msgid "Please select the backup set to restore into database '%s'"
-msgstr ""
-"Bitte wählen sie die Sicherung, die für Datenbank '%s' wiederhergestellt "
-"werden soll."
-
-#: ../../../class/bibliograph/service/Backup.php:332
-msgid "Backup file does not exist."
-msgstr "Backupdatei existiert nicht."
-
-#: ../../../class/bibliograph/service/Backup.php:395
-msgid "Backup has been restored."
-msgstr "Die Sicherung wurde zurückgespielt."
-
-#: ../../../class/bibliograph/service/Backup.php:396
-msgid "Please check logfile for problems."
-msgstr "Bitte sehen Sie im Logfile nach, welche Probleme aufgetreten sind. "
-
-#: ../../../class/bibliograph/service/Backup.php:409
-msgid "All backups older than one day will be deleted. Proceed?"
-msgstr ""
-"Alle Sicherungen, die älter als ein Tag sind, Werden gelöscht. Fortfahren?"
-
-#: ../../../class/bibliograph/service/Backup.php:445
-#, php-format
-msgid "%s backups were deleted."
-msgstr "%s Sicherungen wurden gelöscht."
-
-#: ../../../class/bibliograph/service/Backup.php:446
-msgid "There was a problem. Please examine the log file."
-msgstr ""
-"Es ist ein Problem aufgetreten. Es wurde in der Logdatei aufgezeichnet."
 
 #: ../../../class/bibliograph/service/Export.php:41
 msgid "Export references"
@@ -1115,15 +897,20 @@ msgstr ""
 msgid "Top folders cannot be moved."
 msgstr "Die obersten Ordner können nicht verschoben werden."
 
+#: ../../../class/bibliograph/service/Import.php:102
+#: ../../../class/bibliograph/service/Reference.php:196
+msgid "Author"
+msgstr "Autor/in"
+
 #: ../../../class/bibliograph/service/Import.php:134
 msgid "2. Choose import format"
 msgstr "2. Wählen Sie das Importformat aus"
 
-#: ../../../class/bibliograph/service/Reference.php:257
+#: ../../../class/bibliograph/service/Reference.php:258
 msgid "No recognized query format in request."
 msgstr "Das Abfrageformat kann nicht erkannt werden."
 
-#: ../../../class/bibliograph/service/Reference.php:961
+#: ../../../class/bibliograph/service/Reference.php:962
 #, php-format
 msgid ""
 "The selected record '%s' is contained in %s folders. Move to the trash "
@@ -1132,82 +919,82 @@ msgstr ""
 "Der ausgewählte Datensatz '%s' befindet sich in %s Ordnern. Möchten Sie ihn "
 "trotzdem in den Papierkorb bewegen?"
 
-#: ../../../class/bibliograph/service/Reference.php:1107
-#: ../../../class/bibliograph/service/Reference.php:1190
+#: ../../../class/bibliograph/service/Reference.php:1108
+#: ../../../class/bibliograph/service/Reference.php:1191
 msgid "Invalid datasource."
 msgstr "Ungültige Datenquelle."
 
-#: ../../../class/bibliograph/service/Reference.php:1108
+#: ../../../class/bibliograph/service/Reference.php:1109
 msgid "Invalid source folder."
 msgstr "Ungültiger Quellordner."
 
-#: ../../../class/bibliograph/service/Reference.php:1109
-#: ../../../class/bibliograph/service/Reference.php:1191
+#: ../../../class/bibliograph/service/Reference.php:1110
+#: ../../../class/bibliograph/service/Reference.php:1192
 msgid "Invalid target folder."
 msgstr "Ungültiger Zielordner."
 
-#: ../../../class/bibliograph/service/Reference.php:1273
+#: ../../../class/bibliograph/service/Reference.php:1274
 msgid "Record is marked for deletion"
 msgstr "Der Datensatz ist zur Löschung vorgesehen."
 
-#: ../../../class/bibliograph/service/Reference.php:1277
+#: ../../../class/bibliograph/service/Reference.php:1278
 msgid "Reference id"
 msgstr "Datensatz-ID"
 
-#: ../../../class/bibliograph/service/Reference.php:1278
+#: ../../../class/bibliograph/service/Reference.php:1279
 msgid "Created"
 msgstr "Angelegt am"
 
-#: ../../../class/bibliograph/service/Reference.php:1280
+#: ../../../class/bibliograph/service/Reference.php:1281
 msgid "Created by"
 msgstr "Angelegt von"
 
-#: ../../../class/bibliograph/service/Reference.php:1281
+#: ../../../class/bibliograph/service/Reference.php:1282
 msgid "Modified"
 msgstr "Verändert am"
 
-#: ../../../class/bibliograph/service/Reference.php:1282
+#: ../../../class/bibliograph/service/Reference.php:1283
 msgid "Modified by"
 msgstr "Verändert von"
 
-#: ../../../class/bibliograph/service/Reference.php:1283
+#: ../../../class/bibliograph/service/Reference.php:1284
 #: ../../../class/qcl/data/datasource/DbModel.php:245
 msgid "Status"
 msgstr "Status"
 
-#: ../../../class/bibliograph/service/Reference.php:1431
+#: ../../../class/bibliograph/service/Reference.php:1432
 msgid "Search in:"
 msgstr "Suchen in: "
 
-#: ../../../class/bibliograph/service/Reference.php:1434
+#: ../../../class/bibliograph/service/Reference.php:1435
 msgid "Whole database"
 msgstr "Gesamte Datenbank"
 
-#: ../../../class/bibliograph/service/Reference.php:1435
+#: ../../../class/bibliograph/service/Reference.php:1436
 msgid "Selected records"
 msgstr "Ausgewählte Datensätze"
 
-#: ../../../class/bibliograph/service/Reference.php:1436
+#: ../../../class/bibliograph/service/Reference.php:1437
 msgid "Selected folder"
 msgstr "Ausgewählte Ordner"
 
-#: ../../../class/bibliograph/service/Reference.php:1441
+#: ../../../class/bibliograph/service/Reference.php:1442
 msgid "Replace in:"
 msgstr "Ersetzen in:"
 
-#: ../../../class/bibliograph/service/Reference.php:1446
+#: ../../../class/bibliograph/service/Reference.php:1447
 msgid "Search expression:"
 msgstr "Suchausdruck:"
 
-#: ../../../class/bibliograph/service/Reference.php:1450
+#: ../../../class/bibliograph/service/Reference.php:1451
 msgid "Replace with:"
 msgstr "Ersetzen mit:"
 
-#: ../../../class/bibliograph/service/Reference.php:1454
+#: ../../../class/bibliograph/service/Reference.php:1455
 msgid "Create a backup?"
 msgstr "Eine Sicherung anlegen?"
 
-#: ../../../class/bibliograph/service/Reference.php:1465
+#: ../../../class/bibliograph/service/Reference.php:1472
 msgid ""
 "You can do a 'find and replace' operation on all or selected records in the "
 "database. These changes cannot easily be undone, that is why it is "
@@ -1218,33 +1005,33 @@ msgstr ""
 "schwer oder gar nicht rückgängig gemacht werden, deswegen wird geraten, eine "
 "automatische Sicherung durchführen zu lassen. "
 
-#: ../../../class/bibliograph/service/Reference.php:1485
+#: ../../../class/bibliograph/service/Reference.php:1492
 msgid "in all records"
 msgstr "in allen Datensätzen"
 
-#: ../../../class/bibliograph/service/Reference.php:1486
+#: ../../../class/bibliograph/service/Reference.php:1493
 msgid "in the selected records"
 msgstr "in den ausgewählten Datensätzen"
 
-#: ../../../class/bibliograph/service/Reference.php:1487
+#: ../../../class/bibliograph/service/Reference.php:1494
 msgid "in the selected folder"
 msgstr "im ausgewählten Ordner"
 
-#: ../../../class/bibliograph/service/Reference.php:1496
+#: ../../../class/bibliograph/service/Reference.php:1503
 msgid "all fields"
 msgstr "allen Feldern"
 
-#: ../../../class/bibliograph/service/Reference.php:1497
+#: ../../../class/bibliograph/service/Reference.php:1504
 #, php-format
 msgid "field '%s'"
 msgstr "Feld '%s'"
 
-#: ../../../class/bibliograph/service/Reference.php:1493
+#: ../../../class/bibliograph/service/Reference.php:1500
 #, php-format
 msgid "Are you sure you want to replace '%s' with '%s' in %s %s?"
 msgstr "Sind Sie sicher, dass Sie '%s' mit '%s' in %s %s ersetzen wollen?"
 
-#: ../../../class/bibliograph/service/Reference.php:1573
+#: ../../../class/bibliograph/service/Reference.php:1580
 #, php-format
 msgid ""
 "In case you want to revert the changes, a backup file '%s' has been created."
@@ -1252,25 +1039,25 @@ msgstr ""
 "Im Fall, dass Sie die Änderungen rückgängig machen wollen, wurde eine "
 "Sicherungsdatei '%s' erstellt. "
 
-#: ../../../class/bibliograph/service/Reference.php:1570
+#: ../../../class/bibliograph/service/Reference.php:1577
 #, php-format
 msgid "%s replacements made. %s"
 msgstr "Es wurden %s Ersetzungen vorgenommen. %s"
 
-#: ../../../class/bibliograph/service/Reference.php:1585
+#: ../../../class/bibliograph/service/Reference.php:1592
 msgid "You can use the search features of this application in two ways."
 msgstr ""
 "Sie können sie Suchfunktion dieser Anwendung auf zwei verschiedene Arten "
 "nutzen."
 
-#: ../../../class/bibliograph/service/Reference.php:1586
+#: ../../../class/bibliograph/service/Reference.php:1593
 msgid ""
 "Either you simply type in keywords like you would do in a google search."
 msgstr ""
 "Entweder tippen Sie einfach Schlagwörter in das Suchfeld, wie Sie es von "
 "einer Google-Suche gewöhnt sind."
 
-#: ../../../class/bibliograph/service/Reference.php:1587
+#: ../../../class/bibliograph/service/Reference.php:1594
 msgid ""
 "Or you compose complex queries using field names, comparison operators, and "
 "boolean connectors (for example: title contains constitution and year=1981)."
@@ -1279,7 +1066,7 @@ msgstr ""
 "Vergleichsoperatoren und logischen Verknüpfungen (Zum Beispiel: titel "
 "enthält verfassung und jahr = 1981)."
 
-#: ../../../class/bibliograph/service/Reference.php:1588
+#: ../../../class/bibliograph/service/Reference.php:1595
 msgid ""
 "You can use wildcard characters: '?' for a single character and '*' for any "
 "amount of characters."
@@ -1287,7 +1074,7 @@ msgstr ""
 "Sie können auch Ersetzungszeichen verwenden: '?' für einen einzelnen "
 "Buchstaben und '*' für eine beliebige Anzahl von Buchstaben."
 
-#: ../../../class/bibliograph/service/Reference.php:1589
+#: ../../../class/bibliograph/service/Reference.php:1596
 msgid ""
 "When using more than one word, the phrase has to be quoted (For example, "
 "title startswith \"Recent developments\")."
@@ -1296,22 +1083,22 @@ msgstr ""
 "Anführungszeichen einschließen (Zum Beispiel: titel beginntmit \"Neuere "
 "Entwicklungen\")."
 
-#: ../../../class/bibliograph/service/Reference.php:1590
+#: ../../../class/bibliograph/service/Reference.php:1597
 msgid ""
 "You can click on any of the terms below to insert them into the query field."
 msgstr ""
 "Klicken Sie auf eine der Begriffe weiter unten, um diese in das Suchfeld "
 "einzufügen."
 
-#: ../../../class/bibliograph/service/Reference.php:1599
+#: ../../../class/bibliograph/service/Reference.php:1606
 msgid "Field names"
 msgstr "Feldnamen"
 
-#: ../../../class/bibliograph/service/Reference.php:1635
+#: ../../../class/bibliograph/service/Reference.php:1642
 msgid "Comparison modifiers"
 msgstr "Vergleichsoperatoren"
 
-#: ../../../class/bibliograph/service/Reference.php:1654
+#: ../../../class/bibliograph/service/Reference.php:1661
 msgid "Boolean operators"
 msgstr "Logische Verknüpfungen"
 
@@ -1319,15 +1106,15 @@ msgstr "Logische Verknüpfungen"
 msgid "Starting setup ..."
 msgstr "Die Anwendung wird konfiguriert ..."
 
-#: ../../../class/bibliograph/service/Setup.php:171
+#: ../../../class/bibliograph/service/Setup.php:164
 msgid "Initial user data imported."
 msgstr "Benutzerdaten wurden importiert."
 
-#: ../../../class/bibliograph/service/Setup.php:174
+#: ../../../class/bibliograph/service/Setup.php:167
 msgid "Checking configuration ..."
 msgstr "Überprüfe Konfiguration ..."
 
-#: ../../../class/bibliograph/service/Setup.php:193
+#: ../../../class/bibliograph/service/Setup.php:186
 msgid ""
 "Please enter the administrator email address in the application.ini.php file "
 "(email.admin)."
@@ -1335,47 +1122,47 @@ msgstr ""
 "Bitte tragen sie die Emailadresse des Administrators in der Datei "
 "application.ini.php ein (unter email.admin)."
 
-#: ../../../class/bibliograph/service/Setup.php:201
+#: ../../../class/bibliograph/service/Setup.php:194
 msgid "Administrator email has been set."
 msgstr "Die Administratoren-Email wurde gespeichert."
 
-#: ../../../class/bibliograph/service/Setup.php:204
+#: ../../../class/bibliograph/service/Setup.php:197
 msgid "Setting up configuration keys ..."
 msgstr "Konfigurationsdaten werden hinzugefügt ..."
 
-#: ../../../class/bibliograph/service/Setup.php:224
+#: ../../../class/bibliograph/service/Setup.php:217
 msgid "Configuration keys added."
 msgstr "Konfigurationsdaten hinzugefügt."
 
-#: ../../../class/bibliograph/service/Setup.php:226
+#: ../../../class/bibliograph/service/Setup.php:219
 msgid "Registering datasource information ..."
 msgstr "Speichere Informationen zu den Datenquellen ..."
 
-#: ../../../class/bibliograph/service/Setup.php:248
+#: ../../../class/bibliograph/service/Setup.php:241
 msgid "Added datasource schemas."
 msgstr "Datenquellenschemata hinzugefügt."
 
-#: ../../../class/bibliograph/service/Setup.php:250
+#: ../../../class/bibliograph/service/Setup.php:243
 msgid "Creating example datasources ..."
 msgstr "Erzeuge Beispiel-Datenquellen ..."
 
-#: ../../../class/bibliograph/service/Setup.php:322
+#: ../../../class/bibliograph/service/Setup.php:315
 msgid "Created example datasources."
 msgstr "Beispiel-Datenquellen erzeugt."
 
-#: ../../../class/bibliograph/service/Setup.php:324
+#: ../../../class/bibliograph/service/Setup.php:317
 msgid "Creating internal datasources ..."
 msgstr "Lege interne Datenquellen an ..."
 
-#: ../../../class/bibliograph/service/Setup.php:414
+#: ../../../class/bibliograph/service/Setup.php:408
 msgid "Created internal datasources."
 msgstr "Interne Datenbanken wurden angelegt. "
 
-#: ../../../class/bibliograph/service/Setup.php:417
+#: ../../../class/bibliograph/service/Setup.php:411
 msgid "Done ..."
 msgstr "Fertig ..."
 
-#: ../../../class/bibliograph/service/Setup.php:418
+#: ../../../class/bibliograph/service/Setup.php:412
 msgid "Setup finished. Please reload the application"
 msgstr ""
 "Die Einrichtung von Bibliograph ist abgeschlossen. Bitte laden Sie "
@@ -1484,56 +1271,56 @@ msgstr "Passwörter stimmen nicht überein."
 msgid "Password must be at least 8 characters long"
 msgstr "Das Passwort muss mindestens 8 Zeichen lang sein."
 
-#: ../../../class/qcl/application/plugin/Service.php:77
+#: ../../../class/qcl/application/plugin/Service.php:113
 msgid "Plugin is not installed"
 msgstr "Das Plugin ist nicht installiert."
 
-#: ../../../class/qcl/application/plugin/Service.php:78
+#: ../../../class/qcl/application/plugin/Service.php:114
 msgid "Install plugin"
 msgstr "Plugin installieren"
 
-#: ../../../class/qcl/application/plugin/Service.php:84
+#: ../../../class/qcl/application/plugin/Service.php:120
 msgid "Plugin is installed"
 msgstr "Das Plugin ist installiert."
 
-#: ../../../class/qcl/application/plugin/Service.php:85
+#: ../../../class/qcl/application/plugin/Service.php:121
 msgid "Uninstall plugin"
 msgstr "Plugin deinstallieren"
 
-#: ../../../class/qcl/application/plugin/Service.php:86
+#: ../../../class/qcl/application/plugin/Service.php:122
 msgid "Reinstall plugin"
 msgstr "Plugin erneut installieren"
 
-#: ../../../class/qcl/application/plugin/Service.php:102
+#: ../../../class/qcl/application/plugin/Service.php:136
 msgid "Please configure the plugins"
 msgstr "Bitte konfigurieren Sie die Plugins."
 
-#: ../../../class/qcl/application/plugin/Service.php:144
+#: ../../../class/qcl/application/plugin/Service.php:178
 #, php-format
 msgid "Installed plugin '%s'"
 msgstr "Plugin '%s' wurde installiert."
 
-#: ../../../class/qcl/application/plugin/Service.php:148
+#: ../../../class/qcl/application/plugin/Service.php:182
 #, php-format
 msgid "Installation of plugin '%s' failed: %s"
 msgstr "Die Installation von Plugin '%s' war nicht erfolgreich: %s"
 
-#: ../../../class/qcl/application/plugin/Service.php:167
+#: ../../../class/qcl/application/plugin/Service.php:201
 #, php-format
 msgid "Reinstalled plugin '%s'"
 msgstr "Das Plugin '%s' wurde erneut installiert. "
 
-#: ../../../class/qcl/application/plugin/Service.php:172
+#: ../../../class/qcl/application/plugin/Service.php:206
 #, php-format
 msgid "Re-Installation of plugin '%s' failed: %s"
 msgstr "Die erneute Installation von Plugin '%s' war nicht erfolgreich: %s"
 
-#: ../../../class/qcl/application/plugin/Service.php:189
+#: ../../../class/qcl/application/plugin/Service.php:223
 #, php-format
 msgid "Uninstalled plugin '%s'"
 msgstr "Das Plugin '%s' wurde deinstalliert."
 
-#: ../../../class/qcl/application/plugin/Service.php:196
+#: ../../../class/qcl/application/plugin/Service.php:230
 #, php-format
 msgid "Uninstallation of plugin '%s' failed: %s"
 msgstr "Die Deinstallation von Plugin '%s' war nicht erfolgreich: %s"
@@ -1592,6 +1379,141 @@ msgstr "Pfad"
 #, php-format
 msgid "File '%s' does not exist in datasource '%s'"
 msgstr "Die Datei '%s' existiert in der Datenquelle '%s' nicht."
+
+#~ msgid ""
+#~ "Could not call the bibutils commands through the shell. Please check your "
+#~ "setup."
+#~ msgstr ""
+#~ "Konnte die bibutils Kommandos nicht in der Shell ausführen. Bitte "
+#~ "überprüfen Sie die Einstellungen auf dem Server."
+
+#~ msgid ""
+#~ "Datasources '%s' and '%s' have never been synchronized before. Are you "
+#~ "sure you want to proceed?"
+#~ msgstr ""
+#~ "Die Datenbanken '%s' und '%s' wurden noch nie synchronisiert. Sind Sie "
+#~ "sicher, dass Sie fortfahren wollen?"
+
+#~ msgid "Do you really want to delete clear all synchronization for '%s'?"
+#~ msgstr ""
+#~ "Sind Sie sicher, dass sie alle Synchronisierungsdaten für '%s' löschen "
+#~ "möchten?"
+
+#~ msgid ""
+#~ "More than %s references in the folder. Creating a bibliography would take "
+#~ "too long."
+#~ msgstr ""
+#~ "Mehr als %s Datensätze im Ordner. Es würde zu lange dauern, daraus eine "
+#~ "Bibliographie zu generieren. "
+
+#~ msgid "location"
+#~ msgstr "Standort"
+
+#~ msgid "Category"
+#~ msgstr "Kategorie"
+
+#~ msgid "Owner"
+#~ msgstr "Eigentümer/in"
+
+#~ msgid "Date ordered"
+#~ msgstr "Bestellt am"
+
+#~ msgid "Date received"
+#~ msgstr "Eingang am"
+
+#~ msgid "Source"
+#~ msgstr "Quelle"
+
+#~ msgid "Reimb. requested"
+#~ msgstr "Erstatt. beantr. am"
+
+#~ msgid "Inventory"
+#~ msgstr "Vorhanden?"
+
+#~ msgid "Please reload the application to finish installing."
+#~ msgstr ""
+#~ "Bitte die Anwendung erneut laden, um die Installation abzuschließen."
+
+#~ msgid "Please reload the application to finish uninstalling."
+#~ msgstr ""
+#~ "Bitte die Anwendung erneut laden, um die Deinstallation abzuschließen."
+
+#~ msgid "No folder selected."
+#~ msgstr "Bitte erst einen Ordner auswählen."
+
+#~ msgid "Please enter the ISBN:"
+#~ msgstr "Bitte die ISBN eingeben:"
+
+#~ msgid "Contacting webservices to resolve ISBN..."
+#~ msgstr "Verbinde mit Webservices zum Auflösen der ISBN..."
+
+#~ msgid "Could not find any data for ISBN %s."
+#~ msgstr "Konnte keine Daten für ISBN %s finden."
+
+#~ msgid "Contacting %s. Please wait..."
+#~ msgstr "Anfrage an %s. Bitte warten ..."
+
+#~ msgid "Found: %s<br><br><b>Possible duplicates:</b><br>%s"
+#~ msgstr "Ergebnis: %s<br><br><b>Mögliche Duplikate:</b><br>%s"
+
+#~ msgid "Found: %s"
+#~ msgstr "Ergebnis: %s"
+
+#~ msgid "Import and continue"
+#~ msgstr "Importieren und weiter"
+
+#~ msgid "Import and edit"
+#~ msgstr "Importieren und bearbeiten"
+
+#~ msgid "Skip and continue"
+#~ msgstr "Überspringen und fortsetzen"
+
+#~ msgid "Importing data. Please wait..."
+#~ msgstr "Importiere die Daten. Bitte warten ..."
+
+#~ msgid "Converting names. Please wait..."
+#~ msgstr "Wandle Namen um. Bitte warten ..."
+
+#~ msgid "Do you want to backup Database '%s'"
+#~ msgstr "Wollen Sie Datenbank '%s' sichern?"
+
+#~ msgid "Backup created in %s seconds"
+#~ msgstr "Sicherung in %s Sekunden erstellt"
+
+#~ msgid ""
+#~ "Do you really want to restore Database '%s'? All existing data will be "
+#~ "lost!"
+#~ msgstr ""
+#~ "Wollen Sie wirklich die Datenbank  '%s' wiederherstellen? Alle "
+#~ "bestehenden Daten werden gelöscht!"
+
+#~ msgid "Backup from "
+#~ msgstr "Sicherung vom"
+
+#~ msgid "Please select the backup set to restore into database '%s'"
+#~ msgstr ""
+#~ "Bitte wählen sie die Sicherung, die für Datenbank '%s' wiederhergestellt "
+#~ "werden soll."
+
+#~ msgid "Backup file does not exist."
+#~ msgstr "Backupdatei existiert nicht."
+
+#~ msgid "Backup has been restored."
+#~ msgstr "Die Sicherung wurde zurückgespielt."
+
+#~ msgid "Please check logfile for problems."
+#~ msgstr "Bitte sehen Sie im Logfile nach, welche Probleme aufgetreten sind. "
+
+#~ msgid "All backups older than one day will be deleted. Proceed?"
+#~ msgstr ""
+#~ "Alle Sicherungen, die älter als ein Tag sind, Werden gelöscht. Fortfahren?"
+
+#~ msgid "%s backups were deleted."
+#~ msgstr "%s Sicherungen wurden gelöscht."
+
+#~ msgid "There was a problem. Please examine the log file."
+#~ msgstr ""
+#~ "Es ist ein Problem aufgetreten. Es wurde in der Logdatei aufgezeichnet."
 
 #~ msgid "You must set a password. Generate a random one?"
 #~ msgstr ""
