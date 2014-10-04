@@ -273,11 +273,15 @@ class qcl_locale_Manager extends qcl_core_Object
       $appNamespace = $this->getAppNamespace();
       $len = strlen($appNamespace);
       $availableLocales = array();
-      foreach ( scandir( $this->getMessageDirPath() ) as $file )
+      $messageDirPath = $this->getMessageDirPath();
+      if( file_exists( $messageDirPath ) )
       {
-        if ( substr($file,0, $len) == $appNamespace )
+        foreach ( scandir( $messageDirPath ) as $file )
         {
-          $availableLocales[] = substr($file, $len+1, 2);
+          if ( substr($file,0, $len) == $appNamespace )
+          {
+            $availableLocales[] = substr($file, $len+1, 2);
+          }
         }
       }
     }
