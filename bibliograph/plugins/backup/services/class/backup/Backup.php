@@ -18,7 +18,6 @@
 
 ************************************************************************ */
 
-require_once( __DIR__ . "/__init__.php"); // TODO this should not be neccessary
 qcl_import("qcl_data_controller_Controller");
 qcl_import("qcl_ui_dialog_Form");
 qcl_import("qcl_ui_dialog_Confirm");

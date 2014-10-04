@@ -50,6 +50,13 @@ function qcl_import( $class, $checkDefined = false )
   // get namespace parts
   $namespace = explode("_", $class);
 
+  // if plugin, add include path
+  $pluginClassPath = QCL_PLUGIN_DIR . "/" . $namespace[0] . "/services/class";
+  if( file_exists( $pluginClassPath ) )
+  {
+    qcl_addIncludePath( $pluginClassPath );
+  }
+
   // load __init__ files that belong to a package
   $path = array();
   for( $i=0; $i<count($namespace)-1; $i++)
@@ -77,6 +84,19 @@ function qcl_import( $class, $checkDefined = false )
   else
   {
     throw new qcl_FileNotFoundException("Class file '$class_file' does not exist.");
+  }
+}
+
+/**
+ * Adds a path to the list of paths where PHP tries to locate a class
+ * @param $path#
+ * @return void
+ */
+function qcl_addIncludePath( $path )
+{
+  if( strpos( ini_get("include_path"), $path ) === false )
+  {
+    ini_set('include_path', implode( PATH_SEPARATOR, array( ini_get("include_path"), $path ) ) );
   }
 }
 

@@ -219,13 +219,14 @@ class qcl_server_JsonRpcServer
    */
   protected function addIncludePath( $path )
   {
-    ini_set('include_path', implode( PATH_SEPARATOR, array( ini_get("include_path"), $path ) ) );
+    qcl_addIncludePath( $path );
   }
 
   /**
    * Overridden to allow mapping of services to classes and to load and start  main application
    * @param string $service
    * @return string|false The name of the file if it was found, false if not.
+   * @todo rewrite
    */
   public function loadServiceClass( $service )
   {
@@ -235,7 +236,6 @@ class qcl_server_JsonRpcServer
     $pluginServicePath = QCL_PLUGIN_DIR . "/$serviceNamespace/services/class";
     if( is_dir( $pluginServicePath ) )
     {
-      $this->addIncludePath( $pluginServicePath );
       $servicePath = $pluginServicePath;
     }
     // no, an application service
@@ -251,10 +251,9 @@ class qcl_server_JsonRpcServer
       qcl_log_Logger::getInstance()->warn( "Could not find application file for service $service." );
       return false;
     }
-    require_once $appFile;
-
     // instantiate application object
     $appClassName = $serviceNamespace . "_Application";
+    qcl_import($appClassName);
 
     if( ! class_exists( $appClassName ) )
     {
