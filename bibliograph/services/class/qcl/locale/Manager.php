@@ -36,11 +36,26 @@ class qcl_locale_Manager extends qcl_core_Object
    */
   public $default_locale = "en";
 
+
   /**
-   * The default path to the locale files
+   * The name of the directory containing all locale information
    * @var string
    */
-  protected $messages_path = 'locale/C.UTF-8/LC_MESSAGES';
+  protected $locale_dir_name = "locale";
+
+  /**
+   * The "language" of the translations. Is always "C.UTF-8" because the actual
+   * locale is switched using textdomains, not languages.
+   * @var string
+   */
+  protected $lang = 'C.UTF-8';
+
+  /**
+   * The name of the directory containing the message catalogues
+   * @var string
+   */
+  protected $catalog_dir_name = "LC_MESSAGES";
+
 
   /**
    * The curren locale
@@ -70,21 +85,18 @@ class qcl_locale_Manager extends qcl_core_Object
 	  /*
 	   * set default locale
 	   */
-    if( is_dir( $this->messages_path ) )
+    $lang = $this->lang;
+    $localeDir = $this->getMessagesRoot() . "/" . $this->getMessagesRelativePath();
+    if( is_dir( $localeDir ) )
     {
-      setlocale( LC_ALL, 'C.UTF-8' );
-      putenv("LANG=C.UTF-8");
+      setlocale( LC_ALL, $lang );
+      putenv("LANG=$lang");
       $this->setLocale();
       if( $this->hasLog() ) $this->logLocaleInfo();
     }
     else
     {
-      if ( $this->hasLog() ) {
-        $this->log( sprintf(
-          'Locale directory %s does not exist.',
-          realpath( $this->messages_path )
-        ), QCL_LOG_LOCALE );
-      }
+      $this->log( sprintf( 'Locale directory %s does not exist.', $localeDir ));
     }
 	}
 
@@ -106,10 +118,86 @@ class qcl_locale_Manager extends qcl_core_Object
     return $this->getLogger()->isFilterEnabled( QCL_LOG_LOCALE );
   }
 
+  public function log( $message )
+  {
+    if( $this->hasLog()) parent::log( $message, QCL_LOG_LOCALE );
+  }
+
   //-------------------------------------------------------------
   // API
   //-------------------------------------------------------------
 
+  /**
+   * Getter for locale property
+   * @return string
+   */
+  public function getLocale()
+  {
+    return $this->locale;
+  }
+
+  /**
+   * Returns the topnamespace of the current application
+   * @return string
+   */
+  protected function getAppNamespace()
+  {
+    $appClass = get_class( $this->getApplication() );
+    $namespace = explode("_", $appClass ); // TODO namespacing
+    return $namespace[0];
+  }
+
+  /**
+   * Returns the textdomain for the given locale
+   * @param $locale
+   * @return string
+   */
+  public function getTextDomain( $locale )
+  {
+    return $this->getAppNamespace() . "_" . $locale;
+  }
+
+  /**
+   * Returns the root directory in which gettext will look for locale information
+   * @return string
+   */
+  protected function getMessagesRoot()
+  {
+    $app = $this->getApplication();
+    if( $app instanceof qcl_application_plugin_IPluginApplication )
+    {
+      return QCL_PLUGIN_DIR . "/" . $this->getAppNamespace() . "/services/" . $this->locale_dir_name;
+    }
+    return realpath("./{$this->locale_dir_name}");
+  }
+
+  /**
+   * Returns the relative path from the messages root to the directory containing the message catalogs
+   * @return string
+   */
+  protected  function getMessagesRelativePath()
+  {
+    return $this->lang . "/" . $this->catalog_dir_name;
+  }
+
+  /**
+   * Returns the absolute path to the directory containing the message catalogs
+   * @return string
+   */
+  protected  function getMessageDirPath()
+  {
+    return $this->getMessagesRoot() . "/" . $this->getMessagesRelativePath();
+  }
+
+  /**
+   * Returns the path for the file that contains the messages for the given locale
+   * @param $locale
+   * @return string
+   */
+  public function getMessagesFilePath( $locale )
+  {
+    return $this->getMessageDirPath() . "/" . $this->getTextDomain( $locale ) . ".po";
+  }
 
   /**
    * sets the default locale. if no value is given, the locale is determined on
@@ -122,12 +210,12 @@ class qcl_locale_Manager extends qcl_core_Object
    */
 	public function setLocale($locale=null)
 	{
-    /*
-     * application textdomain
-     */
+    // application textdomain
     $locale = either( $locale, $this->getUserLocale() );
-    $textdomain = $this->getApplication()->id() . "_" . $locale;
-    bindtextdomain( $textdomain, dirname(dirname($this->messages_path)));
+    $textdomain = $this->getTextDomain( $locale );
+    $path = $this->getMessagesRoot();
+    bindtextdomain( $textdomain, $path );
+    $this->log( "Binding textdomain '$textdomain' to '$path'");
     if( function_exists("bind_textdomain_codeset") ) // PHP on Mac Bug
     {
       bind_textdomain_codeset( $textdomain, 'UTF-8');
@@ -135,28 +223,21 @@ class qcl_locale_Manager extends qcl_core_Object
     // set default for _("...") function
     textdomain($textdomain);
 
-    /*
-     * qcl textdomain,
-     */
+    // qcl library textdomain is special since it is not tied to the application
     $qcl_textdomain = "qcl_" . $locale;
-    bindtextdomain( $qcl_textdomain, dirname(__FILE__) );
+    $qcl_path = dirname(__FILE__);
+    bindtextdomain( $qcl_textdomain, $qcl_path );
+    $this->log( "Binding textdomain '$qcl_textdomain' to '$qcl_path'");
     if( function_exists("bind_textdomain_codeset") ) // PHP on Mac Bug
     {
       bind_textdomain_codeset( $qcl_textdomain, 'UTF-8');
     }
 
     $this->locale = $locale;
-    if( $this->hasLog()) $this->log( "Setting locale '$locale'", QCL_LOG_LOCALE);
+    $this->log( "Setting locale '$locale'", QCL_LOG_LOCALE);
 	}
 
-	/**
-	 * Getter for locale property
-	 * @return string
-	 */
-	public function getLocale()
-	{
-	  return $this->locale;
-	}
+
 
   /**
    * determines the user locale from the browser
@@ -189,14 +270,14 @@ class qcl_locale_Manager extends qcl_core_Object
     static $availableLocales = null;
     if ( $availableLocales === null )
     {
-      $app_id = $this->getApplication()->id();
-      $id_len = strlen($app_id);
+      $appNamespace = $this->getAppNamespace();
+      $len = strlen($appNamespace);
       $availableLocales = array();
-      foreach ( scandir( $this->messages_path ) as $file )
+      foreach ( scandir( $this->getMessageDirPath() ) as $file )
       {
-        if ( substr($file,0, $id_len) == $app_id )
+        if ( substr($file,0, $len) == $appNamespace )
         {
-          $availableLocales[] = substr($file, $id_len+1, 2);
+          $availableLocales[] = substr($file, $len+1, 2);
         }
       }
     }
@@ -220,18 +301,18 @@ class qcl_locale_Manager extends qcl_core_Object
   public function tr( $messageId, $varargs=array(), $className=null )
   {
 
-    if ( $className and ( count( $segments = explode( "_", $className) ) > 1 ) )
+    if ( $className and ( count( $segments = explode( "_", $className) ) > 1 ) ) // TODO namespacing
     {
       // use textdomain bound to class
       $textdomain = $segments[0] . "_" . $this->getUserLocale();
       $translation = dgettext( $textdomain, $messageId );
-      //if ( $this->hasLog() ) $this->log( "Translating '$messageId' into '$translation' using domain '$textdomain'", QCL_LOG_LOCALE);
+      //$this->log( "Translating '$messageId' into '$translation' using domain '$textdomain' (for class $className)");
     }
     else
     {
       // use default textdomain
       $translation = gettext( $messageId );
-      //if ( $this->hasLog() ) $this->log( "Translating '$messageId' into '$translation'.", QCL_LOG_LOCALE);
+      //$this->log( "Translating '$messageId' into '$translation'.");
     }
     array_unshift( $varargs, $translation );
     $result = @call_user_func_array('sprintf',$varargs);
@@ -287,6 +368,10 @@ class qcl_locale_Manager extends qcl_core_Object
     $this->info( "  Available locales:  " . implode(",", $this->getAvailableLocales() ) );
     $this->info( "  Browser locales :   " . $_SERVER["HTTP_ACCEPT_LANGUAGE"]  );
     $this->info( "  User locale:        " . $this->getUserLocale() );
-    $this->info( "  Current locale:     " . $this->getLocale() );
+    $locale = $this->getLocale();
+    $this->info( "  Current locale:     $locale");
+    $this->info( "  Textdomain:         " . $this->getTextDomain( $locale ) );
+    $filepath = $this->getMessagesFilePath( $locale ) ;
+    $this->info( "  Message catalog:    $filepath" . (file_exists($filepath)?"":" (missing!)" ) );
   }
 }

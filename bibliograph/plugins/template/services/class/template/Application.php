@@ -19,6 +19,9 @@
 ************************************************************************ */
 
 qcl_import("bibliograph_Application");
+qcl_import("qcl_application_plugin_IPluginApplication");
 
 class template_Application
-  extends bibliograph_Application {}
+  extends bibliograph_Application
+  implements qcl_application_plugin_IPluginApplication
+{}

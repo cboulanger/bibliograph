@@ -18,7 +18,11 @@
 
 ************************************************************************ */
 require_once( __DIR__ . "/__init__.php");
+
 qcl_import("bibliograph_Application");
+qcl_import("qcl_application_plugin_IPluginApplication");
 
 class mdbackup_Application
-  extends bibliograph_Application {}
+  extends bibliograph_Application
+  implements qcl_application_plugin_IPluginApplication
+{}
