@@ -47,7 +47,7 @@
   {
 
     "APPLICATION"    : "bibliograph", 
-    "QOOXDOO_PATH"   : "../qooxdoo-4.0.1-sdk",
+    "QOOXDOO_PATH"   : "../qooxdoo",
     "QXTHEME"        : "bibliograph.theme.Theme",
     "LOCALES"        : [ "en","de" ],
     "ROOT"           : ".",
