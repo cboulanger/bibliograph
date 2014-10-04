@@ -19,6 +19,7 @@
 qcl_import("qcl_data_controller_Controller");
 qcl_import("qcl_application_plugin_RegistryModel");
 qcl_import("qcl_ui_dialog_Alert");
+qcl_import("qcl_ui_dialog_Form");
 
 /**
  * The plugin Service
@@ -29,12 +30,12 @@ class qcl_application_plugin_Service
 {
 
   /**
-   * Returns a new instance of the registry model
+   * Returns a the instance of the registry model
    * @return qcl_application_plugin_RegistryModel
    */
   protected function getRegistryModel()
   {
-    return new qcl_application_plugin_RegistryModel();
+    return qcl_application_plugin_RegistryModel::getInstance();
   }
   
   
@@ -131,7 +132,6 @@ class qcl_application_plugin_Service
       );
     }
 
-    qcl_import("qcl_ui_dialog_Form");
     return new qcl_ui_dialog_Form(
       "<h3>" . $this->tr("Please configure the plugins") . "</h3>",
       $formData, true,
