@@ -29,7 +29,13 @@ class qcl_ui_dialog_ServerProgress
    * The id of the progress widget
    */
   protected $widgetId;
-  
+
+  /**
+   * If true, newlines will be inserted into the generated javascript code
+   * @var bool
+   */
+  public $insertNewlines = false;
+
   /**
    * Constructor
    * @param string $widgetId The id of the progress widget
@@ -64,6 +70,15 @@ class qcl_ui_dialog_ServerProgress
     flush();
     ob_flush();
   }
+
+  /**
+   * Returns new line character or empty string depending on insertNewlines property
+   * @return string
+   */
+  protected function getNewlineChar()
+  {
+    return $this->insertNewlines ? "\n" : "";
+  }
   
   /**
    * API function to set the state of the progress par 
@@ -71,7 +86,7 @@ class qcl_ui_dialog_ServerProgress
    */
   public function setProgress($value, $message=null, $newLogText=null)
   {
-    $nl = "\n";
+    $nl = $this->getNewlineChar();
     $js = '<script type="text/javascript">';
     //$js .= $nl . sprintf('console.log("%d, %s, %s");',$value, $message, $newLogText);
     $js .= $nl . "window.top.qcl.__{$this->widgetId}.set({";
@@ -81,32 +96,49 @@ class qcl_ui_dialog_ServerProgress
     $js .= $nl . '});</script>' . $nl;
     $this->send( $js );
   }
-  
+
+  /**
+   * API function to dispatch a client message
+   * @param string $name Name of message
+   * @param mixed|null $data Message data
+   *
+   */
+  public function dispatchClientMessage($name,$data=null)
+  {
+    $nl = $this->getNewlineChar();
+    $js = '<script type="text/javascript">';
+    $js .= $nl . 'window.top.qx.event.message.Bus.getInstance().dispatchByName("' . $name . '",';
+    $js .= $nl . json_encode($data);
+    $js .= $nl . ');</script>' . $nl;
+    $this->send( $js );
+  }
+
   /**
    * API function to trigger an error alert
    * @param string $message
    */
   public function error($message)
   {
-    $nl = "\n";
+    $nl = $this->getNewlineChar();
     $js = '<script type="text/javascript">';
     $js .= $nl . 'window.top.dialog.Dialog.error("' . $message . '");';
-    $js .= $nl . "window.top.qcl.__{$this->widgetId}.hide();";    
+    $js .= $nl . "window.top.qcl.__{$this->widgetId}.hide();";
     $js .= $nl . '</script>' . $nl;
     $this->send( $js );
     $this->send("");
-    exit; 
+    exit;
   }
 
   /**
    * Must be called on completion of the script
+   * @param string|null Optional message that will be shown in an alert dialog
    */
   public function complete($message=null)
   {
     $this->setProgress(100);
     if ( $message )
     {
-      $nl = "\n";
+      $nl = $this->getNewlineChar();
       $js = '<script type="text/javascript">';
       $js .= $nl . 'window.top.dialog.Dialog.alert("' . $message . '");';
       $js .= $nl . '</script>' . $nl;
