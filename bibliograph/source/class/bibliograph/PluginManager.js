@@ -37,7 +37,6 @@ qx.Class.define("bibliograph.PluginManager",
         var plugins= {
           "plugin_backup"       : window.backup ? backup.Plugin : null,
           "plugin_csl"          : window.csl ? csl.Plugin : null,
-          //"plugin_mdbackup"     : window.mdbackup ? mdbackup.Plugin : null,
           "plugin_isbnscanner"  : window.isbnscanner ? isbnscanner.Plugin : null,
           "plugin_z3950"        : window.z3950 ? z3950.Plugin : null
         };

@@ -96,8 +96,8 @@ class qcl_ui_dialog_ServerProgress
     $this->send( $js );
     $this->send("");
     exit; 
-  }  
-  
+  }
+
   /**
    * Must be called on completion of the script
    */

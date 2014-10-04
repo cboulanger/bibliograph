@@ -47,6 +47,9 @@ function qcl_import( $class, $checkDefined = false )
   // no need to load anything if class is already
   if ( class_exists( $class ) ) return;
 
+  // get namespace parts
+  $namespace = explode("_", $class);
+
   // load __init__ files that belong to a package
   $path = array();
   for( $i=0; $i<count($namespace)-1; $i++)

@@ -183,7 +183,7 @@ qx.Class.define("qcl.ui.dialog.Dialog",
         {
           this.error("No form data in json response.");
         }
-        for ( fieldName in data.properties.formData )
+        for ( var fieldName in data.properties.formData )
         {
           var fieldData = data.properties.formData[fieldName];
           if ( fieldData.dateFormat )

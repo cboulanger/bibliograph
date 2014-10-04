@@ -198,6 +198,7 @@ class backup_Backup
     
     foreach( $models as $type => $model )
     {
+      /** @var $model qcl_data_model_db_ActiveRecord */
       $tmpFileName  = QCL_TMP_PATH . "/" . md5( microtime() );
       $tmpFileHandle = fopen( $tmpFileName, "w");
       $tmpFiles[] = $tmpFileName;
@@ -218,9 +219,18 @@ class backup_Backup
       $index2 = 0;
       
       $model->findAll();
+
+      $converter = function( $v ){
+        if( is_bool( $v ) ) return $v ? 1 : 0;
+        return $v;
+      };
+
       while( $model->loadNext() )
       {
-        fputcsv( $tmpFileHandle, $model->data() );
+        // marshal data to be stored as CSV
+        $data = array_map( $converter, array_values( $model->data() ));
+
+        fputcsv( $tmpFileHandle, $data );
         if( $progressBar )
         {
           $progress = $step1*$index1 + $step2*$index2;
@@ -342,7 +352,8 @@ class backup_Backup
     {
       $progressBar->error( $e->getMessage() );  
     }
-    $progressBar->complete( $this->tr( "Backup has been restored." ) );
+    $this->broadcastClientMessage("backup.restored",array("datasource" => $datasource ) );
+    $progressBar->complete();
   }
   
   /**
@@ -374,10 +385,12 @@ class backup_Backup
     
     $step1 = 100/count( $models );
     $index1 = 0;
-    
-    $tmpFiles = array();    
+
+    $tmpFiles = array();
     foreach( $models  as $type => $model )
     {
+      /** @var $model qcl_data_model_db_ActiveRecord */
+
       $tmpFileName  = QCL_TMP_PATH . "/{$datasource}_{$timestamp}_{$type}.csv";
       if ( ! file_exists( $tmpFileName ) or ! is_readable( $tmpFileName ) )
       {
@@ -441,11 +454,6 @@ class backup_Backup
     {
       $model->resetTransactionId();
     }
-
-    // broacast message
-    $this->broadcastClientMessage("backup.restored",array(
-      "datasource" => $datasource
-    ) );    
   }
 
   /**
@@ -517,6 +525,7 @@ class backup_Backup
     list($files) = $this->unshelve( $shelfId );
     
     $problem = false;
+    $filesDeleted = 0;
     foreach( $files as $file )
     {
       if ( !@unlink( $file ) )

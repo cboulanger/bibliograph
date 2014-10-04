@@ -600,16 +600,12 @@ class qcl_data_model_PropertyBehavior
    */
   public function scalarize( $propertyName, $value )
   {
-    /*
-     * scalar values and null need no conversion
-     */
+    // other scalar values and null need no conversion
     if ( is_scalar( $value ) or is_null( $value ) )
     {
       return $value;
     }
-    /*
-     * serialize the property if so defined
-     */
+    // serialize the property if so defined
     if ( isset( $this->properties[$propertyName]['serializer'] ) )
     {    
     	$method = $this->properties[$propertyName]['serializer'];
