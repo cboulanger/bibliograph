@@ -44,8 +44,9 @@ class qcl_ui_dialog_ServerProgress
   {
     $this->widgetId = $widgetId;
     header("Cache-Control: no-cache, must-revalidate");
-    header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");    
-    header("Transfer-encoding: chunked");
+    header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+    header("Pragma:");
+    //header("Transfer-encoding: chunked"); // doesn't work with build version
     flush();
     @apache_setenv('no-gzip', 1);
     @ini_set('output_buffering', 0);
