@@ -17,7 +17,7 @@
  */
 
 qcl_import("qcl_data_controller_Controller");
-qcl_import("qcl_application_plugin_RegistryModel");
+qcl_import("qcl_application_plugin_Manager");
 qcl_import("qcl_ui_dialog_Alert");
 qcl_import("qcl_ui_dialog_Form");
 
@@ -30,84 +30,31 @@ class qcl_application_plugin_Service
 {
 
   /**
-   * Returns a the instance of the registry model
-   * @return qcl_application_plugin_RegistryModel
+   * Returns the plugin manager instance
+   * @return qcl_application_plugin_Manager
    */
-  protected function getRegistryModel()
+  protected function getPluginManager()
   {
-    return qcl_application_plugin_RegistryModel::getInstance();
+    return qcl_application_plugin_Manager::getInstance();
   }
   
-  
-  /**
-   * Given a named id, return the class path of the plugin
-   * @param string $namedId
-   * @return string
-   */
-  public function getClassPath( $namedId )
-  {
-    return $this->getApplication()->pluginPath() . "/$namedId/services/class";
-  }
-
-  /**
-   * Adds the given path to the PHP include_path
-   * @param string $path
-   * @return void
-   */
-  protected function addIncludePath( $path )
-  {
-    ini_set('include_path', implode( PATH_SEPARATOR, array( ini_get("include_path"), $path ) ) );
-  }
-
-  /**
-   * Loads the plugin setup class, instantiates the class and returns the instance.
-   * Returns boolean false if the class file doesn't exist
-   * @param string $namedId The named id of the plugin
-   * @return qcl_application_plugin_AbstractPlugin|false
-   */
-  protected function getSetupInstance( $namedId )
-  {
-    $classpath = $this->getClassPath( $namedId );
-    $file = "$classpath/$namedId/Plugin.php";
-    if( ! file_exists( $file ) ) return false;
-    $this->addIncludePath( $classpath );
-    require_once ( $file );
-    $class  = "{$namedId}_Plugin";
-    return new $class();    
-  }
-
   /**
    * Creates form to install or uninstall plugins
    * @return qcl_ui_dialog_Form
    */
   public function method_manage()
   {
-    $app = $this->getApplication();
-    $plugin_path = $app->pluginPath();
+
     $formData = array();
-
-    $registryModel = $this->getRegistryModel();
-
-    /*
-     * scan plugin directory
-     */
-    foreach ( scandir($plugin_path) as $namedId )
+    $manager = $this->getPluginManager();
+    //
+    foreach ( $manager->getPluginList() as $namedId )
     {
-      if ( $namedId[0] == "." ) continue;
 
-      // instantiate plugin setup class
-      $plugin = $this->getSetupInstance( $namedId );
-      if ( $plugin === false ) continue;
+      $plugin = $manager->getSetupInstance( $namedId );
+      $label  = $plugin->getName();// . "<br/>" . $plugin->getDescription();
 
-      // if plugin is not meant to be visible, skip
-      if ( ! $plugin->isVisible() )
-      {
-        continue;
-      }
-
-      $label = $plugin->getName();// . "<br/>" . $plugin->getDescription();
-
-      if ( ! $registryModel->namedIdExists( $namedId ) )
+      if ( ! $manager->isInstalled( $namedId ) )
       {
         $options = array(
           array( 'label'  => $this->tr("Plugin is not installed"), 'value' => "" ),
@@ -116,11 +63,24 @@ class qcl_application_plugin_Service
       }
       else
       {
-        $options = array(
-          array( 'label'  => $this->tr("Plugin is installed"), 'value' => "" ),
-          array( 'label'  => $this->tr("Uninstall plugin"), 'value' => "uninstall" ),
-          array( 'label'  => $this->tr("Reinstall plugin"), 'value' => "reinstall" )
-        );
+        if ( $manager->isActive( $namedId ) )
+        {
+          $options = array(
+            array( 'label'  => $this->tr("Plugin is active"), 'value' => "" ),
+            array( 'label'  => $this->tr("Deactivate plugin"), 'value' => "deactivate" ),
+            array( 'label'  => $this->tr("Uninstall plugin"), 'value' => "uninstall" ),
+            array( 'label'  => $this->tr("Reinstall plugin"), 'value' => "reinstall" )
+          );
+        }
+        else
+        {
+          $options = array(
+            array( 'label'  => $this->tr("Plugin is deactivated"), 'value' => "" ),
+            array( 'label'  => $this->tr("Activate plugin"), 'value' => "activate" ),
+            array( 'label'  => $this->tr("Uninstall plugin"), 'value' => "uninstall" ),
+            array( 'label'  => $this->tr("Reinstall plugin"), 'value' => "reinstall" )
+          );
+        }
       }
 
       $formData[$namedId] = array(
@@ -149,14 +109,12 @@ class qcl_application_plugin_Service
       return "ABORTED";
     }
 
-    $registryModel = $this->getRegistryModel();
     $messages = array();
 
     foreach( $data as $namedId => $action )
     {
-      // instantiale plugin setup class
-      $plugin = $this->getSetupInstance( $namedId );
-      
+      $manager = $this->getPluginManager();
+      $plugin = $manager->getSetupInstance( $namedId );
       $msg = "";
       $installMsg = "";
 
@@ -169,12 +127,7 @@ class qcl_application_plugin_Service
           try
           {
             $installMsg = $plugin->install();
-            $registryModel->create( $namedId, array(
-              'name'        => $plugin->getName(),
-              'description' => $plugin->getDescription(),
-              'data'        => $plugin->getData(),
-              'active'      => true
-            ));
+            $manager->register( $namedId, $plugin );
             $msg = $this->tr("Installed plugin '%s'",$plugin->getName());
           }
           catch( qcl_application_plugin_Exception $e )
@@ -184,6 +137,22 @@ class qcl_application_plugin_Service
           }
           break;
 
+        case "activate":
+          $this->getLogger()->log(sprintf(
+            "Activating plugin '%s'", $plugin->getName()
+          ), QCL_LOG_PLUGIN );
+          $manager->setPluginActive( $namedId, true );
+          $msg = $this->tr("Activated plugin '%s'. You might have to reload the application.",$plugin->getName());
+          break;
+
+        case "deactivate":
+          $this->getLogger()->log(sprintf(
+            "Deactivating plugin '%s'", $plugin->getName()
+          ), QCL_LOG_PLUGIN );
+          $manager->setPluginActive( $namedId, false );
+          $msg = $this->tr("Deactivated plugin '%s'. You might have to reload the application.",$plugin->getName());
+          break;
+
         case "reinstall":
           $this->getLogger()->log(sprintf(
             "Reinstalling plugin '%s'", $plugin->getName()
@@ -191,13 +160,7 @@ class qcl_application_plugin_Service
           try
           {
             $installMsg = $plugin->reinstall();
-            $registryModel->load($namedId);
-            $registryModel->set( array(
-              'description' => $plugin->getDescription(),
-              'data'        => $plugin->getData(),
-              'active'      => true
-            ) );
-            $registryModel->save();
+            $manager->update( $namedId, $plugin );
             $msg = $this->tr("Reinstalled plugin '%s'",$plugin->getName());
           }
           catch( qcl_application_plugin_Exception $e )
@@ -217,8 +180,7 @@ class qcl_application_plugin_Service
           try
           {
             $installMsg = $plugin->uninstall();
-            $registryModel->load( $namedId );
-            $registryModel->delete();
+            $manager->unregister( $namedId );
             $msg = $this->tr(
               "Uninstalled plugin '%s'",
               $plugin->getName()
@@ -252,34 +214,12 @@ class qcl_application_plugin_Service
   }
 
   /**
-   * Returns an array of plugin data, with at least the url
-   * from which client plugin code is loaded.
+   * Service returning an array of plugin data of the active plugins
    * @return array
    */
   public function method_getPluginData()
   {
-    $data = array();
-    $registryModel = $this->getRegistryModel();
-    $registryModel->findWhere( array( 'active' => true ) );
-    while( $registryModel->loadNext() )
-    {
-      $pluginData = $registryModel->get("data");
-      $pluginData['name']     = $registryModel->get("name");
-      $pluginData['namespace'] = $registryModel->getNamedId();
-      array_push($data, $pluginData);
-    }
-    return $data;
+    return $this->getPluginManager()->getPluginData();
   }
 
-  public function addPluginIncludePaths()
-  {
-    $registryModel = $this->getRegistryModel();
-    $registryModel->findWhere( array( 'active' => true ) );
-    while( $registryModel->loadNext() )
-    {
-      $pluginNamespace = $registryModel->getNamedId();
-      $pluginServicePath = QCL_PLUGIN_DIR . "/$pluginNamespace/services/class";
-      $this->addIncludePath( $pluginServicePath );
-    }
-  }
 }

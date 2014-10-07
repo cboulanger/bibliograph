@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: qcl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-31 22:35+0100\n"
-"PO-Revision-Date: 2014-07-31 22:37+0100\n"
+"POT-Creation-Date: 2014-10-07 23:15+0100\n"
+"PO-Revision-Date: 2014-10-07 23:16+0100\n"
 "Last-Translator: Christian Boulanger <info@bibliograph.org>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop;tr;trn;marktr\n"
 "X-Poedit-Basepath: .\n"
-"X-Generator: Poedit 1.6.7\n"
+"X-Generator: Poedit 1.6.9\n"
 "X-Poedit-SearchPath-0: ../../..\n"
 
 #: ../../../access/ACLTool.php:50 ../../../access/ACLTool.php:96
@@ -260,56 +260,82 @@ msgstr "Passwörter stimmen nicht überein.\t"
 msgid "Password must be at least 8 characters long"
 msgstr "Das Passwort muss mindestens 8 Zeichen lang sein."
 
-#: ../../../application/plugin/Service.php:77
+#: ../../../application/plugin/Service.php:60
 msgid "Plugin is not installed"
 msgstr "Plugin nicht installiert"
 
-#: ../../../application/plugin/Service.php:78
+#: ../../../application/plugin/Service.php:61
 msgid "Install plugin"
 msgstr "Plugin installieren"
 
-#: ../../../application/plugin/Service.php:84
-msgid "Plugin is installed"
-msgstr "Plugin ist installiert"
+#: ../../../application/plugin/Service.php:69
+msgid "Plugin is active"
+msgstr "Plugin ist aktiviert"
 
-#: ../../../application/plugin/Service.php:85
+#: ../../../application/plugin/Service.php:70
+msgid "Deactivate plugin"
+msgstr "Plugin deaktivieren"
+
+#: ../../../application/plugin/Service.php:71
+#: ../../../application/plugin/Service.php:80
 msgid "Uninstall plugin"
 msgstr "Plugin deinstallieren"
 
-#: ../../../application/plugin/Service.php:86
+#: ../../../application/plugin/Service.php:72
+#: ../../../application/plugin/Service.php:81
 msgid "Reinstall plugin"
 msgstr "Plugin reinstallieren"
 
-#: ../../../application/plugin/Service.php:102
+#: ../../../application/plugin/Service.php:78
+msgid "Plugin is deactivated"
+msgstr "Plugin is deaktiviert"
+
+#: ../../../application/plugin/Service.php:79
+msgid "Activate plugin"
+msgstr "Plugin aktivieren\t"
+
+#: ../../../application/plugin/Service.php:96
 msgid "Please configure the plugins"
 msgstr "Bitte konfigurieren sie die Plugins"
 
-#: ../../../application/plugin/Service.php:144
+#: ../../../application/plugin/Service.php:131
 #, php-format
 msgid "Installed plugin '%s'"
 msgstr "Plugin '%s' wurde installiert."
 
-#: ../../../application/plugin/Service.php:148
+#: ../../../application/plugin/Service.php:135
 #, php-format
 msgid "Installation of plugin '%s' failed: %s"
 msgstr "Die Installation von Plugin '%s' war nicht erfolgreich: %s"
 
-#: ../../../application/plugin/Service.php:167
+#: ../../../application/plugin/Service.php:145
+#, php-format
+msgid "Activated plugin '%s'. You might have to reload the application."
+msgstr ""
+"Plugin '%s' wurde aktiviert. Eventuell müssen Sie die Anwendung neu laden."
+
+#: ../../../application/plugin/Service.php:153
+#, php-format
+msgid "Deactivated plugin '%s'. You might have to reload the application."
+msgstr ""
+"Plugin '%s' wurde deaktiviert. Eventuell müssen Sie die Anwendung neu laden."
+
+#: ../../../application/plugin/Service.php:164
 #, php-format
 msgid "Reinstalled plugin '%s'"
 msgstr "Das Plugin '%s' wurde erneut installiert. "
 
-#: ../../../application/plugin/Service.php:172
+#: ../../../application/plugin/Service.php:169
 #, php-format
 msgid "Re-Installation of plugin '%s' failed: %s"
 msgstr "Die erneute Installation von Plugin '%s' war nicht erfolgreich: %s"
 
-#: ../../../application/plugin/Service.php:189
+#: ../../../application/plugin/Service.php:185
 #, php-format
 msgid "Uninstalled plugin '%s'"
 msgstr "Das Plugin '%s' wurde deinstalliert."
 
-#: ../../../application/plugin/Service.php:196
+#: ../../../application/plugin/Service.php:192
 #, php-format
 msgid "Uninstallation of plugin '%s' failed: %s"
 msgstr "Die Deinstallation von Plugin '%s' war nicht erfolgreich: %s"
