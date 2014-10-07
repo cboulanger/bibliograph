@@ -596,7 +596,6 @@ class backup_Backup
       "&sessionId=" . $this->getSessionId() .
       "&datasource=backup_files" .
       "&name=$file&id=$file";
-$this->debug($url);
     new qcl_ui_dialog_Popup(""); // hide the popup
     $this->dispatchClientMessage("window.location.replace", array(
       'url' => $url
