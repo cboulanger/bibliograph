@@ -1462,11 +1462,10 @@ class bibliograph_service_Reference
     );
     
     qcl_import("qcl_application_plugin_Manager");
-    if ( ! qcl_application_plugin_Manager::getInstance()->isInstalled("backup") )
+    if ( ! qcl_application_plugin_Manager::getInstance()->isActive("backup") )
     {
       unset( $formData['backup'] );
     }
-    
     
     return new qcl_ui_dialog_Form(
       _("You can do a 'find and replace' operation on all or selected records in the database. These changes cannot easily be undone, that is why it is recommended to create a backup."),
@@ -1521,9 +1520,10 @@ class bibliograph_service_Reference
      */
     if ( $data->backup )
     {
-      qcl_import("bibliograph_service_Backup");
-      $backupService = new bibliograph_service_Backup();
-      $zipfile = $backupService->createBackup( $datasource );
+      qcl_import("backup_Backup");
+      $backupService = new backup_Backup();
+      $comment = "Automatically created by find/replace";
+      $zipfile = $backupService->createBackup( $datasource, null, $comment );
     }
 
     $model = $this->getControlledModel($datasource);
@@ -1577,7 +1577,7 @@ class bibliograph_service_Reference
       $this->tr("%s replacements made. %s",
         $count,
         $data->backup
-           ? $this->tr("In case you want to revert the changes, a backup file '%s' has been created.",$zipfile)
+           ? $this->tr("In case you want to revert the changes, a backup file has been created.",$zipfile)
            : ""
       )
     );

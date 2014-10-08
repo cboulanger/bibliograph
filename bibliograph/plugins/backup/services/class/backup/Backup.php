@@ -153,15 +153,16 @@ class backup_Backup
    * @param string $datasource Name of the datasource
    * @param string $progressWidgetId The widgetId of the widget displaying
    *    the progress of the backup
+   * @param string|null $comment Optional comment
    */
-  public function method_createBackup( $datasource, $progressWidgetId  )
+  public function method_createBackup( $datasource, $progressWidgetId, $comment=null )
   {
     $this->requirePermission("backup.create");
     qcl_assert_valid_string( $datasource );
     $progressBar = new qcl_ui_dialog_ServerProgress($progressWidgetId );
     try
     {
-      $zipfile = $this->createBackup( $datasource, $progressBar );  
+      $zipfile = $this->createBackup( $datasource, $progressBar, $comment );  
     }
     catch( Exception $e)
     {
@@ -174,10 +175,11 @@ class backup_Backup
    * Method to create a backup of a datasource
    * @param string $datasource
    * @param qcl_ui_dialog_ServerProgress $progressBar
+   * @param string|null $comment Optional comment
    * @throws Exception
    * @return string The name of the ZIP-Archive with the backups
    */
-  public function createBackup( $datasource, qcl_ui_dialog_ServerProgress $progressBar=null )
+  public function createBackup( $datasource, qcl_ui_dialog_ServerProgress $progressBar=null, $comment=null )
   {
     $timestamp   = time();
     $zipFileName = "{$datasource}_{$timestamp}{$this->backup_file_extension}";
@@ -205,12 +207,24 @@ class backup_Backup
       // header
       $app   = $this->getApplication(); 
       $total = $model->countRecords();
+      $datetime = new DateTime();
+      $datetime->setTimestamp($timestamp);
+      $backuptime = $datetime->format('Y-m-d H:i:s');       
+      if ( $comment )
+      {
+         $comment .= " ($backuptime)";
+      }
+      else
+      {
+        $comment = $backuptime;
+      }
       $header = array( 
         $this->version,
-        implode(",",$model->properties()),
-        $total
+        $total,
+        $comment
       );
       fputcsv( $tmpFileHandle, $header );
+      fputcsv( $tmpFileHandle, $model->properties() ); // field names
       
       // records
       $count = 1;
@@ -404,14 +418,15 @@ class backup_Backup
       $app   = $this->getApplication(); 
       $modelProperties = $model->properties();
       
-      list( $version, $properties, $total ) = fgetcsv( $tmpFileHandle );
-      if( ! $version or ! $properties )
+      list( $version, $total, $comment ) = fgetcsv( $tmpFileHandle );
+      $properties = fgetcsv( $tmpFileHandle );
+      if( ! $version or ! $properties or ! $total )
         throw new Exception("Invalid header");
       list( $maj1, , ) = explode(".", $version );
       list( $maj2, , ) = explode(".", $this->version );
       if ( $maj1 !== $maj2 ) 
         throw new Exception("Backup versions do not match");
-      if ( explode(",",$properties) !== $modelProperties  ) 
+      if ( $properties !== $modelProperties  ) 
         throw new Exception("Properties do not match");
 
       // records
