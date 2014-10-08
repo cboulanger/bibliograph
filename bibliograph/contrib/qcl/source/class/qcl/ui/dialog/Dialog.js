@@ -186,11 +186,14 @@ qx.Class.define("qcl.ui.dialog.Dialog",
         for ( var fieldName in data.properties.formData )
         {
           var fieldData = data.properties.formData[fieldName];
-          if ( fieldData.dateFormat )
+          if ( fieldData.type == "datefield" )
           {
-            fieldData.dateFormat = new qx.util.format.DateFormat(fieldData.dateFormat);
+            if ( fieldData.dateFormat )
+            {
+              fieldData.dateFormat = new qx.util.format.DateFormat(fieldData.dateFormat);
+            }
+            fieldData.value = new Date(fieldData.value);
           }
-          fieldData.value = new Date(fieldData.value);
         }
       }
 
