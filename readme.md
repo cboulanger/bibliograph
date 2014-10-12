@@ -49,19 +49,33 @@ Features
 - Can create and restore snapshot backups of individual databases 
 - LDAP integration to connect to existing LDAP servers
 - Fully open source, can be easily adapted and extended
-- Extensible data model allows easy modification of record fields and integration 
-  of a variety of backends (e.g., NoSql, xml, REST or binary backends such as IMAP)
+
+Plugins
+-------
+Bibliograph implements most advanced features through plugins. The following
+plugins are activated and supported:
+- CSL: Format bibliographic data with the Citation Style Language (no dependencies, installed
+  by default)
+- Backup: Administrators and managers can initiate backups of individual databases, and restore,
+  download and delete backups (no dependencies, installed by default).
+- Import from library catalogs which support the Z39.50 interface. Requires the PHP YAZ
+  extension.
+- Advanced export/import options via the Bibutils format conversion library (needs to
+  be installed).
+More plugins are under development. You can easily add your own plugins (see below).
+
 
 Prerequisites
 -------------
 - PHP 5.3
 - MySql 5.3+ with the following extensions: intl, gettext, yaz/xsl (optional), ldap
-  (optional), zip (optional)
+  (optional), zip (optional). For optimal performance, it is advised to enable OPcache
+  (http://php.net/manual/en/intro.opcache.php)
 
 Preparations
 ------------
-- Rename services/config/bibliograph.ini.dist.php to
-  services/config/bibliograph.ini.php
+- Rename `services/config/bibliograph.ini.dist.php to
+  `services/config/bibliograph.ini.php`
 - Create a user "bibliograph" in your MySql-database with password "bibliograph"
   (if you want to use a different password for security, enter it in the 
   [database] section of bibliograph.ini.php.
@@ -69,9 +83,9 @@ Preparations
   "bibliograph_user". If you want to use different names or use only one database, 
   adapt the settings in the [database] section of bibliograph.ini.php.
 - Give the bibliograph user ALL rights for these databases
-- Rename services/config/server.conf.dist.php in services/config/server.conf.php
+- Rename `services/config/server.conf.dist.php` to `services/config/server.conf.php`
 - Enter the email address of the administrator of the installation in the 
-  [admin.email] section in services/config/bibliograph.ini.php
+  [admin.email] section in `services/config/bibliograph.ini.php`
 
 Optional
 --------
@@ -87,7 +101,7 @@ Optional
   stored in the system tempdir, adapt the BIBLIOGRAPH_BACKUP_PATH
   constant in config/server.conf.php and point it to a world-writable folder 
   outside the document root of the web server.
-- You can connect a ldap server for authentication (adapt config/bibliograph.ini.php)
+- You can connect a ldap server for authentication (adapt `config/bibliograph.ini.php`)
 
 First run
 ---------
@@ -100,22 +114,22 @@ First run
 Deployment
 ----------
 - Securing the Server: The PHP backend has one single entry-point: 
-  services/server.php. If you want to make sure no other PHP script is called, 
+  `services/server.php`. If you want to make sure no other PHP script is called,
   restrict access to php files to this path.
 - It is recommended to create a redirection from the top-level path to the 
   bibliograph/build folder
 - By default, Bibliograph stores persistent data in the system temporary folder 
-  (on Linux, this is usually /tmp). This is fine for testing the application, 
+  (on Linux, this is usually `/tmp`). This is fine for testing the application,
   but can lead to the loss of data whenever this folder is automatically cleaned
   up by the OS. For permanent production installations, you MUST change the 
-  QCL_VAR_DIR constant in services/config/server.conf.php to a world-writable 
+  QCL_VAR_DIR constant in `services/config/server.conf.php` to a world-writable
   directory outside the document root of the web server.
 - Before using the software in a production environment, change the password of 
   the "Admin" user, delete the "Manager" and "User" users and configure your own 
   users in the System > Acces Control tool.
-- Change the access.enforce_https_login preference in config/bibliograph.ini.php 
+- Change the access.enforce_https_login preference in `config/bibliograph.ini.php`
   to "yes" so that passwords are not sent in plain text.
-- Change the QCL_APPLICATION_MODE constant in config/server.conf.php to 
+- Change the QCL_APPLICATION_MODE constant in `config/server.conf.php` to
   "production". When you need to apply updates, change it back to "maintenance".
 
 Support
@@ -133,19 +147,28 @@ Development
 -----------
 This is open source software, everybody is invited to hack on the code and help 
 make it better! Bug fixes and new plugins are very welcome.
+
 - Get the code by cloning it from git@github.com:cboulanger/bibliograph.git 
   (Most easily, by cloning it at GitHub itself).
-- Building the application requires the qooxdoo library (v4.0.1):
-  - Download the 4.0.1 SDK from
-    http://sourceforge.net/projects/qooxdoo/files/qooxdoo-current/
-  - Unzip the SDK into a top-level "qooxdoo" folder. You can also adapt the path
-    to the SDK in the bibliograph/config.json configuration file if you don't 
-    want to store it there. For development, the location of the SDK files must 
-    be accessible to the web server.
-  - Issue "./generate build" in the "bibliograph" folder.
+- Building the application requires the qooxdoo library (currently, v4.0.1):
+    * Download the 4.0.1 SDK from
+      http://sourceforge.net/projects/qooxdoo/files/qooxdoo-current/
+    * Unzip the SDK into a top-level "qooxdoo" folder. You can also adapt the path
+      to the SDK in the `bibliograph/config.json` configuration file if you don't
+      want to store it there. For development, the location of the SDK files must
+      be accessible to the web server.
+    * Excute `./generate build` in the "bibliograph" folder.
+
 - For deployment, you need to copy the bibliograph/build, bibliograph/plugins and
   bibliograph/services folders to the production server. The rest is only 
   necessary to build the application.
+- You can easily add your own plugin. Execute `./generate.py create-plugin` in the
+  "bibliograph" folder and read the output that contains more information on how to
+  proceed. The "backup" plugin can be used as a model on how to write backend and
+  fronend plugin code.
+- Bibliograph features an extensible data model which allows easy modification of
+  record fields and integration of a variety of backends (e.g., NoSql, xml, REST or
+  even binary backends such as IMAP).
 
 Roadmap
 -------
@@ -171,8 +194,8 @@ Open source libraries
   http://www.citationstyles.org
 - CiteProc-PHP. (c) Ron Jerome
   https://bitbucket.org/rjerome/citeproc-php/
-- CQL-PHP. (c) Robert Sanderson
-  http://cgi.csc.liv.ac.uk/~azaroth (page no longer available)
+- CQL/SRU parser. (c) Robert Sanderson, Omar Siam
+  https://github.com/simar0at/sru-cql-parser
 
 Partial funding was provided by
 - Juristische Fakultät (Department of Law), Humboldt-Universität zu Berlin
