@@ -93,7 +93,7 @@ class class_z3950_Service
   protected function getModelType()
   {
     return "record";
-  }  
+  }
   
   /*
   ---------------------------------------------------------------------------
@@ -106,7 +106,7 @@ class class_z3950_Service
    * the records
    *
    * @param $datasource
-   * @return unknown_type
+   * @return array
    */
   public function method_getTableLayout( $datasource )
   {
@@ -156,6 +156,7 @@ class class_z3950_Service
     return $query;
   }
 
+
   /**
    * Configures the yaz object for a ccl query, given the datasource
    * @param YAZ $yaz
@@ -172,6 +173,67 @@ class class_z3950_Service
       "isbn"      => "1=7",
       "all"       => "1=1016"
     ) );
+  }
+
+  /**
+   * Returns an associative array, keys being the names of the Z39.50 databases, values the
+   * paths to the xml EXPLAIN files
+   * @return array
+   */
+  protected function getExplainFileList()
+  {
+    static $data=null;
+    if( $data === null )
+    {
+      $data = array();
+      foreach( scandir( __DIR__ . "/servers" ) as $file )
+      {
+        if( $file[0] == "." or get_file_extension($file) != "xml" ) continue;
+        $path = __DIR__ . "/servers/$file";
+        $explain = simplexml_load_file( $path );
+        $serverInfo = $explain->serverInfo;
+        $database = (string) $serverInfo->database;
+        $data[$database] = $path;
+      }
+    }
+
+    return $data;
+  }
+
+  /**
+   * Given a Z39.50 database identifier, return the path to its XML explain file.
+   * @param string $database
+   * @return string
+   * @throws JsonRpcException
+   */
+  protected function getExplainFilePath( $database )
+  {
+    $filelist = $this->getExplainFileList();
+    $path = $filelist[$database];
+    if ( ! $path or ! file_exists( $path ) )
+    {
+      throw new JsonRpcException("No EXPLAIN file exists for Z39.50 database '$database'.");
+    }
+    return $path;
+  }
+
+  /**
+   * Service method that returns ListItem model data on the available library servers
+   * @return array
+   */
+  public function method_getServerListItems()
+  {
+    $listItemData = array();
+    foreach( $this->getExplainFileList() as $name => $path )
+    {
+      $explain = simplexml_load_file( $path );
+      $title = (string) $explain->databaseInfo->title;
+      $listItemData[] = array(
+        'label' => $title,
+        'value' => $name
+      );
+    }
+    return $listItemData;
   }
 
   /**
@@ -215,18 +277,17 @@ class class_z3950_Service
       /*
        * no search record exists, we have to create it
        */
-      $this->log("Sending query to remote Z39.50 database...", BIBLIOGRAPH_LOG_Z3950);
-      $path = realpath( dirname(__FILE__) . "/servers/z3950.gbv.de-20010-GVK-de.xml" );
-      if ( ! file_exists( $path ) )
-      {
-        throw new JsonRpcException("No EXPLAIN file exists for Z39.50 database '$datasource'.");
-      }
+      $this->log("Sending query to remote Z39.50 database '$datasource' ...", BIBLIOGRAPH_LOG_Z3950);
+      $path = $this->getExplainFilePath( $datasource );
       $yaz = new YAZ( $path );
       $yaz->connect();
       $this->configureCcl( $yaz, $datasource );
-      $yaz->search( new YAZ_CclQuery($query) );
+      $cclquery = new YAZ_CclQuery( $query );
+      $yaz->search( $cclquery );
       $yaz->wait();
-      $hits = $yaz->hits();
+      $info = array();
+      $hits = $yaz->hits($info);
+      $this->log("Result information: " . json_encode($info), BIBLIOGRAPH_LOG_Z3950);
 
       /*
        * save to local cache

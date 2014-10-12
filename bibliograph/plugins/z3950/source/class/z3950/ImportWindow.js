@@ -85,12 +85,19 @@ qx.Class.define("z3950.ImportWindow",
      */
     startSearch : function()
     {
-      this.listView.clearTable();
+      var ds = this.datasourceSelectBox.getSelection().getItem(0).getValue();
+      var lv = this.listView;
+
+      // update the UI
+      lv.clearTable();
       this.importButton.setEnabled(false);
       this.searchButton.setEnabled(false);
-      this.listView.setEnabled(false);
-      this.listView.setQuery(null);
-      this.listView.setQuery( this.normalizeForSearch ( this.searchBox.getValue() ) );
+      lv.setEnabled(false);
+
+      // this triggers the search
+      lv.setDatasource(ds);
+      lv.setQuery(null);
+      lv.setQuery( this.normalizeForSearch ( this.searchBox.getValue() ) );
     },
 
     /**

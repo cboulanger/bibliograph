@@ -31,26 +31,26 @@ msgstr ""
 msgid "Importing references..."
 msgstr ""
 
-#: z3950/ImportWindow.js:149 z3950/Plugin.js:49 z3950/ImportWindowUi.js:40
+#: z3950/ImportWindow.js:150 z3950/Plugin.js:49 z3950/ImportWindowUi.js:42
 msgid "Import from library catalog"
 msgstr ""
 
-#: z3950/ImportWindowUi.js:70 z3950/ImportWindowUi.js:71
+#: z3950/ImportWindowUi.js:79
 msgid "GBV Katalog"
 msgstr ""
 
-#: z3950/ImportWindowUi.js:85
+#: z3950/ImportWindowUi.js:94
 msgid "Enter search term"
 msgstr ""
 
-#: z3950/ImportWindowUi.js:94
+#: z3950/ImportWindowUi.js:103
 msgid "Search"
 msgstr ""
 
-#: z3950/ImportWindowUi.js:129
+#: z3950/ImportWindowUi.js:138
 msgid "Import selected records"
 msgstr ""
 
-#: z3950/ImportWindowUi.js:138
+#: z3950/ImportWindowUi.js:147
 msgid "Close"
 msgstr ""

@@ -32,6 +32,8 @@ qx.Class.define("z3950.ImportWindowUi",
     __qxtCreateUI : function()
     {
 
+      var app = this.getApplication();
+
       /*
        * style window
        */
@@ -62,14 +64,18 @@ qx.Class.define("z3950.ImportWindowUi",
       importWindow.add(qxToolBar1);
 
       // datasource select box
-      var datasourceSelectBox = new qx.ui.form.SelectBox();
-      this.datasourceSelectBox = datasourceSelectBox;
-      datasourceSelectBox.setWidth(150);
-      datasourceSelectBox.setMaxHeight(25);
-      qxToolBar1.add(datasourceSelectBox);
-      var qxListItem1 = new qx.ui.form.ListItem(this.tr('GBV Katalog'), null, null);
-      qxListItem1.setLabel(this.tr('GBV Katalog'));
-      datasourceSelectBox.add(qxListItem1);
+      var dsSelectBox = new qx.ui.form.VirtualSelectBox().set({labelPath: "label"});
+      this.datasourceSelectBox = dsSelectBox;
+      dsSelectBox.setWidth(300);
+      dsSelectBox.setMaxHeight(25);
+      dsSelectBox.bind("selection[0].label", dsSelectBox, "toolTipText", null);
+      qxToolBar1.add(dsSelectBox);
+
+      var store = new qcl.data.store.JsonRpc(null,"z3950.Service");
+      store.setModel( qx.data.marshal.Json.createModel([]) );
+      store.bind("model",dsSelectBox,"model");
+      store.load("getServerListItems");
+
       qxToolBar1.addSpacer();
 
       // searchbox
@@ -82,7 +88,7 @@ qx.Class.define("z3950.ImportWindowUi",
       var searchBox = new qx.ui.form.TextField(null);
       this.searchBox = searchBox;
       searchBox.setPadding(2);
-      searchBox.setPlaceholder(this.tr('Enter search term'));
+      searchBox.setPlaceholder(this.tr('Enter search terms'));
       searchBox.setHeight(26);
       qxComposite1.add(searchBox, { flex : 1 });
       searchBox.addListener("keypress", this._on_keypress, this);
@@ -90,7 +96,7 @@ qx.Class.define("z3950.ImportWindowUi",
         e.stopPropagation();
       }, this);
 
-      // button
+      // search button
       this.searchButton = new qx.ui.form.Button(this.tr('Search'));
       this.searchButton.addListener("execute", function(e) {
         this.startSearch();
@@ -100,7 +106,6 @@ qx.Class.define("z3950.ImportWindowUi",
       // listview
       var listView = new bibliograph.ui.reference.ListView();
       this.listView = listView;
-      listView.setDatasource("z3950_gbv");
       listView.setDecorator("main");
       listView.setModelType("record");
       listView.setServiceName("z3950.Service");

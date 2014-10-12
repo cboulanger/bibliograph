@@ -26,7 +26,7 @@
   "let" :
   {
     "APPLICATION"    : "z3950",
-    "QOOXDOO_PATH" : "../../../qooxdoo-4.0.1-sdk",
+    "QOOXDOO_PATH" : "../../../qooxdoo",
     "QXTHEME"      : "qx.theme.Modern",
     "LOCALES"      : [ "en","de" ],
     "CACHE"        : "${TMPDIR}/qx${QOOXDOO_VERSION}/cache",
