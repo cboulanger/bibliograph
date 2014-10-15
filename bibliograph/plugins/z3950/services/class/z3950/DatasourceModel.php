@@ -102,4 +102,59 @@ class z3950_DatasourceModel
       ) );
     }
   }
+
+  /**
+   * Returns an associative array, keys being the names of the Z39.50 databases, values the
+   * paths to the xml EXPLAIN files
+   * @return array
+   */
+  protected function getExplainFileList()
+  {
+    static $data=null;
+    if( $data === null )
+    {
+      $data = array();
+      foreach( scandir( __DIR__ . "/servers" ) as $file )
+      {
+        if( $file[0] == "." or get_file_extension($file) != "xml" ) continue;
+        $path = __DIR__ . "/servers/$file";
+        $explain = simplexml_load_file( $path );
+        $serverInfo = $explain->serverInfo;
+        $database = (string) $serverInfo->database;
+        $data[$database] = $path;
+      }
+    }
+
+    return $data;
+  }
+
+  /**
+   * Create bibliograph datasources from Z39.50 databases. Overwrites existing datasources.
+   * These datasources will be used to cache the Z39.50 query results.
+   */
+  public function createFromExplainFiles()
+  {
+    $manager = qcl_data_datasource_Manager::getInstance();
+    $dsn     = str_replace( "&",";", $this->getApplication()->getIniValue("macros.dsn_tmp"));
+    foreach($this->getExplainFileList() as $database => $filepath )
+    {
+      $datasource = "z3950_" . $database;
+      try
+      {
+        $manager->getDatasourceModelByName($datasource)->delete();
+      }
+      catch( InvalidArgumentException $e){}
+
+      $explainDoc = simplexml_load_file( $filepath );
+      $title = substr( (string) $explainDoc->databaseInfo->title, 0, 100 );
+      $manager->createDatasource(
+        $datasource, $this->getSchemaName(), array(
+          'dsn'           => $dsn,
+          'title'         => $title,
+          'hidden'        => true, // should not show up as selectable datasource
+          'resourcepath'  => $filepath
+        )
+      );
+    }
+  }
 }

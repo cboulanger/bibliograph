@@ -261,6 +261,7 @@ class qcl_data_datasource_Manager
    * @param string $name Name of datasource
    * @return qcl_data_datasource_DbModel
    * @throws InvalidArgumentException
+   * @todo change thrown error!
    */
   public function getDatasourceModelByName( $name )
   {

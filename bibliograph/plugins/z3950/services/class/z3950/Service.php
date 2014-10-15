@@ -22,6 +22,7 @@ qcl_import("qcl_data_controller_Controller");
 qcl_import("qcl_util_system_Executable");
 qcl_import("bibliograph_service_Reference");
 qcl_import("bibliograph_service_Folder");
+qcl_import("z3950_DatasourceModel");
     
 require_once "lib/yaz/YAZ.php";
 /** @noinspection PhpIncludeInspection */
@@ -94,7 +95,8 @@ class class_z3950_Service
   {
     return "record";
   }
-  
+
+
   /*
   ---------------------------------------------------------------------------
      TABLE INTERFACE API
@@ -158,12 +160,12 @@ class class_z3950_Service
 
 
   /**
-   * Configures the yaz object for a ccl query, given the datasource
+   * Configures the yaz object for a ccl query with a minimal common set of fields:
+   * title, author, keywords, year, isbn, all
    * @param YAZ $yaz
-   * @param string $datasource
    * @return void
    */
-  protected function configureCcl( $yaz, $datasource )
+  protected function configureCcl( $yaz )
   {
     $yaz->ccl_configure(array(
       "title"     => "1=4",
@@ -175,47 +177,7 @@ class class_z3950_Service
     ) );
   }
 
-  /**
-   * Returns an associative array, keys being the names of the Z39.50 databases, values the
-   * paths to the xml EXPLAIN files
-   * @return array
-   */
-  protected function getExplainFileList()
-  {
-    static $data=null;
-    if( $data === null )
-    {
-      $data = array();
-      foreach( scandir( __DIR__ . "/servers" ) as $file )
-      {
-        if( $file[0] == "." or get_file_extension($file) != "xml" ) continue;
-        $path = __DIR__ . "/servers/$file";
-        $explain = simplexml_load_file( $path );
-        $serverInfo = $explain->serverInfo;
-        $database = (string) $serverInfo->database;
-        $data[$database] = $path;
-      }
-    }
 
-    return $data;
-  }
-
-  /**
-   * Given a Z39.50 database identifier, return the path to its XML explain file.
-   * @param string $database
-   * @return string
-   * @throws JsonRpcException
-   */
-  protected function getExplainFilePath( $database )
-  {
-    $filelist = $this->getExplainFileList();
-    $path = $filelist[$database];
-    if ( ! $path or ! file_exists( $path ) )
-    {
-      throw new JsonRpcException("No EXPLAIN file exists for Z39.50 database '$database'.");
-    }
-    return $path;
-  }
 
   /**
    * Service method that returns ListItem model data on the available library servers
@@ -224,13 +186,13 @@ class class_z3950_Service
   public function method_getServerListItems()
   {
     $listItemData = array();
-    foreach( $this->getExplainFileList() as $name => $path )
+    $dsModel = z3950_DatasourceModel::getInstance();
+    $dsModel->findAll();
+    while( $dsModel->loadNext() )
     {
-      $explain = simplexml_load_file( $path );
-      $title = (string) $explain->databaseInfo->title;
       $listItemData[] = array(
-        'label' => $title,
-        'value' => $name
+        'label' => $dsModel->getName(),
+        'value' => $dsModel->getNamedId()
       );
     }
     return $listItemData;
@@ -278,12 +240,17 @@ class class_z3950_Service
        * no search record exists, we have to create it
        */
       $this->log("Sending query to remote Z39.50 database '$datasource' ...", BIBLIOGRAPH_LOG_Z3950);
-      $path = $this->getExplainFilePath( $datasource );
-      $yaz = new YAZ( $path );
+      $yaz = new YAZ( $dsModel->getResourcepath() );
       $yaz->connect();
-      $this->configureCcl( $yaz, $datasource );
-      $cclquery = new YAZ_CclQuery( $query );
-      $yaz->search( $cclquery );
+      $this->configureCcl( $yaz );
+      try
+      {
+        $yaz->search( new YAZ_CclQuery( $query ) );
+      }
+      catch(YAZException $e)
+      {
+        throw new qcl_server_ServiceException($this->tr("The server does not understand the query \"%s\". Please try a different query.", $query));
+      }
       $yaz->wait();
       $info = array();
       $hits = $yaz->hits($info);
@@ -339,7 +306,7 @@ class class_z3950_Service
     qcl_assert_array( $properties );
     $orderBy = $queryData->query->orderBy;
 
-    $this->log("Row data query for datasource '$datasource', query '$query' hits.", BIBLIOGRAPH_LOG_Z3950);
+    $this->log("Row data query for datasource '$datasource', query '$query'.", BIBLIOGRAPH_LOG_Z3950);
 
     $dsModel = $this->getDatasourceModel( $datasource );
     $recordModel = $dsModel->getInstanceOfType("record");
@@ -355,11 +322,13 @@ class class_z3950_Service
     }
     catch( qcl_data_model_RecordNotFoundException $e)
     {
-      throw new JsonRpcException("Invalid query. You have to call the getRowCount method first");
+      return array();
     }
 
     try
     {
+      throw new qcl_data_model_RecordNotFoundException();
+
       /*
        * try to find already downloaded records and
        * return them as rowData
@@ -386,10 +355,9 @@ class class_z3950_Service
        * them from the z39.50 database
        */
       $this->log("Getting row data from remote Z39.50 database ...", BIBLIOGRAPH_LOG_Z3950);
-      $path = realpath( dirname(__FILE__) . "/servers/z3950.gbv.de-20010-GVK-de.xml" ); // todo: allow to choose other servers
-      $yaz = new YAZ( $path );
+      $yaz = new YAZ( $dsModel->getResourcepath() );
       $yaz->connect();
-      $this->configureCcl( $yaz, $datasource );
+      $this->configureCcl( $yaz );
       $yaz->search( new YAZ_CclQuery($query) );
       $yaz->wait();
 
@@ -397,11 +365,13 @@ class class_z3950_Service
        * retrieving records
        */
       $this->log("Retrieving records ...", BIBLIOGRAPH_LOG_Z3950);
+
       $yaz->setSyntax("USmarc");
       $yaz->setElementSet("F");
       $length = $lastRow-$firstRow+1;
       $yaz->setRange( $firstRow+1, $length );
       $yaz->present();
+
       $result = new YAZ_MarcXmlResult($yaz);
       for( $i=$firstRow; $i<=$lastRow; $i++)
       {
@@ -413,8 +383,8 @@ class class_z3950_Service
       /*
        * convert to MODS
        */
-      $mods   = $result->toMods();
-      //$this->debug($mods);
+      $mods = $result->toMods();
+      $this->debug($mods);
 
       /*
        * convert to bibtex
@@ -426,7 +396,7 @@ class class_z3950_Service
        * fix formatting issues
        */
       $bibtex = str_replace( "\nand ", "; ", $bibtex );
-      //$this->debug($bibtex);
+      $this->debug($bibtex);
 
       /*
        * convert to array
@@ -436,7 +406,7 @@ class class_z3950_Service
 
       if ( count( $records) === 0 )
       {
-        throw new JsonRpcException("Error during conversion from MARC");
+        throw new qcl_server_ServiceException("Error during conversion from MARC");
       }
 
       /*

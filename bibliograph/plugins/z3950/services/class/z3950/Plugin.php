@@ -97,19 +97,20 @@ class z3950_plugin
     }
     catch( qcl_data_model_RecordExistsException $e) {}
 
-    /*
-     * create datasource, for the moment only gbv
-     */
-    try
-    {
-      qcl_data_datasource_Manager::getInstance()->createDatasource(
-        "z3950_gbv",$z3950dsModel->getSchemaName(), array(
-          'dsn'    => str_replace( "&",";", $this->getApplication()->getIniValue("macros.dsn_tmp")),
-          'hidden' => true
-        )
-      );
-    }
-    catch( qcl_data_model_RecordExistsException $e) {}
+    // create datasources
+    $this->createDatasourcesFromExplainFiles();
+  }
+
+  /**
+   * Re-installs the plugin.
+   * @override
+   * @throws qcl_application_plugin_Exception
+   * @return void|string Can return a message that will be displayed after reinstallation.
+   */
+  public function reinstall()
+  {
+    // TODO: reinstall datasources only.
+    parent::reinstall();
   }
 
   /**
@@ -119,12 +120,20 @@ class z3950_plugin
    */
   public function uninstall()
   {
-    qcl_import("z3950_DatasourceModel");
     try
     {
       z3950_DatasourceModel::getInstance()->unregisterSchema();
     }
     catch( Exception $e ){}
+    // TODO delete datasources
+  }
+
+  /**
+   * Creates a datasource for each Z39.50 server
+   */
+  protected function createDatasourcesFromExplainFiles()
+  {
+    z3950_DatasourceModel::getInstance()->createFromExplainFiles();
   }
 }
 

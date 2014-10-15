@@ -156,7 +156,7 @@ class YAZ
    *
    * @return void
    */
-  public function parseExplainDoc( $path )
+  protected function parseExplainDoc( $path )
   {
     $doc = file_get_contents( $path );
     $explain = simplexml_load_string( $doc );
@@ -251,6 +251,15 @@ class YAZ
       yaz_addinfo( $this->resource );
 
     throw new YAZException( $message, yaz_errno( $this->resource) );
+  }
+
+  /**
+   * Returns the url or path to the XML file with EXPLAIN data.
+   * @return string
+   */
+  public function getExplainFileUrl()
+  {
+    return $this->zurl;
   }
 
   /**

@@ -71,4 +71,16 @@ abstract class bibliograph_model_AbstractDatasourceModel
    * even though you cannot set it
    */
   public function setTransactionId(){}
+
+  /**
+   * Finds all models with the given schema. Overrides parent method.
+   * @override
+   * @return qcl_data_db_Query
+   */
+  public function findAll()
+  {
+    return $this->findWhere(array(
+      "schema" => $this->getSchemaName()
+    ));
+  }
 }
