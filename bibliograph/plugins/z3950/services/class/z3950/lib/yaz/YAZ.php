@@ -48,7 +48,7 @@ class YAZ
   protected $options = array();
 
   /**
-   * An array mapping BIB-1 indexe numbers to the titles of the
+   * An array mapping BIB-1 index numbers to the titles of the
    * fields and other information on the index
    * @var array
    */
@@ -254,12 +254,30 @@ class YAZ
   }
 
   /**
-   * Returns the url or path to the XML file with EXPLAIN data.
+   * Returns the url of the Z39.50 server.
    * @return string
    */
-  public function getExplainFileUrl()
+  public function getZUrl()
   {
     return $this->zurl;
+  }
+
+  /**
+   * Get a list of available syntax identifiers as an array
+   * @return array
+   */
+  public function  getSyntaxList()
+  {
+    return $this->syntax;
+  }
+
+  /**
+   * Get the available bib-1 indexes
+   * @return array
+   */
+  public function getIndexes()
+  {
+    return $this->indexes;
   }
 
   /**
@@ -811,6 +829,33 @@ class YAZ
   }
 
   /**
+   * Given a list of syntax identifiers, set the first syntax on this list
+   * that is available on the current server and return it. If none of the
+   * given syntaxes is available, raise a YAZ_Exception. Comparison is
+   * case-insensitive and matches can be partial, e.g. "marc" matches
+   * "USMarc" and "UKMarc" etc.
+   * @throws YAZ_Exception
+   * @param array $syntaxList
+   * @return string syntax identifier
+   */
+  public function setPreferredSyntax( array $syntaxList )
+  {
+    foreach( $syntaxList as $syntax )
+    {
+      foreach( $this->getSyntaxList() as $syntaxOption )
+      {
+        if( stripos( $syntaxOption['name'], $syntax ) !== false )
+        {
+          $this->setSyntax( $syntaxOption['name'] );
+          $this->setElementSet( $syntaxOption['elementset'] );
+          return $syntaxOption['name'];
+        }
+      }
+    }
+    throw new YAZException("$syntax is not available.");
+  }
+
+  /**
    * Wait for Z39.50 requests to complete.
    * A static method that carries out networked (blocked) activity for outstanding
    * requests which have been prepared by the functions connect(), search(),
@@ -921,6 +966,43 @@ abstract class YAZ_Result
    * @return mixed
    */
   abstract public function addRecord( $position );
+}
+
+
+/**
+ * Class YAZ_SutrsResult
+ * Converts a SUTRS result into BibTex
+ * !!! NOT FUNCTIONAL YET!!!
+ */
+class YAZ_SutrsResult extends YAZ_Result
+{
+  protected $records = array();
+
+  protected $conversion_map = array(
+  // TODO
+  );
+
+  public function addRecord( $position )
+  {
+    $record = explode("\n" , $this->yaz->getRecord( $position, "string" ));
+    $result = array();
+    foreach( $record as $line )
+    {
+      $splitPos = strpos($line,":");
+      if ($splitPos === false ) continue;
+      $key = substr($line,0,$splitPos-1);
+      $value = substr($line,$splitPos+1);
+      $translatedKey = $this->conversion_map[$key];
+      if( $translatedKey )
+      {
+        $result[$translatedKey] = isset( $result[$translatedKey] ) ? $result[$translatedKey] . "; " . $value : $value;
+      }
+    }
+    if( count( $result) )
+    {
+      $this->record[] = $record;
+    }
+  }
 }
 
 class YAZ_XmlResult extends YAZ_Result

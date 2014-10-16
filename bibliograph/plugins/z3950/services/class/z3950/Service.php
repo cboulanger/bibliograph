@@ -243,6 +243,8 @@ class class_z3950_Service
       $yaz = new YAZ( $dsModel->getResourcepath() );
       $yaz->connect();
       $this->configureCcl( $yaz );
+
+
       try
       {
         $yaz->search( new YAZ_CclQuery( $query ) );
@@ -273,7 +275,6 @@ class class_z3950_Service
       'statusText'  => "$hits hits"
     );
   }
-
 
   /**
    * Returns row data executing a constructed query
@@ -357,6 +358,17 @@ class class_z3950_Service
       $this->log("Getting row data from remote Z39.50 database ...", BIBLIOGRAPH_LOG_Z3950);
       $yaz = new YAZ( $dsModel->getResourcepath() );
       $yaz->connect();
+
+      try
+      {
+        $syntax = $yaz->setPreferredSyntax(array("marc"));
+      }
+      catch( YAZException $e)
+      {
+        return $this->rowDataError( $requestId, $this->tr("Server does not support a convertable format ") );
+      }
+      $this->log("Syntax is '$syntax' ...", BIBLIOGRAPH_LOG_Z3950);
+
       $this->configureCcl( $yaz );
       $yaz->search( new YAZ_CclQuery($query) );
       $yaz->wait();
@@ -366,8 +378,6 @@ class class_z3950_Service
        */
       $this->log("Retrieving records ...", BIBLIOGRAPH_LOG_Z3950);
 
-      $yaz->setSyntax("USmarc");
-      $yaz->setElementSet("F");
       $length = $lastRow-$firstRow+1;
       $yaz->setRange( $firstRow+1, $length );
       $yaz->present();
@@ -378,13 +388,15 @@ class class_z3950_Service
         $result->addRecord( $i );
       }
 
+      $this->debug($result->getXml());
+
       $this->log("Formatting data...", BIBLIOGRAPH_LOG_Z3950);
 
       /*
        * convert to MODS
        */
       $mods = $result->toMods();
-      $this->debug($mods);
+      //$this->debug($mods);
 
       /*
        * convert to bibtex
@@ -396,7 +408,7 @@ class class_z3950_Service
        * fix formatting issues
        */
       $bibtex = str_replace( "\nand ", "; ", $bibtex );
-      $this->debug($bibtex);
+      //$this->debug($bibtex);
 
       /*
        * convert to array
@@ -406,7 +418,7 @@ class class_z3950_Service
 
       if ( count( $records) === 0 )
       {
-        throw new qcl_server_ServiceException("Error during conversion from MARC");
+        return $this->rowDataError($requestId, $this->tr("Cannot convert server response"));
       }
 
       /*
@@ -474,6 +486,20 @@ class class_z3950_Service
     );
   }
 
+  /**
+   * Returns an empty rowData response with the error message as status text.
+   * @param $requestId
+   * @param $error
+   * @return array
+   */
+  protected function rowDataError( $requestId, $error)
+  {
+    return array(
+      'requestId'   => $requestId,
+      'rowData'     => array(),
+      'statusText'  => $error
+    );
+  }
 
   /**
    * @todo Identical method in qcl_controller_ImportController
