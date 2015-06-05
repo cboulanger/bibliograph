@@ -15,6 +15,7 @@
  * Authors:
  *  * Christian Boulanger (cboulanger)
  */
+ 
 qcl_import( "qcl_core_Object" );
 
 /**

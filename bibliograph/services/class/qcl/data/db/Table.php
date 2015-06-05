@@ -91,7 +91,7 @@ class qcl_data_db_Table
   {
     if( QCL_APPLICATION_MODE == "production" )
     {
-      throw new LogicError("Modification of Database schema not allowed.");
+      throw new LogicException("Modification of Database schema not allowed.");
     }
   }
 
