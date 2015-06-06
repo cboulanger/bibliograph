@@ -67,7 +67,7 @@
       [
         // from contrib-catalog
         { "manifest" : "contrib/Dialog/1.2/Manifest.json" },
-        { "manifest" : "contrib://UploadWidget/trunk/Manifest.json" },
+        { "manifest" : "contrib/UploadWidget/trunk/Manifest.json" },
 
         // local legacy contrib
         { "manifest" : "contrib/VirtualData/trunk/Manifest.json" },

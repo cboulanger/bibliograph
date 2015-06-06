@@ -1,0 +1,54 @@
+{
+  "name"    : "Dialog Demo",
+
+  "include" :
+  [
+    {
+      "path" : "${QOOXDOO_PATH}/tool/data/config/application.json"
+    }
+  ],
+
+  "export" :
+  [
+    "api",
+    "build",
+    "clean",
+    "distclean",
+    "fix",
+    "inspector",
+    "lint",
+    "migration",
+    "pretty",
+    "profiling",
+    "source",
+    "source-all",
+    "source-hybrid",
+    "test",
+    "test-source",
+    "translation",
+    "info"
+  ],
+
+  "let" :
+  {
+    "APPLICATION"  : "dialog.demo",
+    "QOOXDOO_PATH" : "../../qooxdoo",
+    "QXTHEME"      : "dialog.demo.theme.Theme",
+    "API_EXCLUDE"  : ["qx.test.*"],
+    "LOCALES"      : [ "en","de","fr" ],
+    "ROOT"         : "."
+  },
+
+  "jobs" :
+  {
+    "libraries" : 
+    {
+      "library" :
+      [
+        {
+          "manifest" : "../../Manifest.json"
+        }          
+      ]
+    }
+  }
+}

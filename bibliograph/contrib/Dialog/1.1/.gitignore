@@ -1,0 +1,11 @@
+cache
+cache-downloads
+inspector
+api
+source/inspector.html
+qooxdoo
+.DS_Store
+.c9
+.c9revisions
+demo/default/build
+demo/default/source/script
