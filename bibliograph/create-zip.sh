@@ -3,7 +3,7 @@
 version=$(cat version.txt)
 today=$(date +"%Y-%m-%d")
 hash=$(git log --pretty=format:'%h' -n 1)
-pretty="$version ($today)"
+pretty="$version ($today, $hash)"
 filename="bibliograph-$version"
 
 # this requires the GNU-sed
@@ -22,7 +22,12 @@ $sedcmd -i -r "s|(/\*begin-version\*/)(.+)(/\*end-version\*/)|\1\"$pretty\"\3|g"
 # build the application for inclusion into the zip file
 ./generate.py build
 
-echo ">>> Creating deployable ZIP-File $filename.zip ..."
+echo 
+echo "----------------------------------------------------------------------------"
+echo "    Creating deployable ZIP-File"
+echo "----------------------------------------------------------------------------"
+
+echo ">>> Creating local copy..."
 
 # remove a preexisting zip file and create a temporary folder
 rm -f ../$filename.zip
@@ -39,6 +44,8 @@ done
 
 # add a version file
 echo "$pretty" > ./bibliograph/version.txt
+
+echo ">>> Preparing for deployment..."
   
 # remove what shouldn't go in there  
 rm -rf \
@@ -59,3 +66,6 @@ rm -rf ./bibliograph
 $sedcmd -i -r "s|(/\*begin-version\*/)(.+)(/\*end-version\*/)|\1\"Development version\"\3|g" \
   ./source/class/bibliograph/Main.js \
   ./services/class/bibliograph/Application.php
+
+FILESIZE=$(ls -lah "../$filename.zip" | awk -F " " {'print $5'})
+echo ">>> Created $filename.zip ($FILESIZE)."
