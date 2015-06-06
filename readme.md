@@ -5,7 +5,7 @@ Bibliograph is a powerful open source web application for the collaborative
 collection, editing and publishing of bibliographic data.
 
 - Demo installation: http://demo.bibliograph.org
-- Documentation: http://www.bibliograph.org
+- Documentation: http://help.bibliograph.org
 - Download: http://sourceforge.net/projects/bibliograph/files/latest/download
 - Donate: http://sourceforge.net/p/bibliograph/donate/
 - The newest version of this readme: 
