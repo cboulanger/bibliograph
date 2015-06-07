@@ -136,10 +136,19 @@ class bibliograph_service_Setup
 
   protected function importInitialData()
   {
-    $app = $this->getApplication();
+    // hack, this is neccessary because of the "setup" user stuff that breaks
+    // the sequence on database/model initiatization steps
+    // see qcl_application_Application::importInitialData 
+    qcl_import("qcl_data_datasource_DbModel");
+    qcl_data_datasource_DbModel::getInstance()->createIfNotExists( "access", array(
+      "schema" => "qcl.schema.access",
+      "type"   => "mysql",
+      "hidden" => true
+    ) );
+    qcl_import("qcl_access_DatasourceModel");
+    $ds_model  = qcl_access_DatasourceModel::getInstance();
+    $ds_model->registerSchema();
     
-    //$this->useEmbeddedDatabase(false);
-
     /*
      * check if "setup" user exists, if not, import user data
      */

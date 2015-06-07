@@ -163,7 +163,16 @@ class qcl_data_model_import_Xml
         }
         $id = $linkNode[$key];
         settype( $id, $type );
-        $model->load( $id );
+        
+        try
+        {
+          $model->load( $id );
+        }
+        catch( qcl_data_model_RecordNotFoundException $e )
+        {
+          $this->warn("Import: Cannot link to non-existent record [$className#$id], omitting...");
+          continue;
+        }
 
         /*
          * link target model(s)
