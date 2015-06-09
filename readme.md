@@ -67,10 +67,10 @@ More plugins are under development. You can easily add your own plugins (see bel
 
 Prerequisites
 -------------
-- PHP 5.3
-- MySql 5.3+ with the following extensions: intl, gettext, yaz/xsl (optional), ldap
+- PHP 5.3 with the following extensions: intl, gettext, yaz/xsl (optional), ldap
   (optional), zip (optional). For optimal performance, it is advised to enable OPcache
   (http://php.net/manual/en/intro.opcache.php)
+- MySql 5.3+ 
 
 Preparations
 ------------
