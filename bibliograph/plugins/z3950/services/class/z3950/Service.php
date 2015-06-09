@@ -185,11 +185,21 @@ class class_z3950_Service
    */
   public function method_getServerListItems()
   {
+    // Reset list of Datasources
+    // z3950_DatasourceModel::getInstance()->createFromExplainFiles();
+    
+    // Return list of Datasources
     $listItemData = array();
     $dsModel = z3950_DatasourceModel::getInstance();
     $dsModel->findAll();
     while( $dsModel->loadNext() )
     {
+      // clear cache
+      $dsModel->getInstanceOfType("record")->deleteAll();
+      $dsModel->getInstanceOfType("search")->deleteAll();
+      $dsModel->getInstanceOfType("result")->deleteAll();
+      
+      // return data
       $listItemData[] = array(
         'label' => $dsModel->getName(),
         'value' => $dsModel->getNamedId()
@@ -223,8 +233,9 @@ class class_z3950_Service
 
     $dsModel = $this->getDatasourceModel( $datasource );
     //$recordModel = $dsModel->getModelOfType("record");
+    
+    // cache
     $searchModel = $dsModel->getInstanceOfType("search");
-
     try
     {
       $searchModel->loadWhere( array( 'query' => $query ) );
@@ -243,8 +254,6 @@ class class_z3950_Service
       $yaz = new YAZ( $dsModel->getResourcepath() );
       $yaz->connect();
       $this->configureCcl( $yaz );
-
-
       try
       {
         $yaz->search( new YAZ_CclQuery( $query ) );
@@ -388,7 +397,7 @@ class class_z3950_Service
         $result->addRecord( $i );
       }
 
-      $this->debug($result->getXml());
+      //$this->debug($result->getXml());
 
       $this->log("Formatting data...", BIBLIOGRAPH_LOG_Z3950);
 

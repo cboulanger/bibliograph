@@ -197,7 +197,7 @@ class YAZ
       $this->databaseInfo = array(
         'title'   => (string) $databaseInfo->title,
         'author'  => (string) $databaseInfo->author,
-        'contact' => (string) $databaseInfo->author
+        'contact' => (string) $databaseInfo->contact
       );
     }
 
@@ -251,6 +251,19 @@ class YAZ
       yaz_addinfo( $this->resource );
 
     throw new YAZException( $message, yaz_errno( $this->resource) );
+  }
+  
+  
+  /**
+   * Checks for a YAZ error and throws an exception with a 
+   * descriptive error message
+   */
+  protected function checkError()
+  {
+    if ( yaz_error( $this->resource ) )
+    {
+      $this->throwException();
+    }
   }
 
   /**
@@ -354,6 +367,7 @@ class YAZ
     {
       $this->throwException("Cannot create resource");
     }
+    $this->checkError();
   }
 
   /**
@@ -730,6 +744,7 @@ class YAZ
     {
       $this->throwException("SEARCH failed");
     }
+    $this->checkError();
   }
 
   /**

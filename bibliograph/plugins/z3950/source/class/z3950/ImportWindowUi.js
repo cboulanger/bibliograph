@@ -75,7 +75,15 @@ qx.Class.define("z3950.ImportWindowUi",
       store.setModel( qx.data.marshal.Json.createModel([]) );
       store.bind("model",dsSelectBox,"model");
       store.load("getServerListItems");
-
+      
+      // refresh datassources btn
+      var refrshBtn = new qx.ui.form.Button(this.tr("Reload"));
+      refrshBtn.set({maxHeight:25,padding:4});
+      qxToolBar1.add(refrshBtn);
+      refrshBtn.addListener("execute",function(){
+        store.load("getServerListItems");
+      });
+      
       qxToolBar1.addSpacer();
 
       // searchbox

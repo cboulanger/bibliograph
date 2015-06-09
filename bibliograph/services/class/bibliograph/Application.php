@@ -139,13 +139,6 @@ class bibliograph_Application
     }
 
     /*
-     * Clear internal caches. This is only necessary during development
-     * as long as you modify the properties of models.
-     */
-    //qcl_data_model_db_ActiveRecord::resetBehaviors();
-
-
-    /*
      * Check if this is the first time the application is called, or if
      * the application backend is currently being configured
      */

@@ -143,7 +143,7 @@ qx.Class.define("z3950.ImportWindow",
       /*
        * send to server
        */
-      var sourceDatasource = "z3950_gbv";  //this.datasourceSelectBox.getSelection()[0];
+      var sourceDatasource = this.datasourceSelectBox.getSelection().toArray()[0].getValue();
       var targetDatasource = app.getDatasource();
       this.showPopup(this.tr("Importing references..."));
       this.getApplication().getRpcManager().execute("z3950.Service", "importReferences", [sourceDatasource, ids, targetDatasource, targetFolderId], function()

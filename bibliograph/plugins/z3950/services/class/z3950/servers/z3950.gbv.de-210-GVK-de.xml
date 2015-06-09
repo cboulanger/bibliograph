@@ -2,8 +2,8 @@
 <explain>
   <serverInfo protocol="Z39.50">
     <host>z3950.gbv.de</host>
-    <port>20010</port>
-    <database>GVK</database>
+    <port>210</port>
+    <database>gvk</database>
     <authentication>
         <user>999</user>
         <password>abc</password>
@@ -11,7 +11,7 @@
     <encoding>ISO8859-1</encoding>
   </serverInfo>
     <databaseInfo>
-      <title primary="true" lang="de">Gemeinsamer Verbundkatalog - Bremen, Hamburg, Mecklenburg-Vorpommern, Niedersachsen, Sachsen-Anhalt, Schleswig-Holstein and Thüringen</title>
+      <title primary="true" lang="de">Gemeinsamer Verbundkatalog - Bremen, Hamburg, Mecklenburg-Vorpommern, Niedersachsen, Sachsen-Anhalt, Schleswig-Holstein and Thï¿½ringen</title>
       <author>GBV</author>
       <contact>gbv@gbv.de</contact>
    </databaseInfo>
@@ -26,7 +26,7 @@
         </map>
       </index>
       <index search="true">
-        <title primary="true" lang="de">Körperschaftsname (Phrase)</title>
+        <title primary="true" lang="de">Kï¿½rperschaftsname (Phrase)</title>
         <map primary="true">
           <attr type="1" set="bib-1">2</attr>
         </map>
@@ -74,7 +74,7 @@
         </map>
       </index>
       <index search="true">
-        <title primary="true" lang="de">Schlagwörter</title>
+        <title primary="true" lang="de">Schlagwï¿½rter</title>
         <map primary="true">
           <attr type="1" set="bib-1">21</attr>
         </map>
@@ -92,7 +92,7 @@
         </map>
       </index>
       <index search="true">
-        <title primary="true" lang="de">Körperschaft (Stichwort)</title>
+        <title primary="true" lang="de">Kï¿½rperschaft (Stichwort)</title>
         <map primary="true">
           <attr type="1" set="bib-1">1005</attr>
         </map>
@@ -110,7 +110,7 @@
         </map>
       </index>
       <index search="true">
-        <title primary="true" lang="en">Alle Wörter</title>
+        <title primary="true" lang="en">Alle Wï¿½rter</title>
         <map primary="true">
           <attr type="1" set="bib-1">1016</attr>
         </map>
