@@ -72,6 +72,7 @@ Prerequisites
   (http://php.net/manual/en/intro.opcache.php)
 - MySql >= 5.3 
 
+
 Preparations
 ------------
 - Rename `services/config/bibliograph.ini.dist.php to
