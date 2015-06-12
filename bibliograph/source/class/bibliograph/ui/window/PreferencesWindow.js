@@ -45,42 +45,43 @@ qx.Class.define("bibliograph.ui.window.PreferencesWindow",
       qx.event.message.Bus.getInstance().subscribe("logout", function(e) {
         this.close();
       }, this)
-      var qxVbox1 = new qx.ui.layout.VBox(5, null, null);
+      var qxVbox1 = new qx.ui.layout.VBox(5);
       qxVbox1.setSpacing(5);
       qxWindow1.setLayout(qxVbox1);
 
       /*
        * Tabview
        */
-      var tabView = new qx.ui.tabview.TabView(null);
+      var tabView = new qx.ui.tabview.TabView();
       this.tabView = tabView;
       tabView.setWidgetId("bibliograph.preferences.tabView");
-      qxWindow1.add(tabView, {
-        flex : 1
-      });
+      qxWindow1.add(tabView, { flex : 1 });
+      
+      // work around strange bug that displays first and second tab simultaneously
+      tabView.addListener("appear", function(){
+        var selectables = tabView.getSelectables();
+        tabView.setSelection([selectables[1]]);
+        tabView.setSelection([selectables[0]]);
+      });      
 
       /*
        * appearance tab
        */
-      var qxPage1 = new qx.ui.tabview.Page(null);
-      qxPage1.setVisibility("hidden");
-      qxPage1.setLabel(this.tr('Appearance'));
+      var qxPage1 = new qx.ui.tabview.Page(this.tr('Appearance'));
+      //qxPage1.setVisibility("hidden");
       tabView.add(qxPage1);
-      var qxGrid1 = new qx.ui.layout.Grid(null, null);
+      var qxGrid1 = new qx.ui.layout.Grid();
       qxGrid1.setSpacing(5);
       qxPage1.setLayout(qxGrid1);
       qxGrid1.setColumnWidth(0, 200);
       qxGrid1.setColumnFlex(1, 2);
       var qxLabel1 = new qx.ui.basic.Label(this.tr('Application title'));
-      qxLabel1.setValue(this.tr('Application title'));
-      qxPage1.add(qxLabel1,
-      {
+      qxPage1.add(qxLabel1, {
         row : 0,
         column : 0
       });
       var qxTextarea1 = new qx.ui.form.TextArea(null);
-      qxPage1.add(qxTextarea1,
-      {
+      qxPage1.add(qxTextarea1, {
         row : 0,
         column : 1
       });
@@ -89,8 +90,7 @@ qx.Class.define("bibliograph.ui.window.PreferencesWindow",
       });
       var qxLabel2 = new qx.ui.basic.Label(this.tr('Application logo'));
       qxLabel2.setValue(this.tr('Application logo'));
-      qxPage1.add(qxLabel2,
-      {
+      qxPage1.add(qxLabel2, {
         row : 1,
         column : 0
       });
@@ -107,22 +107,19 @@ qx.Class.define("bibliograph.ui.window.PreferencesWindow",
       /*
        * Tab to configure which fields to omit
        */
-      var qxPage2 = new qx.ui.tabview.Page(null);
-      qxPage2.setLabel(this.tr('Fields'));
+      var qxPage2 = new qx.ui.tabview.Page(this.tr('Fields'));
       tabView.add(qxPage2);
       permMgr.create("bibliograph.fields.manage").bind("state", qxPage2, "visibility", {
         converter : function(v){ return v? "visible" : "excluded" }
       });
-      var qxGrid2 = new qx.ui.layout.Grid(null, null);
+      var qxGrid2 = new qx.ui.layout.Grid();
       qxGrid2.setSpacing(5);
       qxPage2.setLayout(qxGrid2);
       qxGrid2.setColumnWidth(0, 200);
       qxGrid2.setColumnFlex(1, 2);
       qxGrid2.setRowFlex(1, 1);
       var qxLabel3 = new qx.ui.basic.Label(this.tr('Database'));
-      qxLabel3.setValue(this.tr('Database'));
-      qxPage2.add(qxLabel3,
-      {
+      qxPage2.add(qxLabel3, {
         row : 0,
         column : 0
       });
@@ -160,7 +157,7 @@ qx.Class.define("bibliograph.ui.window.PreferencesWindow",
         row : 1,
         column : 0
       });
-      var excludeFieldsTextArea = new qx.ui.form.TextArea(null);
+      var excludeFieldsTextArea = new qx.ui.form.TextArea();
       this.excludeFieldsTextArea = excludeFieldsTextArea;
       excludeFieldsTextArea.setReadOnly(true);
       excludeFieldsTextArea.setPlaceholder(this.tr('Enter the names of fields to exclude.'));
@@ -181,19 +178,15 @@ qx.Class.define("bibliograph.ui.window.PreferencesWindow",
       /*
        * access mode
        */
-      var qxPage3 = new qx.ui.tabview.Page(null);
-      qxPage3.setLabel(this.tr('Access'));
+      var qxPage3 = new qx.ui.tabview.Page(this.tr('Access'));
       tabView.add(qxPage3);
-      permMgr.create("access.manage").bind("state", qxPage3, "enabled", {
-
-      });
-      var qxGrid3 = new qx.ui.layout.Grid(null, null);
+      permMgr.create("access.manage").bind("state", qxPage3, "enabled", {});
+      var qxGrid3 = new qx.ui.layout.Grid();
       qxGrid3.setSpacing(5);
       qxPage3.setLayout(qxGrid3);
       qxGrid3.setColumnWidth(0, 200);
       qxGrid3.setColumnFlex(1, 2);
       var qxLabel5 = new qx.ui.basic.Label(this.tr('Access Mode'));
-      qxLabel5.setValue(this.tr('Access Mode'));
       qxPage3.add(qxLabel5,
       {
         row : 0,
@@ -206,11 +199,9 @@ qx.Class.define("bibliograph.ui.window.PreferencesWindow",
         column : 1
       });
       var qxListItem1 = new qx.ui.form.ListItem(this.tr('Normal'), null, null);
-      qxListItem1.setLabel(this.tr('Normal'));
       modelSelectBox.add(qxListItem1);
       qxListItem1.setUserData("value", "normal");
       var qxListItem2 = new qx.ui.form.ListItem(this.tr('Read-Only'), null, null);
-      qxListItem2.setLabel(this.tr('Read-Only'));
       modelSelectBox.add(qxListItem2);
       qxListItem2.setUserData("value", "readonly");
       modelSelectBox.addListener("appear", function(e)
@@ -226,7 +217,6 @@ qx.Class.define("bibliograph.ui.window.PreferencesWindow",
 
       }, this);
       var qxLabel6 = new qx.ui.basic.Label(this.tr('Custom message'));
-      qxLabel6.setValue(this.tr('Custom message'));
       qxPage3.add(qxLabel6,
       {
         row : 1,
@@ -242,11 +232,6 @@ qx.Class.define("bibliograph.ui.window.PreferencesWindow",
       confMgr.addListener("ready", function() {
         confMgr.bindKey("bibliograph.access.no-access-message", qxTextarea2, "value", true);
       });
-
-
-
-
-
     }
   }
 });
