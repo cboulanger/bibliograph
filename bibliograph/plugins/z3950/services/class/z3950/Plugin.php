@@ -99,7 +99,7 @@ class z3950_plugin
     
     // preferences and permissions
     $app = $this->getApplication();
-    //$app->addPreference( "backup.daysToKeepBackupFor", 3 );
+    $app->addPreference( "z3950.lastDatasource", null, true );
     $app->addPermission( array(
       "z3950.manage"
     ) );

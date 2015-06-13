@@ -101,7 +101,10 @@ try{
       var store = new qcl.data.store.JsonRpc(null,"z3950.Service");
       store.setModel( qx.data.marshal.Json.createModel([]) );
       store.bind("model",list,"model");
-      store.load("getServerListItems");
+      store.load("getServerListItems",[false]);
+      qx.event.message.Bus.getInstance().subscribe("z3950.reloadDatasources", function(e) {
+        store.load("getServerListItems",[false]);
+      }, this);      
 
       // buttons
       var hbox = new qx.ui.layout.HBox(10);

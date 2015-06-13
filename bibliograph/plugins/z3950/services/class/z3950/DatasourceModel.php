@@ -129,32 +129,38 @@ class z3950_DatasourceModel
   }
 
   /**
-   * Create bibliograph datasources from Z39.50 databases. Overwrites existing datasources.
-   * These datasources will be used to cache the Z39.50 query results.
+   * Create bibliograph datasources from Z39.50 explain files
    */
   public function createFromExplainFiles()
   {
     $manager = qcl_data_datasource_Manager::getInstance();
-    $dsn     = str_replace( "&",";", $this->getApplication()->getIniValue("macros.dsn_tmp"));
-    foreach($this->getExplainFileList() as $database => $filepath )
+    $dsModel = $manager->getDatasourceModel();
+    
+    // Deleting old datasources
+    $dsModel->findWhere( array( "schema" => "bibliograph.schema.z3950" ) );
+    while( $dsModel->loadNext() )
+    {
+      $this->log("Deleting Z39.50 datasource " . $dsModel->getTitle(), BIBLIOGRAPH_LOG_Z3950);
+      $manager->deleteDatasource( $dsModel->namedId() );
+    }
+    
+    // Adding new datasources from XML files
+    $dsn = str_replace( "&",";", $this->getApplication()->getIniValue("macros.dsn_tmp"));
+    foreach( $this->getExplainFileList() as $database => $filepath )
     {
       $datasource = "z3950_" . $database;
-      try
-      {
-        $manager->getDatasourceModelByName($datasource)->delete();
-      }
-      catch( InvalidArgumentException $e){}
-
       $explainDoc = simplexml_load_file( $filepath );
       $title = substr( (string) $explainDoc->databaseInfo->title, 0, 100 );
+      
       $manager->createDatasource(
         $datasource, $this->getSchemaName(), array(
-          'dsn'           => $dsn,
+          'dsn'          => $dsn,
           'title'         => $title,
           'hidden'        => true, // should not show up as selectable datasource
           'resourcepath'  => $filepath
         )
       );
+      $this->log("Added Z39.50 datasource '$title'", BIBLIOGRAPH_LOG_Z3950);
     }
   }
 }

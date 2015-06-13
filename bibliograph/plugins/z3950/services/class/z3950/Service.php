@@ -177,8 +177,6 @@ class class_z3950_Service
     ) );
   }
 
-
-
   /**
    * Service method that returns ListItem model data on the available library servers
    * @param $all Whether to return only the active datasources (default) or all 
@@ -196,6 +194,7 @@ class class_z3950_Service
 
     // Return list of Datasources
     $listItemData = array();
+    $lastDatasource = $this->getApplication()->getPreference("z3950.lastDatasource");
     $dsModel = z3950_DatasourceModel::getInstance();
     $dsModel->findAll();
     while( $dsModel->loadNext() )
@@ -211,12 +210,15 @@ class class_z3950_Service
       
       // assemble data
       if( $activeOnly and ! $dsModel->getActive() ) continue;
+      
+      $name   = $dsModel->getName();
+      $value  = $dsModel->getNamedId();
       $listItemData[] = array(
-        'label' => $dsModel->getName(),
-        'value' => $dsModel->getNamedId(),
-        'active' => $dsModel->getActive()
+        'label'     => $name,
+        'value'     => $value,
+        'active'    => $dsModel->getActive(),
+        'selected'  => $value == $lastDatasource
       );
-
     }
     return $listItemData;
   }
@@ -263,8 +265,10 @@ class class_z3950_Service
     $this->log("Row count query for datasource '$datasource', query '$query'", BIBLIOGRAPH_LOG_Z3950);
 
     $dsModel = $this->getDatasourceModel( $datasource );
-    //$recordModel = $dsModel->getModelOfType("record");
     
+    // remember last datasource used
+    $this->getApplication()->setPreference("z3950.lastDatasource", $datasource);
+
     // cache
     $searchModel = $dsModel->getInstanceOfType("search");
     try

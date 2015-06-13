@@ -1,0 +1,38 @@
+The XML files in this folder are drawn from 
+
+http://irspy.indexdata.com/
+
+you can add any Z39.50 Server listed on this page by downloading the xml
+file behind the link "XML" at the end of each line. 
+
+Please note the following: 
+
+ - You should remove the <irspy:status xmlns:irspy="http://indexdata.com/irspy/1.0">
+   node, it is not needed and increases the size of the file needlessly.
+   
+ - The XML document must contain a recordInfo node like so:
+ 
+   <recordInfo>
+     <recordSyntax name="USmarc">
+       <elementSet name="F"></elementSet>
+     </recordSyntax>
+     <recordSyntax name="Unimarc">
+       <elementSet name="F"></elementSet>
+     </recordSyntax>
+     <recordSyntax name="Picamarc">
+       <elementSet name="F"></elementSet>
+     </recordSyntax>
+     <recordSyntax name="SUTRS">
+       <elementSet name="F"></elementSet>
+     </recordSyntax>
+     <recordSyntax name="MAB">
+       <elementSet name="F"></elementSet>
+     </recordSyntax>
+   </recordInfo> 
+
+  - Currently (as of v2.1), only the following record syntaxes are supported: 
+    - USmarc
+    
+  - In particular, the "SUTRS" record syntax is not supported, i.e. Z39.50 
+    servers that offer only SUTRS (like the British Library, as of 06/2015) 
+    cannot be used.  

@@ -34,9 +34,7 @@ qx.Class.define("z3950.ImportWindowUi",
 
       var app = this.getApplication();
 
-      /*
-       * style window
-       */
+      // window
       var importWindow = this;
       importWindow.setWidth(700);
       importWindow.setCaption(this.tr('Import from library catalog'));
@@ -44,9 +42,7 @@ qx.Class.define("z3950.ImportWindowUi",
       importWindow.setVisibility("excluded");
       importWindow.setHeight(500);
 
-      /*
-       * events
-       */
+      // events
       qx.event.message.Bus.getInstance().subscribe("logout", function(e) {
         importWindow.close()
       }, this)
@@ -64,17 +60,36 @@ qx.Class.define("z3950.ImportWindowUi",
       importWindow.add(qxToolBar1);
 
       // datasource select box
-      var dsSelectBox = new qx.ui.form.VirtualSelectBox().set({labelPath: "label"});
-      this.datasourceSelectBox = dsSelectBox;
-      dsSelectBox.setWidth(300);
-      dsSelectBox.setMaxHeight(25);
-      dsSelectBox.bind("selection[0].label", dsSelectBox, "toolTipText", null);
-      qxToolBar1.add(dsSelectBox);
+      var selectBox = new qx.ui.form.VirtualSelectBox();
+      selectBox.setLabelPath("label");
+      this.datasourceSelectBox = selectBox;
+      selectBox.setWidth(300);
+      selectBox.setMaxHeight(25);
+      qxToolBar1.add(selectBox);
+      
+      // bindings
+      var delegate = {
+        bindItem : function(controller, item, id) {
+          var selection = new qx.data.Array();
+          controller.bindProperty("label", "label", null, item, id);
+          controller.bindProperty("selected", "selection", { 
+            converter: function(selected){
+              if (selected) {
+                selection.push(item.getModel());
+              }
+              return selection;
+            }
+          }, selectBox, id);    
+        }
+      };
+      //selectBox.setDelegate(delegate);
+      selectBox.bind("selection[0].label", selectBox, "toolTipText", null);
 
       // store
       var store = new qcl.data.store.JsonRpc(null,"z3950.Service");
-      store.setModel( qx.data.marshal.Json.createModel([]) );
-      store.bind("model",dsSelectBox,"model");
+      var model = qx.data.marshal.Json.createModel([]);
+      store.setModel( model );
+      store.bind("model",selectBox,"model");
       store.load("getServerListItems");
       
       // reload datassources 
@@ -108,6 +123,13 @@ qx.Class.define("z3950.ImportWindowUi",
         this.startSearch();
       }, this);
       qxComposite1.add(this.searchButton);
+      
+      // help button
+      var helpButton = new qx.ui.toolbar.Button(this.tr('Help'));
+      qxComposite1.add(helpButton);
+      helpButton.addListener("execute", function(e){
+        this.getApplication().showHelpWindow("plugin/z3950/search");
+      }, this);      
 
       // listview
       var listView = new bibliograph.ui.reference.ListView();
@@ -154,3 +176,5 @@ qx.Class.define("z3950.ImportWindowUi",
     }
   }
 });
+
+
