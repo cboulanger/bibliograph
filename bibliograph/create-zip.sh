@@ -54,7 +54,12 @@ rm -rf \
   ./bibliograph/services/class/qcl/test/ \
   ./bibliograph/services/api \
   ./bibliograph/services/class/bibliograph/plugin/csl/citeproc-php/tests/ \
-  ./bibliograph/plugins/template 
+  ./bibliograph/plugins/template
+
+# remove plugins that are not ready to ship or are deprecated
+//rm -rf  ./bibliograph/plugins/isbnscanner
+rm -rf  ./bibliograph/plugins/bookends
+rm -rf  ./bibliograph/plugins/mdbackup
 
 # create the zip file
 zip -qr ../$filename.zip ./bibliograph/
