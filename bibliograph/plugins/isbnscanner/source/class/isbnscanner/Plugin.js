@@ -33,9 +33,7 @@ qx.Class.define("isbnscanner.Plugin",
      */
     init : function()
     {
-      /*
-       * find menu to attach menu buttons to 
-       */
+      // Manager shortcuts
       var app = qx.core.Init.getApplication();
       var permMgr = app.getAccessManager().getPermissionManager();
       var confMgr = app.getConfigManager();
@@ -127,7 +125,7 @@ qx.Class.define("isbnscanner.Plugin",
         converter : function(v){ return v ? "visible" : "excluded" }
       });
 
-      var gridlayout = new qx.ui.layout.Grid(null, null);
+      var gridlayout = new qx.ui.layout.Grid();
       gridlayout.setSpacing(5);
       pluginTab.setLayout(gridlayout);
       gridlayout.setColumnWidth(0, 200);
@@ -161,8 +159,6 @@ qx.Class.define("isbnscanner.Plugin",
       modelSelectBox.addListener("changeSelection", function(e) {
         if (e.getData().length) confMgr.setKey(prefName, e.getData()[0].getUserData("value"));
       }, this);
-
-      prefsTabView.setSelection([prefsTabView.getSelectables()[0]]);
     }
   }
 });
