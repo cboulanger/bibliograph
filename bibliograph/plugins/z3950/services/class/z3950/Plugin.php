@@ -96,6 +96,19 @@ class z3950_plugin
       $z3950dsModel->registerSchema();
     }
     catch( qcl_data_model_RecordExistsException $e) {}
+    
+    // preferences and permissions
+    $app = $this->getApplication();
+    //$app->addPreference( "backup.daysToKeepBackupFor", 3 );
+    $app->addPermission( array(
+      "z3950.manage"
+    ) );
+    foreach( array("admin", "manager" ) as $role )
+    {
+      $app->giveRolePermission( $role, array(
+        "z3950.manage"
+      ) );
+    }
 
     // create datasources
     $this->createDatasourcesFromExplainFiles();
@@ -126,6 +139,11 @@ class z3950_plugin
     }
     catch( Exception $e ){}
     // TODO delete datasources
+    
+    // remove permissions
+    $this->getApplication()->removePermission(array(
+      "z3950.manage"
+    ));
   }
 
   /**

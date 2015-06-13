@@ -15,7 +15,7 @@
 
  ************************************************************************ */
 
-/*global qx z3950*/
+/*global qx qcl z3950*/
 
 /**
  * UI for Library Import Plugin
@@ -71,18 +71,16 @@ qx.Class.define("z3950.ImportWindowUi",
       dsSelectBox.bind("selection[0].label", dsSelectBox, "toolTipText", null);
       qxToolBar1.add(dsSelectBox);
 
+      // store
       var store = new qcl.data.store.JsonRpc(null,"z3950.Service");
       store.setModel( qx.data.marshal.Json.createModel([]) );
       store.bind("model",dsSelectBox,"model");
       store.load("getServerListItems");
       
-      // refresh datassources btn
-      var refrshBtn = new qx.ui.form.Button(this.tr("Reload"));
-      refrshBtn.set({maxHeight:25,padding:4});
-      qxToolBar1.add(refrshBtn);
-      refrshBtn.addListener("execute",function(){
+      // reload datassources 
+      qx.event.message.Bus.getInstance().subscribe("z3950.reloadDatasources", function(e) {
         store.load("getServerListItems");
-      });
+      }, this);
       
       qxToolBar1.addSpacer();
 

@@ -181,13 +181,19 @@ class class_z3950_Service
 
   /**
    * Service method that returns ListItem model data on the available library servers
+   * @param $all Whether to return only the active datasources (default) or all 
+   * @param $reloadFromXmlFiles Whether to reload the list from the XML Explain files 
+   * in the filesystem. This is neccessary if xml files have been added or removed.
    * @return array
    */
-  public function method_getServerListItems()
+  public function method_getServerListItems($activeOnly=true,$reloadFromXmlFiles=false)
   {
     // Reset list of Datasources
-    // z3950_DatasourceModel::getInstance()->createFromExplainFiles();
-    
+    if ( $reloadFromXmlFiles )
+    {
+      z3950_DatasourceModel::getInstance()->createFromExplainFiles();
+    }
+
     // Return list of Datasources
     $listItemData = array();
     $dsModel = z3950_DatasourceModel::getInstance();
@@ -195,17 +201,42 @@ class class_z3950_Service
     while( $dsModel->loadNext() )
     {
       // clear cache
-      $dsModel->getInstanceOfType("record")->deleteAll();
-      $dsModel->getInstanceOfType("search")->deleteAll();
-      $dsModel->getInstanceOfType("result")->deleteAll();
+      try
+      {
+        $dsModel->getInstanceOfType("record")->deleteAll();
+        $dsModel->getInstanceOfType("search")->deleteAll();
+        $dsModel->getInstanceOfType("result")->deleteAll();
+      }
+      catch( PDOException $e) {} // FIXME This should not be a PDOException, see https://github.com/cboulanger/bibliograph/issues/133
       
-      // return data
+      // assemble data
+      if( $activeOnly and ! $dsModel->getActive() ) continue;
       $listItemData[] = array(
         'label' => $dsModel->getName(),
-        'value' => $dsModel->getNamedId()
+        'value' => $dsModel->getNamedId(),
+        'active' => $dsModel->getActive()
       );
+
     }
     return $listItemData;
+  }
+  
+  /**
+   * Sets datasources active / inactive, so that they do not show up in the
+   * list of servers
+   * @param array $map Maps datasource ids to status
+   */
+  public function method_setDatasourceState( $map )
+  {
+    $this->requirePermission("z3950.manage");
+    foreach( $map as $datasource => $active )
+    {
+      $dsModel = z3950_DatasourceModel::getInstance();
+      $dsModel->load($datasource);
+      $dsModel->setActive($active)->save();
+    }
+    $this->broadcastClientMessage("z3950.reloadDatasources");
+    return "OK";
   }
 
   /**

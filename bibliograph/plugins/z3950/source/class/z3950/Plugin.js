@@ -15,7 +15,7 @@
 
 ************************************************************************ */
 
-/*global qx z3950*/
+/*global qx qcl z3950*/
 
 /**
  * Z39.50 Plugin:
@@ -35,6 +35,13 @@ qx.Class.define("z3950.Plugin",
      */
     init : function()
     {
+      
+      // Manager shortcuts
+      var app = qx.core.Init.getApplication();
+      var permMgr = app.getAccessManager().getPermissionManager();
+      var confMgr = app.getConfigManager();
+      
+      
       /*
        * add window
        */
@@ -51,6 +58,94 @@ qx.Class.define("z3950.Plugin",
         importWindow.show();
       });
       importMenu.add(menuButton);
+      
+      
+      /*
+       * Overlays for preference window
+       */
+try{
+      var prefsTabView = app.getWidgetById("bibliograph.preferences.tabView");
+      var pluginTab = new qx.ui.tabview.Page( this.tr('Z39.50 Import') );
+      pluginTab.setVisibility("excluded");
+      prefsTabView.add(pluginTab);
+      
+      // ACL
+      permMgr.create("z3950.manage").bind("state", pluginTab, "visibility", {
+        converter : function(v){ return v ? "visible" : "excluded" }
+      });
+      var vboxlayout = new qx.ui.layout.VBox(5);
+      pluginTab.setLayout(vboxlayout);
+
+
+      // create virtual list
+      var list = new qx.ui.list.List();
+      list.setWidth(150);
+      pluginTab.add(list);
+
+      // create the delegate to change the bindings
+      var delegate = {
+        configureItem : function(item) {
+          item.setPadding(3);
+        },
+        createItem : function() {
+          return new qx.ui.form.CheckBox();
+        },
+        bindItem : function(controller, item, id) {
+          controller.bindProperty("label", "label", null, item, id);
+          controller.bindProperty("active", "value", null, item, id);
+          controller.bindPropertyReverse("active", "value", null, item, id);
+        }
+      };
+      list.setDelegate(delegate);
+
+      var store = new qcl.data.store.JsonRpc(null,"z3950.Service");
+      store.setModel( qx.data.marshal.Json.createModel([]) );
+      store.bind("model",list,"model");
+      store.load("getServerListItems");
+
+      // buttons
+      var hbox = new qx.ui.layout.HBox(10);
+      var buttons = new qx.ui.container.Composite();
+      buttons.setLayout(hbox);
+      pluginTab.add(buttons);
+      
+      // Toggle Button
+      var statusButton = new qx.ui.form.Button(this.tr("(Un-)Select All"));
+      buttons.add(statusButton);
+      var statusSelectAll = false;
+      statusButton.addListener("execute", function() {
+        var model = store.getModel();
+        statusSelectAll = ! statusSelectAll;
+        for (var i = 0; i < model.length; i++) {
+          model.getItem(i).setActive(statusSelectAll);
+        }
+      }, this); 
+      
+      // Save data Button
+      var saveButton = new qx.ui.form.Button(this.tr("Save"));
+      buttons.add(saveButton);
+      saveButton.addListener("execute", function() {
+        var model = store.getModel();
+        var result = {};
+        for (var i = 0; i < model.length; i++) {
+          var name   = model.getItem(i).getValue();
+          var active = model.getItem(i).getActive();
+          result[name] = active;
+        }
+        store.execute("setDatasourceState",[result]);
+      }, this);       
+      
+      // Reload datassources Button
+      var reloadButton= new qx.ui.form.Button(this.tr("Reload"));
+      buttons.add(reloadButton);
+      reloadButton.addListener("execute",function(){
+        store.load("getServerListItems",[false,true]);
+      });          
+      
+      
+ }catch(e){
+   console.log(e);
+ }
     }
   }
 });
