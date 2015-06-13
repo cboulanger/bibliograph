@@ -645,7 +645,7 @@ msgstr "Schließen"
 
 #: bibliograph/ui/window/PreferencesWindow.js:67
 msgid "Appearance"
-msgstr "Aussehene"
+msgstr "Aussehen"
 
 #: bibliograph/ui/window/PreferencesWindow.js:74
 #: bibliograph/ui/window/PreferencesWindow.js:75
