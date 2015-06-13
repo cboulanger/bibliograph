@@ -99,7 +99,7 @@ class z3950_plugin
     
     // preferences and permissions
     $app = $this->getApplication();
-    $app->addPreference( "z3950.lastDatasource", null, true );
+    $app->addPreference( "z3950.lastDatasource", "", true );
     $app->addPermission( array(
       "z3950.manage"
     ) );

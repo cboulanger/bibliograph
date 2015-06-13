@@ -57,7 +57,7 @@ rm -rf \
   ./bibliograph/plugins/template
 
 # remove plugins that are not ready to ship or are deprecated
-//rm -rf  ./bibliograph/plugins/isbnscanner
+# rm -rf  ./bibliograph/plugins/isbnscanner
 rm -rf  ./bibliograph/plugins/bookends
 rm -rf  ./bibliograph/plugins/mdbackup
 
