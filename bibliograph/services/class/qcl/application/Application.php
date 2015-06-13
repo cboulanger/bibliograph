@@ -676,11 +676,23 @@ abstract class qcl_application_Application
   
   /**
    * Returns the value of the given preference key
+   * @param string $key The name of the preference
+   * @return mixed
    */
   public function getPreference( $key )
   {
     return $this->getConfigModel()->getKey( $key );
   }
+  
+  /**
+   * Sets the value of the given preference key
+   * @param string $key The name of the preference
+   * @return void
+   */
+  public function setPreference( $key, $value )
+  {
+    $this->getConfigModel()->setKey( $key, $value );
+  }  
 
   //-------------------------------------------------------------
   // application datasources

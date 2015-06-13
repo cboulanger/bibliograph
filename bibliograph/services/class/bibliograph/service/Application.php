@@ -48,6 +48,10 @@ class bibliograph_service_Application
     {
       $url .= "/" . $this->help_topics[$topic];
     }
+    elseif ( $topic )
+    {
+      $url .= "/" . $topic;
+    }
     header("location: $url");
     exit;
   }
