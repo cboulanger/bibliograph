@@ -785,6 +785,170 @@ class bibliograph_service_ACLTool
   }
 
   /**
+   * Sends an informational email to different groups of 
+   * @param $type
+   * @param $namedId
+   * @return array
+   */
+  public function method_composeEmail( $type, $namedId, $subject="", $body="" )
+  {
+    $this->requirePermission("access.manage");
+    
+    if( ! in_array( $type, array("user","group") ) )
+    {
+      throw new JsonRpcException("Email can only be sent to users and groups."); 
+    }
+    
+    $model = $this->getElementModel( $type );
+    $model->load( $namedId );
+    
+    $emails = array();
+    $names  = array();
+    
+    switch ( $type )
+    {
+      case "user":
+        $email = $model->getEmail(); 
+        if( ! trim( $email ) )
+        {
+          throw new JsonRpcException( $this->tr("The selected user has no email address."));
+        }
+        $emails[] = $email;
+        $names[]  = $model->getName();
+        break;
+        
+      case "group":
+        $userModel = $this->getElementModel("user");
+        try
+        {
+          $userModel->findLinked($model);
+        }
+        catch( qcl_data_model_RecordNotFoundException $e)
+        {
+          throw new JsonRpcException( $this->tr("The selected group has no members."));
+        }
+        while($userModel->loadNext())
+        {
+          $email = $userModel->getEmail();
+          if( trim($email) ) 
+          {
+            $emails[] = $email;
+            $names[]  = $model->getName();
+          }
+        }
+    }
+
+    $number = count($emails);
+    if ( $number == 0 )
+    {
+      throw new JsonRpcException( $this->tr("No email address found."));
+    }
+    
+    $modelMap   = $this->modelMap();
+    $recipients = $this->tr( $modelMap[$type]['dialogLabel'] ) . " '" . $model->getName() . "'";
+    $message    = "<h3>" . 
+                    $this->tr( 
+                        "Email to %s", 
+                        $recipients . ( $type == "group" ? " ($number recipients)" : "") 
+                    ) .
+                  "</h3>" .
+                  ( ( $type == "group" ) ? "<p>" . implode(", ", $names ) . "</p>" : "");
+                  
+    $formData = array(
+      "subject" => array( 
+        "label" => $this->tr("Subject"),
+        "type"  => "TextField",
+        "width" => 400,
+        "value" => $subject
+      ),
+      "body"  => array(
+        "label" => $this->tr("Message"),
+        "type"  => "TextArea",
+        "lines" => 10,
+        "value" => $body
+      )
+    );
+
+    return new qcl_ui_dialog_Form(
+      $message, $formData, true,
+      $this->serviceName(), "confirmSendEmail",
+      array( $this->shelve( $type, $namedId, $emails, $names ) )
+    );
+  }
+  
+  public function method_confirmSendEmail( $data, $shelfId )
+  {
+
+    if ( ! $data )
+    {
+      $this->unshelve( $shelfId );
+      return "CANCELLED"; 
+    }
+
+    list( $type, $namedId, $emails, $names ) = $this->unshelve( $shelfId, true );
+
+    if( ! trim($data->subject) )
+    {
+      return new qcl_ui_dialog_Alert( 
+        $this->tr( "Please enter a subject." ),
+        $this->serviceName(), "correctEmail",
+        array( $shelfId, $data )
+      );
+    }
+    
+    if( ! trim($data->body) )
+    {
+      return new qcl_ui_dialog_Alert( 
+        $this->tr( "Please enter a message." ),
+        $this->serviceName(), "correctEmail",
+        array( $shelfId, $data )
+      );
+    }
+    
+    return new qcl_ui_dialog_Confirm(
+      $this->tr( "Send email to %s recipients?", count($emails) ), null,
+      $this->serviceName(), "sendEmail", 
+      array($shelfId, $data)
+    );    
+  }
+  
+  public function method_correctEmail( $dummy, $shelfId, $data )
+  {
+    list( $type, $namedId, $emails, $names ) = $this->unshelve( $shelfId );
+    return $this->method_composeEmail( $type, $namedId, $data->subject, $data->body );
+  }
+  
+  public function method_sendEmail( $confirm, $shelfId, $data )
+  {
+    list( $type, $namedId, $emails, $names ) = $this->unshelve( $shelfId );
+    
+    if ( ! $confirm )
+    {
+      return "CANCELLED"; 
+    }
+    
+    $subject = $data->subject;
+    $body    = $data->body;
+    
+    foreach( $emails as $index => $email )
+    {
+      $name = $names[$index];
+      $adminEmail  = $this->getApplication()->getIniValue("email.admin");
+      $mail = new qcl_util_system_Mail( array(
+        'senderEmail'     => $adminEmail,
+        'recipient'       => $name,
+        'recipientEmail'  => $email,
+        'subject'         => $subject,
+        'body'            => $body
+      ) );
+      $mail->send();
+    }
+
+    return new qcl_ui_dialog_Alert( $this->tr( "Sent email to %s recipients", count($emails) ) );
+  }
+
+
+  /**
    * Sends an email to the user, either a confirmation email if email has not yet been confirmed, or an information on
    * change of the password
    * @param array|object $data

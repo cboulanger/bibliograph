@@ -248,17 +248,15 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
       qxComposite3.setLayout(qxHbox2)
       qxComposite2.add(qxComposite3);
       qxHbox2.setSpacing(10);
+      
+      // Add button
       var qxButton1 = new qx.ui.form.Button(null, "bibliograph/icon/button-plus.png", null);
       qxButton1.setEnabled(false);
-      qxButton1.setIcon("bibliograph/icon/button-plus.png");
       qxComposite3.add(qxButton1);
       leftSelectBox.bind("selection", qxButton1, "enabled", {
-        converter : function(s) {
-          return s.length > 0
-        }
+        converter : function(s) { return s.length > 0 }
       });
-      qxButton1.addListener("execute", function(e)
-      {
+      qxButton1.addListener("execute", function(e) {
         var type = leftSelectBox.getSelection()[0].getModel().getValue();
         var msg = this.tr("Please enter the id of the new '%1'-Object",   /* this.tr( */
         type/* ) */);
@@ -270,17 +268,15 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
           }
         });
       }, this);
+      
+      // Delete button
       var qxButton2 = new qx.ui.form.Button(null, "bibliograph/icon/button-minus.png", null);
       qxButton2.setEnabled(false);
-      qxButton2.setIcon("bibliograph/icon/button-minus.png");
       qxComposite3.add(qxButton2);
       leftList.bind("selection", qxButton2, "enabled", {
-        converter : function(s) {
-          return s.length > 0
-        }
+        converter : function(s) { return s.length > 0 }
       });
-      qxButton2.addListener("execute", function(e)
-      {
+      qxButton2.addListener("execute", function(e) {
         var itemModel = leftList.getSelection()[0].getModel();
         var name = itemModel.getValue();
         var type = itemModel.getType();
@@ -293,39 +289,57 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
           }
         });
       }, this);
-      var qxButton3 = new qx.ui.form.Button(null, "bibliograph/icon/button-edit.png", null);
-      qxButton3.setEnabled(false);
-      qxButton3.setIcon("bibliograph/icon/button-edit.png");
-      qxComposite3.add(qxButton3);
-      leftList.bind("selection", qxButton3, "enabled", {
-        converter : function(s) {
-          return s.length > 0
-        }
+      
+      // Edit button
+      var editButton = new qx.ui.form.Button(null, "bibliograph/icon/button-edit.png", null);
+      editButton.setEnabled(false);
+      qxComposite3.add(editButton);
+      leftList.bind("selection", editButton, "enabled", {
+        converter : function(s) {  return s.length > 0 }
       });
-      qxButton3.addListener("execute", function(e)
-      {
+      editButton.addListener("execute", function(e) {
         var itemModel = leftList.getSelection()[0].getModel();
         var type = itemModel.getType();
         var name = itemModel.getValue();
-
         // this triggers a server dialog response
         this.getApplication().showPopup(this.tr("Loading data ..."));
         leftListStore.execute("editElement", [type, name], function() {
           this.getApplication().hidePopup();
         }, this);
       }, this);
-      var qxButton4 = new qx.ui.form.Button(null, "bibliograph/icon/button-reload.png", null);
-      qxButton4.setIcon("bibliograph/icon/button-reload.png");
-      qxComposite3.add(qxButton4);
-      qxButton4.addListener("execute", function(e) {
+      
+      // reload button 
+      var reloadBtn = new qx.ui.form.Button(null, "bibliograph/icon/button-reload.png", null);
+      reloadBtn.setIcon("bibliograph/icon/button-reload.png");
+      qxComposite3.add(reloadBtn);
+      reloadBtn.addListener("execute", function(e) {
         leftListStore.reload();
       }, this);
+      
+      // Email button
+      var emailBtn = new qx.ui.form.Button(null, "bibliograph/icon/button-mail.png", null);
+      emailBtn.setEnabled(false);
+      qxComposite3.add(emailBtn);
+      leftList.bind("selection", emailBtn, "enabled", {
+        converter : function(s) {
+           return s.length > 0 && ["user","group"].indexOf(s[0].getModel().getType()) > -1
+        }
+      });
+      emailBtn.addListener("execute", function(e) {
+        var itemModel = leftList.getSelection()[0].getModel();
+        var type = itemModel.getType();
+        var name = itemModel.getValue();
+        this.getApplication().showPopup(this.tr("Please wait..."));
+        leftListStore.execute("composeEmail", [type, name], function() {
+          this.getApplication().hidePopup();
+        }, this);
+      }, this);      
+      
+      // Label for edited element
       var qxVbox4 = new qx.ui.layout.VBox(10, null, null);
       var qxComposite4 = new qx.ui.container.Composite();
       qxComposite4.setLayout(qxVbox4)
-      qxComposite1.add(qxComposite4, {
-        flex : 2
-      });
+      qxComposite1.add(qxComposite4, { flex : 2 });
       qxVbox4.setSpacing(10);
       var centerLabel = new qx.ui.basic.Label(this.tr('Edited element'));
       centerLabel.setValue(this.tr('Edited element'));
@@ -337,27 +351,24 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
           return sel.length ? sel[0].getLabel() : null
         }
       });
+      
+      // Tree of linked Elements 
       var elementTree = new qx.ui.tree.Tree();
       qxComposite4.add(elementTree, {
         flex : 1
       });
       var treeController = new qx.data.controller.Tree(null, elementTree, "children", "label");
       treeController.setIconPath("icon");
-      treeStore.bind("model", treeController, "model", {
-
-      });
+      treeStore.bind("model", treeController, "model", { });
       treeController.setDelegate( {
-        configureItem : function(item) {
-          item.setOpen(true);
-        }
+        configureItem : function(item) {  item.setOpen(true); }
       });
       elementTree.bind("selection", rightListStore, "autoLoadParams", {
         converter : function(selection) {
           return selection.length ? selection[0].getModel().getType() : null;
         }
       });
-      elementTree.addListener("changeSelection", function(e)
-      {
+      elementTree.addListener("changeSelection", function(e) {
         var m = new qx.event.message.Message("treeSelectionChanged", e.getData ? e.getData() : []);
         m.setSender(e.getTarget());
         qx.event.message.Bus.getInstance().dispatch(m);
@@ -367,6 +378,8 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
       qxComposite5.setLayout(qxHbox3)
       qxComposite4.add(qxComposite5);
       qxHbox3.setSpacing(10);
+      
+      // link button 
       var qxButton5 = new qx.ui.form.Button(this.tr('Link'), null, null);
       qxButton5.setEnabled(false);
       qxButton5.setLabel(this.tr('Link'));
@@ -383,6 +396,8 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
           treeStore.reload();
         });
       }, this);
+      
+      // Unlink button 
       var qxButton6 = new qx.ui.form.Button(this.tr('Unlink'), null, null);
       qxButton6.setEnabled(false);
       qxButton6.setLabel(this.tr('Unlink'));
@@ -406,6 +421,9 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
         flex : 1
       });
       qxVbox5.setSpacing(10);
+      
+      // Linkable items
+      
       var rightLabel = new qx.ui.basic.Label(this.tr('Linkable items'));
       rightLabel.setValue(this.tr('Linkable items'));
       rightLabel.setRich(true);
