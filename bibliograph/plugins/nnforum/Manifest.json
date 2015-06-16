@@ -1,0 +1,35 @@
+{
+  "info" :
+  {
+    "name" : "nnforum",
+    "category" : [],
+
+    "summary" : "nnforum Plugin",
+    "description" : "This is a skeleton for a Bibliograph plugin.",
+
+    "homepage" : "http://www.bibliograph.org",
+
+    "license" : "LGPL/EPL",
+    "authors" :
+    [
+      {
+        "name" : "First Author (uid)",
+        "email" : "first.author@some.domain"
+      }
+    ],
+
+    "version" : "trunk",
+    "qooxdoo-versions": ["4.0.1"],
+  },
+
+  "provides" :
+  {
+    "namespace"   : "nnforum",
+    "encoding"    : "utf-8",
+    "class"       : "source/class",
+    "resource"    : "source/resource",
+    "translation" : "source/translation",
+    "type"        : "contribution"
+  }
+}
+

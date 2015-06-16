@@ -1,0 +1,178 @@
+# NoNonsense Forum v26 © Copyright (CC-BY) Kroc Camen 2010-2015
+# licenced under Creative Commons Attribution 3.0 <creativecommons.org/licenses/by/3.0/deed.en_GB>
+# you may do whatever you want to this code as long as you give credit to Kroc Camen, <camendesign.com>
+
+# some features of this file taken from HTML5 boilerplate <h5bp.com>,
+# which took features from my website <camendesign.com> :)
+
+ServerSignature   Off
+AddDefaultCharset utf-8
+
+# this ‘feature’ (MultiViews) drove me absolutely insane!
+# without this, Apache will give a 404 for a rewrite if a folder of the same name does not exist (e.g. “/blog/hello”)
+# <webmasterworld.com/apache/3808792.htm>
+Options -MultiViews -Indexes +FollowSymLinks
+
+<IfModule mod_dir.c>
+	DirectoryIndex index.php
+</IfModule>
+
+# mime types:
+# --------------------------------------------------------------------------------------------------------------------------
+# NNF doesn't use all of these by default, but custom themes might,
+# which will save admins having to modify this file
+<IfModule mod_mime.c>
+	# JavaScript
+	# normalize to standard type (it's sniffed in IE anyways)
+	# <tools.ietf.org/html/rfc4329#section-7.2>
+	AddType application/javascript js
+	
+	# XML / RSS
+	AddType application/xml xml
+	AddType application/rss+xml rss
+	
+	# SVG
+	# required for svg webfonts on iPad
+	# <twitter.com/FontSquirrel/status/14855840545>
+	AddType image/svg+xml svg svgz
+	AddEncoding gzip svgz
+	
+	# webfonts
+	AddType application/vnd.ms-fontobject eot
+	AddType application/x-font-ttf ttf ttc
+	AddType font/opentype otf
+	AddType application/x-font-woff woff
+	
+	# Assorted types
+	AddType image/x-icon ico
+	AddType image/webp webp
+	AddType application/x-shockwave-flash swf
+	
+	AddCharset utf-8 .css .js .rss .xml
+</IfModule>
+
+<Files "index.xml">
+	# 'index.xml' (unlike 'sitemap.xml') is an RSS feed
+	ForceType application/rss+xml
+</Files>
+
+# compression:
+# --------------------------------------------------------------------------------------------------------------------------
+<IfModule mod_deflate.c>
+
+    # Force compression for mangled headers.
+    # http://developer.yahoo.com/blogs/ydn/posts/2010/12/pushing-beyond-gzipping
+    <IfModule mod_setenvif.c>
+        <IfModule mod_headers.c>
+            SetEnvIfNoCase ^(Accept-EncodXng|X-cept-Encoding|X{15}|~{15}|-{15})$ ^((gzip|deflate)\s*,?\s*)+|[X~-]{4,13}$ HAVE_Accept-Encoding
+            RequestHeader append Accept-Encoding "gzip,deflate" env=HAVE_Accept-Encoding
+        </IfModule>
+    </IfModule>
+
+    # Compress all output labeled with one of the following MIME-types
+    # (for Apache versions below 2.3.7, you don't need to enable `mod_filter`
+    #  and can remove the `<IfModule mod_filter.c>` and `</IfModule>` lines
+    #  as `AddOutputFilterByType` is still in the core directives).
+    <IfModule mod_filter.c>
+        AddOutputFilterByType DEFLATE application/atom+xml \
+                                      application/javascript \
+                                      application/json \
+                                      application/rss+xml \
+                                      application/vnd.ms-fontobject \
+                                      application/x-font-ttf \
+                                      application/x-web-app-manifest+json \
+                                      application/xhtml+xml \
+                                      application/xml \
+                                      font/opentype \
+                                      image/svg+xml \
+                                      image/x-icon \
+                                      text/css \
+                                      text/html \
+                                      text/plain \
+                                      text/x-component \
+                                      text/xml
+    </IfModule>
+</IfModule>
+
+# caching:
+# --------------------------------------------------------------------------------------------------------------------------
+# these expires are reasonbly quick, to reflect the rapid nature of forums
+<IfModule mod_expires.c>
+	ExpiresActive on
+	ExpiresDefault "access plus 1 day"
+	
+	ExpiresByType text/html "access plus 0 seconds"
+	ExpiresByType text/css "access plus 1 day"
+	ExpiresByType application/javascript "access plus 1 day"
+	
+	ExpiresByType text/xml "access plus 0 seconds"
+	ExpiresByType application/xml "access plus 1 hour"
+	ExpiresByType application/rss+xml "access plus 1 hour"
+	
+	ExpiresByType image/x-icon "access plus 1 week"
+	ExpiresByType image/gif "access plus 1 week"
+	ExpiresByType image/png "access plus 1 week"
+	ExpiresByType image/jpeg "access plus 1 week"
+	ExpiresByType application/x-font-ttf "access plus 1 week"
+	ExpiresByType font/opentype "access plus 1 week"
+	ExpiresByType application/x-font-woff "access plus 1 week"
+	ExpiresByType image/svg+xml "access plus 1 week"
+	ExpiresByType application/vnd.ms-fontobject "access plus 1 week"
+</IfModule>
+
+# `FileETag None` is not enough for every server.
+<IfModule mod_headers.c>
+	Header unset ETag
+</IfModule>
+
+# Since we're sending far-future expires, we don't need ETags for static content
+# <developer.yahoo.com/performance/rules.html#etags>
+FileETag None
+
+# rewrite rules:
+# --------------------------------------------------------------------------------------------------------------------------
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+	
+	# NNF will display an error message if .htaccess is missing, or not enabled;
+	# we detect that by this environment variable failing to carry through
+	RewriteRule .* - [E=HTTP_HTACCESS:1]
+	
+	# HTTP_AUTH workaround for CGI:
+	# <orangejuiceliberationfront.com/http-auth-with-php-in-cgi-mode-e-g-on-dreamhost/>
+	RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+	
+	# custom favicon?
+	RewriteCond %{DOCUMENT_ROOT}/favicon\.ico !-f
+	RewriteRule ^favicon\.ico$ favicon.default.ico [NC,L]
+	
+	# custom apple-touch-icon?
+	RewriteCond %{DOCUMENT_ROOT}/apple-touch-icon\.png !-f
+	RewriteRule ^apple-touch-icon\.png$ apple-touch-icon.default.png [NC,L]
+	RewriteCond %{DOCUMENT_ROOT}/apple-touch-icon-precomposed\.png !-f
+	RewriteRule ^apple-touch-icon-precomposed\.png$ apple-touch-icon.default.png [NC,L]
+	
+	# custom windows tile icon?
+	RewriteCond %{DOCUMENT_ROOT}/metro-tile\.png !-f
+	RewriteRule ^metro-tile\.png$ metro-tile.default.png [NC,L]
+	
+	# don’t allow any access to '/users' (this is accessed purely from the PHP)
+	RewriteRule ^users/.*$ - [NC,F]
+	
+	# don’t allow forum access to users / themes / lib folder
+	RewriteCond %{QUERY_STRING} path=(?:themes|users|lib) [NC]
+	RewriteRule ^ - [F]
+	
+	# page numbers on the root forum
+	RewriteRule ^[:+](\d+)$ ?page=$1 [QSA,L]
+	
+	# a thread
+	RewriteCond %{REQUEST_URI} ^(/(?:[^\./&]+/)*[_a-z0-9-]+)(?:[:+]\d+)?$
+	RewriteCond %{DOCUMENT_ROOT}%1.rss -f
+	RewriteRule ^((?:[^\./&]+/)*)([_a-z0-9-]+)(?:[:+](\d+))?$ thread.php?path=$1&file=$2&page=$3 [QSA,L]
+	
+	# a sub-forum
+	RewriteCond %{REQUEST_URI} ^(/(?:[^\./&]+/)+)(?:[:+]\d+)?$
+	RewriteCond %{DOCUMENT_ROOT}%1 -d
+	RewriteRule ^((?:[^\./&]+/)+)(?:[:+](\d+))?$ index.php?path=$1&page=$2 [QSA,L]
+</IfModule>
