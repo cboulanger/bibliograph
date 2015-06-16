@@ -139,7 +139,7 @@ group_name_attr = description
 
 ;; if the LDAP database only stores the user name part of the users'
 ;; e-mail address, you can provide the domain part here
-;;ldap.mail_domain = example.com
+;;mail_domain = example.com
 
 ;; ================================================================
 ;; Don't touch anything beyond this point
