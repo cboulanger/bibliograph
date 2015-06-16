@@ -833,7 +833,7 @@ class bibliograph_service_ACLTool
           if( trim($email) ) 
           {
             $emails[] = $email;
-            $names[]  = $model->getName();
+            $names[]  = $userModel->getName();
           }
         }
     }
@@ -941,6 +941,8 @@ class bibliograph_service_ACLTool
         'subject'         => $subject,
         'body'            => $body
       ) );
+      
+      
       $mail->send();
     }
 

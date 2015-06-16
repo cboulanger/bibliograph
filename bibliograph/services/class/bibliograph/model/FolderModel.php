@@ -96,7 +96,7 @@ class bibliograph_model_FolderModel
     'childCount'  => array(
       'check'       => "integer",
       'sqltype'     => "INT(11)",
-      'nullable'    => false,
+      'nullable'    => true,
       'init'        => 0
     ),
     'referenceCount'  => array(
