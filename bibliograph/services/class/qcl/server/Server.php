@@ -132,7 +132,16 @@ class qcl_server_Server
    */
   static public function getUrl()
   {
-    return "http://" . $_SERVER["HTTP_HOST"] . $_SERVER["SCRIPT_NAME"];
+    return qcl_server_Server::getInstance()->getHostUrl() . $_SERVER["SCRIPT_NAME"];
   }
+  
+  /**
+   * Return the host URL
+   * @return string
+   */
+  static public function getHostUrl()
+  {
+    return ( $_SERVER["HTTPS"] ? "https://" : "http://" ) . $_SERVER["HTTP_HOST"];
+  }  
 
 }
