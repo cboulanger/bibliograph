@@ -86,9 +86,16 @@ class qcl_data_db_Table
   /**
    * Checks the state of the application. If in "production" state,
    * disallow any action that changes the database schema.
+   * 
+   * DISABLED! This doesn't work as expected. The lazy instantiation of
+   * tables happens at all kinds of places and times. The risk that something
+   * goes wrong is part of this convenience. 
    */
   private function checkApplicationState()
   {
+    // disable this
+    return; 
+    
     if( QCL_APPLICATION_MODE == "production" )
     {
       throw new LogicException("Modification of Database schema not allowed.");
