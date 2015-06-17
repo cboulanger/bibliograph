@@ -20,13 +20,24 @@
 
 qcl_import("qcl_data_controller_Controller");
 
+define("NNFORUM_PATH", "plugins/nnforum/services/www/");
+define("NNFORUM_RELATIVE_PATH", "../" . NNFORUM_PATH);
+
 class nnforum_Service
   extends qcl_data_controller_Controller
 {
   public function method_getForumUrl()
   {
-    @mkdir(QCL_VAR_DIR . "/nnforum_users");
     $app = $this->getApplication();
+    
+    // set the number of read items to the current number of posts
+    $count = $this->getPostCount();
+    if( $count !== null )
+    {
+      $app->setPreference( "nnforum.readposts", $count );
+    }
+    
+    // link
     $userModel = $app->getAccessController()->getActiveUser();
     $username = "";
     $password = "";
@@ -36,8 +47,32 @@ class nnforum_Service
       $password = md5( $name . $userModel->id() . $userModel->getEmail() );  
     }
     
-    $forumLink = basename( qcl_server_Server::getUrl() ) .
-      "/../../plugins/nnforum/services/www/Forum?path=Forum/&username=$username&password=$password";
+    $forumLink = NNFORUM_RELATIVE_PATH . "?path=Forum/&username=$username&password=$password";
     header("location:" . $forumLink );
+  }
+  
+  public function method_getUnreadPosts()
+  {
+    $count = $this->getPostCount();
+    if ( $count === null ) {
+      return 0;
+    }
+    $readItems = $this->getApplication()->getPreference( "nnforum.readposts" );
+    $unreadItems = $count-$readItems;
+    if( $unreadItems < 0 )
+    {
+      $this->getApplication()->setPreference( "nnforum.readposts", 0 );
+      return 0;
+    }
+    return $unreadItems;
+  }
+  
+  protected function getPostCount()
+  {
+    $rss_url = dirname( dirname( qcl_server_Server::getInstance()->getUrl() ) ) .
+                "/". NNFORUM_PATH ."Forum/index.xml";
+    $rss = @simplexml_load_file($rss_url);
+    if( ! $rss ) return null;
+    return count($rss->channel->item);
   }
 }

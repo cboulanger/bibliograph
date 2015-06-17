@@ -175,7 +175,6 @@ if (@$_SERVER['HTTP_AUTHORIZATION']) list ($_SERVER['PHP_AUTH_USER'], $_SERVER['
 //all pages can accept a name / password when committing actions (new thread / reply &c.)
 //in the case of HTTP authentication (sign in), these are provided in the request header instead
 // modification for bibliograph:
-//echo "<h1>*****" . $_GET['username'] . "****</h1>";
 session_start();
 if ( $_GET['username']  )
 {

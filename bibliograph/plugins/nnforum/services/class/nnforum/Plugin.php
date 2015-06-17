@@ -70,15 +70,24 @@ class nnforum_plugin
    */
   public function install()
   {
-    // preferences and permissions
+    // create user folder
+    @mkdir(QCL_VAR_DIR . "/nnforum_users");
+    
     $app = $this->getApplication();
-    //$app->addPreference( "z3950.lastDatasource", "", true );
+    
+    // google search domain pref
+    $app->addPreference( "nnforum.searchdomain", $_SERVER['SERVER_NAME'], false, true );
+    $app->addPreference( "nnforum.readposts", 0, true );
+    
+    // permissions
     $app->addPermission( array(
       "nnforum.view"
     ) );
     $app->giveRolePermission( "user", array(
       "nnforum.view"
     ) );
+    
+    
     return;
   }
 

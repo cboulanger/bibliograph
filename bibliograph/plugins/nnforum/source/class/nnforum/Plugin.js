@@ -52,6 +52,64 @@ qx.Class.define("nnforum.Plugin",
         }
         this.__forumWindow.focus();
       }, this);    
+      
+      /*
+       * Overlays for preference window
+       */
+ try{
+//       var prefsTabView = app.getWidgetById("bibliograph.preferences.tabView");
+//       var pluginTab = new qx.ui.tabview.Page( this.tr('NN-Forum') );
+//       //pluginTab.setVisibility("excluded");
+      
+      
+//       //prefsTabView.add(pluginTab);
+      
+//       // ACL
+//       permMgr.create("nnforum.view").bind("state", pluginTab, "visibility", {
+//         converter : function(v){ return v ? "visible" : "excluded" }
+//       });
+//       var vboxlayout = new qx.ui.layout.VBox(5);
+//       pluginTab.setLayout(vboxlayout);
+
+//       // option grid
+//       var gridlayout = new qx.ui.layout.Grid();
+//       gridlayout.setSpacing(5);
+//       pluginTab.setLayout(gridlayout);
+//       gridlayout.setColumnWidth(0, 200);
+//       gridlayout.setColumnFlex(1, 2);
+
+//       var msg= this.tr("Domain/Site for Google Search");
+//       var label1 = new qx.ui.basic.Label(msg);
+//       label1.setRich(true);
+//       pluginTab.add(label1,{row : 0, column : 0 });
+
+//       var textField = new qx.ui.form.TextField();
+//       pluginTab.add(textField,{ row : 0, column : 1 });
+
+//       // bind to preference
+//       confMgr.addListener("ready", function() {
+//         confMgr.bindKey("nnforum.searchdomain", textField, "value", true);
+//       });
+      
+      // timer to check for unread posts
+      var checkFunc = function (){
+        app.getRpcManager().execute(
+          "nnforum.service", "getUnreadPosts", [], 
+          function(unreadPosts) {
+            var label = unreadPosts ? 
+              this.trn('User Forum (1 unread thread)','User Forum (%1 unread threads)',unreadPosts,unreadPosts) :
+              this.tr('User Forum');
+            forumBtn.setLabel( label );
+            setTimeout(checkFunc, 60000 );
+          }, this
+        );
+      }.bind(this);
+      checkFunc();
+      
+ }catch(e){
+   console.warn(e);
+ }      
+      
     }
   }
 });
