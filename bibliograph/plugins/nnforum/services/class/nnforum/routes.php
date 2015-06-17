@@ -22,5 +22,5 @@
  * Routes mapping JSONRPC services to class names
  */
 return array(
-  "nnforum.rpcservicename"     => "nnforum_RpcServiceClass"
+  "nnforum.service"     => "nnforum_Service"
 );

@@ -40,9 +40,17 @@ qx.Class.define("nnforum.Plugin",
       helpMenu.add(forumBtn);
       permMgr.create("nnforum.view").bind("state", forumBtn, "visibility", {
         converter : qcl.bool2visibility
-      });      
+      });
+      
       forumBtn.addListener("execute", function(e) {
-        window.open("../plugins/nnforum/services/www/Forum");
+        var url = app.getRpcManager().getServerUrl() +
+          "?sessionId=" + app.getSessionManager().getSessionId() +
+          "&service=nnforum.service&method=getForumUrl&params=";        
+        this.__forumWindow = window.open(url,"bibliograph-forum-window");
+        if (!this.__forumWindow) {
+          dialog.Dialog.alert(this.tr("Cannot open window. Please disable the popup-blocker of your browser for this website."));
+        }
+        this.__forumWindow.focus();
       }, this);    
     }
   }

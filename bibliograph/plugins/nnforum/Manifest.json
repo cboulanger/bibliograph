@@ -5,7 +5,7 @@
     "category" : [],
 
     "summary" : "nnforum Plugin",
-    "description" : "This is a skeleton for a Bibliograph plugin.",
+    "description" : "This plugin integrates the NoNonsenseForum.",
 
     "homepage" : "http://www.bibliograph.org",
 

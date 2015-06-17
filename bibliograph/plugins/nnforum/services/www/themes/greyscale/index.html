@@ -33,7 +33,7 @@
 	</a></h1>
 	
 	<form id="search" method="get" action="http://google.com/search"><!--
-		--><input type="hidden" name="as_sitesearch" value="forum.camendesign.com"><!--
+		--><input type="hidden" name="as_sitesearch"><!--
 		--><input id="query" type="search" name="as_q" placeholder="Google Search…"><!--
 		--><input id="go" type="image" src="/themes/greyscale/img/go.png" width="20" height="20" alt="Search"><!--
 	--></form>
@@ -195,8 +195,10 @@ if (document.getElementsByTagName !== undefined) {
 	//for reasons completely unknown, one only has to reset the onclick event, not actually make it do anything!!
 	for (i=0; i<labels.length; i++) if (labels[i].getAttribute ("for")) labels[i].onclick = function (){}
 }
+
 //when the language selector is changed, submit immediately
-document.getElementById ("lang").onchange = function (){ document.getElementById ("nnf_lang").submit (); };
+if ( document.getElementById ("lang") ) 
+	document.getElementById ("lang").onchange = function (){ document.getElementById ("nnf_lang").submit (); };
 
 /*! A fix for the iOS orientationchange zoom bug. Script by @scottjehl, rebound by @wilto.MIT / GPLv2 License.*/
 (function(a){function m(){d.setAttribute("content",g),h=!0}function n(){d.setAttribute("content",f),h=!1}
@@ -206,6 +208,15 @@ if(!(/iPhone|iPad|iPod/.test(navigator.platform)&&/OS [1-5]_[0-9_]* like Mac OS 
 return;var c=a.document;if(!c.querySelector)return;var d=c.querySelector("meta[name=viewport]"),
 e=d&&d.getAttribute("content"),f=e+",maximum-scale=1",g=e+",maximum-scale=10",h=!0,i,j,k,l;if(!d)return;
 a.addEventListener("orientationchange",m,!1),a.addEventListener("devicemotion",o,!1)})(this);
+
+// modification for bibliograph
+document.getElementById ("search").as_sitesearch.value = window.location.host;
+if ( document.getElementById ("nnf_pass-field").value  )
+{
+	document.getElementById("nnf_pass").style.display = 'none'; 
+	document.getElementById("nnf_error-none").style.display = 'none';
+}
+
 --></script>
 
 </body></html>

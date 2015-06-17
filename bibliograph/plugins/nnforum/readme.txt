@@ -1,6 +1,11 @@
-Bibliograph plugin skeleton
+No-Nonsense Forum Plugin
 ===========================
 
-This is the skeleton for a bibliograph plugin used by ./generate.py create-plugin.
+This plugin integrates the NoNonsenseForum. See
 
+http://camendesign.com/nononsense_forum
+https://github.com/Kroc/NoNonsenseForum
+
+The integration is very basic, it just opens a new tab/window with the forum
+in it. 
 

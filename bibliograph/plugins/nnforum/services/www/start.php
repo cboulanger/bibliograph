@@ -174,8 +174,24 @@ if (@$_SERVER['HTTP_AUTHORIZATION']) list ($_SERVER['PHP_AUTH_USER'], $_SERVER['
 
 //all pages can accept a name / password when committing actions (new thread / reply &c.)
 //in the case of HTTP authentication (sign in), these are provided in the request header instead
-define ('NAME', mb_substr (@$_SERVER['PHP_AUTH_USER'] ? @$_SERVER['PHP_AUTH_USER'] : @$_POST['username'], 0, SIZE_NAME));
-define ('PASS', mb_substr (@$_SERVER['PHP_AUTH_PW']   ? @$_SERVER['PHP_AUTH_PW']   : @$_POST['password'], 0, SIZE_PASS));
+// modification for bibliograph:
+//echo "<h1>*****" . $_GET['username'] . "****</h1>";
+session_start();
+if ( $_GET['username']  )
+{
+        $_SESSION['nnforum_username'] = $_GET['username'];
+        $_SESSION['nnforum_password'] = $_GET['password'];
+}
+if ( $_SESSION['nnforum_username']  )
+{
+        define('NAME', $_SESSION['nnforum_username'] );
+        define('PASS', $_SESSION['nnforum_password'] );
+}
+else
+{
+        define ('NAME', mb_substr (@$_SERVER['PHP_AUTH_USER'] ? @$_SERVER['PHP_AUTH_USER'] : @$_POST['username'], 0, SIZE_NAME));
+        define ('PASS', mb_substr (@$_SERVER['PHP_AUTH_PW']   ? @$_SERVER['PHP_AUTH_PW']   : @$_POST['password'], 0, SIZE_PASS));                
+}
 
 if ((   //if HTTP authentication is used, we don’t need to validate the form fields
         @$_SERVER['PHP_AUTH_USER'] && @$_SERVER['PHP_AUTH_PW']
@@ -188,7 +204,8 @@ if ((   //if HTTP authentication is used, we don’t need to validate the form f
 )) {
         //users are stored as text files based on the hash of the given name
         $name = hash ('sha512', strtolower (NAME));
-        $user = FORUM_ROOT.DIRECTORY_SEPARATOR.FORUM_USERS.DIRECTORY_SEPARATOR."$name.txt";
+        // modification for bibliograph: use absolute path
+        $user = FORUM_USERS.DIRECTORY_SEPARATOR."$name.txt";
         
         //create the user, if new:
         //- if registrations are allowed (`FORUM_NEWBIES` is true)
@@ -209,6 +226,8 @@ if ((   //if HTTP authentication is used, we don’t need to validate the form f
         if (@$_POST['signin'] && AUTH_HTTP) header (
                 'Location: '.FORUM_URL.$_SERVER['REQUEST_URI'], true, 301
         );
+        
+        
 } else {
         define ('AUTH',      false);
         define ('AUTH_HTTP', false);

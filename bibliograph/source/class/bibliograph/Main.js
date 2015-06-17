@@ -940,7 +940,7 @@ qx.Class.define("bibliograph.Main",
           "&service=bibliograph.main&method=getOnlineHelpUrl&params=" + (topic||"home");
       this.__helpWindow = window.open(url,"bibliograph-help-window");
       if (!this.__helpWindow) {
-        dialog.Dialog.alert(this.tr("Cannot open help window. Please disable the popup-blocker of your browser for this website."));
+        dialog.Dialog.alert(this.tr("Cannot open window. Please disable the popup-blocker of your browser for this website."));
       }
       this.__helpWindow.focus();
     },
