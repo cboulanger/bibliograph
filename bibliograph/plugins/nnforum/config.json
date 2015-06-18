@@ -33,7 +33,7 @@
     "QOOXDOO_PATH" : "../../../qooxdoo",
     "QXTHEME"      : "qx.theme.Modern",
     "API_EXCLUDE"  : ["qx.test.*", "nnforum.demo.*", "${APPLICATION}.theme.*", "${APPLICATION}.test.*"],
-    "LOCALES"      : [ "en" ],
+    "LOCALES"      : [ "en","de" ],
     "CACHE"        : "${TMPDIR}/qx${QOOXDOO_VERSION}/cache",
     "ROOT"         : "."
   }

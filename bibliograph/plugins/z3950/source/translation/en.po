@@ -11,46 +11,68 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: z3950/ImportWindow.js:109
+#: z3950/ImportWindow.js:116
 msgid "You have to select one or more reference to import."
 msgstr ""
 
-#: z3950/ImportWindow.js:119
+#: z3950/ImportWindow.js:126
 msgid "Please select a folder first."
 msgstr ""
 
-#: z3950/ImportWindow.js:127
+#: z3950/ImportWindow.js:134
 msgid "Cannot determine selected folder. Please reload the folders."
 msgstr ""
 
-#: z3950/ImportWindow.js:132
+#: z3950/ImportWindow.js:139
 msgid "Invalid target folder. You can only import into normal folders."
 msgstr ""
 
-#: z3950/ImportWindow.js:141
+#: z3950/ImportWindow.js:148
 msgid "Importing references..."
 msgstr ""
 
-#: z3950/ImportWindow.js:150 z3950/Plugin.js:49 z3950/ImportWindowUi.js:42
+#: z3950/ImportWindow.js:157 z3950/ImportWindowUi.js:40 z3950/Plugin.js:56
 msgid "Import from library catalog"
 msgstr ""
 
-#: z3950/ImportWindowUi.js:79
-msgid "GBV Katalog"
+#: z3950/ImportWindowUi.js:112
+msgid "Enter search terms"
 msgstr ""
 
-#: z3950/ImportWindowUi.js:94
-msgid "Enter search term"
-msgstr ""
-
-#: z3950/ImportWindowUi.js:103
+#: z3950/ImportWindowUi.js:121
 msgid "Search"
 msgstr ""
 
-#: z3950/ImportWindowUi.js:138
+#: z3950/ImportWindowUi.js:128
+msgid "Help"
+msgstr ""
+
+#: z3950/ImportWindowUi.js:162
 msgid "Import selected records"
 msgstr ""
 
-#: z3950/ImportWindowUi.js:147
+#: z3950/ImportWindowUi.js:171
 msgid "Close"
 msgstr ""
+
+#: z3950/Plugin.js:68
+msgid "Z39.50 Import"
+msgstr ""
+
+#: z3950/Plugin.js:116
+msgid "(Un-)Select All"
+msgstr ""
+
+#: z3950/Plugin.js:128
+msgid "Save"
+msgstr ""
+
+#: z3950/Plugin.js:142
+msgid "Reload"
+msgstr ""
+
+#~ msgid "GBV Katalog"
+#~ msgstr ""
+
+#~ msgid "Enter search term"
+#~ msgstr ""

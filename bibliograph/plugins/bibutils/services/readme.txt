@@ -1,4 +1,20 @@
-This plugin makes use of the bibutis package by Chris Putnam
+Bibutis plugin
+==============
+
+Status: production
+
+This plugin provides formatting of bibliographic data into various export formats
+and translating the formats into each other. Currently, the following formats
+are supported:
+
+- Endnote export format
+- Endnote XML
+- ISI
+- MODS
+- PubMed
+- RIS
+
+It makes use of the bibutis package by Chris Putnam:
 
 http://www.scripps.edu/~cdputnam/software/bibutils/#bib2xml
 

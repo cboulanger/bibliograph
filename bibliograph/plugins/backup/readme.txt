@@ -1,6 +1,10 @@
-Bibliograph plugin skeleton
-===========================
+Backup plugin
+=============
 
-This is the skeleton for a bibliograph plugin used by ./generate.py create-plugin.
+Status: production
+
+This plugin backs up the datasource data into comma-separated values (CSV) on disk
+from where it can be restored or downloaded. 
+
 
 

@@ -1,6 +1,9 @@
-Bibliograph plugin skeleton
+Plugin template
 ===========================
 
-This is the skeleton for a bibliograph plugin used by ./generate.py create-plugin.
+Status: template
+
+This is not a real plugin, but the template used by the `create-plugin.sh` 
+command.
 
 
