@@ -19,7 +19,7 @@
 ************************************************************************ */
 
 qcl_import("qcl_application_plugin_AbstractPlugin");
-
+define ('NNFORUM_USERS_DIR', QCL_VAR_DIR . "/nnforum_users" );
 
 /**
  * Plugin initializer for the nnforum plugin
@@ -71,7 +71,7 @@ class nnforum_plugin
   public function install()
   {
     // create user folder
-    @mkdir(QCL_VAR_DIR . "/nnforum_users");
+    @mkdir(NNFORUM_USERS_DIR);
     
     $app = $this->getApplication();
     
@@ -101,6 +101,12 @@ class nnforum_plugin
     $this->getApplication()->removePermission(array(
       "nnforum.view"
     ));
+    // remove user files
+    $files = glob( NNFORUM_USERS_DIR . '/*.txt'); 
+    foreach($files as $file){ 
+    if(is_file($file))
+        unlink($file); 
+    }
     return;
   }
 }
