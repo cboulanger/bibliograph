@@ -7,6 +7,7 @@ collection, editing and publishing of bibliographic data.
 - Demo installation: http://demo.bibliograph.org
 - Documentation: http://help.bibliograph.org
 - Download: http://sourceforge.net/projects/bibliograph/files/latest/download
+- User Forum: http://forum.bibliograph.org
 - Donate: http://sourceforge.net/p/bibliograph/donate/
 - The newest version of this readme: 
   https://github.com/cboulanger/bibliograph/blob/master/readme.md
@@ -62,6 +63,9 @@ plugins are activated and supported:
   extension.
 - Advanced export/import options via the Bibutils format conversion library (needs to
   be installed).
+- A user forum plugin that allows the site admin to answer questions or the users
+  to discuss issues related to the particular installation.
+
 More plugins are under development. You can easily add your own plugins (see below).
 
 
