@@ -6,7 +6,7 @@
    http://www.bibliograph.org
 
    Copyright:
-     2007-2014 Christian Boulanger
+     2007-2015 Christian Boulanger
 
    License:
      LGPL: http://www.gnu.org/licenses/lgpl.html

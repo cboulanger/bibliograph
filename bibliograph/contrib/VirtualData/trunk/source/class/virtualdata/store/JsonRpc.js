@@ -5,7 +5,7 @@
    http://qooxdoo.org/contrib/project/qcl/
 
    Copyright:
-     2014 Christian Boulanger
+     2015 Christian Boulanger
 
    License:
      LGPL: http://www.gnu.org/licenses/lgpl.html
