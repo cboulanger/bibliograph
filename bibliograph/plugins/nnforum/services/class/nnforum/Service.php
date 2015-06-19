@@ -44,7 +44,9 @@ class nnforum_Service
     if( ! $userModel->isAnonymous() )
     {
       $username = $userModel->getName();
-      $password = md5( $name . $userModel->id() . $userModel->getEmail() );  
+      // create a hashed password from name and user id, so it cannot be
+      // easily guessed, but is always the same
+      $password = md5( $name . $userModel->id() );  
     }
     
     $forumLink = NNFORUM_RELATIVE_PATH . "?path=Forum/&username=$username&password=$password";
