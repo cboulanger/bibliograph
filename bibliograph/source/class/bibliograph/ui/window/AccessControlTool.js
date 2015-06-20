@@ -20,6 +20,7 @@
  * @asset(qx/icon/${qx.icontheme}/22/actions/go-next.png)
  * @asset(bibliograph/icon/button-plus.png)
  * @asset(bibliograph/icon/button-reload.png)
+ * @asset(bibliograph/icon/button-mail.png)
  * @asset(qx/icon/${qx.icontheme}/22/actions/application-exit.png)
  * @asset(qx/icon/${qx.icontheme}/22/actions/view-refresh.png)
  * @ignore(qcl.bool2visibility)

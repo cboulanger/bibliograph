@@ -674,10 +674,10 @@ qx.Class.define("bibliograph.Main",
     {
       this.getStateManager().setState("query", value);
       if (value && this.getDatasource()) {
-        this.getWidgetById("searchBox").setValue(value);
+        this.getWidgetById("bibliograph/searchbox").setValue(value);
       } else {
         this.getStateManager().removeState("query");
-        this.getWidgetById("searchBox").setValue("");
+        this.getWidgetById("bibliograph/searchbox").setValue("");
       }
     },
 

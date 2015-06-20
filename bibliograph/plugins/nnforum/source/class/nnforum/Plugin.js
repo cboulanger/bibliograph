@@ -19,6 +19,7 @@
 
 /**
  * Plugin Initializer Class
+ * @asset(bibliograph/icon/button-mail.png)
  * 
  */
 qx.Class.define("nnforum.Plugin",
@@ -41,8 +42,10 @@ qx.Class.define("nnforum.Plugin",
       permMgr.create("nnforum.view").bind("state", forumBtn, "visibility", {
         converter : qcl.bool2visibility
       });
+      forumBtn.addListener("execute", openForumFunc, this); 
       
-      forumBtn.addListener("execute", function(e) {
+      // function to open window with forum
+      function openForumFunc(e) {
         var url = app.getRpcManager().getServerUrl() +
           "?sessionId=" + app.getSessionManager().getSessionId() +
           "&service=nnforum.service&method=getForumUrl&params=";        
@@ -51,8 +54,30 @@ qx.Class.define("nnforum.Plugin",
           dialog.Dialog.alert(this.tr("Cannot open window. Please disable the popup-blocker of your browser for this website."));
         }
         this.__forumWindow.focus();
-      }, this);    
+      }
       
+      // view for display of unread posts
+      var searchbox = app.getWidgetById("bibliograph/searchbox");
+      var toolbar   = app.getWidgetById("bibliograph/toolbar");
+      var unreadPostsView = new qx.ui.basic.Atom("...", "bibliograph/icon/button-mail.png" );
+      unreadPostsView.setMarginRight(20);
+      toolbar.addBefore(unreadPostsView,searchbox);
+      unreadPostsView.addListener("click",openForumFunc,this);
+      
+      // periodically check for new messages and display them
+      var checkFunc = function (){
+        app.getRpcManager().execute(
+          "nnforum.service", "getUnreadPosts", [], 
+          function(unreadPosts) {
+            unreadPostsView.setVisibility( unreadPosts ? "visible" : "excluded" );
+            unreadPostsView.setLabel( "" + unreadPosts );
+            setTimeout(checkFunc, 60000 );
+          }, this
+        );
+      }.bind(this);
+      checkFunc();
+            
+
       /*
        * Overlays for preference window
        */
@@ -91,21 +116,7 @@ qx.Class.define("nnforum.Plugin",
 //         confMgr.bindKey("nnforum.searchdomain", textField, "value", true);
 //       });
       
-      // timer to check for unread posts
-      var checkFunc = function (){
-        app.getRpcManager().execute(
-          "nnforum.service", "getUnreadPosts", [], 
-          function(unreadPosts) {
-            var label = unreadPosts ? 
-              this.trn('User Forum (1 unread thread)','User Forum (%1 unread threads)',unreadPosts,unreadPosts) :
-              this.tr('User Forum');
-            forumBtn.setLabel( label );
-            setTimeout(checkFunc, 60000 );
-          }, this
-        );
-      }.bind(this);
-      checkFunc();
-      
+
  }catch(e){
    console.warn(e);
  }      

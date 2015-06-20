@@ -60,6 +60,7 @@ rm -rf \
 # rm -rf  ./bibliograph/plugins/isbnscanner
 rm -rf  ./bibliograph/plugins/bookends
 rm -rf  ./bibliograph/plugins/mdbackup
+rm -rf ./bibliograph/plugins/nnforum/services/www/Forum/*
 
 # create the zip file
 zip -qr ../$filename.zip ./bibliograph/
