@@ -146,9 +146,16 @@ qx.Class.define("bibliograph.ui.folder.TreeViewUi",
       permMgr.create("folder.remove").bind("state", qxMenuBarButton2, "visibility", {
         converter : qcl.bool2visibility
       });
-      permMgr.create("allowAddFolder").bind("state", qxMenuBarButton2, "enabled", {
-
-      });
+      permMgr.create("allowAddFolder").bind("state", qxMenuBarButton2, "enabled");
+      
+      // reload
+      var qxMenuButton5 = new qx.ui.menubar.Button(null, "bibliograph/icon/button-reload.png", null, null);
+      qxMenuBar1.add(qxMenuButton5);
+      qxMenuButton5.addListener("execute", function(e)
+      {
+        this.clearTreeCache();
+        this.reload();
+      }, this);      
       
       // Settings button/menu
       var settingsBtn = new qx.ui.menubar.Button(null, "bibliograph/icon/button-settings-up.png", null);
@@ -192,15 +199,7 @@ qx.Class.define("bibliograph.ui.folder.TreeViewUi",
         converter : qcl.bool2visibility
       });
       
-      var qxMenuButton5 = new qx.ui.menu.Button(this.tr('Reload'), "bibliograph/icon/button-reload.png", null, null);
-      qxMenuButton5.setLabel(this.tr('Reload'));
-      qxMenuButton5.setIcon("bibliograph/icon/button-reload.png");
-      settingsMenu.add(qxMenuButton5);
-      qxMenuButton5.addListener("execute", function(e)
-      {
-        this.clearTreeCache();
-        this.reload();
-      }, this);
+
 
       /*
        * Status label

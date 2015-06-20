@@ -215,6 +215,15 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
       });
 
       /*
+       * Reload Button
+       */
+      var qxMenuButton8 = new qx.ui.menubar.Button(null, "bibliograph/icon/button-reload.png", null, null);
+      menuBar.add(qxMenuButton8);
+      qxMenuButton8.addListener("execute", function(e) {
+        this.reload()
+      }, this);
+
+      /*
        * Options
        */
       var qxMenuBarButton2 = new qx.ui.menubar.Button(null, "bibliograph/icon/button-settings-up.png", null);
@@ -326,16 +335,7 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
       }, this);
 
 
-      /*
-       * Reload Button
-       */
-      var qxMenuButton8 = new qx.ui.menu.Button(this.tr('Reload'), "bibliograph/icon/button-reload.png", null, null);
-      qxMenuButton8.setLabel(this.tr('Reload'));
-      qxMenuButton8.setIcon("bibliograph/icon/button-reload.png");
-      qxMenu1.add(qxMenuButton8);
-      qxMenuButton8.addListener("execute", function(e) {
-        this.reload()
-      }, this);
+
 
       /*
        * Status bar
