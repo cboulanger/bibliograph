@@ -53,21 +53,8 @@ Features
 
 Plugins
 -------
-Bibliograph implements most advanced features through plugins. The following
-plugins are activated and supported:
-- CSL: Format bibliographic data with the Citation Style Language (no dependencies, installed
-  by default)
-- Backup: Administrators and managers can initiate backups of individual databases, and restore,
-  download and delete backups (no dependencies, installed by default).
-- Import from library catalogs which support the Z39.50 interface. Requires the PHP YAZ
-  extension.
-- Advanced export/import options via the Bibutils format conversion library (needs to
-  be installed).
-- A user forum plugin that allows the site admin to answer questions or the users
-  to discuss issues related to the particular installation.
-
-More plugins are under development. You can easily add your own plugins (see below).
-
+Bibliograph implements most advanced features through plugins. For a list of
+Plugins, see the [here](plugins.md) 
 
 Prerequisites
 -------------
@@ -167,10 +154,6 @@ make it better! Bug fixes and new plugins are very welcome.
 - For deployment, you need to copy the bibliograph/build, bibliograph/plugins and
   bibliograph/services folders to the production server. The rest is only 
   necessary to build the application.
-- You can easily add your own plugin. Execute `./generate.py create-plugin` in the
-  "bibliograph" folder and read the output that contains more information on how to
-  proceed. The "backup" plugin can be used as a model on how to write backend and
-  fronend plugin code.
 - Bibliograph features an extensible data model which allows easy modification of
   record fields and integration of a variety of backends (e.g., NoSql, xml, REST or
   even binary backends such as IMAP).
