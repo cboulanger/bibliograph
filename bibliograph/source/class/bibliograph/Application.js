@@ -67,7 +67,7 @@ qx.Class.define("bibliograph.Application",
        * Import window
        */
       var ui_winImportWindow1 = new bibliograph.ui.window.ImportWindowUi();
-      ui_winImportWindow1.setWidgetId("importWindow");
+      ui_winImportWindow1.setWidgetId("bibliograph/importWindow");
       ui_winImportWindow1.setVisibility("excluded");
       this.getRoot().add(ui_winImportWindow1);
 

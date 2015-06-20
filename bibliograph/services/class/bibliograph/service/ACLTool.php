@@ -19,6 +19,7 @@
 ************************************************************************ */
 
 qcl_import("qcl_data_controller_Controller");
+qcl_import("qcl_server_JsonRpcRestServer");
 qcl_import("qcl_ui_dialog_Alert");
 qcl_import("qcl_ui_dialog_Confirm");
 qcl_import("qcl_ui_dialog_Prompt");
@@ -993,10 +994,9 @@ class bibliograph_service_ACLTool
     $app = $this->getApplication();
     $applicationTitle = $this->getApplicationTitle();
     $adminEmail  = $app->getIniValue("email.admin");
-    $confirmationLink = qcl_server_Server::getUrl() .
-      "?service="   . $this->serviceName() .
-      "&method="    . "confirmEmail" .
-      "&params="    . $username;
+    $confirmationLink = qcl_server_JsonRpcRestServer::getJsonRpcRestUrl(
+      $this->serviceName(),"confirmEmail", $username
+    );
 
     // compose mail
     $subject = $this->tr("Your registration at %s", $applicationTitle );

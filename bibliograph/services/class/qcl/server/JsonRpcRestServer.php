@@ -31,6 +31,22 @@ qcl_import( "qcl_server_Request" );
 class qcl_server_JsonRpcRestServer
   extends qcl_server_JsonRpcServer
 {
+  
+  /**
+   * Returns the url that can be used to call a RPC method with an GET request
+   * @param string $serviceName The name of the service
+   * @param string $serviceMethod The name of the method called in this service
+   * @param string $params A string containing the paramenters. If several parameters
+   * get passed, they must be formatted as a JSON Array.
+   */
+  static function getJsonRpcRestUrl( $serviceName, $serviceMethod, $params )
+  {
+    if( is_array( $params) )
+    {
+      $params = json_encode($params);
+    }
+    return qcl_server_Server::getUrl() . "?service=$serviceName&method=$serviceMethod&params=$params";
+  }
 
   /**
    * overridden to replace raw json post data with the data from

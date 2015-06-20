@@ -36,15 +36,24 @@ qx.Class.define("bibliograph.ui.folder.TreeViewUi",
   members : {
     __qxtCreateUI : function()
     {
+      // Manager shortcuts
+      var app = qx.core.Init.getApplication();
+      var permMgr = app.getAccessManager().getPermissionManager();
+      var confMgr = app.getConfigManager();
+      
       var qxVbox1 = new qx.ui.layout.VBox(null, null, null);
       var qxComposite1 = this;
       this.setLayout(qxVbox1)
+      
+      // messages
       qx.event.message.Bus.getInstance().subscribe("authenticated", function(e) {
         this.reload();
       }, this)
       qx.event.message.Bus.getInstance().subscribe("loggedOut", function(e) {
         this.reload();
       }, this)
+      
+      // tree widget
       var qxVbox2 = new qx.ui.layout.VBox(null, null, null);
       var treeWidgetContainer = new qx.ui.container.Composite();
       treeWidgetContainer.setLayout(qxVbox2)
@@ -54,6 +63,7 @@ qx.Class.define("bibliograph.ui.folder.TreeViewUi",
         flex : 1
       });
       this.setTreeWidgetContainer(treeWidgetContainer);
+      
       var qclAccess1 = qcl.access.PermissionManager.getInstance();
       var qclPermission1 = qclAccess1.create("allowEditFolder");
       qclPermission1.setGranted(true);
@@ -115,74 +125,77 @@ qx.Class.define("bibliograph.ui.folder.TreeViewUi",
       qclPermission4.addCondition(function() {
         return this.getSelectedNode() !== null;
       }, this);
+      
+      // Menu bar
       var qxMenuBar1 = new qx.ui.menubar.MenuBar();
       qxComposite1.add(qxMenuBar1);
-      var qxMenuBarButton1 = new qx.ui.menubar.Button(null, "bibliograph/icon/button-plus.png", null);
-      qxMenuBarButton1.setIcon("bibliograph/icon/button-plus.png");
+      
+      // Add button
+      var qxMenuBarButton1 = new qx.ui.menubar.Button(null, "bibliograph/icon/button-plus.png");
       qxMenuBar1.add(qxMenuBarButton1);
       qxMenuBarButton1.addListener("click", this._addFolderDialog, this);
-      qx.core.Init.getApplication().getAccessManager().getPermissionManager().create("folder.add").bind("state", qxMenuBarButton1, "visibility", {
+      permMgr.create("folder.add").bind("state", qxMenuBarButton1, "visibility", {
         converter : qcl.bool2visibility
       });
-      qx.core.Init.getApplication().getAccessManager().getPermissionManager().create("allowAddFolder").bind("state", qxMenuBarButton1, "enabled", {
-
-      });
+      permMgr.create("allowAddFolder").bind("state", qxMenuBarButton1, "enabled");
+      
+      // Remove button
       var qxMenuBarButton2 = new qx.ui.menubar.Button(null, "bibliograph/icon/button-minus.png", null);
-      qxMenuBarButton2.setIcon("bibliograph/icon/button-minus.png");
       qxMenuBar1.add(qxMenuBarButton2);
       qxMenuBarButton2.addListener("click", this._removeFolderDialog, this);
-      qx.core.Init.getApplication().getAccessManager().getPermissionManager().create("folder.remove").bind("state", qxMenuBarButton2, "visibility", {
+      permMgr.create("folder.remove").bind("state", qxMenuBarButton2, "visibility", {
         converter : qcl.bool2visibility
       });
-      qx.core.Init.getApplication().getAccessManager().getPermissionManager().create("allowAddFolder").bind("state", qxMenuBarButton2, "enabled", {
+      permMgr.create("allowAddFolder").bind("state", qxMenuBarButton2, "enabled", {
 
       });
-      var qxMenuBarButton3 = new qx.ui.menubar.Button(null, "bibliograph/icon/button-settings-up.png", null);
-      qxMenuBarButton3.setIcon("bibliograph/icon/button-settings-up.png");
-      qxMenuBar1.add(qxMenuBarButton3);
-      var qxMenu1 = new qx.ui.menu.Menu();
-      qxMenuBarButton3.setMenu(qxMenu1);
+      
+      // Settings button/menu
+      var settingsBtn = new qx.ui.menubar.Button(null, "bibliograph/icon/button-settings-up.png", null);
+      qxMenuBar1.add(settingsBtn);
+      var settingsMenu = new qx.ui.menu.Menu();
+      settingsBtn.setMenu(settingsMenu);
+      settingsMenu.setWidgetId("bibliograph/folder-settings-menu");
+      
       var qxMenuButton1 = new qx.ui.menu.Button(this.tr('Empty trash...'), null, null, null);
       qxMenuButton1.setLabel(this.tr('Empty trash...'));
-      qxMenu1.add(qxMenuButton1);
+      settingsMenu.add(qxMenuButton1);
       qxMenuButton1.addListener("execute", this._emptyTrashDialog, this);
-      qx.core.Init.getApplication().getAccessManager().getPermissionManager().create("trash.empty").bind("state", qxMenuButton1, "visibility", {
+      permMgr.create("trash.empty").bind("state", qxMenuButton1, "visibility", {
         converter : qcl.bool2visibility
       });
-      var qxMenuButton2 = new qx.ui.menu.Button(this.tr('Move folder...'), null, null, null);
-      qxMenuButton2.setLabel(this.tr('Move folder...'));
-      qxMenu1.add(qxMenuButton2);
+      
+      var qxMenuButton2 = new qx.ui.menu.Button(this.tr('Move folder...'));
+      settingsMenu.add(qxMenuButton2);
       qxMenuButton2.addListener("execute", this._moveFolderDialog, this);
-      qx.core.Init.getApplication().getAccessManager().getPermissionManager().create("allowMoveFolder").bind("state", qxMenuButton2, "enabled", {
-
-      });
-      qx.core.Init.getApplication().getAccessManager().getPermissionManager().create("folder.move").bind("state", qxMenuButton2, "visibility", {
+      permMgr.create("allowMoveFolder").bind("state", qxMenuButton2, "enabled");
+      permMgr.create("folder.move").bind("state", qxMenuButton2, "visibility", {
         converter : qcl.bool2visibility
       });
-      var qxMenuButton3 = new qx.ui.menu.Button(this.tr('Edit folder data'), null, null, null);
-      qxMenuButton3.setLabel(this.tr('Edit folder data'));
-      qxMenu1.add(qxMenuButton3);
+      
+      var qxMenuButton3 = new qx.ui.menu.Button(this.tr('Edit folder data'));
+      settingsMenu.add(qxMenuButton3);
       qxMenuButton3.addListener("execute", this._editFolder, this);
-      qx.core.Init.getApplication().getAccessManager().getPermissionManager().create("allowEditFolder").bind("state", qxMenuButton3, "enabled", {
+      permMgr.create("allowEditFolder").bind("state", qxMenuButton3, "enabled", {
 
       });
-      qx.core.Init.getApplication().getAccessManager().getPermissionManager().create("folder.edit").bind("state", qxMenuButton3, "visibility", {
+      permMgr.create("folder.edit").bind("state", qxMenuButton3, "visibility", {
         converter : qcl.bool2visibility
       });
+      
       var qxMenuButton4 = new qx.ui.menu.Button(this.tr('Change visibility'), null, null, null);
       qxMenuButton4.setLabel(this.tr('Change visibility'));
-      qxMenu1.add(qxMenuButton4);
+      settingsMenu.add(qxMenuButton4);
       qxMenuButton4.addListener("execute", this._changePublicState, this);
-      qx.core.Init.getApplication().getAccessManager().getPermissionManager().create("allowEditFolder").bind("state", qxMenuButton4, "enabled", {
-
-      });
-      qx.core.Init.getApplication().getAccessManager().getPermissionManager().create("folder.edit").bind("state", qxMenuButton4, "visibility", {
+      permMgr.create("allowEditFolder").bind("state", qxMenuButton4, "enabled");
+      permMgr.create("folder.edit").bind("state", qxMenuButton4, "visibility", {
         converter : qcl.bool2visibility
       });
+      
       var qxMenuButton5 = new qx.ui.menu.Button(this.tr('Reload'), "bibliograph/icon/button-reload.png", null, null);
       qxMenuButton5.setLabel(this.tr('Reload'));
       qxMenuButton5.setIcon("bibliograph/icon/button-reload.png");
-      qxMenu1.add(qxMenuButton5);
+      settingsMenu.add(qxMenuButton5);
       qxMenuButton5.addListener("execute", function(e)
       {
         this.clearTreeCache();

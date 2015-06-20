@@ -194,7 +194,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       var importTxtBtn = new qx.ui.menu.Button(this.tr('Import text file'));
       qxMenu3.add(importTxtBtn);
       importTxtBtn.addListener("execute", function(e) {
-        this.getApplication().getWidgetById("importWindow").show();
+        this.getApplication().getWidgetById("bibliograph/importWindow").show();
       }, this);
 
       /*
@@ -257,39 +257,40 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
 
       /*
        * Label to indicate application mode
+       * Disabled, because maintenance mode does not do anything at the moment
        */
-      var qxAtom2 = new qx.ui.basic.Atom(null, null);
-      toolBar.add(qxAtom2, {
-        flex : 1
-      });
-      qx.event.message.Bus.subscribe("application.setMode",function (e){
-        var mode= e.getData();
-        this.info("Switching application mode to '" + mode + "'." );
-        var label = null;
-        var toolTipText = null;
-        var textColor = null;
-        var visibility = "visible";
-        switch( mode ){
-          case "maintenance":
-            label = this.tr("Maintenance Mode");
-            toolTipText = this.tr("The application is currently in maintenance mode. You might experience problems. Please come back later.");
-            textColor = "red";
-            break;
-          case "development":
-            label = this.tr("Development Mode");
-            toolTipText = this.tr("The application is currently in development mode. This should never be the case on a public server.");
-            textColor = "green";
-            break;
-          default:
-            visibility="excluded";
-        };
-        qxAtom2.set({
-          "visibility": visibility,
-          "label" : label,
-          "toolTipText" : toolTipText,
-          "textColor" : textColor
-        });
-      },this);
+      // var qxAtom2 = new qx.ui.basic.Atom(null, null);
+      // toolBar.add(qxAtom2, {
+      //   flex : 1
+      // });
+      // qx.event.message.Bus.subscribe("application.setMode",function (e){
+      //   var mode= e.getData();
+      //   this.info("Switching application mode to '" + mode + "'." );
+      //   var label = null;
+      //   var toolTipText = null;
+      //   var textColor = null;
+      //   var visibility = "visible";
+      //   switch( mode ){
+      //     case "maintenance":
+      //       label = this.tr("Maintenance Mode");
+      //       toolTipText = this.tr("The application is currently in maintenance mode. You might experience problems. Please come back later.");
+      //       textColor = "red";
+      //       break;
+      //     case "development":
+      //       label = this.tr("Development Mode");
+      //       toolTipText = this.tr("The application is currently in development mode. This should never be the case on a public server.");
+      //       textColor = "green";
+      //       break;
+      //     default:
+      //       visibility="excluded";
+      //   };
+      //   qxAtom2.set({
+      //     "visibility": visibility,
+      //     "label" : label,
+      //     "toolTipText" : toolTipText,
+      //     "textColor" : textColor
+      //   });
+      // },this);
 
       /*
        * Search Box

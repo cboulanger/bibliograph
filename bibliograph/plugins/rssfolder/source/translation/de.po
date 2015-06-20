@@ -1,0 +1,66 @@
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"Report-Msgid-Bugs-To: you@your.org\n"
+"POT-Creation-Date: 2015-06-20 16:34+0000\n"
+"PO-Revision-Date: 2015-06-20 16:34+0000\n"
+"Last-Translator: you <you@your.org>\n"
+"Language-Team: Team <yourteam@your.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: rssfolder/ImportWindow.js:95
+msgid "Please wait ..."
+msgstr "Bitte warten ..."
+
+#: rssfolder/ImportWindow.js:119
+msgid "Please select a folder first."
+msgstr "Bitte zuerst einen Ordner auswählen"
+
+#: rssfolder/ImportWindow.js:127
+msgid "Cannot determine selected folder. Please reload the folders."
+msgstr "Kann den Ordner nicht finden. Bitte Ordner neu laden."
+
+#: rssfolder/ImportWindow.js:132
+msgid "Invalid target folder. You can only import into normal folders."
+msgstr "Ungültiger Zielordner. Sie können nur in normale Ordner importieren."
+
+#: rssfolder/ImportWindow.js:140
+msgid "Importing references..."
+msgstr "Importiere Datensätze"
+
+#: rssfolder/ImportWindowUi.js:33
+msgid "Import from RSS Feed"
+msgstr "Aus RSS-Feed importieren"
+
+#: rssfolder/ImportWindowUi.js:60
+msgid "Load feed"
+msgstr "RSS-Feed laden"
+
+#: rssfolder/ImportWindowUi.js:110 rssfolder/ImportWindowUi.js:113
+msgid "Select all"
+msgstr ""
+
+#: rssfolder/ImportWindowUi.js:123 rssfolder/ImportWindowUi.js:126
+msgid "Import selected records"
+msgstr ""
+
+#: rssfolder/ImportWindowUi.js:138 rssfolder/ImportWindowUi.js:139
+msgid "Close"
+msgstr ""
+
+#: rssfolder/Plugin.js:41
+msgid "Folder RSS Feed"
+msgstr ""
+
+#: rssfolder/Plugin.js:60
+msgid ""
+"Cannot open window. Please disable the popup-blocker of your browser for "
+"this website."
+msgstr ""
+
+#: rssfolder/Plugin.js:79
+msgid "From RSS Feed"
+msgstr ""

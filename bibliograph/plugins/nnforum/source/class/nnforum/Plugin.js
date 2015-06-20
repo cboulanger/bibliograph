@@ -61,6 +61,7 @@ qx.Class.define("nnforum.Plugin",
       var toolbar   = app.getWidgetById("bibliograph/toolbar");
       var unreadPostsView = new qx.ui.basic.Atom("...", "bibliograph/icon/button-mail.png" );
       unreadPostsView.setMarginRight(20);
+      unreadPostsView.setMarginLeft(20);
       toolbar.addBefore(unreadPostsView,searchbox);
       unreadPostsView.addListener("click",openForumFunc,this);
       

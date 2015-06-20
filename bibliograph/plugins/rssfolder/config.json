@@ -1,0 +1,41 @@
+{
+  "name"    : "rssfolder",
+
+  "include" :
+  [
+    {
+      "path" : "${QOOXDOO_PATH}/tool/data/config/application.json"
+    }
+  ],
+
+  "export" :
+  [
+    "api",
+    "api-data",
+    "clean",
+    "distclean",
+    "dependencies",
+    "fix",
+    "info",
+    "inspector",
+    "lint",
+    "migration",
+    "pretty",
+    "test",
+    "test-source",
+    "translation"
+  ],
+
+  "let" :
+  {
+    "APPLICATION"  : "rssfolder",
+    "APPLICATION_MAIN_CLASS" : "${APPLICATION}.demo.Demo",
+    "QOOXDOO_PATH" : "../../../qooxdoo",
+    //"QXTHEME"      : "rssfolder.theme.modern.Theme",
+    "QXTHEME"      : "qx.theme.Modern",
+    "API_EXCLUDE"  : ["qx.test.*", "rssfolder.demo.*", "${APPLICATION}.theme.*", "${APPLICATION}.test.*"],
+    "LOCALES"      : [ "en","de" ],
+    "CACHE"        : "${TMPDIR}/qx${QOOXDOO_VERSION}/cache",
+    "ROOT"         : "."
+  }
+}
