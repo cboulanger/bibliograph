@@ -137,6 +137,7 @@ qx.Class.define("rssfolder.ImportWindow",
        * send to server
        */
       var targetDatasource = app.getDatasource();
+      var ids = this.listView.getSelectedIds();
       this.showPopup(this.tr("Importing references..."));
       this.getApplication().getRpcManager().execute(
         "rssfolder.service", "import", 

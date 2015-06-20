@@ -126,7 +126,7 @@ qx.Class.define("rssfolder.ImportWindowUi",
       importButton.setLabel(this.tr('Import selected records'));
       qxComposite1.add(importButton);
       listView.bind("selectedIds", importButton, "enabled", {
-        converter : function( ids ){ ids.length > 0 ? true : false }
+        converter : function( ids ){ return ids.length > 0 ? true : false }
       } );
       importButton.addListener("execute", function(e) {
         this.importSelected()
