@@ -25,13 +25,11 @@ Preparations
 
 Optional
 --------
-- To import from library databases, you need to install the php YAZ extension 
-  (http://www.indexdata.com/phpyaz):
-  https://code.google.com/p/list8d/wiki/InstallingYaz
+- To import from library databases, you need to [install](https://code.google.com/p/list8d/wiki/InstallingYaz) the [PHP-YAZ extension](http://www.indexdata.com/phpyaz)
   and the php-xsl extension (Debian: apt-get install php5-xsl)
 - To enable export and import of various bibliographic data formats, install the 
   bibutils toolset (Debian: apt-get install bibutils) and adapt the BIBUTILS_PATH 
-  constant in config/server.conf.php
+  constant in `config/server.conf.php`.
 - If you want to allow backups, install the php zip extension and grant the global 
   "RELOAD" privilege to the "bibliograph" user. if the backups should not be 
   stored in the system tempdir, adapt the BIBLIOGRAPH_BACKUP_PATH
