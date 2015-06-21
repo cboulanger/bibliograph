@@ -1,5 +1,6 @@
 Plugins
--------
+=======
+
 Bibliograph implements most advanced features through plugins. The following
 plugins are activated and supported:
 - CSL: Format bibliographic data with the Citation Style Language (no dependencies, installed

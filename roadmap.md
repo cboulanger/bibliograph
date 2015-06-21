@@ -14,16 +14,15 @@ my free time & sufficient interest:
 
 Version 2.2
 ===========
-This version will contain backwards-incompatible changes to the database and the
-plugin architecture.
+(will be moved into github issues)
 
-Major changes:
---------------
+Major new features
+------------------
+- add a NodeJS plugin for realtime messaging, the current PHP solution just #
+  doesn't cut it.
 - move authors & keywords to own tables to allow metadata connections
-- move plugins out of bibliograph namespace into separate hierarchy containing
-  frontend & backend code
 
-Technical stuff
+Technical stuff 
 ---------------
 - Replace persist.js library with qooxdoo localStorage Wrapper
 - qcl: refactor qcl_data_model_db_QueryBehavior to deal with rowCount problems
@@ -37,5 +36,3 @@ Technical stuff
 - replace defines with const where appropriate
 - Cleanup: Remove all code problems resulting in currently suppressed E_STRICT &
   E_NOTICE errors
-
-

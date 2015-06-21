@@ -123,11 +123,12 @@ Deployment
   to "yes" so that passwords are not sent in plain text.
 - Change the QCL_APPLICATION_MODE constant in `config/server.conf.php` to
   "production". When you need to apply updates, change it back to "maintenance".
+  Note: this is a security feature that doesn't do anything at the moment, but
+  might be used to prevent configuration changes in 'production' mode. 
 
 Support
 -------
-- Online documentation is here: http://www.bibliograph.org. Most of it is still
-  in German, but English documentation will be added once there is some interest.
+- Online documentation is here: http://help.bibliograph.org. 
 - For general questions, please write to info at bibliograph dot org or send 
   a tweet to @bibliograph2. A support mailing list may follow.
 - Bugs and feature requests should be registered as github issues:
@@ -135,39 +136,16 @@ Support
 - Paid support for installation or hosting is available, also if you need a plugin
   to support your particular collection.
 
-Development
------------
-This is open source software, everybody is invited to hack on the code and help 
-make it better! Bug fixes and new plugins are very welcome.
-
-- Get the code by cloning it from git@github.com:cboulanger/bibliograph.git 
-  (Most easily, by cloning it at GitHub itself).
-- Building the application requires the qooxdoo library (currently, v4.0.1):
-    * Download the 4.0.1 SDK from
-      http://sourceforge.net/projects/qooxdoo/files/qooxdoo-current/
-    * Unzip the SDK into a top-level "qooxdoo" folder. You can also adapt the path
-      to the SDK in the `bibliograph/config.json` configuration file if you don't
-      want to store it there. For development, the location of the SDK files must
-      be accessible to the web server.
-    * Excute `./generate build` in the "bibliograph" folder.
-
-- For deployment, you need to copy the bibliograph/build, bibliograph/plugins and
-  bibliograph/services folders to the production server. The rest is only 
-  necessary to build the application.
-- Bibliograph features an extensible data model which allows easy modification of
-  record fields and integration of a variety of backends (e.g., NoSql, xml, REST or
-  even binary backends such as IMAP).
-
-Roadmap
--------
-- The current roadmap is here: 
-  https://github.com/cboulanger/bibliograph/blob/master/roadmap.md
-- If you wish to sponsor a feature, please contact info@bibliograph.org
+Development & Roadmap
+---------------------
+- You can [hack the code](development.md) and make it better
+- The current roadmap is [here](roadmap.md)
+- If you wish to sponsor a feature, please contact info at bibliograph dot org
 
 I am not a developer. How can I contribute to the project?
 ----------------------------------------------------------
-- You can donate and make sure development continues:
-  http://sourceforge.net/p/bibliograph/donate
+- You can [donate](http://sourceforge.net/p/bibliograph/donate) and make sure 
+  development continues:
 - You can help spread the word. The more people use the application, the more
   likely it is that development continues and new features/plugins will be 
   added.
@@ -175,15 +153,17 @@ I am not a developer. How can I contribute to the project?
 
 Credits
 --------
-Open source libraries
-- qooxdoo JavaScript framework: (c)  1&1 Internet AG 
+Open source libraries/applications
+- qooxdoo JavaScript framework: (c) 1&1 Internet AG 
   http://www.qooxdoo.org
-- CSL - The Citation Style Language. (c) Bruce D'Arcus and others
+- CSL - The Citation Style Language.
   http://www.citationstyles.org
-- CiteProc-PHP. (c) Ron Jerome
+- CiteProc-PHP. Author:  Ron Jerome
   https://bitbucket.org/rjerome/citeproc-php/
-- CQL/SRU parser. (c) Robert Sanderson, Omar Siam
+- CQL/SRU parser. Authors: Robert Sanderson, Omar Siam
   https://github.com/simar0at/sru-cql-parser
+- NoNonsense Forum (CC-BY) Kroc Camen 2010-2015 
+  http://camendesign.com/nononsense_forum
 
 Partial funding was provided by
 - Juristische Fakultät (Department of Law), Humboldt-Universität zu Berlin
@@ -194,4 +174,4 @@ Partial funding was provided by
 The author wishes to thank:
 - Serge Barysiuk for providing assistance with UI generation, and for designing
   the application logo
-- Julika Rosenstock for writing the end user documentation. 
+- Julika Rosenstock for writing the first version of the end user documentation. 
