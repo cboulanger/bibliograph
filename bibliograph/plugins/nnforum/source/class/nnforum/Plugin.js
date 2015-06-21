@@ -64,6 +64,9 @@ qx.Class.define("nnforum.Plugin",
       unreadPostsView.setMarginLeft(20);
       toolbar.addBefore(unreadPostsView,searchbox);
       unreadPostsView.addListener("click",openForumFunc,this);
+      permMgr.create("nnforum.view").bind("state", unreadPostsView, "visibility", {
+        converter : qcl.bool2visibility
+      });      
       
       // periodically check for new messages and display them
       var checkFunc = function (){
