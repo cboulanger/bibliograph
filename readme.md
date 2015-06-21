@@ -68,8 +68,7 @@ Support
 - For general questions, please write to info at bibliograph dot org or send 
   a tweet to @bibliograph2.
 - There is also a [user forum](forum.bibliograph.org) to discuss issues with other users.
-- Bugs and feature requests should be registered as github issues:
-  https://github.com/cboulanger/bibliograph/issues
+- Bugs and feature requests should be registered as [github issues](https://github.com/cboulanger/bibliograph/issues).
 - Paid support for installation or hosting is available, also if you need a plugin
   to support your particular collection.
 
@@ -91,22 +90,15 @@ I am not a developer. How can I contribute to the project?
 Credits
 --------
 Open source libraries/applications
-- qooxdoo JavaScript framework: (c) 1&1 Internet AG 
-  http://www.qooxdoo.org
-- CSL - The Citation Style Language.
-  http://www.citationstyles.org
-- CiteProc-PHP. Author:  Ron Jerome
-  https://bitbucket.org/rjerome/citeproc-php/
-- CQL/SRU parser. Authors: Robert Sanderson, Omar Siam
-  https://github.com/simar0at/sru-cql-parser
-- NoNonsense Forum (CC-BY) Kroc Camen 2010-2015 
-  http://camendesign.com/nononsense_forum
+- [qooxdoo JavaScript framework](http://www.qooxdoo.org): (c) 1&1 Internet AG 
+- [CSL - The Citation Style Language](http://www.citationstyles.org).
+- [CiteProc-PHP](https://bitbucket.org/rjerome/citeproc-php/) by Ron Jerome
+- [CQL/SRU parser](https://github.com/simar0at/sru-cql-parser) by Robert Sanderson and Omar Siam
+- [NoNonsense Forum](http://camendesign.com/nononsense_forum) (CC-BY) Kroc Camen 2010-2015 
 
 Partial funding was provided by
-- Juristische Fakultät (Department of Law), Humboldt-Universität zu Berlin
-  http://www.rewi.hu-berlin.de
-- Organized Crime Research Project, Dr. Klaus von Lampe
-  http://www.organized-crime.de/
+- [Department of Law, Humboldt-Universität zu Berlin](http://www.rewi.hu-berlin.de)
+- [Organized Crime Research Project](http://www.organized-crime.de/) (Version 1.0)
 
 The author wishes to thank:
 - Serge Barysiuk for providing assistance with UI generation, and for designing
