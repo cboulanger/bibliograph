@@ -4,13 +4,11 @@ Bibliograph: Open Source Online Citation & Library Management
 Bibliograph is a powerful open source web application for the collaborative
 collection, editing and publishing of bibliographic data.
 
-- Demo installation: http://demo.bibliograph.org
-- Documentation: http://help.bibliograph.org
-- Download: http://sourceforge.net/projects/bibliograph/files/latest/download
-- User Forum: http://forum.bibliograph.org
-- Donate: http://sourceforge.net/p/bibliograph/donate/
-- The newest version of this readme: 
-  https://github.com/cboulanger/bibliograph/blob/master/readme.md
+- [Demo installation](http://demo.bibliograph.org)
+- [Documentation](http://help.bibliograph.org)
+- [Download](http://sourceforge.net/projects/bibliograph/files/latest/download)
+- [User Forum](http://forum.bibliograph.org)
+- [Donate to the project](http://sourceforge.net/p/bibliograph/donate)
 
 Bibliograph
 
@@ -20,7 +18,8 @@ Bibliograph
   with bibliographies and library collections easy and fun.
 - allows researchers, librarians, teachers and students work together online 
   without having to install software locally.
-- is fully open source and free to download and install.
+- is fully open source and free to download, install, use and adapt to your 
+  particular need.
 
 Bibliograph can be used by
 
@@ -44,17 +43,19 @@ Features
 - Unlimited amount of separate databases
 - Imports data from library catalogues (through Z39.50 interface) and from 
   various file-based data formats (RIS, BibTeX, Endnote, MODS, and more)
-- Export data into open formats
+- Export into/import from open formats and publish folders as RSS feeds, import
+  from those feeds
 - Formats bibliographic records with various citation styles (APA, Chicago, ...) 
   using CSL templates and the citeproc style processor (http://citationstyles.org)
 - Can create and restore snapshot backups of individual databases 
 - LDAP integration to connect to existing LDAP servers
+- Optionally provides a user forum
 - Fully open source, can be easily adapted and extended
 
 Plugins
 -------
 Bibliograph implements most advanced features through plugins. For a list of
-Plugins, see the [here](plugins.md) 
+Plugins, see [here](plugins.md).
 
 Prerequisites
 -------------

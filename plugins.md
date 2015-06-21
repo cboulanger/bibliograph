@@ -20,4 +20,4 @@ More plugins are under development. You can easily add your own plugin:
 - Execute `./generate.py create-plugin` in the
   "bibliograph" folder and read the output that contains more information on how to
   proceed. The "backup" plugin can be used as a model on how to write backend and
-  fronend plugin code.
+  frontend plugin code.
