@@ -6,8 +6,8 @@ make it better! Bug fixes and new plugins are very welcome.
 
 - Get the code by cloning it from git@github.com:cboulanger/bibliograph.git 
   (Most easily, by cloning it at GitHub itself).
-- Building the application requires the qooxdoo library (currently, v4.0.1):
-    * Download the 4.0.1 SDK from
+- Building the application requires the qooxdoo library (currently, v4):
+    * Download the latest 4.x SDK from
       http://sourceforge.net/projects/qooxdoo/files/qooxdoo-current/
     * Unzip the SDK into a top-level "qooxdoo" folder. You can also adapt the path
       to the SDK in the `bibliograph/config.json` configuration file if you don't

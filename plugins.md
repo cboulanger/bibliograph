@@ -2,22 +2,27 @@ Plugins
 =======
 
 Bibliograph implements most advanced features through plugins. The following
-plugins are activated and supported:
-- CSL: Format bibliographic data with the Citation Style Language (no dependencies, installed
-  by default)
-- Backup: Administrators and managers can initiate backups of individual databases, and restore,
-  download and delete backups (no dependencies, installed by default).
-- Z3950: Import from library catalogs which support the Z39.50 interface. Requires the PHP YAZ
-  extension.
-- Bibutils: Advanced export/import options via the Bibutils format conversion library (needs to
-  be installed).
-- NNForum: A user forum plugin that allows the site admin to answer questions or the users
-  to discuss issues related to the particular installation.
-- ISBNScanner: Import with a ISBN scanner device (experimental)
-- RSS Feeds: Publish your folders as RSS Feeds and import from those feeds (Experimental) 
+plugins are currently supported:
+- [backup](plugins/backup): Administrators and managers can initiate backups of 
+  individual databases, and restore, download and delete backups (installed by default).
+- [bibutils](plugins/bibutils): Advanced export/import options via the Bibutils
+  format conversion library.
+- [csl](plugins/csl): Format bibliographic data with the Citation Style Language 
+  (installed by default)
+- [nnforum](plugins/nnforum): A user forum plugin that allows the site admin to 
+  answer questions or the users to discuss issues related to the particular installation.
+- [z3950](plugins/z3950): Provides import from library catalogs which support 
+  the Z39.50 interface. 
 
-More plugins are under development. You can easily add your own plugin:
-- Execute `./generate.py create-plugin` in the
-  "bibliograph" folder and read the output that contains more information on how to
-  proceed. The "backup" plugin can be used as a model on how to write backend and
-  frontend plugin code.
+The following plugins are still under development and not supported:
+- [isbnscanner](plugins/isbnscanner): Import books with a ISBN scanner device
+- [rssfolders](plugins/rssfolders): Publish selected folders as RSS Feeds and 
+  import from those feeds
+
+You can easily add your own plugin:
+- Execute `./generate.py create-plugin` in the "bibliograph" folder and follow the
+  instructions.
+- The easiest was to write a plugin is to reuse code from other plugins. The 
+  "backup" plugin can be used as a model on how to write backend and
+  frontend plugin code. The "fieldsExtensionExmpl" template shows how to extend
+  the fields of the reference records. 

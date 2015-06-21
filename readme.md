@@ -14,44 +14,44 @@ collection, editing and publishing of bibliographic data.
 Bibliograph
 
 - is an application that lets you collect, edit, and publish bibliographic data 
-  collaboratively on the web.
+  collaboratively on the web;
 - has a modern and intuitive user interface that makes the daily life of working 
-  with bibliographies and library collections easy and fun.
+  with bibliographies and library collections easy and fun;
 - allows researchers, librarians, teachers and students work together online 
-  without having to install software locally.
+  without having to install software locally;
 - is fully open source and free to download, install, use and adapt to your 
   particular need.
 
 Bibliograph can be used by
 
 - scholars and librarians who want to publish a library collection or a 
-  thematic bibliography online
+  thematic bibliography online;
 - groups of researchers who work together in a research project and want to 
-  collect and share bibliographic references
+  collect and share bibliographic references;
 - professors and teachers who want to share bibliographic information with their
-  students
+  students.
 
 Features
 --------
 - Organize bibliographic records in static folders or dynamic collections based 
-  on queries
-- Rich metadata, Autocompletion and duplicate detection
+  on queries;
+- Rich metadata, Autocompletion and duplicate detection;
 - Allows natural language queries like "title contains hamlet and author 
-  beginswith shake"
+  beginswith shake";
 - Fine-grained access control system with users, roles, groups and permissions 
   allows flexible user management and contol of who is allowed to view, enter, 
-  edit and delete data.
-- Unlimited amount of separate databases
-- Imports data from library catalogues (through Z39.50 interface) and from 
-  various file-based data formats (RIS, BibTeX, Endnote, MODS, and more)
-- Export into/import from open formats and publish folders as RSS feeds, import
-  from those feeds
+  edit and delete data;
+- Unlimited amount of separate databases;
+- Imports data from library catalogues (through Z39.50 interface), from 
+  various file-based data formats (RIS, BibTeX, Endnote, MODS, and more), and
+  from RSS feeds.
+- Export into various open formats and publish folders as RSS feeds;
 - Formats bibliographic records with various citation styles (APA, Chicago, ...) 
-  using CSL templates and the citeproc style processor (http://citationstyles.org)
-- Can create and restore snapshot backups of individual databases 
-- LDAP integration to connect to existing LDAP servers
-- Optionally provides a user forum
-- Fully open source, can be easily adapted and extended
+  using CSL templates and the citeproc style processor (http://citationstyles.org);
+- Ability to create and restore snapshot backups of individual databases;
+- LDAP integration to connect to existing LDAP servers;
+- Optionally provides a user forum;
+- Fully open source, can be easily adapted and extended by plugins. 
 
 Plugins
 -------
@@ -64,27 +64,29 @@ See [here](install.md).
 
 Support
 -------
-- See the extensive [end user online documentation](http://help.bibliograph.org). 
+- See the extensive [end user online documentation](http://help.bibliograph.org).
 - For general questions, please write to info at bibliograph dot org or send 
   a tweet to @bibliograph2.
-- There is also a [user forum](forum.bibliograph.org) to discuss issues with other users.
+- There is also a [user forum](http://forum.bibliograph.org) to discuss issues with other users.
 - Bugs and feature requests should be registered as [github issues](https://github.com/cboulanger/bibliograph/issues).
 - Paid support for installation or hosting is available, also if you need a plugin
   to support your particular collection.
 
 Development & Roadmap
 ---------------------
-- You can [hack the code](development.md) and make it better
-- The current roadmap is [here](roadmap.md)
-- If you wish to sponsor a feature, please contact info at bibliograph dot org
+- You can [hack the code](development.md) and make it better;
+- The current roadmap is [here](roadmap.md);
+- If you wish to sponsor a feature, please contact info at bibliograph dot org.
 
-I am not a developer. How can I contribute to the project?
-----------------------------------------------------------
+How to contribute
+-----------------
+Bibliograph is free (as in beer and in speech). But in order to thrive, the
+project needs your help. Even if you are not a developer, you can contribute:
 - You can [donate](http://sourceforge.net/p/bibliograph/donate) and make sure 
-  development continues.
+  development continues;
 - You can help spread the word. The more people use the application, the more
   likely it is that development continues and new features/plugins will be 
-  added.
+  added;
 - You can provide feedback and suggest changes or features.
 
 Credits
@@ -102,5 +104,5 @@ Partial funding was provided by
 
 The author wishes to thank:
 - Serge Barysiuk for providing assistance with UI generation, and for designing
-  the application logo
+  the application logo;
 - Julika Rosenstock for writing the first version of the end user documentation. 
