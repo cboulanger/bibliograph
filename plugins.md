@@ -3,20 +3,20 @@ Plugins
 
 Bibliograph implements most advanced features through plugins. The following
 plugins are currently supported:
-- [backup](plugins/backup): Administrators and managers can initiate backups of 
+- [backup](cboulanger/bibliograph/tree/master/bibliograph/plugins/backup): Administrators and managers can initiate backups of 
   individual databases, and restore, download and delete backups (installed by default).
-- [bibutils](plugins/bibutils): Advanced export/import options via the Bibutils
+- [bibutils](cboulanger/bibliograph/tree/master/bibliograph/plugins/bibutils): Advanced export/import options via the Bibutils
   format conversion library.
-- [csl](plugins/csl): Format bibliographic data with the Citation Style Language 
+- [csl](cboulanger/bibliograph/tree/master/bibliograph/plugins/csl): Format bibliographic data with the Citation Style Language 
   (installed by default)
-- [nnforum](plugins/nnforum): A user forum plugin that allows the site admin to 
+- [nnforum](cboulanger/bibliograph/tree/master/bibliograph/plugins/nnforum): A user forum plugin that allows the site admin to 
   answer questions or the users to discuss issues related to the particular installation.
-- [z3950](plugins/z3950): Provides import from library catalogs which support 
+- [z3950](cboulanger/bibliograph/tree/master/bibliograph/plugins/z3950): Provides import from library catalogs which support 
   the Z39.50 interface. 
 
 The following plugins are still under development and not supported:
-- [isbnscanner](plugins/isbnscanner): Import books with a ISBN scanner device
-- [rssfolders](plugins/rssfolders): Publish selected folders as RSS Feeds and 
+- [isbnscanner](cboulanger/bibliograph/tree/master/bibliograph/plugins/isbnscanner): Import books with a ISBN scanner device
+- [rssfolders](cboulanger/bibliograph/tree/master/bibliograph/plugins/rssfolders): Publish selected folders as RSS Feeds and 
   import from those feeds
 
 You can easily add your own plugin:
