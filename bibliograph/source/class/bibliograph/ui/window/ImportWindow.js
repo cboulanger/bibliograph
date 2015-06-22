@@ -213,7 +213,7 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
         dialog.Dialog.alert(this.tr("Please select a folder first."));
         return false;
       }
-      var treeView = app.getWidgetById("mainFolderTree");
+      var treeView = app.getWidgetById("bibliograph/mainFolderTree");
       var nodeId = treeView.getController().getClientNodeId(targetFolderId);
       var node = treeView.getTree().getDataModel().getData()[nodeId];
       if (!node)

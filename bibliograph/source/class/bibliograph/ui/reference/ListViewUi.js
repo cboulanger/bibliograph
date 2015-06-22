@@ -286,29 +286,6 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
       qxMenuButton5.addListener("execute", function(e) {
         this.exportFolder();
       }, this);
-      
-      
-      /*
-       * Share menu -> will go into plugin
-       */
-      var shareButton = new qx.ui.menu.Button(this.tr('Share ...'));
-      qxMenu1.add(shareButton);
-      permissionManager.create("reference.share")
-          .bind("state", shareButton, "visibility", { converter : qcl.bool2visibility });
-      var shareMenu = new qx.ui.menu.Menu();
-      shareButton.setMenu(shareMenu);
-      
-      // Stabi -> will go into plugin
-      var stabiButton = new qx.ui.menu.Button(this.tr('Look up in Staatsbibliothek Berlin'));
-      shareMenu.add(stabiButton);
-      stabiButton.addListener("execute", function(e) {
-        var url = "http://stabikat.de/DB=1/SET=2/TTL=2/CMD?ACT=SRCHA&IKT=1007&SRT=YOP&TRM=";
-        var model = this.getApplication().getWidgetById("referenceEditor").getStore().getModel();
-        if( model && model.getIsbn() )
-        {
-          window.open(url + model.getIsbn() );
-        }
-      }, this);
            
 
       /*

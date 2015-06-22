@@ -196,7 +196,7 @@ class bibliograph_model_FolderModel
         'lines'     => 3
 //        ,'events'    => array(
 //          'focus'    =>  "function(e){
-//                            var hwin = this.getApplication().getWidgetById('searchHelpWindow');
+//                            var hwin = this.getApplication().getWidgetById('bibliograph/searchHelpWindow');
 //                            this.getApplication().setInsertTarget(e.getTarget());
 //                            hwin.setZIndex(2147483647);
 //                            hwin.set({maxWidth:250});
@@ -205,7 +205,7 @@ class bibliograph_model_FolderModel
 //
 //                          }"
 //          ,'blur'    =>  "function(){
-//                            var hwin = this.getApplication().getWidgetById('searchHelpWindow');
+//                            var hwin = this.getApplication().getWidgetById('bibliograph/searchHelpWindow');
 //                            hwin.setMaxWidth(400);
 //                            hwin.hide();
 //                          }"

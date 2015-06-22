@@ -35,7 +35,7 @@ qx.Class.define("bibliograph.Application",
        * Datasource list window
        */
       var ui_winDatasourceListWindow1 = new bibliograph.ui.window.DatasourceListWindow();
-      ui_winDatasourceListWindow1.setWidgetId("datasourceWindow");
+      ui_winDatasourceListWindow1.setWidgetId("bibliograph/datasourceWindow");
       ui_winDatasourceListWindow1.setVisibility("excluded");
       this.getRoot().add(ui_winDatasourceListWindow1);
 
@@ -43,7 +43,7 @@ qx.Class.define("bibliograph.Application",
        * Access Control Tool
        */
       var ui_winAccessControlTool1 = new bibliograph.ui.window.AccessControlTool();
-      ui_winAccessControlTool1.setWidgetId("accessControlTool");
+      ui_winAccessControlTool1.setWidgetId("bibliograph/accessControlTool");
       ui_winAccessControlTool1.setVisibility("excluded");
       this.getRoot().add(ui_winAccessControlTool1);
 
@@ -51,7 +51,7 @@ qx.Class.define("bibliograph.Application",
        * Folder Tree window
        */
       var ui_winFolderTreeWindow1 = new bibliograph.ui.window.FolderTreeWindowUi();
-      ui_winFolderTreeWindow1.setWidgetId("folderTreeWindow");
+      ui_winFolderTreeWindow1.setWidgetId("bibliograph/folderTreeWindow");
       ui_winFolderTreeWindow1.setVisibility("excluded");
       this.getRoot().add(ui_winFolderTreeWindow1);
 
@@ -59,7 +59,7 @@ qx.Class.define("bibliograph.Application",
        * Preferences window
        */
       var ui_winPreferencesWindow1 = new bibliograph.ui.window.PreferencesWindow();
-      ui_winPreferencesWindow1.setWidgetId("preferencesWindow");
+      ui_winPreferencesWindow1.setWidgetId("bibliograph/preferencesWindow");
       ui_winPreferencesWindow1.setVisibility("excluded");
       this.getRoot().add(ui_winPreferencesWindow1);
 
@@ -75,7 +75,7 @@ qx.Class.define("bibliograph.Application",
        * About window
        */
       var ui_winAboutWindow1 = new bibliograph.ui.window.AboutWindow();
-      ui_winAboutWindow1.setWidgetId("aboutWindow");
+      ui_winAboutWindow1.setWidgetId("bibliograph/aboutWindow");
       ui_winAboutWindow1.setVisibility("excluded");
       this.getRoot().add(ui_winAboutWindow1);
 
@@ -83,7 +83,7 @@ qx.Class.define("bibliograph.Application",
        * Search help window
        */
       var ui_winSearchHelpWindow1 = new bibliograph.ui.window.SearchHelpWindow();
-      ui_winSearchHelpWindow1.setWidgetId("searchHelpWindow");
+      ui_winSearchHelpWindow1.setWidgetId("bibliograph/searchHelpWindow");
       ui_winSearchHelpWindow1.setVisibility("excluded");
       this.getRoot().add(ui_winSearchHelpWindow1);
       var qxVbox1 = new qx.ui.layout.VBox(null, null, null);
@@ -98,7 +98,7 @@ qx.Class.define("bibliograph.Application",
        */
       var loginDialog = new dialog.Login();
       loginDialog.set({
-        widgetId : "loginDialog",
+        widgetId : "bibliograph/loginDialog",
         allowCancel : true,
         checkCredentials : this.checkLogin,
         showForgotPassword : false,
@@ -167,7 +167,7 @@ qx.Class.define("bibliograph.Application",
        * Item view
        */
       var ui_mainItemView1 = new bibliograph.ui.main.ItemViewUi();
-      ui_mainItemView1.setWidgetId("itemView");
+      ui_mainItemView1.setWidgetId("bibliograph/itemView");
       qxVsplit1.add(ui_mainItemView1);
       ui_mainItemView1.bind("view", this.getApplication(), "itemView", {});
       this.getApplication().bind("itemView", ui_mainItemView1, "view", {});

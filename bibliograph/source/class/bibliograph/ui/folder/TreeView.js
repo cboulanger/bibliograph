@@ -129,7 +129,7 @@ qx.Class.define("bibliograph.ui.folder.TreeView",
     _moveFolderDialog : function()
     {
       var app = this.getApplication();
-      var win = app.getWidgetById("folderTreeWindow");
+      var win = app.getWidgetById("bibliograph/folderTreeWindow");
       win.addListenerOnce("nodeSelected", function(e)
       {
         var node = e.getData();

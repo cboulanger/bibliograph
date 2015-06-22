@@ -75,7 +75,7 @@ qx.Class.define("csl.FormattedViewUi",
       qxMenuBarButton4.setLabel(this.tr('Tabular View'));
       menuBar.add(qxMenuBarButton4);
       qxMenuBarButton4.addListener("click", function(e) {
-        this.getApplication().getWidgetById("itemView").showTabularView();
+        this.getApplication().getWidgetById("bibliograph/itemView").showTabularView();
       }, this);
     }
   }

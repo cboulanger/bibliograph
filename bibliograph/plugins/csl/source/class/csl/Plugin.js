@@ -37,7 +37,7 @@ qx.Class.define("csl.Plugin",
        * get the item view widget
        */
       var app = qx.core.Init.getApplication();
-      var itemView = app.getWidgetById("itemView");
+      var itemView = app.getWidgetById("bibliograph/itemView");
 
       /*
        * add new view to view stack

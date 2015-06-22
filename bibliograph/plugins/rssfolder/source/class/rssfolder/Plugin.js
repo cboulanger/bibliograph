@@ -75,7 +75,7 @@ try{
       /*
        * Overlay for import menu
        */
-      var importMenu = app.getWidgetById("importMenu");
+      var importMenu = app.getWidgetById("bibliograph/importMenu");
       var menuButton1 = new qx.ui.menu.Button(this.tr("From RSS Feed"));
       menuButton1.setEnabled(false);
       menuButton1.setVisibility("excluded");

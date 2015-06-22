@@ -30,7 +30,7 @@ qx.Class.define("mdbackup.Plugin",
     {
       // vars
       var app         = this.getApplication();
-      var systemMenu  = app.getWidgetById("bibliograph-menu-system");
+      var systemMenu  = app.getWidgetById("bibliograph/menu-system");
       var permMgr     = app.getAccessManager().getPermissionManager();
       var rpcMgr      = app.getRpcManager();
       

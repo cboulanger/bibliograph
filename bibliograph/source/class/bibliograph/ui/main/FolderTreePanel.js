@@ -38,7 +38,7 @@ qx.Class.define("bibliograph.ui.main.FolderTreePanel",
       qxMenuBar1.add(titleLabel);
       var treeWidget = new bibliograph.ui.folder.TreeViewUi();
       treeWidget.setShowColumnHeaders(true);
-      treeWidget.setWidgetId("mainFolderTree");
+      treeWidget.setWidgetId("bibliograph/mainFolderTree");
       treeWidget.setWidth(200);
       treeWidget.setColumnHeaders([this.tr('Folders'), '#']);
       qxComposite1.add(treeWidget, {

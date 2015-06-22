@@ -14,7 +14,7 @@
      * Christian Boulanger (cboulanger)
 
 ************************************************************************ */
-/*global qx qcl bibliograph virtualdata*/
+/*global qx qcl dialog bibliograph virtualdata*/
 
 /**
  * Base class for Table widgets
@@ -302,7 +302,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
         /*
          * show breadcrumb
          */
-        var mainFolderTree = this.getApplication().getWidgetById("mainFolderTree");
+        var mainFolderTree = this.getApplication().getWidgetById("bibliograph/mainFolderTree");
         var selectedNode = mainFolderTree.getSelectedNode();
         if (selectedNode && selectedNode.data.id == folderId)
         {
@@ -1043,7 +1043,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
     _moveReference : function()
     {
       var app = this.getApplication();
-      var win = app.getWidgetById("folderTreeWindow");
+      var win = app.getWidgetById("bibliograph/folderTreeWindow");
       win.addListenerOnce("nodeSelected", function(e)
       {
         var node = e.getData();
@@ -1069,7 +1069,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
     _copyReference : function()
     {
       var app = this.getApplication();
-      var win = app.getWidgetById("folderTreeWindow");
+      var win = app.getWidgetById("bibliograph/folderTreeWindow");
       win.addListenerOnce("nodeSelected", function(e)
       {
         var node = e.getData();

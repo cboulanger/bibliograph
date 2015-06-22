@@ -33,7 +33,7 @@ qx.Class.define("bibliograph.ui.main.ReferenceListView",
       this.setLayout(qxHbox1)
       var mainListView = new bibliograph.ui.reference.ListViewUi();
       this.mainListView = mainListView;
-      mainListView.setWidgetId("mainListView");
+      mainListView.setWidgetId("bibliograph/mainListView");
       mainListView.setAllowStretchY(true);
       qxComposite1.add(mainListView, {flex : 1});
 

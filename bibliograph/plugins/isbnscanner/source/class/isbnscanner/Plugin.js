@@ -41,7 +41,7 @@ qx.Class.define("isbnscanner.Plugin",
       /*
        * Overlays for import menu
        */
-      var importMenu = app.getWidgetById("importMenu");
+      var importMenu = app.getWidgetById("bibliograph/importMenu");
       
       /*
        * use barcode scanner (keyboard mode)
@@ -117,7 +117,7 @@ qx.Class.define("isbnscanner.Plugin",
       /*
        * Overlays for preference window
        */
-      var prefsTabView = app.getWidgetById("bibliograph.preferences.tabView");
+      var prefsTabView = app.getWidgetById("bibliograph/preferences-tabView");
       var pluginTab = new qx.ui.tabview.Page( this.tr('Import by ISBN') );
       pluginTab.setVisibility("excluded");
       prefsTabView.add(pluginTab);

@@ -112,12 +112,12 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
        */
       var dsBtn = new qx.ui.toolbar.Button(this.tr('Datasources'), "icon/16/apps/utilities-archiver.png", null);
       dsBtn.setLabel(this.tr('Datasources'));
-      dsBtn.setWidgetId("datasourceButton");
+      dsBtn.setWidgetId("bibliograph/datasourceButton");
       dsBtn.setVisibility("excluded");
       dsBtn.setIcon("icon/16/apps/utilities-archiver.png");
       qxToolBarPart2.add(dsBtn);
       dsBtn.addListener("execute", function(e) {
-        this.getApplication().getWidgetById("datasourceWindow").show();
+        this.getApplication().getWidgetById("bibliograph/datasourceWindow").show();
       }, this);
 
       /*
@@ -133,7 +133,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       });
       var systemMenu = new qx.ui.menu.Menu();
       systemButton.setMenu(systemMenu);
-      systemMenu.setWidgetId("bibliograph-menu-system");
+      systemMenu.setWidgetId("bibliograph/menu-system");
 
       /*
        * Preferences
@@ -145,7 +145,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
         converter : qcl.bool2visibility
       });
       prefBtn.addListener("execute", function(e) {
-        var win = this.getApplication().getWidgetById("preferencesWindow").show();
+        var win = this.getApplication().getWidgetById("bibliograph/preferencesWindow").show();
       }, this);
 
       /*
@@ -158,7 +158,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
         converter : qcl.bool2visibility
       });
       aclBtn.addListener("execute", function(e) {
-        var win = this.getApplication().getWidgetById("accessControlTool").show();
+        var win = this.getApplication().getWidgetById("bibliograph/accessControlTool").show();
       }, this);
 
       /*
@@ -185,7 +185,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
         converter : qcl.bool2visibility
       });
       var qxMenu3 = new qx.ui.menu.Menu();
-      qxMenu3.setWidgetId("importMenu");
+      qxMenu3.setWidgetId("bibliograph/importMenu");
       importBtn.setMenu(qxMenu3);
 
       /*
@@ -205,7 +205,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       toolBar.add(helpMenuBtn);
       var helpMenu = new qx.ui.menu.Menu();
       helpMenuBtn.setMenu(helpMenu);
-      helpMenu.setWidgetId("application.helpMenu");
+      helpMenu.setWidgetId("bibliograph/helpMenu");
 
       /*
        * Online help
@@ -247,13 +247,13 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       toolBar.add(qxAtom1, {
         flex : 10
       });
-      var applicationTitleLabel = new qx.ui.basic.Label(null);
-      this.applicationTitleLabel = applicationTitleLabel;
-      applicationTitleLabel.setPadding(10);
-      applicationTitleLabel.setWidgetId("applicationTitleLabel");
-      applicationTitleLabel.setRich(true);
-      applicationTitleLabel.setTextAlign("right");
-      toolBar.add(applicationTitleLabel);
+      var dsNameLabel = new qx.ui.basic.Label(null);
+      this.applicationTitleLabel = dsNameLabel;
+      dsNameLabel.setPadding(10);
+      dsNameLabel.setWidgetId("bibliograph/datasource-name");
+      dsNameLabel.setRich(true);
+      dsNameLabel.setTextAlign("right");
+      toolBar.add(dsNameLabel);
 
       /*
        * Label to indicate application mode
@@ -314,7 +314,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
           app.setFolderId(0);
           app.setQuery(query);
           qx.event.message.Bus.dispatch(new qx.event.message.Message("bibliograph.userquery", query));
-          app.getWidgetById("searchHelpWindow").hide();
+          app.getWidgetById("bibliograph/searchHelpWindow").hide();
         }
       }, this);
       searchbox.addListener("dblclick", function(e) {
@@ -376,7 +376,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       {
         var query = this.searchbox.getValue();
         var app = this.getApplication();
-        app.getWidgetById("searchHelpWindow").hide();
+        app.getWidgetById("bibliograph/searchHelpWindow").hide();
         app.setFolderId(0);
         if (app.getQuery() == query)app.setQuery(null);
 
@@ -394,7 +394,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       {
         this.searchbox.setValue("");
         this.searchbox.focus();
-        this.getApplication().getWidgetById("searchHelpWindow").hide();
+        this.getApplication().getWidgetById("bibliograph/searchHelpWindow").hide();
       }, this);
       var qxToolBarButton5 = new qx.ui.toolbar.Button(null, "bibliograph/icon/16/help.png", null);
       qxToolBarButton5.setIcon("bibliograph/icon/16/help.png");
@@ -405,7 +405,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       });
       qxToolBarButton5.addListener("execute", function(e)
       {
-        var hwin = this.getApplication().getWidgetById("searchHelpWindow");
+        var hwin = this.getApplication().getWidgetById("bibliograph/searchHelpWindow");
         hwin.show();
         hwin.center();
       }, this);

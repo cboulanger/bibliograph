@@ -71,7 +71,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditorUi",
        */
       var stackView = new qx.ui.container.Stack();
       this.stackView = stackView;
-      this.setWidgetId("referenceEditorStackView");
+      this.setWidgetId("bibliograph/referenceEditorStackView");
       qxComposite1.add(stackView, {
         flex : 1
       });

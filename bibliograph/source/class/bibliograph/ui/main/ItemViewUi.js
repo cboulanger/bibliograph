@@ -45,7 +45,7 @@ qx.Class.define("bibliograph.ui.main.ItemViewUi",
        * reference editor
        */
       var referenceEditor = new bibliograph.ui.item.ReferenceEditorUi();
-      referenceEditor.setWidgetId("referenceEditor");
+      referenceEditor.setWidgetId("bibliograph/referenceEditor");
       referenceEditor.setVisibility("hidden");
       itemViewStack.add(referenceEditor);
       referenceEditor.setUserData("name", "referenceEditor");

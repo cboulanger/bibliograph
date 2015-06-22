@@ -31,7 +31,7 @@ qx.Class.define("backup.Plugin",
     {
       // vars
       var app         = this.getApplication();
-      var systemMenu  = app.getWidgetById("bibliograph-menu-system");
+      var systemMenu  = app.getWidgetById("bibliograph/menu-system");
       var permMgr     = app.getAccessManager().getPermissionManager();
       var rpcMgr      = app.getRpcManager();
       
@@ -124,8 +124,8 @@ qx.Class.define("backup.Plugin",
         var msg = this.tr("The datasource has just been restored to a previous state and will now be reloaded.");
         dialog.Dialog.alert(msg, function()
         {
-          app.getWidgetById("mainFolderTree").reload();
-          app.getWidgetById("mainListView").reload();
+          app.getWidgetById("bibliograph/mainFolderTree").reload();
+          app.getWidgetById("bibliograph/mainListView").reload();
           app.setModelId(0);
         }, this);
       }, this);

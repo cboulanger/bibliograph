@@ -52,7 +52,7 @@ qx.Class.define("z3950.Plugin",
       /*
        * add a new menu button
        */
-      var importMenu = app.getWidgetById("importMenu");
+      var importMenu = app.getWidgetById("bibliograph/importMenu");
       var menuButton = new qx.ui.menu.Button(this.tr("Import from library catalog"));
       menuButton.addListener("execute", function() {
         importWindow.show();
@@ -64,7 +64,7 @@ qx.Class.define("z3950.Plugin",
        * Overlays for preference window
        */
 try{
-      var prefsTabView = app.getWidgetById("bibliograph.preferences.tabView");
+      var prefsTabView = app.getWidgetById("bibliograph/preferences-tabView");
       var pluginTab = new qx.ui.tabview.Page( this.tr('Z39.50 Import') );
       pluginTab.setVisibility("excluded");
       prefsTabView.add(pluginTab);

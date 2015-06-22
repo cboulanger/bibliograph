@@ -529,7 +529,7 @@ qx.Class.define("bibliograph.Main",
       {
         var data = e.getData();
         if (data.datasource !== this.getDatasource())return;
-        this.getWidgetById("mainListView").reload();
+        this.getWidgetById("bibliograph/mainListView").reload();
       }, this);
 
       /*
@@ -537,7 +537,7 @@ qx.Class.define("bibliograph.Main",
        */
       bus.subscribe("loginDialog.show", function()
       {
-        this.getWidgetById("loginDialog").show();
+        this.getWidgetById("bibliograph/loginDialog").show();
       }, this);
 
     },
@@ -644,7 +644,7 @@ qx.Class.define("bibliograph.Main",
         value = this.getConfigManager().getKey("application.title");
       }
       window.document.title = value;
-      this.getWidgetById("applicationTitleLabel").setValue('<span style="font-size:1.2em;font-weight:bold">' + value + '</spsn>');
+      this.getWidgetById("bibliograph/datasource-name").setValue('<span style="font-size:1.2em;font-weight:bold">' + value + '</spsn>');
     },
 
     /**
@@ -773,7 +773,7 @@ qx.Class.define("bibliograph.Main",
           /*
            * else show login dialog
            */
-          this.getWidgetById("loginDialog").show();
+          this.getWidgetById("bibliograph/loginDialog").show();
         }
       }
     },
@@ -909,7 +909,7 @@ qx.Class.define("bibliograph.Main",
         if (!datasource)
         {
           this.setDatasourceLabel(this.getConfigManager().getKey("application.title"));
-          var dsWin = this.getWidgetById("datasourceWindow");
+          var dsWin = this.getWidgetById("bibliograph/datasourceWindow");
           dsWin.open();
           dsWin.center();
         } else
@@ -922,7 +922,7 @@ qx.Class.define("bibliograph.Main",
       /*
        * show datasource button depending on whether there is a choice
        */
-      this.getWidgetById("datasourceButton").setVisibility(datasourceCount > 1 ? "visible" : "excluded");
+      this.getWidgetById("bibliograph/datasourceButton").setVisibility(datasourceCount > 1 ? "visible" : "excluded");
     },
 
     /*
@@ -960,7 +960,7 @@ qx.Class.define("bibliograph.Main",
      * Shows the "about" window
      */
     showAboutWindow : function() {
-      this.getWidgetById("aboutWindow").open();
+      this.getWidgetById("bibliograph/aboutWindow").open();
     },
 
     /*

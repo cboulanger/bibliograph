@@ -35,7 +35,7 @@ qx.Class.define("nnforum.Plugin",
       var permMgr = app.getAccessManager().getPermissionManager();
       var confMgr = app.getConfigManager();
       
-      var helpMenu = app.getWidgetById("application.helpMenu");
+      var helpMenu = app.getWidgetById("bibliograph/helpMenu");
       var forumBtn = new qx.ui.menu.Button(this.tr('User Forum'));
       forumBtn.setVisibility("excluded");
       helpMenu.add(forumBtn);
@@ -86,7 +86,7 @@ qx.Class.define("nnforum.Plugin",
        * Overlays for preference window
        */
  try{
-//       var prefsTabView = app.getWidgetById("bibliograph.preferences.tabView");
+//       var prefsTabView = app.getWidgetById("bibliograph/preferences-tabView");
 //       var pluginTab = new qx.ui.tabview.Page( this.tr('NN-Forum') );
 //       //pluginTab.setVisibility("excluded");
       

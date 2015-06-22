@@ -432,7 +432,7 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
       qxComposite6.add(rightLabel);
       var rightList = new qx.ui.form.List();
       rightList.setSelectionMode("multi");
-      rightList.setWidgetId("rightList");
+      rightList.setWidgetId("bibliograph/acltool-rightList");
       qxComposite6.add(rightList, {
         flex : 1
       });

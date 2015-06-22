@@ -54,7 +54,7 @@ qx.Class.define("bibliograph.ui.window.PreferencesWindow",
        */
       var tabView = new qx.ui.tabview.TabView();
       this.tabView = tabView;
-      tabView.setWidgetId("bibliograph.preferences.tabView");
+      tabView.setWidgetId("bibliograph/preferences-tabView");
       qxWindow1.add(tabView, { flex : 1 });
       
       // work around strange bug that displays first and second tab simultaneously
