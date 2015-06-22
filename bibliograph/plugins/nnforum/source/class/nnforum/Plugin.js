@@ -73,7 +73,7 @@ qx.Class.define("nnforum.Plugin",
         app.getRpcManager().execute(
           "nnforum.service", "getUnreadPosts", [], 
           function(unreadPosts) {
-            unreadPostsView.setVisibility( unreadPosts ? "visible" : "excluded" );
+            if (! unreadPosts ) unreadPostsView.setVisibility( "excluded" );
             unreadPostsView.setLabel( "" + unreadPosts );
             setTimeout(checkFunc, 60000 );
           }, this
