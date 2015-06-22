@@ -19,38 +19,4 @@ The following plugins are still under development and not supported:
 - [rssfolder](https://github.com/cboulanger/bibliograph/tree/master/bibliograph/plugins/rssfolder): Publish selected folders as RSS Feeds and 
   import from those feeds
 
-You can easily add your own plugin:
-- Execute `./generate.py create-plugin` in the "bibliograph" folder and follow the
-  instructions.
-- The easiest was to write a plugin is to reuse code from other plugins. The 
-  "backup" plugin can be used as a model on how to write backend and
-  frontend plugin code. The "fieldsExtensionExmpl" template shows how to extend
-  the fields of the reference records.
-
-When writing a plugin, you can add elements to existing widgets such as menu 
-items or tab pages. Here is a list of widget ids that allow you to get the 
-parent widget ( `this.getApplication().getWidgetById("XXX").add( myWidget );`)
-- bibliograph/datasourceWindow
-- bibliograph/accessControlTool
-- bibliograph/folderTreeWindow
-- bibliograph/preferencesWindow
-- bibliograph/importWindow
-- bibliograph/aboutWindow
-- bibliograph/searchHelpWindow
-- bibliograph/folder-settings-menu
-- bibliograph/itemView
-- bibliograph/referenceEditorStackView
-- bibliograph/mainFolderTree
-- bibliograph/referenceEditor
-- bibliograph/mainListView
-- bibliograph/toolbar
-- bibliograph/datasourceButton
-- bibliograph/menu-system
-- bibliograph/importMenu
-- application.helpMenu -> bibliograph/helpMenu
-- applicationTitleLabel -> bibliograph/datasource-name
-- rightList -> bibliograph/acltool-rightList
-- bibliograph.preferences.tabView -> bibliograph/preferences-tabView
-- 
-
-
+Information on writing new plugins is [here](development.md).
