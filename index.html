@@ -38,223 +38,133 @@
 collection, editing and publishing of bibliographic data.</p>
 
 <ul>
-<li><a href="http://demo.bibliograph.org">Demo installation</a>
-</li>
-<li><a href="http://help.bibliograph.org">Documentation</a>
-</li>
-<li><a href="http://sourceforge.net/projects/bibliograph/files/latest/download">Download the latest version</a>
-</li>
-<li><a href="http://forum.bibliograph.org">User Forum</a>
-</li>
-<li><a href="http://sourceforge.net/p/bibliograph/donate/">Donate to the project</a>
-</li>
-<li>
-<a href="https://github.com/cboulanger/bibliograph">Development</a>
-</li>
-</ul><p>Bibliograph</p>
+<li><a href="http://demo.bibliograph.org">Demo installation</a></li>
+<li><a href="http://help.bibliograph.org">End User Documentation</a></li>
+<li><a href="http://sourceforge.net/projects/bibliograph/files/latest/download">Download</a></li>
+<li><a href="/cboulanger/bibliograph/blob/master/install.md">Installation</a></li>
+<li><a href="https://registry.hub.docker.com/u/cboulanger/bibliograph/">Docker Build</a></li>
+<li><a href="/cboulanger/bibliograph/blob/master/release-notes.md">Release Notes</a></li>
+<li><a href="http://forum.bibliograph.org">User Forum</a></li>
+<li><a href="http://sourceforge.net/p/bibliograph/donate">Donate to the project</a></li>
+</ul>
+
+<p>Bibliograph</p>
 
 <ul>
 <li>is an application that lets you collect, edit, and publish bibliographic data 
-collaboratively on the web.</li>
+collaboratively on the web;</li>
 <li>has a modern and intuitive user interface that makes the daily life of working 
-with bibliographies and library collections easy and fun.</li>
+with bibliographies and library collections easy and fun;</li>
 <li>allows researchers, librarians, teachers and students work together online 
-without having to install software locally.</li>
-<li>is fully open source and free to download and install.</li>
-</ul><p>Bibliograph can be used by</p>
+without having to install software locally;</li>
+<li>is fully open source and free to download, install, use and adapt to your 
+particular need.</li>
+</ul>
+
+<p>Bibliograph can be used by</p>
 
 <ul>
 <li>scholars and librarians who want to publish a library collection or a 
-thematic bibliography online</li>
+thematic bibliography online;</li>
 <li>groups of researchers who work together in a research project and want to 
-collect and share bibliographic references</li>
+collect and share bibliographic references;</li>
 <li>professors and teachers who want to share bibliographic information with their
-students</li>
-</ul><h2>
-<a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>Features</h2>
+students.</li>
+</ul>
+
+<h2><a id="user-content-features" class="anchor" href="#features" aria-hidden="true"><span class="octicon octicon-link"></span></a>Features</h2>
 
 <ul>
 <li>Organize bibliographic records in static folders or dynamic collections based 
-on queries</li>
-<li>Rich metadata, Autocompletion and duplicate detection</li>
+on queries;</li>
+<li>Rich metadata, Autocompletion and duplicate detection;</li>
 <li>Allows natural language queries like "title contains hamlet and author 
-beginswith shake"</li>
+beginswith shake";</li>
 <li>Fine-grained access control system with users, roles, groups and permissions 
 allows flexible user management and contol of who is allowed to view, enter, 
-edit and delete data.</li>
-<li>Unlimited amount of separate databases</li>
-<li>Imports data from library catalogues (through Z39.50 interface) and from 
-various file-based data formats (RIS, BibTeX, Endnote, MODS, and more)</li>
-<li>Export data into open formats</li>
+edit and delete data;</li>
+<li>Unlimited amount of separate databases;</li>
+<li>Imports data from library catalogues (through Z39.50 interface), from 
+various file-based data formats (RIS, BibTeX, Endnote, MODS, and more), and
+from RSS feeds.</li>
+<li>Export into various open formats and publish folders as RSS feeds;</li>
 <li>Formats bibliographic records with various citation styles (APA, Chicago, ...) 
-using CSL templates and the citeproc style processor (<a href="http://citationstyles.org">http://citationstyles.org</a>)</li>
-<li>Can create and restore snapshot backups of individual databases </li>
-<li>LDAP integration to connect to existing LDAP servers</li>
-<li>Fully open source, can be easily adapted and extended</li>
-<li>Extensible data model allows easy modification of record fields and integration 
-of a variety of backends (e.g., NoSql, xml, REST or binary backends such as IMAP)</li>
-</ul><h2>
-<a name="prerequisites" class="anchor" href="#prerequisites"><span class="octicon octicon-link"></span></a>Prerequisites</h2>
+using CSL templates and the citeproc style processor (<a href="http://citationstyles.org">http://citationstyles.org</a>);</li>
+<li>Ability to create and restore snapshot backups of individual databases;</li>
+<li>LDAP integration to connect to existing LDAP servers;</li>
+<li>Optionally provides a user forum;</li>
+<li>Fully open source, can be easily adapted and extended by plugins. </li>
+</ul>
+
+<h2><a id="user-content-plugins" class="anchor" href="#plugins" aria-hidden="true"><span class="octicon octicon-link"></span></a>Plugins</h2>
+
+<p>Bibliograph implements most advanced features through plugins. For a list of
+Plugins, see <a href="/cboulanger/bibliograph/blob/master/plugins.md">here</a>.</p>
+
+<h2><a id="user-content-installation-and-deployment" class="anchor" href="#installation-and-deployment" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation and Deployment</h2>
+
+<p>See <a href="/cboulanger/bibliograph/blob/master/install.md">here</a>.</p>
+
+<h2><a id="user-content-support" class="anchor" href="#support" aria-hidden="true"><span class="octicon octicon-link"></span></a>Support</h2>
 
 <ul>
-<li>PHP >= 5.3  with the following extensions: intl, gettext, yaz/xsl (optional), ldap (optional), zip (optional). For optimal performance, it is advised to enable OPcache
-  (http://php.net/manual/en/intro.opcache.php)</li>
-<li>MySql >= 5.3</li>
-</ul><h2>
-<a name="preparations" class="anchor" href="#preparations"><span class="octicon octicon-link"></span></a>Preparations</h2>
-
-<ul>
-<li>Rename services/config/bibliograph.ini.dist.php to
-services/config/bibliograph.ini.php</li>
-<li>Create a user "bibliograph" in your MySql-database with password "bibliograph"
-(if you want to use a different password for security, enter it in the 
-[database] section of bibliograph.ini.php.</li>
-<li>Create the following databases: "bibliograph_admin", "bibliograph_tmp", 
-"bibliograph_user". If you want to use different names or use only one database, 
-adapt the settings in the [database] section of bibliograph.ini.php.</li>
-<li>Give the bibliograph user ALL rights for these databases</li>
-<li>Rename services/config/server.conf.dist.php in services/config/server.conf.php</li>
-<li>Enter the email address of the administrator of the installation in the 
-[admin.email] section in services/config/bibliograph.ini.php</li>
-</ul><h2>
-<a name="optional" class="anchor" href="#optional"><span class="octicon octicon-link"></span></a>Optional</h2>
-
-<ul>
-<li>To import from library databases, you need to install the php YAZ extension 
-(<a href="http://www.indexdata.com/phpyaz">http://www.indexdata.com/phpyaz</a>):
-<a href="https://code.google.com/p/list8d/wiki/InstallingYaz">https://code.google.com/p/list8d/wiki/InstallingYaz</a>
-and the php-xsl extension (Debian: apt-get install php5-xsl)</li>
-<li>To enable export and import of various bibliographic data formats, install the 
-bibutils toolset (Debian: apt-get install bibutils) and adapt the BIBUTILS_PATH 
-constant in config/server.conf.php</li>
-<li>If you want to allow backups, install the php zip extension and grant the global 
-"RELOAD" privilege to the "bibliograph" user. if the backups should not be 
-stored in the system tempdir, adapt the BIBLIOGRAPH_BACKUP_PATH
-constant in config/server.conf.php and point it to a world-writable folder 
-outside the document root of the web server.</li>
-<li>You can connect a ldap server for authentication (adapt config/bibliograph.ini.php)</li>
-</ul><h2>
-<a name="first-run" class="anchor" href="#first-run"><span class="octicon octicon-link"></span></a>First run</h2>
-
-<ul>
-<li>fire up a browser and open the "build" folder. If problems with the setup 
-occur, error messages will be displayed and will tell you to fix the problems.</li>
-<li>After the setup has fininished, reload the page and login as "Admin"/"admin"</li>
-<li>Got to System -&gt; Plugins. Install the plugins you need.</li>
-<li>Reload and you should be all set.</li>
-</ul><h2>
-<a name="deployment" class="anchor" href="#deployment"><span class="octicon octicon-link"></span></a>Deployment</h2>
-
-<ul>
-<li>Securing the Server: The PHP backend has one single entry-point: 
-services/server.php. If you want to make sure no other PHP script is called, 
-restrict access to php files to this path.</li>
-<li>It is recommended to create a redirection from the top-level path to the 
-bibliograph/build folder</li>
-<li>By default, Bibliograph stores persistent data in the system temporary folder 
-(on Linux, this is usually /tmp). This is fine for testing the application, 
-but can lead to the loss of data whenever this folder is automatically cleaned
-up by the OS. For permanent production installations, you MUST change the 
-QCL_VAR_DIR constant in services/config/server.conf.php to a world-writable 
-directory outside the document root of the web server.</li>
-<li>Before using the software in a production environment, change the password of 
-the "Admin" user, delete the "Manager" and "User" users and configure your own 
-users in the System &gt; Acces Control tool.</li>
-<li>Change the access.enforce_https_login preference in config/bibliograph.ini.php 
-to "yes" so that passwords are not sent in plain text.</li>
-<li>Change the QCL_APPLICATION_MODE constant in config/server.conf.php to 
-"production". When you need to apply updates, change it back to "maintenance".</li>
-</ul><h2>
-<a name="support" class="anchor" href="#support"><span class="octicon octicon-link"></span></a>Support</h2>
-
-<ul>
-<li>Online documentation is here: <a href="http://www.bibliograph.org">http://www.bibliograph.org</a>. Most of it is still
-in German, but English documentation will be added once there is some interest.</li>
+<li>See the extensive <a href="http://help.bibliograph.org">end user online documentation</a>.</li>
 <li>For general questions, please write to info at bibliograph dot org or send 
-a tweet to @bibliograph2. A support mailing list may follow.</li>
-<li>Bugs and feature requests should be registered as github issues:
-<a href="https://github.com/cboulanger/bibliograph/issues">https://github.com/cboulanger/bibliograph/issues</a>
-</li>
+a tweet to @bibliograph2.</li>
+<li>There is also a <a href="http://forum.bibliograph.org">user forum</a> to discuss issues with other users.</li>
+<li>Bugs and feature requests should be registered as <a href="https://github.com/cboulanger/bibliograph/issues">github issues</a>.</li>
 <li>Paid support for installation or hosting is available, also if you need a plugin
 to support your particular collection.</li>
-</ul><h2>
-<a name="development" class="anchor" href="#development"><span class="octicon octicon-link"></span></a>Development</h2>
-
-<p>This is open source software, everybody is invited to hack on the code and help 
-make it better! Bug fixes and new plugins are very welcome.</p>
-
-<ul>
-<li>Get the code by cloning it from <a href="mailto:git@github.com">git@github.com</a>:cboulanger/bibliograph.git 
-(Most easily, by cloning it at GitHub itself).</li>
-<li>Building the application requires the qooxdoo library (v3.5.1, v4.0 might work, 
-but is not tested):
-
-<ul>
-<li>Download the 3.5.1 SDK from 
-<a href="http://sourceforge.net/projects/qooxdoo/files/qooxdoo-current/">http://sourceforge.net/projects/qooxdoo/files/qooxdoo-current/</a>
-</li>
-<li>Unzip the SDK into a top-level "qooxdoo" folder. You can also adapt the path
-to the SDK in the bibliograph/config.json configuration file if you don't 
-want to store it there. For development, the location of the SDK files must 
-be accessible to the web server.</li>
-<li>Issue "./generate build" in the "bibliograph" folder.</li>
 </ul>
-</li>
-<li>For deployment, you only need to copy the bibliograph/build and 
-bibliograph/services folders to the production server. The rest is only 
-necessary to build the application.</li>
-</ul><h2>
-<a name="roadmap" class="anchor" href="#roadmap"><span class="octicon octicon-link"></span></a>Roadmap</h2>
+
+<h2><a id="user-content-development--roadmap" class="anchor" href="#development--roadmap" aria-hidden="true"><span class="octicon octicon-link"></span></a>Development &amp; Roadmap</h2>
 
 <ul>
-<li>The current roadmap is here: 
-<a href="https://github.com/cboulanger/bibliograph/blob/master/roadmap.md">https://github.com/cboulanger/bibliograph/blob/master/roadmap.md</a>
-</li>
-<li>If you wish to sponsor a feature, please contact <a href="mailto:info@bibliograph.org">info@bibliograph.org</a>
-</li>
-</ul><h2>
-<a name="i-am-not-a-developer-how-can-i-contribute-to-the-project" class="anchor" href="#i-am-not-a-developer-how-can-i-contribute-to-the-project"><span class="octicon octicon-link"></span></a>I am not a developer. How can I contribute to the project?</h2>
+<li>You can <a href="/cboulanger/bibliograph/blob/master/development.md">hack the code</a> and make it better;</li>
+<li>The current roadmap is <a href="/cboulanger/bibliograph/blob/master/roadmap.md">here</a>;</li>
+<li>If you wish to sponsor a feature, please contact info at bibliograph dot org.</li>
+</ul>
+
+<h2><a id="user-content-how-to-contribute" class="anchor" href="#how-to-contribute" aria-hidden="true"><span class="octicon octicon-link"></span></a>How to contribute</h2>
+
+<p>Bibliograph is free (as in beer and in speech). But in order to thrive, the
+project needs your help. Even if you are not a developer, you can contribute:</p>
 
 <ul>
-<li>You can donate and make sure development continues:
-<a href="http://sourceforge.net/p/bibliograph/donate">http://sourceforge.net/p/bibliograph/donate</a>
-</li>
+<li>You can <a href="http://sourceforge.net/p/bibliograph/donate">donate</a> and make sure 
+development continues</li>
 <li>You can help spread the word. The more people use the application, the more
 likely it is that development continues and new features/plugins will be 
-added.</li>
-<li>You can provide feedback and suggest changes or features.</li>
-</ul><h2>
-<a name="credits" class="anchor" href="#credits"><span class="octicon octicon-link"></span></a>Credits</h2>
+added;</li>
+<li>You can <a href="https://github.com/cboulanger/bibliograph/issues">provide feedback, report bugs and/or suggest new features</a>.</li>
+</ul>
 
-<p>Open source libraries</p>
+<h2><a id="user-content-credits" class="anchor" href="#credits" aria-hidden="true"><span class="octicon octicon-link"></span></a>Credits</h2>
 
-<ul>
-<li>qooxdoo JavaScript framework: (c)  1&amp;1 Internet AG 
-<a href="http://www.qooxdoo.org">http://www.qooxdoo.org</a>
-</li>
-<li>CSL - The Citation Style Language. (c) Bruce D'Arcus and others
-<a href="http://www.citationstyles.org">http://www.citationstyles.org</a>
-</li>
-<li>CiteProc-PHP. (c) Ron Jerome
-<a href="https://bitbucket.org/rjerome/citeproc-php/">https://bitbucket.org/rjerome/citeproc-php/</a>
-</li>
-<li>CQL-PHP. (c) Robert Sanderson
-<a href="http://cgi.csc.liv.ac.uk/%7Eazaroth">http://cgi.csc.liv.ac.uk/~azaroth</a> (page no longer available)</li>
-</ul><p>Partial funding was provided by</p>
+<p>Open source libraries/applications</p>
 
 <ul>
-<li>Juristische Fakultät (Department of Law), Humboldt-Universität zu Berlin
-<a href="http://www.rewi.hu-berlin.de">http://www.rewi.hu-berlin.de</a>
-</li>
-<li>Organized Crime Research Project, Dr. Klaus von Lampe
-<a href="http://www.organized-crime.de/">http://www.organized-crime.de/</a>
-</li>
-</ul><p>The author wishes to thank:</p>
+<li><a href="http://www.qooxdoo.org">qooxdoo JavaScript framework</a>: (c) 1&amp;1 Internet AG </li>
+<li><a href="http://www.citationstyles.org">CSL - The Citation Style Language</a>.</li>
+<li><a href="https://bitbucket.org/rjerome/citeproc-php/">CiteProc-PHP</a> by Ron Jerome</li>
+<li><a href="https://github.com/simar0at/sru-cql-parser">CQL/SRU parser</a> by Robert Sanderson and Omar Siam</li>
+<li><a href="http://camendesign.com/nononsense_forum">NoNonsense Forum</a> (CC-BY) Kroc Camen 2010-2015 </li>
+</ul>
+
+<p>Partial funding was provided by</p>
+
+<ul>
+<li><a href="http://www.rewi.hu-berlin.de">Department of Law, Humboldt-Universität zu Berlin</a></li>
+<li><a href="http://www.organized-crime.de/">Organized Crime Research Project</a> (Version 1.0)</li>
+</ul>
+
+<p>The author wishes to thank:</p>
 
 <ul>
 <li>Serge Barysiuk for providing assistance with UI generation, and for designing
-the application logo</li>
-<li>Julika Rosenstock for writing the end user documentation. </li>
+the application logo;</li>
+<li>Julika Rosenstock for writing the first version of the end user documentation, Till Rathschlag
+and Anna Luetkefend for expanding and translating it. </li>
 </ul>
       </section>
     </div>
