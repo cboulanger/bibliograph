@@ -24,6 +24,8 @@ qcl_import("qcl_ui_dialog_Alert");
 qcl_import("qcl_ui_dialog_Popup");
 qcl_import("bibliograph_Cache" );
 qcl_import("bibliograph_model_BibliographicDatasourceModel");
+qcl_import("qcl_application_plugin_Manager");
+
 
 /**
  * Setup class. This class is called on application startup, i.e.
@@ -124,6 +126,7 @@ class bibliograph_service_Setup
       "registerDatasourceSchemas",
       "createExampleDatasources",
       "createInternalDatasources",
+      "autoInstallPlugins"
     );
   }
   
@@ -421,14 +424,68 @@ class bibliograph_service_Setup
     // result
     $this->addLogText($this->tr("Created internal datasources."));
     
+  }
+  
+  /**
+   * Auto-install plugins if text file named "plugins.txt" exists at the top
+   * with either the word "all" or a space separated list of plugin ids to install
+   */
+  protected function autoInstallPlugins()
+  {
+    $manager = qcl_application_plugin_Manager::getInstance(); 
+    $plugins_auto_install_file = "../plugins.txt";
+    $logText = array();
+    if( file_exists($plugins_auto_install_file) )
+    {
+      $this->getLogger()->log("Plugin autoinstall file found.", QCL_LOG_SETUP );
+      $plugins_to_install = explode(" ", file_get_contents($plugins_auto_install_file) ); 
+      
+      foreach ( $manager->getPluginList() as $namedId )
+      {
+        $plugin = $manager->getSetupInstance( $namedId );
+        if( ! in_array( $namedId, $plugins_to_install) and trim($plugins_to_install[0]) != "all" )
+        {
+          continue;
+        }
+        
+        if( $manager->isInstalled( $namedId) )
+        {
+          $msg = $this->tr("Plugin '%s' is already installed.", $plugin->getName() ) ;
+          $this->getLogger()->log( $msg, QCL_LOG_SETUP );
+          $logText[] = $msg;
+          continue;
+        }
+        
+        $msg = sprintf( "Installing plugin '%s'", $plugin->getName() );
+        $this->getLogger()->log( $msg, QCL_LOG_SETUP );
+        try
+        {
+          $installMsg = $plugin->install();
+          $this->getLogger()->log( $installMsg, QCL_LOG_SETUP );
+          $manager->register( $namedId, $plugin );
+          $msg = $this->tr("Installed plugin '%s'",$plugin->getName() );
+          $logText[] = $msg;
+        }
+        catch( qcl_application_plugin_Exception $e )
+        {
+          $msg = $this->tr("Installation of plugin '%s' failed: %s", $plugin->getName(), $e->getMessage());
+          $logText[] = $msg;
+          $this->getLogger()->log( $msg, QCL_LOG_SETUP );
+        }
+      }
+    }
+
+    $logText[] = "\n" . $this->tr("Setup finished. Please reload the application");
+        
     // next
     $this->setMessage($this->tr("Done ..."));
-    $this->addLogText("\n" . $this->tr("Setup finished. Please reload the application"));
+    $this->addLogText(implode("\n",$logText));
     
     // done!
     //$this->useEmbeddedDatabase(false); // now the external database can be used. 
+    $app = $this->getApplication();
     $app->getCache()->setValue("setup",true);
-    $app->getCache()->savePersistenceData(); // todo: shouldn't be neccessary, but is - BUG?
+    $app->getCache()->savePersistenceData(); // todo: shouldn't be neccessary, but is - BUG?    
   }
 
   protected function finish()

@@ -14,3 +14,4 @@ bibliograph/source/script/*
 bibliograph/services/config/bibliograph.ini.php
 bibliograph/services/config/server.conf.php
 bibliograph/deploy-*
+fragments.txt
