@@ -491,5 +491,6 @@ class bibliograph_service_Setup
   protected function finish()
   {
     $this->log("Setup completed.", QCL_LOG_SETUP );
+    return new qcl_ui_dialog_Alert($this->tr("Setup finished. Please reload the application"));
   }
 }
