@@ -5,8 +5,10 @@ Bibliograph is a powerful open source web application for the collaborative
 collection, editing and publishing of bibliographic data.
 
 - [Demo installation](http://demo.bibliograph.org)
-- [Documentation](http://help.bibliograph.org)
+- [End User Documentation](http://help.bibliograph.org)
 - [Download](http://sourceforge.net/projects/bibliograph/files/latest/download)
+- [Installation](install.md)
+- [Docker Build](https://registry.hub.docker.com/u/cboulanger/bibliograph/)
 - [Release Notes](release-notes.md)
 - [User Forum](http://forum.bibliograph.org)
 - [Donate to the project](http://sourceforge.net/p/bibliograph/donate)
@@ -83,11 +85,11 @@ How to contribute
 Bibliograph is free (as in beer and in speech). But in order to thrive, the
 project needs your help. Even if you are not a developer, you can contribute:
 - You can [donate](http://sourceforge.net/p/bibliograph/donate) and make sure 
-  development continues;
+  development continues
 - You can help spread the word. The more people use the application, the more
   likely it is that development continues and new features/plugins will be 
   added;
-- You can provide feedback and suggest changes or features.
+- You can [provide feedback, report bugs and/or suggest new features](https://github.com/cboulanger/bibliograph/issues).
 
 Credits
 --------
@@ -105,4 +107,5 @@ Partial funding was provided by
 The author wishes to thank:
 - Serge Barysiuk for providing assistance with UI generation, and for designing
   the application logo;
-- Julika Rosenstock for writing the first version of the end user documentation. 
+- Julika Rosenstock for writing the first version of the end user documentation, Till Rathschlag
+  and Anna Luetkefend for expanding and translating it. 

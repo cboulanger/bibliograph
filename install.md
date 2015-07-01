@@ -1,6 +1,14 @@
 Installation and Deployment
 ===========================
 
+Docker
+------
+The easiest way to install Bibliograph is by using the [preconfigured docker image](https://registry.hub.docker.com/u/cboulanger/bibliograph/). 
+
+Caveat: this image is currently meant only for testing purposes. If you need a 
+production set up, you have to build your own installation, using the instructions
+below. It might be useful to look at the Ubuntu-based [Dockerfile](https://github.com/cboulanger/bibliograph-docker/blob/master/Dockerfile).
+
 Prerequisites
 -------------
 - PHP >= 5.3 with the following extensions: intl, gettext, yaz/xsl (optional), ldap
