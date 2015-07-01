@@ -15,7 +15,7 @@
 
 ************************************************************************ */
 
-/*global qx qcl backup*/
+/*global qx qcl dialog backup*/
 
 /**
  * Plugin Initializer Class

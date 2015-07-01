@@ -63,11 +63,11 @@ qx.Class.define("z3950.Plugin",
       /*
        * Overlays for preference window
        */
-try{
+
       var prefsTabView = app.getWidgetById("bibliograph/preferences-tabView");
       var pluginTab = new qx.ui.tabview.Page( this.tr('Z39.50 Import') );
       pluginTab.setVisibility("excluded");
-      prefsTabView.add(pluginTab);
+      
       
       // ACL
       permMgr.create("z3950.manage").bind("state", pluginTab, "visibility", {
@@ -143,12 +143,10 @@ try{
       buttons.add(reloadButton);
       reloadButton.addListener("execute",function(){
         store.load("getServerListItems",[false,true]);
-      });          
+      });
       
-      
- }catch(e){
-   console.log(e);
- }
+      // add tab to tabview (must be done at the end)
+      prefsTabView.add(pluginTab);
     }
   }
 });

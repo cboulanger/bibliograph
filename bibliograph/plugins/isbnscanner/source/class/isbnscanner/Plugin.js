@@ -120,7 +120,7 @@ qx.Class.define("isbnscanner.Plugin",
       var prefsTabView = app.getWidgetById("bibliograph/preferences-tabView");
       var pluginTab = new qx.ui.tabview.Page( this.tr('Import by ISBN') );
       pluginTab.setVisibility("excluded");
-      prefsTabView.add(pluginTab);
+      
       permMgr.create("isbnscanner.import").bind("state", pluginTab, "visibility", {
         converter : function(v){ return v ? "visible" : "excluded" }
       });
@@ -159,6 +159,9 @@ qx.Class.define("isbnscanner.Plugin",
       modelSelectBox.addListener("changeSelection", function(e) {
         if (e.getData().length) confMgr.setKey(prefName, e.getData()[0].getUserData("value"));
       }, this);
+      
+      // add tab to tabview (must be done at the end)
+      prefsTabView.add(pluginTab);      
     }
   }
 });

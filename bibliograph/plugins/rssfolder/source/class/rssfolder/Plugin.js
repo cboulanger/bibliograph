@@ -30,7 +30,6 @@ qx.Class.define("rssfolder.Plugin",
     init : function()
     {
       
-try{
       // Manager shortcuts
       var app = qx.core.Init.getApplication();
       var permMgr = app.getAccessManager().getPermissionManager();
@@ -89,11 +88,6 @@ try{
         converter : function(v){ return v ? "visible" : "excluded" }
       });
       importMenu.add(menuButton1);
-      
-      
-} catch(e) {
-  console.warn(e);
-}
 
     }
   }
