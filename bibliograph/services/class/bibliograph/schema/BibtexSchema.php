@@ -125,19 +125,13 @@ class bibliograph_schema_BibtexSchema
       'isbn',
       'lccn'
      ),
+    // non-standard use to create conference paper type
     'conference' => array (
       'author',
       'year',
       'title',
-      'subtitle',
-      'organization',
-      'publisher',
-      'address',
-      'publisher',
-      'series',
-      'volume',
-      'url',
-      'lccn'
+      'booktitle',
+      'url'
      ),
      'inbook' => array (
       'author',
@@ -457,7 +451,7 @@ class bibliograph_schema_BibtexSchema
         'author' => array(
           'label'     => array (
                           'default'      => _('Authors'),
-                          'conference'   => _('Editors'),
+                          'conference'   => _('Authors'),
                           'collection'   => _('Editors'),
                           'proceedings'  => _('Editors')
                          ),
@@ -476,7 +470,10 @@ class bibliograph_schema_BibtexSchema
           'index'     => 'Author'
         ),
         'booktitle' => array(
-          'label'     => _('Book Title'),
+          'label'     => array (
+                          'default'      => _('Book Title'),
+                          'conference'   => _('Conference Title')
+                         ),
           'autocomplete'  => array('separator' => null ),
           'type'      => 'string',
           'bibtex'    => true,
