@@ -98,6 +98,19 @@ class qcl_locale_Manager extends qcl_core_Object
     {
       $this->log( sprintf( 'Locale directory %s does not exist.', $localeDir ));
     }
+    
+    // subscribe to system messages
+    $this->addSubscriber("qcl/access/user-authenticated","onUserAuthenticated");
+	}
+	
+	/**
+	 * subscriber function when user has authenticated
+	 */
+	public function onUserAuthenticated($message)
+	{
+	  $localeFromConfig = $this->getApplication()->getPreference("application.locale");
+	  if( $localeFromConfig ) $this->setLocale($localeFromConfig);
+	  return $localeFromConfig;
 	}
 
 	/**
@@ -210,8 +223,13 @@ class qcl_locale_Manager extends qcl_core_Object
    */
 	public function setLocale($locale=null)
 	{
-    // application textdomain
-    $locale = either( $locale, $this->getUserLocale() );
+    // determine which locale to use
+    if( ! $locale ) 
+    {
+      $locale =  $this->getUserLocale();
+    }
+    
+    // application textdomain      
     $textdomain = $this->getTextDomain( $locale );
     $path = $this->getMessagesRoot();
     bindtextdomain( $textdomain, $path );

@@ -80,9 +80,7 @@ class qcl_event_message_Bus
       throw new InvalidArgumentException("Invalid parameter.");
     }
 
-    $message_db = $this->messages;
-
-    /*
+     /*
      * object id
      */
     $subscriberId = $subscriber->objectId();
@@ -90,25 +88,27 @@ class qcl_event_message_Bus
     /*
      * search if we already have an entry for the filter
      */
-    $index = array_search( $filter, $message_db['filters'] );
+    $index = array_search( $filter, $this->messages['filters'] );
     if ( $index === false )
     {
       /*
        * filter not found, create new filter and data
        */
-      $message_db['filters'][] = $filter;
-      $index = count($message_db['filters']) -1;
-      $message_db['data'][$index] = array(
+      $this->messages['filters'][] = $filter;
+      $index = count($this->messages['filters']) -1;
+      $this->messages['data'][$index] = array(
         array( $subscriberId, $method )
       );
+
     }
     else
     {
       /*
        * filter found, add data
        */
-      $message_db['data'][$index][] = array( $subscriberId, $method );
+      $this->messages['data'][$index][] = array( $subscriberId, $method );
     }
+    $this->log("Added filter '$filter' to subscriber $subscriber, method '$method'.", QCL_LOG_MESSAGE );
   }
   
   /**
@@ -182,19 +182,19 @@ class qcl_event_message_Bus
     /*
      * search message database
      */
-    $message_db = $this->messages;
-    $index = array_search ( $name, $message_db['filters'] );
+    $index = array_search ( $name, $this->messages['filters'] );
 
     /*
      * call registered subscriber methods
      */
     if ( $index !== false )
     {
-      foreach ( $message_db['data'][$index] as $subscriberData )
+      foreach ( $this->messages['data'][$index] as $subscriberData )
       {
         list( $subscriberId, $method ) = $subscriberData;
         $subscriber = $this->getObjectById( $subscriberId );
-        $subscriber->$method( $message );
+        $this->log("Calling $subscriber ->  $method ($message).", QCL_LOG_MESSAGE );
+        $value = $subscriber->$method( $message );
       }
       return true; // todo: Should this really return here?
     }

@@ -124,6 +124,11 @@ class qcl_access_SessionController
      */
     $this->setSessionId( $sessionId );
     $this->createUserSessionByUserId( $userId );
+    
+    /*
+     * Notify listeners
+     */
+    $this->dispatchMessage("qcl/access/user-authenticated",$this->getActiveUser());
     return $userId;
   }
 

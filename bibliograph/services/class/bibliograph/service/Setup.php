@@ -229,6 +229,9 @@ class bibliograph_service_Setup
     $enforce_https = $app->getIniValue("access.enforce_https_login" );
     $app->getConfigModel()->createKeyIfNotExists("access.enforce_https_login","boolean");
     $app->getConfigModel()->setKeyDefault("access.enforce_https_login", $enforce_https );
+    
+    // other preferences
+    $app->addPreference( "application.locale", $app->getLocaleManager()->getLocale(), true );
 
     // result
     $this->addLogText($this->tr("Configuration keys added."));

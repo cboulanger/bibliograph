@@ -157,7 +157,6 @@ class bibliograph_Application
      * initialize locale manager
      */
     qcl_locale_Manager::getInstance();
-
   }
 
 

@@ -1009,7 +1009,7 @@ class qcl_core_Object
   }
 
   /**
-   * Dispatches a server message.
+   * Dispatches a client message.
    * @param string $name Message name
    * @param mixed $data Data dispatched with message
    */

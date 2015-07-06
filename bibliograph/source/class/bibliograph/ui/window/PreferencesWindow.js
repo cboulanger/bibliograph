@@ -65,16 +65,17 @@ qx.Class.define("bibliograph.ui.window.PreferencesWindow",
       });      
 
       /*
-       * appearance tab
+       * general settings tab
        */
-      var qxPage1 = new qx.ui.tabview.Page(this.tr('Appearance'));
-      //qxPage1.setVisibility("hidden");
+      var qxPage1 = new qx.ui.tabview.Page(this.tr('General'));
       tabView.add(qxPage1);
       var qxGrid1 = new qx.ui.layout.Grid();
       qxGrid1.setSpacing(5);
       qxPage1.setLayout(qxGrid1);
       qxGrid1.setColumnWidth(0, 200);
       qxGrid1.setColumnFlex(1, 2);
+      
+      // title
       var qxLabel1 = new qx.ui.basic.Label(this.tr('Application title'));
       qxPage1.add(qxLabel1, {
         row : 0,
@@ -88,8 +89,9 @@ qx.Class.define("bibliograph.ui.window.PreferencesWindow",
       confMgr.addListener("ready", function() {
         confMgr.bindKey("application.title", qxTextarea1, "value", true);
       });
+      
+      // logo
       var qxLabel2 = new qx.ui.basic.Label(this.tr('Application logo'));
-      qxLabel2.setValue(this.tr('Application logo'));
       qxPage1.add(qxLabel2, {
         row : 1,
         column : 0
@@ -103,6 +105,58 @@ qx.Class.define("bibliograph.ui.window.PreferencesWindow",
       confMgr.addListener("ready", function() {
         confMgr.bindKey("application.logo", qxTextField1, "value", true);
       });
+      
+      // force backend language
+      var qxLabel3 = new qx.ui.basic.Label(this.tr('Language'));
+      qxPage1.add(qxLabel3, {
+        row : 2,
+        column : 0
+      });
+
+      var localeManager = qx.locale.Manager.getInstance();
+      var locales = localeManager.getAvailableLocales().sort();
+      var currentLocale = localeManager.getLocale();
+
+      var select = new qx.ui.form.SelectBox();
+      select.setAllowGrowY(false);
+      select.setAlignY('middle');
+      
+      // setup selectbox
+      confMgr.addListener("ready", function(e) {
+        
+        var localeFromConfig = confMgr.getKey("application.locale");
+        
+        // default: locale from browser
+        var defaultListItem = new qx.ui.form.ListItem(this.tr("Use browser locale"),null,"");
+        select.add(defaultListItem);
+        
+        for (var i=0; i<locales.length; i++)
+        {
+          var listItem =new qx.ui.form.ListItem(locales[i],null,locales[i]);
+          select.add(listItem);
+          if ( locales[i] == localeFromConfig ) 
+          {
+            defaultListItem = listItem;
+          }
+        }
+        
+        if (defaultListItem) {
+          select.setSelection([defaultListItem]);
+        }
+      }, this);
+
+      // selectbox change
+      select.addListener("changeSelection", function(e)
+      {
+        var locale = e.getData()[0].getModel();
+        if( locale ) {
+          qx.locale.Manager.getInstance().setLocale(locale);  
+        }
+        confMgr.setKey("application.locale",locale);
+      });
+      
+      qxPage1.add(select, {row: 2, column: 1});
+      
 
       /*
        * Tab to configure which fields to omit
@@ -130,9 +184,7 @@ qx.Class.define("bibliograph.ui.window.PreferencesWindow",
         column : 1
       });
       var dsController = new qx.data.controller.List(null, datasourceSelectBox, "label");
-      app.getDatasourceStore().bind("model", dsController, "model", {
-
-      });
+      app.getDatasourceStore().bind("model", dsController, "model");
       datasourceSelectBox.addListener("changeSelection", function(e)
       {
         var datasource = e.getData()[0].getModel().getValue();
