@@ -144,4 +144,18 @@ class bibliograph_service_Application
         : "" )
     );
   }
+  
+  /**
+   * Reset the application
+   */
+  public function method_reset()
+  {
+    $this->requirePermission("application.reset");
+    
+    // Clear internal caches. 
+    qcl_data_model_db_ActiveRecord::resetBehaviors();
+    
+    // Clear application cache
+    $this->getApplication()->getCache()->disposePersistenceData();
+  }
 }

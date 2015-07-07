@@ -12,7 +12,7 @@
  *
  ******************************************************************************/
 
-/*global qx qcl*/
+/*global qx dialog qcl*/
 
 /**
  * @asset(qx/icon/${qx.icontheme}/22/categories/system.png)
@@ -135,9 +135,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       systemButton.setMenu(systemMenu);
       systemMenu.setWidgetId("bibliograph/menu-system");
 
-      /*
-       * Preferences
-       */
+      // Preferences
       var prefBtn = new qx.ui.menu.Button();
       prefBtn.setLabel(this.tr('Preferences'));
       systemMenu.add(prefBtn);
@@ -148,9 +146,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
         var win = this.getApplication().getWidgetById("bibliograph/preferencesWindow").show();
       }, this);
 
-      /*
-       * Access management
-       */
+      // Access management
       var aclBtn = new qx.ui.menu.Button();
       aclBtn.setLabel(this.tr('Access management'));
       systemMenu.add(aclBtn);
@@ -161,9 +157,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
         var win = this.getApplication().getWidgetById("bibliograph/accessControlTool").show();
       }, this);
 
-      /*
-       * Plugins
-       */
+      // Plugins
       var pluginBtn = new qx.ui.menu.Button();
       pluginBtn.setLabel(this.tr('Plugins'));
       systemMenu.add(pluginBtn);
@@ -173,6 +167,24 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       pluginBtn.addListener("execute", function(e) {
         this.getApplication().getRpcManager().execute("bibliograph.plugin", "manage");
       }, this);
+      
+      // Reset
+      var resetBtn = new qx.ui.menu.Button();
+      resetBtn.setLabel(this.tr('Reset'));
+      systemMenu.add(resetBtn);
+      permMgr.create("application.reset").bind("state", resetBtn, "visibility", {
+        converter : qcl.bool2visibility
+      });
+      resetBtn.addListener("execute", function(e) {
+        dialog.Dialog.confirm(this.tr("This will reset and reload the application"),function(ok){
+          if ( !ok ) return;
+          this.getApplication().getRpcManager().execute(
+          "bibliograph.main", "reset", [], function(){
+            document.location.reload();
+          }, this);
+        }, this);
+      }, this);
+      
 
       /*
        * Import Menu

@@ -157,6 +157,9 @@ qx.Class.define("bibliograph.ui.window.PreferencesWindow",
       
       qxPage1.add(select, {row: 2, column: 1});
       
+      
+      //@todo: Reset application button
+      
 
       /*
        * Tab to configure which fields to omit

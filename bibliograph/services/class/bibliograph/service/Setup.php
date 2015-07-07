@@ -75,12 +75,6 @@ class bibliograph_service_Setup
   {
 
     /*
-     * Clear internal caches. This is only necessary during development
-     * as long as you modify the properties of models.
-     */
-    qcl_data_model_db_ActiveRecord::resetBehaviors();
-    
-    /*
      * If the app hasn't been set up, start progressive task
      */
     $app = $this->getApplication(); 
