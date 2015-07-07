@@ -2,7 +2,6 @@
 .hg
 .idea
 .DS_Store
-*.mo
 *.zip
 qooxdoo*
 build

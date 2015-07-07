@@ -92,7 +92,7 @@ class qcl_locale_Manager extends qcl_core_Object
       setlocale( LC_ALL, $lang );
       putenv("LANG=$lang");
       $this->setLocale();
-      if( $this->hasLog() ) $this->logLocaleInfo();
+      //if( $this->hasLog() ) $this->logLocaleInfo();
     }
     else
     {
@@ -109,7 +109,11 @@ class qcl_locale_Manager extends qcl_core_Object
 	public function onUserAuthenticated($message)
 	{
 	  $localeFromConfig = $this->getApplication()->getPreference("application.locale");
-	  if( $localeFromConfig ) $this->setLocale($localeFromConfig);
+	  if( $localeFromConfig ) {
+	    $activeUser = $message->getData();
+	    $this->log( sprintf( "Setting locale for user '%s'", $activeUser->getName()), QCL_LOG_LOCALE);
+	    $this->setLocale($localeFromConfig);
+	  }
 	  return $localeFromConfig;
 	}
 
@@ -223,17 +227,19 @@ class qcl_locale_Manager extends qcl_core_Object
    */
 	public function setLocale($locale=null)
 	{
+	  
     // determine which locale to use
     if( ! $locale ) 
     {
       $locale =  $this->getUserLocale();
     }
+    $this->log( "Setting locale to '$locale'", QCL_LOG_LOCALE);
     
     // application textdomain      
     $textdomain = $this->getTextDomain( $locale );
     $path = $this->getMessagesRoot();
     bindtextdomain( $textdomain, $path );
-    $this->log( "Binding textdomain '$textdomain' to '$path'");
+    $this->log( "Binding textdomain '$textdomain' to '$path'", QCL_LOG_LOCALE);
     if( function_exists("bind_textdomain_codeset") ) // PHP on Mac Bug
     {
       bind_textdomain_codeset( $textdomain, 'UTF-8');
@@ -252,10 +258,8 @@ class qcl_locale_Manager extends qcl_core_Object
     }
 
     $this->locale = $locale;
-    $this->log( "Setting locale '$locale'", QCL_LOG_LOCALE);
+    
 	}
-
-
 
   /**
    * determines the user locale from the browser
@@ -328,13 +332,13 @@ class qcl_locale_Manager extends qcl_core_Object
       // use textdomain bound to class
       $textdomain = $segments[0] . "_" . $this->getUserLocale();
       $translation = dgettext( $textdomain, $messageId );
-      //$this->log( "Translating '$messageId' into '$translation' using domain '$textdomain' (for class $className)");
+      //$this->log( "Translating '$messageId' into '$translation' using domain '$textdomain' (for class $className)", QCL_LOG_LOCALE);
     }
     else
     {
       // use default textdomain
       $translation = gettext( $messageId );
-      //$this->log( "Translating '$messageId' into '$translation'.");
+      //$this->log( "Translating '$messageId' into '$translation'.", QCL_LOG_LOCALE);
     }
     array_unshift( $varargs, $translation );
     $result = @call_user_func_array('sprintf',$varargs);
