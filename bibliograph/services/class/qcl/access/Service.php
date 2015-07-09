@@ -42,6 +42,32 @@ class qcl_access_Service
    * @var bool
    */
   protected $ldapAuth = false;
+  
+  /**
+   * Given a username, return a string consisting of a random hash and the salt 
+   * used to hash the password of that user, concatenated by "|"
+   */
+  public function method_challenge($username)
+  {
+    $app = $this->getApplication();
+    $acl = $this->getAccessController();
+    
+    $auth_method =  $app->getPreference("authentication.method");
+    switch ( $auth_method )
+    {
+      case "plaintext":
+        return array( "method" => "plaintext" );
+        
+      case "hashed":
+        return array( 
+          "method" => "hashed",
+          "nounce" => $acl->createNounce($username)
+        );
+      
+      default:
+        throw new InvalidArgumentException("Unknown authentication method $auth_method");
+    }
+  }  
 
   /**
    * Actively authenticate the user with session id or with username and password.
@@ -499,55 +525,5 @@ class qcl_access_Service
     $this->getApplication()->getAccessController()->terminate();
     return null;
   }
-
-  /**
-   * Creates a SSHA hash from a password
-   * 
-   * @param string $password
-   * @return string hash	
-   */
-  public function makeSshaPassword($password)
-  {
-    mt_srand((double)microtime()*1000000);
-
-    $salt = mhash_keygen_s2k( MHASH_SHA1, $password, substr( pack('h*', md5(mt_rand())), 0, 8), 4);
-
-    $hash = "{SSHA}".base64_encode(mhash(MHASH_SHA1, $password.$salt).$salt);
-    return $hash;
-  }
-
-  /**
-   * Validates a SSHA hash
-   * @param string $password
-   * @param string $hash
-   * @return boolean
-   */
-  public function validateSshaPassword($password, $hash)
-  {
-    $hash = base64_decode(substr($hash, 6));
-    $original_hash = substr($hash, 0, 20);
-    $salt = substr($hash, 20);
-    $new_hash = mhash(MHASH_SHA1, $password . $salt);
-    return (strcmp($original_hash, $new_hash) == 0);
-  }
-
-  
-  function ssha_encode($text)
-  {
-    mt_srand((double)microtime()*1000000);
-    $salt = pack("CCCCCCCC", mt_rand(), mt_rand(), mt_rand(), mt_rand(), mt_rand(), mt_rand(), mt_rand(), mt_rand());
-    $sshaPassword = "{SSHA}" . base64_encode( pack("H*", sha1($text . $salt)) . $salt);
-    return $sshaPassword;
-  }
-
-  function ssha_check($text,$hash)
-  {
-    $ohash = base64_decode(substr($hash,6));
-    $osalt = substr($ohash,20);
-    $ohash = substr($ohash,0,20);
-    $nhash = pack("H*",sha1($text.$osalt));
-    return $ohash == $nhash;
-  }
-
 }
 

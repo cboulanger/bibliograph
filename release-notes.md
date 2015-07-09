@@ -17,7 +17,9 @@ while staying backwards-compatible for database data and plugin code.
 - new plugin 'rssfolder': export folders as RSS feeds and import from those feeds (experimental)
 - updated CiteProc engine
 - improved setup process
-- removed dependency on qxtransformer during development - it's all pure javascript now
+- Default is now to send passwords encrypted (hashed with the stored and a random salt), this
+  can be changed to sending plaintext passwords (for example, for LDAP servers), but only if
+  a https connection exists
 
 Version 2.0 (2011)
 ------------------

@@ -442,58 +442,125 @@ class qcl_access_UserController
   }
 
   /**
-   * Authenticate a user with a password. Returns an integer with
-   * the user id if successful. Throws qcl_access_AuthenticationException
-   * if unsuccessful
+   * Authenticate a user with a password. 
+   * 
+   * Depending on the configuration, the password is sent in plaintext (requires 
+   * secure connection) or hashed with a random and a stored salt.
+   * See http://openwall.info/wiki/people/solar/algorithms/challenge-response-authentication
    *
    * @param string $username or null
-   * @param string $password (MD5-encoded) password
-   * @throws qcl_access_AuthenticationException
-   * @return int|false The id of the user or false if authentication failed
+   * @param string $password (hashed) password
+   * @return int The id of the user if authentication succeeds
+   * @throws qcl_access_AuthenticationException if authentication fails
    */
   public function authenticate( $username, $password )
   {
-    /*
-     * user model
-     */
     $userModel = $this->getUserModel();
-
-    /*
-     * try to authenticate
-     */
     try
     {
       $userModel->load( $username );
     }
     catch( qcl_data_model_RecordNotFoundException $e)
     {
-      throw new qcl_access_AuthenticationException( $this->tr("Invalid user name.") );
+      throw new qcl_access_AuthenticationException( $this->tr("Invalid user name or password.") );
     }
 
-    /*
-     * inactive users cannot authenticate
-     */
+    // inactive users cannot authenticate
     if(!$userModel->getActive())
     {
       throw new qcl_access_AuthenticationException( $this->tr("User is deactivated.") );
     }
-
-    /*
-     * Compare provided password with stored password
-     */
-    $savedPw = $userModel->getPassword();
-
-    if ( $password == $savedPw or
-      $this->generateHash( $password, $savedPw ) == $savedPw )
+    
+    $auth_method = $this->getApplication()->getPreference("authentication.method");
+    
+    $authenticated = false;
+    $storedPw   = $userModel->getPassword();
+    
+    switch ( $auth_method )
     {
-      return $userModel->getId();
+      case "hashed":
+        $this->log("Client sent hashed password: $password.", QCL_LOG_AUTHENTICATION );
+        $token      = explode("|",$password);
+        $randSalt   = $token[0];
+        $clientHash = $token[1];
+        $serverHash = substr( $storedPw, QCL_ACCESS_SALT_LENGTH );   
+
+        $authenticated =
+          $clientHash == sha1( $randSalt . $serverHash );
+        break;
+        
+      case "plaintext":
+        $this->log("Client sent plaintext password.", QCL_LOG_AUTHENTICATION );
+        $authenticated =  
+          $this->generateHash( $password, $storedPw ) == $storedPw;
+        break;
+        
+      default:
+        throw new InvalidArgumentException("Unknown authentication method $auth_method");
+    }
+
+    // success
+    if ( $authenticated ) return $userModel->getId();
+    
+    // fail
+    throw new qcl_access_AuthenticationException( $this->tr("Invalid user name or password.") );
+    
+  }
+  
+  /**
+   * Calling this method with a single argument (the plain text password)
+   * will cause a random string to be generated and used for the salt.
+   * The resulting string consists of the salt followed by the SHA-1 hash
+   * - this is to be stored away in your database. When you're checking a
+   * user's login, the situation is slightly different in that you already
+   * know the salt you'd like to use. The string stored in your database
+   * can be passed to generateHash() as the second argument when generating
+   * the hash of a user-supplied password for comparison.
+   *
+   * See http://phpsec.org/articles/2005/password-hashing.html
+   * @param $plainText
+   * @param $salt
+   * @return string
+   */
+  public function generateHash( $plainText, $salt = null)
+  {
+    if ( $salt === null )
+    {
+      $salt = substr( md5(uniqid(rand(), true) ), 0, QCL_ACCESS_SALT_LENGTH);
     }
     else
     {
-      throw new qcl_access_AuthenticationException( $this->tr("Wrong password.") );
+      $salt = substr($salt, 0, QCL_ACCESS_SALT_LENGTH );
     }
+    return $salt . sha1( $salt . $plainText);
   }
 
+  /**
+   * Create a one-time token for authentication. It consists of a random part and the
+   * salt stored with the password hashed with this salt, concatenated by "|".
+   * @param string $username
+   * @return string The nounce
+   * @throws qcl_access_AuthenticationException
+   */
+  public function createNounce( $username )
+  {
+    $userModel = $this->getUserModel();
+    try
+    {
+      $userModel->load( $username );
+    }
+    catch( qcl_data_model_RecordNotFoundException $e)
+    {
+      throw new qcl_access_AuthenticationException( $this->tr("Invalid user name or password.") );
+    }
+    
+    $randSalt   = md5(uniqid(rand(), true) );
+    $storedSalt = substr( $userModel->getPassword(), 0, QCL_ACCESS_SALT_LENGTH );
+    $nounce = $randSalt . "|" . $storedSalt;
+    
+    return $nounce;
+  }
+  
   /**
    * Registers a new user. When exposing this method in a
    * service class, make sure to protect it adequately.
@@ -518,37 +585,7 @@ class qcl_access_UserController
     }
     $userModel->create( $username, $data );
     return $userModel;
-  }
-
-
-  /**
-   * Calling this method with a single argument (the plain text password)
-   * will cause a random string to be generated and used for the salt.
-   * The resulting string consists of the salt followed by the SHA-1 hash
-   * - this is to be stored away in your database. When you're checking a
-   * user's login, the situation is slightly different in that you already
-   * know the salt you'd like to use. The string stored in your database
-   * can be passed to generateHash() as the second argument when generating
-   * the hash of a user-supplied password for comparison.
-   *
-   * See http://phpsec.org/articles/2005/password-hashing.html
-   * @param $plainText
-   * @param $salt
-   * @return string
-   */
-  public function generateHash( $plainText, $salt = null)
-  {
-    if ( $salt === null )
-    {
-      $salt = substr( md5(uniqid(rand(), true)), 0, QCL_ACCESS_SALT_LENGTH);
-    }
-    else
-    {
-      $salt = substr($salt, 0, QCL_ACCESS_SALT_LENGTH );
-    }
-    return $salt . sha1( $salt . $plainText);
-  }
-
+  }  
 
   /**
    * Terminates and destroys the active session

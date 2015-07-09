@@ -121,6 +121,7 @@ class bibliograph_service_Setup
       "createExampleDatasources",
       "createInternalDatasources",
       "autoInstallPlugins"
+      
     );
   }
   
@@ -189,6 +190,8 @@ class bibliograph_service_Setup
     $this->log("Checking configuration ...", QCL_LOG_SETUP );
     
     $app = $this->getApplication();
+    $acl = $app->getAccessController();
+    
     //$this->useEmbeddedDatabase(false);
     
     $adminEmail = $app->getIniValue("email.admin");
@@ -198,12 +201,33 @@ class bibliograph_service_Setup
     }
     else
     {
-      $userModel = $app->getAccessController()->getUserModel();
-      $userModel->load( "admin" ); // will throw an error if user setup hasn't worked
-      $userModel->set( "email", $adminEmail );
-      $userModel->save();
-      $this->addLogText($this->tr("Administrator email has been set."));
+      $userModel = $acl->getUserModel();
+      // encrypt default users' passwords
+      foreach( array("admin","manager","user") as $username )
+      {
+        try
+        {
+          $userModel->load( $username );
+          // set administrator's email
+          if( ! $userModel->getEmail() ) 
+          {
+            $userModel->setEmai( $adminEmail );
+          }
+          // encrypt default password
+          if( $userModel->getPassword() == $username )
+          {
+            $userModel->setPassword($acl->generateHash( $username ));
+          }
+          $userModel->save();
+        }
+        catch( qcl_data_model_RecordNotFoundException $e)
+        {
+          $this->log("User $username does not exist.", QCL_LOG_SETUP );
+        }
+      }
+      $this->addLogText($this->tr("Set up default users."));
     }
+    
     // next
     $this->setMessage($this->tr("Setting up configuration keys ..."));    
     
@@ -226,6 +250,7 @@ class bibliograph_service_Setup
     
     // other preferences
     $app->addPreference( "application.locale", $app->getLocaleManager()->getLocale(), true );
+    $app->addPreference( "authentication.method", "hashed" );
 
     // result
     $this->addLogText($this->tr("Configuration keys added."));
@@ -417,12 +442,16 @@ class bibliograph_service_Setup
     qcl_import("bibliograph_model_export_RegistryModel");
     $exportRegistry = bibliograph_model_export_RegistryModel::getInstance();
     $exportRegistry->addFromClass("bibliograph_model_export_Bibtex");
+    
+    // next
+    $this->setMessage($this->tr("Installing plugins ..."));
 
     // result
     $this->addLogText($this->tr("Created internal datasources."));
     
   }
   
+
   /**
    * Auto-install plugins if text file named "plugins.txt" exists at the top
    * with either the word "all" or a space separated list of plugin ids to install

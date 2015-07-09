@@ -204,9 +204,19 @@ qx.Class.define("qcl.access.AccessManager",
     },
     
     /**
-     * Authenticates a user with the given password. Since this is done
-     * asynchroneously, the method has no return value but uses a callback 
-     * instead.
+     * Authenticates a user with the given password. 
+     * 
+     * This is done in the following steps:
+     *  - Client request the authentication method, passing the username
+     *  - Server responds with either "plaintext", in which case the password
+     *    is sent plain text (requires https connection), or with "hashed".
+     *  - If a hashed password is requested, server also sends a nounce
+     *    consisting of a random part and the salt
+     *    used to hash the password in the database, concatenated by "|"
+     *  - Client hashes the password with the following algorithm:
+     *    sha1( random salt + sha1( storedSalt + password )
+     *  - Client returns random salt + hash for authentication
+     * 
      * @param username {String}
      * @param password {String}
      * @param callback {Function}
@@ -215,7 +225,18 @@ qx.Class.define("qcl.access.AccessManager",
      */
     authenticate : function( username, password, callback, context )
     {
-       this.getStore().load("authenticate",[ username, password ], callback, context );
+      var sha1 = qcl.crypto.Sha1.hex_sha1.bind(qcl.crypto.Sha1);
+      this.getStore().execute("challenge", [username], function(challenge){
+        if( challenge.method == "hashed" )
+        {
+          var nounce   = challenge.nounce.split(/\|/), 
+            randSalt   = nounce[0], 
+            storedSalt = nounce[1],
+            serverHash = sha1( storedSalt + password );
+          password = randSalt + "|" + sha1( randSalt + serverHash );
+        }
+        this.getStore().load("authenticate",[ username, password ], callback, context );        
+      }, this);
     },
     
     /**
@@ -266,6 +287,5 @@ qx.Class.define("qcl.access.AccessManager",
       qx.event.message.Bus.dispatch( new qx.event.message.Message("logout", true ) );
       this.getStore().load("logout", null, callback, context );
     }
-   
   }
 });

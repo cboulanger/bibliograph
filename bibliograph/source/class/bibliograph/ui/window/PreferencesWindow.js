@@ -12,7 +12,7 @@
  *
  ******************************************************************************/
 
-/*global qx qcl bibliograph*/
+/*global qx qcl dialog bibliograph*/
 
 /**
  * The window containing the preferences
@@ -157,10 +157,6 @@ qx.Class.define("bibliograph.ui.window.PreferencesWindow",
       
       qxPage1.add(select, {row: 2, column: 1});
       
-      
-      //@todo: Reset application button
-      
-
       /*
        * Tab to configure which fields to omit
        */
@@ -231,7 +227,7 @@ qx.Class.define("bibliograph.ui.window.PreferencesWindow",
       }, this);
 
       /*
-       * access mode
+       * access 
        */
       var qxPage3 = new qx.ui.tabview.Page(this.tr('Access'));
       tabView.add(qxPage3);
@@ -241,18 +237,43 @@ qx.Class.define("bibliograph.ui.window.PreferencesWindow",
       qxPage3.setLayout(qxGrid3);
       qxGrid3.setColumnWidth(0, 200);
       qxGrid3.setColumnFlex(1, 2);
+      
+      // Authenication mode
+      var authModeLabel = new qx.ui.basic.Label(this.tr('Authentication method'));
+      qxPage3.add(authModeLabel, { row : 0,  column : 0 });
+      var authModeSelBox = new qx.ui.form.SelectBox();
+      qxPage3.add(authModeSelBox, { row : 0, column : 1 });
+      var item1 = new qx.ui.form.ListItem(this.tr('Client sends plain text password'), null, "plaintext");
+      authModeSelBox.add(item1);
+      var item2 = new qx.ui.form.ListItem(this.tr('Client sends hashed password'), null, "hashed");
+      authModeSelBox.add(item2);
+      authModeSelBox.addListener("appear", function(e)
+      {
+        var mode = this.getApplication().getConfigManager().getKey("authentication.method");
+        authModeSelBox.getSelectables().forEach(function(elem) {
+          if (elem.getModel("value") == mode) authModeSelBox.setSelection([elem]);
+        }, this);
+      }, this);
+      authModeSelBox.addListener("changeSelection", function(e) {
+        if (e.getData().length)
+        {
+           var mode = e.getData()[0].getModel();
+           if (mode== "plaintext" && location.protocol !== 'https:') 
+           {  
+              dialog.Dialog.error(this.tr("Plaintext passwords without a secure connection (HTTPS) are not allowed."));
+              return;
+           }
+           this.getApplication().getConfigManager().setKey("authentication.method", mode );
+        }
+          
+      }, this);      
+      
+      
+      // Access mode
       var qxLabel5 = new qx.ui.basic.Label(this.tr('Access Mode'));
-      qxPage3.add(qxLabel5,
-      {
-        row : 0,
-        column : 0
-      });
+      qxPage3.add(qxLabel5, { row : 1,  column : 0 });
       var modelSelectBox = new qx.ui.form.SelectBox();
-      qxPage3.add(modelSelectBox,
-      {
-        row : 0,
-        column : 1
-      });
+      qxPage3.add(modelSelectBox, { row : 1, column : 1 });
       var qxListItem1 = new qx.ui.form.ListItem(this.tr('Normal'), null, null);
       modelSelectBox.add(qxListItem1);
       qxListItem1.setUserData("value", "normal");
@@ -264,26 +285,16 @@ qx.Class.define("bibliograph.ui.window.PreferencesWindow",
         var mode = this.getApplication().getConfigManager().getKey("bibliograph.access.mode");
         modelSelectBox.getSelectables().forEach(function(elem) {
           if (elem.getUserData("value") == mode)modelSelectBox.setSelection([elem]);
-
         }, this);
       }, this);
       modelSelectBox.addListener("changeSelection", function(e) {
         if (e.getData().length)this.getApplication().getConfigManager().setKey("bibliograph.access.mode", e.getData()[0].getUserData("value"));
-
       }, this);
       var qxLabel6 = new qx.ui.basic.Label(this.tr('Custom message'));
-      qxPage3.add(qxLabel6,
-      {
-        row : 1,
-        column : 0
-      });
+      qxPage3.add(qxLabel6, { row : 2, column : 0 });
       var qxTextarea2 = new qx.ui.form.TextArea(null);
       qxTextarea2.setPlaceholder(this.tr('Shown to users in read-only and no-access mode.'));
-      qxPage3.add(qxTextarea2,
-      {
-        row : 1,
-        column : 1
-      });
+      qxPage3.add(qxTextarea2, { row : 2, column : 1 });
       confMgr.addListener("ready", function() {
         confMgr.bindKey("bibliograph.access.no-access-message", qxTextarea2, "value", true);
       });
