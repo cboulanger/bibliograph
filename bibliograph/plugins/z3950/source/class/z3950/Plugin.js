@@ -66,11 +66,9 @@ qx.Class.define("z3950.Plugin",
 
       var prefsTabView = app.getWidgetById("bibliograph/preferences-tabView");
       var pluginTab = new qx.ui.tabview.Page( this.tr('Z39.50 Import') );
-      pluginTab.setVisibility("excluded");
-      
-      
+
       // ACL
-      permMgr.create("z3950.manage").bind("state", pluginTab, "visibility", {
+      permMgr.create("z3950.manage").bind("state", pluginTab.getChildControl("button"), "visibility", {
         converter : function(v){ return v ? "visible" : "excluded" }
       });
       var vboxlayout = new qx.ui.layout.VBox(5);

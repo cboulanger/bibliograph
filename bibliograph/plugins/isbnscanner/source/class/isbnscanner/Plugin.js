@@ -119,9 +119,8 @@ qx.Class.define("isbnscanner.Plugin",
        */
       var prefsTabView = app.getWidgetById("bibliograph/preferences-tabView");
       var pluginTab = new qx.ui.tabview.Page( this.tr('Import by ISBN') );
-      pluginTab.setVisibility("excluded");
-      
-      permMgr.create("isbnscanner.import").bind("state", pluginTab, "visibility", {
+
+      permMgr.create("isbnscanner.import").bind("state", pluginTab.getChildControl("button"), "visibility", {
         converter : function(v){ return v ? "visible" : "excluded" }
       });
 
