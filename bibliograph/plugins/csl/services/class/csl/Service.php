@@ -126,6 +126,45 @@ class class_csl_Service
     }
     return "";
   }
+  
+  /**
+   * Render the full content of a folder
+   * @param $datasource
+   * @param $folderId
+   * @param $style
+   * @return string HTML
+   */
+  public function method_renderQuery( $datasource, $query, $style )
+  {
+    qcl_assert_valid_string( $datasource,"Invalid datasource argument." );
+    qcl_assert_string( $query, "Invalid query argument");
+    qcl_assert_valid_string( $style,"Invalid style argument." );
+
+    $dsModel  = $this->getDatasourceModel( $datasource );
+    $refModel = $dsModel->getInstanceOfType("reference");
+
+    $query = (object) array( 
+      "cql" => $query
+    );
+    $qclQuery = new qcl_data_db_Query( array(
+      'orderBy' => array("author","year","title")
+    ) );
+    
+    try
+    {
+      qcl_import( "bibliograph_schema_CQL" );
+      $cql =  bibliograph_schema_CQL::getInstance();      
+      $q = $cql->addQueryConditions( $query, $qclQuery, $refModel );
+    }
+    catch( bibliograph_schema_Exception $e)
+    {
+      throw new qcl_server_ServiceException($e->getMessage());
+    }
+    $q->where['markedDeleted'] = false;
+
+    $ids = $refModel->getQueryBehavior()->fetchValues("id", $q );
+    return $this->render( $datasource, $ids, $style );
+  }  
 
   /**
    * Render the citations

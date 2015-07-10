@@ -168,21 +168,38 @@ qx.Class.define("csl.FormattedView",
      */
     loadFolder : function()
     {
-      var app = this.getApplication();
-      var configManager = this.getApplication().getConfigManager();
-      var styleId = configManager.getKey("csl.style.default");
+      var app      = this.getApplication();
+      var confMgr  = app.getConfigManager();
+      var styleId  = confMgr.getKey("csl.style.default");
       var folderId = app.getFolderId();
-      if (!folderId)return;
-      this.viewPane.setHtml(this.tr("Loading formatted citations..."));
-      this.setEnabled(false);
-      app.getRpcManager().execute(
-          "csl.Service", "renderFolder",
-          [app.getDatasource(), folderId, styleId],
-          function(data)
-          {
-            this.viewPane.setHtml(data && data.html ? data.html : "");
-            this.setEnabled(true);
-          }, this);
+      var query    = app.getQuery();
+      
+      if ( folderId )
+      {
+        this.viewPane.setHtml(this.tr("Loading formatted citations..."));
+        this.setEnabled(false);
+        app.getRpcManager().execute(
+            "csl.Service", "renderFolder",
+            [app.getDatasource(), folderId, styleId],
+            function(data)
+            {
+              this.viewPane.setHtml(data && data.html ? data.html : "");
+              this.setEnabled(true);
+            }, this);
+      }
+      else if ( query )
+      {
+        this.viewPane.setHtml(this.tr("Loading formatted citations..."));
+        this.setEnabled(false);
+        app.getRpcManager().execute(
+            "csl.Service", "renderQuery",
+            [app.getDatasource(), query, styleId],
+            function(data)
+            {
+              this.viewPane.setHtml(data && data.html ? data.html : "");
+              this.setEnabled(true);
+            }, this);        
+      }
     },
 
     /**
