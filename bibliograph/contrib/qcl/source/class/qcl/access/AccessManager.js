@@ -215,7 +215,7 @@ qx.Class.define("qcl.access.AccessManager",
      *    used to hash the password in the database, concatenated by "|"
      *  - Client hashes the password with the following algorithm:
      *    sha1( random salt + sha1( storedSalt + password )
-     *  - Client returns random salt + hash for authentication
+     *  - Client returns hash for authentication
      * 
      * @param username {String}
      * @param password {String}
@@ -233,7 +233,7 @@ qx.Class.define("qcl.access.AccessManager",
             randSalt   = nounce[0], 
             storedSalt = nounce[1],
             serverHash = sha1( storedSalt + password );
-          password = randSalt + "|" + sha1( randSalt + serverHash );
+          password = sha1( randSalt + serverHash );
         }
         this.getStore().load("authenticate",[ username, password ], callback, context );        
       }, this);

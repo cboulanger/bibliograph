@@ -474,25 +474,21 @@ class qcl_access_UserController
     $auth_method = $this->getApplication()->getPreference("authentication.method");
     
     $authenticated = false;
-    $storedPw   = $userModel->getPassword();
+    $storedPw = $userModel->getPassword();
     
     switch ( $auth_method )
     {
       case "hashed":
         $this->log("Client sent hashed password: $password.", QCL_LOG_AUTHENTICATION );
-        $token      = explode("|",$password);
-        $randSalt   = $token[0];
-        $clientHash = $token[1];
+        $randSalt   = $this->getLoginSalt();
         $serverHash = substr( $storedPw, QCL_ACCESS_SALT_LENGTH );   
 
-        $authenticated =
-          $clientHash == sha1( $randSalt . $serverHash );
+        $authenticated = $password == sha1( $randSalt . $serverHash );
         break;
         
       case "plaintext":
         $this->log("Client sent plaintext password.", QCL_LOG_AUTHENTICATION );
-        $authenticated =  
-          $this->generateHash( $password, $storedPw ) == $storedPw;
+        $authenticated = $this->generateHash( $password, $storedPw ) == $storedPw;
         break;
         
       default:
@@ -558,8 +554,23 @@ class qcl_access_UserController
     $storedSalt = substr( $userModel->getPassword(), 0, QCL_ACCESS_SALT_LENGTH );
     $nounce = $randSalt . "|" . $storedSalt;
     
+    // store random salt  and return nounce
+    $this->setLoginSalt( $randSalt );
     return $nounce;
   }
+
+  
+  private function setLoginSalt( $salt )
+  {
+    $_SESSION['qcl_access_UserController_createNounce_salt'] = $salt;
+  }
+  
+  private function getLoginSalt()
+  {
+    return $_SESSION['qcl_access_UserController_createNounce_salt'];
+  }
+  
+  
   
   /**
    * Registers a new user. When exposing this method in a
