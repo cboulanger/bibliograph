@@ -1,4 +1,5 @@
 #!/bin/bash
+cd ..
 # the variables we'll need
 version=$(cat version.txt)
 today=$(date +"%Y-%m-%d")

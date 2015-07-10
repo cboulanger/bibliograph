@@ -1,4 +1,5 @@
 #!/bin/bash
+cd ..
 echo "This script creates a skeleton for a Bibliograph plugin."
 echo
 namespace=""
