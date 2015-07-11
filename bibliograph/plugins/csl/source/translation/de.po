@@ -15,22 +15,22 @@ msgstr ""
 msgid "Formatted View"
 msgstr "Formatierte Ansicht"
 
-#: csl/FormattedView.js:176
+#: csl/FormattedView.js:179 csl/FormattedView.js:192
 msgid "Loading formatted citations..."
 msgstr "Lade formatierte Datensätze"
 
-#: csl/FormattedViewUi.js:56 csl/FormattedViewUi.js:57
+#: csl/FormattedViewUi.js:58
 msgid "Style"
 msgstr "Stil"
 
-#: csl/FormattedViewUi.js:62 csl/FormattedViewUi.js:63
-msgid "All in folder"
-msgstr "Gesamter Ordner"
+#: csl/FormattedViewUi.js:65
+msgid "All Results"
+msgstr "Gesamte Liste"
 
-#: csl/FormattedViewUi.js:68 csl/FormattedViewUi.js:69
+#: csl/FormattedViewUi.js:72
 msgid "Print"
 msgstr "Drucken"
 
-#: csl/FormattedViewUi.js:74 csl/FormattedViewUi.js:75
+#: csl/FormattedViewUi.js:79
 msgid "Tabular View"
 msgstr "Tabellarische Ansicht"

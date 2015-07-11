@@ -1,0 +1,411 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: qcl\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-07-11 20:18+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../services/class/qcl/server/Download.php:133
+#, php-format
+msgid "File '%s' does not exist in datasource '%s'"
+msgstr ""
+
+#: ../services/class/qcl/application/plugin/Service.php:60
+msgid "Plugin is not installed"
+msgstr ""
+
+#: ../services/class/qcl/application/plugin/Service.php:61
+msgid "Install plugin"
+msgstr ""
+
+#: ../services/class/qcl/application/plugin/Service.php:69
+msgid "Plugin is active"
+msgstr ""
+
+#: ../services/class/qcl/application/plugin/Service.php:70
+msgid "Deactivate plugin"
+msgstr ""
+
+#: ../services/class/qcl/application/plugin/Service.php:71
+#: ../services/class/qcl/application/plugin/Service.php:80
+msgid "Uninstall plugin"
+msgstr ""
+
+#: ../services/class/qcl/application/plugin/Service.php:72
+#: ../services/class/qcl/application/plugin/Service.php:81
+msgid "Reinstall plugin"
+msgstr ""
+
+#: ../services/class/qcl/application/plugin/Service.php:78
+msgid "Plugin is deactivated"
+msgstr ""
+
+#: ../services/class/qcl/application/plugin/Service.php:79
+msgid "Activate plugin"
+msgstr ""
+
+#: ../services/class/qcl/application/plugin/Service.php:96
+msgid "Please configure the plugins"
+msgstr ""
+
+#: ../services/class/qcl/application/plugin/Service.php:131
+#, php-format
+msgid "Installed plugin '%s'"
+msgstr ""
+
+#: ../services/class/qcl/application/plugin/Service.php:135
+#, php-format
+msgid "Installation of plugin '%s' failed: %s"
+msgstr ""
+
+#: ../services/class/qcl/application/plugin/Service.php:145
+#, php-format
+msgid "Activated plugin '%s'. You might have to reload the application."
+msgstr ""
+
+#: ../services/class/qcl/application/plugin/Service.php:153
+#, php-format
+msgid "Deactivated plugin '%s'. You might have to reload the application."
+msgstr ""
+
+#: ../services/class/qcl/application/plugin/Service.php:164
+#, php-format
+msgid "Reinstalled plugin '%s'"
+msgstr ""
+
+#: ../services/class/qcl/application/plugin/Service.php:169
+#, php-format
+msgid "Re-Installation of plugin '%s' failed: %s"
+msgstr ""
+
+#: ../services/class/qcl/application/plugin/Service.php:185
+#, php-format
+msgid "Uninstalled plugin '%s'"
+msgstr ""
+
+#: ../services/class/qcl/application/plugin/Service.php:192
+#, php-format
+msgid "Uninstallation of plugin '%s' failed: %s"
+msgstr ""
+
+#: ../services/class/qcl/config/Service.php:145
+msgid "Log file deleted."
+msgstr ""
+
+#: ../services/class/qcl/ui/dialog/Confirm.php:47
+#: ../services/class/qcl/ui/dialog/Confirm.php:51
+msgid "Yes"
+msgstr ""
+
+#: ../services/class/qcl/ui/dialog/Confirm.php:47
+#: ../services/class/qcl/ui/dialog/Confirm.php:51
+msgid "No"
+msgstr ""
+
+#: ../services/class/qcl/data/datasource/DbModel.php:191
+#: ../services/class/qcl/access/model/Role.php:90
+#: ../services/class/qcl/access/model/Group.php:95
+msgid "Name"
+msgstr ""
+
+#: ../services/class/qcl/data/datasource/DbModel.php:196
+#: ../services/class/qcl/access/model/Role.php:93
+#: ../services/class/qcl/access/model/Permission.php:84
+#: ../services/class/qcl/access/model/Group.php:98
+msgid "Description"
+msgstr ""
+
+#: ../services/class/qcl/data/datasource/DbModel.php:200
+msgid "Schema"
+msgstr ""
+
+#: ../services/class/qcl/data/datasource/DbModel.php:206
+msgid "Type"
+msgstr ""
+
+#: ../services/class/qcl/data/datasource/DbModel.php:209
+msgid "Server host"
+msgstr ""
+
+#: ../services/class/qcl/data/datasource/DbModel.php:213
+msgid "Server port"
+msgstr ""
+
+#: ../services/class/qcl/data/datasource/DbModel.php:221
+msgid "Database name"
+msgstr ""
+
+#: ../services/class/qcl/data/datasource/DbModel.php:228
+msgid "Database user name"
+msgstr ""
+
+#: ../services/class/qcl/data/datasource/DbModel.php:231
+msgid "Database user password"
+msgstr ""
+
+#: ../services/class/qcl/data/datasource/DbModel.php:234
+msgid "Database encoding"
+msgstr ""
+
+#: ../services/class/qcl/data/datasource/DbModel.php:238
+msgid "Datasource prefix"
+msgstr ""
+
+#: ../services/class/qcl/data/datasource/DbModel.php:241
+msgid "Resource path"
+msgstr ""
+
+#: ../services/class/qcl/data/datasource/DbModel.php:245
+msgid "Status"
+msgstr ""
+
+#: ../services/class/qcl/data/controller/Controller.php:294
+#, php-format
+msgid "You don't have access to '%s'"
+msgstr ""
+
+#: ../services/class/qcl/data/controller/TableController.php:112
+#, php-format
+msgid "%s records"
+msgstr ""
+
+#: ../services/class/qcl/access/model/Group.php:102
+msgid "Default role for new users"
+msgstr ""
+
+#: ../services/class/qcl/access/model/Group.php:172
+msgid "No role"
+msgstr ""
+
+#: ../services/class/qcl/access/model/User.php:172
+msgid "Full name"
+msgstr ""
+
+#: ../services/class/qcl/access/model/User.php:175
+msgid "Email address"
+msgstr ""
+
+#: ../services/class/qcl/access/model/User.php:176
+msgid "Enter a valid Email address"
+msgstr ""
+
+#: ../services/class/qcl/access/model/User.php:182
+msgid "Password"
+msgstr ""
+
+#: ../services/class/qcl/access/model/User.php:185
+msgid "To change the password, enter new password."
+msgstr ""
+
+#: ../services/class/qcl/access/model/User.php:191
+msgid "Repeat password"
+msgstr ""
+
+#: ../services/class/qcl/access/model/User.php:195
+msgid "To change the password, repeat new password"
+msgstr ""
+
+#: ../services/class/qcl/access/model/User.php:284
+msgid "Anonymous User"
+msgstr ""
+
+#: ../services/class/qcl/access/model/User.php:608
+msgid "Passwords do not match..."
+msgstr ""
+
+#: ../services/class/qcl/access/model/User.php:612
+msgid "Password must be at least 8 characters long"
+msgstr ""
+
+#: ../services/class/qcl/access/UserController.php:407
+#: ../services/class/qcl/access/UserController.php:429
+#: ../services/class/qcl/access/SessionController.php:117
+msgid "Please log in again."
+msgstr ""
+
+#: ../services/class/qcl/access/UserController.php:407
+msgid "Invalid session. "
+msgstr ""
+
+#: ../services/class/qcl/access/UserController.php:429
+#: ../services/class/qcl/access/SessionController.php:117
+msgid "Session has expired. "
+msgstr ""
+
+#: ../services/class/qcl/access/UserController.php:465
+#: ../services/class/qcl/access/UserController.php:502
+#: ../services/class/qcl/access/UserController.php:550
+msgid "Invalid user name or password."
+msgstr ""
+
+#: ../services/class/qcl/access/UserController.php:471
+msgid "User is deactivated."
+msgstr ""
+
+#: ../services/class/qcl/access/UserController.php:619
+msgid "You will be logged out. Please reload the application and start again."
+msgstr ""
+
+#: ../services/class/qcl/access/Service.php:104
+msgid "Authentication must be done through a secure connection, using the https:// protocol."
+msgstr ""
+
+#: ../services/class/qcl/access/ACLTool.php:50
+#: ../services/class/qcl/access/ACLTool.php:96
+msgid "Users"
+msgstr ""
+
+#: ../services/class/qcl/access/ACLTool.php:56
+#: ../services/class/qcl/access/ACLTool.php:101
+msgid "Roles"
+msgstr ""
+
+#: ../services/class/qcl/access/ACLTool.php:62
+#: ../services/class/qcl/access/ACLTool.php:106
+msgid "Groups"
+msgstr ""
+
+#: ../services/class/qcl/access/ACLTool.php:68
+#: ../services/class/qcl/access/ACLTool.php:111
+msgid "Permissions"
+msgstr ""
+
+#: ../services/class/qcl/access/ACLTool.php:74
+#: ../services/class/qcl/access/ACLTool.php:116
+msgid "Datasources"
+msgstr ""
+
+#: ../services/class/qcl/access/ACLTool.php:97
+msgid "user"
+msgstr ""
+
+#: ../services/class/qcl/access/ACLTool.php:102
+msgid "role"
+msgstr ""
+
+#: ../services/class/qcl/access/ACLTool.php:107
+msgid "group"
+msgstr ""
+
+#: ../services/class/qcl/access/ACLTool.php:112
+msgid "permission"
+msgstr ""
+
+#: ../services/class/qcl/access/ACLTool.php:117
+msgid "datasource"
+msgstr ""
+
+#: ../services/class/qcl/access/ACLTool.php:363
+msgid "Relations"
+msgstr ""
+
+#: ../services/class/qcl/access/ACLTool.php:436
+msgid "in"
+msgstr ""
+
+#: ../services/class/qcl/access/ACLTool.php:474
+msgid "In all groups"
+msgstr ""
+
+#: ../services/class/qcl/access/ACLTool.php:588
+msgid "Do you want to remove only the datasource entry or all associated data?"
+msgstr ""
+
+#: ../services/class/qcl/access/ACLTool.php:589
+msgid "All data"
+msgstr ""
+
+#: ../services/class/qcl/access/ACLTool.php:589
+msgid "Entry only"
+msgstr ""
+
+#: ../services/class/qcl/access/ACLTool.php:633
+#, php-format
+msgid "Deleting datasource '%s' failed... "
+msgstr ""
+
+#: ../services/class/qcl/access/ACLTool.php:636
+#, php-format
+msgid "Datasource '%s' successfully deleted ... "
+msgstr ""
+
+#: ../services/class/qcl/access/ACLTool.php:851
+msgid "Passwords do not match. Please try again"
+msgstr ""
+
+#: ../services/class/qcl/access/ACLTool.php:879
+#, php-format
+msgid "An email has been sent to %s (%s) with information on the registration."
+msgstr ""
+
+#: ../services/class/qcl/access/ACLTool.php:887
+#, php-format
+msgid "An email has been sent to %s (%s) to inform about the change of password."
+msgstr ""
+
+#: ../services/class/qcl/access/ACLTool.php:919
+#, php-format
+msgid "Your registration at %s"
+msgstr ""
+
+#: ../services/class/qcl/access/ACLTool.php:929
+#: ../services/class/qcl/access/ACLTool.php:968
+#, php-format
+msgid "Dear %s,"
+msgstr ""
+
+#: ../services/class/qcl/access/ACLTool.php:930
+#, php-format
+msgid "You have been registered as a user at  '%s'."
+msgstr ""
+
+#: ../services/class/qcl/access/ACLTool.php:931
+#: ../services/class/qcl/access/ACLTool.php:970
+#, php-format
+msgid "Your username is '%s' and your password is '%s'"
+msgstr ""
+
+#: ../services/class/qcl/access/ACLTool.php:932
+msgid "Please confirm your account by visiting the following link:"
+msgstr ""
+
+#: ../services/class/qcl/access/ACLTool.php:934
+msgid "Thank you."
+msgstr ""
+
+#: ../services/class/qcl/access/ACLTool.php:963
+#, php-format
+msgid "Password change at %s"
+msgstr ""
+
+#: ../services/class/qcl/access/ACLTool.php:969
+#, php-format
+msgid "This is to inform you that your password has changed at '%s'."
+msgstr ""
+
+#: ../services/class/qcl/access/ACLTool.php:1011
+#, php-format
+msgid "Thank you, %s, your email address has been confirmed."
+msgstr ""
+
+#: ../services/class/qcl/access/ACLTool.php:1012
+#, php-format
+msgid "You can now log in at <a href='%s'>this link</a>"
+msgstr ""
+
+#: ../services/class/qcl/access/ACLTool.php:1020
+#, php-format
+msgid "The email address %s is invalid"
+msgstr ""

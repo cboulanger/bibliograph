@@ -84,12 +84,15 @@ How to contribute
 -----------------
 Bibliograph is free (as in beer and in speech). But in order to thrive, the
 project needs your help. Even if you are not a developer, you can contribute:
-- You can [donate](http://sourceforge.net/p/bibliograph/donate) and make sure 
-  development continues
+- You can [provide feedback, report bugs and/or suggest new features](https://github.com/cboulanger/bibliograph/issues).
+- Help translate the user interface into your language. Let me know if you 
+  are willing to do this, and I'll let you know how to do this.
 - You can help spread the word. The more people use the application, the more
   likely it is that development continues and new features/plugins will be 
-  added;
-- You can [provide feedback, report bugs and/or suggest new features](https://github.com/cboulanger/bibliograph/issues).
+  added - so please let your followers on Twitter, Facebook etc. know about
+  Bibliograph
+- You can [donate](http://sourceforge.net/p/bibliograph/donate) and make sure 
+  development continues
 
 Credits
 --------

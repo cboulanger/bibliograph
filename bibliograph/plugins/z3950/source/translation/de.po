@@ -60,7 +60,7 @@ msgstr "Schließen"
 
 #: z3950/Plugin.js:68
 msgid "Z39.50 Import"
-msgstr ""
+msgstr "Import aus Bibliothekskatalog (Z39.50)"
 
 #: z3950/Plugin.js:116
 msgid "(Un-)Select All"

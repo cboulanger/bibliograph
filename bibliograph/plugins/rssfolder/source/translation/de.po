@@ -41,26 +41,26 @@ msgstr "RSS-Feed laden"
 
 #: rssfolder/ImportWindowUi.js:110 rssfolder/ImportWindowUi.js:113
 msgid "Select all"
-msgstr ""
+msgstr "Alle auswählen"
 
 #: rssfolder/ImportWindowUi.js:123 rssfolder/ImportWindowUi.js:126
 msgid "Import selected records"
-msgstr ""
+msgstr "Ausgewählte importieren"
 
 #: rssfolder/ImportWindowUi.js:138 rssfolder/ImportWindowUi.js:139
 msgid "Close"
-msgstr ""
+msgstr "Schließen"
 
 #: rssfolder/Plugin.js:41
 msgid "Folder RSS Feed"
-msgstr ""
+msgstr "Ordner RSS Feed"
 
 #: rssfolder/Plugin.js:60
 msgid ""
 "Cannot open window. Please disable the popup-blocker of your browser for "
 "this website."
-msgstr ""
+msgstr "Bitte Popup-Blocker deaktivieren."
 
 #: rssfolder/Plugin.js:79
 msgid "From RSS Feed"
-msgstr ""
+msgstr "Aus einem RSS Feed"

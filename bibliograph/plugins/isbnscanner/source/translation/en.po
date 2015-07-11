@@ -11,40 +11,40 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: isbnscanner/Plugin.js:51
+#: isbnscanner/Plugin.js:49
 msgid "From ISBN, using barcode scanner or manual input"
 msgstr ""
 
-#: isbnscanner/Plugin.js:52
+#: isbnscanner/Plugin.js:50
 msgid ""
 "Please select a folder into which the item will be imported. Requires a "
 "barcode scanner in keyboard mode"
 msgstr ""
 
-#: isbnscanner/Plugin.js:60
+#: isbnscanner/Plugin.js:58
 msgid "Please wait ..."
 msgstr ""
 
-#: isbnscanner/Plugin.js:101
+#: isbnscanner/Plugin.js:99
 msgid ""
 "ISBN input detected. Please wait for the input dialog and repeat the input "
 "..."
 msgstr ""
 
-#: isbnscanner/Plugin.js:123
+#: isbnscanner/Plugin.js:121
 msgid "Import by ISBN"
 msgstr ""
 
-#: isbnscanner/Plugin.js:136
+#: isbnscanner/Plugin.js:133
 msgid ""
 "How should names (e.g. William Shakespeare) be converted to a sortable "
 "format (Shakespeare, William)?"
 msgstr ""
 
-#: isbnscanner/Plugin.js:145
+#: isbnscanner/Plugin.js:142
 msgid "Name parser (Fast, Correct for most western names)"
 msgstr ""
 
-#: isbnscanner/Plugin.js:149
+#: isbnscanner/Plugin.js:146
 msgid "Webservice (Slower)"
 msgstr ""

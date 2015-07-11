@@ -1,22 +1,24 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Bibliograph 2.0\n"
+"Project-Id-Version: bibliograph v2.1-pre\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-04 22:50+0100\n"
-"PO-Revision-Date: 2014-10-04 22:50+0100\n"
-"Last-Translator: Christian Boulanger <info@bibliograph.org>\n"
-"Language-Team: \n"
-"Language: de\n"
+"POT-Creation-Date: 2015-07-11 20:18+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-KeywordsList: _;gettext;gettext_noop;tr;trn\n"
-"X-Poedit-Basepath: .\n"
-"X-Generator: Poedit 1.6.9\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-SearchPath-0: ../../../class\n"
 
 #: ../../../class/bibliograph/model/FolderModel.php:161
+#: ../services/class/bibliograph/model/FolderModel.php:161
 msgid "Folder Title"
 msgstr "Ordnertitel"
 
@@ -25,10 +27,12 @@ msgstr "Ordnertitel"
 #: ../../../class/qcl/access/model/Permission.php:84
 #: ../../../class/qcl/access/model/Role.php:93
 #: ../../../class/qcl/data/datasource/DbModel.php:196
+#: ../services/class/bibliograph/model/FolderModel.php:165
 msgid "Description"
 msgstr "Beschreibung"
 
 #: ../../../class/bibliograph/model/FolderModel.php:170
+#: ../services/class/bibliograph/model/FolderModel.php:170
 msgid "Is folder publically visible?"
 msgstr "Ist der Ordner öffentlich?"
 
@@ -36,6 +40,8 @@ msgstr "Ist der Ordner öffentlich?"
 #: ../../../class/bibliograph/service/Reference.php:1458
 #: ../../../class/qcl/ui/dialog/Confirm.php:47
 #: ../../../class/qcl/ui/dialog/Confirm.php:51
+#: ../services/class/bibliograph/model/FolderModel.php:173
+#: ../services/class/bibliograph/service/Reference.php:1458
 msgid "Yes"
 msgstr "Ja"
 
@@ -43,146 +49,184 @@ msgstr "Ja"
 #: ../../../class/bibliograph/service/Reference.php:1459
 #: ../../../class/qcl/ui/dialog/Confirm.php:47
 #: ../../../class/qcl/ui/dialog/Confirm.php:51
+#: ../services/class/bibliograph/model/FolderModel.php:174
+#: ../services/class/bibliograph/service/Reference.php:1459
 msgid "No"
 msgstr "Nein"
 
 #: ../../../class/bibliograph/model/FolderModel.php:186
+#: ../services/class/bibliograph/model/FolderModel.php:186
 msgid "Search folder?"
 msgstr "Suchordner?"
 
 #: ../../../class/bibliograph/model/FolderModel.php:189
+#: ../services/class/bibliograph/model/FolderModel.php:189
 msgid "On, Use query to determine content"
 msgstr "Ja, mit Suchausdruck filtern"
 
 #: ../../../class/bibliograph/model/FolderModel.php:190
+#: ../services/class/bibliograph/model/FolderModel.php:190
 msgid "Off"
 msgstr "Aus"
 
 #: ../../../class/bibliograph/model/FolderModel.php:194
+#: ../services/class/bibliograph/model/FolderModel.php:194
 msgid "Query"
 msgstr "Suchausdruck"
 
 #: ../../../class/bibliograph/model/FolderModel.php:216
+#: ../services/class/bibliograph/model/FolderModel.php:216
 msgid "Opened?"
 msgstr "Geöffnet?"
 
 #: ../../../class/bibliograph/model/FolderModel.php:219
+#: ../services/class/bibliograph/model/FolderModel.php:219
 msgid "Folder is opened by default"
 msgstr "Ja, Ordner öffnet sich automatisch"
 
 #: ../../../class/bibliograph/model/FolderModel.php:220
+#: ../services/class/bibliograph/model/FolderModel.php:220
 msgid "Folder is closed by default"
 msgstr "Nein, Ordner ist geschlossen"
 
 #: ../../../class/bibliograph/model/FolderModel.php:265
+#: ../services/class/bibliograph/model/FolderModel.php:265
 msgid "Default Folder"
 msgstr "Hauptordner"
 
 #: ../../../class/bibliograph/model/FolderModel.php:275
+#: ../services/class/bibliograph/model/FolderModel.php:275
 msgid "Trash Folder"
 msgstr "Mülleimer"
 
 #: ../../../class/bibliograph/model/export/Bibtex.php:121
+#: ../services/class/bibliograph/model/export/Bibtex.php:121
 msgid "Special Issue"
 msgstr "Zeitschriftenausgabe"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:295
+#: ../services/class/bibliograph/schema/BibtexSchema.php:289
 msgid "Article"
 msgstr "Artikel"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:300
+#: ../services/class/bibliograph/schema/BibtexSchema.php:294
 msgid "Book (Monograph)"
 msgstr "Buch (Monographie)"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:305
+#: ../services/class/bibliograph/schema/BibtexSchema.php:299
 msgid "Booklet"
 msgstr "Broschüre"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:311
+#: ../services/class/bibliograph/schema/BibtexSchema.php:305
 msgid "Book (Edited)"
 msgstr "Sammelband"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:317
+#: ../services/class/bibliograph/schema/BibtexSchema.php:311
 msgid "Conference Paper"
 msgstr "Konferenzpapier"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:322
+#: ../services/class/bibliograph/schema/BibtexSchema.php:316
 msgid "Book Chapter"
 msgstr "Buchkapitel"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:328
+#: ../services/class/bibliograph/schema/BibtexSchema.php:322
 msgid "Chapter in Edited Book"
 msgstr "Kapitel in Sammelband"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:333
+#: ../services/class/bibliograph/schema/BibtexSchema.php:327
 msgid "Paper in Conference Proceedings"
 msgstr "Konferenzpapier"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:339
+#: ../services/class/bibliograph/schema/BibtexSchema.php:333
 msgid "Journal Issue"
 msgstr "Zeitschriftenausgabe"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:345
+#: ../services/class/bibliograph/schema/BibtexSchema.php:339
 msgid "Handbook"
 msgstr "Handbuch"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:350
+#: ../services/class/bibliograph/schema/BibtexSchema.php:344
 msgid "Master's Thesis"
 msgstr "Masterarbeit"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:355
+#: ../services/class/bibliograph/schema/BibtexSchema.php:349
 msgid "Miscellaneous"
 msgstr "Sonstige Veröffentlichung"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:360
+#: ../services/class/bibliograph/schema/BibtexSchema.php:354
 msgid "Ph.D. Thesis"
 msgstr "Doktorarbeit"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:365
+#: ../services/class/bibliograph/schema/BibtexSchema.php:359
 msgid "Conference Proceedings"
 msgstr "Konferenzbeiträge"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:370
+#: ../services/class/bibliograph/schema/BibtexSchema.php:364
 msgid "Report/Working Paper"
 msgstr "Arbeitspapier/Report"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:375
+#: ../services/class/bibliograph/schema/BibtexSchema.php:369
 msgid "Unpublished Manuscript"
 msgstr "Unveröffentlichtes Manuskript"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:390
+#: ../services/class/bibliograph/schema/BibtexSchema.php:384
 msgid "Bibliographic Type"
 msgstr "Werktyp"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:396
+#: ../services/class/bibliograph/schema/BibtexSchema.php:390
 msgid "Reference Type"
 msgstr "Werktyp"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:409
+#: ../services/class/bibliograph/schema/BibtexSchema.php:403
 msgid "Citation Key"
 msgstr "Zitierschlüssel"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:415
+#: ../services/class/bibliograph/schema/BibtexSchema.php:409
 msgid "Citation key"
 msgstr "Zitierschlüssel"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:419
+#: ../services/class/bibliograph/schema/BibtexSchema.php:413
 msgid "Abstract"
 msgstr "Zusammenfassung"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:431
+#: ../services/class/bibliograph/schema/BibtexSchema.php:425
 msgid "Place"
 msgstr "Ort"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:445
+#: ../services/class/bibliograph/schema/BibtexSchema.php:439
 msgid "Affiliation"
 msgstr "Zugehörigkeit"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:452
+#: ../services/class/bibliograph/schema/BibtexSchema.php:446
 msgid "Annotation"
 msgstr "Annotationen"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:459
+#: ../services/class/bibliograph/schema/BibtexSchema.php:453
+#: ../services/class/bibliograph/schema/BibtexSchema.php:454
 msgid "Authors"
 msgstr "Autor/inn/en"
 
@@ -190,114 +234,144 @@ msgstr "Autor/inn/en"
 #: ../../../class/bibliograph/schema/BibtexSchema.php:461
 #: ../../../class/bibliograph/schema/BibtexSchema.php:462
 #: ../../../class/bibliograph/schema/BibtexSchema.php:533
+#: ../services/class/bibliograph/schema/BibtexSchema.php:455
+#: ../services/class/bibliograph/schema/BibtexSchema.php:456
+#: ../services/class/bibliograph/schema/BibtexSchema.php:530
 msgid "Editors"
 msgstr "Herausgeber/innen"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:479
+#: ../services/class/bibliograph/schema/BibtexSchema.php:474
 msgid "Book Title"
 msgstr "Sammelbandtitel"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:495
+#: ../services/class/bibliograph/schema/BibtexSchema.php:492
 msgid "Contents"
 msgstr "Inhaltsverzeichnis"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:501
+#: ../services/class/bibliograph/schema/BibtexSchema.php:498
 msgid "Copyright"
 msgstr "Urheberrechtsangaben"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:507
+#: ../services/class/bibliograph/schema/BibtexSchema.php:504
 msgid "Cross Reference"
 msgstr "Querverweis"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:520
+#: ../services/class/bibliograph/schema/BibtexSchema.php:517
 msgid "Date"
 msgstr "Datum"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:527
+#: ../services/class/bibliograph/schema/BibtexSchema.php:524
 msgid "Edition"
 msgstr "Auflage"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:549
+#: ../services/class/bibliograph/schema/BibtexSchema.php:546
 msgid "Published As"
 msgstr "Publikationsangaben"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:555
+#: ../services/class/bibliograph/schema/BibtexSchema.php:552
 msgid "Institution"
 msgstr "Institution"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:568
+#: ../services/class/bibliograph/schema/BibtexSchema.php:565
 msgid "ISBN"
 msgstr "ISBN"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:574
+#: ../services/class/bibliograph/schema/BibtexSchema.php:571
 msgid "ISSN"
 msgstr "ISSN"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:580
+#: ../services/class/bibliograph/schema/BibtexSchema.php:577
 msgid "Journal"
 msgstr "Zeitschrift"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:596
+#: ../services/class/bibliograph/schema/BibtexSchema.php:593
 msgid "Key"
 msgstr "Schlüssel"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:602
+#: ../services/class/bibliograph/schema/BibtexSchema.php:599
 msgid "Keywords"
 msgstr "Schlagworte"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:618
+#: ../services/class/bibliograph/schema/BibtexSchema.php:615
 msgid "Language"
 msgstr "Sprache"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:625
+#: ../services/class/bibliograph/schema/BibtexSchema.php:622
 msgid "Call Number"
 msgstr "Signatur"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:633
+#: ../services/class/bibliograph/schema/BibtexSchema.php:630
 msgid "Location"
 msgstr "Standort"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:640
+#: ../services/class/bibliograph/schema/BibtexSchema.php:637
 msgid "Month"
 msgstr "Monat"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:647
+#: ../services/class/bibliograph/schema/BibtexSchema.php:644
 msgid "Note"
 msgstr "Anmerkungen"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:653
+#: ../services/class/bibliograph/schema/BibtexSchema.php:650
 msgid "Number"
 msgstr "Nummer"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:659
+#: ../services/class/bibliograph/schema/BibtexSchema.php:656
 msgid "Organization"
 msgstr "Organisation"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:671
+#: ../services/class/bibliograph/schema/BibtexSchema.php:668
 msgid "Pages"
 msgstr "Seiten"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:677
+#: ../services/class/bibliograph/schema/BibtexSchema.php:674
 msgid "Price"
 msgstr "Preis"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:684
+#: ../services/class/bibliograph/schema/BibtexSchema.php:681
 msgid "Publisher"
 msgstr "Verlag"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:698
+#: ../services/class/bibliograph/schema/BibtexSchema.php:695
 msgid "University"
 msgstr "Universität"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:711
+#: ../services/class/bibliograph/schema/BibtexSchema.php:708
 msgid "Series"
 msgstr "Serie"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:724
+#: ../services/class/bibliograph/schema/BibtexSchema.php:721
 msgid "Size"
 msgstr "Größe"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:730
+#: ../services/class/bibliograph/schema/BibtexSchema.php:727
 msgid "Subtitle"
 msgstr "Untertitel"
 
@@ -305,67 +379,89 @@ msgstr "Untertitel"
 #: ../../../class/bibliograph/service/ACLTool.php:1179
 #: ../../../class/bibliograph/service/Import.php:110
 #: ../../../class/bibliograph/service/Reference.php:204
+#: ../services/class/bibliograph/service/Import.php:110
+#: ../services/class/bibliograph/service/Reference.php:204
+#: ../services/class/bibliograph/schema/BibtexSchema.php:733
+#: ../services/class/bibliograph/service/ACLTool.php:1345
 msgid "Title"
 msgstr "Titel"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:747
+#: ../services/class/bibliograph/schema/BibtexSchema.php:744
 msgid "Translator"
 msgstr "Übersetzer"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:757
 #: ../../../class/bibliograph/service/Folder.php:628
 #: ../../../class/qcl/data/datasource/DbModel.php:206
+#: ../services/class/bibliograph/service/Folder.php:628
+#: ../services/class/bibliograph/schema/BibtexSchema.php:754
 msgid "Type"
 msgstr "Typ"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:763
+#: ../services/class/bibliograph/schema/BibtexSchema.php:760
 msgid "Internet Link"
 msgstr "URL"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:773
+#: ../services/class/bibliograph/schema/BibtexSchema.php:770
 msgid "Volume"
 msgstr "Band"
 
 #: ../../../class/bibliograph/schema/BibtexSchema.php:779
 #: ../../../class/bibliograph/service/Import.php:106
 #: ../../../class/bibliograph/service/Reference.php:200
+#: ../services/class/bibliograph/service/Import.php:106
+#: ../services/class/bibliograph/service/Reference.php:200
+#: ../services/class/bibliograph/schema/BibtexSchema.php:776
 msgid "Year"
 msgstr "Jahr"
 
 #: ../../../class/bibliograph/schema/CQL.php:61
 #: ../../../class/bibliograph/service/Reference.php:1666
+#: ../services/class/bibliograph/service/Reference.php:1666
+#: ../services/class/bibliograph/schema/CQL.php:61
 msgid "and"
 msgstr "und"
 
 #: ../../../class/bibliograph/schema/CQL.php:61
+#: ../services/class/bibliograph/schema/CQL.php:61
 msgid "or"
 msgstr "oder"
 
 #: ../../../class/bibliograph/schema/CQL.php:61
+#: ../services/class/bibliograph/schema/CQL.php:61
 msgid "not"
 msgstr "nicht"
 
 #: ../../../class/bibliograph/schema/CQL.php:62
+#: ../services/class/bibliograph/schema/CQL.php:62
 msgid "is"
 msgstr "ist"
 
 #: ../../../class/bibliograph/schema/CQL.php:62
+#: ../services/class/bibliograph/schema/CQL.php:62
 msgid "isnot"
 msgstr "ist nicht"
 
 #: ../../../class/bibliograph/schema/CQL.php:62
+#: ../services/class/bibliograph/schema/CQL.php:62
 msgid "contains"
 msgstr "enthält"
 
 #: ../../../class/bibliograph/schema/CQL.php:62
+#: ../services/class/bibliograph/schema/CQL.php:62
 msgid "notcontains"
 msgstr "enthält nicht"
 
 #: ../../../class/bibliograph/schema/CQL.php:63
+#: ../services/class/bibliograph/schema/CQL.php:63
 msgid "startswith"
 msgstr "beginnt mit"
 
 #: ../../../class/bibliograph/schema/CQL.php:307
+#: ../services/class/bibliograph/schema/CQL.php:307
 #, php-format
 msgid "Index '%s' does not exist."
 msgstr "Der Index '%s' existiert nicht."
@@ -374,10 +470,13 @@ msgstr "Der Index '%s' existiert nicht."
 #: ../../../class/bibliograph/service/ACLTool.php:101
 #: ../../../class/qcl/access/ACLTool.php:50
 #: ../../../class/qcl/access/ACLTool.php:96
+#: ../services/class/bibliograph/service/ACLTool.php:54
+#: ../services/class/bibliograph/service/ACLTool.php:102
 msgid "Users"
 msgstr "Benutzer/innen"
 
 #: ../../../class/bibliograph/service/ACLTool.php:54
+#: ../services/class/bibliograph/service/ACLTool.php:55
 msgid "User"
 msgstr "Benutzer/in"
 
@@ -385,10 +484,13 @@ msgstr "Benutzer/in"
 #: ../../../class/bibliograph/service/ACLTool.php:106
 #: ../../../class/qcl/access/ACLTool.php:56
 #: ../../../class/qcl/access/ACLTool.php:101
+#: ../services/class/bibliograph/service/ACLTool.php:61
+#: ../services/class/bibliograph/service/ACLTool.php:107
 msgid "Roles"
 msgstr "Rollen"
 
 #: ../../../class/bibliograph/service/ACLTool.php:61
+#: ../services/class/bibliograph/service/ACLTool.php:62
 msgid "Role"
 msgstr "Rolle"
 
@@ -396,10 +498,13 @@ msgstr "Rolle"
 #: ../../../class/bibliograph/service/ACLTool.php:111
 #: ../../../class/qcl/access/ACLTool.php:62
 #: ../../../class/qcl/access/ACLTool.php:106
+#: ../services/class/bibliograph/service/ACLTool.php:68
+#: ../services/class/bibliograph/service/ACLTool.php:112
 msgid "Groups"
 msgstr "Gruppen"
 
 #: ../../../class/bibliograph/service/ACLTool.php:68
+#: ../services/class/bibliograph/service/ACLTool.php:69
 msgid "Group"
 msgstr "Gruppe"
 
@@ -407,10 +512,13 @@ msgstr "Gruppe"
 #: ../../../class/bibliograph/service/ACLTool.php:116
 #: ../../../class/qcl/access/ACLTool.php:68
 #: ../../../class/qcl/access/ACLTool.php:111
+#: ../services/class/bibliograph/service/ACLTool.php:75
+#: ../services/class/bibliograph/service/ACLTool.php:117
 msgid "Permissions"
 msgstr "Berechtigungen"
 
 #: ../../../class/bibliograph/service/ACLTool.php:75
+#: ../services/class/bibliograph/service/ACLTool.php:76
 msgid "Permission"
 msgstr "Berechtigung"
 
@@ -418,99 +526,112 @@ msgstr "Berechtigung"
 #: ../../../class/bibliograph/service/ACLTool.php:121
 #: ../../../class/qcl/access/ACLTool.php:74
 #: ../../../class/qcl/access/ACLTool.php:116
+#: ../services/class/bibliograph/service/ACLTool.php:82
+#: ../services/class/bibliograph/service/ACLTool.php:122
 msgid "Datasources"
 msgstr "Datenquellen"
 
 #: ../../../class/bibliograph/service/ACLTool.php:82
+#: ../services/class/bibliograph/service/ACLTool.php:83
 msgid "Datasource"
 msgstr "Datenquelle"
 
 #: ../../../class/bibliograph/service/ACLTool.php:262
 #: ../../../class/qcl/access/ACLTool.php:363
+#: ../services/class/bibliograph/service/ACLTool.php:263
 msgid "Relations"
 msgstr "Beziehungen"
 
 #: ../../../class/bibliograph/service/ACLTool.php:335
 #: ../../../class/qcl/access/ACLTool.php:436
+#: ../services/class/bibliograph/service/ACLTool.php:336
 msgid "in"
 msgstr "in"
 
 #: ../../../class/bibliograph/service/ACLTool.php:373
 #: ../../../class/qcl/access/ACLTool.php:474
+#: ../services/class/bibliograph/service/ACLTool.php:374
 msgid "In all groups"
 msgstr "In allen Gruppen"
 
 #: ../../../class/bibliograph/service/ACLTool.php:486
 #: ../../../class/qcl/access/ACLTool.php:588
+#: ../services/class/bibliograph/service/ACLTool.php:487
 msgid "Do you want to remove only the datasource entry or all associated data?"
-msgstr ""
-"Wollen Sie nur die Datenquellen-Eintrag entfernen oder alle zugehörigen "
-"Daten löschen?"
+msgstr "Wollen Sie nur die Datenquellen-Eintrag entfernen oder alle zugehörigen Daten löschen?"
 
 #: ../../../class/bibliograph/service/ACLTool.php:487
 #: ../../../class/qcl/access/ACLTool.php:589
+#: ../services/class/bibliograph/service/ACLTool.php:488
 msgid "All data"
 msgstr "Alle Daten"
 
 #: ../../../class/bibliograph/service/ACLTool.php:487
 #: ../../../class/qcl/access/ACLTool.php:589
+#: ../services/class/bibliograph/service/ACLTool.php:488
 msgid "Entry only"
 msgstr "Nur den Eintrag"
 
 #: ../../../class/bibliograph/service/ACLTool.php:511
+#: ../services/class/bibliograph/service/ACLTool.php:512
 #, php-format
 msgid "Deleting element '%s' of type '%s' is not allowed."
 msgstr "Element '%s' vom Typ '%s' kann nicht gelöscht werden.  "
 
 #: ../../../class/bibliograph/service/ACLTool.php:546
 #: ../../../class/qcl/access/ACLTool.php:633
+#: ../services/class/bibliograph/service/ACLTool.php:547
 #, php-format
 msgid "Deleting datasource '%s' failed... "
 msgstr "Das Löschen der Datenquelle '%s' ist fehlgeschlagen..."
 
 #: ../../../class/bibliograph/service/ACLTool.php:549
 #: ../../../class/qcl/access/ACLTool.php:636
+#: ../services/class/bibliograph/service/ACLTool.php:550
 #, php-format
 msgid "Datasource '%s' successfully deleted ... "
 msgstr "Datenquelle '%s' wurde erfolgreich gelöscht."
 
 #: ../../../class/bibliograph/service/ACLTool.php:724
 #: ../../../class/qcl/access/ACLTool.php:851
+#: ../services/class/bibliograph/service/ACLTool.php:725
 msgid "Passwords do not match. Please try again"
 msgstr "Passwörter stimmen nicht überein. Bitte erneut eingeben."
 
 #: ../../../class/bibliograph/service/ACLTool.php:738
+#: ../services/class/bibliograph/service/ACLTool.php:739
 msgid "User data is from an LDAP server and cannot be changed."
-msgstr ""
-"Die Benutzerdaten stammen aus einem LDAP-Server und können nicht verändert "
-"werden."
+msgstr "Die Benutzerdaten stammen aus einem LDAP-Server und können nicht verändert werden."
 
 #: ../../../class/bibliograph/service/ACLTool.php:770
+#: ../services/class/bibliograph/service/ACLTool.php:771
 msgid "You must set a password."
 msgstr "Sie müssen ein Passwort eingeben.\t"
 
 #: ../../../class/bibliograph/service/ACLTool.php:784
+#: ../services/class/bibliograph/service/ACLTool.php:785
 msgid "The data has been saved."
 msgstr "Die Änderungen wurden gespeichert. "
 
 #: ../../../class/bibliograph/service/ACLTool.php:800
 #: ../../../class/bibliograph/service/ACLTool.php:1158
 #: ../../../class/qcl/access/ACLTool.php:879
+#: ../services/class/bibliograph/service/ACLTool.php:967
+#: ../services/class/bibliograph/service/ACLTool.php:1324
 #, php-format
 msgid "An email has been sent to %s (%s) with information on the registration."
-msgstr ""
-"Eine Email mit Informationen zur Registrierung wurde an %s (%s) gesendet."
+msgstr "Eine Email mit Informationen zur Registrierung wurde an %s (%s) gesendet."
 
 #: ../../../class/bibliograph/service/ACLTool.php:807
 #: ../../../class/qcl/access/ACLTool.php:887
+#: ../services/class/bibliograph/service/ACLTool.php:974
 #, php-format
-msgid ""
-"An email has been sent to %s (%s) to inform about the change of password."
-msgstr ""
-"Eine Email mit Informationen zur Passwortänderung wurde an %s (%s) gesendet."
+msgid "An email has been sent to %s (%s) to inform about the change of password."
+msgstr "Eine Email mit Informationen zur Passwortänderung wurde an %s (%s) gesendet."
 
 #: ../../../class/bibliograph/service/ACLTool.php:836
 #: ../../../class/qcl/access/ACLTool.php:919
+#: ../services/class/bibliograph/service/ACLTool.php:1002
 #, php-format
 msgid "Your registration at %s"
 msgstr "Ihre Registrierung bei %s"
@@ -520,187 +641,181 @@ msgstr "Ihre Registrierung bei %s"
 #: ../../../class/bibliograph/service/ACLTool.php:951
 #: ../../../class/qcl/access/ACLTool.php:929
 #: ../../../class/qcl/access/ACLTool.php:968
+#: ../services/class/bibliograph/service/ACLTool.php:1003
+#: ../services/class/bibliograph/service/ACLTool.php:1038
+#: ../services/class/bibliograph/service/ACLTool.php:1117
 #, php-format
 msgid "Dear %s,"
 msgstr "Sehr geehrte/r %s,"
 
 #: ../../../class/bibliograph/service/ACLTool.php:838
+#: ../services/class/bibliograph/service/ACLTool.php:1004
 #, php-format
 msgid "You have been registered as user '%s' at '%s'."
 msgstr "Sie wurden als Benutzer/in '%s' bei '%s' registriert."
 
 #: ../../../class/bibliograph/service/ACLTool.php:841
+#: ../services/class/bibliograph/service/ACLTool.php:1007
 #, php-format
-msgid ""
-"Your temporary password is '%s'. You will be asked to change it after your "
-"first login."
-msgstr ""
-"Ihr temporäres Passwort ist '%s'. Sie müssen das Passwort nach der ersten "
-"Anmeldung ändern."
+msgid "Your temporary password is '%s'. You will be asked to change it after your first login."
+msgstr "Ihr temporäres Passwort ist '%s'. Sie müssen das Passwort nach der ersten Anmeldung ändern."
 
 #: ../../../class/bibliograph/service/ACLTool.php:843
 #: ../../../class/qcl/access/ACLTool.php:932
+#: ../services/class/bibliograph/service/ACLTool.php:1009
 msgid "Please confirm your account by visiting the following link:"
-msgstr ""
-"Bitte bestätigen Sie Ihr Konto, indem sie auf den folgenden Link klicken:"
+msgstr "Bitte bestätigen Sie Ihr Konto, indem sie auf den folgenden Link klicken:"
 
 #: ../../../class/bibliograph/service/ACLTool.php:845
 #: ../../../class/qcl/access/ACLTool.php:934
+#: ../services/class/bibliograph/service/ACLTool.php:1011
 msgid "Thank you."
 msgstr "Vielen Dank."
 
 #: ../../../class/bibliograph/service/ACLTool.php:871
 #: ../../../class/qcl/access/ACLTool.php:963
+#: ../services/class/bibliograph/service/ACLTool.php:1037
 #, php-format
 msgid "Password change at %s"
 msgstr "Passwortänderung bei %s"
 
 #: ../../../class/bibliograph/service/ACLTool.php:873
+#: ../services/class/bibliograph/service/ACLTool.php:1039
 #, php-format
-msgid ""
-"This is to inform you that you or somebody else has changed the password at "
-"%s."
-msgstr ""
-"Hiermit möchten wir Sie darüber informieren, dass Ihr Passwort auf '%s' "
-"geändert wurde."
+msgid "This is to inform you that you or somebody else has changed the password at %s."
+msgstr "Hiermit möchten wir Sie darüber informieren, dass Ihr Passwort auf '%s' geändert wurde."
 
 #: ../../../class/bibliograph/service/ACLTool.php:874
-msgid ""
-"If this is not what you wanted, please reset your password immediately by "
-"clicking on the following link:"
-msgstr ""
-"Wenn Sie dies nicht veranlasst haben, setzen Sie Ihr Passwort am besten "
-"sofort zurück, indem Sie auf den folgenden Link klicken:"
+#: ../services/class/bibliograph/service/ACLTool.php:1040
+msgid "If this is not what you wanted, please reset your password immediately by clicking on the following link:"
+msgstr "Wenn Sie dies nicht veranlasst haben, setzen Sie Ihr Passwort am besten sofort zurück, indem Sie auf den folgenden Link klicken:"
 
 #: ../../../class/bibliograph/service/ACLTool.php:907
 #: ../../../class/qcl/access/ACLTool.php:1011
+#: ../services/class/bibliograph/service/ACLTool.php:1073
 #, php-format
 msgid "Thank you, %s, your email address has been confirmed."
 msgstr "Danke, %s, Ihre E-Mailadresse wurde bestätigt."
 
 #: ../../../class/bibliograph/service/ACLTool.php:909
+#: ../services/class/bibliograph/service/ACLTool.php:1075
 #, php-format
 msgid "You can now log in as user '%s' at <a href='%s'>this link</a>"
-msgstr ""
-"Sie können sich jetzt mit dem Benutzernamen '%s' <a href='%s'>hier</a> "
-"anmelden."
+msgstr "Sie können sich jetzt mit dem Benutzernamen '%s' <a href='%s'>hier</a> anmelden."
 
 #: ../../../class/bibliograph/service/ACLTool.php:930
-msgid ""
-"Please enter your email address. You will receive a message with a link to "
-"reset your password."
-msgstr ""
-"Bitte geben Sie Ihre Emailadresse ein. Sie erhalten dann eine Nachricht mit "
-"einem Link zum Zurücksetzen Ihres Passwortes."
+#: ../services/class/bibliograph/service/ACLTool.php:1096
+msgid "Please enter your email address. You will receive a message with a link to reset your password."
+msgstr "Bitte geben Sie Ihre Emailadresse ein. Sie erhalten dann eine Nachricht mit einem Link zum Zurücksetzen Ihres Passwortes."
 
 #: ../../../class/bibliograph/service/ACLTool.php:950
+#: ../services/class/bibliograph/service/ACLTool.php:1116
 #, php-format
 msgid "Password reset at %s"
 msgstr "Ihr Passwort bei %s wurde zurückgesetzt"
 
 #: ../../../class/bibliograph/service/ACLTool.php:952
+#: ../services/class/bibliograph/service/ACLTool.php:1118
 #, php-format
-msgid ""
-"This is to inform you that you or somebody else has requested a password "
-"reset at %s."
-msgstr ""
-"Hiermit möchten wir Sie informieren, dass Sie oder jemand anders eine "
-"Rücksetzung des Passworts bei '%s' angefordert hat."
+msgid "This is to inform you that you or somebody else has requested a password reset at %s."
+msgstr "Hiermit möchten wir Sie informieren, dass Sie oder jemand anders eine Rücksetzung des Passworts bei '%s' angefordert hat."
 
 #: ../../../class/bibliograph/service/ACLTool.php:953
-msgid ""
-"If this is not what you wanted, you can ignore this email. Your account is "
-"safe."
-msgstr ""
-"Wenn Sie das nicht veranlasst haben oder das Passwort nicht ändern möchten, "
-"können Sie diese Email ignorieren und löschen. Ihr Benutzerkonto wurde nicht "
-"verändert."
+#: ../services/class/bibliograph/service/ACLTool.php:1119
+msgid "If this is not what you wanted, you can ignore this email. Your account is safe."
+msgstr "Wenn Sie das nicht veranlasst haben oder das Passwort nicht ändern möchten, können Sie diese Email ignorieren und löschen. Ihr Benutzerkonto wurde nicht verändert."
 
 #: ../../../class/bibliograph/service/ACLTool.php:954
+#: ../services/class/bibliograph/service/ACLTool.php:1120
 msgid "If you have requested the reset, please click on the following link:"
-msgstr ""
-"Wenn Sie das Zurücksetzen des Passworts veranlasst haben, klicken Sie bitte "
-"auf den folgenden Link:"
+msgstr "Wenn Sie das Zurücksetzen des Passworts veranlasst haben, klicken Sie bitte auf den folgenden Link:"
 
 #: ../../../class/bibliograph/service/ACLTool.php:968
+#: ../services/class/bibliograph/service/ACLTool.php:1134
 msgid "An email has been sent with information on the password reset."
-msgstr ""
-"Es wurde eine Email mit Informationen zur Zurücksetzung des Passworts "
-"gesendet."
+msgstr "Es wurde eine Email mit Informationen zur Zurücksetzung des Passworts gesendet."
 
 #: ../../../class/bibliograph/service/ACLTool.php:983
+#: ../services/class/bibliograph/service/ACLTool.php:1149
 msgid "Access denied."
 msgstr "Zugang verweigert."
 
 #: ../../../class/bibliograph/service/ACLTool.php:995
+#: ../services/class/bibliograph/service/ACLTool.php:1161
 #, php-format
 msgid "%s, your password has been reset."
 msgstr "%s, Ihr Passwort wurde zurückgesetzt."
 
 #: ../../../class/bibliograph/service/ACLTool.php:996
+#: ../services/class/bibliograph/service/ACLTool.php:1162
 #, php-format
 msgid "Your username is '%s' and your temporary password is '%s'."
 msgstr "Ihr Nutzername ist '%s' und Ihr temporäres Passwort ist '%s'."
 
 #: ../../../class/bibliograph/service/ACLTool.php:997
+#: ../services/class/bibliograph/service/ACLTool.php:1163
 #, php-format
 msgid "Please <a href='%s'>log in</a> and change the password now."
-msgstr ""
-"Bitte <a href='%s'>melden Sie sich jetzt an</a> und ändern Ihr Passwort."
+msgstr "Bitte <a href='%s'>melden Sie sich jetzt an</a> und ändern Ihr Passwort."
 
 #: ../../../class/bibliograph/service/ACLTool.php:1067
+#: ../services/class/bibliograph/service/ACLTool.php:1233
 #, php-format
 msgid "%s is not a valid email address"
 msgstr "'%s' ist keine gültige Emailadresse"
 
 #: ../../../class/bibliograph/service/ACLTool.php:1078
+#: ../services/class/bibliograph/service/ACLTool.php:1244
 #, php-format
 msgid "No user found for email address %s"
 msgstr "Für die Adresse '%s' ist kein Benutzer registriert."
 
 #: ../../../class/bibliograph/service/ACLTool.php:1086
-msgid ""
-"Please enter the user data. A random password will be generated and sent to "
-"the user."
-msgstr ""
-"Bitte geben Sie die Nutzerdaten ein. Der/die neue Benutzer/in erhält ein "
-"temporäres Passwort per E-Mail."
+#: ../services/class/bibliograph/service/ACLTool.php:1252
+msgid "Please enter the user data. A random password will be generated and sent to the user."
+msgstr "Bitte geben Sie die Nutzerdaten ein. Der/die neue Benutzer/in erhält ein temporäres Passwort per E-Mail."
 
 #: ../../../class/bibliograph/service/ACLTool.php:1089
+#: ../services/class/bibliograph/service/ACLTool.php:1255
 msgid "Login name"
 msgstr "Benutzername"
 
 #: ../../../class/bibliograph/service/ACLTool.php:1091
+#: ../services/class/bibliograph/service/ACLTool.php:1257
 msgid "Enter the short login name"
 msgstr "Der kurze Benutzername, z.B. kmueller"
 
 #: ../../../class/bibliograph/service/ACLTool.php:1099
 #: ../../../class/qcl/access/model/User.php:172
+#: ../services/class/bibliograph/service/ACLTool.php:1265
 msgid "Full name"
 msgstr "Vollständiger Name"
 
 #: ../../../class/bibliograph/service/ACLTool.php:1100
+#: ../services/class/bibliograph/service/ACLTool.php:1266
 msgid "Enter the full name of the user"
 msgstr "Der vollständige Name, z.B. Klaus Müller"
 
 #: ../../../class/bibliograph/service/ACLTool.php:1108
 #: ../../../class/qcl/access/model/User.php:175
+#: ../services/class/bibliograph/service/ACLTool.php:1274
 msgid "Email address"
 msgstr "Emailadresse"
 
 #: ../../../class/bibliograph/service/ACLTool.php:1109
 #: ../../../class/qcl/access/model/User.php:176
+#: ../services/class/bibliograph/service/ACLTool.php:1275
 msgid "Enter a valid Email address"
 msgstr "Geben Sie eine gültige E-Mailadresse ein. "
 
 #: ../../../class/bibliograph/service/ACLTool.php:1140
+#: ../services/class/bibliograph/service/ACLTool.php:1306
 #, php-format
 msgid "Login name '%s' already exists. Please choose a different one."
-msgstr ""
-"Der Benutzername '%s' kann nicht verwendet werden. Bitte wählen Sie einen "
-"anderen."
+msgstr "Der Benutzername '%s' kann nicht verwendet werden. Bitte wählen Sie einen anderen."
 
 #: ../../../class/bibliograph/service/ACLTool.php:1165
+#: ../services/class/bibliograph/service/ACLTool.php:1331
 msgid "Please enter the information on the new datasource."
 msgstr "Bitte geben Sie die Informationen zur neuen Datenbank ein. "
 
@@ -709,464 +824,492 @@ msgstr "Bitte geben Sie die Informationen zur neuen Datenbank ein. "
 #: ../../../class/qcl/access/model/Group.php:95
 #: ../../../class/qcl/access/model/Role.php:90
 #: ../../../class/qcl/data/datasource/DbModel.php:191
+#: ../services/class/bibliograph/service/Folder.php:623
+#: ../services/class/bibliograph/service/ACLTool.php:1334
 msgid "Name"
 msgstr "Name"
 
 #: ../../../class/bibliograph/service/ACLTool.php:1170
+#: ../services/class/bibliograph/service/ACLTool.php:1336
 msgid "The short name, e.g. researchgroup1"
 msgstr "Kurzname, z.B. forschungsgruppe1"
 
 #: ../../../class/bibliograph/service/ACLTool.php:1180
+#: ../services/class/bibliograph/service/ACLTool.php:1346
 msgid "A descriptive title, e.g. Database of Research Group 1"
 msgstr "Ein beschreibender Titel, z.B. Literaturdatenbank Forschungsgruppe 1"
 
 #: ../../../class/bibliograph/service/ACLTool.php:1210
+#: ../services/class/bibliograph/service/ACLTool.php:1376
 #, php-format
 msgid "Datasource name '%s' already exists. Please choose a different one."
-msgstr ""
-"Der Name '%s' kann nicht verwendet werden. Bitte wählen Sie einen anderen."
+msgstr "Der Name '%s' kann nicht verwendet werden. Bitte wählen Sie einen anderen."
 
 #: ../../../class/bibliograph/service/ACLTool.php:1216
+#: ../services/class/bibliograph/service/ACLTool.php:1382
 #, php-format
-msgid ""
-"Datasource '%s' has been created. By default, it will not be visible to "
-"anyone. You have to link it with a group, a role, or a user first."
-msgstr ""
-"Die Datenbank '%s' wurde angelegt. Sie ist zurzeit noch für niemanden "
-"sichtbar. Sie müssen sie erst mit einer Gruppe, einer Rolle oder mit einem "
-"Benutzer verknüpfen."
+msgid "Datasource '%s' has been created. By default, it will not be visible to anyone. You have to link it with a group, a role, or a user first."
+msgstr "Die Datenbank '%s' wurde angelegt. Sie ist zurzeit noch für niemanden sichtbar. Sie müssen sie erst mit einer Gruppe, einer Rolle oder mit einem Benutzer verknüpfen."
 
 #: ../../../class/bibliograph/service/Access.php:119
+#: ../services/class/bibliograph/service/Access.php:119
 msgid "Application is in read-only state. Only the administrator can log in."
-msgstr ""
-"Das Programm ist im Nur-Lese-Modus. Nur der Administrator kann sich im "
-"Moment einloggen."
+msgstr "Das Programm ist im Nur-Lese-Modus. Nur der Administrator kann sich im Moment einloggen."
 
 #: ../../../class/bibliograph/service/Access.php:148
+#: ../services/class/bibliograph/service/Access.php:148
 msgid "You need to set a new password."
 msgstr "Sie müssen ein neues Passwort eingeben."
 
 #: ../../../class/bibliograph/service/Access.php:183
+#: ../services/class/bibliograph/service/Access.php:183
 #, php-format
-msgid ""
-"This will purge all anonymous user data (do this only during maintenance "
-"periods) and export all access control data to the backup folder."
-msgstr ""
-"Dies löscht alle Daten der Gastnutzer (deswegen nur während Wartungsperioden "
-"durchführen) und wird alle Zugangskontrolldaten in den Backup-Ordner "
-"schreiben."
+msgid "This will purge all anonymous user data (do this only during maintenance periods) and export all access control data to the backup folder."
+msgstr "Dies löscht alle Daten der Gastnutzer (deswegen nur während Wartungsperioden durchführen) und wird alle Zugangskontrolldaten in den Backup-Ordner schreiben."
 
 #: ../../../class/bibliograph/service/Access.php:206
+#: ../services/class/bibliograph/service/Access.php:206
 msgid "All data exported to the backup directory."
 msgstr "Alle Daten wurden im Backup-Verzeichnis gesichtert."
 
 #: ../../../class/bibliograph/service/Application.php:60
+#: ../services/class/bibliograph/service/Application.php:64
 msgid "Thank you for taking time to make Bibliograph better."
 msgstr "Danke, dass Sie dazu beitragen, das Programm zu verbessern."
 
 #: ../../../class/bibliograph/service/Application.php:62
-msgid ""
-"After selecting the type of report (1), please provide a detailed "
-"description of the error or the requested feature (2). "
-msgstr ""
-"Nachdem sie die Art der Meldung gewählt haben (1), geben Sie uns bitte eine "
-"detaillierte Beschreibung des Fehlers oder der gewünschten Funktionalität "
-"(2)."
+#: ../services/class/bibliograph/service/Application.php:66
+msgid "After selecting the type of report (1), please provide a detailed description of the error or the requested feature (2). "
+msgstr "Nachdem sie die Art der Meldung gewählt haben (1), geben Sie uns bitte eine detaillierte Beschreibung des Fehlers oder der gewünschten Funktionalität (2)."
 
 #: ../../../class/bibliograph/service/Application.php:63
-msgid ""
-"If the application has reported an error, please copy & paste or write down "
-"the error message (3). "
-msgstr ""
-"Wenn die Anwendung einen Fehler gemeldet hat, geben Sie diesen im Feld (3) "
-"an."
+#: ../services/class/bibliograph/service/Application.php:67
+msgid "If the application has reported an error, please copy & paste or write down the error message (3). "
+msgstr "Wenn die Anwendung einen Fehler gemeldet hat, geben Sie diesen im Feld (3) an."
 
 #: ../../../class/bibliograph/service/Application.php:64
-msgid ""
-"Finally, If you want to be notified about the progress of your request, "
-"please provide your email address (4)."
-msgstr ""
-"Wenn Sie über den Fortschritt Ihrer Meldung informiert werden möchten, geben "
-"Sie bitte Ihre E-Mailadresse an (4)."
+#: ../services/class/bibliograph/service/Application.php:68
+msgid "Finally, If you want to be notified about the progress of your request, please provide your email address (4)."
+msgstr "Wenn Sie über den Fortschritt Ihrer Meldung informiert werden möchten, geben Sie bitte Ihre E-Mailadresse an (4)."
 
 #: ../../../class/bibliograph/service/Application.php:73
+#: ../services/class/bibliograph/service/Application.php:77
 msgid "Type of report"
 msgstr "Art der Meldung"
 
 #: ../../../class/bibliograph/service/Application.php:75
+#: ../services/class/bibliograph/service/Application.php:79
 msgid "Problem/Bug report"
 msgstr "Fehlermeldung"
 
 #: ../../../class/bibliograph/service/Application.php:76
+#: ../services/class/bibliograph/service/Application.php:80
 msgid "Feature request"
 msgstr "Verbesserungsvorschlag"
 
 #: ../../../class/bibliograph/service/Application.php:80
+#: ../services/class/bibliograph/service/Application.php:84
 msgid "Problem"
 msgstr "Problem"
 
 #: ../../../class/bibliograph/service/Application.php:86
+#: ../services/class/bibliograph/service/Application.php:90
 msgid "Error Message"
 msgstr "Fehlermeldung"
 
 #: ../../../class/bibliograph/service/Application.php:91
+#: ../services/class/bibliograph/service/Application.php:95
 msgid "Email"
 msgstr "E-Mail"
 
 #: ../../../class/bibliograph/service/Application.php:137
+#: ../services/class/bibliograph/service/Application.php:141
 msgid "Thank you for your report."
 msgstr "Vielen Dank für Ihre Meldung."
 
 #: ../../../class/bibliograph/service/Application.php:139
+#: ../services/class/bibliograph/service/Application.php:143
 msgid "You will be notified as soon as it can be considered."
 msgstr "Sie werden benachrichtigt, sobald wir dazu kommen."
 
 #: ../../../class/bibliograph/service/Export.php:41
+#: ../services/class/bibliograph/service/Export.php:41
 msgid "Export references"
 msgstr "Datensätze exportieren"
 
 #: ../../../class/bibliograph/service/Export.php:44
+#: ../services/class/bibliograph/service/Export.php:44
 msgid "Choose the export format"
 msgstr "Exportformat auswählen"
 
 #: ../../../class/bibliograph/service/Export.php:93
+#: ../services/class/bibliograph/service/Export.php:93
 msgid "Preparing export data. Please wait..."
 msgstr "Exportdaten werden verarbeitet. Bitte warten..."
 
 #: ../../../class/bibliograph/service/Folder.php:553
+#: ../services/class/bibliograph/service/Folder.php:553
 msgid "Change the visibility of the folder"
 msgstr "Die Sichtbarkeit des Ordners ändern"
 
 #: ../../../class/bibliograph/service/Folder.php:556
+#: ../services/class/bibliograph/service/Folder.php:556
 msgid "State"
 msgstr "Status"
 
 #: ../../../class/bibliograph/service/Folder.php:559
+#: ../services/class/bibliograph/service/Folder.php:559
 msgid "Folder is publically visible"
 msgstr "Ordner ist öffentlich sichtbar"
 
 #: ../../../class/bibliograph/service/Folder.php:560
+#: ../services/class/bibliograph/service/Folder.php:560
 msgid "Folder is not publically visible"
 msgstr "Ordner ist nicht öffentlich sichtbar"
 
 #: ../../../class/bibliograph/service/Folder.php:566
+#: ../services/class/bibliograph/service/Folder.php:566
 msgid "Depth"
 msgstr "Reichweite"
 
 #: ../../../class/bibliograph/service/Folder.php:569
+#: ../services/class/bibliograph/service/Folder.php:569
 msgid "Apply only to the selected folder"
 msgstr "Nur auf den ausgewählten Ordner anwenden"
 
 #: ../../../class/bibliograph/service/Folder.php:570
+#: ../services/class/bibliograph/service/Folder.php:570
 msgid "Apply to the selected folder and its subfolders"
 msgstr "Auf den ausgewählten Ordner und alle Unterordner anwenden"
 
 #: ../../../class/bibliograph/service/Folder.php:620
+#: ../services/class/bibliograph/service/Folder.php:620
 msgid "Please enter the name and type of the new folder:"
 msgstr "Bitte wählen Sie den Namen und den Typ des neuen Ordners;"
 
 #: ../../../class/bibliograph/service/Folder.php:631
+#: ../services/class/bibliograph/service/Folder.php:631
 msgid "Normal folder"
 msgstr "Normaler Ordner"
 
 #: ../../../class/bibliograph/service/Folder.php:632
+#: ../services/class/bibliograph/service/Folder.php:632
 msgid "Search folder"
 msgstr "Suchordner"
 
 #: ../../../class/bibliograph/service/Folder.php:699
 #: ../../../class/bibliograph/service/Folder.php:745
+#: ../services/class/bibliograph/service/Folder.php:699
+#: ../services/class/bibliograph/service/Folder.php:745
 msgid "Top folders cannot be deleted."
 msgstr "Die obersten Ordner können nicht gelöscht werden."
 
 #: ../../../class/bibliograph/service/Folder.php:706
+#: ../services/class/bibliograph/service/Folder.php:706
 #, php-format
 msgid "Do you really want to move the folder '%s' into the trash?"
 msgstr "Wollen Sie wirklich den Ordner '%s' in den Mülleimer legen?"
 
 #: ../../../class/bibliograph/service/Folder.php:780
+#: ../services/class/bibliograph/service/Folder.php:780
 msgid "Folder cannot be moved on itself."
 msgstr "Ein Ordner kann nicht auf sich selbst verschoben werden."
 
 #: ../../../class/bibliograph/service/Folder.php:807
+#: ../services/class/bibliograph/service/Folder.php:807
 msgid "Parent node cannot be moved on a child node"
-msgstr ""
-"Ein übergeordneter Ordner kann nicht in einen untergeordneten Ordner "
-"verschoben werden. "
+msgstr "Ein übergeordneter Ordner kann nicht in einen untergeordneten Ordner verschoben werden. "
 
 #: ../../../class/bibliograph/service/Folder.php:820
+#: ../services/class/bibliograph/service/Folder.php:820
 msgid "Top folders cannot be moved."
 msgstr "Die obersten Ordner können nicht verschoben werden."
 
 #: ../../../class/bibliograph/service/Import.php:102
 #: ../../../class/bibliograph/service/Reference.php:196
+#: ../services/class/bibliograph/service/Import.php:102
+#: ../services/class/bibliograph/service/Reference.php:196
 msgid "Author"
 msgstr "Autor/in"
 
 #: ../../../class/bibliograph/service/Import.php:134
+#: ../services/class/bibliograph/service/Import.php:134
 msgid "2. Choose import format"
 msgstr "2. Wählen Sie das Importformat aus"
 
 #: ../../../class/bibliograph/service/Reference.php:258
+#: ../services/class/bibliograph/service/Reference.php:258
 msgid "No recognized query format in request."
 msgstr "Das Abfrageformat kann nicht erkannt werden."
 
 #: ../../../class/bibliograph/service/Reference.php:962
+#: ../services/class/bibliograph/service/Reference.php:962
 #, php-format
-msgid ""
-"The selected record '%s' is contained in %s folders. Move to the trash "
-"anyways?"
-msgstr ""
-"Der ausgewählte Datensatz '%s' befindet sich in %s Ordnern. Möchten Sie ihn "
-"trotzdem in den Papierkorb bewegen?"
+msgid "The selected record '%s' is contained in %s folders. Move to the trash anyways?"
+msgstr "Der ausgewählte Datensatz '%s' befindet sich in %s Ordnern. Möchten Sie ihn trotzdem in den Papierkorb bewegen?"
 
 #: ../../../class/bibliograph/service/Reference.php:1108
 #: ../../../class/bibliograph/service/Reference.php:1191
+#: ../services/class/bibliograph/service/Reference.php:1108
+#: ../services/class/bibliograph/service/Reference.php:1191
 msgid "Invalid datasource."
 msgstr "Ungültige Datenquelle."
 
 #: ../../../class/bibliograph/service/Reference.php:1109
+#: ../services/class/bibliograph/service/Reference.php:1109
 msgid "Invalid source folder."
 msgstr "Ungültiger Quellordner."
 
 #: ../../../class/bibliograph/service/Reference.php:1110
 #: ../../../class/bibliograph/service/Reference.php:1192
+#: ../services/class/bibliograph/service/Reference.php:1110
+#: ../services/class/bibliograph/service/Reference.php:1192
 msgid "Invalid target folder."
 msgstr "Ungültiger Zielordner."
 
 #: ../../../class/bibliograph/service/Reference.php:1274
+#: ../services/class/bibliograph/service/Reference.php:1274
 msgid "Record is marked for deletion"
 msgstr "Der Datensatz ist zur Löschung vorgesehen."
 
 #: ../../../class/bibliograph/service/Reference.php:1278
+#: ../services/class/bibliograph/service/Reference.php:1278
 msgid "Reference id"
 msgstr "Datensatz-ID"
 
 #: ../../../class/bibliograph/service/Reference.php:1279
+#: ../services/class/bibliograph/service/Reference.php:1279
 msgid "Created"
 msgstr "Angelegt am"
 
 #: ../../../class/bibliograph/service/Reference.php:1281
+#: ../services/class/bibliograph/service/Reference.php:1281
 msgid "Created by"
 msgstr "Angelegt von"
 
 #: ../../../class/bibliograph/service/Reference.php:1282
+#: ../services/class/bibliograph/service/Reference.php:1282
 msgid "Modified"
 msgstr "Verändert am"
 
 #: ../../../class/bibliograph/service/Reference.php:1283
+#: ../services/class/bibliograph/service/Reference.php:1283
 msgid "Modified by"
 msgstr "Verändert von"
 
 #: ../../../class/bibliograph/service/Reference.php:1284
 #: ../../../class/qcl/data/datasource/DbModel.php:245
+#: ../services/class/bibliograph/service/Reference.php:1284
 msgid "Status"
 msgstr "Status"
 
 #: ../../../class/bibliograph/service/Reference.php:1432
+#: ../services/class/bibliograph/service/Reference.php:1432
 msgid "Search in:"
 msgstr "Suchen in: "
 
 #: ../../../class/bibliograph/service/Reference.php:1435
+#: ../services/class/bibliograph/service/Reference.php:1435
 msgid "Whole database"
 msgstr "Gesamte Datenbank"
 
 #: ../../../class/bibliograph/service/Reference.php:1436
+#: ../services/class/bibliograph/service/Reference.php:1436
 msgid "Selected records"
 msgstr "Ausgewählte Datensätze"
 
 #: ../../../class/bibliograph/service/Reference.php:1437
+#: ../services/class/bibliograph/service/Reference.php:1437
 msgid "Selected folder"
 msgstr "Ausgewählte Ordner"
 
 #: ../../../class/bibliograph/service/Reference.php:1442
+#: ../services/class/bibliograph/service/Reference.php:1442
 msgid "Replace in:"
 msgstr "Ersetzen in:"
 
 #: ../../../class/bibliograph/service/Reference.php:1447
+#: ../services/class/bibliograph/service/Reference.php:1447
 msgid "Search expression:"
 msgstr "Suchausdruck:"
 
 #: ../../../class/bibliograph/service/Reference.php:1451
+#: ../services/class/bibliograph/service/Reference.php:1451
 msgid "Replace with:"
 msgstr "Ersetzen mit:"
 
 #: ../../../class/bibliograph/service/Reference.php:1455
+#: ../services/class/bibliograph/service/Reference.php:1455
 msgid "Create a backup?"
 msgstr "Eine Sicherung anlegen?"
 
 #: ../../../class/bibliograph/service/Reference.php:1472
-msgid ""
-"You can do a 'find and replace' operation on all or selected records in the "
-"database. These changes cannot easily be undone, that is why it is "
-"recommended to create a backup."
-msgstr ""
-"Sie können eine \"Suchen und Ersetzen\"-Operation in allen oder ausgewählten "
-"Datensätzen der Datenbank durchführen. Diese Änderungen können nur sehr "
-"schwer oder gar nicht rückgängig gemacht werden, deswegen wird geraten, eine "
-"automatische Sicherung durchführen zu lassen. "
+#: ../services/class/bibliograph/service/Reference.php:1471
+msgid "You can do a 'find and replace' operation on all or selected records in the database. These changes cannot easily be undone, that is why it is recommended to create a backup."
+msgstr "Sie können eine \"Suchen und Ersetzen\"-Operation in allen oder ausgewählten Datensätzen der Datenbank durchführen. Diese Änderungen können nur sehr schwer oder gar nicht rückgängig gemacht werden, deswegen wird geraten, eine automatische Sicherung durchführen zu lassen. "
 
 #: ../../../class/bibliograph/service/Reference.php:1492
+#: ../services/class/bibliograph/service/Reference.php:1491
 msgid "in all records"
 msgstr "in allen Datensätzen"
 
 #: ../../../class/bibliograph/service/Reference.php:1493
+#: ../services/class/bibliograph/service/Reference.php:1492
 msgid "in the selected records"
 msgstr "in den ausgewählten Datensätzen"
 
 #: ../../../class/bibliograph/service/Reference.php:1494
+#: ../services/class/bibliograph/service/Reference.php:1493
 msgid "in the selected folder"
 msgstr "im ausgewählten Ordner"
 
 #: ../../../class/bibliograph/service/Reference.php:1503
+#: ../services/class/bibliograph/service/Reference.php:1502
 msgid "all fields"
 msgstr "allen Feldern"
 
 #: ../../../class/bibliograph/service/Reference.php:1504
+#: ../services/class/bibliograph/service/Reference.php:1503
 #, php-format
 msgid "field '%s'"
 msgstr "Feld '%s'"
 
 #: ../../../class/bibliograph/service/Reference.php:1500
+#: ../services/class/bibliograph/service/Reference.php:1499
 #, php-format
 msgid "Are you sure you want to replace '%s' with '%s' in %s %s?"
 msgstr "Sind Sie sicher, dass Sie '%s' mit '%s' in %s %s ersetzen wollen?"
 
 #: ../../../class/bibliograph/service/Reference.php:1580
 #, php-format
-msgid ""
-"In case you want to revert the changes, a backup file '%s' has been created."
-msgstr ""
-"Im Fall, dass Sie die Änderungen rückgängig machen wollen, wurde eine "
-"Sicherungsdatei '%s' erstellt. "
+msgid "In case you want to revert the changes, a backup file '%s' has been created."
+msgstr "Im Fall, dass Sie die Änderungen rückgängig machen wollen, wurde eine Sicherungsdatei '%s' erstellt. "
 
 #: ../../../class/bibliograph/service/Reference.php:1577
+#: ../services/class/bibliograph/service/Reference.php:1577
 #, php-format
 msgid "%s replacements made. %s"
 msgstr "Es wurden %s Ersetzungen vorgenommen. %s"
 
 #: ../../../class/bibliograph/service/Reference.php:1592
+#: ../services/class/bibliograph/service/Reference.php:1592
 msgid "You can use the search features of this application in two ways."
-msgstr ""
-"Sie können sie Suchfunktion dieser Anwendung auf zwei verschiedene Arten "
-"nutzen."
+msgstr "Sie können sie Suchfunktion dieser Anwendung auf zwei verschiedene Arten nutzen."
 
 #: ../../../class/bibliograph/service/Reference.php:1593
-msgid ""
-"Either you simply type in keywords like you would do in a google search."
-msgstr ""
-"Entweder tippen Sie einfach Schlagwörter in das Suchfeld, wie Sie es von "
-"einer Google-Suche gewöhnt sind."
+#: ../services/class/bibliograph/service/Reference.php:1593
+msgid "Either you simply type in keywords like you would do in a google search."
+msgstr "Entweder tippen Sie einfach Schlagwörter in das Suchfeld, wie Sie es von einer Google-Suche gewöhnt sind."
 
 #: ../../../class/bibliograph/service/Reference.php:1594
-msgid ""
-"Or you compose complex queries using field names, comparison operators, and "
-"boolean connectors (for example: title contains constitution and year=1981)."
-msgstr ""
-"Oder Sie erstellen komplexere Abfrage unter Verwendung von Feldnamen, "
-"Vergleichsoperatoren und logischen Verknüpfungen (Zum Beispiel: titel "
-"enthält verfassung und jahr = 1981)."
+#: ../services/class/bibliograph/service/Reference.php:1594
+msgid "Or you compose complex queries using field names, comparison operators, and boolean connectors (for example: title contains constitution and year=1981)."
+msgstr "Oder Sie erstellen komplexere Abfrage unter Verwendung von Feldnamen, Vergleichsoperatoren und logischen Verknüpfungen (Zum Beispiel: titel enthält verfassung und jahr = 1981)."
 
 #: ../../../class/bibliograph/service/Reference.php:1595
-msgid ""
-"You can use wildcard characters: '?' for a single character and '*' for any "
-"amount of characters."
-msgstr ""
-"Sie können auch Ersetzungszeichen verwenden: '?' für einen einzelnen "
-"Buchstaben und '*' für eine beliebige Anzahl von Buchstaben."
+#: ../services/class/bibliograph/service/Reference.php:1595
+msgid "You can use wildcard characters: '?' for a single character and '*' for any amount of characters."
+msgstr "Sie können auch Ersetzungszeichen verwenden: '?' für einen einzelnen Buchstaben und '*' für eine beliebige Anzahl von Buchstaben."
 
 #: ../../../class/bibliograph/service/Reference.php:1596
-msgid ""
-"When using more than one word, the phrase has to be quoted (For example, "
-"title startswith \"Recent developments\")."
-msgstr ""
-"Wenn Sie mehr als ein Wort verwenden, müssen sie den Ausdruck mit "
-"Anführungszeichen einschließen (Zum Beispiel: titel beginntmit \"Neuere "
-"Entwicklungen\")."
+#: ../services/class/bibliograph/service/Reference.php:1596
+msgid "When using more than one word, the phrase has to be quoted (For example, title startswith \"Recent developments\")."
+msgstr "Wenn Sie mehr als ein Wort verwenden, müssen sie den Ausdruck mit Anführungszeichen einschließen (Zum Beispiel: titel beginntmit \"Neuere Entwicklungen\")."
 
 #: ../../../class/bibliograph/service/Reference.php:1597
-msgid ""
-"You can click on any of the terms below to insert them into the query field."
-msgstr ""
-"Klicken Sie auf eine der Begriffe weiter unten, um diese in das Suchfeld "
-"einzufügen."
+#: ../services/class/bibliograph/service/Reference.php:1597
+msgid "You can click on any of the terms below to insert them into the query field."
+msgstr "Klicken Sie auf eine der Begriffe weiter unten, um diese in das Suchfeld einzufügen."
 
 #: ../../../class/bibliograph/service/Reference.php:1606
+#: ../services/class/bibliograph/service/Reference.php:1606
 msgid "Field names"
 msgstr "Feldnamen"
 
 #: ../../../class/bibliograph/service/Reference.php:1642
+#: ../services/class/bibliograph/service/Reference.php:1642
 msgid "Comparison modifiers"
 msgstr "Vergleichsoperatoren"
 
 #: ../../../class/bibliograph/service/Reference.php:1661
+#: ../services/class/bibliograph/service/Reference.php:1661
 msgid "Boolean operators"
 msgstr "Logische Verknüpfungen"
 
 #: ../../../class/bibliograph/service/Setup.php:94
+#: ../services/class/bibliograph/service/Setup.php:95
 msgid "Starting setup ..."
 msgstr "Die Anwendung wird konfiguriert ..."
 
 #: ../../../class/bibliograph/service/Setup.php:164
+#: ../services/class/bibliograph/service/Setup.php:176
 msgid "Initial user data imported."
 msgstr "Benutzerdaten wurden importiert."
 
 #: ../../../class/bibliograph/service/Setup.php:167
+#: ../services/class/bibliograph/service/Setup.php:179
 msgid "Checking configuration ..."
 msgstr "Überprüfe Konfiguration ..."
 
 #: ../../../class/bibliograph/service/Setup.php:186
-msgid ""
-"Please enter the administrator email address in the application.ini.php file "
-"(email.admin)."
-msgstr ""
-"Bitte tragen sie die Emailadresse des Administrators in der Datei "
-"application.ini.php ein (unter email.admin)."
+#: ../services/class/bibliograph/service/Setup.php:200
+msgid "Please enter the administrator email address in the application.ini.php file (email.admin)."
+msgstr "Bitte tragen sie die Emailadresse des Administrators in der Datei application.ini.php ein (unter email.admin)."
 
 #: ../../../class/bibliograph/service/Setup.php:194
 msgid "Administrator email has been set."
 msgstr "Die Administratoren-Email wurde gespeichert."
 
 #: ../../../class/bibliograph/service/Setup.php:197
+#: ../services/class/bibliograph/service/Setup.php:232
 msgid "Setting up configuration keys ..."
 msgstr "Konfigurationsdaten werden hinzugefügt ..."
 
 #: ../../../class/bibliograph/service/Setup.php:217
+#: ../services/class/bibliograph/service/Setup.php:256
 msgid "Configuration keys added."
 msgstr "Konfigurationsdaten hinzugefügt."
 
 #: ../../../class/bibliograph/service/Setup.php:219
+#: ../services/class/bibliograph/service/Setup.php:258
 msgid "Registering datasource information ..."
 msgstr "Speichere Informationen zu den Datenquellen ..."
 
 #: ../../../class/bibliograph/service/Setup.php:241
+#: ../services/class/bibliograph/service/Setup.php:280
 msgid "Added datasource schemas."
 msgstr "Datenquellenschemata hinzugefügt."
 
 #: ../../../class/bibliograph/service/Setup.php:243
+#: ../services/class/bibliograph/service/Setup.php:282
 msgid "Creating example datasources ..."
 msgstr "Erzeuge Beispiel-Datenquellen ..."
 
 #: ../../../class/bibliograph/service/Setup.php:315
+#: ../services/class/bibliograph/service/Setup.php:354
 msgid "Created example datasources."
 msgstr "Beispiel-Datenquellen erzeugt."
 
 #: ../../../class/bibliograph/service/Setup.php:317
+#: ../services/class/bibliograph/service/Setup.php:356
 msgid "Creating internal datasources ..."
 msgstr "Lege interne Datenquellen an ..."
 
 #: ../../../class/bibliograph/service/Setup.php:408
+#: ../services/class/bibliograph/service/Setup.php:450
 msgid "Created internal datasources."
 msgstr "Interne Datenbanken wurden angelegt. "
 
 #: ../../../class/bibliograph/service/Setup.php:411
+#: ../services/class/bibliograph/service/Setup.php:507
 msgid "Done ..."
 msgstr "Fertig ..."
 
 #: ../../../class/bibliograph/service/Setup.php:412
+#: ../services/class/bibliograph/service/Setup.php:504
+#: ../services/class/bibliograph/service/Setup.php:520
 msgid "Setup finished. Please reload the application"
-msgstr ""
-"Die Einrichtung von Bibliograph ist abgeschlossen. Bitte laden Sie "
-"Bibliograph neu."
+msgstr "Die Einrichtung von Bibliograph ist abgeschlossen. Bitte laden Sie Bibliograph neu."
 
 #: ../../../class/qcl/access/ACLTool.php:930
 #, php-format
@@ -1182,9 +1325,7 @@ msgstr "Ihr Nutzername ist '%s' und Ihr Passwort ist '%s'"
 #: ../../../class/qcl/access/ACLTool.php:969
 #, php-format
 msgid "This is to inform you that your password has changed at '%s'."
-msgstr ""
-"Hiermit möchten wir Sie informieren, dass Ihr Passwort bei '%s' geändert "
-"worden ist."
+msgstr "Hiermit möchten wir Sie informieren, dass Ihr Passwort bei '%s' geändert worden ist."
 
 #: ../../../class/qcl/access/ACLTool.php:1012
 #, php-format
@@ -1197,12 +1338,8 @@ msgid "The email address %s is invalid"
 msgstr "Die E-Mailadresse %s ist ungültig."
 
 #: ../../../class/qcl/access/Service.php:78
-msgid ""
-"Authentication must be done through a secure connection, using the https:// "
-"protocol."
-msgstr ""
-"Die Anmeldung muss über eine sichere Verbindung erfolgen, d.h. über eine "
-"Adresse, die mit \"https\" beginnt."
+msgid "Authentication must be done through a secure connection, using the https:// protocol."
+msgstr "Die Anmeldung muss über eine sichere Verbindung erfolgen, d.h. über eine Adresse, die mit \"https\" beginnt."
 
 #: ../../../class/qcl/access/SessionController.php:117
 #: ../../../class/qcl/access/UserController.php:407
@@ -1296,11 +1433,13 @@ msgid "Please configure the plugins"
 msgstr "Bitte konfigurieren Sie die Plugins."
 
 #: ../../../class/qcl/application/plugin/Service.php:178
+#: ../services/class/bibliograph/service/Setup.php:492
 #, php-format
 msgid "Installed plugin '%s'"
 msgstr "Plugin '%s' wurde installiert."
 
 #: ../../../class/qcl/application/plugin/Service.php:182
+#: ../services/class/bibliograph/service/Setup.php:497
 #, php-format
 msgid "Installation of plugin '%s' failed: %s"
 msgstr "Die Installation von Plugin '%s' war nicht erfolgreich: %s"
@@ -1380,324 +1519,86 @@ msgstr "Pfad"
 msgid "File '%s' does not exist in datasource '%s'"
 msgstr "Die Datei '%s' existiert in der Datenquelle '%s' nicht."
 
-#~ msgid ""
-#~ "Could not call the bibutils commands through the shell. Please check your "
-#~ "setup."
-#~ msgstr ""
-#~ "Konnte die bibutils Kommandos nicht in der Shell ausführen. Bitte "
-#~ "überprüfen Sie die Einstellungen auf dem Server."
-
-#~ msgid ""
-#~ "Datasources '%s' and '%s' have never been synchronized before. Are you "
-#~ "sure you want to proceed?"
-#~ msgstr ""
-#~ "Die Datenbanken '%s' und '%s' wurden noch nie synchronisiert. Sind Sie "
-#~ "sicher, dass Sie fortfahren wollen?"
-
-#~ msgid "Do you really want to delete clear all synchronization for '%s'?"
-#~ msgstr ""
-#~ "Sind Sie sicher, dass sie alle Synchronisierungsdaten für '%s' löschen "
-#~ "möchten?"
-
-#~ msgid ""
-#~ "More than %s references in the folder. Creating a bibliography would take "
-#~ "too long."
-#~ msgstr ""
-#~ "Mehr als %s Datensätze im Ordner. Es würde zu lange dauern, daraus eine "
-#~ "Bibliographie zu generieren. "
-
-#~ msgid "location"
-#~ msgstr "Standort"
-
-#~ msgid "Category"
-#~ msgstr "Kategorie"
-
-#~ msgid "Owner"
-#~ msgstr "Eigentümer/in"
-
-#~ msgid "Date ordered"
-#~ msgstr "Bestellt am"
-
-#~ msgid "Date received"
-#~ msgstr "Eingang am"
-
-#~ msgid "Source"
-#~ msgstr "Quelle"
-
-#~ msgid "Reimb. requested"
-#~ msgstr "Erstatt. beantr. am"
-
-#~ msgid "Inventory"
-#~ msgstr "Vorhanden?"
-
-#~ msgid "Please reload the application to finish installing."
-#~ msgstr ""
-#~ "Bitte die Anwendung erneut laden, um die Installation abzuschließen."
-
-#~ msgid "Please reload the application to finish uninstalling."
-#~ msgstr ""
-#~ "Bitte die Anwendung erneut laden, um die Deinstallation abzuschließen."
-
-#~ msgid "No folder selected."
-#~ msgstr "Bitte erst einen Ordner auswählen."
-
-#~ msgid "Please enter the ISBN:"
-#~ msgstr "Bitte die ISBN eingeben:"
-
-#~ msgid "Contacting webservices to resolve ISBN..."
-#~ msgstr "Verbinde mit Webservices zum Auflösen der ISBN..."
-
-#~ msgid "Could not find any data for ISBN %s."
-#~ msgstr "Konnte keine Daten für ISBN %s finden."
-
-#~ msgid "Contacting %s. Please wait..."
-#~ msgstr "Anfrage an %s. Bitte warten ..."
-
-#~ msgid "Found: %s<br><br><b>Possible duplicates:</b><br>%s"
-#~ msgstr "Ergebnis: %s<br><br><b>Mögliche Duplikate:</b><br>%s"
-
-#~ msgid "Found: %s"
-#~ msgstr "Ergebnis: %s"
-
-#~ msgid "Import and continue"
-#~ msgstr "Importieren und weiter"
-
-#~ msgid "Import and edit"
-#~ msgstr "Importieren und bearbeiten"
-
-#~ msgid "Skip and continue"
-#~ msgstr "Überspringen und fortsetzen"
-
-#~ msgid "Importing data. Please wait..."
-#~ msgstr "Importiere die Daten. Bitte warten ..."
-
-#~ msgid "Converting names. Please wait..."
-#~ msgstr "Wandle Namen um. Bitte warten ..."
-
-#~ msgid "Do you want to backup Database '%s'"
-#~ msgstr "Wollen Sie Datenbank '%s' sichern?"
-
-#~ msgid "Backup created in %s seconds"
-#~ msgstr "Sicherung in %s Sekunden erstellt"
-
-#~ msgid ""
-#~ "Do you really want to restore Database '%s'? All existing data will be "
-#~ "lost!"
-#~ msgstr ""
-#~ "Wollen Sie wirklich die Datenbank  '%s' wiederherstellen? Alle "
-#~ "bestehenden Daten werden gelöscht!"
-
-#~ msgid "Backup from "
-#~ msgstr "Sicherung vom"
-
-#~ msgid "Please select the backup set to restore into database '%s'"
-#~ msgstr ""
-#~ "Bitte wählen sie die Sicherung, die für Datenbank '%s' wiederhergestellt "
-#~ "werden soll."
-
-#~ msgid "Backup file does not exist."
-#~ msgstr "Backupdatei existiert nicht."
-
-#~ msgid "Backup has been restored."
-#~ msgstr "Die Sicherung wurde zurückgespielt."
-
-#~ msgid "Please check logfile for problems."
-#~ msgstr "Bitte sehen Sie im Logfile nach, welche Probleme aufgetreten sind. "
-
-#~ msgid "All backups older than one day will be deleted. Proceed?"
-#~ msgstr ""
-#~ "Alle Sicherungen, die älter als ein Tag sind, Werden gelöscht. Fortfahren?"
-
-#~ msgid "%s backups were deleted."
-#~ msgstr "%s Sicherungen wurden gelöscht."
-
-#~ msgid "There was a problem. Please examine the log file."
-#~ msgstr ""
-#~ "Es ist ein Problem aufgetreten. Es wurde in der Logdatei aufgezeichnet."
-
-#~ msgid "You must set a password. Generate a random one?"
-#~ msgstr ""
-#~ "Sie müssen ein Passwort eingeben. Soll ein zufälliges Passwort generiert "
-#~ "werden?\t"
-
-#~ msgid "Your username is '%s' and your password is '%s'."
-#~ msgstr "Ihr Nutzername ist '%s' und Ihr Passwort ist '%s'."
-
-#~ msgid ""
-#~ "Format '%s' expects file extension '%s'. The file you uploaded has "
-#~ "extension '%s'"
-#~ msgstr ""
-#~ "Format '%s' erwartet die Dateiendung '%s'. Die Datei, die Sie hochgeladen "
-#~ "haben, hat die Dateiendung '%s'. Bitte nennen Sie die Datei um und laden "
-#~ "Sie sie erneut hoch. "
-
-#~ msgid "Leave blank if you don't want to change the password"
-#~ msgstr "Frei lassen wenn Sie das Passwort nicht ändern möchten. "
-
-#~ msgid "'%s' is not a valid email address."
-#~ msgstr "'%s' ist keine gültige Emailadresse."
-
-#~ msgid "An email has been sent to '%s' with instructions."
-#~ msgstr ""
-#~ "Es wurde eine Email an '%s' gesendet, die weitere Anweisungen enthält.\t"
-
-#~ msgid ""
-#~ "Welcome to Bibliograph. After clicking 'OK', please enter your email "
-#~ "address and a new password."
-#~ msgstr ""
-#~ "Willkommen in Bibliograph. Nachdem Sie \"OK\" geklickt haben, können Sie "
-#~ "Ihre E-Mail-Adresse und ein neues Passwort eingeben."
-
-#~ msgid "reftype"
-#~ msgstr "Werktyp"
-
-#~ msgid "citekey"
-#~ msgstr "Zitierschlüssel"
-
-#~ msgid "booktitle"
-#~ msgstr "Buchtitel"
-
-#~ msgid "Editor"
-#~ msgstr "Herausgeber/in"
-
-#~ msgid "callnumber"
-#~ msgstr "Signatur"
-
-#~ msgid "sortby"
-#~ msgstr "sortiere-nach"
-
-#~ msgid "All fields"
-#~ msgstr "Alle Felder"
-
-#~ msgid "%s replacements made. Please reload to see the changes. %s"
-#~ msgstr ""
-#~ "Es wurden %s Ersetzungen vorgenommen. Bitte laden Sie die Daten neu, um "
-#~ "die Änderungen zu sehen. %s"
-
-#~ msgid "Do you really want to reset/upgrade the '%s' data?"
-#~ msgstr ""
-#~ "Wollen Sie wirklich die Daten für '%s' zurücksetzen oder aktualisieren?"
-
-#~ msgid "'%s' data reset."
-#~ msgstr "Daten für '%s' wurden zurückgesetzt"
-
-#~ msgid "Do you really want to export the '%s' data to the filesystem?"
-#~ msgstr "Wollen Sie wirklich die Daten für '%s' ins Dateisystem exportieren?"
-
-#~ msgid "'%s' data exported to '%s'."
-#~ msgstr "Daten für '%s' wurden nach '%s' exportiert."
-
-#~ msgid "Bibliograph bug report"
-#~ msgstr "Bibliograph bug report"
-
-#~ msgid "Bibliograph feature request"
-#~ msgstr "Bibliograph feature request"
-
-#~ msgid "Your problem report"
-#~ msgstr "Ihre Fehlermeldung"
-
-#~ msgid "Your feature request"
-#~ msgstr "Ihr Verbesserungsvorschlag"
-
-#~ msgid "We will try to get back to you as soon as we can."
-#~ msgstr "Wir werden uns bemühen, uns möglichst bald darum zu kümmern."
-
-#~ msgid "The Bibliograph team"
-#~ msgstr "Das Bibliograph-Team"
-
-#~ msgid "abstract"
-#~ msgstr "Zusammenfassung"
-
-#~ msgid "place"
-#~ msgstr "Ort"
-
-#~ msgid "author"
-#~ msgstr "Autor"
-
-#~ msgid "editor"
-#~ msgstr "Herausgeber"
-
-#~ msgid "journal"
-#~ msgstr "Zeitschrift"
-
-#~ msgid "keywords"
-#~ msgstr "Schlagworte"
-
-#~ msgid "month"
-#~ msgstr "Monat"
-
-#~ msgid "publisher"
-#~ msgstr "Verlag"
-
-#~ msgid "title"
-#~ msgstr "Titel"
-
-#~ msgid "year"
-#~ msgstr "Jahr"
-
-#~ msgid "date"
-#~ msgstr "Datum"
-
-#~ msgid "Typ"
-#~ msgstr "Typ"
-
-#~ msgid "Room"
-#~ msgstr "Raum"
-
-#~ msgid "Last Search"
-#~ msgstr "Letzte Suche"
-
-#~ msgid "Raum"
-#~ msgstr "Raum"
-
-#~ msgid "Kategorie"
-#~ msgstr "Kategorie"
-
-#~ msgid "Besitzerin"
-#~ msgstr "Besitzerin"
-
-#~ msgid "Problem:"
-#~ msgstr "Problem:"
-
-#~ msgid "%s Notes."
-#~ msgstr "%s Anmerkungen"
-
-#~ msgid "Copy selected reference(s) here."
-#~ msgstr "Ausgewählte Datensätze hierher kopieren."
-
-#~ msgid "Move selected reference(s) here."
-#~ msgstr "Ausgewählte Datensätze hierher verschieben."
-
-#~ msgid "Copy of"
-#~ msgstr "Kopie von"
-
-#~ msgid "Do you really want to move the selected references to '%s'"
-#~ msgstr "Wollen Sie wirklich die ausgewählten Datensätze nach '%s' kopieren?"
-
-#~ msgid "Do you really want to copy the selected references to '%s'"
-#~ msgstr ""
-#~ "Wollen Sie wirklich die ausgewählten Datensätze nach '%s' verschieben?"
-
-#~ msgid "No records imported."
-#~ msgstr "Keine Datensätze importiert."
-
-#~ msgid "%s records imported, %s duplicates."
-#~ msgstr "%s Datensätze importiert, %s Duplikate."
-
-#~ msgid "New"
-#~ msgstr "Neu"
-
-#~ msgid "Password field cannot be empty."
-#~ msgstr "Das Passwortfeld darf nicht leer sein."
-
-#~ msgid "A user must have at least one role."
-#~ msgstr "Ein Benutzer muss mindestens eine Rolle haben."
-
-#~ msgid "Notes"
-#~ msgstr "Anmerkungen"
-
-#~ msgid "Links"
-#~ msgstr "Links"
-
-#~ msgid "Archived Webpages"
-#~ msgstr "Archivierte Webseiten"
+#: ../services/class/bibliograph/schema/BibtexSchema.php:475
+msgid "Conference Title"
+msgstr "Titel der Konferenz"
+
+#: ../services/class/bibliograph/service/Reference.php:1580
+msgid "In case you want to revert the changes, a backup file has been created."
+msgstr ""
+
+#: ../services/class/bibliograph/service/ACLTool.php:103
+msgid "user"
+msgstr ""
+
+#: ../services/class/bibliograph/service/ACLTool.php:108
+msgid "role"
+msgstr ""
+
+#: ../services/class/bibliograph/service/ACLTool.php:113
+msgid "group"
+msgstr ""
+
+#: ../services/class/bibliograph/service/ACLTool.php:118
+msgid "permission"
+msgstr ""
+
+#: ../services/class/bibliograph/service/ACLTool.php:123
+msgid "datasource"
+msgstr ""
+
+#: ../services/class/bibliograph/service/ACLTool.php:815
+msgid "The selected user has no email address."
+msgstr ""
+
+#: ../services/class/bibliograph/service/ACLTool.php:829
+msgid "The selected group has no members."
+msgstr ""
+
+#: ../services/class/bibliograph/service/ACLTool.php:845
+msgid "No email address found."
+msgstr ""
+
+#: ../services/class/bibliograph/service/ACLTool.php:852
+#, php-format
+msgid "Email to %s"
+msgstr ""
+
+#: ../services/class/bibliograph/service/ACLTool.php:860
+msgid "Subject"
+msgstr ""
+
+#: ../services/class/bibliograph/service/ACLTool.php:866
+msgid "Message"
+msgstr ""
+
+#: ../services/class/bibliograph/service/ACLTool.php:894
+msgid "Please enter a subject."
+msgstr ""
+
+#: ../services/class/bibliograph/service/ACLTool.php:903
+msgid "Please enter a message."
+msgstr ""
+
+#: ../services/class/bibliograph/service/ACLTool.php:910
+#, php-format
+msgid "Send email to %s recipients?"
+msgstr ""
+
+#: ../services/class/bibliograph/service/ACLTool.php:950
+#, php-format
+msgid "Sent email to %s recipients"
+msgstr ""
+
+#: ../services/class/bibliograph/service/Setup.php:228
+msgid "Set up default users."
+msgstr ""
+
+#: ../services/class/bibliograph/service/Setup.php:447
+msgid "Installing plugins ..."
+msgstr ""
+
+#: ../services/class/bibliograph/service/Setup.php:479
+#, php-format
+msgid "Plugin '%s' is already installed."
+msgstr ""

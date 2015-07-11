@@ -128,7 +128,7 @@ class class_csl_Service
   }
   
   /**
-   * Render the full content of a folder
+   * Render the result of a query
    * @param $datasource
    * @param $folderId
    * @param $style

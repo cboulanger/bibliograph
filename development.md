@@ -61,3 +61,12 @@ the widgets of the core application by `this.getApplication().getWidgetById("XXX
 - bibliograph/loginDialog
 
 You can search for these ids in the source code to see what they do. 
+
+Translation
+-----------
+
+Bibliograph can be easily translated into any language. As it is written 
+in JavaScript on the client and PHP on the server, there are separate 
+translation files for client and server. If you are willing to translate
+the existing messages into your language, let me know and I'll add the
+locale files to the code. 

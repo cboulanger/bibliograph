@@ -53,26 +53,30 @@ qx.Class.define("csl.FormattedViewUi",
       this.menuBar = menuBar;
       menuBar.setHeight(18);
       qxComposite1.add(menuBar);
+      
+      // Stil
       var qxMenuBarButton1 = new qx.ui.menubar.Button(this.tr('Style'), null, null);
-      qxMenuBarButton1.setLabel(this.tr('Style'));
       menuBar.add(qxMenuBarButton1);
       var styleMenu = new qx.ui.menu.Menu();
       this.styleMenu = styleMenu;
       qxMenuBarButton1.setMenu(styleMenu);
-      var qxMenuBarButton2 = new qx.ui.menubar.Button(this.tr('All in folder'), null, null);
-      qxMenuBarButton2.setLabel(this.tr('All in folder'));
+      
+      // All Results
+      var qxMenuBarButton2 = new qx.ui.menubar.Button(this.tr('All Results'), null, null);
       menuBar.add(qxMenuBarButton2);
       qxMenuBarButton2.addListener("click", function(e) {
         this.loadFolder();
       }, this);
+      
+      // Print
       var qxMenuBarButton3 = new qx.ui.menubar.Button(this.tr('Print'), null, null);
-      qxMenuBarButton3.setLabel(this.tr('Print'));
       menuBar.add(qxMenuBarButton3);
       qxMenuBarButton3.addListener("click", function(e) {
         this.getApplication().print(viewPane.getContentElement().getDomElement());
       }, this);
+      
+      // Tabular View
       var qxMenuBarButton4 = new qx.ui.menubar.Button(this.tr('Tabular View'), null, null);
-      qxMenuBarButton4.setLabel(this.tr('Tabular View'));
       menuBar.add(qxMenuBarButton4);
       qxMenuBarButton4.addListener("click", function(e) {
         this.getApplication().getWidgetById("bibliograph/itemView").showTabularView();

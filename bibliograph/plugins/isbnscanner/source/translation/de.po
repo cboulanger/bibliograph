@@ -13,11 +13,11 @@ msgstr ""
 "Language: de\n"
 "X-Generator: Poedit 1.6.7\n"
 
-#: isbnscanner/Plugin.js:51
+#: isbnscanner/Plugin.js:49
 msgid "From ISBN, using barcode scanner or manual input"
 msgstr "Von ISBN importieren, mit Strichcode-Lesegerät oder von Hand\t"
 
-#: isbnscanner/Plugin.js:52
+#: isbnscanner/Plugin.js:50
 msgid ""
 "Please select a folder into which the item will be imported. Requires a "
 "barcode scanner in keyboard mode"
@@ -25,11 +25,11 @@ msgstr ""
 "Bitte wählen sie einen Ordner, in den importiert werden soll. Erfordert "
 "einen Strichcodeleser im \"Keyboard\"-Modus.\t"
 
-#: isbnscanner/Plugin.js:60
+#: isbnscanner/Plugin.js:58
 msgid "Please wait ..."
 msgstr "Bitte warten ..."
 
-#: isbnscanner/Plugin.js:101
+#: isbnscanner/Plugin.js:99
 msgid ""
 "ISBN input detected. Please wait for the input dialog and repeat the input "
 "..."
@@ -37,11 +37,11 @@ msgstr ""
 "Es wurde eine ISBN-Nummer eingegeben. Bitte warten Sie auf den Eingabedialog"
 " und wiederholen Sie die Eingabe."
 
-#: isbnscanner/Plugin.js:123
+#: isbnscanner/Plugin.js:121
 msgid "Import by ISBN"
 msgstr "ISBN-Import\t"
 
-#: isbnscanner/Plugin.js:136
+#: isbnscanner/Plugin.js:133
 msgid ""
 "How should names (e.g. William Shakespeare) be converted to a sortable "
 "format (Shakespeare, William)?"
@@ -49,10 +49,10 @@ msgstr ""
 "Wie sollen Namen (z.B. Friedrich Schiller) in ein sortierbares Format "
 "(Schiller, Friedrich) gebracht werden?\t"
 
-#: isbnscanner/Plugin.js:145
+#: isbnscanner/Plugin.js:142
 msgid "Name parser (Fast, Correct for most western names)"
 msgstr "Automatisch (Schnell, korrekt für die meisten westlichen Namen)"
 
-#: isbnscanner/Plugin.js:149
+#: isbnscanner/Plugin.js:146
 msgid "Webservice (Slower)"
 msgstr "Über einen Webservice (langsamer)"
