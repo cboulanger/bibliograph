@@ -107,14 +107,20 @@ class qcl_locale_Manager extends qcl_core_Object
 	 * subscriber function when user has authenticated
 	 */
 	public function onUserAuthenticated($message)
-	{
-	  $localeFromConfig = $this->getApplication()->getPreference("application.locale");
-	  if( $localeFromConfig ) {
-	    $activeUser = $message->getData();
-	    $this->log( sprintf( "Setting locale for user '%s'", $activeUser->getName()), QCL_LOG_LOCALE);
-	    $this->setLocale($localeFromConfig);
+	{ 
+	  try
+	  {
+  	  $localeFromConfig = $this->getApplication()->getPreference("application.locale");
+  	  if( $localeFromConfig ) {
+  	    $activeUser = $message->getData();
+  	    $this->log( sprintf( "Setting locale for user '%s'", $activeUser->getName()), QCL_LOG_LOCALE);
+  	    $this->setLocale($localeFromConfig);
+  	  }
+  	  return $localeFromConfig;
 	  }
-	  return $localeFromConfig;
+	  catch( qcl_config_Exception $e ){
+	    // this is a hack to work around upgrade problems, can be removed later.
+	  }
 	}
 
 	/**

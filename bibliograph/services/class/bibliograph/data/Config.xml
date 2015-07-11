@@ -7,6 +7,11 @@
         <default>chicago-author-date</default>
         <customize>1</customize>
       </record>
+      <record namedId="application.locale">
+        <type>0</type>
+        <default>en</default>
+        <customize>1</customize>
+      </record>      
     </data>
     <links>
       <relation name="Config_UserConfig"/>
