@@ -321,6 +321,10 @@ qx.Class.define("bibliograph.Main",
 
     _startSetup : function()
     {
+      qx.event.message.Bus.getInstance().subscribe("application.reload", function(e)
+      {
+        window.location.reload();
+      }, this); 
       this.showPopup(this.getSplashMessage(this.tr("Setting up application...")));
       qx.event.message.Bus.getInstance().subscribe("bibliograph.setup.done", this._setupDone, this);
       this.getRpcManager().execute("bibliograph.setup", "setup", []);
@@ -521,7 +525,7 @@ qx.Class.define("bibliograph.Main",
         var data = e.getData();
         window.location.replace(data.url);
       }, this);
-
+      
       /*
        * reload the main list view
        */
