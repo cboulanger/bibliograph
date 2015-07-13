@@ -17,6 +17,21 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: ../../../class/bibliograph/schema/CQL.php:62
+#: ../services/class/bibliograph/schema/CQL.php:62
+msgid "isnot"
+msgstr "is not"
+
+#: ../../../class/bibliograph/schema/CQL.php:62
+#: ../services/class/bibliograph/schema/CQL.php:62
+msgid "notcontains"
+msgstr "not contains"
+
+#: ../../../class/bibliograph/schema/CQL.php:63
+#: ../services/class/bibliograph/schema/CQL.php:63
+msgid "startswith"
+msgstr "starts with"
+
 #: ../services/class/bibliograph/model/export/Bibtex.php:121
 msgid "Special Issue"
 msgstr ""
@@ -71,6 +86,14 @@ msgstr ""
 msgid "Folder is closed by default"
 msgstr ""
 
+#: ../services/class/bibliograph/model/FolderModel.php:265
+msgid "Default Folder"
+msgstr ""
+
+#: ../services/class/bibliograph/model/FolderModel.php:275
+msgid "Trash Folder"
+msgstr ""
+
 #: ../services/class/bibliograph/service/Import.php:102
 #: ../services/class/bibliograph/service/Reference.php:196
 msgid "Author"
@@ -84,8 +107,8 @@ msgstr ""
 
 #: ../services/class/bibliograph/service/Import.php:110
 #: ../services/class/bibliograph/service/Reference.php:204
-#: ../services/class/bibliograph/schema/BibtexSchema.php:733
 #: ../services/class/bibliograph/service/ACLTool.php:1345
+#: ../services/class/bibliograph/schema/BibtexSchema.php:733
 msgid "Title"
 msgstr ""
 
@@ -143,6 +166,11 @@ msgstr ""
 
 #: ../services/class/bibliograph/service/Reference.php:258
 msgid "No recognized query format in request."
+msgstr ""
+
+#: ../services/class/bibliograph/service/Reference.php:962
+#, php-format
+msgid "The selected record '%s' is contained in %s folders. Move to the trash anyways?"
 msgstr ""
 
 #: ../services/class/bibliograph/service/Reference.php:1108
@@ -239,6 +267,25 @@ msgstr ""
 msgid "all fields"
 msgstr ""
 
+#: ../services/class/bibliograph/service/Reference.php:1503
+#, php-format
+msgid "field '%s'"
+msgstr ""
+
+#: ../services/class/bibliograph/service/Reference.php:1499
+#, php-format
+msgid "Are you sure you want to replace '%s' with '%s' in %s %s?"
+msgstr ""
+
+#: ../services/class/bibliograph/service/Reference.php:1580
+msgid "In case you want to revert the changes, a backup file has been created."
+msgstr ""
+
+#: ../services/class/bibliograph/service/Reference.php:1577
+#, php-format
+msgid "%s replacements made. %s"
+msgstr ""
+
 #: ../services/class/bibliograph/service/Reference.php:1592
 msgid "You can use the search features of this application in two ways."
 msgstr ""
@@ -308,6 +355,10 @@ msgstr ""
 msgid "Apply to the selected folder and its subfolders"
 msgstr ""
 
+#: ../services/class/bibliograph/service/Folder.php:620
+msgid "Please enter the name and type of the new folder:"
+msgstr ""
+
 #: ../services/class/bibliograph/service/Folder.php:623
 #: ../services/class/bibliograph/service/ACLTool.php:1334
 msgid "Name"
@@ -352,6 +403,10 @@ msgstr ""
 msgid "Application is in read-only state. Only the administrator can log in."
 msgstr ""
 
+#: ../services/class/bibliograph/service/Access.php:148
+msgid "You need to set a new password."
+msgstr ""
+
 #: ../services/class/bibliograph/service/Access.php:183
 #, php-format
 msgid "This will purge all anonymous user data (do this only during maintenance periods) and export all access control data to the backup folder."
@@ -367,301 +422,6 @@ msgstr ""
 
 #: ../services/class/bibliograph/service/Export.php:44
 msgid "Choose the export format"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:289
-msgid "Article"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:294
-msgid "Book (Monograph)"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:299
-msgid "Booklet"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:305
-msgid "Book (Edited)"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:311
-msgid "Conference Paper"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:316
-msgid "Book Chapter"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:322
-msgid "Chapter in Edited Book"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:327
-msgid "Paper in Conference Proceedings"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:333
-msgid "Journal Issue"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:339
-msgid "Handbook"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:344
-msgid "Master's Thesis"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:349
-msgid "Miscellaneous"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:354
-msgid "Ph.D. Thesis"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:359
-msgid "Conference Proceedings"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:364
-msgid "Report/Working Paper"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:369
-msgid "Unpublished Manuscript"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:384
-msgid "Bibliographic Type"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:403
-msgid "Citation Key"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:409
-msgid "Citation key"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:413
-msgid "Abstract"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:425
-msgid "Place"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:439
-msgid "Affiliation"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:446
-msgid "Annotation"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:453
-#: ../services/class/bibliograph/schema/BibtexSchema.php:454
-msgid "Authors"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:455
-#: ../services/class/bibliograph/schema/BibtexSchema.php:456
-#: ../services/class/bibliograph/schema/BibtexSchema.php:530
-msgid "Editors"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:474
-msgid "Book Title"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:475
-msgid "Conference Title"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:492
-msgid "Contents"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:498
-msgid "Copyright"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:504
-msgid "Cross Reference"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:517
-msgid "Date"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:524
-msgid "Edition"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:546
-msgid "Published As"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:552
-msgid "Institution"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:565
-msgid "ISBN"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:571
-msgid "ISSN"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:577
-msgid "Journal"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:593
-msgid "Key"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:599
-msgid "Keywords"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:615
-msgid "Language"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:622
-msgid "Call Number"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:630
-msgid "Location"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:637
-msgid "Month"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:644
-msgid "Note"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:650
-msgid "Number"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:656
-msgid "Organization"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:668
-msgid "Pages"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:674
-msgid "Price"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:681
-msgid "Publisher"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:695
-msgid "University"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:708
-msgid "Series"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:721
-msgid "Size"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:727
-msgid "Subtitle"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:744
-msgid "Translator"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:760
-msgid "Internet Link"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/BibtexSchema.php:770
-msgid "Volume"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/CQL.php:61
-msgid "or"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/CQL.php:61
-msgid "not"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/CQL.php:62
-msgid "is"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/CQL.php:62
-msgid "isnot"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/CQL.php:62
-msgid "contains"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/CQL.php:62
-msgid "notcontains"
-msgstr ""
-
-#: ../services/class/bibliograph/schema/CQL.php:63
-msgid "startswith"
-msgstr ""
-
-#: ../services/class/bibliograph/model/FolderModel.php:265
-msgid "Default Folder"
-msgstr ""
-
-#: ../services/class/bibliograph/model/FolderModel.php:275
-msgid "Trash Folder"
-msgstr ""
-
-#: ../services/class/bibliograph/service/Reference.php:962
-#, php-format
-msgid "The selected record '%s' is contained in %s folders. Move to the trash anyways?"
-msgstr ""
-
-#: ../services/class/bibliograph/service/Reference.php:1503
-#, php-format
-msgid "field '%s'"
-msgstr ""
-
-#: ../services/class/bibliograph/service/Reference.php:1499
-#, php-format
-msgid "Are you sure you want to replace '%s' with '%s' in %s %s?"
-msgstr ""
-
-#: ../services/class/bibliograph/service/Reference.php:1580
-msgid "In case you want to revert the changes, a backup file has been created."
-msgstr ""
-
-#: ../services/class/bibliograph/service/Reference.php:1577
-#, php-format
-msgid "%s replacements made. %s"
-msgstr ""
-
-#: ../services/class/bibliograph/service/Folder.php:620
-msgid "Please enter the name and type of the new folder:"
-msgstr ""
-
-#: ../services/class/bibliograph/service/Access.php:148
-msgid "You need to set a new password."
 msgstr ""
 
 #: ../services/class/bibliograph/service/Export.php:93
@@ -1078,7 +838,6 @@ msgid "Installation of plugin '%s' failed: %s"
 msgstr ""
 
 #: ../services/class/bibliograph/service/Setup.php:504
-#: ../services/class/bibliograph/service/Setup.php:520
 msgid "Setup finished. Please reload the application"
 msgstr ""
 
@@ -1086,11 +845,253 @@ msgstr ""
 msgid "Done ..."
 msgstr ""
 
+#: ../services/class/bibliograph/schema/BibtexSchema.php:289
+msgid "Article"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:294
+msgid "Book (Monograph)"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:299
+msgid "Booklet"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:305
+msgid "Book (Edited)"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:311
+msgid "Conference Paper"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:316
+msgid "Book Chapter"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:322
+msgid "Chapter in Edited Book"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:327
+msgid "Paper in Conference Proceedings"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:333
+msgid "Journal Issue"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:339
+msgid "Handbook"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:344
+msgid "Master's Thesis"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:349
+msgid "Miscellaneous"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:354
+msgid "Ph.D. Thesis"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:359
+msgid "Conference Proceedings"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:364
+msgid "Report/Working Paper"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:369
+msgid "Unpublished Manuscript"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:384
+msgid "Bibliographic Type"
+msgstr ""
+
 #: ../services/class/bibliograph/schema/BibtexSchema.php:390
 msgid "Reference Type"
 msgstr ""
 
-#: ../services/class/bibliograph/schema/CQL.php:307
+#: ../services/class/bibliograph/schema/BibtexSchema.php:403
+msgid "Citation Key"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:409
+msgid "Citation key"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:413
+msgid "Abstract"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:425
+msgid "Place"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:439
+msgid "Affiliation"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:446
+msgid "Annotation"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:453
+#: ../services/class/bibliograph/schema/BibtexSchema.php:454
+msgid "Authors"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:455
+#: ../services/class/bibliograph/schema/BibtexSchema.php:456
+#: ../services/class/bibliograph/schema/BibtexSchema.php:530
+msgid "Editors"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:474
+msgid "Book Title"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:475
+msgid "Conference Title"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:492
+msgid "Contents"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:498
+msgid "Copyright"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:504
+msgid "Cross Reference"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:517
+msgid "Date"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:524
+msgid "Edition"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:546
+msgid "Published As"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:552
+msgid "Institution"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:565
+msgid "ISBN"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:571
+msgid "ISSN"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:577
+msgid "Journal"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:593
+msgid "Key"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:599
+msgid "Keywords"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:615
+msgid "Language"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:622
+msgid "Call Number"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:630
+msgid "Location"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:637
+msgid "Month"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:644
+msgid "Note"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:650
+msgid "Number"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:656
+msgid "Organization"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:668
+msgid "Pages"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:674
+msgid "Price"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:681
+msgid "Publisher"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:695
+msgid "University"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:708
+msgid "Series"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:721
+msgid "Size"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:727
+msgid "Subtitle"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:744
+msgid "Translator"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:760
+msgid "Internet Link"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/BibtexSchema.php:770
+msgid "Volume"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/CQL.php:61
+msgid "or"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/CQL.php:61
+msgid "not"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/CQL.php:62
+msgid "is"
+msgstr ""
+
+#: ../services/class/bibliograph/schema/CQL.php:62
+msgid "contains"
+msgstr ""
+
 #: ../services/class/bibliograph/schema/CQL.php:324
 #, php-format
 msgid "Index '%s' does not exist."

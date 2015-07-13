@@ -281,11 +281,16 @@ qx.Class.define("bibliograph.ui.reference.ListView",
      */
     _applyFolderId : function(folderId, old)
     {
-      if (folderId === 0)
+      if (!folderId)
       {
         this.clearTable();
         return;
       }
+      
+      /*
+       * clear query
+       */
+      this.setQuery(null);
 
       /*
        * use a small timeout to avoid rapid reloads
@@ -337,15 +342,24 @@ qx.Class.define("bibliograph.ui.reference.ListView",
     /**
      * Reloads the folder when the search query has changed
      */
-    _applyQuery : function(query, old) {
-      if (query) {
-        var breadcrumb = this.tr("Query") + ": " + query;
-        if ( this.referenceViewLabel )
-        {
-          this.referenceViewLabel.setValue(breadcrumb);
-        }
-        this.load();
+    _applyQuery : function(query, old) 
+    {
+      if( ! query ) return;
+      
+      /*
+       * clear folder Id
+       */
+      this.setFolderId(null);
+      
+      /*
+       * show breadcrumb and load
+       */
+      var breadcrumb = this.tr("Query") + ": " + query;
+      if ( this.referenceViewLabel )
+      {
+        this.referenceViewLabel.setValue(breadcrumb);
       }
+      this.load();
     },
 
     /**

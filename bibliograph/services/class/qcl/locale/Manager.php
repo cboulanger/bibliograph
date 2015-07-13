@@ -16,7 +16,6 @@
  *  * Christian Boulanger (cboulanger)
  */
 
-
 /**
  * Manages locales and translations. uses the php gettext extension by default.
  * Language switch is not done via setting locales, but using textdomains, to avoid
@@ -62,6 +61,13 @@ class qcl_locale_Manager extends qcl_core_Object
    * @var string
    */
   public $locale;
+  
+  
+  /**
+   * The namespace of the application for which translation is requested
+   * If not set, it is automatically determined
+   */
+  protected $appNamespace;
 
 	//-------------------------------------------------------------
   // setup
@@ -158,16 +164,28 @@ class qcl_locale_Manager extends qcl_core_Object
   {
     return $this->locale;
   }
-
+  
   /**
    * Returns the topnamespace of the current application
    * @return string
    */
   protected function getAppNamespace()
   {
+    if( $this->appNamespace )
+    {
+      return $this->appNamespace;  
+    }
     $appClass = get_class( $this->getApplication() );
-    $namespace = explode("_", $appClass ); // TODO namespacing
-    return $namespace[0];
+    $namespace = array_shift( explode("_", $appClass ) ); // TODO namespacing
+    return $namespace;
+  }
+  
+  /**
+   * set the applicaiton namespace manually
+   */
+  public function setAppNamespace( $namespace )
+  {
+    $this->appNamespace = $namespace;
   }
 
   /**
@@ -187,7 +205,7 @@ class qcl_locale_Manager extends qcl_core_Object
   protected function getMessagesRoot()
   {
     $app = $this->getApplication();
-    if( $app instanceof qcl_application_plugin_IPluginApplication )
+    if( !$this->appNamespace and $app instanceof qcl_application_plugin_IPluginApplication )
     {
       return QCL_PLUGIN_DIR . "/" . $this->getAppNamespace() . "/services/" . $this->locale_dir_name;
     }
@@ -296,7 +314,7 @@ class qcl_locale_Manager extends qcl_core_Object
   public function getAvailableLocales()
   {
     static $availableLocales = null;
-    if ( $availableLocales === null )
+    if ( $availableLocales === null or $this->appNamespace )
     {
       $appNamespace = $this->getAppNamespace();
       $len = strlen($appNamespace);
@@ -338,13 +356,13 @@ class qcl_locale_Manager extends qcl_core_Object
       // use textdomain bound to class
       $textdomain = $segments[0] . "_" . $this->getUserLocale();
       $translation = dgettext( $textdomain, $messageId );
-      //$this->log( "Translating '$messageId' into '$translation' using domain '$textdomain' (for class $className)", QCL_LOG_LOCALE);
+      $this->log( "Translating '$messageId' into '$translation' using domain '$textdomain' (for class $className)", QCL_LOG_LOCALE);
     }
     else
     {
       // use default textdomain
       $translation = gettext( $messageId );
-      //$this->log( "Translating '$messageId' into '$translation'.", QCL_LOG_LOCALE);
+      $this->log( "Translating '$messageId' into '$translation'.", QCL_LOG_LOCALE);
     }
     array_unshift( $varargs, $translation );
     $result = @call_user_func_array('sprintf',$varargs);

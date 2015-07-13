@@ -80,6 +80,16 @@ class bibliograph_schema_CQL
   {
     parent::log( $msg, BIBLIOGRAPH_LOG_SCHEMA);
   }
+  
+  /**
+   * Constructor
+   */
+  public function __construct()
+  {
+    // @todo this is a hack to work around the fact that translation doesn't
+    // work the way it should
+    $this->dictionary =& $_SESSION['bibliograph_schema_CQL#dictionary'];
+  }
 
   /**
    * Returns the dictionary of words to be translated into english
@@ -89,17 +99,22 @@ class bibliograph_schema_CQL
    */
   protected function getDictionary(bibliograph_model_ReferenceModel $model)
   {
+    
     $modelClass = $model->className();
     if( ! $this->dictionary[ $modelClass ] )
     {
       $localeMgr = qcl_locale_Manager::getInstance();
+      
       $availableLocales = $localeMgr->getAvailableLocales();
       $dict = array();
 
       // translate words for each locale
       foreach( $availableLocales as $locale)
       {
+        
         $localeMgr->setLocale($locale);
+        $textdomain = "bibliograph_$locale";
+        bindtextdomain($textdomain, "./locale");
 
         // model indexes
         foreach ( $model->getSchemaModel()->getIndexNames() as $index )
@@ -107,7 +122,9 @@ class bibliograph_schema_CQL
           $fields = $model->getSchemaModel()->getIndexFields( $index );
           // @todo we only use the first, but it should really search all of them
           $property = $fields[0];
-          $translated = mb_strtolower( $localeMgr->tr($index), 'UTF-8');
+         
+          $translated = mb_strtolower( dgettext($textdomain,$index), 'UTF-8');
+   
           $dict[$translated]=$property;
           // add the root form of German gendered words ("Autor/in"=> "Autor")
           if( $pos = strpos( $translated, "/" ) )

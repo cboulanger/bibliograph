@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: bibliograph v2.1-pre\n"
+"Project-Id-Version: bibliograph v2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-11 20:18+0000\n"
+"POT-Creation-Date: 2015-07-13 18:59+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -462,6 +462,7 @@ msgstr "beginnt mit"
 
 #: ../../../class/bibliograph/schema/CQL.php:307
 #: ../services/class/bibliograph/schema/CQL.php:307
+#: ../services/class/bibliograph/schema/CQL.php:324
 #, php-format
 msgid "Index '%s' does not exist."
 msgstr "Der Index '%s' existiert nicht."

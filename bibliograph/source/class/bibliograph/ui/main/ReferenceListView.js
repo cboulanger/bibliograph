@@ -12,7 +12,7 @@
  *
  ******************************************************************************/
  
-/*global qx qcl*/
+/*global bibliograph qx qcl*/
 
 /**
  * The main list of references

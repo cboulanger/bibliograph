@@ -1,7 +1,7 @@
 #!/bin/bash
 # Extract translatable messages from php source files
 
-LOCALE_IDS="de fr"
+LOCALE_IDS="de fr en"
 
 for LOCALE_ID in $LOCALE_IDS; do
 
