@@ -86,6 +86,9 @@ class bibliograph_schema_CQL
    */
   public function __construct()
   {
+    parent::__construct();
+    
+    // save dictionary in the session
     // @todo this is a hack to work around the fact that translation doesn't
     // work the way it should
     $this->dictionary =& $_SESSION['bibliograph_schema_CQL#dictionary'];

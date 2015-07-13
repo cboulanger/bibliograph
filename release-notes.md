@@ -5,7 +5,7 @@ Version 2.1 (Mid-2015)
 -----------------------
 A large number of changes, fixes, improvements and refactoring under the hood,
 while staying backwards-compatible for database data and plugin code.
-- upgraded qooxdoo to version 3.5.1 on the frontend and to PHP 5.3. on the backend
+- upgraded to qooxdoo 4 on the frontend and to PHP > 5.3. on the backend
 - clean-up and refactoring of the backend and the qcl library. Fixed various problems 
   related to session management.
 - new plugin architecture: plugins now live in a separate folder, with backend and
@@ -30,7 +30,7 @@ Version 2.0 (2011)
 
 Version 1.0 (~2006)
 -------------------
-- used the NetWindows javascript library (a project by Alex Russel, who afterward co-founded the Dojo toolkit)
+- used the NetWindows javascript library (a project by Alex Russel, who afterwards co-founded the Dojo toolkit)
 - was used in a criminological research project
 
 Version 0.1 (~2003)

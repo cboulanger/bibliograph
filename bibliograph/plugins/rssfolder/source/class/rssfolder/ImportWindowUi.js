@@ -65,6 +65,13 @@ qx.Class.define("rssfolder.ImportWindowUi",
       feedUrlTextField.bind("value",loadFeedBtn,"enabled",{
         converter : function(v){ return v ? true : false }
       });
+      
+      // help button
+      var helpButton = new qx.ui.toolbar.Button(this.tr('Help'));
+      toolBar.add(helpButton);
+      helpButton.addListener("execute", function(e){
+        this.getApplication().showHelpWindow("plugin/rssfolder/search");
+      }, this);           
 
       // stack
       var qxStack1 = new qx.ui.container.Stack();

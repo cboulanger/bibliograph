@@ -189,7 +189,7 @@ qx.Class.define("bibliograph.Main",
      * @return {String}
      */
     getCopyright : function() {
-      return "2003-2014 (c) Christian Boulanger";
+      return "2003-2015 (c) Christian Boulanger";
     },
 
     /*

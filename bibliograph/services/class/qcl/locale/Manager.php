@@ -280,9 +280,7 @@ class qcl_locale_Manager extends qcl_core_Object
     {
       bind_textdomain_codeset( $qcl_textdomain, 'UTF-8');
     }
-
     $this->locale = $locale;
-    
 	}
 
   /**
