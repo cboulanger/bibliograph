@@ -416,12 +416,10 @@ class bibliograph_service_Setup
     {
       $dsModel = $manager->createDatasource(
         "bibliograph_export",
-        "qcl.schema.filesystem.local",
-         array(
-          'hidden' => true,
-          'type'   => "file"
-        )
+        "qcl.schema.filesystem.local"
       );
+      $dsModel->setHidden(true);
+      $dsModel->setType("file");
       $dsModel->setResourcepath( QCL_TMP_PATH );
       $dsModel->save();
     }
