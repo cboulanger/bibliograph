@@ -249,7 +249,7 @@ class bibliograph_service_Setup
     $app->getConfigModel()->setKeyDefault("access.enforce_https_login", $enforce_https );
     
     // other preferences
-    $app->addPreference( "application.locale", $app->getLocaleManager()->getLocale(), true );
+    $app->addPreference( "application.locale", "", true );
     $app->addPreference( "authentication.method", "hashed" );
 
     // result
