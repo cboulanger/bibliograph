@@ -211,7 +211,7 @@ class bibliograph_service_Setup
           // set administrator's email
           if( ! $userModel->getEmail() ) 
           {
-            $userModel->setEmai( $adminEmail );
+            $userModel->setEmail( $adminEmail );
           }
           // encrypt default password
           if( $userModel->getPassword() == $username )
