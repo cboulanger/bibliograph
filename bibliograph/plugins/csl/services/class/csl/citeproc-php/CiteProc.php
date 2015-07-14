@@ -550,7 +550,7 @@ class csl_name extends csl_format {
 
     $initialize_with = $this->{'initialize-with'};
 
-    foreach ($names as $rank => $name) {
+    foreach ((array)$names as $rank => $name) {
       $count++;
       //$given = (!empty($name->firstname)) ? $name->firstname : '';
       if (!empty($name->given) && isset($initialize_with)) {
