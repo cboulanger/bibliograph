@@ -122,7 +122,7 @@ qx.Class.define("bibliograph.ui.window.PreferencesWindow",
       select.setAlignY('middle');
       
       // setup selectbox
-      confMgr.addListener("ready", function(e) {
+      confMgr.addListenerOnce("ready", function(e) {
         
         var localeFromConfig = confMgr.getKey("application.locale");
         
