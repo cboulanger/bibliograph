@@ -13,7 +13,7 @@ collection, editing and publishing of bibliographic data.
 - [Docker Build](https://registry.hub.docker.com/u/cboulanger/bibliograph/)
 - [Release Notes](release-notes.md)
 - [User Forum](http://forum.bibliograph.org)
-- [Donate to the project](http://sourceforge.net/p/bibliograph/donate)
+- [Flattr](https://flattr.com/submit/auto?user_id=panyasan&url=https://github.com/cboulanger/bibliograph&title=Bibliograph&language=javascript&tags=github&category=software) or [Donate to the project](http://sourceforge.net/p/bibliograph/donate)
 
 Bibliograph
 
