@@ -441,6 +441,7 @@ class bibliograph_service_Setup
     qcl_import("bibliograph_model_export_RegistryModel");
     $exportRegistry = bibliograph_model_export_RegistryModel::getInstance();
     $exportRegistry->addFromClass("bibliograph_model_export_Bibtex");
+    $exportRegistry->addFromClass("bibliograph_model_export_Csv");
     
     // next
     $this->setMessage($this->tr("Installing plugins ..."));

@@ -201,9 +201,10 @@ class bibliograph_service_Export
      */
     $file->open("w");
     $data = array();
+    $fieldsAsKeys = array_flip( $refModel->getSchemaModel()->fields() );
     while( $refModel->loadNext( $query ) )
     {
-      $data[] = $refModel->data();
+      $data[] = array_intersect_key( $refModel->data(), $fieldsAsKeys );
     }
     $result = $exporter->export( $data );
     $file->write( $result );
