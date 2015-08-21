@@ -436,7 +436,8 @@ class bibliograph_service_Setup
     qcl_import("bibliograph_model_import_RegistryModel");
     $importRegistry = bibliograph_model_import_RegistryModel::getInstance();
     $importRegistry->addFromClass("bibliograph_model_import_Bibtex");
-
+    $importRegistry->addFromClass("bibliograph_model_import_Csv");
+    
     qcl_import("bibliograph_model_export_RegistryModel");
     $exportRegistry = bibliograph_model_export_RegistryModel::getInstance();
     $exportRegistry->addFromClass("bibliograph_model_export_Bibtex");

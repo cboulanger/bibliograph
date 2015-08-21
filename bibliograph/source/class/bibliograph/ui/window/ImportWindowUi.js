@@ -110,31 +110,31 @@ qx.Class.define("bibliograph.ui.window.ImportWindowUi",
       /*
        * select all button
        */
-      var selectAllButton = new qx.ui.form.Button(this.tr('Select all'), null, null);
+      var selectAllButton = new qx.ui.form.Button();
       this.selectAllButton = selectAllButton;
-      selectAllButton.setLabel(this.tr('Select all'));
+      selectAllButton.setLabel(this.tr('Import all records'));
       qxComposite1.add(selectAllButton);
       selectAllButton.addListener("execute", function(e) {
-        listView.selectAll()
+        this.importReferences(true);
       }, this);
       
       /*
        * import selected button
        */
-      var importButton = new qx.ui.form.Button(this.tr('Import selected records'), null, null);
+      var importButton = new qx.ui.form.Button();
       this.importButton = importButton;
       importButton.setEnabled(false);
       importButton.setLabel(this.tr('Import selected records'));
       qxComposite1.add(importButton);
       importButton.bind("enabled", selectAllButton, "enabled");
       importButton.addListener("execute", function(e) {
-        this.importSelected()
+        this.importReferences(false);
       }, this);
       
       /*
        * close button
        */
-      var qxButton1 = new qx.ui.form.Button(this.tr('Close'), null, null);
+      var qxButton1 = new qx.ui.form.Button();
       qxButton1.setLabel(this.tr('Close'));
       qxComposite1.add(qxButton1);
       qxButton1.addListener("execute", function(e) {

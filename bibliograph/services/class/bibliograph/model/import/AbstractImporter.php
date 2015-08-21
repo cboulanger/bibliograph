@@ -100,10 +100,12 @@ abstract class bibliograph_model_import_AbstractImporter
    *
    * @param string $data
    *    A string containing import data
+   * @param bibliograph_model_ReferenceModel $targetModel
+   *    The model in which to import the data (for information about the model)
    * @return array
    *    The result array which can be imported into bibliograph
    *
    */
-  abstract function import( $data );
+  abstract function import( $data, bibliograph_model_ReferenceModel $targetModel );
 
 }

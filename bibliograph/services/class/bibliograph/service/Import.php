@@ -40,8 +40,7 @@ class bibliograph_service_Import
      */
     array(
       'datasource'  => "bibliograph_import",
-      'modelType'   => "reference",
-
+      'modelType'   => array("reference","folder"),
       'rules'         => array(
         array(
           'roles'       => array( BIBLIOGRAPH_ROLE_USER ),
@@ -182,37 +181,69 @@ class bibliograph_service_Import
 //      ));
 //    }
 
-    /*
-     * get the folder and reference models
-     */
+    // get the folder and reference models
     $dsModel  = $this->getDatasourceModel("bibliograph_import");
     $refModel = $dsModel->getInstanceOfType("reference");
     $fldModel = $dsModel->getInstanceOfType("folder");
-
-    /*
-     * delete the folder with the session id as label
-     */
-    $sessionId = $this->getSessionId();
-    try
+    
+    // cleanup unused data: purge all folders with names of sessions that no longer exist
+    $sessionModel=$this->getAccessController()->getSessionModel();
+    $fldModel->findAll();
+    while( $fldModel->loadNext() )
     {
-      $fldModel->findWhere( array('label' => $sessionId ) );
+      try
+      {
+        $sessionModel->load( $fldModel->getLabel() );
+      }
+      catch( qcl_data_model_RecordNotFoundException $e )
+      {
+        try
+        {
+          $refModel->findLinked( $fldModel );
+          while( $refModel->loadNext() ) $refModel->delete();
+        }
+        catch( qcl_data_model_RecordNotFoundException $e ){}
+        $fldModel->delete();
+      }
+    }
+    
+    // empty an existing folder with the session id as label
+    $sessionId = $this->getSessionId();
+    $fldModel->findWhere( array('label' => $sessionId ) );
+    if($fldModel->foundSomething())
+    {
       $fldModel->loadNext();
       $refModel->findLinked( $fldModel );
-      while( $refModel->loadNext() ) $refModel->delete();
+      if( $refModel->foundSomething() )
+      {
+        //$this->debug("Emptying folder $sessionId");
+        while( $refModel->loadNext() ) $refModel->delete();  
+      }
+      else
+      {
+        //$this->debug("No content in folder $sessionId");
+      }
     }
-    catch( qcl_data_model_RecordNotFoundException $e)
+    else
     {
+      //$this->debug("Creating folder $sessionId");
       $fldModel->create( array( 'label' => $sessionId ) );
+      $fldModel->setParentId(0)->save();
     }
-
+    
     /*
      * convert and import data
      */
     $data = file_get_contents( $file );
-    $records = $importer->import( $data );
+    $records = $importer->import( $data, $refModel );
     foreach( $records as $record )
     {
       $refModel->create( $record );
+      if( ! $refModel->getCitekey() )
+      {
+        $refModel->computeCitekey();
+      }
+      
       $refModel->linkModel($fldModel);
     }
 
@@ -232,18 +263,20 @@ class bibliograph_service_Import
    * @param int $targetFolderId
    * @return string "OK"
    */
-  public function method_importReferences( $sourceDatasource, $ids, $targetDatasource, $targetFolderId )
+  public function method_importReferences( $ids, $targetDatasource, $targetFolderId )
   {
     $this->requirePermission("reference.import");
 
-    qcl_assert_valid_string( $sourceDatasource );
     qcl_assert_array( $ids );
     qcl_assert_valid_string( $targetDatasource );
     qcl_assert_integer( $targetFolderId );
+    
     qcl_import("bibliograph_service_Reference");
     qcl_import("bibliograph_service_Folder");
-
-    $sourceModel = $this->getModel( $sourceDatasource, "reference" );
+    
+    $dsModel  = $this->getDatasourceModel("bibliograph_import");
+    $refModel = $dsModel->getInstanceOfType("reference");
+    $fldModel = $dsModel->getInstanceOfType("folder");    
 
     $targetReferenceModel =
       bibliograph_service_Reference::getInstance()
@@ -254,16 +287,35 @@ class bibliograph_service_Import
       ->getFolderModel( $targetDatasource );
 
     $targetFolderModel->load( $targetFolderId );
-
-    foreach( $ids as $id )
+    
+    if( count($ids) == 0 )
     {
-      $sourceModel->load($id);
+      $sessionId = $this->getSessionId();
+      $fldModel->findWhere( array('label' => $sessionId ) );
+      if($fldModel->foundNothing())
+      {
+        throw new JsonRpcException($this->tr("Data has been lost due to session change. Please import again."));
+      }
+      $fldModel->loadNext();
+      //$this->debug("Import folder $sessionId has id " . $fldModel->id() );
+      $refModel->findLinked( $fldModel );
+    }
+    else
+    {
+      $refModel->find(new qcl_data_db_Query( array(
+        'select'    => "*",
+        'where'     => "id IN (" . implode(",", $ids ) .")"
+      ) ) );
+    }
+
+    while( $refModel->loadNext() )
+    {
       $targetReferenceModel->create();
-      $targetReferenceModel->copySharedProperties( $sourceModel );
+      $targetReferenceModel->copySharedProperties( $refModel );
       $targetReferenceModel->save();
       $targetFolderModel->linkModel( $targetReferenceModel );
     }
-
+    
     /*
      * update reference count
      */

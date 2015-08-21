@@ -186,19 +186,23 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
       this.showPopup("Loading imported references ...");
       this.listView.load();
     },
-
+    
     /**
-     * Import the selected references into the datasource
+     * Import the selected or all references into the datasource
      */
-    importSelected : function()
+    importReferences : function(importAll)
     {
       var app = this.getApplication();
 
       /*
-       * ids to import
+       * ids to import => array or empty if all records
        */
       var ids = this.listView.getSelectedIds();
-      if (!ids.length)
+      if ( importAll )
+      {
+        ids = [];
+      }
+      else if ( !ids.length)
       {
         dialog.Dialog.alert(this.tr("You have to select one or more reference to import."));
         return false;
@@ -230,14 +234,16 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
       /*
        * send to server
        */
-      var sourceDatasource = "bibliograph_import";
       var targetDatasource = app.getDatasource();
       this.showPopup(this.tr("Importing references..."));
-      this.getApplication().getRpcManager().execute("bibliograph.import", "importReferences", [sourceDatasource, ids, targetDatasource, targetFolderId], function()
-      {
-        this.importButton.setEnabled(true);
-        this.hidePopup();
-      }, this);
+      this.getApplication().getRpcManager().execute(
+        "bibliograph.import", "importReferences", 
+        [ ids, targetDatasource, targetFolderId], 
+        function(){
+          this.importButton.setEnabled(true);
+          this.hidePopup();
+        },
+      this);
     }
   }
 });
