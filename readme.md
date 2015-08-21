@@ -1,6 +1,8 @@
 Bibliograph: Open Source Online Citation & Library Management
 =============================================================
 
+[![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=panyasan&url=https://github.com/cboulanger/bibliograph&title=Bibliograph&language=javascript&tags=github&category=software)
+
 Bibliograph is a powerful open source web application for the collaborative
 collection, editing and publishing of bibliographic data.
 
@@ -11,7 +13,7 @@ collection, editing and publishing of bibliographic data.
 - [Docker Build](https://registry.hub.docker.com/u/cboulanger/bibliograph/)
 - [Release Notes](release-notes.md)
 - [User Forum](http://forum.bibliograph.org)
-- [Donate to the project](http://sourceforge.net/p/bibliograph/donate)
+- [Flattr](https://flattr.com/submit/auto?user_id=panyasan&url=https://github.com/cboulanger/bibliograph&title=Bibliograph&language=javascript&tags=github&category=software) or [donate to the project](http://sourceforge.net/p/bibliograph/donate)
 
 Bibliograph
 
