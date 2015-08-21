@@ -56,12 +56,14 @@ class bibliograph_model_import_Bibtex
    *
    * @param string $bibtex
    *    A bibtex string
+   * @param bibliograph_model_ReferenceModel $targetModel
+   *    The model in which to import the data (for information about the model)
    * @return array
    *    The result array which can be imported into bibliograph
    * @throws InvalidArgumentException
    *    if input data cannot be parsed
    */
-  function import( $bibtex )
+  function import( $bibtex, bibliograph_model_ReferenceModel $targetModel )
   {
     require_once "bibliograph/lib/bibtex/BibtexParser.php";
     $parser  = new BibtexParser;

@@ -90,17 +90,19 @@ class bibutils_import_Endnote
    *
    * @param string $input
    *    The import data
+   * @param bibliograph_model_ReferenceModel $targetModel
+   *    The model in which to import the data (for information about the model)   
    * @return array
    *    The result array which can be imported into bibliograph
    * @throws InvalidArgumentException
    *    if input data cannot be parsed
    */
-  function import( $input )
+  function import( $input, bibliograph_model_ReferenceModel $targetModel )
   {
     qcl_assert_valid_string( $input );
     $mods   = $this->importer->call("-i unicode", $input );
     $bibtex = $this->modsImporter->call("-nl -fc -o unicode", $mods );
-    $import = $this->bibtexImporter->import( $bibtex );
+    $import = $this->bibtexImporter->import( $bibtex, $targetModel );
     return $import;
   }
 }

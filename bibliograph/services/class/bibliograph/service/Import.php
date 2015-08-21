@@ -213,13 +213,13 @@ class bibliograph_service_Import
     if($fldModel->foundSomething())
     {
       $fldModel->loadNext();
-      $refModel->findLinked( $fldModel );
-      if( $refModel->foundSomething() )
+      try
       {
+        $refModel->findLinked( $fldModel );
         //$this->debug("Emptying folder $sessionId");
         while( $refModel->loadNext() ) $refModel->delete();  
       }
-      else
+      catch( qcl_data_model_RecordNotFoundException $e)
       {
         //$this->debug("No content in folder $sessionId");
       }
