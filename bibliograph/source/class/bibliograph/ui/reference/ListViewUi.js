@@ -235,9 +235,7 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
       qxMenu1.setPosition("top-left");
       qxMenuBarButton2.setMenu(qxMenu1);
 
-      /*
-       * Move references
-       */
+      // Move references
       var qxMenuButton1 = new qx.ui.menu.Button(this.tr('Move reference(s)...'));
       qxMenu1.add(qxMenuButton1);
       qxMenuButton1.addListener("execute", this._moveReference, this);
@@ -246,9 +244,7 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
       permissionManager.create("reference.move")
           .bind("state", qxMenuButton1, "visibility", { converter : qcl.bool2visibility });
 
-      /*
-       * Copy references
-       */
+      // Copy references
       var qxMenuButton2 = new qx.ui.menu.Button(this.tr('Copy reference(s)...'));
       qxMenu1.add(qxMenuButton2);
       qxMenuButton2.addListener("execute", this._copyReference, this);
@@ -267,9 +263,7 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
       var qxMenu2 = new qx.ui.menu.Menu();
       qxMenuButton3.setMenu(qxMenu2);
 
-      /*
-       * Export selected references
-       */
+      // Export selected references
       var qxMenuButton4 = new qx.ui.menu.Button(this.tr('Export selected references'));
       qxMenu2.add(qxMenuButton4);
       permissionManager.create("allowExportReference")
@@ -278,9 +272,7 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
         this.exportSelected();
       }, this);
 
-      /*
-       * Export folder
-       */
+      // Export folder
       var qxMenuButton5 = new qx.ui.menu.Button(this.tr('Export folder'));
       qxMenu2.add(qxMenuButton5);
       qxMenuButton5.addListener("execute", function(e) {
@@ -291,7 +283,7 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
       /*
        * Edit menu
        */
-      var qxMenuButton6 = new qx.ui.menu.Button(this.tr('Edit references'), null, null, null);
+      var qxMenuButton6 = new qx.ui.menu.Button();
       qxMenuButton6.setLabel(this.tr('Edit references'));
       qxMenu1.add(qxMenuButton6);
       permissionManager.create("reference.edit")
@@ -299,19 +291,25 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
       var qxMenu3 = new qx.ui.menu.Menu();
       qxMenuButton6.setMenu(qxMenu3);
 
-      /*
-       * Find/Replace Button
-       */
-      var qxMenuButton7 = new qx.ui.menu.Button(this.tr('Find/Replace'), null, null, null);
-      qxMenuButton7.setLabel(this.tr('Find/Replace'));
-      qxMenu3.add(qxMenuButton7);
+      // Find/Replace Button
+      var findReplBtn = new qx.ui.menu.Button();
+      findReplBtn.setLabel(this.tr('Find/Replace'));
+      qxMenu3.add(findReplBtn);
       permissionManager.create("reference.batchedit")
-          .bind("state", qxMenuButton7, "visibility", { converter : qcl.bool2visibility });
-      qxMenuButton7.addListener("execute", function(e) {
+          .bind("state", findReplBtn, "visibility", { converter : qcl.bool2visibility });
+      findReplBtn.addListener("execute", function(e) {
         this.findReplace()
       }, this);
-
-
+      
+      // Empty folder Button
+      var emptyFldContBtn = new qx.ui.menu.Button();
+      emptyFldContBtn.setLabel(this.tr('Make folder empty'));
+      qxMenu3.add(emptyFldContBtn);
+      permissionManager.create("reference.batchedit")
+          .bind("state", emptyFldContBtn, "visibility", { converter : qcl.bool2visibility });
+      emptyFldContBtn.addListener("execute", function(e) {
+        this.emptyFolder()
+      }, this);      
 
 
       /*

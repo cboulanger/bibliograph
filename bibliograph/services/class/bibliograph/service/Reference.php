@@ -1015,6 +1015,7 @@ class bibliograph_service_Reference
     /*
      * update reference count in source and target folders
      */
+    $foldersToUpdate= array_unique($foldersToUpdate);
     foreach( $foldersToUpdate as $fid )
     {
       $folderModel->load( $fid );
@@ -1052,6 +1053,59 @@ class bibliograph_service_Reference
     {
       array_shift($ids);
       return $this->method_removeReferences( $datasource, $folderId, null, $ids );
+    }
+    return "OK";
+  }
+  
+  
+  public function method_removeAllFromFolder( $datasource, $folderId )
+  {
+    qcl_assert_integer($folderId);
+    qcl_assert_valid_string($datasource);
+    $this->checkDatasourceAccess( $datasource );
+    $this->requirePermission("reference.batchedit");
+    $referenceModel = $this->getControlledModel( $datasource );
+    $folderModel    = $this->getFolderModel( $datasource );
+    $folderModel->load($folderId);
+    $referenceModel->findLinked($folderModel);
+    $foldersToUpdate=array( $folderId );
+    $referencesToTrash=array();
+    while($referenceModel->loadNext())
+    {
+      $folderCount = count( $folderModel->linkedModelIds( $referenceModel ) );
+      $referenceModel->unlinkModel( $folderModel );
+      if ( $folderCount == 1 )
+      {
+        $referencesToTrash[]=$referenceModel->id();
+      }
+    }
+    if ( count($referencesToTrash) )
+    {
+      $trashFolderId  = bibliograph_service_Folder::getInstance()->getTrashFolderId( $datasource );
+      $foldersToUpdate[] = $trashFolderId;
+      $folderModel->load( $trashFolderId );    
+      foreach($referencesToTrash as $id)
+      {
+          $referenceModel->load($id);
+          try
+          {
+            $referenceModel->linkModel( $folderModel );  
+          }
+          catch( qcl_data_model_RecordExistsException $e ){}
+          $referenceModel->set("markedDeleted", true);
+          $referenceModel->save();      
+      }
+    }    
+    foreach( $foldersToUpdate as $fid )
+    {
+      $folderModel->load( $fid );
+      $referenceCount = count( $referenceModel->linkedModelIds( $folderModel ) );
+      $folderModel->set( "referenceCount", $referenceCount );
+      $folderModel->save();
+      $this->broadcastClientMessage("folder.reload",array(
+        'datasource'  => $datasource,
+        'folderId'    => $fid
+      ));      
     }
     return "OK";
   }
@@ -1349,10 +1403,10 @@ class bibliograph_service_Reference
       {
         continue;
       }
-
+      $reftype = $refModel->getReftype();
       $data[] = array(
         $refModel->id(),
-        $refModel->getSchemaModel()->getTypeLabel( $refModel->getReftype() ),
+        $reftype ? $refModel->getSchemaModel()->getTypeLabel( $reftype ) : "",
         $refModel->getAuthor(),
         $refModel->getYear(),
         $refModel->getTitle(),

@@ -1,3 +1,6 @@
 [submodule "qookery"]
     path = bibliograph/contrib/qookery
-    url = git://ergobyte/qookery.git
+    url = git://github.com/ergobyte/qookery.git
+[submodule "bibliograph/contrib/qookery"]
+	path = bibliograph/contrib/qookery
+	url = git://github.com/ergobyte/qookery.git

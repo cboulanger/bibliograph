@@ -1173,6 +1173,24 @@ qx.Class.define("bibliograph.ui.reference.ListView",
         app.hidePopup();
       }, this);
     },
+    
+    /**
+     * Empties the current folder
+     */
+    emptyFolder : function()
+    {
+      var datasource = this.getDatasource();
+      var folderId = this.getFolderId();
+      var app = this.getApplication();
+      var msg = this.tr("Do you really want to make the folder empty, moving all references to the trash that are not in other folders?");
+      dialog.Dialog.confirm(msg, function(yes){
+        if ( !yes ) return;
+        app.showPopup(this.tr("Emptying the folder ..."));
+        app.getRpcManager().execute("bibliograph.reference", "removeAllFromFolder", [datasource, folderId], function() {
+          app.hidePopup();
+        }, this);        
+      },this);
+    },
     dummy : null
   }
 });
