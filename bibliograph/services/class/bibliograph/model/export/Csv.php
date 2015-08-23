@@ -65,10 +65,23 @@ class bibliograph_model_export_Csv
   function export( $data, $exclude=array() )
   {
     qcl_assert_array( $data, "Invalid data");
-    $csv= '"' . implode( '","', array_keys($data[0]) ) . '"' . PHP_EOL;
-    foreach( $data as $ref )
+    
+    // from https://gist.github.com/johanmeiring/2894568
+    function str_putcsv($input, $delimiter = ',', $enclosure = '"')
     {
-      $csv .= '"' . implode( '","', $ref ) . '"' . PHP_EOL;
+        $fp = fopen('php://temp', 'r+');
+        fputcsv($fp, $input, $delimiter, $enclosure);
+        rewind($fp);
+        $data = fread($fp, 1048576);
+        fclose($fp);
+        return rtrim($data, "\n");
+    }
+    
+    $csv = str_putcsv( array_keys( $data[0] ) ) . PHP_EOL;
+    
+    foreach( $data as $line)
+    {
+      $csv .= str_putcsv( array_values( $line ) ) . PHP_EOL;
     }
     return $csv;
   }
