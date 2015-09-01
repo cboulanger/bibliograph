@@ -241,7 +241,7 @@ class bibliograph_service_Import
       $refModel->create( $record );
       if( ! $refModel->getCitekey() )
       {
-        $refModel->computeCitekey();
+        $refModel->setCitekey($refModel->computeCitekey())->save();
       }
       
       $refModel->linkModel($fldModel);
