@@ -51,10 +51,25 @@ class qcl_access_Service
   {
     $app = $this->getApplication();
     $acl = $this->getAccessController();
-    
-    $auth_method =  $app->getPreference("authentication.method");
+    $auth_method = $app->getPreference("authentication.method");
+
+    try
+    {
+      if( $app->getIniValue("ldap.enabled") and $acl->isLdapUser($username) ) 
+      {
+        $this->log("Challenge: User '$username' needs to be authenticated by LDAP.", QCL_LOG_AUTHENTICATION);
+        $auth_method = "plaintext";
+      }
+    }
+    catch( qcl_access_AuthenticationException $e)
+    {
+      // if the user is not in the database (for example, first LDAP auth), use plaintext authentication
+      $auth_method = "plaintext";
+      $this->log("Challenge: User '$username' is not in the database.", QCL_LOG_AUTHENTICATION);
+    }
     
     $this->log("Challenge: Using authentication method '$auth_method'", QCL_LOG_AUTHENTICATION);
+    
     switch ( $auth_method )
     {
       case "plaintext":
@@ -149,12 +164,28 @@ class qcl_access_Service
       {
         try
         {
-          $userId = $this->authenticateByLdap( $username, $password );
-          $this->ldapAuth = true;
+          $isLdapUser = $accessController->isLdapUser($username);
         }
         catch( qcl_access_AuthenticationException $e)
         {
-          $this->log("LDAP authentication failed, trying to authenticate locally ...", QCL_LOG_AUTHENTICATION);
+          $this->log("User does not exist, might have to be created from LDAP ...", QCL_LOG_AUTHENTICATION);
+          $isLdapUser = true;
+        }
+        if( $isLdapUser )
+        {
+          try
+          {
+            $userId = $this->authenticateByLdap( $username, $password );
+            $this->ldapAuth = true;            
+          }
+          catch( qcl_access_AuthenticationException $e)
+          {
+            $this->log("LDAP authentication failed, trying to authenticate locally ...", QCL_LOG_AUTHENTICATION);
+            $isLdapUser = false;
+          }
+        }
+        if( ! $isLdapUser )
+        {
           $userId = $accessController->authenticate( $username, $password );
         }
       }
@@ -245,8 +276,6 @@ class qcl_access_Service
    */
   protected function authenticateByLdap( $username, $password )
   {
-    $this->log("Authenticating against LDAP server...", QCL_LOG_LDAP);
-
     $app = $this->getApplication();
     $host = $app->getIniValue( "ldap.host" );
     $port = (int) $app->getIniValue( "ldap.port" );
@@ -267,7 +296,7 @@ class qcl_access_Service
      * authenticate against ldap server
      */
     $userdn = "$user_id_attr=$username,$user_base_dn";
-    $this->log("Authenticating $userdn against $host:$port with password '$password'.", QCL_LOG_LDAP);
+    $this->log("Authenticating $userdn against $host:$port.", QCL_LOG_LDAP);
     $ldap->authenticate( $userdn, $password );
 
     /*

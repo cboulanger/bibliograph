@@ -504,6 +504,26 @@ class qcl_access_UserController
   }
   
   /**
+   * Checks if the given username has to be authenticated from an LDAP server#
+   * @param string $username
+   * @throws qcl_access_AuthenticationException if user does not exist
+   * @return bool 
+   */
+  public function isLdapUser($username)
+  {
+    $userModel = $this->getUserModel();
+    try 
+    {
+      $userModel->load($username);  
+    }
+    catch ( qcl_data_model_RecordNotFoundException $e)
+    {
+      throw new qcl_access_AuthenticationException( $this->tr("User '$username' does not exist.") );
+    }
+    return $userModel->getLdap();
+  }
+  
+  /**
    * Calling this method with a single argument (the plain text password)
    * will cause a random string to be generated and used for the salt.
    * The resulting string consists of the salt followed by the SHA-1 hash
