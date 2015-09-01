@@ -53,6 +53,8 @@ class qcl_access_Service
     $acl = $this->getAccessController();
     
     $auth_method =  $app->getPreference("authentication.method");
+    
+    $this->log("Challenge: Using authentication method '$auth_method'", QCL_LOG_AUTHENTICATION);
     switch ( $auth_method )
     {
       case "plaintext":
@@ -239,6 +241,7 @@ class qcl_access_Service
    * @param $username
    * @param $password
    * @return int User Id
+   * @throws qcl_access_AuthenticationException if Authentication fails
    */
   protected function authenticateByLdap( $username, $password )
   {
@@ -264,7 +267,7 @@ class qcl_access_Service
      * authenticate against ldap server
      */
     $userdn = "$user_id_attr=$username,$user_base_dn";
-    $this->log("Authenticating $userdn against $host:$port.", QCL_LOG_LDAP);
+    $this->log("Authenticating $userdn against $host:$port with password '$password'.", QCL_LOG_LDAP);
     $ldap->authenticate( $userdn, $password );
 
     /*
