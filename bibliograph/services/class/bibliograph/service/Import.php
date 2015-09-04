@@ -235,6 +235,14 @@ class bibliograph_service_Import
      * convert and import data
      */
     $data = file_get_contents( $file );
+    
+    // convert to utf-8
+    if (!preg_match('!!u', $data))
+    {
+      throw new JsonRpcException($this->tr("You must convert file to UTF-8 before importing."));
+    }
+    
+    
     $records = $importer->import( $data, $refModel );
     foreach( $records as $record )
     {
