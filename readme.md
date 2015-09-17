@@ -109,6 +109,11 @@ Partial funding was provided by
 - [Department of Law, Humboldt-Universität zu Berlin](http://www.rewi.hu-berlin.de)
 - [Organized Crime Research Project](http://www.organized-crime.de/) (Version 1.0)
 
+Bibliograph is developed using
+- [Cloud9 IDE](http://c9.io) (Cloud-based coding and testing environment)
+- [GitHub](http://github.com) (Version control and code hosting)
+- [BrowserStack](http://browserstack.com) (Browser testing service - sponsored Open Source license)
+
 The author wishes to thank:
 - Serge Barysiuk for providing assistance with UI generation, and for designing
   the application logo;
