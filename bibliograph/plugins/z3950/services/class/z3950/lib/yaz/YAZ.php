@@ -1030,8 +1030,8 @@ class YAZ_XmlResult extends YAZ_Result
 
   public function getXml()
   {
-    if ( strtolower( $this->yaz->getOption("charset") ) != "utf-8" )
-    {
+    if (!mb_detect_encoding($this->xml, 'UTF-8', true)) 
+    {  
       $this->xml = utf8_encode( $this->xml );
     }
     $xml  = '<?xml version="1.0" encoding="UTF-8" ?>';
