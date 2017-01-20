@@ -46,7 +46,11 @@ class qcl_ui_dialog_ServerProgress
     header("Cache-Control: no-cache, must-revalidate");
     header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
     header("Pragma:");
-    //header("Transfer-encoding: chunked"); // doesn't work with build version
+    header('Content-Encoding: chunked');
+    header('Transfer-Encoding: chunked');
+    header('Content-Type: text/html');
+    header('Connection: keep-alive');  
+
     flush();
     @apache_setenv('no-gzip', 1);
     @ini_set('output_buffering', 0);
@@ -63,8 +67,9 @@ class qcl_ui_dialog_ServerProgress
     // add padding to force Safari and IE to render
     if( strlen($chunk) < 1024)
     {
-      $chunk = str_repeat(" ", 1024 - strlen($chunk)) . "\r\n" . $chunk;
+      $chunk = str_pad( $chunk, 1024 );
     }
+    $chunk .= "<br/>"; // needed by Safari and Internet Explorer
     echo sprintf("%x\r\n", strlen($chunk));
     echo $chunk;
     echo "\r\n";
