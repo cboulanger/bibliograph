@@ -611,7 +611,8 @@ qx.Class.define("qcl.data.store.JsonRpc",
        */
       if ( ex.code == 0 )
       {
-        ex.message = app.tr("No connection to server.");
+        this.warn ( "JsonRpc Exception (#" + id + "): No connection to server" );
+        return;
       }
 
       /*
