@@ -88,17 +88,25 @@ qx.Class.define("z3950.ImportWindow",
       var ds = this.datasourceSelectBox.getSelection().getItem(0).getValue();
       var lv = this.listView;
 
+      lv.setDatasource(ds);
+      var query = this.normalizeForSearch ( this.searchBox.getValue() );
+      
       // update the UI
       lv.clearTable();
+      //lv.setEnabled(false);
       this.importButton.setEnabled(false);
-      this.searchButton.setEnabled(false);
-      lv.setEnabled(false);
+      //this.searchButton.setEnabled(false);
 
-      // this triggers the search
-      lv.setDatasource(ds);
-      lv.setQuery(null);
-      lv.setQuery( this.normalizeForSearch ( this.searchBox.getValue() ) );
+      // open the ServerProgress widget and initiate the remote search
+      var z3950Progress = this.getApplication().getWidgetById("z3950Progress");
+      var params = [ds, query, "z3950Progress"].join(",");
+      
+      z3950Progress.setMessage(this.tr("Searching..."));
+      z3950Progress.setMethod("executeZ3950Request");
+      z3950Progress.start(params);
+
     },
+    
 
     /**
      * Imports the selected references

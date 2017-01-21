@@ -59,7 +59,7 @@ class YAZ
    * @var unknown_type
    */
   protected $syntax = array();
-
+  
   /**
    * Constructor.
    * @param $zurl
@@ -177,8 +177,13 @@ class YAZ
       $this->zurl = "$host/$database";
     }
 
-    $this->options['charset'] = (string) $serverInfo->encoding;
-
+    // encoding of the databaser
+    $this->options['charset'] = either ( 
+      (string) $serverInfo->charset, 
+      (string) $serverInfo->encoding,
+      "marc-8"
+    ); 
+    
     /*
      * non-standard
      */
@@ -243,7 +248,7 @@ class YAZ
    * yaz error message will be printed;
    * @throws YAZException
    */
-  protected function throwException( $message="" )
+  public function throwException( $message="" )
   {
     $message .=
       ( empty( $message ) ? "" : ": " ) .
@@ -260,10 +265,18 @@ class YAZ
    */
   protected function checkError()
   {
-    if ( yaz_error( $this->resource ) )
+    if ( $error = yaz_error( $this->resource ) )
     {
-      $this->throwException();
+      $this->throwException($error);
     }
+  }
+  
+  /**
+   * Return the last yaz error, if any
+   */
+  public function getError()
+  {
+    return yaz_error( $this->resource );
   }
 
   /**
@@ -965,14 +978,24 @@ abstract class YAZ_Result
    * @var YAZ
    */
   protected $yaz;
+  
+  
+  /**
+   * The record type used by yaz_record
+   * @see http://php.net/manual/de/function.yaz-record.php
+   * @var string
+   */
+   protected $type;
 
   /**
    * Constructor
    * @param YAZ $yaz
+   * @param string $type Optional record type
    */
-  public function __construct( YAZ $yaz )
+  public function __construct( YAZ $yaz, $type=null )
   {
-    $this->yaz = $yaz;
+    $this->yaz  = $yaz;
+    if( $type) $this->type = $type;
   }
 
   /**
@@ -983,45 +1006,12 @@ abstract class YAZ_Result
   abstract public function addRecord( $position );
 }
 
-
 /**
- * Class YAZ_SutrsResult
- * Converts a SUTRS result into BibTex
- * !!! NOT FUNCTIONAL YET!!!
+ * YAZ XML Result
  */
-class YAZ_SutrsResult extends YAZ_Result
-{
-  protected $records = array();
-
-  protected $conversion_map = array(
-  // TODO
-  );
-
-  public function addRecord( $position )
-  {
-    $record = explode("\n" , $this->yaz->getRecord( $position, "string" ));
-    $result = array();
-    foreach( $record as $line )
-    {
-      $splitPos = strpos($line,":");
-      if ($splitPos === false ) continue;
-      $key = substr($line,0,$splitPos-1);
-      $value = substr($line,$splitPos+1);
-      $translatedKey = $this->conversion_map[$key];
-      if( $translatedKey )
-      {
-        $result[$translatedKey] = isset( $result[$translatedKey] ) ? $result[$translatedKey] . "; " . $value : $value;
-      }
-    }
-    if( count( $result) )
-    {
-      $this->record[] = $record;
-    }
-  }
-}
-
 class YAZ_XmlResult extends YAZ_Result
 {
+  
   protected $xml = "";
 
   protected $rootStartTag = "<xml>";
@@ -1030,10 +1020,6 @@ class YAZ_XmlResult extends YAZ_Result
 
   public function getXml()
   {
-    if (!mb_detect_encoding($this->xml, 'UTF-8', true)) 
-    {  
-      $this->xml = utf8_encode( $this->xml );
-    }
     $xml  = '<?xml version="1.0" encoding="UTF-8" ?>';
     $xml .= $this->rootStartTag ."\n" .
             $this->xml . "\n" .
@@ -1055,9 +1041,37 @@ class YAZ_XmlResult extends YAZ_Result
     return $xsltp->transformToXML($xmldoc);
   }
 
+  /**
+   * add the record at the given index position and return it
+   * @param int $position
+   */
   public function addRecord( $position )
   {
-    $this->xml .= $this->yaz->getRecord( $position, "xml" );
+    static $format = null;
+    if( $formal === null )
+    {
+      switch( $charset = $this->yaz->getOption("charset") )
+      {
+        case "utf-8": 
+          $format = "xml"; break;
+        default: 
+          $format = "xml; charset=$charset,utf-8"; break;
+          throw new YAZException("Unknown charset '$charset'.");
+      }
+    }
+    
+    $record = $this->yaz->getRecord( $position, $format );
+    
+    if ( $record ) 
+    {
+      $this->xml .= $record;
+    }
+    elseif ( $this->yaz->getError() )
+    {
+      $this->yaz->throwException("Error retrieving record #$position");
+    }
+    
+    return $record;
   }
 }
 

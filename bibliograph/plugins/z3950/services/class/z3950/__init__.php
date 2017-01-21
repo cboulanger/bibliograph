@@ -42,3 +42,4 @@ if( !defined('BIBUTILS_PATH') )
  */
 define( "BIBLIOGRAPH_LOG_Z3950", "Z3950" );
 qcl_log_Logger::getInstance()->registerFilter( BIBLIOGRAPH_LOG_Z3950, "", false );
+qcl_log_Logger::getInstance()->registerFilter( BIBLIOGRAPH_LOG_Z3950_VERBOSE, "", false );

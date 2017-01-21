@@ -63,7 +63,6 @@ qx.Class.define("z3950.Plugin",
       /*
        * Overlays for preference window
        */
-
       var prefsTabView = app.getWidgetById("bibliograph/preferences-tabView");
       var pluginTab = new qx.ui.tabview.Page( this.tr('Z39.50 Import') );
 
@@ -73,7 +72,6 @@ qx.Class.define("z3950.Plugin",
       });
       var vboxlayout = new qx.ui.layout.VBox(5);
       pluginTab.setLayout(vboxlayout);
-
 
       // create virtual list
       var list = new qx.ui.list.List();
@@ -145,6 +143,14 @@ qx.Class.define("z3950.Plugin",
       
       // add tab to tabview (must be done at the end)
       prefsTabView.add(pluginTab);
+      
+      // remote search progress indicator widget
+      var z3950Progress = new qcl.ui.dialog.ServerProgress(
+        "z3950Progress","z3950.Service"
+      );
+      z3950Progress.set({
+        hideWhenCompleted : true
+      });
     }
   }
 });

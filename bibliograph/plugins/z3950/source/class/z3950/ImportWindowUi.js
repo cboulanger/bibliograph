@@ -138,6 +138,13 @@ qx.Class.define("z3950.ImportWindowUi",
       listView.setModelType("record");
       listView.setServiceName("z3950.Service");
       importWindow.add(listView, { flex : 1 });
+      
+      // populate the list when the data is ready
+      qx.event.message.Bus.getInstance().subscribe("z3950.dataReady", function(e) {
+        listView.setQuery(null);
+        listView.setQuery( e.getData() );
+      });
+      
 
       // footer
       var qxHbox2 = new qx.ui.layout.HBox(5, null, null);

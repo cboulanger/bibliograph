@@ -33,6 +33,6 @@ Please note the following:
   - Currently (as of v2.1), only the following record syntaxes are supported: 
     - USmarc
     
-  - In particular, the "SUTRS" record syntax is not supported, i.e. Z39.50 
+  - Please not that the "SUTRS" record syntax is not supported, i.e. Z39.50 
     servers that offer only SUTRS (like the British Library, as of 06/2015) 
     cannot be used.  
