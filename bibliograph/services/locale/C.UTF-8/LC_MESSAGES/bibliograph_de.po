@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: bibliograph v2.1.0\n"
+"Project-Id-Version: bibliograph v2.1.1-beta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-13 18:59+0000\n"
+"POT-Creation-Date: 2017-01-22 22:37+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,6 +42,7 @@ msgstr "Ist der Ordner öffentlich?"
 #: ../../../class/qcl/ui/dialog/Confirm.php:51
 #: ../services/class/bibliograph/model/FolderModel.php:173
 #: ../services/class/bibliograph/service/Reference.php:1458
+#: ../services/class/bibliograph/service/Reference.php:1512
 msgid "Yes"
 msgstr "Ja"
 
@@ -51,6 +52,7 @@ msgstr "Ja"
 #: ../../../class/qcl/ui/dialog/Confirm.php:51
 #: ../services/class/bibliograph/model/FolderModel.php:174
 #: ../services/class/bibliograph/service/Reference.php:1459
+#: ../services/class/bibliograph/service/Reference.php:1513
 msgid "No"
 msgstr "Nein"
 
@@ -383,6 +385,7 @@ msgstr "Untertitel"
 #: ../services/class/bibliograph/service/Reference.php:204
 #: ../services/class/bibliograph/schema/BibtexSchema.php:733
 #: ../services/class/bibliograph/service/ACLTool.php:1345
+#: ../services/class/bibliograph/service/Import.php:109
 msgid "Title"
 msgstr "Titel"
 
@@ -415,6 +418,7 @@ msgstr "Band"
 #: ../services/class/bibliograph/service/Import.php:106
 #: ../services/class/bibliograph/service/Reference.php:200
 #: ../services/class/bibliograph/schema/BibtexSchema.php:776
+#: ../services/class/bibliograph/service/Import.php:105
 msgid "Year"
 msgstr "Jahr"
 
@@ -422,6 +426,7 @@ msgstr "Jahr"
 #: ../../../class/bibliograph/service/Reference.php:1666
 #: ../services/class/bibliograph/service/Reference.php:1666
 #: ../services/class/bibliograph/schema/CQL.php:61
+#: ../services/class/bibliograph/service/Reference.php:1720
 msgid "and"
 msgstr "und"
 
@@ -463,6 +468,7 @@ msgstr "beginnt mit"
 #: ../../../class/bibliograph/schema/CQL.php:307
 #: ../services/class/bibliograph/schema/CQL.php:307
 #: ../services/class/bibliograph/schema/CQL.php:324
+#: ../services/class/bibliograph/schema/CQL.php:327
 #, php-format
 msgid "Index '%s' does not exist."
 msgstr "Der Index '%s' existiert nicht."
@@ -1030,11 +1036,13 @@ msgstr "Die obersten Ordner können nicht verschoben werden."
 #: ../../../class/bibliograph/service/Reference.php:196
 #: ../services/class/bibliograph/service/Import.php:102
 #: ../services/class/bibliograph/service/Reference.php:196
+#: ../services/class/bibliograph/service/Import.php:101
 msgid "Author"
 msgstr "Autor/in"
 
 #: ../../../class/bibliograph/service/Import.php:134
 #: ../services/class/bibliograph/service/Import.php:134
+#: ../services/class/bibliograph/service/Import.php:133
 msgid "2. Choose import format"
 msgstr "2. Wählen Sie das Importformat aus"
 
@@ -1053,11 +1061,14 @@ msgstr "Der ausgewählte Datensatz '%s' befindet sich in %s Ordnern. Möchten Si
 #: ../../../class/bibliograph/service/Reference.php:1191
 #: ../services/class/bibliograph/service/Reference.php:1108
 #: ../services/class/bibliograph/service/Reference.php:1191
+#: ../services/class/bibliograph/service/Reference.php:1162
+#: ../services/class/bibliograph/service/Reference.php:1245
 msgid "Invalid datasource."
 msgstr "Ungültige Datenquelle."
 
 #: ../../../class/bibliograph/service/Reference.php:1109
 #: ../services/class/bibliograph/service/Reference.php:1109
+#: ../services/class/bibliograph/service/Reference.php:1163
 msgid "Invalid source folder."
 msgstr "Ungültiger Quellordner."
 
@@ -1065,118 +1076,142 @@ msgstr "Ungültiger Quellordner."
 #: ../../../class/bibliograph/service/Reference.php:1192
 #: ../services/class/bibliograph/service/Reference.php:1110
 #: ../services/class/bibliograph/service/Reference.php:1192
+#: ../services/class/bibliograph/service/Reference.php:1164
+#: ../services/class/bibliograph/service/Reference.php:1246
 msgid "Invalid target folder."
 msgstr "Ungültiger Zielordner."
 
 #: ../../../class/bibliograph/service/Reference.php:1274
 #: ../services/class/bibliograph/service/Reference.php:1274
+#: ../services/class/bibliograph/service/Reference.php:1328
 msgid "Record is marked for deletion"
 msgstr "Der Datensatz ist zur Löschung vorgesehen."
 
 #: ../../../class/bibliograph/service/Reference.php:1278
 #: ../services/class/bibliograph/service/Reference.php:1278
+#: ../services/class/bibliograph/service/Reference.php:1332
 msgid "Reference id"
 msgstr "Datensatz-ID"
 
 #: ../../../class/bibliograph/service/Reference.php:1279
 #: ../services/class/bibliograph/service/Reference.php:1279
+#: ../services/class/bibliograph/service/Reference.php:1333
 msgid "Created"
 msgstr "Angelegt am"
 
 #: ../../../class/bibliograph/service/Reference.php:1281
 #: ../services/class/bibliograph/service/Reference.php:1281
+#: ../services/class/bibliograph/service/Reference.php:1335
 msgid "Created by"
 msgstr "Angelegt von"
 
 #: ../../../class/bibliograph/service/Reference.php:1282
 #: ../services/class/bibliograph/service/Reference.php:1282
+#: ../services/class/bibliograph/service/Reference.php:1336
 msgid "Modified"
 msgstr "Verändert am"
 
 #: ../../../class/bibliograph/service/Reference.php:1283
 #: ../services/class/bibliograph/service/Reference.php:1283
+#: ../services/class/bibliograph/service/Reference.php:1337
 msgid "Modified by"
 msgstr "Verändert von"
 
 #: ../../../class/bibliograph/service/Reference.php:1284
 #: ../../../class/qcl/data/datasource/DbModel.php:245
 #: ../services/class/bibliograph/service/Reference.php:1284
+#: ../services/class/bibliograph/service/Reference.php:1338
 msgid "Status"
 msgstr "Status"
 
 #: ../../../class/bibliograph/service/Reference.php:1432
 #: ../services/class/bibliograph/service/Reference.php:1432
+#: ../services/class/bibliograph/service/Reference.php:1486
 msgid "Search in:"
 msgstr "Suchen in: "
 
 #: ../../../class/bibliograph/service/Reference.php:1435
 #: ../services/class/bibliograph/service/Reference.php:1435
+#: ../services/class/bibliograph/service/Reference.php:1489
 msgid "Whole database"
 msgstr "Gesamte Datenbank"
 
 #: ../../../class/bibliograph/service/Reference.php:1436
 #: ../services/class/bibliograph/service/Reference.php:1436
+#: ../services/class/bibliograph/service/Reference.php:1490
 msgid "Selected records"
 msgstr "Ausgewählte Datensätze"
 
 #: ../../../class/bibliograph/service/Reference.php:1437
 #: ../services/class/bibliograph/service/Reference.php:1437
+#: ../services/class/bibliograph/service/Reference.php:1491
 msgid "Selected folder"
 msgstr "Ausgewählte Ordner"
 
 #: ../../../class/bibliograph/service/Reference.php:1442
 #: ../services/class/bibliograph/service/Reference.php:1442
+#: ../services/class/bibliograph/service/Reference.php:1496
 msgid "Replace in:"
 msgstr "Ersetzen in:"
 
 #: ../../../class/bibliograph/service/Reference.php:1447
 #: ../services/class/bibliograph/service/Reference.php:1447
+#: ../services/class/bibliograph/service/Reference.php:1501
 msgid "Search expression:"
 msgstr "Suchausdruck:"
 
 #: ../../../class/bibliograph/service/Reference.php:1451
 #: ../services/class/bibliograph/service/Reference.php:1451
+#: ../services/class/bibliograph/service/Reference.php:1505
 msgid "Replace with:"
 msgstr "Ersetzen mit:"
 
 #: ../../../class/bibliograph/service/Reference.php:1455
 #: ../services/class/bibliograph/service/Reference.php:1455
+#: ../services/class/bibliograph/service/Reference.php:1509
 msgid "Create a backup?"
 msgstr "Eine Sicherung anlegen?"
 
 #: ../../../class/bibliograph/service/Reference.php:1472
 #: ../services/class/bibliograph/service/Reference.php:1471
+#: ../services/class/bibliograph/service/Reference.php:1525
 msgid "You can do a 'find and replace' operation on all or selected records in the database. These changes cannot easily be undone, that is why it is recommended to create a backup."
 msgstr "Sie können eine \"Suchen und Ersetzen\"-Operation in allen oder ausgewählten Datensätzen der Datenbank durchführen. Diese Änderungen können nur sehr schwer oder gar nicht rückgängig gemacht werden, deswegen wird geraten, eine automatische Sicherung durchführen zu lassen. "
 
 #: ../../../class/bibliograph/service/Reference.php:1492
 #: ../services/class/bibliograph/service/Reference.php:1491
+#: ../services/class/bibliograph/service/Reference.php:1545
 msgid "in all records"
 msgstr "in allen Datensätzen"
 
 #: ../../../class/bibliograph/service/Reference.php:1493
 #: ../services/class/bibliograph/service/Reference.php:1492
+#: ../services/class/bibliograph/service/Reference.php:1546
 msgid "in the selected records"
 msgstr "in den ausgewählten Datensätzen"
 
 #: ../../../class/bibliograph/service/Reference.php:1494
 #: ../services/class/bibliograph/service/Reference.php:1493
+#: ../services/class/bibliograph/service/Reference.php:1547
 msgid "in the selected folder"
 msgstr "im ausgewählten Ordner"
 
 #: ../../../class/bibliograph/service/Reference.php:1503
 #: ../services/class/bibliograph/service/Reference.php:1502
+#: ../services/class/bibliograph/service/Reference.php:1556
 msgid "all fields"
 msgstr "allen Feldern"
 
 #: ../../../class/bibliograph/service/Reference.php:1504
 #: ../services/class/bibliograph/service/Reference.php:1503
+#: ../services/class/bibliograph/service/Reference.php:1557
 #, php-format
 msgid "field '%s'"
 msgstr "Feld '%s'"
 
 #: ../../../class/bibliograph/service/Reference.php:1500
 #: ../services/class/bibliograph/service/Reference.php:1499
+#: ../services/class/bibliograph/service/Reference.php:1553
 #, php-format
 msgid "Are you sure you want to replace '%s' with '%s' in %s %s?"
 msgstr "Sind Sie sicher, dass Sie '%s' mit '%s' in %s %s ersetzen wollen?"
@@ -1188,52 +1223,62 @@ msgstr "Im Fall, dass Sie die Änderungen rückgängig machen wollen, wurde eine
 
 #: ../../../class/bibliograph/service/Reference.php:1577
 #: ../services/class/bibliograph/service/Reference.php:1577
+#: ../services/class/bibliograph/service/Reference.php:1631
 #, php-format
 msgid "%s replacements made. %s"
 msgstr "Es wurden %s Ersetzungen vorgenommen. %s"
 
 #: ../../../class/bibliograph/service/Reference.php:1592
 #: ../services/class/bibliograph/service/Reference.php:1592
+#: ../services/class/bibliograph/service/Reference.php:1646
 msgid "You can use the search features of this application in two ways."
 msgstr "Sie können sie Suchfunktion dieser Anwendung auf zwei verschiedene Arten nutzen."
 
 #: ../../../class/bibliograph/service/Reference.php:1593
 #: ../services/class/bibliograph/service/Reference.php:1593
+#: ../services/class/bibliograph/service/Reference.php:1647
 msgid "Either you simply type in keywords like you would do in a google search."
 msgstr "Entweder tippen Sie einfach Schlagwörter in das Suchfeld, wie Sie es von einer Google-Suche gewöhnt sind."
 
 #: ../../../class/bibliograph/service/Reference.php:1594
 #: ../services/class/bibliograph/service/Reference.php:1594
+#: ../services/class/bibliograph/service/Reference.php:1648
 msgid "Or you compose complex queries using field names, comparison operators, and boolean connectors (for example: title contains constitution and year=1981)."
 msgstr "Oder Sie erstellen komplexere Abfrage unter Verwendung von Feldnamen, Vergleichsoperatoren und logischen Verknüpfungen (Zum Beispiel: titel enthält verfassung und jahr = 1981)."
 
 #: ../../../class/bibliograph/service/Reference.php:1595
 #: ../services/class/bibliograph/service/Reference.php:1595
+#: ../services/class/bibliograph/service/Reference.php:1649
 msgid "You can use wildcard characters: '?' for a single character and '*' for any amount of characters."
 msgstr "Sie können auch Ersetzungszeichen verwenden: '?' für einen einzelnen Buchstaben und '*' für eine beliebige Anzahl von Buchstaben."
 
 #: ../../../class/bibliograph/service/Reference.php:1596
 #: ../services/class/bibliograph/service/Reference.php:1596
+#: ../services/class/bibliograph/service/Reference.php:1650
 msgid "When using more than one word, the phrase has to be quoted (For example, title startswith \"Recent developments\")."
 msgstr "Wenn Sie mehr als ein Wort verwenden, müssen sie den Ausdruck mit Anführungszeichen einschließen (Zum Beispiel: titel beginntmit \"Neuere Entwicklungen\")."
 
 #: ../../../class/bibliograph/service/Reference.php:1597
 #: ../services/class/bibliograph/service/Reference.php:1597
+#: ../services/class/bibliograph/service/Reference.php:1651
 msgid "You can click on any of the terms below to insert them into the query field."
 msgstr "Klicken Sie auf eine der Begriffe weiter unten, um diese in das Suchfeld einzufügen."
 
 #: ../../../class/bibliograph/service/Reference.php:1606
 #: ../services/class/bibliograph/service/Reference.php:1606
+#: ../services/class/bibliograph/service/Reference.php:1660
 msgid "Field names"
 msgstr "Feldnamen"
 
 #: ../../../class/bibliograph/service/Reference.php:1642
 #: ../services/class/bibliograph/service/Reference.php:1642
+#: ../services/class/bibliograph/service/Reference.php:1696
 msgid "Comparison modifiers"
 msgstr "Vergleichsoperatoren"
 
 #: ../../../class/bibliograph/service/Reference.php:1661
 #: ../services/class/bibliograph/service/Reference.php:1661
+#: ../services/class/bibliograph/service/Reference.php:1715
 msgid "Boolean operators"
 msgstr "Logische Verknüpfungen"
 
@@ -1525,6 +1570,7 @@ msgid "Conference Title"
 msgstr "Titel der Konferenz"
 
 #: ../services/class/bibliograph/service/Reference.php:1580
+#: ../services/class/bibliograph/service/Reference.php:1634
 msgid "In case you want to revert the changes, a backup file has been created."
 msgstr ""
 
@@ -1602,4 +1648,16 @@ msgstr ""
 #: ../services/class/bibliograph/service/Setup.php:479
 #, php-format
 msgid "Plugin '%s' is already installed."
+msgstr ""
+
+#: ../services/class/bibliograph/model/import/Csv.php:86
+msgid "Data contains no importable columns."
+msgstr ""
+
+#: ../services/class/bibliograph/service/Import.php:242
+msgid "You must convert file to UTF-8 before importing."
+msgstr ""
+
+#: ../services/class/bibliograph/service/Import.php:305
+msgid "Data has been lost due to session change. Please import again."
 msgstr ""

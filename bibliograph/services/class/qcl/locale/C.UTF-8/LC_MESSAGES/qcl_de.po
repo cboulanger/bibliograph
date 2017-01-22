@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: qcl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-13 18:59+0000\n"
+"POT-Creation-Date: 2017-01-22 22:37+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -197,6 +197,7 @@ msgid "The email address %s is invalid"
 msgstr "Die E-Mailadresse %s ist ungültig."
 
 #: ../../../access/Service.php:78 ../services/class/qcl/access/Service.php:104
+#: ../services/class/qcl/access/Service.php:121
 msgid "Authentication must be done through a secure connection, using the https:// protocol."
 msgstr "Die Anmeldung muss über eine sichere Verbindung erfolgen (https:)."
 
@@ -236,6 +237,8 @@ msgstr "Ungültiges Passwort"
 
 #: ../../../access/UserController.php:571
 #: ../services/class/qcl/access/UserController.php:619
+#: ../services/class/qcl/access/UserController.php:639
+#: ../services/class/qcl/access/UserController.php:646
 msgid "You will be logged out. Please reload the application and start again."
 msgstr "Sie werden abgemeldet. Bitte laden Sie die Anwendung neu."
 
@@ -506,5 +509,8 @@ msgstr "Nein"
 #: ../services/class/qcl/access/UserController.php:465
 #: ../services/class/qcl/access/UserController.php:502
 #: ../services/class/qcl/access/UserController.php:550
+#: ../services/class/qcl/access/UserController.php:570
+#: ../services/class/qcl/access/UserController.php:509
+#: ../services/class/qcl/access/UserController.php:577
 msgid "Invalid user name or password."
 msgstr "Benutzername oder Passwort ist ungültig."
