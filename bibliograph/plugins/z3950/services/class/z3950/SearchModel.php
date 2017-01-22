@@ -35,6 +35,10 @@ class z3950_SearchModel
     'hits' => array(
         'check'    => "integer",
         'sqltype'  => "int(11)"
+    ),
+    'UserId' => array(
+        'check'    => "integer",
+        'sqltype'  => "int(11)"
     )
  );
 
@@ -49,11 +53,17 @@ class z3950_SearchModel
   private $relations = array(
     'Record_Search' => array(
       'type'        => QCL_RELATIONS_HAS_MANY,
-      'target'      => array( 'modelType' => "record" )
+      'target'      => array( 
+        'modelType' => "record",
+        'dependent' => true 
+      )
     ),
     'Result_Search' => array(
       'type'        => QCL_RELATIONS_HAS_MANY,
-      'target'      => array( 'modelType' => "result" )
+      'target'      => array( 
+        'modelType' => "result",
+        'dependent' => true
+      )
     )
   );
 

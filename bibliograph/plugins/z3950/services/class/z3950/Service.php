@@ -381,11 +381,13 @@ class class_z3950_Service
     }
     catch( qcl_data_model_RecordNotFoundException $e){}
     
+    $activeUserId = $this->getApplication()->getAccessController()->getActiveUser()->id();
     $searchId = $searchModel->create( array(
-      'query' => $query,
-      'hits'  => $hits
+      'query'   => $query,
+      'hits'    => $hits,
+      'UserId'  => $activeUserId
     ) );
-    $this->log("Created new search record #$searchId for query '$query'.", BIBLIOGRAPH_LOG_Z3950);     
+    $this->log("Created new search record #$searchId for query '$query' for user #$activeUserId.", BIBLIOGRAPH_LOG_Z3950);     
      
     if ($progressBar) $progressBar->setProgress( 10, $this->tr("%s records found.", $hits ) ); 
     
@@ -468,8 +470,13 @@ class class_z3950_Service
     $firstRecordId = 0;
     //$rowData = array();
 
+    $step = 10/count($records);
+    $i= 0;
+    
     foreach( $records as $item )
     {
+      if ($progressBar) $progressBar->setProgress( 90+ ($step*$i++), $this->tr("Formatting records...") );  
+      
       $p = $item->getProperties();
 
       // fix bibtex issues

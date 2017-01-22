@@ -20,6 +20,7 @@
 
 qcl_import("qcl_application_plugin_AbstractPlugin");
 qcl_import("z3950_DatasourceModel");
+qcl_import("qcl_event_message_Bus");
 
 /**
  * Plugin initializer for z3950 plugin
@@ -90,7 +91,6 @@ class z3950_plugin
     /*
      * register datasource
      */
-    qcl_import("z3950_DatasourceModel");
     try
     {
       $z3950dsModel->registerSchema();
@@ -152,6 +152,39 @@ class z3950_plugin
   protected function createDatasourcesFromExplainFiles()
   {
     z3950_DatasourceModel::getInstance()->createFromExplainFiles();
+  }
+  
+  /**
+   * hook function
+   */
+  public function hook( $app )
+  {
+    $bus = $app->getMessageBus();
+    $bus->addSubscriber( "user.logout", $this, "onUserLogout" );
+    $bus->addSubscriber( "user.deleted", $this, "onUserLogout" );
+  }
+  
+  /**
+   * Called when a user logs out
+   */
+  public function onUserLogout( $m )
+  {
+    $userId = $m->getData();
+    $z3950dsModel = z3950_DatasourceModel::getInstance();
+    $dsMgr = qcl_data_datasource_Manager::getInstance();
+    $datasources = $dsMgr->getDatasourceNamesBySchema("bibliograph.schema.z3950"); // get from class!
+    
+    // delete all search records of this user in all of the z39.50 caches
+    foreach ( $datasources as $datasource )
+    {
+      $dsModel = $dsMgr->getDatasourceModelByName($datasource);
+      $searchModel = $dsModel->getInstanceOfType("search");
+      $hits = $searchModel->deleteWhere(array("UserId" => $userId));
+      if( $hits )
+      {
+        $this->log("Deleted $hits search records of user #$userId in '$datasource'.", BIBLIOGRAPH_LOG_Z3950);      
+      }
+    }
   }
 }
 
