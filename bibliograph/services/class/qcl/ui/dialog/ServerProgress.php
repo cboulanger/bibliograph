@@ -104,7 +104,7 @@ class qcl_ui_dialog_ServerProgress
   }
 
   /**
-   * API function to dispatch a client message
+   * API function to dispatch a client message (scope: application)
    * @param string $name Name of message
    * @param mixed|null $data Message data
    *
@@ -118,6 +118,22 @@ class qcl_ui_dialog_ServerProgress
     $js .= $nl . ');</script>' . $nl;
     $this->send( $js );
   }
+  
+  /**
+   * API function to dispatch a event (scope: progress widget)
+   * @param string $name Name of event
+   * @param mixed|null $data event data
+   *
+   */
+  public function dispatchClientEvent($name,$data=null)
+  {
+    $nl = $this->getNewlineChar();
+    $js = '<script type="text/javascript">';
+    $js .= $nl . 'window.top.qx.core.Init.getApplication().getWidgetById("' . $this->widgetId  . '").fireDataEvent("' . $name . '",';
+    $js .= $nl . json_encode($data);
+    $js .= $nl . ');</script>' . $nl;
+    $this->send( $js );
+  }  
 
   /**
    * API function to trigger an error alert
@@ -125,6 +141,7 @@ class qcl_ui_dialog_ServerProgress
    */
   public function error($message)
   {
+    $this->setProgress(100);
     $nl = $this->getNewlineChar();
     $js = '<script type="text/javascript">';
     $js .= $nl . 'window.top.dialog.Dialog.error("' . $message . '");';
