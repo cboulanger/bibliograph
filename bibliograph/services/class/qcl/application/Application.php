@@ -20,6 +20,7 @@ qcl_import( "qcl_access_model_User" ); // this imports all the other required mo
 qcl_import( "qcl_access_SessionController" );
 qcl_import( "qcl_application_ApplicationCache" );
 qcl_import( "qcl_locale_Manager" );
+qcl_import( "qcl_application_plugin_Manager" );
 
 /**
  * Base class for applications. This class mainly provides access to the
@@ -551,6 +552,21 @@ abstract class qcl_application_Application
       foreach( unserialize ( APPLICATION_LOG_DEFAULT ) as $const => $value )
       {
         $logger->setFilterEnabled( constant($const), $value );
+      }
+    }
+    
+    /*
+     * call plugin hook functions (which can contain message subscribers etc.)
+     */
+    $pluginManager = qcl_application_plugin_Manager::getInstance();
+    $pluginList = $pluginManager->getPluginList();
+    
+    foreach( $pluginList as $pluginName )
+    {
+      $pi = $pluginManager->getSetupInstance( $pluginName );
+      if ( method_exists( $pi, "hook" ) )
+      {
+        $pi->hook($this);
       }
     }
   }
