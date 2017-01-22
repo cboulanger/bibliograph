@@ -128,7 +128,7 @@ class qcl_data_datasource_Manager
   }
 
   /**
-   * Returns an array of datasource names that are registered for the model
+   * Returns an array of datasource names that are registered for the model schema
    * @param string $schemaName
    * @return array
    */
