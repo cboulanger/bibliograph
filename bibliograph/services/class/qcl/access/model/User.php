@@ -627,4 +627,15 @@ class qcl_access_model_User
   	}
   	return false;
   }
+  
+  /**
+   * Overridden to dispatch a message "user.deleted" with the user id when a 
+   * user is deleted
+   * @see qcl_data_model_AbstractActiveRecord::delete()
+   */
+  public function delete()
+  {
+    $this->dispatchMessage( "user.deleted", $this->id() );
+    parent::delete();
+  }
 }

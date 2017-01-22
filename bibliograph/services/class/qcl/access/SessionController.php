@@ -184,20 +184,14 @@ class qcl_access_SessionController
   public function logout()
   {
 
-    /*
-     * unregister the current session
-     */
+    // unregister the current session
     $this->unregisterSession();
-    //$this->cleanup();
-    
-		/*
-     * mark user as offline if no more sessions exist
-     */
-    $this->checkOnlineStatus( $this->getActiveUser()->id() );
 
-    /*
-     * logout
-     */
+		// mark user as offline if no more sessions exist
+    $id = $this->getActiveUser()->id();
+    $this->checkOnlineStatus( $id );
+
+    // logout
     parent::logout();
   }
 

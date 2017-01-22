@@ -496,8 +496,15 @@ class qcl_access_UserController
     }
 
     // success
-    if ( $authenticated ) return $userModel->getId();
-    
+    if ( $authenticated ) 
+    {
+      $userId = $userModel->getId();
+      
+      // inform listeners
+      $this->dispatchMessage( "user.login", $userId );
+      
+      return $userId;
+    }
     // fail
     throw new qcl_access_AuthenticationException( $this->tr("Invalid user name or password.") );
     
@@ -647,9 +654,7 @@ class qcl_access_UserController
   public function logout()
   {
 
-    /*
-     * check whether anyone is logged in
-     */
+    // check whether anyone is logged in
     $activeUser = $this->getActiveUser();
 
     if ( ! $activeUser )
@@ -664,25 +669,22 @@ class qcl_access_UserController
 
     $this->log("Logging out: user '$username' user #$userId, Session $sessionId.",QCL_LOG_AUTHENTICATION );
     
-    /*
-     * delete user data if anonymous guest
-     */
+    // delete user data if anonymous guest
     if ( $activeUser->isAnonymous() )
     {
       $activeUser->delete();
     }
     
-    /*
-     * unset active user
-     */
+    // unset active user
     $this->log("Deleting active user ...",QCL_LOG_AUTHENTICATION );
     $this->setActiveUser(null);
 
-    /*
-     * destroy php session
-     */
+    // destroy php session
     $this->log("Destroying session ...",QCL_LOG_AUTHENTICATION );
     $this->destroySession( $sessionId );
+    
+    // inform listeners
+    $this->dispatchMessage( "user.logout", $userId );
 
     return true;
   }
