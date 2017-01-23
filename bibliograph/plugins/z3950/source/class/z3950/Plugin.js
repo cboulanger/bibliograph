@@ -131,20 +131,32 @@ qx.Class.define("z3950.Plugin",
           var active = model.getItem(i).getActive();
           result[name] = active;
         }
-        store.execute("setDatasourceState",[result]);
+        saveButton.setEnabled(false);
+        this.getApplication().showPopup(this.tr("Saving..."));
+        store.execute("setDatasourceState",[result], function(){
+          this.getApplication().hidePopup();
+          saveButton.setEnabled(true);
+        },this);
       }, this);       
       
       // Reload datassources Button
       var reloadButton= new qx.ui.form.Button(this.tr("Reload"));
       buttons.add(reloadButton);
       reloadButton.addListener("execute",function(){
-        store.load("getServerListItems",[false,true]);
+        reloadButton.setEnabled(false);
+        this.getApplication().showPopup(this.tr("Reloading library metadata..."));
+        store.load("getServerListItems",[false,true],function(){
+          this.getApplication().hidePopup();
+          reloadButton.setEnabled(true);
+        },this);
       });
       
       // add tab to tabview (must be done at the end)
       prefsTabView.add(pluginTab);
       
-      // remote search progress indicator widget
+      /*
+       * remote search progress indicator widget
+       */
       var z3950Progress = new qcl.ui.dialog.ServerProgress(
         "z3950Progress","z3950.Service"
       );
