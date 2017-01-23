@@ -479,6 +479,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
       var form = formData.form;
       var controller = formData.controller;
       var data = this.getData();
+      var debug = false;
 
       /*
        * setup form model if not yet created
@@ -505,11 +506,9 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
       for (var property in data)
       {
         var value       = data[property];
-
-
         var formElement = form.getItems()[property];
 
-        //console.log("Setting field " + property + " to "+value + " in " + formElement + " with filter '" + filter + "'.");
+        if( debug ) console.log("Setting field " + property + " to '"+ value + "' in " + formElement);
 
         /*
          * skip if filter is given and property is not in filter
@@ -536,6 +535,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
            * the child elements have already been loaded
            */
           if (children.length) {
+            if( debug ) console.log( "Data of " + formElement + "already loaded.");
             children.forEach(function(child) {
               if (child.getModel().getValue() == value)
               {
@@ -551,8 +551,10 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
            */
            else
           {
+            if( debug ) console.log( "Data of " + formElement + "not yet loaded, deferring selection.");
             this.__deferReattachBubbleEvent++;
-            var selectionHandler = qx.lang.Function.bind(function(property)
+            
+            var selectionHandler = function(property, value)
             {
               var formElement = form.getItems()[property];
 
@@ -561,11 +563,18 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
                */
               timer.start(function()
               {
-                formElement.getChildren().forEach(function(child) {
-                  if (child.getModel().getValue() == value)
+                var children = formElement.getChildren();
+                if( debug ) console.log("Trying again to apply selection '" + value + "' in " + formElement + ", having now " + children.length + " child widgets.");
+                var found = false;
+                children.forEach( function( child ) {
+                  if( found ) return; 
+                  if( debug ) console.log( "  " + child.getModel().getValue() );
+                  if( child.getModel().getValue() === value) 
                   {
                     this.__preventDefault = true;
+                    if( debug ) console.log( "Applying deferred selection of child widget in " + formElement );
                     formElement.setSelection([child]);
+                    found = true;
                     this.__preventDefault = false;
                   }
                 }, this);
@@ -576,12 +585,14 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
                   this.setEnabled(true);
                 }
               }, null, this, null, 50);
-            }, this, property);
+            }
 
             /*
              * call selection handler when model has changed
              */
-            formElement.getUserData("controller").addListenerOnce("changeModel", selectionHandler);
+            formElement
+              .getUserData("controller")
+              .addListenerOnce("changeModel", qx.lang.Function.bind( selectionHandler, this, property, value ) );
           }
         }
 
