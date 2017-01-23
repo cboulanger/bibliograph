@@ -189,7 +189,8 @@ qx.Class.define("bibliograph.Main",
      * @return {String}
      */
     getCopyright : function() {
-      return "2003-2015 (c) Christian Boulanger";
+      var year = (new Date).getFullYear();
+      return "2003-" + year + " (c) Christian Boulanger";
     },
 
     /*
@@ -886,6 +887,8 @@ qx.Class.define("bibliograph.Main",
      */
     _on_datasourceStore_loaded : function()
     {
+      
+try{      
       var datasourceCount = this.getDatasourceStore().getModel().length;
 
       /*
@@ -927,6 +930,11 @@ qx.Class.define("bibliograph.Main",
        * show datasource button depending on whether there is a choice
        */
       this.getWidgetById("bibliograph/datasourceButton").setVisibility(datasourceCount > 1 ? "visible" : "excluded");
+}
+catch(e)
+{
+  console.log(e);
+}
     },
 
     /*
