@@ -479,7 +479,7 @@ class class_z3950_Service
     
     foreach( $records as $item )
     {
-      if ($progressBar) $progressBar->setProgress( 90+ ($step*$i++), $this->tr("Formatting records...") );  
+      if ($progressBar) $progressBar->setProgress( 90+ ($step*$i++), $this->tr("Caching records...") );  
       
       $p = $item->getProperties();
 
