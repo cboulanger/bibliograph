@@ -155,14 +155,18 @@ class class_z3950_Service
   }
   
   /**
-   * Checks the query for problems and fixes them before
-   * sending them to the remote server
+   * Checks the query and optimizes it before
+   * sending it to the remote server
    * @param $query
    * @return string
    */
   protected function fixQueryString( $query )
   {
-    if ( ! strstr( $query, "=" ) )
+    if( substr( $query, 0, 3 ) == "978")
+    {
+      $query = 'isbn=' . $query;
+    }
+    elseif ( ! strstr( $query, "=" ) )
     {
       $query = 'all="' . $query . '"';
     }
