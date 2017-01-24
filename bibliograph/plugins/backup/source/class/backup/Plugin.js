@@ -59,7 +59,7 @@ qx.Class.define("backup.Plugin",
       backupMenu.add(createBackupButton);
       
       createBackupButton.addListener("execute", function(e) {
-        var params = [this.getApplication().getDatasource(),"backupProgress"].join(",");
+        var params = [this.getApplication().getDatasource(),"backupProgress"];
         backupProgress.setMessage(this.tr("Saving backup..."));
         backupProgress.setMethod("createBackup");
         backupProgress.start(params);
@@ -83,7 +83,7 @@ qx.Class.define("backup.Plugin",
           this.warn("Invalid message token.");
           return;
         }
-        var params = [data.datasource, data.file,"backupProgress"].join(",")
+        var params = [data.datasource, data.file,"backupProgress"];
         backupProgress.setMessage(this.tr("Restoring backup..."));
         backupProgress.setMethod("restoreBackup");
         backupProgress.start(params);

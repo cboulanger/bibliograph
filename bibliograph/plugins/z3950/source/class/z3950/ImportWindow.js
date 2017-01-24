@@ -99,7 +99,7 @@ qx.Class.define("z3950.ImportWindow",
 
       // open the ServerProgress widget and initiate the remote search
       var z3950Progress = this.getApplication().getWidgetById("z3950Progress");
-      var params = [ds, query, "z3950Progress"].join(",");
+      var params = [ds, query, "z3950Progress"];
       
       z3950Progress.setMessage(this.tr("Searching..."));
       z3950Progress.setMethod("executeZ3950Request");

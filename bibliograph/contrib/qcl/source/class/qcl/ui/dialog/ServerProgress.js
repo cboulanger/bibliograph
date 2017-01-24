@@ -102,9 +102,19 @@ qx.Class.define("qcl.ui.dialog.ServerProgress",
     
     /**
      * Start the server method and display progress
+     * @param params {Array} The parameters passed to the JSONRPC method
      */
     start : function(params)
     {
+      // check parameters
+      if ( ! params ) {
+        params = [];
+      }
+      else if ( ! qx.lang.Type.isArray( params ) )
+      {
+        this.error( "Paramteters must be an array");
+      }
+    
       // reset
       this.set({
         progress : 0,
@@ -117,7 +127,7 @@ qx.Class.define("qcl.ui.dialog.ServerProgress",
         this.__sourceTemplate, [
           this.getService(),
           this.getMethod(),
-          params || "",
+          qx.lang.Json.stringify(params),
           qx.core.Init.getApplication().getSessionManager().getSessionId(),
           (new Date()).getTime() 
         ]
