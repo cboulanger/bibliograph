@@ -64,14 +64,27 @@ class template_plugin
   );
 
   /**
+   * Permissions used by this plugin
+   * @var array
+   */
+  protected $permissions = array( "template.use" );
+
+  /**
    * Installs the plugin. 
    * @throws qcl_application_plugin_Exception if an error occurs
    * @return void
    */
   public function install()
   {
-    // code to install the plugin
-    return "Message that is displayed when installation was successful";
+    $app = $this->getApplication();
+    //$app->addPreference( "template.xxx", "yyy" );
+
+    $app->addPermission( $this->permissions );
+    foreach( array("admin", "manager", "user" ) as $role )
+    {
+      $app->giveRolePermission( $role, $this->permissions );
+    }
+    // return $this->tr("Please reload the application."); // in case of plugin UI additons
   }
 
   /**
@@ -80,7 +93,7 @@ class template_plugin
    */
   public function uninstall()
   {
-    // code to uninstall the plugin
-    return "Message that is displayed when uninstallation was successful";
+    $this->getApplication()->removePermission( $this->permissions );
+    // return $this->tr("Please reload the application."); // in case of plugin UI additons
   }
 }
