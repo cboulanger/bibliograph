@@ -103,7 +103,7 @@ class qcl_io_remote_JsonRpc
     /*
      * service and method
      */
-    $p = new String($path);
+    $p = new QclString($path);
     $service = $p->substring(0,$p->lastIndexOf("."));
     $method  = $p->substr($p->lastIndexOf(".")+1);
 

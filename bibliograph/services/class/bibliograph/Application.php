@@ -48,7 +48,7 @@ class bibliograph_Application
    * by the script that creates the distributable zip file. Do not change.
    * @var string
    */
-  protected $applicationVersion = /*begin-version*/"Development version"/*end-version*/;
+  protected $applicationVersion = /*begin-version*/"v2.1.1-beta (2017-01-24, 9f48b31)"/*end-version*/;
 
   /**
    * The path to the application ini-file

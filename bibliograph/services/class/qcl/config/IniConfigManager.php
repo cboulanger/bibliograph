@@ -68,7 +68,7 @@ class qcl_config_IniConfigManager
     else
     {
       $this->log( "Looking for ini file in the file system...", QCL_LOG_CONFIG );
-      $appClass = new String( $app->className() );
+      $appClass = new QclString( $app->className() );
       $ini_path = dirname( $appClass->replace("/_/","/") );
 
       do

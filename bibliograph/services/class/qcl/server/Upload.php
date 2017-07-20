@@ -281,7 +281,7 @@ class qcl_server_Upload
       $this->abort("Missing paramenter 'application'");
     }
 
-    $service = new String( $_REQUEST['application'] );
+    $service = new QclString( $_REQUEST['application'] );
     $appClass = (string) $service
       ->replace("/\./","_")
       ->concat( "_Application" );

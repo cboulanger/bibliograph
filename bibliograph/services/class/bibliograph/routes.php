@@ -22,16 +22,18 @@
  * Routes mapping JSONRPC services to class names
  */
 return array(
-  "bibliograph.access"     => "bibliograph_service_Access",
-  "bibliograph.config"     => "qcl_config_Service",
-  "bibliograph.plugin"     => "qcl_application_plugin_Service",
-  "bibliograph.model"      => "bibliograph_service_Model",
-  "bibliograph.folder"     => "bibliograph_service_Folder",
-  "bibliograph.reference"  => "bibliograph_service_Reference",
-  "bibliograph.main"       => "bibliograph_service_Application",
-  "bibliograph.import"     => "bibliograph_service_Import",
-  "bibliograph.export"     => "bibliograph_service_Export",
-  "bibliograph.backup"     => "bibliograph_service_Backup",
-  "bibliograph.actool"     => "bibliograph_service_ACLTool",
-  "bibliograph.setup"      => "bibliograph_service_Setup"
+  "bibliograph.access"        => "bibliograph_service_Access",
+  "bibliograph.config"        => "qcl_config_Service",
+  "bibliograph.plugin"        => "qcl_application_plugin_Service",
+  "bibliograph.model"         => "bibliograph_service_Model",
+  "bibliograph.folder"        => "bibliograph_service_Folder",
+  "bibliograph.reference"     => "bibliograph_service_Reference",
+  "bibliograph.main"          => "bibliograph_service_Application",
+  "bibliograph.import"        => "bibliograph_service_Import",
+  "bibliograph.export"        => "bibliograph_service_Export",
+  "bibliograph.backup"        => "bibliograph_service_Backup",
+  "bibliograph.actool"        => "bibliograph_service_ACLTool",
+  "bibliograph.setup"         => "bibliograph_service_Setup",
+  "bibliograph.indexes"       => "bibliograph_service_reference_Indexes",
+  "bibliograph.findReplace"   => "bibliograph_service_reference_FindReplace",
 );

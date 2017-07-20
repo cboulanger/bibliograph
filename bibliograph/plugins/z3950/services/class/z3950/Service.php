@@ -559,7 +559,8 @@ class class_z3950_Service
     catch( qcl_data_model_RecordNotFoundException $e)
     {
       // this should never occur
-      $searchModel->deleteAll();
+# REWI20170717 - disabled next line (ignoring side effects...)
+#      $searchModel->deleteAll();
       throw new qcl_server_ServiceException( "No search model data exists for this query" );
     }
     /*
@@ -623,7 +624,8 @@ class class_z3950_Service
     {
       $this->warn("Logic Exception! Search model data missing.");
       // this should never happen
-      $searchModel->deleteAll();
+# REWI20170717
+#      $searchModel->deleteAll();
       throw new qcl_server_ServiceException( "No search model data exists for query '$query'" );
     }
 
@@ -653,7 +655,8 @@ class class_z3950_Service
     {
       // this should never happen
       $this->warn("Logic Exception! Result model data missing.");
-      $searchModel->deleteAll();
+# REWI20170717
+#      $searchModel->deleteAll();
       throw new qcl_server_ServiceException( "No result model data exists for this query" );
     }
 

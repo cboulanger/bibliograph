@@ -1,6 +1,15 @@
 Release notes
 =============
 
+Version 2.1.1 (...)
+-----------------------
+- Upgrade to qoodoo 5.0.1
+- Partial rewrite of the z3950 plugin, now uses a ServerProgress widget to indicate
+  the progress of the search request
+- Removed the annoying "No connection to server" alert if a server request fails
+- ...
+
+
 Version 2.1 (Mid-2015)
 -----------------------
 A [large number](https://github.com/cboulanger/bibliograph/issues?q=milestone%3Av2.1+is%3Aclosed)

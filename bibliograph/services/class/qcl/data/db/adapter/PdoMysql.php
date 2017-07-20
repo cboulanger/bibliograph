@@ -267,7 +267,8 @@ class qcl_data_db_adapter_PdoMysql
     $encoding = $this->getApplication()->getIniValue("database.encoding");
     if ( $encoding )
     {
-      $options[PDO::MYSQL_ATTR_INIT_COMMAND] = "SET NAMES '$encoding'";
+# REWI20170717 - set SQL mode
+      $options[PDO::MYSQL_ATTR_INIT_COMMAND] = "SET NAMES '$encoding', SESSION sql_mode = 'ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';";
     }
     return $options;
   }
@@ -598,7 +599,35 @@ class qcl_data_db_adapter_PdoMysql
 		/*
 		 * prepare sql statement
 		 */
-    $param = $this->prepareParameters( $data );
+# REWI20170705 - quick and dirty hack
+# to fill empty table columns with NULL
+# and to avoid MYSQL NO_ZERO_DATE errors
+	  $hack = array();
+	  foreach ( $data as $key => $value ) {
+	    if ( ( $value != '' && $value != '0000-00-00' )
+	    || in_array( $key, array(
+	      'active',
+	      'anonymous',
+	      'childCount',
+	      'confirmed',
+	      'firstRow',
+	      'hidden',
+	      'id',
+	      'lastRow',
+	      'ldap',
+	      'markedDeleted',
+	      'modified',
+	      'online',
+	      'position',
+	      'readonly',
+	      'schema',
+	      'type') ) )
+	    {
+	      $hack[$key] = $data[$key];
+	    }
+	  }
+	  $param = $this->prepareParameters( $hack );
+#	  $param = $this->prepareParameters( $data );
 	  $columns = implode(",", $param['columns'] );
 		$names   = implode(",", $param['names'] );
 		$table   = $this->formatTableName( $table );
