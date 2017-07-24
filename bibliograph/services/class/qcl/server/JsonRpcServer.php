@@ -367,7 +367,7 @@ class qcl_server_JsonRpcServer
      * raw data
      * @todo document
      */
-    if( $_REQUEST['qcl_output_format'] == "raw" )
+    if( isset($_REQUEST['qcl_output_format']) && $_REQUEST['qcl_output_format'] == "raw" )
     {
       return $this->json->encode( $data );
     }

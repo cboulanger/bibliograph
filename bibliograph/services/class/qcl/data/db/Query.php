@@ -327,6 +327,8 @@ class qcl_data_db_Query
      */
     $columns    = array();
     $properties = array();
+    
+    $needAlias = false;
 
     /*
      * if string, split at the pipe and comma characters
@@ -524,7 +526,7 @@ class qcl_data_db_Query
       /*
        * columns, use alias if needed
        */
-      $needAlias = false;
+      
       foreach ( $properties as $property )
       {
         if ( ! $property or ! is_string( $property ) )

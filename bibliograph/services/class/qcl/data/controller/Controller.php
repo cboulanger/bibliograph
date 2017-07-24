@@ -360,7 +360,7 @@ class qcl_data_controller_Controller
    */
   protected function getRecordAcl()
   {
-    $recordAcl = $this->acl['record'];
+    $recordAcl = isset($this->acl['record'])?$this->acl['record']:null;
     return $recordAcl;
   }
 

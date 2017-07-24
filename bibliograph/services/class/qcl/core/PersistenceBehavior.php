@@ -29,7 +29,7 @@ qcl_import("qcl_core_IPersistenceBehavior");
 class qcl_core_PersistenceBehavior
   implements qcl_core_IPersistenceBehavior
 {
-  const KEY = QCL_DATA_PERSISTENCE_SESSION;
+  const KEY = "QCL_DATA_PERSISTENCE_SESSION";
 
   /**
    * Return singleton instance of this class

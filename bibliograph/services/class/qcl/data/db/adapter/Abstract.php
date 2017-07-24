@@ -246,7 +246,7 @@ abstract class qcl_data_db_adapter_Abstract
    */
   public static function extractDsnProperties( $dsn )
   {
-    $dsn = new String( $dsn );
+    $dsn = new QclString( $dsn );
     $dsnprops = array();
 
     /*

@@ -51,12 +51,14 @@ function qcl_import( $class, $checkDefined = false )
   $namespace = explode("_", $class);
 
   // if plugin, add include path
-  $pluginClassPath = QCL_PLUGIN_DIR . "/" . $namespace[0] . "/services/class";
-  if( file_exists( $pluginClassPath ) )
-  {
-    qcl_addIncludePath( $pluginClassPath );
+  if (defined("QCL_PLUGIN_DIR")){
+    $pluginClassPath = QCL_PLUGIN_DIR . "/" . $namespace[0] . "/services/class";
+    if( file_exists( $pluginClassPath ) )
+    {
+      qcl_addIncludePath( $pluginClassPath );
+    }
   }
-
+  
   // load __init__ files that belong to a package
   $path = array();
   for( $i=0; $i<count($namespace)-1; $i++)

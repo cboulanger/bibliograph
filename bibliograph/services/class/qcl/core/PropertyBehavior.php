@@ -41,6 +41,13 @@ class qcl_core_PropertyBehavior
    * @var qcl_log_Logger
    */
   protected $logger;
+  
+  
+  /**
+   * Wheter the property has already been initialized
+   */
+  protected $isInitialized;
+  
 
   //-------------------------------------------------------------
   // initialization

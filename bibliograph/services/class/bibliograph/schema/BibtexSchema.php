@@ -385,6 +385,7 @@ class bibliograph_schema_BibtexSchema
           'type'      => 'string',
           'csl'       => 'type',
           'index'     => 'reftype',
+          'indexEntry' => false,
           'formData'  => array(
             'type'  => 'selectbox',
             'label' => $this->tr( 'Reference Type' ),
@@ -404,6 +405,7 @@ class bibliograph_schema_BibtexSchema
           'type'      => 'string',
           'csl'       => 'id',
           'index'     => 'Citation key',
+          'indexEntry' => false,
           'formData'  => array(
             'type'    => 'textfield',
             'label'   => _('Citation key')
@@ -412,6 +414,7 @@ class bibliograph_schema_BibtexSchema
         'abstract' => array(
           'label'     => _('Abstract'),
           'type'      => 'string',
+          'indexEntry' => false,
           'bibtex'    => true,
           'formData'  => array(
             'type'      => 'textarea',
@@ -425,6 +428,7 @@ class bibliograph_schema_BibtexSchema
           'label'     => _('Place'),
           'type'      => 'string',
           'bibtex'    => true,
+          'indexEntry' => true,
           'formData'  => array(
             'type'      => 'textfield',
             'autocomplete'  => array(
@@ -438,6 +442,7 @@ class bibliograph_schema_BibtexSchema
         'affiliation' => array(
           'label'     => _('Affiliation'),
           'autocomplete'  => array('separator' => null ),
+          'indexEntry' => true,
           'type'      => 'string',
           'bibtex'    => true,
           'csl'       => false // ???
@@ -456,6 +461,7 @@ class bibliograph_schema_BibtexSchema
                           'proceedings'  => _('Editors')
                          ),
           'type'      => 'string',
+          'indexEntry' => true,
           'bibtex'    => true,
           'separator' => ';',
           'formData'  => array(
@@ -476,6 +482,7 @@ class bibliograph_schema_BibtexSchema
                          ),
           'autocomplete'  => array('separator' => null ),
           'type'      => 'string',
+          'indexEntry' => true,
           'bibtex'    => true,
           'formData'  => array(
             'type'          => 'textfield',
@@ -529,6 +536,7 @@ class bibliograph_schema_BibtexSchema
         'editor' => array(
           'label'     => _('Editors'),
           'type'      => 'string',
+          'indexEntry' => true,
           'bibtex'    => true,
           'separator' => ';',
           'formData'  => array(
@@ -551,6 +559,7 @@ class bibliograph_schema_BibtexSchema
         'institution' => array(
           'label'     => _('Institution'),
           'type'      => 'string',
+          'indexEntry' => true,
           'bibtex'    => true,
           'formData'  => array(
             'type'          => 'textfield',
@@ -576,6 +585,7 @@ class bibliograph_schema_BibtexSchema
         'journal' => array(
           'label'     => _('Journal'),
           'type'      => 'string',
+          'indexEntry' => true,
           'bibtex'    => true,
           'formData'  => array(
             'type'          => 'textfield',
@@ -598,6 +608,7 @@ class bibliograph_schema_BibtexSchema
         'keywords' => array(
           'label'     => _('Keywords'),
           'type'      => 'string',
+          'indexEntry' => true,
           'bibtex'    => true,
           'separator' => ';',
           'formData'  => array(
@@ -615,6 +626,7 @@ class bibliograph_schema_BibtexSchema
           'label'     => _('Language'),
           'autocomplete'  => array('separator' => null ),
           'type'      => 'string',
+          'indexEntry' => true,
           'bibtex'    => true,
           'csl'       => false // ???
         ),
@@ -629,6 +641,8 @@ class bibliograph_schema_BibtexSchema
         'location' => array(
           'label'     => _('Location'),
           'type'      => 'string',
+          'indexEntry' => true,
+          'autocomplete'  => array('separator' => null ),
           'bibtex'    => true,
           'csl'       => false,
           'index'     => 'Location'
@@ -636,6 +650,8 @@ class bibliograph_schema_BibtexSchema
         'month' => array(
           'label'     => _('Month'),
           'type'      => 'string',
+          'indexEntry' => true,
+          'autocomplete'  => array('separator' => null ),
           'bibtex'    => true,
           'csl'       => false,
           'index'     => 'Month'
@@ -655,6 +671,7 @@ class bibliograph_schema_BibtexSchema
         'organization' => array(
           'label'     => _('Organization'),
           'type'      => 'string',
+          'indexEntry' => true,
           'formData'  => array(
             'type'          => 'textfield',
             'autocomplete'  => array(
@@ -680,6 +697,7 @@ class bibliograph_schema_BibtexSchema
         'publisher' => array(
           'label'         => _('Publisher'),
           'type'          => 'string',
+          'indexEntry' => true,
           'bibtex'        => true,
           'formData'  => array(
             'type'          => 'textfield',
@@ -694,6 +712,7 @@ class bibliograph_schema_BibtexSchema
         'school' => array(
           'label'         => _('University'),
           'type'          => 'string',
+          'indexEntry' => true,          
           'bibtex'        => true,
           'formData'  => array(
             'type'          => 'textfield',
@@ -705,9 +724,10 @@ class bibliograph_schema_BibtexSchema
           'csl'       => false
         ),
         'series' => array(
-          'label'         => _('Series'),
-          'type'          => 'string',
-          'bibtex'        => true,
+          'label'     => _('Series'),
+          'type'      => 'string',
+          'bibtex'    => true,
+          'indexEntry' => true,
           'formData'  => array(
             'type'          => 'textfield',
             'autocomplete'  => array(
@@ -744,9 +764,15 @@ class bibliograph_schema_BibtexSchema
           'label'     => _('Translator'),
           'type'      => 'string',
           'bibtex'    => true,
+          'indexEntry' => true,
+          'separator' => ";",
           'formData'  => array(
             'type'          => 'textfield',
-            'fullWidth'     => true
+            'fullWidth'     => true,
+            'autocomplete'  => array(
+              'enabled'       => true,
+              'separator'     => ";"
+            )
           ),
           'csl'       => 'translator'
         ),

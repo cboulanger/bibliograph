@@ -246,7 +246,7 @@ class qcl_data_model_db_RelationBehavior
       /*
        * join table
        */
-      if( $relData['jointable'] )
+      if( isset( $relData['jointable'] ) )
       {
         $this->checkJoinTableName( $relData['jointable'], $relation );
         $this->relations[$relation]['jointable'] = $relData['jointable'];
@@ -672,7 +672,7 @@ class qcl_data_model_db_RelationBehavior
     /*
      * get the object singleton
      */
-    if ( ! $instances[$class] )
+    if ( !isset($instances[$class]) )
     {
       $datasourceModel = $this->getModel()->datasourceModel();
 

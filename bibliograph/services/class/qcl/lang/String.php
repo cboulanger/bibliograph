@@ -26,7 +26,7 @@
  * @todo: replace by utf-8 solution
  *
  */
-class String
+class QclString
 {
 
   /**
@@ -39,7 +39,7 @@ class String
   var $_size = null;
 
   /**
-   * String value.
+   * QclString value.
    *
    * @param string
    * @access private
@@ -70,12 +70,12 @@ class String
 
   /**
    * Gets the string value of an element
-   * @param String|string $elem
+   * @param QclString|string $elem
    * @return string
    */
   function _getStringValue( $elem )
   {
-    return is_a( $elem, "String") ? $elem->get() : (string) $elem;
+    return is_a( $elem, "QclString") ? $elem->get() : (string) $elem;
   }
 
   /**
@@ -96,7 +96,7 @@ class String
    * Concatenates the specified string to the end of this string.
    *
    * @param string String that will be concatenated.
-   * @return the modified String object
+   * @return the modified QclString object
    */
   function concat( $str )
   {
@@ -140,20 +140,20 @@ class String
   }
 
   /**
-   * Copies the value of another String object
-   * @param String $data
+   * Copies the value of another QclString object
+   * @param QclString $data
    * @return $this
    */
-  function copyValueOf( String $data )
+  function copyValueOf( QclString $data )
   {
     $this->_copyValueOfString( $data );
     return $this;
   }
 
   /**
-   * Private method that copies the value of a String object to this one.
+   * Private method that copies the value of a QclString object to this one.
    *
-   * @param object String object reference.
+   * @param object QclString object reference.
    * @return void
    */
   function _copyValueOfString( $data )
@@ -180,7 +180,7 @@ class String
   /**
    * Alias for lenght method.
    *
-   * @see String::lenght()
+   * @see QclString::lenght()
    */
   function count()
   {
@@ -241,7 +241,7 @@ class String
    * string value to the substring made by the beginning to size position
    *
    * @param string Value that will be passed to the string.
-   * @return String
+   * @return QclString
    */
   function set( $value )
   {
@@ -252,58 +252,58 @@ class String
   }
 
   /**
-   * Returns a new string object with white spaces form beginnig and end of string
-   * removed
-   * @return String
+   * Returns a new string object with white spaces removed from the beginning
+   * and from the end of string
+   * @return QclString
    */
   function trim()
   {
-    return new String( trim( $this->_value ) );
+    return new QclString( trim( $this->_value ) );
   }
 
   /**
    * Changes the string case to uppercase
-   * @return String A new String object with the modified content
+   * @return QclString A new String object with the modified content
    */
   function toUppercase()
   {
-    return new String( strtoupper( $this->_value ) );
+    return new QclString( strtoupper( $this->_value ) );
   }
 
   /**
    * Changes the string case to lowercase.
    * @param null $charpos
-   * @return String A new String object with the modified content
+   * @return QclString A new String object with the modified content
    */
   function toLowercase( $charpos = null )
   {
-    return new String( strtoupper( $this->_value ) );
+    return new QclString( strtoupper( $this->_value ) );
   }
 
   /**
    * Returns a part of the string
    * @param int $first Index of first character
    * @param int[optional, default null] $count Number of characters to fetch, all if null
-   * @return String A new String object with the modified content
+   * @return QclString A new String object with the modified content
    */
   function substr ($first,$count=null)
   {
     if ( ! is_null( $count ) )
     {
-      return new String( substr($this->_value,$first,$count) );
+      return new QclString( substr($this->_value,$first,$count) );
     }
-    return new String( substr($this->_value,$first) );
+    return new QclString( substr($this->_value,$first) );
   }
 
   /**
    * Returns a part of the string
    * @param int $first Index of first character to fetch
    * @param int $last Index of last character to fetch
-   * @return String A new String object with the modified content
+   * @return QclString A new String object with the modified content
    */
   function substring($first,$last)
   {
-    return new String( $this->substr($first,$last-$first) );
+    return new QclString( $this->substr($first,$last-$first) );
   }
 
   /**
@@ -340,11 +340,11 @@ class String
    * expression replace operation
    * @param $search
    * @param $replace
-   * @return String A new String object with the modified content
+   * @return QclString A new String object with the modified content
    */
     function replace($search,$replace)
     {
-      return new String( preg_replace($search,$replace,$this->_value) );
+      return new QclString( preg_replace($search,$replace,$this->_value) );
     }
 
     /**

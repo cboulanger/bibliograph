@@ -29,7 +29,6 @@ qcl_import("qcl_core_Object");
 qcl_import("qcl_core_SingletonManager");
 qcl_import("qcl_log_Logger");
 
-
 /*
  * create filters
  */

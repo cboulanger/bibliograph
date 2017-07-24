@@ -343,6 +343,13 @@ class qcl_data_db_Table
       throw new InvalidArgumentException("Invalid arguments");
     }
     
+    // check if column exists
+    foreach ($columns as $column) {
+      if( ! $this->columnExists($column)){
+        throw new LogicException(sprintf("Cannot add index on non-existing column '%s' in table '%s'",$column, $this->name ) );
+      }
+    }
+    
     qcl_log_Logger::getInstance()->log( sprintf(
      "Adding '%s' index `%s` to table `%s` using columns %s.",
       $type, $index, $this->getName(), implode(",",$columns)

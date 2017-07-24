@@ -98,12 +98,6 @@ class qcl_data_model_db_PropertyBehavior
   private static $cache = null;
 
   /**
-   * Whether the behavior has been initialized
-   * @var bool
-   */
-  private $isInitialized = false;
-
-  /**
    * Getter for managed model
    * @return qcl_data_model_db_ActiveRecord
    */
@@ -474,16 +468,10 @@ class qcl_data_model_db_PropertyBehavior
   public function getColumnName( $property )
   {
     $this->check( $property );
-    $column = $this->properties[$property]['column'];
-    if ( ! $column )
-    {
-      // @todo Doesn't work if foreign keys are manually set
-      return $property;
-      /*throw new qcl_core_PropertyBehaviorException( sprintf(
-        "Cannot convert property '%s' into column name", $property
-      ) );*/
+    if( isset($this->properties[$property]['column']) ){
+      return $this->properties[$property]['column'];
     }
-    return $column;
+    return $property;
   }
 
   /**

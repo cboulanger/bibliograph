@@ -89,12 +89,6 @@ class qcl_data_model_PropertyBehavior
    */
   protected $data = array();
 
-  /**
-   * If the behavior has been initialized
-   * @var bool
-   */
-  private $isInitialized = false;
-
 
   //-------------------------------------------------------------
   // Initialization
@@ -300,13 +294,14 @@ class qcl_data_model_PropertyBehavior
     $nullable = isset( $def['nullable'] ) ? $def['nullable'] : true; // nullable by default
     $apply    = isset( $def['apply'] )    ? $def['apply']    : null;
     $event    = isset( $def['event'] )    ? $def['event']    : null;
-
+    $fail = false;
+    
     /*
      * check type/nullable
      */
     if ( $nullable and $value === null )
     {
-      $fail = false;
+      // pass
     }
     elseif ( in_array( $type, self::$native_types ) )
     {
@@ -337,7 +332,7 @@ class qcl_data_model_PropertyBehavior
     /*
      * set value
      */
-    $old = $this->data[$property];
+    $old = isset($this->data[$property])?$this->data[$property]:null;
     $this->data[$property] = $value;
 
     /*
@@ -432,7 +427,7 @@ class qcl_data_model_PropertyBehavior
         "Adding property '%s' for model '%s'.", $name, $this->getModel()->className()
       ), QCL_LOG_PROPERTIES );
 
-      if ( ! is_array( $this->properties[ $name ] ) )
+      if ( ! isset( $this->properties[ $name ] ) )
       {
         $this->properties[ $name ] = $map;
       }

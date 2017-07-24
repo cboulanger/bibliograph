@@ -62,7 +62,7 @@ class qcl_log_Logger
    */
   private function _registerInitialFilters()
   {
-    $this->registerFilter("debug",    "Verbose debugging, all messages",false);
+    $this->registerFilter("debug",    "Verbose debugging, all messages",true);
     $this->registerFilter("info",     "Important messages", true);
     $this->registerFilter("warn",     "Warnings", true);
     $this->registerFilter("error",    "Non-fatal errors", true);
