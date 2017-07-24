@@ -47,6 +47,12 @@ abstract class bibliograph_model_import_AbstractImporter
    * @var string
    */
   protected $extension;
+  
+  /**
+   * The description of the format
+   * @var string
+   */
+  protected $description;  
 
   /**
    * Getter for id

@@ -50,6 +50,12 @@ abstract class bibliograph_model_export_AbstractExporter
   protected $extension;
 
   /**
+   * The description of the format
+   * @var string
+   */
+  protected $description;  
+
+  /**
    * Getter for id
    * @return string
    */

@@ -123,7 +123,7 @@ class qcl_data_db_adapter_PdoMysql
    */
   public function setPort( $port )
   {
-    $this->port = port;
+    $this->port = $port;
   }
 
   /**

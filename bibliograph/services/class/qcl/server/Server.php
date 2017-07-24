@@ -83,7 +83,7 @@ class qcl_server_Server
     /*
      * if it is a download request, call download method and exit
      */
-    elseif ( $_REQUEST['download'] )
+    elseif ( isset($_REQUEST['download'] ) )
     {
       qcl_import( "qcl_server_Download" );
       $serverObj = new qcl_server_Download();

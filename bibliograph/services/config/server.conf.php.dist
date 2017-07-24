@@ -117,7 +117,7 @@ define("APPLICATION_LOG_DEFAULT", serialize( array()));
 // DON'T TOUCH
 //-------------------------------------------------------------
 
-error_reporting( E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED );
+error_reporting( E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED & ~E_WARNING );
 ini_set("display_errors",false);
 ini_set("error_log",QCL_LOG_FILE);
 ini_set("log_errors",true);
