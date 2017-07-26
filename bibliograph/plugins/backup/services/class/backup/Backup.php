@@ -65,6 +65,15 @@ class backup_Backup
   */
 
   /**
+   * Checks if the log filter for this plugin is enabled
+   * @return boolean
+   */
+  protected function hasLog()
+  {
+    return qcl_log_Logger::getInstance()->isFilterEnabled( QCL_LOG_PLUGIN_BACKUP );
+  }
+
+  /**
    * Checks if user has access to the given datasource. If not,
    * throws JsonRpcException.
    * @param string $datasource
@@ -210,14 +219,12 @@ class backup_Backup
       $datetime = new DateTime();
       $datetime->setTimestamp($timestamp);
       $backuptime = $datetime->format('Y-m-d H:i:s');       
-      if ( $comment )
-      {
-         $comment .= " ($backuptime)";
-      }
-      else
-      {
-        $comment = $backuptime;
-      }
+      $comment = "Backup of $datasource/$type at $backuptime";
+      
+      if( $this->hasLog()){
+        $this->info("Creating backup for '$datasource', model type '$type', backup version $version, $total records, note: '$comment'.");
+      }      
+      
       $header = array( 
         $this->version,
         $total,
@@ -419,6 +426,11 @@ class backup_Backup
       $modelProperties = $model->properties();
       
       list( $version, $total, $comment ) = fgetcsv( $tmpFileHandle );
+      
+      if( $this->hasLog()){
+        $this->info("Restoring backup to '$datasource', model type '$type', backup version $version, $total records, note: '$comment'.");
+      }
+      
       $properties = fgetcsv( $tmpFileHandle );
       if( ! $version or ! $properties or ! $total )
         throw new Exception("Invalid header");
