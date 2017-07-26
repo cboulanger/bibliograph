@@ -10,9 +10,7 @@ collection, editing and publishing of bibliographic data.
 - [End User Documentation](http://help.bibliograph.org)
 - [Download](http://sourceforge.net/projects/bibliograph/files/latest/download)
 - [Installation](install.md)
-- [Docker Build](https://registry.hub.docker.com/u/cboulanger/bibliograph/)
 - [Release Notes](release-notes.md)
-- [User Forum](http://forum.bibliograph.org)
 - [Flattr](https://flattr.com/submit/auto?user_id=panyasan&url=https://github.com/cboulanger/bibliograph&title=Bibliograph&language=javascript&tags=github&category=software) or [donate to the project](http://sourceforge.net/p/bibliograph/donate)
 
 Bibliograph
@@ -114,7 +112,10 @@ Bibliograph is developed using
 - [GitHub](http://github.com) (Version control and code hosting)
 - [BrowserStack](http://browserstack.com) (Browser testing service - sponsored Open Source license)
 
-The author wishes to thank:
+In particular, the author wishes to thank:
+- Gerrit Oldenburg (Humboldt Universität zu Berlin) for finding and fixing various
+  bugs and providing preliminary PHP7-compatibility, and for supporting and
+  maintaining the software at Humboldt Universität.
 - Serge Barysiuk for providing assistance with UI generation, and for designing
   the application logo;
 - Julika Rosenstock for writing the first version of the end user documentation, Till Rathschlag
