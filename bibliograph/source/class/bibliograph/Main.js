@@ -277,7 +277,7 @@ qx.Class.define("bibliograph.Main",
       /*
        * rpc endpoint and timeout
        */
-      this.getRpcManager().setServerUrl("../services/server.php");
+      this.getRpcManager().setServerUrl("../../services/server.php");
       this.getRpcManager().getRpcObject().setTimeout(180000);  //3 Minutes
 
       /*

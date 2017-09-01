@@ -11,6 +11,7 @@ todo
 node_modules
 test
 bibliograph/source/script/*
+bibliograph/source-output/
 bibliograph/services/config/bibliograph.ini.php
 bibliograph/services/config/server.conf.php
 bibliograph/tool/deploy*

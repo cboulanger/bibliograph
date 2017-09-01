@@ -19,7 +19,7 @@
     ],
 
     "version" : "trunk",
-    "qooxdoo-versions": ["4.0.1"],
+    "qooxdoo-versions": ["4.0.1"]
   },
 
   "provides" :

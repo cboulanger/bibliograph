@@ -44,7 +44,7 @@
   {
 
     "APPLICATION"    : "bibliograph", 
-    "QOOXDOO_PATH"   : "../qooxdoo",
+    "QOOXDOO_PATH"   : "../../../qooxdoo",
     "QXTHEME"        : "bibliograph.theme.Theme",
     "LOCALES"        : [ "en","de" ],
     "ROOT"           : ".",
@@ -88,7 +88,7 @@
           "plugin_isbnscanner"  : { "include" : [ "isbnscanner.Plugin" ] },
           "plugin_nnforum"      : { "include" : [ "nnforum.Plugin" ] },
           "plugin_rssfolder"    : { "include" : [ "rssfolder.Plugin" ] },
-          "plugin_z3950"        : { "include" : [ "z3950.Plugin" ] },
+          "plugin_z3950"        : { "include" : [ "z3950.Plugin" ] }
         }
       }
     },
