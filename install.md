@@ -20,8 +20,8 @@ Preparations
 ------------
 - Rename `services/config/bibliograph.ini.dist.php to
   `services/config/bibliograph.ini.php`
-- Create a user "bibliograph" in your MySql-database with password "bibliograph"
-  (if you want to use a different username and password (for example, if yur database
+- Create a user "bibliograph" in your MySql-database with password "bibliograph", or,
+  if you want to use a different username and password (for example, if yur database
   provider assigns you fixed credetials), enter the values in the [database] section 
   of bibliograph.ini.php.
 - Create the following databases: "bibliograph_admin", "bibliograph_tmp", 
