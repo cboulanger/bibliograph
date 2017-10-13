@@ -40,19 +40,19 @@ install:
   - sudo service apache2 restart
 
   # configure bibliograph
-  - cp .travis/config/* bibliograph/bibliograph/services/config/
-  - echo "all" > bibliograph/plugins.txt
-  - cd bibliograph/bibliograph
-  - ./generate.py source-hybrid
-  - sudo ln -s bibliograph/bibliograph /var/www
+  - cp .travis/config/* bibliograph/services/config/
+  - echo "all" > plugins.txt
+  - cd bibliograph
+  - ./generate.py build
+  - sudo ln -s bibliograph /var/www
 
 before_script:
   # mysql
   - mysql -e 'CREATE DATABASE bibliograph;'
   
 script:
-  # start your web application and listen on `localhost`
-  - google-chrome-stable --headless --disable-gpu http://localhost/bibliograph/source &
+  # open webapp to trigger backend action
+  - google-chrome-stable --headless --disable-gpu http://localhost/bibliograph/build &
   - sleep 30
   - cat /tmp/bibliograph.log 
 
