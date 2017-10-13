@@ -57,7 +57,7 @@ if ( ! defined("QCL_VAR_DIR") )
  * where should the application log to. By default
  * the log file is "bibliograph.log"
  */
-define( "QCL_LOG_FILE", QCL_VAR_DIR . "/bibliograph.log" );
+define( "QCL_LOG_FILE", "/tmp/bibliograph.log" );
 
 //-------------------------------------------------------------
 // Application-related configuration

@@ -1,4 +1,10 @@
+dist: trusty
+
+addons:
+  chrome: stable
+
 language: php
+
 php:
   - '5.4'
   - '5.6'
@@ -30,7 +36,7 @@ install:
   - if [[ ${TRAVIS_PHP_VERSION:0:1} == "5" ]]; then sudo apt-get install -y php5-xsl php5-intl; fi
   - if [[ ${TRAVIS_PHP_VERSION:0:1} == "7" ]]; then sudo add-apt-repository -y ppa:ondrej/php && sudo apt-get update && sudo apt-get install -y php7.0-xsl php7.0-intl; fi  
   - sudo apt-get install -y yaz libyaz4-dev 
-  - yes $'\n' | pear channel-update pear.php.net && pecl install yaz && pear install Structures_LinkedList-0.2.2 && pear install File_MARC 
+  - pear channel-update pear.php.net && yes $'\n' | pecl install yaz && pear install Structures_LinkedList-0.2.2 && pear install File_MARC 
   - #echo "extension = yaz.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - sudo service apache2 restart
 
@@ -40,13 +46,19 @@ install:
   - echo "all" > bibliograph/plugins.txt
   - cd bibliograph/bibliograph
   - ./generate.py source-hybrid
+  - sudo ln -s bibliograph/bibliograph /var/www
 
 before_script:
   # mysql
   - mysql -e 'CREATE DATABASE bibliograph;'
   
 script:
-  echo "Done!";
+  - echo "Done!";
+  # start your web application and listen on `localhost`
+  - google-chrome-stable --headless --disable-gpu http://localhost/bibliograph &
+  - sleep 30
+  - cat /tmp/bibliograph.log 
+
 
 
   
