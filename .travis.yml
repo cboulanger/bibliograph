@@ -51,9 +51,8 @@ before_script:
   - mysql -e 'CREATE DATABASE bibliograph;'
   
 script:
-  - echo "Done!";
   # start your web application and listen on `localhost`
-  - google-chrome-stable --headless --disable-gpu http://localhost/bibliograph &
+  - google-chrome-stable --headless --disable-gpu http://localhost/bibliograph/source &
   - sleep 30
   - cat /tmp/bibliograph.log 
 
