@@ -28,7 +28,7 @@ install:
 
   # configure PHP with yaz
   - if [[ ${TRAVIS_PHP_VERSION:0:1} == "5" ]]; then sudo apt-get install -y php5-xsl php5-intl; fi
-  - if [[ ${TRAVIS_PHP_VERSION:0:1} == "7" ]]; then sudo add-apt-repository ppa:ondrej/php && sudo apt-get update && sudo apt-get install -y php7.0-xsl php7.0-intl; fi  
+  - if [[ ${TRAVIS_PHP_VERSION:0:1} == "7" ]]; then sudo add-apt-repository -y ppa:ondrej/php && sudo apt-get update && sudo apt-get install -y php7.0-xsl php7.0-intl; fi  
   - sudo apt-get install -y yaz libyaz4-dev 
   - yes $'\n' | pecl install yaz && pear install Structures_LinkedList-0.2.2 && pear install File_MARC 
   - #echo "extension = yaz.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
