@@ -8,7 +8,6 @@ language: php
 php:
   - '5.5'
   - '5.6'
-  - '7.0'
 
 services:
   - mysql
@@ -50,15 +49,19 @@ before_script:
   
 script:
   # open webapp to trigger setup 
-  - google-chrome-stable --headless --disable-gpu http://localhost/bibliograph/build &
-  - sleep 240
+  - CHROME_LOGDIR="$(pwd)/chromelogs"
+  - mkdir $CHROME_LOGDIR
+  - CHROME_PARAMS="--headless --disable-gpu --enable-logging --v=1 --user-data-dir=$CHROME_LOGDIR"
+  - google-chrome-stable $CHROME_PARAMS http://localhost/bibliograph/build &
+  - sleep 30
   # load webapp again to initialize gui
-  - google-chrome-stable --headless --disable-gpu http://localhost/bibliograph/build#itemView.tableView!datasource.database1!modelType.reference &
-  - sleep 240
+  - google-chrome-stable $CHROME_PARAMS http://localhost/bibliograph/build#itemView.tableView!datasource.database1!modelType.reference &
+  - sleep 30
+  - ls -al $CHROME_LOGDIR
   - cat /tmp/bibliograph.log 
   - sudo cat /var/log/apache2/other_vhosts_access.log | grep server.php
-  - sudo cat /var/log/apache2/error.log 
-  - mysqldump --database bibliograph
+  - #sudo cat /var/log/apache2/error.log 
+  - #mysqldump --database bibliograph
   - mysql -e 'USE bibliograph; SHOW TABLES;'
 
 
