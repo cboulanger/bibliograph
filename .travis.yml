@@ -53,7 +53,7 @@ script:
   - sleep 30
   - cat /tmp/bibliograph.log 
   - sudo cat /var/log/apache2/other_vhosts_access.log
-  - sudo cat /var/log/apache2/errorlog 
+  - sudo cat /var/log/apache2/error.log 
 
 
 
