@@ -124,6 +124,7 @@ error_reporting( E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED );
 ini_set("display_errors",false);
 ini_set("error_log",QCL_LOG_FILE);
 ini_set("log_errors",true);
+ini_set("always_populate_raw_post_data", -1);
 
 ini_set('include_path', implode(
   PATH_SEPARATOR,

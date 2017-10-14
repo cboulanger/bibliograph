@@ -51,7 +51,7 @@ script:
   - google-chrome-stable --headless --disable-gpu http://localhost/bibliograph/build &
   - sleep 60
   - cat /tmp/bibliograph.log 
-  - sudo cat /var/log/apache2/other_vhosts_access.log
+  - sudo cat /var/log/apache2/other_vhosts_access.log | grep server.php
   - sudo cat /var/log/apache2/error.log 
 
 
