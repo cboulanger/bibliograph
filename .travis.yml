@@ -8,7 +8,6 @@ language: php
 php:
   - '5.4'
   - '5.6'
-  - '7.1'
 
 services:
   - mysql
@@ -50,7 +49,7 @@ before_script:
 script:
   # open webapp to trigger backend action
   - google-chrome-stable --headless --disable-gpu http://localhost/bibliograph/build &
-  - sleep 30
+  - sleep 60
   - cat /tmp/bibliograph.log 
   - sudo cat /var/log/apache2/other_vhosts_access.log
   - sudo cat /var/log/apache2/error.log 
