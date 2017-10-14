@@ -322,6 +322,7 @@ qx.Class.define("bibliograph.Main",
 
     _startSetup : function()
     {
+      this.info("Start setup...");
       qx.event.message.Bus.getInstance().subscribe("application.reload", function(e)
       {
         window.location.reload();
@@ -333,6 +334,7 @@ qx.Class.define("bibliograph.Main",
 
     _setupDone : function()
     {
+      this.info("Setup done.");
       qx.event.message.Bus.getInstance().unsubscribe("bibliograph.setup.done", this._setupDone, this);
       this._connect();
     },
@@ -496,6 +498,14 @@ qx.Class.define("bibliograph.Main",
     initSubscribers : function()
     {
       var bus = qx.event.message.Bus.getInstance();
+
+      /*
+       * remotely log to the browser console
+       */
+      bus.subscribe("console.log", function(e)
+      {
+        console.log(e.getData());
+      }, this);
 
       /*
        * server message to force logout the user

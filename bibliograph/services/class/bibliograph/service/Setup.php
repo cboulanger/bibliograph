@@ -66,6 +66,19 @@ class bibliograph_service_Setup
   }
 
   /**
+   * Logs a message if the filters are enabled.
+   * Overrides parent methdod in order to send the message to the browser console
+   * @return void
+   * @param mixed $msg
+   * @param string|array $filters, defaults to QCL_LOG_SETUP
+   */
+  public function log( $msg, $filters=QCL_LOG_SETUP )
+  {
+    qcl_event_message_Bus::getInstance()->dispatchClientMessage("console.log","Setup: " . $msg);
+    $this->getLogger()->log( $msg, QCL_LOG_SETUP );
+  }
+
+  /**
    * The entry method. If the application is already setup, do nothing. Otherwise,
    * display progress dialog on the client and start setup service
    * @return qcl_ui_dialog_Dialog|string
