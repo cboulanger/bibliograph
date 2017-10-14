@@ -48,13 +48,17 @@ before_script:
   - mysql -e 'CREATE DATABASE bibliograph;'
   
 script:
-  # open webapp to trigger backend action
+  # open webapp to trigger setup 
   - google-chrome-stable --headless --disable-gpu http://localhost/bibliograph/build &
   - sleep 60
+  # load webapp again to initialize gui
+  - google-chrome-stable --headless --disable-gpu http://localhost/bibliograph/build &
+  - sleep 30
   - cat /tmp/bibliograph.log 
   - sudo cat /var/log/apache2/other_vhosts_access.log | grep server.php
   - sudo cat /var/log/apache2/error.log 
   - mysqldump --database bibliograph
+  mysql -e 'USE bibliograph; SHOW TABLES;'
 
 
 
