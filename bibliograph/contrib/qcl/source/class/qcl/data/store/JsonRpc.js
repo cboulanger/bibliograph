@@ -576,6 +576,7 @@ qx.Class.define("qcl.data.store.JsonRpc",
        */ 
       if( data.events && qx.lang.Type.isArray(data.events) )
       {
+        var self=this; 
         data.events.forEach( function(event) {
           if (event.data) 
           {
@@ -586,6 +587,7 @@ qx.Class.define("qcl.data.store.JsonRpc",
           {
             var eventObj = new qx.event.type.Event;
           }
+          self.info("Received server-side event '" + type + "'");
           eventObj.setType(event.Type);
           obj.dispatchEvent( eventObj ); 
         });
