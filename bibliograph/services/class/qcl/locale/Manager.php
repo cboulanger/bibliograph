@@ -147,7 +147,7 @@ class qcl_locale_Manager extends qcl_core_Object
     return $this->getLogger()->isFilterEnabled( QCL_LOG_LOCALE );
   }
 
-  public function log( $message )
+  public function log( $message, $filters = 'debug')
   {
     if( $this->hasLog()) parent::log( $message, QCL_LOG_LOCALE );
   }

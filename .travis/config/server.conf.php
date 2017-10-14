@@ -106,7 +106,9 @@ if ( ! defined( "QCL_APPLICATION_MODE") )
  */
 define("APPLICATION_LOG_DEFAULT", serialize( array(
   "QCL_LOG_SETUP" => true,
-  "QCL_LOG_REQUEST" => true
+  "QCL_LOG_REQUEST" => true,
+  "QCL_LOG_APPLICATION" => true,
+  "QCL_LOG_AUTHENTICATION" => true
 )));
 
 //-------------------------------------------------------------
