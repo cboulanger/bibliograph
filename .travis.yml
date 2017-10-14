@@ -58,7 +58,7 @@ script:
   - sudo cat /var/log/apache2/other_vhosts_access.log | grep server.php
   - sudo cat /var/log/apache2/error.log 
   - mysqldump --database bibliograph
-  mysql -e 'USE bibliograph; SHOW TABLES;'
+  - mysql -e 'USE bibliograph; SHOW TABLES;'
 
 
 
