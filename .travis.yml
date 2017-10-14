@@ -6,8 +6,9 @@ addons:
 language: php
 
 php:
-  - '5.4'
+  - '5.5'
   - '5.6'
+  - '7.0'
 
 services:
   - mysql
@@ -50,9 +51,9 @@ before_script:
 script:
   # open webapp to trigger setup 
   - google-chrome-stable --headless --disable-gpu http://localhost/bibliograph/build &
-  - sleep 60
+  - sleep 120
   # load webapp again to initialize gui
-  - google-chrome-stable --headless --disable-gpu http://localhost/bibliograph/build &
+  - google-chrome-stable --headless --disable-gpu http://localhost/bibliograph/build#itemView.tableView!datasource.database1!modelType.reference &
   - sleep 30
   - cat /tmp/bibliograph.log 
   - sudo cat /var/log/apache2/other_vhosts_access.log | grep server.php
