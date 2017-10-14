@@ -73,7 +73,7 @@ class qcl_event_message_Bus
    * @param string $method Callback method of the subscriber
    * @throws InvalidArgumentException
    */
-  public function addSubscriber( $filter, $subscriber, $method )
+  public function addSubscriber( $filter, $subscriber, $method=null )
   {
     if ( ! $filter or ! $method or ! is_a( $subscriber, "qcl_core_Object" ) )
     {
@@ -319,8 +319,9 @@ class qcl_event_message_Bus
    * @param mixed $data
    * @return void
    */
-  public function dispatchMessage( $sender, $name, $data )
+  public function dispatchMessage( $sender, $name=true, $data=null )
   {
+    if( $name === true) throw new InvalidArgumentException("No message name provided"); //@todo this is a workaround
     qcl_import( "qcl_event_message_Message" );
     $message = new qcl_event_message_Message( $name, $data );
     if ( $sender)

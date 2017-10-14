@@ -994,7 +994,7 @@ class qcl_core_Object
    * @param string $method Callback method of the current object
    * @param mixed $third A dummy parameter to allow subclasses to extend the signature
    */
-  public function addSubscriber( $filter, $method, $third )
+  public function addSubscriber( $filter, $method, $third=null )
   {
     $this->getMessageBus()->addSubscriber( $filter, $this, $method );
   }
@@ -1003,8 +1003,9 @@ class qcl_core_Object
    * Dispatches a message.
    * @param string $name Message name
    * @param mixed $data Data dispatched with message
+   * @param mixed $third A dummy parameter to allow subclasses to extend the signature
    */
-  public function dispatchMessage ( $name, $data=true )
+  public function dispatchMessage ( $name, $data=true, $third=null )
   {
     $this->getMessageBus()->dispatchMessage( $this, $name, $data );
   }
