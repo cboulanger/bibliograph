@@ -428,9 +428,11 @@ function get_log_files($dir, &$results = array()) {
 		foreach($files as $key => $value){
             $path = realpath($dir.DIRECTORY_SEPARATOR.$value);
 			if(!is_dir($path)) {
-                $ext = pathinfo($filename, PATHINFO_EXTENSION);
-                if( ! in_array( $ext, LOG_FILE_EXTENSIONS ) )
-				$files_list[] = $path;
+                $ext = pathinfo($value, PATHINFO_EXTENSION);
+                if( $ext == "log" ){
+                //if( in_array( $ext, LOG_FILE_EXTENSIONS ) ) {
+				    $files_list[] = $path;
+                }
 			}
 			elseif ($value != "." && $value != "..") {
 				$dirs_list[] = $path;

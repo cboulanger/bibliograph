@@ -115,7 +115,7 @@ class qcl_access_Service
       /*
        * check if this is a https connection
        */
-      if ( $_SERVER['HTTPS'] != "on" )
+      if ( ! ( $_SERVER['HTTPS'] == "on" or isset($_SERVER['HTTP_USESSL']) or $_SERVER['SERVER_PORT'] == 443 ) )
       {
         throw new JsonRpcException(
           $this->tr("Authentication must be done through a secure connection, using the https:// protocol.")

@@ -28,7 +28,7 @@ qcl_import( "qcl_data_db_Timestamp" );
  */
 $logger = qcl_log_Logger::getInstance();
 define("QCL_LOG_DB","db");
-$logger->registerFilter( QCL_LOG_DB, "Detailed log messages on database connection and queries",false);
+$logger->registerFilter( QCL_LOG_DB, "Database connection and queries",false);
 
 define("QCL_LOG_TABLES","tables");
 $logger->registerFilter( QCL_LOG_TABLES, "Modification of table schemas in an sql database",false);

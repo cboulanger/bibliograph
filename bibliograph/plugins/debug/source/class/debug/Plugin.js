@@ -21,7 +21,7 @@
  * Plugin Initializer Class
  * 
  */
-qx.Class.define("template.Plugin", {
+qx.Class.define("debug.Plugin", {
   extend: qx.core.Object,
   include: [qx.locale.MTranslation],
   type: "singleton",
@@ -50,17 +50,19 @@ qx.Class.define("template.Plugin", {
       var openWindowButton = new qx.ui.menu.Button();
       openWindowButton.setLabel(this.tr("Open log window"));
       openWindowButton.addListener("execute",function(){
-        var url = this.getApplication().getPluginManager().getPluginServiceUrl("debug");
+        var url = this.getApplication().getPluginManager().getPluginServiceUrl("debug") + "/logtail.php";
         window.open(url,"debug_window");
       },this);
       debugMenu.add(openWindowButton);
       debugMenu.addSeparator();
       // populate menu with log filters
-      this.getRpcManager().execute(
-        "debug.service",
+      this.info("Retrieving log filter data...");
+      rpcMgr.execute(
+        "debug.Service",
         "getLogFilters",
         null,
         function(data) {
+          this.debug(data);
           if (!(data instanceof Array)) {
             this.error("Invalid log filter data from backend...");
           }
@@ -74,8 +76,8 @@ qx.Class.define("template.Plugin", {
               "changeValue",
               function(e) {
                 var value = e.getData();
-                this.getRpcManager().execute(
-                  "debug.service",
+                rpcMgr.execute(
+                  "debug.Service",
                   "setFilterEnabled",
                   [element.name,value],
                   function(data) {

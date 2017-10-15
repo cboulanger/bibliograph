@@ -36,17 +36,41 @@ class qcl_log_Logger
    * @var array
    */
   private $filters = array();
-
-
+  
   /**
    * Constructor
    * @return \qcl_log_Logger
    */
   function __construct()
   {
-     $this->_registerInitialFilters();
+    $path = $this->getFilterCachePath();
+    if( file_exists( $path ) ){
+      $this->writeLog( ">>> Loading log filters from file...\n" );
+      $this->filters = unserialize( file_get_contents($path) );
+      $this->countEnabledFilters();
+    } else {
+      $this->writeLog( ">>> Initializing log filters...\n" );
+      $this->_registerInitialFilters();
+    }
   }
-
+  
+  /**
+   * Save the filters
+   */
+  public function saveFilters()
+  {
+    if( is_object ( $app = qcl_application_Application::getInstance() ) 
+        and is_object ( $accessCtl = $app->getAccessController() )
+        and is_object ( $activeUser = $accessCtl->getActiveUser() )
+        and $activeUser->hasPermission("log.changeLogFilters")
+    ) {
+      $this->writeLog( "<<<<<<<<<<<<<<<<<<<<<<<\n" ); 
+      $this->countEnabledFilters();
+      $this->writeLog( "<<< Saving filters ....\n" );      
+      file_put_contents( $this->getFilterCachePath(), serialize($this->filters) );
+    }
+  }
+  
   /**
    * Returns singleton instance
    * @return qcl_log_Logger
@@ -55,6 +79,11 @@ class qcl_log_Logger
   {
     return qcl_getInstance( __CLASS__ );
   }
+  
+  private function getFilterCachePath()
+  {
+    return QCL_VAR_DIR . DIRECTORY_SEPARATOR . "bibliograph_filter_cache.dat";
+  }
 
   /**
    * Internal method to setup initial filters
@@ -62,14 +91,12 @@ class qcl_log_Logger
    */
   private function _registerInitialFilters()
   {
-    $this->registerFilter("debug",    "Verbose debugging, all messages",true);
+    $this->registerFilter("debug",    "Verbose debugging",true);
     $this->registerFilter("info",     "Important messages", true);
     $this->registerFilter("warn",     "Warnings", true);
     $this->registerFilter("error",    "Non-fatal errors", true);
-    $this->registerFilter("framework","Framework-related debugging", false);
   }
-
-
+  
   /**
    * Register a filter.
    * @param string $filter Filter name
@@ -80,9 +107,9 @@ class qcl_log_Logger
   {
     if ( ! $filter )
     {
-      trigger_error("No filter given.");
+      throw new InvalidArgumentException("No filter given.");
     }
-
+    
     $this->filters[$filter] = array(
       'enabled'     => $state,
       'description' => $description
@@ -107,7 +134,7 @@ class qcl_log_Logger
    * @throws Exception
    * @return void
    */
-  public function setFilterEnabled( $filter, $value )
+  public function setFilterEnabled( $filter, $value=true )
   {
     /*
      * If array is given, set all the filters
@@ -131,7 +158,20 @@ class qcl_log_Logger
     /*
      * enable/disable filter
      */
+    $this->writeLog( "========================================\n" );
+    $this->countEnabledFilters();
+    $this->writeLog( "Setting '$filter' to '$value'\n" );
     $this->filters[$filter]['enabled'] = $value;
+    $this->countEnabledFilters();
+  }
+  
+  private function countEnabledFilters()
+  {
+    $enabled = 0;
+    foreach($this->filters as $filter){
+      if($filter['enabled']) $enabled++;
+    }
+    $this->writeLog( "=== We have now ". $enabled . "  enabled filters ....\n" );   
   }
 
   /**
@@ -167,9 +207,9 @@ class qcl_log_Logger
     $data = array();
     foreach( $this->filters as $key => $value){
       $data[] = array(
-        "name" => $key,
-        "description" => $filter['description'],
-        "enabled" => $filter['enabled']
+        "name" => $key ,
+        "description" => either($value['description'],$key),
+        "enabled" => $value['enabled']
       );
     }
     return $data;

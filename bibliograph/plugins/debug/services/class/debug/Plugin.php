@@ -24,7 +24,7 @@ qcl_import("qcl_application_plugin_AbstractPlugin");
 /**
  * Plugin initializer for the template plugin
  */
-class template_plugin
+class debug_plugin
   extends qcl_application_plugin_AbstractPlugin
 {
   
@@ -60,7 +60,7 @@ class template_plugin
    */
   protected $data = array(
       // 'source'  => "https://code.jquery.com/jquery-2.1.1.min.js",
-      // 'part'    => 'plugin_template'
+      'part'    => 'plugin_debug'
   );
 
   /**
@@ -95,26 +95,5 @@ class template_plugin
   {
     $this->getApplication()->removePermission( $this->permissions );
     return $this->tr("Please reload the application."); // in case of plugin UI additons
-  }
-
-  /**
-   * Service method to return the available log message filters
-   * @return array Ordered array of associative arrays
-   * with keys 'name', 'description', and 'enabled'
-   */
-  public function method_getLogFilters(){
-    return qcl_log_Logger::getInstance()->getFilterData();
-  }
-
-  /**
-   * Service method to enable a filter
-   *
-   * @param string $name
-   * @param boolean $value
-   * @return string "OK"
-   */
-  public function method_setFilterEnabled( $name, $value){
-    qcl_log_Logger::getInstance()->setFilterEnabled( $name, $value);
-    return "OK";
   }
 }
