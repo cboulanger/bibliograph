@@ -80,6 +80,18 @@ qx.Class.define("qcl.application.PluginManager",
 
   members :
   { 
+
+    /**
+     * Returns the relative path to the plugin service folder
+     * @return string
+     */
+    getPluginServiceUrl : function(name){
+      return "../plugins/"+name+"/services";
+    },
+
+    /**
+     * Loads the plugin javascript code
+     */
     loadPlugins : function( callback, context )
     {
       var app = this.getApplication();

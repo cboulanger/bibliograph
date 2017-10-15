@@ -143,7 +143,7 @@ class qcl_log_Logger
   {
     if ( ! $this->isRegistered( $filter ) )
     {
-      trigger_error("Filter '$filter' does not exist." );
+      throw new InvalidArgumentException("Filter '$filter' does not exist." );
     }
   }
 
@@ -156,6 +156,23 @@ class qcl_log_Logger
   {
     $this->checkFilter( $filter );
     return $this->filters[$filter]['enabled'];
+  }
+
+  /**
+   * Returns the filter data
+   * @return array Ordered array of associative arrays
+   * with keys 'name', 'description', and 'enabled'
+   */
+  public function getFilterData(){
+    $data = array();
+    foreach( $this->filters as $key => $value){
+      $data[] = array(
+        "name" => $key,
+        "description" => $filter['description'],
+        "enabled" => $filter['enabled']
+      );
+    }
+    return $data;
   }
 
   /**

@@ -72,7 +72,8 @@
         { "manifest" : "plugins/isbnscanner/Manifest.json" },
         { "manifest" : "plugins/nnforum/Manifest.json" },
         { "manifest" : "plugins/rssfolder/Manifest.json" },
-        { "manifest" : "plugins/z3950/Manifest.json" }
+        { "manifest" : "plugins/z3950/Manifest.json" },
+        { "manifest" : "plugins/debug/Manifest.json" }
       ]
     },
     
@@ -89,6 +90,7 @@
           "plugin_nnforum"      : { "include" : [ "nnforum.Plugin" ] },
           "plugin_rssfolder"    : { "include" : [ "rssfolder.Plugin" ] },
           "plugin_z3950"        : { "include" : [ "z3950.Plugin" ] },
+          "plugin_debug"        : { "include" : [ "debug.Plugin" ] }
         }
       }
     },
