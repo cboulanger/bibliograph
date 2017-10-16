@@ -25,7 +25,6 @@ define('LOG_FILE_EXTENSIONS', array("log") );
 $log = (!isset($_GET['p'])) ? $default : urldecode($_GET['p']);
 $lines = (!isset($_GET['lines'])) ? 50 : $_GET['lines'];
 
-
 $files = get_log_files(LOG_PATH);
 
 ksort($files);
@@ -42,6 +41,7 @@ $title = substr($log, (strrpos($log, '/')+1));
   <title>Logs viewer</title>
   <meta name="description" content="PHP Script that presents your Server Logs in an easy to use layout.">
   <meta name="author" content="pixeline.be">
+  <script type="text/javascript">setTimeout("location.reload(true);",5000);</script>
   <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.2/build/pure-min.css" integrity="sha384-UQiGfs9ICog+LwheBSRCt1o5cbyKIHbwjWscjemyBMT9YCUMZffs6UqUTd0hObXD" crossorigin="anonymous">
   <style type="text/css" media="screen">
 

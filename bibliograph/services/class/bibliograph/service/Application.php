@@ -157,5 +157,11 @@ class bibliograph_service_Application
     
     // Clear application cache
     $this->getApplication()->getCache()->disposePersistenceData();
+    
+    // Clear log file and filter cache
+    $this->getLogger()->clearLogFile();
+    $this->getLogger()->clearFilterCache();
+    
+    
   }
 }
