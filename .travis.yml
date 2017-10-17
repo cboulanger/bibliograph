@@ -1,14 +1,13 @@
 dist: trusty
 
-addons:
-  chrome: stable
-
 language: php
 
 php:
   - '5.4'
   - '5.6'
   - '7.1'
+
+node_js : 8
 
 services:
   - mysql
@@ -41,17 +40,16 @@ install:
   - echo "all" > plugins.txt
   - cd bibliograph
   - ./generate.py build
-  - sudo ln -s bibliograph /var/www
+  - cd ..
+  - sudo mv bibliograph /var/www
 
 before_script:
-  # mysql
   - mysql -e 'CREATE DATABASE bibliograph;'
   
 script:
-  # open webapp to trigger backend action
-  - google-chrome-stable --headless --disable-gpu http://localhost/bibliograph/build &
-  - sleep 30
-  - cat /tmp/bibliograph.log 
+  - cd .travis
+  - npm install
+  - npm test
 
 
 

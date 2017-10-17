@@ -1,0 +1,17 @@
+{
+  "name": "bibliograph_test",
+  "version": "0.0.0",
+  "description": "This tests the bibliograph backenend by replaying JSONRPC traffic",
+  "main": "test.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mocha": "^4.0.1"
+  }
+}
