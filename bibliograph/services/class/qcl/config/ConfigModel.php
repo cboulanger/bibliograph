@@ -218,7 +218,7 @@ class qcl_config_ConfigModel
             case "array":
               return $value;
             default:
-              throw new InvalidArgumentException("Type mismatch for '$type': value is " . typeof( $value, true ) );
+              return array();
           }
         }
         else
@@ -230,7 +230,7 @@ class qcl_config_ConfigModel
             case "array":
               return implode( ",", $value );
             default:
-              throw new InvalidArgumentException("Type mismatch for '$type': value is " . typeof( $value, true ) );
+              return "";
           }
         }
 
