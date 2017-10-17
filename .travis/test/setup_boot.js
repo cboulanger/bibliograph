@@ -4,7 +4,7 @@ const
   assert  = require('assert-diff'),
   r2      = require('r2');
 
-let url = "http://0.0.0.0:8080/bibliograph/services/server.php";
+let url = "http://localhost/bibliograph/services/server.php";
 
 function dump(data){
   console.log(JSON.stringify(data,null,2));
