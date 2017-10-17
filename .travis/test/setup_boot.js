@@ -1,10 +1,18 @@
 /* global describe, it */
 const 
   fs      = require('fs'),
+  process = require('process'),
   assert  = require('assert-diff'),
   r2      = require('r2');
 
-let url = "http://localhost/bibliograph/services/server.php";
+// url
+let url;
+if( process.env.IP && process.env.PORT) {
+  url = `http://${process.env.IP}:${process.env.PORT}`;
+} else {
+  url = "http://localhost";
+}
+url += "/bibliograph/services/server.php";
 
 function dump(data){
   console.log(JSON.stringify(data,null,2));
@@ -20,7 +28,14 @@ describe('Bibliograph', () => {
       request.server_data.sessionId = sessionId;
       console.log(">>>> Request");
       dump(request);
-      let result = await r2.post(url, { json: request }).json;
+      let result; 
+      let response = await r2.post(url, { json: request }).text;
+      try {
+        result = JSON.parse(response);
+      } catch (error) {
+        console.error("Invalid response:" + response );
+        return;
+      }
       console.log("<<<< Response (received)");
       dump(result);
       console.log("==== Response (expected)");
