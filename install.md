@@ -1,6 +1,9 @@
 Installation and Deployment
 ===========================
 
+Note: Bibliograph is not yet compatible with PHP 7.0 and greater. We're working
+on it. 
+
 Docker
 ------
 The easiest way to install Bibliograph is by using the [preconfigured docker image](https://registry.hub.docker.com/u/cboulanger/bibliograph/). 
@@ -11,7 +14,7 @@ below. It might be useful to look at the Ubuntu-based [Dockerfile](https://githu
 
 Prerequisites
 -------------
-- PHP >= 5.3 with the following extensions: intl, gettext, yaz/xsl (optional), ldap
+- PHP >= 5.3 < 7.0 with the following extensions: intl, gettext, yaz/xsl (optional), ldap
   (optional), zip (optional). For optimal performance, it is advised to enable OPcache
   (http://php.net/manual/en/intro.opcache.php)
 - MySql >= 5.3 

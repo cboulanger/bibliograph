@@ -181,6 +181,7 @@ qx.Class.define("qcl.io.RpcManager",
      */
     execute : function( serviceName, serviceMethod, params, callback, context )
     {
+      this.info("execute: "+serviceName+"."+serviceMethod);
       this._appStore.setServiceName(serviceName);
       this._appStore.execute( serviceMethod, params, callback, context);
     },
