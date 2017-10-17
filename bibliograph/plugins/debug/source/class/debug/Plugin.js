@@ -32,6 +32,7 @@ qx.Class.define("debug.Plugin", {
       var systemMenu = app.getWidgetById("bibliograph/menu-system");
       var permMgr = app.getAccessManager().getPermissionManager();
       var rpcMgr = app.getRpcManager();
+      var confMgr = app.getConfigManager();
       
       // add debug menu
       var debugMenuButton = new qx.ui.menu.Button();
@@ -73,6 +74,9 @@ qx.Class.define("debug.Plugin", {
         
         // checkbox button for recording jsonrpc traffic
         var checkBoxButton = new qx.ui.menu.CheckBox(this.tr("Record JSONRPC traffic"));
+        confMgr.addListener("ready", function() {
+          confMgr.bindKey("debug.recordJsonRpcTraffic", checkBoxButton, "value", false);
+        });        
         checkBoxButton.addListener(
           "changeValue",
           function(e) {

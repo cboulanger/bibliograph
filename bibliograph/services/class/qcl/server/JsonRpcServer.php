@@ -419,7 +419,8 @@ class qcl_server_JsonRpcServer
      * save response
      */
      try{
-      if( qcl_application_Application::getInstance()->getPreference("debug.recordJsonRpcTraffic") ){
+      if( is_object( $app = qcl_application_Application::getInstance() ) and
+          $app->getPreference("debug.recordJsonRpcTraffic") ){
         $trafficlogfile = QCL_JSONRPC_LOG_PATH;
         if( file_exists($trafficlogfile) and filesize($trafficlogfile) < QCL_JSONRPC_LOG_SIZE ) {
           $requestResponseArray = json_decode(file_get_contents($trafficlogfile));
