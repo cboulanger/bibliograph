@@ -24,6 +24,7 @@ if ( ! defined( "QCL_LOG_FILE") )
   throw new JsonRpcException("You must define the QCL_LOG_FILE constant.");
 }
 
+
 /*
  * Default logger: logs to filesystem
  * @todo add other loggers
@@ -36,16 +37,26 @@ class qcl_log_Logger
    * @var array
    */
   private $filters = array();
-
-
+  
+  private $dirty = false;
+  
   /**
    * Constructor
    * @return \qcl_log_Logger
    */
   function __construct()
   {
-     $this->_registerInitialFilters();
+    $path = $this->getFilterCachePath();
+    if( file_exists( $path ) ){
+      $this->log( "Loading log filters from file...", "filters" );
+      $this->filters = unserialize( file_get_contents($path) );
+    } else {
+      $this->log( "Initializing log filters...", "filters" );
+      $this->_registerInitialFilters();
+      $this->dirty = true;
+    }
   }
+  
 
   /**
    * Returns singleton instance
@@ -55,6 +66,12 @@ class qcl_log_Logger
   {
     return qcl_getInstance( __CLASS__ );
   }
+  
+  private function getFilterCachePath()
+  {
+    return QCL_VAR_DIR . DIRECTORY_SEPARATOR . "bibliograph_filter_cache.dat";
+  }
+  
 
   /**
    * Internal method to setup initial filters
@@ -62,14 +79,13 @@ class qcl_log_Logger
    */
   private function _registerInitialFilters()
   {
-    $this->registerFilter("debug",    "Verbose debugging, all messages",true);
-    $this->registerFilter("info",     "Important messages", true);
+    $this->registerFilter("debug",    "Debug messages",true);
+    $this->registerFilter("info",     "Informative messages", true);
     $this->registerFilter("warn",     "Warnings", true);
     $this->registerFilter("error",    "Non-fatal errors", true);
-    $this->registerFilter("framework","Framework-related debugging", false);
+    $this->registerFilter("filters",   "Log filter system", false);
   }
-
-
+  
   /**
    * Register a filter.
    * @param string $filter Filter name
@@ -80,13 +96,17 @@ class qcl_log_Logger
   {
     if ( ! $filter )
     {
-      trigger_error("No filter given.");
+      throw new InvalidArgumentException("No filter given.");
     }
-
+    if( $this->isRegistered( $filter ) ) {
+      //$this->log( "Filter '$filter' already registered.", "filters" );
+      return; 
+    }
     $this->filters[$filter] = array(
       'enabled'     => $state,
       'description' => $description
     );
+    $this->dirty=true; 
   }
 
 
@@ -107,7 +127,7 @@ class qcl_log_Logger
    * @throws Exception
    * @return void
    */
-  public function setFilterEnabled( $filter, $value )
+  public function setFilterEnabled( $filter, $value=true )
   {
     /*
      * If array is given, set all the filters
@@ -131,7 +151,48 @@ class qcl_log_Logger
     /*
      * enable/disable filter
      */
+    $this->log( "Setting '$filter' to '" . ($value?"on":"off") ."'", "filters" );
     $this->filters[$filter]['enabled'] = $value;
+    $this->dirty=true;
+  }
+  
+  /**
+   * Save the filters to a cache file
+   */
+  public function saveFilters()
+  {
+
+    if( is_object ( $app = qcl_application_Application::getInstance() ) 
+        and is_object ( $accessCtl = $app->getAccessController() )
+        and is_object ( $activeUser = $accessCtl->getActiveUser() )
+        and $activeUser->hasPermission("log.changeLogFilters")
+    ) {
+      if( ! $this->dirty ){
+         $this->log( "Filters haven't changed", "filters" );
+         return; 
+      }
+      $this->log( "Saving filters...", "filters" );      
+      $this->countEnabledFilters();
+      file_put_contents( $this->getFilterCachePath(), serialize($this->filters) );
+      $this->dirty = false;
+    }
+  }  
+  
+  /**
+   * Clears the filter cache, for example, if descriptions change
+   */
+  public function clearFilterCache(){
+    @unlink($this->getFilterCachePath());
+  }
+  
+  private function countEnabledFilters()
+  {
+    $enabled = array();
+    foreach($this->filters as $name => $filter){
+      if($filter['enabled']) $enabled[]= $name;
+    }
+    sort($enabled);
+    $this->log( "We have now ". count($enabled) . "  enabled filters: " . implode("; ", $enabled), "filters" );   
   }
 
   /**
@@ -143,7 +204,7 @@ class qcl_log_Logger
   {
     if ( ! $this->isRegistered( $filter ) )
     {
-      trigger_error("Filter '$filter' does not exist." );
+      throw new InvalidArgumentException("Filter '$filter' does not exist." );
     }
   }
 
@@ -156,6 +217,26 @@ class qcl_log_Logger
   {
     $this->checkFilter( $filter );
     return $this->filters[$filter]['enabled'];
+  }
+
+  /**
+   * Returns the filter data
+   * @return array Ordered array of associative arrays
+   * with keys 'name', 'description', and 'enabled'
+   */
+  public function getFilterData(){
+    $data = array();
+    foreach( $this->filters as $key => $value){
+      $data[] = array(
+        "name" => $key ,
+        "description" => either($value['description'],$key),
+        "enabled" => $value['enabled']
+      );
+    }
+    usort($data,function($a,$b){
+      return strcmp($a['description'],$b['description']);
+    });
+    return $data;
   }
 
   /**
@@ -208,7 +289,7 @@ class qcl_log_Logger
     {
 
       if ( is_writable( QCL_LOG_FILE )
-        or is_writable( dirname( QCL_LOG_FILE ) ) )
+        or is_writable( dirname( QCL_LOG_FILE ) ) ) // @todo
       {
         /*
          * create log file if it doesn't exist
@@ -230,14 +311,7 @@ class qcl_log_Logger
         {
           if( filesize( QCL_LOG_FILE ) > QCL_LOG_MAX_FILESIZE )
           {
-            if ( @unlink( QCL_LOG_FILE ) )
-            {
-              touch( QCL_LOG_FILE );
-            }
-            else
-            {
-              throw new JsonRpcError("Cannot delete logfile.");
-            }
+            $this->clearLogFile();
           }
         }
       }
@@ -299,6 +373,20 @@ class qcl_log_Logger
       $msg .= $msg . $trace;
     }
     $this->log( $msg , "error" );
+  }
+  
+  /**
+   * Empties the log file
+   */
+  public function clearLogFile(){
+    if ( @unlink( QCL_LOG_FILE ) )
+    {
+      touch( QCL_LOG_FILE );
+    }
+    else
+    {
+      $this->warn("Cannot delete logfile.");
+    }
   }
 
 }

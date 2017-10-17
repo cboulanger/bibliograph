@@ -35,13 +35,13 @@ qcl_import("qcl_log_Logger");
 $logger = qcl_log_Logger::getInstance();
 
 define("QCL_LOG_OBJECT","object");
-$logger->registerFilter( QCL_LOG_OBJECT, "Object-related debugging.",false);
+$logger->registerFilter( QCL_LOG_OBJECT, "QCL object creation.",false);
 
 define("QCL_LOG_PERSISTENCE","persistence");
-$logger->registerFilter( QCL_LOG_PERSISTENCE, "Persistence-related debugging.",false);
+$logger->registerFilter( QCL_LOG_PERSISTENCE, "QCL data persistence",false);
 
 define("QCL_LOG_PROPERTIES","properties");
-$logger->registerFilter( QCL_LOG_PROPERTIES, "Messages concerning the setup and initializing of model properties.",false);
+$logger->registerFilter( QCL_LOG_PROPERTIES, "QCL model properties",false);
 
 /*
  * Exceptions

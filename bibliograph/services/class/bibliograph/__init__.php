@@ -31,6 +31,6 @@ const BIBLIOGRAPH_VALUE_SEPARATOR = "; "; // todo This cannot be a global value,
  * log filters
  */
 define( "BIBLIOGRAPH_LOG_APPLICATION", "bibliograph" );
-qcl_log_Logger::getInstance()->registerFilter( BIBLIOGRAPH_LOG_APPLICATION, "", false );
+qcl_log_Logger::getInstance()->registerFilter( BIBLIOGRAPH_LOG_APPLICATION, "Bibliograph backend", false );
 
 require_once "bibliograph/schema/__init__.php";

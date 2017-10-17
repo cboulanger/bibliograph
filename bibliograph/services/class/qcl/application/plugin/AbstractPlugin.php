@@ -104,6 +104,14 @@ abstract class qcl_application_plugin_AbstractPlugin
   {
     return $this->data;
   }
+  
+  /**
+   * initialize plugin. Override if necessary and call parent::init() at the
+   * beginning.
+   */
+  public function init(){
+    $this->log("Initializing '" . $this->getName() . "' plugin", QCL_LOG_PLUGIN );
+  }
 
   /**
    * Whether this plugin is visible or not.

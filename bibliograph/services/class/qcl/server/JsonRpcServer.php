@@ -182,7 +182,12 @@ class qcl_server_JsonRpcServer
      */
     $request = qcl_server_Request::getInstance();
     $request->set( $input );
-
+    
+    /*
+     * Debug log
+     */
+    qcl_log_Logger::getInstance()->log( "JSONRPC Request:\r" . json_encode($input), QCL_LOG_REQUEST );     
+    
     /*
      * return the input
      */
@@ -402,10 +407,34 @@ class qcl_server_JsonRpcServer
     {
       $data = $data->toArray();
     }
-
+    
+    /*
+     * convert to json string
+     */
     $response->setData( $data );
     $json = $this->json->encode( $response->toArray() );
-    //qcl_log_Logger::getInstance()->info($json);
+    qcl_log_Logger::getInstance()->log( "JSONRPC Response:\r" . $json, QCL_LOG_REQUEST );
+    
+    /*
+     * save response
+     */
+     try{
+      if( is_object( $app = qcl_application_Application::getInstance() ) and
+          $app->getPreference("debug.recordJsonRpcTraffic") ){
+        $trafficlogfile = QCL_JSONRPC_LOG_PATH;
+        if( file_exists($trafficlogfile) and filesize($trafficlogfile) < QCL_JSONRPC_LOG_SIZE ) {
+          $requestResponseArray = json_decode(file_get_contents($trafficlogfile));
+        } else {
+          $requestResponseArray = array();
+        }
+        $requestResponseArray[] = array(
+          'request'   => $this->input,
+          'response'  => $response->toArray()  
+        );
+        file_put_contents($trafficlogfile,json_encode($requestResponseArray, JSON_PRETTY_PRINT));
+      }   
+     } catch( Exception $e ) {}    
+    
     return $json;
   }
 

@@ -40,7 +40,8 @@ qx.Class.define("bibliograph.PluginManager",
           "plugin_isbnscanner"  : window.isbnscanner ? isbnscanner.Plugin : null,
           "plugin_nnforum"      : window.nnforum ? nnforum.Plugin : null,
           "plugin_rssfolder"    : window.rssfolder ? rssfolder.Plugin : null,
-          "plugin_z3950"        : window.z3950 ? z3950.Plugin : null
+          "plugin_z3950"        : window.z3950 ? z3950.Plugin : null,
+          "plugin_debug"        : window.debug ? debug.Plugin : null
         };
         try
         {

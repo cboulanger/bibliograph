@@ -582,17 +582,21 @@ class qcl_config_ConfigModel
     /*
      * look for user variant
      */
+    $value = null;
     $userConfigModel = $this->getUserConfigModel();
-    $userConfigModel->findWhere( array(
-      $userModel->foreignKey()   => $userId,
-      $this->foreignKey()        => $this->id()
-    ) );
-    if ( $userConfigModel->foundSomething() )
-    {
-      $userConfigModel->loadNext();
-      $value = $userConfigModel->getValue();
+    if( $userModel ) {
+      $userConfigModel->findWhere( array(
+        $userModel->foreignKey()   => $userId,
+        $this->foreignKey()        => $this->id()
+      ) );
+      if ( $userConfigModel->foundSomething() )
+      {
+        $userConfigModel->loadNext();
+        $value = $userConfigModel->getValue();
+      }
     }
-    else
+
+    if ( $value === null)
     {
       $value = $this->getDefault();
     }

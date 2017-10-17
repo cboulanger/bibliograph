@@ -282,6 +282,7 @@ abstract class qcl_data_db_adapter_Abstract
   {
     if ( $this->getLogger()->isFilterEnabled( QCL_LOG_DB ) )
     {
+      $msg = str_replace("\n","\r",$msg);
       parent::log( $msg, QCL_LOG_DB );
     }
   }

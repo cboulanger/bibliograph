@@ -193,6 +193,14 @@ qx.Class.define("bibliograph.Main",
       return "2003-" + year + " (c) Christian Boulanger";
     },
 
+    /**
+     * Returns the relative path to the backend entry point
+     * @return {String}
+     */
+    getServerUrl : function() {
+      return "../services/server.php";
+    },
+
     /*
     ---------------------------------------------------------------------------
        PRIVATE MEMBERS
@@ -277,7 +285,7 @@ qx.Class.define("bibliograph.Main",
       /*
        * rpc endpoint and timeout
        */
-      this.getRpcManager().setServerUrl("../services/server.php");
+      this.getRpcManager().setServerUrl(this.getServerUrl());
       this.getRpcManager().getRpcObject().setTimeout(180000);  //3 Minutes
 
       /*

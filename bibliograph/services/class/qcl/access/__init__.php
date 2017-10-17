@@ -76,13 +76,13 @@ define('QCL_ACCESS_SALT_LENGTH', 9);
  * log filter
  */
 define("QCL_LOG_AUTHENTICATION", "authentication");
-qcl_log_Logger::getInstance()->registerFilter(QCL_LOG_AUTHENTICATION,"Authentication-related log messages",false);
+qcl_log_Logger::getInstance()->registerFilter(QCL_LOG_AUTHENTICATION,"Authentication",false);
 
 define("QCL_LOG_ACL", "acl");
-qcl_log_Logger::getInstance()->registerFilter(QCL_LOG_ACL,"Access-control-related log messages",false);
+qcl_log_Logger::getInstance()->registerFilter(QCL_LOG_ACL,"Access-control",false);
 
 define("QCL_LOG_LDAP", "ldap");
-qcl_log_Logger::getInstance()->registerFilter(QCL_LOG_LDAP,"LDAP-related log messages",false);
+qcl_log_Logger::getInstance()->registerFilter(QCL_LOG_LDAP,"LDAP",false);
 
 
 /*

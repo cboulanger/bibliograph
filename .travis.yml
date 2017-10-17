@@ -1,8 +1,5 @@
 dist: trusty
 
-addons:
-  chrome: stable
-
 language: php
 
 php:
@@ -15,7 +12,7 @@ services:
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -y bibutils zip
-  # apache with php-fpm, since travis does not support mod_php
+  # install apache / php
   - sudo apt-get install -y apache2 libapache2-mod-fastcgi
   - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf 2>/dev/null || true # as per https://github.com/travis-ci/travis-ci/issues/3385
   - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf 2>/dev/null || true
@@ -40,24 +37,17 @@ install:
   - cp .travis/config/* bibliograph/services/config/
   - echo "all" > plugins.txt
   - cd bibliograph
-  - ./generate.py -I build
-  - sudo ln -s bibliograph /var/www
+  - ./generate.py build
+  - cd ..
 
 before_script:
-  # mysql
   - mysql -e 'CREATE DATABASE bibliograph;'
   
 script:
-  # open webapp to trigger setup 
-  - CHROME_PARAMS="--headless --disable-gpu --enable-logging --v=1"
-  - google-chrome-stable $CHROME_PARAMS http://localhost/bibliograph/build &
-  - sleep 30
-  # load webapp again to initialize gui
-  - google-chrome-stable $CHROME_PARAMS http://localhost/bibliograph/build#itemView.tableView!datasource.database1!modelType.reference &
-  - sleep 30
-  - cat /tmp/bibliograph.log 
-  - sudo cat /var/log/apache2/other_vhosts_access.log | grep server.php
-  - mysql -e 'USE bibliograph; SHOW TABLES;'
+  - cd .travis
+  - nvm install 8
+  - npm install
+  - npm test
 
 
 

@@ -41,5 +41,5 @@ if( !defined('BIBUTILS_PATH') )
  * log filters
  */
 define( "BIBLIOGRAPH_LOG_Z3950", "Z3950" );
-qcl_log_Logger::getInstance()->registerFilter( "BIBLIOGRAPH_LOG_Z3950", "", true );
-qcl_log_Logger::getInstance()->registerFilter( "BIBLIOGRAPH_LOG_Z3950_VERBOSE", "", false );
+qcl_log_Logger::getInstance()->registerFilter( "BIBLIOGRAPH_LOG_Z3950", "Library Inmport Plugin", false );
+qcl_log_Logger::getInstance()->registerFilter( "BIBLIOGRAPH_LOG_Z3950_VERBOSE", "Library Inmport Plugin (Verbose)", false );

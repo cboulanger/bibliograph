@@ -80,6 +80,18 @@ qx.Class.define("qcl.application.PluginManager",
 
   members :
   { 
+
+    /**
+     * Returns the relative path to the plugin service folder
+     * @return {string}
+     */
+    getPluginServiceUrl : function(name){
+      return "../plugins/"+name+"/services";
+    },
+
+    /**
+     * Loads the plugin javascript code
+     */
     loadPlugins : function( callback, context )
     {
       var app = this.getApplication();
@@ -165,8 +177,12 @@ qx.Class.define("qcl.application.PluginManager",
                 self.warn("Plugin '" + data.name + "' has no namespace property. Not installed.");
                 loadScript();
               }
-
-              self._loadPart(data, loadScript);
+              try {
+                self._loadPart(data, loadScript);
+              } catch(e) {
+                self.warn(e.message);
+                loadScript();
+              }
               return;
             }
             loadScript();
