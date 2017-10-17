@@ -12,6 +12,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "mocha": "^4.0.1"
+    "assert-diff": "^1.2.4",
+    "mocha": "^4.0.1",
+    "r2": "^2.0.0"
   }
 }
