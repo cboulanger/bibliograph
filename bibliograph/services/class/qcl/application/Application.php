@@ -564,6 +564,12 @@ abstract class qcl_application_Application
     foreach( $pluginList as $pluginName )
     {
       $pi = $pluginManager->getSetupInstance( $pluginName );
+      
+      // call init method (defined in qcl_application_plugin_AbstractPlugin or
+      // overridden in implementing classes).
+      $pi->init(); 
+      
+      // additional optional hook method
       if ( method_exists( $pi, "hook" ) )
       {
         $pi->hook($this);

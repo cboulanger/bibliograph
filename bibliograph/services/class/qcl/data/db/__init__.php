@@ -31,6 +31,6 @@ define("QCL_LOG_DB","db");
 $logger->registerFilter( QCL_LOG_DB, "Database connection and queries",false);
 
 define("QCL_LOG_TABLES","tables");
-$logger->registerFilter( QCL_LOG_TABLES, "Modification of table schemas in an sql database",false);
+$logger->registerFilter( QCL_LOG_TABLES, "Database table schemas",false);
 
 

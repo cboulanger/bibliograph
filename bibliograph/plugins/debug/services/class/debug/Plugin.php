@@ -39,13 +39,13 @@ class debug_plugin
    * The descriptive name of the plugin
    * @var string
    */
-  protected $name = "Debug window plugin";
+  protected $name = "Debug tools";
 
   /**
    * The detailed description of the plugin
    * @var string
    */
-  protected $description  = "Displays the bibliograph logfile";
+  protected $description  = "Provides debugging tools, such as backend logfile, selection of log filters, and JSONRPC traffic recording";
 
   /**
    * An associative array containing data on the plugin that is saved when
@@ -67,7 +67,7 @@ class debug_plugin
    * Permissions used by this plugin
    * @var array
    */
-  protected $permissions = array( "debug.showLogFile","debug.selectFilters" );
+  protected $permissions = array( "debug.showLogFile","debug.selectFilters","debug.allowDebug" );
 
   /**
    * Installs the plugin. 
@@ -77,7 +77,7 @@ class debug_plugin
   public function install()
   {
     $app = $this->getApplication();
-    //$app->addPreference( "template.xxx", "yyy" );
+    $app->addPreference( "debug.recordJsonRpcTraffic", false );
 
     $app->addPermission( $this->permissions );
     foreach( array("admin" ) as $role )

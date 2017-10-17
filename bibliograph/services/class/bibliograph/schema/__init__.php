@@ -27,4 +27,4 @@ class bibliograph_schema_Exception extends LogicException {}
  * log filters
  */
 define( "BIBLIOGRAPH_LOG_SCHEMA", "schema" );
-qcl_log_Logger::getInstance()->registerFilter( BIBLIOGRAPH_LOG_SCHEMA, "", false );
+qcl_log_Logger::getInstance()->registerFilter( BIBLIOGRAPH_LOG_SCHEMA, "Bibliograph schema", false ); // @todo remove

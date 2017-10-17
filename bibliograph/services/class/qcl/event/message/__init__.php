@@ -44,4 +44,4 @@ if ( ! defined("QCL_EVENT_MESSAGE_POLLING_DELAYPERSESSION") )
  * log filters
  */
 define( "QCL_LOG_MESSAGE", "message" );
-qcl_log_Logger::getInstance()->registerFilter( QCL_LOG_MESSAGE, "Message system-related log messages", false);
+qcl_log_Logger::getInstance()->registerFilter( QCL_LOG_MESSAGE, "QCL Message system", false);

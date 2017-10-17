@@ -46,4 +46,12 @@ class class_debug_Service
     $logger->saveFilters();
     return "OK";
   }
+  
+  /**
+   * Record JSONRPC traffic
+   */
+  public function method_recordJsonRpcTraffic( $value ){
+    $this->getApplication()->getConfigModel()->setKeyDefault("debug.recordJsonRpcTraffic", $value);
+    return "OK";
+  }
 }

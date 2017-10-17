@@ -79,11 +79,11 @@ class qcl_log_Logger
    */
   private function _registerInitialFilters()
   {
-    $this->registerFilter("debug",    "General debug messages",true);
-    $this->registerFilter("info",     "Important messages", true);
+    $this->registerFilter("debug",    "Debug messages",true);
+    $this->registerFilter("info",     "Informative messages", true);
     $this->registerFilter("warn",     "Warnings", true);
     $this->registerFilter("error",    "Non-fatal errors", true);
-    $this->registerFilter("filters",   "Log filters", false);
+    $this->registerFilter("filters",   "Log filter system", false);
   }
   
   /**
@@ -233,6 +233,9 @@ class qcl_log_Logger
         "enabled" => $value['enabled']
       );
     }
+    usort($data,function($a,$b){
+      return strcmp($a['description'],$b['description']);
+    });
     return $data;
   }
 

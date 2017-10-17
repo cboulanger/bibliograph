@@ -162,6 +162,8 @@ class bibliograph_service_Application
     $this->getLogger()->clearLogFile();
     $this->getLogger()->clearFilterCache();
     
+    // delete jsonrpc log
+    @unlink(QCL_JSONRPC_LOG_PATH);
     
   }
 }

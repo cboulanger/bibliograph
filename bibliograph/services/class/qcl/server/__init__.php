@@ -35,11 +35,29 @@ if ( ! defined("QCL_UPLOAD_MAXFILESIZE") )
   define("QCL_UPLOAD_MAXFILESIZE", 30000 );
 }
 
+/**
+ * Path to the json file recording JSONRPC traffic
+ */
+if ( ! defined("QCL_JSONRPC_LOG_PATH") )
+{
+  define("QCL_JSONRPC_LOG_PATH", QCL_VAR_DIR . "/jsonrpc-traffic.json" );
+}
+
+/**
+ * Maximal size of the jsonrpc log file, default 1MB
+ */
+if ( ! defined("QCL_JSONRPC_LOG_SIZE") )
+{
+  define("QCL_JSONRPC_LOG_SIZE", 1000*1024 );
+}
+
+
 /*
  * log filter name for request-related messages
+ * @todo rename
  */
 define("QCL_LOG_REQUEST", "request");
-qcl_log_Logger::getInstance()->registerFilter( QCL_LOG_REQUEST, "Request-related log messages",false);
+qcl_log_Logger::getInstance()->registerFilter( QCL_LOG_REQUEST, "JSONRPC requests and responses",false);
 
 /**
  * Exception thrown by jsonrpc services
