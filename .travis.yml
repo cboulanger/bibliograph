@@ -5,7 +5,6 @@ language: php
 php:
   - '5.4'
   - '5.6'
-  - '7.1'
 
 services:
   - mysql
@@ -13,12 +12,13 @@ services:
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -y bibutils zip
-  # apache with php-fpm, since travis does not support mod_php
+  # install apache / php
   - sudo apt-get install -y apache2 libapache2-mod-fastcgi
   - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf 2>/dev/null || true # as per https://github.com/travis-ci/travis-ci/issues/3385
   - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf 2>/dev/null || true
   - sudo a2enmod rewrite actions fastcgi alias
   - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "always_populate_raw_post_data = -1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - sudo sed -i -e "s,www-data,travis,g" /etc/apache2/envvars
   - sudo chown -R travis:travis /var/lib/apache2/fastcgi
   - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
