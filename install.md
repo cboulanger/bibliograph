@@ -17,7 +17,8 @@ Prerequisites
 - PHP >= 5.3 < 7.0 with the following extensions: intl, gettext, yaz/xsl (optional), ldap
   (optional), zip (optional). For optimal performance, it is advised to enable OPcache
   (http://php.net/manual/en/intro.opcache.php)
-- MySql >= 5.3 
+- MySql >= 5.3 . There have been some problems with the latest MySql Versions. Stay with
+  v5.3 if you can. 
 
 Preparations
 ------------

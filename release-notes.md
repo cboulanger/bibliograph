@@ -1,6 +1,12 @@
 Release notes
 =============
 
+Version 2.3 (October 2017)
+-----------------------
+- added Debugging Plugin with a server log window, log filter selection and recording of 
+  JSONRPC traffic for later replay.
+- Added Travis CI build script and tests
+
 Version 2.2 (July 2017)
 -----------------------
 - Integrated fixes from Gerrit Oldenburg (Humboldt University Berlin) for 
