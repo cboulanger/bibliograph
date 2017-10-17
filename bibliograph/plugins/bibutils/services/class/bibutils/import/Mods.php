@@ -87,7 +87,7 @@ class bibutils_import_Mods
    * @throws InvalidArgumentException
    *    if input data cannot be parsed
    */
-  function import( $input )
+  function import( $input, bibliograph_model_ReferenceModel $targetModel=null )
   {
     qcl_assert_valid_string( $input );
     $bibtex = $this->importer->call("-nl -fc -o unicode", $input );
