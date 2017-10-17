@@ -33,15 +33,16 @@ describe('Bibliograph', () => {
       try {
         result = JSON.parse(response);
       } catch (error) {
-        console.error("Invalid response:" + response );
+        throw new Error("Invalid response:" + response );
         return;
       }
       console.log("<<<< Response (received)");
       dump(result);
       console.log("==== Response (expected)");
       dump(data.response);
-      if (result.messages && result.messages.length && result.messages[0].name == "setSessionId" ){
-        sessionId = result.messages[0].data;
+      let messages = result.result.messages;
+      if ( messages instanceof Array && messages.length && messages[0].name == "setSessionId" ){
+        sessionId = messages[0].data;
       }
     }
     //assert.deepEqual(content, referenceContent, 'Output does not match reference content');
