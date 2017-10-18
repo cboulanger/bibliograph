@@ -18,7 +18,11 @@ define('LOG_PATH',dirname(QCL_LOG_FILE));
 define('DISPLAY_REVERSE', true); // true = displays log entries starting with the most recent
 define('DIRECTORY_SEPARATOR', '/');
 
-define('LOG_FILE_EXTENSIONS', array("log") );
+/**
+ * File extensions to include in the directory listing, separated by a space character.
+ * @type string
+ */ 
+define('LOG_FILE_EXTENSIONS', "log" );
 
 
 
@@ -422,15 +426,13 @@ if ($output){
 <?php
 
 function get_log_files($dir, &$results = array()) {
-
 	$files = scandir($dir);
-	if($files){
+	if( count($files) ){
 		foreach($files as $key => $value){
             $path = realpath($dir.DIRECTORY_SEPARATOR.$value);
 			if(!is_dir($path)) {
                 $ext = pathinfo($value, PATHINFO_EXTENSION);
-                if( $ext == "log" ){
-                //if( in_array( $ext, LOG_FILE_EXTENSIONS ) ) {
+                if( in_array( $ext, explode(" ",LOG_FILE_EXTENSIONS ) ) ) {
 				    $files_list[] = $path;
                 }
 			}
