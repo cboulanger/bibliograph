@@ -22,7 +22,7 @@ before_install:
   - sudo sed -i -e "s,www-data,travis,g" /etc/apache2/envvars
   - sudo chown -R travis:travis /var/lib/apache2/fastcgi
   - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
-  - sudo cp -f .travis/travis-ci-apache /etc/apache2/sites-available/000-default.conf
+  - sudo cp -f build-env/travis/travis-ci-apache /etc/apache2/sites-available/000-default.conf
   - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/000-default.conf
   # configure PHP with yaz
   - if [[ ${TRAVIS_PHP_VERSION:0:1} == "5" ]]; then sudo apt-get install -y php5-xsl php5-intl; fi
@@ -34,7 +34,7 @@ before_install:
 install:
   # build bibliograph
   - git clone https://github.com/qooxdoo/qooxdoo.git
-  - cp .travis/config/* bibliograph/services/config/
+  - cp build-env/travis/config/* bibliograph/services/config/
   - echo "all" > plugins.txt
   - cd bibliograph
   - ./generate.py -I build
@@ -44,7 +44,7 @@ before_script:
   - mysql -e 'CREATE DATABASE bibliograph;'
   
 script:
-  - cd .travis
+  - cd build-env/travis
   - nvm install 8
   - npm install
   - npm test

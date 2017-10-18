@@ -50,14 +50,14 @@ define("APPLICATION_CLASS_PATH", SERVER_ROOT . "/class/");
  */
 if ( ! defined("QCL_VAR_DIR") )
 {
-  define( "QCL_VAR_DIR" ,  sys_get_temp_dir() );
+  define( "QCL_VAR_DIR" ,  "/var/lib/bibliograph" );
 }
 
 /*
  * where should the application log to. By default
  * the log file is "bibliograph.log"
  */
-define( "QCL_LOG_FILE", "/tmp/bibliograph.log" );
+define( "QCL_LOG_FILE", QCL_VAR_DIR . "/bibliograph.log" );
 
 //-------------------------------------------------------------
 // Application-related configuration
@@ -105,10 +105,7 @@ if ( ! defined( "QCL_APPLICATION_MODE") )
  * log defaults. by default, no log messages
  */
 define("APPLICATION_LOG_DEFAULT", serialize( array(
-  "QCL_LOG_SETUP" => true,
-  "QCL_LOG_REQUEST" => true,
-  "QCL_LOG_APPLICATION" => true,
-  "QCL_LOG_AUTHENTICATION" => true
+  "QCL_LOG_SETUP" => true
 )));
 
 //-------------------------------------------------------------

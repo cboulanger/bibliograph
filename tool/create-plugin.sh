@@ -1,4 +1,9 @@
 #!/bin/bash
+# Create a bibliograph plugin
+# needs to be called in the tool dir
+
+PLUGIN_DIR=../bibliograph/plugins
+
 cd ..
 echo "This script creates a skeleton for a Bibliograph plugin."
 echo
@@ -6,7 +11,7 @@ namespace=""
 while [ -z $namespace ]; do
     echo -n "Please enter the namespace of the new plugin: "
     read namespace
-    if [ -d plugins/$namespace ]; then
+    if [ -d $PLUGIN_DIR/$namespace ]; then
         echo
         echo "This namespace already exists. Please use another one."
         namespace=""
@@ -20,23 +25,23 @@ done
 echo ">>> Creating plugin '$namespace'..."
 
 # copy skeleton
-mkdir plugins/$namespace
-cp -a plugins/template/* plugins/$namespace/
+mkdir $PLUGIN_DIR/$namespace
+cp -a $PLUGIN_DIR/template/* $PLUGIN_DIR/$namespace/
 
 # rename directories and files
-mv plugins/$namespace/services/class/template \
-    plugins/$namespace/services/class/$namespace
-mv plugins/$namespace/services/locale/C.UTF-8/LC_MESSAGES/template_en.po \
-    plugins/$namespace/services/locale/C.UTF-8/LC_MESSAGES/${namespace}_en.po
-mv plugins/$namespace/source/class/template \
-    plugins/$namespace/source/class/$namespace 
-mv plugins/$namespace/source/resource/template \
-    plugins/$namespace/source/resource/$namespace
+mv $PLUGIN_DIR/$namespace/services/class/template \
+    $PLUGIN_DIR/$namespace/services/class/$namespace
+mv $PLUGIN_DIR/$namespace/services/locale/C.UTF-8/LC_MESSAGES/template_en.po \
+    $PLUGIN_DIR/$namespace/services/locale/C.UTF-8/LC_MESSAGES/${namespace}_en.po
+mv $PLUGIN_DIR/$namespace/source/class/template \
+    $PLUGIN_DIR/$namespace/source/class/$namespace 
+mv $PLUGIN_DIR/$namespace/source/resource/template \
+    $PLUGIN_DIR/$namespace/source/resource/$namespace
 
     
 # replace "template" with namespace in files
 
-find ./plugins/$namespace -type f -regex ".*/.*\.\(json\|js\|php\)" \
+find $PLUGIN_DIR/$namespace -type f -regex ".*/.*\.\(json\|js\|php\)" \
     -exec sed -i'' -e "s/template/$namespace/g" '{}' +
     
 echo ">>> Skeleton for '$namespace'-Plugin has been created."

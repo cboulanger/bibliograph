@@ -1,5 +1,8 @@
 #!/bin/bash
-cd ..
+# Creates a deployable ZIP file
+
+BIBLIOGRAPH_DIR=../bibliograph
+
 # the variables we'll need
 version=$(cat version.txt)
 today=$(date +"%Y-%m-%d")
@@ -17,10 +20,11 @@ fi
 
 # update version information in files
 $sedcmd -i -r "s|(/\*begin-version\*/)(.+)(/\*end-version\*/)|\1\"$pretty\"\3|g" \
-  ./source/class/bibliograph/Main.js \
-  ./services/class/bibliograph/Application.php
+  $BIBLIOGRAPH_DIR/source/class/bibliograph/Main.js \
+  $BIBLIOGRAPH_DIR/services/class/bibliograph/Application.php
   
 # build the application for inclusion into the zip file
+cd $BIBLIOGRAPH_DIR
 ./generate.py build
 
 echo 
@@ -32,47 +36,46 @@ echo ">>> Creating local copy..."
 
 # remove a preexisting zip file and create a temporary folder
 rm -f ../$filename.zip
-mkdir -p bibliograph
+mkdir -p dist
 
 # assemble the contents
 cp -a ./build ./services ../readme.md ../release-notes.md \
-  bibliograph/
-mkdir bibliograph/plugins
+  dist/
+mkdir dist/plugins
 for name in $(ls -d -- ./plugins/*/); do
-  mkdir -p bibliograph/$name/services
-  cp -a $name/services/* bibliograph/$name/services
+  mkdir -p dist/$name/services
+  cp -a $name/services/* dist/$name/services
 done
 
 # add a version file
-echo "$pretty" > ./bibliograph/version.txt
+echo "$pretty" > ./dist/version.txt
 
 echo ">>> Preparing for deployment..."
   
 # remove what shouldn't go in there  
 rm -rf \
-  ./bibliograph/services/config/bibliograph.ini.php \
-  ./bibliograph/services/config/server.conf.php \
-  ./bibliograph/services/class/qcl/test/ \
-  ./bibliograph/services/api \
-  ./bibliograph/services/class/bibliograph/plugin/csl/citeproc-php/tests/ \
-  ./bibliograph/plugins/template
+  ./dist/services/config/bibliograph.ini.php \
+  ./dist/services/config/server.conf.php \
+  ./dist/services/class/qcl/test/ \
+  ./dist/services/api \
+  ./dist/services/class/bibliograph/plugin/csl/citeproc-php/tests/ \
+  ./dist/plugins/template
 
 # remove plugins that are not ready to ship or are deprecated
-# rm -rf  ./bibliograph/plugins/isbnscanner
-rm -rf  ./bibliograph/plugins/bookends
-rm -rf  ./bibliograph/plugins/mdbackup
-rm -rf ./bibliograph/plugins/nnforum/services/www/Forum/*
+# rm -rf  ./dist/plugins/isbnscanner
+rm -rf  ./dist/plugins/bookends
+rm -rf  ./dist/plugins/mdbackup
+rm -rf ./dist/plugins/nnforum/services/www/Forum/*
 
 # create the zip file
+mv dist bibliograph
 zip -qr ../$filename.zip ./bibliograph/
-
-# remove the temporary folder
 rm -rf ./bibliograph
 
 # remove version information from source code
 $sedcmd -i -r "s|(/\*begin-version\*/)(.+)(/\*end-version\*/)|\1\"Development version\"\3|g" \
-  ./source/class/bibliograph/Main.js \
-  ./services/class/bibliograph/Application.php
+  $BIBLIOGRAPH_DIR/source/class/bibliograph/Main.js \
+  $BIBLIOGRAPH_DIR/services/class/bibliograph/Application.php
 
 FILESIZE=$(ls -lah "../$filename.zip" | awk -F " " {'print $5'})
 echo ">>> Created $filename.zip ($FILESIZE)."
