@@ -1,8 +1,8 @@
 const fs = require("fs"),
   path = require("path"),
   process = require("process"),
-  //assert  = require('assert-diff'),
   r2 = require("r2");
+  //assert  = require('assert-diff');
 
 // url is dependent on build environment
 let url;
@@ -17,7 +17,7 @@ function dump(data) {
   console.log(JSON.stringify(data, null, 2));
 }
 
-function replay(path) {
+async function replay(path) {
   let replay_data = JSON.parse(
     fs.readFileSync(path, "utf-8"),
     "utf-8"
