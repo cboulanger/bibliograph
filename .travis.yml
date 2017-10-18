@@ -37,7 +37,7 @@ install:
   - cp .travis/config/* bibliograph/services/config/
   - echo "all" > plugins.txt
   - cd bibliograph
-  - ./generate.py build
+  - ./generate.py -I build
   - cd ..
 
 before_script:
