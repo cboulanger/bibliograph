@@ -42,7 +42,7 @@ port = 3306
 ;; The name and password of the database user. Both "normal" user and admin must be the same for the moment.
 ;; This user needs ALL rights in the databases named below. If you want to make backup snapshots, it also
 ;; needs the global RELOAD privilege
-adminname  = root
+adminname  = $C9_USER
 adminpassw = 
 username  = ${adminname}
 userpassw = ${adminpassw}
@@ -50,21 +50,21 @@ userpassw = ${adminpassw}
 ;; database.admindb
 ;; The name of the database holding all the tables with global and
 ;; administrative information. Must exist before the application is started
-admindb = bibliograph
+admindb = c9
 
 ;; database.userdb
 ;; The name of the databases that contains the user data.
 ;; Can be the same as database.admindb, but if you have access
 ;; to more than one database, is recommended to keep a separate
 ;; database for this. Must exist before the application is started.
-userdb = bibliograph
+userdb = c9
 
 ;; database.tmpdb
 ;; The name of the database holding all the tables with temporary data.
 ;; Can be the same as database.admindb, but if you have access
 ;; to more than one database, is recommended to keep a separate
 ;; database for this. Must exist before the application is started.
-tmp_db = bibliograph
+tmp_db = c9
 
 ;; database.tableprefix
 ;; A global prefix for all tables that are created, which makes

@@ -2,21 +2,19 @@
 .DS_Store
 .nvm
 
-fragments.txt
+/qooxdoo/
+/bibliograph/services/config/*.php
+
+# compiler
+/bibliograph/*-output/
 db.json
 resource-db.json
-*.zip
 node_modules/
 
-/qooxdoo/
+# generator
 /bibliograph/build/
-/bibliograph/*-output/
 /bibliograph/**/api/
 /bibliograph/**/test/
 /bibliograph/source/script/*
-/bibliograph/services/config/bibliograph.ini.php
-/bibliograph/services/config/server.conf.php
 
-/bibliograph/tool/deploy*
-/bibliograph/tool/upload*
-
+*.zip

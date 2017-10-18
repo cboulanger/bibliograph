@@ -35,7 +35,6 @@ install:
   # build bibliograph
   - git clone https://github.com/qooxdoo/qooxdoo.git
   - cp build-env/travis/config/* bibliograph/services/config/
-  - echo "all" > plugins.txt
   - cd bibliograph
   - ./generate.py -I build
   - cd ..
@@ -44,7 +43,7 @@ before_script:
   - mysql -e 'CREATE DATABASE bibliograph;'
   
 script:
-  - cd build-env/travis
+  - cd tests/test-backend
   - nvm install 8
   - npm install
   - npm test

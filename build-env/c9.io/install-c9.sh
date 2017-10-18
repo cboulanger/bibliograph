@@ -1,37 +1,38 @@
 # Bibliograph - Online Bibliographic Data Manager
 # Build script for c9.io (Ubuntu)
+# call with bash build-env/c9.io/install-c9.sh
 
 # Packages
-apt-get update && apt-get install -y \
-  apache2 libapache2-mod-php5 php5-cli
-  mysql-server php5-mysql \
+sudo apt-get update && apt-get install -y \
   bibutils \
-  php5-dev php-pear \
-  wget \
-  php5-xsl php5-intl\
-  yaz libyaz4-dev \
-  zip \
-  git
+  php5-dev \
+  yaz libyaz4-dev 
 
 # Install php-yaz
-pecl install yaz
-pear install Structures_LinkedList-0.2.2
-pear install File_MARC
-echo "extension=yaz.so" >> /etc/php5/apache2/php.ini
-echo "extension=yaz.so" >> /etc/php5/cli/php.ini
+sudo yes $'\n' | pecl install yaz
+sudo pear install Structures_LinkedList-0.2.2
+sudo pear install File_MARC
+sudo echo "extension=yaz.so" >> /etc/php5/apache2/php.ini
+sudo echo "extension=yaz.so" >> /etc/php5/cli/php.ini
   
-# Constants
-THIS_DIR=dirname "$(readlink -f "$0")"
-BIB_CONF_DIR=bibliograph/services/config/
+# Paths
+ROOT_DIR=/home/ubuntu/workspace
+THIS_DIR=$ROOT_DIR/build-env/c9.io
+BIB_CONF_DIR=$ROOT_DIR/bibliograph/services/config/
 
 # checkout the latest qooxdoo master and build qooxdoo app
-rm -rf $BIB_HTML_DIR/*
-cd ../../bibliograph
+cd $ROOT_DIR
 git clone https://github.com/qooxdoo/qooxdoo.git
 cd bibliograph
-./generate.py -I build
-cd ..
+./generate.py -I source-hybrid
 
 # add configuration files
 cp $THIS_DIR/bibliograph.ini.php $BIB_CONF_DIR/bibliograph.ini.php
 cp $THIS_DIR/server.conf.php $BIB_CONF_DIR/server.conf.php
+sed -e "s/\$C9_USER/$C9_USER/g" --in-place $BIB_CONF_DIR/bibliograph.ini.php
+
+# start mysql server
+mysql-ctl start
+echo
+echo
+echo "Installation complete. You can now start the server."
