@@ -1,5 +1,5 @@
 /* global describe, it */
-const replay  = require('lib/replay');
+const replay  = require('./lib/replay');
 
 describe('Bibliograph', () => {
   it('should boot and setup the application', async () => {
