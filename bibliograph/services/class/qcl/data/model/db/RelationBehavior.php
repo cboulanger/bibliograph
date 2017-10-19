@@ -983,6 +983,8 @@ class qcl_data_model_db_RelationBehavior
         'column'    => $targetForeignKey
       )
     ) );
+    
+    $joinModel->getPropertyBehavior()->setupProperties();
 
     /*
      * index
@@ -1025,13 +1027,14 @@ class qcl_data_model_db_RelationBehavior
             'column'    => $depForeignKey //FIXME
           )
         ));
+        $joinModel->getPropertyBehavior()->setupProperties();
 
         $indexColumns[] = $depForeignKey;
       }
     }
 
     /*
-     * initialize join model
+     * initialize join model, this is somewhat redundant
      */
     $joinModel->init();
 
@@ -1172,7 +1175,7 @@ class qcl_data_model_db_RelationBehavior
          $joinModel, $joinModel->objectId(), $dsModelName, $joinTableName
       ));
 
-      //$joinModel->init();
+      $joinModel->init();
       $joinModels[$dsModelName][$joinTableName] = $joinModel;
     }
     else
