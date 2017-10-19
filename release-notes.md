@@ -3,14 +3,15 @@ Release notes
 
 Version 2.3 (October 2017)
 -----------------------
-- added Debugging Plugin with a server log window, log filter selection and recording of 
+- added Debugging plugin with a server log window, log filter selection and recording of 
   JSONRPC traffic for later replay.
 - Added Travis CI build script and tests
+- More compatibility fixes for current PHP & MySql versions
 
 Version 2.2 (July 2017)
 -----------------------
 - Integrated fixes from Gerrit Oldenburg (Humboldt University Berlin) for 
-  compatibility with PHP 7 and newer MySQL versions
+  upcoming compatibility with PHP 7 and newer MySQL versions (not yet functional)
 - Upgrade to qoodoo 5.0.2
 - Partial rewrite of the z3950 plugin, now uses a ServerProgress widget to indicate
   the progress of the search request
