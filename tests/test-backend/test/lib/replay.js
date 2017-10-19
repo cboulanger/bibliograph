@@ -41,7 +41,7 @@ async function replay(path) {
     if (result.error) {
       console.log(">>>> Request");
       dump(request);      
-      throw new Error("Error in response: " + error);
+      throw new Error("Error in response: " + result.error);
     }
     
     // compare received and expected json response
@@ -60,15 +60,15 @@ async function replay(path) {
       }
       assert.deepEqual(Object.keys(received.result.data), Object.keys(expected.result.data));
     } catch(e) {
-      console.log(">>>> Request");
-      dump(request);
-      console.log("<<<< Response (received)");
-      dump(received);
-      console.log("==== Response (expected)");
-      dump(expected);
-      console.log("#### Server log");
-      console.log( fs.readFileSync("/tmp/bibliograph.log", "utf-8") );
-      //throw new Error("JSONRPC response does not match expectations.");
+      //console.log(">>>> Request");
+      //dump(request);
+      //console.log("<<<< Response (received)");
+      //dump(received);
+      //console.log("==== Response (expected)");
+      //dump(expected);
+      //console.log("#### Server log");
+      //console.log( fs.readFileSync("/tmp/bibliograph.log", "utf-8") );
+      console.warn("JSONRPC response does not match expectations.");
     }
 
     // adapt sessionId
