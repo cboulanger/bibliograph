@@ -41,6 +41,8 @@ async function replay(path) {
     }
     if (result.error) {
       console.log(`travis_fold:start:Request_Error\r`);
+      console.warn(`    - Request id ${request.id}): Error: ${result.error}.`);
+      console.dir(result.error);
       console.log(">>>> Request");
       dump(request);
       console.log("==== Log file");      
