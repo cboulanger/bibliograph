@@ -39,8 +39,12 @@ async function replay(path) {
       return;
     }
     if (result.error) {
+      console.log(`travis_fold:start:Request_Error\r`);
       console.log(">>>> Request");
-      dump(request);      
+      dump(request);
+      console.log("==== Log file");      
+      console.log( fs.readFileSync("/tmp/bibliograph.log", "utf-8") );
+      console.log(`travis_fold:end:Request_Error\r`);
       throw new Error("Error in response: " + result.error);
     }
     
@@ -60,15 +64,15 @@ async function replay(path) {
       }
       assert.deepEqual(Object.keys(received.result.data), Object.keys(expected.result.data));
     } catch(e) {
-      //console.log(">>>> Request");
-      //dump(request);
-      //console.log("<<<< Response (received)");
-      //dump(received);
-      //console.log("==== Response (expected)");
-      //dump(expected);
-      //console.log("#### Server log");
-      //console.log( fs.readFileSync("/tmp/bibliograph.log", "utf-8") );
-      console.warn("JSONRPC response does not match expectations.");
+      console.warn(`JSONRPC response does not match expectations (Request id ${request.id}).`);
+      console.log(`travis_fold:start:Request_${request.id}\r`);  
+      console.log(">>>> Request");
+      dump(request);
+      console.log("==== Response (expected)");
+      dump(expected);
+      console.log("<<<< Response (received)");
+      dump(received);
+      console.log(`travis_fold:end:Request_${request.id}\r`);      
     }
 
     // adapt sessionId
@@ -81,6 +85,7 @@ async function replay(path) {
       sessionId = messages[0].data;
     }
   }
+  return; 
 }
 
 module.exports = replay;
