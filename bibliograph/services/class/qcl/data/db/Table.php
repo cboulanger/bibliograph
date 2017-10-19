@@ -118,8 +118,10 @@ class qcl_data_db_Table
 
   /**
    * Creates the table with an numeric, unique, self-incrementing 'id' column,
-   * which is also the primary key, with utf-8 as default character set. Throws
-   * an error if table already exists.
+   * which is also the primary key, with utf-8 as default character set. 
+   * Warns if table already exists.
+   * @return boolean True if table was created, false if not. 
+   * @todo this should really throw. 
    */
   function create()
   {
@@ -129,10 +131,12 @@ class qcl_data_db_Table
     try
     {
       $this->getAdapter()->createTable( $this->getName() );
+      return true; 
     }
     catch (PDOException $e)
     {
       $this->warn(sprintf("Table `%s` already exists.",  $this->getName() ));
+      return false;
     }
   }
 

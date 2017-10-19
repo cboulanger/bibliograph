@@ -35,7 +35,9 @@ class qcl_data_model_db_TreeNodeModel
 
     'parentId'  => array(
       'check'     => "integer",
-      'sqltype'   => "int(11)"
+      'sqltype'   => "int(11) NOT NULL",
+      'nullable'  => false,
+      'init'      => 0
     ),
     'position'  => array(
       'check'     => "integer",

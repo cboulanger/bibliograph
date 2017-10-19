@@ -735,6 +735,10 @@ abstract class qcl_application_Application
     {
       $data['dsn'] = $this->getUserDsn();
     }
+    if ( ! isset( $data['parentId'] ) )
+    {
+      $data['parentId'] =0;
+    }    
     return $mgr->createDatasource( $namedId, $this->defaultSchema(), $data );
   }
 

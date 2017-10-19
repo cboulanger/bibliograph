@@ -146,7 +146,11 @@ class qcl_data_model_db_PropertyBehavior
       /*
        * set up the primary index
        */
-      $this->setupPrimaryIndex();
+      try {
+        $this->setupPrimaryIndex();
+      } catch (Exception $e ) {
+        qcl_log_Logger::getInstance()->warn("Problem with 'setupPrimaryIndex' method:" . $e);
+      }
 
       /*
        * initialize the property values

@@ -325,6 +325,8 @@ class bibliograph_service_Setup
         ->linkModel($ac->getRoleModel()->load("anonymous"))
         ->linkModel($ac->getRoleModel()->load("user"))
         ->linkModel($ac->getRoleModel()->load("admin"));
+      $dsModel1->getModelOfType("folder")->load(1)->setPublic(true)->save();
+      
       $dsModel2
         ->linkModel($ac->getRoleModel()->load("user"))
         ->linkModel($ac->getRoleModel()->load("admin"));

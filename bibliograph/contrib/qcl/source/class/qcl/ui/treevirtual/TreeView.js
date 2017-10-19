@@ -343,7 +343,8 @@ qx.Class.define("qcl.ui.treevirtual.TreeView",
     _applyDatasource : function( value, old )
     {
       if( value )
-      {
+      { 
+        this.info("Tree is loading datasource " + value);
         this._setupTree( value, true );  
       }
     },
@@ -428,13 +429,13 @@ qx.Class.define("qcl.ui.treevirtual.TreeView",
      });
      
      /*
-      * drag & drop
+      * drag & drop, not supported yet
       */
-     this.bind("enableDragDrop", tree, "enableDragDrop");
-     this.bind("allowReorderOnly", tree, "allowReorderOnly");
-     tree.addListener("dragstart", this._on_dragstart, this );
-     tree.addListener("dragend", this._on_dragend, this );
-     tree.addListener("drop", this._on_drop, this );
+    // this.bind("enableDragDrop", tree, "enableDragDrop");
+    // this.bind("allowReorderOnly", tree, "allowReorderOnly");
+    // tree.addListener("dragstart", this._on_dragstart, this );
+    // tree.addListener("dragend", this._on_dragend, this );
+    // tree.addListener("drop", this._on_drop, this );
      
      /*
       * configure columns
@@ -496,6 +497,7 @@ qx.Class.define("qcl.ui.treevirtual.TreeView",
         {
           if ( ! this._getDatasourceObjects( datasource ).treeWidget )
           {
+            this.info("Creating tree...");
             this._createTree( datasource );
             loadData = true;
           }
@@ -521,6 +523,7 @@ qx.Class.define("qcl.ui.treevirtual.TreeView",
      */
      _loadTreeData : function( datasource, nodeId )
      {
+       this.info("Loading tree data...");
        datasource = this.getDatasource(); // TODO fix parameter
 
        var app = qx.core.Init.getApplication();

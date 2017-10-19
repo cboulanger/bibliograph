@@ -1044,18 +1044,22 @@ class qcl_data_model_db_RelationBehavior
     $jointable = $joinModel->getQueryBehavior() ->getTable();
     sort( $indexColumns );
     $indexName = "index_" . $relation;
-    if ( ! $jointable->indexExists( $indexName ) )
-    {
-      // hack, this will go away
-      $oldIndexName = "unique_" . $foreignKey . "_" . $targetForeignKey;
-      if ( $jointable->indexExists( $oldIndexName ) )
+    try {
+      if ( ! $jointable->indexExists( $indexName ) )
       {
-        $jointable->dropIndex( $oldIndexName );
+        // hack, this will go away
+        $oldIndexName = "unique_" . $foreignKey . "_" . $targetForeignKey;
+        if ( $jointable->indexExists( $oldIndexName ) )
+        {
+          $jointable->dropIndex( $oldIndexName );
+        }
+  
+        $jointable->addIndex(
+          "unique", $indexName, $indexColumns
+        );
       }
-
-      $jointable->addIndex(
-        "unique", $indexName, $indexColumns
-      );
+    } catch( Exception $e ) {
+      qcl_log_Logger::getInstance()->warn("Known problem in " . __METHOD__ );
     }
   }
 
