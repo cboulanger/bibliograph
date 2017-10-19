@@ -9,19 +9,19 @@ that you install all dependencies manually (see below).
 ## Build environments
 You can also build the application yourself. Bibliograph comes with support for a 
 couple of different build environments (see the `build-env` folder), so that you don't 
-have to deal with the dependencies yourself.
+have to deal with the dependencies.
 
 ### Docker
 The easiest way to install Bibliograph is by using the [preconfigured docker image](https://registry.hub.docker.com/u/cboulanger/bibliograph/). Note, however, that 
 this image is currently meant only for testing purposes. If you need a production 
 setup, you must create your own installation.
 
-## Cloud9IDE
+### Cloud9IDE
 The application can be easily cloned from GitHub to the [web-based Cloud9 IDE](https://c9.io), in fact this is how much of the development has been done recently. Create a new VM based on your own fork of the [GitHub repository](https://github.com/cboulanger/bibliograph). Once the VM 
 starts, in the terminal, execute `bash build-env/c9.io/install-c9.sh`. The start the
 Apache/PHP run configuration and you should be all set!
 
-## Debian/Ubuntu
+### Debian/Ubuntu
 After cloning the repository, run `bash build-env/debian-ubuntu/install-deb-ubuntu.sh`.
 You'll still have setup apache configuration, though. 
 
@@ -49,7 +49,7 @@ You'll still have setup apache configuration, though.
 - Enter the email address of the administrator of the installation in the 
   [admin.email] section in `services/config/bibliograph.ini.php`
 
-## Optional Post-Install steps
+## Optional post-install steps
 - To import from library databases, you need to [install](https://code.google.com/p/list8d/wiki/InstallingYaz) the [PHP-YAZ extension](http://www.indexdata.com/phpyaz)
   and the php-xsl extension (Debian: apt-get install php5-xsl)
 - To enable export and import of various bibliographic data formats, install the 
