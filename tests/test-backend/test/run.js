@@ -3,8 +3,12 @@ const
   assert = require('assert'),
   replay = require('./lib/replay');
 
-describe('Bibliograph', () => {
-  it('should setup the application', async () => {
+// build env
+let c9 = (process.env.IP && process.env.PORT);
+
+describe('Bibliograph', async function() {
+  this.timeout(10000);
+  if( ! c9 ) it ('should setup the application', async () => {
     await replay(__dirname + "/data/setup.json");
   });
   it('should boot', async () => {
