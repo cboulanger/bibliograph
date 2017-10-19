@@ -1,5 +1,5 @@
-Bibliograph: Open Source Online Citation & Library Management
-=============================================================
+# Bibliograph: Open Source Online Citation & Library Management
+
 [![Build Status](https://travis-ci.org/cboulanger/bibliograph.svg?branch=master)](https://travis-ci.org/cboulanger/bibliograph)
 
 [![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=panyasan&url=https://github.com/cboulanger/bibliograph&title=Bibliograph&language=javascript&tags=github&category=software)
@@ -10,9 +10,8 @@ collection, editing and publishing of bibliographic data.
 - [Demo installation](http://demo.bibliograph.org)
 - [End User Documentation](http://help.bibliograph.org)
 - [Download](http://sourceforge.net/projects/bibliograph/files/latest/download)
-- [Installation](install.md)
+- [Installation](doc/install.md)
 - [Release Notes](release-notes.md)
-- [Flattr](https://flattr.com/submit/auto?user_id=panyasan&url=https://github.com/cboulanger/bibliograph&title=Bibliograph&language=javascript&tags=github&category=software) or [donate to the project](http://sourceforge.net/p/bibliograph/donate)
 
 Bibliograph
 
@@ -34,8 +33,7 @@ Bibliograph can be used by
 - professors and teachers who want to share bibliographic information with their
   students.
 
-Features
---------
+## Features
 - Organize bibliographic records in static folders or dynamic collections based 
   on queries;
 - Rich metadata, Autocompletion and duplicate detection;
@@ -56,33 +54,27 @@ Features
 - Optionally provides a user forum;
 - Fully open source, can be easily adapted and extended by plugins. 
 
-Plugins
--------
+## Plugins
 Bibliograph implements most advanced features through plugins. For a list of
-Plugins, see [here](plugins.md).
+Plugins, see [here](doc/plugins.md).
 
-Installation and Deployment
----------------------------
-See [here](install.md).
+## Installation and Deployment
+See [here](doc/install.md).
 
-Support
--------
+## Support
 - See the extensive [end user online documentation](http://help.bibliograph.org).
 - For general questions, please write to info at bibliograph dot org or send 
   a tweet to @bibliograph2.
-- There is also a [user forum](http://forum.bibliograph.org) to discuss issues with other users.
 - Bugs and feature requests should be registered as [github issues](https://github.com/cboulanger/bibliograph/issues).
 - Paid support for installation or hosting is available, also if you need a plugin
   to support your particular collection.
 
-Development & Roadmap
----------------------
-- You can [hack the code](development.md) and make it better;
-- The current roadmap is [here](roadmap.md);
+## Development & Roadmap
+- You can [hack the code](doc/development.md) and make it better;
+- The current roadmap is [here](doc/roadmap.md);
 - If you wish to sponsor a feature, please contact info at bibliograph dot org.
 
-How to contribute
------------------
+## How to contribute
 Bibliograph is free (as in beer and in speech). But in order to thrive, the
 project needs your help. Even if you are not a developer, you can contribute:
 - You can [provide feedback, report bugs and/or suggest new features](https://github.com/cboulanger/bibliograph/issues).
@@ -92,11 +84,11 @@ project needs your help. Even if you are not a developer, you can contribute:
   likely it is that development continues and new features/plugins will be 
   added - so please let your followers on Twitter, Facebook etc. know about
   Bibliograph
-- You can [donate](http://sourceforge.net/p/bibliograph/donate) and make sure 
+- [Flattr me](https://flattr.com/submit/auto?user_id=panyasan&url=https://github.com/cboulanger/bibliograph&title=Bibliograph&language=javascript&tags=github&category=software)  
+- You can also [donate](http://sourceforge.net/p/bibliograph/donate) and make sure 
   development continues
 
-Credits
---------
+## Credits
 Open source libraries/applications
 - [qooxdoo JavaScript framework](http://www.qooxdoo.org): (c) 1&1 Internet AG 
 - [CSL - The Citation Style Language](http://www.citationstyles.org).
@@ -119,5 +111,5 @@ In particular, the author wishes to thank:
   maintaining the software at Humboldt Universität.
 - Serge Barysiuk for providing assistance with UI generation, and for designing
   the application logo;
-- Julika Rosenstock for writing the first version of the end user documentation, Till Rathschlag
-  and Anna Luetkefend for expanding and translating it. 
+- Julika Rosenstock for writing the first version of the end user documentation, 
+  Till Rathschlag and Anna Luetkefend for expanding and translating it. 

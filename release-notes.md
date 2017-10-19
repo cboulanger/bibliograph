@@ -1,15 +1,13 @@
-Release notes
-=============
+# Release notes
 
-Version 2.3 (October 2017)
------------------------
+## Version 2.3 (October 2017)
 - added Debugging plugin with a server log window, log filter selection and recording of 
   JSONRPC traffic for later replay.
 - Added Travis CI build script and tests
+- Support for easy deployment in Docker, Cloud9IDE and Debian/Ubuntu
 - More compatibility fixes for current PHP & MySql versions
 
-Version 2.2 (July 2017)
------------------------
+## Version 2.2 (July 2017)
 - Integrated fixes from Gerrit Oldenburg (Humboldt University Berlin) for 
   upcoming compatibility with PHP 7 and newer MySQL versions (not yet functional)
 - Upgrade to qoodoo 5.0.2
@@ -17,8 +15,7 @@ Version 2.2 (July 2017)
   the progress of the search request
 - Removed the annoying "No connection to server" alert if a server request fails
 
-Version 2.1 (Mid-2015)
------------------------
+## Version 2.1 (Mid-2015)
 A [large number](https://github.com/cboulanger/bibliograph/issues?q=milestone%3Av2.1+is%3Aclosed)
 of changes, fixes, improvements and refactoring under the hood.
 - Upgraded to qooxdoo 4 on the frontend and to PHP > 5.3. on the backend
@@ -37,18 +34,15 @@ of changes, fixes, improvements and refactoring under the hood.
   can be changed to sending plaintext passwords (for example, for LDAP servers), but only if
   a https connection exists
 
-Version 2.0 (2011)
-------------------
+## Version 2.0 (2011)
 - Based on qooxdoo 1.6 (having used every version from qoodoo 0.5 upwards)
 - Was never publicly released, but used in production at Humboldt University's Law School
 - Used its own backend library (qcl) and an xml to javascript compiler (qxtransformer).
 - Moved core features to plugins: Bibutils, CSL, Z39.50 import, Backup
 
-Version 1.0 (~2006)
--------------------
+## Version 1.0 (~2006)
 - Used the NetWindows javascript library (by Alex Russel)
 - Was used in a criminological research project
 
-Version 0.1 (~2003)
--------------------
-- Was a single long PHP file.
+## Version 0.1 (~2003)
+- A single long PHP file.

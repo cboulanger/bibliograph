@@ -33,6 +33,7 @@ RUN /bin/ln -sf ../sites-available/default-ssl /etc/apache2/sites-enabled/001-de
 # Environment variables for the setup
 ENV DOCKER_RESOURCES_DIR=build-env/docker
 ENV BIB_VAR_DIR /var/lib/bibliograph
+ENV BIB_DEPLOY_DIR /var/www/html
 ENV BIB_CONF_DIR /var/www/html/bibliograph/services/config/
 ENV BIB_USE_HOST_MYSQL no
 ENV BIB_MYSQL_USER root
@@ -48,13 +49,13 @@ RUN rm -rf /var/www/html/* && \
   cd .. && \
   mv bibliograph /var/www/html && \
   cd ../.. && \
-  echo "<?php header('location: /bibliograph/build');" > /var/www/html/index.php && \
-  mkdir -p $BIB_VAR_DIR && chmod 0777 $BIB_VAR_DIR 
+  echo "<?php header('location: /bibliograph/build');" > $BIB_DEPLOY_DIR/index.php && \
+  mkdir -p $BIB_VAR_DIR && chmod 0777 $BIB_VAR_DIR && \
+  echo "all" > $BIB_DEPLOY_DIR/bibliograph/plugins.txt
   
 # add configuration files
 COPY $DOCKER_RESOURCES_DIR/bibliograph.ini.php $BIB_CONF_DIR/bibliograph.ini.php
 COPY $DOCKER_RESOURCES_DIR/server.conf.php $BIB_CONF_DIR/server.conf.php
-COPY plugins.txt /var/www/html/bibliograph/plugins.txt
 
 # supervisor files
 COPY supervisord-apache2.conf /etc/supervisor/conf.d/supervisord-apache2.conf

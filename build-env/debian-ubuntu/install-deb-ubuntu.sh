@@ -1,6 +1,7 @@
 # Bibliograph - Online Bibliographic Data Manager
 # Build script for Debian/Ubuntu 
 # Hasn't been tested yet
+# run build-env/debian-ubuntu/install-deb-ubuntu.sh
 
 # Packages
 apt-get update && apt-get install -y \

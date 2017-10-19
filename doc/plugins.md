@@ -1,5 +1,4 @@
-Plugins
-=======
+# Plugins
 
 Bibliograph implements most advanced features through plugins. The following
 plugins are currently supported:
@@ -18,5 +17,7 @@ The following plugins are still under development:
 - [isbnscanner](https://github.com/cboulanger/bibliograph/tree/master/bibliograph/plugins/isbnscanner): Import books with a ISBN scanner device
 - [rssfolder](https://github.com/cboulanger/bibliograph/tree/master/bibliograph/plugins/rssfolder): Publish selected folders as RSS Feeds and 
   import from those feeds
+- [debug](https://github.com/cboulanger/bibliograph/tree/master/bibliograph/plugins/debug): 
+  This adds a window displaying the backend log, control over the verbosity of that log,and the possibility to record the jsonrpc traffic going on between client and server.
 
 Information on writing new plugins is [here](development.md).
