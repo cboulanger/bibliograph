@@ -28,6 +28,7 @@ async function replay(path) {
   let sessionId = null;
   for (let data of replay_data) {
     let request = data.request;
+    // overwrite the sessionId 
     request.server_data.sessionId = sessionId;
 
     let result;
@@ -64,8 +65,8 @@ async function replay(path) {
       }
       assert.deepEqual(Object.keys(received.result.data), Object.keys(expected.result.data));
     } catch(e) {
-      console.warn(`JSONRPC response does not match expectations (Request id ${request.id}).`);
       console.log(`travis_fold:start:Request_${request.id}\r`);  
+      console.warn(`    - Request id ${request.id}): unexpected response.`);
       console.log(">>>> Request");
       dump(request);
       console.log("==== Response (expected)");
