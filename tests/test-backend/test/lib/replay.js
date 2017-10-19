@@ -86,14 +86,16 @@ async function replay(path) {
     }
 
     // adapt sessionId
-    let messages = result.result.messages;
-    if (
-      messages instanceof Array &&
-      messages.length &&
-      messages[0].name == "setSessionId"
-    ) {
-      sessionId = messages[0].data;
-    }
+    try {
+      let messages = result.result.messages;
+      if (
+        messages instanceof Array &&
+        messages.length &&
+        messages[0].name == "setSessionId"
+      ) {
+        sessionId = messages[0].data;
+      }
+    } catch (e) {}
   }
   return; 
 }
