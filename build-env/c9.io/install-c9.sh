@@ -1,6 +1,6 @@
 # Bibliograph - Online Bibliographic Data Manager
-# Build script for c9.io (Ubuntu)
-# call with bash build-env/c9.io/install-c9.sh
+# Build script for c9.io (Ubuntu) - currently needs a VM with at least 1GB RAM
+# Call with bash build-env/c9.io/install-c9.sh
 
 # Packages
 sudo apt-get update && apt-get install -y \

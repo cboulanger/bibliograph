@@ -93,7 +93,7 @@ define('BIBUTILS_PATH','/usr/bin/');
  */
 if ( ! defined( "QCL_APPLICATION_MODE") )
 {
-  define( "QCL_APPLICATION_MODE", "maintenance" );
+  define( "QCL_APPLICATION_MODE", "development" );
 }
 
 
