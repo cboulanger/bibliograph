@@ -1,27 +1,40 @@
-Installation and Deployment
-===========================
+# Installation and Deployment
 
-Note: Bibliograph is not yet compatible with PHP 7.0 and greater. We're working
-on it. 
+Note: Bibliograph is not yet compatible with PHP >=7.0. We're working on it. 
 
-Docker
-------
-The easiest way to install Bibliograph is by using the [preconfigured docker image](https://registry.hub.docker.com/u/cboulanger/bibliograph/). 
+## Download
+You can download a precompiled package from [SourceForge](http://sourceforge.net/projects/bibliograph/files/latest/download), but this requires
+that you install all dependencies manually (see below).
 
-Caveat: this image is currently meant only for testing purposes. If you need a 
-production set up, you have to build your own installation, using the instructions
-below. It might be useful to look at the Ubuntu-based [Dockerfile](https://github.com/cboulanger/bibliograph-docker/blob/master/Dockerfile).
+## Build environments
+You can also build the application yourself. Bibliograph comes with support for a 
+couple of different build environments (see the `build-env` folder), so that you don't 
+have to deal with the dependencies yourself.
 
-Prerequisites
--------------
-- PHP >= 5.3 < 7.0 with the following extensions: intl, gettext, yaz/xsl (optional), ldap
-  (optional), zip (optional). For optimal performance, it is advised to enable OPcache
-  (http://php.net/manual/en/intro.opcache.php)
+### Docker
+The easiest way to install Bibliograph is by using the [preconfigured docker image](https://registry.hub.docker.com/u/cboulanger/bibliograph/). Note, however, that 
+this image is currently meant only for testing purposes. If you need a production 
+setup, you must create your own installation.
+
+## Cloud9IDE
+The application can be easily cloned from GitHub to the [web-based Cloud9 IDE](https://c9.io), in fact this is how much of the development has been done recently. Create a new VM based on your own fork of the [GitHub repository](https://github.com/cboulanger/bibliograph). Once the VM 
+starts, in the terminal, execute `bash build-env/c9.io/install-c9.sh`. The start the
+Apache/PHP run configuration and you should be all set!
+
+## Debian/Ubuntu
+After cloning the repository, run `bash build-env/debian-ubuntu/install-deb-ubuntu.sh`.
+You'll still have setup apache configuration, though. 
+
+# Manual installation 
+
+## Prerequisites
+- PHP >= 5.3 < 7.0 with the following extensions: intl, gettext, yaz/xsl (optional), 
+  ldap  (optional), zip (optional). For optimal performance, it is advised to enable 
+  OPcache (http://php.net/manual/en/intro.opcache.php)
 - MySql >= 5.3 . There have been some problems with the latest MySql Versions. Stay with
-  v5.3 if you can. 
+  v5.3 if you can for the moment. 
 
-Preparations
-------------
+## Install steps 
 - Rename `services/config/bibliograph.ini.dist.php to
   `services/config/bibliograph.ini.php`
 - Create a user "bibliograph" in your MySql-database with password "bibliograph", or,
@@ -36,8 +49,7 @@ Preparations
 - Enter the email address of the administrator of the installation in the 
   [admin.email] section in `services/config/bibliograph.ini.php`
 
-Optional
---------
+## Optional Post-Install steps
 - To import from library databases, you need to [install](https://code.google.com/p/list8d/wiki/InstallingYaz) the [PHP-YAZ extension](http://www.indexdata.com/phpyaz)
   and the php-xsl extension (Debian: apt-get install php5-xsl)
 - To enable export and import of various bibliographic data formats, install the 
@@ -50,16 +62,34 @@ Optional
   outside the document root of the web server.
 - You can connect a ldap server for authentication (adapt `config/bibliograph.ini.php`)
 
-First run
----------
-- fire up a browser and open the "build" folder. If problems with the setup 
-  occur, error messages will be displayed and will tell you to fix the problems.
+## First run
+- Fire up a browser and open the "build" folder. You should see a popup window with 
+  a progress bar and a textfield with information on the ongoing setup. 
+- If problems occur, error messages will be displayed and the setup will be aborted 
+  (see troubeshooting guide below).
 - After the setup has fininished, reload the page and login as "Admin"/"admin"
 - Got to System -> Plugins. Install the plugins you need.
 - Reload and you should be all set.
 
-Deployment
-----------
+## Troubleshooting
+- If you encounter SQL/Database related error messages during or after the first 
+  run, try first to reset the application by replacing, in the URL, the part starting
+  wit `build` up to the end of the URL, with `reset.php`. This will clear some
+  cache and reset session and cookies, and might resolve the problem when reloading
+  the application.
+- If you are able to load the application and log in as administrator, you can 
+  install the "debug" plugin, open a window with the application backend log, and
+  increase the verbosity of the log messages by selecting log filters. 
+- Otherwise, look at the server log (the location is set in server.conf.php), it should
+  contain the error messages together with a backtrace. 
+- If you cannot solve the problem, I am happy to help. The better you prepare your
+  issue, the easier it is for me to help you quickly. 
+  1. Ideally, create an [issue on GitHub](https://github.com/cboulanger/bibliograph/issues)    and save the server log in a separate Gist so that it does not blow up the issue. 
+     This way, others can profit from the resolution.
+  2. You can also send an email to info@bibliograph.org . If the problem is more than
+     trivial, I might ask you to follow 1) 
+
+# Production deployment
 - Securing the Server: The PHP backend has one single entry-point: 
   `services/server.php`. If you want to make sure no other PHP script is called,
   restrict access to php files to this path.
