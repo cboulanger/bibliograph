@@ -1,0 +1,1135 @@
+[
+    {
+        "request": {
+            "service": "bibliograph.setup",
+            "method": "setup",
+            "id": 1,
+            "params": [
+
+            ],
+            "server_data": {
+                "sessionId": null
+            }
+        },
+        "response": {
+            "id": 1,
+            "result": {
+                "__qcl": true,
+                "messages": [
+                    {
+                        "name": "setSessionId",
+                        "data": "86c4718122b3e96b7fea0b51a98a5d36"
+                    },
+                    {
+                        "name": "ldap.enabled",
+                        "data": false
+                    },
+                    {
+                        "name": "bibliograph.setup.done",
+                        "data": true
+                    },
+                    {
+                        "name": "application.setMode",
+                        "data": "development"
+                    }
+                ],
+                "data": "OK"
+            },
+            "error": null
+        }
+    },
+    {
+        "request": {
+            "service": "bibliograph.import",
+            "method": "getImportFormatData",
+            "id": 2,
+            "params": [
+                true
+            ],
+            "server_data": {
+                "sessionId": null
+            }
+        },
+        "response": {
+            "id": 2,
+            "result": {
+                "__qcl": true,
+                "messages": [
+                    {
+                        "name": "setSessionId",
+                        "data": "86c4718122b3e96b7fea0b51a98a5d36"
+                    }
+                ],
+                "data": [
+                    {
+                        "value": null,
+                        "label": "2. W\u00e4hlen Sie das Importformat aus"
+                    },
+                    {
+                        "value": "bibtex",
+                        "label": "BibTeX"
+                    },
+                    {
+                        "value": "Csv",
+                        "label": "Csv"
+                    },
+                    {
+                        "value": "endnote",
+                        "label": "Endnote tagged format"
+                    },
+                    {
+                        "value": "endnotexml",
+                        "label": "Endnote xml format"
+                    },
+                    {
+                        "value": "isi",
+                        "label": "ISI tagged format"
+                    },
+                    {
+                        "value": "mods",
+                        "label": "MODS"
+                    },
+                    {
+                        "value": "pubmed",
+                        "label": "PubMed XML format"
+                    },
+                    {
+                        "value": "ris",
+                        "label": "RIS tagged format"
+                    }
+                ]
+            },
+            "error": null
+        }
+    },
+    {
+        "request": {
+            "service": "bibliograph.access",
+            "method": "authenticate",
+            "id": 3,
+            "params": [
+                null
+            ],
+            "server_data": {
+                "sessionId": "86c4718122b3e96b7fea0b51a98a5d36"
+            }
+        },
+        "response": {
+            "id": 3,
+            "result": {
+                "__qcl": true,
+                "data": {
+                    "error": false,
+                    "permissions": [
+                        "*",
+                        "access.manage",
+                        "backup.upload",
+                        "config.default.edit",
+                        "config.key.add",
+                        "config.key.edit",
+                        "config.value.edit",
+                        "plugin.manage",
+                        "bookends.sync",
+                        "backup.download",
+                        "backup.delete",
+                        "backup.restore",
+                        "backup.create",
+                        "z3950.manage",
+                        "zotero.sync",
+                        "debug.selectFilters",
+                        "debug.showLogFile",
+                        "debug.allowDebug",
+                        "backup.upload",
+                        "config.value.edit",
+                        "folder.delete",
+                        "folder.edit",
+                        "reference.batchedit",
+                        "system.menu.view",
+                        "trash.empty",
+                        "bookends.sync",
+                        "backup.download",
+                        "backup.delete",
+                        "backup.restore",
+                        "backup.create",
+                        "z3950.manage",
+                        "zotero.sync",
+                        "application.reportBug",
+                        "config.value.edit",
+                        "folder.add",
+                        "folder.move",
+                        "folder.remove",
+                        "reference.add",
+                        "reference.delete",
+                        "reference.edit",
+                        "reference.export",
+                        "reference.import",
+                        "reference.move",
+                        "reference.remove",
+                        "reference.search",
+                        "reference.view",
+                        "nnforum.view",
+                        "rssfolder.view"
+                    ],
+                    "sessionId": "86c4718122b3e96b7fea0b51a98a5d36",
+                    "username": "admin",
+                    "fullname": "Administrator",
+                    "userId": 1,
+                    "anonymous": false,
+                    "editable": true
+                }
+            },
+            "error": null
+        }
+    },
+    {
+        "request": {
+            "service": "bibliograph.config",
+            "method": "load",
+            "id": 4,
+            "params": [
+
+            ],
+            "server_data": {
+                "sessionId": "86c4718122b3e96b7fea0b51a98a5d36"
+            }
+        },
+        "response": {
+            "id": 4,
+            "result": {
+                "__qcl": true,
+                "data": {
+                    "keys": [
+                        "access.enforce_https_login",
+                        "application.locale",
+                        "application.logo",
+                        "application.title",
+                        "authentication.method",
+                        "backup.daysToKeepBackupFor",
+                        "bibliograph.access.mode",
+                        "bibliograph.access.no-access-message",
+                        "bibliograph.duplicates.threshold",
+                        "bibliograph.sortableName.engine",
+                        "csl.style.default",
+                        "debug.recordJsonRpcTraffic",
+                        "mdbackup.daysToKeepBackupFor",
+                        "nnforum.readitems",
+                        "nnforum.readposts",
+                        "nnforum.rssitems",
+                        "nnforum.searchdomain",
+                        "plugin.csl.bibliography.maxfolderrecords",
+                        "z3950.lastDatasource"
+                    ],
+                    "values": [
+                        true,
+                        "",
+                        "bibliograph\/icon\/bibliograph-logo.png",
+                        "Bibliograph Online Bibliographic Data Manager",
+                        "plaintext",
+                        3,
+                        "normal",
+                        "",
+                        50,
+                        "parser",
+                        "apa",
+                        true,
+                        3,
+                        0,
+                        3,
+                        "bibliograph2-cboulanger.c9.io",
+                        "bibliograph2-cboulanger.c9.io",
+                        500,
+                        "z3950_U-KBV90"
+                    ],
+                    "types": [
+                        "boolean",
+                        "boolean",
+                        "string",
+                        "string",
+                        "string",
+                        "number",
+                        "string",
+                        "string",
+                        "number",
+                        "string",
+                        "string",
+                        "boolean",
+                        "number",
+                        "number",
+                        "number",
+                        "string",
+                        "string",
+                        "number",
+                        "string"
+                    ]
+                }
+            },
+            "error": null
+        }
+    },
+    {
+        "request": {
+            "service": "bibliograph.model",
+            "method": "getDatasourceListData",
+            "id": 5,
+            "params": [
+
+            ],
+            "server_data": {
+                "sessionId": "86c4718122b3e96b7fea0b51a98a5d36"
+            }
+        },
+        "response": {
+            "id": 5,
+            "result": {
+                "__qcl": true,
+                "data": [
+                    {
+                        "value": "database1",
+                        "label": "Database 1"
+                    },
+                    {
+                        "value": "database2",
+                        "label": "Database 2"
+                    }
+                ]
+            },
+            "error": null
+        }
+    },
+    {
+        "request": {
+            "service": "bibliograph.model",
+            "method": "getDatasourceModelData",
+            "id": 6,
+            "params": [
+                "database1"
+            ],
+            "server_data": {
+                "sessionId": "86c4718122b3e96b7fea0b51a98a5d36"
+            }
+        },
+        "response": {
+            "id": 6,
+            "result": {
+                "__qcl": true,
+                "data": {
+                    "namedId": "database1",
+                    "title": "Database 1",
+                    "tableModelType": "reference",
+                    "tableModelService": "bibliograph.reference",
+                    "transactionId": 0
+                }
+            },
+            "error": null
+        }
+    },
+    {
+        "request": {
+            "service": "bibliograph.folder",
+            "method": "getNodeCount",
+            "id": 7,
+            "params": [
+                "database1",
+                null
+            ],
+            "server_data": {
+                "sessionId": "86c4718122b3e96b7fea0b51a98a5d36"
+            }
+        },
+        "response": {
+            "id": 7,
+            "result": {
+                "__qcl": true,
+                "data": {
+                    "nodeCount": 10,
+                    "transactionId": 1527,
+                    "statusText": ""
+                }
+            },
+            "error": null
+        }
+    },
+    {
+        "request": {
+            "service": "bibliograph.plugin",
+            "method": "getPluginData",
+            "id": 8,
+            "params": [
+
+            ],
+            "server_data": {
+                "sessionId": "86c4718122b3e96b7fea0b51a98a5d36"
+            }
+        },
+        "response": {
+            "id": 8,
+            "result": {
+                "__qcl": true,
+                "data": [
+                    {
+                        "part": "plugin_bookends",
+                        "name": "Bookends connector plugin",
+                        "namespace": "bookends"
+                    },
+                    {
+                        "name": "Bibutils Plugin",
+                        "namespace": "bibutils"
+                    },
+                    {
+                        "part": "plugin_zotero",
+                        "name": "Zotero Integration",
+                        "namespace": "zotero"
+                    },
+                    {
+                        "part": "plugin_z3950",
+                        "name": "Z39.50 Plugin",
+                        "namespace": "z3950"
+                    },
+                    {
+                        "part": "plugin_csl",
+                        "name": "Citation Style Language (CSL) Plugin",
+                        "namespace": "csl"
+                    },
+                    {
+                        "part": "plugin_backup",
+                        "name": "Backup",
+                        "namespace": "backup"
+                    },
+                    {
+                        "part": "plugin_debug",
+                        "name": "Debug tools",
+                        "namespace": "debug"
+                    }
+                ]
+            },
+            "error": null
+        }
+    },
+    {
+        "request": {
+            "service": "bibliograph.folder",
+            "method": "getChildNodeData",
+            "id": 9,
+            "params": [
+                "database1",
+                0,
+                null,
+                true,
+                null,
+                null
+            ],
+            "server_data": {
+                "sessionId": "86c4718122b3e96b7fea0b51a98a5d36"
+            }
+        },
+        "response": {
+            "id": 9,
+            "result": {
+                "__qcl": true,
+                "data": {
+                    "nodeData": [
+                        {
+                            "isBranch": true,
+                            "label": "Default Folder",
+                            "bOpened": false,
+                            "icon": "icon\/16\/places\/folder-remote.png",
+                            "iconSelected": "icon\/16\/places\/folder-remote.png",
+                            "bHideOpenClose": false,
+                            "data": {
+                                "type": "folder",
+                                "id": 1,
+                                "parentId": 0,
+                                "query": null,
+                                "public": true,
+                                "owner": null,
+                                "description": null,
+                                "datasource": "database1",
+                                "childCount": 6,
+                                "referenceCount": 71,
+                                "markedDeleted": false
+                            },
+                            "columnData": [
+                                null,
+                                71
+                            ]
+                        },
+                        {
+                            "isBranch": true,
+                            "label": "Boulanger",
+                            "bOpened": false,
+                            "icon": "icon\/16\/apps\/utilities-graphics-viewer.png",
+                            "iconSelected": "icon\/16\/apps\/utilities-graphics-viewer.png",
+                            "bHideOpenClose": true,
+                            "data": {
+                                "type": "searchfolder",
+                                "id": 6,
+                                "parentId": 0,
+                                "query": "autor beginnt mit boulanger",
+                                "public": false,
+                                "owner": null,
+                                "description": null,
+                                "datasource": "database1",
+                                "childCount": 0,
+                                "referenceCount": "",
+                                "markedDeleted": false
+                            },
+                            "columnData": [
+                                null,
+                                ""
+                            ]
+                        },
+                        {
+                            "isBranch": true,
+                            "label": "Trash Folder",
+                            "bOpened": false,
+                            "icon": "icon\/16\/places\/user-trash.png",
+                            "iconSelected": "icon\/16\/places\/user-trash.png",
+                            "bHideOpenClose": true,
+                            "data": {
+                                "type": "trash",
+                                "id": 2,
+                                "parentId": 0,
+                                "query": null,
+                                "public": false,
+                                "owner": null,
+                                "description": null,
+                                "datasource": "database1",
+                                "childCount": 0,
+                                "referenceCount": 846,
+                                "markedDeleted": false
+                            },
+                            "columnData": [
+                                null,
+                                846
+                            ]
+                        },
+                        {
+                            "isBranch": true,
+                            "label": "Unterordner 1",
+                            "bOpened": false,
+                            "icon": null,
+                            "iconSelected": null,
+                            "bHideOpenClose": true,
+                            "data": {
+                                "type": "folder",
+                                "id": 3,
+                                "parentId": 1,
+                                "query": null,
+                                "public": false,
+                                "owner": null,
+                                "description": null,
+                                "datasource": "database1",
+                                "childCount": 0,
+                                "referenceCount": 8,
+                                "markedDeleted": false
+                            },
+                            "columnData": [
+                                null,
+                                8
+                            ]
+                        },
+                        {
+                            "isBranch": true,
+                            "label": "Verfassungsgerichte",
+                            "bOpened": false,
+                            "icon": "icon\/16\/places\/folder-remote.png",
+                            "iconSelected": "icon\/16\/places\/folder-remote.png",
+                            "bHideOpenClose": true,
+                            "data": {
+                                "type": "folder",
+                                "id": 4,
+                                "parentId": 1,
+                                "query": null,
+                                "public": true,
+                                "owner": null,
+                                "description": null,
+                                "datasource": "database1",
+                                "childCount": 0,
+                                "referenceCount": 26,
+                                "markedDeleted": false
+                            },
+                            "columnData": [
+                                null,
+                                26
+                            ]
+                        },
+                        {
+                            "isBranch": true,
+                            "label": "Vergl. VerfG-Forsch.",
+                            "bOpened": false,
+                            "icon": null,
+                            "iconSelected": null,
+                            "bHideOpenClose": true,
+                            "data": {
+                                "type": "folder",
+                                "id": 5,
+                                "parentId": 1,
+                                "query": null,
+                                "public": false,
+                                "owner": null,
+                                "description": null,
+                                "datasource": "database1",
+                                "childCount": 0,
+                                "referenceCount": 3,
+                                "markedDeleted": false
+                            },
+                            "columnData": [
+                                null,
+                                3
+                            ]
+                        },
+                        {
+                            "isBranch": true,
+                            "label": "import",
+                            "bOpened": false,
+                            "icon": null,
+                            "iconSelected": null,
+                            "bHideOpenClose": false,
+                            "data": {
+                                "type": "folder",
+                                "id": 7,
+                                "parentId": 1,
+                                "query": null,
+                                "public": false,
+                                "owner": null,
+                                "description": null,
+                                "datasource": "database1",
+                                "childCount": 1,
+                                "referenceCount": 1,
+                                "markedDeleted": false
+                            },
+                            "columnData": [
+                                null,
+                                1
+                            ]
+                        },
+                        {
+                            "isBranch": true,
+                            "label": "import2",
+                            "bOpened": false,
+                            "icon": null,
+                            "iconSelected": null,
+                            "bHideOpenClose": true,
+                            "data": {
+                                "type": "folder",
+                                "id": 9,
+                                "parentId": 1,
+                                "query": null,
+                                "public": false,
+                                "owner": null,
+                                "description": null,
+                                "datasource": "database1",
+                                "childCount": 0,
+                                "referenceCount": 12,
+                                "markedDeleted": false
+                            },
+                            "columnData": [
+                                null,
+                                12
+                            ]
+                        },
+                        {
+                            "isBranch": true,
+                            "label": "Backup 2",
+                            "bOpened": null,
+                            "icon": null,
+                            "iconSelected": null,
+                            "bHideOpenClose": true,
+                            "data": {
+                                "type": "folder",
+                                "id": 10,
+                                "parentId": 1,
+                                "query": null,
+                                "public": null,
+                                "owner": null,
+                                "description": null,
+                                "datasource": "database1",
+                                "childCount": 0,
+                                "referenceCount": 7,
+                                "markedDeleted": false
+                            },
+                            "columnData": [
+                                null,
+                                7
+                            ]
+                        },
+                        {
+                            "isBranch": true,
+                            "label": "LSI",
+                            "bOpened": false,
+                            "icon": "icon\/16\/apps\/utilities-graphics-viewer.png",
+                            "iconSelected": "icon\/16\/apps\/utilities-graphics-viewer.png",
+                            "bHideOpenClose": true,
+                            "data": {
+                                "type": "searchfolder",
+                                "id": 8,
+                                "parentId": 7,
+                                "query": "affiliation is LSI",
+                                "public": false,
+                                "owner": null,
+                                "description": null,
+                                "datasource": "database1",
+                                "childCount": 0,
+                                "referenceCount": "",
+                                "markedDeleted": false
+                            },
+                            "columnData": [
+                                null,
+                                ""
+                            ]
+                        }
+                    ],
+                    "queue": [
+
+                    ],
+                    "statusText": ""
+                }
+            },
+            "error": null
+        }
+    },
+    {
+        "request": {
+            "service": "z3950.Service",
+            "method": "getServerListItems",
+            "id": 10,
+            "params": [
+
+            ],
+            "server_data": {
+                "sessionId": "86c4718122b3e96b7fea0b51a98a5d36"
+            }
+        },
+        "response": {
+            "id": 10,
+            "result": {
+                "__qcl": true,
+                "data": [
+                    {
+                        "label": "Library of Congress",
+                        "value": "z3950_voyager",
+                        "active": true,
+                        "selected": false
+                    },
+                    {
+                        "label": "Kooperativer Bibliotheksverbund Berlin-Brandenburg (KOBV)",
+                        "value": "z3950_U-KBV90",
+                        "active": true,
+                        "selected": true
+                    },
+                    {
+                        "label": "Gemeinsamer Verbundkatalog - Bremen, Hamburg, Mecklenburg-Vorpommern, Niedersachsen, Sachsen-Anhalt,",
+                        "value": "z3950_gvk",
+                        "active": true,
+                        "selected": false
+                    },
+                    {
+                        "label": "Bibliotheksverbund Bayern (BVB)\/B3Kat",
+                        "value": "z3950_BVB01MCZ",
+                        "active": true,
+                        "selected": false
+                    }
+                ]
+            },
+            "error": null
+        }
+    },
+    {
+        "request": {
+            "service": "z3950.Service",
+            "method": "getServerListItems",
+            "id": 11,
+            "params": [
+                false
+            ],
+            "server_data": {
+                "sessionId": "86c4718122b3e96b7fea0b51a98a5d36"
+            }
+        },
+        "response": {
+            "id": 11,
+            "result": {
+                "__qcl": true,
+                "data": [
+                    {
+                        "label": "Library of Congress",
+                        "value": "z3950_voyager",
+                        "active": true,
+                        "selected": false
+                    },
+                    {
+                        "label": "Kooperativer Bibliotheksverbund Berlin-Brandenburg (KOBV)",
+                        "value": "z3950_U-KBV90",
+                        "active": true,
+                        "selected": true
+                    },
+                    {
+                        "label": "Gemeinsamer Verbundkatalog - Bremen, Hamburg, Mecklenburg-Vorpommern, Niedersachsen, Sachsen-Anhalt,",
+                        "value": "z3950_gvk",
+                        "active": true,
+                        "selected": false
+                    },
+                    {
+                        "label": "Bibliotheksverbund Bayern (BVB)\/B3Kat",
+                        "value": "z3950_BVB01MCZ",
+                        "active": true,
+                        "selected": false
+                    }
+                ]
+            },
+            "error": null
+        }
+    },
+    {
+        "request": {
+            "service": "csl.Service",
+            "method": "getStyleData",
+            "id": 12,
+            "params": [
+
+            ],
+            "server_data": {
+                "sessionId": "86c4718122b3e96b7fea0b51a98a5d36"
+            }
+        },
+        "response": {
+            "id": 12,
+            "result": {
+                "__qcl": true,
+                "data": [
+                    {
+                        "id": "apa",
+                        "title": "American Psychological Association 6th Edition"
+                    },
+                    {
+                        "id": "apsa",
+                        "title": "American Political Science Association"
+                    },
+                    {
+                        "id": "asa",
+                        "title": "American Sociological Association"
+                    },
+                    {
+                        "id": "chicago-author-date",
+                        "title": "Chicago Manual of Style (author-date)"
+                    },
+                    {
+                        "id": "chicago-fullnote-bibliography",
+                        "title": "Chicago Manual of Style (full note)"
+                    },
+                    {
+                        "id": "harvard1",
+                        "title": "Harvard Reference format 1 (author-date)"
+                    },
+                    {
+                        "id": "ieee",
+                        "title": "IEEE"
+                    },
+                    {
+                        "id": "juristische-zitierweise",
+                        "title": "Juristische Zitierweise (St\u00fcber) (German)"
+                    },
+                    {
+                        "id": "law-and-society-review",
+                        "title": "Law & Society Review"
+                    },
+                    {
+                        "id": "mhra",
+                        "title": "Modern Humanities Research Association (note with bibliography)"
+                    },
+                    {
+                        "id": "mla",
+                        "title": "Modern Language Association"
+                    },
+                    {
+                        "id": "nlm",
+                        "title": "National Library of Medicine"
+                    }
+                ]
+            },
+            "error": null
+        }
+    },
+    {
+        "request": {
+            "service": "debug.Service",
+            "method": "getLogFilters",
+            "id": 13,
+            "params": [
+
+            ],
+            "server_data": {
+                "sessionId": "86c4718122b3e96b7fea0b51a98a5d36"
+            }
+        },
+        "response": {
+            "id": 13,
+            "result": {
+                "__qcl": true,
+                "data": [
+                    {
+                        "name": "acl",
+                        "description": "Access-control",
+                        "enabled": false
+                    },
+                    {
+                        "name": "authentication",
+                        "description": "Authentication",
+                        "enabled": false
+                    },
+                    {
+                        "name": "bibliograph",
+                        "description": "Bibliograph backend",
+                        "enabled": false
+                    },
+                    {
+                        "name": "schema",
+                        "description": "Bibliograph schema",
+                        "enabled": false
+                    },
+                    {
+                        "name": "config",
+                        "description": "Configuration",
+                        "enabled": false
+                    },
+                    {
+                        "name": "application",
+                        "description": "Current application",
+                        "enabled": false
+                    },
+                    {
+                        "name": "db",
+                        "description": "Database connection and queries",
+                        "enabled": false
+                    },
+                    {
+                        "name": "tables",
+                        "description": "Database table schemas",
+                        "enabled": false
+                    },
+                    {
+                        "name": "debug",
+                        "description": "Debug messages",
+                        "enabled": true
+                    },
+                    {
+                        "name": "filesystem",
+                        "description": "Filesystem",
+                        "enabled": false
+                    },
+                    {
+                        "name": "info",
+                        "description": "Informative messages",
+                        "enabled": true
+                    },
+                    {
+                        "name": "request",
+                        "description": "JSONRPC requests and responses",
+                        "enabled": false
+                    },
+                    {
+                        "name": "ldap",
+                        "description": "LDAP",
+                        "enabled": false
+                    },
+                    {
+                        "name": "BIBLIOGRAPH_LOG_Z3950",
+                        "description": "Library Inmport Plugin",
+                        "enabled": false
+                    },
+                    {
+                        "name": "BIBLIOGRAPH_LOG_Z3950_VERBOSE",
+                        "description": "Library Inmport Plugin (Verbose)",
+                        "enabled": false
+                    },
+                    {
+                        "name": "filters",
+                        "description": "Log filter system",
+                        "enabled": false
+                    },
+                    {
+                        "name": "QCL_LOG_PLUGIN_BACKUP",
+                        "description": "Log messages for backup plugin",
+                        "enabled": false
+                    },
+                    {
+                        "name": "error",
+                        "description": "Non-fatal errors",
+                        "enabled": true
+                    },
+                    {
+                        "name": "plugin",
+                        "description": "Plugins",
+                        "enabled": false
+                    },
+                    {
+                        "name": "datasource",
+                        "description": "QCL Datasources",
+                        "enabled": false
+                    },
+                    {
+                        "name": "message",
+                        "description": "QCL Message system",
+                        "enabled": false
+                    },
+                    {
+                        "name": "model",
+                        "description": "QCL data models",
+                        "enabled": false
+                    },
+                    {
+                        "name": "persistence",
+                        "description": "QCL data persistence",
+                        "enabled": false
+                    },
+                    {
+                        "name": "properties",
+                        "description": "QCL model properties",
+                        "enabled": false
+                    },
+                    {
+                        "name": "relations",
+                        "description": "QCL model relations",
+                        "enabled": false
+                    },
+                    {
+                        "name": "object",
+                        "description": "QCL object creation.",
+                        "enabled": false
+                    },
+                    {
+                        "name": "mail",
+                        "description": "Sending mails",
+                        "enabled": false
+                    },
+                    {
+                        "name": "setup",
+                        "description": "Setup",
+                        "enabled": false
+                    },
+                    {
+                        "name": "shell",
+                        "description": "Shell commands",
+                        "enabled": false
+                    },
+                    {
+                        "name": "locale",
+                        "description": "Translation",
+                        "enabled": false
+                    },
+                    {
+                        "name": "warn",
+                        "description": "Warnings",
+                        "enabled": true
+                    }
+                ]
+            },
+            "error": null
+        }
+    },
+    {
+        "request": {
+            "service": "bibliograph.access",
+            "method": "getMessages",
+            "id": 14,
+            "params": [
+
+            ],
+            "server_data": {
+                "sessionId": "86c4718122b3e96b7fea0b51a98a5d36"
+            }
+        },
+        "response": {
+            "id": 14,
+            "result": {
+                "__qcl": true,
+                "data": 11700
+            },
+            "error": null
+        }
+    },
+    {
+        "request": {
+            "service": "bibliograph.access",
+            "method": "getMessages",
+            "id": 15,
+            "params": [
+
+            ],
+            "server_data": {
+                "sessionId": "86c4718122b3e96b7fea0b51a98a5d36"
+            }
+        },
+        "response": {
+            "id": 15,
+            "result": {
+                "__qcl": true,
+                "data": 11700
+            },
+            "error": null
+        }
+    },
+    {
+        "request": {
+            "service": "bibliograph.access",
+            "method": "getMessages",
+            "id": 16,
+            "params": [
+
+            ],
+            "server_data": {
+                "sessionId": "86c4718122b3e96b7fea0b51a98a5d36"
+            }
+        },
+        "response": {
+            "id": 16,
+            "result": {
+                "__qcl": true,
+                "data": 11700
+            },
+            "error": null
+        }
+    },
+    {
+        "request": {
+            "service": "bibliograph.access",
+            "method": "getMessages",
+            "id": 17,
+            "params": [
+
+            ],
+            "server_data": {
+                "sessionId": "86c4718122b3e96b7fea0b51a98a5d36"
+            }
+        },
+        "response": {
+            "id": 17,
+            "result": {
+                "__qcl": true,
+                "data": 11700
+            },
+            "error": null
+        }
+    },
+    {
+        "request": {
+            "service": "debug.Service",
+            "method": "recordJsonRpcTraffic",
+            "id": 18,
+            "params": [
+                true
+            ],
+            "server_data": {
+                "sessionId": "86c4718122b3e96b7fea0b51a98a5d36"
+            }
+        },
+        "response": {
+            "id": 18,
+            "result": {
+                "__qcl": true,
+                "data": "OK"
+            },
+            "error": null
+        }
+    }
+]
