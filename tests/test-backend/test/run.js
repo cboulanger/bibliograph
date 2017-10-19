@@ -5,9 +5,9 @@ const
 
 describe('Bibliograph', () => {
   it('should setup the application', async () => {
-    await replay(__dirname + "data/setup.json");
+    await replay(__dirname + "/data/setup.json");
   });
   it('should boot', async () => {
-    await replay(__dirname + "data/boot.json");
+    await replay(__dirname + "/data/boot.json");
   });  
 });
