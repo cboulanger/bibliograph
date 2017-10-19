@@ -26,6 +26,9 @@ async function replay(path) {
     "utf-8"
   );
   let sessionId = null;
+
+
+  // sort by id 
   for (let data of replay_data) {
     let request = data.request;
     // overwrite the sessionId 
@@ -39,16 +42,20 @@ async function replay(path) {
       throw new Error("Invalid response:" + response);
       return;
     }
+
+    //server error
     if (result.error) {
       console.log(`travis_fold:start:Request_Error\r`);
-      console.warn(`    - Request id ${request.id}): Error: ${result.error}.`);
+      console.warn(`    - Request id ${request.id}): Error: ${result.error.message}.`);
       console.dir(result.error);
       console.log(">>>> Request");
       dump(request);
       console.log("==== Log file");      
       console.log( fs.readFileSync("/tmp/bibliograph.log", "utf-8") );
       console.log(`travis_fold:end:Request_Error\r`);
-      throw new Error("Error in response: " + result.error);
+      if ( ! result.error.silent ){
+        throw new Error("Error in response: " + result.error.message);
+      }
     }
     
     // compare received and expected json response
