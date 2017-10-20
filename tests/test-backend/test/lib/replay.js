@@ -32,12 +32,11 @@ async function replay(file_path) {
     let request = data.request;
     // overwrite the sessionId and request Id;
     request.server_data.sessionId = sessionId;
-    let restDataRequestId = data.request.id;
-    data.request.id = ++requestId;
+    request.id = ++requestId;
 
     let result;
     // send the request and await the async response
-    console.info(`    - Sending request #${requestId} (${restDataRequestId})`);
+    console.info(`    - Sending request #${requestId} (${data.request.id})`);
     let response = await r2.post(url, { json: request }).text;
     try {
       result = JSON.parse(response);
