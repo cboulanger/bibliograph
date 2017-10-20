@@ -65,7 +65,8 @@ class z3950_plugin
     $error = "";
     if (  ! function_exists("yaz_connect" ) )
     {
-      $error = "Plugin needs PHP-YAZ extension. ";
+      // FIXME!
+      //$error = "Plugin needs PHP-YAZ extension. ";
     }
 
     if ( ! class_exists( "XSLTProcessor" ) )
