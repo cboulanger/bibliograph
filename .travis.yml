@@ -8,7 +8,6 @@ language: php
 #    - bibliograph/build
 
 env:
-  - JSONRPC_COMP_KEYSONLY=1
   - JSONRPC_COMP_KEYSONLY=0
 
 php:

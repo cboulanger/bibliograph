@@ -6,8 +6,8 @@
  * variables:
  * - JSONRPC_COMP_KEYSONLY : 1 - compare the structure of the json data only, 
  *   0/empty: compare keys and values.
- * - JSONRPC_RECORD : record the ongoing jsonrpc traffic and display it at the 
- *   end. 
+ * - JSONRPC_RECORD_ONLY : record the ongoing jsonrpc traffic and display it at the 
+ *   end, without checking it against the playback data
  */
 
 const 
@@ -155,7 +155,7 @@ async function replay(name) {
     }    
 
     // if recording, skip verification
-    //if ( process.env.JSONRPC_RECORD ) continue;
+    if ( process.env.JSONRPC_RECORD_ONLY ) continue;
     
     // compare received and expected json response
     if( json_diff.diff(received,expected,{keysOnly:process.env.JSONRPC_COMP_KEYSONLY||false}) ) {
