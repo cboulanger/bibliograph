@@ -1,361 +1,353 @@
 [
     {
-        "request": {
-            "service": "bibliograph.setup",
-            "method": "setup",
-            "id": 1,
-            "params": [
-
-            ],
-            "server_data": {
-                "sessionId": null
-            }
-        },
-        "response": {
-            "id": 1,
-            "result": {
-                "__qcl": true,
-                "messages": [
-                    {
-                        "name": "setSessionId",
-                        "data": "86c4718122b3e96b7fea0b51a98a5d36"
-                    },
-                    {
-                        "name": "qcl.ui.dialog.Dialog.createDialog",
-                        "data": {
-                            "type": "progress",
-                            "properties": {
-                                "showLog": true,
-                                "hideWhenCompleted": false,
-                                "okButtonText": "OK",
-                                "newLogText": "Benutzerdaten wurden importiert.",
-                                "message": "Die Anwendung wird konfiguriert ...",
-                                "progress": 0
-                            },
-                            "service": "bibliograph.setup",
-                            "method": "next",
-                            "params": [
-                                "7b60b6cf6808de020733b0a08f8246e6",
-                                1
-                            ]
-                        }
-                    }
-                ],
-                "data": [
-
-                ]
-            },
-            "error": null
+      "request": {
+        "service": "bibliograph.setup",
+        "method": "setup",
+        "id": 1,
+        "params": [],
+        "server_data": {
+          "sessionId": null
         }
+      },
+      "response": {
+        "id": 1,
+        "result": {
+          "__qcl": true,
+          "messages": [
+            {
+              "name": "setSessionId",
+              "data": "5142748f65dd625c6b7ba793a2e23bc3"
+            },
+            {
+              "name": "qcl.ui.dialog.Dialog.createDialog",
+              "data": {
+                "type": "progress",
+                "properties": {
+                  "showLog": true,
+                  "hideWhenCompleted": false,
+                  "okButtonText": "OK",
+                  "newLogText": "Initial user data imported.",
+                  "message": "Starting setup ...",
+                  "progress": 0
+                },
+                "service": "bibliograph.setup",
+                "method": "next",
+                "params": [
+                  true,
+                  "e2fc97a2899ecbe26d170bdcd74cbb9a",
+                  1
+                ]
+              }
+            }
+          ],
+          "data": []
+        },
+        "error": null
+      }
     },
     {
-        "request": {
-            "service": "bibliograph.setup",
-            "method": "next",
-            "id": 3,
-            "params": [
-                true,
-                "7b60b6cf6808de020733b0a08f8246e6",
-                1
-            ],
-            "server_data": {
-                "sessionId": "86c4718122b3e96b7fea0b51a98a5d36"
-            }
-        },
-        "response": {
-            "id": 3,
-            "result": {
-                "__qcl": true,
-                "messages": [
-                    {
-                        "name": "qcl.ui.dialog.Dialog.createDialog",
-                        "data": {
-                            "type": "progress",
-                            "properties": {
-                                "showLog": true,
-                                "hideWhenCompleted": false,
-                                "okButtonText": "OK",
-                                "newLogText": "Set up default users.",
-                                "message": "Konfigurationsdaten werden hinzugef\u00fcgt ...",
-                                "progress": 17
-                            },
-                            "service": "bibliograph.setup",
-                            "method": "next",
-                            "params": [
-                                "8d7e1ba7cbb98e810b64ffff5bf59a66",
-                                2
-                            ]
-                        }
-                    }
-                ],
-                "data": [
-
-                ]
-            },
-            "error": null
+      "request": {
+        "service": "bibliograph.setup",
+        "method": "next",
+        "id": 2,
+        "params": [
+          true,
+          "e2fc97a2899ecbe26d170bdcd74cbb9a",
+          1
+        ],
+        "server_data": {
+          "sessionId": "5142748f65dd625c6b7ba793a2e23bc3"
         }
+      },
+      "response": {
+        "id": 2,
+        "result": {
+          "__qcl": true,
+          "messages": [
+            {
+              "name": "qcl.ui.dialog.Dialog.createDialog",
+              "data": {
+                "type": "progress",
+                "properties": {
+                  "showLog": true,
+                  "hideWhenCompleted": false,
+                  "okButtonText": "OK",
+                  "newLogText": "Set up default users.",
+                  "message": "Setting up configuration keys ...",
+                  "progress": 17
+                },
+                "service": "bibliograph.setup",
+                "method": "next",
+                "params": [
+                  true,
+                  "04d9d026ab7306c5cb83f0a2fd5efbd7",
+                  2
+                ]
+              }
+            }
+          ],
+          "data": []
+        },
+        "error": null
+      }
     },
     {
-        "request": {
-            "service": "bibliograph.setup",
-            "method": "next",
-            "id": 4,
-            "params": [
-                true,
-                "8d7e1ba7cbb98e810b64ffff5bf59a66",
-                2
-            ],
-            "server_data": {
-                "sessionId": "86c4718122b3e96b7fea0b51a98a5d36"
-            }
-        },
-        "response": {
-            "id": 4,
-            "result": {
-                "__qcl": true,
-                "messages": [
-                    {
-                        "name": "qcl.ui.dialog.Dialog.createDialog",
-                        "data": {
-                            "type": "progress",
-                            "properties": {
-                                "showLog": true,
-                                "hideWhenCompleted": false,
-                                "okButtonText": "OK",
-                                "newLogText": "Konfigurationsdaten hinzugef\u00fcgt.",
-                                "message": "Speichere Informationen zu den Datenquellen ...",
-                                "progress": 33
-                            },
-                            "service": "bibliograph.setup",
-                            "method": "next",
-                            "params": [
-                                "17039491111ed9ec3bd8f86da6e8ee06",
-                                3
-                            ]
-                        }
-                    }
-                ],
-                "data": [
-
-                ]
-            },
-            "error": null
+      "request": {
+        "service": "bibliograph.setup",
+        "method": "next",
+        "id": 3,
+        "params": [
+          true,
+          "04d9d026ab7306c5cb83f0a2fd5efbd7",
+          2
+        ],
+        "server_data": {
+          "sessionId": "5142748f65dd625c6b7ba793a2e23bc3"
         }
+      },
+      "response": {
+        "id": 3,
+        "result": {
+          "__qcl": true,
+          "messages": [
+            {
+              "name": "qcl.ui.dialog.Dialog.createDialog",
+              "data": {
+                "type": "progress",
+                "properties": {
+                  "showLog": true,
+                  "hideWhenCompleted": false,
+                  "okButtonText": "OK",
+                  "newLogText": "Configuration keys added.",
+                  "message": "Registering datasource information ...",
+                  "progress": 33
+                },
+                "service": "bibliograph.setup",
+                "method": "next",
+                "params": [
+                  true,
+                  "5ebc476002dd74994c0250c2fcf2ae95",
+                  3
+                ]
+              }
+            }
+          ],
+          "data": []
+        },
+        "error": null
+      }
     },
     {
-        "request": {
-            "service": "bibliograph.setup",
-            "method": "next",
-            "id": 5,
-            "params": [
-                true,
-                "17039491111ed9ec3bd8f86da6e8ee06",
-                3
-            ],
-            "server_data": {
-                "sessionId": "86c4718122b3e96b7fea0b51a98a5d36"
-            }
-        },
-        "response": {
-            "id": 5,
-            "result": {
-                "__qcl": true,
-                "messages": [
-                    {
-                        "name": "qcl.ui.dialog.Dialog.createDialog",
-                        "data": {
-                            "type": "progress",
-                            "properties": {
-                                "showLog": true,
-                                "hideWhenCompleted": false,
-                                "okButtonText": "OK",
-                                "newLogText": "Datenquellenschemata hinzugef\u00fcgt.",
-                                "message": "Erzeuge Beispiel-Datenquellen ...",
-                                "progress": 50
-                            },
-                            "service": "bibliograph.setup",
-                            "method": "next",
-                            "params": [
-                                "185cac741fc93307046dcd92d4008efd",
-                                4
-                            ]
-                        }
-                    }
-                ],
-                "data": [
-
-                ]
-            },
-            "error": null
+      "request": {
+        "service": "bibliograph.setup",
+        "method": "next",
+        "id": 4,
+        "params": [
+          true,
+          "5ebc476002dd74994c0250c2fcf2ae95",
+          3
+        ],
+        "server_data": {
+          "sessionId": "5142748f65dd625c6b7ba793a2e23bc3"
         }
+      },
+      "response": {
+        "id": 4,
+        "result": {
+          "__qcl": true,
+          "messages": [
+            {
+              "name": "qcl.ui.dialog.Dialog.createDialog",
+              "data": {
+                "type": "progress",
+                "properties": {
+                  "showLog": true,
+                  "hideWhenCompleted": false,
+                  "okButtonText": "OK",
+                  "newLogText": "Added datasource schemas.",
+                  "message": "Creating example datasources ...",
+                  "progress": 50
+                },
+                "service": "bibliograph.setup",
+                "method": "next",
+                "params": [
+                  true,
+                  "5b3498b673a77a35bc586523b4458c3b",
+                  4
+                ]
+              }
+            }
+          ],
+          "data": []
+        },
+        "error": null
+      }
     },
     {
-        "request": {
-            "service": "bibliograph.setup",
-            "method": "next",
-            "id": 6,
-            "params": [
-                true,
-                "185cac741fc93307046dcd92d4008efd",
-                4
-            ],
-            "server_data": {
-                "sessionId": "86c4718122b3e96b7fea0b51a98a5d36"
-            }
-        },
-        "response": {
-            "id": 6,
-            "result": {
-                "__qcl": true,
-                "messages": [
-                    {
-                        "name": "qcl.ui.dialog.Dialog.createDialog",
-                        "data": {
-                            "type": "progress",
-                            "properties": {
-                                "showLog": true,
-                                "hideWhenCompleted": false,
-                                "okButtonText": "OK",
-                                "newLogText": "Not adding example datasources.",
-                                "progress": 67
-                            },
-                            "service": "bibliograph.setup",
-                            "method": "next",
-                            "params": [
-                                "eda0de30036a2811846dc1f993df2356",
-                                5
-                            ]
-                        }
-                    }
-                ],
-                "data": [
-
-                ]
-            },
-            "error": null
+      "request": {
+        "service": "bibliograph.setup",
+        "method": "next",
+        "id": 5,
+        "params": [
+          true,
+          "5b3498b673a77a35bc586523b4458c3b",
+          4
+        ],
+        "server_data": {
+          "sessionId": "5142748f65dd625c6b7ba793a2e23bc3"
         }
+      },
+      "response": {
+        "id": 5,
+        "result": {
+          "__qcl": true,
+          "messages": [
+            {
+              "name": "qcl.ui.dialog.Dialog.createDialog",
+              "data": {
+                "type": "progress",
+                "properties": {
+                  "showLog": true,
+                  "hideWhenCompleted": false,
+                  "okButtonText": "OK",
+                  "newLogText": "Created example datasources.",
+                  "message": "Creating internal datasources ...",
+                  "progress": 67
+                },
+                "service": "bibliograph.setup",
+                "method": "next",
+                "params": [
+                  true,
+                  "fe141269061b2a7cd074a357c4df03b9",
+                  5
+                ]
+              }
+            }
+          ],
+          "data": []
+        },
+        "error": null
+      }
     },
     {
-        "request": {
-            "service": "bibliograph.setup",
-            "method": "next",
-            "id": 7,
-            "params": [
-                true,
-                "eda0de30036a2811846dc1f993df2356",
-                5
-            ],
-            "server_data": {
-                "sessionId": "86c4718122b3e96b7fea0b51a98a5d36"
-            }
-        },
-        "response": {
-            "id": 7,
-            "result": {
-                "__qcl": true,
-                "messages": [
-                    {
-                        "name": "qcl.ui.dialog.Dialog.createDialog",
-                        "data": {
-                            "type": "progress",
-                            "properties": {
-                                "showLog": true,
-                                "hideWhenCompleted": false,
-                                "okButtonText": "OK",
-                                "message": "Installing plugins ...",
-                                "newLogText": "Interne Datenbanken wurden angelegt. ",
-                                "progress": 83
-                            },
-                            "service": "bibliograph.setup",
-                            "method": "next",
-                            "params": [
-                                "f8abbd477123f9430d036e335bcb1ca4",
-                                6
-                            ]
-                        }
-                    }
-                ],
-                "data": [
-
-                ]
-            },
-            "error": null
+      "request": {
+        "service": "bibliograph.setup",
+        "method": "next",
+        "id": 6,
+        "params": [
+          true,
+          "fe141269061b2a7cd074a357c4df03b9",
+          5
+        ],
+        "server_data": {
+          "sessionId": "5142748f65dd625c6b7ba793a2e23bc3"
         }
+      },
+      "response": {
+        "id": 6,
+        "result": {
+          "__qcl": true,
+          "messages": [
+            {
+              "name": "qcl.ui.dialog.Dialog.createDialog",
+              "data": {
+                "type": "progress",
+                "properties": {
+                  "showLog": true,
+                  "hideWhenCompleted": false,
+                  "okButtonText": "OK",
+                  "message": "Installing plugins ...",
+                  "newLogText": "Created internal datasources.",
+                  "progress": 83
+                },
+                "service": "bibliograph.setup",
+                "method": "next",
+                "params": [
+                  true,
+                  "d5c22576acc5f54970c63ee379c6b6ab",
+                  6
+                ]
+              }
+            }
+          ],
+          "data": []
+        },
+        "error": null
+      }
     },
     {
-        "request": {
-            "service": "bibliograph.setup",
-            "method": "next",
-            "id": 8,
-            "params": [
-                true,
-                "f8abbd477123f9430d036e335bcb1ca4",
-                6
-            ],
-            "server_data": {
-                "sessionId": "86c4718122b3e96b7fea0b51a98a5d36"
-            }
-        },
-        "response": {
-            "id": 8,
-            "result": {
-                "__qcl": true,
-                "messages": [
-                    {
-                        "name": "qcl.ui.dialog.Dialog.createDialog",
-                        "data": {
-                            "type": "progress",
-                            "properties": {
-                                "showLog": true,
-                                "hideWhenCompleted": false,
-                                "okButtonText": "OK",
-                                "message": "Fertig ...",
-                                "newLogText": "Plugin 'Citation Style Language (CSL) Plugin' is already installed.\n\nDie Einrichtung von Bibliograph ist abgeschlossen. Bitte laden Sie Bibliograph neu.",
-                                "progress": 100
-                            },
-                            "service": "bibliograph.setup",
-                            "method": "next",
-                            "params": [
-                                "bdc00e38e25ece938070cda1a98e60d2",
-                                7
-                            ]
-                        }
-                    }
-                ],
-                "data": [
-
-                ]
-            },
-            "error": null
+      "request": {
+        "service": "bibliograph.setup",
+        "method": "next",
+        "id": 7,
+        "params": [
+          true,
+          "d5c22576acc5f54970c63ee379c6b6ab",
+          6
+        ],
+        "server_data": {
+          "sessionId": "5142748f65dd625c6b7ba793a2e23bc3"
         }
+      },
+      "response": {
+        "id": 7,
+        "result": {
+          "__qcl": true,
+          "messages": [
+            {
+              "name": "qcl.ui.dialog.Dialog.createDialog",
+              "data": {
+                "type": "progress",
+                "properties": {
+                  "showLog": true,
+                  "hideWhenCompleted": false,
+                  "okButtonText": "OK",
+                  "message": "Done ...",
+                  "newLogText": "Installed plugin 'Backup'\nInstalled plugin 'Bibutils Plugin'\nInstalled plugin 'Citation Style Language (CSL) Plugin'\nInstalled plugin 'Debug tools'\nInstalled plugin 'ISBN Scanner Plugin'\nInstalled plugin 'No-Nonsense Forum Plugin'\nInstalled plugin 'RSS-Folders'\nInstalled plugin 'Z39.50 Plugin'\n\nSetup finished. Please reload the application",
+                  "progress": 100
+                },
+                "service": "bibliograph.setup",
+                "method": "next",
+                "params": [
+                  true,
+                  "ea25123bb2e25f0e9508c55e4631d95c",
+                  7
+                ]
+              }
+            }
+          ],
+          "data": []
+        },
+        "error": null
+      }
     },
     {
-        "request": {
-            "service": "bibliograph.setup",
-            "method": "next",
-            "id": 9,
-            "params": [
-                true,
-                "bdc00e38e25ece938070cda1a98e60d2",
-                7
-            ],
-            "server_data": {
-                "sessionId": "86c4718122b3e96b7fea0b51a98a5d36"
-            }
-        },
-        "response": {
-            "id": 9,
-            "result": {
-                "__qcl": true,
-                "messages": [
-                    {
-                        "name": "application.reload",
-                        "data": true
-                    }
-                ],
-                "data": "OK"
-            },
-            "error": null
+      "request": {
+        "service": "bibliograph.setup",
+        "method": "next",
+        "id": 8,
+        "params": [
+          true,
+          "ea25123bb2e25f0e9508c55e4631d95c",
+          7
+        ],
+        "server_data": {
+          "sessionId": "5142748f65dd625c6b7ba793a2e23bc3"
         }
+      },
+      "response": {
+        "id": 8,
+        "result": {
+          "__qcl": true,
+          "messages": [
+            {
+              "name": "application.reload",
+              "data": true
+            }
+          ],
+          "data": "OK"
+        },
+        "error": null
+      }
     }
 ]
