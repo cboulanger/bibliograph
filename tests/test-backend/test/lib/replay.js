@@ -20,13 +20,20 @@ function dump(data) {
   console.log(JSON.stringify(data, null, 2));
 }
 
+// Persists (incremental) request id and session id across tests
+let requestId = 0;
+let sessionId = null;
+
+/**
+ * Takes a json file produced by the debug plugin and replays
+ * it to the server.
+ * @param {string} file_path 
+ */
 async function replay(file_path) {
   let replay_data = JSON.parse(
     fs.readFileSync(file_path, "utf-8"),
     "utf-8"
   );
-  let sessionId = null;
-  let requestId = 0;
 
   for (let data of replay_data) {
     let request = data.request;
