@@ -44,7 +44,7 @@ install:
   - ./generate.py -I build
   - echo "all" > plugins.txt
   - cd ..
-  
+
 
 before_script:
   - mysql -e 'CREATE DATABASE bibliograph;'
