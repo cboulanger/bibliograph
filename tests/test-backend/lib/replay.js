@@ -47,7 +47,6 @@ async function replay(file_path) {
 
     // override parameters if dynamic
     if( params ){
-      console.log(`Using params!`);
       request.params = params;
       params = null; 
     }
@@ -144,7 +143,8 @@ async function replay(file_path) {
       message = messages.find( (message) => message.name == "qcl.ui.dialog.Dialog.createDialog" );
       if( message && message.data.method == "next" ) {
         console.info("Found Shelf ID,  setting params.");
-        params = [true, message.data.params[0]];
+        params = message.data.params;
+        params.unshift(true);
       }
     }
   }
