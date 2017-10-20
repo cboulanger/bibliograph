@@ -27,14 +27,19 @@ let sessionId = null;
 /**
  * Takes a json file produced by the debug plugin and replays
  * it to the server.
- * @param {string} file_path 
+ * @param {string} name The name of the test
  */
-async function replay(file_path) {
+async function replay(name) {
+  let app_root = process.cwd();
+  let replay_path = `${app_root}/replay/${name}.json`;
+  let record_path = `${app_root}/record/${name}.json`;
+
   let replay_data = JSON.parse(
-    fs.readFileSync(file_path, "utf-8"),
+    fs.readFileSync(name, "utf-8"),
     "utf-8"
   );
 
+  let tape = [];
   let params = null;
 
   for (let data of replay_data) {
@@ -75,6 +80,9 @@ async function replay(file_path) {
       return;
     }
 
+    // record for later replay
+    tape.push( {request,response} );
+
     // handle server error
     if (result.error) {
       // Handle silent errors
@@ -92,6 +100,40 @@ async function replay(file_path) {
       console.log(`travis_fold:end:Log_${requestId}\r`);
       throw new Error("Error in response: " + result.error.message);
     }
+
+    // check messages for values that need to be adapted dynamically
+    let message;
+    if ( messages instanceof Array && messages.length ){
+      // adapt sessionId    
+      message = messages.find( (message) => message.name == "setSessionId" );
+      if (message){
+        //console.log("Found setSessionId message...");
+        sessionId = message.data;        
+      }
+
+      // shelf ids
+      /*
+      "messages": [ {
+        "name": "qcl.ui.dialog.Dialog.createDialog",
+        "data": {
+          "type": "progress",
+          "properties": {..},
+          "service": "bibliograph.setup",
+          "method": "next",
+          "params": [ "eda0de30036a2811846dc1f993df2356", 5 ]
+        }
+      } ],
+      */
+      message = messages.find( (message) => message.name == "qcl.ui.dialog.Dialog.createDialog" );
+      if( message && message.data.method == "next" ) {
+        //console.log("Found Shelf ID,  setting params.");
+        params = message.data.params;
+        params.unshift(true);
+      }
+    }    
+
+    // if recording, skip verification
+    if ( process.env.RECORD_JSONRPC_TRAFFIC ) continue;
     
     // compare received and expected json response
     let received = result;
@@ -116,38 +158,11 @@ async function replay(file_path) {
       dump(expected);
       console.log(`travis_fold:end:Expected_${requestId}\r`); 
     }
-
-    // check messages for values that need to be adapted dynamically
-    let message;
-    if ( messages instanceof Array && messages.length ){
-      // adapt sessionId    
-      message = messages.find( (message) => message.name == "setSessionId" );
-      if (message){
-        //console.log("Found setSessionId message...");
-        sessionId = message.data;        
-      }
-  
-      // shelf ids
-      /*
-      "messages": [ {
-        "name": "qcl.ui.dialog.Dialog.createDialog",
-        "data": {
-          "type": "progress",
-          "properties": {..},
-          "service": "bibliograph.setup",
-          "method": "next",
-          "params": [ "eda0de30036a2811846dc1f993df2356", 5 ]
-        }
-      } ],
-      */
-      message = messages.find( (message) => message.name == "qcl.ui.dialog.Dialog.createDialog" );
-      if( message && message.data.method == "next" ) {
-        //console.log("Found Shelf ID,  setting params.");
-        params = message.data.params;
-        params.unshift(true);
-      }
-    }
   }
+  console.log(`travis_fold:start:Recording\r`);
+  console.log(`Recorded jsonrpc traffic for later replay as '${name}.json':`);
+  dump(tape);
+  console.log(`travis_fold:end:Recording\r`); 
 }
 
 module.exports = replay;
