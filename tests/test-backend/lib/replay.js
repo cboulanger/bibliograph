@@ -144,6 +144,7 @@ async function replay(name) {
     
     // compare received and expected json response
     try {
+      console.log(json_diff.diff(received,expected,{keysOnly:true}));
       assert.deepEqual(received, expected);
     } catch(e) {
       console.log(`travis_fold:start:Diff_${requestId}\r`);

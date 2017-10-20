@@ -2,10 +2,10 @@ dist: trusty
 
 language: php
 
-addons: 
-  artifacts:
-    paths:
-    - $(ls tests/test-backend/test/record/*.json)
+#cache:
+#  bundler: true
+#  directories:
+#    - bibliograph/build
 
 php:
   - '5.5'
@@ -34,6 +34,7 @@ before_install:
   - if [[ ${TRAVIS_PHP_VERSION:0:1} == "7" ]]; then sudo add-apt-repository -y ppa:ondrej/php && sudo apt-get update && sudo apt-get install -y php7.0-xsl php7.0-intl; fi  
   - sudo apt-get install -y yaz libyaz4-dev 
   - pear channel-update pear.php.net && yes $'\n' | pecl install yaz && pear install Structures_LinkedList-0.2.2 && pear install File_MARC 
+  - echo "extension=yaz.so" >> /etc/php5/apache2/php.ini && \
   - sudo service apache2 restart
 
 install:
