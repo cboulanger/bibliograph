@@ -18,7 +18,7 @@ setup, you must create your own installation.
 
 ### Cloud9IDE
 The application can be easily cloned from GitHub to the [web-based Cloud9 IDE](https://c9.io), in fact this is how much of the development has been done recently. Create a new VM based on your own fork of the [GitHub repository](https://github.com/cboulanger/bibliograph). Once the VM 
-starts, in the terminal, execute `bash build-env/c9.io/install-c9.sh`. The start the
+starts, in the terminal, execute `bash build-env/c9.io/install-c9.sh`. Then start the
 Apache/PHP run configuration and you should be all set!
 
 ### Debian/Ubuntu
