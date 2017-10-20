@@ -1,10 +1,10 @@
 const 
   assert = require('assert'),
-  //assert = require('assert-diff'),
   fs = require("fs"),
   path = require("path"),
   process = require("process"),
-  r2 = require("r2");
+  r2 = require("r2"),
+  json_diff = require("json-diff");
   
 
 // url is dependent on build environment
@@ -30,12 +30,12 @@ let sessionId = null;
  * @param {string} name The name of the test
  */
 async function replay(name) {
-  let app_root = process.cwd();
-  let replay_path = `${app_root}/replay/${name}.json`;
-  let record_path = `${app_root}/record/${name}.json`;
+  let test_path = path.join(__dirname,"..","test");
+  let replay_path = `${test_path}/replay/${name}.json`;
+  let record_path = `${test_path}/record/${name}.json`;
 
   let replay_data = JSON.parse(
-    fs.readFileSync(name, "utf-8"),
+    fs.readFileSync(replay_path, "utf-8"),
     "utf-8"
   );
 
