@@ -122,7 +122,7 @@ async function replay(file_path) {
     let message;
     if ( messages instanceof Array && messages.length ){
       // adapt sessionId    
-      message = messages.find( (message) => messages.name == "setSessionId" );
+      message = messages.find( (message) => message.name == "setSessionId" );
       if (message){
         console.info("Found setSessionId message...");
         sessionId = message.data;        
@@ -141,7 +141,7 @@ async function replay(file_path) {
         }
       } ],
       */
-      message = messages.find( (message) => messages.name == "qcl.ui.dialog.Dialog.createDialog" );
+      message = messages.find( (message) => message.name == "qcl.ui.dialog.Dialog.createDialog" );
       if( message && message.data.method == "next" ) {
         console.info("Found Shelf ID,  setting params.");
         params = [true, message.data.params[0]];
