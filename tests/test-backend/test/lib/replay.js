@@ -48,7 +48,7 @@ async function replay(path) {
       // Handle silent errors
       if ( result.error.silent ){
         // Ingnore "Server busy messages"
-        if( result.error.message.test(/Server busy/)){
+        if( result.error.message.search(/server busy/i)){
           continue;
         }
         console.warn("Silent error: " + result.error.message);
