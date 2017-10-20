@@ -27,14 +27,14 @@ async function replay(path) {
   );
   let sessionId = null;
 
-
-  // sort by id 
   for (let data of replay_data) {
     let request = data.request;
     // overwrite the sessionId 
     request.server_data.sessionId = sessionId;
 
     let result;
+    // send the request and await the async response
+    console.info("    - Sending request #" + data.request.id);
     let response = await r2.post(url, { json: request }).text;
     try {
       result = JSON.parse(response);
@@ -45,6 +45,15 @@ async function replay(path) {
 
     //server error
     if (result.error) {
+      // Handle silent errors
+      if ( result.error.silent ){
+        // Ingnore "Server busy messages"
+        if( result.error.message.test(/Server busy/)){
+          continue;
+        }
+        console.warn("Silent error: " + result.error.message);
+        continue;
+      } 
       console.log(`travis_fold:start:Request_Error\r`);
       console.warn(`    - Request id ${request.id}): Error: ${result.error.message}.`);
       console.dir(result.error);
@@ -53,9 +62,7 @@ async function replay(path) {
       console.log("==== Log file");      
       console.log( fs.readFileSync("/tmp/bibliograph.log", "utf-8") );
       console.log(`travis_fold:end:Request_Error\r`);
-      if ( ! result.error.silent ){
-        throw new Error("Error in response: " + result.error.message);
-      }
+      throw new Error("Error in response: " + result.error.message);
     }
     
     // compare received and expected json response
