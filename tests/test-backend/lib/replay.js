@@ -1,3 +1,15 @@
+/**
+ * Replays pre-recorded JSONRPC traffic, adapting the source data in the
+ * case of dynamic values. 
+ * 
+ * The behavior of the script can be controlled with the following environment
+ * variables:
+ * - JSONRPC_COMP_KEYSONLY : 1 - compare the structure of the json data only, 
+ *   0/empty: compare keys and values.
+ * - JSONRPC_RECORD : record the ongoing jsonrpc traffic and display it at the 
+ *   end. 
+ */
+
 const 
   assert = require('assert'),
   fs = require("fs"),
@@ -115,7 +127,10 @@ async function replay(name) {
       message = messages.find( (message) => message.name == "setSessionId" );
       if (message){
         //console.log("Found setSessionId message...");
-        sessionId = message.data;        
+        sessionId = message.data;  
+        expected.result.messages.map( (message) => {
+          message.name == "setSessionId" 
+        });     
       }
 
       // shelf ids
@@ -140,13 +155,10 @@ async function replay(name) {
     }    
 
     // if recording, skip verification
-    if ( process.env.RECORD_JSONRPC_TRAFFIC ) continue;
+    if ( process.env.JSONRPC_RECORD ) continue;
     
     // compare received and expected json response
-    try {
-      console.log(json_diff.diff(received,expected,{keysOnly:true}));
-      assert.deepEqual(received, expected);
-    } catch(e) {
+    if( json_diff.diff(received,expected,{keysOnly:process.env.JSONRPC_COMP_KEYSONLY}) ) {
       console.log(`travis_fold:start:Diff_${requestId}\r`);
       console.log(`      ! Response differs from playback response:`);
       console.log(json_diff.diffString(received,expected));
