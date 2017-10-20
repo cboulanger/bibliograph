@@ -1,6 +1,6 @@
 # Installation and Deployment
 
-Note: Bibliograph is not yet compatible with PHP >=7.0. We're working on it. 
+Note: Bibliograph is not yet compatible with PHP >=7.0. We're [working on it](https://github.com/cboulanger/bibliograph/tree/branch_php7). You are welcome to create pull requests ([See why it fails](https://travis-ci.org/cboulanger/bibliograph/branches)). 
 
 ## Download
 You can download a precompiled package from [SourceForge](http://sourceforge.net/projects/bibliograph/files/latest/download), but this requires
@@ -22,6 +22,7 @@ starts, in the terminal, execute `bash build-env/c9.io/install-c9.sh`. Then star
 Apache/PHP run configuration and you should be all set!
 
 ### Debian/Ubuntu
+Note: this setup hasn't been tested thoroughly yet and might be buggy.
 After cloning the repository, run `bash build-env/debian-ubuntu/install-deb-ubuntu.sh`.
 You'll still have setup apache configuration, though. 
 
