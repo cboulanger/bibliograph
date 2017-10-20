@@ -96,6 +96,7 @@ async function replay(file_path) {
     // compare received and expected json response
     let received = result;
     let expected = data.response;
+    let messages = received.result.messages;
     expected.id = received.id;
 
     // this should eventually work:
@@ -104,8 +105,8 @@ async function replay(file_path) {
     try {
       assert.deepEqual(Object.keys(received), Object.keys(expected));
       assert.deepEqual(Object.keys(received.result), Object.keys(expected.result));
-      if(received.result.messages instanceof Array) {
-        assert.equal(received.result.messages.length, expected.result.messages.length);
+      if( messages instanceof Array) {
+        assert.equal(messages.length, expected.result.messages.length);
       }
       assert.deepEqual(Object.keys(received.result.data), Object.keys(expected.result.data));
     } catch(e) {
@@ -117,13 +118,12 @@ async function replay(file_path) {
     }
 
     // check messages for values that need to be adapted dynamically
-    let messages = result.result.messages;
     let message;
     if ( messages instanceof Array && messages.length ){
       // adapt sessionId    
       message = messages.find( (message) => message.name == "setSessionId" );
       if (message){
-        console.info("Found setSessionId message...");
+        //console.log("Found setSessionId message...");
         sessionId = message.data;        
       }
   
@@ -142,7 +142,7 @@ async function replay(file_path) {
       */
       message = messages.find( (message) => message.name == "qcl.ui.dialog.Dialog.createDialog" );
       if( message && message.data.method == "next" ) {
-        console.info("Found Shelf ID,  setting params.");
+        //console.log("Found Shelf ID,  setting params.");
         params = message.data.params;
         params.unshift(true);
       }

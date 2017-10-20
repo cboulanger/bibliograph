@@ -74,7 +74,7 @@ class bibliograph_service_Setup
    */
   public function log( $msg, $filters=QCL_LOG_SETUP )
   {
-    $this->dispatchClientMessage("console.log","Setup: " . $msg);
+    //$this->dispatchClientMessage("console.log","Setup: " . $msg);
     $this->getLogger()->log( $msg, QCL_LOG_SETUP );
   }
 
