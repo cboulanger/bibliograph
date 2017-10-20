@@ -13,7 +13,12 @@
   "license": "ISC",
   "dependencies": {
     "assert-diff": "^1.2.4",
+    "eslint": "^4.9.0",
     "mocha": "^4.0.1",
     "r2": "^2.0.0"
+  },
+  "devDependencies": {
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0"
   }
 }

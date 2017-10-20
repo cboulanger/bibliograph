@@ -47,6 +47,7 @@ async function replay(file_path) {
 
     // override parameters if dynamic
     if( params ){
+      console.log(`Using params!`);
       request.params = params;
       params = null; 
     }
@@ -83,11 +84,11 @@ async function replay(file_path) {
         if( result.error.message.search(/server busy/i)){
           continue;
         }
-        console.warn(`      - Ignoring silent error: ${result.error.message}.`);
+        console.warn(`      ! Ignoring silent error: ${result.error.message}.`);
         continue;
       } 
       console.log(`travis_fold:start:Log_${requestId}\r`);
-      console.warn(`      - Error: ${result.error.message}.`);
+      console.warn(`      ! Error: ${result.error.message}.`);
       console.log( fs.readFileSync("/tmp/bibliograph.log", "utf-8") );
       console.log(`travis_fold:end:Log_${requestId}\r`);
       throw new Error("Error in response: " + result.error.message);
@@ -110,55 +111,41 @@ async function replay(file_path) {
       assert.deepEqual(Object.keys(received.result.data), Object.keys(expected.result.data));
     } catch(e) {
       console.log(`travis_fold:start:Expected_${requestId}\r`);
-      console.warn(`      - Unexpected response.`);
+      console.warn(`      ! Unexpected response.`);
       console.log("==== Expected response: ====");
       dump(expected);
       console.log(`travis_fold:end:Expected_${requestId}\r`); 
     }
 
+    // check messages for values that need to be adapted dynamically
     let messages = result.result.messages;
-    // adapt sessionId
-    try {
-      if (
-        messages instanceof Array &&
-        messages.length &&
-        messages[0].name == "setSessionId"
-      ) {
-        sessionId = messages[0].data;
+    let message;
+    if ( messages instanceof Array && messages.length ){
+      // adapt sessionId    
+      message = messages.find( (message) => messages.name == "setSessionId" );
+      if (message){
+        console.info("Found setSessionId message...");
+        sessionId = message.data;        
       }
-    } catch (e) {
-      console.warn(`      - Problem setting session id: ${e.message}.`);
-    }
-
-    // shelf ids
-    try {
-    /*
-     "messages": [
-      {
+  
+      // shelf ids
+      /*
+      "messages": [ {
         "name": "qcl.ui.dialog.Dialog.createDialog",
         "data": {
           "type": "progress",
           "properties": {..},
           "service": "bibliograph.setup",
           "method": "next",
-          "params": [
-            "eda0de30036a2811846dc1f993df2356",
-            5
-          ]
+          "params": [ "eda0de30036a2811846dc1f993df2356", 5 ]
         }
+      } ],
+      */
+      message = messages.find( (message) => messages.name == "qcl.ui.dialog.Dialog.createDialog" );
+      if( message && message.data.method == "next" ) {
+        console.info("Found Shelf ID,  setting params.");
+        params = [true, message.data.params[0]];
       }
-    ],
-    */      
-      if (
-        messages instanceof Array &&
-        messages.length &&
-        messages[0].name == "qcl.ui.dialog.Dialog.createDialog" &&
-        messages[0].data.method == "next" 
-      ) {
-        params = [true, messages[0].data.params[0]];
-      }
-    } catch (e) {
-      console.warn(`      - Problem setting shelf id: ${e.message}.`);
     }
   }
 }
