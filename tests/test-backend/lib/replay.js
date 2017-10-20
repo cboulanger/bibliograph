@@ -101,6 +101,12 @@ async function replay(name) {
       throw new Error("Error in response: " + result.error.message);
     }
 
+    // we have a valid response now
+    let received = result;
+    let expected = data.response;
+    let messages = received.result.messages;
+    expected.id = received.id;
+
     // check messages for values that need to be adapted dynamically
     let message;
     if ( messages instanceof Array && messages.length ){
@@ -136,10 +142,7 @@ async function replay(name) {
     if ( process.env.RECORD_JSONRPC_TRAFFIC ) continue;
     
     // compare received and expected json response
-    let received = result;
-    let expected = data.response;
-    let messages = received.result.messages;
-    expected.id = received.id;
+  
 
     // this should eventually work:
     // assert.deepEqual(received, expected, 'Output does not match reference content');
