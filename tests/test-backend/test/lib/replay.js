@@ -35,6 +35,8 @@ async function replay(file_path) {
     "utf-8"
   );
 
+  let params = null;
+
   for (let data of replay_data) {
     let request = data.request;
     let origReqId = request.id;
@@ -42,25 +44,33 @@ async function replay(file_path) {
     // overwrite the sessionId and request Id;
     request.server_data.sessionId = sessionId;
     request.id = ++requestId;
+
+    // override parameters if dynamic
+    if( params ){
+      request.params = params;
+      params = null; 
+    }
     
     // log request
     console.log(`travis_fold:start:Request_${requestId}\r`);
-    console.info(`    - Sending request #${requestId} (${origReqId})`);
+    console.info(`    * Sending request #${requestId} (${origReqId})`);
     dump(request);
     console.log(`travis_fold:end:Request_${requestId}\r`);
 
     // send the request and await the async response
     let response = await r2.post(url, { json: request }).text;
-    console.log(`travis_fold:start:Response_${requestId}\r`);
-    console.info(`    - Received response to request #${requestId} (${origReqId})`);    
-    console.log(response);
-    console.log(`travis_fold:end:Response_${requestId}\r`);    
-    
+     
     // parse json
     let result;
+    console.log(`travis_fold:start:Response_${requestId}\r`);
+    console.info(`      - Received response ...`);    
     try {
       result = JSON.parse(response);
+      console.log(result);
+      console.log(`travis_fold:end:Response_${requestId}\r`);  
     } catch (error) {
+      console.log(response);
+      console.log(`travis_fold:end:Response_${requestId}\r`);  
       throw new Error("Invalid JSON.");
       return;
     }
@@ -73,11 +83,11 @@ async function replay(file_path) {
         if( result.error.message.search(/server busy/i)){
           continue;
         }
-        console.warn(`    - Request #${request.id}: Ignoring silent error: ${result.error.message}.`);
+        console.warn(`      - Ignoring silent error: ${result.error.message}.`);
         continue;
       } 
       console.log(`travis_fold:start:Log_${requestId}\r`);
-      console.warn(`    - Request #${request.id}: Error: ${result.error.message}.`);
+      console.warn(`      - Error: ${result.error.message}.`);
       console.log( fs.readFileSync("/tmp/bibliograph.log", "utf-8") );
       console.log(`travis_fold:end:Log_${requestId}\r`);
       throw new Error("Error in response: " + result.error.message);
@@ -100,15 +110,15 @@ async function replay(file_path) {
       assert.deepEqual(Object.keys(received.result.data), Object.keys(expected.result.data));
     } catch(e) {
       console.log(`travis_fold:start:Expected_${requestId}\r`);
-      console.warn(`    - Request #${request.id}: Unexpected response.`);
+      console.warn(`      - Unexpected response.`);
       console.log("==== Expected response: ====");
       dump(expected);
       console.log(`travis_fold:end:Expected_${requestId}\r`); 
     }
 
+    let messages = result.result.messages;
     // adapt sessionId
     try {
-      let messages = result.result.messages;
       if (
         messages instanceof Array &&
         messages.length &&
@@ -116,9 +126,41 @@ async function replay(file_path) {
       ) {
         sessionId = messages[0].data;
       }
-    } catch (e) {}
+    } catch (e) {
+      console.warn(`      - Problem setting session id: ${e.message}.`);
+    }
+
+    // shelf ids
+    try {
+    /*
+     "messages": [
+      {
+        "name": "qcl.ui.dialog.Dialog.createDialog",
+        "data": {
+          "type": "progress",
+          "properties": {..},
+          "service": "bibliograph.setup",
+          "method": "next",
+          "params": [
+            "eda0de30036a2811846dc1f993df2356",
+            5
+          ]
+        }
+      }
+    ],
+    */      
+      if (
+        messages instanceof Array &&
+        messages.length &&
+        messages[0].name == "qcl.ui.dialog.Dialog.createDialog" &&
+        messages[0].data.method == "next" 
+      ) {
+        params = [true, messages[0].data.params[0]];
+      }
+    } catch (e) {
+      console.warn(`      - Problem setting shelf id: ${e.message}.`);
+    }
   }
-  return; 
 }
 
 module.exports = replay;
