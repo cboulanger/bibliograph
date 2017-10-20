@@ -95,7 +95,6 @@ async function replay(name) {
     // we have a valid response now
     let received = result;
     let expected = data.response;
-    let messages = received.result.messages;
     expected.id = received.id;
 
     // record for later replay
@@ -121,6 +120,7 @@ async function replay(name) {
     }
 
     // check messages for values that need to be adapted dynamically
+    let messages = received.result.messages;
     let message;
     if ( messages instanceof Array && messages.length ){
       // adapt sessionId    
