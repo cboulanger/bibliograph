@@ -20,21 +20,24 @@ function dump(data) {
   console.log(JSON.stringify(data, null, 2));
 }
 
-async function replay(path) {
+async function replay(file_path) {
   let replay_data = JSON.parse(
-    fs.readFileSync(path, "utf-8"),
+    fs.readFileSync(file_path, "utf-8"),
     "utf-8"
   );
   let sessionId = null;
+  let requestId = 0;
 
   for (let data of replay_data) {
     let request = data.request;
-    // overwrite the sessionId 
+    // overwrite the sessionId and request Id;
     request.server_data.sessionId = sessionId;
+    let restDataRequestId = data.request.id;
+    data.request.id = ++requestId;
 
     let result;
     // send the request and await the async response
-    console.info("    - Sending request #" + data.request.id);
+    console.info(`    - Sending request #${requestId} (${restDataRequestId})`);
     let response = await r2.post(url, { json: request }).text;
     try {
       result = JSON.parse(response);

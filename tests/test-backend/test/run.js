@@ -11,10 +11,10 @@ describe('Bibliograph', async function() {
   if( ! c9 ) it ('should setup the application', async () => {
     await replay(__dirname + "/data/setup.json");
   });
-  it("should wait 5 seconds to let setup finish", function(done){
+  it("should wait 10 seconds to let setup finish", function(done){
     setTimeout(function() {
         done();
-    }, 5000);
+    }, 10000);
   });
   it('should boot', async () => {
     await replay(__dirname + "/data/boot.json");
