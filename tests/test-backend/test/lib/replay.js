@@ -66,10 +66,10 @@ async function replay(file_path) {
     console.info(`      - Received response ...`);    
     try {
       result = JSON.parse(response);
-      dump(response);
+      dump(result);
       console.log(`travis_fold:end:Response_${requestId}\r`);  
     } catch (error) {
-      console.log(result);
+      console.log(response);
       console.log(`travis_fold:end:Response_${requestId}\r`);  
       throw new Error("Invalid JSON.");
       return;
