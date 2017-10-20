@@ -91,14 +91,15 @@ async function replay(name) {
         if( result.error.message.search(/server busy/i)){
           continue;
         }
-        console.warn(`      ! Ignoring silent error: ${result.error.message}.`);
+        console.log(`      ! Ignoring silent error: ${result.error.message}.`);
         continue;
-      } 
-      console.log(`travis_fold:start:Log_${requestId}\r`);
-      console.warn(`      ! Error: ${result.error.message}.`);
-      console.log( fs.readFileSync("/tmp/bibliograph.log", "utf-8") );
-      console.log(`travis_fold:end:Log_${requestId}\r`);
-      throw new Error("Error in response: " + result.error.message);
+      } else {
+        console.log(`travis_fold:start:Log_${requestId}\r`);
+        console.log(`      ! Error: ${result.error.message}.`);
+        console.log( fs.readFileSync("/tmp/bibliograph.log", "utf-8") );
+        console.log(`travis_fold:end:Log_${requestId}\r`);
+        throw new Error("Error in response: " + result.error.message);
+      }
     }
 
     // we have a valid response now
@@ -146,8 +147,8 @@ async function replay(name) {
       assert.deepEqual(received, expected);
     } catch(e) {
       console.log(`travis_fold:start:Diff_${requestId}\r`);
-      console.warn(`      ! Response differs from playback response:`);
-      json_diff.diff(received,expected);
+      console.log(`      ! Response differs from playback response:`);
+      console.log(json_diff.diffString(received,expected));
       console.log(`travis_fold:end:Diff_${requestId}\r`); 
     }
   }
