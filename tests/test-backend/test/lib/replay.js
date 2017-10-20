@@ -37,13 +37,17 @@ async function replay(file_path) {
 
   for (let data of replay_data) {
     let request = data.request;
+    let origReqId = request.id;
     // overwrite the sessionId and request Id;
     request.server_data.sessionId = sessionId;
     request.id = ++requestId;
 
     let result;
     // send the request and await the async response
-    console.info(`    - Sending request #${requestId} (${data.request.id})`);
+    console.log(`travis_fold:start:Request_${requestId}\r`);
+    console.info(`    - Sending request #${requestId} (${origReqId})`);
+    dump(request);
+    console.log(`travis_fold:end:Request_${requestId}\r`);
     let response = await r2.post(url, { json: request }).text;
     try {
       result = JSON.parse(response);
@@ -63,14 +67,10 @@ async function replay(file_path) {
         console.warn("Silent error: " + result.error.message);
         continue;
       } 
-      console.log(`travis_fold:start:Request_Error\r`);
-      console.warn(`    - Request id ${request.id}): Error: ${result.error.message}.`);
-      console.dir(result.error);
-      console.log(">>>> Request");
-      dump(request);
-      console.log("==== Log file");      
+      console.log(`travis_fold:start:Response_${requestId}\r`);
+      console.warn(`    - Request #${request.id}: Error: ${result.error.message}.`);
       console.log( fs.readFileSync("/tmp/bibliograph.log", "utf-8") );
-      console.log(`travis_fold:end:Request_Error\r`);
+      console.log(`travis_fold:end:Response_${requestId}\r`);
       throw new Error("Error in response: " + result.error.message);
     }
     
@@ -90,15 +90,13 @@ async function replay(file_path) {
       }
       assert.deepEqual(Object.keys(received.result.data), Object.keys(expected.result.data));
     } catch(e) {
-      console.log(`travis_fold:start:Request_${request.id}\r`);  
-      console.warn(`    - Request id ${request.id}): unexpected response.`);
-      console.log(">>>> Request");
-      dump(request);
-      console.log("==== Response (expected)");
+      console.log(`travis_fold:start:Response_${requestId}\r`);
+      console.warn(`    - Request #${request.id}): unexpected response.`);
+      console.log("==== Expected response ====");
       dump(expected);
-      console.log("<<<< Response (received)");
+      console.log("==== Actual response ====");
       dump(received);
-      console.log(`travis_fold:end:Request_${request.id}\r`);      
+      console.log(`travis_fold:end:Response_${requestId}\r`); 
     }
 
     // adapt sessionId
