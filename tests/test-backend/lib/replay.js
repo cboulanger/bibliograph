@@ -158,7 +158,7 @@ async function replay(name) {
     if ( process.env.JSONRPC_RECORD ) continue;
     
     // compare received and expected json response
-    if( json_diff.diff(received,expected,{keysOnly:process.env.JSONRPC_COMP_KEYSONLY}) ) {
+    if( json_diff.diff(received,expected,{keysOnly:process.env.JSONRPC_COMP_KEYSONLY||false}) ) {
       console.log(`travis_fold:start:Diff_${requestId}\r`);
       console.log(`      ! Response differs from playback response:`);
       console.log(json_diff.diffString(received,expected));
