@@ -65,7 +65,7 @@ class z3950_plugin
     $error = "";
     if (  ! function_exists("yaz_connect" ) )
     {
-      //$error = "Plugin needs PHP-YAZ extension. ";
+      $error = "Plugin needs PHP-YAZ extension. ";
     }
 
     if ( ! class_exists( "XSLTProcessor" ) )
@@ -78,11 +78,12 @@ class z3950_plugin
     $xml2bib->exec("-v");
     if ( ! strstr( $xml2bib->getStdErr(), "bibutils" ) )
     {
-      $this->warn( "Error installing plugin: " . $xml2bib->getStdErr() );
+      $this->warn( "Error installing z3950 plugin: " . $xml2bib->getStdErr() );
       $error .= "Could not call bibutis through the shell. Please check your setup.";
     }
     if ( $error !== "" )
     {
+      $this->warn("Error installing z3950 plugin: $error");
       throw new qcl_application_plugin_Exception($error);
     }
 

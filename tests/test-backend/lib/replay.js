@@ -92,33 +92,33 @@ async function replay(name) {
       return;
     }
 
-    // record for later replay
-    tape.push( {request,response} );
-
-    // handle server error
-    if (result.error) {
-      // Handle silent errors
-      if ( result.error.silent ){
-        // Ingnore "Server busy messages"
-        if( result.error.message.search(/server busy/i)){
-          continue;
-        }
-        console.log(`      ! Ignoring silent error: ${result.error.message}.`);
-        continue;
-      } else {
-        console.log(`travis_fold:start:Log_${requestId}\r`);
-        console.log(`      ! Error: ${result.error.message}.`);
-        console.log( fs.readFileSync("/tmp/bibliograph.log", "utf-8") );
-        console.log(`travis_fold:end:Log_${requestId}\r`);
-        throw new Error("Error in response: " + result.error.message);
-      }
-    }
-
     // we have a valid response now
     let received = result;
     let expected = data.response;
     let messages = received.result.messages;
     expected.id = received.id;
+
+    // record for later replay
+    tape.push( {request,response:received} );
+
+    // handle server error
+    if (received.error) {
+      // Handle silent errors
+      if ( received.error.silent ){
+        // Ingnore "Server busy messages"
+        if( received.error.message.search(/server busy/i)){
+          continue;
+        }
+        console.log(`      ! Ignoring silent error: ${received.error.message}.`);
+        continue;
+      } else {
+        console.log(`travis_fold:start:Log_${requestId}\r`);
+        console.log(`      ! Error: ${received.error.message}.`);
+        console.log( fs.readFileSync("/tmp/bibliograph.log", "utf-8") );
+        console.log(`travis_fold:end:Log_${requestId}\r`);
+        throw new Error("Error in response: " + received.error.message);
+      }
+    }
 
     // check messages for values that need to be adapted dynamically
     let message;
@@ -155,7 +155,7 @@ async function replay(name) {
     }    
 
     // if recording, skip verification
-    if ( process.env.JSONRPC_RECORD ) continue;
+    //if ( process.env.JSONRPC_RECORD ) continue;
     
     // compare received and expected json response
     if( json_diff.diff(received,expected,{keysOnly:process.env.JSONRPC_COMP_KEYSONLY||false}) ) {
