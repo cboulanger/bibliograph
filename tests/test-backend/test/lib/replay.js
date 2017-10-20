@@ -51,16 +51,16 @@ async function replay(file_path) {
 
     // send the request and await the async response
     let response = await r2.post(url, { json: request }).text;
-    console.info(`    - Received response to request #${requestId} (${origReqId})`);
-
+    console.log(`travis_fold:start:Response_${requestId}\r`);
+    console.info(`    - Received response to request #${requestId} (${origReqId})`);    
+    console.log(response);
+    console.log(`travis_fold:end:Response_${requestId}\r`);    
+    
     // parse json
     let result;
     try {
       result = JSON.parse(response);
     } catch (error) {
-      console.log(`travis_fold:start:Response_${requestId}\r`);
-      console.log(response);
-      console.log(`travis_fold:end:Response_${requestId}\r`);
       throw new Error("Invalid JSON.");
       return;
     }
@@ -76,10 +76,10 @@ async function replay(file_path) {
         console.warn(`    - Request #${request.id}: Ignoring silent error: ${result.error.message}.`);
         continue;
       } 
-      console.log(`travis_fold:start:Response_${requestId}\r`);
+      console.log(`travis_fold:start:Log_${requestId}\r`);
       console.warn(`    - Request #${request.id}: Error: ${result.error.message}.`);
       console.log( fs.readFileSync("/tmp/bibliograph.log", "utf-8") );
-      console.log(`travis_fold:end:Response_${requestId}\r`);
+      console.log(`travis_fold:end:Log_${requestId}\r`);
       throw new Error("Error in response: " + result.error.message);
     }
     
@@ -99,13 +99,11 @@ async function replay(file_path) {
       }
       assert.deepEqual(Object.keys(received.result.data), Object.keys(expected.result.data));
     } catch(e) {
-      console.log(`travis_fold:start:Response_${requestId}\r`);
-      console.warn(`    - Request #${request.id}: unexpected response.`);
-      console.log("==== Expected response ====");
+      console.log(`travis_fold:start:Expected_${requestId}\r`);
+      console.warn(`    - Request #${request.id}: Unexpected response.`);
+      console.log("==== Expected response: ====");
       dump(expected);
-      console.log("==== Actual response ====");
-      dump(received);
-      console.log(`travis_fold:end:Response_${requestId}\r`); 
+      console.log(`travis_fold:end:Expected_${requestId}\r`); 
     }
 
     // adapt sessionId
