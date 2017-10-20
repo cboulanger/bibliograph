@@ -58,7 +58,7 @@ async function replay(name) {
     
     // log request
     console.log(`travis_fold:start:Request_${requestId}\r`);
-    console.info(`    * Sending request #${requestId} (${origReqId})`);
+    console.info(`    * Sending request #${requestId} (${origReqId}): ${request.service}.${request.method}`);
     dump(request);
     console.log(`travis_fold:end:Request_${requestId}\r`);
 
@@ -142,24 +142,13 @@ async function replay(name) {
     if ( process.env.RECORD_JSONRPC_TRAFFIC ) continue;
     
     // compare received and expected json response
-  
-
-    // this should eventually work:
-    // assert.deepEqual(received, expected, 'Output does not match reference content');
-    // for the moment,just check structural equality (keys)
     try {
-      assert.deepEqual(Object.keys(received), Object.keys(expected));
-      assert.deepEqual(Object.keys(received.result), Object.keys(expected.result));
-      if( messages instanceof Array) {
-        assert.equal(messages.length, expected.result.messages.length);
-      }
-      assert.deepEqual(Object.keys(received.result.data), Object.keys(expected.result.data));
+      assert.deepEqual(received, expected);
     } catch(e) {
-      console.log(`travis_fold:start:Expected_${requestId}\r`);
-      console.warn(`      ! Unexpected response.`);
-      console.log("==== Expected response: ====");
-      dump(expected);
-      console.log(`travis_fold:end:Expected_${requestId}\r`); 
+      console.log(`travis_fold:start:Diff_${requestId}\r`);
+      console.warn(`      ! Response differs from playback response:`);
+      json_diff.diff(received,expected);
+      console.log(`travis_fold:end:Diff_${requestId}\r`); 
     }
   }
   console.log(`travis_fold:start:Recording\r`);
