@@ -39,7 +39,7 @@ before_install:
   - pear channel-update pear.php.net && yes $'\n' | pecl install yaz && pear install Structures_LinkedList-0.2.2 && pear install File_MARC 
   - sudo service apache2 restart
   - if php -i | grep yaz --quiet; then echo "YAZ is installed"; else echo "YAZ installation failed"; exit 1; fi;
-  -
+  - echo '<?php if(function_exists("yaz_connect" )) echo "yaz_connect exists"; else echo "!!! no yaz_connect"; echo "\n";' | php
 
 install:
   # build bibliograph
