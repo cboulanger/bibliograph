@@ -17,4 +17,7 @@ node_modules/
 /bibliograph/**/test/
 /bibliograph/source/script/*
 
+# php
+bibliograph/vendor/
+
 *.zip
