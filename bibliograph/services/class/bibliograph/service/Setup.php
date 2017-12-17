@@ -183,6 +183,14 @@ class bibliograph_service_Setup
       );
       $this->log("Importing initial user data ....", QCL_LOG_SETUP );
       $this->getApplication()->importInitialData($dataPaths);
+
+      // hash passwords
+      $userModel->findAll();
+      while($userModel->loadNext()){
+        $password = $userModel->getPassword();
+        $hashed = $this->getApplication()->getAccessController()->generateHash( $password );
+        $userModel->setPassword($hashed)->save(); 
+      }       
     }
     
     // result
