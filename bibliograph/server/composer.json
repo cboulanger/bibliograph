@@ -1,0 +1,13 @@
+{
+    "require": {
+        "yiisoft/yii2": "~2.0.0",
+        "cranetm/yii2-json-rpc-2.0": "1.*",
+        "bizley/migration": "^2.2"
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ]
+}

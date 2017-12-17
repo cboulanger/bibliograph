@@ -16,4 +16,4 @@ if (isset($_SERVER['HTTP_COOKIE'])) {
     }
 }
 echo "<h1>Bibliograph has been reset.</h1>";
-echo '<p>Return to <a href="source">source</a> or <a href="build">build</a> version.</p>';
+echo '<p>Return to <a href="source/">source</a> or <a href="build/">build</a> version.</p>';
