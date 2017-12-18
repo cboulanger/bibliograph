@@ -1,8 +1,11 @@
 {
     "require": {
         "yiisoft/yii2": "~2.0.0",
-        "cranetm/yii2-json-rpc-2.0": "1.*",
-        "bizley/migration": "^2.2"
+        "cranetm/yii2-json-rpc-2.0": "1.*"
+    },
+    "require-dev": {
+        "bizley/migration": "^2.2",
+        "yiisoft/yii2-gii": "~2.0.0"
     },
     "repositories": [
         {
