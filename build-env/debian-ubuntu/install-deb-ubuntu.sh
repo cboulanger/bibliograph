@@ -16,7 +16,7 @@ apt-get update && apt-get install -y \
   git
 
 # Install php-yaz
-pecl install yaz
+yes $'\n' | pecl install yaz
 pear install Structures_LinkedList-0.2.2
 pear install File_MARC
 echo "extension=yaz.so" >> /etc/php5/apache2/php.ini
