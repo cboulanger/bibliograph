@@ -44,8 +44,8 @@ port = 3306
 ;; needs the global RELOAD privilege
 adminname  = bibliograph
 adminpassw = bibliograph
-username  = ${adminname}
-userpassw = ${adminpassw}
+username  = ${database.adminname}
+userpassw = ${database.adminpassw}
 
 ;; database.admindb
 ;; The name of the database holding all the tables with global and
