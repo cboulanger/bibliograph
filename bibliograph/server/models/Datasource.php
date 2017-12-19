@@ -81,4 +81,9 @@ class Datasource extends \yii\db\ActiveRecord
             'hidden' => Yii::t('app', 'Hidden'),
         ];
     }
+
+    public static function createInstance($datasourceName){
+        
+
+    }
 }
