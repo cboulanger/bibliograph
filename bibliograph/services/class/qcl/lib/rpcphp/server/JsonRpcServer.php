@@ -434,7 +434,7 @@ class JsonRpcServer extends AbstractServer
    * @param Exception $exception
    * @return void
    */
-  function jsonRpcExceptionHandler( Exception $e )
+  function jsonRpcExceptionHandler( $e )
   {
     $errtype = "Uncaught Exception";
     $errstr  = $e->getMessage();
