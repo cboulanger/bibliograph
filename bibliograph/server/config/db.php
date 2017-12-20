@@ -1,5 +1,5 @@
 <?php
-$ini = require('bibliograph.php');
+$ini = require('ini.php');
 $db = (object) $ini['database'];
 return [
     'db' => [

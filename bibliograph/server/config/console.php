@@ -1,14 +1,19 @@
 <?php
+require "constants.php";
 $config = [
     'id' => 'bibliograph-server',
     'bootstrap' => ['gii'],
     'basePath' => dirname(__DIR__) ,
     'controllerNamespace' => 'bibliograph\controllers',
     'aliases' => [
-        '@bibliograph' => dirname(__DIR__)
+        '@bibliograph' => dirname(__DIR__),
+        '@lib' => __DIR__ . "/../lib/"
     ],
-    'components' => array_merge(require('db.php'),[
-
+    'components' => array_merge(
+        require('db.php'),[
+        'utils' => [
+            'class' => 'lib\component\Utils'
+        ],
     ]),
     'modules' => [
         'gii' => [
