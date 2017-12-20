@@ -14,7 +14,7 @@ use Yii;
  * @property resource $data
  * @property integer $SessionId
  */
-class Messages extends \yii\db\ActiveRecord
+class Message extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc

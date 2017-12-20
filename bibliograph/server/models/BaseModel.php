@@ -40,4 +40,13 @@ class BaseModel extends ActiveRecord
         return implode("_", $parts );
     }
 
+    /**
+     * Shim method 
+     *
+     * @param [type] $string
+     * @return void
+     */
+    protected function tr( $string ){
+        return Yii::t('app', $string );
+    }
 }

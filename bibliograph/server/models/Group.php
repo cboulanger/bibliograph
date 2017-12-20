@@ -1,7 +1,26 @@
 <?php
+/* ************************************************************************
+
+Bibliograph: Collaborative Online Reference Management
+
+http://www.bibliograph.org
+
+Copyright:
+2007-2017 Christian Boulanger
+
+License:
+LGPL: http://www.gnu.org/licenses/lgpl.html
+EPL: http://www.eclipse.org/org/documents/epl-v10.php
+See the LICENSE file in the project's top-level directory for details.
+
+Authors:
+ * Chritian Boulanger (cboulanger)
+
+ ************************************************************************ */
 
 namespace app\models;
 
+use app\models\Group_User;
 use Yii;
 
 /**
@@ -19,44 +38,68 @@ use Yii;
  */
 class Group extends \yii\db\ActiveRecord
 {
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
-    {
-        return 'data_Group';
-    }
+  /**
+   * @inheritdoc
+   */
+  public static function tableName()
+  {
+    return 'data_Group';
+  }
 
-    /**
-     * @inheritdoc
-     */
-    public function rules()
-    {
-        return [
-            [['created', 'modified'], 'safe'],
-            [['ldap', 'active'], 'integer'],
-            [['namedId'], 'string', 'max' => 50],
-            [['name', 'description'], 'string', 'max' => 100],
-            [['defaultRole'], 'string', 'max' => 30],
-            [['namedId'], 'unique'],
-        ];
-    }
+  /**
+   * @inheritdoc
+   */
+  public function rules()
+  {
+    return [
+      [['created', 'modified'], 'safe'],
+      [['ldap', 'active'], 'integer'],
+      [['namedId'], 'string', 'max' => 50],
+      [['name', 'description'], 'string', 'max' => 100],
+      [['defaultRole'], 'string', 'max' => 30],
+      [['namedId'], 'unique'],
+    ];
+  }
 
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => Yii::t('app', 'ID'),
-            'namedId' => Yii::t('app', 'Named ID'),
-            'created' => Yii::t('app', 'Created'),
-            'modified' => Yii::t('app', 'Modified'),
-            'name' => Yii::t('app', 'Name'),
-            'description' => Yii::t('app', 'Description'),
-            'ldap' => Yii::t('app', 'Ldap'),
-            'defaultRole' => Yii::t('app', 'Default Role'),
-            'active' => Yii::t('app', 'Active'),
-        ];
-    }
+  /**
+   * @inheritdoc
+   */
+  public function attributeLabels()
+  {
+    return [
+      'id' => Yii::t('app', 'ID'),
+      'namedId' => Yii::t('app', 'Named ID'),
+      'created' => Yii::t('app', 'Created'),
+      'modified' => Yii::t('app', 'Modified'),
+      'name' => Yii::t('app', 'Name'),
+      'description' => Yii::t('app', 'Description'),
+      'ldap' => Yii::t('app', 'Ldap'),
+      'defaultRole' => Yii::t('app', 'Default Role'),
+      'active' => Yii::t('app', 'Active'),
+    ];
+  }
+
+  //-------------------------------------------------------------
+  // Relations
+  //-------------------------------------------------------------
+
+  protected function getGroupUsers()
+  {
+    return $this->hasMany(Group_User::className(), ['GroupId' => 'id']);
+  }
+
+  protected function getUsers()
+  {
+    return $this->hasMany(User::className(), ['id' => 'UserId'])->via('groupUsers');
+  }
+
+  protected function getGroupDatasources()
+  {
+    return $this->hasMany(Datasource_Group::className(), ['GroupId' => 'id']);
+  }
+
+  protected function getDatasources()
+  {
+    return $this->hasMany(Datasource::className(), ['id' => 'DatasourceId'])->via('groupDatasources');
+  }
 }

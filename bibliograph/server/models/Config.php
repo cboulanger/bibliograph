@@ -3,6 +3,16 @@
 namespace app\models;
 
 use Yii;
+use app\models\User;
+
+/*
+ * constants
+ */
+define( "QCL_CONFIG_TYPE_STRING", "string");
+define( "QCL_CONFIG_TYPE_NUMBER", "number");
+define( "QCL_CONFIG_TYPE_BOOLEAN", "boolean");
+define( "QCL_CONFIG_TYPE_LIST", "list");
+
 
 /**
  * This is the model class for table "data_Config".
@@ -16,14 +26,14 @@ use Yii;
  * @property string $created
  * @property string $modified
  */
-class Config extends \app\models\BaseModel
+class Config extends app\models\BaseModel
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'data_Config';
+      return 'data_Config';
     }
 
     /**
@@ -55,5 +65,5 @@ class Config extends \app\models\BaseModel
             'created' => 'Created',
             'modified' => 'Modified',
         ];
-    }
+    }  
 }
