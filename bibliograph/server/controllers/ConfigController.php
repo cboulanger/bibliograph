@@ -64,16 +64,14 @@ class ConfigController extends AppController
    */
   function actionSet( $key, $value )
   {
-    $configModel = $this->getApplication()->getConfigModel();
-
     /*
      * check key
      */
-    if ( ! $configModel->keyExists( $key ) )
+    if ( ! $this->keyExists( $key ) )
     {
       throw new InvalidArgumentException("Configuration key '$key' does not exist");
     }
-    if ( ! $configModel->valueIsEditable( $key ) )
+    if ( ! $this->valueIsEditable( $key ) )
     {
       throw new InvalidArgumentException("The value of configuration key '$key' is not editable");
     }
@@ -81,10 +79,10 @@ class ConfigController extends AppController
     /*
      * if value is customizable, set the user variant of the key
      */
-    if ( $configModel->valueIsCustomizable( $key ) )
+    if ( $this->valueIsCustomizable( $key ) )
     {
       $this->requirePermission("config.value.edit");
-      $configModel->setKey( $key, $value );
+      $this->setKey( $key, $value );
     }
 
     /*
@@ -93,7 +91,7 @@ class ConfigController extends AppController
     else
     {
       $this->requirePermission("config.default.edit");
-      $configModel->setKeyDefault( $key, $value );
+      $this->setKeyDefault( $key, $value );
     }
 
     /*
@@ -131,38 +129,28 @@ class ConfigController extends AppController
       default: 
         throw new LogicException("Invalid default value for preference key '$key'");
     }
-    $this->getConfigModel()->createKeyIfNotExists($key, $type, $customize, $default, $final);
+    $this->createKeyIfNotExists($key, $type, $customize, $default, $final);
   }
   
   /**
-   * Returns the value of the given preference key
+   * Returns the value of the given preference key. Alias of #getKey()
    * @param string $key The name of the preference
    * @return mixed
    */
   public function getPreference( $key )
   {
-    return $this->getConfigModel()->getKey( $key );
+    return $this->getKey( $key );
   }
   
   /**
-   * Sets the value of the given preference key
+   * Sets the value of the given preference key. Alias of #setKey()
    * @param string $key The name of the preference
    * @return void
    */
   public function setPreference( $key, $value )
   {
-    $this->getConfigModel()->setKey( $key, $value );
+    $this->setKey( $key, $value );
   }  
-
-
-/**
-   * Returns the config model singleton instance used by the application
-   * @return qcl_config_ConfigModel
-   */
-  public function getConfigModel()
-  {
-    return $this->getAccessController()->getConfigModel();
-  }
 
   /**
    * Sets up configuration keys if they do not already exist
@@ -173,7 +161,6 @@ class ConfigController extends AppController
    */
   public function setupConfigKeys( $map )
   {
-    qcl_assert_array( $map, "Invalid map argument");
     $configModel = $this->getConfigModel();
     foreach( $map as $key => $data )
     {
@@ -188,16 +175,6 @@ class ConfigController extends AppController
   //-------------------------------------------------------------
   // helper methods
   //-------------------------------------------------------------
-
-
-  /**
-   * Returns the active user object
-   * @return app\models\User
-   */
-  protected function getActiveUser()
-  {
-    return Yii::$app->activeUser;
-  }
 
   /**
    * Given a user id, return the user model. If no id is given or

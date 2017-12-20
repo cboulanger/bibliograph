@@ -148,7 +148,7 @@ class User extends app\models\BaseModel
   protected function getGroups()
   {
     return $this->hasMany(Group::className(), ['id' => 'GroupId'])->via('userGroups');
-  }  
+  } 
 
   //-------------------------------------------------------------
   // API
@@ -267,37 +267,26 @@ class User extends app\models\BaseModel
   {
     if ($refresh or !$this->roles) {
       $roles = array();
+      $roleObjects = null;
 
       /*
        * simple user-role link
        * FIXME rewrite this, now group-specific roles ar NOT ignored
        */
       if (Yii::$app->utils->getIniValue("access.global_roles_only")) {
-        try {
-          $roleModel->findLinked($this);
-          while ($roleModel->loadNext()) {
-            $roles[] = $roleModel->namedId();
-          }
-        } catch (qcl_data_model_RecordNotFoundException $e) {
-        }
-      } /*
+        $roleObjects = $this->getRoles();
+      } 
+      
+      /*
        * users have roles dependent on group
        */
       else {
-        $groups = $this->groups();
-        $groupModel = $this->getGroupModel();
+        $groupObjects = $this->getGroups();
 
-        /*
-         * get the group-dependent role
-         */
-        foreach ($groups as $groupName) {
-          $groupModel->load($groupName);
-          try {
-            $roleModel->findLinked($this, $groupModel);
-            while ($roleModel->loadNext()) {
-              $roles[] = $roleModel->namedId();
-            }
-          } catch (qcl_data_model_RecordNotFoundException $e) {
+        // get the group-dependent role
+        foreach ($groupObjects as $groupObject) {
+          foreach( $groupObject->getRoles() as $roleObject ){
+            $roles[] = $roleObject->namedId; 
           }
         }
 
