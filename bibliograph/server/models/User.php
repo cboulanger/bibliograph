@@ -157,4 +157,294 @@ class User extends BaseModel
   // API
   //-------------------------------------------------------------
 
+  /**
+   * Alias of #namedId
+   * @return string
+   */
+  public function getUsername()
+  {
+    return $this->namedId;
+  }
+
+  /**
+   * Whether the given user name is the name of a guest (anonymous) user
+   * @return bool True if user name is guest
+   * @todo we need some more sophisticated stuff here
+   */
+  public function isAnonymous()
+  {
+    return (bool) $this->getAnonymous();
+  }
+
+  /**
+   * Returns the value of the "online" property. This doesn't guarantee that the
+   * value actually reflects the user's online status - it is the role of the access
+   * controller to set/unset it.
+   * @return boolean
+   */
+  public function isOnline()
+  {
+    return $this->online;
+  }
+
+  /**
+   * Checks if the current user has the given permission
+   * respects wildcards, i.e. myapp.permissions.* covers
+   * myapp.permissions.canDoFoo
+   * @param string $requestedPermission the permission to check
+   * @return bool
+   * @todo cache result for performance
+   */
+  public function hasPermission($requestedPermission)
+  {
+    static $cache = array();
+    if (isset($cache[$requestedPermission])) {
+      return $cache[$requestedPermission];
+    } else {
+      $hasPermission = $this->_hasPermission($requestedPermission);
+      $cache[$requestedPermission] = $hasPermission;
+      return $hasPermission;
+    }
+  }
+
+  /**
+   * The implementation of hasPermission
+   * @param $requestedPermission
+   * @return bool
+   */
+  protected function _hasPermission($requestedPermission)
+  {
+
+    // get all permissions of the user
+    $permissions = $this->permissions();
+
+    // use wildcard?
+    $useWildcard = strstr($requestedPermission, "*");
+
+    // check if permission is granted
+    foreach ($permissions as $permission) {
+      /*
+       * exact match
+       */
+      if ($permission == $requestedPermission) {
+        return true;
+      } /*
+       * else if the current permission name contains a wildcard
+       */
+      elseif (($pos = strpos($permission, "*")) !== false) {
+        if (substr($permission, 0, $pos) == substr($requestedPermission, 0, $pos)) {
+          return true;
+        }
+      } /*
+       * else if the requested permission contains a wildcard
+       */
+      elseif ($useWildcard and ($pos = strpos($requestedPermission, "*")) !== false) {
+        if (substr($permission, 0, $pos) == substr($requestedPermission, 0, $pos)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Whether the user has the given role
+   * @param string $role
+   * @return bool
+   * @todo this can be optimized
+   */
+  public function hasRole($role)
+  {
+    return in_array($role, $this->roles());
+  }
+
+  /**
+   * Returns list of roles that a user has.
+   * @param bool $refresh
+   *    If true, reload group memberships. If false(default),
+   *    use cached values
+   * @return string[]
+   *    Array of role names
+   */
+  public function getRoleNames($refresh = false)
+  {
+    static $roles = null;
+    if( is_null($roles) or $refresh ){
+      $cache = $this->roles();
+      $roles = array();
+      $roleObjects = null;
+
+      /*
+       * simple user-role link
+       * FIXME rewrite this, now group-specific roles ar NOT ignored
+       */
+      if (Yii::$app->utils->getIniValue("access.global_roles_only")) {
+        $roleObjects = $this->getRoles();
+      } 
+      
+      /*
+       * users have roles dependent on group
+       */
+      else {
+        $groupObjects = $this->getGroups();
+
+        // get the group-dependent role
+        foreach ($groupObjects as $groupObject) {
+          foreach( $groupObject->getRoles() as $roleObject ){
+            $roles[] = $roleObject->namedId; 
+          }
+        }
+
+        /*
+         * add the global roles
+         */
+        try {
+          $roleModel->findLinkedNotDepends($this, $groupModel);
+          while ($roleModel->loadNext()) {
+            $roles[] = $roleModel->namedId();
+          }
+        } catch (qcl_data_model_RecordNotFoundException $e) {
+        }
+      }
+      $roles = array_unique($roles);
+    }
+    return $roles;
+  }
+
+  /**
+   * Returns list of groups that a user belongs to.
+   *
+   * @param bool $refresh
+   *    If true, reload group memberships. If false(default),
+   *    use cached values
+   *
+   * @return array
+   *    Array of string values: group named ids.
+   */
+  public function groups($refresh = false)
+  {
+    $groupModel = $this->getGroupModel();
+    if ($refresh or !$this->groups) {
+      $groups = array();
+      try {
+        $groupModel->findLinked($this);
+        while ($groupModel->loadNext()) {
+          $groups[] = $groupModel->namedId();
+        }
+      } catch (qcl_data_model_RecordNotFoundException $e) {
+      }
+      $this->groups = $groups;
+    }
+    return $this->groups;
+  }
+
+  /**
+   * Returns list of permissions that the user has
+   *
+   * @param bool $refresh
+   *    If true, reload group memberships. If false(default),
+   *    use cached values
+   * @return string[]
+   *    Array of permission ids
+   */
+  public function permissions($refresh = false)
+  {
+    if ($refresh or !$this->permissions) {
+      $roleModel = $this->getRoleModel();
+      $roles = $this->roles($refresh);
+      $permissions = array();
+      foreach ($roles as $roleName) {
+        $roleModel->load($roleName);
+        $permissions = array_merge(
+          $permissions,
+          $roleModel->permissions()
+        );
+      }
+      $this->permissions = $permissions;
+    }
+    return $this->permissions;
+  }
+
+  /**
+   * Overridden to clear cached roles and permissions
+   * @see class/qcl/data/model/qcl_data_model_AbstractNamedActiveRecord#load()
+   */
+  public function load($id)
+  {
+    $this->roles = null;
+    $this->permissions = null;
+    $this->groups = null;
+    return parent::load($id);
+  }
+
+  /**
+   * Resets the timestamp of the last action  for the current user
+   * @return void
+   */
+  public function resetLastAction()
+  {
+    $this->set("lastAction", new qcl_data_db_Timestamp("now"));
+    $this->save();
+  }
+
+  /**
+   * Returns number of seconds since resetLastAction() has been called
+   * for the current user
+   * @return int seconds
+   */
+  public function getSecondsSinceLastAction()
+  {
+    $now = new qcl_data_db_Timestamp();
+    $lastAction = $this->get("lastAction");
+    if ($lastAction) {
+      $d = $now->diff($lastAction);
+      return (int) ($d->s + (60 * $d->i) + (3600 * $d->h) + 3600 * 24 * $d->d);
+    }
+    return 0;
+  }
+
+  /**
+   * Function to check the match between the password and the repeated
+   * password. Returns the hashed password.
+   * @param $value
+   * @throws JsonRpcException
+   * @return string|null
+   */
+  public function checkFormPassword($value)
+  {
+    if (!isset($this->__password)) {
+      $this->__password = $value;
+    } elseif ($this->__password != $value) {
+      throw new JsonRpcException($this->tr("Passwords do not match..."));
+    }
+    if ($value and strlen($value) < 8) {
+      throw new JsonRpcException($this->tr("Password must be at least 8 characters long"));
+    }
+    return $value ? $this->getApplication()->getAccessController()->generateHash($value) : null;
+  }
+
+  /**
+   * Overridden. Checks if user is anonymous and inactive, and deletes user if so.
+   * @see qcl_data_model_AbstractActiveRecord::checkExpiration()
+   * @todo Unhardcode expiration time
+   */
+  protected function checkExpiration()
+  {
+    $purge = ($this->isAnonymous() && $this->getSecondsSinceLastAction() > 600);
+    if ($purge) {
+      $this->delete();
+    }
+    return false;
+  }
+
+  /**
+   * Overridden to dispatch a message "user.deleted" with the user id when a
+   * user is deleted
+   * @see qcl_data_model_AbstractActiveRecord::delete()
+   */
+  public function delete()
+  {
+    $this->dispatchMessage("user.deleted", $this->id());
+    parent::delete();
+  }
 }
