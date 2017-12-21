@@ -20,6 +20,8 @@
 
 namespace app\controllers;
 
+use app\controllers\AppController;
+
 use app\models\User;
 use app\models\Role;
 use app\models\Permission;
@@ -51,7 +53,7 @@ if ( ! defined("QCL_EVENT_MESSAGE_POLLING_DELAYPERSESSION") )
 }
 
 
-class MessageController extends JsonRpc2\Controller {
+class MessageController extends AppController {
 
   /**
    * Service to collect events and messages waiting for a particular connected session.

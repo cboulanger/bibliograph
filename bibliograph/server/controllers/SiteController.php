@@ -1,6 +1,6 @@
 <?php
 
-namespace bibliograph\controllers;
+namespace app\controllers;
 
 use \JsonRpc2\Controller;
 

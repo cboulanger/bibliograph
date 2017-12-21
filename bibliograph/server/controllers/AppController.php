@@ -21,12 +21,13 @@
 namespace app\controllers;
 
 use Yii;
+use JsonRpc2\Controller;
 
 /**
  * Service class providing methods to get or set configuration
  * values
  */
-class AppController extends JsonRpc2\Controller
+class AppController extends Controller
 {
 
   /**
