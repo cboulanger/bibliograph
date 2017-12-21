@@ -736,7 +736,7 @@ class bibliograph_service_ACLTool
      */
     if ( $type == "user" and $model->get("ldap") )
     {
-      throw new qcl_server_ServiceException($this->tr("User data is from an LDAP server and cannot be changed."));
+      throw new JsonRpcException($this->tr("User data is from an LDAP server and cannot be changed."));
     }
 
     try
@@ -994,6 +994,10 @@ class bibliograph_service_ACLTool
     $app = $this->getApplication();
     $applicationTitle = $this->getApplicationTitle();
     $adminEmail  = $app->getIniValue("email.admin");
+
+    if( !$adminEmail ){
+      throw new JsonRpcException( $this->tr("Missing sender email address. Cannot send confirmation email."));
+    }
     $confirmationLink = qcl_server_JsonRpcRestServer::getJsonRpcRestUrl(
       $this->serviceName(),"confirmEmail", $username
     );
@@ -1032,6 +1036,9 @@ class bibliograph_service_ACLTool
     $app = $this->getApplication();
     $applicationTitle = $this->getApplicationTitle();
     $adminEmail  = $app->getIniValue("email.admin");
+    if( !$adminEmail ){
+      throw new JsonRpcException( $this->tr("Missing sender email address. Cannot send confirmation email."));
+    }    
 
     // compose mail
     $subject = $this->tr("Password change at %s", $applicationTitle );
@@ -1110,6 +1117,9 @@ class bibliograph_service_ACLTool
     $userModel = $this->getUserModelFromEmail($email);
     $name = $userModel->get("name");
     $adminEmail = $this->getApplication()->getIniValue("email.admin");
+    if( !$adminEmail ){
+      throw new JsonRpcException( $this->tr("Missing sender email address. Cannot send email."));
+    }    
     $applicationTitle = $this->getApplicationTitle();
 
     // compose mail

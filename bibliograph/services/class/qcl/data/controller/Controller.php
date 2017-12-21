@@ -1210,7 +1210,7 @@ class qcl_data_controller_Controller
             $callback[0] = $model;
           }
           qcl_assert_method_exists( $callback[0], $callback[1] );
-          $value = $callback[0]->$callback[1]( $value );
+          $value = call_user_func( [ $callback[0], $callback[1] ], $value );
         }
         else
         {

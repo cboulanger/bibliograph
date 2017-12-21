@@ -363,10 +363,10 @@ class qcl_log_Logger
         if ($k < 2) {
           continue;
         }
-
-        array_walk($v['args'], function (&$item, $key) {
-          $item = var_export($item, true);
-        });
+        
+        //array_walk($v['args'], function (&$item, $key) {
+          //$item = var_export($item, true);
+        //});
 
         $trace .= '#' . ($k - $ignore) . ' ' . $v['file'] . '(' . $v['line'] . '): ' . (isset($v['class']) ? $v['class'] . '->' : '') . $v['function'] . '(' . implode(', ', $v['args']) . ')' . "\n";
       }
