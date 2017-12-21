@@ -123,6 +123,20 @@ class AccessController extends AppController
   }
   
   /**
+   * Checks if user is anonymous and inactive, and deletes user if so.
+   * @see qcl_data_model_AbstractActiveRecord::checkExpiration()
+   * @todo Unhardcode expiration time
+   */
+  protected function checkExpiration()
+  {
+    $purge = ($this->isAnonymous() && $this->getSecondsSinceLastAction() > 600);
+    if ($purge) {
+      $this->delete();
+    }
+    return false;
+  }
+
+  /**
    * Checks if the given username has to be authenticated from an LDAP server#
    * @param string $username
    * @throws qcl_access_AuthenticationException if user does not exist
@@ -530,6 +544,23 @@ class AccessController extends AppController
   }
 
   /**
+   * Returns number of seconds since resetLastAction() has been called
+   * for the current user
+   * @return int seconds
+   */
+  public function getSecondsSinceLastAction()
+  {
+    not_implemented();
+    $now = new qcl_data_db_Timestamp();
+    $lastAction = $this->get("lastAction");
+    if ($lastAction) {
+      $d = $now->diff($lastAction);
+      return (int) ($d->s + (60 * $d->i) + (3600 * $d->h) + 3600 * 24 * $d->d);
+    }
+    return 0;
+  }
+
+  /**
    * Purges all anonymous users. This will interfere with the sessions of these users,
    * therefore use this only during maintenance
    */
@@ -546,7 +577,27 @@ class AccessController extends AppController
     }
   }
 
-//----------------------------------------------------------------
+  /**
+   * Function to check the match between the password and the repeated
+   * password. Returns the hashed password.
+   * @param $value
+   * @throws JsonRpcException
+   * @return string|null
+   */
+  public function checkFormPassword($value)
+  {
+    if (!isset($this->__password)) {
+      $this->__password = $value;
+    } elseif ($this->__password != $value) {
+      throw new JsonRpcException($this->tr("Passwords do not match..."));
+    }
+    if ($value and strlen($value) < 8) {
+      throw new JsonRpcException($this->tr("Password must be at least 8 characters long"));
+    }
+    return $value ? $this->getApplication()->getAccessController()->generateHash($value) : null;
+  }
+
+  //----------------------------------------------------------------
   // convenience methods  access control
   //----------------------------------------------------------------  
 
@@ -636,5 +687,14 @@ class AccessController extends AppController
       }
     }
   }  
+
+  /**
+   * Deletes a user
+   */
+  public function deleteUser()
+  {
+    $this->dispatchMessage("user.deleted", $this->id());
+    parent::delete();
+  }
 
 }

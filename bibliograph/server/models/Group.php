@@ -20,8 +20,14 @@ Authors:
 
 namespace app\models;
 
-use app\models\Group_User;
 use Yii;
+
+use app\models\BaseModel;
+use app\models\User;
+use app\models\Datasource;
+
+use app\models\Group_User;
+use app\models\Datasource_Group;
 
 /**
  * This is the model class for table "data_Group".

@@ -4,6 +4,11 @@ namespace app\models;
 
 use Yii;
 
+use app\models\BaseModel;
+use app\models\Role;
+
+use app\models\Permission_Role;
+
 /**
  * This is the model class for table "data_Permission".
  *
@@ -15,14 +20,14 @@ use Yii;
  * @property string $description
  * @property integer $active
  */
-class Permission extends \yii\db\ActiveRecord
+class Permission extends BaseModel
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'data_Permission';
+      return 'data_Permission';
     }
 
     /**
@@ -30,14 +35,14 @@ class Permission extends \yii\db\ActiveRecord
      */
     public function rules()
     {
-        return [
-            [['created', 'modified'], 'safe'],
-            [['active'], 'integer'],
-            [['namedId'], 'string', 'max' => 50],
-            [['name'], 'string', 'max' => 100],
-            [['description'], 'string', 'max' => 255],
-            [['namedId'], 'unique'],
-        ];
+      return [
+        [['created', 'modified'], 'safe'],
+        [['active'], 'integer'],
+        [['namedId'], 'string', 'max' => 50],
+        [['name'], 'string', 'max' => 100],
+        [['description'], 'string', 'max' => 255],
+        [['namedId'], 'unique'],
+      ];
     }
 
     /**
@@ -45,14 +50,28 @@ class Permission extends \yii\db\ActiveRecord
      */
     public function attributeLabels()
     {
-        return [
-            'id' => Yii::t('app', 'ID'),
-            'namedId' => Yii::t('app', 'Named ID'),
-            'created' => Yii::t('app', 'Created'),
-            'modified' => Yii::t('app', 'Modified'),
-            'name' => Yii::t('app', 'Name'),
-            'description' => Yii::t('app', 'Description'),
-            'active' => Yii::t('app', 'Active'),
-        ];
+      return [
+        'id' => Yii::t('app', 'ID'),
+        'namedId' => Yii::t('app', 'Named ID'),
+        'created' => Yii::t('app', 'Created'),
+        'modified' => Yii::t('app', 'Modified'),
+        'name' => Yii::t('app', 'Name'),
+        'description' => Yii::t('app', 'Description'),
+        'active' => Yii::t('app', 'Active'),
+      ];
     }
+
+  //-------------------------------------------------------------
+  // Relations
+  //-------------------------------------------------------------
+
+  protected function getPermissionRoles()
+  {
+    return $this->hasMany(Permission_Role::className(), ['PermissionId' => 'id']);
+  }
+
+  protected function getRoles()
+  {
+    return $this->hasMany(Role::className(), ['id' => 'RoleId'])->via('permissionRoles');
+  }
 }

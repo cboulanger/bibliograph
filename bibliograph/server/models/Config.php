@@ -3,7 +3,9 @@
 namespace app\models;
 
 use Yii;
-use app\models\User;
+
+use app\models\BaseModel;
+use app\models\UserConfig;
 
 /*
  * constants
@@ -26,44 +28,53 @@ define( "QCL_CONFIG_TYPE_LIST", "list");
  * @property string $created
  * @property string $modified
  */
-class Config extends app\models\BaseModel
+class Config extends BaseModel
 {
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
-    {
-      return 'data_Config';
-    }
+  /**
+   * @inheritdoc
+   */
+  public static function tableName()
+  {
+    return 'data_Config';
+  }
 
-    /**
-     * @inheritdoc
-     */
-    public function rules()
-    {
-        return [
-            [['type', 'customize', 'final'], 'integer'],
-            [['created', 'modified'], 'safe'],
-            [['default'], 'string', 'max' => 255],
-            [['namedId'], 'string', 'max' => 50],
-            [['namedId'], 'unique'],
-        ];
-    }
+  /**
+   * @inheritdoc
+   */
+  public function rules()
+  {
+    return [
+      [['type', 'customize', 'final'], 'integer'],
+      [['created', 'modified'], 'safe'],
+      [['default'], 'string', 'max' => 255],
+      [['namedId'], 'string', 'max' => 50],
+      [['namedId'], 'unique'],
+    ];
+  }
 
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'ID',
-            'type' => 'Type',
-            'default' => 'Default',
-            'customize' => 'Customize',
-            'final' => 'Final',
-            'namedId' => 'Named ID',
-            'created' => 'Created',
-            'modified' => 'Modified',
-        ];
-    }  
+  /**
+   * @inheritdoc
+   */
+  public function attributeLabels()
+  {
+    return [
+      'id' => 'ID',
+      'type' => 'Type',
+      'default' => 'Default',
+      'customize' => 'Customize',
+      'final' => 'Final',
+      'namedId' => 'Named ID',
+      'created' => 'Created',
+      'modified' => 'Modified',
+    ];
+  }
+  //-------------------------------------------------------------
+  // Relations
+  //-------------------------------------------------------------
+
+  protected function getUserConfigs()
+  {
+    return $this->hasMany(UserConfig::className(), ['ConfigId' => 'id']);
+  }
+
 }

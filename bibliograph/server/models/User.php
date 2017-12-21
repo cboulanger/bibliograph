@@ -26,6 +26,8 @@ use app\models\BaseModel;
 use app\models\Group;
 use app\models\Permissions;
 use app\models\Roles;
+use app\models\UserConfig;
+use app\models\Session;
 use app\models\User_Role;
 
 
@@ -151,6 +153,16 @@ class User extends BaseModel
   protected function getGroups()
   {
     return $this->hasMany(Group::className(), ['id' => 'GroupId'])->via('userGroups');
+  } 
+
+  protected function getUserConfigs()
+  {
+    return $this->hasMany(UserConfig::className(), ['UserId' => 'id']);
+  } 
+
+  protected function getSessions()
+  {
+    return $this->hasMany(Session::className(), ['UserId' => 'id']);
   } 
 
   //-------------------------------------------------------------
@@ -321,21 +333,15 @@ class User extends BaseModel
    * @return array
    *    Array of string values: group named ids.
    */
-  public function groups($refresh = false)
+  public function getGroupNames($refresh = false)
   {
-    $groupModel = $this->getGroupModel();
-    if ($refresh or !$this->groups) {
-      $groups = array();
-      try {
-        $groupModel->findLinked($this);
-        while ($groupModel->loadNext()) {
-          $groups[] = $groupModel->namedId();
-        }
-      } catch (qcl_data_model_RecordNotFoundException $e) {
-      }
-      $this->groups = $groups;
+    static $groups = null;
+    if ( is_null($groups) or $refresh ) {
+      $groups = array_map( function($groupObject){
+        return $groupObject->namedId;
+      }, $this->getGroups() );
     }
-    return $this->groups;
+    return $groups;
   }
 
   /**
@@ -347,34 +353,14 @@ class User extends BaseModel
    * @return string[]
    *    Array of permission ids
    */
-  public function permissions($refresh = false)
+  public function getPermissionNames($refresh = false)
   {
-    if ($refresh or !$this->permissions) {
-      $roleModel = $this->getRoleModel();
-      $roles = $this->roles($refresh);
-      $permissions = array();
-      foreach ($roles as $roleName) {
-        $roleModel->load($roleName);
-        $permissions = array_merge(
-          $permissions,
-          $roleModel->permissions()
-        );
-      }
+    static $permissions = null;
+    if ( is_null($permissions) or $refresh ) {
+      not_implemented();
       $this->permissions = $permissions;
     }
-    return $this->permissions;
-  }
-
-  /**
-   * Overridden to clear cached roles and permissions
-   * @see class/qcl/data/model/qcl_data_model_AbstractNamedActiveRecord#load()
-   */
-  public function load($id)
-  {
-    $this->roles = null;
-    $this->permissions = null;
-    $this->groups = null;
-    return parent::load($id);
+    return $permissions;
   }
 
   /**
@@ -383,68 +369,8 @@ class User extends BaseModel
    */
   public function resetLastAction()
   {
+    not_implemented();
     $this->set("lastAction", new qcl_data_db_Timestamp("now"));
     $this->save();
-  }
-
-  /**
-   * Returns number of seconds since resetLastAction() has been called
-   * for the current user
-   * @return int seconds
-   */
-  public function getSecondsSinceLastAction()
-  {
-    $now = new qcl_data_db_Timestamp();
-    $lastAction = $this->get("lastAction");
-    if ($lastAction) {
-      $d = $now->diff($lastAction);
-      return (int) ($d->s + (60 * $d->i) + (3600 * $d->h) + 3600 * 24 * $d->d);
-    }
-    return 0;
-  }
-
-  /**
-   * Function to check the match between the password and the repeated
-   * password. Returns the hashed password.
-   * @param $value
-   * @throws JsonRpcException
-   * @return string|null
-   */
-  public function checkFormPassword($value)
-  {
-    if (!isset($this->__password)) {
-      $this->__password = $value;
-    } elseif ($this->__password != $value) {
-      throw new JsonRpcException($this->tr("Passwords do not match..."));
-    }
-    if ($value and strlen($value) < 8) {
-      throw new JsonRpcException($this->tr("Password must be at least 8 characters long"));
-    }
-    return $value ? $this->getApplication()->getAccessController()->generateHash($value) : null;
-  }
-
-  /**
-   * Overridden. Checks if user is anonymous and inactive, and deletes user if so.
-   * @see qcl_data_model_AbstractActiveRecord::checkExpiration()
-   * @todo Unhardcode expiration time
-   */
-  protected function checkExpiration()
-  {
-    $purge = ($this->isAnonymous() && $this->getSecondsSinceLastAction() > 600);
-    if ($purge) {
-      $this->delete();
-    }
-    return false;
-  }
-
-  /**
-   * Overridden to dispatch a message "user.deleted" with the user id when a
-   * user is deleted
-   * @see qcl_data_model_AbstractActiveRecord::delete()
-   */
-  public function delete()
-  {
-    $this->dispatchMessage("user.deleted", $this->id());
-    parent::delete();
   }
 }

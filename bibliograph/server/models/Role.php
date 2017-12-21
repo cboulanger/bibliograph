@@ -21,10 +21,15 @@
 
 namespace app\models;
 
-use app\models\Permissions;
-use app\models\Roles;
-use app\models\User_Role;
 use Yii;
+
+use app\models\BaseModel;
+use app\models\Permissions;
+use app\models\User;
+
+use app\models\User_Role;
+use app\models\Permission_Role;
+
 
 /**
  * This is the model class for table "data_Role".
@@ -37,7 +42,7 @@ use Yii;
  * @property string $description
  * @property integer $active
  */
-class Role extends \yii\db\ActiveRecord
+class Role extends BaseModel
 {
   /**
    * @inheritdoc
@@ -116,43 +121,18 @@ class Role extends \yii\db\ActiveRecord
   // API
   //-------------------------------------------------------------
   
-
   /**
    * Returns a list of permissions connected to the current model record.
    * @return array
    */
-  public function permissions()
+  public function getPermissionNames( $refresh=false )
   {
-    $permModel = $this->getPermissionModel();
-    try
-    {
-      $permModel->findLinked( $this );
-    }
-    catch( qcl_data_model_RecordNotFoundException $e )
-    {
-      return array();
-    }
-    $permissions =  array();
-    while ( $permModel->loadNext() )
-    {
-      $permissions[] = $permModel->namedId();
+    static $permissions = null;
+    if( is_null($permissions) or $refresh ){
+      $permissions = array_map( function($permissionObject) {
+        return $permissionObject->namedId;
+      }, $this->getPermissions() );
     }
     return $permissions;
   }
-
-  /**
-   * Returns a list of users connected to the current model record.
-   * @return array
-   */
-  public function users()
-  {
-    $userModel = $this->getUserModel();
-    $userModel->findLinked( $this );
-    $users =  array();
-    while ( $userModel->loadNext() )
-    {
-      $users[] = $userModel->namedId();
-    }
-    return $users;
-  }  
 }
