@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "95f75f3b794b2b203f6a3e6c681f29d1",
+    "content-hash": "f9d7d56a4228be294d2eaae902d25aa9",
     "packages": [
         {
             "name": "bower-asset/inputmask",
@@ -763,6 +763,59 @@
                 "instantiate"
             ],
             "time": "2015-06-14T21:17:01+00:00"
+        },
+        {
+            "name": "elisdn/yii2-gii-fixture-generator",
+            "version": "1.1.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ElisDN/yii2-gii-fixture-generator.git",
+                "reference": "648782b60d346a17baa273a32e9a424717b6f0c9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ElisDN/yii2-gii-fixture-generator/zipball/648782b60d346a17baa273a32e9a424717b6f0c9",
+                "reference": "648782b60d346a17baa273a32e9a424717b6f0c9",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2-gii": "~2.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.*"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "asset-installer-paths": {
+                    "npm-asset-library": "vendor/npm",
+                    "bower-asset-library": "vendor/bower"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "elisdn\\gii\\fixture\\": "src/",
+                    "elisdn\\gii\\fixture\\tests\\": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Dmitriy Yeliseyev",
+                    "email": "mail@elisdn.ru",
+                    "homepage": "http://www.elisdn.ru"
+                }
+            ],
+            "description": "Fixture class generator for Gii module of Yii2 Framework.",
+            "keywords": [
+                "Fixture",
+                "gii",
+                "yii 2",
+                "yii2"
+            ],
+            "time": "2016-12-21T10:20:37+00:00"
         },
         {
             "name": "facebook/webdriver",
