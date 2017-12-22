@@ -69,7 +69,8 @@ script:
 #  - nvm install 8
 #  - npm install
 #  - npm test
-#  - cd ..
+#  - cd ../..
 
   # run yii2 unit tests
-  - php bibliograph/server/vendor/bin/codecept run unit
+  - cd bibliograph/server
+  - php vendor/bin/codecept run unit
