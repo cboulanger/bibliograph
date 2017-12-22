@@ -21,9 +21,17 @@ return [
       'dataFile' => '@tests/_data/config.php',
   ],
   'session' => [
-      'class' => \tests\fixtures\SessionFixture::className(),
-      'dataFile' => '@tests/_data/session.php',
-  ],
+    'class' => \tests\fixtures\SessionFixture::className(),
+    'dataFile' => '@tests/_data/session.php',
+  ],  
+  'datasource' => [
+    'class' => \tests\fixtures\DatasourceFixture::className(),
+    'dataFile' => '@tests/_data/datasource.php',
+  ],    
+  'datasourceschema' => [
+    'class' => \tests\fixtures\DatasourceSchemaFixture::className(),
+    'dataFile' => '@tests/_data/datasource_schema.php',
+  ],  
   'datasource_group' => [
       'class' => \tests\fixtures\DatasourceGroupFixture::className(),
       'dataFile' => '@tests/_data/datasource_group.php',
