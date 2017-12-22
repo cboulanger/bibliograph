@@ -2,17 +2,11 @@ dist: trusty
 
 language: php
 
-#cache:
-#  bundler: true
-#  directories:
-#    - bibliograph/build
-
 env:
   - JSONRPC_COMP_KEYSONLY=0
 
 php:
-  - '5.5'
-  - '5.6'
+  - '7.0'
 
 services:
   - mysql
@@ -42,23 +36,34 @@ before_install:
   - echo '<?php if(function_exists("yaz_connect" )) echo "yaz_connect exists"; else echo "!!! no yaz_connect"; echo "\n";' | php
 
 install:
+  - echo "Installing dependencies..."
+
   # build bibliograph
   - git clone https://github.com/qooxdoo/qooxdoo.git
   - cp build-env/travis/config/* bibliograph/services/config/
   - cd bibliograph
   - ./generate.py -I build
   - echo "all" > plugins.txt
+  
+  # setup yii2 backend
+  - cd server
+  - composer install
+  - ln -s vendor/bower-assets vendor/bower
+
+  # done installing
+  - echo "Installation scripts finished successufully."
   - cd ..
 
-
 before_script:
+
   - mysql -e 'CREATE DATABASE bibliograph;'
+  - mysql -e 'CREATE DATABASE tests;'
   
 script:
   - cd tests/test-backend
   - nvm install 8
   - npm install
-  - npm test
+#  - npm test
 
 
 
