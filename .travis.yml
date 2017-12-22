@@ -32,14 +32,13 @@ before_install:
   - sudo apt-get install -y yaz libyaz4-dev
   - pear channel-update pear.php.net && yes $'\n' | pecl install yaz && pear install Structures_LinkedList-0.2.2 && pear install File_MARC 
   - sudo service apache2 restart
-  - if php -i | grep yaz --quiet; then echo "YAZ is installed"; else echo "YAZ installation failed"; exit 1; fi;
-  - echo '<?php if(function_exists("yaz_connect" )) echo "yaz_connect exists"; else echo "!!! no yaz_connect"; echo "\n";' | php
+  - if php -i | grep yaz --quiet && echo '<?php exit(function_exists("yaz_connect")?0:1);' | php ; then echo "YAZ is installed"; else echo "YAZ installation failed"; exit 1; fi;
 
 install:
   - echo "Installing dependencies..."
 
   # build bibliograph
-  - git clone https://github.com/qooxdoo/qooxdoo.git
+  - git clone --depth 1 https://github.com/qooxdoo/qooxdoo.git
   - cp build-env/travis/config/* bibliograph/services/config/
   - cd bibliograph
   - ./generate.py -I build
