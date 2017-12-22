@@ -38,11 +38,10 @@ install:
   - echo "Installing dependencies..."
 
   # build bibliograph
-  - git clone --depth 1 https://github.com/qooxdoo/qooxdoo.git
+  - git clone --depth 1 https://github.com/qooxdoo/qooxdoo.git /home/travis/build/cboulanger/ #ugly workaround
   - cp build-env/travis/config/* bibliograph/services/config/
-  - QX_PATH=$(pwd)/qooxdoo
   - cd bibliograph
-  - ./generate.py -I -m QOOXDOO_PATH:$QX_PATH build
+  - ./generate.py -I build
   - echo "all" > plugins.txt
   
   # setup yii2 backend
