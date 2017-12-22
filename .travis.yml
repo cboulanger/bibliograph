@@ -41,15 +41,14 @@ install:
   - git clone --depth 1 https://github.com/qooxdoo/qooxdoo.git
   - cp build-env/travis/config/* bibliograph/services/config/
   - cd bibliograph
-  - pwd
-  - ls ..
-  - ./generate.py -I build
+  - ./generate.py -I build -m QOOXDOO_PATH:../qooxdoo
   - echo "all" > plugins.txt
   
   # setup yii2 backend
   - cd server
   - composer install
   - ln -s vendor/bower-assets vendor/bower
+  - cd ..
 
   # done installing
   - echo "Installation scripts finished successufully."
@@ -61,15 +60,10 @@ before_script:
   - mysql -e 'CREATE DATABASE tests;'
   
 script:
-  - cd tests/test-backend
-  - nvm install 8
-  - npm install
+#  - cd tests/test-backend
+#  - nvm install 8
+#  - npm install
 #  - npm test
-
-
-
-  
-      
-      
-      
-      
+  - cd bibliograph/server
+  - php tests/bin/yii migrate/up --interactive 0 
+  - php vendor/bin/codecept run unit
