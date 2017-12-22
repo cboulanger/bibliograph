@@ -68,5 +68,5 @@ script:
 #  - npm install
 #  - npm test
   - cd bibliograph/server
-  - php tests/bin/yii migrate/up --interactive 0 
+  - php tests/bin/yii migrate/up --interactive=0 
   - php vendor/bin/codecept run unit
