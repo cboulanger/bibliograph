@@ -41,6 +41,8 @@ install:
   - git clone --depth 1 https://github.com/qooxdoo/qooxdoo.git
   - cp build-env/travis/config/* bibliograph/services/config/
   - cd bibliograph
+  - pwd
+  - ls ..
   - ./generate.py -I build
   - echo "all" > plugins.txt
   
