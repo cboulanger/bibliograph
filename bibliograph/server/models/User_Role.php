@@ -14,7 +14,7 @@ use Yii;
  * @property integer $RoleId
  * @property integer $GroupId
  */
-class JoinUserRole extends \yii\db\ActiveRecord
+class User_Role extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc

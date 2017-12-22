@@ -22,7 +22,7 @@ class m171219_230853_create_table_data_User extends Migration
             'anonymous' => $this->integer(1)->notNull()->defaultValue('0'),
             'ldap' => $this->integer(1)->notNull()->defaultValue('0'),
             'active' => $this->integer(1)->notNull()->defaultValue('1'),
-            'lastAction' => $this->timestamp(),
+            'lastAction' => $this->timestamp()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),
             'confirmed' => $this->integer(1)->notNull()->defaultValue('0'),
             'online' => $this->integer(1)->notNull()->defaultValue('0'),
         ], $tableOptions);
