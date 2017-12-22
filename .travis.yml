@@ -58,15 +58,18 @@ install:
   - cd ..
 
 before_script:
-
+  # create databases and tables
   - mysql -e 'CREATE DATABASE bibliograph;'
   - mysql -e 'CREATE DATABASE tests;'
+  - php bibliograph/server/tests/bin/yii migrate/up --interactive=0 
   
 script:
+#  # run npm tests
 #  - cd tests/test-backend
 #  - nvm install 8
 #  - npm install
 #  - npm test
-  - cd bibliograph/server
-  - php tests/bin/yii migrate/up --interactive=0 
-  - php vendor/bin/codecept run unit
+#  - cd ..
+
+  # run yii2 unit tests
+  - php bibliograph/server/vendor/bin/codecept run unit
