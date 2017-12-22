@@ -40,8 +40,9 @@ install:
   # build bibliograph
   - git clone --depth 1 https://github.com/qooxdoo/qooxdoo.git
   - cp build-env/travis/config/* bibliograph/services/config/
+  - QX_PATH=$(pwd)/qooxdoo
   - cd bibliograph
-  - ./generate.py -I build -m QOOXDOO_PATH:../qooxdoo
+  - ./generate.py -I -m QOOXDOO_PATH:$QX_PATH build
   - echo "all" > plugins.txt
   
   # setup yii2 backend
