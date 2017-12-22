@@ -9,7 +9,8 @@
         "codeception/codeception": "^2.3",
         "codeception/specify": "^1.0",
         "codeception/verify": "^1.0",
-        "elisdn/yii2-gii-fixture-generator": "^1.1"
+        "elisdn/yii2-gii-fixture-generator": "^1.1",
+        "yiisoft/yii2-faker": "^2.0"
     },
     "repositories": [
         {
