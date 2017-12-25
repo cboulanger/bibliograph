@@ -137,22 +137,27 @@ class User extends BaseModel
 
   protected function getUserRoles()
   {
-    return $this->hasMany(User_Role::className(), ['UserId' => 'id']);
+    return $this->hasMany(User_Role::className(), ['UserId' => 'id'] );
   }
 
-  protected function getRoles()
+  protected function getGroupRoles($groupId=null)
   {
-    return $this->hasMany(Role::className(), ['id' => 'RoleId'])->via('userRoles');
+    return $this->hasMany(Role::className(), ['id' => 'RoleId' ])
+      ->via('userRoles', function( yii\db\ActiveQuery $query) use($groupId) {
+        return $query->andWhere(['groupId'=>$groupId]);
+      });
   }
 
   protected function getUserGroups()
   {
-    return $this->hasMany(Group_User::className(), ['UserId' => 'id']);
+    $userGroups = $this->hasMany(Group_User::className(), ['UserId' => 'id']);
+    return $userGroups;
   }
 
   protected function getGroups()
   {
-    return $this->hasMany(Group::className(), ['id' => 'GroupId'])->via('userGroups');
+    return $this->hasMany(Group::className(), ['id' => 'GroupId'])
+      ->via('userGroups');
   } 
 
   protected function getUserConfigs()
@@ -271,56 +276,24 @@ class User extends BaseModel
   }
 
   /**
-   * Returns list of roles that a user has.
+   * Returns list of roles that a user has globally.
+   * @param int|null $groupId
+   *    If given, retrieve only the roles that the user has in the
+   *    group with the given id. Otherwise, return global roles only
    * @param bool $refresh
    *    If true, reload group memberships. If false(default),
    *    use cached values
    * @return string[]
    *    Array of role names
    */
-  public function getRoleNames($refresh = false)
+  public function getRoleNames( $groupId=null, $refresh = false )
   {
-    static $roles = null;
-    if( is_null($roles) or $refresh ){
-      $cache = $this->roles();
-      $roles = array();
-      $roleObjects = null;
-
-      /*
-       * simple user-role link
-       * FIXME rewrite this, now group-specific roles ar NOT ignored
-       */
-      if (Yii::$app->utils->getIniValue("access.global_roles_only")) {
-        $roleObjects = $this->getRoles();
-      } 
-      
-      /*
-       * users have roles dependent on group
-       */
-      else {
-        $groupObjects = $this->getGroups();
-
-        // get the group-dependent role
-        foreach ($groupObjects as $groupObject) {
-          foreach( $groupObject->getRoles() as $roleObject ){
-            $roles[] = $roleObject->namedId; 
-          }
-        }
-
-        /*
-         * add the global roles
-         */
-        try {
-          $roleModel->findLinkedNotDepends($this, $groupModel);
-          while ($roleModel->loadNext()) {
-            $roles[] = $roleModel->namedId();
-          }
-        } catch (qcl_data_model_RecordNotFoundException $e) {
-        }
-      }
-      $roles = array_unique($roles);
+    static $roleNames = null;
+    if( is_null($roleNames) or $refresh ){
+      $roleObjects = $this->getGroupRoles( $groupId )->all();
+      foreach( $roleObjects as $obj) $roleNames[] = $obj->namedId;
     }
-    return $roles;
+    return $roleNames;
   }
 
   /**
@@ -335,13 +308,14 @@ class User extends BaseModel
    */
   public function getGroupNames($refresh = false)
   {
-    static $groups = null;
-    if ( is_null($groups) or $refresh ) {
-      $groups = array_map( function($groupObject){
+    static $groupNames = null;
+    if ( is_null($groupNames) or $refresh ) {
+      $groupObjects = $this->getGroups()->all(); // @todo Rewrite as query
+      $groupNames = array_map( function($groupObject){
         return $groupObject->namedId;
-      }, $this->getGroups() );
+      }, $groupObjects );
     }
-    return $groups;
+    return $groupNames;
   }
 
   /**
