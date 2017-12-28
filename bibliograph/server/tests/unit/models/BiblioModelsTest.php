@@ -12,7 +12,7 @@ use app\models\UserConfig;
 // for whatever reason, this is not loaded early enough
 require_once __DIR__ . "/../../_bootstrap.php"; 
 
-class BiblioModelsTests extends \Codeception\Test\Unit
+class BiblioModelsTest extends \Codeception\Test\Unit
 {
     /**
      * @var \UnitTester
@@ -20,7 +20,7 @@ class BiblioModelsTests extends \Codeception\Test\Unit
     protected $tester;
 
     public function _fixtures(){
-      return require '../../fixtures/_biblio_models.php';
+      return require __DIR__ . '/../../fixtures/_biblio_models.php';
     }
 
     protected function _before()
