@@ -20,6 +20,10 @@ return [
       'class' => \tests\fixtures\ConfigFixture::className(),
       'dataFile' => '@tests/_data/config.php',
   ],
+  'userconfig' => [
+    'class' => \tests\fixtures\UserConfigFixture::className(),
+    'dataFile' => '@tests/_data/userconfig.php',
+  ],
   'session' => [
       'class' => \tests\fixtures\SessionFixture::className(),
       'dataFile' => '@tests/_data/session.php',

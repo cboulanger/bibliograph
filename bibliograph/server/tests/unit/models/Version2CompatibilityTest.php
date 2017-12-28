@@ -7,6 +7,7 @@ use app\models\Group;
 use app\models\Permission;
 use app\models\Role;
 use app\models\Config;
+use app\models\UserConfig;
 
 // for whatever reason, this is not loaded early enough
 require_once __DIR__ . "/../../_bootstrap.php"; 
@@ -64,9 +65,9 @@ class Version2CompatibilityTest extends \Codeception\Test\Unit
 
     public function testConfigData()
     {
-      $I = $this->tester;
-      $I->wantToTest("Configuration data");
-      $config = Config::findOne(['namedId'=>'application.title']);
-      $this->assertEquals('Bibliograph Online Bibliographic Data Manager', $config->default );
+      $config = Config::findOne(['namedId'=>'application.locale']);
+      $this->assertEquals('en', $config->default );
+      $user = User::findOne(['namedId'=>'admin']);
+      $this->assertEquals('', $config->getUserConfigValue($user->id) );
     }
 }

@@ -30,6 +30,9 @@ define( "QCL_CONFIG_TYPE_LIST", "list");
  */
 class Config extends BaseModel
 {
+
+  const value_types = array("string","number","boolean","list");
+  
   /**
    * @inheritdoc
    */
@@ -72,9 +75,48 @@ class Config extends BaseModel
   // Relations
   //-------------------------------------------------------------
 
-  protected function getUserConfigs()
+  /**
+   * @param int $userId
+   * @return \yii\db\ActiveQuery
+   */
+  protected function getUserConfigs( $userId )
   {
-    return $this->hasMany(UserConfig::className(), ['ConfigId' => 'id']);
+    return $this
+      ->hasMany(UserConfig::className(), ['ConfigId' => 'id'])
+      ->onCondition( ['UserId' => $userId ]);
   }
 
+  /**
+   * @param int $userId
+   * @return \app\models\UserConfig|null 
+   *    Returns the instance of the UserConfig linked to the particular user or null
+   *    if none exists
+   * @throws LogicException
+   */
+  public function getUserConfig( $userId )
+  {
+    if( ! $this->customize ) {
+      throw new LogicException("Config entry {$this->namedId} cannot be customized.");
+    }
+    $query = $this->getUserConfigs( $userId );
+    //codecept_debug($query->createCommand()->getRawSql());
+    $result = $query->one();
+    \codecept_debug($result);
+    return $result;
+  }
+
+  /**
+   * Returns the customized user configuration
+   *
+   * @param int $userId
+   * @return mixed
+   * @throws \InvalidArgumentException if no user configuration exists
+   */
+  public function getUserConfigValue( $userId ){
+    $userConfig = $this->getUserConfig( $userId );
+    if( is_null($userConfig) ){
+      throw new \InvalidArgumentException("No user configuration for {$this->namedId}.");
+    }
+    return $userConfig->value;
+  }
 }
