@@ -11,7 +11,7 @@ class m171219_230854_create_table_datasource_data_ExtendedReference extends Migr
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
         }
 
-        $this->createTable('{{%datasource_data_Reference}}', [
+        $this->createTable('{{%datasource_data_ExtendedReference}}', [
             'id' => $this->integer(11)->notNull()->append('AUTO_INCREMENT PRIMARY KEY'),
             'created' => $this->timestamp(),
             'modified' => $this->timestamp()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),

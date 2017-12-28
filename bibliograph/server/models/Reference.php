@@ -3,7 +3,8 @@
 namespace app\models;
 
 use Yii;
-use \app\models\BaseModel;
+use app\models\BaseModel;
+use app\models\Folder;
 
 /**
  * This is the model class for table "database1_data_Reference".
@@ -66,7 +67,7 @@ class Reference extends BaseModel
      */
     public static function tableName()
     {
-        return 'database1_data_Reference';
+        return 'datasource_data_Reference';
     }
 
     /**
@@ -167,6 +168,27 @@ class Reference extends BaseModel
   ); 
 
   //-------------------------------------------------------------
+  // Relations
+  //-------------------------------------------------------------
+
+  /**
+   * @return \yii\db\ActiveQuery
+   */ 
+  protected function getReferenceFolders()
+  {
+    return $this->hasMany(Folder_Reference::className(), ['ReferenceId' => 'id'] );
+  }  
+
+  /**
+   * @return \yii\db\ActiveQuery
+   */ 
+  public function getFolders()
+  {
+    return $this->hasMany(Folder::className(), ['id' => 'FolderId'])->via('referenceFolders');
+  }
+
+
+  //-------------------------------------------------------------
   // API
   //-------------------------------------------------------------
 
@@ -174,7 +196,7 @@ class Reference extends BaseModel
    * Returns the schema object used by this model
    * @return lib\schema\BibtexSchema
    */
-	function getSchemal()
+	function schema()
 	{
     static $schema = null;
     if ( is_null($schma ) ){
@@ -187,9 +209,8 @@ class Reference extends BaseModel
 	 * Overridden to set "createdBy" column
 	 * @see qcl_data_model_AbstractActiveRecord#create()
 	 */
-	function create( $data=null )
+	function create_notimplemented( $data=null )
 	{
-    notimplemented();
 	  $activeUser = $this->getApplication()->getAccessController()->getActiveUser();
 	  $data['createdBy'] = $activeUser->namedId();
 	  return parent::create( $data );
@@ -199,37 +220,12 @@ class Reference extends BaseModel
 	 * Overridden to set "modifiedBy" column
 	 * @see qcl_data_model_AbstractActiveRecord#save()
 	 */
-	function save()
+	function save_notImplemented()
 	{
-    notimplemented();
 	  $activeUser = $this->getApplication()->getAccessController()->getActiveUser();
 	  $this->set("modifiedBy", $activeUser->namedId() );
 	  return parent::save();
 	}
-
-  /**
-   * @return string
-   */
-  function getAuthor()
-  {
-    return $this->autor;
-  }
-
-  /**
-   * @return string
-   */
-  function getTitle()
-  {
-    return $this->title;
-  }
-
-  /**
-   * @return string
-   */
-  function getYear()
-  {
-    return $this->year;
-  }
 
   /**
    * Returns author or editor depending on reference type
@@ -237,7 +233,7 @@ class Reference extends BaseModel
    */
   function getCreator()
   {
-    $author = $this->getAuthor();
+    $author = $this->author;
     return empty($author) ? $this->editor : $author;
   }
 
@@ -257,9 +253,9 @@ class Reference extends BaseModel
     }
     $citekey = implode("+", $lastNames);
 
-    $citekey .= "-" . $this->getYear();
+    $citekey .= "-" . $this->year;
 
-    $titlewords = explode(" ",$this->getTitle());
+    $titlewords = explode(" ",$this->title);
     while ( count($titlewords) and strlen($titlewords[0]) < 4 )
     {
       array_shift($titlewords);
@@ -281,9 +277,9 @@ class Reference extends BaseModel
 	function findPotentialDuplicates($threshold=50)
 	{
     notimplemented();
-    $author = $this->getAuthor();
-    $title  = $this->getTitle();
-    $year   = $this->getYear();
+    $author = $this->author;
+    $title  = $this->title;
+    $year   = $this->year();
 
     $match = $adapter->fullTextSql(
       $queryBehavior->getTableName(),

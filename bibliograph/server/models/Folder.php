@@ -3,6 +3,9 @@
 namespace app\models;
 
 use Yii;
+use InvalidArgumentException;
+use app\models\BaseModel;
+use app\models\Reference;
 
 /**
  * This is the model class for table "database1_data_Folder".
@@ -29,14 +32,14 @@ use Yii;
  * @property integer $childCount
  * @property integer $referenceCount
  */
-class Folder extends \yii\db\ActiveRecord
+class Folder extends BaseModel
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'database1_data_Folder';
+        return 'datasource_data_Folder';
     }
 
     /**
@@ -144,21 +147,55 @@ class Folder extends \yii\db\ActiveRecord
   }
 
   //-------------------------------------------------------------
+  // Relations
+  //-------------------------------------------------------------
+
+  /**
+   * @return \yii\db\ActiveQuery
+   */ 
+  protected function getFolderReferences()
+  {
+    return $this->hasMany(Folder_Reference::className(), ['FolderId' => 'id'] );
+  }  
+
+  /**
+   * @return \yii\db\ActiveQuery
+   */ 
+  public function getReferences()
+  {
+    return $this->hasMany(Reference::className(), ['id' => 'ReferenceId'])->via('folderReferences');
+  }
+
+  //-------------------------------------------------------------
   // Public API
   //-------------------------------------------------------------
 
   /**
-   * Returns the data of child nodes of a branch ordered by the order field
+   * Returns the Folder objects of subfolders of this folder optionally ordered by a property
    * @param string|null $orderBy
-   *    Optional propert name by which the returned data should be ordered.
+   *    Optional propert name by which the returned ids should be ordered.
    *    Defaults to "position".
-   * @return array
+   * @return \yii\db\ActiveQuery
    */
-	function getChildrenData( $orderBy="position" )
+	protected function getChildrenQuery( $orderBy="position" )
 	{
-    $query = Folder::find(['parentId'=>$this->id])->orderBy($orderBy);
-	  return $query->asArray()->all();
+    return Folder::find()
+      ->select("id")
+      ->where([ 'parentId' => $this->id ])  
+      ->orderBy($orderBy);
 	}
+
+  /**
+   * Returns the Folder objects of subfolders of this folder optionally ordered by a property
+   * @param string|null $orderBy
+   *    Optional propert name by which the returned ids should be ordered.
+   *    Defaults to "position".
+   * @return \yii\db\ActiveQuery[]|null
+   */
+  public function getChildren( $orderBy="position" )
+  {
+    return $this->getChildrenQuery( $orderBy )->all();
+  }
 
   /**
    * Returns the ids of the child node ids optionally ordered by a property
@@ -169,32 +206,26 @@ class Folder extends \yii\db\ActiveRecord
    */
 	function getChildIds ( $orderBy="position" )
 	{
-    $query = Folder::find(['parentId' => $this->id ] )->orderBy($orderBy);
-    
-    return $this->getQueryBehavior()->fetchValues("id", $query );
+    return $this->getChildrenQuery($orderBy)->column();
 	}
-
-	/**
-	 * Finds all model records which are children of the current node
-   * @param string|null $orderBy
-   *    Optional propert name by which the records should be ordered.
-   *    Defaults to "position".
-	 * @return qcl_data_db_Query
-	 */
-	function findChildren( $orderBy="position" )
-	{
-	  $query = new qcl_data_db_Query( array(
-     'where'       => array( 'parentId' => $this->id() ),
-     'orderBy'     => $orderBy
-    ) );
-    $this->lastQuery = $query;
-	  $this->getQueryBehavior()->select( $query );
-	  return $query;
-	}
-
 
   /**
-   * Return 
+   * Returns the data of child nodes of a branch ordered by the order field
+   * @param string|null $orderBy
+   *    Optional propert name by which the returned data should be ordered.
+   *    Defaults to "position".
+   * @return array
+   */
+	function getChildrenData( $orderBy="position" )
+	{
+    $query = Folder::find()
+      ->where(['parentId'=>$this->id])
+      ->orderBy($orderBy);
+	  return $query->asArray()->all();
+	}
+
+  /**
+   * Returns the number of children 
    * @param bool|\If $update If true, recalculate the child count. Defaults to false.
    * @return int
    */
@@ -202,14 +233,10 @@ class Folder extends \yii\db\ActiveRecord
   {
     if ( $update )
     {
-      $childCount = $this->countWhere( array( "parentId" => $this->id() ) );
-      $this->set("childCount", $childCount)->save();
-      return $childCount;
+      $this->childCount = $this->getChildrenQuery()->count();
+      $this->save();
     }
-    else
-    {
-      return $this->_get("childCount");
-    }
+    return $this->childCount;
   }
 
 	/**
@@ -218,7 +245,7 @@ class Folder extends \yii\db\ActiveRecord
 	 */
   public function getPosition()
 	{
-	  return $this->_get("position");
+	  return $this->position;
 	}
 
   /**
@@ -230,18 +257,14 @@ class Folder extends \yii\db\ActiveRecord
    * @throws InvalidArgumentException
    * @return $this
    */
-  function changePosition ( $position )
+  function changePosition( $position )
   {
-    $this->checkLoaded();
-
-    /*
-     * relative position
-     */
+    // relative position
     if ( is_string($position) )
     {
       if ( $position[0] == "-" or $position[0] == "+" )
       {
-        $position = $this->getPosition() + (int) substr( $position, 1);
+        $position = $this->position + (int) $position;
       }
       else
       {
@@ -253,34 +276,25 @@ class Folder extends \yii\db\ActiveRecord
       throw new InvalidArgumentException("Position must be relative or integer");
     }
 
-    /*
-     * change to parent node
-     */
-    $id = $this->id();
-    $parentId = $this->getParentId();
-    $where = array( 'parentId' => $parentId ) ;
-    $childCount = $this->countWhere( $where );
-    $query = $this->findWhere( $where, "position" );
+    // siblings
+    $query = Folder::find()->where( ['parentId' => $this->parentId] )->orderBy('position');
+    $siblingCount = $query->count(); 
 
-    /*
-     * check position
-     */
-    if ( $position < 0 or $position >= $childCount )
+    // check position
+    if ( $position < 0 or $position >= $siblingCount )
     {
-      throw new InvalidArgumentException("Invalid position '$position'");
+      throw new InvalidArgumentException("Invalid position");
     }
 
-    /*
-     * iterate over the parent node's children
-     */
+    // iterate over the parent node's children
     $index = 0;
-    while ( $this->loadNext($query) )
+    foreach ( $query->all() as $sibling )
     {
-      if ( $this->id() == $id )
+      // it's me...
+      if ( $this->id == $sibling->id )
       {
-        $this->setPosition( $position );
+        $sibling->position = $position;
         //$this->debug(sprintf("Setting node %s to position %s",$this->getLabel(), $position ),__CLASS__,__LINE__);
-        $this->save();
       }
       else
       {
@@ -290,97 +304,48 @@ class Folder extends \yii\db\ActiveRecord
           $index++; // skip over target position
         }
         //$this->debug(sprintf( "Setting sibling node %s to position %s", $this->getLabel(), $index),__CLASS__,__LINE__);
-        $this->setPosition( $index++ );
-        $this->save();
+        $sibling->position = $index++;
       }
+      $sibling->save();
     }
-
-    /*
-     * switch back to original record
-     */
-    $this->load( $id );
     return $this;
   }
 
    /**
-    * Change parent node
-    * @param int $parentId  New parent node id
+    * Set parent node
+    * @param \app\models\Folder
     * @return int Old parent id
     */
-	public function changeParent( $parentId )
+	public function setParent( \app\models\Folder $parentFolder )
 	{
-		$oldParentId = $this->getParentId();
-    $this->setParentId( $parentId );
+		$oldParentId = $this->parentId;
+    $this->parentId = $parentFolder->id;
     $this->save();
     return $oldParentId;
 	}
 
   /**
    * Returns the path of a node in the folder hierarchy as a
-   * string of the node labels, separated by the a given character
+   * string of the node labels, separated by the a given character. If that character
+   * exists in the folder labels, these occurrences will be escaped with '\'
    *
    * @param string $separator
    *    Separator character, defaults to "/"
    * @return string
    */
-  public function getLabelPath( $separator="/" )
+  public function labelPath( $separator="/" )
   {
-
-    $id= $this->id();
-
-    /*
-     * get path of parent if any
-     */
-    $path = str_replace( $separator, '\\' . $separator, $this->getLabel() );
-    $count = 0;
-
-    while (  $parentId = $this->getParentId() and $count++ < 10 )
+    // escape existing separator characters in label
+    $path = str_replace( $separator, '\\' . $separator, $this->label );
+    $parentId= $this->parentId;
+    while( $parentId )
     {
-      $this->load( $parentId );
-      $label = str_replace( $separator, '\\' . $separator, $this->getLabel() );
+      $folder = Folder::findOne( ['id' => $parentId]);
+      if( ! $folder ) throw new LogicException("Folder #$parentId does not exist.");
+      $label = str_replace( $separator, '\\' . $separator, $folder->label );
       $path = $label . $separator . $path;
+      $parentId = $folder->parentId;
     }
-
-    $this->load($id);
-
     return $path;
   }
-
-  /**
-   * Returns the path of a node in the folder hierarchy,
-   * as an array of ids.
-   *
-   * @throws qcl_core_NotImplementedException
-   * @return string
-   */
-  public function getIdPath()
-  {
-    throw new qcl_core_NotImplementedException(__METHOD__);
-  }
-
-  /**
-   * Returns the id of a node given its label path
-   * @param string $path
-   * @param string $separator Separator character, defaults to "/"
-   * @throws qcl_core_NotImplementedException
-   * @return int|null The id of the node or null if node does not exist
-   */
-  public function getIdByPath ( $path, $separator="/" )
-  {
-    throw new qcl_core_NotImplementedException(__METHOD__);
-  }
-
-  /**
-   * Creates nodes along the path if they don't exist
-   * @param string $path
-   * @param string $separator Separator character, defaults to "/"
-   * @throws qcl_core_NotImplementedException
-   * @return int Node id
-   */
-  public function createPath( $path, $separator="/" )
-  {
-    throw new qcl_core_NotImplementedException(__METHOD__);
-  }
-
-
 }
