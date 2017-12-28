@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m171219_230854_create_table_datasource_data_Reference extends Migration
+class m171219_230854_create_table_datasource_data_ExtendedReference extends Migration
 {
     public function safeUp()
     {
@@ -11,7 +11,7 @@ class m171219_230854_create_table_datasource_data_Reference extends Migration
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
         }
 
-        $this->createTable('{{%datasource_data_ExtendedReference}}', [
+        $this->createTable('{{%datasource_data_Reference}}', [
             'id' => $this->integer(11)->notNull()->append('AUTO_INCREMENT PRIMARY KEY'),
             'created' => $this->timestamp(),
             'modified' => $this->timestamp()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),
@@ -61,6 +61,15 @@ class m171219_230854_create_table_datasource_data_Reference extends Migration
             'modifiedBy' => $this->string(50),
             'hash' => $this->string(40),
             'markedDeleted' => $this->smallInteger(1)->notNull()->defaultValue('0'),
+            'attachments' => $this->integer(11),
+            '_category' => $this->string(100),
+            '_owner' => $this->string(50),
+            '_source' => $this->string(255),
+            '_sponsor' => $this->string(50),
+            '_date_ordered' => $this->date(),
+            '_date_received' => $this->date(),
+            '_date_reimbursement_requested' => $this->date(),
+            '_inventory' => $this->string(50),
         ], $tableOptions);
     }
 

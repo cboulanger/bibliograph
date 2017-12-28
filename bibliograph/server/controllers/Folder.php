@@ -465,6 +465,37 @@ class bibliograph_service_Folder
   }
 
   /**
+   * Adds basic folders
+   * @return void
+   */
+  function addInitialFolders()
+  {
+    
+    $this->log( "Adding initial folders to $this" );
+
+    // top folder
+    $this->load(array(
+      "label"       => $this->tr("Default Folder"),
+      "parentId"    => 0,
+      "position"    => 0,
+      "childCount"  => 0,
+      "public"      => true
+    ));
+
+    $this->save();
+
+    // trash folder
+    $this->create(array(
+      "type"        => "trash",
+      "label"       => $this->tr("Trash Folder"),
+      "parentId"    => 0,
+      "position"    => 1,
+      "childCount"  => 0,
+      "public"      => false
+    ));
+  }      
+
+  /**
    * Returns the number of references linked to the folder
    * @param qcl_data_model_db_ActiveRecord $folderModel
    * @param string $datasource

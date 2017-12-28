@@ -101,7 +101,6 @@ class Config extends BaseModel
     $query = $this->getUserConfigs( $userId );
     //codecept_debug($query->createCommand()->getRawSql());
     $result = $query->one();
-    \codecept_debug($result);
     return $result;
   }
 

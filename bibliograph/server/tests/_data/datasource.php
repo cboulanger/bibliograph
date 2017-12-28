@@ -276,7 +276,7 @@ return [
     ],
     [
         'id' => 14,
-        'namedId' => 'datasource3',
+        'namedId' => 'database3',
         'created' => '2017-12-21 11:40:26',
         'modified' => '2017-12-21 12:40:36',
         'title' => 'Sarah\'s Database',

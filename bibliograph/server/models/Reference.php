@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use \app\models\BaseModel;
 
 /**
  * This is the model class for table "database1_data_Reference".
@@ -58,7 +59,7 @@ use Yii;
  * @property integer $markedDeleted
  * @property integer $attachments
  */
-class Reference extends \yii\db\ActiveRecord
+class Reference extends BaseModel
 {
     /**
      * @inheritdoc
@@ -93,57 +94,227 @@ class Reference extends \yii\db\ActiveRecord
      */
     public function attributeLabels()
     {
-        return [
-            'id' => Yii::t('app', 'ID'),
-            'created' => Yii::t('app', 'Created'),
-            'modified' => Yii::t('app', 'Modified'),
-            'citekey' => Yii::t('app', 'Citekey'),
-            'reftype' => Yii::t('app', 'Reftype'),
-            'abstract' => Yii::t('app', 'Abstract'),
-            'address' => Yii::t('app', 'Address'),
-            'affiliation' => Yii::t('app', 'Affiliation'),
-            'annote' => Yii::t('app', 'Annote'),
-            'author' => Yii::t('app', 'Author'),
-            'booktitle' => Yii::t('app', 'Booktitle'),
-            'subtitle' => Yii::t('app', 'Subtitle'),
-            'contents' => Yii::t('app', 'Contents'),
-            'copyright' => Yii::t('app', 'Copyright'),
-            'crossref' => Yii::t('app', 'Crossref'),
-            'date' => Yii::t('app', 'Date'),
-            'doi' => Yii::t('app', 'Doi'),
-            'edition' => Yii::t('app', 'Edition'),
-            'editor' => Yii::t('app', 'Editor'),
-            'howpublished' => Yii::t('app', 'Howpublished'),
-            'institution' => Yii::t('app', 'Institution'),
-            'isbn' => Yii::t('app', 'Isbn'),
-            'issn' => Yii::t('app', 'Issn'),
-            'journal' => Yii::t('app', 'Journal'),
-            'key' => Yii::t('app', 'Key'),
-            'keywords' => Yii::t('app', 'Keywords'),
-            'language' => Yii::t('app', 'Language'),
-            'lccn' => Yii::t('app', 'Lccn'),
-            'location' => Yii::t('app', 'Location'),
-            'month' => Yii::t('app', 'Month'),
-            'note' => Yii::t('app', 'Note'),
-            'number' => Yii::t('app', 'Number'),
-            'organization' => Yii::t('app', 'Organization'),
-            'pages' => Yii::t('app', 'Pages'),
-            'price' => Yii::t('app', 'Price'),
-            'publisher' => Yii::t('app', 'Publisher'),
-            'school' => Yii::t('app', 'School'),
-            'series' => Yii::t('app', 'Series'),
-            'size' => Yii::t('app', 'Size'),
-            'title' => Yii::t('app', 'Title'),
-            'translator' => Yii::t('app', 'Translator'),
-            'type' => Yii::t('app', 'Type'),
-            'url' => Yii::t('app', 'Url'),
-            'volume' => Yii::t('app', 'Volume'),
-            'year' => Yii::t('app', 'Year'),
-            'createdBy' => Yii::t('app', 'Created By'),
-            'modifiedBy' => Yii::t('app', 'Modified By'),
-            'hash' => Yii::t('app', 'Hash'),
-            'markedDeleted' => Yii::t('app', 'Marked Deleted'),
-            'attachments' => Yii::t('app', 'Attachments'),
-        ];
+      return [
+        'id' => Yii::t('app', 'ID'),
+        'created' => Yii::t('app', 'Created'),
+        'modified' => Yii::t('app', 'Modified'),
+        'citekey' => Yii::t('app', 'Citekey'),
+        'reftype' => Yii::t('app', 'Reftype'),
+        'abstract' => Yii::t('app', 'Abstract'),
+        'address' => Yii::t('app', 'Address'),
+        'affiliation' => Yii::t('app', 'Affiliation'),
+        'annote' => Yii::t('app', 'Annote'),
+        'author' => Yii::t('app', 'Author'),
+        'booktitle' => Yii::t('app', 'Booktitle'),
+        'subtitle' => Yii::t('app', 'Subtitle'),
+        'contents' => Yii::t('app', 'Contents'),
+        'copyright' => Yii::t('app', 'Copyright'),
+        'crossref' => Yii::t('app', 'Crossref'),
+        'date' => Yii::t('app', 'Date'),
+        'doi' => Yii::t('app', 'Doi'),
+        'edition' => Yii::t('app', 'Edition'),
+        'editor' => Yii::t('app', 'Editor'),
+        'howpublished' => Yii::t('app', 'Howpublished'),
+        'institution' => Yii::t('app', 'Institution'),
+        'isbn' => Yii::t('app', 'Isbn'),
+        'issn' => Yii::t('app', 'Issn'),
+        'journal' => Yii::t('app', 'Journal'),
+        'key' => Yii::t('app', 'Key'),
+        'keywords' => Yii::t('app', 'Keywords'),
+        'language' => Yii::t('app', 'Language'),
+        'lccn' => Yii::t('app', 'Lccn'),
+        'location' => Yii::t('app', 'Location'),
+        'month' => Yii::t('app', 'Month'),
+        'note' => Yii::t('app', 'Note'),
+        'number' => Yii::t('app', 'Number'),
+        'organization' => Yii::t('app', 'Organization'),
+        'pages' => Yii::t('app', 'Pages'),
+        'price' => Yii::t('app', 'Price'),
+        'publisher' => Yii::t('app', 'Publisher'),
+        'school' => Yii::t('app', 'School'),
+        'series' => Yii::t('app', 'Series'),
+        'size' => Yii::t('app', 'Size'),
+        'title' => Yii::t('app', 'Title'),
+        'translator' => Yii::t('app', 'Translator'),
+        'type' => Yii::t('app', 'Type'),
+        'url' => Yii::t('app', 'Url'),
+        'volume' => Yii::t('app', 'Volume'),
+        'year' => Yii::t('app', 'Year'),
+        'createdBy' => Yii::t('app', 'Created By'),
+        'modifiedBy' => Yii::t('app', 'Modified By'),
+        'hash' => Yii::t('app', 'Hash'),
+        'markedDeleted' => Yii::t('app', 'Marked Deleted'),
+        'attachments' => Yii::t('app', 'Attachments'),
+      ];
     }
+
+  /**
+   * Indexes
+   */
+  private $indexes = array(
+    "fulltext" => array(
+      "type"        => "fulltext",
+      "properties"  => array(
+        'abstract','annote', 'author', 'booktitle', 'subtitle', 'contents',
+        'editor','howpublished', 'journal','keywords', 'note','publisher',
+        'school', 'title', 'year'
+      )
+    ),
+    "basic" => array(
+       "type"       => "fulltext",
+       "properties" => array("author","title","year","editor")
+    )
+  ); 
+
+  //-------------------------------------------------------------
+  // API
+  //-------------------------------------------------------------
+
+  /**
+   * Returns the schema object used by this model
+   * @return lib\schema\BibtexSchema
+   */
+	function getSchemal()
+	{
+    static $schema = null;
+    if ( is_null($schma ) ){
+      $schema = new \lib\schema\BibtexSchema();
+    }
+	  return $schema;
+	}
+
+	/**
+	 * Overridden to set "createdBy" column
+	 * @see qcl_data_model_AbstractActiveRecord#create()
+	 */
+	function create( $data=null )
+	{
+    notimplemented();
+	  $activeUser = $this->getApplication()->getAccessController()->getActiveUser();
+	  $data['createdBy'] = $activeUser->namedId();
+	  return parent::create( $data );
+	}
+
+	/**
+	 * Overridden to set "modifiedBy" column
+	 * @see qcl_data_model_AbstractActiveRecord#save()
+	 */
+	function save()
+	{
+    notimplemented();
+	  $activeUser = $this->getApplication()->getAccessController()->getActiveUser();
+	  $this->set("modifiedBy", $activeUser->namedId() );
+	  return parent::save();
+	}
+
+  /**
+   * @return string
+   */
+  function getAuthor()
+  {
+    return $this->autor;
+  }
+
+  /**
+   * @return string
+   */
+  function getTitle()
+  {
+    return $this->title;
+  }
+
+  /**
+   * @return string
+   */
+  function getYear()
+  {
+    return $this->year;
+  }
+
+  /**
+   * Returns author or editor depending on reference type
+   * @return string
+   */
+  function getCreator()
+  {
+    $author = $this->getAuthor();
+    return empty($author) ? $this->editor : $author;
+  }
+
+  /**
+   * Computes the citation key from the record data.
+   * The format is Author-Year-TitleWord or Author1+Author2+Author3-Year-Titleword
+   * @return string
+   */
+  function computeCiteKey()
+  {
+    $creators = explode(trim(BIBLIOGRAPH_VALUE_SEPARATOR),$this->getCreator());
+    $lastNames = array();
+    foreach($creators as $name)
+    {
+      $parts = explode(",", $name);
+      $lastNames[] = str_replace( " ", "-" , trim($parts[0]) );
+    }
+    $citekey = implode("+", $lastNames);
+
+    $citekey .= "-" . $this->getYear();
+
+    $titlewords = explode(" ",$this->getTitle());
+    while ( count($titlewords) and strlen($titlewords[0]) < 4 )
+    {
+      array_shift($titlewords);
+    }
+    if( count($titlewords) )
+    {
+      $citekey .=  "-" . $titlewords[0];
+    }
+    return $citekey;
+  }
+
+	/**
+	 * Selects potential duplicates
+	 * @param $threshold The threshold score to count as a duplicate
+	 * @return array
+   *    Returns an array of match scores in the order of the found records
+   * @todo this works only with MySQL, must be abstracted to support other backends
+	 */
+	function findPotentialDuplicates($threshold=50)
+	{
+    notimplemented();
+    $author = $this->getAuthor();
+    $title  = $this->getTitle();
+    $year   = $this->getYear();
+
+    $match = $adapter->fullTextSql(
+      $queryBehavior->getTableName(),
+      "basic", "$author $title $year", "fuzzy"
+    );
+    $table = $queryBehavior->getTableName();
+    $id = $this->id();
+    $sql = "
+      SELECT id,
+        $match AS score,
+        ($match / maxScore)*100 AS normalisedScore
+      FROM $table,
+        (SELECT MAX($match) AS maxScore FROM $table) AS maxScoreTable
+      WHERE
+        $match
+      HAVING normalisedScore > $threshold AND id != $id
+      ORDER BY score DESC
+    ";
+    $rows = $adapter->fetchAll($sql);
+
+    $ids = array();
+    $scores = array();
+    foreach( $rows as $row )
+    {
+        $ids[]    = $row['id'];
+        $scores[] = $row['normalisedScore'];
+    }
+    if( count($ids) )
+    {
+      $this->lastQuery = $queryBehavior->selectIds( $ids );
+    }
+    return $scores;
+	}  
 }

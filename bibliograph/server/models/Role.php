@@ -24,7 +24,8 @@ namespace app\models;
 use Yii;
 
 use app\models\BaseModel;
-use app\models\Permissions;
+use app\models\Permission;
+use app\models\Datasources;
 use app\models\User;
 
 use app\models\User_Role;
@@ -97,42 +98,88 @@ class Role extends BaseModel
   // Relations
   //-------------------------------------------------------------
 
+  /**
+   * @return \yii\db\ActiveQuery
+   */           
   protected function getRolePermissions()
   {
     return $this->hasMany(Permission_Role::className(), ['RoleId' => 'id']);
   }
 
-  protected function getPermissions()
+  /**
+   * @return \yii\db\ActiveQuery
+   */ 
+  public function getPermissions()
   {
     return $this->hasMany(Permission::className(), ['id' => 'PermissionId'])->via('rolePermissions');
   }
 
+  /**
+   * @return \yii\db\ActiveQuery
+   */ 
   protected function getRoleUsers()
   {
     return $this->hasMany(User_Role::className(), ['RoleId' => 'id']);
   }
 
+  /**
+   * @return \yii\db\ActiveQuery
+   */ 
   protected function getUsers()
   {
     return $this->hasMany(User::className(), ['id' => 'UserId'])->via('roleUsers');
   }  
+
+  /**
+   * @return \yii\db\ActiveQuery
+   */ 
+  protected function getRoleDatasources()
+  {
+    return $this->hasMany(Datasource_Role::className(), ['RoleId' => 'id']);
+  }
+
+  /**
+   * @return \yii\db\ActiveQuery
+   */ 
+  public function getDatasources()
+  {
+    return $this->hasMany(Datasource::className(), ['id' => 'DatasourceId'])->via('roleDatasources');
+  }
 
   //-------------------------------------------------------------
   // API
   //-------------------------------------------------------------
   
   /**
-   * Returns a list of permissions connected to the current model record.
-   * @return array
-   */
-  public function getPermissionNames( $refresh=false )
+   * Returns the usernames of the users with this role
+   * @return string[]
+   */           
+  public function getUserNames()
   {
-    static $permissions = null;
-    if( is_null($permissions) or $refresh ){
-      $permissions = array_map( function($permissionObject) {
-        return $permissionObject->namedId;
-      }, $this->getPermissions() );
-    }
-    return $permissions;
+    $result = $this->getUsers()->all();
+    if( is_null( $result ) ) return [];
+    return array_map( function($o) {return $o->namedId;}, $result );
+  } 
+
+  /**
+   * Returns the names of the datasources that are accessible to this role
+   * @return string[]
+   */
+  public function getDatasourceNames()
+  {
+    $result = $this->getDatasources()->all();
+    if( is_null( $result ) ) return [];
+    return array_map( function($o) {return $o->namedId;}, $result );
+  } 
+
+  /**
+   * Returns the names of permissions connected to the active record.
+   * @return string[]
+   */
+  public function getPermissionNames()
+  {
+    $result = $this->getPermissions()->all();
+    if( is_null( $result ) ) return [];
+    return array_map( function($o) {return $o->namedId;}, $result );
   }
 }

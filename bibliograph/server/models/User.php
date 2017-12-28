@@ -135,12 +135,18 @@ class User extends BaseModel
   // Relations
   //-------------------------------------------------------------
 
+  /**
+   * @return \yii\db\ActiveQuery
+   */         
   protected function getUserRoles()
   {
     return $this->hasMany(User_Role::className(), ['UserId' => 'id'] );
   }
 
-  protected function getGroupRoles($groupId=null)
+  /**
+   * @return \yii\db\ActiveQuery
+   */       
+  public function getGroupRoles($groupId=null)
   {
     return $this->hasMany(Role::className(), ['id' => 'RoleId' ])
       ->via('userRoles', function( yii\db\ActiveQuery $query) use($groupId) {
@@ -148,26 +154,55 @@ class User extends BaseModel
       });
   }
 
+  /**
+   * @return \yii\db\ActiveQuery
+   */      
   protected function getUserGroups()
   {
     $userGroups = $this->hasMany(Group_User::className(), ['UserId' => 'id']);
     return $userGroups;
   }
 
-  protected function getGroups()
+  /**
+   * @return \yii\db\ActiveQuery
+   */      
+  public function getGroups()
   {
     return $this->hasMany(Group::className(), ['id' => 'GroupId'])
       ->via('userGroups');
   } 
 
+  /**
+   * @return \yii\db\ActiveQuery
+   */    
   protected function getUserConfigs()
   {
     return $this->hasMany(UserConfig::className(), ['UserId' => 'id']);
   } 
 
-  protected function getSessions()
+  /**
+   * @return \yii\db\ActiveQuery
+   */  
+  public function getSessions()
   {
     return $this->hasMany(Session::className(), ['UserId' => 'id']);
+  } 
+
+  /**
+   * @return \yii\db\ActiveQuery
+   */
+  protected function getUserDatasources()
+  {
+    return $this->hasMany(Datasource_User::className(), ['UserId' => 'id']);
+  }
+
+  /**
+   * @return \yii\db\ActiveQuery
+   */
+  public function getDatasources()
+  {
+    return $this->hasMany(Datasource::className(), ['id' => 'DatasourceId'])
+      ->via('userDatasources');
   } 
 
   //-------------------------------------------------------------
@@ -190,7 +225,7 @@ class User extends BaseModel
    */
   public function isAnonymous()
   {
-    return (bool) $this->getAnonymous();
+    return (bool) $this->anonymous;
   }
 
   /**
@@ -231,9 +266,10 @@ class User extends BaseModel
    */
   protected function _hasPermission($requestedPermission)
   {
+    static $permissions = null;
 
     // get all permissions of the user
-    $permissions = $this->permissions();
+    if( is_null($permission) ) $permissions = $this->getPermissionNames();
 
     // use wildcard?
     $useWildcard = strstr($requestedPermission, "*");
@@ -265,77 +301,91 @@ class User extends BaseModel
   }
 
   /**
-   * Whether the user has the given role
+   * Whether the user has the given role (in a group, if given)
    * @param string $role
+   * @param int $groupId
    * @return bool
-   * @todo this can be optimized
    */
-  public function hasRole($role)
+  public function hasRole($role, $groupId = null)
   {
-    return in_array($role, $this->roles());
+    return in_array($role, $this->getRoleNames( $groupId ));
   }
 
   /**
-   * Returns list of roles that a user has globally.
+   * Returns list of roles that a user has, either globally or in a group.
    * @param int|null $groupId
    *    If given, retrieve only the roles that the user has in the
    *    group with the given id. Otherwise, return global roles only
-   * @param bool $refresh
-   *    If true, reload group memberships. If false(default),
-   *    use cached values
    * @return string[]
    *    Array of role names
    */
-  public function getRoleNames( $groupId=null, $refresh = false )
+  public function getRoleNames( $groupId = null )
   {
-    static $roleNames = null;
-    if( is_null($roleNames) or $refresh ){
-      $roleObjects = $this->getGroupRoles( $groupId )->all();
-      foreach( $roleObjects as $obj) $roleNames[] = $obj->namedId;
+    $roleNames = [];
+    $roleObjects = $this->getGroupRoles( $groupId )->all();
+    foreach( $roleObjects as $obj) $roleNames[] = $obj->namedId;
+    // if in group, add global roles
+    if ( $groupId ){
+      array_merge( $roleNames, $this->getRoleNames() );
     }
-    return $roleNames;
+    return array_unique($roleNames);
   }
 
   /**
    * Returns list of groups that a user belongs to.
    *
-   * @param bool $refresh
-   *    If true, reload group memberships. If false(default),
-   *    use cached values
-   *
-   * @return array
+   * @return string[]
    *    Array of string values: group named ids.
    */
   public function getGroupNames($refresh = false)
   {
-    static $groupNames = null;
-    if ( is_null($groupNames) or $refresh ) {
-      $groupObjects = $this->getGroups()->all(); // @todo Rewrite as query
-      $groupNames = array_map( function($groupObject){
-        return $groupObject->namedId;
-      }, $groupObjects );
-    }
-    return $groupNames;
+    $result = $this->getGroups()->all();
+    if( is_null( $result ) ) return [];
+    return array_map( function($o) {return $o->namedId;}, $result );
   }
 
   /**
    * Returns list of permissions that the user has
-   *
-   * @param bool $refresh
-   *    If true, reload group memberships. If false(default),
-   *    use cached values
+   * @param int|null $groupId
+   *    If given, retrieve only the permissions that the user has in the
+   *    group with the given id. Otherwise, return global roles only
    * @return string[]
-   *    Array of permission ids
+   *    Array of permission names
    */
-  public function getPermissionNames($refresh = false)
+  public function getPermissionNames( $groupId = null )
   {
-    static $permissions = null;
-    if ( is_null($permissions) or $refresh ) {
-      not_implemented();
-      $this->permissions = $permissions;
+    $permissionNames = [];
+    $roles = $this->getGroupRoles( $groupId )->all();
+    if( is_array($roles) ) foreach( $roles as $obj) {
+      $permissionNames = array_merge( $permissionNames, $obj->getPermissionNames() );
     }
-    return $permissions;
+    // if in group, add global roles
+    if ( $groupId ){
+      $permissionNames = array_merge( $permissionNames, $this->getPermissionNames() );
+    }
+    return array_unique($permissionNames);
   }
+
+  /**
+   * Returns list of datasources that the user has access to 
+   * @return string[]
+   *    Array of datasource names
+   */
+  public function getDatasourceNames()
+  {
+    $datasourceNames = [];
+    $myDatasources = $this->getDatasources()->all();
+    if( is_array($myDatasources) ) foreach( $myDatasources as $o ) $datasourceNames[] = $o->namedId;
+    $groups = $this->getGroups()->all();
+    if( is_array($groups) ) foreach( $groups as $group){
+      $datasourceNames = array_merge( $datasourceNames, $group->getDatasourceNames());
+      $roles = $this->getGroupRoles( $group->id )->all();
+      if( is_array($roles) ) foreach( $roles as $role) {
+          $datasourceNames = array_merge( $datasourceNames, $role->getDatasourceNames() );
+      }
+    }
+    return array_unique($datasourceNames);
+  }  
 
   /**
    * Resets the timestamp of the last action  for the current user
@@ -344,7 +394,5 @@ class User extends BaseModel
   public function resetLastAction()
   {
     not_implemented();
-    $this->set("lastAction", new qcl_data_db_Timestamp("now"));
-    $this->save();
   }
 }

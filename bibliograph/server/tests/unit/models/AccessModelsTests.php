@@ -12,7 +12,7 @@ use app\models\UserConfig;
 // for whatever reason, this is not loaded early enough
 require_once __DIR__ . "/../../_bootstrap.php"; 
 
-class Version2CompatibilityTest extends \Codeception\Test\Unit
+class AccessModelsTests extends \Codeception\Test\Unit
 {
     /**
      * @var \UnitTester
@@ -20,7 +20,7 @@ class Version2CompatibilityTest extends \Codeception\Test\Unit
     protected $tester;
 
     public function _fixtures(){
-      return require 'fixture_data_v2.php';
+      return require '../../fixtures/_access_models.php';
     }
 
     protected function _before()
@@ -40,7 +40,7 @@ class Version2CompatibilityTest extends \Codeception\Test\Unit
       $this->assertEquals('Sarah Manning', $user->name );
     }
 
-    public function testGroupNames()
+    public function testUserGroupNames()
     {
       $user = User::findOne(['name'=>"Dale Cooper"]);
       $this->assertEquals('dale_cooper@bibliograph.org', $user->email );
@@ -48,12 +48,26 @@ class Version2CompatibilityTest extends \Codeception\Test\Unit
       $this->assertEquals(['group2','group3'], $groupNames );
     }
 
-    public function testGlobalRoles()
+    public function testUserGlobalRoles()
     {
       $user = User::findOne(['name'=>"Frank Underwood"]);
       $groupNames = $user->getRoleNames();
       $this->assertEquals(['manager'], $groupNames );
-    } 
+    }
+
+    public function testRolePermissions()
+    {
+      $role = Role::findOne(['namedId'=>"user"]);
+      $permissionNames = $role->getPermissionNames();
+      $this->assertEquals(14, count($permissionNames) );
+    }     
+
+    public function testUserGlobalPermissions()
+    {
+      $user = User::findOne(['namedId'=>"admin"]);
+      $permissionNames = $user->getPermissionNames();
+      $this->assertEquals(34, count($permissionNames) );
+    }  
 
     public function testGroupRoles()
     {
@@ -63,11 +77,32 @@ class Version2CompatibilityTest extends \Codeception\Test\Unit
       $this->assertEquals(['manager'], $groupNames );
     }
 
+    public function testGroupUsers()
+    {
+      $group = Group::findOne(['namedId'=>'group1']);
+      $userNames = $group->getUserNames();
+      $this->assertEquals( 0, count( array_diff( $userNames, ['jessica_jones','frank_underwood','sarah_manning'] )));
+    }
+
+    public function testGroupDatasources()
+    {
+      $group = Group::findOne(['namedId'=>'group1']);
+      $result = $group->getDatasourceNames();
+      $this->assertEquals( ["database1"], $result );
+    }    
+
+    public function testUserDatasources()
+    {
+      $user = User::findOne(['name'=>"Sarah Manning"]);
+      $result = $user->getDatasourceNames();
+      $this->assertEquals( 0, count( array_diff( $result, ['database1','database2','database3'] )));
+    }         
+
     public function testConfigData()
     {
       $config = Config::findOne(['namedId'=>'application.locale']);
       $this->assertEquals('en', $config->default );
       $user = User::findOne(['namedId'=>'admin']);
-      $this->assertEquals('', $config->getUserConfigValue($user->id) );
+      $this->assertEquals('de', $config->getUserConfigValue($user->id) );
     }
 }

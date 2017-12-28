@@ -42,7 +42,7 @@ use app\models\Datasource_Group;
  * @property string $defaultRole
  * @property integer $active
  */
-class Group extends \yii\db\ActiveRecord
+class Group extends BaseModel
 {
   /**
    * @inheritdoc
@@ -89,23 +89,56 @@ class Group extends \yii\db\ActiveRecord
   // Relations
   //-------------------------------------------------------------
 
+  /**
+   * @return \yii\db\ActiveQuery
+   */           
   protected function getGroupUsers()
   {
     return $this->hasMany(Group_User::className(), ['GroupId' => 'id']);
   }
 
-  protected function getUsers()
+  /**
+   * @return \yii\db\ActiveQuery
+   */           
+  public function getUsers()
   {
     return $this->hasMany(User::className(), ['id' => 'UserId'])->via('groupUsers');
   }
 
+  /**
+   * @return \yii\db\ActiveQuery
+   */           
   protected function getGroupDatasources()
   {
     return $this->hasMany(Datasource_Group::className(), ['GroupId' => 'id']);
   }
 
-  protected function getDatasources()
+  /**
+   * @return \yii\db\ActiveQuery
+   */           
+  public function getDatasources()
   {
     return $this->hasMany(Datasource::className(), ['id' => 'DatasourceId'])->via('groupDatasources');
   }
+
+  /**
+   * Returns the usernames of the members of the group
+   * @return string[]
+   */           
+  public function getUserNames()
+  {
+    $result = $this->getUsers()->all();
+    if( is_null( $result ) ) return [];
+    return array_map( function($o) {return $o->namedId;}, $result );
+  } 
+
+  /**
+   * Returns the names of the datasources that are accessible to this groupo
+   */
+  public function getDatasourceNames()
+  {
+    $result = $this->getDatasources()->all();
+    if( is_null( $result ) ) return [];
+    return array_map( function($o) {return $o->namedId;}, $result );
+  } 
 }
