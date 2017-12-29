@@ -6,12 +6,12 @@
    http://www.bibliograph.org
 
    Copyright:
-     2004-2017 Christian Boulanger
+   2004-2017 Christian Boulanger
 
    License:
-     LGPL: http://www.gnu.org/licenses/lgpl.html
-     EPL: http://www.eclipse.org/org/documents/epl-v10.php
-     See the LICENSE file in the project's top-level directory for details.
+   LGPL: http://www.gnu.org/licenses/lgpl.html
+   EPL: http://www.eclipse.org/org/documents/epl-v10.php
+   See the LICENSE file in the project's top-level directory for details.
 
    Authors:
    *  Christian Boulanger (cboulanger)
@@ -30,54 +30,11 @@ class BibliographicDatasource
 {
 
   /**
-   * The name of the datasource schema
-   * @var string
-   */
-  protected $schemaName = "bibliograph.schema.bibliograph2";
-
-  /**
-   * The description of the datasource schema
-   * @var string
-   */
-  protected $description =
-    "The schema of Bibliograph 2.0 datasources";
-
-
- /**
-   * The model properties
-   */
-  private $properties = array(
-    'schema' => array(
-      'nullable'  => false,
-      'init'      => "bibliograph.schema.bibliograph2"
-    )
-  );
-
-  /**
-   * Constructor, overrides some properties
-   */
-  function __construct()
-  {
-    parent::__construct();
-    $this->addProperties( $this->properties );
-  }
-
-  /**
-   * Returns singleton instance of this class.
-   * @return bibliograph_model_BibliographicDatasourceModel
-   */
-  public static function getInstance()
-  {
-    return qcl_getInstance( __CLASS__ );
-  }
-
-  /**
-   * @todo
    * @return string
    */
   public function getTableModelType()
   {
-    return "reference";
+    return 'reference';
   }
 
   /**
@@ -85,26 +42,8 @@ class BibliographicDatasource
    */
   public function init()
   {
-    if ( parent::init() )
-    {
-      $this->registerModels( array(
-        'reference'   => array(
-          'model' => array(
-            'class'   => "bibliograph_model_ReferenceModel"
-          ),
-          'controller' => array(
-            'service' => "bibliograph.reference"
-          )
-        ),
-        'folder'  => array(
-          'model'    => array(
-            'class'    => "bibliograph_model_FolderModel"
-          ),
-          'controller' => array(
-            'service' => "bibliograph.folder"
-          )
-        )
-      ) );
-    }
+    parent::init();
+    $this->addModel( 'reference', 'app\models\Reference', 'reference');
+    $this->addModel( 'folder', 'app\models\Folder', 'folder');
   }
 }

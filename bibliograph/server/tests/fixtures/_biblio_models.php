@@ -11,5 +11,9 @@ return [
   'folder_reference' => [
     'class' => \tests\fixtures\FolderReferenceFixture::className(),
     'dataFile' => '@tests/_data/folder_reference.php',
+  ], 
+  'datasource' => [
+    'class' => \tests\fixtures\DatasourceFixture::className(),
+    'dataFile' => '@tests/_data/datasource.php',
   ],  
 ];

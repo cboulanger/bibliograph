@@ -3,6 +3,8 @@
 namespace app\models;
 
 use Yii;
+use app\models\BaseModel;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "data_Datasource".
@@ -27,63 +29,233 @@ use Yii;
  * @property integer $readonly
  * @property integer $hidden
  */
-class Datasource extends \yii\db\ActiveRecord
+class Datasource extends BaseModel
 {
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
+
+  /**
+   * Models that are attached to this datasource
+   * @var array
+   */
+  private $modelMap = array();
+
+  /**
+   * @inheritdoc
+   */
+  public static function tableName()
+  {
+    return 'data_Datasource';
+  }
+
+  /**
+   * @inheritdoc
+   */
+  public function rules()
+  {
+    return [
+      [['created', 'modified'], 'safe'],
+      [['port', 'active', 'readonly', 'hidden'], 'integer'],
+      [['namedId', 'username', 'password'], 'string', 'max' => 50],
+      [['title', 'schema', 'database'], 'string', 'max' => 100],
+      [['description', 'resourcepath'], 'string', 'max' => 255],
+      [['type', 'encoding', 'prefix'], 'string', 'max' => 20],
+      [['host'], 'string', 'max' => 200],
+      [['namedId'], 'unique'],
+    ];
+  }
+
+  /**
+   * @inheritdoc
+   */
+  public function attributeLabels()
+  {
+    return [
+      'id' => Yii::t('app', 'ID'),
+      'namedId' => Yii::t('app', 'Named ID'),
+      'created' => Yii::t('app', 'Created'),
+      'modified' => Yii::t('app', 'Modified'),
+      'title' => Yii::t('app', 'Title'),
+      'description' => Yii::t('app', 'Description'),
+      'schema' => Yii::t('app', 'Schema'),
+      'type' => Yii::t('app', 'Type'),
+      'host' => Yii::t('app', 'Host'),
+      'port' => Yii::t('app', 'Port'),
+      'database' => Yii::t('app', 'Database'),
+      'username' => Yii::t('app', 'Username'),
+      'password' => Yii::t('app', 'Password'),
+      'encoding' => Yii::t('app', 'Encoding'),
+      'prefix' => Yii::t('app', 'Prefix'),
+      'resourcepath' => Yii::t('app', 'Resourcepath'),
+      'active' => Yii::t('app', 'Active'),
+      'readonly' => Yii::t('app', 'Readonly'),
+      'hidden' => Yii::t('app', 'Hidden'),
+    ];
+  }
+
+  public function formData()
+  {
+    return array(
+      'title'       => array(
+        'label'       => $this->tr("Name")
+      ),
+      'description' => array(
+        'type'        => "TextArea",
+        'lines'       => 3,
+        'label'       => $this->tr("Description")
+      ),
+      'schema'      => array(
+        'type'        => "selectbox",
+        'label'       => $this->tr("Schema"),
+        'delegate'    => array(
+          'options'     => "getSchemaOptions"
+        )
+      ),
+      'type'        => array(
+        'label'       => $this->tr("Type")
+      ),
+      'host'        => array(
+        'label'       => $this->tr("Server host"),
+        'placeholder' => "The database server host, usually 'localhost'"
+      ),
+      'port'        => array(
+        'label'       => $this->tr("Server port"),
+        'marshaler'   => array(
+          'marshal'    => array( 'function' => "qcl_toString" ),
+          'unmarshal'  => array( 'function' => "qcl_toInteger" )
+        ),
+        'placeholder' => "The database server port, usually 3306 for MySql"
+      ),
+      'database'    => array(
+        'label'       => $this->tr("Database name"),
+        'placeholder' => "The name of the database",
+        'validation'  => array(
+          'required'    => true
+        )
+      ),
+      'username'    => array(
+        'label'       => $this->tr("Database user name")
+      ),
+      'password'    => array(
+        'label'       => $this->tr("Database user password")
+      ),
+      'encoding'    => array(
+        'label'       => $this->tr("Database encoding"),
+        'default'     => 'utf-8'
+      ),
+      'prefix'      => array(
+        'label'       => $this->tr("Datasource prefix")
+      ),
+      'resourcepath' => array(
+        'label'       =>  $this->tr("Resource path")
+      ),
+      'active'        => array(
+        'type'    => "SelectBox",
+        'label'   =>  $this->tr("Status"),
+        'options' => array(
+          array( 'label' => "Disabled", 'value' => false ),
+          array( 'label' => "Active",   'value' => true )
+        )
+      )
+    );      
+  }
+
+  /**
+   * Returns the class name of the datasource to be instantiated
+   *
+   * @param string $datasourceName  
+   * @return string
+   * @todo add and use 'class' column instead of 'schema'
+   */
+  public static function getClass( $datasourceName )
+  {
+    $datasource = Datasource::findOne(['namedId' => $datasourceName]);
+    if( is_null($datasource) ) throw new \InvalidArgumentException("Datasource '$datasourceName' does not exist.");
+    // backwards compatibility
+    $schema = $datasource->schema;
+    switch( $schema ){
+      case "bibliograph.schema.bibliograph2":
+        return "app\models\BibliographicDatasource";
+      case "qcl.schema.filesystem.local":
+        return "lib\io\Filesystem";
+    }
+    $class = str_replace(".","\\",$schema);
+    return $class;
+  }
+
+  /**
+   * Registers the models that are part of the datasource
+   * @param array $modelMap Associative array that maps the
+   * type of model to the model classes
+   * @throws InvalidArgumentException
+   * @return void
+   */
+  public function registerModels( $modelMap )
+  {
+    if ( ! is_array( $modelMap ) )
     {
-        return 'data_Datasource';
+      throw new InvalidArgumentException( "Argument must be array" );
     }
+    //@todo validate
+    $this->modelMap = $modelMap;
+  }
+
+  /**
+   * Registers a models that is part of the datasource
+   * @param string $type The name of the type
+   * @param string $class The class of the model
+   * @param string|null $service (optional) The service that provides access to model data
+   * type of model to the model classes
+   * @throws InvalidArgumentException
+   * @return void
+   */
+  public function addModel( $type, $class, $service=null)
+  {
+    if( !$type or !is_string($type) ) throw new \InvalidArgumentException("Invalid type");
+    if( !$class or !is_string($class) ) throw new \InvalidArgumentException("Invalid class");
+
+    ArrayHelper::setValue( $this->modelMap, [$type, "model", "class"], $class );
+    ArrayHelper::setValue( $this->modelMap, [$type, "controller", "service"], $service );
+  }
+
+  /**
+   * Returns the types all the models registered
+   * @return array
+   */
+  public function modelTypes()
+  {
+    return array_keys( $this->modelMap );
+  }
+
+  /**
+   * Returns the class name of the model of the given type.
+   * A model instance does not need to exist at this point.
+   * @param string $type
+   * @throws InvalidArgumentException
+   * @return string The class name
+   */
+  public function getModelClass( $type )
+  {
+    if( !$type or !is_string($type) ) throw new \InvalidArgumentException("Invalid type");
+    if ( ! isset( $this->modelMap[$type] ) )
+    {
+      throw new InvalidArgumentException("Model of type '$type' is not registered");
+    }
+    return $this->modelMap[$type]['model']['class'];
+  }
 
     /**
-     * @inheritdoc
-     */
-    public function rules()
+   * Returns the rpc service name for the given model type, if defined.
+   * @param string $type
+   *    The model type
+   * @return string|null
+   *    The service name or null if none exists
+   */
+  public function getServiceName( $type )
+  {
+    if( !$type or !is_string($type) ) throw new \InvalidArgumentException("Invalid type");
+    if ( ! isset( $this->modelMap[$type]['controller']['service'] ) )
     {
-        return [
-            [['created', 'modified'], 'safe'],
-            [['port', 'active', 'readonly', 'hidden'], 'integer'],
-            [['namedId', 'username', 'password'], 'string', 'max' => 50],
-            [['title', 'schema', 'database'], 'string', 'max' => 100],
-            [['description', 'resourcepath'], 'string', 'max' => 255],
-            [['type', 'encoding', 'prefix'], 'string', 'max' => 20],
-            [['host'], 'string', 'max' => 200],
-            [['namedId'], 'unique'],
-        ];
+      return null;
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => Yii::t('app', 'ID'),
-            'namedId' => Yii::t('app', 'Named ID'),
-            'created' => Yii::t('app', 'Created'),
-            'modified' => Yii::t('app', 'Modified'),
-            'title' => Yii::t('app', 'Title'),
-            'description' => Yii::t('app', 'Description'),
-            'schema' => Yii::t('app', 'Schema'),
-            'type' => Yii::t('app', 'Type'),
-            'host' => Yii::t('app', 'Host'),
-            'port' => Yii::t('app', 'Port'),
-            'database' => Yii::t('app', 'Database'),
-            'username' => Yii::t('app', 'Username'),
-            'password' => Yii::t('app', 'Password'),
-            'encoding' => Yii::t('app', 'Encoding'),
-            'prefix' => Yii::t('app', 'Prefix'),
-            'resourcepath' => Yii::t('app', 'Resourcepath'),
-            'active' => Yii::t('app', 'Active'),
-            'readonly' => Yii::t('app', 'Readonly'),
-            'hidden' => Yii::t('app', 'Hidden'),
-        ];
-    }
-
-    public static function createInstance($datasourceName){
-        
-
-    }
+    return $this->modelMap[$type]['controller']['service'];
+  }
 }
