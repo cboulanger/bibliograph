@@ -51,14 +51,14 @@ class ExtendedFieldsReference extends Reference
       return array_merge(
         parent::rules(),
         [ 
-          '_category' => 'Category',
-          '_owner' => 'Owner',
-          '_source' => 'Source',
-          '_sponsor' => 'Sponsor',
-          '_date_ordered' => 'Date Ordered',
-          '_date_received' => 'Date Received',
-          '_date_reimbursement_requested' => 'Date Reimbursement Requested',
-          '_inventory' => 'Inventory',
+          '_category' => Yii::t('app', 'Category'),
+          '_owner' => Yii::t('app', 'Owner'),
+          '_source' => Yii::t('app', 'Source'),
+          '_sponsor' => Yii::t('app', 'Sponsor'),
+          '_date_ordered' => Yii::t('app', 'Date Ordered'),
+          '_date_received' => Yii::t('app', 'Date Received'),
+          '_date_reimbursement_requested' => Yii::t('app', 'Date Reimbursement Requested'),
+          '_inventory' => Yii::t('app', 'Inventory'),
         ]
       );
     }

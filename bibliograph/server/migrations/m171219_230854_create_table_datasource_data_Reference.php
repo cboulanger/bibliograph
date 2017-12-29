@@ -61,6 +61,7 @@ class m171219_230854_create_table_datasource_data_Reference extends Migration
             'modifiedBy' => $this->string(50),
             'hash' => $this->string(40),
             'markedDeleted' => $this->smallInteger(1)->notNull()->defaultValue('0'),
+            'attachments' => $this->integer(11),
         ], $tableOptions);
     }
 

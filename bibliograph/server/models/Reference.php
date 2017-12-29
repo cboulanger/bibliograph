@@ -196,7 +196,7 @@ class Reference extends BaseModel
    * Returns the schema object used by this model
    * @return lib\schema\BibtexSchema
    */
-	function schema()
+	function getSchema()
 	{
     static $schema = null;
     if ( is_null($schma ) ){
@@ -274,9 +274,8 @@ class Reference extends BaseModel
    *    Returns an array of match scores in the order of the found records
    * @todo this works only with MySQL, must be abstracted to support other backends
 	 */
-	function findPotentialDuplicates($threshold=50)
+	function findPotentialDuplicates_todo($threshold=50)
 	{
-    notimplemented();
     $author = $this->author;
     $title  = $this->title;
     $year   = $this->year();
