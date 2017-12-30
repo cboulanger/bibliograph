@@ -43,7 +43,9 @@ class DatasourceTest extends Base
     $this->assertSame( $folderClass::getDb(), $datasource->getConnection(), "Model does not inherit connection from datasource." );
     $folder = $folderClass::findOne(['label'=>'Hauptordner']);
     $this->assertFalse( is_null($folder), "Folder model not found." );
-    $numEnglishRefs = $datasource->getClassFor('reference')::find()->where(['language'=>'English'])->count();
-    $this->assertEquals( 15, $numEnglishRefs );
+    $this->assertEquals( Datasource::in('test','folder'), $datasource->getClassFor('folder') );
+    $this->assertEquals( Datasource::in('test.reference'), $datasource->getClassFor('reference') );
+    $numEnglishRefs = Datasource::in('test.reference')::find()->where(['language'=>'English'])->count();
+    $this->assertEquals( 15, $numEnglishRefs );    
   }
 }

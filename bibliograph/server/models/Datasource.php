@@ -198,6 +198,22 @@ class Datasource extends BaseModel
     return $instance;
   }
 
+  /**
+   * Static shorthand method to get the classname of the datasource's model of
+   * the given type.
+   *
+   * @param string $datasourceName The Name of the datasource. Can also be a string 
+   * composed of the datasource name and the model type, separated by a dot. In this 
+   * case, the model type can be left empty.
+   * @param string $modelType
+   * @return string The name of the class
+   */
+  public static function in( $datasourceName, $modelType=null ){
+    if( strpos($datasourceName,".") > 0 ){
+      list($datasourceName, $modelType) = explode( ".", $datasourceName );
+    }
+    return self::getInstanceFor( $datasourceName )->getClassFor( $modelType );
+  }
 
   /**
    * Returns the yii Connection object for this datasource
