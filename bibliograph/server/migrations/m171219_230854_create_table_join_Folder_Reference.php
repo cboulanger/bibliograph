@@ -11,7 +11,7 @@ class m171219_230854_create_table_datasource_join_Folder_Reference extends Migra
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
         }
 
-        $this->createTable('{{%datasource_join_Folder_Reference}}', [
+        $this->createTable('{{%join_Folder_Reference}}', [
             'id' => $this->integer(11)->notNull()->append('AUTO_INCREMENT PRIMARY KEY'),
             'created' => $this->timestamp(),
             'modified' => $this->timestamp()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),
