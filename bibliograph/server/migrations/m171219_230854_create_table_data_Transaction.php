@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m171219_230854_create_table_datasource_data_Transaction extends Migration
+class m171219_230854_create_table_data_Transaction extends Migration
 {
     public function safeUp()
     {
@@ -20,11 +20,11 @@ class m171219_230854_create_table_datasource_data_Transaction extends Migration
             'transactionId' => $this->integer(11)->defaultValue('0'),
         ], $tableOptions);
 
-        $this->createIndex('datasource_class_index', '{{%datasource_data_Transaction}}', ['datasource','class'], true);
+        $this->createIndex('datasource_class_index', '{{%data_Transaction}}', ['datasource','class'], true);
     }
 
     public function safeDown()
     {
-        $this->dropTable('{{%datasource_data_Transaction}}');
+        $this->dropTable('{{%data_Transaction}}');
     }
 }

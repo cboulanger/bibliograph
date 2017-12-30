@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m171219_230854_create_table_datasource_data_Reference extends Migration
+class m171219_230854_create_table_data_Reference extends Migration
 {
     public function safeUp()
     {
@@ -67,6 +67,6 @@ class m171219_230854_create_table_datasource_data_Reference extends Migration
 
     public function safeDown()
     {
-        $this->dropTable('{{%datasource_data_Reference}}');
+        $this->dropTable('{{%data_Reference}}');
     }
 }

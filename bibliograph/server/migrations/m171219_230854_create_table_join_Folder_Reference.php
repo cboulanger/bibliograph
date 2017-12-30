@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m171219_230854_create_table_datasource_join_Folder_Reference extends Migration
+class m171219_230854_create_table_join_Folder_Reference extends Migration
 {
     public function safeUp()
     {
@@ -19,11 +19,11 @@ class m171219_230854_create_table_datasource_join_Folder_Reference extends Migra
             'ReferenceId' => $this->integer(11),
         ], $tableOptions);
 
-        $this->createIndex('index_Folder_Reference', '{{%datasource_join_Folder_Reference}}', ['FolderId','ReferenceId'], true);
+        $this->createIndex('index_Folder_Reference', '{{%join_Folder_Reference}}', ['FolderId','ReferenceId'], true);
     }
 
     public function safeDown()
     {
-        $this->dropTable('{{%datasource_join_Folder_Reference}}');
+        $this->dropTable('{{%join_Folder_Reference}}');
     }
 }

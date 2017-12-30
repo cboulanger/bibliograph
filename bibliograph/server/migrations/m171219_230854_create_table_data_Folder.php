@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m171219_230854_create_table_datasource_data_Folder extends Migration
+class m171219_230854_create_table_data_Folder extends Migration
 {
     public function safeUp()
     {
@@ -38,6 +38,6 @@ class m171219_230854_create_table_datasource_data_Folder extends Migration
 
     public function safeDown()
     {
-        $this->dropTable('{{%datasource_data_Folder}}');
+        $this->dropTable('{{%data_Folder}}');
     }
 }

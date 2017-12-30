@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m171219_230854_create_table_datasource_data_ExtendedReference extends Migration
+class m171219_230854_create_table_extended_data_reference extends Migration
 {
     public function safeUp()
     {
@@ -11,7 +11,7 @@ class m171219_230854_create_table_datasource_data_ExtendedReference extends Migr
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
         }
 
-        $this->createTable('{{%data_ExtendedReference}}', [
+        $this->createTable('{{%extended_data_reference}}', [
             'id' => $this->integer(11)->notNull()->append('AUTO_INCREMENT PRIMARY KEY'),
             'created' => $this->timestamp(),
             'modified' => $this->timestamp()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),
@@ -75,6 +75,6 @@ class m171219_230854_create_table_datasource_data_ExtendedReference extends Migr
 
     public function safeDown()
     {
-        $this->dropTable('{{%datasource_data_Reference}}');
+        $this->dropTable('{{%extended_data_reference}}');
     }
 }
