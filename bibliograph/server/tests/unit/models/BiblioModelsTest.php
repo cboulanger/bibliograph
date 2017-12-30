@@ -2,17 +2,15 @@
 
 namespace app\tests\unit\models;
 
+// for whatever reason, this is not loaded early enough
+require_once __DIR__ . "/../../_bootstrap.php";
+
+use app\tests\unit\models\Base;
 use app\models\Folder;
 use app\models\Reference;
 
 
-// for whatever reason, this is not loaded early enough
-require_once __DIR__ . "/../../_bootstrap.php";
-
-/**
- * Undocumented class
- */
-class BiblioModelsTest extends \Codeception\Test\Unit
+class BiblioModelsTest extends Base
 {
   /**
    * @var \UnitTester

@@ -21,7 +21,7 @@ class Transaction extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'database1_data_Transaction';
+        return '{{%data_Transaction}}';
     }
 
     /**

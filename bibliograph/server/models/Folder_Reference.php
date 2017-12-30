@@ -20,7 +20,7 @@ class Folder_Reference extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'datasource_join_Folder_Reference';
+        return '{{%join_Folder_Reference}}';
     }
 
     /**

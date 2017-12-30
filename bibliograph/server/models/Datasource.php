@@ -159,43 +159,77 @@ class Datasource extends BaseModel
   }
 
   /**
-   * Returns the class name of the datasource to be instantiated
+   * Returns the instance of a subclass which is specialized for this
+   * datasource.
    *
    * @param string $datasourceName  
    * @return string
    * @todo add and use 'class' column instead of 'schema'
    */
-  public static function getClass( $datasourceName )
+  public static function getInstanceFor( $datasourceName )
   {
+    // cache
+    static $instances = array();
+    if( isset( $instances[$datasourceName] ) ){
+      return $instances[$datasourceName];
+    }
+
+    // create new instance
     $datasource = Datasource::findOne(['namedId' => $datasourceName]);
     if( is_null($datasource) ) throw new \InvalidArgumentException("Datasource '$datasourceName' does not exist.");
     // backwards compatibility
     $schema = $datasource->schema;
     switch( $schema ){
       case "bibliograph.schema.bibliograph2":
-        return "app\models\BibliographicDatasource";
+        $class = "app\models\BibliographicDatasource"; 
+        break;
       case "qcl.schema.filesystem.local":
-        return "lib\io\Filesystem";
+        $class = "lib\io\Filesystem";
+        break;
+      default: 
+        $class = str_replace(".","\\",$schema);
     }
-    $class = str_replace(".","\\",$schema);
-    return $class;
+    // create instance of subclass 
+    $instance = $class::findOne(['namedId'=>$datasourceName]);
+    if( is_null( $instance) ){
+      throw new \InvalidArgumentException("Datasource '$datasourceName' does not exist.");
+    }
+    $instances[$datasourceName] = $instance;
+    return $instance;
   }
 
+
   /**
-   * Registers the models that are part of the datasource
-   * @param array $modelMap Associative array that maps the
-   * type of model to the model classes
-   * @throws InvalidArgumentException
-   * @return void
+   * Returns the yii Connection object for this datasource
+   * @param string $datasourceName
+   * @return \yii\db\Connection
    */
-  public function registerModels( $modelMap )
+  public function getConnection()
   {
-    if ( ! is_array( $modelMap ) )
-    {
-      throw new InvalidArgumentException( "Argument must be array" );
+    // cache
+    static $connection=null;
+    if( is_null($connection) ){
+      switch( $this->type ){
+        case "mysql":
+        $dsn = "{$this->type}:host={$this->host};port={$this->port};dbname={$this->database}";
+        break;
+        default: 
+        throw new LogicException("Support for datasource type '{$this->type}' has not been implemented yet.");
+      }
+      // determine table prefix from database or datasource name
+      if( ! is_null($this->prefix) ){
+        $prefix = $this->prefix;
+      } else {
+        $prefix = $this->namedId . "_";
+      }
+      $connection = new \yii\db\Connection([
+        'dsn' => $dsn,
+        'username' => $this->username,
+        'password' => $this->password,
+        'tablePrefix' => $prefix
+      ]);
     }
-    //@todo validate
-    $this->modelMap = $modelMap;
+    return $connection;
   }
 
   /**
@@ -226,23 +260,28 @@ class Datasource extends BaseModel
   }
 
   /**
-   * Returns the class name of the model of the given type.
-   * A model instance does not need to exist at this point.
+   * Returns the class name of the model of the given type, which can be used
+   * to create instances of this class via
+   * Datasource::getInstanceFor('database1')::getClassFor('reference')::find()->...
+   * This implicitly sets the static property 'datasource' of the class to the current
+   * datasource name. 
    * @param string $type
    * @throws InvalidArgumentException
    * @return string The class name
    */
-  public function getModelClass( $type )
+  public function getClassFor( $type )
   {
     if( !$type or !is_string($type) ) throw new \InvalidArgumentException("Invalid type");
     if ( ! isset( $this->modelMap[$type] ) )
     {
       throw new InvalidArgumentException("Model of type '$type' is not registered");
     }
-    return $this->modelMap[$type]['model']['class'];
+    $class = $this->modelMap[$type]['model']['class'];
+    $class::setDatasource($this->namedId);
+    return $class;
   }
 
-    /**
+  /**
    * Returns the rpc service name for the given model type, if defined.
    * @param string $type
    *    The model type

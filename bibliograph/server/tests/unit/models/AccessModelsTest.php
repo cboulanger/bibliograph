@@ -2,6 +2,10 @@
 
 namespace app\tests\unit\models;
 
+// for whatever reason, this is not loaded early enough
+require_once __DIR__ . "/../../_bootstrap.php";
+
+use app\tests\unit\models\Base;
 use app\models\User;
 use app\models\Group;
 use app\models\Permission;
@@ -9,10 +13,7 @@ use app\models\Role;
 use app\models\Config;
 use app\models\UserConfig;
 
-// for whatever reason, this is not loaded early enough
-require_once __DIR__ . "/../../_bootstrap.php"; 
-
-class AccessModelsTest extends \Codeception\Test\Unit
+class AccessModelsTest extends Base
 {
     /**
      * @var \UnitTester
@@ -21,14 +22,6 @@ class AccessModelsTest extends \Codeception\Test\Unit
 
     public function _fixtures(){
       return require __DIR__ . '/../../fixtures/_access_models.php';
-    }
-
-    protected function _before()
-    {
-    }
-
-    protected function _after()
-    {
     }
 
     // tests
@@ -88,14 +81,14 @@ class AccessModelsTest extends \Codeception\Test\Unit
     {
       $group = Group::findOne(['namedId'=>'group1']);
       $result = $group->getDatasourceNames();
-      $this->assertEquals( ["database1"], $result );
+      $this->assertEquals( ["test_extended"], $result );
     }    
 
     public function testUserDatasources()
     {
       $user = User::findOne(['name'=>"Sarah Manning"]);
       $result = $user->getDatasourceNames();
-      $this->assertEquals( 0, count( array_diff( $result, ['database1','database2','database3'] )));
+      $this->assertEquals( 0, count( array_diff( $result, ['test_extended','setup','database3'] )));
     }         
 
     public function testConfigData()

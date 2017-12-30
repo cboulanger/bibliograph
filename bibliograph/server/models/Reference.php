@@ -67,7 +67,7 @@ class Reference extends BaseModel
      */
     public static function tableName()
     {
-        return 'datasource_data_Reference';
+      return '{{%data_Reference}}';
     }
 
     /**

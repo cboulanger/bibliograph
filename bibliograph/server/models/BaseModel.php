@@ -22,7 +22,7 @@ namespace app\models;
 
 use Yii;
 use yii\db\ActiveRecord;
-use yii\helpers\StringHelper;
+use app\models\Datasource;
 
 class BaseModel extends ActiveRecord
 {
@@ -31,33 +31,41 @@ class BaseModel extends ActiveRecord
      * the "datasource" in bibliograph parlance refers to a named collection
      * of models within a database
      */
-    public static $datasource = "";
-
-    /**
-     * The name of the database component
-     */
-    public static $database = "db";
+    public static $datasource = null;
 
     /**
      * Returns the database object used by the model
+     * @return \yii\db\Connection
      */
     public static function getDb()
     {
-        return \Yii::$app->{self::$database};
+        if( self::$datasource ){
+          return Datasource::getInstanceFor( self::$datasource )->getConnection();
+        }
+        return parent::getDb();
     }
 
     /**
-     * Returns the name of the table, based on the datasource
+     * Sets the datasource that all models based on the class will use. If you use several 
+     * instances of the same class, you need to set the datasource explicitly before each
+     * query, since the datasource is a static property of the class. 
+     * MyClass::setDatasource("datasource")::find()->...
+     * @return string The name of the called class.
      */
-    public static function tableName()
+    public static function setDatasource($datasourceName)
     {
-        $parts = [];
-        if (self::$datasource) {
-            $parts[] = self::$datasource;
-        }
-        $parts[] = "data";
-        $parts[] = StringHelper::basename(get_called_class());
-        return implode("_", $parts );
+      if( empty($datasourceName) or ! is_string($datasourceName) ) throw new \InvalidArgumentException("Invalid Datasource name");
+      self::$datasource = $datasourceName;
+      return \get_called_class();
+    }
+
+    /**
+     * Gets the name of  the datasource that the model belongs to
+     * @return string The name of the datasource
+     */
+    public static function getDatasource()
+    {
+      return self::$datasource;
     }
 
     /**
