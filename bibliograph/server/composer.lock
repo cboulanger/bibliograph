@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "3ec6d87578acffce157a428ca4f80331",
+    "content-hash": "48697593c5ce5eff5880cd7cb43742f3",
     "packages": [
         {
             "name": "bower-asset/inputmask",
@@ -240,6 +240,50 @@
                 "html"
             ],
             "time": "2017-06-03T02:28:16+00:00"
+        },
+        {
+            "name": "toriphes/yii2-console-runner",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/toriphes/yii2-console-runner.git",
+                "reference": "9a8226b2c8011945018cb35cd6310647c1004180"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/toriphes/yii2-console-runner/zipball/9a8226b2c8011945018cb35cd6310647c1004180",
+                "reference": "9a8226b2c8011945018cb35cd6310647c1004180",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": ">=2.0.0"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "toriphes\\console\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Giulio Ganci",
+                    "email": "giulioganci@gmail.com"
+                }
+            ],
+            "description": "Runs console command in yii web application",
+            "keywords": [
+                "application",
+                "console",
+                "extension",
+                "runner",
+                "web",
+                "yii2"
+            ],
+            "time": "2017-10-30T11:31:57+00:00"
         },
         {
             "name": "yiisoft/yii2",
