@@ -3,9 +3,9 @@
 /**
  * A writable directory for temporary files
  */
-if ( ! defined( "QCL_TMP_PATH" ) )
+if ( ! defined( "APP_TMP_PATH" ) )
 {
-  define( "QCL_TMP_PATH", sys_get_temp_dir() );
+  define( "APP_TMP_PATH", sys_get_temp_dir() );
 }
 
 /*
@@ -14,7 +14,17 @@ if ( ! defined( "QCL_TMP_PATH" ) )
  * this path will be regularly purged and the data is lost. Use a different directory
  * and make it writable.
  */
-if ( ! defined("QCL_VAR_DIR") )
+if ( ! defined("APP_VAR_DIR") )
 {
-  define( "QCL_VAR_DIR" ,  sys_get_temp_dir() );
+  define( "APP_VAR_DIR" ,  sys_get_temp_dir() );
+}
+
+/**
+ * The id of the first migration that the application will use for creating tables on-the-fly
+ * (i.e. not using command-line migrations).
+ * WARNING: This usage is likely to change, so do not use this constant yet.
+ */
+if ( ! defined("APP_MIGRATION_ID") )
+{
+  define( "APP_MIGRATION_ID" ,  "m171219_230853" );
 }

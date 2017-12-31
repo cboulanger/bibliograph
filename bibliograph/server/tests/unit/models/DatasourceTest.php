@@ -48,4 +48,17 @@ class DatasourceTest extends Base
     $numEnglishRefs = Datasource::in('test.reference')::find()->where(['language'=>'English'])->count();
     $this->assertEquals( 15, $numEnglishRefs );    
   }
+
+  public function testCreateDatasource()
+  {
+    $datasource = Datasource::create("test2");
+    $datasource->title = "Test Datasource 2";
+    $datasource->save();
+    $this->assertEquals('app\models\BibliographicDatasource',\get_class(Datasource::getInstanceFor("test2")));
+  }
+
+  public function testCreateModelTables()
+  {
+    
+  }
 }

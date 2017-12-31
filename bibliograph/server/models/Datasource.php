@@ -5,6 +5,10 @@ namespace app\models;
 use Yii;
 use app\models\BaseModel;
 use yii\helpers\ArrayHelper;
+use fourteenmeister\helpers\Dsn;
+
+// @todo Change column `schema` to `class`
+// @todo Add column `dsn` to `class`, remove columns `type`, `host`, `port`, `database`
 
 /**
  * This is the model class for table "data_Datasource".
@@ -157,6 +161,17 @@ class Datasource extends BaseModel
       )
     );      
   }
+
+  // /**
+  //  * Creates a new datasource
+  //  *
+  //  * @param [type] $config
+  //  */
+  // public function __construct( $config )
+  // {
+  //   parent::__construct( $config ); // calls init, whichs adds the models in the subclass
+  // }
+
 
   /**
    * Returns the instance of a subclass which is specialized for this
@@ -313,4 +328,54 @@ class Datasource extends BaseModel
     }
     return $this->modelMap[$type]['controller']['service'];
   }
+
+  /**
+   * Creates a new datasource and returns it. You should set at least the `title` property before saving the ActiveRecord 
+   * to the database. By default, it will use the database connection provided by the `db` component. 
+   *
+   * @param string $datasourceName
+   * @param string $className|null  Optional class name of the datasource, defaults to `app\models\BibliographicDatasource`
+   * @return app\models\BibliographicDatasource 
+   */
+  public static function create( $datasourceName, $className = '\app\models\BibliographicDatasource' )
+  {
+    if( !$datasourceName or ! is_string($datasourceName) ) throw new \InvalidArgumentException("Invalid datasource name");
+    $datasource = new Datasource([
+      'namedId' => $datasourceName,
+      'title' => $datasourceName,
+      'schema' => $className,
+      'prefix' => $datasourceName,
+      'active' => 1
+    ]);
+    $dsn = Dsn::parse(Yii::$app->db->dsn);
+    $db  = Yii::$app->db;
+    $datasource->setAttributes([
+      'type' => $dsn->sheme,
+      'host' => $dsn->host,
+      'port' => $dsn->port,
+      'database' => $dsn->database,
+      'username' => $db->username,
+      'password' => $db->password,
+      'encoding' => $db->charset,
+    ]);
+    return $datasource;
+  }
+
+  /**
+   * Create the tables for the datasource models
+   *
+   * @return void
+   */
+  public function createModelTables()
+  {
+    foreach( $this->modelTypes() as $type){
+      $modelClass = $this->getClassFor( $type );
+      $db = $modelClass::getDb();
+      $tableName = $modelClass::tableName();
+      $migrationClass = APP_MIGRATION_ID . "_create_table_" . $tableName;
+      $migrationFile = Yii::getAlias("@migration") . "/{$migrationClass}.php";
+      codecept_debug( "Creating table $tableName from class $migrationClass in $migrationFile ...");
+    }
+  }
+
 }

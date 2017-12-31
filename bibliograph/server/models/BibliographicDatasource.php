@@ -45,5 +45,6 @@ class BibliographicDatasource
     parent::init();
     $this->addModel( 'reference', 'app\models\Reference', 'reference');
     $this->addModel( 'folder', 'app\models\Folder', 'folder');
+    $this->addModel( 'transaction', 'app\models\Transaction', 'transaction');
   }
 }

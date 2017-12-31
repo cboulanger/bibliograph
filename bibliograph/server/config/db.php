@@ -39,5 +39,6 @@ return [
     'dsn' => "mysql:host=localhost;dbname=tests",
     'username' => "root",
     'password' => "",
+    'charset' => "utf8"
     ]
 ];
