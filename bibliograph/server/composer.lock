@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "48697593c5ce5eff5880cd7cb43742f3",
+    "content-hash": "20b9378c4573e9657f53753dfdd8f185",
     "packages": [
         {
             "name": "bower-asset/inputmask",
@@ -240,6 +240,50 @@
                 "html"
             ],
             "time": "2017-06-03T02:28:16+00:00"
+        },
+        {
+            "name": "fourteenmeister/dsn",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fourteenmeister/dsn.git",
+                "reference": "2c36d5048492a7da2599d7571dac07e3b1343921"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fourteenmeister/dsn/zipball/2c36d5048492a7da2599d7571dac07e3b1343921",
+                "reference": "2c36d5048492a7da2599d7571dac07e3b1343921",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "2.*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "fourteenmeister\\helpers\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andrey Kamaev",
+                    "email": "fourteenmeister@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "helpers class for Yii2",
+            "homepage": "https://github.com/fourteenmeister/dsn",
+            "keywords": [
+                "semantic",
+                "semantic-ui",
+                "widgets",
+                "yii2"
+            ],
+            "time": "2015-06-19T02:26:27+00:00"
         },
         {
             "name": "toriphes/yii2-console-runner",
@@ -3403,7 +3447,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "fourteenmeister/dsn": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
