@@ -1,44 +1,27 @@
 <?php
 $ini = require('ini.php');
 $db = (object) $ini['database'];
-return [
+$dbconfig = [
   'db' => [
     'class' => 'yii\db\Connection',
-    'dsn' => "{$db->type}:host={$db->host};dbname={$db->admindb}",
+    'dsn' => "{$db->type}:host={$db->host};port={$db->port};dbname={$db->admindb}",
     'username' => "{$db->adminname}",
     'password' => "{$db->adminpassw}",
     'charset' => "{$db->encoding}",
     'tablePrefix' => "{$db->tableprefix}",
   ],    
-  'admindb' => [
-    'class' => 'yii\db\Connection',
-    'dsn' => "{$db->type}:host={$db->host};dbname={$db->admindb}",
-    'username' => "{$db->adminname}",
-    'password' => "{$db->adminpassw}",
-    'charset' => "{$db->encoding}",
-    'tablePrefix' => "{$db->tableprefix}",
-  ],
-  'userdb' => [
-    'class' => 'yii\db\Connection',
-    'dsn' => "{$db->type}:host={$db->host};dbname={$db->userdb}",
-    'username' => "{$db->adminname}",
-    'password' => "{$db->adminname}",
-    'charset' => "{$db->encoding}",
-    'tablePrefix' => "{$db->tableprefix}",
-  ],
-  'tmpdb' => [
-    'class' => 'yii\db\Connection',
-    'dsn' => "{$db->type}:host={$db->host};dbname={$db->tmp_db}",
-    'username' => "{$db->adminname}",
-    'password' => "{$db->adminname}",
-    'charset' => "{$db->encoding}",
-    'tablePrefix' => "{$db->tableprefix}",
-  ],
   'testdb' => [
     'class' => 'yii\db\Connection',
-    'dsn' => "mysql:host=localhost;dbname=tests",
+    'dsn' => "mysql:host=localhost;port=3306;dbname=tests",
     'username' => "root",
     'password' => "",
     'charset' => "utf8"
     ]
 ];
+$dbconfig['admindb'] = $dbconfig['db'];
+$dbconfig['admindb']['dsn'] = "{$db->type}:host={$db->host};port={$db->port};dbname={$db->admindb}";
+$dbconfig['userdb'] = $dbconfig['db'];
+$dbconfig['userdb']['dsn'] = "{$db->type}:host={$db->host};port={$db->port};dbname={$db->userdb}";
+$dbconfig['tmpdb'] = $dbconfig['db'];
+$dbconfig['tmpdb']['dsn'] = "{$db->type}:host={$db->host};port={$db->port};dbname={$db->tmp_db}";
+return $dbconfig;
