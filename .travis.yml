@@ -16,19 +16,6 @@ before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -y bibutils zip
 
-  # install apache / php
-#  - sudo apt-get install -y apache2 libapache2-mod-fastcgi
-#  - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf 2>/dev/null || true # as per https://github.com/travis-ci/travis-ci/issues/3385
-#  - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf 2>/dev/null || true
-#  - sudo a2enmod rewrite actions fastcgi alias
-#  - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-#  - echo "always_populate_raw_post_data = -1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-#  - sudo sed -i -e "s,www-data,travis,g" /etc/apache2/envvars
-#  - sudo chown -R travis:travis /var/lib/apache2/fastcgi
-#  - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
-#  - sudo cp -f build-env/travis/travis-ci-apache /etc/apache2/sites-available/000-default.conf
-#  - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/000-default.conf
-
   # configure PHP with yaz/xsl/intl extensions
 #  - if [[ ${TRAVIS_PHP_VERSION:0:1} == "5" ]]; then sudo apt-get install -y php5-xsl php5-intl; fi
 #  - if [[ ${TRAVIS_PHP_VERSION:0:1} == "7" ]]; then sudo add-apt-repository -y ppa:ondrej/php && sudo apt-get update && sudo apt-get install -y php7.0-xsl php7.0-intl; fi  
@@ -64,13 +51,7 @@ before_script:
   - php bibliograph/server/tests/bin/yii migrate/up --interactive=0 
   
 script:
-#  # run npm tests
-#  - cd tests/test-backend
-#  - nvm install 8
-#  - npm install
-#  - npm test
-#  - cd ../..
-
   # run yii2 unit tests
   - cd bibliograph/server
+  - php yii serve -t=@app/tests
   - php vendor/bin/codecept run unit

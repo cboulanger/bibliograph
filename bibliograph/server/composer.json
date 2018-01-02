@@ -12,7 +12,9 @@
         "codeception/specify": "^1.0",
         "codeception/verify": "^1.0",
         "elisdn/yii2-gii-fixture-generator": "^1.1",
-        "yiisoft/yii2-faker": "^2.0"
+        "yiisoft/yii2-faker": "^2.0",
+        "insolita/yii2-migration-generator": "~2.3",
+        "graze/guzzle-jsonrpc": "~3.0"
     },
     "repositories": [
         {

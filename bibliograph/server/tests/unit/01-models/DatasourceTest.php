@@ -6,7 +6,7 @@ namespace app\tests\unit\models;
 require_once __DIR__ . "/../../_bootstrap.php";
 
 use Yii;
-use app\tests\unit\models\Base;
+use app\tests\unit\Base;
 use app\models\Datasource;
 
 class DatasourceTest extends Base

@@ -5,7 +5,7 @@ namespace app\tests\unit\models;
 // for whatever reason, this is not loaded early enough
 require_once __DIR__ . "/../../_bootstrap.php";
 
-use app\tests\unit\models\Base;
+use app\tests\unit\Base;
 use app\models\Folder;
 use app\models\Reference;
 

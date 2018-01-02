@@ -6,21 +6,22 @@
    http://www.bibliograph.org
 
    Copyright:
-     2007-2017 Christian Boulanger
+   2007-2017 Christian Boulanger
 
    License:
-     LGPL: http://www.gnu.org/licenses/lgpl.html
-     EPL: http://www.eclipse.org/org/documents/epl-v10.php
-     See the LICENSE file in the project's top-level directory for details.
+   LGPL: http://www.gnu.org/licenses/lgpl.html
+   EPL: http://www.eclipse.org/org/documents/epl-v10.php
+   See the LICENSE file in the project's top-level directory for details.
 
    Authors:
-     * Chritian Boulanger (cboulanger)
+   * Chritian Boulanger (cboulanger)
 
 ************************************************************************ */
 
 namespace app\models;
 
 use Yii;
+use yii\web\IdentityInterface;
 
 use app\models\BaseModel;
 use app\models\Group;
@@ -48,14 +49,14 @@ use app\models\User_Role;
  * @property integer $confirmed
  * @property integer $online
  */
-class User extends BaseModel
+class User extends BaseModel implements IdentityInterface
 {
   /**
    * @inheritdoc
    */
   public static function tableName()
   {
-    return 'data_User';
+  return 'data_User';
   }
 
   /**
@@ -63,14 +64,14 @@ class User extends BaseModel
    */
   public function rules()
   {
-    return [
-      [['created', 'modified', 'lastAction'], 'safe'],
-      [['anonymous', 'ldap', 'active', 'confirmed', 'online'], 'integer'],
-      [['namedId', 'password'], 'string', 'max' => 50],
-      [['name'], 'string', 'max' => 100],
-      [['email'], 'string', 'max' => 255],
-      [['namedId'], 'unique'],
-    ];
+  return [
+    [['created', 'modified', 'lastAction'], 'safe'],
+    [['anonymous', 'ldap', 'active', 'confirmed', 'online'], 'integer'],
+    [['namedId', 'password'], 'string', 'max' => 50],
+    [['name'], 'string', 'max' => 100],
+    [['email'], 'string', 'max' => 255],
+    [['namedId'], 'unique'],
+  ];
   }
 
   /**
@@ -78,58 +79,90 @@ class User extends BaseModel
    */
   public function attributeLabels()
   {
-    return [
-      'id' => Yii::t('app', 'ID'),
-      'namedId' => Yii::t('app', 'Named ID'),
-      'created' => Yii::t('app', 'Created'),
-      'modified' => Yii::t('app', 'Modified'),
-      'name' => Yii::t('app', 'Name'),
-      'password' => Yii::t('app', 'Password'),
-      'email' => Yii::t('app', 'Email'),
-      'anonymous' => Yii::t('app', 'Anonymous'),
-      'ldap' => Yii::t('app', 'Ldap'),
-      'active' => Yii::t('app', 'Active'),
-      'lastAction' => Yii::t('app', 'Last Action'),
-      'confirmed' => Yii::t('app', 'Confirmed'),
-      'online' => Yii::t('app', 'Online'),
-    ];
+  return [
+    'id' => Yii::t('app', 'ID'),
+    'namedId' => Yii::t('app', 'Named ID'),
+    'created' => Yii::t('app', 'Created'),
+    'modified' => Yii::t('app', 'Modified'),
+    'name' => Yii::t('app', 'Name'),
+    'password' => Yii::t('app', 'Password'),
+    'email' => Yii::t('app', 'Email'),
+    'anonymous' => Yii::t('app', 'Anonymous'),
+    'ldap' => Yii::t('app', 'Ldap'),
+    'active' => Yii::t('app', 'Active'),
+    'lastAction' => Yii::t('app', 'Last Action'),
+    'confirmed' => Yii::t('app', 'Confirmed'),
+    'online' => Yii::t('app', 'Online'),
+  ];
   }
 
-  public function getFormData()
+  //-------------------------------------------------------------
+  // Indentity Interface
+  //-------------------------------------------------------------
+
+  /**
+   * Finds an identity by the given ID.
+   *
+   * @param string|int $id the ID to be looked for
+   * @return IdentityInterface|null the identity object that matches the given ID.
+   */
+  public static function findIdentity($id)
   {
-    return [
-      'name' => array(
-        'name' => "name",
-        'label' => $this->tr("Full name"),
-      ),
-      'email' => array(
-        'label' => $this->tr("Email address"),
-        'placeholder' => $this->tr("Enter a valid Email address"),
-        'validation' => array(
-          'validator' => "email",
-        ),
-      ),
-      'password' => array(
-        'label' => $this->tr("Password"),
-        'type' => "PasswordField",
-        'value' => "",
-        'placeholder' => $this->tr("To change the password, enter new password."),
-        'marshaler' => array(
-          'unmarshal' => array('callback' => array("this", "checkFormPassword")),
-        ),
-      ),
-      'password2' => array(
-        'label' => $this->tr("Repeat password"),
-        'type' => "PasswordField",
-        'value' => "",
-        'ignore' => true,
-        'placeholder' => $this->tr("To change the password, repeat new password"),
-        'marshaler' => array(
-          'unmarshal' => array('callback' => array("this", "checkFormPassword")),
-        ),
-      ),
-    ];
+    return static::findOne($id);
   }
+
+  /**
+   * Finds an identity by the given token.
+   *
+   * @param string $token the token to be looked for
+   * @return IdentityInterface|null the identity object that matches the given token.
+   */
+  public static function findIdentityByAccessToken($token, $type = null)
+  {
+    return static::findOne(['token' => $token]);
+  }
+
+  /**
+   * @return int|string current user ID
+   */
+  public function getId()
+  {
+    return $this->id;
+  }
+
+  /**
+   * @return string current user auth key
+   */
+  public function getAuthKey()
+  {
+    return $this->token;
+  }
+
+  /**
+   * @param string $authKey
+   * @return bool if auth key is valid for current user
+   */
+  public function validateAuthKey($authKey)
+  {
+    return $this->token === $authKey;
+  }  
+
+  /**
+   * Adds an access token for the user before the record is saved to the database
+   *
+   * @param bool $insert
+   * @return bool
+   */
+  public function beforeSave($insert)
+  {
+    if (parent::beforeSave($insert)) {
+      if ($this->isNewRecord or ! $this->token) {
+        $this->token = \Yii::$app->security->generateRandomString();
+      }
+      return true;
+    }
+    return false;
+  }  
 
   //-------------------------------------------------------------
   // Relations
@@ -141,6 +174,15 @@ class User extends BaseModel
   protected function getUserRoles()
   {
     return $this->hasMany(User_Role::className(), ['UserId' => 'id'] );
+  } 
+
+  /**
+   * Returns the global roles of the user.
+   * @return \yii\db\ActiveQuery
+   */
+  public function getRoles()
+  {
+    return $this->getGroupRoles(null);
   }
 
   /**
@@ -148,10 +190,10 @@ class User extends BaseModel
    */       
   public function getGroupRoles($groupId=null)
   {
-    return $this->hasMany(Role::className(), ['id' => 'RoleId' ])
-      ->via('userRoles', function( yii\db\ActiveQuery $query) use($groupId) {
-        return $query->andWhere(['groupId'=>$groupId]);
-      });
+  return $this->hasMany(Role::className(), ['id' => 'RoleId' ])
+    ->via('userRoles', function( yii\db\ActiveQuery $query) use($groupId) {
+    return $query->andWhere(['groupId'=>$groupId]);
+    });
   }
 
   /**
@@ -277,24 +319,24 @@ class User extends BaseModel
     // check if permission is granted
     foreach ($permissions as $permission) {
       /*
-       * exact match
-       */
+      * exact match
+      */
       if ($permission == $requestedPermission) {
-        return true;
+      return true;
       } /*
-       * else if the current permission name contains a wildcard
-       */
+      * else if the current permission name contains a wildcard
+      */
       elseif (($pos = strpos($permission, "*")) !== false) {
-        if (substr($permission, 0, $pos) == substr($requestedPermission, 0, $pos)) {
-          return true;
-        }
+      if (substr($permission, 0, $pos) == substr($requestedPermission, 0, $pos)) {
+        return true;
+      }
       } /*
-       * else if the requested permission contains a wildcard
-       */
+      * else if the requested permission contains a wildcard
+      */
       elseif ($useWildcard and ($pos = strpos($requestedPermission, "*")) !== false) {
-        if (substr($permission, 0, $pos) == substr($requestedPermission, 0, $pos)) {
-          return true;
-        }
+      if (substr($permission, 0, $pos) == substr($requestedPermission, 0, $pos)) {
+        return true;
+      }
       }
     }
     return false;
@@ -381,7 +423,7 @@ class User extends BaseModel
       $datasourceNames = array_merge( $datasourceNames, $group->getDatasourceNames());
       $roles = $this->getGroupRoles( $group->id )->all();
       if( is_array($roles) ) foreach( $roles as $role) {
-          $datasourceNames = array_merge( $datasourceNames, $role->getDatasourceNames() );
+        $datasourceNames = array_merge( $datasourceNames, $role->getDatasourceNames() );
       }
     }
     return array_unique($datasourceNames);

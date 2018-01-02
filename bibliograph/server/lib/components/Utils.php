@@ -21,6 +21,8 @@
 namespace lib\components;
 
 use Yii;
+use app\models\Config;
+use app\models\UserConfig;
 
 /**
  *
@@ -105,92 +107,25 @@ class Utils extends \yii\base\Component
     }, $arr );
   }
 
-  //-------------------------------------------------------------
-  // initial data
-  //-------------------------------------------------------------
-
   /**
-   * Imports initial data
-   * @param array $data
-   *    Map of model types and paths to the xml data files
-   * @param qcl_access_DatasourceModel $accessDatasource
-   *    Optional. If not given, qcl_access_DatasourceModel is used.
-   *    You can provide a subclass of qcl_access_DatasourceModel which
-   *    selectively override the used model types in the init() method by
-   *    using the registerModels() method and a map of the models to
-   *    override.
-   * @throws InvalidArgumentException
-   * @see qcl_access_DatasourceModel::init()
+   * Returns the (user) value for a config key
+   *
+   * @param string $key
+   * @return mixed The value of the preference key
    */
-  protected function importInitialData( $data, $accessDatasource=null )
+  public function getPreference($key)
   {
-
-    if ( $accessDatasource === null )
-    {
-      qcl_import( "qcl_access_DatasourceModel" );
-      $accessDatasource = qcl_access_DatasourceModel::getInstance();
+    $config = Config::findOne(['namedId'=>$key]);
+    if( is_null($config) ){
+      throw new \InvalidArgumentException("Preference '$key' does not exist.");
     }
-    else
-    {
-      if ( ! $accessDatasource instanceof qcl_access_DatasourceModel )
-      {
-        throw new InvalidArgumentException( "The accessDatasource parameter must be an instance of a class inheriting from qcl_access_DatasourceModel");
-      }
+    $activeUser = Yii::$app->user->getIdentity(); 
+    if( ! $activeUser or ! $config->customize ){
+      return $config->default;
     }
-
-    /*
-     * Register the access models as a datasource to make
-     * them accessible to client queries
-     */
-    try
-    {
-      $this->log( "Registering access datasource schema" , QCL_LOG_APPLICATION );
-      $accessDatasource->registerSchema();
-    }
-    catch( qcl_data_model_RecordExistsException $e ){}
-
-    /*
-     * create datasources
-     */
-    $dsManager = qcl_data_datasource_Manager::getInstance();
-    try
-    {
-      $this->log( "Creating datasource named 'access'." , QCL_LOG_APPLICATION );
-      $dsManager->createDatasource(
-        "access","qcl.schema.access", array(
-          'hidden' => true
-        )
-      );
-    }
-    catch( qcl_data_model_RecordExistsException $e ){}
-
-    /*
-     * Import data
-     */
-    foreach( $data as $type => $path )
-    {
-      $this->log( "Importing '$type' data...'." , QCL_LOG_APPLICATION );
-
-      /*
-       * get model from datasource
-       */
-      $dsModel = $dsManager->getDatasourceModelByName( "access" );
-      $model   = $dsModel->getInstanceOfType( $type );
-
-      /*
-       * delete all data
-       * @todo check overwrite
-       */
-      $model->deleteAll();
-
-      /*
-       * import new data
-       */
-      $xmlFile = new qcl_io_filesystem_local_File( "file://" . $path );
-      $this->log( "     ... from $path" , QCL_LOG_APPLICATION );
-      $model->import( new qcl_data_model_import_Xml( $xmlFile ) );
-    }
+    return $config->getUserConfig( $activeUser->id )->value;
   }
+ 
 
   //-------------------------------------------------------------
   // etc

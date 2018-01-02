@@ -10,13 +10,18 @@ $config =  [
   ],
   'components' => array_merge(
     require('db.php'), [
+    'user' => [
+      'class' => 'yii\web\User',
+      'identityClass' => 'app\models\User',
+    ],      
     'utils' => [ 'class' => 'lib\components\Utils'],
     'log' => [
       'targets' => [
         [
           'class' => 'yii\log\FileTarget',
           //'levels' => ['trace','info', 'error', 'warning'],
-          'except' => ['yii/*'],
+          'except' => ['yii\*'],
+          'logVars' => []
         ]
       ]
     ]    
@@ -34,9 +39,12 @@ if (YII_ENV_DEV) {
   ]
   ];
   $config['controllerMap'] = [
-  'fixture' => [
-    'class' => 'yii\faker\FixtureController',
-  ],
+    'fixture' => [
+      'class' => 'yii\faker\FixtureController',
+    ],
+    'migration' => [
+      'class' => 'bizley\migration\controllers\MigrationController',
+    ],    
   ];    
 }
 return $config;

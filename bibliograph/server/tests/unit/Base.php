@@ -1,9 +1,9 @@
 <?php
 
-namespace app\tests\unit\models;
+namespace app\tests\unit;
 
 // for whatever reason, this is not loaded early enough
-require_once __DIR__ . "/../../_bootstrap.php";
+require_once __DIR__ . "/../_bootstrap.php";
 
 /**
  * Undocumented class
@@ -37,4 +37,8 @@ class Base extends \Codeception\Test\Unit
   //     $this->fail("Migrations failed: " . self::$migrationOutput );
   //   }
   // }
+
+
+
+
 }
