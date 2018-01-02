@@ -337,8 +337,8 @@ class AccessController extends AppController
    */
   public function cleanup()
   {
-    $this->log("Cleaning up stale session data ....", LOG_AUTHENTICATION );
-
+    Yii::info("Cleaning up stale session data ...." );
+    not_implemented();
     $sessionModel = $this->getSessionModel();
     $userModel = $this->getUserModel();
 
@@ -435,25 +435,14 @@ class AccessController extends AppController
   /**
    * Checks if any session exists that are connected to the user id.
    * If not, set the user's online status to false.
-   * @param integer $userId
-   * @return boolean Whether the user is online or not.
-   * @throws LogicException if user does not exist.
+   * @param \app\models\User $user
+   * @return boolean Whether the user is online or not..
    */
-  public function checkOnlineStatus($userId)
+  public function checkOnlineStatus(\app\models\User $user)
   {
-    try {
-      $userModel = $this->getUserModel()->load( $userId );
-    } catch (data_model_RecordNotFoundException $e) {
-      throw new LogicException( "User #$userId does not exist." );
-    }
-
-    try {
-      $this->getSessionModel()->findLinked($userModel);
-      return true;
-    } catch (data_model_RecordNotFoundException $e) {
-       $userModel->set("online", false)->save();
-       return false;
-    }
+    $user->online = (bool) Session::findOne(['UserId' => $user->id]);
+    $user->save();
+    return $user->online;
   }
 
   /**
@@ -479,6 +468,7 @@ class AccessController extends AppController
    */
   public function purgeAnonymous()
   {
+    not_implemented();
     $userModel = $this->getUserModel();
     $userModel->findAll();
     while ($userModel->loadNext()) {
@@ -518,9 +508,9 @@ class AccessController extends AppController
    * @param string $namedId The named id of the permission
    * @return bool
    */
-  public function hasPermission($namedId)
+  public function permissionExists($namedId)
   {
-    return $this->getAccessController()->getPermissionModel()->namedIdExists($namedId);
+    return (bool) Permission::findOne(['namedId' => $namedId]);
   }
 
   /**
@@ -539,8 +529,8 @@ class AccessController extends AppController
       }
       return;
     }
-    $this->getAccessController()->getPermissionModel()
-    ->createIfNotExists($namedId, array( "description" => $description ));
+    $permission = new Permission([ 'namedId' => $namedId, 'description' => $description ]);
+    $permission->save();
   }
 
   /**
@@ -557,34 +547,7 @@ class AccessController extends AppController
       }
       return;
     }
-    try {
-      $this->getAccessController()->getPermissionModel()->load($namedId)->delete();
-    } catch (data_model_RecordNotFoundException $e) {
-    }
-  }
-  
-  /**
-   * Assign the given role the given permissions
-   * @param string $roleId The named id of the role
-   * @param string|array $permissions The named id(s) of the permissions
-   * @throws LogicException
-   */
-  public function giveRolePermission($roleId, $permissions)
-  {
-    try {
-      $roleModel = $this->getAccessController()->getRoleModel()->load( $roleId );
-    } catch (data_model_RecordNotFoundException $e) {
-      throw new LogicException("Unknown role '$roleId'");
-    }
-    $permissionModel = $this->getAccessController()->getPermissionModel();
-    foreach ((array) $permissions as $permissionId) {
-      try {
-        $roleModel->linkModel( $permissionModel->load( $permissionId ) );
-      } catch (data_model_RecordExistsException $e) {
-      } catch (data_model_RecordNotFoundException $e) {
-        throw new LogicException("Unknown permission '$permissionId'");
-      }
-    }
+    Permission::deleteAll(['namedId' => $namedId]);
   }
 
   /**
