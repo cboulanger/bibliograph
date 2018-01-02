@@ -53,5 +53,5 @@ before_script:
 script:
   # run yii2 unit tests
   - cd bibliograph/server
-  - php yii serve -t=@app/tests
+  - php yii serve -t=@app/tests &
   - php vendor/bin/codecept run unit
