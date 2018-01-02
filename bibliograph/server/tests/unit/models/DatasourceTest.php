@@ -5,6 +5,7 @@ namespace app\tests\unit\models;
 // for whatever reason, this is not loaded early enough
 require_once __DIR__ . "/../../_bootstrap.php";
 
+use Yii;
 use app\tests\unit\models\Base;
 use app\models\Datasource;
 
@@ -54,11 +55,14 @@ class DatasourceTest extends Base
     $datasource = Datasource::create("test2");
     $datasource->title = "Test Datasource 2";
     $datasource->save();
-    $this->assertEquals('app\models\BibliographicDatasource',\get_class(Datasource::getInstanceFor("test2")));
+    // get specialized subclass
+    $datasource = Datasource::getInstanceFor("test2");
+    $this->assertEquals('app\models\BibliographicDatasource',\get_class($datasource));
+    $datasource->createModelTables();
+    foreach($datasource->modelTypes() as $type){
+      $tableName = "test2_data_" . ucfirst($type);
+      $this->assertFalse(is_null(Yii::$app->db->schema->getTableSchema($tableName)), "$tableName has not been created!" );
+    }
   }
 
-  public function testCreateModelTables()
-  {
-    
-  }
 }

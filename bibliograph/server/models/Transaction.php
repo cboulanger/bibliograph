@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\models\BaseModel;
 use Yii;
 
 /**
@@ -14,7 +15,7 @@ use Yii;
  * @property string $class
  * @property integer $transactionId
  */
-class Transaction extends \yii\db\ActiveRecord
+class Transaction extends BaseModel
 {
     /**
      * @inheritdoc

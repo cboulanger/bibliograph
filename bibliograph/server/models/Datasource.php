@@ -227,7 +227,7 @@ class Datasource extends BaseModel
     if( strpos($datasourceName,".") > 0 ){
       list($datasourceName, $modelType) = explode( ".", $datasourceName );
     }
-    return self::getInstanceFor( $datasourceName )->getClassFor( $modelType );
+    return static::getInstanceFor( $datasourceName )->getClassFor( $modelType );
   }
 
   /**
@@ -248,6 +248,7 @@ class Datasource extends BaseModel
         throw new LogicException("Support for datasource type '{$this->type}' has not been implemented yet.");
       }
       // determine table prefix from database or datasource name
+      // @todo add global prefix from ini file
       if( ! is_null($this->prefix) ){
         $prefix = $this->prefix;
       } else {
@@ -362,6 +363,18 @@ class Datasource extends BaseModel
   }
 
   /**
+   * Returns the prefix for the model table, consisting of the named id of
+   * this datasource and an underscore
+   * @property string modelTablePrefix
+   * @return string
+   */
+  public function getModelTablePrefix()
+  {
+    return $this->namedId . "_";
+  }
+
+
+  /**
    * Create the tables for the datasource models
    *
    * @return void
@@ -371,11 +384,18 @@ class Datasource extends BaseModel
     foreach( $this->modelTypes() as $type){
       $modelClass = $this->getClassFor( $type );
       $db = $modelClass::getDb();
-      $tableName = $modelClass::tableName();
-      $migrationClass = APP_MIGRATION_ID . "_create_table_" . $tableName;
-      $migrationFile = Yii::getAlias("@migration") . "/{$migrationClass}.php";
-      codecept_debug( "Creating table $tableName from class $migrationClass in $migrationFile ...");
+      $prototypeTableName = "data_" . ucfirst($type);
+      $prefix = $this->modelTablePrefix;
+      $modelTableName = $prefix . $prototypeTableName;
+      $migrationClass = APP_MIGRATION_ID . "_create_table_" . $prototypeTableName;
+      $migrationFile = Yii::getAlias("@app/migrations/{$migrationClass}.php");
+      Yii::trace( "Creating table $modelTableName from class $migrationClass...");
+      if( !\class_exists($migrationClass) ){
+        include_once($migrationFile);
+      }
+      $migration = new $migrationClass();
+      $migration->db->tablePrefix = Yii::$app->utils->getIniValue('database.tableprefix') . $prefix;
+      $migration->safeUp();
     }
   }
-
 }

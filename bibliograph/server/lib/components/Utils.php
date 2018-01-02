@@ -18,14 +18,14 @@
 
 ************************************************************************ */
 
-namespace \lib\components;
+namespace lib\components;
 
 use Yii;
 
 /**
  *
  */
-class Utils extends yii\base\Component
+class Utils extends \yii\base\Component
 {
   // function __construct($config){
   //   parent::__construct();
@@ -37,10 +37,9 @@ class Utils extends yii\base\Component
    */
   public function version()
   {
-    return trim(file_get_contents("../../../version.txt"));
+    return trim(file_get_contents(Yii::getAlias('@app/../version.txt')));
   }
   
-
  /**
    * Returns the URL that sets the application into a specific state, showing a reference and selecting a folder
    * @param string $datasource
@@ -69,7 +68,7 @@ class Utils extends yii\base\Component
   {
     static $ini = null;
     if( is_null($ini) ){
-      $ini = require("../config/ini.php");
+      $ini = require(Yii::getAlias('@app/config/ini.php'));
     }
     $parts = explode(".",$path);
     // drill into ini array
