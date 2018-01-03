@@ -2,6 +2,8 @@
 
 namespace app\controllers\traits;
 
+use Yii;
+
 trait CrudTrait
 {
   /**

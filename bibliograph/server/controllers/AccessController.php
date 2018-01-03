@@ -32,123 +32,14 @@ use app\models\Permission;
 use app\models\Group;
 use app\models\Session;
 
-use lib\dialog\Alert;
-use lib\dialog\Prompt;
-use lib\dialog\Confirm;
-
 /**
  * The class used for authentication of users. Adds LDAP authentication
  */
 class AccessController extends AppController
 {
 
-  //-------------------------------------------------------------
-  // Internal API
-  //-------------------------------------------------------------  
-
-  /**
-   * Creates a new anonymous guest user
-   * @throws LogicException
-   * @return int \app\models\User
-   */
-  public function createAnonymous()
-  {
-    $anonRole = Role::findByNamedId('anonymous');
-    if (is_null($anonRole)) {
-      throw new \LogicException("No 'anonymous' role defined.");
-    }
-
-    $user = new User(['namedId' => \microtime() ]); // random temporary username
-    $user->save();
-    $user->namedId = "guest" . $user->getPrimaryKey();
-    $user->name = "Guest";
-    $user->anonymous = $user->active = true;
-    $user->save();
-    $user->link("roles", $anonRole);
-    return $user;
-  }
-
-  /**
-   * Checks if the given username has to be authenticated from an LDAP server#
-   * @param string $username
-   * @throws \InvalidArgumentException if user does not exist
-   * @return bool
-   */
-  public function isLdapUser($username)
-  {
-    return $this->user($username)->ldap;
-  }
-
-  /**
-   * Calling this method with a single argument (the plain text password)
-   * will cause a random string to be generated and used for the salt.
-   * The resulting string consists of the salt followed by the SHA-1 hash
-   * - this is to be stored away in your database. When you're checking a
-   * user's login, the situation is slightly different in that you already
-   * know the salt you'd like to use. The string stored in your database
-   * can be passed to generateHash() as the second argument when generating
-   * the hash of a user-supplied password for comparison.
-   *
-   * See http://phpsec.org/articles/2005/password-hashing.html
-   * @param $plainText
-   * @param $salt
-   * @return string
-   */
-  public function generateHash($plainText, $salt = null)
-  {
-    if ($salt === null) {
-      $salt = substr( md5(uniqid(rand(), true) ), 0, ACCESS_SALT_LENGTH);
-    } else {
-      $salt = substr($salt, 0, ACCESS_SALT_LENGTH );
-    }
-    return $salt . sha1( $salt . $plainText);
-  }
-
-  /**
-   * Create a one-time token for authentication. It consists of a random part and the
-   * salt stored with the password hashed with this salt, concatenated by "|".
-   * @param string $username
-   * @return string The nounce
-   * @throws access_AuthenticationException
-   * @todo replace by a (potentially safer) yii equivalent
-   */
-  public function createNounce($username)
-  {
-    try {
-      $user = $this->user($username);
-    } catch (\InvalidArgumentException $e) {
-      throw new Exception( $this->tr("Invalid user name or password.") );
-    }
-  
-    $randSalt   = md5(uniqid(rand(), true) );
-    $storedSalt = substr( $user->password, 0, ACCESS_SALT_LENGTH );
-    $nounce = $randSalt . "|" . $storedSalt;
-  
-    // store random salt  and return nounce
-    $this->setLoginSalt( $randSalt );
-    return $nounce;
-  }
-
-  /**
-   * Stores a login salt in the session
-   *
-   * @param string $salt
-   * @return void
-   */
-  private function setLoginSalt($salt)
-  {
-    Yii::$app->session->set('LOGIN_SALT', $salt);
-  }
-  
-  /**
-   * Retrieves the login salt from the session
-   *
-   * @return string
-   */
-  private function getLoginSalt()
-  {
-    Yii::$app->session->get('LOGIN_SALT');
-  }
+  use traits\RbacTrait;
+  use traits\AuthTrait;
 
   //-------------------------------------------------------------
   // Actions / JSONRPC API
@@ -398,69 +289,5 @@ class AccessController extends AppController
       return (int) ($d->s + (60 * $d->i) + (3600 * $d->h) + 3600 * 24 * $d->d);
     }
     return 0;
-  }
-
-
-
-
-  //----------------------------------------------------------------
-  // convenience methods  access control
-  //----------------------------------------------------------------
-
-  /**
-   * Returns true if a permission with the given named id exists and false if
-   * not.
-   * @param string $namedId The named id of the permission
-   * @return bool
-   */
-  public function permissionExists($namedId)
-  {
-    return (bool) Permission::findOne(['namedId' => $namedId]);
-  }
-
-  /**
-   * Creates a permission with the given named id if it doesn't
-   * already exist.
-   * @param array|string $namedId The named id(s) of the permission(s)
-   * @param string $description Optional description of the permission.
-   *    Only used when first argument is a string.
-   * @return void
-   */
-  public function addPermission($namedId, $description = null)
-  {
-    if (is_array($namedId)) {
-      foreach ($namedId as $id) {
-        $this->addPermission( $id );
-      }
-      return;
-    }
-    $permission = new Permission([ 'namedId' => $namedId, 'description' => $description ]);
-    $permission->save();
-  }
-
-  /**
-   * Removes a permission with the given named id. Silently fails if the
-   * permission doesn't exist.
-   * @param array|string $namedId The named id(s) of the permission(s)
-   * @return void
-   */
-  public function removePermission($namedId)
-  {
-    if (is_array($namedId)) {
-      foreach ($namedId as $id) {
-        $this->removePermission( $id );
-      }
-      return;
-    }
-    Permission::deleteAll(['namedId' => $namedId]);
-  }
-
-  /**
-   * Deletes a user
-   */
-  public function deleteUser()
-  {
-    $this->dispatchMessage("user.deleted", $this->id());
-    parent::delete();
   }
 }

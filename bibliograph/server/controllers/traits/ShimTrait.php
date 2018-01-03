@@ -1,6 +1,7 @@
 <?php
 
 namespace app\controllers\traits;
+use Yii;
 
 /**
  * Trait that should become obsolete once the code has been updated
