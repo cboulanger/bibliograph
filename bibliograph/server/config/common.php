@@ -9,22 +9,25 @@ $config =  [
   '@tests' => __DIR__ . "/../tests/",
   ],
   'components' => array_merge(
-    require('db.php'), [
-    'user' => [
-      'class' => 'yii\web\User',
-      'identityClass' => 'app\models\User',
-    ],      
-    'utils' => [ 'class' => 'lib\components\Utils'],
-    'log' => [
-      'targets' => [
-        [
-          'class' => 'yii\log\FileTarget',
-          //'levels' => ['trace','info', 'error', 'warning'],
-          'except' => ['yii\*'],
-          'logVars' => []
-        ]
-      ]
-    ]    
+  require('db.php'), [
+  'user' => [
+    'class' => 'yii\web\User',
+    'identityClass' => 'app\models\User',
+  ],      
+  'utils' => [ 'class' => 'lib\components\Utils'],
+  'log' => [
+    'targets' => [
+    [
+      'class' => 'yii\log\FileTarget',
+      //'levels' => ['trace','info', 'error', 'warning'],
+      'except' => ['yii\*'],
+      'logVars' => []
+    ]
+    ]
+    ],
+    'sse' => [
+      'class' => \odannyc\Yii2SSE\LibSSE::class
+    ] 
   ]),
   'extensions' => require(__DIR__ . '/../vendor/yiisoft/extensions.php'),
 ];
@@ -33,18 +36,18 @@ if (YII_ENV_DEV) {
   $config['modules']['gii'] = [
   'class' => 'yii\gii\Module',
   'generators' => [
-    'fixture' => [
-    'class' => 'elisdn\gii\fixture\Generator',
-    ],
+  'fixture' => [
+  'class' => 'elisdn\gii\fixture\Generator',
+  ],
   ]
   ];
   $config['controllerMap'] = [
-    'fixture' => [
-      'class' => 'yii\faker\FixtureController',
-    ],
-    'migration' => [
-      'class' => 'bizley\migration\controllers\MigrationController',
-    ],    
+  'fixture' => [
+    'class' => 'yii\faker\FixtureController',
+  ],
+  'migration' => [
+    'class' => 'bizley\migration\controllers\MigrationController',
+  ],    
   ];    
 }
 return $config;

@@ -3,7 +3,8 @@
         "yiisoft/yii2": "~2.0.0",
         "cranetm/yii2-json-rpc-2.0": "1.*",
         "toriphes/yii2-console-runner": "*",
-        "fourteenmeister/dsn": "@dev"
+        "fourteenmeister/dsn": "@dev",
+        "odannyc/yii2-sse": "^0.1.0"
     },
     "require-dev": {
         "bizley/migration": "^2.2",

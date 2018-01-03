@@ -1,1 +1,25 @@
-<h1>It works</h1>
+<?php
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>EventSource example</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <script src="js/eventsource.min.js"></script>
+    <script>
+      var es = new EventSource("?r=site/message");
+      var listener = function (event) {
+        var div = document.createElement("div");
+        var type = event.type;
+        div.appendChild(document.createTextNode(type + ": " + (type === "message" ? event.data : es.url)));
+        document.body.appendChild(div);
+      };
+      es.addEventListener("open", listener);
+      es.addEventListener("message", listener);
+      es.addEventListener("error", listener);
+    </script>
+</head>
+<body>
+</body>
+</html>
