@@ -1,0 +1,14 @@
+{
+  "name": "bibliograph-client",
+  "version": "2.3.0",
+  "description": "The web client part of the Bibliograph application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Christian Boulanger",
+  "license": "MIT",
+  "dependencies": {
+    "event-source-polyfill": "0.0.12"
+  }
+}
