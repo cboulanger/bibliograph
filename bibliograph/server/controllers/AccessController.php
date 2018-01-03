@@ -41,6 +41,11 @@ use lib\dialog\Confirm;
  */
 class AccessController extends AppController
 {
+
+  //-------------------------------------------------------------
+  // Internal API
+  //-------------------------------------------------------------  
+
   /**
    * Creates a new anonymous guest user
    * @throws LogicException
@@ -144,6 +149,10 @@ class AccessController extends AppController
   {
     Yii::$app->session->get('LOGIN_SALT');
   }
+
+  //-------------------------------------------------------------
+  // Actions / JSONRPC API
+  //-------------------------------------------------------------  
   
   /**
    * Registers a new user.
@@ -264,6 +273,8 @@ class AccessController extends AppController
     // }
 
     // log in identified user
+    $user->online = true;
+    $user->save(); 
     Yii::$app->user->login($user);
     $continueSession = $this->continueUserSession($user);
     $sessionId = $this->getSessionId();
@@ -297,10 +308,12 @@ class AccessController extends AppController
    */
   public function actionLogout()
   {
-    $username = $this->getActiveUser()->getUsername(); 
-    Yii::info("Logging out user '$username'.");
+    $user = $this->getActiveUser(); 
+    Yii::info("Logging out user '{$user->name}'.");
+    $user->online = false;
+    $user->save();
+    Session::deleteAll(['UserId' => $user->id ]);
     Yii::$app->session->destroy();
-    Session::deleteAll(['UserId' => $this->activeUser->id ]);
     return "OK";
   }
 
@@ -337,123 +350,37 @@ class AccessController extends AppController
    */
   public function cleanup()
   {
-    $this->log("Cleaning up stale session data ....", LOG_AUTHENTICATION );
+    Yii::info( "Cleaning up stale session data ...." );
 
-    $sessionModel = $this->getSessionModel();
-    $userModel = $this->getUserModel();
-
-    $sessionModel->findAll();
-    while ($sessionModel->loadNext()) {
-      $sessionId=  $sessionModel->id();
-
-      /*
-       * get user that owns the session
-       */
-      try {
-        $userModel->findLinked( $sessionModel );
-        $userModel->loadNext();
-      } catch (data_model_RecordNotFoundException $e) {
-        /*
-         * purge sessions without an associated user
-         */
-        $this->log("Session $sessionId has no associated user - discarded.", LOG_AUTHENTICATION  );
-        $sessionModel->delete();
-        continue;
+    // cleanup sessions
+    foreach( Session::findAll() as $session ){
+      $user = $session->getUser()->one();
+      if ( ! $user or ! $user->online ){
+        $session->delete();
       }
+      // @todo remove expired sessions
+      // @todo add expire column
+      // $modified = $sessionModel->getModified();
+      // $now      = $sessionModel->getQueryBehavior()->getAdapter()->getTime();
+      // $ageInSeconds = strtotime($now)-strtotime($modified);      
+    }
 
-      /*
-       * purge sessions that have expanded their lifetime
-       */
-      $modified = $sessionModel->getModified();
-      $now      = $sessionModel->getQueryBehavior()->getAdapter()->getTime();
-      $ageInSeconds = strtotime($now)-strtotime($modified);
-
-      if ($userModel->isAnonymous()) {
-        //$this->debug("Anonymous session $sessionId is $ageInSeconds seconds old, timeout is " . ACCESS_ANONYMOUS_SESSION_LIFETIME);
-        if ($ageInSeconds > ACCESS_ANONYMOUS_SESSION_LIFETIME) {
-          $this->log("Anonymous Session $sessionId has expired.", LOG_AUTHENTICATION  );
-          $sessionModel->delete();
+    // cleanup users
+    foreach( User::findAll() as $user){
+      if( $user->getSessions()->count() === 0){
+        // if no sessions, ...
+        if ($user->anonymous ) {
+          // .. delete user if guest
+          $user->delete();
+        } else {
+          // ... set real users to offline 
+          $user->online = false;
+          $user->save(); 
         }
-      } else {
-        //        if( $sessionModel->isToken())
-        //        {
-        //          if ( $ageInSeconds > ACCESS_TOKEN_LIFETIME )
-        //          {
-        //            $this->log("Token $sessionId has expired.", LOG_AUTHENTICATION  );
-        //            $sessionModel->delete();
-        //           }
-        //        }
-        //        else
-        //        {
-        // todo: how to deal with expired user sessions
-        //$this->debug(" session $sessionId is $age seconds old, timeout is " . ACCESS_TIMEOUT);
-        //        if ( $age > ACCESS_TIMEOUT )
-        //        {
-        //          $userId =$userModel->id();
-        //          $this->log("Session $sessionId of user $userId unmodified since $age seconds - discarded.", LOG_AUTHENTICATION  );
-        //          $sessionModel->delete();
-        //        }
-        //        }
-      }
+      } 
     }
 
-    /*
-     * Checking for anonymous users without a session
-     */
-    $userModel->findWhere(array("anonymous"=>true));
-    while ($userModel->loadNext()) {
-      try {
-        $sessionModel->findLinked($userModel); // will throw when no session is found
-      } catch (data_model_RecordNotFoundException $e) {
-        $userId= $userModel->id();
-        $this->log("Anonymous user #$userId has no sessions - discarded.", LOG_AUTHENTICATION  );
-        $userModel->delete();
-      }
-    }
-
-    /*
-     * Checking for sessions without a user
-     */
-    $sessionModel->findAll();
-    while ($sessionModel->loadNext()) {
-      try {
-        $userModel->findLinked($sessionModel); // will throw when no session
-      } catch (data_model_RecordNotFoundException $e) {
-        $sessionId= $sessionModel->id();
-        $this->log("Session $sessionId has no associated user - discarded.", LOG_AUTHENTICATION  );
-        $sessionModel->delete();
-      }
-    }
-
-
-    /*
-     * cleanup messages
-     */
-    $this->getMessageBus()->cleanup();
-  }
-
-  /**
-   * Checks if any session exists that are connected to the user id.
-   * If not, set the user's online status to false.
-   * @param integer $userId
-   * @return boolean Whether the user is online or not.
-   * @throws LogicException if user does not exist.
-   */
-  public function checkOnlineStatus($userId)
-  {
-    try {
-      $userModel = $this->getUserModel()->load( $userId );
-    } catch (data_model_RecordNotFoundException $e) {
-      throw new LogicException( "User #$userId does not exist." );
-    }
-
-    try {
-      $this->getSessionModel()->findLinked($userModel);
-      return true;
-    } catch (data_model_RecordNotFoundException $e) {
-       $userModel->set("online", false)->save();
-       return false;
-    }
+    // @todo cleanup messages
   }
 
   /**
@@ -473,40 +400,8 @@ class AccessController extends AppController
     return 0;
   }
 
-  /**
-   * Purges all anonymous users. This will interfere with the sessions of these users,
-   * therefore use this only during maintenance
-   */
-  public function purgeAnonymous()
-  {
-    $userModel = $this->getUserModel();
-    $userModel->findAll();
-    while ($userModel->loadNext()) {
-      if ($userModel->isAnonymous()) {
-        $userModel->delete();
-      }
-    }
-  }
 
-  /**
-   * Function to check the match between the password and the repeated
-   * password. Returns the hashed password.
-   * @param $value
-   * @throws JsonRpcException
-   * @return string|null
-   */
-  public function checkFormPassword($value)
-  {
-    if (!isset($this->__password)) {
-      $this->__password = $value;
-    } elseif ($this->__password != $value) {
-      throw new JsonRpcException($this->tr("Passwords do not match..."));
-    }
-    if ($value and strlen($value) < 8) {
-      throw new JsonRpcException($this->tr("Password must be at least 8 characters long"));
-    }
-    return $value ? $this->getApplication()->getAccessController()->generateHash($value) : null;
-  }
+
 
   //----------------------------------------------------------------
   // convenience methods  access control

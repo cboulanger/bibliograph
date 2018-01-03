@@ -7,15 +7,6 @@ use Yii;
 use app\models\BaseModel;
 use app\models\UserConfig;
 
-/*
- * constants
- */
-define( "QCL_CONFIG_TYPE_STRING", "string");
-define( "QCL_CONFIG_TYPE_NUMBER", "number");
-define( "QCL_CONFIG_TYPE_BOOLEAN", "boolean");
-define( "QCL_CONFIG_TYPE_LIST", "list");
-
-
 /**
  * This is the model class for table "data_Config".
  *
@@ -31,7 +22,12 @@ define( "QCL_CONFIG_TYPE_LIST", "list");
 class Config extends BaseModel
 {
 
-  const value_types = array("string","number","boolean","list");
+  const value_types = [
+    0 => "string",
+    1 => "number",
+    2 => "boolean",
+    3 => "list"
+  ];
   
   /**
    * @inheritdoc
@@ -71,6 +67,7 @@ class Config extends BaseModel
       'modified' => 'Modified',
     ];
   }
+  
   //-------------------------------------------------------------
   // Relations
   //-------------------------------------------------------------

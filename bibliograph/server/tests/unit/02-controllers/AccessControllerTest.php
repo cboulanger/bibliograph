@@ -65,7 +65,7 @@ class AccessControllerTest extends Base
   }  
 
   // @todo needs real error message
-  public function testTryUnauthorizedAccess()
+  public function testUnauthorizedAccessFails()
   {
     $response = $this->sendJsonRpc('username');
     $this->assertEquals( null, $response->getRpcResult());
