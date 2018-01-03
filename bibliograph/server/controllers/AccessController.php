@@ -413,9 +413,9 @@ class AccessController extends AppController
    * @param string $namedId The named id of the permission
    * @return bool
    */
-  public function hasPermission($namedId)
+  public function permissionExists($namedId)
   {
-    return $this->getAccessController()->getPermissionModel()->namedIdExists($namedId);
+    return (bool) Permission::findOne(['namedId' => $namedId]);
   }
 
   /**
@@ -434,8 +434,8 @@ class AccessController extends AppController
       }
       return;
     }
-    $this->getAccessController()->getPermissionModel()
-    ->createIfNotExists($namedId, array( "description" => $description ));
+    $permission = new Permission([ 'namedId' => $namedId, 'description' => $description ]);
+    $permission->save();
   }
 
   /**
@@ -452,34 +452,7 @@ class AccessController extends AppController
       }
       return;
     }
-    try {
-      $this->getAccessController()->getPermissionModel()->load($namedId)->delete();
-    } catch (data_model_RecordNotFoundException $e) {
-    }
-  }
-  
-  /**
-   * Assign the given role the given permissions
-   * @param string $roleId The named id of the role
-   * @param string|array $permissions The named id(s) of the permissions
-   * @throws LogicException
-   */
-  public function giveRolePermission($roleId, $permissions)
-  {
-    try {
-      $roleModel = $this->getAccessController()->getRoleModel()->load( $roleId );
-    } catch (data_model_RecordNotFoundException $e) {
-      throw new LogicException("Unknown role '$roleId'");
-    }
-    $permissionModel = $this->getAccessController()->getPermissionModel();
-    foreach ((array) $permissions as $permissionId) {
-      try {
-        $roleModel->linkModel( $permissionModel->load( $permissionId ) );
-      } catch (data_model_RecordExistsException $e) {
-      } catch (data_model_RecordNotFoundException $e) {
-        throw new LogicException("Unknown permission '$permissionId'");
-      }
-    }
+    Permission::deleteAll(['namedId' => $namedId]);
   }
 
   /**
