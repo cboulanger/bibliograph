@@ -37,8 +37,4 @@ class Base extends \Codeception\Test\Unit
   //     $this->fail("Migrations failed: " . self::$migrationOutput );
   //   }
   // }
-
-
-
-
 }

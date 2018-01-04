@@ -8,4 +8,5 @@ modules:
         - Asserts
         - \Helper\Unit
         - Yii2:
-            configFile: config/test.php     
+            configFile: config/test.php
+            transaction: false

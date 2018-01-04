@@ -12,7 +12,7 @@ use app\models\Session;
 use app\models\Message;
 use lib\io\Channel;
 
-class MessageTransportTest extends Base
+class Messages1SimpleTest extends Base
 {
   /**
    * @var \UnitTester
@@ -99,8 +99,17 @@ class MessageTransportTest extends Base
     $this->createSessionData();
     $channel1 = new Channel('channel1', 'session2');
     $channel2 = new Channel('channel2', 'session3');
-    $channel1->send('message for channel4');
-    $channel2->broadcast('broadcast for channel4');
-    $this->assertEquals( 5, Message::find()->count() );
+    $channel1->send('message1 for channel1');
+    $channel1->send('message2 for channel1');
+    $channel2->broadcast('broadcast for channel2');
+    $this->assertEquals( 6, Message::find()->count() );
+    $this->assertEquals( 2, count( $channel1->update() ) );
+    $this->assertEquals( 1, count( $channel2->update() ) );
+    $this->assertEquals( 3, Message::find()->count() );
   }
+
+  public function testServerSideEventChannel()
+  {
+    
+  }  
 }

@@ -4,7 +4,10 @@ namespace app\controllers;
 
 use Yii;
 use yii\web\Controller;
-use lib\io\Channel;
+use lib\io\AllChannels;
+use app\models\Session;
+use app\models\User;
+use app\models\Message;
 
 class SiteController extends Controller
 {
@@ -23,10 +26,15 @@ class SiteController extends Controller
    *
    * @return void
    */
-  public function actionMessage()
-  {
+  public function actionSse()
+  { 
+    // @TODO secure 
     $sse = Yii::$app->sse;
-    $sse->addEventListener('message', new Channel('message'));
-    $sse->start();
+    try{
+      $sse->addEventListener('', new AllChannels( 'session1' ) );
+      $sse->start();
+    } catch( \Exception $e) {
+      echo $e->getMessage();
+    }
   }
 }

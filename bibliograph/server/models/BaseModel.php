@@ -100,6 +100,22 @@ class BaseModel extends ActiveRecord
   }
 
   /**
+   * Overridden to log validation errors
+   *
+   * @param boolean $runValidation
+   * @param array|null $attributeNames
+   * @return boolean
+   */
+  public function save( $runValidation = true, $attributeNames = null )
+  {
+    if( parent::save( $runValidation, $attributeNames ) ){
+      return true;
+    }
+    Yii::warning( $this->getErrors() );
+    return false;
+  }
+
+  /**
    * Shim method
    *
    * @param [type] $string

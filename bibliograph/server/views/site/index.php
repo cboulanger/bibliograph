@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <script src="js/eventsource.min.js"></script>
     <script>
-      var es = new EventSource("?r=site/message");
+      var es = new EventSource("?r=site/sse");
       var listener = function (event) {
         var div = document.createElement("div");
         var type = event.type;
