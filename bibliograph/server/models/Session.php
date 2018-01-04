@@ -3,6 +3,8 @@
 namespace app\models;
 
 use Yii;
+use yii\db\Expression;
+
 use app\models\BaseModel;
 use app\models\User;
 use app\models\Message;
@@ -83,5 +85,32 @@ class Session extends BaseModel
   public function getMessages()
   {
     return $this->hasMany(Messages::className(), ['SessionId' => 'id']);
+  }
+
+  //-------------------------------------------------------------
+  // API
+  //-------------------------------------------------------------
+  
+  /**
+   * Overridden method to update the `modified` property.
+   *
+   * @return void
+   */
+  public function touch()
+  {
+    parent::touch('modified');
+  }
+
+  /**
+   * Cleans up session list by purging all entries that are older than
+   * the given minute interval.
+   *
+   * @param int $intervalInSeconds The interval in seconds. Defaults to 1 hour
+   * @return int Number of messages purged
+   */
+  public static function cleanup( $intervalInSeconds=60*60 )
+  {
+    $expression = new Expression('DATE_SUB(NOW(), INTERVAL :seconds SECOND)',['seconds' => $intervalInSeconds ]);
+    return static::deleteAll(['<', 'modified', $expression]);
   }
 }

@@ -167,11 +167,13 @@ class AccessController extends AppController
     $user->online = true;
     $user->save(); 
     Yii::$app->user->login($user);
-    $continueSession = $this->continueUserSession($user);
-    $sessionId = $this->getSessionId();
-    if ( $continueSession ) {
+    $session = $this->continueUserSession($user);
+    if ( $session ) {
+      $sessionId = $session->id;
+      $session->touch();
       Yii::trace("Continued sesssion {$sessionId}"); 
     } else {
+      $sessionId = $this->getSessionId();
       $session = new Session(['namedId' => $sessionId]);
       $session->link('user',$user);
       $session->save();

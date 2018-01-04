@@ -88,4 +88,26 @@ class Channel extends SSEBase
   {
     return $this->name;
   }
+
+  /**
+   * Broadcast data over this channel
+   *
+   * @param mixed $data The data to broadcast
+   * @return void
+   */
+  public function broadcast( $data )
+  {
+    Message::broadcast($this,$data);
+  }
+
+  /**
+   * Send a message to the connected client
+   *
+   * @param mixed $data
+   * @return void
+   */
+  public function send( $data )
+  {
+    Message::send($this, $data, $this->session->id);
+  }
 }

@@ -67,7 +67,8 @@ class AppController extends Controller
    * Tries to continue an existing session
    *
    * @param \app\models\User $user
-   * @return bool If an existing session could be continued
+   * @return \app\model\Session|null The session object to be reused, or null
+   * if none exists.
    */
   protected function continueUserSession( $user )
   {
@@ -77,7 +78,7 @@ class AppController extends Controller
       session_id( $session->namedId );
     }
     Yii::$app->session->open();
-    return (bool) $session; 
+    return $session; 
   }
 
   /**
@@ -109,7 +110,8 @@ class AppController extends Controller
     $user->online = true;
     $user->save();     
     Yii::$app->user->setIdentity($user);
-    $this->continueUserSession( $user );
+    $session = $this->continueUserSession( $user );
+    if( $session ) $session->touch();
     $sessionId = $this->getSessionId();
     Yii::info("Authenticated user '{$user->namedId}' via auth auth token (Session {$sessionId}.");
     return true;

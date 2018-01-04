@@ -55,4 +55,36 @@ class MessageTransportTest extends Base
     $this->assertFalse( $channel->check() );
     $this->assertEquals( [], $channel->update() );    
   }
+
+  public function testCleanupSessions()
+  {
+    $this->createSessionData();
+    $this->assertEquals( 4, Session::find()->count() );
+    // cleaning up session now shouldn't delete any
+    $this->assertEquals( 0, Session::cleanup() );
+    sleep(2);
+    // cleanup should delete all sessions with a timeour of one second
+    $this->assertEquals( 4, Session::cleanup(1) );
+  }
+
+  public function testCleanupMessages()
+  {
+    $this->createSessionData();
+    $channel = new Channel('message3', 'session3');
+    for( $i=0; $i<10; $i++){
+      $channel->broadcast( "data" . $i );
+    }
+    sleep(5);
+    for( $i=0; $i<10; $i++){
+      $channel->broadcast( "data" . $i );
+    }
+    $this->assertEquals( 80, Message::find()->count() );
+    // cleaning up messages now shouldn't delete any
+    $this->assertEquals( 0, Message::cleanup() );
+    sleep(2);
+    // cleanup should delete all messages with a timeout of five seconda
+    $this->assertEquals( 40, Message::cleanup(5) );
+    // fourty messages should remain
+    $this->assertEquals( 40, Message::find()->count() );
+  }
 }

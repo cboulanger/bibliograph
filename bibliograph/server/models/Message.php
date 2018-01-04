@@ -3,6 +3,8 @@
 namespace app\models;
 
 use Yii;
+use yii\db\Expression;
+
 use app\models\BaseModel;
 use app\models\Session;
 
@@ -81,8 +83,6 @@ class Message extends BaseModel
    * @return void
    */
   public static function broadcast($channel, $data){
-    // @todo: Session::cleanup();
-    // @todo: validate channel name
     $name = $channel instanceof \app\controllers\sse\Channel ? $channel->getName() : $channel; 
     foreach( Session::find()->all() as $session ){
       $message = new static([ 'name' => $name, 'data' => json_encode($data), 'SessionId' => $session->id ]);
@@ -112,4 +112,18 @@ class Message extends BaseModel
     $message = new static([ 'name' => $name, 'data' => json_encode($data), 'SessionId' => $session->id ]);
     $message->save();
   }
+
+  /**
+   * Cleans up message queue by purging all entries that are older than
+   * the given second interval.
+   *
+   * @param int $intervalInSeconds The interval in seconds. Defaults to 5 minutes
+   * @return int Number of messages purged
+   */
+  public static function cleanup( $intervalInSeconds=60*5 )
+  {
+    $expression = new Expression('DATE_SUB(NOW(), INTERVAL :seconds SECOND)',['seconds' => $intervalInSeconds ]);
+    return static::deleteAll(['<', 'modified', $expression]);
+  }
+
 }
