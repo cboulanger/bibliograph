@@ -270,8 +270,6 @@ class AccessController extends AppController
         }
       } 
     }
-
-    // @todo cleanup messages
   }
 
   /**

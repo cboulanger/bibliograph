@@ -4,7 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use yii\web\Controller;
-use app\controllers\sse\MessageEventHandler;
+use app\controllers\sse\Channel;
 
 class SiteController extends Controller
 {
@@ -26,7 +26,7 @@ class SiteController extends Controller
   public function actionMessage()
   {
     $sse = Yii::$app->sse;
-    $sse->addEventListener('message', new MessageEventHandler());
+    $sse->addEventListener('message', new Channel('message'));
     $sse->start();
   }
 }

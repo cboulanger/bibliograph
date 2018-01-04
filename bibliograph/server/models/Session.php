@@ -3,6 +3,9 @@
 namespace app\models;
 
 use Yii;
+use app\models\BaseModel;
+use app\models\User;
+use app\models\Message;
 
 /**
  * This is the model class for table "data_Session".
@@ -15,7 +18,7 @@ use Yii;
  * @property string $ip
  * @property integer $UserId
  */
-class Session extends \yii\db\ActiveRecord
+class Session extends BaseModel
 {
     /**
      * @inheritdoc
@@ -60,8 +63,25 @@ class Session extends \yii\db\ActiveRecord
   // Relations
   //-------------------------------------------------------------
   
+  /**
+   * Returns a yii\db\ActiveQuery to find the user object linked to 
+   * the session instance 
+   *
+   * @return \yii\db\ActiveQuery
+   */
   public function getUser()
   {
     return $this->hasOne(User::className(), ['id' => 'UserId']);
+  }
+
+  /**
+   * Returns a yii\db\ActiveQuery to find the message objects linked to 
+   * the session instance 
+   *
+   * @return \yii\db\ActiveQuery
+   */
+  public function getMessages()
+  {
+    return $this->hasMany(Messages::className(), ['SessionId' => 'id']);
   }
 }
