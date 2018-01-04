@@ -108,6 +108,6 @@ class Channel extends SSEBase
    */
   public function send( $data )
   {
-    Message::send($this, $data, $this->session->id);
+    Message::send($this, $data, $this->session->namedId);
   }
 }

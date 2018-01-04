@@ -19,8 +19,15 @@ class MessageTransportTest extends Base
    */
   protected $tester;
 
+  /**
+   * Helper method to create some fake session data;
+   *
+   * @return void
+   */
   protected function createSessionData()
   {
+    Message::deleteAll();
+    Session::deleteAll();
     (new Session(['namedId'=>"session1",'UserId'=>1]))->save();
     (new Session(['namedId'=>"session2",'UserId'=>1]))->save();
     (new Session(['namedId'=>"session3",'UserId'=>2]))->save();
@@ -30,12 +37,11 @@ class MessageTransportTest extends Base
   public function testBroadcast()
   {
     $this->createSessionData();
-    $channel = new Channel('message1', 'session1');
-    Message::broadcast('message1',['hello'=>'world']);
+    $channel = new Channel('channel1', 'session1');
+    Message::broadcast('channel1',['hello'=>'world']);
     $this->assertEquals( 4, Message::find()->count() );
     $this->assertTrue( $channel->check() );
-    $data = $channel->update();
-    $this->assertTrue( is_array( $data ) and count($data) == 1);
+    $this->assertEquals( [['hello'=>'world']], $channel->update() );
     // now one message should be deleted
     $this->assertEquals( 3, Message::find()->count() );
     $this->assertFalse( $channel->check() );
@@ -45,7 +51,7 @@ class MessageTransportTest extends Base
   public function testSend()
   {
     $this->createSessionData();
-    $channel = new Channel('message2', 'session4');
+    $channel = new Channel('channel2', 'session4');
     Message::send( $channel, 'very special message', "session4" );
     $this->assertEquals( 1, Message::find()->count() );
     $this->assertTrue( $channel->check() );
@@ -70,7 +76,7 @@ class MessageTransportTest extends Base
   public function testCleanupMessages()
   {
     $this->createSessionData();
-    $channel = new Channel('message3', 'session3');
+    $channel = new Channel('channel3', 'session3');
     for( $i=0; $i<10; $i++){
       $channel->broadcast( "data" . $i );
     }
@@ -86,5 +92,15 @@ class MessageTransportTest extends Base
     $this->assertEquals( 40, Message::cleanup(5) );
     // fourty messages should remain
     $this->assertEquals( 40, Message::find()->count() );
+  }
+
+  public function testChannelMethods()
+  {
+    $this->createSessionData();
+    $channel1 = new Channel('channel1', 'session2');
+    $channel2 = new Channel('channel2', 'session3');
+    $channel1->send('message for channel4');
+    $channel2->broadcast('broadcast for channel4');
+    $this->assertEquals( 5, Message::find()->count() );
   }
 }
