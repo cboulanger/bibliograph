@@ -4,7 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use yii\web\Controller;
-use app\controllers\sse\Channel;
+use lib\io\Channel;
 
 class SiteController extends Controller
 {

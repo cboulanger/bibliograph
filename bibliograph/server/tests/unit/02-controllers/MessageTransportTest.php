@@ -10,7 +10,7 @@ use Yii;
 use app\tests\unit\Base;
 use app\models\Session;
 use app\models\Message;
-use app\controllers\sse\Channel;
+use lib\io\Channel;
 
 class MessageTransportTest extends Base
 {

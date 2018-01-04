@@ -1,6 +1,6 @@
 <?php
 
-namespace app\controllers\sse;
+namespace lib\io;
 
 use Yii;
 use odannyc\Yii2SSE\SSEBase;
