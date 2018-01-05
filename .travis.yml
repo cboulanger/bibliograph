@@ -48,10 +48,6 @@ before_script:
   # create databases and tables
   - mysql -e 'CREATE DATABASE bibliograph;'
   - mysql -e 'CREATE DATABASE tests;'
-  - php bibliograph/server/tests/bin/yii migrate/up --interactive=0 
   
 script:
-  # run yii2 unit tests
-  - push ./bibliograph/server > /dev/null
-  - php yii serve -t=@app/tests &
-  - 
+  - npm test
