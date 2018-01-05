@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -o errexit # Exit on error
+#set -o errexit # Exit on error
 
 ps | grep "[p]hp yii serve -t=@app/tests localhost:8080" > /dev/null
 if [ $? -eq 0 ]; then
