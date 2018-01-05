@@ -64,7 +64,10 @@ class AllChannels extends SSEBase
     $idsToDelete = [];
     foreach( $this->query->asArray()->all() as $record ) {
       $d = json_decode($record['data']);
-      $data[] = is_object($d) ? (array) $d : $d;
+      $data[] = [ 
+        'event' => $record['name'],
+        'data'  => is_object($d) ? (array) $d : $d
+      ];
       $idsToDelete[] = $record['id']; 
     }
     // delete retrieved messages

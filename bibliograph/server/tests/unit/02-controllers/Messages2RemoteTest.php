@@ -29,24 +29,34 @@ class Messages2RemoteTest extends Base
     $foo->send("This is an urgent message");
     $bar = new Channel('bar','session1');
     $bar->send(['foo'=>'bar']);
+    sleep(2);
     // create a client to simulate a browser
     $client = new Client('http://localhost:8080');
     $start = microtime(true);
-    // while(true){
-    //   $request = $client->get('?r=site/sse', ['Accept' => 'text/event-stream']);
-    //   $request->getQuery()->set('sessionid', 'session1');
-    //   $request->getQuery()->set('token', 'token1');
-    //   $factory = new PhpStreamRequestFactory();
-    //   $stream = $factory->fromRequest($request);
-    //   // Read until the stream is closed
-    //   while (!$stream->feof()) {
-    //     $secondsElapsed = microtime(true)-$start;
-    //     $line = $stream->readLine();
-    //     \codecept_debug($line);
-    //     if( $secondsElapsed > 5 ){
-    //       break 2;
-    //     }
-    //   }
-    // }
+    $expect = 'data:[{"event":"foo","data":"This is an urgent message"},{"event":"bar","data":{"foo":"bar"}}]';
+    while(true){
+      $request = $client->get('?r=site/sse', ['Accept' => 'text/event-stream']);
+      $request->getQuery()->set('sessionid', 'session1');
+      $request->getQuery()->set('token', 'token1');
+      $factory = new PhpStreamRequestFactory();
+      $stream = $factory->fromRequest($request);
+      $output=[];
+      // Read until the stream is closed
+      while (!$stream->feof()) {
+        $s= round(microtime(true)-$start);
+        $bar->send("$s seconds elapsed.");
+        sleep(1);
+        $line = $stream->readLine();
+        if( trim($line) == $expect ) break 2;
+        $ouput[] = $line;
+        \codecept_debug($line);
+        if( $s > 10 ){
+          throw new \Exception("Did not receive expected data. Output was: \n" . implode("\n",$output));
+        }
+      }
+    }
+    // cleanup
+    Message::deleteAll();
+    Session::deleteAll();
   }
 }

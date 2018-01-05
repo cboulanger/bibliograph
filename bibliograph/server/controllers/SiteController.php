@@ -31,10 +31,10 @@ class SiteController extends Controller
     // @TODO secure 
     $sse = Yii::$app->sse;
     try{
-      $sse->addEventListener('', new AllChannels( 'session1' ) );
+      $sse->addEventListener('', new AllChannels( $_GET['sessionid'] ) );
       $sse->start();
     } catch( \Exception $e) {
-      echo $e->getMessage();
+      echo "error: $e->getMessage()\n\n";
     }
   }
 }
