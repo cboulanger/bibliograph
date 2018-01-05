@@ -52,7 +52,7 @@ before_script:
 script:
   - npm i -g npm
   - npm i -g npm
-  - npm install
+  - npm install || true
   - npm link mocha
   - npm install cboulanger/raptor-client
   - npm test
