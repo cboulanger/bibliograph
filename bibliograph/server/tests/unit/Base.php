@@ -25,7 +25,7 @@ class Base extends \Codeception\Test\Unit
     if( self::$migrationsApplied ) return;
     $output = '';
     $runner = new \toriphes\console\Runner();
-    $runner->run('migrate/fresh --interactive=0 --db=testdb' , $output);
+    $runner->run('migrate/fresh --interactive=0 --db=testdb -p=@app/migrations/schema' , $output);
     self::$migrationsApplied = true;
     self::$migrationOutput = $output;
     if( strstr($output,"failed" )) self::$migrationError = true;
