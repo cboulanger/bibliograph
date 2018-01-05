@@ -28,9 +28,11 @@
     "qooxdoo": "^6.0.1",
     "qooxdoo-sdk": "^6.0.0-alpha",
     "qx-cli": "^0.1.39",
-    "qxcompiler": "^0.1.34"
+    "qxcompiler": "^0.1.34",
+    "raptor-client": "github:cboulanger/raptor-client"
   },
   "devDependencies": {
+    "array-equal": "^1.0.0",
     "eslint": "^4.14.0",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.8.0",
@@ -38,7 +40,6 @@
     "jayson": "^2.0.5",
     "json-diff": "^0.5.2",
     "mocha": "^4.1.0",
-    "r2": "^2.0.0",
-    "raptor-client": "^0.2.1"
+    "r2": "^2.0.0"
   }
 }

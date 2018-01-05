@@ -22,14 +22,14 @@ class Base extends \Codeception\Test\Unit
    * @return void
    */
   public static function setUpBeforeClass(){
-    if( self::$migrationsApplied ) return;
-    $output = '';
-    $runner = new \toriphes\console\Runner();
-    $runner->run('migrate/fresh --interactive=0 --db=testdb -p=@app/migrations/schema' , $output);
-    self::$migrationsApplied = true;
-    self::$migrationOutput = $output;
-    if( strstr($output,"failed" )) self::$migrationError = true;
-    codecept_debug($output);
+    // if( self::$migrationsApplied ) return;
+    // $output = '';
+    // $runner = new \toriphes\console\Runner();
+    // $runner->run('migrate/fresh --interactive=0 --db=testdb -p=@app/migrations/schema' , $output);
+    // self::$migrationsApplied = true;
+    // self::$migrationOutput = $output;
+    // if( strstr($output,"failed" )) self::$migrationError = true;
+    // codecept_debug($output);
   }
 
   // public function testMigrations(){

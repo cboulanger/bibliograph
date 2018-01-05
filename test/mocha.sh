@@ -10,5 +10,4 @@ echo "travis_fold:end:data"
 popd > /dev/null
 
 echo "Running Mocha tests..."
-npm link mocha
 mocha -- ./test/**/*.test.js

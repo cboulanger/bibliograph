@@ -49,21 +49,8 @@ class m180105_075452_data_UserDataInsert extends Migration
         'lastAction' => null,
         'confirmed' => '0',
         'online' => '0',
-    ],
-    [
-        
-        'namedId' => 'setup',
-        'name' => 'Setup User (do not delete)',
-        'password' => 'e3946f73e1304d8cb941682bf397fc8a05fcf547dc1b5968f',
-        'email' => null,
-        'anonymous' => '0',
-        'ldap' => '0',
-        'active' => '0',
-        'lastAction' => null,
-        'confirmed' => '0',
-        'online' => '0',
-    ],
-]
+    ]
+    ]
         );
     }
 

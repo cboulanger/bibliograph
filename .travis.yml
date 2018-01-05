@@ -50,4 +50,6 @@ before_script:
   - mysql -e 'CREATE DATABASE tests;'
   
 script:
+  - npm install
+  - npm link mocha
   - npm test
