@@ -18,7 +18,9 @@
     "url": "git+ssh://git@github.com/cboulanger/bibliograph.git"
   },
   "scripts": {
-    "test": "bash test/test.sh"
+    "test": "bash test/test-all.sh",
+    "mocha": "bash test/setup.sh && bash test/mocha.sh",
+    "codeception": "bash test/setup.sh && bash test/codeception.sh"
   },
   "author": "",
   "license": "ISC",
