@@ -22,7 +22,6 @@ namespace app\controllers;
 
 use Yii;
 
-use JsonRpc2\Controller;
 use JsonRpc2\extensions\AuthException;
 
 use app\models\User;
@@ -32,7 +31,7 @@ use app\models\Session;
  * Service class providing methods to get or set configuration
  * values
  */
-class AppController extends Controller
+class AppController extends \JsonRpc2\Controller
 {
   use \JsonRpc2\extensions\AuthTrait;
   use traits\ShimTrait;

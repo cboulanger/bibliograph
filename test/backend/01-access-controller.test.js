@@ -5,7 +5,7 @@ const
   raptor = require('raptor-client'),
   equals = require('array-equal');
 
-describe('The JSON-RPC server', async function() {
+describe('The access controller', async function() {
   this.timeout(config.timeout);
   const client = raptor(config.url + "access");
 
@@ -30,7 +30,7 @@ describe('The JSON-RPC server', async function() {
     assert.equal( 3, await client.send('count', null, token ) );
   });
 
-  it('should allow to authenticate as Administrator with a password', async () => {
+  it('should allow to authenticate as administrator with a password', async () => {
     let response = await client.send('authenticate',['admin','admin']);
     assert( equals( Object.keys(response), ['message','token','sessionId'] ) );
     token = response.token;
@@ -43,4 +43,5 @@ describe('The JSON-RPC server', async function() {
     assert.equal( 2, await client.send('count', null, token ) );
     assert.equal( 3, await client.send('count', null, token ) );
   });
+
 });

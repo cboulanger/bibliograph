@@ -7,12 +7,10 @@ require_once __DIR__ . '/../../_bootstrap.php';
 
 use Yii;
 
-use \Graze\GuzzleHttp\JsonRpc;
-
-use app\tests\unit\Base;
-
-class AccessControllerTest extends Base
+class AccessControllerTest extends \app\tests\unit\Base
 {
+  use \app\controllers\traits\JsonRpcTrait;
+
   /**
    * @var \UnitTester
    */
@@ -22,58 +20,16 @@ class AccessControllerTest extends Base
     return require __DIR__ . '/../../fixtures/_access_models.php';
   }
 
-  /**
-   * Cache the access token
-   *
-   * @param string|null $t If set, store the value as the current token
-   * @return string The access token, if one has been set
-   */
-  protected function token($t=null)
-  {
-    static $token = null;
-    if( $t ) $token = $t;
-    return $token;
-  }
-
-  /**
-   * Executes a JSONRPC call
-   *
-   * @param string $method
-   * @param mixed|null $arguments
-   * @param string|null $token
-   * @return \Graze\GuzzleHttp\JsonRpc\Message\Response
-   */
-  protected function sendJsonRpc($method, $arguments=null )
-  {
-    static $client = null;
-    static $id = 0;
-
-    // create and cache the client
-    if( is_null($client) ){
-      $client = JsonRpc\Client::factory('http://localhost:8080/?r=access');    
-    }
-    $request = $client->request(++$id, $method, $arguments);
-    // add auth token
-    $token = $this->token(); 
-    if( $token ){
-      $json = JsonRpc\json_decode( (string) $request->getBody(), true);
-      $json['auth'] = $token;
-      $body = JsonRpc\json_encode($json); 
-      $request = $request->withBody( \GuzzleHttp\psr7\stream_for( $body ) );
-    }
-    return $client->send($request);
-  }  
-
-  // @todo needs real error message
+   // @todo needs real error message
   public function testUnauthorizedAccessFails()
   {
-    $response = $this->sendJsonRpc('username');
+    $response = $this->sendJsonRpc('username',null,"access");
     $this->assertEquals( null, $response->getRpcResult());
   }
 
   public function testAuthenticateWithPassword()
   {
-    $response = $this->sendJsonRpc('authenticate',['admin','admin']);
+    $response = $this->sendJsonRpc('authenticate',['admin','admin'],"access");
     $result = $response->getRpcResult();
     $this->assertEquals( ['message', 'token', 'sessionId' ], array_keys($result) );
     $this->token($result['token']);
@@ -103,5 +59,4 @@ class AccessControllerTest extends Base
     // test logout
     $this->assertEquals( "OK", $this->sendJsonRpc('logout')->getRpcResult() );
   }
-
 }
