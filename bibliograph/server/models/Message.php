@@ -78,12 +78,12 @@ class Message extends BaseModel
   /**
    * Broadcast to all connected clients
    *
-   * @param string|\lib\io\Channel $channel The name of the Channel or a Channel object
+   * @param string|\lib\channel\Channel $channel The name of the Channel or a Channel object
    * @param mixed $data Data, must be json_encode()able
    * @return void
    */
   public static function broadcast($channel, $data){
-    $name = $channel instanceof \lib\io\Channel ? $channel->getName() : $channel; 
+    $name = $channel instanceof \lib\channel\Channel ? $channel->getName() : $channel; 
     foreach( Session::find()->all() as $session ){
       $message = new static([ 'name' => $name, 'data' => json_encode($data), 'SessionId' => $session->id ]);
       $message->save();
@@ -93,7 +93,7 @@ class Message extends BaseModel
   /**
    * Send to the currently connected client only
    *
-   * @param string|\lib\io\Channel $channel The name of the Channel or a Channel object
+   * @param string|\lib\channel\Channel $channel The name of the Channel or a Channel object
    * @param mixed $data Data, must be json_encode()able
    * @param string|null $sessionId If omitted, the Yii session id will be used
    * @return void
@@ -101,7 +101,7 @@ class Message extends BaseModel
   public static function send($channel, $data, $sessionId=null )
   {
     // @todo: validate channel name
-    $name = $channel instanceof \lib\io\Channel ? $channel->getName() : $channel;     
+    $name = $channel instanceof \lib\channel\Channel ? $channel->getName() : $channel;     
     if( is_null( $sessionId ) ){
       $sessionId = Yii::$app->session->getId();
     }

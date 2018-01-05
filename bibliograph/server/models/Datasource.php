@@ -199,7 +199,7 @@ class Datasource extends BaseModel
         $class = "app\models\BibliographicDatasource"; 
         break;
       case "qcl.schema.filesystem.local":
-        $class = "lib\io\Filesystem";
+        $class = "lib\channel\Filesystem";
         break;
       default: 
         $class = str_replace(".","\\",$schema);

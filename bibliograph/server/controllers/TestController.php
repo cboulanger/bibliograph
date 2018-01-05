@@ -1,17 +1,61 @@
 <?php
+/* ************************************************************************
+
+   Bibliograph: Collaborative Online Reference Management
+
+   http://www.bibliograph.org
+
+   Copyright:
+   2007-2017 Christian Boulanger
+
+   License:
+   LGPL: http://www.gnu.org/licenses/lgpl.html
+   EPL: http://www.eclipse.org/org/documents/epl-v10.php
+   See the LICENSE file in the project's top-level directory for details.
+
+   Authors:
+   * Chritian Boulanger (cboulanger)
+
+************************************************************************ */
 
 namespace app\controllers;
 
-class TestController extends \JsonRpc2\Controller
-{
-    public function actionError()
-    {
-        $exception = Yii::$app->errorHandler->exception;
-        return [ "message" => $exception ];
-    }
+use Yii;
 
-    public function actionTest($message)
-    {
-        return ["message" => "hello ".$message];
+use app\controllers\AppController;
+
+use app\models\User;
+use app\models\Role;
+use app\models\Permission;
+use app\models\Group;
+use app\models\Session;
+use app\models\Message;
+use lib\channel\Channel;
+
+/**
+ * A controller for JSONRPC methods intended to test the application.
+ */
+class TestController extends AppController
+{
+  public function actionError()
+  {
+    $exception = Yii::$app->errorHandler->exception;
+    return [ "message" => $exception ];
+  }
+
+  public function actionTest($message)
+  {
+    return ["message" => "hello ".$message];
+  }
+
+  public function create_messages($sessionId)
+  {
+    $channel = new Channel('test', $sessionId);
+    for ($i=0; $i < 10 ; $i++) { 
+      $channel->send( "The time is " . date('l, F jS, Y, h:i:s A'));
     }
+    $channel->send("done");
+  }
+
+  public function
 }

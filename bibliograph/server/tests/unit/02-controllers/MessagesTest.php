@@ -10,9 +10,9 @@ use Yii;
 use app\tests\unit\Base;
 use app\models\Session;
 use app\models\Message;
-use lib\io\Channel;
+use lib\channel\Channel;
 
-class Messages1SimpleTest extends Base
+class MessagesTest extends Base
 {
   /**
    * @var \UnitTester
@@ -107,9 +107,4 @@ class Messages1SimpleTest extends Base
     $this->assertEquals( 1, count( $channel2->update() ) );
     $this->assertEquals( 3, Message::find()->count() );
   }
-
-  public function testServerSideEventChannel()
-  {
-    
-  }  
 }
