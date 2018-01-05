@@ -22,10 +22,19 @@ else
   popd > /dev/null
 fi
 
-echo "Applying migrations..."
 pushd ./bibliograph/server > /dev/null
+
+echo "Running Codeception tests..."
+php vendor/bin/codecept run unit
+
+echo "Redoing migrations..."
+echo "travis_fold:start:migrations"
 php yii migrate/fresh --interactive=0 --db=testdb -p=@app/migrations/schema
 php yii migrate/up --interactive=0 --db=testdb -p=@app/migrations/data
+echo "travis_fold:end:migrations"
 popd > /dev/null
 
+echo "Running Mocha tests..."
 mocha -- ./test/**/*.test.js
+
+
