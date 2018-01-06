@@ -18,22 +18,17 @@
 
 ************************************************************************ */
 
-qcl_import("qcl_data_controller_ProgressController");
-qcl_import("qcl_util_system_Lock");
-qcl_import("qcl_ui_dialog_Alert");
-qcl_import("qcl_ui_dialog_Popup");
-qcl_import("bibliograph_Cache" );
-qcl_import("bibliograph_model_BibliographicDatasourceModel");
-qcl_import("qcl_application_plugin_Manager");
+namespace app\controllers;
 
+use app\models\User;
+use app\controllers\dto\ServiceResult;
 
 /**
  * Setup class. This class is called on application startup, i.e.
  * when the "main" method of the application is executed.
  *
  */
-class bibliograph_service_Setup
-  extends qcl_data_controller_ProgressController
+class Setup extends \app\controllers\AppController
 {
 
   /**
@@ -47,76 +42,23 @@ class bibliograph_service_Setup
   );
 
   /**
-   * Allow unauthenticated access for all methods.
-   * @param null|string $method
-   * @return bool
-   */
-  public function skipAuthentication( $method )
-  {
-    return true;
-  }
-
-  /**
-   * Returns the cache object
-   * @return bibliograph_Cache
-   */
-  protected function getCache()
-  {
-    return $this->getApplication()->getCache();
-  }
-
-  /**
-   * Logs a message if the filters are enabled.
-   * Overrides parent methdod in order to send the message to the browser console
-   * @return void
-   * @param mixed $msg
-   * @param string|array $filters, defaults to QCL_LOG_SETUP
-   */
-  public function log( $msg, $filters=QCL_LOG_SETUP )
-  {
-    //$this->dispatchClientMessage("console.log","Setup: " . $msg);
-    $this->getLogger()->log( $msg, QCL_LOG_SETUP );
-  }
-
-  /**
    * The entry method. If the application is already setup, do nothing. Otherwise,
    * display progress dialog on the client and start setup service
-   * @return qcl_ui_dialog_Dialog|string
+   * @return \app\controllers\dto\ServiceResult
    * @throws Exception
    */
-  public function method_setup()
+  public function actionSetup()
   {
+    $result = new ServiceResult();
 
-    /*
-     * If the app hasn't been set up, start progressive task
-     */
-    $app = $this->getApplication(); 
-    if ( ! $this->getCache()->getValue("setup") )
-    {
-      if ( QCL_USE_EMBEDDED_DB )
-      {
-        $this->log("Using embedded database for initial authentication ....", QCL_LOG_SETUP );
-        //$this->useEmbeddedDatabase(true);
-        // importing role data to create an anonymous user session
-        $app->importInitialData(array('role'=> "bibliograph/data/Role.xml"));    
-      }
-      else
-      {
-        $this->importInitialData();  
-      }
-      $app->getAccessController()->createUserSession();
-      return $this->method_start($this->tr("Starting setup ..."));
+    if ( ! User::findOne(['namedId'=>'setup']) ){
+      return $this->actionStart( $this->tr("Starting setup ...") );
     }
 
-    // if we're already set up, cleanup sessions and users
-    $this->getAccessController()->createUserSession();
-    $this->getAccessController()->cleanup();
-
     // client messages
-    $this->dispatchClientMessage("ldap.enabled", (bool) $app->getIniValue("ldap.enabled") );
-    $this->dispatchClientMessage("bibliograph.setup.done");
-    $this->broadcastClientMessage("application.setMode",QCL_APPLICATION_MODE,false);
-
+    $result->addEvent("ldap.enabled", (bool) $app->getIniValue("ldap.enabled") );
+    $result->addEvent("bibliograph.setup.done");
+    
     return "OK";
   }
 

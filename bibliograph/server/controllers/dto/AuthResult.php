@@ -4,6 +4,7 @@ namespace app\controllers\dto;
 
 use JsonRpc2\Dto;
 
+// @todo this should really extend Service result
 class AuthResult extends Dto
 {
     /** @var string */
