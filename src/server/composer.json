@@ -4,7 +4,8 @@
         "cranetm/yii2-json-rpc-2.0": "1.*",
         "toriphes/yii2-console-runner": "*",
         "fourteenmeister/dsn": "@dev",
-        "odannyc/yii2-sse": "^0.1.0"
+        "odannyc/yii2-sse": "^0.1.0",
+        "flow/jsonpath": "^0.3.4"
     },
     "require-dev": {
         "bizley/migration": "^2.2",
