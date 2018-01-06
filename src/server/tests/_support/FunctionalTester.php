@@ -76,9 +76,6 @@ class FunctionalTester extends \Codeception\Actor
       'params'  => $params,
       'id'      => $id++
     ];
-    // this is neccessary because codeception funtional testing 
-    // does not (and maybe cannot) populate the 'php://input' resource
-    $GLOBALS['CODECEPT_RAW_POST_DATA'] = $json; 
 
     $path = $service;
 

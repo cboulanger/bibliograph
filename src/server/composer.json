@@ -1,7 +1,7 @@
 {
     "require": {
         "yiisoft/yii2": "~2.0.0",
-        "cranetm/yii2-json-rpc-2.0": "1.*",
+        "cranetm/yii2-json-rpc-2.0": "dev-cboulanger-empty-request-object",
         "toriphes/yii2-console-runner": "*",
         "fourteenmeister/dsn": "@dev",
         "odannyc/yii2-sse": "^0.1.0",
@@ -22,6 +22,10 @@
         {
             "type": "composer",
             "url": "https://asset-packagist.org"
-        }
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/cboulanger//yii2-json-rpc-2.0"
+        }        
     ]
 }

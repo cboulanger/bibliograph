@@ -100,7 +100,7 @@ class AppController extends \JsonRpc2\Controller
     }
 
     // on-the-fly authentication with access token
-    $token = $this->getAuthCredentials() || isset($_GET['auth'])?$_GET['auth']:null;
+    $token = isset( $_GET['auth'] ) ? $_GET['auth'] : $this->getAuthCredentials();
     if (!$token or ! $user = User::findIdentityByAccessToken($token)) {
       return false;
       // @todo this doesn't work:

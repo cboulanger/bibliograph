@@ -1,11 +1,5 @@
 <?php
 $components = [
-  // request component
-  'request' => [
-    'enableCookieValidation' => true,
-    'enableCsrfValidation' => true,
-    'cookieValidationKey' => 'a1a2a3a3d3d4g5g4hfgfh4g',
-  ],
   // identity class
   'user' => [
     'class' => 'yii\web\User',
