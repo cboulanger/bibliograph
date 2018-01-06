@@ -2,7 +2,7 @@
 /**
  * This returns the content of bibliograph.ini.php as an array, with ${...} macros expanded
  */
-$ini = parse_ini_file ( __DIR__ . "/../../services/config/bibliograph.ini.php", true, INI_SCANNER_RAW );
+$ini = parse_ini_file ( "bibliograph.ini.php", true, INI_SCANNER_RAW );
 // replace macros
 array_walk_recursive( $ini, 
 function( &$value ) use($ini) {
