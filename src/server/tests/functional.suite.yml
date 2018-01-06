@@ -8,7 +8,12 @@
 actor: FunctionalTester
 modules:
     enabled:
-        # add a framework module here
-        - \Helper\Functional
         - Yii2:
-            configFile: config/web.php        
+            configFile: config/test.php
+            transaction: false
+        - \Helper\Functional
+        - Asserts
+        - REST:
+            depends: Yii2
+            part: Json
+            url: '?r='

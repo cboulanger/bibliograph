@@ -81,7 +81,9 @@ class AppController extends \JsonRpc2\Controller
   }
 
   /**
-   * Filter method to protect action methods from unauthorized access
+   * Filter method to protect action methods from unauthorized access.
+   * Uses the JSONRPC 2.0 auth extension or the 'auth' query string parameter
+   * as fallback. 
    *
    * @param \yii\base\Action $action
    * @return boolan True if action can proceed, false if not
@@ -98,7 +100,7 @@ class AppController extends \JsonRpc2\Controller
     }
 
     // on-the-fly authentication with access token
-    $token = $this->getAuthCredentials();
+    $token = $this->getAuthCredentials() || isset($_GET['auth'])?$_GET['auth']:null;
     if (!$token or ! $user = User::findIdentityByAccessToken($token)) {
       return false;
       // @todo this doesn't work:

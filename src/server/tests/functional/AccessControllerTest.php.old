@@ -7,7 +7,7 @@ require_once __DIR__ . '/../../_bootstrap.php';
 
 use Yii;
 
-class AccessControllerTest extends \app\tests\unit\Base
+class AccessControllerTest extends \Codeception\Test\Functional
 {
   use \app\controllers\traits\JsonRpcTrait;
 

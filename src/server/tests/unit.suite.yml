@@ -9,4 +9,4 @@ modules:
         - \Helper\Unit
         - Yii2:
             configFile: config/test.php
-            transaction: false
+            #transaction: false

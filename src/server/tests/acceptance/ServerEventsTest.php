@@ -7,9 +7,6 @@ require_once __DIR__ . '/../../_bootstrap.php';
 
 use Yii;
 
-// use Guzzle\Http\Client;
-// use Guzzle\Stream\PhpStreamRequestFactory;
-
 use lib\channel\Channel;
 use app\tests\unit\Base;
 use app\models\Session;
