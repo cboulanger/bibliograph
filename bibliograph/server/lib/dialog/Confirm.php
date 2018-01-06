@@ -18,27 +18,27 @@
 
 ************************************************************************ */
 
-namespace \lib\dialog;
-
-use \lib\dialog\Dialog;
+namespace lib\dialog;
 
 class Confirm extends Dialog
 {
-
   /**
-   * Returns a message to the client which prompts the user to confirm something
-   * @param string $message The message text
+   * Returns an event to the client which prompts the user to confirm something
+   * @param string $message 
+   *    The message text
    * @param array|null|true $choices
-   *  Array containing the "Yes" and the "No" message. A third optional
-   *  parameter is a boolean which determines whether a cancel button is
-   *  shown or not (default to false). If null, show a standard yes/no.
-   *  If true, show yes/no/cancel.
-   * @param string $callbackService Service that will be called when the user clicks on the OK button
-   * @param string $callbackMethod Service method
-   * @param array $callbackParams Optional service params
-   * @return \qcl_ui_dialog_Confirm
+   *    Array containing the "Yes" and the "No" message. A third optional
+   *    parameter is a boolean which determines whether a cancel button is
+   *    shown or not (default to false). If null, show a standard yes/no.
+   *    If true, show yes/no/cancel.
+   * @param string $callbackService 
+   *    Service that will be called when the user clicks on the OK button
+   * @param string $callbackMethod 
+   *    Service method
+   * @param array $callbackParams 
+   *    Optional service params
    */
-  function __construct(
+  public static function create(
     $message,
     $choices,
     $callbackService,
@@ -53,7 +53,7 @@ class Confirm extends Dialog
     {
       $choices = array( $this->tr("Yes"), $this->tr("No"), true );
     }
-    $this->dispatchDialogMessage( array(
+    static::addToEventQueue( array(
      'type' => "confirm",
      'properties'  => array(
         'message'        => $message,

@@ -18,24 +18,24 @@
 
 ************************************************************************ */
 
-namespace \lib\dialog;
-
-use \lib\dialog\Dialog;
+namespace lib\dialog;
 
 class Alert extends Dialog
 {
-
   /**
    * Returns a message to the client which prompts the user with an alert message
-   * @param string $message The message text
-   * @param string $callbackService Optional service that will be called when the user clicks on the OK button
-   * @param string $callbackMethod Optional service method
-   * @param array $callbackParams Optional service params
-   * @return \qcl_ui_dialog_Alert
+   * @param string $message 
+   *    The message text
+   * @param string $callbackService 
+   *    Optional service that will be called when the user clicks on the OK button
+   * @param string $callbackMethod 
+   *    Optional service method
+   * @param array $callbackParams 
+   *    Optional service params
    */
-  function __construct( $message, $callbackService=null, $callbackMethod=null, $callbackParams=null )
+  public static function create( $message, $callbackService=null, $callbackMethod=null, $callbackParams=null )
   {
-    $this->dispatchDialogMessage( array(
+    static::addToEventQueue( array(
      'type' => "alert",
      'properties' => array(
         'message' => $message

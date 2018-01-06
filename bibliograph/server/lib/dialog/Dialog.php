@@ -18,19 +18,21 @@
 
 ************************************************************************ */
 
-namespace \lib\dialog;
+namespace lib\dialog;
 
-use Yii;
+use yii\base\Event;
 
 /**
  * Base class for dialog data
  *
  */
-class Dialog extends yii\base\BaseObject
+class Dialog extends \yii\base\BaseObject
 {
+  const EVENT_DIALOG = "dialog";
 
   /**
-   * Default constructor to be overridden by subclasses
+   * Returns an event to the client which shows a widget of the given type, having the
+   * given properties
    * @param string $type
    *    The type of the dialog widget
    * @param array|null $properties
@@ -42,9 +44,9 @@ class Dialog extends yii\base\BaseObject
    * @param array|null $callbackParams
    *    The parameters to be passed to the service
    */
-  function __construct( $type, array $properties, $callbackService, $callbackMethod, $callbackParams=array() )
+  public static function createWidget( $type, array $properties, $callbackService, $callbackMethod, $callbackParams=array() )
   {
-    $this->dispatchDialogMessage( array(
+    static::addToEventQueue( array(
       'type'        => $type,
       'properties'  => $properties,
       'service'     => $callbackService,
@@ -57,20 +59,9 @@ class Dialog extends yii\base\BaseObject
    * The data of the message that triggers the display of the dialog widget
    * @param $data
    */
-  function dispatchDialogMessage( $data )
+  protected static function addToEventQueue( $data )
   {
-    /*
-     * only dispatch the message if event transport is on
-     */
-    if ( $this->getApplication()->getIniValue("service.event_transport") )
-    {
-      $this->getMessageBus()->dispatchClientMessage(
-        null, "qcl.ui.dialog.Dialog.createDialog", $data
-      );
-    }
-    else
-    {
-      $this->warn( "Cannot dispatch message - event transport is off!");
-    }
+    $event = new Event([ 'name' => Dialog::EVENT_DIALOG, 'data' => $data ]);
+    \Yii::$app->eventQueue->add( $event );
   }
 }

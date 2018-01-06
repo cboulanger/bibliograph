@@ -1,29 +1,33 @@
 <?php
-/*
- * qcl - the qooxdoo component library
- *
- * http://qooxdoo.org/contrib/project/qcl/
- *
- * Copyright:
- *   2007-2015 Christian Boulanger
- *
- * License:
- *   LGPL: http://www.gnu.org/licenses/lgpl.html
- *   EPL: http://www.eclipse.org/org/documents/epl-v10.php
- *   See the LICENSE file in the project's top-level directory for details.
- *
- * Authors:
- *  * Christian Boulanger (cboulanger)
- */
+/* ************************************************************************
+
+   Bibliograph: Collaborative Online Reference Management
+
+   http://www.bibliograph.org
+
+   Copyright:
+     2007-2017 Christian Boulanger
+
+   License:
+     LGPL: http://www.gnu.org/licenses/lgpl.html
+     EPL: http://www.eclipse.org/org/documents/epl-v10.php
+     See the LICENSE file in the project's top-level directory for details.
+
+   Authors:
+     * Chritian Boulanger (cboulanger)
+
+************************************************************************ */
+
+namespace lib\dialog;
 
 /**
- * Class that generates a "chunked" http response with javascript 
- * script fragments. The output of this method must be loaded into an
- * invisible IFRAME. Each time the ::setProgress method is called,
- * the progress bar on the server is updated. 
+ * This dialog widget is different from the others as it does not create a 
+ * browser event, but a long-running chunked HTTP respose. It works only if
+ * no headers have been sent before and must be called via a normal http
+ * GET request (not in a JSONRPC request). It is the server companion of
+ * the qcl.dialog.ServerProgress calls on the client. 
  */
-class qcl_ui_dialog_ServerProgress
-  extends qcl_core_Object
+class ServerProgress extends Dialog
 {
   /**
    * The id of the progress widget
@@ -40,7 +44,7 @@ class qcl_ui_dialog_ServerProgress
    * Constructor
    * @param string $widgetId The id of the progress widget
    */
-  function __construct($widgetId)
+  public function __construct($widgetId)
   {
     $this->widgetId = $widgetId;
     header("Cache-Control: no-cache, must-revalidate");
