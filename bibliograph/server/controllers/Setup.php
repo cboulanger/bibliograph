@@ -24,9 +24,8 @@ use app\models\User;
 use app\controllers\dto\ServiceResult;
 
 /**
- * Setup class. This class is called on application startup, i.e.
- * when the "main" method of the application is executed.
- *
+ * Setup controller. Needs to be the first controller called 
+ * by the application after loading
  */
 class Setup extends \app\controllers\AppController
 {

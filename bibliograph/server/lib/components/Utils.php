@@ -24,9 +24,6 @@ use Yii;
 use app\models\Config;
 use app\models\UserConfig;
 
-/**
- *
- */
 class Utils extends \yii\base\Component
 {
   // function __construct($config){
