@@ -50,9 +50,11 @@ before_script:
   - mysql -e 'CREATE DATABASE tests;'
   
 script:
+  - echo "travis_fold:start:npm_install"
   - npm i -g npm
   - npm i -g npm
   - npm install || true
+  - echo "travis_fold:end:npm_install"
   - npm link mocha
   - npm install cboulanger/raptor-client
   - npm test
