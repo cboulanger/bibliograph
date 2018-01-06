@@ -1,12 +1,11 @@
 <?php
-$components = array_merge(
-  require('db.php'), 
-  [
+$components = [
+  // identity class
   'user' => [
     'class' => 'yii\web\User',
     'identityClass' => 'app\models\User',
   ],      
-  'utils' => [ 'class' => 'lib\components\Utils'],
+  // logging
   'log' => [
     'targets' => [
       [
@@ -18,11 +17,24 @@ $components = array_merge(
       ]
     ] 
   ],
+  // a queue of Events to be transported to the browser
+  'eventQueue' => [
+    'class' => \lib\components\EventQueue::class
+  ],
+  // various utility methods
+  'utils' => [ 
+    'class' => \lib\components\Utils::class
+  ],
+  // server-side events, not working yet
   'sse' => [
     'class' => \odannyc\Yii2SSE\LibSSE::class
   ],
+  // message channels, not working yet
   'channel' => [
     'class' => \lib\channel\Component::class
   ]
-]);
-return $components;
+];
+return array_merge(
+  require('db.php'),
+  $components
+);
