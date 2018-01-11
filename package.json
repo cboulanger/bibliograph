@@ -18,6 +18,8 @@
     "url": "git+ssh://git@github.com/cboulanger/bibliograph.git"
   },
   "scripts": {
+    "source-server": "bash bin/source-server.sh",
+    "cc": "cd src/client/bibliograph && qx compile --watch",
     "test": "bash test/test-all.sh",
     "mocha": "bash test/setup.sh && bash test/mocha.sh",
     "codeception": "bash test/setup.sh && bash test/codeception.sh"
@@ -29,7 +31,8 @@
     "qooxdoo-sdk": "^6.0.0-alpha",
     "qx-cli": "^0.1.39",
     "qxcompiler": "^0.1.34",
-    "raptor-client": "github:cboulanger/raptor-client"
+    "raptor-client": "github:cboulanger/raptor-client",
+    "webpack": "^3.10.0"
   },
   "devDependencies": {
     "array-equal": "^1.0.0",
