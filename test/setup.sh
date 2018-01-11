@@ -14,17 +14,6 @@ else
   popd > /dev/null
 fi
 
-# 'Production' server
-ps | grep "[p]hp yii serve 127.0.0.1:8081" > /dev/null
-if [ $? -eq 0 ]; then
-  echo "Bibliograph 'production' server is running..."
-else
-  echo "Starting Bibliograph 'production' server..."
-  pushd $SERVER_PATH > /dev/null
-  php yii serve 127.0.0.1:8081 &> /dev/null &
-  popd > /dev/null
-fi
-
 # Migrations
 echo "Running migrations..."
 echo "travis_fold:start:migrations"
