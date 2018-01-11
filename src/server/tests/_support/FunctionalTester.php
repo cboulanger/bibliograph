@@ -51,16 +51,9 @@ class FunctionalTester extends \Codeception\Actor
    *    The name of the RPC method
    * @param array $params
    *    The parameters to be passed to the metho
-   * @param boolean $useJsonRpcAuth 
-   *    If true, use the JSONRPC 2.0 Auth Extension protocol for authentication. If false,
-   *    set the 'auth' querystring parameter. Defaults to true.
-   * @param array $queryparams
-   *    Optional query parameters to append to the URL
    * @return void
    */
-  public function sendJsonRpcRequest( 
-    $service, $method, array $params=[], 
-    $useJsonRpcAuth=true, array $queryparams=[] )
+  public function sendJsonRpcRequest( $service, $method, array $params=[] )
   {
     /** @var int $id the id of the request */
     static $id = 1;
@@ -82,13 +75,9 @@ class FunctionalTester extends \Codeception\Actor
     // authentication
     $token = $this->token();
     if ( $token ){
-      if ( $useJsonRpcAuth ){
-        $json['auth'] = $token;
-      } else {
-        $params['auth'] = $token;
-      }
+      $this->haveHttpHeader('Authorization', 'Bearer ' . $token); 
       $path .= "&auth=$token"; 
-    }    
+    }
     
     // send request and validate response
     $this->sendPOST( $path, $json );

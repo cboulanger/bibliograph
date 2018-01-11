@@ -19,8 +19,9 @@ describe('The access controller', async function() {
   it('should allow to login anonymously', async () => {
     let response = await client.send('authenticate');
     assert( equals( Object.keys(response), ['message','token','sessionId'] ) );
-    token = response.token;
-    response = await client.send('username', null, token );
+    client.setAuthToken(response.token);
+    response = await client.send('username' );
+    assert.equal( typeof response, "string" );
     assert( response.startsWith('guest') );
   });
 
@@ -34,7 +35,8 @@ describe('The access controller', async function() {
     let response = await client.send('authenticate',['admin','admin']);
     assert( equals( Object.keys(response), ['message','token','sessionId'] ) );
     token = response.token;
-    response = await client.send('username', null, token );
+    client.setAuthToken(token);
+    response = await client.send('username' );
     assert.equal( response, 'admin' );
   }); 
 

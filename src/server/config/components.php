@@ -10,10 +10,11 @@ $components = [
     'targets' => [
       [
         'class' => 'yii\log\FileTarget',
-        'levels' => ['info', 'error', 'warning'],
-        //'levels' => ['trace','info', 'error', 'warning'],
+        //'levels' => ['info', 'error', 'warning'],
+        'levels' => ['trace','info', 'error', 'warning'],
         'except' => ['yii\db\*'],
-        'logVars' => []
+        'logVars' => [],
+        //'exportInterval' => 1
       ]
     ] 
   ],

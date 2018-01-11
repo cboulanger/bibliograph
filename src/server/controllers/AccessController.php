@@ -79,28 +79,31 @@ class AccessController extends AppController
    * @return \app\controllers\dto\AuthResult
    */
   public function actionAuthenticate($first = null, $password = null)
-  {
-  
-    // @todo check if authentication is allowed at all
-    // $configModel =  $this->getApplication()->getConfigModel();
-    // if ( $password and $configModel->getKey("bibliograph.access.mode") == "readonly" )
-    // {
-    //   if ( ! $this->getActiveUser()->hasRole( ROLE_ADMIN ) )
-    //   {
-    //   $msg = _("Application is in read-only state. Only the administrator can log in." );
-    //   $explanation = $configModel->getKey("bibliograph.access.no-access-message");
-    //   if ( trim($explanation) )
-    //   {
-    //     $msg .= " " . $explanation;
-    //   }
-    //   throw new Exception( $msg );
-    //   }
-    // }
+  {    
+    $user = null;
+    $session = null;
+    Yii::$app->session->open();
 
     if (empty($first) and empty($password)) {
-      // login anonymously
-      $user = $this->createAnonymous();
-      Yii::info("Created anonymous user '{$user->namedId}'.");
+      // see if we have a session id that we can link to a user
+      $session = Session::findOne( [ 'namedId' => $this->getSessionId() ] );
+      if( $session ){
+        Yii::trace('PHP session exists in database...');
+        // find a user that belongs to this session
+        $user = User::findOne( [ 'id' => $session->UserId ] );
+        if ( $user ) {          
+          Yii::trace('Session belongs to user ' . $user->namedId);
+        } else {
+          // shouldn't ever happen
+          Yii::warning('Session has non-existing user!');
+          $session->delete();
+        }
+      } 
+      if ( ! $user ) {
+        // login anonymously
+        $user = $this->createAnonymous();
+        Yii::info("Created anonymous user '{$user->namedId}'.");  
+      }
     } 
     elseif (is_string($first) and empty($password)) {
       // login using token
@@ -108,7 +111,7 @@ class AccessController extends AppController
       if (is_null($user)) {
         throw new AuthException( "Invalid token", AuthException::INVALID_AUTH);
       }
-      Yii::info("Authenticated user '{$user->namedId}' via auth auth token.");
+      Yii::info("Authenticated user '{$user->namedId}' via auth token.");
     } 
     else {
       // login using username/password
@@ -167,12 +170,18 @@ class AccessController extends AppController
     $user->online = true;
     $user->save(); 
     Yii::$app->user->login($user);
-    $session = $this->continueUserSession($user);
+    if( ! $session ) {
+      // if we don't already have a (PHP) session, try to find a saved one
+      $session = $this->continueUserSession($user);
+    }
     if ( $session ) {
+      // let's continue this one
       $sessionId = $session->id;
       $session->touch();
-      Yii::trace("Continued sesssion {$sessionId}"); 
+      Yii::info("Continued sesssion {$sessionId}"); 
+      session_id( $session->namedId );
     } else {
+      // we didn't find one, so let's start a new one
       $sessionId = $this->getSessionId();
       $session = new Session(['namedId' => $sessionId]);
       $session->link('user',$user);
@@ -221,6 +230,7 @@ class AccessController extends AppController
       throw new AuthException("'username' action should not be accessible without an active user.",
       AuthException::MISSING_AUTH);
     }
+    Yii::info("The current user is " . $activeUser->username);
     return $activeUser->username;
   }
 

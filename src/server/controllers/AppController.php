@@ -22,8 +22,6 @@ namespace app\controllers;
 
 use Yii;
 
-use JsonRpc2\extensions\AuthException;
-
 use app\models\User;
 use app\models\Session;
 
@@ -33,8 +31,22 @@ use app\models\Session;
  */
 class AppController extends \JsonRpc2\Controller
 {
-  use \JsonRpc2\extensions\AuthTrait;
   use traits\ShimTrait;
+
+  public function xxxbehaviors()
+  {
+    return [
+      'authenticator' => [
+        'class' => \yii\filters\auth\CompositeAuth::className(),
+        'authMethods' => [
+          [
+            'class' => \yii\filters\auth\HttpBearerAuth::className(),
+            'except' => ['authenticate']
+          ]
+        ],
+      ]
+    ];
+  }
 
   /**
    * Returns the [[app\models\User]] instance of the user with the given
@@ -69,21 +81,21 @@ class AppController extends \JsonRpc2\Controller
    * @return \app\model\Session|null The session object to be reused, or null
    * if none exists.
    */
-  protected function continueUserSession( $user )
+  protected function continueUserSession($user)
   {
     $session = Session::findOne(['UserId' => $user->id]);
-    if( $session ) {
+    if ($session) {
       // manually set session id to recover the session data
       session_id( $session->namedId );
     }
     Yii::$app->session->open();
-    return $session; 
+    return $session;
   }
 
   /**
    * Filter method to protect action methods from unauthorized access.
    * Uses the JSONRPC 2.0 auth extension or the 'auth' query string parameter
-   * as fallback. 
+   * as fallback.
    *
    * @param \yii\base\Action $action
    * @return boolan True if action can proceed, false if not
@@ -100,21 +112,31 @@ class AppController extends \JsonRpc2\Controller
     }
 
     // on-the-fly authentication with access token
-    $token = isset( $_GET['auth'] ) ? $_GET['auth'] : $this->getAuthCredentials();
+    $token = null;
+    $headers = Yii::$app->request->headers;
+    $tryHeaders = ["Authorization","X-Authorization"];
+    foreach ($tryHeaders as $header) {
+      if ($headers->has($header)) {
+        $token = trim( str_replace("Bearer", "", $headers->get($header) ) );
+      }
+    }
     if (!$token or ! $user = User::findIdentityByAccessToken($token)) {
+      Yii::info("No or invalid authorization token '$token'. Access denied.");
       return false;
       // @todo this doesn't work:
       // throw new AuthException('Missing authentication', AuthException::MISSING_AUTH);
     }
 
-    // log in user 
+    // log in user
     $user->online = true;
-    $user->save();     
+    $user->save();
     Yii::$app->user->setIdentity($user);
     $session = $this->continueUserSession( $user );
-    if( $session ) $session->touch();
+    if ($session) {
+      $session->touch();
+    }
     $sessionId = $this->getSessionId();
-    Yii::info("Authenticated user '{$user->namedId}' via auth auth token (Session {$sessionId}.");
+    Yii::info("Authorized user '{$user->namedId}' via auth auth token (Session {$sessionId}.");
     return true;
   }
 
@@ -152,7 +174,7 @@ class AppController extends \JsonRpc2\Controller
       "Active user %s does not have required permission %s",
       $this->getActiveUser(), $permission
       ) );
-      throw new AuthException('Missing authentication', AuthException::MISSING_AUTH);
+        throw new AuthException('Missing authentication', AuthException::MISSING_AUTH);
     }
   }
 
@@ -164,7 +186,7 @@ class AppController extends \JsonRpc2\Controller
    */
   public function requireRole($role)
   {
-    if (! $this->getActiveUser()->hasRole( $role ) ) {
+    if (! $this->getActiveUser()->hasRole( $role )) {
       $this->warn( sprintf(
       "Active user %s does hat required role %s",
       $this->getActiveUser(), $role
