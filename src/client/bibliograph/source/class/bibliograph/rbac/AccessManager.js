@@ -21,10 +21,10 @@
 /**
  * This object manages authentication and authorization issues.
  */
-qx.Class.define("qcl.access.AccessManager",
+qx.Class.define("bibliograph.rbac.AccessManager",
 {
-  
   extend : qx.core.Object,  
+  type : "singleton",
  
   /*
   *****************************************************************************
@@ -39,7 +39,7 @@ qx.Class.define("qcl.access.AccessManager",
       */
      store :
      {
-       check : "qcl.data.store.JsonRpc",
+       check : "bibliograph.io.JsonRpcStore",
        nullable : true,
        event    : "changeStore"
      },
@@ -94,19 +94,16 @@ qx.Class.define("qcl.access.AccessManager",
   
   members :
   {
+    /*
+    ---------------------------------------------------------------------------
+       PRIVATES
+    ---------------------------------------------------------------------------
+    */    
 
-    /*
-    ---------------------------------------------------------------------------
-       PRIVATE MEMBERS
-    ---------------------------------------------------------------------------
-    */         
     _authenticationSetup : false,
-    
-    /*
-    ---------------------------------------------------------------------------
-       APPLY METHODS
-    ---------------------------------------------------------------------------
-    */          
+    __sessionId : null,
+    __activeUser : null,
+           
 
    /*
     ---------------------------------------------------------------------------
@@ -115,13 +112,21 @@ qx.Class.define("qcl.access.AccessManager",
     */       
     
     /**
-     * Returns the session id of the current application instance
+     * Returns the session id 
      */
     getSessionId : function()
     {
-      qx.core.Init.getApplication().getSessionManager().getSessionId();
+      return this.__sessionId;
     },
     
+    /**
+     * Sets the session id 
+     */
+    setSessionId : function(sessionId)
+    {
+      this.__sessionId = sessionId;
+    },
+
     /**
      * Setup the authentication mechanism.
      * @param authStore {qcl.data.store.JsonRpc}
@@ -129,79 +134,18 @@ qx.Class.define("qcl.access.AccessManager",
     init : function( service )
     {
      
-      /*
-       * check if setup is already done
-       */
-      if ( this._authenticationSetup )
-      {
-        this.error("Authentication already set up");
+      // check if setup is already done
+      if ( this._authenticationSetup ) {
+        this.warn("Authentication already set up");
+        return;
       }
       this._authenticationSetup = true;      
       
-      /*
-       * set user manager and auth store
-       */
-      if ( ! this.getUserManager() )
-      {
-        this.setUserManager( qcl.access.UserManager.getInstance() );
-      }
+      this.setStore( new bibliograph.io.JsonRpcStore("access") );
       
-      if ( ! this.getPermissionManager() )
-      {
-        this.setPermissionManager( qcl.access.PermissionManager.getInstance() );
-      }
-      
-      if ( ! this.getStore() )
-      {
-        this.setStore(       
-          new qcl.data.store.JsonRpc( null, service ) 
-        );
-      }
-
-      /*
-       * bind the authentication stores data model to the user managers data model
-       */
-      this.getStore().bind("model", this.getUserManager(), "model");
-
-      /*
-       * bind the session id propery of the auth store to the session
-       * id of the application
-       */
-      this.getStore().bind("model.sessionId", qx.core.Init.getApplication().getSessionManager(), "sessionId" );
-      
-      /*
-       * bind the authentication state to a local boolean
-       * property, which will be false if there is no user logged 
-       * in (initial state) or the user is anonymous (after the backend
-       * has connected) and true when a real login has occurred 
-       */
-      this.getUserManager().bind("activeUser",this,"authenticatedUser",{
-        converter : function(activeUser){ 
-          return ( ! activeUser || activeUser.isAnonymous() ? false : true ) 
-        }
-      });
+      // bind the authentication stores data model to the user managers data model
+      this.getStore().bind("model", bibliograph.rbac.UserManager.getInstance(), "model");
     }, 
-
-    /**
-     * Changes the service name of the store
-     * @param service {String}
-     */
-    setService : function( service )
-    {
-      this.getStore().setServiceName( service );  
-    },
-    
-    /**
-     * Authenticate with session id, if any, otherwise with null to get
-     * guest access, if allowed.
-     * @param callback {function|undefined} optional callback that is called
-     *   when logout request returns from server.
-     * @param context {object|undefined} Optional context for callback function
-     */    
-    connect : function(callback,context)
-    {
-      this.getStore().load("authenticate",[ this.getSessionId() || null ], callback, context );
-    },
     
     /**
      * Authenticates a user with the given password. 
@@ -245,7 +189,12 @@ qx.Class.define("qcl.access.AccessManager",
      */
     getActiveUser : function()
     {
-      return this.getUserManager().getActiveUser();
+      return this.__activeUser;
+    },
+
+    setActiveUser : function( activeUser )
+    {
+      this.__activeUser = activeUser; 
     },
     
    /**

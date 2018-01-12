@@ -51,12 +51,7 @@ qx.Class.define("bibliograph.Application",
       doc.add(label1,  {left: 300, top: 50});
       let configManager = bibliograph.ConfigManager.getInstance().init();
       configManager.addListener("ready", () =>{
-        console.info("Config Manager REady");
         configManager.bindKey("application.title",label1,"value");
-      }); 
-
-      configManager.addListener("changeModel", () =>{
-        console.info("Config Manager model set");
       }); 
 
       /*
