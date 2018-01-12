@@ -1,10 +1,14 @@
 {
+  "environment": {
+    "bibliograph.version" : "3.0.0-alpha"
+  },
+
   "targets": [
     {
       "type": "source",
       "outputPath": "source-compiled",
       "environment": {
-        "bibliograph.serverUrl" : "../../../../server/web/?r=access"
+        "bibliograph.serverUrl" : "../../../../server/web/?r="
       }      
     },
     {

@@ -18,6 +18,15 @@ trait RbacTrait
 {
 
   /**
+   * Shorthand getter for active user object
+   * @return \app\models\User
+   */
+  public function getActiveUser()
+  {
+    return Yii::$app->user->identity;
+  }
+
+  /**
    * Creates a new anonymous guest user
    * @throws LogicException
    * @return int \app\models\User
@@ -96,4 +105,39 @@ trait RbacTrait
     $user->delete();
   }
 
+  /**
+   * Checks if active user has the given permission and aborts if
+   * permission is not granted.
+   *
+   * @param string $permission
+   * @return bool
+   * @throws Exception if access is denied
+   */
+  public function requirePermission($permission)
+  {
+    if (!  $this->getActiveUser()->hasPermission( $permission )) {
+      $this->warn( sprintf(
+        "Active user %s does not have required permission %s",
+        $this->getActiveUser()->namedId, $permission
+      ) );
+      throw new \JsonRpc2\Exception("Not allowed.", \JsonRpc2\Exception::INVALID_REQUEST);
+    }
+  }
+
+  /**
+   * Shorthand method to enforce if active user has a role
+   * @param string $role
+   * @throws qcl_access_AccessDeniedException
+   * @return bool
+   */
+  public function requireRole($role)
+  {
+    if (! $this->getActiveUser()->hasRole( $role )) {
+      $this->warn( sprintf(
+      "Active user %s does hat required role %s",
+        $this->getActiveUser()->namedId, $role
+      ) );
+        throw new Exception("Access denied.");
+    }
+  }
 }

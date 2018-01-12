@@ -182,4 +182,15 @@ class Role extends BaseModel
     if( is_null( $result ) ) return [];
     return array_map( function($o) {return $o->namedId;}, $result );
   }
+
+  /**
+   * Returns true if the role includes the given permission
+   *
+   * @param string $permission The name of the permission
+   * @return boolean
+   */
+  public function hasPermission( $permission )
+  {
+    return in_array( $permission, $this->getPermissionNames() );
+  }
 }

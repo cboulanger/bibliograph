@@ -37,7 +37,7 @@ use app\models\Session;
  */
 class AccessController extends AppController
 {
-
+  use traits\ShimTrait;
   use traits\RbacTrait;
   use traits\AuthTrait;
 

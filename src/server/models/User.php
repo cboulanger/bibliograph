@@ -291,14 +291,7 @@ class User extends BaseModel implements IdentityInterface
    */
   public function hasPermission($requestedPermission)
   {
-    static $cache = array();
-    if (isset($cache[$requestedPermission])) {
-      return $cache[$requestedPermission];
-    } else {
-      $hasPermission = $this->_hasPermission($requestedPermission);
-      $cache[$requestedPermission] = $hasPermission;
-      return $hasPermission;
-    }
+    return $this->_hasPermission($requestedPermission);
   }
 
   /**
@@ -308,35 +301,33 @@ class User extends BaseModel implements IdentityInterface
    */
   protected function _hasPermission($requestedPermission)
   {
-    static $permissions = null;
-
     // get all permissions of the user
-    if( is_null($permission) ) $permissions = $this->getPermissionNames();
-
+    $permissions = $this->getPermissionNames();
+    
     // use wildcard?
     $useWildcard = strstr($requestedPermission, "*");
 
     // check if permission is granted
     foreach ($permissions as $permission) {
-      /*
-      * exact match
-      */
+      // global do anything permission
+      if( $permission == "*" ){
+        return true;
+      }
+      // exact match
       if ($permission == $requestedPermission) {
-      return true;
-      } /*
-      * else if the current permission name contains a wildcard
-      */
+        return true;
+      } 
+      // else if the current permission name contains a wildcard
       elseif (($pos = strpos($permission, "*")) !== false) {
-      if (substr($permission, 0, $pos) == substr($requestedPermission, 0, $pos)) {
-        return true;
-      }
-      } /*
-      * else if the requested permission contains a wildcard
-      */
+        if (substr($permission, 0, $pos) == substr($requestedPermission, 0, $pos)) {
+          return true;
+        }
+      } 
+      // else if the requested permission contains a wildcard
       elseif ($useWildcard and ($pos = strpos($requestedPermission, "*")) !== false) {
-      if (substr($permission, 0, $pos) == substr($requestedPermission, 0, $pos)) {
-        return true;
-      }
+        if (substr($permission, 0, $pos) == substr($requestedPermission, 0, $pos)) {
+          return true;
+        }
       }
     }
     return false;

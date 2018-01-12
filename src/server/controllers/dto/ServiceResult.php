@@ -2,35 +2,35 @@
 
 namespace app\controllers\dto;
 
-use JsonRpc2\Dto;
+use ReflectionProperty;
 
-class ServiceResult extends Dto
+class ServiceResult extends \JsonRpc2\Dto
 {
   /** @var string */
-  public $type;
+  public $type= "ServiceResult";
 
-  /** @var mixed */
+  /** @var string */
+  public $version= "1.0";
+
+  /** @var string */
   public $data;
 
   /** @var array */
   public $events = [];
 
-  /** the property cache */
-  protected $_data = [];
-
-  /**
-   * Magic setter method. Stores the property value in a cache for 
-   * later validation. 
-   *
-   * @param string $key
-   * @param mixed $value
-   */
-  public function __set( $key, $value ){
-    $this->_data[$key] = $value;
+  public function __construct()
+  {
+      // do nothing
   }
-
-  public function validate(){
-    $this->setDataFromArray($this->_data);
+  
+  /**
+   * Set the result of the service
+   *
+   * @param mixed $data
+   * @return void
+   */
+  public function setResult( $data ){
+    $this->data = $data;
   }
 
   /**
@@ -41,7 +41,7 @@ class ServiceResult extends Dto
    * @return void
    */
   public function addEvent( $name, $data=true ){
+    assert( !empty($name) and \is_string($name), "Invalid event name '$name'" );
     $this->events[] = [ 'name' => $name, 'data' => $data ];
   }
-
 }

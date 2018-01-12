@@ -24,6 +24,7 @@ use Yii;
 
 use app\models\User;
 use app\models\Session;
+use \JsonRpc2\Exception;
 
 /**
  * Service class providing methods to get or set configuration
@@ -32,7 +33,9 @@ use app\models\Session;
 class AppController extends \JsonRpc2\Controller
 {
   use traits\ShimTrait;
-
+  use traits\RbacTrait;
+  use traits\AuthTrait;
+  
   public function xxxbehaviors()
   {
     return [
@@ -63,15 +66,6 @@ class AppController extends \JsonRpc2\Controller
       throw new \InvalidArgumentException( $this->tr("User '$username' does not exist.") );
     }
     return $user;
-  }
-
-  /**
-   * Shorthand getter for active user object
-   * @return \app\models\User
-   */
-  public function getActiveUser()
-  {
-    return Yii::$app->user->identity;
   }
 
   /**
@@ -106,8 +100,8 @@ class AppController extends \JsonRpc2\Controller
       return false;
     }
 
-    // authenticate action is always allowed
-    if (in_array($action->id, ["authenticate"])) {
+    // actions without authentication
+    if (in_array($action->id, ["authenticate","setup"])) {
       return true;
     }
 
@@ -124,7 +118,7 @@ class AppController extends \JsonRpc2\Controller
       Yii::info("No or invalid authorization token '$token'. Access denied.");
       return false;
       // @todo this doesn't work:
-      // throw new AuthException('Missing authentication', AuthException::MISSING_AUTH);
+      // throw new Exception('Missing authentication', AuthException::INVALID_REQUEST);
     }
 
     // log in user
@@ -149,51 +143,6 @@ class AppController extends \JsonRpc2\Controller
     return Yii::$app->session->getId();
   }
 
-  /**
-   * Checks if active user has the given permission.
-   * @param $permission
-   * @return bool
-   */
-  public function activeUserhasPermission($permission)
-  {
-    return $this->getActiveUser()->hasPermission( $permission );
-  }
-
-  /**
-   * Checks if active user has the given permission and aborts if
-   * permission is not granted.
-   *
-   * @param string $permission
-   * @return bool
-   * @throws Exception if access is denied
-   */
-  public function requirePermission($permission)
-  {
-    if (!  $this->activeUserhasPermission( $permission )) {
-      $this->warn( sprintf(
-      "Active user %s does not have required permission %s",
-      $this->getActiveUser(), $permission
-      ) );
-        throw new AuthException('Missing authentication', AuthException::MISSING_AUTH);
-    }
-  }
-
-  /**
-   * Shorthand method to enforce if active user has a role
-   * @param string $role
-   * @throws qcl_access_AccessDeniedException
-   * @return bool
-   */
-  public function requireRole($role)
-  {
-    if (! $this->getActiveUser()->hasRole( $role )) {
-      $this->warn( sprintf(
-      "Active user %s does hat required role %s",
-      $this->getActiveUser(), $role
-      ) );
-        throw new Exception("Access denied.");
-    }
-  }
 
   //-------------------------------------------------------------
   // Datasources

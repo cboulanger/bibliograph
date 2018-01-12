@@ -10,23 +10,23 @@ trait ShimTrait
 {
   public function log($msg)
   {
-    Yii:trace($msg);
+    Yii::trace($msg);
   }  
   public function debug($msg)
   {
-    Yii:trace($msg);
+    Yii::trace($msg);
   }
   public function info($msg)
   {
-    Yii:info($msg);
+    Yii::info($msg);
   }
   public function warn($msg)
   {
-    Yii:warning($msg);
+    Yii::warning($msg);
   }
   public function error($msg)
   {
-    Yii:error($msg);
+    Yii::error($msg);
   }
   protected function tr($string)
   {

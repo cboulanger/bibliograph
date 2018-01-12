@@ -50,10 +50,11 @@ class FunctionalTester extends \Codeception\Actor
    * @param string $method
    *    The name of the RPC method
    * @param array $params
-   *    The parameters to be passed to the metho
+   *    The parameters to be passed to the method
+   * @param boolean $allowError Allow an error response. Default false
    * @return void
    */
-  public function sendJsonRpcRequest( $service, $method, array $params=[] )
+  public function sendJsonRpcRequest( $service, $method, array $params=[], $allowError=false )
   {
     /** @var int $id the id of the request */
     static $id = 1;
@@ -76,15 +77,17 @@ class FunctionalTester extends \Codeception\Actor
     $token = $this->token();
     if ( $token ){
       $this->haveHttpHeader('Authorization', 'Bearer ' . $token); 
-      $path .= "&auth=$token"; 
+      //$path .= "&auth=$token"; 
     }
     
     // send request and validate response
     $this->sendPOST( $path, $json );
     $this->canSeeResponseCodeIs(200);
     $this->seeResponseIsJson();
-    $this->seeJsonRpcResult();
-    $this->dontSeeJsonRpcError();
+    if( ! $allowError ){
+      $this->seeJsonRpcResult();
+      $this->dontSeeJsonRpcError();
+    }
   }
   
   /**
@@ -143,12 +146,19 @@ class FunctionalTester extends \Codeception\Actor
 
   /**
    * Throws if the RPC method does not return an error
-   *
+   * @param string|null $message Optionally checks the message
+   * @param int|null $code Optionally checks the error code
    * @return void
    */
-  public function seeJsonRpcError()
+  public function seeJsonRpcError($message=null, $code=null)
   {
     $this->seeResponseJsonMatchesJsonPath('$.error');
+    if( $message){
+      $this->assertContains( $message, $this->grabDataFromResponseByJsonPath('$.error.message')[0] );
+    }
+    if( $code){
+      $this->assertEquals( $this->grabDataFromResponseByJsonPath('$.error.code')[0], $code );
+    }
   }
 
   /**

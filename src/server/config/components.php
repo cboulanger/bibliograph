@@ -33,6 +33,10 @@ $components = [
   // message channels, not working yet
   'channel' => [
     'class' => \lib\channel\Component::class
+  ],
+  // service result, containing events
+  'serviceResult' => [
+    'class' => \app\controllers\dto\ServiceResult::class
   ]
 ];
 return array_merge(

@@ -84,17 +84,16 @@ class Config extends BaseModel
   }
 
   /**
-   * @param int $userId
+   * @param int|\app\models\User $user Either a numeric id or the user model
    * @return \app\models\UserConfig|null 
    *    Returns the instance of the UserConfig linked to the particular user or null
    *    if none exists
-   * @throws LogicException
+   * @throws \LogicException
    */
-  public function getUserConfig( $userId )
+  public function getUserConfig( $user )
   {
-    if( ! $this->customize ) {
-      throw new LogicException("Config entry {$this->namedId} cannot be customized.");
-    }
+    $userId = $user instanceof \app\models\User ? $user->id : $user;
+    if( ! is_numeric($userId) ) throw new \InvalidArgumentException("Invalid user/user id");
     $query = $this->getUserConfigs( $userId );
     //codecept_debug($query->createCommand()->getRawSql());
     $result = $query->one();
@@ -104,14 +103,15 @@ class Config extends BaseModel
   /**
    * Returns the customized user configuration
    *
-   * @param int $userId
+   * @param int|\app\models\User $user Either a numeric id or the user model
    * @return mixed
-   * @throws \InvalidArgumentException if no user configuration exists
+   * @throws \LogicException if user doesn't exists
    */
-  public function getUserConfigValue( $userId ){
-    $userConfig = $this->getUserConfig( $userId );
+  public function getUserConfigValue( $user ){
+    $userConfig = $this->getUserConfig( $user );
     if( is_null($userConfig) ){
-      throw new \InvalidArgumentException("No user configuration for {$this->namedId}.");
+      // no user config exists, return default value
+      return $this->default;
     }
     return $userConfig->value;
   }

@@ -70,18 +70,26 @@ qx.Class.define("bibliograph.io.JsonRpcClient", {
     /** The url template string */
     __url: null,
 
+    /*
+    ---------------------------------------------------------------------------
+     API
+    ---------------------------------------------------------------------------
+    */    
+
     /**
      * Sends a jsonrpc request to the server. An error will be caught
-     * and displayed in a dialog. In this case, the returned promis 
+     * and displayed in a dialog. In this case, the returned promise 
      * resolves to null
      * @param method {String} The service method
-     * @param payload {*} The paylooad
+     * @param params {Array} The parameters of the method
      * @return {Promise<*>}
      */
-    send : async function( method, payload ){
+    send : async function( method, params=[] ){
+      qx.core.Assert.assertArray(params);
       this.setError(null);
       try{
-        return await this.__client.send( method, payload);
+        let result = await this.__client.send( method, params);
+        return this._handleResult(result);
       } catch( e ) {
         this.setError(e);                
         dialog.Dialog.error( this.getErrorMessage() ); // @todo use one instance!
@@ -90,16 +98,17 @@ qx.Class.define("bibliograph.io.JsonRpcClient", {
 
     /**
      * Sends a jsonrpc notification to the server. An error will be caught
-     * and displayed in a dialog. In this case, the returned promis 
+     * and displayed in a dialog. In this case, the returned promise 
      * resolves to null
      * @param method {String} The service method
-     * @param payload {*} The paylooad
+     * @param params {Array} The parameters of the method
      * @return {Promise<void>}
      */
-     notify : async function( method, payload ){
+     notify : async function( method, params=[] ){
+      qx.core.Assert.assertArray(params);
       this.setError(null); 
       try {
-         return this.__client.notify( method, payload);
+         await this.__client.notify( method, params );
       } catch( e ) {
         this.setError( {
           code : e.rpcCode,
@@ -108,19 +117,7 @@ qx.Class.define("bibliograph.io.JsonRpcClient", {
         dialog.Dialog.error( e.rpcData ); // @todo use one instance!
         return null;
       }
-    },    
-
-    /** applys the error property */
-    _applyError : function( value, old ){
-      if( value ){
-        console.warn( value );
-      }
-    },
-
-    /** applys the token property */
-    _applyToken : function( value, old ){
-      this.__client.setAuthToken(value);
-    },
+    }, 
 
     /**
      * Returns a descriptive message of the last error, if available
@@ -135,7 +132,45 @@ qx.Class.define("bibliograph.io.JsonRpcClient", {
         return e.message.substring(0,100);
       }
       return "Unknown Error";
+    },
+
+    /*
+    ---------------------------------------------------------------------------
+     INTERNAL METHODS
+    ---------------------------------------------------------------------------
+    */    
+
+    /** applys the error property */
+    _applyError : function( value, old ){
+      if( value ){
+        console.warn( value );
+      }
+    },
+
+    /** applys the token property */
+    _applyToken : function( value, old ){
+      this.__client.setAuthToken(value);
+    },
+
+    _handleResult : function( result ){
+      // we are only interested in objects (but not arrays)
+      if(  qx.lang.Type.isArray(result) || ! qx.lang.Type.isObject(result) ){
+        return result;
+      }
+      // we're only interested in ServiceResult DTOs
+      if( result.type != "ServiceResult" ) return result;
+      // dispatch events as messages
+      if( ! qx.lang.Type.isArray(result.events) ){
+        this.warn("Invalid event property in ServiceResult DTO!");
+        return;
+      }
+      result.events.forEach(function(event) {
+        qx.event.message.Bus.dispatchByName( event.name, event.data)
+      }, this);
+      return result.data;
     }
+
+
   },
 
   /**

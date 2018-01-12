@@ -20,6 +20,7 @@
 
 namespace app\controllers;
 
+use Yii;
 use app\models\User;
 use app\controllers\dto\ServiceResult;
 
@@ -27,7 +28,7 @@ use app\controllers\dto\ServiceResult;
  * Setup controller. Needs to be the first controller called 
  * by the application after loading
  */
-class Setup extends \app\controllers\AppController
+class SetupController extends \app\controllers\AppController
 {
 
   /**
@@ -43,22 +44,19 @@ class Setup extends \app\controllers\AppController
   /**
    * The entry method. If the application is already setup, do nothing. Otherwise,
    * display progress dialog on the client and start setup service
-   * @return \app\controllers\dto\ServiceResult
-   * @throws Exception
+   * return \app\controllers\dto\ServiceResult
    */
   public function actionSetup()
   {
-    $result = new ServiceResult();
-
-    if ( ! User::findOne(['namedId'=>'setup']) ){
-      return $this->actionStart( $this->tr("Starting setup ...") );
-    }
+    // if ( ! User::findOne(['namedId'=>'setup']) ){
+    //   return $this->actionStart( $this->tr("Starting setup ...") );
+    // }
 
     // client messages
-    $result->addEvent("ldap.enabled", (bool) $app->getIniValue("ldap.enabled") );
+    $result = Yii::$app->serviceResult;
+    $result->addEvent("ldap.enabled", Yii::$app->utils->getIniValue("ldap.enabled") );
     $result->addEvent("bibliograph.setup.done");
-    
-    return "OK";
+    return $result;
   }
 
   /**

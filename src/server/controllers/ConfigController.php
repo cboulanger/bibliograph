@@ -21,7 +21,10 @@
 namespace app\controllers;
 
 use app\controllers\AppController;
-
+use app\models\Config;
+use app\models\User;
+use app\models\UserConfig;
+use app\controllers\dto\ConfigLoadResult;
 
 /**
  * Service class providing methods to get or set configuration
@@ -35,10 +38,7 @@ class ConfigController extends AppController
    * @var array
    */
   protected $types = array(
-    QCL_CONFIG_TYPE_STRING,
-    QCL_CONFIG_TYPE_NUMBER,
-    QCL_CONFIG_TYPE_BOOLEAN,
-    QCL_CONFIG_TYPE_LIST
+    "string","number","boolean","list"
   );
   
   //-------------------------------------------------------------
@@ -48,7 +48,7 @@ class ConfigController extends AppController
  /**
   * Service method to load config data
   * @param string|null $filter Filter
-  * @return array
+  * xxreturn \app\controllers\dto\ConfigLoadResult
   */
   public function actionLoad( $filter=null )
   {
@@ -64,9 +64,7 @@ class ConfigController extends AppController
    */
   function actionSet( $key, $value )
   {
-    /*
-     * check key
-     */
+    // check key
     if ( ! $this->keyExists( $key ) )
     {
       throw new InvalidArgumentException("Configuration key '$key' does not exist");
@@ -76,29 +74,37 @@ class ConfigController extends AppController
       throw new InvalidArgumentException("The value of configuration key '$key' is not editable");
     }
 
-    /*
-     * if value is customizable, set the user variant of the key
-     */
+    // if value is customizable, set the user variant of the key
     if ( $this->valueIsCustomizable( $key ) )
     {
       $this->requirePermission("config.value.edit");
       $this->setKey( $key, $value );
     }
 
-    /*
-     * else, you need special permission to edit the default
-     */
+    // else, you need special permission to edit the default
     else
     {
       $this->requirePermission("config.default.edit");
       $this->setKeyDefault( $key, $value );
     }
-
-    /*
-     * result
-     */
     return "OK";
   }
+
+  /**
+   * Service method to get a config value
+   * @param string $key Key
+   * @throws InvalidArgumentException 
+   * @return mixed
+   */
+  function actionGet( $key )
+  {
+    // check key
+    if ( ! $this->keyExists( $key ) )
+    {
+      throw new InvalidArgumentException($this->tr("Configuration key '$key' does not exist"));
+    }
+    return $this->getKey($key);
+  }  
 
   //-------------------------------------------------------------
   // API methods
@@ -120,12 +126,15 @@ class ConfigController extends AppController
   {
     switch( gettype( $default) )
     {
-      case "boolean": $type = QCL_CONFIG_TYPE_BOOLEAN; break;
-      case "integer": 
+      case "boolean": 
+        $type = "boolean"; break;
+      case "integer":    
       case "double":  
-        $type = QCL_CONFIG_TYPE_NUMBER; break;
-      case "string": $type = QCL_CONFIG_TYPE_STRING; break;
-      case "array": $type = QCL_CONFIG_TYPE_LIST; break;
+        $type =  "number"; break;
+      case "string": 
+        $type = "string"; break;
+      case "array": 
+        $type = "list"; break;
       default: 
         throw new LogicException("Invalid default value for preference key '$key'");
     }
@@ -164,8 +173,6 @@ class ConfigController extends AppController
     $configModel = $this->getConfigModel();
     foreach( $map as $key => $data )
     {
-      qcl_assert_valid_string( $key, "Invalid key $key");
-      qcl_assert_array_keys( $data, array("type","custom","default","final") );
       $configModel->createKeyIfNotExists(
         $key, $data['type'], $data['custom'], $data['default'], $data['final']
       );
@@ -330,7 +337,7 @@ class ConfigController extends AppController
   {
     if ( ! $this->keyExists( $key ) )
     {
-      throw new InvalidArgumentException( sprintf(
+      throw new \InvalidArgumentException( sprintf(
         "Configuration key '%s' does not exist.", $key
       ) );
     }
@@ -343,11 +350,28 @@ class ConfigController extends AppController
    */
   public function keyExists( $key )
   {
-    return (boolean) $this->findOne(['namedId'=>$key]);
+    return (boolean) Config::findOne(['namedId'=>$key]);
+  }
+
+  /**
+   * Returns the config record with that key
+   * @param string $key
+   * @return \app\models\Config
+   * @throws \InvalidArgumentException If key does not exist
+   */
+  protected function getModel( $key )
+  {
+    $config = Config::findOne(['namedId'=>$key]);
+    if ( ! $config  ) {
+      throw new \InvalidArgumentException( sprintf(
+        "Configuration key '%s' does not exist.", $key
+      ) );
+    }
+    return $config;
   }
 
 
-/**
+  /**
    * Creates a config property
    *
    * @param $key
@@ -375,7 +399,7 @@ class ConfigController extends AppController
 		 */
 		if ( ! in_array( $type, $this->types ) )
 		{
-			throw new InvalidArgumentException("Invalid type '$type' for key '$key'");
+			throw new \InvalidArgumentException("Invalid type '$type' for key '$key'");
 		}
 
     /*
@@ -383,10 +407,11 @@ class ConfigController extends AppController
      */
     if ( $this->keyExists( $key ) )
     {
-      throw new qcl_config_Exception("Config key '$key' already exists.");
+      throw new \InvalidArgumentException("Config key '$key' already exists.");
     }
 
     $data = array(
+      'namedId'   => $key,
       'type'      => $this->getTypeIndex( $type ),
       'customize' => $customize,
       'final'     => $final
@@ -397,11 +422,12 @@ class ConfigController extends AppController
       $data['default'] = $this->castType( $default, $type, false );
     }
 
-    /*
-     * create new entry
-     */
-		return Config::create( $key, $data );
+    // create new entry
+    $config = new Config( $data );
+    if( $config->save() ) return true;
 
+    // throw validation errors
+    throw new \LogicError( $config->errors );
 	}
 
 	/**
@@ -442,7 +468,7 @@ class ConfigController extends AppController
    */
   public function keys()
   {
-    return $this->getQueryBehavior()->fetchValues( "namedId" );
+    return Config::find()->select('namedId')->column();
   }
 
   /**
@@ -454,16 +480,15 @@ class ConfigController extends AppController
    */
   public function setKeyDefault( $key, $value )
   {
-    $this->checkKey( $key );
-    $this->load( $key );
-    if ( ! $this->getFinal() )
+    $config = $this->getModel($key);
+    if ( ! $config->final )
     {
-      $this->setDefault( $this->castType( $value, $this->keyType(), false ) );
-      $this->save();
+      $config->default = $this->castType( $value, $this->keyType(), false );
+      $config->save();
     }
     else
     {
-      throw new qcl_config_Exception("Config key '$key' cannot be changed.");
+      throw new LogicException("Config key '$key' cannot be changed.");
     }
   }
 
@@ -474,9 +499,8 @@ class ConfigController extends AppController
    */
   public function valueIsEditable( $key )
   {
-    $this->checkKey( $key );
-    $this->load( $key );
-    return ! $this->getFinal();
+    $config = $this->getModel($key);
+    return ! $config->final;
   }
 
   /**
@@ -486,161 +510,73 @@ class ConfigController extends AppController
    */
   public function valueIsCustomizable( $key )
   {
-    $this->checkKey( $key );
-    $this->load( $key );
-    return $this->getCustomize();
+    $config = $this->getModel($key);
+    return $config->customize;
   }
 
   /**
    * Gets the default value for a config key
    * @param $key
    * @return mixed
+   * @throws \InvalidArgumentException
    */
   public function getKeyDefault( $key )
   {
-    $this->checkKey( $key );
-    $this->load( $key );
-    return $this->castType( $this->getDefault(), $this->keyType(), true );
+    $config = $this->getModel( $key );
+    return $this->castType( $config->default, $this->keyType( $key ), true );
   }
 
   /**
    * Returns config property value. Raises an error if key does not exist.
    * @param string $key The name of the property (i.e., myapplication.config.locale)
-   * @param bool|false|int|\qcl_access_model_User $user Optional user (id). If not given,
+   * @param \app\models\User $user (optional) user. If not given,
    *   get the config key for the current user. If no custom value exists for the given
    *   user, return the default value.
    * @return bool|array|string|int value of property.
+   * @throws \InvalidArgumentException
    */
-  public function getKey( $key, $user=false )
+  public function getKey( $key, $user=null )
   {
-    $this->checkKey( $key );
-    $userModel = $this->checkUserModel( $user );
-    $userId    = $userModel? $userModel->getId() : null;
-
-    /*
-     * are the results cached?
-     */
-    if ( isset( $this->cache[$key][$userId] ) )
-    {
-      return $this->cache[$key][$userId];
-    }
-
-    /*
-     * load record
-     */
-    $this->load( $key );
-
-    /*
-     * look for user variant
-     */
-    $value = null;
-    $userConfigModel = $this->getUserConfigModel();
-    if( $userModel ) {
-      $userConfigModel->findWhere( array(
-        $userModel->foreignKey()   => $userId,
-        $this->foreignKey()        => $this->id()
-      ) );
-      if ( $userConfigModel->foundSomething() )
-      {
-        $userConfigModel->loadNext();
-        $value = $userConfigModel->getValue();
-      }
-    }
-
-    if ( $value === null)
-    {
-      $value = $this->getDefault();
-    }
-    $value = $this->castType( $value, $this->keyType(), true );
-
-    /*
-     * retrieve, cache and return value
-     */
-    if ( ! isset( $this->cache[$key] ) )
-    {
-      $this->cache[$key] = array();
-    }
-    $this->cache[$key][$userId] = $value;
-    return $value;
+    if( ! $user ) $user = $this->getActiveUser();
+    $config = $this->getModel( $key );
+    return $config->getUserConfigValue($user);
   }
 
   /**
    * Sets config property
    * @param string $key The name of the config key  (i.e., myapplication.config.locale)
    * @param string $value The value of the property.
-   * @param bool|false|int|\qcl_access_model_User $user Optional user (id). If given, create
-   *   or set a custom user value for that key.
-   * @throws qcl_config_Exception
-   * @return qcl_config_ConfigModel
-   * @todo permissions
+   * @param \app\models\User $user (optional) user.
+   * @throws \InvalidArgumentException
    */
   public function setKey( $key, $value, $user=false)
   {
-
-    $this->checkKey( $key );
-    $userModel = $this->checkUserModel( $user );
-    $userId = $userModel? $userModel->id() : null;
-
-    /*
-     * load record and look for custom user value and check
-     * whether this model allows customized values
-     */
-    $this->load( $key );
-
-    if( ! $this->getCustomize() )
-    {
-      throw new qcl_config_Exception( sprintf(
+    $config = $this->getModel( $key );
+    if( ! $user ) $user = $this->getActiveUser();
+    if( ! $config->customize ) {
+      throw new \LogicException( sprintf(
         "Config key '%s' does not allow user values.", $key
       ) );
     }
-
-    if ( $this->getFinal() )
-    {
-      throw new qcl_config_Exception("Config key '$key' cannot be changed.");
+    if ( $config->final ) {
+      throw new \LogicException("Config key '$key' cannot be changed.");
     }
-
-    /*
-     * look for custom user value
-     */
-    $userConfigModel = $this->getUserConfigModel();
-    $userConfigModel->findWhere( array(
-      $userModel->foreignKey()   => $userId,
-      $this->foreignKey()        => $this->id()
-    ) );
-
-    /*
-     * convert value into format that can be stored into
-     * the database
-     */
-    $storeValue = $this->castType( $value, $this->keyType(), false );
-
-    /*
-     * if the custom user value exists, update it,
-     * otherwise create it
-     */
-    if ( $userConfigModel->foundSomething() )
+    $storeValue = $this->castType( $value, $this->keyType($key), false );
+    $userConfig = $config->getUserConfig($user);
+    if ( $userConfig )
     {
-      $userConfigModel->loadNext();
-      $userConfigModel->setValue( $storeValue );
-      $userConfigModel->save();
+      $userConfig->value = $storeValue;
+      $userConfig->save();
     }
     else
     {
-      $userConfigModel->create( array(
-        $userModel->foreignKey()  => $userId,
-        $this->foreignKey()       => $this->id(),
-        "value"                   => $storeValue
-      ));
+      $userConfig = new UserConfig([
+        'UserId' => $user->id,
+        'ConfigId' => $this->id,
+        'value'   => $storeValue
+      ]);
+      $userConfig->save(); 
     }
-
-    /*
-     * update cache
-     */
-    if ( ! isset( $this->cache[$key] ) )
-    {
-      $this->cache[$key] = array();
-    }
-    $this->cache[$key][$userId] = $value;
     return $this;
   }
 
@@ -649,89 +585,65 @@ class ConfigController extends AppController
    * the key itself, use delete()
    *
    * @param string $key
-   * @param bool|int $userId Optional id of the user to whom the custom value
-   *   belongs or false if current user
+   * @param \app\models\User $user (optional) user.
    * @return void
    */
-	public function deleteKey( $key, $userId= false )
+	public function deleteKey( $key, $user= false )
 	{
-	  $this->checkKey( $key );
-	  $userModel = $this->getUserFromId( $userId );
-
-	  $this->load( $key );
-
-	  $userConfigModel = $this->getUserConfigModel();
-    $userConfigModel->deleteWhere( array(
-      $this->foreignKey()      => $this->id(),
-      $userModel->foreignKey() => $userModel->id()
-    ) );
+    $config = $this->getModel( $key );
+    if( ! $user ) $user = $this->getActiveUser();
+	  UserConfig::deleteAll(['UserId' => $user->id]);
 	}
 
   /**
    * Resets the user variant of a config value to the default value.
    * @param string $key
-   * @param bool|int $userId Optional id of the user to whom the custom value
-   *   belongs or false if current user
+   * @param \app\models\User $user (optional) user 
    * @return void
    */
-  public function resetKey( $key, $userId = false )
+  public function resetKey( $key, $user = false )
   {
-    $this->checkKey( $key );
-    $this->setKey( $key, $this->getDefault( $key ), $userId );
+    $config = $this->getModel( $key );
+    if( ! $user ) $user = $this->getActiveUser();
+    $userConfig = $config->getUserConfig($user);
+    if( $userConfig ){
+      $userConfig->value = $config->default;
+      $userConfig->save();
+    }
   }
 
   /**
-   * Returns the type of a key, either of the currently loaded record
-   * or of the given key.
-   * @todo bad bad
+   * Returns the type of a key
    * @param string $key
    * @return string
    */
-  public function keyType( $key=null )
+  public function keyType( $key )
   {
-    if ( $key !== null )
-    {
-      $this->checkKey( $key );
-      $this->load( $key );
-    }
-    return $this->getTypeString( $this->_get("type") );
+    $config = $this->getModel( $key );
+    return $this->getTypeString( $config->type );
   }
 
   /**
    * Returns the data of config keys that are readable by the active user.
    *
    * @param string $mask return only a subset of entries that start with $mask
-   * @param bool|int $userId Optional id of the user to whom the custom value
-   *   belongs or false if current user
+   * @param \app\models\User $user (optional) user 
    * @return array Map with the keys 'keys', 'types' and 'values', each
    *  having an index array with all the values.
    */
-	public function getAccessibleKeys( $mask=null, $userId = false  )
+	public function getAccessibleKeys( $mask=null, $user = false  )
 	{
-    /*
-     * no accessible keys if no active user
-     */
-    $userModel = $this->getUserFromId( $userId );
-    if ( ! $userModel ) return array();
+    if( ! $user ) $user = $this->getActiveUser();
 
-    /*
-     * iterate through all keys and return either the
-     * user custom value or the default value
-     */
     $keys   = array();
     $types  = array();
     $values = array();
 
     foreach ( $this->keys() as $key )
     {
-      if( ! $key )
-      {
-        $this->warn("Empty config key!");
-        continue;
-      }
       $keys[]   = $key;
-      $values[] = $this->getKey( $key, $userId );
-      $types[]  = $this->keyType();
+      $values[] = $this->getKey( $key, $user );
+      $types[]  = $this->keyType( $key );
     }
 
 		return array(
