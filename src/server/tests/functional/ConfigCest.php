@@ -35,21 +35,19 @@ class ConfigCest
   public function trySetConfig(FunctionalTester $I)
   {
     $I->loginWithPassword('sarah_manning','sarah_manning');
-    $I->sendJsonRpcRequest('config','set', ['application.locale','fr_CA'], true);
+    $I->sendJsonRpcRequest('config','set', ['application.title','Ha! I shouldn\'t be allowed to change the application title!'], true);
     $I->seeJsonRpcError("Not allowed");
     $I->sendJsonRpcRequest('config','set', ['csl.style.default','APA'], true);
     $I->dontSeeJsonRpcError();
     $I->logout();
     $I->loginWithPassword('admin','admin');
+    $I->sendJsonRpcRequest('config','set', ['application.title','New application title']);
+    $I->dontSeeJsonRpcError();
     $I->sendJsonRpcRequest('config','set', ['application.locale','de_CH']);
     $I->dontSeeJsonRpcError();    
     $I->loginAnonymously();
-    $I->sendJsonRpcRequest('config','get', ['application.locale']);
-    $I->assertSame( $I->grabJsonRpcResult(), "en" );
-    $I->logout();
-    $I->loginWithPassword('admin','admin');
-    $I->sendJsonRpcRequest('config','get', ['application.locale']);
-    $I->assertSame( $I->grabJsonRpcResult(), "de_CH" );
+    $I->sendJsonRpcRequest('config','get', ['csl.style.default']);
+    $I->assertSame( $I->grabJsonRpcResult(), 'chicago-author-date' );
     $I->logout();
     $I->loginWithPassword('sarah_manning','sarah_manning');
     $I->sendJsonRpcRequest('config','get', ['csl.style.default']);

@@ -483,7 +483,7 @@ class ConfigController extends AppController
     $config = $this->getModel($key);
     if ( ! $config->final )
     {
-      $config->default = $this->castType( $value, $this->keyType(), false );
+      $config->default = $this->castType( $value, $this->keyType($key), false );
       $config->save();
     }
     else
@@ -572,7 +572,7 @@ class ConfigController extends AppController
     {
       $userConfig = new UserConfig([
         'UserId' => $user->id,
-        'ConfigId' => $this->id,
+        'ConfigId' => $config->id,
         'value'   => $storeValue
       ]);
       $userConfig->save(); 
