@@ -12,7 +12,7 @@ class ServiceResult extends \JsonRpc2\Dto
   /** @var string */
   public $version= "1.0";
 
-  /** @var string */
+  /**  mixed */
   public $data;
 
   /** @var array */

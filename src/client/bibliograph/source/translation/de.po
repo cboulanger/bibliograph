@@ -1,4 +1,4 @@
-#: dialog.Dialog:419
+#: dialog.Form:434
 msgid "OK"
 msgstr ""
 
@@ -66,70 +66,70 @@ msgstr ""
 msgid "Next year"
 msgstr ""
 
-#: bibliograph.Setup:103
+#: bibliograph.Application:177
 msgid "Missing server address. Please contact administrator."
 msgstr ""
 
-#: bibliograph.Setup:60
+#: bibliograph.Setup:51
 msgid "No connection to server."
 msgstr ""
 
-#: bibliograph.Setup:61
+#: bibliograph.Setup:52
 msgid "Loading folder data ..."
 msgstr ""
 
-#: bibliograph.Application:184
+#: bibliograph.Application:343
 msgid "Setting up application..."
 msgstr ""
 
-#: bibliograph.Application:206
+#: bibliograph.Application:365
 msgid "Connecting with server..."
 msgstr ""
 
-#: bibliograph.Application:217
+#: bibliograph.Application:376
 msgid "Loading configuration ..."
 msgstr ""
 
-#: bibliograph.Application:233
+#: bibliograph.Application:392
 msgid "Loading datasources ..."
 msgstr ""
 
-#: bibliograph.Application:258
+#: bibliograph.Application:417
 msgid "Loading plugins ..."
 msgstr ""
 
-#: bibliograph.Application:262
+#: bibliograph.Application:421
 msgid "Loaded plugin %1 of %2 : %3 ..."
 msgstr ""
 
-#: bibliograph.Application:491
+#: bibliograph.Application:650
 msgid "Loading datasource information ..."
 msgstr ""
 
-#: bibliograph.Application:621
+#: bibliograph.Application:780
 msgid "To log in, you need a secure connection. After you press 'OK', the application will be reloaded in secure mode. After the application finished loading, you can log in again."
 msgstr ""
 
-#: bibliograph.Application:632
+#: bibliograph.Application:791
 msgid "The application is currently in a read-only state. Only the administrator can log in."
 msgstr ""
 
-#: bibliograph.Application:829
+#: bibliograph.Application:988
 msgid "Please wait ..."
 msgstr ""
 
-#: bibliograph.Application:725
+#: bibliograph.Application:884
 msgid "Logging out ..."
 msgstr ""
 
-#: bibliograph.Application:762
+#: bibliograph.Application:921
 msgid "You don't have access to any datasource on the server."
 msgstr ""
 
-#: bibliograph.Application:819
+#: bibliograph.Application:978
 msgid "Cannot open window. Please disable the popup-blocker of your browser for this website."
 msgstr ""
 
-#: bibliograph.Application:904
+#: bibliograph.Application:1063
 msgid "Retrieving user data..."
 msgstr ""

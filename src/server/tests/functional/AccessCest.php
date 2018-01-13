@@ -33,6 +33,9 @@ class AccessCest
       $I->sendJsonRpcRequest('access','count');
       $I->assertSame( $I->grabJsonRpcResult(), $i );   
     }
+    $I->sendJsonRpcRequest('access','userdata');
+    $I->assertSame( $I->grabDataFromResponseByJsonPath('$.result.data.namedId')[0], 'admin' );
+    $I->assertSame( count( $I->grabDataFromResponseByJsonPath('$.result.data.permissions')[0] ), 34 );
     $I->logout();
   }
 }

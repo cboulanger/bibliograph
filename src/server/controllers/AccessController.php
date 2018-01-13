@@ -22,7 +22,7 @@ namespace app\controllers;
 
 use Yii;
 
-use \JsonRpc2\extensions\AuthException;
+use \JsonRpc2\Exception;
 
 use app\controllers\AppController;
 
@@ -227,13 +227,27 @@ class AccessController extends AppController
   {
     $activeUser = $this->getActiveUser();
     if (is_null($activeUser)) {
-      throw new AuthException("'username' action should not be accessible without an active user.",
-      AuthException::MISSING_AUTH);
+      throw new Exception('Missing authentication', AuthException::INVALID_REQUEST);
     }
     Yii::info("The current user is " . $activeUser->username);
     return $activeUser->username;
   }
 
+  /**
+   * Returns the data of the current user, including permissions.
+   * xxxreturn \app\controllers\dto\ServiceResult
+   */
+  public function actionUserdata()
+  {
+    $activeUser = $this->getActiveUser();
+    $data = $activeUser->getAttributes(['namedId','name','anonymous','ldap']);
+    $data['anonymous'] = (bool) $data['anonymous'];
+    $data['permissions'] = array_values($activeUser->getPermissionNames());
+    $result = Yii::$app->serviceResult;
+    $result->setResult($data);
+    return  $result;
+    //return $data;
+  }
 
   /**
    * Returns the times this action has been called. Only for testing session storage.

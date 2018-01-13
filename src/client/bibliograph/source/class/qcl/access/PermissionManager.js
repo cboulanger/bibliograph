@@ -17,48 +17,15 @@
 
 ************************************************************************ */
 
-/* ************************************************************************
-
-************************************************************************ */
-
 /**
  * Manager for permissions
  */
 qx.Class.define("qcl.access.PermissionManager",
 {
-  
   extend : qcl.access.AbstractManager,
-  type : "singleton",
-  /*
-  *****************************************************************************
-     CONSTRUCTOR
-  *****************************************************************************
-  */
-  
   construct : function()
   {
     this.base(arguments);
     this._type = "Permission";
-  },  
-
-  
-  /*
-  *****************************************************************************
-     MEMBERS
-  *****************************************************************************
-  */
-  
-  
-  members :
-  {
-//    /**
-//     * Creates or returns already created permission with the given named id
-//     * @param namedId {String}
-//     * @return {qcl.access.Permission}
-//     */
-//    create : function( namedId )
-//    {
-//      return this.base(arguments, namedId );
-//    }
   }
 });

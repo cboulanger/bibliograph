@@ -83,8 +83,6 @@ qx.Class.define("qcl.access.Permission",
       event : "changeGranted",
       apply : "_applyGranted"
     }
-    
-    
   },
   
   /*
@@ -244,7 +242,6 @@ qx.Class.define("qcl.access.Permission",
      */
     _applyGranted : function( granted, old )
     {
-
       /*
        * if this is a wildcard permission, set all dependent permissions
        */
@@ -272,7 +269,8 @@ qx.Class.define("qcl.access.Permission",
        * update state
        */
       var state = this.getState(); 
-      this.fireDataEvent( "changeState", state );
+      this.fireDataEvent( "changeState", state ); // fired even if state doesn't change
+      //console.debug( `permission ${this.getNamedId()} has state ${state}`);
     },
 
     /**

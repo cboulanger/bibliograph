@@ -101,12 +101,16 @@ qx.Class.define("qcl.access.AbstractManager",
    },  
 
    /**
-    * TODOC
+    * Returns all object as an array
     *
-    * @return {var} TODOC
+    * @return {Array} 
     */
    getAll : function() {
-     return this._objects;
+     let list = [];
+     for( let o of this._objects){
+       list.push(o);
+     }
+     return list;
    },
 
 		/**
@@ -124,7 +128,7 @@ qx.Class.define("qcl.access.AbstractManager",
 			else if ( typeof ref == "string" )
 			{
 				var hashCode = this._index[ref];
-				return hashCode ? this.getAll()[hashCode] : null;
+				return hashCode ? this._objects[hashCode] : null;
 			}
 			
 			return null;
@@ -142,7 +146,7 @@ qx.Class.define("qcl.access.AbstractManager",
 				this.error ("getByName requires string argument!")
 			}
       var hashCode = this._index[ref];
-      return hashCode ? this.getAll()[hashCode] : null;			
+      return hashCode ? this._objects[hashCode] : null;			
 		},
 
 		/**
@@ -162,7 +166,7 @@ qx.Class.define("qcl.access.AbstractManager",
 		 */
 		getNamedIds : function()
 		{
-			var objects = this.getAll();
+			var objects = this._objects;
 			var names = [];
 			for (var key in objects)
 			{
@@ -203,7 +207,7 @@ qx.Class.define("qcl.access.AbstractManager",
 		 */
 		deleteAll : function()
 		{
-			var objects = this.getAll();
+			var objects = this._objects;
 			for ( var hashCode in objects )
 			{
 				if ( objects[hashCode] )

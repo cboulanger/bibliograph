@@ -34,33 +34,17 @@ qx.Class.define("qcl.access.User",
   construct : function(vName)
   {
     this.base(arguments);
-    this.setNamedId(vName);
-    this._manager = qx.core.Init.getApplication().getAccessManager().getUserManager();
+    this.setUsername(vName);
+    this._manager = this.getApplication().getAccessManager().getUserManager();
     this._manager.add(this);
-  
     this.setPermissions([]);
   },
 
-  /*
-  *****************************************************************************
-  PROPERTIES
-  *****************************************************************************
-  */
-
   properties :
   {
-    /**
-     * login name of the user
-     */
-    namedId :
-    {
-      check    : "String",
-      nullable : false,
-      apply : "_applyNamedId"
-    },
 
     /**
-     * Alias for namedId which can be bound
+     * The username
      */
     username :
     {
@@ -84,7 +68,8 @@ qx.Class.define("qcl.access.User",
     anonymous :
     {
       check : "Boolean",
-      init : true
+      init : true,
+      event : "changeAnonymous"
     },
     
     /**
@@ -93,7 +78,8 @@ qx.Class.define("qcl.access.User",
     editable :
     {
       check : "Boolean",
-      init : false
+      init : false,
+      event : "changeEditable"
     },    
     
     /**
@@ -108,23 +94,18 @@ qx.Class.define("qcl.access.User",
 
   },
 
-
-  /*
-  *****************************************************************************
-  MEMBERS
-  *****************************************************************************
-  */
-
   members :
   {
 
     _manager : null,
-    
-    _applyNamedId : function( value, old )
-    {
-      this.setUsername( value );
+
+    /**
+     * Shim for abstract manager
+     */
+    getNamedId : function(){
+      return this.getUsername()
     },
-    
+
     /**
      * Check if user has the given permission
      * @param permissionRef {String|qcl.access.Permission} name of permission object or object reference
@@ -167,11 +148,19 @@ qx.Class.define("qcl.access.User",
      */
     addPermissionsByName : function( names )
     {
-      var permMgr = qx.core.Init.getApplication().getAccessManager().getPermissionManager();
+      var permMgr = this.getApplication().getAccessManager().getPermissionManager();
       for( var i=0; i < names.length; i++)
       {
+        let name = names[i];
+        // superpowers! Already taken care of in Permission._applyGranted()
+        // if( name == "*" ){
+        //   permMgr.getAll().forEach((permission)=>{
+        //     permission.setGranted(true);
+        //   });
+        // }
+        //console.debug( `Added permission ${name}`);
         this.getPermissions().push(
-          permMgr.create( names[i] ) 
+          permMgr.create( name ) 
         );
       }
       this.fireDataEvent("changePermissions",this.getPermissions());
@@ -182,8 +171,7 @@ qx.Class.define("qcl.access.User",
      */
     grantPermissions : function()
     {
-      this.getPermissions().forEach( function( permission )
-      {
+      this.getPermissions().forEach( function( permission ){
         permission.setGranted(true);
       },this);
     },
@@ -200,12 +188,6 @@ qx.Class.define("qcl.access.User",
       this.setPermissions([]);
     }
   },
-
-  /*
-  *****************************************************************************
-  DESTRUCTOR
-  *****************************************************************************
-  */
 
   destruct : function() {
     this._manager.remove(this);

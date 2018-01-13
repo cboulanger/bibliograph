@@ -41,49 +41,208 @@ qx.Class.define("bibliograph.Application",
         qx.log.appender.Native;
       }
 
-      var button1 = new qx.ui.form.Button("Log in", "bibliograph/test.png");
+      //  Mixes `getApplication()` into all qooxdoo objects
+      qx.Class.include( qx.core.Object, qcl.application.MGetApplication );
+
+      let setup = bibliograph.Setup.getInstance();
+      let am = this.getAccessManager();
+      let cm = this.getConfigManager();
+      
       var doc = this.getRoot();
+
+      var button1 = new qx.ui.form.Button("Log in as Admin", "bibliograph/test.png");
+      button1.setEnabled(false);
       doc.add(button1, {left: 100, top: 50});
-        button1.addListener("execute", async function(e) {
+      button1.addListener("execute", async () => {
+        // auth as admin
+        let { token } = await this.getRpcClient("access").send('authenticate',['admin','admin']);
+        console.info( "token " + token );
+        am.setToken(token);
+        await am.load();
+        await cm.load();
       });
+      //am.getPermission( 'config.value.edit' ).bind( "state", button1, "enabled" );
+      am.getUserManager().bind( 'activeUser.anonymous', button1, "enabled" );
+
+      var button2= new qx.ui.form.Button("Change application title", "bibliograph/test.png");
+      button2.setEnabled(false);
+      doc.add(button2, {left: 100, top: 100 });
+      button2.addListener("execute", async () => {
+        cm.setKey(
+          "application.title",
+          await dialog.Dialog.prompt("Enter application title").promise()
+        ); 
+      });
+      am.getPermission( 'config.default.edit' ).bind("state", button2, "enabled");     
+      
+      var button3= new qx.ui.form.Button("Logout", "bibliograph/test.png");
+      button3.setEnabled(false);
+      doc.add(button3, {left: 100, top: 150});
+      button3.addListener("execute", async () => {
+        am.logout();
+      });
+      am.getUserManager().bind( 'activeUser.anonymous', button3, "enabled", {
+        converter : value => ! value
+      });
+      am.getUserManager().bind( 'activeUser.username', button3, "label", {
+        converter : value => `Logout ${value||""}`
+      });      
 
       var label1 = new qx.ui.basic.Label("Loading...");
-      doc.add(label1,  {left: 300, top: 50});
-      let configManager = bibliograph.ConfigManager.getInstance().init();
-      configManager.addListener("ready", () =>{
-        configManager.bindKey("application.title",label1,"value");
+      doc.add(label1,  {left: 300, top: 90});
+      cm.addListener("ready", () =>{
+        cm.bindKey("application.title",label1,"value", true);
       }); 
+
+
 
       /*
        * application startup
        */
       (async ()=>{
-        let setup = bibliograph.Setup.getInstance();
+        
         await setup.checkServerSetup();
         await setup.authenticate();
         await setup.loadConfig();
-        //await setup.loadPermissions();
+        await setup.loadUserdata();
       })();
     },
-
 
     /*
     ---------------------------------------------------------------------------
        PRIVATE MEMBERS
     ---------------------------------------------------------------------------
     */
+
+    /** @var {qx.bom.storage.Web} */
+    __storage : null,
+
+    /** @var {Object} */
+    __clients : {},
+
+    __url : null,
+
     __persistentStore : null,
     __datasourceStore : null,
     __itemView : null,
     __selectedIds : null,
     __blocker : null,
 
-    /*
+   /*
     ---------------------------------------------------------------------------
-     MAIN METHOD
+     COMPONENTS
     ---------------------------------------------------------------------------
     */
 
+    getAccessManager : function(){
+      return bibliograph.AccessManager.getInstance();
+    },
+
+    getPermissionManager : function(){
+      return this.getAccessManager().getPermissionManager();
+    },
+
+    getConfigManager : function(){
+      return bibliograph.ConfigManager.getInstance();
+    },
+
+    /**
+     * Returns a session storage object
+     * @return {qx.bom.storage.Web}
+     */
+    getStorage : function(){
+      if ( ! this.__storage ){
+        this.__storage = new qx.bom.Storage.getSession();
+      }
+      return this.__storage;  
+    },      
+
+   /*
+    ---------------------------------------------------------------------------
+       I/O
+    ---------------------------------------------------------------------------
+    */   
+    
+    /**
+     * Returns the URL to the JSONRPC server
+     * @return {String}
+     */
+    getServerUrl: function() {
+      // cache
+      if( this.__url ) return this.__url;
+
+      let serverUrl = qx.core.Environment.get("bibliograph.serverUrl");
+      if (!serverUrl) {
+        dialog.Dialog.error(
+          this.tr("Missing server address. Please contact administrator.")
+        );
+        throw new Error("No server address set.");
+      }
+      if( ! serverUrl.startsWith("http") ){
+        // assume relative path 
+        let href = document.location.href;
+        serverUrl = qx.util.Uri.getAbsolute( serverUrl );
+      }
+      this.info("Server Url is " + serverUrl);
+      this.__url = serverUrl;
+      return serverUrl;
+    },    
+    
+    /**
+     * Returns a jsonrpc client object with the current auth token already set
+     * @param {String} service The name of the service to get the client for
+     * @return {bibliograph.io.JsonRpcClient}
+     */
+    getRpcClient : function(service){
+      qx.core.Assert.assert(!!service, "Service parameter cannot be empty");
+      qx.util.Validate.checkString(service, "Service parameter must be a string");
+      if( ! this.__clients[service] ){
+        this.__clients[service] = new bibliograph.io.JsonRpcClient(this.getServerUrl() + service );
+      }
+      let client = this.__clients[service];
+      client.setToken( this.getAccessManager().getToken() );
+      return client;
+    },
+
+    /**
+     * Returns a promise that resolves when a message of that name has
+     * been dispatched.
+     * @param {String} message The name of the message
+     * @return {Promise<true>}
+     */
+    resolveOnMessage: function( message ){
+      let bus = qx.event.message.Bus;
+      return new Promise((resolve,reject)=>{
+        bus.subscribe(message,function(){
+          bus.unsubscribe(message);
+          resolve();
+        });
+      }) 
+    },
+
+    /*
+    ---------------------------------------------------------------------------
+        AUTHOR AND VERSION
+    ---------------------------------------------------------------------------
+    */
+    
+    /**
+     * The version of the application. The version will be automatically replaced
+     * by the script that creates the distributable zip file. Do not change.
+     * @return {String}
+     */    
+    getVersion : function() {
+      return qx.core.Environment.get("bibliograph.version");
+    },
+    
+    /**
+     * Copyright notice
+     * @return {String}
+     */
+    getCopyright : function() {
+      var year = (new Date).getFullYear();
+      return "2003-" + year + " (c) Christian Boulanger";
+    },        
 
     /*
     ---------------------------------------------------------------------------

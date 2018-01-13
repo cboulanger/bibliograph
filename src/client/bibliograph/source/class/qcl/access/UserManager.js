@@ -17,9 +17,6 @@
 
 ************************************************************************ */
 
-/* ************************************************************************
-
-************************************************************************ */
 
 /**
  * This manager (singleton) manages users
@@ -28,31 +25,16 @@ qx.Class.define("qcl.access.UserManager",
 {
 
 	extend : qcl.access.AbstractManager,
-  type : "singleton",
-
   
-  /*
-  *****************************************************************************
-     CONSTRUCTOR
-  *****************************************************************************
-  */
-
   construct : function()
   {
 		this.base(arguments);
     this._type = "User";
   },
   
- 
-
-  /*
-  *****************************************************************************
-     PROPERTIES
-  *****************************************************************************
-  */
-
   properties :
   {
+
     /**
      * The currently logged-in user
      */
@@ -64,6 +46,9 @@ qx.Class.define("qcl.access.UserManager",
 			nullable		: true
     },
     
+    /**
+     * A model which will store server data
+     */
     model : 
     {
       check : "Object",
@@ -74,17 +59,11 @@ qx.Class.define("qcl.access.UserManager",
     }
   },
   
-
-  /*
-  *****************************************************************************
-     MEMBERS
-  *****************************************************************************
-  */
-
   members :
   {
 		/**
 		 * get user object by login name
+     * @todo what is this for?
 		 * @param username {String}
 		 * @return {qcl.access.User}
 		 */
@@ -98,26 +77,31 @@ qx.Class.define("qcl.access.UserManager",
 		 */
 		_applyModel : function ( model, old )
 		{
-		  if ( model && ! model.getError() )
+		  if ( model )
 		  {
-		    /*
-		     * create user
-		     */
-		    var user = this.create( model.getUsername() );
+        if( this.getActiveUser() ){
+          this.logout();
+        }
+
+		    // create user
+		    var user = this.create( model.getNamedId() );
 		    
-		    /*
-		     * set user data
-		     */
-		    user.setFullname( model.getFullname() );
-		    user.setAnonymous( model.getAnonymous() );
-        user.setEditable( model.getEditable() );
-		    user.setPermissions([]);
-		    user.addPermissionsByName( model.getPermissions().toArray() );
+		    // set user data
+		    user.setFullname( model.getName() );
+        user.setAnonymous( model.getAnonymous() );
+        user.setEditable( ! model.getLdap() );
+
+        // update permissions
+        user.setPermissions([]);
+        if( model.getPermissions() ){
+          user.addPermissionsByName( model.getPermissions().toArray() );
+        }
 		    
-		    /*
-		     * set user as active user
-		     */
-		    this.setActiveUser( user ); 
+		    // set user as active user
+        this.setActiveUser( user ); 
+        
+        // grant permissions
+        user.grantPermissions();
 		  }
 		},
 		
@@ -141,22 +125,15 @@ qx.Class.define("qcl.access.UserManager",
 			}
 		},
     
-//    /**
-//     * Creates or returns already created user with the given named id
-//     * @param namedId {String}
-//     * @return {qcl.access.User}
-//     */
-//    create : function( namedId )
-//    {
-//      return this.base(arguments, namedId );
-//    },
-		
 		/**
 		 * removes all permission, role and user information
 		 */
 		logout : function()
 		{
-		  this.setActiveUser(null);
+      if( this.getActiveUser() ){
+        this.getActiveUser().revokePermissions();
+        this.setActiveUser(null);  
+      }
 		}
   }
 });

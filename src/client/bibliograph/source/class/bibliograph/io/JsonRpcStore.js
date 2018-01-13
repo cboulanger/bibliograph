@@ -46,7 +46,7 @@ qx.Class.define("bibliograph.io.JsonRpcStore",
       } else {
         this.setMarshaler( marshaler );
       }        
-      this.__client = bibliograph.Setup.getInstance().getClient(serviceName);
+      this.__client = this.getApplication().getRpcClient(serviceName);
     },
 
     /*
@@ -225,7 +225,7 @@ qx.Class.define("bibliograph.io.JsonRpcStore",
             var model = this.getMarshaler().toModel(data);
             this.setModel( model );            
             // fire 'loaded' event only if we created a model
-            this.fireDataEvent( "loaded", this.getModel() );             
+            this.fireDataEvent( "loaded", model );             
           }
           if ( typeof finalCallback == "function" ){
             // execute outside of the current stack so callback errors do not break the current execution context
@@ -233,6 +233,7 @@ qx.Class.define("bibliograph.io.JsonRpcStore",
           }            
         })
         .catch((ex)=>{
+          this.error(ex);
           this.fireDataEvent( "error", ex );
           this.fireDataEvent( "loaded", null);
         }); 
@@ -253,13 +254,14 @@ qx.Class.define("bibliograph.io.JsonRpcStore",
        * @param context {Object} The context of the callback function
        * @param {Promise<Object>} Promise that resolves with the loaded data 
        */
-      load : function( serviceMethod, params, finalCallback, context  )
+      load : function( serviceMethod, params=[], finalCallback, context  )
       {
+        serviceMethod = serviceMethod||this.getLoadMethod();
         this.__lastMethod = serviceMethod;
         this.__lastParams = params;
         return this._sendJsonRpcRequest( 
-          serviceMethod||this.getLoadMethod(), 
-          params || [],
+          serviceMethod, 
+          params,
           finalCallback, 
           context,
           true

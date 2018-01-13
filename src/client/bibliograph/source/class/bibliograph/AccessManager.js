@@ -21,17 +21,21 @@
 /**
  * This object manages authentication and authorization issues.
  */
-qx.Class.define("bibliograph.rbac.AccessManager",
+qx.Class.define("bibliograph.AccessManager",
 {
   extend : qx.core.Object,  
   type : "singleton",
- 
-  /*
-  *****************************************************************************
-     PROPERTIES
-  *****************************************************************************
-  */
 
+  /**
+   * Constructor
+   */
+  construct : function()
+  {
+    this.base(arguments);
+    this.__permissionManager = new qcl.access.PermissionManager;
+    this.__userManager = new qcl.access.UserManager;
+  },
+ 
   properties : {
     
      /**
@@ -42,26 +46,6 @@ qx.Class.define("bibliograph.rbac.AccessManager",
        check : "bibliograph.io.JsonRpcStore",
        nullable : true,
        event    : "changeStore"
-     },
-
-     /**
-      * The user manager
-      */
-     userManager :
-     {
-       check : "qx.core.Object", //@todo: interface
-       nullable : true,
-       event    : "changeUserManager"
-     },
-     
-     /**
-      * The permission manager
-      */
-     permissionManager :
-     {
-       check : "qx.core.Object", //@todo: interface
-       nullable : true,
-       event    : "changePermissionManager"
      },
      
     /**
@@ -74,23 +58,6 @@ qx.Class.define("bibliograph.rbac.AccessManager",
       event    : "changeAuthenticatedUser"
     }     
   },
-
-  /*
-  *****************************************************************************
-     CONSTRUCTOR
-  *****************************************************************************
-  */  
-
-  construct : function()
-  {
-    this.base(arguments);
-  },
-  
-  /*
-  *****************************************************************************
-     MEMBERS
-  *****************************************************************************
-  */
   
   members :
   {
@@ -101,37 +68,69 @@ qx.Class.define("bibliograph.rbac.AccessManager",
     */    
 
     _authenticationSetup : false,
-    __sessionId : null,
     __activeUser : null,
+    __permissionManager : null,
+    __userManager : null,
            
+
+   /*
+    ---------------------------------------------------------------------------
+       COMPONENTS
+    ---------------------------------------------------------------------------
+    */
+
+    getPermissionManager : function(){
+      return this.__permissionManager;
+    },
+
+    getUserManager : function(){
+      return this.__userManager;
+    }, 
 
    /*
     ---------------------------------------------------------------------------
        API METHODS 
     ---------------------------------------------------------------------------
-    */       
-    
+    */           
+
     /**
-     * Returns the session id 
+     * Retrives the current session id from the session storage
+     * @return {String}
      */
-    getSessionId : function()
-    {
-      return this.__sessionId;
-    },
-    
-    /**
-     * Sets the session id 
-     */
-    setSessionId : function(sessionId)
-    {
-      this.__sessionId = sessionId;
+    getSessionId : function(){
+      return this.getApplication().getStorage().getItem('sessionId');
     },
 
     /**
-     * Setup the authentication mechanism.
-     * @param authStore {qcl.data.store.JsonRpc}
+     * Saves the current session id in the session storage.
+     * @param {String} sessionId 
      */
-    init : function( service )
+    setSessionId : function(sessionId){
+      return this.getApplication().getStorage().setItem('sessionId', sessionId);
+    },
+
+    /**
+     * Retrives the current auth token from the session storage
+     * @return {String}
+     */
+    getToken : function(){
+      return this.getApplication().getStorage().getItem('token');
+    },
+
+    /**
+     * Saves the current auth token in the session storage.
+     * @param {String} token 
+     */
+    setToken : function(token){
+      this.getApplication().getStorage().setItem('token', token);
+      qx.event.message.Bus.dispatchByName("bibliograph.token.change",token);
+    },        
+
+    /**
+     * Setup the manager
+     * @return {bibliograph.rbac.AccessManager} Returns itself
+     */
+    init : function( )
     {
      
       // check if setup is already done
@@ -140,13 +139,40 @@ qx.Class.define("bibliograph.rbac.AccessManager",
         return;
       }
       this._authenticationSetup = true;      
-      
+
+      // store for authenticated user
       this.setStore( new bibliograph.io.JsonRpcStore("access") );
       
       // bind the authentication stores data model to the user managers data model
-      this.getStore().bind("model", bibliograph.rbac.UserManager.getInstance(), "model");
+      this.getStore().bind("model", this.getUserManager(), "model");
+
+      // load userdata
+      this.getStore().setLoadMethod("userdata");
+      return this;
     }, 
-    
+
+    /**
+     * Loads the permissions of the active user from the server
+     */
+    load : async function(){
+      await this.getStore().load();
+    },
+
+    /**
+     * Authenticate anomymously with the server.
+     * @return {Promise<Object>}
+     */
+    authenticateAsGuest : async function()
+    {
+      this.info("Authenticating anonymously with server...");
+      let client = this.getApplication().getRpcClient("access");
+      let response = await client.send("authenticate",[]);
+      let { message, token, sessionId } = response; 
+      this.info(message);
+      this.setToken(token);
+      this.setSessionId(sessionId);
+    },    
+
     /**
      * Authenticates a user with the given password. 
      * 
@@ -184,17 +210,12 @@ qx.Class.define("bibliograph.rbac.AccessManager",
     },
     
     /**
-     * Shorthand method to return active user
+     * Returns the active user object
      * @return {qcl.access.User}
      */
     getActiveUser : function()
     {
-      return this.__activeUser;
-    },
-
-    setActiveUser : function( activeUser )
-    {
-      this.__activeUser = activeUser; 
+      return this.getUserManager().getActiveUser();
     },
     
    /**
@@ -229,12 +250,16 @@ qx.Class.define("bibliograph.rbac.AccessManager",
      * @param callback {function|undefined} optional callback that is called
      * when logout request returns from server.
      * @param context {object|undefined} Optional context for callback function
-     * @return {void}
+     * @return {Promise<Object>}
      */
-    logout : function( callback, context )
+    logout : async function( callback, context )
     {
       qx.event.message.Bus.dispatch( new qx.event.message.Message("logout", true ) );
-      this.getStore().load("logout", null, callback, context );
+      await this.getApplication().getRpcClient('access').notify("logout");
+      // re-login as guest
+      await this.authenticateAsGuest();
+      await this.load();
+      await this.getApplication().getConfigManager().load();
     }
   }
 });

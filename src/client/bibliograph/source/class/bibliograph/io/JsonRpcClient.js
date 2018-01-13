@@ -34,6 +34,9 @@ qx.Class.define("bibliograph.io.JsonRpcClient", {
   construct: function(url) {
     qx.util.Validate.checkUrl(url);
     this.__client = window.raptor( url );
+    qx.event.message.Bus.subscribe("bibliograph.token.change",(e) => {
+      this.setToken( e.getData() );
+    });
   },
 
   properties: {
