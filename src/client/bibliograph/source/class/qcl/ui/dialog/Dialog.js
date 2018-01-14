@@ -92,28 +92,19 @@ qx.Class.define("qcl.ui.dialog.Dialog",
       {
         data.properties.callback = function( result )
         {
-          /*
-           * push the result to the beginning of the parameter array
-           */
+          // push the result to the beginning of the parameter array
           if ( ! qx.lang.Type.isArray( data.params ) )
           {
             data.params = [];
           }
           data.params.unshift(result);
           
-          /*
-           * send request back to server
-           */
-          var rpcManager = qx.core.Init.getApplication().getRpcManager();
-          rpcManager.execute( 
-              data.service, data.method, data.params 
-          );
+          // send request back to server
+          this.getApplication().getRpclient(data.service).send( data.method, data.params );
         }
       }
       
-      /*
-       * turn popup on or off
-       */
+      // turn popup on or off
       if (data.type === "popup" )
       {
         if ( typeof app.showPopup === undefined  )
@@ -139,9 +130,7 @@ qx.Class.define("qcl.ui.dialog.Dialog",
       }
       app.hidePopup();
       
-      /*
-       * create dialog according to type
-       */
+      // create dialog according to type
       var isNew = false, widget = qcl.ui.dialog.Dialog.__instances[data.type];
 
       // reusing forms doesn't work
@@ -173,10 +162,8 @@ qx.Class.define("qcl.ui.dialog.Dialog",
         isNew = true;
       }
       
-      /*
-       * marshal special datefield values
-       * TODO check values
-       */
+      // marshal special datefield values
+      // TODO check values
       if( data.type == "form" )
       {
         if ( ! qx.lang.Type.isObject( data.properties.formData ) )
@@ -288,14 +275,5 @@ qx.Class.define("qcl.ui.dialog.Dialog",
         }
       },1000,this);
     }
-  },
-  /*
-  *****************************************************************************
-     PROPERTIES
-  *****************************************************************************
-  */     
-  properties :
-  {
-  
   }
 });

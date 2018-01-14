@@ -59,6 +59,7 @@ qx.Class.define("qcl.application.StateManager",
 {
   
   extend : qx.core.Object,
+  type : "singleton",
 
   /*
   *****************************************************************************

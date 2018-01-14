@@ -15,7 +15,7 @@ if [ $? -eq 0 ]; then
 else
   echo "Starting Bibliograph 'production' server..."
   pushd $SERVER_PATH > /dev/null
-  php -s $HOST &> /dev/null &
+  php -S $HOST &> /dev/null &
   popd > /dev/null
 fi
 

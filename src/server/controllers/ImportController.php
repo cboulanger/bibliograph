@@ -6,73 +6,34 @@
    http://www.bibliograph.org
 
    Copyright:
-     2007-2010 Christian Boulanger
+   2007-2017 Christian Boulanger
 
    License:
-     LGPL: http://www.gnu.org/licenses/lgpl.html
-     EPL: http://www.eclipse.org/org/documents/epl-v10.php
-     See the LICENSE file in the project's top-level directory for details.
+   LGPL: http://www.gnu.org/licenses/lgpl.html
+   EPL: http://www.eclipse.org/org/documents/epl-v10.php
+   See the LICENSE file in the project's top-level directory for details.
 
    Authors:
-     * Chritian Boulanger (cboulanger)
+   * Chritian Boulanger (cboulanger)
 
 ************************************************************************ */
 
-qcl_import( "qcl_data_controller_TableController" );
-qcl_import( "bibliograph_model_import_RegistryModel" );
+namespace app\controllers;
+
+use Yii;
+
+use \JsonRpc2\Exception;
+
+use app\controllers\AppController;
 
 /**
  *
  */
-class bibliograph_service_Import
-  extends qcl_data_controller_TableController
+class ImportController extends AppController
 {
-
-  /**
-   * Access control list. Determines what role has access to what kind
-   * of information.
-   * @var array
-   */
-  private $modelAcl = array(
-
-    /*
-     * The reference model of the given datasource
-     */
-    array(
-      'datasource'  => "bibliograph_import",
-      'modelType'   => array("reference","folder"),
-      'rules'         => array(
-        array(
-          'roles'       => array( BIBLIOGRAPH_ROLE_USER ),
-          'access'      => "*",
-          'properties'  => array( "allow" => "*" )
-        )
-      )
-    )
-  );
-
-  /*
-  ---------------------------------------------------------------------------
-     INITIALIZATION
-  ---------------------------------------------------------------------------
-  */
-
-  /**
-   * Constructor, adds model acl
-   */
-  function __construct()
-  {
-    $this->addModelAcl( $this->modelAcl );
-  }
-
-  /**
-   * Returns singleton instance of this class
-   * @return bibliograph_service_Import
-   */
-  public static function getInstance()
-  {
-    return qcl_getInstance( __CLASS__ );
-  }
+  use traits\ShimTrait;
+  use traits\RbacTrait;
+  use traits\AuthTrait;
 
 
   /*

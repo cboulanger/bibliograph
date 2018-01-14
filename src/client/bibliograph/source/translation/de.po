@@ -1,17 +1,619 @@
-#: dialog.Form:434
-msgid "OK"
+#
+msgid ""
+msgstr "Project-Id-Version: 1.0\n"
+"Report-Msgid-Bugs-To: you@your.org\n"
+"POT-Creation-Date: 2010-05-13 19:30+0100\n"
+"PO-Revision-Date: 2014-08-02 00:00+0100\n"
+"Last-Translator: Christian Boulanger <info@bibliograph.org>\n"
+"Language-Team: Team <yourteam@your.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+"X-Generator: Poedit 1.6.7\n"
+
+#: bibliograph.Setup:35
+msgid "No connection to server."
+msgstr "Keine Verbindung zum Server."
+
+#: bibliograph.Setup:36
+msgid "Loading folder data ..."
+msgstr "Lade die Ordner ..."
+
+#: bibliograph.Setup:76
+msgid "Setting up application..."
+msgstr "Konfiguriere die Anwendung ..."
+
+#: bibliograph.Setup:80
+msgid "Connecting with server..."
+msgstr "Verbinde mit dem Server ..."
+
+#: bibliograph.Setup:85
+msgid "Loading configuration ..."
+msgstr "Lade Konfiguration ..."
+
+#: bibliograph.Setup:93
+msgid "Loading datasources ..."
+msgstr "Lade Liste der Datenbanken ..."
+
+#: bibliograph.Setup:228
+msgid "Loading plugins ..."
+msgstr "Plugins werden geladen ..."
+
+#: bibliograph.Setup:233
+msgid "Loaded plugin %1 of %2 : %3 ..."
+msgstr "Lade Plugin %1 von %2 : %3 ..."
+
+#: bibliograph.MApplicationState:214
+msgid "Loading datasource information ..."
+msgstr "Informationen zur Datenquelle werden abgerufen..."
+
+#: bibliograph.Commands:45
+msgid "To log in, you need a secure connection. After you press 'OK', the application will be reloaded in secure mode. After the application finished loading, you can log in again."
+msgstr "Um sich anzumelden, brauchen Sie eine sicher Verbindung. Nachdem Sie 'OK' geklickt haben, wird die Anwendung über eine verschlüsselte Verbindung neu geladen. Bitte melden Sie sich erneut an, sobald der Ladevorgang abgeschlossen ist."
+
+#: bibliograph.Commands:52
+msgid "The application is currently in a read-only state. Only the administrator can log in."
+msgstr "Das Programm ist gerade im Nur-Lese-Modus. Nur der Administrator kann sich einloggen. "
+
+#: bibliograph/Main.js:797
+msgid "Authenticating ..."
+msgstr "Anmeldung ..."
+
+#: bibliograph.ui.window.AccessControlTool:112
+msgid "Please wait ..."
+msgstr "Bitte warten ..."
+
+#: bibliograph.Commands:113
+msgid "Logging out ..."
+msgstr "Abmelden ..."
+
+#: bibliograph/Main.js:891
+msgid "You don't have access to any datasource on the server."
+msgstr "Sie haben keinen Zugang zu Datenbanken auf diesem Server."
+
+#: bibliograph.Commands:145
+msgid "Cannot open window. Please disable the popup-blocker of your browser for this website."
 msgstr ""
 
-#: dialog.Dialog:445
+#: bibliograph.Commands:211
+msgid "Retrieving user data..."
+msgstr "Lade Benutzerdaten ..."
+
+#: bibliograph.ui.item.TableViewUi:50
+msgid "Print"
+msgstr "Drucken"
+
+#: bibliograph/theme/Assets.js:72
+msgid "Style"
+msgstr "Zitierstil"
+
+#: bibliograph/theme/Assets.js:73
+msgid "All in folder"
+msgstr "Alle im Ordner"
+
+#: bibliograph/theme/Assets.js:74
+msgid "Tabular View"
+msgstr "Tabellarische Ansicht"
+
+#: bibliograph/theme/Assets.js:75
+msgid "Formatted View"
+msgstr "Formatierte Ansicht"
+
+#: bibliograph/theme/Assets.js:76
+msgid "Generate formatted citations ..."
+msgstr "Formatiere die Datensätze ..."
+
+#: bibliograph/theme/Assets.js:81
+msgid "Loading rows %1 - %2 of %3 ..."
+msgstr "Lade Datensätze %1 - %2 von %3 ..."
+
+#: bibliograph/theme/Assets.js:82
+msgid "Getting number of rows..."
+msgstr "Ermittle Anzahl der Datensätze ..."
+
+#: bibliograph.ui.folder.TreeView:80
+msgid "Loading data..."
+msgstr "Datenübertragung ..."
+
+#: bibliograph.ui.folder.TreeView:93
+msgid "Please wait..."
+msgstr "Bitte warten ..."
+
+#: bibliograph.ui.folder.TreeView:106
+msgid "Adding folder ..."
+msgstr "Füge Ordner hinzu ..."
+
+#: bibliograph.ui.folder.TreeView:119
+msgid "Removing folder ..."
+msgstr "Entferne Ordner ..."
+
+#: bibliograph.ui.folder.TreeView:138
+msgid "No folder selected. Try again"
+msgstr "Bitte erst einen Ordner auswählen."
+
+#: bibliograph.ui.folder.TreeView:141
+msgid "Do your really want to move folder '%1' to '%2'?"
+msgstr "Wollen Sie wirklich Ordner  '%1' in Ordner '%2' verschieben?"
+
+#: bibliograph.ui.folder.TreeView:145
+msgid "Moving folder ..."
+msgstr "Verschiebe Ordner ..."
+
+#: bibliograph.ui.folder.TreeView:161
+msgid "Do you really want to delete all references and folders in the trash folder? This cannot be undone."
+msgstr "Wollen sie wirklich alle Datensätze und Ordner im Mülleimer endgültig löschen? Das kann nicht rückgängig gemacht werden."
+
+#: bibliograph.ui.folder.TreeView:165
+msgid "Purging deleted folders ..."
+msgstr "Lösche Ordner ..."
+
+#: bibliograph.ui.folder.TreeView:168
+msgid "Purging deleted references ..."
+msgstr "Lösche Datensätze ..."
+
+#: bibliograph.ui.folder.TreeViewUi:168
+msgid "Empty trash..."
+msgstr "Den Papierkorb leeren ..."
+
+#: bibliograph.ui.folder.TreeViewUi:175
+msgid "Move folder..."
+msgstr "Ordner verschieben ..."
+
+#: bibliograph.ui.folder.TreeViewUi:183
+msgid "Edit folder data"
+msgstr "Ordnereigenschaften bearbeiten"
+
+#: bibliograph.ui.folder.TreeViewUi:194
+msgid "Change visibility"
+msgstr "Sichtbarkeit verändern"
+
+#: bibliograph.ui.item.DuplicatesView:162
+msgid "Processing request..."
+msgstr "Verarbeite die Anfrage ..."
+
+#: bibliograph.ui.item.DuplicatesViewUi:40
+msgid "This table shows potential duplicates of the current record."
+msgstr "Diese Tabelle zeigt potentielle Dubletten des ausgewählten Datensatzes"
+
+#: bibliograph.ui.item.DuplicatesViewUi:61
+msgid "Type"
+msgstr "Typ"
+
+#: bibliograph.ui.item.DuplicatesViewUi:62
+msgid "Author"
+msgstr "Autor"
+
+#: bibliograph.ui.item.DuplicatesViewUi:63
+msgid "Date"
+msgstr "Datum"
+
+#: bibliograph.ui.item.DuplicatesViewUi:64
+msgid "Title"
+msgstr "Titel"
+
+#: bibliograph.ui.item.DuplicatesViewUi:104
+msgid "Display"
+msgstr "Anzeigen"
+
+#: bibliograph.ui.item.DuplicatesViewUi:112
+msgid "Delete"
+msgstr "Löschen\t"
+
+#: bibliograph.ui.item.DuplicatesViewUi:120
+msgid "Score threshold to count as duplicate:"
+msgstr "Schwellenwert für Einordnung als Dublette"
+
+#: bibliograph.ui.item.RecordInfo:163
+msgid "Do you really want to remove the reference from folder '%1'?"
+msgstr "Wollen Sie wirklich diesen Datensatz aus Ordner '%1' entfernen?"
+
+#: bibliograph.ui.item.RecordInfoUi:45
+msgid "Record Info"
+msgstr "Datensatzinfo"
+
+#: bibliograph.ui.item.RecordInfoUi:60
+msgid "Folders"
+msgstr "Ordner"
+
+#: bibliograph.ui.item.RecordInfoUi:73
+msgid "Folders containing the current record"
+msgstr "Ordner, die den aktuellen Datensatz enthalten"
+
+#: bibliograph.ui.item.RecordInfoUi:111
+msgid "Open folder"
+msgstr "Ordner öffnen"
+
+#: bibliograph.ui.item.RecordInfoUi:116
+msgid "Remove from folder"
+msgstr "Aus dem Ordner entfernen"
+
+#: bibliograph.ui.item.ReferenceEditor:342
+msgid "Loading item data..."
+msgstr "Lade Datensatz ..."
+
+#: bibliograph.ui.item.ReferenceEditor:399
+msgid "Loading form data..."
+msgstr "Lade Editor ..."
+
+#: bibliograph.ui.item.ReferenceEditor:419
+msgid "Creating form, please wait ..."
+msgstr "Erzeuge das Formular, bitte warten ..."
+
+#: bibliograph.ui.item.ReferenceEditor:883
+msgid "Saving..."
+msgstr "Speichern ..."
+
+#: bibliograph.ui.item.ReferenceEditorUi:116
+msgid "Abstract"
+msgstr "Zusammenfassung"
+
+#: bibliograph.ui.item.ReferenceEditorUi:132
+msgid "Keywords"
+msgstr "Schlagwörter"
+
+#: bibliograph.ui.item.ReferenceEditorUi:148
+msgid "Notes"
+msgstr "Kommentar"
+
+#: bibliograph.ui.item.ReferenceEditorUi:226
+msgid "Contents"
+msgstr "Inhaltsverzeichnis"
+
+#: bibliograph.ui.item.ReferenceEditorUi:201
+msgid "Main"
+msgstr "Stammdaten"
+
+#: bibliograph.ui.item.ReferenceEditorUi:213
+msgid "About"
+msgstr "Metadaten"
+
+#: bibliograph.ui.item.ReferenceEditorUi:262
+msgid "Duplicates"
+msgstr "Dubletten"
+
+#: dialog.Login:200
+msgid "Login"
+msgstr "Anmelden"
+
+#: bibliograph.ui.main.Toolbar:75
+msgid "Logout"
+msgstr "Abmelden"
+
+#: bibliograph.ui.main.Toolbar:92
+msgid "Loading..."
+msgstr "Lade ..."
+
+#: bibliograph.ui.main.Toolbar:114
+msgid "Datasources"
+msgstr "Datenbanken"
+
+#: bibliograph.ui.main.Toolbar:129
+msgid "System"
+msgstr "System"
+
+#: bibliograph.ui.window.PreferencesWindow:36
+msgid "Preferences"
+msgstr "Optionen"
+
+#: bibliograph.ui.main.Toolbar:151
+msgid "Access management"
+msgstr "Zugangskontrolle"
+
+#: bibliograph.ui.main.Toolbar:162
+msgid "Plugins"
+msgstr "Plugins"
+
+#: bibliograph.ui.main.Toolbar:173
+msgid "Reset"
+msgstr ""
+
+#: bibliograph.ui.main.Toolbar:179
+msgid "This will reset and reload the application"
+msgstr ""
+
+#: bibliograph.ui.main.Toolbar:193
+msgid "Import"
+msgstr "Importieren"
+
+#: bibliograph.ui.main.Toolbar:206
+msgid "Import text file"
+msgstr "Aus Text/Datei importieren"
+
+#: bibliograph.ui.window.AccessControlTool:117
+msgid "Help"
+msgstr "Hilfe"
+
+#: bibliograph.ui.main.Toolbar:225
+msgid "Online Help"
+msgstr "Online-Hilfe"
+
+#: bibliograph.ui.main.Toolbar:235
+msgid "Report a problem or request a feature"
+msgstr "Ein Problem melden oder einen Verbesserungsvorschlag machen"
+
+#: bibliograph.ui.window.AboutWindow:34
+msgid "About Bibliograph"
+msgstr "Über Bibliograph"
+
+#: bibliograph.ui.main.Toolbar:314
+msgid "Enter search term"
+msgstr "Bitte geben sie einen Suchausdruck ein"
+
+#: bibliograph.ui.reference.ListView:357
+msgid "Query"
+msgstr "Suchausdruck"
+
+#: bibliograph.ui.reference.ListView:501
+msgid "Loading table ..."
+msgstr "Lade Tabelle ..."
+
+#: bibliograph.ui.reference.ListView:1028
+msgid "You cannot create an item outside a folder"
+msgstr "Sie können keinen Datensatz außerhalb eines Ordners erstellen"
+
+#: bibliograph.ui.reference.ListView:1044
+msgid "Do your really want to remove the selected references from this folder?"
+msgstr "Möchten Sie die ausgewählten Datensätze wirklich aus diesem Ordner entfernen?\t"
+
+#: bibliograph.ui.reference.ListView:1045
+msgid "Do your really want to remove the selected references?"
+msgstr "Wollen Sie wirklich die ausgewählten Datensätze entfernen?"
+
+#: bibliograph.ui.reference.ListView:1069
+msgid "Do your really want to move the selected references to '%1'?"
+msgstr "Wollen Sie wirklich die augewählten Datensätze nach '%1' verschieben?"
+
+#: bibliograph.ui.reference.ListView:1095
+msgid "Do your really want to copy the selected referencesto '%1'?"
+msgstr "Wollen Sie wirklich die ausgewählten Datensätze nach '%1' kopieren?"
+
+#: bibliograph.ui.reference.ListViewUi:146
+msgid "Create new reference type"
+msgstr "Neuen Datensatz anlegen"
+
+#: bibliograph.ui.reference.ListViewUi:180
+msgid "Create"
+msgstr "Anlegen"
+
+#: bibliograph.ui.reference.ListViewUi:194
 msgid "Cancel"
+msgstr "Abbrechen"
+
+#: bibliograph.ui.reference.ListViewUi:239
+msgid "Move reference(s)..."
+msgstr "Verschieben ..."
+
+#: bibliograph.ui.reference.ListViewUi:248
+msgid "Copy reference(s)..."
+msgstr "Kopieren ..."
+
+#: bibliograph.ui.reference.ListViewUi:259
+msgid "Export references"
+msgstr "Exportieren"
+
+#: bibliograph.ui.reference.ListViewUi:267
+msgid "Export selected references"
+msgstr "Ausgewählte Datensätze exportieren"
+
+#: bibliograph.ui.reference.ListViewUi:276
+msgid "Export folder"
+msgstr "Ordner exportieren"
+
+#: bibliograph.ui.reference.ListViewUi:287
+msgid "Edit references"
+msgstr "Bearbeiten"
+
+#: bibliograph.ui.reference.ListViewUi:296
+msgid "Find/Replace"
+msgstr "Suchen/Ersetzen"
+
+#: bibliograph.ui.window.AboutWindow:50
+msgid "The application"
+msgstr "Das Programm"
+
+#: bibliograph.ui.window.AboutWindow:70
+msgid "Credits"
+msgstr "Danksagungen"
+
+#: bibliograph.ui.window.AccessControlTool:47
+msgid "Access control tool"
+msgstr "Zugangskontrollwerkzeug"
+
+#: bibliograph.ui.window.AccessControlTool:90
+msgid "New User"
+msgstr "Neue/r Benutzer/in"
+
+#: bibliograph.ui.window.AccessControlTool:105
+msgid "New Datasource"
+msgstr "Neue Datenbank"
+
+#: bibliograph.ui.window.AccessControlTool:124
+msgid "Export to filesystem"
+msgstr "Ins Dateisystem exportieren"
+
+#: bibliograph.ui.window.AccessControlTool:143
+msgid "Exit"
+msgstr "Schließen"
+
+#: bibliograph.ui.window.AccessControlTool:467
+msgid "Please enter the id of the new '%1'-Object"
+msgstr "Bitte geben sie die ID für das neue '%1'-Objekt ein"
+
+#: bibliograph.ui.window.AccessControlTool:284
+msgid "Do you really want to delete '%1'?"
+msgstr "Wollen Sie wirklich '%1' löschen?"
+
+#: bibliograph.ui.window.AccessControlTool:522
+msgid "Loading data ..."
+msgstr "Lade die Daten ..."
+
+#: bibliograph.ui.window.AccessControlTool:346
+msgid "Edited element"
+msgstr "Bearbeitetes Element"
+
+#: bibliograph.ui.window.AccessControlTool:386
+msgid "Link"
+msgstr "Verknüpfen"
+
+#: bibliograph.ui.window.AccessControlTool:404
+msgid "Unlink"
+msgstr "Lösen"
+
+#: bibliograph.ui.window.AccessControlTool:429
+msgid "Linkable items"
+msgstr "Verknüpfbare Elemente"
+
+#: bibliograph.ui.window.AccessControlTool:497
+msgid "Do you really want to delete the objects '%1'?"
+msgstr "Wollen Sie wirklich die Objekte '%1' löschen?"
+
+#: bibliograph.ui.window.DatasourceListWindow:42
+msgid "Please select the datasource"
+msgstr "Bitte wählen Sie die Datenquelle aus"
+
+#: bibliograph.ui.window.DatasourceListWindow:97
+msgid "OK"
+msgstr "OK"
+
+#: bibliograph.ui.window.FolderTreeWindowUi:108
+msgid "Select"
+msgstr "Auswählen"
+
+#: bibliograph.ui.window.ImportWindow:120
+msgid "1. Choose file"
+msgstr "1. Datei auswählen"
+
+#: bibliograph.ui.window.ImportWindow:132
+msgid "Uploading file..."
+msgstr "Lade Datei auf den Server ..."
+
+#: bibliograph.ui.window.ImportWindow:176
+msgid "Processing references..."
+msgstr "Verarbeite die Dateisätze ..."
+
+#: bibliograph.ui.window.ImportWindow:213
+msgid "You have to select one or more reference to import."
+msgstr "Sie müssen eine oder mehr Datensätze zum importieren auswählen."
+
+#: bibliograph.ui.window.ImportWindow:223
+msgid "Please select a folder first."
+msgstr "Bitte wählen sie einen Ordner aus, in den importiert werden soll. "
+
+#: bibliograph.ui.window.ImportWindow:231
+msgid "Cannot determine selected folder. Please reload the folders."
+msgstr "Kann den ausgewählten Ordner nicht finden. Bitte die Ordner neu laden."
+
+#: bibliograph.ui.window.ImportWindow:236
+msgid "Invalid target folder. You can only import into normal folders."
+msgstr "Ungültiger Zielordner. Sie können nur in normale Ordner importieren."
+
+#: bibliograph.ui.window.ImportWindow:244
+msgid "Importing references..."
+msgstr "Importiere die Datensätze ..."
+
+#: bibliograph.ui.window.ImportWindowUi:30
+msgid "Import from file"
+msgstr "Aus Datei importieren"
+
+#: bibliograph.ui.window.ImportWindowUi:72
+msgid "3. Upload file"
+msgstr "3. Datei hochladen"
+
+#: bibliograph/ui/window/ImportWindowUi.js:115
+msgid "Select all"
+msgstr "Alle auswählen"
+
+#: bibliograph.ui.window.ImportWindowUi:128
+msgid "Import selected records"
+msgstr "Augewählte Datensätze importieren"
+
+#: bibliograph.ui.window.ImportWindowUi:139
+msgid "Close"
+msgstr "Schließen"
+
+#: bibliograph.ui.window.PreferencesWindow:75
+msgid "General"
 msgstr ""
 
-#: dialog.Confirm:117
-msgid "yes"
+#: bibliograph.ui.window.PreferencesWindow:84
+msgid "Application title"
+msgstr "Programmtitel"
+
+#: bibliograph.ui.window.PreferencesWindow:99
+msgid "Application logo"
+msgstr "Anwendungslogo"
+
+#: bibliograph.ui.window.PreferencesWindow:114
+msgid "Language"
 msgstr ""
 
-#: dialog.Confirm:129
-msgid "no"
+#: bibliograph.ui.window.PreferencesWindow:136
+msgid "Use browser locale"
+msgstr "Browser-Einstellungen verwenden"
+
+#: bibliograph.ui.window.PreferencesWindow:175
+msgid "Fields"
+msgstr "Felder"
+
+#: bibliograph.ui.window.PreferencesWindow:190
+msgid "Database"
+msgstr "Datenbank"
+
+#: bibliograph.ui.window.PreferencesWindow:232
+msgid "Exclude fields"
+msgstr "Felder ausschließen"
+
+#: bibliograph.ui.window.PreferencesWindow:241
+msgid "Enter the names of fields to exclude."
+msgstr "Geben Sie die auszuschließenden Felder ein."
+
+#: bibliograph.ui.window.PreferencesWindow:266
+msgid "Access"
+msgstr "Zugang"
+
+#: bibliograph.ui.window.PreferencesWindow:277
+msgid "Authentication method"
+msgstr "Authentifizierungsmethode"
+
+#: bibliograph.ui.window.PreferencesWindow:283
+msgid "Client sends plain text password"
+msgstr "Klartextübertragung des Passworts (nur mit HTTPS)"
+
+#: bibliograph.ui.window.PreferencesWindow:289
+msgid "Client sends hashed password"
+msgstr "Verschlüsselte Übertragung des Passworts"
+
+#: bibliograph.ui.window.PreferencesWindow:315
+msgid "Plaintext passwords without a secure connection (HTTPS) are not allowed."
+msgstr "Klartextübertragung des Passworts erfordert eine sichere Verbindung (HTTPS)"
+
+#: bibliograph.ui.window.PreferencesWindow:330
+msgid "Access Mode"
+msgstr "Zugangsmodus"
+
+#: bibliograph.ui.window.PreferencesWindow:334
+msgid "Normal"
+msgstr "Normal"
+
+#: bibliograph.ui.window.PreferencesWindow:338
+msgid "Read-Only"
+msgstr "Nur-Lese-Modus"
+
+#: bibliograph.ui.window.PreferencesWindow:370
+msgid "Custom message"
+msgstr "Spezieller Hinweis"
+
+#: bibliograph.ui.window.PreferencesWindow:374
+msgid "Shown to users in read-only and no-access mode."
+msgstr "Wird den Benutzern im Nur-Lese-Modus und bei Zugangssperre angezeigt."
+
+#: bibliograph.ui.window.SearchHelpWindow:25
+msgid "Search Help Window"
+msgstr "Hilfe für die Suche"
+
+#: bibliograph.Application:153
+msgid "Missing server address. Please contact administrator."
 msgstr ""
 
 #: qx.util.Validate:90
@@ -46,6 +648,42 @@ msgstr ""
 msgid "%1 does not fit %2."
 msgstr ""
 
+#: dialog.Confirm:117
+msgid "yes"
+msgstr ""
+
+#: dialog.Confirm:129
+msgid "no"
+msgstr ""
+
+#: bibliograph.ui.window.ImportWindowUi:116
+msgid "Import all records"
+msgstr ""
+
+#: dialog.Login:150
+msgid "Name"
+msgstr ""
+
+#: dialog.Login:150
+msgid "Password"
+msgstr ""
+
+#: dialog.Login:206
+msgid "Forgot Password?"
+msgstr ""
+
+#: bibliograph.ui.reference.ListView:1185
+msgid "Do you really want to make the folder empty, moving all references to the trash that are not in other folders?"
+msgstr ""
+
+#: bibliograph.ui.reference.ListView:1188
+msgid "Emptying the folder ..."
+msgstr ""
+
+#: bibliograph.ui.reference.ListViewUi:306
+msgid "Make folder empty"
+msgstr ""
+
 #: qx.ui.form.validation.Manager:37
 msgid "This field is required"
 msgstr ""
@@ -66,70 +704,18 @@ msgstr ""
 msgid "Next year"
 msgstr ""
 
-#: bibliograph.Application:177
-msgid "Missing server address. Please contact administrator."
+#: qx.ui.table.columnmodel.Resize:197
+msgid "Reset column widths"
 msgstr ""
 
-#: bibliograph.Setup:51
-msgid "No connection to server."
-msgstr ""
+#: qx.ui.table.Table:1974
+msgid "one row"
+msgid_plural "%1 rows"
+msgstr[0] ""
+msgstr[1] ""
 
-#: bibliograph.Setup:52
-msgid "Loading folder data ..."
-msgstr ""
-
-#: bibliograph.Application:343
-msgid "Setting up application..."
-msgstr ""
-
-#: bibliograph.Application:365
-msgid "Connecting with server..."
-msgstr ""
-
-#: bibliograph.Application:376
-msgid "Loading configuration ..."
-msgstr ""
-
-#: bibliograph.Application:392
-msgid "Loading datasources ..."
-msgstr ""
-
-#: bibliograph.Application:417
-msgid "Loading plugins ..."
-msgstr ""
-
-#: bibliograph.Application:421
-msgid "Loaded plugin %1 of %2 : %3 ..."
-msgstr ""
-
-#: bibliograph.Application:650
-msgid "Loading datasource information ..."
-msgstr ""
-
-#: bibliograph.Application:780
-msgid "To log in, you need a secure connection. After you press 'OK', the application will be reloaded in secure mode. After the application finished loading, you can log in again."
-msgstr ""
-
-#: bibliograph.Application:791
-msgid "The application is currently in a read-only state. Only the administrator can log in."
-msgstr ""
-
-#: bibliograph.Application:988
-msgid "Please wait ..."
-msgstr ""
-
-#: bibliograph.Application:884
-msgid "Logging out ..."
-msgstr ""
-
-#: bibliograph.Application:921
-msgid "You don't have access to any datasource on the server."
-msgstr ""
-
-#: bibliograph.Application:978
-msgid "Cannot open window. Please disable the popup-blocker of your browser for this website."
-msgstr ""
-
-#: bibliograph.Application:1063
-msgid "Retrieving user data..."
-msgstr ""
+#: qx.ui.table.Table:1976
+msgid "one of one row"
+msgid_plural "%1 of %2 rows"
+msgstr[0] ""
+msgstr[1] ""

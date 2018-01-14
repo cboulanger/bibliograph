@@ -80,7 +80,7 @@ qx.Class.define("qcl.ui.dialog.ServerProgress",
     this.__iframe.hide();
     var app = qx.core.Init.getApplication();
     app.getRoot().getContentElement().add(this.__iframe);
-    this.__sourceTemplate = app.getRpcManager().getServerUrl();
+    this.__sourceTemplate = app.getServerUrl();
     this.__sourceTemplate += "?service=%1&method=%2&params=%3&sessionId=%4&nocache=%5";    
   }, 
   

@@ -27,9 +27,7 @@
  * startup and synchronize the config values with the server.
  * 
  * <pre>   
- * var myConfigStore = qcl.data.store.JsonRpc( 
- *   "path/to/server/index.php", "myapp.Config" 
- * ); 
+ * var myConfigStore = qcl.data.store.JsonRpc("config"); 
  * myConfigStore.bind("model", qcl.application.ConfigManager.getInstance(), "model");
  * myConfigStore.load();
  * 
@@ -250,7 +248,7 @@ qx.Class.define("qcl.application.ConfigManager",
       if ( ! this.getStore() )
       {
         this.setStore(
-          new qcl.data.store.JsonRpc( null, service )       
+          new qcl.data.store.JsonRpc( service )       
         );        
       }
            

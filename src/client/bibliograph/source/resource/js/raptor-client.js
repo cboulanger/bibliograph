@@ -2188,6 +2188,7 @@ module.exports = function (url) {
 
       xhr.open('POST', url)
       xhr.setRequestHeader('Content-Type', 'application/json')
+      xhr.setRequestHeader('Accept', 'application/json')
 
       // authorization
       if (client.getAuthToken()) {

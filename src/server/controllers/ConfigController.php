@@ -539,7 +539,11 @@ class ConfigController extends AppController
   {
     if( ! $user ) $user = $this->getActiveUser();
     $config = $this->getModel( $key );
-    return $config->getUserConfigValue($user);
+    return $this->castType( 
+      $config->getUserConfigValue($user),
+      $this->keyType( $key ),
+      true 
+    );
   }
 
   /**

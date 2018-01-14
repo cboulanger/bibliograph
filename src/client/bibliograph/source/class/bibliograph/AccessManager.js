@@ -32,8 +32,6 @@ qx.Class.define("bibliograph.AccessManager",
   construct : function()
   {
     this.base(arguments);
-    this.__permissionManager = new qcl.access.PermissionManager;
-    this.__userManager = new qcl.access.UserManager;
   },
  
   properties : {
@@ -68,11 +66,7 @@ qx.Class.define("bibliograph.AccessManager",
     */    
 
     _authenticationSetup : false,
-    __activeUser : null,
-    __permissionManager : null,
-    __userManager : null,
            
-
    /*
     ---------------------------------------------------------------------------
        COMPONENTS
@@ -80,11 +74,11 @@ qx.Class.define("bibliograph.AccessManager",
     */
 
     getPermissionManager : function(){
-      return this.__permissionManager;
+      return qcl.access.PermissionManager.getInstance();
     },
 
     getUserManager : function(){
-      return this.__userManager;
+      return qcl.access.UserManager.getInstance();
     }, 
 
    /*
@@ -189,24 +183,20 @@ qx.Class.define("bibliograph.AccessManager",
      * 
      * @param username {String}
      * @param password {String}
-     * @param callback {Function}
-     * @param context {Object} The context in which the callback is executed
-     * @return {void}
+     * @return {Promise<Object>}
      */
-    authenticate : function( username, password, callback, context )
+    authenticate : async function( username, password )
     {
       var sha1 = qcl.crypto.Sha1.hex_sha1.bind(qcl.crypto.Sha1);
-      this.getStore().execute("challenge", [username], function(challenge){
-        if( challenge.method == "hashed" )
-        {
-          var nounce   = challenge.nounce.split(/\|/), 
-            randSalt   = nounce[0], 
-            storedSalt = nounce[1],
-            serverHash = sha1( storedSalt + password );
-          password = sha1( randSalt + serverHash );
-        }
-        this.getStore().load("authenticate",[ username, password ], callback, context );        
-      }, this);
+      let challenge = await this.getStore().execute("challenge", [username]);
+      if( challenge.method == "hashed" ) {
+        var nounce   = challenge.nounce.split(/\|/), 
+          randSalt   = nounce[0], 
+          storedSalt = nounce[1],
+          serverHash = sha1( storedSalt + password );
+        password = sha1( randSalt + serverHash );
+      }
+      return this.getStore().load("authenticate",[ username, password ]);  
     },
     
     /**
@@ -243,23 +233,6 @@ qx.Class.define("bibliograph.AccessManager",
     updatePermission : function( name )
     {
       this.getPermission( name ).update();
-    },    
-       
-    /**
-     * Log out current user on the server
-     * @param callback {function|undefined} optional callback that is called
-     * when logout request returns from server.
-     * @param context {object|undefined} Optional context for callback function
-     * @return {Promise<Object>}
-     */
-    logout : async function( callback, context )
-    {
-      qx.event.message.Bus.dispatch( new qx.event.message.Message("logout", true ) );
-      await this.getApplication().getRpcClient('access').notify("logout");
-      // re-login as guest
-      await this.authenticateAsGuest();
-      await this.load();
-      await this.getApplication().getConfigManager().load();
-    }
+    },
   }
 });

@@ -48,7 +48,7 @@
  * Autocomplete with a single-value ComboBox
  * 
  * <pre>
- * var store = new qcl.data.store.JsonRpc(null, "my.service");
+ * var store = new qcl.data.store.JsonRpc( "service");
  * store.setAutoLoadMethod("myAutoCompleteValuesMethod");
  * var combobox = new qx.ui.form.ComboBox();
  * var controller = new qcl.data.controller.AutoComplete(null,combobox);
@@ -62,7 +62,7 @@
  * by a semicolon (";").
  * 
  * <pre>
- * var store = new qcl.data.store.JsonRpc(null, "my.service");
+ * var store = new qcl.data.store.JsonRpc( "service");
  * store.setAutoLoadMethod("myAutoCompleteValuesMethod");
  * var textfield = new qx.ui.form.TextField();
  * var controller = new qcl.data.controller.AutoComplete(null,textfield, ";",true);
@@ -76,7 +76,7 @@
  * by newline. 
  * 
  * <pre>
- * var store = new qcl.data.store.JsonRpc(null, "my.service");
+ * var store = new qcl.data.store.JsonRpc( "service");
  * store.setAutoLoadMethod("myAutoCompleteValuesMethod");
  * var textarea = new qx.ui.form.TextArea();
  * var controller = new qcl.data.controller.AutoComplete(null,textarea,"\n");

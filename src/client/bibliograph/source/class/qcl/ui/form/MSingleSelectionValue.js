@@ -99,7 +99,7 @@ qx.Mixin.define("qcl.ui.form.MSingleSelectionValue",
      */
     _convertSelectionToValue : function( items )
     {
-      if ( items.length )
+      if ( qx.lang.Type.isArray(items) && items.length )
       {
         if ( typeof items[0].getModel == "function" 
             && items[0].getModel() 

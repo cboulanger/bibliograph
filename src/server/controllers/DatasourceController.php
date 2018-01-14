@@ -61,4 +61,14 @@ class DatasourceController extends AppController
     return $datasourceModel;
   }
 
+  public function actionLoad(){
+    $activeUser = $this->getActiveUser();
+    //$datasources = $activeUser->getDatasources()
+    $datasources = \app\models\Datasource::find()
+      ->select(['namedId','title','description'])
+      ->where(['schema' => 'bibliograph.schema.bibliograph2'])
+      ->asArray()->all();
+    return $datasources;
+  }
+
 }

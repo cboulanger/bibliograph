@@ -23,6 +23,7 @@
 qx.Class.define("qcl.access.PermissionManager",
 {
   extend : qcl.access.AbstractManager,
+  type : "singleton",
   construct : function()
   {
     this.base(arguments);

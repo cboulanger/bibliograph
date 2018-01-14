@@ -24,7 +24,8 @@
 qx.Class.define("qcl.access.UserManager",
 {
 
-	extend : qcl.access.AbstractManager,
+  extend : qcl.access.AbstractManager,
+  type: "singleton",
   
   construct : function()
   {

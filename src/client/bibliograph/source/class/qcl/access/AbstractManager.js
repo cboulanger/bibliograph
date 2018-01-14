@@ -220,53 +220,6 @@ qx.Class.define("qcl.access.AbstractManager",
 		}
   },
   
-  /*
-  *****************************************************************************
-     DEFERRED EXECUTION
-  *****************************************************************************
-  */  
-  
-  /**
-   * This defer key is used to declare a couple of functions in the "qcl" scope.
-   * @ignore(qcl.*)
-   */
-  defer : function()
-  {
-    /**
-     * convenience converter method
-     */
-    qcl.bool2visibility = function(state)
-    {
-      return state ? 'visible' : 'excluded';
-    };
-    
-    qcl.utf8_encode = function ( string )
-    {
-      return unescape( encodeURIComponent( string ) );
-    }
-
-    qcl.utf8_decode = function( string )
-    {
-      return decodeURIComponent( escape( string ) );
-    }
-    
-    qcl.html_entity_decode = function(str) 
-    {
-      var ta=document.createElement("textarea");
-      ta.innerHTML=str.replace(/</g,"&lt;").replace(/>/g,"&gt;");
-      return ta.value;
-    }
-    
-    qcl.strip_tags = function (html)
-    {
-      return html.replace(/(<([^>]+)>)/ig,"");
-    }
-    
-    qcl.br2nl = function( html )
-    {
-      return html.replace(/<br[\s]*\/?>/ig,"\n");
-    }    
-  },  
 
   /*
   *****************************************************************************

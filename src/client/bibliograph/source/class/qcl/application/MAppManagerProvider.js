@@ -337,7 +337,6 @@ qx.Mixin.define("qcl.application.MAppManagerProvider",
      */
     terminate : function()
     {
-      this.getRpcManager().terminate();
       this.getRoot().setVisibility("hidden");
     }        
  

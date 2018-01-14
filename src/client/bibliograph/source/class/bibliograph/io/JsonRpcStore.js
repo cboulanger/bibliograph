@@ -45,8 +45,11 @@ qx.Class.define("bibliograph.io.JsonRpcStore",
         this.setMarshaler( new qx.data.marshal.Json(delegate) );
       } else {
         this.setMarshaler( marshaler );
-      }        
-      this.__client = this.getApplication().getRpcClient(serviceName);
+      } 
+      if( ! serviceName ){
+        throw new Error("Missing service name");
+      }
+      this.setServiceName( serviceName );
     },
 
     /*
@@ -112,6 +115,17 @@ qx.Class.define("bibliograph.io.JsonRpcStore",
         nullable: true,
         event: "changeModel"
       },
+
+     /**
+      * The name of the jsonrpc service
+      */
+      serviceName : 
+      {
+        check : "String",
+        nullable: false,
+        event: "changeServiceName",
+        apply : "_applyServiceName"
+      },      
   
       /**
        * The name of the service method that is called on the server when the load()
@@ -175,6 +189,12 @@ qx.Class.define("bibliograph.io.JsonRpcStore",
         APPLY METHODS
       ---------------------------------------------------------------------------
       */ 
+
+      _applyServiceName : function( value, old)
+      {
+        if( ! value ) return; // @todo hack!!
+        this.__client = this.getApplication().getRpcClient(value);
+      },
       
       _applyAutoLoadMethod : function( value, old)
       {

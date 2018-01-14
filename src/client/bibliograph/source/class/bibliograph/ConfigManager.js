@@ -177,8 +177,9 @@ qx.Class.define("bibliograph.ConfigManager", {
       // set default config store
       this.setStore(new bibliograph.io.JsonRpcStore("config"));
 
-      // bind the configuration store's data model to the user manager's data model
-      this.getStore().bind("model", this, "model");
+      // bind the configuration store's data model to the manager's data model
+      // so that it is copied over when loaded
+      this.bind("store.model", this, "model");
 
       // whenever a config value changes on the server, send it to server
       this.addListener(

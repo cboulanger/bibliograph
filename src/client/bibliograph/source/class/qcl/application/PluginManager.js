@@ -100,8 +100,8 @@ qx.Class.define("qcl.application.PluginManager",
       /*
        * get script url arry from server
        */
-      app.getRpcManager().execute(
-        service, "getPluginData", [],
+      app.getRpcClient(service).send(
+        "getPluginData", [],
         function( pluginData )
         {
           

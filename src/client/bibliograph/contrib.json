@@ -6,6 +6,13 @@
       "repo_name": "cboulanger/qx-contrib-Dialog",
       "repo_tag": "v1.3.0-beta.3",
       "path": "contrib/cboulanger_qx-contrib-Dialog_v1.3.0-beta.3"
+    },
+    {
+      "library_name": "UploadWidget",
+      "library_version": "trunk",
+      "repo_name": "oetiker/UploadWidget",
+      "repo_tag": "v1.0.0",
+      "path": "contrib/oetiker_UploadWidget_v1.0.0"
     }
   ]
 }

@@ -128,7 +128,7 @@ class AccessController extends AppController
         $user = $this->user($first);
       } catch (\InvalidArgumentException $e) {
         Yii::warning("Invalid user '$first' tried to authenticate.");
-        throw new AuthException( $this->tr("Invalid username or password."), AuthException::INVALID_AUTH);
+        throw new Exception( $this->tr("Invalid username or password."), Exception::INVALID_REQUEST);
       }
   
       $auth_method = Yii::$app->utils->getPreference("authentication.method");

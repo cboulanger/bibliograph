@@ -470,9 +470,7 @@ qx.Class.define("qcl.ui.treevirtual.TreeView",
       * Store
       * @todo: we don't need a qcl AND a virtualdata jsonrpc store!
       */
-     ds.store = new qcl.data.store.JsonRpc( 
-       null, this.getServiceName(), this.getMarshaler() 
-     );
+     ds.store = new qcl.data.store.JsonRpc( this.getServiceName(), this.getMarshaler());
      
      /*
       * Controller
