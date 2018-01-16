@@ -66,7 +66,7 @@ msgstr ""
 msgid "Next year"
 msgstr ""
 
-#: bibliograph.Application:153
+#: bibliograph.Application:177
 msgid "Missing server address. Please contact administrator."
 msgstr ""
 
@@ -78,27 +78,27 @@ msgstr ""
 msgid "Loading folder data ..."
 msgstr ""
 
-#: bibliograph.Setup:76
+#: bibliograph.Setup:80
 msgid "Setting up application..."
 msgstr ""
 
-#: bibliograph.Setup:80
+#: bibliograph.Setup:84
 msgid "Connecting with server..."
 msgstr ""
 
-#: bibliograph.Setup:85
+#: bibliograph.Setup:89
 msgid "Loading configuration ..."
 msgstr ""
 
-#: bibliograph.Setup:93
+#: bibliograph.Setup:97
 msgid "Loading datasources ..."
 msgstr ""
 
-#: bibliograph.Setup:228
+#: bibliograph.Setup:232
 msgid "Loading plugins ..."
 msgstr ""
 
-#: bibliograph.Setup:233
+#: bibliograph.Setup:237
 msgid "Loaded plugin %1 of %2 : %3 ..."
 msgstr ""
 
@@ -106,19 +106,19 @@ msgstr ""
 msgid "Loading datasource information ..."
 msgstr ""
 
-#: bibliograph.Commands:45
+#: bibliograph.Commands:46
 msgid "To log in, you need a secure connection. After you press 'OK', the application will be reloaded in secure mode. After the application finished loading, you can log in again."
 msgstr ""
 
-#: bibliograph.Commands:52
+#: bibliograph.Commands:53
 msgid "The application is currently in a read-only state. Only the administrator can log in."
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:112
+#: bibliograph.ui.window.AccessControlTool:114
 msgid "Please wait ..."
 msgstr ""
 
-#: bibliograph.Commands:113
+#: bibliograph.Commands:84
 msgid "Logging out ..."
 msgstr ""
 
@@ -126,11 +126,11 @@ msgstr ""
 msgid "You don't have access to any datasource on the server."
 msgstr ""
 
-#: bibliograph.Commands:145
+#: bibliograph.Commands:108
 msgid "Cannot open window. Please disable the popup-blocker of your browser for this website."
 msgstr ""
 
-#: bibliograph.Commands:211
+#: bibliograph.Commands:125
 msgid "Retrieving user data..."
 msgstr ""
 
@@ -138,39 +138,39 @@ msgstr ""
 msgid "Please select the datasource"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:47
+#: bibliograph.ui.window.AccessControlTool:49
 msgid "Access control tool"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:90
+#: bibliograph.ui.window.AccessControlTool:92
 msgid "New User"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:105
+#: bibliograph.ui.window.AccessControlTool:107
 msgid "New Datasource"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:117
+#: bibliograph.ui.main.Toolbar:211
 msgid "Help"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:124
+#: bibliograph.ui.window.AccessControlTool:126
 msgid "Export to filesystem"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:143
+#: bibliograph.ui.window.AccessControlTool:145
 msgid "Exit"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:467
+#: bibliograph.ui.window.AccessControlTool:469
 msgid "Please enter the id of the new '%1'-Object"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:284
+#: bibliograph.ui.window.AccessControlTool:286
 msgid "Do you really want to delete '%1'?"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:522
+#: bibliograph.ui.window.AccessControlTool:524
 msgid "Loading data ..."
 msgstr ""
 
@@ -178,23 +178,23 @@ msgstr ""
 msgid "Please wait..."
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:346
+#: bibliograph.ui.window.AccessControlTool:348
 msgid "Edited element"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:386
+#: bibliograph.ui.window.AccessControlTool:388
 msgid "Link"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:404
+#: bibliograph.ui.window.AccessControlTool:406
 msgid "Unlink"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:429
+#: bibliograph.ui.window.AccessControlTool:431
 msgid "Linkable items"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:497
+#: bibliograph.ui.window.AccessControlTool:499
 msgid "Do you really want to delete the objects '%1'?"
 msgstr ""
 
@@ -202,7 +202,7 @@ msgstr ""
 msgid "Select"
 msgstr ""
 
-#: bibliograph.ui.window.PreferencesWindow:36
+#: bibliograph.ui.main.Toolbar:136
 msgid "Preferences"
 msgstr ""
 
@@ -302,7 +302,7 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: bibliograph.ui.window.AboutWindow:34
+#: bibliograph.ui.main.Toolbar:245
 msgid "About Bibliograph"
 msgstr ""
 
@@ -326,7 +326,7 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
-#: dialog.Login:200
+#: bibliograph.ui.main.Toolbar:57
 msgid "Login"
 msgstr ""
 
@@ -334,23 +334,23 @@ msgstr ""
 msgid "Forgot Password?"
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:75
+#: bibliograph.ui.main.Toolbar:73
 msgid "Logout"
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:92
+#: bibliograph.ui.main.Toolbar:90
 msgid "Loading..."
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:114
+#: bibliograph.ui.main.Toolbar:110
 msgid "Datasources"
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:129
+#: bibliograph.ui.main.Toolbar:125
 msgid "System"
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:151
+#: bibliograph.ui.main.Toolbar:147
 msgid "Access management"
 msgstr ""
 
@@ -366,23 +366,23 @@ msgstr ""
 msgid "This will reset and reload the application"
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:193
+#: bibliograph.ui.main.Toolbar:189
 msgid "Import"
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:206
+#: bibliograph.ui.main.Toolbar:202
 msgid "Import text file"
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:225
+#: bibliograph.ui.main.Toolbar:221
 msgid "Online Help"
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:235
+#: bibliograph.ui.main.Toolbar:231
 msgid "Report a problem or request a feature"
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:314
+#: bibliograph.ui.main.Toolbar:310
 msgid "Enter search term"
 msgstr ""
 

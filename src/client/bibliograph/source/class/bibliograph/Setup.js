@@ -18,7 +18,7 @@
 
 /**
  * This is a qooxdoo singleton class
- *
+ * 
  */
 qx.Class.define("bibliograph.Setup", {
   extend: qx.core.Object,
@@ -48,6 +48,9 @@ qx.Class.define("bibliograph.Setup", {
       qx.Class.include( qx.core.Object, qcl.application.MGetApplication );
       // Mixes `widgetId` property into all qooxdoo objects
       qx.Class.include( qx.core.Object, qcl.application.MWidgetId );
+
+      // initialize application commands
+      bibliograph.Commands.getInstance();
       
       let app = this.getApplication();
       
@@ -55,6 +58,7 @@ qx.Class.define("bibliograph.Setup", {
       this.saveApplicationState();
 
       // create main UI Layout
+      bibliograph.ui.Windows.getInstance().create();
       bibliograph.ui.MainLayout.getInstance().create();
       
       // show the splash screen

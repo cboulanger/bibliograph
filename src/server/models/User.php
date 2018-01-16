@@ -278,7 +278,17 @@ class User extends BaseModel implements IdentityInterface
    */
   public function isOnline()
   {
-    return $this->online;
+    return (boolean) $this->online;
+  }
+
+  /**
+   * Returns true if the user is authenticated via an ldap source
+   *
+   * @return boolean
+   */
+  public function isLdapUser()
+  {
+    return (boolean) $this->ldap;
   }
 
   /**

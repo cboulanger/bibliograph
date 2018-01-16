@@ -43,7 +43,7 @@ qx.Class.define("bibliograph.ui.main.DatasourceListPanel",
 
       });
       dsList.bind("selection", this.getApplication(), "datasource", {
-        converter : this.getApplication().getSelectionValue
+        converter : bibliograph.Utils.getSelectionValue
       });
       this.getApplication().bind("datasource", dsList, "selection", {
         converter : qx.lang.Function.bind(this.getApplication().getModelValueListElement, dsList)

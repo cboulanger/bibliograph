@@ -140,6 +140,11 @@ qx.Class.define("bibliograph.AccessManager",
       // bind the authentication stores data model to the user managers data model
       this.getStore().bind("model", this.getUserManager(), "model");
 
+      // bind the userdata anonymous property 
+      this.getStore().bind("model.anonymous", this, "authenticatedUser",{
+        converter: v => !v
+      });
+
       // load userdata
       this.getStore().setLoadMethod("userdata");
       return this;
@@ -153,18 +158,35 @@ qx.Class.define("bibliograph.AccessManager",
     },
 
     /**
-     * Authenticate anomymously with the server.
-     * @return {Promise<Object>}
+     * Handles the response of the access/authenticate server action:
+     * If authentication is successful, reload config and user data.
      */
-    authenticateAsGuest : async function()
+    __handleAuthenticationResponse : async function(response)
     {
-      this.info("Authenticating anonymously with server...");
-      let client = this.getApplication().getRpcClient("access");
-      let response = await client.send("authenticate",[]);
-      let { message, token, sessionId } = response; 
+      let { message, token, sessionId, error } = response; 
+      if( error ){
+        this.warn(error);
+        return response;
+      }
+      // load user config & userdata
       this.info(message);
       this.setToken(token);
       this.setSessionId(sessionId);
+      await this.getApplication().getConfigManager().load();
+      await this.load();      
+      return response;
+    },
+
+    /**
+     * Authenticate anomymously with the server.
+     * @return {Promise<Object>}
+     */
+    guestLogin : async function()
+    {
+      this.info("Logging in as a guest...");
+      let client = this.getApplication().getRpcClient("access");
+      let response = await client.send("authenticate",[]);
+      return await this.__handleAuthenticationResponse( response );
     },    
 
     /**
@@ -188,7 +210,8 @@ qx.Class.define("bibliograph.AccessManager",
     authenticate : async function( username, password )
     {
       var sha1 = qcl.crypto.Sha1.hex_sha1.bind(qcl.crypto.Sha1);
-      let challenge = await this.getStore().execute("challenge", [username]);
+      let client = this.getApplication().getRpcClient("access");
+      let challenge = await client.send("challenge", [username]);
       if( challenge.method == "hashed" ) {
         var nounce   = challenge.nounce.split(/\|/), 
           randSalt   = nounce[0], 
@@ -196,7 +219,13 @@ qx.Class.define("bibliograph.AccessManager",
           serverHash = sha1( storedSalt + password );
         password = sha1( randSalt + serverHash );
       }
-      return this.getStore().load("authenticate",[ username, password ]);  
+      let response = await client.send("authenticate",[username, password]);
+      await this.__handleAuthenticationResponse( response );
+      if ( ! response.error ){
+        // notify subscribers
+        qx.event.message.Bus.dispatch(new qx.event.message.Message("authenticated", this.getActiveUser()));
+      }
+      return response;
     },
     
     /**
@@ -234,5 +263,23 @@ qx.Class.define("bibliograph.AccessManager",
     {
       this.getPermission( name ).update();
     },
+
+    /**
+     * Logs out the current user 
+     * @return {Promise<void>}
+     */
+    logout : async function()
+    {
+      qx.event.message.Bus.dispatch( new qx.event.message.Message("loggingout", true ) );
+      // notify server
+      let app = this.getApplication();
+      await app.getRpcClient('access').notify("logout");
+      // re-login as guest
+      await this.guestLogin();
+      // load config and userdata
+      await this.load();
+      await app.getConfigManager().load();
+      qx.event.message.Bus.dispatch( new qx.event.message.Message("loggedOut"));      
+    }
   }
 });

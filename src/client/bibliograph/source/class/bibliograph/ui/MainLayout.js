@@ -17,12 +17,13 @@
 /*global bibliograph qx qcl dialog*/
 
 /**
- * The application UI
+ * This class instantiates the main application ui
  */
 qx.Class.define("bibliograph.ui.MainLayout", {
   extend: qx.core.Object,
   type: "singleton",
   members: {
+
     getRoot: function() {
       return this.getApplication().getRoot();
     },
@@ -30,10 +31,9 @@ qx.Class.define("bibliograph.ui.MainLayout", {
     /**
      * Create the main layout
      */
-    create: function() {
+    create: function() 
+    {
       
-      this.createWindows();
-
       var app = qx.core.Init.getApplication();
       var bus = qx.event.message.Bus.getInstance();
 
@@ -92,115 +92,6 @@ qx.Class.define("bibliograph.ui.MainLayout", {
       qxVsplit1.add(ui_mainItemView1);
       ui_mainItemView1.bind("view", this.getApplication(), "itemView", {});
       this.getApplication().bind("itemView", ui_mainItemView1, "view", {});
-    },
-
-    /**
-     * Create the application windows 
-     */
-    createWindows: function() 
-    {
-      var app = qx.core.Init.getApplication();
-      var bus = qx.event.message.Bus.getInstance();
-
-      /*
-       * Datasource list window
-       */
-      var ui_winDatasourceListWindow1 = new bibliograph.ui.window
-        .DatasourceListWindow();
-      ui_winDatasourceListWindow1.setWidgetId("bibliograph/datasourceWindow");
-      ui_winDatasourceListWindow1.setVisibility("excluded");
-      this.getRoot().add(ui_winDatasourceListWindow1);
-
-      /*
-       * Access Control Tool
-       */
-      var ui_winAccessControlTool1 = new bibliograph.ui.window
-        .AccessControlTool();
-      ui_winAccessControlTool1.setWidgetId("bibliograph/accessControlTool");
-      ui_winAccessControlTool1.setVisibility("excluded");
-      this.getRoot().add(ui_winAccessControlTool1);
-      
-      /*
-       * Folder Tree window
-       */
-      var ui_winFolderTreeWindow1 = new bibliograph.ui.window
-        .FolderTreeWindowUi();
-      ui_winFolderTreeWindow1.setWidgetId("bibliograph/folderTreeWindow");
-      ui_winFolderTreeWindow1.setVisibility("excluded");
-      this.getRoot().add(ui_winFolderTreeWindow1);
-
-      /*
-       * Preferences window
-       */
-      var ui_winPreferencesWindow1 = new bibliograph.ui.window
-        .PreferencesWindow();
-      ui_winPreferencesWindow1.setWidgetId("bibliograph/preferencesWindow");
-      ui_winPreferencesWindow1.setVisibility("excluded");
-      this.getRoot().add(ui_winPreferencesWindow1);
-      
-      /*
-       * Import window
-       */
-      var ui_winImportWindow1 = new bibliograph.ui.window.ImportWindowUi();
-      ui_winImportWindow1.setWidgetId("bibliograph/importWindow");
-      ui_winImportWindow1.setVisibility("excluded");
-      this.getRoot().add(ui_winImportWindow1);
-return;
-      /*
-       * About window
-       */
-      var ui_winAboutWindow1 = new bibliograph.ui.window.AboutWindow();
-      ui_winAboutWindow1.setWidgetId("bibliograph/aboutWindow");
-      ui_winAboutWindow1.setVisibility("excluded");
-      this.getRoot().add(ui_winAboutWindow1);
-
-      /*
-       * Search help window
-       */
-      var ui_winSearchHelpWindow1 = new bibliograph.ui.window
-        .SearchHelpWindow();
-      ui_winSearchHelpWindow1.setWidgetId("bibliograph/searchHelpWindow");
-      ui_winSearchHelpWindow1.setVisibility("excluded");
-      this.getRoot().add(ui_winSearchHelpWindow1);
-
-      /*
-       * Login Dialog
-       */
-      var loginDialog = new dialog.Login();
-      loginDialog.set({
-        widgetId: "bibliograph/loginDialog",
-        allowCancel: true,
-        checkCredentials: this.checkLogin,
-        showForgotPassword: false,
-        forgotPasswordHandler: this.forgotPassword.bind(this)
-      });
-
-      loginDialog.setCallback(function(loginSuccessful) {
-        if (loginSuccessful) {
-          loginDialog.hide();
-        }
-      });
-
-      // bind messages to configuration values
-      app.getConfigManager().addListener("ready", function() {
-        app
-          .getConfigManager()
-          .bindKey("application.title", loginDialog, "text", false);
-      });
-      app.getConfigManager().addListener("ready", function() {
-        app
-          .getConfigManager()
-          .bindKey("application.logo", loginDialog, "image", false);
-      });
-
-      // hide forgot password button if ldap is enabled
-      bus.subscribe(
-        "ldap.enabled",
-        function(e) {
-          loginDialog.setShowForgotPassword(!e.getData());
-        },
-        this
-      );
     }
   }
 });

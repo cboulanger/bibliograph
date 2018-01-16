@@ -94,8 +94,10 @@ qx.Class.define("bibliograph.io.JsonRpcClient", {
         let result = await this.__client.send( method, params);
         return this._handleResult(result);
       } catch( e ) {
-        this.setError(e);                
-        dialog.Dialog.error( this.getErrorMessage() ); // @todo use one instance!
+        this.setError(e);
+        let msg = `Error calling remote method '${method}': `+this.getErrorMessage();
+        dialog.Dialog.error( msg ); // @todo use one instance!
+        return null;
       }
     },
 
@@ -113,11 +115,9 @@ qx.Class.define("bibliograph.io.JsonRpcClient", {
       try {
          await this.__client.notify( method, params );
       } catch( e ) {
-        this.setError( {
-          code : e.rpcCode,
-          message : e.rpcData
-        });
-        dialog.Dialog.error( e.rpcData ); // @todo use one instance!
+        this.setError(e);
+        let msg = `Error calling remote method '${method}': `+this.getErrorMessage();
+        dialog.Dialog.error( msg ); // @todo use one instance!
         return null;
       }
     }, 
@@ -130,6 +130,9 @@ qx.Class.define("bibliograph.io.JsonRpcClient", {
       let e = this.getError()
       if( ! e ){
         return undefined;
+      }
+      if ( typeof e.rpcData == "string" ){
+        return e.rpcData;
       }
       if ( typeof e.message == "string" ){
         return e.message.substring(0,100);

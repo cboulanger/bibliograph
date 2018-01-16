@@ -8,11 +8,14 @@ use JsonRpc2\Dto;
 class AuthResult extends Dto
 {
     /** @var string */
-    public $message;
+    public $message = null;
 
     /** @var string */
-    public $token;
+    public $token = null;
 
     /** @var string */
-    public $sessionId;
+    public $sessionId = null;
+
+    /** @var string */
+    public $error = null;
 }

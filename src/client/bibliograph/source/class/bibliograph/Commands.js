@@ -17,8 +17,9 @@
 ************************************************************************ */
 
 /**
- * This is a qooxdoo singleton class
- *
+ * This singleton class contains the commands that can be executed in menus and buttons.
+ * Call them via qx.core.Init.getApplication().cmd("methodName",arg)
+ * 
  */
 qx.Class.define("bibliograph.Commands",
 {
@@ -36,15 +37,15 @@ qx.Class.define("bibliograph.Commands",
     /**
      * Called when the user presses the "login" button
      */
-    showLoginDialog : async function()
+    showLoginDialog : async function(value, app)
     {
-      let app = this.getApplication();
       // check if https login is enforced
+      let l= window.location;
       var enforce_https = app.getConfigManager().getKey("access.enforce_https_login");
-      if (enforce_https && location.protocol != "https:") {
+      if (enforce_https && l.protocol != "https:") {
         let msg = this.tr("To log in, you need a secure connection. After you press 'OK', the application will be reloaded in secure mode. After the application finished loading, you can log in again.");
         await dialog.Dialog.alert(msg).promise();
-        location.href = "https://" + location.host + location.pathname + location.hash;
+        l.href = "https://" + l.host + l.pathname + l.hash;
       } else {
         // check if access is restricted
         if ( app.getConfigManager().getKey("bibliograph.access.mode" ) == "readonly" && 
@@ -58,73 +59,35 @@ qx.Class.define("bibliograph.Commands",
           this.__readonlyConfirmed = true
         } else {
           // else show login dialog
-          this.getWidgetById("bibliograph/loginDialog").show();
+          app.getWidgetById("bibliograph/loginDialog").show();
         }
       }
     },
 
     /**
-     * Callback function that takes the username, password and
-     * another callback function as parameters.
-     * The passed function is called with a boolean value
-     * (true=authenticated, false=authentication failed) and an
-     * optional string value which can contain an error message :
-     * callback( {Boolean} result, {String} message);
-     *
-     * @param username {String} TODOC
-     * @param password {String} TODOC
-     * @return {Promise<void>}
-     */
-    checkLogin : async function(username)
-    {
-      var app = qx.core.Init.getApplication();
-      app.showPopup(app.tr("Authenticating ..."));
-      let data = this.authenticate(username, password);
-      app.hidePopup();
-      if (data.error) {
-        return data.error;
-      } 
-      await app.getConfigManager().load();
-      app.hidePopup();
-      qx.event.message.Bus.dispatch(new qx.event.message.Message("authenticated"));
-    },
-
-    /**
      * called when user clicks on the "forgot password?" button
      */
-    forgotPassword : async function()
+    forgotPassword : async function(data,app)
     {
-      this.showPopup(this.tr("Please wait ..."));
-      await this.getApplication().getRpcClient("actool").send("resetPasswordDialog");
-      this.hidePopup();
+      app.showPopup(this.tr("Please wait ..."));
+      await app.getApplication().getRpcClient("actool").send("resetPasswordDialog");
+      app.hidePopup();
     },
        
     /**
      * Log out current user on the server
-     * @param callback {function|undefined} optional callback that is called
-     * when logout request returns from server.
-     * @param context {object|undefined} Optional context for callback function
      * @return {Promise<Object>}
      */
-    logout : async function( callback, context )
+    logout : async function( data, app )
     {
-      let app = this.getApplication();
-
-      this.showPopup( this.tr("Logging out ...") );
-      qx.event.message.Bus.dispatch( new qx.event.message.Message("logout", true ) );
-
+      app.createPopup();
+      app.showPopup( this.tr("Logging out ...") );
       // remove state
       app.setFolderId(null);
       app.setModelId(null);
-
-      await this.getApplication().getRpcClient('access').notify("logout");
-      // re-login as guest
-      await this.authenticateAsGuest();
-      await this.load();
-      await this.getApplication().getConfigManager().load();
-
-      this.hidePopup();
-      qx.event.message.Bus.dispatch( new qx.event.message.Message("loggedOut")); // @todo: do we need this??
+      // logout
+      await app.getAccessManager().logout();
+      app.hidePopup();
     },
 
    /*
@@ -136,9 +99,9 @@ qx.Class.define("bibliograph.Commands",
     /**
      * opens a window with the online help
      */
-    showHelpWindow : function(topic) {
-      var url = this.getApplication().getServerUrl() +
-          "?sessionId=" + this.getAccessManager().getSessionId() +
+    showHelpWindow : function(topic,app) {
+      var url = app.getServerUrl() +
+          "?sessionId=" + app.getAccessManager().getSessionId() +
           "&service=bibliograph.main&method=getOnlineHelpUrl&params=" + (topic||"home");
       this.__helpWindow = window.open(url,"bibliograph-help-window");
       if (!this.__helpWindow) {
@@ -148,22 +111,22 @@ qx.Class.define("bibliograph.Commands",
     },
 
     /**
-     * Opens a server dialog to submit a bug.
-     */
-    reportBug : function()
-    {
-      this.showPopup(this.tr("Please wait ..."));
-      this.getRpcClient("main").send("reportBugDialog", [], function() {
-        this.hidePopup();
-      }, this);
-    },
-
-    /**
      * Shows the "about" window
      */
-    showAboutWindow : function() {
-      this.getWidgetById("bibliograph/aboutWindow").open();
+    showAboutWindow : function(data,app) {
+      app.getWidgetById("bibliograph/aboutWindow").open();
     },
+
+    editUserData : async function(data,app)
+    {
+      var activeUser = app.getAccessManager().getActiveUser();
+      if (activeUser.getEditable())
+      {
+        app.showPopup(this.tr("Retrieving user data..."));
+        await app.getRpcClient("acl").send("editElement", ["user", activeUser.getNamedId()]);
+        app.hidePopup();
+      }
+    },    
 
     /*
     ---------------------------------------------------------------------------
@@ -178,7 +141,7 @@ qx.Class.define("bibliograph.Commands",
      *
      * @param domElement {Element}
      */
-    print : function(domElement)
+    print : function(domElement, app)
     {
       if (!domElement instanceof Element)
       {
@@ -192,28 +155,34 @@ qx.Class.define("bibliograph.Commands",
       win.print();
     },
 
-    /**
-     * Helper function for converters in list databinding. If a selected element
-     * exist, returns its model value, otherwise return null
-     *
-     * @param selection {Array} TODOC
-     * @return {String | null} TODOC
-     */
-    getSelectionValue : function(selection) {
-      return selection.length ? selection[0].getModel().getValue() : null;
-    },
 
-    editUserData : function()
-    {
-      var activeUser = this.getAccessManager().getActiveUser();
-      if (activeUser.getEditable())
-      {
-        this.showPopup(this.tr("Retrieving user data..."));
-        this.getRpcClient("acl").send("editElement", ["user", activeUser.getNamedId()], function() {
-          this.hidePopup()
+
+    endOfFile : true
+  },
+
+  /**
+   * Setup event listeners in the defer function by iterating through the member methods 
+   * and setting up up a message subscriber for "bibliograph.command.{method name}". 
+   * When the message is dispatched, the method is called with the signature 
+   * ({mixed} messageData, {qx.application.Standalone} app) 
+   */
+  defer: function(statics, members, properties) 
+  {
+    for ( let methodName in members ){
+      if( typeof members[methodName] == "function" ) {
+        qx.event.message.Bus.subscribe("bibliograph.command." + methodName, function(e){
+          try {
+            let maybePromise = members[methodName](e.getData(),qx.core.Init.getApplication());
+            if( maybePromise instanceof Promise || maybePromise instanceof qx.Promise ){
+              (async ()=> {
+                await maybePromise
+              })()
+            }
+          } catch (e){
+            throw new Error(`Exception raised during call to bibliograph.command.${methodName}():${e}`);
+          }
         }, this);
       }
-    },
-    endOfFile : true
-  }
+    }
+  }  
 });

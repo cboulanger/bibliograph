@@ -21,9 +21,40 @@
  */
 qx.Class.define("bibliograph.Utils",
 {
-  extend : qx.core.Object,
+  type : "static",
   statics :
   {
+    /**
+     * Callback function that takes the username, password and
+     * another callback function as parameters.
+     * The callback is called with (err, data)
+     *
+     * @param username {String}
+     * @param password {String}
+     * @param callback {Function}
+     * @return {Promise<void>}
+     */
+    checkLogin : async function(username, password, callback)
+    {
+      var app = qx.core.Init.getApplication();
+      app.createPopup();
+      app.showPopup(app.tr("Authenticating ..."));
+      let result = await app.getAccessManager().authenticate(username, password);
+      app.hidePopup();
+      callback( result.error, result );
+    },    
+
+    /**
+     * Helper function for converters in list databinding. If a selected element
+     * exist, returns its model value, otherwise return null
+     *
+     * @param selection {Array} TODOC
+     * @return {String | null} TODOC
+     */
+    getSelectionValue : function(selection) {
+      return selection.length ? selection[0].getModel().getValue() : null;
+    },
+
     /**
      * Given a value, return the list element that has the
      * matching model value wrapped in an array. If nothing

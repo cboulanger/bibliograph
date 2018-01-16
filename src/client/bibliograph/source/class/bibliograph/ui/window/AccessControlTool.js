@@ -23,6 +23,8 @@
  * @asset(bibliograph/icon/button-mail.png)
  * @asset(qx/icon/${qx.icontheme}/22/actions/application-exit.png)
  * @asset(qx/icon/${qx.icontheme}/22/actions/view-refresh.png)
+ * @asset(qx/icon/${qx.icontheme}/22/apps/preferences-users.png)
+ * @asset(qx/icon/${qx.icontheme}/22/apps/internet-transfer.png)
  * @ignore(bibliograph.Utils.bool2visibility)
  */
 qx.Class.define("bibliograph.ui.window.AccessControlTool",

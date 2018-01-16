@@ -45,6 +45,30 @@ qx.Class.define("bibliograph.Application",
 
     /*
     ---------------------------------------------------------------------------
+        AUTHOR AND VERSION
+    ---------------------------------------------------------------------------
+    */
+    
+    /**
+     * The version of the application. The version will be automatically replaced
+     * by the script that creates the distributable zip file. Do not change.
+     * @return {String}
+     */    
+    getVersion : function() {
+      return qx.core.Environment.get("bibliograph.version");
+    },
+    
+    /**
+     * Copyright notice
+     * @return {String}
+     */
+    getCopyright : function() {
+      var year = (new Date).getFullYear();
+      return "2003-" + year + " (c) Christian Boulanger";
+    },         
+
+    /*
+    ---------------------------------------------------------------------------
        PRIVATE MEMBERS
     ---------------------------------------------------------------------------
     */
@@ -194,31 +218,7 @@ qx.Class.define("bibliograph.Application",
           resolve();
         });
       }) 
-    },
-
-    /*
-    ---------------------------------------------------------------------------
-        AUTHOR AND VERSION
-    ---------------------------------------------------------------------------
-    */
-    
-    /**
-     * The version of the application. The version will be automatically replaced
-     * by the script that creates the distributable zip file. Do not change.
-     * @return {String}
-     */    
-    getVersion : function() {
-      return qx.core.Environment.get("bibliograph.version");
-    },
-    
-    /**
-     * Copyright notice
-     * @return {String}
-     */
-    getCopyright : function() {
-      var year = (new Date).getFullYear();
-      return "2003-" + year + " (c) Christian Boulanger";
-    },        
+    },   
 
     /*
     ---------------------------------------------------------------------------
@@ -229,7 +229,7 @@ qx.Class.define("bibliograph.Application",
     /**
      * Store a reference to a widget linked to its id.
      * @param id {String}
-     * @param widget {Object}
+     * @param widget {qx.ui.core.Widget}
      */
     setWidgetById : function(id,widget)
     {
@@ -239,7 +239,7 @@ qx.Class.define("bibliograph.Application",
     /**
      * gets a reference to a widget by its id
      * @param id {String}
-     * @return {Object} TODOC
+     * @return {qx.ui.core.Widget} The widget with the given id
      */
     getWidgetById : function(id)
     {

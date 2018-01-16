@@ -25,6 +25,7 @@ use Yii;
 use \JsonRpc2\Exception;
 
 use app\controllers\AppController;
+use app\models\ImportFormat;
 
 /**
  *
@@ -49,7 +50,7 @@ class ImportController extends AppController
    * @param $datasource
    * @return unknown_type
    */
-  public function method_getTableLayout( $datasource )
+  public function actionGetTableLayout( $datasource )
   {
     return array(
       'columnLayout' => array(
@@ -85,23 +86,21 @@ class ImportController extends AppController
   ---------------------------------------------------------------------------
   */
 
-  public function method_getImportFormatData()
+  /**
+   * Returns the list of import formats for a selectbox
+   */
+  public function actionGetImportFormatData()
   {
-    $registry = bibliograph_model_import_RegistryModel::getInstance();
-    $registry->findAllOrderBy("name");
+    $importFormats = ImportFormat::find()->where(['active' => 1])->orderBy("name")->all();
     $listData = array( array(
       'value' => null,
       'label' => _("2. Choose import format" )
     ) );
-    while( $registry->loadNext() )
-    {
-      if ( $registry->getActive() )
-      {
-        $listData[] = array(
-          'value' => $registry->namedId(),
-          'label' => $registry->getName()
-        );
-      }
+    foreach( $importFormats as $format ){
+      $listData[] = array(
+        'value' => $format->namedId,
+        'label' => $format->name
+      );
     }
     return $listData;
   }
