@@ -53,7 +53,7 @@ qx.Class.define("bibliograph.ui.window.ImportWindowUi",
     var importFilterStore = new bibliograph.io.JsonRpcStore("import");
     qx.event.message.Bus.subscribe("bibliograph.setup.completed",()=>{
       importFilterStore.setAutoLoadParams([true]);
-      importFilterStore.setAutoLoadMethod("getImportFormatData");  
+      importFilterStore.setAutoLoadMethod("importformats");  
     }),
     toolBar.add(this.createUploadWidget(), { flex : 1 });
     var importFilterSelectBox = new qx.ui.form.SelectBox();

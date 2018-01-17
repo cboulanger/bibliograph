@@ -89,7 +89,7 @@ class ImportController extends AppController
   /**
    * Returns the list of import formats for a selectbox
    */
-  public function actionGetImportFormatData()
+  public function actionImportformats()
   {
     $importFormats = ImportFormat::find()->where(['active' => 1])->orderBy("name")->all();
     $listData = array( array(

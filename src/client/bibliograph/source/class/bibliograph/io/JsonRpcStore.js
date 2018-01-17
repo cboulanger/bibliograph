@@ -113,7 +113,8 @@ qx.Class.define("bibliograph.io.JsonRpcStore",
       {
         check : "qx.core.Object",
         nullable: true,
-        event: "changeModel"
+        event: "changeModel",
+        apply : "_applyModel"
       },
 
      /**
@@ -189,6 +190,11 @@ qx.Class.define("bibliograph.io.JsonRpcStore",
         APPLY METHODS
       ---------------------------------------------------------------------------
       */ 
+
+      /**
+       * Stub that can be overridden
+       */
+      _applyModel : function(value,old){},
 
       _applyServiceName : function( value, old)
       {

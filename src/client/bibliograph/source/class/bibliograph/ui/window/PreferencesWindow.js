@@ -202,7 +202,7 @@ qx.Class.define("bibliograph.ui.window.PreferencesWindow", {
         datasourceSelectBox,
         "label"
       );
-      app.bind("datasourceStore.model", dsController, "model");
+      app.getDatasourceStore().bind("model", dsController, "model");
       datasourceSelectBox.addListener(
         "changeSelection",
         function(e) {

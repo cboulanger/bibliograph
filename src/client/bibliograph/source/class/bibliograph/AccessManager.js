@@ -174,6 +174,8 @@ qx.Class.define("bibliograph.AccessManager",
       this.setSessionId(sessionId);
       await this.getApplication().getConfigManager().load();
       await this.load();      
+      // notify subscribers
+      qx.event.message.Bus.dispatchByName("user.loggedin", this.getUserManager().getActiveUser());
       return response;
     },
 
@@ -220,12 +222,7 @@ qx.Class.define("bibliograph.AccessManager",
         password = sha1( randSalt + serverHash );
       }
       let response = await client.send("authenticate",[username, password]);
-      await this.__handleAuthenticationResponse( response );
-      if ( ! response.error ){
-        // notify subscribers
-        qx.event.message.Bus.dispatch(new qx.event.message.Message("authenticated", this.getActiveUser()));
-      }
-      return response;
+      return await this.__handleAuthenticationResponse( response );
     },
     
     /**
@@ -270,7 +267,7 @@ qx.Class.define("bibliograph.AccessManager",
      */
     logout : async function()
     {
-      qx.event.message.Bus.dispatch( new qx.event.message.Message("loggingout", true ) );
+      qx.event.message.Bus.dispatch( new qx.event.message.Message("user.logoff", true ) );
       // notify server
       let app = this.getApplication();
       await app.getRpcClient('access').notify("logout");
@@ -279,7 +276,7 @@ qx.Class.define("bibliograph.AccessManager",
       // load config and userdata
       await this.load();
       await app.getConfigManager().load();
-      qx.event.message.Bus.dispatch( new qx.event.message.Message("loggedOut"));      
+      qx.event.message.Bus.dispatch( new qx.event.message.Message("user.loggedout"));      
     }
   }
 });

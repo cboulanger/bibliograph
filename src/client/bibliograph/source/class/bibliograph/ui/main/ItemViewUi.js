@@ -67,7 +67,7 @@ qx.Class.define("bibliograph.ui.main.ItemViewUi", {
      */
     qx.event.message.Bus
       .getInstance()
-      .subscribe("authenticated", this.toggleReferenceView, this);
+      .subscribe("user.loggedin", this.toggleReferenceView, this);
     qx.event.message.Bus.getInstance().subscribe(
       "logout",
       function(e) {

@@ -51,6 +51,9 @@ qx.Class.define("bibliograph.Setup", {
 
       // initialize application commands
       bibliograph.Commands.getInstance();
+
+      // datasource store, configures itself and responds to authentication events
+      bibliograph.store.Datasources.getInstance();
       
       let app = this.getApplication();
       
@@ -90,12 +93,15 @@ qx.Class.define("bibliograph.Setup", {
       await this.loadConfig();
       await this.loadUserdata();
 
+      // notify about user login 
+      qx.event.message.Bus.dispatchByName(
+        "user.loggedin", 
+        // @todo - we need a shortcut for this
+        this.getApplication().getAccessManager().getUserManager().getActiveUser()
+      );
+
       // load plugins
       this.loadPlugins();
-
-      // datasources
-      this.showPopup(this.getSplashMessage(this.tr("Loading datasources ...")));
-      await this.setupDatasourceStore();
 
       // initialize application state
       //app.getStateManager().setHistorySupport(true);
@@ -197,28 +203,6 @@ qx.Class.define("bibliograph.Setup", {
       await this.getApplication().getAccessManager().init().load();
       this.info("Userdata loaded.");
     },
-
-    /**
-     * Setup the list of available datasources
-     */
-    setupDatasourceStore : async function()
-    {
-      let app = this.getApplication();
-      let datasourceStore = new bibliograph.io.JsonRpcStore("datasource");
-      // configure event handler for when datasources are loaded
-      datasourceStore.addListener("loaded", this._on_datasourceStore_loaded, this);  
-      
-      // load it
-      await datasourceStore.load();  
-      // reload on message
-      // todo: "authenticated" "loggedout"
-      qx.event.message.Bus.subscribe("reloadDatasources", function() {
-        datasourceStore.reload();
-      }); 
-
-      // save in app property
-      app.setDatasourceStore(datasourceStore);
-    },    
 
     /**
      * Loads the plugins
@@ -331,55 +315,6 @@ qx.Class.define("bibliograph.Setup", {
         qx.lang.Function.delay(this.startPolling,delayInMs,this);
       }
     },
-
-    /*
-    ---------------------------------------------------------------------------
-        EVENT LISTENERS
-    ---------------------------------------------------------------------------
-    */
-    
-    _on_datasourceStore_loaded : function(e)
-    {
-      let data = e.getData();
-      console.debug(qx.util.Serializer.toNativeObject(data));
-      return; 
-
-      let app = this.getApplication();    
-      var datasourceCount = data.length;
-      // if we have no datasource loaded, no access
-      if (datasourceCount == 0) {
-        dialog.Dialog.alert(app.tr("You don't have access to any datasource on the server."));
-      }
-      // if we have access to exactly one datasource, load this one
-      else if (datasourceCount == 1) {
-        var item = data.getItem(0);
-        app.setDatasource(item.getValue()); //???
-        app.setDatasourceLabel(item.getTitle());
-        app.getStateManager().updateState();
-      }
-      // else, we have a choice of datasource
-      else
-      {
-        // if there is one saved in the application state, use this
-        var datasource = app.getStateManager().getState("datasource");
-        if (!datasource)
-        {
-          app.setDatasourceLabel(app.getConfigManager().getKey("application.title"));
-          var dsWin = app.getWidgetById("bibliograph/datasourceWindow");
-          dsWin.open();
-          dsWin.center();
-        } else {
-          app.setDatasource(datasource);
-          app.getStateManager().updateState();
-        }
-      }
-
-      /*
-      * show datasource button depending on whether there is a choice
-      */
-      app.getWidgetById("bibliograph/datasourceButton").setVisibility(datasourceCount > 1 ? "visible" : "excluded");
-    },
-
 
     /** Applies the foo property */
     _applyFoo: function(value, old) {

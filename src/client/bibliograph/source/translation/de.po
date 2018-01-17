@@ -20,15 +20,15 @@ msgstr "Keine Verbindung zum Server."
 msgid "Loading folder data ..."
 msgstr "Lade die Ordner ..."
 
-#: bibliograph.Setup:80
+#: bibliograph.Setup:83
 msgid "Setting up application..."
 msgstr "Konfiguriere die Anwendung ..."
 
-#: bibliograph.Setup:84
+#: bibliograph.Setup:87
 msgid "Connecting with server..."
 msgstr "Verbinde mit dem Server ..."
 
-#: bibliograph.Setup:89
+#: bibliograph.Setup:92
 msgid "Loading configuration ..."
 msgstr "Lade Konfiguration ..."
 
@@ -36,15 +36,15 @@ msgstr "Lade Konfiguration ..."
 msgid "Loading datasources ..."
 msgstr "Lade Liste der Datenbanken ..."
 
-#: bibliograph.Setup:232
+#: bibliograph.Setup:216
 msgid "Loading plugins ..."
 msgstr "Plugins werden geladen ..."
 
-#: bibliograph.Setup:237
+#: bibliograph.Setup:221
 msgid "Loaded plugin %1 of %2 : %3 ..."
 msgstr "Lade Plugin %1 von %2 : %3 ..."
 
-#: bibliograph.MApplicationState:214
+#: bibliograph.MApplicationState:204
 msgid "Loading datasource information ..."
 msgstr "Informationen zur Datenquelle werden abgerufen..."
 
@@ -468,11 +468,11 @@ msgstr "Verknüpfbare Elemente"
 msgid "Do you really want to delete the objects '%1'?"
 msgstr "Wollen Sie wirklich die Objekte '%1' löschen?"
 
-#: bibliograph.ui.window.DatasourceListWindow:42
+#: bibliograph.ui.window.DatasourceListWindow:41
 msgid "Please select the datasource"
 msgstr "Bitte wählen Sie die Datenquelle aus"
 
-#: bibliograph.ui.window.DatasourceListWindow:97
+#: bibliograph.ui.window.DatasourceListWindow:89
 msgid "OK"
 msgstr "OK"
 
@@ -612,7 +612,7 @@ msgstr "Wird den Benutzern im Nur-Lese-Modus und bei Zugangssperre angezeigt."
 msgid "Search Help Window"
 msgstr "Hilfe für die Suche"
 
-#: bibliograph.Application:177
+#: bibliograph.Application:182
 msgid "Missing server address. Please contact administrator."
 msgstr ""
 

@@ -20,34 +20,28 @@ qx.Class.define("bibliograph.ui.main.DatasourceListPanel",
   construct : function()
   {
     this.base(arguments);
-    this.__qxtCreateUI();
-  },
-  members : {
-    __qxtCreateUI : function()
-    {
-      var qxHbox1 = new qx.ui.layout.HBox(null, null, null);
-      var qxComposite1 = this;
-      this.setLayout(qxHbox1)
-      var datasourcePanel = new collapsablepanel.Panel();
-      datasourcePanel.setCaption("Datasource");
-      datasourcePanel.setAppearance("collapsable-panel-classic");
-      datasourcePanel.setValue(false);
-      qxComposite1.add(datasourcePanel, {
-        flex : 1
-      });
-      var dsList = new qx.ui.form.List();
-      dsList.setAllowStretchY(true);
-      datasourcePanel.add(dsList);
-      var dsController = new qx.data.controller.List(null, dsList, "label");
-      this.getApplication().bind("datasourceStore.model", dsController, "model", {
+    let app = this.getApplication();
 
-      });
-      dsList.bind("selection", this.getApplication(), "datasource", {
-        converter : bibliograph.Utils.getSelectionValue
-      });
-      this.getApplication().bind("datasource", dsList, "selection", {
-        converter : qx.lang.Function.bind(this.getApplication().getModelValueListElement, dsList)
-      });
-    }
+    var qxHbox1 = new qx.ui.layout.HBox(null, null, null);
+    var qxComposite1 = this;
+    this.setLayout(qxHbox1)
+    var datasourcePanel = new collapsablepanel.Panel();
+    datasourcePanel.setCaption("Datasource");
+    datasourcePanel.setAppearance("collapsable-panel-classic");
+    datasourcePanel.setValue(false);
+    qxComposite1.add(datasourcePanel, {
+      flex : 1
+    });
+    var dsList = new qx.ui.form.List();
+    dsList.setAllowStretchY(true);
+    datasourcePanel.add(dsList);
+    var dsController = new qx.data.controller.List(null, dsList, "label");
+    app.getDatasourceStore().bind("model", dsController, "model");
+    dsList.bind("selection", this.getApplication(), "datasource", {
+      converter : bibliograph.Utils.getSelectionValue
+    });
+    this.getApplication().bind("datasource", dsList, "selection", {
+      converter : bibliograph.Utils.getModelValueListElement(dsList)
+    });
   }
 });

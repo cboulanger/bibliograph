@@ -1,4 +1,4 @@
-#: bibliograph.ui.window.DatasourceListWindow:97
+#: bibliograph.ui.window.DatasourceListWindow:89
 msgid "OK"
 msgstr ""
 
@@ -66,7 +66,7 @@ msgstr ""
 msgid "Next year"
 msgstr ""
 
-#: bibliograph.Application:177
+#: bibliograph.Application:182
 msgid "Missing server address. Please contact administrator."
 msgstr ""
 
@@ -78,15 +78,15 @@ msgstr ""
 msgid "Loading folder data ..."
 msgstr ""
 
-#: bibliograph.Setup:80
+#: bibliograph.Setup:83
 msgid "Setting up application..."
 msgstr ""
 
-#: bibliograph.Setup:84
+#: bibliograph.Setup:87
 msgid "Connecting with server..."
 msgstr ""
 
-#: bibliograph.Setup:89
+#: bibliograph.Setup:92
 msgid "Loading configuration ..."
 msgstr ""
 
@@ -94,15 +94,15 @@ msgstr ""
 msgid "Loading datasources ..."
 msgstr ""
 
-#: bibliograph.Setup:232
+#: bibliograph.Setup:216
 msgid "Loading plugins ..."
 msgstr ""
 
-#: bibliograph.Setup:237
+#: bibliograph.Setup:221
 msgid "Loaded plugin %1 of %2 : %3 ..."
 msgstr ""
 
-#: bibliograph.MApplicationState:214
+#: bibliograph.MApplicationState:204
 msgid "Loading datasource information ..."
 msgstr ""
 
@@ -134,7 +134,7 @@ msgstr ""
 msgid "Retrieving user data..."
 msgstr ""
 
-#: bibliograph.ui.window.DatasourceListWindow:42
+#: bibliograph.ui.window.DatasourceListWindow:41
 msgid "Please select the datasource"
 msgstr ""
 

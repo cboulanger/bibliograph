@@ -61,17 +61,7 @@ qx.Mixin.define("bibliograph.MApplicationState",
       nullable : true,
       event : "changeDatasourceLabel",
       apply : "_applyDatasourceLabel"
-    },  
-
-    /**
-     * The store with the data on available datasources
-     */
-    datasourceStore :
-    {
-      check : "bibliograph.io.JsonRpcStore",
-      nullable : true,
-      event : "changeDatasourceStore"
-    },      
+    },   
 
     /**
      * The id of the currently displayed model record

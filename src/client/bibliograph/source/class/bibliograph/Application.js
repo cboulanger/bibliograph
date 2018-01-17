@@ -81,8 +81,6 @@ qx.Class.define("bibliograph.Application",
     __blocker : null,
     /** @var {String} */
     __url : null,
-    /** @var {bibliograph.io.JsonRpcStore} */
-    __datasourceStore : null,
     /** @var {Object} */
     __widgets : {},
 
@@ -142,6 +140,13 @@ qx.Class.define("bibliograph.Application",
      */
     getCommands : function(){
       return bibliograph.Commands.getInstance();
+    },
+
+    /**
+     * @return {bibliograph.store.Datasources}
+     */
+    getDatasourceStore : function(){
+      return bibliograph.store.Datasources.getInstance();
     },
 
     /*

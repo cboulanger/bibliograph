@@ -46,10 +46,10 @@ qx.Class.define("bibliograph.ui.folder.TreeViewUi",
       this.setLayout(qxVbox1)
       
       // messages
-      qx.event.message.Bus.getInstance().subscribe("authenticated", function(e) {
+      qx.event.message.Bus.getInstance().subscribe("user.loggedin", function(e) {
         this.reload();
       }, this)
-      qx.event.message.Bus.getInstance().subscribe("loggedOut", function(e) {
+      qx.event.message.Bus.getInstance().subscribe("user.loggedout", function(e) {
         this.reload();
       }, this)
       
