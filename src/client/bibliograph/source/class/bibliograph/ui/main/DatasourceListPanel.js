@@ -41,7 +41,7 @@ qx.Class.define("bibliograph.ui.main.DatasourceListPanel",
       converter : bibliograph.Utils.getSelectionValue
     });
     this.getApplication().bind("datasource", dsList, "selection", {
-      converter : bibliograph.Utils.getModelValueListElement(dsList)
+      converter : (v) => bibliograph.Utils.getListElementWithValue(dsList,v)
     });
   }
 });

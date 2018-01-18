@@ -468,11 +468,11 @@ msgstr "Verknüpfbare Elemente"
 msgid "Do you really want to delete the objects '%1'?"
 msgstr "Wollen Sie wirklich die Objekte '%1' löschen?"
 
-#: bibliograph.ui.window.DatasourceListWindow:41
+#: bibliograph.ui.window.DatasourceListWindow:44
 msgid "Please select the datasource"
 msgstr "Bitte wählen Sie die Datenquelle aus"
 
-#: bibliograph.ui.window.DatasourceListWindow:89
+#: bibliograph.ui.window.DatasourceListWindow:100
 msgid "OK"
 msgstr "OK"
 

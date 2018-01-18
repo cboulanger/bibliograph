@@ -41,42 +41,43 @@ qx.Class.define("bibliograph.store.Datasources",
       // call overriddden method
       this.base(arguments, data, old);
 
-      console.debug(qx.util.Serializer.toNativeObject(data));
-      return; 
-
       let app = this.getApplication();    
       var datasourceCount = data.length;
+
       // if we have no datasource loaded, no access
       if (datasourceCount == 0) {
         dialog.Dialog.alert(app.tr("You don't have access to any datasource on the server."));
+        return;
       }
+
+      // if there is one saved in the application state, and we have access, use this
+      var datasource = app.getStateManager().getState("datasource");
+      let found=false;
+      data.forEach((item)=>{ if(item.getValue()==datasource) found=item;});
+      if ( datasource && found)
+      {          
+        app.setDatasourceLabel(found.getTitle());
+        app.getStateManager().updateState(); 
+        return;
+      }
+
       // if we have access to exactly one datasource, load this one
-      else if (datasourceCount == 1) {
+      if (datasourceCount == 1) {
         var item = data.getItem(0);
-        app.setDatasource(item.getValue()); //???
+        app.setDatasource(item.getValue());
         app.setDatasourceLabel(item.getTitle());
         app.getStateManager().updateState();
       }
       // else, we have a choice of datasource
       else
       {
-        // if there is one saved in the application state, use this
-        var datasource = app.getStateManager().getState("datasource");
-        if (!datasource)
-        {
-          app.setDatasourceLabel(app.getConfigManager().getKey("application.title"));
-          var dsWin = app.getWidgetById("bibliograph/datasourceWindow");
-          dsWin.open();
-          dsWin.center();
-        } else {
-          app.setDatasource(datasource);
-          app.getStateManager().updateState();
-        }
+        app.setDatasourceLabel(app.getConfigManager().getKey("application.title"));
+        var dsWin = app.getWidgetById("bibliograph/datasourceWindow");
+        dsWin.open();
+        dsWin.center();
       }
 
-      /*
-      * show datasource button depending on whether there is a choice
-      */
+      // show datasource button depending on whether there is a choice
       app.getWidgetById("bibliograph/datasourceButton").setVisibility(datasourceCount > 1 ? "visible" : "excluded");
     },
   }

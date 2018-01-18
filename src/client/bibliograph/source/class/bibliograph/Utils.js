@@ -63,14 +63,13 @@ qx.Class.define("bibliograph.Utils",
      * @param value {String} TODOC
      * @return {Array} TODOC
      */
-    getModelValueListElement : function(value)
+    getListElementWithValue : function(list, value)
     {
-      for (var i = 0, c = this.getChildren(); i < c.length; i++) {
+      for (var i = 0, c = list.getChildren(); i < c.length; i++) {
         if (c[i].getModel().getValue() == value) {
           return [c[i]];
         }
       }
-
       // console.warn( "Did not find " + value );
       return [];
     },

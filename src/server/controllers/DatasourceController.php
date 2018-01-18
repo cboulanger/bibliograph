@@ -61,11 +61,15 @@ class DatasourceController extends AppController
     return $datasourceModel;
   }
 
+  /**
+   * Return the model for the datasource store
+   *
+   */
   public function actionLoad(){
     $activeUser = $this->getActiveUser();
-    //$datasources = $activeUser->getDatasources()
+    //$datasources = $activeUser->getDatasources() //@todo
     $datasources = \app\models\Datasource::find()
-      ->select(['namedId','title','description'])
+      ->select(['namedId AS value','title AS label','title','description'])
       ->where(['schema' => 'bibliograph.schema.bibliograph2'])
       ->andWhere(['active' => 1])
       ->andWhere(['hidden' => 0])

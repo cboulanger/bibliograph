@@ -36,20 +36,15 @@ qx.Class.define("bibliograph.ui.Windows",
 
     /**
      * Create the application windows 
+     * @todo : move logic into class definition if window is singleton
      */
     create: function() 
     {
       var app = qx.core.Init.getApplication();
       var bus = qx.event.message.Bus.getInstance();
 
-      /*
-       * Datasource list window
-       */
-      var ui_winDatasourceListWindow1 = new bibliograph.ui.window
-        .DatasourceListWindow();
-      ui_winDatasourceListWindow1.setWidgetId("bibliograph/datasourceWindow");
-      ui_winDatasourceListWindow1.setVisibility("excluded");
-      this.getRoot().add(ui_winDatasourceListWindow1);
+      // Datasource list window
+      this.getRoot().add(bibliograph.ui.window.DatasourceListWindow.getInstance());
 
       /*
        * Access Control Tool

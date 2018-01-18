@@ -104,15 +104,15 @@ qx.Class.define("bibliograph.Setup", {
       this.loadPlugins();
 
       // initialize application state
-      //app.getStateManager().setHistorySupport(true);
-      //app.getStateManager().updateState();
+      app.getStateManager().setHistorySupport(true);
+      app.getStateManager().updateState();
 
       // reset splash screen
       this.hidePopup();
       this.createPopup();
 
       // restore app state 
-      //this.restoreApplicationState();
+      this.restoreApplicationState();
 
       // message transport
       //this.startPolling();
@@ -279,11 +279,14 @@ qx.Class.define("bibliograph.Setup", {
       }, this);
     },  
 
+    /**
+     * Restores the state of the origininal URL 
+     */
     restoreApplicationState : function()
     {
       let app = this.getApplication();
       if (this.__itemView) {
-        this.setItemView(this.__itemView);
+        app.setItemView(this.__itemView);
       }
       if (this.__selectedIds) {
         var selectedIds = [];
@@ -294,14 +297,14 @@ qx.Class.define("bibliograph.Setup", {
       }
       if (this.__folderId && !isNaN(parseInt(this.__folderId))) {
         this.info("Restoring folder id: " + this.__folderId);
-        this.setFolderId(parseInt(this.__folderId))
+        app.setFolderId(parseInt(this.__folderId))
       } else if (this.__query) {
         this.info("Restoring query: " + this.__query);
-        this.setQuery(this.__query);
+        app.setQuery(this.__query);
       }
       if (this.__modelId && !isNaN(parseInt(this.__modelId))) {
         this.info("Restoring model id: " + this.__modelId);
-        this.setModelId(parseInt(this.__modelId))
+        app.setModelId(parseInt(this.__modelId))
       }
     },
 

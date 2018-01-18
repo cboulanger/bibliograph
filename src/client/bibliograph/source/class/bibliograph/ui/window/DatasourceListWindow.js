@@ -22,17 +22,20 @@
 qx.Class.define("bibliograph.ui.window.DatasourceListWindow",
 {
   extend : qx.ui.window.Window,
+  type : "singleton",
   construct : function()
   {
     this.base(arguments);
-    let app = this.getApplication();
+    this.setWidgetId("bibliograph/datasourceWindow");
     this.setWidth(300);
+    this.setVisibility("excluded");
 
+    let app = this.getApplication();
     qx.event.message.Bus.getInstance().subscribe("user.loggedout", function(e) {
       this.close()
     }, this)
 
-    var qxVbox1 = new qx.ui.layout.VBox(5, null, null);
+    var qxVbox1 = new qx.ui.layout.VBox(5);
     qxVbox1.setSpacing(5);
     this.setLayout(qxVbox1);
     var qxAtom1 = new qx.ui.basic.Atom();
@@ -40,16 +43,20 @@ qx.Class.define("bibliograph.ui.window.DatasourceListWindow",
     qxAtom1.setIcon("icon/22/apps/utilities-archiver.png");
     qxAtom1.setLabel(this.tr('Please select the datasource'));
     this.add(qxAtom1);
+
+    // list
     var dsList = new qx.ui.form.List();
     dsList.setAllowStretchY(true);
-    this.add(dsList, {
-      flex : 1
-    });
+    this.add(dsList, { flex : 1 });
+
+    // controller
     var dsController = new qx.data.controller.List(null, dsList, "label");
     this.getApplication().getDatasourceStore().bind("model", dsController, "model");
     this.getApplication().bind("datasource", dsList, "selection", {
-        converter : qx.lang.Function.bind(bibliograph.Utils.getModelValueListElement, dsList)
+      converter : (v) => bibliograph.Utils.getListElementWithValue(dsList,v)
     });
+
+    // event listeners
     dsList.addListener("changeSelection", function(e)    {
       var sel = e.getData();
       if (sel.length) {
@@ -64,6 +71,8 @@ qx.Class.define("bibliograph.ui.window.DatasourceListWindow",
         }, this, 1000);
       }
     }, this);
+
+    // blocker
     // dsList.addListener("appear", (e) => {
     //   this.center();
     //   var root = app.getRoot();
@@ -74,12 +83,14 @@ qx.Class.define("bibliograph.ui.window.DatasourceListWindow",
     // dsList.addListener("disappear", function(e) {
     //   //this.getApplicationRoot().unblockContent(); // not working with qx > 3.0
     // }, this);
+
+    // buttons
     var qxHbox1 = new qx.ui.layout.HBox(5, null, null);
     var qxComposite1 = new qx.ui.container.Composite();
     qxComposite1.setLayout(qxHbox1)
     this.add(qxComposite1);
     qxHbox1.setSpacing(5);
-    var qxButton1 = new qx.ui.form.Button(null, "bibliograph/icon/button-reload.png", null);
+    var qxButton1 = new qx.ui.form.Button();
     qxButton1.setIcon("bibliograph/icon/button-reload.png");
     qxComposite1.add(qxButton1);
     qxButton1.addListener("execute", function(e) {

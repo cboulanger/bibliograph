@@ -1,4 +1,4 @@
-#: bibliograph.ui.window.DatasourceListWindow:89
+#: bibliograph.ui.window.DatasourceListWindow:100
 msgid "OK"
 msgstr ""
 
@@ -134,7 +134,7 @@ msgstr ""
 msgid "Retrieving user data..."
 msgstr ""
 
-#: bibliograph.ui.window.DatasourceListWindow:41
+#: bibliograph.ui.window.DatasourceListWindow:44
 msgid "Please select the datasource"
 msgstr ""
 
