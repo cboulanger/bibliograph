@@ -78,15 +78,15 @@ msgstr ""
 msgid "Loading folder data ..."
 msgstr ""
 
-#: bibliograph.Setup:83
+#: bibliograph.Setup:85
 msgid "Setting up application..."
 msgstr ""
 
-#: bibliograph.Setup:87
+#: bibliograph.Setup:89
 msgid "Connecting with server..."
 msgstr ""
 
-#: bibliograph.Setup:92
+#: bibliograph.Setup:94
 msgid "Loading configuration ..."
 msgstr ""
 
@@ -94,11 +94,11 @@ msgstr ""
 msgid "Loading datasources ..."
 msgstr ""
 
-#: bibliograph.Setup:216
+#: bibliograph.Setup:218
 msgid "Loading plugins ..."
 msgstr ""
 
-#: bibliograph.Setup:221
+#: bibliograph.Setup:223
 msgid "Loaded plugin %1 of %2 : %3 ..."
 msgstr ""
 
@@ -114,7 +114,7 @@ msgstr ""
 msgid "The application is currently in a read-only state. Only the administrator can log in."
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:114
+#: bibliograph.ui.window.AccessControlTool:106
 msgid "Please wait ..."
 msgstr ""
 
@@ -138,15 +138,15 @@ msgstr ""
 msgid "Please select the datasource"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:49
+#: bibliograph.ui.window.AccessControlTool:41
 msgid "Access control tool"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:92
+#: bibliograph.ui.window.AccessControlTool:84
 msgid "New User"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:107
+#: bibliograph.ui.window.AccessControlTool:99
 msgid "New Datasource"
 msgstr ""
 
@@ -154,47 +154,47 @@ msgstr ""
 msgid "Help"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:126
+#: bibliograph.ui.window.AccessControlTool:118
 msgid "Export to filesystem"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:145
+#: bibliograph.ui.window.AccessControlTool:137
 msgid "Exit"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:469
+#: bibliograph.ui.window.AccessControlTool:461
 msgid "Please enter the id of the new '%1'-Object"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:286
+#: bibliograph.ui.window.AccessControlTool:278
 msgid "Do you really want to delete '%1'?"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:524
+#: bibliograph.ui.window.AccessControlTool:516
 msgid "Loading data ..."
 msgstr ""
 
-#: bibliograph.ui.folder.TreeView:93
+#: bibliograph.ui.window.AccessControlTool:327
 msgid "Please wait..."
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:348
+#: bibliograph.ui.window.AccessControlTool:340
 msgid "Edited element"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:388
+#: bibliograph.ui.window.AccessControlTool:380
 msgid "Link"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:406
+#: bibliograph.ui.window.AccessControlTool:398
 msgid "Unlink"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:431
+#: bibliograph.ui.window.AccessControlTool:423
 msgid "Linkable items"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:499
+#: bibliograph.ui.window.AccessControlTool:491
 msgid "Do you really want to delete the objects '%1'?"
 msgstr ""
 
@@ -306,11 +306,11 @@ msgstr ""
 msgid "About Bibliograph"
 msgstr ""
 
-#: bibliograph.ui.window.AboutWindow:50
+#: bibliograph.ui.window.AboutWindow:43
 msgid "The application"
 msgstr ""
 
-#: bibliograph.ui.window.AboutWindow:70
+#: bibliograph.ui.window.AboutWindow:63
 msgid "Credits"
 msgstr ""
 
@@ -462,19 +462,19 @@ msgstr ""
 msgid "Emptying the folder ..."
 msgstr ""
 
-#: bibliograph.ui.folder.TreeViewUi:168
+#: bibliograph.ui.folder.TreeViewUi:166
 msgid "Empty trash..."
 msgstr ""
 
-#: bibliograph.ui.folder.TreeViewUi:175
+#: bibliograph.ui.folder.TreeViewUi:173
 msgid "Move folder..."
 msgstr ""
 
-#: bibliograph.ui.folder.TreeViewUi:183
+#: bibliograph.ui.folder.TreeViewUi:181
 msgid "Edit folder data"
 msgstr ""
 
-#: bibliograph.ui.folder.TreeViewUi:194
+#: bibliograph.ui.folder.TreeViewUi:190
 msgid "Change visibility"
 msgstr ""
 
@@ -582,11 +582,11 @@ msgstr ""
 msgid "Removing folder ..."
 msgstr ""
 
-#: bibliograph.ui.folder.TreeView:138
+#: bibliograph.ui.folder.TreeView:117
 msgid "No folder selected. Try again"
 msgstr ""
 
-#: bibliograph.ui.folder.TreeView:141
+#: bibliograph.ui.folder.TreeView:120
 msgid "Do your really want to move folder '%1' to '%2'?"
 msgstr ""
 
@@ -594,15 +594,15 @@ msgstr ""
 msgid "Moving folder ..."
 msgstr ""
 
-#: bibliograph.ui.folder.TreeView:161
+#: bibliograph.ui.folder.TreeView:140
 msgid "Do you really want to delete all references and folders in the trash folder? This cannot be undone."
 msgstr ""
 
-#: bibliograph.ui.folder.TreeView:165
+#: bibliograph.ui.folder.TreeView:145
 msgid "Purging deleted folders ..."
 msgstr ""
 
-#: bibliograph.ui.folder.TreeView:168
+#: bibliograph.ui.folder.TreeView:148
 msgid "Purging deleted references ..."
 msgstr ""
 

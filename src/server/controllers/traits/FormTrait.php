@@ -26,9 +26,7 @@ trait FormTrait
     $formData = array();
 
     foreach ($modelFormData as $name => $elementData) {
-      /*
-       * dynamically get element data from the object
-       */
+      // dynamically get element data from the object
       if (isset( $elementData['delegate'] )) {
         qcl_assert_array( $elementData['delegate'] );
         foreach ($elementData['delegate'] as $key => $delegateMethod) {

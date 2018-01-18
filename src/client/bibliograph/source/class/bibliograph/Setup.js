@@ -72,6 +72,8 @@ qx.Class.define("bibliograph.Setup", {
         height : 170
       });
       this.showPopup(this.getSplashMessage(), null);
+      // application loading popup
+      app.createPopup();
       
       // blocker      
       this.createBlocker();

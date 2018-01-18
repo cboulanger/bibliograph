@@ -24,6 +24,9 @@ qx.Class.define("bibliograph.ui.MainLayout", {
   type: "singleton",
   members: {
 
+    /**
+     * shorthand
+     */
     getRoot: function() {
       return this.getApplication().getRoot();
     },
@@ -31,9 +34,7 @@ qx.Class.define("bibliograph.ui.MainLayout", {
     /**
      * Create the main layout
      */
-    create: function() 
-    {
-      
+    create: function() {
       var app = qx.core.Init.getApplication();
       var bus = qx.event.message.Bus.getInstance();
 
@@ -44,49 +45,34 @@ qx.Class.define("bibliograph.ui.MainLayout", {
         edge: 0
       });
 
-      /*
-       * Toolbar
-       */
+      // Toolbar
       var ui_mainToolbar1 = new bibliograph.ui.main.Toolbar();
       qxComposite1.add(ui_mainToolbar1);
 
-      /*
-       * Splitpane
-       */
+      // Horizontal splitpane
       var qxHsplit1 = new qx.ui.splitpane.Pane("horizontal");
       qxHsplit1.setOrientation("horizontal");
-      qxComposite1.add(qxHsplit1, {
-        flex: 1
-      });
+      qxComposite1.add(qxHsplit1, { flex: 1 });
       var qxVbox2 = new qx.ui.layout.VBox(null, null, null);
       var qxComposite2 = new qx.ui.container.Composite();
       qxComposite2.setLayout(qxVbox2);
       qxHsplit1.add(qxComposite2, 1);
-      var accordeon = new qx.ui.form.RadioGroup();
-      accordeon.setAllowEmptySelection(true);
 
-      /*
-       * Folder Tree
-       */
-      var ui_mainFolderTreePanel1 = new bibliograph.ui.main.FolderTreePanel();
-      qxComposite2.add(ui_mainFolderTreePanel1, {
-        flex: 1
-      });
+      // Folder Tree
+      qxComposite2.add(bibliograph.ui.main.FolderTreePanel.getInstance(), { flex: 1 });
+
+      // Vertical splitpane
       var qxVsplit1 = new qx.ui.splitpane.Pane("vertical");
       qxVsplit1.setOrientation("vertical");
       qxVsplit1.setDecorator(null);
       qxHsplit1.add(qxVsplit1, 3);
-      
-      /*
-       * Reference Listview
-       */
+
+      // Reference Listview
       var ui_mainReferenceListView1 = new bibliograph.ui.main
         .ReferenceListView();
       qxVsplit1.add(ui_mainReferenceListView1);
-      
-      /*
-       * Item view
-       */
+
+      // Item view
       var ui_mainItemView1 = new bibliograph.ui.main.ItemViewUi();
       ui_mainItemView1.setWidgetId("bibliograph/itemView");
       qxVsplit1.add(ui_mainItemView1);

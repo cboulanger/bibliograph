@@ -18,7 +18,7 @@
 
 ************************************************************************ */
 
-namespace app\models;
+namespace lib\models;
 
 use Yii;
 use yii\db\ActiveRecord;
@@ -92,7 +92,7 @@ class BaseModel extends ActiveRecord
    * Shorthand method to find ActiveRecord with the given named id
    *
    * @param string $namedId
-   * @return \app\models\BaseModel
+   * @return \lib\models\BaseModel
    */
   public static function findByNamedId( $namedId )
   {

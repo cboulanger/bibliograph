@@ -5,7 +5,7 @@ namespace app\models;
 use Yii;
 use yii\db\Expression;
 
-use app\models\BaseModel;
+use lib\models\BaseModel;
 use app\models\Session;
 
 /**

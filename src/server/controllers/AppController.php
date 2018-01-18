@@ -35,6 +35,11 @@ class AppController extends \JsonRpc2\Controller
   use traits\ShimTrait;
   use traits\RbacTrait;
   use traits\AuthTrait;
+
+  //-------------------------------------------------------------
+  // Authentication
+  //-------------------------------------------------------------
+
   
   public function xxxbehaviors()
   {
@@ -143,42 +148,49 @@ class AppController extends \JsonRpc2\Controller
     return Yii::$app->session->getId();
   }
 
-
   //-------------------------------------------------------------
-  // Datasources
+  // Datasources and models
   //-------------------------------------------------------------
-
-  /**
-   * Returns a list of datasources that is accessible to the current user.
-   * Accessibility is restricted by the group-datasource, the role-datasource
-   * relation and the user-datasource relation.
-   *
-   * @return array
-   */
-  public function getAccessibleDatasources()
-  {
-    not_implemented();
-    static $datasources = null;
-
-    if ($datasources === null) {
-    }
-    sort( $datasources );
-    return array_unique( $datasources );
-  }
 
   /**
    * Checks if user has access to the given datasource. If not,
    * throws JsonRpcException.
    * @param string $datasource
    * @return void
-   * @throws JsonRpcException
+   * @throws Exception
    */
   public function checkDatasourceAccess($datasource)
   {
-    if ($this->controlDatasourceAccess === true and
-    ! in_array( $datasource, $this->getAccessibleDatasources() ) ) {
-      $dsModel = $this->getDatasourceModel( $datasource );
-      throw new JsonRpcException( $this->tr("You don't have access to '%s'", $dsModel->getName() ) );
-    }
+    // @todo
   }
+
+  /**
+   * Returns the class name of the main model type of the controller as determined by the datasource
+   * @todo check datasource access
+   * @param string $datasource
+   * @return string
+   */
+  static public function controlledModel( $datasource )
+  {
+    return  
+      Datasource
+        :: getInstanceFor( $datasource )
+        :: getClassFor( static::$modelType );
+  }
+
+  /**
+   * Returns the model with the given id 
+   *
+   * @param string $datasource
+   * @param int $id
+   * @return void
+   */
+  static public function getModelbyId($datasource, $id)
+  {
+    $model = static :: controlledModel($datasource) :: findOne($id);
+    if( is_null( $model) ){
+      throw new \InvalidArgumentException("Model of type " . static::$modelType . " and id #$id does not exist in datasource '$datasource'.");
+    }
+    return $model;
+  }  
 }

@@ -6,7 +6,7 @@
    http://www.bibliograph.org
 
    Copyright:
-     2007-2015 Christian Boulanger
+     2007-2018 Christian Boulanger
 
    License:
      LGPL: http://www.gnu.org/licenses/lgpl.html
@@ -18,64 +18,35 @@
 
 ************************************************************************ */
 
-qcl_import( "qcl_data_controller_TreeController" );
+namespace app\controllers;
 
-class bibliograph_service_Folder
-  extends qcl_data_controller_TreeController
+use Yii;
+
+use lib\controllers\ITreeController;
+use app\controllers\AppController;
+use app\models\Datasource;
+use app\models\Folder;
+
+class FolderController extends AppController //implements ITreeController
 {
+  use traits\FormTrait;
 
   /*
   ---------------------------------------------------------------------------
-     MODEL ACL
+     STATIC PROPERTIES & METHODS
   ---------------------------------------------------------------------------
   */
 
   /**
-   * Access control list. Determines what role has access to what kind
-   * of information.
-   * @var array
+   * The main model type of this controller
    */
-  private $modelAcl = array(
-
-    /*
-     * The folder model of the given datasource
-     */
-    array(
-      //'schema'      => "bibliograph",
-      'datasource'  => "*",
-      'modelType'   => array("folder","reference"),
-
-      'rules'         => array(
-        array(
-          'roles'       => "*",
-          'access'      => array( QCL_ACCESS_READ ),
-          'properties'  => array( "allow" => "*" )
-        ),
-        array(
-          'roles'       => array( BIBLIOGRAPH_ROLE_USER ),
-          'access'      => "*",
-          'properties'  => array( "allow" => "*" )
-        ),
-        array(
-          'roles'       => array( BIBLIOGRAPH_ROLE_ADMIN, BIBLIOGRAPH_ROLE_MANAGER ),
-          'access'      => "*",
-          'properties'  => array( "allow" => "*" )
-        )
-      )
-    )
-  );
-
-  /*
-  ---------------------------------------------------------------------------
-     CLASS PROPERTIES
-  ---------------------------------------------------------------------------
-  */
+  static $modelType = "folder";
 
   /**
-   * Icons for the folder nodes, depending on type
+   * Icons for the folder nodes, depending on folder type
    * @var array
    */
-  protected $icon = array(
+  static $icon = array(
     "closed"          => null,
     "open"            => null,
     "default"         => "icon/16/places/folder.png",
@@ -88,461 +59,173 @@ class bibliograph_service_Folder
   );
 
   /**
-   * The main model type of this controller
-   */
-  protected $modelType = "folder";
-
-  /**
-   * Whether datasource access should be restricted according
-   * to the current user. The implementation of this behavior is
-   * done by the getAccessibleDatasources() and checkDatasourceAccess()
-   * methods.
-   *
-   * @var bool
-   */
-  protected $controlDatasourceAccess = true;
-
-
-  /*
-  ---------------------------------------------------------------------------
-     INITIALIZATION
-  ---------------------------------------------------------------------------
-  */
-
-  /**
-   * Constructor, adds model acl
-   */
-  public function __construct()
-  {
-    $this->addModelAcl( $this->modelAcl );
-  }
-
-  /**
-   * Returns singleton instance of this class
-   * @return bibliograph_service_Folder
-   */
-  public static function getInstance()
-  {
-    return qcl_getInstance( __CLASS__ );
-  }
-
-  /*
-  ---------------------------------------------------------------------------
-     INTERFACE ITREEVIRTUALCONTROLLER
-  ---------------------------------------------------------------------------
-  */
-
-  /**
-   * Return the data of a node of the tree.
+   * Return the data of a node of the tree as expected by the qooxdoo tree data model
    * @param string $datasource Datasource name
-   * @param int $nodeId
-   * @param int $parentId Optional id of parent folder
-   * @param mixed|null $options Optional data
+   * @param \app\models\Folder|int $nodee
    * @return array
    */
-  function getNodeData( $datasource, $nodeId, $parentId=null, $options=null )
+  static function getNodeData( $datasource, $node )
   {
-    /*
-     * folder model
-     */
-    $folderModel = $this->getTreeNodeModel( $datasource, $nodeId );
+    if ( $node instanceof Folder ){
+      $folder = $node;
+    } else {
+      assert( \is_numeric( $node) );
+      $folder = static::controlledModel($datasource)::findOne($node);
+      if( ! $folder ){
+        throw new \InvalidArgumentException("Folder #$nodeId does not exist.");
+      }      
+    }
 
-    /*
-     * prepare individual information
-     */
-    $folderType     = $folderModel->getType();
-    $owner          = $folderModel->getOwner();
-    $label          = $folderModel->getLabel();
-    $query          = $folderModel->getQuery();
-    $searchFolder   = $folderModel->getSearchfolder();
-    $description    = $folderModel->getDescription();
-    $childCount     = $folderModel->getChildCount();
-    $referenceCount = $this->getReferenceCount( $folderModel, $datasource );
-    $markedDeleted  = $folderModel->get("markedDeleted");
-    $public         = $folderModel->getPublic();
-    $opened         = $folderModel->getOpened();
-    $parentId       = is_null( $parentId ) ? $folderModel->get("parentId") : $parentId;
+    $folderType     = $folder->type;
+    $owner          = $folder->owner;
+    $label          = $folder->label;
+    $query          = $folder->query;
+    $searchFolder   = (bool) $folder->searchfolder;
+    $description    = $folder->description;
+    $parentId       = is_null( $parentId ) ? $folder->parentId : $parentId;
 
-    /*
-     * access
-     */
+    $childCount     = $folder->getChildCount();
+    $referenceCount = static::getReferenceCount( $folder, $datasource );
+    $markedDeleted  = $folder->markedDeleted;
+    $public         = $folder->public;
+    $opened         = $folder->opened;
+    
+    // access
     static $activeUser = null;
     static $isAnonymous = null;
     if ( $activeUser === null )
     {
-      $activeUser = $this->getActiveUser();
-      $isAnonymous = $activeUser->hasRole( QCL_ROLE_ANONYMOUS );
+      $activeUser = Yii::$app->user->identity();
+      $isAnonymous = $activeUser->isAnonymous();
     }
 
-    if ( $isAnonymous )
-    {
-      /*
-       * do not show unpublished folders to anonymous roles
-       */
+    if ( $isAnonymous ) {
+      // do not show unpublished folders to anonymous roles
       if ( ! $public )  return null;
     }
 
-    /*
-     * reference count is zero if folder executes a query
-     */
-    if ( $query )
-    {
+    // reference count is zero if folder executes a query
+    if ( $query ) {
       $referenceCount = "";
     }
 
-    /*
-     * icon & type
-     */
-    if ( ( $folderType=="search" or !$folderType)
-           and $query and $searchFolder != false )
-    {
-      $icon = $this->icon["search"];
+    // icon & type
+    if ( ( $folderType == "search" or !$folderType)
+           and $query and $searchFolder != false ) {
+      $icon = static::$icon["search"];
       $type = "searchfolder";
-    }
-    elseif ( $folderType == "trash" )
-    {
-      $icon = $this->icon["trash"];
+    } elseif ( $folderType == "trash" ) {
+      $icon = static::$icon["trash"];
       $type = "trash";
-    }
-    elseif ( $folderType == "favorites" )
-    {
-      $icon = $this->icon["favorites"];
+    } elseif ( $folderType == "favorites" ) {
+      $icon = static::$icon["favorites"];
       $type = "favorites";
-    }
-    elseif ( $markedDeleted )
-    {
-      $icon = $this->icon["markedDeleted"];
+    } elseif ( $markedDeleted ) {
+      $icon = static::$icon["markedDeleted"];
       $type = "deleted";
-    }
-    elseif ( $public )
-    {
-      $icon = $this->icon["public"];
+    } elseif ( $public ) {
+      $icon = static::$icon["public"];
       $type = "folder";
-    }
-    else
-    {
-      $icon = $this->icon["closed"];
+    } else {
+      $icon = static::$icon["closed"];
       $type = "folder";
     }
 
-    /*
-     * construct node data
-     */
-    $data = array(
+    // return node data
+    $data = [
       'isBranch'        => true,
       'label'           => $label,
       'bOpened'         => $opened,
       'icon'            => $icon,
       'iconSelected'    => $icon,
       'bHideOpenClose'  => ($childCount == 0),
-      'data'            => array (
-                        'type'            => $type,
-                        'id'              => $nodeId,
-                        'parentId'        => $parentId,
-                        'query'           => $query,
-                        'public'          => $public,
-                        'owner'           => $owner,
-                        'description'     => $description,
-                        'datasource'      => $datasource,
-                        'childCount'      => $childCount,
-                        'referenceCount'  => $referenceCount,
-                        'markedDeleted'   => $markedDeleted
-                      ),
-       'columnData'   => array( null, $referenceCount )
-    );
-
-    /*
-     * return node data
-     */
+      'columnData'      => [ null, $referenceCount ],
+      'data'            => [
+                          'type'            => $type,
+                          'id'              => $nodeId,
+                          'parentId'        => $parentId,
+                          'query'           => $query,
+                          'public'          => $public,
+                          'owner'           => $owner,
+                          'description'     => $description,
+                          'datasource'      => $datasource,
+                          'childCount'      => $childCount,
+                          'referenceCount'  => $referenceCount,
+                          'markedDeleted'   => $markedDeleted
+                        ]
+      ];
     return $data;
   }
-
-  /*
-  ---------------------------------------------------------------------------
-     PUBLIC METHODS
-  ---------------------------------------------------------------------------
-  */
 
   /**
    * Returns the icon for a given folder type
    * @param string $type
    * @throws InvalidArgumentException
-   * @return unknown_type
+   * @return string
    */
-  public function getIcon( $type )
+  public static function getIcon( $type )
   {
-    qcl_assert_valid_string( $type, "Invalid type." );
-    if ( isset( $this->icon[$type] ) )
-    {
-      return $this->icon[$type];
-    }
-    else
-    {
+    if ( isset( static::$icon[$type] ) ) {
+      return static::$icon[$type];
+    } else {
       throw new InvalidArgumentException("Icon for type '$type' does not exist.");
     }
-  }
-
-  /**
-   * Returns the folder model
-   * @param $datasource
-   * @return bibliograph_model_FolderModel
-   */
-  public function getFolderModel( $datasource )
-  {
-    static $model = null;
-    if( $model === null )
-    {
-      $model = $this->getModel( $datasource, "folder" );
-      if ( ! $model->__listenersAdded ) // @todo check for listener
-      {
-        $model->addListener("changeBubble", $this, "_on_changeBubble" );
-        $model->addListener("change", $this, "_on_change" );
-        $model->__listenersAdded = true;
-      }
-    }
-    return $model;
-  }
-
-  /**
-   * Returns the reference controller as provided by the controller
-   * @param $datasource
-   * @return bibliograph_model_ReferenceModel
-   */
-  public function getReferenceModel( $datasource )
-  {
-    qcl_import("bibliograph_service_Reference");
-    return bibliograph_service_Reference::getInstance()->getReferenceModel( $datasource );
-  }
-
-
-  /**
-   * Event listener for "changeBubble" event
-   * Since the client data structure does not match the server data structure,
-   * we have to send the whole node if only one property changes.
-   * @param qcl_event_type_DataEvent|null $e
-   * @return void
-   */
-  public function _on_changeBubble( $e )
-  {
-    $data           = ($e instanceof qcl_event_type_DataEvent) ? $e->getData():null; // TODO: should a non-data event triggler "changeBubble"?
-    $target         = $e->getTarget();
-    $datasource     = $target->datasourceModel()->namedId();
-    $nodeId         = $target->id();
-    $transactionId  = $target->getTransactionId();
-
-    switch( $data['name'] )
-    {
-      case "id":
-        return;
-
-      case "position":
-        // this event has to be manually dispatched
-        break;
-
-      /** @noinspection PhpMissingBreakStatementInspection */
-      case "parentId":
-        $parentId = $data['value'];
-        if ( ! $parentId ) break;
-        $target->load( $parentId );
-        $target->getChildCount(true);
-        $target->save();
-        $nodeData = $this->getNodeData( $datasource, $parentId );
-        unset( $nodeData['bOpened'] );
-        $this->broadcastClientMessage(
-          "folder.node.update", array(
-            'datasource'    => $datasource,
-            'modelType'     => "folder",
-            'nodeData'      => $nodeData,
-            'transactionId' => $transactionId
-          )
-        );
-
-        $oldParentId = $data['old'];
-        $target->load( $oldParentId );
-        $target->getChildCount(true);
-        $target->save();
-        $nodeData = $this->getNodeData( $datasource, $oldParentId );
-        unset( $nodeData['bOpened'] );
-        $this->broadcastClientMessage(
-          "folder.node.update", array(
-            'datasource'    => $datasource,
-            'modelType'     => "folder",
-            'nodeData'      => $nodeData,
-            'transactionId' => $transactionId
-          )
-        );
-        $this->broadcastClientMessage(
-          "folder.node.move", array(
-            'datasource'    => $datasource,
-            'modelType'     => "folder",
-            'nodeId'        => $nodeId,
-            'parentId'      => $parentId,
-            'transactionId' => $transactionId
-          )
-        );
-        // no break since the node itself also needs updating
-
-      default:
-        $nodeData = $this->getNodeData( $datasource, $nodeId );
-        unset( $nodeData['bOpened'] );
-        $this->broadcastClientMessage(
-          "folder.node.update", array(
-            'datasource'    => $datasource,
-            'modelType'     => "folder",
-            'nodeData'      => $nodeData,
-            'transactionId' => $transactionId
-          )
-        );
-    }
-
-  }
-
-  /*
-  ---------------------------------------------------------------------------
-     INTERNAL METHODS
-  ---------------------------------------------------------------------------
-  */
-
-  public function _on_change( $e )
-  {
-    $data           = ($e instanceof qcl_event_type_DataEvent) ? $e->getData():null; // TODO: should data event triggler "change"?
-    $target = $e->getTarget();
-    $datasource = $target->datasourceModel()->namedId();
-    $nodeId = $target->id();
-
-    /*
-     * update parent node
-     */
-    $parentId = $target->getParentId();
-    try
-    {
-      $target->load( $parentId );
-    }
-    catch( qcl_data_model_RecordNotFoundException $e )
-    {
-      return;
-    }
-
-    $transactionId = $target->getTransactionId();
-
-    $target->getChildCount(true);
-    $target->save();
-    $nodeData = $this->getNodeData( $datasource, $parentId );
-    unset( $nodeData['bOpened'] );
-
-    $this->broadcastClientMessage(
-      "folder.node.update", array(
-        'datasource'    => $datasource,
-        'modelType'     => "folder",
-        'nodeData'      => $nodeData,
-        'transactionId' => $transactionId
-      )
-    );
-
-    switch( $data['type'] )
-    {
-      case "add":
-        $this->broadcastClientMessage(
-          "folder.node.add", array(
-            'datasource'    => $datasource,
-            'modelType'     => "folder",
-            'nodeData'      => $this->getNodeData( $datasource, $nodeId ),
-            'transactionId' => $target->getTransactionId()
-          )
-        );
-        break;
-
-      case "remove":
-        $this->broadcastClientMessage(
-          "folder.node.delete", array(
-            'datasource'    => $datasource,
-            'modelType'     => "folder",
-            'nodeId'        => $nodeId,
-            'transactionId' => $target->getTransactionId()
-          )
-        );
-    }
-  }
+  }  
 
   /**
    * Adds basic folders
    * @return void
    */
-  function addInitialFolders()
+  static function addInitialFolders($datasource)
   {
-    
-    $this->log( "Adding initial folders to $this" );
-
     // top folder
-    $this->load(array(
-      "label"       => $this->tr("Default Folder"),
+    $class = static::controlledModel($datasource);
+    $top = new $class([
+      "label"       => Yii::t("app","Default Folder"),
       "parentId"    => 0,
       "position"    => 0,
       "childCount"  => 0,
       "public"      => true
-    ));
-
-    $this->save();
+    ]);
+    $top->save();
 
     // trash folder
-    $this->create(array(
+    $trash = new $class([
       "type"        => "trash",
-      "label"       => $this->tr("Trash Folder"),
+      "label"       => Yii::t("app","Trash Folder"),
       "parentId"    => 0,
       "position"    => 1,
       "childCount"  => 0,
       "public"      => false
-    ));
-  }      
-
-  /**
-   * Returns the number of references linked to the folder
-   * @param qcl_data_model_db_ActiveRecord $folderModel
-   * @param string $datasource
-   * @param bool $update If true, calculate the reference count again. Defaults to false
-   * @return int
-   */
-  protected function getReferenceCount( $folderModel, $datasource, $update=false )
-  {
-    $referenceCount = $folderModel->get("referenceCount");
-    if ( $update or $referenceCount === null )
-    {
-      $referenceModel = $this->getReferenceModel( $datasource );
-      $referenceCount = count( $referenceModel->linkedModelIds( $folderModel ) );
-      $folderModel->set( "referenceCount", $referenceCount );
-      $folderModel->save();
-    }
-    return $referenceCount;
+    ]);
+    $trash->save();
   }
-
 
   /*
   ---------------------------------------------------------------------------
-     SERVICE METHODS
+     INTERFACE ITreeController
   ---------------------------------------------------------------------------
   */
-
 
   /**
    * Edit folder data
    * @param $datasource
    * @param $folderId
-   * @return qcl_ui_dialog_Form
+   * @return string "OK"
    */
-  public function method_edit( $datasource, $folderId )
+  public function actionEdit( $datasource, $folderId )
   {
     $this->requirePermission("folder.edit");
-    $model = $this->getFolderModel( $datasource );
-    $model->load( $folderId );
-    $formData = $this->createFormData( $model );
-    $label = $model->getLabel();
+    $model = statid :: getModelbyId (§datasource, $folderId);
+    $formData = $this->createFormData( $model ); 
+    $label = $model->label;
     $message = "<h3>$label</h3>";
-    qcl_import("qcl_ui_dialog_Form");
-    return new qcl_ui_dialog_Form(
+    \lib\dialog\Form::create(
       $message, $formData, true,
       $this->serviceName(), "saveFormData",
       array( $datasource, $folderId )
     );
+    return "OK";
   }
 
   /**
@@ -550,21 +233,25 @@ class bibliograph_service_Folder
    * @param $data
    * @param $datasource
    * @param $folderId
-   * @return string "OK"
+   * @return string "OK"/"ABORTED"
    */
-  public function method_saveFormData( $data, $datasource, $folderId )
+  public function actionSaveFormData( $data, $datasource, $folderId )
   {
     if ( $data === null ) return "ABORTED";
 
     $this->requirePermission("folder.edit");
 
-    $model = $this->getFolderModel( $datasource );
-    $model->load( $folderId );
+    $model = statid :: getModelbyId (§datasource, $folderId);
     $data = $this->parseFormData( $model, $data );
-    $model->set( $data );
-    $model->save();
+    if( $model->load( $data ) && $model->save() ){
+      
+      // @todo return service result!
+      return "OK";
+    } 
+    Yii::error($model->getErrors());
+    return "ERROR";
 
-    return "OK";
+    
   }
 
   /**
@@ -902,48 +589,48 @@ class bibliograph_service_Folder
    * folders, and marking them as deleted. If the value is false, the folders
    * and contained references will be marked "not deleted"
    *
-   * @param $folderModel
+   * @param $folder
    * @param $value
    * @return void
    */
-  public function setFolderMarkedDeleted( bibliograph_model_FolderModel $folderModel, $value )
+  public function setFolderMarkedDeleted( bibliograph_model_FolderModel $folder, $value )
   {
     qcl_assert_boolean( $value );
 
     /*
      * mark folder (un)deleted
      */
-    //$this->debug("Marking $folderModel deleted " . boolString($value),__CLASS__,__LINE__);
-    $folderModel->set("markedDeleted", $value )->save();
+    //$this->debug("Marking $folder deleted " . boolString($value),__CLASS__,__LINE__);
+    $folder->set("markedDeleted", $value )->save();
 
     /*
      * handle contained referenced
      */
-    $referenceModel = $folderModel->getRelationBehavior()->getTargetModel("Folder_Reference");
+    $referenceModel = $folder->getRelationBehavior()->getTargetModel("Folder_Reference");
     try
     {
-      $referenceModel->findLinked( $folderModel );
+      $referenceModel->findLinked( $folder );
       while ( $referenceModel->loadNext() )
       {
         if ( $value )
         {
-          $linkCount = $folderModel->countLinksWithModel( $referenceModel );
+          $linkCount = $folder->countLinksWithModel( $referenceModel );
           //$this->debug("$referenceModel has $linkCount links with folders... ",__CLASS__,__LINE__);
           if ( $linkCount > 1 )
           {
             /*
              * unlink reference and folder
              */
-            //$this->debug("Unlinking $referenceModel from $folderModel",__CLASS__,__LINE__);
-            $referenceModel->unlinkModel( $folderModel );
+            //$this->debug("Unlinking $referenceModel from $folder",__CLASS__,__LINE__);
+            $referenceModel->unlinkModel( $folder );
 
             /*
              * update reference count
              * @todo use event?
              */
-            $referenceCount = count( $referenceModel->linkedModelIds( $folderModel ) );
-            $folderModel->set( "referenceCount", $referenceCount );
-            $folderModel->save();
+            $referenceCount = count( $referenceModel->linkedModelIds( $folder ) );
+            $folder->set( "referenceCount", $referenceCount );
+            $folder->save();
           }
           else
           {
@@ -967,11 +654,11 @@ class bibliograph_service_Folder
      */
     try
     {
-      $query = $folderModel->findChildren();
-      //$this->debug("$folderModel has {$query->rowCount} children",__CLASS__,__LINE__);
-      if ( $query->getRowCount() ) while( $folderModel->loadNext( $query ) )
+      $query = $folder->findChildren();
+      //$this->debug("$folder has {$query->rowCount} children",__CLASS__,__LINE__);
+      if ( $query->getRowCount() ) while( $folder->loadNext( $query ) )
       {
-        $this->setFolderMarkedDeleted( $folderModel, $value );
+        $this->setFolderMarkedDeleted( $folder, $value );
       }
     }
     catch ( qcl_data_model_RecordNotFoundException $e){}
@@ -1002,9 +689,9 @@ class bibliograph_service_Folder
     /*
      * change position
      */
-    $folderModel = $this->getFolderModel( $datasource );
-    $folderModel->load( $folderId );
-    $folderModel->changePosition( $position );
+    $folder = $this->getFolderModel( $datasource );
+    $folder->load( $folderId );
+    $folder->changePosition( $position );
 
     /*
      * dispatch update event
@@ -1014,9 +701,9 @@ class bibliograph_service_Folder
         'datasource'    => $datasource,
         'modelType'     => "folder",
         'nodeId'        => $folderId,
-        'parentNodeId'  => $folderModel->getParentId(),
+        'parentNodeId'  => $folder->getParentId(),
         'position'      => $position,
-        'transactionId' => $folderModel->getTransactionId()
+        'transactionId' => $folder->getTransactionId()
       )
     );
 

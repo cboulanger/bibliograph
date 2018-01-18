@@ -6,7 +6,7 @@
    http://www.bibliograph.org
 
    Copyright:
-     2007-2010 Christian Boulanger
+     2007-2018 Christian Boulanger
 
    License:
      LGPL: http://www.gnu.org/licenses/lgpl.html
@@ -18,152 +18,36 @@
 
 ************************************************************************ */
 
-qcl_import("qcl_data_controller_TableController");
-qcl_import("qcl_ui_dialog_Alert");
-qcl_import("qcl_ui_dialog_Confirm");
-qcl_import("qcl_ui_dialog_Form");
-qcl_import("bibliograph_service_Folder");
+namespace app\controllers;
 
-/**
- * Controller that supplies data for the references
- */
-class bibliograph_service_Reference
-  extends qcl_data_controller_TableController
+use Yii;
+
+//use lib\controllers\ITreeController;
+use app\controllers\AppController;
+use app\models\Datasource;
+use app\models\Reference;
+
+class ReferenceController extends AppController // implements ITreeController
 {
-
-  /**
-   * Access control list. Determines what role has access to what kind
-   * of information.
-   * @var array
-   */
-  private $modelAcl = array(
-
-    /*
-     * The reference model of the given datasource
-     */
-    array(
-      'datasource'  => "*",
-      'modelType'   => "reference",
-
-      'rules'         => array(
-        array(
-          'roles'       => "*",
-          'access'      => array( QCL_ACCESS_READ ),
-          'properties'  => array( "allow" =>  "*" )
-        ),
-        array(
-          'roles'       => array( BIBLIOGRAPH_ROLE_USER ),
-          'access'      => "*",
-          'properties'  => array( "allow" => "*" )
-        ),
-        array(
-          'roles'       => array( BIBLIOGRAPH_ROLE_ADMIN, BIBLIOGRAPH_ROLE_MANAGER ),
-          'access'      => "*",
-          'properties'  => array( "allow" => "*" )
-        )
-      )
-    ),
-    /*
-     * The folder model of the given datasource
-     */
-    array(
-      'datasource'  => "*",
-      'modelType'   => "folder",
-
-      'rules'         => array(
-        array(
-          'roles'       => "*",
-          'access'      => array( QCL_ACCESS_READ ),
-          'properties'  => array( "allow" =>  "*" )
-        ),
-        array(
-          'roles'       => array( BIBLIOGRAPH_ROLE_USER ),
-          'access'      => "*",
-          'properties'  => array( "allow" => "*" )
-        ),
-        array(
-          'roles'       => array( BIBLIOGRAPH_ROLE_ADMIN, BIBLIOGRAPH_ROLE_MANAGER ),
-          'access'      => "*",
-          'properties'  => array( "allow" => "*" )
-        )
-      )
-    )
-  );
 
   /*
   ---------------------------------------------------------------------------
-     CLASS PROPERTIES
+     STATIC PROPERTIES & METHODS
   ---------------------------------------------------------------------------
   */
+
+  /**
+   * The main model type of this controller
+   */
+  static $modelType = "reference";
 
   /**
    * Icons for the folder nodes, depending on type
    * @var array
    */
-  protected $icon = array(
+  static $icon = array(
     "favorites"       => "icon/16/actions/help-about.png"
   );
-
-  /**
-   * Whether datasource access should be restricted according
-   * to the current user. The implementation of this behavior is
-   * done by the getAccessibleDatasources() and checkDatasourceAccess()
-   * methods.
-   *
-   * @var bool
-   */
-  protected $controlDatasourceAccess = true;
-
-
-  /*
-  ---------------------------------------------------------------------------
-     INITIALIZATION
-  ---------------------------------------------------------------------------
-  */
-
-  /**
-   * Constructor, adds model acl
-   */
-  function __construct()
-  {
-    $this->addModelAcl( $this->modelAcl );
-  }
-
-  /**
-   * Returns singleton instance of this class
-   * @return bibliograph_service_Reference
-   */
-  public static function getInstance()
-  {
-    return qcl_getInstance( __CLASS__ );
-  }
-
-  /*
-  ---------------------------------------------------------------------------
-     CONTROLLER-MODEL API
-  ---------------------------------------------------------------------------
-  */
-
-  /**
-   * Returns the default model type for which this controller is providing
-   * data.
-   * @return string
-   */
-  protected function getModelType()
-  {
-    return "reference";
-  }
-
-  /**
-   * Returns the reference model
-   * @param string $datasource
-   * @param null $modelType
-   * @return bibliograph_model_ReferenceModel
-   */
-  public function getControlledModel( $datasource, $modelType=null )
-  {
-    return $this->getModel( $datasource, either( $modelType, "reference") );
-  }
 
   /*
   ---------------------------------------------------------------------------
@@ -257,23 +141,6 @@ class bibliograph_service_Reference
     {
       throw new qcl_server_ServiceException( _("No recognized query format in request.") );
     }
-  }
-
-  
-  /**
-   * Returns the folder model, as provided by the folder controller
-   * @param $datasource
-   * @return bibliograph_model_FolderModel
-   */
-  public function getFolderModel( $datasource )
-  {
-    qcl_import("bibliograph_service_Folder");
-    return bibliograph_service_Folder::getInstance()->getFolderModel($datasource);
-  }
-  
-  public function getReferenceModel( $datasource )
-  {
-    return $this->getControlledModel( $datasource );
   }
 
   /**

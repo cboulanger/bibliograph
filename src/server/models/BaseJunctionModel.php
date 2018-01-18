@@ -3,7 +3,7 @@
 namespace app\models;
 
 use Yii;
-use \app\models\BaseModel;
+use \lib\models\BaseModel;
 use \yii\helpers\StringHelper;
 
 class BaseJunctionModel extends BaseModel

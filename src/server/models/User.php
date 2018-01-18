@@ -23,7 +23,7 @@ namespace app\models;
 use Yii;
 use yii\web\IdentityInterface;
 
-use app\models\BaseModel;
+use lib\models\BaseModel;
 use app\models\Group;
 use app\models\Permissions;
 use app\models\Roles;

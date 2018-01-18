@@ -22,7 +22,7 @@ namespace app\models;
 
 use Yii;
 
-use app\models\BaseModel;
+use lib\models\BaseModel;
 use app\models\User;
 use app\models\Datasource;
 
