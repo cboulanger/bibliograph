@@ -161,7 +161,14 @@ class AppController extends \JsonRpc2\Controller
    */
   public function checkDatasourceAccess($datasource)
   {
-    // @todo
+    static $myDatasources = null;
+    if ( is_null( $myDatasources ) ){
+      $myDatasources = $this->getActiveUser()->getDatasourceNames();
+    }
+    if( ! in_array($datasource, $myDatasources) ){
+      // @todo: temporary disabled
+      //throw new \InvalidArgumentException("Invalid or unauthorized datasource '$datasource'");
+    }
   }
 
   /**

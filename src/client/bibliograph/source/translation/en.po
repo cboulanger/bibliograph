@@ -198,7 +198,7 @@ msgstr ""
 msgid "Do you really want to delete the objects '%1'?"
 msgstr ""
 
-#: bibliograph.ui.window.FolderTreeWindowUi:108
+#: bibliograph.ui.window.FolderTreeWindowUi:107
 msgid "Select"
 msgstr ""
 

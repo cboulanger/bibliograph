@@ -25,7 +25,7 @@ qx.Class.define("bibliograph.ui.folder.TreeView",
   construct : function()
   {
     this.base(arguments);
-    this.setServiceName("bibliograph.folder");
+    this.setServiceName("folder");
     this.setModelType("folder");
   },
   members :

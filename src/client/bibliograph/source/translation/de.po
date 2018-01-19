@@ -476,7 +476,7 @@ msgstr "Bitte wählen Sie die Datenquelle aus"
 msgid "OK"
 msgstr "OK"
 
-#: bibliograph.ui.window.FolderTreeWindowUi:108
+#: bibliograph.ui.window.FolderTreeWindowUi:107
 msgid "Select"
 msgstr "Auswählen"
 

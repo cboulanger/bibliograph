@@ -135,6 +135,7 @@ qx.Class.define("qcl.ui.treevirtual.TreeView", {
 
     /**
     * Use a cache to save tree data
+    * Not implemented, does nothing currently.
     */
     useCache: {
       check: "Boolean",
@@ -147,18 +148,19 @@ qx.Class.define("qcl.ui.treevirtual.TreeView", {
     nodeCountMethod: {
       check: "String",
       init: "getNodeCount"
-    },
+    },  
 
     /**
     * The service method used to query the number of nodes in the tree
     */
     childNodeDataMethod: {
       check: "String",
-      init: "getChildNodeData"
+      init: "child-data"
     },
 
     /**
     * The number of nodes that are transmitted in each request. If null, no limit
+    * Not implemented, does nothing
     */
     childrenPerRequest: {
       check: "Integer",
@@ -184,6 +186,7 @@ qx.Class.define("qcl.ui.treevirtual.TreeView", {
 
     /**
      * Enable/disable drag and drop
+     * Not implememted, does nothing
      */
     enableDragDrop: {
       check: "Boolean",
@@ -193,6 +196,7 @@ qx.Class.define("qcl.ui.treevirtual.TreeView", {
 
     /**
      * Whether Drag & Drop should be limited to reordering
+     * Not implemented, does nothing.
      */
     allowReorderOnly: {
       check: "Boolean",
@@ -348,7 +352,7 @@ qx.Class.define("qcl.ui.treevirtual.TreeView", {
 
     /*
     ---------------------------------------------------------------------------
-     INTERNAL METHODS
+      SETUP TREE
     ---------------------------------------------------------------------------
     */
 
@@ -502,80 +506,19 @@ qx.Class.define("qcl.ui.treevirtual.TreeView", {
       this.__loadingTreeData = true;
 
       // get node count and transaction id from server
-      let data = await store.load( this.getNodeCountMethod(), [datasource, this.getOptionalRequestData()]);
-      var nodeCount = data.nodeCount;
-      var transactionId = data.transactionId;
+      // let data = await store.load( "node-count", [datasource, this.getOptionalRequestData()] );// @todo unhardcode service method
+      // var nodeCount = data.nodeCount;
+      // var transactionId = data.transactionId;
 
       // if no tree, return
-      if (!nodeCount) {
-        this.setEnabled(true);
-        this.__loadingTreeData = false;
-        return;
-      }
-      var counter = 0;
-
-      //this.getTree().setEnabled(false);
-
-      // Create a function that can recursively call itself
-      // in order to load folder children, as long as there
-      // are some left on the server. 
-      let loadTree = (data) => {
-        // if the function is called with boolean 'true', this
-        // is interpreted as the start of the loading process. 
-        if (data === true) {
-          store.load(
-            this.getChildNodeDataMethod(),
-            [
-              datasource,
-              nodeId,
-              this.getChildrenPerRequest(),
-              true,
-              storeId,
-              this.getOptionalRequestData()
-            ],
-            qx.lang.Function.bind(loadTree, this)
-          );
-        } else if (
-          qx.lang.Type.isObject(data) &&
-          qx.lang.Type.isArray(data.queue) &&
-          data.queue.length
-        ) {
-          // After the data has returned from the server, if there are nodes left
-          // to be loaded, the function is called again, and the nodes to load passed to 
-          // the function.
-          counter += data.nodeData.length;
-          app.showPopup(
-            "Loading folder data... " +
-              Math.floor(100 * (counter / nodeCount)) +
-              "%",
-            this
-          );
-          store.load(
-            this.getChildNodeDataMethod(),
-            [
-              datasource,
-              data.queue,
-              this.getChildrenPerRequest(),
-              true,
-              storeId,
-              this.getOptionalRequestData()
-            ],
-            qx.lang.Function.bind(loadTree, this)
-          );
-        } else if (data === null) {
-          // an error occurred
-          app.hidePopup();
-          this.__loadingTreeData = false;
-        } else {
-          // notify listeners 
-          this.__loadingTreeData = false;
-          this.fireEvent("loaded");
-          app.hidePopup();
-        } // end if
-      }
-
-      // load the tree data
-      loadTree(true); 
+      // if (!nodeCount) {
+      //   this.setEnabled(true);
+      //   this.__loadingTreeData = false;
+      //   return;
+      // }
+      await store.load( "load" ,[datasource,null] );// @todo unhardcode service method
+      this.setEnabled(true);
+      this.__loadingTreeData = false;
     },
 
     /**

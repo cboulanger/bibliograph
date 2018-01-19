@@ -60,7 +60,6 @@ qx.Class.define("bibliograph.ui.window.FolderTreeWindowUi",
       // tree widget
       var treeWidget = new qcl.ui.treevirtual.TreeView();
       this.treeWidget = treeWidget;
-      treeWidget.setServiceName("bibliograph.folder");
       treeWidget.setColumnHeaders(['Folders', '#']);
       treeWidget.setModelType("folder");
       folderTreeWindow.add(treeWidget);

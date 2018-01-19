@@ -208,6 +208,188 @@ class FolderController extends AppController //implements ITreeController
   */
 
   /**
+   * Returns the number of nodes in a given datasource
+   * @param string $datasource
+   * @param mixed|null $options Optional data, for example, when nodes
+   *   should be filtered by a certain criteria
+   * @return array containing the keys 'nodeCount', 'transactionId'
+   *   and (optionally) 'statusText'.
+   */
+  function actionNodeCount( $datasource, $options=null )
+  {
+    $this->checkDatasourceAccess( $datasource );
+    $query = Folder::find();
+    if( $this->getActiveUser()->isAnonymous() ){
+      $query = $query->where( [ 'public' => true ] );
+    }
+    $nodeCount = $query->count();
+    return array(
+      'nodeCount'     => $nodeCount,
+      'transactionId' => $model->getTransactionId(),
+      'statusText'    => ""
+    );
+  }
+
+  /**
+   * Returns the number of children of a node with the given id
+   * in the given datasource.
+   *
+   * @param $datasource
+   * @param $nodeId
+   * @param mixed|null $options Optional data, for example, when nodes
+   *   should be filtered by a certain criteria
+   * @return array
+   */
+  function actionChildCount( $datasource, $nodeId, $options=null )
+  {
+    not_implemented();
+  }
+
+
+  /**
+   * Returns all nodes of a tree in a given datasource
+   * @param string $datasource
+   * @param mixed|null $options Optional data, for example, when nodes
+   *   should be filtered by a certain criteria
+   * @return array Array of node data.
+   */  
+  function actionLoad( $datasource,  $options=null )
+  {
+    $this->checkDatasourceAccess( $datasource );
+    $query = Folder::find()->select("id");
+    if( $this->getActiveUser()->isAnonymous() ){
+      $query = $query->where( [ 'public' => true ] );
+    }
+    $nodeIds = $query->column();
+    $result = array_map( function($id) use ($datasource) {
+      return $this->getNodeData($datasource, $id);
+    }, $nodeIds );
+    return $result;
+  }
+
+  /**
+   * NOT PORTED TO YII2 YET.
+   * 
+   * Returns the node data of the children of a given array of
+   * parent node ids. If the "recurse" parameter is true,
+   * also return the data of the whole branch. The number of
+   * nodes returned can be limited by the "max" argument.
+   *
+   * Returns an associative array with at least the keys "nodeData" and
+   * "queue". The "nodeData" value is an array of node data, each of which
+   * contains information on the parent id in the data.parentId property.
+   * The "queue" value is an array of ids that could not be retrieved
+   * because of the "max" limitation.
+   *
+   * If you supply a 'storeId' parameter, the requesting tree will be
+   * synchronized with all other trees that are connected to this store.
+   *
+   * @param string $datasource The name of the datasource
+   * @param int|array $ids A node id or array of node ids
+   * @param int $max The maximum number of queues to retrieve. If null, no limit
+   * @param bool $recurse Whether recurse into the tree branch
+   * @param string $storeId The id of the connected datastore
+   * @param string|null $options Optional data, for example, when nodes
+   *   should be filtered by a certain criteria
+   * @throws LogicException
+   * @return array
+   */
+  function method_getChildNodeData(
+    $datasource, $ids, $max=null, $recurse=false, $storeId=null, $options=null )
+  {    
+    not_implemented();
+    $this->checkDatasourceAccess( $datasource );
+    $counter = 0;
+
+    // create node array with root node
+    $nodeArr = array();
+
+    // check array of nodes of which the children should be retrieved
+    if ( ! is_array( $ids ) )
+    {
+      if ( ! is_numeric( $ids ) )
+      {
+        throw new LogicException("Invalid argument.");
+      }
+    }
+    $queue = (array) $ids;
+    $queueLater = array();
+
+    /*
+     * retrieve the whole tree
+     */
+    while( count( $queue ) )
+    {
+
+      /*
+       * get child nodes
+       */
+      $parentId = (int) array_shift( $queue );
+      $childIds = (array) $this->getChildIds( $datasource, $parentId, "position" );
+      $queueLater = array();
+      while( count ($childIds ) )
+      {
+        $childId = array_shift( $childIds );
+
+        /*
+         * get child data
+         */
+        $childData = $this->getNodeData( $datasource, $childId, $parentId );
+
+        /*
+         * ingnore inaccessible nodes
+         */
+        if ( $childData === null )
+        {
+          //$this->debug("Node #$childId is not accessible");
+          continue;
+        }
+
+        qcl_assert_array( $childData ); // todo assert keys
+
+        /*
+         * if the child has children itself, load those
+         */
+        if ( $recurse and $childData['data']['childCount'] )
+        {
+          if ( $max and $counter > $max )
+          {
+            $queueLater[]= (int) $childId;
+          }
+          else
+          {
+            array_push( $queue, (int) $childId );
+          }
+        }
+
+        /*
+         * add child data to result
+         */
+        $nodeArr[] = $childData;
+        $counter++;
+      }
+
+      // if a node limit is set, check for maximum number of nodes per request
+      if ( $max and $counter > $max ) break;
+    }
+
+   /*
+    * return the node data
+    */
+    $queue = array_merge( $queue, $queueLater );
+    $queueCount = count($queue);
+    //$nodeCount  = count( $nodeArr );
+    //$this->debug("Returning $nodeCount nodes, remaining nodes $queueCount");
+
+    return array(
+      'nodeData'    => $nodeArr,
+      'queue'       => $queue,
+      'statusText'  => $queueCount ? "Loading..." : ""
+    );
+  }  
+
+
+  /**
    * Edit folder data
    * @param $datasource
    * @param $folderId
@@ -250,8 +432,6 @@ class FolderController extends AppController //implements ITreeController
     } 
     Yii::error($model->getErrors());
     return "ERROR";
-
-    
   }
 
   /**
