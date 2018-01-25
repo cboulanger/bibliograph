@@ -15,7 +15,7 @@ qx.Theme.define("bibliograph.theme.Theme",
     color : bibliograph.theme.Color,
     decoration : bibliograph.theme.Decoration,
     font : bibliograph.theme.Font,
-    icon : qx.theme.icon.Tango,
+    icon : bibliograph.theme.Icon,
     appearance : bibliograph.theme.Appearance
   }
 });

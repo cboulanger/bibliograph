@@ -235,7 +235,7 @@ qx.Class.define("qcl.application.StateManager",
      */
     _analyzeHashString : function(string)
     { 
-      var hash  = string || location.hash.substr(1) || "";
+      var hash  = string || window.location.hash.substr(1) || "";
 
       /*
        * Safari bug
@@ -418,7 +418,7 @@ qx.Class.define("qcl.application.StateManager",
         /*
          * qooxdoo browser navigation button support
          */
-        this.addToHistory( location.hash.substr(1), description );        
+        this.addToHistory( window.location.hash.substr(1), description );        
       }
     },
     
@@ -549,7 +549,7 @@ qx.Class.define("qcl.application.StateManager",
     removeState : function ( name )
     {
       this.removeHashParam( name );
-      this.addToHistory(location.hash.substr(1),null);
+      this.addToHistory(window.location.hash.substr(1),null);
     },
     
     
