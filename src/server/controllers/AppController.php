@@ -24,6 +24,7 @@ use Yii;
 
 use app\models\User;
 use app\models\Session;
+use app\models\Datasource;
 use \JsonRpc2\Exception;
 
 /**
@@ -182,7 +183,7 @@ class AppController extends \JsonRpc2\Controller
     return  
       Datasource
         :: getInstanceFor( $datasource )
-        :: getClassFor( static::$modelType );
+        -> getClassFor( static::$modelType );
   }
 
   /**

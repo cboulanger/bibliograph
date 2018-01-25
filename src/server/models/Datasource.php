@@ -240,6 +240,7 @@ class Datasource extends BaseModel
     // cache
     static $connection=null;
     if( is_null($connection) ){
+      $this->useDsnDefaults();  
       switch( $this->type ){
         case "mysql":
         $dsn = "{$this->type}:host={$this->host};port={$this->port};dbname={$this->database}";
@@ -262,6 +263,21 @@ class Datasource extends BaseModel
       ]);
     }
     return $connection;
+  }
+
+  /**
+   * Uses the application dsn defaults if the datasource information doesn't
+   * contain it. 
+   *
+   * @return void
+   */
+  protected function useDsnDefaults(){
+    foreach( ["host","port","database","username","password"] as $key ){
+      $connection = self::parseAppDsn(); 
+      if( ! $this->$key ){
+        $this->$key = $connection[$key];
+      }
+    }
   }
 
   /**
@@ -348,9 +364,20 @@ class Datasource extends BaseModel
       'prefix' => $datasourceName,
       'active' => 1
     ]);
+    $datasource->setAttributes(self::parseAppDsn());
+    return $datasource;
+  }
+
+  /**
+   * Parses the Yii2 datasource connection information in a way that
+   * can be stored in the datasource db record
+   *
+   * @return array
+   */
+  protected static function parseAppDsn(){
     $dsn = Dsn::parse(Yii::$app->db->dsn);
     $db  = Yii::$app->db;
-    $datasource->setAttributes([
+    return [
       'type' => $dsn->sheme,
       'host' => $dsn->host,
       'port' => $dsn->port,
@@ -358,8 +385,7 @@ class Datasource extends BaseModel
       'username' => $db->username,
       'password' => $db->password,
       'encoding' => $db->charset,
-    ]);
-    return $datasource;
+    ];
   }
 
   /**

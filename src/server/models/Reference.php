@@ -176,6 +176,7 @@ class Reference extends BaseModel
    */ 
   protected function getReferenceFolders()
   {
+    Folder_Reference::setDatasouce(static::getDatasource());
     return $this->hasMany(Folder_Reference::className(), ['ReferenceId' => 'id'] );
   }  
 
@@ -184,6 +185,7 @@ class Reference extends BaseModel
    */ 
   public function getFolders()
   {
+    Folder::setDatasouce(static::getDatasource());
     return $this->hasMany(Folder::className(), ['id' => 'FolderId'])->via('referenceFolders');
   }
 

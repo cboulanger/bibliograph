@@ -30,6 +30,11 @@ use app\models\Datasource;
 class BaseModel extends ActiveRecord
 {
 
+
+  //-------------------------------------------------------------
+  // Behaviors
+  //-------------------------------------------------------------
+
   /**
    * Class behaviors. Adds a timestamp to the `created` and `modified` columns
    * @return array
@@ -46,6 +51,11 @@ class BaseModel extends ActiveRecord
     ];
   }
 
+
+  //-------------------------------------------------------------
+  // Datasource feature
+  //-------------------------------------------------------------
+
   /**
    * The name of the datasource the model is attached to.
    * the "datasource" in bibliograph parlance refers to a named collection
@@ -59,8 +69,8 @@ class BaseModel extends ActiveRecord
    */
   public static function getDb()
   {
-    if( self::$datasource ){
-      return Datasource::getInstanceFor( self::$datasource )->getConnection();
+    if( static::$datasource ){
+      return Datasource::getInstanceFor( static::$datasource )->getConnection();
     }
     return parent::getDb();
   }
@@ -88,6 +98,11 @@ class BaseModel extends ActiveRecord
     return self::$datasource;
   }
 
+
+  //-------------------------------------------------------------
+  // Shorthand methods
+  //-------------------------------------------------------------  
+
   /**
    * Shorthand method to find ActiveRecord with the given named id
    *
@@ -98,6 +113,11 @@ class BaseModel extends ActiveRecord
   {
     return static::findOne( ['namedId' => $namedId ] );
   }
+
+
+  //-------------------------------------------------------------
+  // Overridden methods
+  //-------------------------------------------------------------  
 
   /**
    * Overridden to log validation errors
@@ -114,6 +134,11 @@ class BaseModel extends ActiveRecord
     Yii::warning( $this->getErrors() );
     return false;
   }
+
+
+  //-------------------------------------------------------------
+  // Shims
+  //-------------------------------------------------------------  
 
   /**
    * Shim method

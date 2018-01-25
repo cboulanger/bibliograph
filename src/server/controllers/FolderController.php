@@ -61,19 +61,19 @@ class FolderController extends AppController //implements ITreeController
   /**
    * Return the data of a node of the tree as expected by the qooxdoo tree data model
    * @param string $datasource Datasource name
-   * @param \app\models\Folder|int $nodee
+   * @param \app\models\Folder|int $folder
    * @return array
    */
-  static function getNodeData( $datasource, $node )
+  static function getNodeData( $datasource, $folder )
   {
-    if ( $node instanceof Folder ){
-      $folder = $node;
-    } else {
-      assert( \is_numeric( $node) );
-      $folder = static::controlledModel($datasource)::findOne($node);
+    // Accept both a folder model and a numeric id
+    if ( ! ($folder instanceof Folder ) ){
+      assert( \is_numeric( $folder) );
+      $folderId = $folder;
+      $folder = static::controlledModel($datasource)::findOne($folder);
       if( ! $folder ){
-        throw new \InvalidArgumentException("Folder #$nodeId does not exist.");
-      }      
+        throw new \InvalidArgumentException("Folder #$folderId does not exist.");
+      }
     }
 
     $folderType     = $folder->type;
@@ -82,10 +82,10 @@ class FolderController extends AppController //implements ITreeController
     $query          = $folder->query;
     $searchFolder   = (bool) $folder->searchfolder;
     $description    = $folder->description;
-    $parentId       = is_null( $parentId ) ? $folder->parentId : $parentId;
+    $parentId       = $folder->parentId;
 
     $childCount     = $folder->getChildCount();
-    $referenceCount = static::getReferenceCount( $folder, $datasource );
+    $referenceCount = $folder->getReferences()->count();
     $markedDeleted  = $folder->markedDeleted;
     $public         = $folder->public;
     $opened         = $folder->opened;
@@ -95,7 +95,7 @@ class FolderController extends AppController //implements ITreeController
     static $isAnonymous = null;
     if ( $activeUser === null )
     {
-      $activeUser = Yii::$app->user->identity();
+      $activeUser = Yii::$app->user->getIdentity();
       $isAnonymous = $activeUser->isAnonymous();
     }
 
@@ -110,6 +110,8 @@ class FolderController extends AppController //implements ITreeController
     }
 
     // icon & type
+    $icon = static::$icon["closed"];
+    $type = "folder";
     if ( ( $folderType == "search" or !$folderType)
            and $query and $searchFolder != false ) {
       $icon = static::$icon["search"];
@@ -126,9 +128,6 @@ class FolderController extends AppController //implements ITreeController
     } elseif ( $public ) {
       $icon = static::$icon["public"];
       $type = "folder";
-    } else {
-      $icon = static::$icon["closed"];
-      $type = "folder";
     }
 
     // return node data
@@ -141,9 +140,9 @@ class FolderController extends AppController //implements ITreeController
       'bHideOpenClose'  => ($childCount == 0),
       'columnData'      => [ null, $referenceCount ],
       'data'            => [
-                          'type'            => $type,
-                          'id'              => $nodeId,
-                          'parentId'        => $parentId,
+                          'type'            => $folderType,
+                          'id'              => $folder->id,
+                          'parentId'        => $folder->parentId,
                           'query'           => $query,
                           'public'          => $public,
                           'owner'           => $owner,
@@ -251,12 +250,12 @@ class FolderController extends AppController //implements ITreeController
    * @param string $datasource
    * @param mixed|null $options Optional data, for example, when nodes
    *   should be filtered by a certain criteria
-   * @return array Array of node data.
+   * //return array Array of node data.
    */  
   function actionLoad( $datasource,  $options=null )
   {
     $this->checkDatasourceAccess( $datasource );
-    $query = Folder::find()->select("id");
+    $query = static::controlledModel($datasource)::find()->select("id");
     if( $this->getActiveUser()->isAnonymous() ){
       $query = $query->where( [ 'public' => true ] );
     }

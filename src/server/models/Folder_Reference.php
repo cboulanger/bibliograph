@@ -13,8 +13,10 @@ use Yii;
  * @property integer $FolderId
  * @property integer $ReferenceId
  */
-class Folder_Reference extends \yii\db\ActiveRecord
+class Folder_Reference extends \lib\models\BaseModel
 {
+
+  
     /**
      * @inheritdoc
      */
