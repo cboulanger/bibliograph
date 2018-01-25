@@ -23,7 +23,7 @@
  * @ignore(qx.data.model.TreeVirtual)
  * @ignore(qx.data.model.Table)
  */
-qx.Class.define("virtualdata.marshal.TreeVirtual", 
+qx.Class.define("qcl.data.marshal.TreeVirtual", 
 {
   extend : qx.core.Object,
 

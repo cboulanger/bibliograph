@@ -22,7 +22,7 @@
  */
 qx.Class.define("bibliograph.store.Datasources",
 {
-  extend : bibliograph.io.JsonRpcStore,
+  extend : qcl.data.store.JsonRpcStore,
   include : [],
   type : "singleton",
   construct : function() {

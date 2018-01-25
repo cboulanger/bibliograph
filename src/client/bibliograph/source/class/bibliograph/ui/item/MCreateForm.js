@@ -212,7 +212,7 @@ qx.Mixin.define("bibliograph.ui.item.MCreateForm",
             var acStoreId = ac.service + ac.method;
             if (!this._stores[acStoreId])
             {
-              this._stores[acStoreId] = new bibliograph.io.JsonRpcStore(ac.service);
+              this._stores[acStoreId] = new qcl.data.store.JsonRpcStore(ac.service);
               this._stores[acStoreId].setAutoLoadMethod(ac.method);
             }
             var store = this._stores[acStoreId];
@@ -255,7 +255,7 @@ qx.Mixin.define("bibliograph.ui.item.MCreateForm",
          */
         var storeId = key + serviceName + serviceMethod
         if (this._stores[storeId] == undefined) {
-          this._stores[storeId] = new bibliograph.io.JsonRpcStore( data.serviceName);
+          this._stores[storeId] = new qcl.data.store.JsonRpcStore( data.serviceName);
         }
         var store = this._stores[storeId];
         formElement.setUserData("store", store);

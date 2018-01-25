@@ -81,7 +81,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
      */
     store :
     {
-      check : "bibliograph.io.JsonRpcStore",
+      check : "qcl.data.store.JsonRpcStore",
       event : "changeStore",
       nullable : true
     },
@@ -133,7 +133,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
      * create store and bind the application datasource model's
      * tableModelService to the serviceName property
      */
-    var store = new bibliograph.io.JsonRpcStore("reference");
+    var store = new qcl.data.store.JsonRpcStore("reference");
     this.getApplication().bind("datasourceModel.tableModelService", store, "serviceName");
     this.setStore(store);
 
@@ -908,7 +908,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
     {
       var _this = this;
       var controller = new qcl.data.controller.AutoComplete(null, widget, separator);
-      var store = new bibliograph.io.JsonRpcStore("reference");
+      var store = new qcl.data.store.JsonRpcStore("reference");
       store.setAutoLoadMethod("getAutoCompleteData");
       controller.bind("input", store, "autoLoadParams", {
         'converter' : function(input) {

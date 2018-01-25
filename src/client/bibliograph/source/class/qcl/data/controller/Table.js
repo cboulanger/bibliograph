@@ -22,7 +22,7 @@
  * Controller for Table widget
  * @asset(virtualdata/ajax-loader.gif)
  */
-qx.Class.define("virtualdata.controller.Table", 
+qx.Class.define("qcl.data.controller.Table", 
 {
   extend : qx.core.Object,
   include: [ qx.data.controller.MSelection ],

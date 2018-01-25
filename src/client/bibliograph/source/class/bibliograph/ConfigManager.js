@@ -43,7 +43,7 @@ qx.Class.define("bibliograph.ConfigManager", {
      * The data store used for configuration data
      */
     store: {
-      check: "bibliograph.io.JsonRpcStore",
+      check: "qcl.data.store.JsonRpcStore",
       nullable: true,
       event: "changeStore"
     },
@@ -175,7 +175,7 @@ qx.Class.define("bibliograph.ConfigManager", {
       this._configSetup = true;
 
       // set default config store
-      this.setStore(new bibliograph.io.JsonRpcStore("config"));
+      this.setStore(new qcl.data.store.JsonRpcStore("config"));
 
       // bind the configuration store's data model to the manager's data model
       // so that it is copied over when loaded

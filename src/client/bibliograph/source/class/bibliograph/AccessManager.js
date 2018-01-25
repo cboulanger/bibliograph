@@ -41,7 +41,7 @@ qx.Class.define("bibliograph.AccessManager",
       */
      store :
      {
-       check : "bibliograph.io.JsonRpcStore",
+       check : "qcl.data.store.JsonRpcStore",
        nullable : true,
        event    : "changeStore"
      },
@@ -135,7 +135,7 @@ qx.Class.define("bibliograph.AccessManager",
       this._authenticationSetup = true;      
 
       // store for authenticated user
-      this.setStore( new bibliograph.io.JsonRpcStore("access") );
+      this.setStore( new qcl.data.store.JsonRpcStore("access") );
       
       // bind the authentication stores data model to the user managers data model
       this.getStore().bind("model", this.getUserManager(), "model");

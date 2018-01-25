@@ -21,7 +21,7 @@
 /**
  * Controller for TreeVirtual widget
  */
-qx.Class.define("virtualdata.controller.TreeVirtual", 
+qx.Class.define("qcl.data.controller.TreeVirtual", 
 {
   extend : qx.core.Object,
   include: qx.data.controller.MSelection,

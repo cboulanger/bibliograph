@@ -22,7 +22,7 @@
  * An implementation of the abstract class qx.ui.table.model.Remote requests 
  * to load data are delegated to the data store through the controller.
  */
-qx.Class.define("virtualdata.model.Table",
+qx.Class.define("qcl.data.model.Table",
 {
   extend : qx.ui.table.model.Remote,
 

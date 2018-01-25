@@ -24,7 +24,7 @@
  * qx.data.marshal.Json will be used. 
  * 
  */
-qx.Class.define("bibliograph.io.JsonRpcStore",
+qx.Class.define("qcl.data.store.JsonRpcStore",
 {
   
   extend : qx.core.Object,

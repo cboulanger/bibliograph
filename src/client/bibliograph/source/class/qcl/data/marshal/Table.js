@@ -23,7 +23,7 @@
  * Marshaler for data for qx.ui.treevirtual.Table
  * @ignore(qx.data.model.Table)
  */
-qx.Class.define("virtualdata.marshal.Table", 
+qx.Class.define("qcl.data.marshal.Table", 
 {
   extend : qx.core.Object,
 

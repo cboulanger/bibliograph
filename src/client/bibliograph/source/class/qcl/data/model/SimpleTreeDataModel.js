@@ -87,7 +87,7 @@
  * }
  * </pre>
  */
-qx.Class.define("virtualdata.model.SimpleTreeDataModel",
+qx.Class.define("qcl.data.model.SimpleTreeDataModel",
 {
 
   extend : qx.ui.table.model.Abstract,

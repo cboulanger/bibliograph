@@ -148,14 +148,14 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     qxGroupBox1.setLayout(qxVbox2);
 
     // store for select box
-    var selectBoxStore = new bibliograph.io.JsonRpcStore("actool", null);
+    var selectBoxStore = new qcl.data.store.JsonRpcStore("actool", null);
     this.selectBoxStore = selectBoxStore;
     selectBoxStore.setAutoLoadParams(null);
     selectBoxStore.setServiceName("bibliograph.actool");
     selectBoxStore.setAutoLoadMethod("getAccessElementTypes");
 
     // store for left list
-    var leftListStore = new bibliograph.io.JsonRpcStore("actool", null);
+    var leftListStore = new qcl.data.store.JsonRpcStore("actool", null);
     leftListStore.setServiceName("bibliograph.actool");
     leftListStore.setAutoLoadMethod("getAccessElements");
     leftListStore.addListener("loaded", function(e)
@@ -169,7 +169,7 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     }, this);
 
     // store for right list
-    var rightListStore = new bibliograph.io.JsonRpcStore("actool", null);
+    var rightListStore = new qcl.data.store.JsonRpcStore("actool", null);
     rightListStore.setServiceName("bibliograph.actool");
     rightListStore.setAutoLoadMethod("getAccessElements");
     qx.event.message.Bus.getInstance().subscribe("leftListReloaded", function(e)
@@ -184,7 +184,7 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     }, this);
 
     // store for tree
-    var treeStore = new bibliograph.io.JsonRpcStore("actool", null);
+    var treeStore = new qcl.data.store.JsonRpcStore("actool", null);
     treeStore.setServiceName("bibliograph.actool");
     treeStore.setAutoLoadMethod("getAccessElementTree");
     qx.event.message.Bus.getInstance().subscribe("leftListReloaded", function(e)

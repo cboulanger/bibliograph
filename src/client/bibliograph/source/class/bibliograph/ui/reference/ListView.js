@@ -257,7 +257,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
       /*
        * hide old table
        */
-      if (old)
+      if (old && this.getTable())
       {
         if( this.referenceViewLabel )
         {
@@ -575,20 +575,20 @@ qx.Class.define("bibliograph.ui.reference.ListView",
        * marshaler, set the datasource and a null
        * value for query data.
        */
-      var marshaler = new virtualdata.marshal.Table();
+      var marshaler = new qcl.data.marshal.Table();
       this.setMarshaler(marshaler);
 
       /*
        * create store
        */
-      var store = new bibliograph.io.JsonRpcStore(this.getServiceName(), marshaler);
+      var store = new qcl.data.store.JsonRpcStore(this.getServiceName(), marshaler);
       this.setStore(store);
 
       /*
        * the controller propagates data changes between table and store. note
        * that you don't have to setup the bindings manually
        */
-      var controller = new virtualdata.controller.Table(table, store);
+      var controller = new qcl.data.controller.Table(table, store);
       this.setController(controller);
 
       // show status messages
@@ -640,7 +640,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
         columnIds.push(columnId);
         columnHeaders.push(columnLayout[columnId].header);
       }
-      var tableModel = new virtualdata.model.Table();
+      var tableModel = new qcl.data.model.Table();
 
       /*
        * set column labels and id

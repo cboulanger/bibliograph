@@ -50,7 +50,7 @@ qx.Class.define("bibliograph.ui.window.ImportWindowUi",
     importWindow.add(toolBar);
 
     // import filter
-    var importFilterStore = new bibliograph.io.JsonRpcStore("import");
+    var importFilterStore = new qcl.data.store.JsonRpcStore("import");
     qx.event.message.Bus.subscribe("bibliograph.setup.completed",()=>{
       importFilterStore.setAutoLoadParams([true]);
       importFilterStore.setAutoLoadMethod("importformats");  

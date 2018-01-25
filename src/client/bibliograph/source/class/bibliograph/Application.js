@@ -196,13 +196,13 @@ qx.Class.define("bibliograph.Application",
     /**
      * Returns a jsonrpc client object with the current auth token already set
      * @param {String} service The name of the service to get the client for
-     * @return {bibliograph.io.JsonRpcClient}
+     * @return {qcl.io.JsonRpcClient}
      */
     getRpcClient : function(service){
       qx.core.Assert.assert(!!service, "Service parameter cannot be empty");
       qx.util.Validate.checkString(service, "Service parameter must be a string");
       if( ! this.__clients[service] ){
-        this.__clients[service] = new bibliograph.io.JsonRpcClient(this.getServerUrl() + service );
+        this.__clients[service] = new qcl.io.JsonRpcClient(this.getServerUrl() + service );
       }
       let client = this.__clients[service];
       client.setToken( this.getAccessManager().getToken() );

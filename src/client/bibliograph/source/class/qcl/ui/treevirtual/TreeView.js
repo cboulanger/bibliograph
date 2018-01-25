@@ -236,7 +236,7 @@ qx.Class.define("qcl.ui.treevirtual.TreeView", {
     this.base(arguments);
 
     // Marshaler
-    this.setMarshaler(new virtualdata.marshal.TreeVirtual());
+    this.setMarshaler(new qcl.data.marshal.TreeVirtual());
 
     this.__datasources = {};
 
@@ -382,7 +382,7 @@ qx.Class.define("qcl.ui.treevirtual.TreeView", {
 
       // tree widget
       var tree = new qcl.ui.treevirtual.DragDropTree(this.getColumnHeaders(), {
-        dataModel: new virtualdata.model.SimpleTreeDataModel(),
+        dataModel: new qcl.data.model.SimpleTreeDataModel(),
         tableColumnModel: function(obj) {
           return new qx.ui.table.columnmodel.Resize(obj);
         }
@@ -442,14 +442,13 @@ qx.Class.define("qcl.ui.treevirtual.TreeView", {
       this.getTreeWidgetContainer().add(tree, { flex: 10, height: null });
 
       // Store
-      // @todo: we don't need a qcl AND a virtualdata jsonrpc store!
-      ds.store = new bibliograph.io.JsonRpcStore(
+      ds.store = new qcl.data.store.JsonRpcStore(
         this.getServiceName(),
         this.getMarshaler()
       );
 
       // Controller
-      ds.controller = new virtualdata.controller.TreeVirtual(tree, ds.store);
+      ds.controller = new qcl.data.controller.TreeVirtual(tree, ds.store);
       return ds;
     },
 

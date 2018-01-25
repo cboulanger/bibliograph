@@ -20,7 +20,7 @@
  * A JSONRPC 2.0 client. This uses a fork of the NPM package "raptor-client"
  * under the hood. See https://github.com/cboulanger/raptor-client
  */
-qx.Class.define("bibliograph.io.JsonRpcClient", {
+qx.Class.define("qcl.io.JsonRpcClient", {
   extend: qx.core.Object,
 
   /**
