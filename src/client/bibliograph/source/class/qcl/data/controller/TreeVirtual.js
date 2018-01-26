@@ -69,7 +69,7 @@ qx.Class.define("qcl.data.controller.TreeVirtual",
      /** The root element of the data. */
      model : 
      {
-       check: "qx.core.Object",
+       check: "Object",
        apply: "_applyModel",
        event: "changeModel",
        nullable: true
@@ -224,7 +224,8 @@ qx.Class.define("qcl.data.controller.TreeVirtual",
        /*
         * check if there are any nodes to add
         */
-       var nodeData = model.getNodeData();   
+       var nodeData = model.nodeData;   
+
        if ( ! qx.lang.Type.isArray( nodeData ) )
        {
           throw new Error("Invalid node data!");
@@ -288,9 +289,7 @@ qx.Class.define("qcl.data.controller.TreeVirtual",
           this.__nodeIdMap[serverNodeId] = clientNodeId;
           
        }, this);
-          
-       targetModel.setData();         
-
+       targetModel.setData();
      },
     
      /**

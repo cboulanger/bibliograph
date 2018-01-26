@@ -7,6 +7,7 @@
 HOST="localhost:9090"
 SERVER_PATH="src/"
 APP_PATH="client/bibliograph/source-compiled/bibliograph/index.html"
+COMPILE_PATH="src/client/bibliograph"
 
 # 'Production' server
 ps | grep "[p]hp -S $HOST" > /dev/null
@@ -19,5 +20,11 @@ else
   popd > /dev/null
 fi
 
-# Better: https://www.npmjs.com/package/webpack-browser-plugin
+# Open Safari, better: https://www.npmjs.com/package/webpack-browser-plugin
 open -a Safari http://$HOST/$APP_PATH
+# send Alt+Command+I to open Web inspector
+osascript -e 'tell application "System Events" to keystroke "i" using {option down, command down}'
+
+
+cd $COMPILE_PATH
+qx compile --watch

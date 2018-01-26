@@ -23,6 +23,15 @@
  * Base class for virtual tree widgets which load their data from different 
  * datasources. The data is cached for performance, so that switching the 
  * datasource won't result in expensive reloads.
+ * @asset(icon/16/places/folder-remote.png)
+ * @asset("icon/16/places/folder.png")
+ * @asset("icon/16/apps/utilities-graphics-viewer.png")
+ * @asset("icon/16/places/user-trash.png")
+ * @asset("icon/16/places/user-trash-full.png")
+ * @asset("icon/16/actions/folder-new.png")
+ * @asset("icon/16/places/folder-remote.png")
+ * @asset("icon/16/actions/help-about.png")
+ * @todo Theme It!
  */
 qx.Class.define("qcl.ui.treevirtual.TreeView", {
   extend: qx.ui.container.Composite,
@@ -98,15 +107,6 @@ qx.Class.define("qcl.ui.treevirtual.TreeView", {
       nullable: true,
       apply: "_applyTree",
       event: "changeTree"
-    },
-
-    /**
-     * The marshaler responsible for preparing the request and
-     * turning the response into model data.
-     */
-    marshaler: {
-      check: "qx.core.Object",
-      nullable: true
     },
 
     /**
@@ -235,8 +235,7 @@ qx.Class.define("qcl.ui.treevirtual.TreeView", {
   construct: function() {
     this.base(arguments);
 
-    // Marshaler
-    this.setMarshaler(new qcl.data.marshal.TreeVirtual());
+
 
     this.__datasources = {};
 
@@ -442,10 +441,7 @@ qx.Class.define("qcl.ui.treevirtual.TreeView", {
       this.getTreeWidgetContainer().add(tree, { flex: 10, height: null });
 
       // Store
-      ds.store = new qcl.data.store.JsonRpcStore(
-        this.getServiceName(),
-        this.getMarshaler()
-      );
+      ds.store = new qcl.data.store.JsonRpcStore(this.getServiceName());
 
       // Controller
       ds.controller = new qcl.data.controller.TreeVirtual(tree, ds.store);
@@ -515,7 +511,12 @@ qx.Class.define("qcl.ui.treevirtual.TreeView", {
       //   this.__loadingTreeData = false;
       //   return;
       // }
-      await store.load( "load" ,[datasource,null] );// @todo unhardcode service method
+
+      // load raw data
+      let model = await store.loadRaw( "load" ,[datasource] );// @todo unhardcode service method
+      // since this is a raw load, we need to manually set the mode and fire the event
+      store.fireDataEvent("loaded",model);
+      store.setModel(model);
       this.setEnabled(true);
       this.__loadingTreeData = false;
     },
@@ -606,26 +607,6 @@ qx.Class.define("qcl.ui.treevirtual.TreeView", {
        */
       this.setSelectedNode(node);
       this.setNodeId(nodeId);
-
-      //      this.setSelectedNodeType( nodeType );
-
-      return; // FIXME
-
-      /*
-       * load children only if the selection change was done by the user
-       */
-      if (node.children.length != data.childCount) {
-        if (nodeId != tree.getServerNodeIdSelected()) {
-          ////console.log("Node client#"+nodeId+", server#"+nodeId+": loading "+node.data.childCount+" children.");
-          this.loadChildFolders(datasource, nodeId);
-        }
-      }
-
-      /*
-       * remember server-side id of node currently selected
-       */
-      tree.setServerNodeIdSelected(nodeId);
-      //console.log("Selecting folder server#"+nodeId);
     },
 
     /*

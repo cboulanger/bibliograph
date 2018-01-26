@@ -143,9 +143,9 @@ qx.Class.define("qcl.ui.dialog.Dialog",
       if( ! widget )
       {
         var clazz = qx.lang.String.firstUp( data.type );
-        if ( qx.lang.Type.isFunction( dialog[clazz] ) )
+        if ( qx.lang.Type.isFunction( window.dialog[clazz] ) )
         {
-          widget = new dialog[clazz]();
+          widget = new window.dialog[clazz]();
         }
         else
         {

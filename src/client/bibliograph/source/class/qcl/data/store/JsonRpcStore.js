@@ -111,7 +111,7 @@ qx.Class.define("qcl.data.store.JsonRpcStore",
       */
       model : 
       {
-        check : "qx.core.Object",
+        check : "Object",
         nullable: true,
         event: "changeModel",
         apply : "_applyModel"
@@ -256,7 +256,8 @@ qx.Class.define("qcl.data.store.JsonRpcStore",
           if ( typeof finalCallback == "function" ){
             // execute outside of the current stack so callback errors do not break the current execution context
             qx.lang.Function.delay(finalCallback,0,context,data);
-          }            
+          }
+          return data;      
         })
         .catch((ex)=>{
           this.error(ex);
@@ -272,12 +273,13 @@ qx.Class.define("qcl.data.store.JsonRpcStore",
       */
 
       /** 
-       * Loads the data from a service method asynchroneously. 
+       * Loads the data from a service method asynchronously. 
        * @param serviceMethod {String} Method to call
        * @param params {Array} Array of arguments passed to the service method
        * @param finalCallback {function} The callback function that is called with
        *   the result of the request
        * @param context {Object} The context of the callback function
+       * @todo remove callback
        * @param {Promise<Object>} Promise that resolves with the loaded data 
        */
       load : function( serviceMethod, params=[], finalCallback, context  )
@@ -285,15 +287,10 @@ qx.Class.define("qcl.data.store.JsonRpcStore",
         serviceMethod = serviceMethod||this.getLoadMethod();
         this.__lastMethod = serviceMethod;
         this.__lastParams = params;
-        return this._sendJsonRpcRequest( 
-          serviceMethod, 
-          params,
-          finalCallback, 
-          context,
-          true
-        );
+        this.__lastCreateModel = true;
+        return this.reload(finalCallback,context);
       },
-      
+
       /** 
        * Reloads the data from a service method asynchroneously. Uses the last
        * method and parameters used.
@@ -302,12 +299,35 @@ qx.Class.define("qcl.data.store.JsonRpcStore",
        *   the result of the request
        * @param context {Object} The context of the callback function
        * @param {Promise<Object>} Promise that resolves with the loaded data
-       * 
+       * @todo remove callback
+       * @return {Promise<mixed>} Promise that resolves with the data
        */    
       reload : function( callback, context )
       {
-        return this.load( this.__lastMethod, this.__lastParams, callback, context );
+        return this._sendJsonRpcRequest( 
+          this.__lastMethod, 
+          this.__lastParams,
+          callback, 
+          context,
+          this.__lastCreateModel
+        );
       },
+
+      /** 
+       * Loads the data from a service method asynchronously without converting it into
+       * a qooxdoo data model. 
+       * @param serviceMethod {String} Method to call
+       * @param params {Array} Array of arguments passed to the service method
+       * @param {Promise<Object>} Promise that resolves with the loaded data 
+       */
+      loadRaw : function( serviceMethod, params=[] )
+      {
+        serviceMethod = serviceMethod||this.getLoadMethod();
+        this.__lastMethod = serviceMethod;
+        this.__lastParams = params;
+        this.__lastCreateModel = false;
+        return this.reload();
+      },       
       
     /** 
       * Executes a service method without loading model data in response. 

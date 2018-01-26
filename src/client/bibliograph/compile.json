@@ -32,7 +32,7 @@
   ],
 
   "libraries": [
-    "/Users/cboulanger/Code/bibliograph/src/vcslib/cboulanger-qooxdoo/framework",
+    "../../../../qooxdoo/framework",
     "."
   ],
 

@@ -250,7 +250,7 @@ class FolderController extends AppController //implements ITreeController
    * @param string $datasource
    * @param mixed|null $options Optional data, for example, when nodes
    *   should be filtered by a certain criteria
-   * //return array Array of node data.
+   * //return { nodeData : [], statusText: [] }.
    */  
   function actionLoad( $datasource,  $options=null )
   {
@@ -260,10 +260,13 @@ class FolderController extends AppController //implements ITreeController
       $query = $query->where( [ 'public' => true ] );
     }
     $nodeIds = $query->column();
-    $result = array_map( function($id) use ($datasource) {
+    $nodeData = array_map( function($id) use ($datasource) {
       return $this->getNodeData($datasource, $id);
     }, $nodeIds );
-    return $result;
+    return [
+      'nodeData'    => $nodeData,
+      'statusText'  => count($nodeData) . " Folders loaded." 
+    ];
   }
 
   /**

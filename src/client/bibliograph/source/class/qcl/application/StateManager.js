@@ -258,7 +258,7 @@ qx.Class.define("qcl.application.StateManager",
           hashParams[p[0]] = typeof p[1] == "string" ? p[1].replace(/\+/g, ' ') : true;
         }
       }
-      if ( ! string ) location.hashParams = hashParams;
+      if ( ! string ) window.location.hashParams = hashParams;
       return hashParams;
     },
 
