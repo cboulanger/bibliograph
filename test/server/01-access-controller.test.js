@@ -18,7 +18,9 @@ describe('The access controller', async function() {
 
   it('should allow to login anonymously', async () => {
     let response = await client.send('authenticate');
-    assert( equals( Object.keys(response), ['message','token','sessionId'] ) );
+    let expected = ['message','token','sessionId','error'];
+    let received = Object.keys(response);
+    assert( equals( expected, received ), `Expected: ${expected}, received: ${received}.` );
     client.setAuthToken(response.token);
     response = await client.send('username' );
     assert.equal( typeof response, "string" );
@@ -33,7 +35,9 @@ describe('The access controller', async function() {
 
   it('should allow to authenticate as administrator with a password', async () => {
     let response = await client.send('authenticate',['admin','admin']);
-    assert( equals( Object.keys(response), ['message','token','sessionId'] ) );
+    let expected = ['message','token','sessionId','error'];
+    let received = Object.keys(response);
+    assert( equals( expected, received ), `Expected: ${expected}, received: ${received}.` );
     token = response.token;
     client.setAuthToken(token);
     response = await client.send('username' );

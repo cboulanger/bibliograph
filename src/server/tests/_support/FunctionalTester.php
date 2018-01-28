@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  * Inherited Methods
  * @method void wantToTest($text)
@@ -77,7 +76,7 @@ class FunctionalTester extends \Codeception\Actor
     $token = $this->token();
     if ( $token ){
       $this->haveHttpHeader('Authorization', 'Bearer ' . $token); 
-      //$path .= "&auth=$token"; 
+     //$path .= "&auth=$token"; 
     }
     
     // send request and validate response

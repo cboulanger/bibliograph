@@ -209,13 +209,16 @@ class AccessController extends AppController
         default:
           throw new InvalidArgumentException("Unknown authentication method $auth_method");
       }
-      Yii::info("Authenticated user '{$user->namedId}' via auth username/password.");
+      
       // password is wrong
       if ( $authenticated === false ){
+        Yii::info("Wrong password.");
         return new AuthResult([
           'error' => Yii::t('app', "Invalid username or password"),
         ]);  
       }
+
+      Yii::info("Authenticated user '{$user->namedId}' via auth username/password.");
     }
 
     /*
@@ -223,7 +226,7 @@ class AccessController extends AppController
      */
 
     // log in identified user
-    $user->online = true;
+    $user->online = 1;
     $user->save(); 
     Yii::$app->user->login($user);
     if( ! $session ) {

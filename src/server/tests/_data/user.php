@@ -7,7 +7,7 @@ return [
         'created' => '2017-12-20 13:56:47',
         'modified' => '2017-12-21 12:48:19',
         'name' => 'Administrator',
-        'password' => 'a978770bd75b941fef76f142d26cbb85ae3399bc39caa2d0e',
+        'password' => '273a41fc35358d3f4612b4b67c62fc9111e0d175b9d61d72a',
         'email' => null,
         'anonymous' => 0,
         'ldap' => 0,

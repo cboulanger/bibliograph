@@ -86,7 +86,7 @@ class m180105_075548_data_ConfigDataInsert extends Migration
     [
         
         'type' => '0',
-        'default' => 'hashed',
+        'default' => 'plaintext',
         'customize' => '0',
         'final' => '0',
         'namedId' => 'authentication.method',

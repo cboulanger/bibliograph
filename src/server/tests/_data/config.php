@@ -94,7 +94,7 @@ return [
     [
         'id' => 10,
         'type' => 0,
-        'default' => 'hashed',
+        'default' => 'plaintext',
         'customize' => 0,
         'final' => 0,
         'namedId' => 'authentication.method',
