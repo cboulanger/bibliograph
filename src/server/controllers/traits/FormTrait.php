@@ -170,10 +170,10 @@ trait FormTrait
     if (!isset($this->__password)) {
       $this->__password = $value;
     } elseif ($this->__password != $value) {
-      throw new JsonRpcException($this->tr("Passwords do not match..."));
+      throw new JsonRpcException(Yii::t('app',"Passwords do not match..."));
     }
     if ($value and strlen($value) < 8) {
-      throw new JsonRpcException($this->tr("Password must be at least 8 characters long"));
+      throw new JsonRpcException(Yii::t('app',"Password must be at least 8 characters long"));
     }
     return $value ? $this->getApplication()->getAccessController()->generateHash($value) : null;
   }

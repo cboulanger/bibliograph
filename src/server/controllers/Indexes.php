@@ -162,10 +162,10 @@ class bibliograph_service_reference_Indexes
      * show alert
      */
     return new qcl_ui_dialog_Alert(
-      $this->tr("%s replacements made. %s",
+      Yii::t('app',"%s replacements made. %s",
         $count,
         $data->backup
-           ? $this->tr("In case you want to revert the changes, a backup file has been created.",$zipfile)
+           ? Yii::t('app',"In case you want to revert the changes, a backup file has been created.",$zipfile)
            : ""
       )
     );

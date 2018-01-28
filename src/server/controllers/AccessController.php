@@ -281,7 +281,7 @@ class AccessController extends AppController
     // if ( strlen($password) == 7 and ! $this->ldapAuth )
     // {
     //   new ui_dialog_Alert(
-    //   $this->tr("You need to set a new password."),
+    //   Yii::t('app',"You need to set a new password."),
     //   "bibliograph.actool", "editElement", array( "user", $first )
     //   );
     // }
@@ -670,7 +670,7 @@ class AccessController extends AppController
     try {
       $user = $this->user($username);
     } catch (\InvalidArgumentException $e) {
-      throw new Exception( $this->tr("Invalid user name or password.") );
+      throw new Exception( Yii::t('app',"Invalid user name or password.") );
     }
   
     $randSalt   = md5(uniqid(rand(), true) );

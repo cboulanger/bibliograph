@@ -49,7 +49,7 @@ class SetupController extends \app\controllers\AppController
   public function actionSetup()
   {
     // if ( ! User::findOne(['namedId'=>'setup']) ){
-    //   return $this->actionStart( $this->tr("Starting setup ...") );
+    //   return $this->actionStart( Yii::t('app',"Starting setup ...") );
     // }
 
     // client messages
@@ -133,10 +133,10 @@ class SetupController extends \app\controllers\AppController
     }
     
     // result
-    $this->addLogText($this->tr("Initial user data imported."));
+    $this->addLogText(Yii::t('app',"Initial user data imported."));
     
     // next
-    $this->setMessage($this->tr("Checking configuration ..."));  
+    $this->setMessage(Yii::t('app',"Checking configuration ..."));  
     
     //$this->useEmbeddedDatabase(true);
   }
@@ -157,7 +157,7 @@ class SetupController extends \app\controllers\AppController
     $adminEmail = $app->getIniValue("email.admin");
     if ( ! $adminEmail )
     {
-      $this->addLogText(">>> " .$this->tr("Please enter the administrator email address in the application.ini.php file (email.admin)." ));
+      $this->addLogText(">>> " .Yii::t('app',"Please enter the administrator email address in the application.ini.php file (email.admin)." ));
     }
     else
     {
@@ -185,11 +185,11 @@ class SetupController extends \app\controllers\AppController
           $this->log("User $username does not exist.", QCL_LOG_SETUP );
         }
       }
-      $this->addLogText($this->tr("Set up default users."));
+      $this->addLogText(Yii::t('app',"Set up default users."));
     }
     
     // next
-    $this->setMessage($this->tr("Setting up configuration keys ..."));    
+    $this->setMessage(Yii::t('app',"Setting up configuration keys ..."));    
     
     //$this->useEmbeddedDatabase(true);
   }
@@ -213,9 +213,9 @@ class SetupController extends \app\controllers\AppController
     $app->addPreference( "authentication.method", "hashed" );
 
     // result
-    $this->addLogText($this->tr("Configuration keys added."));
+    $this->addLogText(Yii::t('app',"Configuration keys added."));
     // next
-    $this->setMessage($this->tr("Registering datasource information ..."));
+    $this->setMessage(Yii::t('app',"Registering datasource information ..."));
     
     //$this->useEmbeddedDatabase(true);
   }
@@ -237,9 +237,9 @@ class SetupController extends \app\controllers\AppController
       $this->log("Bibliograph datasource schema already exists", QCL_LOG_SETUP );
     }
     // result
-    $this->addLogText($this->tr("Added datasource schemas."));
+    $this->addLogText(Yii::t('app',"Added datasource schemas."));
     // next
-    $this->setMessage($this->tr("Creating example datasources ..."));
+    $this->setMessage(Yii::t('app',"Creating example datasources ..."));
     
     //$this->useEmbeddedDatabase(true);
   }
@@ -256,7 +256,7 @@ class SetupController extends \app\controllers\AppController
       // result
       $msg = "Not adding example datasources.";
       $this->log($msg, QCL_LOG_SETUP );
-      $this->addLogText($this->tr($msg));
+      $this->addLogText(Yii::t('app',$msg));
       return;
     }
     catch( qcl_data_model_RecordNotFoundException $e){}
@@ -313,9 +313,9 @@ class SetupController extends \app\controllers\AppController
     ));
 
     // result
-    $this->addLogText($this->tr("Created example datasources."));
+    $this->addLogText(Yii::t('app',"Created example datasources."));
     // next
-    $this->setMessage($this->tr("Creating internal datasources ..."));
+    $this->setMessage(Yii::t('app',"Creating internal datasources ..."));
     
     //$this->useEmbeddedDatabase(true);
   }
@@ -406,10 +406,10 @@ class SetupController extends \app\controllers\AppController
     $exportRegistry->addFromClass("bibliograph_model_export_Csv");
     
     // next
-    $this->setMessage($this->tr("Installing plugins ..."));
+    $this->setMessage(Yii::t('app',"Installing plugins ..."));
 
     // result
-    $this->addLogText($this->tr("Created internal datasources."));
+    $this->addLogText(Yii::t('app',"Created internal datasources."));
     
   }
   
@@ -438,7 +438,7 @@ class SetupController extends \app\controllers\AppController
         
         if( $manager->isInstalled( $namedId) )
         {
-          $msg = $this->tr("Plugin '%s' is already installed.", $plugin->getName() ) ;
+          $msg = Yii::t('app',"Plugin '%s' is already installed.", $plugin->getName() ) ;
           $this->getLogger()->log( $msg, QCL_LOG_SETUP );
           $logText[] = $msg;
           continue;
@@ -451,22 +451,22 @@ class SetupController extends \app\controllers\AppController
           $installMsg = $plugin->install();
           $this->getLogger()->log( $installMsg, QCL_LOG_SETUP );
           $manager->register( $namedId, $plugin );
-          $msg = $this->tr("Installed plugin '%s'",$plugin->getName() );
+          $msg = Yii::t('app',"Installed plugin '%s'",$plugin->getName() );
           $logText[] = $msg;
         }
         catch( qcl_application_plugin_Exception $e )
         {
-          $msg = $this->tr("Installation of plugin '%s' failed: %s", $plugin->getName(), $e->getMessage());
+          $msg = Yii::t('app',"Installation of plugin '%s' failed: %s", $plugin->getName(), $e->getMessage());
           $logText[] = $msg;
           $this->getLogger()->log( $msg, QCL_LOG_SETUP );
         }
       }
     }
 
-    $logText[] = "\n" . $this->tr("Setup finished. Please reload the application");
+    $logText[] = "\n" . Yii::t('app',"Setup finished. Please reload the application");
         
     // next
-    $this->setMessage($this->tr("Done ..."));
+    $this->setMessage(Yii::t('app',"Done ..."));
     $this->addLogText(implode("\n",$logText));
     
     // done!

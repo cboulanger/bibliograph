@@ -99,29 +99,29 @@ class Datasource extends BaseModel
   {
     return array(
       'title'       => array(
-        'label'       => $this->tr("Name")
+        'label'       => Yii::t('app',"Name")
       ),
       'description' => array(
         'type'        => "TextArea",
         'lines'       => 3,
-        'label'       => $this->tr("Description")
+        'label'       => Yii::t('app',"Description")
       ),
       'schema'      => array(
         'type'        => "selectbox",
-        'label'       => $this->tr("Schema"),
+        'label'       => Yii::t('app',"Schema"),
         'delegate'    => array(
           'options'     => "getSchemaOptions"
         )
       ),
       'type'        => array(
-        'label'       => $this->tr("Type")
+        'label'       => Yii::t('app',"Type")
       ),
       'host'        => array(
-        'label'       => $this->tr("Server host"),
+        'label'       => Yii::t('app',"Server host"),
         'placeholder' => "The database server host, usually 'localhost'"
       ),
       'port'        => array(
-        'label'       => $this->tr("Server port"),
+        'label'       => Yii::t('app',"Server port"),
         'marshaler'   => array(
           'marshal'    => array( 'function' => "qcl_toString" ),
           'unmarshal'  => array( 'function' => "qcl_toInteger" )
@@ -129,31 +129,31 @@ class Datasource extends BaseModel
         'placeholder' => "The database server port, usually 3306 for MySql"
       ),
       'database'    => array(
-        'label'       => $this->tr("Database name"),
+        'label'       => Yii::t('app',"Database name"),
         'placeholder' => "The name of the database",
         'validation'  => array(
           'required'    => true
         )
       ),
       'username'    => array(
-        'label'       => $this->tr("Database user name")
+        'label'       => Yii::t('app',"Database user name")
       ),
       'password'    => array(
-        'label'       => $this->tr("Database user password")
+        'label'       => Yii::t('app',"Database user password")
       ),
       'encoding'    => array(
-        'label'       => $this->tr("Database encoding"),
+        'label'       => Yii::t('app',"Database encoding"),
         'default'     => 'utf-8'
       ),
       'prefix'      => array(
-        'label'       => $this->tr("Datasource prefix")
+        'label'       => Yii::t('app',"Datasource prefix")
       ),
       'resourcepath' => array(
-        'label'       =>  $this->tr("Resource path")
+        'label'       =>  Yii::t('app',"Resource path")
       ),
       'active'        => array(
         'type'    => "SelectBox",
-        'label'   =>  $this->tr("Status"),
+        'label'   =>  Yii::t('app',"Status"),
         'options' => array(
           array( 'label' => "Disabled", 'value' => false ),
           array( 'label' => "Active",   'value' => true )

@@ -128,11 +128,11 @@ class bibliograph_service_reference_FindReplace
 
     $args =  func_get_args();
     return new qcl_ui_dialog_Confirm(
-      $this->tr("Are you sure you want to replace '%s' with '%s' in %s %s?",
+      Yii::t('app',"Are you sure you want to replace '%s' with '%s' in %s %s?",
        $data->find, $data->replace,
        $data->field == "all"
          ? _("all fields")
-         : $this->tr( "field '%s'", $schemaModel->getFieldLabel( $data->field ) ),
+         : Yii::t('app', "field '%s'", $schemaModel->getFieldLabel( $data->field ) ),
        $msg_map[$data->scope]
       ),
       null,
@@ -206,10 +206,10 @@ class bibliograph_service_reference_FindReplace
      * show alert
      */
     return new qcl_ui_dialog_Alert(
-      $this->tr("%s replacements made. %s",
+      Yii::t('app',"%s replacements made. %s",
         $count,
         $data->backup
-           ? $this->tr("In case you want to revert the changes, a backup file has been created.",$zipfile)
+           ? Yii::t('app',"In case you want to revert the changes, a backup file has been created.",$zipfile)
            : ""
       )
     );

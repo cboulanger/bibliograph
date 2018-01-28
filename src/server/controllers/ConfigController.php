@@ -101,7 +101,7 @@ class ConfigController extends AppController
     // check key
     if ( ! $this->keyExists( $key ) )
     {
-      throw new InvalidArgumentException($this->tr("Configuration key '$key' does not exist"));
+      throw new InvalidArgumentException(Yii::t('app',"Configuration key '$key' does not exist"));
     }
     return $this->getKey($key);
   }  

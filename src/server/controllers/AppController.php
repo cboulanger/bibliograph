@@ -69,7 +69,7 @@ class AppController extends \JsonRpc2\Controller
   {
     $user = User::findOne(['namedId'=>$username]);
     if (is_null($user)) {
-      throw new \InvalidArgumentException( $this->tr("User '$username' does not exist.") );
+      throw new \InvalidArgumentException( Yii::t('app',"User '$username' does not exist.") );
     }
     return $user;
   }

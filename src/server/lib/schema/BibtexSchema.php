@@ -381,7 +381,7 @@ class BibtexSchema
           'indexEntry' => false,
           'formData'  => array(
             'type'  => 'selectbox',
-            'label' => $this->tr( 'Reference Type' ),
+            'label' => Yii::t('app', 'Reference Type' ),
             'bindStore' => array(
               'serviceName'   => 'bibliograph.reference',
               'serviceMethod' => 'getReferenceTypeListData',

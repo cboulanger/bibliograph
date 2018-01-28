@@ -160,7 +160,7 @@ class ReferenceController extends AppController // implements ITreeController
       $options[] = array(
         'value' => $reftype,
         'icon'  => null, //"icon/16/actions/document-new.png",
-        'label' => $this->tr( $schemaModel->getTypeLabel( $reftype ) )
+        'label' => Yii::t('app', $schemaModel->getTypeLabel( $reftype ) )
       );
     }
     return $options;
@@ -825,7 +825,7 @@ class ReferenceController extends AppController // implements ITreeController
       if ( $folderCount > 1 and ! $confirmRemove )
       {
         return new qcl_ui_dialog_Confirm(
-          $this->tr(
+          Yii::t('app',
             "The selected record '%s' is contained in %s folders. Move to the trash anyways?",
             ( $referenceModel->getTitle() . " (" . $referenceModel->getYear() . ")" ),
             $folderCount

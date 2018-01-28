@@ -517,7 +517,7 @@ class FolderController extends AppController //implements ITreeController
     qcl_import("qcl_ui_dialog_Form");
 
     return new qcl_ui_dialog_Form(
-      $this->tr("Please enter the name and type of the new folder:"),
+      Yii::t('app',"Please enter the name and type of the new folder:"),
       array(
         'label' => array(
           'label'   => _("Name"),

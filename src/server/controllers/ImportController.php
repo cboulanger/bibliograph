@@ -199,7 +199,7 @@ class ImportController extends AppController
     // convert to utf-8
     if (!preg_match('!!u', $data))
     {
-      throw new JsonRpcException($this->tr("You must convert file to UTF-8 before importing."));
+      throw new JsonRpcException(Yii::t('app',"You must convert file to UTF-8 before importing."));
     }
     
     
@@ -262,7 +262,7 @@ class ImportController extends AppController
       $fldModel->findWhere( array('label' => $sessionId ) );
       if($fldModel->foundNothing())
       {
-        throw new JsonRpcException($this->tr("Data has been lost due to session change. Please import again."));
+        throw new JsonRpcException(Yii::t('app',"Data has been lost due to session change. Please import again."));
       }
       $fldModel->loadNext();
       //$this->debug("Import folder $sessionId has id " . $fldModel->id() );

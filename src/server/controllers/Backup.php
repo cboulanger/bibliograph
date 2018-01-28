@@ -202,7 +202,7 @@ class bibliograph_service_Backup
   public function method_dialogCreateBackup( $datasource )
   {
     return new qcl_ui_dialog_Confirm(
-      $this->tr("Do you want to backup Database '%s'", $datasource),
+      Yii::t('app',"Do you want to backup Database '%s'", $datasource),
       null,
       $this->serviceName(), "createBackup", array( $datasource )
     );
@@ -234,7 +234,7 @@ class bibliograph_service_Backup
 
 
     return new qcl_ui_dialog_Alert(
-      $this->tr( "Backup created in %s seconds" , $timer->getElapsedTime() )
+      Yii::t('app', "Backup created in %s seconds" , $timer->getElapsedTime() )
     );
   }
 
@@ -245,7 +245,7 @@ class bibliograph_service_Backup
   public function method_dialogRestoreBackup( $datasource )
   {
     $this->checkBackupPrerequisites();
-    $msg = $this->tr("Do you really want to restore Database '%s'? All existing data will be lost!", $datasource);
+    $msg = Yii::t('app',"Do you really want to restore Database '%s'? All existing data will be lost!", $datasource);
     qcl_import("qcl_ui_dialog_Confirm");
     return new qcl_ui_dialog_Confirm(
       $msg,
@@ -300,7 +300,7 @@ class bibliograph_service_Backup
     );
     qcl_import("qcl_ui_dialog_Form");
     return new qcl_ui_dialog_Form(
-      $this->tr("Please select the backup set to restore into database '%s'",$datasource),
+      Yii::t('app',"Please select the backup set to restore into database '%s'",$datasource),
       $formData,
       true,
       $this->serviceName(), "restoreBackup", array( $datasource )
@@ -392,8 +392,8 @@ class bibliograph_service_Backup
     ) );
 
 
-    $msg = $this->tr( "Backup has been restored." );
-    if ($problem ) $msg .= $this->tr( "Please check logfile for problems." );
+    $msg = Yii::t('app', "Backup has been restored." );
+    if ($problem ) $msg .= Yii::t('app', "Please check logfile for problems." );
 
     return new qcl_ui_dialog_Alert($msg);
 
@@ -406,7 +406,7 @@ class bibliograph_service_Backup
   {
     $this->requirePermission("backup.delete");
     return new qcl_ui_dialog_Confirm(
-      $this->tr("All backups older than one day will be deleted. Proceed?"),
+      Yii::t('app',"All backups older than one day will be deleted. Proceed?"),
       null,
       $this->serviceName(), "deleteBackups", array( $datasource )
     );
@@ -442,8 +442,8 @@ class bibliograph_service_Backup
         }
       }
     }
-    $msg = $this->tr("%s backups were deleted.", $filesDeleted);
-    if( $problem ) $msg .= $this->tr("There was a problem. Please examine the log file.");
+    $msg = Yii::t('app',"%s backups were deleted.", $filesDeleted);
+    if( $problem ) $msg .= Yii::t('app',"There was a problem. Please examine the log file.");
     return new qcl_ui_dialog_Alert($msg);
   }
 

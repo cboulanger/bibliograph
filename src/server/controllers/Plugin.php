@@ -57,8 +57,8 @@ class qcl_application_plugin_Service
       if ( ! $manager->isInstalled( $namedId ) )
       {
         $options = array(
-          array( 'label'  => $this->tr("Plugin is not installed"), 'value' => "" ),
-          array( 'label'  => $this->tr("Install plugin"), 'value' => "install" )
+          array( 'label'  => Yii::t('app',"Plugin is not installed"), 'value' => "" ),
+          array( 'label'  => Yii::t('app',"Install plugin"), 'value' => "install" )
         );
       }
       else
@@ -66,19 +66,19 @@ class qcl_application_plugin_Service
         if ( $manager->isActive( $namedId ) )
         {
           $options = array(
-            array( 'label'  => $this->tr("Plugin is active"), 'value' => "" ),
-            array( 'label'  => $this->tr("Deactivate plugin"), 'value' => "deactivate" ),
-            array( 'label'  => $this->tr("Uninstall plugin"), 'value' => "uninstall" ),
-            array( 'label'  => $this->tr("Reinstall plugin"), 'value' => "reinstall" )
+            array( 'label'  => Yii::t('app',"Plugin is active"), 'value' => "" ),
+            array( 'label'  => Yii::t('app',"Deactivate plugin"), 'value' => "deactivate" ),
+            array( 'label'  => Yii::t('app',"Uninstall plugin"), 'value' => "uninstall" ),
+            array( 'label'  => Yii::t('app',"Reinstall plugin"), 'value' => "reinstall" )
           );
         }
         else
         {
           $options = array(
-            array( 'label'  => $this->tr("Plugin is deactivated"), 'value' => "" ),
-            array( 'label'  => $this->tr("Activate plugin"), 'value' => "activate" ),
-            array( 'label'  => $this->tr("Uninstall plugin"), 'value' => "uninstall" ),
-            array( 'label'  => $this->tr("Reinstall plugin"), 'value' => "reinstall" )
+            array( 'label'  => Yii::t('app',"Plugin is deactivated"), 'value' => "" ),
+            array( 'label'  => Yii::t('app',"Activate plugin"), 'value' => "activate" ),
+            array( 'label'  => Yii::t('app',"Uninstall plugin"), 'value' => "uninstall" ),
+            array( 'label'  => Yii::t('app',"Reinstall plugin"), 'value' => "reinstall" )
           );
         }
       }
@@ -93,7 +93,7 @@ class qcl_application_plugin_Service
     }
 
     return new qcl_ui_dialog_Form(
-      "<h3>" . $this->tr("Please configure the plugins") . "</h3>",
+      "<h3>" . Yii::t('app',"Please configure the plugins") . "</h3>",
       $formData, true,
       $this->serviceName(), "handlePluginForm"
     );
@@ -128,11 +128,11 @@ class qcl_application_plugin_Service
           {
             $installMsg = $plugin->install();
             $manager->register( $namedId, $plugin );
-            $msg = $this->tr("Installed plugin '%s'",$plugin->getName());
+            $msg = Yii::t('app',"Installed plugin '%s'",$plugin->getName());
           }
           catch( qcl_application_plugin_Exception $e )
           {
-            $msg = $this->tr("Installation of plugin '%s' failed: %s", $plugin->getName(), $e->getMessage());
+            $msg = Yii::t('app',"Installation of plugin '%s' failed: %s", $plugin->getName(), $e->getMessage());
             $this->getLogger()->log($msg, QCL_LOG_PLUGIN );
           }
           break;
@@ -142,7 +142,7 @@ class qcl_application_plugin_Service
             "Activating plugin '%s'", $plugin->getName()
           ), QCL_LOG_PLUGIN );
           $manager->setPluginActive( $namedId, true );
-          $msg = $this->tr("Activated plugin '%s'. You might have to reload the application.",$plugin->getName());
+          $msg = Yii::t('app',"Activated plugin '%s'. You might have to reload the application.",$plugin->getName());
           break;
 
         case "deactivate":
@@ -150,7 +150,7 @@ class qcl_application_plugin_Service
             "Deactivating plugin '%s'", $plugin->getName()
           ), QCL_LOG_PLUGIN );
           $manager->setPluginActive( $namedId, false );
-          $msg = $this->tr("Deactivated plugin '%s'. You might have to reload the application.",$plugin->getName());
+          $msg = Yii::t('app',"Deactivated plugin '%s'. You might have to reload the application.",$plugin->getName());
           break;
 
         case "reinstall":
@@ -161,11 +161,11 @@ class qcl_application_plugin_Service
           {
             $installMsg = $plugin->reinstall();
             $manager->update( $namedId, $plugin );
-            $msg = $this->tr("Reinstalled plugin '%s'",$plugin->getName());
+            $msg = Yii::t('app',"Reinstalled plugin '%s'",$plugin->getName());
           }
           catch( qcl_application_plugin_Exception $e )
           {
-            $msg = $this->tr(
+            $msg = Yii::t('app',
               "Re-Installation of plugin '%s' failed: %s",
               $plugin->getName(), $e->getMessage()
             );
@@ -181,14 +181,14 @@ class qcl_application_plugin_Service
           {
             $installMsg = $plugin->uninstall();
             $manager->unregister( $namedId );
-            $msg = $this->tr(
+            $msg = Yii::t('app',
               "Uninstalled plugin '%s'",
               $plugin->getName()
             );
           }
           catch( qcl_application_plugin_Exception $e )
           {
-            $msg = $this->tr(
+            $msg = Yii::t('app',
               "Uninstallation of plugin '%s' failed: %s",
               $plugin->getName(), $e->getMessage()
             );

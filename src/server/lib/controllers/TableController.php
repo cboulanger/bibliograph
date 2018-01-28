@@ -109,7 +109,7 @@ class qcl_data_controller_TableController
     $rowCount = $model->countWhere( $qclQuery );
     return array(
       "rowCount"    => $rowCount,
-      'statusText'  => $this->tr("%s records",$rowCount)
+      'statusText'  => Yii::t('app',"%s records",$rowCount)
     );
   }
 
@@ -177,7 +177,7 @@ class qcl_data_controller_TableController
     return array(
       'requestId'  => $requestId,
       'rowData'    =>  $rowData
-      //'statusText' => $this->tr("Loaded records %s - %s ...", $firstRow, $lastRow)
+      //'statusText' => Yii::t('app',"Loaded records %s - %s ...", $firstRow, $lastRow)
     );
   }
 

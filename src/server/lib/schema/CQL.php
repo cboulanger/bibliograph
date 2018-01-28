@@ -324,7 +324,7 @@ class bibliograph_schema_CQL
         }
         else
         {
-          throw new bibliograph_schema_Exception($this->tr("Index '%s' does not exist.", $index ) );
+          throw new bibliograph_schema_Exception(Yii::t('app',"Index '%s' does not exist.", $index ) );
         }
         $index = null;
       }

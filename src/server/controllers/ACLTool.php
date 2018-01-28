@@ -51,36 +51,36 @@ class bibliograph_service_ACLTool
     return  array(
       'user'        => array(
         'model'       => $this->getAccessController()->getUserModel(),
-        'label'       => $this->tr("Users"),
-        'dialogLabel' => $this->tr("User"),
+        'label'       => Yii::t('app',"Users"),
+        'dialogLabel' => Yii::t('app',"User"),
         'labelProp'   => "name",
         'icon'        => "icon/16/apps/preferences-users.png"
       ),
       'role'        => array(
         'model'       => $this->getAccessController()->getRoleModel(),
-        'label'       => $this->tr("Roles"),
-        'dialogLabel' => $this->tr("Role"),
+        'label'       => Yii::t('app',"Roles"),
+        'dialogLabel' => Yii::t('app',"Role"),
         'labelProp'   => "name",
         'icon'        => "icon/16/apps/internet-feed-reader.png"
       ),
       'group'        => array(
         'model'       => $this->getAccessController()->getGroupModel(),
-        'label'       => $this->tr("Groups"),
-        'dialogLabel' => $this->tr("Group"),
+        'label'       => Yii::t('app',"Groups"),
+        'dialogLabel' => Yii::t('app',"Group"),
         'labelProp'   => "name",
         'icon'        => "icon/16/actions/address-book-new.png"
       ),
       'permission'  => array(
         'model'       => $this->getAccessController()->getPermissionModel(),
-        'label'       => $this->tr("Permissions"),
-        'dialogLabel' => $this->tr("Permission"),
+        'label'       => Yii::t('app',"Permissions"),
+        'dialogLabel' => Yii::t('app',"Permission"),
         'labelProp'   => "namedId",
         'icon'        => "icon/16/apps/preferences-security.png"
       ),
       'datasource'  => array(
         'model'       => $this->getDatasourceModel(),
-        'label'       => $this->tr("Datasources"),
-        'dialogLabel' => $this->tr("Datasource"),
+        'label'       => Yii::t('app',"Datasources"),
+        'dialogLabel' => Yii::t('app',"Datasource"),
         'labelProp'   => "title",
         'icon'        => "icon/16/apps/internet-transfer.png"
       )
@@ -99,27 +99,27 @@ class bibliograph_service_ACLTool
     return array(
       array(
         'icon'    => $models['user']['icon'],
-        'label'   => $this->tr("Users"),
+        'label'   => Yii::t('app',"Users"),
         'value'   => $this->marktr("user")
       ),
       array(
         'icon'    => $models['role']['icon'],
-        'label'   => $this->tr("Roles"),
+        'label'   => Yii::t('app',"Roles"),
         'value'   => $this->marktr("role")
       ),
       array(
         'icon'    => $models['group']['icon'],
-        'label'   => $this->tr("Groups"),
+        'label'   => Yii::t('app',"Groups"),
         'value'   => $this->marktr("group")
       ),
       array(
         'icon'    => $models['permission']['icon'],
-        'label'   => $this->tr("Permissions"),
+        'label'   => Yii::t('app',"Permissions"),
         'value'   => $this->marktr("permission")
       ),
       array(
         'icon'    => $models['datasource']['icon'],
-        'label'   => $this->tr("Datasources"),
+        'label'   => Yii::t('app',"Datasources"),
         'value'   => $this->marktr("datasource")
       ),
     );
@@ -260,7 +260,7 @@ class bibliograph_service_ACLTool
     $tree = array(
       'icon'      => "icon/16/apps/utilities-network-manager.png",
       'children'  => array(),
-      'label'     => $this->tr("Relations"),
+      'label'     => Yii::t('app',"Relations"),
       'value'     => null,
       'type'      => null
     );
@@ -333,7 +333,7 @@ class bibliograph_service_ACLTool
             {
               $groupNode = array(
                 'icon'      => $models['group']['icon'],
-                'label'     => $this->tr("in") . " " . $groupModel->get( $models['group']['labelProp'] ),
+                'label'     => Yii::t('app',"in") . " " . $groupModel->get( $models['group']['labelProp'] ),
                 'type'      => "role",
                 'mode'      => "link",
                 'value'     => "group=" . $groupModel->namedId() . ",user=" . $userModel->namedId(),
@@ -371,7 +371,7 @@ class bibliograph_service_ACLTool
            */
           $groupNode = array(
             'icon'      => $models['group']['icon'],
-            'label'     => $this->tr("In all groups"),
+            'label'     => Yii::t('app',"In all groups"),
             'type'      => "role",
             'value'     => "user=" . $userModel->namedId(),
             'mode'      => "link",
@@ -484,8 +484,8 @@ class bibliograph_service_ACLTool
     {
       case "datasource":
         return new qcl_ui_dialog_Confirm(
-          $this->tr("Do you want to remove only the datasource entry or all associated data?"),
-          array( $this->tr("All data"), $this->tr("Entry only"), true),
+          Yii::t('app',"Do you want to remove only the datasource entry or all associated data?"),
+          array( Yii::t('app',"All data"), Yii::t('app',"Entry only"), true),
           $this->serviceName(), "deleteDatasource", array($ids)
         );
 
@@ -509,7 +509,7 @@ class bibliograph_service_ACLTool
       $model->load( $namedId );
       if( $minId and $model->id() < $minId )
       {
-        throw new qcl_server_ServiceException( $this->tr("Deleting element '%s' of type '%s' is not allowed.", $namedId, $type));
+        throw new qcl_server_ServiceException( Yii::t('app',"Deleting element '%s' of type '%s' is not allowed.", $namedId, $type));
       }
       $model->delete();
     }
@@ -544,10 +544,10 @@ class bibliograph_service_ACLTool
     catch ( PDOException $e )
     {
       $this->warn(  $e->getMessage() );
-      return new  qcl_ui_dialog_Alert($this->tr("Deleting datasource '%s' failed... ",$namedId));
+      return new  qcl_ui_dialog_Alert(Yii::t('app',"Deleting datasource '%s' failed... ",$namedId));
     }
 
-    return new  qcl_ui_dialog_Alert($this->tr("Datasource '%s' successfully deleted ... ",$namedId));
+    return new  qcl_ui_dialog_Alert(Yii::t('app',"Datasource '%s' successfully deleted ... ",$namedId));
   }
 
   protected function getLinkModels( $treeElement, $type, $namedId )
@@ -682,7 +682,7 @@ class bibliograph_service_ACLTool
     }
 
     $modelMap = $this->modelMap();
-    $message = "<h3>" . $this->tr( $modelMap[$type]['dialogLabel'] ) . " '" . $namedId . "'</h3>";
+    $message = "<h3>" . Yii::t('app', $modelMap[$type]['dialogLabel'] ) . " '" . $namedId . "'</h3>";
 
     return new qcl_ui_dialog_Form(
       $message, $formData, true,
@@ -722,7 +722,7 @@ class bibliograph_service_ACLTool
       if ( ! isset($data->password2) or $data->password != $data->password2 )
       {
         return new qcl_ui_dialog_Alert(
-          $this->tr("Passwords do not match. Please try again"),
+          Yii::t('app',"Passwords do not match. Please try again"),
           $this->serviceName(), "editElement", array( "user", $namedId )
         );
       }
@@ -736,7 +736,7 @@ class bibliograph_service_ACLTool
      */
     if ( $type == "user" and $model->get("ldap") )
     {
-      throw new qcl_server_ServiceException($this->tr("User data is from an LDAP server and cannot be changed."));
+      throw new qcl_server_ServiceException(Yii::t('app',"User data is from an LDAP server and cannot be changed."));
     }
 
     try
@@ -768,7 +768,7 @@ class bibliograph_service_ACLTool
       if ( ! $data->password and ! $model->getPassword() )
       {
         return new qcl_ui_dialog_Alert(
-          $this->tr("You must set a password."),
+          Yii::t('app',"You must set a password."),
           $this->serviceName(), "handleMissingPasswordDialog", array( $namedId )
         );
       }
@@ -782,7 +782,7 @@ class bibliograph_service_ACLTool
         return $this->sendInformationEmail( $model->data() );
       }
     }
-    return new qcl_ui_dialog_Alert($this->tr("The data has been saved."));
+    return new qcl_ui_dialog_Alert(Yii::t('app',"The data has been saved."));
   }
 
   /**
@@ -812,7 +812,7 @@ class bibliograph_service_ACLTool
         $email = $model->getEmail(); 
         if( ! trim( $email ) )
         {
-          throw new JsonRpcException( $this->tr("The selected user has no email address."));
+          throw new JsonRpcException( Yii::t('app',"The selected user has no email address."));
         }
         $emails[] = $email;
         $names[]  = $model->getName();
@@ -826,7 +826,7 @@ class bibliograph_service_ACLTool
         }
         catch( qcl_data_model_RecordNotFoundException $e)
         {
-          throw new JsonRpcException( $this->tr("The selected group has no members."));
+          throw new JsonRpcException( Yii::t('app',"The selected group has no members."));
         }
         while($userModel->loadNext())
         {
@@ -842,13 +842,13 @@ class bibliograph_service_ACLTool
     $number = count($emails);
     if ( $number == 0 )
     {
-      throw new JsonRpcException( $this->tr("No email address found."));
+      throw new JsonRpcException( Yii::t('app',"No email address found."));
     }
     
     $modelMap   = $this->modelMap();
-    $recipients = $this->tr( $modelMap[$type]['dialogLabel'] ) . " '" . $model->getName() . "'";
+    $recipients = Yii::t('app', $modelMap[$type]['dialogLabel'] ) . " '" . $model->getName() . "'";
     $message    = "<h3>" . 
-                    $this->tr( 
+                    Yii::t('app', 
                         "Email to %s", 
                         $recipients . ( $type == "group" ? " ($number recipients)" : "") 
                     ) .
@@ -857,13 +857,13 @@ class bibliograph_service_ACLTool
                   
     $formData = array(
       "subject" => array( 
-        "label" => $this->tr("Subject"),
+        "label" => Yii::t('app',"Subject"),
         "type"  => "TextField",
         "width" => 400,
         "value" => $subject
       ),
       "body"  => array(
-        "label" => $this->tr("Message"),
+        "label" => Yii::t('app',"Message"),
         "type"  => "TextArea",
         "lines" => 10,
         "value" => $body
@@ -891,7 +891,7 @@ class bibliograph_service_ACLTool
     if( ! trim($data->subject) )
     {
       return new qcl_ui_dialog_Alert( 
-        $this->tr( "Please enter a subject." ),
+        Yii::t('app', "Please enter a subject." ),
         $this->serviceName(), "correctEmail",
         array( $shelfId, $data )
       );
@@ -900,14 +900,14 @@ class bibliograph_service_ACLTool
     if( ! trim($data->body) )
     {
       return new qcl_ui_dialog_Alert( 
-        $this->tr( "Please enter a message." ),
+        Yii::t('app', "Please enter a message." ),
         $this->serviceName(), "correctEmail",
         array( $shelfId, $data )
       );
     }
     
     return new qcl_ui_dialog_Confirm(
-      $this->tr( "Send email to %s recipients?", count($emails) ), null,
+      Yii::t('app', "Send email to %s recipients?", count($emails) ), null,
       $this->serviceName(), "sendEmail", 
       array($shelfId, $data)
     );    
@@ -947,7 +947,7 @@ class bibliograph_service_ACLTool
       $mail->send();
     }
 
-    return new qcl_ui_dialog_Alert( $this->tr( "Sent email to %s recipients", count($emails) ) );
+    return new qcl_ui_dialog_Alert( Yii::t('app', "Sent email to %s recipients", count($emails) ) );
   }
 
 
@@ -964,14 +964,14 @@ class bibliograph_service_ACLTool
     {
       $this->sendConfirmationLinkEmail( $data->email, $data->namedId, $data->name );
       return new qcl_ui_dialog_Alert(
-        $this->tr("An email has been sent to %s (%s) with information on the registration.", $data->name, $data->email)
+        Yii::t('app',"An email has been sent to %s (%s) with information on the registration.", $data->name, $data->email)
       );
     }
     else
     {
       $this->sendPasswordChangeEmail( $data->email, $data->namedId, $data->name );
       return new qcl_ui_dialog_Alert(
-        $this->tr("An email has been sent to %s (%s) to inform about the change of password.", $data->name, $data->email)
+        Yii::t('app',"An email has been sent to %s (%s) to inform about the change of password.", $data->name, $data->email)
       );
     }
   }
@@ -999,16 +999,16 @@ class bibliograph_service_ACLTool
     );
 
     // compose mail
-    $subject = $this->tr("Your registration at %s", $applicationTitle );
-    $body  = $this->tr("Dear %s,", $name);
-    $body .= "\n\n" . $this->tr("You have been registered as user '%s' at '%s'.", $username, $applicationTitle );
+    $subject = Yii::t('app',"Your registration at %s", $applicationTitle );
+    $body  = Yii::t('app',"Dear %s,", $name);
+    $body .= "\n\n" . Yii::t('app',"You have been registered as user '%s' at '%s'.", $username, $applicationTitle );
     if( $tmpPasswd )
     {
-      $body .= "\n\n" . $this->tr( "Your temporary password is '%s'. You will be asked to change it after your first login.", $tmpPasswd);
+      $body .= "\n\n" . Yii::t('app', "Your temporary password is '%s'. You will be asked to change it after your first login.", $tmpPasswd);
     }
-    $body .= "\n\n" . $this->tr("Please confirm your account by visiting the following link:" );
+    $body .= "\n\n" . Yii::t('app',"Please confirm your account by visiting the following link:" );
     $body .= "\n\n" . $confirmationLink;
-    $body .= "\n\n" . $this->tr("Thank you." );
+    $body .= "\n\n" . Yii::t('app',"Thank you." );
 
     // send mail
     $mail = new qcl_util_system_Mail( array(
@@ -1034,10 +1034,10 @@ class bibliograph_service_ACLTool
     $adminEmail  = $app->getIniValue("email.admin");
 
     // compose mail
-    $subject = $this->tr("Password change at %s", $applicationTitle );
-    $body  = $this->tr("Dear %s,", $name);
-    $body .= "\n\n" . $this->tr("This is to inform you that you or somebody else has changed the password at %s.", $applicationTitle );
-    $body .= "\n\n" . $this->tr("If this is not what you wanted, please reset your password immediately by clicking on the following link:");
+    $subject = Yii::t('app',"Password change at %s", $applicationTitle );
+    $body  = Yii::t('app',"Dear %s,", $name);
+    $body .= "\n\n" . Yii::t('app',"This is to inform you that you or somebody else has changed the password at %s.", $applicationTitle );
+    $body .= "\n\n" . Yii::t('app',"If this is not what you wanted, please reset your password immediately by clicking on the following link:");
     $body .= "\n\n" . $this->generateResetPasswordURL($email);
 
     // send email
@@ -1070,8 +1070,8 @@ class bibliograph_service_ACLTool
         $userModel->set("confirmed", true);
         $userModel->save();
       }
-      $msg1 = $this->tr( "Thank you, %s, your email address has been confirmed.", $userModel->getName() );
-      $msg2 = $this->tr(
+      $msg1 = Yii::t('app', "Thank you, %s, your email address has been confirmed.", $userModel->getName() );
+      $msg2 = Yii::t('app',
         "You can now log in as user '%s' at <a href='%s'>this link</a>",
         $userModel->namedId(), $app->getClientUrl()
       );
@@ -1093,7 +1093,7 @@ class bibliograph_service_ACLTool
    */
   public function method_resetPasswordDialog()
   {
-    $msg = $this->tr("Please enter your email address. You will receive a message with a link to reset your password.");
+    $msg = Yii::t('app',"Please enter your email address. You will receive a message with a link to reset your password.");
     return new qcl_ui_dialog_Prompt($msg, "", $this->serviceName(), "sendPasswortResetEmail");
   }
 
@@ -1113,11 +1113,11 @@ class bibliograph_service_ACLTool
     $applicationTitle = $this->getApplicationTitle();
 
     // compose mail
-    $subject = $this->tr("Password reset at %s", $applicationTitle);
-    $body  = $this->tr("Dear %s,", $name);
-    $body .= "\n\n" . $this->tr("This is to inform you that you or somebody else has requested a password reset at %s.", $applicationTitle );
-    $body .= "\n\n" . $this->tr("If this is not what you wanted, you can ignore this email. Your account is safe.");
-    $body .= "\n\n" . $this->tr("If you have requested the reset, please click on the following link:");
+    $subject = Yii::t('app',"Password reset at %s", $applicationTitle);
+    $body  = Yii::t('app',"Dear %s,", $name);
+    $body .= "\n\n" . Yii::t('app',"This is to inform you that you or somebody else has requested a password reset at %s.", $applicationTitle );
+    $body .= "\n\n" . Yii::t('app',"If this is not what you wanted, you can ignore this email. Your account is safe.");
+    $body .= "\n\n" . Yii::t('app',"If you have requested the reset, please click on the following link:");
     $body .= "\n\n" . $this->generateResetPasswordURL($email);
 
     // send
@@ -1131,7 +1131,7 @@ class bibliograph_service_ACLTool
     $mail->send();
 
     return new qcl_ui_dialog_Alert(
-      $this->tr("An email has been sent with information on the password reset.")
+      Yii::t('app',"An email has been sent with information on the password reset.")
     );
   }
 
@@ -1146,7 +1146,7 @@ class bibliograph_service_ACLTool
     header('Content-Type: text/html; charset=utf-8');
     if( !$storedNonce or $storedNonce != $nonce )
     {
-      echo $this->tr("Access denied.");
+      echo Yii::t('app',"Access denied.");
       exit;
     }
 
@@ -1158,9 +1158,9 @@ class bibliograph_service_ACLTool
     // message to the user
     $url = $this->getApplication()->getClientUrl();
     $name = $userModel->getNamedId();
-    $msg = $this->tr( "%s, your password has been reset.", $userModel->get("name") );
-    $msg .= "\n\n" . $this->tr( "Your username is '%s' and your temporary password is '%s'.",  $name, $password);
-    $msg .= "\n\n" . $this->tr( "Please <a href='%s'>log in</a> and change the password now.",  $url);
+    $msg = Yii::t('app', "%s, your password has been reset.", $userModel->get("name") );
+    $msg .= "\n\n" . Yii::t('app', "Your username is '%s' and your temporary password is '%s'.",  $name, $password);
+    $msg .= "\n\n" . Yii::t('app', "Please <a href='%s'>log in</a> and change the password now.",  $url);
     echo "<html>" . nl2br($msg) . "</html>";
     exit;
   }
@@ -1230,7 +1230,7 @@ class bibliograph_service_ACLTool
     catch( InvalidArgumentException $e)
     {
       throw new qcl_server_ServiceException(
-        $this->tr("%s is not a valid email address",$email)
+        Yii::t('app',"%s is not a valid email address",$email)
       );
     }
     $userModel = $this->getAccessController()->getUserModel();
@@ -1241,7 +1241,7 @@ class bibliograph_service_ACLTool
     catch( qcl_data_model_RecordNotFoundException $e)
     {
       throw new qcl_server_ServiceException(
-        $this->tr("No user found for email address %s", $email)
+        Yii::t('app',"No user found for email address %s", $email)
       );
     }
     return $userModel;
@@ -1249,12 +1249,12 @@ class bibliograph_service_ACLTool
 
   public function method_newUserDialog()
   {
-    $message = $this->tr("Please enter the user data. A random password will be generated and sent to the user.");
+    $message = Yii::t('app',"Please enter the user data. A random password will be generated and sent to the user.");
     $formData = array(
       'namedId'        => array(
-        'label'       => $this->tr("Login name"),
+        'label'       => Yii::t('app',"Login name"),
         'type'        => "textfield",
-        'placeholder' => $this->tr("Enter the short login name"),
+        'placeholder' => Yii::t('app',"Enter the short login name"),
         'validation'  => array(
           'required'  => true,
           'validator'   => "string"
@@ -1262,8 +1262,8 @@ class bibliograph_service_ACLTool
       ),
       'name'        => array(
         'type'        => "textfield",
-        'label'       => $this->tr("Full name"),
-        'placeholder' => $this->tr("Enter the full name of the user"),
+        'label'       => Yii::t('app',"Full name"),
+        'placeholder' => Yii::t('app',"Enter the full name of the user"),
         'validation'  => array(
           'required'  => true,
           'validator'   => "string"
@@ -1271,8 +1271,8 @@ class bibliograph_service_ACLTool
       ),
       'email'       => array(
         'type'        => "textfield",
-        'label'       => $this->tr("Email address"),
-        'placeholder' => $this->tr("Enter a valid Email address"),
+        'label'       => Yii::t('app',"Email address"),
+        'placeholder' => Yii::t('app',"Enter a valid Email address"),
         'validation'  => array(
           'required'    => true,
           'validator'   => "email"
@@ -1303,7 +1303,7 @@ class bibliograph_service_ACLTool
     }
     catch ( qcl_data_model_RecordExistsException $e)
     {
-      return new qcl_ui_dialog_Alert( $this->tr("Login name '%s' already exists. Please choose a different one.", $data->namedId ) );
+      return new qcl_ui_dialog_Alert( Yii::t('app',"Login name '%s' already exists. Please choose a different one.", $data->namedId ) );
     }
 
     $model->set( $data )->save();
@@ -1321,19 +1321,19 @@ class bibliograph_service_ACLTool
     $this->dispatchClientMessage("accessControlTool.reloadLeftList");
 
     return new qcl_ui_dialog_Alert(
-      $this->tr("An email has been sent to %s (%s) with information on the registration.", $data->name, $data->email)
+      Yii::t('app',"An email has been sent to %s (%s) with information on the registration.", $data->name, $data->email)
     );
 
   }
 
   public function method_newDatasourceDialog()
   {
-    $message = $this->tr("Please enter the information on the new datasource.");
+    $message = Yii::t('app',"Please enter the information on the new datasource.");
     $formData = array(
       'namedId'        => array(
-        'label'       => $this->tr("Name"),
+        'label'       => Yii::t('app',"Name"),
         'type'        => "textfield",
-        'placeholder' => $this->tr("The short name, e.g. researchgroup1"),
+        'placeholder' => Yii::t('app',"The short name, e.g. researchgroup1"),
         'validation'  => array(
           'required'  => true,
           'validator'   => "string"
@@ -1342,8 +1342,8 @@ class bibliograph_service_ACLTool
       'title'        => array(
         'width'       => 500,
         'type'        => "textfield",
-        'label'       => $this->tr("Title"),
-        'placeholder' => $this->tr("A descriptive title, e.g. Database of Research Group 1"),
+        'label'       => Yii::t('app',"Title"),
+        'placeholder' => Yii::t('app',"A descriptive title, e.g. Database of Research Group 1"),
         'validation'  => array(
           'required'  => true,
           'validator'   => "string"
@@ -1373,12 +1373,12 @@ class bibliograph_service_ACLTool
     }
     catch ( qcl_data_model_RecordExistsException $e)
     {
-      return new qcl_ui_dialog_Alert( $this->tr("Datasource name '%s' already exists. Please choose a different one.", $data->namedId ) );
+      return new qcl_ui_dialog_Alert( Yii::t('app',"Datasource name '%s' already exists. Please choose a different one.", $data->namedId ) );
     }
 
     $this->dispatchClientMessage("accessControlTool.reloadLeftList");
     return new qcl_ui_dialog_Alert(
-      $this->tr(
+      Yii::t('app',
         "Datasource '%s' has been created. By default, it will not be visible to anyone. You have to link it with a group, a role, or a user first.",
         $data->namedId
       )

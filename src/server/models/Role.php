@@ -86,10 +86,10 @@ class Role extends BaseModel
   public function getFormData(){
     return [
       'name'        => array(
-        'label'       => $this->tr("Name")
+        'label'       => Yii::t('app',"Name")
       ),
       'description' => array(
-        'label'       => $this->tr("Description")
+        'label'       => Yii::t('app',"Description")
       )
     ];
   }

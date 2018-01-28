@@ -90,7 +90,7 @@ class bibliograph_service_Export
       return "ABORTED";
     }
     return new qcl_ui_dialog_Popup(
-      $this->tr("Preparing export data. Please wait..."),
+      Yii::t('app',"Preparing export data. Please wait..."),
       $this->serviceName(), "exportReferencesStartExport",
       array($this->shelve($data, $datasource, $selector))
     );

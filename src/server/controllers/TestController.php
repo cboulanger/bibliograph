@@ -57,5 +57,4 @@ class TestController extends AppController
     $channel->send("done");
   }
 
-  public function
 }

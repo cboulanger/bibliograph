@@ -47,11 +47,11 @@ class Confirm extends Dialog
   {
     if ( $choices === null )
     {
-      $choices = array( $this->tr("Yes"), $this->tr("No"), false );
+      $choices = array( Yii::t('app',"Yes"), Yii::t('app',"No"), false );
     }
     elseif ( $choices === true )
     {
-      $choices = array( $this->tr("Yes"), $this->tr("No"), true );
+      $choices = array( Yii::t('app',"Yes"), Yii::t('app',"No"), true );
     }
     static::addToEventQueue( array(
      'type' => "confirm",
