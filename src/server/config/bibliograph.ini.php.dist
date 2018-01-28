@@ -7,10 +7,6 @@
 ;; for your application. They are unchangeable by the application
 ;; and typically should not be exposed to the client.
 ;;
-;; You can access a configuration value with
-;;    $app = qcl_application_Application::getInstance();
-;;    $myconfigValue = $app->getIniValue( "sectionname.keyname" );
-;;
 ;; The section name is found in square brackets below, the key name
 ;; is the string before the "=" character.
 ;;
