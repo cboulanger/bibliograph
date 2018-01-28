@@ -463,22 +463,9 @@ qx.Class.define("bibliograph.ui.reference.ListView",
      */
     _checkTableLayout : function()
     {
-      /*
-       * get table model type from datasource model. if not loaded,
-       * wait until loaded and call method again
-       */
-      var dsModel = this.getApplication().getDatasourceModel();
-      if (!dsModel)
-      {
-        this.getApplication().addListenerOnce("changeDatasourceModel", function(e) {
-          if (e.getData()) {
-            this._checkTableLayout();
-          }
-        }, this);
-        return;
-      }
-      var modelType = this.getModelType() || dsModel.getTableModelType();
-      var serviceName = this.getServiceName() || dsModel.getTableModelService();
+      // @todo unhardcode!
+      var modelType = "reference"; //this.getModelType() || dsModel.getTableModelType(); 
+      var serviceName = "load"; // this.getServiceName() || dsModel.getTableModelService();
 
       /*
        * if the datasource model properties relevant for the

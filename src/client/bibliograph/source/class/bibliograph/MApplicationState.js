@@ -37,18 +37,8 @@ qx.Mixin.define("bibliograph.MApplicationState", {
     },
 
     /**
-     * The model of the current datasource
-     * @todo this is not part of the app state
-     */
-    datasourceModel: {
-      check: "qx.core.Object",
-      nullable: true,
-      event: "changeDatasourceModel"
-    },
-
-    /**
      * The name of the datasource as it should appear in the UI
-     * @todo remove, use datasourceModel instead
+     * @todo remove
      */
     datasourceLabel: {
       check: "String",
@@ -174,25 +164,12 @@ qx.Mixin.define("bibliograph.MApplicationState", {
         this.setFolderId(0);
         this.setSelectedIds([]);
         this.setQuery(null);
-        this.setDatasourceModel(null);
       }
       if (value) {
         // set the application state
         stateMgr.setState("datasource", value);
 
-        // // load datasource model from server
-        // this.showPopup(this.tr("Loading datasource information ..."));
-        // this.getRpcClient("model").send(
-        //   "getDatasourceModelData",
-        //   [value],
-        //   function(data) {
-        //     this.hidePopup();
-        //     var model = qx.data.marshal.Json.createModel(data);
-        //     this.setDatasourceModel(model);
-        //     this.setModelType(model.getTableModelType());
-        //   },
-        //   this
-        // );
+
       } else {
         stateMgr.removeState("datasource");
       }

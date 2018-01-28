@@ -2,7 +2,7 @@
 msgid "OK"
 msgstr ""
 
-#: bibliograph.ui.reference.ListViewUi:194
+#: bibliograph.ui.reference.ListViewUi:173
 msgid "Cancel"
 msgstr ""
 
@@ -426,27 +426,27 @@ msgstr ""
 msgid "Query"
 msgstr ""
 
-#: bibliograph.ui.reference.ListView:501
+#: bibliograph.ui.reference.ListView:488
 msgid "Loading table ..."
 msgstr ""
 
-#: bibliograph.ui.reference.ListView:1028
+#: bibliograph.ui.reference.ListView:1015
 msgid "You cannot create an item outside a folder"
 msgstr ""
 
-#: bibliograph.ui.reference.ListView:1044
+#: bibliograph.ui.reference.ListView:1031
 msgid "Do your really want to remove the selected references from this folder?"
 msgstr ""
 
-#: bibliograph.ui.reference.ListView:1045
+#: bibliograph.ui.reference.ListView:1032
 msgid "Do your really want to remove the selected references?"
 msgstr ""
 
-#: bibliograph.ui.reference.ListView:1069
+#: bibliograph.ui.reference.ListView:1056
 msgid "Do your really want to move the selected references to '%1'?"
 msgstr ""
 
-#: bibliograph.ui.reference.ListView:1095
+#: bibliograph.ui.reference.ListView:1082
 msgid "Do your really want to copy the selected referencesto '%1'?"
 msgstr ""
 
@@ -454,11 +454,11 @@ msgstr ""
 msgid "Processing request..."
 msgstr ""
 
-#: bibliograph.ui.reference.ListView:1185
+#: bibliograph.ui.reference.ListView:1172
 msgid "Do you really want to make the folder empty, moving all references to the trash that are not in other folders?"
 msgstr ""
 
-#: bibliograph.ui.reference.ListView:1188
+#: bibliograph.ui.reference.ListView:1175
 msgid "Emptying the folder ..."
 msgstr ""
 
@@ -478,43 +478,43 @@ msgstr ""
 msgid "Change visibility"
 msgstr ""
 
-#: bibliograph.ui.reference.ListViewUi:146
+#: bibliograph.ui.reference.ListViewUi:131
 msgid "Create new reference type"
 msgstr ""
 
-#: bibliograph.ui.reference.ListViewUi:180
+#: bibliograph.ui.reference.ListViewUi:161
 msgid "Create"
 msgstr ""
 
-#: bibliograph.ui.reference.ListViewUi:239
+#: bibliograph.ui.reference.ListViewUi:210
 msgid "Move reference(s)..."
 msgstr ""
 
-#: bibliograph.ui.reference.ListViewUi:248
+#: bibliograph.ui.reference.ListViewUi:219
 msgid "Copy reference(s)..."
 msgstr ""
 
-#: bibliograph.ui.reference.ListViewUi:259
+#: bibliograph.ui.reference.ListViewUi:228
 msgid "Export references"
 msgstr ""
 
-#: bibliograph.ui.reference.ListViewUi:267
+#: bibliograph.ui.reference.ListViewUi:236
 msgid "Export selected references"
 msgstr ""
 
-#: bibliograph.ui.reference.ListViewUi:276
+#: bibliograph.ui.reference.ListViewUi:245
 msgid "Export folder"
 msgstr ""
 
-#: bibliograph.ui.reference.ListViewUi:287
+#: bibliograph.ui.reference.ListViewUi:254
 msgid "Edit references"
 msgstr ""
 
-#: bibliograph.ui.reference.ListViewUi:296
+#: bibliograph.ui.reference.ListViewUi:263
 msgid "Find/Replace"
 msgstr ""
 
-#: bibliograph.ui.reference.ListViewUi:306
+#: bibliograph.ui.reference.ListViewUi:273
 msgid "Make folder empty"
 msgstr ""
 
@@ -606,19 +606,19 @@ msgstr ""
 msgid "Purging deleted references ..."
 msgstr ""
 
-#: bibliograph.ui.item.ReferenceEditor:342
+#: bibliograph.ui.item.ReferenceEditor:341
 msgid "Loading item data..."
 msgstr ""
 
-#: bibliograph.ui.item.ReferenceEditor:399
+#: bibliograph.ui.item.ReferenceEditor:398
 msgid "Loading form data..."
 msgstr ""
 
-#: bibliograph.ui.item.ReferenceEditor:419
+#: bibliograph.ui.item.ReferenceEditor:418
 msgid "Creating form, please wait ..."
 msgstr ""
 
-#: bibliograph.ui.item.ReferenceEditor:883
+#: bibliograph.ui.item.ReferenceEditor:882
 msgid "Saving..."
 msgstr ""
 

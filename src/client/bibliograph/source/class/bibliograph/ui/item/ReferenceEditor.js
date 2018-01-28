@@ -134,7 +134,6 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
      * tableModelService to the serviceName property
      */
     var store = new qcl.data.store.JsonRpcStore("reference");
-    this.getApplication().bind("datasourceModel.tableModelService", store, "serviceName");
     this.setStore(store);
 
     /*

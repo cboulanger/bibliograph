@@ -68,8 +68,7 @@ qx.Class.define("bibliograph.ui.MainLayout", {
       qxHsplit1.add(qxVsplit1, 3);
 
       // Reference Listview
-      var ui_mainReferenceListView1 = new bibliograph.ui.main
-        .ReferenceListView();
+      var ui_mainReferenceListView1 = new bibliograph.ui.main.ReferenceListView();
       qxVsplit1.add(ui_mainReferenceListView1);
 
       // Item view
