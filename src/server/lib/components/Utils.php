@@ -48,6 +48,7 @@ class Utils extends \yii\base\Component
   public function getAppStateUrl($datasource,$folderId,$modelId)
   {
     //https://demo.bibliograph.org/bibliograph/source/#datasource.database1!modelType.reference!itemView.referenceEditor!folderId.3
+    notImplemented();
     return dirname(dirname(qcl_server_Server::getUrl() ) ) .
       "/build/#datasource.$datasource" .
       ( $folderId ? "!folderId.$folderId" : "" ).
@@ -134,6 +135,7 @@ class Utils extends \yii\base\Component
    */
   public function getClientUrl()
   {
+    notImplemented();
     return "http://" . $_SERVER["HTTP_HOST"] .
       dirname( dirname( $_SERVER["SCRIPT_NAME"] ) ) .
       "/build";
@@ -145,7 +147,7 @@ class Utils extends \yii\base\Component
    */
   public function getServerUrl()
   {
+    notImplemented();
     return qcl_server_Server::getUrl();
   }
-
 }

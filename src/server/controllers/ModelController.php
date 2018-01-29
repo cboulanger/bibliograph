@@ -18,135 +18,15 @@
 
 ************************************************************************ */
 
-
-
+namespace \app\controllers;
 
 /**
  * Provides services based on a generic model API, using datasource
  * and modelType information
  */
-class bibliograph_service_Model
-  extends qcl_data_controller_TableController
+class ModelController
+  extends \app\controllers\AppController
 {
-
-  /**
-   * Access control list. Determines what role has access to what kind
-   * of information.
-   * @var array
-   */
-  private $modelAcl = array(
-
-    /*
-     * the datasource model itself. anonymous can only
-     * read the namedId property.
-     */
-    array(
-      'datasource'  => "",
-      'modelType'   => "",
-      'roles'       => "*",
-      'rules'         => array(
-        array(
-          'roles'       => "*",
-          'access'      => array( QCL_ACCESS_READ ),
-          'properties'  => array( "allow" => array( NAMED_ID, "title", "description" ) )
-        ),
-        array(
-          'roles'       => array(
-            BIBLIOGRAPH_ROLE_ADMIN,
-            BIBLIOGRAPH_ROLE_MANAGER
-          ),
-          'access'      => "*",
-          'properties'  => array( "allow" => "*" )
-        )
-      )
-    ),
-    /*
-     * the other models - give read access
-     */
-    array(
-      'datasource'  => "*",
-      'modelType'   => "reference",
-      'roles'       => "*",
-      'rules'         => array(
-        array(
-          'roles'       => "*",
-          'access'      => array( QCL_ACCESS_READ ),
-          'properties'  => array( "allow" => "*" )
-        ),
-        array(
-          'roles'       => array(
-            BIBLIOGRAPH_ROLE_ADMIN
-          ),
-          'access'      => "*",
-          'properties'  => array( "allow" => "*" )
-        )
-      )
-    ),
-    /*
-     * access to user data
-     */
-    array(
-      'datasource'  => "access",
-      'modelType'   => "user",
-      'rules'         => array(
-        array(
-          'roles'       => array( QCL_ROLE_USER ),
-          'access'      => array( QCL_ACCESS_READ, QCL_ACCESS_WRITE ),
-          'properties'  => array( "allow" => "*" )
-        )
-      )
-    )
-  );
-
-  /**
-   * Record access control list. Determines access to individual
-   * result rows based on specific rules
-   *
-   * @var array
-   */
-  private $recordAcl = array(
-    array(
-      'datasource'  => "",
-      'modelType'   => "",
-      'rules'         => array(
-        array(
-          'callback'   => "checkDatasourceAccess"
-        )
-      )
-    )
-  );
-
-  /*
-  ---------------------------------------------------------------------------
-     CLASS PROPERTIES
-  ---------------------------------------------------------------------------
-  */
-
-  /**
-   * Whether datasource access should be restricted according
-   * to the current user. The implementation of this behavior is
-   * done by the getAccessibleDatasources() and checkDatasourceAccess()
-   * methods.
-   *
-   * @var bool
-   */
-  protected $controlDatasourceAccess = true;
-
-  /*
-  ---------------------------------------------------------------------------
-     INTIALIZATION
-  ---------------------------------------------------------------------------
-  */
-
-  /**
-   * Constructor, adds model acl
-   */
-  function __construct()
-  {
-    $this->addModelAcl( $this->modelAcl );
-    $this->addRecordAcl( $this->recordAcl );
-  }
-
 
   /*
   ---------------------------------------------------------------------------

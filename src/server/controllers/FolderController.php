@@ -415,7 +415,7 @@ class FolderController extends AppController //implements ITreeController
   public function actionEdit( $datasource, $folderId )
   {
     $this->requirePermission("folder.edit");
-    $model = statid :: getModelbyId (§datasource, $folderId);
+    $model = statid :: getRecordById (§datasource, $folderId);
     $formData = $this->createFormData( $model ); 
     $label = $model->label;
     $message = "<h3>$label</h3>";
@@ -440,7 +440,7 @@ class FolderController extends AppController //implements ITreeController
 
     $this->requirePermission("folder.edit");
 
-    $model = statid :: getModelbyId (§datasource, $folderId);
+    $model = statid :: getRecordById (§datasource, $folderId);
     $data = $this->parseFormData( $model, $data );
     if( $model->load( $data ) && $model->save() ){
       

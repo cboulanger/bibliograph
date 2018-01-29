@@ -57,4 +57,5 @@ script:
   - echo "travis_fold:end:npm_install"
   - npm link mocha
   - npm install cboulanger/raptor-client
+  - npm install cboulanger/raptor-client
   - npm test

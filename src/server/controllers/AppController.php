@@ -187,13 +187,13 @@ class AppController extends \JsonRpc2\Controller
   }
 
   /**
-   * Returns the model with the given id 
+   * Returns a query for the record with the given id 
    *
    * @param string $datasource
    * @param int $id
-   * @return void
+   * @return \yii\db\ActiveRecord
    */
-  static public function getModelbyId($datasource, $id)
+  static public function getRecordById($datasource, $id)
   {
     $model = static :: getControlledModel($datasource) :: findOne($id);
     if( is_null( $model) ){
