@@ -110,24 +110,24 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
   {
     $this->formData =  array(
       'label'  => array(
-      'label'     => _("Folder Title"),
+      'label'     => Yii::t('app', "Folder Title"),
       'type'      => "TextField"
       ),
       'description'  => array(
-      'label'     => _("Description"),
+      'label'     => Yii::t('app', "Description"),
       'type'      => "TextArea",
       'lines'     => 2
       ),
       'public'  => array(
-      'label'     => _("Is folder publically visible?"),
+      'label'     => Yii::t('app', "Is folder publically visible?"),
       'type'      => "SelectBox",
       'options'   => array(
-        array( 'label' => _("Yes"), 'value' => true ),
-        array( 'label' => _("No"), 'value' => false )
+        array( 'label' => Yii::t('app', "Yes"), 'value' => true ),
+        array( 'label' => Yii::t('app', "No"), 'value' => false )
       )
       ),
     //    'searchable'  => array(
-    //      'label'     => _("Publically searchable?"),
+    //      'label'     => Yii::t('app', "Publically searchable?"),
     //      'type'      => "SelectBox",
     //      'options'   => array(
     //        array( 'label' => "Folder is searchable", 'value' => true ),
@@ -135,25 +135,25 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
     //      )
     //    ),
       'searchfolder'  => array(
-      'label'     => _("Search folder?"),
+      'label'     => Yii::t('app', "Search folder?"),
       'type'      => "SelectBox",
       'options'   => array(
-        array( 'label' => _("On, Use query to determine content"), 'value' => true ),
-        array( 'label' => _("Off"), 'value' => false )
+        array( 'label' => Yii::t('app', "On, Use query to determine content"), 'value' => true ),
+        array( 'label' => Yii::t('app', "Off"), 'value' => false )
       )
       ),
       'query'  => array(
-      'label'     => _("Query"),
+      'label'     => Yii::t('app', "Query"),
       'type'      => "TextArea",
       'lines'     => 3
       ),
 
       'opened'  => array(
-      'label'     => _("Opened?"),
+      'label'     => Yii::t('app', "Opened?"),
       'type'      => "SelectBox",
       'options'   => array(
-        array( 'label' => _("Folder is opened by default"), 'value' => true ),
-        array( 'label' => _("Folder is closed by default"), 'value' => false )
+        array( 'label' => Yii::t('app', "Folder is opened by default"), 'value' => true ),
+        array( 'label' => Yii::t('app', "Folder is closed by default"), 'value' => false )
       )
       )
     );  

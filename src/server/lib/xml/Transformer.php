@@ -16,7 +16,7 @@
  *  * Christian Boulanger (cboulanger)
  */
 
-qcl_import("qcl_core_Object");
+
 
 /**
  * Model to do XSLT - Transformations in PHP4 and PHP5

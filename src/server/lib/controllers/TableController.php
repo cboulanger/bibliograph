@@ -16,8 +16,8 @@
  *  * Christian Boulanger (cboulanger)
  */
 
-qcl_import( "qcl_data_controller_Controller" );
-qcl_import( "qcl_data_controller_ITableController" );
+
+
 
 /**
  * Controller that supplies data for a

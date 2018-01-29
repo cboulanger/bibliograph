@@ -140,7 +140,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
      * listen for server messages to update single form fields
      * todo: I cannot remember what this is for - remove?
      */
-    qx.event.message.Bus.getInstance().subscribe("bibliograph/fieldeditor/update", function(e)
+    qx.event.message.Bus.getInstance().subscribe("bibliograph.fieldeditor.update", function(e)
     {
       var data = e.getData();
       var messageIsForMe = data.datasource == this.getDatasource() && data.modelType == this.getModelType() && data.modelId == this.getReferenceId();
@@ -341,7 +341,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
       this.showMessage(this.tr("Loading item data..."));
       this.__isLoading = true;
       var datasource = this.getDatasource();
-      this.getStore().load("getData", [datasource, referenceId], function(data)
+      this.getStore().load("item", [datasource, referenceId], function(data)
       {
         this.__isLoading = false;
         this.showMessage(null);
@@ -401,7 +401,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
         /*
          * load form data first
          */
-        this.getStore().execute("getFormLayout", [this.getDatasource(), reftype], function(formData) {
+        this.getStore().execute("form-layout", [this.getDatasource(), reftype], function(formData) {
           this.showMessage(null);
           this._createForm(reftype, formData);
         }, this);
@@ -728,7 +728,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
          * save to server
          */
         this.showMessage(this.tr("Saving..."));
-        this.getStore().execute("saveData", [this.getData().datasource, this.getData().referenceId, data], function()
+        this.getStore().execute("save", [this.getData().datasource, this.getData().referenceId, data], function()
         {
           this.showMessage(null);
 
@@ -908,7 +908,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
       var _this = this;
       var controller = new qcl.data.controller.AutoComplete(null, widget, separator);
       var store = new qcl.data.store.JsonRpcStore("reference");
-      store.setAutoLoadMethod("getAutoCompleteData");
+      store.setAutoLoadMethod("autocomplete");
       controller.bind("input", store, "autoLoadParams", {
         'converter' : function(input) {
           return input ? [_this.getDatasource(), fieldname, input] : null

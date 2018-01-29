@@ -37,7 +37,7 @@ class DatasourceController extends AppController
    */
   public function createDatasource( $namedId, $data= array() )
   {
-    qcl_import( "qcl_data_datasource_Manager" );
+    
     $mgr = qcl_data_datasource_Manager::getInstance();
     if ( ! isset( $data['dsn'] ) )
     {

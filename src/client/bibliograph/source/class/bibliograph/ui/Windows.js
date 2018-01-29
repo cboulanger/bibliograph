@@ -17,7 +17,8 @@
 ************************************************************************ */
 
 /**
- * This class instantiates the application windows
+ * This class instantiates the application windows and sets up the bindings
+ * between them and the application state
  */
 qx.Class.define("bibliograph.ui.Windows",
 {

@@ -18,9 +18,9 @@
 
 ************************************************************************ */
 
-qcl_import("qcl_data_controller_Controller");
-qcl_import("qcl_ui_dialog_Confirm");
-qcl_import("qcl_ui_dialog_Alert");
+
+
+
 
 class bibliograph_service_Backup
   extends qcl_data_controller_Controller
@@ -57,7 +57,7 @@ class bibliograph_service_Backup
    */
   public function checkDatasourceAccess( $datasource )
   {
-    qcl_import("bibliograph_service_Access");
+    
     bibliograph_service_Access::getInstance()->checkDatasourceAccess( $datasource );
   }
 
@@ -201,7 +201,7 @@ class bibliograph_service_Backup
    */
   public function method_dialogCreateBackup( $datasource )
   {
-    return new qcl_ui_dialog_Confirm(
+    return \lib\dialog\Confirm::create(
       Yii::t('app',"Do you want to backup Database '%s'", $datasource),
       null,
       $this->serviceName(), "createBackup", array( $datasource )
@@ -224,7 +224,7 @@ class bibliograph_service_Backup
     $this->checkBackupPrerequisites();
     qcl_assert_valid_string( $datasource );
 
-    qcl_import("qcl_event_Timer");
+    
     $timer = new qcl_event_Timer();
     $timer->start();
 
@@ -233,7 +233,7 @@ class bibliograph_service_Backup
     $timer->stop();
 
 
-    return new qcl_ui_dialog_Alert(
+    return \lib\dialog\Alert::create(
       Yii::t('app', "Backup created in %s seconds" , $timer->getElapsedTime() )
     );
   }
@@ -246,8 +246,8 @@ class bibliograph_service_Backup
   {
     $this->checkBackupPrerequisites();
     $msg = Yii::t('app',"Do you really want to restore Database '%s'? All existing data will be lost!", $datasource);
-    qcl_import("qcl_ui_dialog_Confirm");
-    return new qcl_ui_dialog_Confirm(
+    
+    return \lib\dialog\Confirm::create(
       $msg,
       null,
       $this->serviceName(), "dialogChooseBackup", array( $datasource )
@@ -292,14 +292,14 @@ class bibliograph_service_Backup
 
     $formData = array(
       'file'  => array(
-        'label'   => _("Backup from "),
+        'label'   => Yii::t('app', "Backup from "),
         'type'    => "selectbox",
         'options' => $options,
         'width'   => 200,
       )
     );
-    qcl_import("qcl_ui_dialog_Form");
-    return new qcl_ui_dialog_Form(
+    
+    return \lib\dialog\Form::create(
       Yii::t('app',"Please select the backup set to restore into database '%s'",$datasource),
       $formData,
       true,
@@ -329,7 +329,7 @@ class bibliograph_service_Backup
     if( ! file_exists( $zipfile ) )
     {
       $this->warn("File '$zipfile' does not exist.");
-      throw new JsonRpcException(_("Backup file does not exist."));
+      throw new JsonRpcException(Yii::t('app', "Backup file does not exist."));
     }
 
     $zip = new ZipArchive();
@@ -395,7 +395,7 @@ class bibliograph_service_Backup
     $msg = Yii::t('app', "Backup has been restored." );
     if ($problem ) $msg .= Yii::t('app', "Please check logfile for problems." );
 
-    return new qcl_ui_dialog_Alert($msg);
+    return \lib\dialog\Alert::create($msg);
 
   }
 
@@ -405,7 +405,7 @@ class bibliograph_service_Backup
   public function method_dialogDeleteBackups($datasource)
   {
     $this->requirePermission("backup.delete");
-    return new qcl_ui_dialog_Confirm(
+    return \lib\dialog\Confirm::create(
       Yii::t('app',"All backups older than one day will be deleted. Proceed?"),
       null,
       $this->serviceName(), "deleteBackups", array( $datasource )
@@ -444,13 +444,13 @@ class bibliograph_service_Backup
     }
     $msg = Yii::t('app',"%s backups were deleted.", $filesDeleted);
     if( $problem ) $msg .= Yii::t('app',"There was a problem. Please examine the log file.");
-    return new qcl_ui_dialog_Alert($msg);
+    return \lib\dialog\Alert::create($msg);
   }
 
   function method_testProgress()
   {
-    qcl_import("qcl_ui_dialog_ServerProgress");
-    $progress = new qcl_ui_dialog_ServerProgress("testProgress");
+    
+    $progress = \lib\dialog\ServerProgress::create("testProgress");
     for ( $i=0; $i<101; $i++)
     {
       $progress->setProgress($i,"Message$i");

@@ -198,10 +198,10 @@ class Reference extends BaseModel
    * Returns the schema object used by this model
    * @return lib\schema\BibtexSchema
    */
-	function getSchema()
+	static function getSchema()
 	{
     static $schema = null;
-    if ( is_null($schma ) ){
+    if ( is_null( $schma ) ){
       $schema = new \lib\schema\BibtexSchema();
     }
 	  return $schema;

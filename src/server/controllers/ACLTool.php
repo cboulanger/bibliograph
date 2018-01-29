@@ -18,13 +18,13 @@
 
 ************************************************************************ */
 
-qcl_import("qcl_data_controller_Controller");
-qcl_import("qcl_server_JsonRpcRestServer");
-qcl_import("qcl_ui_dialog_Alert");
-qcl_import("qcl_ui_dialog_Confirm");
-qcl_import("qcl_ui_dialog_Prompt");
-qcl_import("qcl_ui_dialog_Form");
-qcl_import("qcl_util_system_Mail");
+
+
+
+
+
+
+
 
 /**
  * Backend service class for the access control tool widget
@@ -452,7 +452,7 @@ class bibliograph_service_ACLTool
 
     if ( $type == "datasource" )
     {
-      qcl_import( "qcl_data_datasource_Manager" );
+      
       $mgr = qcl_data_datasource_Manager::getInstance();
       $this->getApplication()->createDatasource( $namedId );
       $model = $mgr->getDatasourceModelByName( $namedId );
@@ -483,7 +483,7 @@ class bibliograph_service_ACLTool
     switch( $type )
     {
       case "datasource":
-        return new qcl_ui_dialog_Confirm(
+        return \lib\dialog\Confirm::create(
           Yii::t('app',"Do you want to remove only the datasource entry or all associated data?"),
           array( Yii::t('app',"All data"), Yii::t('app',"Entry only"), true),
           $this->serviceName(), "deleteDatasource", array($ids)
@@ -532,12 +532,12 @@ class bibliograph_service_ACLTool
     }
 
     $this->requirePermission("access.manage");
-    qcl_import("qcl_ui_dialog_Alert");
+    
 
     try
     {
       qcl_assert_boolean( $doDeleteModelData );
-      qcl_import( "qcl_data_datasource_Manager" );
+      
       qcl_data_datasource_Manager::getInstance()->deleteDatasource( $namedId, $doDeleteModelData );
       $this->broadcastClientMessage("accessControlTool.reloadLeftList");
     }
@@ -684,7 +684,7 @@ class bibliograph_service_ACLTool
     $modelMap = $this->modelMap();
     $message = "<h3>" . Yii::t('app', $modelMap[$type]['dialogLabel'] ) . " '" . $namedId . "'</h3>";
 
-    return new qcl_ui_dialog_Form(
+    return \lib\dialog\Form::create(
       $message, $formData, true,
       $this->serviceName(), "saveFormData",
       array( $type, $namedId )
@@ -721,7 +721,7 @@ class bibliograph_service_ACLTool
     {
       if ( ! isset($data->password2) or $data->password != $data->password2 )
       {
-        return new qcl_ui_dialog_Alert(
+        return \lib\dialog\Alert::create(
           Yii::t('app',"Passwords do not match. Please try again"),
           $this->serviceName(), "editElement", array( "user", $namedId )
         );
@@ -745,7 +745,7 @@ class bibliograph_service_ACLTool
     }
     catch( JsonRpcException $e)
     {
-      return new qcl_ui_dialog_Alert(
+      return \lib\dialog\Alert::create(
         $e->getMessage(),
         $this->serviceName(), "editElement", array( "user", $namedId )
       );
@@ -767,7 +767,7 @@ class bibliograph_service_ACLTool
        */
       if ( ! $data->password and ! $model->getPassword() )
       {
-        return new qcl_ui_dialog_Alert(
+        return \lib\dialog\Alert::create(
           Yii::t('app',"You must set a password."),
           $this->serviceName(), "handleMissingPasswordDialog", array( $namedId )
         );
@@ -782,7 +782,7 @@ class bibliograph_service_ACLTool
         return $this->sendInformationEmail( $model->data() );
       }
     }
-    return new qcl_ui_dialog_Alert(Yii::t('app',"The data has been saved."));
+    return \lib\dialog\Alert::create(Yii::t('app',"The data has been saved."));
   }
 
   /**
@@ -870,7 +870,7 @@ class bibliograph_service_ACLTool
       )
     );
 
-    return new qcl_ui_dialog_Form(
+    return \lib\dialog\Form::create(
       $message, $formData, true,
       $this->serviceName(), "confirmSendEmail",
       array( $this->shelve( $type, $namedId, $emails, $names ) )
@@ -890,7 +890,7 @@ class bibliograph_service_ACLTool
 
     if( ! trim($data->subject) )
     {
-      return new qcl_ui_dialog_Alert( 
+      return \lib\dialog\Alert::create( 
         Yii::t('app', "Please enter a subject." ),
         $this->serviceName(), "correctEmail",
         array( $shelfId, $data )
@@ -899,14 +899,14 @@ class bibliograph_service_ACLTool
     
     if( ! trim($data->body) )
     {
-      return new qcl_ui_dialog_Alert( 
+      return \lib\dialog\Alert::create( 
         Yii::t('app', "Please enter a message." ),
         $this->serviceName(), "correctEmail",
         array( $shelfId, $data )
       );
     }
     
-    return new qcl_ui_dialog_Confirm(
+    return \lib\dialog\Confirm::create(
       Yii::t('app', "Send email to %s recipients?", count($emails) ), null,
       $this->serviceName(), "sendEmail", 
       array($shelfId, $data)
@@ -947,7 +947,7 @@ class bibliograph_service_ACLTool
       $mail->send();
     }
 
-    return new qcl_ui_dialog_Alert( Yii::t('app', "Sent email to %s recipients", count($emails) ) );
+    return \lib\dialog\Alert::create( Yii::t('app', "Sent email to %s recipients", count($emails) ) );
   }
 
 
@@ -963,14 +963,14 @@ class bibliograph_service_ACLTool
     if ( ! $data->confirmed )
     {
       $this->sendConfirmationLinkEmail( $data->email, $data->namedId, $data->name );
-      return new qcl_ui_dialog_Alert(
+      return \lib\dialog\Alert::create(
         Yii::t('app',"An email has been sent to %s (%s) with information on the registration.", $data->name, $data->email)
       );
     }
     else
     {
       $this->sendPasswordChangeEmail( $data->email, $data->namedId, $data->name );
-      return new qcl_ui_dialog_Alert(
+      return \lib\dialog\Alert::create(
         Yii::t('app',"An email has been sent to %s (%s) to inform about the change of password.", $data->name, $data->email)
       );
     }
@@ -1094,7 +1094,7 @@ class bibliograph_service_ACLTool
   public function method_resetPasswordDialog()
   {
     $msg = Yii::t('app',"Please enter your email address. You will receive a message with a link to reset your password.");
-    return new qcl_ui_dialog_Prompt($msg, "", $this->serviceName(), "sendPasswortResetEmail");
+    return \lib\dialog\Prompt::create($msg, "", $this->serviceName(), "sendPasswortResetEmail");
   }
 
   /**
@@ -1130,7 +1130,7 @@ class bibliograph_service_ACLTool
     ) );
     $mail->send();
 
-    return new qcl_ui_dialog_Alert(
+    return \lib\dialog\Alert::create(
       Yii::t('app',"An email has been sent with information on the password reset.")
     );
   }
@@ -1280,7 +1280,7 @@ class bibliograph_service_ACLTool
       ),
     );
 
-    return new qcl_ui_dialog_Form(
+    return \lib\dialog\Form::create(
       $message, $formData, true,
       $this->serviceName(), "addNewUser", array()
     );
@@ -1303,7 +1303,7 @@ class bibliograph_service_ACLTool
     }
     catch ( qcl_data_model_RecordExistsException $e)
     {
-      return new qcl_ui_dialog_Alert( Yii::t('app',"Login name '%s' already exists. Please choose a different one.", $data->namedId ) );
+      return \lib\dialog\Alert::create( Yii::t('app',"Login name '%s' already exists. Please choose a different one.", $data->namedId ) );
     }
 
     $model->set( $data )->save();
@@ -1320,7 +1320,7 @@ class bibliograph_service_ACLTool
 
     $this->dispatchClientMessage("accessControlTool.reloadLeftList");
 
-    return new qcl_ui_dialog_Alert(
+    return \lib\dialog\Alert::create(
       Yii::t('app',"An email has been sent to %s (%s) with information on the registration.", $data->name, $data->email)
     );
 
@@ -1351,7 +1351,7 @@ class bibliograph_service_ACLTool
       )
     );
 
-    return new qcl_ui_dialog_Form(
+    return \lib\dialog\Form::create(
       $message, $formData, true,
       $this->serviceName(), "addNewDatasource", array()
     );
@@ -1373,11 +1373,11 @@ class bibliograph_service_ACLTool
     }
     catch ( qcl_data_model_RecordExistsException $e)
     {
-      return new qcl_ui_dialog_Alert( Yii::t('app',"Datasource name '%s' already exists. Please choose a different one.", $data->namedId ) );
+      return \lib\dialog\Alert::create( Yii::t('app',"Datasource name '%s' already exists. Please choose a different one.", $data->namedId ) );
     }
 
     $this->dispatchClientMessage("accessControlTool.reloadLeftList");
-    return new qcl_ui_dialog_Alert(
+    return \lib\dialog\Alert::create(
       Yii::t('app',
         "Datasource '%s' has been created. By default, it will not be visible to anyone. You have to link it with a group, a role, or a user first.",
         $data->namedId

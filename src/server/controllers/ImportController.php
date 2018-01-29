@@ -60,15 +60,15 @@ class ImportController extends AppController
           'visible' => false
         ),
         'author' => array(
-          'header'  => _("Author"),
+          'header'  => Yii::t('app', "Author"),
           'width'   => "1*"
         ),
         'year' => array(
-          'header'  => _("Year"),
+          'header'  => Yii::t('app', "Year"),
           'width'   => 50
         ),
         'title' => array(
-          'header'  => _("Title"),
+          'header'  => Yii::t('app', "Title"),
           'width'   => "3*"
         )
       ),
@@ -94,7 +94,7 @@ class ImportController extends AppController
     $importFormats = ImportFormat::find()->where(['active' => 1])->orderBy("name")->all();
     $listData = array( array(
       'value' => null,
-      'label' => _("2. Choose import format" )
+      'label' => Yii::t('app', "2. Choose import format" )
     ) );
     foreach( $importFormats as $format ){
       $listData[] = array(
@@ -134,7 +134,7 @@ class ImportController extends AppController
 //    if( $extension !== $importer->getExtension() )
 //    {
 //      throw new JsonRpcException(sprintf(
-//        _("Format '%s' expects file extension '%s'. The file you uploaded has extension '%s'"),
+//        Yii::t('app', "Format '%s' expects file extension '%s'. The file you uploaded has extension '%s'"),
 //        $importer->getName(),
 //        $importer->getExtension(),
 //        $extension
@@ -239,8 +239,8 @@ class ImportController extends AppController
     qcl_assert_valid_string( $targetDatasource );
     qcl_assert_integer( $targetFolderId );
     
-    qcl_import("bibliograph_service_Reference");
-    qcl_import("bibliograph_service_Folder");
+    
+    
     
     $dsModel  = $this->getDatasourceModel("bibliograph_import");
     $refModel = $dsModel->getInstanceOfType("reference");
@@ -305,7 +305,7 @@ class ImportController extends AppController
 
   public function method_test()
   {
-    qcl_import("qcl_util_system_Executable");
+    
     $xml2bib = new qcl_util_system_Executable( BIBUTILS_PATH . "xml2bib");
     $xml2bib->call( "-v" );
     $this->info( "stdout: " . $xml2bib->getStdOut() );

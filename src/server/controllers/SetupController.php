@@ -94,13 +94,13 @@ class SetupController extends \app\controllers\AppController
     // hack, this is neccessary because of the "setup" user stuff that breaks
     // the sequence on database/model initiatization steps
     // see qcl_application_Application::importInitialData 
-    qcl_import("qcl_data_datasource_DbModel");
+    
     qcl_data_datasource_DbModel::getInstance()->createIfNotExists( "access", array(
       "schema" => "qcl.schema.access",
       "type"   => "mysql",
       "hidden" => true
     ) );
-    qcl_import("qcl_access_DatasourceModel");
+    
     $ds_model  = qcl_access_DatasourceModel::getInstance();
     $ds_model->registerSchema();
     
@@ -332,14 +332,14 @@ class SetupController extends \app\controllers\AppController
     $this->log("Registering file storage datasources ....", QCL_LOG_SETUP );
     try
     {
-      qcl_import("qcl_io_filesystem_local_Datasource");
+      
       qcl_io_filesystem_local_Datasource::getInstance()->registerSchema();
     }
     catch( qcl_data_model_RecordExistsException $e){}
 
 //    try
 //    {
-//      qcl_import("qcl_io_filesystem_remote_Datasource");
+//      
 //      qcl_io_filesystem_remote_Datasource::getInstance()->registerSchema();
 //    }
 //    catch( qcl_data_model_RecordExistsException $e){}
@@ -395,12 +395,12 @@ class SetupController extends \app\controllers\AppController
      * text files, located in the temporary folder
      */
     $this->log("Creating datasource for importing and exporting BibTeX data ....", QCL_LOG_SETUP );
-    qcl_import("bibliograph_model_import_RegistryModel");
+    
     $importRegistry = bibliograph_model_import_RegistryModel::getInstance();
     $importRegistry->addFromClass("bibliograph_model_import_Bibtex");
     $importRegistry->addFromClass("bibliograph_model_import_Csv");
     
-    qcl_import("bibliograph_model_export_RegistryModel");
+    
     $exportRegistry = bibliograph_model_export_RegistryModel::getInstance();
     $exportRegistry->addFromClass("bibliograph_model_export_Bibtex");
     $exportRegistry->addFromClass("bibliograph_model_export_Csv");

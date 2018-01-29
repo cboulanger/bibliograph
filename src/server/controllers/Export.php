@@ -18,10 +18,10 @@
 
 ************************************************************************ */
 
-qcl_import( "qcl_data_controller_Controller" );
-qcl_import("qcl_ui_dialog_Form");
-qcl_import("qcl_ui_dialog_Popup");
-qcl_import("bibliograph_model_export_RegistryModel");
+
+
+
+
 
 /**
  *
@@ -37,11 +37,11 @@ class bibliograph_service_Export
    */
   public function method_exportReferencesDialog( $datasource, $selector )
   {
-    return new qcl_ui_dialog_Form(
-      "<b>" . _("Export references") . "</b>",
+    return \lib\dialog\Form::create(
+      "<b>" . Yii::t('app', "Export references") . "</b>",
       array(
         'format'  => array(
-          'label'   => _("Choose the export format"),
+          'label'   => Yii::t('app', "Choose the export format"),
           'type'    => "selectbox",
           'options' => $this->getFormatListData()
         )
@@ -89,7 +89,7 @@ class bibliograph_service_Export
     {
       return "ABORTED";
     }
-    return new qcl_ui_dialog_Popup(
+    return \lib\dialog\Popup::create(
       Yii::t('app',"Preparing export data. Please wait..."),
       $this->serviceName(), "exportReferencesStartExport",
       array($this->shelve($data, $datasource, $selector))
@@ -117,7 +117,7 @@ class bibliograph_service_Export
       "&name=" . $name[1] .
       "&id=$file&delete=true";
 
-    new qcl_ui_dialog_Popup(""); // hide the popup
+    \lib\dialog\Popup::create(""); // hide the popup
     $this->dispatchClientMessage("window.location.replace", array(
       'url' => $url
     ) );
@@ -175,7 +175,7 @@ class bibliograph_service_Export
     }
     elseif ( is_string( $selector ) )
     {
-      qcl_import( "bibliograph_schema_CQL" );
+      
       try
       {
         $query = bibliograph_schema_CQL::getInstance()->addQueryConditions(
@@ -201,7 +201,7 @@ class bibliograph_service_Export
      */
     $file->open("w");
     $data = array();
-    $fieldsAsKeys = array_flip( $refModel->getSchemaModel()->fields() );
+    $fieldsAsKeys = array_flip( $refModel::getSchema()->fields() );
     while( $refModel->loadNext( $query ) )
     {
       $data[] = array_intersect_key( $refModel->data(), $fieldsAsKeys );

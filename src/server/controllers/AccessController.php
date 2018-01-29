@@ -354,7 +354,7 @@ class AccessController extends AppController
     /*
      * create new LDAP server object
      */
-    qcl_import( "qcl_access_LdapServer" );
+    
     $ldap = new qcl_access_LdapServer( $host, $port );
 
     /*

@@ -18,10 +18,10 @@
 
 ************************************************************************ */
 
-qcl_import("qcl_ui_dialog_Alert");
-qcl_import("qcl_ui_dialog_Confirm");
-qcl_import("qcl_ui_dialog_Form");
-qcl_import("bibliograph_service_Reference");
+
+
+
+
 
 /**
  * Controller that supplies data for the references
@@ -41,7 +41,7 @@ class bibliograph_service_reference_Indexes
     /*
      * prepare field list
      */
-    $schemaModel = $this->getControlledModel( $datasource )->getSchemaModel();
+    $schemaModel = static::getControlledModel( $datasource )::getSchema();
     $fields = $schemaModel->fields();
     $fieldOptions = array();
 
@@ -68,39 +68,39 @@ class bibliograph_service_reference_Indexes
     $formData = array(
       
       'field'  => array(
-        'label'   => _("Index"),
+        'label'   => Yii::t('app', "Index"),
         'type'    => "selectbox",
         'options' => $fieldOptions
       ),
       
       'field'  => array(
-        'label'   => _("Action"),
+        'label'   => Yii::t('app', "Action"),
         'type'    => "selectbox",
         'options' => array(
-          array( "label" => _("Delete entry"), "value" => "delete" ),
-          array( "label" => _("Merge entries"), "value" => "merge" )
+          array( "label" => Yii::t('app', "Delete entry"), "value" => "delete" ),
+          array( "label" => Yii::t('app', "Merge entries"), "value" => "merge" )
         )
       ),      
       
       'backup'  => array(
-        'label'   => _("Create a backup?"),
+        'label'   => Yii::t('app', "Create a backup?"),
         'type'    => "selectbox",
         'options' => array(
-          array( 'value' => true, 'label' => _("Yes") ),
-          array( 'value' => false, 'label' => _("No") )
+          array( 'value' => true, 'label' => Yii::t('app', "Yes") ),
+          array( 'value' => false, 'label' => Yii::t('app', "No") )
         )
       ),
     );
     
-    qcl_import("qcl_application_plugin_Manager");
+    
     if ( ! qcl_application_plugin_Manager::getInstance()->isActive("backup") )
     {
       unset( $formData['backup'] );
     }
     
-    return new qcl_ui_dialog_Form(
-      _("You can edit indexes here." ) . " " .
-      _("These changes cannot easily be undone, that is why it is recommended to create a backup."),
+    return \lib\dialog\Form::create(
+      Yii::t('app', "You can edit indexes here." ) . " " .
+      Yii::t('app', "These changes cannot easily be undone, that is why it is recommended to create a backup."),
       $formData,
       true,
       $this->serviceName(), "confirmEdit",
@@ -115,9 +115,9 @@ class bibliograph_service_reference_Indexes
       return "ABORTED";
     }
 
-    $schemaModel = $this->getControlledModel( $datasource )->getSchemaModel();
+    $schemaModel = static::getControlledModel( $datasource )::getSchema();
 
-    return new qcl_ui_dialog_Form(
+    return \lib\dialog\Form::create(
       $message,
       $formData,
       true,
@@ -139,13 +139,13 @@ class bibliograph_service_reference_Indexes
      */
     if ( $data->backup )
     {
-      qcl_import("backup_Backup");
+      
       $backupService = new backup_Backup();
       $comment = "Automatically created by " . __CLASS__;
       $zipfile = $backupService->createBackup( $datasource, null, $comment );
     }
 
-    $model = $this->getControlledModel($datasource);
+    $model = static::getControlledModel($datasource);
 
     // action!
    
@@ -161,7 +161,7 @@ class bibliograph_service_reference_Indexes
     /*
      * show alert
      */
-    return new qcl_ui_dialog_Alert(
+    return \lib\dialog\Alert::create(
       Yii::t('app',"%s replacements made. %s",
         $count,
         $data->backup

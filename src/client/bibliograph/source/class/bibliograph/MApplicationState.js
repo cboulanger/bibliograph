@@ -110,7 +110,7 @@ qx.Mixin.define("bibliograph.MApplicationState", {
     /**
      * The name of the theme
      * currently not used, because only the modern theme functions
-     * correctly with the current UI
+     * correctly works with the current UI
      */
     theme: {
       check: ["Modern", "Simple", "Indigo"],
@@ -134,7 +134,7 @@ qx.Mixin.define("bibliograph.MApplicationState", {
    */
   events: {
     /** Fired when something happens */
-    changeSituation: "qx.event.type.Data"
+    changeState: "qx.event.type.Data"
   },
 
   /**
@@ -169,14 +169,13 @@ qx.Mixin.define("bibliograph.MApplicationState", {
         // set the application state
         stateMgr.setState("datasource", value);
 
-
       } else {
         stateMgr.removeState("datasource");
       }
     },
 
     /**
-     * @todo rename to application title
+     * Displays the name of the current datasource
      */
     _applyDatasourceLabel: function(value, old) {
       if (!value) {

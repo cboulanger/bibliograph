@@ -162,7 +162,7 @@ qx.Class.define("bibliograph.ui.item.DuplicatesView",
       app.showPopup(this.tr("Processing request..."));
       this.duplicatesTable.getSelectionModel().resetSelection();
       app.getRpcClient("reference").send(
-          "removeReferences",
+          "remove",
           [app.getDatasource(), null, null, selectedRefIds],
           function() {
             app.hidePopup();

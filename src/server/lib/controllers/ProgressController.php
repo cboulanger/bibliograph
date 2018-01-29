@@ -15,8 +15,8 @@
  * Authors:
  *  * Christian Boulanger (cboulanger)
  */
-qcl_import("qcl_data_controller_Controller");
-qcl_import("qcl_ui_dialog_Progress");
+
+
 
 
 /**
@@ -125,7 +125,7 @@ abstract class qcl_data_controller_ProgressController
     $this->setMessage($message);
     $this->step = 0;
 
-    return new qcl_ui_dialog_Progress(
+    return \lib\dialog\Progress::create(
       $this->getDialogProperties(),
       $this->serviceName(),
       "next",
@@ -156,7 +156,7 @@ abstract class qcl_data_controller_ProgressController
 
     $data = $this->$nextMethod($data);
 
-    return new qcl_ui_dialog_Progress(
+    return \lib\dialog\Progress::create(
       $this->getDialogProperties(),
       $this->serviceName(),
       "next",
@@ -171,6 +171,6 @@ abstract class qcl_data_controller_ProgressController
    */
   protected function finish()
   {
-    return new qcl_ui_dialog_Progress( array( 'show' => false ), null, null, null );
+    return \lib\dialog\Progress::create( array( 'show' => false ), null, null, null );
   }
 }

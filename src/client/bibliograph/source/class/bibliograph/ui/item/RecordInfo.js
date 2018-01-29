@@ -165,7 +165,7 @@ qx.Class.define("bibliograph.ui.item.RecordInfo",
         if (result === true)
         {
           this.showPopup(this.tr("Processing request..."));
-          app.getRpcClient("reference").send( "removeReferences", [app.getDatasource(), selectedFolders[0].id, null, [app.getModelId()]], function()
+          app.getRpcClient("reference").send( "remove", [app.getDatasource(), selectedFolders[0].id, null, [app.getModelId()]], function()
           {
             this.hidePopup();
             this.reloadFolderData();

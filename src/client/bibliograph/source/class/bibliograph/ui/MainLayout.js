@@ -17,7 +17,8 @@
 /*global bibliograph qx qcl dialog*/
 
 /**
- * This class instantiates the main application ui
+ * This class instantiates the main application ui and sets up bindings 
+ * between the widgets and the main application state
  */
 qx.Class.define("bibliograph.ui.MainLayout", {
   extend: qx.core.Object,

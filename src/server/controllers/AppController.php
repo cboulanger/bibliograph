@@ -178,7 +178,7 @@ class AppController extends \JsonRpc2\Controller
    * @param string $datasource
    * @return string
    */
-  static public function controlledModel( $datasource )
+  static public function getControlledModel( $datasource )
   {
     return  
       Datasource
@@ -195,10 +195,79 @@ class AppController extends \JsonRpc2\Controller
    */
   static public function getModelbyId($datasource, $id)
   {
-    $model = static :: controlledModel($datasource) :: findOne($id);
+    $model = static :: getControlledModel($datasource) :: findOne($id);
     if( is_null( $model) ){
       throw new \InvalidArgumentException("Model of type " . static::$modelType . " and id #$id does not exist in datasource '$datasource'.");
     }
     return $model;
   }  
+
+  //-------------------------------------------------------------
+  // methods to pass data between service methods
+  //-------------------------------------------------------------
+
+
+  /**
+   * Temporarily stores the supplied arguments on the server for retrieval
+   * by another service method. This storage is only guaranteed to last during
+   * the current session and is then discarded.
+   * @param mixed $varargs
+   *    The method can take a variable number of arguments
+   * @return string
+   *    The shelve id needed to retrieve the data later
+   */
+  public function shelve($varargs)
+  {
+    $shelveId = md5(microtime_float());
+    $_SESSION[$shelveId]=func_get_args();
+    return $shelveId;
+  }
+
+  /**
+   * Retrieve the data stored by the shelve() method.
+   * @param $shelveId
+   *    The id of the shelved data
+   * @param bool $keepCopy
+   *    If true, the data will be preserved and can be retrieved again.
+   *    If false or omitted, the data will be deleted.
+   * @return array
+   *    Returns an array of the elements passed to the shelve() method, which can be
+   *    extracted with the list() method.
+   */
+  public function unshelve( $shelveId, $keepCopy=false )
+  {
+    $args =  $_SESSION[$shelveId];
+    if ( !$keepCopy )
+    {
+      unset( $_SESSION[$shelveId] );
+    }
+    return $args;
+  }  
+
+  //-------------------------------------------------------------
+  // send and broadcast messages
+  // @todo reimplement and move into component
+  //-------------------------------------------------------------
+
+  /**
+   * @todo !!!
+   *
+   * @param [type] $eventName
+   * @param [type] $data
+   * @return void
+   */
+  public function broadcastClientMessage($eventName, $data){
+    Yii::warning("NOT BROADCASTING $eventName");
+  }
+
+  /**
+   * @todo !!!
+   *
+   * @param [type] $eventName
+   * @param [type] $data
+   * @return void
+   */
+  public function  dispatchClientMessage($eventName, $data){
+    Yii::warning("NOT DISPATCHING $eventName");
+  }
 }

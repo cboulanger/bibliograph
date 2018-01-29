@@ -15,7 +15,7 @@
  * Authors:
  *  * Christian Boulanger (cboulanger)
  */
-//qcl_import("qcl_data_controller_ITreeController");
+//
 
 /**
  * Interface for a controller that supplies data for a

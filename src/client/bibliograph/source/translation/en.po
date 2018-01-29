@@ -422,31 +422,31 @@ msgstr ""
 msgid "Importing references..."
 msgstr ""
 
-#: bibliograph.ui.reference.ListView:357
+#: bibliograph.ui.reference.ListView:354
 msgid "Query"
 msgstr ""
 
-#: bibliograph.ui.reference.ListView:488
+#: bibliograph.ui.reference.ListView:479
 msgid "Loading table ..."
 msgstr ""
 
-#: bibliograph.ui.reference.ListView:1015
+#: bibliograph.ui.reference.ListView:972
 msgid "You cannot create an item outside a folder"
 msgstr ""
 
-#: bibliograph.ui.reference.ListView:1031
+#: bibliograph.ui.reference.ListView:988
 msgid "Do your really want to remove the selected references from this folder?"
 msgstr ""
 
-#: bibliograph.ui.reference.ListView:1032
+#: bibliograph.ui.reference.ListView:989
 msgid "Do your really want to remove the selected references?"
 msgstr ""
 
-#: bibliograph.ui.reference.ListView:1056
+#: bibliograph.ui.reference.ListView:1013
 msgid "Do your really want to move the selected references to '%1'?"
 msgstr ""
 
-#: bibliograph.ui.reference.ListView:1082
+#: bibliograph.ui.reference.ListView:1039
 msgid "Do your really want to copy the selected referencesto '%1'?"
 msgstr ""
 
@@ -454,11 +454,11 @@ msgstr ""
 msgid "Processing request..."
 msgstr ""
 
-#: bibliograph.ui.reference.ListView:1172
+#: bibliograph.ui.reference.ListView:1129
 msgid "Do you really want to make the folder empty, moving all references to the trash that are not in other folders?"
 msgstr ""
 
-#: bibliograph.ui.reference.ListView:1175
+#: bibliograph.ui.reference.ListView:1132
 msgid "Emptying the folder ..."
 msgstr ""
 
@@ -668,4 +668,8 @@ msgstr ""
 
 #: bibliograph.ui.item.RecordInfo:163
 msgid "Do you really want to remove the reference from folder '%1'?"
+msgstr ""
+
+#: bibliograph.ui.reference.ListView:461
+msgid "Loading table layout ..."
 msgstr ""

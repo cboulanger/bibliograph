@@ -340,31 +340,31 @@ msgstr "Über Bibliograph"
 msgid "Enter search term"
 msgstr "Bitte geben sie einen Suchausdruck ein"
 
-#: bibliograph.ui.reference.ListView:357
+#: bibliograph.ui.reference.ListView:354
 msgid "Query"
 msgstr "Suchausdruck"
 
-#: bibliograph.ui.reference.ListView:488
+#: bibliograph.ui.reference.ListView:479
 msgid "Loading table ..."
 msgstr "Lade Tabelle ..."
 
-#: bibliograph.ui.reference.ListView:1015
+#: bibliograph.ui.reference.ListView:972
 msgid "You cannot create an item outside a folder"
 msgstr "Sie können keinen Datensatz außerhalb eines Ordners erstellen"
 
-#: bibliograph.ui.reference.ListView:1031
+#: bibliograph.ui.reference.ListView:988
 msgid "Do your really want to remove the selected references from this folder?"
 msgstr "Möchten Sie die ausgewählten Datensätze wirklich aus diesem Ordner entfernen?\t"
 
-#: bibliograph.ui.reference.ListView:1032
+#: bibliograph.ui.reference.ListView:989
 msgid "Do your really want to remove the selected references?"
 msgstr "Wollen Sie wirklich die ausgewählten Datensätze entfernen?"
 
-#: bibliograph.ui.reference.ListView:1056
+#: bibliograph.ui.reference.ListView:1013
 msgid "Do your really want to move the selected references to '%1'?"
 msgstr "Wollen Sie wirklich die augewählten Datensätze nach '%1' verschieben?"
 
-#: bibliograph.ui.reference.ListView:1082
+#: bibliograph.ui.reference.ListView:1039
 msgid "Do your really want to copy the selected referencesto '%1'?"
 msgstr "Wollen Sie wirklich die ausgewählten Datensätze nach '%1' kopieren?"
 
@@ -672,11 +672,11 @@ msgstr ""
 msgid "Forgot Password?"
 msgstr ""
 
-#: bibliograph.ui.reference.ListView:1172
+#: bibliograph.ui.reference.ListView:1129
 msgid "Do you really want to make the folder empty, moving all references to the trash that are not in other folders?"
 msgstr ""
 
-#: bibliograph.ui.reference.ListView:1175
+#: bibliograph.ui.reference.ListView:1132
 msgid "Emptying the folder ..."
 msgstr ""
 
@@ -719,3 +719,7 @@ msgid "one of one row"
 msgid_plural "%1 of %2 rows"
 msgstr[0] ""
 msgstr[1] ""
+
+#: bibliograph.ui.reference.ListView:461
+msgid "Loading table layout ..."
+msgstr ""

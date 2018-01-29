@@ -59,6 +59,21 @@ class FolderController extends AppController //implements ITreeController
   );
 
   /**
+   * Return the id of the trash folder of the given datasource
+   * @param string $datasource
+   * @throws JsonRpcException
+   * @return \app\models\Folder
+   */
+  static function getTrashFolder( $datasource )
+  {
+    $trashFolder = static::getControlledModel()::findOne(['type'=>'trash']);
+    if( ! $trashFolder ){
+      throw new \Exception("Datasource $datasource does not have a trash folder");
+    }
+    return $trashFolder;
+  }  
+
+  /**
    * Return the data of a node of the tree as expected by the qooxdoo tree data model
    * @param string $datasource Datasource name
    * @param \app\models\Folder|int $folder
@@ -70,7 +85,7 @@ class FolderController extends AppController //implements ITreeController
     if ( ! ($folder instanceof Folder ) ){
       assert( \is_numeric( $folder) );
       $folderId = $folder;
-      $folder = static::controlledModel($datasource)::findOne($folder);
+      $folder = static::getControlledModel($datasource)::findOne($folder);
       if( ! $folder ){
         throw new \InvalidArgumentException("Folder #$folderId does not exist.");
       }
@@ -178,7 +193,7 @@ class FolderController extends AppController //implements ITreeController
   static function addInitialFolders($datasource)
   {
     // top folder
-    $class = static::controlledModel($datasource);
+    $class = static::getControlledModel($datasource);
     $top = new $class([
       "label"       => Yii::t("app","Default Folder"),
       "parentId"    => 0,
@@ -255,7 +270,7 @@ class FolderController extends AppController //implements ITreeController
   function actionLoad( $datasource,  $options=null )
   {
     $this->checkDatasourceAccess( $datasource );
-    $query = static::controlledModel($datasource)::find()->select("id");
+    $query = static::getControlledModel($datasource)::find()->select("id");
     if( $this->getActiveUser()->isAnonymous() ){
       $query = $query->where( [ 'public' => true ] );
     }
@@ -448,26 +463,26 @@ class FolderController extends AppController //implements ITreeController
     $model = $this->getFolderModel( $datasource );
     $model->load( $folderId );
 
-    qcl_import("qcl_ui_dialog_Form");
-    return new qcl_ui_dialog_Form(
-      _("Change the visibility of the folder"),
+    
+    return \lib\dialog\Form::create(
+      Yii::t('app', "Change the visibility of the folder"),
       array(
         'state' => array(
-          'label'   => _("State"),
+          'label'   => Yii::t('app', "State"),
           'type'    => "SelectBox",
           'options' => array(
-            array( 'label' => _("Folder is publically visible"), 'value' => true ),
-            array( 'label' => _("Folder is not publically visible"), 'value' => false )
+            array( 'label' => Yii::t('app', "Folder is publically visible"), 'value' => true ),
+            array( 'label' => Yii::t('app', "Folder is not publically visible"), 'value' => false )
           ),
           'value'   => $model->getPublic(),
           'width'   => 300
         ),
         'recurse' => array(
-          'label'   => _("Depth"),
+          'label'   => Yii::t('app', "Depth"),
           'type'    => "SelectBox",
           'options' => array(
-            array( 'label' => _("Apply only to the selected folder"), 'value' => false ),
-            array( 'label' => _("Apply to the selected folder and its subfolders"), 'value' => true )
+            array( 'label' => Yii::t('app', "Apply only to the selected folder"), 'value' => false ),
+            array( 'label' => Yii::t('app', "Apply to the selected folder and its subfolders"), 'value' => true )
           ),
           'value'   => false
         )
@@ -514,22 +529,22 @@ class FolderController extends AppController //implements ITreeController
   public function method_addFolderDialog( $datasource, $folderId )
   {
     $this->requirePermission("folder.add");
-    qcl_import("qcl_ui_dialog_Form");
+    
 
-    return new qcl_ui_dialog_Form(
+    return \lib\dialog\Form::create(
       Yii::t('app',"Please enter the name and type of the new folder:"),
       array(
         'label' => array(
-          'label'   => _("Name"),
+          'label'   => Yii::t('app', "Name"),
           'type'    => "textfield",
           'width'   => 200
         ),
         'searchfolder' => array(
-          'label'   => _("Type"),
+          'label'   => Yii::t('app', "Type"),
           'type'    => "SelectBox",
           'options' => array(
-            array( 'label' => _("Normal folder"), 'value' => false ),
-            array( 'label' => _("Search folder"), 'value' => true )
+            array( 'label' => Yii::t('app', "Normal folder"), 'value' => false ),
+            array( 'label' => Yii::t('app', "Search folder"), 'value' => true )
           ),
           'value'   => false
         )
@@ -596,14 +611,14 @@ class FolderController extends AppController //implements ITreeController
     // root folder?
     if( $model->getParentId() == 0 )
     {
-      throw new qcl_server_ServiceException(_("Top folders cannot be deleted."));
+      throw new qcl_server_ServiceException(Yii::t('app', "Top folders cannot be deleted."));
     }
 
     // create dialog
     $label = $model->getLabel();
-    qcl_import("qcl_ui_dialog_Confirm");
-    return new qcl_ui_dialog_Confirm(
-      sprintf( _( "Do you really want to move the folder '%s' into the trash?"), $label),
+    
+    return \lib\dialog\Confirm::create(
+      sprintf( Yii::t('app',  "Do you really want to move the folder '%s' into the trash?"), $label),
       null,
       $this->serviceName(), "removeFolder", array( $datasource, $folderId )
     );
@@ -642,7 +657,7 @@ class FolderController extends AppController //implements ITreeController
     // root folder?
     if( $model->getParentId() == 0 )
     {
-      throw new qcl_server_ServiceException(_("Top folders cannot be deleted."));
+      throw new qcl_server_ServiceException(Yii::t('app', "Top folders cannot be deleted."));
     }
 
     if ( $model->getParentId() ==  $trashFolderId )
@@ -677,7 +692,7 @@ class FolderController extends AppController //implements ITreeController
     qcl_assert_integer( $parentId );
     if( $folderId == $parentId )
     {
-      throw new qcl_server_ServiceException(_("Folder cannot be moved on itself."));
+      throw new qcl_server_ServiceException(Yii::t('app', "Folder cannot be moved on itself."));
     }
 
     /*
@@ -704,7 +719,7 @@ class FolderController extends AppController //implements ITreeController
       $id = $model->getParentId();
       if( $id == $folderId )
       {
-        throw new qcl_server_ServiceException(_("Parent node cannot be moved on a child node"));
+        throw new qcl_server_ServiceException(Yii::t('app', "Parent node cannot be moved on a child node"));
       }
     }
     while ( $id !== 0 );
@@ -717,7 +732,7 @@ class FolderController extends AppController //implements ITreeController
     // root folder?
     if( $model->getParentId() == 0 )
     {
-      throw new qcl_server_ServiceException(_("Top folders cannot be moved."));
+      throw new qcl_server_ServiceException(Yii::t('app', "Top folders cannot be moved."));
     }
 
     $model->setParentId( $parentId );
@@ -729,39 +744,6 @@ class FolderController extends AppController //implements ITreeController
     $this->setFolderMarkedDeleted( $model, $parentId === $this->getTrashfolderId( $datasource ) );
 
     return "OK";
-  }
-
-  /**
-   * Return the id of the trash folder of the given datasource
-   * @param string $datasource
-   * @throws JsonRpcException
-   * @return int
-   */
-  public function getTrashfolderId( $datasource )
-  {
-    qcl_assert_valid_string( $datasource );
-    if ( ! $this->__trashFolderIds ) $this->__trashFolderIds = array();
-    if ( ! $this->__trashFolderIds[$datasource] )
-    {
-      $model = $this->getFolderModel( $datasource );
-      $ids =  $model->getQueryBehavior()->fetchValues("id",array(
-        'type' => "trash"
-      ));
-      if ( ! count( $ids ) )
-      {
-        throw new JsonRpcException("Datasource '$datasource' does not have a trash folder!");
-      }
-      $trashfolderId = (int) $ids[0];
-      if( $trashfolderId )
-      {
-        $this->__trashFolderIds[$datasource] = $trashfolderId;
-      }
-      else
-      {
-        throw new JsonRpcException("Datasource '$datasource' does not contain a valid trash folder");
-      }
-    }
-    return $this->__trashFolderIds[$datasource];
   }
 
   /**

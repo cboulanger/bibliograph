@@ -18,10 +18,10 @@
 
 ************************************************************************ */
 
-qcl_import("qcl_ui_dialog_Alert");
-qcl_import("qcl_ui_dialog_Confirm");
-qcl_import("qcl_ui_dialog_Form");
-qcl_import("bibliograph_service_Reference");
+
+
+
+
 
 /**
  * Controller that supplies data for the references
@@ -41,10 +41,10 @@ class bibliograph_service_reference_FindReplace
     /*
      * prepare field list
      */
-    $schemaModel = $this->getControlledModel( $datasource )->getSchemaModel();
+    $schemaModel = static::getControlledModel( $datasource )::getSchema();
     $fields = $schemaModel->fields();
     $fieldOptions = array();
-//    $fieldOptions[] = array( 'value' => "all", 'label' => _("All fields") ); // not implemented yet
+//    $fieldOptions[] = array( 'value' => "all", 'label' => Yii::t('app', "All fields") ); // not implemented yet
 
     foreach( $fields as $field )
     {
@@ -61,46 +61,46 @@ class bibliograph_service_reference_FindReplace
      */
     $formData = array(
       'scope'  => array(
-        'label'   => _("Search in:"),
+        'label'   => Yii::t('app', "Search in:"),
         'type'    => "selectbox",
         'options' => array(
-          array( 'value' => 'all',      'label' => _("Whole database") ),
-          array( 'value' => 'selected', 'label' => _("Selected records") ),
-          array( 'value' => 'folder',   'label' => _("Selected folder") )
+          array( 'value' => 'all',      'label' => Yii::t('app', "Whole database") ),
+          array( 'value' => 'selected', 'label' => Yii::t('app', "Selected records") ),
+          array( 'value' => 'folder',   'label' => Yii::t('app', "Selected folder") )
         ),
         'width'   => 200,
       ),
       'field'  => array(
-        'label'   => _("Replace in:"),
+        'label'   => Yii::t('app', "Replace in:"),
         'type'    => "selectbox",
         'options' => $fieldOptions
       ),
       'find'  => array(
-        'label'   => _("Search expression:"),
+        'label'   => Yii::t('app', "Search expression:"),
         'type'    => "textfield"
       ),
       'replace'  => array(
-        'label'   => _("Replace with:"),
+        'label'   => Yii::t('app', "Replace with:"),
         'type'    => "textfield"
       ),
       'backup'  => array(
-        'label'   => _("Create a backup?"),
+        'label'   => Yii::t('app', "Create a backup?"),
         'type'    => "selectbox",
         'options' => array(
-          array( 'value' => true, 'label' => _("Yes") ),
-          array( 'value' => false, 'label' => _("No") )
+          array( 'value' => true, 'label' => Yii::t('app', "Yes") ),
+          array( 'value' => false, 'label' => Yii::t('app', "No") )
         )
       ),
     );
     
-    qcl_import("qcl_application_plugin_Manager");
+    
     if ( ! qcl_application_plugin_Manager::getInstance()->isActive("backup") )
     {
       unset( $formData['backup'] );
     }
     
-    return new qcl_ui_dialog_Form(
-      _("You can do a 'find and replace' operation on all or selected records in the database. These changes cannot easily be undone, that is why it is recommended to create a backup."),
+    return \lib\dialog\Form::create(
+      Yii::t('app', "You can do a 'find and replace' operation on all or selected records in the database. These changes cannot easily be undone, that is why it is recommended to create a backup."),
       $formData,
       true,
       $this->serviceName(), "confirmFindReplace",
@@ -120,18 +120,18 @@ class bibliograph_service_reference_FindReplace
     qcl_assert_string($data->replace, "Invalid 'replace' argument");
 
     $msg_map = array(
-      'all'       => _("in all records"),
-      'selected'  => _("in the selected records"),
-      'folder'    => _("in the selected folder")
+      'all'       => Yii::t('app', "in all records"),
+      'selected'  => Yii::t('app', "in the selected records"),
+      'folder'    => Yii::t('app', "in the selected folder")
     );
-    $schemaModel = $this->getControlledModel( $datasource )->getSchemaModel();
+    $schemaModel = static::getControlledModel( $datasource )::getSchema();
 
     $args =  func_get_args();
-    return new qcl_ui_dialog_Confirm(
+    return \lib\dialog\Confirm::create(
       Yii::t('app',"Are you sure you want to replace '%s' with '%s' in %s %s?",
        $data->find, $data->replace,
        $data->field == "all"
-         ? _("all fields")
+         ? Yii::t('app', "all fields")
          : Yii::t('app', "field '%s'", $schemaModel->getFieldLabel( $data->field ) ),
        $msg_map[$data->scope]
       ),
@@ -152,13 +152,13 @@ class bibliograph_service_reference_FindReplace
      */
     if ( $data->backup )
     {
-      qcl_import("backup_Backup");
+      
       $backupService = new backup_Backup();
       $comment = "Automatically created by find/replace";
       $zipfile = $backupService->createBackup( $datasource, null, $comment );
     }
 
-    $model = $this->getControlledModel($datasource);
+    $model = static::getControlledModel($datasource);
 
     /*
      * action!
@@ -205,7 +205,7 @@ class bibliograph_service_reference_FindReplace
     /*
      * show alert
      */
-    return new qcl_ui_dialog_Alert(
+    return \lib\dialog\Alert::create(
       Yii::t('app',"%s replacements made. %s",
         $count,
         $data->backup

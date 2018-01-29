@@ -16,10 +16,10 @@
  *  * Christian Boulanger (cboulanger)
  */
 
-qcl_import("qcl_data_controller_Controller");
-qcl_import("qcl_application_plugin_Manager");
-qcl_import("qcl_ui_dialog_Alert");
-qcl_import("qcl_ui_dialog_Form");
+
+
+
+
 
 /**
  * The plugin Service
@@ -92,7 +92,7 @@ class qcl_application_plugin_Service
       );
     }
 
-    return new qcl_ui_dialog_Form(
+    return \lib\dialog\Form::create(
       "<h3>" . Yii::t('app',"Please configure the plugins") . "</h3>",
       $formData, true,
       $this->serviceName(), "handlePluginForm"
@@ -208,7 +208,7 @@ class qcl_application_plugin_Service
     }
     if ( count( $messages) )
     {
-      return new qcl_ui_dialog_Alert( implode("<br/>", $messages ) );
+      return \lib\dialog\Alert::create( implode("<br/>", $messages ) );
     }
     return "OK";
   }

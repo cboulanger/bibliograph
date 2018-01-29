@@ -254,24 +254,24 @@ qx.Class.define("bibliograph.ui.reference.ListView",
      * @param old {String}
      */
     _applyDatasource : function(value, old) {
-      /*
-       * hide old table
-       */
+      // hide old table
       if (old && this.getTable())
       {
-        if( this.referenceViewLabel )
-        {
+        // clear label
+        if( this.referenceViewLabel ){
           this.referenceViewLabel.setValue("");  
         }
 
-        /*
-         * clear table and mark as not ready so that
-         * the next loading request checks for table changes
-         */
+        // clear table and mark as not ready so that the next loading request checks for table changes
         this.clearTable();
         this.getTable().setVisibility("hidden");
         this.__tableReady = false;
       }
+
+      //@todo unhardcode, get from datasource
+      this.setModelType("reference");
+      this.setServiceName("reference");
+
     },
 
     /**
@@ -281,6 +281,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
      */
     _applyFolderId : function(folderId, old)
     {
+      
       if (!folderId)
       {
         this.clearTable();
@@ -297,18 +298,16 @@ qx.Class.define("bibliograph.ui.reference.ListView",
        */
       qx.util.TimerManager.getInstance().start(function()
       {
-        /*
-         * if the folder id has already changed, do not load
-         */
+        
+        // if the folder id has already changed, do not load
         if (folderId != this.getFolderId()) {
           return;
         }
 
-        /*
-         * show breadcrumb
-         */
+        // show breadcrumb
         var mainFolderTree = this.getApplication().getWidgetById("bibliograph/mainFolderTree");
         var selectedNode = mainFolderTree.getSelectedNode();
+        
         if (selectedNode && selectedNode.data.id == folderId)
         {
           // we can get the folder hierarchy for the breadcrumb
@@ -332,9 +331,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
           }
         }
 
-        /*
-         * load folder
-         */
+        // load folder
         this.load();
       }, null, this, null, 500);
     },
@@ -401,20 +398,17 @@ qx.Class.define("bibliograph.ui.reference.ListView",
      */
     _selectIds : function(ids)
     {
-      if ( this.__ignoreChangeSelection )
-      {
+      if ( this.__ignoreChangeSelection ) {
         return;
       }
 
-      if( ! ids )
-      {
+      if( ! ids ) {
         // remove selection?
         return;
       }
 
       //console.log("old selection is " + this.__selectedIds + ", new selection is " + ids);
-      if( this.__selectedIds && ""+ids == ""+this.__selectedIds) // stringify arrays for comparison
-      {
+      if( this.__selectedIds && ""+ids == ""+this.__selectedIds) {
         //console.log("Same, same");
         return;
       }
@@ -434,9 +428,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
         {
           selectionModel.addSelectionInterval(row,row);
           table.scrollCellVisible(0,row);
-        }
-        else
-        {
+        } else {
           //console.log("Cannot select row with id " + id + ". Data not loaded yet.");
           this.__selectedIds = null;
         }
@@ -454,58 +446,33 @@ qx.Class.define("bibliograph.ui.reference.ListView",
     ---------------------------------------------------------------------------
     */
 
-
-
     /**
-     * Checks whether the table layout has to be created or recreated
-     * due to changes in the datasource model. Loads table layout
-     * from the server if necessary.
+     * Loads table layout from the server
      */
-    _checkTableLayout : function()
+    _loadTableLayout : async function()
     {
-      // @todo unhardcode!
-      var modelType = "reference"; //this.getModelType() || dsModel.getTableModelType(); 
-      var serviceName = "load"; // this.getServiceName() || dsModel.getTableModelService();
+      var modelType = this.getModelType(); 
+      var serviceName = this.getServiceName();
 
-      /*
-       * if the datasource model properties relevant for the
-       * table haven't changed, use existing table
-       */
-      if (this.getTable() && modelType == this.getModelType() && serviceName == this.getServiceName())
-      {
-        this.__tableReady = true;
-        this.getTable().setVisibility("visible");
-        this.fireEvent("tableReady");
-        return;
-      }
-
-      /*
-       * otherwise, load new table layout
-       */
+      // otherwise, load new table layout
       this.setModelType(modelType);
       this.setServiceName(serviceName);
       this.__loadingTableStructure = true;
-      this.showMessage(this.tr("Loading table ..."));
+      this.showMessage(this.tr("Loading table layout ..."));
 
       //console.log([this.getServiceName(), this.getDatasource(), this.getModelType() ]);
-      this.getApplication().getRpcClient(this.getServiceName()).send( "getTableLayout", [this.getDatasource(), this.getModelType()], function(data)
-      {
-        this.showMessage("");
+      let client = this.getApplication().getRpcClient(this.getServiceName());
+      let data = await client.send( "table-layout", [this.getDatasource(), this.getModelType()]);
+      this.showMessage("");
 
-        /*
-         * create the table
-         */
-        this._createTableLayout(data);
+      // create the table
+      this._createTableLayout(data);
 
-        /*
-         * notify listeners that the table is ready when
-         * it appears
-         */
-        this.__tableReady = true;
-        this.__loadingTableStructure = false;
-        this.fireEvent("tableReady");
-        this.getTable().setVisibility("visible");
-      }, this);
+      // notify listeners that the table is ready when it appears
+      this.__tableReady = true;
+      this.__loadingTableStructure = false;
+      this.fireEvent("tableReady");
+      this.getTable().setVisibility("visible"); 
     },
 
     /**
@@ -882,42 +849,38 @@ qx.Class.define("bibliograph.ui.reference.ListView",
      */
     load : function()
     {
+      
       this.clearTable();
 
+      // if we don't have a model type yet, wait until we have one
       if (!this.getModelType())
       {
+        this.info("No model type for the table, waiting...");
         this.addListenerOnce("changeModelType", function() {
           this.load();
         }, this);
         return;
       }
+
       try
       {
-        /*
-         * if we're still loading the table, don't do anything
-         */
         if (this.__loadingTableStructure) {
+          this.info("We're still loading, ignoring load request...");
           return;
         }
 
-        /*
-         * if the table is not set up, wait for corresponding event
-         */
+        // if the table is not set up, wait for corresponding event
         if (!this.isTableReady())
         {
+          this.info("Table is not ready - deferring load request ...");
           this.addListenerOnce("tableReady", this.load, this);
-          this._checkTableLayout();
+          this._loadTableLayout();
           return;
         }
 
-        /*
-         * load a query
-         */
-        if (this.getQuery())
-        {
-          /*
-           * convert string query into one the backend can understand
-           */
+        // load a query
+        if (this.getQuery()) {
+          // convert string query into one the backend can understand
           this.getMarshaler().setQueryParams([
           {
             'datasource' : this.getDatasource(),
@@ -933,11 +896,8 @@ qx.Class.define("bibliograph.ui.reference.ListView",
           return;
         }
 
-        /*
-         * load a folder content
-         */
-        if (this.getFolderId())
-        {
+        // load a folder content
+        if (this.getFolderId()) {
           this.getMarshaler().setQueryParams([
           {
             'datasource' : this.getDatasource(),
@@ -957,12 +917,9 @@ qx.Class.define("bibliograph.ui.reference.ListView",
           return;
         }
 
-        /*
-         * error
-         */
+        // error
         this.warn("Cannot load - no folderId or query available.");
-      }catch (e)
-      {
+      } catch (e) {
         // debug
         this.warn(e);
         return;

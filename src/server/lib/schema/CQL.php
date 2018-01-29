@@ -21,8 +21,8 @@
 require_once "bibliograph/lib/cql/cql2.php";
 require_once "bibliograph/schema/Tokenizer.php";
 
-qcl_import("bibliograph_schema_BibtexSchema");
-qcl_import("qcl_locale_Manager");
+
+
 
 /**
  * Singleton object which acts as a tool for working with the CQL query
@@ -120,9 +120,9 @@ class bibliograph_schema_CQL
         bindtextdomain($textdomain, "./locale");
 
         // model indexes
-        foreach ( $model->getSchemaModel()->getIndexNames() as $index )
+        foreach ( $model::getSchema()->getIndexNames() as $index )
         {
-          $fields = $model->getSchemaModel()->getIndexFields( $index );
+          $fields = $model::getSchema()->getIndexFields( $index );
           // @todo we only use the first, but it should really search all of them
           $property = $fields[0];
          
