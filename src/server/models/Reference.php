@@ -176,7 +176,7 @@ class Reference extends BaseModel
    */ 
   protected function getReferenceFolders()
   {
-    Folder_Reference::setDatasouce(static::getDatasource());
+    Folder_Reference::setDatasource(static::getDatasource());
     return $this->hasMany(Folder_Reference::className(), ['ReferenceId' => 'id'] );
   }  
 
@@ -185,7 +185,7 @@ class Reference extends BaseModel
    */ 
   public function getFolders()
   {
-    Folder::setDatasouce(static::getDatasource());
+    Folder::setDatasource(static::getDatasource());
     return $this->hasMany(Folder::className(), ['id' => 'FolderId'])->via('referenceFolders');
   }
 
@@ -201,32 +201,27 @@ class Reference extends BaseModel
 	static function getSchema()
 	{
     static $schema = null;
-    if ( is_null( $schma ) ){
+    if ( is_null( $schema ) ){
       $schema = new \lib\schema\BibtexSchema();
     }
 	  return $schema;
 	}
 
-	/**
-	 * Overridden to set "createdBy" column
-	 * @see qcl_data_model_AbstractActiveRecord#create()
-	 */
-	function create_notimplemented( $data=null )
-	{
-	  $activeUser = $this->getApplication()->getAccessController()->getActiveUser();
-	  $data['createdBy'] = $activeUser->namedId();
-	  return parent::create( $data );
-	}
 
 	/**
-	 * Overridden to set "modifiedBy" column
-	 * @see qcl_data_model_AbstractActiveRecord#save()
+	 * Overridden to set "modifiedBy"/"createdBy" columns
 	 */
-	function save_notImplemented()
+	function beforeSave($insert)
 	{
-	  $activeUser = $this->getApplication()->getAccessController()->getActiveUser();
-	  $this->set("modifiedBy", $activeUser->namedId() );
-	  return parent::save();
+    if (!parent::beforeSave($insert)) {
+      return false;
+    }
+    $activeUser = Yii::$app->user->getIdentity();
+    if ($insert){
+      $this->createdBy = $activeUser->getUsername();
+    } else {
+      $this->modifiedBy = $activeUser->getUsername();
+    }
 	}
 
   /**

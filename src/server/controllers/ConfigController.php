@@ -359,7 +359,7 @@ class ConfigController extends AppController
    * @return \app\models\Config
    * @throws \InvalidArgumentException If key does not exist
    */
-  protected function getModel( $key )
+  protected function getConfigModel( $key )
   {
     $config = Config::findOne(['namedId'=>$key]);
     if ( ! $config  ) {
@@ -480,7 +480,7 @@ class ConfigController extends AppController
    */
   public function setKeyDefault( $key, $value )
   {
-    $config = $this->getModel($key);
+    $config = $this->getConfigModel($key);
     if ( ! $config->final )
     {
       $config->default = $this->castType( $value, $this->keyType($key), false );
@@ -499,7 +499,7 @@ class ConfigController extends AppController
    */
   public function valueIsEditable( $key )
   {
-    $config = $this->getModel($key);
+    $config = $this->getConfigModel($key);
     return ! $config->final;
   }
 
@@ -510,7 +510,7 @@ class ConfigController extends AppController
    */
   public function valueIsCustomizable( $key )
   {
-    $config = $this->getModel($key);
+    $config = $this->getConfigModel($key);
     return $config->customize;
   }
 
@@ -522,7 +522,7 @@ class ConfigController extends AppController
    */
   public function getKeyDefault( $key )
   {
-    $config = $this->getModel( $key );
+    $config = $this->getConfigModel( $key );
     return $this->castType( $config->default, $this->keyType( $key ), true );
   }
 
@@ -538,7 +538,7 @@ class ConfigController extends AppController
   public function getKey( $key, $user=null )
   {
     if( ! $user ) $user = $this->getActiveUser();
-    $config = $this->getModel( $key );
+    $config = $this->getConfigModel( $key );
     return $this->castType( 
       $config->getUserConfigValue($user),
       $this->keyType( $key ),
@@ -555,7 +555,7 @@ class ConfigController extends AppController
    */
   public function setKey( $key, $value, $user=false)
   {
-    $config = $this->getModel( $key );
+    $config = $this->getConfigModel( $key );
     if( ! $user ) $user = $this->getActiveUser();
     if( ! $config->customize ) {
       throw new \LogicException( sprintf(
@@ -594,7 +594,7 @@ class ConfigController extends AppController
    */
 	public function deleteKey( $key, $user= false )
 	{
-    $config = $this->getModel( $key );
+    $config = $this->getConfigModel( $key );
     if( ! $user ) $user = $this->getActiveUser();
 	  UserConfig::deleteAll(['UserId' => $user->id]);
 	}
@@ -607,7 +607,7 @@ class ConfigController extends AppController
    */
   public function resetKey( $key, $user = false )
   {
-    $config = $this->getModel( $key );
+    $config = $this->getConfigModel( $key );
     if( ! $user ) $user = $this->getActiveUser();
     $userConfig = $config->getUserConfig($user);
     if( $userConfig ){
@@ -623,7 +623,7 @@ class ConfigController extends AppController
    */
   public function keyType( $key )
   {
-    $config = $this->getModel( $key );
+    $config = $this->getConfigModel( $key );
     return $this->getTypeString( $config->type );
   }
 

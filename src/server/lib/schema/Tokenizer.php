@@ -19,7 +19,7 @@
 
 ************************************************************************ */
 
-namespace bibliograph\schema;
+namespace lib\schema;
 
 /**
  * Class Tokenizer

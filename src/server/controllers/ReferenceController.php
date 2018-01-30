@@ -39,14 +39,14 @@ class ReferenceController extends AppController
   /**
    * The main model type of this controller
    */
-  static $modelClassType = "reference";
+  static $modelType = "reference";
 
   /**
    * Icons for the folder nodes, depending on type
    * @var array
    */
   static $icon = array(
-    "favorites"       => "icon/16/actions/help-about.png"
+    "favorites" => "icon/16/actions/help-about.png"
   );
 
   /**
@@ -57,9 +57,7 @@ class ReferenceController extends AppController
    */
   static function getFolderModel( $datasource )
   {
-    return Datasource
-      :: getInstanceFor( $datasource )
-      -> getClassFor( "folder" );
+    return Datasource :: in( $datasource, "folder" );
   }
 
   /*
@@ -69,49 +67,64 @@ class ReferenceController extends AppController
   */  
 
   /**
-   * Overridden to create qcl-compliant 'where' structure from a
-   * pseudo- CQL query string.
+   * Modifies the query with conditions supplied by the client
    *
-   * @see http://www.loc.gov/standards/sru/resources/cql-context-set-v1-2.html
-   *
+   * The client query looks like this:
+   * {
+   *   'datasource' : "<datasource name>",
+   *   'modelType' : "reference",
+   *   'query' : {
+   *     'properties' : ["author","title","year" ...],
+   *     'orderBy' : "author",
+   *     'relation' : {
+   *       'name' : "folder",
+   *       'id' : 3
+   *     }
+   *     'cql' : 
+   *   }
+   * }
    * @param stdClass $query
    *    The query data object from the json-rpc request
-   * @param qcl_data_db_Query $qclQuery
-   *    The query object used by the query behavior
-   * @param qcl_data_model_AbstractActiveRecord $modelClass
-   *    The model on which the query should be performed
+   * @param \yii\db\ActiveQuery $activeQuery
+   *    The query object used 
    * @throws JsonRpcException
    * @return qcl_data_db_Query
    */
-  public function addQueryConditions(
-    stdClass $query,
-    qcl_data_db_Query $qclQuery,
-    qcl_data_model_AbstractActiveRecord $modelClass )
+  public static function addQueryConditions(
+    \yii\db\ActiveQuery $activeQuery,
+    \stdClass $queryData )
   {
-    if ( isset( $query->link ) )
+    $query = $queryData->query;
+    if ( ! is_object( $query ) or
+         ! is_array(  $query->properties ) )
     {
-      $qclQuery->link = object2array( $query->link );
-      return $qclQuery;
+      throw new \InvalidArgumentException("Invalid query data");
     }
-    elseif ( isset ( $query->cql ) )
-    {
-      
-      $cql =  bibliograph_schema_CQL::getInstance();
-      try
-      {
-        $q = $cql->addQueryConditions( $query, $qclQuery, $modelClass );
-      }
-      catch( bibliograph_schema_Exception $e)
-      {
+
+    // @todo should be 'columns' or 'fields'
+    $activeQuery = $activeQuery->select( $query->properties ); 
+
+    // relation
+    if ( isset( $query->relation ) ) {
+      return $activeQuery
+        -> joinWith( $query->relation->name );
+       // -> onCondition( [ 'FolderId' => $query->relation->id ] );
+    }
+    
+    // cql
+    if ( isset ( $query->cql ) ){
+      throw new \Exception("CQL query not implememted");
+      $cql = new \lib\schema\CQL;
+      try {
+        $q = $cql->addQueryConditions( $query, $activeQuery, $modelClass );
+      } catch( bibliograph_schema_Exception $e) {
         throw new \Exception($e->getMessage());
       }
       $q->where['markedDeleted'] = false;
       return $q;
     }
-    else
-    {
-      throw new \Exception( Yii::t('app', "No recognized query format in request.") );
-    }
+
+    throw new \Exception( Yii::t('app', "No recognized query format in request.") );
   }
 
   /**
@@ -135,6 +148,20 @@ class ReferenceController extends AppController
     return $options;
   }
 
+  /**
+   * Returns the title label for the reference editor form
+   *
+   * @param \app\models\Reference $reference
+   * @return void
+   */
+  protected function getTitleLabel( $reference )
+  {
+    $datasource = $reference::getDatasource();
+    $ids = [$reference->id];
+    $style = "apa"; // @todo
+    return \app\controllers\CitationController :: render( $datasource, $ids, $style );
+  }
+
   /*
   ---------------------------------------------------------------------------
      ACTIONS
@@ -147,7 +174,6 @@ class ReferenceController extends AppController
    *
    * @param $datasource
    * @param null $modelClassType
-   * @return unknown_type
    */
   public function actionTableLayout( $datasource, $modelClassType=null )
   {
@@ -175,14 +201,72 @@ class ReferenceController extends AppController
           'width'   => "3*"
         )
       ),
+      /**
+       * This will feed back into addQueryConditions()  
+       */
       'queryData' => array(
-        'link'    => array( 'relation' => "Folder_Reference" ),
-        'orderBy' => "author,year,title",
+        'relation'  => array( 'name' => "folders" ),
+        'orderBy'   => "author,year,title",
       ),
       'addItems' => $this->getAddItemListData( $datasource, $modelClassType )
     );
   }
 
+ /**
+   * Returns count of rows that will be retrieved when executing the current
+   * query.
+   *
+   * param array $queryData data to construct the query. Needs at least the
+   * a string property "datasource" with the name of datasource and a property
+   * "modelType" with the type of the model.
+   * @throws \InvalidArgumentException
+   */
+  public function actionRowCount( $queryData )
+  {
+    $model = static :: getModel( $queryData->datasource, $queryData->modelType );
+    $model :: setDatasource( $queryData->datasource );
+    $activeQuery = $model :: find();
+
+    // add additional conditions from the client query
+    $query = $this->addQueryConditions( $activeQuery, $queryData );
+
+    // count number of rows
+    return $query->createCommand()->getRawSql();
+    $rowCount = $query->count();
+    return [
+      "rowCount"    => $rowCount,
+      'statusText'  => Yii::t('app', "{numberOfRecords} records",['numberOfRecords' => $rowCount])
+    ];
+  }
+
+  /**
+   * Returns row data executing a constructed query
+   *
+   * @param int $firstRow First row of queried data
+   * @param int $lastRow Last row of queried data
+   * @param int $requestId Request id
+   * @param object $queryData Data to construct the query
+   * @throws InvalidArgumentException
+   * return array Array containing the keys
+   *                int     requestId   The request id identifying the request (mandatory)
+   *                array   rowData     The actual row data (mandatory)
+   *                string  statusText  Optional text to display in a status bar
+   */
+  function actionRowData( $firstRow, $lastRow, $requestId, $queryData )
+  {
+    $model = static :: getModel( $queryData->datasource, $queryData->modelType );
+    $activeQuery = $model :: find()
+      -> orderBy( $query->orderBy )
+      -> offset( $firstRow )
+      -> limit( $lastRow - $firstRow + 1 );
+    $activeQuery = $this->addQueryConditions( $activeQuery, $queryData );
+    $rowData = $activeQuery->asArray()->all();
+    return array(
+      'requestId'  => $requestId,
+      'rowData'    =>  $rowData,
+      'statusText' => Yii::t('app',"Loaded records {firstRow} - {lastRow} ...", [ 'firstRow' => $firstRow, 'lastRow' => $lastRow ])
+    );
+  }
 
   /**
    * Returns the form layout for the given reference type and
@@ -288,7 +372,7 @@ class ReferenceController extends AppController
    * @param $arg2
    * @param null $arg3
    * @param null $arg4
-   * @throws InvalidArgumentException
+   * @throws \InvalidArgumentException
    * @return array
    * @todo: this method is called with different signatures!
    */
@@ -313,9 +397,9 @@ class ReferenceController extends AppController
     }
 
     // load model record and get reference type
-    $modelClass    = static::getControlledModel( $datasource )::findOne($id);
-    $reftype  = $modelClass->reftype;
-    $schema   = $modelClass->schema;
+    $record = static::getControlledModel( $datasource )::findOne($id);
+    $reftype  = $record->reftype;
+    $schema   = $record->schema;
 
     // determine the fields to return the values for
     $fields = array_merge(
@@ -335,7 +419,7 @@ class ReferenceController extends AppController
     $reference = array(
       'datasource'  => $datasource,
       'referenceId' => $id, // todo: replace by "id"
-      'titleLabel'  => $this->getTitleLabel( $modelClass )
+      'titleLabel'  => $this->getTitleLabel( $record )
     );
 
     foreach ( $fields as $field )
@@ -346,7 +430,7 @@ class ReferenceController extends AppController
         $this->warn("No field data for field '$field'");
         continue;
       }
-      $value = $modelClass->$field;
+      $value = $record->$field;
 
       // replace field separator with form separator if both exist
       $dataSeparator = isset( $fieldData['separator'] )
@@ -370,25 +454,6 @@ class ReferenceController extends AppController
     }
 
     return $reference;
-  }
-
-  /**
-   * ???
-   *
-   * @param [type] $modelClass
-   * @return void
-   */
-  protected function getTitleLabel( $modelClass )
-  {
-    return static::$modelType;
-    /*
-        "<b>" .
-        ($modelClass.author || data.editor || "No author" ).replace( /\n/, "/" ) +
-        " (" + ( data.year || "No year" ) + "): " +
-        ( data.title || "No title" ) +
-        "</b>"
-    );
-     */
   }
 
   /**

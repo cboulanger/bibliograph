@@ -66,7 +66,7 @@ class CitationController extends \app\controllers\AppController
   public function actionRenderItems( $datasource, $ids, $style )
   {
     //$data = $this->render_debug( $datasource, $ids, $style );
-    $data = $this->render( $datasource, $ids, $style );
+    $data = static :: render( $datasource, $ids, $style );
     //$this->debug($data);
     return $data;
   }
@@ -158,13 +158,13 @@ class CitationController extends \app\controllers\AppController
   }  
 
   /**
-   * Render the citations
+   * Render citations
    * @param $datasource
    * @param $ids
    * @param $style
    * @return array Array containing the key "html" with the rendered result
    */
-  protected function render( $datasource, $ids, $style )
+  public static function render( $datasource, $ids, $style )
   {
     $bibtexSchema = new \lib\schema\BibtexSchema;
     $citeproc = new \lib\csl\CiteProc($style);
@@ -172,7 +172,7 @@ class CitationController extends \app\controllers\AppController
     $data = array();
     $counter = 0;
 
-    $references = static :: getModel( $datasource, "reference" ) :: findAll($ids);
+    $references = static :: getModel( $datasource, "reference" ) :: findAll( $ids );
     foreach( $references as $reference )
     {
       $csl = $bibtexSchema->toCslRecord( $reference->getAttributes() );

@@ -4,9 +4,11 @@
 
 pushd ./src/server > /dev/null
 
-echo "Running Codeception tests..."
-#php vendor/bin/codecept run unit
-php vendor/bin/codecept run functional AccessCest --debug
+# echo "Running Unit tests..."
+# php vendor/bin/codecept run unit
+
+echo "Running functional tests.."
+php vendor/bin/codecept run functional ReferenceControllerCest --debug
 
 popd > /dev/null
 

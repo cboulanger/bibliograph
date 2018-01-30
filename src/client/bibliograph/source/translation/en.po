@@ -430,23 +430,23 @@ msgstr ""
 msgid "Loading table ..."
 msgstr ""
 
-#: bibliograph.ui.reference.ListView:972
+#: bibliograph.ui.reference.ListView:947
 msgid "You cannot create an item outside a folder"
 msgstr ""
 
-#: bibliograph.ui.reference.ListView:988
+#: bibliograph.ui.reference.ListView:963
 msgid "Do your really want to remove the selected references from this folder?"
 msgstr ""
 
-#: bibliograph.ui.reference.ListView:989
+#: bibliograph.ui.reference.ListView:964
 msgid "Do your really want to remove the selected references?"
 msgstr ""
 
-#: bibliograph.ui.reference.ListView:1013
+#: bibliograph.ui.reference.ListView:987
 msgid "Do your really want to move the selected references to '%1'?"
 msgstr ""
 
-#: bibliograph.ui.reference.ListView:1039
+#: bibliograph.ui.reference.ListView:1013
 msgid "Do your really want to copy the selected referencesto '%1'?"
 msgstr ""
 
@@ -454,11 +454,11 @@ msgstr ""
 msgid "Processing request..."
 msgstr ""
 
-#: bibliograph.ui.reference.ListView:1129
+#: bibliograph.ui.reference.ListView:1103
 msgid "Do you really want to make the folder empty, moving all references to the trash that are not in other folders?"
 msgstr ""
 
-#: bibliograph.ui.reference.ListView:1132
+#: bibliograph.ui.reference.ListView:1106
 msgid "Emptying the folder ..."
 msgstr ""
 
@@ -550,7 +550,7 @@ msgstr ""
 msgid "Duplicates"
 msgstr ""
 
-#: bibliograph.ui.item.TableViewUi:50
+#: bibliograph.ui.item.FormattedViewUi:72
 msgid "Print"
 msgstr ""
 
@@ -670,6 +670,30 @@ msgstr ""
 msgid "Do you really want to remove the reference from folder '%1'?"
 msgstr ""
 
-#: bibliograph.ui.reference.ListView:461
+#: bibliograph.ui.reference.ListView:412
 msgid "Loading table layout ..."
+msgstr ""
+
+#: qcl.data.controller.Table:317
+msgid "Loading rows %1 - %2 of %3 ..."
+msgstr ""
+
+#: bibliograph.ui.item.FormattedView:80
+msgid "Formatted View"
+msgstr ""
+
+#: bibliograph.ui.item.FormattedViewUi:58
+msgid "Style"
+msgstr ""
+
+#: bibliograph.ui.item.FormattedViewUi:65
+msgid "All Results"
+msgstr ""
+
+#: bibliograph.ui.item.FormattedViewUi:79
+msgid "Tabular View"
+msgstr ""
+
+#: bibliograph.ui.item.FormattedView:190
+msgid "Loading formatted citations..."
 msgstr ""

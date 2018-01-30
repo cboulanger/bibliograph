@@ -164,21 +164,15 @@ qx.Class.define("qcl.data.controller.Table",
        
        if ( target )
        {
-         /*
-          * catch the dataEdited event which is fired when the
-          * user has made a manual change to the data
-          */
+         // catch the dataEdited event which is fired when the
+         // user has made a manual change to the data
          //target.addListener("dataEdited", this._targetOnDataEdited, this );
          
-         /*
-          * catch events like add, remove, etc. 
-          */
+         // catch events like add, remove, etc. 
          //target.getTableModel().addListener("change", this._targetOnChange, this );
          
-         /*
-          * store a reference to controller in the model. This can be
-          * problematic if several Tables share a datasource.
-          */
+         // store a reference to controller in the model. This can be
+         // problematic if several Tables share a datasource.
          target.getTableModel().setController(this);
        }
        
@@ -206,9 +200,7 @@ qx.Class.define("qcl.data.controller.Table",
      {
        var targetModel  = this.getTarget().getTableModel();
         
-       /*
-        * clear the table if the model is set to null
-        */
+       // clear the table if the model is set to null
        if ( model === null )
        {
          targetModel.clearCache();
@@ -219,18 +211,13 @@ qx.Class.define("qcl.data.controller.Table",
        
        var requestId = model.getRequestId();
        
-       /*
-        * was this a row count request?
-        */
-       if ( model.getRowCount() !== null && this.__rowCountRequest )
-       {
+       // was this a row count request?
+       if ( model.getRowCount() !== null && this.__rowCountRequest ) {
          targetModel._onRowCountLoaded( model.getRowCount() );
          this.__rowCountRequest = false;
        }
        
-       /*
-        * was this a row data request? if yes, does the requestId fit?
-        */
+       // was this a row data request? if yes, does the requestId fit?
        else if ( model.getRowData() !== null 
            && qx.lang.Array.contains( this.__currentRequestIds, requestId ) )
        {
@@ -251,11 +238,8 @@ qx.Class.define("qcl.data.controller.Table",
       */
      reload : function()
      {
-       if( this.getTarget() && this.getStore() )
-       {
-         /*
-          * visually reset the table
-          */
+       if( this.getTarget() && this.getStore() ) { 
+        // visually reset the table
          var table = this.getTarget();
          var model = table.getTableModel();
          table.resetSelection();
@@ -290,9 +274,7 @@ qx.Class.define("qcl.data.controller.Table",
        
       this.fireDataEvent("statusMessage", app.tr( "Getting number of rows..." ) );
 
-       /*
-        * load the row count and pass it to th model
-        */
+       // load the row count and pass it to th model
        store.load( marshaler.getMethodGetRowCount(), params, function(){
          this.fireDataEvent( "statusMessage", null );
          this.__rowCount = store.getModel().getRowCount();
@@ -309,15 +291,11 @@ qx.Class.define("qcl.data.controller.Table",
      */
      _loadRowData : function( firstRow, lastRow ) 
      {
-        
        //if ( this.__rowDataRequest ) return;
        //this.info( "Requesting " + firstRow + " - " + lastRow );
       
-       /*
-        * prevent retrieving the same data more than once
-        */
-       if ( firstRow === this.__firstRow )
-       {
+       // prevent retrieving the same data more than once
+       if ( firstRow === this.__firstRow ) {
          return;
        }      
        this.__firstRow = firstRow;
@@ -325,40 +303,28 @@ qx.Class.define("qcl.data.controller.Table",
        var store = this.getStore();
        var marshaler = store.getMarshaler();
        var tableModel = this.getTarget().getTableModel();
-       var app = qx.core.Init.getApplication();
 
-       /*
-        * store request id so that we can differentiate different
-        * tables connected to the same store
-        */
+       // store request id so that we can differentiate different
+       // tables connected to the same store
        var requestId = store.getNextRequestId(); 
        this.__currentRequestIds.push( requestId );
        
-       /*
-        * add firstRow, lastRow, requestId at the beginning of the 
-        * parameters
-        * @todo do we really need the request id?
-        */
+       // add firstRow, lastRow, requestId at the beginning of the 
+       // parameters
+       // @todo do we really need the request id?
        var params = [firstRow, lastRow, requestId].concat( marshaler.getQueryParams() );
          
-       this.fireDataEvent("statusMessage", app.tr(
+       this.fireDataEvent("statusMessage", this.tr(
           "Loading rows %1 - %2 of %3 ...",
           firstRow, Math.min( lastRow, this.__rowCount), this.__rowCount 
         ) /*,this.getTarget() */);
        
-       /*
-        * load data
-        * @todo Catch server errors to avoid to break the remote table
-        * model when something goes wrong on the server
-        */
-       store.load( marshaler.getMethodGetRowData(), params, function()
-       {
-
-         this.fireDataEvent("statusMessage",null);
+      // load data
+      store.load( marshaler.getMethodGetRowData(), params)
+      .then(()=>{
+        this.fireDataEvent("statusMessage",null);
         
-        /*
-         * check data
-         */
+        // check data
         var rowData = store.getModel().getRowData();
         if ( ! qx.lang.Type.isArray( rowData ) || ! rowData.length )
         {
@@ -366,19 +332,19 @@ qx.Class.define("qcl.data.controller.Table",
           rowData = null;
         }
         
-        /*
-         * pass data to the table model
-         */
+        // pass data to the table model
         tableModel._onRowDataLoaded( rowData );
         
-        /*
-         * fire event
-         */
+        // fire event
         this.fireDataEvent("blockLoaded",{
           'firstRow' : firstRow,
           'lastRow'  : lastRow
         });
-       }, this );
+      })
+      .catch((err)=>{
+        this.warn(err);
+        tableModel._onRowDataLoaded( null );
+      });
      },
      
      /*

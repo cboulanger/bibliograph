@@ -18,20 +18,18 @@
 
 ************************************************************************ */
 
-require_once "bibliograph/lib/cql/cql2.php";
-require_once "bibliograph/schema/Tokenizer.php";
+namespace lib\schema\cql;
 
-
-
+use \Yii;
+use Parser;
+use \lib\schema\Tokenizer;
 
 /**
- * Singleton object which acts as a tool for working with the CQL query
- * language
+ * Tool for working with the CQL query language
  *
  * @see http://www.loc.gov/standards/sru/resources/cql-context-set-v1-2.html
  */
-class bibliograph_schema_CQL
-  extends qcl_core_Object
+class Query extends \yii\base\BaseObject
 {
 
   /**
@@ -55,6 +53,7 @@ class bibliograph_schema_CQL
 
   /**
    * Exists only for POEditor to pick up the translation messages.
+   * @todo Yii'ify
    */
   function marktranslations()
   {
@@ -63,24 +62,6 @@ class bibliograph_schema_CQL
     _("startswith");
   }
 
-  /**
-   * Returns singleton sinstance
-   * @return bibliograph_schema_CQL
-   */
-  public static function getInstance()
-  {
-    return qcl_getInstance( __CLASS__ );
-  }
-
-  /**
-   * @overridden
-   * @param mixed $msg
-   */
-  public function log( $msg )
-  {
-    parent::log( $msg, BIBLIOGRAPH_LOG_SCHEMA);
-  }
-  
   /**
    * Constructor
    */
@@ -97,13 +78,13 @@ class bibliograph_schema_CQL
   /**
    * Returns the dictionary of words to be translated into english
    * booleans, modifiers or object properties
-   * @param bibliograph_model_ReferenceModel $model
+   * @param \app\models\Reference $model
    * @return array The dictionary for the model
    */
-  protected function getDictionary(bibliograph_model_ReferenceModel $model)
+  protected function getDictionary( \app\models\Reference $model)
   {
-    
-    $modelClass = $model->className();
+    not_implemented(); 
+    $modelClass = get_class($model);
     if( ! $this->dictionary[ $modelClass ] )
     {
       $localeMgr = qcl_locale_Manager::getInstance();
@@ -174,26 +155,22 @@ class bibliograph_schema_CQL
     qcl_data_db_Query $qclQuery,
     bibliograph_model_ReferenceModel $model
   ){
-    /*
-     * get qcl query
-     */
+    not_implemented(); 
+    // get qcl query
     $error = "First argument must be object and have a 'cql' property";
     qcl_assert_has_property( $query, "cql", $error );
     qcl_assert_valid_string( $query->cql, $error );
     $cqlQuery = trim($query->cql);
 
-    /*
-     * Translate operators, booleans and indexes.
-     */
-    $tokenizer    = new bibliograph\schema\Tokenizer($cqlQuery);
+    // Translate operators, booleans and indexes.
+    $tokenizer    = new lib\schema\Tokenizer($cqlQuery);
     $tokens       = $tokenizer->tokenize();
     $dict         = $this->getDictionary($model);
     $operators    = array_merge($this->booleans,$this->modifiers);
     $hasOperator  = false;
     $translTokens = array();
 
-    do
-    {
+    do {
       $token = mb_strtolower( array_shift( $tokens ), "UTF-8" );
 
       // do not translate quoted expressions
@@ -247,10 +224,8 @@ class bibliograph_schema_CQL
       $cqlQuery = implode( " and ", $translTokens );
     }
 
-    /*
-     * create and configure parser object
-     */
-    $parser = new cql_Parser( $cqlQuery );
+    // create and configure parser object
+    $parser = new Parser( $cqlQuery );
     $parser->setBooleans( $this->booleans );
     $parser->setModifiers( $this->modifiers );
     $parser->setSortWords( array("sortby" ) );

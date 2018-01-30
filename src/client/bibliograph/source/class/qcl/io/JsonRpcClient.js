@@ -135,7 +135,13 @@ qx.Class.define("qcl.io.JsonRpcClient", {
         return e.rpcData;
       }
       if ( typeof e.message == "string" ){
-        return e.message.substring(0,100);
+        // shorten message
+        let msg = e.message.substring(0,100);
+        // use only the first part
+        if( msg.includes(":") ){
+          msg = msg.substring(0,msg.indexOf(':')-1);
+        }
+        return msg;
       }
       return "Unknown Error";
     },

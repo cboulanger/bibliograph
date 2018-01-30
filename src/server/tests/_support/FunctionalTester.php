@@ -84,8 +84,8 @@ class FunctionalTester extends \Codeception\Actor
     $this->canSeeResponseCodeIs(200);
     $this->seeResponseIsJson();
     if( ! $allowError ){
-      $this->seeJsonRpcResult();
       $this->dontSeeJsonRpcError();
+      $this->seeJsonRpcResult();
     }
   }
   
@@ -167,6 +167,8 @@ class FunctionalTester extends \Codeception\Actor
    */  
   public function dontSeeJsonRpcError()
   {
+    $error = $this->grabDataFromResponseByJsonPath('$.error');
+    if( count($error) ) codecept_debug($error[0]);
     $this->dontSeeResponseJsonMatchesJsonPath('$.error');
   }
 

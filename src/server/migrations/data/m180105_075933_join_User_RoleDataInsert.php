@@ -53,6 +53,6 @@ class m180105_075933_join_User_RoleDataInsert extends Migration
 
     public function safeDown()
     {
-        $this->truncateTable('{{%join_User_Role}} CASCADE');
+        $this->truncateTable('{{%join_User_Role}}');
     }
 }

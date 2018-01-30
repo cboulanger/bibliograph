@@ -56,6 +56,6 @@ class m180105_075452_data_UserDataInsert extends Migration
 
     public function safeDown()
     {
-        $this->truncateTable('{{%data_User}} CASCADE');
+        $this->truncateTable('{{%data_User}}');
     }
 }

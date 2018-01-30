@@ -69,7 +69,7 @@ class BaseModel extends ActiveRecord
    */
   public static function getDb()
   {
-    if( static::$datasource ){
+    if( static :: $datasource ){
       return Datasource::getInstanceFor( static::$datasource )->getConnection();
     }
     return parent::getDb();
@@ -85,7 +85,7 @@ class BaseModel extends ActiveRecord
   public static function setDatasource($datasourceName)
   {
     if( empty($datasourceName) or ! is_string($datasourceName) ) throw new \InvalidArgumentException("Invalid Datasource name");
-    self::$datasource = $datasourceName;
+    static :: $datasource = $datasourceName;
     return \get_called_class();
   }
 
@@ -95,7 +95,7 @@ class BaseModel extends ActiveRecord
    */
   public static function getDatasource()
   {
-    return self::$datasource;
+    return static :: $datasource;
   }
 
 
@@ -111,7 +111,7 @@ class BaseModel extends ActiveRecord
    */
   public static function findByNamedId( $namedId )
   {
-    return static::findOne( ['namedId' => $namedId ] );
+    return static :: findOne( ['namedId' => $namedId ] );
   }
 
 

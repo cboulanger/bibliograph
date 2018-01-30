@@ -46,6 +46,6 @@ class m180105_075537_data_RoleDataInsert extends Migration
 
     public function safeDown()
     {
-        $this->truncateTable('{{%data_Role}} CASCADE');
+        $this->truncateTable('{{%data_Role}}');
     }
 }

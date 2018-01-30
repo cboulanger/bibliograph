@@ -31,40 +31,44 @@ qx.Class.define("bibliograph.ui.main.ItemViewUi", {
       this
     );
 
-    /*
-     * stack view
-     */
+    // stack view
     var itemViewStack = new qx.ui.container.Stack();
     this.itemViewStack = itemViewStack;
     itemView.add(itemViewStack, {
       flex: 1
     });
 
-    /*
-     * reference editor
-     */
+    // reference editor
     var referenceEditor = new bibliograph.ui.item.ReferenceEditorUi();
     referenceEditor.setWidgetId("bibliograph/referenceEditor");
     referenceEditor.setVisibility("hidden");
     itemViewStack.add(referenceEditor);
     referenceEditor.setUserData("name", "referenceEditor");
-    
-    // bind appication state
     this.getApplication().bind("datasource", referenceEditor, "datasource");
     this.getApplication().bind("modelType", referenceEditor, "modelType");
     this.getApplication().bind("modelId", referenceEditor, "referenceId");
 
-    /*
-     * display of reference as a table
-     */
+    // table view
     var tableView = new bibliograph.ui.item.TableViewUi();
     tableView.setVisibility("hidden");
     itemViewStack.add(tableView);
     tableView.setUserData("name", "tableView");
 
-    /*
-     * event handlers
-     */
+    // formatted vieqw
+    var formattedView = new bibliograph.ui.item.FormattedViewUi();
+    itemView.addView("formattedView", formattedView);
+    var button = new qx.ui.menubar.Button(this.tr("Formatted View"));
+    button.addListener("click", function() {
+      itemView.setView("formattedView");
+    });
+    itemView.getViewByName("tableView").menuBar.add(button);
+    var button = new qx.ui.menubar.Button(this.tr("Formatted View"));
+    button.addListener("click", function() {
+      itemView.setView("formattedView");
+    });
+    itemView.getViewByName("referenceEditor").menuBar.add(button);    
+
+    // event handlers
     qx.event.message.Bus
       .getInstance()
       .subscribe("user.loggedin", this.toggleReferenceView, this);

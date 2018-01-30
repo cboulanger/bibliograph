@@ -23,30 +23,30 @@ class DatasourceTest extends Base
 
   public function testDatasourceExists()
   {
-    $datasource = Datasource::findOne(['namedId'=>'test']);
+    $datasource = Datasource::findOne(['namedId'=>'database1']);
     $this->assertEquals(false, is_null($datasource), "Cannot find datasource 'database1'");
     $this->assertEquals('mysql', $datasource->type);
   }
 
   public function testDatasourceInstance()
   {
-    $datasource = Datasource::getInstanceFor('test');
+    $datasource = Datasource::getInstanceFor('database1');
     $this->assertEquals('app\models\BibliographicDatasource',\get_class($datasource));
     $this->assertEquals('mysql:host=localhost;port=3306;dbname=tests', $datasource->getConnection()->dsn);
   }
 
   public function testDatasourceModels()
   {
-    $datasource = Datasource::getInstanceFor('test');
+    $datasource = Datasource::getInstanceFor('database1');
     $folderClass = $datasource->getClassFor('folder');
     $this->assertEquals( 'app\models\Folder', $folderClass );
-    $this->assertEquals( 'test', $folderClass::getDatasource() );
+    $this->assertEquals( 'database1', $folderClass::getDatasource() );
     $this->assertSame( $folderClass::getDb(), $datasource->getConnection(), "Model does not inherit connection from datasource." );
     $folder = $folderClass::findOne(['label'=>'Hauptordner']);
     $this->assertFalse( is_null($folder), "Folder model not found." );
-    $this->assertEquals( Datasource::in('test','folder'), $datasource->getClassFor('folder') );
-    $this->assertEquals( Datasource::in('test.reference'), $datasource->getClassFor('reference') );
-    $numEnglishRefs = Datasource::in('test.reference')::find()->where(['language'=>'English'])->count();
+    $this->assertEquals( Datasource::in('database1','folder'), $datasource->getClassFor('folder') );
+    $this->assertEquals( Datasource::in('database1.reference'), $datasource->getClassFor('reference') );
+    $numEnglishRefs = Datasource::in('database1.reference')::find()->where(['language'=>'English'])->count();
     $this->assertEquals( 15, $numEnglishRefs );    
   }
 

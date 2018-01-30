@@ -80,11 +80,11 @@ msgstr ""
 msgid "Retrieving user data..."
 msgstr "Lade Benutzerdaten ..."
 
-#: bibliograph.ui.item.TableViewUi:50
+#: bibliograph.ui.item.FormattedViewUi:72
 msgid "Print"
 msgstr "Drucken"
 
-#: bibliograph/theme/Assets.js:72
+#: bibliograph.ui.item.FormattedViewUi:58
 msgid "Style"
 msgstr "Zitierstil"
 
@@ -92,11 +92,11 @@ msgstr "Zitierstil"
 msgid "All in folder"
 msgstr "Alle im Ordner"
 
-#: bibliograph/theme/Assets.js:74
+#: bibliograph.ui.item.FormattedViewUi:79
 msgid "Tabular View"
 msgstr "Tabellarische Ansicht"
 
-#: bibliograph/theme/Assets.js:75
+#: bibliograph.ui.item.FormattedView:80
 msgid "Formatted View"
 msgstr "Formatierte Ansicht"
 
@@ -104,7 +104,7 @@ msgstr "Formatierte Ansicht"
 msgid "Generate formatted citations ..."
 msgstr "Formatiere die Datensätze ..."
 
-#: bibliograph/theme/Assets.js:81
+#: qcl.data.controller.Table:317
 msgid "Loading rows %1 - %2 of %3 ..."
 msgstr "Lade Datensätze %1 - %2 von %3 ..."
 
@@ -348,23 +348,23 @@ msgstr "Suchausdruck"
 msgid "Loading table ..."
 msgstr "Lade Tabelle ..."
 
-#: bibliograph.ui.reference.ListView:972
+#: bibliograph.ui.reference.ListView:947
 msgid "You cannot create an item outside a folder"
 msgstr "Sie können keinen Datensatz außerhalb eines Ordners erstellen"
 
-#: bibliograph.ui.reference.ListView:988
+#: bibliograph.ui.reference.ListView:963
 msgid "Do your really want to remove the selected references from this folder?"
 msgstr "Möchten Sie die ausgewählten Datensätze wirklich aus diesem Ordner entfernen?\t"
 
-#: bibliograph.ui.reference.ListView:989
+#: bibliograph.ui.reference.ListView:964
 msgid "Do your really want to remove the selected references?"
 msgstr "Wollen Sie wirklich die ausgewählten Datensätze entfernen?"
 
-#: bibliograph.ui.reference.ListView:1013
+#: bibliograph.ui.reference.ListView:987
 msgid "Do your really want to move the selected references to '%1'?"
 msgstr "Wollen Sie wirklich die augewählten Datensätze nach '%1' verschieben?"
 
-#: bibliograph.ui.reference.ListView:1039
+#: bibliograph.ui.reference.ListView:1013
 msgid "Do your really want to copy the selected referencesto '%1'?"
 msgstr "Wollen Sie wirklich die ausgewählten Datensätze nach '%1' kopieren?"
 
@@ -672,11 +672,11 @@ msgstr ""
 msgid "Forgot Password?"
 msgstr ""
 
-#: bibliograph.ui.reference.ListView:1129
+#: bibliograph.ui.reference.ListView:1103
 msgid "Do you really want to make the folder empty, moving all references to the trash that are not in other folders?"
 msgstr ""
 
-#: bibliograph.ui.reference.ListView:1132
+#: bibliograph.ui.reference.ListView:1106
 msgid "Emptying the folder ..."
 msgstr ""
 
@@ -720,6 +720,14 @@ msgid_plural "%1 of %2 rows"
 msgstr[0] ""
 msgstr[1] ""
 
-#: bibliograph.ui.reference.ListView:461
+#: bibliograph.ui.reference.ListView:412
 msgid "Loading table layout ..."
+msgstr ""
+
+#: bibliograph.ui.item.FormattedViewUi:65
+msgid "All Results"
+msgstr ""
+
+#: bibliograph.ui.item.FormattedView:190
+msgid "Loading formatted citations..."
 msgstr ""

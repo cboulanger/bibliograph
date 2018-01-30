@@ -172,17 +172,27 @@ class AppController extends \JsonRpc2\Controller
   }
 
   /**
+   * Returns the class name of the given model type of the controller as determined by the datasource
+   * @param string $datasource
+   * @param string $modelType
+   * @return string
+   */
+  static public function getModel( $datasource, $modelType )
+  {
+    return  
+      Datasource
+        :: getInstanceFor( $datasource )
+        -> getClassFor( $modelType );
+  }
+
+  /**
    * Returns the class name of the main model type of the controller as determined by the datasource
-   * @todo check datasource access
    * @param string $datasource
    * @return string
    */
   static public function getControlledModel( $datasource )
   {
-    return  
-      Datasource
-        :: getInstanceFor( $datasource )
-        -> getClassFor( static::$modelType );
+    return static :: getModel( $datasource, static :: $modelType );
   }
 
   /**

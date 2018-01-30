@@ -391,58 +391,9 @@ qx.Class.define("bibliograph.ui.reference.ListView",
       }
     },
 
-    /**
-     * Tries to select the rows with the given ids.
-     * @return {Boolean} Returns true if successful
-     * and false if the ids could not be determined
-     */
-    _selectIds : function(ids)
-    {
-      if ( this.__ignoreChangeSelection ) {
-        return;
-      }
-
-      if( ! ids ) {
-        // remove selection?
-        return;
-      }
-
-      //console.log("old selection is " + this.__selectedIds + ", new selection is " + ids);
-      if( this.__selectedIds && ""+ids == ""+this.__selectedIds) {
-        //console.log("Same, same");
-        return;
-      }
-      this.__selectedIds = ids;
-
-      //console.log("Selecting " + ids );
-      var table = this.getTable();
-      var selectionModel = table.getSelectionModel();
-
-      selectionModel.resetSelection();
-      this.__ignoreChangeSelection = true;
-
-      ids.forEach(function(id){
-        var row = table.getTableModel().getRowById(id);
-        //console.log("Id " + id + " is row "+ row);
-        if ( row !== undefined )
-        {
-          selectionModel.addSelectionInterval(row,row);
-          table.scrollCellVisible(0,row);
-        } else {
-          //console.log("Cannot select row with id " + id + ". Data not loaded yet.");
-          this.__selectedIds = null;
-        }
-      },this);
-
-      this.__ignoreChangeSelection = false;
-
-      return this.__selectedIds ? true: false;
-
-    },
-
     /*
     ---------------------------------------------------------------------------
-      internal methods
+      SETUP TABLE
     ---------------------------------------------------------------------------
     */
 
@@ -463,6 +414,11 @@ qx.Class.define("bibliograph.ui.reference.ListView",
       //console.log([this.getServiceName(), this.getDatasource(), this.getModelType() ]);
       let client = this.getApplication().getRpcClient(this.getServiceName());
       let data = await client.send( "table-layout", [this.getDatasource(), this.getModelType()]);
+      if( data === null ) {
+        this.warn("Loading table layout failed.");
+        this.__loadingTableStructure = false;
+        return;
+      }
       this.showMessage("");
 
       // create the table
@@ -477,12 +433,12 @@ qx.Class.define("bibliograph.ui.reference.ListView",
 
     /**
      * Creates the table layout from data sent by the server
-     * @param data {Map} layout data
+     * @param data {Map} layout data from server
      */
     _createTableLayout : function(data)
     {
       /*
-       * todo: Dispose old table and connected objects if they
+       * @todo: Dispose old table and connected objects if they
        * exist. this will result in a fatal error if done as below
        */
       var table = this.getTable();
@@ -495,53 +451,36 @@ qx.Class.define("bibliograph.ui.reference.ListView",
         //        table.dispose();
       }
 
-      /*
-       * create table
-       */
+      // create table
       table = this._createTable(data.columnLayout);
       table.getSelectionModel().addListener("changeSelection", this._on_table_changeSelection, this);
 
-      /*
-       * save columns
-       */
+      // save columns
       var columnIds = [];
       for (var columnId in data.columnLayout) {
         columnIds.push(columnId)
       }
       this.setColumnIds(columnIds);
 
-      /*
-       * query data
-       */
+      // query data
       this.setQueryData(data.queryData);
 
-      /*
-       * save a reference to the table widget
-       */
+      // save a reference to the table widget
       this.setTable(table);
 
-      /*
-       * add to the layout
-       */
+      // add to the container
       this.getTableContainer().add(table);
 
-      /*
-       * marshaler, set the datasource and a null
-       * value for query data.
-       */
+      // marshaler
       var marshaler = new qcl.data.marshal.Table();
       this.setMarshaler(marshaler);
 
-      /*
-       * create store
-       */
+      // create store
       var store = new qcl.data.store.JsonRpcStore(this.getServiceName(), marshaler);
       this.setStore(store);
 
-      /*
-       * the controller propagates data changes between table and store. note
-       * that you don't have to setup the bindings manually
-       */
+      // the controller propagates data changes between table and store. note
+      // that you don't have to setup the bindings manually
       var controller = new qcl.data.controller.Table(table, store);
       this.setController(controller);
 
@@ -550,9 +489,8 @@ qx.Class.define("bibliograph.ui.reference.ListView",
         this.showMessage(e.getData());
       }, this);
 
-      /*
-       * create reference type list
-       */
+      // create reference type list
+      // @todo refactor this
       if (data.addItems && data.addItems.length)
       {
         var model = qx.data.marshal.Json.createModel(data.addItems);
@@ -585,9 +523,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
      */
     _createTable : function(columnLayout)
     {
-      /*
-       * analyze table info
-       */
+      // analyze table info
       var columnIds = [], columnHeaders = [];
       for (var columnId in columnLayout)
       {
@@ -596,22 +532,16 @@ qx.Class.define("bibliograph.ui.reference.ListView",
       }
       var tableModel = new qcl.data.model.Table();
 
-      /*
-       * set column labels and id
-       */
+      // set column labels and id
       tableModel.setColumns(columnHeaders, columnIds);
 
-      /*
-       * set columns editable
-       */
+      // set columns (un-)editable and unsortable
       for (var i = 0; i < columnIds.length; i++) {
         tableModel.setColumnEditable(i, columnLayout[columnIds[i]].editable || false);
         tableModel.setColumnSortable(i,false);
       }
 
-      /*
-       * create table
-       */
+      // create table
       var custom = {
         tableColumnModel : function(obj) {
           return new qx.ui.table.columnmodel.Resize(obj);
@@ -619,12 +549,9 @@ qx.Class.define("bibliograph.ui.reference.ListView",
       };
       var table = new qx.ui.table.Table(tableModel, custom);
 
-      /*
-       * Use special cell editors and cell renderers
-       */
+      // Use special cell editors and cell renderers
       var tcm = table.getTableColumnModel();
-      for (var i = 0; i < columnIds.length; i++)
-      {
+      for (var i = 0; i < columnIds.length; i++) {
         if (columnLayout[columnIds[i]].visible !== undefined) {
           tcm.setColumnVisible(i, columnLayout[columnIds[i]].visible);
         }
@@ -636,36 +563,30 @@ qx.Class.define("bibliograph.ui.reference.ListView",
         }
       }
 
-      /*
-       * set selection mode
-       */
+      // set selection mode
       table.getSelectionModel().setSelectionMode(qx.ui.table.selection.Model.MULTIPLE_INTERVAL_SELECTION);
 
-      /*
-       * set width of columns
-       */
+      // set width of columns
       var behavior = table.getTableColumnModel().getBehavior();
       behavior.setInitializeWidthsOnEveryAppear(true);
       for (var i = 0; i < columnIds.length; i++) {
         behavior.setWidth(i, columnLayout[columnIds[i]].width);
       }
+
+      // other table layout settings
       table.setKeepFirstVisibleRowComplete(true);
       table.setShowCellFocusIndicator(false);
       table.setStatusBarVisible(false);
 
-      /*
-       * listeners
-       */
+      // listeners
       //tableModel.addListener("dataChanged", this._retryApplySelection, this);
 
       return table;
     },
 
-
-
     /*
     ---------------------------------------------------------------------------
-       EVENT LISTENERS
+       EVENT HANDLERS
     ---------------------------------------------------------------------------
     */
 
@@ -819,9 +740,64 @@ qx.Class.define("bibliograph.ui.reference.ListView",
 
     /*
     ---------------------------------------------------------------------------
-       API METHODS
+       HELPER METHODS
     ---------------------------------------------------------------------------
     */
+
+    /**
+     * Tries to select the rows with the given ids.
+     * @return {Boolean} Returns true if successful
+     * and false if the ids could not be determined
+     */
+    _selectIds : function(ids)
+    {
+      if ( this.__ignoreChangeSelection ) {
+        return;
+      }
+
+      if( ! ids ) {
+        // remove selection?
+        return;
+      }
+
+      //console.log("old selection is " + this.__selectedIds + ", new selection is " + ids);
+      if( this.__selectedIds && ""+ids == ""+this.__selectedIds) {
+        //console.log("Same, same");
+        return;
+      }
+      this.__selectedIds = ids;
+
+      //console.log("Selecting " + ids );
+      var table = this.getTable();
+      var selectionModel = table.getSelectionModel();
+
+      selectionModel.resetSelection();
+      this.__ignoreChangeSelection = true;
+
+      ids.forEach(function(id){
+        var row = table.getTableModel().getRowById(id);
+        //console.log("Id " + id + " is row "+ row);
+        if ( row !== undefined )
+        {
+          selectionModel.addSelectionInterval(row,row);
+          table.scrollCellVisible(0,row);
+        } else {
+          //console.log("Cannot select row with id " + id + ". Data not loaded yet.");
+          this.__selectedIds = null;
+        }
+      },this);
+
+      this.__ignoreChangeSelection = false;
+
+      return this.__selectedIds ? true: false;
+
+    },
+
+    /*
+    ---------------------------------------------------------------------------
+       API METHODS
+    ---------------------------------------------------------------------------
+    */    
 
     /**
      * Shows a status message
@@ -862,8 +838,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
         return;
       }
 
-      try
-      {
+      try {
         if (this.__loadingTableStructure) {
           this.info("We're still loading, ignoring load request...");
           return;
@@ -906,10 +881,10 @@ qx.Class.define("bibliograph.ui.reference.ListView",
             {
               'properties' : this.getColumnIds(),
               'orderBy' : this.getQueryData().orderBy,
-              'link' :
+              'relation' :
               {
-                'relation' : this.getQueryData().link.relation,
-                'foreignId' : this.getFolderId()
+                'name' : this.getQueryData().relation.name,
+                'id' : this.getFolderId()
               }
             }
           }]);
@@ -1005,8 +980,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
       win.addListenerOnce("nodeSelected", function(e)
       {
         var node = e.getData();
-        if (!node)
-        {
+        if (!node) {
           dialog.Dialog.alert("No folder selected. Try again");
           return;
         }

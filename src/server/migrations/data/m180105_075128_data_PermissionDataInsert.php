@@ -199,6 +199,6 @@ class m180105_075128_data_PermissionDataInsert extends Migration
 
     public function safeDown()
     {
-        $this->truncateTable('{{%data_Permission}} CASCADE');
+        $this->truncateTable('{{%data_Permission}}');
     }
 }

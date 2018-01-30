@@ -19,6 +19,8 @@ echo "Running migrations..."
 echo "travis_fold:start:migrations"
 pushd $SERVER_PATH > /dev/null
 php yii migrate/fresh --interactive=0 --db=testdb -p=@app/migrations/schema
+php yii migrate/up --interactive=0 --db=testdb -p=@app/tests/migrations
+
 echo "travis_fold:end:migrations"
 popd > /dev/null
 

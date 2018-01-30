@@ -98,6 +98,6 @@ class m180105_075548_data_ConfigDataInsert extends Migration
 
     public function safeDown()
     {
-        $this->truncateTable('{{%data_Config}} CASCADE');
+        $this->truncateTable('{{%data_Config}}');
     }
 }

@@ -197,6 +197,6 @@ class m180105_075600_join_Permission_RoleDataInsert extends Migration
 
     public function safeDown()
     {
-        $this->truncateTable('{{%join_Permission_Role}} CASCADE');
+        $this->truncateTable('{{%join_Permission_Role}}');
     }
 }
