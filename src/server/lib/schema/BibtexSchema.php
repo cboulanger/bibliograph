@@ -20,14 +20,13 @@
 
 namespace lib\schema;
 
+use Yii;
 
 /**
  * Class containing data on the BibTex Format
  */
-class BibtexSchema
-  extends \lib\schema\AbstractSchema
+class BibtexSchema extends \lib\schema\AbstractSchema
 {
-
   /**
    * The default reference type
    * @var string
@@ -809,32 +808,22 @@ class BibtexSchema
    * @param $input
    * @return object
    */
-  public function toCslRecord( $input )
+  public function toCslRecord( array $input )
   {
-    qcl_assert_array( $input );
     $record = array();
     foreach( $input as $key => $value )
     {
-      /*
-       * skip empy values
-       */
+      // skip empy values
       if ( $value === null or $value === "" ) continue;
 
-      /*
-       * get field data, if exists for the field
-       */
-      try
-      {
+      // get field data, if exists for the field
+      try {
         $fieldData = $this->getFieldData( $key );
-      }
-      catch( InvalidArgumentException $e )
-      {
+      } catch( InvalidArgumentException $e ) {
         continue;
       }
 
-      /*
-       * transform field
-       */
+      // transform field
       switch( $key )
       {
         case "reftype":
@@ -884,8 +873,7 @@ class BibtexSchema
 
         default:
           $csl = $fieldData['csl'];
-          if( $csl )
-          {
+          if( $csl ) {
             $record[ $csl ] = $value;
           }
           break;
