@@ -204,7 +204,7 @@ class bibliograph_service_Backup
     return \lib\dialog\Confirm::create(
       Yii::t('app',"Do you want to backup Database '%s'", $datasource),
       null,
-      $this->serviceName(), "createBackup", array( $datasource )
+      Yii::$app->controller->id, "createBackup", array( $datasource )
     );
   }
 
@@ -250,7 +250,7 @@ class bibliograph_service_Backup
     return \lib\dialog\Confirm::create(
       $msg,
       null,
-      $this->serviceName(), "dialogChooseBackup", array( $datasource )
+      Yii::$app->controller->id, "dialogChooseBackup", array( $datasource )
     );
   }
 
@@ -303,7 +303,7 @@ class bibliograph_service_Backup
       Yii::t('app',"Please select the backup set to restore into database '%s'",$datasource),
       $formData,
       true,
-      $this->serviceName(), "restoreBackup", array( $datasource )
+      Yii::$app->controller->id, "restoreBackup", array( $datasource )
     );
   }
 
@@ -408,7 +408,7 @@ class bibliograph_service_Backup
     return \lib\dialog\Confirm::create(
       Yii::t('app',"All backups older than one day will be deleted. Proceed?"),
       null,
-      $this->serviceName(), "deleteBackups", array( $datasource )
+      Yii::$app->controller->id, "deleteBackups", array( $datasource )
     );
   }
 

@@ -103,7 +103,7 @@ class bibliograph_service_reference_FindReplace
       Yii::t('app', "You can do a 'find and replace' operation on all or selected records in the database. These changes cannot easily be undone, that is why it is recommended to create a backup."),
       $formData,
       true,
-      $this->serviceName(), "confirmFindReplace",
+      Yii::$app->controller->id, "confirmFindReplace",
       func_get_args()
     );
   }
@@ -136,7 +136,7 @@ class bibliograph_service_reference_FindReplace
        $msg_map[$data->scope]
       ),
       null,
-      $this->serviceName(), "findReplace", $args
+      Yii::$app->controller->id, "findReplace", $args
     );
   }
 

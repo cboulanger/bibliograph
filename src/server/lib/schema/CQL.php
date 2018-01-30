@@ -261,7 +261,7 @@ class bibliograph_schema_CQL
     $cqlObject = $parser->query();
     if ( $cqlObject instanceof cql_Diagnostic )
     {
-      throw new qcl_server_ServiceException( "Could not parse query." );
+      throw new \Exception( "Could not parse query." );
     }
 
     /*

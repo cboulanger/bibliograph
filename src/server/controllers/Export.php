@@ -47,7 +47,7 @@ class bibliograph_service_Export
         )
       ),
       true, // allow cancel
-      $this->serviceName(),
+      Yii::$app->controller->id,
       "exportReferencesHandleDialogData",
       $this->serviceParams()
     );
@@ -91,7 +91,7 @@ class bibliograph_service_Export
     }
     return \lib\dialog\Popup::create(
       Yii::t('app',"Preparing export data. Please wait..."),
-      $this->serviceName(), "exportReferencesStartExport",
+      Yii::$app->controller->id, "exportReferencesStartExport",
       array($this->shelve($data, $datasource, $selector))
     );
   }
@@ -186,7 +186,7 @@ class bibliograph_service_Export
       }
       catch( bibliograph_schema_Exception $e)
       {
-        throw new qcl_server_ServiceException($e->getMessage());
+        throw new \Exception($e->getMessage());
       }
       $query->where['markedDeleted'] = false;
       $refModel->getQueryBehavior()->select( $query );

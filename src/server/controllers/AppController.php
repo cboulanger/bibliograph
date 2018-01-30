@@ -40,7 +40,6 @@ class AppController extends \JsonRpc2\Controller
   //-------------------------------------------------------------
   // Authentication
   //-------------------------------------------------------------
-
   
   public function xxxbehaviors()
   {

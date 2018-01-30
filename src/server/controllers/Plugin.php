@@ -95,7 +95,7 @@ class qcl_application_plugin_Service
     return \lib\dialog\Form::create(
       "<h3>" . Yii::t('app',"Please configure the plugins") . "</h3>",
       $formData, true,
-      $this->serviceName(), "handlePluginForm"
+      Yii::$app->controller->id, "handlePluginForm"
     );
   }
 

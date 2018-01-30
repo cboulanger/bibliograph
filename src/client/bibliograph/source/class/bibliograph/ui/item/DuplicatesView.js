@@ -122,7 +122,7 @@ qx.Class.define("bibliograph.ui.item.DuplicatesView",
       this.setEnabled(false);
       if( !app.getDatasource() || !app.getModelId() ) return;
       app.getRpcClient("reference").send(
-          "getDuplicatesData",
+          "duplicates-data",
           [app.getDatasource(), app.getModelId()],
           function(data) {
             this.setEnabled(true);

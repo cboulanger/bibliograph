@@ -43,7 +43,7 @@ qx.Class.define("bibliograph.ui.folder.TreeView",
     //       var data = e.getData();
     //       var nodeId = data.node.data.id;
     //       var position = data.position;
-    //       this.getStore().execute("changeFolderPosition", [this.getDatasource(), nodeId, position]);
+    //       this.getStore().execute("position-change", [this.getDatasource(), nodeId, position]);
     //     }, this);
     //     tree.moveNode(e);
     //   }
@@ -70,7 +70,7 @@ qx.Class.define("bibliograph.ui.folder.TreeView",
     _changePublicState : function()
     {
       this.setEnabled(false);
-      this.getApplication().getRpcClient("folder").send( "changePublicStateDialog", [this.getDatasource(), this.getSelectedNode().data.id], function() {
+      this.getApplication().getRpcClient("folder").send( "visibility-dialog", [this.getDatasource(), this.getSelectedNode().data.id], function() {
         this.setEnabled(true);
       }, this);
     },
@@ -83,7 +83,7 @@ qx.Class.define("bibliograph.ui.folder.TreeView",
     _addFolderDialog : function()
     {
       this.setEnabled(false);
-      this.getApplication().getRpcClient("folder").send( "addFolderDialog", [this.getDatasource(), this.getNodeId()], function() {
+      this.getApplication().getRpcClient("folder").send( "add-dialog", [this.getDatasource(), this.getNodeId()], function() {
         this.setEnabled(true);
       }, this);
     },
@@ -96,7 +96,7 @@ qx.Class.define("bibliograph.ui.folder.TreeView",
     _removeFolderDialog : function()
     {
       this.setEnabled(false);
-      this.getApplication().getRpcClient("folder").send( "removeFolderDialog", [this.getDatasource(), this.getNodeId()], function() {
+      this.getApplication().getRpcClient("folder").send( "remove-dialog", [this.getDatasource(), this.getNodeId()], function() {
         this.setEnabled(true);
       }, this);
     },

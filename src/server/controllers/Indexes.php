@@ -103,7 +103,7 @@ class bibliograph_service_reference_Indexes
       Yii::t('app', "These changes cannot easily be undone, that is why it is recommended to create a backup."),
       $formData,
       true,
-      $this->serviceName(), "confirmEdit",
+      Yii::$app->controller->id, "confirmEdit",
       func_get_args()
     );
   }
@@ -121,7 +121,7 @@ class bibliograph_service_reference_Indexes
       $message,
       $formData,
       true,
-      $this->serviceName(), "executeEdits",
+      Yii::$app->controller->id, "executeEdits",
       func_get_args()
     );
   }

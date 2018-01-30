@@ -486,7 +486,7 @@ class bibliograph_service_ACLTool
         return \lib\dialog\Confirm::create(
           Yii::t('app',"Do you want to remove only the datasource entry or all associated data?"),
           array( Yii::t('app',"All data"), Yii::t('app',"Entry only"), true),
-          $this->serviceName(), "deleteDatasource", array($ids)
+          Yii::$app->controller->id, "deleteDatasource", array($ids)
         );
 
       case "user":
@@ -509,7 +509,7 @@ class bibliograph_service_ACLTool
       $model->load( $namedId );
       if( $minId and $model->id() < $minId )
       {
-        throw new qcl_server_ServiceException( Yii::t('app',"Deleting element '%s' of type '%s' is not allowed.", $namedId, $type));
+        throw new \Exception( Yii::t('app',"Deleting element '%s' of type '%s' is not allowed.", $namedId, $type));
       }
       $model->delete();
     }
@@ -686,7 +686,7 @@ class bibliograph_service_ACLTool
 
     return \lib\dialog\Form::create(
       $message, $formData, true,
-      $this->serviceName(), "saveFormData",
+      Yii::$app->controller->id, "saveFormData",
       array( $type, $namedId )
     );
   }
@@ -723,7 +723,7 @@ class bibliograph_service_ACLTool
       {
         return \lib\dialog\Alert::create(
           Yii::t('app',"Passwords do not match. Please try again"),
-          $this->serviceName(), "editElement", array( "user", $namedId )
+          Yii::$app->controller->id, "editElement", array( "user", $namedId )
         );
       }
     }
@@ -736,7 +736,7 @@ class bibliograph_service_ACLTool
      */
     if ( $type == "user" and $model->get("ldap") )
     {
-      throw new qcl_server_ServiceException(Yii::t('app',"User data is from an LDAP server and cannot be changed."));
+      throw new \Exception(Yii::t('app',"User data is from an LDAP server and cannot be changed."));
     }
 
     try
@@ -747,7 +747,7 @@ class bibliograph_service_ACLTool
     {
       return \lib\dialog\Alert::create(
         $e->getMessage(),
-        $this->serviceName(), "editElement", array( "user", $namedId )
+        Yii::$app->controller->id, "editElement", array( "user", $namedId )
       );
     }
 
@@ -769,7 +769,7 @@ class bibliograph_service_ACLTool
       {
         return \lib\dialog\Alert::create(
           Yii::t('app',"You must set a password."),
-          $this->serviceName(), "handleMissingPasswordDialog", array( $namedId )
+          Yii::$app->controller->id, "handleMissingPasswordDialog", array( $namedId )
         );
       }
 
@@ -872,7 +872,7 @@ class bibliograph_service_ACLTool
 
     return \lib\dialog\Form::create(
       $message, $formData, true,
-      $this->serviceName(), "confirmSendEmail",
+      Yii::$app->controller->id, "confirmSendEmail",
       array( $this->shelve( $type, $namedId, $emails, $names ) )
     );
   }
@@ -892,7 +892,7 @@ class bibliograph_service_ACLTool
     {
       return \lib\dialog\Alert::create( 
         Yii::t('app', "Please enter a subject." ),
-        $this->serviceName(), "correctEmail",
+        Yii::$app->controller->id, "correctEmail",
         array( $shelfId, $data )
       );
     }
@@ -901,14 +901,14 @@ class bibliograph_service_ACLTool
     {
       return \lib\dialog\Alert::create( 
         Yii::t('app', "Please enter a message." ),
-        $this->serviceName(), "correctEmail",
+        Yii::$app->controller->id, "correctEmail",
         array( $shelfId, $data )
       );
     }
     
     return \lib\dialog\Confirm::create(
       Yii::t('app', "Send email to %s recipients?", count($emails) ), null,
-      $this->serviceName(), "sendEmail", 
+      Yii::$app->controller->id, "sendEmail", 
       array($shelfId, $data)
     );    
   }
@@ -995,7 +995,7 @@ class bibliograph_service_ACLTool
     $applicationTitle = $this->getApplicationTitle();
     $adminEmail  = $app->getIniValue("email.admin");
     $confirmationLink = qcl_server_JsonRpcRestServer::getJsonRpcRestUrl(
-      $this->serviceName(),"confirmEmail", $username
+      Yii::$app->controller->id,"confirmEmail", $username
     );
 
     // compose mail
@@ -1094,14 +1094,14 @@ class bibliograph_service_ACLTool
   public function method_resetPasswordDialog()
   {
     $msg = Yii::t('app',"Please enter your email address. You will receive a message with a link to reset your password.");
-    return \lib\dialog\Prompt::create($msg, "", $this->serviceName(), "sendPasswortResetEmail");
+    return \lib\dialog\Prompt::create($msg, "", Yii::$app->controller->id, "sendPasswortResetEmail");
   }
 
   /**
    * Service to send password reset email
    * @param $email
    * @return string
-   * @throws qcl_server_ServiceException
+   * @throws \Exception
    */
   public function method_sendPasswortResetEmail($email)
   {
@@ -1195,7 +1195,7 @@ class bibliograph_service_ACLTool
   protected function generateResetPasswordURL($email)
   {
     return qcl_server_Server::getUrl() .
-      "?service="   . $this->serviceName() .
+      "?service="   . Yii::$app->controller->id .
       "&method="    . "resetPassword" .
       "&params="    . $email . "," . $this->createAndStoreNonce() .
       "&sessionId=" . $this->getSessionId();
@@ -1207,19 +1207,14 @@ class bibliograph_service_ACLTool
    */
   protected function getApplicationTitle()
   {
-    $app = $this->getApplication();
-    $configModel = $app->getConfigModel();
-    return
-      $configModel->keyExists("application.title")
-        ? $configModel->getKey("application.title")
-        : $app->name();
+    return Yii::$app->utils->getPreference("application.title");
   }
 
   /**
    * Given an email address, returns the (first) user record that matches this address
    * @param $email
    * @return qcl_access_model_User
-   * @throws qcl_server_ServiceException
+   * @throws \Exception
    */
   protected function getUserModelFromEmail( $email )
   {
@@ -1229,7 +1224,7 @@ class bibliograph_service_ACLTool
     }
     catch( InvalidArgumentException $e)
     {
-      throw new qcl_server_ServiceException(
+      throw new \Exception(
         Yii::t('app',"%s is not a valid email address",$email)
       );
     }
@@ -1240,7 +1235,7 @@ class bibliograph_service_ACLTool
     }
     catch( qcl_data_model_RecordNotFoundException $e)
     {
-      throw new qcl_server_ServiceException(
+      throw new \Exception(
         Yii::t('app',"No user found for email address %s", $email)
       );
     }
@@ -1282,7 +1277,7 @@ class bibliograph_service_ACLTool
 
     return \lib\dialog\Form::create(
       $message, $formData, true,
-      $this->serviceName(), "addNewUser", array()
+      Yii::$app->controller->id, "addNewUser", array()
     );
   }
 
@@ -1353,7 +1348,7 @@ class bibliograph_service_ACLTool
 
     return \lib\dialog\Form::create(
       $message, $formData, true,
-      $this->serviceName(), "addNewDatasource", array()
+      Yii::$app->controller->id, "addNewDatasource", array()
     );
   }
 

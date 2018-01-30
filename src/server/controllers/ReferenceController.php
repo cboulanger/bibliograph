@@ -238,7 +238,7 @@ class ReferenceController extends AppController
       // setup autocomplete data
       if ( isset( $formData[$field]['autocomplete'] ) )
       {
-        $formData[$field]['autocomplete']['service'] = $this->serviceName();
+        $formData[$field]['autocomplete']['service'] = Yii::$app->controller->id;
         $formData[$field]['autocomplete']['method'] = "getAutoCompleteData";
         $formData[$field]['autocomplete']['params'] = array( $datasource, $field );
       }
@@ -670,8 +670,8 @@ class ReferenceController extends AppController
     if ( $folderCount < 2 )
     {
       // link with trash folder
-      $trashFolder  = \app\controllers\FolderController::getTrashFolder(); 
-      $trashFolder  -> link( $reference );
+      $trashFolder  = \app\controllers\TrashController::getTrashFolder(); 
+      if( $trashFolder ) $trashFolder  -> link( $reference );
 
       $foldersToUpdate[] = $trashFolderId;
 
@@ -754,10 +754,11 @@ class ReferenceController extends AppController
     }
     if ( count( $referencesToTrash ) )
     {
-      $trashFolder  = \app\controllers\FolderController::getTrashFolder(); 
-      foreach($referencesToTrash as $reference)
-      {
-        $trashFolder -> link($reference);
+      $trashFolder  = \app\controllers\TrashController::getTrashFolder(); 
+      if( $trashFolder ) {
+        foreach($referencesToTrash as $reference) {
+          $trashFolder -> link($reference);
+        }
       }
     }    
     foreach( $foldersToUpdate as $fid )
@@ -1043,14 +1044,14 @@ class ReferenceController extends AppController
    * @param int $referenceId
    * @return array
    */
-  function method_getDuplicatesData( $datasource, $referenceId )
+  function actionDuplicatesData( $datasource, $referenceId )
   {
-    notImplemented();
-    
-    $referenceModel = static::getControlledModel( $datasource );
-    $referenceModel->load( $referenceId );
-    $threshold = $this->getApplication()->getConfigModel()->getKey("bibliograph.duplicates.threshold");
-    $scores = $referenceModel->findPotentialDuplicates($threshold);
+    // @todo
+    return [];
+
+    $reference = static :: getRecordById( $referenceId );
+    $threshold = Yii::$app->utils->getPreference("bibliograph.duplicates.threshold");
+    $scores = $reference->findPotentialDuplicates($threshold);
     $data = array();
     while( $referenceModel->loadNext() )
     {
@@ -1071,140 +1072,5 @@ class ReferenceController extends AppController
       );
     }
     return $data;
-  }
-
-  /**
-   * Purges references that have been marked for deletion
-   * @param $datasource
-   * @return string "OK"
-   */
-  public function method_purge( $datasource )
-  {
-    $this->requirePermission("trash.empty");
-
-    /*
-     * delete marked references
-     */
-    $referenceModel = static::getControlledModel( $datasource );
-    $referenceModel->findWhere( array( 'markedDeleted' => true ) );
-    while( $referenceModel->loadNext() )
-    {
-      $referenceModel->delete();
-    }
-
-    /*
-     * update trash folder reference count
-     * todo: there should be method to do that
-     */
-    $trashFolder  = \app\controllers\FolderController::getTrashFolder(); 
-    $folderModel = $folderService->getFolderModel( $datasource );
-    $folderModel->load( $trashfolderId );
-    $referenceCount = count( $referenceModel->linkedModelIds( $folderModel ) );
-    $folderModel->set( "referenceCount", $referenceCount );
-    $folderModel->save();
-
-    $this->broadcastClientMessage("folder.reload",array(
-      'datasource'  => $datasource,
-      'folderId'    => $trashfolder->id
-    ));
-
-    return "OK";
-  }
-
-
-
-  public function method_getSearchHelpHtml( $datasource )
-  {
-    qcl_assert_valid_string($datasource, "No datasource given");
-
-    $html = "<p>";
-    $html .= Yii::t('app', "You can use the search features of this application in two ways.");
-    $html .= " ". Yii::t('app', "Either you simply type in keywords like you would do in a google search.");
-    $html .= " ". Yii::t('app', "Or you compose complex queries using field names, comparison operators, and boolean connectors (for example: title contains constitution and year=1981).");
-    $html .= " ". Yii::t('app', "You can use wildcard characters: '?' for a single character and '*' for any amount of characters.");
-    $html .= " ". Yii::t('app', "When using more than one word, the phrase has to be quoted (For example, title startswith \"Recent developments\").");
-    $html .= " ". Yii::t('app', "You can click on any of the terms below to insert them into the query field.");
-    $html .= "</p>";
-
-    $modelClass = static::getControlledModel( $datasource );
-    $schema = $modelClass::getSchema();
-
-    /*
-     * field names
-     */
-    $html .= "<h4>" . Yii::t('app', "Field names") . "</h4>";
-    $html .= "<p style='line-height:2em'>";
-
-    $style = "border: 1px solid grey; padding:2px";
-
-    $indexes = array();
-    $activeUser = $this->getActiveUser();
-    foreach( $schema->fields() as $field )
-    {
-      $data = $schema->getFieldData( $field );
-
-      if( isset( $data['index'] ) )
-      {
-        if ( isset( $data['public'] ) and $data['public'] === false )
-        {
-          if ( $activeUser->isAnonymous() ) continue;
-        }
-        foreach( (array) $data['index'] as $index )
-        {
-          $indexes[] = Yii::t('app', $index);
-        }
-      }
-    }
-
-    sort( $indexes );
-    foreach( array_unique($indexes) as $index )
-    {
-      /*
-       * don't show already translated field names
-       */
-      $html .= "<span style='$style' value='$index'>$index</span> ";
-    }
-
-    /*
-     * modifiers
-     */
-    $html .= "</p><h4>" . Yii::t('app', "Comparison modifiers") . "</h4>";
-    $html .= "<p style='line-height:2em'>";
-
-    $style = "border: 1px solid grey; padding:2px";
-
-    
-    $qcl = bibliograph_schema_CQL::getInstance();
-    $modifiers = $qcl->modifiers;
-
-    sort( $modifiers );
-    foreach( $modifiers as $modifier )
-    {
-      $modifier = Yii::t('app', $modifier);
-      $html .= "<span style='$style' value='$modifier'>$modifier</span> ";
-    }
-
-    /*
-     * booleans
-     */
-    $html .= "</p><h4>" . Yii::t('app', "Boolean operators") . "</h4>";
-    $html .= "<p style='line-height:2em'>";
-
-    $style = "border: 1px solid grey; padding:2px";
-
-    $booleans = array( Yii::t('app', "and") );
-
-    sort( $booleans );
-    foreach( $booleans as $boolean )
-    {
-      /*
-       * don't show already translated field names
-       */
-      $html .= "<span style='$style' value='$boolean'>$boolean</span> ";
-    }
-
-    $html .= "</p>";
-
-    return $html;
   }
 }

@@ -58,20 +58,7 @@ class FolderController extends AppController //implements ITreeController
     "favorites"       => "icon/16/actions/help-about.png"
   );
 
-  /**
-   * Return the id of the trash folder of the given datasource
-   * @param string $datasource
-   * @throws JsonRpcException
-   * @return \app\models\Folder
-   */
-  static function getTrashFolder( $datasource )
-  {
-    $trashFolder = static::getControlledModel()::findOne(['type'=>'trash']);
-    if( ! $trashFolder ){
-      throw new \Exception("Datasource $datasource does not have a trash folder");
-    }
-    return $trashFolder;
-  }  
+
 
   /**
    * Return the data of a node of the tree as expected by the qooxdoo tree data model
@@ -269,7 +256,6 @@ class FolderController extends AppController //implements ITreeController
    */  
   function actionLoad( $datasource,  $options=null )
   {
-    $this->checkDatasourceAccess( $datasource );
     $query = static::getControlledModel($datasource)::find()->select("id");
     if( $this->getActiveUser()->isAnonymous() ){
       $query = $query->where( [ 'public' => true ] );
@@ -283,128 +269,6 @@ class FolderController extends AppController //implements ITreeController
       'statusText'  => count($nodeData) . " Folders loaded." 
     ];
   }
-
-  /**
-   * NOT PORTED TO YII2 YET.
-   * 
-   * Returns the node data of the children of a given array of
-   * parent node ids. If the "recurse" parameter is true,
-   * also return the data of the whole branch. The number of
-   * nodes returned can be limited by the "max" argument.
-   *
-   * Returns an associative array with at least the keys "nodeData" and
-   * "queue". The "nodeData" value is an array of node data, each of which
-   * contains information on the parent id in the data.parentId property.
-   * The "queue" value is an array of ids that could not be retrieved
-   * because of the "max" limitation.
-   *
-   * If you supply a 'storeId' parameter, the requesting tree will be
-   * synchronized with all other trees that are connected to this store.
-   *
-   * @param string $datasource The name of the datasource
-   * @param int|array $ids A node id or array of node ids
-   * @param int $max The maximum number of queues to retrieve. If null, no limit
-   * @param bool $recurse Whether recurse into the tree branch
-   * @param string $storeId The id of the connected datastore
-   * @param string|null $options Optional data, for example, when nodes
-   *   should be filtered by a certain criteria
-   * @throws LogicException
-   * @return array
-   */
-  function method_getChildNodeData(
-    $datasource, $ids, $max=null, $recurse=false, $storeId=null, $options=null )
-  {    
-    not_implemented();
-    $this->checkDatasourceAccess( $datasource );
-    $counter = 0;
-
-    // create node array with root node
-    $nodeArr = array();
-
-    // check array of nodes of which the children should be retrieved
-    if ( ! is_array( $ids ) )
-    {
-      if ( ! is_numeric( $ids ) )
-      {
-        throw new LogicException("Invalid argument.");
-      }
-    }
-    $queue = (array) $ids;
-    $queueLater = array();
-
-    /*
-     * retrieve the whole tree
-     */
-    while( count( $queue ) )
-    {
-
-      /*
-       * get child nodes
-       */
-      $parentId = (int) array_shift( $queue );
-      $childIds = (array) $this->getChildIds( $datasource, $parentId, "position" );
-      $queueLater = array();
-      while( count ($childIds ) )
-      {
-        $childId = array_shift( $childIds );
-
-        /*
-         * get child data
-         */
-        $childData = $this->getNodeData( $datasource, $childId, $parentId );
-
-        /*
-         * ingnore inaccessible nodes
-         */
-        if ( $childData === null )
-        {
-          //$this->debug("Node #$childId is not accessible");
-          continue;
-        }
-
-        qcl_assert_array( $childData ); // todo assert keys
-
-        /*
-         * if the child has children itself, load those
-         */
-        if ( $recurse and $childData['data']['childCount'] )
-        {
-          if ( $max and $counter > $max )
-          {
-            $queueLater[]= (int) $childId;
-          }
-          else
-          {
-            array_push( $queue, (int) $childId );
-          }
-        }
-
-        /*
-         * add child data to result
-         */
-        $nodeArr[] = $childData;
-        $counter++;
-      }
-
-      // if a node limit is set, check for maximum number of nodes per request
-      if ( $max and $counter > $max ) break;
-    }
-
-   /*
-    * return the node data
-    */
-    $queue = array_merge( $queue, $queueLater );
-    $queueCount = count($queue);
-    //$nodeCount  = count( $nodeArr );
-    //$this->debug("Returning $nodeCount nodes, remaining nodes $queueCount");
-
-    return array(
-      'nodeData'    => $nodeArr,
-      'queue'       => $queue,
-      'statusText'  => $queueCount ? "Loading..." : ""
-    );
-  }  
-
 
   /**
    * Edit folder data
@@ -421,7 +285,7 @@ class FolderController extends AppController //implements ITreeController
     $message = "<h3>$label</h3>";
     \lib\dialog\Form::create(
       $message, $formData, true,
-      $this->serviceName(), "saveFormData",
+      Yii::$app->controller->id, "saveFormData",
       array( $datasource, $folderId )
     );
     return "OK";
@@ -434,7 +298,7 @@ class FolderController extends AppController //implements ITreeController
    * @param $folderId
    * @return string "OK"/"ABORTED"
    */
-  public function actionSaveFormData( $data, $datasource, $folderId )
+  public function actionSave( $data, $datasource, $folderId )
   {
     if ( $data === null ) return "ABORTED";
 
@@ -452,18 +316,15 @@ class FolderController extends AppController //implements ITreeController
   }
 
   /**
-   * Change the public state - returns a menu.
+   * Change the public state - creates dialog event.
    * @param $datasource
    * @param $folderId
-   * @return qcl_ui_dialog_Form
+   * @return void
    */
-  public function method_changePublicStateDialog( $datasource, $folderId )
+  public function actionVisibilityDialog( $datasource, $folderId )
   {
     $this->requirePermission("folder.edit");
-    $model = $this->getFolderModel( $datasource );
-    $model->load( $folderId );
-
-    
+    $folder = static :: getRecordById( $datasource, $folderId );
     return \lib\dialog\Form::create(
       Yii::t('app', "Change the visibility of the folder"),
       array(
@@ -474,7 +335,7 @@ class FolderController extends AppController //implements ITreeController
             array( 'label' => Yii::t('app', "Folder is publically visible"), 'value' => true ),
             array( 'label' => Yii::t('app', "Folder is not publically visible"), 'value' => false )
           ),
-          'value'   => $model->getPublic(),
+          'value'   => $folder->public,
           'width'   => 300
         ),
         'recurse' => array(
@@ -487,38 +348,37 @@ class FolderController extends AppController //implements ITreeController
           'value'   => false
         )
       ), true,
-      $this->serviceName(), "changePublicState", array( $datasource, $folderId )
+      Yii::$app->controller->id, "visibility-change", array( $datasource, $folderId )
    );
   }
 
   /**
    * Change the public state
    *
-   * @param $data
-   * @param $datasource
-   * @param $folderId
+   * @param string $data
+   * @param string $datasource
+   * @param int $folderId
    * @return string "OK"
    */
-  public function method_changePublicState( $data, $datasource, $folderId )
+  public function actionVisibilityChange( $data, $datasource, $folderId )
   {
     if ( $data === null ) return "ABORTED";
     $this->requirePermission("folder.edit");
-    $data = object2array( $data );
-    qcl_assert_array_keys( $data, array( "recurse","state" ) );
+    $data = json_decode(json_encode($data), true); // convert to array
 
-    $model = $this->getFolderModel( $datasource );
-    $ids = array( $folderId );
+    $folderModel = static :: getControlledModel( $datasource );
+    $ids = [$folderId];
     do
     {
       $id = array_shift( $ids );
       if ( ! $id ) break;
       //$this->debug("> $id ",__CLASS__,__LINE__);
-      $model->load( $id );
-      $model->set( "public", $data['state'] );
-      $model->save();
+      $folder = $folderModel::findOne( $id );
+      $folder->public = $data['state'];
+      $folder->save();
       if ( $data['recurse'] )
       {
-        $ids = array_merge( $ids, $model->getChildIds() );
+        $ids = array_merge( $ids, $folder->getChildIds() );
       }
     }
     while( count( $ids ) );
@@ -526,11 +386,16 @@ class FolderController extends AppController //implements ITreeController
   }
 
 
-  public function method_addFolderDialog( $datasource, $folderId )
+  /**
+   * Action to add a folder. Creates a dialog event
+   *
+   * @param string $datasource
+   * @param int $folderId
+   * @return void
+   */ 
+  public function actionAddDialog( $datasource, $folderId )
   {
     $this->requirePermission("folder.add");
-    
-
     return \lib\dialog\Form::create(
       Yii::t('app',"Please enter the name and type of the new folder:"),
       array(
@@ -549,7 +414,7 @@ class FolderController extends AppController //implements ITreeController
           'value'   => false
         )
       ), true,
-      $this->serviceName(), "addFolder", array( $datasource, $folderId )
+      Yii::$app->controller->id, "create", array( $datasource, $folderId )
     );
   }
 
@@ -557,70 +422,45 @@ class FolderController extends AppController //implements ITreeController
    * Creates a new folder
    * @param $data
    * @param $datasource
-   * @param $folderId
+   * @param $parentFolderId
    * @return string "OK"
    */
-  public function method_addFolder( $data, $datasource, $folderId )
+  public function actionCreate( $data, $datasource, $parentFolderId )
   {
-    /*
-     * check arguments
-     */
     if ( $data === null or $data->label =="" ) return "ABORTED";
-    qcl_assert_valid_string( $datasource );
-    qcl_assert_integer( $folderId );
-
-    /*
-     * check access
-     */
     $this->requirePermission("folder.add");
-    $this->checkDatasourceAccess( $datasource );
-
-    /*
-     * create folder
-     */
-    $model = $this->getFolderModel( $datasource );
-    $model->create(array(
-      'parentId'      => $folderId,
+    $folderModel = static :: getControlledModel( $datasource );
+    $folder = new $folderModel([
+      'parentId'      => $parentFolderId,
       'label'         => $data->label,
       'searchfolder'  => $data->searchfolder,
-      'createdBy'     => $this->getActiveUser()->namedId()
-    ));
+      'createdBy'     => $this->getActiveUser()->getUsername()
+    ]);
     return "OK";
   }
 
   /**
-   * Dialog to remove a folder
+   * Creates a confimation dialog to remove a folder
    * @param $datasource
    * @param $folderId
-   * @return qcl_ui_dialog_Confirm
+   * @return void
    */
-  public function method_removeFolderDialog( $datasource, $folderId )
+  public function actionRemoveDialog( $datasource, $folderId )
   {
-    // check arguments
-    qcl_assert_valid_string( $datasource );
-    qcl_assert_integer( $folderId );
-
-    // check access
-    $this->checkDatasourceAccess( $datasource );
     $this->requirePermission("folder.remove");
-
-    // model
-    $model = $this->getFolderModel( $datasource );
-    $model->load( $folderId );
-
+    $folder = static :: getRecordById( $datasource, $folderId );
     // root folder?
-    if( $model->getParentId() == 0 )
-    {
-      throw new qcl_server_ServiceException(Yii::t('app', "Top folders cannot be deleted."));
+    if( $model->parentId == 0 ) {
+      throw new \Exception(Yii::t('app', "Top folders cannot be deleted."));
     }
 
     // create dialog
-    $label = $model->getLabel();
-    
     return \lib\dialog\Confirm::create(
-      sprintf( Yii::t('app',  "Do you really want to move the folder '%s' into the trash?"), $label),
+      Yii::t('app', "Do you really want to move the folder '{name}' into the trash?", [
+        'name' => $model->label
+      ]),
       null,
-      $this->serviceName(), "removeFolder", array( $datasource, $folderId )
+      Yii::$app->controller->id, "remove", array( $datasource, $folderId )
     );
   }
 
@@ -631,118 +471,29 @@ class FolderController extends AppController //implements ITreeController
    * @param $folderId
    * @return string "OK"
    */
-  public function method_removeFolder( $data, $datasource, $folderId )
+  public function actionRemove( $data, $datasource, $folderId )
   {
     if ( ! $data ) return "ABORTED";
-
-    /*
-     * check arguments
-     */
-    qcl_assert_valid_string( $datasource );
-    qcl_assert_integer( $folderId );
-
-    /*
-     * check access
-     */
     $this->requirePermission("folder.remove");
-    $this->checkDatasourceAccess( $datasource );
-
-    /*
-     * move folder into trash
-     */
-    $trashFolderId = $this->getTrashfolderId( $datasource );
-    $model = $this->getFolderModel( $datasource );
-    $model->load( $folderId );
-
-    // root folder?
-    if( $model->getParentId() == 0 )
-    {
-      throw new qcl_server_ServiceException(Yii::t('app', "Top folders cannot be deleted."));
+    
+    $folder = static :: getRecordById( $datasource, $folderId );
+    if( $folder->parentId == 0 ) {
+      throw new \Exception(Yii::t('app', "Top folders cannot be deleted."));
     }
 
-    if ( $model->getParentId() ==  $trashFolderId )
-    {
-      // it is already in the trash, delete right away
-      $model->delete();
-    }
-    else
-    {
-      // move to trash and mark as deleted
-      $model->setParentId( $trashFolderId )->save();
-      $this->setFolderMarkedDeleted( $model, true);
-    }
-    return "OK";
-  }
-
-  /**
-   * Move a folder to a different parent
-   * @param $datasource
-   * @param $folderId
-   * @param $parentId
-   * @throws JsonRpcException
-   * @return string "OK"
-   */
-  public function method_moveFolder( $datasource, $folderId, $parentId )
-  {
-    /*
-     * check arguments
-     */
-    qcl_assert_valid_string( $datasource );
-    qcl_assert_integer( $folderId );
-    qcl_assert_integer( $parentId );
-    if( $folderId == $parentId )
-    {
-      throw new qcl_server_ServiceException(Yii::t('app', "Folder cannot be moved on itself."));
-    }
-
-    /*
-     * check access
-     */
-    $this->checkDatasourceAccess( $datasource );
-    $this->requirePermission("folder.move");
-
-    /*
-     * move node
-     */
-    $model = $this->getFolderModel( $datasource );
-    $id = $parentId;
-    do
-    {
-      try
-      {
-        $model->load( $id );
-      }
-      catch( qcl_data_model_RecordNotFoundException $e)
-      {
-        break;
-      }
-      $id = $model->getParentId();
-      if( $id == $folderId )
-      {
-        throw new qcl_server_ServiceException(Yii::t('app', "Parent node cannot be moved on a child node"));
+    // move folder into trash
+    $trashFolder = \app\controllers\TrashController::getTrashFolder();
+    if( $trashFolder ){
+      if ( $folder->parentId == $trashFolder->id ) {
+        // it is already in the trash, delete right away
+        $folder->delete();
+      } else {
+        $folder->parentId = $trashFolder->id;
       }
     }
-    while ( $id !== 0 );
 
-    /*
-     * change folder parent
-     */
-    $model->load( $folderId );
-
-    // root folder?
-    if( $model->getParentId() == 0 )
-    {
-      throw new qcl_server_ServiceException(Yii::t('app', "Top folders cannot be moved."));
-    }
-
-    $model->setParentId( $parentId );
-    $model->save();
-
-    /*
-     * mark deleted if moved into trash folder
-     */
-    $this->setFolderMarkedDeleted( $model, $parentId === $this->getTrashfolderId( $datasource ) );
-
+    // mark references as deleted
+    $this->setFolderMarkedDeleted( $folder, true);
     return "OK";
   }
 
@@ -753,79 +504,86 @@ class FolderController extends AppController //implements ITreeController
    * folders, and marking them as deleted. If the value is false, the folders
    * and contained references will be marked "not deleted"
    *
-   * @param $folder
-   * @param $value
+   * @param \app\models\Folder $folder
+   * @param bool $value
    * @return void
    */
-  public function setFolderMarkedDeleted( bibliograph_model_FolderModel $folder, $value )
+  public function setFolderMarkedDeleted( \app\models\Folder $folder, $value )
   {
-    qcl_assert_boolean( $value );
+    // mark folder (un)deleted
+    $folder->markedDeleted = $value;
+    $folder->save();
 
-    /*
-     * mark folder (un)deleted
-     */
-    //$this->debug("Marking $folder deleted " . boolString($value),__CLASS__,__LINE__);
-    $folder->set("markedDeleted", $value )->save();
-
-    /*
-     * handle contained referenced
-     */
-    $referenceModel = $folder->getRelationBehavior()->getTargetModel("Folder_Reference");
-    try
-    {
-      $referenceModel->findLinked( $folder );
-      while ( $referenceModel->loadNext() )
-      {
-        if ( $value )
-        {
-          $linkCount = $folder->countLinksWithModel( $referenceModel );
-          //$this->debug("$referenceModel has $linkCount links with folders... ",__CLASS__,__LINE__);
-          if ( $linkCount > 1 )
-          {
-            /*
-             * unlink reference and folder
-             */
-            //$this->debug("Unlinking $referenceModel from $folder",__CLASS__,__LINE__);
-            $referenceModel->unlinkModel( $folder );
-
-            /*
-             * update reference count
-             * @todo use event?
-             */
-            $referenceCount = count( $referenceModel->linkedModelIds( $folder ) );
-            $folder->set( "referenceCount", $referenceCount );
-            $folder->save();
-          }
-          else
-          {
-            //$this->debug("Marking $referenceModel deleted",__CLASS__,__LINE__);
-            $referenceModel->set( "markedDeleted", true );
-            $referenceModel->save();
-          }
+    // handle contained references
+    $references = $folder -> getReferences() -> all();
+    foreach( $references as $reference ){
+      if ( $value ) {
+        $folderCount = $reference->getFolders()->count();
+        if ( $folderCount > 1 ) {
+          // if it is contained in other folders, simply unlink reference and folder
+          $folder->unlink( $reference );
+          $folder->getReferenceCount(true);
+        } else {
+          // if it is contained in this folder only,  mark deleted 
+          $folder->markedDeleted = true;
+          $folder->save();
         }
-        else
-        {
-          //$this->debug("Marking $referenceModel as not deleted",__CLASS__,__LINE__);
-          $referenceModel->set( "markedDeleted", false );
-          $referenceModel->save();
-        }
+      } else {
+        $folder->markedDeleted = false;
+        $folder->save();
       }
     }
-    catch(qcl_data_model_RecordNotFoundException $e){}
-
-    /*
-     * child folders
-     */
-    try
-    {
-      $query = $folder->findChildren();
-      //$this->debug("$folder has {$query->rowCount} children",__CLASS__,__LINE__);
-      if ( $query->getRowCount() ) while( $folder->loadNext( $query ) )
-      {
-        $this->setFolderMarkedDeleted( $folder, $value );
-      }
+    
+    // child folders
+    $childFolders = $folder->getChildren();
+    foreach( $childFolders as $folder ){
+      $this->setFolderMarkedDeleted( $folder, $value );
     }
-    catch ( qcl_data_model_RecordNotFoundException $e){}
+  }  
+
+  /**
+   * Move a folder to a different parent
+   * @param $datasource
+   * @param $folderId
+   * @param $parentId
+   * @throws JsonRpcException
+   * @return string "OK"
+   */
+  public function actionMove( $datasource, $folderId, $parentId )
+  {
+    if( $folderId == $parentId )
+    {
+      throw new \Exception(Yii::t('app', "Folder cannot be moved on itself."));
+    }
+    $this->requirePermission("folder.move");
+    $id = $parentId;
+    do {
+      $folder = static :: getRecordById( $datasource, $id );
+      if( $folder->id == $folderId )
+      {
+        throw new \Exception(Yii::t('app', "Parent node cannot be moved on a child node"));
+      }
+      $id = $folder->parentId;
+    }
+    while ( $id !== 0 );
+
+    // change folder parent
+    $folder = static :: getRecordById( $datasource, $folderId );
+
+    // root folder?
+    if( $folder->parentId == 0 ) {
+      throw new \Exception(Yii::t('app', "Top folders cannot be moved."));
+    }
+
+    $model->parentId = $parentId;
+    $model->save();
+
+    // mark deleted if moved into trash folder
+    $trashFolder = \app\controllers\TrashController::getTrashfolder( $datasource );
+    if( $trashFolder ) {
+      $this->setFolderMarkedDeleted( $folder, $parentId === $trashFolder->id );
+    }
+    return "OK";
   }
 
   /**
@@ -835,79 +593,22 @@ class FolderController extends AppController //implements ITreeController
    * @param $position
    * @return string "OK"
    */
-  public function method_changeFolderPosition( $datasource, $folderId, $position )
+  public function actionPositionChange( $datasource, $folderId, $position )
   {
-    /*
-     * check arguments
-     */
-    qcl_assert_valid_string( $datasource );
-    qcl_assert_integer( $folderId );
-    qcl_assert_integer( $position );
-
-    /*
-     * check access
-     */
-    $this->checkDatasourceAccess( $datasource );
     $this->requirePermission("folder.move");
-
-    /*
-     * change position
-     */
-    $folder = $this->getFolderModel( $datasource );
-    $folder->load( $folderId );
+    $folder = static :: getRecordById( $datasource, $folderId );
     $folder->changePosition( $position );
-
-    /*
-     * dispatch update event
-     */
+    // notify clients
     $this->broadcastClientMessage(
       "folder.node.reorder", array(
         'datasource'    => $datasource,
         'modelType'     => "folder",
         'nodeId'        => $folderId,
-        'parentNodeId'  => $folder->getParentId(),
+        'parentNodeId'  => $folder->parentId,
         'position'      => $position,
-        'transactionId' => $folder->getTransactionId()
+        'transactionId' => $folder->transactionId
       )
     );
-
     return "OK";
   }
-
-  /**
-   * Purges folders that have been marked for deletion
-   * @param string $datasource
-   * @return string "OK"
-   */
-  public function method_purge( $datasource )
-  {
-    $this->requirePermission("trash.empty");
-    $fldModel = $this->getFolderModel( $datasource );
-
-    /*
-     * clean up trash folder
-     */
-    $trashfolderId = $this->getTrashfolderId( $datasource );
-    $fldModel->load( $trashfolderId );
-    try
-    {
-      $fldModel->findChildren();
-      while( $fldModel->loadNext() )
-      {
-        $this->setFolderMarkedDeleted( $fldModel, true );
-      }
-    }
-    catch ( qcl_data_model_RecordNotFoundException $e){}
-
-    /*
-     * delete folders
-     */
-    $fldModel->findWhere(array( 'markedDeleted' => true ) );
-    while( $fldModel->loadNext() )
-    {
-      $fldModel->delete();
-    }
-    return "OK";
-  }
-
 }
