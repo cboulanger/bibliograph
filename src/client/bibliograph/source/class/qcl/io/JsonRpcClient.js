@@ -139,7 +139,7 @@ qx.Class.define("qcl.io.JsonRpcClient", {
         let msg = e.message.substring(0,100);
         // use only the first part
         if( msg.includes(":") ){
-          msg = msg.substring(0,msg.indexOf(':')-1);
+          msg = msg.substring(0,msg.indexOf(':'));
         }
         return msg;
       }

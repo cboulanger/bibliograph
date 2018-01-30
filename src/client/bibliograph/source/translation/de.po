@@ -104,7 +104,7 @@ msgstr "Formatierte Ansicht"
 msgid "Generate formatted citations ..."
 msgstr "Formatiere die Datensätze ..."
 
-#: qcl.data.controller.Table:317
+#: qcl.data.controller.Table:320
 msgid "Loading rows %1 - %2 of %3 ..."
 msgstr "Lade Datensätze %1 - %2 von %3 ..."
 

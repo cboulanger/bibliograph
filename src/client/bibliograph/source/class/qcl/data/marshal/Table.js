@@ -72,7 +72,7 @@ qx.Class.define("qcl.data.marshal.Table",
    {
      check : "String",
      nullable : false,
-     init : "getRowCount"
+     init : "row-count"
    },
 
    /** 
@@ -83,7 +83,7 @@ qx.Class.define("qcl.data.marshal.Table",
    {
      check : "String",
      nullable : false,
-     init : "getRowData"
+     init : "row-data"
    }   
   },
 

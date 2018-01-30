@@ -855,7 +855,6 @@ qx.Class.define("bibliograph.ui.reference.ListView",
 
         // load a query
         if (this.getQuery()) {
-          // convert string query into one the backend can understand
           this.getMarshaler().setQueryParams([
           {
             'datasource' : this.getDatasource(),
@@ -884,6 +883,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
               'relation' :
               {
                 'name' : this.getQueryData().relation.name,
+                'foreignId' : this.getQueryData().relation.foreignId,
                 'id' : this.getFolderId()
               }
             }

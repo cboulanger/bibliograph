@@ -23,6 +23,7 @@ namespace app\controllers;
 use Yii;
 
 use app\controllers\AppController;
+use app\controllers\CitationController;
 use app\models\Datasource;
 use app\models\Reference;
 use lib\Validate;
@@ -102,13 +103,17 @@ class ReferenceController extends AppController
     }
 
     // @todo should be 'columns' or 'fields'
-    $activeQuery = $activeQuery->select( $query->properties ); 
+    $columns = array_map( function($column){
+      return $column == "id" ? "references.id" : $column;
+    }, $query->properties);
+    $activeQuery = $activeQuery->select( $columns ); 
 
     // relation
     if ( isset( $query->relation ) ) {
       return $activeQuery
-        -> joinWith( $query->relation->name );
-       // -> onCondition( [ 'FolderId' => $query->relation->id ] );
+        -> alias('references')
+        -> joinWith( $query->relation->name, /* eagerly loading */ false )
+        -> onCondition( [ $query->relation->foreignId => $query->relation->id ] );
     }
     
     // cql
@@ -159,7 +164,8 @@ class ReferenceController extends AppController
     $datasource = $reference::getDatasource();
     $ids = [$reference->id];
     $style = "apa"; // @todo
-    return \app\controllers\CitationController :: render( $datasource, $ids, $style );
+    return "TODO";
+    //return CitationController :: process( $datasource, $ids, $style );
   }
 
   /*
@@ -204,10 +210,13 @@ class ReferenceController extends AppController
       /**
        * This will feed back into addQueryConditions()  
        */
-      'queryData' => array(
-        'relation'  => array( 'name' => "folders" ),
+      'queryData' => [
+        'relation'  => [ 
+          'name'      => "folders", 
+          'foreignId' => 'FolderId' 
+        ],
         'orderBy'   => "author,year,title",
-      ),
+      ],
       'addItems' => $this->getAddItemListData( $datasource, $modelClassType )
     );
   }
@@ -225,16 +234,17 @@ class ReferenceController extends AppController
   {
     $model = static :: getModel( $queryData->datasource, $queryData->modelType );
     $model :: setDatasource( $queryData->datasource );
-    $activeQuery = $model :: find();
+    $query = $model :: find();
 
     // add additional conditions from the client query
-    $query = $this->addQueryConditions( $activeQuery, $queryData );
+    $query = $this->addQueryConditions( $query, $queryData );
+
+    //Yii::info($query->createCommand()->getRawSql());
 
     // count number of rows
-    return $query->createCommand()->getRawSql();
     $rowCount = $query->count();
     return [
-      "rowCount"    => $rowCount,
+      "rowCount"    => (int) $rowCount,
       'statusText'  => Yii::t('app', "{numberOfRecords} records",['numberOfRecords' => $rowCount])
     ];
   }
@@ -245,7 +255,7 @@ class ReferenceController extends AppController
    * @param int $firstRow First row of queried data
    * @param int $lastRow Last row of queried data
    * @param int $requestId Request id
-   * @param object $queryData Data to construct the query
+   * param object $queryData Data to construct the query
    * @throws InvalidArgumentException
    * return array Array containing the keys
    *                int     requestId   The request id identifying the request (mandatory)
@@ -255,12 +265,14 @@ class ReferenceController extends AppController
   function actionRowData( $firstRow, $lastRow, $requestId, $queryData )
   {
     $model = static :: getModel( $queryData->datasource, $queryData->modelType );
-    $activeQuery = $model :: find()
-      -> orderBy( $query->orderBy )
+    $query = $model :: find()
+      -> orderBy( $queryData->query->orderBy )
       -> offset( $firstRow )
       -> limit( $lastRow - $firstRow + 1 );
-    $activeQuery = $this->addQueryConditions( $activeQuery, $queryData );
-    $rowData = $activeQuery->asArray()->all();
+    $query = $this->addQueryConditions( $query, $queryData );
+    //return $query->createCommand()->getRawSql();
+    Yii::info($query->createCommand()->getRawSql());
+    $rowData = $query->asArray()->all();
     return array(
       'requestId'  => $requestId,
       'rowData'    =>  $rowData,
@@ -275,7 +287,7 @@ class ReferenceController extends AppController
    * @param $datasource
    * @param $reftype
    * @internal param \Reference $refType type
-   * @return array
+   * 
    */
   function actionFormLayout( $datasource, $reftype )
   {
@@ -338,7 +350,7 @@ class ReferenceController extends AppController
   /**
    * Returns data for the reference type select box
    * @param $datasource
-   * @return array
+   * 
    */
   public function actionReferenceTypeList( $datasource )
   {
@@ -359,7 +371,7 @@ class ReferenceController extends AppController
   /**
    * Returns data for the store that populates reference type lists
    * @param $datasource
-   * @return unknown_type
+   * 
    */
   function actionReferenceTypeData( $datasource )
   {
@@ -373,7 +385,7 @@ class ReferenceController extends AppController
    * @param null $arg3
    * @param null $arg4
    * @throws \InvalidArgumentException
-   * @return array
+   * 
    * @todo: this method is called with different signatures!
    */
   function actionItem( $datasource, $arg2, $arg3= null, $arg4=null)
@@ -461,7 +473,7 @@ class ReferenceController extends AppController
    * @param $datasource
    * @param $field
    * @param $input
-   * @return array
+   * 
    */
   public function actionAutocomplete( $datasource, $field, $input )
   {
@@ -508,7 +520,7 @@ class ReferenceController extends AppController
    * @param $referenceId
    * @param $data
    * @throws JsonRpcException
-   * @return unknown_type
+   * 
    */
   public function actionSave( $datasource, $referenceId, $data )
   {
@@ -568,7 +580,7 @@ class ReferenceController extends AppController
    * Returns data for a ComboBox widget.
    * @param $datasource
    * @param $field
-   * @return unknown_type
+   * 
    */
   public function actionListField( $datasource, $field )
   {
@@ -652,7 +664,6 @@ class ReferenceController extends AppController
    *    methods.
    * @param array $ids
    *    If given, the ids of the references to remove
-   * @return \qcl_ui_dialog_Confirm|string "OK"
    * @throws InvalidArgumentException
    */
   public function actionRemove( $first, $second=null, $third=null, $ids=null )
@@ -795,7 +806,6 @@ class ReferenceController extends AppController
    *
    * @param strin $datasource
    * @param int $folderId
-   * @return void
    */
   public function actionFolderRemove( $datasource, $folderId )
   {
@@ -994,7 +1004,6 @@ class ReferenceController extends AppController
    * Returns information on the record as a HTML table
    * @param $datasource
    * @param $referenceId
-   * @return unknown_type
    */
   public function actionTableHtml( $datasource, $referenceId )
   {
@@ -1036,7 +1045,6 @@ class ReferenceController extends AppController
    * Returns a HTML table with the reference data
    * @param $datasource
    * @param $id
-   * @return unknown_type
    */
   public function actionItemHtml( $datasource, $id )
   {
@@ -1085,7 +1093,6 @@ class ReferenceController extends AppController
    * Returns data on folders that contain the given reference
    * @param $datasource
    * @param $referenceId
-   * @return array
    */
   public function actionContainers( $datasource, $referenceId )
   {
@@ -1107,7 +1114,7 @@ class ReferenceController extends AppController
    * Returns potential duplicates in a simple data model format.
    * @param string $datasource
    * @param int $referenceId
-   * @return array
+   * 
    */
   function actionDuplicatesData( $datasource, $referenceId )
   {

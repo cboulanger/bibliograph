@@ -674,7 +674,7 @@ msgstr ""
 msgid "Loading table layout ..."
 msgstr ""
 
-#: qcl.data.controller.Table:317
+#: qcl.data.controller.Table:320
 msgid "Loading rows %1 - %2 of %3 ..."
 msgstr ""
 

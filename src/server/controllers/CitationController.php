@@ -24,7 +24,7 @@ use Yii;
 use lib\csl\CiteProc;
 use app\models\Datasource;
 
-class CitationController extends \app\controllers\AppController
+class CitationController extends AppController
 {
 
   /*
@@ -66,7 +66,7 @@ class CitationController extends \app\controllers\AppController
   public function actionRenderItems( $datasource, $ids, $style )
   {
     //$data = $this->render_debug( $datasource, $ids, $style );
-    $data = static :: render( $datasource, $ids, $style );
+    $data = self :: process( $datasource, $ids, $style );
     //$this->debug($data);
     return $data;
   }
@@ -116,13 +116,13 @@ class CitationController extends \app\controllers\AppController
         'orderBy' => array("author","year","title")
       ) );
       $ids = $refModel->getQueryBehavior()->fetchValues("id", $query );
-      return $this->render( $datasource, $ids, $style );
+      return self :: process( $datasource, $ids, $style );
     }
     return "";
   }
   
   /**
-   * Render the result of a query
+   * process the result of a query
    * @param $datasource
    * @param $folderId
    * @param $style
@@ -130,7 +130,7 @@ class CitationController extends \app\controllers\AppController
    */
   public function actionRenderQuery( $datasource, $query, $style )
   {
-    not_implemented():
+    not_implemented();
     $app = $this->getApplication();
     $dsModel  = $this->getDatasourceModel( $datasource );
     $refModel = $dsModel->getInstanceOfType("reference");
@@ -154,17 +154,17 @@ class CitationController extends \app\controllers\AppController
     
     $ids = $refModel->getQueryBehavior()->fetchValues("id", $q );
     
-    return $this->render( $datasource, $ids, $style );
+    return self :: process( $datasource, $ids, $style );
   }  
 
   /**
-   * Render citations
+   * process citations
    * @param $datasource
    * @param $ids
    * @param $style
    * @return array Array containing the key "html" with the rendered result
    */
-  public static function render( $datasource, $ids, $style )
+  public static function process( $datasource, $ids, $style )
   {
     $bibtexSchema = new \lib\schema\BibtexSchema;
     $citeproc = new \lib\csl\CiteProc($style);

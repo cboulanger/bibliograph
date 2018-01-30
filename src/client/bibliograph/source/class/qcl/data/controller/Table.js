@@ -25,7 +25,7 @@
 qx.Class.define("qcl.data.controller.Table", 
 {
   extend : qx.core.Object,
-  include: [ qx.data.controller.MSelection ],
+  include: [ qx.data.controller.MSelection, qx.locale.MTranslation ],
 
   /*
    *****************************************************************************
@@ -133,6 +133,7 @@ qx.Class.define("qcl.data.controller.Table",
      ---------------------------------------------------------------------------
      */          
      __currentRequestIds : null,
+     __requestId : 0,
      __rowCount : null,
 
      /*
@@ -291,33 +292,36 @@ qx.Class.define("qcl.data.controller.Table",
      */
      _loadRowData : function( firstRow, lastRow ) 
      {
-       //if ( this.__rowDataRequest ) return;
-       //this.info( "Requesting " + firstRow + " - " + lastRow );
+      //if ( this.__rowDataRequest ) return;
+      //this.info( "Requesting " + firstRow + " - " + lastRow );
+    
+      // prevent retrieving the same data more than once
+      if ( firstRow === this.__firstRow ) {
+        return;
+      }      
+      this.__firstRow = firstRow;
       
-       // prevent retrieving the same data more than once
-       if ( firstRow === this.__firstRow ) {
-         return;
-       }      
-       this.__firstRow = firstRow;
-       
-       var store = this.getStore();
-       var marshaler = store.getMarshaler();
-       var tableModel = this.getTarget().getTableModel();
+      var store = this.getStore();
+      var marshaler = store.getMarshaler();
+      var tableModel = this.getTarget().getTableModel();
 
-       // store request id so that we can differentiate different
-       // tables connected to the same store
-       var requestId = store.getNextRequestId(); 
-       this.__currentRequestIds.push( requestId );
-       
-       // add firstRow, lastRow, requestId at the beginning of the 
-       // parameters
-       // @todo do we really need the request id?
-       var params = [firstRow, lastRow, requestId].concat( marshaler.getQueryParams() );
-         
-       this.fireDataEvent("statusMessage", this.tr(
+      // store request id so that we can differentiate different
+      // tables connected to the same store
+      //var requestId = store.getNextRequestId(); 
+      var requestId = this.__requestId++;
+      this.__currentRequestIds.push( requestId );
+      
+      // add firstRow, lastRow, requestId at the beginning of the 
+      // parameters
+      // @todo do we really need the request id?
+      var params = [firstRow, lastRow, requestId].concat( marshaler.getQueryParams() );
+
+      this.fireDataEvent("statusMessage", 
+        this.tr(
           "Loading rows %1 - %2 of %3 ...",
           firstRow, Math.min( lastRow, this.__rowCount), this.__rowCount 
-        ) /*,this.getTarget() */);
+        ) 
+      );
        
       // load data
       store.load( marshaler.getMethodGetRowData(), params)
