@@ -222,6 +222,7 @@ class Reference extends BaseModel
     } else {
       $this->modifiedBy = $activeUser->getUsername();
     }
+    return true;
 	}
 
   /**

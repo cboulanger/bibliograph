@@ -224,17 +224,24 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
   }
 
   /**
-   * Triggered when a record is saved. We only deal with updates in this method,
-   * inserts are dealt with in _afterInsert()
+   * Triggered when a record is saved to dispatch events.
+   * Inserts are dealt with in _afterInsert()
+   *
+   * @param bool $insert
+   * @param array $changedAttributes
+   * @return void
    */
   public function afterSave ( $insert, $changedAttributes )
   {
-    if (!parent::afterSave($insert)) {
+    // parent implemenattion
+    if (!parent::afterSave($insert, $changedAttributes)) {
         return false;
     }
+    // inserts
     if ( $insert ) {
-      return $this->_afterInsert();
+      return $this->_afterInsert($insert, $changedAttributes);
     }
+    // dispatch events
     foreach( $changedAttributes as $key => $oldValue )
     {
       switch( $key ){
@@ -261,6 +268,7 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
       unset( $nodeData['bOpened'] );
       Yii::$app->eventQueue->add( $this->createUpdateNodeEvent( $nodeData ));   
     }
+    return true;
   }
 
   /**
@@ -268,7 +276,7 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
    *
    * @return void
    */
-  protected function _afterInsert()
+  protected function _afterInsert($insert, $changedAttributes)
   {
     Yii::$app->eventQueue->add( new Event([
       "folder.node.add", [

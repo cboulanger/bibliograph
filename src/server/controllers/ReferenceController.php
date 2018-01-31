@@ -133,11 +133,11 @@ class ReferenceController extends AppController
   }
 
   /**
-   * Returns an array of ListItem data
+   * Returns an array of ListItem data on the available reference types
    * @param $datasource
    * @return array
    */
-  public function getAddItemListData( $datasource )
+  public function getReferenceTypeListData( $datasource )
   {
     $schema = static::getControlledModel( $datasource )::getSchema();
     $reftypes  = $schema->types();
@@ -217,7 +217,7 @@ class ReferenceController extends AppController
         ],
         'orderBy'   => "author,year,title",
       ],
-      'addItems' => $this->getAddItemListData( $datasource, $modelClassType )
+      'addItems' => $this->getReferenceTypeListData( $datasource, $modelClassType )
     );
   }
 
@@ -373,9 +373,9 @@ class ReferenceController extends AppController
    * @param $datasource
    * 
    */
-  function actionReferenceTypeData( $datasource )
+  function actionTypes( $datasource )
   {
-    return $this->getAddItemListData( $datasource );
+    return $this->getReferenceTypeListData( $datasource );
   }
 
   /**
@@ -622,17 +622,16 @@ class ReferenceController extends AppController
     $reference = new $modelClass( [
       'reftype'     => $reftype,
       'createdBy'   => $this->getActiveUser()->getUsername()
-     ]);
-     $reference->save();
+    ]);
+    $reference->save();
     
-    $folderClass = 
-    $folder = static :: getFolderModel() :: findOne( $folderId );
+    $folder = static :: getFolderModel($datasource) :: findOne( $folderId );
 
     if( ! $folder ){
       throw new \InvalidArgumentException("Folder #$folderId does not exist.");
     } 
-    $folder -> link($reference);
-    $folder -> referenceCount = $folder -> getFolderReferences()->count();
+    $folder -> link("references", $reference);
+    $folder -> referenceCount = $folder -> getReferences() -> count();
     $folder -> save();
 
     // reload references
@@ -737,7 +736,7 @@ class ReferenceController extends AppController
 
     // unlink from folder if id is given.
     else {
-      $reference->unlink($folder);
+      $reference->unlink("folder", $folder);
     }
 
     $foldersToUpdate = $containedFolderIds;
@@ -747,7 +746,7 @@ class ReferenceController extends AppController
     {
       // link with trash folder
       $trashFolder  = \app\controllers\TrashController::getTrashFolder(); 
-      if( $trashFolder ) $trashFolder  -> link( $reference );
+      if( $trashFolder ) $trashFolder  -> link("references", $reference );
 
       $foldersToUpdate[] = $trashFolderId;
 
@@ -821,7 +820,7 @@ class ReferenceController extends AppController
     foreach( $references as $reference )
     {
       $folderCount = $reference -> getFolders() -> count();
-      $referenceModel -> unlink( $folder );
+      $referenceModel -> unlink( "folder", $folder );
       if ( $folderCount == 1 )
       {
         $referencesToTrash[] = $reference;
@@ -832,7 +831,7 @@ class ReferenceController extends AppController
       $trashFolder  = \app\controllers\TrashController::getTrashFolder(); 
       if( $trashFolder ) {
         foreach($referencesToTrash as $reference) {
-          $trashFolder -> link($reference);
+          $trashFolder -> link("references", $reference);
         }
       }
     }    
@@ -912,8 +911,8 @@ class ReferenceController extends AppController
       if( ! ( $reference instanceof \app\models\Reference ) ){
         Yii::warning("Skipping invalid reference '$reference'");
       }
-      $sourceFolder -> unlink( $reference );
-      $targetFolder -> link( $reference );
+      $sourceFolder -> unlink("references", $reference );
+      $targetFolder -> link("references", $reference );
     }
 
     // update reference count
@@ -992,7 +991,7 @@ class ReferenceController extends AppController
       if( ! ( $reference instanceof \app\models\Reference ) ){
         Yii::warning("Skipping invalid reference '$reference'");
       }
-      $targetFolder -> link( $reference );
+      $targetFolder -> link("references", $reference );
     }
 
     // update reference count

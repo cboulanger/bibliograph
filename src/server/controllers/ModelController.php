@@ -18,14 +18,13 @@
 
 ************************************************************************ */
 
-namespace \app\controllers;
+namespace app\controllers;
 
 /**
  * Provides services based on a generic model API, using datasource
  * and modelType information
  */
-class ModelController
-  extends \app\controllers\AppController
+class ModelController extends \app\controllers\AppController
 {
 
   /*

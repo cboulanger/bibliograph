@@ -382,8 +382,8 @@ class BibtexSchema extends \lib\schema\AbstractSchema
             'type'  => 'selectbox',
             'label' => Yii::t('app', 'Reference Type' ),
             'bindStore' => array(
-              'serviceName'   => 'bibliograph.reference',
-              'serviceMethod' => 'getReferenceTypeListData',
+              'serviceName'   => 'reference',
+              'serviceMethod' => 'types',
               'params'        => array( '$datasource' )
             )
           )
