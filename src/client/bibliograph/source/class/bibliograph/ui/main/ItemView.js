@@ -19,11 +19,6 @@ qx.Class.define("bibliograph.ui.main.ItemView",
 {
   extend : qx.ui.container.Composite,
 
-  /*
-   *****************************************************************************
-     PROPERTIES
-   *****************************************************************************
-   */
   properties :
   {
     /**
@@ -49,29 +44,25 @@ qx.Class.define("bibliograph.ui.main.ItemView",
     }
   },
 
-  /*
-  *****************************************************************************
-      CONSTRUCTOR
-  *****************************************************************************
-  */
   construct : function()
   {
     this.base(arguments);
     this._itemViews = {};
+
+    // setup event handlers
+    let bus = qx.event.message.Bus.getInstance();
+    let app = this.getApplication();
+    bus.subscribe( "user.loggedin", this.toggleReferenceView, this);
+    bus.subscribe( "user.loggedout", () => this.setView(null) );
+    app.addListener( "changeModelId", (e) => {
+      this.toggleReferenceView();
+      this.setVisibility(e.getData() ? "visible" : "hidden");
+    });
   },
 
-  /*
-  *****************************************************************************
-    MEMBERS
-  *****************************************************************************
-  */
   members :
   {
-    /*
-    ---------------------------------------------------------------------------
-       WIDGETS
-    ---------------------------------------------------------------------------
-    */
+    // the stack view
     itemViewStack : null,
 
     /**
@@ -87,9 +78,7 @@ qx.Class.define("bibliograph.ui.main.ItemView",
        APPLY METHODS
     ---------------------------------------------------------------------------
     */
-    _applyDatasource : function(value, old) {
-    },
-
+ 
     /**
      * Displays the item view of the given name. If the name contains a plus sign,
      * use the part before the plus sign as item view name, the part after as
@@ -186,13 +175,16 @@ qx.Class.define("bibliograph.ui.main.ItemView",
       switch (type)
       {
         default:
-          var allowEditReference = qcl.access.PermissionManager.getInstance().create("reference.edit").getState();
+          var allowEditReference = 
+            qcl.access.PermissionManager.getInstance().
+            create("reference.edit").getState();
           this.setView(allowEditReference ? "referenceEditor" : "tableView");
       }
     },
 
     /**
      * Prints the current item view
+     * @todo test & enable
      */
     print : function() {
       

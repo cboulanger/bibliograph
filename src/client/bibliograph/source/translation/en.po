@@ -150,7 +150,7 @@ msgstr ""
 msgid "New Datasource"
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:211
+#: bibliograph.ui.window.AccessControlTool:111
 msgid "Help"
 msgstr ""
 
@@ -202,7 +202,7 @@ msgstr ""
 msgid "Select"
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:136
+#: bibliograph.ui.main.Toolbar:142
 msgid "Preferences"
 msgstr ""
 
@@ -302,7 +302,7 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:245
+#: bibliograph.ui.main.Toolbar:221
 msgid "About Bibliograph"
 msgstr ""
 
@@ -326,7 +326,7 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:57
+#: bibliograph.ui.main.Toolbar:62
 msgid "Login"
 msgstr ""
 
@@ -334,27 +334,27 @@ msgstr ""
 msgid "Forgot Password?"
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:73
+#: bibliograph.ui.main.Toolbar:76
 msgid "Logout"
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:90
+#: bibliograph.ui.main.Toolbar:92
 msgid "Loading..."
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:110
+#: bibliograph.ui.main.Toolbar:109
 msgid "Datasources"
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:125
+#: bibliograph.ui.main.Toolbar:124
 msgid "System"
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:147
+#: bibliograph.ui.main.Toolbar:155
 msgid "Access management"
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:162
+#: bibliograph.ui.main.Toolbar:168
 msgid "Plugins"
 msgstr ""
 
@@ -366,15 +366,15 @@ msgstr ""
 msgid "This will reset and reload the application"
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:189
+#: bibliograph.ui.main.Toolbar:181
 msgid "Import"
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:202
+#: bibliograph.ui.main.Toolbar:198
 msgid "Import text file"
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:221
+#: bibliograph.ui.main.Toolbar:214
 msgid "Online Help"
 msgstr ""
 
@@ -382,7 +382,7 @@ msgstr ""
 msgid "Report a problem or request a feature"
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:310
+#: bibliograph.ui.main.Toolbar:248
 msgid "Enter search term"
 msgstr ""
 
@@ -518,27 +518,27 @@ msgstr ""
 msgid "Make folder empty"
 msgstr ""
 
-#: bibliograph.ui.item.ReferenceEditorUi:144
+#: bibliograph.ui.item.ReferenceEditorUi:139
 msgid "Abstract"
 msgstr ""
 
-#: bibliograph.ui.item.ReferenceEditorUi:158
+#: bibliograph.ui.item.ReferenceEditorUi:153
 msgid "Keywords"
 msgstr ""
 
-#: bibliograph.ui.item.ReferenceEditorUi:172
+#: bibliograph.ui.item.ReferenceEditorUi:167
 msgid "Notes"
 msgstr ""
 
-#: bibliograph.ui.item.ReferenceEditorUi:212
+#: bibliograph.ui.item.ReferenceEditorUi:207
 msgid "Contents"
 msgstr ""
 
-#: bibliograph.ui.item.ReferenceEditorUi:115
+#: bibliograph.ui.item.ReferenceEditorUi:110
 msgid "Main"
 msgstr ""
 
-#: bibliograph.ui.item.ReferenceEditorUi:182
+#: bibliograph.ui.item.ReferenceEditorUi:177
 msgid "About"
 msgstr ""
 
@@ -546,11 +546,11 @@ msgstr ""
 msgid "Record Info"
 msgstr ""
 
-#: bibliograph.ui.item.ReferenceEditorUi:265
+#: bibliograph.ui.item.ReferenceEditorUi:260
 msgid "Duplicates"
 msgstr ""
 
-#: bibliograph.ui.item.TableViewUi:50
+#: bibliograph.ui.item.FormattedViewUi:72
 msgid "Print"
 msgstr ""
 

@@ -21,6 +21,7 @@
 qx.Class.define("bibliograph.ui.item.ReferenceEditorUi",
 {
   extend : bibliograph.ui.item.ReferenceEditor,
+  include : [qcl.ui.MChildWidget],
   construct : function()
   {
     this.base(arguments);
@@ -76,13 +77,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditorUi",
       // @todo test & enable { id : "duplicates" }
       // formatted view is not part of the stack
     ];
-    for( let {id} of childControls ){
-      let methodName = 'create' + id.charAt(0).toUpperCase() + id.substr(1) + "View";
-      let [ page, button ] = this[methodName]();
-      page.setWidgetId("app/item/editor/" + id);
-      stackView.add(page);
-      menuBar.add(button);
-    }
+    this.addChildViews( [stackView,menuBar], childControls, "app/item/editor" );
   },
 
   members: 

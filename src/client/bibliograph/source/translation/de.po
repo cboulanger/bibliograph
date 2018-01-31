@@ -80,7 +80,7 @@ msgstr ""
 msgid "Retrieving user data..."
 msgstr "Lade Benutzerdaten ..."
 
-#: bibliograph.ui.item.TableViewUi:50
+#: bibliograph.ui.item.FormattedViewUi:72
 msgid "Print"
 msgstr "Drucken"
 
@@ -244,63 +244,63 @@ msgstr "Erzeuge das Formular, bitte warten ..."
 msgid "Saving..."
 msgstr "Speichern ..."
 
-#: bibliograph.ui.item.ReferenceEditorUi:144
+#: bibliograph.ui.item.ReferenceEditorUi:139
 msgid "Abstract"
 msgstr "Zusammenfassung"
 
-#: bibliograph.ui.item.ReferenceEditorUi:158
+#: bibliograph.ui.item.ReferenceEditorUi:153
 msgid "Keywords"
 msgstr "Schlagwörter"
 
-#: bibliograph.ui.item.ReferenceEditorUi:172
+#: bibliograph.ui.item.ReferenceEditorUi:167
 msgid "Notes"
 msgstr "Kommentar"
 
-#: bibliograph.ui.item.ReferenceEditorUi:212
+#: bibliograph.ui.item.ReferenceEditorUi:207
 msgid "Contents"
 msgstr "Inhaltsverzeichnis"
 
-#: bibliograph.ui.item.ReferenceEditorUi:115
+#: bibliograph.ui.item.ReferenceEditorUi:110
 msgid "Main"
 msgstr "Stammdaten"
 
-#: bibliograph.ui.item.ReferenceEditorUi:182
+#: bibliograph.ui.item.ReferenceEditorUi:177
 msgid "About"
 msgstr "Metadaten"
 
-#: bibliograph.ui.item.ReferenceEditorUi:265
+#: bibliograph.ui.item.ReferenceEditorUi:260
 msgid "Duplicates"
 msgstr "Dubletten"
 
-#: bibliograph.ui.main.Toolbar:57
+#: bibliograph.ui.main.Toolbar:62
 msgid "Login"
 msgstr "Anmelden"
 
-#: bibliograph.ui.main.Toolbar:73
+#: bibliograph.ui.main.Toolbar:76
 msgid "Logout"
 msgstr "Abmelden"
 
-#: bibliograph.ui.main.Toolbar:90
+#: bibliograph.ui.main.Toolbar:92
 msgid "Loading..."
 msgstr "Lade ..."
 
-#: bibliograph.ui.main.Toolbar:110
+#: bibliograph.ui.main.Toolbar:109
 msgid "Datasources"
 msgstr "Datenbanken"
 
-#: bibliograph.ui.main.Toolbar:125
+#: bibliograph.ui.main.Toolbar:124
 msgid "System"
 msgstr "System"
 
-#: bibliograph.ui.main.Toolbar:136
+#: bibliograph.ui.main.Toolbar:142
 msgid "Preferences"
 msgstr "Optionen"
 
-#: bibliograph.ui.main.Toolbar:147
+#: bibliograph.ui.main.Toolbar:155
 msgid "Access management"
 msgstr "Zugangskontrolle"
 
-#: bibliograph.ui.main.Toolbar:162
+#: bibliograph.ui.main.Toolbar:168
 msgid "Plugins"
 msgstr "Plugins"
 
@@ -312,19 +312,19 @@ msgstr ""
 msgid "This will reset and reload the application"
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:189
+#: bibliograph.ui.main.Toolbar:181
 msgid "Import"
 msgstr "Importieren"
 
-#: bibliograph.ui.main.Toolbar:202
+#: bibliograph.ui.main.Toolbar:198
 msgid "Import text file"
 msgstr "Aus Text/Datei importieren"
 
-#: bibliograph.ui.main.Toolbar:211
+#: bibliograph.ui.window.AccessControlTool:111
 msgid "Help"
 msgstr "Hilfe"
 
-#: bibliograph.ui.main.Toolbar:221
+#: bibliograph.ui.main.Toolbar:214
 msgid "Online Help"
 msgstr "Online-Hilfe"
 
@@ -332,11 +332,11 @@ msgstr "Online-Hilfe"
 msgid "Report a problem or request a feature"
 msgstr "Ein Problem melden oder einen Verbesserungsvorschlag machen"
 
-#: bibliograph.ui.main.Toolbar:245
+#: bibliograph.ui.main.Toolbar:221
 msgid "About Bibliograph"
 msgstr "Über Bibliograph"
 
-#: bibliograph.ui.main.Toolbar:310
+#: bibliograph.ui.main.Toolbar:248
 msgid "Enter search term"
 msgstr "Bitte geben sie einen Suchausdruck ein"
 

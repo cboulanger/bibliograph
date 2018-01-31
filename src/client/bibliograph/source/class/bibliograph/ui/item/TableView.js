@@ -21,31 +21,6 @@
 qx.Class.define("bibliograph.ui.item.TableView",
 {
   extend : qx.ui.container.Composite,
-
-  /*
-    *****************************************************************************
-       PROPERTIES
-    *****************************************************************************
-    */
-  properties : {
-
-  },
-
-  /*
-    *****************************************************************************
-        CONSTRUCTOR
-    *****************************************************************************
-    */
-  construct : function()
-  {
-    this.base(arguments);
-  },
-
-  /*
-    *****************************************************************************
-        MEMBERS
-    *****************************************************************************
-    */
   members :
   {
     /*
@@ -63,15 +38,28 @@ qx.Class.define("bibliograph.ui.item.TableView",
     {
       var app = this.getApplication();
       if (app.getDatasource() && app.getModelId()) {
-        app.getRpcClient("reference").send(
-            "getHtml",
-            [app.getDatasource(), app.getModelId()],
-            function(data) {
-              this.viewPane.setHtml(qx.lang.Type.isObject(data) ? data.html : "");
-            }, this);
+        this._load(app.getDatasource(), app.getModelId());
       }
     },
 
+    /**
+     * loads the HTML from the server
+     */
+    _load : function(datasource,id)
+    {
+      this.setEnabled(false);
+      this.viewPane.setHtml("");
+      this.getApplication()
+      .getRpcClient("reference")
+      .send( "item-html", [datasource, id])
+      .then((data)=>{
+        this.viewPane.setHtml(qx.lang.Type.isObject(data) ? data.html : "");
+        this.setEnabled(true);
+      })
+      .catch((err)=>{
+        this.warn(err);
+      });      
+    },
 
     /*
     ---------------------------------------------------------------------------
@@ -79,33 +67,18 @@ qx.Class.define("bibliograph.ui.item.TableView",
     ---------------------------------------------------------------------------
     */
 
-    /**
-     * TODOC
-     *
-     * @return {void}
-     */
     loadHtml : function()
     {
       var app = this.getApplication();
       var id = app.getModelId();
-      if (!id)
-      {
+      if (!id) {
         this.viewPane.setHtml("");
         return;
       }
       if (this.isVisible() && app.getDatasource()) {
         qx.event.Timer.once(function() {
-          if (id == app.getModelId())
-          {
-            this.setEnabled(false);
-            this.viewPane.setHtml("");
-            app.getRpcClient("reference").send(
-                "getHtml",
-                [app.getDatasource(), id],
-                function(data){
-                  this.viewPane.setHtml(qx.lang.Type.isObject(data) ? data.html : "");
-                  this.setEnabled(true);
-                }, this);
+          if (id == app.getModelId()) {
+            this._load( app.getDatasource(), id);
           }
         }, this, 500);
       }

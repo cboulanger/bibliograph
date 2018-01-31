@@ -23,9 +23,21 @@
  * @asset(bibliograph/icon/button-settings-up.png)
  * @asset(bibliograph/icon/button-minus.png)
  * 
- * === Other menu icons ===
+ * === other icons ===
+ * @asset(bibliograph/icon/16/cancel.png)
+ * @asset(bibliograph/icon/16/help.png)
+ * @asset(bibliograph/icon/16/search.png)
+ * 
+ * === Icons from the framework (Tango/Oxygen) ===
  * @asset(icon/16/places/user-trash.png)
  * @asset(icon/16/apps/utilities-graphics-viewer.png)
+ * @asset(qx/icon/${qx.icontheme}/22/categories/system.png)
+ * @asset(qx/icon/${qx.icontheme}/16/status/dialog-password.png)
+ * @asset(qx/icon/${qx.icontheme}/16/apps/preferences-users.png)
+ * @asset(qx/icon/${qx.icontheme}/22/apps/utilities-help.png)
+ * @asset(qx/icon/${qx.icontheme}/16/apps/utilities-archiver.png)
+ * @asset(qx/icon/${qx.icontheme}/22/places/network-server.png)
+ * @asset(qx/icon/${qx.icontheme}/16/actions/application-exit.png)
  * 
  */
 qx.Theme.define("bibliograph.theme.Icon",

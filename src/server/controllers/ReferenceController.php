@@ -1060,11 +1060,9 @@ class ReferenceController extends AppController
 
     // create html table
     $html = "<table>";
-    //$reference = array();
-    
     foreach ( $fields as $field )
     {
-      $value = $modelClass->get( $field );
+      $value = $reference->$field;
       if ( ! $value or ! $schema->isPublicField( $field ) ) continue;
       $label = $modelClass::getSchema()->getFieldLabel( $field, $reftype );
 
@@ -1075,8 +1073,10 @@ class ReferenceController extends AppController
           $value = $schema->getTypeLabel( $value );
           break;
         case "url":
-          //@todo multiple urls
-          $value = "<a href='$value' target='_blank'>$value</a>";
+          $urls = explode(";",$value);
+          $value = implode("<br/>", array_map( function($url){
+            return "<a href='$url' target='_blank'>$url</a>";
+          }, $urls) );
           break;
       }
 
