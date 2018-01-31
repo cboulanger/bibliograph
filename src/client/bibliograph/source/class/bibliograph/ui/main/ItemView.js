@@ -103,42 +103,29 @@ qx.Class.define("bibliograph.ui.main.ItemView",
      */
     _applyView : function(value, old)
     {
-      if (value)
-      {
+      if (value) {
         var subView;
-        if( value.indexOf("-") !== -1 )
-        {
+        if( value.indexOf("-") !== -1 ) {
           var parts = value.split("-");
           value = parts[0];
           subView = parts[1];
         }
         var itemViewWidget = this.getViewByName(value);
-        if (itemViewWidget)
-        {
+        if (itemViewWidget) {
           this.itemViewStack.setSelection([itemViewWidget]);
-          if( subView )
-          {
-            if( typeof itemViewWidget.setPage == "function" )
-            {
+          if( subView ) {
+            if( typeof itemViewWidget.setPage == "function" ) {
               itemViewWidget.setPage(subView);
             }
           }
+        } else {
+          this.warn("Invalid item view name " + value);
+          return; 
         }
-        else
-        {
-          this.error("Invalid item view name " + value);
-        }
-      } else
-      {
+      } else  {
         this.getItemViewStack().setSelection([]);
       }
     },
-
-    /*
-    ---------------------------------------------------------------------------
-       EVENT HANDLERS
-    ---------------------------------------------------------------------------
-    */
 
     /*
     ---------------------------------------------------------------------------

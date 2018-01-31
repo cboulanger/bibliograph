@@ -80,7 +80,7 @@ msgstr ""
 msgid "Retrieving user data..."
 msgstr "Lade Benutzerdaten ..."
 
-#: bibliograph.ui.item.FormattedViewUi:72
+#: bibliograph.ui.item.TableViewUi:50
 msgid "Print"
 msgstr "Drucken"
 
@@ -172,35 +172,35 @@ msgstr "Sichtbarkeit verändern"
 msgid "Processing request..."
 msgstr "Verarbeite die Anfrage ..."
 
-#: bibliograph.ui.item.DuplicatesViewUi:40
+#: bibliograph.ui.item.DuplicatesViewUi:35
 msgid "This table shows potential duplicates of the current record."
 msgstr "Diese Tabelle zeigt potentielle Dubletten des ausgewählten Datensatzes"
 
-#: bibliograph.ui.item.DuplicatesViewUi:61
+#: bibliograph.ui.item.DuplicatesViewUi:54
 msgid "Type"
 msgstr "Typ"
 
-#: bibliograph.ui.item.DuplicatesViewUi:62
+#: bibliograph.ui.item.DuplicatesViewUi:55
 msgid "Author"
 msgstr "Autor"
 
-#: bibliograph.ui.item.DuplicatesViewUi:63
+#: bibliograph.ui.item.DuplicatesViewUi:56
 msgid "Date"
 msgstr "Datum"
 
-#: bibliograph.ui.item.DuplicatesViewUi:64
+#: bibliograph.ui.item.DuplicatesViewUi:57
 msgid "Title"
 msgstr "Titel"
 
-#: bibliograph.ui.item.DuplicatesViewUi:104
+#: bibliograph.ui.item.DuplicatesViewUi:93
 msgid "Display"
 msgstr "Anzeigen"
 
-#: bibliograph.ui.item.DuplicatesViewUi:112
+#: bibliograph.ui.item.DuplicatesViewUi:99
 msgid "Delete"
 msgstr "Löschen\t"
 
-#: bibliograph.ui.item.DuplicatesViewUi:120
+#: bibliograph.ui.item.DuplicatesViewUi:105
 msgid "Score threshold to count as duplicate:"
 msgstr "Schwellenwert für Einordnung als Dublette"
 
@@ -244,31 +244,31 @@ msgstr "Erzeuge das Formular, bitte warten ..."
 msgid "Saving..."
 msgstr "Speichern ..."
 
-#: bibliograph.ui.item.ReferenceEditorUi:116
+#: bibliograph.ui.item.ReferenceEditorUi:144
 msgid "Abstract"
 msgstr "Zusammenfassung"
 
-#: bibliograph.ui.item.ReferenceEditorUi:132
+#: bibliograph.ui.item.ReferenceEditorUi:158
 msgid "Keywords"
 msgstr "Schlagwörter"
 
-#: bibliograph.ui.item.ReferenceEditorUi:148
+#: bibliograph.ui.item.ReferenceEditorUi:172
 msgid "Notes"
 msgstr "Kommentar"
 
-#: bibliograph.ui.item.ReferenceEditorUi:226
+#: bibliograph.ui.item.ReferenceEditorUi:212
 msgid "Contents"
 msgstr "Inhaltsverzeichnis"
 
-#: bibliograph.ui.item.ReferenceEditorUi:201
+#: bibliograph.ui.item.ReferenceEditorUi:115
 msgid "Main"
 msgstr "Stammdaten"
 
-#: bibliograph.ui.item.ReferenceEditorUi:213
+#: bibliograph.ui.item.ReferenceEditorUi:182
 msgid "About"
 msgstr "Metadaten"
 
-#: bibliograph.ui.item.ReferenceEditorUi:262
+#: bibliograph.ui.item.ReferenceEditorUi:265
 msgid "Duplicates"
 msgstr "Dubletten"
 
