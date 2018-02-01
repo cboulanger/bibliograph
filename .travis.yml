@@ -50,10 +50,10 @@ before_script:
   - mysql -e 'CREATE DATABASE tests;'
   
 script:
-  - echo "travis_fold:start:npm_install"
+  #- echo "travis_fold:start:npm_install"
   - npm cache clean --force
   - npm i -g npm
-  - npm install --dev || true
-  - echo "travis_fold:end:npm_install"
+  - npm install --dev
+  #- echo "travis_fold:end:npm_install"
   - npm link mocha
   - npm test
