@@ -272,35 +272,35 @@ msgstr "Metadaten"
 msgid "Duplicates"
 msgstr "Dubletten"
 
-#: bibliograph.ui.main.Toolbar:62
+#: bibliograph.ui.main.Toolbar:64
 msgid "Login"
 msgstr "Anmelden"
 
-#: bibliograph.ui.main.Toolbar:76
+#: bibliograph.ui.main.Toolbar:78
 msgid "Logout"
 msgstr "Abmelden"
 
-#: bibliograph.ui.main.Toolbar:92
+#: bibliograph.ui.main.Toolbar:94
 msgid "Loading..."
 msgstr "Lade ..."
 
-#: bibliograph.ui.main.Toolbar:109
+#: bibliograph.ui.main.Toolbar:111
 msgid "Datasources"
 msgstr "Datenbanken"
 
-#: bibliograph.ui.main.Toolbar:124
+#: bibliograph.ui.main.Toolbar:126
 msgid "System"
 msgstr "System"
 
-#: bibliograph.ui.main.Toolbar:142
+#: bibliograph.ui.main.Toolbar:144
 msgid "Preferences"
 msgstr "Optionen"
 
-#: bibliograph.ui.main.Toolbar:155
+#: bibliograph.ui.main.Toolbar:157
 msgid "Access management"
 msgstr "Zugangskontrolle"
 
-#: bibliograph.ui.main.Toolbar:168
+#: bibliograph.ui.main.Toolbar:170
 msgid "Plugins"
 msgstr "Plugins"
 
@@ -312,11 +312,11 @@ msgstr ""
 msgid "This will reset and reload the application"
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:181
+#: bibliograph.ui.main.Toolbar:183
 msgid "Import"
 msgstr "Importieren"
 
-#: bibliograph.ui.main.Toolbar:198
+#: bibliograph.ui.main.Toolbar:200
 msgid "Import text file"
 msgstr "Aus Text/Datei importieren"
 
@@ -324,7 +324,7 @@ msgstr "Aus Text/Datei importieren"
 msgid "Help"
 msgstr "Hilfe"
 
-#: bibliograph.ui.main.Toolbar:214
+#: bibliograph.ui.main.Toolbar:216
 msgid "Online Help"
 msgstr "Online-Hilfe"
 
@@ -332,11 +332,11 @@ msgstr "Online-Hilfe"
 msgid "Report a problem or request a feature"
 msgstr "Ein Problem melden oder einen Verbesserungsvorschlag machen"
 
-#: bibliograph.ui.main.Toolbar:221
+#: bibliograph.ui.main.Toolbar:223
 msgid "About Bibliograph"
 msgstr "Über Bibliograph"
 
-#: bibliograph.ui.main.Toolbar:248
+#: bibliograph.ui.main.Toolbar:268
 msgid "Enter search term"
 msgstr "Bitte geben sie einen Suchausdruck ein"
 
@@ -730,4 +730,16 @@ msgstr ""
 
 #: bibliograph.ui.item.FormattedView:190
 msgid "Loading formatted citations..."
+msgstr ""
+
+#: bibliograph.ui.main.Toolbar:235
+msgid "Development"
+msgstr ""
+
+#: bibliograph.ui.main.Toolbar:241
+msgid "Run RPC method test.test"
+msgstr ""
+
+#: bibliograph.ui.main.Toolbar:235
+msgid "Developer"
 msgstr ""

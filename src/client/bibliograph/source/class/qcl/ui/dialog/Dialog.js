@@ -59,7 +59,7 @@ qx.Class.define("qcl.ui.dialog.Dialog",
      */
     allowServerDialogs : function( value )
     {
-      var messageName = "qcl.ui.dialog.Dialog.createDialog";
+      var messageName = "dialog";
       if ( value )
       {
         qx.event.message.Bus.getInstance().subscribe( messageName, this._onServerDialog,this);
@@ -84,9 +84,9 @@ qx.Class.define("qcl.ui.dialog.Dialog",
      */
     _onServerDialog : function( message )
     {
+      
       var app = qx.core.Init.getApplication();
       var data = message.getData();
-
       data.properties.callback = null;
       if ( data.service )
       {
@@ -100,7 +100,7 @@ qx.Class.define("qcl.ui.dialog.Dialog",
           data.params.unshift(result);
           
           // send request back to server
-          this.getApplication().getRpclient(data.service).send( data.method, data.params );
+          qx.core.Init.getApplication().getRpcClient(data.service).send( data.method, data.params );
         }
       }
       

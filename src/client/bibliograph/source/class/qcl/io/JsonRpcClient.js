@@ -164,6 +164,14 @@ qx.Class.define("qcl.io.JsonRpcClient", {
       this.__client.setAuthToken(value);
     },
 
+    /**
+     * Event Transport protocol:
+     * {
+     *   "type" : "ServiceResult"
+     *   "events" : [ { "name": "...", "data": <event data> }],
+     *   "data" : <result data>
+     * }
+     */
     _handleResult : function( result ){
       // we are only interested in objects (but not arrays)
       if(  qx.lang.Type.isArray(result) || ! qx.lang.Type.isObject(result) ){

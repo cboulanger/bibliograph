@@ -29,6 +29,16 @@ class EventQueue extends \yii\base\Component
   }
 
   /**
+   * Returns true if there are events to be transported
+   *
+   * @return boolean
+   */
+  public function hasEvents()
+  {
+    return count($this->events) >0;
+  }
+
+  /**
    * Converts the event queue to an array of arrays containing
    * the event properties. The conversion is done in the [[EventQueue::_eventToArray]]
    * method, which can be overridden in subclasses.

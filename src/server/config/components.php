@@ -20,7 +20,7 @@ $components = [
   ],
   // The http response component
   'response' => [
-    'format' => yii\web\Response::FORMAT_JSON
+    'class' => \lib\components\EventTransportResponse::class
   ],  
   // a queue of Events to be transported to the browser
   'eventQueue' => [
@@ -37,10 +37,6 @@ $components = [
   // message channels, not working yet
   'channel' => [
     'class' => \lib\channel\Component::class
-  ],
-  // service result, containing events
-  'serviceResult' => [
-    'class' => \app\controllers\dto\ServiceResult::class
   ]
 ];
 return array_merge(

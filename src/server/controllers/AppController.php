@@ -276,7 +276,10 @@ class AppController extends \JsonRpc2\Controller
    * @param [type] $data
    * @return void
    */
-  public function  dispatchClientMessage($eventName, $data){
-    Yii::warning("NOT DISPATCHING $eventName");
+  public function  dispatchClientMessage($eventName, $data=null){
+    Yii::$app->eventQueue->add( new \yii\base\Event([
+      "name" => $eventName,
+      "data" => $data
+    ]));
   }
 }

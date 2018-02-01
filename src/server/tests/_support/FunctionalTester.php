@@ -184,6 +184,17 @@ class FunctionalTester extends \Codeception\Actor
   }
 
   /**
+   * Shorthand method aliasing grabDataFromResponseByJsonPath($path)[0]
+   *
+   * @param string $path
+   * @return mixed
+   */
+  public function getByJsonPath($path)
+  {
+    return $this->grabDataFromResponseByJsonPath($path)[0];
+  }
+
+  /**
    * Logs out current user
    *
    * @return void

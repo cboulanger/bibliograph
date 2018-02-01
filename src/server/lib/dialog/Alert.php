@@ -33,7 +33,7 @@ class Alert extends Dialog
    * @param array $callbackParams 
    *    Optional service params
    */
-  public static function create( $message, $callbackService=null, $callbackMethod=null, $callbackParams=null )
+  public static function create( $message, $callbackService=null, $callbackMethod=null, array $callbackParams=[] )
   {
     static::addToEventQueue( array(
      'type' => "alert",

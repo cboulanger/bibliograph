@@ -202,7 +202,7 @@ msgstr ""
 msgid "Select"
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:142
+#: bibliograph.ui.main.Toolbar:144
 msgid "Preferences"
 msgstr ""
 
@@ -302,7 +302,7 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:221
+#: bibliograph.ui.main.Toolbar:223
 msgid "About Bibliograph"
 msgstr ""
 
@@ -326,7 +326,7 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:62
+#: bibliograph.ui.main.Toolbar:64
 msgid "Login"
 msgstr ""
 
@@ -334,27 +334,27 @@ msgstr ""
 msgid "Forgot Password?"
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:76
+#: bibliograph.ui.main.Toolbar:78
 msgid "Logout"
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:92
+#: bibliograph.ui.main.Toolbar:94
 msgid "Loading..."
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:109
+#: bibliograph.ui.main.Toolbar:111
 msgid "Datasources"
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:124
+#: bibliograph.ui.main.Toolbar:126
 msgid "System"
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:155
+#: bibliograph.ui.main.Toolbar:157
 msgid "Access management"
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:168
+#: bibliograph.ui.main.Toolbar:170
 msgid "Plugins"
 msgstr ""
 
@@ -366,15 +366,15 @@ msgstr ""
 msgid "This will reset and reload the application"
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:181
+#: bibliograph.ui.main.Toolbar:183
 msgid "Import"
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:198
+#: bibliograph.ui.main.Toolbar:200
 msgid "Import text file"
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:214
+#: bibliograph.ui.main.Toolbar:216
 msgid "Online Help"
 msgstr ""
 
@@ -382,7 +382,7 @@ msgstr ""
 msgid "Report a problem or request a feature"
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:248
+#: bibliograph.ui.main.Toolbar:268
 msgid "Enter search term"
 msgstr ""
 
@@ -696,4 +696,16 @@ msgstr ""
 
 #: bibliograph.ui.item.FormattedView:190
 msgid "Loading formatted citations..."
+msgstr ""
+
+#: bibliograph.ui.main.Toolbar:235
+msgid "Development"
+msgstr ""
+
+#: bibliograph.ui.main.Toolbar:241
+msgid "Run RPC method test.test"
+msgstr ""
+
+#: bibliograph.ui.main.Toolbar:235
+msgid "Developer"
 msgstr ""

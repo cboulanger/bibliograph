@@ -43,10 +43,15 @@ class TestController extends AppController
     return [ "message" => $exception ];
   }
 
-  public function actionTest($message)
+  public function actionTest()
   {
-    return ["message" => "hello ".$message];
+    \lib\dialog\Alert::create("It works!","test","test2",["it really does."]);
   }
+
+  public function actionTest2($result, $message )
+  {
+    \lib\dialog\Alert::create($message);
+  }  
 
   public function create_messages($sessionId)
   {
@@ -55,6 +60,16 @@ class TestController extends AppController
       $channel->send( "The time is " . date('l, F jS, Y, h:i:s A'));
     }
     $channel->send("done");
+  }
+
+  public function actionAlert( $message )
+  {
+    \lib\dialog\Alert::create( $message );
+  }
+
+  public function actionSimpleEvent()
+  {
+    $this->dispatchClientMessage("foo","Hello World");
   }
 
 }

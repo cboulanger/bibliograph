@@ -46,6 +46,8 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
     toolBarPart2.add(this.createSystemMenu());
     toolBarPart2.add(this.createImportMenu());
     toolBarPart2.add(this.createHelpMenu());
+    // @todo toggle with server config
+    toolBarPart2.add(this.createDeveloperMenu());
 
     toolBar.add(new qx.ui.basic.Atom(), { flex : 10 }); // why not a spacer?
     toolBar.add(this.createTitleLabel());
@@ -207,22 +209,40 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       var menuButton = new qx.ui.toolbar.MenuButton();
       menuButton.setIcon("icon/22/apps/utilities-help.png");
 
-      var helpMenu = new qx.ui.menu.Menu();
-      menuButton.setMenu(helpMenu);
-      helpMenu.setWidgetId("app/toolbar/help");
+      var menu = new qx.ui.menu.Menu();
+      menuButton.setMenu(menu);
+      menu.setWidgetId("app/toolbar/help");
 
       var button1 = new qx.ui.menu.Button(this.tr('Online Help'));
-      helpMenu.add(button1);
+      menu.add(button1);
       button1.addListener("execute", function(e) {
         this.getApplication().cmd("showHelpWindow");
       }, this);
 
       var button2 = new qx.ui.menu.Button();
       button2.setLabel(this.tr('About Bibliograph'));
-      helpMenu.add(button2);
+      menu.add(button2);
       button2.addListener("execute", function(e) {
         this.getApplication().cmd("showAboutWindow");
       }, this);      
+
+      return menuButton;
+    },
+
+    createDeveloperMenu : function()
+    {
+      var menuButton = new qx.ui.toolbar.MenuButton();
+      menuButton.setLabel(this.tr('Developer'));
+
+      var menu = new qx.ui.menu.Menu();
+      menuButton.setMenu(menu);
+      menu.setWidgetId("app/toolbar/developer");
+
+      var button1 = new qx.ui.menu.Button(this.tr('Run RPC method test.test'));
+      menu.add(button1);
+      button1.addListener("execute", function(e) {
+        this.getApplication().getRpcClient("test").send("test");
+      }, this);
 
       return menuButton;
     },

@@ -4,9 +4,10 @@
 
 ### Major tasks
 - [ ] Make Travis ~~great~~ work again
-- [ ] Add event transport on the level of the reponse, not the service
-- [ ] Repair event dispatch, now we have  Yii::$app->eventQueue->add( new Event()) and $this->dispatch/broadcast
-(http://www.yiiframework.com/doc-2.0/guide-runtime-responses.html#sending-response)
+- [x] Add event transport on the level of the reponse, not the service
+- [x] Repair event dispatch
+- [ ] Re-implement setup
+- [ ] Re-implement LDAP support
 - [ ] Re-implement cql search
 - [ ] Re-implement Remove/Move/Copy references
 - [ ] Re-implement Add/Remove/Move/Copy folders
@@ -24,9 +25,14 @@
 - [ ] Rename item view "metadata" page
 
 ## v3.X
+
+### Major tasks
 - [ ] Re-enable item view / formatted item
 - [ ] Re-enable item view / record info
 - [ ] Re-enable item view / duplicates search
 - [ ] Re-enable system menu commands
+- [ ] Re-implement message broadcast
 - [ ] Reimplement HTML editor integration for notes
+
+### Minor tasks
 - [ ] Enable print item view: bibliograph.ui.main.ItemView#print()

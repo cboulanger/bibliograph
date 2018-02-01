@@ -306,7 +306,6 @@ class AccessController extends AppController
 
   /**
    * Returns the data of the current user, including permissions.
-   * xxxreturn \app\controllers\dto\ServiceResult
    */
   public function actionUserdata()
   {
@@ -314,10 +313,7 @@ class AccessController extends AppController
     $data = $activeUser->getAttributes(['namedId','name','anonymous','ldap']);
     $data['anonymous'] = (bool) $data['anonymous'];
     $data['permissions'] = array_values($activeUser->getPermissionNames());
-    $result = Yii::$app->serviceResult;
-    $result->setResult($data);
-    return  $result;
-    //return $data;
+    return $data;
   }
 
   /**
