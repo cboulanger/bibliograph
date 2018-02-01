@@ -31,8 +31,7 @@ install:
   - git clone --depth 1 https://github.com/qooxdoo/qooxdoo.git /home/travis/build/cboulanger/qooxdoo #ugly workaround
   - cp build-env/travis/config/* bibliograph/services/config/
   - pushd bibliograph
-  - ./generate.py -I build
-  - echo "all" > plugins.txt
+  - qx compile --feedback=false
   - popd
   
   # setup yii2 backend
@@ -46,17 +45,15 @@ install:
 
 before_script:
   # create databases and tables
-  - mysql -e 'CREATE DATABASE bibliograph;'
   - mysql -e 'CREATE DATABASE tests;'
   
 script:
-  #- echo "travis_fold:start:npm_install"
-  # this hopefully fixes the ENOENT problems
+  - echo "travis_fold:start:npm_install"
   - rm package-lock.json
   - rm -rf node_modules
   # install npm packages
   - npm install npm@latest -g
   - npm install
-  #- echo "travis_fold:end:npm_install"
+  - echo "travis_fold:end:npm_install"
   - npm link mocha
   - npm test

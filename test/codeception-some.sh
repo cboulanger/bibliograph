@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -o errexit # Exit on error
+#set -o errexit # Exit on error
 
 pushd ./src/server > /dev/null
 echo "Setting up database ..."

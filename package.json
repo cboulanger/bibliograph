@@ -29,14 +29,13 @@
   "dependencies": {
     "qooxdoo": "^6.0.1",
     "qooxdoo-sdk": "^6.0.0-alpha",
-    "qx-cli": "^0.1.39",
-    "qxcompiler": "^0.1.34",
+    "qxcompiler": "^0.2.0",
     "raptor-client": "github:cboulanger/raptor-client",
     "webpack": "^3.10.0"
   },
   "devDependencies": {
     "array-equal": "^1.0.0",
-    "eslint": "^4.14.0",
+    "eslint": "^4.16.0",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.8.0",
     "eventsource": "^1.0.5",

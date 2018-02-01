@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -o errexit # Exit on error
+#set -o errexit # Exit on error
 SERVER_PATH=src/server
 
 echo "Setting up database ..."
