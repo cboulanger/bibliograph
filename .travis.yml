@@ -25,15 +25,17 @@ before_install:
 #  - if php -i | grep yaz --quiet && echo '<?php exit(function_exists("yaz_connect")?0:1);' | php ; then echo "YAZ is installed"; else echo "YAZ installation failed"; exit 1; fi;
 
 install:
-  - echo "Installing Bibliograph..."
-
-  # build bibliograph
-  - git clone --depth 1 https://github.com/qooxdoo/qooxdoo.git /home/travis/build/cboulanger/qooxdoo #ugly workaround
+  - echo "Installing qooxdoo..."
+  - git clone --depth 1 https://github.com/qooxdoo/qooxdoo-compiler.git /home/travis/build/cboulanger/qooxdoo-compiler
+  - pushd qooxdoo-compiler
+  - npm link
+  - popd
+  - git clone --depth 1 https://github.com/qooxdoo/qooxdoo.git /home/travis/build/cboulanger/qooxdoo
   - cp build-env/travis/config/* bibliograph/services/config/
+  - echo "Building Bibliograph..."
   - pushd bibliograph
   - qx compile --feedback=false
   - popd
-  
   # setup yii2 backend
   - pushd src/server
   - composer install
