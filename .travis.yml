@@ -51,10 +51,9 @@ before_script:
   
 script:
   - echo "travis_fold:start:npm_install"
-  - npm cache --force
+  - npm cache clean --force
   - npm i -g npm
-  - npm install || true
-  - npm install cboulanger/raptor-client
+  - npm install --dev || true
   - echo "travis_fold:end:npm_install"
   - npm link mocha
   - npm test
