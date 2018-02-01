@@ -1,5 +1,5 @@
 <?php
-
+namespace app\migrations\schema;
 use yii\db\Migration;
 
 class m171219_230854_create_table_extended_data_reference extends Migration

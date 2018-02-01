@@ -88,13 +88,13 @@ class AccessModelsTest extends Base
   {
     $group = Group::findOne(['namedId'=>'group1']);
     $result = $group->getDatasourceNames();
-    $this->assertEquals( ["test_extended"], $result );
+    $this->assertEquals( ["database2"], $result );
   }    
 
   public function testUserDatasources()
   {
     $user = User::findOne(['name'=>"Sarah Manning"]);
     $result = $user->getDatasourceNames();
-    $this->assertEquals( 0, count( array_diff( $result, ['test_extended','setup','database3'] )));
+    $this->assertEquals( 0, count( array_diff( $result, ['database2','setup','database3'] )));
   } 
 }

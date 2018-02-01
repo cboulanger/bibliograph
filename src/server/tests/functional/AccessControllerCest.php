@@ -3,7 +3,7 @@
 // for whatever reason, this is not loaded early enough
 require_once __DIR__ . '/../_bootstrap.php';
 
-class AccessCest
+class AccessControllerCest
 {
 
   public function _fixtures()
@@ -34,8 +34,9 @@ class AccessCest
       $I->assertSame( $I->grabJsonRpcResult(), $i );   
     }
     $I->sendJsonRpcRequest('access','userdata');
-    $I->assertSame( $I->grabDataFromResponseByJsonPath('$.result.data.namedId')[0], 'admin' );
-    $I->assertSame( count( $I->grabDataFromResponseByJsonPath('$.result.data.permissions')[0] ), 34 );
+    //codecept_debug($I->grabDataFromResponseByJsonPath('$.result'));
+    $I->assertSame( $I->grabDataFromResponseByJsonPath('$.result.namedId')[0], 'admin' );
+    $I->assertSame( count( $I->grabDataFromResponseByJsonPath('$.result.permissions')[0] ), 34 );
     $I->logout();
   }
 }

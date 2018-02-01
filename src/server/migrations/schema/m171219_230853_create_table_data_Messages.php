@@ -1,5 +1,5 @@
 <?php
-
+namespace app\migrations\schema;
 use yii\db\Migration;
 
 class m171219_230853_create_table_data_Messages extends Migration

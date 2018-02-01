@@ -1,5 +1,5 @@
 <?php
-
+namespace app\migrations\schema;
 use yii\db\Migration;
 
 class m180102_104347_update_table_data_User extends Migration

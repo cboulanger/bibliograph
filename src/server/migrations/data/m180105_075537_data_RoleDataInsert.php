@@ -1,5 +1,5 @@
 <?php
-
+namespace app\migrations\data;
 use yii\db\Schema;
 use yii\db\Migration;
 

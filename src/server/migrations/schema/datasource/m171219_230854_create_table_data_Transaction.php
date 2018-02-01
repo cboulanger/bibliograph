@@ -1,8 +1,8 @@
 <?php
-
+namespace app\migrations\schema\datasource;
 use yii\db\Migration;
 
-class m171219_230854_create_table_join_Folder_Reference extends Migration
+class m171219_230854_create_table_data_Transaction extends Migration
 {
     public function safeUp()
     {
@@ -11,19 +11,20 @@ class m171219_230854_create_table_join_Folder_Reference extends Migration
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
         }
 
-        $this->createTable('{{%join_Folder_Reference}}', [
+        $this->createTable('{{%data_Transaction}}', [
             'id' => $this->integer(11)->notNull()->append('AUTO_INCREMENT PRIMARY KEY'),
             'created' => $this->timestamp(),
             'modified' => $this->timestamp()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),
-            'FolderId' => $this->integer(11),
-            'ReferenceId' => $this->integer(11),
+            'datasource' => $this->string(50),
+            'class' => $this->string(100),
+            'transactionId' => $this->integer(11)->defaultValue('0'),
         ], $tableOptions);
 
-        $this->createIndex('index_Folder_Reference', '{{%join_Folder_Reference}}', ['FolderId','ReferenceId'], true);
+        $this->createIndex('datasource_class_index', '{{%data_Transaction}}', ['datasource','class'], true);
     }
 
     public function safeDown()
     {
-        $this->dropTable('{{%join_Folder_Reference}}');
+        $this->dropTable('{{%data_Transaction}}');
     }
 }

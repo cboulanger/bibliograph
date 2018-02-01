@@ -1,5 +1,7 @@
 <?php
 
+namespace app\tests\migrations;
+
 use yii\db\Migration;
 
 class m171219_231010_create_table_database1_join_Folder_Reference extends Migration

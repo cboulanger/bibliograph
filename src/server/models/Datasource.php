@@ -412,9 +412,11 @@ class Datasource extends BaseModel
       $db = $modelClass::getDb();
       $prototypeTableName = "data_" . ucfirst($type);
       $prefix = $this->modelTablePrefix;
+      //@todo rewrite the following!
       $modelTableName = $prefix . $prototypeTableName;
-      $migrationClass = APP_MIGRATION_ID . "_create_table_" . $prototypeTableName;
-      $migrationFile = Yii::getAlias("@app/migrations/schema/{$migrationClass}.php"); //@todo very fragile and hackish!!
+      $baseName = "m" . MIGRATION_ID . "_create_table_" . $prototypeTableName;
+      $migrationClass = "\\app\\migrations\\schema\\datasource\\" . $baseName ;
+      $migrationFile = Yii::getAlias("@app/migrations/schema/datasource/{$baseName}.php"); 
       Yii::trace( "Creating table $modelTableName from class $migrationClass...");
       if( !\class_exists($migrationClass) ){
         include_once($migrationFile);
