@@ -52,7 +52,7 @@ before_script:
 script:
   #- echo "travis_fold:start:npm_install"
   # this hopefully fixes the ENOENT problems
-  - rm packge-lock.json
+  - rm package-lock.json
   - rm -rf node_modules
   # install npm packages
   - npm install npm@latest -g
