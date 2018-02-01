@@ -51,11 +51,12 @@ before_script:
   
 script:
   #- echo "travis_fold:start:npm_install"
-  - npm i -g npm
-  - npm i -g npm
+  # this hopefully fixes the ENOENT problems
+  - rm package-lock.json
   - rm -rf node_modules
+  # install npm packages
+  - npm install npm@latest -g
   - npm install
-  - npm install --only=dev
   #- echo "travis_fold:end:npm_install"
   - npm link mocha
   - npm test

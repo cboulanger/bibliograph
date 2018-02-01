@@ -10,6 +10,8 @@
 
 ```
 brew update
+brew install mysql
+mysql.server start
 brew install yaz autoconf bibutils
 brew install php70 --with-pear
 brew install php70-intl
