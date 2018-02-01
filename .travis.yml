@@ -57,6 +57,9 @@ script:
   - echo "travis_fold:end:npm_install"
   - npm link mocha
   - npm uninstall cboulanger/raptor-client
+<<<<<<< HEAD
   - npm cache clean
+=======
+>>>>>>> d016ca446f354a87901dd41f3f23cbce619d8871
   - npm install cboulanger/raptor-client
   - npm test
