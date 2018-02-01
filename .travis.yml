@@ -53,9 +53,8 @@ script:
   #- echo "travis_fold:start:npm_install"
   - npm i -g npm
   - npm i -g npm
+  - rm -rf node_modules
   - npm install
-  - npm install
-  - npm install --only=dev
   - npm install --only=dev
   #- echo "travis_fold:end:npm_install"
   - npm link mocha
