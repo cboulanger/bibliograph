@@ -1,13 +1,7 @@
 dist: trusty
-
 language: php
-
-env:
-  - JSONRPC_COMP_KEYSONLY=0
-
 php:
   - '7.0'
-
 services:
   - mysql
 
@@ -31,29 +25,25 @@ install:
   - npm link
   - popd
   - git clone --depth 1 https://github.com/qooxdoo/qooxdoo.git /home/travis/build/cboulanger/qooxdoo
-  - cp build-env/travis/config/* bibliograph/services/config/
   - echo "Building Bibliograph..."
-  - pushd bibliograph
-  - qx compile --feedback=false
+#  - cp build-env/travis/config/* bibliograph/services/config/
+  - pushd src/client/bibliograph
+  - qx compile
   - popd
-  # setup yii2 backend
+  - echo "Setting up backend..."
   - pushd src/server
   - composer install
   - ln -s vendor/bower-assets vendor/bower
   - popd
-
-  # done installing
   - echo "Installation scripts finished successufully."
 
 before_script:
-  # create databases and tables
   - mysql -e 'CREATE DATABASE tests;'
   
 script:
   - echo "travis_fold:start:npm_install"
   - rm package-lock.json
   - rm -rf node_modules
-  # install npm packages
   - npm install npm@latest -g
   - npm install
   - echo "travis_fold:end:npm_install"
