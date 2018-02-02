@@ -20,11 +20,11 @@ before_install:
 
 install:
   - echo "Installing qooxdoo..."
-  - git clone --depth 1 https://github.com/qooxdoo/qooxdoo-compiler.git /home/travis/build/cboulanger/qooxdoo-compiler
+  - git clone --depth 1 https://github.com/qooxdoo/qooxdoo-compiler.git
   - pushd qooxdoo-compiler
   - npm link
   - popd
-  - git clone --depth 1 https://github.com/qooxdoo/qooxdoo.git /home/travis/build/cboulanger/qooxdoo
+  - git clone --depth 1 https://github.com/qooxdoo/qooxdoo.git 
   - echo "Building Bibliograph..."
 #  - cp build-env/travis/config/* bibliograph/services/config/
   - pushd src/client/bibliograph
