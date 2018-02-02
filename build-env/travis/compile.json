@@ -1,0 +1,43 @@
+{
+  "environment": {
+    "bibliograph.version" : "3.0.0-alpha"
+  },
+
+  "targets": [
+    {
+      "type": "source",
+      "outputPath": "source-compiled",
+      "environment": {
+        "bibliograph.serverUrl" : "../../../server/web/?r="
+      }      
+    },
+    {
+      "type": "build",
+      "outputPath": "build-compiled"
+    }
+  ],
+  "defaultTarget": "source",
+  "locales": ["en","de"],
+
+  "applications": [
+    {
+      "class": "bibliograph.Application",
+      "theme": "bibliograph.theme.Theme",
+      "name": "bibliograph"
+    }
+  ],
+
+  "libraries": [
+    "../../../qooxdoo/framework",
+    "."
+  ],
+
+  "eslintConfig": {
+    "parserOptions": {
+      "ecmaVersion": 2017
+    },
+    "globals": {
+      "JSZip": false
+    } 
+  }
+}

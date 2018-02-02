@@ -25,11 +25,12 @@ install:
   - npm link
   - popd
   - git clone --depth 1 https://github.com/qooxdoo/qooxdoo.git 
+
   - echo "Building Bibliograph..."
-#  - cp build-env/travis/config/* bibliograph/services/config/
   - pushd src/client/bibliograph
-  - qx compile
+  - qx compile build-env/travis/compile.json --all-targets 
   - popd
+
   - echo "Setting up backend..."
   - pushd src/server
   - composer install
