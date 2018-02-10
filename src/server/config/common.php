@@ -1,5 +1,5 @@
 <?php
-require "constants.php";
+require "parts/constants.php";
 
 // Production
 $config =  [
@@ -10,7 +10,7 @@ $config =  [
     '@lib'   => __DIR__ . "/../lib/",
     '@tests' => __DIR__ . "/../tests/",
     ],
-  'components' => require('components.php'),
+  'components' => require('parts/components.php'),
   'extensions' => require(__DIR__ . '/../vendor/yiisoft/extensions.php'),
 ];
 

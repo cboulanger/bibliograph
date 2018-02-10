@@ -62,13 +62,13 @@ class Utils extends \yii\base\Component
 
   /**
    * Returns a configuration value of the pattern "foo.bar.baz"
-   * This retrieves the values set in the service.ini.php file.
+   * This retrieves the values set in the config/bibliograph.ini.php file.
    */
   public function getIniValue( $path )
   {
     static $ini = null;
     if( is_null($ini) ){
-      $ini = require(Yii::getAlias('@app/config/ini.php'));
+      $ini = require(Yii::getAlias('@app/config/parts/ini.php'));
     }
     $parts = explode(".",$path);
     // drill into ini array
