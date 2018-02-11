@@ -32,10 +32,6 @@ use app\models\ImportFormat;
  */
 class ImportController extends AppController
 {
-  use traits\ShimTrait;
-  use traits\RbacTrait;
-  use traits\AuthTrait;
-
 
   /*
   ---------------------------------------------------------------------------

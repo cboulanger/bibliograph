@@ -105,25 +105,6 @@ class Utils extends \yii\base\Component
     }, $arr );
   }
 
-  /**
-   * Returns the (user) value for a config key
-   *
-   * @param string $key
-   * @return mixed The value of the preference key
-   */
-  public function getPreference($key)
-  {
-    $config = Config::findOne(['namedId'=>$key]);
-    if( is_null($config) ){
-      throw new \InvalidArgumentException("Preference '$key' does not exist.");
-    }
-    $activeUser = Yii::$app->user->getIdentity(); 
-    if( ! $activeUser or ! $config->customize ){
-      return $config->default;
-    }
-    return $config->getUserConfig( $activeUser->id )->value;
-  }
- 
 
   //-------------------------------------------------------------
   // etc

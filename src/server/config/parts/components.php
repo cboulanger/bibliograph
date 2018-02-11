@@ -18,6 +18,10 @@ $components = [
       ]
     ] 
   ],
+  // The application configuration
+  'config' => [
+    'class' => \lib\components\Configuration::class
+  ],    
   // The http response component
   'response' => [
     'class' => \lib\components\EventTransportResponse::class

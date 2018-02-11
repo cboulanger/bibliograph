@@ -40,8 +40,6 @@ use lib\channel\Aggregator;
 class ChannelController extends AppController
 {
 
-  use traits\RbacTrait;
-  use traits\AuthTrait;
 
   //-------------------------------------------------------------
   // Actions / JSONRPC API

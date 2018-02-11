@@ -101,13 +101,16 @@ class Config extends BaseModel
   }
 
   /**
-   * Returns the customized user configuration
+   * Returns the customized user configuration or the config default if no 
+   * user object has been passed.
    *
-   * @param int|\app\models\User $user Either a numeric id or the user model
+   * @param int|\app\models\User|null $user Either a numeric id or the user model
    * @return mixed
-   * @throws \LogicException if user doesn't exists
    */
   public function getUserConfigValue( $user ){
+    if ( ! $user ){
+      return $this->default;
+    }
     $userConfig = $this->getUserConfig( $user );
     if( is_null($userConfig) ){
       // no user config exists, return default value

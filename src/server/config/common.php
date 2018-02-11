@@ -29,8 +29,13 @@ if (YII_ENV_DEV) {
     'fixture' => [
       'class' => 'yii\faker\FixtureController',
     ],
+    'migrate' => [
+      'class' => 'yii\console\controllers\MigrateController',
+      'migrationNamespaces' => ['app\migrations\schema', 'app\migrations\data'],
+      'migrationPath' => null
+    ],
     'migration' => [
-      'class' => 'bizley\migration\controllers\MigrationController',
+      'class' => 'bizley\migration\controllers\MigrationController'
     ],    
   ];    
 }

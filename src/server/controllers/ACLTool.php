@@ -1207,7 +1207,7 @@ class bibliograph_service_ACLTool
    */
   protected function getApplicationTitle()
   {
-    return Yii::$app->utils->getPreference("application.title");
+    return Yii::$app->config->getPreference("application.title");
   }
 
   /**

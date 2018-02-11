@@ -38,9 +38,13 @@ use app\models\Session;
  */
 class AccessController extends AppController
 {
-  use traits\ShimTrait;
-  use traits\RbacTrait;
-  use traits\AuthTrait;
+ 
+  /**
+   * @inheritDoc
+   *
+   * @var array
+   */
+  protected $noAuthActions = ["authenticate"];
 
 
   //-------------------------------------------------------------
@@ -76,7 +80,7 @@ class AccessController extends AppController
    */
   public function actionChallenge($username)
   {
-    $auth_method = Yii::$app->utils->getPreference("authentication.method");
+    $auth_method = Yii::$app->config->getPreference("authentication.method");
     $user = User::findOne(['namedId'=> $username]);
     if( $user ){
       if( Yii::$app->utils->getIniValue("ldap.enabled") and $user->isLdapUser() ) 
@@ -192,7 +196,7 @@ class AccessController extends AppController
       }        
   
       // check password
-      $auth_method = Yii::$app->utils->getPreference("authentication.method");
+      $auth_method = Yii::$app->config->getPreference("authentication.method");
       $authenticated = false;
       $storedPw = $user->password;
       switch ($auth_method) {

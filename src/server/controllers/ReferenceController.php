@@ -301,7 +301,7 @@ class ReferenceController extends AppController
     );
 
     // remove excluded fields
-    $excludeFields = Yii::$app->utils->getPreference("datasource.$datasource.fields.exclude");
+    $excludeFields = Yii::$app->config->getPreference("datasource.$datasource.fields.exclude");
     if( count( $excludeFields ) ) {
       $fields = array_diff( $fields, $excludeFields );
     }
@@ -421,7 +421,7 @@ class ReferenceController extends AppController
     );
     
     // exclude fields
-    $excludeFields = Yii::$app->utils->getPreference("datasource.$datasource.fields.exclude");
+    $excludeFields = Yii::$app->config->getPreference("datasource.$datasource.fields.exclude");
     if( count( $excludeFields ) )
     {
       $fields = array_diff( $fields, $excludeFields );
@@ -1121,7 +1121,7 @@ class ReferenceController extends AppController
     return [];
 
     $reference = static :: getRecordById( $referenceId );
-    $threshold = Yii::$app->utils->getPreference("bibliograph.duplicates.threshold");
+    $threshold = Yii::$app->config->getPreference("bibliograph.duplicates.threshold");
     $scores = $reference->findPotentialDuplicates($threshold);
     $data = array();
     while( $referenceModel->loadNext() )
