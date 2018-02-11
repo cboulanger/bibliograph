@@ -6,15 +6,15 @@
    http://www.bibliograph.org
 
    Copyright:
-     2007-2015 Christian Boulanger
+   2007-2015 Christian Boulanger
 
    License:
-     LGPL: http://www.gnu.org/licenses/lgpl.html
-     EPL: http://www.eclipse.org/org/documents/epl-v10.php
-     See the LICENSE file in the project's top-level directory for details.
+   LGPL: http://www.gnu.org/licenses/lgpl.html
+   EPL: http://www.eclipse.org/org/documents/epl-v10.php
+   See the LICENSE file in the project's top-level directory for details.
 
    Authors:
-     * Chritian Boulanger (cboulanger)
+   * Chritian Boulanger (cboulanger)
 
 ************************************************************************ */
 
@@ -22,6 +22,9 @@ namespace app\controllers;
 
 use Yii;
 use app\models\User;
+use lib\dialog\RemoteWizard;
+use lib\components\ConsoleAppHelper as Console;
+use Stringy\Stringy;
 
 /**
  * Setup controller. Needs to be the first controller called 
@@ -31,452 +34,228 @@ class SetupController extends \app\controllers\AppController
 {
 
   /**
+   * @inheritDoc
+   *
+   * @var array
+   */
+  protected $noAuthActions = ["setup"];
+
+  /**
+   * Whether we have an ini file
+   */
+  protected $hasIni;  
+
+  /**
+   * Whether we have a db connection
+   */
+  protected $hasDb;
+
+
+  /**
    * The properties of the progress dialog to show on the client
    * @var array
    */
-  protected $dialogProperties = array(
+  protected $progressDialogProperties = [
     'showLog' => true,
     'hideWhenCompleted' => false,
     'okButtonText' => "OK"
-  );
+  ];
+
+
+  //-------------------------------------------------------------
+  // ACTIONS
+  //-------------------------------------------------------------  
 
   /**
    * The entry method. If the application is already setup, do nothing. Otherwise,
    * display progress dialog on the client and start setup service
-   * @todo reimplement
    */
   public function actionSetup()
   {
-    // if ( ! User::findOne(['namedId'=>'setup']) ){
-    //   return $this->actionStart( Yii::t('app',"Starting setup ...") );
-    // }
-
-    // client messages
+    if( ! Yii::$app->config->keyExists('bibliograph.setup') ){
+      $success = $this->setup();
+      if ( $success ){
+        // createKey( $key, $type, $customize=false, $default=null, $final=false )
+        Yii::$app->config->createKey('bibliograph.setup','boolean',false,true,true);  
+      } else {
+        // setup failed
+        return null;      
+      }
+    } 
+    // notify client that setup it done
     $this->dispatchClientMessage("ldap.enabled", Yii::$app->utils->getIniValue("ldap.enabled") );
     $this->dispatchClientMessage("bibliograph.setup.done");
-  }
+  }  
 
-  /**
-   * A list of methods that are executed in order
-   * @return array
-   */
-  protected function getStepMethods()
+  protected function setup()
   {
-    return array(
-      //"importInitialData",
-      "checkConfiguration",
-      "createConfig",
-      "registerDatasourceSchemas",
-      "createExampleDatasources",
-      "createInternalDatasources",
-      "autoInstallPlugins"
-      
-    );
-  }
-  
-  /**
-   * not yet used
-   */
-  protected function useEmbeddedDatabase($value)
-  {
-    if ( QCL_USE_EMBEDDED_DB )
-    {
-      qcl_data_model_db_ActiveRecord::resetBehaviors();
-      $this->getApplication()->useEmbeddedDatabase($value);
-    }
-  }
-
-  protected function importInitialData()
-  {
-    // hack, this is neccessary because of the "setup" user stuff that breaks
-    // the sequence on database/model initiatization steps
-    // see qcl_application_Application::importInitialData 
-    
-    qcl_data_datasource_DbModel::getInstance()->createIfNotExists( "access", array(
-      "schema" => "qcl.schema.access",
-      "type"   => "mysql",
-      "hidden" => true
-    ) );
-    
-    $ds_model  = qcl_access_DatasourceModel::getInstance();
-    $ds_model->registerSchema();
-    
-    /*
-     * check if "setup" user exists, if not, import user data
-     */
-    $userModel = qcl_access_model_User::getInstance();
-    try
-    {
-      $userModel->load("setup");
-    }
-    catch( qcl_data_model_RecordNotFoundException $e )
-    {
-      $dataPaths =  array(
-        'user'        => "bibliograph/data/User.xml",
-        'role'        => "bibliograph/data/Role.xml",
-        'permission'  => "bibliograph/data/Permission.xml",
-        'config'      => "bibliograph/data/Config.xml"
-      );
-      $this->log("Importing initial user data ....", QCL_LOG_SETUP );
-      $this->getApplication()->importInitialData($dataPaths);
-
-      // hash passwords
-      $userModel->findAll();
-      while($userModel->loadNext()){
-        $password = $userModel->getPassword();
-        $hashed = $this->getApplication()->getAccessController()->generateHash( $password );
-        $userModel->setPassword($hashed)->save(); 
-      }
-    }
-    
-    // result
-    $this->addLogText(Yii::t('app',"Initial user data imported."));
-    
-    // next
-    $this->setMessage(Yii::t('app',"Checking configuration ..."));  
-    
-    //$this->useEmbeddedDatabase(true);
-  }
-  
-  
-  /**
-   * Check configuration
-   */  
-  protected function checkConfiguration()
-  {
-    $this->log("Checking configuration ...", QCL_LOG_SETUP );
-    
-    $app = $this->getApplication();
-    $acl = $app->getAccessController();
-    
-    //$this->useEmbeddedDatabase(false);
-    
-    $adminEmail = $app->getIniValue("email.admin");
-    if ( ! $adminEmail )
-    {
-      $this->addLogText(">>> " .Yii::t('app',"Please enter the administrator email address in the application.ini.php file (email.admin)." ));
-    }
-    else
-    {
-      $userModel = $acl->getUserModel();
-      // encrypt default users' passwords
-      foreach( array("admin","manager","user") as $username )
-      {
-        try
-        {
-          $userModel->load( $username );
-          // set administrator's email
-          if( ! $userModel->getEmail() ) 
-          {
-            $userModel->setEmail( $adminEmail );
-          }
-          // encrypt default password
-          if( $userModel->getPassword() == $username )
-          {
-            $userModel->setPassword($acl->generateHash( $username ));
-          }
-          $userModel->save();
+    // compile list of setup methods
+    foreach( \get_class_methods( $this ) as $method ){
+      $errors = [];
+      $messages = [];
+      if( Stringy::create( $method )->startsWith("setup") ){
+        $result = $this->$method();
+        if( ! $result ) continue;
+        $fatalError = isset($result['fatalError']) ? $result['fatalError'] : false; 
+        if ( $fatalError ){
+          Yii::warning($fatalError);
+          \lib\dialog\Error::create( $fatalError );
+          return false;
         }
-        catch( qcl_data_model_RecordNotFoundException $e)
-        {
-          $this->log("User $username does not exist.", QCL_LOG_SETUP );
+        if( isset($result['error'])){
+          $errors[] = $result['error'];
         }
-      }
-      $this->addLogText(Yii::t('app',"Set up default users."));
-    }
-    
-    // next
-    $this->setMessage(Yii::t('app',"Setting up configuration keys ..."));    
-    
-    //$this->useEmbeddedDatabase(true);
-  }
-
-  protected function createConfig()
-  {
-    $this->log("Adding configuration keys ...", QCL_LOG_SETUP );
-    
-    $app = $this->getApplication();
-    //$this->useEmbeddedDatabase(false);
-    
-    $app->setupConfigKeys( include( APPLICATION_CLASS_PATH . "/bibliograph/config.php" ) );
-
-    // access.enforce_https_login
-    $enforce_https = $app->getIniValue("access.enforce_https_login" );
-    $app->getConfigModel()->createKeyIfNotExists("access.enforce_https_login","boolean");
-    $app->getConfigModel()->setKeyDefault("access.enforce_https_login", $enforce_https );
-    
-    // other preferences
-    $app->addPreference( "application.locale", "", true );
-    $app->addPreference( "authentication.method", "hashed" );
-
-    // result
-    $this->addLogText(Yii::t('app',"Configuration keys added."));
-    // next
-    $this->setMessage(Yii::t('app',"Registering datasource information ..."));
-    
-    //$this->useEmbeddedDatabase(true);
-  }
-
-  protected function registerDatasourceSchemas()
-  {
-    $this->log("Registering bibliograph datasource schema ....", QCL_LOG_SETUP );
-    
-    $app = $this->getApplication();
-    //$this->useEmbeddedDatabase(false);
-    
-    $model = bibliograph_model_BibliographicDatasourceModel::getInstance();
-    try
-    {
-      $model->registerSchema();
-    }
-    catch( qcl_data_model_RecordExistsException $e )
-    {
-      $this->log("Bibliograph datasource schema already exists", QCL_LOG_SETUP );
-    }
-    // result
-    $this->addLogText(Yii::t('app',"Added datasource schemas."));
-    // next
-    $this->setMessage(Yii::t('app',"Creating example datasources ..."));
-    
-    //$this->useEmbeddedDatabase(true);
-  }
-
-  protected function createExampleDatasources()
-  {
-    $app = $this->getApplication();
-    //$this->useEmbeddedDatabase(false);
-    
-    $dsModel = qcl_data_datasource_DbModel::getInstance();
-    try
-    {
-      $dsModel->load("setup");
-      // result
-      $msg = "Not adding example datasources.";
-      $this->log($msg, QCL_LOG_SETUP );
-      $this->addLogText(Yii::t('app',$msg));
-      return;
-    }
-    catch( qcl_data_model_RecordNotFoundException $e){}
-
-    // create example datasources and link them to roles
-    $this->log("Creating example datasources ...", QCL_LOG_SETUP );
-    try
-    {
-      $dsModel1 = $app->createDatasource( "database1", array( 'title' => "Database 1" ) );
-      $dsModel2 = $app->createDatasource( "database2", array( 'title' => "Database 2" ) );
-      $ac = $this->getAccessController();
-      $dsModel1
-        ->linkModel($ac->getRoleModel()->load("anonymous"))
-        ->linkModel($ac->getRoleModel()->load("user"))
-        ->linkModel($ac->getRoleModel()->load("admin"));
-      $dsModel1->getInstanceOfType("folder")->load(1)->setPublic(true)->save();
-      
-      $dsModel2
-        ->linkModel($ac->getRoleModel()->load("user"))
-        ->linkModel($ac->getRoleModel()->load("admin"));
-    }
-    catch(qcl_data_model_RecordExistsException $e)
-    {
-      $this->log("Example datasources already exist.", QCL_LOG_SETUP );
-    }
-
-    $this->log("Linking datasources to roles...", QCL_LOG_SETUP );
-    try
-    {
-      $ac = $this->getAccessController();
-      $ac->getDatasourceModel("database1")
-        ->linkModel($ac->getRoleModel()->load("anonymous"))
-        ->linkModel($ac->getRoleModel()->load("user"))
-        ->linkModel($ac->getRoleModel()->load("admin"));
-      $ac->getDatasourceModel("database2")
-        ->linkModel($ac->getRoleModel()->load("user"))
-        ->linkModel($ac->getRoleModel()->load("admin"));
-    }
-    catch(qcl_data_model_RecordExistsException $e)
-    {
-      $this->log("Datasources already linked to roles.", QCL_LOG_SETUP );
-    }
-    catch(Exception $e)
-    {
-      $this->log("Problem linking datasources to roles: $e.", QCL_LOG_SETUP );
-    }
-
-    // create marker record to prevent recreation of removed example datasources
-    $dsModel->create("setup", array(
-      "schema" => "none",
-      "type"   => "dummy",
-      "active" => false,
-      "hidden" => true
-    ));
-
-    // result
-    $this->addLogText(Yii::t('app',"Created example datasources."));
-    // next
-    $this->setMessage(Yii::t('app',"Creating internal datasources ..."));
-    
-    //$this->useEmbeddedDatabase(true);
-  }
-
-
-  protected function createInternalDatasources()
-  {
-    $app = $this->getApplication();
-    //$this->useEmbeddedDatabase(false);    
-    
-    /*
-     * remote and local file storage datasources
-     */
-    $this->log("Registering file storage datasources ....", QCL_LOG_SETUP );
-    try
-    {
-      
-      qcl_io_filesystem_local_Datasource::getInstance()->registerSchema();
-    }
-    catch( qcl_data_model_RecordExistsException $e){}
-
-//    try
-//    {
-//      
-//      qcl_io_filesystem_remote_Datasource::getInstance()->registerSchema();
-//    }
-//    catch( qcl_data_model_RecordExistsException $e){}
-
-    /*
-     * create datasource for importing records from
-     * text files
-     */
-    $this->log("Creating datasource for importing data ....", QCL_LOG_SETUP );
-    $manager = qcl_data_datasource_Manager::getInstance();
-    try
-    {
-      $dsn = str_replace("&",";", $this->getApplication()->getIniValue("macros.dsn_tmp")); // ini-file data cannot contain ";"
-      $manager->createDatasource(
-        "bibliograph_import",
-        "bibliograph.schema.bibliograph2",
-        array(
-          'dsn'    => $dsn,
-          'hidden' => true
-        )
-      );
-    }
-    catch( qcl_data_model_RecordExistsException $e )
-    {
-      $this->log("Import datasource already exists.", QCL_LOG_SETUP );
-    }
-
-    /*
-     * create datasource for exporting records into
-     * text files, located in the temporary folder
-     */
-    $this->log("Creating datasource for exporting data ....", QCL_LOG_SETUP );
-
-    $manager = qcl_data_datasource_Manager::getInstance();
-    try
-    {
-      $dsModel = $manager->createDatasource(
-        "bibliograph_export",
-        "qcl.schema.filesystem.local"
-      );
-      $dsModel->setHidden(true);
-      $dsModel->setType("file");
-      $dsModel->setResourcepath( QCL_TMP_PATH );
-      $dsModel->save();
-    }
-    catch( qcl_data_model_RecordExistsException $e )
-    {
-      $this->log("Export datasource already exists.", QCL_LOG_SETUP );
-    }
-
-    /*
-     * create datasource for exporting records into
-     * text files, located in the temporary folder
-     */
-    $this->log("Creating datasource for importing and exporting BibTeX data ....", QCL_LOG_SETUP );
-    
-    $importRegistry = bibliograph_model_import_RegistryModel::getInstance();
-    $importRegistry->addFromClass("bibliograph_model_import_Bibtex");
-    $importRegistry->addFromClass("bibliograph_model_import_Csv");
-    
-    
-    $exportRegistry = bibliograph_model_export_RegistryModel::getInstance();
-    $exportRegistry->addFromClass("bibliograph_model_export_Bibtex");
-    $exportRegistry->addFromClass("bibliograph_model_export_Csv");
-    
-    // next
-    $this->setMessage(Yii::t('app',"Installing plugins ..."));
-
-    // result
-    $this->addLogText(Yii::t('app',"Created internal datasources."));
-    
-  }
-  
-
-  /**
-   * Auto-install plugins if text file named "plugins.txt" exists at the top
-   * with either the word "all" or a space separated list of plugin ids to install
-   */
-  protected function autoInstallPlugins()
-  {
-    $manager = qcl_application_plugin_Manager::getInstance(); 
-    $plugins_auto_install_file = "../plugins.txt";
-    $logText = array();
-    if( file_exists($plugins_auto_install_file) )
-    {
-      $this->getLogger()->log("Plugin autoinstall file found.", QCL_LOG_SETUP );
-      $plugins_to_install = explode(" ", file_get_contents($plugins_auto_install_file) ); 
-      
-      foreach ( $manager->getPluginList() as $namedId )
-      {
-        $plugin = $manager->getSetupInstance( $namedId );
-        if( ! in_array( $namedId, $plugins_to_install) and trim($plugins_to_install[0]) != "all" )
-        {
-          continue;
+        if( isset($result['message'])){
+          $messages[] = $result['message'];
         }
-        
-        if( $manager->isInstalled( $namedId) )
-        {
-          $msg = Yii::t('app',"Plugin '%s' is already installed.", $plugin->getName() ) ;
-          $this->getLogger()->log( $msg, QCL_LOG_SETUP );
-          $logText[] = $msg;
-          continue;
+        if( count($errors) ){
+          \array_unshift($errors, Yii::t('app','<b>Setup failed. Please fix the following problems:</b>'));
+          \lib\dialog\Error::create( \implode('<br>',$errors));
+          return false;
         }
-        
-        $msg = sprintf( "Installing plugin '%s'", $plugin->getName() );
-        $this->getLogger()->log( $msg, QCL_LOG_SETUP );
-        try
-        {
-          $installMsg = $plugin->install();
-          $this->getLogger()->log( $installMsg, QCL_LOG_SETUP );
-          $manager->register( $namedId, $plugin );
-          $msg = Yii::t('app',"Installed plugin '%s'",$plugin->getName() );
-          $logText[] = $msg;
-        }
-        catch( qcl_application_plugin_Exception $e )
-        {
-          $msg = Yii::t('app',"Installation of plugin '%s' failed: %s", $plugin->getName(), $e->getMessage());
-          $logText[] = $msg;
-          $this->getLogger()->log( $msg, QCL_LOG_SETUP );
-        }
+        // Everything seems to be ok
+        return true;
       }
     }
 
-    $logText[] = "\n" . Yii::t('app',"Setup finished. Please reload the application");
-        
+    //$this->addLogText(Yii::t('app',"Initial user data imported."));    
     // next
-    $this->setMessage(Yii::t('app',"Done ..."));
-    $this->addLogText(implode("\n",$logText));
-    
-    // done!
-    //$this->useEmbeddedDatabase(false); // now the external database can be used. 
-    $app = $this->getApplication();
-    $app->getCache()->setValue("setup",true);
-    $app->getCache()->savePersistenceData(); // todo: shouldn't be neccessary, but is - BUG?    
+    //$this->setMessage(Yii::t('app',"Checking configuration ..."));     
   }
 
-  protected function finish()
+  //-------------------------------------------------------------
+  // HELPERS
+  //-------------------------------------------------------------  
+
+  /**
+   * @param $tableName
+   * @return bool table exists in schema
+   * @throws \yii\base\InvalidParamException
+   */
+  private function tableExists($tableName)
   {
-    $this->log("Setup completed.", QCL_LOG_SETUP );
-    $this->dispatchClientMessage("application.reload");
-    return "OK";
+    $dbConnect = \Yii::$app->get('db');
+    if (!($dbConnect instanceof \yii\db\Connection))
+      throw new \yii\base\InvalidParamException;
+    return in_array($tableName, $dbConnect->schema->getTableNames());
+  }
+
+  //-------------------------------------------------------------
+  // CHECK METHODS
+  //-------------------------------------------------------------  
+
+  protected function setupCheckIniFileExists()
+  {
+    $this->hasIni = file_exists(Yii::getAlias('@app/config/bibliograph.ini.php'));
+    if( ! $this->hasIni and YII_ENV_PROD ){
+      return [
+        'fatalError' => Yii::t('app','Cannot run in production mode without ini file.')
+      ];
+    }
+  }
+
+  protected function setupCheckFilePermissions()
+  {
+    $config_dir = Yii::getAlias('@app/config');
+    if ( ! $this->hasIni and YII_ENV_DEV and ! \is_writable($config_dir) ) {
+      return [
+        'error' => Yii::t('app',"The configuration directory needs to be writable in order to create an .ini file: {config_dir}.",[
+          'config_dir' => $config_dir
+        ])
+      ];
+    }
+    if ( YII_ENV_PROD and \is_writable($config_dir) ) {
+      return [
+        'error' => Yii::t('app',"The configuration directory must not be writable in production mode {config_dir}.",[
+          'config_dir' => $config_dir
+        ])
+      ];
+    }
+
+    // OK
+    return [
+      'message' => 'Checking file permissions'
+    ];
+  }
+
+  public function setupCheckDbConnection()
+  {
+
+    if( ! Yii::$app->db instanceof \yii\db\Connection ){
+      return [
+        'fatalError' => Yii::t('app','No database connection. ')
+      ];
+    }
+    try {
+      Yii::$app->db->open();
+    } catch( \yii\db\Exception $e) {
+      return [
+        'fatalError' => Yii::t('app','Cannot connect to database: {error} ',[
+          'error' => $e->errorInfo
+        ])
+      ];      
+    }
+    $this->hasDb = true;
+    return [
+      'message' => 'Checking database connection'
+    ];    
+  }  
+
+  protected function setupDoMigrations()
+  {
+    if( YII_ENV_PROD ){
+      Yii::trace('Skipping migrations in production mode...');
+      return false;
+    }
+    $output = Console::runAction('migrate/history');
+    Yii::info($output,'migrations');
+
+    if( $output->contains('No migration') ){
+      // upgrade from v2?
+      if( $this->tableExists("data_Users")  ){
+        // set migration history to match the existing data
+        $output = Console::runAction('migrate/mark app\\migrations\\data\\m180105_075933_join_User_RoleDataInsert');
+        Yii::info($output,'migrations');
+        if ( $output->contains('migration history is set') ){
+          return [
+            'message' => Yii::t('app','Migrating data from Bibliograph v2')
+          ];
+        }
+        return [
+          'fatalError' => Yii::t('app','Migrating data from Bibliograph v2 failed.')
+        ];
+      }
+      // no, this is a fresh installation
+    } 
+    // run all migrations 
+    $output = Console::runAction("migrate/up");
+    Yii::info($output,'migrations');
+    // @todo check if migration was successful
+    if ( true ){
+      return [
+        'message' => Yii::t('app', 'Initializing databases')
+      ];
+    }
+    return [
+      'fatalError' => Yii::t('app', 'Initializing databases failed.')
+    ];    
+  }
+
+  protected function setupCheckLdapConnection()
+  {
+    return false;
+  }
+
+  protected function setupCheckAdminEmail()
+  {
+    $adminEmail = Yii::$app->utils->getIniValue("email.admin");
+    if ( ! $adminEmail ){
+      return [
+        'error' => Yii::t('app',"Missing administrator email in bibliograph.ini.php." )
+      ];
+    }
+    return [
+      'message' => Yii::t('app','Checking admininstrator email')
+    ];
   }
 }
