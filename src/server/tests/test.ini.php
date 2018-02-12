@@ -42,29 +42,29 @@ port = 3306
 ;; The name and password of the database user. Both "normal" user and admin must be the same for the moment.
 ;; This user needs ALL rights in the databases named below. If you want to make backup snapshots, it also
 ;; needs the global RELOAD privilege
-adminname  = bibliograph
-adminpassw = bibliograph
+adminname  = root
+adminpassw = 
 username  = ${database.adminname}
 userpassw = ${database.adminpassw}
 
 ;; database.admindb
 ;; The name of the database holding all the tables with global and
 ;; administrative information. Must exist before the application is started
-admindb = bibliograph
+admindb = tests
 
 ;; database.userdb
 ;; The name of the databases that contains the user data.
 ;; Can be the same as database.admindb, but if you have access
 ;; to more than one database, is recommended to keep a separate
 ;; database for this. Must exist before the application is started.
-userdb = bibliograph
+userdb = tests
 
 ;; database.tmpdb
 ;; The name of the database holding all the tables with temporary data.
 ;; Can be the same as database.admindb, but if you have access
 ;; to more than one database, is recommended to keep a separate
 ;; database for this. Must exist before the application is started.
-tmp_db = bibliograph
+tmp_db = tests
 
 ;; database.tableprefix
 ;; A global prefix for all tables that are created, which makes
@@ -103,7 +103,7 @@ enforce_https_login = no
 
 ;; The email address of the administrator of this particular installation.
 ;; Must be set, otherwise setup process will not complete
-admin = ""
+admin = "info@bibliograph.org"
 
 ;; The email address of the developer of the application. Don't change
 ;; this unless you are a developer

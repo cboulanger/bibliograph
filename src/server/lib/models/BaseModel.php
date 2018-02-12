@@ -131,25 +131,9 @@ class BaseModel extends ActiveRecord
     if( parent::save( $runValidation, $attributeNames ) ){
       return true;
     }
-    Yii::warning("Error saving model " . get_class($this) );
-    Yii::warning( $this->getFirstErrors() );
+    Yii::error("Error saving model " . get_class($this) );
+    Yii::error( $this->getFirstErrors() );
     //Yii::warning( $this->getErrorSummary() );
     return false;
-  }
-
-
-  //-------------------------------------------------------------
-  // Shims
-  //-------------------------------------------------------------  
-
-  /**
-   * Shim method
-   *
-   * @param [type] $string
-   * @return void
-   */
-  protected function tr($string)
-  {
-    return Yii::t('app', $string );
   }
 }

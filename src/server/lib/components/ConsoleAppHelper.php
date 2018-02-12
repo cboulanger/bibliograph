@@ -29,9 +29,8 @@ class ConsoleAppHelper extends \yii\base\Component
     defined( 'STDIN' ) or define( 'STDIN', fopen( 'php://stdin', 'r' ) );
     defined( 'STDOUT' ) or define( 'STDOUT', fopen( 'php://stdout', 'w' ) );
 
-    /** @noinspection PhpIncludeInspection */
     $config = require( \Yii::getAlias( '@app/config/console.php' ) );
-    $consoleApp = new ConsoleApplication( $config );
+    $consoleApp = new \yii\console\Application( $config );
 
     if (!is_null( $controllerNamespace )) {
       $consoleApp->controllerNamespace = $controllerNamespace;
@@ -40,13 +39,12 @@ class ConsoleAppHelper extends \yii\base\Component
     try {
       // use current connection to DB
       \Yii::$app->set( 'db', $oldApp->db );
-      ob_start();
 
+      ob_start();
       $exitCode = $consoleApp->runAction(
         $route,
-        array_merge( func_get_arg( 1 ), [ 'interactive' => false, 'color' => false ] )
+        array_merge( $params, [ 'interactive' => false, 'color' => false ] )
       );
-
       $result = ob_get_clean();
 
     } catch ( \Exception $e ) {
@@ -54,6 +52,9 @@ class ConsoleAppHelper extends \yii\base\Component
       throw $e;
     }
     \Yii::$app = $oldApp;
+    if( $exitCode ){
+      throw new \LogicException("Running action '$route' exited with code $exitCode.");
+    }
     return Stringy::create($result);
   }
 } 

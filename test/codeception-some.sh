@@ -11,7 +11,7 @@ echo "travis_fold:end:migrate_up"
 
 echo "Running tests..."
 #php vendor/bin/codecept run unit
-php vendor/bin/codecept run functional AccessControllerCest --debug
+php vendor/bin/codecept run functional SetupControllerCest --debug
 
 
 echo "Cleanup database ..."

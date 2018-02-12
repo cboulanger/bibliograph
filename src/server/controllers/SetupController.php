@@ -40,6 +40,11 @@ class SetupController extends \app\controllers\AppController
    */
   protected $noAuthActions = ["setup"];
 
+
+  protected $errors = [];
+
+  protected $messages = [];
+
   /**
    * Whether we have an ini file
    */
@@ -73,7 +78,7 @@ class SetupController extends \app\controllers\AppController
   public function actionSetup()
   {
     if( ! Yii::$app->config->keyExists('bibliograph.setup') ){
-      $success = $this->setup();
+      $success = $this->runSetupMethods();
       if ( $success ){
         // createKey( $key, $type, $customize=false, $default=null, $final=false )
         Yii::$app->config->createKey('bibliograph.setup','boolean',false,true,true);  
@@ -85,42 +90,42 @@ class SetupController extends \app\controllers\AppController
     // notify client that setup it done
     $this->dispatchClientMessage("ldap.enabled", Yii::$app->utils->getIniValue("ldap.enabled") );
     $this->dispatchClientMessage("bibliograph.setup.done");
+
+    // return errors and messages
+    return [
+      'errors' => $this->errors,
+      'messages' => $this->messages
+    ];
   }  
 
-  protected function setup()
+  protected function runSetupMethods()
   {
     // compile list of setup methods
     foreach( \get_class_methods( $this ) as $method ){
-      $errors = [];
-      $messages = [];
       if( Stringy::create( $method )->startsWith("setup") ){
         $result = $this->$method();
         if( ! $result ) continue;
         $fatalError = isset($result['fatalError']) ? $result['fatalError'] : false; 
         if ( $fatalError ){
-          Yii::warning($fatalError);
+          Yii::error($fatalError);
           \lib\dialog\Error::create( $fatalError );
           return false;
         }
         if( isset($result['error'])){
-          $errors[] = $result['error'];
+          $this->errors[] = $result['error'];
         }
         if( isset($result['message'])){
-          $messages[] = $result['message'];
+          $this->messages[] = $result['message'];
         }
-        if( count($errors) ){
-          \array_unshift($errors, Yii::t('app','<b>Setup failed. Please fix the following problems:</b>'));
-          \lib\dialog\Error::create( \implode('<br>',$errors));
+        if( count($this->errors) ){
+          \array_unshift($this->errors, Yii::t('app','<b>Setup failed. Please fix the following problems:</b>'));
+          \lib\dialog\Error::create( \implode('<br>',$this->errors));
           return false;
         }
-        // Everything seems to be ok
-        return true;
       }
     }
-
-    //$this->addLogText(Yii::t('app',"Initial user data imported."));    
-    // next
-    //$this->setMessage(Yii::t('app',"Checking configuration ..."));     
+    // Everything seems to be ok
+    return true;
   }
 
   //-------------------------------------------------------------
@@ -152,6 +157,10 @@ class SetupController extends \app\controllers\AppController
         'fatalError' => Yii::t('app','Cannot run in production mode without ini file.')
       ];
     }
+    //OK
+    return [
+      'message' => Yii::t('app','Ini file exists.')
+    ];
   }
 
   protected function setupCheckFilePermissions()
@@ -174,7 +183,7 @@ class SetupController extends \app\controllers\AppController
 
     // OK
     return [
-      'message' => 'Checking file permissions'
+      'message' => 'File permissions ok.'
     ];
   }
 
@@ -197,10 +206,15 @@ class SetupController extends \app\controllers\AppController
     }
     $this->hasDb = true;
     return [
-      'message' => 'Checking database connection'
+      'message' => 'Database connection ok.'
     ];    
   }  
 
+  /**
+   * Run migrations if neccessary
+   *
+   * @return array
+   */
   protected function setupDoMigrations()
   {
     if( YII_ENV_PROD ){
@@ -208,17 +222,17 @@ class SetupController extends \app\controllers\AppController
       return false;
     }
     $output = Console::runAction('migrate/history');
-    Yii::info($output,'migrations');
+    Yii::info((string)$output,'migrations');
 
     if( $output->contains('No migration') ){
       // upgrade from v2?
       if( $this->tableExists("data_Users")  ){
         // set migration history to match the existing data
         $output = Console::runAction('migrate/mark app\\migrations\\data\\m180105_075933_join_User_RoleDataInsert');
-        Yii::info($output,'migrations');
+        Yii::info((string)$output,'migrations');
         if ( $output->contains('migration history is set') ){
           return [
-            'message' => Yii::t('app','Migrating data from Bibliograph v2')
+            'message' => Yii::t('app','Migrated data from Bibliograph v2.')
           ];
         }
         return [
@@ -229,11 +243,11 @@ class SetupController extends \app\controllers\AppController
     } 
     // run all migrations 
     $output = Console::runAction("migrate/up");
-    Yii::info($output,'migrations');
+    Yii::info((string)$output,'migrations');
     // @todo check if migration was successful
     if ( true ){
       return [
-        'message' => Yii::t('app', 'Initializing databases')
+        'message' => Yii::t('app', 'Initialized databases.')
       ];
     }
     return [
@@ -255,7 +269,7 @@ class SetupController extends \app\controllers\AppController
       ];
     }
     return [
-      'message' => Yii::t('app','Checking admininstrator email')
+      'message' => Yii::t('app','Admininstrator email exists')
     ];
   }
 }

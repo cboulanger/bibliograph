@@ -2,6 +2,11 @@
 
 // @todo remove and use yii2 app parameters instead
 
+if ( ! defined("APP_INI_FILE") )
+{
+  define( "APP_INI_FILE" ,  __DIR__ . "/../bibliograph.ini.php" );
+}
+
 /**
  * The id of the first migration that the application will use for creating tables on-the-fly
  * (i.e. not using command-line migrations).

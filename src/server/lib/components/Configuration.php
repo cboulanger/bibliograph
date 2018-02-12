@@ -173,7 +173,7 @@ class Configuration extends \yii\base\Component
         return (string) $value;
       case "boolean" :
         if ( $phpType ) return $value == "true" ? true : false;
-        return boolString($value);
+        return $value ? "true":"false";
       case "list" :
         if ( $phpType )
         {
@@ -349,8 +349,8 @@ class Configuration extends \yii\base\Component
     $data = array(
       'namedId'   => $key,
       'type'      => $this->getTypeIndex( $type ),
-      'customize' => $customize,
-      'final'     => $final
+      'customize' => $customize ? 1:0,
+      'final'     => $final ? 1:0
     );
     if ( $default !== null ) {
       $data['default'] = $this->castType( $default, $type, false );
@@ -358,8 +358,10 @@ class Configuration extends \yii\base\Component
     // create new entry
     $config = new Config( $data );
     if( $config->save() ) return true;
-    // throw validation errors
-    throw new \LogicError( $config->errors );
+    // validation failed
+    //throw new \LogicException("Validation failed for config data.");
+    return false;
+
 	}
 
 	/**
