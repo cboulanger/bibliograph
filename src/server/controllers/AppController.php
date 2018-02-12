@@ -34,7 +34,6 @@ use \JsonRpc2\Exception;
  */
 class AppController extends \JsonRpc2\Controller
 {
-  use traits\ShimTrait;
 
   /**
    * Array of action names that can be accessed without authentication
@@ -210,7 +209,7 @@ class AppController extends \JsonRpc2\Controller
   public function requirePermission($permission)
   {
     if (!  $this->getActiveUser()->hasPermission( $permission )) {
-      $this->warn( sprintf(
+      Yii::warning( sprintf(
         "Active user %s does not have required permission %s",
         $this->getActiveUser()->namedId, $permission
       ) );
@@ -227,7 +226,7 @@ class AppController extends \JsonRpc2\Controller
   public function requireRole($role)
   {
     if (! $this->getActiveUser()->hasRole( $role )) {
-      $this->warn( sprintf(
+      Yii::warning( sprintf(
       "Active user %s does hat required role %s",
         $this->getActiveUser()->namedId, $role
       ) );

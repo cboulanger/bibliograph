@@ -209,7 +209,7 @@ class Query extends \yii\base\BaseObject
     }
     while( count( $tokens ) );
 
-    $this->log( "Translated tokens: " . implode(" ", $translTokens ) );
+    Yii::trace( "Translated tokens: " . implode(" ", $translTokens ) );
 
     // Re-assemble translated query string
     if ( $hasOperator )
@@ -244,7 +244,7 @@ class Query extends \yii\base\BaseObject
      */
     $this->convertCqlObjectToQclQuery( $cqlObject, $qclQuery, $model );
 
-    $this->log( "'Where' structure: " . json_encode($qclQuery->where) );
+    Yii::trace( "'Where' structure: " . json_encode($qclQuery->where) );
 
     return $qclQuery;
   }

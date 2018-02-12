@@ -79,7 +79,7 @@ class bibliograph_service_Backup
      */
     if( ! class_exists("ZipArchive") )
     {
-      $this->warn("You must install the ZIP extension in order to create backups");
+      Yii::warning("You must install the ZIP extension in order to create backups");
       throw new JsonRpcException("Cannot create backup archive.");
     }
 
@@ -88,12 +88,12 @@ class bibliograph_service_Backup
      */
     if ( ! defined("BIBLIOGRAPH_BACKUP_PATH") )
     {
-      $this->warn("You must define the BIBLIOGRAPH_BACKUP_PATH constant." );
+      Yii::warning("You must define the BIBLIOGRAPH_BACKUP_PATH constant." );
       throw new JsonRpcException("Cannot create backup archive.");
     }
     if ( ! file_exists( BIBLIOGRAPH_BACKUP_PATH ) or ! is_writable( BIBLIOGRAPH_BACKUP_PATH ) )
     {
-      $this->warn("Directory '" . BIBLIOGRAPH_BACKUP_PATH . "' needs to exist and be writable" );
+      Yii::warning("Directory '" . BIBLIOGRAPH_BACKUP_PATH . "' needs to exist and be writable" );
       throw new JsonRpcException("Cannot create backup archive.");
     }
   }
@@ -151,7 +151,7 @@ class bibliograph_service_Backup
     $zip = new ZipArchive();
     if ($zip->open($zipfile, ZIPARCHIVE::CREATE)!==TRUE)
     {
-      $this->warn("Cannot create file '$zipfile' in '$backupPath'");
+      Yii::warning("Cannot create file '$zipfile' in '$backupPath'");
       throw new JsonRpcException("Cannot create backup archive - please check file permissions.");
     }
 
@@ -172,7 +172,7 @@ class bibliograph_service_Backup
     catch ( PDOException $e )
     {
       $zip->close();
-      $this->warn( $e->getMessage() );
+      Yii::warning( $e->getMessage() );
       throw new JsonRpcException( "You don't seem to have the necessary MySql Privileges to make a backup. You need at least the global 'SELECT' and 'FILE' privilege" );
     }
 
@@ -185,7 +185,7 @@ class bibliograph_service_Backup
     {
       if ( ! @unlink( $file ) )
       {
-        $this->warn("Cannot create delete '$zipfile'");
+        Yii::warning("Cannot create delete '$zipfile'");
       }
     }
 
@@ -328,14 +328,14 @@ class bibliograph_service_Backup
     $zipfile = $backupPath . "/" . $data->file;
     if( ! file_exists( $zipfile ) )
     {
-      $this->warn("File '$zipfile' does not exist.");
+      Yii::warning("File '$zipfile' does not exist.");
       throw new JsonRpcException(Yii::t('app', "Backup file does not exist."));
     }
 
     $zip = new ZipArchive();
     if ($zip->open($zipfile, ZIPARCHIVE::CHECKCONS )!==TRUE)
     {
-      $this->warn("Cannot open file '$zipfile'");
+      Yii::warning("Cannot open file '$zipfile'");
       throw new JsonRpcException("Cannot open backup archive");
     }
 
@@ -363,7 +363,7 @@ class bibliograph_service_Backup
       if ( !@unlink( $file ) )
       {
         $problem = true;
-        $this->warn("Cannot delete temporary backup file '$file'");
+        Yii::warning("Cannot delete temporary backup file '$file'");
       }
     }
 
@@ -372,7 +372,7 @@ class bibliograph_service_Backup
     if ( !@unlink( $lockfile ) )
     {
       $problem = true;
-      $this->warn("Cannot delete lockfile file '$lockfile'");
+      Yii::warning("Cannot delete lockfile file '$lockfile'");
     };
 
     /*
@@ -434,7 +434,7 @@ class bibliograph_service_Backup
         if ( !@unlink( "$backupPath/$file" ) )
         {
           $problem = true;
-          $this->warn("Cannot delete backup file '$file'");
+          Yii::warning("Cannot delete backup file '$file'");
         }
         else
         {

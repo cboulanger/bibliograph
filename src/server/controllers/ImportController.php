@@ -304,7 +304,7 @@ class ImportController extends AppController
     
     $xml2bib = new qcl_util_system_Executable( BIBUTILS_PATH . "xml2bib");
     $xml2bib->call( "-v" );
-    $this->info( "stdout: " . $xml2bib->getStdOut() );
-    $this->info( "stderr: " . $xml2bib->getStdErr() );
+    Yii::info( "stdout: " . $xml2bib->getStdOut() );
+    Yii::info( "stderr: " . $xml2bib->getStdErr() );
   }
 }

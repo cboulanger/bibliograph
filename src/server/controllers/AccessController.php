@@ -361,7 +361,7 @@ class AccessController extends AppController
      * authenticate against ldap server
      */
     $userdn = "$user_id_attr=$username,$user_base_dn";
-    $this->log("Authenticating $userdn against $host:$port.", QCL_LOG_LDAP);
+    Yii::trace("Authenticating $userdn against $host:$port.", 'ldap');
     $ldap->authenticate( $userdn, $password );
 
     /*
@@ -415,7 +415,7 @@ class AccessController extends AppController
     $attributes = array( "cn", "sn","givenName","mail" );
     $filter = "($user_id_attr=$username)";
 
-    $this->log("Retrieving user data from LDAP base dn '$user_base_dn' with filter '$filter'", QCL_LOG_LDAP);
+    Yii::trace("Retrieving user data from LDAP base dn '$user_base_dn' with filter '$filter'", 'ldap');
     $ldap->search( $user_base_dn, $filter, $attributes);
     if ( $ldap->countEntries() == 0 )
     {
@@ -498,11 +498,11 @@ class AccessController extends AppController
     $attributes = array( "cn", $group_name_attr );
     $filter = "($member_id_attr=$username)";
 
-    $this->log("Retrieving group data from LDAP base dn '$group_base_dn' with filter '$filter'", QCL_LOG_LDAP );
+    Yii::trace("Retrieving group data from LDAP base dn '$group_base_dn' with filter '$filter'", 'ldap' );
     $ldap->search( $group_base_dn, $filter, $attributes);
     if ( $ldap->countEntries() == 0 )
     {
-      $this->log("User $username belongs to no groups", QCL_LOG_LDAP );
+      Yii::trace("User $username belongs to no groups", 'ldap' );
     }
 
     /*
@@ -529,7 +529,7 @@ class AccessController extends AppController
       catch( qcl_data_model_RecordNotFoundException $e)
       {
         $name    = $entries[$i][$group_name_attr][0];
-        $this->log("Creating group '$namedId' ('$name') from LDAP", QCL_LOG_LDAP );
+        Yii::trace("Creating group '$namedId' ('$name') from LDAP", 'ldap' );
         $groupModel->create( $namedId, array(
           'name'  => $name,
           'ldap'  => true
@@ -541,7 +541,7 @@ class AccessController extends AppController
        */
       if ( ! $userModel->islinkedModel( $groupModel ) )
       {
-        $this->log("Adding user '$username' to group '$namedId'", QCL_LOG_LDAP );
+        Yii::trace("Adding user '$username' to group '$namedId'", 'ldap' );
         $groupModel->linkModel( $userModel );
       }
 
@@ -555,7 +555,7 @@ class AccessController extends AppController
         $roleModel->load( $defaultRole );
         if( ! $userModel->islinkedModel( $roleModel, $groupModel ) )
         {
-          $this->log("Granting user '$username' the default role '$defaultRole' in group '$namedId'", QCL_LOG_LDAP );
+          Yii::trace("Granting user '$username' the default role '$defaultRole' in group '$namedId'", 'ldap' );
           $userModel->linkModel( $roleModel, $groupModel );
         }
       }
@@ -574,12 +574,12 @@ class AccessController extends AppController
       $groupModel->load( $groupToRemove );
       if ( $groupModel->getLdap() === true )
       {
-        $this->log("Removing user '$username' from group '$groupToRemove'", QCL_LOG_LDAP );
+        Yii::trace("Removing user '$username' from group '$groupToRemove'", 'ldap' );
         $groupModel->unlinkModel( $userModel );
       }
     }
 
-    $this->log( "User '$username' is member of the following groups: " . implode(",", $userModel->groups(true) ), QCL_LOG_LDAP );
+    Yii::trace( "User '$username' is member of the following groups: " . implode(",", $userModel->groups(true) ), 'ldap' );
   }
   
 

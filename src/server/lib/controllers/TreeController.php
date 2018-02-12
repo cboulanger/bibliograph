@@ -303,7 +303,7 @@ class TreeController extends AppController implements ITreeController
      *  delete folder and unlink all records
      */
     $model->delete();
-    $this->info("Deleted node #$nodeId");
+    Yii::info("Deleted node #$nodeId");
 
     /*
      * recurse into children

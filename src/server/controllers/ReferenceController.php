@@ -439,7 +439,7 @@ class ReferenceController extends AppController
       try {
         $fieldData = $schema->getFieldData( $field );
       } catch( \InvalidArgumentException $e ) {
-        $this->warn("No field data for field '$field'");
+        Yii::warning("No field data for field '$field'");
         continue;
       }
       $value = $record->$field;

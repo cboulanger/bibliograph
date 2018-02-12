@@ -543,7 +543,7 @@ class bibliograph_service_ACLTool
     }
     catch ( PDOException $e )
     {
-      $this->warn(  $e->getMessage() );
+      Yii::warning(  $e->getMessage() );
       return new  qcl_ui_dialog_Alert(Yii::t('app',"Deleting datasource '%s' failed... ",$namedId));
     }
 
