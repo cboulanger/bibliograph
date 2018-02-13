@@ -1,0 +1,2 @@
+# ignore big fat local mysql dumps 
+*.local.sql

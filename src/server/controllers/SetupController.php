@@ -140,9 +140,12 @@ class SetupController extends \app\controllers\AppController
   private function tableExists($tableName)
   {
     $dbConnect = \Yii::$app->get('db');
-    if (!($dbConnect instanceof \yii\db\Connection))
+    if (!($dbConnect instanceof \yii\db\Connection)){
       throw new \yii\base\InvalidParamException;
-    return in_array($tableName, $dbConnect->schema->getTableNames());
+    }
+    $tables = $dbConnect->schema->getTableNames();
+    Yii::trace("Tables in the database {$dbConnect->dsn}: " . implode(", ", $tables));
+    return in_array($tableName, $tables);
   }
 
   //-------------------------------------------------------------
@@ -217,42 +220,55 @@ class SetupController extends \app\controllers\AppController
    */
   protected function setupDoMigrations()
   {
+    // visual marker in log file
+    Yii::trace(
+      "\n\n\n" .
+      str_repeat("*",80) . "\n\n" .
+      " BIBLIOGRAPH SETUP\n\n" .
+      str_repeat("*",80) . 
+      "\n\n\n",
+      'marker'
+    );
+
     if( YII_ENV_PROD ){
       Yii::trace('Skipping migrations in production mode...');
       return false;
-    }
-    $output = Console::runAction('migrate/history');
-    Yii::info((string)$output,'migrations');
-
-    if( $output->contains('No migration') ){
+    };
+    $output = Console::runAction('migrate/new');
+    if( $output->contains('up-to-date') ){
+      Yii::info('No new migrations.','migrations');
+    } else {
       // upgrade from v2?
-      if( $this->tableExists("data_Users")  ){
+      if( $this->tableExists("data_User")  ){
+        Yii::info('Found Bibliograph data in database. Adding migration history.','migrations');
         // set migration history to match the existing data
-        $output = Console::runAction('migrate/mark app\\migrations\\data\\m180105_075933_join_User_RoleDataInsert');
-        Yii::info((string)$output,'migrations');
+        $output = Console::runAction('migrate/mark', ["app\\migrations\\data\\m180105_075933_join_User_RoleDataInsert"]);
         if ( $output->contains('migration history is set') ){
+          $message = Yii::t('app','Migrated data from Bibliograph v2');
+        } else {
           return [
-            'message' => Yii::t('app','Migrated data from Bibliograph v2.')
+            'fatalError' => Yii::t('app','Migrating data from Bibliograph v2 failed.')
           ];
         }
+      } else {
+        // no, this is a fresh installation
+        $message = Yii::t('app','Found empty database');
+        Yii::trace("No existing data.","migrations");
+      }
+      // run all migrations 
+      $output = Console::runAction("migrate/up");
+      // @todo check if migration was successful
+      if ( true ){
+        $message .= Yii::t('app', ' and applied new migrations.');
         return [
-          'fatalError' => Yii::t('app','Migrating data from Bibliograph v2 failed.')
+          'message' => $message
         ];
       }
-      // no, this is a fresh installation
-    } 
-    // run all migrations 
-    $output = Console::runAction("migrate/up");
-    Yii::info((string)$output,'migrations');
-    // @todo check if migration was successful
-    if ( true ){
       return [
-        'message' => Yii::t('app', 'Initialized databases.')
-      ];
-    }
-    return [
-      'fatalError' => Yii::t('app', 'Initializing databases failed.')
-    ];    
+        'fatalError' => Yii::t('app', 'Initializing database failed.')
+      ];    
+
+    } 
   }
 
   protected function setupCheckLdapConnection()

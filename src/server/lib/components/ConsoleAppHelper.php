@@ -47,7 +47,13 @@ class ConsoleAppHelper extends \yii\base\Component
         array_merge( $params, [ 'interactive' => false, 'color' => false ] )
       );
       $result = ob_get_clean();
-
+      \Yii::trace( "\n" .
+        "Output of console action '$route':\n" .
+        "---------------------------------------------------------\n" .
+        $result . "\n".
+        "---------------------------------------------------------\n",
+        "console" 
+      );      
     } catch ( \Exception $e ) {
       \Yii::$app = $oldApp;
       throw $e;
