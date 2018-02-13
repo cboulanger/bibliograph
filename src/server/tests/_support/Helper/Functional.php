@@ -6,5 +6,5 @@ namespace Helper;
 
 class Functional extends \Codeception\Module
 {
-
+  use JsonRpcTrait;
 }

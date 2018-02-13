@@ -1,11 +1,10 @@
 actor: ApiTester
 modules:
     enabled:
-        - \Helper\Api
         - PhpBrowser:
             url: http://127.0.0.1:8080       
         - Asserts
         - REST:
             depends: PhpBrowser
-            part: Json
-            url: '?r='            
+            part: [json]
+            url: '?r='

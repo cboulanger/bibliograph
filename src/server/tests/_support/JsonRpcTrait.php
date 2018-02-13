@@ -1,8 +1,8 @@
 <?php
 
-trait JsonRpcTrait 
+trait JsonRpcTrait
 {
-    /**
+  /**
    * Cache the access token
    *
    * @param string|null $t If set, store the value as the current token
@@ -16,12 +16,10 @@ trait JsonRpcTrait
   } 
 
   /**
-   * Send a JSONRPC request. Authentication is through an additional 'auth' property of the
-   * request or through the 'autt' parameter in the querystring of the URL target. 
+   * Send a JSONRPC request. 
+   * Authentication is done with the "Authorization: Bearer <token>" header.
+   * The token is retrieved from the token() method. 
    * Throws if the transport layer or the RPC method return an error.
-   * 
-   * @todo For this to work, you need to patch JsonRpc2\Controller, after line 43
-   * `if( ! $requestObject ) $requestObject = (object) $GLOBALS['CODECEPT_RAW_POST_DATA'];`
    *
    * @param string $serviceController
    *    The name of the service (=controller) to be called

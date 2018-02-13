@@ -237,6 +237,7 @@ class SetupController extends \app\controllers\AppController
     $output = Console::runAction('migrate/new');
     if( $output->contains('up-to-date') ){
       Yii::info('No new migrations.','migrations');
+      $message = "No database migrations necessary";
     } else {
       // upgrade from v2?
       if( $this->tableExists("data_User")  ){
@@ -256,19 +257,21 @@ class SetupController extends \app\controllers\AppController
         Yii::trace("No existing data.","migrations");
       }
       // run all migrations 
+      Yii::trace("Applying migrations...","migrations");
       $output = Console::runAction("migrate/up");
       // @todo check if migration was successful
-      if ( true ){
+      if ( $output->contains('Migrated up successfully') ){
+        Yii::trace("Migrations successfully applied.","migrations");
         $message .= Yii::t('app', ' and applied new migrations.');
+      } else {
         return [
-          'message' => $message
+          'fatalError' => Yii::t('app', 'Initializing database failed.')
         ];
       }
-      return [
-        'fatalError' => Yii::t('app', 'Initializing database failed.')
-      ];    
-
     } 
+    return [
+      'message' => $message
+    ];    
   }
 
   protected function setupCheckLdapConnection()
