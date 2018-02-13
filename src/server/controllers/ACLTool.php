@@ -993,7 +993,7 @@ class bibliograph_service_ACLTool
   {
     $app = $this->getApplication();
     $applicationTitle = $this->getApplicationTitle();
-    $adminEmail  = $app->getIniValue("email.admin");
+    $adminEmail  = $app->config->getIniValue("email.admin");
     $confirmationLink = qcl_server_JsonRpcRestServer::getJsonRpcRestUrl(
       Yii::$app->controller->id,"confirmEmail", $username
     );
@@ -1031,7 +1031,7 @@ class bibliograph_service_ACLTool
   {
     $app = $this->getApplication();
     $applicationTitle = $this->getApplicationTitle();
-    $adminEmail  = $app->getIniValue("email.admin");
+    $adminEmail  = $app->config->getIniValue("email.admin");
 
     // compose mail
     $subject = Yii::t('app',"Password change at %s", $applicationTitle );

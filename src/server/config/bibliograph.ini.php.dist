@@ -46,21 +46,21 @@ userpassw = ${database.adminpassw}
 ;; database.admindb
 ;; The name of the database holding all the tables with global and
 ;; administrative information. Must exist before the application is started
-admindb = bibliograph_admin
+admindb = bibliograph
 
 ;; database.userdb
 ;; The name of the databases that contains the user data.
 ;; Can be the same as database.admindb, but if you have access
 ;; to more than one database, is recommended to keep a separate
 ;; database for this. Must exist before the application is started.
-userdb = bibliograph_user
+userdb = bibliograph
 
 ;; database.tmpdb
 ;; The name of the database holding all the tables with temporary data.
 ;; Can be the same as database.admindb, but if you have access
 ;; to more than one database, is recommended to keep a separate
 ;; database for this. Must exist before the application is started.
-tmp_db = bibliograph_tmp
+tmp_db = bibliograph
 
 ;; database.tableprefix
 ;; A global prefix for all tables that are created, which makes
@@ -71,7 +71,7 @@ tableprefix =
 ;; database.encoding
 ;; The default encoding scheme of the database. It is recommended
 ;; to use the default utf8.
-encoding  = utf8
+encoding = utf8
 
 [service]
 

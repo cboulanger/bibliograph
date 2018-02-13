@@ -41,7 +41,8 @@ $components = [
   // message channels, not working yet
   'channel' => [
     'class' => \lib\channel\Component::class
-  ]
+  ],
+  'ldap' => require('ldap.php')
 ];
 return array_merge(
   require('db.php'),

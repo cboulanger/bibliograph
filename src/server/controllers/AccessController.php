@@ -348,25 +348,13 @@ class AccessController extends AppController
    */
   protected function authenticateByLdap( $username, $password )
   {
-    $host = $app->getIniValue( "ldap.host" );
-    $port = (int) $app->getIniValue( "ldap.port" );
-    $user_base_dn = $app->getIniValue( "ldap.user_base_dn" );
-    $user_id_attr = $app->getIniValue( "ldap.user_id_attr" );
+    $app = Yii::$app;
+    $user_id_attr = $app->config->getIniValue( "ldap.user_id_attr" );
 
-
-    /*
-     * create new LDAP server object
-     */
-    
-    $ldap = new qcl_access_LdapServer( $host, $port );
-
-    /*
-     * authenticate against ldap server
-     */
-    $userdn = "$user_id_attr=$username,$user_base_dn";
-    Yii::trace("Authenticating $userdn against $host:$port.", 'ldap');
-    $ldap->authenticate( $userdn, $password );
-
+    Yii::trace("Authenticating $userdn against LDAP Server.", 'ldap');
+    $userdn = "$username,$user_base_dn";
+    $ldapObject = $app->ldap->search()->findBy($user_id_attr, $userdn);
+  
     /*
      * if LDAP authentication succeeds, assume we have a valid
      * user. if this user does not exist, create it with "user" role
@@ -408,12 +396,13 @@ class AccessController extends AppController
    */
   protected function createUserFromLdap( qcl_access_LdapServer $ldap, $username )
   {
+    return false; 
     $app = $this->getApplication();
     $userModel = $app->getAccessController()->getUserModel();
 
-    $user_base_dn = $app->getIniValue("ldap.user_base_dn");
-    $user_id_attr = $app->getIniValue( "ldap.user_id_attr" );
-    $mail_domain  = $app->getIniValue( "ldap.mail_domain" );
+    $user_base_dn = $app->config->getIniValue("ldap.user_base_dn");
+    $user_id_attr = $app->config->getIniValue( "ldap.user_id_attr" );
+    $mail_domain  = $app->config->getIniValue( "ldap.mail_domain" );
 
     $attributes = array( "cn", "sn","givenName","mail" );
     $filter = "($user_id_attr=$username)";
@@ -426,9 +415,7 @@ class AccessController extends AppController
     }
     $entries = $ldap->getEntries();
 
-    /*
-     * Full name of user
-     */
+    // Full name of user
     if( isset( $entries[0]['cn'][0] ) )
     {
       $name = $entries[0]['cn'][0];
@@ -446,9 +433,7 @@ class AccessController extends AppController
       $name = $username;
     }
 
-    /*
-     * Email address
-     */
+    // Email address
     if ( isset( $entries[0]['mail'][0] ) )
     {
       $email = $entries[0]['mail'][0];
@@ -462,9 +447,7 @@ class AccessController extends AppController
       $email = "";
     }
 
-    /*
-     * create new user without any role
-     */
+    // create new user without any role
     $userModel->create( $username, array(
       'name'      => $name,
       'email'     => $email,
@@ -484,15 +467,15 @@ class AccessController extends AppController
   protected function updateGroupMembershipFromLdap( qcl_access_LdapServer $ldap, $username )
   {
     $app = $this->getApplication();
-    if ( $app->getIniValue("ldap.use_groups") === false )
+    if ( $app->config->getIniValue("ldap.use_groups") === false )
     {
       // don't use groups
       return;
     }
 
-    $group_base_dn   = $app->getIniValue( "ldap.group_base_dn" );
-    $member_id_attr  = $app->getIniValue( "ldap.member_id_attr" );
-    $group_name_attr = $app->getIniValue( "ldap.group_name_attr" );
+    $group_base_dn   = $app->config->getIniValue( "ldap.group_base_dn" );
+    $member_id_attr  = $app->config->getIniValue( "ldap.member_id_attr" );
+    $group_name_attr = $app->config->getIniValue( "ldap.group_name_attr" );
 
     qcl_assert_valid_string( $group_base_dn,   "Invalid config value ldap.group_base_dn " );
     qcl_assert_valid_string( $member_id_attr,  "Invalid config value ldap.member_id_attr " );

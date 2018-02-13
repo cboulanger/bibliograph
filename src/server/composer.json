@@ -6,7 +6,8 @@
         "fourteenmeister/dsn": "@dev",
         "odannyc/yii2-sse": "^0.1.0",
         "flow/jsonpath": "^0.3.4",
-        "danielstjules/stringy": "^3.1"
+        "danielstjules/stringy": "^3.1",
+        "edvlerblog/yii2-adldap-module": "^4.0.0"
     },
     "require-dev": {
         "bizley/migration": "^2.2",
