@@ -2,27 +2,6 @@
 ;; Leave the above line to make sure nobody can access this file ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; These are the server-side default configuration values
-;; for your application. They are unchangeable by the application
-;; and typically should not be exposed to the client.
-;;
-;; You can access a configuration value with
-;;    $app = qcl_application_Application::getInstance();
-;;    $myconfigValue = $app->getIniValue( "sectionname.keyname" );
-;;
-;; The section name is found in square brackets below, the key name
-;; is the string before the "=" character.
-;;
-;; Please note:
-;;   - If values contain whitespace, they have to be quoted.
-;;   - values "on" and "yes" will be converted in boolean true,
-;;     values "off" and "no" into boolean false.
-;;   - you can use macros (see below in the section 'macros' to
-;;     compose values from other values. Note that the values
-;;     contained in the macro have to be defined before the macro.
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 [database]
 
 ;; database.type

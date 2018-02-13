@@ -422,7 +422,7 @@ class Datasource extends BaseModel
         include_once($migrationFile);
       }
       $migration = new $migrationClass();
-      $migration->db->tablePrefix = Yii::$app->utils->getIniValue('database.tableprefix') . $prefix;
+      $migration->db->tablePrefix = Yii::$app->config->getIniValue('database.tableprefix') . $prefix;
       $migration->safeUp();
     }
   }

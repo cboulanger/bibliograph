@@ -88,7 +88,7 @@ class SetupController extends \app\controllers\AppController
       }
     } 
     // notify client that setup it done
-    $this->dispatchClientMessage("ldap.enabled", Yii::$app->utils->getIniValue("ldap.enabled") );
+    $this->dispatchClientMessage("ldap.enabled", Yii::$app->config->getIniValue("ldap.enabled") );
     $this->dispatchClientMessage("bibliograph.setup.done");
 
     // return errors and messages
@@ -281,7 +281,7 @@ class SetupController extends \app\controllers\AppController
 
   protected function setupCheckAdminEmail()
   {
-    $adminEmail = Yii::$app->utils->getIniValue("email.admin");
+    $adminEmail = Yii::$app->config->getIniValue("email.admin");
     if ( ! $adminEmail ){
       return [
         'error' => Yii::t('app',"Missing administrator email in bibliograph.ini.php." )

@@ -55,56 +55,6 @@ class Utils extends \yii\base\Component
       ( $modelId  ? "!modelType.reference!modelId.$modelId" : "");
   }    
 
-  //-------------------------------------------------------------
-  // ini values
-  //-------------------------------------------------------------
-
-
-  /**
-   * Returns a configuration value of the pattern "foo.bar.baz"
-   * This retrieves the values set in the config/bibliograph.ini.php file.
-   */
-  public function getIniValue( $path )
-  {
-    static $ini = null;
-    if( is_null($ini) ){
-      $ini = require(Yii::getAlias('@app/config/parts/ini.php'));
-    }
-    $parts = explode(".",$path);
-    // drill into ini array
-    $value = $ini;
-    while( is_array($value) and $part = array_shift($parts) ){
-      if ( isset( $value[$part] ) ) {
-        $value = $value[$part];
-        continue;
-      }
-      throw new InvalidArgumentException("No ini value for '$path' exists.");
-    }
-    // post-process value
-    if( $value == "on" or $value == "yes" )
-    {
-      $value = true;
-    }
-    elseif ( $value == "off" or $value == "no" )
-    {
-      $value = false;
-    }
-    return $value;
-  }
-
-  /**
-   * Returns an array of values corresponding to the given array of keys from the
-   * initialization configuration data.
-   * @param array $arr
-   * @return array
-   */
-  public function getIniValues( $arr )
-  {
-    return array_map( function($elem) {
-      return $this->getIniValue( $elem );
-    }, $arr );
-  }
-
 
   //-------------------------------------------------------------
   // etc
@@ -130,5 +80,6 @@ class Utils extends \yii\base\Component
   {
     notImplemented();
     return qcl_server_Server::getUrl();
-  }
+  }  
+
 }

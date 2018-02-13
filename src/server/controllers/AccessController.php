@@ -83,7 +83,7 @@ class AccessController extends AppController
     $auth_method = Yii::$app->config->getPreference("authentication.method");
     $user = User::findOne(['namedId'=> $username]);
     if( $user ){
-      if( Yii::$app->utils->getIniValue("ldap.enabled") and $user->isLdapUser() ) 
+      if( Yii::$app->config->getIniValue("ldap.enabled") and $user->isLdapUser() ) 
       {
         Yii:trace("Challenge: User '$username' needs to be authenticated by LDAP.");
         $auth_method = "plaintext";
@@ -179,49 +179,56 @@ class AccessController extends AppController
       // }
 
       // identify user
+      $authenticated = false;
       try {
         $user = $this->user($first);
       } catch (\InvalidArgumentException $e) {
-        Yii::warning("Invalid user '$first' tried to authenticate.");
-        return new AuthResult([
-          'error' => Yii::t('app', "Invalid username or password")
-        ]);
+        // this could be a LDAP user
+        $user = $this->authenticateByLdap($first,$password);
+        if( ! $user ) {
+          Yii::warning("Invalid user '$first' tried to authenticate.");
+          return new AuthResult([
+            'error' => Yii::t('app', "Invalid username or password")
+          ]);
+        }
+        $authenticated = true;
       }
 
       // inactive users cannot log in
-      if ( ! $user->active) {
+      if ( ! $user->active ) {
         return new AuthResult([
           'error' => Yii::t('app', "User is deactivated"),
         ]);  
       }        
   
-      // check password
-      $auth_method = Yii::$app->config->getPreference("authentication.method");
-      $authenticated = false;
-      $storedPw = $user->password;
-      switch ($auth_method) {
-        case "hashed":
-          Yii::trace("Client sent hashed password: $password.");
-          $randSalt   = $this->getLoginSalt();
-          $serverHash = substr( $storedPw, ACCESS_SALT_LENGTH );
-          $authenticated = $password == sha1( $randSalt . $serverHash );
-          break;
-        case "plaintext":
-          Yii::trace("Client sent plaintext password." );
-          $authenticated = $this->generateHash( $password, $storedPw ) == $storedPw;
-          break;
-        default:
-          throw new InvalidArgumentException("Unknown authentication method $auth_method");
+      // check password from database if not an LDAP user
+      if ( ! $authenticated ) {
+        $auth_method = Yii::$app->config->getPreference("authentication.method");
+        $authenticated = false;
+        $storedPw = $user->password;
+        switch ($auth_method) {
+          case "hashed":
+            Yii::trace("Client sent hashed password: $password.");
+            $randSalt   = $this->getLoginSalt();
+            $serverHash = substr( $storedPw, ACCESS_SALT_LENGTH );
+            $authenticated = $password == sha1( $randSalt . $serverHash );
+            break;
+          case "plaintext":
+            Yii::trace("Client sent plaintext password." );
+            $authenticated = $this->generateHash( $password, $storedPw ) == $storedPw;
+            break;
+          default:
+            throw new InvalidArgumentException("Unknown authentication method $auth_method");
+        }
+        
+        // password is wrong
+        if ( $authenticated === false ){
+          Yii::info("Wrong password.");
+          return new AuthResult([
+            'error' => Yii::t('app', "Invalid username or password"),
+          ]);  
+        }
       }
-      
-      // password is wrong
-      if ( $authenticated === false ){
-        Yii::info("Wrong password.");
-        return new AuthResult([
-          'error' => Yii::t('app', "Invalid username or password"),
-        ]);  
-      }
-
       Yii::info("Authenticated user '{$user->namedId}' via auth username/password.");
     }
 
@@ -332,24 +339,20 @@ class AccessController extends AppController
     return $count;
   }
 
-/**
+  /**
    * Authenticate using a remote LDAP server.
    * @param $username
    * @param $password
-   * @return int User Id
-   * @throws qcl_access_AuthenticationException if Authentication fails
+   * @return \app\models\User|null User or null if authentication failed
+   * @throws 
    */
   protected function authenticateByLdap( $username, $password )
   {
-    $app = $this->getApplication();
     $host = $app->getIniValue( "ldap.host" );
     $port = (int) $app->getIniValue( "ldap.port" );
     $user_base_dn = $app->getIniValue( "ldap.user_base_dn" );
     $user_id_attr = $app->getIniValue( "ldap.user_id_attr" );
 
-    qcl_assert_valid_string( $host );
-    qcl_assert_valid_string( $user_base_dn, "Invalid config value ldap.user_base_dn " );
-    qcl_assert_valid_string( $user_id_attr, "Invalid config value ldap.user_id_attr " );
 
     /*
      * create new LDAP server object
@@ -625,7 +628,7 @@ class AccessController extends AppController
   //-------------------------------------------------------------    
 
   /**
-   * Checks if the given username has to be authenticated from an LDAP server#
+   * Checks if the given username has to be authenticated from an LDAP server
    * @param string $username
    * @throws \InvalidArgumentException if user does not exist
    * @return bool
