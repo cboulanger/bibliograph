@@ -41,10 +41,11 @@ class LdapAuth extends \yii\base\Component
   public function authenticate( $username, $password )
   {
     $app = Yii::$app;
-
-    Yii::trace("Authenticating user $username against LDAP Server.", 'ldap');
+    $user_id_attr = Yii::$app->config->getIniValue("ldap.user_id_attr");
+    $bind_dn = "$user_id_attr=$username";
+    Yii::trace("Trying to bind $bind_dn with LDAP Server.", 'ldap');
     try {
-      if ( ! $app->ldap->auth()->attempt($username, $password, true)) {
+      if ( ! $app->ldap->auth()->attempt( $bind_dn, $password, true )) {
         Yii::trace("User/Password combination is wrong.", 'ldap');
         return null; 
       }  
@@ -119,12 +120,15 @@ class LdapAuth extends \yii\base\Component
     // create new user without any role
     // @todo import first and last name
     $user = new User([
+      'namedId'   => $username,
       'name'      => $name,
       'email'     => $email,
-      'ldap'      => true,
-      'confirmed' => true // an LDAP user needs no confirmation
+      'ldap'      => 1,
+      'confirmed' => 1 // an LDAP user needs no confirmation
     ]);
     $user->save();
+    $user->link('roles', Role::findByNamedId("user") );
+    Yii::trace("Created local user '$name' from LDAP data and assigned 'user' role ...", 'ldap' );
     return $user;
   }
 
@@ -155,18 +159,22 @@ class LdapAuth extends \yii\base\Component
       ->get();
     
     if ( count($records) == 0 ) {
-      Yii::trace("User $username belongs to no groups", 'ldap' );
+      Yii::trace("User '$username' belongs to no LDAP groups", 'ldap' );
     }
 
     $user = User::findOne(['namedId'=>$username]);
-    assert($user,"User record must exist at this point");
+    assert(is_object($user),"User record must exist at this point");
     $groupNames = $user->getGroupNames();
 
-    // parse entries and update groups if neccessary
-    $entries = $ldap->getEntries();
-    $count = $entries['count'];
+    if( count($groupNames) == 0 and count($records) == 0 ){
+      Yii::trace("User '$username' belongs to no local groups. Nothing to do.", 'ldap' );
+      return;
+    }
 
-    for( $i=0; $i<$count; $i++ ) {
+    // parse entries and update groups if neccessary
+    foreach( $records as $record ) {
+      Yii::trace($record);
+      continue;
       $namedId = $entries[$i]['cn'][0];
       $group = Group::findByNamedId($namedId);
       if( ! $group ){      
@@ -183,7 +191,7 @@ class LdapAuth extends \yii\base\Component
       // make user a group member
       if ( ! $user->getGroups()->where(['namedId'=>'$namedId'])->exists() ){
         Yii::trace("Adding user '$username' to group '$namedId'", 'ldap' );
-        $group->link( 'group', $user );
+        $group->link( 'groups', $user );
       }
 
       // if group provides a default role
@@ -201,7 +209,7 @@ class LdapAuth extends \yii\base\Component
         if( $role and ! $user->getUserRoles()->where($condition)->exists() )
         {
           Yii::trace("Granting user '$username' the default role '$defaultRole' in group '$namedId'", 'ldap' );
-          $user->link( 'role', $role, [ 'GroupId' => $group->id ] );
+          $user->link( 'roles', $role, [ 'GroupId' => $group->id ] );
         }
       }
       // tick off (remove) group name from the list
@@ -215,7 +223,7 @@ class LdapAuth extends \yii\base\Component
       assert(\is_object($group)); // group must exist
       if ( $group->ldap ) {
         Yii::trace("Removing user '$username' from group '$namedId'", 'ldap' );
-        $user->unlink( 'group', $group );
+        $user->unlink( 'groups', $group );
       } else {
         Yii::warn("Not removing user '$username' from group '$namedId': not a LDAP group", 'ldap' );
       }

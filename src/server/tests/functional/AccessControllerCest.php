@@ -50,17 +50,16 @@ class AccessControllerCest
   public function tryAuthenticateViaLdap(FunctionalTester $I, $scenario)
   {
     $I->sendJsonRpcRequest('access','ldap-support');
-    codecept_debug( $I->grabDataFromResponseByJsonPath('$.result')[0] );
+    //codecept_debug( $I->grabDataFromResponseByJsonPath('$.result')[0] );
     if( ! $I->grabDataFromResponseByJsonPath('$.result.connection')[0] ){
       $scenario->skip("We don't have an LDAP connection");
     }
     
     $I->loginWithPassword('einstein','password');
-    $I->sendJsonRpcRequest('access','userdata');
+    //$I->sendJsonRpcRequest('access','userdata');
     
     // $I->assertSame( $I->grabDataFromResponseByJsonPath('$.result.namedId')[0], 'admin' );
     // $I->assertSame( count( $I->grabDataFromResponseByJsonPath('$.result.permissions')[0] ), 34 );
     // $I->logout();
   }
-
 }
