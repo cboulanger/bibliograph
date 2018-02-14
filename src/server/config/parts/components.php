@@ -1,10 +1,15 @@
 <?php
 $components = [
+
+  /*
+   * Framework components
+   */
+
   // identity class
   'user' => [
     'class' => 'yii\web\User',
     'identityClass' => 'app\models\User',
-  ],      
+  ],
   // logging
   'log' => [
     'targets' => [
@@ -18,13 +23,22 @@ $components = [
       ]
     ] 
   ],
+  // Override http response component
+  'response' => [
+    'class' => \lib\components\EventTransportResponse::class
+  ], 
+  
+  /*
+   * Custom applications components
+   */  
+
   // The application configuration
   'config' => [
     'class' => \lib\components\Configuration::class
   ],    
-  // The http response component
-  'response' => [
-    'class' => \lib\components\EventTransportResponse::class
+  'ldap' => require('ldap.php'),
+  'ldapAuth'  => [
+    'class' => \lib\components\LdapAuth::class
   ],  
   // a queue of Events to be transported to the browser
   'eventQueue' => [
@@ -34,17 +48,17 @@ $components = [
   'utils' => [ 
     'class' => \lib\components\Utils::class
   ],
-  // server-side events, not working yet
+  //server-side events, not used
   'sse' => [
     'class' => \odannyc\Yii2SSE\LibSSE::class
   ],
-  // message channels, not working yet
+  //message channels, not working yet
   'channel' => [
     'class' => \lib\channel\Component::class
-  ],
-  'ldap' => require('ldap.php')
+  ]
 ];
 return array_merge(
+  // merge db components
   require('db.php'),
   $components
 );

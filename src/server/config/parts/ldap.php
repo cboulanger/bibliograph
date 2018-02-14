@@ -1,6 +1,7 @@
 <?php
 $ini = require('ini.php');
-$db = (object) $ini['ldap'];
+$ldap = (object) $ini['ldap'];
+if( $ldap->enabled !== "on") return;
 return  [
   'class' => 'Edvlerblog\Adldap2\Adldap2Wrapper',
 
@@ -36,10 +37,11 @@ return  [
       // Connect this provider on initialisation of the LdapWrapper Class automatically
       'autoconnect' => true,
 
-      // The provider's schema. Default is \Adldap\Schemas\ActiveDirectory set in https://github.com/Adldap2/Adldap2/blob/master/src/Connections/Provider.php#L112
-      // You can make your own https://github.com/Adldap2/Adldap2/blob/master/docs/schema.md or use one from https://github.com/Adldap2/Adldap2/tree/master/src/Schemas
+      // The provider's schema. 
+      // You can make your own https://github.com/Adldap2/Adldap2/blob/master/docs/schema.md 
+      // or use one from https://github.com/Adldap2/Adldap2/tree/master/src/Schemas
       // Example to set it to OpenLDAP:
-      // 'schema' => new \Adldap\Schemas\OpenLDAP(),
+      'schema' => new \Adldap\Schemas\OpenLDAP(),
 
       // The config has to be defined as described in the Adldap2 documentation.
       // https://github.com/Adldap2/Adldap2/blob/master/docs/configuration.md
@@ -58,14 +60,27 @@ return  [
 
         // The account to use for querying / modifying users. This
         // does not need to be an actual admin account.
+        // See https://github.com/Adldap2/Adldap2/tree/master/docs
         //'admin_username' => 'username_ldap_access',
         //'admin_password' => 'password_ldap_access!',
 
-        // To enable SSL/TLS read https://github.com/edvler/yii2-adldap-module/blob/master/docs/SSL_TLS_AD.md
+        // To enable SSL/TLS read 
+        // https://github.com/edvler/yii2-adldap-module/blob/master/docs/SSL_TLS_AD.md
         // and uncomment the variables below
-        // @todo move into bibliograph.ini.php
         //'use_ssl' => true,
-        //'use_tls' => true,                                
+        //'use_tls' => true,             
+        
+        // Optional Configuration Options
+        //'account_prefix'        => 'ACME-',
+        //'admin_account_prefix'  => 'ACME-ADMIN-',
+        //'admin_account_suffix'  => '@acme.org',
+        //'follow_referrals'      => false,
+        //'timeout'               => 5,
+        
+        // Custom LDAP Options
+        // See: http://php.net/ldap_set_option
+        //'custom_options'        => [
+        //]        
       ]
     ]
   ], // close providers array

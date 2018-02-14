@@ -39,6 +39,12 @@ class AccessModelsTest extends Base
     $this->assertEquals('dale_cooper@bibliograph.org', $user->email );
     $groupNames = $user->getGroupNames();
     $this->assertEquals(['group2','group3'], $groupNames );
+    // the Yii2 "isLinked" method
+    $this->assertTrue( $user->getGroups()->where(['namedId'=>'group2'])->exists() );
+    $group1 = Group::findOne(['namedId'=>'group1']);
+    $this->assertFalse( is_null($group1) );
+    $user->link('groups', $group1);
+    $this->assertTrue( $user->getGroups()->where(['namedId'=>'group1'])->exists() );
   }
 
   public function testUserGlobalRoles()

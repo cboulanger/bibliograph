@@ -26,7 +26,7 @@ use app\models\User;
 use app\models\UserConfig;
 
 /**
- * Service class providing methods to get or set configuration
+ * Component class providing methods to get or set configuration
  * values
  */
 class Configuration extends \yii\base\Component

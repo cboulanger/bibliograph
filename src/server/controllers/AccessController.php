@@ -34,7 +34,7 @@ use app\models\Group;
 use app\models\Session;
 
 /**
- * The class used for authentication of users. Adds LDAP authentication
+ * The class used for authentication of users.
  */
 class AccessController extends AppController
 {
@@ -180,11 +180,14 @@ class AccessController extends AppController
 
       // identify user
       $authenticated = false;
+      $useLdap = Yii::$app->getIniValue("ldap.enabled");
       try {
         $user = $this->user($first);
       } catch (\InvalidArgumentException $e) {
-        // this could be a LDAP user
-        $user = $this->authenticateByLdap($first,$password);
+        if( $useLdap ){
+          // this could be a LDAP user
+          $user = Yii::$app->ldapAuth->authenticate($first,$password);
+        }
         if( ! $user ) {
           Yii::warning("Invalid user '$first' tried to authenticate.");
           return new AuthResult([
@@ -199,31 +202,40 @@ class AccessController extends AppController
         return new AuthResult([
           'error' => Yii::t('app', "User is deactivated"),
         ]);  
-      }        
-  
-      // check password from database if not an LDAP user
+      } 
+
       if ( ! $authenticated ) {
-        $auth_method = Yii::$app->config->getPreference("authentication.method");
-        $authenticated = false;
-        $storedPw = $user->password;
-        switch ($auth_method) {
-          case "hashed":
-            Yii::trace("Client sent hashed password: $password.");
-            $randSalt   = $this->getLoginSalt();
-            $serverHash = substr( $storedPw, ACCESS_SALT_LENGTH );
-            $authenticated = $password == sha1( $randSalt . $serverHash );
-            break;
-          case "plaintext":
-            Yii::trace("Client sent plaintext password." );
-            $authenticated = $this->generateHash( $password, $storedPw ) == $storedPw;
-            break;
-          default:
-            throw new InvalidArgumentException("Unknown authentication method $auth_method");
+
+        // if the user has been authenticated via ldap before
+        if( $useLdap and $user->ldap ){
+          if ( Yii::$app->ldapAuth->authenticate($first,$password) ){
+            $authenticated = true;
+          }
+          // authentication failed
+        } else {
+          // check password from database
+          $auth_method = Yii::$app->config->getPreference("authentication.method");
+          $authenticated = false;
+          $storedPw = $user->password;
+          switch ($auth_method) {
+            case "hashed":
+              Yii::trace("Client sent hashed password: $password.");
+              $randSalt   = $this->getLoginSalt();
+              $serverHash = substr( $storedPw, ACCESS_SALT_LENGTH );
+              $authenticated = $password == sha1( $randSalt . $serverHash );
+              break;
+            case "plaintext":
+              Yii::trace("Client sent plaintext password." );
+              $authenticated = $this->generateHash( $password, $storedPw ) == $storedPw;
+              break;
+            default:
+              throw new InvalidArgumentException("Unknown authentication method $auth_method");
+          }
         }
-        
+
         // password is wrong
         if ( $authenticated === false ){
-          Yii::info("Wrong password.");
+          Yii::info("User supplied wrong password.");
           return new AuthResult([
             'error' => Yii::t('app', "Invalid username or password"),
           ]);  
@@ -232,11 +244,7 @@ class AccessController extends AppController
       Yii::info("Authenticated user '{$user->namedId}' via auth username/password.");
     }
 
-    /*
-     * user is authenticated
-     */
-
-    // log in identified user
+    // user is authenticated, log in 
     $user->online = 1;
     $user->save(); 
     Yii::$app->user->login($user);
@@ -292,7 +300,7 @@ class AccessController extends AppController
   public function renewPassword()
   {
     // @todo  create dialog that asks user to fill out their user information
-    // if ( strlen($password) == 7 and ! $this->ldapAuth )
+    // if ( strlen($password) == 7 and ! $user->ldapAuth )
     // {
     //   new ui_dialog_Alert(
     //   Yii::t('app',"You need to set a new password."),
@@ -338,236 +346,6 @@ class AccessController extends AppController
     $session->set( "counter", $count );
     return $count;
   }
-
-  /**
-   * Authenticate using a remote LDAP server.
-   * @param $username
-   * @param $password
-   * @return \app\models\User|null User or null if authentication failed
-   * @throws 
-   */
-  protected function authenticateByLdap( $username, $password )
-  {
-    $app = Yii::$app;
-    $user_id_attr = $app->config->getIniValue( "ldap.user_id_attr" );
-
-    Yii::trace("Authenticating $userdn against LDAP Server.", 'ldap');
-    $userdn = "$username,$user_base_dn";
-    $ldapObject = $app->ldap->search()->findBy($user_id_attr, $userdn);
-  
-    /*
-     * if LDAP authentication succeeds, assume we have a valid
-     * user. if this user does not exist, create it with "user" role
-     * and assign it to the groups specified by the ldap source
-     */
-    $userModel = $app->getAccessController()->getUserModel();
-    try
-    {
-      $userModel->load( $username );
-      $userId = $userModel->id();
-    }
-    catch( qcl_data_model_RecordNotFoundException $e)
-    {
-      $userId = $this->createUserFromLdap( $ldap, $username );
-      $this->newUser = $username;
-    }
-
-    /*
-     * update group membership
-     */
-    $this->updateGroupMembershipFromLdap( $ldap, $username );
-    return $userId;
-  }
-
-  /**
-   * Creates a new user from an authenticated LDAP connection.
-   * Receives as parameter a qcl_access_LdapServer object that
-   * has already been successfully bound, and the username. The
-   * default behavior is to use the attributes "cn", "sn","givenName"
-   * to determine the user's full name and the "mail" attribute to
-   * determine the user's email address.
-   * Returns the newly created local user id.
-   *
-   * @param qcl_access_LdapServer $ldap
-   * @param string $username
-   * @return int User id
-   * @throws qcl_access_LdapException in case no information can be
-   * retrieved.
-   */
-  protected function createUserFromLdap( qcl_access_LdapServer $ldap, $username )
-  {
-    return false; 
-    $app = $this->getApplication();
-    $userModel = $app->getAccessController()->getUserModel();
-
-    $user_base_dn = $app->config->getIniValue("ldap.user_base_dn");
-    $user_id_attr = $app->config->getIniValue( "ldap.user_id_attr" );
-    $mail_domain  = $app->config->getIniValue( "ldap.mail_domain" );
-
-    $attributes = array( "cn", "sn","givenName","mail" );
-    $filter = "($user_id_attr=$username)";
-
-    Yii::trace("Retrieving user data from LDAP base dn '$user_base_dn' with filter '$filter'", 'ldap');
-    $ldap->search( $user_base_dn, $filter, $attributes);
-    if ( $ldap->countEntries() == 0 )
-    {
-      throw new qcl_access_LdapException("Failed to retrieve user information from LDAP.");
-    }
-    $entries = $ldap->getEntries();
-
-    // Full name of user
-    if( isset( $entries[0]['cn'][0] ) )
-    {
-      $name = $entries[0]['cn'][0];
-    }
-    elseif ( isset( $entries[0]['sn'][0] ) and isset( $entries[0]['givenName'][0] ) )
-    {
-      $name = $entries[0]['givenName'][0] . " " . $entries[0]['sn'][0];
-    }
-    elseif ( isset( $entries[0]['sn'][0] ) )
-    {
-      $name = $entries[0]['sn'][0];
-    }
-    else
-    {
-      $name = $username;
-    }
-
-    // Email address
-    if ( isset( $entries[0]['mail'][0] ) )
-    {
-      $email = $entries[0]['mail'][0];
-      if ( $mail_domain )
-      {
-        $email .= "@" . $mail_domain;
-      }
-    }
-    else
-    {
-      $email = "";
-    }
-
-    // create new user without any role
-    $userModel->create( $username, array(
-      'name'      => $name,
-      'email'     => $email,
-      'ldap'      => true,
-      'confirmed' => true // an LDAP user needs no confirmation
-    ) );
-
-    return $userModel->id();
-  }
-
-  /**
-   * Updates the group memberships of the user from the ldap database
-   * @param $ldap
-   * @param $username
-   * @return void
-   */
-  protected function updateGroupMembershipFromLdap( qcl_access_LdapServer $ldap, $username )
-  {
-    $app = $this->getApplication();
-    if ( $app->config->getIniValue("ldap.use_groups") === false )
-    {
-      // don't use groups
-      return;
-    }
-
-    $group_base_dn   = $app->config->getIniValue( "ldap.group_base_dn" );
-    $member_id_attr  = $app->config->getIniValue( "ldap.member_id_attr" );
-    $group_name_attr = $app->config->getIniValue( "ldap.group_name_attr" );
-
-    qcl_assert_valid_string( $group_base_dn,   "Invalid config value ldap.group_base_dn " );
-    qcl_assert_valid_string( $member_id_attr,  "Invalid config value ldap.member_id_attr " );
-    qcl_assert_valid_string( $group_name_attr, "Invalid config value ldap.group_name_attr " );
-
-    $attributes = array( "cn", $group_name_attr );
-    $filter = "($member_id_attr=$username)";
-
-    Yii::trace("Retrieving group data from LDAP base dn '$group_base_dn' with filter '$filter'", 'ldap' );
-    $ldap->search( $group_base_dn, $filter, $attributes);
-    if ( $ldap->countEntries() == 0 )
-    {
-      Yii::trace("User $username belongs to no groups", 'ldap' );
-    }
-
-    /*
-     * load user model
-     */
-    $userModel = $app->getAccessController()->getUserModel();
-    $userModel->load( $username );
-
-    /*
-     * parse entries and update groups if neccessary
-     */
-    $entries = $ldap->getEntries();
-    $count = $entries['count'];
-    $groupModel= $app->getAccessController()->getGroupModel();
-    $groups = new ArrayList( $userModel->groups() );
-
-    for( $i=0; $i<$count; $i++ )
-    {
-      $namedId = $entries[$i]['cn'][0];
-      try
-      {
-        $groupModel->load( $namedId );
-      }
-      catch( qcl_data_model_RecordNotFoundException $e)
-      {
-        $name    = $entries[$i][$group_name_attr][0];
-        Yii::trace("Creating group '$namedId' ('$name') from LDAP", 'ldap' );
-        $groupModel->create( $namedId, array(
-          'name'  => $name,
-          'ldap'  => true
-        ) );
-      }
-
-      /*
-       * make user a group member
-       */
-      if ( ! $userModel->islinkedModel( $groupModel ) )
-      {
-        Yii::trace("Adding user '$username' to group '$namedId'", 'ldap' );
-        $groupModel->linkModel( $userModel );
-      }
-
-      /*
-       * if group provides a default role
-       */
-      $defaultRole = $groupModel->getDefaultRole();
-      if ( $defaultRole )
-      {
-        $roleModel = $this->getApplication()->getAccessController()->getRoleModel();
-        $roleModel->load( $defaultRole );
-        if( ! $userModel->islinkedModel( $roleModel, $groupModel ) )
-        {
-          Yii::trace("Granting user '$username' the default role '$defaultRole' in group '$namedId'", 'ldap' );
-          $userModel->linkModel( $roleModel, $groupModel );
-        }
-      }
-
-      /*
-       * tick off (remove) group name from the list
-       */
-      $groups->remove( $groups->indexOf( $namedId ) );
-    }
-
-    /*
-     * remove all remaining user from all groups that are not listed in LDAP
-     */
-    foreach( $groups->toArray() as $groupToRemove )
-    {
-      $groupModel->load( $groupToRemove );
-      if ( $groupModel->getLdap() === true )
-      {
-        Yii::trace("Removing user '$username' from group '$groupToRemove'", 'ldap' );
-        $groupModel->unlinkModel( $userModel );
-      }
-    }
-
-    Yii::trace( "User '$username' is member of the following groups: " . implode(",", $userModel->groups(true) ), 'ldap' );
-  }
-  
 
    /**
    * Manually cleanup access data
