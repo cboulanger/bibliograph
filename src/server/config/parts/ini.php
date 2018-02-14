@@ -1,8 +1,7 @@
 <?php
-/**
- * This returns the content of bibliograph.ini.php as an array, with ${...} macros expanded
- */
-$ini = parse_ini_file ( APP_INI_FILE, true, INI_SCANNER_RAW );
+// This returns the content of bibliograph.ini.php as an array, with ${...} macros expanded
+// @todo move into @lib
+$ini = parse_ini_file ( APP_INI_FILE, true, INI_SCANNER_TYPED );
 // replace macros
 array_walk_recursive( $ini, 
 function( &$value ) use($ini) {

@@ -15,6 +15,7 @@ $config =  [
 ];
 
 // Development
+// @todo move into own config file
 if (YII_ENV_DEV) {
   $config['bootstrap'][] = 'gii';
   $config['modules']['gii'] = [
@@ -36,6 +37,9 @@ if (YII_ENV_DEV) {
     ],
     'migration' => [
       'class' => 'bizley\migration\controllers\MigrationController'
+    ],
+    'stubs' => [
+      'class' => 'bazilio\stubsgenerator\StubsController',
     ],    
   ];    
 }

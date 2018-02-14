@@ -1,7 +1,7 @@
 <?php
 $ini = require('ini.php');
 $ldap = (object) $ini['ldap'];
-if( $ldap->enabled !== "on") return;
+if( ! $ldap->enabled ) return;
 return  [
   'class' => 'Edvlerblog\Adldap2\Adldap2Wrapper',
 
@@ -33,9 +33,10 @@ return  [
       * $provider = \Yii::$app->ldap->getDefaultProvider();
       * or with $provider = \Yii::$app->ldap->getProvider('default');
       */
-    'default' => [ //Providername default
+    'default' => [ 
       // Connect this provider on initialisation of the LdapWrapper Class automatically
-      'autoconnect' => true,
+      // Must be false otherwise the app will break if the server isn't available
+      'autoconnect' => false,
 
       // The provider's schema. 
       // You can make your own https://github.com/Adldap2/Adldap2/blob/master/docs/schema.md 
@@ -46,9 +47,7 @@ return  [
       // The config has to be defined as described in the Adldap2 documentation.
       // https://github.com/Adldap2/Adldap2/blob/master/docs/configuration.md
       'config' => [
-        // The account suffix, usually the mail domain
-        'account_suffix' => "@" . $ldap->mail_domain,
-
+        
         // You can use the host name or the IP address of your controllers.
         'domain_controllers' => [$ldap->host],
 
@@ -58,12 +57,16 @@ return  [
         // Your base DN. This is usually your account suffix.
         'base_dn' => $ldap->user_base_dn,
 
-        // The account to use for querying / modifying users. This
-        // does not need to be an actual admin account.
+        // The account to use for 
+        //   a) comnecting / querying (This usually does not need to be an actual admin account)
+        //   b) modifying / creating users (An account with admin priviledges is required)
         // See https://github.com/Adldap2/Adldap2/tree/master/docs
-        //'admin_username' => 'username_ldap_access',
-        //'admin_password' => 'password_ldap_access!',
+        'admin_username' => $ldap->bind_dn,
+        'admin_password' => $ldap->bind_password,
 
+        // The account suffix, if set, will be added to all CNs
+        'account_suffix' => "," . $ldap->user_base_dn,
+        
         // To enable SSL/TLS read 
         // https://github.com/edvler/yii2-adldap-module/blob/master/docs/SSL_TLS_AD.md
         // and uncomment the variables below

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ad4b5cb45b1b604510c254889434351c",
+    "content-hash": "6a01a24c91e67e7ed4b3c93e61f82518",
     "packages": [
         {
             "name": "adldap2/adldap2",
@@ -1371,6 +1371,48 @@
         }
     ],
     "packages-dev": [
+        {
+            "name": "bazilio/yii2-stubs-generator",
+            "version": "1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bazilio91/yii2-stubs-generator.git",
+                "reference": "0e5331ef96b3b00e7bf4cd33bb412bedfb8e8380"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bazilio91/yii2-stubs-generator/zipball/0e5331ef96b3b00e7bf4cd33bb412bedfb8e8380",
+                "reference": "0e5331ef96b3b00e7bf4cd33bb412bedfb8e8380",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "bazilio\\stubsgenerator\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Vasily Ostanin",
+                    "email": "bazilio91@gmail.com"
+                }
+            ],
+            "description": "Yii2 component stubs generator for Yii::$app",
+            "keywords": [
+                "autocomplete",
+                "phpstorm",
+                "stubs",
+                "yii2"
+            ],
+            "time": "2017-05-09T06:17:29+00:00"
+        },
         {
             "name": "behat/gherkin",
             "version": "v4.4.5",

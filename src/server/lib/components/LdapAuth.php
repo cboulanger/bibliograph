@@ -38,14 +38,24 @@ class LdapAuth extends \yii\base\Component
    * @return \app\models\User|null User or null if authentication failed
    * @throws 
    */
-  protected function authenticate( $username, $password )
+  public function authenticate( $username, $password )
   {
     $app = Yii::$app;
+
     Yii::trace("Authenticating user $username against LDAP Server.", 'ldap');
-    if ( ! $app->ldap->auth()->attempt($username, $password, true)) {
+    try {
+      if ( ! $app->ldap->auth()->attempt($username, $password, true)) {
+        Yii::trace("User/Password combination is wrong.", 'ldap');
         return null; 
+      }  
+    } catch (\Adldap\Auth\BindException $e) {
+      $error = "Can't connect to the LDAP server: " . $e->getMessage();
+      // @todo generatlize this:
+      if ( YII_ENV_DEV ) throw new \Exception($error);
+      Yii::error($error);
+      return null; 
     } 
-    
+
     // if LDAP authentication succeeds, assume we have a valid
     // user. if this user does not exist, create it with "user" role
     // and assign it to the groups specified by the ldap source

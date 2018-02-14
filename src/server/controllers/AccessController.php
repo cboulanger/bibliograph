@@ -44,8 +44,7 @@ class AccessController extends AppController
    *
    * @var array
    */
-  protected $noAuthActions = ["authenticate"];
-
+  protected $noAuthActions = ["authenticate","ldap-support"];
 
   //-------------------------------------------------------------
   // Actions / JSONRPC API
@@ -110,7 +109,33 @@ class AccessController extends AppController
       default:
         throw new InvalidArgumentException("Unknown authentication method $auth_method");
     }
-  }    
+  }
+
+  public function actionLdapSupport()
+  {
+    $ldapEnabled    = Yii::$app->config->getIniValue("ldap.enabled");
+    $bind_dn        = Yii::$app->config->getIniValue("ldap.bind_dn");
+    $bind_password  = Yii::$app->config->getIniValue("ldap.bind_password");
+    $connection = false;
+    $error = null;
+    if( $ldapEnabled ){
+      if( ! $bind_dn or ! $bind_password ){
+        $error = "Cannot bind to LDAP server. Missing ldap.bind_dn or ldap.bind_password ini setting.";
+      } else {
+        try {
+          Yii::$app->ldap->connect("default");
+          $connection = true; 
+        } catch (\Adldap\Auth\BindException $e) {
+          $error = "Can't connect / bind to the LDAP server:" . $e->getMessage();
+        }
+      }
+      return [
+        'enabled'     => $ldapEnabled,
+        'connection'  => $connection,
+        'error'       => $error,
+      ];
+    }
+  }
 
   /**
    * Identifies the current user, either by a token, a username/password, or as a
@@ -180,7 +205,7 @@ class AccessController extends AppController
 
       // identify user
       $authenticated = false;
-      $useLdap = Yii::$app->getIniValue("ldap.enabled");
+      $useLdap = Yii::$app->config->getIniValue("ldap.enabled");
       try {
         $user = $this->user($first);
       } catch (\InvalidArgumentException $e) {
