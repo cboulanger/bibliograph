@@ -18,32 +18,27 @@ function section {
 
 section "Installing required  packages..."
 
-# Packages
+# General packages
 apt-get update && apt-get install -y \
-  apache2 libapache2-mod-php5 php5-cli
-  mysql-server php5-mysql \
-  bibutils \
-  php5-dev php-pear \
-  wget \
-  php5-xsl php5-intl\
-  yaz libyaz4-dev \
-  curl \
-  zip
+  apache2 \
+  mysql-server \
+  php7.0 php7.0-dev php-pear \
+  wget curl zip \
+  build-essential \
+  bibutils 
 
-# Install php-yaz
-yes $'\n' | pecl install yaz
-pear install Structures_LinkedList-0.2.2
-pear install File_MARC
-echo "extension=yaz.so" >> /etc/php5/apache2/php.ini
-echo "extension=yaz.so" >> /etc/php5/cli/php.ini
-  
-# configure PHP with yaz/xsl/intl extensions
-#  - if [[ ${TRAVIS_PHP_VERSION:0:1} == "5" ]]; then sudo apt-get install -y php5-xsl php5-intl; fi
-#  - if [[ ${TRAVIS_PHP_VERSION:0:1} == "7" ]]; then sudo add-apt-repository -y ppa:ondrej/php && sudo apt-get update && sudo apt-get install -y php7.0-xsl php7.0-intl; fi  
-#  - sudo apt-get install -y yaz libyaz4-dev
-#  - pear channel-update pear.php.net && yes $'\n' | pecl install yaz && pear install Structures_LinkedList-0.2.2 && pear install File_MARC 
-#  - sudo service apache2 restart
-#  - if php -i | grep yaz --quiet && echo '<?php exit(function_exists("yaz_connect")?0:1);' | php ; then echo "YAZ is installed"; else echo "YAZ installation failed"; exit 1; fi;
+# PHP extensions
+apt-get install -y \
+  php7.0-cli php7.0-ldap php7.0-curl php7.0-gd \
+  php7.0-intl php7.0-json php7.0-mbstring \
+  php7.0-mcrypt php7.0-mysql php7.0-opcache \
+  php7.0-readline php7.0-xml php7.0-xsl php7.0-zip
+
+# sudo add-apt-repository -y ppa:ondrej/php && sudo apt-get update && sudo apt-get install -y php7.0-xsl php7.0-intl; fi  
+# sudo apt-get install -y yaz libyaz4-dev
+# pear channel-update pear.php.net && yes $'\n' | pecl install yaz && pear install Structures_LinkedList-0.2.2 && pear install File_MARC 
+# sudo service apache2 restart
+# if php -i | grep yaz --quiet && echo '<?php exit(function_exists("yaz_connect")?0:1);' | php ; then echo "YAZ is installed"; else echo "YAZ installation failed"; exit 1; fi;
 
 section "Installing composer..."
 php -r "copy('https://getcomposer.org/installer', '/tmp/composer-setup.php');"
@@ -52,8 +47,8 @@ rm /tmp/composer-setup.php
 composer --version
 
 section "Installing node and npm ..."
-curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
-sudo apt-get install -y nodejs
+curl -sL https://deb.nodesource.com/setup_8.x | bash -
+apt-get install -y nodejs
 
 section "Installing qooxdoo..."
 rm -rf qooxdoo-compiler
@@ -66,6 +61,8 @@ git clone --depth 1 https://github.com/qooxdoo/qooxdoo.git
 
 section "Building Bibliograph..."
 pushd src/client/bibliograph
+qx contrib update
+qx contrib install
 qx compile ../../../build-env/travis/compile.json --all-targets 
 popd
 
