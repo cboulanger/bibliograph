@@ -78,12 +78,13 @@ section "Starting MySql Server"
 service mysql start
 mysql -e 'CREATE DATABASE IF NOT EXISTS tests;'
 mysql -e 'CREATE DATABASE IF NOT EXISTS bibliograph;'
+mysql -e "CREATE USER 'bibliograph'@'localhost' IDENTIFIED BY 'bibliograph';"
 mysql -e "GRANT ALL PRIVILEGES ON bibliograph.* TO 'bibliograph'@'localhost';"
 
-section "Install deployment tool"
-curl -LO https://deployer.org/deployer.phar
-mv deployer.phar /usr/local/bin/dep
-chmod +x /usr/local/bin/dep
+#section "Install deployment tool"
+#curl -LO https://deployer.org/deployer.phar
+#mv deployer.phar /usr/local/bin/dep
+#chmod +x /usr/local/bin/dep
 
 section "Installation finished."
 echo "Please review and adapt the 'src/server/config/bibliograph.ini.php' config file:"
