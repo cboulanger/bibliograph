@@ -70,6 +70,7 @@ mv build-env/debian-ubuntu/bibliograph.ini.php src/server/config
 section "Setting up Yii2 backend..."
 pushd src/server
 composer install
+rm vendor/bower
 ln -s vendor/bower-assets vendor/bower
 popd
 
