@@ -1,7 +1,7 @@
 # Bibliograph - Online Bibliographic Data Manager
 # Build script for Debian/Ubuntu 
-# Hasn't been tested yet
-# run `bash build-env/debian-ubuntu/install-deb-ubuntu.sh`
+
+set -o errexit # Exit on error
 
 # Colorize output, see https://linuxtidbits.wordpress.com/2008/08/11/output-color-on-bash-scripts/
 txtbld=$(tput bold)             # Bold
@@ -51,11 +51,17 @@ php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer
 rm /tmp/composer-setup.php
 composer --version
 
+section "Installing node and npm ..."
+curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
 section "Installing qooxdoo..."
+rm -rf qooxdoo-compiler
 git clone --depth 1 https://github.com/qooxdoo/qooxdoo-compiler.git
 pushd qooxdoo-compiler
 npm link
 popd
+rm -rf qooxdoo
 git clone --depth 1 https://github.com/qooxdoo/qooxdoo.git 
 
 section "Building Bibliograph..."

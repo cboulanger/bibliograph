@@ -1,22 +1,23 @@
 # Installation and Deployment
 
-### Debian/Ubuntu
+## Debian/Ubuntu
 - In a vanilla Debian installation (for example, in the official Debian Docker image), do
 - `apt-get update -y && apt-get upgrade -y && apt-get install git`
-- `git clone --depth 1 https://github.com/cboulanger/bibliograph.git`
+- `git clone https://github.com/cboulanger/bibliograph.git`
 - `cd bibliograph`
-- run `bash build-env/debian-ubuntu/install-deb-ubuntu.sh`.
+- `git fetch && git checkout develop`
+- `bash build-env/debian-ubuntu/install.sh`.
 
-# Manual installation 
+## Manual installation 
 
-## Prerequisites
+### Prerequisites
 - PHP >= 7.0 with the following extensions: intl, gettext, yaz/xsl (optional), 
   ldap  (optional), zip (optional). For optimal performance, it is advised to enable 
   OPcache (http://php.net/manual/en/intro.opcache.php)
 - MySql >= 5.3 
 - A web server, such as apache, or use the built-in server with `php -S`.
 
-## Installation steps 
+### Installation steps 
 - At them moment, there is no built package available. You'll have to clone the repository
   and replicate the steps in [the Debian/Ubuntu install script](build-env/debian-ubuntu/install-deb-ubuntu.sh) adapted to your local environment.
 - In `src/server/config/`, rename `bibliograph.ini.dist.php` to
