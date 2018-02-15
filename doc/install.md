@@ -17,9 +17,11 @@
 - MySql >= 5.3 
 - A web server, such as apache, or use the built-in server with `php -S`.
 
-### Installation steps 
+### Installation 
 - At them moment, there is no built package available. You'll have to clone the repository
   and replicate the steps in [the Debian/Ubuntu install script](build-env/debian-ubuntu/install-deb-ubuntu.sh) adapted to your local environment.
+
+### Post-Installation 
 - In `src/server/config/`, rename `bibliograph.ini.dist.php` to
   `bibliograph.ini.php`
 - Create a user "bibliograph" in your MySql-database with password "bibliograph", or,
@@ -33,7 +35,10 @@
 - Enter the email address of the administrator of the installation in the 
   [admin.email] section in `services/config/bibliograph.ini.php`
 
-## Optional post-install steps
+### Optional post-install steps
 - You can connect a ldap server for authentication (adapt the settings in the `[ldap]` section of `src/server/config/bibliograph.ini.php`)
 
+## Test-Run
 
+
+## Deployment

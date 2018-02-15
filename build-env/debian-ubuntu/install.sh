@@ -9,7 +9,7 @@ bldred=${txtbld}$(tput setaf 1) #  red
 bldblu=${txtbld}$(tput setaf 4) #  blue
 txtrst=$(tput sgr0)             # Reset
 function section {
-  echo $bldblue
+  echo $bldblu
   echo ==============================================================================
   echo $1
   echo ==============================================================================
@@ -66,10 +66,17 @@ qx contrib install
 qx compile ../../../build-env/travis/compile.json --all-targets 
 popd
 
-section "Setting up backend..."
+section "Setting up Yii2 backend..."
 pushd src/server
 composer install
 ln -s vendor/bower-assets vendor/bower
 popd
 
-section "Installation finished. Please complete the post-installation steps as per doc/install.md"
+section "Starting MySql Server"
+service mysql start
+mysql -e 'CREATE DATABASE bibliograph;'
+mysql -e 'CREATE DATABASE tests;'
+
+section "Installation finished."
+echo "- Please complete the post-installation steps as per doc/install.md"
+echo "- You can run tests with `npm test`"
