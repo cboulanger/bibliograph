@@ -11,7 +11,7 @@ class m171219_230854_create_table_extended_data_reference extends Migration
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
         }
 
-        $this->createTable('{{%extended_data_reference}}', [
+        $this->createTable('{{%extended_data_Reference}}', [
             'id' => $this->integer(11)->notNull()->append('AUTO_INCREMENT PRIMARY KEY'),
             'created' => $this->timestamp(),
             'modified' => $this->timestamp()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),
@@ -75,6 +75,6 @@ class m171219_230854_create_table_extended_data_reference extends Migration
 
     public function safeDown()
     {
-        $this->dropTable('{{%extended_data_reference}}');
+        $this->dropTable('{{%extended_data_Reference}}');
     }
 }
