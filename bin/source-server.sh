@@ -20,11 +20,11 @@ else
   popd > /dev/null
 fi
 
-# Open Safari, better: https://www.npmjs.com/package/webpack-browser-plugin
-open -a Safari http://$HOST/$APP_PATH
-# send Alt+Command+I to open Web inspector
-osascript -e 'tell application "System Events" to keystroke "i" using {option down, command down}'
-
-
-cd $COMPILE_PATH
-qx compile --watch
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  # Open Safari, better: https://www.npmjs.com/package/webpack-browser-plugin
+  open -a Safari http://$HOST/$APP_PATH
+  # send Alt+Command+I to open Web inspector
+  osascript -e 'tell application "System Events" to keystroke "i" using {option down, command down}'
+  cd $COMPILE_PATH
+  qx compile --watch
+fi
