@@ -16,12 +16,10 @@ class AccessControllerCest
     if( ! $I->grabDataFromResponseByJsonPath('$.result.connection')[0] ){
       $scenario->skip("We don't have an LDAP connection");
     }
-    
     $I->loginWithPassword('einstein','password');
-    //$I->sendJsonRpcRequest('access','userdata');
-    
-    // $I->assertSame( $I->grabDataFromResponseByJsonPath('$.result.namedId')[0], 'admin' );
-    // $I->assertSame( count( $I->grabDataFromResponseByJsonPath('$.result.permissions')[0] ), 34 );
-    // $I->logout();
+    $I->sendJsonRpcRequest('access','userdata');
+    $I->assertSame( $I->grabDataFromResponseByJsonPath('$.result.namedId')[0], 'einstein' );
+    $I->assertSame( count( $I->grabDataFromResponseByJsonPath('$.result.permissions')[0] ), 14 );
+    $I->logout();
   }
 }

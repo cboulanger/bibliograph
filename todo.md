@@ -7,7 +7,7 @@
 - [x] Add event transport on the level of the reponse, not the service
 - [x] Repair event dispatch
 - [x] Re-implement setup
-- [ ] Re-implement LDAP support
+- [x] Re-implement LDAP support
 - [ ] Re-implement cql search
 - [ ] Re-implement Remove/Move/Copy references
 - [ ] Re-implement Add/Remove/Move/Copy folders
@@ -24,9 +24,10 @@
 - [ ] Backend: Create a JsonRpcServiceException and replace \Exception
 - [ ] Frontend: Rename item view "metadata" page
 - [ ] Tests: Fix bootstrap loading issue
+- [ ] Backend: Model validation: accept booleans for MySql SmallInt columns
 
 
-## v3.X
+## v3.1
 
 ### Major tasks
 - [ ] Re-enable item view / formatted item

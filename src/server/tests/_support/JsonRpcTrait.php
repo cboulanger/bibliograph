@@ -145,7 +145,7 @@ trait JsonRpcTrait
   public function dontSeeJsonRpcError()
   {
     $error = $this->grabDataFromResponseByJsonPath('$.error');
-    if( count($error) ) codecept_debug($error[0]);
+    //if( count($error) ) codecept_debug(json_decode($error[0]));
     $this->dontSeeResponseJsonMatchesJsonPath('$.error');
   }
 
