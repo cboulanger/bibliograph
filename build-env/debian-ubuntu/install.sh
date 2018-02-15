@@ -65,7 +65,7 @@ qx contrib update
 qx contrib install
 qx compile ../../../build-env/travis/compile.json --all-targets 
 popd
-mv build-env/debian-ubuntu/bibliograph.ini.php src/server/config
+mv build-env/debian-ubuntu/bibliograph.ini.php.dist src/server/config/bibliograph.ini.php
 
 section "Setting up Yii2 backend..."
 pushd src/server
