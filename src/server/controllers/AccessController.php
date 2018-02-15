@@ -103,7 +103,7 @@ class AccessController extends AppController
       case "hashed":
         return array( 
           "method" => "hashed",
-          "nounce" => $acl->createNounce($username)
+          "nounce" => $this->createNounce($username)
         );
       
       default:
