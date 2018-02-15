@@ -28,4 +28,13 @@ You will have to adapt the path to `yaz.so` to whatever was shown in the result 
 
 Check with `php -i | grep yaz` whether yaz has been correctly installed.
 
+# Deployment
+
+Install deployer:
+```bash
+curl -LO https://deployer.org/deployer.phar
+mv deployer.phar /usr/local/bin/dep
+chmod +x /usr/local/bin/dep
+```
+
 

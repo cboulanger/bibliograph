@@ -1,4 +1,4 @@
-;;<?php exit; ?>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;<?php exit; /*;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Leave the above line to make sure nobody can access this file ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -82,7 +82,7 @@ enforce_https_login = no
 
 ;; The email address of the administrator of this particular installation.
 ;; Must be set, otherwise setup process will not complete
-admin = ""
+admin = "info@bibliograph.org"
 
 ;; The email address of the developer of the application. Don't change
 ;; this unless you are a developer
@@ -119,3 +119,5 @@ group_name_attr = description
 ;; if the LDAP database only stores the user name part of the users'
 ;; e-mail address, provide the domain part here
 mail_domain = example.com
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;*/?>

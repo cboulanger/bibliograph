@@ -1,7 +1,10 @@
-;;<?php exit; ?>;
+;;<?php exit; /*;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                                                               ;;
+;;     Bibliograph initial settings for a Debian/Ubuntu setup    ;;
+;;                                                               ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 [database]
-
 ;; database.type
 ;; the database type. currently, only mysql is supported and tested. Since
 ;; the PDO abstraction layer is used, it will be easy to support other backends.
@@ -79,3 +82,5 @@ group_member_attr = memberUid
 ;; if the LDAP database only stores the user name part of the users'
 ;; e-mail address, you can provide the domain part here
 mail_domain = example.com
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;*/?>

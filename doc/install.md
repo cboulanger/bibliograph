@@ -1,12 +1,14 @@
 # Installation and Deployment
 
 ## Debian/Ubuntu
-- In a vanilla Debian installation (for example, in the official Debian Docker image), do
-- `apt-get update -y && apt-get upgrade -y && apt-get install git`
-- `git clone https://github.com/cboulanger/bibliograph.git`
-- `cd bibliograph`
-- `git fetch && git checkout develop`
-- `bash build-env/debian-ubuntu/install.sh`.
+In a vanilla Debian installation (for example, in the official Debian Docker image), do
+```
+apt-get update -y && apt-get upgrade -y && apt-get install git -y
+git clone https://github.com/cboulanger/bibliograph.git
+cd bibliograph
+git fetch && git checkout develop
+bash build-env/debian-ubuntu/install.sh
+````
 
 ## Manual installation 
 
@@ -33,7 +35,7 @@
   adapt the settings in the [database] section of bibliograph.ini.php.
 - Give the bibliograph user ALL rights for these databases
 - Enter the email address of the administrator of the installation in the 
-  [admin.email] section in `services/config/bibliograph.ini.php`
+  [email] section in `bibliograph.ini.php`
 
 ### Optional post-install steps
 - You can connect a ldap server for authentication (adapt the settings in the `[ldap]` section of `src/server/config/bibliograph.ini.php`)

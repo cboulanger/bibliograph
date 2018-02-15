@@ -65,6 +65,7 @@ qx contrib update
 qx contrib install
 qx compile ../../../build-env/travis/compile.json --all-targets 
 popd
+mv build-env/debian-ubuntu/bibliograph.ini.php src/server/config
 
 section "Setting up Yii2 backend..."
 pushd src/server
@@ -75,7 +76,20 @@ popd
 section "Starting MySql Server"
 service mysql start
 mysql -e 'CREATE DATABASE IF NOT EXISTS tests;'
+mysql -e 'CREATE DATABASE IF NOT EXISTS bibliograph;'
+mysql -e "GRANT ALL PRIVILEGES ON bibliograph.* TO 'bibliograph'@'localhost';"
+
+section "Install deployment tool"
+curl -LO https://deployer.org/deployer.phar
+mv deployer.phar /usr/local/bin/dep
+chmod +x /usr/local/bin/dep
 
 section "Installation finished."
-echo "- Please complete the post-installation steps as per doc/install.md"
-echo "- You can run tests with `npm test`"
+echo "Please review and adapt the 'src/server/config/bibliograph.ini.php' config file:"
+echo "- Enter the email address of the administrator in the [email] section (The application"
+echo "  won't start without one. "
+echo "- If you use an LDAP server for authentication, adapt the settings in the [ldap] section."
+echo 
+echo "You can now:"
+echo "- run tests with 'npm test'"
+echo "- start a development server on localhost:9090 with 'bash bin/source-server.sh'"
