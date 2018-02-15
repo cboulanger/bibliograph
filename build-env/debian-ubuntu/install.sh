@@ -74,8 +74,7 @@ popd
 
 section "Starting MySql Server"
 service mysql start
-mysql -e 'CREATE DATABASE bibliograph;'
-mysql -e 'CREATE DATABASE tests;'
+mysql -e 'CREATE DATABASE IF NOT EXISTS tests;'
 
 section "Installation finished."
 echo "- Please complete the post-installation steps as per doc/install.md"
