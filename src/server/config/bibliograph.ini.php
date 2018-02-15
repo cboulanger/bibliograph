@@ -117,9 +117,5 @@ member_id_attr = memberUid
 group_name_attr = description
 
 ;; if the LDAP database only stores the user name part of the users'
-;; e-mail address, you can provide the domain part here
-;;mail_domain = example.com
-
-;; ================================================================
-;; End
-;; ================================================================
+;; e-mail address, provide the domain part here
+mail_domain = example.com

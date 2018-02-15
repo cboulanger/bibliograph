@@ -33,6 +33,7 @@ port                = 389
 mail_domain         = example.com
 bind_dn             = "cn=read-only-admin"
 bind_password       = password
+
 ;; user objects
 user_base_dn        = "dc=example,dc=com"
 user_id_attr        = uid
@@ -44,5 +45,4 @@ group_name_attr     = cn
 group_member_attr   = uniqueMember ; was member_id_attr
 
 
-
-
+;*/?>
