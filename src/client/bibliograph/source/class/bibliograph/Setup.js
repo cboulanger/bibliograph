@@ -213,21 +213,6 @@ qx.Class.define("bibliograph.Setup", {
     {
       this.warn("Plugins not implemented, skipping...");
       return; 
-
-      this.info("Loading plugins...");
-      this.showPopup(this.getSplashMessage(this.tr("Loading plugins ...")));
-      let pluginManager = bibliograph.PluginManager().getInstance();
-      pluginManager.addListener("loadingPlugin", function(e)
-      {
-        var data = e.getData();
-        this.showPopup(this.getSplashMessage(this.tr("Loaded plugin %1 of %2 : %3 ...", data.count, data.sum, data.name)));
-      }, this);
-
-      /*
-        * load plugin code
-        */
-      pluginManager.setPreventCache(true);
-      await pluginManager.loadPlugins();
     },  
 
     /**

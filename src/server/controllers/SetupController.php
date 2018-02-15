@@ -244,7 +244,8 @@ class SetupController extends \app\controllers\AppController
         Yii::info('Found Bibliograph data in database. Adding migration history.','migrations');
         // set migration history to match the existing data
         $output = Console::runAction('migrate/mark', ["app\\migrations\\data\\m180105_075933_join_User_RoleDataInsert"]);
-        if ( $output->contains('migration history is set') ){
+        if ( $output->contains('migration history is set') or 
+            $output->contains('Nothing needs to be done') ){
           $message = Yii::t('app','Migrated data from Bibliograph v2');
         } else {
           return [

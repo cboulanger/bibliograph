@@ -60,12 +60,9 @@ qx.Class.define("qcl.ui.dialog.Dialog",
     allowServerDialogs : function( value )
     {
       var messageName = "dialog";
-      if ( value )
-      {
+      if ( value ) {
         qx.event.message.Bus.getInstance().subscribe( messageName, this._onServerDialog,this);
-      }
-      else
-      {
+      } else {
         qx.event.message.Bus.getInstance().unsubscribe( messageName, this._onServerDialog,this);
       }
     },
@@ -84,7 +81,7 @@ qx.Class.define("qcl.ui.dialog.Dialog",
      */
     _onServerDialog : function( message )
     {
-      
+      var that = this;
       var app = qx.core.Init.getApplication();
       var data = message.getData();
       data.properties.callback = null;
@@ -109,7 +106,7 @@ qx.Class.define("qcl.ui.dialog.Dialog",
       {
         if ( typeof app.showPopup === undefined  )
         {
-          this.warn("Cannot show popup.");
+          app.warn("Cannot show popup.");
           data.properties.callback(false);
           return;
         }
@@ -155,7 +152,8 @@ qx.Class.define("qcl.ui.dialog.Dialog",
           }
           else
           {
-            this.warn(data.type + " is not a valid dialog type");
+            app.warn(data.type + " is not a valid dialog type");
+            return;
           }
         }
         qcl.ui.dialog.Dialog.__instances[data.type] = widget;
@@ -168,7 +166,8 @@ qx.Class.define("qcl.ui.dialog.Dialog",
       {
         if ( ! qx.lang.Type.isObject( data.properties.formData ) )
         {
-          this.error("No form data in json response.");
+          app.error("No form data in json response.");
+          return;
         }
         for ( var fieldName in data.properties.formData )
         {

@@ -155,7 +155,7 @@ qx.Class.define("qcl.io.JsonRpcClient", {
     /** applys the error property */
     _applyError : function( value, old ){
       if( value ){
-        console.warn( value );
+        console.log( value );
       }
     },
 

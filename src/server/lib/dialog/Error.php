@@ -36,9 +36,10 @@ class Error extends Dialog
   public static function create( $message, $callbackService=null, $callbackMethod=null, array $callbackParams=[] )
   {
     static::addToEventQueue( array(
-     'type' => "error",
+     'type' => "alert",
      'properties' => array(
-        'message' => $message
+        'message' => $message,
+        'image'   => "dialog.icon.error"
       ),
      'service' => $callbackService,
      'method'  => $callbackMethod,
