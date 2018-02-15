@@ -65,7 +65,7 @@ qx contrib update
 qx contrib install
 qx compile ../../../build-env/travis/compile.json --all-targets 
 popd
-mv build-env/debian-ubuntu/bibliograph.ini.php.dist src/server/config/bibliograph.ini.php
+cp build-env/debian-ubuntu/bibliograph.ini.php.dist src/server/config/bibliograph.ini.php
 
 section "Setting up Yii2 backend..."
 pushd src/server
@@ -78,6 +78,7 @@ section "Starting MySql Server"
 service mysql start
 mysql -e 'CREATE DATABASE IF NOT EXISTS tests;'
 mysql -e 'CREATE DATABASE IF NOT EXISTS bibliograph;'
+mysql -e "DROP USER IF EXISTS 'bibliograph'@'localhost';"
 mysql -e "CREATE USER 'bibliograph'@'localhost' IDENTIFIED BY 'bibliograph';"
 mysql -e "GRANT ALL PRIVILEGES ON bibliograph.* TO 'bibliograph'@'localhost';"
 
@@ -89,7 +90,7 @@ mysql -e "GRANT ALL PRIVILEGES ON bibliograph.* TO 'bibliograph'@'localhost';"
 section "Installation finished."
 echo "Please review and adapt the 'src/server/config/bibliograph.ini.php' config file:"
 echo "- Enter the email address of the administrator in the [email] section (The application"
-echo "  won't start without one. "
+echo "  won't start otherwise) "
 echo "- If you use an LDAP server for authentication, adapt the settings in the [ldap] section."
 echo 
 echo "You can now:"
