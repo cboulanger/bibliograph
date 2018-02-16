@@ -31,6 +31,42 @@ use app\models\Role;
  */
 class LdapAuth extends \yii\base\Component
 {
+
+  /**
+   * Checks if LDAP is enabled and that a connection can be established
+   *
+   * @return array 
+   *    An associated array with the keys 'enabled' (bool), 'connection' (bool) and
+   *    'error' (string).
+   */
+  public function checkConnection()
+  {
+    $ldapEnabled    = Yii::$app->config->getIniValue("ldap.enabled");
+    $bind_dn        = Yii::$app->config->getIniValue("ldap.bind_dn");
+    $bind_password  = Yii::$app->config->getIniValue("ldap.bind_password");
+    $connection = false;
+    $error = null;
+    if( $ldapEnabled ){
+      if( ! $bind_dn or ! $bind_password ){
+        $error = "Cannot bind to LDAP server. Missing ldap.bind_dn or ldap.bind_password ini setting.";
+      } else {
+        try {
+          Yii::$app->ldap->connect("default");
+          $connection = true; 
+        } catch (\Adldap\Auth\BindException $e) {
+          $error = "Can't connect / bind to the LDAP server:" . $e->getMessage();
+        }
+      }
+      return [
+        'enabled'     => $ldapEnabled,
+        'connection'  => $connection,
+        'error'       => $error,
+      ];
+    }
+  }
+
+
+
  /**
    * Authenticate using a remote LDAP server.
    * @param $username
