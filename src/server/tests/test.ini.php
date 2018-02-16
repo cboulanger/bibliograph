@@ -26,7 +26,7 @@ admin      = "info@bibliograph.org"
 developer  = "info@bibliograph.org"
 
 [ldap]
-enabled             = yes
+enabled             = no
 use_groups          = yes
 host                = ldap.forumsys.com
 port                = 389

@@ -57,12 +57,12 @@ class LdapAuth extends \yii\base\Component
           $error = "Can't connect / bind to the LDAP server:" . $e->getMessage();
         }
       }
-      return [
-        'enabled'     => $ldapEnabled,
-        'connection'  => $connection,
-        'error'       => $error,
-      ];
     }
+    return [
+      'enabled'     => $ldapEnabled,
+      'connection'  => $connection,
+      'error'       => $error,
+    ];    
   }
 
 

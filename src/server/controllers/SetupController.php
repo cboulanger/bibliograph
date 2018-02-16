@@ -280,12 +280,12 @@ class SetupController extends \app\controllers\AppController
     $ldap = Yii::$app->ldapAuth->checkConnection();
     $message = $ldap['enabled'] ? 
       Yii::t('app', 'LDAP authentication is enabled') :
-      Yii::t('app', 'LDAP authentication is not enabled');
-    $message .= $ldap['connection'] ? 
+      Yii::t('app', 'LDAP authentication is not enabled.');
+    $message .=  (  $ldap['enabled'] and $ldap['connection'] ) ? 
       Yii::t('app', ' and a connection has successfully been established.') :
-      Yii::t('app', ', but trying to establish a connection failed with the error: {error}', [
+      $ldap['enabled'] ?  Yii::t('app', ', but trying to establish a connection failed with the error: {error}', [
         'error' => $ldap['error']
-      ]);
+      ]) : "";
     $result = [];
     $result[ $ldap['error'] ? 'error' : 'message' ] = $message;
     return $result;
@@ -328,7 +328,7 @@ class SetupController extends \app\controllers\AppController
       if( \app\models\Datasource::findByNamedId($name) ){
         $found++; continue;
       }
-      $datasource = \app\models\Datasource::create( $name );
+      $datasource = Yii::$app->datasourceManager->create( $name );
       $datasource->setAttributes( $data['config'] );
       $datasource->save();
       foreach( $data['roles'] as $roleId ){

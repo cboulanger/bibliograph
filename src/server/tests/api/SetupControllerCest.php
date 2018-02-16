@@ -10,7 +10,7 @@ class SetupControllerCest
       "events": [
         {
           "name": "ldap.enabled",
-          "data": true
+          "data": false
         },
         {
           "name": "bibliograph.setup.done",
@@ -26,7 +26,7 @@ class SetupControllerCest
           "File permissions ok.",
           "Database connection ok.",
           "No updates to the databases.",
-          "LDAP authentication is enabled and a connection has successfully been established.",
+          "LDAP authentication is not enabled.",
           "Admininstrator email exists.",
           "Example databases were created."
         ]
