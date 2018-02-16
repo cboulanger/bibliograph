@@ -2,26 +2,32 @@
 
 ## list of git clone targets
 declare -a arr=(
-  "git@github.com:qooxdoo/qooxdoo.git" 
-  "git@github.com:qooxdoo/qooxdoo-compiler.git"
+  "qooxdoo/qooxdoo" 
+  "qooxdoo/qooxdoo-compiler"
 )
-
-for url in "${arr[@]}"
+for repo in "${arr[@]}"
 do
-  repo=$(echo $url | sed -e 's/\.git$//' | sed -e 's|https://github\.com/||')
-  dir=$(basename $repo )
+  dir=$(basename $repo)
   if [ -d "$dir" ]; then
     cd $dir
     git pull
     npm install
     cd ..
   else
-    git clone $url --depth 1
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+      # if on mac, assume dev workstation with git credentials
+      uri="git@github.com:$repo.git"
+      git clone $uri
+    else
+      # otherwise, just clone a shallow read-only copy 
+      uri="https://github.com/$repo.git"
+      git clone $uri --depth 1
+    fi
     npm install
   fi
 done
 
-# link development versions
+# link qooxdoo-compiler development version
 cd qooxdoo-compiler
 npm link
 cd ..
