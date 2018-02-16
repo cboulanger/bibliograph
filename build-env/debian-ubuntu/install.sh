@@ -16,19 +16,19 @@ function section {
   echo $txtrst
 }
 
-section "Installing required  packages..."
+section "Installing required packages..."
 
 # General packages
 apt-get update && apt-get install -y \
   apache2 \
   mysql-server \
-  php7.0 php7.0-dev php-pear \
   wget curl zip \
   build-essential \
   bibutils 
 
-# PHP extensions
+# PHP 
 apt-get install -y \
+  php7.0 php7.0-dev php-pear \
   php7.0-cli php7.0-ldap php7.0-curl php7.0-gd \
   php7.0-intl php7.0-json php7.0-mbstring \
   php7.0-mcrypt php7.0-mysql php7.0-opcache \

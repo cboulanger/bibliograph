@@ -19,3 +19,4 @@ node_modules/
 /bibliograph/source/script/*
 
 *.zip
+src/server/config/bibliograph.ini.php
