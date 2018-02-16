@@ -27,12 +27,12 @@ class EventTransportResponse extends \yii\web\Response
       return parent::prepare();
     }
     
-    if( Yii::$app->eventQueue->hasEvents() )
-    {
+    if( Yii::$app->eventQueue->hasEvents() ){
+      $data = $this->data['result'];
       $this->data['result'] = [
         "type"    => "ServiceResult",
         "events"  => Yii::$app->eventQueue->toArray(),
-        "data"    => $this->data
+        "data"    => $data
       ];
     }
     parent::prepare();
