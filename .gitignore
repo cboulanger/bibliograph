@@ -3,20 +3,14 @@
 .c9
 .vscode
 
-/qooxdoo/
-/bibliograph/services/config/*.php
-
 # compiler
 /bibliograph/*-output/
 db.json
 resource-db.json
 node_modules/
 
-# generator
-/bibliograph/build/
-/bibliograph/**/api/
-/bibliograph/**/test/
-/bibliograph/source/script/*
-
 *.zip
 src/server/config/bibliograph.ini.php
+
+# package-lock.json is platform-specific 
+package-lock.json
