@@ -3,7 +3,6 @@
 ## list of git clone targets
 declare -a arr=(
   "git@github.com:qooxdoo/qooxdoo.git" 
-  "git@github.com:qooxdoo/qooxdoo-cli.git" 
   "git@github.com:qooxdoo/qooxdoo-compiler.git"
 )
 
@@ -17,13 +16,12 @@ do
     npm install
     cd ..
   else
-    git clone $url --depth 10
+    git clone $url --depth 1
     npm install
   fi
 done
 
 # link development versions
-cd qooxdoo-cli
+cd qooxdoo-compiler
 npm link
-npm link ../qooxdoo-compiler
 cd ..

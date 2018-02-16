@@ -50,20 +50,16 @@ section "Installing node and npm ..."
 curl -sL https://deb.nodesource.com/setup_8.x | bash -
 apt-get install -y nodejs
 
-section "Installing qooxdoo..."
-rm -rf qooxdoo-compiler
-git clone --depth 1 https://github.com/qooxdoo/qooxdoo-compiler.git
-pushd qooxdoo-compiler
-npm link
+section "Installing qooxdoo and qxcompiler..."
+pushd src/vcslib
+bash install.sh
 popd
-rm -rf qooxdoo
-git clone --depth 1 https://github.com/qooxdoo/qooxdoo.git 
 
 section "Building Bibliograph..."
 pushd src/client/bibliograph
 qx contrib update
 qx contrib install
-qx compile ../../../build-env/travis/compile.json --all-targets 
+qx compile ../../../build-env/debian-ubuntu/compile.json --all-targets 
 popd
 cp build-env/debian-ubuntu/bibliograph.ini.php.dist src/server/config/bibliograph.ini.php
 
