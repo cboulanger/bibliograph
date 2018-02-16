@@ -66,8 +66,8 @@ cp build-env/debian-ubuntu/bibliograph.ini.php.dist src/server/config/bibliograp
 section "Setting up Yii2 backend..."
 pushd src/server
 composer install
-rm vendor/bower
-ln -s vendor/bower-assets vendor/bower
+if [ -d "$dir" ]; then
+[[ -d vendor/bower ]] || ln -s vendor/bower-assets vendor/bower
 popd
 
 section "Starting MySql Server"
