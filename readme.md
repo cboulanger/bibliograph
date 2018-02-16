@@ -88,8 +88,9 @@ Funding provided by
 - [Department of Law, Humboldt-Universität zu Berlin](http://www.rewi.hu-berlin.de)
 
 Bibliograph is developed using
-- [Cloud9 IDE](http://c9.io) (Cloud-based coding and testing environment)
+- [Codeception](https://codeception.com) and [PHPUnit](https://phpunit.de) (Testing libraries)
 - [Visual Studio Code](https://code.visualstudio.com)
+- [Cloud9 IDE](http://c9.io) (Cloud-based coding and testing environment)
 - [GitHub](http://github.com) (Version control and code hosting)
 - [BrowserStack](http://browserstack.com) (Browser testing service - sponsored Open Source license)
 

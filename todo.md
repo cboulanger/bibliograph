@@ -31,6 +31,7 @@
 - [ ] Backend: Streamline API to get Datasource & typed model
 - [ ] Frontend: Convert static icon resouce paths into aliases that are resolved in bibliograph.theme.Icon
 - [ ] Frontend: Rename widget ids, replace with native qooxdoo ids, see https://github.com/qooxdoo/qooxdoo/issues/9422
+- [ ] Replace ::findOne(['namedid'=>'foo']) with ::findByNamedId('foo')
 
 ## v3.1
 
