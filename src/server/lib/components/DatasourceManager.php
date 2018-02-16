@@ -25,6 +25,9 @@ use app\models\Config;
 use app\models\User;
 use app\models\Datasource;
 use lib\components\ConsoleAppHelper as Console;
+use fourteenmeister\helpers\Dsn;
+
+use yii\helpers\VarDumper;
 
 /**
  * Component class providing methods to create and migrate datasource tables,
@@ -44,6 +47,72 @@ class DatasourceManager extends \yii\base\Component
     'bibliograph.schema.bibliograph2' => '\app\models\BibliographicDatasource'
   ];
 
+/**
+   * Creates a new datasource and returns it. You should set at least the `title` property before saving the ActiveRecord 
+   * to the database. By default, it will use the database connection provided by the `db` component. 
+   * It returns the instance for the given schema class, not the \app\models\Datasource instance created. 
+   *
+   * @param string $datasourceName
+   * @param string $className|null  Optional class name of the datasource, defaults to \app\models\BibliographicDatasource
+   * @return app\models\BibliographicDatasource 
+   * @todo Rename "schema" to "class"
+   */
+  public function create( 
+    $datasourceName, 
+    $className = null)
+  {
+    if( !$datasourceName or ! is_string($datasourceName) ) {
+      throw new \InvalidArgumentException("Invalid datasource name");
+    }
+
+    if( ! $className ){
+      $className = \app\models\BibliographicDatasource::class;
+    }
+
+    if( ! is_subclass_of( $className, Datasource::class ) ){
+      throw new \InvalidArgumentException("Invalid class '$className'. Must be subclass of " . Datasource::class );
+    }
+
+    $datasource = new Datasource([
+      'namedId'   => $datasourceName,
+      'title'     => $datasourceName,
+      'schema'    => $className,
+      'prefix'    => $className::createTablePrefix($datasourceName),
+      'active'    => 1
+    ]);
+    $datasource->setAttributes( $this->parseDsn() );
+    $datasource->save();
+    // get the subclass instance and configure it
+    $datasource = Datasource::getInstanceFor($datasourceName);
+    $this->createModelTables($datasource);
+    // @todo work with interface instead
+    if( $datasource instanceof \app\models\BibliographicDatasource ){
+      $datasource->addDefaultFolders();
+    }
+    return $datasource;
+  }
+
+  /**
+   * Parses a DSN string in a way that can be stored in the datasource db record.
+   * If no DSN string is passed, the app default dsn is used.
+   * @param string|null $dsn 
+   * @return array
+   */
+  public function parseDsn($dsn=null){
+    $dsn = ( $dsn ? $dsn : Yii::$app->db->dsn );  
+    $dsn = Dsn::parse( $dsn );
+    $db  = Yii::$app->db;
+    return [
+      'type' => $dsn->sheme,
+      'host' => $dsn->host,
+      'port' => $dsn->port,
+      'database' => $dsn->database,
+      'username' => $db->username,
+      'password' => $db->password,
+      'encoding' => $db->charset,
+    ];
+  }
+
   /**
    * Creates the tables necessary for a datasource, using migration files
    *
@@ -56,8 +125,10 @@ class DatasourceManager extends \yii\base\Component
       'all',
       'migrationNamespaces' => 'app\\migrations\\schema\\datasource',
     ];
+    Yii::trace("Creating model tables for {$datasource->namedId}...");
     $db = $datasource->getConnection();
     Console::runAction( 'migrate/up', $params, null, $db );
+    Yii::info("Created model tables for {$datasource->namedId}.");
   }  
 
   /**

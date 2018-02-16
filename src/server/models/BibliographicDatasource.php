@@ -47,4 +47,42 @@ class BibliographicDatasource
     $this->addModel( 'folder', 'app\models\Folder', 'folder');
     $this->addModel( 'transaction', 'app\models\Transaction', 'transaction');
   }
+
+  /**
+   * Creates the default folders for the datasource
+   *
+   * @return void
+   */
+  public function addDefaultFolders()
+  {
+    $folderData = [
+      [
+        'parentId' => 0,
+        'position' => 1,
+        'label' => Yii::t('app', 'Main folder'),
+        'description' => Yii::t('app', 'This is the main folder of the database'),
+        'searchable' => 1,
+        'public' => 1,
+        'opened' => 1,
+      ],
+      [
+        'parentId' => 0,
+        'position' => 2,
+        'label' => Yii::t('app', 'Trash'),
+        'description' => Yii::t('app', 'This folder contains deleted items'),
+        'type' => "trash",
+        'searchable' => 0,
+        'searchfolder' => 0,
+        'public' => 0,
+        'opened' => 0,
+      ],
+    ];
+    $folderClass = $this->getClassFor('folder');
+    foreach( $folderData as $data ){
+      $folder = new $folderClass();
+      $folder->setAttributes( $data );
+      $folder->save();
+    }
+    Yii::info("Created default folders for datasource '{$this->namedId}' ");
+  }
 }

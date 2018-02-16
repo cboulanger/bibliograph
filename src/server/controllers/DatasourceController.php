@@ -40,7 +40,7 @@ class DatasourceController extends AppController
     $this->requirePermission("datasource.create");
     // @todo handle type
     // @tod validate input
-    $datasource = Datasource::create($namedId);
+    $datasource = Yii::$app->datasourceManager->create($namedId);
     $datasource->createModelTables();
     Yii::$app->config->addPreference( "datasource.$namedId.fields.exclude", []);
     return "Datasource '$namedId' has been created";
@@ -48,7 +48,7 @@ class DatasourceController extends AppController
 
   /**
    * Return the model for the datasource store
-   *
+   * @todo reimplement!
    */
   public function actionLoad(){
     $activeUser = $this->getActiveUser();

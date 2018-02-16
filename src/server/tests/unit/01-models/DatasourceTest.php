@@ -52,7 +52,7 @@ class DatasourceTest extends Base
 
   public function testCreateDatasource()
   {
-    $datasource = Datasource::create("test2");
+    $datasource = Yii::$app->datasourceManager->create("test2");
     $datasource->title = "Test Datasource 2";
     $datasource->save();
     // get specialized subclass

@@ -6,7 +6,6 @@ use Yii;
 use lib\models\BaseModel;
 use app\models\Role;
 use yii\helpers\ArrayHelper;
-use fourteenmeister\helpers\Dsn;
 
 // @todo Change column `schema` to `class`
 // @todo Add column `dsn` to `class`, remove columns `type`, `host`, `port`, `database`
@@ -190,6 +189,17 @@ class Datasource extends BaseModel
   */
 
   /**
+   * Returns the prefix for the model table. Default is the named 
+   * plus an underscore
+   * @property string modelTablePrefix
+   * @return string
+   */
+  public static function createTablePrefix( $namedId )
+  {
+    return $namedId . "_";
+  }  
+
+  /**
    * Returns the instance of a subclass which is specialized for this
    * datasource.
    *
@@ -254,8 +264,8 @@ class Datasource extends BaseModel
   public function getConnection()
   {
     // cache
-    static $connection=null;
-    if( is_null($connection) ){
+    static $connections=[];    
+    if( !isset($connections[$this->namedId]) ){
       $this->useDsnDefaults();  
       switch( $this->type ){
         case "mysql":
@@ -277,8 +287,10 @@ class Datasource extends BaseModel
         'password' => $this->password,
         'tablePrefix' => $prefix
       ]);
+      $connections[$this->namedId] = $connection;
+      return $connection;
     }
-    return $connection;
+    return $connections[$this->namedId];
   }
 
   /**
@@ -289,7 +301,7 @@ class Datasource extends BaseModel
    */
   protected function useDsnDefaults(){
     foreach( ["host","port","database","username","password"] as $key ){
-      $connection = self::parseAppDsn(); 
+      $connection = Yii::$app->datasourceManager->parseDsn(); 
       if( ! $this->$key ){
         $this->$key = $connection[$key];
       }
@@ -362,74 +374,7 @@ class Datasource extends BaseModel
     return $this->modelMap[$type]['controller']['service'];
   }
 
-  /**
-   * Creates a new datasource and returns it. You should set at least the `title` property before saving the ActiveRecord 
-   * to the database. By default, it will use the database connection provided by the `db` component. 
-   * It returns the instance for the given schema class, not the \app\models\Datasource instance created. 
-   *
-   * @param string $datasourceName
-   * @param string $className|null  Optional class name of the datasource, defaults to \app\models\BibliographicDatasource
-   * @return app\models\BibliographicDatasource 
-   * @todo Rename "schema" to "class"
-   */
-  public static function create( 
-    $datasourceName, 
-    $className = null)
-  {
-    if( !$datasourceName or ! is_string($datasourceName) ) {
-      throw new \InvalidArgumentException("Invalid datasource name");
-    }
 
-    if( ! $className ){
-      $className = \app\models\BibliographicDatasource::class;
-    }
-
-    if( ! is_subclass_of( $className, Datasource::class ) ){
-      throw new \InvalidArgumentException("Invalid class '$className'. Must be subclass of " . Datasource::class );
-    }
-
-    $datasource = new Datasource([
-      'namedId'   => $datasourceName,
-      'title'     => $datasourceName,
-      'schema'    => $className,
-      'prefix'    => static::createTablePrefix($datasourceName),
-      'active'    => 1
-    ]);
-    $datasource->setAttributes(self::parseAppDsn());
-    $datasource->save();
-    return self::getInstanceFor($datasourceName);
-  }
-
-  /**
-   * Parses the Yii2 datasource connection information in a way that
-   * can be stored in the datasource db record
-   *
-   * @return array
-   */
-  protected static function parseAppDsn(){
-    $dsn = Dsn::parse(Yii::$app->db->dsn);
-    $db  = Yii::$app->db;
-    return [
-      'type' => $dsn->sheme,
-      'host' => $dsn->host,
-      'port' => $dsn->port,
-      'database' => $dsn->database,
-      'username' => $db->username,
-      'password' => $db->password,
-      'encoding' => $db->charset,
-    ];
-  }
-
-  /**
-   * Returns the prefix for the model table. Default is the named 
-   * plus an underscore
-   * @property string modelTablePrefix
-   * @return string
-   */
-  public static function createTablePrefix( $namedId )
-  {
-    return $namedId . "_";
-  }
 
   /**
    * Creates the tables for the models associated with this datasource
