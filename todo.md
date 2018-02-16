@@ -5,8 +5,8 @@
 - [x] Repair event dispatch
 - [x] Re-implement setup
 - [x] Re-implement LDAP support
-- [x] Tests: Make Travis ~~great~~ work again
-- [ ] Update docs to allow test installation at Humboldt-University
+- [x] Update docs to allow test installation at Humboldt-University
+- [ ] Re-implement datasource restrictions
 - [ ] Add distribution mechanism
 - [ ] Re-implement cql search
 - [ ] Re-implement Remove/Move/Copy references
@@ -18,6 +18,7 @@
 ## v3.0.0-beta
 
 ### Priority: High
+- [ ] Tests: Make Travis ~~great~~ work again
 - [ ] Add datasource access control when getting the datasource, not in the service methods
 - [ ] Re-implement translation (http://www.yiiframework.com/doc-2.0/guide-tutorial-i18n.html)
 

@@ -9,7 +9,7 @@ php yii migrate/up --interactive=0 --db=testdb --migrationNamespaces=app\\migrat
 php yii migrate/up --interactive=0 --db=testdb --migrationNamespaces=app\\tests\\migrations  &> /dev/null
 
 echo "Running tests..."
-php vendor/bin/codecept run api --debug
+php vendor/bin/codecept run api
 
 echo "Cleanup database ..."
 php yii migrate/down all --interactive=0 --db=testdb  &> /dev/null
