@@ -9,8 +9,8 @@ pushd ./src/server > /dev/null
 $YIICMD migrate/fresh --interactive=0 --db=testdb --migrationNamespaces=app\\migrations\\schema  > /dev/null
 $YIICMD migrate/up    --interactive=0 --db=testdb --migrationNamespaces=app\\tests\\migrations  > /dev/null
 
-$CPTCMD run unit
-$CPTCMD run functional
+$CPTCMD run unit || exit $?
+$CPTCMD run functional || exit $?
 
 echo "Cleaning up database ..."
 $YIICMD migrate/down all --interactive=0 --db=testdb > /dev/null

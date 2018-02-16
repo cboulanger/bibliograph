@@ -11,7 +11,7 @@ $YIICMD migrate/up    --interactive=0 --db=testdb --migrationNamespaces=app\\mig
 popd > /dev/null
 
 echo "Running Mocha tests..."
-mocha -- ./test/**/*.test.js
+mocha -- ./test/**/*.test.js || exit $?
 
 echo "Cleaning up database ..."
 pushd $SERVER_PATH > /dev/null
