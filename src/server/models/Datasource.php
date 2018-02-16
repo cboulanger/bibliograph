@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use lib\models\BaseModel;
+use app\models\Role;
 use yii\helpers\ArrayHelper;
 use fourteenmeister\helpers\Dsn;
 
@@ -162,16 +163,31 @@ class Datasource extends BaseModel
     );      
   }
 
-  // /**
-  //  * Creates a new datasource
-  //  *
-  //  * @param [type] $config
-  //  */
-  // public function __construct( $config )
-  // {
-  //   parent::__construct( $config ); // calls init, whichs adds the models in the subclass
-  // }
+  //-------------------------------------------------------------
+  // Relations
+  //-------------------------------------------------------------
 
+  /**
+   * @return \yii\db\ActiveQuery
+   */ 
+  protected function getDatasourceRoles()
+  {
+    return $this->hasMany(Datasource_Role::className(), ['DatasourceId' => 'id']);
+  }
+
+  /**
+   * @return \yii\db\ActiveQuery
+   */ 
+  protected function getRoles()
+  {
+    return $this->hasMany(Role::className(), ['id' => 'RoleId'])->via('datasourceRoles');
+  }
+
+  /*
+  ---------------------------------------------------------------------------
+     API
+  ---------------------------------------------------------------------------
+  */
 
   /**
    * Returns the instance of a subclass which is specialized for this
@@ -349,23 +365,39 @@ class Datasource extends BaseModel
   /**
    * Creates a new datasource and returns it. You should set at least the `title` property before saving the ActiveRecord 
    * to the database. By default, it will use the database connection provided by the `db` component. 
+   * It returns the instance for the given schema class, not the \app\models\Datasource instance created. 
    *
    * @param string $datasourceName
-   * @param string $className|null  Optional class name of the datasource, defaults to `app\models\BibliographicDatasource`
+   * @param string $className|null  Optional class name of the datasource, defaults to \app\models\BibliographicDatasource
    * @return app\models\BibliographicDatasource 
+   * @todo Rename "schema" to "class"
    */
-  public static function create( $datasourceName, $className = '\app\models\BibliographicDatasource' )
+  public static function create( 
+    $datasourceName, 
+    $className = null)
   {
-    if( !$datasourceName or ! is_string($datasourceName) ) throw new \InvalidArgumentException("Invalid datasource name");
+    if( !$datasourceName or ! is_string($datasourceName) ) {
+      throw new \InvalidArgumentException("Invalid datasource name");
+    }
+
+    if( ! $className ){
+      $className = \app\models\BibliographicDatasource::class;
+    }
+
+    if( ! is_subclass_of( $className, Datasource::class ) ){
+      throw new \InvalidArgumentException("Invalid class '$className'. Must be subclass of " . Datasource::class );
+    }
+
     $datasource = new Datasource([
-      'namedId' => $datasourceName,
-      'title' => $datasourceName,
-      'schema' => $className,
-      'prefix' => $datasourceName,
-      'active' => 1
+      'namedId'   => $datasourceName,
+      'title'     => $datasourceName,
+      'schema'    => $className,
+      'prefix'    => static::createTablePrefix($datasourceName),
+      'active'    => 1
     ]);
     $datasource->setAttributes(self::parseAppDsn());
-    return $datasource;
+    $datasource->save();
+    return self::getInstanceFor($datasourceName);
   }
 
   /**
@@ -389,41 +421,24 @@ class Datasource extends BaseModel
   }
 
   /**
-   * Returns the prefix for the model table, consisting of the named id of
-   * this datasource and an underscore
+   * Returns the prefix for the model table. Default is the named 
+   * plus an underscore
    * @property string modelTablePrefix
    * @return string
    */
-  public function getModelTablePrefix()
+  public static function createTablePrefix( $namedId )
   {
-    return $this->namedId . "_";
+    return $namedId . "_";
   }
 
-
   /**
-   * Create the tables for the datasource models
+   * Creates the tables for the models associated with this datasource
    *
    * @return void
    */
   public function createModelTables()
   {
-    foreach( $this->modelTypes() as $type){
-      $modelClass = $this->getClassFor( $type );
-      $db = $modelClass::getDb();
-      $prototypeTableName = "data_" . ucfirst($type);
-      $prefix = $this->modelTablePrefix;
-      //@todo rewrite the following!
-      $modelTableName = $prefix . $prototypeTableName;
-      $baseName = "m" . MIGRATION_ID . "_create_table_" . $prototypeTableName;
-      $migrationClass = "\\app\\migrations\\schema\\datasource\\" . $baseName ;
-      $migrationFile = Yii::getAlias("@app/migrations/schema/datasource/{$baseName}.php"); 
-      Yii::trace( "Creating table $modelTableName from class $migrationClass...");
-      if( !\class_exists($migrationClass) ){
-        include_once($migrationFile);
-      }
-      $migration = new $migrationClass();
-      $migration->db->tablePrefix = Yii::$app->config->getIniValue('database.tableprefix') . $prefix;
-      $migration->safeUp();
-    }
+    return Yii::$app->datasourceManager->createModelTables($this);
   }
+
 }

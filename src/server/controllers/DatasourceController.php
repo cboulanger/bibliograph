@@ -20,8 +20,9 @@
 
 namespace app\controllers;
 
+use Yii;
 use app\controllers\AppController;
-
+use app\models\Datasource;
 
 /**
  * Service class providing methods to work with datasources.
@@ -29,36 +30,20 @@ use app\controllers\AppController;
 class DatasourceController extends AppController
 {
   /**
-   * Creates and returns a dasource with the given name, of the default type that the
+   * Creates a dasource with the given name, of the default type that the
    * application supports
-   * @param $namedId
-   * @param array $data
-   * @return \qcl_data_datasource_DbModel 
+   * @param string $namedId
+   * @param string $namedId
    */
-  public function createDatasource( $namedId, $data= array() )
+  public function actionCreate( $namedId, $type=null )
   {
-    
-    $mgr = qcl_data_datasource_Manager::getInstance();
-    if ( ! isset( $data['dsn'] ) )
-    {
-      $data['dsn'] = $this->getUserDsn();
-    }
-    if ( ! isset( $data['parentId'] ) )
-    {
-      $data['parentId'] =0;
-    } 
-    $datasourceModel = $mgr->createDatasource( $namedId, $this->defaultSchema(), $data );
-
-    /*
-     * create config keys for the datasource
-     * @todo generalize this
-     * @todo check that setup calls this
-     */
-    $configModel = $this->getApplication()->getConfigModel();
-    $key = "datasource.$namedId.fields.exclude";
-    $configModel->createKeyIfNotExists( $key, QCL_CONFIG_TYPE_LIST, false, array() );
-
-    return $datasourceModel;
+    $this->requirePermission("datasource.create");
+    // @todo handle type
+    // @tod validate input
+    $datasource = Datasource::create($namedId);
+    $datasource->createModelTables();
+    Yii::$app->config->addPreference( "datasource.$namedId.fields.exclude", []);
+    return "Datasource '$namedId' has been created";
   }
 
   /**

@@ -44,6 +44,10 @@ $components = [
   'eventQueue' => [
     'class' => \lib\components\EventQueue::class
   ],
+  // datasource manager, handles creation and migration of datasource tables
+  'datasourceManager' => [
+    'class' => \lib\components\DatasourceManager::class
+  ],  
   // various utility methods
   'utils' => [ 
     'class' => \lib\components\Utils::class
