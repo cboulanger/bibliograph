@@ -172,6 +172,20 @@ trait JsonRpcTrait
   }
 
   /**
+   * Compares the JSONRPC received with the given value as two pretty-printed
+   * JSON strings and throws if differences exist
+   *
+   * @param mixed $result
+   * @return void
+   */
+  public function compareJsonRpcResultWith( $result )
+  {
+    $expected = json_encode( $result, JSON_PRETTY_PRINT );
+    $received = json_encode( $this->grabJsonRpcResult(), JSON_PRETTY_PRINT );
+    $this->assertEquals($expected, $received); 
+  }
+
+  /**
    * Logs out current user
    *
    * @return void

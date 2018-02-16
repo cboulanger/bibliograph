@@ -237,7 +237,7 @@ class SetupController extends \app\controllers\AppController
     $output = Console::runAction('migrate/new');
     if( $output->contains('up-to-date') ){
       Yii::info('No new migrations.','migrations');
-      $message = "No database migrations necessary";
+      $message = Yii::t('app',"No updates to the databases.");
     } else {
       // upgrade from v2?
       if( $this->tableExists("data_User")  ){
@@ -277,7 +277,18 @@ class SetupController extends \app\controllers\AppController
 
   protected function setupCheckLdapConnection()
   {
-    return false;
+    $ldap = Yii::$app->ldapAuth->checkConnection();
+    $message = $ldap['enabled'] ? 
+      Yii::t('app', 'LDAP authentication is enabled') :
+      Yii::t('app', 'LDAP authentication is not enabled');
+    $message .= $ldap['connection'] ? 
+      Yii::t('app', ' and a connection has successfully been established.') :
+      Yii::t('app', ', but trying to establish a connection failed with the error: {error}', [
+        'error' => $ldap['error']
+      ]);
+    $result = [];
+    $result[ $ldap['error'] ? 'error' : 'message' ] = $message;
+    return $result;
   }
 
   protected function setupCheckAdminEmail()
@@ -289,7 +300,47 @@ class SetupController extends \app\controllers\AppController
       ];
     }
     return [
-      'message' => Yii::t('app','Admininstrator email exists')
+      'message' => Yii::t('app','Admininstrator email exists.')
+    ];
+  }
+
+  protected function setupExampleDatasources()
+  {
+    $datasources = [
+      'datasource1' => [
+        'config' => [
+          'title'       => "Example Database 1",
+          'description' => "This database is publically visible"
+        ],
+        'roles' => ['anonymous']
+      ],
+      'datasource2' => [
+          'config' => [
+            'title'       => "Example Database 3",
+            'description' => "This database is visible only for logged-in users"                
+          ],
+          'roles' => ['anonymous','user']
+      ],
+    ];
+
+    $count = 0; $found = 0; 
+    foreach( $datasources as $name => $data){
+      if( \app\models\Datasource::findByNamedId($name) ){
+        $found++; continue;
+      }
+      $datasource = \app\models\Datasource::create( $name );
+      $datasource->setAttributes( $data['config'] );
+      $datasource->save();
+      foreach( $data['roles'] as $roleId ){
+        $datasource->link( 'roles', \app\models\Role::findByNamedId($roleId) );
+      }
+      $count++;
+    }
+
+    return [
+      'message' => $found == $count ?
+        Yii::t('app','Example databases already existed.') :
+        Yii::t('app','Example databases were created.')
     ];
   }
 }

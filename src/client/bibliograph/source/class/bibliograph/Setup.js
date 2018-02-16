@@ -164,7 +164,8 @@ qx.Class.define("bibliograph.Setup", {
      * "bibliograph.setup.done" message.
      */
     checkServerSetup : async function(){
-      this.getApplication().getRpcClient("setup").send("setup");
+      let messages = this.getApplication().getRpcClient("setup").send("setup");
+      this.info(messages);
       await this.getApplication().resolveOnMessage("bibliograph.setup.done");
       this.info("Server setup done.");
     },
