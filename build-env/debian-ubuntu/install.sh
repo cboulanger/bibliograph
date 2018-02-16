@@ -56,6 +56,8 @@ bash install.sh
 popd
 
 section "Building Bibliograph..."
+npm install
+npm link mocha
 pushd src/client/bibliograph
 qx contrib update
 qx contrib install
