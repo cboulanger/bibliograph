@@ -38,8 +38,7 @@ class SetupController extends \app\controllers\AppController
    *
    * @var array
    */
-  protected $noAuthActions = ["setup"];
-
+  protected $noAuthActions = ["setup","version"];
 
   protected $errors = [];
 
@@ -72,30 +71,61 @@ class SetupController extends \app\controllers\AppController
   //-------------------------------------------------------------  
 
   /**
+   * Returns the application verision as per package.json
+   */
+  public function actionVersion()
+  {
+    return Yii::$app->utils->version; 
+  }
+
+  /**
    * The entry method. If the application is already setup, do nothing. Otherwise,
    * display progress dialog on the client and start setup service
    */
   public function actionSetup()
   {
+    $app_version = null;
     try {
-      $setupCompleted = Yii::$app->config->keyExists('bibliograph.setup');
+      $app_version = Yii::$app->config->getKey('app.version');
     } catch( \yii\db\Exception $e ) {
-      $setupCompleted = false;
-    }
-    if( ! $setupCompleted  ){
+      // this is the first run of a fresh installation, we don't have a db connection yet
+    } catch( \InvalidArgumentException $e ) {
+      // upgrading from version 2
+    } 
+    // if app version has changed or first run, run setup methods
+    $package_version = Yii::$app->utils->version; 
+    if( $package_version != $app_version ){
+      // visual marker in log file
+      Yii::trace(
+        "\n\n\n" .
+        str_repeat("*",80) . "\n\n" .
+        " BIBLIOGRAPH SETUP\n\n" .
+        str_repeat("*",80) . 
+        "\n\n\n",
+        'marker'
+      );      
+      Yii::info("Application version has changed from '$app_version' to '$package_version', running setup methods");
       $success = $this->runSetupMethods();
       if ( $success ){
-        // createKey( $key, $type, $customize=false, $default=null, $final=false )
-        Yii::$app->config->createKey('bibliograph.setup','boolean',false,true,true);  
+        $app_version = $package_version;
+        Yii::info("Setup of version '$app_version' finished successfully.");
+        if( ! Yii::$app->config->keyExists('app.version') ){
+          // createKey( $key, $type, $customize=false, $default=null, $final=false )
+          Yii::$app->config->createKey( 'app.version','string',false,null,false) ;  
+        } 
+        Yii::$app->config->setKeyDefault( 'app.version', $app_version );  
       } else {
-        // setup failed
+        Yii::info(
+          "Setup of version '$app_version' failed with the following errors:" .
+          implode( "\n", $this->errors)
+        );
         return null;      
       }
     }
 
     // notify client that setup it done
     $this->dispatchClientMessage("ldap.enabled", Yii::$app->config->getIniValue("ldap.enabled") );
-    $this->dispatchClientMessage("bibliograph.setup.done");
+    $this->dispatchClientMessage("bibliograph.setup.done"); // @todo rename
 
     // return errors and messages
     return [
@@ -226,17 +256,8 @@ class SetupController extends \app\controllers\AppController
    */
   protected function setupDoMigrations()
   {
-    // visual marker in log file
-    Yii::trace(
-      "\n\n\n" .
-      str_repeat("*",80) . "\n\n" .
-      " BIBLIOGRAPH SETUP\n\n" .
-      str_repeat("*",80) . 
-      "\n\n\n",
-      'marker'
-    );
-
     if( YII_ENV_PROD ){
+      // @todo: throw!!
       Yii::trace('Skipping migrations in production mode...');
       return false;
     };

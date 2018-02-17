@@ -12,38 +12,42 @@
 - [ ] Re-implement Remove/Move/Copy references
 - [ ] Re-implement Add/Remove/Move/Copy folders
 - [ ] Re-implement ACL Tool
-- [ ] Re-implement Import
 - [ ] Re-implement Export
+- [ ] Tests: Make Travis ~~great~~ work again
 
 ## v3.0.0-beta
 
-### Priority: High
-- [ ] Tests: Make Travis ~~great~~ work again
+### Priority: high
 - [ ] Add datasource access control when getting the datasource, not in the service methods
 - [ ] Re-implement translation (http://www.yiiframework.com/doc-2.0/guide-tutorial-i18n.html)
+- [ ] Re-implement Z3950 import as a Yii2 module
 
 ### Priority: normal
-- [ ] Backend: Create a JsonRpcServiceException and replace \Exception
 - [ ] Frontend: Rename item view "metadata" page
 - [ ] Tests: Fix bootstrap loading issue
 - [ ] Backend: Model validation: accept booleans for MySql SmallInt columns
 
 ### Priority: low
+- [ ] Backend: Create a JsonRpcServiceException and replace \Exception
 - [ ] Backend: Streamline API to get Datasource & typed model
 - [ ] Frontend: Convert static icon resouce paths into aliases that are resolved in bibliograph.theme.Icon
 - [ ] Frontend: Rename widget ids, replace with native qooxdoo ids, see https://github.com/qooxdoo/qooxdoo/issues/9422
 - [ ] Replace ::findOne(['namedid'=>'foo']) with ::findByNamedId('foo')
+- [ ] Rename Yii::$app->utils to Yii::$app->state
+- [ ] Add correct @return information to the JSONRPC methods/actions
+
+## v3.0.0
 
 ## v3.1
 
-### Priority: High
+### Priority: high
 - [ ] Re-enable item view / formatted item
 - [ ] Re-enable item view / record info
 - [ ] Re-enable item view / duplicates search
 - [ ] Re-enable system menu commands
 - [ ] Re-implement message broadcast
 
-### Priority: High
+### Priority: normal
 - [ ] Reimplement HTML editor integration for notes
 
 ### Priority: low

@@ -26,17 +26,36 @@ use app\models\UserConfig;
 
 class Utils extends \yii\base\Component
 {
-  // function __construct($config){
-  //   parent::__construct();
-  // }
 
   /**
-   * returns the version of the application
+   * Returns the absolute path to the project's root
+   * directory
+   *
    * @return string
    */
-  public function version()
+  public function getProjectRootDir()
   {
-    return trim(file_get_contents(Yii::getAlias('@app/../version.txt')));
+    return realpath( __DIR__ . "/../../../.." );
+  }
+
+  /**
+   * Returns the content of package.json as an object structure
+   * @return object
+   */
+  public function getNpmPackageData()
+  {
+    $package_json_path = $this->getProjectRootDir() . "/package.json";
+    return json_decode( file_get_contents( $package_json_path ) );
+  }
+
+
+  /**
+   * Returns the version of the application
+   * @return string
+   */
+  public function getVersion()
+  {
+    return $this->getNpmPackageData()->version;
   }
   
  /**
@@ -54,11 +73,6 @@ class Utils extends \yii\base\Component
       ( $folderId ? "!folderId.$folderId" : "" ).
       ( $modelId  ? "!modelType.reference!modelId.$modelId" : "");
   }    
-
-
-  //-------------------------------------------------------------
-  // etc
-  //-------------------------------------------------------------
 
   /**
    * Returns the url of the client application's build directory
@@ -80,6 +94,5 @@ class Utils extends \yii\base\Component
   {
     notImplemented();
     return qcl_server_Server::getUrl();
-  }  
-
+  } 
 }
