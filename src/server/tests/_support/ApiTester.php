@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  * Inherited Methods
  * @method void wantToTest($text)
@@ -18,6 +17,35 @@
 */
 class ApiTester extends \Codeception\Actor
 {
-    use _generated\ApiTesterActions;
-    use JsonRpcTrait;
+  use _generated\ApiTesterActions;
+  use JsonRpcTrait;
+
+  /**
+   * Enable LDAP authentication
+   */
+  public function enableLdapAuthentication(){
+    $this->setLdapEnabled(true);
+  }
+
+  /**
+   * Disable LDAP authentication
+   */
+  public function disableLdapAuthentication(){
+    $this->setLdapEnabled(false);
+  }  
+
+  /**
+   * Dis/enable LDAP support by replacing the setting in the 
+   * test.ini.php file.
+   *
+   * @param bool $boolValue
+   */
+  protected function setLdapEnabled($boolValue){
+    $path_to_file = __DIR__ . "/../test.ini.php";
+    $file_contents = file_get_contents($path_to_file);
+    $enabled = "yes;!ldap!"; $disabled = "no;!ldap!";
+    $newValue = $boolValue ? $enabled : $disabled;
+    $file_contents = str_replace([$enabled,$disabled],$newValue, $file_contents);
+    file_put_contents($path_to_file,$file_contents);
+  }
 }

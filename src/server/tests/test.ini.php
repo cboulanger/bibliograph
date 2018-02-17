@@ -26,7 +26,7 @@ admin      = "info@bibliograph.org"
 developer  = "info@bibliograph.org"
 
 [ldap]
-enabled             = no
+enabled             = no;!ldap! leave this exactly like it is since tests rely on it
 use_groups          = yes
 host                = ldap.forumsys.com
 port                = 389

@@ -611,7 +611,7 @@ class Configuration extends \yii\base\Component
         $value = $value[$part];
         continue;
       }
-      throw new InvalidArgumentException("No ini value for '$path' exists.");
+      throw new \InvalidArgumentException("No ini value for '$path' exists.");
     }
     // post-process value
     if( $value == "on" or $value == "yes" )

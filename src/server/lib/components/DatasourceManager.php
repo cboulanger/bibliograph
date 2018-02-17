@@ -147,13 +147,14 @@ class DatasourceManager extends \yii\base\Component
    * Migrates the tables of the datasources which are of the 
    * given schema class to the newest version
    * 
-   * NOT TESTED!
+   * NOT READY!
    *
    * @param string $class Datasource schema class
    * @return boolean Returns true if migration succeeded
    */
   public function migrate( $class )
   {
+    throw new \BadMethodCallException("Not ready!");
     if( YII_ENV_PROD ){
       throw new \Exception('Datasource migrations are not allowed in production mode. Please contact the adminstrator');
     };
@@ -174,6 +175,10 @@ class DatasourceManager extends \yii\base\Component
         'migrationNamespaces' => 'app\\migrations\\schema\\datasource',
       ];
       $db = $datasource->getConnection();
+      $tables = $db->schema->getTableNames();
+      if ( ! in_array("{$db->prefix}migrations", $tables) ){
+        // need to migrate/mark tables
+      }      
       Console::runAction( 'migrate/up', $params, null, $db );
     }
     return true; 

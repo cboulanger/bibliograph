@@ -27,7 +27,7 @@ class Validate
    * @throws Exception
    */
   public static function isFalse( $condition, $error ){
-    $this->isTrue( ! $condition, $error );
+    self::isTrue( ! $condition, $error );
   }
 
   /**
@@ -39,6 +39,6 @@ class Validate
    * @throws Exception
    */
   public static function isNotNull( $arg, $error ){
-    $this->isTrue( $arg !== null, $error );
+    self::isTrue( $arg !== null, $error );
   }  
 }

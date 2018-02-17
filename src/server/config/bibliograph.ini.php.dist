@@ -79,6 +79,12 @@ host = ldap.example.com
 ;; the port listening for ldap connections
 port = 389
 
+;; the dn of user that can bind to the LDAP server to do searches
+bind_dn = "cn=read-only-admin"
+
+;; the password of that user
+bind_password = password
+
 ;; base dn to which the user name is added for authentication
 user_base_dn = "ou=people,dc=example,dc=com"
 

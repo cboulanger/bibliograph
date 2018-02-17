@@ -55,9 +55,10 @@ class DatasourceController extends AppController
     //$datasources = $activeUser->getDatasources() //@todo
     $datasources = \app\models\Datasource::find()
       ->select(['namedId AS value','title AS label','title','description'])
-      ->where(['schema' => 'bibliograph.schema.bibliograph2'])
-      ->andWhere(['active' => 1])
-      ->andWhere(['hidden' => 0])
+      ->where(['schema' => 'app\models\BibliographicDatasource'])
+      ->orWhere(['schema' => 'bibliograph.schema.bibliograph2'])
+      // ->andWhere(['active' => 1])
+      // ->andWhere(['hidden' => 0])
       ->asArray()->all();
     return $datasources;
   }

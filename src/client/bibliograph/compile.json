@@ -32,7 +32,7 @@
   ],
 
   "libraries": [
-    "../../../../qooxdoo/framework",
+    "../../vcslib/qooxdoo/framework",
     "."
   ],
 

@@ -1,3 +1,4 @@
+# This test suite assumes a web server running at http://127.0.0.1:8080.
 actor: ApiTester
 modules:
     enabled:
@@ -8,3 +9,6 @@ modules:
             depends: PhpBrowser
             part: [json]
             url: '?r='
+env:
+    development:
+    testing:

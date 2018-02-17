@@ -1,17 +1,29 @@
 #!/bin/bash
 
-set -o errexit # Exit on error
-YIICMD="php yii-test"
-CPTCMD="php vendor/bin/codecept"
+# This test runs unit and functional tests that do not need
+# a webserver.
+
+YII_CMD="php yii-test"
+CPT_CMD="php vendor/bin/codecept"
+SERVER_PATH=src/server
+
+pushd $SERVER_PATH > /dev/null
 
 echo "Setting up database ..."
-pushd ./src/server > /dev/null
-$YIICMD migrate/fresh --interactive=0 --db=testdb --migrationNamespaces=app\\migrations\\schema  > /dev/null
-$YIICMD migrate/up    --interactive=0 --db=testdb --migrationNamespaces=app\\tests\\migrations  > /dev/null
+MIGRATE_ARGS="--interactive=0 --db=testdb"
+$YII_CMD migrate/fresh --migrationNamespaces=app\\migrations\\schema $MIGRATE_ARGS &> /dev/null
+$YII_CMD migrate/up --migrationNamespaces=app\\migrations\\data $MIGRATE_ARGS &> /dev/null
+$YII_CMD migrate/up --migrationNamespaces=app\\tests\\migrations $MIGRATE_ARGS &> /dev/null
 
-$CPTCMD run unit || exit $?
-$CPTCMD run functional || exit $?
+$CPT_CMD run unit || exit $?
 
-echo "Cleaning up database ..."
-$YIICMD migrate/down all --interactive=0 --db=testdb > /dev/null
+$YII_CMD migrate/fresh --migrationNamespaces=app\\migrations\\schema $MIGRATE_ARGS &> /dev/null
+$YII_CMD migrate/up --migrationNamespaces=app\\migrations\\data $MIGRATE_ARGS &> /dev/null
+$YII_CMD migrate/up --migrationNamespaces=app\\tests\\migrations $MIGRATE_ARGS &> /dev/null
+
+$CPT_CMD run functional || exit $?
+
+echo "Tests finished. Cleaning up database ..."
+$YII_CMD migrate/down all --interactive=0 --db=testdb > /dev/null
 popd > /dev/null
+exit 0

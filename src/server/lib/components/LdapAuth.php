@@ -41,11 +41,16 @@ class LdapAuth extends \yii\base\Component
    */
   public function checkConnection()
   {
-    $ldapEnabled    = Yii::$app->config->getIniValue("ldap.enabled");
-    $bind_dn        = Yii::$app->config->getIniValue("ldap.bind_dn");
-    $bind_password  = Yii::$app->config->getIniValue("ldap.bind_password");
     $connection = false;
     $error = null;
+    try {
+      $ldapEnabled    = Yii::$app->config->getIniValue("ldap.enabled");
+      $bind_dn        = Yii::$app->config->getIniValue("ldap.bind_dn");
+      $bind_password  = Yii::$app->config->getIniValue("ldap.bind_password");
+    } catch (\InvalidArgumentException $e) {
+      $ldapEnabled = false;
+      $error = "Invalid ldap configuration in ini file:" . $e->getMessage();
+    }
     if( $ldapEnabled ){
       if( ! $bind_dn or ! $bind_password ){
         $error = "Cannot bind to LDAP server. Missing ldap.bind_dn or ldap.bind_password ini setting.";

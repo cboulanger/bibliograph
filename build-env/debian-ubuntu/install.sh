@@ -90,6 +90,7 @@ echo "- Enter the email address of the administrator in the [email] section (The
 echo "  won't start otherwise) "
 echo "- If you use an LDAP server for authentication, adapt the settings in the [ldap] section."
 echo 
-echo "You can now:"
-echo "- run tests with 'npm test'"
-echo "- start a development server on localhost:9090 with 'bash bin/source-server.sh'"
+echo "You can now execute:"
+echo "- 'npm test': run unit, functional and api tests"
+echo "- 'npm run test-dev': run unit, functional and api tests in development mode"
+echo "- 'npm run serve-dev': start a development server on localhost:9090"

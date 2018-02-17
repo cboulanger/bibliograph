@@ -37,7 +37,7 @@ install:
   - echo "Installation scripts finished successufully."
 
 before_script:
-  - mysql -e 'CREATE DATABASE tests;'
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS tests;'
   
 script:
   - echo "travis_fold:start:npm_install"

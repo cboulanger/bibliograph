@@ -9,6 +9,12 @@ SERVER_PATH="src/"
 APP_PATH="client/bibliograph/source-compiled/bibliograph/index.html"
 COMPILE_PATH="src/client/bibliograph"
 
+# first compiler pass
+echo "Compiling application..."
+pushd $COMPILE_PATH > /dev/null
+qx compile
+popd > /dev/null  
+
 # 'Production' server
 ps | grep "[p]hp -S $HOST" > /dev/null
 if [ $? -eq 0 ]; then
@@ -21,10 +27,13 @@ else
 fi
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
+  echo "Opening Safari browser"
   # Open Safari, better: https://www.npmjs.com/package/webpack-browser-plugin
   open -a Safari http://$HOST/$APP_PATH
   # send Alt+Command+I to open Web inspector
   osascript -e 'tell application "System Events" to keystroke "i" using {option down, command down}'
-  cd $COMPILE_PATH
+  # continuous compilation
+  pushd $COMPILE_PATH > /dev/null
   qx compile --watch
+  popd > /dev/null
 fi

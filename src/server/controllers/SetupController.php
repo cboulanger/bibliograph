@@ -77,7 +77,12 @@ class SetupController extends \app\controllers\AppController
    */
   public function actionSetup()
   {
-    if( ! Yii::$app->config->keyExists('bibliograph.setup') ){
+    try {
+      $setupCompleted = Yii::$app->config->keyExists('bibliograph.setup');
+    } catch( \yii\db\Exception $e ) {
+      $setupCompleted = false;
+    }
+    if( ! $setupCompleted  ){
       $success = $this->runSetupMethods();
       if ( $success ){
         // createKey( $key, $type, $customize=false, $default=null, $final=false )
@@ -86,7 +91,8 @@ class SetupController extends \app\controllers\AppController
         // setup failed
         return null;      
       }
-    } 
+    }
+
     // notify client that setup it done
     $this->dispatchClientMessage("ldap.enabled", Yii::$app->config->getIniValue("ldap.enabled") );
     $this->dispatchClientMessage("bibliograph.setup.done");

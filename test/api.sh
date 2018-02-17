@@ -1,18 +1,42 @@
 #!/bin/bash
 
-set -o errexit # Exit on error
-YIICMD="php yii-test"
-CPTCMD="php vendor/bin/codecept"
+# This test runs a temporary server on localhost:8080 and
+# then runs the codeception API test suite. 
 
-pushd ./src/server > /dev/null
+YII_CMD="php yii-test"
+CPT_CMD="php vendor/bin/codecept"
+CPT_ENV=${1:-testing}
+SERVER_PATH=src/server
+SERVER_CMD="yii serve 127.0.0.1:8080 -t=@app/tests &> /dev/null"
+
+pushd $SERVER_PATH > /dev/null
+
+echo "Starting Bibliograph test server..."
+# Start a PHP server and finish it when the script ends
+nohup php $SERVER_CMD &
+bg_pid=$!
+trap "kill -2 $bg_pid" 2
+ps | grep "[p]hp $SERVER_CMD" > /dev/null
+if [ $? -eq 1 ]; then
+  echo "Failed to start test server..."
+  exit 1
+fi
+
 echo "Setting up database ..."
-$YIICMD migrate/fresh --interactive=0 --db=testdb --migrationNamespaces=app\\migrations\\schema  &> /dev/null
-$YIICMD migrate/up --interactive=0 --db=testdb --migrationNamespaces=app\\migrations\\data  &> /dev/null
-$YIICMD migrate/up --interactive=0 --db=testdb --migrationNamespaces=app\\tests\\migrations  &> /dev/null
+MIGRATE_ARGS="--interactive=0 --db=testdb"
+$YII_CMD migrate/fresh --migrationNamespaces=app\\migrations\\schema $MIGRATE_ARGS &> /dev/null
+$YII_CMD migrate/up --migrationNamespaces=app\\migrations\\data $MIGRATE_ARGS &> /dev/null
+$YII_CMD migrate/up --migrationNamespaces=app\\tests\\migrations $MIGRATE_ARGS &> /dev/null
 
-echo "Running tests..."
-$CPTCMD run api
+echo "Running Codeception tests..."
+$CPT_CMD run api --env $CPT_ENV || exit $?
+popd > /dev/null
+
+echo "Running Mocha tests..."
+mocha -- ./test/**/*.test.js || exit $?
 
 echo "Cleaning up database ..."
-$YIICMD migrate/down all --interactive=0 --db=testdb  &> /dev/null
+pushd $SERVER_PATH > /dev/null
+$YII_CMD migrate/down all $MIGRATE_ARGS > /dev/null
 popd > /dev/null
+exit 0
