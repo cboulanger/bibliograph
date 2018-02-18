@@ -207,9 +207,10 @@ qx.Class.define("bibliograph.AccessManager",
      * 
      * @param username {String}
      * @param password {String}
+     * @param authOnly {Boolean}
      * @return {Promise<Object>}
      */
-    authenticate : async function( username, password )
+    authenticate : async function( username, password, authOnly )
     {
       var sha1 = qcl.crypto.Sha1.hex_sha1.bind(qcl.crypto.Sha1);
       let client = this.getApplication().getRpcClient("access");
@@ -222,6 +223,9 @@ qx.Class.define("bibliograph.AccessManager",
         password = sha1( randSalt + serverHash );
       }
       let response = await client.send("authenticate",[username, password]);
+      if( authOnly ){
+        return response;
+      }
       return await this.__handleAuthenticationResponse( response );
     },
     

@@ -87,6 +87,16 @@ trait JsonRpcTrait
     $this->sendJsonRpcRequest( "access","authenticate", [] );
     $this->seeAndSaveTokenInJsonResponse();
   }
+  
+  /**
+   * Log in as an Adminstrator
+   *
+   * @return void
+   */
+  public function loginAsAdmin()
+  {
+    $this->loginWithPassword( "admin", "admin" );
+  }
 
   /**
    * Log in with a username and password

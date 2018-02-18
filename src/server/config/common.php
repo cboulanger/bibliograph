@@ -6,6 +6,16 @@ $config =  [
   'basePath' => dirname(__DIR__),
   'bootstrap' => ['log','channel'],
   'controllerNamespace' => 'app\controllers',
+  'controllerMap' => [
+    'migrate' => [
+      'class' => 'yii\console\controllers\MigrateController',
+      'migrationNamespaces' => [
+        'app\migrations\schema', 
+        'app\migrations\data'
+      ],
+      'migrationPath' => null
+    ],
+  ],  
   'aliases' => [
     '@lib'   => __DIR__ . "/../lib/",
     '@tests' => __DIR__ . "/../tests/",
@@ -26,13 +36,17 @@ if (YII_ENV_DEV) {
       ],
     ]
   ];
-  $config['controllerMap'] = [
+  $config['controllerMap'] = array_merge(
+    $config['controllerMap'],[
     'fixture' => [
       'class' => 'yii\faker\FixtureController',
     ],
     'migrate' => [
       'class' => 'yii\console\controllers\MigrateController',
-      'migrationNamespaces' => ['app\migrations\schema', 'app\migrations\data'],
+      'migrationNamespaces' => [
+        'app\migrations\schema', 
+        'app\migrations\data'
+      ],
       'migrationPath' => null
     ],
     'migration' => [
@@ -41,6 +55,6 @@ if (YII_ENV_DEV) {
     'stubs' => [
       'class' => 'bazilio\stubsgenerator\StubsController',
     ],    
-  ];    
+  ]);    
 }
 return $config;

@@ -12,3 +12,6 @@ modules:
 env:
     development:
     testing:
+    setup:
+    upgradev2:
+    upgradev3:
