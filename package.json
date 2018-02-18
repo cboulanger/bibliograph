@@ -22,7 +22,7 @@
     "serve-dev:darwin:linux": "bash bin/source-server.sh",
     "serve-dev:win32": "echo 'Sorry, server can be run on MacOs/Linux platforms only.'",
     "test": "run-script-os",
-    "test:darwin:linux": "bash test/codeception-all.sh && bash test/api.sh",
+    "test:darwin:linux": "bash test/codeception-all.sh && bash test/api.sh || exit $?",
     "test:win32": "echo 'Sorry, tests can be run on MacOs/Linux platforms only.'",
     "test-dev": "run-script-os",
     "test-dev:darwin:linux": "bash test/codeception-all.sh && bash test/api.sh development",

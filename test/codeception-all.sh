@@ -21,7 +21,7 @@ $YII_CMD migrate/fresh --migrationNamespaces=app\\migrations\\schema $MIGRATE_AR
 $YII_CMD migrate/up --migrationNamespaces=app\\migrations\\data $MIGRATE_ARGS &> /dev/null
 $YII_CMD migrate/up --migrationNamespaces=app\\tests\\migrations $MIGRATE_ARGS &> /dev/null
 
-$CPT_CMD run functional || exit $?
+$CPT_CMD run functional -v || exit $?
 
 echo "Tests finished. Cleaning up database ..."
 $YII_CMD migrate/down all --interactive=0 --db=testdb > /dev/null
