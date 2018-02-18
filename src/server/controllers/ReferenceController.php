@@ -271,7 +271,7 @@ class ReferenceController extends AppController
       -> limit( $lastRow - $firstRow + 1 );
     $query = $this->addQueryConditions( $query, $queryData );
     //return $query->createCommand()->getRawSql();
-    Yii::info($query->createCommand()->getRawSql());
+    //Yii::info($query->createCommand()->getRawSql());
     $rowData = $query->asArray()->all();
     return array(
       'requestId'  => $requestId,
