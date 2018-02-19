@@ -6,8 +6,9 @@
 - [x] Re-implement setup
 - [x] Re-implement LDAP support
 - [x] Update docs to allow test installation at Humboldt-University
-- [ ] Re-implement datasource restrictions
+- [x] Re-implement datasource restrictions
 - [ ] Add distribution mechanism
+- [ ] Re-implement user error handling: New user error without stack trace, alert to user and log it
 - [ ] Re-implement cql search
 - [ ] Re-implement Remove/Move/Copy references
 - [ ] Re-implement Add/Remove/Move/Copy folders
@@ -35,6 +36,7 @@
 - [ ] Replace ::findOne(['namedid'=>'foo']) with ::findByNamedId('foo')
 - [ ] Rename Yii::$app->utils to Yii::$app->state
 - [ ] Add correct @return information to the JSONRPC methods/actions
+- [ ] Change app state separator and assignment chars
 
 ## v3.0.0
 

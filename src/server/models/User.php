@@ -418,15 +418,33 @@ class User extends BaseModel implements IdentityInterface
   {
     $datasourceNames = [];
     $myDatasources = $this->getDatasources()->all();
-    if( is_array($myDatasources) ) foreach( $myDatasources as $o ) $datasourceNames[] = $o->namedId;
-    $groups = $this->getGroups()->all();
-    if( is_array($groups) ) foreach( $groups as $group){
-      $datasourceNames = array_merge( $datasourceNames, $group->getDatasourceNames());
-      $roles = $this->getGroupRoles( $group->id )->all();
-      if( is_array($roles) ) foreach( $roles as $role) {
-        $datasourceNames = array_merge( $datasourceNames, $role->getDatasourceNames() );
+    if( is_array($myDatasources) ) {
+      foreach( $myDatasources as $o ) {
+        $datasourceNames[] = $o->namedId;
       }
     }
+    Yii::trace( "User datasources:" );
+    Yii::trace( $datasourceNames );
+    $groups = $this->getGroups()->all();
+    if( is_array($groups) ) {
+      foreach( $groups as $group){
+        $datasourceNames = array_merge( $datasourceNames, $group->getDatasourceNames());
+        $roles = $this->getGroupRoles( $group->id )->all();
+        if( is_array($roles) ) foreach( $roles as $role) {
+          $datasourceNames = array_merge( $datasourceNames, $role->getDatasourceNames() );
+        }
+      }
+    }
+    Yii::trace( "Plus group datasources:" );
+    Yii::trace( $datasourceNames );    
+    $roles = $this->getRoles()->all();
+    if( is_array($roles) ) {
+      foreach( $roles as $role){
+        $datasourceNames = array_merge( $datasourceNames, $role->getDatasourceNames());
+      }
+    }    
+    Yii::trace( "Plus role datasources:" );
+    Yii::trace( $datasourceNames );        
     return array_unique($datasourceNames);
   }  
 

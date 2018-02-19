@@ -132,7 +132,12 @@ class SetupController extends \app\controllers\AppController
       } catch( \yii\db\Exception $e ) {
         // no tables exist yet, this is the first run of a fresh installation
         $upgrade_from = "0.0.0";        
-      }
+      } catch ( yii\base\InvalidConfigException $e ){
+        // this happens deleting the tables in the database during development
+        // @todo 
+        $upgrade_from = "0.0.0";  
+        session_destroy();
+      } 
     }
     if ( ! $upgrade_to ){
       $upgrade_to = Yii::$app->utils->version;
@@ -482,8 +487,11 @@ class SetupController extends \app\controllers\AppController
       $ldap['enabled'] ?  Yii::t('app', ', but trying to establish a connection failed with the error: {error}', [
         'error' => $ldap['error']
       ]) : "";
-    $result = [];
-    $result[ $ldap['error'] ? 'error' : 'message' ] = $message;
+    if ( $ldap['enabled'] and $ldap['error'] ){
+      $result = [ 'error' => $message ];
+    } else {
+      $result = [ 'message' => $message ];
+    }
     return $result;
   }
 
@@ -500,14 +508,14 @@ class SetupController extends \app\controllers\AppController
           'title'       => "Example Database 1",
           'description' => "This database is publically visible"
         ],
-        'roles' => ['anonymous']
+        'roles' => ['anonymous','user']
       ],
       'datasource2' => [
           'config' => [
-            'title'       => "Example Database 3",
+            'title'       => "Example Database 2",
             'description' => "This database is visible only for logged-in users"                
           ],
-          'roles' => ['anonymous','user']
+          'roles' => ['user']
       ],
     ];
 

@@ -256,7 +256,15 @@ class FolderController extends AppController //implements ITreeController
    */  
   function actionLoad( $datasource,  $options=null )
   {
-    $query = static::getControlledModel($datasource)::find()->select("id");
+    try{
+      $modelClass = static::getControlledModel($datasource);
+    } catch( \InvalidArgumentException $e ){
+      \lib\dialog\Error::create( Yii::t('app',"Database {datasource} does not exist.",[
+        'datasource' => $datasource
+      ]));
+      return "Invalid datasource $datasource";
+    }
+    $query = $modelClass::find()->select("id");
     if( $this->getActiveUser()->isAnonymous() ){
       $query = $query->where( [ 'public' => true ] );
     }
