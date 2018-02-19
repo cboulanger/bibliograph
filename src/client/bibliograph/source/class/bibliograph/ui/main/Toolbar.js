@@ -32,7 +32,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
     
     // Toolbar
     var toolBar = this;
-    toolBar.setWidgetId("bibliograph/toolbar");
+    toolBar.setWidgetId("app/toolbar");
 
     var toolBarPart = new qx.ui.toolbar.Part();
     toolBar.add(toolBarPart);    
@@ -109,11 +109,11 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
     {
       var button = new qx.ui.toolbar.Button();
       button.setLabel(this.tr('Datasources'));
-      button.setWidgetId("bibliograph/datasourceButton");
+      button.setWidgetId("app/toolbar/datasource");
       button.setVisibility("excluded");
       button.setIcon("icon/16/apps/utilities-archiver.png");
       button.addListener("execute", function(e) {
-        this.getApplication().getWidgetById("bibliograph/datasourceWindow").show();
+        this.getApplication().getWidgetById("app/windows/datasource").show();
       }, this);
       return button; 
     },

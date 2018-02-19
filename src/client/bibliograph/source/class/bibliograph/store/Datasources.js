@@ -43,6 +43,11 @@ qx.Class.define("bibliograph.store.Datasources",
 
       let app = this.getApplication();    
       var datasourceCount = data.length;
+      this.info( "User hass access to " + datasourceCount + " datasources." );
+      // show datasource button depending on whether there is a choice
+      app.getWidgetById("app/toolbar/datasource").setVisibility(
+        datasourceCount > 1 ? "visible" : "excluded"
+      );      
 
       // if we have no datasource loaded, no access
       if (datasourceCount == 0) {
@@ -72,13 +77,10 @@ qx.Class.define("bibliograph.store.Datasources",
       else
       {
         app.setDatasourceLabel(app.getConfigManager().getKey("application.title"));
-        var dsWin = app.getWidgetById("bibliograph/datasourceWindow");
+        var dsWin = app.getWidgetById("app/windows/datasource");
         dsWin.open();
         dsWin.center();
       }
-
-      // show datasource button depending on whether there is a choice
-      app.getWidgetById("bibliograph/datasourceButton").setVisibility(datasourceCount > 1 ? "visible" : "excluded");
     },
   }
 });
