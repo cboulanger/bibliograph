@@ -103,56 +103,66 @@ class SetupController extends \app\controllers\AppController
 
   /**
    * A setup a specific version of the application. This is mainly for testing. 
-   * @param string $version (optional) The version to upgrade to. You should not set
-   * this parameter unless you know what you are doing. 
+   * @param string $upgrade_to(optional) The version to upgrade from. 
+   * @param string $upgrade_from (optional) The version to upgrade to.
    */
-  public function actionSetupVersion($version){
-    return $this->_setup($version);
+  public function actionSetupVersion($upgrade_to, $upgrade_from=null){
+    if ( ! YII_ENV_TEST ){
+      throw \BadMethodCallException('setup/setup-version can only be called in test mode.');
+    }
+    return $this->_setup($upgrade_to, $upgrade_from);
   }  
 
   /**
    * The setup action. Is called as first server method from the client 
-   * @param string $version (optional) The version to upgrade to. You should not set
+   * @param string $upgrade_to (optional) The version to upgrade to. You should not set
+   * this parameter unless you know what you are doing. 
+   *  @param string $upgrade_from (optional) The version to upgrade from.You should not set
    * this parameter unless you know what you are doing. 
    * @return array
    */
-  protected function _setup($version=null)
+  protected function _setup($upgrade_to=null, $upgrade_from=null)
   {
-    $app_version = null;
-    try {
-      $app_version = Yii::$app->config->getKey('app.version');
-    } catch( \yii\db\Exception $e ) {
-      // no tables exist yet, this is the first run of a fresh installation
-      $app_version = "0.0.0";
-    } catch( \InvalidArgumentException $e ) {
-      // upgrading from version 2 where the config key doesn't exist
-      $app_version = "2.x";
-    } 
-    // if app version has changed or first run, run setup methods
-    $package_version = is_null($version) ? Yii::$app->utils->version : $version; 
-    if( $package_version != $app_version ){
+    if ( ! $upgrade_from ) {
+      try {
+        $upgrade_from = Yii::$app->config->getKey('app.version');
+      } catch( \InvalidArgumentException $e ) {
+        // upgrading from version 2 where the config key doesn't exist
+        $upgrade_from = "2.x";
+      } catch( \yii\db\Exception $e ) {
+        // no tables exist yet, this is the first run of a fresh installation
+        $upgrade_from = "0.0.0";        
+      }
+    }
+    if ( ! $upgrade_to ){
+      $upgrade_to = Yii::$app->utils->version;
+    }
+    // @todo validate
+    
+    // if application version has changed or first run, run setup methods
+    if( $upgrade_to != $upgrade_from ){
       // visual marker in log file
       Yii::trace(
         "\n\n\n" .str_repeat("*",80) . "\n\n BIBLIOGRAPH SETUP\n\n" . str_repeat("*",80) . "\n\n\n",
         'marker'
       );      
-      Yii::info("Application version has changed from '$app_version' to '$package_version', running setup methods");
+      Yii::info("Application version has changed from '$upgrade_from' to '$upgrade_to', running setup methods");
       
       // run methods. If any of them returns a fatal error, abort and alert the user
       // if any non-fatal errors occur, collect them and display them to the user at the 
       // end, then consider setup unsuccessful
-      $success = $this->runSetupMethods($app_version, $package_version);
+      $success = $this->runSetupMethods($upgrade_from, $upgrade_to);
       if ( $success ){
-        $app_version = $package_version;
-        Yii::info("Setup of version '$app_version' finished successfully.");
+        $upgrade_from = $upgrade_to;
+        Yii::info("Setup of version '$upgrade_from' finished successfully.");
         if( ! Yii::$app->config->keyExists('app.version') ){
           // createKey( $key, $type, $customize=false, $default=null, $final=false )
           Yii::$app->config->createKey( 'app.version','string',false,null,false) ;  
         } 
-        Yii::$app->config->setKeyDefault( 'app.version', $app_version );  
+        Yii::$app->config->setKeyDefault( 'app.version', $upgrade_from );  
       } else {
         Yii::info(
-          "Setup of version '$app_version' failed with the following errors:" .
+          "Setup of version '$upgrade_from' failed with the following errors:" .
           implode( "\n", $this->errors)
         );
         return null;      
@@ -182,18 +192,18 @@ class SetupController extends \app\controllers\AppController
    *   process continue. Messages are stored in the 'messages' member property, errors in the
    *   'error' member property of this object 
    * 
-   * @param string $app_version 
+   * @param string $upgrade_from 
    *    The current version of the application as stored in the database
-   * @param string $package_version The version in package.json, i.e. of the code, which can be
+   * @param string $upgrade_to The version in package.json, i.e. of the code, which can be
    *    higher than the 
    * @return void
    */
-  protected function runSetupMethods($app_version, $package_version)
+  protected function runSetupMethods($upgrade_from, $upgrade_to)
   {
     // compile list of setup methods
     foreach( \get_class_methods( $this ) as $method ){
       if( Stringy::create( $method )->startsWith("setup") ){
-        $result = $this->$method($app_version, $package_version);
+        $result = $this->$method($upgrade_from, $upgrade_to);
         if( ! $result ) continue;
         $fatalError = isset($result['fatalError']) ? $result['fatalError'] : false; 
         if ( $fatalError ){
@@ -367,7 +377,7 @@ class SetupController extends \app\controllers\AppController
    * Run migrations
    * @return array
    */
-  protected function setupDoMigrations($app_version, $package_version)
+  protected function setupDoMigrations($upgrade_from, $upgrade_to)
   {
     $expectTables = explode(",",
         "data_Config,data_Datasource,data_Group,data_Messages,data_Permission,data_Role,data_Session,data_User,data_UserConfig," .
@@ -387,11 +397,11 @@ class SetupController extends \app\controllers\AppController
       }
     }
     // fresh installation
-    if( $app_version == "0.0.0"  ){
+    if( $upgrade_from == "0.0.0"  ){
       $message = Yii::t('app','Found empty database');
     }
     // if this is an upgrade from a v2 installation, manually add migration history
-    elseif ( $app_version == "2.x" ) {
+    elseif ( $upgrade_from == "2.x" ) {
       if( ! $allTablesExist ){
         return [
           'fatalError' => Yii::t('app','Cannot update from Bibliograph v2 data: some tables are missing.')
@@ -410,7 +420,7 @@ class SetupController extends \app\controllers\AppController
       }       
     } else {
       $message = Yii::t('app','Found data for version {version}',[
-        'version' => $app_version
+        'version' => $upgrade_from
       ]);
     }
     // run new migrations
@@ -422,16 +432,16 @@ class SetupController extends \app\controllers\AppController
       // unless this is a fresh installation, require admin login
       $activeUser = Yii::$app->user->identity;
       // if the current version is >= 3.0.0 and no user is logged in, show a login screen
-      if( version_compare( $app_version, "3.0.0", ">=" ) and ( ! $activeUser or  ! $activeUser->hasRole('admin') ) ){
+      if( version_compare( $upgrade_from, "3.0.0", ">=" ) and ( ! $activeUser or  ! $activeUser->hasRole('admin') ) ){
         $message = Yii::t('app',"The application database needs to be upgraded from '{oldversion}' to '{newversion}'. Please log in as administrator.", [
-          'oldversion' => $app_version,
-          'newversion' => $package_version
+          'oldversion' => $upgrade_from,
+          'newversion' => $upgrade_to
         ]);
         Login::create( $message, "setup", "setup" );
         return "Login required.";
       };
       // unless we're in test mode, let the admin confirm 
-      if( version_compare( $app_version, "3.0.0", ">=" )  and ! $this->migrationConfirmed and ! YII_ENV_TEST){
+      if( version_compare( $upgrade_from, "3.0.0", ">=" )  and ! $this->migrationConfirmed and ! YII_ENV_TEST){
         $message = Yii::t('app',"The database must be upgraded. Confirm that you have made a database backup and now are ready to run the upgrade."); // or face eternal damnation.
         Confirm::create($message,null,"setup","setup-confirm-migration");
         return "User needs to confirm the migrations";
@@ -443,7 +453,7 @@ class SetupController extends \app\controllers\AppController
       if ( $output->contains('Migrated up successfully') ){
         Yii::trace("Migrations successfully applied.","migrations");
         $message .= Yii::t('app', ' and applied new migrations for version {version}',[
-          'version' => $package_version
+          'version' => $upgrade_to
         ]);
       } else {
         return [
