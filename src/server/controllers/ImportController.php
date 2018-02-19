@@ -108,7 +108,7 @@ class ImportController extends AppController
    *    Path to the uploaded file.
    * @param string $format
    *    The name of the import format
-   * @throws JsonRpcException
+   * @throws \lib\exceptions\UserErrorException
    * @return array
    *    An array containint the key "folderId" with the integer
    *    value of the folder containing the processed references.
@@ -129,7 +129,7 @@ class ImportController extends AppController
 //
 //    if( $extension !== $importer->getExtension() )
 //    {
-//      throw new JsonRpcException(sprintf(
+//      throw new \lib\exceptions\UserErrorException(sprintf(
 //        Yii::t('app', "Format '%s' expects file extension '%s'. The file you uploaded has extension '%s'"),
 //        $importer->getName(),
 //        $importer->getExtension(),
@@ -195,7 +195,7 @@ class ImportController extends AppController
     // convert to utf-8
     if (!preg_match('!!u', $data))
     {
-      throw new JsonRpcException(Yii::t('app',"You must convert file to UTF-8 before importing."));
+      throw new \lib\exceptions\UserErrorException(Yii::t('app',"You must convert file to UTF-8 before importing."));
     }
     
     
@@ -258,7 +258,7 @@ class ImportController extends AppController
       $fldModel->findWhere( array('label' => $sessionId ) );
       if($fldModel->foundNothing())
       {
-        throw new JsonRpcException(Yii::t('app',"Data has been lost due to session change. Please import again."));
+        throw new \lib\exceptions\UserErrorException(Yii::t('app',"Data has been lost due to session change. Please import again."));
       }
       $fldModel->loadNext();
       //$this->debug("Import folder $sessionId has id " . $fldModel->id() );

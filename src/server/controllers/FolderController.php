@@ -551,7 +551,7 @@ class FolderController extends AppController //implements ITreeController
    * @param $datasource
    * @param $folderId
    * @param $parentId
-   * @throws JsonRpcException
+   * @throws \lib\exceptions\UserErrorException
    * @return string "OK"
    */
   public function actionMove( $datasource, $folderId, $parentId )

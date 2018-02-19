@@ -56,7 +56,7 @@ class qcl_data_controller_TableController
    * @param object $queryData data to construct the query. Needs at least the
    * a string property "datasource" with the name of datasource and a property
    * "modelType" with the type of the model.
-   * @throws JsonRpcException
+   * @throws \lib\exceptions\UserErrorException
    * @throws InvalidArgumentException
    * @return array
    */
@@ -72,7 +72,7 @@ class qcl_data_controller_TableController
 
     if ( ! $datasource or ! $modelType )
     {
-      throw new JsonRpcException("Invalid arguments.");
+      throw new \lib\exceptions\UserErrorException("Invalid arguments.");
     }
 
     /*

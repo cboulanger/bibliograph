@@ -110,7 +110,7 @@ abstract class qcl_data_controller_ProgressController
    * @param $message The message to display in the progress dialog widget
    * @param mixed|null $data The data to pass to the first method
    * @return qcl_ui_dialog_Progress
-   * @throws JsonRpcException
+   * @throws \lib\exceptions\UserErrorException
    */
   public function method_start( $message, $data=null )
   {
@@ -118,7 +118,7 @@ abstract class qcl_data_controller_ProgressController
     {
       if ( ! method_exists( $this, $method ) )
       {
-        throw new JsonRpcException("Cannot start process: step method $method does not exist.");
+        throw new \lib\exceptions\UserErrorException("Cannot start process: step method $method does not exist.");
       }
     }
 

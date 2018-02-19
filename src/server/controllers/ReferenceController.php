@@ -88,7 +88,7 @@ class ReferenceController extends AppController
    *    The query data object from the json-rpc request
    * @param \yii\db\ActiveQuery $activeQuery
    *    The query object used 
-   * @throws JsonRpcException
+   * @throws \lib\exceptions\UserErrorException
    * @return qcl_data_db_Query
    */
   public static function addQueryConditions(
@@ -519,7 +519,7 @@ class ReferenceController extends AppController
    * @param $datasource
    * @param $referenceId
    * @param $data
-   * @throws JsonRpcException
+   * @throws \lib\exceptions\UserErrorException
    * 
    */
   public function actionSave( $datasource, $referenceId, $data )

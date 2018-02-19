@@ -11,7 +11,7 @@ trait FormTrait
    * Returns data for a dialog.Form widget based on a model
    * @param qcl_data_model_AbstractActiveRecord $model
    * @param int $width The default width of the form in pixel (defaults to 300)
-   * @throws JsonRpcException
+   * @throws \lib\exceptions\UserErrorException
    * @throws InvalidArgumentException
    * @return array
    */
@@ -20,7 +20,7 @@ trait FormTrait
     $modelFormData = $model->formData();
 
     if (! is_array( $modelFormData) or ! count( $modelFormData )) {
-      throw new JsonRpcException( "No form data exists.");
+      throw new \lib\exceptions\UserErrorException( "No form data exists.");
     }
 
     $formData = array();
@@ -99,7 +99,7 @@ trait FormTrait
    * Parses data returned by  dialog.Form widget based on a model
    * @param qcl_data_model_AbstractActiveRecord $model
    * @param object $data ;
-   * @throws JsonRpcException
+   * @throws \lib\exceptions\UserErrorException
    * @throws InvalidArgumentException
    * @return array
    */
@@ -109,14 +109,14 @@ trait FormTrait
     $modelFormData = $model->formData();
 
     if (! is_array( $modelFormData) or ! count( $modelFormData )) {
-      throw new JsonRpcException( "No form data exists");
+      throw new \lib\exceptions\UserErrorException( "No form data exists");
     }
     foreach ($data as $property => $value) {
       /*
        * is it an editable property?
        */
       if (! isset( $modelFormData[$property] )) {
-        throw new JsonRpcException( "Invalid form data property '$property'");
+        throw new \lib\exceptions\UserErrorException( "Invalid form data property '$property'");
       }
 
       /*
@@ -162,7 +162,7 @@ trait FormTrait
    * Function to check the match between the password and the repeated
    * password. Returns the hashed password.
    * @param $value
-   * @throws JsonRpcException
+   * @throws \lib\exceptions\UserErrorException
    * @return string|null
    */
   public function checkFormPassword($value)
@@ -170,10 +170,10 @@ trait FormTrait
     if (!isset($this->__password)) {
       $this->__password = $value;
     } elseif ($this->__password != $value) {
-      throw new JsonRpcException(Yii::t('app',"Passwords do not match..."));
+      throw new \lib\exceptions\UserErrorException(Yii::t('app',"Passwords do not match..."));
     }
     if ($value and strlen($value) < 8) {
-      throw new JsonRpcException(Yii::t('app',"Password must be at least 8 characters long"));
+      throw new \lib\exceptions\UserErrorException(Yii::t('app',"Password must be at least 8 characters long"));
     }
     return $value ? $this->getApplication()->getAccessController()->generateHash($value) : null;
   }

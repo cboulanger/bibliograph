@@ -147,7 +147,7 @@ class Query extends \yii\base\BaseObject
    *    The model on which the query should be performed
    * @throws bibliograph_schema_Exception
    * @throws Exception
-   * @throws JsonRpcException
+   * @throws \lib\exceptions\UserErrorException
    * @return qcl_data_db_Query
    */
   public function addQueryConditions(
@@ -259,7 +259,7 @@ class Query extends \yii\base\BaseObject
    * @param qcl_data_db_Query $qclQuery
    * @param bibliograph_model_ReferenceModel $model
    * @throws LogicException
-   * @throws JsonRpcException
+   * @throws \lib\exceptions\UserErrorException
    * @throws bibliograph_schema_Exception
    * @return void
    * @todo implement other operators, this requires reworking of how
@@ -357,7 +357,7 @@ class Query extends \yii\base\BaseObject
           break;
 
         default:
-          throw new JsonRpcException("Cannot yet deal with relation '$relation'. " . typeof( $cqlObject ) );
+          throw new \lib\exceptions\UserErrorException("Cannot yet deal with relation '$relation'. " . typeof( $cqlObject ) );
       }
 
       if ( $property )
@@ -377,7 +377,7 @@ class Query extends \yii\base\BaseObject
      */
     elseif ( $cqlObject instanceof cql_Diagnostic )
     {
-      throw new JsonRpcException( $cqlObject->toTxt() );
+      throw new \lib\exceptions\UserErrorException( $cqlObject->toTxt() );
     }
 
     /**

@@ -50,10 +50,10 @@ class bibliograph_service_Backup
 
   /**
    * Checks if user has access to the given datasource. If not,
-   * throws JsonRpcException.
+   * throws \lib\exceptions\UserErrorException.
    * @param string $datasource
    * @return void
-   * @throws JsonRpcException
+   * @throws \lib\exceptions\UserErrorException
    */
   public function checkDatasourceAccess( $datasource )
   {
@@ -63,7 +63,7 @@ class bibliograph_service_Backup
 
   /**
    * Check if we can make or restore backups
-   * @throws JsonRpcException
+   * @throws \lib\exceptions\UserErrorException
    * @return void
    */
   public function checkBackupPrerequisites()
@@ -80,7 +80,7 @@ class bibliograph_service_Backup
     if( ! class_exists("ZipArchive") )
     {
       Yii::warning("You must install the ZIP extension in order to create backups");
-      throw new JsonRpcException("Cannot create backup archive.");
+      throw new \lib\exceptions\UserErrorException("Cannot create backup archive.");
     }
 
     /*
@@ -89,12 +89,12 @@ class bibliograph_service_Backup
     if ( ! defined("BIBLIOGRAPH_BACKUP_PATH") )
     {
       Yii::warning("You must define the BIBLIOGRAPH_BACKUP_PATH constant." );
-      throw new JsonRpcException("Cannot create backup archive.");
+      throw new \lib\exceptions\UserErrorException("Cannot create backup archive.");
     }
     if ( ! file_exists( BIBLIOGRAPH_BACKUP_PATH ) or ! is_writable( BIBLIOGRAPH_BACKUP_PATH ) )
     {
       Yii::warning("Directory '" . BIBLIOGRAPH_BACKUP_PATH . "' needs to exist and be writable" );
-      throw new JsonRpcException("Cannot create backup archive.");
+      throw new \lib\exceptions\UserErrorException("Cannot create backup archive.");
     }
   }
 
@@ -108,7 +108,7 @@ class bibliograph_service_Backup
   /**
    * Method to create a backup of a datasource
    * @param $datasource
-   * @throws JsonRpcException
+   * @throws \lib\exceptions\UserErrorException
    * @return string
    *    Returns the name of the ZIP-Archive with the backups
    */
@@ -152,7 +152,7 @@ class bibliograph_service_Backup
     if ($zip->open($zipfile, ZIPARCHIVE::CREATE)!==TRUE)
     {
       Yii::warning("Cannot create file '$zipfile' in '$backupPath'");
-      throw new JsonRpcException("Cannot create backup archive - please check file permissions.");
+      throw new \lib\exceptions\UserErrorException("Cannot create backup archive - please check file permissions.");
     }
 
     /*
@@ -173,7 +173,7 @@ class bibliograph_service_Backup
     {
       $zip->close();
       Yii::warning( $e->getMessage() );
-      throw new JsonRpcException( "You don't seem to have the necessary MySql Privileges to make a backup. You need at least the global 'SELECT' and 'FILE' privilege" );
+      throw new \lib\exceptions\UserErrorException( "You don't seem to have the necessary MySql Privileges to make a backup. You need at least the global 'SELECT' and 'FILE' privilege" );
     }
 
     $zip->close();
@@ -259,7 +259,7 @@ class bibliograph_service_Backup
    * @param $form
    * @param $datasource
    * @return qcl_ui_dialog_Form|string
-   * @throws JsonRpcException
+   * @throws \lib\exceptions\UserErrorException
    */
   public function method_dialogChooseBackup( $form, $datasource )
   {
@@ -287,7 +287,7 @@ class bibliograph_service_Backup
 
     if( ! count( $options) )
     {
-      throw new JsonRpcException("No backup sets available.");
+      throw new \lib\exceptions\UserErrorException("No backup sets available.");
     }
 
     $formData = array(
@@ -311,7 +311,7 @@ class bibliograph_service_Backup
    * @param $data
    * @param $datasource
    * @return string
-   * @throws JsonRpcException
+   * @throws \lib\exceptions\UserErrorException
    */
   public function method_restoreBackup( $data, $datasource )
   {
@@ -329,20 +329,20 @@ class bibliograph_service_Backup
     if( ! file_exists( $zipfile ) )
     {
       Yii::warning("File '$zipfile' does not exist.");
-      throw new JsonRpcException(Yii::t('app', "Backup file does not exist."));
+      throw new \lib\exceptions\UserErrorException(Yii::t('app', "Backup file does not exist."));
     }
 
     $zip = new ZipArchive();
     if ($zip->open($zipfile, ZIPARCHIVE::CHECKCONS )!==TRUE)
     {
       Yii::warning("Cannot open file '$zipfile'");
-      throw new JsonRpcException("Cannot open backup archive");
+      throw new \lib\exceptions\UserErrorException("Cannot open backup archive");
     }
 
     $lockfile = $backupPath . "/$datasource.lock";
     if( file_exists($lockfile) )
     {
-      throw new JsonRpcException("Cannot restore backup. Backup is locked.");
+      throw new \lib\exceptions\UserErrorException("Cannot restore backup. Backup is locked.");
     }
     touch( $lockfile );
 

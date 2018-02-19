@@ -170,7 +170,7 @@ class bibliograph_service_reference_FindReplace
         switch( $data->field )
         {
           case "all":
-            throw new JsonRpcException("Find/Replace in all columns not yet implemented");
+            throw new \lib\exceptions\UserErrorException("Find/Replace in all columns not yet implemented");
 
           default:
             //todo: check field
@@ -183,16 +183,16 @@ class bibliograph_service_reference_FindReplace
 
       case "selected":
         qcl_assert_array( $selectedIds );
-        throw new JsonRpcException("Find/Replace in selected records not yet implemented");
+        throw new \lib\exceptions\UserErrorException("Find/Replace in selected records not yet implemented");
         break;
 
       case "folder":
         qcl_assert_integer( $folderId );
-        throw new JsonRpcException("Find/Replace in folder not yet implemented");
+        throw new \lib\exceptions\UserErrorException("Find/Replace in folder not yet implemented");
         break;
 
       default:
-        throw new JsonRpcException("Invalid scope argument");
+        throw new \lib\exceptions\UserErrorException("Invalid scope argument");
     }
 
     /*

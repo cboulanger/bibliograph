@@ -12,7 +12,7 @@ trait CrudTrait
    *
    * @param string $datasource
    * @param $modelType
-   * @throws JsonRpcException
+   * @throws \lib\exceptions\UserErrorException
    * @return array
    */
   public function actionModelinfo($datasource, $modelType)
@@ -21,7 +21,7 @@ trait CrudTrait
     $datasourceModel = $this->getDatasourceModel( $datasource );
     $serviceName = $datasourceModel->getServiceNameForType( $modelType );
     if (! $serviceName) {
-      throw new JsonRpcException( sprintf(
+      throw new \lib\exceptions\UserErrorException( sprintf(
       "No service defined for datasource class %s, model type %s",
        $datasourceModel->className(), $modelType
       ) );
