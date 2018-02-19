@@ -8,7 +8,7 @@
 - [x] Update docs to allow test installation at Humboldt-University
 - [x] Re-implement datasource restrictions
 - [ ] Add distribution mechanism
-- [ ] Re-implement user error handling: New user error without stack trace, alert to user and log it
+- [x] Re-implement user error handling: New user error without stack trace, alert to user and log it
 - [ ] Re-implement cql search
 - [ ] Re-implement Remove/Move/Copy references
 - [ ] Re-implement Add/Remove/Move/Copy folders

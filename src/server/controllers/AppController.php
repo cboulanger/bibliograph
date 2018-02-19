@@ -43,7 +43,7 @@ class AppController extends \JsonRpc2\Controller
   protected $noAuthActions = [];
 
   //-------------------------------------------------------------
-  // Authentication
+  // Overridden methods
   //-------------------------------------------------------------
   
 
@@ -109,6 +109,26 @@ class AppController extends \JsonRpc2\Controller
   //     ]
   //   ];
   // }
+  
+  /**
+   * Overridden to catch User exception
+   * @inheritDoc
+   */
+  protected function _runAction($method)
+  {
+    try{
+      return parent::_runAction($method);
+    } catch ( \lib\exceptions\UserErrorException $e ){
+      Yii::info("User Error: " . $e->getMessage());
+      \lib\dialog\Error::create($e->getMessage());
+      return null;            
+    }
+  }
+
+  //-------------------------------------------------------------
+  // Added methods
+  //-------------------------------------------------------------
+  
 
   /**
    * Shorthand getter for active user object
@@ -297,7 +317,7 @@ class AppController extends \JsonRpc2\Controller
     }
     if( ! in_array($datasource, $myDatasources) ){
       // @todo: temporary disabled
-      //throw new \InvalidArgumentException("Invalid or unauthorized datasource '$datasource'");
+      throw new \lib\exceptions\UserErrorException("Invalid or unauthorized datasource '$datasource'");
     }
   }
 

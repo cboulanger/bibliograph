@@ -45,7 +45,8 @@ class TestController extends AppController
 
   public function actionTest()
   {
-    \lib\dialog\Alert::create("It works!","test","test2",["it really does."]);
+    throw new \lib\exceptions\UserErrorException("This is a user error");
+    //\lib\dialog\Alert::create("It works!","test","test2",["it really does."]);
   }
 
   public function actionTest2($result, $message )

@@ -4,6 +4,8 @@
 declare -a arr=(
   "qooxdoo/qooxdoo" 
   "qooxdoo/qooxdoo-compiler"
+  "cboulanger/yii2-json-rpc-2.0"
+  "cboulanger/raptor-client"
 )
 for repo in "${arr[@]}"
 do
@@ -30,4 +32,9 @@ done
 # link qooxdoo-compiler development version
 cd qooxdoo-compiler
 npm link
+cd ..
+
+# use specific branches
+cd yii2-json-rpc-2.0
+git checkout cboulanger-empty-request-object
 cd ..
