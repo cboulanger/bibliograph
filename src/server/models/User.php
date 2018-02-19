@@ -414,7 +414,7 @@ class User extends BaseModel implements IdentityInterface
    * @return string[]
    *    Array of datasource names
    */
-  public function getDatasourceNames()
+  public function getAccessibleDatasourceNames()
   {
     $datasourceNames = [];
     $myDatasources = $this->getDatasources()->all();
@@ -423,8 +423,6 @@ class User extends BaseModel implements IdentityInterface
         $datasourceNames[] = $o->namedId;
       }
     }
-    Yii::trace( "User datasources:" );
-    Yii::trace( $datasourceNames );
     $groups = $this->getGroups()->all();
     if( is_array($groups) ) {
       foreach( $groups as $group){
@@ -435,16 +433,12 @@ class User extends BaseModel implements IdentityInterface
         }
       }
     }
-    Yii::trace( "Plus group datasources:" );
-    Yii::trace( $datasourceNames );    
     $roles = $this->getRoles()->all();
     if( is_array($roles) ) {
       foreach( $roles as $role){
         $datasourceNames = array_merge( $datasourceNames, $role->getDatasourceNames());
       }
-    }    
-    Yii::trace( "Plus role datasources:" );
-    Yii::trace( $datasourceNames );        
+    }     
     return array_unique($datasourceNames);
   }  
 

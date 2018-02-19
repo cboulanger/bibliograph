@@ -81,8 +81,8 @@ class CitationController extends AppController
   public function actionRenderFolder( $datasource, $folderId, $style )
   {
     not_implemented();
-    $folderModel = static :: getModel( $datasource, "folder" );
-    $referenceModel = static :: getModel( $datasource, "reference" );
+    $folderModel = $this->getModelClass( $datasource, "folder" );
+    $referenceModel = $this->getModelClass( $datasource, "reference" );
 
     // search folder
     if ( $folderModel->searchFolder ) {
@@ -172,7 +172,7 @@ class CitationController extends AppController
     $data = array();
     $counter = 0;
 
-    $references = static :: getModel( $datasource, "reference" ) :: findAll( $ids );
+    $references = $this->getModelClass( $datasource, "reference" ) :: findAll( $ids );
     foreach( $references as $reference )
     {
       $csl = $bibtexSchema->toCslRecord( $reference->getAttributes() );

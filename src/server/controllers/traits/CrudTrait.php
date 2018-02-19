@@ -46,7 +46,7 @@ trait CrudTrait
     /*
    * check access to model and get model
      */
-    $model = $this->getModel( $datasource, $modelType );
+    $model = $this->getModelClass( $datasource, $modelType );
 
     /*
    * specifically check authorization to create a record
@@ -75,7 +75,7 @@ trait CrudTrait
     /*
    * check access to model and get model
      */
-    $model = $this->getModel( $datasource, $modelType );
+    $model = $this->getModelClass( $datasource, $modelType );
 
     /*
    * specifically check authorization to create a record
@@ -108,7 +108,7 @@ trait CrudTrait
     /*
    * check access to model and get model
      */
-    $model = $this->getModel( $datasource, $modelType );
+    $model = $this->getModelClass( $datasource, $modelType );
 
     /*
    * specifically check authorization to create a record
@@ -152,7 +152,7 @@ trait CrudTrait
     /*
    * check access to model and get it
      */
-    $model = $this->getModel( $datasource, $modelType );
+    $model = $this->getModelClass( $datasource, $modelType );
 
     /*
    * check read access to properties
@@ -237,7 +237,7 @@ trait CrudTrait
   public function actionFetchValues($datasource, $modelType, $property, $where)
   {
     not_implemented();
-    $model = $this->getModel( $datasource, $modelType );
+    $model = $this->getModelClass( $datasource, $modelType );
     $model->findWhere( object2array( $where ) );
     $result = array();
     if ($this->hasRecordAcl()) {
@@ -268,7 +268,7 @@ trait CrudTrait
     /*
    * get model and check whether the id is numeric or a string
      */
-    $model = $this->getModel( $datasource, $modelType );
+    $model = $this->getModelClass( $datasource, $modelType );
 
     /*
    * Check property
@@ -306,7 +306,7 @@ trait CrudTrait
     /*
    * get model and check whether the id is numeric or a string
      */
-    $model = $this->getModel( $datasource, $modelType );
+    $model = $this->getModelClass( $datasource, $modelType );
 
     /*
    * Check property

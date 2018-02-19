@@ -303,22 +303,36 @@ class AppController extends \JsonRpc2\Controller
   //-------------------------------------------------------------
 
   /**
-   * Checks if user has access to the given datasource. If not,
-   * throws JsonRpcException.
+   * Returns the datasource instance which has the given named id.
+   * By default, checks the current user's access to the datasource.
    * @param string $datasource
-   * @return void
-   * @throws Exception
+   *    The named id of the datasource
+   * @param bool $checkAccess 
+   *    Optional. Whether to check the current user's access to the datasource
+   *    Defaults to true
+   * @return \app\models\Datasource
+   * @throws \lib\exceptions\UserErrorException
    */
-  public function checkDatasourceAccess($datasource)
+  public function datasource($datasource, $checkAccess=true)
   {
-    static $myDatasources = null;
-    if ( is_null( $myDatasources ) ){
-      $myDatasources = $this->getActiveUser()->getDatasourceNames();
+    $myDatasources = $this->getActiveUser()->getAccessibleDatasourceNames();
+    try {
+      $instance = Datasource :: getInstanceFor( $datasource );
+    } catch( \InvalidArgumentException $e ){
+      throw new \lib\exceptions\UserErrorException( 
+        Yii::t('app', "Datasource '{datasource}' does not exist",[
+          'datasource' => $datasource
+        ])
+      );
     }
-    if( ! in_array($datasource, $myDatasources) ){
-      // @todo: temporary disabled
-      throw new \lib\exceptions\UserErrorException("Invalid or unauthorized datasource '$datasource'");
-    }
+    if( $checkAccess and ! in_array($datasource, $myDatasources) ){
+      throw new \lib\exceptions\UserErrorException( 
+        Yii::t('app', "You do not have access to datasource '{datasource}'",[
+          'datasource' => $datasource
+        ])
+      );
+    }  
+    return $instance;  
   }
 
   /**
@@ -327,12 +341,9 @@ class AppController extends \JsonRpc2\Controller
    * @param string $modelType
    * @return string
    */
-  static public function getModel( $datasource, $modelType )
+  public function getModelClass( $datasource, $modelType )
   {
-    return  
-      Datasource
-        :: getInstanceFor( $datasource )
-        -> getClassFor( $modelType );
+    return $this->datasource($datasource)->getClassFor( $modelType );
   }
 
   /**
@@ -340,9 +351,9 @@ class AppController extends \JsonRpc2\Controller
    * @param string $datasource
    * @return string
    */
-  static public function getControlledModel( $datasource )
+  public function getControlledModel( $datasource )
   {
-    return static :: getModel( $datasource, static :: $modelType );
+    return $this->getModelClass( $datasource, static :: $modelType );
   }
 
   /**
@@ -352,9 +363,9 @@ class AppController extends \JsonRpc2\Controller
    * @param int $id
    * @return \yii\db\ActiveRecord
    */
-  static public function getRecordById($datasource, $id)
+  public function getRecordById($datasource, $id)
   {
-    $model = static :: getControlledModel($datasource) :: findOne($id);
+    $model = $this->getControlledModel($datasource) :: findOne($id);
     if( is_null( $model) ){
       throw new \InvalidArgumentException("Model of type " . static::$modelType . " and id #$id does not exist in datasource '$datasource'.");
     }

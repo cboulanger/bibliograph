@@ -68,7 +68,7 @@ class qcl_data_controller_TableController
     qcl_assert_valid_string( $datasource, "Invalid datasource argument" );
     qcl_assert_valid_string( $modelType, "Invalid model type argument" );
 
-    $model = $this->getModel( $datasource, $modelType );
+    $model = $this->getModelClass( $datasource, $modelType );
 
     if ( ! $datasource or ! $modelType )
     {
@@ -139,7 +139,7 @@ class qcl_data_controller_TableController
     qcl_assert_integer( $firstRow, "Invalid firstRow argument");
     qcl_assert_integer( $lastRow, "Invalid lastRow argument");
 
-    $model = $this->getModel( $datasource, $modelType );
+    $model = $this->getModelClass( $datasource, $modelType );
 
     /*
      * query

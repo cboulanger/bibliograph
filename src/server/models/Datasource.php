@@ -204,7 +204,8 @@ class Datasource extends BaseModel
    * datasource.
    *
    * @param string $datasourceName  
-   * @return string
+   * @return \app\models\Datasource
+   * @throws \InvalidArgumentException
    * @todo add and use 'class' column instead of 'schema'
    */
   public static function getInstanceFor( $datasourceName )

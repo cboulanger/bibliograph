@@ -51,7 +51,7 @@ class DatasourceController extends AppController
    */
   public function actionLoad(){
     $activeUser = $this->getActiveUser();
-    $datasourceNames = $activeUser->getDatasourceNames();
+    $datasourceNames = $activeUser->getAccessibleDatasourceNames();
     $availableDatasources = [];
     foreach ($datasourceNames as $datasourceName ) {
       $datasource = Datasource::findByNamedId( $datasourceName );

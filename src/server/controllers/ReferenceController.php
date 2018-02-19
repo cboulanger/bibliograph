@@ -117,8 +117,8 @@ class ReferenceController extends AppController
     }
     
     // cql
-    if ( isset ( $query->cql ) ){
-      throw new \Exception("CQL query not implememted");
+    if ( false /* not implemented */ ){ // isset ( $query->cql ) ){
+      
       $cql = new \lib\schema\CQL;
       try {
         $q = $cql->addQueryConditions( $query, $activeQuery, $modelClass );
@@ -139,7 +139,7 @@ class ReferenceController extends AppController
    */
   public function getReferenceTypeListData( $datasource )
   {
-    $schema = static::getControlledModel( $datasource )::getSchema();
+    $schema = $this->getControlledModel( $datasource )::getSchema();
     $reftypes  = $schema->types();
     $options = array();
     foreach ( $reftypes as $reftype )
@@ -232,7 +232,7 @@ class ReferenceController extends AppController
    */
   public function actionRowCount( $queryData )
   {
-    $model = static :: getModel( $queryData->datasource, $queryData->modelType );
+    $model = $this->getModelClass( $queryData->datasource, $queryData->modelType );
     $model :: setDatasource( $queryData->datasource );
     $query = $model :: find();
 
@@ -264,7 +264,7 @@ class ReferenceController extends AppController
    */
   function actionRowData( $firstRow, $lastRow, $requestId, $queryData )
   {
-    $model = static :: getModel( $queryData->datasource, $queryData->modelType );
+    $model = $this->getModelClass( $queryData->datasource, $queryData->modelType );
     $query = $model :: find()
       -> orderBy( $queryData->query->orderBy )
       -> offset( $firstRow )
@@ -291,7 +291,7 @@ class ReferenceController extends AppController
    */
   function actionFormLayout( $datasource, $reftype )
   {
-    $modelClass  = static::getControlledModel( $datasource );
+    $modelClass  = $this->getControlledModel( $datasource );
     $schema = $modelClass::getSchema();
 
     // get fields to display in the form
@@ -354,7 +354,7 @@ class ReferenceController extends AppController
    */
   public function actionReferenceTypeList( $datasource )
   {
-    $modelClass  = static::getControlledModel( $datasource );
+    $modelClass  = $this->getControlledModel( $datasource );
     $schema = $modelClass::getSchema();
     $result = array();
     foreach( $schema->types() as $type )
@@ -409,7 +409,7 @@ class ReferenceController extends AppController
     }
 
     // load model record and get reference type
-    $record = static::getControlledModel( $datasource )::findOne($id);
+    $record = $this->getControlledModel( $datasource )::findOne($id);
     $reftype  = $record->reftype;
     $schema   = $record->schema;
 
@@ -477,7 +477,7 @@ class ReferenceController extends AppController
    */
   public function actionAutocomplete( $datasource, $field, $input )
   {
-    $modelClass = static::getControlledModel( $datasource );
+    $modelClass = $this->getControlledModel( $datasource );
     $fieldData = $modelClass::getSchema()->getFieldData( $field );
     $separator = $fieldData['separator'];
     $suggestionValues = $modelClass :: select($field)
@@ -526,7 +526,7 @@ class ReferenceController extends AppController
   {
     // transform data into array
     $data = json_decode(json_encode($data), true);
-    $modelClass = static::getControlledModel( $datasource );    
+    $modelClass = $this->getControlledModel( $datasource );    
 
     // save user-supplied data
     foreach( $data as $property => $value )
@@ -549,7 +549,7 @@ class ReferenceController extends AppController
     }
 
     // add metadata
-    $modelClass = static::getControlledModel( $datasource );
+    $modelClass = $this->getControlledModel( $datasource );
     $record = $modelClass::findOne( $referenceId );
 
     // modified by
@@ -618,7 +618,7 @@ class ReferenceController extends AppController
   public function actionCreate( $datasource, $folderId, $reftype )
   {
     $this->requirePermission( "reference.add" ); 
-    $modelClass = static::getControlledModel( $datasource );
+    $modelClass = $this->getControlledModel( $datasource );
     $reference = new $modelClass( [
       'reftype'     => $reftype,
       'createdBy'   => $this->getActiveUser()->getUsername()
@@ -698,7 +698,7 @@ class ReferenceController extends AppController
     }
 
     $this->requirePermission("reference.remove");
-    $referenceModel = static::getControlledModel( $datasource );
+    $referenceModel = $this->getControlledModel( $datasource );
     $folderModel    = static::getFolderModel( $datasource );
 
     //$this->debug( array($datasource, $folderId, $ids) );
@@ -810,7 +810,7 @@ class ReferenceController extends AppController
   {
     $this->requirePermission("reference.batchedit");
     
-    $referenceModel = static::getControlledModel( $datasource );
+    $referenceModel = $this->getControlledModel( $datasource );
     $folderModel    = static::getFolderModel( $datasource );
     $folder         = $folderModel :: findOne($folderId);
     $references     = $folder -> getReferences() -> all();
@@ -906,7 +906,7 @@ class ReferenceController extends AppController
   ) {
     foreach( $references as $reference ) {
       if (is_numeric($reference) ) {
-        $reference = static :: getControlledModel() -> findOne($reference);
+        $reference = $this->getControlledModel() -> findOne($reference);
       }
       if( ! ( $reference instanceof \app\models\Reference ) ){
         Yii::warning("Skipping invalid reference '$reference'");
@@ -986,7 +986,7 @@ class ReferenceController extends AppController
   ) {
     foreach( $references as $reference ) {
       if (is_numeric($reference) ) {
-        $reference = static :: getControlledModel() -> findOne($reference);
+        $reference = $this->getControlledModel() -> findOne($reference);
       }
       if( ! ( $reference instanceof \app\models\Reference ) ){
         Yii::warning("Skipping invalid reference '$reference'");
@@ -1006,7 +1006,7 @@ class ReferenceController extends AppController
    */
   public function actionTableHtml( $datasource, $referenceId )
   {
-    $referenceModel = static :: getControlledModel( $datasource );
+    $referenceModel = $this->getControlledModel( $datasource );
     $reference = $referenceModel :: findOne( $referenceId );
     Validate :: isNotNull( $reference, "Reference #$referenceId does not exist.");
     
@@ -1047,7 +1047,7 @@ class ReferenceController extends AppController
    */
   public function actionItemHtml( $datasource, $id )
   {
-    $modelClass = static::getControlledModel( $datasource );
+    $modelClass = $this->getControlledModel( $datasource );
     $schema     = $modelClass::getSchema();
     $reference  = $modelClass::findOne( $id );
     $reftype    = $reference->reftype;
@@ -1095,7 +1095,7 @@ class ReferenceController extends AppController
    */
   public function actionContainers( $datasource, $referenceId )
   {
-    $reference = static :: getRecordById( $datasource, $referenceId );
+    $reference = $this->getRecordById( $datasource, $referenceId );
     $folders = $reference -> getFolders() -> all();
     $data = array();
     foreach( $folders as $folder ){
@@ -1120,7 +1120,7 @@ class ReferenceController extends AppController
     // @todo
     return [];
 
-    $reference = static :: getRecordById( $referenceId );
+    $reference = $this->getRecordById( $referenceId );
     $threshold = Yii::$app->config->getPreference("bibliograph.duplicates.threshold");
     $scores = $reference->findPotentialDuplicates($threshold);
     $data = array();

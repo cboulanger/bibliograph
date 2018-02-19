@@ -41,7 +41,7 @@ class bibliograph_service_reference_FindReplace
     /*
      * prepare field list
      */
-    $schemaModel = static::getControlledModel( $datasource )::getSchema();
+    $schemaModel = $this->getControlledModel( $datasource )::getSchema();
     $fields = $schemaModel->fields();
     $fieldOptions = array();
 //    $fieldOptions[] = array( 'value' => "all", 'label' => Yii::t('app', "All fields") ); // not implemented yet
@@ -124,7 +124,7 @@ class bibliograph_service_reference_FindReplace
       'selected'  => Yii::t('app', "in the selected records"),
       'folder'    => Yii::t('app', "in the selected folder")
     );
-    $schemaModel = static::getControlledModel( $datasource )::getSchema();
+    $schemaModel = $this->getControlledModel( $datasource )::getSchema();
 
     $args =  func_get_args();
     return \lib\dialog\Confirm::create(
@@ -158,7 +158,7 @@ class bibliograph_service_reference_FindReplace
       $zipfile = $backupService->createBackup( $datasource, null, $comment );
     }
 
-    $model = static::getControlledModel($datasource);
+    $model = $this->getControlledModel($datasource);
 
     /*
      * action!

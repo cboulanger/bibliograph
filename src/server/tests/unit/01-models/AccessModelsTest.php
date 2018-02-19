@@ -100,7 +100,7 @@ class AccessModelsTest extends Base
   public function testUserDatasources()
   {
     $user = User::findOne(['name'=>"Sarah Manning"]);
-    $result = $user->getDatasourceNames();
+    $result = $user->getAccessibleDatasourceNames();
     $this->assertEquals( 0, count( array_diff( $result, ['database2','setup','database3'] )));
   } 
 }

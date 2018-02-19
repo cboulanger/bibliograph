@@ -41,7 +41,7 @@ class bibliograph_service_reference_Indexes
     /*
      * prepare field list
      */
-    $schemaModel = static::getControlledModel( $datasource )::getSchema();
+    $schemaModel = $this->getControlledModel( $datasource )::getSchema();
     $fields = $schemaModel->fields();
     $fieldOptions = array();
 
@@ -115,7 +115,7 @@ class bibliograph_service_reference_Indexes
       return "ABORTED";
     }
 
-    $schemaModel = static::getControlledModel( $datasource )::getSchema();
+    $schemaModel = $this->getControlledModel( $datasource )::getSchema();
 
     return \lib\dialog\Form::create(
       $message,
@@ -145,7 +145,7 @@ class bibliograph_service_reference_Indexes
       $zipfile = $backupService->createBackup( $datasource, null, $comment );
     }
 
-    $model = static::getControlledModel($datasource);
+    $model = $this->getControlledModel($datasource);
 
     // action!
    

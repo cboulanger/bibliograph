@@ -36,4 +36,11 @@ return [
         'DatasourceId' => 3,
         'RoleId' => 1,
     ],
+    [
+      'id' => 6,
+      'created' => '2017-12-20 14:56:48',
+      'modified' => '2017-12-20 14:56:48',
+      'DatasourceId' => 1,
+      'RoleId' => 2,
+  ],    
 ];

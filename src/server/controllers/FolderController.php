@@ -58,21 +58,19 @@ class FolderController extends AppController //implements ITreeController
     "favorites"       => "icon/16/actions/help-about.png"
   );
 
-
-
   /**
    * Return the data of a node of the tree as expected by the qooxdoo tree data model
    * @param string $datasource Datasource name
    * @param \app\models\Folder|int $folder
    * @return array
    */
-  static function getNodeData( $datasource, $folder )
+  public function getNodeData( $datasource, $folder )
   {
     // Accept both a folder model and a numeric id
     if ( ! ($folder instanceof Folder ) ){
       assert( \is_numeric( $folder) );
       $folderId = $folder;
-      $folder = static::getControlledModel($datasource)::findOne($folder);
+      $folder = $this->getControlledModel($datasource)::findOne($folder);
       if( ! $folder ){
         throw new \InvalidArgumentException("Folder #$folderId does not exist.");
       }
@@ -180,7 +178,7 @@ class FolderController extends AppController //implements ITreeController
   static function addInitialFolders($datasource)
   {
     // top folder
-    $class = static::getControlledModel($datasource);
+    $class = $this->getControlledModel($datasource);
     $top = new $class([
       "label"       => Yii::t("app","Default Folder"),
       "parentId"    => 0,
@@ -257,12 +255,11 @@ class FolderController extends AppController //implements ITreeController
   function actionLoad( $datasource,  $options=null )
   {
     try{
-      $modelClass = static::getControlledModel($datasource);
+      $modelClass = $this->getControlledModel($datasource);
     } catch( \InvalidArgumentException $e ){
-      \lib\dialog\Error::create( Yii::t('app',"Database {datasource} does not exist.",[
+      throw new \lib\exceptions\UserErrorException( Yii::t('app',"Database {datasource} does not exist.",[
         'datasource' => $datasource
       ]));
-      return "Invalid datasource $datasource";
     }
     $query = $modelClass::find()->select("id");
     if( $this->getActiveUser()->isAnonymous() ){
@@ -332,7 +329,7 @@ class FolderController extends AppController //implements ITreeController
   public function actionVisibilityDialog( $datasource, $folderId )
   {
     $this->requirePermission("folder.edit");
-    $folder = static :: getRecordById( $datasource, $folderId );
+    $folder = $this->getRecordById( $datasource, $folderId );
     return \lib\dialog\Form::create(
       Yii::t('app', "Change the visibility of the folder"),
       array(
@@ -374,7 +371,7 @@ class FolderController extends AppController //implements ITreeController
     $this->requirePermission("folder.edit");
     $data = json_decode(json_encode($data), true); // convert to array
 
-    $folderModel = static :: getControlledModel( $datasource );
+    $folderModel = $this->getControlledModel( $datasource );
     $ids = [$folderId];
     do
     {
@@ -437,7 +434,7 @@ class FolderController extends AppController //implements ITreeController
   {
     if ( $data === null or $data->label =="" ) return "ABORTED";
     $this->requirePermission("folder.add");
-    $folderModel = static :: getControlledModel( $datasource );
+    $folderModel = $this->getControlledModel( $datasource );
     $folder = new $folderModel([
       'parentId'      => $parentFolderId,
       'label'         => $data->label,
@@ -456,7 +453,7 @@ class FolderController extends AppController //implements ITreeController
   public function actionRemoveDialog( $datasource, $folderId )
   {
     $this->requirePermission("folder.remove");
-    $folder = static :: getRecordById( $datasource, $folderId );
+    $folder = $this->getRecordById( $datasource, $folderId );
     // root folder?
     if( $model->parentId == 0 ) {
       throw new \Exception(Yii::t('app', "Top folders cannot be deleted."));
@@ -484,7 +481,7 @@ class FolderController extends AppController //implements ITreeController
     if ( ! $data ) return "ABORTED";
     $this->requirePermission("folder.remove");
     
-    $folder = static :: getRecordById( $datasource, $folderId );
+    $folder = $this->getRecordById( $datasource, $folderId );
     if( $folder->parentId == 0 ) {
       throw new \Exception(Yii::t('app', "Top folders cannot be deleted."));
     }
@@ -566,7 +563,7 @@ class FolderController extends AppController //implements ITreeController
     $this->requirePermission("folder.move");
     $id = $parentId;
     do {
-      $folder = static :: getRecordById( $datasource, $id );
+      $folder = $this->getRecordById( $datasource, $id );
       if( $folder->id == $folderId )
       {
         throw new \Exception(Yii::t('app', "Parent node cannot be moved on a child node"));
@@ -576,7 +573,7 @@ class FolderController extends AppController //implements ITreeController
     while ( $id !== 0 );
 
     // change folder parent
-    $folder = static :: getRecordById( $datasource, $folderId );
+    $folder = $this->getRecordById( $datasource, $folderId );
 
     // root folder?
     if( $folder->parentId == 0 ) {
@@ -604,7 +601,7 @@ class FolderController extends AppController //implements ITreeController
   public function actionPositionChange( $datasource, $folderId, $position )
   {
     $this->requirePermission("folder.move");
-    $folder = static :: getRecordById( $datasource, $folderId );
+    $folder = $this->getRecordById( $datasource, $folderId );
     $folder->changePosition( $position );
     // notify clients
     $this->broadcastClientMessage(

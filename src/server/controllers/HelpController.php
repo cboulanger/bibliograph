@@ -44,7 +44,7 @@ class HelpController extends AppController
     $html .= " ". Yii::t('app', "You can click on any of the terms below to insert them into the query field.");
     $html .= "</p>";
 
-    $modelClass = static::getControlledModel( $datasource );
+    $modelClass = $this->getControlledModel( $datasource );
     $schema = $modelClass::getSchema();
 
     /*

@@ -6,7 +6,7 @@
 - [x] Re-implement setup
 - [x] Re-implement LDAP support
 - [x] Update docs to allow test installation at Humboldt-University
-- [x] Re-implement datasource restrictions
+- [x] Re-implement datasource restrictions and access check
 - [ ] Add distribution mechanism
 - [x] Re-implement user error handling: New user error without stack trace, alert to user and log it
 - [ ] Re-implement cql search
