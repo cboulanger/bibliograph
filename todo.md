@@ -7,14 +7,14 @@
 - [x] Re-implement LDAP support
 - [x] Update docs to allow test installation at Humboldt-University
 - [x] Re-implement datasource restrictions and access check
-- [ ] Add distribution mechanism
 - [x] Re-implement user error handling: New user error without stack trace, alert to user and log it
+- [ ] Re-implement ACL Tool
 - [ ] Re-implement cql search
 - [ ] Re-implement Remove/Move/Copy references
 - [ ] Re-implement Add/Remove/Move/Copy folders
-- [ ] Re-implement ACL Tool
 - [ ] Re-implement Export
 - [ ] Tests: Make Travis ~~great~~ work again
+- [ ] Add distribution mechanism
 
 ## v3.0.0-beta
 

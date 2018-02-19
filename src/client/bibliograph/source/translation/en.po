@@ -158,43 +158,43 @@ msgstr ""
 msgid "Export to filesystem"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:137
+#: bibliograph.ui.window.AccessControlTool:138
 msgid "Exit"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:461
+#: bibliograph.ui.window.AccessControlTool:438
 msgid "Please enter the id of the new '%1'-Object"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:278
+#: bibliograph.ui.window.AccessControlTool:269
 msgid "Do you really want to delete '%1'?"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:516
+#: bibliograph.ui.window.AccessControlTool:485
 msgid "Loading data ..."
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:327
+#: bibliograph.ui.window.AccessControlTool:318
 msgid "Please wait..."
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:340
+#: bibliograph.ui.window.AccessControlTool:331
 msgid "Edited element"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:380
+#: bibliograph.ui.window.AccessControlTool:369
 msgid "Link"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:398
+#: bibliograph.ui.window.AccessControlTool:385
 msgid "Unlink"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:423
+#: bibliograph.ui.window.AccessControlTool:408
 msgid "Linkable items"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:491
+#: bibliograph.ui.window.AccessControlTool:464
 msgid "Do you really want to delete the objects '%1'?"
 msgstr ""
 

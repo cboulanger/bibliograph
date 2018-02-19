@@ -18,20 +18,20 @@
 
 ************************************************************************ */
 
+namespace app\controllers;
 
+use Yii;
 
-
-
-
-
-
+use app\models\User;
+use app\models\Role;
+use app\models\Group;
+use app\models\Datasource;
+use \lib\exceptions\UserErrorException;
 
 /**
  * Backend service class for the access control tool widget
- * @todo move back to qcl
  */
-class bibliograph_service_ACLTool
-  extends qcl_data_controller_Controller
+class AccessConfigController extends \app\Controllers\AppController
 {
 
   /*
@@ -43,42 +43,41 @@ class bibliograph_service_ACLTool
   /**
    * Returns a map of data on the models that are used for the various xxxElement
    * methods
-   * @todo Use 'access' datasource!
    * @return array
    */
-  protected function modelMap()
+  public function getModelData()
   {
     return  array(
       'user'        => array(
-        'model'       => $this->getAccessController()->getUserModel(),
+        'class'       => \app\models\User::class,
         'label'       => Yii::t('app',"Users"),
         'dialogLabel' => Yii::t('app',"User"),
         'labelProp'   => "name",
         'icon'        => "icon/16/apps/preferences-users.png"
       ),
       'role'        => array(
-        'model'       => $this->getAccessController()->getRoleModel(),
+        'class'       => \app\models\Role::class,
         'label'       => Yii::t('app',"Roles"),
         'dialogLabel' => Yii::t('app',"Role"),
         'labelProp'   => "name",
         'icon'        => "icon/16/apps/internet-feed-reader.png"
       ),
       'group'        => array(
-        'model'       => $this->getAccessController()->getGroupModel(),
+        'class'       => \app\models\Group::class,
         'label'       => Yii::t('app',"Groups"),
         'dialogLabel' => Yii::t('app',"Group"),
         'labelProp'   => "name",
         'icon'        => "icon/16/actions/address-book-new.png"
       ),
       'permission'  => array(
-        'model'       => $this->getAccessController()->getPermissionModel(),
+        'class'       => \app\models\Permission::class,
         'label'       => Yii::t('app',"Permissions"),
         'dialogLabel' => Yii::t('app',"Permission"),
         'labelProp'   => "namedId",
         'icon'        => "icon/16/apps/preferences-security.png"
       ),
       'datasource'  => array(
-        'model'       => $this->getDatasourceModel(),
+        'class'       => \app\models\Datasource::class,
         'label'       => Yii::t('app',"Datasources"),
         'dialogLabel' => Yii::t('app',"Datasource"),
         'labelProp'   => "title",
@@ -88,131 +87,126 @@ class bibliograph_service_ACLTool
   }
 
   /**
+   * Return data from the model map pertaining to the model type
+   *
+   * @param string $ype
+   * @return array
+   * @throws \InvalidArgumentsException
+   */
+  protected function elementData( $ype ){
+    if ( ! isset( $this->modelData[ $type ] ) ) {
+      throw new \InvalidArgumentsException("Invalid model type '$type'");
+    }
+    return $this->modelData[$type];
+  }
+
+  /**
    * Retuns ListItem data for the types of access models
    *
    * @return array
    */
-  public function method_getAccessElementTypes()
+  public function actionTypes()
   {
-    $this->requirePermission("access.manage");
-    $models = $this->modelMap();
+    $modelData = $this->modelData;
     return array(
       array(
-        'icon'    => $models['user']['icon'],
+        'icon'    => $modelData['user']['icon'],
         'label'   => Yii::t('app',"Users"),
-        'value'   => $this->marktr("user")
+        'value'   => "user"
       ),
       array(
-        'icon'    => $models['role']['icon'],
+        'icon'    => $modelData['role']['icon'],
         'label'   => Yii::t('app',"Roles"),
-        'value'   => $this->marktr("role")
+        'value'   => "role"
       ),
       array(
-        'icon'    => $models['group']['icon'],
+        'icon'    => $modelData['group']['icon'],
         'label'   => Yii::t('app',"Groups"),
-        'value'   => $this->marktr("group")
+        'value'   => "group"
       ),
       array(
-        'icon'    => $models['permission']['icon'],
+        'icon'    => $modelData['permission']['icon'],
         'label'   => Yii::t('app',"Permissions"),
-        'value'   => $this->marktr("permission")
+        'value'   => "permission"
       ),
       array(
-        'icon'    => $models['datasource']['icon'],
+        'icon'    => $modelData['datasource']['icon'],
         'label'   => Yii::t('app',"Datasources"),
-        'value'   => $this->marktr("datasource")
+        'value'   => "datasource"
       ),
     );
   }
 
   /**
+   * Action acl-tool/elements
    * Return ListItem data for access models
    *
-   * @param $type
-   * @throws JsonRpcException
+   * @param string $type
+   *    The type of the element
+   * @param array|null $filter 
+   *    An associative array that can be used in a ActiveQuery::where() method call
+   * @throws \lib\exceptions\UserErrorException
    * @return array
    */
-  public function method_getAccessElements( $type )
+  public function actionElements( $type, array $filter=null )
   {
     $this->requirePermission("access.manage");
-    $activeUser   = $this->getActiveUser();
-    $isAdmin      = $activeUser->hasRole( QCL_ROLE_ADMIN );
-
+    if( ! isset($this->elementTypes[$type]) ){
+      throw new UserErrorException("Invalid element type");
+    }
+    $activeUser = $this->getActiveUser();
+    $isAdmin = $activeUser->hasRole( "admin" );
+    // query
+    $modelClass = $this->elementTypes[$type]['class'];
+    $labelProp = "name";
     switch ( $type )
     {
       case "user":
-        $model = $this->getAccessController()->getUserModel();
-        $labelProp = "name";
-        $model->findWhere( array( 'anonymous' => false ),"name" );
+        $query = $modelClass::find()->where( [ 'anonymous' => false ] );
         break;
       case "role":
-        $model = $this->getAccessController()->getRoleModel();
-        $labelProp = "name";
-        $model->findAllOrderBy( $labelProp );
+        $query = $modelClass::find();
         break;
       case "group":
-        $model = $this->getAccessController()->getGroupModel();
-        $labelProp = "name";
-        $model->findAllOrderBy( $labelProp );
+        $query = $modelClass::find();
         break;
       case "permission":
-        $model = $this->getAccessController()->getPermissionModel();
         $labelProp = "namedId";
-        $model->findAllOrderBy( $labelProp );
+        $query = $modelClass::find();
         break;
       case "datasource":
-        $model = $this->getDatasourceModel();
         $labelProp = "title";
-        $model->findAllOrderBy( $labelProp );
+        $query = $modelClass::find();
         break;
       default:
-        throw new JsonRpcException("Invalid type $type");
+        throw new UserErrorException("Invalid type $type");
     }
-
-    $result = array();
-    $models = $this->modelMap();
-    while( $model->loadNext() )
-    {
-      $value  = $model->namedId();
-
-//      /*
-//       * don't show hidden records
-//       */
-//      if( $model->has("hidden" ) )
-//      {
-//        if( $model->get("hidden") )
-//        {
-//          continue;
-//        }
-//      }
-
-      $icon   = $models[$type]['icon'];
-      $label  = $model->get($labelProp);
-
-      if ( $model->hasProperty("hidden") and $model->isHidden() and ! $isAdmin )
-      {
-        continue;
+    if( $filter ){
+      try {
+        $query = $query->where( $filter );
+      } catch( \Exception $e ) {
+        throw new UserErrorException("Invalid filter");
       }
-
-      if ( ! trim($label ) )
-      {
-        $label = $value;
-      }
-
-      if ( $model->hasProperty("ldap") and $model->getLdap() )
-      {
-        $label .= " (LDAP)";
-      }
-
-      if ( $type == "permission" )
-      {
-        $description = $model->getDescription();
-        if ( $description )
-        {
+    }
+    $records = $query->all();
+    $elementData = $this->elementData($type);
+    // create result from record data
+    $result = [];
+    foreach( $records as $record ){
+      $value  = $record->namedId;
+      $icon   = $elementData['icon'];
+      $label  = $elementData[$labelProp];
+      // special cases
+      if ( $record->hasAttribute("hidden") and $record->hidden and ! $isAdmin ) continue;
+      if ( ! trim($label ) ) $label = $value;
+      if ( $record->hasAttribute("ldap") and $record->ldap ) $label .= " (LDAP)";
+      if ( $type == "permission" ) {
+        $description = $model->description;
+        if ( $description ) {
           $label .= sprintf( " (%s)", $description );
         }
       }
-
+      // entry
       $result[] = array(
         'icon'      => $icon,
         'label'     => $label,
@@ -221,219 +215,132 @@ class bibliograph_service_ACLTool
         'value'     => $value
       );
     }
-
     return $result;
-  }
-
-  /**
-   * Returns the model of a given element type
-   * @param string $type
-   * @throws JsonRpcException
-   * @return qcl_data_model_AbstractActiveRecord
-   */
-  protected function getElementModel( $type )
-  {
-    $models = $this->modelMap();
-    if ( isset( $models[$type] ) )
-    {
-      return $models[$type]['model'];
-    }
-    throw new JsonRpcException( "Invalid type '$type'" );
   }
 
   /**
    * Returns the tree of model relationships based on the selected element
    * @param $elementType
    * @param $namedId
-   * @throws JsonRpcException
+   * @throws \lib\exceptions\UserErrorException
    * @return array
    */
-  public function method_getAccessElementTree( $elementType, $namedId )
+  public function actionTree( $elementType, $namedId )
   {
     $this->requirePermission("access.manage");
-
-    $models = $this->modelMap();
-
-    /*
-     * top node
-     */
-    $tree = array(
+    $modelData = $this->modelData;
+    //
+    $tree = [
       'icon'      => "icon/16/apps/utilities-network-manager.png",
-      'children'  => array(),
       'label'     => Yii::t('app',"Relations"),
       'value'     => null,
-      'type'      => null
-    );
+      'type'      => null,
+      'children'  => [],      
+    ];
 
-    /*
-     * the edited model element
-     */
-    $thisModel = $this->getElementModel( $elementType );
-    if( ! $thisModel )
-    {
-      throw new JsonRpcException("Invalid type argument $elementType");
+    // the edited model element
+    $modelClass = $this->elementData($elementType)['class'];
+    $model = $modelClass::findOneByNamedId($namedId);
+    if( ! $model ){
+      throw new UserErrorException("Model of '$type' with id '$namedId' does not exist.");
     }
-    $thisModel->load( $namedId );
 
-    /*
-     * iterate through the models and display relations as
-     * tree structure
-     */
-    foreach( $models as $type => $data )
-    {
+    // iterate through the rec and display relations as tree structure
+    foreach( array_keys($this->modelData) as $type ) {
+      
+      // skip if same
+      if( $type == $elementType ) continue;
+      // skip role -> user
+      if( $elementType == "role" and $type == "users" ) continue;
+      // skip if no relation
+      try {
+        $model->hasRelation( $type . "s" ); // this throws if no relation exists
+      } catch( \yii\base\InvalidArgumentException $e ) {
+        continue;
+      }  
 
-      $model = $data['model'];
+      // normal node
+      $data = $this->modelData($type);
+      $node = array(
+        'icon'      => $data['icon'],
+        'label'     => $data['label'],
+        'value'     => $elementType . "=" . $namedId,
+        'type'      => $type,
+        'mode'      => "link",
+        'children'  => []
+      );
+      
+      // user -> roles
+      if( $elementType == "user" and $type == "role" ) {
+        $user = $model; 
+        // you cannot link to this node
+        $node['mode'] = null;
 
-      if ( $thisModel->hasRelationWithModel( $model )  )
-      {
-
-        $node = array(
-          'icon'      => $data['icon'],
-          'label'     => $data['label'],
-          'value'     => $elementType . "=" . $namedId,
-          'type'      => $type,
+        // pseudo group node -> no group dependency
+        $groupNode = [
+          'icon'      => $modelData['group']['icon'],
+          'label'     => Yii::t('app',"In all groups"),
+          'type'      => "group",
+          'value'     => "user=" . $user->namedId,
           'mode'      => "link",
-          'children'  => array()
-        );
-
-        /*
-         * special case role - users: skip, would have to be
-         * displayed in dependenc of group, we leave this
-         * to user - roles
-         */
-        if( $thisModel instanceof $models['role']['model']
-            and $model instanceof $models['user']['model'] )
-        {
-          continue;
-        }
-
-        /*
-         * special case: user - role, which can be dependent on the group
-         */
-        elseif( $thisModel instanceof $models['user']['model']
-            and $model instanceof $models['role']['model'] )
-        {
-          $userModel  = $thisModel;
-          $roleModel  = $model;
-          $groupModel = $models['group']['model'];
-
-          /*
-           * you cannot link to this node
-           */
-          $node['mode'] = null;
-
-          /*
-           * find all groups that the user is member of
-           */
-          try
-          {
-            $groupModel->findLinked( $userModel );
-
-            while( $groupModel->loadNext() )
-            {
-              $groupNode = array(
-                'icon'      => $models['group']['icon'],
-                'label'     => Yii::t('app',"in") . " " . $groupModel->get( $models['group']['labelProp'] ),
-                'type'      => "role",
-                'mode'      => "link",
-                'value'     => "group=" . $groupModel->namedId() . ",user=" . $userModel->namedId(),
-                'children'  => array()
-              );
-              try
-              {
-                $roleModel->findLinked( $userModel, $groupModel );
-                while( $roleModel->loadNext() )
-                {
-                  $label = $roleModel->get( $models['role']['labelProp'] );
-                  $roleNode = array(
-                    'icon'      => $models['role']['icon'],
-                    'label'     => either( $label,$model->namedId()),
-                    'type'      => "role",
-                    'mode'      => "unlink",
-                    'value'     => "group=" . $groupModel->namedId() . ",role=" . $roleModel->namedId(),
-                    'children'  => array()
-                  );
-                  $groupNode['children'][] = $roleNode;
-                }
-              }
-              catch( qcl_data_model_RecordNotFoundException $e) {}
-
-              /*
-               * add group node to roles node
-               */
-              $node['children'][] = $groupNode;
-            }
-          }
-          catch( qcl_data_model_RecordNotFoundException $e ){}
-
-          /*
-           * no group dependency
-           */
-          $groupNode = array(
-            'icon'      => $models['group']['icon'],
-            'label'     => Yii::t('app',"In all groups"),
+          'children'  => []
+        ];
+        $roles = $user->getGroupRoles(null)->all();
+        foreach( $roles as $role ){
+          $roleNode = [
+            'icon'      => $models['role']['icon'],
+            'label'     => $role->name,
             'type'      => "role",
-            'value'     => "user=" . $userModel->namedId(),
+            'mode'      => "unlink",
+            'value'     => "role=" . $role->namedId,
+            'children'  => []
+          ];
+          $groupNode['children'][] = $roleNode;
+        }
+        $node['children'][] = $groupNode;
+
+        // one node for each existing group
+        $allGroups = Group::findAll(); // @todo where active=1
+        foreach( $allGroups as $group ){
+          $groupNode = array(
+            'icon'      => $modelData['group']['icon'],
+            'label'     => Yii::t('app',"in") . " " . $group->name,
+            'type'      => "group",
             'mode'      => "link",
-            'children'  => array()
+            'value'     => "group=" . $group->namedId . ",user=" . $user->namedId,
+            'children'  => []
           );
-
-          /*
-           * find all roles that are linked to the user
-           * but not dendent on a group
-           */
-          try
-          {
-            $query = $roleModel->findLinkedNotDepends( $userModel, $groupModel );
-
-            while( $roleModel->loadNext( $query ) )
-            {
-              $label = $roleModel->get( $models['role']['labelProp'] );
-              $roleNode = array(
-                'icon'      => $models['role']['icon'],
-                'label'     => either( $label, $roleModel->namedId() ),
-                'type'      => "role",
-                'mode'      => "unlink",
-                'value'     => "role=" . $roleModel->namedId(),
-                'children'  => array()
-              );
-              $groupNode['children'][] = $roleNode;
-            }
+          $roles = $user->getGroupRoles(null)->all();
+          foreach( $roles as $role ){
+            $roleNode = array(
+              'icon'      => $modelData['role']['icon'],
+              'label'     => $role->name,
+              'type'      => "role",
+              'mode'      => "unlink",
+              'value'     => "group=" . $group->namedId . ",role=" . $role->namedId,
+              'children'  => []
+            );
+            $groupNode['children'][] = $roleNode;          
           }
-          catch( qcl_data_model_RecordNotFoundException $e) {}
-
-          /*
-           * add group node to roles node
-           */
           $node['children'][] = $groupNode;
         }
-
-        /*
-         * no dependencies
-         */
-        else
+      } else {
+        // other combinations
+        $relation = $type . "s";
+        foreach( $model->$relation as $linkedModel )
         {
-          try
-          {
-            $model->findLinked( $thisModel );
-
-            while( $model->loadNext() )
-            {
-              $label = $model->get($data['labelProp']);
-              $node['children'][] = array(
-                'icon'      => $data['icon'],
-                'label'     => either( $label,  $model->namedId() ),
-                'type'      => $type,
-                'value'     => $type . "=" . $model->namedId(),
-                'mode'      => "unlink",
-                'children'  => array()
-              );
-            }
-          }
-          catch( qcl_data_model_RecordNotFoundException $e) {}
+          $linkedNode = [
+            'icon'      => $modelData[$type]['icon'],
+            'label'     => $linkedModel->getAttribute($modelData[$type]['label']),
+            'type'      => $type,
+            'mode'      => "unlink",
+            'value'     => "$type=" . $linkModel->namedId,
+            'children'  => []
+          ];
+          $node['children'][] = $linkedNode;  
         }
-        $tree['children'][] = $node;
       }
+      $tree['children'][] = $node;
     }
     return $tree;
   }
@@ -445,10 +352,10 @@ class bibliograph_service_ACLTool
    * @param $namedId
    * @return string "OK"
    */
-  public function method_addElement( $type, $namedId )
+  public function actionAdd( $type, $namedId )
   {
     $this->requirePermission("access.manage");
-    $models = $this->modelMap();
+    $models = $this->modelData();
 
     if ( $type == "datasource" )
     {
@@ -476,7 +383,7 @@ class bibliograph_service_ACLTool
    * @param $ids
    * @return \qcl_ui_dialog_Confirm|string "OK"
    */
-  public function method_deleteElement( $type, $ids )
+  public function actionDelete( $type, $ids )
   {
     $this->requirePermission("access.manage");
     $minId = null;
@@ -504,7 +411,7 @@ class bibliograph_service_ACLTool
 
     foreach ( (array) $ids as $namedId )
     {
-      //$models = $this->modelMap();
+      //$models = $this->modelData();
       $model = $this->getElementModel( $type );
       $model->load( $namedId );
       if( $minId and $model->id() < $minId )
@@ -522,9 +429,9 @@ class bibliograph_service_ACLTool
    *
    * @param $doDeleteModelData
    * @param $namedId
-   * @return qcl_ui_dialog_Alert
+   * @return 
    */
-  public function method_deleteDatasource( $doDeleteModelData, $namedId )
+  public function actionDeleteDatasource( $doDeleteModelData, $namedId )
   {
     if ( $doDeleteModelData === null )
     {
@@ -552,7 +459,7 @@ class bibliograph_service_ACLTool
 
   protected function getLinkModels( $treeElement, $type, $namedId )
   {
-    //$models = $this->modelMap();
+    //$models = $this->modelData();
 
     $elementParts = explode( ",", $treeElement );
 
@@ -589,7 +496,7 @@ class bibliograph_service_ACLTool
    * @param $namedId
    * @return string "OK"
    */
-  public function method_linkElements( $treeElement, $type, $namedId )
+  public function actionLink( $treeElement, $type, $namedId )
   {
     $this->requirePermission("access.manage");
 
@@ -616,7 +523,7 @@ class bibliograph_service_ACLTool
    * @param $namedId
    * @return string "OK"
    */
-  public function method_unlinkElements( $treeElement, $type, $namedId )
+  public function actionUnlin( $treeElement, $type, $namedId )
   {
     $this->requirePermission("access.manage");
 
@@ -645,7 +552,7 @@ class bibliograph_service_ACLTool
    * @internal param $namedId
    * @return array
    */
-  public function method_editElement( $first, $second, $third=null )
+  public function actionEdit( $first, $second, $third=null )
   {
     /*
      * if first argument is boolean true, this is the call from a
@@ -681,7 +588,7 @@ class bibliograph_service_ACLTool
       $formData['password2']['value'] = null;
     }
 
-    $modelMap = $this->modelMap();
+    $modelMap = $this->modelData();
     $message = "<h3>" . Yii::t('app', $modelMap[$type]['dialogLabel'] ) . " '" . $namedId . "'</h3>";
 
     return \lib\dialog\Form::create(
@@ -696,10 +603,10 @@ class bibliograph_service_ACLTool
    * @param $data
    * @param $type
    * @param $namedId
-   * @throws JsonRpcException
+   * @throws \lib\exceptions\UserErrorException
    * @return \qcl_ui_dialog_Alert|string "OK"
    */
-  public function method_saveFormData( $data, $type, $namedId )
+  public function actionSave( $data, $type, $namedId )
   {
 
     if ( $data === null )
@@ -743,7 +650,7 @@ class bibliograph_service_ACLTool
     {
       $parsed = (object) $this->parseFormData( $model, $data );
     }
-    catch( JsonRpcException $e)
+    catch( \lib\exceptions\UserErrorException $e)
     {
       return \lib\dialog\Alert::create(
         $e->getMessage(),
@@ -791,13 +698,13 @@ class bibliograph_service_ACLTool
    * @param $namedId
    * @return array
    */
-  public function method_composeEmail( $type, $namedId, $subject="", $body="" )
+  public function actionEmailCompose( $type, $namedId, $subject="", $body="" )
   {
     $this->requirePermission("access.manage");
     
     if( ! in_array( $type, array("user","group") ) )
     {
-      throw new JsonRpcException("Email can only be sent to users and groups."); 
+      throw new \lib\exceptions\UserErrorException("Email can only be sent to users and groups."); 
     }
     
     $model = $this->getElementModel( $type );
@@ -812,7 +719,7 @@ class bibliograph_service_ACLTool
         $email = $model->getEmail(); 
         if( ! trim( $email ) )
         {
-          throw new JsonRpcException( Yii::t('app',"The selected user has no email address."));
+          throw new \lib\exceptions\UserErrorException( Yii::t('app',"The selected user has no email address."));
         }
         $emails[] = $email;
         $names[]  = $model->getName();
@@ -826,7 +733,7 @@ class bibliograph_service_ACLTool
         }
         catch( qcl_data_model_RecordNotFoundException $e)
         {
-          throw new JsonRpcException( Yii::t('app',"The selected group has no members."));
+          throw new \lib\exceptions\UserErrorException( Yii::t('app',"The selected group has no members."));
         }
         while($userModel->loadNext())
         {
@@ -842,10 +749,10 @@ class bibliograph_service_ACLTool
     $number = count($emails);
     if ( $number == 0 )
     {
-      throw new JsonRpcException( Yii::t('app',"No email address found."));
+      throw new \lib\exceptions\UserErrorException( Yii::t('app',"No email address found."));
     }
     
-    $modelMap   = $this->modelMap();
+    $modelMap   = $this->modelData();
     $recipients = Yii::t('app', $modelMap[$type]['dialogLabel'] ) . " '" . $model->getName() . "'";
     $message    = "<h3>" . 
                     Yii::t('app', 
@@ -877,7 +784,7 @@ class bibliograph_service_ACLTool
     );
   }
   
-  public function method_confirmSendEmail( $data, $shelfId )
+  public function actionEmailConfirm( $data, $shelfId )
   {
 
     if ( ! $data )
@@ -913,13 +820,13 @@ class bibliograph_service_ACLTool
     );    
   }
   
-  public function method_correctEmail( $dummy, $shelfId, $data )
+  public function actionEmailCorrect( $dummy, $shelfId, $data )
   {
     list( $type, $namedId, $emails, $names ) = $this->unshelve( $shelfId );
     return $this->method_composeEmail( $type, $namedId, $data->subject, $data->body );
   }
   
-  public function method_sendEmail( $confirm, $shelfId, $data )
+  public function actionEmailSend( $confirm, $shelfId, $data )
   {
     list( $type, $namedId, $emails, $names ) = $this->unshelve( $shelfId );
     
@@ -976,9 +883,9 @@ class bibliograph_service_ACLTool
     }
   }
 
-  public function method_handleMissingPasswordDialog( $namedId )
+  public function actionMissingPassword( $namedId )
   {
-    return $this->method_editElement( "user", $namedId );
+    return $this->edit( "user", $namedId );
   }
 
 
@@ -1055,7 +962,7 @@ class bibliograph_service_ACLTool
    * Service to confirm a registration via email
    * @param $namedId
    */
-  public function method_confirmEmail( $namedId )
+  public function actionConfirmRegistration( $namedId )
   {
     $app = $this->getApplication();
     $userModel = $app->getAccessController()->getUserModel();
@@ -1089,12 +996,11 @@ class bibliograph_service_ACLTool
 
   /**
    * Displays a dialog to reset the password
-   * @return qcl_ui_dialog_Prompt
    */
-  public function method_resetPasswordDialog()
+  public function actionResetPasswordDialog()
   {
     $msg = Yii::t('app',"Please enter your email address. You will receive a message with a link to reset your password.");
-    return \lib\dialog\Prompt::create($msg, "", Yii::$app->controller->id, "sendPasswortResetEmail");
+    \lib\dialog\Prompt::create($msg, "", Yii::$app->controller->id, "password-reset-email");
   }
 
   /**
@@ -1103,7 +1009,7 @@ class bibliograph_service_ACLTool
    * @return string
    * @throws \Exception
    */
-  public function method_sendPasswortResetEmail($email)
+  public function actionPasswortResetEmail($email)
   {
     if( $email == false ) return "CANCELLED";
 
@@ -1140,7 +1046,7 @@ class bibliograph_service_ACLTool
    * @param $email
    * @param $nonce
    */
-  public function method_resetPassword( $email, $nonce )
+  public function actionResetPassword( $email, $nonce )
   {
     $storedNonce = $this->retrieveAndDestroyStoredNonce();
     header('Content-Type: text/html; charset=utf-8');
@@ -1242,7 +1148,10 @@ class bibliograph_service_ACLTool
     return $userModel;
   }
 
-  public function method_newUserDialog()
+  /**
+   * Presents the user with a form to enter user data
+   */
+  public function actionNewUserDialog()
   {
     $message = Yii::t('app',"Please enter the user data. A random password will be generated and sent to the user.");
     $formData = array(
@@ -1277,11 +1186,16 @@ class bibliograph_service_ACLTool
 
     return \lib\dialog\Form::create(
       $message, $formData, true,
-      Yii::$app->controller->id, "addNewUser", array()
+      Yii::$app->controller->id, "add-user", array()
     );
   }
 
-  public function method_addNewUser( $data )
+  /**
+   * Action to add a new user
+   *
+   * @param object $data
+   */
+  public function actionAddUser( $data )
   {
     $this->requirePermission("access.manage");
 
@@ -1321,7 +1235,10 @@ class bibliograph_service_ACLTool
 
   }
 
-  public function method_newDatasourceDialog()
+  /**
+   * Presents the user a form to enter the data of a new datasource to be created
+   */
+  public function actionNewDatasourceDialog()
   {
     $message = Yii::t('app',"Please enter the information on the new datasource.");
     $formData = array(
@@ -1348,26 +1265,25 @@ class bibliograph_service_ACLTool
 
     return \lib\dialog\Form::create(
       $message, $formData, true,
-      Yii::$app->controller->id, "addNewDatasource", array()
+      Yii::$app->controller->id, "add-datasource", array()
     );
   }
 
-  public function method_addNewDatasource( $data )
+  /**
+   * Action to add a new datasource from client-supplied data
+   *
+   * @param object $data
+   */
+  public function actionAddDatasource( $data )
   {
     $this->requirePermission("access.manage");
 
     if ( $data === null ) return "CANCEL";
-
-    qcl_assert_valid_string( $data->namedId, "Invalid datasource name");
-
     $model = $this->getElementModel( "datasource" );
 
-    try
-    {
+    try {
       $this->getApplication()->createDatasource( $data->namedId, array( 'title' => $data->title ) );
-    }
-    catch ( qcl_data_model_RecordExistsException $e)
-    {
+    } catch ( qcl_data_model_RecordExistsException $e)  {
       return \lib\dialog\Alert::create( Yii::t('app',"Datasource name '%s' already exists. Please choose a different one.", $data->namedId ) );
     }
 
@@ -1378,6 +1294,5 @@ class bibliograph_service_ACLTool
         $data->namedId
       )
     );
-
   }
 }
