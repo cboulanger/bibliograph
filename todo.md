@@ -10,11 +10,13 @@
 - [x] Re-implement user error handling: New user error without stack trace, alert to user and log it
 - [ ] Re-implement ACL Tool
 - [ ] Re-implement cql search
+- [ ] Re-implement Datasource Schemas, needed to create datasource types by user input
 - [ ] Re-implement Remove/Move/Copy references
 - [ ] Re-implement Add/Remove/Move/Copy folders
 - [ ] Re-implement Export
 - [ ] Tests: Make Travis ~~great~~ work again
 - [ ] Add distribution mechanism
+
 
 ## v3.0.0-beta
 
@@ -38,6 +40,7 @@
 - [ ] Add correct @return information to the JSONRPC methods/actions
 - [ ] Change app state separator and assignment chars
 - [ ] Add @jsonrpc controller-id/action-id tag in controller actions
+- [ ] Add column 'protected' to user/group etc. to prevent records from being deleted
 
 ## v3.0.0
 

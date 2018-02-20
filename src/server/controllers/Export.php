@@ -72,7 +72,7 @@ class bibliograph_service_Export
     {
       $listData[] = array(
         'label' => $exportRegistry->getName(),
-        'value' => $exportRegistry->namedId()
+        'value' => $exportRegistry->namedId
       );
     }
     return $listData;

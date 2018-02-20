@@ -73,8 +73,8 @@ class ModelController extends \app\controllers\AppController
        * build list items
        */
       $listData[] = array(
-        'value' => $dsModel->namedId(),
-        'label' => either( $dsModel->getTitle(), $dsModel->namedId() )
+        'value' => $dsModel->namedId,
+        'label' => either( $dsModel->getTitle(), $dsModel->namedId )
       );
     }
 

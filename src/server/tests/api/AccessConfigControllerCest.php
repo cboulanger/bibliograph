@@ -22,7 +22,7 @@ class AccessConfigControllerCest
   {
     $I->sendJsonRpcRequest('access-config','tree',['user','admin']);
     $expected = '[]';
-    //$I->compareJsonRpcResultWith(json_decode($expected));
+    // $I->compareJsonRpcResultWith(json_decode($expected));
   }  
   
 }

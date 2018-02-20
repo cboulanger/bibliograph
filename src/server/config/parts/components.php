@@ -44,6 +44,10 @@ $components = [
   'eventQueue' => [
     'class' => \lib\components\EventQueue::class
   ],
+  // access manager, handles all things access
+  'accessManager' => [
+    'class' => \lib\components\AccessManager::class
+  ],
   // datasource manager, handles creation and migration of datasource tables
   'datasourceManager' => [
     'class' => \lib\components\DatasourceManager::class

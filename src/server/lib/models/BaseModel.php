@@ -30,7 +30,6 @@ use app\models\Datasource;
 class BaseModel extends ActiveRecord
 {
 
-
   //-------------------------------------------------------------
   // Behaviors
   //-------------------------------------------------------------
@@ -43,14 +42,26 @@ class BaseModel extends ActiveRecord
   {
     return [
       [
-        'class' => TimestampBehavior::className(),
-        'createdAtAttribute' => 'created',
-        'updatedAtAttribute' => 'modified',
-        'value' => new Expression('NOW()'),
+        'class'               => TimestampBehavior::className(),
+        'createdAtAttribute'  => 'created',
+        'updatedAtAttribute'  => 'modified',
+        'value'               => new Expression('NOW()'),
       ],
     ];
   }
 
+  //-------------------------------------------------------------
+  // Abstract methods
+  //-------------------------------------------------------------
+
+  /**
+   * Returns data for a \lib\dialog\Form in which the
+   * model data can be edited
+   * @return array|null
+   */
+  public function formData(){
+    return null;
+  }
 
   //-------------------------------------------------------------
   // Datasource feature
@@ -98,7 +109,6 @@ class BaseModel extends ActiveRecord
     return static :: $datasource;
   }
 
-
   //-------------------------------------------------------------
   // Shorthand methods
   //-------------------------------------------------------------  
@@ -113,7 +123,6 @@ class BaseModel extends ActiveRecord
   {
     return static :: findOne( ['namedId' => $namedId ] );
   }
-
 
   //-------------------------------------------------------------
   // Overridden methods

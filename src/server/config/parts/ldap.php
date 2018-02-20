@@ -3,7 +3,7 @@ $ini = require('ini.php');
 $ldap = (object) $ini['ldap'];
 if( ! $ldap->enabled ) return;
 return  [
-  'class' => 'Edvlerblog\Adldap2\Adldap2Wrapper',
+  'class' => '\Edvlerblog\Adldap2\Adldap2Wrapper',
 
   /*
     * Set the default provider to one of the providers defined in the

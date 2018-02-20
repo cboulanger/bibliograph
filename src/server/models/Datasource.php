@@ -343,7 +343,7 @@ class Datasource extends BaseModel
    * This implicitly sets the static property 'datasource' of the class to the current
    * datasource name. 
    * @param string $type
-   * @throws InvalidArgumentException
+   * @throws \InvalidArgumentException
    * @return string The class name
    */
   public function getClassFor( $type )
@@ -351,7 +351,7 @@ class Datasource extends BaseModel
     if( !$type or !is_string($type) ) throw new \InvalidArgumentException("Invalid type");
     if ( ! isset( $this->modelMap[$type] ) )
     {
-      throw new InvalidArgumentException("Model of type '$type' is not registered");
+      throw new \InvalidArgumentException("Model of type '$type' is not registered");
     }
     $class = $this->modelMap[$type]['model']['class'];
     $class::setDatasource($this->namedId);

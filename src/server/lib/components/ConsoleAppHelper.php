@@ -75,7 +75,7 @@ class ConsoleAppHelper extends \yii\base\Component
     }
     Yii::$app = $oldApp;
     if( $exitCode ){
-      throw new \LogicException("Running action '$route' exited with code $exitCode.");
+      throw new \Exception("Running action '$route' exited with code $exitCode.");
     }
     return Stringy::create($result);
   }

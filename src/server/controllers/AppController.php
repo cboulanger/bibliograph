@@ -25,6 +25,7 @@ use Yii;
 use app\models\User;
 use app\models\Role;
 use app\models\Session;
+use app\models\Permission;
 use app\models\Datasource;
 use \JsonRpc2\Exception;
 
@@ -45,7 +46,7 @@ class AppController extends \JsonRpc2\Controller
   //-------------------------------------------------------------
   // Overridden methods
   //-------------------------------------------------------------
-  
+
 
   /**
    * Filter method to protect action methods from unauthorized access.
@@ -53,7 +54,8 @@ class AppController extends \JsonRpc2\Controller
    * as fallback.
    *
    * @param \yii\base\Action $action
-   * @return boolan True if action can proceed, false if not
+   * @return bool True if action can proceed, false if not
+   * @throws \yii\web\BadRequestHttpException
    */
   public function beforeAction($action)
   {
@@ -75,7 +77,8 @@ class AppController extends \JsonRpc2\Controller
         $token = trim( str_replace("Bearer", "", $headers->get($header) ) );
       }
     }
-    if (!$token or ! $user = User::findIdentityByAccessToken($token)) {
+    $user = User::findIdentityByAccessToken($token);
+    if (!$token or ! $user ) {
       Yii::info("No or invalid authorization token '$token'. Access denied.");
       return false;
       // @todo this doesn't work:
@@ -132,7 +135,7 @@ class AppController extends \JsonRpc2\Controller
 
   /**
    * Shorthand getter for active user object
-   * @return \app\models\User
+   * @return \app\models\User|\yii\web\IdentityInterface
    */
   public function getActiveUser()
   {
@@ -141,8 +144,8 @@ class AppController extends \JsonRpc2\Controller
 
   /**
    * Creates a new anonymous guest user
-   * @throws LogicException
-   * @return int \app\models\User
+   * @throws \LogicException
+   * @return \app\models\User
    */
   public function createAnonymous()
   {
@@ -150,7 +153,6 @@ class AppController extends \JsonRpc2\Controller
     if (is_null($anonRole)) {
       throw new \LogicException("No 'anonymous' role defined.");
     }
-
     $user = new User(['namedId' => \microtime() ]); // random temporary username
     $user->save();
     $user->namedId = "guest" . $user->getPrimaryKey();
@@ -223,12 +225,11 @@ class AppController extends \JsonRpc2\Controller
    * permission is not granted.
    *
    * @param string $permission
-   * @return bool
-   * @throws Exception if access is denied
+   * @throws \JsonRpc2\Exception
    */
   public function requirePermission($permission)
   {
-    if (!  $this->getActiveUser()->hasPermission( $permission )) {
+    if (! $this->getActiveUser()->hasPermission( $permission )) {
       Yii::warning( sprintf(
         "Active user %s does not have required permission %s",
         $this->getActiveUser()->namedId, $permission
@@ -240,8 +241,7 @@ class AppController extends \JsonRpc2\Controller
   /**
    * Shorthand method to enforce if active user has a role
    * @param string $role
-   * @throws qcl_access_AccessDeniedException
-   * @return bool
+   * @throws \JsonRpc2\Exception
    */
   public function requireRole($role)
   {
@@ -250,7 +250,7 @@ class AppController extends \JsonRpc2\Controller
       "Active user %s does hat required role %s",
         $this->getActiveUser()->namedId, $role
       ) );
-        throw new Exception("Access denied.");
+      throw new \JsonRpc2\Exception("Not allowed.", \JsonRpc2\Exception::INVALID_REQUEST);
     }
   }  
 
@@ -259,7 +259,7 @@ class AppController extends \JsonRpc2\Controller
    * username.
    *
    * @param string $username
-   * @throws InvalidArgumentException if user does not exist
+   * @throws \InvalidArgumentException if user does not exist
    * @return \app\models\User
    */
   public function user($username)
@@ -274,9 +274,9 @@ class AppController extends \JsonRpc2\Controller
   /**
    * Tries to continue an existing session
    *
-   * @param \app\models\User $user
-   * @return \app\model\Session|null The session object to be reused, or null
-   * if none exists.
+   * @param User $user
+   * @return Session|null
+   *    The session object to be reused, or null if none exists.
    */
   protected function continueUserSession($user)
   {
@@ -420,19 +420,20 @@ class AppController extends \JsonRpc2\Controller
   //-------------------------------------------------------------
 
   /**
-   * @todo !!!
-   *
-   * @param [type] $eventName
-   * @param [type] $data
+   * Broadcasts a message to all connected clients.
+   * NOTE this doesn't work at the moment, the message is only sent to the 
+   * current user's client. 
+   * @todo Reimplement
+   * @param string $eventName
+   * @param mixed $data
    * @return void
    */
   public function broadcastClientMessage($eventName, $data){
-    Yii::warning("NOT BROADCASTING $eventName");
+    $this->dispatchClientMessage($eventName, $data);
   }
 
   /**
-   * @todo !!!
-   *
+   * Sends a message to the current user's application
    * @param [type] $eventName
    * @param [type] $data
    * @return void

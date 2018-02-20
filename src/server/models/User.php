@@ -115,7 +115,7 @@ class User extends BaseModel implements IdentityInterface
    * Finds an identity by the given token.
    *
    * @param string $token the token to be looked for
-   * @return IdentityInterface|null the identity object that matches the given token.
+   * @return User|null the identity object that matches the given token.
    */
   public static function findIdentityByAccessToken($token, $type = null)
   {
