@@ -37,6 +37,7 @@
 - [ ] Rename Yii::$app->utils to Yii::$app->state
 - [ ] Add correct @return information to the JSONRPC methods/actions
 - [ ] Change app state separator and assignment chars
+- [ ] Add @jsonrpc controller-id/action-id tag in controller actions
 
 ## v3.0.0
 

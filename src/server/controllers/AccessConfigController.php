@@ -93,17 +93,16 @@ class AccessConfigController extends \app\Controllers\AppController
    * @return array
    * @throws \InvalidArgumentsException
    */
-  protected function elementData( $ype ){
+  protected function getModelDataFor( $type ){
     if ( ! isset( $this->modelData[ $type ] ) ) {
-      throw new \InvalidArgumentsException("Invalid model type '$type'");
+      throw new \InvalidArgumentsException("Invalid type '$type'");
     }
     return $this->modelData[$type];
   }
 
   /**
    * Retuns ListItem data for the types of access models
-   *
-   * @return array
+   * @jsonrpc access-config/types
    */
   public function actionTypes()
   {
@@ -146,18 +145,15 @@ class AccessConfigController extends \app\Controllers\AppController
    * @param array|null $filter 
    *    An associative array that can be used in a ActiveQuery::where() method call
    * @throws \lib\exceptions\UserErrorException
-   * @return array
    */
   public function actionElements( $type, array $filter=null )
   {
     $this->requirePermission("access.manage");
-    if( ! isset($this->elementTypes[$type]) ){
-      throw new UserErrorException("Invalid element type");
-    }
     $activeUser = $this->getActiveUser();
     $isAdmin = $activeUser->hasRole( "admin" );
     // query
-    $modelClass = $this->elementTypes[$type]['class'];
+    $elementData = $this->getModelDataFor($type);
+    $modelClass = $elementData['class'];
     $labelProp = "name";
     switch ( $type )
     {
@@ -189,13 +185,14 @@ class AccessConfigController extends \app\Controllers\AppController
       }
     }
     $records = $query->all();
-    $elementData = $this->elementData($type);
+    $elementData = $this->getModelDataFor($type);
     // create result from record data
     $result = [];
+    //Yii::trace($elementData);
     foreach( $records as $record ){
       $value  = $record->namedId;
+      $label  = $record->$labelProp;
       $icon   = $elementData['icon'];
-      $label  = $elementData[$labelProp];
       // special cases
       if ( $record->hasAttribute("hidden") and $record->hidden and ! $isAdmin ) continue;
       if ( ! trim($label ) ) $label = $value;
@@ -223,13 +220,21 @@ class AccessConfigController extends \app\Controllers\AppController
    * @param $elementType
    * @param $namedId
    * @throws \lib\exceptions\UserErrorException
-   * @return array
    */
   public function actionTree( $elementType, $namedId )
   {
     $this->requirePermission("access.manage");
     $modelData = $this->modelData;
-    //
+
+    // the edited model element
+    $elementData = $this->getModelDataFor($elementType);
+    $modelClass = $elementData['class'];
+    $model = $modelClass::findByNamedId($namedId);
+    if( ! $model ){
+      throw new UserErrorException("Model of '$type' with id '$namedId' does not exist.");
+    }
+
+    // root node
     $tree = [
       'icon'      => "icon/16/apps/utilities-network-manager.png",
       'label'     => Yii::t('app',"Relations"),
@@ -238,43 +243,38 @@ class AccessConfigController extends \app\Controllers\AppController
       'children'  => [],      
     ];
 
-    // the edited model element
-    $modelClass = $this->elementData($elementType)['class'];
-    $model = $modelClass::findOneByNamedId($namedId);
-    if( ! $model ){
-      throw new UserErrorException("Model of '$type' with id '$namedId' does not exist.");
-    }
-
     // iterate through the rec and display relations as tree structure
-    foreach( array_keys($this->modelData) as $type ) {
+    $types = array_keys($this->modelData);
+    foreach( $types as $linkedType ) {
       
       // skip if same
-      if( $type == $elementType ) continue;
+      if( $linkedType == $elementType ) continue;
       // skip role -> user
-      if( $elementType == "role" and $type == "users" ) continue;
+      if( $elementType == "role" and $linkedType == "users" ) continue;
       // skip if no relation
       try {
-        $model->hasRelation( $type . "s" ); // this throws if no relation exists
-      } catch( \yii\base\InvalidArgumentException $e ) {
+        $model->getRelation( $linkedType . "s" ); // this throws if no relation exists
+      } catch( \yii\base\InvalidParamException $e ) {
         continue;
       }  
 
       // normal node
-      $data = $this->modelData($type);
+      $linkedElementdata = $this->getModelDataFor($linkedType);
       $node = array(
-        'icon'      => $data['icon'],
-        'label'     => $data['label'],
+        'icon'      => $linkedElementdata['icon'],
+        'label'     => $linkedElementdata['label'],
         'value'     => $elementType . "=" . $namedId,
-        'type'      => $type,
+        'type'      => $linkedType,
         'mode'      => "link",
         'children'  => []
       );
       
       // user -> roles
-      if( $elementType == "user" and $type == "role" ) {
+      if( $elementType == "user" and $linkedType == "role" ) {
         $user = $model; 
         // you cannot link to this node
         $node['mode'] = null;
+        $node['value'] = null;
 
         // pseudo group node -> no group dependency
         $groupNode = [
@@ -288,7 +288,7 @@ class AccessConfigController extends \app\Controllers\AppController
         $roles = $user->getGroupRoles(null)->all();
         foreach( $roles as $role ){
           $roleNode = [
-            'icon'      => $models['role']['icon'],
+            'icon'      => $modelData['role']['icon'],
             'label'     => $role->name,
             'type'      => "role",
             'mode'      => "unlink",
@@ -300,7 +300,7 @@ class AccessConfigController extends \app\Controllers\AppController
         $node['children'][] = $groupNode;
 
         // one node for each existing group
-        $allGroups = Group::findAll(); // @todo where active=1
+        $allGroups = Group::find()->where(['not', ['active' => null]])->all(); // @todo where active=1
         foreach( $allGroups as $group ){
           $groupNode = array(
             'icon'      => $modelData['group']['icon'],
@@ -326,15 +326,15 @@ class AccessConfigController extends \app\Controllers\AppController
         }
       } else {
         // other combinations
-        $relation = $type . "s";
+        $relation = $linkedType . "s";
         foreach( $model->$relation as $linkedModel )
         {
           $linkedNode = [
-            'icon'      => $modelData[$type]['icon'],
-            'label'     => $linkedModel->getAttribute($modelData[$type]['label']),
-            'type'      => $type,
+            'icon'      => $modelData[$linkedType]['icon'],
+            'label'     => $linkedModel->getAttribute($modelData[$linkedType]['label']),
+            'type'      => $linkedType,
             'mode'      => "unlink",
-            'value'     => "$type=" . $linkModel->namedId,
+            'value'     => "$linkedType=" . $linkModel->namedId,
             'children'  => []
           ];
           $node['children'][] = $linkedNode;  
@@ -355,8 +355,7 @@ class AccessConfigController extends \app\Controllers\AppController
   public function actionAdd( $type, $namedId )
   {
     $this->requirePermission("access.manage");
-    $models = $this->modelData();
-
+    $modelData = $this->modelData;
     if ( $type == "datasource" )
     {
       
@@ -371,7 +370,7 @@ class AccessConfigController extends \app\Controllers\AppController
     {
       $model = $this->getElementModel( $type );
       $model->create($namedId,array(
-        $models[$type]['labelProp'] => $namedId
+        $modelData[$type]['labelProp'] => $namedId
       ));
     }
     return $this->method_editElement($type,$namedId);
@@ -411,7 +410,6 @@ class AccessConfigController extends \app\Controllers\AppController
 
     foreach ( (array) $ids as $namedId )
     {
-      //$models = $this->modelData();
       $model = $this->getElementModel( $type );
       $model->load( $namedId );
       if( $minId and $model->id() < $minId )
@@ -459,7 +457,6 @@ class AccessConfigController extends \app\Controllers\AppController
 
   protected function getLinkModels( $treeElement, $type, $namedId )
   {
-    //$models = $this->modelData();
 
     $elementParts = explode( ",", $treeElement );
 
