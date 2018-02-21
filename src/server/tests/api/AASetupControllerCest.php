@@ -1,6 +1,6 @@
 <?php
 
-class SetupControllerCest
+class AASetupControllerCest
 {
 
   /**
@@ -135,7 +135,7 @@ class SetupControllerCest
   }
 
  /**
-   * This upgrades from 3.0.0-alpha to 3.0.1
+   * This upgrades from 3.0.0-alpha to 3.0.0
    *
    * @param ApiTester $I
    * @env upgradev3

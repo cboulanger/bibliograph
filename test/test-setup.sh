@@ -23,14 +23,13 @@ fi
 echo "Started Bibliograph test server..."
 echo
 echo "Creating empty database ..."
-mysql -uroot -e "DROP DATABASE tests;"
-mysql -uroot -e "CREATE DATABASE tests;" 
+mysql -uroot -e "DROP DATABASE tests; CREATE DATABASE tests;"
 echo "Calling application setup service ..."
-$CPT_CMD run api SetupControllerCest --env setup $CPT_ARGS || exit $?
+$CPT_CMD run api AASetupControllerCest --env setup $CPT_ARGS || exit $?
 echo
-echo "Upgrading from 3.0 to 3.1..."
+echo "Upgrading from 3.0.0-alpha to 3.0.0..."
 $YII_CMD migrate/create app\\migrations\\schema\\create_post_table --interactive=0
-$CPT_CMD run api SetupControllerCest --env upgradev3 $CPT_ARGS 
+$CPT_CMD run api AASetupControllerCest --env upgradev3 $CPT_ARGS
 exitcode=$?
 popd > /dev/null
 rm src/server/migrations/schema/*Create_post_table.php
@@ -43,7 +42,7 @@ mysql -uroot -e "DROP DATABASE tests;"
 mysql -uroot -e "CREATE DATABASE tests;"
 mysql -uroot < test/data/bibliograph2.sql
 pushd $SERVER_PATH > /dev/null
-$CPT_CMD run api SetupControllerCest --env upgradev2 $CPT_ARGS || exit $?
+$CPT_CMD run api AASetupControllerCest --env upgradev2 $CPT_ARGS || exit $?
 echo
 echo "Cleaning up database ..."
 mysql -uroot -e "DROP DATABASE tests;"

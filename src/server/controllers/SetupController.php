@@ -24,9 +24,11 @@ use lib\components\MigrationException;
 use lib\dialog\{
   Error as ErrorDialog, Confirm, Login
 };
+use PHPUnit\Framework\MockObject\BadMethodCallException;
 use Yii;
 use lib\components\ConsoleAppHelper as Console;
 use Stringy\Stringy;
+use yii\db\Exception;
 
 /**
  * Setup controller. Needs to be the first controller called 
@@ -108,7 +110,7 @@ class SetupController extends \app\controllers\AppController
    */
   public function actionSetupVersion($upgrade_to, $upgrade_from=null){
     if ( ! YII_ENV_TEST ){
-      throw \BadMethodCallException('setup/setup-version can only be called in test mode.');
+      throw new BadMethodCallException('setup/setup-version can only be called in test mode.');
     }
     return $this->_setup($upgrade_to, $upgrade_from);
   }  
@@ -135,8 +137,7 @@ class SetupController extends \app\controllers\AppController
       } catch ( yii\base\InvalidConfigException $e ){
         // this happens deleting the tables in the database during development
         // @todo 
-        $upgrade_from = "0.0.0";  
-        session_destroy();
+        $upgrade_from = "0.0.0";
       } 
     }
     if ( ! $upgrade_to ){
@@ -145,7 +146,8 @@ class SetupController extends \app\controllers\AppController
     // @todo validate
     
     // if application version has changed or first run, run setup methods
-    if( $upgrade_to != $upgrade_from ){
+    Yii::trace("Data version: $upgrade_from, code version: $upgrade_to.");
+    if( $upgrade_to !== $upgrade_from ){
       // visual marker in log file
       Yii::trace(
         "\n\n\n" .str_repeat("*",80) . "\n\n BIBLIOGRAPH SETUP\n\n" . str_repeat("*",80) . "\n\n\n",
@@ -209,7 +211,10 @@ class SetupController extends \app\controllers\AppController
     foreach( \get_class_methods( $this ) as $method ){
       if( Stringy::create( $method )->startsWith("setup") ){
         $result = $this->$method($upgrade_from, $upgrade_to);
-        if( ! $result ) continue;
+        if( ! $result ) {
+          Yii::trace("Skipping method '$method'...");
+          continue;
+        }
         if( isset($result['fatalError']) ){
           $fatalError= $result['fatalError'];
           Yii::error($fatalError);
@@ -362,7 +367,7 @@ class SetupController extends \app\controllers\AppController
    *
    * @return array
    */
-  public function setupCheckDbConnection()
+  protected function setupCheckDbConnection()
   {
     if( ! Yii::$app->db instanceof \yii\db\Connection ){
       return [
@@ -459,6 +464,7 @@ class SetupController extends \app\controllers\AppController
       $message = Yii::t('app',"No updates to the databases.");
     } else {
       // unless this is a fresh installation, require admin login
+      /** @var \app\models\User $activeUser */
       $activeUser = Yii::$app->user->identity;
       // if the current version is >= 3.0.0 and no user is logged in, show a login screen
       if( version_compare( $upgrade_from, "3.0.0", ">=" ) and ( ! $activeUser or  ! $activeUser->hasRole('admin') ) ){
@@ -533,7 +539,7 @@ class SetupController extends \app\controllers\AppController
   /**
    * Setup two example datasources
    *
-   * @return void
+   * @return array
    */
   protected function setupExampleDatasources()
   {
@@ -559,7 +565,11 @@ class SetupController extends \app\controllers\AppController
       if( \app\models\Datasource::findByNamedId($name) ){
         $found++; continue;
       }
-      $datasource = Yii::$app->datasourceManager->create( $name );
+      try {
+        $datasource = Yii::$app->datasourceManager->create($name);
+      } catch (\Exception $e) {
+        Yii::error("Could not create datasource '$name':" . $e->getMessage() );
+      }
       $datasource->setAttributes( $data['config'] );
       $datasource->save();
       foreach( $data['roles'] as $roleId ){
