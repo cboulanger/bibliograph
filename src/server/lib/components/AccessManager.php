@@ -37,6 +37,7 @@ class AccessManager
    * the hash of a user-supplied password for comparison.
    *
    * See http://phpsec.org/articles/2005/password-hashing.html
+   * @todo use YII method instead
    * @param $plainText
    * @param $salt
    * @return string

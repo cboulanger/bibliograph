@@ -18,7 +18,7 @@
 - [ ] Add distribution mechanism
 
 
-## v3.0.0-beta
+## v3.0.0-beta 
 
 ### Priority: high
 - [ ] Add datasource access control when getting the datasource, not in the service methods
@@ -31,16 +31,21 @@
 - [ ] Backend: Model validation: accept booleans for MySql SmallInt columns
 
 ### Priority: low
-- [ ] Backend: Create a JsonRpcServiceException and replace \Exception
+- [ ] Add column 'protected' to user/group etc. to prevent records from being deleted
 - [ ] Backend: Streamline API to get Datasource & typed model
 - [ ] Frontend: Convert static icon resouce paths into aliases that are resolved in bibliograph.theme.Icon
 - [ ] Frontend: Rename widget ids, replace with native qooxdoo ids, see https://github.com/qooxdoo/qooxdoo/issues/9422
-- [ ] Replace ::findOne(['namedid'=>'foo']) with ::findByNamedId('foo')
-- [ ] Rename Yii::$app->utils to Yii::$app->state
 - [ ] Add correct @return information to the JSONRPC methods/actions
 - [ ] Change app state separator and assignment chars
+
+### Code cleanup
+- [ ] Use UserErrorException consistently and replace \Exception
+- [ ] \app\controllers\AppController::require* methods should throw a specialized
+      Exception (i.e. MethodNotAllowedException) instead of \JsonRpc2\Exception
 - [ ] Add @jsonrpc controller-id/action-id tag in controller actions
-- [ ] Add column 'protected' to user/group etc. to prevent records from being deleted
+- [ ] Replace ::findOne(['namedid'=>'foo']) with ::findByNamedId('foo')
+- [ ] Rename Yii::$app->utils to Yii::$app->state
+- [ ] Have actions return an informative message when they don't return a result
 
 ## v3.0.0
 

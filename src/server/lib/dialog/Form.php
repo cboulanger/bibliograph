@@ -20,6 +20,9 @@
 
 namespace lib\dialog;
 
+use InvalidArgumentException;
+use lib\models\BaseModel;
+
 class Form extends Dialog
 {
   /**
@@ -98,13 +101,13 @@ class Form extends Dialog
 
   /**
    * Returns data for a dialog.Form widget based on a model
-   * @param \lib\models\BaseModel  $model
+   * @param BaseModel  $model
    * @param int $width The default width of the form in pixel (defaults to 300)
    * @throws \Exception
-   * @throws \InvalidArgumentException
+   * @throws InvalidArgumentException
    * @return array
    */
-  public static function createFromModel( \lib\models\BaseModel $model, $width = 300)
+  public static function createFromModel( BaseModel $model, $width = 300)
   {
     $modelFormData = $model->formData();
     if (! is_array( $modelFormData) or ! count( $modelFormData ) ) {
@@ -144,9 +147,9 @@ class Form extends Dialog
 
       // marshal value
       if (isset( $data['marshaler']['marshal'] )) {
-        $marshaler = $data[$property]['marshaler']['marshal'];
+        $marshaler = $data['marshaler']['marshal'];
         if( ! is_callable( $marshaler ) ){
-          throw new \InvalidArgumentException("$name.marshaler must be callable.");
+          throw new InvalidArgumentException("$name.marshaler must be callable.");
         }
         $data['value'] = $marshaler($data['value']);
         unset( $data['marshaler'] );
@@ -158,24 +161,24 @@ class Form extends Dialog
 
   /**
    * Parses data returned by  dialog.Form widget based on a model
-   * @param \lib\models\BaseModel $model
+   * @param BaseModel $model
    * @param object $data;
    * @throws \Exception
-   * @throws \InvalidArgumentException
+   * @throws InvalidArgumentException
    * @return array
    */
-  protected static function parseResultData(\lib\models\BaseModel $model, $data)
+  public static function parseResultData(BaseModel $model, $data)
   {
     $data = json_decode(json_encode( $data ),true);
     $formData = $model->formData();
     if (! is_array( $formData) or ! count( $formData ) ) {
-      throw new \InvalidArgumentException( 'Model has no valid form data.');
+      throw new InvalidArgumentException( 'Model has no valid form data.');
     }
     foreach ($data as $property => $value) {
 
       // is it an editable property?
       if (! isset( $formData[$property] )) {
-        throw new \InvalidArgumentException( "Invalid form data property '$property'");
+        throw new InvalidArgumentException( "Invalid form data property '$property'");
       }
 
       // should I ignore it?
@@ -188,7 +191,7 @@ class Form extends Dialog
       if (isset( $formData[$property]['marshaler']['unmarshal'] )) {
         $unmarshaler = $formData[$property]['marshaler']['unmarshal'];
         if( ! is_callable( $unmarshaler ) ){
-          throw new \InvalidArgumentException("Invalid unmarshaller for property '$property': must be callable.");
+          throw new InvalidArgumentException("Invalid unmarshaller for property '$property': must be callable.");
         }
         $data['value'] = $unmarshaler($data['value']);
       }

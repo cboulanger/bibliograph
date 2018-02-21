@@ -212,15 +212,6 @@ class AppController extends \JsonRpc2\Controller
   }
 
   /**
-   * Deletes a user
-   */
-  public function deleteUser($user)
-  {
-    $this->dispatchMessage("user.deleted", $user->id());
-    $user->delete();
-  }
-
-  /**
    * Checks if active user has the given permission and aborts if
    * permission is not granted.
    *
@@ -370,7 +361,46 @@ class AppController extends \JsonRpc2\Controller
       throw new \InvalidArgumentException("Model of type " . static::$modelType . " and id #$id does not exist in datasource '$datasource'.");
     }
     return $model;
-  }  
+  }
+
+  //-------------------------------------------------------------
+  // Helpers for returning data to the user
+  //-------------------------------------------------------------
+
+  /**
+   * Return a message that can be send as the result of an action which does
+   * not return anything. The message is purely for diagnostic and debug reasons.
+   * @param string|null $reason (optional) reason for the abort
+   * @return string
+   */
+  public function successfulActionResult($reason=null)
+  {
+    return Yii::$app->requestedRoute . " was successful.";
+  }
+
+  /**
+   * Return a message that can be send as the result of an action if this action
+   * is aborted as response to user feedback. The message is purely for diagnostic
+   * and debug reasons.
+   * @param string|null $reason (optional) reason for cancelling
+   * @return string
+   */
+  public function cancelledActionResult($reason=null)
+  {
+    return Yii::$app->requestedRoute . " was cancelled" . ($reason ? ": $reason." : ".");
+  }
+
+  /**
+   * Return a message that can be send as the result of a failed action if this action
+   * is aborted as response to user feedback without throwing an exception.
+   * The message is purely for diagnostic and debug reasons.
+   * @param string|null $reason (optional) reason for the abort
+   * @return string
+   */
+  public function abortedActionResult($reason=null)
+  {
+    return "Aborted " . Yii::$app->requestedRoute . ($reason ? ": $reason." : ".");
+  }
 
   //-------------------------------------------------------------
   // methods to pass data between service methods
@@ -428,7 +458,7 @@ class AppController extends \JsonRpc2\Controller
    * @param mixed $data
    * @return void
    */
-  public function broadcastClientMessage($eventName, $data){
+  public function broadcastClientMessage($eventName, $data=null){
     $this->dispatchClientMessage($eventName, $data);
   }
 

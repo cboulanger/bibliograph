@@ -23,6 +23,8 @@ namespace lib\components;
 use app\models\Datasource;
 use fourteenmeister\helpers\Dsn;
 use lib\components\ConsoleAppHelper as Console;
+use lib\exceptions\UserErrorException;
+use Sse\Data;
 use Yii;
 
 /**
@@ -52,6 +54,8 @@ class DatasourceManager extends \yii\base\Component
    * @param string $className |null
    *    Optional class name of the datasource, defaults to "\app\models\BibliographicDatasource"
    * @return \app\models\Datasource
+   * @throws \Exception
+   * @throws \yii\db\Exception If a datasource of that name already exists.
    * @todo Rename "schema" to "class"
    */
   public function create(
@@ -63,14 +67,17 @@ class DatasourceManager extends \yii\base\Component
     }
 
     // @todo reimplement datasource schemas
-    if (!$className) {
+    if(!$className) {
       $className = \app\models\BibliographicDatasource::class;
     }
 
-    if (!is_subclass_of($className, Datasource::class)) {
+    if(!is_subclass_of($className, Datasource::class)) {
       throw new \InvalidArgumentException("Invalid class '$className'. Must be subclass of " . Datasource::class);
     }
 
+    if( Datasource::find()->where(['namedId'=>$datasourceName])->exists() ){
+      throw new \yii\db\Exception("Datasource exists");
+    }
     $datasource = new Datasource([
       'namedId' => $datasourceName,
       'title' => $datasourceName,
@@ -176,12 +183,13 @@ class DatasourceManager extends \yii\base\Component
    *
    * @param string $class Datasource schema class
    * @return boolean Returns true if migration succeeded
+   * @throws UserErrorException
    */
   public function migrate($class)
   {
     throw new \BadMethodCallException("Not ready!");
     if (YII_ENV_PROD) {
-      throw new \Exception('Datasource migrations are not allowed in production mode. Please contact the adminstrator');
+      throw new UserErrorException('Datasource migrations are not allowed in production mode. Please contact the adminstrator');
     };
 
     // backward compatibitly 

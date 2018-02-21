@@ -20,19 +20,13 @@
 
 namespace app\controllers;
 
-use PHPUnit\Framework\MockObject\BadMethodCallException;
 use Yii;
-
 use \JsonRpc2\Exception;
-
-use app\controllers\AppController;
 use app\controllers\dto\AuthResult;
 
-use app\models\User;
-use app\models\Role;
-use app\models\Permission;
-use app\models\Group;
-use app\models\Session;
+use app\models\{
+  User, Role, Permission, Group, Session
+};
 
 /**
  * The class used for authentication of users.
@@ -308,9 +302,12 @@ class AccessController extends AppController
     return "OK";
   }
 
+  /**
+   *
+   */
   public function actionRenewPassword()
   {
-    throw new BadMethodCallException("Not implemented");
+    throw new \BadMethodCallException("Not implemented");
     // @todo  create dialog that asks user to fill out their user information
     // if ( strlen($password) == 7 and ! $user->ldapAuth )
     // {
