@@ -24,7 +24,7 @@ use app\models\Group;
 use lib\dialog\Alert;
 use lib\exceptions\UserErrorException;
 use Yii;
-use yii\db\StaleObjectException;
+
 
 /**
  * Backend service class for the access control tool widget
