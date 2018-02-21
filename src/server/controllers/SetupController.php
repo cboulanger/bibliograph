@@ -20,11 +20,11 @@
 
 namespace app\controllers;
 
+use lib\components\MigrationException;
+use lib\dialog\{
+  Error as ErrorDialog, Confirm, Login
+};
 use Yii;
-use app\models\User;
-//use lib\dialog\RemoteWizard;
-use lib\dialog\Login;
-use lib\dialog\Confirm;
 use lib\components\ConsoleAppHelper as Console;
 use Stringy\Stringy;
 
@@ -201,7 +201,7 @@ class SetupController extends \app\controllers\AppController
    *    The current version of the application as stored in the database
    * @param string $upgrade_to The version in package.json, i.e. of the code, which can be
    *    higher than the 
-   * @return void
+   * @return bool
    */
   protected function runSetupMethods($upgrade_from, $upgrade_to)
   {
@@ -210,10 +210,13 @@ class SetupController extends \app\controllers\AppController
       if( Stringy::create( $method )->startsWith("setup") ){
         $result = $this->$method($upgrade_from, $upgrade_to);
         if( ! $result ) continue;
-        $fatalError = isset($result['fatalError']) ? $result['fatalError'] : false; 
-        if ( $fatalError ){
+        if( isset($result['fatalError']) ){
+          $fatalError= $result['fatalError'];
           Yii::error($fatalError);
-          \lib\dialog\Error::create( $fatalError );
+          if( isset($result['consoleOutput']) ){
+            // @todo display output in some way
+          }
+          ErrorDialog::create( $fatalError );
           return false;
         }
         if( isset($result['error'])){
@@ -223,8 +226,11 @@ class SetupController extends \app\controllers\AppController
           $this->messages[] = $result['message'];
         }
         if( count($this->errors) ){
-          \array_unshift($this->errors, Yii::t('app','<b>Setup failed. Please fix the following problems:</b>'));
-          \lib\dialog\Error::create( \implode('<br>',$this->errors));
+          \array_unshift(
+            $this->errors,
+            Yii::t('app','<b>Setup failed. Please fix the following problems:</b>')
+          );
+          ErrorDialog::create( \implode('<br>',$this->errors));
           return false;
         }
       }
@@ -282,7 +288,7 @@ class SetupController extends \app\controllers\AppController
   /**
    * Check if an ini file exists
    *
-   * @return void
+   * @return array
    */
   protected function setupCheckIniFileExists()
   {
@@ -307,7 +313,7 @@ class SetupController extends \app\controllers\AppController
   /**
    * Check if the file permissions are correct
    *
-   * @return void
+   * @return array
    */
   protected function setupCheckFilePermissions()
   {
@@ -336,7 +342,7 @@ class SetupController extends \app\controllers\AppController
   /**
    * Check if we have an admin email address
    *
-   * @return void
+   * @return array
    */
   protected function setupCheckAdminEmail()
   {
@@ -354,7 +360,7 @@ class SetupController extends \app\controllers\AppController
   /**
    * Check if we have a database connection
    *
-   * @return void
+   * @return array
    */
   public function setupCheckDbConnection()
   {
@@ -376,11 +382,14 @@ class SetupController extends \app\controllers\AppController
     return [
       'message' => 'Database connection ok.'
     ];    
-  }  
+  }
 
   /**
    * Run migrations
+   * @param $upgrade_from
+   * @param $upgrade_to
    * @return array
+   * @throws \Exception
    */
   protected function setupDoMigrations($upgrade_from, $upgrade_to)
   {
@@ -414,7 +423,13 @@ class SetupController extends \app\controllers\AppController
       }
       Yii::info('Found Bibliograph v2.x data in database. Adding migration history.','migrations');
       // set migration history to match the existing data
-      $output = Console::runAction('migrate/mark', ["app\\migrations\\data\\m180105_075933_join_User_RoleDataInsert"]);
+      try {
+        $output = Console::runAction('migrate/mark', ["app\\migrations\\data\\m180105_075933_join_User_RoleDataInsert"]);
+      } catch (MigrationException $e) {
+        return [
+          'fatalError' => Yii::t('app','Migrating data from Bibliograph v2 failed.')
+        ];
+      }
       if ( $output->contains('migration history is set') or 
           $output->contains('Nothing needs to be done') ){
         $message = Yii::t('app','Migrated data from Bibliograph v2');
@@ -428,8 +443,17 @@ class SetupController extends \app\controllers\AppController
         'version' => $upgrade_from
       ]);
     }
+
+
     // run new migrations
-    $output = Console::runAction('migrate/new');
+    try {
+      $output = Console::runAction('migrate/new');
+    } catch (MigrationException $e) {
+      return [
+        'fatalError'    => "migrate/new failed",
+        'consoleOutput' => $e->consoleOutput
+      ];
+    }
     if( $output->contains('up-to-date') ){
       Yii::info('No new migrations.','migrations');
       $message = Yii::t('app',"No updates to the databases.");
@@ -443,18 +467,28 @@ class SetupController extends \app\controllers\AppController
           'newversion' => $upgrade_to
         ]);
         Login::create( $message, "setup", "setup" );
-        return "Login required.";
+        return [
+          "abort" => "Login required."
+        ];
       };
+
       // unless we're in test mode, let the admin confirm 
       if( version_compare( $upgrade_from, "3.0.0", ">=" )  and ! $this->migrationConfirmed and ! YII_ENV_TEST){
         $message = Yii::t('app',"The database must be upgraded. Confirm that you have made a database backup and now are ready to run the upgrade."); // or face eternal damnation.
         Confirm::create($message,null,"setup","setup-confirm-migration");
-        return "User needs to confirm the migrations";
+        return [
+          "abort" => "Admin needs to confirm the migrations"
+        ];
       }
+
+
       // run all migrations 
       Yii::trace("Applying migrations...","migrations");
-      $output = Console::runAction("migrate/up");
-      // @todo check if migration was successful
+      try {
+        $output = Console::runAction("migrate/up");
+      } catch (MigrationException $e) {
+        $output = $e->consoleOutput;
+      }
       if ( $output->contains('Migrated up successfully') ){
         Yii::trace("Migrations successfully applied.","migrations");
         $message .= Yii::t('app', ' and applied new migrations for version {version}',[
@@ -462,7 +496,8 @@ class SetupController extends \app\controllers\AppController
         ]);
       } else {
         return [
-          'fatalError' => Yii::t('app', 'Initializing database failed.')
+          'fatalError'    => Yii::t('app', 'Initializing database failed.'),
+          'consoleOutput' => $output
         ];
       }
     } 

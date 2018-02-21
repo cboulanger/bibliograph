@@ -70,7 +70,7 @@ class Configuration extends \yii\base\Component
       case "array": 
         $type = "list"; break;
       default: 
-        throw new LogicException("Invalid default value for preference key '$key'");
+        throw new \InvalidArgumentException("Invalid default value for preference key '$key'");
     }
     $this->createKeyIfNotExists($key, $type, $customize, $default, $final);
   }
@@ -93,25 +93,7 @@ class Configuration extends \yii\base\Component
   public function setPreference( $key, $value )
   {
     $this->setKey( $key, $value );
-  }  
-
-  /**
-   * Sets up configuration keys if they do not already exist
-   * @param array Map of maps with the name of the config key as
-   * key and a map of "type","custom", "default", and "final" keys with values
-   * as value.
-   * @return void
-   */
-  public function setupConfigKeys( $map )
-  {
-    $configModel = $this->getConfigModel();
-    foreach( $map as $key => $data )
-    {
-      $configModel->createKeyIfNotExists(
-        $key, $data['type'], $data['custom'], $data['default'], $data['final']
-      );
-    }
-  }  
+  }
 
   //-------------------------------------------------------------
   // helper methods
@@ -120,37 +102,11 @@ class Configuration extends \yii\base\Component
   /**
    * Returns the current user
    *
-   * @return \app\models\User
+   * @return \app\models\User|\yii\web\IdentityInterface
    */
   protected function getActiveUser()
   {
     return Yii::$app->user->identity;
-  }
-
-  /**
-   * Given a user id, return the user model. If no id is given or
-   * the id is boolean false, return the active user model object
-   * @param $userId
-   * @throws InvalidArgumentException
-   * @return qcl_access_model_User
-   */
-  protected function getUserFromId( $userId=false )
-  {
-    if ( $userId === false )
-    {
-      return $this->getActiveUser();
-    }
-    elseif ( is_numeric( $userId ) and $userId > 0 )
-    {
-      $user = User::findOne($userId);
-      if ( ! $user ) {
-        throw new InvalidArgumentException( "User id '$userId' does not exist.");
-      }
-    }
-    else
-    {
-      throw new InvalidArgumentException( "Invalid user id '$userId'");
-    }
   }
 
   /**
@@ -160,7 +116,7 @@ class Configuration extends \yii\base\Component
    * @param string $type
    * @param bool $phpType If false, convert the value for saving in the database,
    *   if true (default), convert them into the corresponding php type
-   * @throws InvalidArgumentException
+   * @throws \InvalidArgumentException
    * @return mixed $value
    * @todo rewrite the typecasting stuff, this is confusing.
    */
@@ -204,7 +160,7 @@ class Configuration extends \yii\base\Component
         if ( $phpType ) return strval($value);
         return (string) $value;
       default:
-        throw new InvalidArgumentException("Invalid type '$type'");
+        throw new \InvalidArgumentException("Invalid type '$type'");
     }
   }
 
@@ -212,7 +168,7 @@ class Configuration extends \yii\base\Component
    * Checks if the type of the configuration value is correct
    * @param mixed $value
    * @param string $type
-   * @throws InvalidArgumentException
+   * @throws \InvalidArgumentException
    * @return bool True if correct
    */
   protected function isType( $value, $type )
@@ -228,7 +184,7 @@ class Configuration extends \yii\base\Component
       case "string":
         return is_string( $value );
       default:
-        throw new InvalidArgumentException("Invalid type '$type'");
+        throw new \InvalidArgumentException("Invalid type '$type'");
     }
   }
 
@@ -237,13 +193,13 @@ class Configuration extends \yii\base\Component
    * @param mixed $value
    * @param string $type
    * @return void
-   * @throws InvalidArgumentException
+   * @throws \InvalidArgumentException
    */
   protected function checkType( $value, $type )
   {
     if ( ! $this->isType( $value, $type ) )
     {
-      throw new InvalidArgumentException( sprintf(
+      throw new \InvalidArgumentException( sprintf(
         "Incorrect type. Expected '%s', got '%s'", $type, typeof( $value )
       ) );
     }
@@ -272,7 +228,7 @@ class Configuration extends \yii\base\Component
   /**
    * Checks if a configuration key exists and throws an exception if not.
    * @param $key
-   * @throws InvalidArgumentException
+   * @throws \InvalidArgumentException
    * @return void
    * @todo This is inefficient. Methods should try to load the record and
    * abort if not found.
@@ -329,11 +285,10 @@ class Configuration extends \yii\base\Component
    *     If not null, set a default value
    * @param bool $final
    *     If true, the value cannot be modified after creation
-   * @throws InvalidArgumentException
-   * @see app\controllers\ConfigController::$types
    * @return int|bool
    *     Returns the id of the newly created record, or false if
    *     key was not created.
+   * @throws \InvalidArgumentException
    */
 	public function createKey( $key, $type, $customize=false, $default=null, $final=false )
 	{
@@ -406,7 +361,7 @@ class Configuration extends \yii\base\Component
    * Sets a default value for a config key
    * @param string $key
    * @param mixed $value
-   * @throws qcl_config_Exception
+   * @throws \InvalidArgumentException
    * @return void
    */
   public function setKeyDefault( $key, $value )
@@ -419,7 +374,7 @@ class Configuration extends \yii\base\Component
     }
     else
     {
-      throw new LogicException("Config key '$key' cannot be changed.");
+      throw new \InvalidArgumentException("Config key '$key' cannot be changed.");
     }
   }
 

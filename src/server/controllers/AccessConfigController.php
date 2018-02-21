@@ -785,7 +785,8 @@ class AccessConfigController extends \app\Controllers\AppController
     }
 
     /** @var \app\models\User $user */
-    $user = new ($user::className())();
+    $userClass = get_class($user);
+    $user = new $userClass;
     $user->setAttributes((array) $data );
 
     // give it the 'user' role

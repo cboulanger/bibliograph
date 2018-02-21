@@ -5,6 +5,7 @@ class AccessControllerCest
 
   public function tryToAccessMethodWithoutAuthentication(ApiTester $I, \Codeception\Scenario $scenario)
   {
+    $I->clearToken();
     $I->sendJsonRpcRequest("access","username");
     // @todo we don't get a proper error yet, so we have to check that the result is null
     $I->assertSame( [null], $I->grabDataFromResponseByJsonPath('$.result')); 

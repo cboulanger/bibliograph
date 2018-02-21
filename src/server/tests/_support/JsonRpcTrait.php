@@ -11,9 +11,17 @@ trait JsonRpcTrait
   protected function token($t=null)
   {
     static $token = null;
-    if( $t ) $token = $t;
+    if( ! is_null($t) ) $token = $t;
     return $token;
-  } 
+  }
+
+  /**
+   * Clears the token
+   */
+  public function clearToken()
+  {
+    $this->token(false);
+  }
 
   /**
    * Send a JSONRPC request. 

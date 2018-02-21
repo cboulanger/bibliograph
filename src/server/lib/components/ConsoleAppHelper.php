@@ -3,6 +3,7 @@
 namespace lib\components;
 use Stringy\Stringy;
 use Yii;
+use yii\db\Exception;
 
 /**
  * Class ConsoleAppHelper
@@ -13,16 +14,17 @@ class ConsoleAppHelper extends \yii\base\Component
 {
 
   /**
-   * Runs a console action. Returns the result if successful, otherwise 
-   * throws the error. 
+   * Runs a console action. Returns the result if successful, otherwise
+   * throws the error.
    *
    * @param string $route
    * @param array $params
    * @param string $controllerNamespace
-   * @param yii\db\Connection|null $customDb 
-   *    The database connection to use or null for the default application db 
-   * @throws \Exception
+   * @param yii\db\Connection|null $customDb
+   *    The database connection to use or null for the default application db
    * @return \Stringy\Stringy The output of the console action as a Stringy object
+   * @throws MigrationException
+   * @throws \Exception
    */
   public static function runAction( 
     $route, 
@@ -61,11 +63,11 @@ class ConsoleAppHelper extends \yii\base\Component
         $route,
         array_merge( $params, [ 'interactive' => false, 'color' => false ] )
       );
-      $result = ob_get_clean();
+      $consoleOutput = ob_get_clean();
       Yii::trace( "\n" .
         "Output of console action '$route':\n" .
         "---------------------------------------------------------\n" .
-        $result . "\n".
+        $consoleOutput . "\n".
         "---------------------------------------------------------\n",
         "console" 
       );      
@@ -74,9 +76,36 @@ class ConsoleAppHelper extends \yii\base\Component
       throw $e;
     }
     Yii::$app = $oldApp;
+    $consoleOutput = Stringy::create($consoleOutput);
     if( $exitCode ){
-      throw new \Exception("Running action '$route' exited with code $exitCode.");
+      $e = new MigrationException("Running '$route' failed.");
+      $e->exitCode = $exitCode;
+      $e->consoleApp = $consoleApp;
+      $e->consoleOutput = $consoleOutput;
+      throw $e;
     }
-    return Stringy::create($result);
+    return $consoleOutput;
   }
-} 
+}
+
+class MigrationException extends Exception
+{
+  /**
+   * The console output of the migration command, wrapped in a
+   * Stringy object for easier manipulation
+   * @var \Stringy\Stringy
+   */
+  public $consoleOutput;
+
+  /**
+   * The console application used
+   * @var \yii\console\Application
+   */
+  public $consoleApp;
+
+  /**
+   * The exit code of the console command
+   * @var int
+   */
+  public $exitCode;
+}

@@ -9,6 +9,7 @@ class SetupControllerCest
    * @param ApiTester $I
    * @return void
    * @env testing
+   *
    */
   public function tryVersion(ApiTester $I)
   {
