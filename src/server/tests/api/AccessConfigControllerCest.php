@@ -3,7 +3,7 @@
 class AccessConfigControllerCest
 {
 
-  public function tryGetTypeData(ApiTester $I, \Codeception\Scenario $scenario)
+  public function tryToGetTypeData(ApiTester $I, \Codeception\Scenario $scenario)
   {
     $I->loginAsAdmin();
     $I->sendJsonRpcRequest('access-config','types');
@@ -11,7 +11,7 @@ class AccessConfigControllerCest
     $I->compareJsonRpcResultWith(json_decode($expected));
   }
 
-  public function tryGetElementData(ApiTester $I, \Codeception\Scenario $scenario)
+  public function tryToGetElementData(ApiTester $I, \Codeception\Scenario $scenario)
   {
     $I->sendJsonRpcRequest('access-config','elements',['user']);
     $expected = '[{"icon":"icon/16/apps/preferences-users.png","label":"Administrator","params":"user,admin","type":"user","value":"admin"},{"icon":"icon/16/apps/preferences-users.png","label":"Manager","params":"user,manager","type":"user","value":"manager"},{"icon":"icon/16/apps/preferences-users.png","label":"User","params":"user,user","type":"user","value":"user"}]';
@@ -25,9 +25,9 @@ class AccessConfigControllerCest
     $I->compareJsonRpcResultWith(json_decode($expected));
   }
 
-  public function tryToAddUsers (ApiTester $I, \Codeception\Scenario $scenario)
+  public function tryToAddUsers(ApiTester $I, \Codeception\Scenario $scenario)
   {
-    $I->wantTo("create users user2 and user3");
+    $I->comment("create users user2 and user3");
     $I->sendJsonRpcRequest('access-config','add',['user','user2',false]);
     $I->sendJsonRpcRequest('access-config','elements',['user']);
     $expected = [
@@ -50,10 +50,18 @@ class AccessConfigControllerCest
     $I->compareJsonRpcResultWith( $expected, 4);
   }
 
-
-  public function tryToAddDatasource2(ApiTester $I, \Codeception\Scenario $scenario)
+  public function tryToAddExistingUser(ApiTester $I, \Codeception\Scenario $scenario)
   {
-    $I->wantTo("create datasources datasource1 and datasource2");
+    $I->comment("create a user2, which already exists, and expect an error message");
+    $I->sendJsonRpcRequest('access-config','add',['user','user2',false]);
+    $expected = "A user named 'user2' already exists. Please pick another name.";;
+    $I->compareJsonRpcResultWith( $expected, "events.0.data.properties.message" );
+  }
+
+
+  public function tryToAddDatasources(ApiTester $I, \Codeception\Scenario $scenario)
+  {
+    $I->comment("create datasources datasource1 and datasource2");
     $I->sendJsonRpcRequest('access-config','add',['datasource','datasource1',false]);
     $I->sendJsonRpcRequest('access-config','elements',['datasource']);
     $expected = [
@@ -76,6 +84,35 @@ class AccessConfigControllerCest
     $I->compareJsonRpcResultWith( $expected, 1);
   }
 
+  public function tryToAddGroups(ApiTester $I, \Codeception\Scenario $scenario)
+  {
+    $I->comment("create groups group1 and group2");
+    $I->sendJsonRpcRequest('access-config','add',['group','group1',false]);
+    $I->sendJsonRpcRequest('access-config','elements',['group']);
+    $expected = [
+      "icon"   => "icon/16/actions/address-book-new.png",
+      "label"  => "group1",
+      "params" => "group,group1",
+      "type"   => "group",
+      "value"  => "group1"
+    ];
+    $I->compareJsonRpcResultWith( $expected, 0);
+    $I->sendJsonRpcRequest('access-config','add',['group','group2',false]);
+    $I->sendJsonRpcRequest('access-config','elements',['group']);
+    $expected = [
+      "icon"   => "icon/16/actions/address-book-new.png",
+      "label"  => "group2",
+      "params" => "group,group2",
+      "type"   => "group",
+      "value"  => "group2"
+    ];
+    $I->compareJsonRpcResultWith( $expected, 1);
+  }
 
+  public function tryToCreateUserForm(ApiTester $I, \Codeception\Scenario $scenario)
+  {
+    $I->loginAsAdmin();
+    $I->sendJsonRpcRequest('access-config','edit',['user','user2']);
+  }
   
 }

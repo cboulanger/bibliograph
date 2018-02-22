@@ -39,6 +39,7 @@ class BibliographicDatasource
 
   /**
    * Initialize the datasource, registers the models
+   * @throws InvalidArgumentException
    */
   public function init()
   {
@@ -52,6 +53,7 @@ class BibliographicDatasource
    * Creates the default folders for the datasource
    *
    * @return void
+   * @throws \yii\db\Exception
    */
   public function addDefaultFolders()
   {
@@ -79,6 +81,7 @@ class BibliographicDatasource
     ];
     $folderClass = $this->getClassFor('folder');
     foreach( $folderData as $data ){
+      /** @var \app\models\Folder $folder */
       $folder = new $folderClass();
       $folder->setAttributes( $data );
       $folder->save();

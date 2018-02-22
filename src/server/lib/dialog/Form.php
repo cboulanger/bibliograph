@@ -22,6 +22,7 @@ namespace lib\dialog;
 
 use InvalidArgumentException;
 use lib\models\BaseModel;
+use yii\helpers\ArrayHelper;
 
 class Form extends Dialog
 {
@@ -107,56 +108,60 @@ class Form extends Dialog
    * @throws InvalidArgumentException
    * @return array
    */
-  public static function createFromModel( BaseModel $model, $width = 300)
+  public static function getDataFromModel( BaseModel $model, $width = 300)
   {
-    $modelFormData = $model->formData();
+    $modelFormData = $model->formData;
     if (! is_array( $modelFormData) or ! count( $modelFormData ) ) {
       throw new \Exception( "No form data exists.");
     }
-    $formData = array();
-    foreach ($modelFormData as $name => $data) {
+    $widgetFormData = [];
+    foreach ($modelFormData as $property => $field) {
+
+      // add label
+      if( ! isset($field['label'] ) ){
+        $field['label'] = $model->getAttributeLabel($property);
+      }
 
       // dynamically get element data from the object
-      if ( isset( $data['delegate'] )) {
-        foreach ($data['delegate'] as $key => $delegateMethod) {
-          $data[$key] = $model->$delegateMethod( $name, $key, $data );
+      if ( isset( $field['delegate'] )) {
+        foreach ($field['delegate'] as $key => $delegateMethod) {
+          $field[$key] = $model->$delegateMethod( $property, $key, $field );
         }
-        unset( $data['delegate'] );
+        unset( $field['delegate'] );
       }
 
       // type
-      if (! isset( $data['type'] )) {
-        $data['type']  = "TextField";
+      if (! isset( $field['type'] )) {
+        $field['type']  = "TextField";
       }
 
       // width
-      if (! isset( $data['width'] )) {
-        $data['width'] = $width;
+      if (! isset( $field['width'] )) {
+        $field['width'] = $width;
       }
 
       // get value from model or default value
-      if (! isset( $data['value'] )) {
-        $data['value'] = $model->$name;
+      if (! isset( $field['value'] )) {
+        $field['value'] = $model->$property;
       }
-      if (isset( $data['default'] )) {
-        if (! $data['value']) {
-          $data['value'] = $data['default'];
+      if (isset( $field['default'] )) {
+        if (! $field['value']) {
+          $field['value'] = $field['default'];
         }
-        unset( $data['default'] );
+        unset( $field['default'] );
       }
 
-      // marshal value
-      if (isset( $data['marshaler']['marshal'] )) {
-        $marshaler = $data['marshaler']['marshal'];
-        if( ! is_callable( $marshaler ) ){
-          throw new InvalidArgumentException("$name.marshaler must be callable.");
-        }
-        $data['value'] = $marshaler($data['value']);
-        unset( $data['marshaler'] );
+      // marshal a model property value for the form field's value
+      $marshaler = ArrayHelper::getValue( $modelFormData, [$property,'marshal'] );
+      if(is_callable($marshaler)) {
+        $field['value'] = $marshaler($field['value']);
+      } elseif( $marshaler) {
+        throw new InvalidArgumentException("Invalid marshaller property for '$property': must be callable.");
       }
-      $formData[ $name ] = $data;
+
+      $widgetFormData[ $property ] = $field;
     }
-    return $formData;
+    return $widgetFormData;
   }
 
   /**
@@ -170,30 +175,29 @@ class Form extends Dialog
   public static function parseResultData(BaseModel $model, $data)
   {
     $data = json_decode(json_encode( $data ),true);
-    $formData = $model->formData();
-    if (! is_array( $formData) or ! count( $formData ) ) {
+    $modelFormData = $model->formData;
+    if (! is_array( $modelFormData) or ! count( $modelFormData ) ) {
       throw new InvalidArgumentException( 'Model has no valid form data.');
     }
     foreach ($data as $property => $value) {
 
-      // is it an editable property?
-      if (! isset( $formData[$property] )) {
-        throw new InvalidArgumentException( "Invalid form data property '$property'");
+      // is the property part of the form?
+      if (! isset( $modelFormData[$property] )) {
+        continue;
       }
 
       // should I ignore it?
-      if (isset( $formData[$property]['ignore'] ) and $formData[$property]['ignore'] === true) {
+      if ( ArrayHelper::getValue($modelFormData, [$property, 'ignore'],false) ) {
         unset( $data[$property] );
         continue;
       }
 
-      // marshaler
-      if (isset( $formData[$property]['marshaler']['unmarshal'] )) {
-        $unmarshaler = $formData[$property]['marshaler']['unmarshal'];
-        if( ! is_callable( $unmarshaler ) ){
-          throw new InvalidArgumentException("Invalid unmarshaller for property '$property': must be callable.");
-        }
-        $data['value'] = $unmarshaler($data['value']);
+      // unmarshal form field values to be stored in a model property
+      $unmarshaler = ArrayHelper::getValue( $modelFormData, [$property,'umarshal'] );
+      if(is_callable($unmarshaler)) {
+        $data[$property] = $unmarshaler($data[$property]);
+      } elseif( $unmarshaler ) {
+        throw new InvalidArgumentException("Invalid unmarshaller for property '$property': must be callable.");
       }
 
       // remove null values from data
@@ -203,4 +207,6 @@ class Form extends Dialog
     }
     return $data;
   }
+
+
 }

@@ -23,6 +23,7 @@ namespace lib\components;
 use app\models\Datasource;
 use fourteenmeister\helpers\Dsn;
 use lib\components\ConsoleAppHelper as Console;
+use lib\exceptions\RecordExistsException;
 use lib\exceptions\UserErrorException;
 use Sse\Data;
 use Yii;
@@ -55,7 +56,7 @@ class DatasourceManager extends \yii\base\Component
    *    Optional class name of the datasource, defaults to "\app\models\BibliographicDatasource"
    * @return \app\models\Datasource
    * @throws \Exception
-   * @throws \yii\db\Exception If a datasource of that name already exists.
+   * @throws RecordExistsException
    * @todo Rename "schema" to "class"
    */
   public function create(
@@ -76,7 +77,7 @@ class DatasourceManager extends \yii\base\Component
     }
 
     if( Datasource::find()->where(['namedId'=>$datasourceName])->exists() ){
-      throw new \yii\db\Exception("Datasource exists");
+      throw new RecordExistsException("Datasource exists");
     }
     $datasource = new Datasource([
       'namedId' => $datasourceName,

@@ -20,6 +20,8 @@
 
 namespace app\controllers;
 
+use lib\dialog\Form;
+use lib\exceptions\UserErrorException;
 use Yii;
 
 use lib\controllers\ITreeController;
@@ -169,35 +171,6 @@ class FolderController extends AppController //implements ITreeController
     } else {
       throw new InvalidArgumentException("Icon for type '$type' does not exist.");
     }
-  }  
-
-  /**
-   * Adds basic folders
-   * @return void
-   */
-  static function addInitialFolders($datasource)
-  {
-    // top folder
-    $class = $this->getControlledModel($datasource);
-    $top = new $class([
-      "label"       => Yii::t("app","Default Folder"),
-      "parentId"    => 0,
-      "position"    => 0,
-      "childCount"  => 0,
-      "public"      => true
-    ]);
-    $top->save();
-
-    // trash folder
-    $trash = new $class([
-      "type"        => "trash",
-      "label"       => Yii::t("app","Trash Folder"),
-      "parentId"    => 0,
-      "position"    => 1,
-      "childCount"  => 0,
-      "public"      => false
-    ]);
-    $trash->save();
   }
 
   /*
@@ -224,7 +197,7 @@ class FolderController extends AppController //implements ITreeController
     $nodeCount = $query->count();
     return array(
       'nodeCount'     => $nodeCount,
-      'transactionId' => $model->getTransactionId(),
+      'transactionId' => 0,
       'statusText'    => ""
     );
   }
@@ -279,21 +252,23 @@ class FolderController extends AppController //implements ITreeController
    * Edit folder data
    * @param $datasource
    * @param $folderId
-   * @return string "OK"
+   * @return string Diagnostic message
+   * @throws \JsonRpc2\Exception
+   * @throws \Exception
    */
   public function actionEdit( $datasource, $folderId )
   {
     $this->requirePermission("folder.edit");
-    $model = statid :: getRecordById (§datasource, $folderId);
-    $formData = $this->createFormData( $model ); 
+    $model = $this->getRecordById(§datasource, $folderId);
+    $formData = Form::getDataFromModel( $model );
     $label = $model->label;
     $message = "<h3>$label</h3>";
-    \lib\dialog\Form::create(
+    Form::create(
       $message, $formData, true,
       Yii::$app->controller->id, "saveFormData",
       array( $datasource, $folderId )
     );
-    return "OK";
+    return "Created form to edit folder data.";
   }
 
   /**
@@ -330,7 +305,7 @@ class FolderController extends AppController //implements ITreeController
   {
     $this->requirePermission("folder.edit");
     $folder = $this->getRecordById( $datasource, $folderId );
-    return \lib\dialog\Form::create(
+    return Form::create(
       Yii::t('app', "Change the visibility of the folder"),
       array(
         'state' => array(
@@ -401,7 +376,7 @@ class FolderController extends AppController //implements ITreeController
   public function actionAddDialog( $datasource, $folderId )
   {
     $this->requirePermission("folder.add");
-    return \lib\dialog\Form::create(
+    return Form::create(
       Yii::t('app',"Please enter the name and type of the new folder:"),
       array(
         'label' => array(
@@ -448,25 +423,28 @@ class FolderController extends AppController //implements ITreeController
    * Creates a confimation dialog to remove a folder
    * @param $datasource
    * @param $folderId
-   * @return void
+   * @return string Diagnostic message
+   * @throws UserErrorException
+   * @throws \JsonRpc2\Exception
    */
   public function actionRemoveDialog( $datasource, $folderId )
   {
     $this->requirePermission("folder.remove");
     $folder = $this->getRecordById( $datasource, $folderId );
     // root folder?
-    if( $model->parentId == 0 ) {
-      throw new \Exception(Yii::t('app', "Top folders cannot be deleted."));
+    if( $folder->parentId == 0 ) {
+      throw new UserErrorException(Yii::t('app', "Top folders cannot be deleted."));
     }
 
     // create dialog
-    return \lib\dialog\Confirm::create(
+    \lib\dialog\Confirm::create(
       Yii::t('app', "Do you really want to move the folder '{name}' into the trash?", [
-        'name' => $model->label
+        'name' => $folder->label
       ]),
       null,
       Yii::$app->controller->id, "remove", array( $datasource, $folderId )
     );
+    return "Created confirmation dialog";
   }
 
   /**
@@ -544,29 +522,29 @@ class FolderController extends AppController //implements ITreeController
     foreach( $childFolders as $folder ){
       $this->setFolderMarkedDeleted( $folder, $value );
     }
-  }  
+  }
 
   /**
    * Move a folder to a different parent
    * @param $datasource
    * @param $folderId
    * @param $parentId
-   * @throws \lib\exceptions\UserErrorException
+   * @throws UserErrorException
    * @return string "OK"
+   * @throws \JsonRpc2\Exception
    */
   public function actionMove( $datasource, $folderId, $parentId )
   {
-    if( $folderId == $parentId )
-    {
-      throw new \Exception(Yii::t('app', "Folder cannot be moved on itself."));
-    }
     $this->requirePermission("folder.move");
+    if( $folderId == $parentId ) {
+      throw new UserErrorException(Yii::t('app', "Folder cannot be moved on itself."));
+    }
     $id = $parentId;
     do {
       $folder = $this->getRecordById( $datasource, $id );
       if( $folder->id == $folderId )
       {
-        throw new \Exception(Yii::t('app', "Parent node cannot be moved on a child node"));
+        throw new UserErrorException(Yii::t('app', "Parent node cannot be moved on a child node"));
       }
       $id = $folder->parentId;
     }
@@ -577,11 +555,11 @@ class FolderController extends AppController //implements ITreeController
 
     // root folder?
     if( $folder->parentId == 0 ) {
-      throw new \Exception(Yii::t('app', "Top folders cannot be moved."));
+      throw new UserErrorException(Yii::t('app', "Top folders cannot be moved."));
     }
 
-    $model->parentId = $parentId;
-    $model->save();
+    $folder->parentId = $parentId;
+    $folder->save();
 
     // mark deleted if moved into trash folder
     $trashFolder = \app\controllers\TrashController::getTrashfolder( $datasource );

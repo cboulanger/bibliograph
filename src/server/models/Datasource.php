@@ -261,6 +261,7 @@ class Datasource extends BaseModel
    * Returns the yii Connection object for this datasource
    * @param string $datasourceName
    * @return \yii\db\Connection
+   * @throws \LogicException
    */
   public function getConnection()
   {
@@ -273,7 +274,7 @@ class Datasource extends BaseModel
         $dsn = "{$this->type}:host={$this->host};port={$this->port};dbname={$this->database}";
         break;
         default: 
-        throw new LogicException("Support for datasource type '{$this->type}' has not been implemented yet.");
+        throw new \LogicException("Support for datasource type '{$this->type}' has not been implemented yet.");
       }
       // determine table prefix from database or datasource name
       // @todo add global prefix from ini file
@@ -296,9 +297,10 @@ class Datasource extends BaseModel
 
   /**
    * Uses the application dsn defaults if the datasource information doesn't
-   * contain it. 
+   * contain it.
    *
    * @return void
+   * @throws \Exception
    */
   protected function useDsnDefaults(){
     foreach( ["host","port","database","username","password"] as $key ){
@@ -315,7 +317,7 @@ class Datasource extends BaseModel
    * @param string $class The class of the model
    * @param string|null $service (optional) The service that provides access to model data
    * type of model to the model classes
-   * @throws InvalidArgumentException
+   * @throws \InvalidArgumentException
    * @return void
    */
   public function addModel( $type, $class, $service=null)
@@ -375,16 +377,14 @@ class Datasource extends BaseModel
     return $this->modelMap[$type]['controller']['service'];
   }
 
-
-
   /**
    * Creates the tables for the models associated with this datasource
    *
    * @return void
+   * @throws \Exception
    */
   public function createModelTables()
   {
-    return Yii::$app->datasourceManager->createModelTables($this);
+    Yii::$app->datasourceManager->createModelTables($this);
   }
-
 }

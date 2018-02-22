@@ -20,11 +20,15 @@
 
 namespace app\controllers;
 
-use app\models\Group;
-use lib\dialog\Alert;
-use lib\exceptions\UserErrorException;
 use Yii;
-use yii\db\Exception;
+use app\models\Group;
+use lib\dialog\{
+  Alert, Form
+};
+use lib\exceptions\{
+  RecordExistsException, UserErrorException
+};
+
 
 
 /**
@@ -90,11 +94,23 @@ class AccessConfigController extends \app\Controllers\AppController
    * @param string $type
    * @param string $namedId
    * @return \lib\models\BaseModel
+   * @throws UserErrorException
+   * @todo can this go into AppController?
    */
   protected function getModelInstance($type, $namedId)
   {
     $modelClass = $this->getModelDataFor($type)['class'];
-    return $modelClass::findByNamedId($namedId);
+    $model = $modelClass::findByNamedId($namedId);
+    if( $model ) {
+      return $model;
+    }
+    throw new UserErrorException(
+      Yii::t(
+        'app',
+        "An object of type {type} and id {namedId} does not exist.",
+        [ 'type' => $type, 'namedId' => $namedId ]
+      )
+    );
   }
 
   /**
@@ -455,13 +471,14 @@ class AccessConfigController extends \app\Controllers\AppController
     );
     $errorMessage = Yii::t(
       'app',
-      "Error saving {type} named '{name}'.",
+      "Error saving {type} named '{name}':",
       [ 'type' => $type, 'name' => $namedId ]
     );
+
     if ($type == "datasource") {
       try {
         $model = Yii::$app->datasourceManager->create($namedId);
-      } catch ( \yii\db\Exception $e) {
+      } catch ( RecordExistsException $e) {
         throw new UserErrorException( $duplicateMessage );
       } catch (\Exception $e) {
         throw new UserErrorException( $e->getMessage() );
@@ -470,11 +487,14 @@ class AccessConfigController extends \app\Controllers\AppController
       try {
         $model->save();
       } catch (\yii\db\Exception $e) {
-        throw new UserErrorException($errorMessage);
+        throw new UserErrorException($errorMessage . $e->getMessage());
       }
       $this->dispatchClientMessage("reloadDatasources");
     } else {
       $modelClass = $elementData['class'];
+      if( $modelClass::findByNamedId($namedId) ){
+        throw new UserErrorException( $duplicateMessage );
+      }
       /** @var \lib\models\BaseModel $model */
       $model = new $modelClass([
         'namedId' => $namedId,
@@ -483,7 +503,7 @@ class AccessConfigController extends \app\Controllers\AppController
       try {
         $model->save();
       } catch (\yii\db\Exception $e) {
-        throw new UserErrorException($errorMessage);
+        throw new UserErrorException($errorMessage . $e->getMessage() );
       }
     }
     if( $edit ) {
@@ -505,6 +525,7 @@ class AccessConfigController extends \app\Controllers\AppController
    *    arguments are the normal signature
    * @return string
    * @throws \JsonRpc2\Exception
+   * @throws UserErrorException
    */
   public function actionEdit($first, $second, $third = null)
   {
@@ -522,18 +543,20 @@ class AccessConfigController extends \app\Controllers\AppController
       $this->requirePermission("access.manage");
     }
 
+    // create form
     $model = $this->getModelInstance($type,$namedId);
-    $formData = $this->createFormData($model);
-
+    try {
+      $formData = Form::getDataFromModel($model);
+    } catch (\Exception $e) {
+      throw new UserErrorException($e->getMessage());
+    }
     if ($type == "user") {
       $formData['password']['value'] = null;
       $formData['password2']['value'] = null;
     }
-
-    $modelMap = $this->modelData();
-    $message = "<h3>" . Yii::t('app', $modelMap[$type]['dialogLabel']) . " '" . $namedId . "'</h3>";
-
-    \lib\dialog\Form::create(
+    $label  = $this->getModelDataFor($type)['dialogLabel'];
+    $message = "<h3>$label '$namedId'</h3>";
+    Form::create(
       $message, $formData, true,
       Yii::$app->controller->id, "saveFormData",
       array($type, $namedId)

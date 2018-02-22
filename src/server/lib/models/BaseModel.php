@@ -27,6 +27,11 @@ use yii\behaviors\TimestampBehavior;
 
 use app\models\Datasource;
 
+/**
+ * @property array formData
+ *    A associative array of arrays containing data for the
+ *    dialog.Form widget
+ */
 class BaseModel extends ActiveRecord
 {
 
@@ -59,7 +64,7 @@ class BaseModel extends ActiveRecord
    * model data can be edited
    * @return array|null
    */
-  public function formData(){
+  public function getFormData(){
     return null;
   }
 

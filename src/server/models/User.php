@@ -20,16 +20,10 @@
 
 namespace app\models;
 
+use lib\exceptions\UserErrorException;
 use Yii;
 use yii\web\IdentityInterface;
-
 use lib\models\BaseModel;
-use app\models\Group;
-use app\models\Permissions;
-use app\models\Roles;
-use app\models\UserConfig;
-use app\models\Session;
-use app\models\User_Role;
 
 
 /**
@@ -79,21 +73,74 @@ class User extends BaseModel implements IdentityInterface
    */
   public function attributeLabels()
   {
-  return [
-    'id' => Yii::t('app', 'ID'),
-    'namedId' => Yii::t('app', 'Named ID'),
-    'created' => Yii::t('app', 'Created'),
-    'modified' => Yii::t('app', 'Modified'),
-    'name' => Yii::t('app', 'Name'),
-    'password' => Yii::t('app', 'Password'),
-    'email' => Yii::t('app', 'Email'),
-    'anonymous' => Yii::t('app', 'Anonymous'),
-    'ldap' => Yii::t('app', 'Ldap'),
-    'active' => Yii::t('app', 'Active'),
-    'lastAction' => Yii::t('app', 'Last Action'),
-    'confirmed' => Yii::t('app', 'Confirmed'),
-    'online' => Yii::t('app', 'Online'),
-  ];
+    return [
+      'id' => Yii::t('app', 'ID'),
+      'namedId' => Yii::t('app', 'Named ID'),
+      'created' => Yii::t('app', 'Created'),
+      'modified' => Yii::t('app', 'Modified'),
+      'name' => Yii::t('app', 'Name'),
+      'password' => Yii::t('app', 'Password'),
+      'email' => Yii::t('app', 'Email'),
+      'anonymous' => Yii::t('app', 'Anonymous'),
+      'ldap' => Yii::t('app', 'Ldap'),
+      'active' => Yii::t('app', 'Active'),
+      'lastAction' => Yii::t('app', 'Last Action'),
+      'confirmed' => Yii::t('app', 'Confirmed'),
+      'online' => Yii::t('app', 'Online'),
+    ];
+  }
+
+  /**
+   * @inheritdoc
+   */
+  public function getFormData()
+  {
+    return [
+      'name' => [
+        'name' => "name",
+      ],
+      'email' => [
+        'placeholder' => Yii::t('app', "Enter a valid Email address"),
+        'validation' => [
+          'validator' => "email"
+        ]
+      ],
+      'password' => [
+        'type' => "PasswordField",
+        'value' => "",
+        'placeholder' => Yii::t('app', "To change the password, enter new password."),
+        'unmarshal' => function( $value) { return $this->checkFormPassword($value);}
+
+      ],
+      'password2' => [
+        'type' => "PasswordField",
+        'value' => "",
+        'ignore' => true,
+        'placeholder' => Yii::t('app', "To change the password, repeat new password"),
+        'unmarshal' => function( $value) { return $this->checkFormPassword($value);}
+      ]
+    ];
+  }
+
+  /**
+   * Function to check the match between the password and the repeated
+   * password. Returns the hashed password.
+   * @param $value
+   * @return string|null
+   * @throws UserErrorException
+   */
+  protected function checkFormPassword ( $value )
+  {
+    if ( ! isset( $this->__password ) ) {
+      $this->__password = $value;
+    }
+    elseif ( $this->__password != $value ) {
+      throw new UserErrorException( Yii::t('app',"Passwords do not match...") );
+    }
+    if ( $value and strlen($value) < 8 ) {
+      throw new UserErrorException( Yii::t('app',"Password must be at least 8 characters long") );
+    }
+    return $value ? Yii::$app->accessManager->generateHash( $value ) : null;
   }
 
   //-------------------------------------------------------------
@@ -101,10 +148,7 @@ class User extends BaseModel implements IdentityInterface
   //-------------------------------------------------------------
 
   /**
-   * Finds an identity by the given ID.
-   *
-   * @param string|int $id the ID to be looked for
-   * @return IdentityInterface|null the identity object that matches the given ID.
+   * @inheritdoc
    */
   public static function findIdentity($id)
   {
@@ -112,10 +156,7 @@ class User extends BaseModel implements IdentityInterface
   }
 
   /**
-   * Finds an identity by the given token.
-   *
-   * @param string $token the token to be looked for
-   * @return User|null the identity object that matches the given token.
+   * @inheritdoc
    */
   public static function findIdentityByAccessToken($token, $type = null)
   {
@@ -123,7 +164,7 @@ class User extends BaseModel implements IdentityInterface
   }
 
   /**
-   * @return int|string current user ID
+   * @inheritdoc
    */
   public function getId()
   {
@@ -131,7 +172,7 @@ class User extends BaseModel implements IdentityInterface
   }
 
   /**
-   * @return string current user auth key
+   * @inheritdoc
    */
   public function getAuthKey()
   {
@@ -139,25 +180,23 @@ class User extends BaseModel implements IdentityInterface
   }
 
   /**
-   * @param string $authKey
-   * @return bool if auth key is valid for current user
+   * @inheritdoc
    */
   public function validateAuthKey($authKey)
   {
     return $this->token === $authKey;
-  }  
+  }
 
   /**
    * Adds an access token for the user before the record is saved to the database
    *
-   * @param bool $insert
-   * @return bool
+   * @inheritdoc
    */
   public function beforeSave($insert)
   {
     if (parent::beforeSave($insert)) {
       if ($this->isNewRecord or ! $this->token) {
-        $this->token = \Yii::$app->security->generateRandomString();
+        $this->token = Yii::$app->security->generateRandomString();
       }
       return true;
     }
@@ -380,7 +419,7 @@ class User extends BaseModel implements IdentityInterface
    * @return string[]
    *    Array of string values: group named ids.
    */
-  public function getGroupNames($refresh = false)
+  public function getGroupNames()
   {
     $result = $this->getGroups()->all();
     if( is_null( $result ) ) return [];
@@ -448,6 +487,6 @@ class User extends BaseModel implements IdentityInterface
    */
   public function resetLastAction()
   {
-    not_implemented();
+    throw new \BadMethodCallException("not implemented");
   }
 }
