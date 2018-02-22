@@ -191,15 +191,26 @@ trait JsonRpcTrait
 
   /**
    * Compares the JSONRPC received with the given value as two pretty-printed
-   * JSON strings and throws if differences exist
+   * JSON strings and throws if differences exist. The result can be drilled into
+   * using the key syntax from Yii's ArrayHelper
    *
    * @param mixed $result
+   * @param string|\Closure|array $key
+   * @see \yii\helpers\ArrayHelper::getValue()
    * @return void
    */
-  public function compareJsonRpcResultWith( $result )
+  public function compareJsonRpcResultWith( $result, $path=null )
   {
     $expected = json_encode( $result, JSON_PRETTY_PRINT );
-    $received = json_encode( $this->grabJsonRpcResult(), JSON_PRETTY_PRINT );
+    $received = $this->grabJsonRpcResult();
+    if( ! is_null( $path) ){
+      if( is_numeric($path) and is_array($received) ){
+        $received = $received[$path];
+      } else {
+        $received = \yii\helpers\ArrayHelper::getValue($received, $path);
+      }
+    }
+    $received = json_encode( $received, JSON_PRETTY_PRINT );
     $this->assertEquals($expected, $received); 
   }
 

@@ -134,6 +134,7 @@ class BaseModel extends ActiveRecord
    * @param boolean $runValidation
    * @param array|null $attributeNames
    * @return boolean
+   * @throws \yii\db\Exception
    */
   public function save( $runValidation = true, $attributeNames = null )
   {
@@ -143,6 +144,7 @@ class BaseModel extends ActiveRecord
     Yii::error("Error saving model " . get_class($this) );
     Yii::error( $this->getFirstErrors() );
     //Yii::warning( $this->getErrorSummary() );
-    return false;
+    //return false;
+    throw new \yii\db\Exception("Error saving model.");
   }
 }

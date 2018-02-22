@@ -24,6 +24,7 @@ use app\models\Group;
 use lib\dialog\Alert;
 use lib\exceptions\UserErrorException;
 use Yii;
+use yii\db\Exception;
 
 
 /**
@@ -219,9 +220,8 @@ class AccessConfigController extends \app\Controllers\AppController
    *    The type of the element
    * @param array|null $filter
    *    An associative array that can be used in a ActiveQuery::where() method call
-   * @throws \lib\exceptions\UserErrorException
+   * @throws UserErrorException
    * @throws \JsonRpc2\Exception
-   * @throws \InvalidArgumentException
    */
   public function actionElements($type, array $filter = null)
   {
@@ -229,7 +229,11 @@ class AccessConfigController extends \app\Controllers\AppController
     $activeUser = $this->getActiveUser();
     $isAdmin = $activeUser->hasRole("admin");
     // query
-    $elementData = $this->getModelDataFor($type);
+    try {
+      $elementData = $this->getModelDataFor($type);
+    } catch (\InvalidArgumentException $e) {
+      throw new UserErrorException($e->getMessage());
+    }
     $modelClass = $elementData['class'];
     $labelProp = "name";
     /* @var \yii\db\ActiveQuery $query */
@@ -434,27 +438,59 @@ class AccessConfigController extends \app\Controllers\AppController
    *
    * @param string $type
    * @param string $namedId
+   * @param bool $edit
+   * @return string
    * @throws \JsonRpc2\Exception
+   * @throws UserErrorException
    * @todo Implement support for other datasource types
    */
-  public function actionAdd($type, $namedId)
+  public function actionAdd($type, $namedId, $edit=true)
   {
     $this->requirePermission("access.manage");
     $elementData = $this->getModelDataFor($type);
+    $duplicateMessage = Yii::t(
+      'app',
+      "A {type} named '{name}' already exists. Please pick another name.",
+      [ 'type' => $type, 'name' => $namedId ]
+    );
+    $errorMessage = Yii::t(
+      'app',
+      "Error saving {type} named '{name}'.",
+      [ 'type' => $type, 'name' => $namedId ]
+    );
     if ($type == "datasource") {
-      $model = Yii::$app->datasourceManager->create($namedId);
+      try {
+        $model = Yii::$app->datasourceManager->create($namedId);
+      } catch ( \yii\db\Exception $e) {
+        throw new UserErrorException( $duplicateMessage );
+      } catch (\Exception $e) {
+        throw new UserErrorException( $e->getMessage() );
+      }
       $model->title = $namedId;
-      $model->save();
+      try {
+        $model->save();
+      } catch (\yii\db\Exception $e) {
+        throw new UserErrorException($errorMessage);
+      }
       $this->dispatchClientMessage("reloadDatasources");
     } else {
       $modelClass = $elementData['class'];
       /** @var \lib\models\BaseModel $model */
       $model = new $modelClass([
+        'namedId' => $namedId,
         $elementData['labelProp'] => $namedId
       ]);
-      $model->save();
+      try {
+        $model->save();
+      } catch (\yii\db\Exception $e) {
+        throw new UserErrorException($errorMessage);
+      }
     }
-    return $this->actionEdit($type, $namedId);
+    if( $edit ) {
+      $this->actionEdit($type, $namedId);
+      return "Created record and form for $type $namedId.";
+    }
+    return "Created record for $type $namedId.";
   }
 
   /**
@@ -467,7 +503,7 @@ class AccessConfigController extends \app\Controllers\AppController
    * @param null|string $third
    *    If the first argument is boolean true, then the second and third
    *    arguments are the normal signature
-   * @return array
+   * @return string
    * @throws \JsonRpc2\Exception
    */
   public function actionEdit($first, $second, $third = null)
@@ -497,11 +533,12 @@ class AccessConfigController extends \app\Controllers\AppController
     $modelMap = $this->modelData();
     $message = "<h3>" . Yii::t('app', $modelMap[$type]['dialogLabel']) . " '" . $namedId . "'</h3>";
 
-    return \lib\dialog\Form::create(
+    \lib\dialog\Form::create(
       $message, $formData, true,
       Yii::$app->controller->id, "saveFormData",
       array($type, $namedId)
     );
+    return "Created form for $type $namedId";
   }
 
   /**
