@@ -179,6 +179,17 @@ trait JsonRpcTrait
   }
 
   /**
+   * Throws if the RPC method does not return an error
+   *
+   * @return void
+   */
+  public function dontSeeUserError()
+  {
+    $error = $this->grabDataFromResponseByJsonPath('$.result');
+
+  }
+
+  /**
    * Shorthand method aliasing grabDataFromResponseByJsonPath($path)[0]
    *
    * @param string $path

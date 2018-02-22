@@ -85,6 +85,22 @@ class Group extends BaseModel
     ];
   }
 
+
+  public function getFormData()
+  {
+    return [
+      'name'        => [],
+      'description' => [],
+      'defaultRole' => [
+        'type'        => "selectbox",
+        'label'       => Yii::t('app',"Default role for new users"),
+        'delegate'    => [
+          'options'     => "getDefaultRoleListData"
+        ]
+      ]
+    ];
+  }
+
   //-------------------------------------------------------------
   // Relations
   //-------------------------------------------------------------
@@ -140,5 +156,24 @@ class Group extends BaseModel
     $result = $this->getDatasources()->all();
     if( is_null( $result ) ) return [];
     return array_map( function($o) {return $o->namedId;}, $result );
-  } 
+  }
+
+  /**
+   * Returns data for a select box with the role names
+   *
+   * @return array
+   */
+  public function getDefaultRoleListData()
+  {
+    $listData = Role::find()
+      ->select("name as label, namedId as value")
+      ->orderBy("name")
+      ->asArray()
+      ->all();
+    array_unshift( $listData, [[
+      'label' => Yii::t('app',"No role"),
+      'value' => ""
+    ]]);
+    return $listData;
+  }
 }

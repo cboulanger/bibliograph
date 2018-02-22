@@ -20,15 +20,14 @@
 
 namespace app\controllers;
 
-use Yii;
 use app\models\Group;
 use lib\dialog\{
-  Alert, Form
+  Alert, Confirm, Form
 };
 use lib\exceptions\{
   RecordExistsException, UserErrorException
 };
-
+use Yii;
 
 
 /**
@@ -101,14 +100,14 @@ class AccessConfigController extends \app\Controllers\AppController
   {
     $modelClass = $this->getModelDataFor($type)['class'];
     $model = $modelClass::findByNamedId($namedId);
-    if( $model ) {
+    if ($model) {
       return $model;
     }
     throw new UserErrorException(
       Yii::t(
         'app',
         "An object of type {type} and id {namedId} does not exist.",
-        [ 'type' => $type, 'namedId' => $namedId ]
+        ['type' => $type, 'namedId' => $namedId]
       )
     );
   }
@@ -156,7 +155,7 @@ class AccessConfigController extends \app\Controllers\AppController
    * @return void
    * @throws \InvalidArgumentException
    */
-  protected function linkOrUnlink($treeElement, $type, $namedId, $link=true )
+  protected function linkOrUnlink($treeElement, $type, $namedId, $link = true)
   {
     $elementParts = explode(",", $treeElement);
     $extraColumns = null;
@@ -165,23 +164,23 @@ class AccessConfigController extends \app\Controllers\AppController
       list($depModelType, $depModelNamedId) = explode("=", $elementParts[0]);
       $linkedModelInfo = explode("=", $elementParts[1]);
       /** @var \lib\models\BaseModel $depModel */
-      $depModel     = $this->getModelInstance(trim($depModelType), trim($depModelNamedId));
-      if( $depModelType != "group" ) {
+      $depModel = $this->getModelInstance(trim($depModelType), trim($depModelNamedId));
+      if ($depModelType != "group") {
         throw new \InvalidArgumentException("Invalid dependent model type '$depModelType'");
       }
-      $extraColumns = [ 'GroupId' => $depModel->id ];
+      $extraColumns = ['GroupId' => $depModel->id];
     } else {
       $depModelArray = null;
       $linkedModelInfo = explode("=", $elementParts[0]);
     }
     $model = $this->getModelInstance($type, $namedId);
     $linkedModelRelation = trim($linkedModelInfo[0]) . "s";
-    $linkedModelNamedId  = trim($linkedModelInfo[1]);
-    $linkedModel         = $this->getModelInstance($linkedModelRelation, $linkedModelNamedId);
-    if( $link ){
-      $model->link( $linkedModelRelation, $linkedModel, $extraColumns );
+    $linkedModelNamedId = trim($linkedModelInfo[1]);
+    $linkedModel = $this->getModelInstance($linkedModelRelation, $linkedModelNamedId);
+    if ($link) {
+      $model->link($linkedModelRelation, $linkedModel, $extraColumns);
     } else {
-      $model->unlink( $linkedModelRelation, $linkedModel, $extraColumns );
+      $model->unlink($linkedModelRelation, $linkedModel, $extraColumns);
     }
   }
 
@@ -335,12 +334,12 @@ class AccessConfigController extends \app\Controllers\AppController
 
     // root node
     $tree = [
-      'icon'   => "icon/16/apps/utilities-network-manager.png",
-      'label'  => Yii::t('app', "Relations"),
+      'icon' => "icon/16/apps/utilities-network-manager.png",
+      'label' => Yii::t('app', "Relations"),
       'action' => null,
-      'value'  => null,
-      'type'   => null,
-      'children'=> [],
+      'value' => null,
+      'type' => null,
+      'children' => [],
     ];
 
     // iterate through the rec and display relations as tree structure
@@ -360,11 +359,11 @@ class AccessConfigController extends \app\Controllers\AppController
       // normal node
       $linkedElementdata = $this->getModelDataFor($linkedType);
       $node = array(
-        'icon'    => $linkedElementdata['icon'],
-        'label'   => $linkedElementdata['label'],
-        'type'    => $linkedType,
-        'action'  => "link",
-        'value'   => $elementType . "=" . $namedId,
+        'icon' => $linkedElementdata['icon'],
+        'label' => $linkedElementdata['label'],
+        'type' => $linkedType,
+        'action' => "link",
+        'value' => $elementType . "=" . $namedId,
         'children' => []
       );
 
@@ -374,25 +373,25 @@ class AccessConfigController extends \app\Controllers\AppController
         $user = $model;
         // you cannot link to this node
         $node['action'] = null;
-        $node['value']  = null;
+        $node['value'] = null;
 
         // pseudo group node -> no group dependency
         $groupNode = [
-          'icon'    => $modelData['group']['icon'],
-          'label'   => Yii::t('app', "In all groups"),
-          'type'    => "group",
-          'action'  => "link",
-          'value'   => "user=" . $user->namedId,
+          'icon' => $modelData['group']['icon'],
+          'label' => Yii::t('app', "In all groups"),
+          'type' => "group",
+          'action' => "link",
+          'value' => "user=" . $user->namedId,
           'children' => []
         ];
         $roles = $user->getGroupRoles(null)->all();
         foreach ($roles as $role) {
           $roleNode = [
-            'icon'    => $modelData['role']['icon'],
-            'label'   => $role->name,
-            'type'    => "role",
-            'action'  => "unlink",
-            'value'   => "role=" . $role->namedId,
+            'icon' => $modelData['role']['icon'],
+            'label' => $role->name,
+            'type' => "role",
+            'action' => "unlink",
+            'value' => "role=" . $role->namedId,
             'children' => []
           ];
           $groupNode['children'][] = $roleNode;
@@ -404,22 +403,22 @@ class AccessConfigController extends \app\Controllers\AppController
         $allGroups = Group::find()->where(['not', ['active' => null]])->all(); // @todo where active=1
         foreach ($allGroups as $group) {
           $groupNode = array(
-            'icon'    => $modelData['group']['icon'],
-            'label'   => Yii::t('app', "in") . " " . $group->name,
-            'type'    => "group",
-            'action'  => "link",
-            'value'   => "group=" . $group->namedId . ",user=" . $user->namedId,
+            'icon' => $modelData['group']['icon'],
+            'label' => Yii::t('app', "in") . " " . $group->name,
+            'type' => "group",
+            'action' => "link",
+            'value' => "group=" . $group->namedId . ",user=" . $user->namedId,
             'children' => []
           );
           /** @var \app\models\Role[] $roles */
           $roles = $user->getGroupRoles(null)->all();
           foreach ($roles as $role) {
             $roleNode = array(
-              'icon'    => $modelData['role']['icon'],
-              'label'   => $role->name,
-              'type'    => "role",
-              'action'  => "unlink",
-              'value'   => "group=" . $group->namedId . ",role=" . $role->namedId,
+              'icon' => $modelData['role']['icon'],
+              'label' => $role->name,
+              'type' => "role",
+              'action' => "unlink",
+              'value' => "group=" . $group->namedId . ",role=" . $role->namedId,
               'children' => []
             );
             $groupNode['children'][] = $roleNode;
@@ -432,11 +431,11 @@ class AccessConfigController extends \app\Controllers\AppController
         /** @var \lib\models\BaseModel $linkedModel */
         foreach ($model->$relation as $linkedModel) {
           $linkedNode = [
-            'icon'    => $modelData[$linkedType]['icon'],
-            'label'   => $linkedModel->getAttribute($modelData[$linkedType]['label']),
-            'type'    => $linkedType,
-            'action'  => "unlink",
-            'value'   => "$linkedType=" . $linkedModel->namedId,
+            'icon' => $modelData[$linkedType]['icon'],
+            'label' => $linkedModel->getAttribute($modelData[$linkedType]['label']),
+            'type' => $linkedType,
+            'action' => "unlink",
+            'value' => "$linkedType=" . $linkedModel->namedId,
             'children' => []
           ];
           $node['children'][] = $linkedNode;
@@ -460,28 +459,28 @@ class AccessConfigController extends \app\Controllers\AppController
    * @throws UserErrorException
    * @todo Implement support for other datasource types
    */
-  public function actionAdd($type, $namedId, $edit=true)
+  public function actionAdd($type, $namedId, $edit = true)
   {
     $this->requirePermission("access.manage");
     $elementData = $this->getModelDataFor($type);
     $duplicateMessage = Yii::t(
       'app',
       "A {type} named '{name}' already exists. Please pick another name.",
-      [ 'type' => $type, 'name' => $namedId ]
+      ['type' => $type, 'name' => $namedId]
     );
     $errorMessage = Yii::t(
       'app',
       "Error saving {type} named '{name}':",
-      [ 'type' => $type, 'name' => $namedId ]
+      ['type' => $type, 'name' => $namedId]
     );
 
     if ($type == "datasource") {
       try {
         $model = Yii::$app->datasourceManager->create($namedId);
-      } catch ( RecordExistsException $e) {
-        throw new UserErrorException( $duplicateMessage );
+      } catch (RecordExistsException $e) {
+        throw new UserErrorException($duplicateMessage);
       } catch (\Exception $e) {
-        throw new UserErrorException( $e->getMessage() );
+        throw new UserErrorException($e->getMessage());
       }
       $model->title = $namedId;
       try {
@@ -492,8 +491,8 @@ class AccessConfigController extends \app\Controllers\AppController
       $this->dispatchClientMessage("reloadDatasources");
     } else {
       $modelClass = $elementData['class'];
-      if( $modelClass::findByNamedId($namedId) ){
-        throw new UserErrorException( $duplicateMessage );
+      if ($modelClass::findByNamedId($namedId)) {
+        throw new UserErrorException($duplicateMessage);
       }
       /** @var \lib\models\BaseModel $model */
       $model = new $modelClass([
@@ -503,10 +502,10 @@ class AccessConfigController extends \app\Controllers\AppController
       try {
         $model->save();
       } catch (\yii\db\Exception $e) {
-        throw new UserErrorException($errorMessage . $e->getMessage() );
+        throw new UserErrorException($errorMessage . $e->getMessage());
       }
     }
-    if( $edit ) {
+    if ($edit) {
       $this->actionEdit($type, $namedId);
       return "Created record and form for $type $namedId.";
     }
@@ -544,7 +543,7 @@ class AccessConfigController extends \app\Controllers\AppController
     }
 
     // create form
-    $model = $this->getModelInstance($type,$namedId);
+    $model = $this->getModelInstance($type, $namedId);
     try {
       $formData = Form::getDataFromModel($model);
     } catch (\Exception $e) {
@@ -554,37 +553,121 @@ class AccessConfigController extends \app\Controllers\AppController
       $formData['password']['value'] = null;
       $formData['password2']['value'] = null;
     }
-    $label  = $this->getModelDataFor($type)['dialogLabel'];
+    $label = $this->getModelDataFor($type)['dialogLabel'];
     $message = "<h3>$label '$namedId'</h3>";
     Form::create(
       $message, $formData, true,
-      Yii::$app->controller->id, "saveFormData",
+      Yii::$app->controller->id, "save",
       array($type, $namedId)
     );
     return "Created form for $type $namedId";
   }
 
+
+  /**
+   * Save the form produced by editElement()
+   * @param \stdClass|null $data
+   *    The form data
+   * @param string $type
+   *    The type of the model
+   * @param string $namedId
+   *    The namedId of the model
+   * @return string Diagnostic message
+   * @throws \Exception
+   * @throws \JsonRpc2\Exception
+   * @throws UserErrorException
+   */
+  public function actionSave(\stdClass $data, $type, $namedId)
+  {
+    if ($data === null) {
+      return "Action save aborted";
+    }
+
+    $model = $this->getModelInstance($type, $namedId);
+    $oldData = (object)$model->getAttributes();
+
+    // lower permission requirement if users edit their own data
+    if ($type != "user" or $namedId != $this->getActiveUser()->namedId) {
+      $this->requirePermission("access.manage");
+    }
+
+    // if we have a password field, we expect to have a password2 field
+    // as well to match. return to dialog if passwords do not match.
+    if (isset($data->password) and !empty($data->password)) {
+      if (!isset($data->password2) or $data->password != $data->password2) {
+        Alert::create(
+          Yii::t('app', "Passwords do not match. Please try again"),
+          Yii::$app->controller->id, "editElement", ["user", $namedId]
+        );
+        return "Passwords did not match";
+      }
+      unset($data->password2);
+    }
+
+    // ldap user data cannot be edited
+    if ($type == "user" and $model->ldap) {
+      throw new UserErrorException(Yii::t('app', "User data is from an LDAP server and cannot be changed."));
+    }
+
+    // parse form and save in model
+    try {
+      $parsed = Form::parseResultData($model, $data);
+      $model->setAttributes($parsed);
+      $model->save();
+    } catch (\Exception $e) {
+      // make user errors return to the edit method
+      $message = $e->getMessage();
+      Alert::create(
+        $message,
+        Yii::$app->controller->id, "edit", [$data, $type, $namedId]
+      );
+      return "User error '$message', reopening editor form.";
+    }
+
+    if ($model->hasAttribute("password")) {
+
+      if (!$data->password and !$model->password) {
+        // enforce setting of password
+        Alert::create(
+          Yii::t('app', "You must set a password."),
+          Yii::$app->controller->id, "handleMissingPasswordDialog", array($namedId)
+        );
+        return "Missing password";
+      }
+      //  @todo reimplement if password has changed, inform user, unless the old password was a temporary password
+/*      if ($data->password and $parsed->password != $oldData->password and strlen($oldData->password) > 7) {
+        return $this->sendInformationEmail($model->data());
+      }*/
+    }
+
+    Alert::create(Yii::t('app', "The data has been saved."));
+    // message to update the UI
+    $this->dispatchClientMessage("accessControlTool.reloadLeftList");
+    return "Data for $type '$namedId' has been saved";
+  }
+
+
   /**
    * Delete a model record
    * @param string $type
    *    The type of the model
-   * @param array $ids
+   * @param $ids
    *    An array of ids to delete
+   * @return string Diagnostic message
    * @throws UserErrorException
-   *    Thrown if deleting one of the models is not allowed
    * @throws \JsonRpc2\Exception
-   *    Thrown if the action is not allowed
    * @throws \Exception
-   *    Thrown if model deletion encounters problems
+   *
    */
-  public function actionDelete($type, array $ids)
+  public function actionDelete($type, $ids)
   {
     $this->requirePermission("access.manage");
     $elementData = $this->getModelDataFor($type);
+    $ids = (array)$ids;
     $minId = null;
     switch ($type) {
       case "datasource":
-        return \lib\dialog\Confirm::create(
+        return Confirm::create(
           Yii::t('app', "Do you want to remove only the datasource entry or all associated data?"),
           [
             Yii::t('app', "All data"),
@@ -596,17 +679,15 @@ class AccessConfigController extends \app\Controllers\AppController
       case "user":
         $minId = 2;
         break;
-
       case "permission":
-        $minId = 29;
+        $minId = 27;
         break;
-
       case "role":
         $minId = 5;
         break;
     }
 
-    foreach ((array)$ids as $namedId) {
+    foreach ($ids as $namedId) {
       $modelClass = $elementData['class'];
       /** @var \lib\models\BaseModel $model */
       $model = $modelClass::findByNamedId($namedId);
@@ -627,7 +708,7 @@ class AccessConfigController extends \app\Controllers\AppController
       //$this->dispatchClientMessage("user.deleted", $user->id());
     }
 
-    return "OK";
+    return "Created delete confirmation dialog";
   }
 
   /**
@@ -672,7 +753,7 @@ class AccessConfigController extends \app\Controllers\AppController
   public function actionLink($treeElement, $type, $namedId)
   {
     $this->requirePermission("access.manage");
-    $this->linkOrUnlink( $treeElement, $type, $namedId, true);
+    $this->linkOrUnlink($treeElement, $type, $namedId, true);
     return "OK";
   }
 
@@ -687,84 +768,7 @@ class AccessConfigController extends \app\Controllers\AppController
   public function actionUnlink($treeElement, $type, $namedId)
   {
     $this->requirePermission("access.manage");
-    $this->linkOrUnlink( $treeElement, $type, $namedId, false);
-    return "OK";
-  }
-
-  /**
-   * Save the form produced by editElement()
-   * @param \stdClass|null $data
-   *    The form data
-   * @param string $type
-   *    The type of the model
-   * @param string $namedId
-   *    The namedId of the model
-   * @return string Message for debug purposes
-   * @throws \Exception
-   * @throws \JsonRpc2\Exception
-   * @throws UserErrorException
-   */
-  public function actionSave( \stdClass $data, $type, $namedId)
-  {
-    if ($data === null) {
-      return "Action save aborted";
-    }
-
-    $model = $this->getModelInstance($type, $namedId);
-    $oldData = (object) $model->getAttributes();
-
-    if ($type != "user" or $namedId != $this->getActiveUser()->namedId) {
-      $this->requirePermission("access.manage");
-      $this->dispatchClientMessage("accessControlTool.reloadLeftList");
-    }
-
-    // if we have a password field, we expect to have a password2 field
-    // as well to match. return to dialog if passwords do not match.
-    if (isset($data->password) and !empty($data->password)) {
-      if (!isset($data->password2) or $data->password != $data->password2) {
-         Alert::create(
-          Yii::t('app', "Passwords do not match. Please try again"),
-          Yii::$app->controller->id, "editElement", ["user", $namedId]
-        );
-        return "Passwords did not match";
-      }
-      unset( $data->password2 );
-    }
-
-    if ( $type == "user") {
-      // Validate user data input
-      if ($model->ldap ) {
-        // ldap user data cannot be edited
-        throw new UserErrorException(Yii::t('app', "User data is from an LDAP server and cannot be changed."));
-      } else if( !$data->password and !$model->password ) {
-        // enforce setting of password
-        Alert::create(
-          Yii::t('app', "You must set a password."),
-          Yii::$app->controller->id, "handleMissingPasswordDialog", array($namedId)
-        );
-        return "Missing password";
-      }
-      //  @todo reimplement if password has changed, inform user, unless the old password was a temporary password
-//      if ($data->password and $parsed->password != $oldData->password and strlen($oldData->password) > 7) {
-//        return $this->sendInformationEmail($model->data());
-//      }
-    }
-
-    // parse form and save in model
-    try {
-      $parsed = \lib\dialog\Form::parseResultData($model, $data);
-      $model->setAttributes($parsed);
-      $model->save();
-    } catch ( UserErrorException $e) {
-      // make user errors return to the edit method
-      $message = $e->getMessage();
-      Alert::create(
-        $message,
-        Yii::$app->controller->id, "editElement", array("user", $namedId)
-      );
-      return "User error '$message', reopening editor form.";
-    }
-    Alert::create(Yii::t('app', "The data has been saved."));
+    $this->linkOrUnlink($treeElement, $type, $namedId, false);
     return "OK";
   }
 
@@ -824,18 +828,18 @@ class AccessConfigController extends \app\Controllers\AppController
    * @throws UserErrorException
    * @throws \yii\base\Exception
    */
-  public function actionAddUser( \stdClass $data)
+  public function actionAddUser(\stdClass $data)
   {
     $this->requirePermission("access.manage");
 
     if ($data === null) $this->cancelledActionResult();
 
-    if( empty($data->namedId)) {
-      throw new UserErrorException( Yii::t('app', "Missing login name"));
+    if (empty($data->namedId)) {
+      throw new UserErrorException(Yii::t('app', "Missing login name"));
     }
 
-    $user = $this->getModelInstance("user", $data->namedId );
-    if( $user ){
+    $user = $this->getModelInstance("user", $data->namedId);
+    if ($user) {
       Alert::create(Yii::t(
         'app',
         "Login name '{1}' already exists. Please choose a different one.",
@@ -847,16 +851,16 @@ class AccessConfigController extends \app\Controllers\AppController
     /** @var \app\models\User $user */
     $userClass = get_class($user);
     $user = new $userClass;
-    $user->setAttributes((array) $data );
+    $user->setAttributes((array)$data);
 
     // give it the 'user' role
     /** @var \app\models\Role $roleClass */
     $roleClass = $this->getModelClassFor('role');
-    $user->link( 'roles', $roleClass::findByNamedId("user") );
+    $user->link('roles', $roleClass::findByNamedId("user"));
 
     // generate temporary password
-    $tmpPasswd =Yii::$app->getSecurity()->generateRandomString(7);
-    $user->password =  $tmpPasswd;
+    $tmpPasswd = Yii::$app->getSecurity()->generateRandomString(7);
+    $user->password = $tmpPasswd;
     $user->confirmed = true;  // @todo Remove when email confirmation is reimplemented
     $user->save();
 
@@ -866,7 +870,7 @@ class AccessConfigController extends \app\Controllers\AppController
 
     $this->dispatchClientMessage("accessControlTool.reloadLeftList");
 
-    Alert::create( Yii::t(
+    Alert::create(Yii::t(
       'app',
       "An email has been sent to {1} ({2}) with information on the registration.", [$data->name, $data->email])
     );
@@ -935,7 +939,7 @@ class AccessConfigController extends \app\Controllers\AppController
     }
 
     $this->dispatchClientMessage("accessControlTool.reloadLeftList");
-    Alert::create( Yii::t(
+    Alert::create(Yii::t(
       'app',
       "Datasource '%s' has been created. By default, it will not be visible to anyone. You have to link it with a group, a role, or a user first.",
       $data->namedId
@@ -961,10 +965,10 @@ class AccessConfigController extends \app\Controllers\AppController
     if (!isset($this->__password)) {
       $this->__password = $value;
     } elseif ($this->__password != $value) {
-      throw new \lib\exceptions\UserErrorException(Yii::t('app',"Passwords do not match..."));
+      throw new \lib\exceptions\UserErrorException(Yii::t('app', "Passwords do not match..."));
     }
     if ($value and strlen($value) < 8) {
-      throw new \lib\exceptions\UserErrorException(Yii::t('app',"Password must be at least 8 characters long"));
+      throw new \lib\exceptions\UserErrorException(Yii::t('app', "Password must be at least 8 characters long"));
     }
     return $value ? Yii::$app->accessManager->generateHash($value) : null;
   }

@@ -20,14 +20,14 @@
 
 namespace app\controllers;
 
+use lib\dialog\Error;
+use lib\exceptions\UserErrorException;
 use Yii;
 
-use app\models\User;
-use app\models\Role;
-use app\models\Session;
-use app\models\Permission;
-use app\models\Datasource;
-use \JsonRpc2\Exception;
+use app\models\{
+  User, Role, Session, Permission, Datasource
+};
+
 
 /**
  * Service class providing methods to get or set configuration
@@ -56,6 +56,7 @@ class AppController extends \JsonRpc2\Controller
    * @param \yii\base\Action $action
    * @return bool True if action can proceed, false if not
    * @throws \yii\web\BadRequestHttpException
+   * @throws \yii\db\Exception
    */
   public function beforeAction($action)
   {
@@ -121,9 +122,9 @@ class AppController extends \JsonRpc2\Controller
   {
     try{
       return parent::_runAction($method);
-    } catch ( \lib\exceptions\UserErrorException $e ){
+    } catch ( UserErrorException $e ){
       Yii::info("User Error: " . $e->getMessage());
-      \lib\dialog\Error::create($e->getMessage());
+      Error::create($e->getMessage());
       return null;            
     }
   }
@@ -146,6 +147,7 @@ class AppController extends \JsonRpc2\Controller
    * Creates a new anonymous guest user
    * @throws \LogicException
    * @return \app\models\User
+   * @throws \yii\db\Exception
    */
   public function createAnonymous()
   {
@@ -181,6 +183,7 @@ class AppController extends \JsonRpc2\Controller
    * @param string $description Optional description of the permission.
    *    Only used when first argument is a string.
    * @return void
+   * @throws \yii\db\Exception
    */
   public function addPermission($namedId, $description = null)
   {
@@ -302,7 +305,7 @@ class AppController extends \JsonRpc2\Controller
    *    Optional. Whether to check the current user's access to the datasource
    *    Defaults to true
    * @return \app\models\Datasource
-   * @throws \lib\exceptions\UserErrorException
+   * @throws UserErrorException
    */
   public function datasource($datasource, $checkAccess=true)
   {
@@ -310,14 +313,14 @@ class AppController extends \JsonRpc2\Controller
     try {
       $instance = Datasource :: getInstanceFor( $datasource );
     } catch( \InvalidArgumentException $e ){
-      throw new \lib\exceptions\UserErrorException( 
+      throw new UserErrorException(
         Yii::t('app', "Datasource '{datasource}' does not exist",[
           'datasource' => $datasource
         ])
       );
     }
     if( $checkAccess and ! in_array($datasource, $myDatasources) ){
-      throw new \lib\exceptions\UserErrorException( 
+      throw new UserErrorException(
         Yii::t('app', "You do not have access to datasource '{datasource}'",[
           'datasource' => $datasource
         ])
@@ -331,6 +334,7 @@ class AppController extends \JsonRpc2\Controller
    * @param string $datasource
    * @param string $modelType
    * @return string
+   * @throws UserErrorException
    */
   public function getModelClass( $datasource, $modelType )
   {
@@ -341,6 +345,7 @@ class AppController extends \JsonRpc2\Controller
    * Returns the class name of the main model type of the controller as determined by the datasource
    * @param string $datasource
    * @return string
+   * @throws UserErrorException
    */
   public function getControlledModel( $datasource )
   {
@@ -348,11 +353,12 @@ class AppController extends \JsonRpc2\Controller
   }
 
   /**
-   * Returns a query for the record with the given id 
+   * Returns a query for the record with the given id
    *
    * @param string $datasource
    * @param int $id
    * @return \yii\db\ActiveRecord
+   * @throws UserErrorException
    */
   public function getRecordById($datasource, $id)
   {

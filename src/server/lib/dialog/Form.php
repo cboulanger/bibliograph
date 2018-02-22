@@ -122,7 +122,8 @@ class Form extends Dialog
         $field['label'] = $model->getAttributeLabel($property);
       }
 
-      // dynamically get element data from the object
+      // delegate: dynamically get element data from the object
+      // the delegate method is called with ( $property, $key, $field )
       if ( isset( $field['delegate'] )) {
         foreach ($field['delegate'] as $key => $delegateMethod) {
           $field[$key] = $model->$delegateMethod( $property, $key, $field );
@@ -152,12 +153,14 @@ class Form extends Dialog
       }
 
       // marshal a model property value for the form field's value
-      $marshaler = ArrayHelper::getValue( $modelFormData, [$property,'marshal'] );
+      $marshaler = ArrayHelper::getValue( $modelFormData, [$property,'marshal'], null );
       if(is_callable($marshaler)) {
         $field['value'] = $marshaler($field['value']);
       } elseif( $marshaler) {
         throw new InvalidArgumentException("Invalid marshaller property for '$property': must be callable.");
       }
+      unset( $field['marshal'] );
+      unset( $field['unmarshal'] );
 
       $widgetFormData[ $property ] = $field;
     }
@@ -181,11 +184,6 @@ class Form extends Dialog
     }
     foreach ($data as $property => $value) {
 
-      // is the property part of the form?
-      if (! isset( $modelFormData[$property] )) {
-        continue;
-      }
-
       // should I ignore it?
       if ( ArrayHelper::getValue($modelFormData, [$property, 'ignore'],false) ) {
         unset( $data[$property] );
@@ -207,6 +205,4 @@ class Form extends Dialog
     }
     return $data;
   }
-
-
 }
