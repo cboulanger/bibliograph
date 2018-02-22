@@ -124,7 +124,8 @@ class User extends BaseModel implements IdentityInterface
 
   /**
    * Function to check the match between the password and the repeated
-   * password. Returns the hashed password.
+   * password. If called with a password, returns it in a hashed form
+   * ready to be stored in the database
    * @param $value
    * @return string|null
    * @throws UserErrorException

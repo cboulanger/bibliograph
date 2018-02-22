@@ -60,7 +60,7 @@ msgstr "Das Programm ist gerade im Nur-Lese-Modus. Nur der Administrator kann si
 msgid "Authenticating ..."
 msgstr "Anmeldung ..."
 
-#: bibliograph.ui.window.AccessControlTool:106
+#: bibliograph.ui.window.AccessControlTool:78
 msgid "Please wait ..."
 msgstr "Bitte warten ..."
 
@@ -80,7 +80,7 @@ msgstr ""
 msgid "Retrieving user data..."
 msgstr "Lade Benutzerdaten ..."
 
-#: bibliograph.ui.item.FormattedViewUi:72
+#: bibliograph.ui.item.TableViewUi:50
 msgid "Print"
 msgstr "Drucken"
 
@@ -320,7 +320,7 @@ msgstr "Importieren"
 msgid "Import text file"
 msgstr "Aus Text/Datei importieren"
 
-#: bibliograph.ui.window.AccessControlTool:111
+#: bibliograph.ui.window.AccessControlTool:83
 msgid "Help"
 msgstr "Hilfe"
 
@@ -416,15 +416,15 @@ msgstr "Das Programm"
 msgid "Credits"
 msgstr "Danksagungen"
 
-#: bibliograph.ui.window.AccessControlTool:41
+#: bibliograph.ui.window.AccessControlTool:31
 msgid "Access control tool"
 msgstr "Zugangskontrollwerkzeug"
 
-#: bibliograph.ui.window.AccessControlTool:84
+#: bibliograph.ui.window.AccessControlTool:56
 msgid "New User"
 msgstr "Neue/r Benutzer/in"
 
-#: bibliograph.ui.window.AccessControlTool:99
+#: bibliograph.ui.window.AccessControlTool:71
 msgid "New Datasource"
 msgstr "Neue Datenbank"
 
@@ -432,39 +432,39 @@ msgstr "Neue Datenbank"
 msgid "Export to filesystem"
 msgstr "Ins Dateisystem exportieren"
 
-#: bibliograph.ui.window.AccessControlTool:138
+#: bibliograph.ui.window.AccessControlTool:93
 msgid "Exit"
 msgstr "Schließen"
 
-#: bibliograph.ui.window.AccessControlTool:438
+#: bibliograph.ui.window.AccessControlTool:393
 msgid "Please enter the id of the new '%1'-Object"
 msgstr "Bitte geben sie die ID für das neue '%1'-Objekt ein"
 
-#: bibliograph.ui.window.AccessControlTool:269
+#: bibliograph.ui.window.AccessControlTool:223
 msgid "Do you really want to delete '%1'?"
 msgstr "Wollen Sie wirklich '%1' löschen?"
 
-#: bibliograph.ui.window.AccessControlTool:485
+#: bibliograph.ui.window.AccessControlTool:440
 msgid "Loading data ..."
 msgstr "Lade die Daten ..."
 
-#: bibliograph.ui.window.AccessControlTool:331
+#: bibliograph.ui.window.AccessControlTool:287
 msgid "Edited element"
 msgstr "Bearbeitetes Element"
 
-#: bibliograph.ui.window.AccessControlTool:369
+#: bibliograph.ui.window.AccessControlTool:327
 msgid "Link"
 msgstr "Verknüpfen"
 
-#: bibliograph.ui.window.AccessControlTool:385
+#: bibliograph.ui.window.AccessControlTool:342
 msgid "Unlink"
 msgstr "Lösen"
 
-#: bibliograph.ui.window.AccessControlTool:408
+#: bibliograph.ui.window.AccessControlTool:363
 msgid "Linkable items"
 msgstr "Verknüpfbare Elemente"
 
-#: bibliograph.ui.window.AccessControlTool:464
+#: bibliograph.ui.window.AccessControlTool:419
 msgid "Do you really want to delete the objects '%1'?"
 msgstr "Wollen Sie wirklich die Objekte '%1' löschen?"
 

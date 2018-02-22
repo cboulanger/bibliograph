@@ -37,8 +37,8 @@ echo
 echo "Running Mocha tests..."
 mocha -- ./test/**/*.test.js || exit $?
 echo
-echo "Cleaning up database ..."
-pushd $SERVER_PATH > /dev/null
-$YII_CMD migrate/down all $MIGRATE_ARGS > /dev/null
-popd > /dev/null
+#echo "Cleaning up database ..."
+#pushd $SERVER_PATH > /dev/null
+# $YII_CMD migrate/down all $MIGRATE_ARGS > /dev/null
+#popd > /dev/null
 exit 0

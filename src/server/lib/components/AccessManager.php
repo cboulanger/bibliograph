@@ -96,20 +96,19 @@ class AccessManager
   }
 
 
-  /**
-   * Returns number of seconds since resetLastAction() has been called
-   * for the current user
-   * @return int seconds
-   */
-  public function getSecondsSinceLastAction()
-  {
-    not_implemented();
-    $now = new data_db_Timestamp();
-    $lastAction = $this->get("lastAction");
-    if ($lastAction) {
-      $d = $now->diff($lastAction);
-      return (int) ($d->s + (60 * $d->i) + (3600 * $d->h) + 3600 * 24 * $d->d);
-    }
-    return 0;
-  }
+//  /**
+//   * Returns number of seconds since resetLastAction() has been called
+//   * for the current user
+//   * @return int seconds
+//   */
+//  public function getSecondsSinceLastAction()
+//  {
+//    $now = new data_db_Timestamp();
+//    $lastAction = $this->get("lastAction");
+//    if ($lastAction) {
+//      $d = $now->diff($lastAction);
+//      return (int) ($d->s + (60 * $d->i) + (3600 * $d->h) + 3600 * 24 * $d->d);
+//    }
+//    return 0;
+//  }
 }

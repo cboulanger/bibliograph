@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JavaScriptLibraryMappings">
+    <file url="PROJECT" libraries="{Qooxdoo}" />
+    <excludedPredefinedLibrary name="bibliograph/node_modules" />
+    <excludedPredefinedLibrary name="bibliograph/src/vcslib/qooxdoo-compiler/node_modules" />
+    <excludedPredefinedLibrary name="bibliograph/src/vcslib/raptor-client/node_modules" />
+  </component>
+</project>

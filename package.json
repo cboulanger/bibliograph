@@ -47,6 +47,22 @@
     "json-diff": "^0.5.2",
     "mocha": "^4.1.0",
     "r2": "^2.0.0",
-    "run-script-os": "^1.0.3"
+    "run-script-os": "^1.0.3",
+    "standard": "^11.0.0"
+  },
+  "eslintConfig": {
+    "parserOptions": {
+      "ecmaVersion": 2018
+    },
+    "env": {
+      "browser": true,
+      "node": true
+    },
+    "globals": {
+      "qx": true,
+      "qcl": true,
+      "dialog": true,
+      "bibliograph": true
+    }
   }
 }

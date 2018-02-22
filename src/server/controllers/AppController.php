@@ -420,18 +420,18 @@ class AppController extends \JsonRpc2\Controller
    * @param mixed $varargs
    *    The method can take a variable number of arguments
    * @return string
-   *    The shelve id needed to retrieve the data later
+   *    The shelf id needed to retrieve the data later
    */
   public function shelve($varargs)
   {
-    $shelveId = md5(microtime_float());
-    $_SESSION[$shelveId]=func_get_args();
-    return $shelveId;
+    $shelfId = Yii::$app->security->generateRandomString();
+    Yii::$app->session->set($shelfId,func_get_args());
+    return $shelfId;
   }
 
   /**
    * Retrieve the data stored by the shelve() method.
-   * @param $shelveId
+   * @param $shelfId
    *    The id of the shelved data
    * @param bool $keepCopy
    *    If true, the data will be preserved and can be retrieved again.
@@ -440,15 +440,24 @@ class AppController extends \JsonRpc2\Controller
    *    Returns an array of the elements passed to the shelve() method, which can be
    *    extracted with the list() method.
    */
-  public function unshelve( $shelveId, $keepCopy=false )
+  public function unshelve($shelfId, $keepCopy=false )
   {
-    $args =  $_SESSION[$shelveId];
-    if ( !$keepCopy )
-    {
-      unset( $_SESSION[$shelveId] );
+    $args =  Yii::$app->session->get($shelfId);
+    if ( !$keepCopy ) {
+      Yii::$app->session->remove( $shelfId );
     }
     return $args;
-  }  
+  }
+
+  /**
+   * Returns true if something is stored und the shelf id
+   * @param string $shelfId
+   * @return bool
+   */
+  public function hasInShelf( $shelfId ){
+    if( empty($shelfId) ) return false;
+    return Yii::$app->session->has( $shelfId );
+  }
 
   //-------------------------------------------------------------
   // send and broadcast messages

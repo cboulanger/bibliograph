@@ -61,27 +61,13 @@ class AccessConfigControllerCest
 
   public function tryToAddDatasources(ApiTester $I, \Codeception\Scenario $scenario)
   {
-    $I->amGoingTo("create datasources datasource1 and datasource2");
-    $I->sendJsonRpcRequest('access-config', 'add', ['datasource', 'datasource1', false]);
+    $I->amGoingTo("create datasources datasource3 and datasource4");
+    $I->sendJsonRpcRequest('access-config', 'add', ['datasource', 'datasource3', false]);
     $I->sendJsonRpcRequest('access-config', 'elements', ['datasource']);
-    $expected = [
-      "icon" => "icon/16/apps/internet-transfer.png",
-      "label" => "datasource1",
-      "params" => "datasource,datasource1",
-      "type" => "datasource",
-      "value" => "datasource1"
-    ];
-    $I->compareJsonRpcResultWith($expected, 0);
-    $I->sendJsonRpcRequest('access-config', 'add', ['datasource', 'datasource2', false]);
+    $I->seeResponseJsonMatchesJsonPath("$.result[?(@.value=datasource3)]");
+    $I->sendJsonRpcRequest('access-config', 'add', ['datasource', 'datasource4', false]);
     $I->sendJsonRpcRequest('access-config', 'elements', ['datasource']);
-    $expected = [
-      "icon" => "icon/16/apps/internet-transfer.png",
-      "label" => "datasource2",
-      "params" => "datasource,datasource2",
-      "type" => "datasource",
-      "value" => "datasource2"
-    ];
-    $I->compareJsonRpcResultWith($expected, 1);
+    $I->seeResponseJsonMatchesJsonPath("$.result[?(@.value=datasource4)]");
   }
 
   public function tryToAddGroups(ApiTester $I, \Codeception\Scenario $scenario)
@@ -168,22 +154,65 @@ class AccessConfigControllerCest
     $data = json_decode('{
       "name":"Group 1",
       "description":"This is the first group",
-      "defaultRole":"user"
+      "defaultRole":"user",
+      "active":1
     }', true);
     $I->sendJsonRpcRequest('access-config', 'save', [$data, "group", "group1"]);
     $I->dontSeeJsonRpcError();
     $I->expectTo("see a success dialog");
     $I->compareJsonRpcResultWith("The data has been saved.", "events.0.data.properties.message");
     $I->expectTo("see the saved data");
-    $I->sendJsonRpcRequest('access-config', 'elements', [ 'group' ]);
+    $I->sendJsonRpcRequest('access-config', 'data', [ 'group', 'group1' ]);
     $expected = [
-      "icon" => "icon/16/actions/address-book-new.png",
-      "label" => "Group 1",
-      "params" => "group,group1",
-      "type" => "group",
-      "value" => "group1"
+      'id' => 1,
+      'namedId' => 'group1',
+      'name' => 'Group 1',
+      'description' => 'This is the first group',
+      'ldap' => 0,
+      'defaultRole' => "user",
+      'active' => 1
     ];
-    $I->compareJsonRpcResultWith($expected, 0 );
+    $I->compareJsonRpcResultWith( $expected );
+  }
+
+  public function tryToAddUserToGroup(ApiTester $I, \Codeception\Scenario $scenario)
+  {
+    $I->amGoingTo("Add user2 to group1");
+    $I->sendJsonRpcRequest(
+      "access-config",'link',
+      ["group=group1","user","user2"]
+    );
+    $I->expectTo("see them linked now.");
+    $I->sendJsonRpcRequest('access-config', 'tree', ['user', 'user2']);
+    $path = "$.result.children[?(@.type=group)].children[?(@.label='Group 1')]";
+    $I->seeResponseJsonMatchesJsonPath($path);
+  }
+
+  public function tryToAssignGlobalUserRole(ApiTester $I, \Codeception\Scenario $scenario)
+  {
+    $I->sendJsonRpcRequest(
+      "access-config",'link',
+      ["role=admin","user","user2"]
+    );
+    $I->sendJsonRpcRequest('access-config', 'tree', ['user', 'user2']);
+    $path = "$.result.children[?(@.type=role)].children[?(@.label='In all groups')].children[?(@.value='role=admin')]";
+    $I->seeResponseJsonMatchesJsonPath($path);
+  }
+
+  public function tryToAssignGroupRole(ApiTester $I, \Codeception\Scenario $scenario)
+  {
+    $I->amGoingTo("assign user3 the admin role in group2.");
+    $I->sendJsonRpcRequest(
+      "access-config",'link',
+      ["group=group2","user","user3"]
+    );
+    $I->sendJsonRpcRequest(
+      "access-config",'link',
+      ["group=group2,role=admin","user","user3"]
+    );
+    $I->sendJsonRpcRequest('access-config', 'tree', ['user', 'user3']);
+    $path = "$.result.children[?(@.type=role)].children[?(@.label='In group2')].children[?(@.value='group=group2,role=admin')]";
+    $I->seeResponseJsonMatchesJsonPath($path);
   }
 
 }
