@@ -61,7 +61,7 @@ class TrashController extends AppController
    */
   static function getTrashFolder( $datasource )
   {
-    $trashFolder = $this->getControlledModel()::findOne(['type'=>'trash']);
+    $trashFolder = Datasource :: in( $datasource, "folder" ) :: findOne(['type'=>'trash']);
     return $trashFolder;
   }  
 

@@ -26,7 +26,7 @@ use Yii;
 /**
  * Backend service class for the access control tool widget
  */
-class AccessConfigController extends \app\Controllers\AppController
+class EmailController extends \app\Controllers\AppController
 {
 
 

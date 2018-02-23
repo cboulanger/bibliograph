@@ -172,7 +172,7 @@ class CitationController extends AppController
     $data = array();
     $counter = 0;
 
-    $references = $this->getModelClass( $datasource, "reference" ) :: findAll( $ids );
+    $references = Datasource :: in( $datasource, "reference" ) :: findAll( $ids );
     foreach( $references as $reference )
     {
       $csl = $bibtexSchema->toCslRecord( $reference->getAttributes() );
