@@ -15,8 +15,7 @@
 /* global qx qcl bibliograph */
 
 /**
-
-
+ * The Access configuration window
  */
 qx.Class.define("bibliograph.ui.window.AccessControlTool",
 {
@@ -24,9 +23,10 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
   
   construct: function () {
     this.base(arguments);
-    
-    let pm = this.getApplication().getAccessManager().getPermissionManager();
-    let bus = qx.event.message.Bus.getInstance();
+  
+    const app = qx.core.Init.getApplication();
+    const pm  = qcl.access.PermissionManager.getInstance();
+    const bus = qx.event.message.Bus.getInstance();
     
     this.setCaption(this.tr('Access control tool'));
     this.setVisibility("visible");
@@ -43,8 +43,106 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     bus.subscribe("user.loggedout", function (e) {
       this.close();
     }, this);
+  
+    /*
+     ---------------------------------------------------------------------------
+        PERMISSIONS
+     ---------------------------------------------------------------------------
+     */
+  
+    const allowLinkPermission = pm.create("act.allowLink").set({granted:true});
+    const allowUnlinkPermission = pm.create("act.allowUnlink").set({granted:true});
+  
+    // closure vars:
+    // elementTree
     
-    // layout
+    // add conditions
+    allowLinkPermission.addCondition(() => {
+      let treeSelection = elementTree.getSelection();
+      return (
+      treeSelection.length > 0
+      && treeSelection[0].getModel()
+      && treeSelection[0].getModel().getAction() === "link"
+      && rightList.getSelection().length > 0);
+    }).addListener("changeState", (e)=>{
+      this.info( "Allow link: " + e.getData());
+    });
+    allowUnlinkPermission.addCondition(() => {
+      let treeSelection = elementTree.getSelection();
+      return (
+      treeSelection.length > 0
+      && treeSelection[0].getModel()
+      && treeSelection[0].getModel().getAction() === "unlink");
+    }).addListener("changeState", (e)=>{
+      this.info( "Allow unlink: " + e.getData());
+    });
+    // update on events
+    bus.subscribe("leftListReloaded", () => {
+      allowLinkPermission.update();
+      allowUnlinkPermission.update();
+    });
+    bus.subscribe("treeSelectionChanged", () => {
+      allowLinkPermission.update();
+      allowUnlinkPermission.update();
+    });
+    bus.subscribe("rightListSelectionChanged", () => {
+      allowLinkPermission.update();
+      allowUnlinkPermission.update();
+    });
+    
+    /*
+     ---------------------------------------------------------------------------
+        STORES
+     ---------------------------------------------------------------------------
+     */
+  
+    // store for select box
+    const selectBoxStore = new qcl.data.store.JsonRpcStore("access-config");
+    this.selectBoxStore = selectBoxStore;
+    selectBoxStore.setAutoLoadParams(null);
+    selectBoxStore.setAutoLoadMethod("types");
+  
+    // store for left list
+    const leftListStore = new qcl.data.store.JsonRpcStore("access-config");
+    leftListStore.setAutoLoadMethod("elements");
+    leftListStore.addListener("loaded", function (e) {
+      let m = new qx.event.message.Message("leftListReloaded", e.getData ? e.getData() : []);
+      m.setSender(e.getTarget());
+      bus.dispatch(m);
+    }, this);
+    bus.subscribe("accessControlTool.reloadLeftList", () => leftListStore.reload());
+  
+    // store for right list
+    const rightListStore = new qcl.data.store.JsonRpcStore("access-config");
+    rightListStore.setAutoLoadMethod('elements');
+    bus.subscribe("leftListReloaded", () => {
+      rightListStore.setModel(null);
+      rightListStore.setAutoLoadParams(null);
+    });
+    bus.subscribe("treeReloaded", e => {
+      rightListStore.setModel(null);
+      rightListStore.setAutoLoadParams(null);
+    });
+  
+    // store for tree
+    const treeStore = new qcl.data.store.JsonRpcStore("access-config");
+    treeStore.setAutoLoadMethod("tree");
+    bus.subscribe("leftListReloaded", () => {
+      treeStore.setModel(null);
+      treeStore.setAutoLoadParams(null);
+    });
+    treeStore.addListener("loaded", e => {
+      let m = new qx.event.message.Message("treeReloaded", e.getData ? e.getData() : []);
+      m.setSender(e.getTarget());
+      bus.dispatch(m);
+    });
+    
+    /*
+    ---------------------------------------------------------------------------
+       LAYOUT
+    ---------------------------------------------------------------------------
+    */
+    
     let qxVbox1 = new qx.ui.layout.VBox(null, null, null);
     this.setLayout(qxVbox1);
     
@@ -102,49 +200,6 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     
     let qxVbox2 = new qx.ui.layout.VBox(null, null, null);
     qxGroupBox1.setLayout(qxVbox2);
-    
-    // store for select box
-    let selectBoxStore = new qcl.data.store.JsonRpcStore("access-config");
-    this.selectBoxStore = selectBoxStore;
-    selectBoxStore.setAutoLoadParams(null);
-    selectBoxStore.setAutoLoadMethod("types");
-    
-    // store for left list
-    let leftListStore = new qcl.data.store.JsonRpcStore("access-config");
-    leftListStore.setAutoLoadMethod("elements");
-    leftListStore.addListener("loaded", function (e) {
-      let m = new qx.event.message.Message("leftListReloaded", e.getData ? e.getData() : []);
-      m.setSender(e.getTarget());
-      qx.event.message.Bus.getInstance().dispatch(m);
-    }, this);
-    qx.event.message.Bus.getInstance().subscribe("accessControlTool.reloadLeftList", function (e) {
-      leftListStore.reload();
-    }, this);
-    
-    // store for right list
-    let rightListStore = new qcl.data.store.JsonRpcStore("access-config");
-    rightListStore.setAutoLoadMethod("elements");
-    qx.event.message.Bus.getInstance().subscribe("leftListReloaded", function (e) {
-      rightListStore.setModel(null);
-      rightListStore.setAutoLoadParams(null);
-    }, this);
-    qx.event.message.Bus.getInstance().subscribe("treeReloaded", function (e) {
-      rightListStore.setModel(null);
-      rightListStore.setAutoLoadParams(null);
-    }, this);
-    
-    // store for tree
-    let treeStore = new qcl.data.store.JsonRpcStore("access-config");
-    treeStore.setAutoLoadMethod("tree");
-    qx.event.message.Bus.getInstance().subscribe("leftListReloaded", function (e) {
-      treeStore.setModel(null);
-      treeStore.setAutoLoadParams(null);
-    }, this);
-    treeStore.addListener("loaded", function (e) {
-      let m = new qx.event.message.Message("treeReloaded", e.getData ? e.getData() : []);
-      m.setSender(e.getTarget());
-      qx.event.message.Bus.getInstance().dispatch(m);
-    }, this);
     
     // layout for three columns
     let qxHbox1 = new qx.ui.layout.HBox(10, null, null);
@@ -295,9 +350,9 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     });
     
     // Tree of linked Elements
-    let elementTree = new qx.ui.tree.Tree();
+    const elementTree = new qx.ui.tree.Tree();
     qxComposite4.add(elementTree, {flex: 1});
-    let treeController = new qx.data.controller.Tree(null, elementTree, "children", "label");
+    const treeController = new qx.data.controller.Tree(null, elementTree, "children", "label");
     treeController.setIconPath("icon");
     treeStore.bind("model", treeController, "model", {});
     treeController.setDelegate({
@@ -313,7 +368,7 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     elementTree.addListener("changeSelection", function (e) {
       let m = new qx.event.message.Message("treeSelectionChanged", e.getData ? e.getData() : []);
       m.setSender(e.getTarget());
-      qx.event.message.Bus.getInstance().dispatch(m);
+      bus.dispatch(m);
     }, this);
     let qxHbox3 = new qx.ui.layout.HBox(10, null, null);
     let qxComposite5 = new qx.ui.container.Composite();
@@ -326,22 +381,20 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     qxButton5.setEnabled(false);
     qxButton5.setLabel(this.tr('Link'));
     qxComposite5.add(qxButton5);
-    pm.create("allowLink").bind("state", qxButton5, "enabled");
-    qxButton5.addListener("execute", function (e) {
+    allowLinkPermission.bind("state", qxButton5, "enabled");
+    qxButton5.addListener("execute", () => {
       let treeModel = elementTree.getSelection()[0].getModel();
       let rightModel = rightList.getSelection()[0].getModel();
       let params = [treeModel.getValue(), rightModel.getType(), rightModel.getValue()];
-      treeStore.execute("link", params, function () {
-        treeStore.reload();
-      });
-    }, this);
+      treeStore.execute("link", params, () => treeStore.reload() );
+    });
     
     // Unlink button
     let qxButton6 = new qx.ui.form.Button(this.tr('Unlink'), null, null);
     qxButton6.setEnabled(false);
     qxButton6.setLabel(this.tr('Unlink'));
     qxComposite5.add(qxButton6);
-    pm.create("allowUnlink").bind("state", qxButton6, "enabled");
+    allowUnlinkPermission.bind("state", qxButton6, "enabled");
     qxButton6.addListener("execute", function (e) {
       let leftModel = leftList.getSelection()[0].getModel();
       let treeModel = elementTree.getSelection()[0].getModel();
@@ -374,7 +427,7 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     rightList.addListener("changeSelection", function (e) {
       let m = new qx.event.message.Message("rightListSelectionChanged", e.getData ? e.getData() : []);
       m.setSender(e.getTarget());
-      qx.event.message.Bus.getInstance().dispatch(m);
+      bus.dispatch(m);
     }, this);
     let qxHbox4 = new qx.ui.layout.HBox(10, null, null);
     let qxComposite7 = new qx.ui.container.Composite();
@@ -448,33 +501,5 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     qxButton10.addListener("execute", function (e) {
       rightListStore.reload();
     }, this);
-    
-    // update permissions
-    let allowLinkPermission = pm.create("allowLink");
-    allowLinkPermission.setGranted(true);
-    allowLinkPermission.addCondition(() => {
-      let treeSelection = elementTree.getSelection();
-      return (
-      treeSelection.length > 0
-      && treeSelection[0].getModel()
-      && treeSelection[0].getModel().getAction() === "link"
-      && rightList.getSelection().length > 0);
-    });
-    qx.event.message.Bus.subscribe("leftListReloaded", () => allowLinkPermission.update());
-    qx.event.message.Bus.subscribe("treeSelectionChanged", () => allowLinkPermission.update());
-    qx.event.message.Bus.subscribe("rightListSelectionChanged", () => allowLinkPermission.update());
-    
-    let allowUnlinkPermission = pm.create("allowUnlink");
-    allowUnlinkPermission.setGranted(true);
-    allowUnlinkPermission.addCondition(() => {
-      let treeSelection = elementTree.getSelection();
-      return (
-      treeSelection.length > 0
-      && treeSelection[0].getModel()
-      && treeSelection[0].getModel().getAction() === "unlink");
-    });
-    qx.event.message.Bus.subscribe("leftListReloaded", () => allowUnlinkPermission.update());
-    qx.event.message.Bus.subscribe("treeSelectionChanged", () => allowUnlinkPermission.update());
-    qx.event.message.Bus.subscribe("rightListSelectionChanged", () => allowUnlinkPermission.update());
   }
 });

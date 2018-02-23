@@ -24,9 +24,19 @@ qx.Class.define("qcl.access.PermissionManager",
 {
   extend : qcl.access.AbstractManager,
   type : "singleton",
-  construct : function()
-  {
+  construct : function() {
     this.base(arguments);
     this._type = "Permission";
+  },
+  members : {
+    /**
+     * Returns a newly created or cached Permission object
+     * @param name
+     * @return {qcl.access.Permission}
+     */
+    create : function(name)
+    {
+      return this.base(arguments, name);
+    }
   }
 });

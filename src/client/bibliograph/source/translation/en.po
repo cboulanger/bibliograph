@@ -114,7 +114,7 @@ msgstr ""
 msgid "The application is currently in a read-only state. Only the administrator can log in."
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:78
+#: bibliograph.ui.window.AccessControlTool:176
 msgid "Please wait ..."
 msgstr ""
 
@@ -142,15 +142,15 @@ msgstr ""
 msgid "Access control tool"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:56
+#: bibliograph.ui.window.AccessControlTool:154
 msgid "New User"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:71
+#: bibliograph.ui.window.AccessControlTool:169
 msgid "New Datasource"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:83
+#: bibliograph.ui.window.AccessControlTool:181
 msgid "Help"
 msgstr ""
 
@@ -158,19 +158,19 @@ msgstr ""
 msgid "Export to filesystem"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:93
+#: bibliograph.ui.window.AccessControlTool:191
 msgid "Exit"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:393
+#: bibliograph.ui.window.AccessControlTool:446
 msgid "Please enter the id of the new '%1'-Object"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:223
+#: bibliograph.ui.window.AccessControlTool:278
 msgid "Do you really want to delete '%1'?"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:440
+#: bibliograph.ui.window.AccessControlTool:493
 msgid "Loading data ..."
 msgstr ""
 
@@ -178,23 +178,23 @@ msgstr ""
 msgid "Please wait..."
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:287
+#: bibliograph.ui.window.AccessControlTool:342
 msgid "Edited element"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:327
+#: bibliograph.ui.window.AccessControlTool:382
 msgid "Link"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:342
+#: bibliograph.ui.window.AccessControlTool:395
 msgid "Unlink"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:363
+#: bibliograph.ui.window.AccessControlTool:416
 msgid "Linkable items"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:419
+#: bibliograph.ui.window.AccessControlTool:472
 msgid "Do you really want to delete the objects '%1'?"
 msgstr ""
 

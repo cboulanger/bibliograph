@@ -7,4 +7,4 @@ namespace lib\exceptions;
  * trace since the cause of the error is not in the code.
  * @package lib\exceptions
  */
-class UserErrorException extends \Exception {}
+class UserErrorException extends \RuntimeException {}

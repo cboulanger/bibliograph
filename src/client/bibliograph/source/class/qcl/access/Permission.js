@@ -18,25 +18,24 @@
 ************************************************************************ */
 
 /**
- * A permission object. The object has a "granted" and a read-only "state" property. The "granted" property 
+ * A permission object. The object has a "granted" and a read-only "state" property. The "granted" property
  * is set to true if the current user in priciple has the property. However, you
  * can attach condition functions to this object by the addCondition method. Only
- * if the "granted" property AND all of these conditions return true, the "state" 
+ * if the "granted" property AND all of these conditions return true, the "state"
  * property will be true.
  * @require(qcl.access.PermissionManager)
  */
 qx.Class.define("qcl.access.Permission",
 {
-  extend : qx.core.Object,
-
+  extend: qx.core.Object,
+  
   /*
   *****************************************************************************
      CONSTRUCTOR
   *****************************************************************************
   */
-
-  construct : function(vName)
-  {
+  
+  construct: function (vName) {
     this.base(arguments);
     this.setNamedId(vName);
     this.__conditions = [];
@@ -44,28 +43,28 @@ qx.Class.define("qcl.access.Permission",
     this._manager = qx.core.Init.getApplication().getAccessManager().getPermissionManager();
     this._manager.add(this);
   },
-
+  
   /*
   *****************************************************************************
      PROPERTIES
   *****************************************************************************
   */
-
-  properties :
+  
+  properties:
   {
     /**
      * Name of the permission. Should be a dot-separated name such as myapp.permissions.email.delete
      */
-    namedId :
+    namedId:
     {
-      check:    "String",
+      check: "String",
       nullable: false
     },
-
+    
     /**
      * A description of the permission, optional
      */
-    description :
+    description:
     {
       check: "String",
       nullable: true
@@ -73,15 +72,15 @@ qx.Class.define("qcl.access.Permission",
     
     /**
      * Whether the permission is granted at all. A permission's
-     * state is true if it is granted and if all conditions 
+     * state is true if it is granted and if all conditions
      * evaluate true
      */
-    granted :
+    granted:
     {
-      check : "Boolean",
-      init : false,
-      event : "changeGranted",
-      apply : "_applyGranted"
+      check: "Boolean",
+      init: false,
+      event: "changeGranted",
+      apply: "_applyGranted"
     }
   },
   
@@ -90,10 +89,10 @@ qx.Class.define("qcl.access.Permission",
      EVENTS
   *****************************************************************************
   */
-
-  events :
+  
+  events:
   {
-    "changeState"   : "qx.event.type.Data"
+    "changeState": "qx.event.type.Data"
   },
   
   /*
@@ -101,79 +100,67 @@ qx.Class.define("qcl.access.Permission",
      MEMBERS
   *****************************************************************************
   */
-
-  members :
+  
+  members:
   {
     
-    _manager : null,
+    _manager: null,
     
     /**
      * get all conditions
      * @return {Array}
      */
-    getConditions : function()
-    {
+    getConditions: function () {
       return this.__conditions;
     },
     
     /**
-     * adds a condition for the permisson
+     * Adds a condition function for the permisson
      *
      * @param conditionFunc {Function} callback function
      * @param context {Object} The execution context of the callback (i.e. "this")
-     * @return {Boolean} Success
+     * @return {qcl.access.Permission} The instance for chaining methods
      */
-    addCondition : function(conditionFunc, context)
-    {
-      if (typeof conditionFunc != "function")
-      {
+    addCondition: function (conditionFunc, context) {
+      if (typeof conditionFunc !== "function") {
         this.error("No callback function supplied!");
-        return false;
       }
-
-      if (this.hasCondition(conditionFunc,context))
-      {
+      
+      if (this.hasCondition(conditionFunc, context)) {
         this.warn("Condition has already been added.");
-        return false;
       }
-      else
-      {
+      else {
         // add a condition
         this.getConditions().push({
-          'condition' : conditionFunc,
-          'context'   : context || null
+          'condition': conditionFunc,
+          'context': context || null
         });
-
-        return true;
       }
+      return this;
     },
-
-
+    
+    
     /**
-     * checks if condition has already been added      
-     * 
+     * checks if condition has already been added
+     *
      * @param conditionFunc {Function} Callback Function
      * @param context {Object} execution context
      * @return {Boolean} Whether condition has been added
      */
-    hasCondition : function(conditionFunc, context)
-    {
-      var conditions = this.getConditions(); 
-      for (var i=0; i<conditions.length; i++)
-      {
-        if (  conditionFunc 
-            && typeof conditionFunc == "object" 
-            && conditions[i].condition == conditionFunc 
-            && conditions[i].context == (context || null)) 
-        {
+    hasCondition: function (conditionFunc, context) {
+      var conditions = this.getConditions();
+      for (var i = 0; i < conditions.length; i++) {
+        if (conditionFunc
+        && typeof conditionFunc == "object"
+        && conditions[i].condition == conditionFunc
+        && conditions[i].context == (context || null)) {
           return true;
         }
       }
-
       return false;
     },
-
-
+    
+    
     /**
      * remove a condition
      *
@@ -181,15 +168,12 @@ qx.Class.define("qcl.access.Permission",
      * @param context {Object} execution context
      * @return {Boolean} Whether condition was removed or not
      */
-    removeCondition : function(conditionFunc, context)
-    {
+    removeCondition: function (conditionFunc, context) {
       var conditions = this.getConditions();
-
-      for (var i=0; i<conditions.length; i++)
-      {
-        if (conditions[i].condition == conditionFunc 
-            && conditions[i].context == (context || null)) 
-        {
+      
+      for (var i = 0; i < conditions.length; i++) {
+        if (conditions[i].condition == conditionFunc
+        && conditions[i].context == (context || null)) {
           conditions.splice(i, 1);
           return true;
         }
@@ -199,22 +183,20 @@ qx.Class.define("qcl.access.Permission",
     
     /**
      * Checks if all conditions are satisfied. Only those conditions
-     * are 
+     * are
      * @param context {Object} If provided, check only those conditions
      * with a matching context
      * @return {Boolean} Returns true if all conditions are satisfied
      */
-    _satifiesAllConditions : function(context)
-    {
+    _satifiesAllConditions: function (context) {
       var conditions = this.getConditions();
       //console.log("Checking conditions for " + this.getNamedId() + ", context " + context );
       
       /*
        * loop through all conditions 
        */
-      for (var i=0; i<conditions.length; i++)
-      {
-        var condFunc    = conditions[i].condition; 
+      for (var i = 0; i < conditions.length; i++) {
+        var condFunc = conditions[i].condition;
         var condContext = conditions[i].context;
         
         //console.log([condFunc,condContext]);
@@ -223,102 +205,93 @@ qx.Class.define("qcl.access.Permission",
          * check condition only if context matches,
          * unless no context has been passed
          */
-        if ( ! context || context == condContext) 
-        {
-          if ( ! condFunc.call(condContext) )
-          {
+        if (!context || context == condContext) {
+          if (!condFunc.call(condContext)) {
             return false;
-          } 
+          }
         }
       }
-      return true;  
+      return true;
     },
-
+    
     /**
-     * Applies the permission grant. if the state has changed, 
+     * Applies the permission grant. if the state has changed,
      * dispatches changeState event.
      * @param granted {Boolean}
      * @param old {Boolean}
      */
-    _applyGranted : function( granted, old )
-    {
+    _applyGranted: function (granted, old) {
       /*
        * if this is a wildcard permission, set all dependent permissions
        */
-      var myName = this.getNamedId(); 
+      var myName = this.getNamedId();
       var pos = myName.indexOf("*");
-      if ( pos > -1 )
-      {
-        this._manager.getNamedIds().forEach(function(name)
-        {
-          if (pos == 0 || myName.substr(0, pos) == name.substr(0, pos))
-          {
-            if ( name.indexOf("*") < 0) // other wildcard permissions do not need to be updated
+      if (pos > -1) {
+        this._manager.getNamedIds().forEach(function (name) {
+          if (pos == 0 || myName.substr(0, pos) == name.substr(0, pos)) {
+            if (name.indexOf("*") < 0) // other wildcard permissions do not need to be updated
             {
-              try{
+              try {
                 this._manager.getByName(name).setGranted(granted);
-              }catch(e){
-               this.warn("Invalid manager:"+this._manager); 
+              } catch (e) {
+                this.warn("Invalid manager:" + this._manager);
               }
             }
-          } 
-        },this);
+          }
+        }, this);
       }
-
+      
       /*
        * update state
        */
-      var state = this.getState(); 
-      this.fireDataEvent( "changeState", state ); // fired even if state doesn't change
+      var state = this.getState();
+      this.fireDataEvent("changeState", state); // fired even if state doesn't change
       //console.debug( `permission ${this.getNamedId()} has state ${state}`);
     },
-
+    
     /**
-     * Gets the state of the permission. Returns true if the 
+     * Gets the state of the permission. Returns true if the
      * permission has been granted in general to the particular
      * user and if all condition functions that have been attached
      * return true.
-     * @param context {Object} If provided, check only the conditions 
+     * @param context {Object} If provided, check only the conditions
      * that have a matching object context. This allows to reuse permissions
      * in different instances.
-     * @return {Boolean} The state of the permission 
+     * @return {Boolean} The state of the permission
      */
-    getState : function(context)
-    {
-      return this.isGranted() && this._satifiesAllConditions(context); 
+    getState: function (context) {
+      return this.isGranted() && this._satifiesAllConditions(context);
     },
     
     /**
      * dummy function for databinding
      * @return {void}
      */
-    resetState : function()
-    {
+    resetState: function () {
       // do nothing
     },
     
     /**
      * Updates the current state and dispatches events
-     * @param context {Object} If provided, check only the conditions 
+     * @param context {Object} If provided, check only the conditions
      * that have a matching object context. This allows to reuse permissions
      * in different instances.
-     * @return {Boolean} The state of the permission 
+     * @return {Boolean} The state of the permission
      */
-    update : function(context)
-    {
+    update: function (context) {
       var state = this.getState(context);
       //console.log("Updating "+ this.getNamedId() + ": " + state);
-      this.fireDataEvent( "changeState", state );
-    }   
+      this.fireDataEvent("changeState", state);
+    }
     
   },
-
+  
   /*
   *****************************************************************************
      DESTRUCTOR
   *****************************************************************************
   */
-  destruct : function() {
+  destruct: function () {
     this._disposeArray("__conditions");
     this._manager.remove(this);
   }

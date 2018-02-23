@@ -116,33 +116,12 @@ class User extends BaseModel implements IdentityInterface
         'type' => "PasswordField",
         'value' => "",
         'ignore' => true,
-        'placeholder' => Yii::t('app', "To change the password, repeat new password"),
-        'unmarshal' => function( $value) { return $this->checkFormPassword($value);}
+        'placeholder' => Yii::t('app', "To change the password, repeat new password")
       ]
     ];
   }
 
-  /**
-   * Function to check the match between the password and the repeated
-   * password. If called with a password, returns it in a hashed form
-   * ready to be stored in the database
-   * @param $value
-   * @return string|null
-   * @throws UserErrorException
-   */
-  protected function checkFormPassword ( $value )
-  {
-    if ( ! isset( $this->__password ) ) {
-      $this->__password = $value;
-    }
-    elseif ( $this->__password != $value ) {
-      throw new UserErrorException( Yii::t('app',"Passwords do not match...") );
-    }
-    if ( $value and strlen($value) < 8 ) {
-      throw new UserErrorException( Yii::t('app',"Password must be at least 8 characters long") );
-    }
-    return $value ? Yii::$app->accessManager->generateHash( $value ) : null;
-  }
+
 
   //-------------------------------------------------------------
   // Indentity Interface

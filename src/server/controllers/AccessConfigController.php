@@ -22,7 +22,7 @@ namespace app\controllers;
 
 use app\models\Group;
 use lib\dialog\{
-  Alert, Confirm, Form
+  Alert, Confirm, Error, Form
 };
 use lib\exceptions\{
   RecordExistsException, UserErrorException
@@ -179,12 +179,18 @@ class AccessConfigController extends \app\Controllers\AppController
     $linkedModelRelation = $linkedModelType . "s";
     $linkedModelNamedId = trim($linkedModelInfo[1]);
     $linkedModel = $this->getModelInstance($linkedModelType, $linkedModelNamedId);
-    Yii::trace(
+    Yii::debug(
       "Linking $type '$namedId' with $linkedModelType '$linkedModelNamedId' via '$linkedModelRelation' relation" .
-      ( $extraColumns ? " with extra columns " . \json_encode($extraColumns):".")
+      ($extraColumns ? " with extra columns " . \json_encode($extraColumns) : ".")
     );
     if ($link) {
-      $model->link($linkedModelRelation, $linkedModel, $extraColumns);
+      try {
+        $model->link($linkedModelRelation, $linkedModel, $extraColumns);
+      } catch (\Exception $e) {
+        if( $e instanceof yii\base\InvalidCallException or $e instanceof \PDOException) {
+          throw new UserErrorException("Models are already linked");
+        }
+      }
     } else {
       $model->unlink($linkedModelRelation, $linkedModel, $extraColumns);
     }
@@ -325,13 +331,14 @@ class AccessConfigController extends \app\Controllers\AppController
    * @throws \JsonRpc2\Exception
    * @throws UserErrorException
    */
-  public function actionData($type, $namedId ){
+  public function actionData($type, $namedId)
+  {
     $this->requirePermission("access.manage");
-    if( YII_ENV_PROD ){
+    if (YII_ENV_PROD) {
       throw new \JsonRpc2\Exception("Not allowed.", \JsonRpc2\Exception::INVALID_REQUEST);
     }
     $model = $this->getModelInstance($type, $namedId);
-    return $model->getAttributes(null, ['created','modified']);
+    return $model->getAttributes(null, ['created', 'modified']);
   }
 
   /**
@@ -427,7 +434,7 @@ class AccessConfigController extends \app\Controllers\AppController
         foreach ($allGroups as $group) {
           $groupNode = array(
             'icon' => $modelData['group']['icon'],
-            'label' => Yii::t('app', "In {group}",[
+            'label' => Yii::t('app', "In {group}", [
               'group' => $group->name
             ]),
             'type' => "group",
@@ -436,7 +443,7 @@ class AccessConfigController extends \app\Controllers\AppController
             'children' => []
           );
           /** @var \app\models\Role[] $roles */
-          $roles = $user->getGroupRoles($group->id )->all();
+          $roles = $user->getGroupRoles($group->id)->all();
           foreach ($roles as $role) {
             $roleNode = array(
               'icon' => $modelData['role']['icon'],
@@ -555,10 +562,15 @@ class AccessConfigController extends \app\Controllers\AppController
    */
   public function actionEdit($first, $second, $third = null)
   {
+    // if first argument is boolean true, this is the call from a dialog
     if ($first === true) {
-      // if first argument is boolean true, this is the call from a dialog
-      $type = $second;
-      $namedId = $third;
+      // if the second argument is a shelf id, get arguments from shelf
+      if ($this->hasInShelf($second)) {
+        list($type, $namedId) = $this->unshelve($second);
+      } else {
+        $type = $second;
+        $namedId = $third;
+      }
     } else {
       // otherwise, normal call
       $type = $first;
@@ -594,48 +606,53 @@ class AccessConfigController extends \app\Controllers\AppController
    * Save the form produced by edit()
    * @param \stdClass|null $data
    *    The form data or null if the user cancelled the form
-   * @param string|null $typeOrShelfId
-   *    The type of the model or a shelfId
+   * @param string|null $type
+   *    The type of the model or null if the user cancelled the form
    * @param string|null $namedId
-   *    The namedId of the model
+   *    The namedId of the model or null if the user cancelled the form
    * @return string Diagnostic message
    * @throws \Exception
    * @throws \JsonRpc2\Exception
    * @throws UserErrorException
    */
-  public function actionSave(\stdClass $data=null, $typeOrShelfId=null, $namedId=null)
+  public function actionSave(\stdClass $data = null, $type = null, $namedId = null)
   {
     if ($data === null) {
       return "Action save aborted";
     }
-    if ( $this->hasInShelf( $typeOrShelfId ) ){
-      list($data, $type, $namedId) = $this->unshelve( $typeOrShelfId );
-    } else {
-      $type = $typeOrShelfId;
-    }
 
     $model = $this->getModelInstance($type, $namedId);
     $oldData = (object)$model->getAttributes();
+    $validationError = null;
+    $passwordChanged = false;
 
     // lower permission requirement if users edit their own data
     if ($type != "user" or $namedId != $this->getActiveUser()->namedId) {
       $this->requirePermission("access.manage");
     }
 
-    // if we have a password field, we expect to have a password2 field
-    // as well to match. return to dialog if passwords do not match.
-    if (isset($data->password) and !empty($data->password)) {
-      if (!isset($data->password2) or $data->password != $data->password2) {
-        Alert::create(
-          Yii::t('app', "Passwords do not match. Please try again"),
-          Yii::$app->controller->id, "edit", ["user", $namedId]
-        );
-        return "Passwords did not match";
+    // password handling
+    if (isset($data->password)) {
+      if (!empty($data->password) and isset($data->password2)) {
+        // if we have a password2 field, we expect it to match.
+        if ($data->password !== $data->password2) {
+          $validationError = Yii::t('app', "Passwords did not match.");
+          unset($data->password);
+        }
+        unset($data->password2);
       }
-      unset($data->password2);
-      $hashed =  Yii::$app->accessManager->generateHash( $data->password );
-      Yii::debug("new: $data->password/$hashed, old: $model->password ");
-      $passwordChanged = true;
+      // enforce minimal password length
+      if (isset($data->password) and strlen($data->password) < 8) {
+        $validationError = Yii::t('app', "Password must be at least 8 characters long.");
+        unset($data->password);
+      }
+      // we have a valid password
+      if (isset($data->password)) {
+        $hashed = Yii::$app->accessManager->generateHash($data->password);
+        Yii::debug("new: $data->password/$hashed, old: $model->password ");
+        $data->password = $hashed;
+        $passwordChanged = true;
+      }
     }
 
     // ldap user data cannot be edited
@@ -646,7 +663,6 @@ class AccessConfigController extends \app\Controllers\AppController
     // parse form and save in model
     try {
       $parsed = Form::parseResultData($model, $data);
-      Yii::debug($parsed);
       $model->setAttributes($parsed);
       $model->save();
     } catch (\Exception $e) {
@@ -660,29 +676,32 @@ class AccessConfigController extends \app\Controllers\AppController
       return "User error '$message', reopening editor form.";
     }
 
-    if ($model->hasAttribute("password")) {
-
-      if (!$data->password and !$model->password) {
-        // enforce setting of password
-        $shelfId = $this->shelve($data, $type, $namedId);
-        Alert::create(
-          Yii::t('app', "You must set a password."),
-          Yii::$app->controller->id, "edit", [$shelfId]
-        );
-        return "Missing password";
-      }
-      //  @todo reimplement if password has changed, inform user, unless the old password was a temporary password
-/*      if ($data->password and $parsed->password != $oldData->password and strlen($oldData->password) > 7) {
-        return $this->sendInformationEmail($model->data());
-      }*/
+    // enforce setting of password
+    if ($model->hasAttribute("password") and !$model->password) {
+      $validationError = Yii::t('app', "You need to set a password.");
     }
 
-    if( $passwordChanged) Alert::create(Yii::t('app', "Your password has been changed."));
-    // message to update the UI
-    $this->dispatchClientMessage("accessControlTool.reloadLeftList");
-    return "Data for $type '$namedId' has been saved";
-  }
+    if ($passwordChanged) {
+      //  @todo reimplement if password has changed, inform user, unless the old password was a temporary password
+      if (false and strlen($oldData->password) > 7) {
+        return $this->sendInformationEmail($model->data());
+      }
+      Alert::create(Yii::t('app', "Your password has been changed."));
+    }
 
+    if ($validationError) {
+      $shelfId = $this->shelve($type, $namedId);
+      Error::create(
+        $validationError,
+        Yii::$app->controller->id, "edit", [$shelfId]
+      );
+      return "Data validation error: $validationError";
+    } else {
+      // message to update the UI
+      $this->dispatchClientMessage("accessControlTool.reloadLeftList");
+      return "Data for $type '$namedId' has been saved";
+    }
+  }
 
   /**
    * Delete a model record
@@ -792,7 +811,7 @@ class AccessConfigController extends \app\Controllers\AppController
   {
     $this->requirePermission("access.manage");
     $this->linkOrUnlink($linkedModelData, $type, $namedId, true);
-    return "Linked $type '$namedId' with $linkedModelData" ;
+    return "Linked $type '$namedId' with $linkedModelData";
   }
 
   /**
@@ -809,7 +828,7 @@ class AccessConfigController extends \app\Controllers\AppController
   {
     $this->requirePermission("access.manage");
     $this->linkOrUnlink($linkedModelData, $type, $namedId, false);
-    return "Unlinked $type '$namedId' from $linkedModelData" ;
+    return "Unlinked $type '$namedId' from $linkedModelData";
   }
 
   /**
