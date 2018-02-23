@@ -12,7 +12,7 @@
  *
  ******************************************************************************/
 
-/* global qx qcl bibliograph */
+/* global  qcl bibliograph */
 
 /**
  * The Access configuration window
@@ -77,6 +77,7 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
       this.info( "Allow unlink: " + e.getData());
     });
     // update on events
+    // @todo convert messages to events
     bus.subscribe("leftListReloaded", () => {
       allowLinkPermission.update();
       allowUnlinkPermission.update();
@@ -97,15 +98,18 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
      */
   
     // store for select box
-    const selectBoxStore = new qcl.data.store.JsonRpcStore("access-config");
-    this.selectBoxStore = selectBoxStore;
-    selectBoxStore.setAutoLoadParams(null);
-    selectBoxStore.setAutoLoadMethod("types");
-  
+    this.selectBoxStore = new qcl.data.store.JsonRpcStore("access-config");
+    this.selectBoxStore.set({
+      autoLoadMethod : "types",
+      autoLoadParams : null
+    });
+
     // store for left list
-    const leftListStore = new qcl.data.store.JsonRpcStore("access-config");
-    leftListStore.setAutoLoadMethod("elements");
-    leftListStore.addListener("loaded", function (e) {
+    const leftListStore = new qcl.data.store.JsonRpcStore("access-config")
+    leftListStore.set({
+      autoLoadMethod : "elements"
+    });
+    leftListStore.addListener("loaded", e => {
       let m = new qx.event.message.Message("leftListReloaded", e.getData ? e.getData() : []);
       m.setSender(e.getTarget());
       bus.dispatch(m);
@@ -142,17 +146,17 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
        LAYOUT
     ---------------------------------------------------------------------------
     */
-    
-    let qxVbox1 = new qx.ui.layout.VBox(null, null, null);
-    this.setLayout(qxVbox1);
+
+    this.setLayout(new qx.ui.layout.VBox());
     
     // toolbar
-    let qxToolBar1 = new qx.ui.toolbar.ToolBar();
-    this.add(qxToolBar1);
+    let toolBar1 = new qx.ui.toolbar.ToolBar();
+    this.add(toolBar1);
     
     // user button
     let addUserButton = new qx.ui.toolbar.Button(this.tr('New User'), "icon/22/apps/preferences-users.png");
-    qxToolBar1.add(addUserButton);
+    toolBar1.add(addUserButton);
+    toolBar1.setEnabled(false);
     pm.create("access.manage").bind("state", addUserButton, "visibility", {
       converter: bibliograph.Utils.bool2visibility
     });
@@ -167,7 +171,7 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     
     //  datasource button
     let addDatasourceButton = new qx.ui.toolbar.Button(this.tr('New Datasource'), "icon/22/apps/internet-transfer.png");
-    qxToolBar1.add(addDatasourceButton);
+    toolBar1.add(addDatasourceButton);
     pm.create("access.manage").bind("state", addDatasourceButton, "visibility", {
       converter: bibliograph.Utils.bool2visibility
     });
@@ -179,45 +183,45 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     
     // help button
     let helpButton = new qx.ui.toolbar.Button(this.tr('Help'), "icon/22/apps/utilities-help.png");
-    qxToolBar1.add(helpButton);
+    toolBar1.add(helpButton);
     helpButton.addListener("execute", function (e) {
       this.getApplication().cmd("login", "access-control");
     }, this);
     
-    qxToolBar1.addSpacer();
+    toolBar1.addSpacer();
     
     // exit button
-    let qxToolBarButton3 = new qx.ui.toolbar.Button(
+    let toolBarButton3 = new qx.ui.toolbar.Button(
     this.tr('Exit'), "icon/22/actions/application-exit.png", null);
-    qxToolBar1.add(qxToolBarButton3);
-    qxToolBarButton3.addListener("execute", function (e) {
+    toolBar1.add(toolBarButton3);
+    toolBarButton3.addListener("execute", function (e) {
       this.close();
     }, this);
     
     // group box container
-    let qxGroupBox1 = new qx.ui.groupbox.GroupBox(null, null);
-    this.add(qxGroupBox1, {flex: 1});
+    let groupBox1 = new qx.ui.groupbox.GroupBox(null, null);
+    this.add(groupBox1, {flex: 1});
     
-    let qxVbox2 = new qx.ui.layout.VBox(null, null, null);
-    qxGroupBox1.setLayout(qxVbox2);
+    let vbox2 = new qx.ui.layout.VBox(null, null, null);
+    groupBox1.setLayout(vbox2);
     
     // layout for three columns
-    let qxHbox1 = new qx.ui.layout.HBox(10, null, null);
-    let qxComposite1 = new qx.ui.container.Composite();
-    qxComposite1.setLayout(qxHbox1);
-    qxComposite1.setAllowStretchY(true);
-    qxGroupBox1.add(qxComposite1, {flex: 1});
-    qxHbox1.setSpacing(10);
-    let qxVbox3 = new qx.ui.layout.VBox(10, null, null);
-    let qxComposite2 = new qx.ui.container.Composite();
-    qxComposite2.setLayout(qxVbox3);
-    qxComposite1.add(qxComposite2, {flex: 1});
-    qxVbox3.setSpacing(10);
+    let hbox1 = new qx.ui.layout.HBox(10, null, null);
+    let composite1 = new qx.ui.container.Composite();
+    composite1.setLayout(hbox1);
+    composite1.setAllowStretchY(true);
+    groupBox1.add(composite1, {flex: 1});
+    hbox1.setSpacing(10);
+    let vbox3 = new qx.ui.layout.VBox(10, null, null);
+    let composite2 = new qx.ui.container.Composite();
+    composite2.setLayout(vbox3);
+    composite1.add(composite2, {flex: 1});
+    vbox3.setSpacing(10);
     
     // select box
     let leftSelectBox = new qx.ui.form.SelectBox();
     this.leftSelectBox = leftSelectBox;
-    qxComposite2.add(leftSelectBox);
+    composite2.add(leftSelectBox);
     let leftSelectBoxController = new qx.data.controller.List(null, leftSelectBox, "label");
     leftSelectBoxController.setIconPath("icon");
     this.selectBoxStore.bind("model", leftSelectBoxController, "model");
@@ -229,7 +233,7 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     
     // left list
     let leftList = new qx.ui.form.List();
-    qxComposite2.add(leftList, {flex: 1});
+    composite2.add(leftList, {flex: 1});
     let leftListController = new qx.data.controller.List(null, leftList, "label");
     leftListController.setIconPath("icon");
     leftListStore.bind("model", leftListController, "model");
@@ -238,23 +242,27 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
         return sel.length ? sel[0].getModel().getParams() : null
       }
     });
-    let qxHbox2 = new qx.ui.layout.HBox(10, null, null);
-    let qxComposite3 = new qx.ui.container.Composite();
-    qxComposite3.setLayout(qxHbox2);
-    qxComposite2.add(qxComposite3);
-    qxHbox2.setSpacing(10);
+    let hbox2 = new qx.ui.layout.HBox(10, null, null);
+    let composite3 = new qx.ui.container.Composite();
+    composite3.setLayout(hbox2);
+    composite2.add(composite3);
+    hbox2.setSpacing(10);
     
     // "Add" button
-    let qxButton1 = new qx.ui.form.Button(null, "bibliograph/icon/button-plus.png", null);
-    qxButton1.setEnabled(false);
-    qxComposite3.add(qxButton1);
-    leftSelectBox.bind("selection", qxButton1, "enabled", {
+    let button1 = new qx.ui.form.Button(null, "bibliograph/icon/button-plus.png", null);
+    button1.setEnabled(false);
+    composite3.add(button1);
+    leftSelectBox.bind("selection", button1, "enabled", {
       converter: (s) => s.length > 0
     });
-    qxButton1.addListener("execute", function (e) {
-      let type = leftSelectBox.getSelection()[0].getModel().getValue();
-      let msg = this.tr("Please enter the id of the new '%1'-Object", /* this.tr( */
-      type/* ) */);
+    button1.addListener("execute", function () {
+      let selection = leftSelectBox.getSelection();
+      let type = selection.length ? selection[0].getModel().getValue() : null;
+      if( ! type) {
+        this.warn("Cannot get type!");
+        return;
+      }
+      let msg = this.tr("Please enter the id of the new '%1'-Object", type );
       dialog.Dialog.prompt(msg, function (name) {
         if (name) {
           leftListStore.execute("add", [type, name], function () {
@@ -265,13 +273,14 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     }, this);
     
     // "Delete" button
-    let qxButton2 = new qx.ui.form.Button(null, "bibliograph/icon/button-minus.png", null);
-    qxButton2.setEnabled(false);
-    qxComposite3.add(qxButton2);
-    leftList.bind("selection", qxButton2, "enabled", {
+    let button2 = new qx.ui.form.Button(null, "bibliograph/icon/button-minus.png", null);
+    button2.setEnabled(false);
+    composite3.add(button2);
+    leftList.bind("selection", button2, "enabled", {
       converter: (s) => s.length > 0
     });
-    qxButton2.addListener("execute", function (e) {
+    button2.addListener("execute", function (e) {
+      if( ! leftList.getSelection().length ) return;
       let itemModel = leftList.getSelection()[0].getModel();
       let name = itemModel.getValue();
       let type = itemModel.getType();
@@ -288,13 +297,14 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     // "Edit" button
     let editButton = new qx.ui.form.Button(null, "bibliograph/icon/button-edit.png", null);
     editButton.setEnabled(false);
-    qxComposite3.add(editButton);
+    composite3.add(editButton);
     leftList.bind("selection", editButton, "enabled", {
       converter: function (s) {
         return s.length > 0
       }
     });
-    editButton.addListener("execute", function (e) {
+    editButton.addListener("execute", () => {
+      if( ! leftList.getSelection().length ) return;
       let itemModel = leftList.getSelection()[0].getModel();
       let type = itemModel.getType();
       let name = itemModel.getValue();
@@ -303,12 +313,12 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
       leftListStore.execute("edit", [type, name], function () {
         this.getApplication().hidePopup();
       }, this);
-    }, this);
+    });
     
     // reload button
     let reloadBtn = new qx.ui.form.Button(null, "bibliograph/icon/button-reload.png", null);
     reloadBtn.setIcon("bibliograph/icon/button-reload.png");
-    qxComposite3.add(reloadBtn);
+    composite3.add(reloadBtn);
     reloadBtn.addListener("execute", function (e) {
       leftListStore.reload();
     }, this);
@@ -316,7 +326,7 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     // Email button
     // let emailBtn = new qx.ui.form.Button(null, "bibliograph/icon/button-mail.png", null);
     // emailBtn.setEnabled(false);
-    // qxComposite3.add(emailBtn);
+    // composite3.add(emailBtn);
     // leftList.bind("selection", emailBtn, "enabled", {
     //   converter : function(s) {
     //       return s.length > 0 && ["user","group"].indexOf(s[0].getModel().getType()) > -1
@@ -333,25 +343,28 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     // }, this);
     
     // Label for edited element
-    let qxVbox4 = new qx.ui.layout.VBox(10, null, null);
-    let qxComposite4 = new qx.ui.container.Composite();
-    qxComposite4.setLayout(qxVbox4);
-    qxComposite1.add(qxComposite4, {flex: 2});
-    qxVbox4.setSpacing(10);
-    let centerLabel = new qx.ui.basic.Label(this.tr('Edited element'));
-    centerLabel.setValue(this.tr('Edited element'));
-    centerLabel.setMaxWidth(250);
-    centerLabel.setHeight(20);
-    qxComposite4.add(centerLabel);
+    let vbox4 = new qx.ui.layout.VBox(10, null, null);
+    let composite4 = new qx.ui.container.Composite();
+    composite4.setLayout(vbox4);
+    composite1.add(composite4, {flex: 2});
+    vbox4.setSpacing(10);
+    let centerLabel = new qx.ui.basic.Label();
+    centerLabel.set({
+      value: this.tr('Edited element'),
+      maxWidth : 250,
+      height : 20,
+      rich : true
+    });
+    composite4.add(centerLabel);
     leftList.bind("selection", centerLabel, "value", {
       converter: function (sel) {
-        return sel.length ? sel[0].getLabel() : null
+        return sel.length ? '<b>' + sel[0].getLabel() + '</b>' : null
       }
     });
     
     // Tree of linked Elements
     const elementTree = new qx.ui.tree.Tree();
-    qxComposite4.add(elementTree, {flex: 1});
+    composite4.add(elementTree, {flex: 1});
     const treeController = new qx.data.controller.Tree(null, elementTree, "children", "label");
     treeController.setIconPath("icon");
     treeStore.bind("model", treeController, "model", {});
@@ -360,29 +373,37 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
         item.setOpen(true);
       }
     });
+
+    // Tree bindings
     elementTree.bind("selection", rightListStore, "autoLoadParams", {
       converter: function (selection) {
-        return selection.length ? selection[0].getModel().getType() : null;
+        if( selection.length ){
+         let model = selection[0].getModel();
+         return model.getAction() === "link" ? model.getType() : null;
+        }
+        return null;
       }
     });
     elementTree.addListener("changeSelection", function (e) {
-      let m = new qx.event.message.Message("treeSelectionChanged", e.getData ? e.getData() : []);
+      let m = new qx.event.message.Message("treeSelectionChanged", e.getData());
       m.setSender(e.getTarget());
       bus.dispatch(m);
     }, this);
-    let qxHbox3 = new qx.ui.layout.HBox(10, null, null);
-    let qxComposite5 = new qx.ui.container.Composite();
-    qxComposite5.setLayout(qxHbox3);
-    qxComposite4.add(qxComposite5);
-    qxHbox3.setSpacing(10);
+
+    // tree button pane
+    let hbox3 = new qx.ui.layout.HBox(10, null, null);
+    let composite5 = new qx.ui.container.Composite();
+    composite5.setLayout(hbox3);
+    composite4.add(composite5);
+    hbox3.setSpacing(10);
     
     // link button
-    let qxButton5 = new qx.ui.form.Button(this.tr('Link'), null, null);
-    qxButton5.setEnabled(false);
-    qxButton5.setLabel(this.tr('Link'));
-    qxComposite5.add(qxButton5);
-    allowLinkPermission.bind("state", qxButton5, "enabled");
-    qxButton5.addListener("execute", () => {
+    let button5 = new qx.ui.form.Button(this.tr('Link'), null, null);
+    button5.setEnabled(false);
+    button5.setLabel(this.tr('Link'));
+    composite5.add(button5);
+    allowLinkPermission.bind("state", button5, "enabled");
+    button5.addListener("execute", () => {
       let treeModel = elementTree.getSelection()[0].getModel();
       let rightModel = rightList.getSelection()[0].getModel();
       let params = [treeModel.getValue(), rightModel.getType(), rightModel.getValue()];
@@ -390,12 +411,12 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     });
     
     // Unlink button
-    let qxButton6 = new qx.ui.form.Button(this.tr('Unlink'), null, null);
-    qxButton6.setEnabled(false);
-    qxButton6.setLabel(this.tr('Unlink'));
-    qxComposite5.add(qxButton6);
-    allowUnlinkPermission.bind("state", qxButton6, "enabled");
-    qxButton6.addListener("execute", function (e) {
+    let button6 = new qx.ui.form.Button(this.tr('Unlink'), null, null);
+    button6.setEnabled(false);
+    button6.setLabel(this.tr('Unlink'));
+    composite5.add(button6);
+    allowUnlinkPermission.bind("state", button6, "enabled");
+    button6.addListener("execute", function (e) {
       let leftModel = leftList.getSelection()[0].getModel();
       let treeModel = elementTree.getSelection()[0].getModel();
       let params = [treeModel.getValue(), leftModel.getType(), leftModel.getValue()];
@@ -403,24 +424,38 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
         treeStore.reload();
       });
     }, this);
-    let qxVbox5 = new qx.ui.layout.VBox(10, null, null);
-    let qxComposite6 = new qx.ui.container.Composite();
-    qxComposite6.setLayout(qxVbox5);
-    qxComposite1.add(qxComposite6, {
+    let vbox5 = new qx.ui.layout.VBox(10, null, null);
+    let composite6 = new qx.ui.container.Composite();
+    composite6.setLayout(vbox5);
+    composite1.add(composite6, {
       flex: 1
     });
-    qxVbox5.setSpacing(10);
+    vbox5.setSpacing(10);
     
     // Linkable items
-    let rightLabel = new qx.ui.basic.Label(this.tr('Linkable items'));
-    rightLabel.setValue(this.tr('Linkable items'));
-    rightLabel.setRich(true);
-    rightLabel.setHeight(20);
-    qxComposite6.add(rightLabel);
+
+    // Label
+    let rightLabel = new qx.ui.basic.Label();
+    rightLabel.set({
+      rich : true,
+      value : '<b>' + this.tr('Linkable items')  + '</b>',
+      height : 20
+    });
+    bus.subscribe("treeSelectionChanged",(e)=>{
+      let sel = e.getData();
+      rightLabel.setValue(
+        '<b>' + ( sel.length ? this.tr('No linkable items') : sel[0].getModel().getLabel() ) + "</b>"
+      );
+    });
+    composite6.add(rightLabel);
+
+    // List
     let rightList = new qx.ui.form.List();
     rightList.setSelectionMode("multi");
     rightList.setWidgetId("bibliograph/acltool-rightList");
-    qxComposite6.add(rightList, {flex: 1});
+    composite6.add(rightList, {flex: 1});
+
+    // Controller
     let rightListController = new qx.data.controller.List(null, rightList, "label");
     rightListController.setIconPath("icon");
     rightListStore.bind("model", rightListController, "model");
@@ -429,38 +464,42 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
       m.setSender(e.getTarget());
       bus.dispatch(m);
     }, this);
-    let qxHbox4 = new qx.ui.layout.HBox(10, null, null);
-    let qxComposite7 = new qx.ui.container.Composite();
-    qxComposite7.setLayout(qxHbox4);
-    qxComposite6.add(qxComposite7);
-    qxHbox4.setSpacing(10);
-    let qxButton7 = new qx.ui.form.Button(null, "bibliograph/icon/button-plus.png", null);
-    qxButton7.setEnabled(false);
-    qxButton7.setIcon("bibliograph/icon/button-plus.png");
-    qxComposite7.add(qxButton7);
-    elementTree.bind("selection", qxButton7, "enabled", {
+
+    // Button panel
+    let hbox4 = new qx.ui.layout.HBox(10, null, null);
+    let composite7 = new qx.ui.container.Composite();
+    composite7.setLayout(hbox4);
+    composite6.add(composite7);
+    hbox4.setSpacing(10);
+
+    // "Add" button
+    let button7 = new qx.ui.form.Button(null, "bibliograph/icon/button-plus.png", null);
+    button7.setEnabled(false);
+    button7.setIcon("bibliograph/icon/button-plus.png");
+    composite7.add(button7);
+    elementTree.bind("selection", button7, "enabled", {
       converter: (s) => s.length > 0
     });
-    qxButton7.addListener("execute", function (e) {
+    button7.addListener("execute", async () => {
+      if( ! elementTree.getSelection().length ) return;
       let type = elementTree.getSelection()[0].getModel().getType();
-      let msg = this.tr("Please enter the id of the new '%1'-Object", /* this.tr( */
-      type/* ) */);
-      dialog.Dialog.prompt(msg, function (name) {
-        if (name) {
-          rightListStore.execute("add", [type, name], function () {
-            rightListStore.reload();
-          });
-        }
-      });
-    }, this);
-    let qxButton8 = new qx.ui.form.Button(null, "bibliograph/icon/button-minus.png", null);
-    qxButton8.setEnabled(false);
-    qxButton8.setIcon("bibliograph/icon/button-minus.png");
-    qxComposite7.add(qxButton8);
-    rightList.bind("selection", qxButton8, "enabled", {
+      let msg = this.tr("Please enter the id of the new '%1'-Object", type );
+      let name = dialog.Dialog.prompt(msg).promise();
+      if (name) {
+        await rightListStore.execute("add", [type, name]);
+        rightListStore.reload();
+      }
+    });
+
+    // "Delete" button
+    let button8 = new qx.ui.form.Button();
+    button8.setEnabled(false);
+    button8.setIcon("bibliograph/icon/button-minus.png");
+    composite7.add(button8);
+    rightList.bind("selection", button8, "enabled", {
       converter: (s) => s.length > 0
     });
-    qxButton8.addListener("execute", function (e) {
+    button8.addListener("execute", function (e) {
       let selection = rightList.getSelection();
       let names = [];
       let types = [];
@@ -478,14 +517,17 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
         }
       });
     }, this);
-    let qxButton9 = new qx.ui.form.Button(null, "bibliograph/icon/button-edit.png", null);
-    qxButton9.setEnabled(false);
-    qxButton9.setIcon("bibliograph/icon/button-edit.png");
-    qxComposite7.add(qxButton9);
-    rightList.bind("selection", qxButton9, "enabled", {
+
+    // "Edit" button
+    let button9 = new qx.ui.form.Button(null, "bibliograph/icon/button-edit.png", null);
+    button9.setEnabled(false);
+    button9.setIcon("bibliograph/icon/button-edit.png");
+    composite7.add(button9);
+    rightList.bind("selection", button9, "enabled", {
       converter: (s) => s.length > 0
     });
-    qxButton9.addListener("execute", function (e) {
+    button9.addListener("execute", function (e) {
+      if( ! rightList.getSelection().length ) return;
       let itemModel = rightList.getSelection()[0].getModel();
       let type = itemModel.getType();
       let name = itemModel.getValue();
@@ -495,10 +537,12 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
         this.getApplication().hidePopup();
       }, this);
     }, this);
-    let qxButton10 = new qx.ui.form.Button(null, "bibliograph/icon/button-reload.png", null);
-    qxButton10.setIcon("bibliograph/icon/button-reload.png");
-    qxComposite7.add(qxButton10);
-    qxButton10.addListener("execute", function (e) {
+
+    // "Reload" button
+    let button10 = new qx.ui.form.Button(null, "bibliograph/icon/button-reload.png", null);
+    button10.setIcon("bibliograph/icon/button-reload.png");
+    composite7.add(button10);
+    button10.addListener("execute", function (e) {
       rightListStore.reload();
     }, this);
   }

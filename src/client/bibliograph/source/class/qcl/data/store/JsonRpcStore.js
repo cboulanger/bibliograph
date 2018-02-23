@@ -215,13 +215,24 @@ qx.Class.define("qcl.data.store.JsonRpcStore",
         this.load(value, this.getAutoLoadParams());
       }
     },
-    
+
+    /**
+     * 1) If the passed value is a string, it is split along commas
+     * 2) If it is a valid list of parameters (array or string), load with this params
+     * 3) If null is passed, the model is set to null
+     * @param value
+     * @param old
+     * @private
+     */
     _applyAutoLoadParams: function (value, old) {
       if (qx.lang.Type.isString(value)) {
         value = value.split(",");
       }
       if (value && qx.lang.Type.isArray(value) && this.getAutoLoadMethod()) {
         this.load(this.getAutoLoadMethod(), value);
+      }
+      if (value===null){
+        this.setModel(null);
       }
     },
     

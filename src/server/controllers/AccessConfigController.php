@@ -180,7 +180,7 @@ class AccessConfigController extends \app\Controllers\AppController
     $linkedModelNamedId = trim($linkedModelInfo[1]);
     $linkedModel = $this->getModelInstance($linkedModelType, $linkedModelNamedId);
     Yii::debug(
-      "Linking $type '$namedId' with $linkedModelType '$linkedModelNamedId' via '$linkedModelRelation' relation" .
+      ($link ? "Linking" : "Unlinking") . " $type '$namedId' with $linkedModelType '$linkedModelNamedId' via '$linkedModelRelation' relation" .
       ($extraColumns ? " with extra columns " . \json_encode($extraColumns) : ".")
     );
     if ($link) {
@@ -245,7 +245,7 @@ class AccessConfigController extends \app\Controllers\AppController
    * @jsonrpc access-config/elements
    * @param string $type
    *    The type of the element
-   * @param array|null $filter
+   * @param array $filter
    *    An associative array that can be used in a ActiveQuery::where() method call
    * @throws UserErrorException
    * @throws \JsonRpc2\Exception
@@ -275,7 +275,6 @@ class AccessConfigController extends \app\Controllers\AppController
         $query = $modelClass::find();
         break;
       case "permission":
-        $labelProp = "namedId";
         $query = $modelClass::find();
         break;
       case "datasource":
@@ -299,18 +298,11 @@ class AccessConfigController extends \app\Controllers\AppController
     //Yii::trace($elementData);
     foreach ($records as $record) {
       $value = $record->namedId;
-      $label = $record->$labelProp;
+      $label = ($record->$labelProp and $record->$labelProp !== $value) ? "{$record->$labelProp} ($value)" : $value;
       $icon = $elementData['icon'];
       // special cases
       if ($record->hasAttribute("hidden") and $record->hidden and !$isAdmin) continue;
-      if (!trim($label)) $label = $value;
       if ($record->hasAttribute("ldap") and $record->ldap) $label .= " (LDAP)";
-      if ($type == "permission") {
-        $description = $record->description;
-        if ($description) {
-          $label .= sprintf(" (%s)", $description);
-        }
-      }
       // entry
       $result[] = array(
         'icon' => $icon,
@@ -389,11 +381,11 @@ class AccessConfigController extends \app\Controllers\AppController
       // normal node
       $linkedElementdata = $this->getModelDataFor($linkedType);
       $node = array(
-        'icon' => $linkedElementdata['icon'],
-        'label' => $linkedElementdata['label'],
-        'type' => $linkedType,
-        'action' => "link",
-        'value' => $elementType . "=" . $namedId,
+        'icon'   => $linkedElementdata['icon'],
+        'label'  => $linkedElementdata['label'],
+        'type'   => $linkedType,
+        'action' => $linkedType !== "role" ? "link" : null,
+        'value'  => $elementType . "=" . $namedId,
         'children' => []
       );
 
@@ -409,7 +401,7 @@ class AccessConfigController extends \app\Controllers\AppController
         $groupNode = [
           'icon' => $modelData['group']['icon'],
           'label' => Yii::t('app', "In all groups"),
-          'type' => "group",
+          'type' => "role",
           'action' => "link",
           'value' => "user=" . $user->namedId,
           'children' => []
@@ -429,15 +421,15 @@ class AccessConfigController extends \app\Controllers\AppController
         $node['children'][] = $groupNode;
 
         // one node for each existing group
-        /** @var \app\models\Group[] $allGroups */
-        $allGroups = Group::find()->where(['not', ['active' => null]])->all(); // @todo where active=1
-        foreach ($allGroups as $group) {
+        /** @var \app\models\Group[] $userGroups */
+        $userGroups = $user->getGroups()->all();
+        foreach ($userGroups as $group) {
           $groupNode = array(
             'icon' => $modelData['group']['icon'],
             'label' => Yii::t('app', "In {group}", [
               'group' => $group->name
             ]),
-            'type' => "group",
+            'type' => "role",
             'action' => "link",
             'value' => "group=" . $group->namedId . ",user=" . $user->namedId,
             'children' => []
@@ -588,9 +580,14 @@ class AccessConfigController extends \app\Controllers\AppController
     } catch (\Exception $e) {
       throw new UserErrorException($e->getMessage());
     }
+    // remove password information
     if ($type == "user") {
       $formData['password']['value'] = null;
       $formData['password2']['value'] = null;
+    }
+    // protect namedId
+    if( $model->protected ){
+      $formData['namedId']['enabled'] = false;
     }
     $label = $this->getModelDataFor($type)['dialogLabel'];
     $message = "<h3>$label '$namedId'</h3>";
@@ -731,16 +728,6 @@ class AccessConfigController extends \app\Controllers\AppController
           ],
           Yii::$app->controller->id, "deleteDatasource", [$ids]
         );
-      // @todo the $midId values should not be hardcoded, use a model column to protect records
-      case "user":
-        $minId = 2;
-        break;
-      case "permission":
-        $minId = 27;
-        break;
-      case "role":
-        $minId = 5;
-        break;
     }
 
     foreach ($ids as $namedId) {
@@ -750,12 +737,11 @@ class AccessConfigController extends \app\Controllers\AppController
       if (!$model) {
         throw new UserErrorException("Element $type/$namedId does not exists.");
       }
-      if ($minId and $model->id < $minId) {
+      if ( $model->protected ) {
         throw new UserErrorException(
-          Yii::t('app', "Deleting element '%s' of type '%s' is not allowed.", $namedId, $type)
+          Yii::t('app', "Deleting of this object is not allowed.")
         );
       }
-
       try {
         $model->delete();
       } catch (\Throwable $e) {

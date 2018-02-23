@@ -159,7 +159,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
         converter : bibliograph.Utils.bool2visibility
       });
       button.addListener("execute", function(e) {
-        var win = this.getApplication().getWidgetById("bibliograph/accessControlTool").show();
+        var win = this.getApplication().getWidgetById("app/windows/access-control").show();
       }, this);
       return button;
     },
@@ -317,7 +317,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
         var app = this.getApplication();
         app.getWidgetById("bibliograph/searchHelpWindow").hide();
         app.setFolderId(0);
-        if (app.getQuery() == query)app.setQuery(null);
+        if (app.getQuery() == query) app.setQuery(null);
         app.setQuery(query);
         qx.event.message.Bus.dispatch(new qx.event.message.Message("bibliograph.userquery", query));
       });

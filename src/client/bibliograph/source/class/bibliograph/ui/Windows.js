@@ -52,7 +52,7 @@ qx.Class.define("bibliograph.ui.Windows",
        */
       var ui_winAccessControlTool1 = new bibliograph.ui.window
         .AccessControlTool();
-      ui_winAccessControlTool1.setWidgetId("bibliograph/accessControlTool");
+      ui_winAccessControlTool1.setWidgetId("app/windows/access-control");
       ui_winAccessControlTool1.setVisibility("excluded");
       this.getRoot().add(ui_winAccessControlTool1);
       
