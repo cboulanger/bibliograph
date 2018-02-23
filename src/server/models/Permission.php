@@ -48,7 +48,7 @@ class Permission extends BaseModel
   {
     return [
       'id' => Yii::t('app', 'ID'),
-      'namedId' => Yii::t('app', 'Named ID'),
+      'namedId' => Yii::t('app', 'Permission ID'),
       'created' => Yii::t('app', 'Created'),
       'modified' => Yii::t('app', 'Modified'),
       'name' => Yii::t('app', 'Name'),
@@ -60,7 +60,8 @@ class Permission extends BaseModel
   public function getFormData()
   {
     return [
-      'name' => [],
+      'namedId' => [],
+      'name'    => [],
       'description' => []
     ];
   }

@@ -74,7 +74,7 @@ class Role extends BaseModel
   {
     return [
       'id' => Yii::t('app', 'ID'),
-      'namedId' => Yii::t('app', 'Named ID'),
+      'namedId' => Yii::t('app', 'Role ID'),
       'created' => Yii::t('app', 'Created'),
       'modified' => Yii::t('app', 'Modified'),
       'name' => Yii::t('app', 'Name'),
@@ -85,6 +85,7 @@ class Role extends BaseModel
 
   public function getFormData(){
     return [
+      'namedId'     => [],
       'name'        => [],
       'description' => []
     ];

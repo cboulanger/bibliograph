@@ -75,10 +75,10 @@ class User extends BaseModel implements IdentityInterface
   {
     return [
       'id' => Yii::t('app', 'ID'),
-      'namedId' => Yii::t('app', 'Named ID'),
+      'namedId' => Yii::t('app', 'Login name'),
       'created' => Yii::t('app', 'Created'),
       'modified' => Yii::t('app', 'Modified'),
-      'name' => Yii::t('app', 'Name'),
+      'name' => Yii::t('app', 'Full Name'),
       'password' => Yii::t('app', 'Password'),
       'email' => Yii::t('app', 'Email'),
       'anonymous' => Yii::t('app', 'Anonymous'),
@@ -96,9 +96,8 @@ class User extends BaseModel implements IdentityInterface
   public function getFormData()
   {
     return [
-      'name' => [
-        'name' => "name",
-      ],
+      'namedId'=> [],
+      'name' => [],
       'email' => [
         'placeholder' => Yii::t('app', "Enter a valid Email address"),
         'validation' => [

@@ -74,7 +74,7 @@ class Group extends BaseModel
   {
     return [
       'id' => Yii::t('app', 'ID'),
-      'namedId' => Yii::t('app', 'Named ID'),
+      'namedId' => Yii::t('app', 'Group ID'),
       'created' => Yii::t('app', 'Created'),
       'modified' => Yii::t('app', 'Modified'),
       'name' => Yii::t('app', 'Name'),
@@ -89,6 +89,7 @@ class Group extends BaseModel
   public function getFormData()
   {
     return [
+      'namedId'     => [],
       'name'        => [],
       'description' => [],
       'defaultRole' => [
@@ -170,10 +171,10 @@ class Group extends BaseModel
       ->orderBy("name")
       ->asArray()
       ->all();
-    array_unshift( $listData, [[
+    array_unshift( $listData, [
       'label' => Yii::t('app',"No role"),
       'value' => ""
-    ]]);
+    ]);
     return $listData;
   }
 }

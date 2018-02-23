@@ -20,7 +20,7 @@ class m171219_230853_create_table_data_Group extends Migration
             'description' => $this->string(100),
             'ldap' => $this->integer(1)->notNull()->defaultValue('0'),
             'defaultRole' => $this->string(30),
-            'active' => $this->integer(1)->notNull()->defaultValue('0'),
+            'active' => $this->integer(1)->notNull()->defaultValue('1'),
         ], $tableOptions);
 
         $this->createIndex('unique_namedId', '{{%data_Group}}', 'namedId', true);
