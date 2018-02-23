@@ -139,6 +139,33 @@ trait JsonRpcTrait
   }
 
   /**
+   * Returns the jsonrpc result, removing the event transport layer
+   *
+   * @return mixed
+   */
+  public function grabRpcData()
+  {
+    $result = $this->grabJsonRpcResult();
+    if( isset($result['type']) and $result['type']==="ServiceResult"){
+      return $result['data'];
+    }
+    return $result;
+  }
+
+  /**
+   * Return events from the event transport, if any.
+   * @return array
+   */
+  public function grabRpcEvents()
+  {
+    $result = $this->grabJsonRpcResult();
+    if( isset($result['type']) and $result['type']==="ServiceResult"){
+      return $result['events'];
+    }
+    return [];
+  }
+
+  /**
    * Throws if the RPC method does not return an error
    * @param string|null $message Optionally checks the message
    * @param int|null $code Optionally checks the error code
@@ -223,6 +250,32 @@ trait JsonRpcTrait
     }
     $received = json_encode( $received, JSON_PRETTY_PRINT );
     $this->assertEquals($expected, $received); 
+  }
+
+  /**
+   * Compares the rpc data (with the event transport layer removed)
+   * with the given value as two pretty-printed
+   * JSON strings and throws if differences exist. The result can be drilled into
+   * using the key syntax from Yii's ArrayHelper
+   *
+   * @param mixed $result
+   * @param string|\Closure|array $key
+   * @see \yii\helpers\ArrayHelper::getValue()
+   * @return void
+   */
+  public function compareRpcDatatWith( $result, $path=null )
+  {
+    $expected = json_encode( $result, JSON_PRETTY_PRINT );
+    $received = $this->grabRpcData();
+    if( ! is_null( $path) ){
+      if( is_numeric($path) and is_array($received) ){
+        $received = $received[$path];
+      } else {
+        $received = \yii\helpers\ArrayHelper::getValue($received, $path);
+      }
+    }
+    $received = json_encode( $received, JSON_PRETTY_PRINT );
+    $this->assertEquals($expected, $received);
   }
 
   /**

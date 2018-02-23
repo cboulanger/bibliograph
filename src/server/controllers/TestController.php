@@ -73,4 +73,27 @@ class TestController extends AppController
     $this->dispatchClientMessage("foo","Hello World");
   }
 
+  /**
+   * @param string $json
+   * @return mixed
+   */
+  public function actionShelve($json)
+  {
+    //$args = func_get_args();
+    $args = \json_decode($json,true);
+    return call_user_func_array( [$this,"shelve"], $args);
+  }
+
+  /**
+   * @param $shelfId
+   * @throws \Exception
+   */
+  public function actionUnshelve($shelfId)
+  {
+    if( ! $this->hasInShelf($shelfId) ){
+      throw new \Exception("Shelf id '$shelfId' has no data");
+    }
+    return $this->unshelve($shelfId);
+  }
+
 }

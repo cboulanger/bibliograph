@@ -416,16 +416,16 @@ class AppController extends \JsonRpc2\Controller
   /**
    * Temporarily stores the supplied arguments on the server for retrieval
    * by another service method. This storage is only guaranteed to last during
-   * the current session and is then discarded.
-   * @param mixed $varargs
-   *    The method can take a variable number of arguments
+   * the current session and is then discarded. The method can take a variable
+   * number of arguments
    * @return string
    *    The shelf id needed to retrieve the data later
    */
-  public function shelve($varargs)
+  public function shelve()
   {
     $shelfId = Yii::$app->security->generateRandomString();
     Yii::$app->session->set($shelfId,func_get_args());
+    //$_SESSION[$shelfId] = func_get_args();
     return $shelfId;
   }
 
@@ -443,7 +443,9 @@ class AppController extends \JsonRpc2\Controller
   public function unshelve($shelfId, $keepCopy=false )
   {
     $args =  Yii::$app->session->get($shelfId);
+    //$args = $_SESSION[$shelfId];
     if ( !$keepCopy ) {
+      //unset( $_SESSION[$shelfId] );
       Yii::$app->session->remove( $shelfId );
     }
     return $args;
