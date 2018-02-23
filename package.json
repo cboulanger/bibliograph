@@ -18,16 +18,13 @@
     "url": "git+ssh://git@github.com/cboulanger/bibliograph.git"
   },
   "scripts": {
-    "serve-dev": "run-script-os",
-    "serve-dev:darwin:linux": "bash bin/source-server.sh",
-    "serve-dev:win32": "echo 'Sorry, server can be run on MacOs/Linux platforms only.'",
-    "test": "run-script-os",
-    "test:darwin:linux": "bash test/codeception-all.sh && bash test/api.sh || exit $?",
-    "test:win32": "echo 'Sorry, tests can be run on MacOs/Linux platforms only.'",
-    "test-dev": "run-script-os",
-    "test-dev:darwin:linux": "bash test/codeception-all.sh && bash test/api.sh development",
-    "test-dev:win32": "echo 'Sorry, tests can be run on MacOs/Linux platforms only.'",
-    "codeception": "bash test/setup.sh && bash test/codeception.sh"
+    "postinstall": "bash bin/update-dependencies",
+    "development": "bash bin/source-server.sh",
+    "test": "bash test/codeception-all.sh && bash test/api.sh || exit $?",
+    "test-dev": "bash test/codeception-all.sh && bash test/api.sh development",
+    "compile": "cd src/client/bibliograph && qx compile --watch",
+    "log": "bash bin/view-log.sh",
+    "create-migration" : "bash bin/create-migration.sh"
   },
   "author": "",
   "license": "ISC",
