@@ -6,30 +6,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1d7efdcc-ab7b-4e93-b274-cf7be3d39986" name="Default" comment="ACTool: Add tests for creating users and datasources">
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/server/lib/exceptions/SetupException.php" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/server/models/Role_Schema.php" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/bin/update-dependencies.sh" afterPath="$PROJECT_DIR$/bin/update-dependencies.sh" />
-      <change beforePath="$PROJECT_DIR$/build-env/debian-ubuntu/install.sh" afterPath="$PROJECT_DIR$/build-env/debian-ubuntu/install.sh" />
+      <change beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
+      <change beforePath="$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/ui/window/AccessControlTool.js" afterPath="$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/ui/window/AccessControlTool.js" />
+      <change beforePath="$PROJECT_DIR$/src/client/bibliograph/source/translation/de.po" afterPath="$PROJECT_DIR$/src/client/bibliograph/source/translation/de.po" />
+      <change beforePath="$PROJECT_DIR$/src/client/bibliograph/source/translation/en.po" afterPath="$PROJECT_DIR$/src/client/bibliograph/source/translation/en.po" />
       <change beforePath="$PROJECT_DIR$/src/server/controllers/AccessConfigController.php" afterPath="$PROJECT_DIR$/src/server/controllers/AccessConfigController.php" />
+      <change beforePath="$PROJECT_DIR$/src/server/controllers/ReferenceController.php" afterPath="$PROJECT_DIR$/src/server/controllers/ReferenceController.php" />
       <change beforePath="$PROJECT_DIR$/src/server/controllers/SetupController.php" afterPath="$PROJECT_DIR$/src/server/controllers/SetupController.php" />
-      <change beforePath="$PROJECT_DIR$/src/server/lib/components/Configuration.php" afterPath="$PROJECT_DIR$/src/server/lib/components/Configuration.php" />
-      <change beforePath="$PROJECT_DIR$/src/server/lib/components/DatasourceManager.php" afterPath="$PROJECT_DIR$/src/server/lib/components/DatasourceManager.php" />
-      <change beforePath="$PROJECT_DIR$/src/server/models/BibliographicDatasource.php" afterPath="$PROJECT_DIR$/src/server/models/BibliographicDatasource.php" />
+      <change beforePath="$PROJECT_DIR$/src/server/lib/dialog/Form.php" afterPath="$PROJECT_DIR$/src/server/lib/dialog/Form.php" />
       <change beforePath="$PROJECT_DIR$/src/server/models/Datasource.php" afterPath="$PROJECT_DIR$/src/server/models/Datasource.php" />
-      <change beforePath="$PROJECT_DIR$/src/server/models/DatasourceSchema.php" afterPath="$PROJECT_DIR$/src/server/models/Schema.php" />
-      <change beforePath="$PROJECT_DIR$/src/server/models/Permission_Role.php" afterPath="$PROJECT_DIR$/src/server/models/Permission_Role.php" />
-      <change beforePath="$PROJECT_DIR$/src/server/tests/_data/config.php" afterPath="$PROJECT_DIR$/src/server/tests/_data/config.php" />
-      <change beforePath="$PROJECT_DIR$/src/server/tests/_data/datasource.php" afterPath="$PROJECT_DIR$/src/server/tests/_data/datasource.php" />
-      <change beforePath="$PROJECT_DIR$/src/server/tests/_data/datasource_schema.php" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/server/tests/api/AASetupControllerCest.php" afterPath="$PROJECT_DIR$/src/server/tests/api/AASetupControllerCest.php" />
-      <change beforePath="$PROJECT_DIR$/src/server/tests/api/AccessConfigControllerCest.php" afterPath="$PROJECT_DIR$/src/server/tests/api/AccessConfigControllerCest.php" />
-      <change beforePath="$PROJECT_DIR$/src/server/tests/fixtures/DatasourceSchemaFixture.php" afterPath="$PROJECT_DIR$/src/server/tests/fixtures/DatasourceSchemaFixture.php" />
-      <change beforePath="$PROJECT_DIR$/src/server/tests/fixtures/_access_models.php" afterPath="$PROJECT_DIR$/src/server/tests/fixtures/_access_models.php" />
-      <change beforePath="$PROJECT_DIR$/src/server/tests/functional/ConfigControllerCest.php" afterPath="$PROJECT_DIR$/src/server/tests/functional/ConfigControllerCest.php" />
-      <change beforePath="$PROJECT_DIR$/src/server/tests/unit/01-models/BiblioModelsTest.php" afterPath="$PROJECT_DIR$/src/server/tests/unit/01-models/BiblioModelsTest.php" />
-      <change beforePath="$PROJECT_DIR$/src/server/tests/unit/01-models/DatasourceTest.php" afterPath="$PROJECT_DIR$/src/server/tests/unit/01-models/DatasourceTest.php" />
-      <change beforePath="$PROJECT_DIR$/test/codeception" afterPath="$PROJECT_DIR$/test/codeception" />
+      <change beforePath="$PROJECT_DIR$/src/server/models/Schema.php" afterPath="$PROJECT_DIR$/src/server/models/Schema.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -43,41 +30,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="AccessConfigControllerCest.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/server/tests/api/AccessConfigControllerCest.php">
+      <file leaf-file-name="AccessConfigController.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/server/controllers/AccessConfigController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="137">
-              <caret line="36" column="38" lean-forward="false" selection-start-line="36" selection-start-column="38" selection-end-line="36" selection-end-column="38" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AASetupControllerCest.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/server/tests/api/AASetupControllerCest.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="466">
-              <caret line="55" column="47" lean-forward="true" selection-start-line="55" selection-start-column="47" selection-end-line="55" selection-end-column="47" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="schema.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/server/tests/_data/schema.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="9" column="2" lean-forward="true" selection-start-line="9" selection-start-column="2" selection-end-line="9" selection-end-column="2" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Datasource.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/server/models/Datasource.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1244">
-              <caret line="249" column="80" lean-forward="false" selection-start-line="249" selection-start-column="80" selection-end-line="249" selection-end-column="80" />
+            <state relative-caret-position="-480">
+              <caret line="649" column="29" lean-forward="true" selection-start-line="649" selection-start-column="29" selection-end-line="649" selection-end-column="29" />
               <folding />
             </state>
           </provider>
@@ -86,28 +43,8 @@
       <file leaf-file-name="SetupController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/server/controllers/SetupController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="250">
-              <caret line="552" column="18" lean-forward="true" selection-start-line="552" selection-start-column="18" selection-end-line="552" selection-end-column="18" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DatasourceManager.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/server/lib/components/DatasourceManager.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="88" column="0" lean-forward="false" selection-start-line="88" selection-start-column="0" selection-end-line="88" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="config.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/server/tests/_data/config.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1705">
-              <caret line="114" column="14" lean-forward="false" selection-start-line="114" selection-start-column="14" selection-end-line="114" selection-end-column="14" />
+            <state relative-caret-position="236">
+              <caret line="552" column="19" lean-forward="true" selection-start-line="552" selection-start-column="19" selection-end-line="552" selection-end-column="19" />
               <folding />
             </state>
           </provider>
@@ -116,9 +53,51 @@
       <file leaf-file-name="Schema.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/server/models/Schema.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="119" column="47" lean-forward="true" selection-start-line="119" selection-start-column="47" selection-end-line="119" selection-end-column="47" />
+            <state relative-caret-position="509">
+              <caret line="133" column="20" lean-forward="false" selection-start-line="133" selection-start-column="20" selection-end-line="133" selection-end-column="20" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ReferenceController.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/server/controllers/ReferenceController.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="415">
+              <caret line="426" column="5" lean-forward="true" selection-start-line="426" selection-start-column="5" selection-end-line="426" selection-end-column="5" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Datasource.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/server/models/Datasource.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="195">
+              <caret line="168" column="47" lean-forward="false" selection-start-line="168" selection-start-column="47" selection-end-line="168" selection-end-column="47" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Form.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/server/lib/dialog/Form.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1464">
+              <caret line="203" column="7" lean-forward="false" selection-start-line="203" selection-start-column="7" selection-end-line="203" selection-end-column="7" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AccessControlTool.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/ui/window/AccessControlTool.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="54" column="2" lean-forward="false" selection-start-line="54" selection-start-column="2" selection-end-line="54" selection-end-column="2" />
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -127,7 +106,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>InvalidArgumentException</find>
       <find>Error</find>
       <find>createFormData</find>
       <find>$this-&gt;tr(</find>
@@ -157,6 +135,7 @@
       <find>rightLab</find>
       <find>treeSelectionChanged</find>
       <find>className()</find>
+      <find>allow li</find>
     </findStrings>
     <replaceStrings>
       <replace>-&gt;namedId</replace>
@@ -188,8 +167,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/client/bibliograph/source/class/qcl/access/Permission.js" />
-        <option value="$PROJECT_DIR$/bin/view-log.sh" />
         <option value="$PROJECT_DIR$/src/client/bibliograph/source/class/qcl/data/store/JsonRpcStore.js" />
         <option value="$PROJECT_DIR$/src/client/bibliograph/source/class/qcl/access/PermissionManager.js" />
         <option value="$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/ui/Windows.js" />
@@ -199,7 +176,6 @@
         <option value="$PROJECT_DIR$/src/server/models/Permission.php" />
         <option value="$PROJECT_DIR$/src/server/models/User.php" />
         <option value="$PROJECT_DIR$/src/server/controllers/EmailController.php" />
-        <option value="$PROJECT_DIR$/package.json" />
         <option value="$PROJECT_DIR$/bin/create-migration.sh" />
         <option value="$PROJECT_DIR$/src/server/migrations/schema/m171219_230853_create_table_data_Role.php" />
         <option value="$PROJECT_DIR$/src/server/migrations/schema/m171219_230853_create_table_data_User.php" />
@@ -210,11 +186,9 @@
         <option value="$PROJECT_DIR$/src/server/migrations/data/m180105_075548_data_ConfigDataInsert.php" />
         <option value="$PROJECT_DIR$/src/client/bibliograph/contrib/cboulanger_qx-contrib-Dialog_v1.3.3/source/class/dialog/Form.js" />
         <option value="$PROJECT_DIR$/src/server/migrations/data/m180105_075452_data_UserDataInsert.php" />
-        <option value="$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/ui/window/AccessControlTool.js" />
         <option value="$PROJECT_DIR$/src/server/models/DatasourceSchema.php" />
         <option value="$PROJECT_DIR$/src/server/migrations/schema/M180224080232_create_table_join_role_schema.php" />
         <option value="$PROJECT_DIR$/src/server/models/Permission_Role.php" />
-        <option value="$PROJECT_DIR$/src/server/controllers/AccessConfigController.php" />
         <option value="$PROJECT_DIR$/src/server/models/BibliographicDatasource.php" />
         <option value="$PROJECT_DIR$/src/server/lib/exceptions/SetupException.php" />
         <option value="$PROJECT_DIR$/src/server/lib/components/Configuration.php" />
@@ -230,15 +204,20 @@
         <option value="$PROJECT_DIR$/src/server/config/prefs.php" />
         <option value="$PROJECT_DIR$/src/server/tests/_data/schema.php" />
         <option value="$PROJECT_DIR$/src/server/tests/_data/config.php" />
-        <option value="$PROJECT_DIR$/src/server/models/Datasource.php" />
         <option value="$PROJECT_DIR$/src/server/migrations/schema/M180224070636_create_table_data_schema.php" />
         <option value="$PROJECT_DIR$/src/server/lib/components/DatasourceManager.php" />
         <option value="$PROJECT_DIR$/src/server/tests/_data/datasource.php" />
         <option value="$PROJECT_DIR$/src/server/tests/functional/ConfigControllerCest.php" />
-        <option value="$PROJECT_DIR$/src/server/controllers/SetupController.php" />
-        <option value="$PROJECT_DIR$/src/server/models/Schema.php" />
         <option value="$PROJECT_DIR$/src/server/tests/api/AASetupControllerCest.php" />
         <option value="$PROJECT_DIR$/src/server/tests/api/AccessConfigControllerCest.php" />
+        <option value="$PROJECT_DIR$/package.json" />
+        <option value="$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/ui/window/AccessControlTool.js" />
+        <option value="$PROJECT_DIR$/src/server/lib/dialog/Form.php" />
+        <option value="$PROJECT_DIR$/src/server/controllers/AccessConfigController.php" />
+        <option value="$PROJECT_DIR$/src/server/models/Datasource.php" />
+        <option value="$PROJECT_DIR$/src/server/controllers/SetupController.php" />
+        <option value="$PROJECT_DIR$/src/server/models/Schema.php" />
+        <option value="$PROJECT_DIR$/src/server/controllers/ReferenceController.php" />
       </list>
     </option>
   </component>
@@ -350,22 +329,7 @@
               <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="server" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="tests" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="bibliograph" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="server" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="tests" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="api" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="bibliograph" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="server" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="web" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="controllers" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
               <item name="bibliograph" type="b2602c69:ProjectViewProjectNode" />
@@ -396,6 +360,7 @@
     <property name="node.js.detected.package.standard" value="true" />
     <property name="node.js.selected.package.standard" value="$PROJECT_DIR$/src/vcslib/raptor-client/node_modules/standard" />
     <property name="JavaScriptWeakerCompletionTypeGuess" value="false" />
+    <property name="two.files.diff.last.used.folder" value="$PROJECT_DIR$/../qx-contrib-Dialog/source" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -437,7 +402,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="131081000" />
+    <option name="totallyTimeSpent" value="135839000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -450,6 +415,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32933334" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
@@ -458,7 +424,7 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3285568" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.4094166" sideWeight="0.4945055" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18253969" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25152627" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5680655" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -539,46 +505,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/server/models/Group.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="428">
-          <caret line="91" column="6" lean-forward="false" selection-start-line="91" selection-start-column="6" selection-end-line="91" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/migrations/schema/m171219_230853_create_table_data_User.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="26" column="69" lean-forward="false" selection-start-line="26" selection-start-column="69" selection-end-line="26" selection-end-column="69" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/migrations/schema/m171219_230853_create_table_data_DatasourceSchema.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="4" lean-forward="true" selection-start-line="6" selection-start-column="4" selection-end-line="29" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/migrations/data/m180105_075548_data_ConfigDataInsert.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="21" column="10" lean-forward="true" selection-start-line="11" selection-start-column="3" selection-end-line="21" selection-end-column="10" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/migrations/schema/m171219_230855_create_table_join_User_Role.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="0" lean-forward="false" selection-start-line="6" selection-start-column="0" selection-end-line="28" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/stubs/Core/Core_c.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="109">
@@ -639,14 +565,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="195">
           <caret line="18" column="29" lean-forward="false" selection-start-line="18" selection-start-column="29" selection-end-line="18" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/controllers/AccessConfigController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="175">
-          <caret line="349" column="18" lean-forward="false" selection-start-line="349" selection-start-column="18" selection-end-line="349" selection-end-column="18" />
           <folding />
         </state>
       </provider>
@@ -835,20 +753,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/tests/_data/schema.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="2" lean-forward="true" selection-start-line="9" selection-start-column="2" selection-end-line="9" selection-end-column="2" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/server/tests/unit/01-models/DatasourceTest.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="566">
           <caret line="55" column="52" lean-forward="false" selection-start-line="55" selection-start-column="52" selection-end-line="55" selection-end-column="52" />
           <folding>
-            <element signature="e#146#185#0#PHP" expanded="true" />
+            <element signature="e#146#185#0#PHP" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -857,14 +767,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1705">
           <caret line="114" column="14" lean-forward="false" selection-start-line="114" selection-start-column="14" selection-end-line="114" selection-end-column="14" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/migrations/schema/M180224070636_create_table_data_schema.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="339">
-          <caret line="29" column="0" lean-forward="false" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -909,30 +811,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/controllers/SetupController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="250">
-          <caret line="552" column="18" lean-forward="true" selection-start-line="552" selection-start-column="18" selection-end-line="552" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/models/Schema.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="119" column="47" lean-forward="true" selection-start-line="119" selection-start-column="47" selection-end-line="119" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/models/Datasource.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1244">
-          <caret line="249" column="80" lean-forward="false" selection-start-line="249" selection-start-column="80" selection-end-line="249" selection-end-column="80" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/server/tests/api/AASetupControllerCest.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="466">
@@ -943,8 +821,98 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/server/tests/api/AccessConfigControllerCest.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="137">
+        <state relative-caret-position="-269">
           <caret line="36" column="38" lean-forward="false" selection-start-line="36" selection-start-column="38" selection-end-line="36" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/tests/_data/schema.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="2" lean-forward="true" selection-start-line="9" selection-start-column="2" selection-end-line="9" selection-end-column="2" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="27" lean-forward="false" selection-start-line="2" selection-start-column="27" selection-end-line="2" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/migrations/schema/M180224070636_create_table_data_schema.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="368">
+          <caret line="31" column="3" lean-forward="true" selection-start-line="31" selection-start-column="3" selection-end-line="31" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/stubs/standard/standard_9.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36">
+          <caret line="672" column="41" lean-forward="false" selection-start-line="672" selection-start-column="41" selection-end-line="672" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/lib/dialog/Form.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1464">
+          <caret line="203" column="7" lean-forward="false" selection-start-line="203" selection-start-column="7" selection-end-line="203" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/ui/window/AccessControlTool.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="54" column="2" lean-forward="false" selection-start-line="54" selection-start-column="2" selection-end-line="54" selection-end-column="2" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/models/Datasource.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="168" column="47" lean-forward="false" selection-start-line="168" selection-start-column="47" selection-end-line="168" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/controllers/AccessConfigController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-480">
+          <caret line="649" column="29" lean-forward="true" selection-start-line="649" selection-start-column="29" selection-end-line="649" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/controllers/SetupController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="236">
+          <caret line="552" column="19" lean-forward="true" selection-start-line="552" selection-start-column="19" selection-end-line="552" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/models/Schema.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="509">
+          <caret line="133" column="20" lean-forward="false" selection-start-line="133" selection-start-column="20" selection-end-line="133" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/controllers/ReferenceController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="415">
+          <caret line="426" column="5" lean-forward="true" selection-start-line="426" selection-start-column="5" selection-end-line="426" selection-end-column="5" />
           <folding />
         </state>
       </provider>
