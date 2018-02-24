@@ -56,16 +56,16 @@ class ReferenceController extends AppController
    * @param string $datasource
    * @return string
    */
-  static function getFolderModel( $datasource )
+  static function getFolderModel($datasource)
   {
-    return Datasource :: in( $datasource, "folder" );
+    return Datasource:: in($datasource, "folder");
   }
 
   /*
   ---------------------------------------------------------------------------
      HELPER METHODS
   ---------------------------------------------------------------------------
-  */  
+  */
 
   /**
    * Modifies the query with conditions supplied by the client
@@ -81,55 +81,55 @@ class ReferenceController extends AppController
    *       'name' : "folder",
    *       'id' : 3
    *     }
-   *     'cql' : 
+   *     'cql' :
    *   }
    * }
    * @param stdClass $query
    *    The query data object from the json-rpc request
    * @param \yii\db\ActiveQuery $activeQuery
-   *    The query object used 
+   *    The query object used
    * @throws \lib\exceptions\UserErrorException
    * @return qcl_data_db_Query
    */
   public static function addQueryConditions(
     \yii\db\ActiveQuery $activeQuery,
-    \stdClass $queryData )
+    \stdClass $queryData)
   {
     $query = $queryData->query;
-    if ( ! is_object( $query ) or
-         ! is_array(  $query->properties ) )
-    {
+    if (!is_object($query) or
+      !is_array($query->properties)) {
       throw new \InvalidArgumentException("Invalid query data");
     }
 
     // @todo should be 'columns' or 'fields'
-    $columns = array_map( function($column){
+    $columns = array_map(function ($column) {
       return $column == "id" ? "references.id" : $column;
     }, $query->properties);
-    $activeQuery = $activeQuery->select( $columns ); 
+    $activeQuery = $activeQuery->select($columns);
 
     // relation
-    if ( isset( $query->relation ) ) {
+    if (isset($query->relation)) {
       return $activeQuery
-        -> alias('references')
-        -> joinWith( $query->relation->name, /* eagerly loading */ false )
-        -> onCondition( [ $query->relation->foreignId => $query->relation->id ] );
+        ->alias('references')
+        ->joinWith($query->relation->name, /* eagerly loading */
+          false)
+        ->onCondition([$query->relation->foreignId => $query->relation->id]);
     }
-    
+
     // cql
-    if ( false /* not implemented */ ){ // isset ( $query->cql ) ){
-      
+    if (false /* not implemented */) { // isset ( $query->cql ) ){
+
       $cql = new \lib\schema\CQL;
       try {
-        $q = $cql->addQueryConditions( $query, $activeQuery, $modelClass );
-      } catch( bibliograph_schema_Exception $e) {
+        $q = $cql->addQueryConditions($query, $activeQuery, $modelClass);
+      } catch (bibliograph_schema_Exception $e) {
         throw new \Exception($e->getMessage());
       }
       $q->where['markedDeleted'] = false;
       return $q;
     }
 
-    throw new \Exception( Yii::t('app', "No recognized query format in request.") );
+    throw new \Exception(Yii::t('app', "No recognized query format in request."));
   }
 
   /**
@@ -137,17 +137,16 @@ class ReferenceController extends AppController
    * @param $datasource
    * @return array
    */
-  public function getReferenceTypeListData( $datasource )
+  public function getReferenceTypeListData($datasource)
   {
-    $schema = $this->getControlledModel( $datasource )::getSchema();
-    $reftypes  = $schema->types();
+    $schema = $this->getControlledModel($datasource)::getSchema();
+    $reftypes = $schema->types();
     $options = array();
-    foreach ( $reftypes as $reftype )
-    {
+    foreach ($reftypes as $reftype) {
       $options[] = array(
         'value' => $reftype,
-        'icon'  => null, //"icon/16/actions/document-new.png",
-        'label' => Yii::t('app', $schema->getTypeLabel( $reftype ) )
+        'icon' => null, //"icon/16/actions/document-new.png",
+        'label' => Yii::t('app', $schema->getTypeLabel($reftype))
       );
     }
     return $options;
@@ -159,7 +158,7 @@ class ReferenceController extends AppController
    * @param \app\models\Reference $reference
    * @return void
    */
-  protected function getTitleLabel( $reference )
+  protected function getTitleLabel($reference)
   {
     $datasource = $reference::getDatasource();
     $ids = [$reference->id];
@@ -181,13 +180,13 @@ class ReferenceController extends AppController
    * @param $datasource
    * @param null $modelClassType
    */
-  public function actionTableLayout( $datasource, $modelClassType=null )
+  public function actionTableLayout($datasource, $modelClassType = null)
   {
     return array(
       'columnLayout' => array(
         'id' => array(
-          'header'  => "ID",
-          'width'   => 50,
+          'header' => "ID",
+          'width' => 50,
           'visible' => false
         ),
 //        'markedDeleted'	=> array(	
@@ -195,33 +194,33 @@ class ReferenceController extends AppController
 //        	'width'	 		=> 16
 //        ),
         'author' => array(
-          'header'  => Yii::t('app', "Author"),
-          'width'   => "1*"
+          'header' => Yii::t('app', "Author"),
+          'width' => "1*"
         ),
         'year' => array(
-          'header'  => Yii::t('app', "Year"),
-          'width'   => 50
+          'header' => Yii::t('app', "Year"),
+          'width' => 50
         ),
         'title' => array(
-          'header'  => Yii::t('app', "Title"),
-          'width'   => "3*"
+          'header' => Yii::t('app', "Title"),
+          'width' => "3*"
         )
       ),
       /**
-       * This will feed back into addQueryConditions()  
+       * This will feed back into addQueryConditions()
        */
       'queryData' => [
-        'relation'  => [ 
-          'name'      => "folders", 
-          'foreignId' => 'FolderId' 
+        'relation' => [
+          'name' => "folders",
+          'foreignId' => 'FolderId'
         ],
-        'orderBy'   => "author,year,title",
+        'orderBy' => "author,year,title",
       ],
-      'addItems' => $this->getReferenceTypeListData( $datasource, $modelClassType )
+      'addItems' => $this->getReferenceTypeListData($datasource, $modelClassType)
     );
   }
 
- /**
+  /**
    * Returns count of rows that will be retrieved when executing the current
    * query.
    *
@@ -230,22 +229,22 @@ class ReferenceController extends AppController
    * "modelType" with the type of the model.
    * @throws \InvalidArgumentException
    */
-  public function actionRowCount( $queryData )
+  public function actionRowCount($queryData)
   {
-    $model = $this->getModelClass( $queryData->datasource, $queryData->modelType );
-    $model :: setDatasource( $queryData->datasource );
-    $query = $model :: find();
+    $model = $this->getModelClass($queryData->datasource, $queryData->modelType);
+    $model:: setDatasource($queryData->datasource);
+    $query = $model:: find();
 
     // add additional conditions from the client query
-    $query = $this->addQueryConditions( $query, $queryData );
+    $query = $this->addQueryConditions($query, $queryData);
 
     //Yii::info($query->createCommand()->getRawSql());
 
     // count number of rows
     $rowCount = $query->count();
     return [
-      "rowCount"    => (int) $rowCount,
-      'statusText'  => Yii::t('app', "{numberOfRecords} records",['numberOfRecords' => $rowCount])
+      "rowCount" => (int)$rowCount,
+      'statusText' => Yii::t('app', "{numberOfRecords} records", ['numberOfRecords' => $rowCount])
     ];
   }
 
@@ -262,21 +261,21 @@ class ReferenceController extends AppController
    *                array   rowData     The actual row data (mandatory)
    *                string  statusText  Optional text to display in a status bar
    */
-  function actionRowData( $firstRow, $lastRow, $requestId, $queryData )
+  function actionRowData($firstRow, $lastRow, $requestId, $queryData)
   {
-    $model = $this->getModelClass( $queryData->datasource, $queryData->modelType );
-    $query = $model :: find()
-      -> orderBy( $queryData->query->orderBy )
-      -> offset( $firstRow )
-      -> limit( $lastRow - $firstRow + 1 );
-    $query = $this->addQueryConditions( $query, $queryData );
+    $model = $this->getModelClass($queryData->datasource, $queryData->modelType);
+    $query = $model:: find()
+      ->orderBy($queryData->query->orderBy)
+      ->offset($firstRow)
+      ->limit($lastRow - $firstRow + 1);
+    $query = $this->addQueryConditions($query, $queryData);
     //return $query->createCommand()->getRawSql();
     //Yii::info($query->createCommand()->getRawSql());
     $rowData = $query->asArray()->all();
     return array(
-      'requestId'  => $requestId,
-      'rowData'    =>  $rowData,
-      'statusText' => Yii::t('app',"Loaded records {firstRow} - {lastRow} ...", [ 'firstRow' => $firstRow, 'lastRow' => $lastRow ])
+      'requestId' => $requestId,
+      'rowData' => $rowData,
+      'statusText' => Yii::t('app', "Loaded records {firstRow} - {lastRow} ...", ['firstRow' => $firstRow, 'lastRow' => $lastRow])
     );
   }
 
@@ -287,43 +286,39 @@ class ReferenceController extends AppController
    * @param $datasource
    * @param $reftype
    * @internal param \Reference $refType type
-   * 
+   *
    */
-  function actionFormLayout( $datasource, $reftype )
+  function actionFormLayout($datasource, $reftype)
   {
-    $modelClass  = $this->getControlledModel( $datasource );
+    $modelClass = $this->getControlledModel($datasource);
     $schema = $modelClass::getSchema();
 
     // get fields to display in the form
     $fields = array_merge(
       $schema->getDefaultFormFields(),
-      $schema->getTypeFields( $reftype )
+      $schema->getTypeFields($reftype)
     );
 
     // remove excluded fields
-    $excludeFields = Yii::$app->config->getPreference("datasource.$datasource.fields.exclude");
-    if( count( $excludeFields ) ) {
-      $fields = array_diff( $fields, $excludeFields );
+    if (Yii::$app->config->keyExists("datasource.$datasource.fields.exclude")) {
+      $excludeFields = Yii::$app->config->getPreference("datasource.$datasource.fields.exclude");
+      if (count($excludeFields)) {
+        $fields = array_diff($fields, $excludeFields);
+      }
     }
 
     // Create form
     $formData = array();
-    foreach ( $fields as $field )
-    {
-      $formData[$field] = $schema->getFormData( $field );
-      if ( ! $formData[$field] )
-      {
+    foreach ($fields as $field) {
+      $formData[$field] = $schema->getFormData($field);
+      if (!$formData[$field]) {
         $formData[$field] = array(
-          "type"  => "textfield",
+          "type" => "textfield",
         );
-      }
-
-      // replace placeholders
-      elseif ( isset( $formData[$field]['bindStore']['params'] ) ) {
-        foreach ( $formData[$field]['bindStore']['params'] as $i => $param )
-        {
-          switch ( $param  )
-          {
+      } // replace placeholders
+      elseif (isset($formData[$field]['bindStore']['params'])) {
+        foreach ($formData[$field]['bindStore']['params'] as $i => $param) {
+          switch ($param) {
             case '$datasource':
               $formData[$field]['bindStore']['params'][$i] = $datasource;
               break;
@@ -332,16 +327,15 @@ class ReferenceController extends AppController
       }
 
       // setup autocomplete data
-      if ( isset( $formData[$field]['autocomplete'] ) )
-      {
+      if (isset($formData[$field]['autocomplete'])) {
         $formData[$field]['autocomplete']['service'] = Yii::$app->controller->id;
         $formData[$field]['autocomplete']['method'] = "getAutoCompleteData";
-        $formData[$field]['autocomplete']['params'] = array( $datasource, $field );
+        $formData[$field]['autocomplete']['params'] = array($datasource, $field);
       }
 
       // Add label
-      if ( ! isset( $formData[$field]['label'] ) ) {
-        $formData[$field]['label'] = $schema->getFieldLabel( $field, $reftype );
+      if (!isset($formData[$field]['label'])) {
+        $formData[$field]['label'] = $schema->getFieldLabel($field, $reftype);
       }
     }
     return $formData;
@@ -350,19 +344,18 @@ class ReferenceController extends AppController
   /**
    * Returns data for the reference type select box
    * @param $datasource
-   * 
+   *
    */
-  public function actionReferenceTypeList( $datasource )
+  public function actionReferenceTypeList($datasource)
   {
-    $modelClass  = $this->getControlledModel( $datasource );
+    $modelClass = $this->getControlledModel($datasource);
     $schema = $modelClass::getSchema();
     $result = array();
-    foreach( $schema->types() as $type )
-    {
+    foreach ($schema->types() as $type) {
       $result[] = array(
-        'label' => $schema->getTypeLabel( $type ),
+        'label' => $schema->getTypeLabel($type),
         'value' => $type,
-        'icon'  => null
+        'icon' => null
       );
     }
     return $result;
@@ -371,97 +364,89 @@ class ReferenceController extends AppController
   /**
    * Returns data for the store that populates reference type lists
    * @param $datasource
-   * 
+   *
    */
-  function actionTypes( $datasource )
+  function actionTypes($datasource)
   {
-    return $this->getReferenceTypeListData( $datasource );
+    return $this->getReferenceTypeListData($datasource);
   }
 
   /**
-   * Returns the requested or all accessible properties of a reference 
+   * Returns the requested or all accessible properties of a reference
    * @param string $datasource
    * @param $arg2
    * @param null $arg3
    * @param null $arg4
    * @throws \InvalidArgumentException
-   * 
+   *
    * @todo: this method is called with different signatures!
    */
-  function actionItem( $datasource, $arg2, $arg3= null, $arg4=null)
+  function actionItem($datasource, $arg2, $arg3 = null, $arg4 = null)
   {
-    if( is_numeric( $arg2) )
-    {
+    if (is_numeric($arg2)) {
       //$type   = "reference";
-      $id     = $arg2;
+      $id = $arg2;
       $fields = $arg3;
-    }
-    else 
-    {
+    } else {
       //$type   = $arg2;
-      $id     = $arg3;
+      $id = $arg3;
       $fields = null;
     }
 
-    if ( ! $datasource or ! is_numeric( $id ) )
-    {
+    if (!$datasource or !is_numeric($id)) {
       throw new \InvalidArgumentException("Invalid arguments.");
     }
 
     // load model record and get reference type
-    $record = $this->getControlledModel( $datasource )::findOne($id);
-    $reftype  = $record->reftype;
-    $schema   = $record->schema;
+    $record = $this->getControlledModel($datasource)::findOne($id);
+    $reftype = $record->reftype;
+    $schema = $record->schema;
 
     // determine the fields to return the values for
     $fields = array_merge(
       $schema->getDefaultFieldsBefore(),
-      $schema->getTypeFields( $reftype ),
+      $schema->getTypeFields($reftype),
       $schema->getDefaultFieldsAfter()
     );
-    
+
     // exclude fields
     // @todo create UI for this
-    if( Yii::$app->config->keyExists("datasource.$datasource.fields.exclude")){
+    if (Yii::$app->config->keyExists("datasource.$datasource.fields.exclude")) {
       $excludeFields = Yii::$app->config->getPreference("datasource.$datasource.fields.exclude");
-    }
-    if( count( $excludeFields ) )
-    {
-      $fields = array_diff( $fields, $excludeFields );
+      if (count($excludeFields)) {
+        $fields = array_diff($fields, $excludeFields);
+      }
     }
 
     // prepare record data for the form
     $reference = array(
-      'datasource'  => $datasource,
+      'datasource' => $datasource,
       'referenceId' => $id, // todo: replace by "id"
-      'titleLabel'  => $this->getTitleLabel( $record )
+      'titleLabel' => $this->getTitleLabel($record)
     );
 
-    foreach ( $fields as $field )
-    {
+    foreach ($fields as $field) {
       try {
-        $fieldData = $schema->getFieldData( $field );
-      } catch( \InvalidArgumentException $e ) {
+        $fieldData = $schema->getFieldData($field);
+      } catch (\InvalidArgumentException $e) {
         Yii::warning("No field data for field '$field'");
         continue;
       }
       $value = $record->$field;
 
       // replace field separator with form separator if both exist
-      $dataSeparator = isset( $fieldData['separator'] )
+      $dataSeparator = isset($fieldData['separator'])
         ? $fieldData['separator']
         : null;
-      $formSeparator = isset( $fieldData['formData']['autocomplete']['separator'] )
+      $formSeparator = isset($fieldData['formData']['autocomplete']['separator'])
         ? $fieldData['formData']['autocomplete']['separator']
         : null;
-      if ( $dataSeparator and $formSeparator and $dataSeparator != $formSeparator )
-      {
-        $values = explode( $dataSeparator, $value );
-        foreach( $values as $i => $v )
-        {
-          $values[$i] = trim( $v);
+      if ($dataSeparator and $formSeparator and $dataSeparator != $formSeparator) {
+        $values = explode($dataSeparator, $value);
+        foreach ($values as $i => $v) {
+          $values[$i] = trim($v);
         }
-        $value = implode( $formSeparator, $values );
+        $value = implode($formSeparator, $values);
       }
 
       // store value
@@ -476,43 +461,37 @@ class ReferenceController extends AppController
    * @param $datasource
    * @param $field
    * @param $input
-   * 
+   *
    */
-  public function actionAutocomplete( $datasource, $field, $input )
+  public function actionAutocomplete($datasource, $field, $input)
   {
-    $modelClass = $this->getControlledModel( $datasource );
-    $fieldData = $modelClass::getSchema()->getFieldData( $field );
+    $modelClass = $this->getControlledModel($datasource);
+    $fieldData = $modelClass::getSchema()->getFieldData($field);
     $separator = $fieldData['separator'];
-    $suggestionValues = $modelClass :: select($field)
-      ->where(["like", $field, $input] )
+    $suggestionValues = $modelClass:: select($field)
+      ->where(["like", $field, $input])
       ->column();
 
-    if ( $separator )
-    {
+    if ($separator) {
       $suggestions = array();
-      foreach( $suggestionValues as $value )
-      {
-        foreach( explode( $separator, $value ) as $suggestion )
-        {
-          $suggestion = trim( $suggestion );
-          if ( strtolower( $input ) == strtolower( substr( $suggestion, 0, strlen( $input) ) ) )
-          {
+      foreach ($suggestionValues as $value) {
+        foreach (explode($separator, $value) as $suggestion) {
+          $suggestion = trim($suggestion);
+          if (strtolower($input) == strtolower(substr($suggestion, 0, strlen($input)))) {
             $suggestions[] = $suggestion;
           }
         }
       }
-      $suggestionValues = array_unique( $suggestions );
-      sort( $suggestionValues );
-    }
-    else
-    {
-      $suggestionValues = $modelClass->getQueryBehavior()->fetchValues($field,array(
-        $field => array( "LIKE", "$input%")
+      $suggestionValues = array_unique($suggestions);
+      sort($suggestionValues);
+    } else {
+      $suggestionValues = $modelClass->getQueryBehavior()->fetchValues($field, array(
+        $field => array("LIKE", "$input%")
       ));
     }
 
     return array(
-      'input'       => $input,
+      'input' => $input,
       'suggestions' => $suggestionValues
     );
   }
@@ -523,56 +502,53 @@ class ReferenceController extends AppController
    * @param $referenceId
    * @param $data
    * @throws \lib\exceptions\UserErrorException
-   * 
+   *
    */
-  public function actionSave( $datasource, $referenceId, $data )
+  public function actionSave($datasource, $referenceId, $data)
   {
     // transform data into array
     $data = json_decode(json_encode($data), true);
-    $modelClass = $this->getControlledModel( $datasource );    
+    $modelClass = $this->getControlledModel($datasource);
 
     // save user-supplied data
-    foreach( $data as $property => $value )
-    {
+    foreach ($data as $property => $value) {
       // replace form separator with field separator
-      $fieldData = $modelClass::getSchema()->getFieldData( $property );
-      $fieldSeparator = isset( $fieldData['separator'] )
+      $fieldData = $modelClass::getSchema()->getFieldData($property);
+      $fieldSeparator = isset($fieldData['separator'])
         ? $fieldData['separator']
         : null;
-      $formSeparator = isset( $fieldData['formData']['autocomplete']['separator'] )
+      $formSeparator = isset($fieldData['formData']['autocomplete']['separator'])
         ? $fieldData['formData']['autocomplete']['separator']
-        : null; 
-      if( $fieldSeparator && $formSeparator )
-      {
-        $value = str_replace( $formSeparator, $fieldSeparator, $value );
+        : null;
+      if ($fieldSeparator && $formSeparator) {
+        $value = str_replace($formSeparator, $fieldSeparator, $value);
       }
-      
+
       // set value
-      $this->actionUpdateItem( $datasource, static::$modelType, $referenceId, $property, $value );
+      $this->actionUpdateItem($datasource, static::$modelType, $referenceId, $property, $value);
     }
 
     // add metadata
-    $modelClass = $this->getControlledModel( $datasource );
-    $record = $modelClass::findOne( $referenceId );
+    $modelClass = $this->getControlledModel($datasource);
+    $record = $modelClass::findOne($referenceId);
 
     // modified by
-    if( $modelClass::hasAttribute('modifiedBy') ) {
+    if ($modelClass::hasAttribute('modifiedBy')) {
       $record->modifiedBy = $this->getActiveUser()->getUsername();
       $record->save();
     }
 
     // citation key
-    if( ! trim($record->citekey) and 
-      $record->creator and $record->year and $record->title )
-    {
+    if (!trim($record->citekey) and
+      $record->creator and $record->year and $record->title) {
       $newCitekey = $record->computeCiteKey();
       $data = array(
         'datasource' => $datasource,
-        'modelType'  => "reference",
-        'modelId'    => $referenceId,
-        'data'       => array( "citekey" => $newCitekey )
+        'modelType' => "reference",
+        'modelId' => $referenceId,
+        'data' => array("citekey" => $newCitekey)
       );
-      $this->broadcastClientMessage("bibliograph.fieldeditor.update", $data );
+      $this->broadcastClientMessage("bibliograph.fieldeditor.update", $data);
       $record->citekey = $newCitekey;
       $record->save();
     }
@@ -583,25 +559,23 @@ class ReferenceController extends AppController
    * Returns data for a ComboBox widget.
    * @param $datasource
    * @param $field
-   * 
+   *
    */
-  public function actionListField( $datasource, $field )
+  public function actionListField($datasource, $field)
   {
-    $values = static 
-      :: getControlledModel( $datasource ) 
+    $values = static
+      :: getControlledModel($datasource)
       :: select($field)
-      -> column();
+      ->column();
 
     $result = array();
-    foreach( $values as $value )
-    {
+    foreach ($values as $value) {
       $value = trim($value);
-      if( $value )
-      {
+      if ($value) {
         $result[] = array(
           'label' => $value,
           'value' => $value,
-          'icon'  => null
+          'icon' => null
         );
       }
     }
@@ -618,37 +592,37 @@ class ReferenceController extends AppController
    * @return string
    * @throws \InvalidArgumentException
    */
-  public function actionCreate( $datasource, $folderId, $reftype )
+  public function actionCreate($datasource, $folderId, $reftype)
   {
-    $this->requirePermission( "reference.add" ); 
-    $modelClass = $this->getControlledModel( $datasource );
-    $reference = new $modelClass( [
-      'reftype'     => $reftype,
-      'createdBy'   => $this->getActiveUser()->getUsername()
+    $this->requirePermission("reference.add");
+    $modelClass = $this->getControlledModel($datasource);
+    $reference = new $modelClass([
+      'reftype' => $reftype,
+      'createdBy' => $this->getActiveUser()->getUsername()
     ]);
     $reference->save();
-    
-    $folder = static :: getFolderModel($datasource) :: findOne( $folderId );
 
-    if( ! $folder ){
+    $folder = static:: getFolderModel($datasource):: findOne($folderId);
+
+    if (!$folder) {
       throw new \InvalidArgumentException("Folder #$folderId does not exist.");
-    } 
-    $folder -> link("references", $reference);
-    $folder -> referenceCount = $folder -> getReferences() -> count();
-    $folder -> save();
+    }
+    $folder->link("references", $reference);
+    $folder->referenceCount = $folder->getReferences()->count();
+    $folder->save();
 
     // reload references
     $this->dispatchClientMessage("folder.reload", array(
-      'datasource'  => $datasource,
-      'folderId'    => $folderId
-    ) );
+      'datasource' => $datasource,
+      'folderId' => $folderId
+    ));
 
     // select the new reference
     $this->dispatchClientMessage("bibliograph.setModel", array(
-      'datasource'    => $datasource,
-      'modelType'     => static::$modelType,
-      'modelId'       => $reference->id
-    ) );
+      'datasource' => $datasource,
+      'modelType' => static::$modelType,
+      'modelId' => $reference->id
+    ));
 
     return "OK";
   }
@@ -668,76 +642,66 @@ class ReferenceController extends AppController
    *    If given, the ids of the references to remove
    * @throws InvalidArgumentException
    */
-  public function actionRemove( $first, $second=null, $third=null, $ids=null )
+  public function actionRemove($first, $second = null, $third = null, $ids = null)
   {
     // removal cancelled
-  	if( $first === false ) {
-  		return "CANCELLED";
-  	}
-
-    // removal confirmed
-    elseif ( $first === true and is_string( $second) ) {
+    if ($first === false) {
+      return "CANCELLED";
+    } // removal confirmed
+    elseif ($first === true and is_string($second)) {
       $confirmRemove = true;
-      list( $datasource, $folderId, $ids ) = $this->unshelve( $second );
-    }
-
-    // API signature
-  	elseif ( is_string($first) and is_array( $ids) ) {
+      list($datasource, $folderId, $ids) = $this->unshelve($second);
+    } // API signature
+    elseif (is_string($first) and is_array($ids)) {
       $confirmRemove = false;
       $datasource = $first;
-      $folderId   = $second;
-    }
-
-    // wrong parameters
+      $folderId = $second;
+    } // wrong parameters
     else {
       throw new \InvalidArgumentException("Invalid arguments for bibliograph.reference.removeReferences");
     }
 
     // folderId vs query
     $query = null;
-    if( ! is_integer($folderId) ) {
+    if (!is_integer($folderId)) {
       $query = $folderId;
       $folderId = null;
     }
 
     $this->requirePermission("reference.remove");
-    $referenceModel = $this->getControlledModel( $datasource );
-    $folderModel    = static::getFolderModel( $datasource );
+    $referenceModel = $this->getControlledModel($datasource);
+    $folderModel = static::getFolderModel($datasource);
 
     //$this->debug( array($datasource, $folderId, $ids) );
 
     // use the first id
-    $id = intval( $ids[0] );
+    $id = intval($ids[0]);
 
     // load record and count the number of links to folders
-    $reference = $referenceModel::findOne( $id );
-    $containedFolderIds = $reference->getReferenceFolders()->select("id")->column(); 
-    $folderCount = count( $containedFolderIds );
+    $reference = $referenceModel::findOne($id);
+    $containedFolderIds = $reference->getReferenceFolders()->select("id")->column();
+    $folderCount = count($containedFolderIds);
 
     // if we have no folder id and more than one folders contain the reference,
     // we need to ask the user first
-    if ( ! $folderId ) {
-      if ( $folderCount > 1 and ! $confirmRemove ) {
+    if (!$folderId) {
+      if ($folderCount > 1 and !$confirmRemove) {
         return \lib\dialog\Confirm::create(
           Yii::t('app',
             "The selected record '%s' is contained in %s folders. Move to the trash anyways?",
-            ( $reference->title . " (" . $reference->year . ")" ),
+            ($reference->title . " (" . $reference->year . ")"),
             $folderCount
           ),
           null,
           "reference", "remove",
-          array( $this->shelve( $datasource, $query, $ids ) )
+          array($this->shelve($datasource, $query, $ids))
         );
-      }
-
-      // confirmed
+      } // confirmed
       else {
-        $referenceModel->unlinkAll( "folder" );
+        $referenceModel->unlinkAll("folder");
         $folderCount = 0;
       }
-    }
-
-    // unlink from folder if id is given.
+    } // unlink from folder if id is given.
     else {
       $reference->unlink("folder", $folder);
     }
@@ -745,25 +709,23 @@ class ReferenceController extends AppController
     $foldersToUpdate = $containedFolderIds;
 
     // move to trash only if it was contained in one or less folders
-    if ( $folderCount < 2 )
-    {
+    if ($folderCount < 2) {
       // link with trash folder
-      $trashFolder  = \app\controllers\TrashController::getTrashFolder(); 
-      if( $trashFolder ) $trashFolder  -> link("references", $reference );
+      $trashFolder = \app\controllers\TrashController::getTrashFolder();
+      if ($trashFolder) $trashFolder->link("references", $reference);
 
       $foldersToUpdate[] = $trashFolderId;
 
       // mark as deleted
-      $reference -> markedDeleted = 1;
-      $reference -> save();
+      $reference->markedDeleted = 1;
+      $reference->save();
     }
 
     // update reference count in source and target folders
-    $foldersToUpdate= array_unique($foldersToUpdate);
-    foreach( $foldersToUpdate as $fid )
-    {
-      $folder = $folderModel::findOne( $fid );
-      if( $folder ) {
+    $foldersToUpdate = array_unique($foldersToUpdate);
+    foreach ($foldersToUpdate as $fid) {
+      $folder = $folderModel::findOne($fid);
+      if ($folder) {
         $folder->getReferenceCount(true);
       } else {
         Yii::warning("Folder #$fid does not exist.");
@@ -773,82 +735,75 @@ class ReferenceController extends AppController
     /*
      * display change on connected clients
      */
-    foreach( $containedFolderIds as $fid )
-    {
-	    $this->broadcastClientMessage("reference.removeRows", array(
-	      'datasource' => $datasource,
-	      'folderId'   => $fid,
-        'query'      => null,
-	      'ids'        => array($id)
-	    ) );
-    }
-    if( $query )
-    {
+    foreach ($containedFolderIds as $fid) {
       $this->broadcastClientMessage("reference.removeRows", array(
         'datasource' => $datasource,
-        'folderId'   => null,
-        'query'      => $query,
-        'ids'        => array($id)
-      ) );
+        'folderId' => $fid,
+        'query' => null,
+        'ids' => array($id)
+      ));
+    }
+    if ($query) {
+      $this->broadcastClientMessage("reference.removeRows", array(
+        'datasource' => $datasource,
+        'folderId' => null,
+        'query' => $query,
+        'ids' => array($id)
+      ));
     }
 
     /*
      * if there are references left, repeat
      */
-    if ( count($ids) > 1 )
-    {
+    if (count($ids) > 1) {
       array_shift($ids);
-      return $this->actionRemove( $datasource, $folderId, null, $ids );
+      return $this->actionRemove($datasource, $folderId, null, $ids);
     }
     return "OK";
   }
-  
+
   /**
    * Removes all references from a folder
    *
    * @param strin $datasource
    * @param int $folderId
    */
-  public function actionFolderRemove( $datasource, $folderId )
+  public function actionFolderRemove($datasource, $folderId)
   {
     $this->requirePermission("reference.batchedit");
-    
-    $referenceModel = $this->getControlledModel( $datasource );
-    $folderModel    = static::getFolderModel( $datasource );
-    $folder         = $folderModel :: findOne($folderId);
-    $references     = $folder -> getReferences() -> all();
+
+    $referenceModel = $this->getControlledModel($datasource);
+    $folderModel = static::getFolderModel($datasource);
+    $folder = $folderModel:: findOne($folderId);
+    $references = $folder->getReferences()->all();
 
     $foldersToUpdate = [$folderId];
     $referencesToTrash = [];
-    foreach( $references as $reference )
-    {
-      $folderCount = $reference -> getFolders() -> count();
-      $referenceModel -> unlink( "folder", $folder );
-      if ( $folderCount == 1 )
-      {
+    foreach ($references as $reference) {
+      $folderCount = $reference->getFolders()->count();
+      $referenceModel->unlink("folder", $folder);
+      if ($folderCount == 1) {
         $referencesToTrash[] = $reference;
       }
     }
-    if ( count( $referencesToTrash ) )
-    {
-      $trashFolder  = \app\controllers\TrashController::getTrashFolder(); 
-      if( $trashFolder ) {
-        foreach($referencesToTrash as $reference) {
-          $trashFolder -> link("references", $reference);
+    if (count($referencesToTrash)) {
+      $trashFolder = \app\controllers\TrashController::getTrashFolder();
+      if ($trashFolder) {
+        foreach ($referencesToTrash as $reference) {
+          $trashFolder->link("references", $reference);
         }
       }
-    }    
-    foreach( $foldersToUpdate as $fid )
-    {
-      $folder = $folderModel :: findOne( $fid );
-      if( ! $folder ){
-        Yii :: warning("Folder #$fid does not exist");
+    }
+    foreach ($foldersToUpdate as $fid) {
+      $folder = $folderModel:: findOne($fid);
+      if (!$folder) {
+        Yii:: warning("Folder #$fid does not exist");
       }
-      $folder -> getReferenceCount(true);
-      $this->broadcastClientMessage("folder.reload",array(
-        'datasource'  => $datasource,
-        'folderId'    => $fid
-      ));      
+      $folder->getReferenceCount(true);
+      $this->broadcastClientMessage("folder.reload", array(
+        'datasource' => $datasource,
+        'folderId' => $fid
+      ));
     }
     return "OK";
   }
@@ -862,33 +817,33 @@ class ReferenceController extends AppController
    * @param int[] $ids The ids of the references to move
    * @return "OK"
    */
-  public function actionMove( $datasource, $folderId, $targetFolderId, $ids)
+  public function actionMove($datasource, $folderId, $targetFolderId, $ids)
   {
     $this->requirePermission("reference.move");
 
-    if( $datasource === true ){
-      list( $confirmed, $datasource, $folderId, $targetFolderId, $ids ) = func_get_args();
+    if ($datasource === true) {
+      list($confirmed, $datasource, $folderId, $targetFolderId, $ids) = func_get_args();
     } else {
       $confirmed = false;
     }
-    $folderModel  = static :: getFolderModel($datasource);
-    $sourceFolder = $folderModel :: findOne($folderId);
-    $targetFolder = $folderModel :: findOne($targetFolderId);
+    $folderModel = static:: getFolderModel($datasource);
+    $sourceFolder = $folderModel:: findOne($folderId);
+    $targetFolder = $folderModel:: findOne($targetFolderId);
 
-    Validate :: isNotNull( $sourceFolder, "Folder #$folderId does not exist" );
-    Validate :: isNotNull( $targetFolder, "Folder #$targetFolderId does not exist" );
+    Validate:: isNotNull($sourceFolder, "Folder #$folderId does not exist");
+    Validate:: isNotNull($targetFolder, "Folder #$targetFolderId does not exist");
 
-    if( ! $confirmed ) {
+    if (!$confirmed) {
       return \lib\dialog\Confirm::create(
-        Yii::t('app', "This will move {countReferences} from '{sourceFolder}' to '{targetFolder}'. Proceed?",[
+        Yii::t('app', "This will move {countReferences} from '{sourceFolder}' to '{targetFolder}'. Proceed?", [
           'countReferences' => count($ids),
-          'sourceFolder'    => $sourceFolder -> label,
-          'targetFolder'    => $targetFolder -> label
+          'sourceFolder' => $sourceFolder->label,
+          'targetFolder' => $targetFolder->label
         ]),
-        "reference","move", func_get_args()
+        "reference", "move", func_get_args()
       );
     } else {
-      return $this->move( $references, $sourceFolder, $targetFolder);
+      return $this->move($references, $sourceFolder, $targetFolder);
     }
   }
 
@@ -902,34 +857,34 @@ class ReferenceController extends AppController
    * @param \app\models\Folder $targetFolder
    * @return string "OK"
    */
-  public function move( 
-    array $references, 
-    \app\models\Folder $sourceFolder, 
-    \app\models\Folder $targetFolder 
-  ) {
-    foreach( $references as $reference ) {
-      if (is_numeric($reference) ) {
-        $reference = $this->getControlledModel() -> findOne($reference);
+  public function move(
+    array $references,
+    \app\models\Folder $sourceFolder,
+    \app\models\Folder $targetFolder
+  )
+  {
+    foreach ($references as $reference) {
+      if (is_numeric($reference)) {
+        $reference = $this->getControlledModel()->findOne($reference);
       }
-      if( ! ( $reference instanceof \app\models\Reference ) ){
+      if (!($reference instanceof \app\models\Reference)) {
         Yii::warning("Skipping invalid reference '$reference'");
       }
-      $sourceFolder -> unlink("references", $reference );
-      $targetFolder -> link("references", $reference );
+      $sourceFolder->unlink("references", $reference);
+      $targetFolder->link("references", $reference);
     }
 
     // update reference count
-    $sourceFolder -> getReferenceCount(true);
-    $targetFolder -> getReferenceCount(true);
+    $sourceFolder->getReferenceCount(true);
+    $targetFolder->getReferenceCount(true);
 
     // display change on connected clients
-    if( count( $ids ) )
-    {
+    if (count($ids)) {
       $this->broadcastClientMessage("reference.removeRows", [
         'datasource' => $datasource,
-        'folderId'   => $sourceFolder->id,
-        'query'      => null,
-        'ids'        => $ids
+        'folderId' => $sourceFolder->id,
+        'query' => null,
+        'ids' => $ids
       ]);
     }
     return "OK";
@@ -944,32 +899,32 @@ class ReferenceController extends AppController
    * @param $ids
    * @return string "OK"
    */
-  public function actionCopy( $datasource, $folderId, $targetFolderId, $ids )
+  public function actionCopy($datasource, $folderId, $targetFolderId, $ids)
   {
     $this->requirePermission("reference.move");
-    if( $datasource === true ){
-      list( $confirmed, $datasource, $folderId, $targetFolderId, $ids ) = func_get_args();
+    if ($datasource === true) {
+      list($confirmed, $datasource, $folderId, $targetFolderId, $ids) = func_get_args();
     } else {
       $confirmed = false;
     }
-    $folderModel  = static :: getFolderModel($datasource);
-    $sourceFolder = $folderModel :: findOne($folderId);
-    $targetFolder = $folderModel :: findOne($targetFolderId);
+    $folderModel = static:: getFolderModel($datasource);
+    $sourceFolder = $folderModel:: findOne($folderId);
+    $targetFolder = $folderModel:: findOne($targetFolderId);
 
-    Validate :: isNotNull( $sourceFolder, "Folder #$folderId does not exist" );
-    Validate :: isNotNull( $targetFolder, "Folder #$targetFolderId does not exist" );
+    Validate:: isNotNull($sourceFolder, "Folder #$folderId does not exist");
+    Validate:: isNotNull($targetFolder, "Folder #$targetFolderId does not exist");
 
-    if( ! $confirmed ) {
+    if (!$confirmed) {
       return \lib\dialog\Confirm::create(
-        Yii::t('app', "This will copy {countReferences} from '{sourceFolder}' to '{targetFolder}'. Proceed?",[
+        Yii::t('app', "This will copy {countReferences} from '{sourceFolder}' to '{targetFolder}'. Proceed?", [
           'countReferences' => count($ids),
-          'sourceFolder'    => $sourceFolder -> label,
-          'targetFolder'    => $targetFolder -> label
+          'sourceFolder' => $sourceFolder->label,
+          'targetFolder' => $targetFolder->label
         ]),
-        "reference","copy", func_get_args()
+        "reference", "copy", func_get_args()
       );
     } else {
-      return $this->copy( $references, $sourceFolder, $targetFolder);
+      return $this->copy($references, $sourceFolder, $targetFolder);
     }
   }
 
@@ -982,51 +937,52 @@ class ReferenceController extends AppController
    * @param \app\models\Folder $targetFolder
    * @return string "OK"
    */
-  public function copy( 
-    array $references, 
-    \app\models\Folder $sourceFolder, 
-    \app\models\Folder $targetFolder 
-  ) {
-    foreach( $references as $reference ) {
-      if (is_numeric($reference) ) {
-        $reference = $this->getControlledModel() -> findOne($reference);
+  public function copy(
+    array $references,
+    \app\models\Folder $sourceFolder,
+    \app\models\Folder $targetFolder
+  )
+  {
+    foreach ($references as $reference) {
+      if (is_numeric($reference)) {
+        $reference = $this->getControlledModel()->findOne($reference);
       }
-      if( ! ( $reference instanceof \app\models\Reference ) ){
+      if (!($reference instanceof \app\models\Reference)) {
         Yii::warning("Skipping invalid reference '$reference'");
       }
-      $targetFolder -> link("references", $reference );
+      $targetFolder->link("references", $reference);
     }
 
     // update reference count
-    $targetFolder -> getReferenceCount(true);
+    $targetFolder->getReferenceCount(true);
     return "OK";
-  }  
+  }
 
   /**
    * Returns information on the record as a HTML table
    * @param $datasource
    * @param $referenceId
    */
-  public function actionTableHtml( $datasource, $referenceId )
+  public function actionTableHtml($datasource, $referenceId)
   {
-    $referenceModel = $this->getControlledModel( $datasource );
-    $reference = $referenceModel :: findOne( $referenceId );
-    Validate :: isNotNull( $reference, "Reference #$referenceId does not exist.");
-    
+    $referenceModel = $this->getControlledModel($datasource);
+    $reference = $referenceModel:: findOne($referenceId);
+    Validate:: isNotNull($reference, "Reference #$referenceId does not exist.");
+
     $createdBy = $reference->createdBy;
-    if ( $createdBy ) {
-      $user = User :: findOne( ['namedId' => $createdBy ] );
-      if ( $user ) $createdBy = $user->name;
+    if ($createdBy) {
+      $user = User:: findOne(['namedId' => $createdBy]);
+      if ($user) $createdBy = $user->name;
     }
     $modifiedBy = $reference->modifiedBy;
-    if ( $modifiedBy ){
-      $user = User :: findOne( ['namedId' => $createdBy ] );
-      if ( $user ) $modifiedBy = $user->name;
+    if ($modifiedBy) {
+      $user = User:: findOne(['namedId' => $createdBy]);
+      if ($user) $modifiedBy = $user->name;
     }
 
-    $status = 
+    $status =
       $reference->markedDeleted ?
-      Yii::t('app', "Record is marked for deletion") : "";
+        Yii::t('app', "Record is marked for deletion") : "";
 
     $html = "<table>";
     $html .= "<tr><td><b>" . Yii::t('app', "Reference id") . ":</b></td><td>" . $reference->id . "</td></tr>";
@@ -1039,7 +995,7 @@ class ReferenceController extends AppController
     $html .= "</html>";
 
     return array(
-      'html'  => $html
+      'html' => $html
     );
   }
 
@@ -1048,38 +1004,36 @@ class ReferenceController extends AppController
    * @param $datasource
    * @param $id
    */
-  public function actionItemHtml( $datasource, $id )
+  public function actionItemHtml($datasource, $id)
   {
-    $modelClass = $this->getControlledModel( $datasource );
-    $schema     = $modelClass::getSchema();
-    $reference  = $modelClass::findOne( $id );
-    $reftype    = $reference->reftype;
-    
+    $modelClass = $this->getControlledModel($datasource);
+    $schema = $modelClass::getSchema();
+    $reference = $modelClass::findOne($id);
+    $reftype = $reference->reftype;
+
     $fields = array_merge(
       array("reftype"),
-      $schema->getTypeFields( $reftype ),
-      array("keywords","abstract")
+      $schema->getTypeFields($reftype),
+      array("keywords", "abstract")
     );
 
     // create html table
     $html = "<table>";
-    foreach ( $fields as $field )
-    {
+    foreach ($fields as $field) {
       $value = $reference->$field;
-      if ( ! $value or ! $schema->isPublicField( $field ) ) continue;
-      $label = $modelClass::getSchema()->getFieldLabel( $field, $reftype );
+      if (!$value or !$schema->isPublicField($field)) continue;
+      $label = $modelClass::getSchema()->getFieldLabel($field, $reftype);
 
       // special fields
-      switch( $field )
-      {
+      switch ($field) {
         case "reftype":
-          $value = $schema->getTypeLabel( $value );
+          $value = $schema->getTypeLabel($value);
           break;
         case "url":
-          $urls = explode(";",$value);
-          $value = implode("<br/>", array_map( function($url){
+          $urls = explode(";", $value);
+          $value = implode("<br/>", array_map(function ($url) {
             return "<a href='$url' target='_blank'>$url</a>";
-          }, $urls) );
+          }, $urls));
           break;
       }
 
@@ -1089,23 +1043,23 @@ class ReferenceController extends AppController
     return array(
       'html' => $html
     );
-  }  
+  }
 
   /**
    * Returns data on folders that contain the given reference
    * @param $datasource
    * @param $referenceId
    */
-  public function actionContainers( $datasource, $referenceId )
+  public function actionContainers($datasource, $referenceId)
   {
-    $reference = $this->getRecordById( $datasource, $referenceId );
-    $folders = $reference -> getFolders() -> all();
+    $reference = $this->getRecordById($datasource, $referenceId);
+    $folders = $reference->getFolders()->all();
     $data = array();
-    foreach( $folders as $folder ){
+    foreach ($folders as $folder) {
       $data[] = [
-        $folder -> id,
-        $folder -> getIcon("default"),
-        $folder -> getLabelPath("/")
+        $folder->id,
+        $folder->getIcon("default"),
+        $folder->getLabelPath("/")
       ];
     }
     return $data;
@@ -1116,29 +1070,27 @@ class ReferenceController extends AppController
    * Returns potential duplicates in a simple data model format.
    * @param string $datasource
    * @param int $referenceId
-   * 
+   *
    */
-  function actionDuplicatesData( $datasource, $referenceId )
+  function actionDuplicatesData($datasource, $referenceId)
   {
     // @todo
     return [];
 
-    $reference = $this->getRecordById( $referenceId );
+    $reference = $this->getRecordById($referenceId);
     $threshold = Yii::$app->config->getPreference("bibliograph.duplicates.threshold");
     $scores = $reference->findPotentialDuplicates($threshold);
     $data = array();
-    while( $referenceModel->loadNext() )
-    {
-      $score = round(array_shift( $scores ));
-      if ( $referenceModel->id() == $referenceId or
-        $referenceModel->get( "markedDeleted" ) )
-      {
+    while ($referenceModel->loadNext()) {
+      $score = round(array_shift($scores));
+      if ($referenceModel->id() == $referenceId or
+        $referenceModel->get("markedDeleted")) {
         continue;
       }
       $reftype = $referenceModel->getReftype();
       $data[] = array(
         $referenceModel->id(),
-        $reftype ? $referenceModel::getSchema()->getTypeLabel( $reftype ) : "",
+        $reftype ? $referenceModel::getSchema()->getTypeLabel($reftype) : "",
         $referenceModel->getAuthor(),
         $referenceModel->getYear(),
         $referenceModel->getTitle(),
