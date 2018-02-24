@@ -421,7 +421,10 @@ class ReferenceController extends AppController
     );
     
     // exclude fields
-    $excludeFields = Yii::$app->config->getPreference("datasource.$datasource.fields.exclude");
+    // @todo create UI for this
+    if( Yii::$app->config->keyExists("datasource.$datasource.fields.exclude")){
+      $excludeFields = Yii::$app->config->getPreference("datasource.$datasource.fields.exclude");
+    }
     if( count( $excludeFields ) )
     {
       $fields = array_diff( $fields, $excludeFields );
