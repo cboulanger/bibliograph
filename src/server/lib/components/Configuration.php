@@ -24,6 +24,7 @@ use Yii;
 use app\models\Config;
 use app\models\User;
 use app\models\UserConfig;
+use yii\db\Exception;
 
 /**
  * Component class providing methods to get or set configuration
@@ -312,7 +313,11 @@ class Configuration extends \yii\base\Component
     }
     // create new entry
     $config = new Config( $data );
-    if( $config->save() ) return true;
+    try {
+      if ($config->save()) return true;
+    } catch (\yii\db\Exception $e) {
+      throw new \InvalidArgumentException($e->getMessage(),null, $e);
+    }
     // validation failed
     //throw new \LogicException("Validation failed for config data.");
     return false;
@@ -337,15 +342,14 @@ class Configuration extends \yii\base\Component
 	 * @return int|bool
 	 *     Returns the id of the newly created record, or false if
 	 *     key was not created.
-	 *
+	 * @throws \InvalidArgumentException
 	 */
 	public function createKeyIfNotExists( $key, $type, $customize=false, $default=null, $final=false )
 	{
     if ( ! $this->keyExists( $key ) ) {
       return $this->createKey( $key, $type, $customize, $default, $final );
-    } else {
-      return false;
     }
+    return false;
   }
 
   /**

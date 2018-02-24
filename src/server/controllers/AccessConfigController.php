@@ -69,7 +69,7 @@ class AccessConfigController extends \app\Controllers\AppController
         'class' => \app\models\Permission::class,
         'label' => Yii::t('app', "Permissions"),
         'dialogLabel' => Yii::t('app', "Permission"),
-        'labelProp' => "namedId",
+        'labelProp' => "name",
         'icon' => "icon/16/apps/preferences-security.png"
       ],
       'datasource' => [
@@ -77,6 +77,13 @@ class AccessConfigController extends \app\Controllers\AppController
         'label' => Yii::t('app', "Datasources"),
         'dialogLabel' => Yii::t('app', "Datasource"),
         'labelProp' => "title",
+        'icon' => "icon/16/apps/internet-transfer.png"
+      ],
+      'schema' => [
+        'class' => \app\models\Schema::class,
+        'label' => Yii::t('app', "Schemas"),
+        'dialogLabel' => Yii::t('app', "Schema"),
+        'labelProp' => "name",
         'icon' => "icon/16/apps/internet-transfer.png"
       ]
     ];
