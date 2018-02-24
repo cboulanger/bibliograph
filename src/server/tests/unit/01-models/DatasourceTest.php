@@ -5,6 +5,7 @@ namespace app\tests\unit\models;
 // for whatever reason, this is not loaded early enough
 require_once __DIR__ . "/../../_bootstrap.php";
 
+use app\models\BibliographicDatasource;
 use Yii;
 use app\tests\unit\Base;
 use app\models\Datasource;
@@ -18,7 +19,7 @@ class DatasourceTest extends Base
 
   public function _fixtures()
   {
-      return include __DIR__ . '/../../fixtures/_biblio_models.php';
+      return include __DIR__ . '/../../fixtures/_combined_models.php';
   }
 
   public function testDatasourceExists()
@@ -31,7 +32,7 @@ class DatasourceTest extends Base
   public function testDatasourceInstance()
   {
     $datasource = Datasource::getInstanceFor('database1');
-    $this->assertEquals('app\models\BibliographicDatasource',\get_class($datasource));
+    $this->assertEquals(BibliographicDatasource::class, \get_class($datasource));
     $this->assertEquals('mysql:host=localhost;port=3306;dbname=tests', $datasource->getConnection()->dsn);
   }
 

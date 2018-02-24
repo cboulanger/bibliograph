@@ -17,7 +17,7 @@ class BiblioModelsTest extends Base
 
   public function _fixtures()
   {
-      return include __DIR__ . '/../../fixtures/_biblio_models.php';
+    return include __DIR__ . '/../../fixtures/_combined_models.php';
   }
 
   public function testFolderChildren()

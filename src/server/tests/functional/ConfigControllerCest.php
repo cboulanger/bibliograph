@@ -19,17 +19,15 @@ class ConfigControllerCest
     $I->seeResponseJsonMatchesJsonPath('$.result.values');
     $I->seeResponseJsonMatchesJsonPath('$.result.types');
     $keys = $I->grabDataFromResponseByJsonPath('$.result.keys')[0];
-    $I->assertEquals(count($keys),16);
-    $locale = $I->grabDataFromResponseByJsonPath('$.result.values[1]')[0];
-    $I->assertSame( $locale, "en" );
+    $I->assertEquals(count($keys),12);
   }
  
   public function tryLoadConfigAuthenticated(FunctionalTester $I)
   {
     $I->loginWithPassword('admin','admin');
     $I->sendJsonRpcRequest('config','load');
-    $locale = $I->grabDataFromResponseByJsonPath('$.result.values[1]')[0];
-    $I->assertSame( $locale, "de" );
+    $keys = $I->grabDataFromResponseByJsonPath('$.result.keys')[0];
+    $I->assertEquals(count($keys),12);
   }
 
   public function trySetConfig(FunctionalTester $I)

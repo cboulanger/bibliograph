@@ -50,8 +50,10 @@ class AASetupControllerCest
           "Admininstrator email exists.",
           "Database connection ok.",
           "No updates to the databases.",
-          "LDAP authentication is not enabled.",
-          "Example databases were created."
+          "Configuration values were created.",
+          "Created standard schema.",
+          "Example databases were created.",
+          "LDAP authentication is not enabled."
         ]
       }
     }'));
@@ -88,8 +90,10 @@ class AASetupControllerCest
           "Admininstrator email exists.",
           "Database connection ok.",
           "Found empty database and applied new migrations for version 3.0.0-alpha",
-          "LDAP authentication is not enabled.",
-          "Example databases were created."
+          "Configuration values were created.",
+          "Created standard schema.",
+          "Example databases were created.",
+          "LDAP authentication is not enabled."
         ]
       }
     }'));
@@ -127,8 +131,10 @@ class AASetupControllerCest
           "Admininstrator email exists.",
           "Database connection ok.",
           "Migrated data from Bibliograph v2 and applied new migrations for version 3.0.0-alpha",
-          "LDAP authentication is not enabled.",
-          "Example databases were created."
+          "Configuration values were created.",
+          "Created standard schema.",
+          "Example databases were created.",
+          "LDAP authentication is not enabled."
         ]
       }
     }'));
@@ -166,8 +172,10 @@ class AASetupControllerCest
           "Admininstrator email exists.",
           "Database connection ok.",
           "Found data for version 3.0.0-alpha and applied new migrations for version 3.0.0",
-          "LDAP authentication is not enabled.",
-          "Example databases were created."
+          "Configuration values were created.",
+          "Standard schema existed.",
+          "Example databases were created.",
+          "LDAP authentication is not enabled."
         ]
       }
     }'));
