@@ -37,6 +37,18 @@ class Datasource extends BaseModel
 {
 
   /**
+   * A descriptive name (should be set)
+   * @var string
+   */
+  static $name = "";
+
+  /**
+   * More detailed description of the Datasource (optional)
+   * @var string
+   */
+  static $description = "";
+
+  /**
    * Models that are attached to this datasource
    * @var array
    */
@@ -95,71 +107,71 @@ class Datasource extends BaseModel
     ];
   }
 
-  public function formData()
+  public function getFormData()
   {
-    return array(
-      'title'       => array(
-        'label'       => Yii::t('app',"Name")
-      ),
-      'description' => array(
-        'type'        => "TextArea",
-        'lines'       => 3,
-        'label'       => Yii::t('app',"Description")
-      ),
-      'schema'      => array(
-        'type'        => "selectbox",
-        'label'       => Yii::t('app',"Schema"),
-        'delegate'    => array(
-          'options'     => "getSchemaOptions"
-        )
-      ),
-      'type'        => array(
-        'label'       => Yii::t('app',"Type")
-      ),
-      'host'        => array(
-        'label'       => Yii::t('app',"Server host"),
+    return [
+      'title' => [
+        'label' => Yii::t('app', "Name")
+      ],
+      'description' => [
+        'type' => "TextArea",
+        'lines' => 3,
+        'label' => Yii::t('app', "Description")
+      ],
+      'schema' => [
+        'type' => "selectbox",
+        'label' => Yii::t('app', "Schema"),
+        'delegate' => [
+          'options' => "getSchemaOptions"
+        ]
+      ],
+      'type' => [
+        'label' => Yii::t('app', "Type")
+      ],
+      'host' => [
+        'label' => Yii::t('app', "Server host"),
         'placeholder' => "The database server host, usually 'localhost'"
-      ),
-      'port'        => array(
-        'label'       => Yii::t('app',"Server port"),
-        'marshaler'   => array(
-          'marshal'    => array( 'function' => "qcl_toString" ),
-          'unmarshal'  => array( 'function' => "qcl_toInteger" )
-        ),
+      ],
+      'port' => [
+        'label' => Yii::t('app', "Server port"),
+        'marshaler' => [
+          'marshal' => ['function' => "qcl_toString"],
+          'unmarshal' => ['function' => "qcl_toInteger"]
+        ],
         'placeholder' => "The database server port, usually 3306 for MySql"
-      ),
-      'database'    => array(
-        'label'       => Yii::t('app',"Database name"),
+      ],
+      'database' => [
+        'label' => Yii::t('app', "Database name"),
         'placeholder' => "The name of the database",
-        'validation'  => array(
-          'required'    => true
-        )
-      ),
-      'username'    => array(
-        'label'       => Yii::t('app',"Database user name")
-      ),
-      'password'    => array(
-        'label'       => Yii::t('app',"Database user password")
-      ),
-      'encoding'    => array(
-        'label'       => Yii::t('app',"Database encoding"),
-        'default'     => 'utf-8'
-      ),
-      'prefix'      => array(
-        'label'       => Yii::t('app',"Datasource prefix")
-      ),
-      'resourcepath' => array(
-        'label'       =>  Yii::t('app',"Resource path")
-      ),
-      'active'        => array(
-        'type'    => "SelectBox",
-        'label'   =>  Yii::t('app',"Status"),
-        'options' => array(
-          array( 'label' => "Disabled", 'value' => false ),
-          array( 'label' => "Active",   'value' => true )
-        )
-      )
-    );      
+        'validation' => [
+          'required' => true
+        ]
+      ],
+      'username' => [
+        'label' => Yii::t('app', "Database user name")
+      ],
+      'password' => [
+        'label' => Yii::t('app', "Database user password")
+      ],
+      'encoding' => [
+        'label' => Yii::t('app', "Database encoding"),
+        'default' => 'utf-8'
+      ],
+      'prefix' => [
+        'label' => Yii::t('app', "Datasource prefix")
+      ],
+      'resourcepath' => [
+        'label' => Yii::t('app', "Resource path")
+      ],
+      'active' => [
+        'type' => "SelectBox",
+        'label' => Yii::t('app', "Status"),
+        'options' => [
+          ['label' => "Disabled", 'value' => false],
+          ['label' => "Active", 'value' => true]
+        ]
+      ]
+    ];
   }
 
   //-------------------------------------------------------------
@@ -168,18 +180,27 @@ class Datasource extends BaseModel
 
   /**
    * @return \yii\db\ActiveQuery
-   */ 
+   */
   protected function getDatasourceRoles()
   {
-    return $this->hasMany(Datasource_Role::className(), ['DatasourceId' => 'id']);
+    return $this->hasMany(Datasource_Role::class, ['DatasourceId' => 'id']);
   }
 
   /**
    * @return \yii\db\ActiveQuery
-   */ 
+   */
   protected function getRoles()
   {
-    return $this->hasMany(Role::className(), ['id' => 'RoleId'])->via('datasourceRoles');
+    return $this->hasMany(Role::class, ['id' => 'RoleId'])->via('datasourceRoles');
+  }
+
+  /**
+   * Public to avoid magic property access
+   * @return \yii\db\ActiveQuery
+   */
+  public function getSchema()
+  {
+    return $this->hasOne(Schema::class, [ 'namedId' => 'schema' ] );
   }
 
   /*
@@ -189,51 +210,52 @@ class Datasource extends BaseModel
   */
 
   /**
-   * Returns the prefix for the model table. Default is the named 
+   * Returns the prefix for the model table. Default is the named
    * plus an underscore
    * @property string modelTablePrefix
    * @return string
    */
-  public static function createTablePrefix( $namedId )
+  public static function createTablePrefix($namedId)
   {
     return $namedId . "_";
-  }  
+  }
 
   /**
    * Returns the instance of a subclass which is specialized for this
    * datasource.
    *
-   * @param string $datasourceName  
+   * @param string $datasourceName
    * @return \app\models\Datasource
    * @throws \InvalidArgumentException
-   * @todo add and use 'class' column instead of 'schema'
    */
-  public static function getInstanceFor( $datasourceName )
+  public static function getInstanceFor($datasourceName)
   {
     // cache
     static $instances = array();
-    if( isset( $instances[$datasourceName] ) ){
+    if (isset($instances[$datasourceName])) {
       return $instances[$datasourceName];
     }
-
+    $baseclass = Yii::$app->config->getPreference('app.datasource.baseclass');
     // create new instance
-    $datasource = Datasource::findOne(['namedId' => $datasourceName]);
-    if( is_null($datasource) ) throw new \InvalidArgumentException("Datasource '$datasourceName' does not exist.");
-    // backwards compatibility
-    $schema = $datasource->schema;
-    switch( $schema ){
-      case "bibliograph.schema.bibliograph2":
-        $class = "app\models\BibliographicDatasource"; 
-        break;
-      case "qcl.schema.filesystem.local":
-        $class = "lib\channel\Filesystem";
-        break;
-      default: 
-        $class = str_replace(".","\\",$schema);
+    /** @var Datasource $datasource */
+    $datasource = Datasource::findByNamedId($datasourceName);
+    if (is_null($datasource)) {
+      throw new \InvalidArgumentException("Datasource '$datasourceName' does not exist.");
+    }
+    if( ! $datasource->schema ){
+      throw new \RuntimeException("Datasource '$datasourceName' has no linked schema.");
+    }
+    $schema = $datasource->getSchema()->one();
+    if( ! $schema ){
+      throw new \RuntimeException("Schema '{$datasource->schema}' does not exist.");
+    }
+    $class = $schema->class;
+    if( ! \class_exists($class) ){
+      $class = $baseclass;
     }
     // create instance of subclass 
-    $instance = $class::findOne(['namedId'=>$datasourceName]);
-    if( is_null( $instance) ){
+    $instance = $class::findOne(['namedId' => $datasourceName]);
+    if (is_null($instance)) {
       throw new \InvalidArgumentException("Datasource '$datasourceName' does not exist.");
     }
     $instances[$datasourceName] = $instance;
@@ -244,17 +266,18 @@ class Datasource extends BaseModel
    * Static shorthand method to get the classname of the datasource's model of
    * the given type.
    *
-   * @param string $datasourceName The Name of the datasource. Can also be a string 
-   * composed of the datasource name and the model type, separated by a dot. In this 
+   * @param string $datasourceName The Name of the datasource. Can also be a string
+   * composed of the datasource name and the model type, separated by a dot. In this
    * case, the model type can be left empty.
    * @param string $modelType
    * @return string The name of the class
    */
-  public static function in( $datasourceName, $modelType=null ){
-    if( strpos($datasourceName,".") > 0 ){
-      list($datasourceName, $modelType) = explode( ".", $datasourceName );
+  public static function in($datasourceName, $modelType = null)
+  {
+    if (strpos($datasourceName, ".") > 0) {
+      list($datasourceName, $modelType) = explode(".", $datasourceName);
     }
-    return static::getInstanceFor( $datasourceName )->getClassFor( $modelType );
+    return static::getInstanceFor($datasourceName)->getClassFor($modelType);
   }
 
   /**
@@ -266,19 +289,19 @@ class Datasource extends BaseModel
   public function getConnection()
   {
     // cache
-    static $connections=[];    
-    if( !isset($connections[$this->namedId]) ){
-      $this->useDsnDefaults();  
-      switch( $this->type ){
+    static $connections = [];
+    if (!isset($connections[$this->namedId])) {
+      $this->useDsnDefaults();
+      switch ($this->type) {
         case "mysql":
-        $dsn = "{$this->type}:host={$this->host};port={$this->port};dbname={$this->database}";
-        break;
-        default: 
-        throw new \LogicException("Support for datasource type '{$this->type}' has not been implemented yet.");
+          $dsn = "{$this->type}:host={$this->host};port={$this->port};dbname={$this->database}";
+          break;
+        default:
+          throw new \LogicException("Support for datasource type '{$this->type}' has not been implemented yet.");
       }
       // determine table prefix from database or datasource name
       // @todo add global prefix from ini file
-      if( ! is_null($this->prefix) ){
+      if (!is_null($this->prefix)) {
         $prefix = $this->prefix;
       } else {
         $prefix = $this->namedId . "_";
@@ -302,10 +325,11 @@ class Datasource extends BaseModel
    * @return void
    * @throws \Exception
    */
-  protected function useDsnDefaults(){
-    foreach( ["host","port","database","username","password"] as $key ){
-      $connection = Yii::$app->datasourceManager->parseDsn(); 
-      if( ! $this->$key ){
+  protected function useDsnDefaults()
+  {
+    foreach (["host", "port", "database", "username", "password"] as $key) {
+      $connection = Yii::$app->datasourceManager->parseDsn();
+      if (!$this->$key) {
         $this->$key = $connection[$key];
       }
     }
@@ -320,13 +344,13 @@ class Datasource extends BaseModel
    * @throws \InvalidArgumentException
    * @return void
    */
-  public function addModel( $type, $class, $service=null)
+  public function addModel($type, $class, $service = null)
   {
-    if( !$type or !is_string($type) ) throw new \InvalidArgumentException("Invalid type");
-    if( !$class or !is_string($class) ) throw new \InvalidArgumentException("Invalid class");
+    if (!$type or !is_string($type)) throw new \InvalidArgumentException("Invalid type");
+    if (!$class or !is_string($class)) throw new \InvalidArgumentException("Invalid class");
 
-    ArrayHelper::setValue( $this->modelMap, [$type, "model", "class"], $class );
-    ArrayHelper::setValue( $this->modelMap, [$type, "controller", "service"], $service );
+    ArrayHelper::setValue($this->modelMap, [$type, "model", "class"], $class);
+    ArrayHelper::setValue($this->modelMap, [$type, "controller", "service"], $service);
   }
 
   /**
@@ -335,7 +359,7 @@ class Datasource extends BaseModel
    */
   public function modelTypes()
   {
-    return array_keys( $this->modelMap );
+    return array_keys($this->modelMap);
   }
 
   /**
@@ -343,16 +367,15 @@ class Datasource extends BaseModel
    * to create instances of this class via
    * Datasource::getInstanceFor('database1')::getClassFor('reference')::find()->...
    * This implicitly sets the static property 'datasource' of the class to the current
-   * datasource name. 
+   * datasource name.
    * @param string $type
    * @throws \InvalidArgumentException
    * @return string The class name
    */
-  public function getClassFor( $type )
+  public function getClassFor($type)
   {
-    if( !$type or !is_string($type) ) throw new \InvalidArgumentException("Invalid type");
-    if ( ! isset( $this->modelMap[$type] ) )
-    {
+    if (!$type or !is_string($type)) throw new \InvalidArgumentException("Invalid type");
+    if (!isset($this->modelMap[$type])) {
       throw new \InvalidArgumentException("Model of type '$type' is not registered");
     }
     $class = $this->modelMap[$type]['model']['class'];
@@ -367,11 +390,10 @@ class Datasource extends BaseModel
    * @return string|null
    *    The service name or null if none exists
    */
-  public function getServiceName( $type )
+  public function getServiceName($type)
   {
-    if( !$type or !is_string($type) ) throw new \InvalidArgumentException("Invalid type");
-    if ( ! isset( $this->modelMap[$type]['controller']['service'] ) )
-    {
+    if (!$type or !is_string($type)) throw new \InvalidArgumentException("Invalid type");
+    if (!isset($this->modelMap[$type]['controller']['service'])) {
       return null;
     }
     return $this->modelMap[$type]['controller']['service'];

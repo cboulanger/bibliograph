@@ -29,6 +29,10 @@ class BibliographicDatasource
   extends Datasource
 {
 
+  static $name = "Bibliograph";
+
+  static $description = "Standard Bibliograph Datasource";
+
   /**
    * @return string
    */

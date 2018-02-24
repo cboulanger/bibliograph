@@ -2,25 +2,22 @@
 
 namespace app\models;
 
-use Yii;
-
 /**
  * This is the model class for table "join_Permission_Role".
  *
- * @property integer $id
  * @property string $created
  * @property string $modified
  * @property integer $RoleId
  * @property integer $PermissionId
  */
-class Permission_Role extends \yii\db\ActiveRecord
+class Role_Schema extends \lib\models\BaseJunctionModel
 {
   /**
    * @inheritdoc
    */
   public static function tableName()
   {
-    return 'join_Permission_Role';
+    return 'join_Role_Schema';
   }
 
   /**
@@ -30,8 +27,8 @@ class Permission_Role extends \yii\db\ActiveRecord
   {
     return [
       [['created', 'modified'], 'safe'],
-      [['RoleId', 'PermissionId'], 'integer'],
-      [['PermissionId', 'RoleId'], 'unique', 'targetAttribute' => ['PermissionId', 'RoleId'], 'message' => 'The combination of Role ID and Permission ID has already been taken.'],
+      [['RoleId', 'SchemaId'], 'integer'],
+      [['RoleId', 'SchemaId'], 'unique', 'targetAttribute' => ['RoleId', 'SchemaId'], 'message' => 'The combination of Role ID and Schema ID has already been taken.'],
     ];
   }
 
@@ -41,11 +38,10 @@ class Permission_Role extends \yii\db\ActiveRecord
   public function attributeLabels()
   {
     return [
-      'id' => 'ID',
       'created' => 'Created',
       'modified' => 'Modified',
       'RoleId' => 'Role ID',
-      'PermissionId' => 'Permission ID',
+      'SchemaId' => 'Schema ID',
     ];
   }
 }

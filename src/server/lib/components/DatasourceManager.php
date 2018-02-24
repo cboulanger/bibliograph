@@ -21,6 +21,7 @@
 namespace lib\components;
 
 use app\models\Datasource;
+use app\models\Schema;
 use fourteenmeister\helpers\Dsn;
 use lib\components\ConsoleAppHelper as Console;
 use lib\exceptions\RecordExistsException;
@@ -36,15 +37,6 @@ use Yii;
  */
 class DatasourceManager extends \yii\base\Component
 {
-  /**
-   * For backward-compatibility with v2, this map translates old schema names to
-   * new class names
-   *
-   * @var array
-   */
-  protected $legacySchema = [
-    'bibliograph.schema.bibliograph2' => '\app\models\BibliographicDatasource'
-  ];
 
   /**
    * Creates a new datasource and returns it. You should set at least the `title` property before saving the ActiveRecord
@@ -52,44 +44,51 @@ class DatasourceManager extends \yii\base\Component
    * It returns the instance for the given schema class, not the \app\models\Datasource instance created.
    *
    * @param string $datasourceName
-   * @param string $className |null
-   *    Optional class name of the datasource, defaults to "\app\models\BibliographicDatasource"
+   *    The name of the new datasource
+   * @param string $schemaName |null
+   *    Optional name of a schema. If not given, the default schema is used.
    * @return \app\models\Datasource
    * @throws \Exception
    * @throws RecordExistsException
-   * @todo Rename "schema" to "class"
    */
   public function create(
     $datasourceName,
-    $className = null)
+    $schemaName = null)
   {
     if (!$datasourceName or !is_string($datasourceName)) {
       throw new \InvalidArgumentException("Invalid datasource name");
     }
 
-    // @todo reimplement datasource schemas
-    if(!$className) {
-      $className = \app\models\BibliographicDatasource::class;
+    if( ! $schemaName ){
+      $schemaName = Yii::$app->config->getPreference('app.datasource.baseschema' );
     }
 
-    if(!is_subclass_of($className, Datasource::class)) {
-      throw new \InvalidArgumentException("Invalid class '$className'. Must be subclass of " . Datasource::class);
+    $schema = Schema::findByNamedId($schemaName);
+    if( ! $schema ){
+      throw new \InvalidArgumentException("Schema '$schemaName' does not exist.");
     }
 
-    if( Datasource::find()->where(['namedId'=>$datasourceName])->exists() ){
+    $class = $schema->class;
+    if (!is_subclass_of($class, Datasource::class)) {
+      throw new \InvalidArgumentException("Invalid schema class '$class'. Must be subclass of " . Datasource::class);
+    }
+
+    if (Datasource::findByNamedId($datasourceName)) {
       throw new RecordExistsException("Datasource exists");
     }
     $datasource = new Datasource([
       'namedId' => $datasourceName,
-      'title' => $datasourceName,
-      'schema' => $className,
-      'prefix' => $className::createTablePrefix($datasourceName),
-      'active' => 1
+      'title'   => $datasourceName,
+      'schema'  => $schemaName,
+      'prefix'  => $class::createTablePrefix($datasourceName),
+      'active'  => 1
     ]);
     $datasource->setAttributes($this->parseDsn());
     $datasource->save();
+
     // get the subclass instance and configure it
     $datasource = Datasource::getInstanceFor($datasourceName);
+
     $this->createModelTables($datasource);
     // @todo work with interface instead
     if ($datasource instanceof \app\models\BibliographicDatasource) {
@@ -152,7 +151,7 @@ class DatasourceManager extends \yii\base\Component
   {
     $datasource = Datasource::getInstanceFor($namedId);
     $datasource->delete();
-    if( $deleteData ){
+    if ($deleteData) {
       Yii::trace("Deleting model tables for '$namedId'...");
       $db = $datasource->getConnection();
       $params = [
