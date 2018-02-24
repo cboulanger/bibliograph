@@ -550,7 +550,9 @@ class SetupController extends \app\controllers\AppController
     $schemaClass = Yii::$app->config->getPreference('app.datasource.baseclass');
     $schemaExists = false;
     try {
-      Schema::register("bibliograph", $schemaClass );
+      Schema::register("bibliograph", $schemaClass, [
+        'protected' => 1
+      ] );
     } catch ( RecordExistsException $e) {
       $schemaExists = true;
     } catch (\ReflectionException $e) {
@@ -562,7 +564,6 @@ class SetupController extends \app\controllers\AppController
         Yii::t('app', 'Created standard schema.')
     ];
   }
-
 
   /**
    * Setup two example datasources

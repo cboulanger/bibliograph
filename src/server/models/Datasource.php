@@ -134,10 +134,8 @@ class Datasource extends BaseModel
       ],
       'port' => [
         'label' => Yii::t('app', "Server port"),
-        'marshaler' => [
-          'marshal' => ['function' => "qcl_toString"],
-          'unmarshal' => ['function' => "qcl_toInteger"]
-        ],
+        'marshal' => function($v){ return (string) $v;},
+        'unmarshal' => function($v){ return (int) $v;},
         'placeholder' => "The database server port, usually 3306 for MySql"
       ],
       'database' => [
@@ -151,6 +149,7 @@ class Datasource extends BaseModel
         'label' => Yii::t('app', "Database user name")
       ],
       'password' => [
+        'type' => "passwordfield",
         'label' => Yii::t('app', "Database user password")
       ],
       'encoding' => [
@@ -167,9 +166,10 @@ class Datasource extends BaseModel
         'type' => "SelectBox",
         'label' => Yii::t('app', "Status"),
         'options' => [
-          ['label' => "Disabled", 'value' => false],
-          ['label' => "Active", 'value' => true]
-        ]
+          ['label' => "Disabled", 'value' => 0 ],
+          ['label' => "Active", 'value' => 1 ]
+        ],
+        'marshal' => function($v){ return $v ? 1:0;}
       ]
     ];
   }
@@ -193,6 +193,39 @@ class Datasource extends BaseModel
   {
     return $this->hasMany(Role::class, ['id' => 'RoleId'])->via('datasourceRoles');
   }
+
+  /**
+   * @return \yii\db\ActiveQuery
+   */
+  protected function getDatasourceUsers()
+  {
+    return $this->hasMany(Datasource_User::class, ['DatasourceId' => 'id']);
+  }
+
+  /**
+   * @return \yii\db\ActiveQuery
+   */
+  protected function getUsers()
+  {
+    return $this->hasMany(User::class, ['id' => 'UserId'])->via('datasourceUsers');
+  }
+
+  /**
+   * @return \yii\db\ActiveQuery
+   */
+  protected function getDatasourceGroups()
+  {
+    return $this->hasMany(Datasource_Group::class, ['DatasourceId' => 'id']);
+  }
+
+  /**
+   * @return \yii\db\ActiveQuery
+   */
+  protected function getGroups()
+  {
+    return $this->hasMany(Group::class, ['id' => 'GroupId'])->via('datasourceGroups');
+  }
+
 
   /**
    * Public to avoid magic property access
@@ -408,5 +441,13 @@ class Datasource extends BaseModel
   public function createModelTables()
   {
     Yii::$app->datasourceManager->createModelTables($this);
+  }
+
+  public function getSchemaOptions()
+  {
+    return Schema::find()
+      ->select("name as label, namedId as value")
+      ->asArray()
+      ->all();
   }
 }

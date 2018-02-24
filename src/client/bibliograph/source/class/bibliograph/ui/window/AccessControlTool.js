@@ -64,8 +64,6 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
       && treeSelection[0].getModel()
       && treeSelection[0].getModel().getAction() === "link"
       && rightList.getSelection().length > 0);
-    }).addListener("changeState", (e)=>{
-      this.info( "Allow link: " + e.getData());
     });
     allowUnlinkPermission.addCondition(() => {
       let treeSelection = elementTree.getSelection();
@@ -73,8 +71,6 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
       treeSelection.length > 0
       && treeSelection[0].getModel()
       && treeSelection[0].getModel().getAction() === "unlink");
-    }).addListener("changeState", (e)=>{
-      this.info( "Allow unlink: " + e.getData());
     });
     // update on events
     // @todo convert messages to events
@@ -444,7 +440,7 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     bus.subscribe("treeSelectionChanged",(e)=>{
       let sel = e.getData();
       rightLabel.setValue(
-        '<b>' + ( sel.length ? this.tr('No linkable items') : sel[0].getModel().getLabel() ) + "</b>"
+        '<b>' + ( sel.length ? sel[0].getModel().getLabel() : this.tr('No linkable items') ) + "</b>"
       );
     });
     composite6.add(rightLabel);

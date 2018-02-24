@@ -216,34 +216,15 @@ class AccessConfigController extends \app\Controllers\AppController
    */
   public function actionTypes()
   {
-    $modelData = $this->modelData;
-    return [
-      [
-        'icon' => $modelData['user']['icon'],
-        'label' => Yii::t('app', "Users"),
-        'value' => "user"
-      ],
-      [
-        'icon' => $modelData['role']['icon'],
-        'label' => Yii::t('app', "Roles"),
-        'value' => "role"
-      ],
-      [
-        'icon' => $modelData['group']['icon'],
-        'label' => Yii::t('app', "Groups"),
-        'value' => "group"
-      ],
-      [
-        'icon' => $modelData['permission']['icon'],
-        'label' => Yii::t('app', "Permissions"),
-        'value' => "permission"
-      ],
-      [
-        'icon' => $modelData['datasource']['icon'],
-        'label' => Yii::t('app', "Datasources"),
-        'value' => "datasource"
-      ],
-    ];
+    $result = [];
+    foreach( $this->modelData as $type => $data ){
+      $result[] = [
+        'icon'  => $data['icon'],
+        'label' => $data['dialogLabel'],
+        'value' => $type
+      ];
+    }
+    return $result;
   }
 
   /**
@@ -271,25 +252,15 @@ class AccessConfigController extends \app\Controllers\AppController
     $modelClass = $elementData['class'];
     $labelProp = "name";
     /* @var \yii\db\ActiveQuery $query */
+    $query = $modelClass::find();
     switch ($type) {
       case "user":
         $query = $modelClass::find()->where(['anonymous' => false]);
-        break;
-      case "role":
-        $query = $modelClass::find();
-        break;
-      case "group":
-        $query = $modelClass::find();
-        break;
-      case "permission":
-        $query = $modelClass::find();
         break;
       case "datasource":
         $labelProp = "title";
         $query = $modelClass::find();
         break;
-      default:
-        throw new UserErrorException("Invalid type $type");
     }
     if ($filter) {
       try {
@@ -299,7 +270,6 @@ class AccessConfigController extends \app\Controllers\AppController
       }
     }
     $records = $query->all();
-    $elementData = $this->getModelDataFor($type);
     // create result from record data
     $result = [];
     //Yii::trace($elementData);
@@ -391,7 +361,7 @@ class AccessConfigController extends \app\Controllers\AppController
         'icon'   => $linkedElementdata['icon'],
         'label'  => $linkedElementdata['label'],
         'type'   => $linkedType,
-        'action' => $linkedType !== "role" ? "link" : null,
+        'action' => ($elementType == "user" && $linkedType == "role") ? null : "link",
         'value'  => $elementType . "=" . $namedId,
         'children' => []
       );
@@ -588,10 +558,13 @@ class AccessConfigController extends \app\Controllers\AppController
       throw new UserErrorException($e->getMessage());
     }
     // remove password information
-    if ($type == "user") {
+    if ( isset($formData['password']) ) {
       $formData['password']['value'] = null;
+    }
+    if ( isset($formData['password2']) ) {
       $formData['password2']['value'] = null;
     }
+
     // protect namedId
     if( $model->protected ){
       $formData['namedId']['enabled'] = false;
@@ -625,8 +598,15 @@ class AccessConfigController extends \app\Controllers\AppController
       return "Action save aborted";
     }
 
+    // get edited model
     $model = $this->getModelInstance($type, $namedId);
-    $oldData = (object)$model->getAttributes();
+
+    // ldap user data cannot be edited
+    if ($type == "user" and $model->ldap) {
+      throw new UserErrorException(Yii::t('app', "User data is from an LDAP server and cannot be changed."));
+    }
+
+    $oldData = (object) $model->getAttributes();
     $validationError = null;
     $passwordChanged = false;
 
@@ -645,23 +625,21 @@ class AccessConfigController extends \app\Controllers\AppController
         }
         unset($data->password2);
       }
-      // enforce minimal password length
-      if (isset($data->password) and strlen($data->password) < 8) {
-        $validationError = Yii::t('app', "Password must be at least 8 characters long.");
-        unset($data->password);
-      }
-      // we have a valid password
-      if (isset($data->password)) {
-        $hashed = Yii::$app->accessManager->generateHash($data->password);
-        Yii::debug("new: $data->password/$hashed, old: $model->password ");
-        $data->password = $hashed;
-        $passwordChanged = true;
-      }
-    }
 
-    // ldap user data cannot be edited
-    if ($type == "user" and $model->ldap) {
-      throw new UserErrorException(Yii::t('app', "User data is from an LDAP server and cannot be changed."));
+      // handle user password change
+      if($type == "user"){
+        // enforce minimal password length
+        if (isset($data->password) and strlen($data->password) < 8) {
+          $validationError = Yii::t('app', "Password must be at least 8 characters long.");
+          unset($data->password);
+        }
+        // we have a valid password,hash it
+        if (isset($data->password)) {
+          $hashed = Yii::$app->accessManager->generateHash($data->password);
+          $data->password = $hashed;
+          $passwordChanged = true;
+        }
+      }
     }
 
     // parse form and save in model
@@ -687,8 +665,8 @@ class AccessConfigController extends \app\Controllers\AppController
 
     if ($passwordChanged) {
       //  @todo reimplement if password has changed, inform user, unless the old password was a temporary password
-      if (false and strlen($oldData->password) > 7) {
-        return $this->sendInformationEmail($model->data());
+      if ( strlen($oldData->password) > 7) {
+        //return $this->sendInformationEmail($model->data());
       }
       Alert::create(Yii::t('app', "Your password has been changed."));
     }

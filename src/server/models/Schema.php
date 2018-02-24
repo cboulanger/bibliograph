@@ -34,9 +34,9 @@ class Schema extends \lib\models\BaseModel
   {
     return [
       [['created', 'modified'], 'safe'],
-      [['active','protected'], 'integer'],
+      [['active', 'protected'], 'integer'],
       [['namedId'], 'string', 'max' => 50],
-      [['class','name'], 'string', 'max' => 100],
+      [['class', 'name'], 'string', 'max' => 100],
       [['description'], 'string', 'max' => 255],
       [['namedId'], 'unique'],
     ];
@@ -60,10 +60,11 @@ class Schema extends \lib\models\BaseModel
     ];
   }
 
-  public function getFormData(){
+  public function getFormData()
+  {
     return [
-      'namedId'     => [],
-      'name'        => [],
+      'namedId' => [],
+      'name' => [],
       'description' => []
     ];
   }
@@ -110,29 +111,29 @@ class Schema extends \lib\models\BaseModel
    * @throws  \InvalidArgumentException
    * @throws \ReflectionException
    */
-  public static function register( $namedId, string $className, array $options=null )
+  public static function register($namedId, string $className, array $options = null)
   {
-    if( !$namedId or !is_string($namedId) ){
+    if (!$namedId or !is_string($namedId)) {
       throw new \InvalidArgumentException("Invalid namedId parameter");
     }
     $class = new \ReflectionClass($className);
     $baseClass = \app\models\Datasource::class;
-    if( ! $class->isSubclassOf( $baseClass ) ){
-      throw new \InvalidArgumentException('Class must extend ' . $baseClass );
+    if (!$class->isSubclassOf($baseClass)) {
+      throw new \InvalidArgumentException('Class must extend ' . $baseClass);
     }
-    if( Schema::findByNamedId($namedId) ){
+    if (Schema::findByNamedId($namedId)) {
       throw new RecordExistsException("Schema '$namedId' already exists.");
     }
-    try{
+    try {
       $model = new static ([
-        'namedId'       => $namedId,
-        'class'         => $class->getName(),
-        'name'          => $class->getProperty('name')->getValue(),
-        'description'   => $class->getProperty('description')->getValue(),
+        'namedId' => $namedId,
+        'class' => $class->getName(),
+        'name' => $class->getProperty('name')->getValue(),
+        'description' => $class->getProperty('description')->getValue(),
       ]);
-      $model->setAttributes( $options );
+      if ($options) $model->setAttributes($options);
       $model->save();
-    } catch( \Exception $e ){
+    } catch (\Exception $e) {
       throw new \InvalidArgumentException($e->getMessage(), null, $e);
     }
   }

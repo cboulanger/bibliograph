@@ -198,8 +198,12 @@ class Form extends Dialog
         throw new InvalidArgumentException("Invalid unmarshaller for property '$property': must be callable.");
       }
 
+      // coerce booleans to int
+      if( is_bool($value) ) {
+        $value = (int) $value;
+      }
       // remove null values from data
-      if ($value === null) {
+      elseif ($value === null) {
         unset( $data[$property] );
       }
     }
