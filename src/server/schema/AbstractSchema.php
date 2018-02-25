@@ -18,7 +18,7 @@
 
 ************************************************************************ */
 
-namespace lib\schema;
+namespace app\schema;
 
 use Yii;
 
@@ -26,8 +26,7 @@ use Yii;
 /**
  * Base class for schemas
  */
-abstract class AbstractSchema
-  extends yii\base\BaseObject
+abstract class AbstractSchema extends yii\base\BaseObject
 {
 
   /**

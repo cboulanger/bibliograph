@@ -21,8 +21,8 @@
 namespace lib\schema\cql;
 
 use \Yii;
-use Parser;
-use \lib\schema\Tokenizer;
+use \lib\schema\cql\Parser;
+
 
 /**
  * Tool for working with the CQL query language
@@ -163,7 +163,7 @@ class Query extends \yii\base\BaseObject
     $cqlQuery = trim($query->cql);
 
     // Translate operators, booleans and indexes.
-    $tokenizer    = new lib\schema\Tokenizer($cqlQuery);
+    $tokenizer    = new \lib\util\Tokenizer($cqlQuery);
     $tokens       = $tokenizer->tokenize();
     $dict         = $this->getDictionary($model);
     $operators    = array_merge($this->booleans,$this->modifiers);

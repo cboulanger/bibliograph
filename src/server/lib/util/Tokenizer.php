@@ -19,7 +19,7 @@
 
 ************************************************************************ */
 
-namespace lib\schema;
+namespace lib\util;
 
 /**
  * Class Tokenizer

@@ -9,7 +9,7 @@ class Validate
    * @param bool $condition
    * @param string $error_msg
    * @return void
-   * @throws Exception
+   * @throws \Exception
    */
   public static function isTrue( $condition, $error ){
     if( ! $condition ) {
@@ -24,7 +24,7 @@ class Validate
    * @param bool $condition
    * @param string $error_msg
    * @return void
-   * @throws Exception
+   * @throws \Exception
    */
   public static function isFalse( $condition, $error ){
     self::isTrue( ! $condition, $error );
@@ -36,7 +36,7 @@ class Validate
    * @param mixed $arg  
    * @param string $error_msg
    * @return void
-   * @throws Exception
+   * @throws \Exception
    */
   public static function isNotNull( $arg, $error ){
     self::isTrue( $arg !== null, $error );

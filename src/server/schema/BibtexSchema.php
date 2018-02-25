@@ -18,14 +18,14 @@
 
 ************************************************************************ */
 
-namespace lib\schema;
+namespace app\schema;
 
 use Yii;
 
 /**
  * Class containing data on the BibTex Format
  */
-class BibtexSchema extends \lib\schema\AbstractSchema
+class BibtexSchema extends \app\schema\AbstractSchema
 {
   /**
    * The default reference type
