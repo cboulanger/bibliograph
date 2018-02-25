@@ -95,7 +95,7 @@ class AppController extends \JsonRpc2\Controller
       $session->touch();
     }
     $sessionId = $this->getSessionId();
-    Yii::info("Authorized user '{$user->namedId}' via auth auth token (Session {$sessionId}.");
+    Yii::info("Authorized user '{$user->namedId}' via auth auth token (Session {$sessionId}.","auth");
     return true;
   }
 
