@@ -1,5 +1,7 @@
 <?php
 
+require __DIR__ . "/../../lib/components/Utils.php";
+
 /**
  * Inherited Methods
  * @method void wantToTest($text)
@@ -47,5 +49,11 @@ class ApiTester extends \Codeception\Actor
     $newValue = $boolValue ? $enabled : $disabled;
     $file_contents = str_replace([$enabled,$disabled],$newValue, $file_contents);
     file_put_contents($path_to_file,$file_contents);
+  }
+
+  public function grabCurrentAppVersion()
+  {
+    $utils = new \lib\components\Utils();
+    return $utils->getVersion();
   }
 }

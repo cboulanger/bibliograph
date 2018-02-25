@@ -3,19 +3,21 @@
 class AASetupControllerCest
 {
 
+  protected $version;
+
   /**
    * Getting application version
    *
    * @param ApiTester $I
    * @return void
-   * @env testing
-   *
    */
   public function tryVersion(ApiTester $I)
   {
-    $I->wantToTest("the 'setup.version' server method");
+    $I->amGoingTo("test the 'setup.version' server method");
     $I->sendJsonRpcRequest('setup','version');
-    $I->assertTrue( version_compare( $I->grabJsonRpcResult(), '0.0.1', '>' ), "Result should be a valid version number" );
+    $this->version = $I->grabJsonRpcResult();
+    $I->amGoingTo("see if '$this->version' is a valid version number");
+    $I->assertTrue( version_compare( $this->version, '0.0.1', '>' ), "Result should be a valid version number" );
   }
 
   /**
@@ -28,35 +30,16 @@ class AASetupControllerCest
   public function tryNormalSetupWithLatestMigrationsApplied(ApiTester $I)
   {
     $I->sendJsonRpcRequest('setup','setup');
-    $I->compareJsonRpcResultWith( json_decode('{
-      "type": "ServiceResult",
-      "events": [
-        {
-          "name": "ldap.enabled",
-          "data": false
-        },
-        {
-          "name": "bibliograph.setup.done",
-          "data": null
-        }
-      ],
-      "data": {
-        "errors": [
-          
-        ],
-        "messages": [
-          "Ini file exists.",
-          "File permissions ok.",
-          "Admininstrator email exists.",
-          "Database connection ok.",
-          "No updates to the databases.",
-          "Configuration values were created.",
-          "Created standard schema.",
-          "Example databases were created.",
-          "LDAP authentication is not enabled."
-        ]
+    $I->compareJsonRpcResultWith( json_decode('[
+      {
+        "name": "ldap.enabled",
+        "data": false
+      },
+      {
+        "name": "bibliograph.setup.done",
+        "data": null
       }
-    }'));
+    ]'),"events");
   }  
 
   /**
@@ -89,7 +72,7 @@ class AASetupControllerCest
           "File permissions ok.",
           "Admininstrator email exists.",
           "Database connection ok.",
-          "Found empty database and applied new migrations for version 3.0.0-alpha",
+          "Found empty database and applied new migrations for version ' . $this->version . '",
           "Configuration values were created.",
           "Created standard schema.",
           "Example databases were created.",
@@ -130,7 +113,7 @@ class AASetupControllerCest
           "File permissions ok.",
           "Admininstrator email exists.",
           "Database connection ok.",
-          "Migrated data from Bibliograph v2 and applied new migrations for version 3.0.0-alpha",
+          "Migrated data from Bibliograph v2 and applied new migrations for version ' . $this->version . '",
           "Configuration values were created.",
           "Created standard schema.",
           "Example databases were created.",
@@ -149,7 +132,9 @@ class AASetupControllerCest
    */
   public function tryUpgradeV3(ApiTester $I)
   {
-    $I->sendJsonRpcRequest('setup','setup-version',["3.0.0"]);
+    $upgrade_from = $I->grabCurrentAppVersion();
+    $upgrade_to = '3.0.0';
+    $I->sendJsonRpcRequest('setup','setup-version',[$upgrade_to]);
     $I->compareJsonRpcResultWith( json_decode('{
       "type": "ServiceResult",
       "events": [
@@ -171,7 +156,7 @@ class AASetupControllerCest
           "File permissions ok.",
           "Admininstrator email exists.",
           "Database connection ok.",
-          "Found data for version 3.0.0-alpha and applied new migrations for version 3.0.0",
+          "Found data for version '. $upgrade_from .' and applied new migrations for version ' . $upgrade_to . '",
           "Configuration values were created.",
           "Standard schema existed.",
           "Example databases were created.",
