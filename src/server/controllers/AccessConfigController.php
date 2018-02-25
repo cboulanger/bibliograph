@@ -27,6 +27,7 @@ use lib\dialog\{
 use lib\exceptions\{
   RecordExistsException, UserErrorException
 };
+use lib\schema\ISchema;
 use Yii;
 
 
@@ -280,6 +281,7 @@ class AccessConfigController extends \app\Controllers\AppController
       // special cases
       if ($record->hasAttribute("hidden") and $record->hidden and !$isAdmin) continue;
       if ($record->hasAttribute("ldap") and $record->ldap) $label .= " (LDAP)";
+      if ($record->hasAttribute("active") and ! $record->active ) $label .= " [deactivated]";
       // entry
       $result[] = array(
         'icon' => $icon,
@@ -975,6 +977,18 @@ class AccessConfigController extends \app\Controllers\AppController
       $data->namedId
     ));
     return $this->successfulActionResult();
+  }
+
+  public function actionSchemaclassExists( $class=null )
+  {
+    $class = trim($class);
+    try {
+      $schema = new $class;
+    } catch( \Throwable $e) {
+      return false;
+    }
+    // @todo Use Interface instead
+    return $schema instanceof ISchema;
   }
 
   /*

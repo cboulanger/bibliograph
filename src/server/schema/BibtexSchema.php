@@ -25,7 +25,7 @@ use Yii;
 /**
  * Class containing data on the BibTex Format
  */
-class BibtexSchema extends \app\schema\AbstractSchema
+class BibtexSchema extends \app\schema\AbstractReferenceSchema
 {
   /**
    * The default reference type

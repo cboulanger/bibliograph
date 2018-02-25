@@ -63,9 +63,25 @@ class Schema extends \lib\models\BaseModel
   public function getFormData()
   {
     return [
-      'namedId' => [],
-      'name' => [],
-      'description' => []
+      'namedId' => [
+        'validation' => [
+          'required' => true
+        ]
+      ],
+      'name' => [
+        'validation' => [
+          'required' => true
+        ]
+      ],
+      'description' => [],
+      'class' => [
+        'validation' => [
+          'required' => true,
+          'proxy' => 'bibliograph._actRpcSendProxy',
+          'method' => 'schemaclass-exists',
+          'invalidMessage' => Yii::t('app',"Please enter a valid class name")
+        ]
+      ]
     ];
   }
 

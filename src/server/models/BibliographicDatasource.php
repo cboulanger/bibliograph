@@ -19,6 +19,7 @@
 ************************************************************************ */
 
 namespace app\models;
+use lib\schema\ISchema;
 use Yii;
 use app\models\Datasource;
 
@@ -27,6 +28,7 @@ use app\models\Datasource;
  */
 class BibliographicDatasource
   extends Datasource
+  implements ISchema
 {
 
   static $name = "Bibliograph";

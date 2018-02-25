@@ -137,7 +137,7 @@ class ReferenceController extends AppController
    */
   public function getReferenceTypeListData($datasource)
   {
-    /** @var \app\schema\AbstractSchema $schema */
+    /** @var \app\schema\AbstractReferenceSchema $schema */
     $schema = $this->getControlledModel($datasource)::getSchema();
     $reftypes = $schema->types();
     $options = array();
@@ -291,7 +291,7 @@ class ReferenceController extends AppController
   function actionFormLayout($datasource, $reftype)
   {
     $modelClass = $this->getControlledModel($datasource);
-    /** @var \app\schema\AbstractSchema $schema */
+    /** @var \app\schema\AbstractReferenceSchema $schema */
     $schema = $modelClass::getSchema();
 
     // get fields to display in the form
@@ -350,7 +350,7 @@ class ReferenceController extends AppController
   public function actionReferenceTypeList($datasource)
   {
     $modelClass = $this->getControlledModel($datasource);
-    /** @var \app\schema\AbstractSchema $schema */
+    /** @var \app\schema\AbstractReferenceSchema $schema */
     $schema = $modelClass::getSchema();
     $result = array();
     foreach ($schema->types() as $type) {
@@ -403,7 +403,7 @@ class ReferenceController extends AppController
     $modelClass = $this->getControlledModel($datasource);
     /** @var \app\models\Reference $item */
     $model = $modelClass::findOne($id);
-    /** @var \app\schema\AbstractSchema $schema */
+    /** @var \app\schema\AbstractReferenceSchema $schema */
     $schema = $modelClass::getSchema();
     $reftype = $model->reftype;
 
@@ -623,7 +623,7 @@ class ReferenceController extends AppController
     if( ! isset($data['reftype'])){
       throw new UserErrorException("Missing field 'reftype'");
     }
-    /** @var \app\schema\AbstractSchema $schema */
+    /** @var \app\schema\AbstractReferenceSchema $schema */
     $schema = $modelClass::getSchema();
     if( ! in_array( $data['reftype'], $schema->types()) ){
       throw new UserErrorException("Cannot create reference: invalid reference type.");
@@ -1073,7 +1073,7 @@ class ReferenceController extends AppController
   public function actionItemHtml($datasource, $id)
   {
     $modelClass = $this->getControlledModel($datasource);
-    /** @var \app\schema\AbstractSchema $schema */
+    /** @var \app\schema\AbstractReferenceSchema $schema */
     $schema = $modelClass::getSchema();
     /** @var \app\models\Reference $reference */
     $reference = $modelClass::findOne($id);

@@ -21,12 +21,13 @@
 namespace app\schema;
 
 use Yii;
+use lib\schema\ISchema;
 
 
 /**
  * Base class for schemas
  */
-abstract class AbstractSchema extends yii\base\BaseObject
+abstract class AbstractReferenceSchema extends yii\base\BaseObject implements ISchema
 {
 
   /**
