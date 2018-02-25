@@ -141,7 +141,7 @@ class Configuration extends \yii\base\Component
             case "array":
               return $value;
             default:
-              return array();
+              return [];
           }
         }
         else

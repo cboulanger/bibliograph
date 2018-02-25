@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
-
-tail -F -n 100 src/server/runtime/logs/app.log
+logfile=src/server/runtime/logs/app.log
+touch $logfile
+tail -F -n 100 $logfile

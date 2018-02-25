@@ -29,6 +29,7 @@
 - [ ] Frontend: Rename item view "metadata" page
 - [ ] Tests: Fix bootstrap loading issue
 - [ ] Backend: Model validation: accept booleans for MySql SmallInt columns
+- [ ] Implement reference model schema
 
 ### Priority: low
 - [ ] Add column 'protected' to user/group etc. to prevent records from being deleted
@@ -46,7 +47,7 @@
 - [ ] Replace ::findOne(['namedid'=>'foo']) with ::findByNamedId('foo')
 - [ ] Rename Yii::$app->utils to Yii::$app->state
 - [ ] Have actions return an informative message when they don't return a result
-
+- [ ] Move the .idea folder out of version control (see [instructions](https://intellij-support.jetbrains.com/hc/en-us/articles/207240985-Changing-IDE-default-directories-used-for-config-plugins-and-caches-storage))
 ## v3.0.0
 
 ## v3.1
