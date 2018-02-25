@@ -32,7 +32,7 @@ class BiblioModelsTest extends Base
     $folder = Datasource::in('database1.folder')::findOne(['label'=>'Hauptordner']);
     $this->assertFalse(is_null($folder), "Main folder not found");
     $query = $folder->getReferences();
-    $this->assertEquals(22,$query->count());
+    $this->assertEquals(10,$query->count());
     $this->assertEquals("Digital library economics Elektronische Ressource: An academic perspective",$query->one()->title);
   }
 

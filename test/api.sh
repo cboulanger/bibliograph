@@ -24,7 +24,7 @@ echo
 echo "Creating empty database ..."
 mysql -uroot -e "DROP DATABASE tests; CREATE DATABASE tests;"
 echo "Deleting log file..."
-rm runtime/logs/app.log
+[[ -f runtime/logs/app.log ]] && rm runtime/logs/app.log
 echo "Running migrations..."
 MIGRATE_ARGS="--interactive=0 --db=testdb"
 $YII_CMD migrate/fresh --migrationNamespaces=app\\migrations\\schema $MIGRATE_ARGS &> /dev/null

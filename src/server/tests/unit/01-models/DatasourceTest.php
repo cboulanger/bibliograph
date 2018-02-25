@@ -48,7 +48,7 @@ class DatasourceTest extends Base
     $this->assertEquals( Datasource::in('database1','folder'), $datasource->getClassFor('folder') );
     $this->assertEquals( Datasource::in('database1.reference'), $datasource->getClassFor('reference') );
     $numEnglishRefs = Datasource::in('database1.reference')::find()->where(['language'=>'English'])->count();
-    $this->assertEquals( 15, $numEnglishRefs );    
+    $this->assertEquals( 12, $numEnglishRefs );
   }
 
   public function testCreateDatasource()
