@@ -51,8 +51,8 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
 
     toolBar.add(new qx.ui.basic.Atom(), { flex : 10 }); // why not a spacer?
     toolBar.add(this.createTitleLabel());
-    toolBar.add(this.createSearchBox(), { flex : 1 });
-    this.createSearchButtons().map( button => toolBar.add(button) );
+    //toolBar.add(this.createSearchBox(), { flex : 1 });
+    //this.createSearchButtons().map( button => toolBar.add(button) );
   },
 
   members : 
