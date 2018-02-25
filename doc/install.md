@@ -21,7 +21,7 @@ bash build-env/debian-ubuntu/install.sh
 
 ### Installation 
 - At them moment, there is no built package available. You'll have to clone the repository
-  and replicate the steps in [the Debian/Ubuntu install script](../build-env/debian-ubuntu/install-deb-ubuntu.sh) adapted to your local environment.
+  and replicate the steps in [the Debian/Ubuntu install script](../build-env/debian-ubuntu/install.sh) adapted to your local environment.
 
 ### Post-Installation 
 - In `src/server/config/`, rename `bibliograph.ini.dist.php` to
