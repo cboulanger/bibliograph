@@ -19,10 +19,11 @@ before_install:
 #  - if php -i | grep yaz --quiet && echo '<?php exit(function_exists("yaz_connect")?0:1);' | php ; then echo "YAZ is installed"; else echo "YAZ installation failed"; exit 1; fi;
 
 install:
-  - echo "Installing qooxdoo..."
-  - pushd src/vcslib
-  - bash install.sh
-  - popd
+  # npm install has already run, installing dependencies
+  # - echo "Installing qooxdoo..."
+  # - pushd src/vcslib
+  # - bash install.sh
+  # - popd
 
   - echo "Building Bibliograph..."
   - pushd src/client/bibliograph

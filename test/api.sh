@@ -14,7 +14,8 @@ pushd $SERVER_PATH > /dev/null
 nohup php $SERVER_CMD &> /dev/null & 
 bg_pid=$!
 trap "kill -2 $bg_pid" 2
-ps | grep "[p]hp $SERVER_CMD" > /dev/null
+ps ax
+ps | grep "[p]hp $SERVER_CMD" #> /dev/null
 if [ $? -eq 1 ]; then
   echo "Failed to start test server..."
   exit 1
