@@ -76,6 +76,7 @@ class DatasourceManager extends \yii\base\Component
     if (Datasource::findByNamedId($datasourceName)) {
       throw new RecordExistsException("Datasource exists");
     }
+    /** @noinspection MissedFieldInspection */
     $datasource = new Datasource([
       'namedId' => $datasourceName,
       'title'   => $datasourceName,
@@ -93,6 +94,7 @@ class DatasourceManager extends \yii\base\Component
     // @todo work with interface instead
     if ($datasource instanceof \app\models\BibliographicDatasource) {
       $datasource->addDefaultFolders();
+      Yii::$app->config->createKey("datasource.$datasourceName.fields.exclude","list");
     }
     return $datasource;
   }

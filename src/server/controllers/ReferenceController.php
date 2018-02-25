@@ -20,13 +20,13 @@
 
 namespace app\controllers;
 
-use Yii;
-
-use app\controllers\AppController;
-use app\controllers\CitationController;
 use app\models\Datasource;
-use app\models\Reference;
+use function GuzzleHttp\debug_resource;
+use lib\Exception;
+use lib\exceptions\UserErrorException;
+use lib\schema\cql\Query;
 use lib\Validate;
+use Yii;
 
 class ReferenceController extends AppController
 {
@@ -55,6 +55,7 @@ class ReferenceController extends AppController
    *
    * @param string $datasource
    * @return string
+   * @todo Rename to getFolderModelClass()
    */
   static function getFolderModel($datasource)
   {
@@ -84,46 +85,43 @@ class ReferenceController extends AppController
    *     'cql' :
    *   }
    * }
-   * @param stdClass $query
+   * @param stdClass $clientQueryData
    *    The query data object from the json-rpc request
-   * @param \yii\db\ActiveQuery $activeQuery
-   *    The query object used
-   * @throws \lib\exceptions\UserErrorException
-   * @return qcl_data_db_Query
+   * @param \yii\db\ActiveQuery $serverQuery
+   *    The ActiveQuery object used
+   * @return \yii\db\ActiveQuery
+   * @throws \InvalidArgumentException
    */
-  public static function addQueryConditions(
-    \yii\db\ActiveQuery $activeQuery,
-    \stdClass $queryData)
+  public static function addQueryConditions( \stdClass $clientQueryData, \yii\db\ActiveQuery $serverQuery)
   {
-    $query = $queryData->query;
-    if (!is_object($query) or
-      !is_array($query->properties)) {
+    $clientQuery = $clientQueryData->query;
+    if (!is_object($clientQuery) or
+      !is_array($clientQuery->properties)) {
       throw new \InvalidArgumentException("Invalid query data");
     }
 
     // @todo should be 'columns' or 'fields'
     $columns = array_map(function ($column) {
       return $column == "id" ? "references.id" : $column;
-    }, $query->properties);
-    $activeQuery = $activeQuery->select($columns);
+    }, $clientQuery->properties);
+    $serverQuery = $serverQuery->select($columns);
 
     // relation
-    if (isset($query->relation)) {
-      return $activeQuery
+    if (isset($clientQuery->relation)) {
+      return $serverQuery
         ->alias('references')
-        ->joinWith($query->relation->name, /* eagerly loading */
-          false)
-        ->onCondition([$query->relation->foreignId => $query->relation->id]);
+        ->joinWith($clientQuery->relation->name,false)
+        ->onCondition([$clientQuery->relation->foreignId => $clientQuery->relation->id]);
     }
 
     // cql
     if (false /* not implemented */) { // isset ( $query->cql ) ){
 
-      $cql = new \lib\schema\CQL;
+      $cql = new Query;
       try {
-        $q = $cql->addQueryConditions($query, $activeQuery, $modelClass);
-      } catch (bibliograph_schema_Exception $e) {
-        throw new \Exception($e->getMessage());
+        $q = $cql->addQueryConditions($clientQuery, $serverQuery, $modelClass);
+      } catch (\Exception $e) {
+        throw new UserErrorException($e->getMessage());
       }
       $q->where['markedDeleted'] = false;
       return $q;
@@ -139,6 +137,7 @@ class ReferenceController extends AppController
    */
   public function getReferenceTypeListData($datasource)
   {
+    /** @var \app\schema\AbstractSchema $schema */
     $schema = $this->getControlledModel($datasource)::getSchema();
     $reftypes = $schema->types();
     $options = array();
@@ -182,30 +181,30 @@ class ReferenceController extends AppController
    */
   public function actionTableLayout($datasource, $modelClassType = null)
   {
-    return array(
-      'columnLayout' => array(
-        'id' => array(
+    return [
+      'columnLayout' => [
+        'id' => [
           'header' => "ID",
           'width' => 50,
           'visible' => false
-        ),
+        ],
 //        'markedDeleted'	=> array(	
 //        	'header' 		=> " ",
 //        	'width'	 		=> 16
 //        ),
-        'author' => array(
+        'author' => [
           'header' => Yii::t('app', "Author"),
           'width' => "1*"
-        ),
-        'year' => array(
+        ],
+        'year' => [
           'header' => Yii::t('app', "Year"),
           'width' => 50
-        ),
-        'title' => array(
+        ],
+        'title' => [
           'header' => Yii::t('app', "Title"),
           'width' => "3*"
-        )
-      ),
+        ]
+      ],
       /**
        * This will feed back into addQueryConditions()
        */
@@ -217,7 +216,7 @@ class ReferenceController extends AppController
         'orderBy' => "author,year,title",
       ],
       'addItems' => $this->getReferenceTypeListData($datasource, $modelClassType)
-    );
+    ];
   }
 
   /**
@@ -229,14 +228,15 @@ class ReferenceController extends AppController
    * "modelType" with the type of the model.
    * @throws \InvalidArgumentException
    */
-  public function actionRowCount($queryData)
+  public function actionRowCount($clientQueryData)
   {
-    $model = $this->getModelClass($queryData->datasource, $queryData->modelType);
-    $model:: setDatasource($queryData->datasource);
-    $query = $model:: find();
+    // @todo why pass the model type? It's implied in the controller name
+    $modelClass = $this->getModelClass($clientQueryData->datasource, $clientQueryData->modelType);
+    $modelClass::setDatasource($clientQueryData->datasource);
+    $query = $modelClass::find();
 
     // add additional conditions from the client query
-    $query = $this->addQueryConditions($query, $queryData);
+    $query = $this->addQueryConditions( $clientQueryData, $query);
 
     //Yii::info($query->createCommand()->getRawSql());
 
@@ -261,14 +261,14 @@ class ReferenceController extends AppController
    *                array   rowData     The actual row data (mandatory)
    *                string  statusText  Optional text to display in a status bar
    */
-  function actionRowData($firstRow, $lastRow, $requestId, $queryData)
+  function actionRowData($firstRow, $lastRow, $requestId, $clientQueryData)
   {
-    $model = $this->getModelClass($queryData->datasource, $queryData->modelType);
+    $model = $this->getModelClass($clientQueryData->datasource, $clientQueryData->modelType);
     $query = $model:: find()
-      ->orderBy($queryData->query->orderBy)
+      ->orderBy($clientQueryData->query->orderBy)
       ->offset($firstRow)
       ->limit($lastRow - $firstRow + 1);
-    $query = $this->addQueryConditions($query, $queryData);
+    $query = $this->addQueryConditions( $clientQueryData, $query);
     //return $query->createCommand()->getRawSql();
     //Yii::info($query->createCommand()->getRawSql());
     $rowData = $query->asArray()->all();
@@ -291,6 +291,7 @@ class ReferenceController extends AppController
   function actionFormLayout($datasource, $reftype)
   {
     $modelClass = $this->getControlledModel($datasource);
+    /** @var \app\schema\AbstractSchema $schema */
     $schema = $modelClass::getSchema();
 
     // get fields to display in the form
@@ -312,9 +313,9 @@ class ReferenceController extends AppController
     foreach ($fields as $field) {
       $formData[$field] = $schema->getFormData($field);
       if (!$formData[$field]) {
-        $formData[$field] = array(
+        $formData[$field] = [
           "type" => "textfield",
-        );
+        ];
       } // replace placeholders
       elseif (isset($formData[$field]['bindStore']['params'])) {
         foreach ($formData[$field]['bindStore']['params'] as $i => $param) {
@@ -349,6 +350,7 @@ class ReferenceController extends AppController
   public function actionReferenceTypeList($datasource)
   {
     $modelClass = $this->getControlledModel($datasource);
+    /** @var \app\schema\AbstractSchema $schema */
     $schema = $modelClass::getSchema();
     $result = array();
     foreach ($schema->types() as $type) {
@@ -398,9 +400,12 @@ class ReferenceController extends AppController
     }
 
     // load model record and get reference type
-    $record = $this->getControlledModel($datasource)::findOne($id);
-    $reftype = $record->reftype;
-    $schema = $record->schema;
+    $modelClass = $this->getControlledModel($datasource);
+    /** @var \app\models\Reference $item */
+    $model = $modelClass::findOne($id);
+    /** @var \app\schema\AbstractSchema $schema */
+    $schema = $modelClass::getSchema();
+    $reftype = $model->reftype;
 
     // determine the fields to return the values for
     $fields = array_merge(
@@ -419,10 +424,10 @@ class ReferenceController extends AppController
     }
 
     // prepare record data for the form
-    $reference = array(
+    $item = array(
       'datasource' => $datasource,
       'referenceId' => $id, // todo: replace by "id"
-      'titleLabel' => $this->getTitleLabel($record)
+      'titleLabel' => $this->getTitleLabel($item)
     );
 
     foreach ($fields as $field) {
@@ -432,7 +437,9 @@ class ReferenceController extends AppController
         Yii::warning("No field data for field '$field'");
         continue;
       }
-      $value = $record->$field;
+
+      // get value from model
+      $value = $model->$field;
 
       // replace field separator with form separator if both exist
       $dataSeparator = isset($fieldData['separator'])
@@ -450,10 +457,10 @@ class ReferenceController extends AppController
       }
 
       // store value
-      $reference[$field] = $value;
+      $item[$field] = $value;
     }
 
-    return $reference;
+    return $item;
   }
 
   /**
@@ -509,11 +516,13 @@ class ReferenceController extends AppController
     // transform data into array
     $data = json_decode(json_encode($data), true);
     $modelClass = $this->getControlledModel($datasource);
+    $model = $modelClass::findOne($referenceId);
+    $schema = $modelClass::getSchema();
 
     // save user-supplied data
     foreach ($data as $property => $value) {
       // replace form separator with field separator
-      $fieldData = $modelClass::getSchema()->getFieldData($property);
+      $fieldData = $schema->getFieldData($property);
       $fieldSeparator = isset($fieldData['separator'])
         ? $fieldData['separator']
         : null;
@@ -523,9 +532,7 @@ class ReferenceController extends AppController
       if ($fieldSeparator && $formSeparator) {
         $value = str_replace($formSeparator, $fieldSeparator, $value);
       }
-
-      // set value
-      $this->actionUpdateItem($datasource, static::$modelType, $referenceId, $property, $value);
+      $model->$property = $value;
     }
 
     // add metadata
@@ -586,24 +593,54 @@ class ReferenceController extends AppController
   /**
    * Creates a new reference
    *
-   * @param $datasource
-   * @param $folderId
-   * @param $reftype
-   * @return string
+   * @param string $datasource
+   * @param int|string $folderId
+   * @param $data
+   * @return string Diagnostic message
+   *
    * @throws \InvalidArgumentException
+   * @throws \JsonRpc2\Exception
+   * @throws \yii\db\Exception
    */
-  public function actionCreate($datasource, $folderId, $reftype)
+  public function actionCreate($datasource, $folderId, $data )
   {
     $this->requirePermission("reference.add");
     $modelClass = $this->getControlledModel($datasource);
-    $reference = new $modelClass([
-      'reftype' => $reftype,
-      'createdBy' => $this->getActiveUser()->getUsername()
-    ]);
-    $reference->save();
 
-    $folder = static:: getFolderModel($datasource):: findOne($folderId);
+    switch( gettype( $data )){
+      case "string":
+        $data = ['reftype' => $data ];
+        break;
+      case "object":
+        $data = (array) $data;
+        break;
+      default:
+        throw new UserErrorException("Cannot create reference: invalid data.");
+    }
+    $data['createdBy'] = $this->getActiveUser()->getUsername();
 
+    // validate reference type
+    if( ! isset($data['reftype'])){
+      throw new UserErrorException("Missing field 'reftype'");
+    }
+    /** @var \app\schema\AbstractSchema $schema */
+    $schema = $modelClass::getSchema();
+    if( ! in_array( $data['reftype'], $schema->types()) ){
+      throw new UserErrorException("Cannot create reference: invalid reference type.");
+    }
+
+    // save data
+    try{
+      /** @var \app\models\Reference $reference */
+      $reference = new $modelClass($data);
+      $reference->save();
+    } catch (\yii\db\Exception $e){
+      throw new UserErrorException($e->getMessage(), null, $e);
+    }
+
+    // link with folder
+    /** @var \app\models\Folder $folder */
+    $folder = static::getFolderModel($datasource)::findOne($folderId);
     if (!$folder) {
       throw new \InvalidArgumentException("Folder #$folderId does not exist.");
     }
@@ -624,9 +661,10 @@ class ReferenceController extends AppController
       'modelId' => $reference->id
     ));
 
-    return "OK";
+    // reload model
+    $reference = $modelClass::findOne($reference->id);
+    return "Reference #$reference->id has been created.";
   }
-
 
   /**
    * Remove references. If a folder id is given, remove from that folder
@@ -669,8 +707,13 @@ class ReferenceController extends AppController
     }
 
     $this->requirePermission("reference.remove");
-    $referenceModel = $this->getControlledModel($datasource);
-    $folderModel = static::getFolderModel($datasource);
+
+    /** @var \app\models\Reference $referenceClass */
+    $referenceClass = $this->getControlledModel($datasource);
+    $folderClass = static::getFolderModel($datasource);
+
+    /** @var \app\models\Folder $folder */
+    $folder = $folderClass::findOne($folderId);
 
     //$this->debug( array($datasource, $folderId, $ids) );
 
@@ -678,7 +721,7 @@ class ReferenceController extends AppController
     $id = intval($ids[0]);
 
     // load record and count the number of links to folders
-    $reference = $referenceModel::findOne($id);
+    $reference = $referenceClass::findOne($id);
     $containedFolderIds = $reference->getReferenceFolders()->select("id")->column();
     $folderCount = count($containedFolderIds);
 
@@ -698,7 +741,7 @@ class ReferenceController extends AppController
         );
       } // confirmed
       else {
-        $referenceModel->unlinkAll("folder");
+        $referenceClass->unlinkAll("folder");
         $folderCount = 0;
       }
     } // unlink from folder if id is given.
@@ -711,10 +754,10 @@ class ReferenceController extends AppController
     // move to trash only if it was contained in one or less folders
     if ($folderCount < 2) {
       // link with trash folder
-      $trashFolder = \app\controllers\TrashController::getTrashFolder();
+      $trashFolder = TrashController::getTrashFolder();
       if ($trashFolder) $trashFolder->link("references", $reference);
 
-      $foldersToUpdate[] = $trashFolderId;
+      $foldersToUpdate[] = $trashFolder->id;
 
       // mark as deleted
       $reference->markedDeleted = 1;
@@ -724,7 +767,7 @@ class ReferenceController extends AppController
     // update reference count in source and target folders
     $foldersToUpdate = array_unique($foldersToUpdate);
     foreach ($foldersToUpdate as $fid) {
-      $folder = $folderModel::findOne($fid);
+      $folder = $folderClass::findOne($fid);
       if ($folder) {
         $folder->getReferenceCount(true);
       } else {
@@ -787,7 +830,7 @@ class ReferenceController extends AppController
       }
     }
     if (count($referencesToTrash)) {
-      $trashFolder = \app\controllers\TrashController::getTrashFolder();
+      $trashFolder = TrashController::getTrashFolder();
       if ($trashFolder) {
         foreach ($referencesToTrash as $reference) {
           $trashFolder->link("references", $reference);
@@ -816,6 +859,7 @@ class ReferenceController extends AppController
    * @param int $targetFolderId The folder to move to
    * @param int[] $ids The ids of the references to move
    * @return "OK"
+   * @throws \JsonRpc2\Exception
    */
   public function actionMove($datasource, $folderId, $targetFolderId, $ids)
   {
@@ -826,12 +870,20 @@ class ReferenceController extends AppController
     } else {
       $confirmed = false;
     }
-    $folderModel = static:: getFolderModel($datasource);
-    $sourceFolder = $folderModel:: findOne($folderId);
-    $targetFolder = $folderModel:: findOne($targetFolderId);
 
-    Validate:: isNotNull($sourceFolder, "Folder #$folderId does not exist");
-    Validate:: isNotNull($targetFolder, "Folder #$targetFolderId does not exist");
+    $referenceClass = $this->getControlledModel($datasource);
+    $folderClass = static:: getFolderModel($datasource);
+    /** @var \app\models\Folder $sourceFolder */
+    $sourceFolder = $folderClass::findOne($folderId);
+    /** @var \app\models\Folder $targetFolder */
+    $targetFolder = $folderClass::findOne($targetFolderId);
+
+    try {
+      Validate:: isNotNull($targetFolder, "Folder #$targetFolderId does not exist");
+      Validate:: isNotNull($sourceFolder, "Folder #$folderId does not exist");
+    } catch (\Exception $e) {
+      throw new UserErrorException($e->getMessage());
+    }
 
     if (!$confirmed) {
       return \lib\dialog\Confirm::create(
@@ -840,32 +892,39 @@ class ReferenceController extends AppController
           'sourceFolder' => $sourceFolder->label,
           'targetFolder' => $targetFolder->label
         ]),
+        null,
         "reference", "move", func_get_args()
       );
     } else {
-      return $this->move($references, $sourceFolder, $targetFolder);
+      $references = $referenceClass::find()->where(['in', 'id', $ids])->all();
+      return $this->move($references, $datasource, $sourceFolder, $targetFolder);
     }
   }
-
 
   /**
    * Move reference from one folder to another folder
    *
    * @param \app\models\Reference[]|int[] $references either an array of reference
    *    objects or an array of the ids of that object
+   *
    * @param \app\models\Folder $sourceFolder
    * @param \app\models\Folder $targetFolder
    * @return string "OK"
    */
   public function move(
     array $references,
+    $datasource,
     \app\models\Folder $sourceFolder,
     \app\models\Folder $targetFolder
   )
   {
+    $ids = [];
     foreach ($references as $reference) {
       if (is_numeric($reference)) {
-        $reference = $this->getControlledModel()->findOne($reference);
+        $reference = $this->getRecordById($datasource, $reference);
+        $ids[] = $reference;
+      } else {
+        $ids[] = $reference->id;
       }
       if (!($reference instanceof \app\models\Reference)) {
         Yii::warning("Skipping invalid reference '$reference'");
@@ -879,6 +938,7 @@ class ReferenceController extends AppController
     $targetFolder->getReferenceCount(true);
 
     // display change on connected clients
+
     if (count($ids)) {
       $this->broadcastClientMessage("reference.removeRows", [
         'datasource' => $datasource,
@@ -898,6 +958,7 @@ class ReferenceController extends AppController
    * @param $targetFolderId
    * @param $ids
    * @return string "OK"
+   * @throws \JsonRpc2\Exception
    */
   public function actionCopy($datasource, $folderId, $targetFolderId, $ids)
   {
@@ -911,8 +972,12 @@ class ReferenceController extends AppController
     $sourceFolder = $folderModel:: findOne($folderId);
     $targetFolder = $folderModel:: findOne($targetFolderId);
 
-    Validate:: isNotNull($sourceFolder, "Folder #$folderId does not exist");
-    Validate:: isNotNull($targetFolder, "Folder #$targetFolderId does not exist");
+    try {
+      Validate:: isNotNull($sourceFolder, "Folder #$folderId does not exist");
+      Validate:: isNotNull($targetFolder, "Folder #$targetFolderId does not exist");
+    } catch (\Exception $e) {
+      throw new UserErrorException($e->getMessage());
+    }
 
     if (!$confirmed) {
       return \lib\dialog\Confirm::create(
@@ -921,10 +986,11 @@ class ReferenceController extends AppController
           'sourceFolder' => $sourceFolder->label,
           'targetFolder' => $targetFolder->label
         ]),
+        null,
         "reference", "copy", func_get_args()
       );
     } else {
-      return $this->copy($references, $sourceFolder, $targetFolder);
+      return $this->copy($ids, $sourceFolder, $targetFolder);
     }
   }
 
@@ -1007,7 +1073,9 @@ class ReferenceController extends AppController
   public function actionItemHtml($datasource, $id)
   {
     $modelClass = $this->getControlledModel($datasource);
+    /** @var \app\schema\AbstractSchema $schema */
     $schema = $modelClass::getSchema();
+    /** @var \app\models\Reference $reference */
     $reference = $modelClass::findOne($id);
     $reftype = $reference->reftype;
 

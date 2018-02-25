@@ -46,6 +46,7 @@ use app\models\Folder;
  * @property string $price
  * @property string $publisher
  * @property string $school
+ * @property \lib\schema\BibtexSchema $schema
  * @property string $series
  * @property string $size
  * @property string $title
@@ -174,10 +175,10 @@ class Reference extends BaseModel
   /**
    * @return \yii\db\ActiveQuery
    */ 
-  protected function getReferenceFolders()
+  public function getReferenceFolders()
   {
     Folder_Reference::setDatasource(static::getDatasource());
-    return $this->hasMany(Folder_Reference::className(), ['ReferenceId' => 'id'] );
+    return $this->hasMany(Folder_Reference::class, ['ReferenceId' => 'id'] );
   }  
 
   /**
@@ -186,7 +187,7 @@ class Reference extends BaseModel
   public function getFolders()
   {
     Folder::setDatasource(static::getDatasource());
-    return $this->hasMany(Folder::className(), ['id' => 'FolderId'])->via('referenceFolders');
+    return $this->hasMany(Folder::class, ['id' => 'FolderId'])->via('referenceFolders');
   }
 
 
@@ -196,13 +197,13 @@ class Reference extends BaseModel
 
   /**
    * Returns the schema object used by this model
-   * @return lib\schema\BibtexSchema
+   * @return app\schema\BibtexSchema
    */
-	static function getSchema()
+	public static function getSchema()
 	{
     static $schema = null;
     if ( is_null( $schema ) ){
-      $schema = new \lib\schema\BibtexSchema();
+      $schema = new \app\schema\BibtexSchema();
     }
 	  return $schema;
 	}

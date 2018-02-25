@@ -346,6 +346,7 @@ class AppController extends \JsonRpc2\Controller
    * @param string $datasource
    * @return string
    * @throws UserErrorException
+   * @todo rename to getControlledModelClass
    */
   public function getControlledModel( $datasource )
   {

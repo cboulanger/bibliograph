@@ -71,9 +71,9 @@ class Datasource extends BaseModel
       [['created', 'modified'], 'safe'],
       [['port', 'active', 'readonly', 'hidden'], 'integer'],
       [['namedId', 'username', 'password'], 'string', 'max' => 50],
-      [['title', 'schema', 'database'], 'string', 'max' => 100],
+      [['title', 'schema', 'database','prefix'], 'string', 'max' => 100],
       [['description', 'resourcepath'], 'string', 'max' => 255],
-      [['type', 'encoding', 'prefix'], 'string', 'max' => 20],
+      [['type', 'encoding'], 'string', 'max' => 20],
       [['host'], 'string', 'max' => 200],
       [['namedId'], 'unique'],
     ];

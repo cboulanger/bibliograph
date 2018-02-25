@@ -434,14 +434,22 @@ class User extends BaseModel implements IdentityInterface
    */
   public function getAccessibleDatasourceNames()
   {
+    // admin has access to all datasources except hidden ones
+    if( $this->hasRole("admin")){
+      return Datasource::find()
+        ->select('namedId')
+        ->where(['hidden'=>0])
+        ->column();
+    }
+    // others have only limited access
     $datasourceNames = [];
-    $myDatasources = $this->getDatasources()->all();
+    $myDatasources = $this->getDatasources()->where(['hidden'=>0,'active'=>1])->all();
     if( is_array($myDatasources) ) {
       foreach( $myDatasources as $o ) {
         $datasourceNames[] = $o->namedId;
       }
     }
-    $groups = $this->getGroups()->all();
+    $groups = $this->getGroups()->where(['active'=>1])->all();
     if( is_array($groups) ) {
       foreach( $groups as $group){
         $datasourceNames = array_merge( $datasourceNames, $group->getDatasourceNames());
@@ -451,7 +459,7 @@ class User extends BaseModel implements IdentityInterface
         }
       }
     }
-    $roles = $this->getRoles()->all();
+    $roles = $this->getRoles()->where(['active'=>1])->all();
     if( is_array($roles) ) {
       foreach( $roles as $role){
         $datasourceNames = array_merge( $datasourceNames, $role->getDatasourceNames());

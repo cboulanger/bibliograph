@@ -42,7 +42,6 @@ class DatasourceController extends AppController
     // @tod validate input
     $datasource = Yii::$app->datasourceManager->create($namedId);
     $datasource->createModelTables();
-    Yii::$app->config->addPreference( "datasource.$namedId.fields.exclude", []);
     return "Datasource '$namedId' has been created";
   }
 
