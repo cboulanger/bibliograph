@@ -8,20 +8,19 @@
 - [x] Update docs to allow test installation at Humboldt-University
 - [x] Re-implement datasource restrictions and access check
 - [x] Re-implement user error handling: New user error without stack trace, alert to user and log it
-- [ ] Re-implement ACL Tool
+- [x] Re-implement ACL Tool
+- [x] Re-implement Datasource Schemas
+- [ ] Re-implement Client UI updates via events (e.g. in editor)
 - [ ] Re-implement cql search
-- [ ] Re-implement Datasource Schemas, needed to create datasource types by user input
 - [ ] Re-implement Remove/Move/Copy references
 - [ ] Re-implement Add/Remove/Move/Copy folders
 - [ ] Re-implement Export
-- [ ] Tests: Make Travis ~~great~~ work again
 - [ ] Add distribution mechanism
-
+- [ ] Tests: Make Travis ~~great~~ work again
 
 ## v3.0.0-beta 
 
 ### Priority: high
-- [ ] Add datasource access control when getting the datasource, not in the service methods
 - [ ] Re-implement translation (http://www.yiiframework.com/doc-2.0/guide-tutorial-i18n.html)
 - [ ] Re-implement Z3950 import as a Yii2 module
 

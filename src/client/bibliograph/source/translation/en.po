@@ -114,7 +114,7 @@ msgstr ""
 msgid "The application is currently in a read-only state. Only the administrator can log in."
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:176
+#: bibliograph.ui.window.AccessControlTool:185
 msgid "Please wait ..."
 msgstr ""
 
@@ -142,15 +142,15 @@ msgstr ""
 msgid "Access control tool"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:153
+#: bibliograph.ui.window.AccessControlTool:162
 msgid "New User"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:169
+#: bibliograph.ui.window.AccessControlTool:178
 msgid "New Datasource"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:181
+#: bibliograph.ui.window.AccessControlTool:190
 msgid "Help"
 msgstr ""
 
@@ -158,19 +158,19 @@ msgstr ""
 msgid "Export to filesystem"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:191
+#: bibliograph.ui.window.AccessControlTool:200
 msgid "Exit"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:482
+#: bibliograph.ui.window.AccessControlTool:491
 msgid "Please enter the id of the new '%1'-Object"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:283
+#: bibliograph.ui.window.AccessControlTool:292
 msgid "Do you really want to delete '%1'?"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:531
+#: bibliograph.ui.window.AccessControlTool:540
 msgid "Loading data ..."
 msgstr ""
 
@@ -178,23 +178,23 @@ msgstr ""
 msgid "Please wait..."
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:349
+#: bibliograph.ui.window.AccessControlTool:358
 msgid "Edited element"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:399
+#: bibliograph.ui.window.AccessControlTool:408
 msgid "Link"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:412
+#: bibliograph.ui.window.AccessControlTool:421
 msgid "Unlink"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:437
+#: bibliograph.ui.window.AccessControlTool:446
 msgid "Linkable items"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:507
+#: bibliograph.ui.window.AccessControlTool:516
 msgid "Do you really want to delete the objects '%1'?"
 msgstr ""
 
@@ -718,6 +718,10 @@ msgstr ""
 msgid "No selectable items"
 msgstr ""
 
-#: bibliograph.ui.window.AccessControlTool:443
+#: bibliograph.ui.window.AccessControlTool:452
 msgid "No linkable items"
+msgstr ""
+
+#: dialog.Form:370
+msgid "Value is invalid"
 msgstr ""
