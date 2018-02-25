@@ -19,21 +19,17 @@ before_install:
 #  - if php -i | grep yaz --quiet && echo '<?php exit(function_exists("yaz_connect")?0:1);' | php ; then echo "YAZ is installed"; else echo "YAZ installation failed"; exit 1; fi;
 
 install:
-  # npm install has already run, installing dependencies
-  # - echo "Installing qooxdoo..."
-  # - pushd src/vcslib
-  # - bash install.sh
-  # - popd
-
+  - echo "travis_fold:start:npm_install"
+  - echo "Installing dependencies..."
+  - rm package-lock.json
+  - rm -rf node_modules
+  - npm install npm@latest -g
+  - npm install
+  - npm link mocha
+  - echo "travis_fold:end:npm_install"
   - echo "Building Bibliograph..."
   - pushd src/client/bibliograph
   - qx compile ../../../build-env/travis/compile.json --all-targets 
-  - popd
-
-  - echo "Setting up backend..."
-  - pushd src/server
-  - composer install
-  - ln -s vendor/bower-assets vendor/bower
   - popd
   - echo "Installation scripts finished successufully."
 
@@ -41,11 +37,4 @@ before_script:
   - mysql -e 'CREATE DATABASE IF NOT EXISTS tests;'
   
 script:
-  - echo "travis_fold:start:npm_install"
-  - rm package-lock.json
-  - rm -rf node_modules
-  - npm install npm@latest -g
-  - npm install
-  - echo "travis_fold:end:npm_install"
-  - npm link mocha
   - npm test
