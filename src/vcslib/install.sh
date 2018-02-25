@@ -6,16 +6,19 @@ declare -a arr=(
   "qooxdoo/qooxdoo-compiler"
   "cboulanger/yii2-json-rpc-2.0"
   "cboulanger/raptor-client"
+  "cboulanger/qx-contrib-Dialog"
 )
 for repo in "${arr[@]}"
 do
   dir=$(basename $repo)
   if [ -d "$dir" ]; then
+    echo "Updating $repo..."
     cd $dir
     git pull
-    npm install
+    [[ -f package.json ]] && npm install
     cd ..
   else
+    echo "Checking out $repo..."
     if [[ "$OSTYPE" == "darwin"* ]]; then
       # if on mac, assume dev workstation with git credentials
       uri="git@github.com:$repo.git"
@@ -25,7 +28,9 @@ do
       uri="https://github.com/$repo.git"
       git clone $uri --depth 1
     fi
-    npm install
+    cd $dir
+    [[ -f package.json ]] && npm install
+    cd ..
   fi
 done
 

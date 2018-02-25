@@ -22,11 +22,16 @@ if [ $? -eq 1 ]; then
 fi
 echo "Started Bibliograph test server..."
 echo
+
+# Test new installation
 echo "Creating empty database ..."
 mysql -uroot -e "DROP DATABASE tests; CREATE DATABASE tests;"
 echo "Calling application setup service ..."
 $CPT_CMD run api AASetupControllerCest --env setup $CPT_ARGS || exit $?
+$CPT_CMD run api AASetupControllerCest --env testing $CPT_ARGS || exit $?
 echo
+
+# Test for production upgrade
 echo "Upgrading from 3.0.0-alpha to 3.0.0..."
 $YII_CMD migrate/create app\\migrations\\schema\\create_post_table --interactive=0
 $CPT_CMD run api AASetupControllerCest --env upgradev3 $CPT_ARGS
@@ -37,12 +42,15 @@ if [ "$exitcode" -ne "0" ]; then
    exit $exitcode;
 fi
 echo
+
+# Test upgrade from v2 version
 echo "Recreating empty database and importing Bibliograph v2 data..."
 mysql -uroot -e "DROP DATABASE tests;"
 mysql -uroot -e "CREATE DATABASE tests;"
 mysql -uroot < test/data/bibliograph2.sql
 pushd $SERVER_PATH > /dev/null
 $CPT_CMD run api AASetupControllerCest --env upgradev2 $CPT_ARGS || exit $?
+$CPT_CMD run api AASetupControllerCest --env testing $CPT_ARGS || exit $?
 echo
 echo "Cleaning up database ..."
 mysql -uroot -e "DROP DATABASE tests;"
