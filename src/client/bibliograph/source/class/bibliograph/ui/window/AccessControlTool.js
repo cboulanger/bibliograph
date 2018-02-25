@@ -89,7 +89,7 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     
     /*
      ---------------------------------------------------------------------------
-        STORES
+        STORES & SERVICES
      ---------------------------------------------------------------------------
      */
   
@@ -136,6 +136,15 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
       m.setSender(e.getTarget());
       bus.dispatch(m);
     });
+
+    bibliograph._actRpcSendProxy = ( method, params, callback) => {
+      this.debug(arguments);
+      this.getApplication().getRpcClient("access-config").send(method,params)
+      .then((response)=>{
+        this.debug("Server response: " + response);
+        callback(response);
+      });
+    };
     
     /*
     ---------------------------------------------------------------------------
