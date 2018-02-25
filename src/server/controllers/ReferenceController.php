@@ -115,17 +115,17 @@ class ReferenceController extends AppController
     }
 
     // cql
-    if (false /* not implemented */) { // isset ( $query->cql ) ){
-
-      $cql = new Query;
-      try {
-        $q = $cql->addQueryConditions($clientQuery, $serverQuery, $modelClass);
-      } catch (\Exception $e) {
-        throw new UserErrorException($e->getMessage());
-      }
-      $q->where['markedDeleted'] = false;
-      return $q;
-    }
+//    if ( isset ( $query->cql ) ){
+//
+//      $cql = new Query;
+//      try {
+//        $q = $cql->addQueryConditions($clientQuery, $serverQuery, $modelClass);
+//      } catch (\Exception $e) {
+//        throw new UserErrorException($e->getMessage());
+//      }
+//      $q->where['markedDeleted'] = false;
+//      return $q;
+//    }
 
     throw new \Exception(Yii::t('app', "No recognized query format in request."));
   }
@@ -330,7 +330,7 @@ class ReferenceController extends AppController
       // setup autocomplete data
       if (isset($formData[$field]['autocomplete'])) {
         $formData[$field]['autocomplete']['service'] = Yii::$app->controller->id;
-        $formData[$field]['autocomplete']['method'] = "getAutoCompleteData";
+        $formData[$field]['autocomplete']['method'] = "autocomplete";
         $formData[$field]['autocomplete']['params'] = array($datasource, $field);
       }
 
@@ -427,7 +427,7 @@ class ReferenceController extends AppController
     $item = array(
       'datasource' => $datasource,
       'referenceId' => $id, // todo: replace by "id"
-      'titleLabel' => $this->getTitleLabel($item)
+      'titleLabel' => $this->getTitleLabel($model)
     );
 
     foreach ($fields as $field) {
@@ -475,7 +475,8 @@ class ReferenceController extends AppController
     $modelClass = $this->getControlledModel($datasource);
     $fieldData = $modelClass::getSchema()->getFieldData($field);
     $separator = $fieldData['separator'];
-    $suggestionValues = $modelClass:: select($field)
+    $suggestionValues = $modelClass::find()
+      ->select($field)
       ->where(["like", $field, $input])
       ->column();
 
@@ -516,6 +517,7 @@ class ReferenceController extends AppController
     // transform data into array
     $data = json_decode(json_encode($data), true);
     $modelClass = $this->getControlledModel($datasource);
+    /** @var \app\models\Reference $model */
     $model = $modelClass::findOne($referenceId);
     $schema = $modelClass::getSchema();
 
@@ -534,32 +536,30 @@ class ReferenceController extends AppController
       }
       $model->$property = $value;
     }
-
-    // add metadata
-    $modelClass = $this->getControlledModel($datasource);
-    $record = $modelClass::findOne($referenceId);
-
     // modified by
-    if ($modelClass::hasAttribute('modifiedBy')) {
-      $record->modifiedBy = $this->getActiveUser()->getUsername();
-      $record->save();
+    if ($model->hasAttribute('modifiedBy')) {
+      $model->modifiedBy = $this->getActiveUser()->getUsername();
     }
 
     // citation key
-    if (!trim($record->citekey) and
-      $record->creator and $record->year and $record->title) {
-      $newCitekey = $record->computeCiteKey();
-      $data = array(
+    if ( $model->hasAttribute('citekey') and !trim($model->citekey) and
+      $model->creator and $model->year and $model->title) {
+      $newCitekey = $model->computeCiteKey();
+      $data = [
         'datasource' => $datasource,
         'modelType' => "reference",
         'modelId' => $referenceId,
-        'data' => array("citekey" => $newCitekey)
-      );
+        'data' => ["citekey" => $newCitekey]
+      ];
       $this->broadcastClientMessage("bibliograph.fieldeditor.update", $data);
-      $record->citekey = $newCitekey;
-      $record->save();
+      $model->citekey = $newCitekey;
     }
-    return "OK";
+    try {
+      $model->save();
+    } catch (\yii\db\Exception $e) {
+      throw new UserErrorException($e->getMessage(),null, $e);
+    }
+    return "Updated reference #$referenceId";
   }
 
   /**
@@ -570,12 +570,9 @@ class ReferenceController extends AppController
    */
   public function actionListField($datasource, $field)
   {
-    $values = static
-      :: getControlledModel($datasource)
-      :: select($field)
-      ->column();
-
-    $result = array();
+    $modelClass = $this->getControlledModel($datasource);
+    $values = $modelClass::find()->select($field)->column();
+    $result = [];
     foreach ($values as $value) {
       $value = trim($value);
       if ($value) {
@@ -588,7 +585,6 @@ class ReferenceController extends AppController
     }
     return $result;
   }
-
 
   /**
    * Creates a new reference

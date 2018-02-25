@@ -47,3 +47,10 @@ if ( ! defined("ACCESS_TOKEN_LIFETIME") )
  */
 defined('ACCESS_SALT_LENGTH') or define('ACCESS_SALT_LENGTH', 9);
 
+/**
+ * The character to separate values in a database field
+ * @todo move into preference
+ */
+defined('BIBLIOGRAPH_VALUE_SEPARATOR') or define('BIBLIOGRAPH_VALUE_SEPARATOR', ";");
+
+
