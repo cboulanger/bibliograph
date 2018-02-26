@@ -184,9 +184,9 @@ qx.Class.define("qcl.io.JsonRpcClient", {
         this.warn("Invalid event property in ServiceResult DTO!");
         return;
       }
-      result.events.forEach(function(event) {
-        qx.event.message.Bus.dispatchByName( event.name, event.data)
-      }, this);
+      result.events.forEach(event => {
+        qx.event.message.Bus.dispatchByName( event.name, event.data);
+      });
       return result.data;
     }
 

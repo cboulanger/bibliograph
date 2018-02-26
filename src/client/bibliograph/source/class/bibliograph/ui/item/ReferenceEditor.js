@@ -138,12 +138,15 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
 
     /*
      * listen for server messages to update single form fields
-     * todo: I cannot remember what this is for - remove?
      */
     qx.event.message.Bus.getInstance().subscribe("bibliograph.fieldeditor.update", function(e)
     {
       var data = e.getData();
-      var messageIsForMe = data.datasource == this.getDatasource() && data.modelType == this.getModelType() && data.modelId == this.getReferenceId();
+      var messageIsForMe =
+          data.datasource == this.getDatasource()
+          && data.modelType == this.getModelType()
+          && data.modelId == this.getReferenceId();
+      
       if (messageIsForMe)
       {
         var filter = [];

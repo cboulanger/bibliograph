@@ -22,7 +22,6 @@ namespace app\controllers;
 
 use app\models\Datasource;
 use function GuzzleHttp\debug_resource;
-use lib\Exception;
 use lib\exceptions\UserErrorException;
 use lib\schema\cql\Query;
 use lib\Validate;

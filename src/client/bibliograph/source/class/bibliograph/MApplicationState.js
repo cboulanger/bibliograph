@@ -209,11 +209,12 @@ qx.Mixin.define("bibliograph.MApplicationState", {
      */
     _applyQuery: function(value, old) {
       this.getStateManager().setState("query", value);
+      let searchbox = this.getWidgetById("bibliograph/searchbox");
       if (value && this.getDatasource()) {
-        this.getWidgetById("bibliograph/searchbox").setValue(value);
+        if ( searchbox ) searchbox.setValue(value);
       } else {
         this.getStateManager().removeState("query");
-        this.getWidgetById("bibliograph/searchbox").setValue("");
+        if ( searchbox ) searchbox.setValue("");
       }
     },
 

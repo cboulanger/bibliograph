@@ -115,7 +115,10 @@ qx.Class.define("bibliograph.Setup", {
 
       // restore app state 
       this.restoreApplicationState();
-
+      
+      // initialize subscribers to messages that come from server
+      this.initSubscribers();
+      
       // message transport
       //this.startPolling();
 
@@ -241,14 +244,14 @@ qx.Class.define("bibliograph.Setup", {
       }, this);
 
       // server message to set model type and id
-      bus.subscribe("bibliograph.setModel", function(e){
+      bus.subscribe("bibliograph.setModel", e => {
         var data = e.getData();
-        if (data.datasource == this.getDatasource())
-        {
-          this.setModelType(data.modelType);
-          this.setModelId(data.modelId);
+        var app = this.getApplication();
+        if ( data.datasource == app.getDatasource()) {
+          app.setModelType(data.modelType);
+          app.setModelId(data.modelId);
         }
-      }, this);
+      });
 
       // used by the bibliograph.export.exportReferencesHandleDialogData
       bus.subscribe("window.location.replace", function(e){
@@ -259,13 +262,14 @@ qx.Class.define("bibliograph.Setup", {
       // reload the main list view
       bus.subscribe("mainListView.reload", function(e){
         var data = e.getData();
-        if (data.datasource !== this.getDatasource())return;
-        this.getWidgetById("bibliograph/mainListView").reload();
+        var app = this.getApplication();
+        if (data.datasource !== app.getDatasource())return;
+        app.getWidgetById("bibliograph/mainListView").reload();
       }, this);
 
       // show the login dialog
       bus.subscribe("loginDialog.show", function(){
-        this.getWidgetById("bibliograph/loginDialog").show();
+        this.getApplication().getWidgetById("bibliograph/loginDialog").show();
       }, this);
     },  
 
