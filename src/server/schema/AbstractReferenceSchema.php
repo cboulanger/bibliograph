@@ -20,6 +20,7 @@
 
 namespace app\schema;
 
+use \InvalidArgumentException;
 use Yii;
 use lib\schema\ISchema;
 
@@ -48,7 +49,7 @@ abstract class AbstractReferenceSchema extends yii\base\BaseObject implements IS
    * An array of fields that are part of the data
    * regardless of the record type and are appended
    * to the record-specific fields
-   * @var unknown_type
+   * @var array
    */
   protected $defaultFieldsAfter = array();
 
@@ -164,9 +165,8 @@ abstract class AbstractReferenceSchema extends yii\base\BaseObject implements IS
    * @internal param array $types
    * @return void
    */
-  public function addFields( $fields )
+  public function addFields( array $fields )
   {
-    qcl_assert_array( $fields );
     foreach( $fields as $name => $data )
     {
       $this->field_data[$name] = $data;
@@ -193,9 +193,8 @@ abstract class AbstractReferenceSchema extends yii\base\BaseObject implements IS
    * @param $fields
    * @return void
    */
-  public function addToTypeFields( $fields )
+  public function addToTypeFields( array $fields )
   {
-    qcl_assert_array( $fields );
     foreach ( $this->types() as $type )
     {
       $this->type_fields[$type] = array_unique( array_merge(
@@ -241,7 +240,7 @@ abstract class AbstractReferenceSchema extends yii\base\BaseObject implements IS
    * @param string $field
    * @param string|null $reftype Optional reference type if there are different
    * labels for different reference types
-   * @throws LogicException
+   * @throws \Exception
    * @return string
    */
   public function getFieldLabel( $field, $reftype=null )
@@ -264,7 +263,7 @@ abstract class AbstractReferenceSchema extends yii\base\BaseObject implements IS
       }
       else
       {
-        throw new LogicException("Field '$field' has no label information!" );
+        throw new \Exception("Field '$field' has no label information!" );
       }
     }
 
@@ -286,7 +285,7 @@ abstract class AbstractReferenceSchema extends yii\base\BaseObject implements IS
   /**
    * Returns the label for a reference type
    * @param string $reftype
-   * @throws LogicException
+   * @throws \Exception
    * @return string
    */
   public function getTypeLabel( $reftype )
@@ -294,7 +293,7 @@ abstract class AbstractReferenceSchema extends yii\base\BaseObject implements IS
     $data = $this->getTypeData( $reftype );
     if ( ! isset( $data['label'] ) )
     {
-      throw new LogicException("Type '$reftype' has no label information!" );
+      throw new \Exception("Type '$reftype' has no label information!" );
     }
     return $data['label'];
   }
@@ -330,7 +329,7 @@ abstract class AbstractReferenceSchema extends yii\base\BaseObject implements IS
    */
   public function getIndexMap()
   {
-    static $indexMap = null;
+    static $indexMap = [];
     if ( $indexMap === null )
     {
       foreach( $this->field_data as $field => $data )
@@ -382,7 +381,7 @@ abstract class AbstractReferenceSchema extends yii\base\BaseObject implements IS
     }
     else
     {
-      throw new LogicException("'$index' is not a valid index");
+      throw new InvalidArgumentException("'$index' is not a valid index");
     }
   }
 }

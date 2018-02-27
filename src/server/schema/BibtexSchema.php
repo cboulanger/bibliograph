@@ -21,6 +21,7 @@
 namespace app\schema;
 
 use Yii;
+use \InvalidArgumentException;
 
 /**
  * Class containing data on the BibTex Format
@@ -37,17 +38,17 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
    * An array of fields that are part of the data
    * regardless of the record type and are prepended
    * to the record-specific fields
-   * @var unknown_type
+   * @var array
    */
-  protected $defaultFieldsBefore = array('reftype','citekey');
+  protected $defaultFieldsBefore = ['reftype','citekey'];
 
   /**
    * An array of fields that are part of the data
    * regardless of the record type and are appended
    * to the record-specific fields
-   * @var unknown_type
+   * @var array
    */
-  protected $defaultFieldsAfter = array('keywords','abstract','note','contents');
+  protected $defaultFieldsAfter = ['keywords','abstract','note','contents'];
 
 
   /**
@@ -55,14 +56,14 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
    * regardless of record type
    * @var array
    */
-  protected $defaultFormFields = array( 'reftype','citekey' );
+  protected $defaultFormFields = ['reftype','citekey'];
 
   /**
    * The reference types with their fields
    * @var array
    */
-  protected $type_fields =  array (
-    'article' => array (
+  protected $type_fields =  [
+    'article' => [
       'author',
       'year',
       'title',
@@ -74,8 +75,8 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
       'pages',
       'translator',
       'url'
-    ),
-    'book' => array (
+    ],
+    'book' => [
       'author',
       'year',
       'title',
@@ -89,8 +90,8 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
       'volume',
       'isbn',
       'lccn'
-    ),
-    'booklet' => array (
+    ],
+    'booklet' => [
       'author',
       'year',
       'title',
@@ -102,8 +103,8 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
       'volume',
       'isbn',
       'lccn'
-    ),
-    'collection' => array (
+    ],
+    'collection' => [
       'author',
       'year',
       'title',
@@ -116,16 +117,16 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
       'url',
       'isbn',
       'lccn'
-     ),
+    ],
     // non-standard use to create conference paper type
-    'conference' => array (
+    'conference' => [
       'author',
       'year',
       'title',
       'booktitle',
       'url'
-     ),
-     'inbook' => array (
+    ],
+     'inbook' => [
       'author',
       'year',
       'title',
@@ -139,8 +140,8 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
       'volume',
       'translator',
       'url'
-    ),
-    'incollection'  => array (
+     ],
+    'incollection'  => [
       'author',
       'year',
       'title',
@@ -154,8 +155,8 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
       'series',
       'volume',
       'url'
-    ),
-    'inproceedings' => array (
+    ],
+    'inproceedings' => [
       'author',
       'year',
       'title',
@@ -169,8 +170,8 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
       'series',
       'volume',
       'url'
-    ),
-    'journal' => array (
+    ],
+    'journal' => [
       'author',
       'year',
       'title',
@@ -184,8 +185,8 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
       'url',
       'issn',
       'lccn'
-    ),
-    'manual' => array (
+    ],
+    'manual' => [
       'author',
       'year',
       'title',
@@ -195,8 +196,8 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
       'edition',
       'url',
       'lccn'
-    ),
-    'mastersthesis' => array (
+    ],
+    'mastersthesis' => [
       'author',
       'year',
       'title',
@@ -206,8 +207,8 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
       'address',
       'url',
       'lccn'
-    ),
-    'misc' => array (
+    ],
+    'misc' => [
       'author',
       'year',
       'title',
@@ -216,8 +217,8 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
       'date',
       'url',
       'lccn'
-    ),
-    'phdthesis' => array (
+    ],
+    'phdthesis' => [
       'author',
       'year',
       'title',
@@ -226,8 +227,8 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
       'address',
       'url',
       'lccn'
-    ),
-    'proceedings' => array (
+    ],
+    'proceedings' => [
       'author',
       'year',
       'title',
@@ -240,8 +241,8 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
       'volume',
       'url',
       'lccn'
-    ),
-    'techreport' => array (
+    ],
+    'techreport' => [
       'author',
       'year',
       'title',
@@ -253,21 +254,20 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
       'month',
       'url',
       'lccn'
-    ),
-    'unpublished' => array (
+    ],
+    'unpublished' => [
       'author',
       'year',
       'title',
       'date',
       'url'
-     )
-    );
+    ]
+  ];
 
 
   /**
    * Constructor. Overwrites the public variables so that the translation
    * features can be used
-   * @return \bibliograph_schema_BibtexSchema
    */
   public function __construct()
   {
@@ -276,528 +276,528 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
      * The reference type fields
      * @var array
      */
-    $this->type_data = array (
-        'article' => array (
-          'label'         => _('Article'),
+    $this->type_data = [
+        'article' => [
+          'label'         => Yii::t('app', 'Article'),
           'bibtex'        => true,
           'csl'           => 'article-journal'
-        ),
-        'book' => array (
-          'label'         => _('Book (Monograph)'),
+        ],
+        'book' => [
+          'label'         => Yii::t('app', 'Book (Monograph)'),
           'bibtex'        => true,
           'csl'           => 'book'
-        ),
-        'booklet' => array (
-          'label'         => _('Booklet'),
+        ],
+        'booklet' => [
+          'label'         => Yii::t('app', 'Booklet'),
           'bibtex'        => true,
           'csl'           => 'pamphlet'
-        ),
+        ],
         // non-standard
-        'collection' => array (
-          'label'         => _('Book (Edited)'),
+        'collection' => [
+          'label'         => Yii::t('app', 'Book (Edited)'),
           'bibtex'        => false,
           'csl'           => 'book'
-        ),
+        ],
         // non-standard use: normally same as 'proceedings'
-        'conference' => array (
-          'label'         => _('Conference Paper'),
+        'conference' => [
+          'label'         => Yii::t('app', 'Conference Paper'),
           'bibtex'        => true,
           'csl'           => 'paper-conference'
-         ),
-        'inbook' => array (
-          'label'         => _('Book Chapter'),
+        ],
+        'inbook' => [
+          'label'         => Yii::t('app', 'Book Chapter'),
           'bibtex'        => true,
           'csl'           => 'chapter'
-        ),
+        ],
         // non-standard
-        'incollection'  => array (
-          'label'         => _('Chapter in Edited Book'),
+        'incollection'  => [
+          'label'         => Yii::t('app', 'Chapter in Edited Book'),
           'bibtex'        => true,
           'csl'           => 'chapter'
-        ),
-        'inproceedings' => array (
-          'label'         => _('Paper in Conference Proceedings'),
+        ],
+        'inproceedings' => [
+          'label'         => Yii::t('app', 'Paper in Conference Proceedings'),
           'bibtex'        => true,
           'csl'           => 'chapter'
-        ),
+        ],
         // non-standard
-        'journal' => array (
-          'label'         => _('Journal Issue'),
+        'journal' => [
+          'label'         => Yii::t('app', 'Journal Issue'),
           'bibtex'        => false,
           'csl'           => '???' // => type: periodical?
-          ),
+        ],
         // non-standard use
-        'manual' => array (
-          'label'         => _('Handbook'),
+        'manual' => [
+          'label'         => Yii::t('app', 'Handbook'),
           'bibtex'        => true,
           'csl'           => 'book'
-        ),
-        'mastersthesis' => array (
-          'label'         => _('Master\'s Thesis'),
+        ],
+        'mastersthesis' => [
+          'label'         => Yii::t('app', 'Master\'s Thesis'),
           'bibtex'        => true,
           'csl'           => 'thesis'
-          ),
-        'misc' => array (
-          'label'         => _('Miscellaneous'),
+        ],
+        'misc' => [
+          'label'         => Yii::t('app', 'Miscellaneous'),
           'bibtex'        => true,
           'csl'           => 'manuscript' // ????
-        ),
-        'phdthesis' => array (
-          'label'         => _('Ph.D. Thesis'),
+        ],
+        'phdthesis' => [
+          'label'         => Yii::t('app', 'Ph.D. Thesis'),
           'bibtex'        => true,
           'csl'           => 'thesis'
-        ),
-        'proceedings' => array (
-          'label'         => _('Conference Proceedings'),
+        ],
+        'proceedings' => [
+          'label'         => Yii::t('app', 'Conference Proceedings'),
           'bibtex'        => true,
           'csl'           => 'book'
-        ),
-        'techreport' => array (
-          'label'         => _('Report/Working Paper'),
+        ],
+        'techreport' => [
+          'label'         => Yii::t('app', 'Report/Working Paper'),
           'bibtex'        => true,
           'csl'           => 'report'
-        ),
-        'unpublished' => array (
-          'label'         => _('Unpublished Manuscript'),
+        ],
+        'unpublished' => [
+          'label'         => Yii::t('app', 'Unpublished Manuscript'),
           'bibtex'        => true,
           'csl'           => 'manuscript'
-        )
-      );
+        ]
+    ];
 
       /**
        * all fields and their metadata
        */
-      $this->field_data = array (
+      $this->field_data = [
 
         /*
          * the reference type
          */
-        'reftype' => array(
-          'label'     => _('Bibliographic Type'),
+        'reftype' => [
+          'label'     => Yii::t('app', 'Bibliographic Type'),
           'type'      => 'string',
           'csl'       => 'type',
           'index'     => 'reftype',
           'indexEntry' => false,
-          'formData'  => array(
+          'formData'  => [
             'type'  => 'selectbox',
             'label' => Yii::t('app', 'Reference Type' ),
-            'bindStore' => array(
+            'bindStore' => [
               'serviceName'   => 'reference',
               'serviceMethod' => 'types',
-              'params'        => array( '$datasource' )
-            )
-          )
-        ),
+              'params'        => ['$datasource']
+            ]
+          ]
+        ],
 
         /*
          * the citation key
          */
-        'citekey' => array(
-          'label'     => _('Citation Key'),
+        'citekey' => [
+          'label'     => Yii::t('app', 'Citation Key'),
           'type'      => 'string',
           'csl'       => 'id',
           'index'     => 'Citation key',
           'indexEntry' => false,
-          'formData'  => array(
+          'formData'  => [
             'type'    => 'textfield',
-            'label'   => _('Citation key')
-          )
-        ),
-        'abstract' => array(
-          'label'     => _('Abstract'),
+            'label'   => Yii::t('app', 'Citation key')
+          ]
+        ],
+        'abstract' => [
+          'label'     => Yii::t('app', 'Abstract'),
           'type'      => 'string',
           'indexEntry' => false,
           'bibtex'    => true,
-          'formData'  => array(
+          'formData'  => [
             'type'      => 'textarea',
             'lines'     => 3
-          ),
+          ],
           'csl'       => 'abstract',
           'index'     => 'Abstract'
-        ),
+        ],
         // this is used for publisher-place or for author address
-        'address' => array(
-          'label'     => _('Place'),
+        'address' => [
+          'label'     => Yii::t('app', 'Place'),
           'type'      => 'string',
           'bibtex'    => true,
           'indexEntry' => true,
-          'formData'  => array(
+          'formData'  => [
             'type'      => 'textfield',
-            'autocomplete'  => array(
+            'autocomplete'  => [
               'enabled'   => true,
               'separator' => null
-            )
-          ),
+            ]
+          ],
           'csl'       => 'publisher-place',
           'index'     => 'Place'
-        ),
-        'affiliation' => array(
-          'label'     => _('Affiliation'),
-          'autocomplete'  => array('separator' => null ),
+        ],
+        'affiliation' => [
+          'label'     => Yii::t('app', 'Affiliation'),
+          'autocomplete'  => ['separator' => null],
           'indexEntry' => true,
           'type'      => 'string',
           'bibtex'    => true,
           'csl'       => false // ???
-        ),
-        'annote' => array(
-          'label'     => _('Annotation'),
+        ],
+        'annote' => [
+          'label'     => Yii::t('app', 'Annotation'),
           'type'      => 'string',
           'bibtex'    => true,
           'csl'       => 'annote'
-        ),
-        'author' => array(
-          'label'     => array (
-                          'default'      => _('Authors'),
-                          'conference'   => _('Authors'),
-                          'collection'   => _('Editors'),
-                          'proceedings'  => _('Editors')
-                         ),
+        ],
+        'author' => [
+          'label'     => [
+                          'default'      => Yii::t('app', 'Authors'),
+                          'conference'   => Yii::t('app', 'Authors'),
+                          'collection'   => Yii::t('app', 'Editors'),
+                          'proceedings'  => Yii::t('app', 'Editors')
+          ],
           'type'      => 'string',
           'indexEntry' => true,
           'bibtex'    => true,
           'separator' => ';',
-          'formData'  => array(
+          'formData'  => [
             'type'          => 'textarea',
             'lines'         => 3,
-            'autocomplete'  => array(
+            'autocomplete'  => [
               'enabled'   => true,
               'separator' => "\n"
-            )
-          ),
+            ]
+          ],
           'csl'       => 'author',
           'index'     => 'Author'
-        ),
-        'booktitle' => array(
-          'label'     => array (
-                          'default'      => _('Book Title'),
-                          'conference'   => _('Conference Title')
-                         ),
-          'autocomplete'  => array('separator' => null ),
+        ],
+        'booktitle' => [
+          'label'     => [
+                          'default'      => Yii::t('app', 'Book Title'),
+                          'conference'   => Yii::t('app', 'Conference Title')
+          ],
+          'autocomplete'  => ['separator' => null],
           'type'      => 'string',
           'indexEntry' => true,
           'bibtex'    => true,
-          'formData'  => array(
+          'formData'  => [
             'type'          => 'textfield',
             'fullWidth'     => true,
-            'autocomplete'  => array(
+            'autocomplete'  => [
               'enabled'       => true,
               'separator'     => null
-            )
-          ),
+            ]
+          ],
           'csl'       => 'container-title',
           'index'     => 'Book Title'
-        ),
-        'contents' => array(
-          'label'     => _('Contents'),
+        ],
+        'contents' => [
+          'label'     => Yii::t('app', 'Contents'),
           'type'      => 'string',
           'bibtex'    => true,
           'csl'       => false
-        ),
-        'copyright' => array(
-          'label'     => _('Copyright'),
+        ],
+        'copyright' => [
+          'label'     => Yii::t('app', 'Copyright'),
           'type'      => 'string',
           'bibtex'    => true,
           'csl'       => null
-        ),
-        'crossref' => array(
-          'label'     => _('Cross Reference'),
+        ],
+        'crossref' => [
+          'label'     => Yii::t('app', 'Cross Reference'),
           'type'      => 'string',
           'bibtex'    => true,
-          'formData'  => array(
+          'formData'  => [
             'type'      => 'textfield',
-            'autocomplete'  => array(
+            'autocomplete'  => [
               'enabled'   => true,
               'source'    => 'citekey'
-            )
-          ),
+            ]
+          ],
           'csl'       => 'references'
-        ),
-        'date'   => array(
-          'label'     => _('Date'),
+        ],
+        'date'   => [
+          'label'     => Yii::t('app', 'Date'),
           'type'      => 'date',
           'bibtex'    => true,
           'csl'       => false,
           'index'     => 'Date'
-        ),
-        'edition' => array(
-          'label'     => _('Edition'),
+        ],
+        'edition' => [
+          'label'     => Yii::t('app', 'Edition'),
           'type'      => 'string',
           'bibtex'    => true,
           'csl'       => 'edition'
-        ),
-        'editor' => array(
-          'label'     => _('Editors'),
+        ],
+        'editor' => [
+          'label'     => Yii::t('app', 'Editors'),
           'type'      => 'string',
           'indexEntry' => true,
           'bibtex'    => true,
           'separator' => ';',
-          'formData'  => array(
+          'formData'  => [
             'type'          => 'textarea',
             'lines'         => 3,
-            'autocomplete'  => array(
+            'autocomplete'  => [
               'enabled'   => true,
               'separator' => "\n"
-            )
-          ),
+            ]
+          ],
           'csl'       => 'author',
           'index'     => 'Editor'
-        ),
-        'howpublished' => array(
-          'label'     => _('Published As'),
+        ],
+        'howpublished' => [
+          'label'     => Yii::t('app', 'Published As'),
           'type'      => 'string',
           'bibtex'    => true,
           'csl'       => false
-        ),
-        'institution' => array(
-          'label'     => _('Institution'),
+        ],
+        'institution' => [
+          'label'     => Yii::t('app', 'Institution'),
           'type'      => 'string',
           'indexEntry' => true,
           'bibtex'    => true,
-          'formData'  => array(
+          'formData'  => [
             'type'          => 'textfield',
-            'autocomplete'  => array(
+            'autocomplete'  => [
               'enabled'       => true,
               'separator'     => null
-            )
-          ),
+            ]
+          ],
           'csl'       => false
-        ),
-        'isbn'   => array(
-          'label'     => _('ISBN'),
+        ],
+        'isbn'   => [
+          'label'     => Yii::t('app', 'ISBN'),
           'type'      => 'string',
           'bibtex'    => true,
           'csl'       => 'ISBN'
-        ),
-        'issn'   => array(
-          'label'     => _('ISSN'),
+        ],
+        'issn'   => [
+          'label'     => Yii::t('app', 'ISSN'),
           'type'      => 'string',
           'bibtex'    => true,
           'csl'       => 'ISSN'
-        ),
-        'journal' => array(
-          'label'     => _('Journal'),
+        ],
+        'journal' => [
+          'label'     => Yii::t('app', 'Journal'),
           'type'      => 'string',
           'indexEntry' => true,
           'bibtex'    => true,
-          'formData'  => array(
+          'formData'  => [
             'type'          => 'textfield',
             'fullWidth'     => true,
-            'autocomplete'  => array(
+            'autocomplete'  => [
               'enabled'       => true,
               'separator'     => null
-            )
-          ),
+            ]
+          ],
           'csl'       => 'container-title',
           'index'     => 'Journal'
-        ),
+        ],
         // don't know what this is for, anyways
-        'key' => array(
-          'label'     => _('Key'),
+        'key' => [
+          'label'     => Yii::t('app', 'Key'),
           'type'      => 'string',
           'bibtex'    => true,
           'csl'       => false
-        ),
-        'keywords' => array(
-          'label'     => _('Keywords'),
+        ],
+        'keywords' => [
+          'label'     => Yii::t('app', 'Keywords'),
           'type'      => 'string',
           'indexEntry' => true,
           'bibtex'    => true,
           'separator' => ';',
-          'formData'  => array(
+          'formData'  => [
             'type'          => 'textarea',
             'lines'         => 3,
-            'autocomplete'  => array(
+            'autocomplete'  => [
               'enabled'       => true,
               'separator'     => "\n"
-            )
-          ),
+            ]
+          ],
           'csl'       => 'keyword',
           'index'     => 'Keywords'
-        ),
-        'language' => array(
-          'label'     => _('Language'),
-          'autocomplete'  => array('separator' => null ),
+        ],
+        'language' => [
+          'label'     => Yii::t('app', 'Language'),
+          'autocomplete'  => ['separator' => null],
           'type'      => 'string',
           'indexEntry' => true,
           'bibtex'    => true,
           'csl'       => false // ???
-        ),
-        'lccn' => array(
-          'label'     => _('Call Number'),
+        ],
+        'lccn' => [
+          'label'     => Yii::t('app', 'Call Number'),
           'type'      => 'string',
           'bibtex'    => true,
           'csl'       => 'call-number',
           'index'     => 'Call Number'
-        ),
+        ],
         // field to store where the book is kept
-        'location' => array(
-          'label'     => _('Location'),
+        'location' => [
+          'label'     => Yii::t('app', 'Location'),
           'type'      => 'string',
           'indexEntry' => true,
-          'autocomplete'  => array('separator' => null ),
+          'autocomplete'  => ['separator' => null],
           'bibtex'    => true,
           'csl'       => false,
           'index'     => 'Location'
-        ),
-        'month' => array(
-          'label'     => _('Month'),
+        ],
+        'month' => [
+          'label'     => Yii::t('app', 'Month'),
           'type'      => 'string',
           'indexEntry' => true,
-          'autocomplete'  => array('separator' => null ),
+          'autocomplete'  => ['separator' => null],
           'bibtex'    => true,
           'csl'       => false,
           'index'     => 'Month'
-        ),
-        'note' => array(
-          'label'     => _('Note'),
+        ],
+        'note' => [
+          'label'     => Yii::t('app', 'Note'),
           'type'      => 'string',
           'bibtex'    => true,
           'csl'       => 'note'
-        ),
-        'number' => array(
-          'label'     => _('Number'),
+        ],
+        'number' => [
+          'label'     => Yii::t('app', 'Number'),
           'type'      => 'string',
           'bibtex'    => true,
           'csl'       => 'number'
-        ),
-        'organization' => array(
-          'label'     => _('Organization'),
+        ],
+        'organization' => [
+          'label'     => Yii::t('app', 'Organization'),
           'type'      => 'string',
           'indexEntry' => true,
-          'formData'  => array(
+          'formData'  => [
             'type'          => 'textfield',
-            'autocomplete'  => array(
+            'autocomplete'  => [
               'enabled'       => true,
               'separator'     => null
-            )
-          ),
+            ]
+          ],
           'csl'       => false
-        ),
-        'pages' => array(
-          'label'     => _('Pages'),
+        ],
+        'pages' => [
+          'label'     => Yii::t('app', 'Pages'),
           'type'      => 'string',
           'bibtex'    => true,
           'csl'       => 'page'
-        ),
-        'price' => array(
-          'label'     => _('Price'),
+        ],
+        'price' => [
+          'label'     => Yii::t('app', 'Price'),
           'type'      => 'string',
           'bibtex'    => true,
           'csl'       => "price",
           'public'    => false
-        ),
-        'publisher' => array(
-          'label'         => _('Publisher'),
+        ],
+        'publisher' => [
+          'label'         => Yii::t('app', 'Publisher'),
           'type'          => 'string',
           'indexEntry' => true,
           'bibtex'        => true,
-          'formData'  => array(
+          'formData'  => [
             'type'          => 'textfield',
-            'autocomplete'  => array(
+            'autocomplete'  => [
               'enabled'       => true,
               'separator'     => null
-            )
-          ),
+            ]
+          ],
           'csl'       => 'publisher',
           'index'     => 'Publisher'
-        ),
-        'school' => array(
-          'label'         => _('University'),
+        ],
+        'school' => [
+          'label'         => Yii::t('app', 'University'),
           'type'          => 'string',
           'indexEntry' => true,          
           'bibtex'        => true,
-          'formData'  => array(
+          'formData'  => [
             'type'          => 'textfield',
-            'autocomplete'  => array(
+            'autocomplete'  => [
               'enabled'       => true,
               'separator'     => null
-            )
-          ),
+            ]
+          ],
           'csl'       => false
-        ),
-        'series' => array(
-          'label'     => _('Series'),
+        ],
+        'series' => [
+          'label'     => Yii::t('app', 'Series'),
           'type'      => 'string',
           'bibtex'    => true,
           'indexEntry' => true,
-          'formData'  => array(
+          'formData'  => [
             'type'          => 'textfield',
-            'autocomplete'  => array(
+            'autocomplete'  => [
               'enabled'       => true,
               'separator'     => null
-            )
-          ),
+            ]
+          ],
           'csl'       => 'collection-title'
-        ),
-        'size'   => array(
-          'label'     => _('Size'),
+        ],
+        'size'   => [
+          'label'     => Yii::t('app', 'Size'),
           'type'      => 'string',
           'bibtex'    => true,
           'csl'       => false
-        ),
-        'subtitle' => array(
-          'label'     => _('Subtitle'),
+        ],
+        'subtitle' => [
+          'label'     => Yii::t('app', 'Subtitle'),
           'type'      => 'string',
           'bibtex'    => true,
           'csl'       => false
-        ),
-        'title' => array(
-          'label'     => _('Title'),
+        ],
+        'title' => [
+          'label'     => Yii::t('app', 'Title'),
           'type'      => 'string',
           'bibtex'    => true,
-          'formData'  => array(
+          'formData'  => [
             'type'          => 'textfield',
             'fullWidth'     => true
-          ),
+          ],
           'csl'       => 'title',
           'index'     => 'Title'
-        ),
-        'translator' => array(
-          'label'     => _('Translator'),
+        ],
+        'translator' => [
+          'label'     => Yii::t('app', 'Translator'),
           'type'      => 'string',
           'bibtex'    => true,
           'indexEntry' => true,
           'separator' => ";",
-          'formData'  => array(
+          'formData'  => [
             'type'          => 'textfield',
             'fullWidth'     => true,
-            'autocomplete'  => array(
+            'autocomplete'  => [
               'enabled'       => true,
               'separator'     => ";"
-            )
-          ),
+            ]
+          ],
           'csl'       => 'translator'
-        ),
-        'type' => array(
-          'label'     => _('Type'),
+        ],
+        'type' => [
+          'label'     => Yii::t('app', 'Type'),
           'type'      => 'string',
           'bibtex'    => true,
           'csl'       => false
-        ),
-        'url' => array(
-          'label'     => _('Internet Link'),
+        ],
+        'url' => [
+          'label'     => Yii::t('app', 'Internet Link'),
           'type'      => 'link',
           'bibtex'    => true,
-          'formData'  => array(
+          'formData'  => [
             'type'          => 'textfield',
             'fullWidth'     => true
-          ),
+          ],
           'csl'       => 'URL'
-        ),
-        'volume' => array(
-          'label'     => _('Volume'),
+        ],
+        'volume' => [
+          'label'     => Yii::t('app', 'Volume'),
           'type'      => 'string',
           'bibtex'    => true,
           'csl'       => 'volume'
-        ),
-        'year'     => array(
-          'label'     => _('Year'),
+        ],
+        'year'     => [
+          'label'     => Yii::t('app', 'Year'),
           'type'      => 'int',
           'bibtex'    => true,
           'csl'       => 'issued',
-          'index'     => array('Year','Date')
-        )
-      );
+          'index'     => ['Year','Date']
+        ]
+      ];
 
     parent::__construct();
   }

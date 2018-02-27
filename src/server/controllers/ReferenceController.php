@@ -78,14 +78,14 @@ class ReferenceController extends AppController
    *     'cql' :
    *   }
    * }
-   * @param stdClass $clientQueryData
+   * @param \stdClass $clientQueryData
    *    The query data object from the json-rpc request
    * @param \yii\db\ActiveQuery $serverQuery
    *    The ActiveQuery object used
    * @return \yii\db\ActiveQuery
    * @throws \InvalidArgumentException
    */
-  public static function addQueryConditions( \stdClass $clientQueryData, \yii\db\ActiveQuery $serverQuery)
+  public function addQueryConditions( \stdClass $clientQueryData, \yii\db\ActiveQuery $serverQuery)
   {
     $clientQuery = $clientQueryData->query;
     if (!is_object($clientQuery) or
@@ -467,7 +467,10 @@ class ReferenceController extends AppController
   {
     $modelClass = $this->getControlledModel($datasource);
     $fieldData = $modelClass::getSchema()->getFieldData($field);
-    $separator = $fieldData['separator'];
+    $separator=false;
+    if (isset($fieldData['separator'])) {
+      $separator = $fieldData['separator'];
+    }
     $suggestionValues = $modelClass::find()
       ->select($field)
       ->where(["like", $field, $input])

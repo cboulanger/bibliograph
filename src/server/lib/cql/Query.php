@@ -20,6 +20,8 @@
 
 namespace lib\schema\cql;
 
+use app\models\Datasource;
+use lib\exceptions\UserErrorException;
 use \Yii;
 use \lib\schema\cql\Parser;
 
@@ -28,6 +30,7 @@ use \lib\schema\cql\Parser;
  * Tool for working with the CQL query language
  *
  * @see http://www.loc.gov/standards/sru/resources/cql-context-set-v1-2.html
+ * @property array modifiers
  */
 class Query extends \yii\base\BaseObject
 {
@@ -36,7 +39,7 @@ class Query extends \yii\base\BaseObject
    * Booleans
    * @var array
    */
-  public $booleans = array( "and" /*, "or", "not"*/ ); // currently, only "and" is supported
+  public $booleans = array("and" /*, "or", "not"*/); // currently, only "and" is supported
 
   /**
    * Modifiers. Make sure that longer expressions that contain other expressions ("isnot" - "is")
@@ -44,10 +47,10 @@ class Query extends \yii\base\BaseObject
    * unparsable.
    * @var array
    */
-  public $modifiers = array(
-    "isnot", "is", "notcontains", "contains", "startswith",
-    "=", ">", ">=", "<", "<=", "<>"
-  );
+  public function getModifiers()
+  {
+    return array_keys( $this->getModifierTranslations() );
+  }
 
   protected $dictionary = array();
 
@@ -55,11 +58,21 @@ class Query extends \yii\base\BaseObject
    * Exists only for POEditor to pick up the translation messages.
    * @todo Yii'ify
    */
-  function getBooleanOperators()
+  public function getModifierTranslations()
   {
-    _("and"); _("or"); _("not");
-    _("is"); _("isnot"); _("contains"); _("notcontains");
-    _("startswith");
+    return [
+      "and"   => Yii::t('app', "{operand1} and {operand2}"),
+      "or"    => Yii::t('app', "{operand1} or {operand2}"),
+      "!="   => Yii::t('app', "{operand1} is not {operand2}"),
+      "="    => Yii::t('app', "{operand1} is {operand2}"),
+      "contains"    => Yii::t('app', "{operand1} contains {operand2}"),
+      "notcontains" => Yii::t('app', "{operand1} does not contain {operand2}"),
+      "startswith"  => Yii::t('app', "{operand1} starts with {operand2}"),
+      ">"     => Yii::t('app', "{operand1} is greater than {operand2}"),
+      ">="    => Yii::t('app', "{operand1} is greater than or equal {operand2}"),
+      "<"     => Yii::t('app', "{operand1} is smaller than {operand2}"),
+      "<="    => Yii::t('app', "{operand1} is smaller than or equal {operand2}"),
+    ];
   }
 
   /**
@@ -68,114 +81,87 @@ class Query extends \yii\base\BaseObject
   public function __construct()
   {
     parent::__construct();
-    
-    // save dictionary in the session
-    // @todo this is a hack to work around the fact that translation doesn't
-    // work the way it should
-    $this->dictionary =& $_SESSION['bibliograph_schema_CQL#dictionary'];
   }
 
   /**
    * Returns the dictionary of words to be translated into english
    * booleans, modifiers or object properties
-   * @param \app\models\Reference $model
+   * @param \app\schema\AbstractReferenceSchema $schema
    * @return array The dictionary for the model
+   * @todo cache data
    */
-  protected function getDictionary( \app\models\Reference $model)
+  function getDictionary(\app\schema\AbstractReferenceSchema $schema)
   {
-    not_implemented(); 
-    $modelClass = get_class($model);
-    if( ! $this->dictionary[ $modelClass ] )
-    {
-      $localeMgr = qcl_locale_Manager::getInstance();
-      
-      $availableLocales = $localeMgr->getAvailableLocales();
-      $dict = array();
-
-      // translate words for each locale
-      foreach( $availableLocales as $locale)
-      {
-        
-        $localeMgr->setLocale($locale);
-        $textdomain = "bibliograph_$locale";
-        bindtextdomain($textdomain, "./locale");
-
-        // model indexes
-        foreach ( $model::getSchema()->getIndexNames() as $index )
-        {
-          $fields = $model::getSchema()->getIndexFields( $index );
-          // @todo we only use the first, but it should really search all of them
-          $property = $fields[0];
-         
-          $translated = mb_strtolower( dgettext($textdomain,$index), 'UTF-8');
-   
-          $dict[$translated]=$property;
+    $schemaClass = get_class($schema);
+    if (!$this->dictionary[$schemaClass]) {
+      $lang = Yii::$app->language;
+      // model indexes
+      foreach ($schema->getIndexNames() as $index) {
+        $fields = $schema->getIndexFields($index);
+        foreach ($fields as $field ) {
+          $translated = \mb_strtolower(Yii::t('app', $field), 'UTF-8');
+          $dict[$translated] = $field;
           // add the root form of German gendered words ("Autor/in"=> "Autor")
-          if( $pos = strpos( $translated, "/" ) )
-          {
-            $dict[substr($translated,0,$pos)] = $property;
+          if ($pos = strpos($translated, "/")) {
+            $dict[substr($translated, 0, $pos)] = $field;
           }
         }
-
-        // modifiers and booleans
-        foreach( array_merge($this->modifiers, $this->booleans) as $word)
-        {
-          // skip non-words
-          if( strtolower($word) == strtoupper($word) ) continue;
-          $translated = mb_strtolower( $localeMgr->tr($word), 'UTF-8' );
-          $dict[$translated]=$word;
-        }
-
       }
-      // revert to standard locale
-      $localeMgr->setLocale();
-
-      $this->dictionary[ $modelClass ] = $dict;
+      // modifiers and booleans
+      foreach (array_merge($this->modifiers, $this->booleans) as $word) {
+        // skip non-words
+        if (\mb_strtolower($word, 'UTF-8') == \mb_strtoupper($word, 'UTF-8')) continue;
+        $translated = \mb_strtolower( Yii::t('app', $word), 'UTF-8');
+        $dict[$translated] = $word;
+      }
+      $this->dictionary[$schemaClass] = $dict;
     }
-    return $this->dictionary[ $modelClass ];
+    return $this->dictionary[$schemaClass];
   }
 
 
   /**
-   * Adds conditions to a DB query object from a qcl query
+   * Modifies the query with conditions supplied by the client
    *
-   * @param stdClass $query
+   * The client query looks like this:
+   * {
+   *   'datasource' : "<datasource name>",
+   *   'modelType' : "reference",
+   *   'query' : {
+   *     'properties' : ["author","title","year" ...],
+   *     'orderBy' : "author",
+    *    'cql' : 'author contains shakespeare'
+   *   }
+   * }
+   * @param \stdClass $clientQueryData
    *    The query data object from the json-rpc request
-   * @param qcl_data_db_Query $qclQuery
-   *    The query object used by the query behavior
-   * @param bibliograph_model_ReferenceModel $model
-   *    The model on which the query should be performed
-   * @throws bibliograph_schema_Exception
-   * @throws Exception
-   * @throws \lib\exceptions\UserErrorException
-   * @return qcl_data_db_Query
+   * @param \yii\db\ActiveQuery $serverQuery
+   *    The ActiveQuery object used
+   * @return \yii\db\ActiveQuery
+   * @throws \InvalidArgumentException
    */
-  public function addQueryConditions(
-    stdClass $query,
-    qcl_data_db_Query $qclQuery,
-    bibliograph_model_ReferenceModel $model
-  ){
-    not_implemented(); 
+  public function addQueryConditions( \stdClass $clientQueryData, \yii\db\ActiveQuery $serverQuery)
+  {
     // get qcl query
-    $error = "First argument must be object and have a 'cql' property";
-    qcl_assert_has_property( $query, "cql", $error );
-    qcl_assert_valid_string( $query->cql, $error );
-    $cqlQuery = trim($query->cql);
+
+    $cqlQuery = trim($clientQueryData->cql);
+    $datasource = Datasource::getInstanceFor($clientQueryData->datasource);
+    /** @var \app\schema\BibtexSchema $schema */
+    $schema = $datasource->getSchema()->one();
 
     // Translate operators, booleans and indexes.
-    $tokenizer    = new \lib\util\Tokenizer($cqlQuery);
-    $tokens       = $tokenizer->tokenize();
-    $dict         = $this->getDictionary($model);
-    $operators    = array_merge($this->booleans,$this->modifiers);
-    $hasOperator  = false;
+    $tokenizer = new \lib\util\Tokenizer($cqlQuery);
+    $tokens = $tokenizer->tokenize();
+    $dict = $this->getDictionary($schema);
+    $operators = array_merge($this->booleans, $this->modifiers);
+    $hasOperator = false;
     $translTokens = array();
 
     do {
-      $token = mb_strtolower( array_shift( $tokens ), "UTF-8" );
+      $token = mb_strtolower(array_shift($tokens), "UTF-8");
 
       // do not translate quoted expressions
-      if ( $token[0] == '"' )
-      {
+      if ($token[0] == '"') {
         $translTokens[] = $token;
         continue;
       }
@@ -183,68 +169,54 @@ class Query extends \yii\base\BaseObject
       // translate from dictionary
 
       // simple case: direct match
-      if ( isset($dict[$token]) )
-      {
+      if (isset($dict[$token])) {
         $token = $dict[$token];
-      }
-
-      // try the combination with next token
-      elseif( count($tokens) > 0 )
-      {
+      } // try the combination with next token
+      elseif (count($tokens) > 0) {
         $extToken = $token . " " . $tokens[0];
-        if ( isset($dict[$extToken]) )
-        {
+        if (isset($dict[$extToken])) {
           $token = $dict[$extToken];
-          array_shift( $tokens );
+          array_shift($tokens);
         }
       }
 
       // check if token is an operator
-      if( in_array( $token, $operators ) )
-      {
+      if (in_array($token, $operators)) {
         $hasOperator = true;
       }
 
       $translTokens[] = $token;
-    }
-    while( count( $tokens ) );
+    } while (count($tokens));
 
-    Yii::trace( "Translated tokens: " . implode(" ", $translTokens ) );
+    Yii::debug("Translated tokens: " . implode(" ", $translTokens));
 
     // Re-assemble translated query string
-    if ( $hasOperator )
-    {
-      $cqlQuery = implode( " ", $translTokens );
+    if ($hasOperator) {
+      $cqlQuery = implode(" ", $translTokens);
     }
 
     // Queries that don't contain any operators or booleans are converted into a
     // query connected by "AND"
-    else
-    {
-      $cqlQuery = implode( " and ", $translTokens );
+    else {
+      $cqlQuery = implode(" and ", $translTokens);
     }
 
     // create and configure parser object
-    $parser = new Parser( $cqlQuery );
-    $parser->setBooleans( $this->booleans );
-    $parser->setModifiers( $this->modifiers );
-    $parser->setSortWords( array("sortby" ) );
+    $parser = new Parser($cqlQuery);
+    $parser->setBooleans($this->booleans);
+    $parser->setModifiers($this->modifiers);
+    $parser->setSortWords(array("sortby"));
 
-    /*
-     * parse CQL string
-     */
+    // parse CQL string
     $cqlObject = $parser->query();
-    if ( $cqlObject instanceof cql_Diagnostic )
-    {
-      throw new \Exception( "Could not parse query." );
+    if ($cqlObject instanceof cql_Diagnostic) {
+      throw new UserErrorException(Yii::t('app',"Could not parse query."));
     }
 
-    /*
-     * populate query object
-     */
-    $this->convertCqlObjectToQclQuery( $cqlObject, $qclQuery, $model );
+    // populate query object
+    $this->convertCqlObjectToQclQuery($cqlObject, $qclQuery, $model);
 
-    Yii::trace( "'Where' structure: " . json_encode($qclQuery->where) );
+    Yii::trace("'Where' structure: " . json_encode($qclQuery->where));
 
     return $qclQuery;
   }
@@ -269,60 +241,47 @@ class Query extends \yii\base\BaseObject
     cql_Object $cqlObject,
     qcl_data_db_Query $qclQuery,
     bibliograph_model_ReferenceModel $model
-  ){
-    if ( $cqlObject instanceof cql_Triple )
-    {
-      $this->convertCqlObjectToQclQuery( $cqlObject->leftOperand, $qclQuery, $model );
-      $this->convertCqlObjectToQclQuery( $cqlObject->rightOperand, $qclQuery, $model );
-    }
-    elseif ( $cqlObject instanceof cql_SearchClause )
-    {
+  )
+  {
+    if ($cqlObject instanceof cql_Triple) {
+      $this->convertCqlObjectToQclQuery($cqlObject->leftOperand, $qclQuery, $model);
+      $this->convertCqlObjectToQclQuery($cqlObject->rightOperand, $qclQuery, $model);
+    } elseif ($cqlObject instanceof cql_SearchClause) {
       /*
        * look for index. for now, if there is no index,
        * use an index named 'fulltext', which must exist in the model.
        */
       $index = $cqlObject->index->value;
-      if( ! $index )
-      {
+      if (!$index) {
         $index = "fulltext";
         $property = null;
-      }
-
-      /*
+      } /*
        * else, translate index into property
        */
-      else
-      {
-        if( $model->hasProperty( $index ) )
-        {
+      else {
+        if ($model->hasProperty($index)) {
           $property = $index;
-        }
-        else
-        {
-          throw new bibliograph_schema_Exception(Yii::t('app',"Index '%s' does not exist.", $index ) );
+        } else {
+          throw new bibliograph_schema_Exception(Yii::t('app', "Index '%s' does not exist.", $index));
         }
         $index = null;
       }
 
       $relation = strtolower($cqlObject->relation->value);
-      $term     = str_replace('"',"", $cqlObject->term->value);
+      $term = str_replace('"', "", $cqlObject->term->value);
 
-      switch( $relation )
-      {
+      switch ($relation) {
         /*
          * simple field comparison. compare numeric values normally
          * and replace "*" with "%" for "LIKE" comparisons for strings
          */
         case "=":
         case "is":
-          if( is_numeric($term) )
-          {
+          if (is_numeric($term)) {
             $operator = "=";
-          }
-          else
-          {
+          } else {
             $operator = "LIKE";
-            $term = str_replace("*","%",$term);
+            $term = str_replace("*", "%", $term);
           }
           break;
 
@@ -357,35 +316,26 @@ class Query extends \yii\base\BaseObject
           break;
 
         default:
-          throw new \lib\exceptions\UserErrorException("Cannot yet deal with relation '$relation'. " . typeof( $cqlObject ) );
+          throw new \lib\exceptions\UserErrorException("Cannot yet deal with relation '$relation'. " . typeof($cqlObject));
       }
 
-      if ( $property )
-      {
+      if ($property) {
         // @todo OR and NOT connectors
-        $qclQuery->where[$property] = array( $operator, $term );
-      }
-      elseif ( $index )
-      {
-        $qclQuery->match[$index] = trim( $qclQuery->match[$index] . " " . $term );
+        $qclQuery->where[$property] = array($operator, $term);
+      } elseif ($index) {
+        $qclQuery->match[$index] = trim($qclQuery->match[$index] . " " . $term);
       }
 
-    }
-
-    /**
+    } /**
      * Syntax error
      */
-    elseif ( $cqlObject instanceof cql_Diagnostic )
-    {
-      throw new \lib\exceptions\UserErrorException( $cqlObject->toTxt() );
-    }
-
-    /**
+    elseif ($cqlObject instanceof cql_Diagnostic) {
+      throw new \lib\exceptions\UserErrorException($cqlObject->toTxt());
+    } /**
      * Unknown Object, shouldn't ever get here
      */
-    else
-    {
-      throw new LogicException("Cannot yet deal with object " . get_class( $cqlObject ) );
+    else {
+      throw new LogicException("Cannot yet deal with object " . get_class($cqlObject));
     }
   }
 }
