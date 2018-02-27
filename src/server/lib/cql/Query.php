@@ -55,7 +55,7 @@ class Query extends \yii\base\BaseObject
    * Exists only for POEditor to pick up the translation messages.
    * @todo Yii'ify
    */
-  function marktranslations()
+  function getBooleanOperators()
   {
     _("and"); _("or"); _("not");
     _("is"); _("isnot"); _("contains"); _("notcontains");
