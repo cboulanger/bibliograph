@@ -17,8 +17,9 @@ $config =  [
     ],
   ],  
   'aliases' => [
-    '@lib'   => __DIR__ . "/../lib/",
-    '@tests' => __DIR__ . "/../tests/",
+    '@lib'    => __DIR__ . "/../lib/",
+    '@tests'  => __DIR__ . "/../tests/",
+    '@messages' => __DIR__ . "/../messages/",
     ],
   'components' => require('parts/components.php'),
   'extensions' => require(__DIR__ . '/../vendor/yiisoft/extensions.php'),

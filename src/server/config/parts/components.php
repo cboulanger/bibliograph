@@ -26,7 +26,16 @@ $components = [
   // Override http response component
   'response' => [
     'class' => \lib\components\EventTransportResponse::class
-  ], 
+  ],
+  // Internationalization
+  'i18n' => [
+    'translations' => [
+      'app*' => [
+        'class' => yii\i18n\GettextMessageSource::class,
+        'basePath' => '@messages',
+      ],
+    ],
+  ],
   
   /*
    * Custom applications components

@@ -272,7 +272,7 @@ msgstr "Metadaten"
 msgid "Duplicates"
 msgstr "Dubletten"
 
-#: bibliograph.ui.main.Toolbar:64
+#: dialog.Login:200
 msgid "Login"
 msgstr "Anmelden"
 
