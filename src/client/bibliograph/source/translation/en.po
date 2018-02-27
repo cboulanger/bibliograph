@@ -422,7 +422,7 @@ msgstr ""
 msgid "Importing references..."
 msgstr ""
 
-#: bibliograph.ui.reference.ListView:354
+#: bibliograph.ui.reference.ListView:343
 msgid "Query"
 msgstr ""
 
@@ -430,23 +430,23 @@ msgstr ""
 msgid "Loading table ..."
 msgstr ""
 
-#: bibliograph.ui.reference.ListView:947
+#: bibliograph.ui.reference.ListView:897
 msgid "You cannot create an item outside a folder"
 msgstr ""
 
-#: bibliograph.ui.reference.ListView:963
+#: bibliograph.ui.reference.ListView:911
 msgid "Do your really want to remove the selected references from this folder?"
 msgstr ""
 
-#: bibliograph.ui.reference.ListView:964
+#: bibliograph.ui.reference.ListView:912
 msgid "Do your really want to remove the selected references?"
 msgstr ""
 
-#: bibliograph.ui.reference.ListView:987
+#: bibliograph.ui.reference.ListView:933
 msgid "Do your really want to move the selected references to '%1'?"
 msgstr ""
 
-#: bibliograph.ui.reference.ListView:1013
+#: bibliograph.ui.reference.ListView:956
 msgid "Do your really want to copy the selected referencesto '%1'?"
 msgstr ""
 
@@ -454,11 +454,11 @@ msgstr ""
 msgid "Processing request..."
 msgstr ""
 
-#: bibliograph.ui.reference.ListView:1103
+#: bibliograph.ui.reference.ListView:1040
 msgid "Do you really want to make the folder empty, moving all references to the trash that are not in other folders?"
 msgstr ""
 
-#: bibliograph.ui.reference.ListView:1106
+#: bibliograph.ui.reference.ListView:1043
 msgid "Emptying the folder ..."
 msgstr ""
 
@@ -606,19 +606,19 @@ msgstr ""
 msgid "Purging deleted references ..."
 msgstr ""
 
-#: bibliograph.ui.item.ReferenceEditor:341
+#: bibliograph.ui.item.ReferenceEditor:344
 msgid "Loading item data..."
 msgstr ""
 
-#: bibliograph.ui.item.ReferenceEditor:398
+#: bibliograph.ui.item.ReferenceEditor:401
 msgid "Loading form data..."
 msgstr ""
 
-#: bibliograph.ui.item.ReferenceEditor:418
+#: bibliograph.ui.item.ReferenceEditor:421
 msgid "Creating form, please wait ..."
 msgstr ""
 
-#: bibliograph.ui.item.ReferenceEditor:882
+#: bibliograph.ui.item.ReferenceEditor:885
 msgid "Saving..."
 msgstr ""
 
@@ -670,7 +670,7 @@ msgstr ""
 msgid "Do you really want to remove the reference from folder '%1'?"
 msgstr ""
 
-#: bibliograph.ui.reference.ListView:412
+#: bibliograph.ui.reference.ListView:395
 msgid "Loading table layout ..."
 msgstr ""
 

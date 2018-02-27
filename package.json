@@ -20,7 +20,7 @@
   "scripts": {
     "list": "node_modules/.bin/ls-scripts",
     "postinstall": "bash bin/update-dependencies.sh",
-    "server": "bash bin/source-server.sh",
+    "source": "bash bin/start-source-server.sh",
     "test": "bash test/codeception-all.sh && bash test/api.sh || exit $?",
     "test-dev": "bash test/codeception-all.sh && bash test/api.sh development",
     "compile": "cd src/client/bibliograph && qx compile --watch",
