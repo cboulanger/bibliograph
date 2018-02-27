@@ -288,6 +288,7 @@ qx.Class.define("bibliograph.Setup", {
           id = parseInt(id);
           if (id && !isNaN(id))selectedIds.push(id);
         }, this);
+        app.setSelectedIds(selectedIds);
       }
       if (this.__folderId && !isNaN(parseInt(this.__folderId))) {
         this.info("Restoring folder id: " + this.__folderId);

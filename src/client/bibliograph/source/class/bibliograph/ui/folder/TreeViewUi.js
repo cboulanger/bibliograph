@@ -146,7 +146,7 @@ qx.Class.define("bibliograph.ui.folder.TreeViewUi", {
     qxMenuButton5.addListener(
       "execute",
       function(e) {
-        this.clearTreeCache();
+        //this.clearTreeCache();
         this.reload();
       },
       this

@@ -20,15 +20,16 @@
 
 namespace app\controllers;
 
+use Yii;
 use app\models\Datasource;
 use function GuzzleHttp\debug_resource;
 use lib\exceptions\UserErrorException;
 use lib\schema\cql\Query;
 use lib\Validate;
-use Yii;
 
 class ReferenceController extends AppController
 {
+  use traits\FolderDataTrait;
 
   /*
   ---------------------------------------------------------------------------
@@ -41,13 +42,6 @@ class ReferenceController extends AppController
    */
   static $modelType = "reference";
 
-  /**
-   * Icons for the folder nodes, depending on type
-   * @var array
-   */
-  static $icon = array(
-    "favorites" => "icon/16/actions/help-about.png"
-  );
 
   /**
    * Returns the name of the folder model class
@@ -642,6 +636,10 @@ class ReferenceController extends AppController
     $folder->link("references", $reference);
     $folder->referenceCount = $folder->getReferences()->count();
     $folder->save();
+    $this->broadcastClientMessage(
+      "folder.node.update",
+      $this->getUpdateNodeData($datasource, $folder)
+    );
 
     // reload references
     $this->dispatchClientMessage("folder.reload", array(
@@ -663,35 +661,51 @@ class ReferenceController extends AppController
 
   /**
    * Remove references. If a folder id is given, remove from that folder
-   * @param string|bool $first
+   * @param Dto[] $first
    *    If boolean, the response to the confirmation dialog. Otherwise, the datasource name
-   * @param string|int
-   *    Optional. If string, the shelve id. Otherwise, the id of the folder from which to remove
-   *    the reference
-   * @param int $third
-   *    Optional. Dummy parameter required because of generic signature of the (move|remove|copy)Reference
-   *    methods.
-   * @param array $ids
-   *    If given, the ids of the references to remove
+   * @param object|null $second
+   *    If string, the shelve id. If array, an array of parameters for the action:
+   *    datasource; folder id; target folder id (not used); ids as a string separated by commas
    * @throws InvalidArgumentException
+   * @throws \JsonRpc2\Exception
    */
-  public function actionRemove($first, $second = null, $third = null, $ids = null)
+  public function actionRemove($first, $second=null )
   {
     // removal cancelled
     if ($first === false) {
       return "CANCELLED";
-    } // removal confirmed
+    }
+
+    // removal confirmed
     elseif ($first === true and is_string($second)) {
       $confirmRemove = true;
       list($datasource, $folderId, $ids) = $this->unshelve($second);
-    } // API signature
-    elseif (is_string($first) and is_array($ids)) {
+    }
+
+    // API signature
+    elseif ( is_array($first) ) {
       $confirmRemove = false;
-      $datasource = $first;
-      $folderId = $second;
-    } // wrong parameters
+      list($datasource, $folderId, $dummy, $ids) = $first;
+      if( is_string($ids)){
+        $ids = explode(",",$ids);
+      }
+    }
+
+//    elseif ($first === true and is_string($second)) {
+//      $confirmRemove = true;
+//      list($datasource, $folderId, $ids) = $this->unshelve($second);
+//    } // API signature
+//    elseif (is_string($first) and $ids ) {
+//      if( ! is_array($ids) ){
+//        $ids = explode(",", $ids);
+//      }
+//      $confirmRemove = false;
+//      $datasource = $first;
+//      $folderId = $second;
+//    } // wrong parameters
     else {
-      throw new \InvalidArgumentException("Invalid arguments for bibliograph.reference.removeReferences");
+      // wrong parameters
+      throw new \InvalidArgumentException("Invalid Arguments");
     }
 
     // folderId vs query
@@ -717,7 +731,10 @@ class ReferenceController extends AppController
 
     // load record and count the number of links to folders
     $reference = $referenceClass::findOne($id);
-    $containedFolderIds = $reference->getReferenceFolders()->select("id")->column();
+    if( !$reference ){
+      throw new UserErrorException("Reference #$id does not exist.");
+    }
+    $containedFolderIds = $reference->getReferenceFolders()->select("FolderId")->column();
     $folderCount = count($containedFolderIds);
 
     // if we have no folder id and more than one folders contain the reference,
@@ -736,12 +753,12 @@ class ReferenceController extends AppController
         );
       } // confirmed
       else {
-        $referenceClass->unlinkAll("folder");
+        $referenceClass->unlinkAll("folders");
         $folderCount = 0;
       }
     } // unlink from folder if id is given.
     else {
-      $reference->unlink("folder", $folder);
+      $reference->unlink("folders", $folder);
     }
 
     $foldersToUpdate = $containedFolderIds;
@@ -749,22 +766,31 @@ class ReferenceController extends AppController
     // move to trash only if it was contained in one or less folders
     if ($folderCount < 2) {
       // link with trash folder
-      $trashFolder = TrashController::getTrashFolder();
+      $trashFolder = TrashController::getTrashFolder($datasource);
       if ($trashFolder) $trashFolder->link("references", $reference);
 
       $foldersToUpdate[] = $trashFolder->id;
 
       // mark as deleted
       $reference->markedDeleted = 1;
-      $reference->save();
+      try {
+        $reference->save();
+      } catch ( \yii\db\Exception $e) {
+        throw new UserErrorException($e->getMessage());
+      }
     }
 
     // update reference count in source and target folders
     $foldersToUpdate = array_unique($foldersToUpdate);
     foreach ($foldersToUpdate as $fid) {
+      /** @var \app\models\Folder $folder */
       $folder = $folderClass::findOne($fid);
       if ($folder) {
         $folder->getReferenceCount(true);
+        $this->broadcastClientMessage(
+          "folder.node.update",
+          $this->getUpdateNodeData($datasource, $folder)
+        );
       } else {
         Yii::warning("Folder #$fid does not exist.");
       }
@@ -795,7 +821,7 @@ class ReferenceController extends AppController
      */
     if (count($ids) > 1) {
       array_shift($ids);
-      return $this->actionRemove($datasource, $folderId, null, $ids);
+      return $this->actionRemove([$datasource, $folderId, null, $ids]);
     }
     return "OK";
   }

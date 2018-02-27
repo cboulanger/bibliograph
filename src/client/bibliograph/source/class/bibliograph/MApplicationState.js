@@ -258,7 +258,7 @@ qx.Mixin.define("bibliograph.MApplicationState", {
      * Applies the selectedIds property. Does nothing.
      */
     _applySelectedIds: function(value, old) {
-      //
+      //console.log(value);
     },
 
     /**

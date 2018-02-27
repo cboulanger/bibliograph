@@ -90,7 +90,7 @@ qx.Class.define("bibliograph.ui.window.FolderTreeWindowUi",
       qxComposite1.add(qxButton1);
       qxButton1.addListener("execute", function(e)
       {
-        this.treeWidget.clearTreeCache();
+        //this.treeWidget.clearTreeCache();
         this.treeWidget.reload();
       }, this);
 

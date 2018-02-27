@@ -12,7 +12,7 @@
  *
  ******************************************************************************/
 
-/*global qx qcl dialog bibliograph*/
+/* global qx qcl dialog bibliograph */
 
 /**
 

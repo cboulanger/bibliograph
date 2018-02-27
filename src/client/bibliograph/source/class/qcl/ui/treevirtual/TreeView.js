@@ -671,7 +671,7 @@ qx.Class.define("qcl.ui.treevirtual.TreeView", {
         if (nodeId) {
           dataModel.setState(nodeId, data.nodeData);
           dataModel.setData();
-          controller.setTransactionId(data.transactionId);
+          //controller.setTransactionId(data.transactionId);
           //this.cacheTreeData(data.transactionId);
         }
       }
