@@ -33,7 +33,8 @@ use yii\db\ActiveQuery;
  * Tool for working with the CQL query language
  *
  * @see http://www.loc.gov/standards/sru/resources/cql-context-set-v1-2.html
- * @property array operators
+ * @property array $modifiers
+ * @property array $booleans
  */
 class Query extends \yii\base\BaseObject
 {
@@ -42,13 +43,6 @@ class Query extends \yii\base\BaseObject
    * @var \app\schema\AbstractReferenceSchema
    */
   protected $schema = null;
-
-  /**
-   * Booleans
-   * @var array
-   */
-  public $booleans = ["and" /*, "or", "not"*/]; // currently, only "and" is supported
-
 
   /**
    * The dictionary of operators and modifiers
@@ -84,58 +78,61 @@ class Query extends \yii\base\BaseObject
     static $data = null;
     if(! $data ) $data =[
       "and"   => [
-        'translation' => Yii::t('app', "{operand1} and {operand2}"),
+        'translation' => Yii::t('app', "{leftOperand} and {rightOperand}"),
         'type' => self::TYPE_BOOLEAN
       ],
       "or"    => [
-        'translation' => Yii::t('app', "{operand1} or {operand2}"),
+        'translation' => Yii::t('app', "{leftOperand} or {rightOperand}"),
         'type' => self::TYPE_BOOLEAN
       ],
       "!="   => [
-        'translation' => Yii::t('app', "{operand1} is not {operand2}"),
+        'translation' => Yii::t('app', "{field} is not {value}"),
         'type' => self::TYPE_COMPARATOR
       ],
       "="    => [
-        'translation' => Yii::t('app', "{operand1} is {operand2}"),
+        'translation' => Yii::t('app', "{field} is {value}"),
         'type' => self::TYPE_COMPARATOR
       ],
       "contains" => [
-        'translation' => Yii::t('app', "{operand1} contains {operand2}"),
+        'translation' => Yii::t('app', "{field} contains {value}"),
         'type' => self::TYPE_COMPARATOR
       ],
       "notcontains" => [
-        'translation' => Yii::t('app', "{operand1} does not contain {operand2}"),
+        'translation' => Yii::t('app', "{field} does not contain {value}"),
         'type' => self::TYPE_COMPARATOR
       ],
       "startswith"  => [
-        'translation' => Yii::t('app', "{operand1} starts with {operand2}"),
+        'translation' => Yii::t('app', "{field} starts with {value}"),
         'type' => self::TYPE_COMPARATOR
       ],
       ">" => [
-        'translation' => Yii::t('app', "{operand1} is greater than {operand2}"),
+        'translation' => Yii::t('app', "{field} is greater than {value}"),
         'type' => self::TYPE_COMPARATOR
       ],
       ">=" => [
-        'translation' => Yii::t('app', "{operand1} is greater than or equal to {operand2}"),
+        'translation' => Yii::t('app', "{field} is greater than or equal to {value}"),
         'type' => self::TYPE_COMPARATOR
       ],
       "<"  => [
-        'translation' => Yii::t('app', "{operand1} is smaller than {operand2}"),
+        'translation' => Yii::t('app', "{field} is smaller than {value}"),
         'type' => self::TYPE_COMPARATOR
       ],
       "<=" => [
-        'translation' => Yii::t('app', "{operand1} is smaller than or equal to {operand2}"),
+        'translation' => Yii::t('app', "{field} is smaller than or equal to {value}"),
         'type' => self::TYPE_COMPARATOR
       ],
       "sortby" => [
-        'translation' => Yii::t('app', "sort by {operand1}"),
+        'translation' => Yii::t('app', "sort by {value}"),
         'type' => self::TYPE_COMPARATOR
       ]
     ];
     return $operator ? $data[$operator] : $data;
   }
 
-
+  /**
+   * Getter method for modifiers property
+   * @return array
+   */
   protected function getModifiers(){
     return array_keys( array_filter( $this->getOperatorData(),
       function($item){
@@ -143,13 +140,16 @@ class Query extends \yii\base\BaseObject
       }));
   }
 
+  /**
+   * Getter method for booleans property
+   * @return array
+   */
   protected function getBooleans(){
     return array_keys( array_filter( $this->getOperatorData(),
       function($item){
         return $item['type'] === self::TYPE_BOOLEAN;
       }));
   }
-
 
 
   /**

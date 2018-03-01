@@ -169,40 +169,32 @@ class DatasourceManager extends \yii\base\Component
    * Checks if new migrations exist for the tables of the given datasource
    * schema class
    *
-   * @param string $class Datasource schema class
+   * @param string \app\models\Datasource $datasource
    * @return void
    */
-  public function checkNewMigrations($class)
+  public function checkNewMigrations(\app\models\Datasource $datasource)
   {
-    throw new \BadMethodCallException("Not implemented");
+    throw new \BadMethodCallException("Not implemented!");
   }
 
   /**
    * Migrates the tables of the datasources which are of the
    * given schema class to the newest version
    *
-   * NOT READY!
-   *
-   * @param string $class Datasource schema class
+   * @param string \app\models\Datasource $datasource
    * @return boolean Returns true if migration succeeded
    * @throws UserErrorException
    */
-  public function migrate($class)
+  public function migrate(\app\models\Datasource $datasource)
   {
-    throw new \BadMethodCallException("Not ready!");
+
+    throw new \BadMethodCallException("Not implemented!");
     if (YII_ENV_PROD) {
       throw new UserErrorException('Datasource migrations are not allowed in production mode. Please contact the adminstrator');
     };
 
-    // backward compatibitly 
-    if (isset($this->legacySchema[$class])) {
-      $class = $this->legacySchema[$class];
-    }
 
-    if (!is_subclass_of($class, Datasource::class)) {
-      throw new \InvalidArgumentException($class . " is not a subclass of " . Datasource::class);
-    }
-
+    // TODO Schema migrieren, nicht einzelne Datasource!!!
     $datasources = Datasource::find()->where(['schema' => $class])->all();
     foreach ($datasources as $datasource) {
       $params = [
