@@ -29,7 +29,7 @@ class M180224070636_create_table_data_schema extends Migration
     ], $tableOptions);
 
     $this->createIndex('unique_namedId', '{{%data_Schema}}', 'namedId', true);
-    $this->update('{{data_Datasource}}',['schema' => 'bibliograph'],['schema'=>'bibliograph.schema.bibliograph2']);
+    $this->update('{{data_Datasource}}',['schema' => 'bibliograph_datasource'],['schema'=>'bibliograph.schema.bibliograph2']);
     $this->update('{{data_Datasource}}',['schema' => 'file'],['schema'=>'qcl.schema.filesystem.local']);
     $this->update('{{data_Datasource}}',['schema' => 'z3950'],['schema'=>'bibliograph.schema.z3950']);
   }
@@ -37,7 +37,7 @@ class M180224070636_create_table_data_schema extends Migration
   public function safeDown()
   {
     $this->dropTable('{{%data_Schema}}');
-    $this->update('{{data_Datasource}}',['schema'=>'bibliograph.schema.bibliograph2'],['schema' => 'bibliograph']);
+    $this->update('{{data_Datasource}}',['schema'=>'bibliograph.schema.bibliograph2'],['schema' => 'bibliograph_datasource']);
     $this->update('{{data_Datasource}}',['schema'=>'qcl.schema.filesystem.local'],['schema' => 'file']);
     $this->update('{{data_Datasource}}',['schema'=>'bibliograph.schema.z3950'],['schema' => 'z3950']);
   }

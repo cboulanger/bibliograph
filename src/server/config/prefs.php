@@ -2,7 +2,7 @@
 return [
   'app.datasource.baseschema' => [
     'type' => "string",
-    'default' => "bibliograph"
+    'default' => \app\controllers\SetupController::DATASOURCE_DEFAULT_SCHEMA
   ],
   'app.datasource.baseclass' => [
     'type' => "string",

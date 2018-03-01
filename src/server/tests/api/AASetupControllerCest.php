@@ -76,6 +76,7 @@ class AASetupControllerCest
           "Configuration values were created.",
           "Created standard schema.",
           "Example databases were created.",
+          "No schema migrations necessary.",
           "LDAP authentication is not enabled."
         ]
       }
@@ -159,7 +160,7 @@ class AASetupControllerCest
           "Found data for version '. $upgrade_from .' and applied new migrations for version ' . $upgrade_to . '",
           "Configuration values were created.",
           "Standard schema existed.",
-          "Example databases were created.",
+          "No schema migrations necessary.",
           "LDAP authentication is not enabled."
         ]
       }

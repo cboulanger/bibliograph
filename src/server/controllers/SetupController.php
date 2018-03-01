@@ -39,6 +39,17 @@ use yii\db\Exception;
  */
 class SetupController extends \app\controllers\AppController
 {
+  /**
+   * The name of the default datasource schema.
+   * Initial value of the app.datasource.baseschema preference.
+   */
+  const DATASOURCE_DEFAULT_SCHEMA = "bibliograph_datasource";
+
+  /**
+   * The name of the default bibliographic datasource class.
+   * Initial value of the app.datasource.baseclass preference.
+   */
+  const DATASOURCE_DEFAULT_CLASS = \app\models\BibliographicDatasource::class;
 
   /**
    * @inheritDoc
@@ -67,14 +78,10 @@ class SetupController extends \app\controllers\AppController
   protected $migrationConfirmed = false;
 
   /**
-   * The properties of the progress dialog to show on the client
-   * @var array
+   * Whether this is a new install of bibliograph without existing data.
+   * @var int
    */
-  protected $progressDialogProperties = [
-    'showLog' => true,
-    'hideWhenCompleted' => false,
-    'okButtonText' => "OK"
-  ];
+  protected $isNewInstallation;
 
 
   //-------------------------------------------------------------
@@ -139,10 +146,12 @@ class SetupController extends \app\controllers\AppController
       } catch (\yii\db\Exception $e) {
         // no tables exist yet, this is the first run of a fresh installation
         $upgrade_from = "0.0.0";
+        $this->isNewInstallation = true;
       } catch (yii\base\InvalidConfigException $e) {
         // this happens deleting the tables in the database during development
         // @todo 
         $upgrade_from = "0.0.0";
+        $this->isNewInstallation = true;
       }
     }
     if (!$upgrade_to) {
@@ -418,7 +427,7 @@ class SetupController extends \app\controllers\AppController
       "join_Datasource_Group,join_Datasource_Role,join_Datasource_User,join_Group_User,join_Permission_Role,join_User_Role");
     $allTablesExist = $this->tableExists($expectTables);
     if ($allTablesExist) {
-      Yii::trace("All relevant v2 tables exist.", 'migrations');
+      Yii::debug("All relevant v2 tables exist.", 'migrations');
     } else {
       $missingTables = \array_diff($expectTables, $this->tables());
       if (count(\array_diff($expectTables, $missingTables)) == 0) {
@@ -482,7 +491,7 @@ class SetupController extends \app\controllers\AppController
       $activeUser = Yii::$app->user->identity;
       // if the current version is >= 3.0.0 and no user is logged in, show a login screen
       if (version_compare($upgrade_from, "3.0.0", ">=") and (!$activeUser or !$activeUser->hasRole('admin'))) {
-        $message = Yii::t('app', "The application database needs to be upgraded from '{oldversion}' to '{newversion}'. Please log in as administrator.", [
+        $message = Yii::t('app', "The application needs to be upgraded from '{oldversion}' to '{newversion}'. Please log in as administrator.", [
           'oldversion' => $upgrade_from,
           'newversion' => $upgrade_to
         ]);
@@ -503,7 +512,7 @@ class SetupController extends \app\controllers\AppController
 
 
       // run all migrations 
-      Yii::trace("Applying migrations...", "migrations");
+      Yii::debug("Applying migrations...", "migrations");
       try {
         $output = Console::runAction("migrate/up");
       } catch (MigrationException $e) {
@@ -526,6 +535,11 @@ class SetupController extends \app\controllers\AppController
     ];
   }
 
+  /**
+   * Create inital preference keys/values.
+   * @todo modules!
+   * @return array
+   */
   protected function setupPreferences()
   {
     $prefs = require Yii::getAlias('@app/config/prefs.php');
@@ -545,12 +559,16 @@ class SetupController extends \app\controllers\AppController
     return ['message' => Yii::t('app','Configuration values were created.')];
   }
 
+  /**
+   * Create initial schema(s)
+   * @return array
+   */
   protected function setupSchemas()
   {
     $schemaClass = Yii::$app->config->getPreference('app.datasource.baseclass');
     $schemaExists = false;
     try {
-      Schema::register("bibliograph", $schemaClass, [
+      Schema::register(self::DATASOURCE_DEFAULT_SCHEMA, $schemaClass, [
         'protected' => 1
       ] );
     } catch ( RecordExistsException $e) {
@@ -572,6 +590,9 @@ class SetupController extends \app\controllers\AppController
    */
   protected function setupExampleDatasources()
   {
+    // only create example databases if this is a new installation
+    if( ! $this->isNewInstallation) return false;
+
     $datasources = [
       'datasource1' => [
         'config' => [
@@ -621,7 +642,34 @@ class SetupController extends \app\controllers\AppController
     ];
   }
 
-
+  /**
+   * @return array
+   * @throws MigrationException
+   */
+  protected function setupDatasourceMigrations()
+  {
+    $schemas = Schema::find()->all();
+    $migrated = [];
+    $failed = [];
+    foreach( $schemas as $schema ){
+      try {
+        if (Yii::$app->datasourceManager->checkNewMigrations($schema)) {
+          Yii::$app->datasourceManager->migrate($schema);
+          $migrated[]= $schema->namedId;
+        }
+      } catch (MigrationException $e) {
+        $failed[] = $schema->namedId;
+      } catch (\Exception $e) {
+        throw new MigrationException($e->getMessage());
+      }
+    }
+    return [
+      'message' => count($migrated) ?
+        Yii::t('app','Migrated schemas {schemas}.', ['schemas' => implode(", ", $migrated)]) :
+        Yii::t('app', "No schema migrations necessary."),
+      'error'   => count($failed) ? Yii::t('app','Migrating schemas {schemas} failed.', ['schemas' => implode(", ", $failed)]) : null
+    ];
+  }
 
   /**
    * Check the LDAP connection

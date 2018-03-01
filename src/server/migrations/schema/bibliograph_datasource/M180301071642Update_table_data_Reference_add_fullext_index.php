@@ -1,6 +1,6 @@
 <?php
 
-namespace app\migrations\schema\datasource;
+namespace app\migrations\schema\bibliograph_datasource;
 
 use yii\db\Migration;
 

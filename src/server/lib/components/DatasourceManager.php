@@ -20,6 +20,7 @@
 
 namespace lib\components;
 
+use app\controllers\SetupController;
 use app\models\Datasource;
 use app\models\Schema;
 use fourteenmeister\helpers\Dsn;
@@ -131,11 +132,14 @@ class DatasourceManager extends \yii\base\Component
    */
   public function createModelTables(\app\models\Datasource $datasource)
   {
+    /** @var \app\schema\AbstractReferenceSchema $schema */
+    $schema = $datasource->getSchema()->one();
+    $migrationNamespace = $schema->migrationNamespace;
     $params = [
       'all',
-      'migrationNamespaces' => 'app\\migrations\\schema\\datasource',
+      'migrationNamespaces' => $migrationNamespace,
     ];
-    Yii::trace("Creating model tables for {$datasource->namedId}...");
+    Yii::debug("Creating model tables for '{$datasource->namedId}', using schema '{$schema->namedId}' and migration namespace '$migrationNamespace' ...");
     $db = $datasource->getConnection();
     Console::runAction('migrate/up', $params, null, $db);
     Yii::info("Created model tables for {$datasource->namedId}.");
@@ -152,13 +156,16 @@ class DatasourceManager extends \yii\base\Component
   public function delete($namedId, $deleteData = false)
   {
     $datasource = Datasource::getInstanceFor($namedId);
+    /** @var \app\schema\AbstractReferenceSchema $schema */
+    $schema = $datasource->getSchema()->one();
+    $migrationNamespace = $schema->migrationNamespace;
     $datasource->delete();
     if ($deleteData) {
-      Yii::trace("Deleting model tables for '$namedId'...");
+      Yii::debug("Deleting model tables for '$namedId'...");
       $db = $datasource->getConnection();
       $params = [
         'all',
-        'migrationNamespaces' => 'app\\migrations\\schema\\datasource',
+        'migrationNamespaces' => $migrationNamespace,
       ];
       Console::runAction('migrate/down', $params, null, $db);
       Yii::info("Deleted model tables for '$namedId''.");
@@ -169,45 +176,62 @@ class DatasourceManager extends \yii\base\Component
    * Checks if new migrations exist for the tables of the given datasource
    * schema class
    *
-   * @param string \app\models\Datasource $datasource
-   * @return void
+   * @param Schema $schema
+   * @return bool True if new migrations, false if up-to-date
+   * @throws MigrationException
+   * @throws \Exception
    */
-  public function checkNewMigrations(\app\models\Datasource $datasource)
+  public function checkNewMigrations(Schema $schema)
   {
-    throw new \BadMethodCallException("Not implemented!");
+    $params = [
+      'all',
+      'migrationNamespaces' => $schema->migrationNamespace,
+    ];
+    /** @var \app\models\Datasource $datasource */
+    $datasource = $schema->datasources[0];
+    $db = $datasource->getConnection();
+    $output = Console::runAction('migrate/new', $params, null, $db);
+    return ! $output->contains("up-to-date");
   }
 
   /**
    * Migrates the tables of the datasources which are of the
    * given schema class to the newest version
    *
-   * @param string \app\models\Datasource $datasource
-   * @return boolean Returns true if migration succeeded
-   * @throws UserErrorException
+   * @param Schema $schema
+   * @return void
+   * @throws MigrationException
+   * @throws \Exception
    */
-  public function migrate(\app\models\Datasource $datasource)
+  public function migrate(Schema $schema)
   {
-
-    throw new \BadMethodCallException("Not implemented!");
     if (YII_ENV_PROD) {
-      throw new UserErrorException('Datasource migrations are not allowed in production mode. Please contact the adminstrator');
+      throw new UserErrorException(Yii::t('app', 'Datasource migrations are not allowed in production mode. Please contact the adminstrator'));
     };
-
-
-    // TODO Schema migrieren, nicht einzelne Datasource!!!
-    $datasources = Datasource::find()->where(['schema' => $class])->all();
+    Yii::info("Migrating schema '{$schema->namedId}'...");
+    $datasources = $schema->datasources;
+    /** @var \app\models\BibliographicDatasource $datasource */
     foreach ($datasources as $datasource) {
       $params = [
         'all',
-        'migrationNamespaces' => 'app\\migrations\\schema\\datasource',
+        'migrationNamespaces' => $schema->migrationNamespace,
       ];
+      /** @var \yii\db\Connection $db */
       $db = $datasource->getConnection();
-      $tables = $db->schema->getTableNames();
-      if (!in_array("{$db->prefix}migrations", $tables)) {
-        // need to migrate/mark tables
+      // backwards compatibility
+      if( $schema->namedId == SetupController::DATASOURCE_DEFAULT_SCHEMA ){
+        $tables = $db->schema->getTableNames();
+        $reference_table = "{$db->table_prefix}_data_Reference";
+        $migration_table = "{$db->table_prefix}migrations";
+        Yii::debug("Checking if table $reference_table exists but $migration_table is missing...");
+        $isV2Datasource = in_array($reference_table, $tables) and !in_array($migration_table, $tables);
+        if ($isV2Datasource) {
+          Yii::info("Marking v2 datasource '{$datasource->namedId}'...");
+          Console::runAction('migrate/mark', ["app\\migrations\\schema\\{$schema->namedId}\\m171219_230854"]);
+        }
       }
+      Yii::info("Migrating datasource '{$datasource->namedId}'...");
       Console::runAction('migrate/up', $params, null, $db);
     }
-    return true;
   }
 }

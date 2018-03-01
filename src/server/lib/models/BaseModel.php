@@ -28,9 +28,11 @@ use yii\behaviors\TimestampBehavior;
 use app\models\Datasource;
 
 /**
- * @property array formData
+ * @property array $formData
  *    A associative array of arrays containing data for the
  *    dialog.Form widget
+ * @property string $migrationNamespace
+ *    The migration namespace used for this model
  */
 class BaseModel extends ActiveRecord
 {
@@ -47,7 +49,7 @@ class BaseModel extends ActiveRecord
   {
     return [
       [
-        'class'               => TimestampBehavior::className(),
+        'class'               => TimestampBehavior::class,
         'createdAtAttribute'  => 'created',
         'updatedAtAttribute'  => 'modified',
         'value'               => new Expression('NOW()'),
@@ -56,15 +58,25 @@ class BaseModel extends ActiveRecord
   }
 
   //-------------------------------------------------------------
-  // Abstract methods
+  // Virtual properties
   //-------------------------------------------------------------
 
   /**
-   * Returns data for a \lib\dialog\Form in which the
-   * model data can be edited
+   * Data for a \lib\dialog\Form in which the
+   * model data can be edited or null if the model cannot be edited
    * @return array|null
    */
   public function getFormData(){
+    return null;
+  }
+
+
+  /**
+   * The namespace that contains of migration classes for this model
+   * @return string|null
+   */
+  protected function getMigrationNamespace()
+  {
     return null;
   }
 

@@ -15,6 +15,9 @@ use Yii;
  * @property string $class
  * @property string $description
  * @property integer $active
+ * @property \yii\db\ActiveQuery $datasources
+ * @property \yii\db\ActiveQuery $roleSchemas
+ * @property \yii\db\ActiveQuery $roles
  */
 class Schema extends \lib\models\BaseModel
 {
@@ -60,6 +63,14 @@ class Schema extends \lib\models\BaseModel
     ];
   }
 
+  //-------------------------------------------------------------
+  // Virtual properties
+  //-------------------------------------------------------------
+
+  /**
+   * @inheritdoc
+   * @return array
+   */
   public function getFormData()
   {
     return [
@@ -83,6 +94,17 @@ class Schema extends \lib\models\BaseModel
         ]
       ]
     ];
+  }
+
+  /**
+   * @inheritdoc
+   * By default, the migration namespace is a subfolder of the @app/migrations directory that
+   * corresponds to the model's namedId.
+   * @return string
+   */
+  protected function getMigrationNamespace()
+  {
+    return "\app\migrations\schema\\{$this->namedId}";
   }
 
   //-------------------------------------------------------------
@@ -141,10 +163,11 @@ class Schema extends \lib\models\BaseModel
       throw new RecordExistsException("Schema '$namedId' already exists.");
     }
     try {
+      /** @noinspection MissedFieldInspection */
       $model = new static ([
         'namedId' => $namedId,
         'class' => $class->getName(),
-        'name' => $class->getProperty('name')->getValue(),
+        'name' =>  $class->getProperty('name')->getValue(),
         'description' => $class->getProperty('description')->getValue(),
       ]);
       if ($options) $model->setAttributes($options);

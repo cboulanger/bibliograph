@@ -7,7 +7,6 @@ use lib\models\BaseModel;
 use app\models\Role;
 use yii\helpers\ArrayHelper;
 
-// @todo Change column `schema` to `class`
 // @todo Add column `dsn` to `class`, remove columns `type`, `host`, `port`, `database`
 
 /**
@@ -106,6 +105,10 @@ class Datasource extends BaseModel
       'hidden' => Yii::t('app', 'Hidden'),
     ];
   }
+
+  //-------------------------------------------------------------
+  // Virtual properties
+  //-------------------------------------------------------------
 
   public function getFormData()
   {
