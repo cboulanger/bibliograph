@@ -114,7 +114,7 @@ return [
   [
     'id' => 12,
     'type' => 0,
-    'default' => "bibliograph",
+    'default' => "bibliograph_datasource",
     'customize' => 0,
     'final' => 0,
     'namedId' => 'app.datasource.baseschema',

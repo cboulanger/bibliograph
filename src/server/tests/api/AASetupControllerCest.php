@@ -76,7 +76,6 @@ class AASetupControllerCest
           "Configuration values were created.",
           "Created standard schema.",
           "Example databases were created.",
-          "No schema migrations necessary.",
           "LDAP authentication is not enabled."
         ]
       }
@@ -117,7 +116,7 @@ class AASetupControllerCest
           "Migrated data from Bibliograph v2 and applied new migrations for version ' . $this->version . '",
           "Configuration values were created.",
           "Created standard schema.",
-          "Example databases were created.",
+          "Migrated schema(s) bibliograph_datasource.",
           "LDAP authentication is not enabled."
         ]
       }

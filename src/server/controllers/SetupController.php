@@ -83,6 +83,12 @@ class SetupController extends \app\controllers\AppController
    */
   protected $isNewInstallation;
 
+  /**
+   * Whether we upgrade from legacy version v2
+   * @var 
+   */
+  protected $isV2Upgrade = false;
+
 
   //-------------------------------------------------------------
   // ACTIONS
@@ -143,6 +149,7 @@ class SetupController extends \app\controllers\AppController
       } catch (\InvalidArgumentException $e) {
         // upgrading from version 2 where the config key doesn't exist
         $upgrade_from = "2.x";
+        $this->isV2Upgrade = true;
       } catch (\yii\db\Exception $e) {
         // no tables exist yet, this is the first run of a fresh installation
         $upgrade_from = "0.0.0";
@@ -163,7 +170,7 @@ class SetupController extends \app\controllers\AppController
     Yii::trace("Data version: $upgrade_from, code version: $upgrade_to.");
     if ($upgrade_to !== $upgrade_from) {
       // visual marker in log file
-      Yii::trace(
+      Yii::debug(
         "\n\n\n" . str_repeat("*", 80) . "\n\n BIBLIOGRAPH SETUP\n\n" . str_repeat("*", 80) . "\n\n\n",
         'marker'
       );
@@ -431,9 +438,10 @@ class SetupController extends \app\controllers\AppController
     } else {
       $missingTables = \array_diff($expectTables, $this->tables());
       if (count(\array_diff($expectTables, $missingTables)) == 0) {
-        Yii::trace("None of the relevant v2 tables exist.", 'migrations');
+        Yii::debug("None of the relevant v2 tables exist.", 'migrations');
       } else {
         // only some exist, this cannot currently be migrated or repaired
+        Yii::error("Cannot upgrade from v2, since the following tables are missing: " . implode(", ", $missingTables));
         return [
           'fatalError' => Yii::t('app', 'Invalid database setup. Please contact the adminstrator.')
         ];
@@ -648,13 +656,38 @@ class SetupController extends \app\controllers\AppController
    */
   protected function setupDatasourceMigrations()
   {
+    // no need if this was freshly installed
+    if( $this->isNewInstallation) return false;
     $schemas = Schema::find()->all();
     $migrated = [];
     $failed = [];
     foreach( $schemas as $schema ){
       try {
-        if (Yii::$app->datasourceManager->checkNewMigrations($schema)) {
-          Yii::$app->datasourceManager->migrate($schema);
+        // backwards compatibility
+        if( $schema->namedId == SetupController::DATASOURCE_DEFAULT_SCHEMA and $this->isV2Upgrade){
+          Yii::info("Migrating v2 datasource tables...");
+          $migrationNamespace = $schema->migrationNamespace;
+          $markerClass = "M180301071642_Update_table_data_Reference_add_fullext_index";
+          $fqn = "$migrationNamespace\\$markerClass";
+          $params_new = [
+            'migrationNamespaces' => $migrationNamespace,
+          ];
+          $params_mark = [
+            $fqn,
+            'migrationNamespaces' => $migrationNamespace,
+          ];
+          /** @var \app\models\BibliographicDatasource $datasource */
+          foreach ($schema->datasources as $datasource) {
+            $db = $datasource->getConnection();
+            // for diagnostic purposes
+            Console::runAction('migrate/new', $params_new, null, $db);
+            Yii::debug("Marking v2 datasource '{$datasource->namedId}' with '$fqn'...");
+            Console::runAction('migrate/mark', $params_mark, null, $db);
+          }
+        }
+        // run schema migrations
+        $count = Yii::$app->datasourceManager->migrate($schema);
+        if( $count > 0 ){
           $migrated[]= $schema->namedId;
         }
       } catch (MigrationException $e) {
@@ -665,7 +698,7 @@ class SetupController extends \app\controllers\AppController
     }
     return [
       'message' => count($migrated) ?
-        Yii::t('app','Migrated schemas {schemas}.', ['schemas' => implode(", ", $migrated)]) :
+        Yii::t('app','Migrated schema(s) {schemas}.', ['schemas' => implode(", ", $migrated)]) :
         Yii::t('app', "No schema migrations necessary."),
       'error'   => count($failed) ? Yii::t('app','Migrating schemas {schemas} failed.', ['schemas' => implode(", ", $failed)]) : null
     ];

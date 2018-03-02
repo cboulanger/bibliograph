@@ -90,7 +90,6 @@ class DatasourceManager extends \yii\base\Component
 
     // get the subclass instance and configure it
     $datasource = Datasource::getInstanceFor($datasourceName);
-
     $this->createModelTables($datasource);
     // @todo work with interface instead
     if ($datasource instanceof \app\models\BibliographicDatasource) {
@@ -139,7 +138,7 @@ class DatasourceManager extends \yii\base\Component
       'all',
       'migrationNamespaces' => $migrationNamespace,
     ];
-    Yii::debug("Creating model tables for '{$datasource->namedId}', using schema '{$schema->namedId}' and migration namespace '$migrationNamespace' ...");
+    Yii::info("Creating model tables for '{$datasource->namedId}', using schema '{$schema->namedId}' and migration namespace '$migrationNamespace' ...");
     $db = $datasource->getConnection();
     Console::runAction('migrate/up', $params, null, $db);
     Yii::info("Created model tables for {$datasource->namedId}.");
@@ -174,21 +173,19 @@ class DatasourceManager extends \yii\base\Component
 
   /**
    * Checks if new migrations exist for the tables of the given datasource
-   * schema class
    *
-   * @param Schema $schema
+   * @param Datasource $datasource
    * @return bool True if new migrations, false if up-to-date
    * @throws MigrationException
    * @throws \Exception
    */
-  public function checkNewMigrations(Schema $schema)
+  public function checkNewMigrations(Datasource $datasource)
   {
+    $schema = $datasource->getSchema()->one();
     $params = [
       'all',
       'migrationNamespaces' => $schema->migrationNamespace,
     ];
-    /** @var \app\models\Datasource $datasource */
-    $datasource = $schema->datasources[0];
     $db = $datasource->getConnection();
     $output = Console::runAction('migrate/new', $params, null, $db);
     return ! $output->contains("up-to-date");
@@ -199,7 +196,7 @@ class DatasourceManager extends \yii\base\Component
    * given schema class to the newest version
    *
    * @param Schema $schema
-   * @return void
+   * @return int number of datasources that were migrated
    * @throws MigrationException
    * @throws \Exception
    */
@@ -210,6 +207,7 @@ class DatasourceManager extends \yii\base\Component
     };
     Yii::info("Migrating schema '{$schema->namedId}'...");
     $datasources = $schema->datasources;
+    $count = 0;
     /** @var \app\models\BibliographicDatasource $datasource */
     foreach ($datasources as $datasource) {
       $params = [
@@ -218,20 +216,10 @@ class DatasourceManager extends \yii\base\Component
       ];
       /** @var \yii\db\Connection $db */
       $db = $datasource->getConnection();
-      // backwards compatibility
-      if( $schema->namedId == SetupController::DATASOURCE_DEFAULT_SCHEMA ){
-        $tables = $db->schema->getTableNames();
-        $reference_table = "{$db->table_prefix}_data_Reference";
-        $migration_table = "{$db->table_prefix}migrations";
-        Yii::debug("Checking if table $reference_table exists but $migration_table is missing...");
-        $isV2Datasource = in_array($reference_table, $tables) and !in_array($migration_table, $tables);
-        if ($isV2Datasource) {
-          Yii::info("Marking v2 datasource '{$datasource->namedId}'...");
-          Console::runAction('migrate/mark', ["app\\migrations\\schema\\{$schema->namedId}\\m171219_230854"]);
-        }
-      }
       Yii::info("Migrating datasource '{$datasource->namedId}'...");
-      Console::runAction('migrate/up', $params, null, $db);
+      $output = Console::runAction('migrate/up', $params, null, $db);
+      if( ! $output->contains("up-to-date")) $count++;
     }
+    return $count;
   }
 }

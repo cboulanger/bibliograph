@@ -7,7 +7,7 @@ use yii\db\Migration;
 /**
  * Class M180301071642Update_table_data_Reference_add_fullext_index
  */
-class M180301071642Update_table_data_Reference_add_fullext_index extends Migration
+class M180301071642_Update_table_data_Reference_add_fullext_index extends Migration
 {
     /**
      * {@inheritdoc}
