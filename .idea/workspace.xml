@@ -6,17 +6,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1d7efdcc-ab7b-4e93-b274-cf7be3d39986" name="Default" comment="ACTool: Add tests for creating users and datasources">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/src/server/controllers/SetupController.php" afterPath="$PROJECT_DIR$/src/server/controllers/SetupController.php" />
-      <change beforePath="$PROJECT_DIR$/src/server/lib/cql/Parser.php" afterPath="$PROJECT_DIR$/src/server/lib/cql/Parser.php" />
-      <change beforePath="$PROJECT_DIR$/src/server/lib/cql/Query.php" afterPath="$PROJECT_DIR$/src/server/lib/cql/NaturalLanguageQuery.php" />
-      <change beforePath="$PROJECT_DIR$/src/server/lib/util/MbString.php" afterPath="$PROJECT_DIR$/src/server/lib/util/MbString.php" />
-      <change beforePath="$PROJECT_DIR$/src/server/lib/util/Tokenizer.php" afterPath="$PROJECT_DIR$/src/server/lib/util/Tokenizer.php" />
-      <change beforePath="$PROJECT_DIR$/src/server/models/Schema.php" afterPath="$PROJECT_DIR$/src/server/models/Schema.php" />
-      <change beforePath="$PROJECT_DIR$/src/server/schema/AbstractReferenceSchema.php" afterPath="$PROJECT_DIR$/src/server/schema/AbstractReferenceSchema.php" />
-      <change beforePath="$PROJECT_DIR$/src/server/tests/unit.suite.yml" afterPath="$PROJECT_DIR$/src/server/tests/unit.suite.yml" />
-      <change beforePath="$PROJECT_DIR$/src/server/tests/unit/01-models/AccessModelsTest.php" afterPath="$PROJECT_DIR$/src/server/tests/unit/01-models/AccessModelsTest.php" />
-      <change beforePath="$PROJECT_DIR$/src/server/tests/unit/Base.php" afterPath="$PROJECT_DIR$/src/server/tests/unit/Base.php" />
+      <change beforePath="$PROJECT_DIR$/src/client/bibliograph/source/translation/de.po" afterPath="$PROJECT_DIR$/src/client/bibliograph/source/translation/de.po" />
+      <change beforePath="$PROJECT_DIR$/src/client/bibliograph/source/translation/en.po" afterPath="$PROJECT_DIR$/src/client/bibliograph/source/translation/en.po" />
+      <change beforePath="$PROJECT_DIR$/src/server/config/parts/components.php" afterPath="$PROJECT_DIR$/src/server/config/parts/components.php" />
+      <change beforePath="$PROJECT_DIR$/src/server/lib/cql/NaturalLanguageQuery.php" afterPath="$PROJECT_DIR$/src/server/lib/cql/NaturalLanguageQuery.php" />
+      <change beforePath="$PROJECT_DIR$/src/server/messages/de/messages.po" afterPath="$PROJECT_DIR$/src/server/messages/de/messages.po" />
+      <change beforePath="$PROJECT_DIR$/src/server/tests/unit/00-base/CqlTest.php" afterPath="$PROJECT_DIR$/src/server/tests/unit/00-base/CqlTest.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -42,11 +37,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="NaturalLanguageQuery.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="NaturalLanguageQuery.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/server/lib/cql/NaturalLanguageQuery.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="112">
-              <caret line="278" column="6" lean-forward="false" selection-start-line="278" selection-start-column="6" selection-end-line="278" selection-end-column="6" />
+            <state relative-caret-position="678">
+              <caret line="250" column="25" lean-forward="true" selection-start-line="250" selection-start-column="25" selection-end-line="250" selection-end-column="25" />
               <folding>
                 <element signature="e#569#608#0#PHP" expanded="true" />
               </folding>
@@ -54,18 +49,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CqlTest.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="CqlTest.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/server/tests/unit/00-base/CqlTest.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="244">
-              <caret line="41" column="43" lean-forward="true" selection-start-line="41" selection-start-column="43" selection-end-line="41" selection-end-column="43" />
+            <state relative-caret-position="582">
+              <caret line="56" column="9" lean-forward="true" selection-start-line="56" selection-start-column="9" selection-end-line="56" selection-end-column="9" />
               <folding>
-                <element signature="e#144#169#0#PHP" expanded="true" />
-                <marker date="1520178373246" expanded="true" signature="1098:1147" ph="SELECT * FRO... data_Reference" />
-                <marker date="1520178373246" expanded="true" signature="1228:1340" ph="SELECT * FRO... data_Reference" />
-                <marker date="1520178373246" expanded="true" signature="1389:1475" ph="SELECT * FRO... data_Reference" />
-                <marker date="1520178373246" expanded="true" signature="1783:1819" ph="SELECT * FRO... data_Reference" />
-                <marker date="1520178373246" expanded="true" signature="1783:1820" ph="SELECT * FRO... data_Reference" />
+                <marker date="1520194551585" expanded="true" signature="1783:1820" ph="SELECT * FRO... data_Reference" />
+                <marker date="1520194551585" expanded="true" signature="2481:2567" ph="SELECT * FRO... data_Reference" />
               </folding>
             </state>
           </provider>
@@ -74,11 +65,11 @@
       <file leaf-file-name="Parser.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/server/lib/cql/Parser.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="94">
-              <caret line="848" column="23" lean-forward="false" selection-start-line="848" selection-start-column="23" selection-end-line="848" selection-end-column="23" />
+            <state relative-caret-position="11955">
+              <caret line="805" column="5" lean-forward="false" selection-start-line="805" selection-start-column="5" selection-end-line="805" selection-end-column="5" />
               <folding>
-                <element signature="e#7#500#0#PHP" expanded="true" />
-                <element signature="e#522#544#0#PHP" expanded="true" />
+                <marker date="1520179337905" expanded="true" signature="27701:27747" ph="{...}" />
+                <marker date="1520179337905" expanded="true" signature="27703:27745" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -155,7 +146,6 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/src/server/controllers/AppController.php" />
-        <option value="$PROJECT_DIR$/src/server/config/parts/components.php" />
         <option value="$PROJECT_DIR$/src/vcslib/qx-contrib-Dialog/source/class/dialog/Form.js" />
         <option value="$PROJECT_DIR$/src/server/lib/schema/ISchema.php" />
         <option value="$PROJECT_DIR$/src/server/controllers/AccessConfigController.php" />
@@ -203,8 +193,9 @@
         <option value="$PROJECT_DIR$/src/server/lib/cql/Query.php" />
         <option value="$PROJECT_DIR$/src/server/schema/AbstractReferenceSchema.php" />
         <option value="$PROJECT_DIR$/src/server/lib/cql/Parser.php" />
-        <option value="$PROJECT_DIR$/src/server/lib/cql/NaturalLanguageQuery.php" />
         <option value="$PROJECT_DIR$/src/server/tests/unit/00-base/CqlTest.php" />
+        <option value="$PROJECT_DIR$/src/server/config/parts/components.php" />
+        <option value="$PROJECT_DIR$/src/server/lib/cql/NaturalLanguageQuery.php" />
       </list>
     </option>
   </component>
@@ -235,8 +226,8 @@
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" interpreter_name="PHP 7" />
   <component name="ProjectFrameBounds" fullScreen="true">
-    <option name="width" value="1280" />
-    <option name="height" value="800" />
+    <option name="width" value="1680" />
+    <option name="height" value="1050" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -306,6 +297,21 @@
               <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="server" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="config" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="bibliograph" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="server" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="config" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="parts" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="bibliograph" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="server" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="lib" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
@@ -315,6 +321,21 @@
               <item name="server" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="lib" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="cql" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="bibliograph" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="server" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="messages" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="bibliograph" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="server" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="messages" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="de" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
               <item name="bibliograph" type="b2602c69:ProjectViewProjectNode" />
@@ -338,12 +359,29 @@
               <item name="tests" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="functional" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
+            <path>
+              <item name="bibliograph" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="server" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="tests" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="unit" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="bibliograph" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="server" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="tests" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="unit" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="00-base" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -409,11 +447,12 @@
       <workItem from="1519915778921" duration="19191000" />
       <workItem from="1520012338875" duration="2445000" />
       <workItem from="1520066055449" duration="21969000" />
+      <workItem from="1520193087369" duration="1415000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="222117000" />
+    <option name="totallyTimeSpent" value="223532000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -425,21 +464,21 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1280" height="800" extended-state="0" />
+    <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
+    <editor active="true" />
     <layout>
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26312578" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32933334" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.40133333" sideWeight="0.503125" order="11" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32933334" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287483" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.42090786" sideWeight="0.496875" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26332796" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.40133333" sideWeight="0.503125" order="11" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3574975" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24798061" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287483" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32933334" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25091577" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.42067555" sideWeight="0.496875" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -447,6 +486,7 @@
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection Results" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24484181" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3574975" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -502,27 +542,7 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/server/models/BibliographicDatasource.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="94">
-          <caret line="30" column="20" lean-forward="false" selection-start-line="30" selection-start-column="20" selection-end-line="30" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/migrations/schema/bibliograph_datasource/m171219_230854_create_table_data_Transaction.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" column="54" lean-forward="false" selection-start-line="1" selection-start-column="54" selection-end-line="1" selection-end-column="54" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/migrations/schema/bibliograph_datasource/m171219_230854_create_table_data_Reference.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" column="54" lean-forward="false" selection-start-line="1" selection-start-column="54" selection-end-line="1" selection-end-column="54" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/migrations/schema/bibliograph_datasource/m171219_230854_create_table_data_Reference.php" />
     <entry file="file://$PROJECT_DIR$/src/server/vendor/yiisoft/yii2/db/ActiveQuery.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="218">
@@ -543,7 +563,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="270">
           <caret line="424" column="20" lean-forward="false" selection-start-line="424" selection-start-column="20" selection-end-line="424" selection-end-column="20" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -575,20 +594,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/migrations/schema/bibliograph_datasource/m171219_230854_create_table_join_Folder_Reference.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="55" lean-forward="false" selection-start-line="4" selection-start-column="6" selection-end-line="4" selection-end-column="55" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/migrations/schema/bibliograph_datasource/M180301071642_Update_table_data_Reference_add_fullext_index.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="7" lean-forward="true" selection-start-line="11" selection-start-column="7" selection-end-line="11" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/migrations/schema/bibliograph_datasource/m171219_230854_create_table_join_Folder_Reference.php" />
+    <entry file="file://$PROJECT_DIR$/src/server/migrations/schema/bibliograph_datasource/M180301071642_Update_table_data_Reference_add_fullext_index.php" />
     <entry file="file://$PROJECT_DIR$/test/api.sh">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="266">
@@ -596,13 +603,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/migrations/schema/bibliograph_datasource/m171219_230854_create_table_data_Folder.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="25" column="42" lean-forward="true" selection-start-line="25" selection-start-column="42" selection-end-line="25" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/migrations/schema/bibliograph_datasource/m171219_230854_create_table_data_Folder.php" />
     <entry file="file://$PROJECT_DIR$/test/data/bibliograph2.sql">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
@@ -635,7 +636,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4770">
           <caret line="321" column="24" lean-forward="false" selection-start-line="321" selection-start-column="24" selection-end-line="321" selection-end-column="24" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -657,7 +657,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="127">
           <caret line="155" column="18" lean-forward="false" selection-start-line="155" selection-start-column="18" selection-end-line="155" selection-end-column="18" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -697,22 +696,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/doc/yii2-cheatsheet.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SECOND">
-          <first_editor relative-caret-position="68">
-            <caret line="6" column="30" lean-forward="false" selection-start-line="6" selection-start-column="30" selection-end-line="6" selection-end-column="30" />
-            <folding />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/doc/yii2-cheatsheet.md" />
     <entry file="file://$PROJECT_DIR$/src/server/lib/Validate.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
           <caret line="1" column="10" lean-forward="false" selection-start-line="1" selection-start-column="10" selection-end-line="1" selection-end-column="10" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -728,7 +716,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2190">
           <caret line="146" column="18" lean-forward="false" selection-start-line="146" selection-start-column="18" selection-end-line="146" selection-end-column="18" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -736,7 +723,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -744,7 +730,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
           <caret line="30" column="19" lean-forward="true" selection-start-line="30" selection-start-column="19" selection-end-line="30" selection-end-column="19" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -752,7 +737,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -760,7 +744,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-310">
           <caret line="7" column="15" lean-forward="false" selection-start-line="7" selection-start-column="15" selection-end-line="7" selection-end-column="15" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -792,10 +775,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1519550447470" expanded="true" signature="8814:9098" ph="SELECT id, $... ${$table}" />
-            <marker date="1519550447470" expanded="true" signature="8929:8965" ph="SELECT MAX($... ${$table}" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -803,9 +782,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
           <caret line="4" column="0" lean-forward="false" selection-start-line="4" selection-start-column="0" selection-end-line="5" selection-end-column="47" />
-          <folding>
-            <element signature="e#146#170#0#PHP" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -821,7 +797,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -829,7 +804,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="165">
           <caret line="11" column="24" lean-forward="false" selection-start-line="11" selection-start-column="24" selection-end-line="11" selection-end-column="24" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -859,11 +833,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/server/lib/cql/Parser.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="94">
-          <caret line="848" column="23" lean-forward="false" selection-start-line="848" selection-start-column="23" selection-end-line="848" selection-end-column="23" />
+        <state relative-caret-position="11955">
+          <caret line="805" column="5" lean-forward="false" selection-start-line="805" selection-start-column="5" selection-end-line="805" selection-end-column="5" />
           <folding>
-            <element signature="e#7#500#0#PHP" expanded="true" />
-            <element signature="e#522#544#0#PHP" expanded="true" />
+            <marker date="1520179337905" expanded="true" signature="27701:27747" ph="{...}" />
+            <marker date="1520179337905" expanded="true" signature="27703:27745" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -886,27 +860,39 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/lib/cql/NaturalLanguageQuery.php">
+    <entry file="file://$PROJECT_DIR$/src/server/config/parts/components.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="112">
-          <caret line="278" column="6" lean-forward="false" selection-start-line="278" selection-start-column="6" selection-end-line="278" selection-end-column="6" />
-          <folding>
-            <element signature="e#569#608#0#PHP" expanded="true" />
-          </folding>
+        <state relative-caret-position="420">
+          <caret line="35" column="30" lean-forward="false" selection-start-line="35" selection-start-column="30" selection-end-line="35" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/config/common.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-16">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/server/tests/unit/00-base/CqlTest.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="244">
-          <caret line="41" column="43" lean-forward="true" selection-start-line="41" selection-start-column="43" selection-end-line="41" selection-end-column="43" />
+        <state relative-caret-position="582">
+          <caret line="56" column="9" lean-forward="true" selection-start-line="56" selection-start-column="9" selection-end-line="56" selection-end-column="9" />
           <folding>
-            <element signature="e#144#169#0#PHP" expanded="true" />
-            <marker date="1520178373246" expanded="true" signature="1098:1147" ph="SELECT * FRO... data_Reference" />
-            <marker date="1520178373246" expanded="true" signature="1228:1340" ph="SELECT * FRO... data_Reference" />
-            <marker date="1520178373246" expanded="true" signature="1389:1475" ph="SELECT * FRO... data_Reference" />
-            <marker date="1520178373246" expanded="true" signature="1783:1819" ph="SELECT * FRO... data_Reference" />
-            <marker date="1520178373246" expanded="true" signature="1783:1820" ph="SELECT * FRO... data_Reference" />
+            <marker date="1520194551585" expanded="true" signature="1783:1820" ph="SELECT * FRO... data_Reference" />
+            <marker date="1520194551585" expanded="true" signature="2481:2567" ph="SELECT * FRO... data_Reference" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/lib/cql/NaturalLanguageQuery.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="678">
+          <caret line="250" column="25" lean-forward="true" selection-start-line="250" selection-start-column="25" selection-end-line="250" selection-end-column="25" />
+          <folding>
+            <element signature="e#569#608#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>

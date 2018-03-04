@@ -3,56 +3,59 @@ msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
-"Last-Translator: \n"
+"Last-Translator: Christian Boulanger <info@bibliograph.org>\n"
 "Language-Team: \n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.1\n"
 
 msgctxt "app"
 msgid " and a connection has successfully been established."
-msgstr ""
+msgstr "und eine Verbindung wurde erfolgreich hergestellt."
 
 msgctxt "app"
 msgid " and applied new migrations for version {version}"
-msgstr ""
+msgstr "und neue Migrationen für die Version {version} durchgeführt."
 
 msgctxt "app"
 msgid "%s backups were deleted."
-msgstr ""
+msgstr "Datenquelle ‚%s‘ wurde erfolgreich gelöscht."
 
 msgctxt "app"
 msgid "%s is not a valid email address"
-msgstr ""
+msgstr "‚%s‘ ist keine gültige Emailadresse"
 
 msgctxt "app"
 msgid "%s records"
-msgstr ""
+msgstr "%s Datensätze"
 
 msgctxt "app"
 msgid "%s replacements made. %s"
-msgstr ""
+msgstr "Es wurden %s Ersetzungen vorgenommen. %s"
 
 msgctxt "app"
 msgid "%s, your password has been reset."
-msgstr ""
+msgstr "%s, Ihr Passwort wurde zurückgesetzt."
 
 msgctxt "app"
 msgid ", but trying to establish a connection failed with the error: {error}"
-msgstr ""
+msgstr ", aber der Versuch eine Verbindung herzustellen, scheiterte mit folgender Fehlermeldung: {error}"
 
+#, fuzzy
 msgctxt "app"
 msgid "2. Choose import format"
-msgstr ""
+msgstr "2. Wählen Sie das Importformat aus"
 
 msgctxt "app"
 msgid "<b>Setup failed. Please fix the following problems:</b>"
 msgstr ""
 
+#, fuzzy
 msgctxt "app"
 msgid "A descriptive title, e.g. Database of Research Group 1"
-msgstr ""
+msgstr "Ein beschreibender Titel, z.B. Literaturdatenbank Forschungsgruppe 1"
 
 msgctxt "app"
 msgid "A {type} named '{name}' already exists. Please pick another name."
@@ -60,19 +63,20 @@ msgstr ""
 
 msgctxt "app"
 msgid "Abstract"
-msgstr ""
+msgstr "Zusammenfassung"
 
 msgctxt "app"
 msgid "Access denied."
-msgstr ""
+msgstr "Zugang verweigert."
 
 msgctxt "app"
 msgid "Action"
 msgstr ""
 
+#, fuzzy
 msgctxt "app"
 msgid "Activate plugin"
-msgstr ""
+msgstr "Plugin deinstallieren"
 
 msgctxt "app"
 msgid "Activated plugin '%s'. You might have to reload the application."
@@ -84,15 +88,15 @@ msgstr ""
 
 msgctxt "app"
 msgid "Address"
-msgstr ""
+msgstr "Adresse\t"
 
 msgctxt "app"
 msgid "Admininstrator email exists."
-msgstr ""
+msgstr "Die Administratoren-Emailadresse existiert.\t"
 
 msgctxt "app"
 msgid "Affiliation"
-msgstr ""
+msgstr "Zugehörigkeit"
 
 msgctxt "app"
 msgid "All backups older than one day will be deleted. Proceed?"
@@ -100,23 +104,30 @@ msgstr ""
 
 msgctxt "app"
 msgid "All data"
-msgstr ""
+msgstr "Alle Daten"
 
+#, fuzzy
 msgctxt "app"
 msgid "An email has been sent to %s (%s) to inform about the change of password."
-msgstr ""
+msgstr "Eine Email mit Informationen zur Passwortänderung wurde an %s (%s) gesendet."
 
+#, fuzzy
 msgctxt "app"
 msgid "An email has been sent to %s (%s) with information on the registration."
-msgstr ""
+msgstr "Eine Email mit Informationen zur Registrierung wurde an %s (%s) gesendet."
 
+#, fuzzy
 msgctxt "app"
 msgid "An email has been sent with information on the password reset."
-msgstr ""
+msgstr "Es wurde eine Email mit Informationen zur Zurücksetzung des Passworts gesendet."
 
 msgctxt "app"
 msgid "An object of type {type} and id {namedId} does not exist."
 msgstr ""
+
+msgctxt "app"
+msgid "Annotation"
+msgstr "Annotationen"
 
 msgctxt "app"
 msgid "Annote"
@@ -124,19 +135,27 @@ msgstr ""
 
 msgctxt "app"
 msgid "Anonymous"
-msgstr ""
+msgstr "Gastbenutzer"
 
+#, fuzzy
 msgctxt "app"
 msgid "Apply only to the selected folder"
-msgstr ""
+msgstr "Nur auf den ausgewählten Ordner anwenden"
 
+#, fuzzy
 msgctxt "app"
 msgid "Apply to the selected folder and its subfolders"
-msgstr ""
+msgstr "Auf den ausgewählten Ordner und alle Unterordner anwenden"
 
+#, fuzzy
 msgctxt "app"
 msgid "Are you sure you want to replace '%s' with '%s' in %s %s?"
-msgstr ""
+msgstr "Sind Sie sicher, dass Sie '%s' mit '%s' in %s %s ersetzen wollen?"
+
+#, fuzzy
+msgctxt "app"
+msgid "Article"
+msgstr "Artikel"
 
 msgctxt "app"
 msgid "Attachments"
@@ -144,51 +163,91 @@ msgstr ""
 
 msgctxt "app"
 msgid "Author"
-msgstr ""
+msgstr "Autor/in"
+
+msgctxt "app"
+msgid "Authors"
+msgstr "Autor/inn/en"
 
 msgctxt "app"
 msgid "Backup created in %s seconds"
 msgstr ""
 
+#, fuzzy
 msgctxt "app"
 msgid "Backup file does not exist."
-msgstr ""
+msgstr "Die Datei '%s' existiert in der Datenquelle '%s' nicht."
 
+#, fuzzy
 msgctxt "app"
 msgid "Backup from "
-msgstr ""
+msgstr "Eine Sicherung anlegen?"
 
+#, fuzzy
 msgctxt "app"
 msgid "Backup has been restored."
-msgstr ""
+msgstr "Die Änderungen wurden gespeichert. "
+
+msgctxt "app"
+msgid "Bibliographic Type"
+msgstr "Werktyp"
+
+msgctxt "app"
+msgid "Book (Edited)"
+msgstr "Sammelband"
+
+msgctxt "app"
+msgid "Book (Monograph)"
+msgstr "Buch (Monographie)"
+
+msgctxt "app"
+msgid "Book Chapter"
+msgstr "Buchkapitel"
+
+msgctxt "app"
+msgid "Book Title"
+msgstr "Sammelbandtitel"
+
+msgctxt "app"
+msgid "Booklet"
+msgstr "Broschüre"
 
 msgctxt "app"
 msgid "Booktitle"
 msgstr ""
 
+#, fuzzy
 msgctxt "app"
 msgid "Boolean operators"
-msgstr ""
+msgstr "Logische Verknüpfungen"
+
+msgctxt "app"
+msgid "Call Number"
+msgstr "Signatur"
 
 msgctxt "app"
 msgid "Cannot connect to database: {error} "
-msgstr ""
+msgstr "Verbindung zur Datenbank kann nicht hergestellt werden: {error}"
 
 msgctxt "app"
 msgid "Cannot run in production mode without ini file."
-msgstr ""
+msgstr "Kann nicht im Produktivmodus ohne ini-Datei laufen."
 
 msgctxt "app"
 msgid "Cannot update from Bibliograph v2 data: some tables are missing."
-msgstr ""
+msgstr "Aktualisierung von Bibliograph v2-Daten nicht möglich: Einige Tabellen fehlen."
 
 msgctxt "app"
 msgid "Category"
-msgstr ""
+msgstr "Kategorie"
 
 msgctxt "app"
 msgid "Change the visibility of the folder"
-msgstr ""
+msgstr "Die Sichtbarkeit des Ordners ändern"
+
+msgctxt "app"
+msgid "Chapter in Edited Book"
+msgstr "Kapitel in Sammelband"
 
 msgctxt "app"
 msgid "Child Count"
@@ -196,67 +255,99 @@ msgstr ""
 
 msgctxt "app"
 msgid "Choose the export format"
-msgstr ""
+msgstr "Exportformat auswählen"
+
+msgctxt "app"
+msgid "Citation Key"
+msgstr "Zitierschlüssel"
+
+msgctxt "app"
+msgid "Citation key"
+msgstr "Zitierschlüssel"
 
 msgctxt "app"
 msgid "Citekey"
-msgstr ""
+msgstr "Zitierschlüssel\t"
 
 msgctxt "app"
 msgid "Class"
-msgstr ""
+msgstr "Klasse\t"
 
 msgctxt "app"
 msgid "Comparison modifiers"
-msgstr ""
+msgstr "Vergleichsoperatoren"
+
+msgctxt "app"
+msgid "Conference Paper"
+msgstr "Konferenzpapier"
+
+msgctxt "app"
+msgid "Conference Proceedings"
+msgstr "Konferenzbeiträge"
+
+msgctxt "app"
+msgid "Conference Title"
+msgstr "Titel der Konferenz"
 
 msgctxt "app"
 msgid "Config ID"
-msgstr ""
+msgstr "Konfigurations-ID"
 
 msgctxt "app"
 msgid "Configuration values were created."
 msgstr ""
 
+#, fuzzy
 msgctxt "app"
 msgid "Confirmed"
-msgstr ""
+msgstr "Danke, %s, Ihre E-Mailadresse wurde bestätigt."
 
 msgctxt "app"
 msgid "Contents"
-msgstr ""
+msgstr "Inhaltsverzeichnis"
 
 msgctxt "app"
 msgid "Copyright"
-msgstr ""
+msgstr "Urheberrechtsangaben"
 
 msgctxt "app"
-msgid "Create a backup?"
+msgid "Could not parse query: cq"
 msgstr ""
+
+#, fuzzy
+msgctxt "app"
+msgid "Create a backup?"
+msgstr "Eine Sicherung anlegen?"
 
 msgctxt "app"
 msgid "Created"
-msgstr ""
+msgstr "Angelegt am"
 
 msgctxt "app"
 msgid "Created By"
-msgstr ""
+msgstr "Angelegt von"
 
 msgctxt "app"
 msgid "Created by"
-msgstr ""
+msgstr "Angelegt von"
 
+#, fuzzy
 msgctxt "app"
 msgid "Created standard schema."
-msgstr ""
+msgstr "Angelegt am"
+
+msgctxt "app"
+msgid "Cross Reference"
+msgstr "Querverweis"
 
 msgctxt "app"
 msgid "Crossref"
-msgstr ""
+msgstr "Querverweis"
 
+#, fuzzy
 msgctxt "app"
 msgid "Data"
-msgstr ""
+msgstr "Lade die Ordner ..."
 
 msgctxt "app"
 msgid "Data has been lost due to session change. Please import again."
@@ -264,127 +355,151 @@ msgstr ""
 
 msgctxt "app"
 msgid "Database"
-msgstr ""
+msgstr "Datenbank"
 
 msgctxt "app"
 msgid "Database encoding"
-msgstr ""
+msgstr "Zeichenkodierung"
 
 msgctxt "app"
 msgid "Database name"
-msgstr ""
+msgstr "Datenbankname"
 
 msgctxt "app"
 msgid "Database user name"
-msgstr ""
+msgstr "Datenbank Nutzername"
 
 msgctxt "app"
 msgid "Database user password"
-msgstr ""
+msgstr "Datenbank Passwort"
 
+#, fuzzy
 msgctxt "app"
 msgid "Database {datasource} does not exist."
-msgstr ""
+msgstr "Die Datei '%s' existiert in der Datenquelle '%s' nicht."
 
 msgctxt "app"
 msgid "Datasource"
-msgstr ""
+msgstr "Datenquelle"
 
+#, fuzzy
 msgctxt "app"
 msgid "Datasource '%s' has been created. By default, it will not be visible to anyone. You have to link it with a group, a role, or a user first."
-msgstr ""
+msgstr "Die Datenbank '%s' wurde angelegt. Sie ist zurzeit noch für niemanden sichtbar. Sie müssen sie erst mit einer Gruppe, einer Rolle oder mit einem Benutzer verknüpfen."
 
+#, fuzzy
 msgctxt "app"
 msgid "Datasource '{1}' successfully deleted ... "
-msgstr ""
+msgstr "Datenquelle '%s' wurde erfolgreich gelöscht."
 
+#, fuzzy
 msgctxt "app"
 msgid "Datasource '{datasource}' does not exist"
+msgstr "Die Datei '%s' existiert in der Datenquelle '%s' nicht."
+
+msgctxt "app"
+msgid "Datasource migrations are not allowed in production mode. Please contact the adminstrator"
 msgstr ""
 
+#, fuzzy
 msgctxt "app"
 msgid "Datasource name '{1}' already exists. Please choose a different one."
-msgstr ""
+msgstr "Der Name '%s' kann nicht verwendet werden. Bitte wählen Sie einen anderen."
 
+#, fuzzy
 msgctxt "app"
 msgid "Datasource prefix"
-msgstr ""
+msgstr "Tabellenpräfix"
 
+#, fuzzy
 msgctxt "app"
 msgid "Datasources"
-msgstr ""
+msgstr "Datenbanken"
 
 msgctxt "app"
 msgid "Date"
-msgstr ""
+msgstr "Datum"
 
+#, fuzzy
 msgctxt "app"
 msgid "Date Ordered"
-msgstr ""
+msgstr "Datum"
 
+#, fuzzy
 msgctxt "app"
 msgid "Date Received"
-msgstr ""
+msgstr "Datum"
 
+#, fuzzy
 msgctxt "app"
 msgid "Date Reimbursement Requested"
-msgstr ""
+msgstr "Datum"
 
+#, fuzzy
 msgctxt "app"
 msgid "Deactivate plugin"
-msgstr ""
+msgstr "Plugin deinstallieren"
 
 msgctxt "app"
 msgid "Deactivated plugin '%s'. You might have to reload the application."
 msgstr ""
 
+#, fuzzy
 msgctxt "app"
 msgid "Dear %s,"
-msgstr ""
+msgstr "Sehr geehrte/r %s,"
 
+#, fuzzy
 msgctxt "app"
 msgid "Default Role"
-msgstr ""
+msgstr "Standardrolle für neue Benutzer/innen"
 
 msgctxt "app"
 msgid "Default role for new users"
-msgstr ""
+msgstr "Standardrolle für neue Benutzer/innen"
 
+#, fuzzy
 msgctxt "app"
 msgid "Delete entry"
-msgstr ""
+msgstr "Nur den Eintrag"
 
+#, fuzzy
 msgctxt "app"
 msgid "Deleting datasource '{1}' failed... "
-msgstr ""
+msgstr "Das Löschen der Datenquelle '%s' ist fehlgeschlagen..."
 
 msgctxt "app"
 msgid "Deleting of this object is not allowed."
 msgstr ""
 
+#, fuzzy
 msgctxt "app"
 msgid "Depth"
-msgstr ""
+msgstr "Reichweite"
 
+#, fuzzy
 msgctxt "app"
 msgid "Description"
-msgstr ""
+msgstr "Beschreibung"
 
+#, fuzzy
 msgctxt "app"
 msgid "Do you really want to move the folder '{name}' into the trash?"
-msgstr ""
+msgstr "Wollen Sie wirklich den Ordner '%s' in den Mülleimer legen?"
 
 msgctxt "app"
 msgid "Do you really want to restore Database '%s'? All existing data will be lost!"
 msgstr ""
 
+#, fuzzy
 msgctxt "app"
 msgid "Do you want to backup Database '%s'"
-msgstr ""
+msgstr "Wollen Sie wirklich den Ordner '%s' in den Mülleimer legen?"
 
+#, fuzzy
 msgctxt "app"
 msgid "Do you want to remove only the datasource entry or all associated data?"
-msgstr ""
+msgstr "Wollen Sie nur die Datenquellen-Eintrag entfernen oder alle zugehörigen Daten löschen?"
 
 msgctxt "app"
 msgid "Doi"
@@ -392,47 +507,52 @@ msgstr ""
 
 msgctxt "app"
 msgid "Edition"
-msgstr ""
+msgstr "Auflage"
 
 msgctxt "app"
 msgid "Editor"
-msgstr ""
+msgstr "Herausgeber/in"
+
+msgctxt "app"
+msgid "Editors"
+msgstr "Herausgeber/innen"
 
 msgctxt "app"
 msgid "Either you simply type in keywords like you would do in a google search."
-msgstr ""
+msgstr "Entweder tippen Sie einfach Schlagwörter in das Suchfeld, wie Sie es von einer Google-Suche gewöhnt sind."
 
 msgctxt "app"
 msgid "Email"
-msgstr ""
+msgstr "E-Mail"
 
 msgctxt "app"
 msgid "Email address"
-msgstr ""
+msgstr "Emailadresse"
 
+#, fuzzy
 msgctxt "app"
 msgid "Email to %s"
-msgstr ""
+msgstr "Für die Adresse '%s' ist kein Benutzer registriert."
 
 msgctxt "app"
 msgid "Encoding"
-msgstr ""
+msgstr "Zeichenkodierung"
 
 msgctxt "app"
 msgid "Enter a valid Email address"
-msgstr ""
+msgstr "Geben Sie eine gültige E-Mailadresse ein. "
 
 msgctxt "app"
 msgid "Enter the full name of the user"
-msgstr ""
+msgstr "Der vollständige Name, z.B. Klaus Müller"
 
 msgctxt "app"
 msgid "Enter the short login name"
-msgstr ""
+msgstr "Der kurze Benutzername, z.B. kmueller"
 
 msgctxt "app"
 msgid "Entry only"
-msgstr ""
+msgstr "Nur den Eintrag"
 
 msgctxt "app"
 msgid "Error saving {type} named '{name}':"
@@ -442,13 +562,14 @@ msgctxt "app"
 msgid "Example databases already existed."
 msgstr ""
 
+#, fuzzy
 msgctxt "app"
 msgid "Example databases were created."
-msgstr ""
+msgstr "Beispiel-Datenquellen erzeugt."
 
 msgctxt "app"
 msgid "Export references"
-msgstr ""
+msgstr "Exportieren"
 
 msgctxt "app"
 msgid "Extension"
@@ -456,59 +577,65 @@ msgstr ""
 
 msgctxt "app"
 msgid "Field names"
-msgstr ""
+msgstr "Feldnamen"
 
 msgctxt "app"
 msgid "Folder Title"
-msgstr ""
+msgstr "Ordnertitel"
 
 msgctxt "app"
 msgid "Folder cannot be moved on itself."
-msgstr ""
+msgstr "Ein Ordner kann nicht auf sich selbst verschoben werden."
 
 msgctxt "app"
 msgid "Folder is closed by default"
-msgstr ""
+msgstr "Nein, Ordner ist geschlossen"
 
 msgctxt "app"
 msgid "Folder is not publically visible"
-msgstr ""
+msgstr "Ist der Ordner öffentlich?"
 
 msgctxt "app"
 msgid "Folder is opened by default"
-msgstr ""
+msgstr "Ja, Ordner öffnet sich automatisch"
 
 msgctxt "app"
 msgid "Folder is publically visible"
-msgstr ""
+msgstr "Ist der Ordner öffentlich?"
 
+#, fuzzy
 msgctxt "app"
 msgid "Found data for version {version}"
-msgstr ""
+msgstr "und neue Migrationen für die Version {version} durchgeführt."
 
+#, fuzzy
 msgctxt "app"
 msgid "Found empty database"
-msgstr ""
+msgstr "Den Papierkorb leeren ..."
 
 msgctxt "app"
 msgid "Full Name"
-msgstr ""
+msgstr "Vollständiger Name"
 
 msgctxt "app"
 msgid "Full name"
-msgstr ""
+msgstr "Vollständiger Name"
 
 msgctxt "app"
 msgid "Group"
-msgstr ""
+msgstr "Gruppe"
 
 msgctxt "app"
 msgid "Group ID"
-msgstr ""
+msgstr "Gruppe"
 
 msgctxt "app"
 msgid "Groups"
-msgstr ""
+msgstr "Gruppen"
+
+msgctxt "app"
+msgid "Handbook"
+msgstr "Handbuch"
 
 msgctxt "app"
 msgid "Hash"
@@ -516,75 +643,99 @@ msgstr ""
 
 msgctxt "app"
 msgid "Hidden"
-msgstr ""
+msgstr "Versteckt"
 
 msgctxt "app"
 msgid "Host"
-msgstr ""
+msgstr "Server Hostadresse"
 
 msgctxt "app"
 msgid "Howpublished"
-msgstr ""
+msgstr "Publikationsnachweis\t"
 
 msgctxt "app"
 msgid "ID"
-msgstr ""
+msgstr "Datensatz-ID"
 
+msgctxt "app"
+msgid "ISBN"
+msgstr "ISBN"
+
+msgctxt "app"
+msgid "ISSN"
+msgstr "ISSN"
+
+#, fuzzy
 msgctxt "app"
 msgid "If this is not what you wanted, please reset your password immediately by clicking on the following link:"
-msgstr ""
+msgstr "Wenn Sie dies nicht veranlasst haben, setzen Sie Ihr Passwort am besten sofort zurück, indem Sie auf den folgenden Link klicken:"
 
+#, fuzzy
 msgctxt "app"
 msgid "If this is not what you wanted, you can ignore this email. Your account is safe."
-msgstr ""
+msgstr "Wenn Sie das nicht veranlasst haben oder das Passwort nicht ändern möchten, können Sie diese Email ignorieren und löschen. Ihr Benutzerkonto wurde nicht verändert."
 
+#, fuzzy
 msgctxt "app"
 msgid "If you have requested the reset, please click on the following link:"
-msgstr ""
+msgstr "Wenn Sie das Zurücksetzen des Passworts veranlasst haben, klicken Sie bitte auf den folgenden Link:"
 
 msgctxt "app"
 msgid "In all groups"
-msgstr ""
+msgstr "In allen Gruppen"
 
+#, fuzzy
 msgctxt "app"
 msgid "In case you want to revert the changes, a backup file has been created."
-msgstr ""
+msgstr "Im Fall, dass Sie die Änderungen rückgängig machen wollen, wurde eine Sicherungsdatei '%s' erstellt. "
 
 msgctxt "app"
 msgid "In {group}"
-msgstr ""
+msgstr "In {group}"
 
+#, fuzzy
 msgctxt "app"
 msgid "Index"
-msgstr ""
+msgstr "Der Index '%s' existiert nicht."
 
 msgctxt "app"
 msgid "Index '%s' does not exist."
-msgstr ""
+msgstr "@@@@"
 
+#, fuzzy
 msgctxt "app"
 msgid "Ini file exists."
-msgstr ""
+msgstr "Lade Datei auf den Server ..."
 
+#, fuzzy
 msgctxt "app"
 msgid "Initializing database failed."
-msgstr ""
+msgstr "Das Löschen der Datenquelle '%s' ist fehlgeschlagen..."
 
+#, fuzzy
 msgctxt "app"
 msgid "Install plugin"
-msgstr ""
+msgstr "Plugin installieren"
 
+#, fuzzy
 msgctxt "app"
 msgid "Installation of plugin '%s' failed: %s"
-msgstr ""
+msgstr "Die Installation von Plugin '%s' war nicht erfolgreich: %s"
 
+#, fuzzy
 msgctxt "app"
 msgid "Installed plugin '%s'"
-msgstr ""
+msgstr "Plugin '%s' wurde installiert."
 
+#, fuzzy
 msgctxt "app"
 msgid "Institution"
-msgstr ""
+msgstr "Institution"
+
+#, fuzzy
+msgctxt "app"
+msgid "Internet Link"
+msgstr "URL"
 
 msgctxt "app"
 msgid "Invalid database setup. Please contact the adminstrator."
@@ -600,43 +751,51 @@ msgstr ""
 
 msgctxt "app"
 msgid "Is folder publically visible?"
-msgstr ""
+msgstr "Ist der Ordner öffentlich?"
 
+#, fuzzy
 msgctxt "app"
 msgid "Isbn"
-msgstr ""
+msgstr "ISBN"
 
+#, fuzzy
 msgctxt "app"
 msgid "Issn"
-msgstr ""
+msgstr "ISSN"
 
 msgctxt "app"
 msgid "Journal"
-msgstr ""
+msgstr "Zeitschrift"
+
+msgctxt "app"
+msgid "Journal Issue"
+msgstr "Zeitschriftenausgabe"
 
 msgctxt "app"
 msgid "Key"
-msgstr ""
+msgstr "Schlüssel"
 
 msgctxt "app"
 msgid "Keywords"
-msgstr ""
+msgstr "Schlagwörter"
 
+#, fuzzy
 msgctxt "app"
 msgid "LDAP authentication is enabled"
-msgstr ""
+msgstr "Authentifizierungsmethode"
 
+#, fuzzy
 msgctxt "app"
 msgid "LDAP authentication is not enabled."
-msgstr ""
+msgstr "Authentifizierungsmethode"
 
 msgctxt "app"
 msgid "Label"
-msgstr ""
+msgstr "Feldbezeichner"
 
 msgctxt "app"
 msgid "Language"
-msgstr ""
+msgstr "Sprache"
 
 msgctxt "app"
 msgid "Last Action"
@@ -646,17 +805,19 @@ msgctxt "app"
 msgid "Lccn"
 msgstr ""
 
+#, fuzzy
 msgctxt "app"
 msgid "Ldap"
-msgstr ""
+msgstr "Die Benutzerdaten stammen aus einem LDAP-Server und können nicht verändert werden."
 
 msgctxt "app"
 msgid "Loaded records {firstRow} - {lastRow} ..."
 msgstr ""
 
+#, fuzzy
 msgctxt "app"
 msgid "Location"
-msgstr ""
+msgstr "Standort"
 
 msgctxt "app"
 msgid "Locked"
@@ -664,259 +825,321 @@ msgstr ""
 
 msgctxt "app"
 msgid "Login name"
-msgstr ""
+msgstr "Benutzername"
 
+#, fuzzy
 msgctxt "app"
 msgid "Login name '{1}' already exists. Please choose a different one."
-msgstr ""
+msgstr "Der Benutzername '%s' kann nicht verwendet werden. Bitte wählen Sie einen anderen."
 
+#, fuzzy
 msgctxt "app"
 msgid "Main folder"
-msgstr ""
+msgstr "Stammdaten"
 
+#, fuzzy
 msgctxt "app"
 msgid "Marked Deleted"
-msgstr ""
+msgstr "Der Datensatz ist zur Löschung vorgesehen."
+
+msgctxt "app"
+msgid "Master's Thesis"
+msgstr "Masterarbeit"
 
 msgctxt "app"
 msgid "Merge entries"
 msgstr ""
 
+#, fuzzy
 msgctxt "app"
 msgid "Message"
-msgstr ""
+msgstr "Fehlermeldung"
 
 msgctxt "app"
 msgid "Migrated data from Bibliograph v2"
 msgstr ""
 
 msgctxt "app"
+msgid "Migrated schema(s) {schemas}."
+msgstr ""
+
+msgctxt "app"
 msgid "Migrating data from Bibliograph v2 failed."
 msgstr ""
 
+#, fuzzy
+msgctxt "app"
+msgid "Migrating schemas {schemas} failed."
+msgstr "Datenquellenschemata hinzugefügt."
+
+#, fuzzy
+msgctxt "app"
+msgid "Miscellaneous"
+msgstr "Sonstige Veröffentlichung"
+
+#, fuzzy
 msgctxt "app"
 msgid "Missing administrator email in bibliograph.ini.php."
-msgstr ""
+msgstr "Die Administratoren-Email wurde gespeichert."
 
+#, fuzzy
 msgctxt "app"
 msgid "Missing login name"
-msgstr ""
+msgstr "Der kurze Benutzername, z.B. kmueller"
 
 msgctxt "app"
 msgid "Modified"
-msgstr ""
+msgstr "Verändert am"
 
 msgctxt "app"
 msgid "Modified By"
-msgstr ""
+msgstr "Verändert von"
 
 msgctxt "app"
 msgid "Modified by"
-msgstr ""
+msgstr "Verändert von"
 
 msgctxt "app"
 msgid "Month"
-msgstr ""
+msgstr "Monat"
 
 msgctxt "app"
 msgid "Name"
-msgstr ""
+msgstr "Name"
 
 msgctxt "app"
 msgid "Named ID"
-msgstr ""
+msgstr "Nichtnumerische ID"
 
 msgctxt "app"
 msgid "No"
-msgstr ""
+msgstr "Nein\t"
 
 msgctxt "app"
 msgid "No database connection. "
-msgstr ""
+msgstr "Keine Verbindung zur Datenbank."
 
+#, fuzzy
 msgctxt "app"
 msgid "No email address found."
-msgstr ""
+msgstr "Für die Adresse '%s' ist kein Benutzer registriert."
 
+#, fuzzy
 msgctxt "app"
 msgid "No recognized query format in request."
-msgstr ""
+msgstr "Das Abfrageformat kann nicht erkannt werden."
 
+#, fuzzy
 msgctxt "app"
 msgid "No role"
-msgstr ""
+msgstr "Keine Rolle"
+
+#, fuzzy
+msgctxt "app"
+msgid "No schema migrations necessary."
+msgstr "Schema"
 
 msgctxt "app"
 msgid "No updates to the databases."
 msgstr ""
 
+#, fuzzy
 msgctxt "app"
 msgid "No user found for email address %s"
-msgstr ""
+msgstr "Für die Adresse '%s' ist kein Benutzer registriert."
 
+#, fuzzy
 msgctxt "app"
 msgid "Normal folder"
-msgstr ""
+msgstr "Normaler Ordner"
 
 msgctxt "app"
 msgid "Note"
-msgstr ""
+msgstr "Anmerkungen"
 
 msgctxt "app"
 msgid "Number"
-msgstr ""
+msgstr "Nummer"
 
 msgctxt "app"
 msgid "Off"
-msgstr ""
+msgstr "Aus"
 
 msgctxt "app"
 msgid "On, Use query to determine content"
-msgstr ""
+msgstr "Ja, mit Suchausdruck filtern"
 
 msgctxt "app"
 msgid "Online"
-msgstr ""
+msgstr "Online\t"
 
 msgctxt "app"
 msgid "Opened"
-msgstr ""
+msgstr "Geöffnet?"
 
 msgctxt "app"
 msgid "Opened?"
-msgstr ""
+msgstr "Geöffnet?"
 
 msgctxt "app"
 msgid "Or you compose complex queries using field names, comparison operators, and boolean connectors (for example: title contains constitution and year=1981)."
-msgstr ""
+msgstr "Oder Sie erstellen komplexere Abfrage unter Verwendung von Feldnamen, Vergleichsoperatoren und logischen Verknüpfungen (Zum Beispiel: titel enthält verfassung und jahr = 1981)."
 
 msgctxt "app"
 msgid "Organization"
-msgstr ""
+msgstr "Organisation"
 
 msgctxt "app"
 msgid "Owner"
-msgstr ""
+msgstr "Besitzer/in"
 
 msgctxt "app"
 msgid "Pages"
-msgstr ""
+msgstr "Seiten"
+
+#, fuzzy
+msgctxt "app"
+msgid "Paper in Conference Proceedings"
+msgstr "Konferenzpapier"
 
 msgctxt "app"
 msgid "Parent ID"
-msgstr ""
+msgstr "Eltern-ID"
 
 msgctxt "app"
 msgid "Parent node cannot be moved on a child node"
-msgstr ""
+msgstr "Ein übergeordneter Ordner kann nicht in einen untergeordneten Ordner verschoben werden. "
 
 msgctxt "app"
 msgid "Password"
-msgstr ""
+msgstr "Passwort"
 
+#, fuzzy
 msgctxt "app"
 msgid "Password change at %s"
-msgstr ""
+msgstr "Passwortänderung bei %s"
 
 msgctxt "app"
 msgid "Password must be at least 8 characters long"
-msgstr ""
+msgstr "Das Passwort muss mindestens 8 Zeichen lang sein."
 
 msgctxt "app"
 msgid "Password must be at least 8 characters long."
-msgstr ""
+msgstr "Das Passwort muss mindestens 8 Zeichen lang sein."
 
+#, fuzzy
 msgctxt "app"
 msgid "Password reset at %s"
-msgstr ""
+msgstr "Ihr Passwort bei %s wurde zurückgesetzt"
 
 msgctxt "app"
 msgid "Passwords did not match."
-msgstr ""
+msgstr "Passwörter stimmen nicht überein."
 
 msgctxt "app"
 msgid "Passwords do not match..."
-msgstr ""
+msgstr "Passwörter stimmen nicht überein."
 
 msgctxt "app"
 msgid "Path"
-msgstr ""
+msgstr "Pfad"
 
 msgctxt "app"
 msgid "Permission"
-msgstr ""
+msgstr "Berechtigung"
 
 msgctxt "app"
 msgid "Permission ID"
-msgstr ""
+msgstr "Berechtigung"
 
 msgctxt "app"
 msgid "Permissions"
-msgstr ""
+msgstr "Berechtigungen"
 
 msgctxt "app"
+msgid "Ph.D. Thesis"
+msgstr "Doktorarbeit"
+
+msgctxt "app"
+msgid "Place"
+msgstr "Ort"
+
+#, fuzzy
+msgctxt "app"
 msgid "Please <a href='%s'>log in</a> and change the password now."
-msgstr ""
+msgstr "Bitte <a href='%s'>melden Sie sich jetzt an</a> und ändern Ihr Passwort."
 
 msgctxt "app"
 msgid "Please check logfile for problems."
 msgstr ""
 
+#, fuzzy
 msgctxt "app"
 msgid "Please configure the plugins"
-msgstr ""
+msgstr "Bitte konfigurieren Sie die Plugins."
 
+#, fuzzy
 msgctxt "app"
 msgid "Please confirm your account by visiting the following link:"
-msgstr ""
+msgstr "Bitte bestätigen Sie Ihr Konto, indem sie auf den folgenden Link klicken:"
 
+#, fuzzy
 msgctxt "app"
 msgid "Please enter a message."
-msgstr ""
+msgstr "Bitte geben Sie die Informationen zur neuen Datenbank ein. "
 
+#, fuzzy
 msgctxt "app"
 msgid "Please enter a subject."
-msgstr ""
+msgstr "Bitte geben Sie die Informationen zur neuen Datenbank ein. "
 
+#, fuzzy
 msgctxt "app"
 msgid "Please enter a valid class name"
-msgstr ""
+msgstr "Bitte wählen Sie den Namen und den Typ des neuen Ordners;"
 
+#, fuzzy
 msgctxt "app"
 msgid "Please enter the information on the new datasource."
-msgstr ""
+msgstr "Bitte geben Sie die Informationen zur neuen Datenbank ein. "
 
+#, fuzzy
 msgctxt "app"
 msgid "Please enter the name and type of the new folder:"
-msgstr ""
+msgstr "Bitte wählen Sie den Namen und den Typ des neuen Ordners;"
 
+#, fuzzy
 msgctxt "app"
 msgid "Please enter the user data. A random password will be generated and sent to the user."
-msgstr ""
+msgstr "Bitte geben Sie die Nutzerdaten ein. Der/die neue Benutzer/in erhält ein temporäres Passwort per E-Mail."
 
+#, fuzzy
 msgctxt "app"
 msgid "Please enter your email address. You will receive a message with a link to reset your password."
-msgstr ""
+msgstr "Bitte geben Sie Ihre Emailadresse ein. Sie erhalten dann eine Nachricht mit einem Link zum Zurücksetzen Ihres Passwortes."
 
 msgctxt "app"
 msgid "Please select the backup set to restore into database '%s'"
 msgstr ""
 
+#, fuzzy
 msgctxt "app"
 msgid "Plugin is active"
-msgstr ""
+msgstr "Plugin deinstallieren"
 
+#, fuzzy
 msgctxt "app"
 msgid "Plugin is deactivated"
-msgstr ""
+msgstr "Dieser Benutzer ist deaktiviert."
 
+#, fuzzy
 msgctxt "app"
 msgid "Plugin is not installed"
-msgstr ""
+msgstr "Das Plugin ist installiert."
 
 msgctxt "app"
 msgid "Port"
-msgstr ""
+msgstr "Server-Port"
 
 msgctxt "app"
 msgid "Position"
@@ -924,43 +1147,49 @@ msgstr ""
 
 msgctxt "app"
 msgid "Prefix"
-msgstr ""
+msgstr "Tabellenpräfix"
 
 msgctxt "app"
 msgid "Preparing export data. Please wait..."
-msgstr ""
+msgstr "Exportdaten werden verarbeitet. Bitte warten…"
 
 msgctxt "app"
 msgid "Price"
-msgstr ""
+msgstr "Preis"
 
+#, fuzzy
 msgctxt "app"
 msgid "Protected"
-msgstr ""
+msgstr "Geschützt"
 
 msgctxt "app"
 msgid "Public"
-msgstr ""
+msgstr "Öffentlich"
+
+msgctxt "app"
+msgid "Published As"
+msgstr "Publikationsangaben"
 
 msgctxt "app"
 msgid "Publisher"
-msgstr ""
+msgstr "Verlag"
 
 msgctxt "app"
 msgid "Query"
-msgstr ""
+msgstr "Suchausdruck"
 
+#, fuzzy
 msgctxt "app"
 msgid "Re-Installation of plugin '%s' failed: %s"
-msgstr ""
+msgstr "Die erneute Installation von Plugin '%s' war nicht erfolgreich: %s"
 
 msgctxt "app"
 msgid "Readonly"
-msgstr ""
+msgstr "Nur Lesezugriff"
 
 msgctxt "app"
 msgid "Record is marked for deletion"
-msgstr ""
+msgstr "Der Datensatz ist zur Löschung vorgesehen."
 
 msgctxt "app"
 msgid "Reference Count"
@@ -968,39 +1197,45 @@ msgstr ""
 
 msgctxt "app"
 msgid "Reference Type"
-msgstr ""
+msgstr "Werktyp"
 
 msgctxt "app"
 msgid "Reference id"
-msgstr ""
+msgstr "Datensatz-ID"
 
 msgctxt "app"
 msgid "Reftype"
-msgstr ""
+msgstr "Werktyp\t"
 
+#, fuzzy
 msgctxt "app"
 msgid "Reinstall plugin"
-msgstr ""
+msgstr "Plugin erneut installieren"
 
+#, fuzzy
 msgctxt "app"
 msgid "Reinstalled plugin '%s'"
-msgstr ""
+msgstr "Das Plugin '%s' wurde erneut installiert. "
 
 msgctxt "app"
 msgid "Relations"
-msgstr ""
+msgstr "Beziehungen"
 
 msgctxt "app"
 msgid "Replace in:"
-msgstr ""
+msgstr "Ersetzen in:"
 
 msgctxt "app"
 msgid "Replace with:"
-msgstr ""
+msgstr "Ersetzen mit:"
+
+msgctxt "app"
+msgid "Report/Working Paper"
+msgstr "Arbeitspapier/Report"
 
 msgctxt "app"
 msgid "Resource path"
-msgstr ""
+msgstr "Ressourcenpfad\t"
 
 msgctxt "app"
 msgid "Resourcepath"
@@ -1008,63 +1243,69 @@ msgstr ""
 
 msgctxt "app"
 msgid "Role"
-msgstr ""
+msgstr "Rolle"
 
 msgctxt "app"
 msgid "Role ID"
-msgstr ""
+msgstr "Keine Rolle"
 
 msgctxt "app"
 msgid "Roles"
-msgstr ""
+msgstr "Rollen"
 
 msgctxt "app"
 msgid "Schema"
-msgstr ""
+msgstr "Schema"
 
 msgctxt "app"
 msgid "Schemas"
-msgstr ""
+msgstr "Schemata"
 
 msgctxt "app"
 msgid "School"
-msgstr ""
+msgstr "Universität\t"
 
 msgctxt "app"
 msgid "Search expression:"
-msgstr ""
+msgstr "Suchausdruck:"
+
+#, fuzzy
+msgctxt "app"
+msgid "Search field '{index}' does not exist."
+msgstr "Der Index '%s' existiert nicht."
 
 msgctxt "app"
 msgid "Search folder"
-msgstr ""
+msgstr "Suchordner"
 
 msgctxt "app"
 msgid "Search folder?"
-msgstr ""
+msgstr "Suchordner?"
 
 msgctxt "app"
 msgid "Search in:"
-msgstr ""
+msgstr "Suchen in: "
 
 msgctxt "app"
 msgid "Searchable"
-msgstr ""
+msgstr "Durchsuchbar"
 
 msgctxt "app"
 msgid "Searchfolder"
-msgstr ""
+msgstr "Suchordner"
 
 msgctxt "app"
 msgid "Selected folder"
-msgstr ""
+msgstr "Ausgewählte Ordner"
 
 msgctxt "app"
 msgid "Selected records"
-msgstr ""
+msgstr "Ausgewählte Datensätze"
 
+#, fuzzy
 msgctxt "app"
 msgid "Send email to %s recipients?"
-msgstr ""
+msgstr "'%s' ist keine gültige Emailadresse"
 
 msgctxt "app"
 msgid "Sent email to %s recipients"
@@ -1072,39 +1313,40 @@ msgstr ""
 
 msgctxt "app"
 msgid "Series"
-msgstr ""
+msgstr "Serie"
 
 msgctxt "app"
 msgid "Server host"
-msgstr ""
+msgstr "Server Hostadresse"
 
 msgctxt "app"
 msgid "Server port"
-msgstr ""
+msgstr "Server-Port"
 
 msgctxt "app"
 msgid "Size"
-msgstr ""
+msgstr "Größe"
 
 msgctxt "app"
 msgid "Source"
-msgstr ""
+msgstr "Quelle\t"
 
 msgctxt "app"
 msgid "Sponsor"
-msgstr ""
+msgstr "Zuwendungsgeber\t"
 
+#, fuzzy
 msgctxt "app"
 msgid "Standard schema existed."
-msgstr ""
+msgstr "Schema"
 
 msgctxt "app"
 msgid "State"
-msgstr ""
+msgstr "Status"
 
 msgctxt "app"
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 msgctxt "app"
 msgid "Subject"
@@ -1112,19 +1354,25 @@ msgstr ""
 
 msgctxt "app"
 msgid "Subtitle"
-msgstr ""
+msgstr "Untertitel"
 
+#, fuzzy
 msgctxt "app"
 msgid "Thank you, %s, your email address has been confirmed."
-msgstr ""
+msgstr "Danke, %s, Ihre E-Mailadresse wurde bestätigt."
 
 msgctxt "app"
 msgid "Thank you."
-msgstr ""
+msgstr "Vielen Dank."
 
 msgctxt "app"
 msgid "The application database needs to be upgraded from '{oldversion}' to '{newversion}'. Please log in as administrator."
-msgstr ""
+msgstr "@@@@"
+
+#, fuzzy
+msgctxt "app"
+msgid "The application needs to be upgraded from '{oldversion}' to '{newversion}'. Please log in as administrator."
+msgstr "@@@@"
 
 msgctxt "app"
 msgid "The configuration directory must not be writable in production mode {config_dir}."
@@ -1142,17 +1390,19 @@ msgctxt "app"
 msgid "The selected group has no members."
 msgstr ""
 
+#, fuzzy
 msgctxt "app"
 msgid "The selected record '%s' is contained in %s folders. Move to the trash anyways?"
-msgstr ""
+msgstr "Der ausgewählte Datensatz '%s' befindet sich in %s Ordnern. Möchten Sie ihn trotzdem in den Papierkorb bewegen?"
 
+#, fuzzy
 msgctxt "app"
 msgid "The selected user has no email address."
-msgstr ""
+msgstr "Für die Adresse '%s' ist kein Benutzer registriert."
 
 msgctxt "app"
 msgid "The short name, e.g. researchgroup1"
-msgstr ""
+msgstr "Kurzname, z.B. forschungsgruppe1"
 
 msgctxt "app"
 msgid "There was a problem. Please examine the log file."
@@ -1166,17 +1416,20 @@ msgctxt "app"
 msgid "This folder contains deleted items"
 msgstr ""
 
+#, fuzzy
 msgctxt "app"
 msgid "This is the main folder of the database"
-msgstr ""
+msgstr "Datenbank"
 
+#, fuzzy
 msgctxt "app"
 msgid "This is to inform you that you or somebody else has changed the password at %s."
-msgstr ""
+msgstr "Hiermit möchten wir Sie darüber informieren, dass Ihr Passwort auf '%s' geändert wurde."
 
+#, fuzzy
 msgctxt "app"
 msgid "This is to inform you that you or somebody else has requested a password reset at %s."
-msgstr ""
+msgstr "Hiermit möchten wir Sie informieren, dass Sie oder jemand anders eine Rücksetzung des Passworts bei '%s' angefordert hat."
 
 msgctxt "app"
 msgid "This will copy {countReferences} from '{sourceFolder}' to '{targetFolder}'. Proceed?"
@@ -1188,47 +1441,60 @@ msgstr ""
 
 msgctxt "app"
 msgid "Title"
-msgstr ""
+msgstr "Titel"
 
+#, fuzzy
 msgctxt "app"
 msgid "To change the password, enter new password."
-msgstr ""
+msgstr "Zum ändern bitte ein neues Passwort eingeben."
 
+#, fuzzy
 msgctxt "app"
 msgid "To change the password, repeat new password"
-msgstr ""
+msgstr "Zum ändern bitte das neue Passwort wiederholen."
 
 msgctxt "app"
 msgid "Top folders cannot be deleted."
-msgstr ""
+msgstr "Die obersten Ordner können nicht gelöscht werden."
 
 msgctxt "app"
 msgid "Top folders cannot be moved."
-msgstr ""
+msgstr "Die obersten Ordner können nicht verschoben werden."
 
 msgctxt "app"
 msgid "Translator"
-msgstr ""
+msgstr "Übersetzer"
 
 msgctxt "app"
 msgid "Trash"
-msgstr ""
+msgstr "Mülleimer"
 
 msgctxt "app"
 msgid "Type"
-msgstr ""
+msgstr "Typ"
 
+#, fuzzy
 msgctxt "app"
 msgid "Uninstall plugin"
-msgstr ""
+msgstr "Plugin deinstallieren"
 
+#, fuzzy
 msgctxt "app"
 msgid "Uninstallation of plugin '%s' failed: %s"
-msgstr ""
+msgstr "Die Deinstallation von Plugin '%s' war nicht erfolgreich: %s"
 
+#, fuzzy
 msgctxt "app"
 msgid "Uninstalled plugin '%s'"
-msgstr ""
+msgstr "Das Plugin '%s' wurde deinstalliert."
+
+msgctxt "app"
+msgid "University"
+msgstr "Universität"
+
+msgctxt "app"
+msgid "Unpublished Manuscript"
+msgstr "Unveröffentlichtes Manuskript"
 
 msgctxt "app"
 msgid "Url"
@@ -1236,87 +1502,90 @@ msgstr ""
 
 msgctxt "app"
 msgid "User"
-msgstr ""
+msgstr "Benutzer/in"
 
 msgctxt "app"
 msgid "User ID"
-msgstr ""
+msgstr "Benutzer-ID"
 
 msgctxt "app"
 msgid "User data is from an LDAP server and cannot be changed."
-msgstr ""
+msgstr "Die Benutzerdaten stammen aus einem LDAP-Server und können nicht verändert werden."
 
 msgctxt "app"
 msgid "User is deactivated"
-msgstr ""
+msgstr "Dieser Benutzer ist deaktiviert."
 
+#, fuzzy
 msgctxt "app"
 msgid "Username"
-msgstr ""
+msgstr "Ihr Nutzername ist '%s' und Ihr Passwort ist '%s'"
 
 msgctxt "app"
 msgid "Users"
-msgstr ""
+msgstr "Benutzer/innen"
 
 msgctxt "app"
 msgid "Value"
-msgstr ""
+msgstr "Wert"
 
 msgctxt "app"
 msgid "Volume"
-msgstr ""
+msgstr "Band"
 
 msgctxt "app"
 msgid "Welcome, {0}!"
-msgstr ""
+msgstr "Willkommen, {0}"
 
 msgctxt "app"
 msgid "When using more than one word, the phrase has to be quoted (For example, title startswith \"Recent developments\")."
-msgstr ""
+msgstr "Wenn Sie mehr als ein Wort verwenden, müssen sie den Ausdruck mit Anführungszeichen einschließen (Zum Beispiel: titel beginntmit „Neuere Entwicklungen“)."
 
 msgctxt "app"
 msgid "Whole database"
-msgstr ""
+msgstr "Gesamte Datenbank"
 
 msgctxt "app"
 msgid "Year"
-msgstr ""
+msgstr "Jahr"
 
 msgctxt "app"
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 msgctxt "app"
 msgid "You can click on any of the terms below to insert them into the query field."
-msgstr ""
+msgstr "Klicken Sie auf eine der Begriffe weiter unten, um diese in das Suchfeld einzufügen."
 
 msgctxt "app"
 msgid "You can do a 'find and replace' operation on all or selected records in the database. These changes cannot easily be undone, that is why it is recommended to create a backup."
-msgstr ""
+msgstr "Sie können eine „Suchen und Ersetzen“-Operation in allen oder ausgewählten Datensätzen der Datenbank durchführen. Diese Änderungen können nur sehr schwer oder gar nicht rückgängig gemacht werden, deswegen wird geraten, eine automatische Sicherung durchführen zu lassen. "
 
 msgctxt "app"
 msgid "You can edit indexes here."
 msgstr ""
 
+#, fuzzy
 msgctxt "app"
 msgid "You can now log in as user '%s' at <a href='%s'>this link</a>"
-msgstr ""
+msgstr "Sie können sich jetzt mit dem Benutzernamen '%s' <a href='%s'>hier</a> anmelden."
 
 msgctxt "app"
 msgid "You can use the search features of this application in two ways."
-msgstr ""
+msgstr "Sie können sie Suchfunktion dieser Anwendung auf zwei verschiedene Arten nutzen."
 
 msgctxt "app"
 msgid "You can use wildcard characters: '?' for a single character and '*' for any amount of characters."
-msgstr ""
+msgstr "Sie können auch Ersetzungszeichen verwenden: ‚?‘ für einen einzelnen Buchstaben und ‚*‘ für eine beliebige Anzahl von Buchstaben."
 
 msgctxt "app"
 msgid "You do not have access to datasource '{datasource}'"
-msgstr ""
+msgstr "Sie haben keinen Zugang zur Datenbank {datasource} auf diesem Server."
 
+#, fuzzy
 msgctxt "app"
 msgid "You have been registered as user '%s' at '%s'."
-msgstr ""
+msgstr "Sie wurden als Benutzer/in '%s' bei '%s' registriert."
 
 msgctxt "app"
 msgid "You must convert file to UTF-8 before importing."
@@ -1324,51 +1593,116 @@ msgstr ""
 
 msgctxt "app"
 msgid "You need to set a password."
-msgstr ""
+msgstr "Sie müssen ein neues Passwort eingeben."
 
+#, fuzzy
 msgctxt "app"
 msgid "Your password has been changed."
-msgstr ""
+msgstr "%s, Ihr Passwort wurde zurückgesetzt."
 
+#, fuzzy
 msgctxt "app"
 msgid "Your registration at %s"
-msgstr ""
+msgstr "Ihre Registrierung bei %s"
 
+#, fuzzy
 msgctxt "app"
 msgid "Your temporary password is '%s'. You will be asked to change it after your first login."
-msgstr ""
+msgstr "Ihr temporäres Passwort ist '%s'. Sie müssen das Passwort nach der ersten Anmeldung ändern."
 
+#, fuzzy
 msgctxt "app"
 msgid "Your username is '%s' and your temporary password is '%s'."
-msgstr ""
+msgstr "Ihr Nutzername ist '%s' und Ihr temporäres Passwort ist '%s'."
 
+#, fuzzy
 msgctxt "app"
 msgid "all fields"
-msgstr ""
+msgstr "allen Feldern"
 
 msgctxt "app"
 msgid "and"
-msgstr ""
+msgstr "und "
 
+#, fuzzy
 msgctxt "app"
 msgid "field '%s'"
-msgstr ""
+msgstr "Feld '%s'"
 
+#, fuzzy
 msgctxt "app"
 msgid "in all records"
-msgstr ""
+msgstr "in allen Datensätzen"
 
+#, fuzzy
 msgctxt "app"
 msgid "in the selected folder"
+msgstr "im ausgewählten Ordner"
+
+#, fuzzy
+msgctxt "app"
+msgid "in the selected records"
+msgstr "in den ausgewählten Datensätzen"
+
+msgctxt "app"
+msgid "sort by {value}"
 msgstr ""
 
 msgctxt "app"
-msgid "in the selected records"
-msgstr ""
+msgid "{field} contains {value}"
+msgstr "{field} enthält {value}"
+
+msgctxt "app"
+msgid "{field} does not contain {value}"
+msgstr "{field} enthält nicht {value}"
+
+msgctxt "app"
+msgid "{field} is empty"
+msgstr "{field} ist leer"
+
+msgctxt "app"
+msgid "{field} is greater than or equal to {value}"
+msgstr "{field} ist größer oder gleich {value}"
+
+msgctxt "app"
+msgid "{field} is greater than {value}"
+msgstr "{field} ist größer als {value}"
+
+msgctxt "app"
+msgid "{field} is not empty"
+msgstr "{field} ist nicht leer"
+
+msgctxt "app"
+msgid "{field} is not {value}"
+msgstr "{field} ist ungleich {value}"
+
+msgctxt "app"
+msgid "{field} is smaller than or equal to {value}"
+msgstr "{field} ist kleiner oder gleich {value}"
+
+msgctxt "app"
+msgid "{field} is smaller than {value}"
+msgstr "{field} ist kleiner als {value}"
+
+msgctxt "app"
+msgid "{field} is {value}"
+msgstr "{field} ist {value}"
+
+msgctxt "app"
+msgid "{field} starts with {value}"
+msgstr "{field} beginnt mit {value}"
+
+msgctxt "app"
+msgid "{leftOperand} and {rightOperand}"
+msgstr "{leftOperand} und {rightOperand}"
+
+msgctxt "app"
+msgid "{leftOperand} or {rightOperand}"
+msgstr "{leftOperand} oder {rightOperand}"
 
 msgctxt "app"
 msgid "{numberOfRecords} records"
-msgstr ""
+msgstr "{numberOfRecords} Datensätze"
 
 msgctxt "app"
 msgid "{operand1} and {operand2}"
@@ -1467,7 +1801,7 @@ msgid "Home"
 msgstr ""
 
 msgctxt "yii"
-msgid "In {className} class '{type}' MUST be instance of '\JsonRpc2\Dto'"
+msgid "In {className} class '{type}' MUST be instance of '\\JsonRpc2\\Dto'"
 msgstr ""
 
 msgctxt "yii"
@@ -1949,4 +2283,3 @@ msgstr ""
 msgctxt "yii"
 msgid "{valueName} is required and cannot be Null."
 msgstr ""
-

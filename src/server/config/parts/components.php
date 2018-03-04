@@ -33,6 +33,7 @@ $components = [
       'app*' => [
         'class' => yii\i18n\GettextMessageSource::class,
         'basePath' => '@messages',
+        'catalog' => 'messages'
       ],
     ],
   ],

@@ -251,6 +251,7 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
     $hasOperator = false;
     $parsedTokens = [];
     $dict = $this->getDictionary();
+    Yii::info($dict);
     do {
       $token = $tokens[0];
       //Yii::info("Looking at '$token'...");

@@ -48,6 +48,24 @@ class CqlTest extends \app\tests\unit\Base
       $expected = "SELECT * FROM `data_Reference` WHERE " . $where;
       $this->tester->assertEquals($expected, $activeQuery->createCommand()->rawSql);
     }
+  }
 
+  public function testMultiLanguageQuery()
+  {
+    $tests = [
+      'en-US' => 'title contains "Much Ado" and year is greater than 1598',
+      'de' => 'titel enthält "Much Ado" und jahr ist größer als 1598'
+    ];
+    foreach ($tests as $locale => $query) {
+      \Yii::$app->language = $locale;
+      $nlquery = new NaturalLanguageQuery([
+        'query' => $query,
+        'schema' => new \app\schema\BibtexSchema()
+      ]);
+      $activeQuery = new ActiveQuery(new Reference());
+      $nlquery->injectIntoYiiQuery($activeQuery);
+      $expected = "SELECT * FROM `data_Reference` WHERE (`title` LIKE '%Much Ado%') AND (`year` > '1598')";
+      $this->tester->assertEquals($expected, $activeQuery->createCommand()->rawSql);
+    }
   }
 }
