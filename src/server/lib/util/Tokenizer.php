@@ -22,9 +22,8 @@
 namespace lib\util;
 
 /**
- * Class Tokenizer
- *
- * @package bibliograph\schema
+ * Splits an UTF-8 String into descrete tokens. Words in quotations marks
+ * are treated as one token.
  */
 class Tokenizer
 {

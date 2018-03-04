@@ -20,9 +20,9 @@
 
 namespace app\schema;
 
-use \InvalidArgumentException;
-use Yii;
+use InvalidArgumentException;
 use lib\schema\ISchema;
+use Yii;
 
 
 /**
@@ -93,7 +93,7 @@ abstract class AbstractReferenceSchema extends yii\base\BaseObject implements IS
    */
   public function types()
   {
-    return array_keys( $this->type_data );
+    return array_keys($this->type_data);
   }
 
   /**
@@ -102,7 +102,7 @@ abstract class AbstractReferenceSchema extends yii\base\BaseObject implements IS
    */
   public function fields()
   {
-    return array_keys( $this->field_data );
+    return array_keys($this->field_data);
   }
 
   /**
@@ -110,10 +110,9 @@ abstract class AbstractReferenceSchema extends yii\base\BaseObject implements IS
    * @param array $types
    * @return void
    */
-  public function addTypes( $types )
+  public function addTypes($types)
   {
-    foreach( $types as $name => $data )
-    {
+    foreach ($types as $name => $data) {
       $this->type_data[$name] = $data;
     }
   }
@@ -165,10 +164,9 @@ abstract class AbstractReferenceSchema extends yii\base\BaseObject implements IS
    * @internal param array $types
    * @return void
    */
-  public function addFields( array $fields )
+  public function addFields(array $fields)
   {
-    foreach( $fields as $name => $data )
-    {
+    foreach ($fields as $name => $data) {
       $this->field_data[$name] = $data;
     }
   }
@@ -179,10 +177,9 @@ abstract class AbstractReferenceSchema extends yii\base\BaseObject implements IS
    * @throws InvalidArgumentException
    * @return array
    */
-  public function getTypeFields( $type )
+  public function getTypeFields($type)
   {
-    if ( ! isset($this->type_fields[$type] ) )
-    {
+    if (!isset($this->type_fields[$type])) {
       throw new InvalidArgumentException("Type '$type' does not exist.");
     }
     return $this->type_fields[$type];
@@ -193,13 +190,12 @@ abstract class AbstractReferenceSchema extends yii\base\BaseObject implements IS
    * @param $fields
    * @return void
    */
-  public function addToTypeFields( array $fields )
+  public function addToTypeFields(array $fields)
   {
-    foreach ( $this->types() as $type )
-    {
-      $this->type_fields[$type] = array_unique( array_merge(
+    foreach ($this->types() as $type) {
+      $this->type_fields[$type] = array_unique(array_merge(
         $this->type_fields[$type], $fields
-      ) );
+      ));
     }
   }
 
@@ -210,10 +206,9 @@ abstract class AbstractReferenceSchema extends yii\base\BaseObject implements IS
    * @throws InvalidArgumentException
    * @return array
    */
-  public function getFieldData( $field )
+  public function getFieldData($field)
   {
-    if ( ! isset( $this->field_data[$field] ) )
-    {
+    if (!isset($this->field_data[$field])) {
       throw new InvalidArgumentException("Field '$field' does not exist.");
     }
     return $this->field_data[$field];
@@ -226,10 +221,9 @@ abstract class AbstractReferenceSchema extends yii\base\BaseObject implements IS
    * @internal param string $field
    * @return array
    */
-  public function getTypeData( $type )
+  public function getTypeData($type)
   {
-    if ( ! isset( $this->type_data[$type] ) )
-    {
+    if (!isset($this->type_data[$type])) {
       throw new InvalidArgumentException("Type '$type' does not exist.");
     }
     return $this->type_data[$type];
@@ -243,40 +237,32 @@ abstract class AbstractReferenceSchema extends yii\base\BaseObject implements IS
    * @throws \Exception
    * @return string
    */
-  public function getFieldLabel( $field, $reftype=null )
+  public function getFieldLabel($field, $reftype = null)
   {
-    $data = $this->getFieldData( $field );
+    $data = $this->getFieldData($field);
 
     /*
      * get the label from field or form data
      */
-    if ( isset( $data['label'] ) )
-    {
+    if (isset($data['label'])) {
       $label = $data['label'];
-    }
-    else
-    {
-      $formData = $this->getFormData( $field );
-      if ( isset( $formData['label'] ) )
-      {
+    } else {
+      $formData = $this->getFormData($field);
+      if (isset($formData['label'])) {
         $label = $formData['label'];
-      }
-      else
-      {
-        throw new \Exception("Field '$field' has no label information!" );
+      } else {
+        throw new \Exception("Field '$field' has no label information!");
       }
     }
 
     /*
      * label is an array -> depends on the reference type
      */
-    if( is_array( $label ) )
-    {
-      if ( $reftype and isset( $label[$reftype] ) )
-      {
+    if (is_array($label)) {
+      if ($reftype and isset($label[$reftype])) {
         return $label[$reftype];
       }
-      $labels = array_values( $label );
+      $labels = array_values($label);
       return $labels[0];
     }
     return $data['label'];
@@ -288,12 +274,11 @@ abstract class AbstractReferenceSchema extends yii\base\BaseObject implements IS
    * @throws \Exception
    * @return string
    */
-  public function getTypeLabel( $reftype )
+  public function getTypeLabel($reftype)
   {
-    $data = $this->getTypeData( $reftype );
-    if ( ! isset( $data['label'] ) )
-    {
-      throw new \Exception("Type '$reftype' has no label information!" );
+    $data = $this->getTypeData($reftype);
+    if (!isset($data['label'])) {
+      throw new \Exception("Type '$reftype' has no label information!");
     }
     return $data['label'];
   }
@@ -303,21 +288,20 @@ abstract class AbstractReferenceSchema extends yii\base\BaseObject implements IS
    * @param $field
    * @return array
    */
-  public function getFormData( $field )
+  public function getFormData($field)
   {
-    $data = $this->getFieldData( $field );
-    if ( isset( $data['formData'] ) )
-    {
+    $data = $this->getFieldData($field);
+    if (isset($data['formData'])) {
       return $data['formData'];
     }
     return null;
   }
 
-  public function isPublicField( $field )
+  public function isPublicField($field)
   {
-    $data = $this->getFieldData( $field );
+    $data = $this->getFieldData($field);
     return (
-      ! isset( $data['public'] )
+      !isset($data['public'])
       or $data['public'] !== false
     );
   }
@@ -329,16 +313,13 @@ abstract class AbstractReferenceSchema extends yii\base\BaseObject implements IS
    */
   public function getIndexMap()
   {
-    static $indexMap = [];
-    if ( $indexMap === null )
-    {
-      foreach( $this->field_data as $field => $data )
-      {
-        if ( isset( $data['index'] ) )
-        {
-          foreach( (array)  $data['index'] as $index )
-          {
-            $indexMap[ $index ][] = $field;
+    static $indexMap = null;
+    if ($indexMap === null) {
+      $indexMap=[];
+      foreach ($this->field_data as $field => $data) {
+        if (isset($data['index'])) {
+          foreach ((array)$data['index'] as $index) {
+            $indexMap[$index][] = $field;
           }
         }
       }
@@ -352,7 +333,7 @@ abstract class AbstractReferenceSchema extends yii\base\BaseObject implements IS
    */
   public function getIndexNames()
   {
-    return array_keys( $this->getIndexMap() );
+    return array_keys($this->getIndexMap());
   }
 
   /**
@@ -360,10 +341,10 @@ abstract class AbstractReferenceSchema extends yii\base\BaseObject implements IS
    * @param string $index
    * @return bool
    */
-  public function hasIndex( $index )
+  public function hasIndex($index)
   {
     $indexMap = $this->getIndexMap();
-    return isset( $indexMap[ $index ] );
+    return isset($indexMap[$index]);
   }
 
   /**
@@ -372,15 +353,12 @@ abstract class AbstractReferenceSchema extends yii\base\BaseObject implements IS
    * @throws InvalidArgumentException
    * @return array
    */
-  public function getIndexFields( $index )
+  public function getIndexFields($index)
   {
     $indexMap = $this->getIndexMap();
-    if ( isset( $indexMap[ $index ] ) )
-    {
-      return $indexMap[ $index ];
-    }
-    else
-    {
+    if (isset($indexMap[$index])) {
+      return $indexMap[$index];
+    } else {
       throw new InvalidArgumentException("'$index' is not a valid index");
     }
   }

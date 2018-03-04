@@ -9,4 +9,5 @@ modules:
         - \Helper\Unit
         - Yii2:
             configFile: config/test.php
+            parts: [orm]
             #transaction: false

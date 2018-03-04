@@ -15,9 +15,9 @@ use Yii;
  * @property string $class
  * @property string $description
  * @property integer $active
- * @property array $datasources
- * @property array $roleSchemas
- * @property array $roles
+ * @property Datasource[] $datasources
+ * @property Role_Schema[] $roleSchemas
+ * @property Role[] $roles
  */
 class Schema extends \lib\models\BaseModel
 {

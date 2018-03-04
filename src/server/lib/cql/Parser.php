@@ -8,6 +8,7 @@
  Licence: GPL
  Description:  Port of Python CQLParser to PHP
  Parses CQL Version 1.2
+
  Usage:  $parser = new CQLParser("query");
  $tree = &parser->query();
  $tree.toCQL();
@@ -24,9 +25,12 @@
 
  */
 
-namespace lib\schema\cql;
+namespace lib\cql;
 
-define('XCQLNamespace',"http://www.loc.gov/zing/cql/xcql/");
+use lib\util\MbString;
+use \LogicException;
+
+define('XCQLNamespace', "http://www.loc.gov/zing/cql/xcql/");
 
 /**
  * Main parser class
@@ -49,7 +53,7 @@ class Parser
 
   /**
    * Array of terms that serve as keywords for indicating the sort order
-   * @var unknown_type
+   * @var array
    */
   protected $sortWords = array("sortby");
 
@@ -57,7 +61,7 @@ class Parser
    * The default relation if no one is given. Defaults to "="
    * @var string
    */
-  protected $serverChoiceRelation ="=";
+  protected $serverChoiceRelation = "=";
 
   /**
    * The default index name if no one is given.
@@ -67,18 +71,19 @@ class Parser
 
   /**
    * The separator character. Defaults to "/"
-   * @var unknown_type
+   * @var string
    */
   protected $separator = "/";
 
   /**
    * Configuration data
-   * @var unknown_type
+   * @var array
    */
   protected $config;
 
   /**
    * diagnostic object
+   * @var Diagnostic
    */
   protected $diagnostic;
 
@@ -92,7 +97,7 @@ class Parser
    * The current character
    * @var string
    */
-  protected $current ="";
+  protected $current = "";
 
   /**
    * The next character
@@ -114,49 +119,37 @@ class Parser
 
   /**
    * Setter for modifier terms
-   * @param array $value
+   * @param ModifierClause[] $value
    * @return void
    */
-  public function setModifiers( $value )
+  public function setModifiers(array $value)
   {
-    if( ! is_array( $value ) )
-    {
-      throw new InvalidArgumentException("modifiers argument must be array");
-    }
     $this->modifierList = $value;
   }
 
   /**
    * Setter for boolean terms
-   * @param array $value
+   * @param Boolean[] $value
    * @return void
    */
-  public function setBooleans( $value )
+  public function setBooleans(array $value)
   {
-    if( ! is_array( $value ) )
-    {
-      throw new InvalidArgumentException("booleans argument must be array");
-    }
     $this->booleans = $value;
   }
 
   /**
    * Setter for sort words
-   * @param array $value
+   * @param SortKey[] $value
    * @return void
    */
-  public function setSortWords( $value )
+  public function setSortWords(array $value)
   {
-    if( ! is_array( $value ) )
-    {
-      throw new InvalidArgumentException("sortWord argument must be array");
-    }
     $this->sortWords = $value;
   }
 
   /**
    * Fetch the next token in the cql query string
-   * @return unknown_type
+   * @return void
    */
   public function fetch_token()
   {
@@ -171,7 +164,7 @@ class Parser
    */
   public function is_bool($token)
   {
-    return in_array( strtolower($token), $this->booleans);
+    return in_array(strtolower($token), $this->booleans);
   }
 
   /**
@@ -181,47 +174,36 @@ class Parser
    */
   public function is_sort($token)
   {
-    return in_array( strtolower($token), $this->sortWords);
+    return in_array(strtolower($token), $this->sortWords);
   }
 
   /**
    * Parse the query
-   * @return Object
+   * @return Diagnostic|SearchClause|Triple|null
    */
   public function query()
   {
     $prefs = $this->prefixes();
     $left = $this->subQuery();
-    if ($this->diagnostic)
-    {
+    if ($this->diagnostic) {
       return $this->diagnostic;
     }
 
     $cont = 1;
-    while ($cont)
-    {
-      if (!$this->current)
-      {
+    while ($cont) {
+      if (!$this->current) {
         $cont = 0;
-      }
-      elseif ($this->is_sort($this->current))
-      {
+      } elseif ($this->is_sort($this->current)) {
         $left->SortKeys = $this->sortQuery();
-      }
-      elseif ($this->current == ")")
-      {
+      } elseif ($this->current == ")") {
         return $left;
-      }
-      else
-      {
+      } else {
         $bool = $this->boolean();
-        if ($this->diagnostic)
-        {
+        if ($this->diagnostic) {
           return $this->diagnostic;
         }
         $right = $this->subQuery();
-        if ($this->diagnostic)
-        {
+        if ($this->diagnostic) {
           return $this->diagnostic;
         }
         $Triple = new Triple($left, $right, $bool);
@@ -231,42 +213,34 @@ class Parser
         $left = $Triple;
       }
     }
-    foreach (array_keys($prefs) as $key)
-    {
+    foreach (array_keys($prefs) as $key) {
       $left->add_prefix($key, $prefs[$key]);
     }
     return $left;
   }
 
+  /**
+   * @return Diagnostic|SearchClause|Triple|null
+   */
   public function subQuery()
   {
-    if ($this->current == "(")
-    {
+    if ($this->current == "(") {
       $this->fetch_token();
       $object = $this->query();
-      if ($this->current == ")")
-      {
+      if ($this->current == ")") {
         $this->fetch_token();
-      }
-      else
-      {
+      } else {
         $this->diagnostic = new Diagnostic("Mismatched Parens");
         return null;
       }
-    }
-    else
-    {
+    } else {
       $prefs = $this->prefixes();
-      if ($prefs)
-      {
+      if ($prefs) {
         $object = $this->query();
-        foreach (array_keys($prefs) as $key)
-        {
+        foreach (array_keys($prefs) as $key) {
           $object->add_prefix($key, $prefs[$key]);
         }
-      }
-      else
-      {
+      } else {
         $object = $this->clause();
       }
     }
@@ -278,42 +252,32 @@ class Parser
     $bool = $this->is_bool($this->next);
     $sort = $this->is_sort($this->next);
 
-    if (!$sort && !$bool && $this->next && !strpos("()", $this->next))
-    {
+    if (!$sort && !$bool && $this->next && !strpos("()", $this->next)) {
       $index = new Index($this->current);
       $this->fetch_token();
       $rel = $this->relation();
-      if (!$this->current)
-      {
+      if (!$this->current) {
         $this->diagnostic = new Diagnostic("Missing Term");
         return null;
-      }
-      else
-      {
+      } else {
         $Term = new Term($this->current);
         $this->fetch_token();
       }
-    }
-    elseif ($this->current &&
-      ($bool || $sort || !$this->next || $this->next == ")"))
-    {
+    } elseif ($this->current &&
+      ($bool || $sort || !$this->next || $this->next == ")")) {
       $index = new Index($this->serverChoiceIndex);
       $rel = new Relation($this->serverChoiceRelation);
       $Term = new Term($this->current);
       $this->fetch_token();
 
-    }
-    elseif ( $this->current == ">" )
-    {
+    } elseif ($this->current == ">") {
       $prefs = $this->prefixes();
       $object = $this->clause();
       foreach (array_keys($prefs) as $key) {
         $object->add_prefix($key, $prefs[$key]);
       }
       return $object;
-    }
-    else
-    {
+    } else {
       $this->diagnostic = new Diagnostic("Expected boolean or relation");
       return null;
     }
@@ -326,11 +290,11 @@ class Parser
 
   public function boolean()
   {
-    if ($this->is_bool($this->current))
-    {
+    if ($this->is_bool($this->current)) {
       $bool = new Boolean($this->current);
       $this->fetch_token();
-      $bool->add_modifiers($this->modifiers());
+      $mods = $this->modifiers();
+      $bool->add_modifiers($mods);
       return $bool;
     } else {
       $this->diagnostic = new Diagnostic("Expected boolean, got $this->current");
@@ -338,31 +302,34 @@ class Parser
     }
   }
 
+  /**
+   * @return Relation
+   */
   public function relation()
   {
     $rel = new Relation($this->current);
     $this->fetch_token();
-    $rel->add_modifiers($this->modifiers());
+    $mods = $this->modifiers();
+    $rel->add_modifiers($mods);
     return $rel;
   }
 
+  /**
+   * @return ModifierClause[]
+   */
   public function modifiers()
   {
     $mods = array();
-    while ($this->current == $this->separator)
-    {
+    while ($this->current == $this->separator) {
       $this->fetch_token();
       $mod = strtolower($this->current);
       $this->fetch_token();
-      if ( in_array( $this->current, $this->modifierList ) )
-      {
+      if (in_array($this->current, $this->modifierList)) {
         $comp = $this->current;
         $this->fetch_token();
         $val = $this->current;
         $this->fetch_token();
-      }
-      else
-      {
+      } else {
         $comp = "";
         $val = "";
       }
@@ -371,8 +338,9 @@ class Parser
     return $mods;
   }
 
-  public function prefixes() {
-    $prefs = array();
+  public function prefixes()
+  {
+    $prefs = [];
     while ($this->current == ">") {
       $this->fetch_token();
       if ($this->next == "=") {
@@ -386,22 +354,26 @@ class Parser
         $identifier = $this->current;
         $this->fetch_token();
       }
-      if ($identifier{0} == '"' && $identifier{strlen($identifier)-1} == '"') {
-        $identifier = substr($identifier, 1, strlen($identifier)-2);
+      if ($identifier{0} == '"' && $identifier{strlen($identifier) - 1} == '"') {
+        $identifier = substr($identifier, 1, strlen($identifier) - 2);
       }
       $prefs[strtolower($name)] = $identifier;
     }
     return $prefs;
   }
 
-  public function sortQuery() {
+  /**
+   * @return SortKey[]|null
+   */
+  public function sortQuery()
+  {
     $this->fetch_token();
     $keys = array();
     if (!$this->current) {
       $this->diagnostic = new Diagnostic("No sortKeys after sortBy");
       return null;
     } else {
-      while ( $this->current ) {
+      while ($this->current) {
         $index = new Index($this->current);
         $this->fetch_token();
         $mods = $this->modifiers();
@@ -418,31 +390,43 @@ class Parser
  */
 class Config
 {
+  /**
+   * @var string
+   */
   public $defaultContextSet;
+  /**
+   * @var string
+   */
   public $defaultIndex;
+  /**
+   * @var string
+   */
   public $defaultRelation;
+  /**
+   * @var array
+   */
   public $contextSets;
 
-  public function __construct($zeerex=null)
+  public function __construct($zeerex = null)
   {
-    $this->contextSets = array();
+    $this->contextSets = [];
 
     if ($zeerex == null) {
       $this->defaultContextSet = "dc";
       $this->defaultIndex = "title";
       $this->defaultRelation = "any";
 
-      $this->contextSets['cql']     = 'info:srw/cql-context-set/1/cql-v1.1';
-      $this->contextSets['dc']      = "info:srw/cql-context-set/1/dc-v1.1";
-      $this->contextSets['zthes']   = "http://zthes.z3950.org/cql/1.0/";
-      $this->contextSets['ccg']     = "http://srw.cheshire3.org/contextSets/ccg/1.1/";
-      $this->contextSets['rec']     = "info:srw/cql-context-set/2/rec-1.1";
-      $this->contextSets['net']     = "info:srw/cql-context-set/2/net-1.0";
-      $this->contextSets['music']   = "info:srw/cql-context-set/3/music-1.0";
-      $this->contextSets['rel']     = "info:srw/cql-context-set/2/relevance-1.0";
-      $this->contextSets['zeerex']  = "info:srw/cql-context-set/2/zeerex-1.1";
-      $this->contextSets['mods']    = "info:srw/cql-context-set/1/mods-1.0";
-      $this->contextSets['marc']    = "info:srw/cql-context-set/1/marc-1.0";
+      $this->contextSets['cql'] = 'info:srw/cql-context-set/1/cql-v1.1';
+      $this->contextSets['dc'] = "info:srw/cql-context-set/1/dc-v1.1";
+      $this->contextSets['zthes'] = "http://zthes.z3950.org/cql/1.0/";
+      $this->contextSets['ccg'] = "http://srw.cheshire3.org/contextSets/ccg/1.1/";
+      $this->contextSets['rec'] = "info:srw/cql-context-set/2/rec-1.1";
+      $this->contextSets['net'] = "info:srw/cql-context-set/2/net-1.0";
+      $this->contextSets['music'] = "info:srw/cql-context-set/3/music-1.0";
+      $this->contextSets['rel'] = "info:srw/cql-context-set/2/relevance-1.0";
+      $this->contextSets['zeerex'] = "info:srw/cql-context-set/2/zeerex-1.1";
+      $this->contextSets['mods'] = "info:srw/cql-context-set/1/mods-1.0";
+      $this->contextSets['marc'] = "info:srw/cql-context-set/1/marc-1.0";
     }
   }
 
@@ -451,14 +435,15 @@ class Config
     $this->contextSets[$set] = $id;
   }
 
+  /**
+   * @param string $pref Prefix
+   * @return string|null
+   */
   public function resolve_prefix($pref)
   {
-    if (array_key_exists($pref, $this->contextSets))
-    {
+    if (array_key_exists($pref, $this->contextSets)) {
       return $this->contextSets[$pref];
-    }
-    else
-    {
+    } else {
       return null;
     }
   }
@@ -483,7 +468,7 @@ class SimpleLex
    * The length of the data
    * @var int
    */
-  protected $datalen= 0;
+  protected $datalen = 0;
 
   /**
    * Whitespace characters
@@ -511,7 +496,7 @@ class SimpleLex
 
   /**
    * The current token
-   * @var unknown_type
+   * @var string
    */
   protected $token = '';
 
@@ -519,7 +504,7 @@ class SimpleLex
    * The next token
    * @var string
    */
-  protected $nextToken ="";
+  protected $nextToken = "";
 
   /**
    * The current position
@@ -539,9 +524,9 @@ class SimpleLex
    *    The string data to work with
    * @return void
    */
-  public function __construct( $data )
+  public function __construct($data)
   {
-    $this->data = new MbString( $data );
+    $this->data = new MbString($data);
     $this->datalen = $this->data->length();
   }
 
@@ -551,133 +536,89 @@ class SimpleLex
    */
   public function get_token()
   {
-    if ($this->position >= $this->datalen)
-    {
+    if ($this->position >= $this->datalen) {
       return "";
     }
 
     $cont = 1;
 
-    while ($cont)
-    {
+    while ($cont) {
 
       $this->position += 1;
-      if ( $this->position >= $this->datalen )
-      {
-        return trim( $this->token );
+      if ($this->position >= $this->datalen) {
+        return trim($this->token);
       }
 
-      $nextchar = $this->data->charAt( $this->position );
+      $nextchar = $this->data->charAt($this->position);
 
-      $is_ws    = strpos($this->whitespace, $nextchar) > -1 ? true : false;
+      $is_ws = strpos($this->whitespace, $nextchar) > -1 ? true : false;
       $is_quote = strpos($this->quotes, $nextchar) > -1 ? true : false;
-      $is_oper  = strpos( $this->operators, $nextchar ) > -1 ? true : false;
-      $is_word  = ! ($is_ws or $is_quote or $is_oper );
+      $is_oper = strpos($this->operators, $nextchar) > -1 ? true : false;
+      $is_word = !($is_ws or $is_quote or $is_oper);
 
-      if ( $this->state == ' ' )
-      {
-        if ($is_ws)
-        {
-          if ($this->token != ' ')
-          {
+      if ($this->state == ' ') {
+        if ($is_ws) {
+          if ($this->token != ' ') {
             $cont = 0;
-          }
-          else
-          {
+          } else {
             continue;
           }
-        }
-        elseif ($is_word)
-        {
+        } elseif ($is_word) {
           $this->token = $nextchar;
           $this->state = 'a';
-        }
-        elseif ($is_quote)
-        {
+        } elseif ($is_quote) {
           $this->token = $nextchar;
           $this->state = $nextchar;
-        }
-        elseif (strpos("<>", $nextchar) > -1)
-        {
+        } elseif (strpos("<>", $nextchar) > -1) {
           $this->token = $nextchar;
           $this->state = '<';
-        }
-        else
-        {
+        } else {
           $this->token = $nextchar;
           $cont = 0;
         }
-      }
-      elseif ($this->state == "<")
-      {
-        if ($this->token == ">" && $nextchar == "=")
-        {
+      } elseif ($this->state == "<") {
+        if ($this->token == ">" && $nextchar == "=") {
           $this->token .= $nextchar;
           $this->state = ' ';
-        }
-        elseif ($this->token == "<" && strpos(">=", $nextchar) > -1)
-        {
+        } elseif ($this->token == "<" && strpos(">=", $nextchar) > -1) {
           $this->token .= $nextchar;
           $this->state = ' ';
-        }
-        elseif ($nextchar == "/")
-        {
+        } elseif ($nextchar == "/") {
           $this->state = " ";
           $this->position -= 1;
-        }
-        elseif ($is_word)
-        {
+        } elseif ($is_word) {
           $this->state = "a";
           $this->position -= 1;
-        }
-        elseif ($is_quote)
-        {
+        } elseif ($is_quote) {
           $this->state = $nextchar;
           $this->position -= 1;
-        }
-        else
-        {
+        } else {
           $this->state = ' ';
         }
         $cont = 0;
-      }
-      elseif ( strpos($this->quotes, $this->state) > -1 )
-      {
+      } elseif (strpos($this->quotes, $this->state) > -1) {
         $this->token .= $nextchar;
         /* allow escape */
-        if ($nextchar == $this->state && substr($this->token, -2, 1) != "\\")
-        {
+        if ($nextchar == $this->state && substr($this->token, -2, 1) != "\\") {
           $this->state = ' ';
           $cont = 0;
         }
-      }
-      elseif ( $this->state == 'a' )
-      {
-        if ( $is_ws )
-        {
+      } elseif ($this->state == 'a') {
+        if ($is_ws) {
           $this->state = ' ';
-          if ( strlen($this->token) > 0)
-          {
+          if (strlen($this->token) > 0) {
             $cont = 0;
-          }
-          else
-          {
+          } else {
             continue;
           }
-        }
-        elseif (strpos("<>", $nextchar) > -1)
-        {
+        } elseif (strpos("<>", $nextchar) > -1) {
           $tok = $this->token;
           $this->token = $nextchar;
           $this->state = "<";
           return trim($tok);
-        }
-        elseif ( $is_word || $is_quote )
-        {
+        } elseif ($is_word || $is_quote) {
           $this->token .= $nextchar;
-        }
-        else
-        {
+        } else {
           /* break */
           $tok = $this->token;
           $this->token = $nextchar;
@@ -699,42 +640,52 @@ class SimpleLex
  */
 class Diagnostic extends Object
 {
+  /**
+   * @var string
+   */
   protected $uri;
+  /**
+   * @var string
+   */
   protected $message;
+  /**
+   * @var string
+   */
   protected $details;
 
   /**
    * Constructor
-   * @param $message
-   * @param $type
-   * @param $details
-   * @return unknown_type
+   * @param string $message
+   * @param int $type
+   * @param string $details
+   * @return void
    */
-  public function __construct($message, $type=10, $details="")
+  public function __construct($message, $type = 10, $details = "")
   {
     $this->message = $message;
     $this->uri = "info:srw/diagnostic/1/$type";
     $this->details = $details;
   }
 
-  public function toTxt()
+  public function toTxt($depth = 0)
   {
     return $this->message .
-      ( strlen($this->details) > 0 ? ": " .$this->details : "");
+      (strlen($this->details) > 0 ? ": " . $this->details : "");
   }
 
   /**
    * Converts the object to an xml representation
    * @return string
    */
-  public function toXML() {
+  public function toXML()
+  {
     $txt = "<diag:diagnostic xmlns:diag=\"http://www.loc.gov/zing/srw/diagnostic/\">\n";
     $txt .= "  <diag:uri>$this->uri</diag:uri>\n";
     $txt .= "  <diag:message>$this->message</diag:message>\n";
     if ($this->details) {
       $txt .= "  <diag:details>$this->message</diag:details>\n";
     }
-    $txt .="</diag:diagnostic>\n";
+    $txt .= "</diag:diagnostic>\n";
     return $txt;
   }
 }
@@ -746,18 +697,21 @@ class Diagnostic extends Object
  */
 class Object
 {
+  /** @var string */
   public $value;
+  /** @var ModifierClause[] */
   public $modifiers;
+  /** @var \lib\cql\Object */
   public $parentNode;
-
+  /** @var Config */
   protected $config;
 
   /**
    * Sets the configuration of the object
-   * @param $c
+   * @param Config $c
    * @return void
    */
-  public function set_config( &$c )
+  public function set_config(Config &$c)
   {
     $this->config = $c;
   }
@@ -775,7 +729,8 @@ class Object
   }
 
 
-  public function toCQL() {
+  public function toCQL()
+  {
     $txt = $this->value;
     if (count($this->modifiers) > 0) {
       foreach ($this->modifiers as $mod) {
@@ -785,27 +740,30 @@ class Object
     return $txt;
   }
 
-  public function toXCQL() {
+  public function toXCQL($depth=0)
+  {
     return "";
   }
 
-  public function mods_toXCQL($depth=0) {
+  public function mods_toXCQL($depth = 0)
+  {
     $space = str_repeat("  ", $depth);
     $txt = "$space<modifiers>\n";
     foreach ($this->modifiers as $mod) {
-      $txt .= $mod->toXCQL($depth+1);
+      $txt .= $mod->toXCQL($depth + 1);
     }
     $txt .= "$space<modifiers>\n";
     return $txt;
   }
 
-  public function toTxt($depth=0) {
+  public function toTxt($depth = 0)
+  {
     $cl = get_class($this);
     $space = str_repeat("  ", $depth);
     $modtxt = "";
     if ($this->modifiers) {
       foreach ($this->modifiers as $mod) {
-        $modtxt .= $mod->toTxt($depth+1);
+        $modtxt .= $mod->toTxt($depth + 1);
       }
     }
     return "$space$cl: $this->value\n$modtxt";
@@ -815,28 +773,27 @@ class Object
 
 class Prefixable extends Object
 {
+  /** @var array */
   public $prefixes;
 
-  public function add_prefix($p, $uri) {
+  /**
+   * @param string $p
+   * @param string $uri
+   */
+  public function add_prefix($p, $uri)
+  {
     $this->prefixes[$p] = $uri;
   }
 
   public function resolve_prefix($pref)
   {
-    if ($this->prefixes && array_key_exists($pref, $this->prefixes))
-    {
+    if ($this->prefixes && array_key_exists($pref, $this->prefixes)) {
       return $this->prefixes[$pref];
-    }
-    elseif ($this->parentNode != null)
-    {
+    } elseif ($this->parentNode != null) {
       return $this->parentNode->resolve_prefix($pref);
-    }
-    elseif ($this->config != null)
-    {
+    } elseif ($this->config != null) {
       return $this->config->resolve_prefix($pref);
-    }
-    else
-    {
+    } else {
       /* Not in tree, and no config. Unknown */
       return null;
     }
@@ -845,17 +802,12 @@ class Prefixable extends Object
   public function prefs_toCQL()
   {
     $txt = "";
-    if ($this->prefixes)
-    {
-      foreach (array_keys($this->prefixes) as $key)
-      {
+    if ($this->prefixes) {
+      foreach (array_keys($this->prefixes) as $key) {
         $val = $this->prefixes[$key];
-        if ($key)
-        {
+        if ($key) {
           $txt .= ">$key=\"$val\" ";
-        }
-        else
-        {
+        } else {
           $txt .= ">\"$val\" ";
         }
       }
@@ -863,16 +815,14 @@ class Prefixable extends Object
     return $txt;
   }
 
-  public function prefs_toXCQL($depth=0)
+  public function prefs_toXCQL($depth = 0)
   {
     $space = str_repeat("  ", $depth);
     $txt = "$space<prefixes>\n";
-    foreach (array_keys($this->prefixes) as $key)
-    {
+    foreach (array_keys($this->prefixes) as $key) {
       $val = $this->prefixes[$key];
       $txt .= "$space  <prefix>\n";
-      if ($key)
-      {
+      if ($key) {
         $txt .= "$space    <name>" . htmlentities($key) . "</name>\n";
       }
       $txt .= "$space    <identifier>" . htmlentities($val) . "</identifier>\n";
@@ -891,28 +841,22 @@ class Prefixed extends Object
   public function split_value()
   {
     $c = substr_count($this->value, '.');
-    if ($c > 1)
-    {
+    if ($c > 1) {
       /* NASTY! */
       $diag = new Diagnostic("Too many .s in value: $this->value");
-    }
-    elseif ($this->value{0} == '.')
-    {
+    } elseif ($this->value{0} == '.') {
       throw new LogicException("Null prefix");
-    }
-    elseif ($c > 0)
-    {
-      list($pref, $data) = explode('\.', $this->value);
+    } elseif ($c > 0) {
+      list($pref, $data) = explode('.', $this->value);
       $this->prefix = $pref;
       $this->value = $data;
     }
   }
 
-  public function resolve_prefix()
+  public function resolve_prefix($pref)
   {
     /* resolve my prefix */
-    if (!$this->uri && $this->parentNode != null)
-    {
+    if (!$this->uri && $this->parentNode != null) {
       $uri = $this->parentNode->resolve_prefix($this->prefix);
       $this->uri = $uri;
     }
@@ -921,47 +865,35 @@ class Prefixed extends Object
 
   public function toCQL()
   {
-    if ($this->prefix)
-    {
-      $txt =  "$this->prefix.$this->value";
+    if ($this->prefix) {
+      $txt = "$this->prefix.$this->value";
+    } else {
+      $txt = $this->value;
     }
-    else
-    {
-      $txt =  $this->value;
-    }
-    if (count($this->modifiers) > 0)
-    {
-      foreach ($this->modifiers as $mod)
-      {
+    if (count($this->modifiers) > 0) {
+      foreach ($this->modifiers as $mod) {
         $txt .= "/" . $mod->toCQL();
       }
     }
     return $txt;
   }
 
-  public function toTxt($depth=0)
+  public function toTxt($depth = 0)
   {
     $cl = get_class($this);
     $space = str_repeat("  ", $depth);
     $modtxt = "";
-    if ($this->modifiers)
-    {
-      foreach ($this->modifiers as $mod)
-      {
-        $modtxt .= $mod->toTxt($depth+1);
+    if ($this->modifiers) {
+      foreach ($this->modifiers as $mod) {
+        $modtxt .= $mod->toTxt($depth + 1);
       }
     }
-    $this->resolve_prefix();
-    if ($this->uri)
-    {
+    $this->resolve_prefix("");
+    if ($this->uri) {
       return "$space$cl: $this->prefix $this->uri . $this->value\n$modtxt";
-    }
-    elseif ($this->prefix)
-    {
+    } elseif ($this->prefix) {
       return "$space$cl: $this->prefix . $this->value\n$modtxt";
-    }
-    else
-    {
+    } else {
       return "$space$cl: $this->value\n$modtxt";
     }
   }
@@ -969,19 +901,23 @@ class Prefixed extends Object
 
 class Triple extends Prefixable
 {
+  /** @var \lib\cql\Object */
   public $leftOperand;
+  /** @var \lib\cql\Object */
   public $rightOperand;
+  /** @var \lib\cql\Boolean */
   public $boolean;
+  /** @var SortKey[] */
   public $sortKeys;
 
-  public function Triple(&$left, &$right, &$bool)
+  public function __construct( \lib\cql\Object &$left, \lib\cql\Object &$right, \lib\cql\Boolean &$boolean)
   {
-    $this->prefixes = array();
+    $this->prefixes = [];
     $this->parentNode = null;
     $this->sortKeys = null;
     $this->leftOperand = $left;
     $this->rightOperand = $right;
-    $this->boolean = $bool;
+    $this->boolean = $boolean;
   }
 
   public function toCQL()
@@ -990,35 +926,29 @@ class Triple extends Prefixable
     return "$prefs(" . $this->leftOperand->toCQL() . " " . $this->boolean->toCQL() . " " . $this->rightOperand->toCQL() . ")";
   }
 
-  public function toXCQL($depth=0)
+  public function toXCQL($depth = 0)
   {
     $space = str_repeat("  ", $depth);
-    if ($depth == 0)
-    {
+    if ($depth == 0) {
       $txt = '<Triple xmlns="' . XCQLNamespace . "\">\n";
-    }
-    else
-    {
+    } else {
       $txt = "$space<Triple>\n";
     }
-    if ($this->prefixes)
-    {
-      $txt .= $this->prefs_toXCQL($depth+1);
+    if ($this->prefixes) {
+      $txt .= $this->prefs_toXCQL($depth + 1);
     }
-    $txt .= $this->boolean->toXCQL($depth+1);
+    $txt .= $this->boolean->toXCQL($depth + 1);
     $txt .= "$space  <leftOperand>\n";
-    $txt .= $this->leftOperand->toXCQL($depth+2);
+    $txt .= $this->leftOperand->toXCQL($depth + 2);
     $txt .= "$space  </leftOperand>\n";
     $txt .= "$space  <rightOperand>\n";
-    $txt .= $this->rightOperand->toXCQL($depth+2);
+    $txt .= $this->rightOperand->toXCQL($depth + 2);
     $txt .= "$space  </rightOperand>\n";
 
-    if ($this->sortKeys)
-    {
+    if ($this->sortKeys) {
       $txt .= "$space  <sortKeys>\n";
-      foreach ($this->sortKeys as $key)
-      {
-        $txt .= $key->toXCQL($depth+2);
+      foreach ($this->sortKeys as $key) {
+        $txt .= $key->toXCQL($depth + 2);
       }
       $txt .= "$space  </sortKeys>\n";
     }
@@ -1026,19 +956,17 @@ class Triple extends Prefixable
     return $txt;
   }
 
-  public function toTxt($depth=0)
+  public function toTxt($depth = 0)
   {
-    $space=str_repeat("  ", $depth);
+    $space = str_repeat("  ", $depth);
     $txt = Object::toTxt($depth);
-    $txt .= $this->leftOperand->toTxt($depth+1);
-    $txt .= $this->boolean->toTxt($depth+1);
-    $txt .= $this->rightOperand->toTxt($depth+1);
+    $txt .= $this->leftOperand->toTxt($depth + 1);
+    $txt .= $this->boolean->toTxt($depth + 1);
+    $txt .= $this->rightOperand->toTxt($depth + 1);
 
-    if ($this->sortKeys)
-    {
+    if ($this->sortKeys) {
       $txt .= "$space  sortBy:\n";
-      foreach ($this->sortKeys as $key)
-      {
+      foreach ($this->sortKeys as $key) {
         $txt .= "$space    " . $key->toTxt() . "\n";
       }
     }
@@ -1048,9 +976,13 @@ class Triple extends Prefixable
 
 class SearchClause extends Prefixable
 {
+  /** @var Index */
   public $index;
+  /** @var Relation */
   public $relation;
+  /** @var Term */
   public $term;
+  /** @var SortKey[] */
   public $sortKeys;
 
   public function __construct(&$i, &$r, &$t)
@@ -1065,10 +997,10 @@ class SearchClause extends Prefixable
   public function toCQL()
   {
     $prefs = $this->prefs_toCQL();
-    return $prefs . $this->index->toCQL() . " " . $this->relation->toCQL() . " \"" . $this->term->toCQL(). "\" ";
+    return $prefs . $this->index->toCQL() . " " . $this->relation->toCQL() . " \"" . $this->term->toCQL() . "\" ";
   }
 
-  public function toXCQL($depth=0)
+  public function toXCQL($depth = 0)
   {
     $space = str_repeat("  ", $depth);
     if ($depth == 0) {
@@ -1080,14 +1012,14 @@ class SearchClause extends Prefixable
       $txt .= $this->prefs_toXCQL();
     }
 
-    $txt .= $this->index->toXCQL($depth+1);
-    $txt .= $this->relation->toXCQL($depth+1);
-    $txt .= $this->term->toXCQL($depth+1);
+    $txt .= $this->index->toXCQL($depth + 1);
+    $txt .= $this->relation->toXCQL($depth + 1);
+    $txt .= $this->term->toXCQL($depth + 1);
 
     if ($this->sortKeys) {
       $txt .= "$space  <sortKeys>\n";
       foreach ($this->sortKeys as $key) {
-        $txt .= $key->toXCQL($depth+2);
+        $txt .= $key->toXCQL($depth + 2);
       }
       $txt .= "$space  </sortKeys>\n";
     }
@@ -1096,14 +1028,14 @@ class SearchClause extends Prefixable
     return $txt;
   }
 
-  public function toTxt($depth=0)
+  public function toTxt($depth = 0)
   {
-    $space=str_repeat("  ", $depth);
+    $space = str_repeat("  ", $depth);
     $txt = Object::toTXT($depth);
-    $txt .= $this->index->toTxt($depth+1);
-    $txt .= $this->relation->toTxt($depth+1);
-    $txt .= $this->term->toTxt($depth+1);
-    return $txt;
+    $txt .= $this->index->toTxt($depth + 1);
+    $txt .= $this->relation->toTxt($depth + 1);
+    $txt .= $this->term->toTxt($depth + 1);
+    return $space . $txt;
   }
 
 }
@@ -1117,7 +1049,7 @@ class Index extends Prefixed
     $this->split_value();
   }
 
-  public function toXCQL($depth=0)
+  public function toXCQL($depth = 0)
   {
     $space = str_repeat("  ", $depth);
     return "$space<Index>" . htmlentities($this->toCQL()) . "</Index>\n";
@@ -1141,13 +1073,13 @@ class Relation extends Prefixed
     }
   }
 
-  public function toXCQL($depth=0)
+  public function toXCQL($depth = 0)
   {
     $space = str_repeat("  ", $depth);
     $txt = "$space<Relation>\n";
     $txt .= "$space  <value>" . $this->value . "</value>\n";
     if ($this->modifiers) {
-      $txt .= $this->mods_toXCQL($depth+1);
+      $txt .= $this->mods_toXCQL($depth + 1);
     }
     $txt .= "$space</Relation>\n";
     return $txt;
@@ -1161,16 +1093,15 @@ class Relation extends Prefixed
  */
 class Term extends Object
 {
-  public function __construct( $data )
+  public function __construct($data)
   {
-    if ($data{0} == '"' && $data{strlen($data)-1} == '"')
-    {
-      $data = substr($data, 1, strlen($data)-1);
+    if ($data{0} == '"' && $data{strlen($data) - 1} == '"') {
+      $data = substr($data, 1, strlen($data) - 1);
     }
     $this->value = $data;
   }
 
-  public function toXCQL($depth=0)
+  public function toXCQL($depth = 0)
   {
     $space = str_repeat("  ", $depth);
     return "$space<Term>" . htmlentities($this->value) . "</Term>\n";
@@ -1203,14 +1134,13 @@ class Boolean extends Object
     return $txt;
   }
 
-
-  public function toXCQL($depth=0)
+  public function toXCQL($depth = 0)
   {
     $space = str_repeat("  ", $depth);
     $txt = "$space<Boolean>\n";
     $txt .= "$space  <value>" . $this->value . "</value>\n";
     if ($this->modifiers) {
-      $txt .= $this->mods_toXCQL($depth+1);
+      $txt .= $this->mods_toXCQL($depth + 1);
     }
     $txt .= "$space</Boolean>\n";
     return $txt;
@@ -1227,16 +1157,15 @@ class ModifierType extends Prefixed
     $this->split_value();
   }
 
-  public function toXCQL($depth=0)
+  public function toXCQL($depth = 0)
   {
     $space = str_repeat("  ", $depth);
-    return "$space<type>" . htmlentities( $this->toCQL()) . "</type>\n";
+    return "$space<type>" . htmlentities($this->toCQL()) . "</type>\n";
   }
 }
 
 class ModifierClause extends Object
 {
-
   public $type;
   public $comparison;
 
@@ -1244,7 +1173,7 @@ class ModifierClause extends Object
   {
     $this->value = $v;
     $this->comparison = $r;
-    $this->type =  new ModifierType( $m );
+    $this->type = new ModifierType($m);
     $this->type->parentNode = $this;
   }
 
@@ -1253,11 +1182,11 @@ class ModifierClause extends Object
     return $this->type->toCQL() . $this->comparison . $this->value;
   }
 
-  public function toXCQL($depth=0)
+  public function toXCQL($depth = 0)
   {
     $space = str_repeat("  ", $depth);
     $txt = "$space<modifier>\n";
-    $txt .= $this->type->toXCQL($depth+1);
+    $txt .= $this->type->toXCQL($depth + 1);
     if ($this->value) {
       $txt .= "$space  <comparison>" . htmlentities($this->comparison) . "</comparison>\n";
       $txt .= "$space  <value>" . htmlentities($this->value) . "</value>\n";
@@ -1266,7 +1195,7 @@ class ModifierClause extends Object
     return $txt;
   }
 
-  public function toTxt($depth=0)
+  public function toTxt($depth = 0)
   {
     $space = str_repeat("  ", $depth);
     $txt = $space . Object::toTxt();
@@ -1283,14 +1212,16 @@ class ModifierClause extends Object
 
 class SortKey extends Object
 {
+  /** @var Index */
   public $index;
 
-  public function __construct($i)
+  public function __construct(Index $i, array &$mods)
   {
     $this->index = $i;
+    if ($mods) $this->add_modifiers($mods);
   }
 
-  public function add_modifiers(&$mods)
+  public function add_modifiers(array &$mods)
   {
     $this->modifiers = $mods;
     foreach ($mods as $m) {
@@ -1298,7 +1229,7 @@ class SortKey extends Object
     }
   }
 
-  public function toTxt($depth=0)
+  public function toTxt($depth = 0)
   {
     return $this->index->toTxt();
   }

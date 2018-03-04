@@ -1,6 +1,6 @@
 <?php
 
-namespace \lib\util;
+namespace lib\util;
 
 /**
  * Class to manage multibyte strings
@@ -16,10 +16,17 @@ class MbString
   /**
    * Constructor
    * @param $string
-   * @return unknown_type
+   * @param string|bool|null $encoding
+   *    If omitted, defaults to "UTF-8". If true, detect encoding
+   *    automatically
    */
-  public function __construct( $string )
+  public function __construct( $string, $encoding='UTF-8' )
   {
+    if( $encoding === true ){
+      $encoding = mb_detect_encoding($string);
+    }
+    mb_internal_encoding($encoding);
+    mb_regex_encoding($encoding);
     $this->string = $string;
   }
 
@@ -82,6 +89,16 @@ class MbString
     {
       return mb_strripos( $this->string, $needle, $offset );
     }
+  }
+
+  /**
+   * Returns true if needle is found in the string, false if not
+   * @param $needle
+   * @param bool $casesensitive
+   * @return bool
+   */
+  public function contains( $needle, $casesensitive=true ){
+    return !!$this->indexOf( $needle, null, $casesensitive);
   }
 
   /**
