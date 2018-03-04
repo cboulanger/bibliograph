@@ -679,7 +679,7 @@ class SetupController extends \app\controllers\AppController
           /** @var \app\models\BibliographicDatasource $datasource */
           foreach ($schema->datasources as $datasource) {
             $db = $datasource->getConnection();
-            // for diagnostic purposes
+            // show new migrations, for diagnostic purposes
             Console::runAction('migrate/new', $params_new, null, $db);
             Yii::debug("Marking v2 datasource '{$datasource->namedId}' with '$fqn'...");
             Console::runAction('migrate/mark', $params_mark, null, $db);
