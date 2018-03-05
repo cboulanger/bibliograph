@@ -106,71 +106,73 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
    */
   public function getOperatorData($operator = null)
   {
-    static $data = null;
-    if(! $data ) $data =[
-      "and"   => [
-        'translation' => Yii::t('app', "{leftOperand} and {rightOperand}"),
-        'type' => self::TYPE_BOOLEAN
-      ],
-      "or"    => [
-        'translation' => Yii::t('app', "{leftOperand} or {rightOperand}"),
-        'type' => self::TYPE_BOOLEAN
-      ],
-      "!="   => [
-        'translation' => Yii::t('app', "{field} is not {value}"),
-        'type' => self::TYPE_COMPARATOR
-      ],
-      "="    => [
-        'translation' => Yii::t('app', "{field} is {value}"),
-        'type' => self::TYPE_COMPARATOR
-      ],
-      "contains" => [
-        'translation' => Yii::t('app', "{field} contains {value}"),
-        'type' => self::TYPE_COMPARATOR
-      ],
-      "notcontains" => [
-        'translation' => Yii::t('app', "{field} does not contain {value}"),
-        'type' => self::TYPE_COMPARATOR
-      ],
-      "startswith"  => [
-        'translation' => Yii::t('app', "{field} starts with {value}"),
-        'type' => self::TYPE_COMPARATOR
-      ],
-      ">" => [
-        'translation' => Yii::t('app', "{field} is greater than {value}"),
-        'type' => self::TYPE_COMPARATOR
-      ],
-      ">=" => [
-        'translation' => Yii::t('app', "{field} is greater than or equal to {value}"),
-        'type' => self::TYPE_COMPARATOR
-      ],
-      "<"  => [
-        'translation' => Yii::t('app', "{field} is smaller than {value}"),
-        'type' => self::TYPE_COMPARATOR
-      ],
-      "<=" => [
-        'translation' => Yii::t('app', "{field} is smaller than or equal to {value}"),
-        'type' => self::TYPE_COMPARATOR
-      ],
+    static $data = [];
+    $locale = Yii::$app->language;
+    if(! isset($data[$locale]) ) {
+      $data[$locale] = [
+        "and" => [
+          'translation' => Yii::t('app', "{leftOperand} and {rightOperand}"),
+          'type' => self::TYPE_BOOLEAN
+        ],
+        "or" => [
+          'translation' => Yii::t('app', "{leftOperand} or {rightOperand}"),
+          'type' => self::TYPE_BOOLEAN
+        ],
+        "!=" => [
+          'translation' => Yii::t('app', "{field} is not {value}"),
+          'type' => self::TYPE_COMPARATOR
+        ],
+        "=" => [
+          'translation' => Yii::t('app', "{field} is {value}"),
+          'type' => self::TYPE_COMPARATOR
+        ],
+        "contains" => [
+          'translation' => Yii::t('app', "{field} contains {value}"),
+          'type' => self::TYPE_COMPARATOR
+        ],
+        "notcontains" => [
+          'translation' => Yii::t('app', "{field} does not contain {value}"),
+          'type' => self::TYPE_COMPARATOR
+        ],
+        "startswith" => [
+          'translation' => Yii::t('app', "{field} starts with {value}"),
+          'type' => self::TYPE_COMPARATOR
+        ],
+        ">" => [
+          'translation' => Yii::t('app', "{field} is greater than {value}"),
+          'type' => self::TYPE_COMPARATOR
+        ],
+        ">=" => [
+          'translation' => Yii::t('app', "{field} is greater than or equal to {value}"),
+          'type' => self::TYPE_COMPARATOR
+        ],
+        "<" => [
+          'translation' => Yii::t('app', "{field} is smaller than {value}"),
+          'type' => self::TYPE_COMPARATOR
+        ],
+        "<=" => [
+          'translation' => Yii::t('app', "{field} is smaller than or equal to {value}"),
+          'type' => self::TYPE_COMPARATOR
+        ],
 //      "between" => [
 //        'translation' => Yii::t('app', "{field} is between {value}"),
 //        'type' => self::TYPE_COMPARATOR
 //      ],
-      "sortby" => [
-        'translation' => Yii::t('app', "sort by {value}"),
-        'type' => self::TYPE_COMPARATOR
-      ],
-      "empty" => [
-        'translation' => Yii::t('app', "{field} is empty"),
-        'type' => self::TYPE_COMPARATOR
-      ],
-      "notempty" => [
-        'translation' => Yii::t('app', "{field} is not empty"),
-        'type' => self::TYPE_COMPARATOR
-      ]
-
-    ];
-    return $operator ? $data[$operator] : $data;
+        "sortby" => [
+          'translation' => Yii::t('app', "sort by {value}"),
+          'type' => self::TYPE_COMPARATOR
+        ],
+        "empty" => [
+          'translation' => Yii::t('app', "{field} is empty"),
+          'type' => self::TYPE_COMPARATOR
+        ],
+        "notempty" => [
+          'translation' => Yii::t('app', "{field} is not empty"),
+          'type' => self::TYPE_COMPARATOR
+        ]
+      ];
+    }
+    return $operator ? $data[$locale][$operator] : $data[$locale];
   }
 
   /**
@@ -205,18 +207,20 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
   protected function getDictionary()
   {
     $schemaClass = get_class($this->schema);
-    if ( !isset($this->dictionary[$schemaClass]) ) {
+    $locale = Yii::$app->language;
+    $key = "$schemaClass/$locale";
+    if ( !isset($this->dictionary[$key]) ) {
       $dict=[];
-      $lang = Yii::$app->language;
       // model indexes
       $indexNames = $this->schema->getIndexNames();
       foreach ( $indexNames as $index) {
         $fields = $this->schema->getIndexFields($index);
         foreach ($fields as $field ) {
-          $translated = \mb_strtolower(Yii::t('app', $field), 'UTF-8');
+          $translated = $this->schema->getFieldLabel($field);
+          $translated = \mb_strtolower($translated, 'UTF-8');
           $dict[$translated] = $field;
           // add the root form of German gendered words ("Autor/in"=> "Autor")
-          if ( substr($lang,0,2) === "de" and $pos = strpos($translated, "/")) {
+          if ( substr($locale,0,2) === "de" and $pos = strpos($translated, "/")) {
             $dict[substr($translated, 0, $pos)] = $field;
           }
         }
@@ -225,6 +229,7 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
       foreach ( $this->operators as $operator) {
         // save the lowercase version of the translation for fast lookup
         $translations = $this->getOperatorData($operator)['translation'];
+        //Yii::info([Yii::$app->language, $operator, $translations ]);
         foreach ((array) $translations as $translation) {
           // remove placeholder tokens
           $replace_placeholders = ['{leftOperand}','{rightOperand}','{field}','{value}'];
@@ -232,9 +237,10 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
           $dict[$translation] = $operator;
         }
       }
-      $this->dictionary[$schemaClass] = $dict;
+      $this->dictionary[$key] = $dict;
+      //if( $locale!="en-US") Yii::info($dict);
     }
-    return $this->dictionary[$schemaClass];
+    return $this->dictionary[$key];
   }
 
 
@@ -251,7 +257,6 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
     $hasOperator = false;
     $parsedTokens = [];
     $dict = $this->getDictionary();
-    Yii::info($dict);
     do {
       $token = $tokens[0];
       //Yii::info("Looking at '$token'...");

@@ -53,8 +53,8 @@ class CqlTest extends \app\tests\unit\Base
   public function testMultiLanguageQuery()
   {
     $tests = [
-      'en-US' => 'title contains "Much Ado" and year is greater than 1598',
-      'de' => 'titel enthält "Much Ado" und jahr ist größer als 1598'
+      //'en-US' => 'title contains "Much Ado" and year is greater than 1598',
+      'de-DE' => 'titel enthält "Much Ado" und jahr ist größer als 1598'
     ];
     foreach ($tests as $locale => $query) {
       \Yii::$app->language = $locale;
