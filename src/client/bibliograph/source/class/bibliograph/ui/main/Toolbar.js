@@ -2,7 +2,7 @@
  *
  * Bibliograph: Online Collaborative Reference Management
  *
- * Copyright: 2007-2015 Christian Boulanger
+ * Copyright: 2007-2018 Christian Boulanger
  *
  * License: LGPL: http://www.gnu.org/licenses/lgpl.html EPL:
  * http://www.eclipse.org/org/documents/epl-v10.php See the LICENSE file in the
@@ -25,22 +25,22 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
     this.base(arguments);
 
     // shorthand vars
-    var app = qx.core.Init.getApplication();
+    let app = qx.core.Init.getApplication();
     this.accsMgr = app.getAccessManager();
     this.permMgr = this.accsMgr.getPermissionManager();
-    this.userMgr = this.accsMgr.getUserManager(); 
+    this.userMgr = this.accsMgr.getUserManager();
     
     // Toolbar
-    var toolBar = this;
+    let toolBar = this;
     toolBar.setWidgetId("app/toolbar");
 
-    var toolBarPart = new qx.ui.toolbar.Part();
-    toolBar.add(toolBarPart);    
+    let toolBarPart = new qx.ui.toolbar.Part();
+    toolBar.add(toolBarPart);
     toolBarPart.add(this.createLoginButton());
     toolBarPart.add(this.createLogoutButton());
     toolBarPart.add(this.createUserButton());
 
-    var toolBarPart2 = new qx.ui.toolbar.Part();
+    let toolBarPart2 = new qx.ui.toolbar.Part();
     toolBar.add(toolBarPart2);
     toolBarPart2.add(this.createDatasourceButton());
     toolBarPart2.add(this.createSystemMenu());
@@ -51,15 +51,15 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
 
     toolBar.add(new qx.ui.basic.Atom(), { flex : 10 }); // why not a spacer?
     toolBar.add(this.createTitleLabel());
-    //toolBar.add(this.createSearchBox(), { flex : 1 });
-    //this.createSearchButtons().map( button => toolBar.add(button) );
+    toolBar.add(this.createSearchBox(), { flex : 1 });
+    this.createSearchButtons().map( button => toolBar.add(button) );
   },
 
-  members : 
+  members :
   {
     createLoginButton : function()
     {
-      var button = new qx.ui.toolbar.Button();
+      let button = new qx.ui.toolbar.Button();
       button.setIcon("icon/16/status/dialog-password.png");
       button.setLabel(this.tr('Login'));
       button.setVisibility("excluded");
@@ -74,7 +74,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
     
     createLogoutButton : function()
     {
-      var button = new qx.ui.toolbar.Button();
+      let button = new qx.ui.toolbar.Button();
       button.setLabel(this.tr('Logout'));
       button.setIcon("icon/16/actions/application-exit.png");
       button.setVisibility("excluded");
@@ -90,7 +90,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
     createUserButton : function()
     {
       // User button
-      var button = new qx.ui.toolbar.Button();
+      let button = new qx.ui.toolbar.Button();
       button.setLabel(this.tr('Loading...'));
       button.setIcon("icon/16/apps/preferences-users.png");
       this.userMgr.bind("activeUser.fullname", button, "label" );
@@ -107,7 +107,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
 
     createDatasourceButton : function()
     {
-      var button = new qx.ui.toolbar.Button();
+      let button = new qx.ui.toolbar.Button();
       button.setLabel(this.tr('Datasources'));
       button.setWidgetId("app/toolbar/datasource");
       button.setVisibility("excluded");
@@ -115,19 +115,19 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       button.addListener("execute", function(e) {
         this.getApplication().getWidgetById("app/windows/datasource").show();
       }, this);
-      return button; 
+      return button;
     },
 
     createSystemMenu : function()
     {
-      var button = new qx.ui.toolbar.MenuButton();
+      let button = new qx.ui.toolbar.MenuButton();
       button.setIcon("icon/22/categories/system.png");
       button.setVisibility("excluded");
       button.setLabel(this.tr('System'));
       this.permMgr.create("system.menu.view").bind("state", button, "visibility", {
         converter : bibliograph.Utils.bool2visibility
       });
-      var systemMenu = new qx.ui.menu.Menu();
+      let systemMenu = new qx.ui.menu.Menu();
       button.setMenu(systemMenu);
       systemMenu.setWidgetId("bibliograph/menu-system");
 
@@ -140,33 +140,33 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
 
     createPreferencesButton : function()
     {
-      var button = new qx.ui.menu.Button();
+      let button = new qx.ui.menu.Button();
       button.setLabel(this.tr('Preferences'));
       this.permMgr.create("preferences.view").bind("state", button, "visibility", {
         converter : bibliograph.Utils.bool2visibility
       });
       button.addListener("execute", function(e) {
-        var win = this.getApplication().getWidgetById("bibliograph/preferencesWindow").show();
+        let win = this.getApplication().getWidgetById("bibliograph/preferencesWindow").show();
       }, this);
-      return button; 
+      return button;
     },
 
     createAccessManagementButton : function()
     {
-      var button = new qx.ui.menu.Button();
+      let button = new qx.ui.menu.Button();
       button.setLabel(this.tr('Access management'));
       this.permMgr.create("access.manage").bind("state", button, "visibility", {
         converter : bibliograph.Utils.bool2visibility
       });
       button.addListener("execute", function(e) {
-        var win = this.getApplication().getWidgetById("app/windows/access-control").show();
+        let win = this.getApplication().getWidgetById("app/windows/access-control").show();
       }, this);
       return button;
     },
 
     createPluginButton : function()
     {
-      var button = new qx.ui.menu.Button();
+      let button = new qx.ui.menu.Button();
       button.setLabel(this.tr('Plugins'));
       this.permMgr.create("plugin.manage").bind("state", button, "visibility", {
         converter : bibliograph.Utils.bool2visibility
@@ -179,25 +179,25 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
 
     createImportMenu : function()
     {
-      var button = new qx.ui.toolbar.MenuButton();
+      let button = new qx.ui.toolbar.MenuButton();
       button.setLabel(this.tr('Import'));
       button.setIcon("icon/22/places/network-server.png");
       this.permMgr.create("reference.import").bind("state", button, "visibility", {
         converter : bibliograph.Utils.bool2visibility
       });
-      var menu = new qx.ui.menu.Menu();
+      let menu = new qx.ui.menu.Menu();
       menu.setWidgetId("app/toolbar/import");
       button.setMenu(menu);
 
       // menu content
       menu.add( this.createImportTextButton() );
 
-      return button; 
+      return button;
     },
 
     createImportTextButton : function()
     {
-      var button = new qx.ui.menu.Button(this.tr('Import text file'));
+      let button = new qx.ui.menu.Button(this.tr('Import text file'));
       button.addListener("execute", function(e) {
         this.getApplication().getWidgetById("bibliograph/importWindow").show();
       }, this);
@@ -206,39 +206,39 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
  
     createHelpMenu : function()
     {
-      var menuButton = new qx.ui.toolbar.MenuButton();
+      let menuButton = new qx.ui.toolbar.MenuButton();
       menuButton.setIcon("icon/22/apps/utilities-help.png");
 
-      var menu = new qx.ui.menu.Menu();
+      let menu = new qx.ui.menu.Menu();
       menuButton.setMenu(menu);
       menu.setWidgetId("app/toolbar/help");
 
-      var button1 = new qx.ui.menu.Button(this.tr('Online Help'));
+      let button1 = new qx.ui.menu.Button(this.tr('Online Help'));
       menu.add(button1);
       button1.addListener("execute", function(e) {
         this.getApplication().cmd("showHelpWindow");
       }, this);
 
-      var button2 = new qx.ui.menu.Button();
+      let button2 = new qx.ui.menu.Button();
       button2.setLabel(this.tr('About Bibliograph'));
       menu.add(button2);
       button2.addListener("execute", function(e) {
         this.getApplication().cmd("showAboutWindow");
-      }, this);      
+      }, this);
 
       return menuButton;
     },
 
     createDeveloperMenu : function()
     {
-      var menuButton = new qx.ui.toolbar.MenuButton();
+      let menuButton = new qx.ui.toolbar.MenuButton();
       menuButton.setLabel(this.tr('Developer'));
 
-      var menu = new qx.ui.menu.Menu();
+      let menu = new qx.ui.menu.Menu();
       menuButton.setMenu(menu);
       menu.setWidgetId("app/toolbar/developer");
 
-      var button1 = new qx.ui.menu.Button(this.tr('Run RPC method test.test'));
+      let button1 = new qx.ui.menu.Button(this.tr('Run RPC method test.test'));
       menu.add(button1);
       button1.addListener("execute", function(e) {
         this.getApplication().getRpcClient("test").send("test");
@@ -249,19 +249,19 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
 
     createTitleLabel : function()
     {
-      var label = new qx.ui.basic.Label();      
+      let label = new qx.ui.basic.Label();
       label.setPadding(10);
       label.setRich(true);
       label.setTextAlign("right");
 
       this.applicationTitleLabel = label;
-      label.setWidgetId("bibliograph/datasource-name"); 
+      label.setWidgetId("bibliograph/datasource-name");
       return label;
     },
 
     createSearchBox : function()
     {
-      var searchbox = new qx.ui.form.TextField();
+      let searchbox = new qx.ui.form.TextField();
       this.searchbox = searchbox;
       searchbox.setWidgetId("bibliograph/searchbox");
       searchbox.setMarginTop(8);
@@ -272,8 +272,8 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       searchbox.addListener("keypress", function(e) {
         if (e.getKeyIdentifier() == "Enter")
         {
-          var app = this.getApplication();
-          var query = searchbox.getValue();
+          let app = this.getApplication();
+          let query = searchbox.getValue();
           app.setFolderId(0);
           app.setQuery(query);
           qx.event.message.Bus.dispatch(new qx.event.message.Message("bibliograph.userquery", query));
@@ -292,7 +292,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       }, this);
       searchbox.addListener("blur", function(e)
       {
-        var timer = qx.util.TimerManager.getInstance();
+        let timer = qx.util.TimerManager.getInstance();
         timer.start(function() {
           if (!qx.ui.core.FocusHandler.getInstance().isFocused(searchbox)) {
             searchbox.setLayoutProperties( {
@@ -306,23 +306,24 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
 
     createSearchButtons : function()
     {
-      // search button 
-      var searchButton = new qx.ui.toolbar.Button();
+      // search button
+      let searchButton = new qx.ui.toolbar.Button();
       searchButton.setIcon("bibliograph/icon/16/search.png");
       this.permMgr.create("reference.search").bind("state", searchButton, "visibility", {
         converter : bibliograph.Utils.bool2visibility
       });
       searchButton.addListener("execute", () => {
-        var query = this.searchbox.getValue();
-        var app = this.getApplication();
+        let query = this.searchbox.getValue();
+        let app = this.getApplication();
         app.getWidgetById("bibliograph/searchHelpWindow").hide();
         app.setFolderId(0);
-        if (app.getQuery() == query) app.setQuery(null);
+        if (app.getQuery() == query) app.setQuery(null); // execute query again
         app.setQuery(query);
         qx.event.message.Bus.dispatch(new qx.event.message.Message("bibliograph.userquery", query));
       });
-      // cancel button 
-      var cancelButton = new qx.ui.toolbar.Button();
+      
+      // cancel button
+      let cancelButton = new qx.ui.toolbar.Button();
       cancelButton.setIcon("bibliograph/icon/16/cancel.png");
       cancelButton.setMarginRight(5);
       this.permMgr.create("reference.search").bind("state", cancelButton, "visibility", {
@@ -333,15 +334,16 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
         this.searchbox.focus();
         this.getApplication().getWidgetById("bibliograph/searchHelpWindow").hide();
       });
-      // search help button 
-      var helpButton = new qx.ui.toolbar.Button();
+      
+      // search help button
+      let helpButton = new qx.ui.toolbar.Button();
       helpButton.setIcon("bibliograph/icon/16/help.png");
       helpButton.setMarginRight(5);
       this.permMgr.create("reference.search").bind("state", helpButton, "visibility", {
         converter : bibliograph.Utils.bool2visibility
       });
       helpButton.addListener("execute", function(e) {
-        var hwin = this.getApplication().getWidgetById("bibliograph/searchHelpWindow");
+        let hwin = this.getApplication().getWidgetById("bibliograph/searchHelpWindow");
         hwin.show();
         hwin.center();
       }, this);

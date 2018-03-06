@@ -338,7 +338,15 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
 
       if ( $index == "serverChoice") {
         // use an index named 'fulltext', which must exist in the model.
-        $condition = "MATCH(`fulltext`) AGAINST ('$term' IN NATURAL LANGUAGE MODE)";
+        // @FIXME this is not portable! Get colum names dynamically
+        $columns = ['abstract','annote','author','booktitle','subtitle','contents','editor','howpublished','journal','keywords','note','publisher','school','title','year'];
+        $matchClause = "`" . implode("`,`", $columns) . "`";
+        // @todo make this configurable
+        $condition = "MATCH($matchClause) AGAINST ('$term' IN NATURAL LANGUAGE MODE WITH QUERY EXPANSION)";
+        // @todo hack to remove
+        $activeQuery->select = array_map(function($column){
+          return $column=="references.id" ? "id" : $column;
+        }, $activeQuery->select);
       } else {
         // else, translate index into property
         if (! in_array($index, $this->schema->fields())) {
@@ -405,6 +413,7 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
             throw new UserErrorException("Relation '$relation' not implemented.");
         }
       }
+      // @todo support OR condition!
       $activeQuery = $activeQuery->andWhere($condition);
     } elseif ($cqlObject instanceof Diagnostic) {
       // Syntax error

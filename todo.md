@@ -10,8 +10,8 @@
 - [x] Re-implement user error handling: New user error without stack trace, alert to user and log it
 - [x] Re-implement ACL Tool
 - [x] Re-implement Datasource Schemas
-- [ ] Re-implement Client UI updates via events (e.g. in editor)
-- [ ] Re-implement cql search
+- [x] Re-implement Client UI updates via events (e.g. in editor)
+- [x] Re-implement cql search
 - [ ] Re-implement Remove/Move/Copy references
 - [ ] Re-implement Add/Remove/Move/Copy folders
 - [ ] Re-implement Export

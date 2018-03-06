@@ -20,6 +20,7 @@
 
 namespace app\controllers;
 
+use app\schema\BibtexSchema;
 use Yii;
 use app\models\Datasource;
 use function GuzzleHttp\debug_resource;
@@ -66,26 +67,41 @@ class ReferenceController extends AppController
    *
    * The client query looks like this:
    * {
-   *   'datasource' : "<datasource name>",
-   *   'modelType' : "reference",
-   *   'query' : {
-   *     'properties' : ["author","title","year" ...],
-   *     'orderBy' : "author",
-   *     'relation' : {
-   *       'name' : "folder",
-   *       'id' : 3
-   *     }
-   *     'cql' :
+   *   'datasource" : "<datasource name>",
+   *   "modelType" : "reference",
+   *   "query" : {...}
    *   }
    * }
+   * 
+   * The query is either:
+   * 
+   *    {
+   *     "properties" : ["author","title","year" ...],
+   *     "orderBy" : "author",
+   *     "relation" : {
+   *       "name" : "folder",
+   *       "id" : 3
+   *     }
+   *
+   * or 
+   *    {
+   *     "properties" : ["author","title","year" ...],
+   *     "orderBy" : "author",
+   *     "cql" : "..."
+   *    }
+   *
+   * The cql string can be localized, i.e. the indexes and operators can be in the
+   * current application locale
+   *
    * @param \stdClass $clientQueryData
    *    The query data object from the json-rpc request
-   * @param \yii\db\ActiveQuery $serverQuery
+   * @param \yii\db\ActiveQuery $activeQuery
    *    The ActiveQuery object used
    * @return \yii\db\ActiveQuery
    * @throws \InvalidArgumentException
+   * @todo 'properties'should be 'columns' or 'fields', 'cql' should be 'input'/'search' or similar
    */
-  public function addQueryConditions( \stdClass $clientQueryData, \yii\db\ActiveQuery $serverQuery)
+  public function addQueryConditions( \stdClass $clientQueryData, \yii\db\ActiveQuery $activeQuery)
   {
     $clientQuery = $clientQueryData->query;
     if (!is_object($clientQuery) or
@@ -93,34 +109,34 @@ class ReferenceController extends AppController
       throw new \InvalidArgumentException("Invalid query data");
     }
 
-    // @todo should be 'columns' or 'fields'
     $columns = array_map(function ($column) {
       return $column == "id" ? "references.id" : $column;
     }, $clientQuery->properties);
-    $serverQuery = $serverQuery->select($columns);
+    $activeQuery = $activeQuery->select($columns);
 
     // relation
     if (isset($clientQuery->relation)) {
-      return $serverQuery
+      return $activeQuery
         ->alias('references')
         ->joinWith($clientQuery->relation->name,false)
         ->onCondition([$clientQuery->relation->foreignId => $clientQuery->relation->id]);
     }
 
-    // cql
-//    if ( isset ( $query->cql ) ){
-//
-//      $cql = new Query;
-//      try {
-//        $q = $cql->addQueryConditions($clientQuery, $serverQuery, $modelClass);
-//      } catch (\Exception $e) {
-//        throw new UserErrorException($e->getMessage());
-//      }
-//      $q->where['markedDeleted'] = false;
-//      return $q;
-//    }
+    // freeform search query
+    if ( isset ( $clientQuery->cql ) ){
+      $nlq = new \lib\cql\NaturalLanguageQuery([
+        'query' => $clientQuery->cql,
+        'schema' => new BibtexSchema() //FIXME: unhardcode this
+      ]);
+      try {
+        $nlq->injectIntoYiiQuery($activeQuery);
+      } catch (\Exception $e) {
+        throw new UserErrorException($e->getMessage());
+      }
+      return $activeQuery->andWhere(['markedDeleted' => 0]);
+    }
 
-    throw new \Exception(Yii::t('app', "No recognized query format in request."));
+    throw new UserErrorException(Yii::t('app', "No recognized query format in request."));
   }
 
   /**
@@ -223,7 +239,6 @@ class ReferenceController extends AppController
    */
   public function actionRowCount($clientQueryData)
   {
-    // @todo why pass the model type? It's implied in the controller name
     $modelClass = $this->getModelClass($clientQueryData->datasource, $clientQueryData->modelType);
     $modelClass::setDatasource($clientQueryData->datasource);
     $query = $modelClass::find();
