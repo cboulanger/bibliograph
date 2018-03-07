@@ -7,6 +7,7 @@ declare -a arr=(
   "cboulanger/yii2-json-rpc-2.0"
   "cboulanger/raptor-client"
   "cboulanger/qx-contrib-Dialog"
+  "cboulanger/qx-contrib-TokenField"
 )
 for repo in "${arr[@]}"
 do
