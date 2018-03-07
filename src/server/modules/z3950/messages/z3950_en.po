@@ -1,0 +1,90 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: z3950\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-01-22 22:37+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../plugins/z3950/services/class/z3950/Service.php:124
+msgid "Author"
+msgstr ""
+
+#: ../plugins/z3950/services/class/z3950/Service.php:128
+msgid "Year"
+msgstr ""
+
+#: ../plugins/z3950/services/class/z3950/Service.php:132
+msgid "Title"
+msgstr ""
+
+#: ../plugins/z3950/services/class/z3950/Service.php:326
+#, php-format
+msgid "The server does not understand the query \"%s\". Please try a different query."
+msgstr ""
+
+#: ../plugins/z3950/services/class/z3950/Service.php:336
+msgid "Server does not support a convertable format."
+msgstr ""
+
+#: ../plugins/z3950/services/class/z3950/Service.php:339
+msgid "Waiting for remote server..."
+msgstr ""
+
+#: ../plugins/z3950/services/class/z3950/Service.php:350
+#, php-format
+msgid "Server error: %s"
+msgstr ""
+
+#: ../plugins/z3950/services/class/z3950/Service.php:363
+msgid "No results."
+msgstr ""
+
+#: ../plugins/z3950/services/class/z3950/Service.php:367
+#, php-format
+msgid "The number of results is higher than %s records. Please narrow down your search."
+msgstr ""
+
+#: ../plugins/z3950/services/class/z3950/Service.php:392
+#, php-format
+msgid "%s records found."
+msgstr ""
+
+#: ../plugins/z3950/services/class/z3950/Service.php:416
+#, php-format
+msgid "Retrieving %s of %s records..."
+msgstr ""
+
+#: ../plugins/z3950/services/class/z3950/Service.php:422
+#, php-format
+msgid "Server timeout trying to retrieve %s records: try a more narrow search"
+msgstr ""
+
+#: ../plugins/z3950/services/class/z3950/Service.php:424
+#, php-format
+msgid "Server error: %s."
+msgstr ""
+
+#: ../plugins/z3950/services/class/z3950/Service.php:437
+#: ../plugins/z3950/services/class/z3950/Service.php:478
+msgid "Formatting records..."
+msgstr ""
+
+#: ../plugins/z3950/services/class/z3950/Service.php:462
+msgid "Cannot convert server response"
+msgstr ""
+
+#: ../plugins/z3950/services/class/z3950/Service.php:567
+msgid "hits"
+msgstr ""

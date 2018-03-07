@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<explain>
+  <serverInfo protocol="Z39.50">
+    <host>bvbr.bib-bvb.de</host>
+    <port>9991</port>
+    <database>BVB01MCZ</database>
+    <authentication>
+      <user>Z39-SUCHE</user>
+      <password>SUCHE01</password>
+    </authentication>
+    <charset>utf-8</charset>
+  </serverInfo>
+    <databaseInfo>
+      <title primary="true" lang="en">Bibliotheksverbund Bayern (BVB)/B3Kat</title>
+      <author>Bibliotheksverbund Bayern</author>
+      <description>Die B3Kat-Datenbank enthält Titeldaten und Zeitschriften mit Besitznachweis von BVB- und KOBV-Bibliotheken.</description>
+   </databaseInfo>
+   <metaInfo>
+     <dateModified>2017-01-16T16:00:00ZCET</dateModified>
+   </metaInfo>
+    <indexInfo>
+      <index search="true">
+        <title primary="true" lang="en">Personal name</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">1</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Corporate name</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">2</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Conference name</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">3</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Title</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">4</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Title series</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">5</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Title uniform</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">6</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">ISSN</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">8</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Local number</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">12</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Local classification</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">20</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Subject heading</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">21</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Subject Rameau</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">22</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">BDI index subject</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">23</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">INSPEC subject</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">24</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">MESH subject</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">25</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">PA subject</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">26</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">LC subject heading</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">27</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">RVM subject heading</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">28</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Local subject index</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">29</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Title collective</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">34</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Title parallel</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">35</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Title added title page</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">37</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Title caption</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">38</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Title running</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">39</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Title spine</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">40</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Title other variant</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">41</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Title expanded</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">44</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Subject rswk</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">46</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">No. nat'l biblio.</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">48</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Number local call</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">53</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Place publication</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">59</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Author</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">1003</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Author-name personal</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">1004</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Author-name corporate</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">1005</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Author-name conference</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">1006</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Subject--LC children's</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">1008</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Subject name -- personal</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">1009</attr>
+        </map>
+      </index>
+      <index search="true">
+        <title primary="true" lang="en">Publisher</title>
+        <map primary="true">
+          <attr type="1" set="bib-1">1018</attr>
+        </map>
+      </index>
+    </indexInfo>
+   <recordInfo>
+     <recordSyntax name="USmarc">
+       <elementSet name="F"></elementSet>
+     </recordSyntax>
+   </recordInfo>
+</explain>

@@ -1,0 +1,75 @@
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"Report-Msgid-Bugs-To: you@your.org\n"
+"POT-Creation-Date: 2014-09-08 18:50+0100\n"
+"PO-Revision-Date: 2014-09-08 18:50+0100\n"
+"Last-Translator: you <you@your.org>\n"
+"Language-Team: Team <yourteam@your.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: z3950/ImportWindow.js:116
+msgid "You have to select one or more reference to import."
+msgstr ""
+"Sie müssen zunächst einen oder mehrere Datensätze zum Importieren auswählen"
+
+#: z3950/ImportWindow.js:126
+msgid "Please select a folder first."
+msgstr "Bitte markieren Sie einen Ordner, in den importiert werden soll"
+
+#: z3950/ImportWindow.js:134
+msgid "Cannot determine selected folder. Please reload the folders."
+msgstr ""
+"Kann Ordner nicht finden (vielleicht neu angelegt?) Bitte Ordner neu laden."
+
+#: z3950/ImportWindow.js:139
+msgid "Invalid target folder. You can only import into normal folders."
+msgstr ""
+"Der Zielordner ist ungültig. Sie können nur in normale Ordner importieren"
+
+#: z3950/ImportWindow.js:148
+msgid "Importing references..."
+msgstr "Die Datensätze werden importiert"
+
+#: z3950/ImportWindow.js:157 z3950/ImportWindowUi.js:40 z3950/Plugin.js:56
+msgid "Import from library catalog"
+msgstr "Aus einem Bibliothekskatalog importieren"
+
+#: z3950/ImportWindowUi.js:112
+msgid "Enter search terms"
+msgstr "Bitte Suchausdruck eingeben"
+
+#: z3950/ImportWindowUi.js:121
+msgid "Search"
+msgstr "Suche"
+
+#: z3950/ImportWindowUi.js:128
+msgid "Help"
+msgstr "Hilfe"
+
+#: z3950/ImportWindowUi.js:162
+msgid "Import selected records"
+msgstr "Ausgewählte importieren"
+
+#: z3950/ImportWindowUi.js:171
+msgid "Close"
+msgstr "Schließen"
+
+#: z3950/Plugin.js:68
+msgid "Z39.50 Import"
+msgstr "Import aus Bibliothekskatalog (Z39.50)"
+
+#: z3950/Plugin.js:116
+msgid "(Un-)Select All"
+msgstr "Alles/nichts auswählen"
+
+#: z3950/Plugin.js:128
+msgid "Save"
+msgstr "Speichern"
+
+#: z3950/Plugin.js:142
+msgid "Reload"
+msgstr "Neu Laden"
