@@ -39,6 +39,11 @@ use lib\util\Tokenizer;
  */
 class NaturalLanguageQuery extends \yii\base\BaseObject
 {
+  /**
+   * The language of the query. If undefined, use the Yii::$app->language
+   * @var string
+   */
+  public $language;
 
   /**
    * @var string
@@ -83,7 +88,22 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
       throw new \InvalidArgumentException("Invalid 'schema' property");
     }
     parent::__construct($config);
+    // set language
+    $appLanguage = Yii::$app->language;
+    if( ! $this->language ){
+      $this->language= $appLanguage;
+    } elseif( $this->language !== $appLanguage ) {
+      Yii::$app->language = $this->language;
+      // re-initialize and re-translate schema
+      $this->schema->init();
+    }
+    // translate query
     $this->cql = $this->parseMulitLanguageQuery($this->query);
+    if ( $appLanguage !== $this->language ){
+      // revert to previous language
+      Yii::$app->language = $appLanguage;
+      $this->schema->init();
+    }
   }
 
   /**
@@ -202,12 +222,12 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
    * booleans, modifiers or object properties
    * @param \app\schema\AbstractReferenceSchema $schema
    * @return array The dictionary for the model
-   * @todo cache data
+   * @throws \RuntimeException
    */
   protected function getDictionary()
   {
     $schemaClass = get_class($this->schema);
-    $locale = Yii::$app->language;
+    $locale = $this->language;
     $key = "$schemaClass/$locale";
     if ( !isset($this->dictionary[$key]) ) {
       $dict=[];
@@ -343,10 +363,12 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
         $matchClause = "`" . implode("`,`", $columns) . "`";
         // @todo make this configurable
         $condition = "MATCH($matchClause) AGAINST ('$term' IN NATURAL LANGUAGE MODE WITH QUERY EXPANSION)";
-        // @todo hack to remove
-        $activeQuery->select = array_map(function($column){
-          return $column=="references.id" ? "id" : $column;
-        }, $activeQuery->select);
+        // @todo hack to remove prefix
+        if( $activeQuery->select) {
+          $activeQuery->select = array_map(function($column){
+            return $column=="references.id" ? "id" : $column;
+          }, (array) $activeQuery->select);
+        }
       } else {
         // else, translate index into property
         if (! in_array($index, $this->schema->fields())) {

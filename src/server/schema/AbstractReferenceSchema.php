@@ -234,7 +234,7 @@ abstract class AbstractReferenceSchema extends yii\base\BaseObject implements IS
    * @param string $field
    * @param string|null $reftype Optional reference type if there are different
    * labels for different reference types
-   * @throws \Exception
+   * @throws \RuntimeException
    * @return string
    */
   public function getFieldLabel($field, $reftype = null)
@@ -251,7 +251,7 @@ abstract class AbstractReferenceSchema extends yii\base\BaseObject implements IS
       if (isset($formData['label'])) {
         $label = $formData['label'];
       } else {
-        throw new \Exception("Field '$field' has no label information!");
+        throw new \RuntimeException("Field '$field' has no label information!");
       }
     }
 
