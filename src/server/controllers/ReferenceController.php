@@ -20,12 +20,10 @@
 
 namespace app\controllers;
 
-use app\schema\BibtexSchema;
 use Yii;
 use app\models\Datasource;
-use function GuzzleHttp\debug_resource;
+use app\schema\BibtexSchema;
 use lib\exceptions\UserErrorException;
-use lib\schema\cql\Query;
 use lib\Validate;
 
 class ReferenceController extends AppController
@@ -143,6 +141,7 @@ class ReferenceController extends AppController
    * Returns an array of ListItem data on the available reference types
    * @param $datasource
    * @return array
+   * @throws UserErrorException
    */
   public function getReferenceTypeListData($datasource)
   {
@@ -151,11 +150,15 @@ class ReferenceController extends AppController
     $reftypes = $schema->types();
     $options = array();
     foreach ($reftypes as $reftype) {
-      $options[] = array(
-        'value' => $reftype,
-        'icon' => null, //"icon/16/actions/document-new.png",
-        'label' => Yii::t('app', $schema->getTypeLabel($reftype))
-      );
+      try {
+        $options[] = array(
+          'value' => $reftype,
+          'icon' => null, //"icon/16/actions/document-new.png",
+          'label' => Yii::t('app', $schema->getTypeLabel($reftype))
+        );
+      } catch (\Exception $e) {
+        throw new UserErrorException($e->getMessage(), null, $e);
+      }
     }
     return $options;
   }
@@ -166,14 +169,14 @@ class ReferenceController extends AppController
    * @param \app\models\Reference $reference
    * @return void
    */
-  protected function getTitleLabel($reference)
-  {
-    $datasource = $reference::getDatasource();
-    $ids = [$reference->id];
-    $style = "apa"; // @todo
-    return "TODO";
-    //return CitationController :: process( $datasource, $ids, $style );
-  }
+//  protected function getTitleLabel($reference)
+//  {
+//    $datasource = $reference::getDatasource();
+//    $ids = [$reference->id];
+//    $style = "apa"; // @todo
+//    return "TODO";
+//    //return CitationController :: process( $datasource, $ids, $style );
+//  }
 
   /*
   ---------------------------------------------------------------------------
@@ -224,7 +227,7 @@ class ReferenceController extends AppController
         ],
         'orderBy' => "author,year,title",
       ],
-      'addItems' => $this->getReferenceTypeListData($datasource, $modelClassType)
+      'addItems' => $this->getReferenceTypeListData($datasource)
     ];
   }
 
@@ -263,7 +266,7 @@ class ReferenceController extends AppController
    * @param int $lastRow Last row of queried data
    * @param int $requestId Request id
    * param object $queryData Data to construct the query
-   * @throws InvalidArgumentException
+   * @throws \InvalidArgumentException
    * return array Array containing the keys
    *                int     requestId   The request id identifying the request (mandatory)
    *                array   rowData     The actual row data (mandatory)
@@ -362,11 +365,15 @@ class ReferenceController extends AppController
     $schema = $modelClass::getSchema();
     $result = array();
     foreach ($schema->types() as $type) {
-      $result[] = array(
-        'label' => $schema->getTypeLabel($type),
-        'value' => $type,
-        'icon' => null
-      );
+      try {
+        $result[] = array(
+          'label' => $schema->getTypeLabel($type),
+          'value' => $type,
+          'icon' => null
+        );
+      } catch (\Exception $e) {
+        throw new UserErrorException($e->getMessage(),null, $e);
+      }
     }
     return $result;
   }
@@ -435,7 +442,7 @@ class ReferenceController extends AppController
     $item = array(
       'datasource' => $datasource,
       'referenceId' => $id, // todo: replace by "id"
-      'titleLabel' => $this->getTitleLabel($model)
+      //'titleLabel' => $this->getTitleLabel($model)
     );
 
     foreach ($fields as $field) {
