@@ -9,29 +9,34 @@
 - [x] Re-implement datasource restrictions and access check
 - [x] Re-implement user error handling: New user error without stack trace, alert to user and log it
 - [x] Re-implement ACL Tool
+- [x] Add column 'protected' to user/group etc. to prevent records from being deleted
 - [x] Re-implement Datasource Schemas
 - [x] Re-implement Client UI updates via events (e.g. in editor)
 - [x] Re-implement cql search
+- [x] Re-implement translation (http://www.yiiframework.com/doc-2.0/guide-tutorial-i18n.html)
+- [ ] Re-implemen Plugins as Yii2 modules
+- [ ] Re-implement Z3950 import
+- [ ] Add "locale" property to search folders for parsing queries
 - [ ] Re-implement Remove/Move/Copy references
 - [ ] Re-implement Add/Remove/Move/Copy folders
 - [ ] Re-implement Export
-- [ ] Add distribution mechanism
 - [ ] Tests: Make Travis ~~great~~ work again
 
 ## v3.0.0-beta 
 
 ### Priority: high
-- [ ] Re-implement translation (http://www.yiiframework.com/doc-2.0/guide-tutorial-i18n.html)
-- [ ] Re-implement Z3950 import as a Yii2 module
+- [ ] Add distribution mechanism 
 
 ### Priority: normal
 - [ ] Frontend: Rename item view "metadata" page
-- [ ] Tests: Fix bootstrap loading issue
 - [ ] Backend: Model validation: accept booleans for MySql SmallInt columns
 - [ ] Implement reference model schema
+- [ ] Add missing translations
+- [ ] Re-implement reference editor title label
+- [ ] Use UserErrorException consistently and replace \Exception
+- [ ] Add log email target to report fatal errors, adapt UserErrorException to report fatal errors via email
 
 ### Priority: low
-- [ ] Add column 'protected' to user/group etc. to prevent records from being deleted
 - [ ] Backend: Streamline API to get Datasource & typed model
 - [ ] Frontend: Convert static icon resouce paths into aliases that are resolved in bibliograph.theme.Icon
 - [ ] Frontend: Rename widget ids, replace with native qooxdoo ids, see https://github.com/qooxdoo/qooxdoo/issues/9422
@@ -39,7 +44,8 @@
 - [ ] Change app state separator and assignment chars
 
 ### Code cleanup
-- [ ] Use UserErrorException consistently and replace \Exception
+- [ ] Remove unnecessary packages from npm and composer
+- [ ] Tests: Fix bootstrap loading issue
 - [ ] \app\controllers\AppController::require* methods should throw a specialized
       Exception (i.e. MethodNotAllowedException) instead of \JsonRpc2\Exception
 - [ ] Add @jsonrpc controller-id/action-id tag in controller actions
@@ -52,6 +58,7 @@
 ## v3.1
 
 ### Priority: high
+- [ ] Re-implement Backup plugin
 - [ ] Re-enable item view / formatted item
 - [ ] Re-enable item view / record info
 - [ ] Re-enable item view / duplicates search
