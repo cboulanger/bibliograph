@@ -20,11 +20,9 @@
 
 namespace lib\components;
 
-use Yii;
 use app\models\Config;
-use app\models\User;
 use app\models\UserConfig;
-use yii\db\Exception;
+use Yii;
 
 /**
  * Component class providing methods to get or set configuration
@@ -45,18 +43,20 @@ class Configuration extends \yii\base\Component
   // API methods
   //-------------------------------------------------------------
 
-   /**
+  /**
    * Creates a preference enty with the given properties
-	 * @param $key
-	 *     The name ("key") of the config value
+   * @param $key
+   *     The name ("key") of the config value
    * @param mixed $default
    *     The default value
    * @param boolean $customize
    *     If true, allow users to create their
    *     own variant of the configuration setting
-	 * @param bool $final
-	 *     If true, the value cannot be modified after creation
-	 */
+   * @param bool $final
+   *     If true, the value cannot be modified after creation
+   * @return bool True if preference was added, false if preference already existed
+   * @throws \InvalidArgumentException
+   */
   public function addPreference( $key, $default, $customize=false,  $final=false )
   {
     switch( gettype( $default) )
@@ -73,7 +73,7 @@ class Configuration extends \yii\base\Component
       default: 
         throw new \InvalidArgumentException("Invalid default value for preference key '$key'");
     }
-    $this->createKeyIfNotExists($key, $type, $customize, $default, $final);
+    return $this->createKeyIfNotExists($key, $type, $customize, $default, $final);
   }
   
   /**

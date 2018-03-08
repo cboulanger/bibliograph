@@ -8,7 +8,7 @@ use app\modules\z3950\lib\yaz\Yaz;
 /**
  * Default controller for the `z3950` module
  */
-class DefaultController extends Controller
+class SearchController extends Controller
 {
   /**
    * Returns the default model type for which this controller is providing

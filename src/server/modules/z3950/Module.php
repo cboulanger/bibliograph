@@ -1,20 +1,16 @@
 <?php
 
 namespace app\modules\z3950;
-use app\models\Datasource;
-use app\models\Role;
-use app\models\Schema;
-use app\models\User;
+use app\models\{
+  Datasource, Role, Schema, User
+};
 use app\modules\z3950\models\Search;
 use Yii;
-use yii\base\Event;
-use yii\base\ModelEvent;
-use yii\web\UserEvent;
 
 /**
  * z3950 module definition class
  */
-class Module extends \yii\base\Module
+class Module extends \lib\Module
 {
 
   /**
@@ -28,43 +24,16 @@ class Module extends \yii\base\Module
    */
   public $serverDataPath = __DIR__ . '/data/servers';
 
-  /**
-   * @inheritdoc
-   */
-  public function init()
-  {
-    parent::init();
-
-    $config = Yii::$app->config;
-    $key =  "plugins.z3950.enabled";
-    if( ! $config->keyExists($key) ){
-      $config->addPreference($key,false );
-      try{
-        $this->install();
-      } catch ( \RuntimeException $e ){
-        // unsuccessful, fail silently
-        Yii::error($e->getMessage());
-        return;
-      }
-      //
-
-      // register logout handler
-      Yii::$app->user->on(\yii\web\User::EVENT_AFTER_LOGOUT, function ( UserEvent $e) {
-        $this->clearSearchData($e->identity);
-      });
-      Yii::$app->on(BaseActiveRecord::EVENT_AFTER_DELETE, function( ModelEvent $e){
-        if( $e->sender instanceof User);
-        $this->clearSearchData($e->sender);
-      });
-    }
-  }
 
   /**
    * Installs the plugin.
-   * @return void
+   * @param boolean $enabled
+   *    Whether the module should be enabled after installation (defaults to false)
+   * @return boolean
    * @throws \Throwable
+   * @throws \RuntimeException
    */
-  public function install()
+  public function install($enabled=false)
   {
     // check prerequisites
     $error = "";
@@ -97,7 +66,7 @@ class Module extends \yii\base\Module
 
     // preferences and permissions
     $app = Yii::$app;
-    $app->config->addPreference( "z3950.lastDatasource", "z3950_voyager", true );
+    $app->config->addPreference( $this->configKeyPrefix . "lastDatasource", "z3950_voyager", true );
     try {
       $app->accessManager->addPermissions(["z3950.manage"], [
         Role::findByNamedId("admin"),
@@ -108,6 +77,9 @@ class Module extends \yii\base\Module
     }
     // create datasources
     $this->createDatasources();
+
+    // register module
+    return parent::install(true);
   }
 
   /**
@@ -175,6 +147,7 @@ class Module extends \yii\base\Module
    */
   public function clearSearchData( User $user )
   {
+    Yii::debug("Clearing search data for {$user->name}...'");
     /** @var \app\modules\z3950\models\Datasource[] $z3950Datasources */
     $z3950Datasources = Datasource::find()->where(['schema'=>'z3950']);
     // delete all search records of this user in all of the z39.50 caches

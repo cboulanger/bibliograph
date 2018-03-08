@@ -20,6 +20,10 @@
 
 namespace app\controllers;
 
+
+use Yii;
+use yii\db\Exception;
+use Stringy\Stringy;
 use app\models\Schema;
 use lib\components\MigrationException;
 use lib\dialog\{
@@ -28,10 +32,9 @@ use lib\dialog\{
 use lib\exceptions\{
   RecordExistsException, SetupException
 };
-use Yii;
 use lib\components\ConsoleAppHelper as Console;
-use Stringy\Stringy;
-use yii\db\Exception;
+use lib\Module;
+
 
 /**
  * Setup controller. Needs to be the first controller called
@@ -167,7 +170,7 @@ class SetupController extends \app\controllers\AppController
     // @todo validate
 
     // if application version has changed or first run, run setup methods
-    Yii::trace("Data version: $upgrade_from, code version: $upgrade_to.");
+    Yii::debug("Data version: $upgrade_from, code version: $upgrade_to.");
     if ($upgrade_to !== $upgrade_from) {
       // visual marker in log file
       Yii::debug(
@@ -195,6 +198,18 @@ class SetupController extends \app\controllers\AppController
           'messages' => $this->messages
         ]);
         return null;
+      }
+    }
+
+    // install modules
+    /** @var Module $module */
+    foreach( Yii::$app->modules as $module){
+      if( ! $module->installed ){
+        try{
+          $module->install(true);
+        } catch (\RuntimeException $e) {
+          $this->errors[] = "Installing module '{$module->id}' failed: " . $e->getMessage();
+        }
       }
     }
 
@@ -396,7 +411,7 @@ class SetupController extends \app\controllers\AppController
   /**
    * Check if we have a database connection
    *
-   * @return array
+   * @return array|boolean
    */
   protected function setupCheckDbConnection()
   {
@@ -594,7 +609,7 @@ class SetupController extends \app\controllers\AppController
   /**
    * Setup two example datasources
    *
-   * @return array
+   * @return array|boolean
    */
   protected function setupExampleDatasources()
   {
@@ -651,7 +666,7 @@ class SetupController extends \app\controllers\AppController
   }
 
   /**
-   * @return array
+   * @return array|boolean
    * @throws MigrationException
    */
   protected function setupDatasourceMigrations()

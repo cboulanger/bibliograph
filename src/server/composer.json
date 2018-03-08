@@ -7,7 +7,8 @@
         "odannyc/yii2-sse": "^0.1.0",
         "flow/jsonpath": "^0.3.4",
         "danielstjules/stringy": "^3.1",
-        "edvlerblog/yii2-adldap-module": "^4.0.0"
+        "edvlerblog/yii2-adldap-module": "^4.0.0",
+        "bmsrox/yii2-module-autoloader": "^1.1"
     },
     "require-dev": {
         "bizley/migration": "^2.2",

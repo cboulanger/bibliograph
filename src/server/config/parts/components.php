@@ -38,6 +38,18 @@ $components = [
       ],
     ],
   ],
+
+  /*
+   * Composer components
+   */
+
+  // Module autoloader
+  'moduleLoader' => [
+    'class' => bmsrox\autoloader\ModuleLoader::class,
+    'modules_paths' => [
+      '@app/modules'
+    ]
+  ],
   
   /*
    * Custom applications components

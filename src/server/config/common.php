@@ -4,7 +4,7 @@ require "parts/constants.php";
 // Production
 $config =  [
   'basePath' => dirname(__DIR__),
-  'bootstrap' => ['log','channel'],
+  'bootstrap' => ['log','channel','moduleLoader'],
   'controllerNamespace' => 'app\controllers',
   'controllerMap' => [
     'migrate' => [
@@ -15,7 +15,7 @@ $config =  [
       ],
       'migrationPath' => null
     ],
-  ],  
+  ],
   'aliases' => [
     '@lib'    => __DIR__ . "/../lib/",
     '@tests'  => __DIR__ . "/../tests/",
