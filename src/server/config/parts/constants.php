@@ -7,16 +7,6 @@ if ( ! defined("APP_INI_FILE") )
   define( "APP_INI_FILE" ,  __DIR__ . "/../bibliograph.ini.php" );
 }
 
-/**
- * The id of the first migration that the application will use for creating tables on-the-fly
- * (i.e. not using command-line migrations).
- * WARNING: This usage is likely to change, so do not use this constant yet.
- */
-if ( ! defined("MIGRATION_ID") )
-{
-  define( "MIGRATION_ID" ,  "171219_230854" );
-}
-
 /*
  * the timeout of a normal session, in seconds, Defaults to 60 minutes
  */
@@ -52,5 +42,16 @@ defined('ACCESS_SALT_LENGTH') or define('ACCESS_SALT_LENGTH', 9);
  * @todo move into preference
  */
 defined('BIBLIOGRAPH_VALUE_SEPARATOR') or define('BIBLIOGRAPH_VALUE_SEPARATOR', ";");
+
+
+/**
+ * The path to the bibutils executables. Must contain a trailing slash
+ * since the exeuctable name is appended to the path. If not defined,
+ * the bibutils executables must be on the PATH
+ */
+if( !defined('BIBUTILS_PATH') )
+{
+  define('BIBUTILS_PATH','');
+}
 
 

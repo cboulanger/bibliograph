@@ -18,8 +18,13 @@
 //
 //************************************************************************ */
 //
+namespace app\modules\z3950\models;
 
-throw new qcl_core_NotImplementedException("z3950_Schema");
+class Schema extends \app\models\Schema
+{
+  public $migrationNamespace = 'app\modules\z3950\migrations';
+}
+
 //
 //qcl_import( "bibliograph_schema_BibtexSchema" );
 //

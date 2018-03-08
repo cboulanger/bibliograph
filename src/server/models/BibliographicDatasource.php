@@ -19,16 +19,14 @@
 ************************************************************************ */
 
 namespace app\models;
-use lib\schema\ISchema;
 use Yii;
-use app\models\Datasource;
 
 /**
  * model for bibliograph datasources based on an sql database
  */
 class BibliographicDatasource
   extends Datasource
-  implements ISchema
+  implements \lib\schema\ISchema
 {
 
   static $name = "Bibliograph";
@@ -45,14 +43,14 @@ class BibliographicDatasource
 
   /**
    * Initialize the datasource, registers the models
-   * @throws InvalidArgumentException
+   * @throws \InvalidArgumentException
    */
   public function init()
   {
     parent::init();
-    $this->addModel( 'reference', 'app\models\Reference', 'reference');
-    $this->addModel( 'folder', 'app\models\Folder', 'folder');
-    $this->addModel( 'transaction', 'app\models\Transaction', 'transaction');
+    $this->addModel( 'reference',   Reference::class,   'reference');
+    $this->addModel( 'folder',      Folder::class,      'folder');
+    $this->addModel( 'transaction', Transaction::class, 'transaction');
   }
 
   /**

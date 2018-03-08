@@ -20,6 +20,8 @@
 
 namespace lib\components;
 
+use app\models\Permission;
+use app\models\Role;
 use app\models\User;
 use Yii;
 
@@ -95,6 +97,51 @@ class AccessManager
     return Yii::$app->session->get('ACCESS_LOGIN_SALT');
   }
 
+  /**
+   * Adds a permission with the given named id
+   * @param string|array $permissionNames
+   * @param Role|Role[]|array $roles Optional Role models
+   * @return Permission[]
+   * @throws \yii\db\Exception
+   */
+  public function addPermissions( $permissionNames, $roles=[] )
+  {
+    $permissions = [];
+    foreach ( (array) $permissionNames as $permissionName)
+    {
+      $permission = new Permission([
+        'namedId' => $permissionName
+      ]);
+      $permission->save();
+      foreach ( (array) $roles as $role ){
+        $permission->link("roles",$role);
+      }
+      $permissions[] = $permission;
+    }
+    return $permissions;
+  }
+
+  /**
+   * @param string|array $roleNames
+   * @param Permission[]|array $permissions
+   * @return Role[]
+   * @throws \yii\db\Exception
+   */
+  public function addRoles( $roleNames, $permissions=[])
+  {
+    $roles = [];
+    foreach ((array) $roleNames as $roleName){
+      $role = new Role([
+        'namedId' => $roleName
+      ]);
+      $role->save();
+      foreach ( $permissions as $permission){
+        $role->link("permissions", $permission);
+      }
+      $roles[] = $role;
+    }
+    return $roles;
+  }
 
 //  /**
 //   * Returns number of seconds since resetLastAction() has been called

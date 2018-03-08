@@ -189,7 +189,7 @@ class ReferenceController extends AppController
    * the records
    *
    * @param $datasource
-   * @param null $modelClassType
+   * @param null|string $modelClassType
    */
   public function actionTableLayout($datasource, $modelClassType = null)
   {

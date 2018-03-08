@@ -1,8 +1,13 @@
 <?php
-namespace app\migrations\schema\bibliograph_datasource;
+
+namespace app\modules\z3950\migrations;
+
 use yii\db\Migration;
 
-class m171219_230854_create_table_data_Reference extends Migration
+/**
+ * Class M180307221505_create_table_data_Record
+ */
+class M180307221505_create_table_data_Record extends Migration
 {
   public function safeUp()
   {
@@ -11,7 +16,7 @@ class m171219_230854_create_table_data_Reference extends Migration
       $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
     }
 
-    $this->createTable('{{%data_Reference}}', [
+    $this->createTable('{{%data_Record}}', [
       'id' => $this->integer(11)->notNull()->append('AUTO_INCREMENT PRIMARY KEY'),
       'created' => $this->timestamp(),
       'modified' => $this->timestamp()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),
@@ -56,17 +61,12 @@ class m171219_230854_create_table_data_Reference extends Migration
       'type' => $this->string(50),
       'url' => $this->string(255),
       'volume' => $this->string(50),
-      'year' => $this->string(20),
-      'createdBy' => $this->string(50),
-      'modifiedBy' => $this->string(50),
-      'hash' => $this->string(40),
-      'markedDeleted' => $this->smallInteger(1)->notNull()->defaultValue('0'),
-      'attachments' => $this->integer(11),
+      'year' => $this->string(20)
     ], $tableOptions);
   }
 
   public function safeDown()
   {
-    $this->dropTable('{{%data_Reference}}');
+    $this->dropTable('{{%data_Record}}');
   }
 }

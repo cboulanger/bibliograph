@@ -7,8 +7,8 @@ $components = [
 
   // identity class
   'user' => [
-    'class' => 'yii\web\User',
-    'identityClass' => 'app\models\User',
+    'class' => yii\web\User::class,
+    'identityClass' => app\models\User::class,
   ],
   // logging
   'log' => [

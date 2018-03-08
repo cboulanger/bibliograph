@@ -24,7 +24,11 @@
 
 ************************************************************************ */
 
-class YAZException extends Exception {}
+namespace app\modules\z3950\lib\yaz;
+
+use InvalidArgumentException;
+
+class YAZException extends \Exception {}
 
 class YAZ
 {
@@ -52,13 +56,13 @@ class YAZ
    * fields and other information on the index
    * @var array
    */
-  protected $indexes = array();
+  protected $indexes = [];
 
   /**
    * The available syntaxes offered by the database
-   * @var unknown_type
+   * @var array
    */
-  protected $syntax = array();
+  protected $syntax = [];
   
   /**
    * Constructor.
@@ -311,7 +315,7 @@ class YAZ
    * definitions of access points (CCL qualifiers) and their mapping to
    * RPN. To map a specific CCL query to RPN afterwards call the
    * ccl_parse() function.
-   * @param $config An array of configuration. Each key of the array is the
+   * @param  array $config An array of configuration. Each key of the array is the
    * name of a CCL field and the corresponding value holds a string that
    * specifies a mapping to RPN.The mapping is a sequence of attribute-type,
    * attribute-value pairs. Attribute-type and attribute-value is separated

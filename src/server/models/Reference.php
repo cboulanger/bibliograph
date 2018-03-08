@@ -152,21 +152,22 @@ class Reference extends BaseModel
 
   /**
    * Indexes
+   * @todo use this
    */
-  private $indexes = array(
-    "fulltext" => array(
+  protected $indexes = [
+    "fulltext" => [
       "type"        => "fulltext",
-      "properties"  => array(
+      "properties"  => [
         'abstract','annote', 'author', 'booktitle', 'subtitle', 'contents',
         'editor','howpublished', 'journal','keywords', 'note','publisher',
         'school', 'title', 'year'
-      )
-    ),
-    "basic" => array(
+      ]
+    ],
+    "basic" => [
        "type"       => "fulltext",
-       "properties" => array("author","title","year","editor")
-    )
-  ); 
+       "properties" => ["author","title","year","editor"]
+    ]
+  ];
 
   //-------------------------------------------------------------
   // Relations

@@ -21,11 +21,14 @@
 namespace lib\models;
 
 use Yii;
+use yii\base\ModelEvent;
 use yii\db\ActiveRecord;
+use yii\db\BaseActiveRecord;
 use yii\db\Expression;
 use yii\behaviors\TimestampBehavior;
 
 use app\models\Datasource;
+
 
 /**
  * @property array $formData
@@ -75,7 +78,7 @@ class BaseModel extends ActiveRecord
    * The namespace that contains of migration classes for this model
    * @return string|null
    */
-  protected function getMigrationNamespace()
+  public function getMigrationNamespace()
   {
     return null;
   }
@@ -163,5 +166,17 @@ class BaseModel extends ActiveRecord
     //Yii::warning( $this->getErrorSummary() );
     //return false;
     throw new \yii\db\Exception("Error saving model.");
+  }
+
+  /**
+   * overridden to forward the event to the application object so that
+   * anonymous listeners can listen to it.
+   */
+  public function afterDelete()
+  {
+    Yii::$app->trigger( BaseActiveRecord::EVENT_AFTER_DELETE, new ModelEvent([
+      'sender' => $this
+    ]));
+    parent::afterDelete();
   }
 }

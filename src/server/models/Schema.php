@@ -2,11 +2,15 @@
 
 namespace app\models;
 
+use InvalidArgumentException;
 use lib\exceptions\RecordExistsException;
 use Yii;
 
 /**
- * This is the model class for table "data_DatasourceSchema".
+ * This is the model class for table "data_Schema". It is currently used only for
+ * Datasource schemas, but could be used for any model that uses a "schema" of
+ * some sort, which can be registered using this model (probably requires addition
+ * of a "type" column).
  *
  * @property integer $id
  * @property string $namedId
@@ -146,18 +150,19 @@ class Schema extends \lib\models\BaseModel
    *    Throws a \ReflectionException if the class does not exist.
    * @param array|null $options
    * @throws RecordExistsException
-   * @throws  \InvalidArgumentException
+   * @throws  InvalidArgumentException
    * @throws \ReflectionException
+   * @todo throws too many different types of exceptions!
    */
   public static function register($namedId, string $className, array $options = null)
   {
     if (!$namedId or !is_string($namedId)) {
-      throw new \InvalidArgumentException("Invalid namedId parameter");
+      throw new InvalidArgumentException("Invalid namedId parameter");
     }
     $class = new \ReflectionClass($className);
     $baseClass = \app\models\Datasource::class;
     if (!$class->isSubclassOf($baseClass)) {
-      throw new \InvalidArgumentException('Class must extend ' . $baseClass);
+      throw new InvalidArgumentException('Class must extend ' . $baseClass);
     }
     if (Schema::findByNamedId($namedId)) {
       throw new RecordExistsException("Schema '$namedId' already exists.");
@@ -173,7 +178,7 @@ class Schema extends \lib\models\BaseModel
       if ($options) $model->setAttributes($options);
       $model->save();
     } catch (\Exception $e) {
-      throw new \InvalidArgumentException($e->getMessage(), null, $e);
+      throw new InvalidArgumentException($e->getMessage(), null, $e);
     }
   }
 }

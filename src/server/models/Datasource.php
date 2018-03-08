@@ -321,6 +321,7 @@ class Datasource extends BaseModel
    * @param string $datasourceName
    * @return \yii\db\Connection
    * @throws \LogicException
+   * @throws \Exception
    */
   public function getConnection()
   {

@@ -91,8 +91,9 @@ class DatasourceManager extends \yii\base\Component
     // get the subclass instance and configure it
     $datasource = Datasource::getInstanceFor($datasourceName);
     $this->createModelTables($datasource);
+
     // @todo work with interface instead
-    if ($datasource instanceof \app\models\BibliographicDatasource) {
+    if ($datasource instanceof BibliographicDatasource) {
       $datasource->addDefaultFolders();
       Yii::$app->config->createKey("datasource.$datasourceName.fields.exclude","list");
     }
