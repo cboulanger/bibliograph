@@ -2,13 +2,19 @@
 
 namespace app\modules\z3950\controllers;
 
-use yii\web\Controller;
+use app\controllers\AppController;
+use app\models\Datasource;
+use app\modules\z3950\models\Datasource as Z3950Datasource;
+use app\modules\z3950\Module;
+use lib\exceptions\UserErrorException;
 use app\modules\z3950\lib\yaz\Yaz;
+use yii\db\Exception;
 
 /**
  * Default controller for the `z3950` module
+ * @property Module $module
  */
-class SearchController extends Controller
+class SearchController extends AppController
 {
   /**
    * Returns the default model type for which this controller is providing
@@ -20,11 +26,12 @@ class SearchController extends Controller
     return "record";
   }
 
-  /*
-   ---------------------------------------------------------------------------
-      TABLE INTERFACE API
-   ---------------------------------------------------------------------------
-   */
+
+
+  //---------------------------------------------------------------------------
+  //  ACTIONS
+  //---------------------------------------------------------------------------
+
 
   /**
    * Returns the layout of the columns of the table displaying
@@ -63,55 +70,6 @@ class SearchController extends Controller
     );
   }
 
-  /**
-   * Returns the query as a string constructed from the
-   * query data object
-   * @param object $queryData
-   * @return string
-   */
-  protected function getQueryString( $queryData )
-  {
-    $query = $queryData->query->cql;
-    return $this->fixQueryString($query);
-  }
-
-  /**
-   * Checks the query and optimizes it before
-   * sending it to the remote server
-   * @param $query
-   * @return string
-   */
-  protected function fixQueryString( $query )
-  {
-    // todo: identify DOI
-    if( substr( $query, 0, 3 ) == "978")
-    {
-      $query = 'isbn=' . $query;
-    }
-    elseif ( ! strstr( $query, "=" ) )
-    {
-      $query = 'all="' . $query . '"';
-    }
-    return $query;
-  }
-
-  /**
-   * Configures the yaz object for a ccl query with a minimal common set of fields:
-   * title, author, keywords, year, isbn, all
-   * @param YAZ $yaz
-   * @return void
-   */
-  protected function configureCcl( YAZ $yaz )
-  {
-    $yaz->ccl_configure(array(
-      "title"     => "1=4",
-      "author"    => "1=1004",
-      "keywords"  => "1=21",
-      "year"      => "1=31",
-      "isbn"      => "1=7",
-      "all"       => "1=1016"
-    ) );
-  }
 
   /**
    * Service method that returns ListItem model data on the available library servers
@@ -120,43 +78,61 @@ class SearchController extends Controller
    * @param boolean $reloadFromXmlFiles
    *      Whether to reload the list from the XML Explain files in the filesystem.
    *      This is neccessary if xml files have been added or removed.
+   * @throws UserErrorException
    */
   public function actionServerListItems($activeOnly=true,$reloadFromXmlFiles=false)
   {
     // Reset list of Datasources
     if ( $reloadFromXmlFiles )
     {
-      z3950_DatasourceModel::getInstance()->createFromExplainFiles();
+      try {
+        $this->module->createDatasources();
+      } catch (\Throwable $e) {
+        throw new UserErrorException($e->getMessage(),null, $e);
+      }
     }
-
     // Return list of Datasources
     $listItemData = array();
-    $lastDatasource = $this->getApplication()->getPreference("z3950.lastDatasource");
-    $dsModel = z3950_DatasourceModel::getInstance();
-    $dsModel->findAll();
-    while( $dsModel->loadNext() )
+    $lastDatasource = $this->module->getPreference("lastDatasource");
+    foreach (Datasource::findBySchema("z3950") as $datasource)
     {
-      // clear cache
-      try
-      {
-        $dsModel->getInstanceOfType("record")->deleteAll();
-        $dsModel->getInstanceOfType("search")->deleteAll();
-        $dsModel->getInstanceOfType("result")->deleteAll();
-      }
-      catch( PDOException $e) {} // FIXME This should not be a PDOException, see https://github.com/cboulanger/bibliograph/issues/133
-
-      // assemble data
-      if( $activeOnly and ! $dsModel->getActive() ) continue;
-
-      $name   = $dsModel->getName();
-      $value  = $dsModel->getNamedId();
+      if( $activeOnly and ! $datasource->active ) continue;
       $listItemData[] = array(
-        'label'     => $name,
-        'value'     => $value,
-        'active'    => $dsModel->getActive(),
-        'selected'  => $value == $lastDatasource
+        'label'     => $datasource->title,
+        'value'     => $datasource->namedId,
+        'active'    => $datasource->active,
+        'selected'  => $datasource->namedId == $lastDatasource
       );
     }
     return $listItemData;
   }
+
+  /**
+   * Sets datasources active / inactive, so that they do not show up in the
+   * list of servers
+   * param array $map Maps datasource ids to status
+   * @throws \JsonRpc2\Exception
+   * @throws UserErrorException
+   * @todo add DTO
+   */
+  public function actionSetDatasourceState( $map )
+  {
+    $this->requirePermission("z3950.manage");
+    foreach( (array) $map as $namedId => $active )
+    {
+      $datasource = Z3950Datasource::findByNamedId($namedId);
+      $datasource->active= (int) $active;
+      try {
+        $datasource->save();
+      } catch (Exception $e) {
+        throw new UserErrorException($e->getMessage(),$e->getCode(),$e);
+      }
+    }
+    $this->broadcastClientMessage("z3950.reloadDatasources");
+    return "OK";
+  }
+
+
+
+
 }

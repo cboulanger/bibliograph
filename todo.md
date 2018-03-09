@@ -42,6 +42,7 @@
 - [ ] Frontend: Rename widget ids, replace with native qooxdoo ids, see https://github.com/qooxdoo/qooxdoo/issues/9422
 - [ ] Add correct @return information to the JSONRPC methods/actions
 - [ ] Change app state separator and assignment chars
+- [ ] Re-implement Table Actions Interface
 
 ### Code cleanup
 - [ ] Remove unnecessary packages from npm and composer

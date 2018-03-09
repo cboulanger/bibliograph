@@ -26,9 +26,13 @@
 
 namespace app\modules\z3950\lib\yaz;
 
+use DOMDocument;
 use InvalidArgumentException;
+use XSLTProcessor;
 
-class YAZException extends \Exception {}
+class YazException extends \Exception
+{
+}
 
 class YAZ
 {
@@ -47,9 +51,13 @@ class YAZ
 
   /**
    * An array of options for the connection
-   * @var string
+   * @var array
    */
-  protected $options = array();
+  protected $options = [
+    'charset' => null,
+    'user'  => null,
+    'password' => null
+  ];
 
   /**
    * An array mapping BIB-1 index numbers to the titles of the
@@ -63,7 +71,7 @@ class YAZ
    * @var array
    */
   protected $syntax = [];
-  
+
   /**
    * Constructor.
    * @param $zurl
@@ -122,31 +130,22 @@ class YAZ
    *
    * @return void
    */
-  public function __construct( $zurl, $options=array() )
+  public function __construct($zurl, $options = array())
   {
 
-    if( substr( $zurl, -4 ) == ".xml" )
-    {
-      $this->parseExplainDoc( $zurl );
-    }
-    else
-    {
+    if (substr($zurl, -4) == ".xml") {
+      $this->parseExplainDoc($zurl);
+    } else {
       $this->zurl = $zurl;
     }
 
-    if( is_array( $options ) )
-    {
-      foreach( $options as $key => $value )
-      {
+    if (is_array($options)) {
+      foreach ($options as $key => $value) {
         $this->options[$key] = $value;
       }
-    }
-    elseif ( is_string( $options ) )
-    {
+    } elseif (is_string($options)) {
       $this->options = $options;
-    }
-    else
-    {
+    } else {
       throw new InvalidArgumentException("Invalid options argument");
     }
   }
@@ -160,53 +159,45 @@ class YAZ
    *
    * @return void
    */
-  protected function parseExplainDoc( $path )
+  protected function parseExplainDoc($path)
   {
-    $doc = file_get_contents( $path );
-    $explain = simplexml_load_string( $doc );
+    $doc = file_get_contents($path);
+    $explain = simplexml_load_string($doc);
 
     /*
      * server info
      */
     $serverInfo = $explain->serverInfo;
-    $host = (string) $serverInfo->host;
-    $port = (string) $serverInfo->port;
-    $database = (string) $serverInfo->database;
-    if( $port )
-    {
+    $host = (string)$serverInfo->host;
+    $port = (string)$serverInfo->port;
+    $database = (string)$serverInfo->database;
+    if ($port) {
       $this->zurl = "$host:$port/$database";
-    }
-    else
-    {
+    } else {
       $this->zurl = "$host/$database";
     }
 
-    // encoding of the databaser
-    $this->options['charset'] = either ( 
-      (string) $serverInfo->charset, 
-      (string) $serverInfo->encoding,
-      "marc-8"
-    ); 
-    
-    /*
-     * non-standard
-     */
-    if ( $serverInfo->authentication )
-    {
-      $this->options['user'] = (string) $serverInfo->authentication->user;
-      $this->options['password'] = (string) $serverInfo->authentication->password;
+    // encoding of the database
+    $this->options['charset'] =
+      (string)$serverInfo->charset  ?:
+      (string)$serverInfo->encoding ?:
+      "marc-8";
+
+    // non-standard
+    if ($serverInfo->authentication) {
+      $this->options['user'] = (string)$serverInfo->authentication->user;
+      $this->options['password'] = (string)$serverInfo->authentication->password;
     }
 
     /*
      * database info
      */
     $databaseInfo = $explain->databaseInfo;
-    if( $databaseInfo )
-    {
+    if ($databaseInfo) {
       $this->databaseInfo = array(
-        'title'   => (string) $databaseInfo->title,
-        'author'  => (string) $databaseInfo->author,
-        'contact' => (string) $databaseInfo->contact
+        'title' => (string)$databaseInfo->title,
+        'author' => (string)$databaseInfo->author,
+        'contact' => (string)$databaseInfo->contact
       );
     }
 
@@ -214,22 +205,21 @@ class YAZ
      * index info
      */
     $indexInfo = $explain->indexInfo;
-    foreach( $indexInfo->children() as $index )
-    {
-      $search = ( (string) $index["search"] == "true" );
-      $title  = (string) $index->title;
-      $lang   = (string) $index->title['lang'];
-      $attr   = $index->map->attr;
+    foreach ($indexInfo->children() as $index) {
+      $search = ((string)$index["search"] == "true");
+      $title = (string)$index->title;
+      $lang = (string)$index->title['lang'];
+      $attr = $index->map->attr;
       //$type   = (string) $attr['type'];//ignored for the moment
       //$set    = (string) $attr['set']; //ignored for the moment
-      $attr   = (string) $attr;
+      $attr = (string)$attr;
 
       $this->indexes[$attr] = array(
-        'title'   => $title,
-        'lang'    => $lang,
+        'title' => $title,
+        'lang' => $lang,
         //'type'    => $type,
         //'set'     => $set,
-        'search'  => $search
+        'search' => $search
       );
     }
 
@@ -237,11 +227,10 @@ class YAZ
      * record info
      */
     $recordInfo = $explain->recordInfo;
-    foreach( $recordInfo->children() as $recordSyntax )
-    {
+    foreach ($recordInfo->children() as $recordSyntax) {
       $this->syntax[] = array(
-        'name'        => (string) $recordSyntax['name'],
-        'elementset'  => (string) $recordSyntax->elementSet['name']
+        'name' => (string)$recordSyntax['name'],
+        'elementset' => (string)$recordSyntax->elementSet['name']
       );
     }
   }
@@ -250,37 +239,37 @@ class YAZ
    * Throws an exception after a failed operation
    * @param string $message Optional additional message. Otherwise the
    * yaz error message will be printed;
-   * @throws YAZException
+   * @throws YazException
    */
-  public function throwException( $message="" )
+  public function throwException($message = "")
   {
     $message .=
-      ( empty( $message ) ? "" : ": " ) .
-      yaz_error( $this->resource ) . " - ".
-      yaz_addinfo( $this->resource );
+      (empty($message) ? "" : ": ") .
+      \yaz_error($this->resource) . " - " .
+      \yaz_addinfo($this->resource);
 
-    throw new YAZException( $message, yaz_errno( $this->resource) );
+    throw new YazException($message, \yaz_errno($this->resource));
   }
-  
-  
+
+
   /**
-   * Checks for a YAZ error and throws an exception with a 
+   * Checks for a YAZ error and throws an exception with a
    * descriptive error message
+   * @throws YazException
    */
   protected function checkError()
   {
-    if ( $error = yaz_error( $this->resource ) )
-    {
-      $this->throwException($error);
+    if ($error = \yaz_error($this->resource)) {
+      throw new YazException($error);
     }
   }
-  
+
   /**
    * Return the last yaz error, if any
    */
   public function getError()
   {
-    return yaz_error( $this->resource );
+    return \yaz_error($this->resource);
   }
 
   /**
@@ -296,7 +285,7 @@ class YAZ
    * Get a list of available syntax identifiers as an array
    * @return array
    */
-  public function  getSyntaxList()
+  public function getSyntaxList()
   {
     return $this->syntax;
   }
@@ -330,9 +319,9 @@ class YAZ
    * @see http://www.indexdata.com/yaz/doc/tools.html#CCL
    * @return void
    */
-  public function ccl_configure( $config )
+  public function ccl_configure($config)
   {
-    yaz_ccl_conf( $this->resource, $config );
+    \yaz_ccl_conf($this->resource, $config);
   }
 
   /**
@@ -345,13 +334,13 @@ class YAZ
    *
    * @return string
    *    The rpn query string
+   * @throws YazException
    */
-  public function ccl_parse( $query )
+  public function ccl_parse($query)
   {
     /** @var $result array */
-    if ( ! yaz_ccl_parse( $this->resource, $query, $result ) )
-    {
-      throw new YAZException(
+    if (!\yaz_ccl_parse($this->resource, $query, $result)) {
+      throw new YazException(
         "Ccl parsing failed: " . $result["errorstring"] . " at position " . $result["errorpos"]
       );
     }
@@ -366,7 +355,7 @@ class YAZ
    */
   public function close()
   {
-    yaz_close( $this->resource );
+    \yaz_close($this->resource);
   }
 
   /**
@@ -376,13 +365,13 @@ class YAZ
    * is called.
    *
    * @return void
+   * @throws YazException
    */
   public function connect()
   {
-    $this->resource = yaz_connect( $this->zurl, $this->options );
-    if ( ! $this->resource )
-    {
-      $this->throwException("Cannot create resource");
+    $this->resource = \yaz_connect($this->zurl, $this->options);
+    if (!$this->resource) {
+      throw new YazException("Cannot create resource");
     }
     $this->checkError();
   }
@@ -394,12 +383,12 @@ class YAZ
    *
    * @param string $database
    * @return void
+   * @throws YazException
    */
-  public function setDatabase( $database )
+  public function setDatabase($database)
   {
-    if ( ! yaz_database( $this->resource, $database ) )
-    {
-      $this->throwException("Could not change database");
+    if (!\yaz_database($this->resource, $database)) {
+      throw new YazException("Could not change database");
     }
   }
 
@@ -413,9 +402,9 @@ class YAZ
    *
    * @return void
    */
-  public function setElementSet( $elementset )
+  public function setElementSet($elementset)
   {
-    yaz_element( $this->resource, $elementset );
+    \yaz_element($this->resource, $elementset);
     return;
     /*if ( ! yaz_element( $this->resource, $elementset ) )
     {
@@ -435,7 +424,7 @@ class YAZ
    */
   public function extendedServicesResult()
   {
-    return yaz_es_result( $this->result );
+    return \yaz_es_result($this->resource);
   }
 
   /**
@@ -461,21 +450,21 @@ class YAZ
    *
    * @return void
    */
-  public function extendedServices( $type, $args )
+  public function extendedServices($type, $args)
   {
-    yaz_es( $this->resource, $type, $args);
+    \yaz_es($this->resource, $type, $args);
   }
 
   /**
    * Returns the value of the option specified with name.
-   * @param $name The option name.
+   * @param string $name The option name.
    * @return string
    *    Returns the value of the specified option or an empty string
    *    if the option wasn't set
    */
-  public function getOption( $name )
+  public function getOption($name)
   {
-    return yaz_get_option( $this->resource, $name );
+    return \yaz_get_option($this->resource, $name);
   }
 
   /**
@@ -501,9 +490,9 @@ class YAZ
    *    interpretation.term   Interpretated sub query term (string)
    *    recommendation.term   Recommended sub query term (string)
    */
-  public function hits( &$searchresult=array() )
+  public function hits(&$searchresult = array())
   {
-    return yaz_hits( $this->resource, $searchresult );
+    return \yaz_hits($this->resource, $searchresult);
   }
 
   /**
@@ -519,9 +508,9 @@ class YAZ
    *    item-id,ISBN.
    * @return void
    */
-  public function setItemOrder( $args )
+  public function setItemOrder($args)
   {
-    yaz_item_order( $this->resource, $args );
+    \yaz_item_order($this->resource, $args);
   }
 
   /**
@@ -533,9 +522,8 @@ class YAZ
    */
   public function present()
   {
-    if ( ! yaz_present( $this->resource ) )
-    {
-      $this->throwException("PRESENT failed");
+    if (!\yaz_present($this->resource)) {
+      throw new YazException("PRESENT failed");
     }
   }
 
@@ -551,9 +539,9 @@ class YAZ
    *
    * @return void
    */
-  public function setRange( $start, $number )
+  public function setRange($start, $number)
   {
-    yaz_range( $this->resource, $start, $number );
+    \yaz_range($this->resource, $start, $number);
   }
 
   /**
@@ -631,9 +619,9 @@ class YAZ
    *    exists at the given position. If no database record exists at the
    *    given position an empty string is returned.
    */
-  public function getRecord( $pos, $type )
+  public function getRecord($pos, $type)
   {
-    return yaz_record( $this->resource, $pos, $type );
+    return \yaz_record($this->resource, $pos, $type);
   }
 
   /**
@@ -648,15 +636,15 @@ class YAZ
    *        position - Position of term
    *        status - Scan status
    *
-   * @return unknown_type
+   * @return void
+   * @throws YazException
    */
-  public function scanResult( &$result )
+  public function scanResult(&$result)
   {
-    if ( yaz_error( $this->resource ) )
-    {
-      $this->throwException("SCAN failed");
+    if (\yaz_error($this->resource)) {
+      throw new YazException("SCAN failed");
     }
-    yaz_scan_result(  $this->resource, $result );
+    \yaz_scan_result($this->resource, $result);
   }
 
   /**
@@ -687,9 +675,9 @@ class YAZ
    *
    * @return void
    */
-  public function scan( $startterm, $flags, $type="rpn" )
+  public function scan($startterm, $flags, $type = "rpn")
   {
-    yaz_scan( $this->resource, $type, $startterm, $flags );
+    \yaz_scan($this->resource, $type, $startterm, $flags);
   }
 
   /**
@@ -703,9 +691,9 @@ class YAZ
    *
    * @return void
    */
-  public function setSchema( $schema )
+  public function setSchema($schema)
   {
-    yaz_schema( $this->resource, $schema );
+    \yaz_schema($this->resource, $schema);
   }
 
   /**
@@ -713,11 +701,11 @@ class YAZ
    * is non-blocking and only prepares for a search to be executed later when
    * wait() is called.
    *
-   * @param YAZ_Query|string $query
-   *    The argument can either be an instance of the YAZ_Query class and subclasses
+   * @param Query|string $query
+   *    The argument can either be an instance of the Query class and subclasses
    *    or a string, mostly in the RPN (reverse polish notation) format.
    *
-   *    The YAZ_Query object takes care of converting the particular query format
+   *    The Query object takes care of converting the particular query format
    *    into a valid RPN format.
    *
    *    The string-type RPN query is a textual representation of the Type-1 query as defined
@@ -737,29 +725,25 @@ class YAZ
    *
    * @see http://www.php.net/manual/en/function.yaz-search.php
    * @see http://www.loc.gov/z3950/agency/defns/bib1.html
-
    * @return void
+   * @throws YazException
    */
-  public function search( $query, $type="rpn" )
+  public function search($query, $type = "rpn")
   {
-    if ( $query instanceof YAZ_Query )
-    {
-      if( $type == "rpn" )
-      {
-        $query = $query->toRpn( $this );
+    if ($query instanceof Query) {
+      if ($type == "rpn") {
+        $query = $query->toRpn($this);
       }
 //      elseif ( $type == "cql" )
 //      {
 //        $query = $query->toCql( $this );
 //      }
-      else
-      {
+      else {
         throw new InvalidArgumentException("Invalid type");
       }
     }
-    if ( ! yaz_search( $this->resource, $type, $query ) )
-    {
-      $this->throwException("SEARCH failed");
+    if (!\yaz_search($this->resource, $type, $query)) {
+      throw new YazException("SEARCH failed");
     }
     $this->checkError();
   }
@@ -812,9 +796,9 @@ class YAZ
    *
    * @return void
    */
-  public function setOption( $first, $value=null )
+  public function setOption($first, $value = null)
   {
-    yaz_set_option( $this->resource, $first, $value );
+    \yaz_set_option($this->resource, $first, $value);
   }
 
   /**
@@ -839,9 +823,9 @@ class YAZ
    *
    * @return void
    */
-  public function sort( $criteria )
+  public function sort($criteria)
   {
-    yaz_sort( $this->resource, $criteria );
+    \yaz_sort($this->resource, $criteria);
   }
 
   /**
@@ -855,36 +839,33 @@ class YAZ
    *
    * @return void
    */
-  public function setSyntax( $syntax )
+  public function setSyntax($syntax)
   {
-    yaz_syntax( $this->resource, $syntax );
+    \yaz_syntax($this->resource, $syntax);
   }
 
   /**
    * Given a list of syntax identifiers, set the first syntax on this list
    * that is available on the current server and return it. If none of the
-   * given syntaxes is available, raise a YAZ_Exception. Comparison is
+   * given syntaxes is available, raise a Exception. Comparison is
    * case-insensitive and matches can be partial, e.g. "marc" matches
    * "USMarc" and "UKMarc" etc.
-   * @throws YAZ_Exception
+   * @throws YazException
    * @param array $syntaxList
    * @return string syntax identifier
    */
-  public function setPreferredSyntax( array $syntaxList )
+  public function setPreferredSyntax(array $syntaxList)
   {
-    foreach( $syntaxList as $syntax )
-    {
-      foreach( $this->getSyntaxList() as $syntaxOption )
-      {
-        if( stripos( $syntaxOption['name'], $syntax ) !== false )
-        {
-          $this->setSyntax( $syntaxOption['name'] );
-          $this->setElementSet( $syntaxOption['elementset'] );
+    foreach ($syntaxList as $syntax) {
+      foreach ($this->getSyntaxList() as $syntaxOption) {
+        if (stripos($syntaxOption['name'], $syntax) !== false) {
+          $this->setSyntax($syntaxOption['name']);
+          $this->setElementSet($syntaxOption['elementset']);
           return $syntaxOption['name'];
         }
       }
     }
-    throw new YAZException("$syntax is not available.");
+    throw new YazException("$syntax is not available.");
   }
 
   /**
@@ -906,24 +887,24 @@ class YAZ
    *    Returns TRUE on success or FALSE on failure. In event mode, returns
    *    resource or FALSE on failure.
    */
-  static public function wait( $options=array() )
+  static public function wait($options = array())
   {
-    return yaz_wait( $options );
+    return \yaz_wait($options);
   }
 
 }
 
-abstract class YAZ_Query
+abstract class Query
 {
   /**
    * The type of the query
-   * @var unknown_type
+   * @var string
    */
   protected $type;
 
   /**
    * The query string
-   * @var unknown_type
+   * @var string
    */
   protected $query;
 
@@ -931,75 +912,94 @@ abstract class YAZ_Query
    * Constructor
    * @param $type
    * @param $query
-   * @return unknown_type
    */
-  public function __construct( $query )
+  public function __construct($query)
   {
-    if ( ! $this->type )
-    {
-      throw new LogicException("Child class must define the type property!");
+    if (!$this->type) {
+      throw new \RuntimeException("Child class must define the type property!");
     }
     $this->query = $query;
   }
 
   /**
    * Getter for type
-   * @return unknown_type
+   * @return string
    */
   public function getType()
   {
     return $this->type;
   }
 
-  abstract public function toRpn( YAZ $yaz );
+  abstract public function toRpn(YAZ $yaz);
 
 }
 
-class YAZ_RpnQuery extends YAZ_Query
+/**
+ * Class RpnQuery
+ * @package app\modules\z3950\lib\yaz
+ */
+class RpnQuery extends Query
 {
   protected $type = "rpn";
 
-  public function toRpn( YAZ $yaz )
+  /**
+   * @param YAZ $yaz
+   * @return string
+   */
+  public function toRpn(YAZ $yaz)
   {
     return $this->query;
   }
 }
 
-class YAZ_CclQuery extends YAZ_Query
+/**
+ * Class CclQuery
+ * @package app\modules\z3950\lib\yaz
+ */
+class CclQuery extends Query
 {
   protected $type = "ccl";
 
-  public function toRpn( YAZ $yaz )
+  /**
+   * @param YAZ $yaz
+   * @return string
+   * @throws YazException
+   */
+  public function toRpn(YAZ $yaz)
   {
-    return $yaz->ccl_parse( $this->query );
+    return $yaz->ccl_parse($this->query);
   }
 }
 
-abstract class YAZ_Result
+/**
+ * Class Result
+ * @package app\modules\z3950\lib\yaz
+ */
+abstract class Result
 {
   /**
    * The YAZ object
    * @var YAZ
    */
   protected $yaz;
-  
-  
+
+
   /**
    * The record type used by yaz_record
    * @see http://php.net/manual/de/function.yaz-record.php
    * @var string
    */
-   protected $type;
+  protected $type;
 
   /**
    * Constructor
    * @param YAZ $yaz
    * @param string $type Optional record type
    */
-  public function __construct( YAZ $yaz, $type=null )
+  public function __construct(YAZ $yaz, $type = null)
   {
-    $this->yaz  = $yaz;
-    if( $type) $this->type = $type;
+    $this->yaz = $yaz;
+    if ($type) $this->type = $type;
   }
 
   /**
@@ -1007,98 +1007,125 @@ abstract class YAZ_Result
    * @param $position
    * @return mixed
    */
-  abstract public function addRecord( $position );
+  abstract public function addRecord($position);
 }
 
 /**
  * YAZ XML Result
  */
-class YAZ_XmlResult extends YAZ_Result
+class XmlResult extends Result
 {
-  
+
+  /**
+   * @var string
+   */
   protected $xml = "";
 
+  /**
+   * @var string
+   */
   protected $rootStartTag = "<xml>";
 
+  /**
+   * @var string
+   */
   protected $rootEndTag = "</xml>";
 
+  /**
+   * @return string
+   */
   public function getXml()
   {
-    $xml  = '<?xml version="1.0" encoding="UTF-8" ?>';
-    $xml .= $this->rootStartTag ."\n" .
-            $this->xml . "\n" .
-            $this->rootEndTag;
+    $xml = '<?xml version="1.0" encoding="UTF-8" ?>';
+    $xml .= $this->rootStartTag . "\n" .
+      $this->xml . "\n" .
+      $this->rootEndTag;
     return $xml;
   }
 
   /**
-   * makes a transformation
+   * @param string $xsl_filename
+   * @param string $xml
+   * @return string
    */
-  public function transform($xsl_filename, $xml )
+  public function transform($xsl_filename, $xml)
   {
     $xsltp = new XSLTProcessor();
     $xsldoc = new DOMDocument();
-    $xsldoc->load( $xsl_filename );
+    $xsldoc->load($xsl_filename);
     $xsltp->importStyleSheet($xsldoc);
     $xmldoc = new DOMDocument();
-    $xmldoc->loadXML( $xml );
+    $xmldoc->loadXML($xml);
     return $xsltp->transformToXML($xmldoc);
   }
 
   /**
    * add the record at the given index position and return it
    * @param int $position
+   * @throws YazException
    */
-  public function addRecord( $position )
+  public function addRecord($position)
   {
     static $format = null;
-    if( $formal === null )
-    {
-      switch( $charset = $this->yaz->getOption("charset") )
-      {
-        case "utf-8": 
-          $format = "xml"; break;
-        default: 
-          $format = "xml; charset=$charset,utf-8"; break;
-          throw new YAZException("Unknown charset '$charset'.");
+    if ($format === null) {
+      switch ($charset = $this->yaz->getOption("charset")) {
+        case "utf-8":
+          $format = "xml";
+          break;
+        default:
+          $format = "xml; charset=$charset,utf-8";
+//        default:
+//          throw new YazException("Unknown charset '$charset'.");
       }
     }
-    
-    $record = $this->yaz->getRecord( $position, $format );
-    
-    if ( $record ) 
-    {
+
+    $record = $this->yaz->getRecord($position, $format);
+
+    if ($record) {
       $this->xml .= $record;
-    }
-    elseif ( $this->yaz->getError() )
-    {
+    } elseif ($this->yaz->getError()) {
       $this->yaz->throwException("Error retrieving record #$position");
     }
-    
+
     return $record;
   }
 }
 
 
-class YAZ_MarcXmlResult extends YAZ_XmlResult
+/**
+ * Class MarcXmlResult
+ * @package app\modules\z3950\lib\yaz
+ */
+class MarcXmlResult extends XmlResult
 {
-
+  /**
+   * @var string
+   */
   protected $rootStartTag = '<collection xmlns="http://www.loc.gov/MARC21/slim">';
 
+  /**
+   * @var string
+   */
   protected $rootEndTag = '</collection>';
 
+  /**
+   * @return string
+   */
   public function toDublinCore()
   {
     return $this->transform(
-      dirname( __FILE__ ) . "/marcxml_to_dublincore.xsl",
+      dirname(__FILE__) . "/marcxml_to_dublincore.xsl",
       $this->getXml()
     );
   }
 
+  /**
+   * @return string
+   */
   public function toMods()
   {
     return $this->transform(
-      dirname( __FILE__ ) . "/marcxml_to_mods.xsl",
+      dirname(__FILE__) . "/marcxml_to_mods.xsl",
       $this->getXml()
     );
   }
@@ -1108,16 +1135,21 @@ class YAZ_MarcXmlResult extends YAZ_XmlResult
 /**
  * Oai marc record
  */
-class YAZ_OaiMarcXmlResult extends YAZ_MarcXmlResult
+class OaiMarcXmlResult extends MarcXmlResult
 {
+  /**
+   * @var string
+   */
   protected $rootStartTag = '<collection xmlns="http://www.openarchives.org/OIA/oai_marc">';
 
+  /**
+   * @return string
+   */
   public function getXml()
   {
     return $this->transform(
-      dirname( __FILE__ ) . "/oaimarc_to_marcxml.xsl",
+      dirname(__FILE__) . "/oaimarc_to_marcxml.xsl",
       parent::getXml()
     );
   }
 }
-

@@ -307,6 +307,7 @@ class Datasource extends BaseModel
    * case, the model type can be left empty.
    * @param string $modelType
    * @return string The name of the class
+   * @todo rename
    */
   public static function in($datasourceName, $modelType = null)
   {
@@ -314,6 +315,17 @@ class Datasource extends BaseModel
       list($datasourceName, $modelType) = explode(".", $datasourceName);
     }
     return static::getInstanceFor($datasourceName)->getClassFor($modelType);
+  }
+
+
+  /**
+   * Returns all Datasource instances that belong to the schema with the given name
+   * @param $schemaName
+   * @return Datasource[]
+   */
+  public static function findBySchema( $schemaName )
+  {
+    return static :: find()->where(['schema'=>$schemaName])->all();
   }
 
   /**

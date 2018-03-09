@@ -82,4 +82,45 @@ class Module extends \yii\base\Module
     }
     return true;
   }
+
+  /**
+   * Adds the preference namespaced with the module's prefix
+   * @param $key
+   *     The name ("key") of the config value
+   * @param mixed $default
+   *     The default value
+   * @param boolean $customize
+   *     If true, allow users to create their
+   *     own variant of the configuration setting
+   * @param bool $final
+   *     If true, the value cannot be modified after creation
+   * @return bool True if preference was added, false if preference already existed
+   * @throws \InvalidArgumentException
+   */
+  public function addPreference($key, $default, $customize=false, $final=false  )
+  {
+    return Yii::$app->config->addPreference( $this->configKeyPrefix . $key, $default, $customize, $final );
+  }
+
+  /**
+   * Returns the preference namespaced with the module's prefix
+   * @param string $key
+   * @return mixed
+   */
+  public function getPreference($key)
+  {
+    return Yii::$app->config->getPreference( $this->configKeyPrefix . $key );
+  }
+
+  /**
+   * Returns the preference namespaced with the module's prefix
+   * @param string $key
+   * @param mixed $value
+   * @return void
+   * @throws \InvalidArgumentException
+   */
+  public function setPreference($key, $value )
+  {
+    Yii::$app->config->setPreference( $this->configKeyPrefix . $key, $value );
+  }
 }

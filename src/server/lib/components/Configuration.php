@@ -90,6 +90,7 @@ class Configuration extends \yii\base\Component
    * Sets the value of the given preference key. Alias of #setKey()
    * @param string $key The name of the preference
    * @return void
+   * @throws \InvalidArgumentException
    */
   public function setPreference( $key, $value )
   {
