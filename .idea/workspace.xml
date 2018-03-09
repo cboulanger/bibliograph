@@ -6,16 +6,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1d7efdcc-ab7b-4e93-b274-cf7be3d39986" name="Default" comment="ACTool: Add tests for creating users and datasources">
+      <change beforePath="$PROJECT_DIR$/.idea/bibliograph.iml" afterPath="$PROJECT_DIR$/.idea/bibliograph.iml" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" afterPath="$PROJECT_DIR$/.idea/php.xml" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/src/server/controllers/Plugin.php" afterPath="" />
       <change beforePath="$PROJECT_DIR$/src/server/lib/Module.php" afterPath="$PROJECT_DIR$/src/server/lib/Module.php" />
-      <change beforePath="$PROJECT_DIR$/src/server/lib/components/Configuration.php" afterPath="$PROJECT_DIR$/src/server/lib/components/Configuration.php" />
-      <change beforePath="$PROJECT_DIR$/src/server/models/Datasource.php" afterPath="$PROJECT_DIR$/src/server/models/Datasource.php" />
-      <change beforePath="$PROJECT_DIR$/src/server/modules/config.php" afterPath="$PROJECT_DIR$/src/server/modules/z3950/config.php" />
+      <change beforePath="$PROJECT_DIR$/src/server/lib/bibtex/BibtexParser.php" afterPath="$PROJECT_DIR$/src/server/lib/bibtex/BibtexParser.php" />
+      <change beforePath="$PROJECT_DIR$/src/server/lib/components/DatasourceManager.php" afterPath="$PROJECT_DIR$/src/server/lib/components/DatasourceManager.php" />
+      <change beforePath="$PROJECT_DIR$/src/server/models/Schema.php" afterPath="$PROJECT_DIR$/src/server/models/Schema.php" />
       <change beforePath="$PROJECT_DIR$/src/server/modules/z3950/Module.php" afterPath="$PROJECT_DIR$/src/server/modules/z3950/Module.php" />
+      <change beforePath="$PROJECT_DIR$/src/server/modules/z3950/controllers/ProgressController.php" afterPath="$PROJECT_DIR$/src/server/modules/z3950/controllers/ProgressController.php" />
       <change beforePath="$PROJECT_DIR$/src/server/modules/z3950/controllers/SearchController.php" afterPath="$PROJECT_DIR$/src/server/modules/z3950/controllers/SearchController.php" />
-      <change beforePath="$PROJECT_DIR$/src/server/modules/z3950/controllers/Service.php" afterPath="$PROJECT_DIR$/src/server/modules/z3950/controllers/Service.php" />
-      <change beforePath="$PROJECT_DIR$/src/server/modules/z3950/lib/yaz/YAZ.php" afterPath="$PROJECT_DIR$/src/server/modules/z3950/lib/yaz/YAZ.php" />
+      <change beforePath="$PROJECT_DIR$/src/server/modules/z3950/controllers/Service.php" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/server/modules/z3950/lib/yaz/YAZ.php" afterPath="$PROJECT_DIR$/src/server/modules/z3950/lib/yaz/Yaz.php" />
+      <change beforePath="$PROJECT_DIR$/src/server/modules/z3950/models/Result.php" afterPath="$PROJECT_DIR$/src/server/modules/z3950/models/Result.php" />
+      <change beforePath="$PROJECT_DIR$/src/server/modules/z3950/models/Search.php" afterPath="$PROJECT_DIR$/src/server/modules/z3950/models/Search.php" />
       <change beforePath="$PROJECT_DIR$/todo.md" afterPath="$PROJECT_DIR$/todo.md" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -25,7 +29,8 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ComposerSettings" synchronizationState="DONT_SYNCHRONIZE">
+  <component name="ComposerSettings" doNotAsk="true" synchronizationState="SYNCHRONIZE">
+    <pharConfigPath>$PROJECT_DIR$/src/server/composer.json</pharConfigPath>
     <executablePath>composer</executablePath>
   </component>
   <component name="DatabaseView">
@@ -45,8 +50,8 @@
       <file leaf-file-name="Module.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/Module.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="138">
-              <caret line="214" column="54" lean-forward="false" selection-start-line="214" selection-start-column="54" selection-end-line="214" selection-end-column="54" />
+            <state relative-caret-position="133">
+              <caret line="456" column="8" lean-forward="false" selection-start-line="456" selection-start-column="8" selection-end-line="456" selection-end-column="8" />
               <folding>
                 <element signature="e#37#89#0#PHP" expanded="true" />
               </folding>
@@ -57,20 +62,20 @@
       <file leaf-file-name="SearchController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/controllers/SearchController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
-              <caret line="28" column="0" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+            <state relative-caret-position="109">
+              <caret line="248" column="40" lean-forward="false" selection-start-line="248" selection-start-column="40" selection-end-line="248" selection-end-column="40" />
               <folding>
-                <element signature="e#49#83#0#PHP" expanded="true" />
+                <element signature="e#49#71#0#PHP" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ProgressController.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ProgressController.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/controllers/ProgressController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="29" column="31" lean-forward="false" selection-start-line="29" selection-start-column="31" selection-end-line="29" selection-end-column="31" />
+            <state relative-caret-position="231">
+              <caret line="29" column="32" lean-forward="false" selection-start-line="29" selection-start-column="32" selection-end-line="29" selection-end-column="32" />
               <folding>
                 <element signature="e#130#160#0#PHP" expanded="true" />
               </folding>
@@ -78,34 +83,56 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Service.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/controllers/Service.php">
+      <file leaf-file-name="Search.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/models/Search.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="39" column="0" lean-forward="false" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="YAZ.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/lib/yaz/YAZ.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="6717">
-              <caret line="476" column="4" lean-forward="true" selection-start-line="476" selection-start-column="4" selection-end-line="476" selection-end-column="4" />
+            <state relative-caret-position="-537">
+              <caret line="31" column="28" lean-forward="true" selection-start-line="31" selection-start-column="28" selection-end-line="31" selection-end-column="28" />
               <folding>
-                <element signature="e#844#860#0#PHP" expanded="true" />
+                <element signature="e#586#606#0#PHP" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Datasource.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/models/Datasource.php">
+      <file leaf-file-name="Schema.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/models/Schema.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="60">
-              <caret line="31" column="29" lean-forward="false" selection-start-line="31" selection-start-column="29" selection-end-line="31" selection-end-column="29" />
+              <caret line="22" column="36" lean-forward="false" selection-start-line="22" selection-start-column="36" selection-end-line="22" selection-end-column="36" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Schema.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/server/models/Schema.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="210">
+              <caret line="16" column="22" lean-forward="false" selection-start-line="16" selection-start-column="22" selection-end-line="16" selection-end-column="22" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Result.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/models/Result.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="139">
+              <caret line="36" column="6" lean-forward="false" selection-start-line="36" selection-start-column="6" selection-end-line="36" selection-end-column="6" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Yaz.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/lib/yaz/Yaz.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="156">
+              <caret line="957" column="6" lean-forward="false" selection-start-line="957" selection-start-column="6" selection-end-line="957" selection-end-column="6" />
+              <folding>
+                <element signature="e#844#860#0#PHP" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -114,9 +141,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>$</find>
-      <find>datasource3</find>
-      <find>autoComplete</find>
       <find>autoco</find>
       <find>selectedids</find>
       <find>removeReference</find>
@@ -141,9 +165,12 @@
       <find>var</find>
       <find>this.userMgr</find>
       <find>result</find>
-      <find>*</find>
       <find>YAZ_</find>
       <find>YAZException</find>
+      <find>$this-&gt;log</find>
+      <find>BIBLIOGRAPH_LOG_Z3950_VERBOSE</find>
+      <find>$recordModel</find>
+      <find>self::CATEGORY</find>
     </findStrings>
     <replaceStrings>
       <replace>-&gt;namedId</replace>
@@ -164,6 +191,10 @@
       <replace>&quot;</replace>
       <replace>userMgr</replace>
       <replace />
+      <replace>Yii::debug</replace>
+      <replace>self::CATEGORY</replace>
+      <replace>$dbRecord</replace>
+      <replace>Module::CATEGORY</replace>
     </replaceStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph</dir>
@@ -184,8 +215,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/server/lib/cql/Query.php" />
-        <option value="$PROJECT_DIR$/src/server/lib/cql/Parser.php" />
         <option value="$PROJECT_DIR$/src/server/vendor/yiisoft/yii2/i18n/GettextMessageSource.php" />
         <option value="$PROJECT_DIR$/src/server/messages/de-DE/messages.po" />
         <option value="$PROJECT_DIR$/src/server/vendor/yiisoft/yii2/i18n/MessageSource.php" />
@@ -201,21 +230,16 @@
         <option value="$PROJECT_DIR$/src/server/modules/z3950/models/DatasourceModel.php" />
         <option value="$PROJECT_DIR$/src/server/models/BibliographicDatasource.php" />
         <option value="$PROJECT_DIR$/src/server/lib/components/AccessManager.php" />
-        <option value="$PROJECT_DIR$/src/server/models/Schema.php" />
         <option value="$PROJECT_DIR$/src/server/modules/z3950/models/Datasource.php" />
         <option value="$PROJECT_DIR$/src/server/modules/z3950/__init__.php" />
         <option value="$PROJECT_DIR$/src/server/config/parts/constants.php" />
         <option value="$PROJECT_DIR$/src/server/modules/z3950/Plugin.php" />
         <option value="$PROJECT_DIR$/bin/create-migration.sh" />
-        <option value="$PROJECT_DIR$/src/server/lib/components/DatasourceManager.php" />
         <option value="$PROJECT_DIR$/src/server/modules/z3950/models/Schema.php" />
         <option value="$PROJECT_DIR$/src/server/migrations/schema/bibliograph_datasource/m171219_230854_create_table_data_Reference.php" />
         <option value="$PROJECT_DIR$/src/server/modules/z3950/migrations/M180307221505_create_table_data_Record.php" />
         <option value="$PROJECT_DIR$/src/server/modules/z3950/migrations/M180307221446_create_table_data_Result.php" />
         <option value="$PROJECT_DIR$/src/server/modules/z3950/migrations/M180307221333_create_table_data_Search.php" />
-        <option value="$PROJECT_DIR$/src/server/lib/models/BaseModel.php" />
-        <option value="$PROJECT_DIR$/src/server/modules/z3950/models/Result.php" />
-        <option value="$PROJECT_DIR$/src/server/modules/z3950/models/Search.php" />
         <option value="$PROJECT_DIR$/src/server/models/Reference.php" />
         <option value="$PROJECT_DIR$/src/server/modules/z3950/models/Record.php" />
         <option value="$PROJECT_DIR$/src/server/config/parts/components.php" />
@@ -225,16 +249,23 @@
         <option value="$PROJECT_DIR$/src/server/controllers/SetupController.php" />
         <option value="$PROJECT_DIR$/src/server/modules/z3950/controllers/DefaultController.php" />
         <option value="$PROJECT_DIR$/src/server/lib/components/Configuration.php" />
-        <option value="$PROJECT_DIR$/src/server/lib/Module.php" />
         <option value="$PROJECT_DIR$/src/server/models/Datasource.php" />
         <option value="$PROJECT_DIR$/src/server/lib/bibtex/BibtexItem.php" />
+        <option value="$PROJECT_DIR$/src/server/modules/z3950/lib/yaz/YAZ.php" />
+        <option value="$PROJECT_DIR$/src/server/lib/Module.php" />
+        <option value="$PROJECT_DIR$/src/server/modules/z3950/lib/yaz/Yaz.php" />
+        <option value="$PROJECT_DIR$/src/server/lib/util/Executable.php" />
         <option value="$PROJECT_DIR$/src/server/lib/bibtex/BibtexParser.php" />
+        <option value="$PROJECT_DIR$/src/server/lib/models/BaseModel.php" />
+        <option value="$PROJECT_DIR$/src/server/modules/z3950/models/Search.php" />
+        <option value="$PROJECT_DIR$/src/server/models/Schema.php" />
+        <option value="$PROJECT_DIR$/src/server/modules/z3950/models/Result.php" />
         <option value="$PROJECT_DIR$/todo.md" />
-        <option value="$PROJECT_DIR$/src/server/modules/z3950/controllers/ProgressController.php" />
+        <option value="$PROJECT_DIR$/src/server/lib/components/DatasourceManager.php" />
+        <option value="$PROJECT_DIR$/src/server/modules/z3950/Module.php" />
         <option value="$PROJECT_DIR$/src/server/modules/z3950/controllers/Service.php" />
         <option value="$PROJECT_DIR$/src/server/modules/z3950/controllers/SearchController.php" />
-        <option value="$PROJECT_DIR$/src/server/modules/z3950/Module.php" />
-        <option value="$PROJECT_DIR$/src/server/modules/z3950/lib/yaz/YAZ.php" />
+        <option value="$PROJECT_DIR$/src/server/modules/z3950/controllers/ProgressController.php" />
       </list>
     </option>
   </component>
@@ -264,7 +295,107 @@
   <component name="PhpServers">
     <servers />
   </component>
-  <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" interpreter_name="PHP 7" />
+  <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" interpreter_name="PHP 7">
+    <include_path>
+      <path value="$PROJECT_DIR$/src/server/vendor/bizley/migration" />
+      <path value="$PROJECT_DIR$/src/server/vendor/doctrine/instantiator" />
+      <path value="$PROJECT_DIR$/src/server/vendor/doctrine/inflector" />
+      <path value="$PROJECT_DIR$/src/server/vendor/bmsrox/yii2-module-autoloader" />
+      <path value="$PROJECT_DIR$/src/server/vendor/nesbot/carbon" />
+      <path value="$PROJECT_DIR$/src/server/vendor/elisdn/yii2-gii-fixture-generator" />
+      <path value="$PROJECT_DIR$/src/server/vendor/toriphes/yii2-console-runner" />
+      <path value="$PROJECT_DIR$/src/server/vendor/guzzlehttp/guzzle" />
+      <path value="$PROJECT_DIR$/src/server/vendor/theseer/tokenizer" />
+      <path value="$PROJECT_DIR$/src/server/vendor/paragonie/random_compat" />
+      <path value="$PROJECT_DIR$/src/server/vendor/guzzlehttp/psr7" />
+      <path value="$PROJECT_DIR$/src/server/vendor/guzzlehttp/promises" />
+      <path value="$PROJECT_DIR$/src/server/vendor/tonyhhyip/sse" />
+      <path value="$PROJECT_DIR$/src/server/vendor/odannyc/yii2-sse" />
+      <path value="$PROJECT_DIR$/src/server/vendor/phar-io/manifest" />
+      <path value="$PROJECT_DIR$/src/server/vendor/phar-io/version" />
+      <path value="$PROJECT_DIR$/src/server/vendor/ezyang/htmlpurifier" />
+      <path value="$PROJECT_DIR$/src/server/vendor/sebastian/global-state" />
+      <path value="$PROJECT_DIR$/src/server/vendor/sebastian/comparator" />
+      <path value="$PROJECT_DIR$/src/server/vendor/sebastian/environment" />
+      <path value="$PROJECT_DIR$/src/server/vendor/sebastian/exporter" />
+      <path value="$PROJECT_DIR$/src/server/vendor/sebastian/recursion-context" />
+      <path value="$PROJECT_DIR$/src/server/vendor/sebastian/object-enumerator" />
+      <path value="$PROJECT_DIR$/src/server/vendor/sebastian/object-reflector" />
+      <path value="$PROJECT_DIR$/src/server/vendor/sebastian/resource-operations" />
+      <path value="$PROJECT_DIR$/src/server/vendor/yiisoft/yii2-bootstrap" />
+      <path value="$PROJECT_DIR$/src/server/vendor/sebastian/code-unit-reverse-lookup" />
+      <path value="$PROJECT_DIR$/src/server/vendor/yiisoft/yii2-faker" />
+      <path value="$PROJECT_DIR$/src/server/vendor/sebastian/diff" />
+      <path value="$PROJECT_DIR$/src/server/vendor/bower-asset/typeahead.js" />
+      <path value="$PROJECT_DIR$/src/server/vendor/yiisoft/yii2-composer" />
+      <path value="$PROJECT_DIR$/src/server/vendor/facebook/webdriver" />
+      <path value="$PROJECT_DIR$/src/server/vendor/sebastian/version" />
+      <path value="$PROJECT_DIR$/src/server/vendor/bower-asset/punycode" />
+      <path value="$PROJECT_DIR$/src/server/vendor/yiisoft/yii2-gii" />
+      <path value="$PROJECT_DIR$/src/server/vendor/bower-asset/yii2-pjax" />
+      <path value="$PROJECT_DIR$/src/server/vendor/bower-asset/bootstrap" />
+      <path value="$PROJECT_DIR$/src/server/vendor/bower-asset/jquery" />
+      <path value="$PROJECT_DIR$/src/server/vendor/bower-asset/inputmask" />
+      <path value="$PROJECT_DIR$/src/server/vendor/phpunit/php-timer" />
+      <path value="$PROJECT_DIR$/src/server/vendor/phpunit/php-file-iterator" />
+      <path value="$PROJECT_DIR$/src/server/vendor/phpunit/php-text-template" />
+      <path value="$PROJECT_DIR$/src/server/vendor/phpunit/php-token-stream" />
+      <path value="$PROJECT_DIR$/src/server/vendor/phpunit/phpunit-mock-objects" />
+      <path value="$PROJECT_DIR$/src/server/vendor/phpunit/php-code-coverage" />
+      <path value="$PROJECT_DIR$/src/server/vendor/webmozart/assert" />
+      <path value="$PROJECT_DIR$/src/server/vendor/adldap2/adldap2" />
+      <path value="$PROJECT_DIR$/src/server/vendor/edvlerblog/yii2-adldap-module" />
+      <path value="$PROJECT_DIR$/src/server/vendor/bower/typeahead.js" />
+      <path value="$PROJECT_DIR$/src/server/vendor/bower/punycode" />
+      <path value="$PROJECT_DIR$/src/server/vendor/bower/yii2-pjax" />
+      <path value="$PROJECT_DIR$/src/server/vendor/bower/bootstrap" />
+      <path value="$PROJECT_DIR$/src/server/vendor/bower/jquery" />
+      <path value="$PROJECT_DIR$/src/server/vendor/bower/inputmask" />
+      <path value="$PROJECT_DIR$/src/server/vendor/fzaninotto/faker" />
+      <path value="$PROJECT_DIR$/src/server/vendor/symfony/console" />
+      <path value="$PROJECT_DIR$/src/server/vendor/symfony/process" />
+      <path value="$PROJECT_DIR$/src/server/vendor/symfony/debug" />
+      <path value="$PROJECT_DIR$/src/server/vendor/symfony/browser-kit" />
+      <path value="$PROJECT_DIR$/src/server/vendor/symfony/dom-crawler" />
+      <path value="$PROJECT_DIR$/src/server/vendor/symfony/finder" />
+      <path value="$PROJECT_DIR$/src/server/vendor/symfony/polyfill-php70" />
+      <path value="$PROJECT_DIR$/src/server/vendor/illuminate/contracts" />
+      <path value="$PROJECT_DIR$/src/server/vendor/symfony/event-dispatcher" />
+      <path value="$PROJECT_DIR$/src/server/vendor/illuminate/support" />
+      <path value="$PROJECT_DIR$/src/server/vendor/symfony/css-selector" />
+      <path value="$PROJECT_DIR$/src/server/vendor/symfony/translation" />
+      <path value="$PROJECT_DIR$/src/server/vendor/symfony/polyfill-mbstring" />
+      <path value="$PROJECT_DIR$/src/server/vendor/symfony/http-foundation" />
+      <path value="$PROJECT_DIR$/src/server/vendor/symfony/yaml" />
+      <path value="$PROJECT_DIR$/src/server/vendor/danielstjules/stringy" />
+      <path value="$PROJECT_DIR$/src/server/vendor/codeception/phpunit-wrapper" />
+      <path value="$PROJECT_DIR$/src/server/vendor/phpdocumentor/reflection-docblock" />
+      <path value="$PROJECT_DIR$/src/server/vendor/phpdocumentor/type-resolver" />
+      <path value="$PROJECT_DIR$/src/server/vendor/phpdocumentor/reflection-common" />
+      <path value="$PROJECT_DIR$/src/server/vendor/flow/jsonpath" />
+      <path value="$PROJECT_DIR$/src/server/vendor/composer" />
+      <path value="$PROJECT_DIR$/src/server/vendor/codeception/stub" />
+      <path value="$PROJECT_DIR$/src/server/vendor/codeception/specify" />
+      <path value="$PROJECT_DIR$/src/server/vendor/codeception/verify" />
+      <path value="$PROJECT_DIR$/src/server/vendor/behat/gherkin" />
+      <path value="$PROJECT_DIR$/src/server/vendor/yiisoft/yii2" />
+      <path value="$PROJECT_DIR$/src/server/vendor/phpunit/phpunit" />
+      <path value="$PROJECT_DIR$/src/server/vendor/codeception/codeception" />
+      <path value="$PROJECT_DIR$/src/server/vendor/cebe/markdown" />
+      <path value="$PROJECT_DIR$/src/server/vendor/psr/container" />
+      <path value="$PROJECT_DIR$/src/server/vendor/psr/http-message" />
+      <path value="$PROJECT_DIR$/src/server/vendor/psr/log" />
+      <path value="$PROJECT_DIR$/src/server/vendor/psr/simple-cache" />
+      <path value="$PROJECT_DIR$/src/server/vendor/bazilio/yii2-stubs-generator" />
+      <path value="$PROJECT_DIR$/src/server/vendor/phpspec/php-diff" />
+      <path value="$PROJECT_DIR$/src/server/vendor/cranetm/yii2-json-rpc-2.0" />
+      <path value="$PROJECT_DIR$/src/server/vendor/phpspec/prophecy" />
+      <path value="$PROJECT_DIR$/src/server/vendor/graze/guzzle-jsonrpc" />
+      <path value="$PROJECT_DIR$/src/server/vendor/insolita/yii2-migration-generator" />
+      <path value="$PROJECT_DIR$/src/server/vendor/myclabs/deep-copy" />
+      <path value="$PROJECT_DIR$/src/server/vendor/fourteenmeister/dsn" />
+    </include_path>
+  </component>
   <component name="ProjectFrameBounds" fullScreen="true">
     <option name="width" value="1280" />
     <option name="height" value="800" />
@@ -321,7 +452,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -332,6 +462,11 @@
             <path>
               <item name="bibliograph" type="b2602c69:ProjectViewProjectNode" />
               <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="doc" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="bibliograph" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
@@ -339,21 +474,6 @@
               <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="server" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="bibliograph" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="server" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="lib" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="bibliograph" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="server" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="lib" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="bibtex" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
               <item name="bibliograph" type="b2602c69:ProjectViewProjectNode" />
@@ -379,36 +499,18 @@
               <item name="z3950" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="controllers" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
-            <path>
-              <item name="bibliograph" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="server" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="modules" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="z3950" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="lib" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="bibliograph" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="server" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="modules" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="z3950" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="lib" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="yaz" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
       <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="Errors" />
+    <property name="settings.editor.selected.configurable" value="reference.webide.settings.project.settings.php" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.detected.package.eslint" value="true" />
@@ -476,12 +578,14 @@
       <workItem from="1520403692400" duration="3966000" />
       <workItem from="1520431717793" duration="14726000" />
       <workItem from="1520530686398" duration="69000" />
-      <workItem from="1520530775746" duration="13208000" />
+      <workItem from="1520530775746" duration="13248000" />
+      <workItem from="1520592283906" duration="767000" />
+      <workItem from="1520613377962" duration="10837000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="263434000" />
+    <option name="totallyTimeSpent" value="275078000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -494,19 +598,18 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32933334" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.40133333" sideWeight="0.503125" order="11" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32933334" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287483" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2874828" sideWeight="0.496875" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24474959" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2874828" sideWeight="0.496875" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2956381" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3574975" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25040388" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3562586" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2584814" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -594,59 +697,8 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/server/schema/AbstractReferenceSchema.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3255">
-          <caret line="236" column="30" lean-forward="false" selection-start-line="236" selection-start-column="30" selection-end-line="236" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/lib/exceptions/RecordExistsException.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="24" lean-forward="false" selection-start-line="2" selection-start-column="10" selection-end-line="2" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/Yii.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="460">
-          <caret line="43" column="44" lean-forward="false" selection-start-line="43" selection-start-column="44" selection-end-line="43" selection-end-column="44" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/lib/components/AccessManager.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="281">
-          <caret line="121" column="3" lean-forward="false" selection-start-line="121" selection-start-column="3" selection-end-line="121" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/models/Schema.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="141">
-          <caret line="154" column="57" lean-forward="false" selection-start-line="154" selection-start-column="57" selection-end-line="154" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/config/parts/constants.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="0" lean-forward="true" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/__init__.php" />
     <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/Plugin.php" />
-    <entry file="file://$PROJECT_DIR$/src/server/vendor/yiisoft/yii2/db/ActiveRecord.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="369">
-          <caret line="78" column="39" lean-forward="false" selection-start-line="78" selection-start-column="39" selection-end-line="78" selection-end-column="39" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/server/models/User.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="163">
@@ -679,7 +731,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="163">
           <caret line="599" column="20" lean-forward="false" selection-start-line="599" selection-start-column="20" selection-end-line="599" selection-end-column="20" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -687,7 +738,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="186">
           <caret line="1030" column="32" lean-forward="false" selection-start-line="1030" selection-start-column="32" selection-end-line="1030" selection-end-column="47" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -695,13 +745,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="165">
           <caret line="15" column="27" lean-forward="false" selection-start-line="15" selection-start-column="27" selection-end-line="15" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/lib/components/DatasourceManager.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="136" column="53" lean-forward="false" selection-start-line="136" selection-start-column="35" selection-end-line="136" selection-end-column="53" />
         </state>
       </provider>
     </entry>
@@ -733,34 +776,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/lib/models/BaseModel.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="80">
-          <caret line="30" column="0" lean-forward="true" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/migrations/M180307221446_create_table_data_Result.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="315">
           <caret line="21" column="6" lean-forward="false" selection-start-line="21" selection-start-column="6" selection-end-line="25" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/models/Schema.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="24" column="62" lean-forward="false" selection-start-line="24" selection-start-column="62" selection-end-line="24" selection-end-column="62" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/models/Result.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="35" column="6" lean-forward="false" selection-start-line="35" selection-start-column="6" selection-end-line="35" selection-end-column="6" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -771,32 +790,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/models/Search.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="39" column="0" lean-forward="false" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
-          <folding>
-            <element signature="e#586#606#0#PHP" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/models/Reference.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2535">
-          <caret line="171" column="1" lean-forward="false" selection-start-line="171" selection-start-column="1" selection-end-line="192" selection-end-column="0" />
-          <folding>
-            <marker date="1520494932737" expanded="true" signature="8810:9094" ph="SELECT id, $... ${$table}" />
-            <marker date="1520494932737" expanded="true" signature="8925:8961" ph="SELECT MAX($... ${$table}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/server/vendor/yiisoft/yii2/base/Module.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
           <caret line="220" column="20" lean-forward="false" selection-start-line="220" selection-start-column="20" selection-end-line="220" selection-end-column="20" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -804,7 +801,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="123">
           <caret line="9" column="18" lean-forward="true" selection-start-line="9" selection-start-column="18" selection-end-line="9" selection-end-column="18" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -812,7 +808,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="235">
           <caret line="47" column="36" lean-forward="true" selection-start-line="47" selection-start-column="36" selection-end-line="47" selection-end-column="36" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -820,7 +815,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1157">
           <caret line="102" column="27" lean-forward="false" selection-start-line="102" selection-start-column="27" selection-end-line="102" selection-end-column="27" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -828,25 +822,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="546">
           <caret line="141" column="29" lean-forward="false" selection-start-line="141" selection-start-column="29" selection-end-line="141" selection-end-column="29" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/Events.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="13" column="26" lean-forward="false" selection-start-line="13" selection-start-column="26" selection-end-line="13" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/Events.php" />
     <entry file="file://$PROJECT_DIR$/src/server/controllers/SetupController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="926">
           <caret line="208" column="33" lean-forward="false" selection-start-line="208" selection-start-column="33" selection-end-line="208" selection-end-column="33" />
-          <folding>
-            <element signature="e#568#576#0#PHP" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -854,9 +837,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="390">
           <caret line="43" column="5" lean-forward="false" selection-start-line="43" selection-start-column="5" selection-end-line="43" selection-end-column="5" />
-          <folding>
-            <element signature="e#585#610#0#PHP" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -864,7 +844,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
           <caret line="27" column="3" lean-forward="true" selection-start-line="27" selection-start-column="3" selection-end-line="27" selection-end-column="3" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -872,13 +851,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1093">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/models/Datasource.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
+        <state relative-caret-position="210">
           <caret line="31" column="29" lean-forward="false" selection-start-line="31" selection-start-column="29" selection-end-line="31" selection-end-column="29" />
           <folding />
         </state>
@@ -888,7 +866,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
           <caret line="94" column="18" lean-forward="false" selection-start-line="94" selection-start-column="18" selection-end-line="94" selection-end-column="18" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -896,19 +873,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="465">
           <caret line="31" column="6" lean-forward="false" selection-start-line="31" selection-start-column="6" selection-end-line="31" selection-end-column="6" />
-          <folding>
-            <element signature="e#7#36#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/lib/bibtex/BibtexParser.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="506">
-          <caret line="136" column="24" lean-forward="false" selection-start-line="136" selection-start-column="24" selection-end-line="136" selection-end-column="24" />
-          <folding>
-            <element signature="e#6#594#0#PHP" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -916,34 +880,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="24" column="30" lean-forward="false" selection-start-line="24" selection-start-column="30" selection-end-line="24" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/todo.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="320">
-            <caret line="44" column="42" lean-forward="false" selection-start-line="44" selection-start-column="42" selection-end-line="44" selection-end-column="42" />
-            <folding />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/controllers/Service.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="39" column="0" lean-forward="false" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/lib/Module.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="970">
-          <caret line="118" column="17" lean-forward="false" selection-start-line="118" selection-start-column="17" selection-end-line="118" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -951,46 +887,191 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4758">
           <caret line="321" column="83" lean-forward="false" selection-start-line="321" selection-start-column="83" selection-end-line="321" selection-end-column="83" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/lib/Module.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="191">
+          <caret line="27" column="11" lean-forward="false" selection-start-line="27" selection-start-column="11" selection-end-line="27" selection-end-column="11" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/controllers/ProgressController.php">
+    <entry file="file://$PROJECT_DIR$/src/server/models/Reference.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="29" column="31" lean-forward="false" selection-start-line="29" selection-start-column="31" selection-end-line="29" selection-end-column="31" />
+        <state relative-caret-position="420">
+          <caret line="30" column="25" lean-forward="true" selection-start-line="30" selection-start-column="25" selection-end-line="30" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/lib/models/BaseModel.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="35" column="24" lean-forward="false" selection-start-line="35" selection-start-column="24" selection-end-line="35" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/models/Schema.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="22" column="36" lean-forward="false" selection-start-line="22" selection-start-column="36" selection-end-line="22" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/models/Schema.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="16" column="22" lean-forward="false" selection-start-line="16" selection-start-column="22" selection-end-line="16" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/todo.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="240">
+            <caret line="57" column="49" lean-forward="false" selection-start-line="57" selection-start-column="49" selection-end-line="57" selection-end-column="49" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/lib/util/Executable.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2442">
+          <caret line="2" column="19" lean-forward="false" selection-start-line="2" selection-start-column="19" selection-end-line="2" selection-end-column="19" />
           <folding>
-            <element signature="e#130#160#0#PHP" expanded="true" />
+            <element signature="e#27#41#0#PHP" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/lib/bibtex/BibtexParser.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="148">
+          <caret line="38" column="25" lean-forward="false" selection-start-line="38" selection-start-column="25" selection-end-line="38" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/lib/yaz/Yaz.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="156">
+          <caret line="957" column="6" lean-forward="false" selection-start-line="957" selection-start-column="6" selection-end-line="957" selection-end-column="6" />
+          <folding>
+            <element signature="e#844#860#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/models/Search.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-537">
+          <caret line="31" column="28" lean-forward="true" selection-start-line="31" selection-start-column="28" selection-end-line="31" selection-end-column="28" />
+          <folding>
+            <element signature="e#586#606#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/vendor/yiisoft/yii2/db/Exception.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="163">
+          <caret line="15" column="6" lean-forward="false" selection-start-line="15" selection-start-column="6" selection-end-line="15" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/vendor/yiisoft/yii2/db/ActiveRecord.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="106">
+          <caret line="631" column="20" lean-forward="false" selection-start-line="631" selection-start-column="20" selection-end-line="631" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/lib/components/DatasourceManager.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="313">
+          <caret line="165" column="62" lean-forward="false" selection-start-line="165" selection-start-column="62" selection-end-line="165" selection-end-column="62" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/doc/yii2-cheatsheet.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="0">
+            <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/models/Result.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="139">
+          <caret line="36" column="6" lean-forward="false" selection-start-line="36" selection-start-column="6" selection-end-line="36" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/controllers/Service.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="40" column="2" lean-forward="false" selection-start-line="40" selection-start-column="2" selection-end-line="40" selection-end-column="2" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/controllers/SearchController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="28" column="0" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+        <state relative-caret-position="109">
+          <caret line="248" column="40" lean-forward="false" selection-start-line="248" selection-start-column="40" selection-end-line="248" selection-end-column="40" />
           <folding>
-            <element signature="e#49#83#0#PHP" expanded="true" />
+            <element signature="e#49#71#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/Module.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="138">
-          <caret line="214" column="54" lean-forward="false" selection-start-line="214" selection-start-column="54" selection-end-line="214" selection-end-column="54" />
+        <state relative-caret-position="133">
+          <caret line="456" column="8" lean-forward="false" selection-start-line="456" selection-start-column="8" selection-end-line="456" selection-end-column="8" />
           <folding>
             <element signature="e#37#89#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/lib/yaz/YAZ.php">
+    <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/lib/marc/MarcParser.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6717">
-          <caret line="476" column="4" lean-forward="true" selection-start-line="476" selection-start-column="4" selection-end-line="476" selection-end-column="4" />
+        <state relative-caret-position="-8">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/lib/marc/php-marc.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1435">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/controllers/ProgressController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="231">
+          <caret line="29" column="32" lean-forward="false" selection-start-line="29" selection-start-column="32" selection-end-line="29" selection-end-column="32" />
           <folding>
-            <element signature="e#844#860#0#PHP" expanded="true" />
+            <element signature="e#130#160#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>

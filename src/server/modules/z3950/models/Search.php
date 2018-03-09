@@ -21,8 +21,20 @@
 namespace app\modules\z3950\models;
 
 use app\models\User;
+use app\modules\z3950\Module;
 use lib\models\BaseModel;
+use Yii;
 
+/**
+ * Class Search
+ * @package app\modules\z3950\models
+ * @property int $id
+ * @property string $created
+ * @property string $modified
+ * @property int $hits
+ * @property string $query
+ * @property int $UserId
+ */
 class Search extends BaseModel
 {
 
@@ -66,11 +78,15 @@ class Search extends BaseModel
   public function beforeDelete()
   {
     if( parent::beforeDelete() ){
+      /** @var Result $result */
       foreach( (array) $this->getResults()->all() as $result ){
-        $result->delete();
+        try {
+          $result->delete();
+        } catch (\Throwable $e) {
+          Yii::debug($e->getMessage(), Module::CATEGORY);
+        }
       }
     }
     return false;
   }
-
 }

@@ -28,13 +28,12 @@ namespace app\modules\z3950\lib\yaz;
 
 use DOMDocument;
 use InvalidArgumentException;
+use lib\models\BaseModel;
 use XSLTProcessor;
 
-class YazException extends \Exception
-{
-}
+class YazException extends \Exception{}
 
-class YAZ
+class Yaz
 {
 
   /**
@@ -371,7 +370,7 @@ class YAZ
   {
     $this->resource = \yaz_connect($this->zurl, $this->options);
     if (!$this->resource) {
-      throw new YazException("Cannot create resource");
+      $this->throwException("Cannot create resource");
     }
     $this->checkError();
   }
@@ -388,7 +387,7 @@ class YAZ
   public function setDatabase($database)
   {
     if (!\yaz_database($this->resource, $database)) {
-      throw new YazException("Could not change database");
+      $this->throwException("Could not change database");
     }
   }
 
@@ -523,7 +522,7 @@ class YAZ
   public function present()
   {
     if (!\yaz_present($this->resource)) {
-      throw new YazException("PRESENT failed");
+      $this->throwException("PRESENT failed");
     }
   }
 

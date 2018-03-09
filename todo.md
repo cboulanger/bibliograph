@@ -54,6 +54,9 @@
 - [ ] Rename Yii::$app->utils to Yii::$app->state
 - [ ] Have actions return an informative message when they don't return a result
 - [ ] Move the .idea folder out of version control (see [instructions](https://intellij-support.jetbrains.com/hc/en-us/articles/207240985-Changing-IDE-default-directories-used-for-config-plugins-and-caches-storage))
+- [ ] Fix 'property is unused' inspection alert
+- [ ] Add missing id, created, modified to model rules()
+
 ## v3.0.0
 
 ## v3.1

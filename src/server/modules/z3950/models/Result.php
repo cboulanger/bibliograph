@@ -22,6 +22,18 @@ namespace app\modules\z3950\models;
 
 use lib\models\BaseModel;
 
+/**
+ * Class Result
+ * @package app\modules\z3950\models
+ * @property int $id
+ * @property string $created
+ * @property string $modified
+ * @property int $firstRow
+ * @property int $lastRow
+ * @property int $firstRecordId
+ * @property int $lastRecordId
+ * @property int $SearchId
+ */
 class Result extends BaseModel
 {
 
@@ -31,6 +43,7 @@ class Result extends BaseModel
   public function rules()
   {
     return [
+      [['id'], 'integer'],
       [['created', 'modified'], 'safe'],
       [['firstRow', 'lastRow', 'firstRecordId', 'lastRecordId','SearchId'], 'integer'],
     ];

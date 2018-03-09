@@ -36,7 +36,7 @@ class BibtexParser
   /**
    * Parses the given bibtex string
    * @param string $content Bibtex string
-   * @return array
+   * @return BibtexItem[]
    */
   function parse($content)
   {
@@ -56,7 +56,7 @@ class BibtexParser
 
   /**
    * Implementation of parse()
-   * @return array
+   * @return BibtexItem[]
    */
   private function _parse()
   {

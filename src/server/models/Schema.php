@@ -41,7 +41,7 @@ class Schema extends \lib\models\BaseModel
   {
     return [
       [['created', 'modified'], 'safe'],
-      [['active', 'protected'], 'integer'],
+      [['active', 'protected','id'], 'integer'],
       [['namedId'], 'string', 'max' => 50],
       [['class', 'name'], 'string', 'max' => 100],
       [['description'], 'string', 'max' => 255],

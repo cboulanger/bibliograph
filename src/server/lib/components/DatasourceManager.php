@@ -29,6 +29,7 @@ use lib\exceptions\RecordExistsException;
 use lib\exceptions\UserErrorException;
 use Sse\Data;
 use Yii;
+use yii\db\StaleObjectException;
 
 /**
  * Component class providing methods to create and migrate datasource tables,
@@ -151,7 +152,7 @@ class DatasourceManager extends \yii\base\Component
    * @param string $namedId
    * @param bool $deleteData
    *    Whether all connected models and their data should be deleted, too.
-   * @throws \Exception|\Throwable in case delete or console action failed.
+   * @throws \Exception
    */
   public function delete($namedId, $deleteData = false)
   {
@@ -159,7 +160,11 @@ class DatasourceManager extends \yii\base\Component
     /** @var \app\schema\AbstractReferenceSchema $schema */
     $schema = $datasource->getSchema()->one();
     $migrationNamespace = $schema->migrationNamespace;
-    $datasource->delete();
+    try {
+      $datasource->delete();
+    } catch (\Throwable $e) {
+      throw new \Exception($e->getMessage(),$e->getCode(),$e);
+    }
     if ($deleteData) {
       Yii::debug("Deleting model tables for '$namedId'...");
       $db = $datasource->getConnection();

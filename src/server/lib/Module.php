@@ -22,6 +22,14 @@ use Yii;
  */
 class Module extends \yii\base\Module
 {
+
+  /**
+   * A string constant defining the category for logging and translation
+   * Should be overridden by subclasses
+   */
+  const CATEGORY="module";
+
+
   /**
    * @return string
    */
