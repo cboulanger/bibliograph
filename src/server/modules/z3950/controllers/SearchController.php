@@ -1,316 +1,370 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: cboulanger
+ * Date: 09.03.18
+ * Time: 08:26
+ */
 
-namespace app\modules\z3950\controllers;
+namespace modules\z3950\controllers;
 
-use app\models\Folder;
-use app\models\Reference;
-use app\modules\z3950\models\Record;
-use app\modules\z3950\models\Result;
-use app\modules\z3950\models\Search;
 use Yii;
-use app\controllers\AppController;
-use app\models\Datasource;
-use app\modules\z3950\models\Datasource as Z3950Datasource;
+use Exception;
 use app\modules\z3950\Module;
+use app\models\Datasource;
+use app\modules\z3950\models\{
+  Record, Result, Search, Datasource as Z3950Datasource
+};
+use app\modules\z3950\lib\yaz\{
+  CclQuery, MarcXmlResult, Yaz, YazException
+};
+use lib\dialog\ServerProgress;
 use lib\exceptions\UserErrorException;
-use yii\db\Exception;
+use lib\bibtex\BibtexParser;
+use lib\util\Executable;
 
 /**
- * Default controller for the `z3950` module
+ * Class ProgressController
+ * @package modules\z3950\controllers
  * @property Module $module
  */
-class SearchController extends AppController
+class SearchController extends yii\web\Controller
 {
   /**
-   * Returns the default model type for which this controller is providing
-   * data.
-   * @return string
-   */
-  protected function getModelType()
-  {
-    return "record";
-  }
-  
-  //---------------------------------------------------------------------------
-  //  ACTIONS
-  //---------------------------------------------------------------------------
-
-
-  /**
-   * Returns the layout of the columns of the table displaying
-   * the records
+   * Executes a Z39.50 request on the remote server. Called
+   * by the ServerProgress widget on the client
    *
-   * @param string $datasource
-   * @param null|string $modelClassType
+   * @param string $datasourceName
+   * @param $query
+   * @param string $progressWidgetId
+   * @return string Chunked HTTP response
+   * @todo use DTO
    */
-  public function actionTableLayout($datasource, $modelClassType = null)
+  public function actionRequestProgress($datasourceName, $query, $progressWidgetId)
   {
-    return array(
-      'columnLayout' => array(
-        'id' => array(
-          'header'  => "ID",
-          'width'   => 50,
-          'visible' => false
-        ),
-        'author' => array(
-          'header'  => _("Author"),
-          'width'   => "1*"
-        ),
-        'year' => array(
-          'header'  => _("Year"),
-          'width'   => 50
-        ),
-        'title' => array(
-          'header'  => _("Title"),
-          'width'   => "3*"
-        )
-      ),
-      'queryData' => array(
-        'link'    => array(),
-        'orderBy' => "author,year,title",
-      ),
-      'addItems' => array()
-    );
+    $progressBar = new ServerProgress($progressWidgetId);
+    try {
+      $this->sendRequest($datasourceName, $query, $progressBar);
+      $progressBar->dispatchClientMessage("z3950.dataReady", $query);
+      return $progressBar->complete();
+    } catch (UserErrorException $e) {
+      return $progressBar->error($e->getMessage());
+    } catch (Exception $e) {
+      Yii::warning($e->getFile() . ", line " . $e->getLine() . ": " . $e->getMessage());
+      return $progressBar->error($e->getMessage());
+    }
   }
 
 
   /**
-   * Service method that returns ListItem model data on the available library servers
-   * @param boolean $all
-   *      Whether to return only the active datasources (default) or all datasource
-   * @param boolean $reloadFromXmlFiles
-   *      Whether to reload the list from the XML Explain files in the filesystem.
-   *      This is neccessary if xml files have been added or removed.
+   * Configures the yaz object for a ccl query with a minimal common set of fields:
+   * title, author, keywords, year, isbn, all
+   * @param Yaz $yaz
+   * @return void
+   */
+  protected function configureCcl(Yaz $yaz)
+  {
+    $yaz->ccl_configure(array(
+      "title" => "1=4",
+      "author" => "1=1004",
+      "keywords" => "1=21",
+      "year" => "1=31",
+      "isbn" => "1=7",
+      "all" => "1=1016"
+    ));
+  }
+
+  /**
+   * Does the actual work of executing the Z3950 request on the remote server.
+   *
+   * @param string $datasourceName
+   * @param $query
+   * @param ServerProgress|null $progressBar
+   *    A progressbar object responsible for displaying the progress
+   *    on the client (optional)
+   * @return void
    * @throws UserErrorException
-   */
-  public function actionServerListItems($activeOnly=true,$reloadFromXmlFiles=false)
-  {
-    // Reset list of Datasources
-    if ( $reloadFromXmlFiles )
-    {
-      try {
-        $this->module->createDatasources();
-      } catch (\Throwable $e) {
-        throw new UserErrorException($e->getMessage(),null, $e);
-      }
-    }
-    // Return list of Datasources
-    $listItemData = array();
-    $lastDatasource = $this->module->getPreference("lastDatasource");
-    foreach (Datasource::findBySchema("z3950") as $datasource)
-    {
-      if( $activeOnly and ! $datasource->active ) continue;
-      $listItemData[] = array(
-        'label'     => $datasource->title,
-        'value'     => $datasource->namedId,
-        'active'    => $datasource->active,
-        'selected'  => $datasource->namedId == $lastDatasource
-      );
-    }
-    return $listItemData;
-  }
-
-  /**
-   * Sets datasources active / inactive, so that they do not show up in the
-   * list of servers
-   * param array $map Maps datasource ids to status
-   * @throws \JsonRpc2\Exception
-   * @throws UserErrorException
-   * @todo add DTO
-   */
-  public function actionSetDatasourceState( $map )
-  {
-    $this->requirePermission("z3950.manage");
-    foreach( (array) $map as $namedId => $active )
-    {
-      $datasource = Z3950Datasource::findByNamedId($namedId);
-      $datasource->active= (int) $active;
-      try {
-        $datasource->save();
-      } catch (\yii\db\Exception $e) {
-        throw new UserErrorException($e->getMessage(),$e->getCode(),$e);
-      }
-    }
-    $this->broadcastClientMessage("z3950.reloadDatasources");
-    return "OK";
-  }
-
-  /**
-   * Returns count of rows that will be retrieved when executing the current
-   * query.
-   *
-   * @param object $queryData an array of the structure array(
-   *   'datasource' => datasource name
-   *   'query'      => array(
-   *      'properties'  =>
-   *      'orderBy'     =>
-   *      'cql'         => "the string query (ccl/cql format)"
-   *   )
-   * )
-   * return array ( 'rowCount' => row count )
-   */
-  function actionRowCount( $queryData )
-  {
-    $datasource = $queryData->datasource;
-    $query = $this->module->getQueryString( $queryData );
-    Yii::debug("Row count query for datasource '$datasource', query '$query'", Module::CATEGORY);
-    $search = Search::findOne([ 'query' => $query ]);
-    if( ! $search){
-      throw new UserErrorException(Yii::t(Module::CATEGORY, "No search data exists."));
-    }
-    $hits = $search->hits;
-    Yii::debug("$hits hits.", Module::CATEGORY);
-    return array(
-      'rowCount'    => $hits,
-      'statusText'  => Yii::t(Module::CATEGORY, "{number} hits", ['number'=>$hits])
-    );
-  }
-
-  /**
-   * Returns row data executing a constructed query
-   *
-   * @param int $firstRow First row of queried data
-   * @param int $lastRow Last row of queried data
-   * @param int $requestId Request id, deprecated
-   * @param object $queryData an array of the structure array(
-   *   'datasource' => datasource name
-   *   'query'      => array(
-   *      'properties'  => array("a","b","c"),
-   *      'orderBy'     => array("a"),
-   *      'cql'         => "the string query (ccl/cql format)"
-   *   )
-   * )
-   * return array Array containing the keys
-   *                int     requestId   The request id identifying the request (mandatory)
-   *                array   rowData     The actual row data (mandatory)
-   *                string  statusText  Optional text to display in a status bar
-   */
-  function actionRowData( int $firstRow, int $lastRow, int $requestId, object $queryData )
-  {
-    $datasource = $queryData->datasource;
-    $query = $this->module->getQueryString( $queryData );
-    $properties = $queryData->query->properties;
-    $orderBy = $queryData->query->orderBy;
-    Yii::debug("Row data query for datasource '$datasource', query '$query'.", Module::CATEGORY);
-    $search = Search::findOne([ 'query' => $query ]);
-    if( ! $search){
-      throw new \RuntimeException(Yii::t(Module::CATEGORY, "No search data exists."));
-    }
-    $hits = $search->hits;
-    Yii::debug("Cache says we have $hits hits for query '$query'.", Module::CATEGORY);
-
-    // try to find already downloaded records and return them as rowData
-    $searchId = $search->id;
-    $lastRow  = max($lastRow,$hits-1);
-
-    Yii::debug("Looking for result data for search #$searchId, rows $firstRow-$lastRow...", Module::CATEGORY);
-    $result = Result::findOne([
-      'SearchId'  => $searchId,
-      'firstRow'  => $firstRow
-    ]);
-    if( ! $result ) {
-      throw new \RuntimeException(Yii::t(Module::CATEGORY, "No result data exists."));
-    }
-    $firstRecordId = $result->firstRecordId;
-    $lastRecordId  = $result->lastRecordId;
-    Yii::debug("Getting records $firstRecordId-$lastRecordId from cache ...", Module::CATEGORY);
-
-    // get row data from cache
-    $rowData = Record::find()
-      ->select($properties)
-      ->where(['between', 'id', $firstRecordId, $lastRecordId])
-      ->orderBy( $orderBy )
-      ->asArray();
-    return array(
-      'requestId'   => $requestId,
-      'rowData'     => $rowData,
-      'statusText'  => "Loaded rows $firstRow-$lastRow."
-    );
-  }
-
-  /**
-   * Imports the found references into the main datasource
-   * @param string $sourceDatasource
-   * @param $ids
-   * @param string $targetDatasource
-   * @param int $targetFolderId
-   * @return string "OK"
-   * @throws \JsonRpc2\Exception
-   * @todo Identical method in app\controllers\ImportController
    * @throws Exception
    */
-  public function actionImport( string $sourceDatasource, array $ids, string $targetDatasource, int $targetFolderId )
+  public function sendRequest( string $datasourceName, $query, ServerProgress $progressBar = null)
   {
-    foreach( $ids as $id )
-    {
-      $sourceModelClass = Datasource::in($sourceDatasource, "record");
-      $targetModelClass = Datasource::in($targetDatasource, "reference");
-      /** @var Record $sourceModel */
-      $sourceModel = $sourceModelClass::findOne($id);
-      $copiedAttributeValues = $sourceModel->getAttributes(null, ['id','modified','created']);
-      /** @var Reference $targetModel */
-      $targetModel = new $targetModelClass($copiedAttributeValues);
-      $targetModel->citekey = $targetModel->computeCiteKey();
-      // remove leading "c" and other characters in year data
-      $year = $targetModel->year;
-      if( $year[0] == "c" ) {
-        $year = trim(substr($year,1));
-      }
-      $year = preg_replace("/[\{\[\\]\}\(\)]/",'',$year);
-      $targetModel->year = $year;
-      try {
-        $targetModel->save();
-      } catch (Exception $e) {
-        throw new UserErrorException($e->getMessage(), null, $e);
-      }
-      /** @var Folder $targetFolderModel */
-      $targetFolderModel = Datasource::in($targetDatasource,"folder")::findOne($targetFolderId);
-      if( ! $targetFolderModel ){
-        throw new UserErrorException("Invalid folder id #$targetFolderId");
-      }
-      $targetModel->link('folders',  $targetFolderModel );
+    $datasource = Datasource::findByNamedId($datasourceName);
+    if( ! $datasource or ! $datasource instanceof Z3950Datasource ){
+      throw new \InvalidArgumentException("Invalid datasource '$datasourceName'.");
+    }
+    // set datasource table prefixes
+    Search::setDatasource($datasourceName);
+    Result::setDatasource($datasourceName);
+    Record::setDatasource($datasourceName);
+
+    // remember last datasource used
+    $this->module->setPreference("lastDatasource", $datasource->namedId);
+    $query = $this->module->fixQueryString($query);
+
+    Yii::debug("Executing query '$query' on remote Z39.50 database '$datasource' ...", Module::CATEGORY);
+
+    $yaz = new YAZ($datasource->resourcepath);
+    try {
+      $yaz->connect();
+    } catch (YazException $e) {
+      throw new UserErrorException(
+        Yii::t('z3950', "Cannot connect to server: '{error}'.", [ 'error' => $yaz->getError() ] ),
+        null, $e
+      );
+    }
+    $this->configureCcl($yaz);
+    $ccl = new CclQuery($query);
+
+    try {
+      $ccl->toRpn($yaz);
+    } catch (YazException $e) {
+      throw new UserErrorException(
+        Yii::t('z3950', "Invalid query '{query}'", [ 'query' => $query ] ), null, $e
+      );
     }
 
-    // update reference count
-    $referenceCount = $targetFolderModel->getReferences()->count();
-    $targetFolderModel->referenceCount = $referenceCount;
-    $targetFolderModel->save();
+    try {
+      $yaz->search($ccl);
+    } catch (YazException $e) {
+      throw new UserErrorException(
+        Yii::t('z3950',
+          "The server does not understand the query '{query}'. Please try a different query.",
+          [ 'query' => $query ]
+        ), null, $e
+      );
+    }
 
-    // reload references and select the new reference
-    $this->dispatchClientMessage("folder.reload", array(
-      'datasource'  => $targetDatasource,
-      'folderId'    => $targetFolderId
+    try {
+      $syntax = $yaz->setPreferredSyntax(["marc"]);
+      Yii::debug("Syntax is '$syntax' ...",Module::CATEGORY);
+    } catch (YazException $e) {
+      throw new UserErrorException(Yii::t(Module::CATEGORY, "Server does not support a convertable format."));
+    }
+
+    if ($progressBar) {
+      $progressBar->setProgress(0, Yii::t(Module::CATEGORY, "Waiting for remote server..."));
+    }
+
+    // Result
+    $yaz->wait();
+
+    $error = $yaz->getError();
+    if ($error) {
+      Yii::debug("Server error (yaz_wait): $error. Aborting.", Module::CATEGORY);
+      throw new UserErrorException(Yii::t(Module::CATEGORY, "Server error: %s", $error));
+    }
+
+    $info = [];
+    $hits = $yaz->hits($info);
+    Yii::debug("(Optional) result information: " . json_encode($info), Module::CATEGORY);
+
+    // No result or a too large result
+    $maxHits = 1000; // @todo make this configurable
+    if ($hits == 0) {
+      throw new UserErrorException(Yii::t(Module::CATEGORY, "No results."));
+    } elseif ($hits > $maxHits) {
+      throw new UserErrorException(Yii::t(
+        Module::CATEGORY,
+        "The number of results is higher than {number} records. Please narrow down your search.",
+        [ 'number' => $maxHits ]
+      ));
+    }
+    Yii::debug("Found $hits records...", Module::CATEGORY);
+
+    // delete existing search
+    $userId = Yii::$app->user->identity->getId();
+    Yii::debug("Deleting existing search data for query '$query'...", Module::CATEGORY);
+    /** @var Search[] $searches */
+    $searches = (array) Search::find()->where(['query' => $query, 'UserId' => $userId ])->all();
+    foreach ($searches as $search) {
+      try {
+        $search->delete();
+      } catch (\Throwable $e) {
+        Yii::debug($e->getMessage(),Module::CATEGORY);
+      }
+    }
+    // create new search
+    $search = new Search([
+      'query' => $query,
+      'hits' => $hits,
+      'UserId' => $userId
+    ]);
+    $search->save();
+
+    Yii::debug("Created new search record for query '$query' for user #$userId.", Module::CATEGORY);
+
+    if ($progressBar) {
+      $progressBar->setProgress(10, Yii::t(
+        Module::CATEGORY, "{number} records found.",
+        ['number'=>$hits]
+      ));
+    }
+
+    // Retrieve record data
+    Yii::debug("Getting row data from remote Z39.50 database ...", Module::CATEGORY);
+    $yaz->setRange(1, $hits);
+    $yaz->present();
+    $error = $yaz->getError();
+    if ($error) {
+      Yii::debug("Server error (yaz_present): $error. Aborting.", Module::CATEGORY);
+      throw new UserErrorException(Yii::t(Module::CATEGORY, "Server error: $error."));
+    }
+
+    // Retrieve as MARC XML
+    $result = new MarcXmlResult($yaz);
+    for ($i = 1; $i <= $hits; $i++) {
+      try {
+        $result->addRecord($i);
+        if ($progressBar){
+          $progressBar->setProgress(10 + (($i / $hits) * 80),
+            Yii::t( Module::CATEGORY,"Retrieving {index} of {number} records...",   [ 'index' =>$i, 'number' => $hits])
+          );
+        }
+      } catch (YazException $e) {
+        if (stristr($e->getMessage(), "timeout")) {
+          throw new UserErrorException(
+            Yii::t( Module::CATEGORY,
+              "Server timeout trying to retrieve {number} records: try a more narrow search",
+              ['number'=>$hits]
+            )
+          );
+        }
+        throw new UserErrorException(
+          Yii::t(Module::CATEGORY,"Server error: {error}.", ['error' => $e->getMessage()])
+        );
+      }
+    }
+
+    // visually separate verbose output for debugging
+    function ml($description, $text)
+    {
+      $hl = "\n" . str_repeat("-", 100) . "\n";
+      return $hl . $description . $hl . $text . $hl;
+    }
+
+    Yii::debug(ml("XML", $result->getXml()), Module::CATEGORY);
+    Yii::debug("Formatting data...", Module::CATEGORY);
+
+    if ($progressBar) {
+      $progressBar->setProgress(90, Yii::t(Module::CATEGORY, "Formatting records..."));
+    }
+
+    // convert to MODS
+    $mods = $result->toMods();
+    Yii::debug(ml("MODS", $mods), Module::CATEGORY);
+
+    // convert to bibtex and fix some issues
+    $xml2bib = new Executable(BIBUTILS_PATH . "xml2bib");
+    $bibtex = $xml2bib->call("-nl -fc -o unicode", $mods);
+
+    $bibtex = str_replace("\nand ", "; ", $bibtex);
+    Yii::debug(ml("BibTeX", $bibtex), Module::CATEGORY);
+
+    // convert to array
+    $parser = new BibtexParser();
+    $records = $parser->parse($bibtex);
+
+    if (count($records) === 0) {
+      Yii::debug("Empty result set, aborting...", Module::CATEGORY);
+      throw new UserErrorException(Yii::t(Module::CATEGORY, "Cannot convert server response"));
+    }
+
+    // saving to local cache
+    Yii::debug("Saving data...", Module::CATEGORY);
+
+    $firstRecordId = 0;
+    $step = 10 / count($records);
+    $i = 0; $id= 0;
+
+    foreach ($records as $item) {
+      if ($progressBar) {
+        $progressBar->setProgress(
+          round (90 + ($step * $i++)),
+          Yii::t(Module::CATEGORY, "Caching records...")
+        );
+      }
+
+      $p = $item->getProperties();
+
+      // fix bibtex issues
+      foreach (array("author", "editor") as $key) {
+        $p[$key] = str_replace("{", "", $p[$key]);
+        $p[$key] = str_replace("}", "", $p[$key]);
+      }
+
+      // create record
+      $dbRecord = new Record($p);
+      $dbRecord->setAttributes([
+        'citekey' => $item->getItemID(),
+        'reftype' => $item->getItemType(),
+        'SearchId' => $search->id
+      ]);
+      $dbRecord->save();
+      $id = $dbRecord->id;
+      if (!$firstRecordId) $firstRecordId = $id;
+      Yii::debug(ml("Model Data", print_r($dbRecord->getAttributes(), true)), Module::CATEGORY);
+    }
+
+    $lastRecordId = $id;
+    $firstRow = 0;
+    $lastRow = $hits - 1;
+
+    $data = [
+      'firstRow' => $firstRow,
+      'lastRow' => $lastRow,
+      'firstRecordId' => $firstRecordId,
+      'lastRecordId' => $lastRecordId,
+      'SearchId' => $search->id
+    ];
+    $result = new Result($data);
+    $result->save();
+    Yii::debug("Saved result data for search #{$search->id}, rows $firstRow-$lastRow...", Module::CATEGORY);
+  }
+
+  /**
+   * @return string
+   * @throws YazException
+   * @throws Exception
+   */
+  public function test()
+  {
+    $gbvpath = $this->module->serverDataPath . "z3950.gbv.de-20010-GVK-de.xml";
+
+    $yaz = new Yaz( $gbvpath );
+    $yaz->connect();
+
+    $yaz->ccl_configure(array(
+      "title"     => "1=4",
+      "author"    => "1=1004",
+      "keywords"  => "1=21",
+      "year"      => "1=31"
     ) );
 
+    $query = new CclQuery("author=boulanger");
+    $yaz->search( $query );
+    $yaz->wait();
+    $hits = $yaz->hits();
+
+    Yii::info( "$hits hits.");
+
+    $yaz->setSyntax("USmarc");
+    $yaz->setElementSet("F");
+    $yaz->setRange( 1, 3 );
+    $yaz->present();
+
+    $result = new MarcXmlResult($yaz);
+
+    for( $i=1; $i<3; $i++)
+    {
+      $result->addRecord( $i );
+    }
+    $mods = $result->toMods();
+
+    $xml2bib = new Executable("xml2bib");
+    $bibtex = $xml2bib->call("-nl -b -o unicode", $mods );
+    $parser = new BibtexParser;
+
+    Yii::info( $parser->parse( $bibtex ) );
     return "OK";
   }
-
-
-  /**
-   * @throws \Exception
-   * @throws \app\modules\z3950\lib\yaz\YazException
-   */
-  public function actionTest()
-  {
-    $this->module->test();
-  }
-
-
-  /**
-   * Returns an empty rowData response with the error message as status text.
-   * @param $requestId
-   * @param $error
-   * @return array
-   */
-  protected function rowDataError( $requestId, $error)
-  {
-    return array(
-      'requestId'   => $requestId,
-      'rowData'     => array(),
-      'statusText'  => $error
-    );
-  }
-
-
-
 }
