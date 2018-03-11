@@ -2,6 +2,7 @@
 
 namespace app\modules\z3950;
 
+use lib\util\Executable;
 use Yii;
 use app\models\{
   Datasource, Role, Schema, User
@@ -11,7 +12,6 @@ use app\modules\z3950\models\{
 };
 use Exception;
 use lib\exceptions\RecordExistsException;
-use RuntimeException;
 
 
 
@@ -33,43 +33,47 @@ class Module extends \lib\Module
 
   /**
    * The path to the directory containing the Z39.50 "Explain" xml files
-   * Must have a trailing slash.
    * @var string
    */
-  public $serverDataPath = __DIR__ . '/data/servers/';
-
+  public $serverDataPath = __DIR__ . '/data/servers';
 
   /**
    * Installs the plugin.
    * @param boolean $enabled
    *    Whether the module should be enabled after installation (defaults to false)
    * @return boolean
-   * @throws RuntimeException
    * @throws Exception
    */
   public function install($enabled = false)
   {
     // check prerequisites
-    $error = "";
     if (!function_exists("yaz_connect")) {
-      $error = "Missing PHP-YAZ extension. ";
+      $this->errors[] = "Missing PHP-YAZ extension. ";
     }
 
     if (!class_exists("XSLTProcessor")) {
-      $error .= "Missing XSL extension. ";
+      $this->errors[] = "Missing XSL extension. ";
     }
 
-    exec(BIBUTILS_PATH . "xml2bib", $output, $return_val);
-    if (!str_contains($output, "bibutils")) {
-      $error .= "Could not call bibutils: $output";
+    $xml2bib = new Executable( "xml2bib",BIBUTILS_PATH);
+    try{
+      $xml2bib->call("--version");
+      if ( !str_contains( $xml2bib->getStdErr(), "bibutils")) {
+        Yii::warning("Unexpected output of xml2bib --version:" . $xml2bib->getStdErr());
+        $this->errors[] = "Could not call bibutils.";
+      }
+    } catch ( Exception $e){
+      Yii::warning("Error calling xml2bib --version:" . $e->getMessage());
+      $this->errors[] = "Could not call bibutils.";
     }
-    if ($error !== "") {
-      throw new RuntimeException("Z39.50 module could not be initialized:" . $error);
+
+    if ( count ( $this->errors )) {
+      return false;
     }
 
     // register datasource
     try {
-      Schema::register("z3950", Schema::class);
+      Schema::register("z3950", Z3950Datasource::class);
     } catch (RecordExistsException $e) {
       // ignore
     }
@@ -105,7 +109,7 @@ class Module extends \lib\Module
       $serverDataPath = $this->serverDataPath;
       foreach (scandir($serverDataPath) as $file) {
         if ($file[0] == "." or !ends_with($file, ".xml")) continue;
-        $path = "$serverDataPath /$file";
+        $path = "$serverDataPath/$file";
         $explain = simplexml_load_file($path);
         $serverInfo = $explain->serverInfo;
         $database = (string)$serverInfo->database;
@@ -124,24 +128,25 @@ class Module extends \lib\Module
     $manager = Yii::$app->datasourceManager;
 
     // Deleting old datasources
-    $z3950Datasources = Datasource::find()->where(['schema' => 'z3950']);
+    $z3950Datasources = Datasource::find()->where(['schema' => 'z3950'])->all();
     foreach ($z3950Datasources as $datasource) {
       $namedId = $datasource->namedId;
       Yii::debug("Deleting Z39.50 datasource '$namedId'...", self::CATEGORY);
-      $manager->delete($namedId);
+      $manager->delete($namedId,true);
     }
     // Adding new datasources from XML files
     foreach ($this->getExplainFileList() as $database => $filepath) {
       $datasourceName = "z3950_" . $database;
       $explainDoc = simplexml_load_file($filepath);
       $title = substr((string)$explainDoc->databaseInfo->title, 0, 100);
+
       $datasource = $manager->create($datasourceName, "z3950");
       $datasource->setAttributes([
         'title' => $title,
         'hidden' => true, // should not show up as selectable datasource
-        'resourcepath' => $filepath
+        'resourcepath' => $filepath,
       ]);
-      $datasource->save();
+      //$datasource->save();
       Yii::info("Added Z39.50 datasource '$title'", self::CATEGORY);
     }
   }

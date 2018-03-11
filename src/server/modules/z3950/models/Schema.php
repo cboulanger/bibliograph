@@ -22,7 +22,7 @@ namespace app\modules\z3950\models;
 
 class Schema extends \app\models\Schema
 {
-  public $migrationNamespace = 'app\modules\z3950\migrations';
+
 }
 
 //

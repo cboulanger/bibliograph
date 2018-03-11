@@ -45,13 +45,10 @@ defined('BIBLIOGRAPH_VALUE_SEPARATOR') or define('BIBLIOGRAPH_VALUE_SEPARATOR', 
 
 
 /**
- * The path to the bibutils executables. Must contain a trailing slash
- * since the exeuctable name is appended to the path. If not defined,
+ * The path to the bibutils executables. If not defined,
  * the bibutils executables must be on the PATH
  */
 if( !defined('BIBUTILS_PATH') )
 {
-  define('BIBUTILS_PATH','');
+  define('BIBUTILS_PATH','/usr/local/bin');
 }
-
-

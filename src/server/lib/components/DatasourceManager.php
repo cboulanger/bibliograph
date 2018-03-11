@@ -21,6 +21,7 @@
 namespace lib\components;
 
 use app\controllers\SetupController;
+use app\models\BibliographicDatasource;
 use app\models\Datasource;
 use app\models\Schema;
 use fourteenmeister\helpers\Dsn;
@@ -29,6 +30,7 @@ use lib\exceptions\RecordExistsException;
 use lib\exceptions\UserErrorException;
 use Sse\Data;
 use Yii;
+use yii\db\Exception;
 use yii\db\StaleObjectException;
 
 /**
@@ -49,7 +51,7 @@ class DatasourceManager extends \yii\base\Component
    *    The name of the new datasource
    * @param string $schemaName |null
    *    Optional name of a schema. If not given, the default schema is used.
-   * @return \app\models\Datasource
+   * @return Datasource
    * @throws \Exception
    * @throws RecordExistsException
    */
@@ -90,15 +92,15 @@ class DatasourceManager extends \yii\base\Component
     $datasource->save();
 
     // get the subclass instance and configure it
-    $datasource = Datasource::getInstanceFor($datasourceName);
-    $this->createModelTables($datasource);
+    $instance = Datasource::getInstanceFor($datasourceName);
+    $this->createModelTables($instance);
 
     // @todo work with interface instead
-    if ($datasource instanceof BibliographicDatasource) {
-      $datasource->addDefaultFolders();
+    if ($instance instanceof BibliographicDatasource) {
+      $instance->addDefaultFolders();
       Yii::$app->config->createKey("datasource.$datasourceName.fields.exclude","list");
     }
-    return $datasource;
+    return $instance;
   }
 
   /**
@@ -127,11 +129,11 @@ class DatasourceManager extends \yii\base\Component
   /**
    * Creates the tables necessary for a datasource, using migration files
    *
-   * @param \app\models\Datasource $datasource
+   * @param Datasource $datasource
    * @return void
    * @throws \Exception if console action fails
    */
-  public function createModelTables(\app\models\Datasource $datasource)
+  public function createModelTables(Datasource $datasource )
   {
     /** @var \app\schema\AbstractReferenceSchema $schema */
     $schema = $datasource->getSchema()->one();
@@ -166,6 +168,13 @@ class DatasourceManager extends \yii\base\Component
       throw new \Exception($e->getMessage(),$e->getCode(),$e);
     }
     if ($deleteData) {
+      if ($datasource instanceof BibliographicDatasource) {
+        try {
+          Yii::$app->config->deleteKey("datasource.$namedId.fields.exclude");
+        } catch (\Throwable $e) {
+          Yii::error($e->getMessage());
+        }
+      }
       Yii::debug("Deleting model tables for '$namedId'...");
       $db = $datasource->getConnection();
       $params = [

@@ -482,12 +482,14 @@ class Configuration extends \yii\base\Component
    * @param string $key
    * @param \app\models\User $user (optional) user.
    * @return void
+   * @throws \yii\db\Exception
    */
 	public function deleteKey( $key, $user= false )
 	{
     $config = $this->getConfigModel( $key );
     if( ! $user ) $user = $this->getActiveUser();
-	  UserConfig::deleteAll(['UserId' => $user->id]);
+    $userConfig = $config->getUserConfig($user);
+	  if( $userConfig) $userConfig->delete();
 	}
 
   /**

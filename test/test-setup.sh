@@ -56,14 +56,14 @@ migration_path="app\\migrations\\schema\\bibliograph_datasource"
 ${YII_CMD} migrate/create ${migration_path}\\new_datasource_migration --migrationNamespaces=${migration_path} --interactive=0
 ${CPT_CMD} run api AASetupControllerCest --env upgradev2 $CPT_ARGS || exit $?
 exitcode=$?
-rm rm src/server/migrations/schema/bibliograph_datasource/*New_datasource_migration.php
+rm migrations/schema/bibliograph_datasource/*New_datasource_migration.php
 if [ "$exitcode" -ne "0" ]; then
    exit $exitcode;
 fi
 ${CPT_CMD} run api AASetupControllerCest --env testing $CPT_ARGS || exit $?
 echo
 echo "Cleaning up database ..."
-mysql -uroot -e "DROP DATABASE tests;"
-mysql -uroot -e "CREATE DATABASE tests;"
+#mysql -uroot -e "DROP DATABASE tests;"
+#mysql -uroot -e "CREATE DATABASE tests;"
 
 exit 0

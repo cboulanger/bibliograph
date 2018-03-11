@@ -97,6 +97,7 @@ class BaseModel extends ActiveRecord
   /**
    * Returns the database object used by the model
    * @return \yii\db\Connection
+   * @throws \Exception
    */
   public static function getDb()
   {

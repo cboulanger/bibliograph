@@ -31,6 +31,12 @@ class Module extends \yii\base\Module
 
 
   /**
+   * An array of strings containing error messages.
+   * @var array
+   */
+  public $errors = [];
+
+  /**
    * @return string
    */
   public function getConfigKeyPrefix()

@@ -103,11 +103,16 @@ class Schema extends \lib\models\BaseModel
   /**
    * @inheritdoc
    * By default, the migration namespace is a subfolder of the @app/migrations directory that
-   * corresponds to the model's namedId.
+   * corresponds to the schema's namedId.
    * @return string
    */
-  protected function getMigrationNamespace()
+  public function getMigrationNamespace()
   {
+    $datasourceClass = $this->class;
+    // take from datasource if present FIXME
+    if( isset( $datasourceClass::$migrationNamespace ) ){
+      return $datasourceClass::$migrationNamespace;
+    }
     return "\app\migrations\schema\\{$this->namedId}";
   }
 

@@ -45,6 +45,12 @@ class Datasource
   static $description = "A datasource that connects to catalogues based on the Z39.50 protocol";
 
   /**
+   * Override schema migration namespace
+   * @var string
+   */
+  static $migrationNamespace = "\app\modules\z3950\migrations";
+
+  /**
    * @todo
    * @return string
    */
@@ -52,6 +58,17 @@ class Datasource
   {
     return "record";
   }
+
+  /**
+   * Returns static string, so that all results are stored in one table
+   * @param $datasourceName
+   * @return string
+   */
+  public static function createTablePrefix($datasourceName){
+    return "z3950_";
+  }
+
+
 
   /**
    * Initialize the datasource, registers the models

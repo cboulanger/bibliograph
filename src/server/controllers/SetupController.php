@@ -201,18 +201,6 @@ class SetupController extends \app\controllers\AppController
       }
     }
 
-    // install modules
-    /** @var Module $module */
-    foreach( Yii::$app->modules as $module){
-      if( ! $module->installed ){
-        try{
-          $module->install(true);
-        } catch (\RuntimeException $e) {
-          $this->errors[] = "Installing module '{$module->id}' failed: " . $e->getMessage();
-        }
-      }
-    }
-
     // notify client that setup it done
     $this->dispatchClientMessage("ldap.enabled", Yii::$app->config->getIniValue("ldap.enabled"));
     $this->dispatchClientMessage("bibliograph.setup.done"); // @todo rename
@@ -246,7 +234,8 @@ class SetupController extends \app\controllers\AppController
   {
     // compile list of setup methods
     foreach (\get_class_methods($this) as $method) {
-      if (Stringy::create($method)->startsWith("setup")) {
+      if ( starts_with($method,"setup")) {
+        Yii::debug("Calling method '$method'...");
         try {
           $result = $this->$method($upgrade_from, $upgrade_to);
         } catch (SetupException $e) {
@@ -271,22 +260,26 @@ class SetupController extends \app\controllers\AppController
           return false;
         }
         if (isset($result['error'])) {
-          $this->errors[] = $result['error'];
+          $this->errors = array_merge( $this->errors, (array) $result['error']);
         }
         if (isset($result['message'])) {
-          $this->messages[] = $result['message'];
-        }
-        if (count($this->errors)) {
-          \array_unshift(
-            $this->errors,
-            Yii::t('app', '<b>Setup failed. Please fix the following problems:</b>')
-          );
-          ErrorDialog::create(\implode('<br>', $this->errors));
-          return false;
+          $this->messages = array_merge( $this->messages, (array) $result['message']);
         }
       }
     }
+    if (count($this->errors)) {
+      Yii::warning("Setup finished with errors:");
+      Yii::warning($this->errors);
+      \array_unshift(
+        $this->errors,
+        Yii::t('app', '<b>Setup failed. Please fix the following problems:</b>')
+      );
+      ErrorDialog::create(\implode('<br>', $this->errors));
+      return false;
+    }
     // Everything seems to be ok
+    Yii::info("Setup finished successfully.");
+    Yii::info($this->messages);
     return true;
   }
 
@@ -724,7 +717,7 @@ class SetupController extends \app\controllers\AppController
    *
    * @return array
    */
-  protected function setupCheckLdapConnection()
+  protected function setupLdapConnection()
   {
     $ldap = Yii::$app->ldapAuth->checkConnection();
     $message = $ldap['enabled'] ?
@@ -741,5 +734,37 @@ class SetupController extends \app\controllers\AppController
       $result = ['message' => $message];
     }
     return $result;
+  }
+
+  /**
+   * @return array
+   */
+  protected function setupModules()
+  {
+    $errors = [];
+    $messages = [];
+    foreach( Yii::$app->modules as $id => $info){
+      /** @var Module $module */
+      $module = Yii::$app->getModule($id);
+      if( ! $module->installed ){
+        try{
+          $enabled = $module->install();
+          if( $enabled ){
+            $messages[] = "Installed module '{$module->id}'.";
+          } else {
+            $errors = array_merge($errors, $module->errors );
+          }
+        } catch (\Exception $e) {
+          Yii::error($e);
+          $errors[] = "Installing module '{$module->id}' failed: " . $e->getMessage();
+        }
+      } else {
+        $messages[] = "Module '{$module->id}' already installed.";
+      }
+    }
+    return [
+      'message' => $messages,
+      'error' => $errors
+    ];
   }
 }

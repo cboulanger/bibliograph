@@ -349,11 +349,11 @@ class Datasource extends BaseModel
           throw new \LogicException("Support for datasource type '{$this->type}' has not been implemented yet.");
       }
       // determine table prefix from database or datasource name
-      // @todo add global prefix from ini file
+      $global_prefix = trim(Yii::$app->config->getIniValue("database.tableprefix"));
       if (!is_null($this->prefix)) {
-        $prefix = $this->prefix;
+        $prefix = $global_prefix . $this->prefix;
       } else {
-        $prefix = $this->namedId . "_";
+        $prefix = $global_prefix . $this->namedId . "_";
       }
       $connection = new \yii\db\Connection([
         'dsn' => $dsn,

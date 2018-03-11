@@ -38,6 +38,10 @@ $components = [
       ],
     ],
   ],
+  // Cache, @todo use more efficient caching
+  'cache' => [
+    'class' => 'yii\caching\FileCache',
+  ],
 
   /*
    * Composer components

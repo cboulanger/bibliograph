@@ -2,16 +2,11 @@
 
 namespace lib\util;
 use Exception;
-use yii\base\BaseObject;
 
 /**
  * A wrapper around proc_open()
- * @property string|null $stdIn
- * @property string|null $stdOut
- * @property string|null $stdErr
- * @property int $exitCode
  */
-class Executable extends BaseObject
+class Executable
 {
 
   /**
@@ -50,27 +45,27 @@ class Executable extends BaseObject
   protected $cwd;
 
   /**
-   * @var array
+   * @var array|null
    */
-  protected $env;
+  protected $env=null;
 
   /**
-   * @var array
+   * @var array|null
    */
-  protected $options;
+  protected $options=null;
 
   /**
    * Constructor.
    * @param string $cmd
    *    Name of the command
-   * @param string $cwd
+   * @param string|null $cwd
    *    Optional working directory
-   * @param array $env
+   * @param array|null $env
    *    Optional array of environment variables
-   * @param array $options
+   * @param array|null $options
    *    Optional additional options for proc_open
    */
-  public function __construct($cmd, $cwd = null, $env = null, $options = array())
+  public function __construct(string $cmd, string $cwd = null, array $env = null, array $options = null)
   {
     $this->cmd = $cmd;
     $this->cwd = $cwd;
@@ -117,18 +112,21 @@ class Executable extends BaseObject
    * Internal method which does the actual calling of the
    * executable.
    *
-   * @param $cmd
-   * @param $input
+   * @param string $cmd
+   * @param string|null $input
    * @return array
    * @throws Exception
    */
-  protected function call_executable($cmd, $input = null)
+  protected function call_executable(string $cmd, string $input = null)
   {
-    $proc = proc_open($cmd, array(
-      array("pipe", "r"),
-      array("pipe", "w"),
-      array("pipe", "w")
-    ), $pipes, $this->cwd, $this->env, $this->options);
+    $proc = proc_open($cmd, [
+      0 => ["pipe", "r"], // STDIN
+      1 => ["pipe", "w"], // STOUT
+      2 => ["pipe", "w"]  // STDERR
+    ], $pipes, $this->cwd, $this->env, $this->options);
+    // make STDERR non-blocking
+    //stream_set_blocking($pipes[2], 0);
+    // handle streams if we have a resource
     if (is_resource($proc)) {
       if ($input) fwrite($pipes[0], $input);
       fclose($pipes[0]);
@@ -151,17 +149,18 @@ class Executable extends BaseObject
    * stdout and stderr data can be retrieved using the
    * getStdOut() and getStdErr() methods.
    *
-   * @param string $arguments Optional command-line arguements
-   * @param string $stdin Optional data fed into the executable
+   * @param string $arguments|null Optional command-line arguements
+   * @param string $stdin|null Optional data fed into the executable
    * @return int Exit code
    * @throws Exception
    */
-  public function exec($arguments = "", $stdin = "")
+  public function exec(string $arguments = null, string $stdin = null)
   {
     $this->arguments = $arguments;
     $this->stdin = $stdin;
     $result = $this->call_executable(
-      $this->cmd . " " . $arguments, $stdin
+      $this->cmd . " " . $arguments,
+      $stdin
     );
     $this->stdout = $result['stdout'];
     $this->stderr = $result['stderr'];
@@ -174,17 +173,18 @@ class Executable extends BaseObject
    * the exit code is not 0, throw an exeption using the
    * stderr data as message for qcl_util_system_ShellException.
    *
-   * @param string $arguments Optional command-line arguements
-   * @param string $stdin Optional data fed into the executable
+   * @param string|null $arguments
+   *    Optional command-line arguments
+   * @param string $stdin
+   *    Optional data fed into the executable
    * @return string Data returned by the executable to stdout.
    * @throws Exception
    */
-  public function call($arguments = "", $stdin = "")
+  public function call(string $arguments = null, string $stdin = null)
   {
-    if ($this->exec($arguments, $stdin) == 0) {
+    if ($this->exec($arguments, $stdin) === 0) {
       return $this->getStdOut();
-    } else {
-      throw new Exception($this->getStdErr());
     }
+    throw new Exception($this->getStdErr());
   }
 }

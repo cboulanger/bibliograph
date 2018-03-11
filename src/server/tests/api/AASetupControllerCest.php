@@ -76,7 +76,8 @@ class AASetupControllerCest
           "Configuration values were created.",
           "Created standard schema.",
           "Example databases were created.",
-          "LDAP authentication is not enabled."
+          "LDAP authentication is not enabled.",
+          "Installed module \'z3950\'."
         ]
       }
     }'));
@@ -117,7 +118,8 @@ class AASetupControllerCest
           "Configuration values were created.",
           "Created standard schema.",
           "Migrated schema(s) bibliograph_datasource.",
-          "LDAP authentication is not enabled."
+          "LDAP authentication is not enabled.",
+          "Installed module \'z3950\'."
         ]
       }
     }'));
@@ -160,7 +162,8 @@ class AASetupControllerCest
           "Configuration values were created.",
           "Standard schema existed.",
           "No schema migrations necessary.",
-          "LDAP authentication is not enabled."
+          "LDAP authentication is not enabled.",
+          "Module \'z3950\' already installed."
         ]
       }
     }'));
