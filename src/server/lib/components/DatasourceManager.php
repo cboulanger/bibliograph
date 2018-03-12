@@ -88,8 +88,11 @@ class DatasourceManager extends \yii\base\Component
       'prefix'  => $class::createTablePrefix($datasourceName),
       'active'  => 1
     ]);
-    $datasource->setAttributes($this->parseDsn());
+    $dsnAttributes = $this->parseDsn();
+    $datasource->setAttributes($dsnAttributes);
     $datasource->save();
+    Yii::info("Created datasource '$datasourceName'.");
+    Yii::debug($datasource->getAttributes());
 
     // get the subclass instance and configure it
     $instance = Datasource::getInstanceFor($datasourceName);
@@ -142,12 +145,17 @@ class DatasourceManager extends \yii\base\Component
       'all',
       'migrationNamespaces' => $migrationNamespace,
     ];
-    Yii::info("Creating model tables for '{$datasource->namedId}', using schema '{$schema->namedId}' and migration namespace '$migrationNamespace' ...");
+
     $db = $datasource->getConnection();
+    Yii::info("Creating model tables for '{$datasource->namedId}'");
+    Yii::debug([
+      "schema" => $schema->namedId,
+      "migrationNamespace" => $migrationNamespace,
+      "dsn" => $db->dsn
+    ]);
     Console::runAction('migrate/up', $params, null, $db);
     Yii::info("Created model tables for {$datasource->namedId}.");
   }
-
 
   /**
    * Deletes a datasource record and optionally all connected data

@@ -64,11 +64,9 @@ class Datasource
    * @param $datasourceName
    * @return string
    */
-  public static function createTablePrefix($datasourceName){
-    return "z3950_";
-  }
-
-
+//  public static function createTablePrefix($datasourceName){
+//    return "z3950_";
+//  }
 
   /**
    * Initialize the datasource, registers the models
@@ -81,4 +79,9 @@ class Datasource
     $this->addModel( 'search', Seach::class,  'search');
     $this->addModel( 'result', Result::class, 'result');
   }
+
+  /**
+   * Remove overridden function, since datasource has no folders
+   */
+  public function addDefaultFolders(){}
 }

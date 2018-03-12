@@ -102,9 +102,12 @@ class BaseModel extends ActiveRecord
   public static function getDb()
   {
     if( static :: $datasource ){
-      return Datasource::getInstanceFor( static::$datasource )->getConnection();
+      $db = Datasource::getInstanceFor( static::$datasource )->getConnection();
+    } else {
+      $db = parent::getDb();
     }
-    return parent::getDb();
+    //Yii::debug(">>>>>>>>>>>>> " . static::class . " :  " . $db->dsn);
+    return $db;
   }
 
   /**

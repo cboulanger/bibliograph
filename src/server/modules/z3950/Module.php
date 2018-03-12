@@ -128,12 +128,8 @@ class Module extends \lib\Module
     $manager = Yii::$app->datasourceManager;
 
     // Deleting old datasources
-    $z3950Datasources = Datasource::find()->where(['schema' => 'z3950'])->all();
-    foreach ($z3950Datasources as $datasource) {
-      $namedId = $datasource->namedId;
-      Yii::debug("Deleting Z39.50 datasource '$namedId'...", self::CATEGORY);
-      $manager->delete($namedId,true);
-    }
+    $this->dropAllZ3950Tables();
+
     // Adding new datasources from XML files
     foreach ($this->getExplainFileList() as $database => $filepath) {
       $datasourceName = "z3950_" . $database;
@@ -202,5 +198,28 @@ class Module extends \lib\Module
         );
       }
     }
+  }
+
+  /**
+   * Deletes all tables that belong to this module (i.e., start with z3950)
+   */
+  public function dropAllZ3950Tables()
+  {
+    $z3950Datasources = Datasource::find()->where(['schema' => 'z3950'])->all();
+    foreach ($z3950Datasources as $datasource) {
+      $namedId = $datasource->namedId;
+      Yii::debug("Deleting Z39.50 datasource '$namedId'...", self::CATEGORY);
+      Yii::$app->datasourceManager->delete($namedId,true);
+    }
+//    $sql = "SET GROUP_CONCAT_MAX_LEN=10000;
+//      SET @tbls = (SELECT GROUP_CONCAT(TABLE_NAME)
+//        FROM information_schema.TABLES
+//        WHERE TABLE_SCHEMA = (SELECT DATABASE())
+//        AND TABLE_NAME LIKE 'z3950_%');
+//      SET @delStmt = CONCAT('DROP TABLE ',  @tbls);
+//      PREPARE stmt FROM @delStmt;
+//      EXECUTE stmt;
+//      DEALLOCATE PREPARE stmt;";
+//    Yii::$app->db->createCommand($sql)->execute();
   }
 }

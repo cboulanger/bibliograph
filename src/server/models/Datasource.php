@@ -54,6 +54,13 @@ class Datasource extends BaseModel
   private $modelMap = array();
 
   /**
+   * A cache of datasource instance
+   * @todo move to manager
+   * @var array
+   */
+  public static $instances =[];
+
+  /**
    * @inheritdoc
    */
   public static function tableName()
@@ -263,13 +270,13 @@ class Datasource extends BaseModel
    * @param string $datasourceName
    * @return \app\models\Datasource
    * @throws \InvalidArgumentException
+   * @throws \AssertionError
+   * @todo move to manager
    */
   public static function getInstanceFor($datasourceName)
   {
-    // cache
-    static $instances = array();
-    if (isset($instances[$datasourceName])) {
-      return $instances[$datasourceName];
+    if (isset(static::$instances[$datasourceName])) {
+      return static::$instances[$datasourceName];
     }
     $baseclass = Yii::$app->config->getPreference('app.datasource.baseclass');
     // create new instance
@@ -289,13 +296,31 @@ class Datasource extends BaseModel
     if( ! \class_exists($class) ){
       $class = $baseclass;
     }
-    // create instance of subclass 
+
+    $db = $class::getDb();
+
+    // create instance of subclass
+    /** @var BibliographicDatasource $instance */
     $instance = $class::findOne(['namedId' => $datasourceName]);
+    $instance->getConnection()->dsn = $db->dsn; // @todo ugly hack to work around strange behavior
+//   if ( $db->dsn !== $instance->getConnection()->dsn ){
+//     throw new \AssertionError("Invalid DSN for " . get_class($instance) . ".  Expected: "  . $db->dsn . ", got: " . $instance->getConnection()->dsn);
+//   }
+
     if (is_null($instance)) {
       throw new \InvalidArgumentException("Datasource '$datasourceName' does not exist.");
     }
-    $instances[$datasourceName] = $instance;
+    static::$instances[$datasourceName] = $instance;
     return $instance;
+  }
+
+  /**
+   * @inheritdoc
+   */
+  public function delete()
+  {
+    unset(static::$instances[$this->namedId]);
+    return parent::delete();
   }
 
   /**
@@ -341,6 +366,7 @@ class Datasource extends BaseModel
     static $connections = [];
     if (!isset($connections[$this->namedId])) {
       $this->useDsnDefaults();
+
       switch ($this->type) {
         case "mysql":
           $dsn = "{$this->type}:host={$this->host};port={$this->port};dbname={$this->database}";
@@ -361,6 +387,7 @@ class Datasource extends BaseModel
         'password' => $this->password,
         'tablePrefix' => $prefix
       ]);
+
       $connections[$this->namedId] = $connection;
       return $connection;
     }
