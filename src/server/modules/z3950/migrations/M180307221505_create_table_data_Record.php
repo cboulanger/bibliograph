@@ -18,6 +18,7 @@ class M180307221505_create_table_data_Record extends Migration
 
     $this->createTable('{{%data_Record}}', [
       'id' => $this->integer(11)->notNull()->append('AUTO_INCREMENT PRIMARY KEY'),
+      'SearchId' => $this->integer(11),
       'created' => $this->timestamp(),
       'modified' => $this->timestamp()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),
       'citekey' => $this->string(50),
@@ -61,7 +62,8 @@ class M180307221505_create_table_data_Record extends Migration
       'type' => $this->string(50),
       'url' => $this->string(255),
       'volume' => $this->string(50),
-      'year' => $this->string(20)
+      'year' => $this->string(20),
+
     ], $tableOptions);
   }
 

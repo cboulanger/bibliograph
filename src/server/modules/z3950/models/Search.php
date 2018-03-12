@@ -33,6 +33,7 @@ use Yii;
  * @property string $modified
  * @property int $hits
  * @property string $query
+ * @property string $datasource
  * @property int $UserId
  */
 class Search extends BaseModel
@@ -47,6 +48,7 @@ class Search extends BaseModel
       [['created', 'modified'], 'safe'],
       [['hits', 'UserId'], 'integer'],
       [['query'], 'string', 'max' => 500],
+      [['datasource'], 'string', 'max' => 50],
     ];
   }
 
@@ -78,14 +80,7 @@ class Search extends BaseModel
   public function beforeDelete()
   {
     if( parent::beforeDelete() ){
-      /** @var Result $result */
-      foreach( (array) $this->getResults()->all() as $result ){
-        try {
-          $result->delete();
-        } catch (\Throwable $e) {
-          Yii::debug($e->getMessage(), Module::CATEGORY);
-        }
-      }
+      Record::deleteAll(['SearchId'=> $this->id]);
     }
     return false;
   }

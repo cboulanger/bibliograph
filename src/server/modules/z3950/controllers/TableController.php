@@ -152,7 +152,10 @@ class TableController extends AppController
     $query = $this->module->getQueryString($queryData);
     Yii::debug("Row count query for datasource '$datasourceName', query '$query'", Module::CATEGORY);
     Search::setDatasource($datasourceName);
-    $search = Search::findOne(['query' => $query]);
+    $search = Search::findOne([
+      'query' => $query,
+      'datasource' => $datasourceName
+    ]);
     if (!$search) {
       throw new UserErrorException(Yii::t(Module::CATEGORY, "No search data exists."));
     }
@@ -195,7 +198,10 @@ class TableController extends AppController
     $properties = $queryData->query->properties;
     $orderBy = $queryData->query->orderBy;
     Yii::debug("Row data query for datasource '$datasourceName', query '$query'.", Module::CATEGORY);
-    $search = Search::findOne(['query' => $query]);
+    $search = Search::findOne([
+      'query' => $query,
+      'datasource' => $datasourceName
+    ]);
     if (!$search) {
       throw new \RuntimeException(Yii::t(Module::CATEGORY, "No search data exists."));
     }
@@ -206,23 +212,15 @@ class TableController extends AppController
     $searchId = $search->id;
     $lastRow = max($lastRow, $hits - 1);
 
-    Yii::debug("Looking for result data for search #$searchId, rows $firstRow-$lastRow...", Module::CATEGORY);
-    $result = Result::findOne([
-      'SearchId' => $searchId,
-      'firstRow' => $firstRow
-    ]);
-    if (!$result) {
-      throw new \RuntimeException(Yii::t(Module::CATEGORY, "No result data exists."));
-    }
-    $firstRecordId = $result->firstRecordId;
-    $lastRecordId = $result->lastRecordId;
-    Yii::debug("Getting records $firstRecordId-$lastRecordId from cache ...", Module::CATEGORY);
+    Yii::debug("Getting records from cache for search #$searchId, rows $firstRow-$lastRow...", Module::CATEGORY);
 
     // get row data from cache
     $rowData = Record::find()
       ->select($properties)
-      ->where(['between', 'id', $firstRecordId, $lastRecordId])
+      ->where(['SearchId' => $searchId])
       ->orderBy($orderBy)
+      ->offset($firstRow)
+      ->limit($lastRow-$firstRow+1)
       ->asArray();
     return array(
       'requestId' => $requestId,

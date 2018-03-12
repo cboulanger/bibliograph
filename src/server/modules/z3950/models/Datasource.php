@@ -64,9 +64,9 @@ class Datasource
    * @param $datasourceName
    * @return string
    */
-//  public static function createTablePrefix($datasourceName){
-//    return "z3950_";
-//  }
+  public static function createTablePrefix($datasourceName){
+    return "z3950_";
+  }
 
   /**
    * Initialize the datasource, registers the models

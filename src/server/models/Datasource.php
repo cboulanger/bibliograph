@@ -302,10 +302,6 @@ class Datasource extends BaseModel
     // create instance of subclass
     /** @var BibliographicDatasource $instance */
     $instance = $class::findOne(['namedId' => $datasourceName]);
-    $instance->getConnection()->dsn = $db->dsn; // @todo ugly hack to work around strange behavior
-//   if ( $db->dsn !== $instance->getConnection()->dsn ){
-//     throw new \AssertionError("Invalid DSN for " . get_class($instance) . ".  Expected: "  . $db->dsn . ", got: " . $instance->getConnection()->dsn);
-//   }
 
     if (is_null($instance)) {
       throw new \InvalidArgumentException("Datasource '$datasourceName' does not exist.");
@@ -381,6 +377,7 @@ class Datasource extends BaseModel
       } else {
         $prefix = $global_prefix . $this->namedId . "_";
       }
+
       $connection = new \yii\db\Connection([
         'dsn' => $dsn,
         'username' => $this->username,

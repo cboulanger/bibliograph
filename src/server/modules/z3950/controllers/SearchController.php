@@ -186,6 +186,7 @@ class SearchController extends yii\web\Controller
     // create new search
     $search = new Search([
       'query' => $query,
+      'datasource' => $datasourceName,
       'hits' => $hits,
       'UserId' => $userId
     ]);
@@ -269,11 +270,11 @@ class SearchController extends yii\web\Controller
     }
 
     // saving to local cache
-    Yii::debug("Saving data...", Module::CATEGORY);
+    Yii::debug("Caching records...", Module::CATEGORY);
 
-    $firstRecordId = 0;
     $step = 10 / count($records);
-    $i = 0; $id= 0;
+    $i = 0;
+    $searchId = $search->id;
 
     foreach ($records as $item) {
       if ($progressBar) {
@@ -296,28 +297,11 @@ class SearchController extends yii\web\Controller
       $dbRecord->setAttributes([
         'citekey' => $item->getItemID(),
         'reftype' => $item->getItemType(),
-        'SearchId' => $search->id
+        'SearchId' => $searchId
       ]);
       $dbRecord->save();
-      $id = $dbRecord->id;
-      if (!$firstRecordId) $firstRecordId = $id;
-      Yii::debug(ml("Model Data", print_r($dbRecord->getAttributes(), true)), Module::CATEGORY);
+      //Yii::debug(ml("Model Data", print_r($dbRecord->getAttributes(), true)), Module::CATEGORY);
     }
-
-    $lastRecordId = $id;
-    $firstRow = 0;
-    $lastRow = $hits - 1;
-
-    $data = [
-      'firstRow' => $firstRow,
-      'lastRow' => $lastRow,
-      'firstRecordId' => $firstRecordId,
-      'lastRecordId' => $lastRecordId,
-      'SearchId' => $search->id
-    ];
-    $result = new Result($data);
-    $result->save();
-    Yii::debug("Saved result data for search #{$search->id}, rows $firstRow-$lastRow...", Module::CATEGORY);
   }
 
   /**

@@ -142,7 +142,7 @@ class Module extends \lib\Module
         'hidden' => true, // should not show up as selectable datasource
         'resourcepath' => $filepath,
       ]);
-      //$datasource->save();
+      $datasource->save();
       Yii::info("Added Z39.50 datasource '$title'", self::CATEGORY);
     }
   }
@@ -205,21 +205,13 @@ class Module extends \lib\Module
    */
   public function dropAllZ3950Tables()
   {
-    $z3950Datasources = Datasource::find()->where(['schema' => 'z3950'])->all();
-    foreach ($z3950Datasources as $datasource) {
-      $namedId = $datasource->namedId;
+    $z3950Datasources = Datasource::find()
+      ->select("namedId")
+      ->where(['schema' => 'z3950'])
+      ->column();
+    foreach ($z3950Datasources as $namedId) {
       Yii::debug("Deleting Z39.50 datasource '$namedId'...", self::CATEGORY);
       Yii::$app->datasourceManager->delete($namedId,true);
     }
-//    $sql = "SET GROUP_CONCAT_MAX_LEN=10000;
-//      SET @tbls = (SELECT GROUP_CONCAT(TABLE_NAME)
-//        FROM information_schema.TABLES
-//        WHERE TABLE_SCHEMA = (SELECT DATABASE())
-//        AND TABLE_NAME LIKE 'z3950_%');
-//      SET @delStmt = CONCAT('DROP TABLE ',  @tbls);
-//      PREPARE stmt FROM @delStmt;
-//      EXECUTE stmt;
-//      DEALLOCATE PREPARE stmt;";
-//    Yii::$app->db->createCommand($sql)->execute();
   }
 }

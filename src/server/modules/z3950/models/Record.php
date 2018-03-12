@@ -24,7 +24,7 @@ use BadMethodCallException;
 
 /**
  * Z3950 record model
- *
+ * @property integer $SearchId
  */
 class Record extends Reference
 {

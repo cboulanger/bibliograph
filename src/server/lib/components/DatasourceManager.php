@@ -92,7 +92,7 @@ class DatasourceManager extends \yii\base\Component
     $datasource->setAttributes($dsnAttributes);
     $datasource->save();
     Yii::info("Created datasource '$datasourceName'.");
-    Yii::debug($datasource->getAttributes());
+    //Yii::debug($datasource->getAttributes());
 
     // get the subclass instance and configure it
     $instance = Datasource::getInstanceFor($datasourceName);
