@@ -35,6 +35,7 @@
 - [ ] Re-implement reference editor title label
 - [ ] Use UserErrorException consistently and replace \Exception
 - [ ] Add log email target to report fatal errors, adapt UserErrorException to report fatal errors via email
+- [ ] Move static methods out of \app\models\Datasource into DatasourceManager component
 
 ### Priority: low
 - [ ] Backend: Streamline API to get Datasource & typed model

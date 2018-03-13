@@ -5,7 +5,7 @@
 
 YII_CMD="php yii-test"
 CPT_CMD="php vendor/bin/codecept"
-CPT_ENV=${1:-testing}
+CPT_ENV=${1:-setup}
 SERVER_PATH=src/server
 SERVER_CMD="yii serve 127.0.0.1:8080 -t=@app/tests"
 
@@ -14,7 +14,6 @@ pushd $SERVER_PATH > /dev/null
 nohup php $SERVER_CMD &> /dev/null & 
 bg_pid=$!
 trap "kill -2 $bg_pid" 2
-ps ax
 ps | grep "[p]hp $SERVER_CMD" #> /dev/null
 if [ $? -eq 1 ]; then
   echo "Failed to start test server..."
@@ -24,12 +23,13 @@ echo "Started Bibliograph test server..."
 echo 
 echo "Creating empty database ..."
 mysql -uroot -e "DROP DATABASE tests; CREATE DATABASE tests;"
-echo "Deleting log file..."
+echo "Deleting log files..."
 [[ -f runtime/logs/app.log ]] && rm runtime/logs/app.log
-echo "Running migrations..."
-MIGRATE_ARGS="--interactive=0 --db=testdb"
-$YII_CMD migrate/fresh --migrationNamespaces=app\\migrations\\schema $MIGRATE_ARGS &> /dev/null
-$YII_CMD migrate/up --migrationNamespaces=app\\migrations\\data $MIGRATE_ARGS &> /dev/null
+[[ -f runtime/logs/error.log ]] && rm runtime/logs/error.log
+#echo "Running migrations..."
+#MIGRATE_ARGS="--interactive=0 --db=testdb"
+#$YII_CMD migrate/fresh --migrationNamespaces=app\\migrations\\schema $MIGRATE_ARGS &> /dev/null
+#$YII_CMD migrate/up --migrationNamespaces=app\\migrations\\data $MIGRATE_ARGS &> /dev/null
 echo
 echo "Running Codeception tests..."
 $CPT_CMD run api --env $CPT_ENV || exit $?

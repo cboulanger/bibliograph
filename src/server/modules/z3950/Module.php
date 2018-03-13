@@ -17,6 +17,7 @@ use lib\exceptions\RecordExistsException;
 
 /**
  * z3950 module definition class
+ * @property Z3950Datasource[] $datasources
  */
 class Module extends \lib\Module
 {
@@ -147,8 +148,6 @@ class Module extends \lib\Module
     }
   }
 
-
-
   /**
    * Returns the query as a string constructed from the
    * query data object
@@ -178,6 +177,29 @@ class Module extends \lib\Module
     return $query;
   }
 
+  /**
+   * Returns the named ids of the all datasources with 'z3950' schema
+   * @return array
+   */
+  public function getDatasourceNames()
+  {
+    return Datasource::find()
+      ->select("namedId")
+      ->where(['schema' => 'z3950'])
+      ->column();
+  }
+
+  /**
+   * Returns all datasources that have the 'z3950' schema
+   * @return Z3950Datasource[]
+   */
+  public function getDatasources()
+  {
+    return Datasource::find()
+      ->select("namedId")
+      ->where(['schema' => 'z3950'])
+      ->all();
+  }
 
   /**
    * Called when a user logs out
@@ -185,18 +207,14 @@ class Module extends \lib\Module
    */
   public function clearSearchData(User $user)
   {
-    Yii::debug("Clearing search data for {$user->name}...'");
-    /** @var Z3950Datasource[] $z3950Datasources */
-    $z3950Datasources = Datasource::find()->where(['schema' => 'z3950']);
-    // delete all search records of this user in all of the z39.50 caches
-    foreach ($z3950Datasources as $datasource) {
-      $hits = Search::deleteAll(["UserId" => $user->id]);
-      if ($hits) {
-        Yii::info(
-          "Deleted $hits search records of user '{$user->name}' in '$datasource'.",
-          self::CATEGORY
-        );
-      }
+    return;
+    if( count($this->datasources)){
+      Yii::debug("Clearing search data for {$user->name}...'", self::CATEGORY);
+      Yii::error("***** Datasource: " . $this->datasources[0]->namedId);
+      Search::setDatasource($this->datasources[0]->namedId);
+      Search::deleteAll(["UserId" => $user->id]);
+    } else {
+      Yii::debug("No datasources.",self::CATEGORY);
     }
   }
 
@@ -205,13 +223,14 @@ class Module extends \lib\Module
    */
   public function dropAllZ3950Tables()
   {
-    $z3950Datasources = Datasource::find()
-      ->select("namedId")
-      ->where(['schema' => 'z3950'])
-      ->column();
+    $z3950Datasources = $this->getDatasourceNames();
     foreach ($z3950Datasources as $namedId) {
       Yii::debug("Deleting Z39.50 datasource '$namedId'...", self::CATEGORY);
-      Yii::$app->datasourceManager->delete($namedId,true);
+      try {
+        Yii::$app->datasourceManager->delete($namedId, true);
+      } catch (Exception $e) {
+        Yii::error("Problem deleting datasource ‘$namedId‘:" . $e, self::CATEGORY );
+      }
     }
   }
 }

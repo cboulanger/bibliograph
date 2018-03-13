@@ -16,16 +16,16 @@ return [
       'event' => User::EVENT_AFTER_LOGOUT,
       'callback' => function ( UserEvent $e) {
         /** @var Module $module */
-        $module = \Yii::$app->modules['z3950'];
+        $module = \Yii::$app->getModule('z3950');
         $module->clearSearchData($e->identity);
       }
     ],
     [
       'class' => \app\models\User::class,
       'event' => BaseActiveRecord::EVENT_AFTER_DELETE,
-      'callback' => function ( ModelEvent $e) {
+      'callback' => function ( \yii\base\Event $e) {
         /** @var Module $module */
-        $module = \Yii::$app->modules['z3950'];
+        $module = \Yii::$app->getModule('z3950');
         $module->clearSearchData($e->sender);
       }
     ],

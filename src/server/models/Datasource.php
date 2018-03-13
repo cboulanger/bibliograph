@@ -297,8 +297,6 @@ class Datasource extends BaseModel
       $class = $baseclass;
     }
 
-    $db = $class::getDb();
-
     // create instance of subclass
     /** @var BibliographicDatasource $instance */
     $instance = $class::findOne(['namedId' => $datasourceName]);
@@ -375,7 +373,7 @@ class Datasource extends BaseModel
       if (!is_null($this->prefix)) {
         $prefix = $global_prefix . $this->prefix;
       } else {
-        $prefix = $global_prefix . $this->namedId . "_";
+        $prefix = $global_prefix . $this->namedId . "_"; //@todo: shouldn't default be just global prefix?
       }
 
       $connection = new \yii\db\Connection([

@@ -29,7 +29,7 @@ class AccessControllerCest
     $I->sendJsonRpcRequest('access','userdata');
     //codecept_debug($I->grabDataFromResponseByJsonPath('$.result'));
     $I->assertSame( $I->grabDataFromResponseByJsonPath('$.result.namedId')[0], 'admin' );
-    $I->assertSame( count( $I->grabDataFromResponseByJsonPath('$.result.permissions')[0] ), 25 );
+    $I->assertSame( count( $I->grabDataFromResponseByJsonPath('$.result.permissions')[0] ), 26 );
     $I->logout();
   }
 

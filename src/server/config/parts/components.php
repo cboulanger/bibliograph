@@ -15,11 +15,17 @@ $components = [
     'targets' => [
       [
         'class' => 'yii\log\FileTarget',
-        //'levels' => ['info', 'error', 'warning'],
-        'levels' => ['trace','info', 'error', 'warning'],
+        'levels' => ['trace','info', 'warning','error'],
         'except' => ['yii\*','auth'],
         'logVars' => [],
         //'exportInterval' => 1
+      ],
+      // errors and exceptions
+      [
+        'class' => 'yii\log\FileTarget',
+        'levels' => ['error'],
+        'logFile' => '@runtime/logs/error.log',
+        'logVars' => [],
       ]
     ] 
   ],

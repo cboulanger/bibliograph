@@ -20,6 +20,7 @@
 
 namespace app\controllers;
 
+use app\modules\z3950\models\Search;
 use Yii;
 
 use app\controllers\AppController;
@@ -94,6 +95,23 @@ class TestController extends AppController
       throw new \Exception("Shelf id '$shelfId' has no data");
     }
     return $this->unshelve($shelfId);
+  }
+
+
+  public function actionCreateSearch()
+  {
+    return [];
+    //Search::setDatasource('z3950_voyager');
+    //$search = new Search(['query'=> 'foo', 'datasource' => 'bar']);
+    //$search->save();
+  }
+
+  public function actionRetrieveSearch()
+  {
+    return [];
+    //Search::setDatasource('z3950_voyager');
+    //$search = Search::findOne(['query'=> 'foo', 'datasource' => 'bar']);
+    //return $search ? $search->getAttributes() : null;
   }
 
 }
