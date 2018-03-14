@@ -15,7 +15,7 @@ $components = [
     'targets' => [
       [
         'class' => 'yii\log\FileTarget',
-        'levels' => ['trace','info', 'warning','error'],
+        'levels' => ['trace','info', 'warning'],
         'except' => ['yii\*','auth'],
         'logVars' => [],
         //'exportInterval' => 1

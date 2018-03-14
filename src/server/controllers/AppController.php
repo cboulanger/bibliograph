@@ -125,7 +125,7 @@ class AppController extends \JsonRpc2\Controller
     } catch ( UserErrorException $e ){
       Yii::info("User Error: " . $e->getMessage());
       Error::create($e->getMessage());
-      return null;            
+      return null;
     }
   }
 
