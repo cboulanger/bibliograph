@@ -234,6 +234,7 @@ trait JsonRpcTrait
    *
    * @param mixed $result
    * @param string|\Closure|array $key
+   * @param string $path
    * @see \yii\helpers\ArrayHelper::getValue()
    * @return void
    */

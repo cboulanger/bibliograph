@@ -39,6 +39,11 @@ use Yii;
 class Search extends BaseModel
 {
 
+  static function tableName()
+  {
+    return '{{%data_Search}}';
+  }
+
   /**
    * @inheritdoc
    */

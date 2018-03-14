@@ -29,6 +29,12 @@ use BadMethodCallException;
 class Record extends Reference
 {
 
+  static function tableName()
+  {
+    return '{{%data_Record}}';
+  }
+
+
   //-------------------------------------------------------------
   // Relations
   //-------------------------------------------------------------

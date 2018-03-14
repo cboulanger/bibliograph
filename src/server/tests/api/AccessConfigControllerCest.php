@@ -216,4 +216,8 @@ class AccessConfigControllerCest
     $I->seeResponseJsonMatchesJsonPath($path);
   }
 
+  public function tryLogout(ApiTester $I)
+  {
+    $I->logout();
+  }
 }

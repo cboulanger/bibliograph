@@ -206,13 +206,15 @@ class Module extends \lib\Module
    * @param User $user
    */
   public function clearSearchData(User $user)
-  {
-    return;
-    if( count($this->datasources)){
-      Yii::debug("Clearing search data for {$user->name}...'", self::CATEGORY);
-      Yii::error("***** Datasource: " . $this->datasources[0]->namedId);
-      Search::setDatasource($this->datasources[0]->namedId);
-      Search::deleteAll(["UserId" => $user->id]);
+  { 
+    if( count($this->datasources )){
+      try{
+        $datasource = Datasource::getInstanceFor($this->datasources[0]->namedId);
+        Search::setDatasource($datasource);
+        Search::deleteAll(['UserId'=>$user->id]);
+      } catch (\Error $e) {
+        Yii::error($e->getMessage());
+      }
     } else {
       Yii::debug("No datasources.",self::CATEGORY);
     }

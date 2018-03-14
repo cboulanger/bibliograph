@@ -270,7 +270,6 @@ class Datasource extends BaseModel
    * @param string $datasourceName
    * @return \app\models\Datasource
    * @throws \InvalidArgumentException
-   * @throws \AssertionError
    * @todo move to manager
    */
   public static function getInstanceFor($datasourceName)
@@ -278,7 +277,7 @@ class Datasource extends BaseModel
     if (isset(static::$instances[$datasourceName])) {
       return static::$instances[$datasourceName];
     }
-    $baseclass = Yii::$app->config->getPreference('app.datasource.baseclass');
+
     // create new instance
     /** @var Datasource $datasource */
     $datasource = Datasource::findByNamedId($datasourceName);
@@ -294,7 +293,7 @@ class Datasource extends BaseModel
     }
     $class = $schema->class;
     if( ! \class_exists($class) ){
-      $class = $baseclass;
+      throw new \RuntimeException("Schema '{$datasource->schema}' does not have a valid datasource class.");
     }
 
     // create instance of subclass

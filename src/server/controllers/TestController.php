@@ -20,6 +20,7 @@
 
 namespace app\controllers;
 
+use app\models\Datasource;
 use app\modules\z3950\models\Search;
 use Yii;
 
@@ -100,18 +101,18 @@ class TestController extends AppController
 
   public function actionCreateSearch()
   {
-    return [];
-    //Search::setDatasource('z3950_voyager');
-    //$search = new Search(['query'=> 'foo', 'datasource' => 'bar']);
-    //$search->save();
+    $datasource = Datasource::getInstanceFor('z3950_voyager');
+    Search::setDatasource($datasource);
+    $search = new Search(['query'=> 'foo', 'datasource' => 'bar', 'UserId' => Yii::$app->user->identity->id]);
+    $search->save();
   }
 
   public function actionRetrieveSearch()
   {
-    return [];
-    //Search::setDatasource('z3950_voyager');
-    //$search = Search::findOne(['query'=> 'foo', 'datasource' => 'bar']);
-    //return $search ? $search->getAttributes() : null;
+    $datasource = Datasource::getInstanceFor('z3950_voyager');
+    Search::setDatasource($datasource);
+    $search = Search::findOne(['query'=> 'foo', 'datasource' => 'bar']);
+    return $search ? $search->getAttributes() : null;
   }
 
 }

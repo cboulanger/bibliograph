@@ -19,10 +19,10 @@ class Z3950ControllersCest
     $I->loginWithPassword('admin','admin');
     $I->sendJsonRpcRequest('test','create-search');
     $I->sendJsonRpcRequest('test','retrieve-search');
-    $I->compareJsonRpcResultWith( []);
+    $I->compareJsonRpcResultWith("foo","query");
     $I->logout();
     $I->loginWithPassword('admin','admin');
     $I->sendJsonRpcRequest('test','retrieve-search');
-    $I->compareJsonRpcResultWith( []);
+    $I->compareJsonRpcResultWith(null);
   }
 }

@@ -49,8 +49,8 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
    */
   public static function tableName()
   {
-    if( static::$datasource ){
-      return static::$datasource . "_data_Folder";
+    if( static::getDatasource() ){
+      return static::getDatasource()->namedId . "_data_Folder";
     }
     return '{{%data_Folder}}';
   }

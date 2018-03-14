@@ -40,6 +40,16 @@ use app\models\Datasource;
 class BaseModel extends ActiveRecord
 {
 
+  /**
+   * @todo generic table name algorithm
+   * @return string
+   */
+//  static function tableName()
+//  {
+//    return basename( static::class ) ...
+//  }
+
+
   //-------------------------------------------------------------
   // Behaviors
   //-------------------------------------------------------------
@@ -88,11 +98,19 @@ class BaseModel extends ActiveRecord
   //-------------------------------------------------------------
 
   /**
-   * The name of the datasource the model is attached to.
+   * The Datasource instance to which the model is attached
+   * and which provides the database connection for all attached models
    * the "datasource" in bibliograph parlance refers to a named collection
    * of models within a database
+   * @var Datasource
    */
-  public static $datasource = null;
+  protected static $datasource = null;
+
+  /**
+   * Flag to prevent infinite recursion
+   * @var bool
+   */
+  protected static $__lookingUpDatasource = null;
 
   /**
    * Returns the database object used by the model
@@ -101,8 +119,11 @@ class BaseModel extends ActiveRecord
    */
   public static function getDb()
   {
-    if( static :: $datasource ){
-      $db = Datasource::getInstanceFor( static::$datasource )->getConnection();
+    if(static::$__lookingUpDatasource ){
+      throw new \RuntimeException("Please instantiate datasource first");
+    }
+    if( static::$datasource ){
+      $db = static::$datasource->getConnection();
     } else {
       $db = parent::getDb();
     }
@@ -115,22 +136,28 @@ class BaseModel extends ActiveRecord
    * instances of the same class, you need to set the datasource explicitly before each
    * query, since the datasource is a static property of the class. 
    * MyClass::setDatasource("datasource")::find()->...
-   * @return string The name of the called class.
+   * @return string|Datasource $datasource The Datasource object or the namedId of the datasource
    */
-  public static function setDatasource($datasourceName)
+  public static function setDatasource($datasource)
   {
-    if( empty($datasourceName) or ! is_string($datasourceName) ) throw new \InvalidArgumentException("Invalid Datasource name");
-    static :: $datasource = $datasourceName;
+    if (is_string($datasource) ){
+      static::$__lookingUpDatasource = true;
+      $datasource = Datasource::getInstanceFor($datasource);
+      static::$__lookingUpDatasource = false;
+    } elseif ( ! $datasource instanceof Datasource ){
+      throw new \InvalidArgumentException("Passed object must be an instance of " . Datasource::class);
+    }
+    static :: $datasource = $datasource;
     return \get_called_class();
   }
 
   /**
    * Gets the name of  the datasource that the model belongs to
-   * @return string The name of the datasource
+   * @return Datasource
    */
-  public static function getDatasource()
+  public static function getDatasource() : Datasource
   {
-    return static :: $datasource;
+    return static::$datasource;
   }
 
   //-------------------------------------------------------------

@@ -15,18 +15,20 @@ return [
       'class' => User::class,
       'event' => User::EVENT_AFTER_LOGOUT,
       'callback' => function ( UserEvent $e) {
+        $user = $e->identity;
         /** @var Module $module */
         $module = \Yii::$app->getModule('z3950');
-        $module->clearSearchData($e->identity);
+        $module->clearSearchData($user);
       }
     ],
     [
       'class' => \app\models\User::class,
       'event' => BaseActiveRecord::EVENT_AFTER_DELETE,
       'callback' => function ( \yii\base\Event $e) {
+        $user = $e->sender;
         /** @var Module $module */
         $module = \Yii::$app->getModule('z3950');
-        $module->clearSearchData($e->sender);
+        $module->clearSearchData($user);
       }
     ],
   ]

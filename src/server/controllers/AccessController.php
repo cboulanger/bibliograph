@@ -298,6 +298,7 @@ class AccessController extends AppController
     $user->online = 0;
     $user->save();
     Session::deleteAll(['UserId' => $user->id ]);
+    Yii::$app->user->logout();
     Yii::$app->session->destroy();
     return "OK";
   }
