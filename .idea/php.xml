@@ -99,6 +99,9 @@
       <path value="$PROJECT_DIR$/src/server/vendor/insolita/yii2-migration-generator" />
       <path value="$PROJECT_DIR$/src/server/vendor/myclabs/deep-copy" />
       <path value="$PROJECT_DIR$/src/server/vendor/fourteenmeister/dsn" />
+      <path value="$PROJECT_DIR$/src/server/vendor/react/event-loop" />
+      <path value="$PROJECT_DIR$/src/server/vendor/evenement/evenement" />
+      <path value="$PROJECT_DIR$/src/server/vendor/react/stream" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7" />

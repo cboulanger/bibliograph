@@ -38,6 +38,7 @@
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/doctrine/instantiator" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/edvlerblog/yii2-adldap-module" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/elisdn/yii2-gii-fixture-generator" />
+      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/evenement/evenement" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/ezyang/htmlpurifier" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/facebook/webdriver" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/flow/jsonpath" />
@@ -72,6 +73,8 @@
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/psr/http-message" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/psr/log" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/psr/simple-cache" />
+      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/react/event-loop" />
+      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/react/stream" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/sebastian/code-unit-reverse-lookup" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/sebastian/comparator" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/sebastian/diff" />

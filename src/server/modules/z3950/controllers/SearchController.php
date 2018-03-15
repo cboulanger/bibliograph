@@ -6,14 +6,15 @@
  * Time: 08:26
  */
 
-namespace modules\z3950\controllers;
+namespace app\modules\z3950\controllers;
 
 use Yii;
 use Exception;
+use app\controllers\traits\AuthTrait;
 use app\modules\z3950\Module;
 use app\models\Datasource;
 use app\modules\z3950\models\{
-  Record, Result, Search, Datasource as Z3950Datasource
+  Record, Search, Datasource as Z3950Datasource
 };
 use app\modules\z3950\lib\yaz\{
   CclQuery, MarcXmlResult, Yaz, YazException
@@ -28,8 +29,20 @@ use lib\util\Executable;
  * @package modules\z3950\controllers
  * @property Module $module
  */
-class SearchController extends yii\web\Controller
+class SearchController extends \yii\web\Controller
 {
+  use AuthTrait;
+
+  protected function getNoAuthActions()
+  {
+    return ['index'];
+  }
+
+  public function actionIndex()
+  {
+    return "nothing here";
+  }
+
   /**
    * Executes a Z39.50 request on the remote server. Called
    * by the ServerProgress widget on the client
@@ -42,6 +55,7 @@ class SearchController extends yii\web\Controller
    */
   public function actionRequestProgress($datasourceName, $query, $progressWidgetId)
   {
+
     $progressBar = new ServerProgress($progressWidgetId);
     try {
       $this->sendRequest($datasourceName, $query, $progressBar);
@@ -93,9 +107,8 @@ class SearchController extends yii\web\Controller
       throw new \InvalidArgumentException("Invalid datasource '$datasourceName'.");
     }
     // set datasource table prefixes
-    Search::setDatasource($datasourceName);
-    Result::setDatasource($datasourceName);
-    Record::setDatasource($datasourceName);
+    Search::setDatasource($datasource);
+    Record::setDatasource($datasource);
 
     // remember last datasource used
     $this->module->setPreference("lastDatasource", $datasource->namedId);
@@ -302,52 +315,5 @@ class SearchController extends yii\web\Controller
       $dbRecord->save();
       //Yii::debug(ml("Model Data", print_r($dbRecord->getAttributes(), true)), Module::CATEGORY);
     }
-  }
-
-  /**
-   * @return string
-   * @throws YazException
-   * @throws Exception
-   */
-  public function test()
-  {
-    $gbvpath = $this->module->serverDataPath . "z3950.gbv.de-20010-GVK-de.xml";
-
-    $yaz = new Yaz( $gbvpath );
-    $yaz->connect();
-
-    $yaz->ccl_configure(array(
-      "title"     => "1=4",
-      "author"    => "1=1004",
-      "keywords"  => "1=21",
-      "year"      => "1=31"
-    ) );
-
-    $query = new CclQuery("author=boulanger");
-    $yaz->search( $query );
-    $yaz->wait();
-    $hits = $yaz->hits();
-
-    Yii::info( "$hits hits.");
-
-    $yaz->setSyntax("USmarc");
-    $yaz->setElementSet("F");
-    $yaz->setRange( 1, 3 );
-    $yaz->present();
-
-    $result = new MarcXmlResult($yaz);
-
-    for( $i=1; $i<3; $i++)
-    {
-      $result->addRecord( $i );
-    }
-    $mods = $result->toMods();
-
-    $xml2bib = new Executable("xml2bib");
-    $bibtex = $xml2bib->call("-nl -b -o unicode", $mods );
-    $parser = new BibtexParser;
-
-    Yii::info( $parser->parse( $bibtex ) );
-    return "OK";
   }
 }

@@ -20,6 +20,7 @@
 
 namespace app\controllers;
 
+use app\controllers\traits\AuthTrait;
 use lib\dialog\Error;
 use lib\exceptions\UserErrorException;
 use Yii;
@@ -36,9 +37,12 @@ use app\models\{
 class AppController extends \JsonRpc2\Controller
 {
 
+  use AuthTrait;
+
   /**
    * Array of action names that can be accessed without authentication
-   *
+   * Overwrite this propery in subclasses or define a getter for dynamic
+   * definition
    * @var array
    */
   protected $noAuthActions = [];
@@ -47,57 +51,6 @@ class AppController extends \JsonRpc2\Controller
   // Overridden methods
   //-------------------------------------------------------------
 
-
-  /**
-   * Filter method to protect action methods from unauthorized access.
-   * Uses the JSONRPC 2.0 auth extension or the 'auth' query string parameter
-   * as fallback.
-   *
-   * @param \yii\base\Action $action
-   * @return bool True if action can proceed, false if not
-   * @throws \yii\web\BadRequestHttpException
-   * @throws \yii\db\Exception
-   */
-  public function beforeAction($action)
-  {
-    if (!parent::beforeAction($action)) {
-      return false;
-    }
-
-    // actions without authentication
-    if (in_array($action->id, $this->noAuthActions)) {
-      return true;
-    }
-
-    // on-the-fly authentication with access token
-    $token = null;
-    $headers = Yii::$app->request->headers;
-    $tryHeaders = ["Authorization","X-Authorization"];
-    foreach ($tryHeaders as $header) {
-      if ($headers->has($header)) {
-        $token = trim( str_replace("Bearer", "", $headers->get($header) ) );
-      }
-    }
-    $user = User::findIdentityByAccessToken($token);
-    if (!$token or ! $user ) {
-      Yii::info("No or invalid authorization token '$token'. Access denied.");
-      return false;
-      // @todo this doesn't work:
-      // throw new Exception('Missing authentication', AuthException::INVALID_REQUEST);
-    }
-
-    // log in user
-    $user->online = true;
-    $user->save();
-    Yii::$app->user->setIdentity($user);
-    $session = $this->continueUserSession( $user );
-    if ($session) {
-      $session->touch();
-    }
-    $sessionId = $this->getSessionId();
-    Yii::info("Authorized user '{$user->namedId}' via auth auth token (Session {$sessionId}.","auth");
-    return true;
-  }
 
   // public function behaviors()
   // {

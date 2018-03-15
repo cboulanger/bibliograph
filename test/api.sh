@@ -23,15 +23,16 @@ echo "Started Bibliograph test server..."
 echo 
 echo "Creating empty database ..."
 mysql -uroot -e "DROP DATABASE tests; CREATE DATABASE tests;"
-echo "Deleting log files..."
+echo "Deleting log and output data files..."
 [[ -f runtime/logs/app.log ]] && rm runtime/logs/app.log
 [[ -f runtime/logs/error.log ]] && rm runtime/logs/error.log
+rm tests/_output/*fail*
 #echo "Running migrations..."
 #MIGRATE_ARGS="--interactive=0 --db=testdb"
 #$YII_CMD migrate/fresh --migrationNamespaces=app\\migrations\\schema $MIGRATE_ARGS &> /dev/null
 #$YII_CMD migrate/up --migrationNamespaces=app\\migrations\\data $MIGRATE_ARGS &> /dev/null
 echo
-echo "Running Codeception tests..."
+echo "Running API tests..."
 $CPT_CMD run api --env $CPT_ENV || exit $?
 popd > /dev/null
 echo

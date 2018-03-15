@@ -1113,7 +1113,7 @@ class MarcXmlResult extends XmlResult
   public function toDublinCore()
   {
     return $this->transform(
-      dirname(__FILE__) . "/marcxml_to_dublincore.xsl",
+      dirname(__DIR__ ) . "/xsl/marcxml_to_dublincore.xsl",
       $this->getXml()
     );
   }
@@ -1124,7 +1124,7 @@ class MarcXmlResult extends XmlResult
   public function toMods()
   {
     return $this->transform(
-      dirname(__FILE__) . "/marcxml_to_mods.xsl",
+      dirname(__DIR__) . "/xsl/marcxml_to_mods.xsl",
       $this->getXml()
     );
   }
@@ -1147,7 +1147,7 @@ class OaiMarcXmlResult extends MarcXmlResult
   public function getXml()
   {
     return $this->transform(
-      dirname(__FILE__) . "/oaimarc_to_marcxml.xsl",
+      dirname(__DIR__) . "/xsl/oaimarc_to_marcxml.xsl",
       parent::getXml()
     );
   }

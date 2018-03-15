@@ -12,18 +12,23 @@ require_once __DIR__ . "/../_bootstrap.php";
  */
 class Base extends \Codeception\Test\Unit
 {
-  static $migrationsApplied = false;
+  /**
+   * @var \UnitTester
+   */
+  protected $tester;
 
-  static $migrationError = false;
+  //static $migrationsApplied = false;
 
-  static $migrationOutput = null;
+  //static $migrationError = false;
+
+  //static $migrationOutput = null;
 
   /**
    * Run migrations
    *
    * @return void
    */
-  public static function setUpBeforeClass(){
+  //public static function setUpBeforeClass(){
     // if( self::$migrationsApplied ) return;
     // $output = '';
     // $runner = new \toriphes\console\Runner();
@@ -32,7 +37,7 @@ class Base extends \Codeception\Test\Unit
     // self::$migrationOutput = $output;
     // if( strstr($output,"failed" )) self::$migrationError = true;
     // codecept_debug($output);
-  }
+  //}
 
   // public function testMigrations(){
   //   if( self::$migrationError == true ){

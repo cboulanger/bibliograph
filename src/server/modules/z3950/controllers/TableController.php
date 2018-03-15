@@ -83,7 +83,7 @@ class TableController extends AppController
    *      This is neccessary if xml files have been added or removed.
    * @throws UserErrorException
    */
-  public function actionServerListItems($activeOnly = true, $reloadFromXmlFiles = false)
+  public function actionListServers($activeOnly = true, $reloadFromXmlFiles = false)
   {
     // Reset list of Datasources
     if ($reloadFromXmlFiles) {
@@ -101,7 +101,7 @@ class TableController extends AppController
       $listItemData[] = array(
         'label' => $datasource->title,
         'value' => $datasource->namedId,
-        'active' => $datasource->active,
+        'active' => !! $datasource->active,
         'selected' => $datasource->namedId == $lastDatasource
       );
     }
