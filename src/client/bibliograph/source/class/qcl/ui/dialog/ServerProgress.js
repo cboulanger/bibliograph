@@ -73,15 +73,13 @@ qx.Class.define("qcl.ui.dialog.ServerProgress",
   {
     this.base(arguments);
     this.setWidgetId( widgetId );
-    qcl["__"+widgetId]=this;
     this.setService( service || null );
     this.setMethod( method || null );
     this.__iframe = new qx.html.Iframe();
     this.__iframe.hide();
-    var app = qx.core.Init.getApplication();
+    let app = qx.core.Init.getApplication();
     app.getRoot().getContentElement().add(this.__iframe);
-    this.__sourceTemplate = app.getServerUrl();
-    this.__sourceTemplate += "?service=%1&method=%2&params=%3&sessionId=%4&nocache=%5";    
+    this.__sourceUrl = app.getServerUrl() + "?r=";
   }, 
   
   /*
@@ -102,17 +100,15 @@ qx.Class.define("qcl.ui.dialog.ServerProgress",
     
     /**
      * Start the server method and display progress
-     * @param params {Array} The parameters passed to the JSONRPC method
+     * @param params {Object}
+     *    The parameters passed to the controller action as a key-value map, the keys corresponding
+     *    to the names of the variables in the method signature
      */
-    start : function(params)
+    start : function(params={})
     {
       // check parameters
-      if ( ! params ) {
-        params = [];
-      }
-      else if ( ! qx.lang.Type.isArray( params ) )
-      {
-        this.error( "Paramteters must be an array");
+      if ( ! qx.lang.Type.isObject( params ) ) {
+        this.error( "Paramteters must be a map");
       }
     
       // reset
@@ -123,15 +119,11 @@ qx.Class.define("qcl.ui.dialog.ServerProgress",
       });
       
       // format source string
-      var source = qx.lang.String.format(
-        this.__sourceTemplate, [
-          this.getService(),
-          this.getMethod(),
-          qx.lang.Json.stringify(params),
-          qx.core.Init.getApplication().getSessionManager().getSessionId(),
-          (new Date()).getTime() 
-        ]
-      );
+      params.auth_token = qx.core.Init.getApplication().getToken();
+      let source = this.__sourceUrl +
+        this.getService() + "/" +
+        this.getMethod() + "&" +
+        qx.util.Uri.toParameter(params);
       
       // start request and show dialog
       this.__iframe.setSource( source );

@@ -55,7 +55,7 @@ qx.Class.define("bibliograph.Application",
      * @return {String}
      */    
     getVersion : function() {
-      return qx.core.Environment.get("bibliograph.version");
+      return qx.core.Environment.get("app.version");
     },
     
     /**
@@ -176,7 +176,7 @@ qx.Class.define("bibliograph.Application",
       // cache
       if( this.__url ) return this.__url;
 
-      let serverUrl = qx.core.Environment.get("bibliograph.serverUrl");
+      let serverUrl = qx.core.Environment.get("app.serverUrl");
       if (!serverUrl) {
         dialog.Dialog.error(
           this.tr("Missing server address. Please contact administrator.")

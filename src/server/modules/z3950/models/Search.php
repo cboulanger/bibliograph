@@ -87,6 +87,7 @@ class Search extends BaseModel
     if( parent::beforeDelete() ){
       Record::setDatasource(static::getDatasource());
       Record::deleteAll(['SearchId'=> $this->id]);
+      return true;
     }
     return false;
   }

@@ -31,11 +31,25 @@ use InvalidArgumentException;
 use lib\models\BaseModel;
 use XSLTProcessor;
 
+/**
+ * Class YazException
+ * @package app\modules\z3950\lib\yaz
+ */
 class YazException extends \Exception{}
 
+/**
+ * Class YazTimeoutException. Does not inherit from YazException because a timeout error should
+ * bubble up to be dealt with separately.
+ * @package app\modules\z3950\lib\yaz
+ */
+class YazTimeoutException extends \Exception{}
+
+/**
+ * Object oriented wrapper class for yaz_* functions
+ * @package app\modules\z3950\lib\yaz
+ */
 class Yaz
 {
-
   /**
    * Resource pointer
    * @var resource
@@ -255,10 +269,15 @@ class Yaz
    * Checks for a YAZ error and throws an exception with a
    * descriptive error message
    * @throws YazException
+   * @throws YazTimeoutException
    */
   protected function checkError()
   {
     if ($error = \yaz_error($this->resource)) {
+      Yii::error("yaz_error: $error");
+      if( stristr($error,"timeout") ){
+        throw new YazTimeoutException();
+      }
       throw new YazException($error);
     }
   }
@@ -268,7 +287,8 @@ class Yaz
    */
   public function getError()
   {
-    return \yaz_error($this->resource);
+    $error = \yaz_error($this->resource);
+    return $error;
   }
 
   /**
@@ -869,7 +889,7 @@ class Yaz
 
   /**
    * Wait for Z39.50 requests to complete.
-   * A static method that carries out networked (blocked) activity for outstanding
+   * A method that carries out networked (blocked) activity for outstanding
    * requests which have been prepared by the functions connect(), search(),
    * present(), scan() and setItemOrder() in all of the instances of this class.
    * wait() returns when all servers have either completed all requests or
@@ -886,11 +906,14 @@ class Yaz
    *    Returns TRUE on success or FALSE on failure. In event mode, returns
    *    resource or FALSE on failure.
    */
-  static public function wait($options = array())
+  public function wait($options = array())
   {
-    return \yaz_wait($options);
+    $result = \yaz_wait($options);
+    if( $result === false ){
+      $this->checkError();
+    }
+    return $result;
   }
-
 }
 
 abstract class Query

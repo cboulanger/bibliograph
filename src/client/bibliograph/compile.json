@@ -1,6 +1,6 @@
 {
   "environment": {
-    "bibliograph.version" : "3.0.0-alpha",
+    "app.version" : "3.0.0-alpha",
     "qx.icontheme" : "Tango"
   },
 
@@ -9,7 +9,7 @@
       "type": "source",
       "outputPath": "source-compiled",
       "environment": {
-        "bibliograph.serverUrl" : "../../../../server/web/?r="
+        "app.serverUrl" : "../../../../server/web/?r="
       }      
     },
     {

@@ -51,12 +51,14 @@ trait AuthTrait
     }
 
     // on-the-fly authentication with access token
-    $token = null;
-    $headers = Yii::$app->request->headers;
-    $tryHeaders = ["Authorization","X-Authorization"];
-    foreach ($tryHeaders as $header) {
-      if ($headers->has($header)) {
-        $token = trim( str_replace("Bearer", "", $headers->get($header) ) );
+    $token = Yii::$app->request->get('auth_token');
+    if ( ! $token ){
+      $headers = Yii::$app->request->headers;
+      $tryHeaders = ["Authorization","X-Authorization"];
+      foreach ($tryHeaders as $header) {
+        if ($headers->has($header)) {
+          $token = trim( str_replace("Bearer", "", $headers->get($header) ) );
+        }
       }
     }
     $user = User::findIdentityByAccessToken($token);

@@ -29,7 +29,6 @@
       <path value="$PROJECT_DIR$/src/server/vendor/sebastian/resource-operations" />
       <path value="$PROJECT_DIR$/src/server/vendor/yiisoft/yii2-bootstrap" />
       <path value="$PROJECT_DIR$/src/server/vendor/sebastian/code-unit-reverse-lookup" />
-      <path value="$PROJECT_DIR$/src/server/vendor/yiisoft/yii2-faker" />
       <path value="$PROJECT_DIR$/src/server/vendor/sebastian/diff" />
       <path value="$PROJECT_DIR$/src/server/vendor/bower-asset/typeahead.js" />
       <path value="$PROJECT_DIR$/src/server/vendor/yiisoft/yii2-composer" />
@@ -56,7 +55,6 @@
       <path value="$PROJECT_DIR$/src/server/vendor/bower/bootstrap" />
       <path value="$PROJECT_DIR$/src/server/vendor/bower/jquery" />
       <path value="$PROJECT_DIR$/src/server/vendor/bower/inputmask" />
-      <path value="$PROJECT_DIR$/src/server/vendor/fzaninotto/faker" />
       <path value="$PROJECT_DIR$/src/server/vendor/symfony/console" />
       <path value="$PROJECT_DIR$/src/server/vendor/symfony/process" />
       <path value="$PROJECT_DIR$/src/server/vendor/symfony/debug" />

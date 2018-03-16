@@ -22,67 +22,92 @@
 ************************************************************************ */
 
 namespace lib\bibtex;
-use \InvalidArgumentException;
+
+use InvalidArgumentException;
 
 
 /**
  *  Bibtex item description
- *  @author Frederick Giasson, Structured Dynamics LLC.
+ * @author Frederick Giasson, Structured Dynamics LLC.
  */
 class BibtexItem
 {
-  protected  $itemType = ""; // The Bibtex entry type.
+  /**
+   * The Bibtex entry type
+   * @var string
+   */
+  protected $itemType = "";
 
-  protected $itemID = ""; // The Bibtex entry ID.
+  /**
+   * The Bibtex entry ID
+   * @var string
+   */
+  protected $itemID = "";
 
-  protected $properties = array();
+  /**
+   * The entry field properties
+   * @var array
+   */
+  protected $properties = [];
 
-  public function addType($type)
+  /**
+   * @param string $type
+   */
+  public function addType(string $type)
   {
-    if( ! $type )
-    {
+    if (!$type) {
       throw new InvalidArgumentException("Invalid type '$type'");
     }
     $this->itemType = $type;
   }
 
-  public function addID($id)
+  /**
+   * @param $id
+   */
+  public function addID(string $id)
   {
-    if( ! $id )
-    {
+    if (!$id) {
       throw new InvalidArgumentException("Invalid id '$id'");
     }
     $this->itemID = $id;
   }
 
-  public function addProperty($property, $value)
+  /**
+   * @param string $property
+   * @param string $value
+   */
+  public function addProperty(string $property, string $value)
   {
-    if( ! $property )
-    {
+    if (!$property) {
       throw new InvalidArgumentException("Invalid property '$property'");
     }
-    if ( empty( $this->properties[$property] ) )
-    {
+    if (empty($this->properties[$property])) {
       $this->properties[$property] = $value;
-    }
-    else
-    {
+    } else {
       $this->properties[$property] .= "; " . $value;
     }
-
   }
 
-  public function getItemType()
+  /**
+   * @return string
+   */
+  public function getItemType() : string
   {
     return $this->itemType;
   }
 
-  public function getItemID()
+  /**
+   * @return string
+   */
+  public function getItemID() : string
   {
     return $this->itemID;
   }
 
-  public function getProperties()
+  /**
+   * @return array
+   */
+  public function getProperties() : array
   {
     return $this->properties;
   }

@@ -8,6 +8,7 @@
 
 namespace app\modules\z3950\controllers;
 
+use app\models\User;
 use Yii;
 use Exception;
 use app\controllers\traits\AuthTrait;
@@ -17,7 +18,7 @@ use app\modules\z3950\models\{
   Record, Search, Datasource as Z3950Datasource
 };
 use app\modules\z3950\lib\yaz\{
-  CclQuery, MarcXmlResult, Yaz, YazException
+  CclQuery, MarcXmlResult, Yaz, YazException, YazTimeoutException
 };
 use lib\dialog\ServerProgress;
 use lib\exceptions\UserErrorException;
@@ -35,7 +36,7 @@ class SearchController extends \yii\web\Controller
 
   protected function getNoAuthActions()
   {
-    return ['index'];
+    return ['index','test'];
   }
 
   public function actionIndex()
@@ -43,32 +44,47 @@ class SearchController extends \yii\web\Controller
     return "nothing here";
   }
 
+  public function actionTest()
+  {
+    Yii::$app->user->login(User::findByNamedId("admin"));
+    $this->actionProgress("z3950_voyager","shakespeare's english","1234");
+  }
+
   /**
    * Executes a Z39.50 request on the remote server. Called
-   * by the ServerProgress widget on the client
+   * by the ServerProgress widget on the client. If server times out
+   * it will retry up to three times.
    *
-   * @param string $datasourceName
-   * @param $query
-   * @param string $progressWidgetId
+   * @param string $datasource The name of the datasource
+   * @param string $query The cql query
+   * @param string $id The id of the progress widget
    * @return string Chunked HTTP response
    * @todo use DTO
    */
-  public function actionRequestProgress($datasourceName, $query, $progressWidgetId)
+  public function actionProgress($datasource, $query, $id)
   {
-
-    $progressBar = new ServerProgress($progressWidgetId);
+    static $retries = 0;
+    $progressBar = new ServerProgress($id);
     try {
-      $this->sendRequest($datasourceName, $query, $progressBar);
+      $this->sendRequest($datasource, $query, $progressBar);
       $progressBar->dispatchClientMessage("z3950.dataReady", $query);
       return $progressBar->complete();
+    } catch (YazTimeoutException $e) {
+      // retry
+      if( $retries < 4){
+        $progressBar->setProgress(0, Yii::t("z3950", "Server timed out. Trying again..."));
+        sleep(rand(1,3));
+        $this->actionProgress($datasource, $query, $progressBar );
+      } else {
+        return $progressBar->error(Yii::t("z3950", "Server timed out."));
+      }
     } catch (UserErrorException $e) {
       return $progressBar->error($e->getMessage());
     } catch (Exception $e) {
-      Yii::warning($e->getFile() . ", line " . $e->getLine() . ": " . $e->getMessage());
+      Yii::error($e);
       return $progressBar->error($e->getMessage());
     }
   }
-
 
   /**
    * Configures the yaz object for a ccl query with a minimal common set of fields:
@@ -97,12 +113,13 @@ class SearchController extends \yii\web\Controller
    *    A progressbar object responsible for displaying the progress
    *    on the client (optional)
    * @return void
+   * @throws YazTimeoutException
    * @throws UserErrorException
    * @throws Exception
    */
   public function sendRequest( string $datasourceName, $query, ServerProgress $progressBar = null)
   {
-    $datasource = Datasource::findByNamedId($datasourceName);
+    $datasource = Datasource::getInstanceFor($datasourceName);
     if( ! $datasource or ! $datasource instanceof Z3950Datasource ){
       throw new \InvalidArgumentException("Invalid datasource '$datasourceName'.");
     }
@@ -111,10 +128,10 @@ class SearchController extends \yii\web\Controller
     Record::setDatasource($datasource);
 
     // remember last datasource used
-    $this->module->setPreference("lastDatasource", $datasource->namedId);
+    $this->module->setPreference("lastDatasource", $datasourceName );
     $query = $this->module->fixQueryString($query);
 
-    Yii::debug("Executing query '$query' on remote Z39.50 database '$datasource' ...", Module::CATEGORY);
+    Yii::debug("Executing query '$query' on remote Z39.50 database '$datasourceName' ...", Module::CATEGORY);
 
     $yaz = new YAZ($datasource->resourcepath);
     try {
@@ -159,12 +176,13 @@ class SearchController extends \yii\web\Controller
     }
 
     // Result
-    $yaz->wait();
-
-    $error = $yaz->getError();
-    if ($error) {
-      Yii::debug("Server error (yaz_wait): $error. Aborting.", Module::CATEGORY);
-      throw new UserErrorException(Yii::t(Module::CATEGORY, "Server error: %s", $error));
+    try {
+      $yaz->wait();
+    } catch ( YazException $e) {
+      Yii::debug("Server error (yaz_wait): ". $e->getMessage(), Module::CATEGORY);
+      throw new UserErrorException(
+        Yii::t(Module::CATEGORY, "Server error: {error}", ['error' => $e->getMessage()])
+      );
     }
 
     $info = [];
@@ -204,8 +222,8 @@ class SearchController extends \yii\web\Controller
       'UserId' => $userId
     ]);
     $search->save();
-
-    Yii::debug("Created new search record for query '$query' for user #$userId.", Module::CATEGORY);
+    $searchId = $search->id;
+    Yii::debug("Created new search record #$searchId for query '$query' for user #$userId.", Module::CATEGORY);
 
     if ($progressBar) {
       $progressBar->setProgress(10, Yii::t(
@@ -256,7 +274,7 @@ class SearchController extends \yii\web\Controller
       return $hl . $description . $hl . $text . $hl;
     }
 
-    Yii::debug(ml("XML", $result->getXml()), Module::CATEGORY);
+    //Yii::debug(ml("XML", $result->getXml()), Module::CATEGORY);
     Yii::debug("Formatting data...", Module::CATEGORY);
 
     if ($progressBar) {
@@ -265,13 +283,13 @@ class SearchController extends \yii\web\Controller
 
     // convert to MODS
     $mods = $result->toMods();
-    Yii::debug(ml("MODS", $mods), Module::CATEGORY);
+    //Yii::debug(ml("MODS", $mods), Module::CATEGORY);
 
     // convert to bibtex and fix some issues
     $xml2bib = new Executable( "xml2bib", BIBUTILS_PATH );
     $bibtex = $xml2bib->call("-nl -fc -o unicode", $mods);
     $bibtex = str_replace("\nand ", "; ", $bibtex);
-    Yii::debug(ml("BibTeX", $bibtex), Module::CATEGORY);
+    //Yii::debug(ml("BibTeX", $bibtex), Module::CATEGORY);
 
     // convert to array
     $parser = new BibtexParser();
@@ -287,7 +305,7 @@ class SearchController extends \yii\web\Controller
 
     $step = 10 / count($records);
     $i = 0;
-    $searchId = $search->id;
+
 
     foreach ($records as $item) {
       if ($progressBar) {
@@ -299,10 +317,21 @@ class SearchController extends \yii\web\Controller
 
       $p = $item->getProperties();
 
-      // fix bibtex issues
-      foreach (array("author", "editor") as $key) {
-        $p[$key] = str_replace("{", "", $p[$key]);
-        $p[$key] = str_replace("}", "", $p[$key]);
+      // fix bibtex parser issues and prevemt validation errors
+      foreach ( $p as $key => $value ) {
+        switch ($key){
+          case "author":
+          case "editor":
+            $p[$key] = str_replace("{", "", $p[$key]);
+            $p[$key] = str_replace("}", "", $p[$key]);
+        }
+        $columnSchema = Record::getDb()->getTableSchema(Record::tableName())->getColumn($key);
+        if( $columnSchema === null ) {
+          Yii::warning("Skipping non-existent column '$key'...");
+        }
+        if( is_string($value) and $columnSchema->size ){
+          $p[$key] = substr( $value, 0, $columnSchema->size );
+        }
       }
 
       // create record

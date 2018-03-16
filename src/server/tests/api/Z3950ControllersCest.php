@@ -68,7 +68,7 @@ class Z3950ControllersCest
    */
   public function tryToExecuteSearch(\ApiTester $I)
   {
-    codecept_debug($I->getBaseUrl());
+    $url = $I->getBaseUrl();
     return;
     $loop = new StreamSelectLoop;
 

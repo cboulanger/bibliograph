@@ -42,6 +42,13 @@ $components = [
         'catalog' => 'messages',
         'useMoFile' => false
       ],
+      /** @todo move into module https://stackoverflow.com/questions/34357254/override-translation-path-of-module-on-yii2 */
+      'z3950' => [
+        'class' => yii\i18n\GettextMessageSource::class,
+        'basePath' => '@messages',
+        'catalog' => 'z3950',
+        'useMoFile' => false
+      ],
     ],
   ],
   // Cache, @todo use more efficient caching

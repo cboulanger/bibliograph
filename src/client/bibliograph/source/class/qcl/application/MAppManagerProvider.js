@@ -35,6 +35,7 @@
  * the current application (not yet functional, depends on the resolution
  * of bug <a href="http://bugzilla.qooxdoo.org/show_bug.cgi?id=3086">3096</a>).</li>
  * </ul>
+ * @todo rename to "Components" to align with Yii2 nomenclature
  */
 qx.Mixin.define("qcl.application.MAppManagerProvider",
 {
@@ -127,17 +128,6 @@ qx.Mixin.define("qcl.application.MAppManagerProvider",
       check    : "qx.core.Object", // @todo: create interface
       nullable : false,
       event    : "changeStateManager"
-    },
-    
-    /**
-     * The manager for maintaining a central clipboard that interacts
-     * with the clipboard of the OS
-     */
-    clipboardManager :
-    {
-      check    : "qx.core.Object", // @todo: create interface
-      nullable : false,
-      event    : "changeClipboardManager"
     },
 
     /**

@@ -43,7 +43,6 @@
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/facebook/webdriver" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/flow/jsonpath" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/fourteenmeister/dsn" />
-      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/fzaninotto/faker" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/graze/guzzle-jsonrpc" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/guzzlehttp/guzzle" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/guzzlehttp/promises" />
@@ -106,7 +105,6 @@
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/yiisoft/yii2" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/yiisoft/yii2-bootstrap" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/yiisoft/yii2-composer" />
-      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/yiisoft/yii2-faker" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/yiisoft/yii2-gii" />
     </content>
     <orderEntry type="inheritedJdk" />

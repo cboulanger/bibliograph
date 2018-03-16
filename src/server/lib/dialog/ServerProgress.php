@@ -39,6 +39,7 @@ class ServerProgress extends Dialog
    * @var bool
    */
   public $insertNewlines = false;
+  /** @noinspection PhpMissingParentConstructorInspection */
 
   /**
    * Constructor
@@ -53,14 +54,14 @@ class ServerProgress extends Dialog
     header('Content-Encoding: chunked');
     header('Transfer-Encoding: chunked');
     header('Content-Type: text/html');
-    header('Connection: keep-alive');  
-
+    header('Connection: keep-alive');
     flush();
-    @apache_setenv('no-gzip', 1);
+    //function_exists("apache_setenv") ? @apache_setenv('no-gzip', 1) : null;
     @ini_set('output_buffering', 0);
     @ini_set('zlib.output_compression', 0);
     @ini_set('implicit_flush', 1);
     flush();
+    $this->start();
   }
   
   /**
@@ -69,8 +70,7 @@ class ServerProgress extends Dialog
   protected function send($chunk)
   {
     // add padding to force Safari and IE to render
-    if( strlen($chunk) < 1024)
-    {
+    if( strlen($chunk) < 1024){
       $chunk = str_pad( $chunk, 1024 );
     }
     $chunk .= "<br/>"; // needed by Safari and Internet Explorer
@@ -82,6 +82,15 @@ class ServerProgress extends Dialog
   }
 
   /**
+   * Sends a script via a script tag
+   * @param array $lines An array of javascript script lines
+   */
+  protected function sendScript(array $lines)
+  {
+    $this->send( $this->createScript( $lines ) );
+  }
+
+  /**
    * Returns new line character or empty string depending on insertNewlines property
    * @return string
    */
@@ -89,22 +98,45 @@ class ServerProgress extends Dialog
   {
     return $this->insertNewlines ? "\n" : "";
   }
-  
+
+  /**
+   * Creates a script tag with the given lines
+   * @param array $lines
+   * @return string
+   */
+  protected function createScript( array $lines)
+  {
+    $nl = $this->getNewlineChar();
+    $tag = '<!script type="text/javascript">';
+    $tag .= $nl . implode( $nl, $lines );
+    $tag .= $nl . '<!/script></pre>' . $nl;
+    return $tag;
+  }
+
+  /**
+   * Called at the start of the transmission, sets a few global variables inside the iframe.
+   */
+  protected function start()
+  {
+    $this->sendScript([
+      "window.progress=window.top.qx.core.Init.getApplication().getWidgetById('{$this->widgetId}');",
+      "window.bus=top.qx.event.message.Bus.getInstance();",
+    ]);
+  }
+
   /**
    * API function to set the state of the progress par 
    * @param integer $value The valeu of the progress, in percent
    */
   public function setProgress($value, $message=null, $newLogText=null)
   {
-    $nl = $this->getNewlineChar();
-    $js = '<script type="text/javascript">';
-    //$js .= $nl . sprintf('console.log("%d, %s, %s");',$value, $message, $newLogText);
-    $js .= $nl . "window.top.qcl.__{$this->widgetId}.set({";
-    $js .= $nl . sprintf( 'progress:%d',$value);            
-    if( $message )    $js .= sprintf(',message:"%s"', $message);
-    if( $newLogText)  $js .= sprintf(',newLogText:"%s"', $newLogText);
-    $js .= $nl . '});</script>' . $nl;
-    $this->send( $js );
+    // sprintf('console.log("%d, %s, %s");',$value, $message, $newLogText);
+    $data =['progress'=>$value];
+    if($message) $data['message']=$message;
+    if($newLogText) $data['newLogText']= $newLogText;
+    $this->sendScript([
+      "window.progress.set(", json_encode($data), ");"
+    ]);
   }
 
   /**
@@ -115,12 +147,9 @@ class ServerProgress extends Dialog
    */
   public function dispatchClientMessage($name,$data=null)
   {
-    $nl = $this->getNewlineChar();
-    $js = '<script type="text/javascript">';
-    $js .= $nl . 'window.top.qx.event.message.Bus.getInstance().dispatchByName("' . $name . '",';
-    $js .= $nl . json_encode($data);
-    $js .= $nl . ');</script>' . $nl;
-    $this->send( $js );
+    $this->sendScript([
+      "window.bus.dispatchByName('$name',", json_encode($data), ");"
+    ]);
   }
   
   /**
@@ -131,12 +160,9 @@ class ServerProgress extends Dialog
    */
   public function dispatchClientEvent($name,$data=null)
   {
-    $nl = $this->getNewlineChar();
-    $js = '<script type="text/javascript">';
-    $js .= $nl . 'window.top.qx.core.Init.getApplication().getWidgetById("' . $this->widgetId  . '").fireDataEvent("' . $name . '",';
-    $js .= $nl . json_encode($data);
-    $js .= $nl . ');</script>' . $nl;
-    $this->send( $js );
+    $this->sendScript([
+      "window.progress.fireDataEvent('$name',", json_encode($data), ");"
+    ]);
   }  
 
   /**
@@ -146,14 +172,24 @@ class ServerProgress extends Dialog
   public function error($message)
   {
     $this->setProgress(100);
-    $nl = $this->getNewlineChar();
-    $js = '<script type="text/javascript">';
-    $js .= $nl . 'window.top.dialog.Dialog.error("' . $message . '");';
-    $js .= $nl . "window.top.qcl.__{$this->widgetId}.hide();";
-    $js .= $nl . '</script>' . $nl;
-    $this->send( $js );
+    $this->sendScript([
+      "window.progress.hide();",
+      "window.top.dialog.Dialog.error('$message');"
+    ]);
     $this->send("");
     exit;
+  }
+
+  /**
+   * Closes the chunked transfer connection
+   */
+  public function close()
+  {
+    echo sprintf("%x\r\n", 0);
+    echo "\r\n";
+    flush();
+    ob_flush();
+    exit();
   }
 
   /**
@@ -165,13 +201,10 @@ class ServerProgress extends Dialog
     $this->setProgress(100);
     if ( $message )
     {
-      $nl = $this->getNewlineChar();
-      $js = '<script type="text/javascript">';
-      $js .= $nl . 'window.top.dialog.Dialog.alert("' . $message . '");';
-      $js .= $nl . '</script>' . $nl;
-      $this->send( $js );      
+      $this->sendScript([
+        "window.top.dialog.Dialog.alert('$message');"
+      ]);
     }
-    $this->send("");
-    exit(); // necessary to not mess up the http response
+    $this->close();
   }
 }

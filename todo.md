@@ -72,6 +72,7 @@
 - [ ] Re-implement message broadcast
 
 ### Priority: normal
+- [ ] Implement boolean database columns (supported by Yii)
 - [ ] Reimplement HTML editor integration for notes
 
 ### Priority: low

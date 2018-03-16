@@ -20,21 +20,20 @@
 /**
  * Z39.50 Plugin:
  *    This plugin allows to import references from Z39.50 datasources
- * 
+ *
  */
 qx.Class.define("z3950.Plugin",
 {
-  extend : qx.core.Object,
-  include : [qx.locale.MTranslation],
-  type : "singleton",
-  members : {
+  extend: qx.core.Object,
+  include: [qx.locale.MTranslation],
+  type: "singleton",
+  members: {
     /**
      * TODOC
      *
      * @return {void}
      */
-    init : function()
-    {
+    init: function () {
       
       // Manager shortcuts
       var app = qx.core.Init.getApplication();
@@ -42,66 +41,61 @@ qx.Class.define("z3950.Plugin",
       var confMgr = app.getConfigManager();
       
       
-      /*
-       * add window
-       */
+      // add window
       var app = qx.core.Init.getApplication();
       var importWindow = new z3950.ImportWindowUi();
       app.getRoot().add(importWindow);
-
-      /*
-       * add a new menu button
-       */
-      var importMenu = app.getWidgetById("bibliograph/importMenu");
+      
+      // add a new menu button
+      var importMenu = app.getWidgetById("app/toolbar/import");
       var menuButton = new qx.ui.menu.Button(this.tr("Import from library catalog"));
-      menuButton.addListener("execute", function() {
+      menuButton.addListener("execute", function () {
         importWindow.show();
       });
       importMenu.add(menuButton);
       
-      
-      /*
-       * Overlays for preference window
-       */
+      // Overlays for preference window @todo rename
       var prefsTabView = app.getWidgetById("bibliograph/preferences-tabView");
-      var pluginTab = new qx.ui.tabview.Page( this.tr('Z39.50 Import') );
-
+      var pluginTab = new qx.ui.tabview.Page(this.tr('Z39.50 Import'));
+      
       // ACL
       permMgr.create("z3950.manage").bind("state", pluginTab.getChildControl("button"), "visibility", {
-        converter : function(v){ return v ? "visible" : "excluded" }
+        converter: function (v) {
+          return v ? "visible" : "excluded"
+        }
       });
       var vboxlayout = new qx.ui.layout.VBox(5);
       pluginTab.setLayout(vboxlayout);
-
+      
       // create virtual list
       var list = new qx.ui.list.List();
       list.setWidth(150);
       pluginTab.add(list);
-
+      
       // create the delegate to change the bindings
       var delegate = {
-        configureItem : function(item) {
+        configureItem: function (item) {
           item.setPadding(3);
         },
-        createItem : function() {
+        createItem: function () {
           return new qx.ui.form.CheckBox();
         },
-        bindItem : function(controller, item, id) {
+        bindItem: function (controller, item, id) {
           controller.bindProperty("label", "label", null, item, id);
           controller.bindProperty("active", "value", null, item, id);
           controller.bindPropertyReverse("active", "value", null, item, id);
         }
       };
       list.setDelegate(delegate);
-
-      var store = new qcl.data.store.JsonRpc(null,"z3950.Service");
-      store.setModel( qx.data.marshal.Json.createModel([]) );
-      store.bind("model",list,"model");
-      store.load("getServerListItems",[false]);
-      qx.event.message.Bus.getInstance().subscribe("z3950.reloadDatasources", function(e) {
-        store.load("getServerListItems",[false]);
-      }, this);      
-
+      
+      var store = new qcl.data.store.JsonRpc(null, "z3950.Service");
+      store.setModel(qx.data.marshal.Json.createModel([]));
+      store.bind("model", list, "model");
+      store.load("getServerListItems", [false]);
+      qx.event.message.Bus.getInstance().subscribe("z3950.reloadDatasources", function (e) {
+        store.load("getServerListItems", [false]);
+      }, this);
+      
       // buttons
       var hbox = new qx.ui.layout.HBox(10);
       var buttons = new qx.ui.container.Composite();
@@ -112,43 +106,43 @@ qx.Class.define("z3950.Plugin",
       var statusButton = new qx.ui.form.Button(this.tr("(Un-)Select All"));
       buttons.add(statusButton);
       var statusSelectAll = false;
-      statusButton.addListener("execute", function() {
+      statusButton.addListener("execute", function () {
         var model = store.getModel();
-        statusSelectAll = ! statusSelectAll;
+        statusSelectAll = !statusSelectAll;
         for (var i = 0; i < model.length; i++) {
           model.getItem(i).setActive(statusSelectAll);
         }
-      }, this); 
+      }, this);
       
       // Save data Button
       var saveButton = new qx.ui.form.Button(this.tr("Save"));
       buttons.add(saveButton);
-      saveButton.addListener("execute", function() {
+      saveButton.addListener("execute", function () {
         var model = store.getModel();
         var result = {};
         for (var i = 0; i < model.length; i++) {
-          var name   = model.getItem(i).getValue();
+          var name = model.getItem(i).getValue();
           var active = model.getItem(i).getActive();
           result[name] = active;
         }
         saveButton.setEnabled(false);
         this.getApplication().showPopup(this.tr("Saving..."));
-        store.execute("setDatasourceState",[result], function(){
+        store.execute("setDatasourceState", [result], function () {
           this.getApplication().hidePopup();
           saveButton.setEnabled(true);
-        },this);
-      }, this);       
+        }, this);
+      }, this);
       
       // Reload datassources Button
-      var reloadButton= new qx.ui.form.Button(this.tr("Reload"));
+      var reloadButton = new qx.ui.form.Button(this.tr("Reload"));
       buttons.add(reloadButton);
-      reloadButton.addListener("execute",function(){
+      reloadButton.addListener("execute", function () {
         reloadButton.setEnabled(false);
         this.getApplication().showPopup(this.tr("Reloading library metadata..."));
-        store.load("getServerListItems",[false,true],function(){
+        store.load("getServerListItems", [false, true], function () {
           this.getApplication().hidePopup();
           reloadButton.setEnabled(true);
-        },this);
+        }, this);
       });
       
       // add tab to tabview (must be done at the end)
@@ -158,10 +152,10 @@ qx.Class.define("z3950.Plugin",
        * remote search progress indicator widget
        */
       var z3950Progress = new qcl.ui.dialog.ServerProgress(
-        "z3950Progress","z3950.Service"
+      "z3950Progress", "z3950.Service"
       );
       z3950Progress.set({
-        hideWhenCompleted : true
+        hideWhenCompleted: true
       });
     }
   }

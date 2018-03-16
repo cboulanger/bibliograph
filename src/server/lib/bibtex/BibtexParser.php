@@ -38,7 +38,7 @@ class BibtexParser
    * @param string $content Bibtex string
    * @return BibtexItem[]
    */
-  function parse($content)
+  function parse($content) : array
   {
     $this->fileContent = $content;
 
@@ -58,15 +58,13 @@ class BibtexParser
    * Implementation of parse()
    * @return BibtexItem[]
    */
-  private function _parse()
+  private function _parse() : array
   {
     // Iterates for all bibtex items.
 
     while ($this->nextItem() !== FALSE) {
       // Create a new bib item
       $item = new BibtexItem();
-
-
       $item->addType($this->getItemType());
       $item->addID($this->getItemID());
 
@@ -200,20 +198,18 @@ class BibtexParser
   {
     // Let fix the ending of a bibtex item from "} }" to "}, }"
     $pattern = '/(((\}[\s]*\}[\s]*)@)|(\}[\s]*\}[\s]*$))/U';
-
     if (preg_match_all($pattern, $this->fileContent, $matches)) {
-      $replaces = array();
-
+      $replaces = [];
       foreach ($matches[0] as $match) {
         $replaces[$match] = $match;
       }
-
       foreach ($replaces as $replace) {
         $replaceWith = str_replace(" ", "", $replace);
         $replaceWith = str_replace("}}", "},}", $replaceWith);
-
         $this->fileContent = str_replace($replace, $replaceWith, $this->fileContent);
       }
     }
+    // Other encoding issues
+    $this->fileContent = str_replace("``", '"', $this->fileContent);
   }
 }

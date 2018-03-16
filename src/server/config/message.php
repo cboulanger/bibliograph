@@ -16,7 +16,7 @@ return [
     'sourcePath' => '@app',
     'messagePath' => 'messages',
     'languages' => [
-        'de',
+        'de-DE'
     ],
     'translator' => 'Yii::t',
     'sort' => false,
@@ -31,6 +31,7 @@ return [
         '.hgignore',
         '.hgkeep',
         '/messages',
+        '/vendor',
         '/BaseYii.php',
     ],
     'only' => [
@@ -38,7 +39,7 @@ return [
     ],
     'format' => 'po',
     'catalog' => 'messages',
-    'ignoreCategories' => [],
+    'ignoreCategories' => ['yii'],
     'phpFileHeader' => '',
     'phpDocBlock' => null,
 ];
