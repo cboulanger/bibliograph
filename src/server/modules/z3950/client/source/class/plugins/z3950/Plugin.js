@@ -22,41 +22,35 @@
  *    This plugin allows to import references from Z39.50 datasources
  *
  */
-qx.Class.define("z3950.Plugin",
+qx.Class.define("plugins.z3950.Plugin",
 {
   extend: qx.core.Object,
   include: [qx.locale.MTranslation],
   type: "singleton",
   members: {
-    /**
-     * TODOC
-     *
-     * @return {void}
-     */
     init: function () {
       
       // Manager shortcuts
-      var app = qx.core.Init.getApplication();
-      var permMgr = app.getAccessManager().getPermissionManager();
-      var confMgr = app.getConfigManager();
+      let app = qx.core.Init.getApplication();
+      let permMgr = app.getAccessManager().getPermissionManager();
+      let confMgr = app.getConfigManager();
       
       
       // add window
-      var app = qx.core.Init.getApplication();
-      var importWindow = new z3950.ImportWindowUi();
+      let importWindow = new z3950.ImportWindowUi();
       app.getRoot().add(importWindow);
       
       // add a new menu button
-      var importMenu = app.getWidgetById("app/toolbar/import");
-      var menuButton = new qx.ui.menu.Button(this.tr("Import from library catalog"));
+      let importMenu = app.getWidgetById("app/toolbar/import");
+      let menuButton = new qx.ui.menu.Button(this.tr("Import from library catalog"));
       menuButton.addListener("execute", function () {
         importWindow.show();
       });
       importMenu.add(menuButton);
       
       // Overlays for preference window @todo rename
-      var prefsTabView = app.getWidgetById("bibliograph/preferences-tabView");
-      var pluginTab = new qx.ui.tabview.Page(this.tr('Z39.50 Import'));
+      let prefsTabView = app.getWidgetById("bibliograph/preferences-tabView");
+      let pluginTab = new qx.ui.tabview.Page(this.tr('Z39.50 Import'));
       
       // ACL
       permMgr.create("z3950.manage").bind("state", pluginTab.getChildControl("button"), "visibility", {
@@ -64,16 +58,16 @@ qx.Class.define("z3950.Plugin",
           return v ? "visible" : "excluded"
         }
       });
-      var vboxlayout = new qx.ui.layout.VBox(5);
+      let vboxlayout = new qx.ui.layout.VBox(5);
       pluginTab.setLayout(vboxlayout);
       
       // create virtual list
-      var list = new qx.ui.list.List();
+      let list = new qx.ui.list.List();
       list.setWidth(150);
       pluginTab.add(list);
       
       // create the delegate to change the bindings
-      var delegate = {
+      let delegate = {
         configureItem: function (item) {
           item.setPadding(3);
         },
@@ -88,7 +82,7 @@ qx.Class.define("z3950.Plugin",
       };
       list.setDelegate(delegate);
       
-      var store = new qcl.data.store.JsonRpc(null, "z3950.Service");
+      let store = new qcl.data.store.JsonRpc(null, "z3950.Service");
       store.setModel(qx.data.marshal.Json.createModel([]));
       store.bind("model", list, "model");
       store.load("getServerListItems", [false]);
@@ -97,33 +91,32 @@ qx.Class.define("z3950.Plugin",
       }, this);
       
       // buttons
-      var hbox = new qx.ui.layout.HBox(10);
-      var buttons = new qx.ui.container.Composite();
+      let hbox = new qx.ui.layout.HBox(10);
+      let buttons = new qx.ui.container.Composite();
       buttons.setLayout(hbox);
       pluginTab.add(buttons);
       
       // Toggle Button
-      var statusButton = new qx.ui.form.Button(this.tr("(Un-)Select All"));
+      let statusButton = new qx.ui.form.Button(this.tr("(Un-)Select All"));
       buttons.add(statusButton);
-      var statusSelectAll = false;
+      let statusSelectAll = false;
       statusButton.addListener("execute", function () {
-        var model = store.getModel();
+        let model = store.getModel();
         statusSelectAll = !statusSelectAll;
-        for (var i = 0; i < model.length; i++) {
+        for (let i = 0; i < model.length; i++) {
           model.getItem(i).setActive(statusSelectAll);
         }
       }, this);
       
       // Save data Button
-      var saveButton = new qx.ui.form.Button(this.tr("Save"));
+      let saveButton = new qx.ui.form.Button(this.tr("Save"));
       buttons.add(saveButton);
       saveButton.addListener("execute", function () {
-        var model = store.getModel();
-        var result = {};
-        for (var i = 0; i < model.length; i++) {
-          var name = model.getItem(i).getValue();
-          var active = model.getItem(i).getActive();
-          result[name] = active;
+        let model = store.getModel();
+        let result = {};
+        for (let i = 0; i < model.length; i++) {
+          let name = model.getItem(i).getValue();
+          result[name] = model.getItem(i).getActive();
         }
         saveButton.setEnabled(false);
         this.getApplication().showPopup(this.tr("Saving..."));
@@ -134,7 +127,7 @@ qx.Class.define("z3950.Plugin",
       }, this);
       
       // Reload datassources Button
-      var reloadButton = new qx.ui.form.Button(this.tr("Reload"));
+      let reloadButton = new qx.ui.form.Button(this.tr("Reload"));
       buttons.add(reloadButton);
       reloadButton.addListener("execute", function () {
         reloadButton.setEnabled(false);
@@ -148,12 +141,8 @@ qx.Class.define("z3950.Plugin",
       // add tab to tabview (must be done at the end)
       prefsTabView.add(pluginTab);
       
-      /*
-       * remote search progress indicator widget
-       */
-      var z3950Progress = new qcl.ui.dialog.ServerProgress(
-      "z3950Progress", "z3950.Service"
-      );
+      // remote search progress indicator widget
+      let z3950Progress = new qcl.ui.dialog.ServerProgress( "z3950Progress", "z3950/search", "progress");
       z3950Progress.set({
         hideWhenCompleted: true
       });

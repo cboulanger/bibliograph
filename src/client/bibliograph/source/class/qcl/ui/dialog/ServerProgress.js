@@ -121,8 +121,8 @@ qx.Class.define("qcl.ui.dialog.ServerProgress",
       // format source string
       params.auth_token = qx.core.Init.getApplication().getToken();
       let source = this.__sourceUrl +
-        this.getService() + "/" +
-        this.getMethod() + "&" +
+        this.getService() + "/" + this.getMethod() + "&" +
+        "id=" + this.getWidgetId() + "&" +
         qx.util.Uri.toParameter(params);
       
       // start request and show dialog

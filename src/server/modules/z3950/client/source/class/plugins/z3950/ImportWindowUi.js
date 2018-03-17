@@ -20,9 +20,9 @@
 /**
  * UI for Library Import Plugin
  */
-qx.Class.define("z3950.ImportWindowUi",
+qx.Class.define("plugins.z3950.ImportWindowUi",
 {
-  extend : z3950.ImportWindow,
+  extend : plugins.z3950.ImportWindow,
   construct : function()
   {
     this.base(arguments);

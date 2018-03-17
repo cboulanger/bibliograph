@@ -11,11 +11,11 @@
         "email": "info@bibliograph.org"
       }
     ],
-    "version": "3.0.0-alpha",
+    "version": "1.0.0",
     "qooxdoo-range": "6.0.0-alpha"
   },
   "provides": {
-    "namespace": "z3950",
+    "namespace": "plugins.z3950",
     "encoding": "utf-8",
     "class": "source/class",
     "resource": "source/resource",
