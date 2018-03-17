@@ -33,7 +33,15 @@ qx.Class.define("bibliograph.AccessManager",
   {
     this.base(arguments);
   },
- 
+
+  statics : {
+    messages : {
+      LOGOUT : "user.loggedout",
+      LOGOFF : "user.logoff"
+    }
+  },
+
+
   properties : {
     
      /**
@@ -271,7 +279,7 @@ qx.Class.define("bibliograph.AccessManager",
      */
     logout : async function()
     {
-      qx.event.message.Bus.dispatch( new qx.event.message.Message("user.logoff", true ) );
+      qx.event.message.Bus.dispatch( new qx.event.message.Message(bibliograph.AccessManager.messages.LOGOFF, true ) );
       // notify server
       let app = this.getApplication();
       await app.getRpcClient('access').notify("logout");
@@ -280,7 +288,7 @@ qx.Class.define("bibliograph.AccessManager",
       // load config and userdata
       await this.load();
       await app.getConfigManager().load();
-      qx.event.message.Bus.dispatch( new qx.event.message.Message("user.loggedout"));      
+      qx.event.message.Bus.dispatch( new qx.event.message.Message(bibliograph.AccessManager.messages.LOGOUT));
     }
   }
 });

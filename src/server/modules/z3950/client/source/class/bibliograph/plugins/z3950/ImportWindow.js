@@ -20,7 +20,7 @@
 /**
  * Z39.50 Plugin: Application logic
  */
-qx.Class.define("plugins.z3950.ImportWindow",
+qx.Class.define("bibliograph.plugins.z3950.ImportWindow",
 {
   extend: qx.ui.window.Window,
   include: [qcl.ui.MLoadingPopup],

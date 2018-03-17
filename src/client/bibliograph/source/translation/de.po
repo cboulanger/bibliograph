@@ -1,36 +1,24 @@
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: 1.0\n"
-"Report-Msgid-Bugs-To: you@your.org\n"
-"POT-Creation-Date: 2010-05-13 19:30+0100\n"
-"PO-Revision-Date: 2018-03-04 19:39+0100\n"
-"Last-Translator: Christian Boulanger <info@bibliograph.org>\n"
-"Language-Team: Team <yourteam@your.org>\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Language: de\n"
-"X-Generator: Poedit 1.8.1\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+msgstr "Project-Id-Version: 1.0\nReport-Msgid-Bugs-To: you@your.org\nPOT-Creation-Date: 2010-05-13 19:30+0100\nPO-Revision-Date: 2018-03-04 19:39+0100\nLast-Translator: Christian Boulanger <info@bibliograph.org>\nLanguage-Team: Team <yourteam@your.org>\nMIME-Version: 1.0\nContent-Type: text/plain; charset=utf-8\nContent-Transfer-Encoding: 8bit\nLanguage: de\nX-Generator: Poedit 1.8.1\nPlural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: bibliograph.Setup:35
+#: bibliograph.Setup:35 bibliograph/Setup.js:35
 msgid "No connection to server."
 msgstr "Keine Verbindung zum Server."
 
-#: bibliograph.Setup:36
+#: bibliograph.Setup:36 bibliograph/Setup.js:36
 msgid "Loading folder data ..."
 msgstr "Lade die Ordner ..."
 
-#: bibliograph.Setup:85
+#: bibliograph.Setup:85 bibliograph/Setup.js:85
 msgid "Setting up application..."
 msgstr "Konfiguriere die Anwendung ..."
 
-#: bibliograph.Setup:89
+#: bibliograph.Setup:89 bibliograph/Setup.js:89
 msgid "Connecting with server..."
 msgstr "Verbinde mit dem Server ..."
 
-#: bibliograph.Setup:94
+#: bibliograph.Setup:94 bibliograph/Setup.js:94
 msgid "Loading configuration ..."
 msgstr "Lade Konfiguration ..."
 
@@ -50,11 +38,11 @@ msgstr "Lade Plugin %1 von %2 : %3 ..."
 msgid "Loading datasource information ..."
 msgstr "Informationen zur Datenquelle werden abgerufen..."
 
-#: bibliograph.Commands:46
+#: bibliograph.Commands:46 bibliograph/Commands.js:46
 msgid "To log in, you need a secure connection. After you press 'OK', the application will be reloaded in secure mode. After the application finished loading, you can log in again."
 msgstr "Um sich anzumelden, brauchen Sie eine sicher Verbindung. Nachdem Sie 'OK' geklickt haben, wird die Anwendung über eine verschlüsselte Verbindung neu geladen. Bitte melden Sie sich erneut an, sobald der Ladevorgang abgeschlossen ist."
 
-#: bibliograph.Commands:53
+#: bibliograph.Commands:53 bibliograph/Commands.js:53
 msgid "The application is currently in a read-only state. Only the administrator can log in."
 msgstr "Das Programm ist gerade im Nur-Lese-Modus. Nur der Administrator kann sich einloggen. "
 
@@ -62,11 +50,13 @@ msgstr "Das Programm ist gerade im Nur-Lese-Modus. Nur der Administrator kann si
 msgid "Authenticating ..."
 msgstr "Anmeldung ..."
 
-#: bibliograph.ui.window.AccessControlTool:185
+#: bibliograph.ui.window.AccessControlTool:185 bibliograph/Commands.js:72
+#: bibliograph/ui/window/AccessControlTool.js:170
+#: bibliograph/ui/window/AccessControlTool.js:185
 msgid "Please wait ..."
 msgstr "Bitte warten ..."
 
-#: bibliograph.Commands:84
+#: bibliograph.Commands:84 bibliograph/Commands.js:84
 msgid "Logging out ..."
 msgstr "Abmelden ..."
 
@@ -74,19 +64,22 @@ msgstr "Abmelden ..."
 msgid "You don't have access to any datasource on the server."
 msgstr "Sie haben keinen Zugang zu Datenbanken auf diesem Server."
 
-#: bibliograph.Commands:108
+#: bibliograph.Commands:108 bibliograph/Commands.js:108
 msgid "Cannot open window. Please disable the popup-blocker of your browser for this website."
 msgstr ""
 
-#: bibliograph.Commands:125
+#: bibliograph.Commands:125 bibliograph/Commands.js:125
 msgid "Retrieving user data..."
 msgstr "Lade Benutzerdaten ..."
 
 #: bibliograph.ui.item.FormattedViewUi:72
+#: bibliograph/ui/item/TableViewUi.js:48 bibliograph/ui/item/TableViewUi.js:50
+#: bibliograph/ui/item/FormattedViewUi.js:72
 msgid "Print"
 msgstr "Drucken"
 
 #: bibliograph.ui.item.FormattedViewUi:58
+#: bibliograph/ui/item/FormattedViewUi.js:58
 msgid "Style"
 msgstr "Zitierstil"
 
@@ -95,10 +88,13 @@ msgid "All in folder"
 msgstr "Alle im Ordner"
 
 #: bibliograph.ui.item.FormattedViewUi:79
+#: bibliograph/ui/item/FormattedViewUi.js:79
 msgid "Tabular View"
 msgstr "Tabellarische Ansicht"
 
-#: bibliograph.ui.item.FormattedView:80
+#: bibliograph.ui.item.FormattedView:80 bibliograph/ui/main/ItemViewUi.js:61
+#: bibliograph/ui/main/ItemViewUi.js:66
+#: bibliograph/ui/item/FormattedView.js:80
 msgid "Formatted View"
 msgstr "Formatierte Ansicht"
 
@@ -106,7 +102,7 @@ msgstr "Formatierte Ansicht"
 msgid "Generate formatted citations ..."
 msgstr "Formatiere die Datensätze ..."
 
-#: qcl.data.controller.Table:320
+#: qcl.data.controller.Table:320 qcl/data/controller/Table.js:320
 msgid "Loading rows %1 - %2 of %3 ..."
 msgstr "Lade Datensätze %1 - %2 von %3 ..."
 
@@ -130,11 +126,11 @@ msgstr "Füge Ordner hinzu ..."
 msgid "Removing folder ..."
 msgstr "Entferne Ordner ..."
 
-#: bibliograph.ui.folder.TreeView:117
+#: bibliograph.ui.folder.TreeView:117 bibliograph/ui/folder/TreeView.js:117
 msgid "No folder selected. Try again"
 msgstr "Bitte erst einen Ordner auswählen."
 
-#: bibliograph.ui.folder.TreeView:120
+#: bibliograph.ui.folder.TreeView:120 bibliograph/ui/folder/TreeView.js:120
 msgid "Do your really want to move folder '%1' to '%2'?"
 msgstr "Wollen Sie wirklich Ordner  '%1' in Ordner '%2' verschieben?"
 
@@ -142,167 +138,221 @@ msgstr "Wollen Sie wirklich Ordner  '%1' in Ordner '%2' verschieben?"
 msgid "Moving folder ..."
 msgstr "Verschiebe Ordner ..."
 
-#: bibliograph.ui.folder.TreeView:140
+#: bibliograph.ui.folder.TreeView:140 bibliograph/ui/folder/TreeView.js:140
 msgid "Do you really want to delete all references and folders in the trash folder? This cannot be undone."
 msgstr "Wollen sie wirklich alle Datensätze und Ordner im Mülleimer endgültig löschen? Das kann nicht rückgängig gemacht werden."
 
-#: bibliograph.ui.folder.TreeView:145
+#: bibliograph.ui.folder.TreeView:145 bibliograph/ui/folder/TreeView.js:145
 msgid "Purging deleted folders ..."
 msgstr "Lösche Ordner ..."
 
-#: bibliograph.ui.folder.TreeView:148
+#: bibliograph.ui.folder.TreeView:148 bibliograph/ui/folder/TreeView.js:148
 msgid "Purging deleted references ..."
 msgstr "Lösche Datensätze ..."
 
 #: bibliograph.ui.folder.TreeViewUi:166
+#: bibliograph/ui/folder/TreeViewUi.js:165
+#: bibliograph/ui/folder/TreeViewUi.js:166
 msgid "Empty trash..."
 msgstr "Den Papierkorb leeren ..."
 
 #: bibliograph.ui.folder.TreeViewUi:173
+#: bibliograph/ui/folder/TreeViewUi.js:173
 msgid "Move folder..."
 msgstr "Ordner verschieben ..."
 
 #: bibliograph.ui.folder.TreeViewUi:181
+#: bibliograph/ui/folder/TreeViewUi.js:181
 msgid "Edit folder data"
 msgstr "Ordnereigenschaften bearbeiten"
 
 #: bibliograph.ui.folder.TreeViewUi:190
+#: bibliograph/ui/folder/TreeViewUi.js:189
+#: bibliograph/ui/folder/TreeViewUi.js:190
 msgid "Change visibility"
 msgstr "Sichtbarkeit verändern"
 
 #: bibliograph.ui.item.DuplicatesView:162
+#: bibliograph/ui/reference/ListView.js:980
+#: bibliograph/ui/reference/ListView.js:994
+#: bibliograph/ui/reference/ListView.js:1009
+#: bibliograph/ui/reference/ListView.js:1027
+#: bibliograph/ui/item/RecordInfo.js:167
+#: bibliograph/ui/item/DuplicatesView.js:162
 msgid "Processing request..."
 msgstr "Verarbeite die Anfrage ..."
 
 #: bibliograph.ui.item.DuplicatesViewUi:35
+#: bibliograph/ui/item/DuplicatesViewUi.js:35
 msgid "This table shows potential duplicates of the current record."
 msgstr "Diese Tabelle zeigt potentielle Dubletten des ausgewählten Datensatzes"
 
 #: bibliograph.ui.item.DuplicatesViewUi:54
+#: bibliograph/ui/item/DuplicatesViewUi.js:54
 msgid "Type"
 msgstr "Typ"
 
 #: bibliograph.ui.item.DuplicatesViewUi:55
+#: bibliograph/ui/item/DuplicatesViewUi.js:55
 msgid "Author"
 msgstr "Autor"
 
 #: bibliograph.ui.item.DuplicatesViewUi:56
+#: bibliograph/ui/item/DuplicatesViewUi.js:56
 msgid "Date"
 msgstr "Datum"
 
 #: bibliograph.ui.item.DuplicatesViewUi:57
+#: bibliograph/ui/item/DuplicatesViewUi.js:57
 msgid "Title"
 msgstr "Titel"
 
 #: bibliograph.ui.item.DuplicatesViewUi:93
+#: bibliograph/ui/item/DuplicatesViewUi.js:93
 msgid "Display"
 msgstr "Anzeigen"
 
 #: bibliograph.ui.item.DuplicatesViewUi:99
+#: bibliograph/ui/item/DuplicatesViewUi.js:99
 msgid "Delete"
 msgstr "Löschen\t"
 
 #: bibliograph.ui.item.DuplicatesViewUi:105
+#: bibliograph/ui/item/DuplicatesViewUi.js:105
 msgid "Score threshold to count as duplicate:"
 msgstr "Schwellenwert für Einordnung als Dublette"
 
-#: bibliograph.ui.item.RecordInfo:163
+#: bibliograph.ui.item.RecordInfo:163 bibliograph/ui/item/RecordInfo.js:163
 msgid "Do you really want to remove the reference from folder '%1'?"
 msgstr "Wollen Sie wirklich diesen Datensatz aus Ordner '%1' entfernen?"
 
 #: bibliograph.ui.item.RecordInfoUi:45
+#: bibliograph/ui/item/ReferenceEditorUi.js:234
+#: bibliograph/ui/item/ReferenceEditorUi.js:236
+#: bibliograph/ui/item/RecordInfoUi.js:43
+#: bibliograph/ui/item/RecordInfoUi.js:45
 msgid "Record Info"
 msgstr "Datensatzinfo"
 
 #: bibliograph.ui.item.RecordInfoUi:60
+#: bibliograph/ui/main/FolderTreePanel.js:48
+#: bibliograph/ui/item/RecordInfoUi.js:59
+#: bibliograph/ui/item/RecordInfoUi.js:60
 msgid "Folders"
 msgstr "Ordner"
 
-#: bibliograph.ui.item.RecordInfoUi:73
+#: bibliograph.ui.item.RecordInfoUi:73 bibliograph/ui/item/RecordInfoUi.js:72
+#: bibliograph/ui/item/RecordInfoUi.js:73
 msgid "Folders containing the current record"
 msgstr "Ordner, die den aktuellen Datensatz enthalten"
 
 #: bibliograph.ui.item.RecordInfoUi:111
+#: bibliograph/ui/item/RecordInfoUi.js:110
+#: bibliograph/ui/item/RecordInfoUi.js:111
 msgid "Open folder"
 msgstr "Ordner öffnen"
 
 #: bibliograph.ui.item.RecordInfoUi:116
+#: bibliograph/ui/item/RecordInfoUi.js:114
+#: bibliograph/ui/item/RecordInfoUi.js:116
 msgid "Remove from folder"
 msgstr "Aus dem Ordner entfernen"
 
 #: bibliograph.ui.item.ReferenceEditor:344
+#: bibliograph/ui/item/ReferenceEditor.js:344
 msgid "Loading item data..."
 msgstr "Lade Datensatz ..."
 
 #: bibliograph.ui.item.ReferenceEditor:401
+#: bibliograph/ui/item/ReferenceEditor.js:401
 msgid "Loading form data..."
 msgstr "Lade Editor ..."
 
 #: bibliograph.ui.item.ReferenceEditor:421
+#: bibliograph/ui/item/ReferenceEditor.js:421
 msgid "Creating form, please wait ..."
 msgstr "Erzeuge das Formular, bitte warten ..."
 
 #: bibliograph.ui.item.ReferenceEditor:885
+#: bibliograph/ui/item/ReferenceEditor.js:733
+#: bibliograph/ui/item/ReferenceEditor.js:885
+#: bibliograph/plugins/z3950/Plugin.js:122
+#: bibliograph/plugins/z3950/Plugin.js:118
 msgid "Saving..."
 msgstr "Speichern ..."
 
 #: bibliograph.ui.item.ReferenceEditorUi:139
+#: bibliograph/ui/item/ReferenceEditorUi.js:139
 msgid "Abstract"
 msgstr "Zusammenfassung"
 
 #: bibliograph.ui.item.ReferenceEditorUi:153
+#: bibliograph/ui/item/ReferenceEditorUi.js:153
 msgid "Keywords"
 msgstr "Schlagwörter"
 
 #: bibliograph.ui.item.ReferenceEditorUi:167
+#: bibliograph/ui/item/ReferenceEditorUi.js:167
 msgid "Notes"
 msgstr "Kommentar"
 
 #: bibliograph.ui.item.ReferenceEditorUi:207
+#: bibliograph/ui/item/ReferenceEditorUi.js:196
+#: bibliograph/ui/item/ReferenceEditorUi.js:204
+#: bibliograph/ui/item/ReferenceEditorUi.js:207
 msgid "Contents"
 msgstr "Inhaltsverzeichnis"
 
 #: bibliograph.ui.item.ReferenceEditorUi:110
+#: bibliograph/ui/item/ReferenceEditorUi.js:108
+#: bibliograph/ui/item/ReferenceEditorUi.js:110
 msgid "Main"
 msgstr "Stammdaten"
 
 #: bibliograph.ui.item.ReferenceEditorUi:177
+#: bibliograph/ui/item/ReferenceEditorUi.js:175
+#: bibliograph/ui/item/ReferenceEditorUi.js:177
 msgid "About"
 msgstr "Metadaten"
 
 #: bibliograph.ui.item.ReferenceEditorUi:260
+#: bibliograph/ui/item/ReferenceEditorUi.js:258
+#: bibliograph/ui/item/ReferenceEditorUi.js:260
 msgid "Duplicates"
 msgstr "Dubletten"
 
-#: dialog.Login:200
+#: bibliograph.ui.main.Toolbar:64 dialog/Login.js:200
+#: bibliograph/ui/main/Toolbar.js:64
 msgid "Login"
 msgstr "Anmelden"
 
-#: bibliograph.ui.main.Toolbar:78
+#: bibliograph.ui.main.Toolbar:78 bibliograph/ui/main/Toolbar.js:78
 msgid "Logout"
 msgstr "Abmelden"
 
-#: bibliograph.ui.main.Toolbar:94
+#: bibliograph.ui.main.Toolbar:94 bibliograph/ui/main/Toolbar.js:94
 msgid "Loading..."
 msgstr "Lade ..."
 
-#: bibliograph.ui.main.Toolbar:111
+#: bibliograph.ui.main.Toolbar:111 bibliograph/ui/main/Toolbar.js:111
 msgid "Datasources"
 msgstr "Datenbanken"
 
-#: bibliograph.ui.main.Toolbar:126
+#: bibliograph.ui.main.Toolbar:126 bibliograph/ui/main/Toolbar.js:126
 msgid "System"
 msgstr "System"
 
 #: bibliograph.ui.main.Toolbar:144
+#: bibliograph/ui/window/PreferencesWindow.js:36
+#: bibliograph/ui/main/Toolbar.js:144
 msgid "Preferences"
 msgstr "Optionen"
 
-#: bibliograph.ui.main.Toolbar:157
+#: bibliograph.ui.main.Toolbar:157 bibliograph/ui/main/Toolbar.js:157
 msgid "Access management"
 msgstr "Zugangskontrolle"
 
-#: bibliograph.ui.main.Toolbar:170
+#: bibliograph.ui.main.Toolbar:170 bibliograph/ui/main/Toolbar.js:170
 msgid "Plugins"
 msgstr "Plugins"
 
@@ -314,19 +364,22 @@ msgstr ""
 msgid "This will reset and reload the application"
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:183
+#: bibliograph.ui.main.Toolbar:183 bibliograph/ui/main/Toolbar.js:183
 msgid "Import"
 msgstr "Importieren"
 
-#: bibliograph.ui.main.Toolbar:200
+#: bibliograph.ui.main.Toolbar:200 bibliograph/ui/main/Toolbar.js:200
 msgid "Import text file"
 msgstr "Aus Text/Datei importieren"
 
 #: bibliograph.ui.window.AccessControlTool:190
+#: bibliograph/ui/window/AccessControlTool.js:190
+#: bibliograph/plugins/z3950/ImportWindowUi.js:128
+#: bibliograph/plugins/z3950/ImportWindowUi.js:118
 msgid "Help"
 msgstr "Hilfe"
 
-#: bibliograph.ui.main.Toolbar:216
+#: bibliograph.ui.main.Toolbar:216 bibliograph/ui/main/Toolbar.js:216
 msgid "Online Help"
 msgstr "Online-Hilfe"
 
@@ -334,15 +387,17 @@ msgstr "Online-Hilfe"
 msgid "Report a problem or request a feature"
 msgstr "Ein Problem melden oder einen Verbesserungsvorschlag machen"
 
-#: bibliograph.ui.main.Toolbar:223
+#: bibliograph.ui.main.Toolbar:223 bibliograph/ui/window/AboutWindow.js:27
+#: bibliograph/ui/main/Toolbar.js:223
 msgid "About Bibliograph"
 msgstr "Über Bibliograph"
 
-#: bibliograph.ui.main.Toolbar:268
+#: bibliograph.ui.main.Toolbar:268 bibliograph/ui/main/Toolbar.js:268
 msgid "Enter search term"
 msgstr "Bitte geben sie einen Suchausdruck ein"
 
 #: bibliograph.ui.reference.ListView:343
+#: bibliograph/ui/reference/ListView.js:343
 msgid "Query"
 msgstr "Suchausdruck"
 
@@ -351,82 +406,103 @@ msgid "Loading table ..."
 msgstr "Lade Tabelle ..."
 
 #: bibliograph.ui.reference.ListView:897
+#: bibliograph/ui/reference/ListView.js:897
 msgid "You cannot create an item outside a folder"
 msgstr "Sie können keinen Datensatz außerhalb eines Ordners erstellen"
 
 #: bibliograph.ui.reference.ListView:911
+#: bibliograph/ui/reference/ListView.js:911
 msgid "Do your really want to remove the selected references from this folder?"
 msgstr "Möchten Sie die ausgewählten Datensätze wirklich aus diesem Ordner entfernen?\t"
 
 #: bibliograph.ui.reference.ListView:912
+#: bibliograph/ui/reference/ListView.js:912
 msgid "Do your really want to remove the selected references?"
 msgstr "Wollen Sie wirklich die ausgewählten Datensätze entfernen?"
 
 #: bibliograph.ui.reference.ListView:933
+#: bibliograph/ui/reference/ListView.js:933
 msgid "Do your really want to move the selected references to '%1'?"
 msgstr "Wollen Sie wirklich die augewählten Datensätze nach '%1' verschieben?"
 
 #: bibliograph.ui.reference.ListView:956
+#: bibliograph/ui/reference/ListView.js:956
 msgid "Do your really want to copy the selected referencesto '%1'?"
 msgstr "Wollen Sie wirklich die ausgewählten Datensätze nach '%1' kopieren?"
 
 #: bibliograph.ui.reference.ListViewUi:131
+#: bibliograph/ui/reference/ListViewUi.js:131
 msgid "Create new reference type"
 msgstr "Neuen Datensatz anlegen"
 
 #: bibliograph.ui.reference.ListViewUi:161
+#: bibliograph/ui/reference/ListViewUi.js:161
 msgid "Create"
 msgstr "Anlegen"
 
-#: bibliograph.ui.reference.ListViewUi:173
+#: bibliograph.ui.reference.ListViewUi:173 dialog/Dialog.js:443
+#: bibliograph/ui/window/FolderTreeWindowUi.js:99
+#: bibliograph/ui/reference/ListViewUi.js:173
 msgid "Cancel"
 msgstr "Abbrechen"
 
 #: bibliograph.ui.reference.ListViewUi:210
+#: bibliograph/ui/reference/ListViewUi.js:210
 msgid "Move reference(s)..."
 msgstr "Verschieben ..."
 
 #: bibliograph.ui.reference.ListViewUi:219
+#: bibliograph/ui/reference/ListViewUi.js:219
 msgid "Copy reference(s)..."
 msgstr "Kopieren ..."
 
 #: bibliograph.ui.reference.ListViewUi:228
+#: bibliograph/ui/reference/ListViewUi.js:228
 msgid "Export references"
 msgstr "Exportieren"
 
 #: bibliograph.ui.reference.ListViewUi:236
+#: bibliograph/ui/reference/ListViewUi.js:236
 msgid "Export selected references"
 msgstr "Ausgewählte Datensätze exportieren"
 
 #: bibliograph.ui.reference.ListViewUi:245
+#: bibliograph/ui/reference/ListViewUi.js:245
 msgid "Export folder"
 msgstr "Ordner exportieren"
 
 #: bibliograph.ui.reference.ListViewUi:254
+#: bibliograph/ui/reference/ListViewUi.js:254
 msgid "Edit references"
 msgstr "Bearbeiten"
 
 #: bibliograph.ui.reference.ListViewUi:263
+#: bibliograph/ui/reference/ListViewUi.js:263
 msgid "Find/Replace"
 msgstr "Suchen/Ersetzen"
 
 #: bibliograph.ui.window.AboutWindow:43
+#: bibliograph/ui/window/AboutWindow.js:43
 msgid "The application"
 msgstr "Das Programm"
 
 #: bibliograph.ui.window.AboutWindow:63
+#: bibliograph/ui/window/AboutWindow.js:63
 msgid "Credits"
 msgstr "Danksagungen"
 
 #: bibliograph.ui.window.AccessControlTool:31
+#: bibliograph/ui/window/AccessControlTool.js:31
 msgid "Access control tool"
 msgstr "Zugangskontrollwerkzeug"
 
 #: bibliograph.ui.window.AccessControlTool:162
+#: bibliograph/ui/window/AccessControlTool.js:162
 msgid "New User"
 msgstr "Neue/r Benutzer/in"
 
 #: bibliograph.ui.window.AccessControlTool:178
+#: bibliograph/ui/window/AccessControlTool.js:178
 msgid "New Datasource"
 msgstr "Neue Datenbank"
 
@@ -435,90 +511,123 @@ msgid "Export to filesystem"
 msgstr "Ins Dateisystem exportieren"
 
 #: bibliograph.ui.window.AccessControlTool:200
+#: bibliograph/ui/window/AccessControlTool.js:200
 msgid "Exit"
 msgstr "Schließen"
 
 #: bibliograph.ui.window.AccessControlTool:491
+#: bibliograph/ui/window/AccessControlTool.js:270
+#: bibliograph/ui/window/AccessControlTool.js:491
 msgid "Please enter the id of the new '%1'-Object"
 msgstr "Bitte geben sie die ID für das neue '%1'-Objekt ein"
 
 #: bibliograph.ui.window.AccessControlTool:292
+#: bibliograph/ui/window/AccessControlTool.js:292
 msgid "Do you really want to delete '%1'?"
 msgstr "Wollen Sie wirklich '%1' löschen?"
 
 #: bibliograph.ui.window.AccessControlTool:540
+#: bibliograph/ui/window/AccessControlTool.js:317
+#: bibliograph/ui/window/AccessControlTool.js:540
 msgid "Loading data ..."
 msgstr "Lade die Daten ..."
 
 #: bibliograph.ui.window.AccessControlTool:358
+#: bibliograph/ui/window/AccessControlTool.js:358
 msgid "Edited element"
 msgstr "Bearbeitetes Element"
 
 #: bibliograph.ui.window.AccessControlTool:408
+#: bibliograph/ui/window/AccessControlTool.js:406
+#: bibliograph/ui/window/AccessControlTool.js:408
 msgid "Link"
 msgstr "Verknüpfen"
 
 #: bibliograph.ui.window.AccessControlTool:421
+#: bibliograph/ui/window/AccessControlTool.js:419
+#: bibliograph/ui/window/AccessControlTool.js:421
 msgid "Unlink"
 msgstr "Lösen"
 
 #: bibliograph.ui.window.AccessControlTool:446
+#: bibliograph/ui/window/AccessControlTool.js:446
 msgid "Linkable items"
 msgstr "Verknüpfbare Elemente"
 
 #: bibliograph.ui.window.AccessControlTool:516
+#: bibliograph/ui/window/AccessControlTool.js:516
 msgid "Do you really want to delete the objects '%1'?"
 msgstr "Wollen Sie wirklich die Objekte '%1' löschen?"
 
 #: bibliograph.ui.window.DatasourceListWindow:44
+#: bibliograph/ui/window/DatasourceListWindow.js:44
 msgid "Please select the datasource"
 msgstr "Bitte wählen Sie die Datenquelle aus"
 
-#: bibliograph.ui.window.DatasourceListWindow:100
+#: bibliograph.ui.window.DatasourceListWindow:100 dialog/Dialog.js:417
+#: dialog/Form.js:431 bibliograph/ui/window/DatasourceListWindow.js:99
+#: bibliograph/ui/window/DatasourceListWindow.js:100
 msgid "OK"
 msgstr "OK"
 
 #: bibliograph.ui.window.FolderTreeWindowUi:107
+#: bibliograph/ui/window/FolderTreeWindowUi.js:107
 msgid "Select"
 msgstr "Auswählen"
 
 #: bibliograph.ui.window.ImportWindow:120
+#: bibliograph/ui/window/ImportWindow.js:120
 msgid "1. Choose file"
 msgstr "1. Datei auswählen"
 
 #: bibliograph.ui.window.ImportWindow:132
+#: bibliograph/ui/window/ImportWindow.js:132
 msgid "Uploading file..."
 msgstr "Lade Datei auf den Server ..."
 
 #: bibliograph.ui.window.ImportWindow:176
+#: bibliograph/ui/window/ImportWindow.js:176
 msgid "Processing references..."
 msgstr "Verarbeite die Dateisätze ..."
 
 #: bibliograph.ui.window.ImportWindow:213
+#: bibliograph/ui/window/ImportWindow.js:213
+#: bibliograph/plugins/z3950/ImportWindow.js:113
 msgid "You have to select one or more reference to import."
 msgstr "Sie müssen eine oder mehr Datensätze zum importieren auswählen."
 
 #: bibliograph.ui.window.ImportWindow:223
+#: bibliograph/ui/window/ImportWindow.js:223
+#: bibliograph/plugins/z3950/ImportWindow.js:120
 msgid "Please select a folder first."
 msgstr "Bitte wählen sie einen Ordner aus, in den importiert werden soll. "
 
 #: bibliograph.ui.window.ImportWindow:231
+#: bibliograph/ui/window/ImportWindow.js:231
+#: bibliograph/plugins/z3950/ImportWindow.js:127
 msgid "Cannot determine selected folder. Please reload the folders."
 msgstr "Kann den ausgewählten Ordner nicht finden. Bitte die Ordner neu laden."
 
 #: bibliograph.ui.window.ImportWindow:236
+#: bibliograph/ui/window/ImportWindow.js:236
+#: bibliograph/plugins/z3950/ImportWindow.js:131
 msgid "Invalid target folder. You can only import into normal folders."
 msgstr "Ungültiger Zielordner. Sie können nur in normale Ordner importieren."
 
 #: bibliograph.ui.window.ImportWindow:244
+#: bibliograph/ui/window/ImportWindow.js:244
+#: bibliograph/plugins/z3950/ImportWindow.js:138
 msgid "Importing references..."
 msgstr "Importiere die Datensätze ..."
 
 #: bibliograph.ui.window.ImportWindowUi:30
+#: bibliograph/ui/window/ImportWindowUi.js:30
 msgid "Import from file"
 msgstr "Aus Datei importieren"
 
 #: bibliograph.ui.window.ImportWindowUi:72
+#: bibliograph/ui/window/ImportWindowUi.js:69
+#: bibliograph/ui/window/ImportWindowUi.js:72
 msgid "3. Upload file"
 msgstr "3. Datei hochladen"
 
@@ -527,210 +636,246 @@ msgid "Select all"
 msgstr "Alle auswählen"
 
 #: bibliograph.ui.window.ImportWindowUi:128
+#: bibliograph/ui/window/ImportWindowUi.js:128
+#: bibliograph/plugins/z3950/ImportWindowUi.js:169
+#: bibliograph/plugins/z3950/ImportWindowUi.js:158
 msgid "Import selected records"
 msgstr "Augewählte Datensätze importieren"
 
 #: bibliograph.ui.window.ImportWindowUi:139
+#: bibliograph/ui/window/ImportWindowUi.js:139
+#: bibliograph/plugins/z3950/ImportWindowUi.js:178
+#: bibliograph/plugins/z3950/ImportWindowUi.js:167
 msgid "Close"
 msgstr "Schließen"
 
 #: bibliograph.ui.window.PreferencesWindow:75
+#: bibliograph/ui/window/PreferencesWindow.js:75
 msgid "General"
 msgstr ""
 
 #: bibliograph.ui.window.PreferencesWindow:84
+#: bibliograph/ui/window/PreferencesWindow.js:84
 msgid "Application title"
 msgstr "Programmtitel"
 
 #: bibliograph.ui.window.PreferencesWindow:99
+#: bibliograph/ui/window/PreferencesWindow.js:99
 msgid "Application logo"
 msgstr "Anwendungslogo"
 
 #: bibliograph.ui.window.PreferencesWindow:114
+#: bibliograph/ui/window/PreferencesWindow.js:114
 msgid "Language"
 msgstr ""
 
 #: bibliograph.ui.window.PreferencesWindow:136
+#: bibliograph/ui/window/PreferencesWindow.js:136
 msgid "Use browser locale"
 msgstr "Browser-Einstellungen verwenden"
 
 #: bibliograph.ui.window.PreferencesWindow:175
+#: bibliograph/ui/window/PreferencesWindow.js:175
 msgid "Fields"
 msgstr "Felder"
 
 #: bibliograph.ui.window.PreferencesWindow:190
+#: bibliograph/ui/window/PreferencesWindow.js:190
 msgid "Database"
 msgstr "Datenbank"
 
 #: bibliograph.ui.window.PreferencesWindow:232
+#: bibliograph/ui/window/PreferencesWindow.js:231
+#: bibliograph/ui/window/PreferencesWindow.js:232
 msgid "Exclude fields"
 msgstr "Felder ausschließen"
 
 #: bibliograph.ui.window.PreferencesWindow:241
+#: bibliograph/ui/window/PreferencesWindow.js:241
 msgid "Enter the names of fields to exclude."
 msgstr "Geben Sie die auszuschließenden Felder ein."
 
 #: bibliograph.ui.window.PreferencesWindow:266
+#: bibliograph/ui/window/PreferencesWindow.js:266
 msgid "Access"
 msgstr "Zugang"
 
 #: bibliograph.ui.window.PreferencesWindow:277
+#: bibliograph/ui/window/PreferencesWindow.js:277
 msgid "Authentication method"
 msgstr "Authentifizierungsmethode"
 
 #: bibliograph.ui.window.PreferencesWindow:283
+#: bibliograph/ui/window/PreferencesWindow.js:283
 msgid "Client sends plain text password"
 msgstr "Klartextübertragung des Passworts (nur mit HTTPS)"
 
 #: bibliograph.ui.window.PreferencesWindow:289
+#: bibliograph/ui/window/PreferencesWindow.js:289
 msgid "Client sends hashed password"
 msgstr "Verschlüsselte Übertragung des Passworts"
 
 #: bibliograph.ui.window.PreferencesWindow:315
+#: bibliograph/ui/window/PreferencesWindow.js:315
 msgid "Plaintext passwords without a secure connection (HTTPS) are not allowed."
 msgstr "Klartextübertragung des Passworts erfordert eine sichere Verbindung (HTTPS)"
 
 #: bibliograph.ui.window.PreferencesWindow:330
+#: bibliograph/ui/window/PreferencesWindow.js:330
 msgid "Access Mode"
 msgstr "Zugangsmodus"
 
 #: bibliograph.ui.window.PreferencesWindow:334
+#: bibliograph/ui/window/PreferencesWindow.js:334
 msgid "Normal"
 msgstr "Normal"
 
 #: bibliograph.ui.window.PreferencesWindow:338
+#: bibliograph/ui/window/PreferencesWindow.js:338
 msgid "Read-Only"
 msgstr "Nur-Lese-Modus"
 
 #: bibliograph.ui.window.PreferencesWindow:370
+#: bibliograph/ui/window/PreferencesWindow.js:370
 msgid "Custom message"
 msgstr "Spezieller Hinweis"
 
 #: bibliograph.ui.window.PreferencesWindow:374
+#: bibliograph/ui/window/PreferencesWindow.js:374
 msgid "Shown to users in read-only and no-access mode."
 msgstr "Wird den Benutzern im Nur-Lese-Modus und bei Zugangssperre angezeigt."
 
 #: bibliograph.ui.window.SearchHelpWindow:25
+#: bibliograph/ui/window/SearchHelpWindow.js:25
 msgid "Search Help Window"
 msgstr "Hilfe für die Suche"
 
-#: bibliograph.Application:182
+#: bibliograph.Application:182 bibliograph/Application.js:182
+#: bibliograph/Application.js:181
 msgid "Missing server address. Please contact administrator."
 msgstr ""
 
-#: qx.util.Validate:90
+#: qx.util.Validate:90 qx/util/Validate.js:90
 msgid "%1 is not a number."
 msgstr ""
 
-#: qx.util.Validate:129
+#: qx.util.Validate:129 qx/util/Validate.js:129
 msgid "'%1' is not an email address."
 msgstr ""
 
-#: qx.util.Validate:166
+#: qx.util.Validate:166 qx/util/Validate.js:166
 msgid "%1 is not a string."
 msgstr ""
 
-#: qx.util.Validate:202
+#: qx.util.Validate:202 qx/util/Validate.js:202
 msgid "%1 is not an url."
 msgstr ""
 
-#: qx.util.Validate:243
+#: qx.util.Validate:243 qx/util/Validate.js:243
 msgid "%1 is not a color! %2"
 msgstr ""
 
-#: qx.util.Validate:267
+#: qx.util.Validate:267 qx/util/Validate.js:267
 msgid "%1 is not in the range from [%2, %3]."
 msgstr ""
 
-#: qx.util.Validate:290
+#: qx.util.Validate:290 qx/util/Validate.js:290
 msgid "%1 is not in %2"
 msgstr ""
 
-#: qx.util.Validate:314
+#: qx.util.Validate:314 qx/util/Validate.js:314
 msgid "%1 does not fit %2."
 msgstr ""
 
-#: dialog.Confirm:117
+#: dialog.Confirm:117 dialog/Confirm.js:117
 msgid "yes"
 msgstr ""
 
-#: dialog.Confirm:129
+#: dialog.Confirm:129 dialog/Confirm.js:129
 msgid "no"
 msgstr ""
 
 #: bibliograph.ui.window.ImportWindowUi:116
+#: bibliograph/ui/window/ImportWindowUi.js:116
 msgid "Import all records"
 msgstr ""
 
-#: dialog.Login:150
+#: dialog.Login:150 dialog/Login.js:150
 msgid "Name"
 msgstr ""
 
-#: dialog.Login:150
+#: dialog.Login:150 dialog/Login.js:150
 msgid "Password"
 msgstr ""
 
-#: dialog.Login:206
+#: dialog.Login:206 dialog/Login.js:206
 msgid "Forgot Password?"
 msgstr ""
 
 #: bibliograph.ui.reference.ListView:1040
+#: bibliograph/ui/reference/ListView.js:1040
 msgid "Do you really want to make the folder empty, moving all references to the trash that are not in other folders?"
 msgstr ""
 
 #: bibliograph.ui.reference.ListView:1043
+#: bibliograph/ui/reference/ListView.js:1043
 msgid "Emptying the folder ..."
 msgstr ""
 
 #: bibliograph.ui.reference.ListViewUi:273
+#: bibliograph/ui/reference/ListViewUi.js:273
 msgid "Make folder empty"
 msgstr ""
 
-#: qx.ui.form.validation.Manager:37
+#: qx.ui.form.validation.Manager:37 qx/ui/form/validation/Manager.js:37
 msgid "This field is required"
 msgstr ""
 
-#: qx.ui.control.DateChooser:258
+#: qx.ui.control.DateChooser:258 qx/ui/control/DateChooser.js:258
 msgid "Last year"
 msgstr ""
 
-#: qx.ui.control.DateChooser:270
+#: qx.ui.control.DateChooser:270 qx/ui/control/DateChooser.js:270
 msgid "Last month"
 msgstr ""
 
-#: qx.ui.control.DateChooser:282
+#: qx.ui.control.DateChooser:282 qx/ui/control/DateChooser.js:282
 msgid "Next month"
 msgstr ""
 
-#: qx.ui.control.DateChooser:294
+#: qx.ui.control.DateChooser:294 qx/ui/control/DateChooser.js:294
 msgid "Next year"
 msgstr ""
 
-#: qx.ui.table.columnmodel.Resize:197
+#: qx.ui.table.columnmodel.Resize:197 qx/ui/table/columnmodel/Resize.js:197
 msgid "Reset column widths"
 msgstr ""
 
-#: qx.ui.table.Table:1974
+#: qx.ui.table.Table:1974 qx/ui/table/Table.js:1974
 msgid "one row"
 msgid_plural "%1 rows"
 msgstr[0] ""
 msgstr[1] ""
 
-#: qx.ui.table.Table:1976
+#: qx.ui.table.Table:1976 qx/ui/table/Table.js:1976
 msgid "one of one row"
 msgid_plural "%1 of %2 rows"
 msgstr[0] ""
 msgstr[1] ""
 
 #: bibliograph.ui.reference.ListView:395
+#: bibliograph/ui/reference/ListView.js:395
 msgid "Loading table layout ..."
 msgstr ""
 
 #: bibliograph.ui.item.FormattedViewUi:65
+#: bibliograph/ui/item/FormattedViewUi.js:65
 msgid "All Results"
 msgstr ""
 
 #: bibliograph.ui.item.FormattedView:190
+#: bibliograph/ui/item/FormattedView.js:177
+#: bibliograph/ui/item/FormattedView.js:190
 msgid "Loading formatted citations..."
 msgstr ""
 
@@ -738,11 +883,11 @@ msgstr ""
 msgid "Development"
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:241
+#: bibliograph.ui.main.Toolbar:241 bibliograph/ui/main/Toolbar.js:241
 msgid "Run RPC method test.test"
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:235
+#: bibliograph.ui.main.Toolbar:235 bibliograph/ui/main/Toolbar.js:235
 msgid "Developer"
 msgstr ""
 
@@ -755,9 +900,56 @@ msgid "No selectable items"
 msgstr ""
 
 #: bibliograph.ui.window.AccessControlTool:452
+#: bibliograph/ui/window/AccessControlTool.js:452
 msgid "No linkable items"
 msgstr ""
 
-#: dialog.Form:370
+#: dialog.Form:370 dialog/Form.js:370
 msgid "Value is invalid"
+msgstr ""
+
+#: bibliograph/plugins/z3950/Plugin.js:45
+#: bibliograph/plugins/z3950/ImportWindowUi.js:40
+#: bibliograph/plugins/z3950/ImportWindowUi.js:34
+#: bibliograph/plugins/z3950/ImportWindow.js:149
+msgid "Import from library catalog"
+msgstr ""
+
+#: bibliograph/plugins/z3950/Plugin.js:53
+#: bibliograph/plugins/z3950/Plugin.js:51
+msgid "Z39.50 Import"
+msgstr ""
+
+#: bibliograph/plugins/z3950/Plugin.js:100
+#: bibliograph/plugins/z3950/Plugin.js:96
+msgid "(Un-)Select All"
+msgstr ""
+
+#: bibliograph/plugins/z3950/Plugin.js:112
+#: bibliograph/plugins/z3950/Plugin.js:108
+msgid "Save"
+msgstr ""
+
+#: bibliograph/plugins/z3950/Plugin.js:130
+#: bibliograph/plugins/z3950/Plugin.js:126
+msgid "Reload"
+msgstr ""
+
+#: bibliograph/plugins/z3950/Plugin.js:134
+#: bibliograph/plugins/z3950/Plugin.js:130
+msgid "Reloading library metadata..."
+msgstr ""
+
+#: bibliograph/plugins/z3950/ImportWindowUi.js:112
+#: bibliograph/plugins/z3950/ImportWindowUi.js:102
+msgid "Enter search terms"
+msgstr ""
+
+#: bibliograph/plugins/z3950/ImportWindowUi.js:121
+#: bibliograph/plugins/z3950/ImportWindowUi.js:111
+msgid "Search"
+msgstr ""
+
+#: bibliograph/plugins/z3950/ImportWindow.js:99
+msgid "Searching..."
 msgstr ""

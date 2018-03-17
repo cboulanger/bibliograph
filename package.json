@@ -23,11 +23,11 @@
     "source": "bash bin/start-source-server.sh",
     "test": "bash test/codeception-all.sh && bash test/api.sh || exit $?",
     "test-dev": "bash test/codeception-all.sh && bash test/api.sh development",
-    "compile": "cd src/client/bibliograph && qx compile --watch",
+    "compile": "cd src/client/bibliograph && (qx clean) && (qx compile --watch)",
     "view-log": "bash bin/view-log.sh",
     "new-log": "bash bin/new-log.sh",
     "create-migration": "bash bin/create-migration.sh",
-    "translation" : "cd src/server && php yii message config/message.php"
+    "translation": "cd src/server && php yii message config/message.php"
   },
   "author": "",
   "license": "ISC",

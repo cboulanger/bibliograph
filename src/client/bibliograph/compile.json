@@ -28,12 +28,14 @@
     {
       "class": "bibliograph.Application",
       "theme": "bibliograph.theme.Theme",
-      "name": "bibliograph"
+      "name": "bibliograph",
+      "include" : ["bibliograph.plugins.*"]
     }
   ],
 
   "libraries": [
     "../../vcslib/qooxdoo/framework",
+    "../../server/modules/z3950/client",
     "."
   ],
 

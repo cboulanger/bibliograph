@@ -7,11 +7,18 @@
   <component name="ChangeListManager">
     <list default="true" id="1d7efdcc-ab7b-4e93-b274-cf7be3d39986" name="Default" comment="ACTool: Add tests for creating users and datasources">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/src/client/bibliograph/source/class/qcl/ui/dialog/ServerProgress.js" afterPath="$PROJECT_DIR$/src/client/bibliograph/source/class/qcl/ui/dialog/ServerProgress.js" />
+      <change beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
+      <change beforePath="$PROJECT_DIR$/src/client/bibliograph/compile.json" afterPath="$PROJECT_DIR$/src/client/bibliograph/compile.json" />
+      <change beforePath="$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/AccessManager.js" afterPath="$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/AccessManager.js" />
+      <change beforePath="$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/Application.js" afterPath="$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/Application.js" />
+      <change beforePath="$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/Setup.js" afterPath="$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/Setup.js" />
+      <change beforePath="$PROJECT_DIR$/src/client/bibliograph/source/translation/de.po" afterPath="$PROJECT_DIR$/src/client/bibliograph/source/translation/de.po" />
+      <change beforePath="$PROJECT_DIR$/src/client/bibliograph/source/translation/en.po" afterPath="$PROJECT_DIR$/src/client/bibliograph/source/translation/en.po" />
+      <change beforePath="$PROJECT_DIR$/src/server/composer.lock" afterPath="$PROJECT_DIR$/src/server/composer.lock" />
       <change beforePath="$PROJECT_DIR$/src/server/modules/z3950/client/Manifest.json" afterPath="$PROJECT_DIR$/src/server/modules/z3950/client/Manifest.json" />
-      <change beforePath="$PROJECT_DIR$/src/server/modules/z3950/client/source/class/z3950/ImportWindow.js" afterPath="$PROJECT_DIR$/src/server/modules/z3950/client/source/class/plugins/z3950/ImportWindow.js" />
-      <change beforePath="$PROJECT_DIR$/src/server/modules/z3950/client/source/class/z3950/ImportWindowUi.js" afterPath="$PROJECT_DIR$/src/server/modules/z3950/client/source/class/plugins/z3950/ImportWindowUi.js" />
-      <change beforePath="$PROJECT_DIR$/src/server/modules/z3950/client/source/class/z3950/Plugin.js" afterPath="$PROJECT_DIR$/src/server/modules/z3950/client/source/class/plugins/z3950/Plugin.js" />
+      <change beforePath="$PROJECT_DIR$/src/server/modules/z3950/client/source/class/plugins/z3950/ImportWindow.js" afterPath="$PROJECT_DIR$/src/server/modules/z3950/client/source/class/bibliograph/plugins/z3950/ImportWindow.js" />
+      <change beforePath="$PROJECT_DIR$/src/server/modules/z3950/client/source/class/plugins/z3950/ImportWindowUi.js" afterPath="$PROJECT_DIR$/src/server/modules/z3950/client/source/class/bibliograph/plugins/z3950/ImportWindowUi.js" />
+      <change beforePath="$PROJECT_DIR$/src/server/modules/z3950/client/source/class/plugins/z3950/Plugin.js" afterPath="$PROJECT_DIR$/src/server/modules/z3950/client/source/class/bibliograph/plugins/z3950/Plugin.js" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -40,23 +47,23 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="SearchController.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/controllers/SearchController.php">
+      <file leaf-file-name="Plugin.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/client/source/class/bibliograph/plugins/z3950/Plugin.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-101">
-              <caret line="49" column="64" lean-forward="false" selection-start-line="49" selection-start-column="64" selection-end-line="49" selection-end-column="64" />
+            <state relative-caret-position="151">
+              <caret line="37" column="6" lean-forward="false" selection-start-line="37" selection-start-column="6" selection-end-line="37" selection-end-column="6" />
               <folding>
-                <element signature="e#134#154#0#PHP" expanded="true" />
+                <element signature="n#!!doc" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Plugin.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/client/source/class/plugins/z3950/Plugin.js">
+      <file leaf-file-name="Setup.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/Setup.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="182">
-              <caret line="144" column="48" lean-forward="false" selection-start-line="144" selection-start-column="48" selection-end-line="144" selection-end-column="48" />
+            <state relative-caret-position="227">
+              <caret line="219" column="45" lean-forward="false" selection-start-line="219" selection-start-column="45" selection-end-line="219" selection-end-column="45" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -67,28 +74,18 @@
       <file leaf-file-name="TableController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/controllers/TableController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-3171">
+            <state relative-caret-position="-922">
               <caret line="21" column="39" lean-forward="false" selection-start-line="21" selection-start-column="39" selection-end-line="21" selection-end-column="39" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ServerProgress.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/client/bibliograph/source/class/qcl/ui/dialog/ServerProgress.js">
+      <file leaf-file-name="ImportWindow.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/client/source/class/bibliograph/plugins/z3950/ImportWindow.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="267">
-              <caret line="128" column="40" lean-forward="true" selection-start-line="128" selection-start-column="40" selection-end-line="128" selection-end-column="40" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ImportWindow.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/client/source/class/plugins/z3950/ImportWindow.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-368">
-              <caret line="99" column="39" lean-forward="false" selection-start-line="99" selection-start-column="39" selection-end-line="99" selection-end-column="39" />
+            <state relative-caret-position="318">
+              <caret line="22" column="17" lean-forward="false" selection-start-line="22" selection-start-column="17" selection-end-line="22" selection-end-column="29" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -96,11 +93,65 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ImportWindowUi.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/client/source/class/plugins/z3950/ImportWindowUi.js">
+      <file leaf-file-name="compile.json" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/client/bibliograph/compile.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="224">
-              <caret line="21" column="3" lean-forward="true" selection-start-line="21" selection-start-column="3" selection-end-line="21" selection-end-column="3" />
+            <state relative-caret-position="366">
+              <caret line="40" column="0" lean-forward="false" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Manifest.json" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/client/Manifest.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="330">
+              <caret line="22" column="20" lean-forward="false" selection-start-line="22" selection-start-column="20" selection-end-line="22" selection-end-column="20" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="db.json" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/client/bibliograph/source-compiled/db.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="45">
+              <caret line="3" column="40" lean-forward="false" selection-start-line="3" selection-start-column="40" selection-end-line="3" selection-end-column="40" />
+              <folding>
+                <marker date="1521293372041" expanded="true" signature="494209:494259" ph="{&quot;mtime&quot;: &quot;2018-02-16T22:25:01.858Z&quot;...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ImportWindowUi.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/client/source/class/bibliograph/plugins/z3950/ImportWindowUi.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="297">
+              <caret line="23" column="1" lean-forward="true" selection-start-line="23" selection-start-column="1" selection-end-line="23" selection-end-column="1" />
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Application.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/Application.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="165">
+              <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AccessManager.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/AccessManager.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="441">
+              <caret line="289" column="42" lean-forward="false" selection-start-line="289" selection-start-column="42" selection-end-line="289" selection-end-column="42" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -119,11 +170,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>clearTreeCache</find>
-      <find>subsc</find>
-      <find>folder.node.update</find>
-      <find>$this-&gt;</find>
-      <find>Invalid database setup</find>
       <find>cannot u</find>
       <find>*</find>
       <find>&quot;Folder&quot;</find>
@@ -148,6 +194,11 @@
       <find>%s</find>
       <find>debug</find>
       <find>void</find>
+      <find>libraries</find>
+      <find>PluginMan</find>
+      <find>plugin</find>
+      <find>parts</find>
+      <find>z39</find>
       <find>var</find>
     </findStrings>
     <replaceStrings>
@@ -184,6 +235,8 @@
       <dir>$PROJECT_DIR$/src/server/controllers</dir>
       <dir>$PROJECT_DIR$/src/server</dir>
       <dir>$PROJECT_DIR$/src/client/bibliograph/source</dir>
+      <dir>$PROJECT_DIR$/src/client</dir>
+      <dir>$PROJECT_DIR$/src/vcslib/qooxdoo-compiler</dir>
     </dirStrings>
   </component>
   <component name="Git.Settings">
@@ -198,13 +251,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/bin/new-log.sh" />
-        <option value="$PROJECT_DIR$/bin/view-log.sh" />
-        <option value="$PROJECT_DIR$/src/server/tests/api/AccessControllerCest.php" />
-        <option value="$PROJECT_DIR$/src/server/vendor/cranetm/yii2-json-rpc-2.0/JsonRpc2/Controller.php" />
-        <option value="$PROJECT_DIR$/src/server/config/test.php" />
-        <option value="$PROJECT_DIR$/src/server/config/common.php" />
-        <option value="$PROJECT_DIR$/src/server/tests/api/AccessConfigControllerCest.php" />
         <option value="$PROJECT_DIR$/src/server/controllers/AccessController.php" />
         <option value="$PROJECT_DIR$/src/index.html" />
         <option value="$PROJECT_DIR$/bin/start-source-server.sh" />
@@ -227,8 +273,6 @@
         <option value="$PROJECT_DIR$/src/server/tests/api.suite.yml" />
         <option value="$PROJECT_DIR$/src/server/tests/_support/Helper/Api.php" />
         <option value="$PROJECT_DIR$/src/server/tests/api/Z3950ControllersCest.php" />
-        <option value="$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/Application.js" />
-        <option value="$PROJECT_DIR$/src/client/bibliograph/compile.json" />
         <option value="$PROJECT_DIR$/src/client/bibliograph/source/class/qcl/application/MAppManagerProvider.js" />
         <option value="$PROJECT_DIR$/src/server/controllers/traits/AuthTrait.php" />
         <option value="$PROJECT_DIR$/src/server/lib/dialog/ServerProgress.php" />
@@ -244,11 +288,20 @@
         <option value="$PROJECT_DIR$/src/server/modules/z3950/client/source/class/z3950/Plugin.js" />
         <option value="$PROJECT_DIR$/src/server/modules/z3950/lib/yaz/Yaz.php" />
         <option value="$PROJECT_DIR$/src/server/modules/z3950/controllers/SearchController.php" />
-        <option value="$PROJECT_DIR$/src/server/modules/z3950/client/Manifest.json" />
         <option value="$PROJECT_DIR$/src/server/modules/z3950/client/source/class/plugins/z3950/ImportWindowUi.js" />
         <option value="$PROJECT_DIR$/src/server/modules/z3950/client/source/class/plugins/z3950/Plugin.js" />
         <option value="$PROJECT_DIR$/src/client/bibliograph/source/class/qcl/ui/dialog/ServerProgress.js" />
         <option value="$PROJECT_DIR$/src/server/modules/z3950/client/source/class/plugins/z3950/ImportWindow.js" />
+        <option value="$PROJECT_DIR$/src/server/modules/z3950/client/source/class/bibliograph/plugins/z3950/ImportWindow.js" />
+        <option value="$PROJECT_DIR$/package.json" />
+        <option value="$PROJECT_DIR$/src/client/bibliograph/source-compiled/db.json" />
+        <option value="$PROJECT_DIR$/src/server/modules/z3950/client/Manifest.json" />
+        <option value="$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/Setup.js" />
+        <option value="$PROJECT_DIR$/src/server/modules/z3950/client/source/class/bibliograph/plugins/z3950/Plugin.js" />
+        <option value="$PROJECT_DIR$/src/client/bibliograph/compile.json" />
+        <option value="$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/AccessManager.js" />
+        <option value="$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/Application.js" />
+        <option value="$PROJECT_DIR$/src/server/modules/z3950/client/source/class/bibliograph/plugins/z3950/ImportWindowUi.js" />
       </list>
     </option>
   </component>
@@ -384,9 +437,9 @@
       <path value="$PROJECT_DIR$/src/server/vendor/react/stream" />
     </include_path>
   </component>
-  <component name="ProjectFrameBounds" fullScreen="true">
-    <option name="width" value="1280" />
-    <option name="height" value="800" />
+  <component name="ProjectFrameBounds" extendedState="6" fullScreen="true">
+    <option name="width" value="836" />
+    <option name="height" value="1050" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -440,8 +493,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -488,6 +539,16 @@
               <item name="bibliograph" type="b2602c69:ProjectViewProjectNode" />
               <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="client" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="source" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="class" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="bibliograph" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="server" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
@@ -545,6 +606,19 @@
               <item name="client" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="source" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="class" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="bibliograph" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="server" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="modules" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="z3950" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="client" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="source" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="class" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="plugins" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
@@ -557,30 +631,9 @@
               <item name="client" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="source" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="class" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="plugins" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="z3950" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="bibliograph" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="server" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="modules" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="z3950" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="client" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="source" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="resource" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="bibliograph" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="server" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="modules" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="z3950" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="client" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="source" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="translation" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
               <item name="bibliograph" type="b2602c69:ProjectViewProjectNode" />
@@ -595,26 +648,38 @@
               <item name="bibliograph" type="b2602c69:ProjectViewProjectNode" />
               <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="server" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="modules" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="z3950" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="lib" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="vcslib" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
               <item name="bibliograph" type="b2602c69:ProjectViewProjectNode" />
               <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="test" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="vcslib" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="qooxdoo-compiler" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
               <item name="bibliograph" type="b2602c69:ProjectViewProjectNode" />
               <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="test" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="server" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="vcslib" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="qooxdoo-compiler" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="docs" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="bibliograph" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="vcslib" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="qooxdoo-compiler" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="docs" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="cli" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -634,19 +699,19 @@
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/server/modules/z3950/client/source/class/plugins" />
-      <recent name="$PROJECT_DIR$/src/server/modules/z3950/lib/yaz" />
-      <recent name="$PROJECT_DIR$/src/server/modules/z3950/lib" />
-      <recent name="$PROJECT_DIR$/doc" />
-      <recent name="$PROJECT_DIR$/src/server/modules/z3950" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/server/modules/z3950/client" />
       <recent name="$PROJECT_DIR$/bin" />
       <recent name="$PROJECT_DIR$/src/server/tests/unit/00-base" />
       <recent name="$PROJECT_DIR$/src/server/tests/api" />
       <recent name="$PROJECT_DIR$" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/server/modules/z3950/client/source/class/bibliograph" />
+      <recent name="$PROJECT_DIR$/src/server/modules/z3950/client/source/class/plugins" />
+      <recent name="$PROJECT_DIR$/src/server/modules/z3950/lib/yaz" />
+      <recent name="$PROJECT_DIR$/src/server/modules/z3950/lib" />
+      <recent name="$PROJECT_DIR$/doc" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -714,6 +779,7 @@
       <workItem from="1521132450982" duration="30000" />
       <workItem from="1521132526990" duration="18622000" />
       <workItem from="1521237621610" duration="1294000" />
+      <workItem from="1521285087652" duration="5388000" />
     </task>
     <servers />
   </component>
@@ -726,7 +792,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="364663000" />
+    <option name="totallyTimeSpent" value="370051000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -738,21 +804,22 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1280" height="800" extended-state="0" />
+    <frame x="0" y="0" width="1680" height="1050" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.28513733" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287483" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287483" sideWeight="0.51130855" order="11" side_tool="true" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32956383" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287483" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34390992" sideWeight="0.51282054" order="11" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287483" sideWeight="0.48869145" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287483" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2625202" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.43328747" sideWeight="0.49030694" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.34390992" sideWeight="0.4871795" order="8" side_tool="false" content_ui="tabs" x="42" y="470" width="814" height="363" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30402932" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32956383" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35619244" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26251528" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39889959" sideWeight="0.48707592" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -760,7 +827,6 @@
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection Results" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24484181" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3562586" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
@@ -839,181 +905,10 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/server/vendor/yiisoft/yii2/web/UrlManager.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="128">
-          <caret line="565" column="20" lean-forward="false" selection-start-line="565" selection-start-column="20" selection-end-line="565" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/codeception">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="14" column="25" lean-forward="false" selection-start-line="14" selection-start-column="25" selection-end-line="14" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/api.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="145">
-          <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="28" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/controllers/traits/CrudTrait.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/controllers/AppController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="121">
-          <caret line="44" column="15" lean-forward="false" selection-start-line="44" selection-start-column="15" selection-end-line="44" selection-end-column="15" />
-          <folding>
-            <element signature="e#567#604#0#PHP" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/Module.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="38" column="51" lean-forward="false" selection-start-line="38" selection-start-column="51" selection-end-line="38" selection-end-column="51" />
-          <folding>
-            <element signature="e#37#61#0#PHP" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/tests/_support/JsonRpcTrait.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1005">
-          <caret line="67" column="24" lean-forward="false" selection-start-line="67" selection-start-column="24" selection-end-line="67" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/tests/_support/_generated/ApiTesterActions.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="42027">
-          <caret line="3251" column="20" lean-forward="false" selection-start-line="3251" selection-start-column="20" selection-end-line="3251" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/vendor/codeception/codeception/src/Codeception/Module.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="128">
-          <caret line="209" column="20" lean-forward="true" selection-start-line="209" selection-start-column="20" selection-end-line="209" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/tests/acceptance.suite.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/tests/api.suite.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="21" lean-forward="true" selection-start-line="5" selection-start-column="21" selection-end-line="5" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/tests/_support/ApiTester.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="855">
-          <caret line="57" column="3" lean-forward="false" selection-start-line="57" selection-start-column="3" selection-end-line="57" selection-end-column="3" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/tests/_support/Helper/Api.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" column="18" lean-forward="false" selection-start-line="18" selection-start-column="18" selection-end-line="18" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/tests/api/Z3950ControllersCest.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="254">
-          <caret line="74" column="27" lean-forward="false" selection-start-line="74" selection-start-column="27" selection-end-line="74" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/client/bibliograph/compile.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="61">
-          <caret line="7" column="5" lean-forward="true" selection-start-line="7" selection-start-column="5" selection-end-line="7" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/vcslib/qooxdoo/framework/source/class/qx/lang/String.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="427">
-          <caret line="294" column="4" lean-forward="false" selection-start-line="294" selection-start-column="4" selection-end-line="294" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/vendor/yiisoft/yii2/web/Request.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="184">
-          <caret line="651" column="20" lean-forward="false" selection-start-line="651" selection-start-column="20" selection-end-line="651" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/controllers/traits/AuthTrait.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="106">
-          <caret line="51" column="0" lean-forward="false" selection-start-line="51" selection-start-column="0" selection-end-line="51" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/AccessManager.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1403">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/client/bibliograph/source/class/qcl/application/MAppManagerProvider.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-896">
-          <caret line="37" column="45" lean-forward="false" selection-start-line="37" selection-start-column="45" selection-end-line="37" selection-end-column="45" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/MApplicationState.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3407">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-            <marker date="1519714738437" expanded="true" signature="4307:4339" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/data/servers/z3950.loc.gov-7090-voyager.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/stubs/standard/standard_0.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="188">
           <caret line="156" column="9" lean-forward="false" selection-start-line="156" selection-start-column="9" selection-end-line="156" selection-end-column="9" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1021,7 +916,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1820">
           <caret line="191" column="11" lean-forward="false" selection-start-line="191" selection-start-column="11" selection-end-line="191" selection-end-column="11" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1065,7 +959,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="111">
           <caret line="78" column="62" lean-forward="false" selection-start-line="78" selection-start-column="62" selection-end-line="78" selection-end-column="62" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1073,7 +966,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="945">
           <caret line="68" column="20" lean-forward="false" selection-start-line="68" selection-start-column="20" selection-end-line="68" selection-end-column="20" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1098,7 +990,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2880">
           <caret line="212" column="44" lean-forward="false" selection-start-line="212" selection-start-column="44" selection-end-line="212" selection-end-column="44" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1106,7 +997,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
           <caret line="28" column="26" lean-forward="false" selection-start-line="28" selection-start-column="26" selection-end-line="28" selection-end-column="26" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1114,10 +1004,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="915">
           <caret line="62" column="6" lean-forward="false" selection-start-line="62" selection-start-column="6" selection-end-line="62" selection-end-column="6" />
-          <folding>
-            <marker date="1521217809924" expanded="true" signature="8792:9076" ph="SELECT id, $... ${$table}" />
-            <marker date="1521217809924" expanded="true" signature="8907:8943" ph="SELECT MAX($... ${$table}" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1141,7 +1028,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3810">
           <caret line="280" column="37" lean-forward="false" selection-start-line="280" selection-start-column="37" selection-end-line="280" selection-end-column="37" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1149,44 +1035,15 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/client/source/class/plugins/z3950/ImportWindowUi.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="224">
-          <caret line="21" column="3" lean-forward="true" selection-start-line="21" selection-start-column="3" selection-end-line="21" selection-end-column="3" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/client/Manifest.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" column="21" lean-forward="false" selection-start-line="13" selection-start-column="21" selection-end-line="13" selection-end-column="21" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/controllers/SearchController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-101">
+        <state relative-caret-position="0">
           <caret line="49" column="64" lean-forward="false" selection-start-line="49" selection-start-column="64" selection-end-line="49" selection-end-column="64" />
           <folding>
-            <element signature="e#134#154#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/client/source/class/plugins/z3950/Plugin.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="182">
-          <caret line="144" column="48" lean-forward="false" selection-start-line="144" selection-start-column="48" selection-end-line="144" selection-end-column="48" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#134#154#0#PHP" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1195,23 +1052,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1037">
           <caret line="22" column="16" lean-forward="false" selection-start-line="22" selection-start-column="16" selection-end-line="22" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/Application.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="98">
-          <caret line="198" column="34" lean-forward="false" selection-start-line="198" selection-start-column="34" selection-end-line="198" selection-end-column="34" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/controllers/TableController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3171">
-          <caret line="21" column="39" lean-forward="false" selection-start-line="21" selection-start-column="39" selection-end-line="21" selection-end-column="39" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1220,23 +1060,286 @@
         <state relative-caret-position="205">
           <caret line="188" column="43" lean-forward="false" selection-start-line="188" selection-start-column="23" selection-end-line="188" selection-end-column="43" />
           <folding>
-            <element signature="n#!!doc" expanded="true" />
+            <element signature="n#!!doc" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/client/bibliograph/source/class/qcl/ui/dialog/ServerProgress.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="267">
-          <caret line="128" column="40" lean-forward="true" selection-start-line="128" selection-start-column="40" selection-end-line="128" selection-end-column="40" />
+        <state relative-caret-position="1665">
+          <caret line="128" column="40" lean-forward="false" selection-start-line="128" selection-start-column="40" selection-end-line="128" selection-end-column="40" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/client/source/class/plugins/z3950/ImportWindow.js">
+    <entry file="file://$PROJECT_DIR$/src/client/bibliograph/resource-db.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-368">
-          <caret line="99" column="39" lean-forward="false" selection-start-line="99" selection-start-column="39" selection-end-line="99" selection-end-column="39" />
+        <state relative-caret-position="-5274">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/client/bibliograph/source/class/qcl/application/PluginManager.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-340">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="n#!!doc" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/client/bibliograph/db.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2276">
+          <caret line="2104" column="22" lean-forward="false" selection-start-line="2104" selection-start-column="19" selection-end-line="2104" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/client/bibliograph/source-compiled/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/client/bibliograph/contrib.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/client/bibliograph/source-compiled/version.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/client/bibliograph/header.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="n#!!doc" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="25" column="46" lean-forward="false" selection-start-line="25" selection-start-column="46" selection-end-line="25" selection-end-column="46" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/vcslib/qooxdoo-compiler/docs/compiler/Manifest.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="-153">
+            <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <folding>
+              <marker date="1518819930910" expanded="true" signature="673:1631" ph="{...}" />
+              <marker date="1518819930910" expanded="true" signature="689:1264" ph="{&quot;name&quot;: &quot;Custom Application&quot;...}" />
+              <marker date="1518819930910" expanded="true" signature="975:1082" ph="[...]" />
+              <marker date="1518819930910" expanded="true" signature="983:1076" ph="{&quot;name&quot;: &quot;First Author (uid)&quot;...}" />
+              <marker date="1518819930910" expanded="true" signature="1285:1500" ph="{&quot;namespace&quot;: &quot;custom&quot;...}" />
+              <marker date="1518819930910" expanded="true" signature="1529:1629" ph="{...}" />
+              <marker date="1518819930910" expanded="true" signature="1545:1580" ph="[...]" />
+              <marker date="1518819930910" expanded="true" signature="1593:1625" ph="[...]" />
+            </folding>
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/vcslib/qooxdoo-compiler/docs/compiler/MetaData.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="0">
+            <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/vcslib/qooxdoo-compiler/RELEASE.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="0">
+            <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/vcslib/qooxdoo-compiler/docs/cli/commands.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="0">
+            <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/vcslib/qooxdoo-compiler/demos/js/compare-old-and-new.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/vcslib/qooxdoo-compiler/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/vcslib/qooxdoo-compiler/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="540">
+            <caret line="36" column="12" lean-forward="true" selection-start-line="36" selection-start-column="12" selection-end-line="36" selection-end-column="12" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/vcslib/qooxdoo-compiler/docs/cli/compiler.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="0">
+            <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/qxcompiler/docs/cli/compile-json.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="-1070">
+            <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/client/bibliograph/source-compiled/db.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="40" lean-forward="false" selection-start-line="3" selection-start-column="40" selection-end-line="3" selection-end-column="40" />
+          <folding>
+            <marker date="1521293372041" expanded="true" signature="494209:494259" ph="{&quot;mtime&quot;: &quot;2018-02-16T22:25:01.858Z&quot;...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/client/Manifest.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="22" column="20" lean-forward="false" selection-start-line="22" selection-start-column="20" selection-end-line="22" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/Setup.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="227">
+          <caret line="219" column="45" lean-forward="false" selection-start-line="219" selection-start-column="45" selection-end-line="219" selection-end-column="45" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/controllers/TableController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-922">
+          <caret line="21" column="39" lean-forward="false" selection-start-line="21" selection-start-column="39" selection-end-line="21" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/client/source/class/bibliograph/plugins/z3950/Plugin.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="151">
+          <caret line="37" column="6" lean-forward="false" selection-start-line="37" selection-start-column="6" selection-end-line="37" selection-end-column="6" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/client/source/class/bibliograph/plugins/z3950/ImportWindow.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="318">
+          <caret line="22" column="17" lean-forward="false" selection-start-line="22" selection-start-column="17" selection-end-line="22" selection-end-column="29" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/vcslib/qooxdoo-compiler/docs/cli/compile-json.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="-530">
+            <caret line="5" column="26" lean-forward="false" selection-start-line="5" selection-start-column="26" selection-end-line="5" selection-end-column="26" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/client/bibliograph/compile.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="366">
+          <caret line="40" column="0" lean-forward="false" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/AccessManager.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="441">
+          <caret line="289" column="42" lean-forward="false" selection-start-line="289" selection-start-column="42" selection-end-line="289" selection-end-column="42" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/Application.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/client/source/class/bibliograph/plugins/z3950/ImportWindowUi.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="297">
+          <caret line="23" column="1" lean-forward="true" selection-start-line="23" selection-start-column="1" selection-end-line="23" selection-end-column="1" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>

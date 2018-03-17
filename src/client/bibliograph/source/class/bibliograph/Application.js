@@ -23,7 +23,6 @@ qx.Class.define("bibliograph.Application",
      MEMBERS
   *****************************************************************************
   */
-
   members :
   {
     /**

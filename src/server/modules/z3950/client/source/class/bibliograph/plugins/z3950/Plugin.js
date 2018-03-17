@@ -22,7 +22,7 @@
  *    This plugin allows to import references from Z39.50 datasources
  *
  */
-qx.Class.define("plugins.z3950.Plugin",
+qx.Class.define("bibliograph.plugins.z3950.Plugin",
 {
   extend: qx.core.Object,
   include: [qx.locale.MTranslation],
@@ -37,15 +37,13 @@ qx.Class.define("plugins.z3950.Plugin",
       
       
       // add window
-      let importWindow = new z3950.ImportWindowUi();
+      let importWindow = new bibliograph.plugins.z3950.ImportWindowUi();
       app.getRoot().add(importWindow);
       
       // add a new menu button
       let importMenu = app.getWidgetById("app/toolbar/import");
       let menuButton = new qx.ui.menu.Button(this.tr("Import from library catalog"));
-      menuButton.addListener("execute", function () {
-        importWindow.show();
-      });
+      menuButton.addListener("execute", () => importWindow.show() );
       importMenu.add(menuButton);
       
       // Overlays for preference window @todo rename
@@ -54,9 +52,7 @@ qx.Class.define("plugins.z3950.Plugin",
       
       // ACL
       permMgr.create("z3950.manage").bind("state", pluginTab.getChildControl("button"), "visibility", {
-        converter: function (v) {
-          return v ? "visible" : "excluded"
-        }
+        converter: v => v ? "visible" : "excluded"
       });
       let vboxlayout = new qx.ui.layout.VBox(5);
       pluginTab.setLayout(vboxlayout);
@@ -82,13 +78,13 @@ qx.Class.define("plugins.z3950.Plugin",
       };
       list.setDelegate(delegate);
       
-      let store = new qcl.data.store.JsonRpc(null, "z3950.Service");
+      let store = new qcl.data.store.JsonRpcStore("z3950/table");
       store.setModel(qx.data.marshal.Json.createModel([]));
       store.bind("model", list, "model");
-      store.load("getServerListItems", [false]);
-      qx.event.message.Bus.getInstance().subscribe("z3950.reloadDatasources", function (e) {
-        store.load("getServerListItems", [false]);
-      }, this);
+      store.load("list-servers", [false]);
+      qx.event.message.Bus.getInstance().subscribe("z3950.reloadDatasources", (e)=>{
+        store.load("list-servers", [false]);
+      });
       
       // buttons
       let hbox = new qx.ui.layout.HBox(10);
@@ -120,22 +116,22 @@ qx.Class.define("plugins.z3950.Plugin",
         }
         saveButton.setEnabled(false);
         this.getApplication().showPopup(this.tr("Saving..."));
-        store.execute("setDatasourceState", [result], function () {
+        store.execute("set-datasource-state", [result], () => {
           this.getApplication().hidePopup();
           saveButton.setEnabled(true);
-        }, this);
+        });
       }, this);
       
       // Reload datassources Button
       let reloadButton = new qx.ui.form.Button(this.tr("Reload"));
       buttons.add(reloadButton);
-      reloadButton.addListener("execute", function () {
+      reloadButton.addListener("execute", () => {
         reloadButton.setEnabled(false);
         this.getApplication().showPopup(this.tr("Reloading library metadata..."));
-        store.load("getServerListItems", [false, true], function () {
+        store.load("list-servers", [false, true], () => {
           this.getApplication().hidePopup();
           reloadButton.setEnabled(true);
-        }, this);
+        });
       });
       
       // add tab to tabview (must be done at the end)

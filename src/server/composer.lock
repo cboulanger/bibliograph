@@ -635,7 +635,7 @@
         },
         {
             "name": "illuminate/contracts",
-            "version": "v5.5.36",
+            "version": "v5.5.39",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
@@ -679,16 +679,16 @@
         },
         {
             "name": "illuminate/support",
-            "version": "v5.5.36",
+            "version": "v5.5.39",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "c10c2fcabe8cb907ebb2dcae4f50e7c83a872055"
+                "reference": "7540abdf66efe232bb657b9a5982fbb0d4de428f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/c10c2fcabe8cb907ebb2dcae4f50e7c83a872055",
-                "reference": "c10c2fcabe8cb907ebb2dcae4f50e7c83a872055",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/7540abdf66efe232bb657b9a5982fbb0d4de428f",
+                "reference": "7540abdf66efe232bb657b9a5982fbb0d4de428f",
                 "shasum": ""
             },
             "require": {
@@ -732,24 +732,24 @@
             ],
             "description": "The Illuminate Support package.",
             "homepage": "https://laravel.com",
-            "time": "2018-02-14T15:12:47+00:00"
+            "time": "2018-03-09T16:54:15+00:00"
         },
         {
             "name": "nesbot/carbon",
-            "version": "1.23.0",
+            "version": "1.24.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "4a874a39b2b00d7e0146cd46fab6f47c41ce9e65"
+                "reference": "bba6c6e410c6b4317e37a9474aeaa753808c3875"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/4a874a39b2b00d7e0146cd46fab6f47c41ce9e65",
-                "reference": "4a874a39b2b00d7e0146cd46fab6f47c41ce9e65",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/bba6c6e410c6b4317e37a9474aeaa753808c3875",
+                "reference": "bba6c6e410c6b4317e37a9474aeaa753808c3875",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0",
+                "php": ">=5.3.9",
                 "symfony/translation": "~2.6 || ~3.0 || ~4.0"
             },
             "require-dev": {
@@ -785,7 +785,7 @@
                 "datetime",
                 "time"
             ],
-            "time": "2018-02-28T09:22:05+00:00"
+            "time": "2018-03-10T10:10:14+00:00"
         },
         {
             "name": "odannyc/yii2-sse",
@@ -1296,21 +1296,21 @@
         },
         {
             "name": "tonyhhyip/sse",
-            "version": "2.1.2",
+            "version": "2.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tonyhhyip/libSSE-php.git",
-                "reference": "13db192d3fa764c70bf0a7ca4e3d08b080d635b2"
+                "reference": "804af074e46247b5d9290b509c5cab8de523c93a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tonyhhyip/libSSE-php/zipball/13db192d3fa764c70bf0a7ca4e3d08b080d635b2",
-                "reference": "13db192d3fa764c70bf0a7ca4e3d08b080d635b2",
+                "url": "https://api.github.com/repos/tonyhhyip/libSSE-php/zipball/804af074e46247b5d9290b509c5cab8de523c93a",
+                "reference": "804af074e46247b5d9290b509c5cab8de523c93a",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.9",
-                "symfony/http-foundation": "~2.7 | ~3.0"
+                "symfony/http-foundation": "~2.7 | ~3.0 | ~4.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "~4.2 | ~5.0"
@@ -1343,12 +1343,12 @@
                     "role": "Developer"
                 }
             ],
-            "description": "An easy-to-use, object-orienlated library for Server-Sent Events",
+            "description": "An easy-to-use, object-oriented library for Server-Sent Events",
             "homepage": "https://github.com/licson0729/libSSE-php",
             "keywords": [
                 "sse"
             ],
-            "time": "2017-02-21T12:32:50+00:00"
+            "time": "2018-03-08T02:55:29+00:00"
         },
         {
             "name": "toriphes/yii2-console-runner",
@@ -1396,16 +1396,16 @@
         },
         {
             "name": "yiisoft/yii2",
-            "version": "2.0.14.1",
+            "version": "2.0.14.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-framework.git",
-                "reference": "d99969394c66dc3606134af092b8ec561ea5d7c6"
+                "reference": "ef74f3783e964cea477f06e6d6ce209df1f37881"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/d99969394c66dc3606134af092b8ec561ea5d7c6",
-                "reference": "d99969394c66dc3606134af092b8ec561ea5d7c6",
+                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/ef74f3783e964cea477f06e6d6ce209df1f37881",
+                "reference": "ef74f3783e964cea477f06e6d6ce209df1f37881",
                 "shasum": ""
             },
             "require": {
@@ -1492,7 +1492,7 @@
                 "framework",
                 "yii2"
             ],
-            "time": "2018-02-24T20:23:06+00:00"
+            "time": "2018-03-13T14:15:01+00:00"
         },
         {
             "name": "yiisoft/yii2-composer",
@@ -1649,16 +1649,16 @@
         },
         {
             "name": "bizley/migration",
-            "version": "2.2.2",
+            "version": "2.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bizley/yii2-migration.git",
-                "reference": "b90f427c3d746f160cef9e666efb855a4df139ee"
+                "reference": "550876065ba86a862569217a6da1c5f04050580c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bizley/yii2-migration/zipball/b90f427c3d746f160cef9e666efb855a4df139ee",
-                "reference": "b90f427c3d746f160cef9e666efb855a4df139ee",
+                "url": "https://api.github.com/repos/bizley/yii2-migration/zipball/550876065ba86a862569217a6da1c5f04050580c",
+                "reference": "550876065ba86a862569217a6da1c5f04050580c",
                 "shasum": ""
             },
             "require": {
@@ -1688,7 +1688,7 @@
                 "migration",
                 "yii2"
             ],
-            "time": "2018-03-06T09:18:56+00:00"
+            "time": "2018-03-10T08:34:11+00:00"
         },
         {
             "name": "bower-asset/bootstrap",
@@ -1824,16 +1824,16 @@
         },
         {
             "name": "codeception/phpunit-wrapper",
-            "version": "6.0.5",
+            "version": "6.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/phpunit-wrapper.git",
-                "reference": "44e2100c300413a6b40cf8874ad402695010f443"
+                "reference": "e18f3ea1f841bfd2cecaf6e183e584127b9d467b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/phpunit-wrapper/zipball/44e2100c300413a6b40cf8874ad402695010f443",
-                "reference": "44e2100c300413a6b40cf8874ad402695010f443",
+                "url": "https://api.github.com/repos/Codeception/phpunit-wrapper/zipball/e18f3ea1f841bfd2cecaf6e183e584127b9d467b",
+                "reference": "e18f3ea1f841bfd2cecaf6e183e584127b9d467b",
                 "shasum": ""
             },
             "require": {
@@ -1841,6 +1841,13 @@
                 "phpunit/phpunit": ">=4.8.28 <5.0.0 || >=5.6.3 <7.0",
                 "sebastian/comparator": ">1.1 <3.0",
                 "sebastian/diff": ">=1.4 <4.0"
+            },
+            "replace": {
+                "codeception/phpunit-wrapper": "*"
+            },
+            "require-dev": {
+                "codeception/specify": "*",
+                "vlucas/phpdotenv": "^2.4"
             },
             "type": "library",
             "autoload": {
@@ -1859,7 +1866,7 @@
                 }
             ],
             "description": "PHPUnit classes used by Codeception",
-            "time": "2018-02-19T13:24:40+00:00"
+            "time": "2018-03-16T10:17:47+00:00"
         },
         {
             "name": "codeception/specify",

@@ -217,6 +217,7 @@ qx.Class.define("bibliograph.Setup", {
      */
     loadPlugins : async function()
     {
+      new bibliograph.plugins.z3950.Plugin();
       this.warn("Plugins not implemented, skipping...");
       return; 
     },  

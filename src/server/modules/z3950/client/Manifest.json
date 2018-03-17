@@ -15,7 +15,7 @@
     "qooxdoo-range": "6.0.0-alpha"
   },
   "provides": {
-    "namespace": "plugins.z3950",
+    "namespace": "bibliograph.plugins.z3950",
     "encoding": "utf-8",
     "class": "source/class",
     "resource": "source/resource",
