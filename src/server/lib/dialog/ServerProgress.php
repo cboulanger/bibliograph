@@ -107,9 +107,9 @@ class ServerProgress extends Dialog
   protected function createScript( array $lines)
   {
     $nl = $this->getNewlineChar();
-    $tag = '<!script type="text/javascript">';
+    $tag = '<script type="text/javascript">';
     $tag .= $nl . implode( $nl, $lines );
-    $tag .= $nl . '<!/script></pre>' . $nl;
+    $tag .= $nl . '</script>' . $nl;
     return $tag;
   }
 
@@ -176,8 +176,7 @@ class ServerProgress extends Dialog
       "window.progress.hide();",
       "window.top.dialog.Dialog.error('$message');"
     ]);
-    $this->send("");
-    exit;
+    $this->close();
   }
 
   /**

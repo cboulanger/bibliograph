@@ -79,7 +79,7 @@ qx.Class.define("qcl.ui.dialog.ServerProgress",
     this.__iframe.hide();
     let app = qx.core.Init.getApplication();
     app.getRoot().getContentElement().add(this.__iframe);
-    this.__sourceUrl = app.getServerUrl() + "?r=";
+    this.__sourceUrl = app.getServerUrl();
   }, 
   
   /*
@@ -119,12 +119,12 @@ qx.Class.define("qcl.ui.dialog.ServerProgress",
       });
       
       // format source string
-      params.auth_token = qx.core.Init.getApplication().getToken();
+      params.id = this.getWidgetId();
+      params.auth_token = qx.core.Init.getApplication().getAccessManager().getToken();
       let source = this.__sourceUrl +
         this.getService() + "/" + this.getMethod() + "&" +
-        "id=" + this.getWidgetId() + "&" +
         qx.util.Uri.toParameter(params);
-      
+this.debug(source);
       // start request and show dialog
       this.__iframe.setSource( source );
       this.show();

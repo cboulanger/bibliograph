@@ -28,7 +28,8 @@
     {
       "class": "bibliograph.Application",
       "theme": "bibliograph.theme.Theme",
-      "name": "bibliograph",
+      "name":  "bibliograph",
+      "title": "Bibliograph Bibliographic Data Manager",
       "include" : ["bibliograph.plugins.*"]
     }
   ],

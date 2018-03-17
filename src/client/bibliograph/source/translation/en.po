@@ -11,6 +11,7 @@ msgstr ""
 #: bibliograph.ui.reference.ListViewUi:173 dialog/Dialog.js:443
 #: bibliograph/ui/window/FolderTreeWindowUi.js:99
 #: bibliograph/ui/reference/ListViewUi.js:173
+#: bibliograph/ui/reference/ListViewUi.js:168
 msgid "Cancel"
 msgstr ""
 
@@ -74,8 +75,7 @@ msgstr ""
 msgid "Next year"
 msgstr ""
 
-#: bibliograph.Application:182 bibliograph/Application.js:182
-#: bibliograph/Application.js:181
+#: bibliograph.Application:181 bibliograph/Application.js:181
 msgid "Missing server address. Please contact administrator."
 msgstr ""
 
@@ -166,9 +166,9 @@ msgid "New Datasource"
 msgstr ""
 
 #: bibliograph.ui.window.AccessControlTool:190
-#: bibliograph/ui/window/AccessControlTool.js:190
-#: bibliograph/plugins/z3950/ImportWindowUi.js:128
 #: bibliograph/plugins/z3950/ImportWindowUi.js:118
+#: bibliograph/plugins/z3950/ImportWindowUi.js:120
+#: bibliograph/ui/window/AccessControlTool.js:190
 msgid "Help"
 msgstr ""
 
@@ -234,7 +234,7 @@ msgstr ""
 msgid "Select"
 msgstr ""
 
-#: bibliograph.ui.main.Toolbar:144
+#: bibliograph.ui.window.PreferencesWindow:36
 #: bibliograph/ui/window/PreferencesWindow.js:36
 #: bibliograph/ui/main/Toolbar.js:144
 msgid "Preferences"
@@ -353,16 +353,16 @@ msgid "Import all records"
 msgstr ""
 
 #: bibliograph.ui.window.ImportWindowUi:128
-#: bibliograph/ui/window/ImportWindowUi.js:128
-#: bibliograph/plugins/z3950/ImportWindowUi.js:169
 #: bibliograph/plugins/z3950/ImportWindowUi.js:158
+#: bibliograph/plugins/z3950/ImportWindowUi.js:160
+#: bibliograph/ui/window/ImportWindowUi.js:128
 msgid "Import selected records"
 msgstr ""
 
 #: bibliograph.ui.window.ImportWindowUi:139
-#: bibliograph/ui/window/ImportWindowUi.js:139
-#: bibliograph/plugins/z3950/ImportWindowUi.js:178
 #: bibliograph/plugins/z3950/ImportWindowUi.js:167
+#: bibliograph/plugins/z3950/ImportWindowUi.js:169
+#: bibliograph/ui/window/ImportWindowUi.js:139
 msgid "Close"
 msgstr ""
 
@@ -478,37 +478,44 @@ msgid "Processing references..."
 msgstr ""
 
 #: bibliograph.ui.window.ImportWindow:213
-#: bibliograph/ui/window/ImportWindow.js:213
 #: bibliograph/plugins/z3950/ImportWindow.js:113
+#: bibliograph/plugins/z3950/ImportWindow.js:112
+#: bibliograph/ui/window/ImportWindow.js:213
 msgid "You have to select one or more reference to import."
 msgstr ""
 
 #: bibliograph.ui.window.ImportWindow:223
-#: bibliograph/ui/window/ImportWindow.js:223
 #: bibliograph/plugins/z3950/ImportWindow.js:120
+#: bibliograph/plugins/z3950/ImportWindow.js:119
+#: bibliograph/ui/window/ImportWindow.js:223
 msgid "Please select a folder first."
 msgstr ""
 
 #: bibliograph.ui.window.ImportWindow:231
-#: bibliograph/ui/window/ImportWindow.js:231
 #: bibliograph/plugins/z3950/ImportWindow.js:127
+#: bibliograph/plugins/z3950/ImportWindow.js:126
+#: bibliograph/ui/window/ImportWindow.js:231
 msgid "Cannot determine selected folder. Please reload the folders."
 msgstr ""
 
 #: bibliograph.ui.window.ImportWindow:236
-#: bibliograph/ui/window/ImportWindow.js:236
 #: bibliograph/plugins/z3950/ImportWindow.js:131
+#: bibliograph/plugins/z3950/ImportWindow.js:130
+#: bibliograph/ui/window/ImportWindow.js:236
 msgid "Invalid target folder. You can only import into normal folders."
 msgstr ""
 
 #: bibliograph.ui.window.ImportWindow:244
-#: bibliograph/ui/window/ImportWindow.js:244
 #: bibliograph/plugins/z3950/ImportWindow.js:138
+#: bibliograph/plugins/z3950/ImportWindow.js:137
+#: bibliograph/ui/window/ImportWindow.js:244
 msgid "Importing references..."
 msgstr ""
 
 #: bibliograph.ui.reference.ListView:343
 #: bibliograph/ui/reference/ListView.js:343
+#: bibliograph/ui/reference/ListView.js:342
+#: bibliograph/ui/reference/ListView.js:337
 msgid "Query"
 msgstr ""
 
@@ -518,26 +525,41 @@ msgstr ""
 
 #: bibliograph.ui.reference.ListView:897
 #: bibliograph/ui/reference/ListView.js:897
+#: bibliograph/ui/reference/ListView.js:896
+#: bibliograph/ui/reference/ListView.js:891
+#: bibliograph/ui/reference/ListView.js:885
 msgid "You cannot create an item outside a folder"
 msgstr ""
 
 #: bibliograph.ui.reference.ListView:911
 #: bibliograph/ui/reference/ListView.js:911
+#: bibliograph/ui/reference/ListView.js:910
+#: bibliograph/ui/reference/ListView.js:905
+#: bibliograph/ui/reference/ListView.js:899
 msgid "Do your really want to remove the selected references from this folder?"
 msgstr ""
 
 #: bibliograph.ui.reference.ListView:912
 #: bibliograph/ui/reference/ListView.js:912
+#: bibliograph/ui/reference/ListView.js:911
+#: bibliograph/ui/reference/ListView.js:906
+#: bibliograph/ui/reference/ListView.js:900
 msgid "Do your really want to remove the selected references?"
 msgstr ""
 
 #: bibliograph.ui.reference.ListView:933
 #: bibliograph/ui/reference/ListView.js:933
+#: bibliograph/ui/reference/ListView.js:932
+#: bibliograph/ui/reference/ListView.js:927
+#: bibliograph/ui/reference/ListView.js:921
 msgid "Do your really want to move the selected references to '%1'?"
 msgstr ""
 
 #: bibliograph.ui.reference.ListView:956
 #: bibliograph/ui/reference/ListView.js:956
+#: bibliograph/ui/reference/ListView.js:955
+#: bibliograph/ui/reference/ListView.js:950
+#: bibliograph/ui/reference/ListView.js:944
 msgid "Do your really want to copy the selected referencesto '%1'?"
 msgstr ""
 
@@ -546,6 +568,18 @@ msgstr ""
 #: bibliograph/ui/reference/ListView.js:994
 #: bibliograph/ui/reference/ListView.js:1009
 #: bibliograph/ui/reference/ListView.js:1027
+#: bibliograph/ui/reference/ListView.js:979
+#: bibliograph/ui/reference/ListView.js:993
+#: bibliograph/ui/reference/ListView.js:1008
+#: bibliograph/ui/reference/ListView.js:1026
+#: bibliograph/ui/reference/ListView.js:974
+#: bibliograph/ui/reference/ListView.js:988
+#: bibliograph/ui/reference/ListView.js:1003
+#: bibliograph/ui/reference/ListView.js:1021
+#: bibliograph/ui/reference/ListView.js:968
+#: bibliograph/ui/reference/ListView.js:982
+#: bibliograph/ui/reference/ListView.js:997
+#: bibliograph/ui/reference/ListView.js:1015
 #: bibliograph/ui/item/RecordInfo.js:167
 #: bibliograph/ui/item/DuplicatesView.js:162
 msgid "Processing request..."
@@ -553,11 +587,17 @@ msgstr ""
 
 #: bibliograph.ui.reference.ListView:1040
 #: bibliograph/ui/reference/ListView.js:1040
+#: bibliograph/ui/reference/ListView.js:1039
+#: bibliograph/ui/reference/ListView.js:1034
+#: bibliograph/ui/reference/ListView.js:1028
 msgid "Do you really want to make the folder empty, moving all references to the trash that are not in other folders?"
 msgstr ""
 
 #: bibliograph.ui.reference.ListView:1043
 #: bibliograph/ui/reference/ListView.js:1043
+#: bibliograph/ui/reference/ListView.js:1042
+#: bibliograph/ui/reference/ListView.js:1037
+#: bibliograph/ui/reference/ListView.js:1031
 msgid "Emptying the folder ..."
 msgstr ""
 
@@ -585,51 +625,61 @@ msgstr ""
 
 #: bibliograph.ui.reference.ListViewUi:131
 #: bibliograph/ui/reference/ListViewUi.js:131
+#: bibliograph/ui/reference/ListViewUi.js:126
 msgid "Create new reference type"
 msgstr ""
 
 #: bibliograph.ui.reference.ListViewUi:161
 #: bibliograph/ui/reference/ListViewUi.js:161
+#: bibliograph/ui/reference/ListViewUi.js:156
 msgid "Create"
 msgstr ""
 
 #: bibliograph.ui.reference.ListViewUi:210
 #: bibliograph/ui/reference/ListViewUi.js:210
+#: bibliograph/ui/reference/ListViewUi.js:205
 msgid "Move reference(s)..."
 msgstr ""
 
 #: bibliograph.ui.reference.ListViewUi:219
 #: bibliograph/ui/reference/ListViewUi.js:219
+#: bibliograph/ui/reference/ListViewUi.js:214
 msgid "Copy reference(s)..."
 msgstr ""
 
 #: bibliograph.ui.reference.ListViewUi:228
 #: bibliograph/ui/reference/ListViewUi.js:228
+#: bibliograph/ui/reference/ListViewUi.js:223
 msgid "Export references"
 msgstr ""
 
 #: bibliograph.ui.reference.ListViewUi:236
 #: bibliograph/ui/reference/ListViewUi.js:236
+#: bibliograph/ui/reference/ListViewUi.js:231
 msgid "Export selected references"
 msgstr ""
 
 #: bibliograph.ui.reference.ListViewUi:245
 #: bibliograph/ui/reference/ListViewUi.js:245
+#: bibliograph/ui/reference/ListViewUi.js:240
 msgid "Export folder"
 msgstr ""
 
 #: bibliograph.ui.reference.ListViewUi:254
 #: bibliograph/ui/reference/ListViewUi.js:254
+#: bibliograph/ui/reference/ListViewUi.js:249
 msgid "Edit references"
 msgstr ""
 
 #: bibliograph.ui.reference.ListViewUi:263
 #: bibliograph/ui/reference/ListViewUi.js:263
+#: bibliograph/ui/reference/ListViewUi.js:258
 msgid "Find/Replace"
 msgstr ""
 
 #: bibliograph.ui.reference.ListViewUi:273
 #: bibliograph/ui/reference/ListViewUi.js:273
+#: bibliograph/ui/reference/ListViewUi.js:268
 msgid "Make folder empty"
 msgstr ""
 
@@ -755,10 +805,10 @@ msgid "Creating form, please wait ..."
 msgstr ""
 
 #: bibliograph.ui.item.ReferenceEditor:885
+#: bibliograph/plugins/z3950/Plugin.js:132
+#: bibliograph/plugins/z3950/Plugin.js:134
 #: bibliograph/ui/item/ReferenceEditor.js:733
 #: bibliograph/ui/item/ReferenceEditor.js:885
-#: bibliograph/plugins/z3950/Plugin.js:122
-#: bibliograph/plugins/z3950/Plugin.js:118
 msgid "Saving..."
 msgstr ""
 
@@ -825,6 +875,9 @@ msgstr ""
 
 #: bibliograph.ui.reference.ListView:395
 #: bibliograph/ui/reference/ListView.js:395
+#: bibliograph/ui/reference/ListView.js:394
+#: bibliograph/ui/reference/ListView.js:389
+#: bibliograph/ui/reference/ListView.js:383
 msgid "Loading table layout ..."
 msgstr ""
 
@@ -888,48 +941,56 @@ msgstr ""
 msgid "Value is invalid"
 msgstr ""
 
-#: bibliograph/plugins/z3950/Plugin.js:45
-#: bibliograph/plugins/z3950/ImportWindowUi.js:40
-#: bibliograph/plugins/z3950/ImportWindowUi.js:34
+#: bibliograph.plugins.z3950.Plugin:59
 #: bibliograph/plugins/z3950/ImportWindow.js:149
+#: bibliograph/plugins/z3950/ImportWindow.js:148
+#: bibliograph/plugins/z3950/ImportWindowUi.js:34
+#: bibliograph/plugins/z3950/Plugin.js:59
 msgid "Import from library catalog"
 msgstr ""
 
-#: bibliograph/plugins/z3950/Plugin.js:53
-#: bibliograph/plugins/z3950/Plugin.js:51
+#: bibliograph.plugins.z3950.Plugin:65 bibliograph/plugins/z3950/Plugin.js:65
 msgid "Z39.50 Import"
 msgstr ""
 
-#: bibliograph/plugins/z3950/Plugin.js:100
-#: bibliograph/plugins/z3950/Plugin.js:96
+#: bibliograph.plugins.z3950.Plugin:110
+#: bibliograph/plugins/z3950/Plugin.js:110
+#: bibliograph/plugins/z3950/Plugin.js:112
 msgid "(Un-)Select All"
 msgstr ""
 
-#: bibliograph/plugins/z3950/Plugin.js:112
-#: bibliograph/plugins/z3950/Plugin.js:108
+#: bibliograph.plugins.z3950.Plugin:122
+#: bibliograph/plugins/z3950/Plugin.js:122
+#: bibliograph/plugins/z3950/Plugin.js:124
 msgid "Save"
 msgstr ""
 
-#: bibliograph/plugins/z3950/Plugin.js:130
-#: bibliograph/plugins/z3950/Plugin.js:126
+#: bibliograph.plugins.z3950.Plugin:140
+#: bibliograph/plugins/z3950/Plugin.js:140
+#: bibliograph/plugins/z3950/Plugin.js:142
 msgid "Reload"
 msgstr ""
 
-#: bibliograph/plugins/z3950/Plugin.js:134
-#: bibliograph/plugins/z3950/Plugin.js:130
+#: bibliograph.plugins.z3950.Plugin:144
+#: bibliograph/plugins/z3950/Plugin.js:144
+#: bibliograph/plugins/z3950/Plugin.js:146
 msgid "Reloading library metadata..."
 msgstr ""
 
-#: bibliograph/plugins/z3950/ImportWindowUi.js:112
+#: bibliograph.plugins.z3950.ImportWindowUi:102
 #: bibliograph/plugins/z3950/ImportWindowUi.js:102
+#: bibliograph/plugins/z3950/ImportWindowUi.js:104
 msgid "Enter search terms"
 msgstr ""
 
-#: bibliograph/plugins/z3950/ImportWindowUi.js:121
+#: bibliograph.plugins.z3950.ImportWindowUi:111
 #: bibliograph/plugins/z3950/ImportWindowUi.js:111
+#: bibliograph/plugins/z3950/ImportWindowUi.js:113
 msgid "Search"
 msgstr ""
 
+#: bibliograph.plugins.z3950.ImportWindow:99
 #: bibliograph/plugins/z3950/ImportWindow.js:99
+#: bibliograph/plugins/z3950/ImportWindow.js:98
 msgid "Searching..."
 msgstr ""

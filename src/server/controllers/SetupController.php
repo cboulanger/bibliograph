@@ -746,7 +746,7 @@ class SetupController extends \app\controllers\AppController
     foreach( Yii::$app->modules as $id => $info){
       /** @var Module $module */
       $module = Yii::$app->getModule($id);
-      if( ! $module->installed ){
+      if( $module->hasProperty('installed') and ! $module->installed ){
         try{
           $enabled = $module->install();
           if( $enabled ){

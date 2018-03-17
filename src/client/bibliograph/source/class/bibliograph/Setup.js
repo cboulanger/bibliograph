@@ -217,9 +217,23 @@ qx.Class.define("bibliograph.Setup", {
      */
     loadPlugins : async function()
     {
-      new bibliograph.plugins.z3950.Plugin();
-      this.warn("Plugins not implemented, skipping...");
-      return; 
+      for( let pluginNamespace in bibliograph.plugins ) {
+        // @todo do not initialize diabled plugins/modules
+        //let key = `modules.`;
+        //let enabled = this.getApplication().getConfigManager().getKey(key);
+        let plugin;
+        try {
+          plugin = bibliograph.plugins[pluginNamespace].Plugin.getInstance();
+        } catch(e){
+          this.warn(`Could not instantiate plugin '${pluginNamespace}': ${e}`);
+        }
+        try {
+          let message = plugin.init();
+          this.info( message || `Initialized plugin '${plugin.getName()}'`);
+        } catch (e) {
+          this.warn(`Could not initialize plugin '${plugin.getName()}': ${e}`);
+        }
+      }
     },  
 
     /**

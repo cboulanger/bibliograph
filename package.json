@@ -23,7 +23,8 @@
     "source": "bash bin/start-source-server.sh",
     "test": "bash test/codeception-all.sh && bash test/api.sh || exit $?",
     "test-dev": "bash test/codeception-all.sh && bash test/api.sh development",
-    "compile": "cd src/client/bibliograph && (qx clean) && (qx compile --watch)",
+    "clean": "cd src/client/bibliograph && qx clean",
+    "compile": "cd src/client/bibliograph && qx compile --watch",
     "view-log": "bash bin/view-log.sh",
     "new-log": "bash bin/new-log.sh",
     "create-migration": "bash bin/create-migration.sh",
@@ -35,7 +36,7 @@
     "npm-ls-scripts": "^0.1.2",
     "qooxdoo": "^6.0.1",
     "qooxdoo-sdk": "^6.0.0-alpha",
-    "qxcompiler": "^0.2.0",
+    "qxcompiler": "^0.2.10",
     "raptor-client": "github:cboulanger/raptor-client",
     "webpack": "^3.10.0"
   },

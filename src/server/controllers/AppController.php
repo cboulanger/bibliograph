@@ -20,14 +20,12 @@
 
 namespace app\controllers;
 
-use app\controllers\traits\AuthTrait;
+use app\controllers\{traits\AuthTrait, traits\DatasourceTrait};
 use lib\dialog\Error;
 use lib\exceptions\UserErrorException;
 use Yii;
+use app\models\Permission;
 
-use app\models\{
-  User, Role, Session, Permission, Datasource
-};
 
 
 /**
@@ -36,37 +34,10 @@ use app\models\{
  */
 class AppController extends \JsonRpc2\Controller
 {
-
   use AuthTrait;
-
-  /**
-   * Array of action names that can be accessed without authentication
-   * Overwrite this propery in subclasses or define a getter for dynamic
-   * definition
-   * @var array
-   */
-  protected $noAuthActions = [];
-
-  //-------------------------------------------------------------
-  // Overridden methods
-  //-------------------------------------------------------------
+  use DatasourceTrait;
 
 
-  // public function behaviors()
-  // {
-  //   return [
-  //     'authenticator' => [
-  //       'class' => \yii\filters\auth\CompositeAuth::className(),
-  //       'authMethods' => [
-  //         [
-  //           'class' => \yii\filters\auth\HttpBearerAuth::className(),
-  //           'except' => ['authenticate']
-  //         ]
-  //       ],
-  //     ]
-  //   ];
-  // }
-  
   /**
    * Overridden to catch User exception
    * @inheritDoc
@@ -80,53 +51,6 @@ class AppController extends \JsonRpc2\Controller
       Error::create($e->getMessage());
       return null;
     }
-  }
-
-  //-------------------------------------------------------------
-  // Added methods
-  //-------------------------------------------------------------
-  
-
-  /**
-   * Shorthand getter for active user object
-   * @return \app\models\User|\yii\web\IdentityInterface
-   */
-  public function getActiveUser()
-  {
-    return Yii::$app->user->identity;
-  }
-
-  /**
-   * Creates a new anonymous guest user
-   * @throws \LogicException
-   * @return \app\models\User
-   * @throws \yii\db\Exception
-   */
-  public function createAnonymous()
-  {
-    $anonRole = Role::findByNamedId('anonymous');
-    if (is_null($anonRole)) {
-      throw new \LogicException("No 'anonymous' role defined.");
-    }
-    $user = new User(['namedId' => \microtime() ]); // random temporary username
-    $user->save();
-    $user->namedId = "guest" . $user->getPrimaryKey();
-    $user->name = "Guest";
-    $user->anonymous = $user->active = true;
-    $user->save();
-    $user->link("roles", $anonRole);
-    return $user;
-  }
-
- /**
-   * Returns true if a permission with the given named id exists and false if
-   * not.
-   * @param string $namedId The named id of the permission
-   * @return bool
-   */
-  public function permissionExists($namedId)
-  {
-    return (bool) Permission::findOne(['namedId' => $namedId]);
   }
 
   /**
@@ -167,161 +91,6 @@ class AppController extends \JsonRpc2\Controller
     Permission::deleteAll(['namedId' => $namedId]);
   }
 
-  /**
-   * Checks if active user has the given permission and aborts if
-   * permission is not granted.
-   *
-   * @param string $permission
-   * @throws \JsonRpc2\Exception
-   */
-  public function requirePermission($permission)
-  {
-    if (! $this->getActiveUser()->hasPermission( $permission )) {
-      Yii::warning( sprintf(
-        "Active user %s does not have required permission %s",
-        $this->getActiveUser()->namedId, $permission
-      ) );
-      throw new \JsonRpc2\Exception("Not allowed.", \JsonRpc2\Exception::INVALID_REQUEST);
-    }
-  }
-
-  /**
-   * Shorthand method to enforce if active user has a role
-   * @param string $role
-   * @throws \JsonRpc2\Exception
-   */
-  public function requireRole($role)
-  {
-    if (! $this->getActiveUser()->hasRole( $role )) {
-      Yii::warning( sprintf(
-      "Active user %s does hat required role %s",
-        $this->getActiveUser()->namedId, $role
-      ) );
-      throw new \JsonRpc2\Exception("Not allowed.", \JsonRpc2\Exception::INVALID_REQUEST);
-    }
-  }  
-
-  /**
-   * Returns the [[app\models\User]] instance of the user with the given
-   * username.
-   *
-   * @param string $username
-   * @throws \InvalidArgumentException if user does not exist
-   * @return \app\models\User
-   */
-  public function user($username)
-  {
-    $user = User::findOne(['namedId'=>$username]);
-    if (is_null($user)) {
-      throw new \InvalidArgumentException( Yii::t('app',"User '$username' does not exist.") );
-    }
-    return $user;
-  }
-
-  /**
-   * Tries to continue an existing session
-   *
-   * @param User $user
-   * @return Session|null
-   *    The session object to be reused, or null if none exists.
-   */
-  protected function continueUserSession($user)
-  {
-    $session = Session::findOne(['UserId' => $user->id]);
-    if ($session) {
-      // manually set session id to recover the session data
-      session_id( $session->namedId );
-    }
-    Yii::$app->session->open();
-    return $session;
-  }
-
-  /**
-   * Shorthand getter for  the current session id.
-   * @return string
-   */
-  public function getSessionId()
-  {
-    return Yii::$app->session->getId();
-  }
-
-  //-------------------------------------------------------------
-  // Datasources and models
-  //-------------------------------------------------------------
-
-  /**
-   * Returns the datasource instance which has the given named id.
-   * By default, checks the current user's access to the datasource.
-   * @param string $datasource
-   *    The named id of the datasource
-   * @param bool $checkAccess 
-   *    Optional. Whether to check the current user's access to the datasource
-   *    Defaults to true
-   * @return \app\models\Datasource
-   * @throws UserErrorException
-   */
-  public function datasource($datasource, $checkAccess=true)
-  {
-    $myDatasources = $this->getActiveUser()->getAccessibleDatasourceNames();
-    try {
-      $instance = Datasource :: getInstanceFor( $datasource );
-    } catch( \InvalidArgumentException $e ){
-      throw new UserErrorException(
-        Yii::t('app', "Datasource '{datasource}' does not exist",[
-          'datasource' => $datasource
-        ])
-      );
-    }
-    if( $checkAccess and ! in_array($datasource, $myDatasources) ){
-      throw new UserErrorException(
-        Yii::t('app', "You do not have access to datasource '{datasource}'",[
-          'datasource' => $datasource
-        ])
-      );
-    }  
-    return $instance;  
-  }
-
-  /**
-   * Returns the class name of the given model type of the controller as determined by the datasource
-   * @param string $datasource
-   * @param string $modelType
-   * @return string
-   * @throws UserErrorException
-   */
-  public function getModelClass( $datasource, $modelType )
-  {
-    return $this->datasource($datasource)->getClassFor( $modelType );
-  }
-
-  /**
-   * Returns the class name of the main model type of the controller as determined by the datasource
-   * @param string $datasource
-   * @return string
-   * @throws UserErrorException
-   * @todo rename to getControlledModelClass
-   */
-  public function getControlledModel( $datasource )
-  {
-    return $this->getModelClass( $datasource, static :: $modelType );
-  }
-
-  /**
-   * Returns a query for the record with the given id
-   *
-   * @param string $datasource
-   * @param int $id
-   * @return \yii\db\ActiveRecord
-   * @throws UserErrorException
-   */
-  public function getRecordById($datasource, $id)
-  {
-    $model = $this->getControlledModel($datasource) :: findOne($id);
-    if( is_null( $model) ){
-      throw new \InvalidArgumentException("Model of type " . static::$modelType . " and id #$id does not exist in datasource '$datasource'.");
-    }
-    return $model;
-  }
 
   //-------------------------------------------------------------
   // Helpers for returning data to the user

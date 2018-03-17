@@ -29,6 +29,8 @@ qx.Class.define("bibliograph.ui.main.ReferenceListView",
     this.mainListView = listView;
     listView.setWidgetId("bibliograph/mainListView");
     listView.setAllowStretchY(true);
+    listView.setServiceName("reference");
+
     this.add(listView, {flex : 1});
     
     app.bind("datasource", listView, "datasource");
@@ -39,5 +41,6 @@ qx.Class.define("bibliograph.ui.main.ReferenceListView",
     app.bind("modelId", listView, "modelId");
     listView.bind("selectedIds", app, "selectedIds");
     //app.bind("selectedIds", listView, "selectedIds");
+    app.setModelType("reference");
   }
 });

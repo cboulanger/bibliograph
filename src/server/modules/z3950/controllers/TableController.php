@@ -21,15 +21,12 @@ use yii\db\Exception;
  */
 class TableController extends AppController
 {
+
+
   /**
-   * Returns the default model type for which this controller is providing
-   * data.
-   * @return string
+   * The main model type of this controller
    */
-  protected function getModelType()
-  {
-    return "record";
-  }
+  static $modelType = "record";
 
   //---------------------------------------------------------------------------
   //  ACTIONS
@@ -83,7 +80,7 @@ class TableController extends AppController
    *      This is neccessary if xml files have been added or removed.
    * @throws UserErrorException
    */
-  public function actionListServers($activeOnly = true, $reloadFromXmlFiles = false)
+  public function actionServerList($activeOnly = true, $reloadFromXmlFiles = false)
   {
     // Reset list of Datasources
     if ($reloadFromXmlFiles) {
@@ -136,7 +133,7 @@ class TableController extends AppController
    * Returns count of rows that will be retrieved when executing the current
    * query.
    *
-   * @param object $queryData an array of the structure array(
+   * param object $queryData an object of the structure array(
    *   'datasource' => datasource name
    *   'query'      => array(
    *      'properties'  =>
@@ -145,13 +142,15 @@ class TableController extends AppController
    *   )
    * )
    * return array ( 'rowCount' => row count )
+   * @todo Add DTOs
    */
-  function actionRowCount($queryData)
+  function actionRowCount(\stdClass $queryData)
   {
-    $datasourceName = $queryData->datasource;
+    $datasourceName =  $queryData->datasource;
+    $datasource = Datasource::getInstanceFor( $datasourceName );
     $query = $this->module->getQueryString($queryData);
-    Yii::debug("Row count query for datasource '$datasourceName', query '$query'", Module::CATEGORY);
-    Search::setDatasource($datasourceName);
+    Search::setDatasource($datasource);
+    //Yii::debug("Row count query for datasource '$datasourceName', query '$query'", Module::CATEGORY);
     $search = Search::findOne([
       'query' => $query,
       'datasource' => $datasourceName
@@ -173,7 +172,7 @@ class TableController extends AppController
    * @param int $firstRow First row of queried data
    * @param int $lastRow Last row of queried data
    * @param int $requestId Request id, deprecated
-   * @param object $queryData an array of the structure array(
+   * param object $queryData an array of the structure array(
    *   'datasource' => datasource name
    *   'query'      => array(
    *      'properties'  => array("a","b","c"),
@@ -185,19 +184,20 @@ class TableController extends AppController
    *                int     requestId   The request id identifying the request (mandatory)
    *                array   rowData     The actual row data (mandatory)
    *                string  statusText  Optional text to display in a status bar
+   * @todo Add DTOs
    */
-  function actionRowData(int $firstRow, int $lastRow, int $requestId, object $queryData)
+  function actionRowData(int $firstRow, int $lastRow, int $requestId, \stdClass $queryData)
   {
     $datasourceName = $queryData->datasource;
+    $datasource = Datasource::getInstanceFor( $datasourceName );
     // set datasource table prefixes
-    Search::setDatasource($datasourceName);
-    Result::setDatasource($datasourceName);
-    Record::setDatasource($datasourceName);
+    Search::setDatasource($datasource);
+    Record::setDatasource($datasource);
 
     $query = $this->module->getQueryString($queryData);
     $properties = $queryData->query->properties;
     $orderBy = $queryData->query->orderBy;
-    Yii::debug("Row data query for datasource '$datasourceName', query '$query'.", Module::CATEGORY);
+    //Yii::debug("Row data query for datasource '$datasourceName', query '$query'.", Module::CATEGORY);
     $search = Search::findOne([
       'query' => $query,
       'datasource' => $datasourceName
@@ -221,7 +221,8 @@ class TableController extends AppController
       ->orderBy($orderBy)
       ->offset($firstRow)
       ->limit($lastRow-$firstRow+1)
-      ->asArray();
+      ->asArray()
+      ->all();
     return array(
       'requestId' => $requestId,
       'rowData' => $rowData,

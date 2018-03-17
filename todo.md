@@ -38,12 +38,14 @@
 - [ ] Move static methods out of \app\models\Datasource into DatasourceManager component
 
 ### Priority: low
+- [ ] Add "serverOnly" column to data_Config (true/false/null) and remove from config data sent to client
 - [ ] Backend: Streamline API to get Datasource & typed model
 - [ ] Frontend: Convert static icon resouce paths into aliases that are resolved in bibliograph.theme.Icon
 - [ ] Frontend: Rename widget ids, replace with native qooxdoo ids, see https://github.com/qooxdoo/qooxdoo/issues/9422
 - [ ] Add correct @return information to the JSONRPC methods/actions
 - [ ] Change app state separator and assignment chars
 - [ ] Re-implement Table Actions Interface
+- [ ] Add compiler-based splash screen for loading 
 
 ### Code cleanup
 - [ ] Remove unnecessary packages from npm and composer

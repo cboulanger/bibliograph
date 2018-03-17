@@ -6,7 +6,7 @@
 #set -o errexit # Exit on error
 HOST="localhost:9090"
 SERVER_PATH="src/"
-APP_PATH="client/bibliograph/source-compiled/bibliograph/index.html"
+APP_PATH="client/bibliograph/source-compiled/index.html"
 COMPILE_PATH="src/client/bibliograph"
 
 # first compiler pass

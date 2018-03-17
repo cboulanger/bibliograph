@@ -80,7 +80,9 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindowUi",
     let model = qx.data.marshal.Json.createModel([]);
     store.setModel(model);
     store.bind("model", selectBox, "model");
-    store.load("server-list");
+    this.addListener("appear", ()=>{
+      store.load("server-list");
+    });
 
     // reload datassources 
     qx.event.message.Bus.getInstance().subscribe("z3950.reloadDatasources", function (e) {
@@ -124,9 +126,9 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindowUi",
     // listview
     let listView = new bibliograph.ui.reference.ListView();
     this.listView = listView;
-    listView.setDecorator("main");
+    listView.setDecorator("main"); //??
     listView.setModelType("record");
-    listView.setServiceName("z3950.Service");
+    listView.setServiceName("z3950/table");
     importWindow.add(listView, {flex: 1});
 
     // populate the list when the data is ready

@@ -1,25 +1,15 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: cboulanger
- * Date: 09.03.18
- * Time: 08:26
- */
 
 namespace app\modules\z3950\controllers;
 
 use app\models\User;
 use Yii;
 use Exception;
-use app\controllers\traits\AuthTrait;
+use app\controllers\{ traits\AuthTrait, traits\DatasourceTrait };
 use app\modules\z3950\Module;
 use app\models\Datasource;
-use app\modules\z3950\models\{
-  Record, Search, Datasource as Z3950Datasource
-};
-use app\modules\z3950\lib\yaz\{
-  CclQuery, MarcXmlResult, Yaz, YazException, YazTimeoutException
-};
+use app\modules\z3950\models\{ Record, Search, Datasource as Z3950Datasource };
+use app\modules\z3950\lib\yaz\{ CclQuery, MarcXmlResult, Yaz, YazException, YazTimeoutException };
 use lib\dialog\ServerProgress;
 use lib\exceptions\UserErrorException;
 use lib\bibtex\BibtexParser;
@@ -33,6 +23,7 @@ use lib\util\Executable;
 class SearchController extends \yii\web\Controller
 {
   use AuthTrait;
+  use DatasourceTrait;
 
   protected function getNoAuthActions()
   {

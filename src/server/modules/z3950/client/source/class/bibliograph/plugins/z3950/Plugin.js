@@ -24,10 +24,24 @@
  */
 qx.Class.define("bibliograph.plugins.z3950.Plugin",
 {
-  extend: qx.core.Object,
+  extend: qcl.application.BasePlugin,
   include: [qx.locale.MTranslation],
   type: "singleton",
   members: {
+
+    /**
+     * Returns the name of the plugin
+     * @returns {string}
+     */
+    getName : function()
+    {
+      return "Z39.50 Datasource Connector";
+    },
+
+    /**
+     * Initialize the plugin
+     * @return void
+     */
     init: function () {
       
       // Manager shortcuts
@@ -81,9 +95,11 @@ qx.Class.define("bibliograph.plugins.z3950.Plugin",
       let store = new qcl.data.store.JsonRpcStore("z3950/table");
       store.setModel(qx.data.marshal.Json.createModel([]));
       store.bind("model", list, "model");
-      store.load("list-servers", [false]);
+      pluginTab.addListener("appear",()=>{
+        store.load("server-list", [false]);
+      });
       qx.event.message.Bus.getInstance().subscribe("z3950.reloadDatasources", (e)=>{
-        store.load("list-servers", [false]);
+        store.load("server-list", [false]);
       });
       
       // buttons
@@ -128,7 +144,7 @@ qx.Class.define("bibliograph.plugins.z3950.Plugin",
       reloadButton.addListener("execute", () => {
         reloadButton.setEnabled(false);
         this.getApplication().showPopup(this.tr("Reloading library metadata..."));
-        store.load("list-servers", [false, true], () => {
+        store.load("server-list", [false, true], () => {
           this.getApplication().hidePopup();
           reloadButton.setEnabled(true);
         });
@@ -138,7 +154,7 @@ qx.Class.define("bibliograph.plugins.z3950.Plugin",
       prefsTabView.add(pluginTab);
       
       // remote search progress indicator widget
-      let z3950Progress = new qcl.ui.dialog.ServerProgress( "z3950Progress", "z3950/search", "progress");
+      let z3950Progress = new qcl.ui.dialog.ServerProgress( "plugins/z3950/searchProgress", "z3950/search", "progress");
       z3950Progress.set({
         hideWhenCompleted: true
       });

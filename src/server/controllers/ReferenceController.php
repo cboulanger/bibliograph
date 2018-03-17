@@ -20,6 +20,7 @@
 
 namespace app\controllers;
 
+use Sse\Data;
 use Yii;
 use app\models\Datasource;
 use app\schema\BibtexSchema;
@@ -235,12 +236,12 @@ class ReferenceController extends AppController
    * Returns count of rows that will be retrieved when executing the current
    * query.
    *
-   * param array $queryData data to construct the query. Needs at least the
+   * param object $queryData data to construct the query. Needs at least the
    * a string property "datasource" with the name of datasource and a property
    * "modelType" with the type of the model.
    * @throws \InvalidArgumentException
    */
-  public function actionRowCount($clientQueryData)
+  public function actionRowCount(\stdClass $clientQueryData)
   {
     $modelClass = $this->getModelClass($clientQueryData->datasource, $clientQueryData->modelType);
     $modelClass::setDatasource($clientQueryData->datasource);
@@ -272,7 +273,7 @@ class ReferenceController extends AppController
    *                array   rowData     The actual row data (mandatory)
    *                string  statusText  Optional text to display in a status bar
    */
-  function actionRowData($firstRow, $lastRow, $requestId, $clientQueryData)
+  function actionRowData(int $firstRow, int $lastRow, int $requestId, \stdClass $clientQueryData)
   {
     $model = $this->getModelClass($clientQueryData->datasource, $clientQueryData->modelType);
     $query = $model:: find()

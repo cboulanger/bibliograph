@@ -82,22 +82,21 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow",
      * Starts the search
      */
     startSearch: function () {
-      let ds = this.datasourceSelectBox.getSelection().getItem(0).getValue();
-      let lv = this.listView;
-      
-      lv.setDatasource(ds);
+      let datasource = this.datasourceSelectBox.getSelection().getItem(0).getValue();
       let query = this.normalizeForSearch(this.searchBox.getValue());
-      
+
       // update the UI
+      let lv = this.listView;
+      lv.setDatasource(datasource);
       lv.clearTable();
       //lv.setEnabled(false);
       this.importButton.setEnabled(false);
       //this.searchButton.setEnabled(false);
       
       // open the ServerProgress widget and initiate the remote search
-      let z3950Progress = this.getApplication().getWidgetById("z3950Progress");
-      z3950Progress.setMessage(this.tr("Searching..."));
-      z3950Progress.start([ds, query]);
+      let p = this.getApplication().getWidgetById("plugins/z3950/searchProgress");
+      p.setMessage(this.tr("Searching..."));
+      p.start({ datasource, query });
     },
     
     
