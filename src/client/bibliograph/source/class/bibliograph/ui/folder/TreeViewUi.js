@@ -26,180 +26,149 @@
  */
 qx.Class.define("bibliograph.ui.folder.TreeViewUi", {
   extend: bibliograph.ui.folder.TreeView,
-  construct: function() {
+  construct: function () {
     this.base(arguments);
 
     // Manager shortcuts
-    var app = qx.core.Init.getApplication();
-    var permMgr = app.getAccessManager().getPermissionManager();
-    var confMgr = app.getConfigManager();
+    let app = qx.core.Init.getApplication();
+    let permMgr = app.getAccessManager().getPermissionManager();
+    let confMgr = app.getConfigManager();
 
-    var qxVbox1 = new qx.ui.layout.VBox(null, null, null);
-    var qxComposite1 = this;
-    this.setLayout(qxVbox1);
+    let vbox1 = new qx.ui.layout.VBox(null, null, null);
+    let composite1 = this;
+    this.setLayout(vbox1);
 
     // messages
-    qx.event.message.Bus.getInstance().subscribe(
-      "user.loggedin",
-      function(e) {
-        this.reload();
-      },
-      this
-    );
-    qx.event.message.Bus.getInstance().subscribe(
-      "user.loggedout",
-      function(e) {
-        this.reload();
-      },
-      this
-    );
+    qx.event.message.Bus.getInstance().subscribe(bibliograph.AccessManager.messages.LOGIN, ()=> this.reload());
+    qx.event.message.Bus.getInstance().subscribe(bibliograph.AccessManager.messages.LOGOUT, ()=> this.reload());
 
     // tree widget
-    var qxVbox2 = new qx.ui.layout.VBox();
-    var treeWidgetContainer = new qx.ui.container.Composite();
-    treeWidgetContainer.setLayout(qxVbox2);
+    let vbox2 = new qx.ui.layout.VBox();
+    let treeWidgetContainer = new qx.ui.container.Composite();
+    treeWidgetContainer.setLayout(vbox2);
     treeWidgetContainer.setAllowStretchY(true);
     treeWidgetContainer.setHeight(null);
-    qxComposite1.add(treeWidgetContainer, { flex: 1 });
+    composite1.add(treeWidgetContainer, {flex: 1});
     this.setTreeWidgetContainer(treeWidgetContainer);
 
     // permissions
-    var qclPermission1 = permMgr.create("allowEditFolder");
-    qclPermission1.setGranted(true);
-    var qclDependency1 = permMgr.create("folder.edit");
-    qclPermission1.addCondition(() => qclDependency1.getState());
-    qclDependency1.addListener("changeState", () => qclPermission1.update());
-    this.addListener("changeSelectedNode", () => qclPermission1.update());
-    qclPermission1.addCondition(function() {
+    let permission1 = permMgr.create("allowEditFolder");
+    permission1.setGranted(true);
+    let dependency1 = permMgr.create("folder.edit");
+    permission1.addCondition(() => dependency1.getState());
+    dependency1.addListener("changeState", () => permission1.update());
+    this.addListener("changeSelectedNode", () => permission1.update());
+    permission1.addCondition(function () {
       return this.getSelectedNode() !== null;
     }, this);
-    var qclPermission2 = permMgr.create("allowAddFolder");
-    qclPermission2.setGranted(true);
-    var qclDependency2 = permMgr.create("folder.add");
-    qclPermission2.addCondition(function() {
-      return qclDependency2.getState();
+    let permission2 = permMgr.create("allowAddFolder");
+    permission2.setGranted(true);
+    let dependency2 = permMgr.create("folder.add");
+    permission2.addCondition(function () {
+      return dependency2.getState();
     });
-    qclDependency2.addListener("changeState", () => qclPermission2.update());
-    this.addListener("changeSelectedNode", () => qclPermission2.update());
-    qclPermission2.addCondition(function() {
+    dependency2.addListener("changeState", () => permission2.update());
+    this.addListener("changeSelectedNode", () => permission2.update());
+    permission2.addCondition(function () {
       return this.getSelectedNode() !== null;
     }, this);
-    var qclPermission3 = permMgr.create("allowRemoveFolder");
-    qclPermission3.setGranted(true);
-    var qclDependency3 = permMgr.create("folder.remove");
-    qclPermission3.addCondition(function() {
-      return qclDependency3.getState();
+    let permission3 = permMgr.create("allowRemoveFolder");
+    permission3.setGranted(true);
+    let dependency3 = permMgr.create("folder.remove");
+    permission3.addCondition(function () {
+      return dependency3.getState();
     });
-    qclDependency3.addListener("changeState", () => qclPermission3.update());
-    this.addListener("changeSelectedNode", () => qclPermission3.update());
-    qclPermission3.addCondition(function() {
+    dependency3.addListener("changeState", () => permission3.update());
+    this.addListener("changeSelectedNode", () => permission3.update());
+    permission3.addCondition(function () {
       return this.getSelectedNode() !== null;
     }, this);
-    var qclPermission4 = permMgr.create("allowMoveFolder");
-    qclPermission4.setGranted(true);
-    var qclDependency4 = permMgr.create("folder.move");
-    qclPermission4.addCondition(function() {
-      return qclDependency4.getState();
+    let permission4 = permMgr.create("allowMoveFolder");
+    permission4.setGranted(true);
+    let dependency4 = permMgr.create("folder.move");
+    permission4.addCondition(function () {
+      return dependency4.getState();
     });
-    qclDependency4.addListener("changeState", () => qclPermission4.update());
-    this.addListener("changeSelectedNode", () => qclPermission4.update());
-    qclPermission4.addCondition(function() {
+    dependency4.addListener("changeState", () => permission4.update());
+    this.addListener("changeSelectedNode", () => permission4.update());
+    permission4.addCondition(function () {
       return this.getSelectedNode() !== null;
     }, this);
 
     // Menu bar
-    var qxMenuBar1 = new qx.ui.menubar.MenuBar();
-    qxComposite1.add(qxMenuBar1);
+    let menuBar1 = new qx.ui.menubar.MenuBar();
+    composite1.add(menuBar1);
 
     // Add button
-    var qxMenuBarButton1 = new qx.ui.menubar.Button(
-      null,
-      "bibliograph/icon/button-plus.png"
-    );
-    qxMenuBar1.add(qxMenuBarButton1);
-    qxMenuBarButton1.addListener("click", this._addFolderDialog, this);
-    permMgr.create("folder.add").bind("state", qxMenuBarButton1, "visibility", {
+    let menuBarButton1 = new qx.ui.menubar.Button(null,"bibliograph/icon/button-plus.png");
+    menuBar1.add(menuBarButton1);
+    menuBarButton1.addListener("click", this._addFolderDialog, this);
+    permMgr.create("folder.add").bind("state", menuBarButton1, "visibility", {
       converter: bibliograph.Utils.bool2visibility
     });
-    permMgr.create("allowAddFolder").bind("state", qxMenuBarButton1, "enabled");
+    permMgr.create("allowAddFolder").bind("state", menuBarButton1, "enabled");
 
     // Remove button
-    var qxMenuBarButton2 = new qx.ui.menubar.Button(
-      null,
-      "bibliograph/icon/button-minus.png"
-    );
-    qxMenuBar1.add(qxMenuBarButton2);
-    qxMenuBarButton2.addListener("click", this._removeFolderDialog, this);
+    let menuBarButton2 = new qx.ui.menubar.Button(null,"bibliograph/icon/button-minus.png");
+    menuBar1.add(menuBarButton2);
+    menuBarButton2.addListener("click", this._removeFolderDialog, this);
     permMgr
-      .create("folder.remove")
-      .bind("state", qxMenuBarButton2, "visibility", {
-        converter: bibliograph.Utils.bool2visibility
-      });
-    permMgr.create("allowAddFolder").bind("state", qxMenuBarButton2, "enabled");
+    .create("folder.remove")
+    .bind("state", menuBarButton2, "visibility", {
+      converter: bibliograph.Utils.bool2visibility
+    });
+    permMgr.create("allowAddFolder").bind("state", menuBarButton2, "enabled");
 
     // reload
-    var qxMenuButton5 = new qx.ui.menubar.Button(
-      null,
-      "bibliograph/icon/button-reload.png"
-    );
-    qxMenuBar1.add(qxMenuButton5);
-    qxMenuButton5.addListener(
-      "execute",
-      function(e) {
-        //this.clearTreeCache();
-        this.reload();
-      },
-      this
-    );
+    let menuButton5 = new qx.ui.menubar.Button(null,"bibliograph/icon/button-reload.png");
+    menuBar1.add(menuButton5);
+    menuButton5.addListener("execute", () => this.reload() );
 
     // Settings button/menu
-    var settingsBtn = new qx.ui.menubar.Button(
-      null,
-      "bibliograph/icon/button-settings-up.png"
-    );
-    qxMenuBar1.add(settingsBtn);
-    var settingsMenu = new qx.ui.menu.Menu();
+    let settingsBtn = new qx.ui.menubar.Button(null, "bibliograph/icon/button-settings-up.png" );
+    menuBar1.add(settingsBtn);
+    let settingsMenu = new qx.ui.menu.Menu();
     settingsBtn.setMenu(settingsMenu);
     settingsMenu.setWidgetId("bibliograph/folder-settings-menu");
 
-    var qxMenuButton1 = new qx.ui.menu.Button(this.tr("Empty trash..."));
-    qxMenuButton1.setLabel(this.tr("Empty trash..."));
-    settingsMenu.add(qxMenuButton1);
-    qxMenuButton1.addListener("execute", this._emptyTrashDialog, this);
-    permMgr.create("trash.empty").bind("state", qxMenuButton1, "visibility", {
+    let menuButton1 = new qx.ui.menu.Button(this.tr("Empty trash..."));
+    menuButton1.setLabel(this.tr("Empty trash..."));
+    settingsMenu.add(menuButton1);
+    menuButton1.addListener("execute", this._emptyTrashDialog, this);
+    permMgr.create("trash.empty").bind("state", menuButton1, "visibility", {
       converter: bibliograph.Utils.bool2visibility
     });
 
-    var qxMenuButton2 = new qx.ui.menu.Button(this.tr("Move folder..."));
-    settingsMenu.add(qxMenuButton2);
-    qxMenuButton2.addListener("execute", this._moveFolderDialog, this);
-    permMgr.create("allowMoveFolder").bind("state", qxMenuButton2, "enabled");
-    permMgr.create("folder.move").bind("state", qxMenuButton2, "visibility", {
+    let menuButton2 = new qx.ui.menu.Button(this.tr("Move folder..."));
+    settingsMenu.add(menuButton2);
+    menuButton2.addListener("execute", this._moveFolderDialog, this);
+    permMgr.create("allowMoveFolder").bind("state", menuButton2, "enabled");
+    permMgr.create("folder.move").bind("state", menuButton2, "visibility", {
       converter: bibliograph.Utils.bool2visibility
     });
 
-    var qxMenuButton3 = new qx.ui.menu.Button(this.tr("Edit folder data"));
-    settingsMenu.add(qxMenuButton3);
-    qxMenuButton3.addListener("execute", this._editFolder, this);
-    permMgr.create("allowEditFolder").bind("state", qxMenuButton3, "enabled");
-    permMgr.create("folder.edit").bind("state", qxMenuButton3, "visibility", {
+    let menuButton3 = new qx.ui.menu.Button(this.tr("Edit folder data"));
+    settingsMenu.add(menuButton3);
+    menuButton3.addListener("execute", this._editFolder, this);
+    permMgr.create("allowEditFolder").bind("state", menuButton3, "enabled");
+    permMgr.create("folder.edit").bind("state", menuButton3, "visibility", {
       converter: bibliograph.Utils.bool2visibility
     });
 
-    var qxMenuButton4 = new qx.ui.menu.Button(this.tr("Change visibility"));
-    qxMenuButton4.setLabel(this.tr("Change visibility"));
-    settingsMenu.add(qxMenuButton4);
-    qxMenuButton4.addListener("execute", this._changePublicState, this);
-    permMgr.create("allowEditFolder").bind("state", qxMenuButton4, "enabled");
-    permMgr.create("folder.edit").bind("state", qxMenuButton4, "visibility", {
+    let menuButton4 = new qx.ui.menu.Button(this.tr("Change visibility"));
+    menuButton4.setLabel(this.tr("Change visibility"));
+    settingsMenu.add(menuButton4);
+    menuButton4.addListener("execute", this._changePublicState, this);
+    permMgr.create("allowEditFolder").bind("state", menuButton4, "enabled");
+    permMgr.create("folder.edit").bind("state", menuButton4, "visibility", {
       converter: bibliograph.Utils.bool2visibility
     });
 
     // Status label
-    var _statusLabel = new qx.ui.basic.Label(null);
+    let _statusLabel = new qx.ui.basic.Label(null);
     this._statusLabel = _statusLabel;
     _statusLabel.setPadding(3);
     _statusLabel.setRich(true);
-    qxMenuBar1.add(_statusLabel, { flex: 1 });
+    menuBar1.add(_statusLabel, {flex: 1});
   }
 });

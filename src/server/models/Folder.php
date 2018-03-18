@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use lib\exceptions\UserErrorException;
 use Yii;
 use InvalidArgumentException;
 
@@ -39,6 +40,10 @@ use yii\db\Exception;
  */
 class Folder extends \lib\models\BaseModel //implements ITreeNode
 {
+  const EVENT_CLIENT_UPDATE = "folder.node.update";
+  const EVENT_CLIENT_ADD    = "folder.node.add";
+  const EVENT_CLIENT_DELETE = "folder.node.delete";
+  const EVENT_CLIENT_MOVE   = "folder.node.move";
 
   /**
    * The type of the model when part of a datasource
@@ -105,28 +110,28 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
   /**
    * Adds the form data for this model
    * @param $datasourceModel
-   * @return void
+   * @return array
    */
-  protected function addFormData($datasourceModel)
+  public function getFormData()
   {
-    $this->formData = array(
-      'label' => array(
+    return  [
+      'label' => [
         'label' => Yii::t('app', "Folder Title"),
         'type' => "TextField"
-      ),
-      'description' => array(
+      ],
+      'description' => [
         'label' => Yii::t('app', "Description"),
         'type' => "TextArea",
         'lines' => 2
-      ),
-      'public' => array(
+      ],
+      'public' => [
         'label' => Yii::t('app', "Is folder publically visible?"),
         'type' => "SelectBox",
-        'options' => array(
-          array('label' => Yii::t('app', "Yes"), 'value' => true),
-          array('label' => Yii::t('app', "No"), 'value' => false)
-        )
-      ),
+        'options' => [
+          ['label' => Yii::t('app', "Yes"), 'value' => true],
+          ['label' => Yii::t('app', "No"), 'value' => false]
+        ]
+      ],
       //    'searchable'  => array(
       //      'label'     => Yii::t('app', "Publically searchable?"),
       //      'type'      => "SelectBox",
@@ -135,29 +140,29 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
       //        array( 'label' => "Folder is not searchable (Currently not implemented)", 'value' => false )
       //      )
       //    ),
-      'searchfolder' => array(
+      'searchfolder' => [
         'label' => Yii::t('app', "Search folder?"),
         'type' => "SelectBox",
-        'options' => array(
-          array('label' => Yii::t('app', "On, Use query to determine content"), 'value' => true),
-          array('label' => Yii::t('app', "Off"), 'value' => false)
-        )
-      ),
-      'query' => array(
+        'options' => [
+          ['label' => Yii::t('app', "On, Use query to determine content"), 'value' => true],
+          ['label' => Yii::t('app', "Off"), 'value' => false]
+        ]
+      ],
+      'query' => [
         'label' => Yii::t('app', "Query"),
         'type' => "TextArea",
         'lines' => 3
-      ),
+      ],
 
-      'opened' => array(
+      'opened' => [
         'label' => Yii::t('app', "Opened?"),
         'type' => "SelectBox",
-        'options' => array(
-          array('label' => Yii::t('app', "Folder is opened by default"), 'value' => true),
-          array('label' => Yii::t('app', "Folder is closed by default"), 'value' => false)
-        )
-      )
-    );
+        'options' => [
+          ['label' => Yii::t('app', "Folder is opened by default"), 'value' => true],
+          ['label' => Yii::t('app', "Folder is closed by default"), 'value' => false]
+        ]
+      ]
+    ];
   }
 
   //-------------------------------------------------------------
@@ -204,8 +209,9 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
   protected function createUpdateNodeEvent($nodeData)
   {
     return new Event([
-      "folder.node.update", [
-        'datasource' => $this->datasource,
+      'name' => static::EVENT_CLIENT_UPDATE,
+      'data' => [
+        'datasource' => static::getDatasource()->namedId,
         'modelType' => static::$modelType,
         'nodeData' => $nodeData,
         'transactionId' => $this->getTransactionId()
@@ -221,7 +227,7 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
     $parent = static::findOne(['parentId' => $parentId]);
     $parent->getChildCount(true);
     $parent->save();
-    $nodeData = FolderController::getNodeData(static::getDatasource(), $parent);
+    $nodeData = FolderController::getNodeDataStatic($parent);
     unset($nodeData['bOpened']);
     // update new parent 
     Yii::$app->eventQueue->add($this->createUpdateNodeEvent($nodeData));
@@ -238,9 +244,8 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
   public function afterSave($insert, $changedAttributes)
   {
     // parent implemenattion
-    if (!parent::afterSave($insert, $changedAttributes)) {
-      return false;
-    }
+    parent::afterSave($insert, $changedAttributes);
+    Yii::debug($changedAttributes);
     // inserts
     if ($insert) {
       $this->_afterInsert($insert, $changedAttributes);
@@ -260,8 +265,9 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
           }
           // move node
           Yii::$app->eventQueue->add(new Event([
-            "folder.node.move", [
-              'datasource' => static::getDatasource(),
+            'name' => static::EVENT_CLIENT_MOVE,
+            'data' => [
+              'datasource' => static::getDatasource()->namedId,
               'modelType' => "folder",
               'nodeId' => $this->id,
               'parentId' => $this->parentId,
@@ -272,7 +278,11 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
 
     // if attributes have changed, update the node 
     if (count($changedAttributes) > 0) {
-      $nodeData = FolderController::getNodeData(static::getDatasource(), $this->id);
+      try {
+        $nodeData = FolderController::getNodeDataStatic($this);
+      } catch (Exception $e) {
+        throw new UserErrorException($e->getMessage(),null, $e);
+      }
       unset($nodeData['bOpened']);
       Yii::$app->eventQueue->add($this->createUpdateNodeEvent($nodeData));
     }
@@ -286,15 +296,19 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
    */
   protected function _afterInsert($insert, $changedAttributes)
   {
-    Yii::$app->eventQueue->add(new Event([
-      "folder.node.add", [
-        'datasource' => $this->datasource,
-        'modelType' => static::$modelType,
-        'nodeData' => FolderController::getNodeData($this->datasource, $this),
-        'transactionId' => $this->getTransactionId()
-      ]]));
+    try {
+      Yii::$app->eventQueue->add(new Event([
+        'name' => static::EVENT_CLIENT_ADD,
+        'data' => [
+          'datasource'  => static::getDatasource()->namedId,
+          'modelType'   => static::$modelType,
+          'nodeData'    => FolderController::getNodeDataStatic($this),
+          'transactionId' => $this->getTransactionId()
+        ]]));
+    } catch (Exception $e) {
+      throw new UserErrorException($e->getMessage(),null, $e);
+    }
   }
-
 
   /**
    * Called after an ActiveRecord has been deleted
@@ -307,7 +321,8 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
     parent::afterDelete();
     $this->updateParentNode($this->parentId);
     Yii::$app->eventQueue->add(new Event([
-      "folder.node.delete", [
+      'name' => static::EVENT_CLIENT_DELETE,
+      'data' => [
         'datasource' => static::getDatasource(),
         'modelType' => static::$modelType,
         'nodeId' => $this->id,

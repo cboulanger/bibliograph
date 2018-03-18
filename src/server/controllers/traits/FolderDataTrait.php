@@ -59,8 +59,6 @@ trait FolderDataTrait
    */
   public function getNodeData( $datasource, $folder )
   {
-    // Accept both a folder model and a numeric id
-    // @todo this should be an interface
     if ( ! ($folder instanceof Folder ) ){
       assert( \is_numeric( $folder) );
       $folderId = $folder;
@@ -70,7 +68,18 @@ trait FolderDataTrait
         throw new \InvalidArgumentException("Folder #$folderId does not exist.");
       }
     }
+    return static::getNodeDataStatic($folder);
+  }
 
+  /**
+   * Return the data of a node of the tree as expected by the qooxdoo tree data model
+   * @param Folder $folder
+   * @return array
+   * @todo remove integer folderId, datasource
+   * @throws \yii\db\Exception
+   */
+  static public function getNodeDataStatic( Folder $folder )
+  {
     $folderType     = $folder->type;
     $owner          = $folder->owner;
     $label          = $folder->label;
@@ -137,12 +146,12 @@ trait FolderDataTrait
       'data'            => [
         'type'            => $type,
         'id'              => $folder->id,
-        'parentId'        => $folder->parentId,
+        'parentId'        => $parentId,
         'query'           => $query,
         'public'          => $public,
         'owner'           => $owner,
         'description'     => $description,
-        'datasource'      => $datasource,
+        'datasource'      => get_class($folder)::getDatasource()->namedId,
         'childCount'      => $childCount,
         'referenceCount'  => $referenceCount,
         'markedDeleted'   => $markedDeleted
@@ -151,6 +160,12 @@ trait FolderDataTrait
     return $data;
   }
 
+  /**
+   * @param $datasource
+   * @param $folder
+   * @return array
+   * @throws \yii\db\Exception
+   */
   public function getUpdateNodeData( $datasource, $folder )
   {
     return [

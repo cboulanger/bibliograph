@@ -14,8 +14,8 @@
 - [x] Re-implement Client UI updates via events (e.g. in editor)
 - [x] Re-implement cql search
 - [x] Re-implement translation (http://www.yiiframework.com/doc-2.0/guide-tutorial-i18n.html)
-- [ ] Re-implemen Plugins as Yii2 modules
-- [ ] Re-implement Z3950 import
+- [x] Re-implemen Plugins as Yii2 modules
+- [x] Re-implement Z3950 import
 - [ ] Add "locale" property to search folders for parsing queries
 - [ ] Re-implement Remove/Move/Copy references
 - [ ] Re-implement Add/Remove/Move/Copy folders
@@ -48,7 +48,7 @@
 - [ ] Add compiler-based splash screen for loading 
 
 ### Code cleanup
-- [ ] Remove unnecessary packages from npm and composer
+- [ ] Replace message names with constants
 - [ ] Tests: Fix bootstrap loading issue
 - [ ] \app\controllers\AppController::require* methods should throw a specialized
       Exception (i.e. MethodNotAllowedException) instead of \JsonRpc2\Exception
@@ -59,6 +59,7 @@
 - [ ] Move the .idea folder out of version control (see [instructions](https://intellij-support.jetbrains.com/hc/en-us/articles/207240985-Changing-IDE-default-directories-used-for-config-plugins-and-caches-storage))
 - [ ] Fix 'property is unused' inspection alert
 - [ ] Add missing id, created, modified to model rules()
+- [ ] Remove qx prefix in generated code (s/qx([A-Z])/\L$1/)
 - [ ] Convert config to YAML: https://packagist.org/packages/sergeymakinen/yii2-config
 
 ## v3.0.0

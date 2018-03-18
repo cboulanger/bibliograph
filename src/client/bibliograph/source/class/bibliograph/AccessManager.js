@@ -36,6 +36,7 @@ qx.Class.define("bibliograph.AccessManager",
 
   statics : {
     messages : {
+      LOGIN  : "user.loggedin",
       LOGOUT : "user.loggedout",
       LOGOFF : "user.logoff"
     }
@@ -183,7 +184,7 @@ qx.Class.define("bibliograph.AccessManager",
       await this.getApplication().getConfigManager().load();
       await this.load();      
       // notify subscribers
-      qx.event.message.Bus.dispatchByName("user.loggedin", this.getUserManager().getActiveUser());
+      qx.event.message.Bus.dispatchByName(bibliograph.AccessManager.messages.LOGIN, this.getUserManager().getActiveUser());
       return response;
     },
 
