@@ -123,8 +123,8 @@ qx.Class.define("qcl.ui.dialog.ServerProgress",
       params.auth_token = qx.core.Init.getApplication().getAccessManager().getToken();
       let source = this.__sourceUrl +
         this.getService() + "/" + this.getMethod() + "&" +
-        qx.util.Uri.toParameter(params);
-this.debug(source);
+        qx.util.Uri.toParameter(params) + "&nocache=" + Math.random();
+  this.debug(source);
       // start request and show dialog
       this.__iframe.setSource( source );
       this.show();

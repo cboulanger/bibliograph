@@ -55,6 +55,7 @@ trait FolderDataTrait
    * @param \app\models\Folder|int $folder
    * @return array
    * @todo remove integer folderId, datasource
+   * @throws \yii\db\Exception
    */
   public function getNodeData( $datasource, $folder )
   {
@@ -134,7 +135,7 @@ trait FolderDataTrait
       'bHideOpenClose'  => ($childCount == 0),
       'columnData'      => [ null, $referenceCount ],
       'data'            => [
-        'type'            => $folderType,
+        'type'            => $type,
         'id'              => $folder->id,
         'parentId'        => $folder->parentId,
         'query'           => $query,
@@ -149,7 +150,6 @@ trait FolderDataTrait
     ];
     return $data;
   }
-
 
   public function getUpdateNodeData( $datasource, $folder )
   {

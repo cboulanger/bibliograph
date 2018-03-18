@@ -231,6 +231,7 @@ qx.Class.define("bibliograph.Setup", {
           let message = plugin.init();
           this.info( message || `Initialized plugin '${plugin.getName()}'`);
         } catch (e) {
+          console.log(e);
           this.warn(`Could not initialize plugin '${plugin.getName()}': ${e}`);
         }
       }

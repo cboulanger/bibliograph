@@ -6,13 +6,14 @@
 #set -o errexit # Exit on error
 HOST="localhost:9090"
 SERVER_PATH="src/"
-APP_PATH="client/bibliograph/source-compiled/index.html"
+TARGET=${1:-source}
+APP_PATH="client/bibliograph/$TARGET-compiled/index.html"
 COMPILE_PATH="src/client/bibliograph"
 
 # first compiler pass
 echo "Compiling application..."
 pushd $COMPILE_PATH > /dev/null
-qx compile
+qx compile --target=$TARGET
 popd > /dev/null  
 
 # 'Production' server
@@ -20,7 +21,7 @@ ps | grep "[p]hp -S $HOST" > /dev/null
 if [ $? -eq 0 ]; then
   echo "Bibliograph 'production' server is already running..."
 else
-  echo "Starting Bibliograph 'production' server..."
+  echo "Starting PHP server..."
   pushd $SERVER_PATH > /dev/null
   php -S $HOST &> /dev/null &
   popd > /dev/null
@@ -36,6 +37,6 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   osascript -e 'tell application "System Events" to keystroke "i" using {option down, command down}'
   # continuous compilation
   pushd $COMPILE_PATH > /dev/null
-  qx compile --watch
+  qx compile --target=$TARGET --watch
   popd > /dev/null
 fi

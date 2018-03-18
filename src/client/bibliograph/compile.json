@@ -1,16 +1,14 @@
 {
   "environment": {
     "app.version" : "3.0.0-alpha",
-    "qx.icontheme" : "Tango"
+    "qx.icontheme" : "Tango",
+    "app.serverUrl" : "../../../../server/web/?r="
   },
 
   "targets": [
     {
       "type": "source",
-      "outputPath": "source-compiled",
-      "environment": {
-        "app.serverUrl" : "../../../../server/web/?r="
-      }      
+      "outputPath": "source-compiled"
     },
     {
       "type": "hybrid",
@@ -18,7 +16,8 @@
     },
     {
       "type": "build",
-      "outputPath": "build-compiled"
+      "outputPath": "build-compiled",
+      "minify" : "off"
     }
   ],
   "defaultTarget": "source",

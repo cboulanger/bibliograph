@@ -51,7 +51,7 @@ qx.Class.define("bibliograph.plugins.z3950.Plugin",
       
       
       // add window
-      let importWindow = new bibliograph.plugins.z3950.ImportWindowUi();
+      let importWindow = new bibliograph.plugins.z3950.ImportWindow();
       app.getRoot().add(importWindow);
       
       // add a new menu button
@@ -95,10 +95,10 @@ qx.Class.define("bibliograph.plugins.z3950.Plugin",
       let store = new qcl.data.store.JsonRpcStore("z3950/table");
       store.setModel(qx.data.marshal.Json.createModel([]));
       store.bind("model", list, "model");
-      pluginTab.addListener("appear",()=>{
+      pluginTab.addListener("appear",e =>{
         store.load("server-list", [false]);
       });
-      qx.event.message.Bus.getInstance().subscribe("z3950.reloadDatasources", (e)=>{
+      qx.event.message.Bus.getInstance().subscribe("plugins.z3950.reloadDatasources", e =>{
         store.load("server-list", [false]);
       });
       
@@ -156,7 +156,8 @@ qx.Class.define("bibliograph.plugins.z3950.Plugin",
       // remote search progress indicator widget
       let z3950Progress = new qcl.ui.dialog.ServerProgress( "plugins/z3950/searchProgress", "z3950/search", "progress");
       z3950Progress.set({
-        hideWhenCompleted: true
+        hideWhenCompleted: true,
+        allowCancel : true
       });
     }
   }

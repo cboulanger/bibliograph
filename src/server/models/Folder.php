@@ -10,6 +10,7 @@ use app\controllers\FolderController;
 use app\models\Reference;
 use lib\models\ITreeNode;
 use yii\base\Event;
+use yii\db\Exception;
 
 /**
  * This is the model class for table "database1_data_Folder".
@@ -49,7 +50,7 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
    */
   public static function tableName()
   {
-    if( static::getDatasource() ){
+    if (static::getDatasource()) {
       return static::getDatasource()->namedId . "_data_Folder";
     }
     return '{{%data_Folder}}';
@@ -106,57 +107,57 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
    * @param $datasourceModel
    * @return void
    */
-  protected function addFormData( $datasourceModel )
+  protected function addFormData($datasourceModel)
   {
-    $this->formData =  array(
-      'label'  => array(
-      'label'     => Yii::t('app', "Folder Title"),
-      'type'      => "TextField"
+    $this->formData = array(
+      'label' => array(
+        'label' => Yii::t('app', "Folder Title"),
+        'type' => "TextField"
       ),
-      'description'  => array(
-      'label'     => Yii::t('app', "Description"),
-      'type'      => "TextArea",
-      'lines'     => 2
+      'description' => array(
+        'label' => Yii::t('app', "Description"),
+        'type' => "TextArea",
+        'lines' => 2
       ),
-      'public'  => array(
-      'label'     => Yii::t('app', "Is folder publically visible?"),
-      'type'      => "SelectBox",
-      'options'   => array(
-        array( 'label' => Yii::t('app', "Yes"), 'value' => true ),
-        array( 'label' => Yii::t('app', "No"), 'value' => false )
-      )
+      'public' => array(
+        'label' => Yii::t('app', "Is folder publically visible?"),
+        'type' => "SelectBox",
+        'options' => array(
+          array('label' => Yii::t('app', "Yes"), 'value' => true),
+          array('label' => Yii::t('app', "No"), 'value' => false)
+        )
       ),
-    //    'searchable'  => array(
-    //      'label'     => Yii::t('app', "Publically searchable?"),
-    //      'type'      => "SelectBox",
-    //      'options'   => array(
-    //        array( 'label' => "Folder is searchable", 'value' => true ),
-    //        array( 'label' => "Folder is not searchable (Currently not implemented)", 'value' => false )
-    //      )
-    //    ),
-      'searchfolder'  => array(
-      'label'     => Yii::t('app', "Search folder?"),
-      'type'      => "SelectBox",
-      'options'   => array(
-        array( 'label' => Yii::t('app', "On, Use query to determine content"), 'value' => true ),
-        array( 'label' => Yii::t('app', "Off"), 'value' => false )
-      )
+      //    'searchable'  => array(
+      //      'label'     => Yii::t('app', "Publically searchable?"),
+      //      'type'      => "SelectBox",
+      //      'options'   => array(
+      //        array( 'label' => "Folder is searchable", 'value' => true ),
+      //        array( 'label' => "Folder is not searchable (Currently not implemented)", 'value' => false )
+      //      )
+      //    ),
+      'searchfolder' => array(
+        'label' => Yii::t('app', "Search folder?"),
+        'type' => "SelectBox",
+        'options' => array(
+          array('label' => Yii::t('app', "On, Use query to determine content"), 'value' => true),
+          array('label' => Yii::t('app', "Off"), 'value' => false)
+        )
       ),
-      'query'  => array(
-      'label'     => Yii::t('app', "Query"),
-      'type'      => "TextArea",
-      'lines'     => 3
+      'query' => array(
+        'label' => Yii::t('app', "Query"),
+        'type' => "TextArea",
+        'lines' => 3
       ),
 
-      'opened'  => array(
-      'label'     => Yii::t('app', "Opened?"),
-      'type'      => "SelectBox",
-      'options'   => array(
-        array( 'label' => Yii::t('app', "Folder is opened by default"), 'value' => true ),
-        array( 'label' => Yii::t('app', "Folder is closed by default"), 'value' => false )
+      'opened' => array(
+        'label' => Yii::t('app', "Opened?"),
+        'type' => "SelectBox",
+        'options' => array(
+          array('label' => Yii::t('app', "Folder is opened by default"), 'value' => true),
+          array('label' => Yii::t('app', "Folder is closed by default"), 'value' => false)
+        )
       )
-      )
-    );  
+    );
   }
 
   //-------------------------------------------------------------
@@ -165,16 +166,16 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
 
   /**
    * @return \yii\db\ActiveQuery
-   */ 
+   */
   protected function getFolderReferences()
   {
     Folder_Reference::setDatasource(static::getDatasource());
-    return $this->hasMany(Folder_Reference::className(), ['FolderId' => 'id'] );
-  }  
+    return $this->hasMany(Folder_Reference::className(), ['FolderId' => 'id']);
+  }
 
   /**
    * @return \yii\db\ActiveQuery
-   */ 
+   */
   public function getReferences()
   {
     Reference::setDatasource(static::getDatasource());
@@ -188,8 +189,7 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
   */
 
   /**
-   * @todo Not implemented
-   *
+   * @todo Check if still needed
    * @return int
    */
   protected function getTransactionId()
@@ -197,30 +197,34 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
     return 0;
   }
 
-  /** 
-   * Creates an Event that will be forwarded to the client to trigger a 
-   * change in the folder tree 
+  /**
+   * Creates an Event that will be forwarded to the client to trigger a
+   * change in the folder tree
    */
-  protected function createUpdateNodeEvent( $nodeData)
+  protected function createUpdateNodeEvent($nodeData)
   {
     return new Event([
       "folder.node.update", [
-        'datasource'    => $this->datasource,
-        'modelType'     => static::$modelType,
-        'nodeData'      => $nodeData,
+        'datasource' => $this->datasource,
+        'modelType' => static::$modelType,
+        'nodeData' => $nodeData,
         'transactionId' => $this->getTransactionId()
-    ]]);
+      ]]);
   }
 
-  protected function updateParentNode( $parentId )
+  /**
+   * @param $parentId
+   * @throws \yii\db\Exception
+   */
+  protected function updateParentNode($parentId)
   {
-    $parent = static::findOne(['parentId' => $parentId] );
+    $parent = static::findOne(['parentId' => $parentId]);
     $parent->getChildCount(true);
     $parent->save();
-    $nodeData = FolderController::getNodeData( $datasource, $parent );
-    unset( $nodeData['bOpened'] );
+    $nodeData = FolderController::getNodeData(static::getDatasource(), $parent);
+    unset($nodeData['bOpened']);
     // update new parent 
-    Yii::$app->eventQueue->add( $this->createUpdateNodeEvent( $nodeData ));
+    Yii::$app->eventQueue->add($this->createUpdateNodeEvent($nodeData));
   }
 
   /**
@@ -229,44 +233,48 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
    *
    * @param bool $insert
    * @param array $changedAttributes
-   * @return void
+   * @return boolean
    */
-  public function afterSave ( $insert, $changedAttributes )
+  public function afterSave($insert, $changedAttributes)
   {
     // parent implemenattion
     if (!parent::afterSave($insert, $changedAttributes)) {
-        return false;
+      return false;
     }
     // inserts
-    if ( $insert ) {
-      return $this->_afterInsert($insert, $changedAttributes);
+    if ($insert) {
+      $this->_afterInsert($insert, $changedAttributes);
+      return true;
     }
     // dispatch events
-    foreach( $changedAttributes as $key => $oldValue )
-    {
-      switch( $key ){
+    foreach ($changedAttributes as $key => $oldValue) {
+      switch ($key) {
         case "parentId":
-          if ( ! $this->parentId ) return;
+          if (!$this->parentId) return false;
           // update parents
-          $this->updateParentNode($this->parentId);
-          $this->updateParentNode($oldValue);
+          try {
+            $this->updateParentNode($this->parentId);
+            $this->updateParentNode($oldValue);
+          } catch (Exception $e) {
+            Yii::error($e);
+          }
           // move node
-          Yii::$app->eventQueue->add( new Event([
+          Yii::$app->eventQueue->add(new Event([
             "folder.node.move", [
-              'datasource'    => $this->datasource,
-              'modelType'     => "folder",
-              'nodeId'        => $this->id,
-              'parentId'      => $this->parentId,
+              'datasource' => static::getDatasource(),
+              'modelType' => "folder",
+              'nodeId' => $this->id,
+              'parentId' => $this->parentId,
               'transactionId' => $this->getTransactionId()
-          ]]));
+            ]]));
       } // end switch
     } // end foreach
 
     // if attributes have changed, update the node 
-    if( count( $changedAttributes ) > 0 ){
-      $nodeData = FolderController::getNodeData( $this->getChildrenQuerydatasource, $this->id );
-      unset( $nodeData['bOpened'] );
-      Yii::$app->eventQueue->add( $this->createUpdateNodeEvent( $nodeData ));   
+    if (count($changedAttributes) > 0) {
+      $nodeData = FolderController::getNodeData(static::getDatasource(), $this->id);
+      unset($nodeData['bOpened']);
+      Yii::$app->eventQueue->add($this->createUpdateNodeEvent($nodeData));
     }
     return true;
   }
@@ -278,13 +286,13 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
    */
   protected function _afterInsert($insert, $changedAttributes)
   {
-    Yii::$app->eventQueue->add( new Event([
+    Yii::$app->eventQueue->add(new Event([
       "folder.node.add", [
-        'datasource'    => $this->datasource,
-        'modelType'     => static::$modelType,
-        'nodeData'      => FolderController::getNodeData( $this->datasource, $this ),
+        'datasource' => $this->datasource,
+        'modelType' => static::$modelType,
+        'nodeData' => FolderController::getNodeData($this->datasource, $this),
         'transactionId' => $this->getTransactionId()
-    ]]));
+      ]]));
   }
 
 
@@ -292,20 +300,19 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
    * Called after an ActiveRecord has been deleted
    *
    * @return void
+   * @throws Exception
    */
   public function afterDelete()
   {
-    if (!parent::afterDelete()) {
-      return false;
-    }
+    parent::afterDelete();
     $this->updateParentNode($this->parentId);
-    Yii::$app->eventQueue->add( new Event([
+    Yii::$app->eventQueue->add(new Event([
       "folder.node.delete", [
-        'datasource'    => $datasource,
-        'modelType'     => static::$modelType,
-        'nodeId'        => $this->id,
-        'transactionId' => $target->getTransactionId()
-    ]]));
+        'datasource' => static::getDatasource(),
+        'modelType' => static::$modelType,
+        'nodeId' => $this->id,
+        'transactionId' => $this->getTransactionId()
+      ]]));
   }
 
   //-------------------------------------------------------------
@@ -319,28 +326,28 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
    *    Defaults to "position".
    * @return \yii\db\ActiveQuery
    */
-  protected function getChildrenQuery( $orderBy="position" )
+  protected function getChildrenQuery($orderBy = "position")
   {
     return Folder::find()
       ->select("id")
-      ->where([ 'parentId' => $this->id ])  
+      ->where(['parentId' => $this->id])
       ->orderBy($orderBy);
   }
 
   //-------------------------------------------------------------
   // ITreeNode Interface
   //-------------------------------------------------------------  
-  
+
   /**
    * Returns the Folder objects of subfolders of this folder optionally ordered by a property
    * @param string|null $orderBy
    *    Optional propert name by which the returned ids should be ordered.
    *    Defaults to "position".
-   * @return \yii\db\ActiveQuery[]|null
+   * @return Folder[]|array
    */
-  public function getChildren( $orderBy="position" )
+  public function getChildren($orderBy = "position")
   {
-    return $this->getChildrenQuery( $orderBy )->all();
+    return $this->getChildrenQuery($orderBy)->all();
   }
 
   /**
@@ -350,7 +357,7 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
    *    Defaults to "position".
    * @return array
    */
-  function getChildIds ( $orderBy="position" )
+  function getChildIds($orderBy = "position")
   {
     return $this->getChildrenQuery($orderBy)->column();
   }
@@ -362,23 +369,24 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
    *    Defaults to "position".
    * @return array
    */
-  function getChildrenData( $orderBy="position" )
+  function getChildrenData($orderBy = "position")
   {
     $query = Folder::find()
-      ->where(['parentId'=>$this->id])
+      ->where(['parentId' => $this->id])
       ->orderBy($orderBy);
-      return $query->asArray()->all();
+    return $query->asArray()->all();
   }
 
   /**
-   * Returns the number of children 
-   * @param bool|\If $update If true, recalculate the child count. Defaults to false.
+   * Returns the number of children
+   * @param bool $update
+   *    If $update If true, recalculate the child count. Defaults to false.
    * @return int
+   * @throws Exception
    */
-  public function getChildCount($update=false)
+  public function getChildCount($update = false)
   {
-    if ( $update or $this->childCount === null )
-    {
+    if ($update or $this->childCount === null) {
       $this->childCount = $this->getChildrenQuery()->count();
       $this->save();
     }
@@ -389,11 +397,11 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
    * Returns the number of references linked to the folder
    * @param bool $update If true, calculate the reference count again. Defaults to false
    * @return int
+   * @throws Exception
    */
-  public function getReferenceCount( $update=false )
+  public function getReferenceCount($update = false)
   {
-    if ( $update or $this->referenceCount === null )
-    {
+    if ($update or $this->referenceCount === null) {
       $this->referenceCount = $this->getReferences()->count();
       $this->save();
     }
@@ -418,52 +426,40 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
    * @throws InvalidArgumentException
    * @return $this
    */
-  function changePosition( $position )
+  function changePosition($position)
   {
     // relative position
-    if ( is_string($position) )
-    {
-      if ( $position[0] == "-" or $position[0] == "+" )
-      {
-        $position = $this->position + (int) $position;
-      }
-      else
-      {
+    if (is_string($position)) {
+      if ($position[0] == "-" or $position[0] == "+") {
+        $position = $this->position + (int)$position;
+      } else {
         throw new InvalidArgumentException("Invalid relative position");
       }
-    }
-    elseif ( ! is_int( $position ) )
-    {
+    } elseif (!is_int($position)) {
       throw new InvalidArgumentException("Position must be relative or integer");
     }
 
     // siblings
-    $query = Folder::find()->where( ['parentId' => $this->parentId] )->orderBy('position');
-    $siblingCount = $query->count(); 
+    $query = Folder::find()->where(['parentId' => $this->parentId])->orderBy('position');
+    $siblingCount = $query->count();
 
     // check position
-    if ( $position < 0 or $position >= $siblingCount )
-    {
+    if ($position < 0 or $position >= $siblingCount) {
       throw new InvalidArgumentException("Invalid position");
     }
 
     // iterate over the parent node's children
     $index = 0;
-    foreach ( $query->all() as $sibling )
-    {
+    foreach ($query->all() as $sibling) {
       // it's me...
-      if ( $this->id == $sibling->id )
-      {
+      if ($this->id == $sibling->id) {
         $sibling->position = $position;
         //$this->debug(sprintf("Setting node %s to position %s",$this->getLabel(), $position ),__CLASS__,__LINE__);
-      }
-      else
-      {
-      if ( $index == $position )
-      {
-        //$this->debug("Skipping $index ",__CLASS__,__LINE__);
-        $index++; // skip over target position
-      }
+      } else {
+        if ($index == $position) {
+          //$this->debug("Skipping $index ",__CLASS__,__LINE__);
+          $index++; // skip over target position
+        }
         //$this->debug(sprintf( "Setting sibling node %s to position %s", $this->getLabel(), $index),__CLASS__,__LINE__);
         $sibling->position = $index++;
       }
@@ -472,12 +468,13 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
     return $this;
   }
 
-   /**
+  /**
    * Set parent node
    * @param \app\models\Folder
    * @return int Old parent id
+   * @throws Exception
    */
-  public function setParent( \app\models\Folder $parentFolder )
+  public function setParent(\app\models\Folder $parentFolder)
   {
     $oldParentId = $this->parentId;
     $this->parentId = $parentFolder->id;
@@ -494,16 +491,15 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
    *    Separator character, defaults to "/"
    * @return string
    */
-  public function labelPath( $separator="/" )
+  public function labelPath($separator = "/")
   {
     // escape existing separator characters in label
-    $path = str_replace( $separator, '\\' . $separator, $this->label );
-    $parentId= $this->parentId;
-    while( $parentId )
-    {
-      $folder = Folder::findOne( ['id' => $parentId]);
-      if( ! $folder ) throw new LogicException("Folder #$parentId does not exist.");
-      $label = str_replace( $separator, '\\' . $separator, $folder->label );
+    $path = str_replace($separator, '\\' . $separator, $this->label);
+    $parentId = $this->parentId;
+    while ($parentId) {
+      $folder = Folder::findOne(['id' => $parentId]);
+      if (!$folder) throw new \RuntimeException("Folder #$parentId does not exist.");
+      $label = str_replace($separator, '\\' . $separator, $folder->label);
       $path = $label . $separator . $path;
       $parentId = $folder->parentId;
     }

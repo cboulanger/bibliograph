@@ -43,7 +43,7 @@ qx.Class.define("bibliograph.store.Datasources",
 
       let app = this.getApplication();    
       var datasourceCount = data.length;
-      this.info( "User hass access to " + datasourceCount + " datasources." );
+      this.info( "User has access to " + datasourceCount + " datasources." );
       // show datasource button depending on whether there is a choice
       app.getWidgetById("app/toolbar/datasource").setVisibility(
         datasourceCount > 1 ? "visible" : "excluded"

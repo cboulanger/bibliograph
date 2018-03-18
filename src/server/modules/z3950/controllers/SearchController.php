@@ -65,7 +65,7 @@ class SearchController extends \yii\web\Controller
       if( $retries < 4){
         $progressBar->setProgress(0, Yii::t("z3950", "Server timed out. Trying again..."));
         sleep(rand(1,3));
-        $this->actionProgress($datasource, $query, $progressBar );
+        return $this->actionProgress($datasource, $query, $progressBar );
       } else {
         return $progressBar->error(Yii::t("z3950", "Server timed out."));
       }
@@ -178,7 +178,7 @@ class SearchController extends \yii\web\Controller
 
     $info = [];
     $hits = $yaz->hits($info);
-    Yii::debug("(Optional) result information: " . json_encode($info), Module::CATEGORY);
+    Yii::debug("$hits hits, additional result information: " . json_encode($info), Module::CATEGORY);
 
     // No result or a too large result
     $maxHits = 1000; // @todo make this configurable

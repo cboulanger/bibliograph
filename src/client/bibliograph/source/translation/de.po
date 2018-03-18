@@ -387,7 +387,29 @@ msgstr "Aus Text/Datei importieren"
 #: bibliograph.ui.window.AccessControlTool:190
 #: bibliograph/plugins/z3950/ImportWindowUi.js:118
 #: bibliograph/plugins/z3950/ImportWindowUi.js:120
+#: bibliograph/plugins/z3950/ImportWindowUi.js:126
+#: bibliograph/plugins/z3950/ImportWindowUi.js:125
+#: bibliograph/plugins/z3950/ImportWindowUi.js:121
+#: bibliograph/plugins/z3950/ImportWindowUi.js:122
+#: bibliograph/plugins/z3950/ImportWindowUi.js:123
+#: bibliograph/plugins/z3950/ImportWindowUi.js:124
+#: bibliograph/plugins/z3950/ImportWindowUi.js:127
+#: bibliograph/plugins/z3950/ImportWindowUi.js:128
+#: bibliograph/plugins/z3950/ImportWindowUi.js:129
+#: bibliograph/plugins/z3950/ImportWindowUi.js:111
+#: bibliograph/plugins/z3950/ImportWindowUi.js:114
 #: bibliograph/ui/window/AccessControlTool.js:190
+#: bibliograph/plugins/z3950/ImportWindow.js:161
+#: bibliograph/plugins/z3950/ImportWindow.js:167
+#: bibliograph/plugins/z3950/ImportWindow.js:175
+#: bibliograph/plugins/z3950/ImportWindow.js:174
+#: bibliograph/plugins/z3950/ImportWindow.js:187
+#: bibliograph/plugins/z3950/ImportWindow.js:186
+#: bibliograph/plugins/z3950/ImportWindow.js:178
+#: bibliograph/plugins/z3950/ImportWindow.js:185
+#: bibliograph/plugins/z3950/ImportWindow.js:188
+#: bibliograph/plugins/z3950/ImportWindow.js:184
+#: bibliograph/plugins/z3950/ImportWindow.js:183
 msgid "Help"
 msgstr "Hilfe"
 
@@ -632,6 +654,17 @@ msgstr "Verarbeite die Dateisätze ..."
 #: bibliograph.ui.window.ImportWindow:213
 #: bibliograph/plugins/z3950/ImportWindow.js:113
 #: bibliograph/plugins/z3950/ImportWindow.js:112
+#: bibliograph/plugins/z3950/ImportWindow.js:252
+#: bibliograph/plugins/z3950/ImportWindow.js:249
+#: bibliograph/plugins/z3950/ImportWindow.js:257
+#: bibliograph/plugins/z3950/ImportWindow.js:256
+#: bibliograph/plugins/z3950/ImportWindow.js:269
+#: bibliograph/plugins/z3950/ImportWindow.js:268
+#: bibliograph/plugins/z3950/ImportWindow.js:260
+#: bibliograph/plugins/z3950/ImportWindow.js:267
+#: bibliograph/plugins/z3950/ImportWindow.js:270
+#: bibliograph/plugins/z3950/ImportWindow.js:266
+#: bibliograph/plugins/z3950/ImportWindow.js:265
 #: bibliograph/ui/window/ImportWindow.js:213
 msgid "You have to select one or more reference to import."
 msgstr "Sie müssen eine oder mehr Datensätze zum importieren auswählen."
@@ -639,6 +672,17 @@ msgstr "Sie müssen eine oder mehr Datensätze zum importieren auswählen."
 #: bibliograph.ui.window.ImportWindow:223
 #: bibliograph/plugins/z3950/ImportWindow.js:120
 #: bibliograph/plugins/z3950/ImportWindow.js:119
+#: bibliograph/plugins/z3950/ImportWindow.js:259
+#: bibliograph/plugins/z3950/ImportWindow.js:256
+#: bibliograph/plugins/z3950/ImportWindow.js:264
+#: bibliograph/plugins/z3950/ImportWindow.js:263
+#: bibliograph/plugins/z3950/ImportWindow.js:276
+#: bibliograph/plugins/z3950/ImportWindow.js:275
+#: bibliograph/plugins/z3950/ImportWindow.js:267
+#: bibliograph/plugins/z3950/ImportWindow.js:274
+#: bibliograph/plugins/z3950/ImportWindow.js:277
+#: bibliograph/plugins/z3950/ImportWindow.js:273
+#: bibliograph/plugins/z3950/ImportWindow.js:272
 #: bibliograph/ui/window/ImportWindow.js:223
 msgid "Please select a folder first."
 msgstr "Bitte wählen sie einen Ordner aus, in den importiert werden soll. "
@@ -646,6 +690,17 @@ msgstr "Bitte wählen sie einen Ordner aus, in den importiert werden soll. "
 #: bibliograph.ui.window.ImportWindow:231
 #: bibliograph/plugins/z3950/ImportWindow.js:127
 #: bibliograph/plugins/z3950/ImportWindow.js:126
+#: bibliograph/plugins/z3950/ImportWindow.js:266
+#: bibliograph/plugins/z3950/ImportWindow.js:263
+#: bibliograph/plugins/z3950/ImportWindow.js:271
+#: bibliograph/plugins/z3950/ImportWindow.js:270
+#: bibliograph/plugins/z3950/ImportWindow.js:283
+#: bibliograph/plugins/z3950/ImportWindow.js:282
+#: bibliograph/plugins/z3950/ImportWindow.js:274
+#: bibliograph/plugins/z3950/ImportWindow.js:281
+#: bibliograph/plugins/z3950/ImportWindow.js:284
+#: bibliograph/plugins/z3950/ImportWindow.js:280
+#: bibliograph/plugins/z3950/ImportWindow.js:279
 #: bibliograph/ui/window/ImportWindow.js:231
 msgid "Cannot determine selected folder. Please reload the folders."
 msgstr "Kann den ausgewählten Ordner nicht finden. Bitte die Ordner neu laden."
@@ -653,6 +708,17 @@ msgstr "Kann den ausgewählten Ordner nicht finden. Bitte die Ordner neu laden."
 #: bibliograph.ui.window.ImportWindow:236
 #: bibliograph/plugins/z3950/ImportWindow.js:131
 #: bibliograph/plugins/z3950/ImportWindow.js:130
+#: bibliograph/plugins/z3950/ImportWindow.js:270
+#: bibliograph/plugins/z3950/ImportWindow.js:267
+#: bibliograph/plugins/z3950/ImportWindow.js:275
+#: bibliograph/plugins/z3950/ImportWindow.js:274
+#: bibliograph/plugins/z3950/ImportWindow.js:287
+#: bibliograph/plugins/z3950/ImportWindow.js:286
+#: bibliograph/plugins/z3950/ImportWindow.js:278
+#: bibliograph/plugins/z3950/ImportWindow.js:285
+#: bibliograph/plugins/z3950/ImportWindow.js:288
+#: bibliograph/plugins/z3950/ImportWindow.js:284
+#: bibliograph/plugins/z3950/ImportWindow.js:283
 #: bibliograph/ui/window/ImportWindow.js:236
 msgid "Invalid target folder. You can only import into normal folders."
 msgstr "Ungültiger Zielordner. Sie können nur in normale Ordner importieren."
@@ -660,6 +726,17 @@ msgstr "Ungültiger Zielordner. Sie können nur in normale Ordner importieren."
 #: bibliograph.ui.window.ImportWindow:244
 #: bibliograph/plugins/z3950/ImportWindow.js:138
 #: bibliograph/plugins/z3950/ImportWindow.js:137
+#: bibliograph/plugins/z3950/ImportWindow.js:277
+#: bibliograph/plugins/z3950/ImportWindow.js:274
+#: bibliograph/plugins/z3950/ImportWindow.js:282
+#: bibliograph/plugins/z3950/ImportWindow.js:281
+#: bibliograph/plugins/z3950/ImportWindow.js:294
+#: bibliograph/plugins/z3950/ImportWindow.js:293
+#: bibliograph/plugins/z3950/ImportWindow.js:285
+#: bibliograph/plugins/z3950/ImportWindow.js:292
+#: bibliograph/plugins/z3950/ImportWindow.js:295
+#: bibliograph/plugins/z3950/ImportWindow.js:291
+#: bibliograph/plugins/z3950/ImportWindow.js:290
 #: bibliograph/ui/window/ImportWindow.js:244
 msgid "Importing references..."
 msgstr "Importiere die Datensätze ..."
@@ -682,14 +759,53 @@ msgstr "Alle auswählen"
 #: bibliograph.ui.window.ImportWindowUi:128
 #: bibliograph/plugins/z3950/ImportWindowUi.js:158
 #: bibliograph/plugins/z3950/ImportWindowUi.js:160
+#: bibliograph/plugins/z3950/ImportWindowUi.js:166
+#: bibliograph/plugins/z3950/ImportWindowUi.js:165
+#: bibliograph/plugins/z3950/ImportWindowUi.js:159
+#: bibliograph/plugins/z3950/ImportWindowUi.js:161
+#: bibliograph/plugins/z3950/ImportWindowUi.js:162
+#: bibliograph/plugins/z3950/ImportWindowUi.js:167
+#: bibliograph/plugins/z3950/ImportWindowUi.js:149
+#: bibliograph/plugins/z3950/ImportWindowUi.js:152
 #: bibliograph/ui/window/ImportWindowUi.js:128
+#: bibliograph/plugins/z3950/ImportWindow.js:199
+#: bibliograph/plugins/z3950/ImportWindow.js:205
+#: bibliograph/plugins/z3950/ImportWindow.js:213
+#: bibliograph/plugins/z3950/ImportWindow.js:212
+#: bibliograph/plugins/z3950/ImportWindow.js:225
+#: bibliograph/plugins/z3950/ImportWindow.js:224
+#: bibliograph/plugins/z3950/ImportWindow.js:216
+#: bibliograph/plugins/z3950/ImportWindow.js:223
+#: bibliograph/plugins/z3950/ImportWindow.js:226
+#: bibliograph/plugins/z3950/ImportWindow.js:222
+#: bibliograph/plugins/z3950/ImportWindow.js:221
 msgid "Import selected records"
 msgstr "Augewählte Datensätze importieren"
 
 #: bibliograph.ui.window.ImportWindowUi:139
 #: bibliograph/plugins/z3950/ImportWindowUi.js:167
 #: bibliograph/plugins/z3950/ImportWindowUi.js:169
+#: bibliograph/plugins/z3950/ImportWindowUi.js:175
+#: bibliograph/plugins/z3950/ImportWindowUi.js:174
+#: bibliograph/plugins/z3950/ImportWindowUi.js:165
+#: bibliograph/plugins/z3950/ImportWindowUi.js:166
+#: bibliograph/plugins/z3950/ImportWindowUi.js:168
+#: bibliograph/plugins/z3950/ImportWindowUi.js:172
+#: bibliograph/plugins/z3950/ImportWindowUi.js:173
+#: bibliograph/plugins/z3950/ImportWindowUi.js:156
+#: bibliograph/plugins/z3950/ImportWindowUi.js:159
 #: bibliograph/ui/window/ImportWindowUi.js:139
+#: bibliograph/plugins/z3950/ImportWindow.js:206
+#: bibliograph/plugins/z3950/ImportWindow.js:212
+#: bibliograph/plugins/z3950/ImportWindow.js:220
+#: bibliograph/plugins/z3950/ImportWindow.js:219
+#: bibliograph/plugins/z3950/ImportWindow.js:232
+#: bibliograph/plugins/z3950/ImportWindow.js:231
+#: bibliograph/plugins/z3950/ImportWindow.js:223
+#: bibliograph/plugins/z3950/ImportWindow.js:230
+#: bibliograph/plugins/z3950/ImportWindow.js:233
+#: bibliograph/plugins/z3950/ImportWindow.js:229
+#: bibliograph/plugins/z3950/ImportWindow.js:228
 msgid "Close"
 msgstr "Schließen"
 
@@ -964,6 +1080,25 @@ msgstr ""
 #: bibliograph.plugins.z3950.Plugin:59
 #: bibliograph/plugins/z3950/ImportWindow.js:149
 #: bibliograph/plugins/z3950/ImportWindow.js:148
+#: bibliograph/plugins/z3950/ImportWindow.js:81
+#: bibliograph/plugins/z3950/ImportWindow.js:288
+#: bibliograph/plugins/z3950/ImportWindow.js:100
+#: bibliograph/plugins/z3950/ImportWindow.js:300
+#: bibliograph/plugins/z3950/ImportWindow.js:107
+#: bibliograph/plugins/z3950/ImportWindow.js:304
+#: bibliograph/plugins/z3950/ImportWindow.js:303
+#: bibliograph/plugins/z3950/ImportWindow.js:112
+#: bibliograph/plugins/z3950/ImportWindow.js:316
+#: bibliograph/plugins/z3950/ImportWindow.js:111
+#: bibliograph/plugins/z3950/ImportWindow.js:315
+#: bibliograph/plugins/z3950/ImportWindow.js:103
+#: bibliograph/plugins/z3950/ImportWindow.js:307
+#: bibliograph/plugins/z3950/ImportWindow.js:110
+#: bibliograph/plugins/z3950/ImportWindow.js:314
+#: bibliograph/plugins/z3950/ImportWindow.js:113
+#: bibliograph/plugins/z3950/ImportWindow.js:317
+#: bibliograph/plugins/z3950/ImportWindow.js:313
+#: bibliograph/plugins/z3950/ImportWindow.js:312
 #: bibliograph/plugins/z3950/ImportWindowUi.js:34
 #: bibliograph/plugins/z3950/Plugin.js:59
 msgid "Import from library catalog"
@@ -1000,17 +1135,70 @@ msgstr ""
 #: bibliograph.plugins.z3950.ImportWindowUi:102
 #: bibliograph/plugins/z3950/ImportWindowUi.js:102
 #: bibliograph/plugins/z3950/ImportWindowUi.js:104
+#: bibliograph/plugins/z3950/ImportWindowUi.js:110
+#: bibliograph/plugins/z3950/ImportWindowUi.js:109
+#: bibliograph/plugins/z3950/ImportWindowUi.js:111
+#: bibliograph/plugins/z3950/ImportWindowUi.js:112
+#: bibliograph/plugins/z3950/ImportWindowUi.js:113
+#: bibliograph/plugins/z3950/ImportWindowUi.js:116
+#: bibliograph/plugins/z3950/ImportWindowUi.js:117
+#: bibliograph/plugins/z3950/ImportWindowUi.js:118
+#: bibliograph/plugins/z3950/ImportWindowUi.js:100
+#: bibliograph/plugins/z3950/ImportWindowUi.js:103
+#: bibliograph/plugins/z3950/ImportWindow.js:150
+#: bibliograph/plugins/z3950/ImportWindow.js:156
+#: bibliograph/plugins/z3950/ImportWindow.js:164
+#: bibliograph/plugins/z3950/ImportWindow.js:163
+#: bibliograph/plugins/z3950/ImportWindow.js:176
+#: bibliograph/plugins/z3950/ImportWindow.js:175
+#: bibliograph/plugins/z3950/ImportWindow.js:167
+#: bibliograph/plugins/z3950/ImportWindow.js:174
+#: bibliograph/plugins/z3950/ImportWindow.js:177
+#: bibliograph/plugins/z3950/ImportWindow.js:173
+#: bibliograph/plugins/z3950/ImportWindow.js:172
 msgid "Enter search terms"
 msgstr ""
 
 #: bibliograph.plugins.z3950.ImportWindowUi:111
 #: bibliograph/plugins/z3950/ImportWindowUi.js:111
 #: bibliograph/plugins/z3950/ImportWindowUi.js:113
+#: bibliograph/plugins/z3950/ImportWindowUi.js:119
+#: bibliograph/plugins/z3950/ImportWindowUi.js:118
+#: bibliograph/plugins/z3950/ImportWindowUi.js:115
+#: bibliograph/plugins/z3950/ImportWindowUi.js:116
+#: bibliograph/plugins/z3950/ImportWindowUi.js:117
+#: bibliograph/plugins/z3950/ImportWindowUi.js:122
+#: bibliograph/plugins/z3950/ImportWindowUi.js:123
+#: bibliograph/plugins/z3950/ImportWindowUi.js:124
+#: bibliograph/plugins/z3950/ImportWindowUi.js:106
+#: bibliograph/plugins/z3950/ImportWindowUi.js:109
+#: bibliograph/plugins/z3950/ImportWindow.js:156
+#: bibliograph/plugins/z3950/ImportWindow.js:162
+#: bibliograph/plugins/z3950/ImportWindow.js:170
+#: bibliograph/plugins/z3950/ImportWindow.js:169
+#: bibliograph/plugins/z3950/ImportWindow.js:182
+#: bibliograph/plugins/z3950/ImportWindow.js:181
+#: bibliograph/plugins/z3950/ImportWindow.js:173
+#: bibliograph/plugins/z3950/ImportWindow.js:180
+#: bibliograph/plugins/z3950/ImportWindow.js:183
+#: bibliograph/plugins/z3950/ImportWindow.js:179
+#: bibliograph/plugins/z3950/ImportWindow.js:178
 msgid "Search"
 msgstr ""
 
 #: bibliograph.plugins.z3950.ImportWindow:99
 #: bibliograph/plugins/z3950/ImportWindow.js:99
 #: bibliograph/plugins/z3950/ImportWindow.js:98
+#: bibliograph/plugins/z3950/ImportWindow.js:238
+#: bibliograph/plugins/z3950/ImportWindow.js:235
+#: bibliograph/plugins/z3950/ImportWindow.js:243
+#: bibliograph/plugins/z3950/ImportWindow.js:242
+#: bibliograph/plugins/z3950/ImportWindow.js:255
+#: bibliograph/plugins/z3950/ImportWindow.js:254
+#: bibliograph/plugins/z3950/ImportWindow.js:246
+#: bibliograph/plugins/z3950/ImportWindow.js:253
+#: bibliograph/plugins/z3950/ImportWindow.js:256
+#: bibliograph/plugins/z3950/ImportWindow.js:252
+#: bibliograph/plugins/z3950/ImportWindow.js:251
 msgid "Searching..."
 msgstr ""

@@ -325,7 +325,7 @@ class Datasource extends BaseModel
    * case, the model type can be left empty.
    * @param string $modelType
    * @return string The name of the class
-   * @todo rename
+   * @todo  move to datasourceManager and rename to getClassFor()
    */
   public static function in($datasourceName, $modelType = null)
   {
@@ -449,7 +449,7 @@ class Datasource extends BaseModel
       throw new \InvalidArgumentException("Model of type '$type' is not registered");
     }
     $class = $this->modelMap[$type]['model']['class'];
-    $class::setDatasource($this->namedId);
+    $class::setDatasource($this);
     return $class;
   }
 

@@ -172,7 +172,7 @@ class BaseModel extends ActiveRecord
    */
   public static function findByNamedId( $namedId )
   {
-    return static :: findOne( ['namedId' => $namedId ] );
+    return static::findOne( ['namedId' => $namedId ] );
   }
 
   //-------------------------------------------------------------
@@ -192,11 +192,12 @@ class BaseModel extends ActiveRecord
     if( parent::save( $runValidation, $attributeNames ) ){
       return true;
     }
-    Yii::error("Error saving model " . get_class($this) );
+    Yii::error("Error saving model " . get_class($this)  );
     Yii::error( $this->getFirstErrors() );
+    $exception =  new \yii\db\Exception("Error saving model.");
+    Yii::error($exception->getTraceAsString());
     //Yii::warning( $this->getErrorSummary() );
-    //return false;
-    throw new \yii\db\Exception("Error saving model.");
+    throw $exception;
   }
 
   /**

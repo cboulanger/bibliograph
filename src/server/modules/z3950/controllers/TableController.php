@@ -91,18 +91,16 @@ class TableController extends AppController
       }
     }
     // Return list of Datasources
-    $listItemData = array();
-    $lastDatasource = $this->module->getPreference("lastDatasource");
-    foreach (Datasource::findBySchema("z3950") as $datasource) {
-      if ($activeOnly and !$datasource->active) continue;
-      $listItemData[] = array(
-        'label' => $datasource->title,
-        'value' => $datasource->namedId,
-        'active' => !! $datasource->active,
-        'selected' => $datasource->namedId == $lastDatasource
-      );
-    }
-    return $listItemData;
+    $list = [[
+      'label' => Yii::t(Module::CATEGORY, "Please select a database"),
+      'value' => null
+    ]];
+    $datasources = Datasource::find()
+      ->select("title as label, namedId as value")
+      ->where(['schema'=> "z3950", 'active' => 1])
+      ->asArray()
+      ->all();
+    return array_merge($list,$datasources);
   }
 
   /**
@@ -125,7 +123,7 @@ class TableController extends AppController
         throw new UserErrorException($e->getMessage(), $e->getCode(), $e);
       }
     }
-    $this->broadcastClientMessage("z3950.reloadDatasources");
+    $this->broadcastClientMessage("plugins.z3950.reloadDatasources");
     return "OK";
   }
 
@@ -241,7 +239,6 @@ class TableController extends AppController
    */
   public function actionImport(string $sourceDatasource, array $ids, string $targetDatasource, int $targetFolderId)
   {
-    // validate arguments (@todo)
     /** @var Folder $targetFolderModel */
     $targetFolderModel = Datasource::in($targetDatasource, "folder")::findOne($targetFolderId);
     if (!$targetFolderModel) {
@@ -250,13 +247,25 @@ class TableController extends AppController
     // import
     $numberImported = 0;
     foreach ($ids as $id) {
+      // source
       $sourceModelClass = Datasource::in($sourceDatasource, "record");
-      $targetModelClass = Datasource::in($targetDatasource, "reference");
+      $sourceColumns = $sourceModelClass::getTableSchema()->columnNames;
       /** @var Record $sourceModel */
-      $sourceModel = $sourceModelClass::findOne($id);
-      $copiedAttributeValues = $sourceModel->getAttributes(null, ['id', 'modified', 'created']);
+      $sourceModel = $sourceModelClass::findOne(['id' => $id]);
+      $copiedAttributes = $sourceModel->getAttributes();
+      // target
+      $targetModelClass = Datasource::in($targetDatasource, "reference");
+      $targetColumns = $targetModelClass::getTableSchema()->columnNames;
+      // common columns
+      $commonColumns = array_intersect($sourceColumns,$targetColumns);
+      $commonColumns = array_diff($commonColumns,['id','created','modified']);
+      //Yii::debug("Copying over columns " . implode(', ', $commonColumns));
+      $copiedAttributes = array_filter( $copiedAttributes, function($key) use($commonColumns) {
+        return in_array($key, $commonColumns);
+      }, ARRAY_FILTER_USE_KEY);
+
       /** @var Reference $targetModel */
-      $targetModel = new $targetModelClass($copiedAttributeValues);
+      $targetModel = new $targetModelClass($copiedAttributes);
       $targetModel->citekey = $targetModel->computeCiteKey();
       // remove leading "c" and other characters in year data
       $year = $targetModel->year;
