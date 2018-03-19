@@ -28,6 +28,8 @@
 - [ ] Add distribution mechanism 
 
 ### Priority: normal
+- [ ] Move static methods out of \app\models\Datasource into DatasourceManager component
+- [ ] Replace calls to Yii::$app->eventQueue->add() with calls to message API
 - [ ] Frontend: Rename item view "metadata" page
 - [ ] Backend: Model validation: accept booleans for MySql SmallInt columns
 - [ ] Implement reference model schema
@@ -35,7 +37,6 @@
 - [ ] Re-implement reference editor title label
 - [ ] Use UserErrorException consistently and replace \Exception
 - [ ] Add log email target to report fatal errors, adapt UserErrorException to report fatal errors via email
-- [ ] Move static methods out of \app\models\Datasource into DatasourceManager component
 
 ### Priority: low
 - [ ] Add "serverOnly" column to data_Config (true/false/null) and remove from config data sent to client

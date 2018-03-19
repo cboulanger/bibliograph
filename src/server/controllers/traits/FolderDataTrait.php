@@ -8,7 +8,8 @@
 
 namespace app\controllers\traits;
 
-use \Yii;
+use InvalidArgumentException;
+use Yii;
 use app\models\Folder;
 
 trait FolderDataTrait
@@ -31,8 +32,6 @@ trait FolderDataTrait
     "public"          => "icon/16/places/folder-remote.png",
     "favorites"       => "icon/16/actions/help-about.png"
   );
-
-
 
   /**
    * Returns the icon for a given folder type
@@ -65,7 +64,7 @@ trait FolderDataTrait
       // @todo this works only if included in the folder controller
       $folder = $this->getControlledModel($datasource)::findOne($folder);
       if( ! $folder ){
-        throw new \InvalidArgumentException("Folder #$folderId does not exist.");
+        throw new InvalidArgumentException("Folder #$folderId does not exist.");
       }
     }
     return static::getNodeDataStatic($folder);

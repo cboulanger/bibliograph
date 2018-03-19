@@ -296,17 +296,29 @@ class FolderController extends AppController //implements ITreeController
     $this->requirePermission("folder.add");
     if ($data === null or $data->label == "") return "ABORTED";
     $folderClass = $this->getControlledModel($datasource);
+    /** @var Folder $parentFolder */
+    $parentFolder = $folderClass::findOne($parentFolderId);
+    if( ! $parentFolder and $parentFolderId ){
+      throw new UserErrorException("Parent folder #$parentFolderId does not exist.");
+    }
+    // child folder
     /** @var Folder $folder */
     $folder = new $folderClass([
       'parentId' => $parentFolderId,
       'label' => $data->label,
       'searchfolder' => $data->searchfolder,
+      'childCount' => 0,
       'position' => 0
     ]);
     try {
       $folder->save();
+      if ($parentFolder) $folder->updateParentNode($parentFolderId);
     } catch (Exception $e) {
       throw new UserErrorException($e->getMessage());
+    }
+    if( ! $parentFolderId ){
+      // root node
+      return "Created new top folder";
     }
     return "Created new folder";
   }

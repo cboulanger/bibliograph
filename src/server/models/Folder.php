@@ -219,16 +219,20 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
   }
 
   /**
-   * @param $parentId
+   * Updates a parent node , i.e. recalculates the node children etc.
+   * By default, opens the node
+   * @param int $parentId
+   * @param boolean $openNode
    * @throws \yii\db\Exception
+   * @todo make static
    */
-  protected function updateParentNode($parentId)
+  public function updateParentNode($parentId, $openNode=true)
   {
     $parent = static::findOne(['parentId' => $parentId]);
     $parent->getChildCount(true);
     $parent->save();
     $nodeData = FolderController::getNodeDataStatic($parent);
-    unset($nodeData['bOpened']);
+    $nodeData['bOpened'] = $openNode;
     // update new parent 
     Yii::$app->eventQueue->add($this->createUpdateNodeEvent($nodeData));
   }
@@ -240,22 +244,23 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
    * @param bool $insert
    * @param array $changedAttributes
    * @return boolean
+   * @throws Exception
    */
   public function afterSave($insert, $changedAttributes)
   {
     // parent implemenattion
     parent::afterSave($insert, $changedAttributes);
-    Yii::debug($changedAttributes);
     // inserts
     if ($insert) {
-      $this->_afterInsert($insert, $changedAttributes);
+      $this->_afterInsert();
       return true;
     }
     // dispatch events
     foreach ($changedAttributes as $key => $oldValue) {
       switch ($key) {
         case "parentId":
-          if (!$this->parentId) return false;
+          // skip if no parent id had been set
+          if ($oldValue===null) return false;
           // update parents
           try {
             $this->updateParentNode($this->parentId);
@@ -278,12 +283,12 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
 
     // if attributes have changed, update the node 
     if (count($changedAttributes) > 0) {
+      Yii::debug($changedAttributes);
       try {
         $nodeData = FolderController::getNodeDataStatic($this);
       } catch (Exception $e) {
         throw new UserErrorException($e->getMessage(),null, $e);
       }
-      unset($nodeData['bOpened']);
       Yii::$app->eventQueue->add($this->createUpdateNodeEvent($nodeData));
     }
     return true;
@@ -293,21 +298,19 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
    * Called when a new Active Record has been created
    *
    * @return void
+   * @throws Exception
    */
-  protected function _afterInsert($insert, $changedAttributes)
+  protected function _afterInsert()
   {
-    try {
-      Yii::$app->eventQueue->add(new Event([
-        'name' => static::EVENT_CLIENT_ADD,
-        'data' => [
-          'datasource'  => static::getDatasource()->namedId,
-          'modelType'   => static::$modelType,
-          'nodeData'    => FolderController::getNodeDataStatic($this),
-          'transactionId' => $this->getTransactionId()
-        ]]));
-    } catch (Exception $e) {
-      throw new UserErrorException($e->getMessage(),null, $e);
-    }
+    Yii::$app->eventQueue->add(new Event([
+      'name' => static::EVENT_CLIENT_ADD,
+      'data' => [
+        'datasource'  => static::getDatasource()->namedId,
+        'modelType'   => static::$modelType,
+        'nodeData'    => FolderController::getNodeDataStatic($this),
+        'transactionId' => $this->getTransactionId()
+      ]]));
+    $this->updateParentNode($this->parentId);
   }
 
   /**
