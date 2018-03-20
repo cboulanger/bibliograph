@@ -1,10 +1,17 @@
+/** FILE IS GENERATED, ANY CHANGES WILL BE OVERWRITTEN */
+
+/**
+ * 
+ * @see app\controllers\HelpController
+ * @file /Users/cboulanger/Code/bibliograph/src/server/controllers/HelpController.php
+ */
 qx.Class.define("rpc.Help",
 { 
-  extend: qx.core.Object,
+  type: 'static',
   statics: {
-
     /**
-     * @param datasource
+     * 
+     * @param datasource 
      * @return {Promise}
      */
     search : function(datasource=null){
@@ -13,13 +20,10 @@ qx.Class.define("rpc.Help",
     },
 
     /**
-
      * @return {Promise}
      */
     index : function(){
-
       return this.getApplication().getRpcClient("help").send("index", []);
-    },
-    ___eof : null
+    }
   }
 });

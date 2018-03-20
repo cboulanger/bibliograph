@@ -905,7 +905,7 @@ class ReferenceController extends AppController
    * @param int $folderId The folder to move from
    * @param int $targetFolderId The folder to move to
    * @param int[] $ids The ids of the references to move
-   * @return "OK"
+   * @return string "OK"
    * @throws \JsonRpc2\Exception
    */
   public function actionMove($datasource, $folderId, $targetFolderId, $ids)

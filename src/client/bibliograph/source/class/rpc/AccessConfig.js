@@ -1,20 +1,26 @@
+/** FILE IS GENERATED, ANY CHANGES WILL BE OVERWRITTEN */
+
+/**
+ * 
+ * @see app\controllers\AccessConfigController
+ * @file /Users/cboulanger/Code/bibliograph/src/server/controllers/AccessConfigController.php
+ */
 qx.Class.define("rpc.AccessConfig",
 { 
-  extend: qx.core.Object,
+  type: 'static',
   statics: {
-
     /**
-
+     * 
      * @return {Promise}
      */
     types : function(){
-
       return this.getApplication().getRpcClient("access-config").send("types", []);
     },
 
     /**
-     * @param type {String}
-     * @param filter {Array}
+     * 
+     * @param type {String} The type of the element
+     * @param filter {Array} An associative array that can be used in a ActiveQuery::where() method call
      * @return {Promise}
      */
     elements : function(type, filter=null){
@@ -24,8 +30,9 @@ qx.Class.define("rpc.AccessConfig",
     },
 
     /**
-     * @param type
-     * @param namedId
+     * 
+     * @param type 
+     * @param namedId 
      * @return {Promise}
      */
     data : function(type=null, namedId=null){
@@ -35,8 +42,9 @@ qx.Class.define("rpc.AccessConfig",
     },
 
     /**
-     * @param elementType
-     * @param namedId
+     * 
+     * @param elementType 
+     * @param namedId 
      * @return {Promise}
      */
     tree : function(elementType=null, namedId=null){
@@ -46,9 +54,10 @@ qx.Class.define("rpc.AccessConfig",
     },
 
     /**
-     * @param type
-     * @param namedId
-     * @param edit
+     * 
+     * @param type 
+     * @param namedId 
+     * @param edit 
      * @return {Promise}
      */
     add : function(type=null, namedId=null, edit=null){
@@ -59,9 +68,11 @@ qx.Class.define("rpc.AccessConfig",
     },
 
     /**
-     * @param first
-     * @param second
-     * @param third
+     * 
+     * @param first The type of the element or boolean true
+     * @param second The namedId of the element
+     * @param third If the first argument is boolean true, then the second and third
+arguments are the normal signature
      * @return {Promise}
      */
     edit : function(first=null, second=null, third=null){
@@ -72,9 +83,10 @@ qx.Class.define("rpc.AccessConfig",
     },
 
     /**
-     * @param data
-     * @param type
-     * @param namedId
+     * 
+     * @param data The form data or null if the user cancelled the form
+     * @param type The type of the model or null if the user cancelled the form
+     * @param namedId The namedId of the model or null if the user cancelled the form
      * @return {Promise}
      */
     save : function(data=null, type=null, namedId=null){
@@ -85,8 +97,9 @@ qx.Class.define("rpc.AccessConfig",
     },
 
     /**
-     * @param type
-     * @param ids
+     * 
+     * @param type The type of the model
+     * @param ids An array of ids to delete
      * @return {Promise}
      */
     delete : function(type=null, ids=null){
@@ -96,8 +109,9 @@ qx.Class.define("rpc.AccessConfig",
     },
 
     /**
-     * @param doDeleteModelData
-     * @param namedId
+     * 
+     * @param doDeleteModelData 
+     * @param namedId 
      * @return {Promise}
      */
     deleteDatasource : function(doDeleteModelData=null, namedId=null){
@@ -107,9 +121,11 @@ qx.Class.define("rpc.AccessConfig",
     },
 
     /**
-     * @param linkedModelData
-     * @param type
-     * @param namedId
+     * 
+     * @param linkedModelData A string consisting of type=namedId pairs, separated by commas, defining
+what models should be linked to the main model
+     * @param type The type of the current element
+     * @param namedId The named id of the current element
      * @return {Promise}
      */
     link : function(linkedModelData=null, type=null, namedId=null){
@@ -120,9 +136,10 @@ qx.Class.define("rpc.AccessConfig",
     },
 
     /**
-     * @param linkedModelData
-     * @param type
-     * @param namedId
+     * 
+     * @param linkedModelData 
+     * @param type 
+     * @param namedId 
      * @return {Promise}
      */
     unlink : function(linkedModelData=null, type=null, namedId=null){
@@ -133,16 +150,16 @@ qx.Class.define("rpc.AccessConfig",
     },
 
     /**
-
+     * 
      * @return {Promise}
      */
     newUserDialog : function(){
-
       return this.getApplication().getRpcClient("access-config").send("new-user-dialog", []);
     },
 
     /**
-     * @param data
+     * 
+     * @param data 
      * @return {Promise}
      */
     addUser : function(data){
@@ -151,16 +168,16 @@ qx.Class.define("rpc.AccessConfig",
     },
 
     /**
-
+     * 
      * @return {Promise}
      */
     newDatasourceDialog : function(){
-
       return this.getApplication().getRpcClient("access-config").send("new-datasource-dialog", []);
     },
 
     /**
-     * @param data
+     * 
+     * @param data 
      * @return {Promise}
      */
     addDatasource : function(data=null){
@@ -169,22 +186,20 @@ qx.Class.define("rpc.AccessConfig",
     },
 
     /**
-     * @param class {String}
+     * 
+     * @param $class {String} 
      * @return {Promise}
      */
-    schemaclassExists : function(class){
-      qx.core.Assert.assertString(class);
-      return this.getApplication().getRpcClient("access-config").send("schemaclass-exists", [class]);
+    schemaclassExists : function($class){
+      qx.core.Assert.assertString($class);
+      return this.getApplication().getRpcClient("access-config").send("schemaclass-exists", [$class]);
     },
 
     /**
-
      * @return {Promise}
      */
     index : function(){
-
       return this.getApplication().getRpcClient("access-config").send("index", []);
-    },
-    ___eof : null
+    }
   }
 });

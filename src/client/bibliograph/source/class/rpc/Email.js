@@ -1,13 +1,20 @@
+/** FILE IS GENERATED, ANY CHANGES WILL BE OVERWRITTEN */
+
+/**
+ * 
+ * @see app\controllers\EmailController
+ * @file /Users/cboulanger/Code/bibliograph/src/server/controllers/EmailController.php
+ */
 qx.Class.define("rpc.Email",
 { 
-  extend: qx.core.Object,
+  type: 'static',
   statics: {
-
     /**
-     * @param type
-     * @param namedId
-     * @param subject
-     * @param body
+     * 
+     * @param type 
+     * @param namedId 
+     * @param subject 
+     * @param body 
      * @return {Promise}
      */
     emailCompose : function(type=null, namedId=null, subject=null, body=null){
@@ -19,8 +26,8 @@ qx.Class.define("rpc.Email",
     },
 
     /**
-     * @param data
-     * @param shelfId
+     * @param data 
+     * @param shelfId 
      * @return {Promise}
      */
     emailConfirm : function(data=null, shelfId=null){
@@ -30,9 +37,9 @@ qx.Class.define("rpc.Email",
     },
 
     /**
-     * @param dummy
-     * @param shelfId
-     * @param data
+     * @param dummy 
+     * @param shelfId 
+     * @param data 
      * @return {Promise}
      */
     emailCorrect : function(dummy=null, shelfId=null, data=null){
@@ -43,9 +50,9 @@ qx.Class.define("rpc.Email",
     },
 
     /**
-     * @param confirm
-     * @param shelfId
-     * @param data
+     * @param confirm 
+     * @param shelfId 
+     * @param data 
      * @return {Promise}
      */
     emailSend : function(confirm=null, shelfId=null, data=null){
@@ -56,7 +63,7 @@ qx.Class.define("rpc.Email",
     },
 
     /**
-     * @param namedId
+     * @param namedId 
      * @return {Promise}
      */
     missingPassword : function(namedId=null){
@@ -65,7 +72,8 @@ qx.Class.define("rpc.Email",
     },
 
     /**
-     * @param namedId
+     * 
+     * @param namedId 
      * @return {Promise}
      */
     confirmRegistration : function(namedId=null){
@@ -74,16 +82,16 @@ qx.Class.define("rpc.Email",
     },
 
     /**
-
+     * 
      * @return {Promise}
      */
     resetPasswordDialog : function(){
-
       return this.getApplication().getRpcClient("email").send("reset-password-dialog", []);
     },
 
     /**
-     * @param email
+     * 
+     * @param email 
      * @return {Promise}
      */
     passwortResetEmail : function(email=null){
@@ -92,8 +100,9 @@ qx.Class.define("rpc.Email",
     },
 
     /**
-     * @param email
-     * @param nonce
+     * 
+     * @param email 
+     * @param nonce 
      * @return {Promise}
      */
     resetPassword : function(email=null, nonce=null){
@@ -103,13 +112,10 @@ qx.Class.define("rpc.Email",
     },
 
     /**
-
      * @return {Promise}
      */
     index : function(){
-
       return this.getApplication().getRpcClient("email").send("index", []);
-    },
-    ___eof : null
+    }
   }
 });

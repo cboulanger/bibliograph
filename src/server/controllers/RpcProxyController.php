@@ -1,9 +1,10 @@
 <?php
+
 namespace app\controllers;
-use SebastianBergmann\CodeCoverage\Report\PHP;
-use Yii;
-use app\controllers\dto\AuthResult;
+
 use Go\ParserReflection\ReflectionFile;
+use phpDocumentor\Reflection\DocBlock\Tags\Param;
+use phpDocumentor\Reflection\DocBlockFactory;
 use yii\helpers\Inflector;
 
 /**
@@ -12,14 +13,24 @@ use yii\helpers\Inflector;
  */
 class RpcProxyController extends \yii\console\Controller
 {
+  
+  const ECMASCRIPT_RESERVED_KEYWORDS = [
+    'do', 'if', 'in', 'for', 'let', 'new', 'try', 'var', 'case', 'else', 'enum', 'eval', 'null', 'this', 'true', 'void',
+    'with', 'await', 'break', 'catch', 'class', 'const', 'false', 'super', 'throw', 'while', 'yield', 'delete', 
+    'export', 'import', 'public', 'return', 'static', 'switch', 'typeof', 'default', 'extends', 'finally', 'package',
+    'private', 'continue', 'debugger', 'function', 'arguments', 'interface', 'protected', 'implements', 'instanceof'
+  ];
+  
   /**
    * Creates stubs
    */
-  public function actionCreate(){
+  public function actionCreate()
+  {
+    // find controller source code files
     $files = [];
-    $target_dir = realpath( __DIR__ . "/../../client/bibliograph/source/class/rpc" );
-    $source_dirs = [ __DIR__, __DIR__ . "/../modules/z3950/controllers"];
-    foreach ($source_dirs as $dir){
+    $target_dir = realpath(__DIR__ . "/../../client/bibliograph/source/class/rpc");
+    $source_dirs = [__DIR__, __DIR__ . "/../modules/z3950/controllers"];
+    foreach ($source_dirs as $dir) {
       foreach (scandir($dir) as $file) {
         if (ends_with($file, "Controller.php")) {
           $files[] = "$dir/$file";
@@ -27,103 +38,172 @@ class RpcProxyController extends \yii\console\Controller
       }
     }
 
-    foreach ($files as $file){
+    // iterator over files
+    foreach ($files as $file) {
       $parsedFile = new ReflectionFile($file);
       require_once $file;
       $fileNameSpaces = $parsedFile->getFileNamespaces();
+      $docblockfactory = DocBlockFactory::createInstance();
       foreach ($fileNameSpaces as $namespace) {
         $classes = $namespace->getClasses();
         $found = false;
+
+        // iterate through declared classes
         foreach ($classes as $class) {
-          echo "Found class: ", $class->getName(), PHP_EOL;
-          $class_name = str_replace( "Controller", "", $class->getShortName() );
-          $target_path = ("$target_dir/$class_name.js");
-          $js = "qx.Class.define(\"rpc.$class_name\"," . PHP_EOL;
-          $js .= "{ " . PHP_EOL;
-          $js .= "  extend: qx.core.Object," . PHP_EOL;
-          $js .= "  statics: {" . PHP_EOL;
+
+          $class_name = str_replace("Controller", "", $class->getShortName());
+          $controllerId = Inflector::camel2id($class_name);
+          echo "Found class: ", $class->getName(), ", controller-ID: $controllerId", PHP_EOL;
+
+          $doc_comment = $class->getDocComment();
+          if ( $doc_comment ){
+            $docblock = $docblockfactory->create($doc_comment);
+            $class_comment = $docblock->getSummary() . PHP_EOL . $docblock->getDescription();
+          }
+
+          // javascript
+          $js = [];
+          $js[] = "/** FILE IS GENERATED, ANY CHANGES WILL BE OVERWRITTEN */";
+          $js[] = "";
+          $js[] = "/**";
+          $js[] = $this->formatDocblockContent($docblock->getSummary() . PHP_EOL.PHP_EOL . $docblock->getDescription());
+          $js[] = " * @see " . $class->getName();
+          $js[] = " * @file $file";
+          $js[] = " */";
+          $js[] = "qx.Class.define(\"rpc.$class_name\",";
+          $js[] = "{ ";
+          $js[] = "  type: 'static',";
+          $js[] = "  statics: {";
 
           // analyze class
-          foreach ($class->getMethods() as $method) {
+          $methods = $class->getMethods();
+          foreach ($methods as $method) {
             $methodName = $method->getName();
-            if( $methodName === "actions" or ! starts_with($methodName, "action")) {
+            // we only use actions
+            if ($methodName === "actions" or !starts_with($methodName, "action")) {
               continue;
             }
-            $action = lcfirst(substr($method->getName(),strlen("action")));
-            $id = Inflector::camel2id($action);
-            echo "Found class method: ", $class->getName(), '::', $method->getName(), ", action $action, ID $id", PHP_EOL;
+
+            $proxymethod = lcfirst(substr($method->getName(), strlen("action")));
+            $actionId = Inflector::camel2id($proxymethod);
+            echo " - Found class method: ", $class->getShortName(), '::', $method->getName(), "(): proxy rpc.$proxymethod(), action-ID $actionId", PHP_EOL;
             $found = true;
             $parameters = [];
-            $phpcomment = $method->getDocComment();
 
+            // comment
+            $phpcomment = $method->getDocComment();
+            if( $phpcomment ){
+              $docblock = $docblockfactory->create($phpcomment);
+              /** @var Param[] $param_tags */
+              $param_tags = $docblock->getTagsByName('param');
+            } else {
+              $param_tags = [];
+            }
             // analyze php method signature
-            foreach( $method->getParameters() as $parameter){
+            foreach ($method->getParameters() as $parameter) {
               $phpname = $parameter->getName();
-              $jsname = $phpname;
+              $jsname = in_array( $phpname, self::ECMASCRIPT_RESERVED_KEYWORDS) ? "\$$phpname" : $phpname;
               $type = $parameter->getType();
-              switch( $type ){
+              /** @var Param $param_tag */
+              $param_tag = array_first($param_tags,function(Param $param) use ($phpname) {
+                return $param->getVariableName() == $phpname;
+              });
+              switch ($type) {
                 case 'object':
                 case 'string':
                 case 'array':
-                  $doc     = ucfirst($type);
-                  $assert  = ucfirst($type);
+                  $doc = ucfirst($type);
+                  $assert = ucfirst($type);
                   break;
                 case 'integer':
                 case 'int':
-                  $doc     = "Number";
-                  $assert  = "Number";
+                  $doc = "Number";
+                  $assert = "Number";
                   break;
                 case 'boolean':
                 case 'bool':
-                  $doc     = "Boolean";
-                  $assert  = "Boolean";
+                  $doc = "Boolean";
+                  $assert = "Boolean";
                   break;
                 default:
-                  $doc     = null;
-                  $assert  = null;
+                  $doc = null;
+                  $assert = null;
               }
-              $param= [
-                'name'       => $jsname,
+              $param = [
+                'name' => $jsname,
                 'allowsNull' => $parameter->allowsNull(),
-                'doc'        => $doc,
-                'assert'     => $assert
+                'doc' => $doc,
+                'assert' => $assert,
+                'description' => $param_tag instanceof Param ? $param_tag->getDescription() : null
               ];
-              $parameters[]=$param;
+              $parameters[] = $param;
             }
 
             // build jsdoc
-            $js .= PHP_EOL . "    /**" . PHP_EOL .
-              implode( PHP_EOL, array_map( function($param){
-                return "     * @param " . $param['name'] .
-                  ( $param['doc'] ? ' {' . $param['doc'] . '}' : "");
-              }, $parameters)) . PHP_EOL;
-            $js .= "     * @return {Promise}" . PHP_EOL;
-            $js .= "     */" . PHP_EOL;
+            $js[] = "    /**";
+            if( $phpcomment ){
+              $js[] = $this->formatDocblockContent($docblock->getSummary() . PHP_EOL.PHP_EOL . $docblock->getDescription(),"    ");
+            }
+            $js = array_merge($js, array_map(function ($param) {
+              return
+                "     * @param " . $param['name'] . " " .
+                  ($param['doc'] ? '{' . $param['doc'] . '} ' : "") .
+                  ($param['description'] ? $param['description'] : "");
+            }, $parameters));
+            $js[] = "     * @return {Promise}";
+            $js[] = "     */";
 
             // build javascript method
-            $js .= "    $action : function(" .
+            $js[] = "    $proxymethod : function(" .
               implode(", ",
-              array_map(function($param){
-                return $param['name'] .
-                  ( $param['allowsNull'] ? "=null":"");
-              }, $parameters) ). "){" . PHP_EOL;
-            $service = Inflector::camel2id($class_name);
-            $args = implode(", ", array_map(function($param){
+                array_map(function ($param) {
+                  return $param['name'] .
+                    ($param['allowsNull'] ? "=null" : "");
+                }, $parameters)) . "){";
+            $args = implode(", ", array_map(function ($param) {
               return $param['name'];
-            },$parameters));
-            $js .= implode(PHP_EOL, array_map(function($param){
+            }, $parameters));
+            $js = array_merge($js, array_map(function ($param) {
               return $param['assert'] ?
                 "      qx.core.Assert.assert" . $param['assert'] . "(" . $param['name'] . ");" : "";
-            },$parameters)) . PHP_EOL;
-            $js .= "      return this.getApplication().getRpcClient(\"$service\").send(\"$id\", [$args]);". PHP_EOL;
-            $js .= "    },". PHP_EOL;
+            }, $parameters));
+            $js[] = "      return this.getApplication().getRpcClient(\"$controllerId\").send(\"$actionId\", [$args]);";
+            $js[] = "    },";
+            $js[] = "";
           }
-          if( $found ){
-            $js .= "    ___eof : null" . PHP_EOL . "  }" . PHP_EOL . "});";
-            file_put_contents($target_path,$js);
+          if ($found) {
+            array_pop($js);
+            array_pop($js);
+            $js[] = "    }";
+            $js[] = "  }";
+            $js[] = "});";
+            $target_path  = "$target_dir/$class_name.js";
+            $file_content = implode(PHP_EOL, $js);
+            //  write to file if content has changed
+            if( file_get_contents($target_path) !== $file_content ){
+              file_put_contents( $target_path, $file_content );
+            }
           }
         }
       }
     }
+  }
+
+  /**
+   * Re-wraps docblock content
+   * @param string $content
+   * @param string $indentation
+   * @return string
+   */
+  protected function formatDocblockContent( string $content, string $indentation="", int $width=75 )
+  {
+    $glue = $indentation . " * ";
+    $content = str_replace(PHP_EOL.PHP_EOL, "\\n\\n",$content);
+    //$lines   = explode(PHP_EOL, $content);
+    //$content = wordwrap( implode(" ", $lines ), $width );
+    $lines   = explode (PHP_EOL, $content );
+    $content = $glue . implode( $glue, $lines );
+    $content = str_replace( "\\n\\n",PHP_EOL.PHP_EOL, $glue );
+    return $content;
   }
 }

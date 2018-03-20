@@ -1,11 +1,17 @@
+/** FILE IS GENERATED, ANY CHANGES WILL BE OVERWRITTEN */
+
+/**
+ * 
+ * @see app\controllers\ChannelController
+ * @file /Users/cboulanger/Code/bibliograph/src/server/controllers/ChannelController.php
+ */
 qx.Class.define("rpc.Channel",
 { 
-  extend: qx.core.Object,
+  type: 'static',
   statics: {
-
     /**
-     * @param name
-     * @param data
+     * @param name 
+     * @param data 
      * @return {Promise}
      */
     send : function(name=null, data=null){
@@ -15,8 +21,8 @@ qx.Class.define("rpc.Channel",
     },
 
     /**
-     * @param name
-     * @param data
+     * @param name 
+     * @param data 
      * @return {Promise}
      */
     broadcast : function(name=null, data=null){
@@ -26,22 +32,17 @@ qx.Class.define("rpc.Channel",
     },
 
     /**
-
      * @return {Promise}
      */
     fetch : function(){
-
       return this.getApplication().getRpcClient("channel").send("fetch", []);
     },
 
     /**
-
      * @return {Promise}
      */
     index : function(){
-
       return this.getApplication().getRpcClient("channel").send("index", []);
-    },
-    ___eof : null
+    }
   }
 });

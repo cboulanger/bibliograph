@@ -1,11 +1,19 @@
+/** FILE IS GENERATED, ANY CHANGES WILL BE OVERWRITTEN */
+
+/**
+ * 
+ * @see app\controllers\FolderController
+ * @file /Users/cboulanger/Code/bibliograph/src/server/controllers/FolderController.php
+ */
 qx.Class.define("rpc.Folder",
 { 
-  extend: qx.core.Object,
+  type: 'static',
   statics: {
-
     /**
-     * @param datasource
-     * @param options
+     * 
+     * @param datasource 
+     * @param options Optional data, for example, when nodes
+should be filtered by a certain criteria
      * @return {Promise}
      */
     nodeCount : function(datasource=null, options=null){
@@ -15,9 +23,11 @@ qx.Class.define("rpc.Folder",
     },
 
     /**
-     * @param datasource
-     * @param nodeId
-     * @param options
+     * 
+     * @param datasource 
+     * @param nodeId 
+     * @param options Optional data, for example, when nodes
+should be filtered by a certain criteria
      * @return {Promise}
      */
     childCount : function(datasource=null, nodeId=null, options=null){
@@ -28,8 +38,11 @@ qx.Class.define("rpc.Folder",
     },
 
     /**
-     * @param datasource
-     * @param options
+     * 
+     * @param datasource 
+     * @param options Optional data, for example, when nodes
+  should be filtered by a certain criteria
+//return { nodeData : [], statusText: [] }.
      * @return {Promise}
      */
     load : function(datasource=null, options=null){
@@ -39,8 +52,9 @@ qx.Class.define("rpc.Folder",
     },
 
     /**
-     * @param datasource
-     * @param folderId
+     * 
+     * @param datasource 
+     * @param folderId 
      * @return {Promise}
      */
     edit : function(datasource=null, folderId=null){
@@ -50,9 +64,10 @@ qx.Class.define("rpc.Folder",
     },
 
     /**
-     * @param data
-     * @param datasource
-     * @param folderId
+     * 
+     * @param data 
+     * @param datasource 
+     * @param folderId 
      * @return {Promise}
      */
     save : function(data=null, datasource=null, folderId=null){
@@ -63,8 +78,9 @@ qx.Class.define("rpc.Folder",
     },
 
     /**
-     * @param datasource
-     * @param folderId
+     * 
+     * @param datasource 
+     * @param folderId 
      * @return {Promise}
      */
     visibilityDialog : function(datasource=null, folderId=null){
@@ -74,9 +90,10 @@ qx.Class.define("rpc.Folder",
     },
 
     /**
-     * @param data
-     * @param datasource
-     * @param folderId
+     * 
+     * @param data 
+     * @param datasource 
+     * @param folderId 
      * @return {Promise}
      */
     visibilityChange : function(data=null, datasource=null, folderId=null){
@@ -87,8 +104,9 @@ qx.Class.define("rpc.Folder",
     },
 
     /**
-     * @param datasource
-     * @param folderId
+     * 
+     * @param datasource 
+     * @param folderId 
      * @return {Promise}
      */
     addDialog : function(datasource=null, folderId=null){
@@ -98,9 +116,10 @@ qx.Class.define("rpc.Folder",
     },
 
     /**
-     * @param data
-     * @param datasource
-     * @param parentFolderId
+     * 
+     * @param data 
+     * @param datasource 
+     * @param parentFolderId 
      * @return {Promise}
      */
     create : function(data=null, datasource=null, parentFolderId=null){
@@ -111,8 +130,9 @@ qx.Class.define("rpc.Folder",
     },
 
     /**
-     * @param datasource
-     * @param folderId
+     * 
+     * @param datasource 
+     * @param folderId 
      * @return {Promise}
      */
     removeDialog : function(datasource=null, folderId=null){
@@ -122,9 +142,10 @@ qx.Class.define("rpc.Folder",
     },
 
     /**
-     * @param data
-     * @param datasource
-     * @param folderId
+     * 
+     * @param data 
+     * @param datasource 
+     * @param folderId 
      * @return {Promise}
      */
     remove : function(data=null, datasource=null, folderId=null){
@@ -135,9 +156,10 @@ qx.Class.define("rpc.Folder",
     },
 
     /**
-     * @param datasource
-     * @param folderId
-     * @param parentId
+     * 
+     * @param datasource 
+     * @param folderId 
+     * @param parentId 
      * @return {Promise}
      */
     move : function(datasource=null, folderId=null, parentId=null){
@@ -148,9 +170,10 @@ qx.Class.define("rpc.Folder",
     },
 
     /**
-     * @param datasource
-     * @param folderId
-     * @param position
+     * 
+     * @param datasource 
+     * @param folderId 
+     * @param position 
      * @return {Promise}
      */
     positionChange : function(datasource=null, folderId=null, position=null){
@@ -161,13 +184,10 @@ qx.Class.define("rpc.Folder",
     },
 
     /**
-
      * @return {Promise}
      */
     index : function(){
-
       return this.getApplication().getRpcClient("folder").send("index", []);
-    },
-    ___eof : null
+    }
   }
 });

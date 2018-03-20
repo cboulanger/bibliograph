@@ -1,21 +1,27 @@
+/** FILE IS GENERATED, ANY CHANGES WILL BE OVERWRITTEN */
+
+/**
+ * 
+ * @see app\controllers\CitationController
+ * @file /Users/cboulanger/Code/bibliograph/src/server/controllers/CitationController.php
+ */
 qx.Class.define("rpc.Citation",
 { 
-  extend: qx.core.Object,
+  type: 'static',
   statics: {
-
     /**
-
+     * 
      * @return {Promise}
      */
     styleData : function(){
-
       return this.getApplication().getRpcClient("citation").send("style-data", []);
     },
 
     /**
-     * @param datasource
-     * @param ids
-     * @param style
+     * 
+     * @param datasource 
+     * @param ids 
+     * @param style 
      * @return {Promise}
      */
     renderItems : function(datasource=null, ids=null, style=null){
@@ -26,9 +32,10 @@ qx.Class.define("rpc.Citation",
     },
 
     /**
-     * @param datasource
-     * @param folderId
-     * @param style
+     * 
+     * @param datasource 
+     * @param folderId 
+     * @param style 
      * @return {Promise}
      */
     renderFolder : function(datasource=null, folderId=null, style=null){
@@ -39,9 +46,10 @@ qx.Class.define("rpc.Citation",
     },
 
     /**
-     * @param datasource
-     * @param query
-     * @param style
+     * 
+     * @param datasource 
+     * @param query 
+     * @param style 
      * @return {Promise}
      */
     renderQuery : function(datasource=null, query=null, style=null){
@@ -52,13 +60,10 @@ qx.Class.define("rpc.Citation",
     },
 
     /**
-
      * @return {Promise}
      */
     index : function(){
-
       return this.getApplication().getRpcClient("citation").send("index", []);
-    },
-    ___eof : null
+    }
   }
 });

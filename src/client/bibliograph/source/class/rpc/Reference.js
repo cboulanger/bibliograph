@@ -1,11 +1,18 @@
+/** FILE IS GENERATED, ANY CHANGES WILL BE OVERWRITTEN */
+
+/**
+ * 
+ * @see app\controllers\ReferenceController
+ * @file /Users/cboulanger/Code/bibliograph/src/server/controllers/ReferenceController.php
+ */
 qx.Class.define("rpc.Reference",
 { 
-  extend: qx.core.Object,
+  type: 'static',
   statics: {
-
     /**
-     * @param datasource
-     * @param modelClassType
+     * 
+     * @param datasource 
+     * @param modelClassType 
      * @return {Promise}
      */
     tableLayout : function(datasource=null, modelClassType=null){
@@ -15,7 +22,8 @@ qx.Class.define("rpc.Reference",
     },
 
     /**
-     * @param clientQueryData
+     * 
+     * @param clientQueryData 
      * @return {Promise}
      */
     rowCount : function(clientQueryData){
@@ -24,10 +32,12 @@ qx.Class.define("rpc.Reference",
     },
 
     /**
-     * @param firstRow {Number}
-     * @param lastRow {Number}
-     * @param requestId {Number}
-     * @param clientQueryData
+     * 
+     * @param firstRow {Number} First row of queried data
+     * @param lastRow {Number} Last row of queried data
+     * @param requestId {Number} Request id
+param object $queryData Data to construct the query
+     * @param clientQueryData 
      * @return {Promise}
      */
     rowData : function(firstRow, lastRow, requestId, clientQueryData){
@@ -39,8 +49,9 @@ qx.Class.define("rpc.Reference",
     },
 
     /**
-     * @param datasource
-     * @param reftype
+     * 
+     * @param datasource 
+     * @param reftype 
      * @return {Promise}
      */
     formLayout : function(datasource=null, reftype=null){
@@ -50,7 +61,8 @@ qx.Class.define("rpc.Reference",
     },
 
     /**
-     * @param datasource
+     * 
+     * @param datasource 
      * @return {Promise}
      */
     referenceTypeList : function(datasource=null){
@@ -59,7 +71,8 @@ qx.Class.define("rpc.Reference",
     },
 
     /**
-     * @param datasource
+     * 
+     * @param datasource 
      * @return {Promise}
      */
     types : function(datasource=null){
@@ -68,10 +81,11 @@ qx.Class.define("rpc.Reference",
     },
 
     /**
-     * @param datasource
-     * @param arg2
-     * @param arg3
-     * @param arg4
+     * 
+     * @param datasource 
+     * @param arg2 
+     * @param arg3 
+     * @param arg4 
      * @return {Promise}
      */
     item : function(datasource=null, arg2=null, arg3=null, arg4=null){
@@ -83,9 +97,10 @@ qx.Class.define("rpc.Reference",
     },
 
     /**
-     * @param datasource
-     * @param field
-     * @param input
+     * 
+     * @param datasource 
+     * @param field 
+     * @param input 
      * @return {Promise}
      */
     autocomplete : function(datasource=null, field=null, input=null){
@@ -96,9 +111,10 @@ qx.Class.define("rpc.Reference",
     },
 
     /**
-     * @param datasource
-     * @param referenceId
-     * @param data
+     * 
+     * @param datasource 
+     * @param referenceId 
+     * @param data 
      * @return {Promise}
      */
     save : function(datasource=null, referenceId=null, data=null){
@@ -109,8 +125,9 @@ qx.Class.define("rpc.Reference",
     },
 
     /**
-     * @param datasource
-     * @param field
+     * 
+     * @param datasource 
+     * @param field 
      * @return {Promise}
      */
     listField : function(datasource=null, field=null){
@@ -120,9 +137,10 @@ qx.Class.define("rpc.Reference",
     },
 
     /**
-     * @param datasource
-     * @param folderId
-     * @param data
+     * 
+     * @param datasource 
+     * @param folderId 
+     * @param data 
      * @return {Promise}
      */
     create : function(datasource=null, folderId=null, data=null){
@@ -133,8 +151,10 @@ qx.Class.define("rpc.Reference",
     },
 
     /**
-     * @param first
-     * @param second
+     * 
+     * @param first If boolean, the response to the confirmation dialog. Otherwise, the datasource name
+     * @param second If string, the shelve id. If array, an array of parameters for the action:
+datasource; folder id; target folder id (not used); ids as a string separated by commas
      * @return {Promise}
      */
     remove : function(first=null, second=null){
@@ -144,8 +164,9 @@ qx.Class.define("rpc.Reference",
     },
 
     /**
-     * @param datasource
-     * @param folderId
+     * 
+     * @param datasource 
+     * @param folderId 
      * @return {Promise}
      */
     folderRemove : function(datasource=null, folderId=null){
@@ -155,10 +176,11 @@ qx.Class.define("rpc.Reference",
     },
 
     /**
-     * @param datasource
-     * @param folderId
-     * @param targetFolderId
-     * @param ids
+     * 
+     * @param datasource If true, it is the result of the confirmation
+     * @param folderId The folder to move from
+     * @param targetFolderId The folder to move to
+     * @param ids The ids of the references to move
      * @return {Promise}
      */
     move : function(datasource=null, folderId=null, targetFolderId=null, ids=null){
@@ -170,10 +192,11 @@ qx.Class.define("rpc.Reference",
     },
 
     /**
-     * @param datasource
-     * @param folderId
-     * @param targetFolderId
-     * @param ids
+     * 
+     * @param datasource 
+     * @param folderId 
+     * @param targetFolderId 
+     * @param ids 
      * @return {Promise}
      */
     copy : function(datasource=null, folderId=null, targetFolderId=null, ids=null){
@@ -185,8 +208,9 @@ qx.Class.define("rpc.Reference",
     },
 
     /**
-     * @param datasource
-     * @param referenceId
+     * 
+     * @param datasource 
+     * @param referenceId 
      * @return {Promise}
      */
     tableHtml : function(datasource=null, referenceId=null){
@@ -196,8 +220,9 @@ qx.Class.define("rpc.Reference",
     },
 
     /**
-     * @param datasource
-     * @param id
+     * 
+     * @param datasource 
+     * @param id 
      * @return {Promise}
      */
     itemHtml : function(datasource=null, id=null){
@@ -207,8 +232,9 @@ qx.Class.define("rpc.Reference",
     },
 
     /**
-     * @param datasource
-     * @param referenceId
+     * 
+     * @param datasource 
+     * @param referenceId 
      * @return {Promise}
      */
     containers : function(datasource=null, referenceId=null){
@@ -218,8 +244,9 @@ qx.Class.define("rpc.Reference",
     },
 
     /**
-     * @param datasource
-     * @param referenceId
+     * 
+     * @param datasource 
+     * @param referenceId 
      * @return {Promise}
      */
     duplicatesData : function(datasource=null, referenceId=null){
@@ -229,13 +256,10 @@ qx.Class.define("rpc.Reference",
     },
 
     /**
-
      * @return {Promise}
      */
     index : function(){
-
       return this.getApplication().getRpcClient("reference").send("index", []);
-    },
-    ___eof : null
+    }
   }
 });

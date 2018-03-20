@@ -1,10 +1,18 @@
+/** FILE IS GENERATED, ANY CHANGES WILL BE OVERWRITTEN */
+
+/**
+ * 
+ * @see app\controllers\ConfigController
+ * @file /Users/cboulanger/Code/bibliograph/src/server/controllers/ConfigController.php
+ */
 qx.Class.define("rpc.Config",
 { 
-  extend: qx.core.Object,
+  type: 'static',
   statics: {
-
     /**
-     * @param filter
+     * 
+     * @param filter Filter
+xxreturn \app\controllers\dto\ConfigLoadResult
      * @return {Promise}
      */
     load : function(filter=null){
@@ -13,8 +21,9 @@ qx.Class.define("rpc.Config",
     },
 
     /**
-     * @param key
-     * @param value
+     * 
+     * @param key Key
+     * @param value Value
      * @return {Promise}
      */
     set : function(key=null, value=null){
@@ -24,7 +33,8 @@ qx.Class.define("rpc.Config",
     },
 
     /**
-     * @param key
+     * 
+     * @param key Key
      * @return {Promise}
      */
     get : function(key=null){
@@ -33,13 +43,10 @@ qx.Class.define("rpc.Config",
     },
 
     /**
-
      * @return {Promise}
      */
     index : function(){
-
       return this.getApplication().getRpcClient("config").send("index", []);
-    },
-    ___eof : null
+    }
   }
 });

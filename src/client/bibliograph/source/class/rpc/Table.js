@@ -1,11 +1,18 @@
+/** FILE IS GENERATED, ANY CHANGES WILL BE OVERWRITTEN */
+
+/**
+ * 
+ * @see app\modules\z3950\controllers\TableController
+ * @file /Users/cboulanger/Code/bibliograph/src/server/controllers/../modules/z3950/controllers/TableController.php
+ */
 qx.Class.define("rpc.Table",
 { 
-  extend: qx.core.Object,
+  type: 'static',
   statics: {
-
     /**
-     * @param datasource
-     * @param modelClassType
+     * 
+     * @param datasource 
+     * @param modelClassType 
      * @return {Promise}
      */
     tableLayout : function(datasource=null, modelClassType=null){
@@ -15,8 +22,10 @@ qx.Class.define("rpc.Table",
     },
 
     /**
-     * @param activeOnly
-     * @param reloadFromXmlFiles
+     * 
+     * @param activeOnly 
+     * @param reloadFromXmlFiles Whether to reload the list from the XML Explain files in the filesystem.
+This is neccessary if xml files have been added or removed.
      * @return {Promise}
      */
     serverList : function(activeOnly=null, reloadFromXmlFiles=null){
@@ -26,7 +35,8 @@ qx.Class.define("rpc.Table",
     },
 
     /**
-     * @param map
+     * 
+     * @param map 
      * @return {Promise}
      */
     setDatasourceState : function(map=null){
@@ -35,7 +45,8 @@ qx.Class.define("rpc.Table",
     },
 
     /**
-     * @param queryData
+     * 
+     * @param queryData 
      * @return {Promise}
      */
     rowCount : function(queryData){
@@ -44,10 +55,23 @@ qx.Class.define("rpc.Table",
     },
 
     /**
-     * @param firstRow {Number}
-     * @param lastRow {Number}
-     * @param requestId {Number}
-     * @param queryData
+     * 
+     * @param firstRow {Number} First row of queried data
+     * @param lastRow {Number} Last row of queried data
+     * @param requestId {Number} Request id, deprecated
+param object $queryData an array of the structure array(
+  'datasource' => datasource name
+  'query'      => array(
+     'properties'  => array("a","b","c"),
+     'orderBy'     => array("a"),
+     'cql'         => "the string query (ccl/cql format)"
+  )
+)
+return array Array containing the keys
+               int     requestId   The request id identifying the request (mandatory)
+               array   rowData     The actual row data (mandatory)
+               string  statusText  Optional text to display in a status bar
+     * @param queryData 
      * @return {Promise}
      */
     rowData : function(firstRow, lastRow, requestId, queryData){
@@ -59,10 +83,11 @@ qx.Class.define("rpc.Table",
     },
 
     /**
-     * @param sourceDatasource {String}
-     * @param ids {Array}
-     * @param targetDatasource {String}
-     * @param targetFolderId {Number}
+     * 
+     * @param sourceDatasource {String} 
+     * @param ids {Array} 
+     * @param targetDatasource {String} 
+     * @param targetFolderId {Number} 
      * @return {Promise}
      */
     import : function(sourceDatasource, ids, targetDatasource, targetFolderId){
@@ -74,13 +99,10 @@ qx.Class.define("rpc.Table",
     },
 
     /**
-
      * @return {Promise}
      */
     index : function(){
-
       return this.getApplication().getRpcClient("table").send("index", []);
-    },
-    ___eof : null
+    }
   }
 });
