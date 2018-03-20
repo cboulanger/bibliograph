@@ -4,7 +4,7 @@
  * Default controller for the `z3950` module
  * 
  * @see app\modules\z3950\controllers\TableController
- * @file /Users/cboulanger/Code/bibliograph/src/server/controllers/../modules/z3950/controllers/TableController.php
+ * @file TableController.php
  */
 qx.Class.define("rpc.Table",
 { 
@@ -19,10 +19,10 @@ qx.Class.define("rpc.Table",
      * @return {Promise}
      * @see TableController::actionTableLayout
      */
-    tableLayout : function(datasource=null, modelClassType=null){
+    tableLayout : function(datasource, modelClassType){
       qx.core.Assert.assertString(datasource);
       // @todo Document type for 'modelClassType' in app\modules\z3950\controllers\TableController::actionTableLayout
-      return this.getApplication().getRpcClient("table").send("table-layout", [datasource, modelClassType]);
+      return qx.core.Init.getApplication().getRpcClient("table").send("table-layout", [datasource, modelClassType]);
     },
 
     /**
@@ -34,10 +34,10 @@ qx.Class.define("rpc.Table",
      * @return {Promise}
      * @see TableController::actionServerList
      */
-    serverList : function(activeOnly=null, reloadFromXmlFiles=null){
+    serverList : function(activeOnly, reloadFromXmlFiles){
       // @todo Document type for 'activeOnly' in app\modules\z3950\controllers\TableController::actionServerList
       qx.core.Assert.assertBoolean(reloadFromXmlFiles);
-      return this.getApplication().getRpcClient("table").send("server-list", [activeOnly, reloadFromXmlFiles]);
+      return qx.core.Init.getApplication().getRpcClient("table").send("server-list", [activeOnly, reloadFromXmlFiles]);
     },
 
     /**
@@ -49,9 +49,9 @@ qx.Class.define("rpc.Table",
      * @return {Promise}
      * @see TableController::actionSetDatasourceState
      */
-    setDatasourceState : function(map=null){
+    setDatasourceState : function(map){
       // @todo Document type for 'map' in app\modules\z3950\controllers\TableController::actionSetDatasourceState
-      return this.getApplication().getRpcClient("table").send("set-datasource-state", [map]);
+      return qx.core.Init.getApplication().getRpcClient("table").send("set-datasource-state", [map]);
     },
 
     /**
@@ -72,7 +72,7 @@ qx.Class.define("rpc.Table",
      */
     rowCount : function(queryData){
       // @todo Document type for 'queryData' in app\modules\z3950\controllers\TableController::actionRowCount
-      return this.getApplication().getRpcClient("table").send("row-count", [queryData]);
+      return qx.core.Init.getApplication().getRpcClient("table").send("row-count", [queryData]);
     },
 
     /**
@@ -102,7 +102,7 @@ qx.Class.define("rpc.Table",
       qx.core.Assert.assertNumber(lastRow);
       qx.core.Assert.assertNumber(requestId);
       // @todo Document type for 'queryData' in app\modules\z3950\controllers\TableController::actionRowData
-      return this.getApplication().getRpcClient("table").send("row-data", [firstRow, lastRow, requestId, queryData]);
+      return qx.core.Init.getApplication().getRpcClient("table").send("row-data", [firstRow, lastRow, requestId, queryData]);
     },
 
     /**
@@ -120,15 +120,7 @@ qx.Class.define("rpc.Table",
       qx.core.Assert.assertArray(ids);
       qx.core.Assert.assertString(targetDatasource);
       qx.core.Assert.assertNumber(targetFolderId);
-      return this.getApplication().getRpcClient("table").send("import", [sourceDatasource, ids, targetDatasource, targetFolderId]);
-    },
-
-    /**
-     * @return {Promise}
-     * @see TableController::actionIndex
-     */
-    index : function(){
-      return this.getApplication().getRpcClient("table").send("index", []);
+      return qx.core.Init.getApplication().getRpcClient("table").send("import", [sourceDatasource, ids, targetDatasource, targetFolderId]);
     }
   }
 });

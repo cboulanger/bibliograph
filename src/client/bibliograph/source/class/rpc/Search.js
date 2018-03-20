@@ -4,7 +4,7 @@
  * Class ProgressController
  * 
  * @see app\modules\z3950\controllers\SearchController
- * @file /Users/cboulanger/Code/bibliograph/src/server/controllers/../modules/z3950/controllers/SearchController.php
+ * @file SearchController.php
  */
 qx.Class.define("rpc.Search",
 { 
@@ -12,18 +12,10 @@ qx.Class.define("rpc.Search",
   statics: {
     /**
      * @return {Promise}
-     * @see SearchController::actionIndex
-     */
-    index : function(){
-      return this.getApplication().getRpcClient("search").send("index", []);
-    },
-
-    /**
-     * @return {Promise}
      * @see SearchController::actionTest
      */
     test : function(){
-      return this.getApplication().getRpcClient("search").send("test", []);
+      return qx.core.Init.getApplication().getRpcClient("search").send("test", []);
     },
 
     /**
@@ -37,11 +29,11 @@ qx.Class.define("rpc.Search",
      * @return {Promise}
      * @see SearchController::actionProgress
      */
-    progress : function(datasource=null, query=null, id=null){
+    progress : function(datasource, query, id){
       qx.core.Assert.assertString(datasource);
       qx.core.Assert.assertString(query);
       qx.core.Assert.assertString(id);
-      return this.getApplication().getRpcClient("search").send("progress", [datasource, query, id]);
+      return qx.core.Init.getApplication().getRpcClient("search").send("progress", [datasource, query, id]);
     }
   }
 });

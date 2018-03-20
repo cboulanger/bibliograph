@@ -4,7 +4,7 @@
  * Backend service class for the access control tool widget
  * 
  * @see app\controllers\AccessConfigController
- * @file /Users/cboulanger/Code/bibliograph/src/server/controllers/AccessConfigController.php
+ * @file AccessConfigController.php
  */
 qx.Class.define("rpc.AccessConfig",
 { 
@@ -17,7 +17,7 @@ qx.Class.define("rpc.AccessConfig",
      * @see AccessConfigController::actionTypes
      */
     types : function(){
-      return this.getApplication().getRpcClient("access-config").send("types", []);
+      return qx.core.Init.getApplication().getRpcClient("access-config").send("types", []);
     },
 
     /**
@@ -28,10 +28,10 @@ qx.Class.define("rpc.AccessConfig",
      * @return {Promise}
      * @see AccessConfigController::actionElements
      */
-    elements : function(type, filter=null){
+    elements : function(type, filter){
       qx.core.Assert.assertString(type);
       qx.core.Assert.assertArray(filter);
-      return this.getApplication().getRpcClient("access-config").send("elements", [type, filter]);
+      return qx.core.Init.getApplication().getRpcClient("access-config").send("elements", [type, filter]);
     },
 
     /**
@@ -43,10 +43,10 @@ qx.Class.define("rpc.AccessConfig",
      * @return {Promise}
      * @see AccessConfigController::actionData
      */
-    data : function(type=null, namedId=null){
+    data : function(type, namedId){
       // @todo Document type for 'type' in app\controllers\AccessConfigController::actionData
       // @todo Document type for 'namedId' in app\controllers\AccessConfigController::actionData
-      return this.getApplication().getRpcClient("access-config").send("data", [type, namedId]);
+      return qx.core.Init.getApplication().getRpcClient("access-config").send("data", [type, namedId]);
     },
 
     /**
@@ -57,10 +57,10 @@ qx.Class.define("rpc.AccessConfig",
      * @return {Promise}
      * @see AccessConfigController::actionTree
      */
-    tree : function(elementType=null, namedId=null){
+    tree : function(elementType, namedId){
       // @todo Document type for 'elementType' in app\controllers\AccessConfigController::actionTree
       // @todo Document type for 'namedId' in app\controllers\AccessConfigController::actionTree
-      return this.getApplication().getRpcClient("access-config").send("tree", [elementType, namedId]);
+      return qx.core.Init.getApplication().getRpcClient("access-config").send("tree", [elementType, namedId]);
     },
 
     /**
@@ -73,11 +73,11 @@ qx.Class.define("rpc.AccessConfig",
      * @return {Promise}
      * @see AccessConfigController::actionAdd
      */
-    add : function(type=null, namedId=null, edit=null){
+    add : function(type, namedId, edit){
       qx.core.Assert.assertString(type);
       qx.core.Assert.assertString(namedId);
       qx.core.Assert.assertBoolean(edit);
-      return this.getApplication().getRpcClient("access-config").send("add", [type, namedId, edit]);
+      return qx.core.Init.getApplication().getRpcClient("access-config").send("add", [type, namedId, edit]);
     },
 
     /**
@@ -90,11 +90,11 @@ qx.Class.define("rpc.AccessConfig",
      * @return {Promise}
      * @see AccessConfigController::actionEdit
      */
-    edit : function(first=null, second=null, third=null){
+    edit : function(first, second, third){
       // @todo Document type for 'first' in app\controllers\AccessConfigController::actionEdit
       qx.core.Assert.assertString(second);
       // @todo Document type for 'third' in app\controllers\AccessConfigController::actionEdit
-      return this.getApplication().getRpcClient("access-config").send("edit", [first, second, third]);
+      return qx.core.Init.getApplication().getRpcClient("access-config").send("edit", [first, second, third]);
     },
 
     /**
@@ -106,11 +106,11 @@ qx.Class.define("rpc.AccessConfig",
      * @return {Promise}
      * @see AccessConfigController::actionSave
      */
-    save : function(data=null, type=null, namedId=null){
+    save : function(data, type, namedId){
       // @todo Document type for 'data' in app\controllers\AccessConfigController::actionSave
       // @todo Document type for 'type' in app\controllers\AccessConfigController::actionSave
       // @todo Document type for 'namedId' in app\controllers\AccessConfigController::actionSave
-      return this.getApplication().getRpcClient("access-config").send("save", [data, type, namedId]);
+      return qx.core.Init.getApplication().getRpcClient("access-config").send("save", [data, type, namedId]);
     },
 
     /**
@@ -121,10 +121,10 @@ qx.Class.define("rpc.AccessConfig",
      * @return {Promise}
      * @see AccessConfigController::actionDelete
      */
-    delete : function(type=null, ids=null){
+    delete : function(type, ids){
       qx.core.Assert.assertString(type);
       // @todo Document type for 'ids' in app\controllers\AccessConfigController::actionDelete
-      return this.getApplication().getRpcClient("access-config").send("delete", [type, ids]);
+      return qx.core.Init.getApplication().getRpcClient("access-config").send("delete", [type, ids]);
     },
 
     /**
@@ -135,10 +135,10 @@ qx.Class.define("rpc.AccessConfig",
      * @return {Promise}
      * @see AccessConfigController::actionDeleteDatasource
      */
-    deleteDatasource : function(doDeleteModelData=null, namedId=null){
+    deleteDatasource : function(doDeleteModelData, namedId){
       // @todo Document type for 'doDeleteModelData' in app\controllers\AccessConfigController::actionDeleteDatasource
       // @todo Document type for 'namedId' in app\controllers\AccessConfigController::actionDeleteDatasource
-      return this.getApplication().getRpcClient("access-config").send("delete-datasource", [doDeleteModelData, namedId]);
+      return qx.core.Init.getApplication().getRpcClient("access-config").send("delete-datasource", [doDeleteModelData, namedId]);
     },
 
     /**
@@ -151,11 +151,11 @@ qx.Class.define("rpc.AccessConfig",
      * @return {Promise}
      * @see AccessConfigController::actionLink
      */
-    link : function(linkedModelData=null, type=null, namedId=null){
+    link : function(linkedModelData, type, namedId){
       qx.core.Assert.assertString(linkedModelData);
       qx.core.Assert.assertString(type);
       qx.core.Assert.assertString(namedId);
-      return this.getApplication().getRpcClient("access-config").send("link", [linkedModelData, type, namedId]);
+      return qx.core.Init.getApplication().getRpcClient("access-config").send("link", [linkedModelData, type, namedId]);
     },
 
     /**
@@ -167,11 +167,11 @@ qx.Class.define("rpc.AccessConfig",
      * @return {Promise}
      * @see AccessConfigController::actionUnlink
      */
-    unlink : function(linkedModelData=null, type=null, namedId=null){
+    unlink : function(linkedModelData, type, namedId){
       // @todo Document type for 'linkedModelData' in app\controllers\AccessConfigController::actionUnlink
       // @todo Document type for 'type' in app\controllers\AccessConfigController::actionUnlink
       // @todo Document type for 'namedId' in app\controllers\AccessConfigController::actionUnlink
-      return this.getApplication().getRpcClient("access-config").send("unlink", [linkedModelData, type, namedId]);
+      return qx.core.Init.getApplication().getRpcClient("access-config").send("unlink", [linkedModelData, type, namedId]);
     },
 
     /**
@@ -181,7 +181,7 @@ qx.Class.define("rpc.AccessConfig",
      * @see AccessConfigController::actionNewUserDialog
      */
     newUserDialog : function(){
-      return this.getApplication().getRpcClient("access-config").send("new-user-dialog", []);
+      return qx.core.Init.getApplication().getRpcClient("access-config").send("new-user-dialog", []);
     },
 
     /**
@@ -193,7 +193,7 @@ qx.Class.define("rpc.AccessConfig",
      */
     addUser : function(data){
       // @todo Document type for 'data' in app\controllers\AccessConfigController::actionAddUser
-      return this.getApplication().getRpcClient("access-config").send("add-user", [data]);
+      return qx.core.Init.getApplication().getRpcClient("access-config").send("add-user", [data]);
     },
 
     /**
@@ -203,7 +203,7 @@ qx.Class.define("rpc.AccessConfig",
      * @see AccessConfigController::actionNewDatasourceDialog
      */
     newDatasourceDialog : function(){
-      return this.getApplication().getRpcClient("access-config").send("new-datasource-dialog", []);
+      return qx.core.Init.getApplication().getRpcClient("access-config").send("new-datasource-dialog", []);
     },
 
     /**
@@ -213,9 +213,9 @@ qx.Class.define("rpc.AccessConfig",
      * @return {Promise}
      * @see AccessConfigController::actionAddDatasource
      */
-    addDatasource : function(data=null){
+    addDatasource : function(data){
       qx.core.Assert.assertObject(data);
-      return this.getApplication().getRpcClient("access-config").send("add-datasource", [data]);
+      return qx.core.Init.getApplication().getRpcClient("access-config").send("add-datasource", [data]);
     },
 
     /**
@@ -227,15 +227,7 @@ qx.Class.define("rpc.AccessConfig",
      */
     schemaclassExists : function($class){
       qx.core.Assert.assertString($class);
-      return this.getApplication().getRpcClient("access-config").send("schemaclass-exists", [$class]);
-    },
-
-    /**
-     * @return {Promise}
-     * @see AccessConfigController::actionIndex
-     */
-    index : function(){
-      return this.getApplication().getRpcClient("access-config").send("index", []);
+      return qx.core.Init.getApplication().getRpcClient("access-config").send("schemaclass-exists", [$class]);
     }
   }
 });

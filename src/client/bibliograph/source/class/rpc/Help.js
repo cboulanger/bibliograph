@@ -4,7 +4,7 @@
  * Changes the position of a folder within its siblings
  * 
  * @see app\controllers\HelpController
- * @file /Users/cboulanger/Code/bibliograph/src/server/controllers/HelpController.php
+ * @file HelpController.php
  */
 qx.Class.define("rpc.Help",
 { 
@@ -17,17 +17,9 @@ qx.Class.define("rpc.Help",
      * @return {Promise}
      * @see HelpController::actionSearch
      */
-    search : function(datasource=null){
+    search : function(datasource){
       qx.core.Assert.assertString(datasource);
-      return this.getApplication().getRpcClient("help").send("search", [datasource]);
-    },
-
-    /**
-     * @return {Promise}
-     * @see HelpController::actionIndex
-     */
-    index : function(){
-      return this.getApplication().getRpcClient("help").send("index", []);
+      return qx.core.Init.getApplication().getRpcClient("help").send("search", [datasource]);
     }
   }
 });

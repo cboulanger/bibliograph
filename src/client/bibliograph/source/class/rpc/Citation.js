@@ -1,10 +1,10 @@
 /** FILE IS GENERATED, ANY CHANGES WILL BE OVERWRITTEN */
 
 /**
- * The class used for authentication of users. Adds LDAP authentication
+ * The controller for PubSub communication
  * 
  * @see app\controllers\CitationController
- * @file /Users/cboulanger/Code/bibliograph/src/server/controllers/CitationController.php
+ * @file CitationController.php
  */
 qx.Class.define("rpc.Citation",
 { 
@@ -17,7 +17,7 @@ qx.Class.define("rpc.Citation",
      * @see CitationController::actionStyleData
      */
     styleData : function(){
-      return this.getApplication().getRpcClient("citation").send("style-data", []);
+      return qx.core.Init.getApplication().getRpcClient("citation").send("style-data", []);
     },
 
     /**
@@ -29,11 +29,11 @@ qx.Class.define("rpc.Citation",
      * @return {Promise}
      * @see CitationController::actionRenderItems
      */
-    renderItems : function(datasource=null, ids=null, style=null){
+    renderItems : function(datasource, ids, style){
       qx.core.Assert.assertString(datasource);
       qx.core.Assert.assertArray(ids);
       qx.core.Assert.assertString(style);
-      return this.getApplication().getRpcClient("citation").send("render-items", [datasource, ids, style]);
+      return qx.core.Init.getApplication().getRpcClient("citation").send("render-items", [datasource, ids, style]);
     },
 
     /**
@@ -45,11 +45,11 @@ qx.Class.define("rpc.Citation",
      * @return {Promise}
      * @see CitationController::actionRenderFolder
      */
-    renderFolder : function(datasource=null, folderId=null, style=null){
+    renderFolder : function(datasource, folderId, style){
       // @todo Document type for 'datasource' in app\controllers\CitationController::actionRenderFolder
       // @todo Document type for 'folderId' in app\controllers\CitationController::actionRenderFolder
       // @todo Document type for 'style' in app\controllers\CitationController::actionRenderFolder
-      return this.getApplication().getRpcClient("citation").send("render-folder", [datasource, folderId, style]);
+      return qx.core.Init.getApplication().getRpcClient("citation").send("render-folder", [datasource, folderId, style]);
     },
 
     /**
@@ -61,19 +61,11 @@ qx.Class.define("rpc.Citation",
      * @return {Promise}
      * @see CitationController::actionRenderQuery
      */
-    renderQuery : function(datasource=null, query=null, style=null){
+    renderQuery : function(datasource, query, style){
       // @todo Document type for 'datasource' in app\controllers\CitationController::actionRenderQuery
       // @todo Document type for 'query' in app\controllers\CitationController::actionRenderQuery
       // @todo Document type for 'style' in app\controllers\CitationController::actionRenderQuery
-      return this.getApplication().getRpcClient("citation").send("render-query", [datasource, query, style]);
-    },
-
-    /**
-     * @return {Promise}
-     * @see CitationController::actionIndex
-     */
-    index : function(){
-      return this.getApplication().getRpcClient("citation").send("index", []);
+      return qx.core.Init.getApplication().getRpcClient("citation").send("render-query", [datasource, query, style]);
     }
   }
 });

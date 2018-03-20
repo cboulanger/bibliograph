@@ -5,7 +5,7 @@
  * and modelType information
  * 
  * @see app\controllers\ReferenceController
- * @file /Users/cboulanger/Code/bibliograph/src/server/controllers/ReferenceController.php
+ * @file ReferenceController.php
  */
 qx.Class.define("rpc.Reference",
 { 
@@ -20,10 +20,10 @@ qx.Class.define("rpc.Reference",
      * @return {Promise}
      * @see ReferenceController::actionTableLayout
      */
-    tableLayout : function(datasource=null, modelClassType=null){
+    tableLayout : function(datasource, modelClassType){
       // @todo Document type for 'datasource' in app\controllers\ReferenceController::actionTableLayout
       // @todo Document type for 'modelClassType' in app\controllers\ReferenceController::actionTableLayout
-      return this.getApplication().getRpcClient("reference").send("table-layout", [datasource, modelClassType]);
+      return qx.core.Init.getApplication().getRpcClient("reference").send("table-layout", [datasource, modelClassType]);
     },
 
     /**
@@ -38,7 +38,7 @@ qx.Class.define("rpc.Reference",
      */
     rowCount : function(clientQueryData){
       // @todo Document type for 'clientQueryData' in app\controllers\ReferenceController::actionRowCount
-      return this.getApplication().getRpcClient("reference").send("row-count", [clientQueryData]);
+      return qx.core.Init.getApplication().getRpcClient("reference").send("row-count", [clientQueryData]);
     },
 
     /**
@@ -57,7 +57,7 @@ qx.Class.define("rpc.Reference",
       qx.core.Assert.assertNumber(lastRow);
       qx.core.Assert.assertNumber(requestId);
       // @todo Document type for 'clientQueryData' in app\controllers\ReferenceController::actionRowData
-      return this.getApplication().getRpcClient("reference").send("row-data", [firstRow, lastRow, requestId, clientQueryData]);
+      return qx.core.Init.getApplication().getRpcClient("reference").send("row-data", [firstRow, lastRow, requestId, clientQueryData]);
     },
 
     /**
@@ -69,10 +69,10 @@ qx.Class.define("rpc.Reference",
      * @return {Promise}
      * @see ReferenceController::actionFormLayout
      */
-    formLayout : function(datasource=null, reftype=null){
+    formLayout : function(datasource, reftype){
       // @todo Document type for 'datasource' in app\controllers\ReferenceController::actionFormLayout
       // @todo Document type for 'reftype' in app\controllers\ReferenceController::actionFormLayout
-      return this.getApplication().getRpcClient("reference").send("form-layout", [datasource, reftype]);
+      return qx.core.Init.getApplication().getRpcClient("reference").send("form-layout", [datasource, reftype]);
     },
 
     /**
@@ -82,9 +82,9 @@ qx.Class.define("rpc.Reference",
      * @return {Promise}
      * @see ReferenceController::actionReferenceTypeList
      */
-    referenceTypeList : function(datasource=null){
+    referenceTypeList : function(datasource){
       // @todo Document type for 'datasource' in app\controllers\ReferenceController::actionReferenceTypeList
-      return this.getApplication().getRpcClient("reference").send("reference-type-list", [datasource]);
+      return qx.core.Init.getApplication().getRpcClient("reference").send("reference-type-list", [datasource]);
     },
 
     /**
@@ -94,9 +94,9 @@ qx.Class.define("rpc.Reference",
      * @return {Promise}
      * @see ReferenceController::actionTypes
      */
-    types : function(datasource=null){
+    types : function(datasource){
       // @todo Document type for 'datasource' in app\controllers\ReferenceController::actionTypes
-      return this.getApplication().getRpcClient("reference").send("types", [datasource]);
+      return qx.core.Init.getApplication().getRpcClient("reference").send("types", [datasource]);
     },
 
     /**
@@ -109,12 +109,12 @@ qx.Class.define("rpc.Reference",
      * @return {Promise}
      * @see ReferenceController::actionItem
      */
-    item : function(datasource=null, arg2=null, arg3=null, arg4=null){
+    item : function(datasource, arg2, arg3, arg4){
       qx.core.Assert.assertString(datasource);
       // @todo Document type for 'arg2' in app\controllers\ReferenceController::actionItem
       // @todo Document type for 'arg3' in app\controllers\ReferenceController::actionItem
       // @todo Document type for 'arg4' in app\controllers\ReferenceController::actionItem
-      return this.getApplication().getRpcClient("reference").send("item", [datasource, arg2, arg3, arg4]);
+      return qx.core.Init.getApplication().getRpcClient("reference").send("item", [datasource, arg2, arg3, arg4]);
     },
 
     /**
@@ -126,11 +126,11 @@ qx.Class.define("rpc.Reference",
      * @return {Promise}
      * @see ReferenceController::actionAutocomplete
      */
-    autocomplete : function(datasource=null, field=null, input=null){
+    autocomplete : function(datasource, field, input){
       // @todo Document type for 'datasource' in app\controllers\ReferenceController::actionAutocomplete
       // @todo Document type for 'field' in app\controllers\ReferenceController::actionAutocomplete
       // @todo Document type for 'input' in app\controllers\ReferenceController::actionAutocomplete
-      return this.getApplication().getRpcClient("reference").send("autocomplete", [datasource, field, input]);
+      return qx.core.Init.getApplication().getRpcClient("reference").send("autocomplete", [datasource, field, input]);
     },
 
     /**
@@ -142,11 +142,11 @@ qx.Class.define("rpc.Reference",
      * @return {Promise}
      * @see ReferenceController::actionSave
      */
-    save : function(datasource=null, referenceId=null, data=null){
+    save : function(datasource, referenceId, data){
       // @todo Document type for 'datasource' in app\controllers\ReferenceController::actionSave
       // @todo Document type for 'referenceId' in app\controllers\ReferenceController::actionSave
       // @todo Document type for 'data' in app\controllers\ReferenceController::actionSave
-      return this.getApplication().getRpcClient("reference").send("save", [datasource, referenceId, data]);
+      return qx.core.Init.getApplication().getRpcClient("reference").send("save", [datasource, referenceId, data]);
     },
 
     /**
@@ -157,10 +157,10 @@ qx.Class.define("rpc.Reference",
      * @return {Promise}
      * @see ReferenceController::actionListField
      */
-    listField : function(datasource=null, field=null){
+    listField : function(datasource, field){
       // @todo Document type for 'datasource' in app\controllers\ReferenceController::actionListField
       // @todo Document type for 'field' in app\controllers\ReferenceController::actionListField
-      return this.getApplication().getRpcClient("reference").send("list-field", [datasource, field]);
+      return qx.core.Init.getApplication().getRpcClient("reference").send("list-field", [datasource, field]);
     },
 
     /**
@@ -172,11 +172,11 @@ qx.Class.define("rpc.Reference",
      * @return {Promise}
      * @see ReferenceController::actionCreate
      */
-    create : function(datasource=null, folderId=null, data=null){
+    create : function(datasource, folderId, data){
       qx.core.Assert.assertString(datasource);
       // @todo Document type for 'folderId' in app\controllers\ReferenceController::actionCreate
       // @todo Document type for 'data' in app\controllers\ReferenceController::actionCreate
-      return this.getApplication().getRpcClient("reference").send("create", [datasource, folderId, data]);
+      return qx.core.Init.getApplication().getRpcClient("reference").send("create", [datasource, folderId, data]);
     },
 
     /**
@@ -188,10 +188,10 @@ qx.Class.define("rpc.Reference",
      * @return {Promise}
      * @see ReferenceController::actionRemove
      */
-    remove : function(first=null, second=null){
+    remove : function(first, second){
       // @todo Document type for 'first' in app\controllers\ReferenceController::actionRemove
       // @todo Document type for 'second' in app\controllers\ReferenceController::actionRemove
-      return this.getApplication().getRpcClient("reference").send("remove", [first, second]);
+      return qx.core.Init.getApplication().getRpcClient("reference").send("remove", [first, second]);
     },
 
     /**
@@ -202,10 +202,10 @@ qx.Class.define("rpc.Reference",
      * @return {Promise}
      * @see ReferenceController::actionFolderRemove
      */
-    folderRemove : function(datasource=null, folderId=null){
+    folderRemove : function(datasource, folderId){
       // @todo Document type for 'datasource' in app\controllers\ReferenceController::actionFolderRemove
       qx.core.Assert.assertNumber(folderId);
-      return this.getApplication().getRpcClient("reference").send("folder-remove", [datasource, folderId]);
+      return qx.core.Init.getApplication().getRpcClient("reference").send("folder-remove", [datasource, folderId]);
     },
 
     /**
@@ -218,12 +218,12 @@ qx.Class.define("rpc.Reference",
      * @return {Promise}
      * @see ReferenceController::actionMove
      */
-    move : function(datasource=null, folderId=null, targetFolderId=null, ids=null){
+    move : function(datasource, folderId, targetFolderId, ids){
       // @todo Document type for 'datasource' in app\controllers\ReferenceController::actionMove
       qx.core.Assert.assertNumber(folderId);
       qx.core.Assert.assertNumber(targetFolderId);
       // @todo Document type for 'ids' in app\controllers\ReferenceController::actionMove
-      return this.getApplication().getRpcClient("reference").send("move", [datasource, folderId, targetFolderId, ids]);
+      return qx.core.Init.getApplication().getRpcClient("reference").send("move", [datasource, folderId, targetFolderId, ids]);
     },
 
     /**
@@ -236,12 +236,12 @@ qx.Class.define("rpc.Reference",
      * @return {Promise}
      * @see ReferenceController::actionCopy
      */
-    copy : function(datasource=null, folderId=null, targetFolderId=null, ids=null){
+    copy : function(datasource, folderId, targetFolderId, ids){
       // @todo Document type for 'datasource' in app\controllers\ReferenceController::actionCopy
       // @todo Document type for 'folderId' in app\controllers\ReferenceController::actionCopy
       // @todo Document type for 'targetFolderId' in app\controllers\ReferenceController::actionCopy
       // @todo Document type for 'ids' in app\controllers\ReferenceController::actionCopy
-      return this.getApplication().getRpcClient("reference").send("copy", [datasource, folderId, targetFolderId, ids]);
+      return qx.core.Init.getApplication().getRpcClient("reference").send("copy", [datasource, folderId, targetFolderId, ids]);
     },
 
     /**
@@ -252,10 +252,10 @@ qx.Class.define("rpc.Reference",
      * @return {Promise}
      * @see ReferenceController::actionTableHtml
      */
-    tableHtml : function(datasource=null, referenceId=null){
+    tableHtml : function(datasource, referenceId){
       // @todo Document type for 'datasource' in app\controllers\ReferenceController::actionTableHtml
       // @todo Document type for 'referenceId' in app\controllers\ReferenceController::actionTableHtml
-      return this.getApplication().getRpcClient("reference").send("table-html", [datasource, referenceId]);
+      return qx.core.Init.getApplication().getRpcClient("reference").send("table-html", [datasource, referenceId]);
     },
 
     /**
@@ -266,10 +266,10 @@ qx.Class.define("rpc.Reference",
      * @return {Promise}
      * @see ReferenceController::actionItemHtml
      */
-    itemHtml : function(datasource=null, id=null){
+    itemHtml : function(datasource, id){
       // @todo Document type for 'datasource' in app\controllers\ReferenceController::actionItemHtml
       // @todo Document type for 'id' in app\controllers\ReferenceController::actionItemHtml
-      return this.getApplication().getRpcClient("reference").send("item-html", [datasource, id]);
+      return qx.core.Init.getApplication().getRpcClient("reference").send("item-html", [datasource, id]);
     },
 
     /**
@@ -280,10 +280,10 @@ qx.Class.define("rpc.Reference",
      * @return {Promise}
      * @see ReferenceController::actionContainers
      */
-    containers : function(datasource=null, referenceId=null){
+    containers : function(datasource, referenceId){
       // @todo Document type for 'datasource' in app\controllers\ReferenceController::actionContainers
       // @todo Document type for 'referenceId' in app\controllers\ReferenceController::actionContainers
-      return this.getApplication().getRpcClient("reference").send("containers", [datasource, referenceId]);
+      return qx.core.Init.getApplication().getRpcClient("reference").send("containers", [datasource, referenceId]);
     },
 
     /**
@@ -294,18 +294,10 @@ qx.Class.define("rpc.Reference",
      * @return {Promise}
      * @see ReferenceController::actionDuplicatesData
      */
-    duplicatesData : function(datasource=null, referenceId=null){
+    duplicatesData : function(datasource, referenceId){
       qx.core.Assert.assertString(datasource);
       qx.core.Assert.assertNumber(referenceId);
-      return this.getApplication().getRpcClient("reference").send("duplicates-data", [datasource, referenceId]);
-    },
-
-    /**
-     * @return {Promise}
-     * @see ReferenceController::actionIndex
-     */
-    index : function(){
-      return this.getApplication().getRpcClient("reference").send("index", []);
+      return qx.core.Init.getApplication().getRpcClient("reference").send("duplicates-data", [datasource, referenceId]);
     }
   }
 });

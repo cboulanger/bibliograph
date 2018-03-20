@@ -5,7 +5,7 @@
  * values
  * 
  * @see app\controllers\ConfigController
- * @file /Users/cboulanger/Code/bibliograph/src/server/controllers/ConfigController.php
+ * @file ConfigController.php
  */
 qx.Class.define("rpc.Config",
 { 
@@ -19,9 +19,9 @@ qx.Class.define("rpc.Config",
      * @return {Promise}
      * @see ConfigController::actionLoad
      */
-    load : function(filter=null){
+    load : function(filter){
       // @todo Document type for 'filter' in app\controllers\ConfigController::actionLoad
-      return this.getApplication().getRpcClient("config").send("load", [filter]);
+      return qx.core.Init.getApplication().getRpcClient("config").send("load", [filter]);
     },
 
     /**
@@ -32,10 +32,10 @@ qx.Class.define("rpc.Config",
      * @return {Promise}
      * @see ConfigController::actionSet
      */
-    set : function(key=null, value=null){
+    set : function(key, value){
       qx.core.Assert.assertString(key);
       // @todo Document type for 'value' in app\controllers\ConfigController::actionSet
-      return this.getApplication().getRpcClient("config").send("set", [key, value]);
+      return qx.core.Init.getApplication().getRpcClient("config").send("set", [key, value]);
     },
 
     /**
@@ -45,17 +45,9 @@ qx.Class.define("rpc.Config",
      * @return {Promise}
      * @see ConfigController::actionGet
      */
-    get : function(key=null){
+    get : function(key){
       qx.core.Assert.assertString(key);
-      return this.getApplication().getRpcClient("config").send("get", [key]);
-    },
-
-    /**
-     * @return {Promise}
-     * @see ConfigController::actionIndex
-     */
-    index : function(){
-      return this.getApplication().getRpcClient("config").send("index", []);
+      return qx.core.Init.getApplication().getRpcClient("config").send("get", [key]);
     }
   }
 });

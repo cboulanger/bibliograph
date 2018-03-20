@@ -4,7 +4,7 @@
  * Service to reset email. Called by a REST request
  * 
  * @see app\controllers\FolderController
- * @file /Users/cboulanger/Code/bibliograph/src/server/controllers/FolderController.php
+ * @file FolderController.php
  */
 qx.Class.define("rpc.Folder",
 { 
@@ -19,10 +19,10 @@ qx.Class.define("rpc.Folder",
      * @return {Promise}
      * @see FolderController::actionNodeCount
      */
-    nodeCount : function(datasource, options=null){
+    nodeCount : function(datasource, options){
       qx.core.Assert.assertString(datasource);
       qx.core.Assert.assertArray(options);
-      return this.getApplication().getRpcClient("folder").send("node-count", [datasource, options]);
+      return qx.core.Init.getApplication().getRpcClient("folder").send("node-count", [datasource, options]);
     },
 
     /**
@@ -36,11 +36,11 @@ qx.Class.define("rpc.Folder",
      * @return {Promise}
      * @see FolderController::actionChildCount
      */
-    childCount : function(datasource=null, nodeId=null, options=null){
+    childCount : function(datasource, nodeId, options){
       // @todo Document type for 'datasource' in app\controllers\FolderController::actionChildCount
       // @todo Document type for 'nodeId' in app\controllers\FolderController::actionChildCount
       // @todo Document type for 'options' in app\controllers\FolderController::actionChildCount
-      return this.getApplication().getRpcClient("folder").send("child-count", [datasource, nodeId, options]);
+      return qx.core.Init.getApplication().getRpcClient("folder").send("child-count", [datasource, nodeId, options]);
     },
 
     /**
@@ -53,10 +53,10 @@ qx.Class.define("rpc.Folder",
      * @return {Promise}
      * @see FolderController::actionLoad
      */
-    load : function(datasource=null, options=null){
+    load : function(datasource, options){
       qx.core.Assert.assertString(datasource);
       // @todo Document type for 'options' in app\controllers\FolderController::actionLoad
-      return this.getApplication().getRpcClient("folder").send("load", [datasource, options]);
+      return qx.core.Init.getApplication().getRpcClient("folder").send("load", [datasource, options]);
     },
 
     /**
@@ -67,10 +67,10 @@ qx.Class.define("rpc.Folder",
      * @return {Promise}
      * @see FolderController::actionEdit
      */
-    edit : function(datasource=null, folderId=null){
+    edit : function(datasource, folderId){
       // @todo Document type for 'datasource' in app\controllers\FolderController::actionEdit
       // @todo Document type for 'folderId' in app\controllers\FolderController::actionEdit
-      return this.getApplication().getRpcClient("folder").send("edit", [datasource, folderId]);
+      return qx.core.Init.getApplication().getRpcClient("folder").send("edit", [datasource, folderId]);
     },
 
     /**
@@ -82,11 +82,11 @@ qx.Class.define("rpc.Folder",
      * @return {Promise}
      * @see FolderController::actionSave
      */
-    save : function(data=null, datasource=null, folderId=null){
+    save : function(data, datasource, folderId){
       // @todo Document type for 'data' in app\controllers\FolderController::actionSave
       // @todo Document type for 'datasource' in app\controllers\FolderController::actionSave
       // @todo Document type for 'folderId' in app\controllers\FolderController::actionSave
-      return this.getApplication().getRpcClient("folder").send("save", [data, datasource, folderId]);
+      return qx.core.Init.getApplication().getRpcClient("folder").send("save", [data, datasource, folderId]);
     },
 
     /**
@@ -97,26 +97,26 @@ qx.Class.define("rpc.Folder",
      * @return {Promise}
      * @see FolderController::actionVisibilityDialog
      */
-    visibilityDialog : function(datasource=null, folderId=null){
+    visibilityDialog : function(datasource, folderId){
       // @todo Document type for 'datasource' in app\controllers\FolderController::actionVisibilityDialog
       // @todo Document type for 'folderId' in app\controllers\FolderController::actionVisibilityDialog
-      return this.getApplication().getRpcClient("folder").send("visibility-dialog", [datasource, folderId]);
+      return qx.core.Init.getApplication().getRpcClient("folder").send("visibility-dialog", [datasource, folderId]);
     },
 
     /**
      * Change the public state
      * 
-     * @param data {String} 
+     * @param data 
      * @param datasource {String} 
      * @param folderId {Number} 
      * @return {Promise}
      * @see FolderController::actionVisibilityChange
      */
-    visibilityChange : function(data=null, datasource=null, folderId=null){
-      qx.core.Assert.assertString(data);
+    visibilityChange : function(data, datasource, folderId){
+      // @todo Document type for 'data' in app\controllers\FolderController::actionVisibilityChange
       qx.core.Assert.assertString(datasource);
       qx.core.Assert.assertNumber(folderId);
-      return this.getApplication().getRpcClient("folder").send("visibility-change", [data, datasource, folderId]);
+      return qx.core.Init.getApplication().getRpcClient("folder").send("visibility-change", [data, datasource, folderId]);
     },
 
     /**
@@ -127,10 +127,10 @@ qx.Class.define("rpc.Folder",
      * @return {Promise}
      * @see FolderController::actionAddDialog
      */
-    addDialog : function(datasource=null, folderId=null){
+    addDialog : function(datasource, folderId){
       qx.core.Assert.assertString(datasource);
       qx.core.Assert.assertNumber(folderId);
-      return this.getApplication().getRpcClient("folder").send("add-dialog", [datasource, folderId]);
+      return qx.core.Init.getApplication().getRpcClient("folder").send("add-dialog", [datasource, folderId]);
     },
 
     /**
@@ -142,11 +142,11 @@ qx.Class.define("rpc.Folder",
      * @return {Promise}
      * @see FolderController::actionCreate
      */
-    create : function(data=null, datasource=null, parentFolderId=null){
+    create : function(data, datasource, parentFolderId){
       // @todo Document type for 'data' in app\controllers\FolderController::actionCreate
       // @todo Document type for 'datasource' in app\controllers\FolderController::actionCreate
       // @todo Document type for 'parentFolderId' in app\controllers\FolderController::actionCreate
-      return this.getApplication().getRpcClient("folder").send("create", [data, datasource, parentFolderId]);
+      return qx.core.Init.getApplication().getRpcClient("folder").send("create", [data, datasource, parentFolderId]);
     },
 
     /**
@@ -157,10 +157,10 @@ qx.Class.define("rpc.Folder",
      * @return {Promise}
      * @see FolderController::actionRemoveDialog
      */
-    removeDialog : function(datasource=null, folderId=null){
+    removeDialog : function(datasource, folderId){
       // @todo Document type for 'datasource' in app\controllers\FolderController::actionRemoveDialog
       // @todo Document type for 'folderId' in app\controllers\FolderController::actionRemoveDialog
-      return this.getApplication().getRpcClient("folder").send("remove-dialog", [datasource, folderId]);
+      return qx.core.Init.getApplication().getRpcClient("folder").send("remove-dialog", [datasource, folderId]);
     },
 
     /**
@@ -172,11 +172,11 @@ qx.Class.define("rpc.Folder",
      * @return {Promise}
      * @see FolderController::actionRemove
      */
-    remove : function(data=null, datasource=null, folderId=null){
+    remove : function(data, datasource, folderId){
       // @todo Document type for 'data' in app\controllers\FolderController::actionRemove
       // @todo Document type for 'datasource' in app\controllers\FolderController::actionRemove
       // @todo Document type for 'folderId' in app\controllers\FolderController::actionRemove
-      return this.getApplication().getRpcClient("folder").send("remove", [data, datasource, folderId]);
+      return qx.core.Init.getApplication().getRpcClient("folder").send("remove", [data, datasource, folderId]);
     },
 
     /**
@@ -188,11 +188,11 @@ qx.Class.define("rpc.Folder",
      * @return {Promise}
      * @see FolderController::actionMove
      */
-    move : function(datasource=null, folderId=null, parentId=null){
+    move : function(datasource, folderId, parentId){
       // @todo Document type for 'datasource' in app\controllers\FolderController::actionMove
       // @todo Document type for 'folderId' in app\controllers\FolderController::actionMove
       // @todo Document type for 'parentId' in app\controllers\FolderController::actionMove
-      return this.getApplication().getRpcClient("folder").send("move", [datasource, folderId, parentId]);
+      return qx.core.Init.getApplication().getRpcClient("folder").send("move", [datasource, folderId, parentId]);
     },
 
     /**
@@ -204,19 +204,11 @@ qx.Class.define("rpc.Folder",
      * @return {Promise}
      * @see FolderController::actionPositionChange
      */
-    positionChange : function(datasource=null, folderId=null, position=null){
+    positionChange : function(datasource, folderId, position){
       // @todo Document type for 'datasource' in app\controllers\FolderController::actionPositionChange
       // @todo Document type for 'folderId' in app\controllers\FolderController::actionPositionChange
       // @todo Document type for 'position' in app\controllers\FolderController::actionPositionChange
-      return this.getApplication().getRpcClient("folder").send("position-change", [datasource, folderId, position]);
-    },
-
-    /**
-     * @return {Promise}
-     * @see FolderController::actionIndex
-     */
-    index : function(){
-      return this.getApplication().getRpcClient("folder").send("index", []);
+      return qx.core.Init.getApplication().getRpcClient("folder").send("position-change", [datasource, folderId, position]);
     }
   }
 });

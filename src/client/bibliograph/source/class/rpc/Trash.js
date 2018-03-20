@@ -4,18 +4,22 @@
  * 
  * 
  * @see app\controllers\TrashController
- * @file /Users/cboulanger/Code/bibliograph/src/server/controllers/TrashController.php
+ * @file TrashController.php
  */
 qx.Class.define("rpc.Trash",
 { 
   type: 'static',
   statics: {
     /**
+     * Empties the trash folder
+     * 
+     * @param datasource {String} 
      * @return {Promise}
-     * @see TrashController::actionIndex
+     * @see TrashController::actionEmpty
      */
-    index : function(){
-      return this.getApplication().getRpcClient("trash").send("index", []);
+    empty : function(datasource){
+      qx.core.Assert.assertString(datasource);
+      return qx.core.Init.getApplication().getRpcClient("trash").send("empty", [datasource]);
     }
   }
 });

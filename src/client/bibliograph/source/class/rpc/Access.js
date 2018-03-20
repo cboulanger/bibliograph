@@ -4,7 +4,7 @@
  * The class used for authentication of users.
  * 
  * @see app\controllers\AccessController
- * @file /Users/cboulanger/Code/bibliograph/src/server/controllers/AccessController.php
+ * @file AccessController.php
  */
 qx.Class.define("rpc.Access",
 { 
@@ -19,11 +19,11 @@ qx.Class.define("rpc.Access",
      * @return {Promise}
      * @see AccessController::actionRegister
      */
-    register : function(username=null, password=null, data=null){
+    register : function(username, password, data){
       qx.core.Assert.assertString(username);
       qx.core.Assert.assertString(password);
       qx.core.Assert.assertArray(data);
-      return this.getApplication().getRpcClient("access").send("register", [username, password, data]);
+      return qx.core.Init.getApplication().getRpcClient("access").send("register", [username, password, data]);
     },
 
     /**
@@ -34,9 +34,9 @@ qx.Class.define("rpc.Access",
      * @return {Promise}
      * @see AccessController::actionChallenge
      */
-    challenge : function(username=null){
+    challenge : function(username){
       // @todo Document type for 'username' in app\controllers\AccessController::actionChallenge
-      return this.getApplication().getRpcClient("access").send("challenge", [username]);
+      return qx.core.Init.getApplication().getRpcClient("access").send("challenge", [username]);
     },
 
     /**
@@ -46,7 +46,7 @@ qx.Class.define("rpc.Access",
      * @see AccessController::actionLdapSupport
      */
     ldapSupport : function(){
-      return this.getApplication().getRpcClient("access").send("ldap-support", []);
+      return qx.core.Init.getApplication().getRpcClient("access").send("ldap-support", []);
     },
 
     /**
@@ -59,10 +59,10 @@ qx.Class.define("rpc.Access",
      * @return {Promise}
      * @see AccessController::actionAuthenticate
      */
-    authenticate : function(first=null, password=null){
+    authenticate : function(first, password){
       // @todo Document type for 'first' in app\controllers\AccessController::actionAuthenticate
       // @todo Document type for 'password' in app\controllers\AccessController::actionAuthenticate
-      return this.getApplication().getRpcClient("access").send("authenticate", [first, password]);
+      return qx.core.Init.getApplication().getRpcClient("access").send("authenticate", [first, password]);
     },
 
     /**
@@ -72,7 +72,7 @@ qx.Class.define("rpc.Access",
      * @see AccessController::actionLogout
      */
     logout : function(){
-      return this.getApplication().getRpcClient("access").send("logout", []);
+      return qx.core.Init.getApplication().getRpcClient("access").send("logout", []);
     },
 
     /**
@@ -82,7 +82,7 @@ qx.Class.define("rpc.Access",
      * @see AccessController::actionRenewPassword
      */
     renewPassword : function(){
-      return this.getApplication().getRpcClient("access").send("renew-password", []);
+      return qx.core.Init.getApplication().getRpcClient("access").send("renew-password", []);
     },
 
     /**
@@ -92,7 +92,7 @@ qx.Class.define("rpc.Access",
      * @see AccessController::actionUsername
      */
     username : function(){
-      return this.getApplication().getRpcClient("access").send("username", []);
+      return qx.core.Init.getApplication().getRpcClient("access").send("username", []);
     },
 
     /**
@@ -102,7 +102,7 @@ qx.Class.define("rpc.Access",
      * @see AccessController::actionUserdata
      */
     userdata : function(){
-      return this.getApplication().getRpcClient("access").send("userdata", []);
+      return qx.core.Init.getApplication().getRpcClient("access").send("userdata", []);
     },
 
     /**
@@ -112,15 +112,7 @@ qx.Class.define("rpc.Access",
      * @see AccessController::actionCount
      */
     count : function(){
-      return this.getApplication().getRpcClient("access").send("count", []);
-    },
-
-    /**
-     * @return {Promise}
-     * @see AccessController::actionIndex
-     */
-    index : function(){
-      return this.getApplication().getRpcClient("access").send("index", []);
+      return qx.core.Init.getApplication().getRpcClient("access").send("count", []);
     }
   }
 });

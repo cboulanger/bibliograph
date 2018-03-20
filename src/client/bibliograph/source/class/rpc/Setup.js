@@ -5,7 +5,7 @@
  * by the application after loading
  * 
  * @see app\controllers\SetupController
- * @file /Users/cboulanger/Code/bibliograph/src/server/controllers/SetupController.php
+ * @file SetupController.php
  */
 qx.Class.define("rpc.Setup",
 { 
@@ -18,7 +18,7 @@ qx.Class.define("rpc.Setup",
      * @see SetupController::actionVersion
      */
     version : function(){
-      return this.getApplication().getRpcClient("setup").send("version", []);
+      return qx.core.Init.getApplication().getRpcClient("setup").send("version", []);
     },
 
     /**
@@ -28,7 +28,7 @@ qx.Class.define("rpc.Setup",
      * @see SetupController::actionConfirmMigrations
      */
     confirmMigrations : function(){
-      return this.getApplication().getRpcClient("setup").send("confirm-migrations", []);
+      return qx.core.Init.getApplication().getRpcClient("setup").send("confirm-migrations", []);
     },
 
     /**
@@ -38,7 +38,7 @@ qx.Class.define("rpc.Setup",
      * @see SetupController::actionSetup
      */
     setup : function(){
-      return this.getApplication().getRpcClient("setup").send("setup", []);
+      return qx.core.Init.getApplication().getRpcClient("setup").send("setup", []);
     },
 
     /**
@@ -49,18 +49,10 @@ qx.Class.define("rpc.Setup",
      * @return {Promise}
      * @see SetupController::actionSetupVersion
      */
-    setupVersion : function(upgrade_to=null, upgrade_from=null){
+    setupVersion : function(upgrade_to, upgrade_from){
       qx.core.Assert.assertString(upgrade_to);
       qx.core.Assert.assertString(upgrade_from);
-      return this.getApplication().getRpcClient("setup").send("setup-version", [upgrade_to, upgrade_from]);
-    },
-
-    /**
-     * @return {Promise}
-     * @see SetupController::actionIndex
-     */
-    index : function(){
-      return this.getApplication().getRpcClient("setup").send("index", []);
+      return qx.core.Init.getApplication().getRpcClient("setup").send("setup-version", [upgrade_to, upgrade_from]);
     }
   }
 });

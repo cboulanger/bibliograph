@@ -4,7 +4,7 @@
  * A setup a specific version of the application. This is mainly for testing.
  * 
  * @see app\controllers\SseController
- * @file /Users/cboulanger/Code/bibliograph/src/server/controllers/SseController.php
+ * @file SseController.php
  */
 qx.Class.define("rpc.Sse",
 { 
@@ -17,17 +17,7 @@ qx.Class.define("rpc.Sse",
      * @see SseController::actionTest
      */
     test : function(){
-      return this.getApplication().getRpcClient("sse").send("test", []);
-    },
-
-    /**
-     * Endpoint for the EventSource URL
-     * 
-     * @return {Promise}
-     * @see SseController::actionIndex
-     */
-    index : function(){
-      return this.getApplication().getRpcClient("sse").send("index", []);
+      return qx.core.Init.getApplication().getRpcClient("sse").send("test", []);
     },
 
     /**
@@ -38,7 +28,7 @@ qx.Class.define("rpc.Sse",
      * @see SseController::actionTime
      */
     time : function(){
-      return this.getApplication().getRpcClient("sse").send("time", []);
+      return qx.core.Init.getApplication().getRpcClient("sse").send("time", []);
     }
   }
 });

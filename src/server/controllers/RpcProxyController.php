@@ -20,6 +20,8 @@ class RpcProxyController extends \yii\console\Controller
     'export', 'import', 'public', 'return', 'static', 'switch', 'typeof', 'default', 'extends', 'finally', 'package',
     'private', 'continue', 'debugger', 'function', 'arguments', 'interface', 'protected', 'implements', 'instanceof'
   ];
+
+
   
   /**
    * Creates stubs
@@ -50,7 +52,6 @@ class RpcProxyController extends \yii\console\Controller
 
         // iterate through declared classes
         foreach ($classes as $class) {
-
           $class_name = str_replace("Controller", "", $class->getShortName());
           $controllerId = Inflector::camel2id($class_name);
           echo "Found class: ", $class->getName(), ", controller-ID: $controllerId", PHP_EOL;
@@ -68,7 +69,7 @@ class RpcProxyController extends \yii\console\Controller
           $js[] = "/**";
           $js[] = $this->formatDocblockContent($docblock->getSummary() . PHP_EOL.PHP_EOL . $docblock->getDescription());
           $js[] = " * @see " . $class->getName();
-          $js[] = " * @file $file";
+          $js[] = " * @file " . basename($file);
           $js[] = " */";
           $js[] = "qx.Class.define(\"rpc.$class_name\",";
           $js[] = "{ ";
@@ -79,8 +80,9 @@ class RpcProxyController extends \yii\console\Controller
           $methods = $class->getMethods();
           foreach ($methods as $method) {
             $methodName = $method->getName();
-            // we only use actions
-            if ($methodName === "actions" or !starts_with($methodName, "action")) {
+
+            // we only use "real" actions
+            if ( in_array($methodName, ["actions", "actionIndex"]) or !starts_with($methodName, "action")) {
               continue;
             }
 
@@ -140,10 +142,10 @@ class RpcProxyController extends \yii\console\Controller
                   $assert = null;
               }
               $param = [
-                'name' => $jsname,
-                'allowsNull' => $parameter->allowsNull(),
-                'doc' => $doc,
-                'assert' => $assert,
+                'name'        => $jsname,
+                'allowsNull'  => false, // $parameter->allowsNull(), // @todo not working
+                'doc'         => $doc,
+                'assert'      => $assert,
                 'description' => $param_tag instanceof Param ? $param_tag->getDescription() : null
               ];
               $parameters[] = $param;
@@ -168,7 +170,7 @@ class RpcProxyController extends \yii\console\Controller
             $js[] = "     * @see " . $class->getShortName() . '::' . $method->getName();
             $js[] = "     */";
 
-            // build javascript method
+            // build javascript method signature
             $js[] = "    $proxymethod : function(" .
               implode(", ",
                 array_map(function ($param) {
@@ -183,7 +185,7 @@ class RpcProxyController extends \yii\console\Controller
                 ? "      qx.core.Assert.assert" . $param['assert'] . "(" . $param['name'] . ");"
                 : "      // @todo Document type for '" . $param['name'] . "' in " . $class->getName() . '::'. $method->getName();
             }, $parameters));
-            $js[] = "      return this.getApplication().getRpcClient(\"$controllerId\").send(\"$actionId\", [$args]);";
+            $js[] = "      return qx.core.Init.getApplication().getRpcClient(\"$controllerId\").send(\"$actionId\", [$args]);";
             $js[] = "    },";
             $js[] = "";
           }
@@ -196,7 +198,7 @@ class RpcProxyController extends \yii\console\Controller
             $target_path  = "$target_dir/$class_name.js";
             $file_content = implode(PHP_EOL, $js);
             //  write to file if content has changed
-            if( file_get_contents($target_path) !== $file_content ){
+            if( ! file_exists($target_path) or file_get_contents($target_path) !== $file_content ){
               file_put_contents( $target_path, $file_content );
             }
           }

@@ -4,7 +4,7 @@
  * Service class providing methods to work with datasources.
  * 
  * @see app\controllers\DatasourceController
- * @file /Users/cboulanger/Code/bibliograph/src/server/controllers/DatasourceController.php
+ * @file DatasourceController.php
  */
 qx.Class.define("rpc.Datasource",
 { 
@@ -19,10 +19,10 @@ qx.Class.define("rpc.Datasource",
      * @return {Promise}
      * @see DatasourceController::actionCreate
      */
-    create : function(namedId=null, type=null){
+    create : function(namedId, type){
       qx.core.Assert.assertString(namedId);
       // @todo Document type for 'type' in app\controllers\DatasourceController::actionCreate
-      return this.getApplication().getRpcClient("datasource").send("create", [namedId, type]);
+      return qx.core.Init.getApplication().getRpcClient("datasource").send("create", [namedId, type]);
     },
 
     /**
@@ -32,15 +32,7 @@ qx.Class.define("rpc.Datasource",
      * @see DatasourceController::actionLoad
      */
     load : function(){
-      return this.getApplication().getRpcClient("datasource").send("load", []);
-    },
-
-    /**
-     * @return {Promise}
-     * @see DatasourceController::actionIndex
-     */
-    index : function(){
-      return this.getApplication().getRpcClient("datasource").send("index", []);
+      return qx.core.Init.getApplication().getRpcClient("datasource").send("load", []);
     }
   }
 });

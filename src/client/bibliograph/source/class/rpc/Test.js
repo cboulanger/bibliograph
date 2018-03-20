@@ -4,7 +4,7 @@
  * A controller for JSONRPC methods intended to test the application.
  * 
  * @see app\controllers\TestController
- * @file /Users/cboulanger/Code/bibliograph/src/server/controllers/TestController.php
+ * @file TestController.php
  */
 qx.Class.define("rpc.Test",
 { 
@@ -15,7 +15,7 @@ qx.Class.define("rpc.Test",
      * @see TestController::actionError
      */
     error : function(){
-      return this.getApplication().getRpcClient("test").send("error", []);
+      return qx.core.Init.getApplication().getRpcClient("test").send("error", []);
     },
 
     /**
@@ -23,7 +23,7 @@ qx.Class.define("rpc.Test",
      * @see TestController::actionTest
      */
     test : function(){
-      return this.getApplication().getRpcClient("test").send("test", []);
+      return qx.core.Init.getApplication().getRpcClient("test").send("test", []);
     },
 
     /**
@@ -32,10 +32,10 @@ qx.Class.define("rpc.Test",
      * @return {Promise}
      * @see TestController::actionTest2
      */
-    test2 : function(result=null, message=null){
+    test2 : function(result, message){
       // @todo Document type for 'result' in app\controllers\TestController::actionTest2
       // @todo Document type for 'message' in app\controllers\TestController::actionTest2
-      return this.getApplication().getRpcClient("test").send("test2", [result, message]);
+      return qx.core.Init.getApplication().getRpcClient("test").send("test2", [result, message]);
     },
 
     /**
@@ -43,9 +43,9 @@ qx.Class.define("rpc.Test",
      * @return {Promise}
      * @see TestController::actionAlert
      */
-    alert : function(message=null){
+    alert : function(message){
       // @todo Document type for 'message' in app\controllers\TestController::actionAlert
-      return this.getApplication().getRpcClient("test").send("alert", [message]);
+      return qx.core.Init.getApplication().getRpcClient("test").send("alert", [message]);
     },
 
     /**
@@ -53,7 +53,7 @@ qx.Class.define("rpc.Test",
      * @see TestController::actionSimpleEvent
      */
     simpleEvent : function(){
-      return this.getApplication().getRpcClient("test").send("simple-event", []);
+      return qx.core.Init.getApplication().getRpcClient("test").send("simple-event", []);
     },
 
     /**
@@ -63,9 +63,9 @@ qx.Class.define("rpc.Test",
      * @return {Promise}
      * @see TestController::actionShelve
      */
-    shelve : function(json=null){
+    shelve : function(json){
       qx.core.Assert.assertString(json);
-      return this.getApplication().getRpcClient("test").send("shelve", [json]);
+      return qx.core.Init.getApplication().getRpcClient("test").send("shelve", [json]);
     },
 
     /**
@@ -75,9 +75,9 @@ qx.Class.define("rpc.Test",
      * @return {Promise}
      * @see TestController::actionUnshelve
      */
-    unshelve : function(shelfId=null){
+    unshelve : function(shelfId){
       // @todo Document type for 'shelfId' in app\controllers\TestController::actionUnshelve
-      return this.getApplication().getRpcClient("test").send("unshelve", [shelfId]);
+      return qx.core.Init.getApplication().getRpcClient("test").send("unshelve", [shelfId]);
     },
 
     /**
@@ -85,7 +85,7 @@ qx.Class.define("rpc.Test",
      * @see TestController::actionCreateSearch
      */
     createSearch : function(){
-      return this.getApplication().getRpcClient("test").send("create-search", []);
+      return qx.core.Init.getApplication().getRpcClient("test").send("create-search", []);
     },
 
     /**
@@ -93,15 +93,7 @@ qx.Class.define("rpc.Test",
      * @see TestController::actionRetrieveSearch
      */
     retrieveSearch : function(){
-      return this.getApplication().getRpcClient("test").send("retrieve-search", []);
-    },
-
-    /**
-     * @return {Promise}
-     * @see TestController::actionIndex
-     */
-    index : function(){
-      return this.getApplication().getRpcClient("test").send("index", []);
+      return qx.core.Init.getApplication().getRpcClient("test").send("retrieve-search", []);
     }
   }
 });

@@ -4,7 +4,7 @@
  * 
  * 
  * @see app\controllers\ImportController
- * @file /Users/cboulanger/Code/bibliograph/src/server/controllers/ImportController.php
+ * @file ImportController.php
  */
 qx.Class.define("rpc.Import",
 { 
@@ -18,9 +18,9 @@ qx.Class.define("rpc.Import",
      * @return {Promise}
      * @see ImportController::actionGetTableLayout
      */
-    getTableLayout : function(datasource=null){
+    getTableLayout : function(datasource){
       // @todo Document type for 'datasource' in app\controllers\ImportController::actionGetTableLayout
-      return this.getApplication().getRpcClient("import").send("get-table-layout", [datasource]);
+      return qx.core.Init.getApplication().getRpcClient("import").send("get-table-layout", [datasource]);
     },
 
     /**
@@ -30,15 +30,7 @@ qx.Class.define("rpc.Import",
      * @see ImportController::actionImportformats
      */
     importformats : function(){
-      return this.getApplication().getRpcClient("import").send("importformats", []);
-    },
-
-    /**
-     * @return {Promise}
-     * @see ImportController::actionIndex
-     */
-    index : function(){
-      return this.getApplication().getRpcClient("import").send("index", []);
+      return qx.core.Init.getApplication().getRpcClient("import").send("importformats", []);
     }
   }
 });

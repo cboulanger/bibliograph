@@ -4,7 +4,7 @@
  * Backend service class for the access control tool widget
  * 
  * @see app\controllers\EmailController
- * @file /Users/cboulanger/Code/bibliograph/src/server/controllers/EmailController.php
+ * @file EmailController.php
  */
 qx.Class.define("rpc.Email",
 { 
@@ -20,12 +20,12 @@ qx.Class.define("rpc.Email",
      * @return {Promise}
      * @see EmailController::actionEmailCompose
      */
-    emailCompose : function(type=null, namedId=null, subject=null, body=null){
+    emailCompose : function(type, namedId, subject, body){
       // @todo Document type for 'type' in app\controllers\EmailController::actionEmailCompose
       // @todo Document type for 'namedId' in app\controllers\EmailController::actionEmailCompose
       // @todo Document type for 'subject' in app\controllers\EmailController::actionEmailCompose
       // @todo Document type for 'body' in app\controllers\EmailController::actionEmailCompose
-      return this.getApplication().getRpcClient("email").send("email-compose", [type, namedId, subject, body]);
+      return qx.core.Init.getApplication().getRpcClient("email").send("email-compose", [type, namedId, subject, body]);
     },
 
     /**
@@ -34,10 +34,10 @@ qx.Class.define("rpc.Email",
      * @return {Promise}
      * @see EmailController::actionEmailConfirm
      */
-    emailConfirm : function(data=null, shelfId=null){
+    emailConfirm : function(data, shelfId){
       // @todo Document type for 'data' in app\controllers\EmailController::actionEmailConfirm
       // @todo Document type for 'shelfId' in app\controllers\EmailController::actionEmailConfirm
-      return this.getApplication().getRpcClient("email").send("email-confirm", [data, shelfId]);
+      return qx.core.Init.getApplication().getRpcClient("email").send("email-confirm", [data, shelfId]);
     },
 
     /**
@@ -47,11 +47,11 @@ qx.Class.define("rpc.Email",
      * @return {Promise}
      * @see EmailController::actionEmailCorrect
      */
-    emailCorrect : function(dummy=null, shelfId=null, data=null){
+    emailCorrect : function(dummy, shelfId, data){
       // @todo Document type for 'dummy' in app\controllers\EmailController::actionEmailCorrect
       // @todo Document type for 'shelfId' in app\controllers\EmailController::actionEmailCorrect
       // @todo Document type for 'data' in app\controllers\EmailController::actionEmailCorrect
-      return this.getApplication().getRpcClient("email").send("email-correct", [dummy, shelfId, data]);
+      return qx.core.Init.getApplication().getRpcClient("email").send("email-correct", [dummy, shelfId, data]);
     },
 
     /**
@@ -61,11 +61,11 @@ qx.Class.define("rpc.Email",
      * @return {Promise}
      * @see EmailController::actionEmailSend
      */
-    emailSend : function(confirm=null, shelfId=null, data=null){
+    emailSend : function(confirm, shelfId, data){
       // @todo Document type for 'confirm' in app\controllers\EmailController::actionEmailSend
       // @todo Document type for 'shelfId' in app\controllers\EmailController::actionEmailSend
       // @todo Document type for 'data' in app\controllers\EmailController::actionEmailSend
-      return this.getApplication().getRpcClient("email").send("email-send", [confirm, shelfId, data]);
+      return qx.core.Init.getApplication().getRpcClient("email").send("email-send", [confirm, shelfId, data]);
     },
 
     /**
@@ -73,9 +73,9 @@ qx.Class.define("rpc.Email",
      * @return {Promise}
      * @see EmailController::actionMissingPassword
      */
-    missingPassword : function(namedId=null){
+    missingPassword : function(namedId){
       // @todo Document type for 'namedId' in app\controllers\EmailController::actionMissingPassword
-      return this.getApplication().getRpcClient("email").send("missing-password", [namedId]);
+      return qx.core.Init.getApplication().getRpcClient("email").send("missing-password", [namedId]);
     },
 
     /**
@@ -85,9 +85,9 @@ qx.Class.define("rpc.Email",
      * @return {Promise}
      * @see EmailController::actionConfirmRegistration
      */
-    confirmRegistration : function(namedId=null){
+    confirmRegistration : function(namedId){
       // @todo Document type for 'namedId' in app\controllers\EmailController::actionConfirmRegistration
-      return this.getApplication().getRpcClient("email").send("confirm-registration", [namedId]);
+      return qx.core.Init.getApplication().getRpcClient("email").send("confirm-registration", [namedId]);
     },
 
     /**
@@ -97,7 +97,7 @@ qx.Class.define("rpc.Email",
      * @see EmailController::actionResetPasswordDialog
      */
     resetPasswordDialog : function(){
-      return this.getApplication().getRpcClient("email").send("reset-password-dialog", []);
+      return qx.core.Init.getApplication().getRpcClient("email").send("reset-password-dialog", []);
     },
 
     /**
@@ -107,9 +107,9 @@ qx.Class.define("rpc.Email",
      * @return {Promise}
      * @see EmailController::actionPasswortResetEmail
      */
-    passwortResetEmail : function(email=null){
+    passwortResetEmail : function(email){
       // @todo Document type for 'email' in app\controllers\EmailController::actionPasswortResetEmail
-      return this.getApplication().getRpcClient("email").send("passwort-reset-email", [email]);
+      return qx.core.Init.getApplication().getRpcClient("email").send("passwort-reset-email", [email]);
     },
 
     /**
@@ -120,18 +120,10 @@ qx.Class.define("rpc.Email",
      * @return {Promise}
      * @see EmailController::actionResetPassword
      */
-    resetPassword : function(email=null, nonce=null){
+    resetPassword : function(email, nonce){
       // @todo Document type for 'email' in app\controllers\EmailController::actionResetPassword
       // @todo Document type for 'nonce' in app\controllers\EmailController::actionResetPassword
-      return this.getApplication().getRpcClient("email").send("reset-password", [email, nonce]);
-    },
-
-    /**
-     * @return {Promise}
-     * @see EmailController::actionIndex
-     */
-    index : function(){
-      return this.getApplication().getRpcClient("email").send("index", []);
+      return qx.core.Init.getApplication().getRpcClient("email").send("reset-password", [email, nonce]);
     }
   }
 });

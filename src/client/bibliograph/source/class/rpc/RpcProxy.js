@@ -4,7 +4,7 @@
  * Creates rpc proxy stub methods
  * 
  * @see app\controllers\RpcProxyController
- * @file /Users/cboulanger/Code/bibliograph/src/server/controllers/RpcProxyController.php
+ * @file RpcProxyController.php
  */
 qx.Class.define("rpc.RpcProxy",
 { 
@@ -17,7 +17,7 @@ qx.Class.define("rpc.RpcProxy",
      * @see RpcProxyController::actionCreate
      */
     create : function(){
-      return this.getApplication().getRpcClient("rpc-proxy").send("create", []);
+      return qx.core.Init.getApplication().getRpcClient("rpc-proxy").send("create", []);
     }
   }
 });
