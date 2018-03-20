@@ -2,6 +2,7 @@
 
 /**
  * 
+ * 
  * @see app\controllers\TrashController
  * @file /Users/cboulanger/Code/bibliograph/src/server/controllers/TrashController.php
  */
@@ -11,6 +12,7 @@ qx.Class.define("rpc.Trash",
   statics: {
     /**
      * @return {Promise}
+     * @see TrashController::actionIndex
      */
     index : function(){
       return this.getApplication().getRpcClient("trash").send("index", []);

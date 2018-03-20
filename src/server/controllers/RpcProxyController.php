@@ -108,6 +108,16 @@ class RpcProxyController extends \yii\console\Controller
               $param_tag = array_first($param_tags,function(Param $param) use ($phpname) {
                 return $param->getVariableName() == $phpname;
               });
+              // use type information from docblock
+              if( $param_tag ){
+                $doc_type = (string) $param_tag->getType();
+                if( $doc_type ){
+//                  if( $doc_type and $type and $doc_type != $type  ){
+//                    throw new \RuntimeException("Parameter type mismatch: Signature type is '$type', documented type is '$doc_type'.");
+//                  }
+                  if( !$type ) $type = $doc_type;
+                }
+              }
               switch ($type) {
                 case 'object':
                 case 'string':
@@ -142,15 +152,20 @@ class RpcProxyController extends \yii\console\Controller
             // build jsdoc
             $js[] = "    /**";
             if( $phpcomment ){
-              $js[] = $this->formatDocblockContent($docblock->getSummary() . PHP_EOL.PHP_EOL . $docblock->getDescription(),"    ");
+              $description = $docblock->getSummary() . PHP_EOL.PHP_EOL . (string) $docblock->getDescription();
+              $js[] = $this->formatDocblockContent( $description,"    ");
             }
             $js = array_merge($js, array_map(function ($param) {
-              return
-                "     * @param " . $param['name'] . " " .
+              return $this->formatDocblockContent(
+                "@param " . $param['name'] . " " .
                   ($param['doc'] ? '{' . $param['doc'] . '} ' : "") .
-                  ($param['description'] ? $param['description'] : "");
-            }, $parameters));
+                  ($param['description'] ? $param['description'] : ""),
+                "    "
+              );
+              }, $parameters)
+            );
             $js[] = "     * @return {Promise}";
+            $js[] = "     * @see " . $class->getShortName() . '::' . $method->getName();
             $js[] = "     */";
 
             // build javascript method
@@ -163,9 +178,10 @@ class RpcProxyController extends \yii\console\Controller
             $args = implode(", ", array_map(function ($param) {
               return $param['name'];
             }, $parameters));
-            $js = array_merge($js, array_map(function ($param) {
-              return $param['assert'] ?
-                "      qx.core.Assert.assert" . $param['assert'] . "(" . $param['name'] . ");" : "";
+            $js = array_merge($js, array_map(function ($param) use ($class, $method) {
+              return $param['assert']
+                ? "      qx.core.Assert.assert" . $param['assert'] . "(" . $param['name'] . ");"
+                : "      // @todo Document type for '" . $param['name'] . "' in " . $class->getName() . '::'. $method->getName();
             }, $parameters));
             $js[] = "      return this.getApplication().getRpcClient(\"$controllerId\").send(\"$actionId\", [$args]);";
             $js[] = "    },";
@@ -197,13 +213,13 @@ class RpcProxyController extends \yii\console\Controller
    */
   protected function formatDocblockContent( string $content, string $indentation="", int $width=75 )
   {
-    $glue = $indentation . " * ";
+    $prefix = $indentation . " * ";
     $content = str_replace(PHP_EOL.PHP_EOL, "\\n\\n",$content);
     //$lines   = explode(PHP_EOL, $content);
     //$content = wordwrap( implode(" ", $lines ), $width );
     $lines   = explode (PHP_EOL, $content );
-    $content = $glue . implode( $glue, $lines );
-    $content = str_replace( "\\n\\n",PHP_EOL.PHP_EOL, $glue );
+    $content = $prefix . implode( PHP_EOL.$prefix, $lines );
+    $content = str_replace( "\\n\\n", PHP_EOL.$prefix, $content );
     return $content;
   }
 }

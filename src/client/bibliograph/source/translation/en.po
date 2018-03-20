@@ -720,22 +720,28 @@ msgstr ""
 #: bibliograph.ui.folder.TreeViewUi:166
 #: bibliograph/ui/folder/TreeViewUi.js:165
 #: bibliograph/ui/folder/TreeViewUi.js:166
+#: bibliograph/ui/folder/TreeViewUi.js:134
+#: bibliograph/ui/folder/TreeViewUi.js:135
 msgid "Empty trash..."
 msgstr ""
 
 #: bibliograph.ui.folder.TreeViewUi:173
 #: bibliograph/ui/folder/TreeViewUi.js:173
+#: bibliograph/ui/folder/TreeViewUi.js:142
 msgid "Move folder..."
 msgstr ""
 
 #: bibliograph.ui.folder.TreeViewUi:181
 #: bibliograph/ui/folder/TreeViewUi.js:181
+#: bibliograph/ui/folder/TreeViewUi.js:150
 msgid "Edit folder data"
 msgstr ""
 
 #: bibliograph.ui.folder.TreeViewUi:190
 #: bibliograph/ui/folder/TreeViewUi.js:189
 #: bibliograph/ui/folder/TreeViewUi.js:190
+#: bibliograph/ui/folder/TreeViewUi.js:158
+#: bibliograph/ui/folder/TreeViewUi.js:159
 msgid "Change visibility"
 msgstr ""
 
@@ -882,10 +888,12 @@ msgid "Removing folder ..."
 msgstr ""
 
 #: bibliograph.ui.folder.TreeView:117 bibliograph/ui/folder/TreeView.js:117
+#: bibliograph/ui/folder/TreeView.js:101
 msgid "No folder selected. Try again"
 msgstr ""
 
 #: bibliograph.ui.folder.TreeView:120 bibliograph/ui/folder/TreeView.js:120
+#: bibliograph/ui/folder/TreeView.js:104
 msgid "Do your really want to move folder '%1' to '%2'?"
 msgstr ""
 
@@ -894,14 +902,17 @@ msgid "Moving folder ..."
 msgstr ""
 
 #: bibliograph.ui.folder.TreeView:140 bibliograph/ui/folder/TreeView.js:140
+#: bibliograph/ui/folder/TreeView.js:123
 msgid "Do you really want to delete all references and folders in the trash folder? This cannot be undone."
 msgstr ""
 
 #: bibliograph.ui.folder.TreeView:145 bibliograph/ui/folder/TreeView.js:145
+#: bibliograph/ui/folder/TreeView.js:127
 msgid "Purging deleted folders ..."
 msgstr ""
 
 #: bibliograph.ui.folder.TreeView:148 bibliograph/ui/folder/TreeView.js:148
+#: bibliograph/ui/folder/TreeView.js:129
 msgid "Purging deleted references ..."
 msgstr ""
 
