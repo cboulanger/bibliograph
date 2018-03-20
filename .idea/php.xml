@@ -100,6 +100,8 @@
       <path value="$PROJECT_DIR$/src/server/vendor/react/event-loop" />
       <path value="$PROJECT_DIR$/src/server/vendor/evenement/evenement" />
       <path value="$PROJECT_DIR$/src/server/vendor/react/stream" />
+      <path value="$PROJECT_DIR$/src/server/vendor/nikic/php-parser" />
+      <path value="$PROJECT_DIR$/src/server/vendor/goaop/parser-reflection" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7" />

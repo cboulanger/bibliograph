@@ -45,6 +45,7 @@
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/facebook/webdriver" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/flow/jsonpath" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/fourteenmeister/dsn" />
+      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/goaop/parser-reflection" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/graze/guzzle-jsonrpc" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/guzzlehttp/guzzle" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/guzzlehttp/promises" />
@@ -54,6 +55,7 @@
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/insolita/yii2-migration-generator" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/myclabs/deep-copy" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/nesbot/carbon" />
+      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/nikic/php-parser" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/odannyc/yii2-sse" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/paragonie/random_compat" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/phar-io/manifest" />

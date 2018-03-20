@@ -310,7 +310,9 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
         'nodeData'    => FolderController::getNodeDataStatic($this),
         'transactionId' => $this->getTransactionId()
       ]]));
-    $this->updateParentNode($this->parentId);
+    if($this->parentId){
+      $this->updateParentNode($this->parentId);
+    }
   }
 
   /**

@@ -29,9 +29,9 @@ $config =  [
 
   /* Path aliases */
   'aliases' => [
-    '@lib'    => __DIR__ . "/../lib/",
-    '@tests'  => __DIR__ . "/../tests/",
-    '@messages' => __DIR__ . "/../messages/",
+    '@lib'      => __DIR__ . "/../lib/",
+    '@tests'    => __DIR__ . "/../tests/",
+    '@messages' => __DIR__ . "/../messages/"
     ],
 
   /* Application components */
@@ -55,9 +55,6 @@ if (YII_ENV_DEV) {
   ];
   $config['controllerMap'] = array_merge(
     $config['controllerMap'],[
-    'fixture' => [
-      'class' => 'yii\faker\FixtureController',
-    ],
     'migrate' => [
       'class' => 'yii\console\controllers\MigrateController',
       'migrationNamespaces' => [

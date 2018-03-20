@@ -20,7 +20,7 @@
 
 namespace app\controllers;
 
-use app\models\Group;
+use Yii;
 use lib\dialog\{
   Alert, Confirm, Error, Form
 };
@@ -28,13 +28,11 @@ use lib\exceptions\{
   RecordExistsException, UserErrorException
 };
 use lib\schema\ISchema;
-use Yii;
-
 
 /**
  * Backend service class for the access control tool widget
  */
-class AccessConfigController extends \app\Controllers\AppController
+class AccessConfigController extends AppController
 {
   /**
    * Returns a map of data on the models that are used for the various xxxElement
@@ -213,7 +211,7 @@ class AccessConfigController extends \app\Controllers\AppController
 
   /**
    * Retuns ListItem data for the types of access models
-   * @jsonrpc access-config/types
+   *
    */
   public function actionTypes()
   {
@@ -231,7 +229,6 @@ class AccessConfigController extends \app\Controllers\AppController
   /**
    * Return ListItem data for access models
    *
-   * @jsonrpc access-config/elements
    * @param string $type
    *    The type of the element
    * @param array $filter
@@ -239,7 +236,7 @@ class AccessConfigController extends \app\Controllers\AppController
    * @throws UserErrorException
    * @throws \JsonRpc2\Exception
    */
-  public function actionElements($type, array $filter = null)
+  public function actionElements(string $type, array $filter = null)
   {
     $this->requirePermission("access.manage");
     $activeUser = $this->getActiveUser();
@@ -979,7 +976,11 @@ class AccessConfigController extends \app\Controllers\AppController
     return $this->successfulActionResult();
   }
 
-  public function actionSchemaclassExists( $class=null )
+  /**
+   * @param string|null $class
+   * @return bool
+   */
+  public function actionSchemaclassExists( string $class )
   {
     $class = trim($class);
     try {

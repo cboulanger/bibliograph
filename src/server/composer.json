@@ -20,7 +20,8 @@
         "elisdn/yii2-gii-fixture-generator": "^1.1",
         "insolita/yii2-migration-generator": "~2.3",
         "graze/guzzle-jsonrpc": "~3.0",
-        "bazilio/yii2-stubs-generator": "^1.1"
+        "bazilio/yii2-stubs-generator": "^1.1",
+        "goaop/parser-reflection": "^1.4"
     },
     "repositories": [
         {
