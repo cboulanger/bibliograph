@@ -90,8 +90,14 @@ qx.Class.define("qcl.access.User",
       check : "Array",
       nullable : false,
       event : "changePermissions"
+    },
+  
+    /**
+     * The manager object
+     */
+    manager: {
+      check: "qcl.access.UserManager"
     }
-
   },
 
   members :

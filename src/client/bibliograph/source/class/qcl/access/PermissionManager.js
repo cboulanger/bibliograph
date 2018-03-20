@@ -20,14 +20,18 @@
 /**
  * Manager for permissions
  */
+let instance;
 qx.Class.define("qcl.access.PermissionManager",
 {
   extend : qcl.access.AbstractManager,
   type : "singleton",
+  
   construct : function() {
     this.base(arguments);
     this._type = "Permission";
   },
+  
+  
   members : {
     /**
      * Returns a newly created or cached Permission object

@@ -81,11 +81,17 @@ qx.Class.define("bibliograph.AccessManager",
        COMPONENTS
     ---------------------------------------------------------------------------
     */
-
+  
+    /**
+     * @return {qcl.access.PermissionManager}
+     */
     getPermissionManager : function(){
       return qcl.access.PermissionManager.getInstance();
     },
-
+  
+    /**
+     * @return {qcl.access.UserManager}
+     */
     getUserManager : function(){
       return qcl.access.UserManager.getInstance();
     }, 

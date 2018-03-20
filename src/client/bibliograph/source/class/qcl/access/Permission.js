@@ -23,7 +23,7 @@
  * can attach condition functions to this object by the addCondition method. Only
  * if the "granted" property AND all of these conditions return true, the "state"
  * property will be true.
- * @require(qcl.access.PermissionManager)
+ * //require(qcl.access.PermissionManager)
  */
 qx.Class.define("qcl.access.Permission",
 {
@@ -40,8 +40,6 @@ qx.Class.define("qcl.access.Permission",
     this.setNamedId(vName);
     this.__conditions = [];
     this.__state = false;
-    this._manager = qx.core.Init.getApplication().getAccessManager().getPermissionManager();
-    this._manager.add(this);
   },
   
   /*
@@ -81,6 +79,13 @@ qx.Class.define("qcl.access.Permission",
       init: false,
       event: "changeGranted",
       apply: "_applyGranted"
+    },
+  
+    /**
+     * The manager object
+     */
+    manager : {
+      check : "qcl.access.PermissionManager"
     }
   },
   
@@ -103,8 +108,6 @@ qx.Class.define("qcl.access.Permission",
   
   members:
   {
-    
-    _manager: null,
     
     /**
      * get all conditions
@@ -148,12 +151,12 @@ qx.Class.define("qcl.access.Permission",
      * @return {Boolean} Whether condition has been added
      */
     hasCondition: function (conditionFunc, context) {
-      var conditions = this.getConditions();
-      for (var i = 0; i < conditions.length; i++) {
+      let conditions = this.getConditions();
+      for (let i = 0; i < conditions.length; i++) {
         if (conditionFunc
-        && typeof conditionFunc == "object"
-        && conditions[i].condition == conditionFunc
-        && conditions[i].context == (context || null)) {
+        && typeof conditionFunc === "object"
+        && conditions[i].condition === conditionFunc
+        && conditions[i].context === (context || null)) {
           return true;
         }
       }
@@ -169,11 +172,11 @@ qx.Class.define("qcl.access.Permission",
      * @return {Boolean} Whether condition was removed or not
      */
     removeCondition: function (conditionFunc, context) {
-      var conditions = this.getConditions();
+      let conditions = this.getConditions();
       
-      for (var i = 0; i < conditions.length; i++) {
-        if (conditions[i].condition == conditionFunc
-        && conditions[i].context == (context || null)) {
+      for (let i = 0; i < conditions.length; i++) {
+        if (conditions[i].condition === conditionFunc
+        && conditions[i].context === (context || null)) {
           conditions.splice(i, 1);
           return true;
         }
@@ -182,22 +185,21 @@ qx.Class.define("qcl.access.Permission",
     },
     
     /**
-     * Checks if all conditions are satisfied. Only those conditions
-     * are
+     * Checks if all conditions are satisfied.
      * @param context {Object} If provided, check only those conditions
      * with a matching context
      * @return {Boolean} Returns true if all conditions are satisfied
      */
-    _satifiesAllConditions: function (context) {
-      var conditions = this.getConditions();
+    _satifiesAllConditions: function (context=null) {
+      let conditions = this.getConditions();
       //console.log("Checking conditions for " + this.getNamedId() + ", context " + context );
       
       /*
        * loop through all conditions 
        */
-      for (var i = 0; i < conditions.length; i++) {
-        var condFunc = conditions[i].condition;
-        var condContext = conditions[i].context;
+      for (let i = 0; i < conditions.length; i++) {
+        let condFunc = conditions[i].condition;
+        let condContext = conditions[i].context;
         
         //console.log([condFunc,condContext]);
         
@@ -205,8 +207,8 @@ qx.Class.define("qcl.access.Permission",
          * check condition only if context matches,
          * unless no context has been passed
          */
-        if (!context || context == condContext) {
-          if (!condFunc.call(condContext)) {
+        if (!context || context === condContext) {
+          if (!condFunc.call(condContext, condContext)) {
             return false;
           }
         }
@@ -224,17 +226,18 @@ qx.Class.define("qcl.access.Permission",
       /*
        * if this is a wildcard permission, set all dependent permissions
        */
-      var myName = this.getNamedId();
-      var pos = myName.indexOf("*");
+      let myName = this.getNamedId();
+      let pos = myName.indexOf("*");
       if (pos > -1) {
-        this._manager.getNamedIds().forEach(function (name) {
-          if (pos == 0 || myName.substr(0, pos) == name.substr(0, pos)) {
+        this.getManager().getNamedIds().forEach(function (name) {
+          if (pos === 0 || myName.substr(0, pos) === name.substr(0, pos)) {
             if (name.indexOf("*") < 0) // other wildcard permissions do not need to be updated
             {
-              try {
-                this._manager.getByName(name).setGranted(granted);
-              } catch (e) {
-                this.warn("Invalid manager:" + this._manager);
+              let permission = this.getManager().getByName(name);
+              if( permission) {
+                permission.setGranted(granted);
+              } else {
+                this.warn(`Permission '${permission}' does not exist.`);
               }
             }
           }
@@ -244,7 +247,7 @@ qx.Class.define("qcl.access.Permission",
       /*
        * update state
        */
-      var state = this.getState();
+      let state = this.getState();
       this.fireDataEvent("changeState", state); // fired even if state doesn't change
       //console.debug( `permission ${this.getNamedId()} has state ${state}`);
     },
@@ -259,7 +262,7 @@ qx.Class.define("qcl.access.Permission",
      * in different instances.
      * @return {Boolean} The state of the permission
      */
-    getState: function (context) {
+    getState: function (context=null) {
       return this.isGranted() && this._satifiesAllConditions(context);
     },
     
@@ -279,7 +282,7 @@ qx.Class.define("qcl.access.Permission",
      * @return {Boolean} The state of the permission
      */
     update: function (context) {
-      var state = this.getState(context);
+      let state = this.getState(context);
       //console.log("Updating "+ this.getNamedId() + ": " + state);
       this.fireDataEvent("changeState", state);
     }
@@ -293,6 +296,6 @@ qx.Class.define("qcl.access.Permission",
   */
   destruct: function () {
     this._disposeArray("__conditions");
-    this._manager.remove(this);
+    this.getManager().remove(this);
   }
 });
