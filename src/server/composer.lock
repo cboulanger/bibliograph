@@ -736,16 +736,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "1.24.2",
+            "version": "1.25.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "bba6c6e410c6b4317e37a9474aeaa753808c3875"
+                "reference": "cbcf13da0b531767e39eb86e9687f5deba9857b4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/bba6c6e410c6b4317e37a9474aeaa753808c3875",
-                "reference": "bba6c6e410c6b4317e37a9474aeaa753808c3875",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/cbcf13da0b531767e39eb86e9687f5deba9857b4",
+                "reference": "cbcf13da0b531767e39eb86e9687f5deba9857b4",
                 "shasum": ""
             },
             "require": {
@@ -785,7 +785,7 @@
                 "datetime",
                 "time"
             ],
-            "time": "2018-03-10T10:10:14+00:00"
+            "time": "2018-03-19T15:50:49+00:00"
         },
         {
             "name": "odannyc/yii2-sse",
@@ -1396,16 +1396,16 @@
         },
         {
             "name": "yiisoft/yii2",
-            "version": "2.0.14.2",
+            "version": "2.0.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-framework.git",
-                "reference": "ef74f3783e964cea477f06e6d6ce209df1f37881"
+                "reference": "e8e5bc894e19cf1e37084106a122da7062d7b179"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/ef74f3783e964cea477f06e6d6ce209df1f37881",
-                "reference": "ef74f3783e964cea477f06e6d6ce209df1f37881",
+                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/e8e5bc894e19cf1e37084106a122da7062d7b179",
+                "reference": "e8e5bc894e19cf1e37084106a122da7062d7b179",
                 "shasum": ""
             },
             "require": {
@@ -1492,7 +1492,7 @@
                 "framework",
                 "yii2"
             ],
-            "time": "2018-03-13T14:15:01+00:00"
+            "time": "2018-03-20T12:41:23+00:00"
         },
         {
             "name": "yiisoft/yii2-composer",

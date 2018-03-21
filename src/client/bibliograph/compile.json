@@ -20,7 +20,7 @@
       "minify" : "off"
     }
   ],
-  "defaultTarget": "source",
+  "defaultTarget": "build",
   "locales": ["en","de"],
 
   "applications": [
