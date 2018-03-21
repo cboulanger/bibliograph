@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use lib\channel\BroadcastEvent;
 use lib\exceptions\UserErrorException;
 use Yii;
 use InvalidArgumentException;
@@ -128,24 +129,24 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
         'label' => Yii::t('app', "Is folder publically visible?"),
         'type' => "SelectBox",
         'options' => [
-          ['label' => Yii::t('app', "Yes"), 'value' => true],
-          ['label' => Yii::t('app', "No"), 'value' => false]
+          ['label' => Yii::t('app', "Yes"), 'value' => 1],
+          ['label' => Yii::t('app', "No"), 'value' => 0]
         ]
       ],
       //    'searchable'  => array(
       //      'label'     => Yii::t('app', "Publically searchable?"),
       //      'type'      => "SelectBox",
       //      'options'   => array(
-      //        array( 'label' => "Folder is searchable", 'value' => true ),
-      //        array( 'label' => "Folder is not searchable (Currently not implemented)", 'value' => false )
+      //        array( 'label' => "Folder is searchable", 'value' => 1 ),
+      //        array( 'label' => "Folder is not searchable (Currently not implemented)", 'value' => 0 )
       //      )
       //    ),
       'searchfolder' => [
         'label' => Yii::t('app', "Search folder?"),
         'type' => "SelectBox",
         'options' => [
-          ['label' => Yii::t('app', "On, Use query to determine content"), 'value' => true],
-          ['label' => Yii::t('app', "Off"), 'value' => false]
+          ['label' => Yii::t('app', "On, Use query to determine content"), 'value' => 1],
+          ['label' => Yii::t('app', "Off"), 'value' => 0]
         ]
       ],
       'query' => [
@@ -158,8 +159,8 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
         'label' => Yii::t('app', "Opened?"),
         'type' => "SelectBox",
         'options' => [
-          ['label' => Yii::t('app', "Folder is opened by default"), 'value' => true],
-          ['label' => Yii::t('app', "Folder is closed by default"), 'value' => false]
+          ['label' => Yii::t('app', "Folder is opened by default"), 'value' => 1],
+          ['label' => Yii::t('app', "Folder is closed by default"), 'value' => 0]
         ]
       ]
     ];
@@ -208,7 +209,7 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
    */
   protected function createUpdateNodeEvent($nodeData)
   {
-    return new Event([
+    return new BroadcastEvent([
       'name' => static::EVENT_CLIENT_UPDATE,
       'data' => [
         'datasource' => static::getDatasource()->namedId,
@@ -221,19 +222,29 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
   /**
    * Updates a parent node , i.e. recalculates the node children etc.
    * By default, opens the node
-   * @param int $parentId
+   * @param int|null $parentId
+   *    Optional id of parent node. If omitted (normal case), the
+   *    parentId of the current model instance is used
    * @param boolean $openNode
+   *    Optional flag to open the parent node on the client. This doesn't
+   *    save the "opened" state.
    * @throws \yii\db\Exception
-   * @todo make static
    */
-  public function updateParentNode($parentId, $openNode=true)
+  public function updateParentNode($parentId=null, $openNode=true)
   {
-    $parent = static::findOne(['parentId' => $parentId]);
-    $parent->getChildCount(true);
-    $parent->save();
+    if( ! $parentId ){
+      $parentId = $this->parentId;
+    }
+    $parent = static::findOne(['id' => $parentId]);
+    if( ! $parent ) return;
+    //Yii::debug("Updating parent node " . $parent->label);
+    $parent->getChildCount(true); // this saves the parent
     $nodeData = FolderController::getNodeDataStatic($parent);
-    $nodeData['bOpened'] = $openNode;
-    // update new parent 
+    if( $openNode ){
+      $nodeData['bOpened'] = true;
+    }
+    //Yii::debug($nodeData);
+    // update new parent on client
     Yii::$app->eventQueue->add($this->createUpdateNodeEvent($nodeData));
   }
 
@@ -252,24 +263,29 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
     parent::afterSave($insert, $changedAttributes);
     // inserts
     if ($insert) {
+      Yii::debug("Inserting " . $this->label);
       $this->_afterInsert();
       return true;
     }
     // dispatch events
+    Yii::debug("Updating " . $this->label . " " . json_encode($changedAttributes));
     foreach ($changedAttributes as $key => $oldValue) {
       switch ($key) {
         case "parentId":
-          // skip if no parent id had been set
+          // skip if no parent id had been set (is the case when adding a node)
           if ($oldValue===null) return false;
           // update parents
           try {
-            $this->updateParentNode($this->parentId);
-            $this->updateParentNode($oldValue);
+            $this->updateParentNode();
+            // update old parent also
+            if( $oldValue){
+              $this->updateParentNode($oldValue,false);
+            }
           } catch (Exception $e) {
             Yii::error($e);
           }
           // move node
-          Yii::$app->eventQueue->add(new Event([
+          Yii::$app->eventQueue->add(new BroadcastEvent([
             'name' => static::EVENT_CLIENT_MOVE,
             'data' => [
               'datasource' => static::getDatasource()->namedId,
@@ -283,7 +299,6 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
 
     // if attributes have changed, update the node 
     if (count($changedAttributes) > 0) {
-      Yii::debug($changedAttributes);
       try {
         $nodeData = FolderController::getNodeDataStatic($this);
       } catch (Exception $e) {
@@ -302,7 +317,10 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
    */
   protected function _afterInsert()
   {
-    Yii::$app->eventQueue->add(new Event([
+    if($this->parentId){
+      $this->updateParentNode();
+    }
+    Yii::$app->eventQueue->add(new BroadcastEvent([
       'name' => static::EVENT_CLIENT_ADD,
       'data' => [
         'datasource'  => static::getDatasource()->namedId,
@@ -310,9 +328,6 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
         'nodeData'    => FolderController::getNodeDataStatic($this),
         'transactionId' => $this->getTransactionId()
       ]]));
-    if($this->parentId){
-      $this->updateParentNode($this->parentId);
-    }
   }
 
   /**
@@ -324,11 +339,11 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
   public function afterDelete()
   {
     parent::afterDelete();
-    $this->updateParentNode($this->parentId);
-    Yii::$app->eventQueue->add(new Event([
+    $this->updateParentNode();
+    Yii::$app->eventQueue->add(new BroadcastEvent([
       'name' => static::EVENT_CLIENT_DELETE,
       'data' => [
-        'datasource' => static::getDatasource(),
+        'datasource' => static::getDatasource()->namedId,
         'modelType' => static::$modelType,
         'nodeId' => $this->id,
         'transactionId' => $this->getTransactionId()
@@ -348,7 +363,7 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
    */
   protected function getChildrenQuery($orderBy = "position")
   {
-    return Folder::find()
+    return static::find()
       ->select("id")
       ->where(['parentId' => $this->id])
       ->orderBy($orderBy);
@@ -375,11 +390,11 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
    * @param string|null $orderBy
    *    Optional propert name by which the returned ids should be ordered.
    *    Defaults to "position".
-   * @return array
+   * @return array of ids
    */
   function getChildIds($orderBy = "position")
   {
-    return $this->getChildrenQuery($orderBy)->column();
+    return $this->getChildrenQuery($orderBy)->select('id')->column();
   }
 
   /**
@@ -391,7 +406,7 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
    */
   function getChildrenData($orderBy = "position")
   {
-    $query = Folder::find()
+    $query = static::find()
       ->where(['parentId' => $this->id])
       ->orderBy($orderBy);
     return $query->asArray()->all();

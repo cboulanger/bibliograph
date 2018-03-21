@@ -122,14 +122,14 @@ trait FolderDataTrait
     } elseif ( $folderType == "trash" ) {
       $icon = static::$icon["trash"];
       $type = "trash";
-    } elseif ( $folderType == "favorites" ) {
+    } elseif ( $folderType == 'favorites' ) {
       $icon = static::$icon["favorites"];
       $type = "favorites";
     } elseif ( $markedDeleted ) {
-      $icon = static::$icon["markedDeleted"];
+      $icon = static::$icon['marked-deleted'];
       $type = "deleted";
     } elseif ( $public ) {
-      $icon = static::$icon["public"];
+      $icon = static::$icon['public'];
       $type = "folder";
     }
 

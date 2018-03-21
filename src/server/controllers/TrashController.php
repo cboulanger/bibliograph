@@ -20,10 +20,13 @@
 
 namespace app\controllers;
 
+use app\models\Folder;
+use lib\exceptions\UserErrorException;
 use Yii;
 
 use app\controllers\AppController;
 use app\models\Datasource;
+use yii\db\Exception;
 
 class TrashController extends AppController
 {
@@ -63,37 +66,40 @@ class TrashController extends AppController
   {
     $trashFolder = Datasource :: in( $datasource, "folder" ) :: findOne(['type'=>'trash']);
     return $trashFolder;
-  }  
+  }
 
   /**
-   * Purges folders that have been marked for deletion
+   * Empties the trash folder
    * @param string $datasource
-   * @return string "OK"
+   * @return string Diagnostic message
+   * @throws \JsonRpc2\Exception
    */
-  public function empty( $datasource )
+  public function actionEmpty( string $datasource )
   {
     $this->requirePermission("trash.empty");
-
     // folder
-    $trashfolder = static :: getTrashfolder( $datasource );
+    $trashfolder = static::getTrashfolder( $datasource );
+
+    if(!$trashfolder) throw new UserErrorException(
+      Yii::t('app', "Datasource '{datasource}' does not have a trash folder.", [
+        'datasource' => $datasource
+      ])
+    );
+    /** @var Folder $childFolders */
     $childFolders = $trashfolder->getChildren();
     foreach( $childFolders as $folder ){
-      $folder -> delete();
+      $folder->delete();
     }
-    
     // references
-    self::getReferenceModel()::deleteAll( ['markedDeleted' => true] );
+    self::getReferenceModel($datasource)::deleteAll( ['markedDeleted' => true] );
 
     // update reference count
-    $trashfolder->getReferenceCount(true);
-
-    // notify clients
-    $this->broadcastClientMessage("folder.reload",array(
-      'datasource'  => $datasource,
-      'folderId'    => $trashfolder->id
-    ));
-    
-    return "OK";
+    try {
+      $trashfolder->getReferenceCount(true);
+    } catch (Exception $e) {
+      Yii::error($e);
+    }
+    return "Trash emptied.";
   }
   
 }

@@ -51,6 +51,12 @@ class FolderController extends AppController //implements ITreeController
    */
   static $modelType = "folder";
 
+  /**
+   * The class that is used for the folder model
+   * @var string
+   */
+  static $modelClass = Folder::class;
+
 
   /*
   ---------------------------------------------------------------------------
@@ -60,13 +66,14 @@ class FolderController extends AppController //implements ITreeController
 
   /**
    * Returns the number of nodes in a given datasource
+   *
    * @param string $datasource
    * @param mixed|null $options Optional data, for example, when nodes
    *   should be filtered by a certain criteria
    * @return array containing the keys 'nodeCount', 'transactionId'
    *   and (optionally) 'statusText'.
    */
-  function actionNodeCount($datasource, $options = null)
+  function actionNodeCount(string $datasource, array $options = null)
   {
     $query = Folder::find();
     if ($this->getActiveUser()->isAnonymous()) {
@@ -92,7 +99,7 @@ class FolderController extends AppController //implements ITreeController
    */
   function actionChildCount($datasource, $nodeId, $options = null)
   {
-    not_implemented();
+    throw new \BadMethodCallException("Not implemented");
   }
 
 
@@ -144,7 +151,7 @@ class FolderController extends AppController //implements ITreeController
     $message = "<h3>$label</h3>";
     Form::create(
       $message, $formData, true,
-      Yii::$app->controller->id, "saveFormData",
+      Yii::$app->controller->id, "save",
       array($datasource, $folderId)
     );
     return "Created form to edit folder data.";
@@ -155,23 +162,29 @@ class FolderController extends AppController //implements ITreeController
    * @param $data
    * @param $datasource
    * @param $folderId
-   * @return string "OK"/"ABORTED"
+   * @return string Diagnostic message
    * @throws \JsonRpc2\Exception
    */
-  public function actionSave($data, $datasource, $folderId)
+  public function actionSave($data=null, $datasource=null, $folderId=null)
   {
     if ($data === null) return "ABORTED";
-
     $this->requirePermission("folder.edit");
-
-    $model = static::getRecordById($datasource, $folderId);
-    $data = Form::parseResultData($model, $data);
-    if ($model->load($data) && $model->save()) {
-      // @todo return service result!
-      return "OK";
+    /** @var Folder $folder */
+    $folder = static::getRecordById($datasource, $folderId);
+    try {
+      $data = Form::parseResultData($folder, $data);
+      Yii::debug($data);
+    } catch (\Exception $e) {
+      throw new UserErrorException($e->getMessage(),null, $e);
     }
-    Yii::error($model->getErrors());
-    return "ERROR";
+    try {
+      $folder->setAttributes($data);
+      Yii::debug($folder->getAttributes());
+      $folder->save();
+      return "Folder data saved";
+    } catch (Exception $e) {
+      throw new UserErrorException($e->getMessage(),null, $e);
+    }
   }
 
   /**
@@ -192,8 +205,8 @@ class FolderController extends AppController //implements ITreeController
           'label' => Yii::t('app', "State"),
           'type' => "SelectBox",
           'options' => [
-            ['label' => Yii::t('app', "Folder is publically visible"), 'value' => true],
-            ['label' => Yii::t('app', "Folder is not publically visible"), 'value' => false]
+            ['label' => Yii::t('app', "Folder is publically visible"), 'value' => 1],
+            ['label' => Yii::t('app', "Folder is not publically visible"), 'value' => 0]
           ],
           'value' => $folder->public,
           'width' => 300
@@ -202,8 +215,8 @@ class FolderController extends AppController //implements ITreeController
           'label' => Yii::t('app', "Depth"),
           'type' => "SelectBox",
           'options' => [
-            ['label' => Yii::t('app', "Apply only to the selected folder"), 'value' => false],
-            ['label' => Yii::t('app', "Apply to the selected folder and its subfolders"), 'value' => true]
+            ['label' => Yii::t('app', "Apply only to the selected folder"), 'value' => 1],
+            ['label' => Yii::t('app', "Apply to the selected folder and its subfolders"), 'value' => 0]
           ],
           'value' => false
         ]
@@ -215,13 +228,13 @@ class FolderController extends AppController //implements ITreeController
   /**
    * Change the public state
    *
-   * @param string $data
+   * @param $data
    * @param string $datasource
    * @param int $folderId
    * @return string Diagnostic message
    * @throws \JsonRpc2\Exception
    */
-  public function actionVisibilityChange($data, $datasource, $folderId)
+  public function actionVisibilityChange($data=null, string $datasource=null, int $folderId=null)
   {
     if ($data === null) return "ABORTED";
     $this->requirePermission("folder.edit");
@@ -312,7 +325,6 @@ class FolderController extends AppController //implements ITreeController
     ]);
     try {
       $folder->save();
-      if ($parentFolder) $folder->updateParentNode($parentFolderId);
     } catch (Exception $e) {
       throw new UserErrorException($e->getMessage());
     }
@@ -370,7 +382,7 @@ class FolderController extends AppController //implements ITreeController
     }
 
     // move folder into trash
-    $trashFolder = TrashController::getTrashFolder();
+    $trashFolder = TrashController::getTrashFolder($datasource);
     if ($trashFolder) {
       if ($folder->parentId == $trashFolder->id) {
         // it is already in the trash, delete right away
