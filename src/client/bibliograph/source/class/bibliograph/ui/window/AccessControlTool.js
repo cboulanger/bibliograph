@@ -25,19 +25,13 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     this.base(arguments);
   
     const app = qx.core.Init.getApplication();
-    const pm  = qcl.access.PermissionManager.getInstance();
+    const pm  = app.getPermissionManager();
     const bus = qx.event.message.Bus.getInstance();
     
     this.setCaption(this.tr('Access control tool'));
-    this.setVisibility("visible");
+    //this.setVisibility("excluded");
     this.setWidth(800);
-    
-    // on appear
-    this.addListener("appear", function (e) {
-      this.center();
-      this.selectBoxStore.setAutoLoadParams(null);
-      this.selectBoxStore.setAutoLoadParams([]);
-    }, this);
+    this.addListener("appear", (e) => this.center());
     
     // close on logout
     bus.subscribe("user.loggedout", function (e) {
@@ -99,9 +93,16 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
       autoLoadMethod : "types",
       autoLoadParams : null
     });
-
+  
+    // on appear
+    this.addListener("appear", function (e) {
+      this.selectBoxStore.setAutoLoadParams(null);
+      this.selectBoxStore.setAutoLoadParams([]);
+    }, this);
+  
+  
     // store for left list
-    const leftListStore = new qcl.data.store.JsonRpcStore("access-config")
+    const leftListStore = new qcl.data.store.JsonRpcStore("access-config");
     leftListStore.set({
       autoLoadMethod : "elements"
     });

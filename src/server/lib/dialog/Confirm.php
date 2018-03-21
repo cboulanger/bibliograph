@@ -19,6 +19,7 @@
 ************************************************************************ */
 
 namespace lib\dialog;
+use Yii;
 
 class Confirm extends Dialog
 {
@@ -81,11 +82,8 @@ class Confirm extends Dialog
    */
   static public function getArguments( $args )
   {
-  	qcl_assert_array( $args );
-  	if ( gettype( $args[0] ) == "boolean" )
-  	{
-  		if ( $args[0] === false )
-  		{
+  	if ( gettype( $args[0] ) == "boolean" ) {
+  		if ( $args[0] === false ){
   			return false;	
   		}
   		array_shift( $args );

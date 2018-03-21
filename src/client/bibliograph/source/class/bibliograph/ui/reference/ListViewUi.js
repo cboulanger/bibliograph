@@ -15,7 +15,6 @@
 /* global qx qcl dialog bibliograph */
 
 /**
-
  * @ignore(bibliograph.Utils.bool2visibility)
  **/
 qx.Class.define("bibliograph.ui.reference.ListViewUi",
@@ -283,7 +282,7 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
     this.bind("store.model.statusText", statusLabel, "value");
     statusLabel.addListener("changeValue", function (e) {
       qx.util.TimerManager.getInstance().start(function (value) {
-        if (statusLabel.getValue() == value) statusLabel.setValue("");
+        if (statusLabel.getValue() === value) statusLabel.setValue("");
       }, null, this, e.getData(), 5000);
     }, this);
   }

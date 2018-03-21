@@ -28,7 +28,6 @@ qx.Class.define("bibliograph.Application",
     /**
      * This method contains the initial application code and gets called 
      * during startup of the application
-
      */
     main : async function()
     {
@@ -37,7 +36,7 @@ qx.Class.define("bibliograph.Application",
       if (qx.core.Environment.get("qx.debug")) {
         qx.log.appender.Native;
       }
-
+  
       // application startup
       await bibliograph.Setup.getInstance().boot();
     },

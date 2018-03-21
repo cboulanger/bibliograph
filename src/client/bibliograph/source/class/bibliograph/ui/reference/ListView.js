@@ -292,7 +292,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
         }
 
         // show breadcrumb
-        var mainFolderTree = this.getApplication().getWidgetById("bibliograph/mainFolderTree");
+        var mainFolderTree = this.getApplication().getWidgetById("app/treeview");
         var selectedNode = mainFolderTree.getSelectedNode();
 
         if (selectedNode && selectedNode.data.id == folderId) {

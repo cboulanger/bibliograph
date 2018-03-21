@@ -24,13 +24,13 @@ qx.Class.define("bibliograph.ui.Windows",
 {
   extend : qx.core.Object,
   type: "singleton",
-
-  /**
-   * The methods and simple properties of this class
-   */
   members :
   {
-
+  
+    /**
+     * Returns application ui root
+     * @return {*}
+     */
     getRoot: function() {
       return this.getApplication().getRoot();
     },
@@ -41,8 +41,8 @@ qx.Class.define("bibliograph.ui.Windows",
      */
     create: function() 
     {
-      var app = qx.core.Init.getApplication();
-      var bus = qx.event.message.Bus.getInstance();
+      let app = qx.core.Init.getApplication();
+      let bus = qx.event.message.Bus.getInstance();
 
       // Datasource list window
       this.getRoot().add(bibliograph.ui.window.DatasourceListWindow.getInstance());
@@ -50,8 +50,7 @@ qx.Class.define("bibliograph.ui.Windows",
       /*
        * Access Control Tool
        */
-      var ui_winAccessControlTool1 = new bibliograph.ui.window
-        .AccessControlTool();
+      let ui_winAccessControlTool1 = new bibliograph.ui.window.AccessControlTool();
       ui_winAccessControlTool1.setWidgetId("app/windows/access-control");
       ui_winAccessControlTool1.setVisibility("excluded");
       this.getRoot().add(ui_winAccessControlTool1);
@@ -59,25 +58,24 @@ qx.Class.define("bibliograph.ui.Windows",
       /*
        * Folder Tree window
        */
-      var ui_winFolderTreeWindow1 = new bibliograph.ui.window
-        .FolderTreeWindowUi();
-      ui_winFolderTreeWindow1.setWidgetId("bibliograph/folderTreeWindow");
+      let ui_winFolderTreeWindow1 = new bibliograph.ui.window
+        .FolderTreeWindow();
+      ui_winFolderTreeWindow1.setWidgetId("app/windows/folders");
       ui_winFolderTreeWindow1.setVisibility("excluded");
       this.getRoot().add(ui_winFolderTreeWindow1);
 
       /*
        * Preferences window
        */
-      var ui_winPreferencesWindow1 = new bibliograph.ui.window
-        .PreferencesWindow();
-      ui_winPreferencesWindow1.setWidgetId("bibliograph/preferencesWindow");
+      let ui_winPreferencesWindow1 = new bibliograph.ui.window.PreferencesWindow();
+      ui_winPreferencesWindow1.setWidgetId("app/windows/preferences");
       ui_winPreferencesWindow1.setVisibility("excluded");
       this.getRoot().add(ui_winPreferencesWindow1);
       
       /*
        * Import window
        */
-      var ui_winImportWindow1 = new bibliograph.ui.window.ImportWindowUi();
+      let ui_winImportWindow1 = new bibliograph.ui.window.ImportWindowUi();
       ui_winImportWindow1.setWidgetId("bibliograph/importWindow");
       ui_winImportWindow1.setVisibility("excluded");
       this.getRoot().add(ui_winImportWindow1);
@@ -85,7 +83,7 @@ qx.Class.define("bibliograph.ui.Windows",
       /*
        * About window
        */
-      var ui_winAboutWindow1 = new bibliograph.ui.window.AboutWindow();
+      let ui_winAboutWindow1 = new bibliograph.ui.window.AboutWindow();
       ui_winAboutWindow1.setWidgetId("bibliograph/aboutWindow");
       ui_winAboutWindow1.setVisibility("excluded");
       this.getRoot().add(ui_winAboutWindow1);
@@ -93,8 +91,7 @@ qx.Class.define("bibliograph.ui.Windows",
       /*
        * Search help window
        */
-      var ui_winSearchHelpWindow1 = new bibliograph.ui.window
-        .SearchHelpWindow();
+      let ui_winSearchHelpWindow1 = new bibliograph.ui.window.SearchHelpWindow();
       ui_winSearchHelpWindow1.setWidgetId("bibliograph/searchHelpWindow");
       ui_winSearchHelpWindow1.setVisibility("excluded");
       this.getRoot().add(ui_winSearchHelpWindow1);
@@ -102,8 +99,7 @@ qx.Class.define("bibliograph.ui.Windows",
       /*
        * Login Dialog
        */
-
-      var loginDialog = new dialog.Login();
+      let loginDialog = new dialog.Login();
       loginDialog.set({
         widgetId: "bibliograph/loginDialog",
         allowCancel: true,
@@ -111,7 +107,6 @@ qx.Class.define("bibliograph.ui.Windows",
         showForgotPassword: false,
         forgotPasswordHandler: function(){ app.cmd("forgotPassword");}
       });
-
       loginDialog.setCallback(async function(err, data) {
         if ( err ) {
           await dialog.Dialog.error(err).promise();
@@ -120,22 +115,16 @@ qx.Class.define("bibliograph.ui.Windows",
       });
 
       // bind messages to configuration values
-      let cm = app.getConfigManager()
+      let cm = app.getConfigManager();
       cm.addListener("ready", ()=> {
         cm.bindKey("application.title", loginDialog, "text", false);
       });
       cm.addListener("ready", () => {
         cm.bindKey("application.logo", loginDialog, "image", false);
       });
-
+      
       // hide forgot password button if ldap is enabled
-      bus.subscribe(
-        "ldap.enabled",
-        function(e) {
-          loginDialog.setShowForgotPassword(!e.getData());
-        },
-        this
-      );
+      bus.subscribe( "ldap.enabled",(e) => loginDialog.setShowForgotPassword(!e.getData()));
     }
   }
 });

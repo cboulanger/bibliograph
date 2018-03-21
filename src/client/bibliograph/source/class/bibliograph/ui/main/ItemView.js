@@ -177,7 +177,7 @@ qx.Class.define("bibliograph.ui.main.ItemView",
         default:
           var allowEditReference = 
             qcl.access.PermissionManager.getInstance().
-            create("reference.edit").getState();
+              create("reference.edit").getState();
           this.setView(allowEditReference ? "referenceEditor" : "tableView");
       }
     },

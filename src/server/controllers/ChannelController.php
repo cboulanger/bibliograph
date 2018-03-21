@@ -34,8 +34,9 @@ use lib\channel\Channel;
 use lib\channel\MessageEvent;
 use lib\channel\Aggregator;
 
+
 /**
- * The class used for authentication of users. Adds LDAP authentication
+ * The controller for PubSub communication
  */
 class ChannelController extends AppController
 {
