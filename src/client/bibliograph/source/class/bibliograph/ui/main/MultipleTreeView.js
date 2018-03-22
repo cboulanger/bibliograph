@@ -49,6 +49,14 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
       debugDragSession : true
     });
     
+    // configure new tree
+    this.addListener("changeTree",e => {
+      /** @var {qcl.ui.treevirtual.DragDropTree}  */
+      let tree = e.getData();
+      if( ! tree ) return;
+      tree.setExcludeDragTypes( new qx.data.Array('trash','top'));
+    })
+    
   },
   
   members:

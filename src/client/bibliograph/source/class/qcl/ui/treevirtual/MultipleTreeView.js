@@ -19,6 +19,7 @@
 
 /*global qx qcl virtualdata dialog*/
 
+// noinspection JSUnusedLocalSymbols
 /**
  * Base class for virtual tree widgets which load their data from different
  * datasources. The data is cached for performance, so that switching the
@@ -309,7 +310,10 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
      * Attempts to select a node
      */
     __selectAttempts: 0,
-    
+  
+    /**
+     * The transaction id records the "state" of the current tree
+     */
     __lastTransactionId: 0,
     
     /*
@@ -322,6 +326,7 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
      * Handles the change in the datasource property of the widget
      */
     _applyDatasource: function (value, old) {
+      void(old);
       if (value) {
         this.info("Tree is loading datasource " + value);
         this._setupTree(value, true);
@@ -342,6 +347,7 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
      * Applies the node id
      */
     _applyNodeId: function (value, old) {
+      void(old);
       this.selectByServerNodeId(value);
     },
   
@@ -363,6 +369,7 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
      * @param old {qcl.ui.treevirtual.TreeAction|null}
      */
     _applyTreeAction: function (value, old) {
+      void(old);
       this.info(`Tree action ${value.getAction()}`);
     },
     
@@ -706,64 +713,70 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
     },
   
     /**
+     * Checks if message is relevant for the current tree
+     * @param {qcl.ui.treevirtual.DragDropTree|null} tree
+     * @param {Object} data
+     * @return {boolean} Returns true if the message is not relevant
+     * @private
+     */
+    _notForMe : function(tree, data){
+      if ( ! tree ){
+        this.debug("Ignoring message because no tree exists...");
+        return true;
+      }
+      let notForMe = !(data.datasource === this.getDatasource() &&  data.modelType === this.getModelType());
+      if (notForMe) {
+        this.debug("Ignoring irrelevant message...");
+      }
+      return notForMe;
+    },
+  
+    /**
      * Moves a node, triggered by a message
-     * @param e {qx.event.message.Message}
+     * @param {qx.event.message.Message} e
      * @private
      */
     _moveNode: function (e) {
       let data = e.getData();
       let tree = this.getTree();
-      if (!tree) return;
+      if( this._notForMe(tree, data) ) return;
       let dataModel = tree.getDataModel();
       let controller = this.getController();
-      if (
-      data.datasource === this.getDatasource() &&
-      data.modelType === this.getModelType()
-      ) {
-        let nodeId = controller.getClientNodeId(data.nodeId);
-        let parentNodeId = controller.getClientNodeId(data.parentId);
-        //console.warn( "moving #" + nodeId + " to #" + parentNodeId );
-        if (nodeId && parentNodeId !== undefined) {
-          let node = dataModel.getData()[nodeId];
-          let oldParentNode = dataModel.getData()[node.parentNodeId];
-          let newParentNode = dataModel.getData()[parentNodeId];
-          node.parentNodeId = parentNodeId;
-          oldParentNode.children.splice(
-          oldParentNode.children.indexOf(nodeId),
-          1
-          );
-          newParentNode.children.push(nodeId);
-          dataModel.setData();
-          controller.setTransactionId(data.transactionId);
-          //this.cacheTreeData(data.transactionId);
-        }
+      let nodeId = controller.getClientNodeId(data.nodeId);
+      let parentNodeId = controller.getClientNodeId(data.parentId);
+      if (!nodeId || parentNodeId === undefined) {
+        this.warn("Igoring move message because node or node parent doesn't exist...");
+        return;
       }
+      let node = dataModel.getData()[nodeId];
+      let oldParentNode = dataModel.getData()[node.parentNodeId];
+      let newParentNode = dataModel.getData()[parentNodeId];
+      node.parentNodeId = parentNodeId;
+      oldParentNode.children.splice(oldParentNode.children.indexOf(nodeId), 1);
+      newParentNode.children.push(nodeId);
+      dataModel.setData();
+      controller.setTransactionId(data.transactionId);
     },
     
     /**
      * Deletes a node, triggered by a message
-     * @param e {qx.event.message.Message}
+     * @param {qx.event.message.Message} e
      */
     _deleteNode: function (e) {
       let data = e.getData();
       let tree = this.getTree();
-      if (!tree) return;
+      if( this._notForMe(tree, data) ) return;
       let dataModel = tree.getDataModel();
       let controller = this.getController();
-      if (
-      data.datasource === this.getDatasource() &&
-      data.modelType === this.getModelType()
-      ) {
-        let nodeId = controller.getClientNodeId(data.nodeId);
-        //console.warn( "deleting #" + nodeId );
-        if (nodeId) {
-          dataModel.prune(nodeId, true);
-          dataModel.setData();
-          controller.remapNodeIds();
-          controller.setTransactionId(data.transactionId);
-          //this.cacheTreeData(data.transactionId);
-        }
+      let nodeId = controller.getClientNodeId(data.nodeId);
+      if (!nodeId) {
+        this.warn("Igoring delete message because node doesn't exist...");
+        return;
       }
+      dataModel.prune(nodeId, true);
+      dataModel.setData();
+      controller.remapNodeIds();
+      controller.setTransactionId(data.transactionId);
     },
     
     /**
@@ -775,11 +788,7 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
     _reorderNodeChildren: function (e) {
       let data = e.getData();
       let tree = this.getTree();
-      if (!tree) return;
-      
-      // check if the message concerns us
-      let notforus = data.datasource !== this.getDatasource() || data.modelType !== this.getModelType();
-      if (notforus) return;
+      if( this._notForMe(tree, data) ) return;
       
       // get the node data
       let dataModel = tree.getDataModel();
@@ -792,12 +801,12 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
       let pnc = parentNode.children;
       let oldPos = pnc.indexOf(nodeId);
       if (oldPos === data.position) {
-        //this.debug("Node already at new position");
+        this.warn("Node already at new position");
         return;
       }
       pnc.splice(oldPos, 1);
       pnc.splice(data.position, 0, nodeId);
-      //this.debug("Changed child position");
+      this.debug("Changed child node position.");
       
       // render tree
       dataModel.setData();
@@ -817,7 +826,7 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
      * Clears the tree and loads a datasource into the tree display,
      * optionally with a pre-selected node
      * @param datasource {String}
-     * @param nodeId {Int} Optional
+     * @param nodeId {Number} Optional
      */
     
     load: function (datasource, nodeId) {
@@ -887,19 +896,14 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
       let model = tree.getDataModel();
       let node = tree.nodeGet(id);
       
-      /*
-       * open the tree so that the node is rendered
-       */
+      // open the tree so that the node is rendered
       for (let parentId = node.parentNodeId; parentId; parentId = node.parentNodeId) {
         node = tree.nodeGet(parentId);
         model.setState(node, {bOpened: true});
       }
       model.setData();
       
-      /*
-       * we need a timeout because tree rendering also uses
-       * timeouts, so this is not synchronous
-       */
+      // we need a timeout because tree rendering also uses timeouts, so this is not synchronous
       qx.event.Timer.once(() => {
         let row = model.getRowFromNodeId(id);
         if (row) {

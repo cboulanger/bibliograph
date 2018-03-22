@@ -25,6 +25,7 @@ use app\models\Reference;
 use lib\dialog\Confirm;
 use lib\dialog\Form;
 use lib\exceptions\UserErrorException;
+use RuntimeException;
 use Yii;
 
 use lib\controllers\ITreeController;
@@ -160,12 +161,12 @@ class FolderController extends AppController //implements ITreeController
   /**
    * Saves the result of the edit() method
    * @param $data
-   * @param $datasource
-   * @param $folderId
+   * @param string $datasource
+   * @param int $folderId
    * @return string Diagnostic message
    * @throws \JsonRpc2\Exception
    */
-  public function actionSave($data=null, $datasource=null, $folderId=null)
+  public function actionSave($data=null, string $datasource=null, int $folderId=null)
   {
     if ($data === null) return "ABORTED";
     $this->requirePermission("folder.edit");
@@ -460,22 +461,25 @@ class FolderController extends AppController //implements ITreeController
 
   /**
    * Move a folder to a different parent
-   * @param $datasource
-   * @param $folderId
-   * @param $parentId
+   * @param string $datasource
+   * @param int $folderId
+   * @param int $parentId
    * @throws UserErrorException
-   * @return string "OK"
+   * @return string Diagnostic message
    * @throws \JsonRpc2\Exception
    */
-  public function actionMove($datasource, $folderId, $parentId)
+  public function actionMove(string $datasource, int $folderId, int $parentId)
   {
     $this->requirePermission("folder.move");
-    if ($folderId == $parentId) {
+    if ($folderId === $parentId) {
       throw new UserErrorException(Yii::t('app', "Folder cannot be moved on itself."));
     }
     $id = $parentId;
     do {
       $folder = $this->getRecordById($datasource, $id);
+      if( ! $folder ){
+        throw new RuntimeException("Invalid parent folder id.");
+      }
       if ($folder->id == $folderId) {
         throw new UserErrorException(Yii::t('app', "Parent node cannot be moved on a child node"));
       }
