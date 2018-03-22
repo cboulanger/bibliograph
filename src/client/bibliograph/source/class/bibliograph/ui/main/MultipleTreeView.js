@@ -204,10 +204,54 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
         });
       });
     },
+  
+    //-------------------------------------------------------------------------
+    //  TREE ACTIONS
+    //-------------------------------------------------------------------------
+  
+    /**
+     * Applies the `treeAction` property.
+     * @param value {qcl.ui.treevirtual.TreeAction|null}
+     * @param old {qcl.ui.treevirtual.TreeAction|null}
+     */
+    _applyTreeAction: function (value, old) {
+      let action = value.getAction();
+      switch (action){
+        case "move":
+          this._moveFolderDialog(
+            value.getModel().getItem(0),
+            value.getTargetModel()
+          );
+          break;
+        default:
+          this.warn(`Action ${action} not implemented.`);
+      }
+    },
     
     //-------------------------------------------------------------------------
     //  SERVER ACTIONS
     //-------------------------------------------------------------------------
+  
+    /**
+     * Method to indicate that server action is happening
+     * @param waiting
+     * @private
+     */
+    _isWaiting : function(waiting){
+      this.setEnabled(waiting);
+      if( waiting ){
+        // create a timer to re-enable even if an error occurred,
+        // so that we don't get stuck in disabled mode.
+        this.__timer = qx.event.Timer.once(()=>{
+          this.setEnabled(true);
+        },this,5000)
+      } else {
+        if( this.__timer ){
+          this.__timer.stop();
+          this.__timer = null;
+        }
+      }
+    },
     
     /**
      * Triggers server dialog to edit folder properties
@@ -240,29 +284,45 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
     {
       this.rpc.removeDialog(this.getDatasource(), this.getNodeId());
     },
-
+  
     /**
-     * Shows dialog to confim a folder move
+     * Shows dialog to confim a folder move.
+     * If no model is passed, use the model of the currently selected node.
+     * If no target model is passed, open a window with a tree from which
+     * a node can be selected.
+     * @param model {Object}
+     * @param targetModel {Object}
+     * @private
      */
-    _moveFolderDialog : function ()
+    _moveFolderDialog : function (model=null,targetModel=null)
     {
-      let app = this.getApplication();
-      let win = app.getWidgetById("app/windows/folders");
-      if( !win ){
-        this.warn("Cannot open folder dialog!");
-        return;
+      if( model === null){
+        model = this.getSelectedNode();
       }
-      win.addListenerOnce("nodeSelected", e => {
-        let node = e.getData();
-        if (!node) {
-          dialog.Dialog.alert(this.tr("No folder selected. Try again"));
-          return;
-        }
-        let message = this.tr("Do your really want to move folder '%1' to '%2'?", this.getSelectedNode().label, node.label);
-        dialog.Dialog.confirm(message).promise().then(result => {
-          if (result === true) this.rpc.move(this.getDatasource(), this.getNodeId(), node.data.id);
+      if( targetModel === null ){
+        let app = this.getApplication();
+        let win = app.getWidgetById("app/windows/folders");
+        qx.core.Assert.assertInstance(win, qx.ui.window.Window);
+        win.addListenerOnce("nodeSelected", e => {
+          let targetModel = e.getData();
+          if (!targetModel) {
+            dialog.Dialog.alert(this.tr("No folder selected."));
+          }
+          this._moveFolderDialog(model,targetModel);
         });
         win.show();
+      }
+      let message = this.tr(
+        "Do your really want to move folder '%1' to '%2'?",
+        model.label, targetModel.label
+      );
+      dialog.Dialog.confirm(message).promise().then(result => {
+        if (result === true) {
+          this._isWaiting(true);
+          this.rpc
+          .move(this.getDatasource(), model.data.id, targetModel.data.id)
+          .then(() => this._isWaiting(false))
+        }
       });
     },
 

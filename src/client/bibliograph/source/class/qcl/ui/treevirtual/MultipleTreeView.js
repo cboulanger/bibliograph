@@ -127,6 +127,7 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
     
     /**
      * The name of the service which supplies the tree data
+     * @todo remove?
      */
     serviceName: {
       check: "String",
@@ -144,6 +145,7 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
     
     /**
      * The service method used to query the number of nodes in the tree
+     * @todo remove?
      */
     nodeCountMethod: {
       check: "String",
@@ -152,7 +154,7 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
     
     /**
      * The number of nodes that are transmitted in each request. If null, no limit
-     * Not implemented, does nothing
+     * @todo Not implemented, does nothing
      */
     childrenPerRequest: {
       check: "Integer",
@@ -171,6 +173,7 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
     /**
      * The type of model that is displayed as tree data.
      * Used to identify server messages.
+     * @todo really needed?
      */
     modelType: {
       check: "String"
@@ -195,17 +198,20 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
       init: false,
       event: "changeAllowReorderOnly"
     },
-    
-    /**
-     * Whether the tree columns should have headers. This works only
-     * when set before the creation of the tree - it is not dynamically
-     * toggable.
-     */
-    showColumnHeaders: {
-      check: "Boolean",
-      init: true
-    },
   
+    /**
+     * If a successful drop has occurred, this will be set with a map containing
+     * the properties tree {qcl.ui.treevirtual.DragDropTree}, action {String},
+     * dragModel {Object} and dropModel {Object}
+     */
+    treeAction: {
+      check: "Object",
+      init: null,
+      nullable: true,
+      event: "changeTreeAction",
+      apply: "_applyTreeAction"
+    },
+    
     /**
      * Whether the drag session should output verbose debug messages.
      * Useful for development
@@ -215,6 +221,16 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
       check: "Boolean",
       init: false,
       event: "changeDebugDragSession"
+    },
+  
+    /**
+     * Whether the tree columns should have headers. This works only
+     * when set before the creation of the tree - it is not dynamically
+     * toggable.
+     */
+    showColumnHeaders: {
+      check: "Boolean",
+      init: true
     }
   },
   
@@ -238,9 +254,7 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
   construct: function () {
     this.base(arguments);
     
-    
     this.__datasources = {};
-    
     this.__prompt = new dialog.Prompt();
     this.setTreeWidgetContainer(this);
     
@@ -248,6 +262,7 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
     this.__lastTransactionId = 0;
   
     // @todo get constants from generated file
+    // @todo move to bibliograph implementation
     let bus = qx.event.message.Bus;
     bus.subscribe( "folder.node.update", this._updateNode, this );
     bus.subscribe( "folder.node.add", this._addNode, this);
@@ -329,9 +344,26 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
     _applyNodeId: function (value, old) {
       this.selectByServerNodeId(value);
     },
-    
+  
+    /**
+     * Applies the `selectedNode` property.
+     * Empty stub to be overridden
+     * @param value {Object|null}
+     * @param old {Object|null}
+     * @todo Rename to selectedModel
+     */
     _applySelectedNode: function (value, old) {
       // empty stub
+    },
+  
+    /**
+     * Applies the `treeAction` property.
+     * Empty stub to be overridden
+     * @param value {qcl.ui.treevirtual.TreeAction|null}
+     * @param old {qcl.ui.treevirtual.TreeAction|null}
+     */
+    _applyTreeAction: function (value, old) {
+      this.info(`Tree action ${value.getAction()}`);
     },
     
     /*
@@ -582,18 +614,19 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
     },
   
     /**
-     * Called when a successful drop has happened in the current treee
+     * Called when a successful drop has happened in the current treee.
+     * Sets the `treeAction` property
      * @param e {qx.event.type.Drag}
      * @private
      */
     _onDropImpl : function(e){
-      let
-        tree = this.getTree(),
-        action = tree.getDragAction(),
-        sourceLabel = tree.getDragModel().label,
-        targetLabel = tree.getDropModel().label;
-      
-      this.info(`${action} ${sourceLabel} to ${targetLabel}`);
+      let tree = this.getTree();
+      this.setTreeAction( new qcl.ui.treevirtual.TreeAction({
+        tree,
+        action: e.getCurrentAction(),
+        model: tree.getDragModel(),
+        targetModel: tree.getDropModel()
+      }));
     },
     
     /*
