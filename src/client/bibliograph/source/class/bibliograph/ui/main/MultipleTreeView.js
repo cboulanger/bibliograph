@@ -16,7 +16,7 @@
 ************************************************************************ */
 
 /**
- * The folder tree view. Most of the business logic is in {@see qcl.ui.treevirtual.TreeView},
+ * The folder tree view. Most of the business logic is in {@see qcl.ui.treevirtual.MultipleTreeView},
  * this adds server actions
  *
  * @asset(bibliograph/icon/button-plus.png)
@@ -24,9 +24,9 @@
  * @asset(bibliograph/icon/button-settings-up.png)
  * @asset(bibliograph/icon/button-minus.png)
  */
-qx.Class.define("bibliograph.ui.main.TreeView",
+qx.Class.define("bibliograph.ui.main.MultipleTreeView",
 {
-  extend: qcl.ui.treevirtual.TreeView,
+  extend: qcl.ui.treevirtual.MultipleTreeView,
   include : [qcl.access.MPermissions],
   
   construct: function () {
@@ -36,7 +36,7 @@ qx.Class.define("bibliograph.ui.main.TreeView",
 
     // messages
     let bus = qx.event.message.Bus.getInstance();
-    bus.subscribe(bibliograph.AccessManager.messages.LOGIN, () => this.reload());
+    bus.subscribe(bibliograph.AccessManager.messages.LOGIN,  () => this.reload());
     bus.subscribe(bibliograph.AccessManager.messages.LOGOUT, () => this.reload());
   
     // permissions
@@ -44,8 +44,11 @@ qx.Class.define("bibliograph.ui.main.TreeView",
     
     // context menu
     this.setupTreeCtxMenu();
+    this.set({
+      enableDragDrop : true,
+      debugDragSession : true
+    });
     
-    this.setEnableDragDrop(true);
   },
   
   members:
@@ -83,6 +86,12 @@ qx.Class.define("bibliograph.ui.main.TreeView",
         updateEvent : "changeSelectedNode",
         condition : tree => tree.getSelectedNode() !== null
       },
+      change_position : {
+        depends : "folder.move",
+        granted : true,
+        updateEvent : "changeSelectedNode",
+        condition : tree => tree.getSelectedNode() !== null
+      },
       empty_trash : {
         depends : "trash.empty",
         granted : true,
@@ -91,24 +100,6 @@ qx.Class.define("bibliograph.ui.main.TreeView",
       },
     },
     
-    // /**
-    //  * Overridden. Called when a dragged element is dropped onto the tree widget
-    //  * @param e {qx.event.type.Drag}
-    //  */
-    // _on_drop : function(e) {
-    //   if (e.supportsType("qx/treevirtual-node"))
-    //   {
-    //     let tree = this.getTree();
-    //     tree.addListenerOnce("changeNodePosition", function(e)
-    //     {
-    //       let data = e.getData();
-    //       let nodeId = data.node.data.id;
-    //       let position = data.position;
-    //       this.getStore().execute("position-change", [this.getDatasource(), nodeId, position]);
-    //     }, this);
-    //     tree.moveNode(e);
-    //   }
-    // },
   
     //-------------------------------------------------------------------------
     //  USER INTERFACE

@@ -23,6 +23,7 @@
  * Base class for virtual tree widgets which load their data from different
  * datasources. The data is cached for performance, so that switching the
  * datasource won't result in expensive reloads.
+ *
  * @asset(icon/16/places/folder-remote.png)
  * @asset(icon/16/places/folder.png)
  * @asset(icon/16/apps/utilities-graphics-viewer.png)
@@ -31,9 +32,8 @@
  * @asset(icon/16/actions/folder-new.png)
  * @asset(icon/16/places/folder-remote.png)
  * @asset(icon/16/actions/help-about.png)
- * @todo Theme It!
  */
-qx.Class.define("qcl.ui.treevirtual.TreeView", {
+qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
   extend: qx.ui.container.Composite,
   
   /*
@@ -177,8 +177,8 @@ qx.Class.define("qcl.ui.treevirtual.TreeView", {
     },
     
     /**
-     * Enable/disable drag and drop
-     * Not implememted, does nothing
+     * Enable/disable drag and drop. This is synchronized with the
+     * tables that are created
      */
     enableDragDrop: {
       check: "Boolean",
@@ -204,6 +204,17 @@ qx.Class.define("qcl.ui.treevirtual.TreeView", {
     showColumnHeaders: {
       check: "Boolean",
       init: true
+    },
+  
+    /**
+     * Whether the drag session should output verbose debug messages.
+     * Useful for development
+     */
+    debugDragSession :
+    {
+      check: "Boolean",
+      init: false,
+      event: "changeDebugDragSession"
     }
   },
   
@@ -235,19 +246,15 @@ qx.Class.define("qcl.ui.treevirtual.TreeView", {
     
     // server databinding
     this.__lastTransactionId = 0;
-    
-    let bus = qx.event.message.Bus;
-    
+  
     // @todo get constants from generated file
+    let bus = qx.event.message.Bus;
     bus.subscribe( "folder.node.update", this._updateNode, this );
     bus.subscribe( "folder.node.add", this._addNode, this);
     bus.subscribe( "folder.node.delete", this._deleteNode, this );
     bus.subscribe( "folder.node.move", this._moveNode, this);
     bus.subscribe( "folder.node.reorder", this._reorderNodeChildren, this);
     bus.subscribe( "folder.node.select", this._selectNode, this);
-    
-    // drag & drop
-    //this.setAllowReorderOnly(true);
   },
   
   /*
@@ -374,12 +381,10 @@ qx.Class.define("qcl.ui.treevirtual.TreeView", {
         rowFocusChangeModifiesSelection: false
       });
       
-      // drag & drop, not supported yet
-      // this.bind("enableDragDrop", tree, "enableDragDrop");
-      // this.bind("allowReorderOnly", tree, "allowReorderOnly");
-      // tree.addListener("dragstart", this._on_dragstart, this );
-      // tree.addListener("dragend", this._on_dragend, this );
-      // tree.addListener("drop", this._on_drop, this );
+      // drag & drop
+      this.bind("enableDragDrop", tree, "enableDragDrop");
+      this.bind("allowReorderOnly", tree, "allowReorderOnly");
+      this.bind("debugDragSession", tree, "debugDragSession");
       
       // configure columns
       tree
@@ -410,6 +415,7 @@ qx.Class.define("qcl.ui.treevirtual.TreeView", {
       tree.addListener("changeSelection", this._on_treeChangeSelection, this);
       tree.addListener("click", this._on_treeClick, this);
       tree.addListener("dblclick", this._on_treeDblClick, this);
+      tree._onDropImpl = this._onDropImpl.bind(this);
       
       ds.treeWidget = tree;
       this.getTreeWidgetContainer().add(tree, {flex: 10, height: null});
@@ -553,21 +559,15 @@ qx.Class.define("qcl.ui.treevirtual.TreeView", {
      * @return {void} void
      */
     _on_treeChangeSelection: function (event) {
-      /*  
-       * reset selected row cache 
-       */
+      // reset selected row cache
       this.setSelectedNode(null);
       this.setSelectedNodeType(null);
       
-      /*
-       * get new selection
-       */
+      // get new selection
       let selection = event.getData();
       if (selection.length === 0) return;
       
-      /*
-       * get data
-       */
+      // get data
       let tree = this.getTree();
       let app = this.getApplication();
       let node = selection[0];
@@ -576,57 +576,45 @@ qx.Class.define("qcl.ui.treevirtual.TreeView", {
       let nodeId = parseInt(data.id);
       //      let nodeType    = tree.getNodeType(node);
       
-      /* 
-       * update properties
-       */
+      // update properties
       this.setSelectedNode(node);
       this.setNodeId(nodeId);
     },
-    
-    /*
-    ---------------------------------------------------------------------------
-       DRAG & DROP
-    ---------------------------------------------------------------------------
-    */
-    
+  
     /**
-     * Called when the user starts dragging a node
+     * Called when a successful drop has happened in the current treee
      * @param e {qx.event.type.Drag}
+     * @private
      */
-    _on_dragstart: function (e) {
-      this.__dragsession = true;
-    },
-    
-    /**
-     * Called when the drag session ends
-     * @param e {qx.event.type.Drag}
-     */
-    _on_dragend: function (e) {
-      this.__dragsession = false;
-    },
-    
-    /**
-     * Called when a dragged element is dropped onto the tree widget.
-     * Override for your own behavior
-     * @param e {qx.event.type.Drag}
-     */
-    _on_drop: function (e) {
-      if (e.supportsType("qx/treevirtual-node")) {
-        this.moveNode(e);
-      }
+    _onDropImpl : function(e){
+      let
+        tree = this.getTree(),
+        action = tree.getDragAction(),
+        sourceLabel = tree.getDragModel().label,
+        targetLabel = tree.getDropModel().label;
+      
+      this.info(`${action} ${sourceLabel} to ${targetLabel}`);
     },
     
     /*
     ---------------------------------------------------------------------------
-       SERVER DATABINDING EVENT HANDLERS
+      MESSAGE HANDLERS
     ---------------------------------------------------------------------------
     */
-    
+  
+    /**
+     * Selects a node triggered by a message
+     * @param e {qx.event.message.Message}
+     * @param e
+     * @private
+     */
     _selectNode: function (e) {
       this.setNodeId(e.getData());
     },
     
     /**
+     * Updates a node, triggered by a message
+     * @param e {qx.event.message.Message}
      * @todo rewrite the cache stuff! if the transaction id doesnt'change,
      * no need to update the cache!
      */
@@ -650,7 +638,12 @@ qx.Class.define("qcl.ui.treevirtual.TreeView", {
         }
       }
     },
-    
+  
+    /**
+     * Adds a node, triggered by a message
+     * @param e {qx.event.message.Message}
+     * @private
+     */
     _addNode: function (e) {
       let data = e.getData();
       let tree = this.getTree();
@@ -678,7 +671,12 @@ qx.Class.define("qcl.ui.treevirtual.TreeView", {
         }
       }
     },
-    
+  
+    /**
+     * Moves a node, triggered by a message
+     * @param e {qx.event.message.Message}
+     * @private
+     */
     _moveNode: function (e) {
       let data = e.getData();
       let tree = this.getTree();
@@ -710,7 +708,7 @@ qx.Class.define("qcl.ui.treevirtual.TreeView", {
     },
     
     /**
-     * Called when the message "folder.node.delete" is received
+     * Deletes a node, triggered by a message
      * @param e {qx.event.message.Message}
      */
     _deleteNode: function (e) {
@@ -736,7 +734,8 @@ qx.Class.define("qcl.ui.treevirtual.TreeView", {
     },
     
     /**
-     * Called by a server message to reorder the child nodes of
+     * Reorders node children, triggered by a message
+     * @param e {qx.event.message.Message}
      * a given node.
      * @param e {qx.event.message.Message}
      */
@@ -789,9 +788,7 @@ qx.Class.define("qcl.ui.treevirtual.TreeView", {
      */
     
     load: function (datasource, nodeId) {
-      /*
-       * clear tree and load new tree data
-       */
+      // clear tree and load new tree data
       if (datasource) {
         this._loadTreeData(datasource, nodeId);
       } else {
@@ -804,9 +801,7 @@ qx.Class.define("qcl.ui.treevirtual.TreeView", {
      * @return {void} void
      */
     reload: function () {
-      /*
-       * clear the tree and reload
-       */
+      // clear the tree and reload
       let datasource = this.getDatasource();
       this.clearTree();
       this.load(datasource);

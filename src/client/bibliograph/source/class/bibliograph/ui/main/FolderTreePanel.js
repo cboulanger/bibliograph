@@ -62,41 +62,41 @@ qx.Class.define("bibliograph.ui.main.FolderTreePanel",
       titleLabel.setRich(true);
       headerMenu.add(titleLabel);
   
-      // tree widget
-      let treeWidget = new bibliograph.ui.main.TreeView();
-      treeWidget.setShowColumnHeaders(true);
-      treeWidget.setWidgetId("app/treeview");
-      treeWidget.setWidth(200);
-      treeWidget.setColumnHeaders([this.tr('Folders'), '#']);
-      this.add(treeWidget, { flex : 1 });
-      // bind tree widget properties
-      this.getApplication().bind("datasource", treeWidget, "datasource");
-      treeWidget.bind("nodeId", this.getApplication(), "folderId" );
-      this.getApplication().bind("folderId", treeWidget, "nodeId");
-      this.treeWidget = treeWidget;
+      // multiple tree widget
+      let mTree = new bibliograph.ui.main.MultipleTreeView();
+      mTree.setShowColumnHeaders(true);
+      mTree.setWidgetId("app/treeview");
+      mTree.setWidth(200);
+      mTree.setColumnHeaders([this.tr('Folders'), '#']);
       
-      // @todo: drag & drop
-      // qx.core.Init.getApplication()
-      //   .getAccessManager()
-      //   .getPermissionManager()
-      //   .create("folder.move").bind("state", treeWidget, "enableDragDrop");
+      // bind tree widget properties
+      this.getApplication().bind("datasource", mTree, "datasource");
+      mTree.bind("nodeId", this.getApplication(), "folderId" );
+      this.getApplication().bind("folderId", mTree, "nodeId");
+      this.treeWidget = mTree;
+      
+      // @todo convert to new permission API
+      qx.core.Init.getApplication()
+        .getAccessManager()
+        .getPermissionManager()
+        .create("folder.move").bind("state", mTree, "enableDragDrop");
       
       // tree widget container (tree is not added directly to the parent,
       // but is added to the container once it is set up.
       let vbox2 = new qx.ui.layout.VBox();
-      let treeWidgetContainer = new qx.ui.container.Composite();
-      treeWidgetContainer.setLayout(vbox2);
-      treeWidgetContainer.setAllowStretchY(true);
-      treeWidgetContainer.setHeight(null);
-      this.add(treeWidgetContainer, {flex: 1});
-      treeWidget.setTreeWidgetContainer(treeWidgetContainer);
+      let mTreeContainer = new qx.ui.container.Composite();
+      mTreeContainer.setLayout(vbox2);
+      mTreeContainer.setAllowStretchY(true);
+      mTreeContainer.setHeight(null);
+      this.add(mTreeContainer, {flex: 1});
+      mTree.setTreeWidgetContainer(mTreeContainer);
     
       // footer menu
       let footerMenu = new qx.ui.menubar.MenuBar();
       this.add(footerMenu);
-      footerMenu.add(treeWidget.createAddButton(true));
-      footerMenu.add(treeWidget.createRemoveButton(true));
-      footerMenu.add(treeWidget.createReloadButton());
+      footerMenu.add(mTree.createAddButton(true));
+      footerMenu.add(mTree.createRemoveButton(true));
+      footerMenu.add(mTree.createReloadButton());
 
       // Settings button/menu
       let settingsBtn = new qx.ui.menubar.Button(null, "bibliograph/icon/button-settings-up.png");
@@ -104,10 +104,10 @@ qx.Class.define("bibliograph.ui.main.FolderTreePanel",
       let settingsMenu =  new qx.ui.menu.Menu();
       settingsMenu.setWidgetId("app/treeview/settings-menu");
       settingsBtn.setMenu(settingsMenu);
-      settingsMenu.add(treeWidget.createEmptyTrashButton());
-      settingsMenu.add(treeWidget.createEditButton());
-      settingsMenu.add(treeWidget.createVisibilityButton());
-      settingsMenu.add(treeWidget.createMoveButton());
+      settingsMenu.add(mTree.createEmptyTrashButton());
+      settingsMenu.add(mTree.createEditButton());
+      settingsMenu.add(mTree.createVisibilityButton());
+      settingsMenu.add(mTree.createMoveButton());
     
       // Status label
       let _statusLabel = new qx.ui.basic.Label(null);
