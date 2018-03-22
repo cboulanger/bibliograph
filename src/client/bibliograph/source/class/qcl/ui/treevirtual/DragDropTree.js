@@ -525,15 +525,16 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
       let validDropTarget = !!dropModel;
       e.getManager().setDropAllowed(validDropTarget);
       
-      // drag cursor
+      // show drag session visually
       if (validDropTarget) {
+        // drag cursor
         qx.ui.core.DragDropCursor.getInstance().setAction(e.getCurrentAction());
         // open node after timeout
         if( this.__dragActionTimeout ){
           this.__dragActionTimeout.stop();
         }
         this.__dragActionTimeout = qx.event.Timer.once(()=>{
-          dropModel.bOpened = true;
+          this.getDataModel().setState(dropModel, {bOpened: true});
           this.getDataModel().setData();
         },this,500);
       }  else {

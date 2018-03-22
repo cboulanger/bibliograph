@@ -643,6 +643,25 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
     */
   
     /**
+     * Checks if message is relevant for the current tree
+     * @param {qcl.ui.treevirtual.DragDropTree|null} tree
+     * @param {Object} data
+     * @return {boolean} Returns true if the message is not relevant
+     * @private
+     */
+    _notForMe : function(tree, data){
+      if ( ! tree ){
+        this.debug("Ignoring message because no tree exists...");
+        return true;
+      }
+      let notForMe = !(data.datasource === this.getDatasource() &&  data.modelType === this.getModelType());
+      if (notForMe) {
+        this.debug("Ignoring irrelevant message...");
+      }
+      return notForMe;
+    },
+  
+    /**
      * Selects a node triggered by a message
      * @param e {qx.event.message.Message}
      * @param e
@@ -661,22 +680,18 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
     _updateNode: function (e) {
       let data = e.getData();
       let tree = this.getTree();
-      if (!tree) return;
+      if ( this._notForMe(tree,data) )return;
       let dataModel = tree.getDataModel();
       let controller = this.getController();
-      if (
-        data.datasource === this.getDatasource() &&
-        data.modelType === this.getModelType()
-      ) {
-        let nodeId = controller.getClientNodeId(data.nodeData.data.id);
-        this.debug( "Updating tree node, client #" + nodeId + " server #" + data.nodeData.data.id);
-        if (nodeId) {
-          dataModel.setState(nodeId, data.nodeData);
-          dataModel.setData();
-          //controller.setTransactionId(data.transactionId);
-          //this.cacheTreeData(data.transactionId);
-        }
+      let nodeId = controller.getClientNodeId(data.nodeData.data.id);
+      if (!nodeId) {
+        this.warn("Node doesn't exist.");
+        return;
       }
+      this.debug("Updating tree node, client #" + nodeId + " server #" + data.nodeData.data.id);
+      dataModel.setState(nodeId, data.nodeData);
+      dataModel.setData();
+      controller.setTransactionId(data.transactionId);
     },
   
     /**
@@ -687,49 +702,27 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
     _addNode: function (e) {
       let data = e.getData();
       let tree = this.getTree();
-      if (!tree) return;
+      if ( this._notForMe(tree,data) )return;
       let dataModel = tree.getDataModel();
       let controller = this.getController();
-      if (
-        data.datasource === this.getDatasource() &&
-        data.modelType === this.getModelType()
-      ) {
-        let parentNodeId = controller.getClientNodeId( data.nodeData.data.parentId );
-        this.debug( "Adding new tree node to #" + parentNodeId );
-        if (parentNodeId) {
-          let nodeId;
-          if (data.nodeData.isBranch) {
-            nodeId = dataModel.addBranch(parentNodeId);
-          } else {
-            nodeId = dataModel.addLeaf(parentNodeId);
-          }
-          dataModel.setState(nodeId, data.nodeData);
-          dataModel.setData();
-          controller.setTransactionId(data.transactionId);
-          controller.remapNodeIds();
-          //this.cacheTreeData(data.transactionId);
-        }
+      let parentNodeId = controller.getClientNodeId(data.nodeData.data.parentId);
+      if (parentNodeId===undefined){
+        this.warn("Parent node doesn't exist.");
+        return;
       }
+      this.debug("Adding new tree node to #" + parentNodeId);
+      let nodeId;
+      if (data.nodeData.isBranch) {
+        nodeId = dataModel.addBranch(parentNodeId);
+      } else {
+        nodeId = dataModel.addLeaf(parentNodeId);
+      }
+      dataModel.setState(nodeId, data.nodeData);
+      dataModel.setData();
+      controller.setTransactionId(data.transactionId);
+      controller.remapNodeIds();
     },
-  
-    /**
-     * Checks if message is relevant for the current tree
-     * @param {qcl.ui.treevirtual.DragDropTree|null} tree
-     * @param {Object} data
-     * @return {boolean} Returns true if the message is not relevant
-     * @private
-     */
-    _notForMe : function(tree, data){
-      if ( ! tree ){
-        this.debug("Ignoring message because no tree exists...");
-        return true;
-      }
-      let notForMe = !(data.datasource === this.getDatasource() &&  data.modelType === this.getModelType());
-      if (notForMe) {
-        this.debug("Ignoring irrelevant message...");
-      }
-      return notForMe;
-    },
+    
   
     /**
      * Moves a node, triggered by a message
