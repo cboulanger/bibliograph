@@ -911,11 +911,11 @@ qx.Class.define("bibliograph.ui.reference.ListView",
      */
     _moveReference: function () {
       var app = this.getApplication();
-      var win = app.getWidgetById("bibliograph/folderTreeWindow");
+      let win = app.getWidgetById("app/windows/folders");
       win.addListenerOnce("nodeSelected", function (e) {
         var node = e.getData();
         if (!node) {
-          dialog.Dialog.alert("No folder selected. Try again");
+          dialog.Dialog.alert("No folder selected.");
           return;
         }
         var message = this.tr("Do your really want to move the selected references to '%1'?", [node.label]);
@@ -934,7 +934,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
      */
     _copyReference: function () {
       var app = this.getApplication();
-      var win = app.getWidgetById("bibliograph/folderTreeWindow");
+      let win = app.getWidgetById("app/windows/folders");
       win.addListenerOnce("nodeSelected", function (e) {
         var node = e.getData();
         if (!node) {
@@ -966,7 +966,7 @@ qx.Class.define("bibliograph.ui.reference.ListView",
       app.setModelId(0);
       let params = [datasource, query || folderId, targetFolderId, selectedIds.join(",")];
       app.showPopup(this.tr("Processing request..."));
-      app.getRpcClient("reference").send(action, [params])
+      app.getRpcClient("reference").send(action, params)
       .then(() => {
         app.hidePopup();
       });

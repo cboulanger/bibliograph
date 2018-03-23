@@ -16,9 +16,9 @@
 - [x] Re-implement translation (http://www.yiiframework.com/doc-2.0/guide-tutorial-i18n.html)
 - [x] Re-implemen Plugins as Yii2 modules
 - [x] Re-implement Z3950 import
-- [ ] Add "locale" property to search folders for parsing queries
+- [x] Re-implement Add/Remove/Move/Copy folders
 - [ ] Re-implement Remove/Move/Copy references
-- [ ] Re-implement Add/Remove/Move/Copy folders
+- [ ] Add "locale" property to search folders for parsing queries
 - [ ] Re-implement Export
 - [ ] Tests: Make Travis ~~great~~ work again
 
@@ -37,6 +37,7 @@
 - [ ] Re-implement reference editor title label
 - [ ] Use UserErrorException consistently and replace \Exception
 - [ ] Add log email target to report fatal errors, adapt UserErrorException to report fatal errors via email
+- [ ] Make UserErrorException a JSONRPC error which is caught on the client, instead of a Dialog event. 
 
 ### Priority: low
 - [ ] Add "serverOnly" column to data_Config (true/false/null) and remove from config data sent to client

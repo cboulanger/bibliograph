@@ -66,6 +66,7 @@ qx.Class.define("bibliograph.ui.window.FolderTreeWindow",
       this.treeWidget = treeWidget;
       treeWidget.setColumnHeaders(['Folders', '#']);
       treeWidget.setModelType("folder");
+      treeWidget.setServiceName("folder");
       this.add(treeWidget);
       
       // connect datasource

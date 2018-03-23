@@ -203,7 +203,7 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
     // Move references
     let qxMenuButton1 = new qx.ui.menu.Button(this.tr('Move reference(s)...'));
     qxMenu1.add(qxMenuButton1);
-    qxMenuButton1.addListener("execute", this._moveReference, this);
+    qxMenuButton1.addListener("execute", ()=>this._moveReference());
     permissionManager.create("allowMoveReference")
     .bind("state", qxMenuButton1, "enabled");
     permissionManager.create("reference.move")
@@ -212,7 +212,7 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
     // Copy references
     let qxMenuButton2 = new qx.ui.menu.Button(this.tr('Copy reference(s)...'));
     qxMenu1.add(qxMenuButton2);
-    qxMenuButton2.addListener("execute", this._copyReference, this);
+    qxMenuButton2.addListener("execute", ()=>this._copyReference());
     permissionManager.create("allowMoveReference")
     .bind("state", qxMenuButton2, "enabled");
     permissionManager.create("reference.move")

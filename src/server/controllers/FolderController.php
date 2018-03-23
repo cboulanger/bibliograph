@@ -116,12 +116,13 @@ class FolderController extends AppController //implements ITreeController
     try {
       $modelClass = $this->getControlledModel($datasource);
     } catch (\InvalidArgumentException $e) {
-      throw new \lib\exceptions\UserErrorException(Yii::t('app', "Database {datasource} does not exist.", [
+      throw new UserErrorException(Yii::t('app', "Database {datasource} does not exist.", [
         'datasource' => $datasource
       ]));
     }
     /** @var ActiveQuery $query */
-    $query = $modelClass::find()->select("id");
+    $query = $modelClass::find();
+    $query->select("id")->orderBy("parentId,id");
     if ($this->getActiveUser()->isAnonymous()) {
       $query = $query->where(['public' => true]);
     }
@@ -129,9 +130,39 @@ class FolderController extends AppController //implements ITreeController
     $nodeData = array_map(function ($id) use ($datasource) {
       return $this->getNodeData($datasource, $id);
     }, $nodeIds);
+
+    // make sure that parents are placed before their children
+    // this is a limitation of the SimpleDataModel
+    $orderedNodeData = [];
+    $loaded=[];
+    $failed=[];
+    while( count($nodeData) ){
+      $node = array_shift($nodeData);
+      $id= $node['data']['id'];
+      $parentId = $node['data']['parentId'];
+      if ( isset($loaded[$parentId]) or $parentId===0){
+        $orderedNodeData[] = $node;
+        $loaded[$id] = true;
+        //Yii::debug(">>> id: $id, parentId: $parentId");
+      } else {
+        // if the parent hasn't been processed yet, put at the end of the list
+        //Yii::debug("XXX id: $id, parentId: $parentId");
+        // prevent infinite loop if tree is corrupted
+        if(! isset($failed[$id])){
+          $failed[$id]=0;
+        }
+        if( $failed[$id]++ > 10) {
+          $node['data']['parentId'] = 0;
+          $node['label'] .= "(recovered)";
+          $orderedNodeData[] = $node;
+          continue;
+        }
+        $nodeData[]= $node;
+      }
+    }
     return [
-      'nodeData' => $nodeData,
-      'statusText' => count($nodeData) . " Folders loaded."
+      'nodeData' => $orderedNodeData,
+      'statusText' => count($orderedNodeData) . " Folders loaded."
     ];
   }
 

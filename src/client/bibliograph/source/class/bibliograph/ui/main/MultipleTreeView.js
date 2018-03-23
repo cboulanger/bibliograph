@@ -118,7 +118,7 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
       let button = menubar
         ? new qx.ui.menubar.Button(null, "bibliograph/icon/button-plus.png")
         : new qx.ui.menu.Button(this.tr("Add folder"));
-      button.addListener("click", this._addFolderDialog, this);
+      button.addListener("click", ()=> this._addFolderDialog());
       this.getPermission("folder.add").bind("state", button, "visibility", {
         converter: bibliograph.Utils.bool2visibility
       });
@@ -131,7 +131,7 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
       let button = menubar
         ? new qx.ui.menubar.Button(null, "bibliograph/icon/button-minus.png")
         : new qx.ui.menu.Button(this.tr("Remove folder"));
-      button.addListener("click", this._removeFolderDialog, this);
+      button.addListener("click", ()=> this._removeFolderDialog());
       this.getPermission("folder.remove").bind("state", button, "visibility", {
         converter: bibliograph.Utils.bool2visibility
       });
@@ -150,7 +150,7 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
     {
       let button = new qx.ui.menu.Button(this.tr("Empty trash..."));
       button.setLabel(this.tr("Empty trash..."));
-      button.addListener("execute", this._emptyTrashDialog, this);
+      button.addListener("execute", ()=>this._emptyTrashDialog());
       this.permissions.empty_trash.bind("state", button, "enabled");
       this.getPermission("trash.empty").bind("state", button, "visibility", {
         converter: bibliograph.Utils.bool2visibility
@@ -161,7 +161,7 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
     createMoveButton : function()
     {
       let button = new qx.ui.menu.Button(this.tr("Move folder..."));
-      button.addListener("execute", this._moveFolderDialog, this);
+      button.addListener("execute", ()=> this._moveFolderDialog() );
       this.permissions.move_folder.bind("state", button, "enabled");
       this.getPermission("folder.move").bind("state", button, "visibility", {
         converter: bibliograph.Utils.bool2visibility
@@ -172,7 +172,7 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
     createEditButton : function()
     {
       let button = new qx.ui.menu.Button(this.tr("Edit folder data"));
-      button.addListener("execute", this._editFolder, this);
+      button.addListener("execute", () => this._editFolder() );
       this.permissions.edit_folder.bind("state", button, "enabled");
       this.getPermission("folder.edit").bind("state", button, "visibility", {
         converter: bibliograph.Utils.bool2visibility
@@ -184,7 +184,7 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
     {
       let button = new qx.ui.menu.Button(this.tr("Change visibility"));
       button.setLabel(this.tr("Change visibility"));
-      button.addListener("execute", this._changePublicState, this);
+      button.addListener("execute", ()=>this._changePublicState());
       this.permissions.edit_folder.bind("state", button, "enabled");
       this.getPermission("folder.edit").bind("state", button, "visibility", {
         converter: bibliograph.Utils.bool2visibility
@@ -304,10 +304,10 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
      */
     _moveFolderDialog : function (model=null,targetModel=null)
     {
-      if( model === null){
+      if( ! model ){
         model = this.getSelectedNode();
       }
-      if( targetModel === null ){
+      if( ! targetModel ){
         let app = this.getApplication();
         let win = app.getWidgetById("app/windows/folders");
         qx.core.Assert.assertInstance(win, qx.ui.window.Window);
@@ -319,7 +319,9 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
           this._moveFolderDialog(model,targetModel);
         });
         win.show();
+        return;
       }
+      console.warn([model,targetModel]);
       let message = this.tr(
         "Do your really want to move folder '%1' to '%2'?",
         model.label, targetModel.label
