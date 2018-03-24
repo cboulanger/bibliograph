@@ -24,81 +24,30 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
     this.base(arguments);
 
     let app = qx.core.Init.getApplication();
-    let permissionManager = app.getAccessManager().getPermissionManager();
-
+    
     // Main view & Layout
-    let qxVbox1 = new qx.ui.layout.VBox(null, null, null);
-    let qxComposite1 = this;
-    this.setLayout(qxVbox1);
-
-    // Permissions
-    let qclAccess1 = qcl.access.PermissionManager.getInstance();
-    let qclPermission1 = qclAccess1.create("allowRemoveReference");
-    qclPermission1.setGranted(true);
-    let qclDependency1 = qcl.access.PermissionManager.getInstance().create("reference.remove");
-    qclPermission1.addCondition(function () {
-      return qclDependency1.getState();
-    });
-    qclDependency1.addListener("changeState", function () {
-      qclPermission1.update();
-    }, this);
-    this.addListener("changeSelectedIds", function () {
-      qclPermission1.update();
-    }, this);
-    qclPermission1.addCondition(function () {
-      return (this.getSelectedIds().length > 0);
-    }, this);
-    let qclAccess2 = qcl.access.PermissionManager.getInstance();
-    let qclPermission2 = qclAccess2.create("allowMoveReference");
-    qclPermission2.setGranted(true);
-    let qclDependency2 = qcl.access.PermissionManager.getInstance().create("reference.move");
-    qclPermission2.addCondition(function () {
-      return qclDependency2.getState();
-    });
-    qclDependency2.addListener("changeState", function () {
-      qclPermission2.update();
-    }, this);
-    this.addListener("changeSelectedIds", function () {
-      qclPermission2.update();
-    }, this);
-    qclPermission2.addCondition(function () {
-      return (this.getSelectedIds().length > 0);
-    }, this);
-    let qclAccess3 = qcl.access.PermissionManager.getInstance();
-    let qclPermission3 = qclAccess3.create("allowExportReference");
-    qclPermission3.setGranted(true);
-    let qclDependency3 = qcl.access.PermissionManager.getInstance().create("reference.export");
-    qclPermission3.addCondition(function () {
-      return qclDependency3.getState();
-    });
-    qclDependency3.addListener("changeState", function () {
-      qclPermission3.update();
-    }, this);
-    this.addListener("changeSelectedIds", function () {
-      qclPermission3.update();
-    }, this);
-    qclPermission3.addCondition(function () {
-      return (this.getSelectedIds().length > 0);
-    }, this);
-
+    let vbox1 = new qx.ui.layout.VBox(null, null, null);
+    let composite1 = this;
+    this.setLayout(vbox1);
+    
     // Layout
-    let qxVbox2 = new qx.ui.layout.VBox(null, null, null);
+    let vbox2 = new qx.ui.layout.VBox(null, null, null);
     let contentPane = new qx.ui.container.Composite();
-    contentPane.setLayout(qxVbox2);
+    contentPane.setLayout(vbox2);
     this.contentPane = contentPane;
-    qxComposite1.add(contentPane, {
-      flex: 1
-    });
+    composite1.add(contentPane, { flex: 1 });
 
     // Menu bar
-    let qxMenuBar1 = new qx.ui.menubar.MenuBar();
-    qxMenuBar1.setHeight(22);
-    contentPane.add(qxMenuBar1);
+    let menuBar1 = new qx.ui.menubar.MenuBar();
+    menuBar1.setHeight(22);
+    contentPane.add(menuBar1);
     let referenceViewLabel = new qx.ui.basic.Label(null);
     this.referenceViewLabel = referenceViewLabel;
     referenceViewLabel.setPadding(3);
     referenceViewLabel.setRich(true);
-    qxMenuBar1.add(referenceViewLabel);
+    menuBar1.add(referenceViewLabel);
+    
+    // Table container, table will be inserted here
     let tableContainer = new qx.ui.container.Stack();
     contentPane.add(tableContainer, {flex: 1});
     this.setTableContainer(tableContainer);
@@ -109,16 +58,14 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
 
     // "Add Reference" menubar button
     let listViewAddMenuButton = new qx.ui.menubar.Button();
-    listViewAddMenuButton.setWidth(16);
-    listViewAddMenuButton.setIcon("bibliograph/icon/button-plus.png");
-    listViewAddMenuButton.setEnabled(false);
-    listViewAddMenuButton.setHeight(16);
-    menuBar.add(listViewAddMenuButton);
-    permissionManager.create("reference.add").bind("state", listViewAddMenuButton, "visibility", {
-      converter: bibliograph.Utils.bool2visibility
+    listViewAddMenuButton.set({
+      width: 16,
+      height: 16,
+      icon: "bibliograph/icon/button-plus.png",
+      enabled : false
     });
-
-    // access
+    menuBar.add(listViewAddMenuButton);
+    this.bindVisibility(this.permissions.add_reference, listViewAddMenuButton);
     this.listViewAddMenuButton = listViewAddMenuButton;
 
     // Window to choose reference type
@@ -171,107 +118,91 @@ qx.Class.define("bibliograph.ui.reference.ListViewUi",
     win.add(cancelButton);
 
     // Remove button
-    let qxMenuBarButton1 = new qx.ui.menubar.Button();
-    qxMenuBarButton1.setWidth(16);
-    qxMenuBarButton1.setHeight(16);
-    qxMenuBarButton1.setEnabled(false);
-    qxMenuBarButton1.setIcon("bibliograph/icon/button-minus.png");
-    menuBar.add(qxMenuBarButton1);
-    qxMenuBarButton1.addListener("click", this._removeReference, this);
-    permissionManager.create("allowRemoveReference").bind("state", qxMenuBarButton1, "enabled");
-    permissionManager.create("reference.remove").bind("state", qxMenuBarButton1, "visibility", {
-      converter: bibliograph.Utils.bool2visibility
+    let menuBarButton1 = new qx.ui.menubar.Button();
+    menuBarButton1.set({
+      width: 16,
+      height: 16,
+      enabled : false,
+      icon : "bibliograph/icon/button-minus.png"
     });
+    menuBarButton1.addListener("click", this._removeReference, this);
+    this.bindEnabled(this.permissions.remove_selected_references, menuBarButton1);
+    this.bindVisibility(this.permissions.remove_reference, menuBarButton1);
 
     // Reload Button
-    let qxMenuButton8 = new qx.ui.menubar.Button(null, "bibliograph/icon/button-reload.png", null, null);
-    menuBar.add(qxMenuButton8);
-    qxMenuButton8.addListener("execute", function (e) {
+    let menuButton8 = new qx.ui.menubar.Button(null, "bibliograph/icon/button-reload.png", null, null);
+    menuBar.add(menuButton8);
+    menuButton8.addListener("execute", function (e) {
       this.reload()
     }, this);
 
     // Options
-    let qxMenuBarButton2 = new qx.ui.menubar.Button();
-    qxMenuBarButton2.setWidth(16);
-    qxMenuBarButton2.setHeight(16);
-    qxMenuBarButton2.setIcon("bibliograph/icon/button-settings-up.png");
-    menuBar.add(qxMenuBarButton2);
-    let qxMenu1 = new qx.ui.menu.Menu();
-    qxMenu1.setPosition("top-left");
-    qxMenuBarButton2.setMenu(qxMenu1);
+    let menuBarButton2 = new qx.ui.menubar.Button();
+    menuBarButton2.set({
+      width:16,
+      height:16,
+      icon: "bibliograph/icon/button-settings-up.png"
+    });
+    menuBar.add(menuBarButton2);
+    let menu1 = new qx.ui.menu.Menu();
+    menu1.setPosition("top-left");
+    menuBarButton2.setMenu(menu1);
 
     // Move references
-    let qxMenuButton1 = new qx.ui.menu.Button(this.tr('Move reference(s)...'));
-    qxMenu1.add(qxMenuButton1);
-    qxMenuButton1.addListener("execute", ()=>this._moveReference());
-    permissionManager.create("allowMoveReference")
-    .bind("state", qxMenuButton1, "enabled");
-    permissionManager.create("reference.move")
-    .bind("state", qxMenuButton1, "visibility", {converter: bibliograph.Utils.bool2visibility});
+    let menuButton1 = new qx.ui.menu.Button(this.tr('Move reference(s)...'));
+    menu1.add(menuButton1);
+    menuButton1.addListener("execute", ()=>this._moveReference());
+    this.bindEnabled(this.permissions.move_selected_references, menuButton1);
+    this.bindVisibility(this.permissions.move_reference, menuButton1);
 
     // Copy references
-    let qxMenuButton2 = new qx.ui.menu.Button(this.tr('Copy reference(s)...'));
-    qxMenu1.add(qxMenuButton2);
-    qxMenuButton2.addListener("execute", ()=>this._copyReference());
-    permissionManager.create("allowMoveReference")
-    .bind("state", qxMenuButton2, "enabled");
-    permissionManager.create("reference.move")
-    .bind("state", qxMenuButton2, "visibility", {converter: bibliograph.Utils.bool2visibility});
-
+    let menuButton2 = new qx.ui.menu.Button(this.tr('Copy reference(s)...'));
+    menu1.add(menuButton2);
+    menuButton2.addListener("execute", ()=>this._copyReference());
+    this.bindEnabled(this.permissions.move_selected_references, menuButton2);
+    this.bindVisibility(this.permissions.move_reference, menuButton2);
+    
     // Export menu
-    let qxMenuButton3 = new qx.ui.menu.Button(this.tr('Export references'));
-    qxMenu1.add(qxMenuButton3);
-    permissionManager.create("reference.export")
-    .bind("state", qxMenuButton3, "visibility", {converter: bibliograph.Utils.bool2visibility});
-    let qxMenu2 = new qx.ui.menu.Menu();
-    qxMenuButton3.setMenu(qxMenu2);
+    let menuButton3 = new qx.ui.menu.Button(this.tr('Export references'));
+    menu1.add(menuButton3);
+    this.bindVisibility(this.permissions.export_references, menuButton2);
+    
+    let menu2 = new qx.ui.menu.Menu();
+    menuButton3.setMenu(menu2);
 
     // Export selected references
-    let qxMenuButton4 = new qx.ui.menu.Button(this.tr('Export selected references'));
-    qxMenu2.add(qxMenuButton4);
-    permissionManager.create("allowExportReference")
-    .bind("state", qxMenuButton4, "enabled");
-    qxMenuButton4.addListener("execute", function (e) {
-      this.exportSelected();
-    }, this);
+    let menuButton4 = new qx.ui.menu.Button(this.tr('Export selected references'));
+    menu2.add(menuButton4);
+    menuButton4.addListener("execute", () => this.exportSelected());
+    this.bindEnabled(this.permissions.export_selected_references, menuButton4);
 
     // Export folder
-    let qxMenuButton5 = new qx.ui.menu.Button(this.tr('Export folder'));
-    qxMenu2.add(qxMenuButton5);
-    qxMenuButton5.addListener("execute", function (e) {
-      this.exportFolder();
-    }, this);
-
+    let menuButton5 = new qx.ui.menu.Button(this.tr('Export folder'));
+    menu2.add(menuButton5);
+    menuButton5.addListener("execute", () => this.exportFolder() );
+    this.bindEnabled(this.permissions.export_folder, menuButton5);
 
     // Edit menu
-    let qxMenuButton6 = new qx.ui.menu.Button();
-    qxMenuButton6.setLabel(this.tr('Edit references'));
-    qxMenu1.add(qxMenuButton6);
-    permissionManager.create("reference.edit")
-    .bind("state", qxMenuButton6, "visibility", {converter: bibliograph.Utils.bool2visibility});
-    let qxMenu3 = new qx.ui.menu.Menu();
-    qxMenuButton6.setMenu(qxMenu3);
+    let menuButton6 = new qx.ui.menu.Button();
+    menuButton6.setLabel(this.tr('Edit references'));
+    menu1.add(menuButton6);
+    this.bindVisibility(this.permissions.edit_reference, menuButton6);
+    let menu3 = new qx.ui.menu.Menu();
+    menuButton6.setMenu(menu3);
 
     // Find/Replace Button
     let findReplBtn = new qx.ui.menu.Button();
     findReplBtn.setLabel(this.tr('Find/Replace'));
-    qxMenu3.add(findReplBtn);
-    permissionManager.create("reference.batchedit")
-    .bind("state", findReplBtn, "visibility", {converter: bibliograph.Utils.bool2visibility});
-    findReplBtn.addListener("execute", function (e) {
-      this.findReplace()
-    }, this);
+    menu3.add(findReplBtn);
+    findReplBtn.addListener("execute", () => this.findReplace());
+    this.bindVisibility(this.permissions.batch_edit_reference,findReplBtn);
 
     // Empty folder Button
     let emptyFldContBtn = new qx.ui.menu.Button();
     emptyFldContBtn.setLabel(this.tr('Make folder empty'));
-    qxMenu3.add(emptyFldContBtn);
-    permissionManager.create("reference.batchedit")
-    .bind("state", emptyFldContBtn, "visibility", {converter: bibliograph.Utils.bool2visibility});
-    emptyFldContBtn.addListener("execute", function (e) {
-      this.emptyFolder()
-    }, this);
-
+    menu3.add(emptyFldContBtn);
+    emptyFldContBtn.addListener("execute", () => this.emptyFolder());
+    this.bindVisibility(this.permissions.batch_edit_reference,emptyFldContBtn);
 
     // Status bar
     let statusLabel = new qx.ui.basic.Label(null);

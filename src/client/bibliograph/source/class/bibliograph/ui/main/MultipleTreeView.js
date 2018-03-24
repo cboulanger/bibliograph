@@ -40,7 +40,7 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
     bus.subscribe(bibliograph.AccessManager.messages.LOGOUT, () => this.reload());
   
     // permissions
-    this.setupPermissions();
+    //this.setupPermissions();
     
     // context menu
     this.setupTreeCtxMenu();

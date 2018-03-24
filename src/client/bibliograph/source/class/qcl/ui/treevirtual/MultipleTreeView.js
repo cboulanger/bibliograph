@@ -104,7 +104,7 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
      * The widget displaying the tree
      */
     tree: {
-      check: "qx.ui.treevirtual.TreeVirtual",
+      check: "qcl.ui.treevirtual.DragDropTree",
       nullable: true,
       apply: "_applyTree",
       event: "changeTree"
@@ -613,10 +613,10 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
       let data = node.data;
       let datasource = data.datasource || this.getDatasource();
       let nodeId = parseInt(data.id);
-      //      let nodeType    = tree.getNodeType(node);
       
       // update properties
       this.setSelectedNode(node);
+      this.setSelectedNodeType( tree.getNodeType(node) );
       this.setNodeId(nodeId);
     },
   

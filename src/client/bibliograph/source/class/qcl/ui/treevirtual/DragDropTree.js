@@ -144,7 +144,7 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
     
     /**
      * array of two-element arrays containing a combination of drag source and
-     * drop target types. Type information is in the nodeTypeProperty of the
+     * drop target types. Type information is in the nodeType Property of the
      * userData hash map. If null, allow any combination. "*" can be used to as a
      * wildcard, i.e. [ ['Foo','*'] ...] will allow the 'Foo' type node to be dropped on any
      * other type, and [ ['*','Bar'] ...] will allow any type to be dropped on a 'Bar' type node.
@@ -658,11 +658,11 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
         }
   
         // check legitimate source and target type combinations
-        let sourceType = this.getNodeDragType(dragModel);
+        let sourceType = this.getNodeType(dragModel);
         let targetTypeNode = (dropTargetRelativePosition !== 0)
           ? this.nodeGet(dropModel.parentNodeId)
           : dropModel;
-        let targetType = this.getNodeDragType(targetTypeNode);
+        let targetType = this.getNodeType(targetTypeNode);
   
         if (!targetType) {
           this.dragDebug("No target type.");
@@ -1023,11 +1023,12 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
     
     
     /**
-     * gets the (drag) type of a node
+     * Returns the type of a node as set by the server. By default,
+     * the value of the `data.type` property
      * @param nodeReference {Object|Integer}
      * @return {Object} the user-supplied type of the node or null if not set
      */
-    getNodeDragType: function (nodeReference) {
+    getNodeType: function (nodeReference) {
       try {
         if (typeof nodeReference === "object") {
           return nodeReference.data.type;
@@ -1043,11 +1044,12 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
     },
     
     /**
-     * sets the (drag) type of a node
+     * Sets the type of a node as set by the server. By default,
+     * the value of the `data.type` property
      * @param nodeReference {Object|Integer}
      * @param type {String}
      */
-    setNodeDragType: function (nodeReference, type) {
+    setNodeType: function (nodeReference, type) {
       if (typeof type !== "string") {
         this.error("Drag Type must be a string, got " + (typeof type));
       }
