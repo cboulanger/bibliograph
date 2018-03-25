@@ -20,16 +20,25 @@
 
 namespace app\controllers;
 
+use app\models\Folder;
+use app\models\Reference;
 use Sse\Data;
 use Yii;
 use app\models\Datasource;
 use app\schema\BibtexSchema;
 use lib\exceptions\UserErrorException;
 use lib\Validate;
+use yii\db\Exception;
 
 class ReferenceController extends AppController
 {
   use traits\FolderDataTrait;
+
+  /**
+   * Used by confirmation actions
+   * @var bool
+   */
+  protected $confirm = false;
 
   /*
   ---------------------------------------------------------------------------
@@ -577,7 +586,7 @@ class ReferenceController extends AppController
     }
     try {
       $model->save();
-    } catch (\yii\db\Exception $e) {
+    } catch (Exception $e) {
       throw new UserErrorException($e->getMessage(),null, $e);
     }
     return "Updated reference #$referenceId";
@@ -617,7 +626,7 @@ class ReferenceController extends AppController
    *
    * @throws \InvalidArgumentException
    * @throws \JsonRpc2\Exception
-   * @throws \yii\db\Exception
+   * @throws Exception
    */
   public function actionCreate($datasource, $folderId, $data )
   {
@@ -651,12 +660,12 @@ class ReferenceController extends AppController
       /** @var \app\models\Reference $reference */
       $reference = new $modelClass($data);
       $reference->save();
-    } catch (\yii\db\Exception $e){
+    } catch (Exception $e){
       throw new UserErrorException($e->getMessage(), null, $e);
     }
 
     // link with folder
-    /** @var \app\models\Folder $folder */
+    /** @var Folder $folder */
     $folder = static::getFolderModel($datasource)::findOne($folderId);
     if (!$folder) {
       throw new \InvalidArgumentException("Folder #$folderId does not exist.");
@@ -684,73 +693,23 @@ class ReferenceController extends AppController
   }
 
   /**
-   * Remove references. If a folder id is given, remove from that folder
-   * @param $first
-   *    If boolean, the response to the confirmation dialog. Otherwise, the datasource name
-   * @param $second
-   *    If string, the shelve id. If array, an array of parameters for the action:
-   *    datasource; folder id; target folder id (not used); ids as a string separated by commas
-   * @throws InvalidArgumentException
+   * Remove references from a folder
+   * @param string $datasource
+   * @param int $folderId
+   * @param string $ids
+   * @return string Diagnostic message
    * @throws \JsonRpc2\Exception
    */
-  public function actionRemove($first, $second=null )
+  public function actionRemove(string $datasource, int $folderId, $dummy, string $ids )
   {
-    // removal cancelled
-    if ($first === false) {
-      return "CANCELLED";
-    }
-
-    // removal confirmed
-    elseif ($first === true and is_string($second)) {
-      $confirmRemove = true;
-      list($datasource, $folderId, $ids) = $this->unshelve($second);
-    }
-
-    // API signature
-    elseif ( is_array($first) ) {
-      $confirmRemove = false;
-      list($datasource, $folderId, $dummy, $ids) = $first;
-      if( is_string($ids)){
-        $ids = explode(",",$ids);
-      }
-    }
-
-//    elseif ($first === true and is_string($second)) {
-//      $confirmRemove = true;
-//      list($datasource, $folderId, $ids) = $this->unshelve($second);
-//    } // API signature
-//    elseif (is_string($first) and $ids ) {
-//      if( ! is_array($ids) ){
-//        $ids = explode(",", $ids);
-//      }
-//      $confirmRemove = false;
-//      $datasource = $first;
-//      $folderId = $second;
-//    } // wrong parameters
-    else {
-      // wrong parameters
-      throw new \InvalidArgumentException("Invalid Arguments");
-    }
-
-    // folderId vs query
-    $query = null;
-    if (!is_integer($folderId)) {
-      $query = $folderId;
-      $folderId = null;
-    }
-
     $this->requirePermission("reference.remove");
 
     /** @var \app\models\Reference $referenceClass */
     $referenceClass = $this->getControlledModel($datasource);
     $folderClass = static::getFolderModel($datasource);
 
-    /** @var \app\models\Folder $folder */
-    $folder = $folderClass::findOne($folderId);
-
-    //$this->debug( array($datasource, $folderId, $ids) );
-
     // use the first id
+    $ids = explode(",",$ids);
     $id = intval($ids[0]);
 
     // load record and count the number of links to folders
@@ -761,45 +720,25 @@ class ReferenceController extends AppController
     $containedFolderIds = $reference->getReferenceFolders()->select("FolderId")->column();
     $folderCount = count($containedFolderIds);
 
-    // if we have no folder id and more than one folders contain the reference,
-    // we need to ask the user first
-    if (!$folderId) {
-      if ($folderCount > 1 and !$confirmRemove) {
-        return \lib\dialog\Confirm::create(
-          Yii::t('app',
-            "The selected record '%s' is contained in %s folders. Move to the trash anyways?",
-            ($reference->title . " (" . $reference->year . ")"),
-            $folderCount
-          ),
-          null,
-          "reference", "remove",
-          array($this->shelve($datasource, $query, $ids))
-        );
-      } // confirmed
-      else {
-        $referenceClass->unlinkAll("folders");
-        $folderCount = 0;
-      }
-    } // unlink from folder if id is given.
-    else {
-      $reference->unlink("folders", $folder);
-    }
+    // unlink
+    /** @var Folder $folder */
+    $folder = $folderClass::findOne(intval($folderId));
+    $reference->unlink("folders", $folder);
 
+    // update folders
     $foldersToUpdate = $containedFolderIds;
 
-    // move to trash only if it was contained in one or less folders
+    // move to trash if it was contained in one or less folders
     if ($folderCount < 2) {
       // link with trash folder
       $trashFolder = TrashController::getTrashFolder($datasource);
       if ($trashFolder) $trashFolder->link("references", $reference);
-
       $foldersToUpdate[] = $trashFolder->id;
-
       // mark as deleted
       $reference->markedDeleted = 1;
       try {
         $reference->save();
-      } catch ( \yii\db\Exception $e) {
+      } catch (Exception $e) {
         throw new UserErrorException($e->getMessage());
       }
     }
@@ -807,10 +746,14 @@ class ReferenceController extends AppController
     // update reference count in source and target folders
     $foldersToUpdate = array_unique($foldersToUpdate);
     foreach ($foldersToUpdate as $fid) {
-      /** @var \app\models\Folder $folder */
+      /** @var Folder $folder */
       $folder = $folderClass::findOne($fid);
       if ($folder) {
-        $folder->getReferenceCount(true);
+        try {
+          $folder->getReferenceCount(true);
+        } catch (Exception $e) {
+          Yii::error($e);
+        }
       } else {
         Yii::warning("Folder #$fid does not exist.");
       }
@@ -825,69 +768,27 @@ class ReferenceController extends AppController
         'ids' => array($id)
       ));
     }
-    if ($query) {
-      $this->broadcastClientMessage("reference.removeRows", array(
-        'datasource' => $datasource,
-        'folderId' => null,
-        'query' => $query,
-        'ids' => array($id)
-      ));
-    }
-
-    /*
-     * if there are references left, repeat
-     */
+    // if there are references left, repeat
     if (count($ids) > 1) {
       array_shift($ids);
-      return $this->actionRemove([$datasource, $folderId, null, $ids]);
+      return $this->actionRemove($datasource, $folderId, null, $ids);
     }
-    return "OK";
+    return "Removed references.";
   }
 
   /**
-   * Removes all references from a folder
-   *
-   * @param strin $datasource
+   * Confirm that a reference should be moved to the trash folder
+   * @param string $datasource
    * @param int $folderId
+   * @param string $ids
+   * @return string Diagnostic message
+   * @throws \JsonRpc2\Exception
    */
-  public function actionFolderRemove($datasource, $folderId)
+  public function actionConfirmMoveToTrash($confirmed, string $datasource, int $folderId, $ids )
   {
-    $this->requirePermission("reference.batchedit");
-
-    $referenceModel = $this->getControlledModel($datasource);
-    $folderModel = static::getFolderModel($datasource);
-    $folder = $folderModel:: findOne($folderId);
-    $references = $folder->getReferences()->all();
-
-    $foldersToUpdate = [$folderId];
-    $referencesToTrash = [];
-    foreach ($references as $reference) {
-      $folderCount = $reference->getFolders()->count();
-      $referenceModel->unlink("folder", $folder);
-      if ($folderCount == 1) {
-        $referencesToTrash[] = $reference;
-      }
-    }
-    if (count($referencesToTrash)) {
-      $trashFolder = TrashController::getTrashFolder();
-      if ($trashFolder) {
-        foreach ($referencesToTrash as $reference) {
-          $trashFolder->link("references", $reference);
-        }
-      }
-    }
-    foreach ($foldersToUpdate as $fid) {
-      $folder = $folderModel:: findOne($fid);
-      if (!$folder) {
-        Yii:: warning("Folder #$fid does not exist");
-      }
-      $folder->getReferenceCount(true);
-      $this->broadcastClientMessage("folder.reload", array(
-        'datasource' => $datasource,
-        'folderId' => $fid
-      ));
-    }
-    return "OK";
+    if( ! $confirmed ) return "Remove action was cancelled.";
+    $this->confirm = true;
+    return $this->actionRemove($datasource, $folderId, $dummy, $ids );
   }
 
   /**
@@ -904,17 +805,11 @@ class ReferenceController extends AppController
   {
     $this->requirePermission("reference.move");
 
-    if ($datasource === true) {
-      list($confirmed, $datasource, $folderId, $targetFolderId, $ids) = func_get_args();
-    } else {
-      $confirmed = false;
-    }
-
     $referenceClass = $this->getControlledModel($datasource);
     $folderClass = static:: getFolderModel($datasource);
-    /** @var \app\models\Folder $sourceFolder */
+    /** @var Folder $sourceFolder */
     $sourceFolder = $folderClass::findOne($folderId);
-    /** @var \app\models\Folder $targetFolder */
+    /** @var Folder $targetFolder */
     $targetFolder = $folderClass::findOne($targetFolderId);
 
     try {
@@ -924,20 +819,8 @@ class ReferenceController extends AppController
       throw new UserErrorException($e->getMessage());
     }
 
-    if (!$confirmed) {
-      return \lib\dialog\Confirm::create(
-        Yii::t('app', "This will move {countReferences} from '{sourceFolder}' to '{targetFolder}'. Proceed?", [
-          'countReferences' => count($ids),
-          'sourceFolder' => $sourceFolder->label,
-          'targetFolder' => $targetFolder->label
-        ]),
-        null,
-        "reference", "move", func_get_args()
-      );
-    } else {
-      $references = $referenceClass::find()->where(['in', 'id', $ids])->all();
-      return $this->move($references, $datasource, $sourceFolder, $targetFolder);
-    }
+    $references = $referenceClass::find()->where(['in', 'id', $ids])->all();
+    return $this->move($references, $datasource, $sourceFolder, $targetFolder);
   }
 
   /**
@@ -946,15 +829,15 @@ class ReferenceController extends AppController
    * @param \app\models\Reference[]|int[] $references either an array of reference
    *    objects or an array of the ids of that object
    *
-   * @param \app\models\Folder $sourceFolder
-   * @param \app\models\Folder $targetFolder
+   * @param Folder $sourceFolder
+   * @param Folder $targetFolder
    * @return string "OK"
    */
   public function move(
     array $references,
     $datasource,
-    \app\models\Folder $sourceFolder,
-    \app\models\Folder $targetFolder
+    Folder $sourceFolder,
+    Folder $targetFolder
   )
   {
     $ids = [];
@@ -973,8 +856,13 @@ class ReferenceController extends AppController
     }
 
     // update reference count
-    $sourceFolder->getReferenceCount(true);
-    $targetFolder->getReferenceCount(true);
+    try {
+      $sourceFolder->getReferenceCount(true);
+      $targetFolder->getReferenceCount(true);
+    } catch (Exception $e) {
+      Yii::error($e);
+    }
+
 
     // display change on connected clients
 
@@ -986,51 +874,32 @@ class ReferenceController extends AppController
         'ids' => $ids
       ]);
     }
-    return "OK";
+    $count = count($ids);
+    return "Moved $count references from '{$sourceFolder->label}' to '{$targetFolder->label}'.";
   }
 
   /**
    * Copies a reference to a folder
    *
-   * @param $datasource
-   * @param $folderId
-   * @param $targetFolderId
+   * @param string $datasource
+   * @param $dummy
+   * @param int $targetFolderId
    * @param $ids
    * @return string "OK"
    * @throws \JsonRpc2\Exception
    */
-  public function actionCopy($datasource, $folderId, $targetFolderId, $ids)
+  public function actionCopy(string $datasource, $dummy, $targetFolderId, string $ids)
   {
     $this->requirePermission("reference.move");
-    if ($datasource === true) {
-      list($confirmed, $datasource, $folderId, $targetFolderId, $ids) = func_get_args();
-    } else {
-      $confirmed = false;
-    }
     $folderModel = static:: getFolderModel($datasource);
-    $sourceFolder = $folderModel:: findOne($folderId);
     $targetFolder = $folderModel:: findOne($targetFolderId);
 
     try {
-      Validate:: isNotNull($sourceFolder, "Folder #$folderId does not exist");
       Validate:: isNotNull($targetFolder, "Folder #$targetFolderId does not exist");
     } catch (\Exception $e) {
       throw new UserErrorException($e->getMessage());
     }
-
-    if (!$confirmed) {
-      return \lib\dialog\Confirm::create(
-        Yii::t('app', "This will copy {countReferences} from '{sourceFolder}' to '{targetFolder}'. Proceed?", [
-          'countReferences' => count($ids),
-          'sourceFolder' => $sourceFolder->label,
-          'targetFolder' => $targetFolder->label
-        ]),
-        null,
-        "reference", "copy", func_get_args()
-      );
-    } else {
-      return $this->copy($ids, $sourceFolder, $targetFolder);
-    }
+    return $this->copy($ids, $targetFolder);
   }
 
   /**
@@ -1038,15 +907,10 @@ class ReferenceController extends AppController
    *
    * @param \app\models\Reference[]|int[] $references either an array of reference
    *    objects or an array of the ids of that object
-   * @param \app\models\Folder $sourceFolder
-   * @param \app\models\Folder $targetFolder
+   * @param Folder $targetFolder
    * @return string "OK"
    */
-  public function copy(
-    array $references,
-    \app\models\Folder $sourceFolder,
-    \app\models\Folder $targetFolder
-  )
+  public function copy( array $references, Folder $targetFolder)
   {
     foreach ($references as $reference) {
       if (is_numeric($reference)) {
@@ -1059,8 +923,67 @@ class ReferenceController extends AppController
     }
 
     // update reference count
-    $targetFolder->getReferenceCount(true);
-    return "OK";
+    try {
+      $targetFolder->getReferenceCount(true);
+    } catch (Exception $e) {
+      Yii::error($e);
+    }
+    $count = count($references);
+    return "Copied $count references from '{$sourceFolder->label}' to '{$targetFolder->label}'.";
+  }
+
+  /**
+   * Removes all references from a folder
+   *
+   * @param string $datasource
+   * @param int $folderId
+   * @throws \JsonRpc2\Exception
+   */
+  public function actionEmptyFolder($datasource, $folderId)
+  {
+    $this->requirePermission("reference.batchedit");
+
+    $folderModel = static::getFolderModel($datasource);
+    /** @var Folder $folder */
+    $folder = $folderModel::findOne($folderId);
+    /** @var Reference[] $references */
+    $references = $folder->getReferences()->all();
+
+    $foldersToUpdate = [$folderId];
+    $referencesToTrash = [];
+
+    foreach ($references as $reference) {
+      $folderCount = $reference->getFolders()->count();
+      $reference->unlink("folders", $folder);
+      if ($folderCount == 1) {
+        $referencesToTrash[] = $reference;
+      }
+    }
+    if (count($referencesToTrash)) {
+      $trashFolder = TrashController::getTrashFolder($datasource);
+      if ($trashFolder) {
+        foreach ($referencesToTrash as $reference) {
+          $trashFolder->link("references", $reference);
+        }
+      }
+    }
+    foreach ($foldersToUpdate as $fid) {
+      /** @var Folder $folder */
+      $folder = $folderModel::findOne($fid);
+      if (!$folder) {
+        Yii:: warning("Folder #$fid does not exist");
+      }
+      try {
+        $folder->getReferenceCount(true);
+      } catch (Exception $e) {
+        Yii::error($e);
+      }
+      $this->broadcastClientMessage("folder.reload", array(
+        'datasource' => $datasource,
+        'folderId' => $fid
+      ));
+    }
+    return "Removed all references from folder #$folderId in $datasource";
   }
 
   /**
@@ -1071,12 +994,12 @@ class ReferenceController extends AppController
   public function actionTableHtml($datasource, $referenceId)
   {
     $referenceModel = $this->getControlledModel($datasource);
-    $reference = $referenceModel:: findOne($referenceId);
+    $reference = $referenceModel::findOne($referenceId);
     Validate:: isNotNull($reference, "Reference #$referenceId does not exist.");
 
     $createdBy = $reference->createdBy;
     if ($createdBy) {
-      $user = User:: findOne(['namedId' => $createdBy]);
+      $user = User::findOne(['namedId' => $createdBy]);
       if ($user) $createdBy = $user->name;
     }
     $modifiedBy = $reference->modifiedBy;

@@ -476,25 +476,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
       win.show();
     },
     
-    /**
-     * Send a server request to modify a reference
-     * @param action {String}
-     * @param targetFolderId {Integer}
-     */
-    modifyReferences: function (action, targetFolderId) {
-      let datasource = this.getDatasource();
-      let folderId = this.getFolderId();
-      let selectedIds = this.getSelectedIds();
-      let query = this.getQuery() || null;
-      let app = this.getApplication();
-      app.setModelId(0);
-      let params = [datasource, query || folderId, targetFolderId, selectedIds.join(",")];
-      app.showPopup(this.tr("Processing request..."));
-      app.getRpcClient("reference").send(action, params)
-      .then(() => {
-        app.hidePopup();
-      });
-    },
+
     
     /**
      * Exports the selected references via jsonrpc service
