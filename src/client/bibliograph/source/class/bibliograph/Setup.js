@@ -280,7 +280,7 @@ qx.Class.define("bibliograph.Setup", {
         var data = e.getData();
         var app = this.getApplication();
         if (data.datasource !== app.getDatasource())return;
-        app.getWidgetById("bibliograph/mainListView").reload();
+        app.getWidgetById("app/tableview").reload();
       }, this);
 
       // show the login dialog

@@ -108,15 +108,17 @@ class ReferenceController extends AppController
       throw new \InvalidArgumentException("Invalid query data");
     }
 
+    // select columns, disambiguate id column
     $columns = array_map(function ($column) {
       return $column == "id" ? "references.id" : $column;
     }, $clientQuery->properties);
-    $activeQuery = $activeQuery->select($columns);
+    $activeQuery = $activeQuery
+      ->select($columns)
+      ->alias('references');
 
     // relation
     if (isset($clientQuery->relation)) {
       return $activeQuery
-        ->alias('references')
         ->joinWith($clientQuery->relation->name,false)
         ->onCondition([$clientQuery->relation->foreignId => $clientQuery->relation->id]);
     }
@@ -662,10 +664,6 @@ class ReferenceController extends AppController
     $folder->link("references", $reference);
     $folder->referenceCount = $folder->getReferences()->count();
     $folder->save();
-    $this->broadcastClientMessage(
-      "folder.node.update",
-      $this->getUpdateNodeData($datasource, $folder)
-    );
 
     // reload references
     $this->dispatchClientMessage("folder.reload", array(
@@ -687,9 +685,9 @@ class ReferenceController extends AppController
 
   /**
    * Remove references. If a folder id is given, remove from that folder
-   * @param Dto[] $first
+   * @param $first
    *    If boolean, the response to the confirmation dialog. Otherwise, the datasource name
-   * @param object|null $second
+   * @param $second
    *    If string, the shelve id. If array, an array of parameters for the action:
    *    datasource; folder id; target folder id (not used); ids as a string separated by commas
    * @throws InvalidArgumentException
@@ -813,18 +811,12 @@ class ReferenceController extends AppController
       $folder = $folderClass::findOne($fid);
       if ($folder) {
         $folder->getReferenceCount(true);
-        $this->broadcastClientMessage(
-          "folder.node.update",
-          $this->getUpdateNodeData($datasource, $folder)
-        );
       } else {
         Yii::warning("Folder #$fid does not exist.");
       }
     }
 
-    /*
-     * display change on connected clients
-     */
+    // display change on connected clients
     foreach ($containedFolderIds as $fid) {
       $this->broadcastClientMessage("reference.removeRows", array(
         'datasource' => $datasource,
@@ -901,11 +893,11 @@ class ReferenceController extends AppController
   /**
    * Move references from one folder to another folder
    *
-   * @param string|true $datasource If true, it is the result of the confirmation
-   * @param int $folderId The folder to move from
-   * @param int $targetFolderId The folder to move to
-   * @param int[] $ids The ids of the references to move
-   * @return string "OK"
+   * @param $datasource If true, it is the result of the confirmation
+   * @param $folderId The folder to move from
+   * @param $targetFolderId The folder to move to
+   * @param $ids The ids of the references to move
+   * @return string Diagnostic message
    * @throws \JsonRpc2\Exception
    */
   public function actionMove($datasource, $folderId, $targetFolderId, $ids)
@@ -926,8 +918,8 @@ class ReferenceController extends AppController
     $targetFolder = $folderClass::findOne($targetFolderId);
 
     try {
-      Validate:: isNotNull($targetFolder, "Folder #$targetFolderId does not exist");
-      Validate:: isNotNull($sourceFolder, "Folder #$folderId does not exist");
+      Validate::isNotNull($targetFolder, "Folder #$targetFolderId does not exist");
+      Validate::isNotNull($sourceFolder, "Folder #$folderId does not exist");
     } catch (\Exception $e) {
       throw new UserErrorException($e->getMessage());
     }

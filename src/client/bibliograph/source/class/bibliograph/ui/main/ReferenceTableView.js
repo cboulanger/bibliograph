@@ -17,7 +17,7 @@
 /**
  * The main list of references
  */
-qx.Class.define("bibliograph.ui.main.ReferenceListView",
+qx.Class.define("bibliograph.ui.main.ReferenceTableView",
 {
   extend : qx.ui.container.Composite,
   construct : function()
@@ -25,21 +25,22 @@ qx.Class.define("bibliograph.ui.main.ReferenceListView",
     this.base(arguments);
     this.setLayout(new qx.ui.layout.HBox());
     const app = this.getApplication();
-    const listView = new bibliograph.ui.reference.ListViewUi();
-    this.mainListView = listView;
-    listView.setWidgetId("bibliograph/mainListView");
-    listView.setAllowStretchY(true);
-    listView.setServiceName("reference");
+    const tableview = new bibliograph.ui.main.TableView();
 
-    this.add(listView, {flex : 1});
+    this.mainListView = tableview;
+    tableview.setWidgetId("app/tableview");
+    tableview.setAllowStretchY(true);
+    tableview.setServiceName("reference");
+
+    this.add(tableview, {flex : 1});
     
-    app.bind("datasource", listView, "datasource");
-    app.bind("query", listView, "query");
-    app.bind("folderId", listView, "folderId");
-    app.bind("modelType", listView, "modelType");
-    listView.bind("modelId", app, "modelId");
-    app.bind("modelId", listView, "modelId");
-    listView.bind("selectedIds", app, "selectedIds");
+    app.bind("datasource", tableview, "datasource");
+    app.bind("query", tableview, "query");
+    app.bind("folderId", tableview, "folderId");
+    app.bind("modelType", tableview, "modelType");
+    tableview.bind("modelId", app, "modelId");
+    app.bind("modelId", tableview, "modelId");
+    tableview.bind("selectedIds", app, "selectedIds");
     //app.bind("selectedIds", listView, "selectedIds");
     app.setModelType("reference");
   }

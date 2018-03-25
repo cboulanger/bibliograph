@@ -52,8 +52,18 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow",
    */
   construct: function () {
     this.base(arguments);
-    this.createUI();
+
+    this.setWidth(700);
+    this.setCaption(this.tr('Import from library catalog'));
+    this.setShowMinimize(false);
+    this.setVisibility("excluded");
+    this.setHeight(500);
+    this.addListener("appear", ()=>this.center() );
+
+    this.createUi();
     this.createPopup();
+    qx.event.message.Bus
+    .getInstance().subscribe(bibliograph.AccessManager.messages.LOGOUT, ()=>this.close() );
 
     qx.lang.Function.delay(() => {
       this.listView.addListenerOnce("tableReady", () => {
@@ -100,30 +110,17 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow",
       this.info("Z39.50 datasource is now: " + value);
     },
 
-    createUI: function()
+    /**
+     * UI
+     */
+    createUi: function()
     {
       let app = this.getApplication();
-
-      // window
-      let importWindow = this;
-      importWindow.setWidth(700);
-      importWindow.setCaption(this.tr('Import from library catalog'));
-      importWindow.setShowMinimize(false);
-      importWindow.setVisibility("excluded");
-      importWindow.setHeight(500);
-
-      // events
-      qx.event.message.Bus.getInstance().subscribe(bibliograph.AccessManager.messages.LOGOUT, ()=>importWindow.close() );
-      importWindow.addListener("appear", ()=>importWindow.center() );
-
-      // layout
-      let qxVbox1 = new qx.ui.layout.VBox(5, null, null);
-      qxVbox1.setSpacing(5);
-      importWindow.setLayout(qxVbox1);
+      this.setLayout(new qx.ui.layout.VBox(5));
 
       // toolbar
-      let qxToolBar1 = new qx.ui.toolbar.ToolBar();
-      importWindow.add(qxToolBar1);
+      let toolBar1 = new qx.ui.toolbar.ToolBar();
+      this.add(toolBar1);
 
       // datasource select box
       let selectBox = new qx.ui.form.VirtualSelectBox();
@@ -131,7 +128,7 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow",
       this.datasourceSelectBox = selectBox;
       selectBox.setWidth(300);
       selectBox.setMaxHeight(25);
-      qxToolBar1.add(selectBox);
+      toolBar1.add(selectBox);
 
       // bindings
       selectBox.bind("selection[0].label", selectBox, "toolTipText");
@@ -157,63 +154,65 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow",
         store.load("server-list");
       }, this);
 
-      qxToolBar1.addSpacer();
+      toolBar1.addSpacer();
 
       // searchbox
-      let qxHbox1 = new qx.ui.layout.HBox(null, null, null);
-      qxHbox1.setSpacing(5);
-      let qxComposite1 = new qx.ui.container.Composite();
-      qxComposite1.setLayout(qxHbox1)
-      qxComposite1.setPadding(4);
-      qxToolBar1.add(qxComposite1, {flex: 1});
+      let hbox1 = new qx.ui.layout.HBox(null, null, null);
+      hbox1.setSpacing(5);
+      let composite1 = new qx.ui.container.Composite();
+      composite1.setLayout(hbox1);
+      composite1.setPadding(4);
+      toolBar1.add(composite1, {flex: 1});
       let searchBox = new qx.ui.form.TextField(null);
       this.searchBox = searchBox;
       searchBox.setPadding(2);
       searchBox.setPlaceholder(this.tr('Enter search terms'));
       searchBox.setHeight(26);
-      qxComposite1.add(searchBox, {flex: 1});
+      composite1.add(searchBox, {flex: 1});
       searchBox.addListener("keypress", this._on_keypress, this);
       searchBox.addListener("dblclick", e => e.stopPropagation() );
       // search button
       this.searchButton = new qx.ui.form.Button(this.tr('Search'));
       this.searchButton.addListener("execute", e => this.startSearch() );
-      qxComposite1.add(this.searchButton);
+      composite1.add(this.searchButton);
 
       // help button
       let helpButton = new qx.ui.toolbar.Button(this.tr('Help'));
-      qxComposite1.add(helpButton);
+      composite1.add(helpButton);
       helpButton.addListener("execute", e => this.getApplication().showHelpWindow("plugin/z3950/search") );
 
-      // listview
-      let listView = new bibliograph.ui.reference.ListView();
-      this.listView = listView;
-      listView.setDecorator("main"); //??
-      listView.setModelType("record");
-      listView.setServiceName("z3950/table");
-      importWindow.add(listView, {flex: 1});
+      // table view
+      let tableview = new qcl.ui.table.TableView();
+      this.listView = tableview;
+      tableview.setDecorator("main"); //??
+      tableview.setModelType("record");
+      tableview.setServiceName("z3950/table");
+      tableview.headerBar.setVisibility("excluded");
+      tableview.menuBar.setVisibility("excluded");
+      this.add(tableview, {flex: 1});
 
       // populate the list when the data is ready
       qx.event.message.Bus.getInstance().subscribe("z3950.dataReady", e => {
-        listView.setQuery(null);
-        listView.setQuery(e.getData());
+        tableview.setQuery(null);
+        tableview.setQuery(e.getData());
       });
 
       // footer
-      let qxHbox2 = new qx.ui.layout.HBox(5, null, null);
-      let qxComposite2 = new qx.ui.container.Composite();
-      qxComposite2.setLayout(qxHbox2);
-      importWindow.add(qxComposite2);
-      qxHbox2.setSpacing(5);
+      let hbox2 = new qx.ui.layout.HBox(5, null, null);
+      let composite2 = new qx.ui.container.Composite();
+      composite2.setLayout(hbox2);
+      this.add(composite2);
+      hbox2.setSpacing(5);
 
       // status label
       this.statusTextLabel = new qx.ui.basic.Label(null);
       this.statusTextLabel.setTextColor("#808080");
-      qxComposite2.add(this.statusTextLabel);
+      composite2.add(this.statusTextLabel);
       this.listView.bind("store.model.statusText", this.statusTextLabel, "value");
 
       // spacer
-      let qxSpacer2 = new qx.ui.core.Spacer(null, null);
-      qxComposite2.add(qxSpacer2, {
+      let spacer2 = new qx.ui.core.Spacer(null, null);
+      composite2.add(spacer2, {
         flex: 10
       });
 
@@ -221,13 +220,13 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow",
       let importButton = new qx.ui.form.Button(this.tr('Import selected records'));
       this.importButton = importButton;
       importButton.setEnabled(false);
-      qxComposite2.add(importButton);
+      composite2.add(importButton);
       importButton.addListener("execute", e => this.importSelected() );
 
       // close button
-      let qxButton1 = new qx.ui.form.Button(this.tr('Close'));
-      qxComposite2.add(qxButton1);
-      qxButton1.addListener("execute", e => this.close() );
+      let button1 = new qx.ui.form.Button(this.tr('Close'));
+      composite2.add(button1);
+      button1.addListener("execute", e => this.close() );
     },
     
 
@@ -272,7 +271,7 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow",
         dialog.Dialog.alert(this.tr("Please select a folder first."));
         return false;
       }
-      let treeView = app.getWidgetById("bibliograph/mainFolderTree");
+      let treeView = app.getWidgetById(bibliograph.Application.ids.app.treeview);
       let nodeId = treeView.getController().getClientNodeId(targetFolderId);
       let node = treeView.getTree().getDataModel().getData()[nodeId];
       if (!node) {

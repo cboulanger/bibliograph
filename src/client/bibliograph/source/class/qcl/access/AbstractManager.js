@@ -94,7 +94,7 @@ qx.Class.define("qcl.access.AbstractManager",
      * @return {var} TODOC
      */
     has: function (vObject) {
-      return this._objects[vObject.toHashCode()] !== null;
+      return this._objects[vObject.toHashCode()] !== undefined;
     },
     
     /**

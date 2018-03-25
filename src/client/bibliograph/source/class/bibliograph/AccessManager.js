@@ -252,33 +252,7 @@ qx.Class.define("bibliograph.AccessManager",
     {
       return this.getUserManager().getActiveUser();
     },
-    
-   /**
-    * Shorthand method to return a permission object by name
-    * @return {qcl.access.Permission}
-    */    
-    getPermission : function( name )
-    {
-      return this.getPermissionManager().create( name );   
-    },
-    
-    /**
-     * Shorthand method to return a permission state
-     * @return {Boolean}
-     */    
-     getPermissionState : function( name )
-     {
-       return this.getPermissionManager().create( name ).getState();   
-     },    
 
-    /**
-     * Shorthand method to update a permission
-     * @return {void}
-     */        
-    updatePermission : function( name )
-    {
-      this.getPermission( name ).update();
-    },
 
     /**
      * Logs out the current user 

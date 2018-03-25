@@ -432,9 +432,13 @@ class AccessConfigController extends AppController
 
         foreach ($model->$relation as $linkedModel) {
           $labelAttribute = $modelData[$linkedType]['labelProp'];
+          $label = $linkedModel->getAttribute($labelAttribute);
+          if( !$label ){
+            $label = $linkedModel->namedId;
+          }
           $linkedNode = [
             'icon' => $modelData[$linkedType]['icon'],
-            'label' => $linkedModel->getAttribute($labelAttribute),
+            'label' => $label,
             'type' => $linkedType,
             'action' => "unlink",
             'value' => "$linkedType=" . $linkedModel->namedId,

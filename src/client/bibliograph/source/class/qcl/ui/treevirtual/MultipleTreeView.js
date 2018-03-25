@@ -598,26 +598,18 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
      * @return {void} void
      */
     _on_treeChangeSelection: function (event) {
-      // reset selected row cache
-      this.setSelectedNode(null);
-      this.setSelectedNodeType(null);
-      
-      // get new selection
       let selection = event.getData();
-      if (selection.length === 0) return;
-      
-      // get data
-      let tree = this.getTree();
-      let app = this.getApplication();
+      if (selection.length === 0) {
+        // reset selected row cache
+        this.setSelectedNode(null);
+        this.setSelectedNodeType(null);
+        return;
+      }
+
       let node = selection[0];
-      let data = node.data;
-      let datasource = data.datasource || this.getDatasource();
-      let nodeId = parseInt(data.id);
-      
-      // update properties
       this.setSelectedNode(node);
-      this.setSelectedNodeType( tree.getNodeType(node) );
-      this.setNodeId(nodeId);
+      this.setSelectedNodeType( this.getTree().getNodeType(node) );
+      this.setNodeId(parseInt(node.data.id));
     },
   
     /**

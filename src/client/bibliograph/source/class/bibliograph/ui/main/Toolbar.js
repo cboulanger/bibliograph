@@ -47,7 +47,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
     toolBarPart2.add(this.createImportMenu());
     toolBarPart2.add(this.createHelpMenu());
     // @todo toggle with server config
-    toolBarPart2.add(this.createDeveloperMenu());
+    //toolBarPart2.add(this.createDeveloperMenu());
 
     toolBar.add(new qx.ui.basic.Atom(), { flex : 10 }); // why not a spacer?
     toolBar.add(this.createTitleLabel());
@@ -190,7 +190,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       button.setMenu(menu);
 
       // menu content
-      menu.add( this.createImportTextButton() );
+      //menu.add( this.createImportTextButton() );
 
       return button;
     },

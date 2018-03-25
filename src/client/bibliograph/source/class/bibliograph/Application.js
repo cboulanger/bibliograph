@@ -18,6 +18,23 @@ qx.Class.define("bibliograph.Application",
   extend : qx.application.Standalone,
   include : [ bibliograph.MApplicationState, qcl.ui.MLoadingPopup ],
 
+
+  /*
+  *****************************************************************************
+     MEMBERS
+  *****************************************************************************
+  */
+  statics:{
+    /**
+     * Widget ids as static constants
+     */
+    ids : {
+      app : {
+        treeview : "app/treeview"
+      }
+    }
+  },
+
   /*
   *****************************************************************************
      MEMBERS
