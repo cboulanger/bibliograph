@@ -927,7 +927,14 @@ class ReferenceController extends AppController
       if (!($reference instanceof Reference)) {
         Yii::warning("Skipping invalid reference '$reference'");
       }
-      $targetFolder->link("references", $reference);
+      try{
+        $targetFolder->link("references", $reference);
+      } catch (yii\db\IntegrityException $e ){
+        throw new UserErrorException(
+          Yii::t('app', "The reference is already contained in that folder.")
+        );
+      }
+
     }
 
     // update reference count

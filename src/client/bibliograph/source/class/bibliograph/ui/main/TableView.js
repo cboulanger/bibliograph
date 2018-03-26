@@ -437,46 +437,62 @@ qx.Class.define("bibliograph.ui.main.TableView",
         dialog.Dialog.error("Funktion noch nicht implementiert...");
       }
     },
+  
+    /**
+     * Shows a window with the folder tree from which to choose a target folder
+     * @return {Promise<any>}
+     * @private
+     */
+    _showFolderDialog : function(){
+      return new Promise((resolve)=>{
+        let app = this.getApplication();
+        let win = app.getWidgetById("app/windows/folders");
+        win.addListenerOnce("nodeSelected", (e) => resolve(e.getData()) );
+        win.show();
+      });
+    },
     
     /**
      * Move selected references from one folder to the other
+     * @param node {Object|null}
+     *    Tree node model data or null to open a dialog
+     * @return {Promise}
      */
-    moveSelectedReferences: async function () {
+    moveSelectedReferences: async function (node=null) {
       let app = this.getApplication();
-      let win = app.getWidgetById("app/windows/folders");
-      win.addListenerOnce("nodeSelected", async (e) => {
-        let node = e.getData();
-        if (!node) return;
-        let message = this.tr(
-          "Do your really want to move the selected references to '%1'?",
-          [node.label]
-        );
-        await dialog.Dialog.confirm(message).promise();
-        let targetFolderId = parseInt(node.data.id);
-        app.showPopup(this.tr("Moving references..."));
-        this.rpc.move(this.getDatasource(), this.getFolderId(), targetFolderId, this.getSelectedIds().join(","));
-        app.hidePopup();
-      });
-      win.show();
+      if( ! node){
+        node = await this._showFolderDialog();
+        if( ! node ) return;
+      }
+      let message = this.tr(
+        "Do your really want to move the selected references to '%1'?",
+        [node.label]
+      );
+      await dialog.Dialog.confirm(message).promise();
+      let targetFolderId = parseInt(node.data.id);
+      app.showPopup(this.tr("Moving references..."));
+      this.rpc.move(this.getDatasource(), this.getFolderId(), targetFolderId, this.getSelectedIds().join(","));
+      app.hidePopup();
     },
     
     /**
      * Copy the selected references to a folder
+     * @param node {Object|null}
+     *    Tree node model data or null to open a dialog
+     * @return {Promise}
      */
-    copySelectedReferences: async function () {
+    copySelectedReferences: async function ( node=null ) {
       let app = this.getApplication();
-      let win = app.getWidgetById("app/windows/folders");
-      win.addListenerOnce("nodeSelected", async (e) => {
-        let node = e.getData();
-        if (!node) return;
-        let message = this.tr("Do your really want to copy the selected references to '%1'?", [node.label]);
-        await dialog.Dialog.confirm(message).promise();
-        let targetFolderId = parseInt(node.data.id);
-        app.showPopup(this.tr("Copying references..."));
-        this.rpc.copy(this.getDatasource(), targetFolderId, this.getSelectedIds().join(","));
-        app.hidePopup();
-      });
-      win.show();
+      if( ! node){
+        node = await this._showFolderDialog();
+        if( ! node ) return;
+      }
+      let message = this.tr("Do your really want to copy the selected references to '%1'?", [node.label]);
+      await dialog.Dialog.confirm(message).promise();
+      let targetFolderId = parseInt(node.data.id);
+      app.showPopup(this.tr("Copying references..."));
+      this.rpc.copy(this.getDatasource(), targetFolderId, this.getSelectedIds().join(","));
+      app.hidePopup();
     },
     
     /**

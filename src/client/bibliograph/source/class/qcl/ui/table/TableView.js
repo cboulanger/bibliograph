@@ -360,12 +360,12 @@ qx.Class.define("qcl.ui.table.TableView",
      * that corresponds to the id.
      */
     _applyModelId: function (value, old, counter) {
-      if (counter == "modelId") {
+      if (counter === "modelId") {
         counter = 0;
       }
       
       //console.log("Model id changed to " + value);
-      if (value && value == this.getModelId()) {
+      if (value && value === this.getModelId()) {
         //console.log("Trying to select id " + value + ", attempt " + counter);
         if ((!this.isTableReady() || this._selectIds([value]) === false) && counter < 10) {
           qx.lang.Function.delay(this._applyModelId, 1000, this, value, old, ++counter);
@@ -475,6 +475,8 @@ qx.Class.define("qcl.ui.table.TableView",
       // create table
       table = this._createTable(data.columnLayout);
       table.getSelectionModel().addListener("changeSelection", this._on_table_changeSelection, this);
+      
+      // drag & drop
       
       // save columns
       let columnIds = [];
