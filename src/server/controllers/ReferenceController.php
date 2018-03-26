@@ -696,14 +696,18 @@ class ReferenceController extends AppController
    * Removes references from a folder. If the reference is not contained in any other folder,
    * move it to the trash
    * @param string $datasource The name of the datasource
-   * @param int $folderId The numeric id of the folder
-   * @param string $ids A string of the numeric ids of the references, joined by a comma
+   * @param int $folderId The numeric id of the folder. If zero, remove from all folders
+   * @param $ids A string of the numeric ids of the references, joined by a comma
    * @return string Diagnostic message
    * @throws \JsonRpc2\Exception
    */
   public function actionRemove(string $datasource, int $folderId, string $ids )
   {
     $this->requirePermission("reference.remove");
+
+    if( $folderId === 0){
+      throw new UserErrorException("Removing from all folder not impemeneted yet.");
+    }
 
     /** @var \app\models\Reference $referenceClass */
     $referenceClass = $this->getControlledModel($datasource);
@@ -733,14 +737,20 @@ class ReferenceController extends AppController
     if ($folderCount < 2) {
       // link with trash folder
       $trashFolder = TrashController::getTrashFolder($datasource);
-      if ($trashFolder) $trashFolder->link("references", $reference);
-      $foldersToUpdate[] = $trashFolder->id;
+      if ($trashFolder) {
+        try{
+          $trashFolder->link("references", $reference);
+        } catch (Exception $e) {
+          Yii::error($e);
+        }
+        $foldersToUpdate[] = $trashFolder->id;
+      }
       // mark as deleted
       $reference->markedDeleted = 1;
       try {
         $reference->save();
       } catch (Exception $e) {
-        throw new UserErrorException($e->getMessage());
+        Yii::error($e->getMessage());
       }
     }
 

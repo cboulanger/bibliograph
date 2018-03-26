@@ -251,7 +251,8 @@ class Reference extends BaseModel
     $lastNames = array();
     foreach ($creators as $name) {
       $parts = explode(",", $name);
-      $lastNames[] = str_replace(" ", "-", trim($parts[0]));
+      $lastName= substr( trim($parts[0]),0, 20);
+      $lastNames[] = str_replace(" ", "-", $lastName);
     }
     $citekey = implode("+", $lastNames);
 
@@ -264,6 +265,8 @@ class Reference extends BaseModel
     if (count($titlewords)) {
       $citekey .= "-" . $titlewords[0];
     }
+    $citekey= preg_replace("/[^[:alnum:][:space:]\-\+]/u", '', $citekey);
+    $citekey= str_replace(" ","_",$citekey);
     return $citekey;
   }
 

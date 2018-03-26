@@ -177,7 +177,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
         enabled : false,
         icon : "bibliograph/icon/button-minus.png"
       });
-      removeButton.addListener("click", this._removeReference, this);
+      removeButton.addListener("click", this.removeSelectedReferences, this);
       this.bindVisibility(this.permissions.remove_reference, removeButton);
       this.bindEnabled(this.permissions.remove_selected_references, removeButton);
       this.addMenuBarButton(removeButton);
@@ -202,14 +202,14 @@ qx.Class.define("bibliograph.ui.main.TableView",
       // Move references
       let moveButton = new qx.ui.menu.Button(this.tr('Move reference(s)...'));
       optionsMenu.add(moveButton);
-      moveButton.addListener("execute", ()=>this._moveReference());
+      moveButton.addListener("execute", ()=>this.moveSelectedReferences());
       this.bindEnabled(this.permissions.move_selected_references, moveButton);
       this.bindVisibility(this.permissions.move_reference, moveButton);
 
       // Copy references
       let copyButton = new qx.ui.menu.Button(this.tr('Copy reference(s)...'));
       optionsMenu.add(copyButton);
-      copyButton.addListener("execute", ()=>this._copyReference());
+      copyButton.addListener("execute", ()=>this.copySelectedReferences());
       this.bindEnabled(this.permissions.move_selected_references, copyButton);
       this.bindVisibility(this.permissions.move_reference, copyButton);
 
@@ -398,42 +398,51 @@ qx.Class.define("bibliograph.ui.main.TableView",
       tableModel.rebuildIndex();
       
     },
+  
+    /*
+    ---------------------------------------------------------------------------
+       API
+    ---------------------------------------------------------------------------
+    */
 
     /**
-     * Create a new reference
+     * Creates a new reference
      * @param reftype
      */
-    createReference: function (reftype) {
+    createReference: async function (reftype) {
+      let app = this.getApplication();
       let folderId = this.getFolderId();
       if (!folderId) {
-        dialog.Dialog.alert(this.tr("You cannot create an item outside a folder"));
+        dialog.Dialog.error(this.tr("You cannot create an item outside a folder"));
         return;
       }
-      let store = this.getStore();
-      store.execute("create", [this.getDatasource(), this.getFolderId(), reftype], function () {
-        //this.loadFolder( datasource, folderId );
-      }, this);
+      app.showPopup(this.tr("Creating reference..."));
+      await this.rpc.create( this.getDatasource(), this.getFolderId(), reftype );
+      app.hidePopup();
     },
     
     /**
-     * handler for  a reference from a folder
+     * Removes the currently selected references from a folder
+     * or moves it to trash if not in a folder
      */
-    _removeReference: function () {
-      let message = this.getFolderId() ?
-      this.tr("Do your really want to remove the selected references from this folder?") :
-      this.tr("Do your really want to remove the selected references?");
-      let handler = qx.lang.Function.bind(function (result) {
-        if (result === true) {
-          this.modifyReferences("remove", null);
-        }
-      }, this);
-      dialog.Dialog.confirm(message, handler);
+    removeSelectedReferences: async function () {
+      let app = this.getApplication();
+      if( this.getFolderId()){
+        let msg = this.tr("Do your really want to remove the selected references?");
+        if( ! await dialog.Dialog.confirm(msg).promise() ) return;
+        app.showPopup(this.tr("Removing references..."));
+        await this.rpc.remove( this.getDatasource(), this.getFolderId(), this.getSelectedIds().join(",") );
+        app.hidePopup();
+      } else {
+        dialog.Dialog.error("Funktion noch nicht implementiert...");
+      }
     },
     
     /**
-     * Move reference from one folder to the other
+     * Move selected references from one folder to the other
      */
-    _moveReference: function () {
+    moveSelectedReferences: function () {
+      return dialog.Dialog.error("Funktion noch nicht implementiert...");
       let app = this.getApplication();
       let win = app.getWidgetById("app/windows/folders");
       win.addListenerOnce("nodeSelected", function (e) {
@@ -456,7 +465,8 @@ qx.Class.define("bibliograph.ui.main.TableView",
     /**
      * Copy a reference to a folder
      */
-    _copyReference: function () {
+    copySelectedReferences: function () {
+      return dialog.Dialog.error("Funktion noch nicht implementiert...");
       let app = this.getApplication();
       let win = app.getWidgetById("app/windows/folders");
       win.addListenerOnce("nodeSelected", function (e) {
@@ -482,6 +492,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
      * Exports the selected references via jsonrpc service
      */
     exportSelected: function () {
+      return dialog.Dialog.error("Funktion noch nicht implementiert...");
       let datasource = this.getDatasource();
       let selectedIds = this.getSelectedIds();
       let app = this.getApplication();
@@ -499,6 +510,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
      * Exports the whole folder or query
      */
     exportFolder: function () {
+      return dialog.Dialog.error("Funktion noch nicht implementiert...");
       let app = this.getApplication();
       app.showPopup(this.tr("Processing request..."));
       app.getRpcClient("export").send(
@@ -514,6 +526,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
      * Finds and replaces text in the database using a service
      */
     findReplace: function () {
+      return dialog.Dialog.error("Funktion noch nicht implementiert...");
       let datasource = this.getDatasource();
       let folderId = this.getFolderId();
       let selectedIds = this.getSelectedIds();
@@ -528,6 +541,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
      * Empties the current folder
      */
     emptyFolder: function () {
+      return dialog.Dialog.error("Funktion noch nicht implementiert...");
       let datasource = this.getDatasource();
       let folderId = this.getFolderId();
       let app = this.getApplication();

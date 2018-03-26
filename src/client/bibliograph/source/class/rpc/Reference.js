@@ -180,21 +180,20 @@ qx.Class.define("rpc.Reference",
     },
 
     /**
-     * Remove references from a folder
+     * Removes references from a folder. If the reference is not contained in any other folder,
+     * move it to the trash
      * 
-     * @param datasource {String} 
-     * @param folderId {Number} 
-     * @param dummy 
-     * @param ids {String} 
+     * @param datasource {String} The name of the datasource
+     * @param folderId {Number} The numeric id of the folder
+     * @param ids {String} A string of the numeric ids of the references, joined by a comma
      * @return {Promise}
      * @see ReferenceController::actionRemove
      */
-    remove : function(datasource, folderId, dummy, ids){
+    remove : function(datasource, folderId, ids){
       qx.core.Assert.assertString(datasource);
       qx.core.Assert.assertNumber(folderId);
-      // @todo Document type for 'dummy' in app\controllers\ReferenceController::actionRemove
       qx.core.Assert.assertString(ids);
-      return qx.core.Init.getApplication().getRpcClient("reference").send("remove", [datasource, folderId, dummy, ids]);
+      return qx.core.Init.getApplication().getRpcClient("reference").send("remove", [datasource, folderId, ids]);
     },
 
     /**
