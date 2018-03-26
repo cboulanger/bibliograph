@@ -266,7 +266,7 @@ class TableController extends AppController
 
       /** @var Reference $targetModel */
       $targetModel = new $targetModelClass($copiedAttributes);
-      $targetModel->citekey = $targetModel->computeCiteKey();
+      $targetModel->citekey = substr( $targetModel->computeCiteKey(), 0, 50);
       // remove leading "c" and other characters in year data
       $year = $targetModel->year;
       if ($year[0] == "c") {
