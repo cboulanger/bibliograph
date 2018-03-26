@@ -29,6 +29,7 @@ fi
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
   # assume we have mysql from homebrew
+  mysql.server stop &> /dev/null
   killall mysqld
   killall mysqld_safe
   mysql.server start

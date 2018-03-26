@@ -686,7 +686,8 @@ msgstr ""
 #: bibliograph/ui/reference/ListView.js:896
 #: bibliograph/ui/reference/ListView.js:891
 #: bibliograph/ui/reference/ListView.js:885
-#: bibliograph/ui/main/TableView.js:409
+#: bibliograph/ui/main/TableView.js:409 bibliograph/ui/main/TableView.js:410
+#: bibliograph/ui/main/TableView.js:416
 msgid "You cannot create an item outside a folder"
 msgstr ""
 
@@ -704,7 +705,8 @@ msgstr ""
 #: bibliograph/ui/reference/ListView.js:911
 #: bibliograph/ui/reference/ListView.js:906
 #: bibliograph/ui/reference/ListView.js:900
-#: bibliograph/ui/main/TableView.js:424
+#: bibliograph/ui/main/TableView.js:424 bibliograph/ui/main/TableView.js:425
+#: bibliograph/ui/main/TableView.js:431
 msgid "Do your really want to remove the selected references?"
 msgstr ""
 
@@ -713,7 +715,9 @@ msgstr ""
 #: bibliograph/ui/reference/ListView.js:932
 #: bibliograph/ui/reference/ListView.js:927
 #: bibliograph/ui/reference/ListView.js:921
-#: bibliograph/ui/main/TableView.js:445
+#: bibliograph/ui/main/TableView.js:445 bibliograph/ui/main/TableView.js:442
+#: bibliograph/ui/main/TableView.js:447 bibliograph/ui/main/TableView.js:446
+#: bibliograph/ui/main/TableView.js:448 bibliograph/ui/main/TableView.js:454
 msgid "Do your really want to move the selected references to '%1'?"
 msgstr ""
 
@@ -722,7 +726,9 @@ msgstr ""
 #: bibliograph/ui/reference/ListView.js:955
 #: bibliograph/ui/reference/ListView.js:950
 #: bibliograph/ui/reference/ListView.js:944
-#: bibliograph/ui/main/TableView.js:468
+#: bibliograph/ui/main/TableView.js:468 bibliograph/ui/main/TableView.js:465
+#: bibliograph/ui/main/TableView.js:470 bibliograph/ui/main/TableView.js:469
+#: bibliograph/ui/main/TableView.js:472 bibliograph/ui/main/TableView.js:478
 msgid "Do your really want to copy the selected referencesto '%1'?"
 msgstr ""
 
@@ -750,7 +756,13 @@ msgstr ""
 #: bibliograph/ui/main/TableView.js:499 bibliograph/ui/main/TableView.js:517
 #: bibliograph/ui/main/TableView.js:532 bibliograph/ui/main/TableView.js:550
 #: bibliograph/ui/main/TableView.js:488 bibliograph/ui/main/TableView.js:503
-#: bibliograph/ui/main/TableView.js:521
+#: bibliograph/ui/main/TableView.js:521 bibliograph/ui/main/TableView.js:485
+#: bibliograph/ui/main/TableView.js:500 bibliograph/ui/main/TableView.js:518
+#: bibliograph/ui/main/TableView.js:490 bibliograph/ui/main/TableView.js:505
+#: bibliograph/ui/main/TableView.js:523 bibliograph/ui/main/TableView.js:489
+#: bibliograph/ui/main/TableView.js:504 bibliograph/ui/main/TableView.js:522
+#: bibliograph/ui/main/TableView.js:493 bibliograph/ui/main/TableView.js:509
+#: bibliograph/ui/main/TableView.js:515 bibliograph/ui/main/TableView.js:534
 msgid "Processing request..."
 msgstr ""
 
@@ -760,7 +772,9 @@ msgstr ""
 #: bibliograph/ui/reference/ListView.js:1034
 #: bibliograph/ui/reference/ListView.js:1028
 #: bibliograph/ui/main/TableView.js:559 bibliograph/ui/main/TableView.js:563
-#: bibliograph/ui/main/TableView.js:534
+#: bibliograph/ui/main/TableView.js:534 bibliograph/ui/main/TableView.js:531
+#: bibliograph/ui/main/TableView.js:536 bibliograph/ui/main/TableView.js:535
+#: bibliograph/ui/main/TableView.js:542 bibliograph/ui/main/TableView.js:548
 msgid "Do you really want to make the folder empty, moving all references to the trash that are not in other folders?"
 msgstr ""
 
@@ -770,7 +784,9 @@ msgstr ""
 #: bibliograph/ui/reference/ListView.js:1037
 #: bibliograph/ui/reference/ListView.js:1031
 #: bibliograph/ui/main/TableView.js:562 bibliograph/ui/main/TableView.js:566
-#: bibliograph/ui/main/TableView.js:537
+#: bibliograph/ui/main/TableView.js:537 bibliograph/ui/main/TableView.js:534
+#: bibliograph/ui/main/TableView.js:539 bibliograph/ui/main/TableView.js:538
+#: bibliograph/ui/main/TableView.js:545 bibliograph/ui/main/TableView.js:551
 msgid "Emptying the folder ..."
 msgstr ""
 
@@ -1355,4 +1371,14 @@ msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:317
 msgid "No folder selected."
+msgstr ""
+
+#: bibliograph/ui/main/TableView.js:412 bibliograph/ui/main/TableView.js:413
+#: bibliograph/ui/main/TableView.js:419
+msgid "Creating reference..."
+msgstr ""
+
+#: bibliograph/ui/main/TableView.js:426 bibliograph/ui/main/TableView.js:427
+#: bibliograph/ui/main/TableView.js:433
+msgid "Removing references..."
 msgstr ""
