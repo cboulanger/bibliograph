@@ -416,7 +416,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
     },
     
     /**
-     * Remove a reference from a folder
+     * handler for  a reference from a folder
      */
     _removeReference: function () {
       let message = this.getFolderId() ?

@@ -30,6 +30,7 @@ fi
 if [[ "$OSTYPE" == "darwin"* ]]; then
   # assume we have mysql from homebrew
   killall mysqld
+  killall mysqld_safe
   mysql.server start
   echo "Opening Safari browser"
   # Open Safari, better: https://www.npmjs.com/package/webpack-browser-plugin

@@ -693,14 +693,15 @@ class ReferenceController extends AppController
   }
 
   /**
-   * Remove references from a folder
-   * @param string $datasource
-   * @param int $folderId
-   * @param string $ids
+   * Removes references from a folder. If the reference is not contained in any other folder,
+   * move it to the trash
+   * @param string $datasource The name of the datasource
+   * @param int $folderId The numeric id of the folder
+   * @param string $ids A string of the numeric ids of the references, joined by a comma
    * @return string Diagnostic message
    * @throws \JsonRpc2\Exception
    */
-  public function actionRemove(string $datasource, int $folderId, $dummy, string $ids )
+  public function actionRemove(string $datasource, int $folderId, string $ids )
   {
     $this->requirePermission("reference.remove");
 

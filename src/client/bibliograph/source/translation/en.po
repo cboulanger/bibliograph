@@ -749,6 +749,8 @@ msgstr ""
 #: bibliograph/ui/main/TableView.js:528 bibliograph/ui/main/TableView.js:546
 #: bibliograph/ui/main/TableView.js:499 bibliograph/ui/main/TableView.js:517
 #: bibliograph/ui/main/TableView.js:532 bibliograph/ui/main/TableView.js:550
+#: bibliograph/ui/main/TableView.js:488 bibliograph/ui/main/TableView.js:503
+#: bibliograph/ui/main/TableView.js:521
 msgid "Processing request..."
 msgstr ""
 
@@ -758,6 +760,7 @@ msgstr ""
 #: bibliograph/ui/reference/ListView.js:1034
 #: bibliograph/ui/reference/ListView.js:1028
 #: bibliograph/ui/main/TableView.js:559 bibliograph/ui/main/TableView.js:563
+#: bibliograph/ui/main/TableView.js:534
 msgid "Do you really want to make the folder empty, moving all references to the trash that are not in other folders?"
 msgstr ""
 
@@ -767,6 +770,7 @@ msgstr ""
 #: bibliograph/ui/reference/ListView.js:1037
 #: bibliograph/ui/reference/ListView.js:1031
 #: bibliograph/ui/main/TableView.js:562 bibliograph/ui/main/TableView.js:566
+#: bibliograph/ui/main/TableView.js:537
 msgid "Emptying the folder ..."
 msgstr ""
 

@@ -77,15 +77,15 @@ qx.Class.define("rpc.Folder",
      * Saves the result of the edit() method
      * 
      * @param data 
-     * @param datasource 
-     * @param folderId 
+     * @param datasource {String} 
+     * @param folderId {Number} 
      * @return {Promise}
      * @see FolderController::actionSave
      */
     save : function(data, datasource, folderId){
       // @todo Document type for 'data' in app\controllers\FolderController::actionSave
-      // @todo Document type for 'datasource' in app\controllers\FolderController::actionSave
-      // @todo Document type for 'folderId' in app\controllers\FolderController::actionSave
+      qx.core.Assert.assertString(datasource);
+      qx.core.Assert.assertNumber(folderId);
       return qx.core.Init.getApplication().getRpcClient("folder").send("save", [data, datasource, folderId]);
     },
 
@@ -182,16 +182,16 @@ qx.Class.define("rpc.Folder",
     /**
      * Move a folder to a different parent
      * 
-     * @param datasource 
-     * @param folderId 
-     * @param parentId 
+     * @param datasource {String} 
+     * @param folderId {Number} 
+     * @param parentId {Number} 
      * @return {Promise}
      * @see FolderController::actionMove
      */
     move : function(datasource, folderId, parentId){
-      // @todo Document type for 'datasource' in app\controllers\FolderController::actionMove
-      // @todo Document type for 'folderId' in app\controllers\FolderController::actionMove
-      // @todo Document type for 'parentId' in app\controllers\FolderController::actionMove
+      qx.core.Assert.assertString(datasource);
+      qx.core.Assert.assertNumber(folderId);
+      qx.core.Assert.assertNumber(parentId);
       return qx.core.Init.getApplication().getRpcClient("folder").send("move", [datasource, folderId, parentId]);
     },
 

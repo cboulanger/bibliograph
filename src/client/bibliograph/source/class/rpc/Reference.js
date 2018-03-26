@@ -180,48 +180,55 @@ qx.Class.define("rpc.Reference",
     },
 
     /**
-     * Remove references. If a folder id is given, remove from that folder
+     * Remove references from a folder
      * 
-     * @param first If boolean, the response to the confirmation dialog. Otherwise, the datasource name
-     * @param second If string, the shelve id. If array, an array of parameters for the action:
-     * datasource; folder id; target folder id (not used); ids as a string separated by commas
+     * @param datasource {String} 
+     * @param folderId {Number} 
+     * @param dummy 
+     * @param ids {String} 
      * @return {Promise}
      * @see ReferenceController::actionRemove
      */
-    remove : function(first, second){
-      // @todo Document type for 'first' in app\controllers\ReferenceController::actionRemove
-      // @todo Document type for 'second' in app\controllers\ReferenceController::actionRemove
-      return qx.core.Init.getApplication().getRpcClient("reference").send("remove", [first, second]);
+    remove : function(datasource, folderId, dummy, ids){
+      qx.core.Assert.assertString(datasource);
+      qx.core.Assert.assertNumber(folderId);
+      // @todo Document type for 'dummy' in app\controllers\ReferenceController::actionRemove
+      qx.core.Assert.assertString(ids);
+      return qx.core.Init.getApplication().getRpcClient("reference").send("remove", [datasource, folderId, dummy, ids]);
     },
 
     /**
-     * Removes all references from a folder
+     * Confirm that a reference should be moved to the trash folder
      * 
-     * @param datasource 
+     * @param confirmed 
+     * @param datasource {String} 
      * @param folderId {Number} 
+     * @param ids {String} 
      * @return {Promise}
-     * @see ReferenceController::actionFolderRemove
+     * @see ReferenceController::actionConfirmMoveToTrash
      */
-    folderRemove : function(datasource, folderId){
-      // @todo Document type for 'datasource' in app\controllers\ReferenceController::actionFolderRemove
+    confirmMoveToTrash : function(confirmed, datasource, folderId, ids){
+      // @todo Document type for 'confirmed' in app\controllers\ReferenceController::actionConfirmMoveToTrash
+      qx.core.Assert.assertString(datasource);
       qx.core.Assert.assertNumber(folderId);
-      return qx.core.Init.getApplication().getRpcClient("reference").send("folder-remove", [datasource, folderId]);
+      qx.core.Assert.assertString(ids);
+      return qx.core.Init.getApplication().getRpcClient("reference").send("confirm-move-to-trash", [confirmed, datasource, folderId, ids]);
     },
 
     /**
      * Move references from one folder to another folder
      * 
      * @param datasource If true, it is the result of the confirmation
-     * @param folderId {Number} The folder to move from
-     * @param targetFolderId {Number} The folder to move to
+     * @param folderId The folder to move from
+     * @param targetFolderId The folder to move to
      * @param ids The ids of the references to move
      * @return {Promise}
      * @see ReferenceController::actionMove
      */
     move : function(datasource, folderId, targetFolderId, ids){
       // @todo Document type for 'datasource' in app\controllers\ReferenceController::actionMove
-      qx.core.Assert.assertNumber(folderId);
-      qx.core.Assert.assertNumber(targetFolderId);
+      // @todo Document type for 'folderId' in app\controllers\ReferenceController::actionMove
+      // @todo Document type for 'targetFolderId' in app\controllers\ReferenceController::actionMove
       // @todo Document type for 'ids' in app\controllers\ReferenceController::actionMove
       return qx.core.Init.getApplication().getRpcClient("reference").send("move", [datasource, folderId, targetFolderId, ids]);
     },
@@ -229,19 +236,33 @@ qx.Class.define("rpc.Reference",
     /**
      * Copies a reference to a folder
      * 
-     * @param datasource 
-     * @param folderId 
-     * @param targetFolderId 
-     * @param ids 
+     * @param datasource {String} 
+     * @param dummy 
+     * @param targetFolderId {Number} 
+     * @param ids {String} 
      * @return {Promise}
      * @see ReferenceController::actionCopy
      */
-    copy : function(datasource, folderId, targetFolderId, ids){
-      // @todo Document type for 'datasource' in app\controllers\ReferenceController::actionCopy
-      // @todo Document type for 'folderId' in app\controllers\ReferenceController::actionCopy
-      // @todo Document type for 'targetFolderId' in app\controllers\ReferenceController::actionCopy
-      // @todo Document type for 'ids' in app\controllers\ReferenceController::actionCopy
-      return qx.core.Init.getApplication().getRpcClient("reference").send("copy", [datasource, folderId, targetFolderId, ids]);
+    copy : function(datasource, dummy, targetFolderId, ids){
+      qx.core.Assert.assertString(datasource);
+      // @todo Document type for 'dummy' in app\controllers\ReferenceController::actionCopy
+      qx.core.Assert.assertNumber(targetFolderId);
+      qx.core.Assert.assertString(ids);
+      return qx.core.Init.getApplication().getRpcClient("reference").send("copy", [datasource, dummy, targetFolderId, ids]);
+    },
+
+    /**
+     * Removes all references from a folder
+     * 
+     * @param datasource {String} 
+     * @param folderId {Number} 
+     * @return {Promise}
+     * @see ReferenceController::actionEmptyFolder
+     */
+    emptyFolder : function(datasource, folderId){
+      qx.core.Assert.assertString(datasource);
+      qx.core.Assert.assertNumber(folderId);
+      return qx.core.Init.getApplication().getRpcClient("reference").send("empty-folder", [datasource, folderId]);
     },
 
     /**

@@ -18,6 +18,7 @@
     "url": "git+ssh://git@github.com/cboulanger/bibliograph.git"
   },
   "scripts": {
+    "start" : "bash bin/start-server.sh",
     "list": "node_modules/.bin/ls-scripts",
     "postinstall": "bash bin/update-dependencies.sh",
     "server": "bash bin/start-server.sh",
