@@ -6,15 +6,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1d7efdcc-ab7b-4e93-b274-cf7be3d39986" name="Default" comment="ACTool: Add tests for creating users and datasources">
+      <change beforePath="$PROJECT_DIR$/.idea/bibliograph.iml" afterPath="$PROJECT_DIR$/.idea/bibliograph.iml" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" afterPath="$PROJECT_DIR$/.idea/php.xml" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/bin/start-server.sh" afterPath="$PROJECT_DIR$/bin/start-server.sh" />
       <change beforePath="$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/ui/main/TableView.js" afterPath="$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/ui/main/TableView.js" />
-      <change beforePath="$PROJECT_DIR$/src/client/bibliograph/source/class/rpc/Reference.js" afterPath="$PROJECT_DIR$/src/client/bibliograph/source/class/rpc/Reference.js" />
+      <change beforePath="$PROJECT_DIR$/src/client/bibliograph/source/class/qcl/ui/table/TableView.js" afterPath="$PROJECT_DIR$/src/client/bibliograph/source/class/qcl/ui/table/TableView.js" />
       <change beforePath="$PROJECT_DIR$/src/client/bibliograph/source/translation/de.po" afterPath="$PROJECT_DIR$/src/client/bibliograph/source/translation/de.po" />
       <change beforePath="$PROJECT_DIR$/src/client/bibliograph/source/translation/en.po" afterPath="$PROJECT_DIR$/src/client/bibliograph/source/translation/en.po" />
+      <change beforePath="$PROJECT_DIR$/src/server/composer.json" afterPath="$PROJECT_DIR$/src/server/composer.json" />
+      <change beforePath="$PROJECT_DIR$/src/server/composer.lock" afterPath="$PROJECT_DIR$/src/server/composer.lock" />
       <change beforePath="$PROJECT_DIR$/src/server/controllers/ReferenceController.php" afterPath="$PROJECT_DIR$/src/server/controllers/ReferenceController.php" />
-      <change beforePath="$PROJECT_DIR$/src/server/models/Reference.php" afterPath="$PROJECT_DIR$/src/server/models/Reference.php" />
-      <change beforePath="$PROJECT_DIR$/src/server/modules/z3950/controllers/TableController.php" afterPath="$PROJECT_DIR$/src/server/modules/z3950/controllers/TableController.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -42,14 +43,14 @@
     <select />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.4483533">
+    <splitter split-orientation="horizontal" split-proportion="0.48869145">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="TableView.js" pinned="false" current-in-tab="true">
+          <file leaf-file-name="TableView.js" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/ui/main/TableView.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-100">
-                  <caret line="403" column="10" lean-forward="false" selection-start-line="403" selection-start-column="10" selection-end-line="403" selection-end-column="10" />
+                <state relative-caret-position="992">
+                  <caret line="453" column="4" lean-forward="false" selection-start-line="453" selection-start-column="4" selection-end-line="453" selection-end-column="4" />
                   <folding>
                     <element signature="n#!!doc" expanded="true" />
                   </folding>
@@ -57,11 +58,21 @@
               </provider>
             </entry>
           </file>
+          <file leaf-file-name="TableView.js" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/src/client/bibliograph/source/class/qcl/ui/table/TableView.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="170">
+                  <caret line="478" column="20" lean-forward="false" selection-start-line="478" selection-start-column="20" selection-end-line="478" selection-end-column="20" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
           <file leaf-file-name="Reference.js" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/client/bibliograph/source/class/rpc/Reference.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="142">
-                  <caret line="174" column="4" lean-forward="false" selection-start-line="174" selection-start-column="4" selection-end-line="174" selection-end-column="4" />
+                <state relative-caret-position="133">
+                  <caret line="247" column="93" lean-forward="false" selection-start-line="247" selection-start-column="93" selection-end-line="247" selection-end-column="93" />
                   <folding />
                 </state>
               </provider>
@@ -84,9 +95,21 @@
           <file leaf-file-name="ReferenceController.php" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/server/controllers/ReferenceController.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-51">
-                  <caret line="714" column="0" lean-forward="true" selection-start-line="714" selection-start-column="0" selection-end-line="714" selection-end-column="0" />
+                <state relative-caret-position="423">
+                  <caret line="937" column="5" lean-forward="false" selection-start-line="937" selection-start-column="5" selection-end-line="937" selection-end-column="5" />
                   <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="FolderTreeWindow.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/ui/window/FolderTreeWindow.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="1029">
+                  <caret line="109" column="4" lean-forward="false" selection-start-line="109" selection-start-column="4" selection-end-line="109" selection-end-column="4" />
+                  <folding>
+                    <element signature="n#!!doc" expanded="true" />
+                  </folding>
                 </state>
               </provider>
             </entry>
@@ -94,7 +117,7 @@
           <file leaf-file-name="Reference.php" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/server/models/Reference.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="313">
+                <state relative-caret-position="3990">
                   <caret line="267" column="53" lean-forward="false" selection-start-line="267" selection-start-column="53" selection-end-line="267" selection-end-column="53" />
                   <folding>
                     <marker date="1522049694512" expanded="true" signature="8954:9238" ph="SELECT id, $... ${$table}" />
@@ -211,8 +234,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/client/bibliograph/source/class/qcl/data/controller/TreeVirtual.js" />
-        <option value="$PROJECT_DIR$/src/server/models/Folder.php" />
         <option value="$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/ui/folder/TreeViewUi.js" />
         <option value="$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/ui/folder/TreeView.js" />
         <option value="$PROJECT_DIR$/src/client/bibliograph/source/class/qcl/ui/MChildWidget.js" />
@@ -237,7 +258,6 @@
         <option value="$PROJECT_DIR$/src/server/controllers/traits/FolderDataTrait.php" />
         <option value="$PROJECT_DIR$/todo.md" />
         <option value="$PROJECT_DIR$/src/server/controllers/FolderController.php" />
-        <option value="$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/ui/window/FolderTreeWindow.js" />
         <option value="$PROJECT_DIR$/src/client/bibliograph/source/class/qcl/ui/treevirtual/DragDropTree.js" />
         <option value="$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/ui/main/MultipleTreeView.js" />
         <option value="$PROJECT_DIR$/src/client/bibliograph/source/class/qcl/access/AbstractManager.js" />
@@ -251,7 +271,6 @@
         <option value="$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/ui/main/ReferenceTableView.js" />
         <option value="$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/ui/window/ImportWindowUi.js" />
         <option value="$PROJECT_DIR$/src/client/bibliograph/source/class/qcl/ui/treevirtual/MultipleTreeView.js" />
-        <option value="$PROJECT_DIR$/src/client/bibliograph/source/class/qcl/ui/table/TableView.js" />
         <option value="$PROJECT_DIR$/src/server/modules/z3950/client/source/class/bibliograph/plugins/z3950/ImportWindow.js" />
         <option value="$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/Application.js" />
         <option value="$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/ui/main/Toolbar.js" />
@@ -260,8 +279,12 @@
         <option value="$PROJECT_DIR$/bin/start-server.sh" />
         <option value="$PROJECT_DIR$/src/server/modules/z3950/controllers/TableController.php" />
         <option value="$PROJECT_DIR$/src/server/models/Reference.php" />
+        <option value="$PROJECT_DIR$/src/server/deploy.php" />
+        <option value="$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/ui/window/FolderTreeWindow.js" />
+        <option value="$PROJECT_DIR$/src/client/bibliograph/source/class/rpc/Reference.js" />
         <option value="$PROJECT_DIR$/src/server/controllers/ReferenceController.php" />
         <option value="$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/ui/main/TableView.js" />
+        <option value="$PROJECT_DIR$/src/client/bibliograph/source/class/qcl/ui/table/TableView.js" />
       </list>
     </option>
   </component>
@@ -397,10 +420,13 @@
       <path value="$PROJECT_DIR$/src/server/vendor/react/stream" />
       <path value="$PROJECT_DIR$/src/server/vendor/nikic/php-parser" />
       <path value="$PROJECT_DIR$/src/server/vendor/goaop/parser-reflection" />
+      <path value="$PROJECT_DIR$/src/server/vendor/deployer/phar-update" />
+      <path value="$PROJECT_DIR$/src/server/vendor/deployer/deployer" />
+      <path value="$PROJECT_DIR$/src/server/vendor/pimple/pimple" />
     </include_path>
   </component>
-  <component name="ProjectFrameBounds" fullScreen="true">
-    <option name="width" value="1280" />
+  <component name="ProjectFrameBounds" extendedState="6" fullScreen="true">
+    <option name="width" value="638" />
     <option name="height" value="800" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
@@ -455,8 +481,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -467,11 +493,6 @@
             <path>
               <item name="bibliograph" type="b2602c69:ProjectViewProjectNode" />
               <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="bin" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="bibliograph" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
@@ -512,46 +533,30 @@
               <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="source" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="class" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="rpc" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="qcl" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
               <item name="bibliograph" type="b2602c69:ProjectViewProjectNode" />
               <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="server" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="bibliograph" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="server" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="modules" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="bibliograph" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="server" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="modules" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="z3950" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="bibliograph" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="server" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="modules" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="z3950" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="client" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="source" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="class" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="qcl" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="ui" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
               <item name="bibliograph" type="b2602c69:ProjectViewProjectNode" />
               <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="server" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="modules" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="z3950" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="controllers" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="client" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="bibliograph" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="source" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="class" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="qcl" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="ui" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="table" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
           </expand>
           <select />
@@ -668,6 +673,7 @@
       <workItem from="1521899976733" duration="30467000" />
       <workItem from="1522041635701" duration="1462000" />
       <workItem from="1522047092088" duration="3021000" />
+      <workItem from="1522093051511" duration="4280000" />
     </task>
     <servers />
   </component>
@@ -680,7 +686,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="565386000" />
+    <option name="totallyTimeSpent" value="569666000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -692,7 +698,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1280" height="800" extended-state="0" />
+    <frame x="0" y="0" width="1280" height="800" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18739903" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -793,86 +799,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/vcslib/qooxdoo/framework/source/class/qx/ui/treevirtual/MNode.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1290">
-          <caret line="104" column="4" lean-forward="false" selection-start-line="104" selection-start-column="4" selection-end-line="104" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/todo.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="FIRST">
-          <first_editor relative-caret-position="294">
-            <caret line="39" column="104" lean-forward="false" selection-start-line="39" selection-start-column="104" selection-end-line="39" selection-end-column="104" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/client/bibliograph/source/class/qcl/data/controller/TreeVirtual.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3990">
-          <caret line="284" column="4" lean-forward="false" selection-start-line="284" selection-start-column="4" selection-end-line="284" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/stubs/standard/standard_8.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="146">
-          <caret line="1029" column="9" lean-forward="false" selection-start-line="1029" selection-start-column="9" selection-end-line="1029" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/vcslib/qooxdoo/framework/source/class/qx/ui/tree/core/AbstractTreeItem.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="149">
-          <caret line="68" column="4" lean-forward="false" selection-start-line="68" selection-start-column="4" selection-end-line="68" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/vcslib/qooxdoo/component/apiviewer/source/class/apiviewer/dao/Node.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="149">
-          <caret line="66" column="4" lean-forward="false" selection-start-line="66" selection-start-column="4" selection-end-line="66" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/vcslib/qooxdoo/framework/source/class/qx/ui/treevirtual/TreeVirtual.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="854" column="18" lean-forward="false" selection-start-line="854" selection-start-column="17" selection-end-line="854" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/ui/window/FolderTreeWindow.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="40">
-          <caret line="68" column="42" lean-forward="false" selection-start-line="68" selection-start-column="42" selection-end-line="68" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/Utils.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="149">
-          <caret line="76" column="4" lean-forward="false" selection-start-line="76" selection-start-column="4" selection-end-line="76" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/vcslib/qooxdoo/framework/source/class/qx/Bootstrap.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="149">
-          <caret line="762" column="4" lean-forward="false" selection-start-line="762" selection-start-column="4" selection-end-line="762" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/vcslib/qooxdoo/framework/source/class/qx/lang/Type.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="149">
-          <caret line="34" column="34" lean-forward="false" selection-start-line="34" selection-start-column="34" selection-end-line="34" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/client/bibliograph/source/class/qcl/access/Permission.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
@@ -913,9 +839,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3555">
           <caret line="254" column="0" lean-forward="false" selection-start-line="254" selection-start-column="0" selection-end-line="254" selection-end-column="0" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -958,9 +881,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3315">
           <caret line="341" column="3" lean-forward="false" selection-start-line="341" selection-start-column="3" selection-end-line="341" selection-end-column="3" />
-          <folding>
-            <marker date="1522047013993" expanded="true" signature="12537:12648" ph="{...}" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -998,9 +918,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="28" column="41" lean-forward="false" selection-start-line="28" selection-start-column="41" selection-end-line="28" selection-end-column="41" />
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1012,7 +929,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/client/bibliograph/source/class/qcl/ui/table/TableView.js" />
     <entry file="file://$PROJECT_DIR$/src/server/controllers/FolderController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
@@ -1032,29 +948,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="300">
           <caret line="45" column="37" lean-forward="false" selection-start-line="45" selection-start-column="37" selection-end-line="45" selection-end-column="37" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <marker date="1522047013983" expanded="true" signature="862:1042" ph="/*...*/" />
-            <marker date="1522047013983" expanded="true" signature="1644:1838" ph="/** The version of the application. The version will be automatically replaced ...*/" />
-            <marker date="1522047013983" expanded="true" signature="1942:2001" ph="/** Copyright notice ...*/" />
-            <marker date="1522047013983" expanded="true" signature="2413:2433" ph="/**...*/" />
-            <marker date="1522047013983" expanded="true" signature="2458:2485" ph="/**...*/" />
-            <marker date="1522047013983" expanded="true" signature="2512:2532" ph="/**...*/" />
-            <marker date="1522047013983" expanded="true" signature="2555:2575" ph="/**...*/" />
-            <marker date="1522047013983" expanded="true" signature="2791:2845" ph="/** @return {bibliograph.AccessManager} ...*/" />
-            <marker date="1522047013983" expanded="true" signature="3117:3171" ph="/** @return {bibliograph.ConfigManager} ...*/" />
-            <marker date="1522047013983" expanded="true" signature="3273:3330" ph="/** @return {qcl.application.StateManager} ...*/" />
-            <marker date="1522047013983" expanded="true" signature="3438:3485" ph="/** @return {qx.bom.storage.Web} ...*/" />
-            <marker date="1522047013983" expanded="true" signature="3655:3702" ph="/** @return {qx.ui.core.Blocker} ...*/" />
-            <marker date="1522047013983" expanded="true" signature="3774:3823" ph="/** @return {bibliograph.Commands} ...*/" />
-            <marker date="1522047013983" expanded="true" signature="3915:3973" ph="/** @return {bibliograph.store.Datasources} ...*/" />
-            <marker date="1522047013983" expanded="true" signature="4271:4326" ph="/** Run command by dispatching a message ...*/" />
-            <marker date="1522047013983" expanded="true" signature="4653:4733" ph="/** Returns the URL to the JSONRPC server ...*/" />
-            <marker date="1522047013983" expanded="true" signature="5392:5597" ph="/** Returns a jsonrpc client object with the current auth token already set ...*/" />
-            <marker date="1522047013983" expanded="true" signature="6073:6265" ph="/** Returns a promise that resolves when a message of that name has ...*/" />
-            <marker date="1522047013983" expanded="true" signature="6720:6853" ph="/** Store a reference to a widget linked to its id. ...*/" />
-            <marker date="1522047013983" expanded="true" signature="6951:7098" ph="/** gets a reference to a widget by its id ...*/" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1062,16 +955,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2700">
           <caret line="192" column="10" lean-forward="false" selection-start-line="192" selection-start-column="10" selection-end-line="192" selection-end-column="10" />
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-            <marker date="1522047013989" expanded="true" signature="6583:12070" ph="{...}" />
-            <marker date="1522047013989" expanded="true" signature="8911:8974" ph="{&quot;converter&quot;: bibliograph.Utils.bool2visibility...}" />
-            <marker date="1522047013989" expanded="true" signature="9626:9657" ph="{...}" />
-            <marker date="1522047013989" expanded="true" signature="9999:10037" ph="{...}" />
-            <marker date="1522047013989" expanded="true" signature="10404:10467" ph="{&quot;converter&quot;: bibliograph.Utils.bool2visibility...}" />
-            <marker date="1522047013989" expanded="true" signature="11193:11256" ph="{&quot;converter&quot;: bibliograph.Utils.bool2visibility...}" />
-            <marker date="1522047013989" expanded="true" signature="11738:11801" ph="{&quot;converter&quot;: bibliograph.Utils.bool2visibility...}" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1087,13 +970,6 @@
         <state relative-caret-position="269">
           <caret line="200" column="18" lean-forward="false" selection-start-line="200" selection-start-column="18" selection-end-line="200" selection-end-column="18" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/yii">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -1130,7 +1006,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="313">
           <caret line="32" column="16" lean-forward="true" selection-start-line="32" selection-start-column="16" selection-end-line="32" selection-end-column="16" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1142,25 +1017,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/client/bibliograph/source/class/rpc/Reference.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="142">
-          <caret line="174" column="4" lean-forward="false" selection-start-line="174" selection-start-column="4" selection-end-line="174" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/server/modules/z3950/controllers/TableController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="605">
           <caret line="268" column="61" lean-forward="true" selection-start-line="268" selection-start-column="61" selection-end-line="268" selection-end-column="61" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/server/models/Reference.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="313">
+        <state relative-caret-position="3990">
           <caret line="267" column="53" lean-forward="false" selection-start-line="267" selection-start-column="53" selection-end-line="267" selection-end-column="53" />
           <folding>
             <marker date="1522049694512" expanded="true" signature="8954:9238" ph="SELECT id, $... ${$table}" />
@@ -1169,21 +1035,135 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/Yii.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/nohup.out">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/yii-test">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/vendor/deployer/deployer/bin/dep">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1402">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/yii">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/composer.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/vendor/deployer/deployer/recipe/common.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/vendor/deployer/deployer/recipe/yii2-app-basic.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/vendor/deployer/deployer/recipe/yii2-app-advanced.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-281">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/vendor/deployer/deployer/recipe/yii.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-25">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/deploy.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="0" lean-forward="false" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/ui/window/FolderTreeWindow.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1029">
+          <caret line="109" column="4" lean-forward="false" selection-start-line="109" selection-start-column="4" selection-end-line="109" selection-end-column="4" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/client/bibliograph/source/class/rpc/Reference.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="247" column="93" lean-forward="false" selection-start-line="247" selection-start-column="93" selection-end-line="247" selection-end-column="93" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/server/controllers/ReferenceController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-51">
-          <caret line="714" column="0" lean-forward="true" selection-start-line="714" selection-start-column="0" selection-end-line="714" selection-end-column="0" />
+        <state relative-caret-position="423">
+          <caret line="937" column="5" lean-forward="false" selection-start-line="937" selection-start-column="5" selection-end-line="937" selection-end-column="5" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/client/bibliograph/source/class/bibliograph/ui/main/TableView.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-100">
-          <caret line="403" column="10" lean-forward="false" selection-start-line="403" selection-start-column="10" selection-end-line="403" selection-end-column="10" />
+        <state relative-caret-position="992">
+          <caret line="453" column="4" lean-forward="false" selection-start-line="453" selection-start-column="4" selection-end-line="453" selection-end-column="4" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/client/bibliograph/source/class/qcl/ui/table/TableView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="478" column="20" lean-forward="false" selection-start-line="478" selection-start-column="20" selection-end-line="478" selection-end-column="20" />
+          <folding />
         </state>
       </provider>
     </entry>

@@ -102,6 +102,9 @@
       <path value="$PROJECT_DIR$/src/server/vendor/react/stream" />
       <path value="$PROJECT_DIR$/src/server/vendor/nikic/php-parser" />
       <path value="$PROJECT_DIR$/src/server/vendor/goaop/parser-reflection" />
+      <path value="$PROJECT_DIR$/src/server/vendor/deployer/phar-update" />
+      <path value="$PROJECT_DIR$/src/server/vendor/deployer/deployer" />
+      <path value="$PROJECT_DIR$/src/server/vendor/pimple/pimple" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7" />

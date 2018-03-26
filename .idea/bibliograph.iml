@@ -36,6 +36,8 @@
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/composer" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/cranetm/yii2-json-rpc-2.0" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/danielstjules/stringy" />
+      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/deployer/deployer" />
+      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/deployer/phar-update" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/doctrine/inflector" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/doctrine/instantiator" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/edvlerblog/yii2-adldap-module" />
@@ -72,6 +74,7 @@
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/phpunit/php-token-stream" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/phpunit/phpunit" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/phpunit/phpunit-mock-objects" />
+      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/pimple/pimple" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/psr/container" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/psr/http-message" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/psr/log" />
