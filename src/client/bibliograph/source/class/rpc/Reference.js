@@ -235,19 +235,17 @@ qx.Class.define("rpc.Reference",
     /**
      * Copies a reference to a folder
      * 
-     * @param datasource {String} 
-     * @param dummy 
+     * @param datasource {String}
      * @param targetFolderId {Number} 
      * @param ids {String} 
      * @return {Promise}
      * @see ReferenceController::actionCopy
      */
-    copy : function(datasource, dummy, targetFolderId, ids){
+    copy : function(datasource, targetFolderId, ids){
       qx.core.Assert.assertString(datasource);
-      // @todo Document type for 'dummy' in app\controllers\ReferenceController::actionCopy
       qx.core.Assert.assertNumber(targetFolderId);
       qx.core.Assert.assertString(ids);
-      return qx.core.Init.getApplication().getRpcClient("reference").send("copy", [datasource, dummy, targetFolderId, ids]);
+      return qx.core.Init.getApplication().getRpcClient("reference").send("copy", [datasource, targetFolderId, ids]);
     },
 
     /**

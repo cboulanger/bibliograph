@@ -178,7 +178,7 @@ class ReferenceController extends AppController
   /**
    * Returns the title label for the reference editor form
    *
-   * @param \app\models\Reference $reference
+   * @param Reference $reference
    * @return void
    */
 //  protected function getTitleLabel($reference)
@@ -428,7 +428,7 @@ class ReferenceController extends AppController
 
     // load model record and get reference type
     $modelClass = $this->getControlledModel($datasource);
-    /** @var \app\models\Reference $item */
+    /** @var Reference $item */
     $model = $modelClass::findOne($id);
     /** @var \app\schema\AbstractReferenceSchema $schema */
     $schema = $modelClass::getSchema();
@@ -547,7 +547,7 @@ class ReferenceController extends AppController
     // transform data into array
     $data = json_decode(json_encode($data), true);
     $modelClass = $this->getControlledModel($datasource);
-    /** @var \app\models\Reference $model */
+    /** @var Reference $model */
     $model = $modelClass::findOne($referenceId);
     $schema = $modelClass::getSchema();
 
@@ -657,7 +657,7 @@ class ReferenceController extends AppController
 
     // save data
     try{
-      /** @var \app\models\Reference $reference */
+      /** @var Reference $reference */
       $reference = new $modelClass($data);
       $reference->save();
     } catch (Exception $e){
@@ -709,7 +709,7 @@ class ReferenceController extends AppController
       throw new UserErrorException("Removing from all folder not impemeneted yet.");
     }
 
-    /** @var \app\models\Reference $referenceClass */
+    /** @var Reference $referenceClass */
     $referenceClass = $this->getControlledModel($datasource);
     $folderClass = static::getFolderModel($datasource);
 
@@ -805,14 +805,14 @@ class ReferenceController extends AppController
   /**
    * Move references from one folder to another folder
    *
-   * @param $datasource If true, it is the result of the confirmation
-   * @param $folderId The folder to move from
-   * @param $targetFolderId The folder to move to
-   * @param $ids The ids of the references to move
+   * @param string $datasource If true, it is the result of the confirmation
+   * @param int $folderId The folder to move from
+   * @param it $targetFolderId The folder to move to
+   * @param string $ids The ids of the references to move, joined by  a comma
    * @return string Diagnostic message
    * @throws \JsonRpc2\Exception
    */
-  public function actionMove($datasource, $folderId, $targetFolderId, $ids)
+  public function actionMove(string $datasource, int $folderId, int $targetFolderId, string $ids)
   {
     $this->requirePermission("reference.move");
 
@@ -837,19 +837,18 @@ class ReferenceController extends AppController
   /**
    * Move reference from one folder to another folder
    *
-   * @param \app\models\Reference[]|int[] $references either an array of reference
+   * @param Reference[]|int[] $references either an array of reference
    *    objects or an array of the ids of that object
-   *
+   * @param string $datasource
    * @param Folder $sourceFolder
    * @param Folder $targetFolder
    * @return string "OK"
    */
   public function move(
     array $references,
-    $datasource,
+    string $datasource,
     Folder $sourceFolder,
-    Folder $targetFolder
-  )
+    Folder $targetFolder )
   {
     $ids = [];
     foreach ($references as $reference) {
@@ -859,7 +858,7 @@ class ReferenceController extends AppController
       } else {
         $ids[] = $reference->id;
       }
-      if (!($reference instanceof \app\models\Reference)) {
+      if (!($reference instanceof Reference)) {
         Yii::warning("Skipping invalid reference '$reference'");
       }
       $sourceFolder->unlink("references", $reference);
@@ -873,7 +872,6 @@ class ReferenceController extends AppController
     } catch (Exception $e) {
       Yii::error($e);
     }
-
 
     // display change on connected clients
 
@@ -893,41 +891,40 @@ class ReferenceController extends AppController
    * Copies a reference to a folder
    *
    * @param string $datasource
-   * @param $dummy
    * @param int $targetFolderId
-   * @param $ids
+   * @param string $ids Numeric ids joined by comma
    * @return string "OK"
    * @throws \JsonRpc2\Exception
    */
-  public function actionCopy(string $datasource, $dummy, $targetFolderId, string $ids)
+  public function actionCopy(string $datasource, int $targetFolderId, string $ids)
   {
     $this->requirePermission("reference.move");
-    $folderModel = static:: getFolderModel($datasource);
-    $targetFolder = $folderModel:: findOne($targetFolderId);
+    $folderModel = static::getFolderModel($datasource);
+    $targetFolder = $folderModel::findOne($targetFolderId);
 
     try {
       Validate:: isNotNull($targetFolder, "Folder #$targetFolderId does not exist");
     } catch (\Exception $e) {
       throw new UserErrorException($e->getMessage());
     }
-    return $this->copy($ids, $targetFolder);
+    return $this->copy($datasource, $targetFolder, explode(",",$ids));
   }
 
   /**
    * Copy reference from one folder to another folder
-   *
-   * @param \app\models\Reference[]|int[] $references either an array of reference
-   *    objects or an array of the ids of that object
+   * @param string $datasource
    * @param Folder $targetFolder
-   * @return string "OK"
+   * @param Reference[]|int[] $references either an array of reference
+   *    objects or an array of the ids of that object
+   * @return string Diagnostic message
    */
-  public function copy( array $references, Folder $targetFolder)
+  public function copy( string $datasource, Folder $targetFolder, array $references)
   {
     foreach ($references as $reference) {
       if (is_numeric($reference)) {
-        $reference = $this->getControlledModel()->findOne($reference);
+        $reference = $this->getControlledModel($datasource)::findOne($reference);
       }
-      if (!($reference instanceof \app\models\Reference)) {
+      if (!($reference instanceof Reference)) {
         Yii::warning("Skipping invalid reference '$reference'");
       }
       $targetFolder->link("references", $reference);
@@ -940,7 +937,7 @@ class ReferenceController extends AppController
       Yii::error($e);
     }
     $count = count($references);
-    return "Copied $count references from '{$sourceFolder->label}' to '{$targetFolder->label}'.";
+    return "Copied $count references to '{$targetFolder->label}'.";
   }
 
   /**
@@ -1048,7 +1045,7 @@ class ReferenceController extends AppController
     $modelClass = $this->getControlledModel($datasource);
     /** @var \app\schema\AbstractReferenceSchema $schema */
     $schema = $modelClass::getSchema();
-    /** @var \app\models\Reference $reference */
+    /** @var Reference $reference */
     $reference = $modelClass::findOne($id);
     $reftype = $reference->reftype;
 

@@ -54,8 +54,9 @@ qx.Class.define("bibliograph.ui.window.FolderTreeWindow",
         this.__blocker.blockContent(this.getZIndex() - 1);
       }, this);
     
-      this.addListener("disappear", function (e) {
+      this.addListener("close", function (e) {
         this.__blocker.unblock();
+        this.fireDataEvent("nodeSelected", null );
       }, this);
     
       qx.event.message.Bus.getInstance()
@@ -80,7 +81,7 @@ qx.Class.define("bibliograph.ui.window.FolderTreeWindow",
       treeWidget.setLayout(vbox1);
       let vbox2 = new qx.ui.layout.VBox(null, null, null);
       let treeWidgetContainer = new qx.ui.container.Composite();
-      treeWidgetContainer.setLayout(vbox2)
+      treeWidgetContainer.setLayout(vbox2);
       treeWidgetContainer.setHeight(null);
       treeWidget.add(treeWidgetContainer, { flex: 1  });
       this.treeWidget.setTreeWidgetContainer(treeWidgetContainer);
@@ -88,7 +89,7 @@ qx.Class.define("bibliograph.ui.window.FolderTreeWindow",
       // buttons pane
       let hbox1 = new qx.ui.layout.HBox(5, null, null);
       let composite1 = new qx.ui.container.Composite();
-      composite1.setLayout(hbox1)
+      composite1.setLayout(hbox1);
       treeWidget.add(composite1);
       hbox1.setSpacing(5);
     
@@ -105,18 +106,16 @@ qx.Class.define("bibliograph.ui.window.FolderTreeWindow",
       let button2 = new qx.ui.form.Button();
       button2.setLabel(this.tr('Cancel'));
       composite1.add(button2);
-      button2.addListener("execute", function (e) {
-        this.hide();
-      }, this);
+      button2.addListener("execute", () => this.close());
     
       // Select
       let button3 = new qx.ui.form.Button();
       button3.setLabel(this.tr('Select'));
       composite1.add(button3);
-      button3.addListener("execute", function (e) {
-        this.hide();
+      button3.addListener("execute", () => {
         this.fireDataEvent("nodeSelected", treeWidget.getSelectedNode());
-      }, this);
+        this.close();
+      });
     }
   }
 });

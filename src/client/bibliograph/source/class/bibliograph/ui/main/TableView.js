@@ -441,52 +441,43 @@ qx.Class.define("bibliograph.ui.main.TableView",
     /**
      * Move selected references from one folder to the other
      */
-    moveSelectedReferences: function () {
-      return dialog.Dialog.error("Funktion noch nicht implementiert...");
+    moveSelectedReferences: async function () {
       let app = this.getApplication();
       let win = app.getWidgetById("app/windows/folders");
-      win.addListenerOnce("nodeSelected", function (e) {
+      win.addListenerOnce("nodeSelected", async (e) => {
         let node = e.getData();
-        if (!node) {
-          dialog.Dialog.alert("No folder selected.");
-          return;
-        }
-        let message = this.tr("Do your really want to move the selected references to '%1'?", [node.label]);
-        let handler = qx.lang.Function.bind(function (result) {
-          if (result === true) {
-            this.modifyReferences("move", parseInt(node.data.id));
-          }
-        }, this);
-        dialog.Dialog.confirm(message, handler);
-      }, this);
+        if (!node) return;
+        let message = this.tr(
+          "Do your really want to move the selected references to '%1'?",
+          [node.label]
+        );
+        await dialog.Dialog.confirm(message).promise();
+        let targetFolderId = parseInt(node.data.id);
+        app.showPopup(this.tr("Moving references..."));
+        this.rpc.move(this.getDatasource(), this.getFolderId(), targetFolderId, this.getSelectedIds().join(","));
+        app.hidePopup();
+      });
       win.show();
     },
     
     /**
-     * Copy a reference to a folder
+     * Copy the selected references to a folder
      */
-    copySelectedReferences: function () {
-      return dialog.Dialog.error("Funktion noch nicht implementiert...");
+    copySelectedReferences: async function () {
       let app = this.getApplication();
       let win = app.getWidgetById("app/windows/folders");
-      win.addListenerOnce("nodeSelected", function (e) {
+      win.addListenerOnce("nodeSelected", async (e) => {
         let node = e.getData();
-        if (!node) {
-          dialog.Dialog.alert("No folder selected. Try again");
-          return;
-        }
-        let message = this.tr("Do your really want to copy the selected referencesto '%1'?", [node.label]);
-        let handler = qx.lang.Function.bind(function (result) {
-          if (result === true) {
-            this.modifyReferences("copy", parseInt(node.data.id));
-          }
-        }, this);
-        dialog.Dialog.confirm(message, handler);
-      }, this);
+        if (!node) return;
+        let message = this.tr("Do your really want to copy the selected references to '%1'?", [node.label]);
+        await dialog.Dialog.confirm(message).promise();
+        let targetFolderId = parseInt(node.data.id);
+        app.showPopup(this.tr("Copying references..."));
+        this.rpc.copy(this.getDatasource(), targetFolderId, this.getSelectedIds().join(","));
+        app.hidePopup();
+      });
       win.show();
     },
-    
-
     
     /**
      * Exports the selected references via jsonrpc service

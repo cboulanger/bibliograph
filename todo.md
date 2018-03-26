@@ -17,7 +17,9 @@
 - [x] Re-implemen Plugins as Yii2 modules
 - [x] Re-implement Z3950 import
 - [x] Re-implement Add/Remove/Move/Copy folders
-- [ ] Re-implement Remove/Move/Copy references
+- [x] Re-implement Remove/Move/Copy references
+- [ ] Implement move/copy references with drag & drop
+- [ ] Re-implement deleting references and emptying trash
 - [ ] Add "locale" property to search folders for parsing queries
 - [ ] Re-implement Export
 - [ ] Tests: Make Travis ~~great~~ work again
