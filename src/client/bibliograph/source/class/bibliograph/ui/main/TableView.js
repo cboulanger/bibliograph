@@ -34,8 +34,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
     bus.subscribe("reference.changeData", this._on_changeReferenceData, this);
     bus.subscribe("reference.removeRows", this._on_removeRows, this);
     bus.subscribe(bibliograph.AccessManager.messages.LOGOUT, ()=> this.clearTable());
-
-
+    
     // create reference type list
     this.addListener("tableReady",e =>{
       let data = e.getData();
@@ -43,6 +42,9 @@ qx.Class.define("bibliograph.ui.main.TableView",
         this.setAddItems(qx.data.marshal.Json.createModel(data.addItems));
       }
     });
+    
+    this.setDebugDragSession(true);
+    this.setEnableDragDrop(true);
   },
 
   /*
@@ -53,7 +55,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
   properties:
   {
     /**
-     * the datasource of the current tables
+     * The model of the list of items that can be added
      */
     addItems:
     {

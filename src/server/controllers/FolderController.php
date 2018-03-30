@@ -160,10 +160,40 @@ class FolderController extends AppController //implements ITreeController
         $nodeData[]= $node;
       }
     }
+    //$this->addLostAndFound($orderedNodeData);
     return [
       'nodeData' => $orderedNodeData,
       'statusText' => count($orderedNodeData) . " Folders loaded."
     ];
+  }
+
+  function addLostAndFound(&$orderedNodeData){
+    $referenceCount = 0;
+    $id = 99999999;
+    $icon = "icon/16/places/folder.png"; // @todo
+    $query = "";
+    array_push($orderedNodeData, [
+      'isBranch'        => false,
+      'label'           => Yii::t('app', "Not in a folder"),
+      'bOpened'         => false,
+      'icon'            => $icon,
+      'iconSelected'    => $icon,
+      'bHideOpenClose'  => true,
+      'columnData'      => [ null, $referenceCount ],
+      'data'            => [
+        'type'            => "nofolder",
+        'id'              => $id,
+        'parentId'        => 0,
+        'query'           => $query,
+        'public'          => false,
+        'owner'           => "admin",
+        'description'     => Yii::t('app', "Not in a folder"),
+        'datasource'      => null,
+        'childCount'      => 0,
+        'referenceCount'  => $referenceCount,
+        'markedDeleted'   => false
+      ]
+    ]);
   }
 
   /**

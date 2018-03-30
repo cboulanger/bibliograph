@@ -242,7 +242,7 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow",
       lv.setDatasource(datasource);
       lv.clearTable();
       //lv.setEnabled(false);
-      this.importButton.setEnabled(false);
+      //this.importButton.setEnabled(false);
       //this.searchButton.setEnabled(false);
       
       // open the ServerProgress widget and initiate the remote search

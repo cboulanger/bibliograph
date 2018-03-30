@@ -99,6 +99,11 @@ class TrashController extends AppController
     } catch (Exception $e) {
       Yii::error($e);
     }
+    $this->broadcastClientMessage("folder.reload", array(
+      'datasource' => $datasource,
+      'folderId' => $trashfolder->id
+    ));
+
     return "Trash emptied.";
   }
   

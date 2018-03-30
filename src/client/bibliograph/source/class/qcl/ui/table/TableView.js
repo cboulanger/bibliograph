@@ -113,7 +113,8 @@ qx.Class.define("qcl.ui.table.TableView",
     table:
     {
       check: "qx.ui.table.Table",
-      nullable: true
+      nullable: true,
+      event: "changeTable"
     },
 
 
@@ -181,6 +182,29 @@ qx.Class.define("qcl.ui.table.TableView",
     {
       check: "Object",
       nullable: true
+    },
+  
+  
+    /**
+     * Enable/disable drag and drop
+     */
+    enableDragDrop:
+    {
+      check: "Boolean",
+      apply: "_applyEnableDragDrop",
+      event: "changeEnableDragDrop",
+      init: false
+    },
+  
+    /**
+     * Whether the drag session should output verbose debug messages.
+     * Useful for development
+     */
+    debugDragSession :
+    {
+      check: "Boolean",
+      init: false,
+      event: "changeDebugDragSession"
     }
   },
   
@@ -213,7 +237,9 @@ qx.Class.define("qcl.ui.table.TableView",
   *****************************************************************************
    */
   statics: {
-  
+    types : {
+       ROWDATA : "qcl/table-row-data"
+    }
   },
   
   /*
@@ -292,7 +318,7 @@ qx.Class.define("qcl.ui.table.TableView",
       /*
        * use a small timeout to avoid rapid reloads
        */
-      qx.util.TimerManager.getInstance().start(function () {
+      qx.util.TimerManager.getInstance().start( () => {
         
         // if the folder id has already changed, do not load
         if (folderId != this.getFolderId()) {
@@ -370,6 +396,55 @@ qx.Class.define("qcl.ui.table.TableView",
         if ((!this.isTableReady() || this._selectIds([value]) === false) && counter < 10) {
           qx.lang.Function.delay(this._applyModelId, 1000, this, value, old, ++counter);
         }
+      }
+    },
+  
+    /**
+     * Enables or disables drag and drop by adding or removing event listeners
+     * from the *current* table
+     * @param value {Boolean}
+     * @param old {Boolean}
+     * @private
+     */
+    _applyEnableDragDrop: function (value, old) {
+      
+      let table = this.getTable();
+      
+      // if we don't have a table yet, wait until we have one
+      if( !table ){
+        if( value ){
+          this.dragDebug("Deferring drag & drop initialization");
+          this.addListenerOnce("changeTable", ()=> this._applyEnableDragDrop(value, old) );
+        }
+        return;
+      }
+      
+      if (old && !value) {
+        table.setDraggable(false);
+        table.setDroppable(false);
+        table.removeListener("dragstart",    this.__onDragStart,   this);
+        table.removeListener("drag",         this.__onDragHandler, this);
+        table.removeListener("dragover",     this.__onDragOver,    this);
+        table.removeListener("dragend",      this.__onDragEnd,     this);
+        table.removeListener("dragleave",    this.__onDragEnd,     this);
+        table.removeListener("dragchange",   this.__onDragChange,  this);
+        table.removeListener("drop",         this.__onDrop,        this);
+        table.removeListener("droprequest",  this.__onDropRequest, this);
+        table.info("Drag & Drop disabled.");
+      }
+    
+      if (value && !old) {
+        table.addListener("dragstart",   this.__onDragStart,   this);
+        table.addListener("dragover",    this.__onDragOver,    this); // dragover handler must be called *before* drag handler
+        table.addListener("drag",        this.__onDragHandler, this);
+        table.addListener("dragleave",   this.__onDragEnd,     this);
+        table.addListener("dragend",     this.__onDragEnd,     this);
+        table.addListener("dragchange",  this.__onDragChange,  this);
+        table.addListener("drop",        this.__onDrop,        this);
+        table.addListener("droprequest", this.__onDropRequest, this);
+        table.setDraggable(true);
+        table.setDroppable(true);
+        table.info("Drag & Drop enabled.");
       }
     },
 
@@ -475,8 +550,6 @@ qx.Class.define("qcl.ui.table.TableView",
       // create table
       table = this._createTable(data.columnLayout);
       table.getSelectionModel().addListener("changeSelection", this._on_table_changeSelection, this);
-      
-      // drag & drop
       
       // save columns
       let columnIds = [];
@@ -592,7 +665,8 @@ qx.Class.define("qcl.ui.table.TableView",
       
       // listeners
       //tableModel.addListener("dataChanged", this._retryApplySelection, this);
-      
+  
+
       return table;
     },
     
@@ -604,7 +678,8 @@ qx.Class.define("qcl.ui.table.TableView",
     
 
     /**
-     * Called when user clicks on a table cell. Does nothing currently
+     * Called when user clicks on a table cell.
+     * Unused.
      */
     _on_table_cellClick: function (e) {
       //let table = e.getTarget();
@@ -642,6 +717,128 @@ qx.Class.define("qcl.ui.table.TableView",
         this.__ignoreChangeSelection = true; // prevent infinite loop
         this.setModelId(selectedIds[0]);
         this.__ignoreChangeSelection = false;
+      }
+    },
+  
+    /*
+     ---------------------------------------------------------------------------
+        DRAG & DROP EVENT HANDLERS
+     ---------------------------------------------------------------------------
+     */
+  
+    /**
+     * Outputs verbose drag session debug messages, suppressing duplicate
+     * messages. Can be turned off using the `debugDragSession` property.
+     * @param msg
+     */
+    dragDebug : function(msg){
+      if( msg !== this.__lastDebugMessage && this.getDebugDragSession()){
+        console.log(msg);
+        this.__lastDebugMessage = msg;
+      }
+    },
+    
+    /**
+     * Handles event fired whem a drag session starts.
+     * @param e {qx.event.type.Drag} the drag event fired
+     */
+    __onDragStart: function (e) {
+      this.dragDebug("Table drag start...");
+      e.addAction("copy");
+      e.addAction("move");
+      e.addType(qcl.ui.table.TableView.types.ROWDATA);
+    },
+  
+    /**
+     * Fired when dragging over another widget.
+     * @param e {qx.event.type.Drag} the drag event fired
+     */
+    __onDragOver: function (e) {
+      this.dragDebug("Tabe Drag over...");
+      this.__onDragAction(e);
+    },
+  
+    /**
+     * Fired when dragging over the source widget.
+     * @param e {qx.event.type.Drag} the drag event fired
+     */
+    __onDragHandler: function (e) {
+      this.dragDebug("Table Drag event...");
+      this.__onDragAction(e);
+    },
+  
+    /**
+     * Implementation of drag action for drag & dragover. This updates the drag cursor
+     * and drag indicator (once implemented)
+     * @param e {qx.event.type.Drag}
+     */
+    __onDragAction: function (e) {
+      let tree = e.getRelatedTarget();
+      if( ! tree) return;
+      
+      let positionData = tree._getDragCursorPositionData(e);
+  
+      // auto-scroll at the beginning and at the end of the column
+      if (positionData.row < tree.getDataModel().getRowCount()) {
+        tree._processAutoscroll(positionData);
+      }
+  
+      let dropModelRowData = tree.getDataModel().getRowData(positionData.row);
+      let dropModel = dropModelRowData[0];
+      if( ! dropModel) {
+        this.dragDebug("Could not find node!");
+      }
+      tree.setDropModel(dropModel);
+      tree._openNodeAfterTimeout(dropModel);
+    
+      // set flag whether drop is allowed
+      let validDropTarget = (dropModel.data.type === "folder");
+      
+      // show drag session visually
+      e.getManager().setDropAllowed(validDropTarget);
+      if (validDropTarget) {
+        qx.ui.core.DragDropCursor.getInstance().setAction(e.getCurrentAction());
+      }  else {
+        qx.ui.core.DragDropCursor.getInstance().resetAction();
+      }
+    },
+  
+    /**
+     * Handles the event that is fired when the user changes the mode of the drag during
+     * the drag session
+     * @param e {qx.event.type.Drag}
+     * @private
+     */
+    __onDragChange : function(e){
+      this.dragDebug("Table drag change...");
+    },
+  
+    /**
+     * Handles the event fired when a drag session ends (with or without drop).
+     * @param e {qx.event.type.Drag}
+     */
+    __onDragEnd: function (e) {
+      this.dragDebug("Table drag end.");
+    },
+  
+    /**
+     * Drop request handler. Calls the _onDropImpl method implementation.
+     * @param e {qx.event.type.Drag}
+     */
+    __onDrop: function (e) {
+      this.dragDebug("Table drop.");
+    },
+  
+    /**
+     * Called when a drop request is made
+     * @param e {qx.event.type.Drag}
+     * @private
+     */
+    __onDropRequest : function(e){
+      this.dragDebug("Drop request");
+      let type = e.getCurrentType();
+      if (type === qcl.ui.table.TableView.types.ROWDATA ) {
+        e.addData(qcl.ui.table.TableView.types.ROWDATA, this.getSelectedRowData());
       }
     },
 

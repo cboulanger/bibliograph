@@ -107,8 +107,9 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
         condition : tree => tree.getSelectedNode() && tree.getSelectedNode().data.type === "trash"
       },
     },
-    
   
+   
+    
     //-------------------------------------------------------------------------
     //  USER INTERFACE
     //-------------------------------------------------------------------------
@@ -214,26 +215,46 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
     },
   
     //-------------------------------------------------------------------------
-    //  TREE ACTIONS
+    //  DRAG & DROP
     //-------------------------------------------------------------------------
   
+  
     /**
-     * Applies the `treeAction` property.
-     * @param value {qcl.ui.treevirtual.TreeAction|null}
-     * @param old {qcl.ui.treevirtual.TreeAction|null}
+     * Called when a successful drop has happened in the current treee.
+     *
+     * @param e {qx.event.type.Drag}
+     * @private
      */
-    _applyTreeAction: function (value, old) {
-      let action = value.getAction();
-      switch (action){
-        case "move":
-          this._moveFolderDialog(
-            value.getModel().getItem(0),
-            value.getTargetModel()
-          );
-          break;
-        default:
-          this.warn(`Action ${action} not implemented.`);
+    _onDropImpl : function(e){
+      let action = e.getCurrentAction();
+      if( e.supportsType(qcl.ui.treevirtual.DragDropTree.types.TREEVIRTUAL)){
+        let data = e.getData(qcl.ui.treevirtual.DragDropTree.types.TREEVIRTUAL);
+        switch (action){
+          case "move":
+            this._moveFolderDialog( data[0], this.getTree().getDropModel() );
+            break;
+          default:
+            this.warn(`Action ${action} not implemented.`);
+        }
       }
+      if( e.supportsType(qcl.ui.table.TableView.types.ROWDATA)){
+        let rowData = e.getData(qcl.ui.table.TableView.types.ROWDATA);
+        // @todo This should really be calculated differently (async from server)
+        let id = this.getController().getClientNodeId(this.getNodeId());
+        let sourceFolderModel = this.getTree().nodeGet(id);
+        let targetFolderModel = this.getTree().getDropModel();
+        switch (action){
+          case "move":
+            this._moveReferencesDialog(sourceFolderModel,targetFolderModel,rowData);
+            break;
+          case "copy":
+            this._copyReferencesDialog(targetFolderModel,rowData);
+            break;
+          default:
+            this.warn(`Action ${action} not implemented.`);
+        }
+      }
+      return true;
     },
     
     //-------------------------------------------------------------------------
@@ -321,7 +342,6 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
         win.show();
         return;
       }
-      console.warn([model,targetModel]);
       let message = this.tr(
         "Do your really want to move folder '%1' to '%2'?",
         model.label, targetModel.label
@@ -335,7 +355,53 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
         }
       });
     },
-
+  
+    /**
+     * Shows dialog to confim moving references.
+     * @param sourceModel {Object}
+     * @param targetModel {Object}
+     * @param rowData {Array}
+     * @private
+     */
+    _moveReferencesDialog : function (sourceModel, targetModel, rowData)
+    {
+      qx.core.Assert.assertObject(sourceModel);
+      qx.core.Assert.assertObject(targetModel);
+      qx.core.Assert.assertArray(rowData);
+      let ids = rowData.map(row => row.id );
+      let message = this.tr( "Do your really want to move %1 references to '%2'?", ids.length, targetModel.label );
+      dialog.Dialog.confirm(message).promise().then(result => {
+        if (result === true) {
+          this._isWaiting(true);
+          rpc.Reference
+          .move(this.getDatasource(), sourceModel.data.id, targetModel.data.id, ids.join(","))
+          .then(() => this._isWaiting(false))
+        }
+      });
+    },
+  
+    /**
+     * Shows dialog to confim copying references.
+     * @param targetModel {Object}
+     * @param rowData {Array}
+     * @private
+     */
+    _copyReferencesDialog : function (targetModel, rowData)
+    {
+      qx.core.Assert.assertObject(targetModel);
+      qx.core.Assert.assertArray(rowData);
+      let ids = rowData.map(row => row.id );
+      let message = this.tr( "Do your really want to copy %1 references to '%2'?", ids.length, targetModel.label );
+      dialog.Dialog.confirm(message).promise().then(result => {
+        if (result === true) {
+          this._isWaiting(true);
+          rpc.Reference
+          .copy(this.getDatasource(), targetModel.data.id, ids.join(","))
+          .then(() => this._isWaiting(false))
+        }
+      });
+    },
+    
     /**
      * Shows dialog asking whether the user wants to empty the trash
      * folder.

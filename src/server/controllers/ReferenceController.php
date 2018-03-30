@@ -28,7 +28,9 @@ use app\models\Datasource;
 use app\schema\BibtexSchema;
 use lib\exceptions\UserErrorException;
 use lib\Validate;
+use yii\db\ActiveQuery;
 use yii\db\Exception;
+use yii\db\StaleObjectException;
 
 class ReferenceController extends AppController
 {
@@ -287,7 +289,7 @@ class ReferenceController extends AppController
   function actionRowData(int $firstRow, int $lastRow, int $requestId, \stdClass $clientQueryData)
   {
     $model = $this->getModelClass($clientQueryData->datasource, $clientQueryData->modelType);
-    $query = $model:: find()
+    $query = $model::find()
       ->orderBy($clientQueryData->query->orderBy)
       ->offset($firstRow)
       ->limit($lastRow - $firstRow + 1);
@@ -697,7 +699,7 @@ class ReferenceController extends AppController
    * move it to the trash
    * @param string $datasource The name of the datasource
    * @param int $folderId The numeric id of the folder. If zero, remove from all folders
-   * @param $ids A string of the numeric ids of the references, joined by a comma
+   * @param string $ids A string of the numeric ids of the references, joined by a comma
    * @return string Diagnostic message
    * @throws \JsonRpc2\Exception
    */
@@ -706,12 +708,13 @@ class ReferenceController extends AppController
     $this->requirePermission("reference.remove");
 
     if( $folderId === 0){
-      throw new UserErrorException("Removing from all folder not impemeneted yet.");
+      throw new UserErrorException("Removing from all folders not impemented yet.");
     }
 
     /** @var Reference $referenceClass */
     $referenceClass = $this->getControlledModel($datasource);
     $folderClass = static::getFolderModel($datasource);
+    $trashFolder = TrashController::getTrashFolder($datasource);
 
     // use the first id
     $ids = explode(",",$ids);
@@ -729,28 +732,35 @@ class ReferenceController extends AppController
     /** @var Folder $folder */
     $folder = $folderClass::findOne(intval($folderId));
     $reference->unlink("folders", $folder);
-
     // update folders
     $foldersToUpdate = $containedFolderIds;
 
     // move to trash if it was contained in one or less folders
     if ($folderCount < 2) {
-      // link with trash folder
-      $trashFolder = TrashController::getTrashFolder($datasource);
       if ($trashFolder) {
-        try{
-          $trashFolder->link("references", $reference);
-        } catch (Exception $e) {
-          Yii::error($e);
+        if( $folder->id === $trashFolder->id ){
+          // reference is already in the trash, delete
+          try {
+            $reference->delete();
+          } catch (\Throwable $e) {
+            Yii::error($e);
+          }
+        } else {
+          // link with trash folder
+          try{
+            $trashFolder->link("references", $reference);
+          } catch (Exception $e) {
+            Yii::error($e);
+          }
+          // mark as deleted
+          $reference->markedDeleted = 1;
+          try {
+            $reference->save();
+          } catch (Exception $e) {
+            Yii::error($e->getMessage());
+          }
+          $foldersToUpdate[] = $trashFolder->id;
         }
-        $foldersToUpdate[] = $trashFolder->id;
-      }
-      // mark as deleted
-      $reference->markedDeleted = 1;
-      try {
-        $reference->save();
-      } catch (Exception $e) {
-        Yii::error($e->getMessage());
       }
     }
 
@@ -782,7 +792,7 @@ class ReferenceController extends AppController
     // if there are references left, repeat
     if (count($ids) > 1) {
       array_shift($ids);
-      return $this->actionRemove($datasource, $folderId, null, $ids);
+      return $this->actionRemove($datasource, $folderId, implode(",",$ids) );
     }
     return "Removed references.";
   }
@@ -829,8 +839,10 @@ class ReferenceController extends AppController
     } catch (\Exception $e) {
       throw new UserErrorException($e->getMessage());
     }
-
-    $references = $referenceClass::find()->where(['in', 'id', $ids])->all();
+    /** @var ActiveQuery $query */
+    $query = $referenceClass::find()->where(['in', 'id', explode(",",$ids)]);
+    Yii::info($query->createCommand()->getRawSql());
+    $references = $query->all();
     return $this->move($references, $datasource, $sourceFolder, $targetFolder);
   }
 
@@ -853,16 +865,25 @@ class ReferenceController extends AppController
     $ids = [];
     foreach ($references as $reference) {
       if (is_numeric($reference)) {
-        $reference = $this->getRecordById($datasource, $reference);
         $ids[] = $reference;
-      } else {
+        $reference = $this->getRecordById($datasource, $reference);
+      } elseif($reference instanceof Reference)  {
         $ids[] = $reference->id;
+      } else {
+        throw new \InvalidArgumentException("Invalid reference '$reference'");
       }
-      if (!($reference instanceof Reference)) {
-        Yii::warning("Skipping invalid reference '$reference'");
+      // unlink source folder
+      try{
+        $sourceFolder->unlink("references", $reference);
+      } catch (Exception $e){
+        Yii::error($e);
       }
-      $sourceFolder->unlink("references", $reference);
-      $targetFolder->link("references", $reference);
+      // link target folder
+      try{
+        $targetFolder->link("references", $reference);
+      } catch (Exception $e){
+        Yii::error($e);
+      }
     }
 
     // update reference count

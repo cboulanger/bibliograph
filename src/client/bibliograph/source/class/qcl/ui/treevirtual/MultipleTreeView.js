@@ -611,22 +611,6 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
       this.setSelectedNodeType( this.getTree().getNodeType(node) );
       this.setNodeId(parseInt(node.data.id));
     },
-  
-    /**
-     * Called when a successful drop has happened in the current treee.
-     * Sets the `treeAction` property
-     * @param e {qx.event.type.Drag}
-     * @private
-     */
-    _onDropImpl : function(e){
-      let tree = this.getTree();
-      this.setTreeAction( new qcl.ui.treevirtual.TreeAction({
-        tree,
-        action: e.getCurrentAction(),
-        model: tree.getDragModel(),
-        targetModel: tree.getDropModel()
-      }));
-    },
     
     /*
     ---------------------------------------------------------------------------
