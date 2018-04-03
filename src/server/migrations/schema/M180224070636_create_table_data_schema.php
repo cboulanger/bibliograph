@@ -32,7 +32,6 @@ class M180224070636_create_table_data_schema extends Migration
     $this->createIndex('unique_namedId', '{{%data_Schema}}', 'namedId', true);
     $this->update('{{data_Datasource}}',['schema' => 'bibliograph_datasource'],['schema'=>'bibliograph.schema.bibliograph2']);
     $this->update('{{data_Datasource}}',['schema' => 'file'],['schema'=>'qcl.schema.filesystem.local']);
-
     $this->delete('{{data_Datasource}}',['schema'=>'bibliograph.schema.z3950']);
 
     $sql = "

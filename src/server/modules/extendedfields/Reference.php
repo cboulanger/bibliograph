@@ -1,12 +1,10 @@
 <?php
 
-namespace app\models;
+namespace app\modules\extendedfields;
 
 use Yii;
-use app\models\Reference;
 
 /**
- * This is the model class for table "database3_data_Reference".
  * @inheritdoc
  * @property string $_category
  * @property string $_owner
@@ -17,15 +15,8 @@ use app\models\Reference;
  * @property string $_date_reimbursement_requested
  * @property string $_inventory
  */
-class ExtendedFieldsReference extends Reference
+class Reference extends \app\models\Reference
 {
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
-    {
-        return 'database3_data_Reference';
-    }
 
     /**
      * @inheritdoc
