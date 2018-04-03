@@ -38,25 +38,21 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
     let bus = qx.event.message.Bus.getInstance();
     bus.subscribe(bibliograph.AccessManager.messages.LOGIN,  () => this.reload());
     bus.subscribe(bibliograph.AccessManager.messages.LOGOUT, () => this.reload());
-  
-    // permissions
-    //this.setupPermissions();
     
     // context menu
     this.setupTreeCtxMenu();
+    
+    // drag & drop
     this.set({
       enableDragDrop : true,
-      debugDragSession : true
+      debugDragSession : qx.core.Environment.get("qx.debug")
     });
-    
-    // configure new tree
     this.addListener("changeTree",e => {
       /** @var {qcl.ui.treevirtual.DragDropTree}  */
       let tree = e.getData();
       if( ! tree ) return;
       tree.setExcludeDragTypes( new qx.data.Array('trash','top'));
     })
-    
   },
   
   members:

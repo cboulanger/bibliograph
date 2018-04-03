@@ -42,8 +42,8 @@ qx.Class.define("bibliograph.ui.main.TableView",
         this.setAddItems(qx.data.marshal.Json.createModel(data.addItems));
       }
     });
-    
-    this.setDebugDragSession(true);
+    // drag & drop
+    this.setDebugDragSession(qx.core.Environment.get("qx.debug"));
     this.setEnableDragDrop(true);
   },
 
