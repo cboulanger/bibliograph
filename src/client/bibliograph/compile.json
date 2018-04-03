@@ -11,16 +11,14 @@
       "outputPath": "source-compiled"
     },
     {
-      "type": "hybrid",
-      "outputPath": "hybrid-compiled"
-    },
-    {
       "type": "build",
       "outputPath": "build-compiled",
-      "minify" : "off"
+      "environment": {
+        "app.serverUrl" : "../server.php?r="
+      }
     }
   ],
-  "defaultTarget": "build",
+  "defaultTarget": "source",
   "locales": ["en","de"],
 
   "applications": [

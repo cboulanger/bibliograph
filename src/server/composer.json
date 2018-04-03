@@ -8,7 +8,7 @@
         "flow/jsonpath": "^0.3.4",
         "danielstjules/stringy": "^3.1",
         "edvlerblog/yii2-adldap-module": "^4.0.0",
-        "bmsrox/yii2-module-autoloader": "^1.1",
+        "bmsrox/yii2-module-autoloader": "dev-cboulanger-fix-mac-hidden-dir",
         "react/stream": "^0.7.7"
     },
     "require-dev": {
@@ -32,6 +32,10 @@
         {
             "type": "git",
             "url": "https://github.com/cboulanger//yii2-json-rpc-2.0"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/cboulanger/yii2-module-autoloader.git"
         }        
     ]
 }
