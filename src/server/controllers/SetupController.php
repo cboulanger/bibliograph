@@ -748,11 +748,11 @@ class SetupController extends \app\controllers\AppController
       $module = Yii::$app->getModule($id);
       if( ! $module instanceof \lib\Module ) continue;
       if( $module->version === $module->installedVersion ){
-        Yii::error("Module $module->id ($module->name) is already at version $module->version ...");
+        Yii::debug("Module $module->id ($module->name) is already at version $module->version ...");
         $messages[] = "Module '$module->id' already installed.";
         continue;
       }
-      Yii::error("Installing module $module->id $module->version");
+      Yii::debug("Installing module $module->id $module->version");
       try{
         $enabled = $module->install();
         if( $enabled ){
