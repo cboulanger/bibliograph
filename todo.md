@@ -18,28 +18,29 @@
 - [x] Re-implement Z3950 import
 - [x] Re-implement Add/Remove/Move/Copy folders
 - [x] Re-implement Remove/Move/Copy references
-- [ ] Implement move/copy references with drag & drop
-- [ ] Re-implement deleting references and emptying trash
-- [ ] Add "locale" property to search folders for parsing queries
-- [ ] Re-implement Export
-- [ ] Tests: Make Travis ~~great~~ work again
+- [x] Implement move/copy references with drag & drop
+- [x] Re-implement deleting references and emptying trash
+- [ ] Re-implement extended fields datasource
 
 ## v3.0.0-beta 
 
 ### Priority: high
-- [ ] Add distribution mechanism 
+- [ ] Add distribution mechanism
+- [ ] module autoloader requires debug mode (trying to serialize closures breaks app)
+- [ ] Tests: Make Travis ~~great~~ work again
 
 ### Priority: normal
+- [ ] Add "locale" property to search folders for parsing queries
+- [ ] Re-implement Export
 - [ ] Move static methods out of \app\models\Datasource into DatasourceManager component
 - [ ] Replace calls to Yii::$app->eventQueue->add() with calls to message API
 - [ ] Frontend: Rename item view "metadata" page
 - [ ] Backend: Model validation: accept booleans for MySql SmallInt columns
-- [ ] Implement reference model schema
 - [ ] Add missing translations
-- [ ] Re-implement reference editor title label
-- [ ] Use UserErrorException consistently and replace \Exception
 - [ ] Add log email target to report fatal errors, adapt UserErrorException to report fatal errors via email
 - [ ] Make UserErrorException a JSONRPC error which is caught on the client, instead of a Dialog event. 
+- [ ] Re-implement "New User" & "New Datasource" in Access Control Tool and System dialogs
+- [ ] Add "Re-install modules" button in Systems menu
 
 ### Priority: low
 - [ ] Add "serverOnly" column to data_Config (true/false/null) and remove from config data sent to client
@@ -49,7 +50,8 @@
 - [ ] Add correct @return information to the JSONRPC methods/actions
 - [ ] Change app state separator and assignment chars
 - [ ] Re-implement Table Actions Interface
-- [ ] Add compiler-based splash screen for loading 
+- [ ] Add compiler-based splash screen for loading
+- [ ] Re-implement reference editor title label
 
 ### Code cleanup
 - [ ] Replace message names with constants
@@ -59,6 +61,7 @@
 - [ ] Add @jsonrpc controller-id/action-id tag in controller actions
 - [ ] Replace ::findOne(['namedid'=>'foo']) with ::findByNamedId('foo')
 - [ ] Rename Yii::$app->utils to Yii::$app->state
+- [ ] Use UserErrorException consistently and replace \Exception
 - [ ] Have actions return an informative message when they don't return a result
 - [ ] Move the .idea folder out of version control (see [instructions](https://intellij-support.jetbrains.com/hc/en-us/articles/207240985-Changing-IDE-default-directories-used-for-config-plugins-and-caches-storage))
 - [ ] Fix 'property is unused' inspection alert

@@ -253,16 +253,16 @@ class AccessConfigController extends AppController
     $query = $modelClass::find();
     switch ($type) {
       case "user":
-        $query = $modelClass::find()->where(['anonymous' => false]);
+        $query = $modelClass::find()->andWhere(['anonymous' => false]);
         break;
       case "datasource":
         $labelProp = "title";
-        $query = $modelClass::find();
+        $query = $query->andWhere(['hidden'=>0]);
         break;
     }
     if ($filter) {
       try {
-        $query = $query->where($filter);
+        $query = $query->andWhere($filter);
       } catch (\Exception $e) {
         throw new UserErrorException("Invalid filter");
       }

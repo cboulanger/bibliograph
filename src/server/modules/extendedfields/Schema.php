@@ -6,7 +6,7 @@
  * Time: 23:35
  */
 
-namespace modules\extendedfields;
+namespace app\modules\extendedfields;
 
 use app\schema\BibtexSchema;
 

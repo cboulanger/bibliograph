@@ -746,20 +746,23 @@ class SetupController extends \app\controllers\AppController
     foreach( Yii::$app->modules as $id => $info){
       /** @var Module $module */
       $module = Yii::$app->getModule($id);
-      if( $module->hasProperty('installed') and ! $module->installed ){
-        try{
-          $enabled = $module->install();
-          if( $enabled ){
-            $messages[] = "Installed module '{$module->id}'.";
-          } else {
-            $errors = array_merge($errors, $module->errors );
-          }
-        } catch (\Exception $e) {
-          Yii::error($e);
-          $errors[] = "Installing module '{$module->id}' failed: " . $e->getMessage();
+      if( ! $module instanceof \lib\Module ) continue;
+      if( $module->version === $module->installedVersion ){
+        Yii::error("Module $module->id ($module->name) is already at version $module->version ...");
+        $messages[] = "Module '$module->id' already installed.";
+        continue;
+      }
+      Yii::error("Installing module $module->id $module->version");
+      try{
+        $enabled = $module->install();
+        if( $enabled ){
+          $messages[] = "Installed module '{$module->id}'.";
+        } else {
+          $errors = array_merge($errors, $module->errors );
         }
-      } else {
-        $messages[] = "Module '{$module->id}' already installed.";
+      } catch (\Exception $e) {
+        Yii::error($e);
+        $errors[] = "Installing module '{$module->id}' failed: " . $e->getMessage();
       }
     }
     return [

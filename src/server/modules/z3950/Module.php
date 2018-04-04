@@ -21,6 +21,11 @@ use lib\exceptions\RecordExistsException;
  */
 class Module extends \lib\Module
 {
+  /**
+   * The version of the module
+   * @var string
+   */
+  protected $version = "1.0.0";
 
   /**
    * A string constant defining the category for logging and translation
@@ -87,7 +92,7 @@ class Module extends \lib\Module
         Role::findByNamedId("admin"),
         Role::findByNamedId("manager")
       ]);
-    } catch (\yii\db\Exception $e) {
+    } catch (\Exception $e) {
       //ignore
     }
     // create datasources

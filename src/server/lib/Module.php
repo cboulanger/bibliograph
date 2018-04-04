@@ -12,13 +12,17 @@ use Yii;
 /**
  * Class Module
  * @package lib
+ * @property string $name
  * @property boolean $enabled
  *    Whether the module ist enabled
  * @property boolean $installed
  *    Whether the module has already been installed, i.e. the install() method
  *    has been called.
- * @property string configKeyPrefix
- * @property string configKeyEnabled
+ * @property string $version
+ * @property string $installedVersion
+ * @property string $configKeyPrefix
+ * @property string $configKeyEnabled
+ *
  */
 class Module extends \yii\base\Module
 {
@@ -29,12 +33,33 @@ class Module extends \yii\base\Module
    */
   const CATEGORY="module";
 
+  /**
+   * The name of the module
+   * @var string
+   */
+  protected $name="";
+
+  /**
+   * The code version of the module
+   * @var string
+   */
+  protected $version = "";
+
 
   /**
    * An array of strings containing error messages.
    * @var array
    */
   public $errors = [];
+
+  /**
+   * Returns the name of the module or the class name if no name has been defined.
+   * @return string
+   */
+  public function getName()
+  {
+    return $this->name ? $this->name : static::class;
+  }
 
   /**
    * @return string
@@ -50,6 +75,15 @@ class Module extends \yii\base\Module
   public function getConfigKeyEnabled()
   {
     return $this->configKeyPrefix . "enabled";
+  }
+
+  /**
+   * Getter for code version
+   * @return string
+   */
+  public function getVersion()
+  {
+    return $this->version;
   }
 
   /**
@@ -76,6 +110,17 @@ class Module extends \yii\base\Module
     Yii::$app->config->setPreference($this->configKeyEnabled,$value);
   }
 
+  /**
+   * Return the version of the module as it was last installed or an empty string if not installed
+   * @return string
+   */
+  public function getInstalledVersion()
+  {
+    return (
+      Yii::$app->config->keyExists($this->configKeyPrefix . "version") )?
+      Yii::$app->config->getPreference($this->configKeyPrefix . "version") : "";
+  }
+
   public function init()
   {
     $not = $this->enabled ? "" : "not";
@@ -93,6 +138,13 @@ class Module extends \yii\base\Module
   {
     if( ! Yii::$app->config->keyExists($this->configKeyEnabled) ){
       Yii::$app->config->createKey($this->configKeyEnabled,"boolean",false, $enabled);
+    } else {
+      Yii::$app->config->setKeyDefault($this->configKeyEnabled,$enabled);
+    }
+    if( ! Yii::$app->config->keyExists($this->configKeyPrefix . "version") ){
+      Yii::$app->config->createKey($this->configKeyPrefix . "version","string",false, $this->version);
+    } else {
+      Yii::$app->config->setKeyDefault($this->configKeyPrefix . "version", $this->version);
     }
     return true;
   }

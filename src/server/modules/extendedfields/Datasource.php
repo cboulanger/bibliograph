@@ -6,7 +6,7 @@
  * Time: 23:28
  */
 
-namespace modules\extendedfields;
+namespace app\modules\extendedfields;
 
 use app\modules\extendedfields\Reference;
 
