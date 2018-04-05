@@ -31,7 +31,7 @@ qx.Class.define("rpc.Folder",
      * 
      * @param datasource 
      * @param nodeId 
-     * @param options Optional data, for example, when nodes
+     * @param options {|null} Optional data, for example, when nodes
      * should be filtered by a certain criteria
      * @return {Promise}
      * @see FolderController::actionChildCount
@@ -47,7 +47,7 @@ qx.Class.define("rpc.Folder",
      * Returns all nodes of a tree in a given datasource
      * 
      * @param datasource {String} 
-     * @param options Optional data, for example, when nodes
+     * @param options {|null} Optional data, for example, when nodes
      *   should be filtered by a certain criteria
      * //return { nodeData : [], statusText: [] }.
      * @return {Promise}

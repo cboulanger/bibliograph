@@ -31,7 +31,10 @@ class RpcProxyController extends \yii\console\Controller
     // find controller source code files
     $files = [];
     $target_dir = realpath(__DIR__ . "/../../client/bibliograph/source/class/rpc");
-    $source_dirs = [__DIR__, __DIR__ . "/../modules/z3950/controllers"];
+    $source_dirs = array_merge(
+      [__DIR__],
+      glob( dirname(__DIR__) . "/modules/*/controllers", GLOB_ONLYDIR)
+    );
     foreach ($source_dirs as $dir) {
       foreach (scandir($dir) as $file) {
         if (ends_with($file, "Controller.php")) {
@@ -120,6 +123,14 @@ class RpcProxyController extends \yii\console\Controller
                   if( !$type ) $type = $doc_type;
                 }
               }
+              $allowsNull=false;
+              $defaultValue=null;
+              $index = strpos( $type, "|");
+              if( is_numeric($index) ){
+                $defaultValue= substr($type,$index+1);
+                $type = substr($type,0, $index );
+                if( $defaultValue=="null") $allowsNull = true;
+              }
               switch ($type) {
                 case 'object':
                 case 'string':
@@ -143,8 +154,9 @@ class RpcProxyController extends \yii\console\Controller
               }
               $param = [
                 'name'        => $jsname,
-                'allowsNull'  => false, // $parameter->allowsNull(), // @todo not working
-                'doc'         => $doc,
+                'allowsNull'  => $allowsNull, // $parameter->allowsNull(), doesn't work
+                'doc'         => $doc . ($defaultValue ? "|$defaultValue":""),
+                'default'     => $defaultValue,
                 'assert'      => $assert,
                 'description' => $param_tag instanceof Param ? $param_tag->getDescription() : null
               ];
@@ -174,13 +186,16 @@ class RpcProxyController extends \yii\console\Controller
             $js[] = "    $proxymethod : function(" .
               implode(", ",
                 array_map(function ($param) {
-                  return $param['name'] .
-                    ($param['allowsNull'] ? "=null" : "");
+                  return $param['name']; // .
+                    //($param['default'] ? "=" . $param['default'] : ""); @todo
                 }, $parameters)) . "){";
             $args = implode(", ", array_map(function ($param) {
               return $param['name'];
             }, $parameters));
             $js = array_merge($js, array_map(function ($param) use ($class, $method) {
+              if($param['allowsNull'] and $param['assert']){
+                return "      if({$param['name']}!==null) qx.core.Assert.assert" . $param['assert'] . "(" . $param['name'] . ");";
+              }
               return $param['assert']
                 ? "      qx.core.Assert.assert" . $param['assert'] . "(" . $param['name'] . ");"
                 : "      // @todo Document type for '" . $param['name'] . "' in " . $class->getName() . '::'. $method->getName();

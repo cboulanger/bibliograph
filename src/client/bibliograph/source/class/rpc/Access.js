@@ -53,15 +53,15 @@ qx.Class.define("rpc.Access",
      * Identifies the current user, either by a token, a username/password, or as a
      * anonymous guest.
      * 
-     * @param first Either a token (then the second param must be null), a username (then the seconde
+     * @param first {String|null} Either a token (then the second param must be null), a username (then the seconde
      * param must be the password, or null, then the user logs in anonymously
-     * @param password 
+     * @param password {String|null} 
      * @return {Promise}
      * @see AccessController::actionAuthenticate
      */
     authenticate : function(first, password){
-      // @todo Document type for 'first' in app\controllers\AccessController::actionAuthenticate
-      // @todo Document type for 'password' in app\controllers\AccessController::actionAuthenticate
+      if(first!==null) qx.core.Assert.assertString(first);
+      if(password!==null) qx.core.Assert.assertString(password);
       return qx.core.Init.getApplication().getRpcClient("access").send("authenticate", [first, password]);
     },
 

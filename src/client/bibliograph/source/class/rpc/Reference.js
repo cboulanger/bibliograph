@@ -16,7 +16,7 @@ qx.Class.define("rpc.Reference",
      * the records
      * 
      * @param datasource 
-     * @param modelClassType 
+     * @param modelClassType {|string} 
      * @return {Promise}
      * @see ReferenceController::actionTableLayout
      */
@@ -167,14 +167,14 @@ qx.Class.define("rpc.Reference",
      * Creates a new reference
      * 
      * @param datasource {String} 
-     * @param folderId 
+     * @param folderId {Number|string} 
      * @param data 
      * @return {Promise}
      * @see ReferenceController::actionCreate
      */
     create : function(datasource, folderId, data){
       qx.core.Assert.assertString(datasource);
-      // @todo Document type for 'folderId' in app\controllers\ReferenceController::actionCreate
+      qx.core.Assert.assertNumber(folderId);
       // @todo Document type for 'data' in app\controllers\ReferenceController::actionCreate
       return qx.core.Init.getApplication().getRpcClient("reference").send("create", [datasource, folderId, data]);
     },
@@ -184,7 +184,7 @@ qx.Class.define("rpc.Reference",
      * move it to the trash
      * 
      * @param datasource {String} The name of the datasource
-     * @param folderId {Number} The numeric id of the folder
+     * @param folderId {Number} The numeric id of the folder. If zero, remove from all folders
      * @param ids {String} A string of the numeric ids of the references, joined by a comma
      * @return {Promise}
      * @see ReferenceController::actionRemove
@@ -217,27 +217,27 @@ qx.Class.define("rpc.Reference",
     /**
      * Move references from one folder to another folder
      * 
-     * @param datasource If true, it is the result of the confirmation
-     * @param folderId The folder to move from
-     * @param targetFolderId The folder to move to
-     * @param ids The ids of the references to move
+     * @param datasource {String} If true, it is the result of the confirmation
+     * @param folderId {Number} The folder to move from
+     * @param targetFolderId {Number} The folder to move to
+     * @param ids {String} The ids of the references to move, joined by  a comma
      * @return {Promise}
      * @see ReferenceController::actionMove
      */
     move : function(datasource, folderId, targetFolderId, ids){
-      // @todo Document type for 'datasource' in app\controllers\ReferenceController::actionMove
-      // @todo Document type for 'folderId' in app\controllers\ReferenceController::actionMove
-      // @todo Document type for 'targetFolderId' in app\controllers\ReferenceController::actionMove
-      // @todo Document type for 'ids' in app\controllers\ReferenceController::actionMove
+      qx.core.Assert.assertString(datasource);
+      qx.core.Assert.assertNumber(folderId);
+      qx.core.Assert.assertNumber(targetFolderId);
+      qx.core.Assert.assertString(ids);
       return qx.core.Init.getApplication().getRpcClient("reference").send("move", [datasource, folderId, targetFolderId, ids]);
     },
 
     /**
      * Copies a reference to a folder
      * 
-     * @param datasource {String}
+     * @param datasource {String} 
      * @param targetFolderId {Number} 
-     * @param ids {String} 
+     * @param ids {String} Numeric ids joined by comma
      * @return {Promise}
      * @see ReferenceController::actionCopy
      */

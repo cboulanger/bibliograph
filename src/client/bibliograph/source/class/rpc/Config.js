@@ -14,13 +14,13 @@ qx.Class.define("rpc.Config",
     /**
      * Service method to load config data
      * 
-     * @param filter Filter
+     * @param filter {String|null} Filter
      * xxreturn \app\controllers\dto\ConfigLoadResult
      * @return {Promise}
      * @see ConfigController::actionLoad
      */
     load : function(filter){
-      // @todo Document type for 'filter' in app\controllers\ConfigController::actionLoad
+      if(filter!==null) qx.core.Assert.assertString(filter);
       return qx.core.Init.getApplication().getRpcClient("config").send("load", [filter]);
     },
 

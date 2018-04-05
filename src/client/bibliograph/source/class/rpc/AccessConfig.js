@@ -64,34 +64,58 @@ qx.Class.define("rpc.AccessConfig",
     },
 
     /**
+     * 
+     * 
+     * @return {Promise}
+     * @see AccessConfigController::actionCreateDatasourceDialog
+     */
+    createDatasourceDialog : function(){
+      return qx.core.Init.getApplication().getRpcClient("access-config").send("create-datasource-dialog", []);
+    },
+
+    /**
+     * 
+     * 
+     * @param formData 
+     * @return {Promise}
+     * @see AccessConfigController::actionCreateDatasourceHandler
+     */
+    createDatasourceHandler : function(formData){
+      // @todo Document type for 'formData' in app\controllers\AccessConfigController::actionCreateDatasourceHandler
+      return qx.core.Init.getApplication().getRpcClient("access-config").send("create-datasource-handler", [formData]);
+    },
+
+    /**
      * Add an empty model record. When creating a datasource,
      * a default bibliograph datasource is created.
      * Creates the form editor
-     * @param type {String} 
-     * @param namedId {String} 
-     * @param edit {Boolean} 
+     * @param type {String} The type of the element
+     * @param namedId {String} The named id of the element
+     * @param schema {String|null} The name of the schema (only relevant for datasource elements)
+     * @param edit {Boolean} If true (default), trigger the form to edit the data
      * @return {Promise}
      * @see AccessConfigController::actionAdd
      */
-    add : function(type, namedId, edit){
+    add : function(type, namedId, schema, edit){
       qx.core.Assert.assertString(type);
       qx.core.Assert.assertString(namedId);
+      if(schema!==null) qx.core.Assert.assertString(schema);
       qx.core.Assert.assertBoolean(edit);
-      return qx.core.Init.getApplication().getRpcClient("access-config").send("add", [type, namedId, edit]);
+      return qx.core.Init.getApplication().getRpcClient("access-config").send("add", [type, namedId, schema, edit]);
     },
 
     /**
      * Edit the element data by returning a form to the user
      * 
-     * @param first The type of the element or boolean true
+     * @param first {String|bool} The type of the element or boolean true
      * @param second {String} The namedId of the element
-     * @param third If the first argument is boolean true, then the second and third
+     * @param third {|string} If the first argument is boolean true, then the second and third
      * arguments are the normal signature
      * @return {Promise}
      * @see AccessConfigController::actionEdit
      */
     edit : function(first, second, third){
-      // @todo Document type for 'first' in app\controllers\AccessConfigController::actionEdit
+      qx.core.Assert.assertString(first);
       qx.core.Assert.assertString(second);
       // @todo Document type for 'third' in app\controllers\AccessConfigController::actionEdit
       return qx.core.Init.getApplication().getRpcClient("access-config").send("edit", [first, second, third]);
@@ -101,15 +125,15 @@ qx.Class.define("rpc.AccessConfig",
      * Save the form produced by edit()
      * 
      * @param data The form data or null if the user cancelled the form
-     * @param type The type of the model or null if the user cancelled the form
-     * @param namedId The namedId of the model or null if the user cancelled the form
+     * @param type {String|null} The type of the model or null if the user cancelled the form
+     * @param namedId {String|null} The namedId of the model or null if the user cancelled the form
      * @return {Promise}
      * @see AccessConfigController::actionSave
      */
     save : function(data, type, namedId){
       // @todo Document type for 'data' in app\controllers\AccessConfigController::actionSave
-      // @todo Document type for 'type' in app\controllers\AccessConfigController::actionSave
-      // @todo Document type for 'namedId' in app\controllers\AccessConfigController::actionSave
+      if(type!==null) qx.core.Assert.assertString(type);
+      if(namedId!==null) qx.core.Assert.assertString(namedId);
       return qx.core.Init.getApplication().getRpcClient("access-config").send("save", [data, type, namedId]);
     },
 

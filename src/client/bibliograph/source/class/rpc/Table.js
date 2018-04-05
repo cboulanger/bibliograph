@@ -15,7 +15,7 @@ qx.Class.define("rpc.Table",
      * the records
      * 
      * @param datasource {String} 
-     * @param modelClassType 
+     * @param modelClassType {|string} 
      * @return {Promise}
      * @see TableController::actionTableLayout
      */
