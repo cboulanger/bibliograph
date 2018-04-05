@@ -179,7 +179,7 @@ class DatasourceManager extends \yii\base\Component
           Yii::error($e->getMessage());
         }
       }
-      Yii::debug("Deleting model tables for '$namedId'...");
+      Yii::debug("Deleting model tables for '$namedId', migration namespace '$migrationNamespace'...");
       $db = $datasource->getConnection();
       $params = [
         'all',
@@ -227,15 +227,15 @@ class DatasourceManager extends \yii\base\Component
     Yii::info("Migrating schema '{$schema->namedId}'...");
     $datasources = $schema->datasources;
     $count = 0;
-    /** @var \app\models\BibliographicDatasource $datasource */
+    /** @var \app\models\Datasource $datasource */
     foreach ($datasources as $datasource) {
-      $params = [
-        'all',
-        'migrationNamespaces' => $datasource->migrationNamespace,
-      ];
+      $instance = Datasource::getInstanceFor($datasource->namedId);
+      $migrationNamespace = $instance->migrationNamespace;
+      Yii::info("Migrating datasource '{$instance->namedId}'...");
+      Yii::debug( "Migration namespace: $migrationNamespace");
+      $params = [ 'all', 'migrationNamespaces' => $migrationNamespace ];
       /** @var \yii\db\Connection $db */
-      $db = $datasource->getConnection();
-      Yii::info("Migrating datasource '{$datasource->namedId}'...");
+      $db = $instance->getConnection();
       $output = Console::runAction('migrate/up', $params, null, $db);
       if( ! $output->contains("up-to-date")) $count++;
     }

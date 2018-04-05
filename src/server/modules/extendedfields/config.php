@@ -1,6 +1,6 @@
 <?php
 /** @noinspection MissedFieldInspection */
 return [
-  'id' => 'ext_fields',
+  'id' => 'extendedfields',
   'class' => \app\modules\extendedfields\Module::class
 ];

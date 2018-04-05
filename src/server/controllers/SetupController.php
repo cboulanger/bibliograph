@@ -174,34 +174,33 @@ class SetupController extends \app\controllers\AppController
 
     // if application version has changed or first run, run setup methods
     Yii::debug("Data version: $upgrade_from, code version: $upgrade_to.");
+    // visual marker in log file
+    Yii::debug(
+      "\n\n\n" . str_repeat("*", 80) . "\n\n BIBLIOGRAPH SETUP\n\n" . str_repeat("*", 80) . "\n\n\n",
+      'marker'
+    );
     if ($upgrade_to !== $upgrade_from) {
-      // visual marker in log file
-      Yii::debug(
-        "\n\n\n" . str_repeat("*", 80) . "\n\n BIBLIOGRAPH SETUP\n\n" . str_repeat("*", 80) . "\n\n\n",
-        'marker'
-      );
       Yii::info("Application version has changed from '$upgrade_from' to '$upgrade_to', running setup methods");
-
-      // run methods. If any of them returns a fatal error, abort and alert the user
-      // if any non-fatal errors occur, collect them and display them to the user at the 
-      // end, then consider setup unsuccessful
-      $success = $this->runSetupMethods($upgrade_from, $upgrade_to);
-      if ($success) {
-        $upgrade_from = $upgrade_to;
-        Yii::info("Setup of version '$upgrade_from' finished successfully.");
-        if (!Yii::$app->config->keyExists('app.version')) {
-          // createKey( $key, $type, $customize=false, $default=null, $final=false )
-          Yii::$app->config->createKey('app.version', 'string', false, null, false);
-        }
-        Yii::$app->config->setKeyDefault('app.version', $upgrade_from);
-      } else {
-        Yii::warning("Setup of version '$upgrade_from' failed.");
-        Yii::debug([
-          'errors'   => $this->errors,
-          'messages' => $this->messages
-        ]);
-        return null;
+    }
+    // run methods. If any of them returns a fatal error, abort and alert the user
+    // if any non-fatal errors occur, collect them and display them to the user at the
+    // end, then consider setup unsuccessful
+    $success = $this->runSetupMethods($upgrade_from, $upgrade_to);
+    if ($success) {
+      $upgrade_from = $upgrade_to;
+      Yii::info("Setup of version '$upgrade_from' finished successfully.");
+      if (!Yii::$app->config->keyExists('app.version')) {
+        // createKey( $key, $type, $customize=false, $default=null, $final=false )
+        Yii::$app->config->createKey('app.version', 'string', false, null, false);
       }
+      Yii::$app->config->setKeyDefault('app.version', $upgrade_from);
+    } else {
+      Yii::warning("Setup of version '$upgrade_from' failed.");
+      Yii::debug([
+        'errors'   => $this->errors,
+        'messages' => $this->messages
+      ]);
+      return null;
     }
 
     // notify client that setup it done
@@ -339,6 +338,7 @@ class SetupController extends \app\controllers\AppController
    */
   protected function setupCheckIniFileExists()
   {
+    if( ! $this->isNewInstallation ) return false;
     $this->hasIni = file_exists(Yii::getAlias('@app/config/bibliograph.ini.php'));
     if (!$this->hasIni) {
       if (YII_ENV_PROD) {
@@ -364,6 +364,8 @@ class SetupController extends \app\controllers\AppController
    */
   protected function setupCheckFilePermissions()
   {
+    if( ! $this->isNewInstallation ) return false;
+
     $config_dir = Yii::getAlias('@app/config');
     if (!$this->hasIni and YII_ENV_DEV and !\is_writable($config_dir)) {
       return [
@@ -440,6 +442,8 @@ class SetupController extends \app\controllers\AppController
    */
   protected function setupDoMigrations($upgrade_from, $upgrade_to)
   {
+    if( $upgrade_from == $upgrade_to ) return false;
+
     $expectTables = explode(",",
       "data_Config,data_Datasource,data_Group,data_Messages,data_Permission,data_Role,data_Session,data_User,data_UserConfig," .
       "join_Datasource_Group,join_Datasource_Role,join_Datasource_User,join_Group_User,join_Permission_Role,join_User_Role");
@@ -559,8 +563,9 @@ class SetupController extends \app\controllers\AppController
    * @todo modules!
    * @return array
    */
-  protected function setupPreferences()
+  protected function setupPreferences($upgrade_from, $upgrade_to)
   {
+    if( $upgrade_from == $upgrade_to ) return false;
     $prefs = require Yii::getAlias('@app/config/prefs.php');
     foreach ($prefs as $key => $value) {
       try{
@@ -698,22 +703,19 @@ class SetupController extends \app\controllers\AppController
 
   /**
    * Migrates datasources
-   * @param string $schemaToMigrate|null If given, migrate only datasources of that schema
    * @return array|boolean
    * @throws MigrationException
    */
-  protected function setupDatasourceMigrations($schemaToMigrate=null)
+  protected function setupDatasourceMigrations($upgrade_from,$upgrade_to)
   {
-    // no need if this was freshly installed
-    if( $this->isNewInstallation) {
+    if( $this->isNewInstallation or $upgrade_from == $upgrade_to) {
+      Yii::debug("New installation or no new version, no datasource migration necessary.");
       return false;
     }
-    $schemas = Schema::find()->all();
     $migrated = [];
     $failed = [];
+    $schemas = [Schema::findByNamedId(self::DATASOURCE_DEFAULT_SCHEMA)];
     foreach( $schemas as $schema ){
-      // if specific schema only
-      if( $schemaToMigrate and $schemaToMigrate !== $schema->namedId ) continue;
       try {
         // backwards compatibility
         if( $schema->namedId == SetupController::DATASOURCE_DEFAULT_SCHEMA and $this->isV2Upgrade){
@@ -779,6 +781,4 @@ class SetupController extends \app\controllers\AppController
     }
     return $result;
   }
-
-
 }

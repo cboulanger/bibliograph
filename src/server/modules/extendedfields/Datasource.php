@@ -8,6 +8,11 @@
 
 namespace app\modules\extendedfields;
 
+/**
+ * Class Datasource
+ * @package app\modules\extendedfields
+ * @property $migrationNamespace
+ */
 class Datasource extends \app\models\BibliographicDatasource
 {
   /**
