@@ -34,8 +34,6 @@ use app\models\Datasource;
  * @property array $formData
  *    A associative array of arrays containing data for the
  *    dialog.Form widget
- * @property string $migrationNamespace
- *    The migration namespace used for this model
  */
 class BaseModel extends ActiveRecord
 {
@@ -80,16 +78,6 @@ class BaseModel extends ActiveRecord
    * @return array|null
    */
   public function getFormData(){
-    return null;
-  }
-
-
-  /**
-   * The namespace that contains of migration classes for this model
-   * @return string|null
-   */
-  public function getMigrationNamespace()
-  {
     return null;
   }
 

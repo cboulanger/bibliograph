@@ -29,8 +29,19 @@ class BibliographicDatasource
   implements \lib\schema\ISchema
 {
 
+  /**
+   * The named id of the datasource schema
+   */
+  const SCHEMA_ID = "bibliograph_datasource";
+
+  /**
+   * @var string
+   */
   static $name = "Bibliograph";
 
+  /**
+   * @var string
+   */
   static $description = "Standard Bibliograph Datasource";
 
   /**

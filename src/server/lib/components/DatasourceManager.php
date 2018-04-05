@@ -138,9 +138,7 @@ class DatasourceManager extends \yii\base\Component
    */
   public function createModelTables(Datasource $datasource )
   {
-    /** @var \app\schema\AbstractReferenceSchema $schema */
-    $schema = $datasource->getSchema()->one();
-    $migrationNamespace = $schema->migrationNamespace;
+    $migrationNamespace = $datasource->migrationNamespace;
     $params = [
       'all',
       'migrationNamespaces' => $migrationNamespace,
@@ -149,7 +147,6 @@ class DatasourceManager extends \yii\base\Component
     $db = $datasource->getConnection();
     Yii::info("Creating model tables for '{$datasource->namedId}'");
     Yii::debug([
-      "schema" => $schema->namedId,
       "migrationNamespace" => $migrationNamespace,
       "dsn" => $db->dsn
     ]);
@@ -166,10 +163,9 @@ class DatasourceManager extends \yii\base\Component
    */
   public function delete($namedId, $deleteData = false)
   {
+    /** @var Datasource $datasource */
     $datasource = Datasource::getInstanceFor($namedId);
-    /** @var \app\schema\AbstractReferenceSchema $schema */
-    $schema = $datasource->getSchema()->one();
-    $migrationNamespace = $schema->migrationNamespace;
+    $migrationNamespace = $datasource->migrationNamespace;
     try {
       $datasource->delete();
     } catch (\Throwable $e) {
@@ -204,10 +200,9 @@ class DatasourceManager extends \yii\base\Component
    */
   public function checkNewMigrations(Datasource $datasource)
   {
-    $schema = $datasource->getSchema()->one();
     $params = [
       'all',
-      'migrationNamespaces' => $schema->migrationNamespace,
+      'migrationNamespaces' => $datasource->migrationNamespace,
     ];
     $db = $datasource->getConnection();
     $output = Console::runAction('migrate/new', $params, null, $db);
@@ -236,7 +231,7 @@ class DatasourceManager extends \yii\base\Component
     foreach ($datasources as $datasource) {
       $params = [
         'all',
-        'migrationNamespaces' => $schema->migrationNamespace,
+        'migrationNamespaces' => $datasource->migrationNamespace,
       ];
       /** @var \yii\db\Connection $db */
       $db = $datasource->getConnection();

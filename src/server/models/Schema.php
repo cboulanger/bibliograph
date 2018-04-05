@@ -8,9 +8,10 @@ use Yii;
 
 /**
  * This is the model class for table "data_Schema". It is currently used only for
- * Datasource schemas, but could be used for any model that uses a "schema" of
- * some sort, which can be registered using this model (probably requires addition
- * of a "type" column).
+ * Datasource schemas.
+ *
+ * @todo this but could be used for any model that uses a "schema" of some sort, which can be registered using this
+ * model. This requires addition of a "type" column.
  *
  * @property integer $id
  * @property string $namedId
@@ -100,22 +101,6 @@ class Schema extends \lib\models\BaseModel
     ];
   }
 
-  /**
-   * @inheritdoc
-   * By default, the migration namespace is a subfolder of the @app/migrations directory that
-   * corresponds to the schema's namedId.
-   * @return string
-   */
-  public function getMigrationNamespace()
-  {
-    $datasourceClass = $this->class;
-    // take from datasource if present FIXME
-    if( isset( $datasourceClass::$migrationNamespace ) ){
-      return $datasourceClass::$migrationNamespace;
-    }
-    return "\app\migrations\schema\\{$this->namedId}";
-  }
-
   //-------------------------------------------------------------
   // Relations
   //-------------------------------------------------------------
@@ -149,22 +134,24 @@ class Schema extends \lib\models\BaseModel
   //-------------------------------------------------------------
 
   /**
-   * Registers a schema.
+   * Registers a datasource schema.
    * @param string $namedId
    * @param string $className
    *    Throws a \ReflectionException if the class does not exist.
    * @param array|null $options
    * @throws RecordExistsException
-   * @throws  InvalidArgumentException
-   * @throws \ReflectionException
-   * @todo throws too many different types of exceptions!
+   * @throws InvalidArgumentException
    */
   public static function register($namedId, string $className, array $options = null)
   {
     if (!$namedId or !is_string($namedId)) {
       throw new InvalidArgumentException("Invalid namedId parameter");
     }
-    $class = new \ReflectionClass($className);
+    try {
+      $class = new \ReflectionClass($className);
+    } catch (\ReflectionException $e) {
+      throw new InvalidArgumentException($e->getMessage(), null, $e);
+    }
     $baseClass = \app\models\Datasource::class;
     if (!$class->isSubclassOf($baseClass)) {
       throw new InvalidArgumentException('Class must extend ' . $baseClass);

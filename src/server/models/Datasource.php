@@ -31,21 +31,40 @@ use yii\helpers\ArrayHelper;
  * @property integer $active
  * @property integer $readonly
  * @property integer $hidden
+ * @property string $migrationNamespace
  */
 class Datasource extends BaseModel
 {
 
   /**
+   * The named id of the datasource schema
+   * Define this constant in subclasses
+   */
+  const SCHEMA_ID = "";
+
+  /**
    * A descriptive name (should be set)
+   * @todo convert to constant
    * @var string
    */
-  static $name = "";
+  public static $name = "";
 
   /**
    * More detailed description of the Datasource (optional)
+   * @todo convert to constant
    * @var string
    */
-  static $description = "";
+  public static $description = "";
+
+  /**
+   * By default, the migration namespace is a subfolder of the @app/migrations directory that
+   * corresponds to the schema's namedId.
+   * @return string
+   */
+  public function getMigrationNamespace()
+  {
+    return "\\app\\migrations\\schema\\{$this->namedId}";
+  }
 
   /**
    * Models that are attached to this datasource

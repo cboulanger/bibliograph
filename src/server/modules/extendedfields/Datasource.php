@@ -11,10 +11,30 @@ namespace app\modules\extendedfields;
 class Datasource extends \app\models\BibliographicDatasource
 {
   /**
-   * Override schema migration namespace
+   * The named id of the datasource schema
+   */
+  const SCHEMA_ID = "bibliograph_extended";
+
+  /**
+   * @inheritdoc
    * @var string
    */
-  static $migrationNamespace = "\\app\\modules\\extendedfields\\migrations";
+  static $name = "Extended Fields";
+
+  /**
+   * @inheritdoc
+   * @var string
+   */
+  static $description = "An example how to extend the standard datasource schema";
+
+  /**
+   * The migration namespace
+   * @return string
+   */
+  public function getMigrationNamespace()
+  {
+    return "\\app\\modules\\extendedfields\\migrations";
+  }
 
   /**
    * Initialize the datasource, registers the models

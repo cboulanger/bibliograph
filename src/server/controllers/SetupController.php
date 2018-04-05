@@ -21,6 +21,7 @@
 namespace app\controllers;
 
 
+use app\models\BibliographicDatasource;
 use Yii;
 use yii\db\Exception;
 use Stringy\Stringy;
@@ -45,12 +46,14 @@ class SetupController extends \app\controllers\AppController
   /**
    * The name of the default datasource schema.
    * Initial value of the app.datasource.baseschema preference.
+   * @todo remove?
    */
-  const DATASOURCE_DEFAULT_SCHEMA = "bibliograph_datasource";
+  const DATASOURCE_DEFAULT_SCHEMA = BibliographicDatasource::SCHEMA_ID;
 
   /**
    * The name of the default bibliographic datasource class.
    * Initial value of the app.datasource.baseclass preference.
+   * @todo remove?
    */
   const DATASOURCE_DEFAULT_CLASS = \app\models\BibliographicDatasource::class;
 
@@ -659,6 +662,41 @@ class SetupController extends \app\controllers\AppController
   }
 
   /**
+   * @return array
+   */
+  protected function setupModules()
+  {
+    $errors = [];
+    $messages = [];
+    foreach( Yii::$app->modules as $id => $info){
+      /** @var Module $module */
+      $module = Yii::$app->getModule($id);
+      if( ! $module instanceof \lib\Module ) continue;
+      if( $module->version === $module->installedVersion ){
+        Yii::debug("Module $module->id ($module->name) is already at version $module->version ...");
+        $messages[] = "Module '$module->id' already installed.";
+        continue;
+      }
+      Yii::debug("Installing module $module->id $module->version");
+      try{
+        $enabled = $module->install();
+        if( $enabled ){
+          $messages[] = "Installed module '{$module->id}'.";
+        } else {
+          $errors = array_merge($errors, $module->errors );
+        }
+      } catch (\Exception $e) {
+        Yii::error($e);
+        $errors[] = "Installing module '{$module->id}' failed: " . $e->getMessage();
+      }
+    }
+    return [
+      'message' => $messages,
+      'error' => $errors
+    ];
+  }
+
+  /**
    * Migrates datasources
    * @param string $schemaToMigrate|null If given, migrate only datasources of that schema
    * @return array|boolean
@@ -667,7 +705,9 @@ class SetupController extends \app\controllers\AppController
   protected function setupDatasourceMigrations($schemaToMigrate=null)
   {
     // no need if this was freshly installed
-    if( $this->isNewInstallation) return false;
+    if( $this->isNewInstallation) {
+      return false;
+    }
     $schemas = Schema::find()->all();
     $migrated = [];
     $failed = [];
@@ -740,38 +780,5 @@ class SetupController extends \app\controllers\AppController
     return $result;
   }
 
-  /**
-   * @return array
-   */
-  protected function setupModules()
-  {
-    $errors = [];
-    $messages = [];
-    foreach( Yii::$app->modules as $id => $info){
-      /** @var Module $module */
-      $module = Yii::$app->getModule($id);
-      if( ! $module instanceof \lib\Module ) continue;
-      if( $module->version === $module->installedVersion ){
-        Yii::debug("Module $module->id ($module->name) is already at version $module->version ...");
-        $messages[] = "Module '$module->id' already installed.";
-        continue;
-      }
-      Yii::debug("Installing module $module->id $module->version");
-      try{
-        $enabled = $module->install();
-        if( $enabled ){
-          $messages[] = "Installed module '{$module->id}'.";
-        } else {
-          $errors = array_merge($errors, $module->errors );
-        }
-      } catch (\Exception $e) {
-        Yii::error($e);
-        $errors[] = "Installing module '{$module->id}' failed: " . $e->getMessage();
-      }
-    }
-    return [
-      'message' => $messages,
-      'error' => $errors
-    ];
-  }
+
 }

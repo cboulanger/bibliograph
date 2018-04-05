@@ -31,6 +31,7 @@
 
 ### Priority: normal
 - [ ] Add "locale" property to search folders for parsing queries
+- [ ] Clear up the conceptual mess concerning "schema": datasource schema/reference schema
 - [ ] Re-implement Export
 - [ ] Move static methods out of \app\models\Datasource into DatasourceManager component
 - [ ] Replace calls to Yii::$app->eventQueue->add() with calls to message API

@@ -10,7 +10,7 @@ namespace app\modules\extendedfields;
 
 use app\schema\BibtexSchema;
 
-class Schema extends BibtexSchema
+class ReferenceSchema extends BibtexSchema
 {
   /**
    * Constructor
