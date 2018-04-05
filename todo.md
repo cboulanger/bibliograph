@@ -20,23 +20,26 @@
 - [x] Re-implement Remove/Move/Copy references
 - [x] Implement move/copy references with drag & drop
 - [x] Re-implement deleting references and emptying trash
-- [ ] Re-implement extended fields datasource
+- [x] Re-implement extended fields datasource
+- [x] Move the .idea folder out of version control
+- [ ] Fix Drag & Drop
+- [ ] Add & test packaging scripts mechanism
+- [ ] Re-implement Docker image for testing
 
 ## v3.0.0-beta 
 
 ### Priority: high
-- [ ] Add distribution mechanism
 - [ ] module autoloader requires debug mode (trying to serialize closures breaks app)
 - [ ] Tests: Make Travis ~~great~~ work again
+- [ ] Re-implement Export
+- [ ] Move static methods out of \app\models\Datasource into DatasourceManager component
+- [ ] Datasource-specific migration namespace should be in the Datasource Schema
+- [ ] Clear up the conceptual mess concerning "schema": datasource schema/reference schema
 
 ### Priority: normal
 - [ ] Add "locale" property to search folders for parsing queries
-- [ ] Clear up the conceptual mess concerning "schema": datasource schema/reference schema
-- [ ] Re-implement Export
-- [ ] Move static methods out of \app\models\Datasource into DatasourceManager component
 - [ ] Replace calls to Yii::$app->eventQueue->add() with calls to message API
 - [ ] Frontend: Rename item view "metadata" page
-- [ ] Backend: Model validation: accept booleans for MySql SmallInt columns
 - [ ] Add missing translations
 - [ ] Add log email target to report fatal errors, adapt UserErrorException to report fatal errors via email
 - [ ] Make UserErrorException a JSONRPC error which is caught on the client, instead of a Dialog event. 
@@ -54,6 +57,7 @@
 - [ ] Re-implement Table Actions Interface
 - [ ] Add compiler-based splash screen for loading
 - [ ] Re-implement reference editor title label
+- [ ] Backend: Model validation: accept booleans for MySql SmallInt columns
 
 ### Code cleanup
 - [ ] Replace message names with constants
@@ -65,7 +69,6 @@
 - [ ] Rename Yii::$app->utils to Yii::$app->state
 - [ ] Use UserErrorException consistently and replace \Exception
 - [ ] Have actions return an informative message when they don't return a result
-- [ ] Move the .idea folder out of version control (see [instructions](https://intellij-support.jetbrains.com/hc/en-us/articles/207240985-Changing-IDE-default-directories-used-for-config-plugins-and-caches-storage))
 - [ ] Fix 'property is unused' inspection alert
 - [ ] Add missing id, created, modified to model rules()
 - [ ] Remove qx prefix in generated code (s/qx([A-Z])/\L$1/)
