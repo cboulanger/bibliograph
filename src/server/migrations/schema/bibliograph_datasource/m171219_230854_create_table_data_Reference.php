@@ -4,14 +4,12 @@ use yii\db\Migration;
 
 class m171219_230854_create_table_data_Reference extends Migration
 {
-  public function safeUp()
+  /**
+   * @return array
+   */
+  public function getSchema()
   {
-    $tableOptions = null;
-    if ($this->db->driverName === 'mysql') {
-      $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
-    }
-
-    $this->createTable('{{%data_Reference}}', [
+    return [
       'id' => $this->integer(11)->notNull()->append('AUTO_INCREMENT PRIMARY KEY'),
       'created' => $this->timestamp(),
       'modified' => $this->timestamp()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),
@@ -62,7 +60,17 @@ class m171219_230854_create_table_data_Reference extends Migration
       'hash' => $this->string(40),
       'markedDeleted' => $this->smallInteger(1)->notNull()->defaultValue('0'),
       'attachments' => $this->integer(11),
-    ], $tableOptions);
+    ];
+  }
+
+  public function safeUp()
+  {
+    $tableOptions = null;
+    if ($this->db->driverName === 'mysql') {
+      $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
+    }
+
+    $this->createTable('{{%data_Reference}}', $this->getSchema() , $tableOptions);
   }
 
   public function safeDown()

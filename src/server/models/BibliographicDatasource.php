@@ -50,7 +50,7 @@ class BibliographicDatasource
     parent::init();
     $this->addModel( 'reference',   Reference::class,   'reference');
     $this->addModel( 'folder',      Folder::class,      'folder');
-    $this->addModel( 'transaction', Transaction::class, 'transaction');
+    $this->addModel( 'transaction', Transaction::class);
   }
 
   /**

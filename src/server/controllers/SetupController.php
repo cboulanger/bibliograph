@@ -659,10 +659,12 @@ class SetupController extends \app\controllers\AppController
   }
 
   /**
+   * Migrates datasources
+   * @param string $schemaToMigrate|null If given, migrate only datasources of that schema
    * @return array|boolean
    * @throws MigrationException
    */
-  protected function setupDatasourceMigrations()
+  protected function setupDatasourceMigrations($schemaToMigrate=null)
   {
     // no need if this was freshly installed
     if( $this->isNewInstallation) return false;
@@ -670,6 +672,8 @@ class SetupController extends \app\controllers\AppController
     $migrated = [];
     $failed = [];
     foreach( $schemas as $schema ){
+      // if specific schema only
+      if( $schemaToMigrate and $schemaToMigrate !== $schema->namedId ) continue;
       try {
         // backwards compatibility
         if( $schema->namedId == SetupController::DATASOURCE_DEFAULT_SCHEMA and $this->isV2Upgrade){

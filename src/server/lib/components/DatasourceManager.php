@@ -221,6 +221,7 @@ class DatasourceManager extends \yii\base\Component
    * @param Schema $schema
    * @return int number of datasources that were migrated
    * @throws MigrationException
+   * @throws UserErrorException
    * @throws \Exception
    */
   public function migrate(Schema $schema)

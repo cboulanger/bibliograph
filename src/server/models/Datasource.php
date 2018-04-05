@@ -130,6 +130,7 @@ class Datasource extends BaseModel
       ],
       'schema' => [
         'type' => "selectbox",
+        'enabled' => false,
         'label' => Yii::t('app', "Schema"),
         'delegate' => [
           'options' => "getSchemaOptions"
@@ -350,7 +351,7 @@ class Datasource extends BaseModel
    * Returns the yii Connection object for this datasource
    * @param string $datasourceName
    * @return \yii\db\Connection
-   * @throws \LogicException
+   * @throws \RuntimeException
    * @throws \Exception
    */
   public function getConnection()
@@ -365,7 +366,7 @@ class Datasource extends BaseModel
           $dsn = "{$this->type}:host={$this->host};port={$this->port};dbname={$this->database}";
           break;
         default:
-          throw new \LogicException("Support for datasource type '{$this->type}' has not been implemented yet.");
+          throw new \RuntimeException("Support for datasource type '{$this->type}' has not been implemented yet.");
       }
       // determine table prefix from database or datasource name
       $global_prefix = trim(Yii::$app->config->getIniValue("database.tableprefix"));

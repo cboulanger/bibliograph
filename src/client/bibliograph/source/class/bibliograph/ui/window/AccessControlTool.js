@@ -162,7 +162,7 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     // user button
     let addUserButton = new qx.ui.toolbar.Button(this.tr('New User'), "icon/22/apps/preferences-users.png");
     toolBar1.add(addUserButton);
-    toolBar1.setEnabled(false);
+    addUserButton.setEnabled(false);
     pm.create("access.manage").bind("state", addUserButton, "visibility", {
       converter: bibliograph.Utils.bool2visibility
     });
@@ -178,6 +178,7 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     //  datasource button
     let addDatasourceButton = new qx.ui.toolbar.Button(this.tr('New Datasource'), "icon/22/apps/internet-transfer.png");
     toolBar1.add(addDatasourceButton);
+    addDatasourceButton.setEnabled(false);
     pm.create("access.manage").bind("state", addDatasourceButton, "visibility", {
       converter: bibliograph.Utils.bool2visibility
     });
@@ -261,22 +262,24 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     leftSelectBox.bind("selection", button1, "enabled", {
       converter: (s) => s.length > 0
     });
-    button1.addListener("execute", function () {
+    button1.addListener("execute", async () => {
       let selection = leftSelectBox.getSelection();
       let type = selection.length ? selection[0].getModel().getValue() : null;
       if( ! type) {
         this.warn("Cannot get type!");
         return;
       }
-      let msg = this.tr("Please enter the id of the new '%1'-Object", type );
-      dialog.Dialog.prompt(msg, function (name) {
+      if( type === "datasource" ){
+        await rpc.AccessConfig.createDatasourceDialog();
+      } else {
+        let msg = this.tr("Please enter the id of the new '%1'-Object", type);
+        let name = await dialog.Dialog.prompt(msg).promise();
         if (name) {
-          leftListStore.execute("add", [type, name], function () {
-            leftListStore.reload();
-          });
+          await rpc.AccessConfig.add(type, name,null,true);
+          leftListStore.reload();
         }
-      });
-    }, this);
+      }
+    });
     
     // "Delete" button
     let button2 = new qx.ui.form.Button(null, "bibliograph/icon/button-minus.png", null);
@@ -489,11 +492,15 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     button7.addListener("execute", async () => {
       if( ! elementTree.getSelection().length ) return;
       let type = elementTree.getSelection()[0].getModel().getType();
-      let msg = this.tr("Please enter the id of the new '%1'-Object", type );
-      let name = dialog.Dialog.prompt(msg).promise();
-      if (name) {
-        await rightListStore.execute("add", [type, name]);
-        rightListStore.reload();
+      if( type === "datasource" ){
+        rpc.AccessConfig.createDatasourceDialog();
+      } else {
+        let msg = this.tr("Please enter the id of the new '%1'-Object", type );
+        let name = dialog.Dialog.prompt(msg).promise();
+        if (name) {
+          await rightListStore.execute("add", [type, name]);
+          rightListStore.reload();
+        }
       }
     });
 

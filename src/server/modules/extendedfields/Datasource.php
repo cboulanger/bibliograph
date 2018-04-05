@@ -8,13 +8,13 @@
 
 namespace app\modules\extendedfields;
 
-use app\modules\extendedfields\Reference;
-
 class Datasource extends \app\models\BibliographicDatasource
 {
-  static $name = "Extended";
-
-  static $description = "Bibliograph Datasource with extended field list";
+  /**
+   * Override schema migration namespace
+   * @var string
+   */
+  static $migrationNamespace = "\\app\\modules\\extendedfields\\migrations";
 
   /**
    * Initialize the datasource, registers the models

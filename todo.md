@@ -41,6 +41,7 @@
 - [ ] Make UserErrorException a JSONRPC error which is caught on the client, instead of a Dialog event. 
 - [ ] Re-implement "New User" & "New Datasource" in Access Control Tool and System dialogs
 - [ ] Add "Re-install modules" button in Systems menu
+- [ ] Remove migrations table for deleted datasources
 
 ### Priority: low
 - [ ] Add "serverOnly" column to data_Config (true/false/null) and remove from config data sent to client

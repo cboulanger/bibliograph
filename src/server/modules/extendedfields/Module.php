@@ -24,11 +24,17 @@ class Module extends \lib\Module
    */
   public function install($enabled = false)
   {
-    // register datasource
+    // register schema
     try {
       Schema::register("bibliograph_extended", Datasource::class);
     } catch (RecordExistsException $e) {
       Yii::debug("Extended fields schema already registered.");
+    }
+    // migrate existing datasources
+    try {
+      $count = Yii::$app->datasourceManager->migrate("bibliograph_extended");
+    } catch (\Exception $e) {
+      Yii::error($e);
     }
 
     // register module

@@ -20,7 +20,7 @@
 
 namespace app\controllers;
 
-use Yii;
+use app\models\Schema;
 use lib\dialog\{
   Alert, Confirm, Error, Form
 };
@@ -28,6 +28,7 @@ use lib\exceptions\{
   RecordExistsException, UserErrorException
 };
 use lib\schema\ISchema;
+use Yii;
 
 /**
  * Backend service class for the access control tool widget
@@ -79,7 +80,7 @@ class AccessConfigController extends AppController
         'icon' => "icon/16/apps/internet-transfer.png"
       ],
       'schema' => [
-        'class' => \app\models\Schema::class,
+        'class' => Schema::class,
         'label' => Yii::t('app', "Schemas"),
         'dialogLabel' => Yii::t('app', "Schema"),
         'labelProp' => "name",
@@ -193,7 +194,7 @@ class AccessConfigController extends AppController
       try {
         $model->link($linkedModelRelation, $linkedModel, $extraColumns);
       } catch (\Exception $e) {
-        if( $e instanceof yii\base\InvalidCallException or $e instanceof \PDOException) {
+        if ($e instanceof yii\base\InvalidCallException or $e instanceof \PDOException) {
           throw new UserErrorException("Models are already linked");
         }
       }
@@ -216,9 +217,9 @@ class AccessConfigController extends AppController
   public function actionTypes()
   {
     $result = [];
-    foreach( $this->modelData as $type => $data ){
+    foreach ($this->modelData as $type => $data) {
       $result[] = [
-        'icon'  => $data['icon'],
+        'icon' => $data['icon'],
         'label' => $data['dialogLabel'],
         'value' => $type
       ];
@@ -257,7 +258,7 @@ class AccessConfigController extends AppController
         break;
       case "datasource":
         $labelProp = "title";
-        $query = $query->andWhere(['hidden'=>0]);
+        $query = $query->andWhere(['hidden' => 0]);
         break;
     }
     if ($filter) {
@@ -273,12 +274,22 @@ class AccessConfigController extends AppController
     //Yii::trace($elementData);
     foreach ($records as $record) {
       $value = $record->namedId;
-      $label = ($record->$labelProp and $record->$labelProp !== $value) ? "{$record->$labelProp} ($value)" : $value;
+      if( in_array($type, ['permission','role' ])){
+        $translatedValue = Yii::t('app', $value);
+        $label = ($record->$labelProp and $record->$labelProp !== $value) ?
+          Yii::t('app',  $record->$labelProp) . " ($translatedValue)" :
+          $translatedValue;
+      } else {
+        $label = ($record->$labelProp and $record->$labelProp !== $value) ? $record->$labelProp . " ($value)" : $value;
+      }
+
       $icon = $elementData['icon'];
       // special cases
       if ($record->hasAttribute("hidden") and $record->hidden and !$isAdmin) continue;
       if ($record->hasAttribute("ldap") and $record->ldap) $label .= " (LDAP)";
-      if ($record->hasAttribute("active") and ! $record->active ) $label .= " [deactivated]";
+      if ($record->hasAttribute("active") and !$record->active) {
+        $label .= " [" . Yii::t('app', 'deactivated') . "]";
+      }
       // entry
       $result[] = array(
         'icon' => $icon,
@@ -357,11 +368,11 @@ class AccessConfigController extends AppController
       // normal node
       $linkedElementdata = $this->getModelDataFor($linkedType);
       $node = array(
-        'icon'   => $linkedElementdata['icon'],
-        'label'  => $linkedElementdata['label'],
-        'type'   => $linkedType,
+        'icon' => $linkedElementdata['icon'],
+        'label' => $linkedElementdata['label'],
+        'type' => $linkedType,
         'action' => ($elementType == "user" && $linkedType == "role") ? null : "link",
-        'value'  => $elementType . "=" . $namedId,
+        'value' => $elementType . "=" . $namedId,
         'children' => []
       );
 
@@ -433,7 +444,7 @@ class AccessConfigController extends AppController
         foreach ($model->$relation as $linkedModel) {
           $labelAttribute = $modelData[$linkedType]['labelProp'];
           $label = $linkedModel->getAttribute($labelAttribute);
-          if( !$label ){
+          if (!$label) {
             $label = $linkedModel->namedId;
           }
           $linkedNode = [
@@ -453,19 +464,53 @@ class AccessConfigController extends AppController
   }
 
   /**
+   *
+   */
+  public function actionCreateDatasourceDialog()
+  {
+    Form::create(
+      Yii::t('app', "Create a new datasource"),
+      ['namedId' => [
+        'type' => 'textfield',
+        'label' => Yii::t('app', "ID of the datasource")
+      ],
+        'schema' => [
+          'type' => "selectbox",
+          'label' => Yii::t('app', "Schema"),
+          'options' => Schema::find()->select("name as label, namedId as value")->asArray()->all()
+        ],
+      ],
+      true,
+      Yii::$app->controller->id, "create-datasource-handler", []
+    );
+    return "Created dialog to add a datasource";
+  }
+
+  /**
+   * @param $formData
+   * @return string
+   * @throws \JsonRpc2\Exception
+   */
+  public function actionCreateDatasourceHandler(\stdClass $formData=null)
+  {
+    if (!$formData or ! $formData->namedId ) return "Action cancelled";
+    $this->actionAdd("datasource", $formData->namedId, $formData->schema);
+  }
+
+  /**
    * Add an empty model record. When creating a datasource,
    * a default bibliograph datasource is created.
    * Creates the form editor
    *
-   * @param string $type
-   * @param string $namedId
-   * @param bool $edit
+   * @param string $type The type of the element
+   * @param string $namedId The named id of the element
+   * @param string|null $schema The name of the schema (only relevant for datasource elements)
+   * @param bool $edit If true (default), trigger the form to edit the data
    * @return string
    * @throws \JsonRpc2\Exception
    * @throws UserErrorException
-   * @todo Implement support for other datasource types
    */
-  public function actionAdd($type, $namedId, $edit = true)
+  public function actionAdd($type, $namedId, $schema = null, $edit = true)
   {
     $this->requirePermission("access.manage");
     $elementData = $this->getModelDataFor($type);
@@ -482,7 +527,7 @@ class AccessConfigController extends AppController
 
     if ($type == "datasource") {
       try {
-        $model = Yii::$app->datasourceManager->create($namedId);
+        $model = Yii::$app->datasourceManager->create($namedId, $schema);
       } catch (RecordExistsException $e) {
         throw new UserErrorException($duplicateMessage);
       } catch (\Exception $e) {
@@ -561,15 +606,15 @@ class AccessConfigController extends AppController
       throw new UserErrorException($e->getMessage());
     }
     // remove password information
-    if ( isset($formData['password']) ) {
+    if (isset($formData['password'])) {
       $formData['password']['value'] = null;
     }
-    if ( isset($formData['password2']) ) {
+    if (isset($formData['password2'])) {
       $formData['password2']['value'] = null;
     }
 
     // protect namedId
-    if( $model->protected ){
+    if ($model->protected) {
       $formData['namedId']['enabled'] = false;
     }
     $label = $this->getModelDataFor($type)['dialogLabel'];
@@ -609,7 +654,7 @@ class AccessConfigController extends AppController
       throw new UserErrorException(Yii::t('app', "User data is from an LDAP server and cannot be changed."));
     }
 
-    $oldData = (object) $model->getAttributes();
+    $oldData = (object)$model->getAttributes();
     $validationError = null;
     $passwordChanged = false;
 
@@ -630,7 +675,7 @@ class AccessConfigController extends AppController
       }
 
       // handle user password change
-      if($type == "user"){
+      if ($type == "user") {
         // enforce minimal password length
         if (isset($data->password) and strlen($data->password) < 8) {
           $validationError = Yii::t('app', "Password must be at least 8 characters long.");
@@ -668,7 +713,7 @@ class AccessConfigController extends AppController
 
     if ($passwordChanged) {
       //  @todo reimplement if password has changed, inform user, unless the old password was a temporary password
-      if ( strlen($oldData->password) > 7) {
+      if (strlen($oldData->password) > 7) {
         //return $this->sendInformationEmail($model->data());
       }
       Alert::create(Yii::t('app', "Your password has been changed."));
@@ -712,9 +757,10 @@ class AccessConfigController extends AppController
           Yii::t('app', "Do you want to remove only the datasource entry or all associated data?"),
           [
             Yii::t('app', "All data"),
-            Yii::t('app', "Entry only"), true
+            Yii::t('app', "Entry only"),
+            true
           ],
-          Yii::$app->controller->id, "deleteDatasource", [$ids]
+          Yii::$app->controller->id, "delete-datasource", [$ids[0]]
         );
     }
 
@@ -725,7 +771,7 @@ class AccessConfigController extends AppController
       if (!$model) {
         throw new UserErrorException("Element $type/$namedId does not exists.");
       }
-      if ( $model->protected ) {
+      if ($model->protected) {
         throw new UserErrorException(
           Yii::t('app', "Deleting of this object is not allowed.")
         );
@@ -744,15 +790,15 @@ class AccessConfigController extends AppController
   /**
    * Delete a datasource
    *
-   * @param $doDeleteModelData
-   * @param $namedId
-   * @return string
+   * @param bool|null $doDeleteModelData
+   * @param string $namedId
+   * @return string Diagnostic message
    * @throws UserErrorException
    * @throws \JsonRpc2\Exception
    */
-  public function actionDeleteDatasource($doDeleteModelData, $namedId)
+  public function actionDeleteDatasource(bool $doDeleteModelData=null, string $namedId)
   {
-    if ($doDeleteModelData === null) {
+    if ( $doDeleteModelData === null ) {
       return "ABORTED";
     }
     $this->requirePermission("access.manage");
@@ -762,9 +808,16 @@ class AccessConfigController extends AppController
       $this->broadcastClientMessage("accessControlTool.reloadLeftList");
     } catch (\Throwable $e) {
       Yii::error($e); // log it for inspection
-      throw new UserErrorException(Yii::t('app', "Deleting datasource '{1}' failed... ", [$namedId]));
+      throw new UserErrorException(Yii::t('app', "Deleting datasource '{datasource}' failed... ", [
+        'datasource' => $namedId
+      ]));
     }
-    Alert::create(Yii::t('app', "Datasource '{1}' successfully deleted ... ", [$namedId]));
+    Alert::create(Yii::t('app', "Datasource '{datasource}' successfully deleted ... ", [
+      'datasource' => $namedId
+    ]));
+
+    $this->broadcastClientMessage("datasources.reload");
+    return "Deleted Datasource";
   }
 
   /**
@@ -917,30 +970,30 @@ class AccessConfigController extends AppController
   public function actionNewDatasourceDialog()
   {
     $message = Yii::t('app', "Please enter the information on the new datasource.");
-    $formData = array(
-      'namedId' => array(
+    $formData = [
+      'namedId' => [
         'label' => Yii::t('app', "Name"),
         'type' => "textfield",
         'placeholder' => Yii::t('app', "The short name, e.g. researchgroup1"),
-        'validation' => array(
+        'validation' => [
           'required' => true,
           'validator' => "string"
-        )
-      ),
-      'title' => array(
+        ]
+      ],
+      'title' => [
         'width' => 500,
         'type' => "textfield",
         'label' => Yii::t('app', "Title"),
         'placeholder' => Yii::t('app', "A descriptive title, e.g. Database of Research Group 1"),
-        'validation' => array(
+        'validation' => [
           'required' => true,
           'validator' => "string"
-        )
-      )
-    );
+        ]
+      ]
+    ];
     Form::create(
       $message, $formData, true,
-      Yii::$app->controller->id, "add-datasource", array()
+      Yii::$app->controller->id, "add-datasource", []
     );
     return $this->successfulActionResult();
   }
@@ -984,12 +1037,12 @@ class AccessConfigController extends AppController
    * @param string|null $class
    * @return bool
    */
-  public function actionSchemaclassExists( string $class )
+  public function actionSchemaclassExists(string $class)
   {
     $class = trim($class);
     try {
       $schema = new $class;
-    } catch( \Throwable $e) {
+    } catch (\Throwable $e) {
       return false;
     }
     // @todo Use Interface instead
