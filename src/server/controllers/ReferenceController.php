@@ -524,10 +524,6 @@ class ReferenceController extends AppController
       }
       $suggestionValues = array_unique($suggestions);
       sort($suggestionValues);
-    } else {
-      $suggestionValues = $modelClass->getQueryBehavior()->fetchValues($field, array(
-        $field => array("LIKE", "$input%")
-      ));
     }
 
     return array(
