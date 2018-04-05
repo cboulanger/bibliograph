@@ -2,6 +2,7 @@
 .nvm
 .c9
 .vscode
+.idea
 
 # compiler
 /bibliograph/*-output/
@@ -15,3 +16,4 @@ src/server/config/bibliograph.ini.php
 # package-lock.json is platform-specific 
 package-lock.json
 src/server/nohup.out
+
