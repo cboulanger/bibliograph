@@ -41,18 +41,18 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
     
     // context menu
     this.setupTreeCtxMenu();
-    
+  
     // drag & drop
-    this.set({
-      enableDragDrop : true,
-      debugDragSession : qx.core.Environment.get("qx.debug")
-    });
     this.addListener("changeTree",e => {
       /** @var {qcl.ui.treevirtual.DragDropTree}  */
       let tree = e.getData();
       if( ! tree ) return;
       tree.setExcludeDragTypes( new qx.data.Array('trash','top'));
-    })
+    });
+    this.addListener(qcl.access.MPermissions.events.permissionsReady, e => {
+      this.bindState(this.permissions.move_folder,this,"enableDragDrop");
+      this.setDebugDragSession(qx.core.Environment.get("qx.debug"));
+    });
   },
   
   members:

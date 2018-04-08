@@ -22,7 +22,7 @@
 - [x] Re-implement deleting references and emptying trash
 - [x] Re-implement extended fields datasource
 - [x] Move the .idea folder out of version control
-- [ ] Fix Drag & Drop
+- [x] Fix Drag & Drop
 - [ ] Add & test packaging scripts mechanism
 - [ ] Re-implement Docker image for testing
 
@@ -35,6 +35,7 @@
 - [ ] Move static methods out of \app\models\Datasource into DatasourceManager component
 - [ ] Datasource-specific migration namespace should be in the Datasource Schema
 - [ ] Clear up the conceptual mess concerning "schema": datasource schema/reference schema
+- [ ] Allow migrations via permission, not prod/dev-mode
 
 ### Priority: normal
 - [ ] Add "locale" property to search folders for parsing queries
@@ -46,6 +47,7 @@
 - [ ] Re-implement "New User" & "New Datasource" in Access Control Tool and System dialogs
 - [ ] Add "Re-install modules" button in Systems menu
 - [ ] Remove migrations table for deleted datasources
+- [ ] Implement setup Wizard
 
 ### Priority: low
 - [ ] Add "serverOnly" column to data_Config (true/false/null) and remove from config data sent to client
@@ -58,6 +60,7 @@
 - [ ] Add compiler-based splash screen for loading
 - [ ] Re-implement reference editor title label
 - [ ] Backend: Model validation: accept booleans for MySql SmallInt columns
+- [ ] Revert return value of ConsoleAppHelper to simple string
 
 ### Code cleanup
 - [ ] Replace message names with constants

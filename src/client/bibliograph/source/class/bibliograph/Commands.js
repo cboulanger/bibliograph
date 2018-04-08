@@ -116,14 +116,20 @@ qx.Class.define("bibliograph.Commands",
     showAboutWindow : function(data,app) {
       app.getWidgetById("bibliograph/aboutWindow").open();
     },
-
+  
+    /**
+     * Edit the data of the current user
+     * @param data
+     * @param app
+     * @return {Promise<void>}
+     */
     editUserData : async function(data,app)
     {
       var activeUser = app.getAccessManager().getActiveUser();
       if (activeUser.getEditable())
       {
         app.showPopup(this.tr("Retrieving user data..."));
-        await app.getRpcClient("acl").send("editElement", ["user", activeUser.getNamedId()]);
+        await rpc.AccessConfig.edit("user", activeUser.getNamedId());
         app.hidePopup();
       }
     },    

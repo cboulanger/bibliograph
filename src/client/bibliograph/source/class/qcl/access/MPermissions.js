@@ -47,6 +47,12 @@ qx.Mixin.define("qcl.access.MPermissions",
     permissionsReady: "qx.event.type.Event",
 
   },
+  
+  statics : {
+    events : {
+      permissionsReady : "permissionsReady"
+    }
+  },
 
   members:
   {
@@ -280,6 +286,18 @@ qx.Mixin.define("qcl.access.MPermissions",
         });
       }
       this.fireEvent("permissionsReady");
+    },
+  
+    /**
+     * Bind the given property of the targetWidget to the state of
+     * this permission
+     * @param permission {qcl.access.Permission}
+     * @param targetWidget {qx.ui.core.Widget}
+     * @param targetProperty {String}
+     */
+    bindState : function(permission, targetWidget, targetProperty){
+      this._checkBindArguments(permission, targetWidget);
+      permission.bind("state", targetWidget, targetProperty);
     },
   
     /**

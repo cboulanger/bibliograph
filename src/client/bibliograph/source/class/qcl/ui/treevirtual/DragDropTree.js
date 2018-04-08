@@ -590,13 +590,17 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
     },
     
     _openNodeAfterTimeout : function(node){
+      if( ! node ) return;
       // open node after timeout
       if( this.__dragActionTimeout ){
         this.__dragActionTimeout.stop();
       }
       this.__dragActionTimeout = qx.event.Timer.once(()=>{
-        this.getDataModel().setState(node, {bOpened: true});
-        this.getDataModel().setData();
+        if( ! node.bOpened ){
+          let model = this.getDataModel();
+          model.setState(node, {bOpened: true});
+          model.setData();
+        }
       },this,500);
     },
   

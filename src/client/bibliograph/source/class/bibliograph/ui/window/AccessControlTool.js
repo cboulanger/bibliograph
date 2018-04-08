@@ -106,12 +106,13 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     leftListStore.set({
       autoLoadMethod : "elements"
     });
+    // @todo this message stuff smells bad...
     leftListStore.addListener("loaded", e => {
       let m = new qx.event.message.Message("leftListReloaded", e.getData ? e.getData() : []);
       m.setSender(e.getTarget());
       bus.dispatch(m);
     }, this);
-    bus.subscribe("accessControlTool.reloadLeftList", () => leftListStore.reload());
+    bus.subscribe("accessControlTool.reloadLeftList", () => leftListStore.canReload() && leftListStore.reload());
   
     // store for right list
     const rightListStore = new qcl.data.store.JsonRpcStore("access-config");
@@ -137,12 +138,20 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
       m.setSender(e.getTarget());
       bus.dispatch(m);
     });
-
+  
+    /**
+     * This is a globally addressable proxy method
+     * @todo Implement this differently!
+     * @param method
+     * @param params
+     * @param callback
+     * @private
+     */
     bibliograph._actRpcSendProxy = ( method, params, callback) => {
-      this.debug(arguments);
+      //this.debug(arguments);
       this.getApplication().getRpcClient("access-config").send(method,params)
       .then((response)=>{
-        this.debug("Server response: " + response);
+        //this.debug("Server response: " + response);
         callback(response);
       });
     };

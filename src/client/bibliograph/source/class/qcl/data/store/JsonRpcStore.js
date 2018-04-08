@@ -302,6 +302,14 @@ qx.Class.define("qcl.data.store.JsonRpcStore",
       this.__lastCreateModel = true;
       return this.reload(finalCallback, context);
     },
+  
+    /**
+     * Returns true if method and params have been set.
+     * @return {boolean}
+     */
+    canReload : function(){
+      return !!this.__lastMethod && !!this.__lastParams;
+    },
     
     /**
      * Reloads the data from a service method asynchroneously. Uses the last

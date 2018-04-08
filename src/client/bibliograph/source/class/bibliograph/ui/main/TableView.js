@@ -43,8 +43,11 @@ qx.Class.define("bibliograph.ui.main.TableView",
       }
     });
     // drag & drop
-    this.setDebugDragSession(qx.core.Environment.get("qx.debug"));
-    this.setEnableDragDrop(true);
+    this.addListener(qcl.access.MPermissions.events.permissionsReady, e => {
+      this.bindState(this.permissions.move_selected_references,this,"enableDragDrop");
+      this.setDebugDragSession(qx.core.Environment.get("qx.debug"));
+    });
+    
   },
 
   /*
@@ -141,6 +144,14 @@ qx.Class.define("bibliograph.ui.main.TableView",
         condition: treeview => treeview.getSelectedNode() !== null
       },
     },
+    
+    // permissions2: {
+    //   foo : new qcl.access.Permission("foo")
+    //     .dependsOn("boo.boo")/.dependsOn(new Permission("new.new"))
+    //     .set({ granted: true })
+    //     .updateOn("foo/bar:changeBaz")
+    //     .addCondition((targets) => targets[0].goo == 0);
+    // },
   
 
     /*

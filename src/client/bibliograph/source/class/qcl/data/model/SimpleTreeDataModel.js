@@ -1111,7 +1111,7 @@ qx.Class.define("qcl.data.model.SimpleTreeDataModel",
       var node;
       var nodeId;
 
-      if (typeof(nodeReference) == "object")
+      if (nodeReference && typeof(nodeReference) == "object")
       {
         node = nodeReference;
         nodeId = node.nodeId;
