@@ -36,7 +36,6 @@ class ConsoleAppHelper extends \yii\base\Component
 
     // fcgi doesn't have STDIN and STDOUT defined by default
     defined( 'STDIN' ) or define( 'STDIN', fopen( 'php://stdin', 'r' ) );
-    #defined( 'STDOUT' ) or define( 'STDOUT', fopen( 'php://stdout', 'w' ) );
     defined( 'STDOUT' ) or define( 'STDOUT', fopen('php://output', 'w') );
 
     $config = require( Yii::getAlias( '@app/config/console.php' ) );

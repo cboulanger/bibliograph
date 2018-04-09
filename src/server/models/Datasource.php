@@ -63,7 +63,7 @@ class Datasource extends BaseModel
    */
   public function getMigrationNamespace()
   {
-    return "\\app\\migrations\\schema\\{$this->namedId}";
+    return "\\app\\migrations\\schema\\" . $this->schema;
   }
 
   /**

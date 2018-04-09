@@ -22,6 +22,7 @@ namespace lib\components;
 
 use app\models\Config;
 use app\models\UserConfig;
+use lib\exceptions\RecordExistsException;
 use Yii;
 
 /**
@@ -291,6 +292,7 @@ class Configuration extends \yii\base\Component
    *     Returns the id of the newly created record, or false if
    *     key was not created.
    * @throws \InvalidArgumentException
+   * @throws RecordExistsException
    */
 	public function createKey( $key, $type, $customize=false, $default=null, $final=false )
 	{
@@ -300,7 +302,7 @@ class Configuration extends \yii\base\Component
 		}
     // check if key exists
     if ( $this->keyExists( $key ) ) {
-      throw new \InvalidArgumentException("Config key '$key' already exists.");
+      throw new RecordExistsException("Config key '$key' already exists.");
     }
     // prepare config data
     $data = array(

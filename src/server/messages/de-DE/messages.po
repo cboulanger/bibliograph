@@ -540,7 +540,7 @@ msgstr "Feldnamen"
 
 msgctxt "app"
 msgid "Folder"
-msgstr "@@Ordner@@"
+msgstr "Ordner"
 
 msgctxt "app"
 msgid "Folder Title"

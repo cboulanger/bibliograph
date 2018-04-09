@@ -10,7 +10,7 @@ SERVER_PATH=src/server
 pushd $SERVER_PATH > /dev/null
 
 echo "Setting up database ..."
-MIGRATE_ARGS="--interactive=0 --db=testdb"
+MIGRATE_ARGS="--interactive=0 --db=testdb --verbose"
 $YII_CMD migrate/fresh --migrationNamespaces=app\\migrations\\schema $MIGRATE_ARGS &> /dev/null
 $YII_CMD migrate/up --migrationNamespaces=app\\migrations\\data $MIGRATE_ARGS &> /dev/null
 $YII_CMD migrate/up --migrationNamespaces=app\\tests\\migrations $MIGRATE_ARGS &> /dev/null

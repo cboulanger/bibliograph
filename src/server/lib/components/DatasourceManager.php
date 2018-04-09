@@ -43,21 +43,18 @@ class DatasourceManager extends \yii\base\Component
 {
 
   /**
-   * Creates a new datasource and returns it. You should set at least the `title` property before saving the ActiveRecord
-   * to the database. By default, it will use the database connection provided by the `db` component.
-   * It returns the instance for the given schema class, not the \app\models\Datasource instance created.
+   * Creates a new datasource.
    *
    * @param string $datasourceName
    *    The name of the new datasource
    * @param string $schemaName |null
    *    Optional name of a schema. If not given, the default schema is used.
    * @return Datasource
+   *    The instance for the given schema sub-class, not the \app\models\Datasource instance created.
    * @throws \Exception
    * @throws RecordExistsException
    */
-  public function create(
-    $datasourceName,
-    $schemaName = null)
+  public function create( $datasourceName, $schemaName = null)
   {
     if (!$datasourceName or !is_string($datasourceName)) {
       throw new \InvalidArgumentException("Invalid datasource name");
@@ -101,7 +98,11 @@ class DatasourceManager extends \yii\base\Component
     // @todo work with interface instead
     if ($instance instanceof BibliographicDatasource) {
       $instance->addDefaultFolders();
-      Yii::$app->config->createKey("datasource.$datasourceName.fields.exclude","list");
+      try{
+        Yii::$app->config->createKey("datasource.$datasourceName.fields.exclude","list");
+      } catch( RecordExistsException $e ){
+        Yii::warning($e->getMessage());
+      }
     }
     return $instance;
   }

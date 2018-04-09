@@ -41,7 +41,7 @@ class DatasourceTest extends Base
     $datasource = Datasource::getInstanceFor('database1');
     $folderClass = $datasource->getClassFor('folder');
     $this->assertEquals( 'app\models\Folder', $folderClass );
-    $this->assertEquals( 'database1', $folderClass::getDatasource() );
+    $this->assertEquals( 'database1', $folderClass::getDatasource()->namedId );
     $this->assertSame( $folderClass::getDb(), $datasource->getConnection(), "Model does not inherit connection from datasource." );
     $folder = $folderClass::findOne(['label'=>'Hauptordner']);
     $this->assertFalse( is_null($folder), "Folder model not found." );
@@ -53,13 +53,9 @@ class DatasourceTest extends Base
 
   public function testCreateDatasource()
   {
-    $datasource = Yii::$app->datasourceManager->create("test2");
-    // FIXME: This doesn't work!
-    //$datasource->title = "Test Datasource 2";
-    //$datasource->save();
-    // get specialized subclass
+    Yii::$app->datasourceManager->create("test2");
     $datasource = Datasource::getInstanceFor("test2");
-    $this->assertEquals('app\models\BibliographicDatasource',\get_class($datasource));
+    $this->assertEquals(\app\models\BibliographicDatasource::class,\get_class($datasource));
     $tableName = "test2_migration";
     $this->assertFalse(is_null(Yii::$app->db->schema->getTableSchema($tableName)), "$tableName has not been created!" );
     foreach($datasource->modelTypes() as $type){

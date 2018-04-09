@@ -1,67 +1,69 @@
 <?php
+namespace tests\fixtures;
+
 return [
   'user' => [
-    'class' => \tests\fixtures\UserFixture::class,
+    'class' => UserFixture::class,
     'dataFile' => '@tests/_data/user.php',
   ],
   'group' => [
-    'class' => \tests\fixtures\GroupFixture::class,
+    'class' => GroupFixture::class,
     'dataFile' => '@tests/_data/group.php',
   ],
   'role' => [
-    'class' => \tests\fixtures\RoleFixture::class,
+    'class' => RoleFixture::class,
     'dataFile' => '@tests/_data/role.php',
   ],
   'permission' => [
-      'class' => \tests\fixtures\PermissionFixture::class,
+      'class' => PermissionFixture::class,
       'dataFile' => '@tests/_data/permission.php',
   ],
   'config' => [
-      'class' => \tests\fixtures\ConfigFixture::class,
+      'class' => ConfigFixture::class,
       'dataFile' => '@tests/_data/config.php',
   ],
   'userconfig' => [
-    'class' => \tests\fixtures\UserConfigFixture::class,
+    'class' => UserConfigFixture::class,
     'dataFile' => '@tests/_data/userconfig.php',
   ],
   'session' => [
-    'class' => \tests\fixtures\SessionFixture::class,
+    'class' => SessionFixture::class,
     'dataFile' => '@tests/_data/session.php',
   ],  
   'datasource' => [
-    'class' => \tests\fixtures\DatasourceFixture::class,
+    'class' => DatasourceFixture::class,
     'dataFile' => '@tests/_data/datasource.php',
   ],
   'datasource_group' => [
-      'class' => \tests\fixtures\DatasourceGroupFixture::class,
+      'class' => DatasourceGroupFixture::class,
       'dataFile' => '@tests/_data/datasource_group.php',
   ],
   'datasource_role' => [
-      'class' => \tests\fixtures\DatasourceRoleFixture::class,
+      'class' => DatasourceRoleFixture::class,
       'dataFile' => '@tests/_data/datasource_role.php',
   ],
   'datasource_user' => [
-      'class' => \tests\fixtures\DatasourceUserFixture::class,
+      'class' => DatasourceUserFixture::class,
       'dataFile' => '@tests/_data/datasource_user.php',
   ],
   'group_user' => [
-      'class' => \tests\fixtures\GroupUserFixture::class,
+      'class' => GroupUserFixture::class,
       'dataFile' => '@tests/_data/group_user.php',
   ],
   'permission_role' => [
-      'class' => \tests\fixtures\PermissionRoleFixture::class,
+      'class' => PermissionRoleFixture::class,
       'dataFile' => '@tests/_data/permission_role.php',
   ],
   'schema' => [
-    'class' => \tests\fixtures\SchemaFixture::class,
+    'class' => SchemaFixture::class,
     'dataFile' => '@tests/_data/schema.php',
   ],
   'role_schema' => [
-    'class' => \tests\fixtures\RoleSchemaFixture::class,
+    'class' => RoleSchemaFixture::class,
     'dataFile' => '@tests/_data/role_schema.php',
   ],
   'user_role' => [
-      'class' => \tests\fixtures\UserRoleFixture::class,
+      'class' => UserRoleFixture::class,
       'dataFile' => '@tests/_data/user_role.php',
   ],
 ];

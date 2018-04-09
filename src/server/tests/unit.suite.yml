@@ -10,4 +10,4 @@ modules:
         - Yii2:
             configFile: config/test.php
             parts: [orm]
-            #transaction: false
+            transaction: false

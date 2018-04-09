@@ -1,22 +1,23 @@
 <?php
+namespace  tests\fixtures;
 return [
   'reference' => [
-      'class' => \tests\fixtures\ReferenceFixture::className(),
+      'class' => ReferenceFixture::class,
       'dataFile' => '@tests/_data/reference.php',
       'tableName' => 'database1_data_Reference'
   ],
   'folder' => [
-    'class' => \tests\fixtures\FolderFixture::className(),
+    'class' =>  FolderFixture::class,
     'dataFile' => '@tests/_data/folder.php',
     'tableName' => 'database1_data_Folder'
   ],
   'folder_reference' => [
-    'class' => \tests\fixtures\FolderReferenceFixture::className(),
+    'class' => FolderReferenceFixture::class,
     'dataFile' => '@tests/_data/folder_reference.php',
     'tableName' => 'database1_join_Folder_Reference'
   ], 
   'datasource' => [
-    'class' => \tests\fixtures\DatasourceFixture::className(),
+    'class' => DatasourceFixture::class,
     'dataFile' => '@tests/_data/datasource.php',
   ],  
 ];

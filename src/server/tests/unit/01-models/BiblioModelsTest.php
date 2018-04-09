@@ -70,11 +70,10 @@ class BiblioModelsTest extends Base
   public function testSetParentFolder()
   {
     $folderClass = Datasource::in('database1.folder');
-    $folderClass :: findOne(['id'=>5])
-      -> setParent($folderClass :: findOne(['id'=>4]));
+    $folderClass::findOne(5)->setParent($folderClass::findOne(4));
     $this -> assertEquals(
       'Hauptordner/Zotero/Foo', 
-      $folderClass :: findOne(['id'=>5]) -> labelPath() 
+      $folderClass::findOne(5)->labelPath()
     );      
   }
 }

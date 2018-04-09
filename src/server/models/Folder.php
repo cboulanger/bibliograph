@@ -272,8 +272,8 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
     foreach ($changedAttributes as $key => $oldValue) {
       switch ($key) {
         case "parentId":
-          // skip if no parent id had been set (is the case when adding a node)
-          if ($oldValue===null) return false;
+          // skip if no parent id had been set (is the case when adding a node) or no valid user
+          if ($oldValue===null or ! Yii::$app->user->getIdentity() ) return false;
           // update parents
           try {
             $this->updateParentNode();
@@ -297,8 +297,8 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
       } // end switch
     } // end foreach
 
-    // if attributes have changed, update the node 
-    if (count($changedAttributes) > 0) {
+    // if attributes have changed and we have a valid user, update the node
+    if (count($changedAttributes) > 0 and Yii::$app->user->getIdentity()) {
       try {
         $nodeData = FolderController::getNodeDataStatic($this);
       } catch (Exception $e) {
@@ -317,6 +317,8 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
    */
   protected function _afterInsert()
   {
+    // skip if we don't have a logged-in user (e.g. in tests)
+    if( ! Yii::$app->user->getIdentity()) return;
     if($this->parentId){
       $this->updateParentNode();
     }
