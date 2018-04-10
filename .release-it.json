@@ -1,5 +1,6 @@
 {
   "//see" : "https://github.com/webpro/release-it/blob/HEAD/conf/release-it.json",
+  "buildCommand": "bash bin/build-dist.sh",
   "npm": {
     "release": false
   },
