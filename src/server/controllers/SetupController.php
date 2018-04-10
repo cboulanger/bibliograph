@@ -720,18 +720,19 @@ class SetupController extends \app\controllers\AppController
         // backwards compatibility
         if( $schema->namedId == SetupController::DATASOURCE_DEFAULT_SCHEMA and $this->isV2Upgrade){
           Yii::info("Migrating v2 datasource tables...");
-          $migrationNamespace = $schema->migrationNamespace;
           $markerClass = "M180301071642_Update_table_data_Reference_add_fullext_index";
-          $fqn = "$migrationNamespace\\$markerClass";
-          $params_new = [
-            'migrationNamespaces' => $migrationNamespace,
-          ];
-          $params_mark = [
-            $fqn,
-            'migrationNamespaces' => $migrationNamespace,
-          ];
           /** @var \app\models\BibliographicDatasource $datasource */
           foreach ($schema->datasources as $datasource) {
+            //@todo the schema should have the migrationNamespace!
+            $migrationNamespace = $datasource->migrationNamespace;
+            $fqn = "$migrationNamespace\\$markerClass";
+            $params_new = [
+              'migrationNamespaces' => $migrationNamespace,
+            ];
+            $params_mark = [
+              $fqn,
+              'migrationNamespaces' => $migrationNamespace,
+            ];
             $db = $datasource->getConnection();
             // show new migrations, for diagnostic purposes
             Console::runAction('migrate/new', $params_new, null, $db);
