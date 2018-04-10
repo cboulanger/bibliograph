@@ -6,14 +6,14 @@ if [[ ! -d "$DIST_DIR" ]]; then
 fi
 
 # dist - Client files
-rm -rf $DIST_DIR/{bibliograph,resource}
-rm $DIST_DIR/index.html
+rm -rf $DIST_DIR/{bibliograph,resource} || true
+rm $DIST_DIR/index.html || true
 
 # dist - Server files
-rm -rf $DIST_DIR/server/{config,controllers,lib,messages,migrations,models,modules,vendor,schema} 
+rm -rf $DIST_DIR/server/{config,controllers,lib,messages,migrations,models,modules,vendor,runtime,schema} || true
 
 # documentation
-rm $DIST_DIR/{version.txt,readme.md,release-notes.md}
+rm $DIST_DIR/{version.txt,readme.md,release-notes.md} || true
 
 # ZIPs
-rm $DIST_DIR/*.zip
+rm $DIST_DIR/*.zip || true
