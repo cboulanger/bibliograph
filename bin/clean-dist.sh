@@ -14,3 +14,6 @@ rm -rf $DIST_DIR/server/{config,controllers,lib,messages,migrations,models,modul
 
 # documentation
 rm $DIST_DIR/{version.txt,readme.md,release-notes.md}
+
+# ZIPs
+rm $DIST_DIR/*.zip

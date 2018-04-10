@@ -4,6 +4,9 @@
   "npm": {
     "release": false
   },
+  "src": {
+    "tagName": "next"
+  },
   "github": {
     "release": true,
     "assets": "dist/*.zip"
