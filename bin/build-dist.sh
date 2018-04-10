@@ -19,7 +19,7 @@ cp build-compiled/index.html $DIST_DIR
 # Server files
 cd $DIST_DIR/server
 cp -a $SERVER_SRC_DIR/{config,controllers,lib,messages,migrations,models,modules,schema} .
-rm config/{bibliograph.ini.php,console.php,message.php,test.php}
+rm config/{bibliograph.ini.php,message.php,test.php}
 rm runtime/cache/*
 rm runtime/logs/*
 
@@ -33,6 +33,6 @@ echo $VERSION > $DIST_DIR/version.txt
 
 # package as zip
 cd $DIST_DIR
-zip -r bibliograph-$VERSION.zip *
+zip -q -r bibliograph-$VERSION.zip *
 
 

@@ -20,6 +20,7 @@
 
 namespace lib\components;
 
+use lib\exceptions\UserErrorException;
 use Yii;
 use app\models\Config;
 use app\models\UserConfig;
@@ -55,7 +56,15 @@ class Utils extends \yii\base\Component
    */
   public function getVersion()
   {
-    return $this->getNpmPackageData()->version;
+    try{
+      return $this->getNpmPackageData()->version;
+    } catch( \Exception $e){
+      try{
+        return file_get_contents(__DIR__ . "/../../../version.txt");
+      } catch( \Exception $e) {
+        throw new UserErrorException("Cannot read package.json or version.txt",null, $e);
+      }
+    }
   }
   
  /**

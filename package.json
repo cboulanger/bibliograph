@@ -33,7 +33,7 @@
     "build-dist": "bash bin/clean-dist.sh && bash bin/build-dist.sh",
     "test-dist": "bash bin/test-dist.sh",
     "clean-dist": "bash bin/clean-dist.sh",
-    "release": "npm run build-dist && npx release-it major --preRelease=alpha"
+    "release": "npx release-it --preRelease=alpha"
   },
   "author": "",
   "license": "ISC",
