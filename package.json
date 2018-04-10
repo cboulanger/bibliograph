@@ -18,7 +18,7 @@
     "url": "git+ssh://git@github.com/cboulanger/bibliograph.git"
   },
   "scripts": {
-    "start" : "bash bin/start-server.sh",
+    "start": "bash bin/start-server.sh",
     "list": "node_modules/.bin/ls-scripts",
     "postinstall": "bash bin/update-dependencies.sh",
     "server": "bash bin/start-server.sh",
@@ -30,9 +30,10 @@
     "new-log": "bash bin/new-log.sh",
     "create-migration": "bash bin/create-migration.sh",
     "translation": "cd src/server && php yii message config/message.php",
-    "build-dist" : "bash bin/build-dist.sh",
-    "test-dist" : "bash bin/test-dist.sh",
-    "clean-dist" : "bash bin/clean-dist.sh"
+    "build-dist": "bash bin/clean-dist.sh && bash bin/build-dist.sh",
+    "test-dist": "bash bin/test-dist.sh",
+    "clean-dist": "bash bin/clean-dist.sh",
+    "release" : "npm run build-dist && npx release-it major --preRelease=alpha"
   },
   "author": "",
   "license": "ISC",
@@ -53,6 +54,7 @@
     "json-diff": "^0.5.2",
     "mocha": "^4.1.0",
     "r2": "^2.0.0",
+    "release-it": "^7.3.0",
     "run-script-os": "^1.0.3",
     "standard": "^11.0.0"
   },

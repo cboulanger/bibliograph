@@ -1,0 +1,10 @@
+{
+  "//see" : "https://github.com/webpro/release-it/blob/HEAD/conf/release-it.json",
+  "npm": {
+    "release": false
+  },
+  "github": {
+    "release": true,
+    "assets": "dist/*.zip"
+  }
+}

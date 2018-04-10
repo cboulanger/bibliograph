@@ -38,3 +38,17 @@ before_script:
   
 script:
   - npm test
+
+before_deploy:
+  # Set up git user name and tag this commit
+  - git config --local user.name "cboulanger"
+  - git config --local user.email "info@bibliograph.org"
+  - git tag "$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)"
+deploy:
+  provider: releases
+  api_key: $GITHUB_TOKEN
+  file: "FILE TO UPLOAD"
+  skip_cleanup: true
+  on:
+    repo: qooxdoo/qooxdoo
+    tags: true
