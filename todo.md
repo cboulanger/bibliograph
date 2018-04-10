@@ -25,6 +25,8 @@
 - [x] Fix Drag & Drop
 - [ ] Add & test packaging scripts mechanism
 - [ ] Re-implement Docker image for testing
+- [ ] BUG: Title label is not updated
+- [ ] BUG: Datasource list window is not updated after adding datasource
 
 ## v3.0.0-beta 
 

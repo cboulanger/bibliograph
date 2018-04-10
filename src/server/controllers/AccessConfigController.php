@@ -464,40 +464,6 @@ class AccessConfigController extends AppController
   }
 
   /**
-   *
-   */
-  public function actionCreateDatasourceDialog()
-  {
-    Form::create(
-      Yii::t('app', "Create a new datasource"),
-      ['namedId' => [
-        'type' => 'textfield',
-        'label' => Yii::t('app', "ID of the datasource")
-      ],
-        'schema' => [
-          'type' => "selectbox",
-          'label' => Yii::t('app', "Schema"),
-          'options' => Schema::find()->select("name as label, namedId as value")->asArray()->all()
-        ],
-      ],
-      true,
-      Yii::$app->controller->id, "create-datasource-handler", []
-    );
-    return "Created dialog to add a datasource";
-  }
-
-  /**
-   * @param $formData
-   * @return string
-   * @throws \JsonRpc2\Exception
-   */
-  public function actionCreateDatasourceHandler(\stdClass $formData=null)
-  {
-    if (!$formData or ! $formData->namedId ) return "Action cancelled";
-    $this->actionAdd("datasource", $formData->namedId, $formData->schema);
-  }
-
-  /**
    * Add an empty model record. When creating a datasource,
    * a default bibliograph datasource is created.
    * Creates the form editor
@@ -962,6 +928,43 @@ class AccessConfigController extends AppController
 //    );
     return $this->successfulActionResult();
   }
+
+  /**
+   * Creates a new datasource, allowing the user to choose the schema
+   */
+  public function actionCreateDatasourceDialog()
+  {
+    Form::create(
+      Yii::t('app', "Create a new datasource"),
+      [
+        'namedId' => [
+        'type' => 'textfield',
+        'label' => Yii::t('app', "ID of the datasource")
+        ],
+        'schema' => [
+          'type' => "selectbox",
+          'label' => Yii::t('app', "Schema"),
+          'options' => Schema::find()->select("name as label, namedId as value")->asArray()->all()
+        ],
+
+      ],
+      true,
+      Yii::$app->controller->id, "create-datasource-handler", []
+    );
+    return "Created dialog to add a datasource";
+  }
+
+  /**
+   * @param $formData
+   * @return string
+   * @throws \JsonRpc2\Exception
+   */
+  public function actionCreateDatasourceHandler(\stdClass $formData=null)
+  {
+    if (!$formData or ! $formData->namedId ) return "Action cancelled";
+    $this->actionAdd("datasource", $formData->namedId, $formData->schema);
+  }
+
 
   /**
    * Presents the user a form to enter the data of a new datasource to be created

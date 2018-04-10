@@ -187,14 +187,13 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     //  datasource button
     let addDatasourceButton = new qx.ui.toolbar.Button(this.tr('New Datasource'), "icon/22/apps/internet-transfer.png");
     toolBar1.add(addDatasourceButton);
-    addDatasourceButton.setEnabled(false);
     pm.create("access.manage").bind("state", addDatasourceButton, "visibility", {
       converter: bibliograph.Utils.bool2visibility
     });
+    // @todo rewrite
     addDatasourceButton.addListener("execute", function (e) {
       this.leftSelectBox.setSelection([this.leftSelectBox.getSelectables()[4]]);
-      this.getApplication().showPopup(this.tr("Please wait ..."));
-      this.getApplication().getRpcClient("actool").send("newDatasourceDialog");
+      rpc.AccessConfig.createDatasourceDialog();
     }, this);
     
     // help button

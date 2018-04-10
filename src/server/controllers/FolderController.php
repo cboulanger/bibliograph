@@ -153,7 +153,7 @@ class FolderController extends AppController //implements ITreeController
         }
         if( $failed[$id]++ > 10) {
           $node['data']['parentId'] = 0;
-          $node['label'] .= "(recovered)";
+          if( YII_DEBUG) $node['label'] .= " (without parent)";
           $orderedNodeData[] = $node;
           continue;
         }
