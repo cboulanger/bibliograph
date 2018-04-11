@@ -224,9 +224,6 @@ class DatasourceManager extends \yii\base\Component
    */
   public function migrate(Schema $schema)
   {
-    if (YII_ENV_PROD) {
-      throw new UserErrorException(Yii::t('app', 'Datasource migrations are not allowed in production mode. Please contact the adminstrator'));
-    };
     Yii::info("Migrating schema '{$schema->namedId}'...");
     $datasources = $schema->datasources;
     $count = 0;

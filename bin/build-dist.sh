@@ -18,10 +18,10 @@ cp build-compiled/index.html $DIST_DIR
 
 # Server files
 cd $DIST_DIR/server
-cp -a $SERVER_SRC_DIR/{config,controllers,lib,messages,migrations,models,modules,runtime,schema} .
+cp -a $SERVER_SRC_DIR/{config,controllers,lib,messages,migrations,models,modules,schema} .
 rm config/{bibliograph.ini.php,message.php,test.php}
-rm runtime/cache/*
-rm runtime/logs/*
+mkdir -p runtime/cache
+mkdir -p runtime/logs
 
 cp -a $SERVER_SRC_DIR/composer.* .
 composer install --no-dev

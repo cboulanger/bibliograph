@@ -24,6 +24,7 @@
 - [x] Move the .idea folder out of version control
 - [x] Fix Drag & Drop
 - [ ] Add & test packaging scripts mechanism
+    - [ ] Remove unneeded dirs in server/runtime
 - [ ] Re-implement Docker image for testing
 - [ ] BUG: Title label is not updated
 - [ ] BUG: Datasource list window is not updated after adding datasource
