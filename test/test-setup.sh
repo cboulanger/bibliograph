@@ -10,6 +10,7 @@ CPT_ARGS=""
 SERVER_PATH=src/server
 SERVER_CMD="yii serve 127.0.0.1:8080 -t=@app/tests"
 BIBLIOGRAPH2_SQL_DUMP=test/data/bibliograph2.local.sql
+#BIBLIOGRAPH2_SQL_DUMP=test/data/bibliograph-hu.local.sql
 
 set -o errexit # Exit on error
 
@@ -62,11 +63,11 @@ echo
 
 section "Test upgrade from v2 version"
 
-echo "Deleting log file..."
+echo "Clearing log file and database..."
 [[ -f runtime/logs/app.log ]] && rm runtime/logs/app.log
-echo "Recreating empty database and importing Bibliograph v2 data..."
 mysql -uroot -e "DROP DATABASE tests;"
 mysql -uroot -e "CREATE DATABASE tests;"
+echo "Importing Bibliograph v2 data..."
 mysql -uroot tests < $BIBLIOGRAPH2_SQL_DUMP
 echo "Testing upgrade from v2..."
 pushd $SERVER_PATH > /dev/null

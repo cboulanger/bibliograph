@@ -42,7 +42,7 @@ INST_VER_FILE=./installed_version.txt
 [[ $(cat $INST_VER_FILE) == "$FULL_VERSION" ]] || ( echo "Version $FULL_VERSION already installed" && exit 0)
 
 # this strips alpha/beta number OR patch version
-VERSION=$(echo $FULL_VERSION | sed -r s/\(alpha\|beta\)\.[0-9]\+/\\1/ | sed -r s/\([0-9]+\.[0-9]+\)\.[0-9]+$/\\1/)
+VERSION=$(echo $FULL_VERSION | sed -r s/\(alpha\|beta\)\.[0-9]\+/dev/ | sed -r s/\([0-9]+\.[0-9]+\)\.[0-9]+$/\\1/)
 TARGET_DIR=$INSTALL_DIR/bibliograph.$VERSION
 
 echo "  >>> Installing version $FULL_VERSION ..."
@@ -73,8 +73,11 @@ for db in $DB_LIST; do
   mysqldump \
     --user=$USERNAME \
     $db \
-  | sed s/bibliograph\.schema\.huBerlinRewi/bibliograph_extended/g | \
-  mysql \
+#  | sed s/bibliograph\.schema\.huBerlinRewi/bibliograph_extended/g \
+#  | sed s/bibliograph_user/$TARGET_DB/g \
+#  | sed s/bibliograph_tmp/$TARGET_DB/g \
+#  | sed s/bibliograph_admin/$TARGET_DB/g \
+  | mysql \
     --user=$USERNAME \
     $TARGET_DB
 done

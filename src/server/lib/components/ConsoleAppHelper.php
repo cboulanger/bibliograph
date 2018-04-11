@@ -63,7 +63,7 @@ class ConsoleAppHelper extends \yii\base\Component
         array_merge( $params, [ 'interactive' => false, 'color' => false ] )
       );
       $consoleOutput = ob_get_clean();
-      Yii::trace( "\n" .
+      Yii::debug( "\n" .
         "Output of console action '$route':\n" .
         "---------------------------------------------------------\n" .
         $consoleOutput . "\n".

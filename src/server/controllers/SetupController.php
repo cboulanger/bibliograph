@@ -718,26 +718,33 @@ class SetupController extends \app\controllers\AppController
     foreach( $schemas as $schema ){
       try {
         // backwards compatibility
-        if( $schema->namedId == SetupController::DATASOURCE_DEFAULT_SCHEMA and $this->isV2Upgrade){
+        $markerClass = null;
+        if( $this->isV2Upgrade){
+
           Yii::info("Migrating v2 datasource tables...");
-          $markerClass = "M180301071642_Update_table_data_Reference_add_fullext_index";
-          /** @var \app\models\BibliographicDatasource $datasource */
-          foreach ($schema->datasources as $datasource) {
-            //@todo the schema should have the migrationNamespace!
-            $migrationNamespace = $datasource->migrationNamespace;
-            $fqn = "$migrationNamespace\\$markerClass";
-            $params_new = [
-              'migrationNamespaces' => $migrationNamespace,
-            ];
-            $params_mark = [
-              $fqn,
-              'migrationNamespaces' => $migrationNamespace,
-            ];
-            $db = $datasource->getConnection();
-            // show new migrations, for diagnostic purposes
-            Console::runAction('migrate/new', $params_new, null, $db);
-            Yii::debug("Marking v2 datasource '{$datasource->namedId}' with '$fqn'...");
-            Console::runAction('migrate/mark', $params_mark, null, $db);
+          switch( $schema->namedId ) {
+            case "bibliograph_datasource":
+              $markerClass = "M180301071642_Update_table_data_Reference_add_fullext_index";
+              break;
+            case "bibliograph_extended":
+              $markerClass = "m171219_230854_create_table_join_Folder_Reference";
+              break;
+          }
+          if( $markerClass ){
+            /** @var \app\models\BibliographicDatasource $datasource */
+            foreach ($schema->datasources as $datasource) {
+              //@todo the schema should have the migrationNamespace!
+              $migrationNamespace = $datasource->migrationNamespace;
+              $fqn = "$migrationNamespace\\$markerClass";
+              $params_mark = [
+                $fqn,
+                'migrationNamespaces' => $migrationNamespace,
+              ];
+              $db = $datasource->getConnection();
+              Yii::debug("Marking v2 datasource '{$datasource->namedId}' with '$fqn'...");
+              Console::runAction('migrate/mark', $params_mark, null, $db);
+              $migrated[]= $schema->namedId;
+            }
           }
         }
         // run schema migrations
@@ -752,9 +759,11 @@ class SetupController extends \app\controllers\AppController
       }
     }
     return [
-      'message' => count($migrated) ?
-        Yii::t('app','Migrated schema(s) {schemas}.', ['schemas' => implode(", ", $migrated)]) :
-        Yii::t('app', "No schema migrations necessary."),
+      'message' => count($migrated)
+        ? Yii::t('app','Migrated schema(s) {schemas}.', [
+          'schemas' => implode(", ", array_unique($migrated) )
+        ])
+        : Yii::t('app', "No schema migrations necessary."),
       'error'   => count($failed) ? Yii::t('app','Migrating schemas {schemas} failed.', ['schemas' => implode(", ", $failed)]) : null
     ];
   }
