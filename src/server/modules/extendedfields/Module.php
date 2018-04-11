@@ -34,8 +34,8 @@ class Module extends \lib\Module
     } catch (RecordExistsException $e) {
       Yii::info("Schema '$schema_id' already registered.");
     }
-    $count = Yii::$app->datasourceManager->migrate(Schema::findByNamedId($schema_id));
-    Yii::info("Migrated $count datasources of schema '$schema_id'");
+    //$count = Yii::$app->datasourceManager->migrate(Schema::findByNamedId($schema_id));
+    //Yii::info("Migrated $count datasources of schema '$schema_id'");
     // register module
     return parent::install(true);
   }
