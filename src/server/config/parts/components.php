@@ -11,28 +11,9 @@ $components = [
     'identityClass' => app\models\User::class,
   ],
   // logging
-  'log' => [
-    'targets' => [
-      [
-        'class' => 'yii\log\FileTarget',
-        'levels' => ['trace','info', 'warning'],
-        'except' => ['yii\*','auth'],
-        'logVars' => [],
-        //'exportInterval' => 1
-      ],
-      // errors and exceptions
-      [
-        'class' => 'yii\log\FileTarget',
-        'levels' => ['error'],
-        'logFile' => '@runtime/logs/error.log',
-        'logVars' => [],
-      ]
-    ] 
-  ],
+  'log' => require('log.php'),
   // Override http response component
-  'response' => [
-    'class' => \lib\components\EventTransportResponse::class
-  ],
+  'response' => [ 'class' => \lib\components\EventTransportResponse::class  ],
   // Internationalization
   'i18n' => [
     'translations' => [
@@ -52,9 +33,7 @@ $components = [
     ],
   ],
   // Cache, @todo use more efficient caching
-  'cache' => [
-    'class' => 'yii\caching\FileCache',
-  ],
+  'cache' => [ 'class' => 'yii\caching\FileCache' ],
 
   /*
    * Composer components

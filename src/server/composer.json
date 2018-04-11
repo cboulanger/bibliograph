@@ -9,7 +9,8 @@
         "danielstjules/stringy": "^3.1",
         "edvlerblog/yii2-adldap-module": "^4.0.0",
         "bmsrox/yii2-module-autoloader": "dev-cboulanger-fix-mac-hidden-dir",
-        "react/stream": "^0.7.7"
+        "react/stream": "^0.7.7",
+        "yiisoft/yii2-swiftmailer": "^2.1"
     },
     "require-dev": {
         "bizley/migration": "^2.2",
