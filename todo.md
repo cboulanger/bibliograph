@@ -97,3 +97,4 @@
 
 ### Priority: low
 - [ ] Enable print item view: bibliograph.ui.main.ItemView#print()
+- [ ] Implement config.d - style configuration

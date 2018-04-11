@@ -76,8 +76,9 @@ class AASetupControllerCest
           "Configuration values were created.",
           "Created standard schema.",
           "Example databases were created.",
-          "LDAP authentication is not enabled.",
-          "Installed module \'z3950\'."
+          "Installed module \'extendedfields\'.",
+          "Installed module \'z3950\'.",
+          "LDAP authentication is not enabled."
         ]
       }
     }'));
@@ -110,16 +111,15 @@ class AASetupControllerCest
           
         ],
         "messages": [
-          "Ini file exists.",
-          "File permissions ok.",
           "Admininstrator email exists.",
           "Database connection ok.",
           "Migrated data from Bibliograph v2 and applied new migrations for version ' . $this->version . '",
           "Configuration values were created.",
           "Created standard schema.",
+          "Installed module \'extendedfields\'.",
+          "Installed module \'z3950\'.",
           "Migrated schema(s) bibliograph_datasource.",
-          "LDAP authentication is not enabled.",
-          "Installed module \'z3950\'."
+          "LDAP authentication is not enabled."
         ]
       }
     }'));
@@ -154,16 +154,15 @@ class AASetupControllerCest
           
         ],
         "messages": [
-          "Ini file exists.",
-          "File permissions ok.",
           "Admininstrator email exists.",
           "Database connection ok.",
           "Found data for version '. $upgrade_from .' and applied new migrations for version ' . $upgrade_to . '",
           "Configuration values were created.",
           "Standard schema existed.",
+          "Module \'extendedfields\' already installed.",
+          "Module \'z3950\' already installed.",          
           "No schema migrations necessary.",
-          "LDAP authentication is not enabled.",
-          "Module \'z3950\' already installed."
+          "LDAP authentication is not enabled."
         ]
       }
     }'));

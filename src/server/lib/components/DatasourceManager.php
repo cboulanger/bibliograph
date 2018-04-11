@@ -83,7 +83,9 @@ class DatasourceManager extends \yii\base\Component
       'title'   => $datasourceName,
       'schema'  => $schemaName,
       'prefix'  => $class::createTablePrefix($datasourceName),
-      'active'  => 1
+      'active'  => 1,
+      'readonly' => 0,
+      'hidden'  => 0
     ]);
     $dsnAttributes = $this->parseDsn();
     $datasource->setAttributes($dsnAttributes);
