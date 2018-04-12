@@ -339,7 +339,7 @@ class SetupController extends \app\controllers\AppController
   protected function setupCheckIniFileExists()
   {
     if( ! $this->isNewInstallation ) return false;
-    $this->hasIni = file_exists(Yii::getAlias('@app/config/bibliograph.ini.php'));
+    $this->hasIni = file_exists(APP_CONFIG_FILE);
     if (!$this->hasIni) {
       if (YII_ENV_PROD) {
         return [
@@ -721,7 +721,7 @@ class SetupController extends \app\controllers\AppController
         $markerClass = null;
         if( $this->isV2Upgrade){
 
-          Yii::info("Migrating v2 datasource tables...");
+          Yii::info("Migrating v2 datasource tables, schema '$schema->namedId'...");
           switch( $schema->namedId ) {
             case "bibliograph_datasource":
               $markerClass = "M180301071642_Update_table_data_Reference_add_fullext_index";
@@ -755,7 +755,8 @@ class SetupController extends \app\controllers\AppController
       } catch (MigrationException $e) {
         $failed[] = $schema->namedId;
       } catch (\Exception $e) {
-        throw new MigrationException($e->getMessage());
+        Yii::error($e);
+        throw new MigrationException( $e->getMessage() );
       }
     }
     return [

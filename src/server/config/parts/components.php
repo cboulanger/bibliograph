@@ -32,8 +32,12 @@ $components = [
       ],
     ],
   ],
-  // Cache, @todo use more efficient caching
+  // Cache
   'cache' => [ 'class' => 'yii\caching\FileCache' ],
+  // Mailer
+  'mailer' => [
+    'class' => yii\swiftmailer\Mailer::class,
+  ],
 
   /*
    * Composer components

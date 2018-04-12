@@ -10,7 +10,9 @@
         "edvlerblog/yii2-adldap-module": "^4.0.0",
         "bmsrox/yii2-module-autoloader": "dev-cboulanger-fix-mac-hidden-dir",
         "react/stream": "^0.7.7",
-        "yiisoft/yii2-swiftmailer": "^2.1"
+        "yiisoft/yii2-swiftmailer": "^2.1",
+        "m1/vars": "^1.1",
+        "yosymfony/toml": "^0.3.3"
     },
     "require-dev": {
         "bizley/migration": "^2.2",

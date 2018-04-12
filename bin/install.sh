@@ -43,8 +43,9 @@ INST_VER_FILE=./installed_version.txt
 
 # this strips alpha/beta number OR patch version
 VERSION=$(echo $FULL_VERSION | sed -r s/\(alpha\|beta\)\.[0-9]\+/dev/ | sed -r s/\([0-9]+\.[0-9]+\)\.[0-9]+$/\\1/)
-TARGET_DIR=$INSTALL_DIR/bibliograph.$VERSION
 
+TARGET_DIR=$INSTALL_DIR/bibliograph.$VERSION
+[[ -d $TARGET_DIR ]] && ( echo "  >>> Deleting existing installation ..." && rm -rf $TARGET_DIR )
 echo "  >>> Installing version $FULL_VERSION ..."
 [[ -d $TARGET_DIR ]] || mkdir $TARGET_DIR
 cp -a $TMP_NAME/* $TARGET_DIR

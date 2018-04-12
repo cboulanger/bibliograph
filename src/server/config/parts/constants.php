@@ -2,9 +2,9 @@
 
 // @todo remove and use yii2 app parameters instead
 
-if ( ! defined("APP_INI_FILE") )
+if ( ! defined("APP_CONFIG_FILE") )
 {
-  define( "APP_INI_FILE" ,  __DIR__ . "/../bibliograph.ini.php" );
+  define( "APP_CONFIG_FILE" , __DIR__ . "/../app.conf.toml");
 }
 
 /*

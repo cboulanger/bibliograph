@@ -23,6 +23,7 @@ namespace lib\components;
 use app\models\Config;
 use app\models\UserConfig;
 use lib\exceptions\RecordExistsException;
+use M1\Vars\Vars;
 use Yii;
 
 /**
@@ -559,34 +560,13 @@ class Configuration extends \yii\base\Component
 
   /**
    * Returns a configuration value of the pattern "foo.bar.baz"
-   * This retrieves the values set in the config/bibliograph.ini.php file.
+   * This retrieves the values set in the application config/ini file.
    */
-  public function getIniValue( $path )
+  public function getIniValue( $key )
   {
     static $ini = null;
-    if( is_null($ini) ){
-      $ini = require(Yii::getAlias('@app/config/parts/ini.php'));
-    }
-    $parts = explode(".",$path);
-    // drill into ini array
-    $value = $ini;
-    while( is_array($value) and $part = array_shift($parts) ){
-      if ( isset( $value[$part] ) ) {
-        $value = $value[$part];
-        continue;
-      }
-      throw new \InvalidArgumentException("No ini value for '$path' exists.");
-    }
-    // post-process value
-    if( $value == "on" or $value == "yes" )
-    {
-      $value = true;
-    }
-    elseif ( $value == "off" or $value == "no" )
-    {
-      $value = false;
-    }
-    return $value;
+    if( is_null($ini) ) $ini = new Vars( APP_CONFIG_FILE );
+    return $ini->get($key);
   }
 
   /**

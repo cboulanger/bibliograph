@@ -20,6 +20,8 @@
 
 namespace lib\components;
 
+use Adldap\Auth\BindException;
+use lib\exceptions\UserErrorException;
 use Yii;
 use app\models\User;
 use app\models\Group;
@@ -58,7 +60,7 @@ class LdapAuth extends \yii\base\Component
         try {
           Yii::$app->ldap->connect("default");
           $connection = true; 
-        } catch (\Adldap\Auth\BindException $e) {
+        } catch ( BindException $e) {
           $error = "Can't connect / bind to the LDAP server:" . $e->getMessage();
         }
       }
@@ -70,14 +72,12 @@ class LdapAuth extends \yii\base\Component
     ];    
   }
 
-
-
  /**
    * Authenticate using a remote LDAP server.
    * @param $username
    * @param $password
    * @return \app\models\User|null User or null if authentication failed
-   * @throws 
+   * @throws \RuntimeException
    */
   public function authenticate( $username, $password )
   {
@@ -87,15 +87,15 @@ class LdapAuth extends \yii\base\Component
     Yii::trace("Trying to bind $bind_dn with LDAP Server.", 'ldap');
     try {
       if ( ! $app->ldap->auth()->attempt( $bind_dn, $password, true )) {
-        Yii::trace("User/Password combination is wrong.", 'ldap');
+        Yii::debug("User/Password combination is wrong.", 'ldap');
         return null; 
       }  
-    } catch (\Adldap\Auth\BindException $e) {
-      $error = "Can't connect to the LDAP server: " . $e->getMessage();
-      // @todo generatlize this:
-      if ( YII_ENV_DEV ) throw new \Exception($error);
-      Yii::error($error);
-      return null; 
+    } catch (BindException $e) {
+      throw new \RuntimeException(
+        Yii::t('app', "Cannot connect to the LDAP server: {reason}", [
+          'reason' => $e->getMessage()
+        ])
+      );
     } 
 
     // if LDAP authentication succeeds, assume we have a valid

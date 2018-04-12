@@ -360,6 +360,7 @@ class AccessController extends AppController
 
    /**
    * Manually cleanup access data
+    * @todo call this method in logout
     * @throws \Exception
     * @throws \Throwable
    */
