@@ -8,6 +8,6 @@
   "github": {
     "release": true,
     "assets": "dist/*.zip",
-    "preRelease": true
+    "preRelease": "alpha"
   }
 }
