@@ -1,11 +1,13 @@
 {
   "//see" : "https://github.com/webpro/release-it/blob/HEAD/conf/release-it.json",
+  "non-interactive": true,
   "buildCommand": "bash bin/build-dist.sh",
   "npm": {
-    "release": false
+    "publish": false
   },
   "github": {
     "release": true,
-    "assets": "dist/*.zip"
+    "assets": "dist/*.zip",
+    "preRelease": true
   }
 }
