@@ -149,14 +149,16 @@ class FolderController extends AppController //implements ITreeController
         // if the parent hasn't been processed yet, put at the end of the list
         //Yii::debug("XXX id: $id, parentId: $parentId");
         // prevent infinite loop if tree is corrupted
-        if(! isset($failed[$id])){
+        if(! isset($failed[$id]) ){
           $failed[$id]=0;
         }
         // Show orphaned folders
-        if( $failed[$id]++ > 10 ) {
+        if( $failed[$id]++ > 3 ) {
           $node['data']['parentId'] = 0;
-          if( YII_DEBUG) $node['label'] .= " (without parent)";
-          if( ! $isGuestUser) $orderedNodeData[] = $node;
+          if( ! $isGuestUser) {
+            $node['label'] .= " " . Yii::t('app',"(orphaned)");
+            $orderedNodeData[] = $node;
+          }
           continue;
         }
         $nodeData[]= $node;
