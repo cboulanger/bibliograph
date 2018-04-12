@@ -39,7 +39,8 @@ class AppController extends \JsonRpc2\Controller
 
 
   /**
-   * Overridden to catch User exception
+   * Overridden to add functionality:
+   * - catch User exception and convert it into an error dialog widget on the client
    * @inheritDoc
    */
   protected function _runAction($method)

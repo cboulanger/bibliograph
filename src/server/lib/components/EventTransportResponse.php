@@ -22,6 +22,15 @@ class EventTransportResponse extends \yii\web\Response
    */
   protected function prepare()
   {
+    // FIXME
+    // This is a bad hack working around a broken mysql server setup
+    $data = var_export($this->data, true);
+    if( ! preg_match("//u", $data) ) {
+      $data = utf8_encode($data);
+      $def = '$this->data = ' . $data . ';';
+      eval($def);
+    }
+    
     if( isset($this->data['error']) and $this->data['error'] )
     {
       return parent::prepare();

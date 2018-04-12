@@ -23,14 +23,14 @@
 - [x] Re-implement extended fields datasource
 - [x] Move the .idea folder out of version control
 - [x] Fix Drag & Drop
-- [ ] Translate ini files for tests to .toml
-- [ ] Add & test packaging scripts mechanism
-    - [ ] Remove unneeded dirs in server/runtime
-- [ ] Re-implement Docker image for testing
+- [x] Translate ini files for tests to .toml
+- [x] Add & test packaging scripts mechanism
+- [ ] BUG: Drag & Drop is enabled in table for anonymous!
 - [ ] BUG: Title label is not updated
 - [ ] BUG: Datasource list window is not updated after adding datasource
 - [ ] BUG: Z3950-Import in "Main" funktioniert nicht
 - [ ] Move config/test.php to tests/config.php 
+
 
 ## v3.0.0-beta 
 
@@ -68,6 +68,7 @@
 - [ ] Re-implement reference editor title label
 - [ ] Backend: Model validation: accept booleans for MySql SmallInt columns
 - [ ] Revert return value of ConsoleAppHelper to simple string
+- [ ] Re-implement Docker image for testing
 
 ### Code cleanup
 - [ ] Replace message names with constants

@@ -79,16 +79,16 @@ class AccessController extends AppController
     if( $user ){
       if( Yii::$app->config->getIniValue("ldap.enabled") and $user->isLdapUser() ) 
       {
-        Yii:trace("Challenge: User '$username' needs to be authenticated by LDAP.");
+        Yii::debug("Challenge: User '$username' needs to be authenticated by LDAP.");
         $auth_method = "plaintext";
       }      
     } else {
       // if the user is not in the database (for example, first LDAP auth), use plaintext authentication
       $auth_method = "plaintext";
-      Yii::trace("Challenge: User '$username' is not in the database, maybe first LDAP authentication.");
+      Yii::debug("Challenge: User '$username' is not in the database, maybe first LDAP authentication.");
     }
 
-    Yii::trace("Challenge: Using authentication method '$auth_method'");
+    Yii::debug("Challenge: Using authentication method '$auth_method'");
     
     switch ( $auth_method )
     {

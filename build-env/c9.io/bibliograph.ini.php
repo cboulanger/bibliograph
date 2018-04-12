@@ -131,28 +131,14 @@ user_id_attr = uid
 ;; base dn of group data
 group_base_dn = "ou=groups,dc=example,dc=com"
 
-;; attribute for members of the group
-member_id_attr = memberUid
-
 ;; attribute for the group name, usually description or displayName
 group_name_attr = description
 
+;; attribute for members of the group, was called member_id_attr earlier
+group_member_attr = memberUid
+
 ;; if the LDAP database only stores the user name part of the users'
 ;; e-mail address, you can provide the domain part here
-;;mail_domain = example.com
+mail_domain = example.com
 
-;; ================================================================
-;; Don't touch anything beyond this point
-;; ================================================================
-
-[macros]
-
-;; DSN information. Since the ";" character cannot be used in value
-;; definitions, it is replaced by "&" in the the dsn string.
-dsn_user  = "${database.type}:host=${database.host}&port=${database.port}&dbname=${database.userdb}"
-dsn_admin = "${database.type}:host=${database.host}&port=${database.port}&dbname=${database.admindb}"
-dsn_tmp   = "${database.type}:host=${database.host}&port=${database.port}&dbname=${database.tmp_db}"
-
-;; ================================================================
-;; End
-;; ================================================================
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;*/?>

@@ -136,6 +136,7 @@ class FolderController extends AppController //implements ITreeController
     $orderedNodeData = [];
     $loaded=[];
     $failed=[];
+    $isGuestUser = Yii::$app->user->identity->isAnonymous();
     while( count($nodeData) ){
       $node = array_shift($nodeData);
       $id= $node['data']['id'];
@@ -151,10 +152,11 @@ class FolderController extends AppController //implements ITreeController
         if(! isset($failed[$id])){
           $failed[$id]=0;
         }
-        if( $failed[$id]++ > 10) {
+        // Show orphaned folders
+        if( $failed[$id]++ > 10 ) {
           $node['data']['parentId'] = 0;
           if( YII_DEBUG) $node['label'] .= " (without parent)";
-          $orderedNodeData[] = $node;
+          if( ! $isGuestUser) $orderedNodeData[] = $node;
           continue;
         }
         $nodeData[]= $node;
