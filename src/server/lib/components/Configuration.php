@@ -565,7 +565,7 @@ class Configuration extends \yii\base\Component
   public function getIniValue( $key )
   {
     static $ini = null;
-    if( is_null($ini) ) $ini = new Vars( APP_CONFIG_FILE );
+    if( is_null($ini) ) $ini = new Vars( APP_CONFIG_FILE, ['cache' => false] );
     return $ini->get($key);
   }
 
