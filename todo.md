@@ -31,7 +31,6 @@
 - [ ] BUG: Z3950-Import in "Main" funktioniert nicht
 - [ ] Move config/test.php to tests/config.php 
 
-
 ## v3.0.0-beta 
 
 ### Priority: high
@@ -42,9 +41,11 @@
 - [ ] Datasource-specific migration namespace should be in the Datasource Schema
 - [ ] Clear up the conceptual mess concerning "schema": datasource schema/reference schema
 - [ ] Allow migrations via permission, not prod/dev-mode
+- [ ] Disallow drop of references on folders in which they are already contained. 
 
 ### Priority: normal
 - [ ] Add "locale" property to search folders for parsing queries
+- [ ] Reimplement Search Help
 - [ ] Replace calls to Yii::$app->eventQueue->add() with calls to message API
 - [ ] Frontend: Rename item view "metadata" page
 - [ ] Add missing translations
