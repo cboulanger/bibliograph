@@ -44,7 +44,7 @@ class Z3950ControllersCest
    */
   public function tryToGetServerList(\ApiTester $I)
   {
-    $I->sendJsonRpcRequest('z3950/table','list-servers');
+    $I->sendJsonRpcRequest('z3950/table','server-list');
     $I->seeResponseMatchesJsonType([
       'label' => 'string',
       'value' => 'string',

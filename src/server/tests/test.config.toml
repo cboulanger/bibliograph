@@ -1,0 +1,39 @@
+[database]
+type            = "mysql"
+host            = "localhost"
+port            = 3306
+adminname       = "root"
+adminpassw      = ""
+username        = "root"
+userpassw       = ""
+admindb         = "tests"
+userdb          = "tests"
+tmp_db          = "tests"
+tableprefix     = ""
+encoding        = "utf8"
+
+[service]
+event_transport = true
+
+[access]
+global_roles_only   = false
+enforce_https_login = false
+
+[email]
+admin      = "info@bibliograph.org"
+developer  = "info@bibliograph.org"
+
+[ldap]
+enabled             = false#!ldap! leave this exactly like it is since tests rely on it
+use_groups          = true
+host                = "ldap.forumsys.com"
+port                = 389
+mail_domain         = "example.com"
+bind_dn             = "cn=read-only-admin"
+bind_password       = "password"
+user_base_dn        = "dc=example,dc=com"
+user_id_attr        = "uid"
+group_base_dn       = "dc=example,dc=com"
+group_id_attr       = "ou"
+group_name_attr     = "cn"
+group_member_attr   = "uniqueMember"

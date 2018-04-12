@@ -11,7 +11,7 @@ resource-db.json
 node_modules/
 
 *.zip
-src/server/config/bibliograph.ini.php
+src/server/config/app.config.toml
 
 # package-lock.json is platform-specific 
 package-lock.json

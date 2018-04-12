@@ -43,9 +43,9 @@ class ApiTester extends \Codeception\Actor
    * @param bool $boolValue
    */
   protected function setLdapEnabled($boolValue){
-    $path_to_file = __DIR__ . "/../test.ini.php";
+    $path_to_file = APP_CONFIG_FILE;
     $file_contents = file_get_contents($path_to_file);
-    $enabled = "yes;!ldap!"; $disabled = "no;!ldap!";
+    $enabled = "true#!ldap!"; $disabled = "false#!ldap!";
     $newValue = $boolValue ? $enabled : $disabled;
     $file_contents = str_replace([$enabled,$disabled],$newValue, $file_contents);
     file_put_contents($path_to_file,$file_contents);

@@ -23,11 +23,14 @@
 - [x] Re-implement extended fields datasource
 - [x] Move the .idea folder out of version control
 - [x] Fix Drag & Drop
+- [ ] Translate ini files for tests to .toml
 - [ ] Add & test packaging scripts mechanism
     - [ ] Remove unneeded dirs in server/runtime
 - [ ] Re-implement Docker image for testing
 - [ ] BUG: Title label is not updated
 - [ ] BUG: Datasource list window is not updated after adding datasource
+- [ ] BUG: Z3950-Import in "Main" funktioniert nicht
+- [ ] Move config/test.php to tests/config.php 
 
 ## v3.0.0-beta 
 
@@ -51,6 +54,7 @@
 - [ ] Add "Re-install modules" button in Systems menu
 - [ ] Remove migrations table for deleted datasources
 - [ ] Implement setup Wizard
+- [ ] Rewrite Yii2 configuration using M1/Var 
 
 ### Priority: low
 - [ ] Add "serverOnly" column to data_Config (true/false/null) and remove from config data sent to client
