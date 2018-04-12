@@ -14,7 +14,6 @@
       "type": "build",
       "outputPath": "build-compiled",
       "environment": {
-        "qx.debug" : false,
         "app.serverUrl" : "../server.php?r="
       }
     }

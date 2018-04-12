@@ -11,7 +11,7 @@ resource-db.json
 node_modules/
 
 *.zip
-src/server/config/app.config.toml
+src/server/config/app.conf.toml
 
 # package-lock.json is platform-specific 
 package-lock.json
