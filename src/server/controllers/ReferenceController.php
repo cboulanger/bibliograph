@@ -509,7 +509,9 @@ class ReferenceController extends AppController
     }
     $suggestionValues = $modelClass::find()
       ->select($field)
+      ->distinct()
       ->where(["like", $field, $input])
+      ->orderBy($field)
       ->column();
 
     if ($separator) {
@@ -591,15 +593,19 @@ class ReferenceController extends AppController
   }
 
   /**
-   * Returns data for a ComboBox widget.
+   * Returns distinct values for a field, sorted alphatbetically, in a format suitable
+   * for a ComboBox widget.
    * @param $datasource
    * @param $field
-   *
    */
   public function actionListField($datasource, $field)
   {
     $modelClass = $this->getControlledModel($datasource);
-    $values = $modelClass::find()->select($field)->column();
+    $values = $modelClass::find()
+      ->select($field)
+      ->distinct()
+      ->orderBy($field)
+      ->column();
     $result = [];
     foreach ($values as $value) {
       $value = trim($value);
