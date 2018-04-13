@@ -53,6 +53,7 @@ msgstr "Anmeldung ..."
 #: bibliograph/Commands.js:72 bibliograph/ui/window/AccessControlTool.js:171
 #: bibliograph/ui/window/AccessControlTool.js:186
 #: bibliograph/ui/window/AccessControlTool.js:180
+#: bibliograph/ui/window/AccessControlTool.js:158
 msgid "Please wait ..."
 msgstr "Bitte warten ..."
 
@@ -412,6 +413,7 @@ msgstr "Aus Text/Datei importieren"
 #: bibliograph/ui/window/AccessControlTool.js:190
 #: bibliograph/ui/window/AccessControlTool.js:191
 #: bibliograph/ui/window/AccessControlTool.js:200
+#: bibliograph/ui/window/AccessControlTool.js:178
 #: bibliograph/plugins/z3950/ImportWindow.js:161
 #: bibliograph/plugins/z3950/ImportWindow.js:167
 #: bibliograph/plugins/z3950/ImportWindow.js:175
@@ -612,6 +614,7 @@ msgstr "Zugangskontrollwerkzeug"
 #: bibliograph/ui/window/AccessControlTool.js:162
 #: bibliograph/ui/window/AccessControlTool.js:163
 #: bibliograph/ui/window/AccessControlTool.js:172
+#: bibliograph/ui/window/AccessControlTool.js:150
 msgid "New User"
 msgstr "Neue/r Benutzer/in"
 
@@ -619,6 +622,7 @@ msgstr "Neue/r Benutzer/in"
 #: bibliograph/ui/window/AccessControlTool.js:178
 #: bibliograph/ui/window/AccessControlTool.js:179
 #: bibliograph/ui/window/AccessControlTool.js:188
+#: bibliograph/ui/window/AccessControlTool.js:166
 msgid "New Datasource"
 msgstr "Neue Datenbank"
 
@@ -630,6 +634,7 @@ msgstr "Ins Dateisystem exportieren"
 #: bibliograph/ui/window/AccessControlTool.js:200
 #: bibliograph/ui/window/AccessControlTool.js:201
 #: bibliograph/ui/window/AccessControlTool.js:210
+#: bibliograph/ui/window/AccessControlTool.js:188
 msgid "Exit"
 msgstr "Schließen"
 
@@ -640,6 +645,8 @@ msgstr "Schließen"
 #: bibliograph/ui/window/AccessControlTool.js:492
 #: bibliograph/ui/window/AccessControlTool.js:283
 #: bibliograph/ui/window/AccessControlTool.js:506
+#: bibliograph/ui/window/AccessControlTool.js:277
+#: bibliograph/ui/window/AccessControlTool.js:487
 msgid "Please enter the id of the new '%1'-Object"
 msgstr "Bitte geben sie die ID für das neue '%1'-Objekt ein"
 
@@ -647,6 +654,7 @@ msgstr "Bitte geben sie die ID für das neue '%1'-Objekt ein"
 #: bibliograph/ui/window/AccessControlTool.js:292
 #: bibliograph/ui/window/AccessControlTool.js:293
 #: bibliograph/ui/window/AccessControlTool.js:304
+#: bibliograph/ui/window/AccessControlTool.js:298
 msgid "Do you really want to delete '%1'?"
 msgstr "Wollen Sie wirklich '%1' löschen?"
 
@@ -657,6 +665,7 @@ msgstr "Wollen Sie wirklich '%1' löschen?"
 #: bibliograph/ui/window/AccessControlTool.js:541
 #: bibliograph/ui/window/AccessControlTool.js:329
 #: bibliograph/ui/window/AccessControlTool.js:556
+#: bibliograph/ui/window/AccessControlTool.js:536
 msgid "Loading data ..."
 msgstr "Lade die Daten ..."
 
@@ -664,6 +673,7 @@ msgstr "Lade die Daten ..."
 #: bibliograph/ui/window/AccessControlTool.js:358
 #: bibliograph/ui/window/AccessControlTool.js:359
 #: bibliograph/ui/window/AccessControlTool.js:370
+#: bibliograph/ui/window/AccessControlTool.js:340
 msgid "Edited element"
 msgstr "Bearbeitetes Element"
 
@@ -674,6 +684,8 @@ msgstr "Bearbeitetes Element"
 #: bibliograph/ui/window/AccessControlTool.js:409
 #: bibliograph/ui/window/AccessControlTool.js:418
 #: bibliograph/ui/window/AccessControlTool.js:420
+#: bibliograph/ui/window/AccessControlTool.js:389
+#: bibliograph/ui/window/AccessControlTool.js:391
 msgid "Link"
 msgstr "Verknüpfen"
 
@@ -684,6 +696,8 @@ msgstr "Verknüpfen"
 #: bibliograph/ui/window/AccessControlTool.js:422
 #: bibliograph/ui/window/AccessControlTool.js:431
 #: bibliograph/ui/window/AccessControlTool.js:433
+#: bibliograph/ui/window/AccessControlTool.js:402
+#: bibliograph/ui/window/AccessControlTool.js:404
 msgid "Unlink"
 msgstr "Lösen"
 
@@ -691,6 +705,7 @@ msgstr "Lösen"
 #: bibliograph/ui/window/AccessControlTool.js:446
 #: bibliograph/ui/window/AccessControlTool.js:447
 #: bibliograph/ui/window/AccessControlTool.js:458
+#: bibliograph/ui/window/AccessControlTool.js:429
 msgid "Linkable items"
 msgstr "Verknüpfbare Elemente"
 
@@ -698,6 +713,7 @@ msgstr "Verknüpfbare Elemente"
 #: bibliograph/ui/window/AccessControlTool.js:516
 #: bibliograph/ui/window/AccessControlTool.js:517
 #: bibliograph/ui/window/AccessControlTool.js:532
+#: bibliograph/ui/window/AccessControlTool.js:512
 msgid "Do you really want to delete the objects '%1'?"
 msgstr "Wollen Sie wirklich die Objekte '%1' löschen?"
 
@@ -1204,6 +1220,7 @@ msgstr ""
 #: bibliograph/ui/window/AccessControlTool.js:452
 #: bibliograph/ui/window/AccessControlTool.js:453
 #: bibliograph/ui/window/AccessControlTool.js:464
+#: bibliograph/ui/window/AccessControlTool.js:435
 msgid "No linkable items"
 msgstr ""
 
@@ -1408,4 +1425,9 @@ msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:390
 msgid "Do your really want to copy %1 references to '%2'?"
+msgstr ""
+
+#: bibliograph/ui/window/AccessControlTool.js:229
+#: bibliograph/ui/window/AccessControlTool.js:443
+msgid "Filter by name here..."
 msgstr ""
