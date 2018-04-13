@@ -30,8 +30,8 @@
 - [x] BUG: Datasource list window is not updated after adding datasource
 - [x] FEAT: Reimplement options window
 - [x] FEAT: Reimplement field selection for editor
-- [ ] BUG: Fix LDAP authentication
- 
+- [x] BUG: Fix LDAP authentication
+- [ ] BUG/FEAT: Fix translation of search words, add "locale" property to search folders for parsing queries 
 
 ## v3.0.0-beta 
 
@@ -39,6 +39,7 @@
 - [ ] BUG: module autoloader requires debug mode (trying to serialize closures breaks app)
 - [ ] BUG: Disallow drop of references on folders in which they are already contained. 
 - [ ] BUG: Z3950-Import in "Main" funktioniert nicht
+- [ ] BUG: Boolean columns must be NOT NULL DEFAULT 0 (z.B. data_User.anonymous)
 - [ ] FEAT: Tests: Make Travis ~~great~~ work again
 - [ ] FEAT: Re-implement Export
 - [ ] FEAT: Clear up the conceptual mess concerning "schema": datasource schema/reference schema
@@ -46,7 +47,6 @@
 - [ ] FEAT: Transform compile.json into compile.js (to allow to update env var "app.version" etc.)
 
 ### Priority: normal
-- [ ] FEAT: Add "locale" property to search folders for parsing queries
 - [ ] FEAT: Reimplement Search Help
 - [ ] FEAT: Add missing translations
 - [ ] FEAT: Make UserErrorException a JSONRPC error which is caught on the client, instead of a Dialog event. 
