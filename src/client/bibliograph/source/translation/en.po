@@ -7,6 +7,8 @@ msgstr "Plural-Forms: nplurals=2; plural=(n != 1);\nProject-Id-Version: \nPOT-Cr
 #: bibliograph/ui/window/DatasourceListWindow.js:100
 #: bibliograph/ui/window/DatasourceListWindow.js:97
 #: bibliograph/ui/window/DatasourceListWindow.js:98
+#: bibliograph/ui/window/DatasourceListWindow.js:81
+#: bibliograph/ui/window/DatasourceListWindow.js:82
 msgid "OK"
 msgstr ""
 
@@ -160,6 +162,7 @@ msgstr ""
 #: bibliograph.ui.window.DatasourceListWindow:44
 #: bibliograph/ui/window/DatasourceListWindow.js:44
 #: bibliograph/ui/window/DatasourceListWindow.js:42
+#: bibliograph/ui/window/DatasourceListWindow.js:43
 msgid "Please select the datasource"
 msgstr ""
 

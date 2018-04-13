@@ -689,6 +689,7 @@ msgstr "Wollen Sie wirklich die Objekte '%1' löschen?"
 #: bibliograph.ui.window.DatasourceListWindow:44
 #: bibliograph/ui/window/DatasourceListWindow.js:44
 #: bibliograph/ui/window/DatasourceListWindow.js:42
+#: bibliograph/ui/window/DatasourceListWindow.js:43
 msgid "Please select the datasource"
 msgstr "Bitte wählen Sie die Datenquelle aus"
 
@@ -697,6 +698,8 @@ msgstr "Bitte wählen Sie die Datenquelle aus"
 #: bibliograph/ui/window/DatasourceListWindow.js:100
 #: bibliograph/ui/window/DatasourceListWindow.js:97
 #: bibliograph/ui/window/DatasourceListWindow.js:98
+#: bibliograph/ui/window/DatasourceListWindow.js:81
+#: bibliograph/ui/window/DatasourceListWindow.js:82
 msgid "OK"
 msgstr "OK"
 
