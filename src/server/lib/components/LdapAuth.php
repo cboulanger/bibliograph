@@ -215,8 +215,8 @@ class LdapAuth extends \yii\base\Component
     
     $user = User::findOne(['namedId'=>$username]);
     assert(is_object($user),"User record must exist at this point");
-    $groupNames = $user->getGroupNames();
 
+    $groupNames = $user->getGroupNames();
     if( count($groupNames) == 0 and count($ldapGroups) == 0 ){
       Yii::debug("User '$username' belongs to no local groups. Nothing to do.", 'ldap' );
       return;
@@ -240,7 +240,7 @@ class LdapAuth extends \yii\base\Component
       }
 
       // make user a group member
-      if ( ! $user->getGroups()->where(['namedId'=>'$namedId'])->exists() ){
+      if ( ! in_array( $namedId, $groupNames ) ){
         Yii::debug("Adding user '$username' to group '$namedId'", 'ldap' );
         $group->link( 'users', $user );
       } else {
