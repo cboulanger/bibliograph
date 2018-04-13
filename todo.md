@@ -28,6 +28,10 @@
 - [x] BUG: Drag & Drop is enabled in table for anonymous! - not reproduceable
 - [x] BUG: Title label is not updated
 - [x] BUG: Datasource list window is not updated after adding datasource
+- [x] FEAT: Reimplement options window
+- [x] FEAT: Reimplement field selection for editor
+- [ ] BUG: Fix LDAP authentication
+ 
 
 ## v3.0.0-beta 
 
@@ -39,6 +43,7 @@
 - [ ] FEAT: Re-implement Export
 - [ ] FEAT: Clear up the conceptual mess concerning "schema": datasource schema/reference schema
 - [ ] FEAT: Allow migrations via permission, not prod/dev-mode
+- [ ] FEAT: Transform compile.json into compile.js (to allow to update env var "app.version" etc.)
 
 ### Priority: normal
 - [ ] FEAT: Add "locale" property to search folders for parsing queries
@@ -66,6 +71,7 @@
 - [ ] Re-implement Docker image for testing
 - [ ] Frontend: Rename item view "metadata" page
 - [ ] Configure log email target to report fatal errors, adapt UserErrorException to report fatal errors via email
+- [ ] FEAT: Implement field selection for editor as checkboxes
 
 ### Code cleanup
 - [ ] Move config/test.php to tests/config.php 
