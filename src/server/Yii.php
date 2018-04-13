@@ -24,7 +24,7 @@ class Yii extends \yii\BaseYii
  * @property \lib\components\Configuration $config
  *    Configuration component, managing file-based initialization (.ini) values and
  *    config data stored in the database
- * @property \Edvlerblog\Adldap2\Adldap2Wrapper $ldap
+ * @property \Edvlerblog\Adldap2\Adldap2Wrapper|\Adldap\Adldap $ldap
  *    A LDAP library wrapper class
  * @property \lib\components\LdapAuth $ldapAuth
  *    A component that handles LDAP authentication
