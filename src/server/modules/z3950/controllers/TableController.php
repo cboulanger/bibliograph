@@ -91,13 +91,10 @@ class TableController extends AppController
       }
     }
     // Return list of Datasources
-    $list = [[
-      'label' => Yii::t(Module::CATEGORY, "Please select a database"),
-      'value' => null
-    ]];
+    $list = [];
     $datasources = Datasource::find()
-      ->select("title as label, namedId as value")
-      ->where(['schema'=> "z3950", 'active' => 1])
+      ->select("title as label, namedId as value, active")
+      ->where(['schema'=> "z3950"])
       ->asArray()
       ->all();
     return array_merge($list,$datasources);

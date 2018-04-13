@@ -25,7 +25,7 @@ class Module extends \lib\Module
    * The version of the module
    * @var string
    */
-  protected $version = "1.0.0";
+  protected $version = "1.0.2";
 
   /**
    * A string constant defining the category for logging and translation

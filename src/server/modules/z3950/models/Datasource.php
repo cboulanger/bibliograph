@@ -32,6 +32,12 @@ class Datasource
   extends \app\models\Datasource
   implements \lib\schema\ISchema
 {
+
+  /**
+   * The named id of the datasource schema
+   */
+  const SCHEMA_ID = "z3950";
+
   /**
    * A descriptive name (should be set)
    * @var string
@@ -46,9 +52,12 @@ class Datasource
 
   /**
    * Override schema migration namespace
-   * @var string
+   * @return string
    */
-  static $migrationNamespace = "\app\modules\z3950\migrations";
+  public function getMigrationNamespace()
+  {
+    return "\\app\\modules\\z3950\\migrations";
+  }
 
   /**
    * @todo

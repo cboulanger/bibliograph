@@ -55,13 +55,13 @@ qx.Class.define("bibliograph.plugins.z3950.Plugin",
       app.getRoot().add(importWindow);
       
       // add a new menu button
-      let importMenu = app.getWidgetById("app/toolbar/import");
+      let importMenu = app.getWidgetById("app/toolbar/menus/import");
       let menuButton = new qx.ui.menu.Button(this.tr("Import from library catalog"));
       menuButton.addListener("execute", () => importWindow.show() );
       importMenu.add(menuButton);
       
       // Overlays for preference window @todo rename
-      let prefsTabView = app.getWidgetById("bibliograph/preferences-tabView");
+      let prefsTabView = app.getWidgetById("app/windows/preferences/tabview");
       let pluginTab = new qx.ui.tabview.Page(this.tr('Z39.50 Import'));
       
       // ACL
@@ -86,8 +86,8 @@ qx.Class.define("bibliograph.plugins.z3950.Plugin",
         },
         bindItem: function (controller, item, id) {
           controller.bindProperty("label", "label", null, item, id);
-          controller.bindProperty("active", "value", null, item, id);
-          controller.bindPropertyReverse("active", "value", null, item, id);
+          controller.bindProperty("active", "value", { converter: v => v==1 }, item, id);
+          controller.bindPropertyReverse("active", "value", { converter: v => v==1 }, item, id);
         }
       };
       list.setDelegate(delegate);
