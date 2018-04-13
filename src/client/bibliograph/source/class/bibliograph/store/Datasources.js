@@ -60,8 +60,7 @@ qx.Class.define("bibliograph.store.Datasources",
       let found=false;
       data.forEach((item)=>{ if(item.getValue()==datasource) found=item;});
       if ( datasource && found)
-      {          
-        app.setDatasourceLabel(found.getTitle());
+      {
         app.getStateManager().updateState(); 
         return;
       }
@@ -70,7 +69,6 @@ qx.Class.define("bibliograph.store.Datasources",
       if (datasourceCount == 1) {
         var item = data.getItem(0);
         app.setDatasource(item.getValue());
-        app.setDatasourceLabel(item.getTitle());
         app.getStateManager().updateState();
       }
       // else, we have a choice of datasource

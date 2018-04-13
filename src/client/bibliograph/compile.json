@@ -8,13 +8,17 @@
   "targets": [
     {
       "type": "source",
-      "outputPath": "source-compiled"
+      "outputPath": "source-compiled",
+      "environment": {
+        "app.mode" : "development"
+      }
     },
     {
       "type": "build",
       "outputPath": "build-compiled",
       "environment": {
-        "app.serverUrl" : "../server.php?r="
+        "app.serverUrl" : "../server.php?r=",
+        "app.mode" : "production"
       }
     }
   ],

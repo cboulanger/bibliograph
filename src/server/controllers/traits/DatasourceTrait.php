@@ -41,7 +41,7 @@ trait DatasourceTrait
     if( $checkAccess ){
       $myDatasources = $this->getActiveUser()->getAccessibleDatasourceNames();
       if( ! in_array($datasourceName, $myDatasources) ){
-        throw new RuntimeException(
+        throw new UserErrorException(
           Yii::t('app', "You do not have access to datasource '{datasource}'",[
             'datasource' => $datasourceName
           ])

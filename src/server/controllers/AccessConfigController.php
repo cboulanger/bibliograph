@@ -491,6 +491,13 @@ class AccessConfigController extends AppController
       ['type' => $type, 'name' => $namedId]
     );
 
+    if( ! preg_match("/^[\S\w_]+$/u", $namedId) ){
+      throw new UserErrorException(Yii::t(
+        'app',
+        "Invalid name '{name}': Must only contain alphanumeric characters or '_'.", [ 'name' => $namedId]
+      ));
+    }
+
     if ($type == "datasource") {
       try {
         $model = Yii::$app->datasourceManager->create($namedId, $schema);
@@ -505,7 +512,8 @@ class AccessConfigController extends AppController
       } catch (\yii\db\Exception $e) {
         throw new UserErrorException($errorMessage . $e->getMessage());
       }
-      $this->dispatchClientMessage("reloadDatasources");
+      $this->dispatchClientMessage("datasources.reload");
+
     } else {
       $modelClass = $elementData['class'];
       if ($modelClass::findByNamedId($namedId)) {
@@ -1015,7 +1023,12 @@ class AccessConfigController extends AppController
     $this->requirePermission("access.manage");
 
     if ($data === null) return $this->cancelledActionResult();
-
+    if( ! preg_match("/^[\S\w_]+$/u", $data->namedId) ){
+      throw new UserErrorException(Yii::t(
+        'app',
+        "Invalid datasource name '{name}': Must only contain alphanumeric characters or '_'.", [ 'name' => $data->namedId]
+      ));
+    }
     try {
       Yii::$app->datasourceManager->create($data->namedId);
     } catch (\yii\db\Exception $e) {

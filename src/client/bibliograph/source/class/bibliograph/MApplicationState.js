@@ -153,12 +153,10 @@ qx.Mixin.define("bibliograph.MApplicationState", {
     _applyDatasource: function(value, old) {
       var stateMgr = this.getStateManager();
 
-      /*
-       * reset all states that have been connected
-       * with the datasource if a previous datasource
-       * has been loaded
-       * @todo hide search box when no datasource is selected
-       */
+      // reset all states that have been connected
+      // with the datasource if a previous datasource
+      // has been loaded
+      // @todo hide search box when no datasource is selected
       if (old) {
         this.setModelId(0);
         this.setFolderId(0);
@@ -166,13 +164,32 @@ qx.Mixin.define("bibliograph.MApplicationState", {
         this.setQuery(null);
       }
       if (value) {
-        // set the application state
         stateMgr.setState("datasource", value);
-
-      } else {
-        stateMgr.removeState("datasource");
+        let datasourcesStore = bibliograph.store.Datasources.getInstance();
+        let model = datasourcesStore.getModel();
+        if( model ) {
+          this.__setApplicationTitleFromDatasourceModel(model, value);
+        } else {
+          datasourcesStore.addListenerOnce("loaded", e =>{
+            this.__setApplicationTitleFromDatasourceModel(e.getData(), value);
+          });
+        }
+        return;
+      }
+      stateMgr.removeState("datasource");
+      this.setDatasourceLabel(this.getApplication().getConfigManager().getKey("application.title"));
+    },
+    
+    __setApplicationTitleFromDatasourceModel : function(model,value){
+      if( model ){
+        model.forEach( item => {
+          if(item.getValue()===value) {
+            this.getApplication().setDatasourceLabel(item.getTitle());
+          }
+        });
       }
     },
+    
 
     /**
      * Displays the name of the current datasource
@@ -180,6 +197,9 @@ qx.Mixin.define("bibliograph.MApplicationState", {
     _applyDatasourceLabel: function(value, old) {
       if (!value) {
         value = this.getConfigManager().getKey("application.title");
+      }
+      if( qx.core.Environment.get("app.mode")==="development"){
+        value += " (DEVELOPMENT)";
       }
       window.document.title = value;
       this.getWidgetById("bibliograph/datasource-name").setValue(

@@ -29,6 +29,7 @@ qx.Class.define("bibliograph.ui.window.DatasourceListWindow",
     this.setWidgetId("app/windows/datasource");
     this.setWidth(300);
     this.setVisibility("excluded");
+    this.addListener("appear", e => this.center() );
 
     let app = this.getApplication();
     qx.event.message.Bus.getInstance().subscribe(bibliograph.AccessManager.messages.LOGOUT, () => this.close());
@@ -49,7 +50,7 @@ qx.Class.define("bibliograph.ui.window.DatasourceListWindow",
 
     // controller
     let dsController = new qx.data.controller.List(null, dsList, "label");
-    this.getApplication().getDatasourceStore().bind("model", dsController, "model");
+    bibliograph.store.Datasources.getInstance().bind("model", dsController, "model");
     this.getApplication().bind("datasource", dsList, "selection", {
       converter : (v) => bibliograph.Utils.getListElementWithValue(dsList,v)
     });
@@ -59,28 +60,11 @@ qx.Class.define("bibliograph.ui.window.DatasourceListWindow",
       let sel = e.getData();
       if (sel.length) {
         app.setDatasource(sel[0].getModel().getValue());
-      }
-    }, this);
-
-    dsList.addListener("changeSelection", function(e) {
-      if (e.getData().length) {
         qx.event.Timer.once(function() {
           this.hide();
         }, this, 1000);
       }
     }, this);
-
-    // blocker
-    // dsList.addListener("appear", (e) => {
-    //   this.center();
-    //   let root = app.getRoot();
-    //   root.setBlockerOpacity(0.5);
-    //   root.setBlockerColor("black");
-    //   root.blockContent(this.getZIndex() - 1);
-    // }, this);
-    // dsList.addListener("disappear", function(e) {
-    //   //this.getApplicationRoot().unblockContent(); // not working with qx > 3.0
-    // }, this);
 
     // buttons
     let hbox1 = new qx.ui.layout.HBox(5, null, null);

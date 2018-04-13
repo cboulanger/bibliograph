@@ -25,37 +25,31 @@
 - [x] Fix Drag & Drop
 - [x] Translate ini files for tests to .toml
 - [x] Add & test packaging scripts mechanism
-- [ ] BUG: Drag & Drop is enabled in table for anonymous!
-- [ ] BUG: Title label is not updated
-- [ ] BUG: Datasource list window is not updated after adding datasource
-- [ ] BUG: Z3950-Import in "Main" funktioniert nicht
-- [ ] Move config/test.php to tests/config.php 
+- [x] BUG: Drag & Drop is enabled in table for anonymous! - not reproduceable
+- [x] BUG: Title label is not updated
+- [x] BUG: Datasource list window is not updated after adding datasource
 
 ## v3.0.0-beta 
 
 ### Priority: high
-- [ ] module autoloader requires debug mode (trying to serialize closures breaks app)
-- [ ] Tests: Make Travis ~~great~~ work again
-- [ ] Re-implement Export
-- [ ] Move static methods out of \app\models\Datasource into DatasourceManager component
-- [ ] Datasource-specific migration namespace should be in the Datasource Schema
-- [ ] Clear up the conceptual mess concerning "schema": datasource schema/reference schema
-- [ ] Allow migrations via permission, not prod/dev-mode
-- [ ] Disallow drop of references on folders in which they are already contained. 
+- [ ] BUG: module autoloader requires debug mode (trying to serialize closures breaks app)
+- [ ] BUG: Disallow drop of references on folders in which they are already contained. 
+- [ ] BUG: Z3950-Import in "Main" funktioniert nicht
+- [ ] FEAT: Tests: Make Travis ~~great~~ work again
+- [ ] FEAT: Re-implement Export
+- [ ] FEAT: Clear up the conceptual mess concerning "schema": datasource schema/reference schema
+- [ ] FEAT: Allow migrations via permission, not prod/dev-mode
 
 ### Priority: normal
-- [ ] Add "locale" property to search folders for parsing queries
-- [ ] Reimplement Search Help
-- [ ] Replace calls to Yii::$app->eventQueue->add() with calls to message API
-- [ ] Frontend: Rename item view "metadata" page
-- [ ] Add missing translations
-- [ ] Add log email target to report fatal errors, adapt UserErrorException to report fatal errors via email
-- [ ] Make UserErrorException a JSONRPC error which is caught on the client, instead of a Dialog event. 
-- [ ] Re-implement "New User" & "New Datasource" in Access Control Tool and System dialogs
-- [ ] Add "Re-install modules" button in Systems menu
-- [ ] Remove migrations table for deleted datasources
-- [ ] Implement setup Wizard
-- [ ] Rewrite Yii2 configuration using M1/Var 
+- [ ] FEAT: Add "locale" property to search folders for parsing queries
+- [ ] FEAT: Reimplement Search Help
+- [ ] FEAT: Add missing translations
+- [ ] FEAT: Make UserErrorException a JSONRPC error which is caught on the client, instead of a Dialog event. 
+- [ ] FEAT: Re-implement "New User" in Access Control Tool and System dialogs
+- [ ] FEAT: Add "Re-install modules" button in Systems menu
+- [ ] FEAT: Remove migrations table for deleted datasources
+- [ ] FEAT: Implement setup Wizard
+- [ ] FEAT: Rewrite Yii2 configuration using M1/Var 
 
 ### Priority: low
 - [ ] Add "serverOnly" column to data_Config (true/false/null) and remove from config data sent to client
@@ -70,8 +64,15 @@
 - [ ] Backend: Model validation: accept booleans for MySql SmallInt columns
 - [ ] Revert return value of ConsoleAppHelper to simple string
 - [ ] Re-implement Docker image for testing
+- [ ] Frontend: Rename item view "metadata" page
+- [ ] Configure log email target to report fatal errors, adapt UserErrorException to report fatal errors via email
 
 ### Code cleanup
+- [ ] Move config/test.php to tests/config.php 
+- [ ] Replace calls to Yii::$app->eventQueue->add() with calls to message API
+- [ ] Datasource-specific migration namespace should be in the Datasource Schema
+- [ ] Move static methods out of \app\models\Datasource into DatasourceManager component
+- [ ] Rename "Datasource" to "Repository" (see https://dev.to/remojansen/implementing-the-onion-architecture-in-nodejs-with-typescript-and-inversifyjs-10ad)
 - [ ] Replace message names with constants
 - [ ] Tests: Fix bootstrap loading issue
 - [ ] \app\controllers\AppController::require* methods should throw a specialized
@@ -85,6 +86,7 @@
 - [ ] Add missing id, created, modified to model rules()
 - [ ] Remove qx prefix in generated code (s/qx([A-Z])/\L$1/)
 - [ ] Convert config to YAML: https://packagist.org/packages/sergeymakinen/yii2-config
+- [ ] Change URL params separators
 
 ## v3.0.0
 
