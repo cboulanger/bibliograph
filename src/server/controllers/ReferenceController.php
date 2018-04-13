@@ -734,7 +734,7 @@ class ReferenceController extends AppController
     // unlink
     /** @var Folder $folder */
     $folder = $folderClass::findOne(intval($folderId));
-    $reference->unlink("folders", $folder);
+    $reference->unlink("folders", $folder, true);
     // update folders
     $foldersToUpdate = $containedFolderIds;
 
@@ -877,7 +877,7 @@ class ReferenceController extends AppController
       }
       // unlink source folder
       try{
-        $sourceFolder->unlink("references", $reference);
+        $sourceFolder->unlink("references", $reference, true);
       } catch (Exception $e){
         Yii::error($e);
       }
@@ -993,7 +993,7 @@ class ReferenceController extends AppController
 
     foreach ($references as $reference) {
       $folderCount = $reference->getFolders()->count();
-      $reference->unlink("folders", $folder);
+      $reference->unlink("folders", $folder, true);
       if ($folderCount == 1) {
         $referencesToTrash[] = $reference;
       }
