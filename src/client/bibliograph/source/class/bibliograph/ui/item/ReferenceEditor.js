@@ -885,14 +885,11 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
           this.showMessage(this.tr("Saving..."));
           var data = {};
           data[fieldname] = value;
-          this.getStore().execute(
-              "saveData",
-              [datasource, referenceId, data],
-              function() {
-                this.showMessage(null);
-                this.getData()[name] = value;
-              }, this);
-
+          rpc.Reference.save(datasource, referenceId, data)
+          .then(()=> {
+              this.showMessage(null);
+              this.getData()[name] = value;
+          });
         }, 500, this);
 
         this.__timeoutId = timeoutId;
