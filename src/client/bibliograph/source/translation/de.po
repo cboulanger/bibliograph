@@ -236,6 +236,8 @@ msgstr "Wollen Sie wirklich diesen Datensatz aus Ordner '%1' entfernen?"
 #: bibliograph.ui.item.RecordInfoUi:45
 #: bibliograph/ui/item/ReferenceEditorUi.js:234
 #: bibliograph/ui/item/ReferenceEditorUi.js:236
+#: bibliograph/ui/item/ReferenceEditorUi.js:233
+#: bibliograph/ui/item/ReferenceEditorUi.js:235
 #: bibliograph/ui/item/RecordInfoUi.js:43
 #: bibliograph/ui/item/RecordInfoUi.js:45
 msgid "Record Info"
@@ -291,16 +293,19 @@ msgstr "Speichern ..."
 
 #: bibliograph.ui.item.ReferenceEditorUi:139
 #: bibliograph/ui/item/ReferenceEditorUi.js:139
+#: bibliograph/ui/item/ReferenceEditorUi.js:138
 msgid "Abstract"
 msgstr "Zusammenfassung"
 
 #: bibliograph.ui.item.ReferenceEditorUi:153
 #: bibliograph/ui/item/ReferenceEditorUi.js:153
+#: bibliograph/ui/item/ReferenceEditorUi.js:152
 msgid "Keywords"
 msgstr "Schlagwörter"
 
 #: bibliograph.ui.item.ReferenceEditorUi:167
 #: bibliograph/ui/item/ReferenceEditorUi.js:167
+#: bibliograph/ui/item/ReferenceEditorUi.js:166
 msgid "Notes"
 msgstr "Kommentar"
 
@@ -308,24 +313,33 @@ msgstr "Kommentar"
 #: bibliograph/ui/item/ReferenceEditorUi.js:196
 #: bibliograph/ui/item/ReferenceEditorUi.js:204
 #: bibliograph/ui/item/ReferenceEditorUi.js:207
+#: bibliograph/ui/item/ReferenceEditorUi.js:195
+#: bibliograph/ui/item/ReferenceEditorUi.js:203
+#: bibliograph/ui/item/ReferenceEditorUi.js:206
 msgid "Contents"
 msgstr "Inhaltsverzeichnis"
 
 #: bibliograph.ui.item.ReferenceEditorUi:110
 #: bibliograph/ui/item/ReferenceEditorUi.js:108
 #: bibliograph/ui/item/ReferenceEditorUi.js:110
+#: bibliograph/ui/item/ReferenceEditorUi.js:107
+#: bibliograph/ui/item/ReferenceEditorUi.js:109
 msgid "Main"
 msgstr "Stammdaten"
 
 #: bibliograph.ui.item.ReferenceEditorUi:177
 #: bibliograph/ui/item/ReferenceEditorUi.js:175
 #: bibliograph/ui/item/ReferenceEditorUi.js:177
+#: bibliograph/ui/item/ReferenceEditorUi.js:174
+#: bibliograph/ui/item/ReferenceEditorUi.js:176
 msgid "About"
 msgstr "Metadaten"
 
 #: bibliograph.ui.item.ReferenceEditorUi:260
 #: bibliograph/ui/item/ReferenceEditorUi.js:258
 #: bibliograph/ui/item/ReferenceEditorUi.js:260
+#: bibliograph/ui/item/ReferenceEditorUi.js:257
+#: bibliograph/ui/item/ReferenceEditorUi.js:259
 msgid "Duplicates"
 msgstr "Dubletten"
 
@@ -352,6 +366,7 @@ msgstr "System"
 
 #: bibliograph.ui.main.Toolbar:144
 #: bibliograph/ui/window/PreferencesWindow.js:36
+#: bibliograph/ui/window/PreferencesWindow.js:31
 #: bibliograph/ui/main/Toolbar.js:144
 msgid "Preferences"
 msgstr "Optionen"
@@ -896,72 +911,87 @@ msgstr "Schließen"
 
 #: bibliograph.ui.window.PreferencesWindow:75
 #: bibliograph/ui/window/PreferencesWindow.js:75
+#: bibliograph/ui/window/PreferencesWindow.js:57
 msgid "General"
 msgstr ""
 
 #: bibliograph.ui.window.PreferencesWindow:84
 #: bibliograph/ui/window/PreferencesWindow.js:84
+#: bibliograph/ui/window/PreferencesWindow.js:66
 msgid "Application title"
 msgstr "Programmtitel"
 
 #: bibliograph.ui.window.PreferencesWindow:99
 #: bibliograph/ui/window/PreferencesWindow.js:99
+#: bibliograph/ui/window/PreferencesWindow.js:79
 msgid "Application logo"
 msgstr "Anwendungslogo"
 
 #: bibliograph.ui.window.PreferencesWindow:114
 #: bibliograph/ui/window/PreferencesWindow.js:114
+#: bibliograph/ui/window/PreferencesWindow.js:86
 msgid "Language"
 msgstr ""
 
 #: bibliograph.ui.window.PreferencesWindow:136
 #: bibliograph/ui/window/PreferencesWindow.js:136
+#: bibliograph/ui/window/PreferencesWindow.js:108
 msgid "Use browser locale"
 msgstr "Browser-Einstellungen verwenden"
 
 #: bibliograph.ui.window.PreferencesWindow:175
 #: bibliograph/ui/window/PreferencesWindow.js:175
+#: bibliograph/ui/window/PreferencesWindow.js:145
 msgid "Fields"
 msgstr "Felder"
 
 #: bibliograph.ui.window.PreferencesWindow:190
 #: bibliograph/ui/window/PreferencesWindow.js:190
+#: bibliograph/ui/window/PreferencesWindow.js:160
 msgid "Database"
 msgstr "Datenbank"
 
 #: bibliograph.ui.window.PreferencesWindow:232
 #: bibliograph/ui/window/PreferencesWindow.js:231
 #: bibliograph/ui/window/PreferencesWindow.js:232
+#: bibliograph/ui/window/PreferencesWindow.js:191
+#: bibliograph/ui/window/PreferencesWindow.js:192
 msgid "Exclude fields"
 msgstr "Felder ausschließen"
 
 #: bibliograph.ui.window.PreferencesWindow:241
 #: bibliograph/ui/window/PreferencesWindow.js:241
+#: bibliograph/ui/window/PreferencesWindow.js:200
 msgid "Enter the names of fields to exclude."
 msgstr "Geben Sie die auszuschließenden Felder ein."
 
 #: bibliograph.ui.window.PreferencesWindow:266
 #: bibliograph/ui/window/PreferencesWindow.js:266
+#: bibliograph/ui/window/PreferencesWindow.js:241
 msgid "Access"
 msgstr "Zugang"
 
 #: bibliograph.ui.window.PreferencesWindow:277
 #: bibliograph/ui/window/PreferencesWindow.js:277
+#: bibliograph/ui/window/PreferencesWindow.js:252
 msgid "Authentication method"
 msgstr "Authentifizierungsmethode"
 
 #: bibliograph.ui.window.PreferencesWindow:283
 #: bibliograph/ui/window/PreferencesWindow.js:283
+#: bibliograph/ui/window/PreferencesWindow.js:258
 msgid "Client sends plain text password"
 msgstr "Klartextübertragung des Passworts (nur mit HTTPS)"
 
 #: bibliograph.ui.window.PreferencesWindow:289
 #: bibliograph/ui/window/PreferencesWindow.js:289
+#: bibliograph/ui/window/PreferencesWindow.js:264
 msgid "Client sends hashed password"
 msgstr "Verschlüsselte Übertragung des Passworts"
 
 #: bibliograph.ui.window.PreferencesWindow:315
 #: bibliograph/ui/window/PreferencesWindow.js:315
+#: bibliograph/ui/window/PreferencesWindow.js:290
 msgid "Plaintext passwords without a secure connection (HTTPS) are not allowed."
 msgstr "Klartextübertragung des Passworts erfordert eine sichere Verbindung (HTTPS)"
 
