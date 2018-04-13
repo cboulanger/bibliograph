@@ -72,7 +72,7 @@ qx.Class.define("bibliograph.ui.MainLayout", {
 
       // Item view
       let itemview = new bibliograph.ui.main.ItemViewUi();
-      itemview.setWidgetId("app/itemview");
+      itemview.setWidgetId("app/item/view");
       vsplit1.add(itemview);
       itemview.bind("view", this.getApplication(), "itemView", {});
       this.getApplication().bind("itemView", itemview, "view", {});

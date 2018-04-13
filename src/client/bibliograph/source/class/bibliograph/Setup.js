@@ -285,7 +285,7 @@ qx.Class.define("bibliograph.Setup", {
 
       // show the login dialog
       bus.subscribe("loginDialog.show", function(){
-        this.getApplication().getWidgetById("bibliograph/loginDialog").show();
+        this.getApplication().getWidgetById("app/windows/login").show();
       }, this);
     },  
 

@@ -47,61 +47,47 @@ qx.Class.define("bibliograph.ui.Windows",
       // Datasource list window
       this.getRoot().add(bibliograph.ui.window.DatasourceListWindow.getInstance());
 
-      /*
-       * Access Control Tool
-       */
-      let ui_winAccessControlTool1 = new bibliograph.ui.window.AccessControlTool();
-      ui_winAccessControlTool1.setWidgetId("app/windows/access-control");
-      ui_winAccessControlTool1.setVisibility("excluded");
-      this.getRoot().add(ui_winAccessControlTool1);
+      // Access Control Tool
+      let accessControlTool = new bibliograph.ui.window.AccessControlTool();
+      accessControlTool.setWidgetId("app/windows/access-control");
+      accessControlTool.setVisibility("excluded");
+      this.getRoot().add(accessControlTool);
       
-      /*
-       * Folder Tree window
-       */
-      let ui_winFolderTreeWindow1 = new bibliograph.ui.window
+      // Folder Tree window
+      let folderTreeWindow = new bibliograph.ui.window
         .FolderTreeWindow();
-      ui_winFolderTreeWindow1.setWidgetId("app/windows/folders");
-      ui_winFolderTreeWindow1.setVisibility("excluded");
-      this.getRoot().add(ui_winFolderTreeWindow1);
+      folderTreeWindow.setWidgetId("app/windows/folders");
+      folderTreeWindow.setVisibility("excluded");
+      this.getRoot().add(folderTreeWindow);
 
-      /*
-       * Preferences window
-       */
-      let ui_winPreferencesWindow1 = new bibliograph.ui.window.PreferencesWindow();
-      ui_winPreferencesWindow1.setWidgetId("app/windows/preferences");
-      ui_winPreferencesWindow1.setVisibility("excluded");
-      this.getRoot().add(ui_winPreferencesWindow1);
+      // Preferences window
+      let preferencesWindow = new bibliograph.ui.window.PreferencesWindow();
+      preferencesWindow.setWidgetId("app/windows/preferences");
+      preferencesWindow.setVisibility("excluded");
+      this.getRoot().add(preferencesWindow);
       
-      /*
-       * Import window
-       */
-      let ui_winImportWindow1 = new bibliograph.ui.window.ImportWindowUi();
-      ui_winImportWindow1.setWidgetId("bibliograph/importWindow");
-      ui_winImportWindow1.setVisibility("excluded");
-      this.getRoot().add(ui_winImportWindow1);
+      // Import window
+      let importWindow = new bibliograph.ui.window.ImportWindowUi();
+      importWindow.setWidgetId("app/windows/import");
+      importWindow.setVisibility("excluded");
+      this.getRoot().add(importWindow);
 
-      /*
-       * About window
-       */
-      let ui_winAboutWindow1 = new bibliograph.ui.window.AboutWindow();
-      ui_winAboutWindow1.setWidgetId("bibliograph/aboutWindow");
-      ui_winAboutWindow1.setVisibility("excluded");
-      this.getRoot().add(ui_winAboutWindow1);
+      // About window
+      let aboutWindow = new bibliograph.ui.window.AboutWindow();
+      aboutWindow.setWidgetId("app/windows/about");
+      aboutWindow.setVisibility("excluded");
+      this.getRoot().add(aboutWindow);
 
-      /*
-       * Search help window
-       */
-      let ui_winSearchHelpWindow1 = new bibliograph.ui.window.SearchHelpWindow();
-      ui_winSearchHelpWindow1.setWidgetId("bibliograph/searchHelpWindow");
-      ui_winSearchHelpWindow1.setVisibility("excluded");
-      this.getRoot().add(ui_winSearchHelpWindow1);
+      // Search help window
+      let searchHelpWindow = new bibliograph.ui.window.SearchHelpWindow();
+      searchHelpWindow.setWidgetId("app/windows/search-help");
+      searchHelpWindow.setVisibility("excluded");
+      this.getRoot().add(searchHelpWindow);
 
-      /*
-       * Login Dialog
-       */
+      // Login Dialog
       let loginDialog = new dialog.Login();
       loginDialog.set({
-        widgetId: "bibliograph/loginDialog",
+        widgetId: "app/windows/login",
         allowCancel: true,
         checkCredentials: bibliograph.Utils.checkLogin,
         showForgotPassword: false,

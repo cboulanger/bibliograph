@@ -109,11 +109,11 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
     {
       let button = new qx.ui.toolbar.Button();
       button.setLabel(this.tr('Datasources'));
-      button.setWidgetId("app/toolbar/datasource");
+      button.setWidgetId("app/toolbar/buttons/datasource");
       button.setVisibility("excluded");
       button.setIcon("icon/16/apps/utilities-archiver.png");
       button.addListener("execute", function(e) {
-        this.getApplication().getWidgetById("app/windows/datasource").show();
+        this.getApplication().getWidgetById("app/windows/datasources").show();
       }, this);
       return button;
     },
@@ -129,10 +129,10 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       });
       let systemMenu = new qx.ui.menu.Menu();
       button.setMenu(systemMenu);
-      systemMenu.setWidgetId("bibliograph/menu-system");
+      systemMenu.setWidgetId("app/toolbar/menus/system");
 
       // menu content
-      //systemMenu.add(this.createPreferencesButton());
+      systemMenu.add(this.createPreferencesButton());
       systemMenu.add(this.createAccessManagementButton());
       //systemMenu.add(this.createPluginButton());
       return button;
@@ -146,7 +146,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
         converter : bibliograph.Utils.bool2visibility
       });
       button.addListener("execute", function(e) {
-        let win = this.getApplication().getWidgetById("bibliograph/preferencesWindow").show();
+        let win = this.getApplication().getWidgetById("app/windows/preferences").show();
       }, this);
       return button;
     },
@@ -186,7 +186,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
         converter : bibliograph.Utils.bool2visibility
       });
       let menu = new qx.ui.menu.Menu();
-      menu.setWidgetId("app/toolbar/import");
+      menu.setWidgetId("app/toolbar/menus/import");
       button.setMenu(menu);
 
       // menu content
@@ -199,7 +199,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
     {
       let button = new qx.ui.menu.Button(this.tr('Import text file'));
       button.addListener("execute", function(e) {
-        this.getApplication().getWidgetById("bibliograph/importWindow").show();
+        this.getApplication().getWidgetById("app/windows/import").show();
       }, this);
       return button;
     },
@@ -211,7 +211,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
 
       let menu = new qx.ui.menu.Menu();
       menuButton.setMenu(menu);
-      menu.setWidgetId("app/toolbar/help");
+      menu.setWidgetId("app/toolbar/menus/help");
 
       let button1 = new qx.ui.menu.Button(this.tr('Online Help'));
       menu.add(button1);
@@ -236,7 +236,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
 
       let menu = new qx.ui.menu.Menu();
       menuButton.setMenu(menu);
-      menu.setWidgetId("app/toolbar/developer");
+      menu.setWidgetId("app/toolbar/menus/developer");
 
       let button1 = new qx.ui.menu.Button(this.tr('Run RPC method test.test'));
       menu.add(button1);
@@ -255,7 +255,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       label.setTextAlign("right");
 
       this.applicationTitleLabel = label;
-      label.setWidgetId("bibliograph/datasource-name");
+      label.setWidgetId("app/toolbar/title");
       return label;
     },
 
@@ -263,7 +263,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
     {
       let searchbox = new qx.ui.form.TextField();
       this.searchbox = searchbox;
-      searchbox.setWidgetId("bibliograph/searchbox");
+      searchbox.setWidgetId("app/toolbar/searchbox");
       searchbox.setMarginTop(8);
       searchbox.setPlaceholder(this.tr('Enter search term'));
       this.permMgr.create("reference.search").bind("state", searchbox, "visibility", {
@@ -277,7 +277,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
           app.setFolderId(0);
           app.setQuery(query);
           qx.event.message.Bus.dispatch(new qx.event.message.Message("bibliograph.userquery", query));
-          app.getWidgetById("bibliograph/searchHelpWindow").hide();
+          app.getWidgetById("app/windows/help-search").hide();
         }
       }, this);
       searchbox.addListener("dblclick", function(e) {
@@ -315,7 +315,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       searchButton.addListener("execute", () => {
         let query = this.searchbox.getValue();
         let app = this.getApplication();
-        app.getWidgetById("bibliograph/searchHelpWindow").hide();
+        app.getWidgetById("app/windows/help-search").hide();
         app.setFolderId(0);
         if (app.getQuery() == query) app.setQuery(null); // execute query again
         app.setQuery(query);
@@ -332,7 +332,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       cancelButton.addListener("execute", () => {
         this.searchbox.setValue("");
         this.searchbox.focus();
-        this.getApplication().getWidgetById("bibliograph/searchHelpWindow").hide();
+        this.getApplication().getWidgetById("app/windows/help-search").hide();
       });
       
       // search help button
@@ -343,7 +343,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
         converter : bibliograph.Utils.bool2visibility
       });
       helpButton.addListener("execute", function(e) {
-        let hwin = this.getApplication().getWidgetById("bibliograph/searchHelpWindow");
+        let hwin = this.getApplication().getWidgetById("app/windows/help-search");
         hwin.show();
         hwin.center();
       }, this);

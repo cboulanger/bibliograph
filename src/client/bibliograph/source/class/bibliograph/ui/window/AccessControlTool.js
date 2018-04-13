@@ -469,7 +469,7 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     // List
     let rightList = new qx.ui.form.List();
     rightList.setSelectionMode("multi");
-    rightList.setWidgetId("bibliograph/acltool-rightList");
+    rightList.setWidgetId("app/windows/acltool/rightList");
     composite6.add(rightList, {flex: 1});
 
     // Controller

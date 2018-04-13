@@ -202,7 +202,7 @@ qx.Mixin.define("bibliograph.MApplicationState", {
         value += " (DEVELOPMENT)";
       }
       window.document.title = value;
-      this.getWidgetById("bibliograph/datasource-name").setValue(
+      this.getWidgetById("app/toolbar/title").setValue(
         '<span style="font-size:1.2em;font-weight:bold">' + value + "</spsn>"
       );
     },
@@ -229,7 +229,7 @@ qx.Mixin.define("bibliograph.MApplicationState", {
      */
     _applyQuery: function(value, old) {
       this.getStateManager().setState("query", value);
-      let searchbox = this.getWidgetById("bibliograph/searchbox");
+      let searchbox = this.getWidgetById("app/toolbar/searchbox");
       if (value && this.getDatasource()) {
         if ( searchbox ) searchbox.setValue(value);
       } else {

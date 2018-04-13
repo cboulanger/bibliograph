@@ -59,7 +59,7 @@ qx.Class.define("bibliograph.Commands",
           this.__readonlyConfirmed = true
         } else {
           // else show login dialog
-          app.getWidgetById("bibliograph/loginDialog").show();
+          app.getWidgetById("app/windows/login").show();
         }
       }
     },
@@ -114,7 +114,7 @@ qx.Class.define("bibliograph.Commands",
      * Shows the "about" window
      */
     showAboutWindow : function(data,app) {
-      app.getWidgetById("bibliograph/aboutWindow").open();
+      app.getWidgetById("app/windows/about").open();
     },
   
     /**

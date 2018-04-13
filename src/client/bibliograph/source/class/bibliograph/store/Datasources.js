@@ -45,7 +45,7 @@ qx.Class.define("bibliograph.store.Datasources",
       var datasourceCount = data.length;
       this.info( "User has access to " + datasourceCount + " datasources." );
       // show datasource button depending on whether there is a choice
-      app.getWidgetById("app/toolbar/datasource").setVisibility(
+      app.getWidgetById("app/toolbar/buttons/datasource").setVisibility(
         datasourceCount > 1 ? "visible" : "excluded"
       );      
 
@@ -70,14 +70,11 @@ qx.Class.define("bibliograph.store.Datasources",
         var item = data.getItem(0);
         app.setDatasource(item.getValue());
         app.getStateManager().updateState();
-      }
-      // else, we have a choice of datasource
-      else
-      {
+      } else {
+        // else, we have a choice of datasource
         app.setDatasourceLabel(app.getConfigManager().getKey("application.title"));
-        var dsWin = app.getWidgetById("app/windows/datasource");
+        var dsWin = app.getWidgetById("app/windows/datasources");
         dsWin.open();
-        dsWin.center();
       }
     },
   }

@@ -33,7 +33,7 @@ qx.Class.define("bibliograph.ui.main.ItemViewUi", {
     // reference editor
     // @todo wiget id should be app/item/stack/editor
     var referenceEditor = new bibliograph.ui.item.ReferenceEditorUi();
-    referenceEditor.setWidgetId("bibliograph/referenceEditor");
+    referenceEditor.setWidgetId("app/item/editor");
     referenceEditor.setVisibility("hidden");
     this.addView("referenceEditor", referenceEditor);
     // setup bindings
