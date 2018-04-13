@@ -3,7 +3,8 @@ msgid ""
 msgstr "Plural-Forms: nplurals=2; plural=(n != 1);\nProject-Id-Version: \nPOT-Creation-Date: \nPO-Revision-Date: \nLast-Translator: \nLanguage-Team: \nMIME-Version: 1.0\nContent-Type: text/plain; charset=iso-8859-1\nContent-Transfer-Encoding: 8bit\nLanguage: en\nX-Generator: Poedit 1.8.1\n"
 
 #: bibliograph.ui.window.DatasourceListWindow:100 dialog/Dialog.js:417
-#: dialog/Form.js:431 bibliograph/ui/window/DatasourceListWindow.js:99
+#: dialog/Form.js:431 dialog/Form.js:455
+#: bibliograph/ui/window/DatasourceListWindow.js:99
 #: bibliograph/ui/window/DatasourceListWindow.js:100
 #: bibliograph/ui/window/DatasourceListWindow.js:97
 #: bibliograph/ui/window/DatasourceListWindow.js:98
@@ -1295,7 +1296,7 @@ msgstr ""
 msgid "No linkable items"
 msgstr ""
 
-#: dialog.Form:370 dialog/Form.js:370
+#: dialog.Form:370 dialog/Form.js:370 dialog/Form.js:394
 msgid "Value is invalid"
 msgstr ""
 

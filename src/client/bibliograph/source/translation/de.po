@@ -725,7 +725,8 @@ msgid "Please select the datasource"
 msgstr "Bitte wählen Sie die Datenquelle aus"
 
 #: bibliograph.ui.window.DatasourceListWindow:100 dialog/Dialog.js:417
-#: dialog/Form.js:431 bibliograph/ui/window/DatasourceListWindow.js:99
+#: dialog/Form.js:431 dialog/Form.js:455
+#: bibliograph/ui/window/DatasourceListWindow.js:99
 #: bibliograph/ui/window/DatasourceListWindow.js:100
 #: bibliograph/ui/window/DatasourceListWindow.js:97
 #: bibliograph/ui/window/DatasourceListWindow.js:98
@@ -1224,7 +1225,7 @@ msgstr ""
 msgid "No linkable items"
 msgstr ""
 
-#: dialog.Form:370 dialog/Form.js:370
+#: dialog.Form:370 dialog/Form.js:370 dialog/Form.js:394
 msgid "Value is invalid"
 msgstr ""
 
