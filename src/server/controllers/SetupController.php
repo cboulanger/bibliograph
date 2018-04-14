@@ -31,7 +31,7 @@ use lib\dialog\{
   Error as ErrorDialog, Confirm, Login
 };
 use lib\exceptions\{
-  RecordExistsException, SetupException
+  RecordExistsException, SetupException, UserErrorException
 };
 use lib\components\ConsoleAppHelper as Console;
 use lib\Module;
@@ -46,14 +46,14 @@ class SetupController extends \app\controllers\AppController
   /**
    * The name of the default datasource schema.
    * Initial value of the app.datasource.baseschema preference.
-   * @todo remove?
+   * @todo remove
    */
   const DATASOURCE_DEFAULT_SCHEMA = BibliographicDatasource::SCHEMA_ID;
 
   /**
    * The name of the default bibliographic datasource class.
    * Initial value of the app.datasource.baseclass preference.
-   * @todo remove?
+   * @todo remove
    */
   const DATASOURCE_DEFAULT_CLASS = \app\models\BibliographicDatasource::class;
 
@@ -149,6 +149,8 @@ class SetupController extends \app\controllers\AppController
    */
   protected function _setup($upgrade_to = null, $upgrade_from = null)
   {
+    // this throws if ini file doesn't exist
+    $this->checkIfIniFileExists();
     if (!$upgrade_from) {
       try {
         $upgrade_from = Yii::$app->config->getKey('app.version');
@@ -335,26 +337,18 @@ class SetupController extends \app\controllers\AppController
    * Check if an ini file exists
    *
    * @return array
+   * @throws UserErrorException
    */
-  protected function setupCheckIniFileExists()
+  protected function checkIfIniFileExists()
   {
-    if( ! $this->isNewInstallation ) return false;
     $this->hasIni = file_exists(APP_CONFIG_FILE);
     if (!$this->hasIni) {
       if (YII_ENV_PROD) {
-        return [
-          'fatalError' => Yii::t('app', 'Cannot run in production mode without ini file.')
-        ];
+        throw new UserErrorException(Yii::t('app', 'Cannot run in production mode without ini file.'));
       } else {
-        return [
-          'fatalError' => "Wizard not implemented yet. Please add ini file as per installation instructions."
-        ];
+        throw new UserErrorException( "Wizard not implemented yet. Please add ini file as per installation instructions.");
       }
     }
-    //OK
-    return [
-      'message' => Yii::t('app', 'Ini file exists.')
-    ];
   }
 
   /**

@@ -68,7 +68,6 @@ class AASetupControllerCest
           
         ],
         "messages": [
-          "Ini file exists.",
           "File permissions ok.",
           "Admininstrator email exists.",
           "Database connection ok.",
