@@ -66,11 +66,12 @@ msgid "You don't have access to any datasource on the server."
 msgstr "Sie haben keinen Zugang zu Datenbanken auf diesem Server."
 
 #: bibliograph.Commands:108 bibliograph/Commands.js:108
+#: bibliograph/Commands.js:106
 msgid "Cannot open window. Please disable the popup-blocker of your browser for this website."
 msgstr ""
 
 #: bibliograph.Commands:125 bibliograph/Commands.js:125
-#: bibliograph/Commands.js:131
+#: bibliograph/Commands.js:131 bibliograph/Commands.js:129
 msgid "Retrieving user data..."
 msgstr "Lade Benutzerdaten ..."
 
@@ -725,7 +726,8 @@ msgid "Please select the datasource"
 msgstr "Bitte wählen Sie die Datenquelle aus"
 
 #: bibliograph.ui.window.DatasourceListWindow:100 dialog/Dialog.js:417
-#: dialog/Form.js:431 bibliograph/ui/window/DatasourceListWindow.js:99
+#: dialog/Form.js:431 dialog/Form.js:455
+#: bibliograph/ui/window/DatasourceListWindow.js:99
 #: bibliograph/ui/window/DatasourceListWindow.js:100
 #: bibliograph/ui/window/DatasourceListWindow.js:97
 #: bibliograph/ui/window/DatasourceListWindow.js:98
@@ -1224,7 +1226,7 @@ msgstr ""
 msgid "No linkable items"
 msgstr ""
 
-#: dialog.Form:370 dialog/Form.js:370
+#: dialog.Form:370 dialog/Form.js:370 dialog/Form.js:394
 msgid "Value is invalid"
 msgstr ""
 
