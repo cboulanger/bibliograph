@@ -215,12 +215,14 @@ class LdapAuth extends \yii\base\Component
     
     $user = User::findOne(['namedId'=>$username]);
     assert(is_object($user),"User record must exist at this point");
+
     $groupNames = $user->getGroupNames();
 
     if( count($groupNames) == 0 and count($ldapGroups) == 0 ){
       Yii::debug("User '$username' belongs to no local groups. Nothing to do.", 'ldap' );
       return;
     }
+    Yii::debug("User '$username' is member of the groups " . implode(", ", $groupNames), 'ldap' );
 
     // parse entries and update groups if neccessary
     foreach( $ldapGroups as $ldapGroup ) {
@@ -236,11 +238,10 @@ class LdapAuth extends \yii\base\Component
           'active'  => 1,
          ]);
          $group->save();
-         //Yii::debug( $group->getAttributes() );
       }
 
       // make user a group member
-      if ( ! $user->getGroups()->where(['namedId'=>'$namedId'])->exists() ){
+      if ( ! in_array( $namedId, $groupNames ) ){
         Yii::debug("Adding user '$username' to group '$namedId'", 'ldap' );
         $group->link( 'users', $user );
       } else {
@@ -254,7 +255,7 @@ class LdapAuth extends \yii\base\Component
         if( ! $role ){
           $error = "Default role '$role' does not exist.";
           // @todo generatlize this:
-          if ( YII_ENV_DEV ) throw new \InvalidArgumentException($eror);
+          if ( YII_ENV_DEV ) throw new \InvalidArgumentException($error);
           Yii::error($error);
         }
         $condition = [ 'RoleId' => $role->id, 'GroupId' => $group->id ];

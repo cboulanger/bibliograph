@@ -199,7 +199,7 @@ class AccessConfigController extends AppController
         }
       }
     } else {
-      $model->unlink($linkedModelRelation, $linkedModel, $extraColumns);
+      $model->unlink($linkedModelRelation, $linkedModel, true);
     }
   }
 

@@ -506,7 +506,7 @@ class FolderController extends AppController //implements ITreeController
         $folderCount = $reference->getFolders()->count();
         if ($folderCount > 1) {
           // if it is contained in other folders, simply unlink reference and folder
-          $folder->unlink("references", $reference);
+          $folder->unlink("references", $reference, true);
           $folder->getReferenceCount(true);
         } else {
           // if it is contained in this folder only,  mark deleted 
