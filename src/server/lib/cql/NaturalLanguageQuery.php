@@ -52,6 +52,7 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
 
   /**
    * @var \app\schema\BibtexSchema
+   * @todo transform into attribute with setter and type checking
    */
   public $schema = null;
 

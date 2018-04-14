@@ -148,7 +148,7 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     
     // user button
     let addUserButton = new qx.ui.toolbar.Button(this.tr('New User'), "icon/22/apps/preferences-users.png");
-    toolBar1.add(addUserButton);
+    //toolBar1.add(addUserButton);
     addUserButton.setEnabled(false);
     pm.create("access.manage").bind("state", addUserButton, "visibility", {
       converter: bibliograph.Utils.bool2visibility
@@ -177,9 +177,9 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     // help button
     let helpButton = new qx.ui.toolbar.Button(this.tr('Help'), "icon/22/apps/utilities-help.png");
     toolBar1.add(helpButton);
-    helpButton.addListener("execute", function (e) {
-      this.getApplication().cmd("login", "access-control");
-    }, this);
+    helpButton.addListener("execute", () => {
+      this.getApplication().getCommands().showHelpWindow("administration/access-control");
+    });
     
     toolBar1.addSpacer();
     

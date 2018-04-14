@@ -31,7 +31,7 @@
 - [x] FEAT: Reimplement options window
 - [x] FEAT: Reimplement field selection for editor
 - [x] BUG: Fix LDAP authentication
-- [ ] BUG/FEAT: Fix translation of search words, add "locale" property to search folders for parsing queries 
+- [x] BUG: Fix translation of search words 
 
 ## v3.0.0-beta 
 
@@ -47,6 +47,8 @@
 - [ ] FEAT: Transform compile.json into compile.js (to allow to update env var "app.version" etc.)
 
 ### Priority: normal
+- [ ] FEAT: respect folder `position` value
+- [ ] FEAT: implement virtual folders (orphaned, by index, etc. )
 - [ ] FEAT: Reimplement Search Help
 - [ ] FEAT: Add missing translations
 - [ ] FEAT: Make UserErrorException a JSONRPC error which is caught on the client, instead of a Dialog event. 
@@ -72,6 +74,7 @@
 - [ ] Frontend: Rename item view "metadata" page
 - [ ] Configure log email target to report fatal errors, adapt UserErrorException to report fatal errors via email
 - [ ] FEAT: Implement field selection for editor as checkboxes
+- [ ] Reimplememt help window
 
 ### Code cleanup
 - [ ] Move config/test.php to tests/config.php 

@@ -3,12 +3,13 @@ msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
-"Last-Translator: \n"
+"Last-Translator: Christian Boulanger <info@bibliograph.org>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.6\n"
 
 msgctxt "app"
 msgid " and a connection has successfully been established."
@@ -39,6 +40,10 @@ msgid "%s, your password has been reset."
 msgstr "%s, Ihr Passwort wurde zurückgesetzt."
 
 msgctxt "app"
+msgid "(orphaned)"
+msgstr "(verwaist)"
+
+msgctxt "app"
 msgid ", but trying to establish a connection failed with the error: {error}"
 msgstr ", aber der Versuch eine Verbindung herzustellen, scheiterte mit folgender Fehlermeldung: {error}"
 
@@ -56,7 +61,7 @@ msgstr "Ein beschreibender Titel, z.B. Literaturdatenbank Forschungsgruppe 1"
 
 msgctxt "app"
 msgid "A {type} named '{name}' already exists. Please pick another name."
-msgstr ""
+msgstr "Ein/e {type} mit dem Namen  '{name}' existiert bereits. Bitte verwenden Sie einen anderen Namen."
 
 msgctxt "app"
 msgid "Abstract"
@@ -72,7 +77,7 @@ msgstr ""
 
 msgctxt "app"
 msgid "Activate plugin"
-msgstr "@@Plugin deinstallieren@@"
+msgstr "@@Plugin aktivieren@@"
 
 msgctxt "app"
 msgid "Activated plugin '%s'. You might have to reload the application."
@@ -215,6 +220,10 @@ msgid "Cannot connect to database: {error} "
 msgstr "Verbindung zur Datenbank kann nicht hergestellt werden: {error}"
 
 msgctxt "app"
+msgid "Cannot connect to the LDAP server: {reason}"
+msgstr ""
+
+msgctxt "app"
 msgid "Cannot run in production mode without ini file."
 msgstr "Kann nicht im Produktivmodus ohne ini-Datei laufen."
 
@@ -303,6 +312,10 @@ msgid "Create a backup?"
 msgstr "Eine Sicherung anlegen?"
 
 msgctxt "app"
+msgid "Create a new datasource"
+msgstr ""
+
+msgctxt "app"
 msgid "Created"
 msgstr "Angelegt am"
 
@@ -368,15 +381,23 @@ msgstr "Die Datenbank '%s' wurde angelegt. Sie ist zurzeit noch für niemanden s
 
 msgctxt "app"
 msgid "Datasource '{1}' successfully deleted ... "
-msgstr "Datenquelle '%s' wurde erfolgreich gelöscht."
+msgstr "@@Datenquelle ‚{1}’ wurde erfolgreich gelöscht. @@"
 
 msgctxt "app"
 msgid "Datasource '{datasource}' does not exist"
 msgstr "Datenquelle '{datasource}' existiert nicht."
 
 msgctxt "app"
-msgid "Datasource migrations are not allowed in production mode. Please contact the adminstrator"
+msgid "Datasource '{datasource}' does not have a trash folder."
 msgstr ""
+
+msgctxt "app"
+msgid "Datasource '{datasource}' successfully deleted ... "
+msgstr ""
+
+msgctxt "app"
+msgid "Datasource migrations are not allowed in production mode. Please contact the adminstrator"
+msgstr "@@@@"
 
 msgctxt "app"
 msgid "Datasource name '{1}' already exists. Please choose a different one."
@@ -396,19 +417,19 @@ msgstr "Datum"
 
 msgctxt "app"
 msgid "Date Ordered"
-msgstr "Datum"
+msgstr "Datum der Bestellung"
 
 msgctxt "app"
 msgid "Date Received"
-msgstr "Datum"
+msgstr "Datum Eingang"
 
 msgctxt "app"
 msgid "Date Reimbursement Requested"
-msgstr "Datum"
+msgstr "Datum Erstattung beantragt"
 
 msgctxt "app"
 msgid "Deactivate plugin"
-msgstr "@@Plugin deinstallieren@@"
+msgstr "@@@@"
 
 msgctxt "app"
 msgid "Deactivated plugin '%s'. You might have to reload the application."
@@ -432,7 +453,11 @@ msgstr "Nur den Eintrag"
 
 msgctxt "app"
 msgid "Deleting datasource '{1}' failed... "
-msgstr "Das Löschen der Datenquelle '%s' ist fehlgeschlagen..."
+msgstr "@@@@"
+
+msgctxt "app"
+msgid "Deleting datasource '{datasource}' failed... "
+msgstr ""
 
 msgctxt "app"
 msgid "Deleting of this object is not allowed."
@@ -540,7 +565,7 @@ msgstr "Feldnamen"
 
 msgctxt "app"
 msgid "Folder"
-msgstr "Ordner"
+msgstr "@@@@"
 
 msgctxt "app"
 msgid "Folder Title"
@@ -619,6 +644,10 @@ msgid "ID"
 msgstr "Datensatz-ID"
 
 msgctxt "app"
+msgid "ID of the datasource"
+msgstr ""
+
+msgctxt "app"
 msgid "ISBN"
 msgstr "ISBN"
 
@@ -660,7 +689,7 @@ msgstr "@@@@"
 
 msgctxt "app"
 msgid "Ini file exists."
-msgstr "Lade Datei auf den Server ..."
+msgstr "@@Eine Konfigurationsdatei existiert.@@"
 
 msgctxt "app"
 msgid "Initializing database failed."
@@ -668,15 +697,15 @@ msgstr "Das Löschen der Datenquelle '%s' ist fehlgeschlagen..."
 
 msgctxt "app"
 msgid "Install plugin"
-msgstr "@@Plugin installieren@@"
+msgstr "@@@@"
 
 msgctxt "app"
 msgid "Installation of plugin '%s' failed: %s"
-msgstr "@@Die Installation von Plugin '%s' war nicht erfolgreich: %s@@"
+msgstr "@@@@"
 
 msgctxt "app"
 msgid "Installed plugin '%s'"
-msgstr "@@Plugin '%s' wurde installiert.@@"
+msgstr "@@@@"
 
 msgctxt "app"
 msgid "Institution"
@@ -688,6 +717,14 @@ msgstr "URL"
 
 msgctxt "app"
 msgid "Invalid database setup. Please contact the adminstrator."
+msgstr ""
+
+msgctxt "app"
+msgid "Invalid datasource name '{name}': Must only contain alphanumeric characters or '_'."
+msgstr ""
+
+msgctxt "app"
+msgid "Invalid name '{name}': Must only contain alphanumeric characters or '_'."
 msgstr ""
 
 msgctxt "app"
@@ -883,6 +920,10 @@ msgid "Normal folder"
 msgstr "Normaler Ordner"
 
 msgctxt "app"
+msgid "Not in a folder"
+msgstr ""
+
+msgctxt "app"
 msgid "Note"
 msgstr "Anmerkungen"
 
@@ -1000,7 +1041,7 @@ msgstr ""
 
 msgctxt "app"
 msgid "Please configure the plugins"
-msgstr "@@Bitte konfigurieren Sie die Plugins.@@"
+msgstr "@@@@"
 
 msgctxt "app"
 msgid "Please confirm your account by visiting the following link:"
@@ -1040,15 +1081,15 @@ msgstr ""
 
 msgctxt "app"
 msgid "Plugin is active"
-msgstr "@@Plugin deinstallieren@@"
+msgstr "@@@@"
 
 msgctxt "app"
 msgid "Plugin is deactivated"
-msgstr "@@Dieser Benutzer ist deaktiviert.@@"
+msgstr "@@@@"
 
 msgctxt "app"
 msgid "Plugin is not installed"
-msgstr "@@Das Plugin ist installiert.@@"
+msgstr "@@@@"
 
 msgctxt "app"
 msgid "Port"
@@ -1092,7 +1133,7 @@ msgstr "Suchausdruck"
 
 msgctxt "app"
 msgid "Re-Installation of plugin '%s' failed: %s"
-msgstr "@@Die erneute Installation von Plugin '%s' war nicht erfolgreich: %s@@"
+msgstr "@@@@"
 
 msgctxt "app"
 msgid "Readonly"
@@ -1124,7 +1165,7 @@ msgstr "@@Plugin erneut installieren@@"
 
 msgctxt "app"
 msgid "Reinstalled plugin '%s'"
-msgstr "@@Das Plugin '%s' wurde erneut installiert. @@"
+msgstr "@@Das Plugin '%s' wurde erneut installiert.@@"
 
 msgctxt "app"
 msgid "Relations"
@@ -1276,7 +1317,7 @@ msgstr "@@@@"
 
 msgctxt "app"
 msgid "The application needs to be upgraded from '{oldversion}' to '{newversion}'. Please log in as administrator."
-msgstr "@@@@"
+msgstr "Bibliograph muss von Version '{oldversion}' auf die Version '{newversion}' aktualisiert werden. Bitte loggen Sie sich als Administrator ein."
 
 msgctxt "app"
 msgid "The configuration directory must not be writable in production mode {config_dir}."
@@ -1291,12 +1332,16 @@ msgid "The database must be upgraded. Confirm that you have made a database back
 msgstr ""
 
 msgctxt "app"
+msgid "The reference is already contained in that folder."
+msgstr ""
+
+msgctxt "app"
 msgid "The selected group has no members."
 msgstr ""
 
 msgctxt "app"
 msgid "The selected record '%s' is contained in %s folders. Move to the trash anyways?"
-msgstr "Der ausgewählte Datensatz '%s' befindet sich in %s Ordnern. Möchten Sie ihn trotzdem in den Papierkorb bewegen?"
+msgstr "@@@@"
 
 msgctxt "app"
 msgid "The selected user has no email address."
@@ -1332,11 +1377,11 @@ msgstr "Hiermit möchten wir Sie informieren, dass Sie oder jemand anders eine R
 
 msgctxt "app"
 msgid "This will copy {countReferences} from '{sourceFolder}' to '{targetFolder}'. Proceed?"
-msgstr ""
+msgstr "@@@@"
 
 msgctxt "app"
 msgid "This will move {countReferences} from '{sourceFolder}' to '{targetFolder}'. Proceed?"
-msgstr ""
+msgstr "@@@@"
 
 msgctxt "app"
 msgid "Title"
@@ -1372,15 +1417,15 @@ msgstr "Typ"
 
 msgctxt "app"
 msgid "Uninstall plugin"
-msgstr "@@Plugin deinstallieren@@"
+msgstr "@@@@"
 
 msgctxt "app"
 msgid "Uninstallation of plugin '%s' failed: %s"
-msgstr "@@Die Deinstallation von Plugin '%s' war nicht erfolgreich: %s@@"
+msgstr "@@@@"
 
 msgctxt "app"
 msgid "Uninstalled plugin '%s'"
-msgstr "@@Das Plugin '%s' wurde deinstalliert.@@"
+msgstr "@@@@"
 
 msgctxt "app"
 msgid "University"
@@ -1511,6 +1556,10 @@ msgid "and"
 msgstr "und "
 
 msgctxt "app"
+msgid "deactivated"
+msgstr ""
+
+msgctxt "app"
 msgid "field '%s'"
 msgstr "Feld '%s'"
 
@@ -1586,15 +1635,46 @@ msgctxt "app"
 msgid "{numberOfRecords} records"
 msgstr "{numberOfRecords} Datensätze"
 
+msgctxt "extendedfields"
+msgid "Category"
+msgstr "Kategorie"
+
+msgctxt "extendedfields"
+msgid "Date ordered"
+msgstr "Datum der Bestellung"
+
+msgctxt "extendedfields"
+msgid "Date received"
+msgstr "Datum Eingang"
+
+msgctxt "extendedfields"
+msgid "Location"
+msgstr "Standort"
+
+msgctxt "extendedfields"
+msgid "Owner"
+msgstr "Besitzer/in"
+
+msgctxt "extendedfields"
+msgid "Type"
+msgstr "Typ"
+
 msgctxt "z3950"
 msgid "Cannot connect to server: '{error}'."
-msgstr ""
+msgstr "Kann mich nicht mit dem Server verbinden: '{error}'."
 
 msgctxt "z3950"
 msgid "Invalid query '{query}'"
-msgstr ""
+msgstr "Ungültige Abfrage '{query}'"
+
+msgctxt "z3950"
+msgid "Server timed out."
+msgstr "Zeitüberschreitung bei der Anfrage."
+
+msgctxt "z3950"
+msgid "Server timed out. Trying again..."
+msgstr "Zeitüberschreitung bei der Anfrage. Versuche es erneut…"
 
 msgctxt "z3950"
 msgid "The server does not understand the query '{query}'. Please try a different query."
-msgstr ""
-
+msgstr "Der Server versteht die Anfrage '{query}' nicht. Versuchen Sie es mit einer anderen Anfrage."

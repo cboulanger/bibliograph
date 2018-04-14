@@ -129,8 +129,8 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
         'label' => Yii::t('app', "Is folder publically visible?"),
         'type' => "SelectBox",
         'options' => [
+          ['label' => Yii::t('app', "No"), 'value' => 0],
           ['label' => Yii::t('app', "Yes"), 'value' => 1],
-          ['label' => Yii::t('app', "No"), 'value' => 0]
         ]
       ],
       //    'searchable'  => array(
@@ -159,9 +159,15 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
         'label' => Yii::t('app', "Opened?"),
         'type' => "SelectBox",
         'options' => [
-          ['label' => Yii::t('app', "Folder is opened by default"), 'value' => 1],
-          ['label' => Yii::t('app', "Folder is closed by default"), 'value' => 0]
+          ['label' => Yii::t('app', "Folder is closed by default"), 'value' => 0],
+          ['label' => Yii::t('app', "Folder is opened by default"), 'value' => 1]
         ]
+      ],
+      'position' =>[
+        'label' => Yii::t('app',"Position"),
+        "type"  => "spinner",
+        "min"   => 0,
+        "max"   => 100
       ]
     ];
   }

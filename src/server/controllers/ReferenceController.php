@@ -22,6 +22,7 @@ namespace app\controllers;
 
 use app\models\Folder;
 use app\models\Reference;
+use lib\cql\NaturalLanguageQuery;
 use Sse\Data;
 use Yii;
 use app\models\Datasource;
@@ -105,47 +106,92 @@ class ReferenceController extends AppController
    *
    * @param \stdClass $clientQueryData
    *    The query data object from the json-rpc request
-   * @param \yii\db\ActiveQuery $activeQuery
-   *    The ActiveQuery object used
+   * @param string $modelClass
+   *    The model class from which to create the query
    * @return \yii\db\ActiveQuery
    * @throws \InvalidArgumentException
    * @todo 'properties'should be 'columns' or 'fields', 'cql' should be 'input'/'search' or similar
    */
-  public function addQueryConditions( \stdClass $clientQueryData, \yii\db\ActiveQuery $activeQuery)
+  protected function transformClientQuery(\stdClass $clientQueryData, string $modelClass)
   {
     $clientQuery = $clientQueryData->query;
+    $datasourceName = $clientQueryData->datasource;
+
+    // params validation
+    if( ! class_exists($modelClass) ){
+      throw new \InvalidArgumentException("Class '$modelClass' does not exist.");
+    }
+    // @todo doesn't work! use interface instead of base class
+    if( ! is_subclass_of($modelClass,  Reference::class)){
+      //throw new \InvalidArgumentException("Class '$modelClass' must be an subclass of " . Reference::class);
+    }
     if (!is_object($clientQuery) or
       !is_array($clientQuery->properties)) {
       throw new \InvalidArgumentException("Invalid query data");
     }
 
-    // select columns, disambiguate id column
-    $columns = array_map(function ($column) {
-      return $column == "id" ? "references.id" : $column;
-    }, $clientQuery->properties);
-    $activeQuery = $activeQuery
-      ->select($columns)
-      ->alias('references');
-
-    // relation
+    // it's a relational query
     if (isset($clientQuery->relation)) {
-      return $activeQuery
+
+      // select columns, disambiguate id column
+      $columns = array_map(function ($column) {
+        return $column == "id" ? "references.id" : $column;
+      }, $clientQuery->properties);
+
+      /** @var ActiveQuery $activeQuery */
+      $activeQuery = $modelClass::find()
+        ->select($columns)
+        ->alias('references')
         ->joinWith($clientQuery->relation->name,false)
         ->onCondition([$clientQuery->relation->foreignId => $clientQuery->relation->id]);
+
+      //Yii::debug($activeQuery->createCommand()->getRawSql());
+
+      return $activeQuery;
     }
 
-    // freeform search query
+    // it's a freeform search query
     if ( isset ( $clientQuery->cql ) ){
-      $nlq = new \lib\cql\NaturalLanguageQuery([
-        'query' => $clientQuery->cql,
-        'schema' => new BibtexSchema() //FIXME: unhardcode this
-      ]);
-      try {
-        $nlq->injectIntoYiiQuery($activeQuery);
-      } catch (\Exception $e) {
-        throw new UserErrorException($e->getMessage());
+
+      // use the language that works/yields most hits
+      $languages=Yii::$app->utils->getLanguages();
+      $useQuery=null;
+
+      foreach ($languages as $language) {
+        /** @var ActiveQuery $activeQuery */
+        $activeQuery = $modelClass::find();
+        $schema = Datasource
+          ::getInstanceFor($datasourceName)
+          ->getClassFor("reference")
+          ::getSchema();
+
+        $nlq = new NaturalLanguageQuery([
+          'query'     => $clientQuery->cql,
+          'schema'    => $schema,
+          'language'  => $language
+        ]);
+        try {
+          $nlq->injectIntoYiiQuery($activeQuery);
+        } catch (\Exception $e) {
+          throw new UserErrorException($e->getMessage());
+        }
+        try{
+          $activeQuery->exists();
+          $useQuery=$activeQuery;
+        } catch (\Exception $e){
+          continue;
+        }
       }
-      return $activeQuery->andWhere(['markedDeleted' => 0]);
+      if(!$useQuery){
+        throw new UserErrorException(
+          Yii::t('app',"The database could not parse the query '{query}'.",[
+            'query' => $clientQuery->cql
+          ])
+        );
+      }
+      $activeQuery = $useQuery->andWhere(['markedDeleted' => 0]);
+      //Yii::debug($activeQuery->createCommand()->getRawSql());
+      return $activeQuery;
     }
 
     throw new UserErrorException(Yii::t('app', "No recognized query format in request."));
@@ -258,10 +304,9 @@ class ReferenceController extends AppController
   {
     $modelClass = $this->getModelClass($clientQueryData->datasource, $clientQueryData->modelType);
     $modelClass::setDatasource($clientQueryData->datasource);
-    $query = $modelClass::find();
 
     // add additional conditions from the client query
-    $query = $this->addQueryConditions( $clientQueryData, $query);
+    $query = $this->transformClientQuery( $clientQueryData, $modelClass);
 
     //Yii::info($query->createCommand()->getRawSql());
 
@@ -288,13 +333,11 @@ class ReferenceController extends AppController
    */
   function actionRowData(int $firstRow, int $lastRow, int $requestId, \stdClass $clientQueryData)
   {
-    $model = $this->getModelClass($clientQueryData->datasource, $clientQueryData->modelType);
-    $query = $model::find()
+    $modelClass = $this->getModelClass($clientQueryData->datasource, $clientQueryData->modelType);
+    $query = $this->transformClientQuery( $clientQueryData, $modelClass)
       ->orderBy($clientQueryData->query->orderBy)
       ->offset($firstRow)
       ->limit($lastRow - $firstRow + 1);
-    $query = $this->addQueryConditions( $clientQueryData, $query);
-    //return $query->createCommand()->getRawSql();
     //Yii::info($query->createCommand()->getRawSql());
     $rowData = $query->asArray()->all();
     return array(
@@ -812,7 +855,7 @@ class ReferenceController extends AppController
   {
     if( ! $confirmed ) return "Remove action was cancelled.";
     $this->confirm = true;
-    return $this->actionRemove($datasource, $folderId, $dummy, $ids );
+    return $this->actionRemove($datasource, $folderId, $ids );
   }
 
   /**
@@ -820,7 +863,7 @@ class ReferenceController extends AppController
    *
    * @param string $datasource If true, it is the result of the confirmation
    * @param int $folderId The folder to move from
-   * @param it $targetFolderId The folder to move to
+   * @param int $targetFolderId The folder to move to
    * @param string $ids The ids of the references to move, joined by  a comma
    * @return string Diagnostic message
    * @throws \JsonRpc2\Exception

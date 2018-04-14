@@ -142,8 +142,9 @@ class FolderController extends AppController //implements ITreeController
       $id= $node['data']['id'];
       $parentId = $node['data']['parentId'];
       if ( isset($loaded[$parentId]) or $parentId===0){
+
         $orderedNodeData[] = $node;
-        $loaded[$id] = true;
+        $loaded[$id] = &$node;
         //Yii::debug(">>> id: $id, parentId: $parentId");
       } else {
         // if the parent hasn't been processed yet, put at the end of the list
@@ -153,10 +154,11 @@ class FolderController extends AppController //implements ITreeController
           $failed[$id]=0;
         }
         // Show orphaned folders
+        // @todo put into virtual top folder "orphaned"
         if( $failed[$id]++ > 3 ) {
           $node['data']['parentId'] = 0;
           if( ! $isGuestUser) {
-            $node['label'] .= " " . Yii::t('app',"(orphaned)");
+            $node['label'] .= " (" . Yii::t('app',"Orphaned") . ")";
             $orderedNodeData[] = $node;
           }
           continue;
@@ -383,21 +385,30 @@ class FolderController extends AppController //implements ITreeController
     // child folder
     /** @var Folder $folder */
     $folder = new $folderClass([
-      'parentId' => $parentFolderId,
-      'label' => $data->label,
-      'searchfolder' => $data->searchfolder,
-      'childCount' => 0,
-      'position' => 0
+      'parentId'      => $parentFolderId,
+      'label'         => $data->label,
+      'searchfolder'  => $data->searchfolder,
+      'childCount'    => 0,
+      'position'      => 0,
+      'public'        => 0,
+      'opened'        => 0,
     ]);
+
     try {
       $folder->save();
     } catch (Exception $e) {
       throw new UserErrorException($e->getMessage());
     }
+    // if searchfolder, edit right away
+    if( $data->searchfolder ){
+      return $this->actionEdit($datasource,$folder->id);
+    }
+    // otherwise, just return
     if( ! $parentFolderId ){
       // root node
       return "Created new top folder";
     }
+
     return "Created new folder";
   }
 

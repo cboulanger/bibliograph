@@ -96,7 +96,9 @@ class User extends BaseModel implements IdentityInterface
   public function getFormData()
   {
     return [
-      'namedId'=> [],
+      'namedId'     => [
+        'enabled' => false
+      ],
       'name' => [],
       'email' => [
         'placeholder' => Yii::t('app', "Enter a valid Email address"),

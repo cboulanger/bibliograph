@@ -25,6 +25,11 @@ use Yii;
 use app\models\Config;
 use app\models\UserConfig;
 
+/**
+ * Class Utils
+ * @package lib\components
+ * @todo rename?
+ */
 class Utils extends \yii\base\Component
 {
 
@@ -65,6 +70,26 @@ class Utils extends \yii\base\Component
         throw new UserErrorException("Cannot read package.json or version.txt",null, $e);
       }
     }
+  }
+
+  /**
+   * Return the languages supported by the application by scanning the 'messages' dir
+   * "en-US" is always included.
+   * @return array
+   */
+  public function getLanguages()
+  {
+    static $languages = null;
+    if( is_null($languages) ){
+      $languages=[Yii::$app->sourceLanguage];
+      foreach (scandir(__DIR__ . "/../../messages") as $dir) {
+        if( $dir[0] !== "." ) {
+          $languages[] = $dir;
+        }
+      }
+      $languages=array_unique($languages);
+    }
+    return $languages;
   }
   
  /**

@@ -45,7 +45,6 @@ use Yii;
  * @property string $price
  * @property string $publisher
  * @property string $school
- * @property \lib\schema\BibtexSchema $schema
  * @property string $series
  * @property string $size
  * @property string $title

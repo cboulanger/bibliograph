@@ -99,10 +99,8 @@ qx.Class.define("bibliograph.Commands",
     /**
      * opens a window with the online help
      */
-    showHelpWindow : function(topic,app) {
-      var url = app.getServerUrl() +
-          "?sessionId=" + app.getAccessManager().getSessionId() +
-          "&service=bibliograph.main&method=getOnlineHelpUrl&params=" + (topic||"home");
+    showHelpWindow : function(path) {
+      let url = "https://sites.google.com/a/bibliograph.org/docs-v2-de/" + path;
       this.__helpWindow = window.open(url,"bibliograph-help-window");
       if (!this.__helpWindow) {
         dialog.Dialog.alert(this.tr("Cannot open window. Please disable the popup-blocker of your browser for this website."));

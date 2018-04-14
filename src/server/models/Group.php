@@ -89,7 +89,9 @@ class Group extends BaseModel
   public function getFormData()
   {
     return [
-      'namedId'     => [],
+      'namedId'     => [
+        'enabled' => false
+      ],
       'name'        => [],
       'description' => [],
       'defaultRole' => [

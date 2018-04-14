@@ -8,6 +8,7 @@
 
 namespace app\modules\extendedfields;
 
+use Yii;
 use app\schema\BibtexSchema;
 
 class ReferenceSchema extends BibtexSchema
@@ -24,11 +25,11 @@ class ReferenceSchema extends BibtexSchema
          * The type of publication
          */
         'type' => [
-          'label'     => _("Type"),
+          'label'     => Yii::t('extendedfields', "Type"),
           'type'      => "string",
           'public'    => false,
           'formData'  => [
-            'label'     => _("Type"),
+            'label'     => Yii::t('extendedfields', "Type"),
             'type'      => "combobox",
             'bindStore' => [
               'serviceName'   => "reference",
@@ -39,18 +40,19 @@ class ReferenceSchema extends BibtexSchema
               'enabled'   => true,
               'separator' => null
             ]
-          ]
+          ],
+          'index' => "Type"
         ],
 
         /*
          * Where it is stored
          */
         'location' => [
-          'label'     => _("location"),
+          'label'     => Yii::t('extendedfields', "Location"),
           'type'      => "string",
           'public'    => false,
           'formData'  => [
-            'label'     => _("location"),
+            'label'     => Yii::t('extendedfields', "Location"),
             'type'      => "combobox",
             'bindStore' => [
               'serviceName'   => "reference",
@@ -61,18 +63,19 @@ class ReferenceSchema extends BibtexSchema
               'enabled'   => true,
               'separator' => null
             ]
-          ]
+          ],
+          'index' => "Location"
         ],
 
         /*
          * A thematic category
          */
         '_category' => [
-          'label'     => _("Category"),
+          'label'     => Yii::t('extendedfields', "Category"),
           'type'      => "string",
           'public'    => false,
           'formData'  => [
-            'label'     => _("Category"),
+            'label'     => Yii::t('extendedfields', "Category"),
             'type'      => "combobox",
             'bindStore' => [
               'serviceName'   => "reference",
@@ -83,18 +86,19 @@ class ReferenceSchema extends BibtexSchema
               'enabled'   => true,
               'separator' => null
             ]
-          ]
+          ],
+          'index' => "Category"
         ],
 
         /*
          * who owns it
          */
         '_owner' => [
-          'label'     => _("Owner"),
+          'label'     => Yii::t('extendedfields', "Owner"),
           'type'      => "string",
           'public'    => false,
           'formData'  => [
-            'label'     => _("Owner"),
+            'label'     => Yii::t('extendedfields', "Owner"),
             'type'      => "combobox",
             'bindStore' => [
               'serviceName'   => "reference",
@@ -105,33 +109,36 @@ class ReferenceSchema extends BibtexSchema
               'enabled'   => true,
               'separator' => null
             ]
-          ]
+          ],
+          'index' => "Owner"
         ],
 
         /*
          * When was it ordered
          */
         '_date_ordered' => [
-          'label'     => _("Date ordered"),
+          'label'     => Yii::t('extendedfields', "Date ordered"),
           'type'      => "string",
           'public'    => false,
           'formData'  => [
-            'label'     => _("Date ordered"),
+            'label'     => Yii::t('extendedfields', "Date ordered"),
             'type'      => "datefield"
-          ]
+          ],
+          'index' => "Date ordered"
         ],
 
         /*
          * when was it received
          */
         '_date_received' => [
-          'label'     => _("Date received"),
+          'label'     => Yii::t('extendedfields', "Date received"),
           'type'      => "string",
           'public'    => false,
           'formData'  => [
-            'label'     => _("Date received"),
+            'label'     => Yii::t('extendedfields', "Date received"),
             'type'      => "datefield"
-          ]
+          ],
+          'index' => "Date received"
         ]
       ]
     );
