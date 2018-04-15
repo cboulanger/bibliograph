@@ -45,6 +45,7 @@
 - [ ] FEAT: Check log email target to report fatal errors
 - [ ] BUG: module autoloader requires debug mode (trying to serialize closures breaks app)
 - [ ] BUG: Disallow drop of references on folders in which they are already contained. 
+- [ ] BUG: author begins with "A" -> "missing term"
 - [ ] BUG: Z3950-Import in "Main" funktioniert nicht
 - [ ] BUG: Boolean columns must be NOT NULL DEFAULT 0 (z.B. data_User.anonymous)
 - [ ] FEAT: Tests: Make Travis ~~great~~ work again

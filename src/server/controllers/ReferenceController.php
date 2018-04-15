@@ -171,7 +171,7 @@ class ReferenceController extends AppController
       foreach ($languages as $language) {
         //Yii::debug("Trying to translate query '$clientQuery->cql' from '$language'...");
         /** @var ActiveQuery $activeQuery */
-        $activeQuery = $modelClass::find();
+        $activeQuery = $modelClass::find()->where(['markedDeleted' => 0]);
         $schema = Datasource::in($datasourceName,"reference")::getSchema();
 
         $nlq = new NaturalLanguageQuery([
@@ -193,14 +193,7 @@ class ReferenceController extends AppController
           continue;
         }
       }
-//      if(!$useQuery){
-//        throw new UserErrorException(
-//          Yii::t('app',"The database could not parse the query '{query}'.",[
-//            'query' => $clientQuery->cql
-//          ])
-//        );
-//      }
-      $activeQuery = $useQuery->andWhere(['markedDeleted' => 0]);
+      if( $useQuery ) $activeQuery = $useQuery;
       //Yii::debug($activeQuery->createCommand()->getRawSql());
       return $activeQuery;
     }
