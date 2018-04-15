@@ -261,6 +261,19 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
 
     createSearchBox : function()
     {
+      // let t = new tokenfield.Token();
+      // t.setMarginTop(8);
+      // t.setSelectionMode('multi');
+      // t.setSelectOnce(true);
+      // t.setLabelPath("name");
+      // t.setHintText("Token field test...");
+      // t.addListener("loadData", e => {
+      //   let input = e.getData();
+      //   rpc.Reference.autocomplete()
+      //   t.populateList(input, data);
+      // });
+      //
+      
       let searchbox = new qx.ui.form.TextField();
       this.searchbox = searchbox;
       searchbox.setWidgetId("app/toolbar/searchbox");
