@@ -359,18 +359,21 @@ msgstr ""
 #: bibliograph.ui.window.PreferencesWindow:136
 #: bibliograph/ui/window/PreferencesWindow.js:136
 #: bibliograph/ui/window/PreferencesWindow.js:108
+#: bibliograph/ui/window/PreferencesWindow.js:105
 msgid "Use browser locale"
 msgstr ""
 
 #: bibliograph.ui.window.PreferencesWindow:175
 #: bibliograph/ui/window/PreferencesWindow.js:175
 #: bibliograph/ui/window/PreferencesWindow.js:145
+#: bibliograph/ui/window/PreferencesWindow.js:133
 msgid "Fields"
 msgstr ""
 
 #: bibliograph.ui.window.PreferencesWindow:190
 #: bibliograph/ui/window/PreferencesWindow.js:190
 #: bibliograph/ui/window/PreferencesWindow.js:160
+#: bibliograph/ui/window/PreferencesWindow.js:148
 msgid "Database"
 msgstr ""
 
@@ -379,42 +382,50 @@ msgstr ""
 #: bibliograph/ui/window/PreferencesWindow.js:232
 #: bibliograph/ui/window/PreferencesWindow.js:191
 #: bibliograph/ui/window/PreferencesWindow.js:192
+#: bibliograph/ui/window/PreferencesWindow.js:179
+#: bibliograph/ui/window/PreferencesWindow.js:180
 msgid "Exclude fields"
 msgstr ""
 
 #: bibliograph.ui.window.PreferencesWindow:241
 #: bibliograph/ui/window/PreferencesWindow.js:241
 #: bibliograph/ui/window/PreferencesWindow.js:200
+#: bibliograph/ui/window/PreferencesWindow.js:188
 msgid "Enter the names of fields to exclude."
 msgstr ""
 
 #: bibliograph.ui.window.PreferencesWindow:266
 #: bibliograph/ui/window/PreferencesWindow.js:266
 #: bibliograph/ui/window/PreferencesWindow.js:241
+#: bibliograph/ui/window/PreferencesWindow.js:229
 msgid "Access"
 msgstr ""
 
 #: bibliograph.ui.window.PreferencesWindow:277
 #: bibliograph/ui/window/PreferencesWindow.js:277
 #: bibliograph/ui/window/PreferencesWindow.js:252
+#: bibliograph/ui/window/PreferencesWindow.js:240
 msgid "Authentication method"
 msgstr ""
 
 #: bibliograph.ui.window.PreferencesWindow:283
 #: bibliograph/ui/window/PreferencesWindow.js:283
 #: bibliograph/ui/window/PreferencesWindow.js:258
+#: bibliograph/ui/window/PreferencesWindow.js:246
 msgid "Client sends plain text password"
 msgstr ""
 
 #: bibliograph.ui.window.PreferencesWindow:289
 #: bibliograph/ui/window/PreferencesWindow.js:289
 #: bibliograph/ui/window/PreferencesWindow.js:264
+#: bibliograph/ui/window/PreferencesWindow.js:252
 msgid "Client sends hashed password"
 msgstr ""
 
 #: bibliograph.ui.window.PreferencesWindow:315
 #: bibliograph/ui/window/PreferencesWindow.js:315
 #: bibliograph/ui/window/PreferencesWindow.js:290
+#: bibliograph/ui/window/PreferencesWindow.js:278
 msgid "Plaintext passwords without a secure connection (HTTPS) are not allowed."
 msgstr ""
 
@@ -1116,6 +1127,7 @@ msgstr ""
 #: bibliograph/ui/main/MultipleTreeView.js:261
 #: bibliograph/ui/main/MultipleTreeView.js:325
 #: bibliograph/ui/main/MultipleTreeView.js:341
+#: bibliograph/ui/main/MultipleTreeView.js:347
 msgid "Do your really want to move folder '%1' to '%2'?"
 msgstr ""
 
@@ -1132,6 +1144,7 @@ msgstr ""
 #: bibliograph/ui/main/MultipleTreeView.js:275
 #: bibliograph/ui/main/MultipleTreeView.js:345
 #: bibliograph/ui/main/MultipleTreeView.js:407
+#: bibliograph/ui/main/MultipleTreeView.js:413
 msgid "Do you really want to delete all references and folders in the trash folder? This cannot be undone."
 msgstr ""
 
@@ -1459,11 +1472,13 @@ msgstr ""
 #: bibliograph/ui/main/MultipleTreeView.js:281
 #: bibliograph/ui/main/MultipleTreeView.js:351
 #: bibliograph/ui/main/MultipleTreeView.js:413
+#: bibliograph/ui/main/MultipleTreeView.js:419
 msgid "Emptying the trash ..."
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:317
 #: bibliograph/ui/main/MultipleTreeView.js:334
+#: bibliograph/ui/main/MultipleTreeView.js:340
 msgid "No folder selected."
 msgstr ""
 
@@ -1493,10 +1508,12 @@ msgid "Copying references..."
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:368
+#: bibliograph/ui/main/MultipleTreeView.js:374
 msgid "Do your really want to move %1 references to '%2'?"
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:390
+#: bibliograph/ui/main/MultipleTreeView.js:396
 msgid "Do your really want to copy %1 references to '%2'?"
 msgstr ""
 
