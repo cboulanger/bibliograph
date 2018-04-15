@@ -616,6 +616,7 @@ msgid "Report a problem or request a feature"
 msgstr ""
 
 #: bibliograph.ui.main.Toolbar:268 bibliograph/ui/main/Toolbar.js:268
+#: bibliograph/ui/main/Toolbar.js:281
 msgid "Enter search term"
 msgstr ""
 

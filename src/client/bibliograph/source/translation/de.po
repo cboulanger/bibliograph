@@ -458,6 +458,7 @@ msgid "About Bibliograph"
 msgstr "Über Bibliograph"
 
 #: bibliograph.ui.main.Toolbar:268 bibliograph/ui/main/Toolbar.js:268
+#: bibliograph/ui/main/Toolbar.js:281
 msgid "Enter search term"
 msgstr "Bitte geben sie einen Suchausdruck ein"
 
