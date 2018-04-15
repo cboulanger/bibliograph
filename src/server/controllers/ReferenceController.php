@@ -193,13 +193,13 @@ class ReferenceController extends AppController
           continue;
         }
       }
-      if(!$useQuery){
-        throw new UserErrorException(
-          Yii::t('app',"The database could not parse the query '{query}'.",[
-            'query' => $clientQuery->cql
-          ])
-        );
-      }
+//      if(!$useQuery){
+//        throw new UserErrorException(
+//          Yii::t('app',"The database could not parse the query '{query}'.",[
+//            'query' => $clientQuery->cql
+//          ])
+//        );
+//      }
       $activeQuery = $useQuery->andWhere(['markedDeleted' => 0]);
       //Yii::debug($activeQuery->createCommand()->getRawSql());
       return $activeQuery;
