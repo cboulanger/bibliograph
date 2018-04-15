@@ -80,7 +80,7 @@ qx.Class.define("bibliograph.ui.Windows",
 
       // Search help window
       let searchHelpWindow = new bibliograph.ui.window.SearchHelpWindow();
-      searchHelpWindow.setWidgetId("app/windows/search-help");
+      searchHelpWindow.setWidgetId("app/windows/help-search");
       searchHelpWindow.setVisibility("excluded");
       this.getRoot().add(searchHelpWindow);
 

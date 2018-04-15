@@ -76,6 +76,11 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
    */
   private $config;
 
+  /**
+   * Whether the query contains any (translatable) operators
+   * @var bool
+   */
+  protected $containsOperators = false;
 
   /**
    * NaturalLanguageQuery constructor.
@@ -273,16 +278,18 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
    */
   protected function parseMulitLanguageQuery($query)
   {
-    //Yii::info("Query is '$query'...");
+    $verbose = true;
+    if($verbose) Yii::info(" *** Query is '$query', using language '$this->language'... ***");
     $tokenizer = new Tokenizer($query);
     $tokens = $tokenizer->tokenize();
     $operators = $this->getOperators();
     $hasOperator = false;
     $parsedTokens = [];
     $dict = $this->getDictionary();
+    if($verbose) Yii::debug($dict);
     do {
       $token = $tokens[0];
-      //Yii::info("Looking at '$token'...");
+      if($verbose) Yii::info("Looking at '$token'...");
       // do not translate quoted expressions
       if ( in_array( $token[0], ["'", '"']) ) {
         array_shift($tokens);
@@ -292,27 +299,29 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
         for($i=0; $i<count($tokens); $i++){
           $compare = implode( " ", array_slice( $tokens, 0, $i+1 ));
           $compare = mb_strtolower( $compare, "UTF-8");
-          //Yii::info("Comparing '$compare'...");
+          if($verbose) Yii::info("Comparing '$compare'...");
           if( isset( $dict[$compare] ) ) {
             $token = $dict[$compare];
             $offset = $i+1;
-            //Yii::info("Found '$token'.");
+            if($verbose) Yii::info("Found '$token'.");
           }
         }
         $tokens = array_slice($tokens, $offset);
-        //Yii::info("Using '$token', rest: " . implode("_",$tokens));
+        if($verbose) Yii::info("Using '$token', rest: " . implode("|",$tokens));
       }
       if( in_array( $token, $operators ) ) $hasOperator = true;
       $parsedTokens[] = $token;
     } while (count($tokens));
-    //Yii::info("Parsed tokens: " . implode("_", $parsedTokens));
+    if($verbose) Yii::info("Parsed tokens: " . implode("|", $parsedTokens));
 
     // Re-assemble translated query string
     if ($hasOperator) {
       $cqlQuery = implode(" ", $parsedTokens);
+      $this->containsOperators=true;
     } else {
       // Queries that don't contain any operators or booleans are put into quotes
       $cqlQuery = '"' . implode(" ", $parsedTokens) . '"';
+      $this->containsOperators=false;
     }
 
     // create and configure parser object
@@ -324,9 +333,20 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
     // parse CQL string
     $cql = $parser->query();
     if ($cql instanceof Diagnostic) {
+      // @todo throw the UserErrorException in the calling code....
       throw new UserErrorException(Yii::t('app',"Could not parse query: " . $cql->toTxt()));
     }
     return $cql;
+  }
+
+  /**
+   * Returns true if the query contains any (translated) operators
+   * @todo rename
+   * @return bool
+   */
+  public function containsOperators()
+  {
+    return $this->containsOperators;
   }
 
   /**
@@ -365,7 +385,7 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
         $columns = ['abstract','annote','author','booktitle','subtitle','contents','editor','howpublished','journal','keywords','note','publisher','school','title','year'];
         $matchClause = "`" . implode("`,`", $columns) . "`";
         // @todo make this configurable
-        $condition = "MATCH($matchClause) AGAINST ('$term' IN NATURAL LANGUAGE MODE WITH QUERY EXPANSION)";
+        $condition = "MATCH($matchClause) AGAINST ('$term' IN NATURAL LANGUAGE MODE )";
         // @todo hack to remove prefix
         if( $activeQuery->select) {
           $activeQuery->select = array_map(function($column){
@@ -384,6 +404,7 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
             //Yii::debug("Index '$index' translates to column '$column', which does not exist.");
             // add impossible condition to return zero rows
             $activeQuery = $activeQuery->andWhere(new Expression("TRUE = FALSE"));
+            $this->containsOperators=false;
             return;
           }
           Yii::debug("Index '$index' successfully translated to column '$column'...");
@@ -393,6 +414,7 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
             //Yii::debug("Index '$index' refers to a non-existing column.");
             // add impossible condition to return zero rows
             $activeQuery = $activeQuery->andWhere(new Expression("TRUE = FALSE"));
+            $this->containsOperators=false;
             return;
           }
           Yii::debug("Index '$index' is column '$column'...");
@@ -440,7 +462,7 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
           case "<":
           case ">=":
           case "<=":
-            $condition = [$relation, $column, $term];
+            $condition = [$relation, $column, (int)$term];
             break;
 
           case "empty":

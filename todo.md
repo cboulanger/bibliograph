@@ -25,7 +25,6 @@
 - [x] Fix Drag & Drop
 - [x] Translate ini files for tests to .toml
 - [x] Add & test packaging scripts mechanism
-- [x] BUG: Drag & Drop is enabled in table for anonymous! - not reproduceable
 - [x] BUG: Title label is not updated
 - [x] BUG: Datasource list window is not updated after adding datasource
 - [x] FEAT: Reimplement options window
@@ -37,11 +36,11 @@
 - [x] BUG: Suppress z3950 permission error during setup
 - [x] FEAT: implement virtual folders with indexes 
 - [x] BUG: respect folder `position` value
+- [x] BUG: Fulltext search doesn't work
 
 ## v3.0.0-beta 
 
 ### Priority: high
-- [ ] BUG: Search doesn't work reliably on rewi 
 - [ ] BUG: Empty Trash does not delete references
 - [ ] BUG: module autoloader requires debug mode (trying to serialize closures breaks app)
 - [ ] BUG: Disallow drop of references on folders in which they are already contained. 

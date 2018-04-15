@@ -166,8 +166,7 @@ class ReferenceController extends AppController
 
       // use the language that works/yields most hits
       $languages=Yii::$app->utils->getLanguages();
-      $useQuery=null;
-
+      $indexedQueries =[];
       foreach ($languages as $language) {
         //Yii::debug("Trying to translate query '$clientQuery->cql' from '$language'...");
         /** @var ActiveQuery $activeQuery */
@@ -185,19 +184,22 @@ class ReferenceController extends AppController
           throw new UserErrorException($e->getMessage());
         }
         try{
-          if( $activeQuery->exists() ){
-            $useQuery=$activeQuery;
+          if( $nlq->containsOperators() ){
             break;
           }
+          if( $activeQuery->exists() ){
+            $indexedQueries[] = $activeQuery;
+          }
         } catch (\Exception $e){
-          continue;
+          Yii::warning($e->getMessage());
         }
       }
-      if( $useQuery ) $activeQuery = $useQuery;
-      //Yii::debug($activeQuery->createCommand()->getRawSql());
+      if( ! $nlq->containsOperators() ){
+        if( count($indexedQueries) ) $activeQuery = $indexedQueries[0];
+      }
+      Yii::debug($activeQuery->createCommand()->getRawSql());
       return $activeQuery;
     }
-
     throw new UserErrorException(Yii::t('app', "No recognized query format in request."));
   }
 
