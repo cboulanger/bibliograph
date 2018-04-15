@@ -23,6 +23,7 @@
  * @asset(bibliograph/icon/button-reload.png)
  * @asset(bibliograph/icon/button-settings-up.png)
  * @asset(bibliograph/icon/button-minus.png)
+ * @asset(icon/16/emblems/emblem-important.png)
  */
 qx.Class.define("bibliograph.ui.main.MultipleTreeView",
 {

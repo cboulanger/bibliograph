@@ -680,15 +680,15 @@ msgstr "In {group}"
 
 msgctxt "app"
 msgid "Index"
-msgstr "Der Index '%s' existiert nicht."
+msgstr "Indexeintrag"
 
 msgctxt "app"
 msgid "Index '%s' does not exist."
-msgstr "@@@@"
+msgstr "Der Index '%s' existiert nicht."
 
 msgctxt "app"
 msgid "Ini file exists."
-msgstr "@@Eine Konfigurationsdatei existiert.@@"
+msgstr "Eine Konfigurationsdatei existiert."
 
 msgctxt "app"
 msgid "Initializing database failed."
@@ -1216,7 +1216,7 @@ msgstr "Schemata"
 
 msgctxt "app"
 msgid "School"
-msgstr "Universität\t"
+msgstr "Universität"
 
 msgctxt "app"
 msgid "Search expression:"
@@ -1224,7 +1224,7 @@ msgstr "Suchausdruck:"
 
 msgctxt "app"
 msgid "Search field '{index}' does not exist."
-msgstr "Der Index '%s' existiert nicht."
+msgstr "Das Suchfeld '{index}' existiert nicht."
 
 msgctxt "app"
 msgid "Search folder"
@@ -1280,11 +1280,11 @@ msgstr "Größe"
 
 msgctxt "app"
 msgid "Source"
-msgstr "Quelle\t"
+msgstr "Quelle"
 
 msgctxt "app"
 msgid "Sponsor"
-msgstr "Zuwendungsgeber\t"
+msgstr "Zuwendungsgeber"
 
 msgctxt "app"
 msgid "Standard schema existed."

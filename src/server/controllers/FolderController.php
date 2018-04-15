@@ -229,7 +229,6 @@ class FolderController extends AppController //implements ITreeController
     }
   }
 
-
   /**
    * Create a virtual folder for orphaned folders and references
    * @param int $id The id of the folder
@@ -243,7 +242,7 @@ class FolderController extends AppController //implements ITreeController
       'id'          => $id,
       'parentId'    => 0,
       'query'       => null,
-      'icon'        => "icon/16/places/folder.png",
+      'icon'        => "icon/16/emblems/emblem-important.png",
       'label'       => Yii::t('app', "Orphaned"),
       'childCount'  => 1
     ]);
@@ -319,13 +318,11 @@ class FolderController extends AppController //implements ITreeController
     $folder = static::getRecordById($datasource, $folderId);
     try {
       $data = Form::parseResultData($folder, $data);
-      Yii::debug($data);
     } catch (\Exception $e) {
       throw new UserErrorException($e->getMessage(),null, $e);
     }
     try {
       $folder->setAttributes($data);
-      Yii::debug($folder->getAttributes());
       $folder->save();
       return "Folder data saved";
     } catch (Exception $e) {

@@ -31,17 +31,23 @@ class EventTransportResponse extends \yii\web\Response
       eval($def);
     }
     
-    if( isset($this->data['error']) and $this->data['error'] )
-    {
+    if( isset($this->data['error']) and $this->data['error'] ) {
       return parent::prepare();
     }
     
     if( Yii::$app->eventQueue->hasEvents() ){
-      $data = $this->data['result'];
-      $this->data['result'] = [
+      $events = Yii::$app->eventQueue->toArray();
+      // see above
+      $data = var_export($events, true);
+      if( ! preg_match("//u", $data) ) {
+        $data = utf8_encode($data);
+        $def = '$events = ' . $data . ';';
+        eval($def);
+      }
+      $this->data['result'] =[
         "type"    => "ServiceResult",
-        "events"  => Yii::$app->eventQueue->toArray(),
-        "data"    => $data
+        "events"  => $events,
+        "data"    => $this->data['result']
       ];
     }
     parent::prepare();

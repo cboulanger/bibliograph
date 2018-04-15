@@ -353,11 +353,11 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
 
     if ($cqlObject instanceof SearchClause) {
       // look for index
-      $index = $cqlObject->index->value;
+      $index = strtolower($cqlObject->index->value);
       $relation = mb_strtolower($cqlObject->relation->value);
       $term = str_replace('"', "", $cqlObject->term->value);
 
-      if ( $index == "serverChoice") {
+      if ( $index == "serverchoice") {
         // use an index named 'fulltext', which must exist in the model.
         // @FIXME this is not portable! Get colum names dynamically
         $columns = ['abstract','annote','author','booktitle','subtitle','contents','editor','howpublished','journal','keywords','note','publisher','school','title','year'];
@@ -372,7 +372,11 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
         }
       } else {
         // else, translate index into property
-        if (! in_array($index, $this->schema->fields())) {
+
+        // is the index a schema fiels?
+        $fields = $this->schema->fields();
+        if (! in_array($index, $fields)) {
+          Yii::debug("Index '$index' is not among the fields " .  implode(", ", $fields) );
           throw new UserErrorException(Yii::t('app', "Search field '{index}' does not exist.", [
             'index' => $index
           ]));

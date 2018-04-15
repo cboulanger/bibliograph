@@ -803,7 +803,7 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
       if (datasource) {
         this._loadTreeData(datasource, nodeId);
       } else {
-        this.warn("Cannot load: no datasource!");
+        this.log("Not loading tree: no datasource specified...");
       }
     },
     
