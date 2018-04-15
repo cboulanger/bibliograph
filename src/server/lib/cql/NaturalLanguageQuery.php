@@ -379,18 +379,23 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
         $fields = $this->schema->fields();
         $column = isset($dict[$index])? $dict[$index]:null ;
         // is the index a schema field?
-        if ( $column and ! in_array($column, $fields)) {
-          //Yii::debug("Index '$index' translates to column '$column', which does not exist.");
-          // add impossible condition to return zero rows
-          $activeQuery = $activeQuery->andWhere(new Expression("TRUE = FALSE"));
-          return;
-        }
-        $column = $index;
-        if ( ! in_array($index, $fields)) {
-          //Yii::debug("Index '$index' refers to a non-existing column.");
-          // add impossible condition to return zero rows
-          $activeQuery = $activeQuery->andWhere(new Expression("TRUE = FALSE"));
-          return;
+        if ( $column ) {
+          if (!in_array($column, $fields)) {
+            //Yii::debug("Index '$index' translates to column '$column', which does not exist.");
+            // add impossible condition to return zero rows
+            $activeQuery = $activeQuery->andWhere(new Expression("TRUE = FALSE"));
+            return;
+          }
+          Yii::debug("Index '$index' successfully translated to column '$column'...");
+        } else {
+          $column = $index;
+          if ( ! in_array($index, $fields)) {
+            //Yii::debug("Index '$index' refers to a non-existing column.");
+            // add impossible condition to return zero rows
+            $activeQuery = $activeQuery->andWhere(new Expression("TRUE = FALSE"));
+            return;
+          }
+          Yii::debug("Index '$index' is column '$column'...");
         }
         $condition=[];
         switch ($relation) {

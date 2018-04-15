@@ -169,6 +169,7 @@ class ReferenceController extends AppController
       $useQuery=null;
 
       foreach ($languages as $language) {
+        //Yii::debug("Trying to translate query '$clientQuery->cql' from '$language'...");
         /** @var ActiveQuery $activeQuery */
         $activeQuery = $modelClass::find();
         $schema = Datasource::in($datasourceName,"reference")::getSchema();
@@ -184,8 +185,10 @@ class ReferenceController extends AppController
           throw new UserErrorException($e->getMessage());
         }
         try{
-          $activeQuery->exists();
-          $useQuery=$activeQuery;
+          if( $activeQuery->exists() ){
+            $useQuery=$activeQuery;
+            break;
+          }
         } catch (\Exception $e){
           continue;
         }
@@ -198,7 +201,7 @@ class ReferenceController extends AppController
         );
       }
       $activeQuery = $useQuery->andWhere(['markedDeleted' => 0]);
-      //Yii::debug(__METHOD__  . ": " . $activeQuery->createCommand()->getRawSql());
+      //Yii::debug($activeQuery->createCommand()->getRawSql());
       return $activeQuery;
     }
 
