@@ -32,8 +32,8 @@
 - [x] FEAT: Reimplement field selection for editor
 - [x] BUG: Fix LDAP authentication
 - [x] BUG: Fix translation of search words 
-- [x] BUG: Fix backend locale switching
 - [x] FEAT: Add "Orphaned" folder
+- [ ] BUG: Fix backend locale switching
 - [ ] FEAT: Check log email target to report fatal errors
 
 
