@@ -33,9 +33,10 @@
 - [x] BUG: Fix LDAP authentication
 - [x] BUG: Fix translation of search words 
 - [x] FEAT: Add "Orphaned" folder
-- [ ] BUG: Fix backend locale switching
+- [x] BUG: Fix backend locale switching
+- [x] BUG: Suppress z3950 permission error during setup
 - [ ] FEAT: Check log email target to report fatal errors
-
+- [ ] FEAT: implement virtual folders with indexes 
 
 ## v3.0.0-beta 
 
@@ -43,7 +44,6 @@
 - [ ] BUG: module autoloader requires debug mode (trying to serialize closures breaks app)
 - [ ] BUG: Disallow drop of references on folders in which they are already contained. 
 - [ ] BUG: Z3950-Import in "Main" funktioniert nicht
-- [ ] BUG: Suppress z3950 permission error during setup
 - [ ] BUG: Boolean columns must be NOT NULL DEFAULT 0 (z.B. data_User.anonymous)
 - [ ] FEAT: Tests: Make Travis ~~great~~ work again
 - [ ] FEAT: Re-implement Export
@@ -53,7 +53,6 @@
 
 ### Priority: normal
 - [ ] FEAT: respect folder `position` value
-- [ ] FEAT: implement virtual folders (orphaned, by index, etc. )
 - [ ] FEAT: Reimplement Search Help
 - [ ] FEAT: Add missing translations
 - [ ] FEAT: Make UserErrorException a JSONRPC error which is caught on the client, instead of a Dialog event. 
@@ -62,7 +61,7 @@
 - [ ] FEAT: Remove migrations table for deleted datasources
 - [ ] FEAT: Implement setup Wizard
 - [ ] FEAT: Rewrite Yii2 configuration using M1/Var
-
+- [ ] FEAT: "Orphaned" folder should contain references that do not have a parent
 
 ### Priority: low
 - [ ] FEAT: Add "serverOnly" column to data_Config (true/false/null) and remove from config data sent to client
@@ -75,10 +74,10 @@
 - [ ] FEAT: Implement field selection for editor as checkboxes
 - [ ] FEAT: Reimplememt help window
 - [ ] FEAT: validate email configuration 
+- [ ] FEAT: Change virtual folder icon
 
 ### Code cleanup
 - [ ] Move config data from migration to config/prefs
-
 - [ ] Revert return value of ConsoleAppHelper to simple string
 - [ ] Backend: Model validation: accept booleans for MySql SmallInt columns
 - [ ] Re-implement Table Actions Interface
@@ -91,8 +90,7 @@
 - [ ] Rename "Datasource" to "Repository" (see https://dev.to/remojansen/implementing-the-onion-architecture-in-nodejs-with-typescript-and-inversifyjs-10ad)
 - [ ] Replace message names with constants
 - [ ] Tests: Fix bootstrap loading issue
-- [ ] \app\controllers\AppController::require* methods should throw a specialized
-      Exception (i.e. MethodNotAllowedException) instead of \JsonRpc2\Exception
+- [ ] \app\controllers\AppController::require* methods should throw a specialized Exception (i.e. MethodNotAllowedException) instead of \JsonRpc2\Exception
 - [ ] Add @jsonrpc controller-id/action-id tag in controller actions
 - [ ] Replace ::findOne(['namedid'=>'foo']) with ::findByNamedId('foo')
 - [ ] Rename Yii::$app->utils to Yii::$app->state
@@ -121,6 +119,7 @@
 ### Priority: normal
 - [ ] Implement boolean database columns (supported by Yii)
 - [ ] Reimplement HTML editor integration for notes
+- [ ] Implement drag&drop folder positioning
 
 ### Priority: low
 - [ ] Enable print item view: bibliograph.ui.main.ItemView#print()

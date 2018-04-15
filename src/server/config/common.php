@@ -39,14 +39,24 @@ $config =  [
   /* Extension libraries */
   'extensions' => require(__DIR__ . '/../vendor/yiisoft/extensions.php'),
 
-  /* EVENTS */
+  /* Events */
+
+  /**
+   * Switch backend language based on configuration and browser settings
+   */
   "on beforeRequest" => function($event){
     try {
-      $locale = Yii::$app->config->getPreference("application.locale");
-      if( ! $locale ) {
+      $configLocale = Yii::$app->config->getPreference("application.locale");
+      if( ! $configLocale ) {
         Yii::$app->utils->setLanguageFromBrowser();
       } else {
-        Yii::$app->language = $locale;
+        $language = Yii::$app->sourceLanguage;
+        foreach( Yii::$app->utils->getLanguages() as $lang){
+          if( str_contains( $lang, $configLocale ) ){
+            $language = $lang;
+          }
+        }
+        Yii::$app->language = $language;
       }
     } catch( Exception $e ){
       Yii::$app->utils->setLanguageFromBrowser();

@@ -181,7 +181,12 @@ class FolderController extends AppController //implements ITreeController
     ];
   }
 
-  protected function createOrphanedFolder($id)
+  /**
+   * Create a virtual folder for orphaned folders and references
+   * @param int $id The id of the folder
+   * @return array The node data
+   */
+  protected function createOrphanedFolder(int $id)
   {
     return $this->createVirtualFolder([
       'isBranch'    => true,
@@ -194,7 +199,12 @@ class FolderController extends AppController //implements ITreeController
     ]);
   }
 
-  protected function createVirtualFolder($data)
+  /**
+   * Create a virtual folder (one that does not have a corresponding entry in the folder table)
+   * @param array $data A flat map with preset folder properties
+   * @return array The node data
+   */
+  protected function createVirtualFolder(array $data)
   {
     return [
       'isBranch'        => isset($data['isBranch']) ? $data['isBranch']:false,
