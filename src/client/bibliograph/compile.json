@@ -1,6 +1,6 @@
 {
   "environment": {
-    "app.version" : "3.0.0-alpha",
+    "app.version" : "3.0.0-beta",
     "qx.icontheme" : "Tango",
     "app.serverUrl" : "../../../../server/web/?r="
   },
