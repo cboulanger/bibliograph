@@ -32,6 +32,10 @@
 - [x] FEAT: Reimplement field selection for editor
 - [x] BUG: Fix LDAP authentication
 - [x] BUG: Fix translation of search words 
+- [x] BUG: Fix backend locale switching
+- [x] FEAT: Add "Orphaned" folder
+- [ ] FEAT: Check log email target to report fatal errors
+
 
 ## v3.0.0-beta 
 
@@ -39,6 +43,7 @@
 - [ ] BUG: module autoloader requires debug mode (trying to serialize closures breaks app)
 - [ ] BUG: Disallow drop of references on folders in which they are already contained. 
 - [ ] BUG: Z3950-Import in "Main" funktioniert nicht
+- [ ] BUG: Suppress z3950 permission error during setup
 - [ ] BUG: Boolean columns must be NOT NULL DEFAULT 0 (z.B. data_User.anonymous)
 - [ ] FEAT: Tests: Make Travis ~~great~~ work again
 - [ ] FEAT: Re-implement Export
@@ -56,27 +61,29 @@
 - [ ] FEAT: Add "Re-install modules" button in Systems menu
 - [ ] FEAT: Remove migrations table for deleted datasources
 - [ ] FEAT: Implement setup Wizard
-- [ ] FEAT: Rewrite Yii2 configuration using M1/Var 
+- [ ] FEAT: Rewrite Yii2 configuration using M1/Var
+
 
 ### Priority: low
-- [ ] Add "serverOnly" column to data_Config (true/false/null) and remove from config data sent to client
-- [ ] Backend: Streamline API to get Datasource & typed model
-- [ ] Frontend: Convert static icon resouce paths into aliases that are resolved in bibliograph.theme.Icon
-- [ ] Frontend: Rename widget ids, replace with native qooxdoo ids, see https://github.com/qooxdoo/qooxdoo/issues/9422
-- [ ] Add correct @return information to the JSONRPC methods/actions
-- [ ] Change app state separator and assignment chars
-- [ ] Re-implement Table Actions Interface
-- [ ] Add compiler-based splash screen for loading
-- [ ] Re-implement reference editor title label
-- [ ] Backend: Model validation: accept booleans for MySql SmallInt columns
-- [ ] Revert return value of ConsoleAppHelper to simple string
-- [ ] Re-implement Docker image for testing
-- [ ] Frontend: Rename item view "metadata" page
-- [ ] Configure log email target to report fatal errors, adapt UserErrorException to report fatal errors via email
+- [ ] FEAT: Add "serverOnly" column to data_Config (true/false/null) and remove from config data sent to client
+- [ ] FEAT: Backend: Streamline API to get Datasource & typed model
+- [ ] FEAT: Frontend: Rename widget ids, replace with native qooxdoo ids, see https://github.com/qooxdoo/qooxdoo/issues/9422
+- [ ] FEAT: Change app state separator and assignment chars
+- [ ] FEAT: Re-implement reference editor title label
+- [ ] FEAT: Re-implement Docker image for testing
+- [ ] FEAT: Frontend: Rename item view "metadata" page
 - [ ] FEAT: Implement field selection for editor as checkboxes
-- [ ] Reimplememt help window
+- [ ] FEAT: Reimplememt help window
+- [ ] FEAT: validate email configuration 
 
 ### Code cleanup
+- [ ] Move config data from migration to config/prefs
+
+- [ ] Revert return value of ConsoleAppHelper to simple string
+- [ ] Backend: Model validation: accept booleans for MySql SmallInt columns
+- [ ] Re-implement Table Actions Interface
+- [ ] Add correct @return information to the JSONRPC methods/actions
+- [ ] Convert static icon resouce paths into aliases that are resolved in bibliograph.theme.Icon
 - [ ] Move config/test.php to tests/config.php 
 - [ ] Replace calls to Yii::$app->eventQueue->add() with calls to message API
 - [ ] Datasource-specific migration namespace should be in the Datasource Schema
@@ -96,6 +103,8 @@
 - [ ] Remove qx prefix in generated code (s/qx([A-Z])/\L$1/)
 - [ ] Convert config to YAML: https://packagist.org/packages/sergeymakinen/yii2-config
 - [ ] Change URL params separators
+
+## v3.0.0.RC.X (only bug fixes)
 
 ## v3.0.0
 

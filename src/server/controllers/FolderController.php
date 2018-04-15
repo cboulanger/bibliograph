@@ -133,38 +133,46 @@ class FolderController extends AppController //implements ITreeController
 
     // make sure that parents are placed before their children
     // this is a limitation of the SimpleDataModel
+    // @todo rewrite to build the whole tree in memory first and then send the SimpleDataModel view of it
     $orderedNodeData = [];
     $loaded=[];
     $failed=[];
     $isGuestUser = Yii::$app->user->identity->isAnonymous();
+    $orphanedFolder = null;
+    $orphanedFolderId = null;
+    $virtualFolderId = POSIX_RLIMIT_INFINITY;
     while( count($nodeData) ){
       $node = array_shift($nodeData);
       $id= $node['data']['id'];
       $parentId = $node['data']['parentId'];
-      if ( isset($loaded[$parentId]) or $parentId===0){
-
-        $orderedNodeData[] = $node;
-        $loaded[$id] = &$node;
-        //Yii::debug(">>> id: $id, parentId: $parentId");
-      } else {
-        // if the parent hasn't been processed yet, put at the end of the list
-        //Yii::debug("XXX id: $id, parentId: $parentId");
+      // if the parent hasn't been processed yet, put at the end of the list
+      if (!isset($loaded[$parentId]) and $parentId !== 0) {
         // prevent infinite loop if tree is corrupted
-        if(! isset($failed[$id]) ){
-          $failed[$id]=0;
+        if( !isset($failed[$id]) ){
+          $failed[$id] = 0;
         }
-        // Show orphaned folders
-        // @todo put into virtual top folder "orphaned"
-        if( $failed[$id]++ > 3 ) {
-          $node['data']['parentId'] = 0;
-          if( ! $isGuestUser) {
-            $node['label'] .= " (" . Yii::t('app',"Orphaned") . ")";
-            $orderedNodeData[] = $node;
-          }
+        if ($failed[$id]++ <= 3) {
+          // push to the tail of the queue
+          $nodeData[] = $node;
           continue;
         }
-        $nodeData[]= $node;
+        // do not show orphaned nodes to guests
+        if ($isGuestUser) continue;
+        // put into virtual top folder "orphaned"
+        if (!$orphanedFolder) {
+          // create this folder first
+          $orphanedFolderId = $virtualFolderId--;
+          $orphanedFolder = $this->createOrphanedFolder($orphanedFolderId);
+          $orderedNodeData[] = &$orphanedFolder;
+          $loaded[$orphanedFolderId] = &$orphanedFolder;
+        }
+        $orphanedFolder['data']['childCount']++;
+        $node['data']['parentId'] = $orphanedFolderId;
       }
+      // add node to output
+      $orderedNodeData[] = $node;
+      $loaded[$id] = $node;
+      //Yii::debug(">>> id: $id, parentId: $parentId");
     }
     //$this->addLostAndFound($orderedNodeData);
     return [
@@ -173,33 +181,43 @@ class FolderController extends AppController //implements ITreeController
     ];
   }
 
-  function addLostAndFound(&$orderedNodeData){
-    $referenceCount = 0;
-    $id = 99999999;
-    $icon = "icon/16/places/folder.png"; // @todo
-    $query = "";
-    array_push($orderedNodeData, [
-      'isBranch'        => false,
-      'label'           => Yii::t('app', "Not in a folder"),
+  protected function createOrphanedFolder($id)
+  {
+    return $this->createVirtualFolder([
+      'isBranch'    => true,
+      'id'          => $id,
+      'parentId'    => 0,
+      'query'       => null,
+      'icon'        => "icon/16/places/folder.png",
+      'label'       => Yii::t('app', "Orphaned"),
+      'childCount'  => 1
+    ]);
+  }
+
+  protected function createVirtualFolder($data)
+  {
+    return [
+      'isBranch'        => isset($data['isBranch']) ? $data['isBranch']:false,
+      'label'           => $data['label'],
       'bOpened'         => false,
-      'icon'            => $icon,
-      'iconSelected'    => $icon,
+      'icon'            => $data['icon'],
+      'iconSelected'    => $data['icon'],
       'bHideOpenClose'  => true,
-      'columnData'      => [ null, $referenceCount ],
+      'columnData'      => [ null, isset($data['columnData']) ? $data['columnData']:"" ],
       'data'            => [
-        'type'            => "nofolder",
-        'id'              => $id,
-        'parentId'        => 0,
-        'query'           => $query,
+        'type'            => "virtual",
+        'id'              => $data['id'],
+        'parentId'        => $data['parentId'],
+        'query'           => $data['query'],
         'public'          => false,
         'owner'           => "admin",
-        'description'     => Yii::t('app', "Not in a folder"),
+        'description'     => isset($data['description']) ? $data['description']:"",
         'datasource'      => null,
-        'childCount'      => 0,
-        'referenceCount'  => $referenceCount,
+        'childCount'      => isset($data['childCount']) ? $data['childCount']:0,
+        'referenceCount'  => isset($data['referenceCount']) ? $data['referenceCount']:0,
         'markedDeleted'   => false
       ]
-    ]);
+    ];
   }
 
   /**

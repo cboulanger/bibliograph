@@ -79,6 +79,7 @@ class BibliographicDatasource
         'label' => Yii::t('app', 'Main folder'),
         'description' => Yii::t('app', 'This is the main folder of the database'),
         'searchable' => 1,
+        'type' => "folder",
         'public' => 1,
         'opened' => 1,
       ],

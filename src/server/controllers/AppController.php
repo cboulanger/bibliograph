@@ -27,7 +27,6 @@ use Yii;
 use app\models\Permission;
 
 
-
 /**
  * Service class providing methods to get or set configuration
  * values
@@ -36,7 +35,6 @@ class AppController extends \JsonRpc2\Controller
 {
   use AuthTrait;
   use DatasourceTrait;
-
 
   /**
    * Overridden to add functionality:

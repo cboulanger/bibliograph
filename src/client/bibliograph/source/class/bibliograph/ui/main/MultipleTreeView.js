@@ -70,31 +70,37 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
         depends: "folder.add",
         granted : true,
         updateEvent : "changeSelectedNode",
-        condition : tree => tree.getSelectedNode() !== null
+        condition : tree => tree.getSelectedNode() !== null && tree.getSelectedNode().data.type !== "virtual"
       },
       remove_folder : {
         depends: "folder.remove",
         granted : true,
         updateEvent : "changeSelectedNode",
-        condition : tree => tree.getSelectedNode() !== null
+        condition : tree =>
+          tree.getSelectedNode() !== null &&
+          tree.getSelectedNode().data.type !== "virtual" &&
+          tree.getSelectedNode().data.type !== "trash"
       },
       edit_folder : {
         depends : "folder.edit",
         granted : true,
         updateEvent : "changeSelectedNode",
-        condition : tree => tree.getSelectedNode() !== null
+        condition : tree => tree.getSelectedNode() !== null && tree.getSelectedNode().data.type !== "virtual"
       },
       move_folder : {
         depends : "folder.move",
         granted : true,
         updateEvent : "changeSelectedNode",
-        condition : tree => tree.getSelectedNode() !== null
+        condition : tree =>
+          tree.getSelectedNode() !== null &&
+          tree.getSelectedNode().data.type !== "virtual" &&
+          tree.getSelectedNode().data.type !== "trash"
       },
       change_position : {
         depends : "folder.move",
         granted : true,
         updateEvent : "changeSelectedNode",
-        condition : tree => tree.getSelectedNode() !== null
+        condition : tree => tree.getSelectedNode() !== null && tree.getSelectedNode().data.type !== "virtual"
       },
       empty_trash : {
         depends : "trash.empty",

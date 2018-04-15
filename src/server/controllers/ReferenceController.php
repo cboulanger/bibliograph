@@ -31,6 +31,7 @@ use lib\exceptions\UserErrorException;
 use lib\Validate;
 use yii\db\ActiveQuery;
 use yii\db\Exception;
+use yii\db\Expression;
 use yii\db\StaleObjectException;
 
 class ReferenceController extends AppController
@@ -132,6 +133,11 @@ class ReferenceController extends AppController
 
     // it's a relational query
     if (isset($clientQuery->relation)) {
+
+      // FIXME hack to support 1000 virtual folders
+      if( $clientQuery->relation->id > POSIX_RLIMIT_INFINITY - 1000 ){
+        return $modelClass::find()->where(new Expression("TRUE = FALSE"));
+      }
 
       // select columns, disambiguate id column
       $columns = array_map(function ($column) {
