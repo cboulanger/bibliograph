@@ -41,6 +41,12 @@ use yii\db\Expression;
 class NaturalLanguageQuery extends \yii\base\BaseObject
 {
   /**
+   * Toggle for verbose logging
+   * @var bool
+   */
+  public $verbose = false;
+
+  /**
    * The language of the query. If undefined, use the Yii::$app->language
    * @var string
    */
@@ -278,18 +284,17 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
    */
   protected function parseMulitLanguageQuery($query)
   {
-    $verbose = true;
-    if($verbose) Yii::info(" *** Query is '$query', using language '$this->language'... ***");
+    if($this->verbose) Yii::info(" *** Query is '$query', using language '$this->language'... ***");
     $tokenizer = new Tokenizer($query);
     $tokens = $tokenizer->tokenize();
     $operators = $this->getOperators();
     $hasOperator = false;
     $parsedTokens = [];
     $dict = $this->getDictionary();
-    if($verbose) Yii::debug($dict);
+    if($this->verbose) Yii::debug($dict);
     do {
       $token = $tokens[0];
-      if($verbose) Yii::info("Looking at '$token'...");
+      if($this->verbose) Yii::info("Looking at '$token'...");
       // do not translate quoted expressions
       if ( in_array( $token[0], ["'", '"']) ) {
         array_shift($tokens);
@@ -299,20 +304,20 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
         for($i=0; $i<count($tokens); $i++){
           $compare = implode( " ", array_slice( $tokens, 0, $i+1 ));
           $compare = mb_strtolower( $compare, "UTF-8");
-          if($verbose) Yii::info("Comparing '$compare'...");
+          if($this->verbose) Yii::info("Comparing '$compare'...");
           if( isset( $dict[$compare] ) ) {
             $token = $dict[$compare];
             $offset = $i+1;
-            if($verbose) Yii::info("Found '$token'.");
+            if($this->verbose) Yii::info("Found '$token'.");
           }
         }
         $tokens = array_slice($tokens, $offset);
-        if($verbose) Yii::info("Using '$token', rest: " . implode("|",$tokens));
+        if($this->verbose) Yii::info("Using '$token', rest: " . implode("|",$tokens));
       }
       if( in_array( $token, $operators ) ) $hasOperator = true;
       $parsedTokens[] = $token;
     } while (count($tokens));
-    if($verbose) Yii::info("Parsed tokens: " . implode("|", $parsedTokens));
+    if($this->verbose) Yii::info("Parsed tokens: " . implode("|", $parsedTokens));
 
     // Re-assemble translated query string
     if ($hasOperator) {
@@ -355,6 +360,7 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
    */
   public function injectIntoYiiQuery(ActiveQuery &$activeQuery ){
     $this->addCondition($this->cql, $activeQuery);
+
   }
 
   /**
@@ -395,13 +401,13 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
       } else {
         // else, translate index into property
         $dict = $this->getDictionary();
-        //Yii::debug($dict);
+        if($this->verbose) Yii::debug($dict);
         $fields = $this->schema->fields();
         $column = isset($dict[$index])? $dict[$index]:null ;
         // is the index a schema field?
         if ( $column ) {
           if (!in_array($column, $fields)) {
-            //Yii::debug("Index '$index' translates to column '$column', which does not exist.");
+            if($this->verbose) Yii::debug("Index '$index' translates to column '$column', which does not exist.");
             // add impossible condition to return zero rows
             $activeQuery = $activeQuery->andWhere(new Expression("TRUE = FALSE"));
             $this->containsOperators=false;
@@ -411,13 +417,13 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
         } else {
           $column = $index;
           if ( ! in_array($index, $fields)) {
-            //Yii::debug("Index '$index' refers to a non-existing column.");
+            if($this->verbose) Yii::debug("Index '$index' refers to a non-existing column.");
             // add impossible condition to return zero rows
             $activeQuery = $activeQuery->andWhere(new Expression("TRUE = FALSE"));
             $this->containsOperators=false;
             return;
           }
-          Yii::debug("Index '$index' is column '$column'...");
+          if($this->verbose) Yii::debug("Index '$index' is column '$column'...");
         }
         $condition=[];
         switch ($relation) {

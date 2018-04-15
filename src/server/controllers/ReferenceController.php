@@ -197,7 +197,7 @@ class ReferenceController extends AppController
       if( ! $nlq->containsOperators() ){
         if( count($indexedQueries) ) $activeQuery = $indexedQueries[0];
       }
-      Yii::debug($activeQuery->createCommand()->getRawSql());
+      //Yii::debug($activeQuery->createCommand()->getRawSql());
       return $activeQuery;
     }
     throw new UserErrorException(Yii::t('app', "No recognized query format in request."));
