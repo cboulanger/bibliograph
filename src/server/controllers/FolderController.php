@@ -124,7 +124,7 @@ class FolderController extends AppController //implements ITreeController
     }
     /** @var ActiveQuery $query */
     $query = $modelClass::find();
-    $query->select("id")->orderBy("parentId,id");
+    $query->select("id")->orderBy("parentId,position");
     if ($this->getActiveUser()->isAnonymous()) {
       $query = $query->where(['public' => true]);
     }
@@ -464,7 +464,7 @@ class FolderController extends AppController //implements ITreeController
       'label'         => $data->label,
       'searchfolder'  => $data->searchfolder,
       'childCount'    => 0,
-      'position'      => 0,
+      'position'      => $parentFolder->childCount,
       'public'        => 0,
       'opened'        => 0,
     ]);

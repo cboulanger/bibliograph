@@ -36,26 +36,27 @@
 - [x] BUG: Fix backend locale switching
 - [x] BUG: Suppress z3950 permission error during setup
 - [x] FEAT: implement virtual folders with indexes 
-- [ ] BUG: Search doesn't work on rewi
-- [ ] BUG: Empty Trash does not delete references
+- [x] BUG: respect folder `position` value
 
 ## v3.0.0-beta 
 
 ### Priority: high
-- [ ] FEAT: Check log email target to report fatal errors
+- [ ] BUG: Search doesn't work reliably on rewi 
+- [ ] BUG: Empty Trash does not delete references
 - [ ] BUG: module autoloader requires debug mode (trying to serialize closures breaks app)
 - [ ] BUG: Disallow drop of references on folders in which they are already contained. 
 - [ ] BUG: author begins with "A" -> "missing term"
 - [ ] BUG: Z3950-Import in "Main" funktioniert nicht
 - [ ] BUG: Boolean columns must be NOT NULL DEFAULT 0 (z.B. data_User.anonymous)
+- [ ] FEAT: Check log email target to report fatal errors
 - [ ] FEAT: Tests: Make Travis ~~great~~ work again
 - [ ] FEAT: Re-implement Export
-- [ ] FEAT: Clear up the conceptual mess concerning "schema": datasource schema/reference schema
+- [ ] FEAT: Re-implement Backup
+- [ ] FEAT: Allow adding top folders
 - [ ] FEAT: Allow migrations via permission, not prod/dev-mode
 - [ ] FEAT: Transform compile.json into compile.js (to allow to update env var "app.version" etc.)
 
 ### Priority: normal
-- [ ] FEAT: respect folder `position` value
 - [ ] FEAT: Reimplement Search Help
 - [ ] FEAT: Add missing translations
 - [ ] FEAT: Make UserErrorException a JSONRPC error which is caught on the client, instead of a Dialog event. 
@@ -80,6 +81,8 @@
 - [ ] FEAT: Change virtual folder icon
 
 ### Code cleanup
+- [ ] Clear up the conceptual mess concerning "schema": datasource schema/reference schema -> "repository"?
+- [ ] FactoryClass("datasource","reference") proxying ActiveRecord methods
 - [ ] Move config data from migration to config/prefs
 - [ ] Revert return value of ConsoleAppHelper to simple string
 - [ ] Backend: Model validation: accept booleans for MySql SmallInt columns
@@ -104,7 +107,8 @@
 - [ ] Remove qx prefix in generated code (s/qx([A-Z])/\L$1/)
 - [ ] Convert config to YAML: https://packagist.org/packages/sergeymakinen/yii2-config
 - [ ] Change URL params separators
-
+- [ ] Clean, future-proof OO-Rewrite of the Rendering the tree in SimpleDataModel format
+ 
 ## v3.0.0.RC.X (only bug fixes)
 
 ## v3.0.0
