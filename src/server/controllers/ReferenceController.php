@@ -134,8 +134,8 @@ class ReferenceController extends AppController
     // it's a relational query
     if (isset($clientQuery->relation)) {
 
-      // FIXME hack to support 1000 virtual folders
-      if( $clientQuery->relation->id > POSIX_RLIMIT_INFINITY - 1000 ){
+      // FIXME hack to support 10000 virtual folders
+      if( $clientQuery->relation->id > PHP_INT_MAX - 10000 ){
         return $modelClass::find()->where(new Expression("TRUE = FALSE"));
       }
 

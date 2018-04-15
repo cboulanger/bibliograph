@@ -140,7 +140,7 @@ class FolderController extends AppController //implements ITreeController
     $isGuestUser = Yii::$app->user->identity->isAnonymous();
     $orphanedFolder = null;
     $orphanedFolderId = null;
-    $virtualFolderId = POSIX_RLIMIT_INFINITY;
+    $virtualFolderId = PHP_INT_MAX;
     while( count($nodeData) ){
       $node = array_shift($nodeData);
       $id= $node['data']['id'];
