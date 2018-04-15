@@ -134,8 +134,8 @@ class ReferenceController extends AppController
     // it's a relational query
     if (isset($clientQuery->relation)) {
 
-      // FIXME hack to support 10000 virtual folders
-      if( $clientQuery->relation->id > PHP_INT_MAX - 10000 ){
+      // FIXME hack to support virtual folders
+      if( $clientQuery->relation->id > 9007199254740991 - 10000 ){
         return $modelClass::find()->where(new Expression("TRUE = FALSE"));
       }
 
@@ -158,6 +158,11 @@ class ReferenceController extends AppController
 
     // it's a freeform search query
     if ( isset ( $clientQuery->cql ) ){
+
+      // FIXME hack to support virtual folders
+      if( str_contains( $clientQuery->cql, "virtsub:") ){
+        return $modelClass::find()->where(new Expression("TRUE = FALSE"));
+      }
 
       // use the language that works/yields most hits
       $languages=Yii::$app->utils->getLanguages();
@@ -196,7 +201,7 @@ class ReferenceController extends AppController
         );
       }
       $activeQuery = $useQuery->andWhere(['markedDeleted' => 0]);
-      //Yii::debug($activeQuery->createCommand()->getRawSql());
+      Yii::debug($activeQuery->createCommand()->getRawSql());
       return $activeQuery;
     }
 

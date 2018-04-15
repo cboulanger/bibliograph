@@ -35,12 +35,14 @@
 - [x] FEAT: Add "Orphaned" folder
 - [x] BUG: Fix backend locale switching
 - [x] BUG: Suppress z3950 permission error during setup
-- [ ] FEAT: Check log email target to report fatal errors
-- [ ] FEAT: implement virtual folders with indexes 
+- [x] FEAT: implement virtual folders with indexes 
+- [ ] BUG: Search doesn't work on rewi
+
 
 ## v3.0.0-beta 
 
 ### Priority: high
+- [ ] FEAT: Check log email target to report fatal errors
 - [ ] BUG: module autoloader requires debug mode (trying to serialize closures breaks app)
 - [ ] BUG: Disallow drop of references on folders in which they are already contained. 
 - [ ] BUG: Z3950-Import in "Main" funktioniert nicht

@@ -580,7 +580,7 @@ msgstr "Nein, Ordner ist geschlossen"
 
 msgctxt "app"
 msgid "Folder is not publically visible"
-msgstr "Ist der Ordner öffentlich?"
+msgstr "Ordner ist nicht öffentlich sichtbar"
 
 msgctxt "app"
 msgid "Folder is opened by default"
@@ -588,7 +588,7 @@ msgstr "Ja, Ordner öffnet sich automatisch"
 
 msgctxt "app"
 msgid "Folder is publically visible"
-msgstr "Ist der Ordner öffentlich?"
+msgstr "Ordner ist öffentlich sichtbar"
 
 msgctxt "app"
 msgid "Found data for version {version}"

@@ -103,6 +103,8 @@ class FolderController extends AppController //implements ITreeController
     throw new \BadMethodCallException("Not implemented");
   }
 
+  // FIXME
+  protected $virtualFolderId = 9007199254740991; // highest javascript value
 
   /**
    * Returns all nodes of a tree in a given datasource
@@ -140,28 +142,30 @@ class FolderController extends AppController //implements ITreeController
     $isGuestUser = Yii::$app->user->identity->isAnonymous();
     $orphanedFolder = null;
     $orphanedFolderId = null;
-    $virtualFolderId = PHP_INT_MAX;
     while( count($nodeData) ){
       $node = array_shift($nodeData);
       $id= $node['data']['id'];
       $parentId = $node['data']['parentId'];
-      // if the parent hasn't been processed yet, put at the end of the list
-      if (!isset($loaded[$parentId]) and $parentId !== 0) {
-        // prevent infinite loop if tree is corrupted
+
+      // if the parent hasn't been processed yet, push to the tail of the queue
+      if ( ! isset($loaded[$parentId]) and $parentId !== 0) {
+
+        // but only three times to prevent infinite loop if tree is corrupted
         if( !isset($failed[$id]) ){
           $failed[$id] = 0;
         }
         if ($failed[$id]++ <= 3) {
-          // push to the tail of the queue
           $nodeData[] = $node;
           continue;
         }
-        // do not show orphaned nodes to guests
+
+        // otherwise, put into virtual top folder "orphaned"
+        // unless user is unauthenticated
         if ($isGuestUser) continue;
-        // put into virtual top folder "orphaned"
         if (!$orphanedFolder) {
           // create this folder first
-          $orphanedFolderId = $virtualFolderId--;
+          $this->virtualFolderId-=1;
+          $orphanedFolderId = $this->virtualFolderId;
           $orphanedFolder = $this->createOrphanedFolder($orphanedFolderId);
           $orderedNodeData[] = &$orphanedFolder;
           $loaded[$orphanedFolderId] = &$orphanedFolder;
@@ -172,7 +176,11 @@ class FolderController extends AppController //implements ITreeController
       // add node to output
       $orderedNodeData[] = $node;
       $loaded[$id] = $node;
-      //Yii::debug(">>> id: $id, parentId: $parentId");
+
+      // virtual subfolders
+      if( str_contains( $node['data']['query'], "virtsub:" )){
+        $this->createVirtualSubfolders($node['data'], $orderedNodeData, $datasource);
+      }
     }
     //$this->addLostAndFound($orderedNodeData);
     return [
@@ -182,6 +190,47 @@ class FolderController extends AppController //implements ITreeController
   }
 
   /**
+   * EXPERIMENTAL
+   * @param array $data
+   * @param array $orderedNodeData
+   */
+  protected function createVirtualSubfolders(array $data, array &$orderedNodeData, string $datasource)
+  {
+    $query = $data['query'];
+    if( str_contains($query, "virtsub:") ){
+      $field = trim(substr($query,strpos($query,":")+1));
+      $referenceClass = Datasource::in($datasource,"reference");
+      $values = $referenceClass::find()
+        ->select($field)
+        ->distinct()
+        ->column();
+      $separatedValues = [];
+      foreach ($values as $value) {
+        if( ! $value ) continue;
+        if( str_contains($value, ";") ){
+          $separatedValues = array_merge($separatedValues, explode(";",$value) );
+        } else {
+          $separatedValues[]=$value;
+        }
+      }
+      sort($separatedValues);
+      foreach( $separatedValues as $value){
+        $this->virtualFolderId-=1;
+        $node = $this->createVirtualFolder([
+          'type'        => 'virtual',
+          'id'          => $this->virtualFolderId,
+          'parentId'    => $data['id'],
+          'query'       => $field . ' contains "' . $value . '"',
+          'icon'        => "icon/16/apps/utilities-graphics-viewer.png",
+          'label'       => $value,
+        ]);
+        $orderedNodeData[] = $node;
+      }
+    }
+  }
+
+
+  /**
    * Create a virtual folder for orphaned folders and references
    * @param int $id The id of the folder
    * @return array The node data
@@ -189,6 +238,7 @@ class FolderController extends AppController //implements ITreeController
   protected function createOrphanedFolder(int $id)
   {
     return $this->createVirtualFolder([
+      'type'        => "virtual",
       'isBranch'    => true,
       'id'          => $id,
       'parentId'    => 0,
@@ -215,7 +265,7 @@ class FolderController extends AppController //implements ITreeController
       'bHideOpenClose'  => true,
       'columnData'      => [ null, isset($data['columnData']) ? $data['columnData']:"" ],
       'data'            => [
-        'type'            => "virtual",
+        'type'            => isset($data['type']) ? $data['type']:"virtual",
         'id'              => $data['id'],
         'parentId'        => $data['parentId'],
         'query'           => $data['query'],
