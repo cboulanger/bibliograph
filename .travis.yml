@@ -21,6 +21,7 @@ before_install:
 install:
   - echo "travis_fold:start:npm_install"
   - echo "Installing dependencies..."
+  # package-lock is platform-specific and cannot be reused from Mac
   - [[ -f package-lock.json ]] && rm package-lock.json
   - rm -rf node_modules
   - npm install npm@latest -g
