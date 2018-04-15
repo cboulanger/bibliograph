@@ -144,9 +144,7 @@ class ReferenceSchema extends BibtexSchema
     );
 
     $this->addToTypeFields( [
-      'type','location','_category','_owner',
-      'price',
-      '_date_ordered','_date_received'
+      'type','location','_category','_owner', 'price', '_date_ordered','_date_received'
     ]);
   }
 }

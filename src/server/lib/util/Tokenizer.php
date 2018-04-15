@@ -94,8 +94,8 @@ class Tokenizer
         continue;
       }
 
-      // unicode alphanumeric character -> add to token
-      if( preg_match("/[\pL\pN]/u", $char ) )
+      // unicode alphanumeric character plus underscore -> add to token
+      if( preg_match("/[\pL\pN_]/u", $char ) )
       {
         // if we're outside of a word, start new token
         if ( ! $isWord and ! $isQuoted and strlen($token) > 0)

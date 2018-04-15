@@ -28,6 +28,7 @@ use \Yii;
 use app\models\Datasource;
 use lib\exceptions\UserErrorException;
 use lib\util\Tokenizer;
+use yii\db\Expression;
 
 /**
  * Tool for working with the CQL query language
@@ -272,6 +273,7 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
    */
   protected function parseMulitLanguageQuery($query)
   {
+    //Yii::info("Query is '$query'...");
     $tokenizer = new Tokenizer($query);
     $tokens = $tokenizer->tokenize();
     $operators = $this->getOperators();
@@ -353,7 +355,7 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
 
     if ($cqlObject instanceof SearchClause) {
       // look for index
-      $index = strtolower($cqlObject->index->value);
+      $index = mb_strtolower($cqlObject->index->value);
       $relation = mb_strtolower($cqlObject->relation->value);
       $term = str_replace('"', "", $cqlObject->term->value);
 
@@ -372,16 +374,24 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
         }
       } else {
         // else, translate index into property
-
-        // is the index a schema fiels?
+        $dict = $this->getDictionary();
+        //Yii::debug($dict);
         $fields = $this->schema->fields();
-        if (! in_array($index, $fields)) {
-          Yii::debug("Index '$index' is not among the fields " .  implode(", ", $fields) );
-          throw new UserErrorException(Yii::t('app', "Search field '{index}' does not exist.", [
-            'index' => $index
-          ]));
+        $column = isset($dict[$index])? $dict[$index]:null ;
+        // is the index a schema field?
+        if ( $column and ! in_array($column, $fields)) {
+          //Yii::debug("Index '$index' translates to column '$column', which does not exist.");
+          // add impossible condition to return zero rows
+          $activeQuery = $activeQuery->andWhere(new Expression("TRUE = FALSE"));
+          return;
         }
         $column = $index;
+        if ( ! in_array($index, $fields)) {
+          //Yii::debug("Index '$index' refers to a non-existing column.");
+          // add impossible condition to return zero rows
+          $activeQuery = $activeQuery->andWhere(new Expression("TRUE = FALSE"));
+          return;
+        }
         $condition=[];
         switch ($relation) {
           // simple field comparison. compare numeric values normally

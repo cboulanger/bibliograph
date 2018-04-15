@@ -37,7 +37,7 @@
 - [x] BUG: Suppress z3950 permission error during setup
 - [x] FEAT: implement virtual folders with indexes 
 - [ ] BUG: Search doesn't work on rewi
-
+- [ ] BUG: Empty Trash does not delete references
 
 ## v3.0.0-beta 
 

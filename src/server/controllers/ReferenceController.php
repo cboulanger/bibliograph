@@ -171,10 +171,7 @@ class ReferenceController extends AppController
       foreach ($languages as $language) {
         /** @var ActiveQuery $activeQuery */
         $activeQuery = $modelClass::find();
-        $schema = Datasource
-          ::getInstanceFor($datasourceName)
-          ->getClassFor("reference")
-          ::getSchema();
+        $schema = Datasource::in($datasourceName,"reference")::getSchema();
 
         $nlq = new NaturalLanguageQuery([
           'query'     => $clientQuery->cql,
@@ -201,7 +198,7 @@ class ReferenceController extends AppController
         );
       }
       $activeQuery = $useQuery->andWhere(['markedDeleted' => 0]);
-      Yii::debug($activeQuery->createCommand()->getRawSql());
+      //Yii::debug(__METHOD__  . ": " . $activeQuery->createCommand()->getRawSql());
       return $activeQuery;
     }
 
