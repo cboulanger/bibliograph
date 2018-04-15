@@ -63,6 +63,18 @@ admin = ""
 # this unless you are a developer
 developer = "info@bibliograph.org"
 
+# The type of email transport. Either "sendmail" or "smtp". "sendmail" probably
+# works only on Linux/Mac and only if php and the host are configured to use
+# this transport. "smtp" uses a separate smtp server (see below)
+transport = "sendmail"
+
+# If transport is "smtp", specify connection parameters here
+# host = "localhost"
+# username = "smtp username"
+# password = "smtp password"
+# port =  "587"
+# encryption = "tls"
+
 # Uncomment and configure the following values if you want Yii::error() messages
 # to be sent to a specific address.
 # errors_from = "%$email.admin%"

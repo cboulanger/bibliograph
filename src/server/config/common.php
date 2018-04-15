@@ -38,6 +38,20 @@ $config =  [
 
   /* Extension libraries */
   'extensions' => require(__DIR__ . '/../vendor/yiisoft/extensions.php'),
+
+  /* EVENTS */
+  "on beforeRequest" => function($event){
+    try {
+      $locale = Yii::$app->config->getPreference("application.locale");
+      if( ! $locale ) {
+        Yii::$app->utils->setLanguageFromBrowser();
+      } else {
+        Yii::$app->language = $locale;
+      }
+    } catch( Exception $e ){
+      Yii::$app->utils->setLanguageFromBrowser();
+    }
+  }
 ];
 
 return $config;

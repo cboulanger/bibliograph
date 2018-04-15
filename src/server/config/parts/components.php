@@ -1,4 +1,5 @@
 <?php
+$ini = require "ini.php";
 $components = [
 
   /*
@@ -15,19 +16,27 @@ $components = [
   // Override http response component
   'response' => [ 'class' => \lib\components\EventTransportResponse::class  ],
   // Internationalization
+  // @todo move module translations into module
+  // https://stackoverflow.com/questions/34357254/override-translation-path-of-module-on-yii2
+  // https://www.yiiframework.com/doc/guide/2.0/en/tutorial-i18n#module-translation
   'i18n' => [
     'translations' => [
       'app*' => [
-        'class' => yii\i18n\GettextMessageSource::class,
+        'class' => \yii\i18n\GettextMessageSource::class,
         'basePath' => '@messages',
         'catalog' => 'messages',
         'useMoFile' => false
       ],
-      /** @todo move into module https://stackoverflow.com/questions/34357254/override-translation-path-of-module-on-yii2 */
-      'z3950' => [
-        'class' => yii\i18n\GettextMessageSource::class,
+      'extendedfields*' => [
+        'class' => \yii\i18n\GettextMessageSource::class,
         'basePath' => '@messages',
-        'catalog' => 'z3950',
+        'catalog' => 'messages',
+        'useMoFile' => false
+      ],
+      'z3950' => [
+        'class' => \yii\i18n\GettextMessageSource::class,
+        'basePath' => '@messages',
+        'catalog' => 'messages',
         'useMoFile' => false
       ],
     ],
@@ -37,6 +46,15 @@ $components = [
   // Mailer
   'mailer' => [
     'class' => yii\swiftmailer\Mailer::class,
+    'transport' => isset($ini['email']['transport']) and $ini['email']['transport'] === "smtp"
+      ? [
+        'class' => 'Swift_SmtpTransport',
+        'host'        => $ini['email']['host'],
+        'username'    => $ini['email']['username'],
+        'password'    => $ini['email']['password'],
+        'port'        => $ini['email']['port'],
+        'encryption'  => $ini['email']['encryption'],
+      ] : null,
   ],
 
   /*

@@ -20,10 +20,8 @@
 
 namespace lib\components;
 
-use lib\exceptions\UserErrorException;
 use Yii;
-use app\models\Config;
-use app\models\UserConfig;
+use lib\exceptions\UserErrorException;
 
 /**
  * Class Utils
@@ -57,6 +55,7 @@ class Utils extends \yii\base\Component
 
   /**
    * Returns the version of the application
+   * @todo Rewrite in "production first" mode
    * @return string
    */
   public function getVersion()
@@ -70,6 +69,13 @@ class Utils extends \yii\base\Component
         throw new UserErrorException("Cannot read package.json or version.txt",null, $e);
       }
     }
+  }
+
+  /**
+   * Set the best language based on browser request.
+   */
+  public function setLanguageFromBrowser() {
+    Yii::$app->language = Yii::$app->request->getPreferredLanguage($this->getLanguages());
   }
 
   /**

@@ -98,37 +98,25 @@ qx.Class.define("bibliograph.ui.window.PreferencesWindow", {
     select.setAlignY("middle");
 
     // setup selectbox
-    confMgr.addListenerOnce(
-      "ready",
-      function(e) {
-        let localeFromConfig = confMgr.getKey("application.locale");
+    confMgr.addListenerOnce( "ready", () => {
+      let localeFromConfig = confMgr.getKey("application.locale");
 
-        // default: locale from browser
-        let defaultListItem = new qx.ui.form.ListItem(
-          this.tr("Use browser locale"),
-          null,
-          ""
-        );
-        select.add(defaultListItem);
+      // default: locale from browser
+      let defaultListItem = new qx.ui.form.ListItem( this.tr("Use browser locale"), null, "" );
+      select.add(defaultListItem);
 
-        for (let i = 0; i < locales.length; i++) {
-          let listItem = new qx.ui.form.ListItem(
-            locales[i],
-            null,
-            locales[i]
-          );
-          select.add(listItem);
-          if (locales[i] == localeFromConfig) {
-            defaultListItem = listItem;
-          }
+      for (let i = 0; i < locales.length; i++) {
+        let listItem = new qx.ui.form.ListItem( locales[i], null, locales[i] );
+        select.add(listItem);
+        if (locales[i] === localeFromConfig) {
+          defaultListItem = listItem;
         }
+      }
 
-        if (defaultListItem) {
-          select.setSelection([defaultListItem]);
-        }
-      },
-      this
-    );
+      if (defaultListItem) {
+        select.setSelection([defaultListItem]);
+      }
+    });
 
     // selectbox change
     select.addListener("changeSelection", function(e) {
