@@ -180,10 +180,10 @@ class BaseModel extends ActiveRecord
     if( parent::save( $runValidation, $attributeNames ) ){
       return true;
     }
-    Yii::error("Error saving model " . get_class($this)  );
-    Yii::error( $this->getFirstErrors() );
+    Yii::warning("Error saving model " . get_class($this)  );
+    Yii::warning( $this->getFirstErrors() );
     $exception =  new \yii\db\Exception("Error saving model.");
-    Yii::error($exception->getTraceAsString());
+    //Yii::error($exception->getTraceAsString());
     //Yii::warning( $this->getErrorSummary() );
     throw $exception;
   }
