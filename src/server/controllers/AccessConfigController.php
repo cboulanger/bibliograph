@@ -522,8 +522,15 @@ class AccessConfigController extends AppController
       /** @var \lib\models\BaseModel $model */
       $model = new $modelClass([
         'namedId' => $namedId,
-        $elementData['labelProp'] => $namedId
+        $elementData['labelProp'] => $namedId,
       ]);
+      if( $model->hasAttribute('active')){
+        $model->active = 1;
+      }
+      if( $model->hasAttribute('anonymous')){
+        $model->anonymous = 0;
+      }
+
       try {
         $model->save();
       } catch (\yii\db\Exception $e) {

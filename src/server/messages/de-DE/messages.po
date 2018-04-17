@@ -1540,7 +1540,7 @@ msgstr "Sie müssen ein neues Passwort eingeben."
 
 msgctxt "app"
 msgid "Your password has been changed."
-msgstr "%s, Ihr Passwort wurde zurückgesetzt."
+msgstr "Ihr Passwort wurde geändert."
 
 msgctxt "app"
 msgid "Your registration at %s"

@@ -237,6 +237,7 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
         leftList.setDelegate(null);
       }
     });
+    leftSelectBox.addListener("changeSelection",()=> {searchbox1.setValue(""); leftList.setDelegate(null);});
     
     // left list
     let leftList = new qx.ui.list.List();
@@ -450,6 +451,7 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
         rightList.setDelegate(null);
       }
     });
+    elementTree.addListener("changeSelection",()=> {searchbox2.setValue(""); rightList.setDelegate(null);});
     
     // right list
     let rightList = new qx.ui.list.List();
