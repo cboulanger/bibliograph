@@ -22,6 +22,7 @@ namespace app\models;
 
 use lib\exceptions\UserErrorException;
 use Yii;
+use yii\db\StaleObjectException;
 use yii\web\IdentityInterface;
 use lib\models\BaseModel;
 
@@ -50,7 +51,7 @@ class User extends BaseModel implements IdentityInterface
    */
   public static function tableName()
   {
-  return 'data_User';
+    return 'data_User';
   }
 
   /**
@@ -58,14 +59,14 @@ class User extends BaseModel implements IdentityInterface
    */
   public function rules()
   {
-  return [
-    [['created', 'modified', 'lastAction'], 'safe'],
-    [['anonymous', 'ldap', 'active', 'confirmed', 'online'], 'integer'],
-    [['namedId', 'password'], 'string', 'max' => 50],
-    [['name'], 'string', 'max' => 100],
-    [['email'], 'string', 'max' => 255],
-    [['namedId'], 'unique'],
-  ];
+    return [
+      [['created', 'modified', 'lastAction'], 'safe'],
+      [['anonymous', 'ldap', 'active', 'confirmed', 'online'], 'integer'],
+      [['namedId', 'password'], 'string', 'max' => 50],
+      [['name'], 'string', 'max' => 100],
+      [['email'], 'string', 'max' => 255],
+      [['namedId'], 'unique'],
+    ];
   }
 
   /**
@@ -96,7 +97,7 @@ class User extends BaseModel implements IdentityInterface
   public function getFormData()
   {
     return [
-      'namedId'     => [
+      'namedId' => [
         'enabled' => false
       ],
       'name' => [],
@@ -110,7 +111,9 @@ class User extends BaseModel implements IdentityInterface
         'type' => "PasswordField",
         'value' => "",
         'placeholder' => Yii::t('app', "To change the password, enter new password."),
-        'unmarshal' => function( $value) { return $this->checkFormPassword($value);}
+        'unmarshal' => function ($value) {
+          return $this->checkFormPassword($value);
+        }
 
       ],
       'password2' => [
@@ -176,13 +179,36 @@ class User extends BaseModel implements IdentityInterface
   public function beforeSave($insert)
   {
     if (parent::beforeSave($insert)) {
-      if ($this->isNewRecord or ! $this->token) {
+      if ($this->isNewRecord or !$this->token) {
         $this->token = Yii::$app->security->generateRandomString();
       }
       return true;
     }
     return false;
-  }  
+  }
+
+  /**
+   * Before deleting of this record, remove sessions and user configs
+   * @return bool
+   */
+  public function beforeDelete()
+  {
+    foreach($this->getSessions()->all() as $session) {
+      try {
+        $session->delete();
+      } catch (\Throwable $e) {
+        Yii::warning($e->getMessage());
+      }
+    }
+    foreach($this->getUserConfigs()->all() as $userConfig) {
+      try {
+        $userConfig->delete();
+      } catch (\Throwable $e) {
+        Yii::warning($e->getMessage());
+      }
+    }
+    return parent::beforeDelete();
+  }
 
   //-------------------------------------------------------------
   // Relations
@@ -193,7 +219,7 @@ class User extends BaseModel implements IdentityInterface
    */         
   protected function getUserRoles()
   {
-    return $this->hasMany(User_Role::className(), ['UserId' => 'id'] );
+    return $this->hasMany(User_Role::class, ['UserId' => 'id'] );
   } 
 
   /**
@@ -206,11 +232,14 @@ class User extends BaseModel implements IdentityInterface
   }
 
   /**
+   * @param int|null $groupId
+   *    If given, retrieve only the roles that the user has in the
+   *    group with the given (numeric) id. Otherwise, return global roles only
    * @return \yii\db\ActiveQuery
    */       
-  public function getGroupRoles($groupId=null)
+  public function getGroupRoles(int $groupId=null)
   {
-  return $this->hasMany(Role::className(), ['id' => 'RoleId' ])
+  return $this->hasMany(Role::class, ['id' => 'RoleId' ])
     ->via('userRoles', function( yii\db\ActiveQuery $query) use($groupId) {
     return $query->andWhere(['groupId'=>$groupId]);
     });
@@ -221,7 +250,7 @@ class User extends BaseModel implements IdentityInterface
    */      
   protected function getUserGroups()
   {
-    $userGroups = $this->hasMany(Group_User::className(), ['UserId' => 'id']);
+    $userGroups = $this->hasMany(Group_User::class, ['UserId' => 'id']);
     return $userGroups;
   }
 
@@ -230,7 +259,7 @@ class User extends BaseModel implements IdentityInterface
    */      
   public function getGroups()
   {
-    return $this->hasMany(Group::className(), ['id' => 'GroupId'])
+    return $this->hasMany(Group::class, ['id' => 'GroupId'])
       ->via('userGroups');
   } 
 
@@ -239,7 +268,7 @@ class User extends BaseModel implements IdentityInterface
    */    
   protected function getUserConfigs()
   {
-    return $this->hasMany(UserConfig::className(), ['UserId' => 'id']);
+    return $this->hasMany(UserConfig::class, ['UserId' => 'id']);
   } 
 
   /**
@@ -247,7 +276,7 @@ class User extends BaseModel implements IdentityInterface
    */  
   public function getSessions()
   {
-    return $this->hasMany(Session::className(), ['UserId' => 'id']);
+    return $this->hasMany(Session::class, ['UserId' => 'id']);
   } 
 
   /**
@@ -255,7 +284,7 @@ class User extends BaseModel implements IdentityInterface
    */
   protected function getUserDatasources()
   {
-    return $this->hasMany(Datasource_User::className(), ['UserId' => 'id']);
+    return $this->hasMany(Datasource_User::class, ['UserId' => 'id']);
   }
 
   /**
@@ -263,7 +292,7 @@ class User extends BaseModel implements IdentityInterface
    */
   public function getDatasources()
   {
-    return $this->hasMany(Datasource::className(), ['id' => 'DatasourceId'])
+    return $this->hasMany(Datasource::class, ['id' => 'DatasourceId'])
       ->via('userDatasources');
   } 
 
@@ -332,7 +361,7 @@ class User extends BaseModel implements IdentityInterface
   protected function _hasPermission($requestedPermission)
   {
     // get all permissions of the user
-    $permissions = $this->getPermissionNames();
+    $permissions = $this->getAllPermissionNames();
     
     // use wildcard?
     $useWildcard = strstr($requestedPermission, "*");
@@ -408,23 +437,41 @@ class User extends BaseModel implements IdentityInterface
   }
 
   /**
-   * Returns list of permissions that the user has
+   * Returns the names of all permissions the user has (globally or in groups)
+   * FIXME This needs a rewrite since it gives the user all the permissions that s/he has in one group in all other groups!
+   * @return array
+   */
+  public function getAllPermissionNames()
+  {
+    // global roles
+    $permissions= array_values($this->getPermissionNames());
+    // group roles
+    if( ! Yii::$app->config->getIniValue("global_roles_only") ){
+      /** @var Group $group */
+      foreach( $this->getGroups()->all() as $group ){
+        $permissions=array_merge($permissions, $this->getPermissionNames($group->id) );
+      }
+    }
+    return $permissions;
+  }
+
+  /**
+   * Returns list of permissions that the user has in the given group OR globally
    * @param int|null $groupId
    *    If given, retrieve only the permissions that the user has in the
-   *    group with the given id. Otherwise, return global roles only
+   *    group with the given (numeric) id. Otherwise, return global permissions only
    * @return string[]
    *    Array of permission names
    */
-  public function getPermissionNames( $groupId = null )
+  public function getPermissionNames( int $groupId = null )
   {
     $permissionNames = [];
     $roles = $this->getGroupRoles( $groupId )->all();
-    if( is_array($roles) ) foreach( $roles as $obj) {
-      $permissionNames = array_merge( $permissionNames, $obj->getPermissionNames() );
-    }
-    // if in group, add global roles
-    if ( $groupId ){
-      $permissionNames = array_merge( $permissionNames, $this->getPermissionNames() );
+    if( is_array($roles) ) {
+      /** @var Role $role */
+      foreach( $roles as $role) {
+        $permissionNames = array_merge( $permissionNames, $role->getPermissionNames() );
+      }
     }
     return array_unique($permissionNames);
   }

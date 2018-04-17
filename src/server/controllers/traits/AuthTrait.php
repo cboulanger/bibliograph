@@ -8,6 +8,7 @@
 
 namespace app\controllers\traits;
 
+use lib\exceptions\UserErrorException;
 use Yii;
 use app\models\{
   User, Role, Session, Permission
@@ -169,7 +170,8 @@ trait AuthTrait
         "Active user %s does not have required permission %s",
         $this->getActiveUser()->namedId, $permission
       ) );
-      throw new \JsonRpc2\Exception("Not allowed.", \JsonRpc2\Exception::INVALID_REQUEST);
+      throw new UserErrorException(Yii::t("app","Insufficient permissions. If this is unexpected, contact the administrator."));
+      //throw new \JsonRpc2\Exception("Not allowed.", \JsonRpc2\Exception::INVALID_REQUEST);
     }
   }
 

@@ -27,6 +27,7 @@ use app\controllers\dto\AuthResult;
 use app\models\{
   User, Role, Permission, Group, Session
 };
+use yii\db\Expression;
 
 /**
  * The class used for authentication of users.
@@ -130,7 +131,7 @@ class AccessController extends AppController
    * @throws \LogicException
    */
   public function actionAuthenticate($first = null, $password = null)
-  {    
+  {
     $user = null;
     $session = null;
     Yii::$app->session->open();
@@ -272,13 +273,16 @@ class AccessController extends AppController
       $session->link('user',$user);
       $session->save();
       $sessionId = $this->getSessionId();
-      Yii::trace("Started sesssion {$sessionId}");
+      Yii::debug("Started sesssion {$sessionId}");
     }
        
     // if necessary, add a token
     if (! $user->token) {
       $user->save();
     }
+
+    // cleanup old sessions
+    $this->cleanup();
 
     // return information on user
     return new AuthResult([
@@ -296,11 +300,21 @@ class AccessController extends AppController
     $user = $this->getActiveUser(); 
     Yii::info("Logging out user '{$user->name}'.");
     $user->online = 0;
-    $user->save();
+    try {
+      $user->save();
+    } catch (\yii\db\Exception $e) {
+      Yii::warning($e->getMessage());
+    }
     Session::deleteAll(['UserId' => $user->id ]);
     Yii::$app->user->logout();
     Yii::$app->session->destroy();
-    return "OK";
+    // cleanup old sessions
+    try {
+      $this->cleanup();
+    } catch (\Throwable $e) {
+      Yii::warning($e->getMessage());
+    }
+    return "User logged out";
   }
 
   /**
@@ -342,7 +356,7 @@ class AccessController extends AppController
     $activeUser = $this->getActiveUser();
     $data = $activeUser->getAttributes(['namedId','name','anonymous','ldap']);
     $data['anonymous'] = (bool) $data['anonymous'];
-    $data['permissions'] = array_values($activeUser->getPermissionNames());
+    $data['permissions'] = $activeUser->getAllPermissionNames();
     return $data;
   }
 
@@ -374,23 +388,23 @@ class AccessController extends AppController
       if ( ! $user or ! $user->online ){
         $session->delete();
       }
-      // @todo remove expired sessions
-      // @todo add expire column
-      // $modified = $sessionModel->getModified();
-      // $now      = $sessionModel->getQueryBehavior()->getAdapter()->getTime();
-      // $ageInSeconds = strtotime($now)-strtotime($modified);      
     }
+    $expiredSessions = Session::find()
+      ->where(new Expression("`modified` + INTERVAL 1 HOUR < NOW()"))
+      ->all();
+    foreach ( $expiredSessions as $session ) $session->delete();
 
     // cleanup users
+    /** @var User $user */
     foreach( User::find()->all() as $user){
-      if( $user->getSessions()->count() === 0){
+      if( ! $user->getSessions()->exists() ){
         // if no sessions, ...
         if ($user->anonymous ) {
           // .. delete user if guest
           $user->delete();
         } else {
           // ... set real users to offline 
-          $user->online = false;
+          $user->online = 0;
           $user->save(); 
         }
       } 
