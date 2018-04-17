@@ -84,21 +84,28 @@ class LdapAuth extends \yii\base\Component
   public function authenticate( $username, $password )
   {
     $user_id_attr = Yii::$app->config->getIniValue("ldap.user_id_attr");
-    $bind_dn = "$user_id_attr=$username";
-    Yii::debug("Trying to bind $bind_dn with LDAP Server.", 'ldap');
-    try {
-      if ( ! Yii::$app->ldap->auth()->attempt( $bind_dn, $password, true )) {
+    $bind_attrs = [$user_id_attr, "cn"];
+    $i=0;
+    foreach( $bind_attrs as $attr ) {
+      $bind_dn = "$attr=$username";
+      Yii::debug("Trying to bind $bind_dn with LDAP Server...", 'ldap');
+      try {
+        if (Yii::$app->ldap->auth()->attempt($bind_dn, $password, true)) {
+          Yii::debug("Success!", 'ldap');
+          break;
+        }
+      } catch (BindException $e) {
+        throw new \RuntimeException(
+          Yii::t('app', "Cannot connect to the LDAP server: {reason}", [
+            'reason' => $e->getMessage()
+          ])
+        );
+      }
+      if (++$i === count($bind_attrs)) {
         Yii::debug("User/Password combination is wrong.", 'ldap');
-        return null; 
-      }  
-    } catch (BindException $e) {
-      throw new \RuntimeException(
-        Yii::t('app', "Cannot connect to the LDAP server: {reason}", [
-          'reason' => $e->getMessage()
-        ])
-      );
-    } 
-
+        return null;
+      }
+    }
     // if LDAP authentication succeeds, assume we have a valid
     // user. if this user does not exist, create it with "user" role
     // and assign it to the groups specified by the ldap source
