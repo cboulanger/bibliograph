@@ -319,8 +319,7 @@ class SearchController extends \yii\web\Controller
         $columnSchema = Record::getDb()->getTableSchema(Record::tableName())->getColumn($key);
         if( $columnSchema === null ) {
           Yii::warning("Skipping non-existent column '$key'...");
-        }
-        if( is_string($value) and $columnSchema->size ){
+        } elseif( is_string($value) and $columnSchema->size ){
           $p[$key] = substr( $value, 0, $columnSchema->size );
         }
       }

@@ -215,7 +215,7 @@ msgid "Call Number"
 msgstr "Signatur"
 
 msgctxt "app"
-msgid "Cannot connect to database: {error} "
+msgid "Cannot connect to database: {error}"
 msgstr "Verbindung zur Datenbank kann nicht hergestellt werden: {error}"
 
 msgctxt "app"
@@ -808,11 +808,11 @@ msgstr "Benutzername"
 
 msgctxt "app"
 msgid "Login name '{1}' already exists. Please choose a different one."
-msgstr "Der Benutzername '%s' kann nicht verwendet werden. Bitte wählen Sie einen anderen."
+msgstr "Der Benutzername '{1}' kann nicht verwendet werden. Bitte wählen Sie einen anderen."
 
 msgctxt "app"
 msgid "Main folder"
-msgstr "Stammdaten"
+msgstr "Hauptordner"
 
 msgctxt "app"
 msgid "Marked Deleted"

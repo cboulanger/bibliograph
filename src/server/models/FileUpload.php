@@ -3,25 +3,17 @@ namespace app\models;
 
 use RuntimeException;
 use Yii;
-use yii\base\Model;
 use yii\web\UploadedFile;
 
-class FileUpload extends Model
+/**
+ * Class FileUpload
+ * @inheritdoc
+ * @package app\models
+ */
+class FileUpload extends UploadedFile
 {
+
   const LAST_UPLOAD_PATH_SESSION_VAR = "lastUploadPath";
-
-  /**
-   * @var UploadedFile
-   */
-  public $file;
-
-  public function rules()
-  {
-    // @todo dynamically assign validation rule for extensions?
-    return [
-      [['file'], 'file', 'skipOnEmpty' => false, 'extensions' => null],
-    ];
-  }
 
   /**
    * Return the path of the file which was uploaded last
@@ -52,14 +44,10 @@ class FileUpload extends Model
    * inspect the `errors` and `firstErrors` attributes.
    * @return string|false
    */
-  public function upload()
+  public function save()
   {
-    if ($this->validate()) {
-      $path = realpath( sys_get_temp_dir() . DIRECTORY_SEPARATOR . $this->file->baseName . '.' . $this->file->extension);
-      $this->file->saveAs($path);
-      Yii::$app->session->set(self::LAST_UPLOAD_PATH_SESSION_VAR, $path);
-      return $path;
-    }
-    return false;
+    $path = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $this->baseName . '.' . $this->extension;
+    $this->saveAs($path);
+    Yii::$app->session->set(self::LAST_UPLOAD_PATH_SESSION_VAR, $path);
   }
 }

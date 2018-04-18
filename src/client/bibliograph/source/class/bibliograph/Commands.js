@@ -48,19 +48,19 @@ qx.Class.define("bibliograph.Commands",
         l.href = "https://" + l.host + l.pathname + l.hash;
       } else {
         // check if access is restricted
-        if ( app.getConfigManager().getKey("bibliograph.access.mode" ) == "readonly" && 
-          !this.__readonlyConfirmed) {
-          var msg = this.tr("The application is currently in a read-only state. Only the administrator can log in.");
-          var explanation = this.getConfigManager().getKey("bibliograph.access.no-access-message");
-          if (explanation) {
-            msg += "\n" + explanation;
-          }
-          await dialog.Dialog.alert(msg).promise();
-          this.__readonlyConfirmed = true
-        } else {
+        // if ( app.getConfigManager().getKey("bibliograph.access.mode" ) == "readonly" &&
+        //   !this.__readonlyConfirmed) {
+        //   var msg = this.tr("The application is currently in a read-only state. Only the administrator can log in.");
+        //   var explanation = this.getConfigManager().getKey("bibliograph.access.no-access-message");
+        //   if (explanation) {
+        //     msg += "\n" + explanation;
+        //   }
+        //   await dialog.Dialog.alert(msg).promise();
+        //   this.__readonlyConfirmed = true
+        // } else {
           // else show login dialog
           app.getWidgetById("app/windows/login").show();
-        }
+        //}
       }
     },
 

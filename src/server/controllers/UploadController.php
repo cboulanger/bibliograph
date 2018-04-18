@@ -24,9 +24,12 @@ class UploadController extends \yii\web\Controller
    */
   public function actionIndex()
   {
-    $file = new FileUpload();
-    if( ! $file->upload() ){
-      throw new ServerErrorHttpException(implode("; ", $file->getFirstErrors()));
+    /** @var FileUpload $file */
+    $file = FileUpload::getInstanceByName('file');
+    if( ! $file->hasError ) {
+      $file->save();
+    } else {
+      return $file->error;
     }
   }
 }

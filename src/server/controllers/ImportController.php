@@ -20,11 +20,14 @@
 
 namespace app\controllers;
 
+use app\models\Datasource;
 use app\models\FileUpload;
 use app\models\Folder;
 use app\models\Reference;
 use app\models\Session;
+use app\modules\bibutils\import\AbstractParser;
 use lib\exceptions\UserErrorException;
+use Sse\Data;
 use Yii;
 
 use app\controllers\AppController;
@@ -37,26 +40,20 @@ use yii\db\StaleObjectException;
  */
 class ImportController extends AppController
 {
+  use traits\TableTrait;
 
   /**
    * @var string The name of the datasource which is used for importing
    */
-  protected $datasource = "bibliograph_datasource";
-
-  /*
-  ---------------------------------------------------------------------------
-     TABLE INTERFACE API
-  ---------------------------------------------------------------------------
-  */
+  protected $datasource = "bibliograph_import";
 
   /**
    * Returns the layout of the columns of the table displaying
    * the records
    *
    * @param $datasource
-   * @return array
    */
-  public function actionGetTableLayout( $datasource )
+  public function actionTableLayout( $datasource )
   {
     return [
       'columnLayout' => [
@@ -80,7 +77,10 @@ class ImportController extends AppController
       ],
       'queryData' => [
         'orderBy' => "author,year,title",
-        'link'    => ['relation' => "Folder_Reference"],
+        'relation' => [
+          'name' => "folders",
+          'foreignId' => 'FolderId'
+        ],
       ],
       'addItems' => null
     ];
@@ -93,6 +93,7 @@ class ImportController extends AppController
   protected function findInFolders() {
     return $this->findIn($this->datasource,"folder");
   }
+
 
   /*
   ---------------------------------------------------------------------------
@@ -128,10 +129,9 @@ class ImportController extends AppController
    * @param string $format
    *    The name of the import format
    * @throws UserErrorException
-   * @return array
    * @throws \JsonRpc2\Exception
    */
-  public function actionParseUpload(string $format )
+  public function actionParseUpload( string $format )
   {
     $this->requirePermission("reference.import");
 
@@ -201,7 +201,8 @@ class ImportController extends AppController
     } else {
       $folder = new Folder([
         'label'    => $sessionId,
-        'parentId' => 0
+        'parentId' => 0,
+        'position' => 0
       ]);
       try {
         $folder->save();
@@ -217,115 +218,85 @@ class ImportController extends AppController
     if( ! class_exists($parserClass) ){
       throw new UserErrorException("Importer class '$parserClass' does not exist!");
     }
-    $parser = new $parserClass([
-
-    ]);
+    /** @var AbstractParser $parser */
+    $parser = new $parserClass();
     $records = $parser->parse( $data );
     foreach( $records as $record )
     {
-      $refModel->create( $record );
-      if( ! $refModel->getCitekey() )
-      {
-        $refModel->setCitekey($refModel->computeCitekey())->save();
+      $referenceClass = Datasource::in($this->datasource,"reference");
+      /** @var Reference $reference */
+      $reference = new $referenceClass();
+      $reference->setAttributes( $record );
+      if( ! $reference->citekey ){
+        $reference->citekey = $reference->computeCitekey();
       }
-      
-      $refModel->linkModel($fldModel);
+      try {
+        $reference->save();
+      } catch (Exception $e) {
+        Yii::warning($e->getMessage());
+      }
+      $reference->link("folders", $folder );
     }
 
-    /*
-     * return information on containing folder
-     */
-    return array(
-      'folderId' => $fldModel->id()
-    );
+    // return information on containing folder
+    return [
+      'folderId'   => $folder->id,
+      'datasource' => $this->datasource
+    ];
   }
 
   /**
-   * Imports the given references from one datasource into another
-   * @param string $sourceDatasource
+   * Imports the references with the given ids to a target folder
    * @param array $ids
    * @param string $targetDatasource
    * @param int $targetFolderId
    * @return string "OK"
+   * @throws \JsonRpc2\Exception
    */
-  public function method_importReferences( $ids, $targetDatasource, $targetFolderId )
+  public function actionImport( $ids, $targetDatasource, $targetFolderId )
   {
     $this->requirePermission("reference.import");
 
-    qcl_assert_array( $ids );
-    qcl_assert_valid_string( $targetDatasource );
-    qcl_assert_integer( $targetFolderId );
-    
-    
-    
-    
-    $dsModel  = $this->getDatasourceModel("bibliograph_import");
-    $refModel = $dsModel->getInstanceOfType("reference");
-    $fldModel = $dsModel->getInstanceOfType("folder");    
+    $refs = $this->findIn($this->datasource,"reference")
+      ->where(['in','id',$ids])
+      ->all();
 
-    $targetReferenceModel =
-      bibliograph_service_Reference::getInstance()
-      ->getReferenceModel($targetDatasource);
+    $targetReferenceClass = Datasource::in($targetDatasource,"reference");
+    /** @var Folder $targetFolder */
+    $targetFolder = $this->findIn($targetDatasource,"folder")
+      ->where(['id'=>$targetFolderId])
+      ->one();
+    if( ! $targetFolder){
+      throw new UserErrorException("The target folder #$targetFolderId does not exist.");
+    }
 
-    $targetFolderModel =
-      bibliograph_service_Folder::getInstance()
-      ->getFolderModel( $targetDatasource );
-
-    $targetFolderModel->load( $targetFolderId );
-    
-    if( count($ids) == 0 )
-    {
-      $sessionId = $this->getSessionId();
-      $fldModel->findWhere( array('label' => $sessionId ) );
-      if($fldModel->foundNothing())
-      {
-        throw new UserErrorException(Yii::t('app',"Data has been lost due to session change. Please import again."));
+    $commonAttributes = array_intersect(
+      array_keys($this->datasource::getTableSchema()->columns),
+      array_keys($targetReferenceClass::getTableSchema()->columns)
+    );
+    $count = 0;
+    /** @var Reference $ref */
+    foreach ($refs as $ref) {
+      /** @var Reference $importedReference */
+       $importedReference = new $targetReferenceClass();
+       $importedReference->setAttributes(
+         $ref->getAttributes($commonAttributes)
+       );
+      try {
+        $importedReference->save();
+        $count++;
+      } catch (Exception $e) {
+        Yii::warning($e->getMessage());
       }
-      $fldModel->loadNext();
-      //$this->debug("Import folder $sessionId has id " . $fldModel->id() );
-      $refModel->findLinked( $fldModel );
+      $importedReference->link("folders", $targetFolder );
     }
-    else
-    {
-      $refModel->find(new qcl_data_db_Query( array(
-        'select'    => "*",
-        'where'     => "id IN (" . implode(",", $ids ) .")"
-      ) ) );
-    }
-
-    while( $refModel->loadNext() )
-    {
-      $targetReferenceModel->create();
-      $targetReferenceModel->copySharedProperties( $refModel );
-      $targetReferenceModel->save();
-      $targetFolderModel->linkModel( $targetReferenceModel );
-    }
-    
-    /*
-     * update reference count
-     */
-    $referenceCount = count( $targetReferenceModel->linkedModelIds( $targetFolderModel ) );
-    $targetFolderModel->set( "referenceCount", $referenceCount );
-    $targetFolderModel->save();
-
-    /*
-     * reload references and select the new reference
-     */
+    // update child count and reload folders
+    $targetFolder->getChildCount(true);
     $this->dispatchClientMessage("folder.reload", array(
       'datasource'  => $targetDatasource,
       'folderId'    => $targetFolderId
     ) );
 
-    return "OK";
-  }
-
-
-  public function method_test()
-  {
-    
-    $xml2bib = new qcl_util_system_Executable( BIBUTILS_PATH . "xml2bib");
-    $xml2bib->call( "-v" );
-    Yii::info( "stdout: " . $xml2bib->getStdOut() );
-    Yii::info( "stderr: " . $xml2bib->getStdErr() );
+    return "$count references imported.";
   }
 }

@@ -215,12 +215,12 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
       let url = this.getApplication().getServerUrl() + "upload";
 
       // form
-      let form = new uploadwidget.UploadForm('uploadFrm', url);
+      let form = new uploadwidget.UploadForm('uploadForm', url);
       this.form = form;
       form.setLayout(new qx.ui.layout.HBox());
 
       // upload button
-      let uploadField = new uploadwidget.UploadField('uploadfile', this.tr('1. Choose file'));
+      let uploadField = new uploadwidget.UploadField('file', this.tr('1. Choose file'));
       this.file = uploadField;
       form.add(uploadField, { flex : 1 });
 
@@ -260,10 +260,12 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
       app.getRpcClient("import")
         .send( "parse-upload", [this.getFilter()])
         .then( data => {
-          if( data.datasource && data.folderId){
+          if( data && data.datasource && data.folderId){
             this.listView.setDatasource(data.datasource);
             this.listView.setFolderId(data.folderId);
             this.listView.load();
+          } else {
+            this.warn(data);
           }
         });
     },

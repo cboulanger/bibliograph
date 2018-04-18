@@ -416,7 +416,7 @@ class SetupController extends \app\controllers\AppController
       Yii::$app->db->open();
     } catch (\yii\db\Exception $e) {
       return [
-        'fatalError' => Yii::t('app', 'Cannot connect to database: {error} ', [
+        'fatalError' => Yii::t('app', 'Cannot connect to database: {error}', [
           'error' => $e->errorInfo
         ])
       ];
@@ -632,7 +632,7 @@ class SetupController extends \app\controllers\AppController
           'hidden' => 1,
           'description' => "This database is used for importing data"
         ],
-        'roles' => []
+        'roles' => ['user']
       ],
     ];
 

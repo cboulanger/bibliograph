@@ -78,6 +78,12 @@ class BibtexUtf8 extends AbstractParser
           case "editor":
             $p[$key] = str_replace("{", "", $p[$key]);
             $p[$key] = str_replace("}", "", $p[$key]);
+            break;
+          case "date":
+            if( preg_match("/^[0-9]{4}$/", trim($p[$key]))) {
+              $p['year'] = $p[$key];
+              unset($p[$key]);
+            }
         }
         try {
           $columnSchema = Reference::getDb()->getTableSchema(Reference::tableName())->getColumn($key);
@@ -86,8 +92,7 @@ class BibtexUtf8 extends AbstractParser
         }
         if( $columnSchema === null ) {
           Yii::warning("Skipping non-existent column '$key'...");
-        }
-        if( is_string($value) and $columnSchema->size ){
+        } elseif( is_string($value) and $columnSchema->size ){
           $p[$key] = substr( $value, 0, $columnSchema->size );
         }
       }

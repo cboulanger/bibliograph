@@ -42,32 +42,32 @@ class TableController extends AppController
    */
   public function actionTableLayout($datasource, $modelClassType = null)
   {
-    return array(
-      'columnLayout' => array(
-        'id' => array(
+    return [
+      'columnLayout' => [
+        'id' => [
           'header' => "ID",
           'width' => 50,
           'visible' => false
-        ),
-        'author' => array(
+        ],
+        'author' => [
           'header' => _("Author"),
           'width' => "1*"
-        ),
-        'year' => array(
+        ],
+        'year' => [
           'header' => _("Year"),
           'width' => 50
-        ),
-        'title' => array(
+        ],
+        'title' => [
           'header' => _("Title"),
           'width' => "3*"
-        )
-      ),
-      'queryData' => array(
-        'link' => array(),
+        ]
+      ],
+      'queryData' => [
+        'link' => [],
         'orderBy' => "author,year,title",
-      ),
-      'addItems' => array()
-    );
+      ],
+      'addItems' => []
+    ];
   }
 
 
