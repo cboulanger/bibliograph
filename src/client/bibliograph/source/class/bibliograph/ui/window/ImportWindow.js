@@ -131,27 +131,31 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
       let qclController1 = new qx.data.controller.List(null, importFilterSelectBox, "label");
       importFilterStore.bind("model", qclController1, "model");
       importFilterSelectBox.bind("selection", this, "filter", {
-        converter : this._convertImportFilterSelection
+        converter : s => (s.length ? s[0].getModel().getValue() : null)
       });
+      
       // upload button
       let uploadButton = new qx.ui.form.Button(this.tr('3. Upload file'), null, null);
       this.uploadButton = uploadButton;
       uploadButton.setEnabled(false);
       uploadButton.setLabel(this.tr('3. Upload file'));
       toolBar.add(uploadButton);
-      uploadButton.addListener("execute", this._on_uploadButton_execute, this);
-      let stack1 = new qx.ui.container.Stack();
-      this.add(stack1, {
-        flex : 1
+      uploadButton.addListener("execute", () => {
+        this.importButton.setEnabled(false);
+        this.uploadButton.setEnabled(false);
+        this.form.send();
       });
+      let stack1 = new qx.ui.container.Stack();
+      this.add(stack1, { flex : 1 });
     
       // Listview
       let tableview = new qcl.ui.table.TableView();
       this.listView = tableview;
       tableview.set({
+        decorator: "main",
+        /* @todo unhardcode this */
         serviceName:  "import",
         datasource:   "bibliograph_import",
-        decorator:    "main",
         modelType:    "reference"
       });
       tableview.headerBar.setVisibility("excluded");
@@ -204,17 +208,15 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
     {
       let uploadwidget = window.uploadwidget;
       if( ! uploadwidget ){
-        this.warn("UploadWidget contrib not installed or not compiled.");
+        this.error("UploadWidget contrib not installed or not compiled.");
         return;
       }
 
-      let url = this.getApplication().getServerUrl();
+      let url = this.getApplication().getServerUrl() + "upload";
 
       // form
       let form = new uploadwidget.UploadForm('uploadFrm', url);
       this.form = form;
-      form.setParameter('application', 'bibliograph');
-      form.setParameter('replace', true);
       form.setLayout(new qx.ui.layout.HBox());
 
       // upload button
@@ -224,8 +226,8 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
 
       // callback when file is selected
       uploadField.addListener('changeFileName', function(e) {
-        form.setParameter('sessionId', this.getApplication().getSessionManager().getSessionId());
-        this.uploadButton.setEnabled(e.getData() != '' && this.getFilter() !== null);
+        form.setParameter('auth_token', this.getApplication().getAccessManager().getToken());
+        this.uploadButton.setEnabled(e.getData() !== '' && this.getFilter() !== null);
       }, this);
 
       // callback when file is sent to server
@@ -238,60 +240,32 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
         this.hidePopup();
         uploadField.setFileName('');
         let response = form.getIframeHtmlContent();
-        if (response.search(/qcl_file/) == -1) {
-          dialog.Dialog.alert(response);
+        // response is empty for success or an error message
+        if(response) {
+          dialog.Dialog.error(response.substr(0,100));
         } else {
-          this.processUpload(response.match(/qcl_file\=\"([^']+)\"/)[1]);
+          this.processUpload();
         }
       }, this);
       return form;
     },
-
-    /**
-     * converter for import filter selection
-     * @param s {Object}
-     * @returns {int|null}
-     * @private
-     */
-    _convertImportFilterSelection : function(s) {
-      return (s.length ? s[0].getModel().getValue() : null);
-    },
-
-    /**
-     * called when the upload button is clicked
-     * @private
-     */
-    _on_uploadButton_execute : function()
-    {
-      this.importButton.setEnabled(false);
-      this.uploadButton.setEnabled(false);
-      this.form.send();
-    },
-
+    
     /**
      * Processing the uploaded file on the server
-     * @param file {String}
      */
-    processUpload : function(file)
+    processUpload : function()
     {
       this.showPopup(this.tr("Processing references..."));
       let app = this.getApplication();
-      app.getRpcClient("import").send(
-          "processUpload",
-          [file, this.getFilter()],
-          this.uploadFinished, this
-      );
-    },
-
-    /**
-     * Called when the upload is finished
-     * @param data {Object}
-     */
-    uploadFinished : function(data)
-    {
-      this.listView.setFolderId(data.folderId);
-      this.showPopup("Loading imported references ...");
-      this.listView.load();
+      app.getRpcClient("import")
+        .send( "parse-upload", [this.getFilter()])
+        .then( data => {
+          if( data.datasource && data.folderId){
+            this.listView.setDatasource(data.datasource);
+            this.listView.setFolderId(data.folderId);
+            this.listView.load();
+          }
+        });
     },
     
     /**
@@ -301,56 +275,43 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
     {
       let app = this.getApplication();
 
-      /*
-       * ids to import => array or empty if all records
-       */
+      // ids to import => array or empty if all records
       let ids = this.listView.getSelectedIds();
       if ( importAll )
       {
         ids = [];
-      }
-      else if ( !ids.length)
-      {
+      } else if ( !ids.length) {
         dialog.Dialog.alert(this.tr("You have to select one or more reference to import."));
         return false;
       }
 
-      /*
-       * target folder
-       */
+      // target folder
       let targetFolderId = app.getFolderId();
-      if (!targetFolderId)
-      {
+      if (!targetFolderId) {
         dialog.Dialog.alert(this.tr("Please select a folder first."));
         return false;
       }
       let treeView = app.getWidgetById("app/treeview");
       let nodeId = treeView.getController().getClientNodeId(targetFolderId);
       let node = treeView.getTree().getDataModel().getData()[nodeId];
-      if (!node)
-      {
+      if (!node) {
         dialog.Dialog.alert(this.tr("Cannot determine selected folder. Please reload the folders."));
         return false;
       }
-      if (node.data.type != "folder")
-      {
+      if (node.data.type !== "folder") {
         dialog.Dialog.alert(this.tr("Invalid target folder. You can only import into normal folders."));
         return false;
       }
 
-      /*
-       * send to server
-       */
+      // send to server
       let targetDatasource = app.getDatasource();
       this.showPopup(this.tr("Importing references..."));
-      this.getApplication().getRpcClient("import").send(
-        "importReferences", 
-        [ ids, targetDatasource, targetFolderId], 
-        function(){
+      this.getApplication().getRpcClient("import")
+        .send( "import", [ ids, targetDatasource, targetFolderId])
+        .then( () => {
           this.importButton.setEnabled(true);
           this.hidePopup();
-        },
-      this);
+        });
     }
   }
 });

@@ -83,7 +83,8 @@ trait AuthTrait
 
     // on-the-fly authentication with access token
     // first try GET Parameter, then headers
-    $token = Yii::$app->request->get('auth_token');
+    $token = Yii::$app->request->get('auth_token')
+          ?? Yii::$app->request->post('auth_token');
     if ( ! $token ){
       $headers = Yii::$app->request->headers;
       $tryHeaders = ["Authorization","X-Authorization"];

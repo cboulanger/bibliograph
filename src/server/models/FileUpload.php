@@ -48,7 +48,7 @@ class FileUpload extends Model
 
   /**
    * Store the uploaded file in the system temp folder and store the path.
-   * Returns true on success and false if an error occurred. In case of errors,
+   * Returns the path of the uploaded file on success and false if an error occurred. In case of errors,
    * inspect the `errors` and `firstErrors` attributes.
    * @return string|false
    */
@@ -59,9 +59,7 @@ class FileUpload extends Model
       $this->file->saveAs($path);
       Yii::$app->session->set(self::LAST_UPLOAD_PATH_SESSION_VAR, $path);
       return $path;
-    } else {
-      $this->errors;
-      return false;
     }
+    return false;
   }
 }

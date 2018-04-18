@@ -131,7 +131,7 @@ class ImportController extends AppController
    * @return array
    * @throws \JsonRpc2\Exception
    */
-  public function actionParse(string $format )
+  public function actionParseUpload(string $format )
   {
     $this->requirePermission("reference.import");
 
@@ -213,21 +213,14 @@ class ImportController extends AppController
     // convert and import data
     $data = file_get_contents( $file );
     
-    // require a utf-8 encoded file
-    // @todo be more tolerant and convert on the fly
-    if (!preg_match('!!u', $data))
-    {
-      throw new UserErrorException(Yii::t('app',"You must convert file to UTF-8 before importing."));
+    $parserClass = $importFormatModel->class;
+    if( ! class_exists($parserClass) ){
+      throw new UserErrorException("Importer class '$parserClass' does not exist!");
     }
-    
-    $importerClass = $importFormatModel->class;
-    if( ! class_exists($importerClass) ){
-      throw new UserErrorException("Importer class '$importerClass' does not exist!");
-    }
-    $importer = new $importerClass([
+    $parser = new $parserClass([
 
     ]);
-    $records = $importer->import( $data, $refModel );
+    $records = $parser->parse( $data );
     foreach( $records as $record )
     {
       $refModel->create( $record );

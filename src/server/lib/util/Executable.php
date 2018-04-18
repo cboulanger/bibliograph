@@ -1,12 +1,14 @@
 <?php
 
 namespace lib\util;
+
 use Exception;
+use yii\base\BaseObject;
 
 /**
  * A wrapper around proc_open()
  */
-class Executable
+class Executable extends BaseObject
 {
 
   /**
@@ -56,8 +58,8 @@ class Executable
 
   /**
    * Constructor.
-   * @param string $cmd
-   *    Name of the command
+   * @param string|array $first
+   *    If string, name of the command. If array, configuration map
    * @param string|null $cwd
    *    Optional working directory
    * @param array|null $env
@@ -65,10 +67,17 @@ class Executable
    * @param array|null $options
    *    Optional additional options for proc_open
    */
-  public function __construct(string $cmd, string $cwd = null, array $env = null, array $options = null)
+  public function __construct( $first, string $cwd = null, array $env = null, array $options = null)
   {
-    $this->cmd = $cmd;
+    // Yii-style
+    if( is_array( $first) ){
+      return parent::__construct($first);
+    }
+    // BC constructor style
+    parent::__construct();
+    $this->cmd = $first;
     $this->cwd = $cwd;
+    $this->env = $env;
     $this->options = $options;
   }
 

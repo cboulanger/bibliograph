@@ -7,7 +7,6 @@ use Yii;
 
 /**
  * This is the model class for table "data_ImportFormat".
- *
  * @property integer $id
  * @property string $namedId
  * @property string $created

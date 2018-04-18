@@ -2,8 +2,9 @@
 
 namespace app\modules\bibutils;
 
+use app\models\ImportFormat;
+use app\modules\bibutils\import\AbstractParser;
 use Yii;
-
 
 class Module extends \lib\Module
 {
@@ -13,19 +14,46 @@ class Module extends \lib\Module
    */
   protected $version = "0.0.1";
 
+  protected $install_classes = [
+    'import' =>['BibtexUtf8']
+  ];
+
   /**
    * Installs the plugin.
    * @param boolean $enabled
    *    Whether the module should be enabled after installation (defaults to false)
    * @return boolean
-   * @throws \Exception
    */
   public function install($enabled = false)
   {
-    try {
-      // register bibutils import formats
-    } catch (\yii\db\Exception $e) {
-      Yii::debug("Bibutils import/export format ... already registered.");
+    foreach ($this->install_classes as $converterType => $converterData) {
+      foreach ($converterData as $install_class) {
+        try {
+          $converterClass = sprintf("\\app\\modules\\bibutils\\%s\\%s", $converterType, $install_class);
+          /** @var AbstractParser $converter */
+          $converter = new $converterClass();
+          $registryClass = sprintf("\\app\\models\\%sFormat", ucfirst($converterType));
+          $attributes = [
+            'namedId' => $converter->id,
+            'extension' => $converter->extension,
+            'name' => $converter->name,
+            'type' => $converter->type,
+            'description' => $converter->description,
+            'active' => 1,
+            'class' => $converterClass
+          ];
+          /** @var ImportFormat $registry */
+          $registry = $registryClass::find()
+            ->where(['namedId'=>$converter->id])
+            ->exists()
+              ? $registryClass::findOne(['namedId'=>$converter->id])
+              : new $registryClass();
+          $registry->setAttributes($attributes);
+          $registry->save();
+        } catch (\yii\db\Exception $e) {
+          Yii::warning($e->getMessage());
+        }
+      }
     }
     return parent::install(true);
   }
