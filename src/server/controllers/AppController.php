@@ -21,15 +21,18 @@
 namespace app\controllers;
 
 use app\controllers\{traits\AuthTrait, traits\DatasourceTrait};
+use app\models\Datasource;
 use lib\dialog\Error;
 use lib\exceptions\UserErrorException;
 use Yii;
 use app\models\Permission;
+use yii\db\ActiveQuery;
 
 
 /**
  * Service class providing methods to get or set configuration
  * values
+ * @todo refactor to \lib\BaseController
  */
 class AppController extends \JsonRpc2\Controller
 {
@@ -51,6 +54,10 @@ class AppController extends \JsonRpc2\Controller
       return null;
     }
   }
+
+  //-------------------------------------------------------------
+  // Access control
+  //-------------------------------------------------------------
 
   /**
    * Creates a permission with the given named id if it doesn't
@@ -90,6 +97,19 @@ class AppController extends \JsonRpc2\Controller
     Permission::deleteAll(['namedId' => $namedId]);
   }
 
+  //-------------------------------------------------------------
+  // Datasources
+  //-------------------------------------------------------------
+
+  /**
+   * Returns the query that belongs the model of the given type in the given datasource
+   * @param string $datasource
+   * @param string $type
+   * @return ActiveQuery
+   */
+  protected function findIn( $datasource, $type ){
+    return Datasource::getInstanceFor($datasource)->getClassFor($type)::find();
+  }
 
   //-------------------------------------------------------------
   // Helpers for returning data to the user

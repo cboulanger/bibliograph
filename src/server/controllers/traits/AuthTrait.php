@@ -82,6 +82,7 @@ trait AuthTrait
     }
 
     // on-the-fly authentication with access token
+    // first try GET Parameter, then headers
     $token = Yii::$app->request->get('auth_token');
     if ( ! $token ){
       $headers = Yii::$app->request->headers;
@@ -93,7 +94,7 @@ trait AuthTrait
       }
     }
     $user = User::findIdentityByAccessToken($token);
-    if (!$token or ! $user ) {
+    if (!$token or ! $user or ! $user->active ) {
       Yii::info("No or invalid authorization token '$token'. Access denied.");
       return false;
       // @todo this doesn't work:

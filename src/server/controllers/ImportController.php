@@ -20,18 +20,28 @@
 
 namespace app\controllers;
 
+use app\models\FileUpload;
+use app\models\Folder;
+use app\models\Reference;
+use app\models\Session;
+use lib\exceptions\UserErrorException;
 use Yii;
-
-use \JsonRpc2\Exception;
 
 use app\controllers\AppController;
 use app\models\ImportFormat;
+use yii\db\Exception;
+use yii\db\StaleObjectException;
 
 /**
  *
  */
 class ImportController extends AppController
 {
+
+  /**
+   * @var string The name of the datasource which is used for importing
+   */
+  protected $datasource = "bibliograph_datasource";
 
   /*
   ---------------------------------------------------------------------------
@@ -44,48 +54,56 @@ class ImportController extends AppController
    * the records
    *
    * @param $datasource
-   * @return unknown_type
+   * @return array
    */
   public function actionGetTableLayout( $datasource )
   {
-    return array(
-      'columnLayout' => array(
-        'id' => array(
+    return [
+      'columnLayout' => [
+        'id' => [
           'header'  => "ID",
           'width'   => 50,
           'visible' => false
-        ),
-        'author' => array(
+        ],
+        'author' => [
           'header'  => Yii::t('app', "Author"),
           'width'   => "1*"
-        ),
-        'year' => array(
+        ],
+        'year' => [
           'header'  => Yii::t('app', "Year"),
           'width'   => 50
-        ),
-        'title' => array(
+        ],
+        'title' => [
           'header'  => Yii::t('app', "Title"),
           'width'   => "3*"
-        )
-      ),
-      'queryData' => array(
+        ]
+      ],
+      'queryData' => [
         'orderBy' => "author,year,title",
-        'link'    => array( 'relation' => "Folder_Reference" ),
-      ),
+        'link'    => ['relation' => "Folder_Reference"],
+      ],
       'addItems' => null
-    );
+    ];
+  }
+
+  /**
+   * Shorthand method
+   * @return \yii\db\ActiveQuery
+   */
+  protected function findInFolders() {
+    return $this->findIn($this->datasource,"folder");
   }
 
   /*
   ---------------------------------------------------------------------------
-     OTHER SERVICES
+    SERVICES
   ---------------------------------------------------------------------------
   */
 
   /**
    * Returns the list of import formats for a selectbox
    */
-  public function actionImportformats()
+  public function actionImportFormats()
   {
     $importFormats = ImportFormat::find()->where(['active' => 1])->orderBy("name")->all();
     $listData = array( array(
@@ -102,103 +120,113 @@ class ImportController extends AppController
   }
 
   /**
-   * Process the uploaded file with the given format.
+   * Parse the data from the last uploaded file with the given format.
+   * Returns an associative array containing the keys "datasource" with the name of the
+   * datasource (usually "bibliograph_import") and "folderId" containing
+   * the numeric value of the folder containing the processed references.
    *
-   * @param string $file
-   *    Path to the uploaded file.
    * @param string $format
    *    The name of the import format
-   * @throws \lib\exceptions\UserErrorException
+   * @throws UserErrorException
    * @return array
-   *    An array containint the key "folderId" with the integer
-   *    value of the folder containing the processed references.
+   * @throws \JsonRpc2\Exception
    */
-  public function method_processUpload( $file, $format )
+  public function actionParse(string $format )
   {
     $this->requirePermission("reference.import");
-    qcl_assert_valid_string( $format, "Invalid format");
-    qcl_assert_file_exists( $file );
 
-    /*
-     * load importer object according to format
-     */
-    $importRegistry = bibliograph_model_import_RegistryModel::getInstance();
-    $importer = $importRegistry->getImporter( $format );
+    // load importer object according to format
+    /** @var ImportFormat $importFormatModel */
+    $importFormatModel = ImportFormat::findByNamedId($format);
+    if(! $importFormatModel ){
+      throw new UserErrorException( Yii::t('app',
+        "Unknown format '{format}'.", [ 'format' => $format]
+      ));
+    }
+    try{
+      $file = FileUpload::getLastUploadPath();
+    } catch (\RuntimeException $e){
+      throw new UserErrorException($e->getMessage());
+    }
 
-//    $extension = either( get_file_extension( $file ), $format);
-//
-//    if( $extension !== $importer->getExtension() )
-//    {
-//      throw new \lib\exceptions\UserErrorException(sprintf(
-//        Yii::t('app', "Format '%s' expects file extension '%s'. The file you uploaded has extension '%s'"),
-//        $importer->getName(),
-//        $importer->getExtension(),
-//        $extension
-//      ));
-//    }
-
-    // get the folder and reference models
-    $dsModel  = $this->getDatasourceModel("bibliograph_import");
-    $refModel = $dsModel->getInstanceOfType("reference");
-    $fldModel = $dsModel->getInstanceOfType("folder");
-    
-    // cleanup unused data: purge all folders with names of sessions that no longer exist
-    $sessionModel=$this->getAccessController()->getSessionModel();
-    $fldModel->findAll();
-    while( $fldModel->loadNext() )
+    $givenExtension = pathinfo( $file, PATHINFO_EXTENSION);
+    $allowedExtensions = $importFormatModel->getExtensions();
+    if( ! in_array( $givenExtension,$allowedExtensions ) )
     {
-      try
-      {
-        $sessionModel->load( $fldModel->getLabel() );
-      }
-      catch( qcl_data_model_RecordNotFoundException $e )
-      {
-        try
-        {
-          $refModel->findLinked( $fldModel );
-          while( $refModel->loadNext() ) $refModel->delete();
+      throw new UserErrorException(
+        Yii::t('app',
+          "Format '{format}' expects file extension(s) '{allowedExtensions}'. The file you uploaded has extension '{givenExtension}.'",[
+            'format'            => $format,
+            'allowedExtensions' => $allowedExtensions,
+            'givenExtension'    => $givenExtension
+          ])
+      );
+    }
+
+    // cleanup unused data: purge all folders with names of sessions that no longer exist
+    /** @var Folder $folder */
+    foreach ($this->findInFolders()->all() as $folder)
+    {
+      if ( ! Session::find()->where( ['id' => $folder->label ])->exists() ){
+        foreach( $folder->getReferences()->all() as $reference ){
+          try {
+            $reference->delete();
+          } catch (\Throwable $e) {
+            Yii::warning($e->getMessage());
+          }
         }
-        catch( qcl_data_model_RecordNotFoundException $e ){}
-        $fldModel->delete();
+        try {
+          $folder->delete();
+        } catch (\Throwable $e) {
+          Yii::warning($e->getMessage());
+        }
       }
     }
     
     // empty an existing folder with the session id as label
-    $sessionId = $this->getSessionId();
-    $fldModel->findWhere( array('label' => $sessionId ) );
-    if($fldModel->foundSomething())
-    {
-      $fldModel->loadNext();
-      try
-      {
-        $refModel->findLinked( $fldModel );
-        //$this->debug("Emptying folder $sessionId");
-        while( $refModel->loadNext() ) $refModel->delete();  
+    $sessionId = Yii::$app->session->getId();
+    /** @var Folder|null $folder */
+    $folder = $this->findInFolders()
+      ->where(['id'=>$sessionId])
+      ->one();
+    if( $folder ){
+      /** @var Reference $reference */
+      foreach ($folder->getReferences() as $reference) {
+        try {
+          $reference->delete();
+        } catch (\Throwable $e) {
+          Yii::warning($e->getMessage());
+        }
       }
-      catch( qcl_data_model_RecordNotFoundException $e)
-      {
-        //$this->debug("No content in folder $sessionId");
+    } else {
+      $folder = new Folder([
+        'label'    => $sessionId,
+        'parentId' => 0
+      ]);
+      try {
+        $folder->save();
+      } catch (Exception $e) {
+        throw new UserErrorException($e->getMessage());
       }
-    }
-    else
-    {
-      //$this->debug("Creating folder $sessionId");
-      $fldModel->create( array( 'label' => $sessionId ) );
-      $fldModel->setParentId(0)->save();
     }
     
-    /*
-     * convert and import data
-     */
+    // convert and import data
     $data = file_get_contents( $file );
     
-    // convert to utf-8
+    // require a utf-8 encoded file
+    // @todo be more tolerant and convert on the fly
     if (!preg_match('!!u', $data))
     {
-      throw new \lib\exceptions\UserErrorException(Yii::t('app',"You must convert file to UTF-8 before importing."));
+      throw new UserErrorException(Yii::t('app',"You must convert file to UTF-8 before importing."));
     }
     
-    
+    $importerClass = $importFormatModel->class;
+    if( ! class_exists($importerClass) ){
+      throw new UserErrorException("Importer class '$importerClass' does not exist!");
+    }
+    $importer = new $importerClass([
+
+    ]);
     $records = $importer->import( $data, $refModel );
     foreach( $records as $record )
     {
@@ -258,7 +286,7 @@ class ImportController extends AppController
       $fldModel->findWhere( array('label' => $sessionId ) );
       if($fldModel->foundNothing())
       {
-        throw new \lib\exceptions\UserErrorException(Yii::t('app',"Data has been lost due to session change. Please import again."));
+        throw new UserErrorException(Yii::t('app',"Data has been lost due to session change. Please import again."));
       }
       $fldModel->loadNext();
       //$this->debug("Import folder $sessionId has id " . $fldModel->id() );

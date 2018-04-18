@@ -190,7 +190,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       button.setMenu(menu);
 
       // menu content
-      //menu.add( this.createImportTextButton() );
+      menu.add( this.createImportTextButton() );
 
       return button;
     },

@@ -38,9 +38,10 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
   {
     this.base(arguments);
     this.createPopup();
-    qx.lang.Function.delay(function(){
+    this.createUi();
+    qx.lang.Function.delay(()=>{
       this.listView.addListenerOnce("tableReady", function() {
-        var controller = this.listView.getController();
+        let controller = this.listView.getController();
         function enableButtons (){
           this.importButton.setEnabled(true);
           this.listView.setEnabled(true);
@@ -52,7 +53,7 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
           qx.lang.Function.delay( enableButtons, 1000, this);
         }, this);
       }, this);
-    },100,this);
+    },100);
   },
 
   /*
@@ -95,6 +96,106 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
       }
 
     },
+  
+    createUi : function()
+    {
+      this.setCaption(this.tr('Import from file'));
+      this.setShowMinimize(false);
+      this.setWidth(700);
+      this.setHeight(500);
+      
+      qx.event.message.Bus.getInstance().subscribe(bibliograph.AccessManager.messages.LOGOUT, () => this.close());
+      this.addListener("appear", () => this.center());
+      
+      let vbox1 = new qx.ui.layout.VBox(5, null, null);
+      vbox1.setSpacing(5);
+      this.setLayout(vbox1);
+    
+      // Toolbar
+      let toolBar = new qx.ui.toolbar.ToolBar();
+      this.toolBar = toolBar;
+      toolBar.setSpacing(10);
+      this.add(toolBar);
+    
+      // import filter
+      let importFilterStore = new qcl.data.store.JsonRpcStore("import");
+      qx.event.message.Bus.subscribe("bibliograph.setup.completed",()=>{
+        importFilterStore.setAutoLoadParams([true]);
+        importFilterStore.setAutoLoadMethod("import-formats");
+      });
+      toolBar.add(this.createUploadWidget(), { flex : 1 });
+      let importFilterSelectBox = new qx.ui.form.SelectBox();
+      importFilterSelectBox.setWidth(200);
+      importFilterSelectBox.setMaxHeight(25);
+      toolBar.add(importFilterSelectBox);
+      let qclController1 = new qx.data.controller.List(null, importFilterSelectBox, "label");
+      importFilterStore.bind("model", qclController1, "model");
+      importFilterSelectBox.bind("selection", this, "filter", {
+        converter : this._convertImportFilterSelection
+      });
+      // upload button
+      let uploadButton = new qx.ui.form.Button(this.tr('3. Upload file'), null, null);
+      this.uploadButton = uploadButton;
+      uploadButton.setEnabled(false);
+      uploadButton.setLabel(this.tr('3. Upload file'));
+      toolBar.add(uploadButton);
+      uploadButton.addListener("execute", this._on_uploadButton_execute, this);
+      let stack1 = new qx.ui.container.Stack();
+      this.add(stack1, {
+        flex : 1
+      });
+    
+      // Listview
+      let tableview = new qcl.ui.table.TableView();
+      this.listView = tableview;
+      tableview.set({
+        serviceName:  "import",
+        datasource:   "bibliograph_import",
+        decorator:    "main",
+        modelType:    "reference"
+      });
+      tableview.headerBar.setVisibility("excluded");
+      tableview.menuBar.setVisibility("excluded");
+      stack1.add(tableview);
+    
+      // Footer
+      let hbox1 = new qx.ui.layout.HBox(5, null, null);
+      let composite1 = new qx.ui.container.Composite();
+      composite1.setLayout(hbox1)
+      this.add(composite1);
+      hbox1.setSpacing(5);
+    
+      // Status label
+      let statusTextLabel = new qx.ui.basic.Label(null);
+      this.listView._statusLabel = statusTextLabel; // todo this is a hack
+      composite1.add(statusTextLabel);
+      this.listView.bind("store.model.statusText", statusTextLabel, "value");
+    
+      let spacer1 = new qx.ui.core.Spacer(null, null);
+      composite1.add(spacer1, { flex : 10 });
+    
+      // Select all button
+      let selectAllButton = new qx.ui.form.Button();
+      this.selectAllButton = selectAllButton;
+      selectAllButton.setLabel(this.tr('Import all records'));
+      composite1.add(selectAllButton);
+      selectAllButton.addListener("execute", ()=>  this.importReferences(true));
+    
+      // Import selected button
+      let importButton = new qx.ui.form.Button();
+      this.importButton = importButton;
+      importButton.setEnabled(false);
+      importButton.setLabel(this.tr('Import selected records'));
+      composite1.add(importButton);
+      importButton.bind("enabled", selectAllButton, "enabled");
+      importButton.addListener("execute", ()=> this.importReferences(false));
+    
+      // Close button
+      let button1 = new qx.ui.form.Button();
+      button1.setLabel(this.tr('Close'));
+      composite1.add(button1);
+      button1.addListener("execute", ()=>  this.close());
+    },    
     
     /**
      * Create upload widget
@@ -107,17 +208,17 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
         return;
       }
 
-      var url = this.getApplication().getServerUrl();
+      let url = this.getApplication().getServerUrl();
 
       // form
-      var form = new uploadwidget.UploadForm('uploadFrm', url);
+      let form = new uploadwidget.UploadForm('uploadFrm', url);
       this.form = form;
       form.setParameter('application', 'bibliograph');
       form.setParameter('replace', true);
       form.setLayout(new qx.ui.layout.HBox());
 
       // upload button
-      var uploadField = new uploadwidget.UploadField('uploadfile', this.tr('1. Choose file'));
+      let uploadField = new uploadwidget.UploadField('uploadfile', this.tr('1. Choose file'));
       this.file = uploadField;
       form.add(uploadField, { flex : 1 });
 
@@ -136,7 +237,7 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
       form.addListener('completed', function(e) {
         this.hidePopup();
         uploadField.setFileName('');
-        var response = form.getIframeHtmlContent();
+        let response = form.getIframeHtmlContent();
         if (response.search(/qcl_file/) == -1) {
           dialog.Dialog.alert(response);
         } else {
@@ -174,7 +275,7 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
     processUpload : function(file)
     {
       this.showPopup(this.tr("Processing references..."));
-      var app = this.getApplication();
+      let app = this.getApplication();
       app.getRpcClient("import").send(
           "processUpload",
           [file, this.getFilter()],
@@ -198,12 +299,12 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
      */
     importReferences : function(importAll)
     {
-      var app = this.getApplication();
+      let app = this.getApplication();
 
       /*
        * ids to import => array or empty if all records
        */
-      var ids = this.listView.getSelectedIds();
+      let ids = this.listView.getSelectedIds();
       if ( importAll )
       {
         ids = [];
@@ -217,15 +318,15 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
       /*
        * target folder
        */
-      var targetFolderId = app.getFolderId();
+      let targetFolderId = app.getFolderId();
       if (!targetFolderId)
       {
         dialog.Dialog.alert(this.tr("Please select a folder first."));
         return false;
       }
-      var treeView = app.getWidgetById("app/treeview");
-      var nodeId = treeView.getController().getClientNodeId(targetFolderId);
-      var node = treeView.getTree().getDataModel().getData()[nodeId];
+      let treeView = app.getWidgetById("app/treeview");
+      let nodeId = treeView.getController().getClientNodeId(targetFolderId);
+      let node = treeView.getTree().getDataModel().getData()[nodeId];
       if (!node)
       {
         dialog.Dialog.alert(this.tr("Cannot determine selected folder. Please reload the folders."));
@@ -240,7 +341,7 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
       /*
        * send to server
        */
-      var targetDatasource = app.getDatasource();
+      let targetDatasource = app.getDatasource();
       this.showPopup(this.tr("Importing references..."));
       this.getApplication().getRpcClient("import").send(
         "importReferences", 

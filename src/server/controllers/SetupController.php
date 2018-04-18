@@ -330,7 +330,7 @@ class SetupController extends \app\controllers\AppController
   }
 
   //-------------------------------------------------------------
-  // CHECK METHODS
+  // SETUP METHODS
   //-------------------------------------------------------------  
 
   /**
@@ -431,7 +431,7 @@ class SetupController extends \app\controllers\AppController
    * Run migrations
    * @param $upgrade_from
    * @param $upgrade_to
-   * @return array
+   * @return array|false
    * @throws \Exception
    */
   protected function setupDoMigrations($upgrade_from, $upgrade_to)
@@ -603,7 +603,7 @@ class SetupController extends \app\controllers\AppController
 
   /**
    * Setup two example datasources
-   *
+   * @todo change name
    * @return array|boolean
    */
   protected function setupExampleDatasources()
@@ -626,6 +626,14 @@ class SetupController extends \app\controllers\AppController
         ],
         'roles' => ['user']
       ],
+      'bibliograph_import' => [
+        'config' => [
+          'title' => "Import",
+          'hidden' => 1,
+          'description' => "This database is used for importing data"
+        ],
+        'roles' => []
+      ],
     ];
 
     $count = 0;
@@ -647,7 +655,7 @@ class SetupController extends \app\controllers\AppController
       } catch (Exception $e) {
         Yii::error("Error saving datasource '$name':" . $e->getMessage());
       }
-      foreach ($data['roles'] as $roleId) {
+      foreach ((array)$data['roles'] as $roleId) {
         $datasource->link('roles', \app\models\Role::findByNamedId($roleId));
       }
       $count++;
