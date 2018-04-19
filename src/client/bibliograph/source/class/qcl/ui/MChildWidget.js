@@ -15,6 +15,7 @@
     Christian Boulanger (@cboulanger) info@bibliograph.org
 
 ************************************************************************ */
+/*global qx qcl */
 
 /**
  * Mixin providing methodds to deal with child widgets

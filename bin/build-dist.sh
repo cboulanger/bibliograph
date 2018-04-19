@@ -16,6 +16,7 @@ cd $CLIENT_SRC_DIR
 qx compile --target=$BUILD_TARGET
 cp -a $BUILD_TARGET-compiled/bibliograph $DIST_DIR
 cp -a $BUILD_TARGET-compiled/resource $DIST_DIR
+[[ -d $BUILD_TARGET-compiled/transpiled ]] && cp -a $BUILD_TARGET-compiled/transpiled $DIST_DIR
 cp $BUILD_TARGET-compiled/index.html $DIST_DIR
 
 # Server files

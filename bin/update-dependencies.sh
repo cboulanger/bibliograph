@@ -1,12 +1,19 @@
 #!/bin/bash
+echo " >>> Updating contribs..."
+pushd src/client/bibliograph >/dev/null
+qx contrib update
+qx contrib install
+popd >/dev/null
 
-pushd src/server
-echo "Updating composer packages..."
+echo " >>> Updating composer packages..."
+pushd src/server >/dev/null
 composer update
-pushd vendor
+pushd vendor >/dev/null
 [[ -d bower ]] || ln -s bower-asset/ bower
-popd
-popd
-pushd src/vcslib
+popd >/dev/null
+popd >/dev/null
+
+echo " >>> Updating cloned GitHub repos..."
+pushd src/vcslib >/dev/null
 bash install.sh
-popd
+popd >/dev/null

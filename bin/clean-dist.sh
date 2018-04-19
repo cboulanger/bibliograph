@@ -6,7 +6,7 @@ if [[ ! -d "$DIST_DIR" ]]; then
 fi
 
 # dist - Client files
-rm -rf $DIST_DIR/{bibliograph,resource} || true
+rm -rf $DIST_DIR/{bibliograph,resource,transpiled} || true
 rm $DIST_DIR/index.html || true
 
 # dist - Server files

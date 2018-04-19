@@ -1,23 +1,23 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
     "content-hash": "89e7b116fddf13b1a475ac53651a2af0",
     "packages": [
         {
             "name": "adldap2/adldap2",
-            "version": "v8.1.4",
+            "version": "v8.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Adldap2/Adldap2.git",
-                "reference": "2abf3c6cd68ba4d3239fbc761dee4484dfd170d0"
+                "reference": "54722408c68f12942fcbf4a1b666d90a178ddc5c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Adldap2/Adldap2/zipball/2abf3c6cd68ba4d3239fbc761dee4484dfd170d0",
-                "reference": "2abf3c6cd68ba4d3239fbc761dee4484dfd170d0",
+                "url": "https://api.github.com/repos/Adldap2/Adldap2/zipball/54722408c68f12942fcbf4a1b666d90a178ddc5c",
+                "reference": "54722408c68f12942fcbf4a1b666d90a178ddc5c",
                 "shasum": ""
             },
             "require": {
@@ -56,7 +56,7 @@
                 "ldap",
                 "windows"
             ],
-            "time": "2018-03-29T15:42:37+00:00"
+            "time": "2018-04-19T15:06:54+00:00"
         },
         {
             "name": "bmsrox/yii2-module-autoloader",

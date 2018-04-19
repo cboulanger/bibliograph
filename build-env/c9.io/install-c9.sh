@@ -67,10 +67,12 @@ echo " >>> Installing node v8.x."
 source ~/.nvm/nvm.sh
 nvm install 8 > /dev/null
 nvm use 8
-
+if ! [ "$(cat ~/.bashrc | grep nvm.sh)" ] ; then 
+    cat echo "source ~/.nvm/nvm.sh && nvm use 8" >> ~/.bashrc
+fi
 echo " >>> Installing project dependencies ..."
 rm package-lock.json
-npm install
+npm install > /dev/null
 
 echo " >>> Installing configuration file ..."
 cp $THIS_DIR/$BIB_CONF_FILE $BIB_CONF_DIR
@@ -79,4 +81,4 @@ sed -e "s/\$C9_USER/$C9_USER/g" --in-place $BIB_CONF_DIR/$BIB_CONF_FILE
 # start mysql server
 mysql-ctl start
 echo
-echo "Installation complete. You can now start the application."
+echo "Installation complete. Happy Coding!"
