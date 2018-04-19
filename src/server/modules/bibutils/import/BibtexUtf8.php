@@ -72,18 +72,63 @@ class BibtexUtf8 extends AbstractParser
     foreach ($records as $item) {
       $p = $item->getProperties();
       // fix bibtex parser issues and prevemt validation errors
+
+
       foreach ( $p as $key => $value ) {
+
+        // some implementations put different authors/editors in separate fields and attach a suffix
+        if ( starts_with($key, ["editor","author"]) and strlen($key) > 6 ){
+          $key = substr($key,0,6);
+          if( isset($p[$key]) ){
+            // add more that one author/editor field with a semicolon as separator
+            $value = $p[$key] . "; ";
+          }
+        }
         switch ($key){
           case "author":
           case "editor":
-            $p[$key] = str_replace("{", "", $p[$key]);
-            $p[$key] = str_replace("}", "", $p[$key]);
+            $p[$key] = str_replace("{", "", $value);
+            $p[$key] = str_replace("}", "", $value);
             break;
           case "date":
-            if( preg_match("/^[0-9]{4}$/", trim($p[$key]))) {
-              $p['year'] = $p[$key];
-              unset($p[$key]);
+            // non-standard, but often used
+            $year = date( "Y", strtotime($p[$key]));
+            if( $year ){
+              $p['year'] = $year;
             }
+          case "journal":
+          case "journaltitle":
+            // non-standard
+            $key = "journal";
+            if(isset($p['journalsubtitle']) ){
+              $value = $value . ". " . $p['journalsubtitle'];
+              unset($p['journalsubtitle']);
+            }
+            break;
+          case "journalsubtitle":
+            // non-standard
+            continue;
+          case "issue":
+            // non-standard
+            unset($p[$key]);
+            $key = "number";
+            break;
+          case "booksubtitle":
+            // non-standard
+            unset($p[$key]);
+            $key = "subtitle";
+            break;
+          case "shortjournal":
+            // non-standard
+            // use journal abbreviation only if we have no journal title
+            unset($p["shortjournal"]);
+            if( isset($p['journal'])) continue;
+            $key = "journal";
+            break;
+        }
+        // remove "opt" prefix
+        if( starts_with($key, "opt") ){
+          $key = substr($key, 3);
         }
         try {
           $columnSchema = Reference::getDb()->getTableSchema(Reference::tableName())->getColumn($key);

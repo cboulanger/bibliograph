@@ -1372,7 +1372,7 @@ msgstr ""
 
 msgctxt "app"
 msgid "This is the main folder of the database"
-msgstr "Datenbank"
+msgstr "Der Hauptordner der Datenbank"
 
 msgctxt "app"
 msgid "This is to inform you that you or somebody else has changed the password at %s."

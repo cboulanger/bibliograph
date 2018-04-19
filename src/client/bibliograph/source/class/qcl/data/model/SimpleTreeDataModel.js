@@ -56,16 +56,7 @@
  *                          // application-specific user data goes in here
  *                          foo: "bar",
  *                          ...
- *                      },
- *                      MDragAndDropSupport :
- *                      {
- *                          // Data required for the Drag & Drop mixin.
- *                          // When a mixin is included, its constructor
- *                          // should create this object, named according
- *                          // to the mixin or subclass name (empty or
- *                          // otherwise)
- *                      },
- *                      ... // Additional mixins or subclasses.
+ *                      }
  *                    },
  *
  *   // INTERNALLY-CALCULATED ATTRIBUTES

@@ -247,16 +247,16 @@ class ImportController extends AppController
 
   /**
    * Imports the references with the given ids to a target folder
-   * @param array $ids
+   * @param string $ids Comma-separated ids
    * @param string $targetDatasource
    * @param int $targetFolderId
-   * @return string "OK"
+   * @return string Diagnostic message
    * @throws \JsonRpc2\Exception
    */
-  public function actionImport( $ids, $targetDatasource, $targetFolderId )
+  public function actionImport( string $ids, string $targetDatasource, int $targetFolderId )
   {
     $this->requirePermission("reference.import");
-
+    $ids = explode(',',$ids);
     $refs = $this->findIn($this->datasource,"reference")
       ->where(['in','id',$ids])
       ->all();
@@ -271,7 +271,7 @@ class ImportController extends AppController
     }
 
     $commonAttributes = array_intersect(
-      array_keys($this->datasource::getTableSchema()->columns),
+      array_keys(Reference::getTableSchema()->columns),
       array_keys($targetReferenceClass::getTableSchema()->columns)
     );
     $count = 0;

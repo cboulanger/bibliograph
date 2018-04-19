@@ -6,6 +6,8 @@
 - [x] BUG: anonymous users are not purged
 - [x] BUG: Fix Group permissions
 - [x] FEAT: ACT: changing element type must clear filter
+- [x] BUG: Import in "Main" funktioniert nicht
+- [x] FEAT: Reimplemented import for BibTex-UTF8
 
 ### Priority: urgent
 
@@ -14,7 +16,6 @@
 - [ ] BUG: module autoloader requires debug mode (trying to serialize closures breaks app)
 - [ ] BUG: Disallow drop of references on folders in which they are already contained. 
 - [ ] BUG: author begins with "A" -> "missing term"
-- [ ] BUG: Z3950-Import in "Main" funktioniert nicht
 - [ ] BUG: Boolean columns must be NOT NULL DEFAULT 0 (z.B. data_User.anonymous)
 - [ ] BUG: User::getAllPermissions returns always the highest available set of permissions, regardless of the permissions of the group the current datasource belongs to. 
 - [ ] FEAT: Check log email target to report fatal errors

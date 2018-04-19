@@ -128,8 +128,6 @@ trait FolderDataTrait
     } elseif ( $markedDeleted ) {
       $icon = static::$icon['marked-deleted'];
       $type = "deleted";
-    } elseif ($parentId === 0){
-      $type = "top";
     } elseif ( $public ) {
       $icon = static::$icon['public'];
       $type = "folder";

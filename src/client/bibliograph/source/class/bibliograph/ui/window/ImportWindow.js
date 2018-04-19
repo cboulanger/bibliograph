@@ -276,13 +276,12 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
     importReferences : function(importAll)
     {
       let app = this.getApplication();
-
-      // ids to import => array or empty if all records
+      if(importAll){
+        let table =  this.listView.getTable();
+        table.getSelectionModel().addSelectionInterval(0,table.getTableModel().getRowCount());
+      }
       let ids = this.listView.getSelectedIds();
-      if ( importAll )
-      {
-        ids = [];
-      } else if ( !ids.length) {
+      if ( !ids.length) {
         dialog.Dialog.alert(this.tr("You have to select one or more reference to import."));
         return false;
       }
@@ -309,7 +308,7 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
       let targetDatasource = app.getDatasource();
       this.showPopup(this.tr("Importing references..."));
       this.getApplication().getRpcClient("import")
-        .send( "import", [ ids, targetDatasource, targetFolderId])
+        .send( "import", [ ids.join(","), targetDatasource, targetFolderId])
         .then( () => {
           this.importButton.setEnabled(true);
           this.hidePopup();
