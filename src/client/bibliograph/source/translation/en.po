@@ -244,6 +244,8 @@ msgstr ""
 #: bibliograph/ui/window/AccessControlTool.js:506
 #: bibliograph/ui/window/AccessControlTool.js:277
 #: bibliograph/ui/window/AccessControlTool.js:487
+#: bibliograph/ui/window/AccessControlTool.js:278
+#: bibliograph/ui/window/AccessControlTool.js:489
 msgid "Please enter the id of the new '%1'-Object"
 msgstr ""
 
@@ -252,6 +254,7 @@ msgstr ""
 #: bibliograph/ui/window/AccessControlTool.js:293
 #: bibliograph/ui/window/AccessControlTool.js:304
 #: bibliograph/ui/window/AccessControlTool.js:298
+#: bibliograph/ui/window/AccessControlTool.js:299
 msgid "Do you really want to delete '%1'?"
 msgstr ""
 
@@ -263,6 +266,7 @@ msgstr ""
 #: bibliograph/ui/window/AccessControlTool.js:329
 #: bibliograph/ui/window/AccessControlTool.js:556
 #: bibliograph/ui/window/AccessControlTool.js:536
+#: bibliograph/ui/window/AccessControlTool.js:538
 msgid "Loading data ..."
 msgstr ""
 
@@ -275,6 +279,7 @@ msgstr ""
 #: bibliograph/ui/window/AccessControlTool.js:359
 #: bibliograph/ui/window/AccessControlTool.js:370
 #: bibliograph/ui/window/AccessControlTool.js:340
+#: bibliograph/ui/window/AccessControlTool.js:341
 msgid "Edited element"
 msgstr ""
 
@@ -287,6 +292,8 @@ msgstr ""
 #: bibliograph/ui/window/AccessControlTool.js:420
 #: bibliograph/ui/window/AccessControlTool.js:389
 #: bibliograph/ui/window/AccessControlTool.js:391
+#: bibliograph/ui/window/AccessControlTool.js:390
+#: bibliograph/ui/window/AccessControlTool.js:392
 msgid "Link"
 msgstr ""
 
@@ -299,6 +306,8 @@ msgstr ""
 #: bibliograph/ui/window/AccessControlTool.js:433
 #: bibliograph/ui/window/AccessControlTool.js:402
 #: bibliograph/ui/window/AccessControlTool.js:404
+#: bibliograph/ui/window/AccessControlTool.js:403
+#: bibliograph/ui/window/AccessControlTool.js:405
 msgid "Unlink"
 msgstr ""
 
@@ -307,6 +316,7 @@ msgstr ""
 #: bibliograph/ui/window/AccessControlTool.js:447
 #: bibliograph/ui/window/AccessControlTool.js:458
 #: bibliograph/ui/window/AccessControlTool.js:429
+#: bibliograph/ui/window/AccessControlTool.js:430
 msgid "Linkable items"
 msgstr ""
 
@@ -315,6 +325,7 @@ msgstr ""
 #: bibliograph/ui/window/AccessControlTool.js:517
 #: bibliograph/ui/window/AccessControlTool.js:532
 #: bibliograph/ui/window/AccessControlTool.js:512
+#: bibliograph/ui/window/AccessControlTool.js:514
 msgid "Do you really want to delete the objects '%1'?"
 msgstr ""
 
@@ -456,6 +467,7 @@ msgstr ""
 
 #: bibliograph.ui.window.ImportWindowUi:30
 #: bibliograph/ui/window/ImportWindowUi.js:30
+#: bibliograph/ui/window/ImportWindow.js:102
 msgid "Import from file"
 msgstr ""
 
@@ -464,12 +476,15 @@ msgstr ""
 #: bibliograph/ui/window/ImportWindowUi.js:72
 #: bibliograph/ui/window/ImportWindowUi.js:67
 #: bibliograph/ui/window/ImportWindowUi.js:70
+#: bibliograph/ui/window/ImportWindow.js:138
+#: bibliograph/ui/window/ImportWindow.js:141
 msgid "3. Upload file"
 msgstr ""
 
 #: bibliograph.ui.window.ImportWindowUi:116
 #: bibliograph/ui/window/ImportWindowUi.js:116
 #: bibliograph/ui/window/ImportWindowUi.js:108
+#: bibliograph/ui/window/ImportWindow.js:184
 msgid "Import all records"
 msgstr ""
 
@@ -498,6 +513,7 @@ msgstr ""
 #: bibliograph/plugins/z3950/ImportWindow.js:222
 #: bibliograph/plugins/z3950/ImportWindow.js:221
 #: bibliograph/plugins/z3950/ImportWindow.js:220
+#: bibliograph/ui/window/ImportWindow.js:192
 msgid "Import selected records"
 msgstr ""
 
@@ -527,6 +543,7 @@ msgstr ""
 #: bibliograph/plugins/z3950/ImportWindow.js:229
 #: bibliograph/plugins/z3950/ImportWindow.js:228
 #: bibliograph/plugins/z3950/ImportWindow.js:227
+#: bibliograph/ui/window/ImportWindow.js:199
 msgid "Close"
 msgstr ""
 
@@ -630,16 +647,19 @@ msgstr ""
 
 #: bibliograph.ui.window.ImportWindow:120
 #: bibliograph/ui/window/ImportWindow.js:120
+#: bibliograph/ui/window/ImportWindow.js:223
 msgid "1. Choose file"
 msgstr ""
 
 #: bibliograph.ui.window.ImportWindow:132
 #: bibliograph/ui/window/ImportWindow.js:132
+#: bibliograph/ui/window/ImportWindow.js:235
 msgid "Uploading file..."
 msgstr ""
 
 #: bibliograph.ui.window.ImportWindow:176
 #: bibliograph/ui/window/ImportWindow.js:176
+#: bibliograph/ui/window/ImportWindow.js:258
 msgid "Processing references..."
 msgstr ""
 
@@ -659,6 +679,7 @@ msgstr ""
 #: bibliograph/plugins/z3950/ImportWindow.js:265
 #: bibliograph/plugins/z3950/ImportWindow.js:264
 #: bibliograph/ui/window/ImportWindow.js:213
+#: bibliograph/ui/window/ImportWindow.js:285
 msgid "You have to select one or more reference to import."
 msgstr ""
 
@@ -678,6 +699,7 @@ msgstr ""
 #: bibliograph/plugins/z3950/ImportWindow.js:272
 #: bibliograph/plugins/z3950/ImportWindow.js:271
 #: bibliograph/ui/window/ImportWindow.js:223
+#: bibliograph/ui/window/ImportWindow.js:292
 msgid "Please select a folder first."
 msgstr ""
 
@@ -697,6 +719,7 @@ msgstr ""
 #: bibliograph/plugins/z3950/ImportWindow.js:279
 #: bibliograph/plugins/z3950/ImportWindow.js:278
 #: bibliograph/ui/window/ImportWindow.js:231
+#: bibliograph/ui/window/ImportWindow.js:299
 msgid "Cannot determine selected folder. Please reload the folders."
 msgstr ""
 
@@ -716,6 +739,7 @@ msgstr ""
 #: bibliograph/plugins/z3950/ImportWindow.js:283
 #: bibliograph/plugins/z3950/ImportWindow.js:282
 #: bibliograph/ui/window/ImportWindow.js:236
+#: bibliograph/ui/window/ImportWindow.js:303
 msgid "Invalid target folder. You can only import into normal folders."
 msgstr ""
 
@@ -735,6 +759,7 @@ msgstr ""
 #: bibliograph/plugins/z3950/ImportWindow.js:290
 #: bibliograph/plugins/z3950/ImportWindow.js:289
 #: bibliograph/ui/window/ImportWindow.js:244
+#: bibliograph/ui/window/ImportWindow.js:309
 msgid "Importing references..."
 msgstr ""
 
@@ -1314,6 +1339,7 @@ msgstr ""
 #: bibliograph/ui/window/AccessControlTool.js:453
 #: bibliograph/ui/window/AccessControlTool.js:464
 #: bibliograph/ui/window/AccessControlTool.js:435
+#: bibliograph/ui/window/AccessControlTool.js:436
 msgid "No linkable items"
 msgstr ""
 
@@ -1532,5 +1558,6 @@ msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:229
 #: bibliograph/ui/window/AccessControlTool.js:443
+#: bibliograph/ui/window/AccessControlTool.js:444
 msgid "Filter by name here..."
 msgstr ""
