@@ -87,6 +87,7 @@ msgstr ""
 
 #: bibliograph.Application:181 bibliograph/Application.js:181
 #: bibliograph/Application.js:180 bibliograph/Application.js:197
+#: bibliograph/Application.js:194
 msgid "Missing server address. Please contact administrator."
 msgstr ""
 
