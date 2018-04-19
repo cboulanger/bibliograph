@@ -12,6 +12,7 @@
  * This is the main application class of "Bibliograph"
  *
  * @asset(bibliograph/*)
+ * @require(qx.log.appender.Native)
  */
 qx.Class.define("bibliograph.Application",
 {
@@ -49,11 +50,7 @@ qx.Class.define("bibliograph.Application",
     main : async function()
     {
       this.base(arguments);
-
-      if (qx.core.Environment.get("qx.debug")) {
-        qx.log.appender.Native;
-      }
-  
+      
       // application startup
       await bibliograph.Setup.getInstance().boot();
     },
