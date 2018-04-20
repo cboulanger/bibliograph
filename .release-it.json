@@ -1,7 +1,7 @@
 {
   "//see" : "https://github.com/webpro/release-it/blob/HEAD/conf/release-it.json",
   "non-interactive": true,
-  "buildCommand": "bash bin/build-dist.sh &> /dev/null",
+  "buildCommand": "bash bin/build-dist.sh",
   "npm": {
     "publish": false
   },
