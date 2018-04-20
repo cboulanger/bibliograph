@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Starts a server in "source" mode, i.e. running the uniminified sources
+# Compiles and starts the application from the source dir
 # This is currently MacOS only and should probably be a node script. 
 
 #set -o errexit # Exit on error
@@ -13,7 +13,8 @@ COMPILE_PATH="src/client/bibliograph"
 # first compiler pass
 echo "Compiling application..."
 pushd $COMPILE_PATH > /dev/null
-qx compile --target=$TARGET
+qx clean
+qx compile --target=$TARGET --clean
 popd > /dev/null  
 
 # 'Production' server

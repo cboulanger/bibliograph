@@ -2,24 +2,47 @@
   "environment": {
     "app.version" : "3.0.0-beta",
     "qx.icontheme" : "Tango",
-    "qx.debug" : true,
-    "app.serverUrl" : "../../../../server/web/?r="
+    "qx.debug" : true
   },
 
   "targets": [
     {
+      "//": "The local 'source' target",
       "type": "source",
       "outputPath": "source-compiled",
       "environment": {
+        "app.serverUrl" : "../../../../server/web/?r=",
         "app.mode" : "development"
       }
     },
     {
+      "//": "The local 'build' target",
       "type": "build",
       "outputPath": "build-compiled",
       "environment": {
-        "app.serverUrl" : "../server.php?r=",
+        "app.serverUrl" : "../../../../server/web/?r=",
         "app.mode" : "production"
+      }
+    },
+    {
+      "//": "The distribution 'source' target (for debugging on deployed instances, usually not needed)",
+      "type": "dist-source",
+      "targetClass": "SourceTarget",
+      "outputPath": "dist-source-compiled",
+      "environment": {
+        "app.serverUrl": "../server.php?r=",
+        "app.mode": "development"
+      }
+    },
+    {
+      "//": "The final distribution 'build' target",
+      "type": "dist-build",
+      "targetClass": "BuildTarget",
+      "outputPath": "dist-build-compiled",
+      "environment": {
+        "app.serverUrl" : "../server.php?r=",
+        "app.mode": "production",
+        "qx.debug" : false
       }
     }
   ],

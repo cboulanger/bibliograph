@@ -4,21 +4,23 @@
 
   http://www.bibliograph.org
 
-  Copyright: 
+  Copyright:
   2018 Christian Boulanger
 
-  License: 
+  License:
   MIT license
   See the LICENSE file in the project's top-level directory for details.
 
-  Authors: 
+  Authors:
   Christian Boulanger (@cboulanger) info@bibliograph.org
 
 ************************************************************************ */
 
+/* global qx qcl bibliograph */
+
 /**
  * This is a qooxdoo singleton class
- * 
+ *
  */
 qx.Class.define("bibliograph.Setup", {
   extend: qx.core.Object,
@@ -54,16 +56,16 @@ qx.Class.define("bibliograph.Setup", {
 
       // datasource store, configures itself and responds to authentication events
       bibliograph.store.Datasources.getInstance();
-      
+
       let app = this.getApplication();
-      
+
       // save state from querystring
       this.saveApplicationState();
 
       // create main UI Layout
       bibliograph.ui.Windows.getInstance().create();
       bibliograph.ui.MainLayout.getInstance().create();
-      
+
       // show the splash screen
       this.createPopup({
         icon : "bibliograph/icon/bibliograph-logo.png",
@@ -74,8 +76,8 @@ qx.Class.define("bibliograph.Setup", {
       this.showPopup(this.getSplashMessage(), null);
       // application loading popup
       app.createPopup();
-      
-      // blocker      
+
+      // blocker
       this.createBlocker();
 
       //  allow incoming server dialogs
@@ -84,9 +86,9 @@ qx.Class.define("bibliograph.Setup", {
       // server setup
       this.showPopup(this.getSplashMessage(this.tr("Setting up application...")));
       await this.checkServerSetup();
-      
+
       // authenticate
-      this.showPopup(this.getSplashMessage(this.tr("Connecting with server...")));    
+      this.showPopup(this.getSplashMessage(this.tr("Connecting with server...")));
       await this.authenticate();
       qx.event.message.Bus.dispatch(new qx.event.message.Message("connected"));
 
@@ -95,9 +97,9 @@ qx.Class.define("bibliograph.Setup", {
       await this.loadConfig();
       await this.loadUserdata();
 
-      // notify about user login 
+      // notify about user login
       qx.event.message.Bus.dispatchByName(
-        "user.loggedin", 
+        "user.loggedin",
         // @todo - we need a shortcut for this
         this.getApplication().getAccessManager().getUserManager().getActiveUser()
       );
@@ -113,12 +115,12 @@ qx.Class.define("bibliograph.Setup", {
       this.hidePopup();
       this.createPopup();
 
-      // restore app state 
+      // restore app state
       this.restoreApplicationState();
-      
+
       // initialize subscribers to messages that come from server
       this.initSubscribers();
-      
+
       // message transport
       //this.startPolling();
 
@@ -129,10 +131,10 @@ qx.Class.define("bibliograph.Setup", {
     ---------------------------------------------------------------------------
       SETUP METHODS
     ---------------------------------------------------------------------------
-    */  
-    
-    
-    /** 
+    */
+
+
+    /**
      * save some intial application states which would otherwise be overwritten
      */
     saveApplicationState : function(){
@@ -160,10 +162,10 @@ qx.Class.define("bibliograph.Setup", {
     getSplashMessage : function(text) {
       let app = this.getApplication();
       return app.getVersion() + "<br />" + app.getCopyright() + "<br />" + (text || "");
-    },  
+    },
 
     /**
-     * This will initiate server setup. When done, server will send a 
+     * This will initiate server setup. When done, server will send a
      * "bibliograph.setup.done" message.
      */
     checkServerSetup : async function(){
@@ -189,9 +191,9 @@ qx.Class.define("bibliograph.Setup", {
       if( ! response ) {
         return this.error("Cannot authenticate with server: " + client.getErrorMessage() );
       }
-      let { message, token, sessionId } = response; 
+      let { message, token, sessionId } = response;
       this.info(message);
-      
+
       am.setToken(token);
       am.setSessionId(sessionId);
       this.info("Acquired access token.");
@@ -235,7 +237,7 @@ qx.Class.define("bibliograph.Setup", {
           this.warn(`Could not initialize plugin '${plugin.getName()}': ${e}`);
         }
       }
-    },  
+    },
 
     /**
      * Initialize  subscribers for server messages
@@ -247,7 +249,7 @@ qx.Class.define("bibliograph.Setup", {
       // listen to reload event
       bus.subscribe("application.reload", function(e){
         window.location.reload();
-      }, this);       
+      }, this);
 
       // remotely log to the browser console
       bus.subscribe("console.log", function(e){
@@ -274,7 +276,7 @@ qx.Class.define("bibliograph.Setup", {
         var data = e.getData();
         window.location.replace(data.url);
       }, this);
-      
+
       // reload the main list view
       bus.subscribe("mainListView.reload", function(e){
         var data = e.getData();
@@ -287,10 +289,10 @@ qx.Class.define("bibliograph.Setup", {
       bus.subscribe("loginDialog.show", function(){
         this.getApplication().getWidgetById("app/windows/login").show();
       }, this);
-    },  
+    },
 
     /**
-     * Restores the state of the origininal URL 
+     * Restores the state of the origininal URL
      */
     restoreApplicationState : function()
     {

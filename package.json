@@ -30,10 +30,10 @@
     "new-log": "bash bin/new-log.sh",
     "create-migration": "bash bin/create-migration.sh",
     "translation": "cd src/server && php yii message config/i18n.php",
-    "build-dist": "bash bin/clean-dist.sh && bash bin/build-dist.sh",
-    "test-dist": "bash bin/test-dist.sh",
-    "clean-dist": "bash bin/clean-dist.sh",
-    "release": "bash bin/clean-dist.sh && npx release-it --preRelease=beta"
+    "dist-create": "bash bin/dist-clean.sh && bash bin/dist-build.sh $1",
+    "dist-test": "bash bin/dist-test.sh",
+    "dist-clean": "bash bin/dist-clean.sh",
+    "release": "bash bin/dist-clean.sh && npx release-it --preRelease=beta"
   },
   "author": "",
   "license": "ISC",
@@ -71,6 +71,7 @@
       "qcl": true,
       "dialog": true,
       "bibliograph": true
-    }
+    },
+    "semi" : "always"
   }
 }

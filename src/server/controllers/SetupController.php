@@ -197,7 +197,7 @@ class SetupController extends \app\controllers\AppController
       }
       Yii::$app->config->setKeyDefault('app.version', $upgrade_from);
     } else {
-      Yii::warning("Setup of version '$upgrade_from' failed.");
+      Yii::warning("Setup of version '$upgrade_to' failed.");
       Yii::debug([
         'errors'   => $this->errors,
         'messages' => $this->messages
