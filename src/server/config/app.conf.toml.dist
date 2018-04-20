@@ -89,7 +89,7 @@ enabled = false
 use_groups = true
 
 # the host of the ldap server
-host = ldap.example.com
+host = "ldap.example.com"
 
 # the port listening for ldap connections
 port = 389
@@ -117,7 +117,7 @@ group_name_attr = "description"
 
 # if the LDAP database only stores the user name part of the users'
 # e-mail address, you can provide the domain part here
-mail_domain = example.com
+mail_domain = "example.com"
 
 [access]
 # whether users are attached to roles directly ("yes") or have roles
