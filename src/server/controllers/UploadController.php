@@ -28,8 +28,14 @@ class UploadController extends \yii\web\Controller
     /** @var FileUpload $file */
     $file = FileUpload::getInstanceByName('file');
     if( ! $file->hasError ) {
-      $file->save();
+      $path = $file->save();
+      if ( $path === false ){
+        Yii::warning('Saving file failed: ' . $file->error);
+      } else {
+        Yii::debug("Uploaded file successfully saved to '$path'");
+      }
     } else {
+      Yii::warning('File upload failed: ' . $file->error);
       return $file->error;
     }
   }

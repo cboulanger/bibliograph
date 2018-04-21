@@ -26,14 +26,11 @@ use app\models\Folder;
 use app\models\Reference;
 use app\models\Session;
 use app\modules\bibutils\import\AbstractParser;
-use lib\exceptions\UserErrorException;
-use Sse\Data;
-use Yii;
-
-use app\controllers\AppController;
 use app\models\ImportFormat;
+use lib\exceptions\UserErrorException;
+use yii\base\InvalidConfigException;
 use yii\db\Exception;
-use yii\db\StaleObjectException;
+use Yii;
 
 /**
  *
@@ -107,15 +104,18 @@ class ImportController extends AppController
   public function actionImportFormats()
   {
     $importFormats = ImportFormat::find()->where(['active' => 1])->orderBy("name")->all();
-    $listData = array( array(
+    $listData = [[
       'value' => null,
-      'label' => Yii::t('app', "2. Choose import format" )
-    ) );
+      'label' => Yii::t('app', "2. Choose import format" ),
+      'description' => "",
+    ]];
+    /** @var ImportFormat $format */
     foreach( $importFormats as $format ){
-      $listData[] = array(
+      $listData[] = [
         'value' => $format->namedId,
-        'label' => $format->name
-      );
+        'label' => $format->name,
+        'description' => $format->description
+      ];
     }
     return $listData;
   }
@@ -270,10 +270,15 @@ class ImportController extends AppController
       throw new UserErrorException("The target folder #$targetFolderId does not exist.");
     }
 
-    $commonAttributes = array_intersect(
-      array_keys(Reference::getTableSchema()->columns),
-      array_keys($targetReferenceClass::getTableSchema()->columns)
-    );
+    try {
+      $commonAttributes = array_intersect(
+        array_keys(Reference::getTableSchema()->columns),
+        array_keys($targetReferenceClass::getTableSchema()->columns)
+      );
+    } catch (InvalidConfigException $e) {
+      Yii::error($e);
+      throw new UserErrorException($e->getMessage());
+    }
     $count = 0;
     /** @var Reference $ref */
     foreach ($refs as $ref) {

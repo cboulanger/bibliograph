@@ -30,28 +30,25 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
      CONSTRUCTOR
   *****************************************************************************
   */
-
-  /**
-   * @todo rewrite the cache stuff!
-   */
+  
   construct : function()
   {
     this.base(arguments);
     this.createPopup();
     this.createUi();
     qx.lang.Function.delay(()=>{
-      this.listView.addListenerOnce("tableReady", function() {
+      this.listView.addListenerOnce("tableReady", () => {
         let controller = this.listView.getController();
-        function enableButtons (){
+        let enableButtons = () => {
           this.importButton.setEnabled(true);
           this.listView.setEnabled(true);
           this.hidePopup();
-        }
+        };
         controller.addListener("blockLoaded", enableButtons, this);
-        controller.addListener("statusMessage", function(e){
+        controller.addListener("statusMessage", e => {
           this.showPopup(e.getData());
           qx.lang.Function.delay( enableButtons, 1000, this);
-        }, this);
+        });
       }, this);
     },100);
   },
@@ -90,11 +87,9 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
      * Apply filter property
      */
     _applyFilter : function(value, old) {
-      if (this.uploadButton)
-      {
-        this.uploadButton.setEnabled(value !== null && this.file.getFieldValue != '');
+      if (this.uploadButton){
+        this.uploadButton.setEnabled(value !== null && this.file.getFieldValue !== '');
       }
-
     },
   
     createUi : function()
@@ -116,20 +111,23 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
       this.toolBar = toolBar;
       toolBar.setSpacing(10);
       this.add(toolBar);
-    
+  
+      // invisible upload form with visible button
+      let form = this.createUploadForm();
+      toolBar.add(form, { flex : 1 });
+      
       // import filter
       let importFilterStore = new qcl.data.store.JsonRpcStore("import");
       qx.event.message.Bus.subscribe("bibliograph.setup.completed",()=>{
         importFilterStore.setAutoLoadParams([true]);
         importFilterStore.setAutoLoadMethod("import-formats");
       });
-      toolBar.add(this.createUploadWidget(), { flex : 1 });
       let importFilterSelectBox = new qx.ui.form.SelectBox();
       importFilterSelectBox.setWidth(200);
       importFilterSelectBox.setMaxHeight(25);
-      toolBar.add(importFilterSelectBox);
-      let qclController1 = new qx.data.controller.List(null, importFilterSelectBox, "label");
-      importFilterStore.bind("model", qclController1, "model");
+      toolBar.add(importFilterSelectBox,{ flex : 1 });
+      let selectboxController1 = new qx.data.controller.List(null, importFilterSelectBox, "label");
+      importFilterStore.bind("model", selectboxController1, "model");
       importFilterSelectBox.bind("selection", this, "filter", {
         converter : s => (s.length ? s[0].getModel().getValue() : null)
       });
@@ -139,12 +137,25 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
       this.uploadButton = uploadButton;
       uploadButton.setEnabled(false);
       uploadButton.setLabel(this.tr('3. Upload file'));
-      toolBar.add(uploadButton);
+      toolBar.add(uploadButton, { flex : 1 });
       uploadButton.addListener("execute", () => {
         this.importButton.setEnabled(false);
         this.uploadButton.setEnabled(false);
         this.form.send();
       });
+      
+      // Label for details on the import filter
+      let helpText = new qx.ui.basic.Label(this.tr("Select the file with data to import ..."));
+      helpText.setHeight(30);
+      this.helpText = helpText;
+      this.add(helpText);
+      importFilterSelectBox.addListener("changeSelection", e => {
+        let s = e.getData();
+        let description = s.length && s[0].getModel().getDescription();
+        if (description) helpText.setValue(description);
+      });
+      
+      // stack - don't remember what that was for
       let stack1 = new qx.ui.container.Stack();
       this.add(stack1, { flex : 1 });
     
@@ -203,8 +214,9 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
     
     /**
      * Create upload widget
+     * @return {uploadwidget.UploadButton}
      */
-    createUploadWidget : function()
+    createUploadForm : function()
     {
       let uploadwidget = window.uploadwidget;
       if( ! uploadwidget ){
@@ -219,17 +231,26 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
       this.form = form;
       form.setLayout(new qx.ui.layout.HBox());
 
-      // upload button
+      // upload button @todo grow button
       let uploadField = new uploadwidget.UploadField('file', this.tr('1. Choose file'));
       this.file = uploadField;
-      form.add(uploadField, { flex : 1 });
-
+      form.add(uploadField);
+      uploadField.getChildControl("textfield").set({ visibility : "excluded", width: 0 });
+      uploadField._getLayout().setColumnFlex(0,0);
+      uploadField._getLayout().setColumnFlex(1,1);
+      
       // callback when file is selected
-      uploadField.addListener('changeFileName', function(e) {
-        f
+      uploadField.addListener('changeFileName', e => {
+        let filename = e.getData() || '';
+        this.uploadButton.setEnabled(filename !== '' && this.getFilter() !== null);
+        if( filename ){
+          let msg = this.tr("Choose import format of '%1'", filename.replace(/C:\\fakepath\\/,"") );
+          this.helpText.setValue(msg);
+        } else {
+          this.helpText.setValue(this.tr('Please select the file with data to import...'));
+        }
         form.setParameter('auth_token', this.getApplication().getAccessManager().getToken());
-        this.uploadButton.setEnabled(e.getData() !== '' && this.getFilter() !== null);
-      }, this);
+      });
 
       // callback when file is sent to server
       form.addListener('sending', function(e) {
