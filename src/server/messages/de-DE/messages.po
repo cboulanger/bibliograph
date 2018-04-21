@@ -851,7 +851,7 @@ msgid "Miscellaneous"
 msgstr "Sonstige Veröffentlichung"
 
 msgctxt "app"
-msgid "Missing administrator email in bibliograph.ini.php."
+msgid "Missing administrator email in app.conf.toml."
 msgstr ""
 
 msgctxt "app"

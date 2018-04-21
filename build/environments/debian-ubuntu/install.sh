@@ -56,9 +56,9 @@ npm link mocha
 pushd src/client/bibliograph
 qx contrib update
 qx contrib install
-qx compile ../../../build-env/debian-ubuntu/compile.json --all-targets 
+qx compile ../../../build/environments/debian-ubuntu/compile.json --all-targets
 popd
-cp build-env/debian-ubuntu/bibliograph.ini.php.dist src/server/config/bibliograph.ini.php
+cp build/environments/debian-ubuntu/app.conf.toml.dist src/server/config/app.conf.toml
 
 section "Setting up Yii2 backend..."
 pushd src/server/vendor
@@ -74,7 +74,7 @@ mysql -e "CREATE USER 'bibliograph'@'localhost' IDENTIFIED BY 'bibliograph';"
 mysql -e "GRANT ALL PRIVILEGES ON bibliograph.* TO 'bibliograph'@'localhost';"
 
 section "Installation finished."
-echo "Please review and adapt the 'src/server/config/bibliograph.ini.php' config file:"
+echo "Please review and adapt the 'src/server/config/app.conf.toml' config file:"
 echo "- Enter the email address of the administrator in the [email] section (The application"
 echo "  won't start otherwise) "
 echo "- If you use an LDAP server for authentication, adapt the settings in the [ldap] section."

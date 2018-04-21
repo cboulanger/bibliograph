@@ -85,8 +85,8 @@ done
 
 # ------- CONFIG --------
 echo "  >>> Adding configuration data ..."
-cat bibliograph.ini.php \
+cat app.conf.toml \
   | sed -r s/\\{\\{database\\}\\}/$TARGET_DB/g \
-  > $TARGET_DIR/server/config/bibliograph.ini.php
+  > $TARGET_DIR/server/config/app.conf.toml
 
 echo "Done. Open application at $HOST/bibliograph.$VERSION"

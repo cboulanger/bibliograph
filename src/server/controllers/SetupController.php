@@ -392,7 +392,7 @@ class SetupController extends \app\controllers\AppController
     $adminEmail = Yii::$app->config->getIniValue("email.admin");
     if (!$adminEmail) {
       return [
-        'error' => Yii::t('app', "Missing administrator email in bibliograph.ini.php.")
+        'error' => Yii::t('app', "Missing administrator email in app.conf.toml.")
       ];
     }
     return [

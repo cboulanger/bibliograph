@@ -25,7 +25,7 @@ fi
 if [ "$BIB_USE_HOST_MYSQL" = "yes" ]; then
   HOST_IP=$(netstat -nr | grep '^0\.0\.0\.0' | awk '{print $2}')
   echo "Accessing MySql Server on $HOST_IP from $CLIENT_IP"
-  sed -i.bak "s/0\.0\.0\.0/$HOST_IP/" $BIB_CONF_DIR/bibliograph.ini.php
+  sed -i.bak "s/0\.0\.0\.0/$HOST_IP/" $BIB_CONF_DIR/app.conf.toml
   AUTH_ARGS="-u$BIB_MYSQL_USER -p$BIB_MYSQL_PASSWORD -h$HOST_IP"
   GRANTEE="'bibliograph'@'$CLIENT_IP'"
 fi
