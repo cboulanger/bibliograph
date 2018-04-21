@@ -6,7 +6,7 @@ DIST_DIR=$TOP_DIR/dist
 CLIENT_SRC_DIR=$TOP_DIR/src/client/bibliograph
 SERVER_SRC_DIR=$TOP_DIR/src/server
 VERSION=$(node -p -e "require('$TOP_DIR/package.json').version")
-QX_CMD=$TOP_DIR/src/vcslib/qooxdoo-compiler/qx > dev/null
+QX_CMD=$TOP_DIR/src/vcslib/qooxdoo-compiler/qx
 
 if [[ ! -d "$DIST_DIR" ]]; then
     echo "Cannot find 'dist' subdirectory - are you in the top folder?"
@@ -17,7 +17,7 @@ echo "Building distributable package of Bibliograph from '$BUILD_TARGET' build t
 
 echo " >>> Building client ..."
 cd $CLIENT_SRC_DIR
-$QX_CMD compile --target=$BUILD_TARGET --clean
+$QX_CMD compile --target=$BUILD_TARGET --clean --feedback=false
 
 cp -a $BUILD_TARGET-compiled/bibliograph $DIST_DIR
 cp -a $BUILD_TARGET-compiled/resource $DIST_DIR

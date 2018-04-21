@@ -16,7 +16,7 @@ mysql.server start
 
 # open browser
 cd $DIST_DIR
-open -a Safari http://$HOST
+open -a "Google Chrome" http://$HOST
 
 # start webserver (stops when script ends)
 php -S $HOST
