@@ -12,22 +12,16 @@
  * This is the main application class of "Bibliograph"
  *
  * @asset(bibliograph/*)
- * @require(qx.log.appender.Native)
  */
 qx.Class.define("bibliograph.Application",
 {
   extend : qx.application.Standalone,
   include : [ bibliograph.MApplicationState, qcl.ui.MLoadingPopup ],
-
-
-  /*
-  *****************************************************************************
-     MEMBERS
-  *****************************************************************************
-  */
+  
   statics:{
     /**
      * Widget ids as static constants
+     * @todo use or remove
      */
     ids : {
       app : {
@@ -35,24 +29,23 @@ qx.Class.define("bibliograph.Application",
       }
     }
   },
-
-  /*
-  *****************************************************************************
-     MEMBERS
-  *****************************************************************************
-  */
+  
   members :
   {
     /**
      * This method contains the initial application code and gets called 
      * during startup of the application
      */
-    main : async function()
+    main : function()
     {
       this.base(arguments);
       
+      if (qx.core.Environment.get("qx.debug")){
+        void qx.log.appender.Native;
+      }
+      
       // application startup
-      await bibliograph.Setup.getInstance().boot();
+      bibliograph.Setup.getInstance().boot();
     },
 
     /*
@@ -75,7 +68,7 @@ qx.Class.define("bibliograph.Application",
      * @return {String}
      */
     getCopyright : function() {
-      var year = (new Date).getFullYear();
+      let year = (new Date).getFullYear();
       return "2003-" + year + " (c) Christian Boulanger";
     },         
 
@@ -261,8 +254,6 @@ qx.Class.define("bibliograph.Application",
     getWidgetById : function(id)
     {
       return this.__widgets[id];
-    },
-
-   
+    }
   }
 });

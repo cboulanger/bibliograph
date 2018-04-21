@@ -71,7 +71,6 @@
       "qcl": true,
       "dialog": true,
       "bibliograph": true
-    },
-    "semi" : "always"
+    }
   }
 }

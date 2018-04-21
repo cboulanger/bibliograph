@@ -24,6 +24,7 @@ class UploadController extends \yii\web\Controller
    */
   public function actionIndex()
   {
+    \Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
     /** @var FileUpload $file */
     $file = FileUpload::getInstanceByName('file');
     if( ! $file->hasError ) {

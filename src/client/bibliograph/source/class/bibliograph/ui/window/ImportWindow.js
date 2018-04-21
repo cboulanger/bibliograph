@@ -226,6 +226,7 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
 
       // callback when file is selected
       uploadField.addListener('changeFileName', function(e) {
+        f
         form.setParameter('auth_token', this.getApplication().getAccessManager().getToken());
         this.uploadButton.setEnabled(e.getData() !== '' && this.getFilter() !== null);
       }, this);
@@ -239,9 +240,9 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
       form.addListener('completed', function(e) {
         this.hidePopup();
         uploadField.setFileName('');
-        let response = form.getIframeHtmlContent();
+        let response = form.getIframeHtmlContent().trim();
         // response is empty for success or an error message
-        if(response) {
+        if (response.length) {
           dialog.Dialog.error(response.substr(0,100));
         } else {
           this.processUpload();
