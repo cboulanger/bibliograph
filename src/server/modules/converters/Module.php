@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\bibutils;
+namespace app\modules\converters;
 
 use app\models\ImportFormat;
 use app\modules\converters\import\AbstractParser;
@@ -15,7 +15,7 @@ class Module extends \lib\Module
   protected $version = "0.0.1";
 
   protected $install_classes = [
-    'import' =>['Bibtex']
+    'import' =>['BibtexUtf8']
   ];
 
   /**
@@ -28,7 +28,6 @@ class Module extends \lib\Module
   {
     foreach ($this->install_classes as $converterType => $converterData) {
       $registryClass = sprintf("\\app\\models\\%sFormat", ucfirst($converterType));
-      $registryClass::deleteAll(['type' => 'bibutils']);
       foreach ($converterData as $install_class) {
         try {
           $converterClass = sprintf("\\app\\modules\\bibutils\\%s\\%s", $converterType, $install_class);

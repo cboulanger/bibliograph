@@ -6,7 +6,7 @@
  * Time: 09:04
  */
 
-namespace app\modules\bibutils\import;
+namespace app\modules\converters\import;
 use lib\exceptions\UserErrorException;
 use Yii;
 use yii\base\BaseObject;

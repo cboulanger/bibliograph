@@ -21,6 +21,7 @@
 
 namespace app\modules\bibutils\import;
 
+use app\modules\converters\import\AbstractParser;
 use Yii;
 use app\models\Reference;
 use lib\bibtex\BibtexParser;
@@ -28,18 +29,18 @@ use lib\bibtex\BibtexParser;
 /**
  * Parser for UTF-8 encoded BibTeX files
  */
-class BibtexUtf8 extends AbstractParser
+class Bibtex extends AbstractParser
 {
 
   /**
    * @inheritdoc
    */
-  public $id = "bibtexutf8";
+  public $id = "bibtex";
 
   /**
    * @inheritdoc
    */
-  public $name = "BibTex with UTF-8 character encoding";
+  public $name = "BibTex with LaTeX character encoding";
 
   /**
    * @inheritdoc
@@ -55,7 +56,7 @@ class BibtexUtf8 extends AbstractParser
   /**
    * @inheritdoc
    */
-  public $description = "This importer expects the BibTeX format in UTF-8. It does not convert LaTeX characters such as \\\"{a}";
+  public $description = "This importer expects BibTeX data with the original 7-bit LaTeX encoding";
 
   /**
    * @inheritdoc

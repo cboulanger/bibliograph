@@ -602,16 +602,14 @@ class SetupController extends \app\controllers\AppController
   }
 
   /**
-   * Setup two example datasources
+   * Setup datasources
    * @todo change name
    * @return array|boolean
    */
-  protected function setupExampleDatasources()
+  protected function setupDatasources()
   {
     // only create example databases if this is a new installation
-    if( ! $this->isNewInstallation) return false;
-
-    $datasources = [
+    $datasources = !$this->isNewInstallation ? [] : [
       'datasource1' => [
         'config' => [
           'title' => "Example Database 1",
@@ -625,7 +623,11 @@ class SetupController extends \app\controllers\AppController
           'description' => "This database is visible only for logged-in users"
         ],
         'roles' => ['user']
-      ],
+      ]
+    ];
+
+    // Import
+    $datasources = array_merge( $datasources, [
       'bibliograph_import' => [
         'config' => [
           'title' => "Import",
@@ -634,7 +636,7 @@ class SetupController extends \app\controllers\AppController
         ],
         'roles' => ['user']
       ],
-    ];
+    ]);
 
     $count = 0;
     $found = 0;
@@ -663,8 +665,8 @@ class SetupController extends \app\controllers\AppController
 
     return [
       'message' => $found == $count ?
-        Yii::t('app', 'Example databases already existed.') :
-        Yii::t('app', 'Example databases were created.')
+        Yii::t('app', 'Datasources already existed.') :
+        Yii::t('app', 'Created datasources.')
     ];
   }
 
