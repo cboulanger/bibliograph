@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-BUILD_TARGET=${1:-source}
+BUILD_TARGET=${1:-dist-build}
 TOP_DIR=$(pwd)
 DIST_DIR=$TOP_DIR/dist
 CLIENT_SRC_DIR=$TOP_DIR/src/client/bibliograph
@@ -14,10 +14,11 @@ fi
 
 echo
 echo "Building distributable package of Bibliograph from '$BUILD_TARGET' build target"
+echo "using qx executable at $QX_CMD"
 
 echo " >>> Building client ..."
 cd $CLIENT_SRC_DIR
-$QX_CMD compile --target=$BUILD_TARGET --clean --feedback=false
+$QX_CMD compile --target=$BUILD_TARGET --clean
 
 cp -a $BUILD_TARGET-compiled/bibliograph $DIST_DIR
 cp -a $BUILD_TARGET-compiled/resource $DIST_DIR
