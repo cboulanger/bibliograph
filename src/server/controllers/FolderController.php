@@ -216,6 +216,8 @@ class FolderController extends AppController //implements ITreeController
       $separatedValues = array_unique($separatedValues);
       sort($separatedValues);
       foreach( $separatedValues as $value){
+        $value = trim($value);
+        if(!$value) continue;
         $this->virtualFolderId-=1;
         $node = $this->createVirtualFolder([
           'type'        => 'virtual',
