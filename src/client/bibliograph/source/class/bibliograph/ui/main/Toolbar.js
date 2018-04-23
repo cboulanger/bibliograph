@@ -349,6 +349,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       });
       
       // search help button
+      // @todo reimplement
       let helpButton = new qx.ui.toolbar.Button();
       helpButton.setIcon("bibliograph/icon/16/help.png");
       helpButton.setMarginRight(5);
@@ -360,7 +361,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
         hwin.show();
         hwin.center();
       }, this);
-      return [searchButton, cancelButton, helpButton];
+      return [searchButton, cancelButton /*, helpButton*/ ];
     }
   }
 });

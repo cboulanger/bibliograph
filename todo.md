@@ -40,6 +40,7 @@
 - [ ] FEAT: Implement setup Wizard
 - [ ] FEAT: "Orphaned" folder should contain references that do not have a parent
 - [ ] FEAT: Add "Active" Checkbox to user editor
+- [ ] FEAT: Reimplement Search Help window
 
 ### Priority: low
 - [ ] FEAT: Add "serverOnly" column to data_Config (true/false/null) and remove from config data sent to client
