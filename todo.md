@@ -12,30 +12,32 @@
 ### Priority: urgent
 
 ### Priority: high
+- [ ] BUG: Delete, Export, Copy, Move buttons enabled for Anonymous
+- [ ] BUG: Drag & Drop not enabled after re-login as authorized user
+- [ ] BUG: Move/Copy Windows blank
 - [ ] BUG: Empty Trash does not delete references
 - [ ] BUG: module autoloader requires debug mode (trying to serialize closures breaks app)
 - [ ] BUG: Disallow drop of references on folders in which they are already contained. 
-- [ ] BUG: author begins with "A" -> "missing term"
+- [ ] BUG: Query `author begins with "A"` -> "missing term"
 - [ ] BUG: Boolean columns must be NOT NULL DEFAULT 0 (z.B. data_User.anonymous)
-- [ ] BUG: User::getAllPermissions returns always the highest available set of permissions, regardless of the permissions of the group the current datasource belongs to. 
-- [ ] FEAT: Check log email target to report fatal errors
-- [ ] FEAT: Tests: Make Travis ~~great~~ work again
+- [ ] FEAT: User::getAllPermissions returns always the highest available set of permissions, regardless of the permissions of the group the current datasource belongs to. Requires rewriting of  `$this->requirePermission` to pass the datasource / datasource name
 - [ ] FEAT: Re-implement Export
-- [ ] FEAT: Re-implement Backup
 - [ ] FEAT: Allow adding top folders
-- [ ] FEAT: Allow migrations via permission, not prod/dev-mode
-- [ ] FEAT: Transform compile.json into compile.js (to allow to update env var "app.version" etc.)
+- [ ] FEAT: Tests: Make Travis ~~great~~ work again
 
 ### Priority: normal
+- [ ] FEAT: Transform compile.json into compile.js (to allow to update env var "app.version" etc.)
 - [ ] FEAT: Reimplement account management via email
+- [ ] FEAT: Check log email target to report fatal errors
 - [ ] FEAT: Reimplement Search Help
 - [ ] FEAT: Add missing translations, replace %s by {1}
 - [ ] FEAT: Make UserErrorException a JSONRPC error which is caught on the client, instead of a Dialog event. 
+- [ ] FEAT: Re-implement Backup
 - [ ] FEAT: Reimplement "New User" in Access Control Tool and System dialogs
 - [ ] FEAT: Add "Re-install modules" button in Systems menu
 - [ ] FEAT: Remove migrations table for deleted datasources
+- [ ] FEAT: Allow migrations via permission, not prod/dev-mode
 - [ ] FEAT: Implement setup Wizard
-- [ ] FEAT: Rewrite Yii2 configuration using M1/Var
 - [ ] FEAT: "Orphaned" folder should contain references that do not have a parent
 - [ ] FEAT: Add "Active" Checkbox to user editor
 
@@ -51,6 +53,7 @@
 - [ ] FEAT: Reimplememt help window
 - [ ] FEAT: validate email configuration 
 - [ ] FEAT: Change virtual folder icon
+- [ ] FEAT: Rewrite Yii2 configuration using M1/Var
 
 ### Code cleanup
 - [ ] Clear up the conceptual mess concerning "schema": datasource schema/reference schema -> "repository"?
