@@ -213,6 +213,7 @@ class FolderController extends AppController //implements ITreeController
           $separatedValues[]=$value;
         }
       }
+      $separatedValues = array_unique($separatedValues);
       sort($separatedValues);
       foreach( $separatedValues as $value){
         $this->virtualFolderId-=1;
