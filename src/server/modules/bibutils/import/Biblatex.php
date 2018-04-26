@@ -32,18 +32,18 @@ use Yii;
 /**
  * Parser for UTF-8 encoded BibTeX files
  */
-class Bibtex extends AbstractParser
+class Biblatex extends AbstractParser
 {
 
   /**
    * @inheritdoc
    */
-  public $id = "bibtex";
+  public $id = "biblatex";
 
   /**
    * @inheritdoc
    */
-  public $name = "BibTex with LaTeX character encoding (ASCII)";
+  public $name = "Biblatex/Biber (UTF-8)";
 
   /**
    * @inheritdoc
@@ -53,12 +53,12 @@ class Bibtex extends AbstractParser
   /**
    * @inheritdoc
    */
-  public $extension = "bib,bibtex";
+  public $extension = "bbl,bib";
 
   /**
    * @inheritdoc
    */
-  public $description = "This importer expects BibTeX data with the original 7-bit LaTeX character encoding";
+  public $description = "Biblatex/Biber (UTF-8), see http://texdoc.net/texmf-dist/doc/latex/biblatex/biblatex.pdf";
 
   /**
    * @inheritdoc
@@ -66,7 +66,7 @@ class Bibtex extends AbstractParser
   public function parse( string $bibtex )
   {
     try {
-      $mods = (new Executable("bib2xml", BIBUTILS_PATH))->call("-u", $bibtex);
+      $mods = (new Executable("biblatex2xml", BIBUTILS_PATH))->call("-u", $bibtex);
       //Yii::debug($mods, Module::CATEGORY);
       $bibtex = (new Executable("xml2bib", BIBUTILS_PATH ))->call("-sd -nl", $mods);
     } catch (\Exception $e) {

@@ -1,13 +1,6 @@
 # TODO
 
-## v3.0.0-beta 
-
-### v3.0.0.beta1
-- [x] BUG: anonymous users are not purged
-- [x] BUG: Fix Group permissions
-- [x] FEAT: ACT: changing element type must clear filter
-- [x] BUG: Import in "Main" funktioniert nicht
-- [x] FEAT: Reimplemented import for BibTex-UTF8
+## v3.0.0-beta
 
 ### Priority: urgent
 

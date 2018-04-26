@@ -8,12 +8,22 @@ use Yii;
 
 class Module extends \lib\Module
 {
+
+  /**
+   * A string constant defining the category for logging and translation
+   */
+  const CATEGORY="converters";
+
   /**
    * The version of the module
    * @var string
    */
-  protected $version = "0.0.1";
+  protected $version = "0.0.2";
 
+  /**
+   * Defines the converter classes to install
+   * @var array
+   */
   protected $install_classes = [
     'import' =>['BibtexUtf8']
   ];
@@ -30,7 +40,7 @@ class Module extends \lib\Module
       $registryClass = sprintf("\\app\\models\\%sFormat", ucfirst($converterType));
       foreach ($converterData as $install_class) {
         try {
-          $converterClass = sprintf("\\app\\modules\\bibutils\\%s\\%s", $converterType, $install_class);
+          $converterClass = sprintf("\\app\\modules\\%s\\%s\\%s", $this->id, $converterType, $install_class);
           /** @var AbstractParser $converter */
           $converter = new $converterClass();
           $attributes = [

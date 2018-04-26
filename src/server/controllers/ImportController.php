@@ -155,9 +155,9 @@ class ImportController extends AppController
     {
       throw new UserErrorException(
         Yii::t('app',
-          "Format '{format}' expects file extension(s) '{allowedExtensions}'. The file you uploaded has extension '{givenExtension}.'",[
+          "Format '{format}' expects file extension(s) '{allowedExtensions}'. The file you uploaded has extension '{givenExtension}'.",[
             'format'            => $format,
-            'allowedExtensions' => $allowedExtensions,
+            'allowedExtensions' => implode("', '", $allowedExtensions),
             'givenExtension'    => $givenExtension
           ])
       );
