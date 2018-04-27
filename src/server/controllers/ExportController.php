@@ -18,26 +18,25 @@
 
 ************************************************************************ */
 
-
-
-
+namespace app\controllers;
+use lib\dialog\Form;
+use Yii;
 
 
 /**
  *
  */
-class bibliograph_service_Export
-  extends qcl_data_controller_Controller
+class ExportController extends AppController
 {
 
   /**
    * Returns a dialog to export references
    * @see bibliograph_service_Export::exportReferences for signature
-   * @return qcl_ui_dialog_Form
+   * @return string Diagnostic message
    */
-  public function method_exportReferencesDialog( $datasource, $selector )
+  public function actionExportDialog( $datasource, $selector )
   {
-    return \lib\dialog\Form::create(
+     Form::create(
       "<b>" . Yii::t('app', "Export references") . "</b>",
       array(
         'format'  => array(
@@ -49,8 +48,9 @@ class bibliograph_service_Export
       true, // allow cancel
       Yii::$app->controller->id,
       "exportReferencesHandleDialogData",
-      $this->serviceParams()
+      [$datasource, $selector]
     );
+     return "Created export dialog.";
   }
 
   /**
