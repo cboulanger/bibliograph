@@ -4,7 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\controllers\traits\AuthTrait;
-use app\models\FileUpload;
+use app\models\LastFileUpload;
 use yii\web\ServerErrorHttpException;
 
 class UploadController extends \yii\web\Controller
@@ -25,8 +25,8 @@ class UploadController extends \yii\web\Controller
   public function actionIndex()
   {
     \Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
-    /** @var FileUpload $file */
-    $file = FileUpload::getInstanceByName('file');
+    /** @var LastFileUpload $file */
+    $file = LastFileUpload::getInstanceByName('file');
     if( ! $file->hasError ) {
       $path = $file->save();
       if ( $path === false ){

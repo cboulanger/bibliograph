@@ -21,12 +21,12 @@
 namespace app\controllers;
 
 use app\models\Datasource;
-use app\models\FileUpload;
+use app\models\LastFileUpload;
 use app\models\Folder;
 use app\models\Reference;
 use app\models\Session;
-use app\modules\bibutils\import\AbstractParser;
 use app\models\ImportFormat;
+use app\modules\converters\import\AbstractParser;
 use lib\exceptions\UserErrorException;
 use yii\base\InvalidConfigException;
 use yii\db\Exception;
@@ -144,12 +144,12 @@ class ImportController extends AppController
       ));
     }
     try{
-      $file = FileUpload::getLastUploadPath();
+      $file = LastFileUpload::instance();
     } catch (\RuntimeException $e){
-      throw new UserErrorException($e->getMessage());
+      throw new UserErrorException("No file was uploaded");
     }
 
-    $givenExtension = pathinfo( $file, PATHINFO_EXTENSION);
+    $givenExtension = $file->extension;
     $allowedExtensions = $importFormatModel->getExtensions();
     if( ! in_array( $givenExtension,$allowedExtensions ) )
     {
@@ -212,7 +212,8 @@ class ImportController extends AppController
     }
     
     // convert and import data
-    $data = file_get_contents( $file );
+    $data = file_get_contents( $file->path );
+    $file->delete();
     
     $parserClass = $importFormatModel->class;
     if( ! class_exists($parserClass) ){
