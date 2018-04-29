@@ -182,7 +182,7 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
   protected function getFolderReferences()
   {
     Folder_Reference::setDatasource(static::getDatasource());
-    return $this->hasMany(Folder_Reference::className(), ['FolderId' => 'id']);
+    return $this->hasMany(Folder_Reference::class, ['FolderId' => 'id']);
   }
 
   /**
@@ -191,7 +191,7 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
   public function getReferences()
   {
     Reference::setDatasource(static::getDatasource());
-    return $this->hasMany(Reference::className(), ['id' => 'ReferenceId'])->via('folderReferences');
+    return $this->hasMany(Reference::class, ['id' => 'ReferenceId'])->via('folderReferences');
   }
 
   /*

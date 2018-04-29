@@ -7,11 +7,11 @@
  */
 
 namespace app\controllers\traits;
-
-use RuntimeException;
-use Yii;
-use lib\exceptions\UserErrorException;
 use app\models\Datasource;
+use lib\exceptions\UserErrorException;
+use RuntimeException;
+use yii\db\ActiveQuery;
+use Yii;
 
 trait DatasourceTrait
 {
@@ -50,6 +50,16 @@ trait DatasourceTrait
     }
 
     return $instance;
+  }
+
+  /**
+   * Returns the query that belongs the model of the given type in the given datasource
+   * @param string $datasource
+   * @param string $type
+   * @return ActiveQuery
+   */
+  protected function findIn( $datasource, $type ){
+    return Datasource::getInstanceFor($datasource)->getClassFor($type)::find();
   }
 
   /**

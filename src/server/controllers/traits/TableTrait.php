@@ -178,7 +178,8 @@ trait TableTrait
    *    The model class from which to create the query
    * @return \yii\db\ActiveQuery
    * @throws \InvalidArgumentException
-   * @todo 'properties'should be 'columns' or 'fields', 'cql' should be 'input'/'search' or similar
+   * @todo rename to 'createQueryFromClientData()'
+   * @todo 'properties' should be 'columns' or 'fields', 'cql' should be 'input'/'search' or similar
    */
   protected function transformClientQuery(\stdClass $clientQueryData, string $modelClass)
   {
@@ -225,48 +226,59 @@ trait TableTrait
 
     // it's a freeform search query
     if ( isset ( $clientQuery->cql ) ){
-
       // FIXME hack to support virtual folders
       if( str_contains( $clientQuery->cql, "virtsub:") ){
         return $modelClass::find()->where(new Expression("TRUE = FALSE"));
       }
-
-      // use the language that works/yields most hits
-      $languages=Yii::$app->utils->getLanguages();
-      $indexedQueries =[];
-      foreach ($languages as $language) {
-        //Yii::debug("Trying to translate query '$clientQuery->cql' from '$language'...");
-        /** @var ActiveQuery $activeQuery */
-        $activeQuery = $modelClass::find()->where(['markedDeleted' => 0]);
-        $schema = Datasource::in($datasourceName,"reference")::getSchema();
-
-        $nlq = new NaturalLanguageQuery([
-          'query'     => $clientQuery->cql,
-          'schema'    => $schema,
-          'language'  => $language
-        ]);
-        try {
-          $nlq->injectIntoYiiQuery($activeQuery);
-        } catch (\Exception $e) {
-          throw new UserErrorException($e->getMessage());
-        }
-        try{
-          if( $nlq->containsOperators() ){
-            break;
-          }
-          if( $activeQuery->exists() ){
-            $indexedQueries[] = $activeQuery;
-          }
-        } catch (\Exception $e){
-          Yii::warning($e->getMessage());
-        }
-      }
-      if( ! $nlq->containsOperators() ){
-        if( count($indexedQueries) ) $activeQuery = $indexedQueries[0];
-      }
+      $activeQuery = $this->createActiveQueryFromNaturalLanguageQuery($modelClass,$datasourceName, $clientQuery->cql);
       //Yii::debug($activeQuery->createCommand()->getRawSql());
       return $activeQuery;
     }
     throw new UserErrorException(Yii::t('app', "No recognized query format in request."));
+  }
+
+  /**
+   * Given a natural language query, return the Yii ActiveQuery instance that satisfies the query terms
+   * @param string $modelClass
+   * @param string $datasourceName
+   * @param string $naturalLanguageQuery
+   * @return ActiveQuery
+   * @todo modelClass can probably be determined by the datasource and be removed from params
+   */
+  protected function createActiveQueryFromNaturalLanguageQuery( string $modelClass,string $datasourceName, string $naturalLanguageQuery)
+  {
+    // use the language that works/yields most hits
+    $languages=Yii::$app->utils->getLanguages();
+    $indexedQueries =[];
+    foreach ($languages as $language) {
+      //Yii::debug("Trying to translate query '$clientQuery->cql' from '$language'...");
+      /** @var ActiveQuery $activeQuery */
+      $activeQuery = $modelClass::find()->where(['markedDeleted' => 0]);
+      $schema = Datasource::in($datasourceName,"reference")::getSchema();
+      $nlq = new NaturalLanguageQuery([
+        'query'     => $naturalLanguageQuery,
+        'schema'    => $schema,
+        'language'  => $language
+      ]);
+      try {
+        $nlq->injectIntoYiiQuery($activeQuery);
+      } catch (\Exception $e) {
+        throw new UserErrorException($e->getMessage());
+      }
+      try{
+        if( $nlq->containsOperators() ){
+          break;
+        }
+        if( $activeQuery->exists() ){
+          $indexedQueries[] = $activeQuery;
+        }
+      } catch (\Exception $e){
+        Yii::warning($e->getMessage());
+      }
+    }
+    if( ! $nlq->containsOperators() ){
+      if( count($indexedQueries) ) $activeQuery = $indexedQueries[0];
+    }
+    return $activeQuery;
   }
 }

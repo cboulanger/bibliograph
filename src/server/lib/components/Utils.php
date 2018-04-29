@@ -114,25 +114,4 @@ class Utils extends \yii\base\Component
       ( $modelId  ? "!modelType.reference!modelId.$modelId" : "");
   }    
 
-  /**
-   * Returns the url of the client application's build directory
-   * @return string
-   */
-  public function getClientUrl()
-  {
-    notImplemented();
-    return "http://" . $_SERVER["HTTP_HOST"] .
-      dirname( dirname( $_SERVER["SCRIPT_NAME"] ) ) .
-      "/build";
-  }
-
-  /**
-   * Alias of qcl_server_Server::getUrl()
-   * @return string
-   */
-  public function getServerUrl()
-  {
-    notImplemented();
-    return qcl_server_Server::getUrl();
-  } 
 }

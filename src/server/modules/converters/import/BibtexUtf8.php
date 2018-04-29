@@ -59,6 +59,7 @@ class BibtexUtf8 extends AbstractParser
 
   /**
    * @inheritdoc
+   * The parser (inofficially) supports some BibLaTeX fields.
    */
   public function parse( string $bibtex )
   {
@@ -72,10 +73,8 @@ class BibtexUtf8 extends AbstractParser
     foreach ($records as $item) {
       $p = $item->getProperties();
       // fix bibtex parser issues and prevemt validation errors
-
-
       foreach ( $p as $key => $value ) {
-
+        $value = stripslashes($value);
         // some implementations put different authors/editors in separate fields and attach a suffix
         if ( starts_with($key, ["editor","author"]) and strlen($key) > 6 ){
           $key = substr($key,0,6);
@@ -87,18 +86,21 @@ class BibtexUtf8 extends AbstractParser
         switch ($key){
           case "author":
           case "editor":
-            $p[$key] = str_replace("{", "", $value);
-            $p[$key] = str_replace("}", "", $value);
+            $value = str_replace('{', '',
+              str_replace('}', '',
+                str_replace(' and ', '; ',
+                  str_replace(  PHP_EOL .'and ', '; ',$value)))); // TODO use RegExpr
             break;
           case "date":
-            // non-standard, but often used
+            // BibLaTeX
             $year = date( "Y", strtotime($p[$key]));
             if( $year ){
               $p['year'] = $year;
             }
+            break;
           case "journal":
           case "journaltitle":
-            // non-standard
+            // BibLaTeX
             $key = "journal";
             if(isset($p['journalsubtitle']) ){
               $value = $value . ". " . $p['journalsubtitle'];
@@ -106,20 +108,20 @@ class BibtexUtf8 extends AbstractParser
             }
             break;
           case "journalsubtitle":
-            // non-standard
+            // BibLaTeX
             continue;
           case "issue":
-            // non-standard
+            // BibLaTeX
             unset($p[$key]);
             $key = "number";
             break;
           case "booksubtitle":
-            // non-standard
+            // BibLaTeX
             unset($p[$key]);
             $key = "subtitle";
             break;
           case "shortjournal":
-            // non-standard
+            // BibLaTeX
             // use journal abbreviation only if we have no journal title
             unset($p["shortjournal"]);
             if( isset($p['journal'])) continue;

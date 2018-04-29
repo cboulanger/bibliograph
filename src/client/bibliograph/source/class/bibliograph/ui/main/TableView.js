@@ -225,7 +225,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
       copyButton.addListener("execute", ()=>this.copySelectedReferences());
       this.bindEnabled(this.permissions.move_selected_references, copyButton);
       this.bindVisibility(this.permissions.move_reference, copyButton);
-
+      
       // Export menu
       let exportButton = new qx.ui.menu.Button(this.tr('Export references'));
       optionsMenu.add(exportButton);
@@ -246,27 +246,29 @@ qx.Class.define("bibliograph.ui.main.TableView",
       menuButton5.addListener("execute", () => this.exportFolder() );
       this.bindEnabled(this.permissions.export_folder, menuButton5);
 
-      // Edit menu
-      let editButton = new qx.ui.menu.Button();
-      editButton.setLabel(this.tr('Edit references'));
-      optionsMenu.add(editButton);
-      this.bindVisibility(this.permissions.edit_reference, editButton);
-      let editMenu = new qx.ui.menu.Menu();
-      editButton.setMenu(editMenu);
-
-      // Find/Replace Button
-      let findReplBtn = new qx.ui.menu.Button();
-      findReplBtn.setLabel(this.tr('Find/Replace'));
-      editMenu.add(findReplBtn);
-      findReplBtn.addListener("execute", () => this.findReplace());
-      this.bindVisibility(this.permissions.batch_edit_reference,findReplBtn);
-
-      // Empty folder Button
-      let emptyFldContBtn = new qx.ui.menu.Button();
-      emptyFldContBtn.setLabel(this.tr('Make folder empty'));
-      editMenu.add(emptyFldContBtn);
-      emptyFldContBtn.addListener("execute", () => this.emptyFolder());
-      this.bindVisibility(this.permissions.batch_edit_reference,emptyFldContBtn);
+      
+      // TODO reimplement as a plugin/module
+      // // Edit menu
+      // let editButton = new qx.ui.menu.Button();
+      // editButton.setLabel(this.tr('Edit references'));
+      // //optionsMenu.add(editButton);
+      // this.bindVisibility(this.permissions.edit_reference, editButton);
+      // let editMenu = new qx.ui.menu.Menu();
+      // editButton.setMenu(editMenu);
+      //
+      // // Find/Replace Button
+      // let findReplBtn = new qx.ui.menu.Button();
+      // findReplBtn.setLabel(this.tr('Find/Replace'));
+      // editMenu.add(findReplBtn);
+      // findReplBtn.addListener("execute", () => this.findReplace());
+      // this.bindVisibility(this.permissions.batch_edit_reference,findReplBtn);
+      //
+      // // Empty folder Button
+      // let emptyFldContBtn = new qx.ui.menu.Button();
+      // emptyFldContBtn.setLabel(this.tr('Make folder empty'));
+      // editMenu.add(emptyFldContBtn);
+      // emptyFldContBtn.addListener("execute", () => this.emptyFolder());
+      // this.bindVisibility(this.permissions.batch_edit_reference,emptyFldContBtn);
     },
 
     /**
@@ -512,34 +514,24 @@ qx.Class.define("bibliograph.ui.main.TableView",
      * Exports the selected references via jsonrpc service
      */
     exportSelected: function () {
-      return dialog.Dialog.error("Funktion noch nicht implementiert...");
       let datasource = this.getDatasource();
       let selectedIds = this.getSelectedIds();
       let app = this.getApplication();
       app.showPopup(this.tr("Processing request..."));
-      app.getRpcClient("export").send(
-      "exportReferencesDialog",
-      [datasource, selectedIds],
-      function () {
-        app.hidePopup();
-      }, this
-      );
+      app.getRpcClient("converters/export").send( "format-dialog", [datasource, selectedIds])
+        .then(()=>app.hidePopup());
     },
     
     /**
      * Exports the whole folder or query
      */
-    exportFolder: function () {
-      return dialog.Dialog.error("Funktion noch nicht implementiert...");
+    exportFolder: function (){
       let app = this.getApplication();
       app.showPopup(this.tr("Processing request..."));
-      app.getRpcClient("export").send(
-      "exportReferencesDialog",
-      [this.getDatasource(), this.getFolderId() || this.getQuery()],
-      function () {
-        app.hidePopup();
-      }, this
-      );
+      app.getRpcClient("converters/export").send("format-dialog", [
+        this.getDatasource(),
+        this.getFolderId() ? "folder:" + this.getFolderId() : this.getQuery()
+      ]).then(()=>app.hidePopup());
     },
     
     /**

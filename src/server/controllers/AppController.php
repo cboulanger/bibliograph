@@ -97,19 +97,6 @@ class AppController extends \JsonRpc2\Controller
     Permission::deleteAll(['namedId' => $namedId]);
   }
 
-  //-------------------------------------------------------------
-  // Datasources
-  //-------------------------------------------------------------
-
-  /**
-   * Returns the query that belongs the model of the given type in the given datasource
-   * @param string $datasource
-   * @param string $type
-   * @return ActiveQuery
-   */
-  protected function findIn( $datasource, $type ){
-    return Datasource::getInstanceFor($datasource)->getClassFor($type)::find();
-  }
 
   //-------------------------------------------------------------
   // Helpers for returning data to the user

@@ -18,14 +18,20 @@ class Module extends \lib\Module
    * The version of the module
    * @var string
    */
-  protected $version = "0.0.2";
+  protected $version = "0.0.5";
+
+  /**
+   * @inheritdoc
+   */
+  public $controllerNamespace = 'app\modules\converters\controllers';
 
   /**
    * Defines the converter classes to install
    * @var array
    */
   protected $install_classes = [
-    'import' =>['BibtexUtf8']
+    'import' => ['BibtexUtf8'],
+    'export' => ['BibliographBibtex']
   ];
 
   /**

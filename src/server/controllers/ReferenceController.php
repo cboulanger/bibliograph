@@ -363,7 +363,7 @@ class ReferenceController extends AppController
         ? $fieldData['formData']['autocomplete']['separator']
         : null;
       if ($fieldSeparator && $formSeparator) {
-        $value = str_replace($formSeparator, $fieldSeparator, $value);
+        $value = str_replace($formSeparator, $fieldSeparator, trim($value));
       }
       $model->$property = $value;
     }
