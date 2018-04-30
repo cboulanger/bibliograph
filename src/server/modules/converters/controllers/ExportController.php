@@ -83,7 +83,6 @@ class ExportController extends AppController
     if ( $data === null ) {
       return "Dialog was cancelled.";
     }
-    Yii::debug([$data, $datasource, $selector]);
     Popup::create(
       Yii::t('app',"Preparing export data. Please wait..."),
       /*Yii::$app->controller->route*/ "converters/export", "start-export",
