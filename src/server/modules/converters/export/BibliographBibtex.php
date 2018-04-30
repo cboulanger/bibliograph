@@ -79,7 +79,7 @@ class BibliographBibtex extends AbstractExporter
             return !!trim($creator);
           } ) ) );
       }
-      $bibtex .= ',' . PHP_EOL . $indent . $field . ' = "' . addslashes($value) . '"';
+      $bibtex .= ',' . PHP_EOL . $indent . $field . ' = {' . $value . '}';
     }
     $bibtex .=  PHP_EOL .  '}' . PHP_EOL . PHP_EOL;
     return $bibtex;

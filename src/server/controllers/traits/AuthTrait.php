@@ -112,7 +112,7 @@ trait AuthTrait
       $session->touch();
     }
     $sessionId = $this->getSessionId();
-    Yii::info("Authorized user '{$user->namedId}' via auth auth token (Session {$sessionId}.","auth");
+    Yii::info("Authorized user '{$user->namedId}' via auth auth token (Session {$sessionId}).","auth");
     return true;
   }
 
@@ -222,7 +222,8 @@ trait AuthTrait
     $session = Session::findOne(['UserId' => $user->id]);
     if ($session) {
       // manually set session id to recover the session data
-      session_id( $session->namedId );
+      // TODO this doesn't work if old stale sessions are still in the database, revisit this
+      //session_id( $session->namedId );
     }
     Yii::$app->session->open();
     return $session;

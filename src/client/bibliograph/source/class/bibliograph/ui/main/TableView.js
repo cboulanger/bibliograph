@@ -143,6 +143,12 @@ qx.Class.define("bibliograph.ui.main.TableView",
         updateEvent: "app/treeview:changeSelectedNode",
         condition: treeview => treeview.getSelectedNode() !== null
       },
+      export_query :{
+        depends: "reference.export",
+        granted : false,
+        updateEvent: "changeQuery",
+        condition: self => !!self.getQuery()
+      },
     },
     
     // permissions2: {
@@ -240,13 +246,19 @@ qx.Class.define("bibliograph.ui.main.TableView",
       menuButton4.addListener("execute", () => this.exportSelected());
       this.bindEnabled(this.permissions.export_selected_references, menuButton4);
 
-      // Export folder
-      let menuButton5 = new qx.ui.menu.Button(this.tr('Export folder'));
+      // export selected folder
+      let menuButton5 = new qx.ui.menu.Button(this.tr('Export selected folder'));
       exportMenu.add(menuButton5);
       menuButton5.addListener("execute", () => this.exportFolder() );
-      this.bindEnabled(this.permissions.export_folder, menuButton5);
-
-      
+      this.bindVisibility(this.permissions.export_folder, menuButton5);
+  
+      // export current query
+      let menuButton6 = new qx.ui.menu.Button(this.tr('Export current query'));
+      exportMenu.add(menuButton6);
+      menuButton6.addListener("execute", () => this.exportQuery() );
+      this.bindVisibility(this.permissions.export_query, menuButton6);
+  
+  
       // TODO reimplement as a plugin/module
       // // Edit menu
       // let editButton = new qx.ui.menu.Button();
@@ -517,20 +529,32 @@ qx.Class.define("bibliograph.ui.main.TableView",
       let datasource = this.getDatasource();
       let selectedIds = this.getSelectedIds();
       let app = this.getApplication();
-      app.showPopup(this.tr("Processing request..."));
-      app.getRpcClient("converters/export").send( "format-dialog", [datasource, selectedIds])
+      app.showPopup(this.tr("Exporting the selected references..."));
+      app.getRpcClient("converters/export").send( "format-dialog", [datasource, selectedIds.join(",")])
         .then(()=>app.hidePopup());
     },
     
     /**
-     * Exports the whole folder or query
+     * Exports the whole folder
      */
     exportFolder: function (){
       let app = this.getApplication();
-      app.showPopup(this.tr("Processing request..."));
+      app.showPopup(this.tr("Exporting folder..."));
       app.getRpcClient("converters/export").send("format-dialog", [
         this.getDatasource(),
-        this.getFolderId() ? "folder:" + this.getFolderId() : this.getQuery()
+        "folder:" + this.getFolderId()
+      ]).then(()=>app.hidePopup());
+    },
+  
+    /**
+     * Exports the current query
+     */
+    exportQuery: function (){
+      let app = this.getApplication();
+      app.showPopup(this.tr("Exporting query..."));
+      app.getRpcClient("converters/export").send("format-dialog", [
+        this.getDatasource(),
+        "query:" + this.getQuery()
       ]).then(()=>app.hidePopup());
     },
     

@@ -34,13 +34,13 @@ class ExportController extends AppController
    * @param string $selector
    * @return string Diagnostic message
    */
-  public function actionFormatDialog( $datasource, $selector )
+  public function actionFormatDialog( string $datasource, string $selector )
   {
      Form::create(
-      "<b>" . Yii::t('app', "Export references") . "</b>",
+       Yii::t('app', "Choose the export format"),
       [
         'format'  => [
-          'label'   => Yii::t('app', "Choose the export format"),
+          'label'   => "",
           'type'    => "selectbox",
           'options' => $this->listData()
         ]
@@ -48,7 +48,11 @@ class ExportController extends AppController
       true, // allow cancel
        /*Yii::$app->controller->route*/ "converters/export",
       "handle-dialog-response",
-      [$datasource, $selector]
+      [$datasource, $selector],
+      [
+        'width' => 500,
+        'caption' => Yii::t('app', "Export references")
+      ]
     );
      return "Created export dialog.";
   }
@@ -74,11 +78,12 @@ class ExportController extends AppController
    * @param string $selector
    * @return string Diagnostic message
    */
-  public function actionHandleDialogResponse( $data, string $datasource, $selector )
+  public function actionHandleDialogResponse( $data=null, string $datasource=null, string $selector=null )
   {
     if ( $data === null ) {
       return "Dialog was cancelled.";
     }
+    Yii::debug([$data, $datasource, $selector]);
     Popup::create(
       Yii::t('app',"Preparing export data. Please wait..."),
       /*Yii::$app->controller->route*/ "converters/export", "start-export",
@@ -96,11 +101,12 @@ class ExportController extends AppController
    */
   public function actionStartExport( $dummy, $shelfId )
   {
-    list( $data, $datasource, $selector ) = $this->unshelve( $shelfId );
+    $shelfData = $this->unshelve( $shelfId );
+    list( $data, $datasource, $selector ) = $shelfData;
     // todo: Use yii\helpers\Url
     $url  = Yii::$app->homeUrl .
-      'converters/download' .
-      '?auth_token=' . Yii::$app->user->getIdentity()->getAuthKey() .
+      '?r=converters/download' .
+      '&auth_token=' . Yii::$app->user->getIdentity()->getAuthKey() .
       '&format=' . $data->format .
       '&datasource=' . $datasource .
       '&selector=' . $selector;

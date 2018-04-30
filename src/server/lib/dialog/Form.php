@@ -75,25 +75,32 @@ class Form extends Dialog
    *    Service that will be called when the user clicks on the OK button
    * @param string $callbackMethod 
    *    Service method
+   * @param int $width
+   *    Width of the dialog in pixels
    * @param array $callbackParams 
    *    Optional service params
    */
   public static function create(
-    $message,
-    $formData,
-    $allowCancel=true,
-    $callbackService,
-    $callbackMethod,
-    $callbackParams=null )
+    string $message,
+    array $formData,
+    bool $allowCancel=true,
+    string $callbackService,
+    string $callbackMethod,
+    array $callbackParams=null,
+    array $options = null )
   {
+    $properties = [
+      'message'     => $message,
+      'formData'    => $formData,
+      'allowCancel' => $allowCancel,
+      'width'       => 300
+    ];
+    if ( is_array($options) ){
+      foreach ($options as $key => $value) $properties[$key] = $value;
+    }
     static::addToEventQueue( array(
        'type' => "form",
-       'properties'  => array(
-          'message'     => $message,
-          'formData'    => $formData,
-          'allowCancel' => $allowCancel,
-          'maxWidth'    => 500 // FIXME Hardcoding this is BAD!
-        ),
+       'properties'  => $properties,
        'service' => $callbackService,
        'method'  => $callbackMethod,
        'params'  => $callbackParams

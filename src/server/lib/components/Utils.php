@@ -97,21 +97,4 @@ class Utils extends \yii\base\Component
     }
     return $languages;
   }
-  
- /**
-   * Returns the URL that sets the application into a specific state, showing a reference and selecting a folder
-   * @param string $datasource
-   * @param int $folderId
-   * @param int $modelId
-   */
-  public function getAppStateUrl($datasource,$folderId,$modelId)
-  {
-    //https://demo.bibliograph.org/bibliograph/source/#datasource.database1!modelType.reference!itemView.referenceEditor!folderId.3
-    notImplemented();
-    return dirname(dirname(qcl_server_Server::getUrl() ) ) .
-      "/build/#datasource.$datasource" .
-      ( $folderId ? "!folderId.$folderId" : "" ).
-      ( $modelId  ? "!modelType.reference!modelId.$modelId" : "");
-  }    
-
 }

@@ -124,7 +124,7 @@ class Module extends \yii\base\Module
   public function init()
   {
     $not = $this->enabled ? "" : "not";
-    Yii::info("Module '{$this->id}' is $not enabled.");
+    Yii::debug("Module '{$this->id}' is $not enabled.");
     parent::init();
   }
 

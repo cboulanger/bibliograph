@@ -26,6 +26,7 @@ use lib\dialog\Error;
 use lib\exceptions\UserErrorException;
 use Yii;
 use app\models\Permission;
+use yii\base\Exception;
 use yii\db\ActiveQuery;
 
 
@@ -152,7 +153,11 @@ class AppController extends \JsonRpc2\Controller
    */
   public function shelve()
   {
-    $shelfId = Yii::$app->security->generateRandomString();
+    try {
+      $shelfId = Yii::$app->security->generateRandomString();
+    } catch (Exception $e) {
+      $shelfId = str_random();
+    }
     Yii::$app->session->set($shelfId,func_get_args());
     //$_SESSION[$shelfId] = func_get_args();
     return $shelfId;
