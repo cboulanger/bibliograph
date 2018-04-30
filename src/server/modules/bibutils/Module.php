@@ -8,7 +8,7 @@ class Module extends \app\modules\converters\Module
    * The version of the module
    * @var string
    */
-  protected $version = "0.0.6";
+  protected $version = "0.0.7";
 
   /**
    * Defines the converter classes to install

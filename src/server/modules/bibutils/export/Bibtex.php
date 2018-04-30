@@ -55,7 +55,7 @@ class Bibtex extends AbstractExporter
   /**
    * @inheritdoc
    */
-  public $mimeType = "text/x-bibtex";
+  public $mimeType = "application/x-bibtex";
 
   /**
    * @inheritdoc

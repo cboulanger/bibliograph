@@ -67,6 +67,7 @@ class ExportController extends AppController
   {
     return ExportFormat::find()
       ->select("name as label, namedId as value")
+      ->orderBy('name')
       ->asArray()
       ->all();
   }

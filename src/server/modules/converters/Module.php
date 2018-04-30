@@ -18,7 +18,7 @@ class Module extends \lib\Module
    * The version of the module
    * @var string
    */
-  protected $version = "0.0.6";
+  protected $version = "0.0.8";
 
   /**
    * @inheritdoc
@@ -31,7 +31,7 @@ class Module extends \lib\Module
    */
   protected $install_classes = [
     'import' => ['BibtexUtf8'],
-    'export' => ['BibliographBibtex']
+    'export' => ['BibliographBibtex','Csv']
   ];
 
   /**
