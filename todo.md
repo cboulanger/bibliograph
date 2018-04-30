@@ -9,12 +9,12 @@
 - [x] BUG: Move/Copy Windows blank
 - [x] BUG: Drag & Drop not enabled after re-login as authorized user
 - [x] BUG: Empty Trash does not delete references
+- [x] FEAT: Re-implement Export
 - [ ] BUG: module autoloader requires debug mode (trying to serialize closures breaks app)
 - [ ] BUG: Disallow drop of references on folders in which they are already contained. 
 - [ ] BUG: Query `author begins with "A"` -> "missing term"
 - [ ] BUG: Boolean columns must be NOT NULL DEFAULT 0 (z.B. data_User.anonymous)
 - [ ] FEAT: User::getAllPermissions returns always the highest available set of permissions, regardless of the permissions of the group the current datasource belongs to. Requires rewriting of  `$this->requirePermission` to pass the datasource / datasource name
-- [ ] FEAT: Re-implement Export
 - [ ] FEAT: Allow adding top folders
 - [ ] FEAT: Tests: Make Travis ~~great~~ work again
 
