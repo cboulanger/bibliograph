@@ -27,15 +27,16 @@ use lib\exceptions\UserErrorException;
 use lib\util\Executable;
 
 /**
- * Exports standard ASCII BibTeX
+ * Exports in a format that can be imported by Endnote
+ * @see https://en.wikipedia.org/wiki/EndNote#Tags_and_fields
  */
-class Bibtex extends AbstractExporter
+class Endnote extends AbstractExporter
 {
 
   /**
    * @inheritdoc
    */
-  public $id = "bibtex";
+  public $id = "endnote";
 
   /**
    * @inheritdoc
@@ -45,7 +46,7 @@ class Bibtex extends AbstractExporter
   /**
    * @inheritdoc
    */
-  public $name = "BibTeX (ASCII)";
+  public $name = "Endnote";
 
   /**
    * @inheritdoc
@@ -55,17 +56,17 @@ class Bibtex extends AbstractExporter
   /**
    * @inheritdoc
    */
-  public $mimeType = "text/x-bibtex";
+  public $mimeType = "application/x-endnote";
 
   /**
    * @inheritdoc
    */
-  public $extension = "bib";
+  public $extension = "enw";
 
   /**
    * @inheritdoc
    */
-  public $description = "Exports standard 7-bit BibTeX with LaTeX character encoding ";
+  public $description = "Bibliographic data exchange format used by the Endnote Reference Manager";
 
   /**
    * @inheritdoc
@@ -84,10 +85,10 @@ class Bibtex extends AbstractExporter
     try {
       $mods = (new Executable("bib2xml", BIBUTILS_PATH))->call("-u", $bibliographBibtex);
       //Yii::debug($mods, Module::CATEGORY);
-      $bibtex = (new Executable("xml2bib", BIBUTILS_PATH ))->call("-sd -w", $mods);
+      $end = (new Executable("xml2end", BIBUTILS_PATH ))->call("", $mods);
     } catch (\Exception $e) {
       throw new UserErrorException($e->getMessage());
     }
-    return $bibtex;
+    return $end;
   }
 }

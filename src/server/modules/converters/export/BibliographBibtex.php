@@ -37,7 +37,7 @@ class BibliographBibtex extends AbstractExporter
   /**
    * @inheritdoc
    */
-  public $name = "Bibliograph BibTex (UTF-8)";
+  public $name = "BibTex (UTF-8)";
 
   /**
    * @inheritdoc

@@ -8,7 +8,7 @@ class Module extends \app\modules\converters\Module
    * The version of the module
    * @var string
    */
-  protected $version = "0.0.5";
+  protected $version = "0.0.6";
 
   /**
    * Defines the converter classes to install
@@ -16,6 +16,6 @@ class Module extends \app\modules\converters\Module
    */
   protected $install_classes = [
     'import' =>['Bibtex','Biblatex'],
-    'export' =>['Bibtex']
+    'export' =>['Bibtex','Ris','Endnote']
   ];
 }

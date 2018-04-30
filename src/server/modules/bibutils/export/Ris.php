@@ -27,15 +27,16 @@ use lib\exceptions\UserErrorException;
 use lib\util\Executable;
 
 /**
- * Exports standard ASCII BibTeX
+ * Exports RIS
+ * @see https://en.wikipedia.org/wiki/RIS_(file_format)
  */
-class Bibtex extends AbstractExporter
+class Ris extends AbstractExporter
 {
 
   /**
    * @inheritdoc
    */
-  public $id = "bibtex";
+  public $id = "ris";
 
   /**
    * @inheritdoc
@@ -45,7 +46,7 @@ class Bibtex extends AbstractExporter
   /**
    * @inheritdoc
    */
-  public $name = "BibTeX (ASCII)";
+  public $name = "RIS";
 
   /**
    * @inheritdoc
@@ -55,17 +56,17 @@ class Bibtex extends AbstractExporter
   /**
    * @inheritdoc
    */
-  public $mimeType = "text/x-bibtex";
+  public $mimeType = "application/x-research-info-systems";
 
   /**
    * @inheritdoc
    */
-  public $extension = "bib";
+  public $extension = "ris";
 
   /**
    * @inheritdoc
    */
-  public $description = "Exports standard 7-bit BibTeX with LaTeX character encoding ";
+  public $description = "Bibliographic data exchange format by Research Information Systems";
 
   /**
    * @inheritdoc
@@ -84,10 +85,10 @@ class Bibtex extends AbstractExporter
     try {
       $mods = (new Executable("bib2xml", BIBUTILS_PATH))->call("-u", $bibliographBibtex);
       //Yii::debug($mods, Module::CATEGORY);
-      $bibtex = (new Executable("xml2bib", BIBUTILS_PATH ))->call("-sd -w", $mods);
+      $ris = (new Executable("xml2ris", BIBUTILS_PATH ))->call("", $mods);
     } catch (\Exception $e) {
       throw new UserErrorException($e->getMessage());
     }
-    return $bibtex;
+    return $ris;
   }
 }

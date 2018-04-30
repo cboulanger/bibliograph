@@ -18,7 +18,7 @@ class Module extends \lib\Module
    * The version of the module
    * @var string
    */
-  protected $version = "0.0.5";
+  protected $version = "0.0.6";
 
   /**
    * @inheritdoc

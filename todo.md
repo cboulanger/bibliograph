@@ -77,10 +77,10 @@
 - [ ] Remove qx prefix in generated code (s/qx([A-Z])/\L$1/)
 - [ ] Convert config to YAML: https://packagist.org/packages/sergeymakinen/yii2-config
 - [ ] Change URL params separators
-- [ ] Clean, future-proof OO-Rewrite of the Rendering the tree in SimpleDataModel format
 - [ ] Rename 'converters' module
 - [ ] Move ImportController and UploadController into renamed 'converter' module
- 
+- [ ] Remove verbose logging in Drag & Drop
+
 ## v3.0.0.RC.X (only bug fixes)
 
 ## v3.0.0
@@ -99,6 +99,7 @@
 - [ ] Implement boolean database columns (supported by Yii)
 - [ ] Reimplement HTML editor integration for notes
 - [ ] Implement drag&drop folder positioning
+- [ ] Clean, future-proof OO-Rewrite of the Rendering the tree in SimpleDataModel format
 
 ### Priority: low
 - [ ] Enable print item view: bibliograph.ui.main.ItemView#print()

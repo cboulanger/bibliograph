@@ -21,6 +21,7 @@
 namespace app\controllers;
 
 use app\models\Datasource;
+use app\models\ExportFormat;
 use app\models\Folder;
 use app\models\Reference;
 use lib\exceptions\UserErrorException;
@@ -870,6 +871,7 @@ class ReferenceController extends AppController
    * Returns a HTML table with the reference data
    * @param $datasource
    * @param $id
+   *
    */
   public function actionItemHtml($datasource, $id)
   {
@@ -909,6 +911,26 @@ class ReferenceController extends AppController
       $html .= "<tr><td><b>$label</b></td><td>$value</td></tr>";
     }
     $html .= "</table>";
+
+    // shcow export formats
+    $formats = ExportFormat::find()
+      ->select('namedId,name')
+      ->where(['type'=>'export'])
+      ->orderBy('name')
+      ->all();
+    $links = [];
+    /** @var ExportFormat $format */
+    foreach ($formats as $format) {
+      $url = Yii::$app->homeUrl .
+        '?r=converters/download' .
+        '&auth_token=' . Yii::$app->user->getIdentity()->getAuthKey() .
+        '&format=' . $format->namedId .
+        '&datasource=' . $datasource .
+        '&selector=' . $id;
+      $links[] = "<a href=\"$url\">{$format->name}</a>";
+    }
+    $html .= "<p>" . Yii::t('app','Export citation as ') . implode(" | ", $links ) . "</p>";
+
     return array(
       'html' => $html
     );
