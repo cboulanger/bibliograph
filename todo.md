@@ -10,7 +10,7 @@
 - [x] BUG: Drag & Drop not enabled after re-login as authorized user
 - [x] BUG: Empty Trash does not delete references
 - [x] FEAT: Re-implement Export
-- [ ] BUG: module autoloader requires debug mode (trying to serialize closures breaks app)
+- [x] BUG: module autoloader requires debug mode (trying to serialize closures breaks app)
 - [ ] BUG: Disallow drop of references on folders in which they are already contained. 
 - [ ] BUG: Query `author begins with "A"` -> "missing term"
 - [ ] BUG: Boolean columns must be NOT NULL DEFAULT 0 (z.B. data_User.anonymous)

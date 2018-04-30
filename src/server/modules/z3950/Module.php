@@ -12,7 +12,7 @@ use app\modules\z3950\models\{
 };
 use Exception;
 use lib\exceptions\RecordExistsException;
-
+use yii\web\UserEvent;
 
 
 /**
@@ -25,7 +25,7 @@ class Module extends \lib\Module
    * The version of the module
    * @var string
    */
-  protected $version = "1.0.2";
+  protected $version = "1.0.3";
 
   /**
    * A string constant defining the category for logging and translation
@@ -217,11 +217,10 @@ class Module extends \lib\Module
         $datasource = Datasource::getInstanceFor($this->datasources[0]->namedId);
         Search::setDatasource($datasource);
         Search::deleteAll(['UserId'=>$user->id]);
+        Yii::debug("Deleted search data.",self::CATEGORY);
       } catch (\Error $e) {
         Yii::error($e->getMessage());
       }
-    } else {
-      Yii::debug("No datasources.",self::CATEGORY);
     }
   }
 
@@ -240,4 +239,40 @@ class Module extends \lib\Module
       }
     }
   }
+
+  /**
+   * Event handler for logout event
+   * @param UserEvent $e
+   */
+  public static function on_after_logout ( UserEvent $e) {
+    /** @var \app\models\User|null $user */
+    $user = $e->identity;
+    if( ! $user ) return;
+    /** @var Module $module */
+    $module = \Yii::$app->getModule('z3950');
+    try{
+      $module->clearSearchData($user);
+    } catch (\Throwable $e){
+      \Yii::warning($e->getMessage());
+    }
+  }
+
+  /**
+   * Event handler for delete event
+   * @param \yii\base\Event $e
+   */
+  public static function on_after_delete ( \yii\base\Event $e) {
+    /** @var \app\models\User|null $user */
+    $user = $e->sender;
+    if( ! $user ) return;
+    /** @var Module $module */
+    $module = \Yii::$app->getModule('z3950');
+    try{
+      $module->clearSearchData($user);
+    } catch (\Throwable $e){
+      \Yii::warning($e->getMessage());
+    }
+  }
+
+
 }

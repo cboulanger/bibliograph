@@ -14,34 +14,12 @@ return [
     [
       'class' => User::class,
       'event' => User::EVENT_AFTER_LOGOUT,
-      'callback' => function ( UserEvent $e) {
-        /** @var \app\models\User|null $user */
-        $user = $e->identity;
-        if( ! $user ) return;
-        /** @var Module $module */
-        $module = \Yii::$app->getModule('z3950');
-        try{
-          $module->clearSearchData($user);
-        } catch (Throwable $e){
-          \Yii::warning($e->getMessage());
-        }
-      }
+      'callback' => [Module::class, "on_after_logout"]
     ],
     [
       'class' => \app\models\User::class,
       'event' => BaseActiveRecord::EVENT_AFTER_DELETE,
-      'callback' => function ( \yii\base\Event $e) {
-        /** @var \app\models\User|null $user */
-        $user = $e->sender;
-        if( ! $user ) return;
-        /** @var Module $module */
-        $module = \Yii::$app->getModule('z3950');
-        try{
-          $module->clearSearchData($user);
-        } catch (Throwable $e){
-          \Yii::warning($e->getMessage());
-        }
-      }
-    ],
+      'callback' => [Module::class, "on_after_delete"]
+    ]
   ]
 ];
