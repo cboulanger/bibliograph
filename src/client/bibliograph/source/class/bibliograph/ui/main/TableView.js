@@ -102,11 +102,10 @@ qx.Class.define("bibliograph.ui.main.TableView",
         ]
       },
       remove_reference : {
-        aliasOf : "reference.remove"
+        aliasOf : "reference.remove",
       },
       remove_selected_references : {
         depends: "reference.remove",
-        granted : true,
         updateEvent : "changeSelectedIds",
         condition : self => self.getSelectedIds().length > 0
       },
@@ -115,13 +114,11 @@ qx.Class.define("bibliograph.ui.main.TableView",
       },
       move_selected_references :{
         depends: "reference.move",
-        granted : true,
         updateEvent : "changeSelectedIds",
         condition : self => self.getSelectedIds().length > 0
       },
       edit_reference :{
         depends: "reference.edit",
-        granted : true,
         updateEvent : "changeSelectedIds",
         condition : self => self.getSelectedIds().length > 0
       },
@@ -133,19 +130,16 @@ qx.Class.define("bibliograph.ui.main.TableView",
       },
       export_selected_references :{
         depends: "reference.export",
-        granted : false,
         updateEvent : "changeSelectedIds",
         condition : self => self.getSelectedIds().length > 0
       },
       export_folder :{
         depends: "reference.export",
-        granted : false,
         updateEvent: "app/treeview:changeSelectedNode",
         condition: treeview => treeview.getSelectedNode() !== null
       },
       export_query :{
         depends: "reference.export",
-        granted : false,
         updateEvent: "changeQuery",
         condition: self => !!self.getQuery()
       },

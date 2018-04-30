@@ -454,7 +454,9 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
       tree.addListener("changeSelection", this._on_treeChangeSelection, this);
       tree.addListener("click", this._on_treeClick, this);
       tree.addListener("dblclick", this._on_treeDblClick, this);
-      tree._onDropImpl = this._onDropImpl.bind(this);
+      if( this._onDropImpl ){
+        tree._onDropImpl = this._onDropImpl.bind(this);
+      }
       
       ds.treeWidget = tree;
       this.getTreeWidgetContainer().add(tree, {flex: 10, height: null});

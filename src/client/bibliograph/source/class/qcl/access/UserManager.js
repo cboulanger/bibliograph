@@ -81,7 +81,7 @@ qx.Class.define("qcl.access.UserManager",
         }
         
         // create user
-        var user = this.create(model.getNamedId());
+        let user = this.create(model.getNamedId());
         
         // set user data
         user.setFullname(model.getName());

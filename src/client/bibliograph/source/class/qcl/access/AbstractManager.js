@@ -70,7 +70,7 @@ qx.Class.define("qcl.access.AbstractManager",
      * @return {void | Boolean} TODOC
      */
     add: function (vObject) {
-      var hashCode = vObject.toHashCode();
+      let hashCode = vObject.toHashCode();
       this._objects[hashCode] = vObject;
       this._index[vObject.getNamedId()] = hashCode;
     },
@@ -82,7 +82,7 @@ qx.Class.define("qcl.access.AbstractManager",
      * @return {void | Boolean} TODOC
      */
     remove: function (vObject) {
-      var hashCode = vObject.toHashCode();
+      let hashCode = vObject.toHashCode();
       delete this._objects[hashCode];
       delete this._index[vObject.getNamedId()];
       return true;
@@ -104,8 +104,8 @@ qx.Class.define("qcl.access.AbstractManager",
      */
     getAll: function () {
       let list = [];
-      for (let o of this._objects) {
-        list.push(o);
+      for (let key in Object.getOwnPropertyNames(this._objects)) {
+        list.push(this._objects[key] );
       }
       return list;
     },
@@ -117,11 +117,11 @@ qx.Class.define("qcl.access.AbstractManager",
      */
     getObject: function (ref) {
       if (typeof ref === "object") {
-        var obj = this.get(ref);
+        let obj = this.get(ref);
         return obj ? obj : null;
       }
       else if (typeof ref === "string") {
-        var hashCode = this._index[ref];
+        let hashCode = this._index[ref];
         return hashCode ? this._objects[hashCode] : null;
       }
       
@@ -137,7 +137,7 @@ qx.Class.define("qcl.access.AbstractManager",
       if (typeof ref !== "string") {
         this.error("getByName requires string argument!")
       }
-      var hashCode = this._index[ref];
+      let hashCode = this._index[ref];
       return hashCode ? this._objects[hashCode] : null;
     },
     
@@ -147,7 +147,7 @@ qx.Class.define("qcl.access.AbstractManager",
      * @return {String|Null}
      */
     getNamedId: function (ref) {
-      var obj = this.getObject(ref);
+      let obj = this.getObject(ref);
       return obj ? obj.getNamedId() : null;
     },
     
@@ -156,9 +156,9 @@ qx.Class.define("qcl.access.AbstractManager",
      * @return {Array}
      */
     getNamedIds: function () {
-      var objects = this._objects;
-      var names = [];
-      for (var key in objects) {
+      let objects = this._objects;
+      let names = [];
+      for (let key in objects) {
         names.push(objects[key].getNamedId());
       }
       return names;
@@ -177,7 +177,7 @@ qx.Class.define("qcl.access.AbstractManager",
         return;
       }
       
-      var obj = this.getObject(name);
+      let obj = this.getObject(name);
       if (!qx.lang.Type.isObject(obj)) {
         obj = new qcl.access[this._type](name);
         if (!qx.lang.Type.isObject(obj)) {
@@ -193,8 +193,8 @@ qx.Class.define("qcl.access.AbstractManager",
      * deletes all managed objects
      */
     deleteAll: function () {
-      var objects = this._objects;
-      for (var hashCode in objects) {
+      let objects = this._objects;
+      for (let hashCode in objects) {
         if (objects[hashCode]) {
           objects[hashCode].dispose();
         }

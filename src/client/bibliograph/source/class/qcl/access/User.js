@@ -119,15 +119,14 @@ qx.Class.define("qcl.access.User",
      */
     hasPermission : function( permissionRef )
     {
-      var hasPermission = false;
-      var perms = this.getPermissions();
-      for ( var i=0; i<perms.length; i++ )
-      {
-        var permission = perms[i];
+      let hasPermission = false;
+      let perms = this.getPermissions();
+      for ( let i=0; i<perms.length; i++ ) {
+        let permission = perms[i];
         if ( permissionRef instanceof qcl.access.Permission 
             && permissionRef === permission ) return true;
-        else if ( permissionRef == permission.getNamedId() ) return true;
-      };
+        else if ( permissionRef === permission.getNamedId() ) return true;
+      }
       return false;
     },
 
@@ -137,9 +136,9 @@ qx.Class.define("qcl.access.User",
      */
     getPermissionNames : function()
     {
-      var names = [];
-      var perms = this.getPermissions();
-      for ( var i=0; i<perms.length; i++ )
+      let names = [];
+      let perms = this.getPermissions();
+      for ( let i=0; i<perms.length; i++ )
       {
         names.push( perms[i].getNamedId() );
       }
@@ -154,8 +153,8 @@ qx.Class.define("qcl.access.User",
      */
     addPermissionsByName : function( names )
     {
-      var permMgr = this.getApplication().getAccessManager().getPermissionManager();
-      for( var i=0; i < names.length; i++)
+      let permMgr = this.getApplication().getAccessManager().getPermissionManager();
+      for( let i=0; i < names.length; i++)
       {
         let name = names[i];
         // superpowers! Already taken care of in Permission._applyGranted()

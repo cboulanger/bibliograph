@@ -5,10 +5,10 @@
 ### Priority: urgent
 
 ### Priority: high
-- [ ] BUG: Delete, Export, Copy, Move buttons enabled for Anonymous
-- [ ] BUG: Drag & Drop not enabled after re-login as authorized user
-- [ ] BUG: Move/Copy Windows blank
-- [ ] BUG: Empty Trash does not delete references
+- [x] BUG: Delete, Export, Copy, Move buttons enabled for Anonymous
+- [x] BUG: Move/Copy Windows blank
+- [x] BUG: Drag & Drop not enabled after re-login as authorized user
+- [x] BUG: Empty Trash does not delete references
 - [ ] BUG: module autoloader requires debug mode (trying to serialize closures breaks app)
 - [ ] BUG: Disallow drop of references on folders in which they are already contained. 
 - [ ] BUG: Query `author begins with "A"` -> "missing term"
@@ -48,6 +48,7 @@
 - [ ] FEAT: validate email configuration 
 - [ ] FEAT: Change virtual folder icon
 - [ ] FEAT: Rewrite Yii2 configuration using M1/Var
+- [ ] FEAT: Ctrl+A to select all (visible?) references.
 
 ### Code cleanup
 - [ ] Clear up the conceptual mess concerning "schema": datasource schema/reference schema -> "repository"?
@@ -77,6 +78,8 @@
 - [ ] Convert config to YAML: https://packagist.org/packages/sergeymakinen/yii2-config
 - [ ] Change URL params separators
 - [ ] Clean, future-proof OO-Rewrite of the Rendering the tree in SimpleDataModel format
+- [ ] Rename 'converters' module
+- [ ] Move ImportController and UploadController into renamed 'converter' module
  
 ## v3.0.0.RC.X (only bug fixes)
 

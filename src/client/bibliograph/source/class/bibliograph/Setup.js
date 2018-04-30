@@ -244,7 +244,7 @@ qx.Class.define("bibliograph.Setup", {
      */
     initSubscribers : function()
     {
-      var bus = qx.event.message.Bus.getInstance();
+      let bus = qx.event.message.Bus.getInstance();
 
       // listen to reload event
       bus.subscribe("application.reload", function(e){
@@ -263,9 +263,9 @@ qx.Class.define("bibliograph.Setup", {
 
       // server message to set model type and id
       bus.subscribe("bibliograph.setModel", e => {
-        var data = e.getData();
-        var app = this.getApplication();
-        if ( data.datasource == app.getDatasource()) {
+        let data = e.getData();
+        let app = this.getApplication();
+        if ( data.datasource === app.getDatasource()) {
           app.setModelType(data.modelType);
           app.setModelId(data.modelId);
         }
@@ -273,14 +273,14 @@ qx.Class.define("bibliograph.Setup", {
 
       // used by the bibliograph.export.exportReferencesHandleDialogData
       bus.subscribe("window.location.replace", function(e){
-        var data = e.getData();
+        let data = e.getData();
         window.location.replace(data.url);
       }, this);
 
       // reload the main list view
       bus.subscribe("mainListView.reload", function(e){
-        var data = e.getData();
-        var app = this.getApplication();
+        let data = e.getData();
+        let app = this.getApplication();
         if (data.datasource !== app.getDatasource())return;
         app.getWidgetById("app/tableview").reload();
       }, this);
@@ -301,7 +301,7 @@ qx.Class.define("bibliograph.Setup", {
         app.setItemView(this.__itemView);
       }
       if (this.__selectedIds) {
-        var selectedIds = [];
+        let selectedIds = [];
         this.__selectedIds.split(",").forEach(function(id) {
           id = parseInt(id);
           if (id && !isNaN(id))selectedIds.push(id);

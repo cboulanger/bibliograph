@@ -169,6 +169,7 @@ qx.Class.define("bibliograph.AccessManager",
      * Loads the permissions of the active user from the server
      */
     load : async function(){
+      this.getPermissionManager().getAll().map( permission => permission.setGranted(false) );
       await this.getStore().load();
     },
 
@@ -227,11 +228,11 @@ qx.Class.define("bibliograph.AccessManager",
      */
     authenticate : async function( username, password, authOnly )
     {
-      var sha1 = qcl.crypto.Sha1.hex_sha1.bind(qcl.crypto.Sha1);
+      let sha1 = qcl.crypto.Sha1.hex_sha1.bind(qcl.crypto.Sha1);
       let client = this.getApplication().getRpcClient("access");
       let challenge = await client.send("challenge", [username]);
-      if( challenge.method == "hashed" ) {
-        var nounce   = challenge.nounce.split(/\|/), 
+      if( challenge.method === "hashed" ) {
+        let nounce   = challenge.nounce.split(/\|/), 
           randSalt   = nounce[0], 
           storedSalt = nounce[1],
           serverHash = sha1( storedSalt + password );

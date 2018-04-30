@@ -69,13 +69,11 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
     permissions : {
       add_folder : {
         depends: "folder.add",
-        granted : true,
         updateEvent : "changeSelectedNode",
         condition : tree => tree.getSelectedNode() !== null && tree.getSelectedNode().data.type !== "virtual"
       },
       remove_folder : {
         depends: "folder.remove",
-        granted : true,
         updateEvent : "changeSelectedNode",
         condition : tree =>
           tree.getSelectedNode() !== null &&
@@ -84,13 +82,11 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
       },
       edit_folder : {
         depends : "folder.edit",
-        granted : true,
         updateEvent : "changeSelectedNode",
         condition : tree => tree.getSelectedNode() !== null && tree.getSelectedNode().data.type !== "virtual"
       },
       move_folder : {
         depends : "folder.move",
-        granted : true,
         updateEvent : "changeSelectedNode",
         condition : tree =>
           tree.getSelectedNode() !== null &&
@@ -99,13 +95,11 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
       },
       change_position : {
         depends : "folder.move",
-        granted : true,
         updateEvent : "changeSelectedNode",
         condition : tree => tree.getSelectedNode() !== null && tree.getSelectedNode().data.type !== "virtual"
       },
       empty_trash : {
         depends : "trash.empty",
-        granted : true,
         updateEvent : "changeSelectedNode",
         condition : tree => tree.getSelectedNode() && tree.getSelectedNode().data.type === "trash"
       },

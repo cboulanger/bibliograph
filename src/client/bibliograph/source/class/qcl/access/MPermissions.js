@@ -23,7 +23,6 @@ qx.Mixin.define("qcl.access.MPermissions",
 {
   construct : function(){
     this.info(`*** Setting up permissions via mixin constructor in ${this}...`);
-    this.debug(this.getPermissionManager().getNamedIds());
     this.setupPermissions();
     // monkeypatch main app's finalize() method
     let app = qx.core.Init.getApplication();
@@ -178,6 +177,7 @@ qx.Mixin.define("qcl.access.MPermissions",
           this.debug(` - Using name '${permData.name}'.`);
           permission = manager.create(permData.name);
         } else if ( qx.lang.Type.isString(permData.aliasOf) ) {
+          // todo: this is problematic because it will add conditions to the alias
           this.debug(` - Permission is alias of '${permData.aliasOf}'.`);
           permission = manager.create(permData.aliasOf);
         } else {
@@ -189,6 +189,7 @@ qx.Mixin.define("qcl.access.MPermissions",
         if( permData.depends !== undefined ){
           this._castToArray(permData.depends).forEach((dependencyName)=>{
             let dependency = manager.create(dependencyName);
+            dependency.bind("granted",permission, "granted");
             permission.addCondition(() => dependency.getState());
             dependency.addListener("changeState", () => permission.update());
             this.debug(` - Added dependency on '${dependencyName}'.`);
@@ -237,9 +238,9 @@ qx.Mixin.define("qcl.access.MPermissions",
           });
           if( count ) this.debug(` - Added ${count} condition(s).`);
         }
-        // Grant state, true by default
+        // Grant state, false by default
         if( permData.granted === undefined ){
-          permission.setGranted(true);
+          permission.setGranted(false);
         } else {
           permission.setGranted(permData.granted);
         }
