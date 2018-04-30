@@ -18,25 +18,25 @@ class m180105_075537_data_RoleDataInsert extends Migration
           'namedId' => 'admin',
           'name' => 'Administrator role',
           'description' => null,
-          'active' => '0',
+          'active' => '1',
         ],
         [
           'namedId' => 'anonymous',
           'name' => 'Anonymous user',
           'description' => null,
-          'active' => '0',
+          'active' => '1',
         ],
         [
           'namedId' => 'manager',
           'name' => 'Manager role',
           'description' => null,
-          'active' => '0',
+          'active' => '1',
         ],
         [
           'namedId' => 'user',
           'name' => 'Normal user',
           'description' => null,
-          'active' => '0',
+          'active' => '1',
         ],
       ]
     );
