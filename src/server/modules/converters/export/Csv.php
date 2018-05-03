@@ -20,8 +20,10 @@
 ************************************************************************ */
 
 namespace app\modules\converters\export;
+use app\models\User;
 use app\schema\BibtexSchema;
 use app\models\Reference;
+use Yii;
 
 /**
  * Parser for UTF-8 encoded BibTeX files
@@ -85,7 +87,8 @@ class Csv extends AbstractExporter
    */
   public function export(array $references)
   {
-    $fields = $references[0]->getSchema()->fields();
+    // export only the standard fields
+    $fields = (new BibtexSchema())->fields();
     // header
     $csv = $this->putcsv( $fields ) . PHP_EOL;
     // data

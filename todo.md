@@ -11,9 +11,11 @@
 - [x] BUG: Empty Trash does not delete references
 - [x] FEAT: Re-implement Export
 - [x] BUG: module autoloader requires debug mode (trying to serialize closures breaks app)
-- [ ] BUG: Disallow drop of references on folders in which they are already contained. 
+- [ ] BUG: CSV export must only export standard bibtex fields when unauthenticated!
 - [ ] BUG: Query `author begins with "A"` -> "missing term"
 - [ ] BUG: Boolean columns must be NOT NULL DEFAULT 0 (z.B. data_User.anonymous)
+- [ ] BUG: Disallow drop of references on folders in which they are already contained.
+- [ ] FEAT: Cache export formats for HTML view, make configurable 
 - [ ] FEAT: User::getAllPermissions returns always the highest available set of permissions, regardless of the permissions of the group the current datasource belongs to. Requires rewriting of  `$this->requirePermission` to pass the datasource / datasource name
 - [ ] FEAT: Allow adding top folders
 - [ ] FEAT: Tests: Make Travis ~~great~~ work again
