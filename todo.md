@@ -11,7 +11,8 @@
 - [x] BUG: Empty Trash does not delete references
 - [x] FEAT: Re-implement Export
 - [x] BUG: module autoloader requires debug mode (trying to serialize closures breaks app)
-- [ ] BUG: CSV export must only export standard bibtex fields when unauthenticated!
+- [x] BUG: CSV export must only export standard bibtex fields when unauthenticated!
+- [x] BUG: Z39.50 Records were not deleted on logout
 - [ ] BUG: Query `author begins with "A"` -> "missing term"
 - [ ] BUG: Boolean columns must be NOT NULL DEFAULT 0 (z.B. data_User.anonymous)
 - [ ] BUG: Disallow drop of references on folders in which they are already contained.

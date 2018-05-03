@@ -216,7 +216,8 @@ class Module extends \lib\Module
       try{
         $datasource = Datasource::getInstanceFor($this->datasources[0]->namedId);
         Search::setDatasource($datasource);
-        Search::deleteAll(['UserId'=>$user->id]);
+        $searches = Search::find()->where(['UserId'=>$user->id])->all();
+        foreach ($searches as $search) $search->delete();
         Yii::debug("Deleted search data.",self::CATEGORY);
       } catch (\Error $e) {
         Yii::error($e->getMessage());
