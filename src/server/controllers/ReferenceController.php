@@ -1064,21 +1064,25 @@ class ReferenceController extends AppController
               foreach (explode($separator, $value) as $suggestion) {
                 $suggestion = trim($suggestion);
                 if (strtolower($input) == strtolower(substr($suggestion, 0, strlen($input)))) {
-                  $m[] =  str_contains($suggestion, " ")
-                    ? "\"$suggestion\""
-                    : $suggestion;
+                  $m[] = $suggestion;
                 }
               }
             }
             $matches = $m;
           }
+          // enclose in quotes
+          $matches = array_map(function($item){
+            $item= trim($item);
+            return str_contains($item, " ")
+              ? "\"$item\""
+              : $item;
+          }, $matches);
         }
         break;
     }
     if( count($matches)===0){
       $matches = [$input];
     }
-    $matches = array_map(function ($item){ return trim($item);}, $matches);
     $matches = array_filter($matches, function ($item){ return !empty($item);});
     $matches = array_unique($matches);
     sort($matches);
