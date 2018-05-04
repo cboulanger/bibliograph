@@ -162,7 +162,9 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
           return $value;
         },
         'unmarshal' => function($value, &$data){
-          $data['query'] = "virtsub:" . $value;
+          if(trim($value)){
+            $data['query'] = "virtsub:" . $value;
+          }
           return null; // do not set null value
         }
       ],

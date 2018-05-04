@@ -993,14 +993,13 @@ class ReferenceController extends AppController
     return $data;
   }
 
-
   /**
    * @param $input
    * @param $inputPosition
    * @param string[] $tokens
    * @param $datasourceName
    * @todo rename
-   * @return TokenFieldDto[]
+   * return TokenFieldDto[]
    */
   public function actionTokenizeQuery( $input, $inputPosition, $tokens, $datasourceName ){
     Yii::debug(func_get_args());
