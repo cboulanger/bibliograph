@@ -118,7 +118,8 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
     return  [
       'label' => [
         'label' => Yii::t('app', "Folder Title"),
-        'type' => "TextField"
+        'type' => "TextField",
+        'width' => 500
       ],
       'description' => [
         'label' => Yii::t('app', "Description"),
@@ -196,7 +197,7 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
       'label' => Yii::t('app',"No virtual subfolders"),
       'value' => ""
     ]];
-    $schema = Reference::getSchema();
+    $schema = Datasource::in(self::getDatasource()->namedId, "reference")::getSchema();
     $indexNames = $schema->getIndexNames();
     sort($indexNames);
     foreach( $indexNames as $indexName ){

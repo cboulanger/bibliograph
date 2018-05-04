@@ -1053,7 +1053,8 @@ class ReferenceController extends AppController
           $query = $this->findIn($datasourceName,"reference")
             ->select($field)
             ->distinct()
-            ->orderBy($field);
+            ->orderBy($field)
+            ->limit(50);
           if( ! $input or $input !== "?" ){
             $query = $query->where( "$field like '%$input%'");
           }
@@ -1072,7 +1073,8 @@ class ReferenceController extends AppController
           }
           // enclose in quotes
           $matches = array_map(function($item){
-            $item= trim($item);
+            // trim the item
+            $item= trim(substr($item,0,50));
             return str_contains($item, " ")
               ? "\"$item\""
               : $item;

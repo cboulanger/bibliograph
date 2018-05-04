@@ -271,19 +271,18 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
           selectionMode: 'multi',
           closeWhenNoResults: true,
           showCloseButton: false,
-          minChars : 0,
+          minChars : 1,
           selectOnce: false,
           labelPath: 'token',
           wildcards : ['?'],
+          noResultsText : this.tr("No results"),
+          searchingText : this.tr("Searching..."),
           typeInText: this.tr('Enter search term or ? for suggestions')
         });
         searchbox.addListener("loadData", async (e) =>  {
           let input = e.getData();
-          let tokens = [];
-          searchbox.getSelection().forEach(function(item){
-            if( item.getLabel !== undefined) tokens.push(item.getLabel());
-          },this);
-          let inputPosition = searchbox._getChildren().indexOf(searchbox.getChildControl('textfield'));
+          let tokens = searchbox.getTokenLabels();
+          let inputPosition = searchbox.getInputPosition();
           let data = await this.getApplication()
             .getRpcClient("reference")
             .send("tokenize-query", [ input, inputPosition, tokens, this.getApplication().getDatasource() ]);
@@ -293,7 +292,6 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
           let app = this.getApplication();
           let query = searchbox.getTextContent();
           searchbox.close();
-          this.debug(query);
           app.setFolderId(0);
           app.setQuery(query);
           qx.event.message.Bus.dispatch(new qx.event.message.Message("bibliograph.userquery", query));
@@ -357,13 +355,12 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
           query = this.searchbox.getValue();
         } else {
           query = this.searchbox.getTextContent();
-          console.log(query);
         }
         this.searchbox.close();
         let app = this.getApplication();
         app.getWidgetById("app/windows/help-search").hide();
         app.setFolderId(0);
-        if (app.getQuery() === query) app.setQuery(null); // execute query again
+        //if (app.getQuery() === query) app.setQuery(null); // execute query again
         app.setQuery(query);
         qx.event.message.Bus.dispatch(new qx.event.message.Message("bibliograph.userquery", query));
       });
