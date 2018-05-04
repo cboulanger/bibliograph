@@ -642,7 +642,7 @@ msgstr ""
 
 #: bibliograph.ui.main.Toolbar:268 bibliograph/ui/main/Toolbar.js:268
 #: bibliograph/ui/main/Toolbar.js:281 bibliograph/ui/main/Toolbar.js:305
-#: bibliograph/ui/main/Toolbar.js:313
+#: bibliograph/ui/main/Toolbar.js:313 bibliograph/ui/main/Toolbar.js:311
 msgid "Enter search term"
 msgstr ""
 
@@ -1518,6 +1518,7 @@ msgstr ""
 #: bibliograph/plugins/z3950/ImportWindow.js:252
 #: bibliograph/plugins/z3950/ImportWindow.js:251
 #: bibliograph/plugins/z3950/ImportWindow.js:250
+#: bibliograph/ui/main/Toolbar.js:279
 msgid "Searching..."
 msgstr ""
 
@@ -1654,7 +1655,7 @@ msgstr ""
 msgid "Exporting query..."
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:278
+#: bibliograph/ui/main/Toolbar.js:278 bibliograph/ui/main/Toolbar.js:280
 msgid "Enter search term or ? for suggestions"
 msgstr ""
 
@@ -1664,4 +1665,8 @@ msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:150
 msgid "Save current search query as top folder"
+msgstr ""
+
+#: bibliograph/ui/main/Toolbar.js:278
+msgid "No results"
 msgstr ""
