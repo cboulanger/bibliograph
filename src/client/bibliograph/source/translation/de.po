@@ -464,7 +464,7 @@ msgid "About Bibliograph"
 msgstr "Über Bibliograph"
 
 #: bibliograph.ui.main.Toolbar:268 bibliograph/ui/main/Toolbar.js:268
-#: bibliograph/ui/main/Toolbar.js:281
+#: bibliograph/ui/main/Toolbar.js:281 bibliograph/ui/main/Toolbar.js:305
 msgid "Enter search term"
 msgstr "Bitte geben sie einen Suchausdruck ein"
 
@@ -1567,4 +1567,8 @@ msgstr ""
 
 #: bibliograph/ui/main/TableView.js:548
 msgid "Exporting query..."
+msgstr ""
+
+#: bibliograph/ui/main/Toolbar.js:278
+msgid "Enter search term or ? for suggestions"
 msgstr ""
