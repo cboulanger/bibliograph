@@ -229,12 +229,8 @@ qx.Mixin.define("bibliograph.MApplicationState", {
      */
     _applyQuery: function(value, old) {
       this.getStateManager().setState("query", value);
-      let searchbox = this.getWidgetById("app/toolbar/searchbox");
-      if (value && this.getDatasource()) {
-        if ( searchbox ) searchbox.setValue(value);
-      } else {
+      if (! value ||! this.getDatasource()) {
         this.getStateManager().removeState("query");
-        if ( searchbox ) searchbox.setValue("");
       }
     },
 

@@ -162,7 +162,7 @@ class Form extends Dialog
       // marshal a model property value for the form field's value
       $marshaler = ArrayHelper::getValue( $modelFormData, [$property,'marshal'], null );
       if(is_callable($marshaler)) {
-        $field['value'] = $marshaler($field['value']);
+        $field['value'] = $marshaler($field['value'], $model, $widgetFormData);
       } elseif( $marshaler) {
         throw new InvalidArgumentException("Invalid marshaller property for '$property': must be callable.");
       }
@@ -198,19 +198,19 @@ class Form extends Dialog
       }
 
       // unmarshal form field values to be stored in a model property
-      $unmarshaler = ArrayHelper::getValue( $modelFormData, [$property,'umarshal'] );
-      if(is_callable($unmarshaler)) {
-        $data[$property] = $unmarshaler($data[$property]);
+      $unmarshaler = ArrayHelper::getValue( $modelFormData, [$property,'unmarshal'] );
+      if (is_callable($unmarshaler)) {
+       $data[$property] = $unmarshaler($data[$property], $data);
       } elseif( $unmarshaler ) {
         throw new InvalidArgumentException("Invalid unmarshaller for property '$property': must be callable.");
       }
 
       // coerce booleans to int
-      if( is_bool($value) ) {
-        $value = (int) $value;
+      if( is_bool($data[$property]) ) {
+        $data[$property] = (int) $value;
       }
       // remove null values from data
-      elseif ($value === null) {
+      elseif ($data[$property] === null) {
         unset( $data[$property] );
       }
     }

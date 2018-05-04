@@ -93,7 +93,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
           "app/treeview:changeSelectedNode"
         ],
         condition : [
-          self => self.getAddItems() !== null,
+          self => self.getAddItems() !== null &&  self.getFolderId() > 0,
           treeview => {
             if ( ! treeview.getTree() ) return false;
             let selection = treeview.getTree().getSelectedNodes();
@@ -107,12 +107,17 @@ qx.Class.define("bibliograph.ui.main.TableView",
       remove_selected_references : {
         depends: "reference.remove",
         updateEvent : "changeSelectedIds",
-        condition : self => self.getSelectedIds().length > 0
+        condition : self => self.getSelectedIds().length > 0 && self.getFolderId() >0
       },
       move_reference : {
         aliasOf : "reference.move"
       },
       move_selected_references :{
+        depends: "reference.move",
+        updateEvent : "changeSelectedIds",
+        condition : self => self.getSelectedIds().length > 0 &&  self.getFolderId() >0
+      },
+      copy_selected_references :{
         depends: "reference.move",
         updateEvent : "changeSelectedIds",
         condition : self => self.getSelectedIds().length > 0
@@ -223,7 +228,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
       let copyButton = new qx.ui.menu.Button(this.tr('Copy reference(s)...'));
       optionsMenu.add(copyButton);
       copyButton.addListener("execute", ()=>this.copySelectedReferences());
-      this.bindEnabled(this.permissions.move_selected_references, copyButton);
+      this.bindEnabled(this.permissions.copy_selected_references, copyButton);
       this.bindVisibility(this.permissions.move_reference, copyButton);
       
       // Export menu

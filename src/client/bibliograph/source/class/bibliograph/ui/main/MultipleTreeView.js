@@ -67,10 +67,21 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
      * Permissions
      */
     permissions : {
-      add_folder : {
+      add_any_folder : {
+        aliasOf : "folder.add"
+      },
+      add_child_folder : {
         depends: "folder.add",
         updateEvent : "changeSelectedNode",
         condition : tree => tree.getSelectedNode() !== null && tree.getSelectedNode().data.type !== "virtual"
+      },
+      save_search : {
+        depends: "folder.add",
+        updateEvent : "app:changeQuery",
+        condition : app => !! app.getQuery()
+      },
+      add_top_folder : {
+        depends: "folder.add"
       },
       remove_folder : {
         depends: "folder.remove",
@@ -111,16 +122,35 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
     //  USER INTERFACE
     //-------------------------------------------------------------------------
     
-    createAddButton : function(menubar=false)
+    createAddFolderButton : function(menubar =false)
     {
       let button = menubar
         ? new qx.ui.menubar.Button(null, "bibliograph/icon/button-plus.png")
-        : new qx.ui.menu.Button(this.tr("Add folder"));
+        : new qx.ui.menu.Button(this.tr("Add folder"), "bibliograph/icon/button-plus.png");
       button.addListener("click", ()=> this._addFolderDialog());
-      this.getPermission("folder.add").bind("state", button, "visibility", {
-        converter: bibliograph.Utils.bool2visibility
-      });
-      this.permissions.add_folder.bind("state", button, "enabled");
+      this.bindVisibility(this.permissions.add_any_folder,button);
+      this.bindEnabled(this.permissions.add_child_folder, button);
+      return button;
+    },
+  
+    createAddTopFolderButton : function(menubar=false)
+    {
+      let button = menubar
+        ? new qx.ui.menubar.Button(null, "bibliograph/icon/button-plus.png")
+        : new qx.ui.menu.Button(this.tr("Add top level folder"), "bibliograph/icon/button-plus.png");
+      button.addListener("click", ()=> this._addTopFolderDialog());
+      this.bindVisibility( this.permissions.add_top_folder, button);
+      return button;
+    },
+  
+    createSaveSearchFolderButton : function(menubar=false)
+    {
+      let button = menubar
+        ? new qx.ui.menubar.Button(null, "bibliograph/icon/16/search.png")
+        : new qx.ui.menu.Button(this.tr("Save current search query as top folder"),"bibliograph/icon/16/search.png");
+      button.addListener("click", ()=> this._saveSearchQuery());
+      this.bindVisibility( this.permissions.add_any_folder, button);
+      this.bindEnabled(this.permissions.save_search,button);
       return button;
     },
   
@@ -128,12 +158,12 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
     {
       let button = menubar
         ? new qx.ui.menubar.Button(null, "bibliograph/icon/button-minus.png")
-        : new qx.ui.menu.Button(this.tr("Remove folder"));
+        : new qx.ui.menu.Button(this.tr("Remove folder"), "bibliograph/icon/button-minus.png");
       button.addListener("click", ()=> this._removeFolderDialog());
       this.getPermission("folder.remove").bind("state", button, "visibility", {
         converter: bibliograph.Utils.bool2visibility
       });
-      this.permissions.add_folder.bind("state", button, "enabled");
+      this.permissions.add_child_folder.bind("state", button, "enabled");
       return button;
     },
   
@@ -200,7 +230,8 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
         let tree = e.getData();
         if (! tree) return;
         tree.setContextMenuHandler(0, (col, row, table, dataModel, contextMenu) => {
-          contextMenu.add(this.createAddButton());
+          contextMenu.add(this.createAddFolderButton());
+          contextMenu.add(this.createAddTopFolderButton());
           contextMenu.add(this.createRemoveButton());
           contextMenu.add(this.createEditButton());
           contextMenu.add(this.createMoveButton());
@@ -302,7 +333,24 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
     {
      this.rpc.addDialog(this.getDatasource(), this.getNodeId());
     },
-
+  
+    /**
+     * Triggers server dialog to add a top folder
+     */
+    _addTopFolderDialog: function ()
+    {
+      this.rpc.addDialog(this.getDatasource(), 0 ).then(()=>this.reload());
+    },
+  
+    /**
+     * Triggers server dialog to add a top folder
+     */
+    _saveSearchQuery: function ()
+    {
+      let app = this.getApplication();
+      app.getRpcClient("folder").send("save-search", [this.getDatasource(), 0, app.getQuery()]);
+    },
+    
     /**
      * Triggers server dialog to remove a folder
      */

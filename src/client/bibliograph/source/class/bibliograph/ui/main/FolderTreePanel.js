@@ -94,7 +94,7 @@ qx.Class.define("bibliograph.ui.main.FolderTreePanel",
       // footer menu
       let footerMenu = new qx.ui.menubar.MenuBar();
       this.add(footerMenu);
-      footerMenu.add(mTree.createAddButton(true));
+      footerMenu.add(mTree.createAddFolderButton(true));
       footerMenu.add(mTree.createRemoveButton(true));
       footerMenu.add(mTree.createReloadButton());
 
@@ -104,6 +104,8 @@ qx.Class.define("bibliograph.ui.main.FolderTreePanel",
       let settingsMenu =  new qx.ui.menu.Menu();
       settingsMenu.setWidgetId("app/treeview/settings-menu");
       settingsBtn.setMenu(settingsMenu);
+      settingsMenu.add(mTree.createAddTopFolderButton());
+      settingsMenu.add(mTree.createSaveSearchFolderButton());
       settingsMenu.add(mTree.createEmptyTrashButton());
       settingsMenu.add(mTree.createEditButton());
       settingsMenu.add(mTree.createVisibilityButton());

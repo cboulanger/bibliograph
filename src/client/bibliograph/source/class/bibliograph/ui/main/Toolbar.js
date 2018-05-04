@@ -299,6 +299,14 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
           qx.event.message.Bus.dispatch(new qx.event.message.Message("bibliograph.userquery", query));
           app.getWidgetById("app/windows/help-search").hide();
         });
+        this.getApplication().addListener("changeQuery", e => {
+          if( e.getData() === searchbox.getTextContent() ) return;
+          searchbox.reset();
+          //searchbox.getChildControl('textfield').setWidth(null);
+          //searchbox.getChildControl('textfield').setValue(e.getData());
+          //searchbox.search(e.getData());
+        });
+        
       } else {
         searchbox = new qx.ui.form.TextField();
         searchbox.setMarginTop(8);

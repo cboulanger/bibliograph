@@ -514,7 +514,7 @@ class ReferenceController extends AppController
     $this->requirePermission("reference.remove");
 
     if( $folderId === 0){
-      throw new UserErrorException("Removing from all folders not impemented yet.");
+      throw new UserErrorException("Removing a search result is not impemented yet.");
     }
 
     /** @var Reference $referenceClass */
@@ -999,15 +999,16 @@ class ReferenceController extends AppController
    * @param $inputPosition
    * @param string[] $tokens
    * @param $datasourceName
+   * @todo rename
    * @return TokenFieldDto[]
    */
   public function actionTokenizeQuery( $input, $inputPosition, $tokens, $datasourceName ){
     Yii::debug(func_get_args());
     $input = trim($input);
     $modelClass = Datasource::in($datasourceName,"reference");
-    /** @var BibtexSchema $schema */
     $tokens[] = $input;
     $query = implode(" ", $tokens);
+    /** @var BibtexSchema $schema */
     $schema = $modelClass::getSchema();
     $nlq = new NaturalLanguageQuery([
       'query'     => $query,

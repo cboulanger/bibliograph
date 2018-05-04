@@ -200,10 +200,15 @@ class FolderController extends AppController //implements ITreeController
     if( str_contains($query, "virtsub:") ){
       $field = trim(substr($query,strpos($query,":")+1));
       $referenceClass = Datasource::in($datasource,"reference");
-      $values = $referenceClass::find()
-        ->select($field)
-        ->distinct()
-        ->column();
+      try{
+        $values = $referenceClass::find()
+          ->select($field)
+          ->distinct()
+          ->column();
+      } catch (\Exception $e){
+        Yii::warning($e->getMessage());
+        return;
+      }
       $separatedValues = [];
       foreach ($values as $value) {
         if( ! $value ) continue;
@@ -455,19 +460,30 @@ class FolderController extends AppController //implements ITreeController
     $this->requirePermission("folder.add");
     if ($data === null or $data->label == "") return "ABORTED";
     $folderClass = $this->getControlledModel($datasource);
-    /** @var Folder $parentFolder */
-    $parentFolder = $folderClass::findOne($parentFolderId);
-    if( ! $parentFolder and $parentFolderId ){
-      throw new UserErrorException("Parent folder #$parentFolderId does not exist.");
+    $position = 0;
+    if( $parentFolderId ){
+      /** @var Folder $parentFolder */
+      $parentFolder = $folderClass::findOne($parentFolderId);
+      if( ! $parentFolder ){
+        throw new UserErrorException("Parent folder #$parentFolderId does not exist.");
+      }
+      $position = $parentFolder->childCount;
+    } else {
+      $position = $folderClass::find()->where(['parentId' => 0])->count()-1;
+      $trashFolder = TrashController::getTrashFolder($datasource);
+      $trashFolder->position = $position+1;
+      $trashFolder->save();
     }
+
     // child folder
     /** @var Folder $folder */
     $folder = new $folderClass([
       'parentId'      => $parentFolderId,
       'label'         => $data->label,
-      'searchfolder'  => $data->searchfolder,
+      'searchfolder'  => $data->searchfolder ?? 0,
+      'query'         => $data->query ?? "",
       'childCount'    => 0,
-      'position'      => $parentFolder->childCount,
+      'position'      => $position,
       'public'        => 0,
       'opened'        => 0,
     ]);
@@ -482,12 +498,30 @@ class FolderController extends AppController //implements ITreeController
       return $this->actionEdit($datasource,$folder->id);
     }
     // otherwise, just return
-    if( ! $parentFolderId ){
+    if( $parentFolderId === 0){
       // root node
       return "Created new top folder";
     }
-
     return "Created new folder";
+  }
+
+  /**
+   * Saves the current search query as a subfolder
+   * @param string $datasource
+   * @param int $parentFolderId
+   * @param string $query
+   * @return string
+   * @throws Exception
+   * @throws \JsonRpc2\Exception
+   */
+  public function actionSaveSearch(string $datasource, int $parentFolderId, string $query)
+  {
+    $data = (object)[
+      'label' => $query,
+      'searchfolder' => true,
+      'query' => $query
+    ];
+    return $this->actionCreate($data,$datasource,$parentFolderId);
   }
 
   /**
@@ -503,10 +537,6 @@ class FolderController extends AppController //implements ITreeController
     $this->requirePermission("folder.remove");
     /** @var Folder $folder */
     $folder = $this->getRecordById($datasource, $folderId);
-    // root folder?
-    if ($folder->parentId == 0) {
-      throw new UserErrorException(Yii::t('app', "Top folders cannot be deleted."));
-    }
     // create dialog
     Confirm::create(
       Yii::t('app', "Do you really want to move the folder '{name}' into the trash?", [
@@ -532,9 +562,6 @@ class FolderController extends AppController //implements ITreeController
     $this->requirePermission("folder.remove");
     /** @var Folder $folder */
     $folder = $this->getRecordById($datasource, $folderId);
-    if ($folder->parentId == 0) {
-      throw new UserErrorException(Yii::t('app', "Top folders cannot be deleted."));
-    }
 
     // move folder into trash
     $trashFolder = TrashController::getTrashFolder($datasource);
@@ -642,11 +669,6 @@ class FolderController extends AppController //implements ITreeController
 
     // change folder parent
     $folder = $this->getRecordById($datasource, $folderId);
-
-    // root folder?
-    if ($folder->parentId == 0) {
-      throw new UserErrorException(Yii::t('app', "Top folders cannot be moved."));
-    }
 
     $folder->parentId = $parentId;
     $folder->save();

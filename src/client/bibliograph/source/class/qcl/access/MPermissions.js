@@ -205,7 +205,9 @@ qx.Mixin.define("qcl.access.MPermissions",
               let splitPos  = eventName.indexOf(":");
               let widgetId  = eventName.substr( 0, splitPos );
               eventName = eventName.substr( splitPos+1 );
-              let obj = this.getApplication().getWidgetById(widgetId);
+              let obj = widgetId === "app"
+                ? this.getApplication()
+                : this.getApplication().getWidgetById(widgetId);
               if( obj ){
                 permissionUpdaters[index] = obj;
                 obj.addListener(eventName, () => permission.update() );
@@ -226,7 +228,7 @@ qx.Mixin.define("qcl.access.MPermissions",
           let count=0;
           this._castToArray(permData.condition).forEach((fn, index)=>{
             let instance = permissionUpdaters[index];
-            if ( instance instanceof qx.ui.core.Widget){
+            if ( instance instanceof qx.core.Object ){
               permission.addCondition( fn, instance );
               count++;
             } else if (qx.lang.Type.isArray(instance)) {
@@ -274,7 +276,8 @@ qx.Mixin.define("qcl.access.MPermissions",
             } else if (elem.length === 4 ){
               // condition
               let [widgetId, eventName, permission, fn] = elem;
-              let instance = qx.core.Init.getApplication().getWidgetById(widgetId);
+              let app = qx.core.Init.getApplication();
+              let instance = widgetId === "app" ? app : app.getWidgetById(widgetId);
               if( ! instance ){
                 this.error(`Object with id '${widgetId}' does not exist.`);
               }

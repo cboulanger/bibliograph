@@ -41,7 +41,7 @@ class ReferenceSchema extends BibtexSchema
               'separator' => null
             ]
           ],
-          'index' => "Type"
+          'index' => Yii::t('extendedfields', "Type")
         ],
 
         /*
@@ -64,7 +64,7 @@ class ReferenceSchema extends BibtexSchema
               'separator' => null
             ]
           ],
-          'index' => "Location"
+          'index' => Yii::t('extendedfields', "Location")
         ],
 
         /*
@@ -87,7 +87,7 @@ class ReferenceSchema extends BibtexSchema
               'separator' => null
             ]
           ],
-          'index' => "Category"
+          'index' => Yii::t('extendedfields', "Category")
         ],
 
         /*
@@ -110,7 +110,7 @@ class ReferenceSchema extends BibtexSchema
               'separator' => null
             ]
           ],
-          'index' => "Owner"
+          'index' => Yii::t('extendedfields', "Owner")
         ],
 
         /*
@@ -124,7 +124,7 @@ class ReferenceSchema extends BibtexSchema
             'label'     => Yii::t('extendedfields', "Date ordered"),
             'type'      => "datefield"
           ],
-          'index' => "Date ordered"
+          'index' => Yii::t('extendedfields', "Date ordered")
         ],
 
         /*
@@ -138,7 +138,7 @@ class ReferenceSchema extends BibtexSchema
             'label'     => Yii::t('extendedfields', "Date received"),
             'type'      => "datefield"
           ],
-          'index' => "Date received"
+          'index' => Yii::t('extendedfields', "Date received")
         ]
       ]
     );
