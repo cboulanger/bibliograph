@@ -328,7 +328,7 @@ abstract class AbstractReferenceSchema extends yii\base\BaseObject implements IS
   }
 
   /**
-   * Returns the index names for this schema (lower case!).
+   * Returns the translated index names for this schema
    * @return array Array of index names
    */
   public function getIndexNames()

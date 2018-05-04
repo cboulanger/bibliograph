@@ -261,59 +261,77 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
 
     createSearchBox : function()
     {
-      // let t = new tokenfield.Token();
-      // t.setMarginTop(8);
-      // t.setSelectionMode('multi');
-      // t.setSelectOnce(true);
-      // t.setLabelPath("name");
-      // t.setHintText("Token field test...");
-      // t.addListener("loadData", e => {
-      //   let input = e.getData();
-      //   rpc.Reference.autocomplete()
-      //   t.populateList(input, data);
-      // });
-      //
-      
-      let searchbox = new qx.ui.form.TextField();
-      this.searchbox = searchbox;
-      searchbox.setWidgetId("app/toolbar/searchbox");
-      searchbox.setMarginTop(8);
-      searchbox.setPlaceholder(this.tr('Enter search term'));
-      this.permMgr.create("reference.search").bind("state", searchbox, "visibility", {
-        converter : bibliograph.Utils.bool2visibility
-      });
-      searchbox.addListener("keypress", function(e) {
-        if (e.getKeyIdentifier() == "Enter")
-        {
+      let searchbox;
+      if (true) { // todo make configurable
+        searchbox = new tokenfield.Token();
+        searchbox.set({
+          marginTop: 8,
+          maxHeight: 24,
+          width: 400,
+          selectionMode: 'multi',
+          closeWhenNoResults: true,
+          showCloseButton: false,
+          minChars : 0,
+          selectOnce: false,
+          labelPath: 'token',
+          wildcards : ['?'],
+          typeInText: this.tr('Enter search term or ? for suggestions')
+        });
+        searchbox.addListener("loadData", async (e) =>  {
+          let input = e.getData();
+          let tokens = [];
+          searchbox.getSelection().forEach(function(item){
+            if( item.getLabel !== undefined) tokens.push(item.getLabel());
+          },this);
+          let inputPosition = searchbox._getChildren().indexOf(searchbox.getChildControl('textfield'));
+          let data = await this.getApplication()
+            .getRpcClient("reference")
+            .send("tokenize-query", [ input, inputPosition, tokens, this.getApplication().getDatasource() ]);
+          searchbox.populateList(input, data);
+        });
+        searchbox.addListener('enterKeyWithContent',e => {
           let app = this.getApplication();
-          let query = searchbox.getValue();
+          let query = searchbox.getTextContent();
+          searchbox.close();
+          this.debug(query);
           app.setFolderId(0);
           app.setQuery(query);
           qx.event.message.Bus.dispatch(new qx.event.message.Message("bibliograph.userquery", query));
           app.getWidgetById("app/windows/help-search").hide();
-        }
-      }, this);
-      searchbox.addListener("dblclick", function(e) {
-        e.stopPropagation();
-      }, this);
-      searchbox.addListener("focus", function(e)
-      {
-        searchbox.setLayoutProperties( {
-          flex : 10
         });
-        this.getApplication().setInsertTarget(searchbox);
-      }, this);
-      searchbox.addListener("blur", function(e)
-      {
+      } else {
+        searchbox = new qx.ui.form.TextField();
+        searchbox.setMarginTop(8);
+        searchbox.setPlaceholder(this.tr('Enter search term'));
+        this.permMgr.create("reference.search").bind("state", searchbox, "visibility", {
+          converter : bibliograph.Utils.bool2visibility
+        });
+        searchbox.addListener("keypress", e => {
+          if (e.getKeyIdentifier() === "Enter") {
+            let app = this.getApplication();
+            let query = searchbox.getValue();
+            app.setFolderId(0);
+            app.setQuery(query);
+            qx.event.message.Bus.dispatch(new qx.event.message.Message("bibliograph.userquery", query));
+            app.getWidgetById("app/windows/help-search").hide();
+          }
+        });
+        searchbox.addListener("dblclick", e =>  e.stopPropagation());
+      }
+      this.searchbox = searchbox;
+      searchbox.setWidgetId("app/toolbar/searchbox");
+      searchbox.addListener("focus", e => {
+        searchbox.setLayoutProperties( { flex : 10 });
+        //this.getApplication().setInsertTarget(searchbox);
+      });
+      searchbox.addListener("blur", e => {
         let timer = qx.util.TimerManager.getInstance();
         timer.start(function() {
           if (!qx.ui.core.FocusHandler.getInstance().isFocused(searchbox)) {
-            searchbox.setLayoutProperties( {
-              flex : 1
-            });
+            searchbox.setLayoutProperties( { flex : 1 });
           }
         }, null, this, null, 5000);
-      }, this);
+      });
       return searchbox
     },
 
@@ -326,11 +344,18 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
         converter : bibliograph.Utils.bool2visibility
       });
       searchButton.addListener("execute", () => {
-        let query = this.searchbox.getValue();
+        let query;
+        if( this.searchbox instanceof qx.ui.form.TextField ){
+          query = this.searchbox.getValue();
+        } else {
+          query = this.searchbox.getTextContent();
+          console.log(query);
+        }
+        this.searchbox.close();
         let app = this.getApplication();
         app.getWidgetById("app/windows/help-search").hide();
         app.setFolderId(0);
-        if (app.getQuery() == query) app.setQuery(null); // execute query again
+        if (app.getQuery() === query) app.setQuery(null); // execute query again
         app.setQuery(query);
         qx.event.message.Bus.dispatch(new qx.event.message.Message("bibliograph.userquery", query));
       });
@@ -343,7 +368,8 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
         converter : bibliograph.Utils.bool2visibility
       });
       cancelButton.addListener("execute", () => {
-        this.searchbox.setValue("");
+        this.searchbox.reset ? this.searchbox.reset() : null;
+        this.searchbox.setValue ? this.searchbox.setValue("") : null;
         this.searchbox.focus();
         this.getApplication().getWidgetById("app/windows/help-search").hide();
       });

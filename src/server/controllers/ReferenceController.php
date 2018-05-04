@@ -24,6 +24,8 @@ use app\models\Datasource;
 use app\models\ExportFormat;
 use app\models\Folder;
 use app\models\Reference;
+use app\schema\BibtexSchema;
+use lib\cql\NaturalLanguageQuery;
 use lib\exceptions\UserErrorException;
 use lib\Validate;
 use Yii;
@@ -990,4 +992,108 @@ class ReferenceController extends AppController
     }
     return $data;
   }
+
+
+  /**
+   * @param $input
+   * @param $inputPosition
+   * @param string[] $tokens
+   * @param $datasourceName
+   * @return TokenFieldDto[]
+   */
+  public function actionTokenizeQuery( $input, $inputPosition, $tokens, $datasourceName ){
+    Yii::debug(func_get_args());
+    $input = trim($input);
+    $modelClass = Datasource::in($datasourceName,"reference");
+    /** @var BibtexSchema $schema */
+    $tokens[] = $input;
+    $query = implode(" ", $tokens);
+    $schema = $modelClass::getSchema();
+    $nlq = new NaturalLanguageQuery([
+      'query'     => $query,
+      'schema'    => $schema,
+      'language'  => Yii::$app->language,
+      'verbose' => true
+    ]);
+    $translatedQuery = $nlq->translate();
+    Yii::debug("$query => $translatedQuery");
+    $matches=[];
+    switch ($inputPosition){
+      case 0:
+        // the first token is either a field name (or a search expression)
+        $matches = array_filter($schema->getIndexNames(), function($item) use($input) {
+          return $input === "?" or str_contains( mb_strtolower($item, 'UTF-8'),  mb_strtolower($input, 'UTF-8') );
+        });
+        break;
+      case 1:
+        // the second token is an operator (or a search expression)
+        $translatedOpterators = array_map(function ($item) use ($nlq) {
+          return trim(str_replace( ['{field}','{value}','{leftOperand}','{rightOperand}'],'', $nlq->getOperatorData($item)['translation']));
+        },$nlq->getOperators());
+        sort($translatedOpterators);
+        $matches = array_filter($translatedOpterators, function($item) use($input) {
+          return $input === "?" or str_contains( mb_strtolower($item, 'UTF-8'),  mb_strtolower($input, 'UTF-8' ) );
+        });
+        break;
+      case 2:
+        if( count($nlq->parsedTokens) ===  0) break;
+        // if the first token is field, return index entries
+        $field = array_first($schema->fields(), function($field) use($nlq) {
+          return $field === $nlq->parsedTokens[0];
+        });
+        $operator = array_first($nlq->getOperators(), function($operator) use($nlq) {
+          return isset($nlq->parsedTokens[1]) && $operator === $nlq->parsedTokens[1];
+        });
+        if( $field ){
+          $separator=false;
+          $fieldData = $schema->getFieldData($field);
+          if (isset($fieldData['separator'])) {
+            $separator = $fieldData['separator'];
+          }
+          $query = $this->findIn($datasourceName,"reference")
+            ->select($field)
+            ->distinct()
+            ->orderBy($field);
+          if( ! $input or $input !== "?" ){
+            $query = $query->where( "$field like '%$input%'");
+          }
+          $matches = $query->column();
+          if ($separator) {
+            $m = [];
+            foreach ($matches as $value) {
+              foreach (explode($separator, $value) as $suggestion) {
+                $suggestion = trim($suggestion);
+                if (strtolower($input) == strtolower(substr($suggestion, 0, strlen($input)))) {
+                  $m[] =  str_contains($suggestion, " ")
+                    ? "\"$suggestion\""
+                    : $suggestion;
+                }
+              }
+            }
+            $matches = $m;
+          }
+        }
+        break;
+    }
+    if( count($matches)===0){
+      $matches = [$input];
+    }
+    $matches = array_map(function ($item){ return trim($item);}, $matches);
+    $matches = array_filter($matches, function ($item){ return !empty($item);});
+    $matches = array_unique($matches);
+    sort($matches);
+    $list = [];
+    foreach ($matches as $match) {
+      $list[] = [ 'token' => $match ];
+    }
+    return $list;
+  }
+}
+
+class TokenFieldDto extends \JsonRpc2\Dto
+{
+  /**
+   * @var string
+   */
+  public $token = "";
 }

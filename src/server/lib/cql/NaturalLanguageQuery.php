@@ -64,9 +64,15 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
   public $schema = null;
 
   /**
+   * @todo rename
    * @var Diagnostic|SearchClause|Triple|null
    */
   public $cql;
+
+  /**
+   * @var array
+   */
+  public $parsedTokens =[];
 
   /**
    * The dictionary of operators and modifiers
@@ -94,13 +100,22 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
    */
   public function __construct(array $config = [])
   {
-    if( ! isset($config['query']) ){
+    if (!isset($config['query'])) {
       throw new \InvalidArgumentException("You need to set the 'query' property");
     }
-    if( ! isset($config['schema']) or !( $config['schema'] instanceof AbstractReferenceSchema) ){
+    if (!isset($config['schema']) or !($config['schema'] instanceof AbstractReferenceSchema)) {
       throw new \InvalidArgumentException("Invalid 'schema' property");
     }
     parent::__construct($config);
+  }
+
+  /**
+   * Parses the query
+   * @return Diagnostic|SearchClause|Triple|null
+   * @throws UserErrorException
+   */
+  public function parse()
+  {
     // set language
     $appLanguage = Yii::$app->language;
     if( ! $this->language ){
@@ -111,12 +126,26 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
       $this->schema->init();
     }
     // translate query
-    $this->cql = $this->parseMulitLanguageQuery($this->query);
     if ( $appLanguage !== $this->language ){
       // revert to previous language
       Yii::$app->language = $appLanguage;
       $this->schema->init();
     }
+    $cqlQuery = $this->translate();
+
+    // create and configure parser object
+    $parser = new Parser($cqlQuery);
+    $parser->setBooleans($this->booleans);
+    $parser->setModifiers($this->modifiers);
+    $parser->setSortWords(array("sortby"));
+
+    // parse CQL string
+    $cql = $parser->query();
+    if ($cql instanceof Diagnostic) {
+      // @todo throw the UserErrorException in the calling code....
+      throw new UserErrorException(Yii::t('app',"Could not parse query: " . $cql->toTxt()));
+    }
+    return $cql;
   }
 
   /**
@@ -171,22 +200,22 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
           'translation' => Yii::t('app', "{field} starts with {value}"),
           'type' => self::TYPE_COMPARATOR
         ],
-        ">" => [
-          'translation' => Yii::t('app', "{field} is greater than {value}"),
-          'type' => self::TYPE_COMPARATOR
-        ],
-        ">=" => [
-          'translation' => Yii::t('app', "{field} is greater than or equal to {value}"),
-          'type' => self::TYPE_COMPARATOR
-        ],
-        "<" => [
-          'translation' => Yii::t('app', "{field} is smaller than {value}"),
-          'type' => self::TYPE_COMPARATOR
-        ],
-        "<=" => [
-          'translation' => Yii::t('app', "{field} is smaller than or equal to {value}"),
-          'type' => self::TYPE_COMPARATOR
-        ],
+//        ">" => [
+//          'translation' => Yii::t('app', "{field} is greater than {value}"),
+//          'type' => self::TYPE_COMPARATOR
+//        ],
+//        ">=" => [
+//          'translation' => Yii::t('app', "{field} is greater than or equal to {value}"),
+//          'type' => self::TYPE_COMPARATOR
+//        ],
+//        "<" => [
+//          'translation' => Yii::t('app', "{field} is smaller than {value}"),
+//          'type' => self::TYPE_COMPARATOR
+//        ],
+//        "<=" => [
+//          'translation' => Yii::t('app', "{field} is smaller than or equal to {value}"),
+//          'type' => self::TYPE_COMPARATOR
+//        ],
 //      "between" => [
 //        'translation' => Yii::t('app', "{field} is between {value}"),
 //        'type' => self::TYPE_COMPARATOR
@@ -252,8 +281,10 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
           $translated = $this->schema->getFieldLabel($field);
           $translated = \mb_strtolower($translated, 'UTF-8');
           $dict[$translated] = $field;
-          // add the root form of German gendered words ("Autor/in"=> "Autor")
-          if ( substr($locale,0,2) === "de" and $pos = strpos($translated, "/")) {
+          // add the root form of German gendered words ("Autor/in"=> "Autor"), todo: make this more universal
+          $de_gendered = substr($locale,0,2) === "de"
+            and ( $pos = strpos($translated, "/") or $pos = strpos($translated, "*"));
+          if ( $de_gendered ) {
             $dict[substr($translated, 0, $pos)] = $field;
           }
         }
@@ -279,12 +310,13 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
 
   /**
    * Translate operators, booleans and indexes.
-   * @param $query
-   * @return Diagnostic|SearchClause|Triple|null
+   * @return string
    */
-  protected function parseMulitLanguageQuery($query)
+  public function translate()
   {
+    $query = $this->query;
     if($this->verbose) Yii::info(" *** Query is '$query', using language '$this->language'... ***");
+    if( ! $query ) return "";
     $tokenizer = new Tokenizer($query);
     $tokens = $tokenizer->tokenize();
     $operators = $this->getOperators();
@@ -293,7 +325,7 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
     $dict = $this->getDictionary();
     if($this->verbose) Yii::debug($dict);
     do {
-      $token = $tokens[0];
+      $token = isset($tokens[0]) ? $tokens[0] : "";
       if($this->verbose) Yii::info("Looking at '$token'...");
       // do not translate quoted expressions
       if ( in_array( $token[0], ["'", '"']) ) {
@@ -304,10 +336,17 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
         for($i=0; $i<count($tokens); $i++){
           $compare = implode( " ", array_slice( $tokens, 0, $i+1 ));
           $compare = mb_strtolower( $compare, "UTF-8");
-          if($this->verbose) Yii::info("Comparing '$compare'...");
-          if( isset( $dict[$compare] ) ) {
-            $token = $dict[$compare];
-            $offset = $i+1;
+          if ($this->verbose) Yii::info("Comparing '$compare'...");
+          if ($pos = strpos($compare, "/") or $pos = strpos($compare, "*")){
+            $compare_key = substr( $compare, 0, $pos);
+          } else {
+            $compare_key = $compare;
+          }
+          if( isset( $dict[$compare_key] ) ) {
+            $token = $dict[$compare_key];
+            if( $compare_key == $compare){
+              $offset = $i+1;
+            }
             if($this->verbose) Yii::info("Found '$token'.");
           }
         }
@@ -328,20 +367,8 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
       $cqlQuery = '"' . implode(" ", $parsedTokens) . '"';
       $this->containsOperators=false;
     }
-
-    // create and configure parser object
-    $parser = new Parser($cqlQuery);
-    $parser->setBooleans($this->booleans);
-    $parser->setModifiers($this->modifiers);
-    $parser->setSortWords(array("sortby"));
-
-    // parse CQL string
-    $cql = $parser->query();
-    if ($cql instanceof Diagnostic) {
-      // @todo throw the UserErrorException in the calling code....
-      throw new UserErrorException(Yii::t('app',"Could not parse query: " . $cql->toTxt()));
-    }
-    return $cql;
+    $this->parsedTokens = $parsedTokens;
+    return $cqlQuery;
   }
 
   /**
@@ -359,8 +386,11 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
    * @param ActiveQuery $activeQuery
    */
   public function injectIntoYiiQuery(ActiveQuery &$activeQuery ){
+    // implicit parsing
+    if( ! $this->cql ){
+      $this->cql = $this->parse();
+    }
     $this->addCondition($this->cql, $activeQuery);
-
   }
 
   /**

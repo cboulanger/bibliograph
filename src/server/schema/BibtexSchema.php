@@ -375,10 +375,10 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
        * the reference type
        */
       'reftype' => [
-        'label' => Yii::t('app', 'Bibliographic Type'),
+        'label' => Yii::t('app', 'Reference Type'),
         'type' => 'string',
         'csl' => 'type',
-        'index' => 'reftype',
+        'index' => Yii::t('app', 'Reference Type'),
         'indexEntry' => false,
         'formData' => [
           'type' => 'selectbox',
@@ -398,7 +398,7 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
         'label' => Yii::t('app', 'Citation Key'),
         'type' => 'string',
         'csl' => 'id',
-        'index' => 'Citation key',
+        'index' => Yii::t('app', 'Citation Key'),
         'indexEntry' => false,
         'formData' => [
           'type' => 'textfield',
@@ -415,7 +415,7 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
           'lines' => 3
         ],
         'csl' => 'abstract',
-        'index' => 'Abstract'
+        'index' => Yii::t('app', 'Abstract')
       ],
       // this is used for publisher-place or for author address
       'address' => [
@@ -431,7 +431,7 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
           ]
         ],
         'csl' => 'publisher-place',
-        'index' => 'Place'
+        'index' => Yii::t('app', 'Place')
       ],
       'affiliation' => [
         'label' => Yii::t('app', 'Affiliation'),
@@ -467,13 +467,10 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
           ]
         ],
         'csl' => 'author',
-        'index' => 'Author'
+        'index' => Yii::t('app', 'Author')
       ],
       'booktitle' => [
-        'label' => [
-          'default' => Yii::t('app', 'Book Title'),
-          'conference' => Yii::t('app', 'Conference Title')
-        ],
+        'label' => Yii::t('app', 'Book Title'),
         'autocomplete' => ['separator' => null],
         'type' => 'string',
         'indexEntry' => true,
@@ -487,7 +484,7 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
           ]
         ],
         'csl' => 'container-title',
-        'index' => 'Book Title'
+        'index' => Yii::t('app', 'Book Title')
       ],
       'contents' => [
         'label' => Yii::t('app', 'Contents'),
@@ -519,7 +516,7 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
         'type' => 'date',
         'bibtex' => true,
         'csl' => false,
-        'index' => 'Date'
+        'index' => Yii::t('app', 'Date')
       ],
       'edition' => [
         'label' => Yii::t('app', 'Edition'),
@@ -542,7 +539,7 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
           ]
         ],
         'csl' => 'author',
-        'index' => 'Editor'
+        'index' =>  Yii::t('app', 'Editor')
       ],
       'howpublished' => [
         'label' => Yii::t('app', 'Published As'),
@@ -568,7 +565,8 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
         'label' => Yii::t('app', 'ISBN'),
         'type' => 'string',
         'bibtex' => true,
-        'csl' => 'ISBN'
+        'csl' => 'ISBN',
+        'index' => Yii::t('app', 'ISBN')
       ],
       'issn' => [
         'label' => Yii::t('app', 'ISSN'),
@@ -590,7 +588,7 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
           ]
         ],
         'csl' => 'container-title',
-        'index' => 'Journal'
+        'index' => Yii::t('app', 'Journal')
       ],
       // don't know what this is for, anyways
       'key' => [
@@ -614,7 +612,7 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
           ]
         ],
         'csl' => 'keyword',
-        'index' => 'Keywords'
+        'index' => Yii::t('app', 'Keywords')
       ],
       'language' => [
         'label' => Yii::t('app', 'Language'),
@@ -639,7 +637,7 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
         'autocomplete' => ['separator' => null],
         'bibtex' => true,
         'csl' => false,
-        'index' => 'Location'
+        'index' => Yii::t('app', 'Location')
       ],
       'month' => [
         'label' => Yii::t('app', 'Month'),
@@ -647,14 +645,14 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
         'indexEntry' => true,
         'autocomplete' => ['separator' => null],
         'bibtex' => true,
-        'csl' => false,
-        'index' => 'Month'
+        'csl' => false
       ],
       'note' => [
         'label' => Yii::t('app', 'Note'),
         'type' => 'string',
         'bibtex' => true,
-        'csl' => 'note'
+        'csl' => 'note',
+        'index' => Yii::t('app', 'Note')
       ],
       'number' => [
         'label' => Yii::t('app', 'Number'),
@@ -701,7 +699,7 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
           ]
         ],
         'csl' => 'publisher',
-        'index' => 'Publisher'
+        'index' => Yii::t('app', 'Publisher')
       ],
       'school' => [
         'label' => Yii::t('app', 'University'),
@@ -729,7 +727,8 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
             'separator' => null
           ]
         ],
-        'csl' => 'collection-title'
+        'csl' => 'collection-title',
+        'index' => Yii::t('app', 'Series'),
       ],
       'size' => [
         'label' => Yii::t('app', 'Size'),
@@ -752,7 +751,7 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
           'fullWidth' => true
         ],
         'csl' => 'title',
-        'index' => 'Title'
+        'index' => Yii::t('app', 'Title')
       ],
       'translator' => [
         'label' => Yii::t('app', 'Translator'),
@@ -797,7 +796,7 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
         'type' => 'int',
         'bibtex' => true,
         'csl' => 'issued',
-        'index' => ['Year', 'Date']
+        'index' => Yii::t('app', 'Year')
       ]
     ];
   }
