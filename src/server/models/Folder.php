@@ -149,12 +149,28 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
           ['label' => Yii::t('app', "Off"), 'value' => 0]
         ]
       ],
+      'virtsub' => [
+        'label' => Yii::t('app', "Virtual subfolders"),
+        'type' => "SelectBox",
+        'options' => (array) $this->getIndexFieldsOptions(),
+        'value' => "",
+        'marshal' => function($value, $model, &$formData ){
+          if( str_contains($model->query, 'virtsub:') ){
+            $formData['query']['enabled'] = false;
+            return substr($model->query,8);
+          }
+          return $value;
+        },
+        'unmarshal' => function($value, &$data){
+          $data['query'] = "virtsub:" . $value;
+          return null; // do not set null value
+        }
+      ],
       'query' => [
         'label' => Yii::t('app', "Query"),
         'type' => "TextArea",
         'lines' => 3
       ],
-
       'opened' => [
         'label' => Yii::t('app', "Opened?"),
         'type' => "SelectBox",
@@ -170,6 +186,24 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
         "max"   => 100
       ]
     ];
+  }
+
+  protected function getIndexFieldsOptions()
+  {
+    $options = [[
+      'label' => Yii::t('app',"No virtual subfolders"),
+      'value' => ""
+    ]];
+    $schema = Reference::getSchema();
+    $indexNames = $schema->getIndexNames();
+    sort($indexNames);
+    foreach( $indexNames as $indexName ){
+      $options[] = [
+        'label' => $indexName,
+        'value' => $schema->getIndexFields($indexName)[0]
+      ];
+    }
+    return $options;
   }
 
   //-------------------------------------------------------------
