@@ -63,7 +63,7 @@ class Bibtex extends AbstractParser
   /**
    * @inheritdoc
    */
-  public function parse( string $bibtex )
+  public function parse( string $bibtex ) : array
   {
     try {
       $mods = (new Executable("bib2xml", BIBUTILS_PATH))->call("-u", $bibtex);

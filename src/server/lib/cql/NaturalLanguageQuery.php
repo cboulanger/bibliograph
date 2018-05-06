@@ -110,7 +110,7 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
   }
 
   /**
-   * Parses the query
+   * Translates and parses the query
    * @return Diagnostic|SearchClause|Triple|null
    * @throws UserErrorException
    */
@@ -163,7 +163,8 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
    * Returns the metadata on available operators. If an operator is passed as parameter, only
    * the metadata (type, translation) for this operator is returned. Otherwise, return
    * the data on all operators
-   * @param null $operator
+   * @todo This doesn't match the specs @ http://www.loc.gov/standards/sru/cql/contextSets/theCqlContextSet.html!
+   * @param string|null $operator
    * @return array
    */
   public function getOperatorData($operator = null)
@@ -180,7 +181,7 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
           'translation' => Yii::t('app', "{leftOperand} or {rightOperand}"),
           'type' => self::TYPE_BOOLEAN
         ],
-        "!=" => [
+        "<>" => [
           'translation' => Yii::t('app', "{field} is not {value}"),
           'type' => self::TYPE_COMPARATOR
         ],
@@ -220,18 +221,18 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
 //        'translation' => Yii::t('app', "{field} is between {value}"),
 //        'type' => self::TYPE_COMPARATOR
 //      ],
-        "sortby" => [
-          'translation' => Yii::t('app', "sort by {value}"),
-          'type' => self::TYPE_COMPARATOR
-        ],
-        "empty" => [
-          'translation' => Yii::t('app', "{field} is empty"),
-          'type' => self::TYPE_COMPARATOR
-        ],
-        "notempty" => [
-          'translation' => Yii::t('app', "{field} is not empty"),
-          'type' => self::TYPE_COMPARATOR
-        ]
+//        "sortby" => [
+//          'translation' => Yii::t('app', "sort by {value}"),
+//          'type' => self::TYPE_COMPARATOR
+//        ],
+//        "empty" => [
+//          'translation' => Yii::t('app', "{field} is empty"),
+//          'type' => self::TYPE_COMPARATOR
+//        ],
+//        "notempty" => [
+//          'translation' => Yii::t('app', "{field} is not empty"),
+//          'type' => self::TYPE_COMPARATOR
+//        ]
       ];
     }
     return $operator ? $data[$locale][$operator] : $data[$locale];

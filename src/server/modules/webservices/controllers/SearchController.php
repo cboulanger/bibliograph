@@ -117,7 +117,7 @@ class SearchController extends \yii\web\Controller
     Yii::debug("Executing query '{$cql->toCQL()}' on webservice '$datasourceName' ...", Module::CATEGORY);
 
     if ($progressBar) {
-      $progressBar->setProgress(0, Yii::t(Module::CATEGORY, "Waiting for remote server..."));
+      $progressBar->setProgress(0, Yii::t(Module::CATEGORY, "Waiting for webservice..."));
     }
 
     $records = $connector->query($cql);

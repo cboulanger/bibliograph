@@ -59,9 +59,9 @@ class BibtexUtf8 extends AbstractParser
 
   /**
    * @inheritdoc
-   * The parser (inofficially) supports some BibLaTeX fields.
+   * The parser (inofficially) supports parts of the BibLaTeX schema.
    */
-  public function parse( string $bibtex )
+  public function parse( string $bibtex ) : array
   {
     $parser = new BibtexParser();
     $records = $parser->parse($bibtex);

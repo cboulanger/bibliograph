@@ -9,6 +9,8 @@
  Description:  Port of Python CQLParser to PHP
  Parses CQL Version 1.2
 
+  See http://www.loc.gov/standards/sru/cql/
+
  Usage:  $parser = new CQLParser("query");
  $tree = &parser->query();
  $tree.toCQL();

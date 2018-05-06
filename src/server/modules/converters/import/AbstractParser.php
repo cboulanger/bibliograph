@@ -7,6 +7,7 @@
  */
 
 namespace app\modules\converters\import;
+use app\models\Reference;
 use lib\exceptions\UserErrorException;
 use Yii;
 use yii\base\BaseObject;
@@ -67,9 +68,9 @@ abstract class AbstractParser extends BaseObject
 
   /**
    * Parses the given data.
-   * @todo implement using streams, to allow efficient handling of very large files
+   * @todo support streams, to allow efficient handling of very large files
    * @param string $data
-   * @return array Array of records to be imported
+   * @return Reference[] of records to be imported
    */
-  abstract public function parse(string $data);
+  abstract public function parse(string $data) : array;
 }
