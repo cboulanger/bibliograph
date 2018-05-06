@@ -19,7 +19,6 @@
 - [ ] BUG: Disallow drop of references on folders in which they are already contained.
 - [ ] FEAT: Cache export formats for HTML view, make configurable 
 - [ ] FEAT: User::getAllPermissions returns always the highest available set of permissions, regardless of the permissions of the group the current datasource belongs to. Requires rewriting of  `$this->requirePermission` to pass the datasource / datasource name
-- [ ] FEAT: Tests: Make Travis ~~great~~ work again
 
 ### Priority: normal
 - [ ] FEAT: Transform compile.json into compile.js (to allow to update env var "app.version" etc.)
@@ -50,27 +49,28 @@
 - [ ] FEAT: Reimplememt help window
 - [ ] FEAT: validate email configuration 
 - [ ] FEAT: Change virtual folder icon
-- [ ] FEAT: Rewrite Yii2 configuration using M1/Var
+- [ ] FEAT: Rewrite Yii2 configuration using M1/Var, maybe convert config to YAML: https://packagist.org/packages/sergeymakinen/yii2-config ?
 - [ ] FEAT: Ctrl+A to select all (visible?) references.
+- [ ] FEAT: Change URL params separators to & and = 
 
-### Code cleanup
+### Code cleanup / refactoring
 - [ ] Clear up the conceptual mess concerning "schema": datasource schema/reference schema -> "repository"?
+- [ ] Rename "Datasource" to "Repository" (see https://dev.to/remojansen/implementing-the-onion-architecture-in-nodejs-with-typescript-and-inversifyjs-10ad)
 - [ ] FactoryClass("datasource","reference") proxying ActiveRecord methods
+- [ ] Replace calls to Yii::$app->eventQueue->add() with calls to message API
+- [ ] Rename 'converters' module
+- [ ] Move ImportController and UploadController into renamed 'converter' module
+- [ ] Move static methods out of \app\models\Datasource into DatasourceManager component
+- [ ] Replace message names with constants
+- [ ] Rename factory functions from getXxx to createXxx
+- [ ] Datasource-specific migration namespace should be in the Datasource Schema
 - [ ] Move config data from migration to config/prefs
 - [ ] Revert return value of ConsoleAppHelper to simple string
 - [ ] Backend: Model validation: accept booleans for MySql SmallInt columns
 - [ ] Re-implement Table Actions Interface
 - [ ] Add correct @return information to the JSONRPC methods/actions
 - [ ] Convert static icon resouce paths into aliases that are resolved in bibliograph.theme.Icon
-- [ ] Move config/test.php to tests/config.php 
-- [ ] Replace calls to Yii::$app->eventQueue->add() with calls to message API
-- [ ] Datasource-specific migration namespace should be in the Datasource Schema
-- [ ] Move static methods out of \app\models\Datasource into DatasourceManager component
-- [ ] Rename "Datasource" to "Repository" (see https://dev.to/remojansen/implementing-the-onion-architecture-in-nodejs-with-typescript-and-inversifyjs-10ad)
-- [ ] Replace message names with constants
-- [ ] Tests: Fix bootstrap loading issue
 - [ ] \app\controllers\AppController::require* methods should throw a specialized Exception (i.e. MethodNotAllowedException) instead of \JsonRpc2\Exception
-- [ ] Add @jsonrpc controller-id/action-id tag in controller actions
 - [ ] Replace ::findOne(['namedid'=>'foo']) with ::findByNamedId('foo')
 - [ ] Rename Yii::$app->utils to Yii::$app->state
 - [ ] Use UserErrorException consistently and replace \Exception
@@ -78,11 +78,14 @@
 - [ ] Fix 'property is unused' inspection alert
 - [ ] Add missing id, created, modified to model rules()
 - [ ] Remove qx prefix in generated code (s/qx([A-Z])/\L$1/)
-- [ ] Convert config to YAML: https://packagist.org/packages/sergeymakinen/yii2-config
-- [ ] Change URL params separators
-- [ ] Rename 'converters' module
-- [ ] Move ImportController and UploadController into renamed 'converter' module
 - [ ] Remove verbose logging in Drag & Drop
+
+### Testing, CI and distribution
+- [ ] Make Travis ~~great~~ work again
+- [ ] Use eslint on Travis: see https://github.com/ITISFoundation/qx-iconfont-material/blob/master/package.json
+- [ ] Add dockerized setup, see https://github.com/ITISFoundation/qx-iconfont-material
+- [ ] Tests: Fix bootstrap loading issue
+- [ ] Move config/test.php to tests/config.php 
 
 ## v3.0.0.RC.X (only bug fixes)
 
