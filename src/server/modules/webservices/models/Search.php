@@ -18,16 +18,14 @@
 
 ************************************************************************ */
 
-namespace app\modules\z3950\models;
+namespace app\modules\webservices\models;
 
 use app\models\User;
-use app\modules\z3950\Module;
 use lib\models\BaseModel;
-use Yii;
 
 /**
  * Class Search
- * @package app\modules\z3950\models
+ * @package app\modules\webservices\models
  * @property int $id
  * @property string $created
  * @property string $modified

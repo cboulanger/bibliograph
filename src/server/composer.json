@@ -12,7 +12,9 @@
         "react/stream": "^0.7.7",
         "yiisoft/yii2-swiftmailer": "^2.1",
         "m1/vars": "^1.1",
-        "yosymfony/toml": "^0.3.3"
+        "yosymfony/toml": "^0.3.3",
+        "renanbr/crossref-client": "^1",
+        "voku/simple-cache": "^3.1"
     },
     "require-dev": {
         "bizley/migration": "^2.2",

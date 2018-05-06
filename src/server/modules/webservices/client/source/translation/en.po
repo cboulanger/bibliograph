@@ -1,0 +1,78 @@
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"Report-Msgid-Bugs-To: you@your.org\n"
+"POT-Creation-Date: 2014-09-08 18:50+0100\n"
+"PO-Revision-Date: 2014-09-08 18:50+0100\n"
+"Last-Translator: you <you@your.org>\n"
+"Language-Team: Team <yourteam@your.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: webservices/ImportWindow.js:116
+msgid "You have to select one or more reference to import."
+msgstr ""
+
+#: webservices/ImportWindow.js:126
+msgid "Please select a folder first."
+msgstr ""
+
+#: webservices/ImportWindow.js:134
+msgid "Cannot determine selected folder. Please reload the folders."
+msgstr ""
+
+#: webservices/ImportWindow.js:139
+msgid "Invalid target folder. You can only import into normal folders."
+msgstr ""
+
+#: webservices/ImportWindow.js:148
+msgid "Importing references..."
+msgstr ""
+
+#: webservices/ImportWindow.js:157 webservices/ImportWindowUi.js:40 webservices/Plugin.js:56
+msgid "Import from library catalog"
+msgstr ""
+
+#: webservices/ImportWindowUi.js:112
+msgid "Enter search terms"
+msgstr ""
+
+#: webservices/ImportWindowUi.js:121
+msgid "Search"
+msgstr ""
+
+#: webservices/ImportWindowUi.js:128
+msgid "Help"
+msgstr ""
+
+#: webservices/ImportWindowUi.js:162
+msgid "Import selected records"
+msgstr ""
+
+#: webservices/ImportWindowUi.js:171
+msgid "Close"
+msgstr ""
+
+#: webservices/Plugin.js:68
+msgid "Z39.50 Import"
+msgstr ""
+
+#: webservices/Plugin.js:116
+msgid "(Un-)Select All"
+msgstr ""
+
+#: webservices/Plugin.js:128
+msgid "Save"
+msgstr ""
+
+#: webservices/Plugin.js:142
+msgid "Reload"
+msgstr ""
+
+#~ msgid "GBV Katalog"
+#~ msgstr ""
+
+#~ msgid "Enter search term"
+#~ msgstr ""

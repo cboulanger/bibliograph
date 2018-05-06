@@ -18,11 +18,12 @@
 
 ************************************************************************ */
 
-namespace app\modules\z3950\models;
+namespace app\modules\webservices\models;
+use app\modules\webservices\repositories\IConnector;
 use Yii;
 
 /**
- * Datasource model for z3950 datasources
+ * Datasource model for webservices datasources
  *
  * Dependencies:
  * - php_yaz extension
@@ -36,19 +37,19 @@ class Datasource
   /**
    * The named id of the datasource schema
    */
-  const SCHEMA_ID = "z3950";
+  const SCHEMA_ID = "webservices";
 
   /**
    * A descriptive name (should be set)
    * @var string
    */
-  static $name = "Z39.50 Datasource";
+  static $name = "Webservice datasource";
 
   /**
    * More detailed description of the Datasource (optional)
    * @var string
    */
-  static $description = "A datasource that caches search results from queries to catalogues based on the Z39.50 protocol";
+  static $description = "A datasource that caches search results from bibliographic webservices such as CrossRef";
 
   /**
    * Override schema migration namespace
@@ -56,7 +57,7 @@ class Datasource
    */
   public function getMigrationNamespace()
   {
-    return "\\app\\modules\\z3950\\migrations";
+    return "\\app\\modules\\webservices\\migrations";
   }
 
   /**
@@ -74,7 +75,7 @@ class Datasource
    * @return string
    */
   public static function createTablePrefix($datasourceName){
-    return "z3950_";
+    return "webservices_";
   }
 
   /**
@@ -90,7 +91,18 @@ class Datasource
   }
 
   /**
-   * Remove overridden function, since datasource has no folders
+   * Remove overridden function, since this datasource has no folders
    */
   public function addDefaultFolders(){}
+
+  /**
+   * Returns the connector for the given datasource
+   * @param string $namedId
+   * @return IConnector
+   */
+  public function createConnector( string $namedId ){
+    $class = "\\app\\modules\\webservices\\connectors\\$namedId";
+    if( ! class_exists($class)) throw new \InvalidArgumentException("Connector '$namedId' does not exist.");
+    return new $class();
+  }
 }
