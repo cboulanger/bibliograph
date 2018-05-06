@@ -36,6 +36,7 @@
 - [ ] FEAT: "Orphaned" folder should contain references that do not have a parent
 - [ ] FEAT: Add "Active" Checkbox to user editor
 - [ ] FEAT: Reimplement Search Help window
+- [ ] FEAT: Update CQL operators to conform to the specs (http://www.loc.gov/standards/sru/cql/contextSets/theCqlContextSet.html)
 
 ### Priority: low
 - [ ] FEAT: Add "serverOnly" column to data_Config (true/false/null) and remove from config data sent to client
@@ -54,6 +55,7 @@
 - [ ] FEAT: Change URL params separators to & and = 
 
 ### Code cleanup / refactoring
+- [ ] Fix compiler warnings
 - [ ] Clear up the conceptual mess concerning "schema": datasource schema/reference schema -> "repository"?
 - [ ] Rename "Datasource" to "Repository" (see https://dev.to/remojansen/implementing-the-onion-architecture-in-nodejs-with-typescript-and-inversifyjs-10ad)
 - [ ] FactoryClass("datasource","reference") proxying ActiveRecord methods
@@ -86,6 +88,7 @@
 - [ ] Add dockerized setup, see https://github.com/ITISFoundation/qx-iconfont-material
 - [ ] Tests: Fix bootstrap loading issue
 - [ ] Move config/test.php to tests/config.php 
+- [ ] Replace compile.json by compile.js to dynamically include plugin code
 
 ## v3.0.0.RC.X (only bug fixes)
 

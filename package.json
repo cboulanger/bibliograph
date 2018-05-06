@@ -29,6 +29,7 @@
     "view-log": "bash bin/view-log.sh",
     "new-log": "bash bin/new-log.sh",
     "create-migration": "bash bin/create-migration.sh",
+    "create-rpcproxies": "cd src/server && php yii rpcproxy/create",
     "translation": "cd src/server && php yii message config/i18n.php",
     "dist-create": "bash bin/dist-clean.sh && bash bin/dist-build.sh $1",
     "dist-test": "bash bin/dist-test.sh",

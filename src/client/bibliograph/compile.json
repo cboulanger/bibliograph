@@ -62,6 +62,7 @@
   "libraries": [
     "../../vcslib/qooxdoo/framework",
     "../../server/modules/z3950/client",
+    "../../server/modules/webservices/client",
     "."
   ],
 
