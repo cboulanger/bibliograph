@@ -143,7 +143,9 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
     $cql = $parser->query();
     if ($cql instanceof Diagnostic) {
       // @todo throw the UserErrorException in the calling code....
-      throw new UserErrorException(Yii::t('app',"Could not parse query: " . $cql->toTxt()));
+      throw new UserErrorException(Yii::t('app',"Could not parse query: {error}", [
+        'error' => $cql->toTxt()
+      ]));
     }
     return $cql;
   }

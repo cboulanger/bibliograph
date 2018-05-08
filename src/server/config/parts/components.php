@@ -21,12 +21,12 @@ $components = [
   // https://www.yiiframework.com/doc/guide/2.0/en/tutorial-i18n#module-translation
   'i18n' => [
     'translations' => [
-      'app*' => [
+      '*' => [
         'class' => \yii\i18n\GettextMessageSource::class,
         'basePath' => '@messages',
         'catalog' => 'messages',
         'useMoFile' => false
-      ],
+      ],/*
       'extendedfields*' => [
         'class' => \yii\i18n\GettextMessageSource::class,
         'basePath' => '@messages',
@@ -38,7 +38,7 @@ $components = [
         'basePath' => '@messages',
         'catalog' => 'messages',
         'useMoFile' => false
-      ],
+      ],*/
     ],
   ],
   // Cache

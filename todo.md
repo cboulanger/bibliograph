@@ -14,19 +14,19 @@
 - [x] BUG: CSV export must only export standard bibtex fields when unauthenticated!
 - [x] BUG: Z39.50 Records were not deleted on logout
 - [x] FEAT: Allow adding/moving/deleting top folders
-- [ ] BUG: Query `author begins with "A"` -> "missing term"
+- [x] FEAT: Add missing translations, replace %s by {1}
 - [x] BUG: Boolean columns must be NOT NULL DEFAULT 0 (z.B. data_User.anonymous)
+- [ ] FEAT: Exclude .todo files from being copied into the distribution package
+- [ ] BUG: Query `author begins with "A"` -> "missing term"
 - [ ] BUG: Disallow drop of references on folders in which they are already contained.
 - [ ] FEAT: Cache export formats for HTML view, make configurable 
 - [ ] FEAT: User::getAllPermissions returns always the highest available set of permissions, regardless of the permissions of the group the current datasource belongs to. Requires rewriting of  `$this->requirePermission` to pass the datasource / datasource name
-- [ ] FEAT: Exclude .todo files from being copied into the distribution package
  
 ### Priority: normal
 - [ ] FEAT: Transform compile.json into compile.js (to allow to update env var "app.version" etc.)
 - [ ] FEAT: Reimplement account management via email
 - [ ] FEAT: Check log email target to report fatal errors
 - [ ] FEAT: Reimplement Search Help
-- [ ] FEAT: Add missing translations, replace %s by {1}
 - [ ] FEAT: Make UserErrorException a JSONRPC error which is caught on the client, instead of a Dialog event. 
 - [ ] FEAT: Re-implement Backup
 - [ ] FEAT: Reimplement "New User" in Access Control Tool and System dialogs
@@ -83,6 +83,7 @@
 - [ ] Remove qx prefix in generated code (s/qx([A-Z])/\L$1/)
 - [ ] Remove verbose logging in Drag & Drop
 - [ ] Remove forks from composer.json that have been updated upstream
+- [ ] Move module translations into module https://www.yiiframework.com/doc/guide/2.0/en/tutorial-i18n#module-translation
 
 ### Testing, CI and distribution
 - [ ] Make Travis ~~great~~ work again

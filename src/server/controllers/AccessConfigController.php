@@ -1050,8 +1050,8 @@ class AccessConfigController extends AppController
     $this->dispatchClientMessage("accessControlTool.reloadLeftList");
     Alert::create(Yii::t(
       'app',
-      "Datasource '%s' has been created. By default, it will not be visible to anyone. You have to link it with a group, a role, or a user first.",
-      $data->namedId
+      "Datasource '{datasource}' has been created. By default, it will not be visible to anyone. You have to link it with a group, a role, or a user first.",
+      ['datasource' => $data->namedId]
     ));
     return $this->successfulActionResult();
   }

@@ -44,7 +44,7 @@ $config =  [
   /**
    * Switch backend language based on configuration and browser settings
    */
-  "on beforeRequest" => function($event){
+  'on beforeRequest' => function($event){
     try {
       $configLocale = Yii::$app->config->getPreference("application.locale");
       if( ! $configLocale ) {

@@ -21,7 +21,7 @@ return [
     'translator' => 'Yii::t',
     'sort' => false,
     'overwrite' => true,
-    'removeUnused' => false,
+    'removeUnused' => true,
     'markUnused' => true,
     'except' => [
         '.svn',
