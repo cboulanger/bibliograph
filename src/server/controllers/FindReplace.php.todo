@@ -128,13 +128,14 @@ class bibliograph_service_reference_FindReplace
 
     $args =  func_get_args();
     return \lib\dialog\Confirm::create(
-      Yii::t('app',"Are you sure you want to replace '%s' with '%s' in %s %s?",
-       $data->find, $data->replace,
-       $data->field == "all"
-         ? Yii::t('app', "all fields")
-         : Yii::t('app', "field '%s'", $schemaModel->getFieldLabel( $data->field ) ),
-       $msg_map[$data->scope]
-      ),
+      Yii::t('app',"Are you sure you want to replace '{findString}' with '{replaceString}' in {recordScope} {databaseScope}?", [
+         'findString' => $data->find,
+          'replaceString' => $data->replace,
+          'recordScope' => $data->field == "all"
+            ? Yii::t('app', "all fields")
+            : Yii::t('app', "field '{field}'", [ 'field' => $schemaModel->getFieldLabel( $data->field ) ] ),
+          'databaseScope' => $msg_map[$data->scope] 
+      ]),
       null,
       Yii::$app->controller->id, "findReplace", $args
     );
@@ -206,12 +207,12 @@ class bibliograph_service_reference_FindReplace
      * show alert
      */
     return \lib\dialog\Alert::create(
-      Yii::t('app',"%s replacements made. %s",
-        $count,
-        $data->backup
-           ? Yii::t('app',"In case you want to revert the changes, a backup file has been created.",$zipfile)
-           : ""
-      )
+      Yii::t('app',"{numReplacements} replacements made. {additionalComment}", [
+        'numReplacements' => $count,
+        'additionalComment' => $data->backup
+          ? Yii::t('app',"In case you want to revert the changes, a backup file has been created.",$zipfile)
+          : ""
+      ])
     );
   }
 }

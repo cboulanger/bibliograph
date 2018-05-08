@@ -19,7 +19,8 @@
 - [ ] BUG: Disallow drop of references on folders in which they are already contained.
 - [ ] FEAT: Cache export formats for HTML view, make configurable 
 - [ ] FEAT: User::getAllPermissions returns always the highest available set of permissions, regardless of the permissions of the group the current datasource belongs to. Requires rewriting of  `$this->requirePermission` to pass the datasource / datasource name
-
+- [ ] FEAT: Exclude .todo files from being copied into the distribution package
+ 
 ### Priority: normal
 - [ ] FEAT: Transform compile.json into compile.js (to allow to update env var "app.version" etc.)
 - [ ] FEAT: Reimplement account management via email

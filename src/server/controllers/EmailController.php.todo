@@ -42,12 +42,18 @@ class EmailController extends \app\Controllers\AppController
     if (!$data->confirmed) {
       $this->sendConfirmationLinkEmail($data->email, $data->namedId, $data->name);
       return \lib\dialog\Alert::create(
-        Yii::t('app', "An email has been sent to %s (%s) with information on the registration.", $data->name, $data->email)
+        Yii::t('app', "An email has been sent to {name} ({email}) with information on the registration.", [
+          'name' => $data->name,
+          'email' => $data->email
+        ])
       );
     } else {
       $this->sendPasswordChangeEmail($data->email, $data->namedId, $data->name);
       return \lib\dialog\Alert::create(
-        Yii::t('app', "An email has been sent to %s (%s) to inform about the change of password.", $data->name, $data->email)
+        Yii::t('app', "An email has been sent to {name} (email) to inform about the change of password.", [
+          'name' => $data->name, 
+          'email' => $data->email
+        ])
       );
     }
   }

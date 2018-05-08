@@ -18,9 +18,7 @@
 
 ************************************************************************ */
 
-
-
-
+use lib\dialog\Alert;
 
 
 /**
@@ -161,13 +159,13 @@ class bibliograph_service_reference_Indexes
     /*
      * show alert
      */
-    return \lib\dialog\Alert::create(
-      Yii::t('app',"%s replacements made. %s",
-        $count,
-        $data->backup
-           ? Yii::t('app',"In case you want to revert the changes, a backup file has been created.",$zipfile)
-           : ""
-      )
+    return Alert::create(
+      Yii::t('app',"{numReplacements} replacements made. {additionalComment}", [
+        'numReplacements' => $count,
+        'additionalComment' => $data->backup
+          ? Yii::t('app',"In case you want to revert the changes, a backup file has been created.",$zipfile)
+          : ""
+      ])
     );
   }
 }
