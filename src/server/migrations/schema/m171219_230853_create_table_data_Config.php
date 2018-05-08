@@ -13,10 +13,10 @@ class m171219_230853_create_table_data_Config extends Migration
 
         $this->createTable('{{%data_Config}}', [
             'id' => $this->integer(11)->notNull()->append('AUTO_INCREMENT PRIMARY KEY'),
-            'type' => $this->smallInteger(6),
+            'type' => $this->smallInteger(6)->notNull()->defaultValue(0),
             'default' => $this->string(255),
-            'customize' => $this->integer(1)->notNull()->defaultValue('0'),
-            'final' => $this->integer(1)->notNull()->defaultValue('0'),
+            'customize' => $this->smallInteger(1)->notNull()->defaultValue(0),
+            'final' => $this->smallInteger(1)->notNull()->defaultValue(0),
             'namedId' => $this->string(50),
             'created' => $this->timestamp(),
             'modified' => $this->timestamp()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),

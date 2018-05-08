@@ -23,7 +23,7 @@ class M180307221333_create_table_data_Search extends Migration
       'modified' => $this->timestamp()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),
       'query' => $this->string(500),
       'datasource' => $this->string(50),
-      'hits' => $this->integer(11),
+      'hits' => $this->integer(11)->notNull()->defaultValue(0),
       'UserId' => $this->integer(11),
     ], $tableOptions);
   }

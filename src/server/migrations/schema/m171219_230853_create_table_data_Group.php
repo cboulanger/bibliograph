@@ -18,9 +18,9 @@ class m171219_230853_create_table_data_Group extends Migration
             'modified' => $this->timestamp()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),
             'name' => $this->string(100),
             'description' => $this->string(100),
-            'ldap' => $this->integer(1)->notNull()->defaultValue('0'),
+            'ldap' => $this->smallInteger(1)->notNull()->defaultValue(0),
             'defaultRole' => $this->string(30),
-            'active' => $this->integer(1)->notNull()->defaultValue('1'),
+            'active' => $this->smallInteger(1)->notNull()->defaultValue(1),
         ], $tableOptions);
 
         $this->createIndex('unique_namedId', '{{%data_Group}}', 'namedId', true);

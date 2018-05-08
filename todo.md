@@ -15,7 +15,7 @@
 - [x] BUG: Z39.50 Records were not deleted on logout
 - [x] FEAT: Allow adding/moving/deleting top folders
 - [ ] BUG: Query `author begins with "A"` -> "missing term"
-- [ ] BUG: Boolean columns must be NOT NULL DEFAULT 0 (z.B. data_User.anonymous)
+- [x] BUG: Boolean columns must be NOT NULL DEFAULT 0 (z.B. data_User.anonymous)
 - [ ] BUG: Disallow drop of references on folders in which they are already contained.
 - [ ] FEAT: Cache export formats for HTML view, make configurable 
 - [ ] FEAT: User::getAllPermissions returns always the highest available set of permissions, regardless of the permissions of the group the current datasource belongs to. Requires rewriting of  `$this->requirePermission` to pass the datasource / datasource name
@@ -81,6 +81,7 @@
 - [ ] Add missing id, created, modified to model rules()
 - [ ] Remove qx prefix in generated code (s/qx([A-Z])/\L$1/)
 - [ ] Remove verbose logging in Drag & Drop
+- [ ] Remove forks from composer.json that have been updated upstream
 
 ### Testing, CI and distribution
 - [ ] Make Travis ~~great~~ work again

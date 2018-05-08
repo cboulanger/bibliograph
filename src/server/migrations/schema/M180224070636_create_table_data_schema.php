@@ -25,8 +25,8 @@ class M180224070636_create_table_data_schema extends Migration
       'class' => $this->string(100),
       'name' => $this->string(100),
       'description' => $this->string(255),
-      'active' => $this->smallInteger(1)->notNull()->defaultValue('1'),
-      'protected' => $this->integer(1)->notNull()->defaultValue('0')
+      'active' => $this->smallInteger(1)->notNull()->defaultValue(1),
+      'protected' => $this->smallInteger(1)->notNull()->defaultValue(0)
     ], $tableOptions);
 
     $this->createIndex('unique_namedId', '{{%data_Schema}}', 'namedId', true);

@@ -25,14 +25,13 @@ class M180223200020_add_column_protected extends Migration
   /**
    * Adds a column "protected" and sets column "active" to 1
    * {@inheritdoc}
+   * @throws \yii\db\Exception
    */
   public function safeUp()
   {
     foreach ($this->tables as $tableName => $tableData ) {
       $tableSchema = $this->db->schema->getTableSchema($tableName);
-      //try {
-        $this->addColumn($tableName, "protected", $this->integer(1)->notNull()->defaultValue('0'));
-      //} catch (\Exception $e) {}
+      $this->addColumn($tableName, "protected", $this->smallInteger(1)->notNull()->defaultValue(0));
       $this->getDb()
         ->createCommand()
         ->update($tableName, ['protected' => 1], 'id <= ' . $tableData['maxId'])

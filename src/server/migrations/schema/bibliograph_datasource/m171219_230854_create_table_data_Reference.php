@@ -58,8 +58,8 @@ class m171219_230854_create_table_data_Reference extends Migration
       'createdBy' => $this->string(50),
       'modifiedBy' => $this->string(50),
       'hash' => $this->string(40),
-      'markedDeleted' => $this->smallInteger(1)->notNull()->defaultValue('0'),
-      'attachments' => $this->integer(11),
+      'markedDeleted' => $this->smallInteger(1)->notNull()->defaultValue(0),
+      'attachments' => $this->integer(11)->notNull()->defaultValue(0),
     ];
   }
 

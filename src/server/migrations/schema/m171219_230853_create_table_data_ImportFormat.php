@@ -19,7 +19,7 @@ class m171219_230853_create_table_data_ImportFormat extends Migration
             'class' => $this->string(100)->notNull()->defaultValue('invalid'),
             'name' => $this->string(100)->notNull()->defaultValue('invalid'),
             'description' => $this->string(255),
-            'active' => $this->smallInteger(1)->notNull()->defaultValue('1'),
+            'active' => $this->smallInteger(1)->notNull()->defaultValue(1),
             'type' => $this->string(20),
             'extension' => $this->string(20)->notNull()->defaultValue('txt'),
         ], $tableOptions);

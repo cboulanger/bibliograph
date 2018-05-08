@@ -19,12 +19,12 @@ class m171219_230853_create_table_data_User extends Migration
             'name' => $this->string(100),
             'password' => $this->string(50),
             'email' => $this->string(255),
-            'anonymous' => $this->integer(1)->notNull()->defaultValue('0'),
-            'ldap' => $this->integer(1)->notNull()->defaultValue('0'),
-            'active' => $this->integer(1)->notNull()->defaultValue('1'),
+            'anonymous' => $this->smallInteger(1)->notNull()->defaultValue(0),
+            'ldap' => $this->smallInteger(1)->notNull()->defaultValue(0),
+            'active' => $this->smallInteger(1)->notNull()->defaultValue(1),
             'lastAction' => $this->timestamp()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),
-            'confirmed' => $this->integer(1)->notNull()->defaultValue('0'),
-            'online' => $this->integer(1)->notNull()->defaultValue('1'),
+            'confirmed' => $this->smallInteger(1)->notNull()->defaultValue(0),
+            'online' => $this->smallInteger(1)->notNull()->defaultValue(1),
         ], $tableOptions);
 
         $this->createIndex('unique_namedId', '{{%data_User}}', 'namedId', true);

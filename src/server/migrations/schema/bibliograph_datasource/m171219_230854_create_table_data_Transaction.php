@@ -17,7 +17,7 @@ class m171219_230854_create_table_data_Transaction extends Migration
             'modified' => $this->timestamp()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),
             'datasource' => $this->string(50),
             'class' => $this->string(100),
-            'transactionId' => $this->integer(11)->defaultValue('0'),
+            'transactionId' => $this->integer(11)->defaultValue(0),
         ], $tableOptions);
 
         $this->createIndex('datasource_class_index', '{{%data_Transaction}}', ['datasource','class'], true);

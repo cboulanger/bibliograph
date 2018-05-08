@@ -28,9 +28,9 @@ class m171219_230853_create_table_data_Datasource extends Migration
             'encoding' => $this->string(20)->notNull()->defaultValue('utf-8'),
             'prefix' => $this->string(20),
             'resourcepath' => $this->string(255),
-            'active' => $this->smallInteger(1)->notNull()->defaultValue('1'),
-            'readonly' => $this->smallInteger(1)->notNull()->defaultValue('0'),
-            'hidden' => $this->smallInteger(1)->notNull()->defaultValue('0'),
+            'active' => $this->smallInteger(1)->notNull()->defaultValue(1),
+            'readonly' => $this->smallInteger(1)->notNull()->defaultValue(0),
+            'hidden' => $this->smallInteger(1)->notNull()->defaultValue(0),
         ], $tableOptions);
 
         $this->createIndex('unique_namedId', '{{%data_Datasource}}', 'namedId', true);

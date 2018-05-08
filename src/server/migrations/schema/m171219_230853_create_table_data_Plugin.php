@@ -19,7 +19,7 @@ class m171219_230853_create_table_data_Plugin extends Migration
             'name' => $this->string(100),
             'description' => $this->string(250),
             'data' => $this->text(),
-            'active' => $this->integer(1)->notNull()->defaultValue('1'),
+            'active' => $this->smallInteger(1)->notNull()->defaultValue(1),
         ], $tableOptions);
 
         $this->createIndex('unique_namedId', '{{%data_Plugin}}', 'namedId', true);
