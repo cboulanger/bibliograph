@@ -488,7 +488,6 @@ class SetupController extends \app\controllers\AppController
       ]);
     }
 
-
     // run new migrations
     try {
       $output = Console::runAction('migrate/new');

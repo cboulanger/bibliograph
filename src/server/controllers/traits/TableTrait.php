@@ -212,6 +212,14 @@ trait TableTrait
         return $column == "id" ? "references.id" : $column;
       }, $clientQuery->properties);
 
+      $hasCreatorProperty = array_search("creator",$columns) !== false;
+      if( $hasCreatorProperty ){
+        $columns = array_merge(
+          ['author','editor',new Expression('coalesce(`author`,`editor`) as creator')],
+          array_diff($columns,['creator'])
+        );
+      }
+
       /** @var ActiveQuery $activeQuery */
       $activeQuery = $modelClass::find()
         ->select($columns)

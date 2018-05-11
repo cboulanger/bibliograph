@@ -105,7 +105,7 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
       'lccn'
     ],
     'collection' => [
-      'author',
+      'editor',
       'year',
       'title',
       'subtitle',

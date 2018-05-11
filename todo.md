@@ -3,6 +3,8 @@
 ## v3.0.0-beta
 
 ### Priority: urgent
+- [x] BUG: Bibliograph v2 'collection' reftype has editor info in 'author' -> create migration to move info.
+- [ ] BUG: "Creator" column not updated in real time
 
 ### Priority: high
 - [x] BUG: Delete, Export, Copy, Move buttons enabled for Anonymous

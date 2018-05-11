@@ -23,6 +23,7 @@ use Yii;
  * @property string $contents
  * @property string $copyright
  * @property string $crossref
+ * @property string $creator
  * @property string $date
  * @property string $doi
  * @property string $edition
@@ -109,6 +110,7 @@ class Reference extends BaseModel
       'subtitle' => Yii::t('app', 'Subtitle'),
       'contents' => Yii::t('app', 'Contents'),
       'copyright' => Yii::t('app', 'Copyright'),
+      'creator'=> Yii::t('app', 'Creator'),
       'crossref' => Yii::t('app', 'Crossref'),
       'date' => Yii::t('app', 'Date'),
       'doi' => Yii::t('app', 'Doi'),

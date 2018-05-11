@@ -141,8 +141,8 @@ class ReferenceController extends AppController
 //        	'header' 		=> " ",
 //        	'width'	 		=> 16
 //        ),
-        'author' => [
-          'header' => Yii::t('app', "Author"),
+        'creator' => [
+          'header' => Yii::t('app', "Creator"),
           'width' => "1*"
         ],
         'year' => [
