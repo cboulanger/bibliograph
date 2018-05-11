@@ -20,6 +20,7 @@
 
 namespace app\modules\webservices\models;
 use app\modules\webservices\repositories\IConnector;
+use lib\exceptions\UserErrorException;
 use Yii;
 
 /**
@@ -101,7 +102,8 @@ class Datasource
    * @return IConnector
    */
   public function createConnector( string $namedId ){
-    $class = "\\app\\modules\\webservices\\connectors\\$namedId";
+
+    $class = "\\app\\modules\\webservices\\connectors\\" . ucfirst($namedId);
     if( ! class_exists($class)) throw new \InvalidArgumentException("Connector '$namedId' does not exist.");
     return new $class();
   }

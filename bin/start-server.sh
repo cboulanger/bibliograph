@@ -14,7 +14,7 @@ QX_CMD=$(pwd)/src/vcslib/qooxdoo-compiler/qx
 
 echo " >>> Compiling application..."
 pushd $COMPILE_PATH > /dev/null
-$QX_CMD clean
+#$QX_CMD clean
 $QX_CMD compile --target=$TARGET
 popd > /dev/null  
 

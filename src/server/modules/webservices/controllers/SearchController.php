@@ -3,6 +3,7 @@
 namespace app\modules\webservices\controllers;
 
 use app\models\User;
+use app\modules\webservices\connectors\Worldcat;
 use lib\cql\Diagnostic;
 use lib\cql\Parser;
 use lib\exceptions\TimeoutException;
@@ -50,13 +51,16 @@ class SearchController extends \yii\web\Controller
    * @param string $datasource The name of the datasource
    * @param string $query The cql query
    * @param string $id The id of the progress widget
+   * @param ServerProgress|null $progressBar Only used internally
    * @return string Chunked HTTP response
    * @todo use DTO
    */
-  public function actionProgress($datasource, $query, $id)
+  public function actionProgress(string $datasource, string $query, string $id, ServerProgress $progressBar=null)
   {
     static $retries = 0;
-    $progressBar = new ServerProgress($id);
+    if( ! $progressBar ){
+      $progressBar = new ServerProgress($id);
+    }
     try {
       $this->sendRequest($datasource, $query, $progressBar);
       $progressBar->dispatchClientMessage("webservices.dataReady", $query);
@@ -66,13 +70,13 @@ class SearchController extends \yii\web\Controller
       if( $retries < 4){
         $progressBar->setProgress(0, Yii::t("webservices", "Server timed out. Trying again..."));
         sleep(rand(1,3));
-        return $this->actionProgress($datasource, $query, $progressBar );
+        return $this->actionProgress($datasource, $query, $id, $progressBar );
       } else {
         return $progressBar->error(Yii::t("webservices", "Server timed out."));
       }
     } catch (UserErrorException $e) {
       return $progressBar->error($e->getMessage());
-    } catch (Exception $e) {
+    } catch (\Throwable $e) {
       Yii::error($e);
       return $progressBar->error($e->getMessage());
     }
@@ -105,8 +109,10 @@ class SearchController extends \yii\web\Controller
     // remember last datasource used
     $this->module->setPreference("lastDatasource", $datasourceName );
 
-    $connector = $datasource->createConnector($datasourceName);
-    $query = $connector->fixQuery($query->query->cql);
+    $connectorId = str_replace(Module::CATEGORY . "_", "", $datasourceName);
+    $connector = $datasource->createConnector($connectorId);
+
+    $query = Module::fixQuery($query);
     $cql = (new Parser($query))->query();
     if( $cql instanceof Diagnostic ){
       throw new UserErrorException(Yii::t( Module::CATEGORY, "Could not parse query: {error}", [
@@ -120,22 +126,12 @@ class SearchController extends \yii\web\Controller
       $progressBar->setProgress(0, Yii::t(Module::CATEGORY, "Waiting for webservice..."));
     }
 
-    $records = $connector->query($cql);
-    $hits = count($records);
+    $hits = $connector->search($cql);
 
-    Yii::debug("$hits hits.", Module::CATEGORY);
-    Yii::debug($records[0]->getAttributes());
-    return;
-
-    // No result or a too large result
-    $maxHits = 1000; // @todo make this configurable
-    if ($hits == 0) {
-      throw new UserErrorException(Yii::t(Module::CATEGORY, "No results."));
-    } elseif ($hits > $maxHits) {
-      throw new UserErrorException(Yii::t(
-        Module::CATEGORY,
-        "The number of results is higher than {number} records. Please narrow down your search.",
-        [ 'number' => $maxHits ]
+    if ($progressBar) {
+      $progressBar->setProgress(25, Yii::t(
+        Module::CATEGORY, "{number} records found.",
+        ['number'=>$hits]
       ));
     }
     Yii::debug("Found $hits records...", Module::CATEGORY);
@@ -163,123 +159,29 @@ class SearchController extends \yii\web\Controller
     $searchId = $search->id;
     Yii::debug("Created new search record #$searchId for query '$query' for user #$userId.", Module::CATEGORY);
 
-    if ($progressBar) {
-      $progressBar->setProgress(10, Yii::t(
-        Module::CATEGORY, "{number} records found.",
-        ['number'=>$hits]
-      ));
-    }
-
-    // Retrieve record data
-    Yii::debug("Getting row data from remote Z39.50 database ...", Module::CATEGORY);
-    $yaz->setRange(1, $hits);
-    $yaz->present();
-    $error = $yaz->getError();
-    if ($error) {
-      Yii::debug("Server error (yaz_present): $error. Aborting.", Module::CATEGORY);
-      throw new UserErrorException(Yii::t(Module::CATEGORY, "Server error: $error."));
-    }
-
-    // Retrieve as MARC XML
-    $result = new MarcXmlResult($yaz);
-    for ($i = 1; $i <= $hits; $i++) {
-      try {
-        $result->addRecord($i);
-        if ($progressBar){
-          $progressBar->setProgress(10 + (($i / $hits) * 80),
-            Yii::t( Module::CATEGORY,"Retrieving {index} of {number} records...",   [ 'index' =>$i, 'number' => $hits])
-          );
-        }
-      } catch (YazException $e) {
-        if (stristr($e->getMessage(), "timeout")) {
-          throw new UserErrorException(
-            Yii::t( Module::CATEGORY,
-              "Server timeout trying to retrieve {number} records: try a more narrow search",
-              ['number'=>$hits]
-            )
-          );
-        }
-        throw new UserErrorException(
-          Yii::t(Module::CATEGORY,"Server error: {error}.", ['error' => $e->getMessage()])
-        );
-      }
-    }
-
-    // visually separate verbose output for debugging
-    function ml($description, $text)
-    {
-      $hl = "\n" . str_repeat("-", 100) . "\n";
-      return $hl . $description . $hl . $text . $hl;
-    }
-
-    //Yii::debug(ml("XML", $result->getXml()), Module::CATEGORY);
-    Yii::debug("Formatting data...", Module::CATEGORY);
-
-    if ($progressBar) {
-      $progressBar->setProgress(90, Yii::t(Module::CATEGORY, "Formatting records..."));
-    }
-
-    // convert to MODS
-    $mods = $result->toMods();
-    //Yii::debug(ml("MODS", $mods), Module::CATEGORY);
-
-    // convert to bibtex and fix some issues
-    $xml2bib = new Executable( "xml2bib", BIBUTILS_PATH );
-    $bibtex = $xml2bib->call("-nl -fc -o unicode", $mods);
-    $bibtex = str_replace("\nand ", "; ", $bibtex);
-    //Yii::debug(ml("BibTeX", $bibtex), Module::CATEGORY);
-
-    // convert to array
-    $parser = new BibtexParser();
-    $records = $parser->parse($bibtex);
-
-    if (count($records) === 0) {
+    if ( $hits === 0) {
       Yii::debug("Empty result set, aborting...", Module::CATEGORY);
-      throw new UserErrorException(Yii::t(Module::CATEGORY, "Cannot convert server response"));
+      return;
     }
 
     // saving to local cache
     Yii::debug("Caching records...", Module::CATEGORY);
 
-    $step = 10 / count($records);
+    $step = 50 / count($hits);
     $i = 0;
 
-
-    foreach ($records as $item) {
+    // Get iterator from generator
+    $recordIterator = $connector->recordIterator();
+    /** @var Record $record */
+    foreach ($recordIterator as $record) {
       if ($progressBar) {
         $progressBar->setProgress(
-          round (90 + ($step * $i++)),
+          round (50 + ($step * $i++)),
           Yii::t(Module::CATEGORY, "Caching records...")
         );
       }
-
-      $p = $item->getProperties();
-
-      // fix bibtex parser issues and prevemt validation errors
-      foreach ( $p as $key => $value ) {
-        switch ($key){
-          case "author":
-          case "editor":
-            $p[$key] = str_replace("{", "", $p[$key]);
-            $p[$key] = str_replace("}", "", $p[$key]);
-        }
-        $columnSchema = Record::getDb()->getTableSchema(Record::tableName())->getColumn($key);
-        if( $columnSchema === null ) {
-          Yii::warning("Skipping non-existent column '$key'...");
-        } elseif( is_string($value) and $columnSchema->size ){
-          $p[$key] = substr( $value, 0, $columnSchema->size );
-        }
-      }
-
-      // create record
-      $dbRecord = new Record($p);
-      $dbRecord->setAttributes([
-        'citekey' => $item->getItemID(),
-        'reftype' => $item->getItemType(),
-        'SearchId' => $searchId
-      ]);
-      $dbRecord->save();
-      //Yii::debug(ml("Model Data", print_r($dbRecord->getAttributes(), true)), Module::CATEGORY);
+      $record->SearchId = $searchId;
+      $record->save();
     }
   }
 }

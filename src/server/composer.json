@@ -14,7 +14,8 @@
         "m1/vars": "^1.1",
         "yosymfony/toml": "^0.3.3",
         "renanbr/crossref-client": "^1",
-        "voku/simple-cache": "^3.1"
+        "voku/simple-cache": "^3.1",
+        "rsinger/worldcat-linkeddata-php" : "*@dev"
     },
     "require-dev": {
         "bizley/migration": "^2.2",
@@ -40,6 +41,10 @@
         {
             "type": "git",
             "url": "https://github.com/cboulanger/yii2-module-autoloader.git"
-        }        
+        },
+        {
+          "type": "git",
+          "url": "https://github.com/rsinger/worldcat-linkeddata-php.git"          
+        }
     ]
 }

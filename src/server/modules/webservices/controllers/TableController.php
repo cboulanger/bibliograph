@@ -13,6 +13,7 @@ use app\modules\webservices\Module;
 use lib\exceptions\UserErrorException;
 use Yii;
 use yii\db\Exception;
+use yii\db\Expression;
 
 
 /**
@@ -49,8 +50,8 @@ class TableController extends AppController
           'width' => 50,
           'visible' => false
         ],
-        'author' => [
-          'header' => _("Author"),
+        'creator' => [
+          'header' => _("Creator"),
           'width' => "1*"
         ],
         'year' => [
@@ -191,6 +192,13 @@ class TableController extends AppController
 
     $query = $this->module->getQueryString($queryData);
     $properties = $queryData->query->properties;
+    $hasCreatorProperty = array_search("creator",$properties) !== false;
+    if( $hasCreatorProperty ){
+      $properties = array_merge(
+        ['author','editor',new Expression('coalesce(`author`,`editor`) as creator')],
+        array_diff($properties,['creator'])
+      );
+    }
     $orderBy = $queryData->query->orderBy;
     //Yii::debug("Row data query for datasource '$datasourceName', query '$query'.", Module::CATEGORY);
     $search = Search::findOne([
@@ -198,6 +206,7 @@ class TableController extends AppController
       'datasource' => $datasourceName
     ]);
     if (!$search) {
+      Yii::debug("Cache says we have no entry for query '$query'. Aborting.", Module::CATEGORY);
       throw new \RuntimeException(Yii::t(Module::CATEGORY, "No search data exists."));
     }
     $hits = $search->hits;
@@ -256,10 +265,11 @@ class TableController extends AppController
       // common columns
       $commonColumns = array_intersect($sourceColumns,$targetColumns);
       $commonColumns = array_diff($commonColumns,['id','created','modified']);
-      //Yii::debug("Copying over columns " . implode(', ', $commonColumns));
+
       $copiedAttributes = array_filter( $copiedAttributes, function($key) use($commonColumns) {
         return in_array($key, $commonColumns);
       }, ARRAY_FILTER_USE_KEY);
+      //Yii::debug("Copying over columns " . implode(', ', $commonColumns) );
 
       /** @var Reference $targetModel */
       $targetModel = new $targetModelClass($copiedAttributes);

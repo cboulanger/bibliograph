@@ -3,21 +3,24 @@
 namespace app\modules\webservices\repositories;
 
 use app\models\Reference;
+use app\modules\webservices\models\Record;
+use Iterator;
 use lib\cql\Prefixable;
 
 interface IConnector
 {
+
   /**
    * Queries
    * @param Prefixable $cql
-   * @return Reference[]
+   * @return int
    */
-  public function query( Prefixable $cql ) : array;
+  public function search( Prefixable $cql ) : array;
 
   /**
-   * Used to transform query before it is converted to a CQL object
-   * @param string $query
-   * @return string
+   * Generator function that yields Record instances
+   * @return Iterator|Record
    */
-  public function fixQuery( string $query ): string;
+  public function recordIterator() : Iterator;
+
 }

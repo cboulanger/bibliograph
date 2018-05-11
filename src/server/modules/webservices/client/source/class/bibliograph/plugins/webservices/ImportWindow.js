@@ -50,7 +50,7 @@ qx.Class.define("bibliograph.plugins.webservices.ImportWindow",
     this.base(arguments);
 
     this.setWidth(700);
-    this.setCaption(this.tr('Import from library catalog'));
+    this.setCaption(this.tr('Import from webservices'));
     this.setShowMinimize(false);
     this.setVisibility("excluded");
     this.setHeight(500);
@@ -59,7 +59,8 @@ qx.Class.define("bibliograph.plugins.webservices.ImportWindow",
     this.createUi();
     this.createPopup();
     qx.event.message.Bus
-    .getInstance().subscribe(bibliograph.AccessManager.messages.LOGOUT, ()=>this.close() );
+      .getInstance()
+        .subscribe(bibliograph.AccessManager.messages.LOGOUT, ()=>this.close() );
 
     qx.lang.Function.delay(() => {
       this.listView.addListenerOnce("tableReady", () => {
@@ -103,7 +104,7 @@ qx.Class.define("bibliograph.plugins.webservices.ImportWindow",
         });
         this.getApplication().getConfigManager().setKey("modules.webservices.lastDatasource", value);
       }
-      this.info("Z39.50 datasource is now: " + value);
+      this.info("Webservices datasource is now: " + value);
     },
 
     /**

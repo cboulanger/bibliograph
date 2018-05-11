@@ -89,8 +89,7 @@ class Module extends \lib\Module
     $this->addPreference("lastDatasource", "z3950_voyager", true);
     try {
       $app->accessManager->addPermissions(["z3950.manage"], [
-        Role::findByNamedId("admin"),
-        Role::findByNamedId("manager")
+        Role::findByNamedId("admin")
       ]);
     } catch (\Exception $e) {
       //ignore

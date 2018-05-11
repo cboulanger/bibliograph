@@ -25,7 +25,7 @@ class Module extends \lib\Module
    * The version of the module
    * @var string
    */
-  protected $version = "0.0.1";
+  protected $version = "0.0.4";
 
   /**
    * A string constant defining the category for logging and translation
@@ -60,8 +60,7 @@ class Module extends \lib\Module
     $this->addPreference("lastDatasource", "", true);
     try {
       $app->accessManager->addPermissions(["webservices.manage"], [
-        Role::findByNamedId("admin"),
-        Role::findByNamedId("manager")
+        Role::findByNamedId("admin")
       ]);
     } catch (\Exception $e) {
       //ignore
@@ -87,7 +86,7 @@ class Module extends \lib\Module
   }
 
   /**
-   * Create bibliograph datasources
+   * Create datasources
    * @throws Exception
    */
   public function createDatasources()
@@ -95,10 +94,14 @@ class Module extends \lib\Module
     $manager = Yii::$app->datasourceManager;
     foreach ($this->getConnectors() as $connector) {
       $repoNamedId = self::CATEGORY . '_' . $connector->id;
-      $repoModel = $manager->create($repoNamedId, "webservices");
+      $repoModel = Datasource::findByNamedId($repoNamedId);
+      if( ! $repoModel ){
+        $repoModel = $manager->create($repoNamedId, "webservices");
+      }
       $repoModel->setAttributes([
-        'title' => $connector->name,
-        'hidden' => 1, // should not show up as selectable datasource
+        'title'       => $connector->name,
+        'description' => $connector->description,
+        'hidden'      => 1 // should not show up as selectable datasource
       ]);
       $repoModel->save();
       Yii::info("Added webservice '{$connector->name}'", self::CATEGORY);
@@ -128,6 +131,32 @@ class Module extends \lib\Module
       ->select("namedId")
       ->where(['schema' => 'webservices'])
       ->all();
+  }
+
+  /**
+   * Returns the query as a string constructed from the
+   * query data object
+   * @param object $queryData
+   * @return string
+   */
+  public function getQueryString($queryData)
+  {
+    return self::fixQuery( $queryData->query->cql );
+  }
+
+  /**
+   * Used to transform query before it is converted to a CQL object
+   * @param string $query
+   * @return string
+   */
+  public static function fixQuery(string $query) : string
+  {
+    if (substr($query, 0, 3) == "978") {
+      $query = 'isbn=' . $query;
+    } if (substr($query, 0, 3) == "10.") {
+    $query = 'doi=' . $query;
+  }
+    return $query;
   }
 
   /**

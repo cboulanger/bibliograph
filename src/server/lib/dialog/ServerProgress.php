@@ -174,7 +174,7 @@ class ServerProgress extends Dialog
     $this->setProgress(100);
     $this->sendScript([
       "window.progress.hide();",
-      "window.top.dialog.Dialog.error('$message');"
+      "window.top.dialog.Dialog.error('" . addslashes($message) . "');"
     ]);
     $this->close();
   }
