@@ -4,7 +4,7 @@
 
 ### Priority: urgent
 - [x] BUG: Bibliograph v2 'collection' reftype has editor info in 'author' -> create migration to move info.
-- [ ] BUG: "Creator" column not updated in real time
+- [x] BUG: "Creator" column not updated in real time
 
 ### Priority: high
 - [x] BUG: Delete, Export, Copy, Move buttons enabled for Anonymous
@@ -56,6 +56,8 @@
 - [ ] FEAT: Rewrite Yii2 configuration using M1/Var, maybe convert config to YAML: https://packagist.org/packages/sergeymakinen/yii2-config ?
 - [ ] FEAT: Ctrl+A to select all (visible?) references.
 - [ ] FEAT: Change URL params separators to & and = 
+- [ ] FEAT: Broadcast "reference.changeData" message (with datasource info) to update connected clients' tableView
+- [ ] FEAT: Click on "Citation key" refreshes it
 
 ### Code cleanup / refactoring
 - [ ] Fix compiler warnings

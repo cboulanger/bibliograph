@@ -370,11 +370,20 @@ qx.Class.define("bibliograph.ui.main.TableView",
       let table = this.getTable();
       if (!table) return;
       let tableModel = table.getTableModel();
-      let column = tableModel.getColumnIndexById(data.name);
-      if (column === undefined) return;
-      let row = tableModel.getRowById(data.referenceId);
-      if (row === undefined) return;
-      tableModel.setValue(column, row, data.value.replace(/\n/, "; "));
+      let columnName = data.name;
+      switch (columnName) {
+        case "author":
+        case "editor":
+          if (tableModel.getColumnIndexById("creator") !== undefined ){
+            columnName = "creator";
+          }
+          break;
+      }
+      let columnIndex = tableModel.getColumnIndexById(columnName);
+      if (columnIndex === undefined) return;
+      let rowIndex = tableModel.getRowById(data.referenceId);
+      if (rowIndex === undefined) return;
+      tableModel.setValue(columnIndex, rowIndex, data.value.replace(/\n/, "; "));
     },
     
     /**
