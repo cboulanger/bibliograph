@@ -44,7 +44,7 @@
         },
         {
           "type": "git",
-          "url": "https://github.com/rsinger/worldcat-linkeddata-php.git"          
+          "url": "https://github.com/cboulanger/worldcat-linkeddata-php.git"
         }
     ]
 }

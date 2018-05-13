@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c7bbf34f9a69b5617c9f5e5083f74db8",
+    "content-hash": "91691170876a9561ddc561a7d50f68bf",
     "packages": [
         {
             "name": "adldap2/adldap2",
@@ -1720,8 +1720,8 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/rsinger/worldcat-linkeddata-php.git",
-                "reference": "8c6f1ae86cb516438aa81859ca2c0cf238cd0d4a"
+                "url": "https://github.com/cboulanger/worldcat-linkeddata-php.git",
+                "reference": "b1e738c419b8488f155e5777e7ad4d4914d1eb90"
             },
             "require": {
                 "guzzlehttp/guzzle": "~6.2",
@@ -1759,7 +1759,7 @@
                 "php",
                 "xisbn"
             ],
-            "time": "2017-10-06T19:08:30+00:00"
+            "time": "2018-05-13T22:39:47+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
