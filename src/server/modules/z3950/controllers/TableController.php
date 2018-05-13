@@ -92,12 +92,12 @@ class TableController extends AppController
     }
     // Return list of Datasources
     $list = [];
-    $datasources = Datasource::find()
+    $query = Datasource::find()
       ->select("title as label, namedId as value, active")
       ->where(['schema'=> "z3950"])
-      ->asArray()
-      ->all();
-    return array_merge($list,$datasources);
+      ->asArray();
+    if( $activeOnly ) $query = $query->andWhere(['active'=>1]);
+    return array_merge($list,$query->all());
   }
 
   /**

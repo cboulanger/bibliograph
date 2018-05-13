@@ -28,12 +28,34 @@ qx.Class.define("bibliograph.plugins.webservices.ImportWindow",
   *****************************************************************************
   */
   properties : {
-
+  
+    /**
+     * The datasource to search
+     */
     datasource : {
-      check : "String",
-      nullable : true,
-      event : "changeDatasource",
-      apply : "_applyDatasource"
+      check: "String",
+      nullable: true,
+      event: "changeDatasource",
+      apply: "_applyDatasource"
+    },
+  
+    /**
+     * Whether to auto-import the first/best search result. This will also
+     * auto-submit recognizable identifiers such as ISBNs or DOIs
+     */
+    autoimport : {
+      check: "Boolean",
+      init: false,
+      event: "changeAutomimport"
+    },
+  
+    /**
+     * The search text
+     */
+    search: {
+      check: "String",
+      nullable: true,
+      event: "changeSearch"
     }
   },
 
@@ -70,6 +92,16 @@ qx.Class.define("bibliograph.plugins.webservices.ImportWindow",
           this.searchButton.setEnabled(true);
           this.listView.setEnabled(true);
           this.hidePopup();
+          if( this.getAutoimport() && this.getSearch() ){
+           this.listView
+             .getTable()
+             .getSelectionManager()
+             .getSelectionModel()
+             .setSelectionInterval(0,0);
+           this.importSelected();
+           this.setSearch(null);
+           this.searchBox.focus();
+          }
         };
         controller.addListener("blockLoaded", enableButtons);
         controller.addListener("statusMessage", (e) => {
@@ -117,27 +149,29 @@ qx.Class.define("bibliograph.plugins.webservices.ImportWindow",
 
       // toolbar
       let toolBar1 = new qx.ui.toolbar.ToolBar();
+      toolBar1.set({
+        spacing : 5,
+        
+      })
       this.add(toolBar1);
 
       // datasource select box
       let selectBox = new qx.ui.form.VirtualSelectBox();
       selectBox.setLabelPath("label");
       this.datasourceSelectBox = selectBox;
-      selectBox.setWidth(300);
-      selectBox.setMaxHeight(25);
-      toolBar1.add(selectBox);
-
-      // bindings
+      //selectBox.setWidth(300);
+      //selectBox.setMaxHeight(25);
+      toolBar1.add(selectBox, {flex:1});
       selectBox.bind("selection[0].label", selectBox, "toolTipText");
       selectBox.bind("selection[0].value", this, "datasource");
-
-      // store
       let store = new qcl.data.store.JsonRpcStore("webservices/table");
       let model = qx.data.marshal.Json.createModel([]);
       store.setModel(model);
       store.bind("model", selectBox, "model");
       store.addListener("loaded", ()=>{
-        let lastDatasource = this.getApplication().getConfigManager().getKey("modules.webservices.lastDatasource");
+        let lastDatasource = this.getApplication()
+          .getConfigManager()
+          .getKey("modules.webservices.lastDatasource");
         if (lastDatasource) {
           this.setDatasource(lastDatasource);
         }
@@ -145,29 +179,35 @@ qx.Class.define("bibliograph.plugins.webservices.ImportWindow",
       this.addListener("appear", ()=>{
         qx.event.message.Bus.dispatchByName("plugins.webservices.reloadDatasources");
       });
-
-      // (re-)load datasources
       qx.event.message.Bus.getInstance().subscribe("plugins.webservices.reloadDatasources", function (e) {
         store.load("server-list");
       }, this);
 
-      toolBar1.addSpacer();
-
-      // searchbox
-      let hbox1 = new qx.ui.layout.HBox(null, null, null);
-      hbox1.setSpacing(5);
+      // auto-import
+      let autoimport = new qx.ui.form.CheckBox( this.tr("Auto-import best result") );
+      autoimport.bind("value",this,"autoimport");
+      this.bind("autoimport",autoimport,"value");
+      toolBar1.add(autoimport);
+      
+      // search widgets container
       let composite1 = new qx.ui.container.Composite();
-      composite1.setLayout(hbox1);
+      composite1.setLayout(new qx.ui.layout.HBox(5));
       composite1.setPadding(4);
       toolBar1.add(composite1, {flex: 1});
-      let searchBox = new qx.ui.form.TextField(null);
+      
+      // searchbox
+      let searchBox = new qx.ui.form.TextField();
       this.searchBox = searchBox;
       searchBox.setPadding(2);
       searchBox.setPlaceholder(this.tr('Enter search terms'));
       searchBox.setHeight(26);
       composite1.add(searchBox, {flex: 1});
+      searchBox.addListener("input", e => this.setSearch(e.getData()));
+      searchBox.addListener("changeValue", e => this.setSearch(e.getData()));
+      this.bind("search", searchBox, "value");
       searchBox.addListener("keypress", this._on_keypress, this);
       searchBox.addListener("dblclick", e => e.stopPropagation() );
+      
       // search button
       this.searchButton = new qx.ui.form.Button(this.tr('Search'));
       this.searchButton.addListener("execute", e => this.startSearch() );
@@ -232,7 +272,7 @@ qx.Class.define("bibliograph.plugins.webservices.ImportWindow",
      */
     startSearch: function () {
       let datasource = this.datasourceSelectBox.getSelection().getItem(0).getValue();
-      let query = this.normalizeForSearch(this.searchBox.getValue());
+      let query = this.searchBox.getValue();
 
       // update the UI
       let lv = this.listView;
@@ -299,89 +339,17 @@ qx.Class.define("bibliograph.plugins.webservices.ImportWindow",
      * @param e {qx.event.type.Data}
      */
     _on_keypress: function (e) {
-      if (e.getKeyIdentifier() == "Enter") {
+      if (e.getKeyIdentifier() === "Enter") {
         this.startSearch();
       }
-    },
-    
-    markForTranslation: function () {
-      this.tr("Import from library catalog");
-    },
-    
-    /**
-     * from https://github.com/ikr/normalize-for-search/blob/master/src/normalize.js
-     * MIT licence
-     * @param s {String}
-     * @return {String}
-     */
-    normalizeForSearch: function (s) {
-      
-      // ES6: @todo
-      //let combining = /[\u0300-\u036F]/g;
-      // return s.normalize('NFKD').replace(combining, ''));
-      
-      function filter(c) {
-        switch (c) {
-          case 'ä':
-            return 'ae';
-          
-          case 'å':
-            return 'aa';
-          
-          case 'á':
-          case 'à':
-          case 'ã':
-          case 'â':
-            return 'a';
-          
-          case 'ç':
-          case 'č':
-            return 'c';
-          
-          case 'é':
-          case 'ê':
-          case 'è':
-            return 'e';
-          
-          case 'ï':
-          case 'í':
-            return 'i';
-          
-          case 'ö':
-            return 'oe';
-          
-          case 'ó':
-          case 'õ':
-          case 'ô':
-            return 'o';
-          
-          case 'ś':
-          case 'š':
-            return 's';
-          
-          case 'ü':
-            return 'ue';
-          
-          case 'ú':
-            return 'u';
-          
-          case 'ß':
-            return 'ss';
-          
-          case 'ё':
-            return 'е';
-          
-          default:
-            return c;
+      if( false && this.getAutoimport() ){
+        let searchText = this.getSearch();
+        // auto-submit ISBNs
+        if( searchText && searchText.length > 12 && searchText.replace(/[^0-9xX]/g,'').length === 13 && searchText.substr(0,3) === "978" ){
+          this.startSearch();
         }
       }
-      
-      let normalized = '', i, l;
-      s = s.toLowerCase();
-      for (i = 0, l = s.length; i < l; i = i + 1) {
-        normalized = normalized + filter(s.charAt(i));
-      }
-      return normalized;
     }
+   
   }
 });

@@ -23,14 +23,25 @@ use Yii;
  */
 class Worldcat extends AbstractConnector
 {
-
+  /**
+   * @inheritdoc
+   */
   protected $id = "worldcat";
 
+  /**
+   * @inheritdoc
+   */
   protected $name = "WorldCat (ISBN only)";
 
+  /**
+   * @inheritdoc
+   */
   protected $description = "Web service to look up book-related metadata, based on WorldCat information.";
 
-  protected $searchFields = ['isbn'];
+  /**
+   * @inheritdoc
+   */
+  protected $indexes = ['isbn'];
 
   /**
    * @var Manifestation[]
@@ -78,17 +89,37 @@ class Worldcat extends AbstractConnector
    * @return Iterator|Record
    */
   public function recordIterator() : Iterator {
+    $map = [
+      'year'      => 'datePublished',
+      'contents'  => 'description',
+      'language'  => 'inLanguage',
+      'keywords'  => 'keywords',
+      'title'     => 'name'
+    ];
     foreach ($this->manifestations as $id => $m) {
       $data = [
         'reftype'   => 'book',
-        'edition'   => $m->bookEdition ?? null,
-        'isbn'      => implode("; ", array_slice( $m->getIsbns(), 0,2)),
-        'year'      => $m->datePublished,
-        'contents'  => $m->description ?? null,
-        'language'  => is_string($m->inLanguage) ? $m->inLanguage : $m->inLanguage->name,
-        'keywords'  => $m->keywords,
-        'title'     => $m->name
+        'quality'   => 0,
       ];
+      foreach ( $map as $recordKey => $worldCatKey ){
+        if( ! $m->$worldCatKey ) continue;
+        if( $m->$worldCatKey instanceof Entity ){
+          $data[$recordKey] = $m->$worldCatKey->name;
+        } elseif( is_scalar( $m->$worldCatKey ) ){
+          $data[$recordKey] = $m->$worldCatKey;
+        } else {
+          continue;
+        }
+        $data['quality']++;
+      }
+      if ( $m->bookEdition ) {
+        $data['edition'] = $m->bookEdition;
+        $data['quality']++;
+      }
+      if (count( $m->getIsbns()) ){
+        $data['isbn'] = implode("; ", array_slice( $m->getIsbns(), 0,2));
+        $data['quality']++;
+      }
       $authors = [];
       $editors = [];
       $translators = [];
@@ -99,8 +130,10 @@ class Worldcat extends AbstractConnector
           if( $entity instanceof Entity ) {
             if( $entity->familyName and $entity->givenName ){
               $name = $entity->familyName . ", " . $entity->givenName;
+              $data['quality'] += 5;
             } elseif( $entity->name ){
               $name = $entity->name;
+              $data['quality']++;
             } else {
               continue;
             }
@@ -115,10 +148,12 @@ class Worldcat extends AbstractConnector
               // edited book
                 $editors[] = $name;
                 $data['reftype'] = 'collection';
+                $data['quality']++;
                 break;
-
               case 'translator':
                 $translators[] = $name;
+                $data['quality']++;
+                break;
             }
           }
         }
@@ -128,11 +163,14 @@ class Worldcat extends AbstractConnector
       $data['translator'] = implode("; ", $translators);
       if( $m->publisher instanceof Entity ){
         $data['publisher'] = $m->publisher->name;
+        $data['quality']++;
         $location = $m->publisher->location;
         if( $location instanceof Entity) {
           $data['address'] = $location->name;
+          $data['quality']++;
         } elseif (is_string( $location) ){
           $data['address'] = $location;
+          $data['quality']++;
         }
       }
       yield new Record($data);

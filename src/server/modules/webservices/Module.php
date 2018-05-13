@@ -2,6 +2,7 @@
 
 namespace app\modules\webservices;
 
+use app\modules\webservices\repositories\IConnector;
 use lib\util\Executable;
 use Yii;
 use app\models\{
@@ -25,7 +26,7 @@ class Module extends \lib\Module
    * The version of the module
    * @var string
    */
-  protected $version = "0.0.4";
+  protected $version = "0.0.6";
 
   /**
    * A string constant defining the category for logging and translation
@@ -72,6 +73,10 @@ class Module extends \lib\Module
     return parent::install(true);
   }
 
+  /**
+   * Returns an array of connector objects
+   * @return IConnector[]
+   */
   protected function getConnectors()
   {
     $connectors = [];
@@ -141,21 +146,27 @@ class Module extends \lib\Module
    */
   public function getQueryString($queryData)
   {
-    return self::fixQuery( $queryData->query->cql );
+    return $queryData->query->cql;
   }
 
   /**
-   * Used to transform query before it is converted to a CQL object
+   * Used to transform query before it is converted to a CQL object, depending on the connector
    * @param string $query
+   * @param AbstractConnector $connector
    * @return string
    */
-  public static function fixQuery(string $query) : string
+  public static function fixQuery(string $query, AbstractConnector $connector) : string
   {
+    // if the connector only has one index, and it is not in the query, use this one
+    $indexes = $connector->indexes;
+    if (count($indexes) === 1 and ! str_contains($query,$indexes[0])){
+      return $indexes[0] . "=" . $query;
+    }
     if (substr($query, 0, 3) == "978") {
       $query = 'isbn=' . $query;
     } if (substr($query, 0, 3) == "10.") {
-    $query = 'doi=' . $query;
-  }
+      $query = 'doi=' . $query;
+    }
     return $query;
   }
 

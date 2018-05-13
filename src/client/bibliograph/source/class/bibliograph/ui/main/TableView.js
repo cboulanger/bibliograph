@@ -149,15 +149,6 @@ qx.Class.define("bibliograph.ui.main.TableView",
         condition: self => !!self.getQuery()
       },
     },
-    
-    // permissions2: {
-    //   foo : new qcl.access.Permission("foo")
-    //     .dependsOn("boo.boo")/.dependsOn(new Permission("new.new"))
-    //     .set({ granted: true })
-    //     .updateOn("foo/bar:changeBaz")
-    //     .addCondition((targets) => targets[0].goo == 0);
-    // },
-  
 
     /*
     ---------------------------------------------------------------------------

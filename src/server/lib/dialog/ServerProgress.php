@@ -39,20 +39,31 @@ class ServerProgress extends Dialog
    * @var bool
    */
   public $insertNewlines = false;
+
+  /**
+   * @var bool
+   */
+  private $debug = false;
+
+
   /** @noinspection PhpMissingParentConstructorInspection */
 
   /**
    * Constructor
    * @param string $widgetId The id of the progress widget
+   * @param bool $debug If true, omit the Transfer-encoding: chunked header. This allows to debug the response in a browser
    */
-  public function __construct($widgetId)
+  public function __construct($widgetId, $debug=false)
   {
+    $this->debug = $debug;
     $this->widgetId = $widgetId;
     header("Cache-Control: no-cache, must-revalidate");
     header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
     header("Pragma:");
-    header('Content-Encoding: chunked');
-    header('Transfer-Encoding: chunked');
+    if( ! $debug ){
+      header('Content-Encoding: chunked');
+      header('Transfer-Encoding: chunked');
+    }
     header('Content-Type: text/html');
     header('Connection: keep-alive');
     flush();
@@ -107,10 +118,11 @@ class ServerProgress extends Dialog
   protected function createScript( array $lines)
   {
     $nl = $this->getNewlineChar();
-    $tag = '<script type="text/javascript">';
+    $tag = '';
+    $tag .= '<script type="text/javascript">';
     $tag .= $nl . implode( $nl, $lines );
     $tag .= $nl . '</script>' . $nl;
-    return $tag;
+    return $this->debug ? nl2br(htmlentities($tag)) : $tag;
   }
 
   /**

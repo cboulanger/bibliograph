@@ -9,13 +9,33 @@ use lib\cql\Prefixable;
 
 interface IConnector
 {
+  /**
+   * @return string
+   */
+  public function getId();
 
   /**
-   * Queries
+   * @return string
+   */
+  public function getName();
+
+  /**
+   * @return string
+   */
+  public function getDescription();
+
+  /**
+   * Returns an array of indexes that can be searched
+   * @return array
+   */
+  public function getIndexes();
+
+  /**
+   * Queries the data repository and returns the number of results
    * @param Prefixable $cql
    * @return int
    */
-  public function search( Prefixable $cql ) : array;
+  public function search( Prefixable $cql ) : int;
 
   /**
    * Generator function that yields Record instances

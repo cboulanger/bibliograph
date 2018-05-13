@@ -93,12 +93,12 @@ class TableController extends AppController
     }
     // Return list of Datasources
     $list = [];
-    $datasources = Datasource::find()
+    $query = Datasource::find()
       ->select("title as label, namedId as value, active")
-      ->where(['schema'=> "webservices"])
-      ->asArray()
-      ->all();
-    return array_merge($list,$datasources);
+      ->where(['schema'=> 'webservices'])
+      ->asArray();
+    if( $activeOnly ) $query = $query->andWhere(['active'=>1]);
+    return array_merge($list,$query->all());
   }
 
   /**
@@ -199,7 +199,6 @@ class TableController extends AppController
         array_diff($properties,['creator'])
       );
     }
-    $orderBy = $queryData->query->orderBy;
     //Yii::debug("Row data query for datasource '$datasourceName', query '$query'.", Module::CATEGORY);
     $search = Search::findOne([
       'query' => $query,
@@ -222,7 +221,7 @@ class TableController extends AppController
     $rowData = Record::find()
       ->select($properties)
       ->where(['SearchId' => $searchId])
-      ->orderBy($orderBy)
+      ->orderBy('quality DESC')
       ->offset($firstRow)
       ->limit($lastRow-$firstRow+1)
       ->asArray()

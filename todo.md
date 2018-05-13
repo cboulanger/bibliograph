@@ -3,21 +3,7 @@
 ## v3.0.0-beta
 
 ### Priority: urgent
-- [x] BUG: Bibliograph v2 'collection' reftype has editor info in 'author' -> create migration to move info.
-- [x] BUG: "Creator" column not updated in real time
-
 ### Priority: high
-- [x] BUG: Delete, Export, Copy, Move buttons enabled for Anonymous
-- [x] BUG: Move/Copy Windows blank
-- [x] BUG: Drag & Drop not enabled after re-login as authorized user
-- [x] BUG: Empty Trash does not delete references
-- [x] FEAT: Re-implement Export
-- [x] BUG: module autoloader requires debug mode (trying to serialize closures breaks app)
-- [x] BUG: CSV export must only export standard bibtex fields when unauthenticated!
-- [x] BUG: Z39.50 Records were not deleted on logout
-- [x] FEAT: Allow adding/moving/deleting top folders
-- [x] FEAT: Add missing translations, replace %s by {1}
-- [x] BUG: Boolean columns must be NOT NULL DEFAULT 0 (z.B. data_User.anonymous)
 - [ ] FEAT: Exclude .todo files from being copied into the distribution package
 - [ ] BUG: Query `author begins with "A"` -> "missing term"
 - [ ] BUG: Disallow drop of references on folders in which they are already contained.

@@ -24,6 +24,7 @@ use lib\bibtex\BibtexParser;
  */
 class SearchController extends \yii\web\Controller
 {
+
   use AuthTrait;
   use DatasourceTrait;
 
@@ -112,8 +113,8 @@ class SearchController extends \yii\web\Controller
     $connectorId = str_replace(Module::CATEGORY . "_", "", $datasourceName);
     $connector = $datasource->createConnector($connectorId);
 
-    $query = Module::fixQuery($query);
-    $cql = (new Parser($query))->query();
+    $fixedQuery = Module::fixQuery($query, $connector);
+    $cql = (new Parser($fixedQuery))->query();
     if( $cql instanceof Diagnostic ){
       throw new UserErrorException(Yii::t( Module::CATEGORY, "Could not parse query: {error}", [
         'error' => $cql->toTxt()
@@ -123,7 +124,7 @@ class SearchController extends \yii\web\Controller
     Yii::debug("Executing query '{$cql->toCQL()}' on webservice '$datasourceName' ...", Module::CATEGORY);
 
     if ($progressBar) {
-      $progressBar->setProgress(0, Yii::t(Module::CATEGORY, "Waiting for webservice..."));
+      $progressBar->setProgress(10, Yii::t(Module::CATEGORY, "Waiting for webservice..."));
     }
 
     $hits = $connector->search($cql);
@@ -167,7 +168,7 @@ class SearchController extends \yii\web\Controller
     // saving to local cache
     Yii::debug("Caching records...", Module::CATEGORY);
 
-    $step = 50 / count($hits);
+    $step = 50 / $hits;
     $i = 0;
 
     // Get iterator from generator

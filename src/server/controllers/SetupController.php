@@ -97,6 +97,12 @@ class SetupController extends \app\controllers\AppController
   protected $isV2Upgrade = false;
 
 
+  /**
+   * Whether one of the modules was upgraded
+   * @var bool
+   */
+  protected $moduleUpgrade = false;
+
   //-------------------------------------------------------------
   // ACTIONS
   //-------------------------------------------------------------  
@@ -675,6 +681,7 @@ class SetupController extends \app\controllers\AppController
   {
     $errors = [];
     $messages = [];
+    $this->moduleUpgrade = false;
     foreach( Yii::$app->modules as $id => $info){
       /** @var Module $module */
       $module = Yii::$app->getModule($id);
@@ -689,6 +696,7 @@ class SetupController extends \app\controllers\AppController
         $enabled = $module->install();
         if( $enabled ){
           $messages[] = "Installed module '{$module->id}'.";
+          $this->moduleUpgrade = true;
         } else {
           $errors = array_merge($errors, $module->errors );
         }
@@ -710,13 +718,13 @@ class SetupController extends \app\controllers\AppController
    */
   protected function setupDatasourceMigrations($upgrade_from,$upgrade_to)
   {
-    if( $this->isNewInstallation or $upgrade_from == $upgrade_to) {
-      Yii::debug("New installation or no new version, no datasource migration necessary.");
+    if( ($this->isNewInstallation or $upgrade_from === $upgrade_to) and ! $this->moduleUpgrade ) {
+      Yii::debug("New installation or no new versions, skipping datasource migration.");
       return false;
     }
     $migrated = [];
     $failed = [];
-    $schemas = [Schema::findByNamedId(self::DATASOURCE_DEFAULT_SCHEMA)];
+    $schemas = Schema::find()->all(); //[Schema::findByNamedId(self::DATASOURCE_DEFAULT_SCHEMA)];
     foreach( $schemas as $schema ){
       try {
         // backwards compatibility

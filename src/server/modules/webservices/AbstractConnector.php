@@ -1,6 +1,10 @@
 <?php
 
 namespace app\modules\webservices;
+use app\modules\webservices\models\Record;
+use app\modules\webservices\repositories\IConnector;
+use Iterator;
+use lib\cql\Prefixable;
 use yii\base\BaseObject;
 
 /**
@@ -9,8 +13,9 @@ use yii\base\BaseObject;
  * @property string $id
  * @property string $name
  * @property string $description
+ * @property array $indexes
  */
-class AbstractConnector extends BaseObject
+abstract class AbstractConnector extends BaseObject //implements IConnector // throws!
 {
   /**
    * @var string
@@ -30,7 +35,7 @@ class AbstractConnector extends BaseObject
   /**
    * @var array
    */
-  protected $searchFields = [];
+  protected $indexes = [];
 
   /**
    * @return string
@@ -56,8 +61,20 @@ class AbstractConnector extends BaseObject
   /**
    * @return array
    */
-  public function getSearcFields(){
-    return $this->searchFields;
+  public function getIndexes(){
+    return $this->indexes;
   }
 
+  /**
+   * Queries
+   * @param Prefixable $cql
+   * @return int
+   */
+  public abstract function search(Prefixable $cql): int;
+
+  /**
+   * Generator function that yields Record instances
+   * @return Iterator|Record
+   */
+  public abstract function recordIterator(): Iterator;
 }

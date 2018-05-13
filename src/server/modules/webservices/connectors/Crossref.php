@@ -31,17 +31,17 @@ class Crossref extends AbstractConnector
   /**
    * @inheritdoc
    */
-  protected $name = "CrossRef metadata repository (DOI only)";
+  protected $name = "CrossRef (DOI only)";
 
   /**
    * @inheritdoc
    */
-  protected $description = "see https://www.crossref.org";
+  protected $description = "CrossRef metadata repository. See https://www.crossref.org";
 
   /**
    * @inheritdoc
    */
-  protected $searchFields = ['doi'];
+  protected $indexes = ['doi'];
 
   /**
    * @var Reference[]
