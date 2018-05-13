@@ -106,6 +106,7 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
     ],
     'collection' => [
       'editor',
+      'author',
       'year',
       'title',
       'subtitle',
@@ -229,7 +230,7 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
       'lccn'
     ],
     'proceedings' => [
-      'author',
+      'editor',
       'year',
       'title',
       'subtitle',
@@ -451,8 +452,8 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
         'label' => [
           'default' => Yii::t('app', 'Authors'),
           'conference' => Yii::t('app', 'Authors'),
-          'collection' => Yii::t('app', 'Editors'),
-          'proceedings' => Yii::t('app', 'Editors')
+          'collection' => Yii::t('app', 'Authors'),
+          'proceedings' => Yii::t('app', 'Authors')
         ],
         'type' => 'string',
         'indexEntry' => true,

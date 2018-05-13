@@ -21,7 +21,7 @@ class M180511110319_move_editor_data_in_collections extends Migration
     $sql = "
       update $table_name 
       set `editor` = `author` , `author` = null 
-      where `reftype` = 'collection' 
+      where (`reftype` = 'collection' or `reftype`  = 'proceedings')
         and (`author` is not null and `author` != '')
         and (`editor` is null or `editor` = '');";
     $this->db->createCommand($sql)->execute();
