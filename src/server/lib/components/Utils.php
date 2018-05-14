@@ -27,6 +27,7 @@ use lib\exceptions\UserErrorException;
  * Class Utils
  * @package lib\components
  * @todo rename?
+ * @property string $version
  */
 class Utils extends \yii\base\Component
 {
@@ -61,10 +62,10 @@ class Utils extends \yii\base\Component
   public function getVersion()
   {
     try{
-      return $this->getNpmPackageData()->version;
+      return trim($this->getNpmPackageData()->version);
     } catch( \Exception $e){
       try{
-        return file_get_contents(__DIR__ . "/../../../version.txt");
+        return trim(file_get_contents(__DIR__ . "/../../../version.txt"));
       } catch( \Exception $e) {
         throw new UserErrorException("Cannot read package.json or version.txt",null, $e);
       }

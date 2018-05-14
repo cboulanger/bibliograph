@@ -5,6 +5,7 @@ class AASetupControllerCest
 
   protected $version;
 
+
   /**
    * Getting application version
    *
@@ -74,9 +75,13 @@ class AASetupControllerCest
           "Found empty database and applied new migrations for version ' . $this->version . '",
           "Configuration values were created.",
           "Created standard schema.",
-          "Example databases were created.",
+          "Created datasources.",
+          "Installed module \'bibutils\'.",
+          "Installed module \'converters\'.",
           "Installed module \'extendedfields\'.",
+          "Installed module \'webservices\'.",
           "Installed module \'z3950\'.",
+          "No schema migrations necessary.",
           "LDAP authentication is not enabled."
         ]
       }
@@ -115,7 +120,11 @@ class AASetupControllerCest
           "Migrated data from Bibliograph v2 and applied new migrations for version ' . $this->version . '",
           "Configuration values were created.",
           "Created standard schema.",
+          "Created datasources.",
+          "Installed module \'bibutils\'.",
+          "Installed module \'converters\'.",
           "Installed module \'extendedfields\'.",
+          "Installed module \'webservices\'.",
           "Installed module \'z3950\'.",
           "Migrated schema(s) bibliograph_datasource.",
           "LDAP authentication is not enabled."
@@ -158,7 +167,11 @@ class AASetupControllerCest
           "Found data for version '. $upgrade_from .' and applied new migrations for version ' . $upgrade_to . '",
           "Configuration values were created.",
           "Standard schema existed.",
+          "Created datasources.",
+          "Module \'bibutils\' already installed.",
+          "Module \'converters\' already installed.",         
           "Module \'extendedfields\' already installed.",
+          "Module \'webservices\' already installed.",
           "Module \'z3950\' already installed.",          
           "No schema migrations necessary.",
           "LDAP authentication is not enabled."

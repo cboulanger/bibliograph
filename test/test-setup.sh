@@ -43,7 +43,8 @@ echo
 section "Testing new installation"
 
 echo "Creating empty database ..."
-mysql -uroot -e "DROP DATABASE tests; CREATE DATABASE tests;"
+mysql -uroot -e "DROP DATABASE tests;" || true
+mysql -uroot -e "CREATE DATABASE tests;"
 echo "Calling application setup service ..."
 ${CPT_CMD} run api AASetupControllerCest --env setup $CPT_ARGS || exit $?
 ${CPT_CMD} run api AASetupControllerCest --env testing $CPT_ARGS || exit $?
