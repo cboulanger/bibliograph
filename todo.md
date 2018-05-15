@@ -3,6 +3,8 @@
 ## v3.0.0-beta
 
 ### Priority: urgent
+- [ ] FEAT: Language preference -> default value, add language selector for individual language setting
+
 ### Priority: high
 - [ ] FEAT: Exclude .todo files from being copied into the distribution package
 - [ ] BUG: Query `author begins with "A"` -> "missing term"
@@ -52,6 +54,8 @@
 - [ ] FactoryClass("datasource","reference") proxying ActiveRecord methods
 - [ ] Replace calls to Yii::$app->eventQueue->add() with calls to message API
 - [ ] Rename 'converters' module
+- [ ] Use Session Cache instead of File Cache
+- [ ] Fix Boolean/smallinteger issues
 - [ ] Move ImportController and UploadController into renamed 'converter' module
 - [ ] Move static methods out of \app\models\Datasource into DatasourceManager component
 - [ ] Replace message names with constants

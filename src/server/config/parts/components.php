@@ -19,15 +19,16 @@ $components = [
   // @todo move module translations into module
   // https://stackoverflow.com/questions/34357254/override-translation-path-of-module-on-yii2
   // https://www.yiiframework.com/doc/guide/2.0/en/tutorial-i18n#module-translation
+  // catchall "*" doesn't work
   'i18n' => [
     'translations' => [
-      '*' => [
+      'app' => [
         'class' => \yii\i18n\GettextMessageSource::class,
         'basePath' => '@messages',
         'catalog' => 'messages',
         'useMoFile' => false
-      ],/*
-      'extendedfields*' => [
+      ],
+      'extendedfields' => [
         'class' => \yii\i18n\GettextMessageSource::class,
         'basePath' => '@messages',
         'catalog' => 'messages',
@@ -38,7 +39,19 @@ $components = [
         'basePath' => '@messages',
         'catalog' => 'messages',
         'useMoFile' => false
-      ],*/
+      ],
+      'webservices' => [
+        'class' => \yii\i18n\GettextMessageSource::class,
+        'basePath' => '@messages',
+        'catalog' => 'messages',
+        'useMoFile' => false
+      ],
+      'setup' => [
+        'class' => \yii\i18n\GettextMessageSource::class,
+        'basePath' => '@messages',
+        'catalog' => 'messages',
+        'useMoFile' => false
+      ],
     ],
   ],
   // Cache

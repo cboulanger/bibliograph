@@ -79,10 +79,10 @@ qx.Class.define("bibliograph.plugins.webservices.Plugin",
         createItem: function () {
           return new qx.ui.form.CheckBox();
         },
-        bindItem: function (controller, item, id) {
+        bindItem: function (controller, item, id){
           controller.bindProperty("label", "label", null, item, id);
-          controller.bindProperty("active", "value", { converter: v => v===1 }, item, id);
-          controller.bindPropertyReverse("active", "value", { converter: v => v===1 }, item, id);
+          controller.bindProperty("active", "value", { converter: v => v==1 }, item, id);
+          controller.bindPropertyReverse("active", "value", { converter: v => v==1 }, item, id);
         }
       };
       list.setDelegate(delegate);

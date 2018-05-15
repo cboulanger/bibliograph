@@ -46,6 +46,12 @@ $config =  [
    */
   'on beforeRequest' => function($event){
     try {
+      // FIXME replace with language selector
+      if( Yii::$app->user->getIdentity()->anonymous ){
+        Yii::$app->utils->setLanguageFromBrowser();
+        Yii::debug("Setting language from browser settings to " . Yii::$app->language );
+        return;
+      }
       $configLocale = Yii::$app->config->getPreference("application.locale");
       if( ! $configLocale ) {
         Yii::$app->utils->setLanguageFromBrowser();
@@ -57,11 +63,12 @@ $config =  [
           }
         }
         Yii::$app->language = $language;
+        Yii::debug("Setting language from user setting to " . $language );
       }
     } catch( Exception $e ){
       Yii::$app->utils->setLanguageFromBrowser();
+      Yii::debug("Fallback: Setting language from browser settings to " . Yii::$app->language );
     }
   }
 ];
-
 return $config;

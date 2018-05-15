@@ -276,7 +276,7 @@ msgstr "Stammdaten"
 #: bibliograph/ui/item/ReferenceEditorUi.js:174
 #: bibliograph/ui/item/ReferenceEditorUi.js:176
 msgid "About"
-msgstr "Metadaten"
+msgstr "Inhaltsdaten"
 
 #: bibliograph/ui/item/ReferenceEditorUi.js:257
 #: bibliograph/ui/item/ReferenceEditorUi.js:259
@@ -596,39 +596,49 @@ msgid "Use browser locale"
 msgstr "Browser-Einstellungen verwenden"
 
 #: bibliograph/ui/window/PreferencesWindow.js:133
+#: bibliograph/ui/window/PreferencesWindow.js:138
 msgid "Fields"
 msgstr "Felder"
 
 #: bibliograph/ui/window/PreferencesWindow.js:148
+#: bibliograph/ui/window/PreferencesWindow.js:153
 msgid "Database"
 msgstr "Datenbank"
 
 #: bibliograph/ui/window/PreferencesWindow.js:179
 #: bibliograph/ui/window/PreferencesWindow.js:180
+#: bibliograph/ui/window/PreferencesWindow.js:184
+#: bibliograph/ui/window/PreferencesWindow.js:185
 msgid "Exclude fields"
 msgstr "Felder ausschließen"
 
 #: bibliograph/ui/window/PreferencesWindow.js:188
+#: bibliograph/ui/window/PreferencesWindow.js:193
 msgid "Enter the names of fields to exclude."
 msgstr "Geben Sie die auszuschließenden Felder ein."
 
 #: bibliograph/ui/window/PreferencesWindow.js:229
+#: bibliograph/ui/window/PreferencesWindow.js:234
 msgid "Access"
 msgstr "Zugang"
 
 #: bibliograph/ui/window/PreferencesWindow.js:240
+#: bibliograph/ui/window/PreferencesWindow.js:245
 msgid "Authentication method"
 msgstr "Authentifizierungsmethode"
 
 #: bibliograph/ui/window/PreferencesWindow.js:246
+#: bibliograph/ui/window/PreferencesWindow.js:251
 msgid "Client sends plain text password"
 msgstr "Klartextübertragung des Passworts (nur mit HTTPS)"
 
 #: bibliograph/ui/window/PreferencesWindow.js:252
+#: bibliograph/ui/window/PreferencesWindow.js:257
 msgid "Client sends hashed password"
 msgstr "Verschlüsselte Übertragung des Passworts"
 
 #: bibliograph/ui/window/PreferencesWindow.js:278
+#: bibliograph/ui/window/PreferencesWindow.js:283
 msgid "Plaintext passwords without a secure connection (HTTPS) are not allowed."
 msgstr "Klartextübertragung des Passworts erfordert eine sichere Verbindung (HTTPS)"
 

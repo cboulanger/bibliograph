@@ -114,7 +114,10 @@ qx.Class.define("bibliograph.ui.window.PreferencesWindow", {
       }
 
       if (defaultListItem) {
+        this.__setLocaleFromConfig = true;
         select.setSelection([defaultListItem]);
+        qx.locale.Manager.getInstance().setLocale(defaultListItem.getModel());
+        this.__setLocaleFromConfig = false;
       }
     });
 
@@ -124,7 +127,9 @@ qx.Class.define("bibliograph.ui.window.PreferencesWindow", {
       if (locale) {
         qx.locale.Manager.getInstance().setLocale(locale);
       }
-      confMgr.setKey("application.locale", locale);
+      if( ! this.__setLocaleFromConfig ){
+        confMgr.setKey("application.locale", locale);
+      }
     });
 
     qxPage1.add(select, { row: 2, column: 1 });

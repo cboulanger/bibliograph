@@ -29,11 +29,11 @@ cp $BUILD_TARGET-compiled/index.html $DIST_DIR
 
 echo " >>> Building server ..."
 cd $DIST_DIR/server
-cp -a $SERVER_SRC_DIR/{config,controllers,lib,messages,migrations,models,modules,schema,runtime} .
+cp -a $SERVER_SRC_DIR/{config,controllers,lib,messages,migrations,models,modules,schema} .
 if ! [[ $BUILD_TARGET == *"build"* ]]; then
   cp -a $SERVER_SRC_DIR/web .
 fi
-rm -rf runtime/{cache,logs}/*
+mkdir -p runtime/{cache/logs}
 rm -f config/{app.conf.toml,message.php,test.php}
 
 cp -a $SERVER_SRC_DIR/composer.* .

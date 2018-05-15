@@ -11,6 +11,138 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 msgctxt "app"
+msgid "Could not parse query: {error}"
+msgstr ""
+
+msgctxt "app"
+msgid "Creator"
+msgstr ""
+
+msgctxt "setup"
+msgid " and a connection has successfully been established."
+msgstr ""
+
+msgctxt "setup"
+msgid " and applied new migrations for version {version}"
+msgstr ""
+
+msgctxt "setup"
+msgid ", but trying to establish a connection failed with the error: {error}"
+msgstr ""
+
+msgctxt "setup"
+msgid "Admininstrator email exists."
+msgstr ""
+
+msgctxt "setup"
+msgid "Cannot connect to database: {error}"
+msgstr ""
+
+msgctxt "setup"
+msgid "Cannot run in production mode without ini file."
+msgstr ""
+
+msgctxt "setup"
+msgid "Cannot update from Bibliograph v2 data: some tables are missing."
+msgstr ""
+
+msgctxt "setup"
+msgid "Configuration values were created."
+msgstr ""
+
+msgctxt "setup"
+msgid "Created datasources."
+msgstr ""
+
+msgctxt "setup"
+msgid "Created standard schema."
+msgstr ""
+
+msgctxt "setup"
+msgid "Datasources already existed."
+msgstr ""
+
+msgctxt "setup"
+msgid "Found data for version {version}"
+msgstr ""
+
+msgctxt "setup"
+msgid "Found empty database"
+msgstr ""
+
+msgctxt "setup"
+msgid "Initializing database failed."
+msgstr ""
+
+msgctxt "setup"
+msgid "Invalid database setup. Please contact the adminstrator."
+msgstr ""
+
+msgctxt "setup"
+msgid "LDAP authentication is enabled"
+msgstr ""
+
+msgctxt "setup"
+msgid "LDAP authentication is not enabled."
+msgstr ""
+
+msgctxt "setup"
+msgid "Migrated data from Bibliograph v2"
+msgstr ""
+
+msgctxt "setup"
+msgid "Migrated schema(s) {schemas}."
+msgstr ""
+
+msgctxt "setup"
+msgid "Migrating data from Bibliograph v2 failed."
+msgstr ""
+
+msgctxt "setup"
+msgid "Migrating schema(s) failed: {errinfo}"
+msgstr ""
+
+msgctxt "setup"
+msgid "Missing administrator email in app.conf.toml."
+msgstr ""
+
+msgctxt "setup"
+msgid "No database connection. "
+msgstr ""
+
+msgctxt "setup"
+msgid "No schema migrations necessary."
+msgstr ""
+
+msgctxt "setup"
+msgid "No updates to the databases."
+msgstr ""
+
+msgctxt "setup"
+msgid "Setup failed. Please fix the following problems:"
+msgstr ""
+
+msgctxt "setup"
+msgid "Standard schema existed."
+msgstr ""
+
+msgctxt "setup"
+msgid "The application needs to be upgraded from '{oldversion}' to '{newversion}'. Please log in as administrator."
+msgstr ""
+
+msgctxt "setup"
+msgid "The configuration directory must not be writable in production mode {config_dir}."
+msgstr ""
+
+msgctxt "setup"
+msgid "The configuration directory needs to be writable in order to create an .ini file: {config_dir}."
+msgstr ""
+
+msgctxt "setup"
+msgid "The database must be upgraded. Confirm that you have made a database backup and now are ready to run the upgrade."
+msgstr ""
+
+msgctxt "app"
 msgid "2. Choose import format"
 msgstr "2. Wählen Sie das Importformat aus"
 
@@ -181,10 +313,6 @@ msgstr "Inhaltsverzeichnis"
 msgctxt "app"
 msgid "Copyright"
 msgstr "Urheberrechtsangaben"
-
-msgctxt "app"
-msgid "Could not parse query: {error}"
-msgstr ""
 
 msgctxt "app"
 msgid "Create a new datasource"
@@ -1121,130 +1249,6 @@ msgstr "Besitzer/in"
 msgctxt "extendedfields"
 msgid "Type"
 msgstr "Typ"
-
-msgctxt "setup"
-msgid " and a connection has successfully been established."
-msgstr ""
-
-msgctxt "setup"
-msgid " and applied new migrations for version {version}"
-msgstr ""
-
-msgctxt "setup"
-msgid ", but trying to establish a connection failed with the error: {error}"
-msgstr ""
-
-msgctxt "setup"
-msgid "Admininstrator email exists."
-msgstr ""
-
-msgctxt "setup"
-msgid "Cannot connect to database: {error}"
-msgstr ""
-
-msgctxt "setup"
-msgid "Cannot run in production mode without ini file."
-msgstr ""
-
-msgctxt "setup"
-msgid "Cannot update from Bibliograph v2 data: some tables are missing."
-msgstr ""
-
-msgctxt "setup"
-msgid "Configuration values were created."
-msgstr ""
-
-msgctxt "setup"
-msgid "Created datasources."
-msgstr ""
-
-msgctxt "setup"
-msgid "Created standard schema."
-msgstr ""
-
-msgctxt "setup"
-msgid "Datasources already existed."
-msgstr ""
-
-msgctxt "setup"
-msgid "Found data for version {version}"
-msgstr ""
-
-msgctxt "setup"
-msgid "Found empty database"
-msgstr ""
-
-msgctxt "setup"
-msgid "Initializing database failed."
-msgstr ""
-
-msgctxt "setup"
-msgid "Invalid database setup. Please contact the adminstrator."
-msgstr ""
-
-msgctxt "setup"
-msgid "LDAP authentication is enabled"
-msgstr ""
-
-msgctxt "setup"
-msgid "LDAP authentication is not enabled."
-msgstr ""
-
-msgctxt "setup"
-msgid "Migrated data from Bibliograph v2"
-msgstr ""
-
-msgctxt "setup"
-msgid "Migrated schema(s) {schemas}."
-msgstr ""
-
-msgctxt "setup"
-msgid "Migrating data from Bibliograph v2 failed."
-msgstr ""
-
-msgctxt "setup"
-msgid "Migrating schemas {schemas} failed."
-msgstr ""
-
-msgctxt "setup"
-msgid "Missing administrator email in app.conf.toml."
-msgstr ""
-
-msgctxt "setup"
-msgid "No database connection. "
-msgstr ""
-
-msgctxt "setup"
-msgid "No schema migrations necessary."
-msgstr ""
-
-msgctxt "setup"
-msgid "No updates to the databases."
-msgstr ""
-
-msgctxt "setup"
-msgid "Setup failed. Please fix the following problems:"
-msgstr ""
-
-msgctxt "setup"
-msgid "Standard schema existed."
-msgstr ""
-
-msgctxt "setup"
-msgid "The application needs to be upgraded from '{oldversion}' to '{newversion}'. Please log in as administrator."
-msgstr ""
-
-msgctxt "setup"
-msgid "The configuration directory must not be writable in production mode {config_dir}."
-msgstr ""
-
-msgctxt "setup"
-msgid "The configuration directory needs to be writable in order to create an .ini file: {config_dir}."
-msgstr ""
-
-msgctxt "setup"
-msgid "The database must be upgraded. Confirm that you have made a database backup and now are ready to run the upgrade."
-msgstr ""
 
 msgctxt "webservices"
 msgid "Server timed out."
