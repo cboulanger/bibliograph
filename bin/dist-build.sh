@@ -33,7 +33,7 @@ cp -a $SERVER_SRC_DIR/{config,controllers,lib,messages,migrations,models,modules
 if ! [[ $BUILD_TARGET == *"build"* ]]; then
   cp -a $SERVER_SRC_DIR/web .
 fi
-mkdir -p runtime/{cache/logs}
+mkdir -p runtime/{cache,logs}
 rm -f config/{app.conf.toml,message.php,test.php}
 
 cp -a $SERVER_SRC_DIR/composer.* .

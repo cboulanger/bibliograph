@@ -55,7 +55,7 @@ $components = [
     ],
   ],
   // Cache
-  'cache' => [ 'class' => 'yii\caching\FileCache' ],
+  'cache' => [ 'class' => yii\caching\FileCache::class ],
   // Mailer
   'mailer' => [
     'class' => yii\swiftmailer\Mailer::class,

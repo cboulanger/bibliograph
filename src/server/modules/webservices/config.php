@@ -1,10 +1,8 @@
 <?php
 
 use app\modules\webservices\Module;
-use yii\base\ModelEvent;
 use yii\db\BaseActiveRecord;
 use yii\web\User;
-use yii\web\UserEvent;
 
 /** @noinspection MissedFieldInspection */
 return [

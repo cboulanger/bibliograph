@@ -231,8 +231,8 @@ class DatasourceManager extends \yii\base\Component
     foreach ($datasources as $datasource) {
       $instance = Datasource::getInstanceFor($datasource->namedId);
       $migrationNamespace = $instance->migrationNamespace;
-      Yii::info("Migrating datasource '{$instance->namedId}'...");
-      Yii::debug( "Migration namespace: $migrationNamespace");
+      Yii::debug("Migrating datasource '{$instance->namedId}'...");
+      Yii::debug("Migration namespace: $migrationNamespace");
       $params = [ 'all', 'migrationNamespaces' => $migrationNamespace ];
       /** @var \yii\db\Connection $db */
       $db = $instance->getConnection();

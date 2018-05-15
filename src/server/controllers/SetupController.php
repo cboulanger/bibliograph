@@ -289,8 +289,8 @@ class SetupController extends \app\controllers\AppController
       return false;
     }
     // Everything seems to be ok
-    Yii::info("Setup finished successfully.");
-    Yii::info($this->messages);
+    Yii::debug("Setup finished successfully.");
+    Yii::debug($this->messages);
     return true;
   }
 
@@ -336,9 +336,41 @@ class SetupController extends \app\controllers\AppController
     return \in_array($tableName, $tables);
   }
 
+  /**
+   * Recursively deletes files and subfolders in a given folder
+   * @param string $dir
+   */
+  protected function emptyDir(string $dir) {
+    if (is_dir($dir)) {
+      $objects = scandir($dir);
+      foreach ($objects as $object) {
+        if ($object != "." && $object != "..") {
+          if (is_dir($dir."/".$object))
+            $this->emptyDir($dir."/".$object);
+          else
+            unlink($dir."/".$object);
+        }
+      }
+    }
+  }
+
   //-------------------------------------------------------------
   // SETUP METHODS
-  //-------------------------------------------------------------  
+  //-------------------------------------------------------------
+
+  /**
+   * Deletes the file cache on version change
+   * @return boolean
+   * @throws \Exception
+   */
+  protected function setupDeleteFileCache($upgrade_from,$upgrade_to){
+    if( $upgrade_from !== $upgrade_to ){
+      Yii::debug("Deleting file cache ...");
+      $this->emptyDir( __DIR__ . "/../runtime/cache" );
+    }
+    return false;
+  }
+
 
   /**
    * Check if an ini file exists
@@ -506,7 +538,7 @@ class SetupController extends \app\controllers\AppController
       ];
     }
     if ($output->contains('up-to-date')) {
-      Yii::info('No new migrations.', 'migrations');
+      Yii::debug('No new migrations.', 'migrations');
       $message = Yii::t('setup', "No updates to the databases.");
     } else {
       // unless this is a fresh installation, require admin login
@@ -746,7 +778,7 @@ class SetupController extends \app\controllers\AppController
           }
           $migration_table_exists = $datasource::getDb()->getTableSchema( $prefix . "migration");
           if( $markerClass and ! $migration_table_exists ){
-            Yii::info("Initializing migrating for datasource table '$datasource->namedId', schema '$schema->namedId'...");
+            Yii::debug("Initializing migrating for datasource table '$datasource->namedId', schema '$schema->namedId'...");
             $migrationNamespace = Datasource::getInstanceFor($datasource->namedId)->migrationNamespace;
             $fqn = "$migrationNamespace\\$markerClass";
             $params_mark = [
