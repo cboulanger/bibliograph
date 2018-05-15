@@ -241,39 +241,49 @@ msgid "Use browser locale"
 msgstr ""
 
 #: bibliograph/ui/window/PreferencesWindow.js:133
+#: bibliograph/ui/window/PreferencesWindow.js:138
 msgid "Fields"
 msgstr ""
 
 #: bibliograph/ui/window/PreferencesWindow.js:148
+#: bibliograph/ui/window/PreferencesWindow.js:153
 msgid "Database"
 msgstr ""
 
 #: bibliograph/ui/window/PreferencesWindow.js:179
 #: bibliograph/ui/window/PreferencesWindow.js:180
+#: bibliograph/ui/window/PreferencesWindow.js:184
+#: bibliograph/ui/window/PreferencesWindow.js:185
 msgid "Exclude fields"
 msgstr ""
 
 #: bibliograph/ui/window/PreferencesWindow.js:188
+#: bibliograph/ui/window/PreferencesWindow.js:193
 msgid "Enter the names of fields to exclude."
 msgstr ""
 
 #: bibliograph/ui/window/PreferencesWindow.js:229
+#: bibliograph/ui/window/PreferencesWindow.js:234
 msgid "Access"
 msgstr ""
 
 #: bibliograph/ui/window/PreferencesWindow.js:240
+#: bibliograph/ui/window/PreferencesWindow.js:245
 msgid "Authentication method"
 msgstr ""
 
 #: bibliograph/ui/window/PreferencesWindow.js:246
+#: bibliograph/ui/window/PreferencesWindow.js:251
 msgid "Client sends plain text password"
 msgstr ""
 
 #: bibliograph/ui/window/PreferencesWindow.js:252
+#: bibliograph/ui/window/PreferencesWindow.js:257
 msgid "Client sends hashed password"
 msgstr ""
 
 #: bibliograph/ui/window/PreferencesWindow.js:278
+#: bibliograph/ui/window/PreferencesWindow.js:283
 msgid "Plaintext passwords without a secure connection (HTTPS) are not allowed."
 msgstr ""
 
