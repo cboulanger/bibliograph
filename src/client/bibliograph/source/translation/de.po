@@ -415,7 +415,7 @@ msgstr "Exportieren"
 msgid "Export selected references"
 msgstr "Ausgewählte Datensätze exportieren"
 
-#
+#: bibliograph/ui/main/TableView.js:240
 msgid "Export folder"
 msgstr "Ordner exportieren"
 

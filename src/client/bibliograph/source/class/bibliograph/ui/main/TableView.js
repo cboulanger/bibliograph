@@ -237,7 +237,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
       this.bindEnabled(this.permissions.export_selected_references, menuButton4);
 
       // export selected folder
-      let menuButton5 = new qx.ui.menu.Button(this.tr('Export selected folder'));
+      let menuButton5 = new qx.ui.menu.Button(this.tr('Export folder'));
       exportMenu.add(menuButton5);
       menuButton5.addListener("execute", () => this.exportFolder() );
       this.bindVisibility(this.permissions.export_folder, menuButton5);
