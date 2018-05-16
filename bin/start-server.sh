@@ -40,7 +40,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   osascript -e 'tell application "System Events" to keystroke "i" using {option down, command down}'
   echo ">>> Waiting 2 minutes until page is loaded..."
   sleep 120s
-  echo ">>> Start continuous compilation..."
+  echo " >>> Start continuous compilation..."
   pushd $COMPILE_PATH > /dev/null
   qx compile --target=$TARGET --watch
   popd > /dev/null

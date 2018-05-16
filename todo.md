@@ -3,16 +3,14 @@
 ## v3.0.0-beta
 
 ### Priority: urgent
+- [ ] BUG: Remove UTF-8 hack from EventResponse, remove non-UTF-8 chars from Z39.50 import, see also https://github.com/cboulanger/bibliograph/issues/189
 
 ### Priority: high
-- [x] FEAT: Language preference -> default value, add language selector for individual language setting
-- [ ] BUG: Remove UTF-8 hack from EventResponse, remove non-UTF-8 chars from Z39.50 import, see also https://github.com/cboulanger/bibliograph/issues/189
-- [ ] BUG: Query `author begins with "A"` -> "missing term"
-- [ ] BUG: Use Session Cache instead of File Cache for Storing file path in importer
-- [ ] FEAT: Cache export formats for HTML view, make configurable 
 - [ ] FEAT: User::getAllPermissions returns always the highest available set of permissions, regardless of the permissions of the group the current datasource belongs to. Requires rewriting of  `$this->requirePermission` to pass the datasource / datasource name
  
 ### Priority: normal
+- [ ] FEAT: Cache export formats for HTML view, make configurable 
+- [ ] BUG: Use Session Cache instead of File Cache for Storing file path in importer
 - [ ] FEAT: Disallow drop of references on folders in which they are already contained.
 - [ ] FEAT: Transform compile.json into compile.js (to allow to update env var "app.version" etc.)
 - [ ] FEAT: Check log email target to report fatal errors
