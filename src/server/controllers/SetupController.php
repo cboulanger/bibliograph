@@ -313,10 +313,10 @@ class SetupController extends \app\controllers\AppController
       }
       $tables = $dbConnect->schema->getTableNames();
       if (!count($tables)) {
-        Yii::trace("Database {$dbConnect->dsn} does not contain any tables." . implode(", ", $tables));
+        Yii::debug("Database {$dbConnect->dsn} does not contain any tables." . implode(", ", $tables));
         return [];
       }
-      Yii::trace("Tables in the database {$dbConnect->dsn}: " . implode(", ", $tables));
+      Yii::debug("Tables in the database {$dbConnect->dsn}: " . implode(", ", $tables));
     }
     return $tables;
   }

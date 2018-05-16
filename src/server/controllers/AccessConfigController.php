@@ -271,7 +271,7 @@ class AccessConfigController extends AppController
     $records = $query->all();
     // create result from record data
     $result = [];
-    //Yii::trace($elementData);
+    //Yii::debug($elementData);
     foreach ($records as $record) {
       $value = $record->namedId;
       if( in_array($type, ['permission','role' ])){

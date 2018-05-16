@@ -51,7 +51,7 @@ class EventTransportResponse extends \yii\web\Response
       ];
     }
     parent::prepare();
-    //Yii::trace( "****************************");
-    //Yii::trace( $this->data );    
+    //Yii::debug( "****************************");
+    //Yii::debug( $this->data );
   }
 }

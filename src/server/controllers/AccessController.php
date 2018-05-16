@@ -143,11 +143,11 @@ class AccessController extends AppController
       // see if we have a session id that we can link to a user
       $session = Session::findOne( [ 'namedId' => $this->getSessionId() ] );
       if( $session ){
-        Yii::trace('PHP session exists in database...');
+        Yii::debug('PHP session exists in database...');
         // find a user that belongs to this session
         $user = User::findOne( [ 'id' => $session->UserId ] );
         if ( $user ) {          
-          Yii::trace('Session belongs to user ' . $user->namedId);
+          Yii::debug('Session belongs to user ' . $user->namedId);
         } else {
           // shouldn't ever happen
           Yii::warning('Session has non-existing user!');
@@ -227,13 +227,13 @@ class AccessController extends AppController
           $storedPw = $user->password;
           switch ($auth_method) {
             case "hashed":
-              Yii::trace("Client sent hashed password: $password.");
+              Yii::debug("Client sent hashed password: $password.");
               $randSalt   = Yii::$app->accessManager->getLoginSalt();
               $serverHash = substr( $storedPw, ACCESS_SALT_LENGTH );
               $authenticated = $password == sha1( $randSalt . $serverHash );
               break;
             case "plaintext":
-              Yii::trace("Client sent plaintext password." );
+              Yii::debug("Client sent plaintext password." );
               $authenticated = Yii::$app->accessManager->generateHash( $password, $storedPw ) == $storedPw;
               break;
             default:
