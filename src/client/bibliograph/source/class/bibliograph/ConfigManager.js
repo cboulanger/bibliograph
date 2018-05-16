@@ -120,7 +120,7 @@ qx.Class.define("bibliograph.ConfigManager", {
       function (event) {
         let data = event.getData();
         let key = model.getKeys().getItem(data.name);
-        if (data.value != data.old) {
+        if (data.value !== data.old) {
           this.fireDataEvent("change", key);
         }
       },
@@ -182,14 +182,12 @@ qx.Class.define("bibliograph.ConfigManager", {
       this.bind("store.model", this, "model");
 
       // whenever a config value changes on the server, send it to server
-      this.addListener(
-      "clientChange",
-      function (event) {
-        let data = event.getData();
+      this.addListener( "clientChange", e => {
+        let data = e.getData();
         this.getStore().execute("set", [data.key, data.value]);
-      },
-      this
-      );
+      });
+      
+      //@todo subscribe to server message with config value change
       return this;
     },
 
@@ -241,8 +239,9 @@ qx.Class.define("bibliograph.ConfigManager", {
     setKey: function (key, value) {
       let index = this._getIndex(key);
       let old = this.getModel().getValues().getItem(index);
-      if (value != old) {
+      if (value !== old) {
         this.getModel().getValues().setItem(index, value);
+        this.fireDataEvent("change", key);
         this.fireDataEvent("clientChange", {
           key: key,
           value: value,

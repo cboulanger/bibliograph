@@ -81,59 +81,7 @@ qx.Class.define("bibliograph.ui.window.PreferencesWindow", {
     let qxTextField1 = new qx.ui.form.TextField(null);
     qxPage1.add(qxTextField1, { row: 1, column: 1 });
     confMgr.addListener("ready", e => confMgr.bindKey("application.logo", qxTextField1, "value", true));
-
-    // force backend language
-    let qxLabel3 = new qx.ui.basic.Label(this.tr("Language"));
-    qxPage1.add(qxLabel3, {
-      row: 2,
-      column: 0
-    });
-
-    let localeManager = qx.locale.Manager.getInstance();
-    let locales = localeManager.getAvailableLocales().sort();
-    let currentLocale = localeManager.getLocale();
-
-    let select = new qx.ui.form.SelectBox();
-    select.setAllowGrowY(false);
-    select.setAlignY("middle");
-
-    // setup selectbox
-    confMgr.addListenerOnce( "ready", () => {
-      let localeFromConfig = confMgr.getKey("application.locale");
-
-      // default: locale from browser
-      let defaultListItem = new qx.ui.form.ListItem( this.tr("Use browser locale"), null, "" );
-      select.add(defaultListItem);
-
-      for (let i = 0; i < locales.length; i++) {
-        let listItem = new qx.ui.form.ListItem( locales[i], null, locales[i] );
-        select.add(listItem);
-        if (locales[i] === localeFromConfig) {
-          defaultListItem = listItem;
-        }
-      }
-
-      if (defaultListItem) {
-        this.__setLocaleFromConfig = true;
-        select.setSelection([defaultListItem]);
-        qx.locale.Manager.getInstance().setLocale(defaultListItem.getModel());
-        this.__setLocaleFromConfig = false;
-      }
-    });
-
-    // selectbox change
-    select.addListener("changeSelection", function(e) {
-      let locale = e.getData()[0].getModel();
-      if (locale) {
-        qx.locale.Manager.getInstance().setLocale(locale);
-      }
-      if( ! this.__setLocaleFromConfig ){
-        confMgr.setKey("application.locale", locale);
-      }
-    });
-
-    qxPage1.add(select, { row: 2, column: 1 });
-
+    
     // Tab to configure which fields to omit
     let qxPage2 = new qx.ui.tabview.Page(this.tr("Fields"));
     tabView.add(qxPage2);

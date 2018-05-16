@@ -44,7 +44,8 @@ qx.Class.define("bibliograph.Setup", {
     ---------------------------------------------------------------------------
     */
 
-    boot : async function(){
+    boot : async function()
+    {
 
       //  Mixes `getApplication()` into all qooxdoo objects
       qx.Class.include( qx.core.Object, qcl.application.MGetApplication );
@@ -61,6 +62,9 @@ qx.Class.define("bibliograph.Setup", {
 
       // save state from querystring
       this.saveApplicationState();
+      
+      // User interface translations
+      this.setupUiTranslations();
 
       // create main UI Layout
       bibliograph.ui.Windows.getInstance().create();
@@ -135,7 +139,7 @@ qx.Class.define("bibliograph.Setup", {
 
 
     /**
-     * save some intial application states which would otherwise be overwritten
+     * Save some intial application states which would otherwise be overwritten
      */
     saveApplicationState : function(){
       let app = this.getApplication();
@@ -144,7 +148,10 @@ qx.Class.define("bibliograph.Setup", {
       this.__query    = app.getStateManager().getState("query");
       this.__modelId  = app.getStateManager().getState("modelId");
     },
-
+  
+    /**
+     * Creates the blocker for modal popupus
+     */
     createBlocker : function(){
       let app = this.getApplication();
       let blocker = new qx.ui.core.Blocker(app.getRoot());
@@ -152,7 +159,29 @@ qx.Class.define("bibliograph.Setup", {
       blocker.setColor( "black" );
       app.__blocker = blocker;
     },
-
+  
+    /**
+     * Sets the locale according to the browser settings.
+     * This can be overridden by a config value
+     */
+    setupUiTranslations : function()
+    {
+      let confMgr = this.getApplication().getConfigManager();
+      let localeManager = qx.locale.Manager.getInstance();
+      let locales = localeManager.getAvailableLocales().sort();
+      let currentLocale = localeManager.getLocale();
+      this.info("Browser locale: " + currentLocale);
+      // override locale from config
+      confMgr.addListenerOnce( "change", e => {
+        if (e.getData() !== "application.locale") return;
+        let localeFromConfig = confMgr.getKey("application.locale");
+        if (localeFromConfig && localeFromConfig !== localeManager.getLocale()) {
+          this.info(`Switching locale to '${localeFromConfig}' as per user configuration.`);
+          localeManager.setLocale(localeFromConfig);
+        }
+      });
+    },
+    
     /**
      * Returns the message displayed below the splash screen icon.
      * By default, return the version and copyright text.
@@ -167,6 +196,7 @@ qx.Class.define("bibliograph.Setup", {
     /**
      * This will initiate server setup. When done, server will send a
      * "bibliograph.setup.done" message.
+     * @return {Promise<void>}
      */
     checkServerSetup : async function(){
       // 'await' omitted in the next line, since the message is what we're waiting for
@@ -180,6 +210,7 @@ qx.Class.define("bibliograph.Setup", {
     /**
      * Unless we have a token in the session storage, authenticate
      * anomymously with the server.
+     * @return {Promise<void>}
      */
     authenticate : async function(){
       let am = bibliograph.AccessManager.getInstance();
@@ -201,13 +232,21 @@ qx.Class.define("bibliograph.Setup", {
       this.info("Got access token from session storage" );
       }
     },
-
+  
+    /**
+     * Loads the configuration values
+     * @return {Promise<void>}
+     */
     loadConfig : async function(){
       this.info("Loading config values...");
       await this.getApplication().getConfigManager().init().load();
       this.info("Config values loaded.");
     },
-
+  
+    /**
+     * Loads user data including permissions
+     * @return {Promise<void>}
+     */
     loadUserdata : async function(){
       this.info("Loading userdata...");
       await this.getApplication().getAccessManager().init().load();

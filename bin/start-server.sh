@@ -34,7 +34,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   killall mysqld &> /dev/null
   killall mysqld_safe &> /dev/null
   mysql.server start
-  echo " >>> Opening app in browser"
+  echo " >>> Opening app in browser at http://$HOST/$APP_PATH"
   open -a "Google Chrome" http://$HOST/$APP_PATH
   # send Alt+Command+I to open Web inspector
   osascript -e 'tell application "System Events" to keystroke "i" using {option down, command down}'

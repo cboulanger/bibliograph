@@ -7,9 +7,5 @@ return [
   'app.datasource.baseclass' => [
     'type' => "string",
     'default' => \app\models\BibliographicDatasource::class
-  ],
-  'app.datasource.baseclass' => [
-    'type' => "string",
-    'default' => \app\models\BibliographicDatasource::class
   ]
 ];

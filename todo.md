@@ -3,18 +3,17 @@
 ## v3.0.0-beta
 
 ### Priority: urgent
-- [ ] FEAT: Language preference -> default value, add language selector for individual language setting
 
 ### Priority: high
-- [ ] FEAT: Exclude .todo files from being copied into the distribution package
+- [x] FEAT: Language preference -> default value, add language selector for individual language setting
+- [ ] BUG: Remove UTF-8 hack from EventResponse, remove non-UTF-8 chars from Z39.50 import, see also https://github.com/cboulanger/bibliograph/issues/189
 - [ ] BUG: Query `author begins with "A"` -> "missing term"
-- [ ] BUG: Disallow drop of references on folders in which they are already contained.
 - [ ] FEAT: Cache export formats for HTML view, make configurable 
 - [ ] FEAT: User::getAllPermissions returns always the highest available set of permissions, regardless of the permissions of the group the current datasource belongs to. Requires rewriting of  `$this->requirePermission` to pass the datasource / datasource name
  
 ### Priority: normal
+- [ ] FEAT: Disallow drop of references on folders in which they are already contained.
 - [ ] FEAT: Transform compile.json into compile.js (to allow to update env var "app.version" etc.)
-- [ ] FEAT: Reimplement account management via email
 - [ ] FEAT: Check log email target to report fatal errors
 - [ ] FEAT: Reimplement Search Help
 - [ ] FEAT: Make UserErrorException a JSONRPC error which is caught on the client, instead of a Dialog event. 
@@ -24,10 +23,12 @@
 - [ ] FEAT: Remove migrations table for deleted datasources
 - [ ] FEAT: Allow migrations via permission, not prod/dev-mode
 - [ ] FEAT: Implement setup Wizard
+- [ ] FEAT: Reimplement account management via email
 - [ ] FEAT: "Orphaned" folder should contain references that do not have a parent
 - [ ] FEAT: Add "Active" Checkbox to user editor
 - [ ] FEAT: Reimplement Search Help window
 - [ ] FEAT: Update CQL operators to conform to the specs (http://www.loc.gov/standards/sru/cql/contextSets/theCqlContextSet.html)
+- [ ] FEAT: Config key change should be broadcasted
 
 ### Priority: low
 - [ ] FEAT: Add "serverOnly" column to data_Config (true/false/null) and remove from config data sent to client
@@ -49,6 +50,7 @@
 
 ### Code cleanup / refactoring
 - [ ] Fix compiler warnings
+- [ ] Exclude .todo files from being copied into the distribution package
 - [ ] Clear up the conceptual mess concerning "schema": datasource schema/reference schema -> "repository"?
 - [ ] Rename "Datasource" to "Repository" (see https://dev.to/remojansen/implementing-the-onion-architecture-in-nodejs-with-typescript-and-inversifyjs-10ad)
 - [ ] FactoryClass("datasource","reference") proxying ActiveRecord methods

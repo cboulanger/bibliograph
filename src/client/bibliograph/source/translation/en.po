@@ -85,15 +85,15 @@ msgstr ""
 msgid "Loading folder data ..."
 msgstr ""
 
-#: bibliograph/Setup.js:87
+#: bibliograph/Setup.js:87 bibliograph/Setup.js:90 bibliograph/Setup.js:91
 msgid "Setting up application..."
 msgstr ""
 
-#: bibliograph/Setup.js:91
+#: bibliograph/Setup.js:91 bibliograph/Setup.js:94 bibliograph/Setup.js:95
 msgid "Connecting with server..."
 msgstr ""
 
-#: bibliograph/Setup.js:96
+#: bibliograph/Setup.js:96 bibliograph/Setup.js:99 bibliograph/Setup.js:100
 msgid "Loading configuration ..."
 msgstr ""
 
@@ -233,6 +233,7 @@ msgid "Application logo"
 msgstr ""
 
 #: bibliograph/ui/window/PreferencesWindow.js:86
+#: bibliograph/ui/main/Toolbar.js:217
 msgid "Language"
 msgstr ""
 
@@ -242,11 +243,13 @@ msgstr ""
 
 #: bibliograph/ui/window/PreferencesWindow.js:133
 #: bibliograph/ui/window/PreferencesWindow.js:138
+#: bibliograph/ui/window/PreferencesWindow.js:86
 msgid "Fields"
 msgstr ""
 
 #: bibliograph/ui/window/PreferencesWindow.js:148
 #: bibliograph/ui/window/PreferencesWindow.js:153
+#: bibliograph/ui/window/PreferencesWindow.js:101
 msgid "Database"
 msgstr ""
 
@@ -254,36 +257,44 @@ msgstr ""
 #: bibliograph/ui/window/PreferencesWindow.js:180
 #: bibliograph/ui/window/PreferencesWindow.js:184
 #: bibliograph/ui/window/PreferencesWindow.js:185
+#: bibliograph/ui/window/PreferencesWindow.js:132
+#: bibliograph/ui/window/PreferencesWindow.js:133
 msgid "Exclude fields"
 msgstr ""
 
 #: bibliograph/ui/window/PreferencesWindow.js:188
 #: bibliograph/ui/window/PreferencesWindow.js:193
+#: bibliograph/ui/window/PreferencesWindow.js:141
 msgid "Enter the names of fields to exclude."
 msgstr ""
 
 #: bibliograph/ui/window/PreferencesWindow.js:229
 #: bibliograph/ui/window/PreferencesWindow.js:234
+#: bibliograph/ui/window/PreferencesWindow.js:182
 msgid "Access"
 msgstr ""
 
 #: bibliograph/ui/window/PreferencesWindow.js:240
 #: bibliograph/ui/window/PreferencesWindow.js:245
+#: bibliograph/ui/window/PreferencesWindow.js:193
 msgid "Authentication method"
 msgstr ""
 
 #: bibliograph/ui/window/PreferencesWindow.js:246
 #: bibliograph/ui/window/PreferencesWindow.js:251
+#: bibliograph/ui/window/PreferencesWindow.js:199
 msgid "Client sends plain text password"
 msgstr ""
 
 #: bibliograph/ui/window/PreferencesWindow.js:252
 #: bibliograph/ui/window/PreferencesWindow.js:257
+#: bibliograph/ui/window/PreferencesWindow.js:205
 msgid "Client sends hashed password"
 msgstr ""
 
 #: bibliograph/ui/window/PreferencesWindow.js:278
 #: bibliograph/ui/window/PreferencesWindow.js:283
+#: bibliograph/ui/window/PreferencesWindow.js:231
 msgid "Plaintext passwords without a secure connection (HTTPS) are not allowed."
 msgstr ""
 
@@ -335,6 +346,8 @@ msgid "Close"
 msgstr ""
 
 #: bibliograph/ui/window/AboutWindow.js:27 bibliograph/ui/main/Toolbar.js:223
+#: bibliograph/ui/main/Toolbar.js:233 bibliograph/ui/main/Toolbar.js:241
+#: bibliograph/ui/main/Toolbar.js:242
 msgid "About Bibliograph"
 msgstr ""
 
@@ -406,7 +419,8 @@ msgstr ""
 msgid "Import text file"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:216
+#: bibliograph/ui/main/Toolbar.js:216 bibliograph/ui/main/Toolbar.js:225
+#: bibliograph/ui/main/Toolbar.js:233 bibliograph/ui/main/Toolbar.js:234
 msgid "Online Help"
 msgstr ""
 
@@ -771,11 +785,13 @@ msgstr ""
 msgid "Development"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:241
+#: bibliograph/ui/main/Toolbar.js:241 bibliograph/ui/main/Toolbar.js:251
+#: bibliograph/ui/main/Toolbar.js:259 bibliograph/ui/main/Toolbar.js:260
 msgid "Run RPC method test.test"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:235
+#: bibliograph/ui/main/Toolbar.js:235 bibliograph/ui/main/Toolbar.js:245
+#: bibliograph/ui/main/Toolbar.js:253 bibliograph/ui/main/Toolbar.js:254
 msgid "Developer"
 msgstr ""
 
@@ -841,7 +857,8 @@ msgstr ""
 #: bibliograph/plugins/webservices/ImportWindow.js:246
 #: bibliograph/plugins/webservices/ImportWindow.js:287
 #: bibliograph/plugins/z3950/ImportWindow.js:250
-#: bibliograph/ui/main/Toolbar.js:279
+#: bibliograph/ui/main/Toolbar.js:279 bibliograph/ui/main/Toolbar.js:289
+#: bibliograph/ui/main/Toolbar.js:297 bibliograph/ui/main/Toolbar.js:298
 msgid "Searching..."
 msgstr ""
 
@@ -926,7 +943,8 @@ msgstr ""
 msgid "Exporting query..."
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:280
+#: bibliograph/ui/main/Toolbar.js:280 bibliograph/ui/main/Toolbar.js:290
+#: bibliograph/ui/main/Toolbar.js:298 bibliograph/ui/main/Toolbar.js:299
 msgid "Enter search term or ? for suggestions"
 msgstr ""
 
@@ -938,7 +956,8 @@ msgstr ""
 msgid "Save current search query as top folder"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:278
+#: bibliograph/ui/main/Toolbar.js:278 bibliograph/ui/main/Toolbar.js:288
+#: bibliograph/ui/main/Toolbar.js:296 bibliograph/ui/main/Toolbar.js:297
 msgid "No results"
 msgstr ""
 

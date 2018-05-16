@@ -213,12 +213,31 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       menuButton.setMenu(menu);
       menu.setWidgetId("app/toolbar/menus/help");
 
+      // Manually set locale
+      let localeMenuButton = new qx.ui.menu.Button(this.tr('Language'));
+      let localeMenu = new qx.ui.menu.Menu();
+      localeMenuButton.setMenu(localeMenu);
+      menu.add(localeMenuButton);
+  
+      let localeManager = qx.locale.Manager.getInstance();
+      let locales = localeManager.getAvailableLocales().sort();
+      locales.forEach(locale => {
+        let localeButton = new qx.ui.menu.Button(locale);
+        localeMenu.add(localeButton);
+        localeButton.addListener("execute", ()=>{
+          localeManager.setLocale(locale);
+          this.getApplication().getConfigManager().setKey("application.locale", locale);
+        });
+      });
+      
+      // Help
       let button1 = new qx.ui.menu.Button(this.tr('Online Help'));
       menu.add(button1);
       button1.addListener("execute", function(e) {
         this.getApplication().cmd("showHelpWindow");
       }, this);
 
+      // About
       let button2 = new qx.ui.menu.Button();
       button2.setLabel(this.tr('About Bibliograph'));
       menu.add(button2);
