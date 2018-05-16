@@ -1016,13 +1016,16 @@ class ReferenceController extends AppController
       'verbose' => true
     ]);
     $translatedQuery = $nlq->translate();
-    Yii::debug("$query => $translatedQuery");
+    Yii::debug("User search query '$query' was translated to '$translatedQuery'.");
     $matches=[];
     switch ($inputPosition){
       case 0:
         // the first token is either a field name (or a search expression)
-        $matches = array_filter($schema->getIndexNames(), function($item) use($input) {
-          return $input === "?" or str_contains( mb_strtolower($item, 'UTF-8'),  mb_strtolower($input, 'UTF-8') );
+        $matches = array_filter($schema->getIndexNames(), function($index) use($input,$schema) {
+          foreach ($schema->getIndexFields($index) as $indexField) {
+            if( ! $schema->isPublicField($indexField) ) return false;
+          }
+          return $input === "?" or str_contains( mb_strtolower($index, 'UTF-8'),  mb_strtolower($input, 'UTF-8') );
         });
         break;
       case 1:

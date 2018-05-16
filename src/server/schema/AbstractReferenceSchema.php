@@ -297,6 +297,11 @@ abstract class AbstractReferenceSchema extends yii\base\BaseObject implements IS
     return null;
   }
 
+  /**
+   * Wheter the field is shown to unauthenticated users
+   * @param $field
+   * @return bool
+   */
   public function isPublicField($field)
   {
     $data = $this->getFieldData($field);
