@@ -57,11 +57,11 @@ $config =  [
           }
         }
         Yii::$app->language = $language;
-        Yii::debug("Setting language from user setting to " . $language );
+        //Yii::debug("Setting language from user setting to " . $language );
       }
     } catch( Exception $e ){
       Yii::$app->utils->setLanguageFromBrowser();
-      Yii::debug("Fallback: Setting language from browser settings to " . Yii::$app->language );
+      //Yii::warning("Fallback: Setting language from browser settings to " . Yii::$app->language );
     }
   }
 ];
