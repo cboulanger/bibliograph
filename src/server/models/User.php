@@ -43,6 +43,7 @@ use lib\models\BaseModel;
  * @property string $lastAction
  * @property integer $confirmed
  * @property integer $online
+ * @property string $token
  */
 class User extends BaseModel implements IdentityInterface
 {
@@ -65,7 +66,8 @@ class User extends BaseModel implements IdentityInterface
       [['namedId', 'password'], 'string', 'max' => 50],
       [['name'], 'string', 'max' => 100],
       [['email'], 'string', 'max' => 255],
-      [['namedId'], 'unique'],
+      [['token'], 'string', 'max' => 32],
+      [['namedId','token'], 'unique'],
     ];
   }
 
@@ -88,6 +90,7 @@ class User extends BaseModel implements IdentityInterface
       'lastAction' => Yii::t('app', 'Last Action'),
       'confirmed' => Yii::t('app', 'Confirmed'),
       'online' => Yii::t('app', 'Online'),
+      'token' => Yii::t('app', 'Token'),
     ];
   }
 

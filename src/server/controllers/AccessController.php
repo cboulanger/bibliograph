@@ -132,6 +132,7 @@ class AccessController extends AppController
    */
   public function actionAuthenticate($first = null, $password = null)
   {
+    /** @var User $user */
     $user = null;
     $session = null;
     Yii::$app->session->open();
@@ -275,11 +276,10 @@ class AccessController extends AppController
       $sessionId = $this->getSessionId();
       Yii::debug("Started sesssion {$sessionId}");
     }
-       
-    // if necessary, add a token
-    if (! $user->token) {
-      $user->save();
-    }
+
+    // renew the token
+    $user->token = null;
+    $user->save();
 
     // cleanup old sessions
     $this->cleanup();
