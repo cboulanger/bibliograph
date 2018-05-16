@@ -290,11 +290,11 @@ class ImportController extends AppController
        );
       try {
         $importedReference->save();
+        $importedReference->link("folders", $targetFolder );
         $count++;
       } catch (Exception $e) {
         Yii::warning($e->getMessage());
       }
-      $importedReference->link("folders", $targetFolder );
     }
     // update child count and reload folders
     $targetFolder->getChildCount(true);
