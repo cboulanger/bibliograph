@@ -296,7 +296,7 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
       foreach ( $this->operators as $operator) {
         // save the lowercase version of the translation for fast lookup
         $translations = $this->getOperatorData($operator)['translation'];
-        //Yii::info([Yii::$app->language, $operator, $translations ]);
+        //Yii::debug([Yii::$app->language, $operator, $translations ]);
         foreach ((array) $translations as $translation) {
           // remove placeholder tokens
           $replace_placeholders = ['{leftOperand}','{rightOperand}','{field}','{value}'];
@@ -305,7 +305,7 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
         }
       }
       $this->dictionary[$key] = $dict;
-      //if( $locale!="en-US") Yii::info($dict);
+      //if( $locale!="en-US") Yii::debug($dict);
     }
     return $this->dictionary[$key];
   }
@@ -318,7 +318,7 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
   public function translate()
   {
     $query = $this->query;
-    if($this->verbose) Yii::info(" *** Query is '$query', using language '$this->language'... ***");
+    if($this->verbose) Yii::debug(" *** Query is '$query', using language '$this->language'... ***");
     if( ! $query ) return "";
     $tokenizer = new Tokenizer($query);
     $tokens = $tokenizer->tokenize();
@@ -329,7 +329,7 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
     if($this->verbose) Yii::debug($dict);
     do {
       $token = isset($tokens[0]) ? $tokens[0] : "";
-      if($this->verbose) Yii::info("Looking at '$token'...");
+      if($this->verbose) Yii::debug("Looking at '$token'...");
       // do not translate quoted expressions
       if ( in_array( $token[0], ["'", '"']) ) {
         array_shift($tokens);
@@ -339,7 +339,7 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
         for($i=0; $i<count($tokens); $i++){
           $compare = implode( " ", array_slice( $tokens, 0, $i+1 ));
           $compare = mb_strtolower( $compare, "UTF-8");
-          if ($this->verbose) Yii::info("Comparing '$compare'...");
+          if ($this->verbose) Yii::debug("Comparing '$compare'...");
           if ($pos = strpos($compare, "/") or $pos = strpos($compare, "*")){
             $compare_key = substr( $compare, 0, $pos);
           } else {
@@ -350,16 +350,16 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
             if( $compare_key == $compare){
               $offset = $i+1;
             }
-            if($this->verbose) Yii::info("Found '$token'.");
+            if($this->verbose) Yii::debug("Found '$token'.");
           }
         }
         $tokens = array_slice($tokens, $offset);
-        if($this->verbose) Yii::info("Using '$token', rest: " . implode("|",$tokens));
+        if($this->verbose) Yii::debug("Using '$token', rest: " . implode("|",$tokens));
       }
       if( in_array( $token, $operators ) ) $hasOperator = true;
       $parsedTokens[] = $token;
     } while (count($tokens));
-    if($this->verbose) Yii::info("Parsed tokens: " . implode("|", $parsedTokens));
+    if($this->verbose) Yii::debug("Parsed tokens: " . implode("|", $parsedTokens));
 
     // Re-assemble translated query string
     if ($hasOperator) {

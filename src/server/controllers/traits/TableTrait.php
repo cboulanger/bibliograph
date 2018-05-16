@@ -178,6 +178,7 @@ trait TableTrait
    *    The model class from which to create the query
    * @return \yii\db\ActiveQuery
    * @throws \InvalidArgumentException
+   * @todo rewrite this
    * @todo rename to 'createQueryFromClientData()'
    * @todo 'properties' should be 'columns' or 'fields', 'cql' should be 'input'/'search' or similar
    */
@@ -199,6 +200,15 @@ trait TableTrait
       throw new \InvalidArgumentException("Invalid query data");
     }
 
+    // "Creator" column coalesces author and editor data
+    $hasCreatorProperty = array_search("creator", $clientQuery->properties) !== false;
+    if( $hasCreatorProperty ){
+      $clientQuery->properties = array_merge(
+        ['author','editor',new Expression('coalesce(`author`,`editor`) as creator')],
+        array_diff($clientQuery->properties,['creator'])
+      );
+    }
+
     // it's a relational query
     if (isset($clientQuery->relation)) {
 
@@ -211,14 +221,6 @@ trait TableTrait
       $columns = array_map(function ($column) {
         return $column == "id" ? "references.id" : $column;
       }, $clientQuery->properties);
-
-      $hasCreatorProperty = array_search("creator",$columns) !== false;
-      if( $hasCreatorProperty ){
-        $columns = array_merge(
-          ['author','editor',new Expression('coalesce(`author`,`editor`) as creator')],
-          array_diff($columns,['creator'])
-        );
-      }
 
       /** @var ActiveQuery $activeQuery */
       $activeQuery = $modelClass::find()
@@ -238,7 +240,12 @@ trait TableTrait
       if( str_contains( $clientQuery->cql, "virtsub:") ){
         return $modelClass::find()->where(new Expression("TRUE = FALSE"));
       }
-      $activeQuery = $this->createActiveQueryFromNaturalLanguageQuery($modelClass,$datasourceName, $clientQuery->cql);
+      $activeQuery = $this->createActiveQueryFromNaturalLanguageQuery(
+        $modelClass,
+        $datasourceName,
+        $clientQuery->cql,
+        $clientQuery->properties
+      );
       //Yii::debug($activeQuery->createCommand()->getRawSql());
       return $activeQuery;
     }
@@ -250,10 +257,12 @@ trait TableTrait
    * @param string $modelClass
    * @param string $datasourceName
    * @param string $naturalLanguageQuery
+   * @param string|array $columns
    * @return ActiveQuery
+   * @todo rewrite this
    * @todo modelClass can probably be determined by the datasource and be removed from params
    */
-  protected function createActiveQueryFromNaturalLanguageQuery( string $modelClass,string $datasourceName, string $naturalLanguageQuery)
+  protected function createActiveQueryFromNaturalLanguageQuery( string $modelClass,string $datasourceName, string $naturalLanguageQuery, $columns="*")
   {
     // use the language that works/yields most hits
     $languages=Yii::$app->utils->getLanguages();
@@ -261,12 +270,15 @@ trait TableTrait
     foreach ($languages as $language) {
       //Yii::debug("Trying to translate query '$clientQuery->cql' from '$language'...");
       /** @var ActiveQuery $activeQuery */
-      $activeQuery = $modelClass::find()->where(['markedDeleted' => 0]);
+      $activeQuery = $modelClass::find()
+        ->select($columns)
+        ->where(['markedDeleted' => 0]);
       $schema = Datasource::in($datasourceName,"reference")::getSchema();
       $nlq = new NaturalLanguageQuery([
         'query'     => $naturalLanguageQuery,
         'schema'    => $schema,
-        'language'  => $language
+        'language'  => $language,
+        'verbose'   => false
       ]);
       try {
         $nlq->injectIntoYiiQuery($activeQuery);
