@@ -1,6 +1,7 @@
 <?php
 
 namespace lib\components;
+use ForceUTF8\Encoding;
 use Yii;
 
 /**
@@ -26,7 +27,7 @@ class EventTransportResponse extends \yii\web\Response
     // This is a bad hack working around a broken mysql server setup
     $data = var_export($this->data, true);
     if( ! preg_match("//u", $data) ) {
-      $data = utf8_encode($data);
+      $data = Encoding::fixUTF8($data);
       $def = '$this->data = ' . $data . ';';
       eval($def);
     }

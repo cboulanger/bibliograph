@@ -15,7 +15,8 @@
         "yosymfony/toml": "^0.3.3",
         "renanbr/crossref-client": "^1",
         "voku/simple-cache": "^3.1",
-        "rsinger/worldcat-linkeddata-php" : "*@dev"
+        "rsinger/worldcat-linkeddata-php" : "*@dev",
+        "neitanod/forceutf8": "^2.0"
     },
     "require-dev": {
         "bizley/migration": "^2.2",
