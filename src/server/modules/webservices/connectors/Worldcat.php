@@ -129,7 +129,7 @@ class Worldcat extends AbstractConnector
         foreach ($list as $entity){
           if( $entity instanceof Entity ) {
             if( $entity->familyName and $entity->givenName ){
-              $name = $entity->familyName . ", " . $entity->givenName;
+              $name = implode(" ",(array)$entity->familyName) . ", " . implode(" ", (array) $entity->givenName);
               $data['quality'] += 5;
             } elseif( $entity->name ){
               $name = $entity->name;
