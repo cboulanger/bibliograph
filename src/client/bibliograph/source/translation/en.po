@@ -428,7 +428,7 @@ msgstr ""
 msgid "Report a problem or request a feature"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:311
+#: bibliograph/ui/main/Toolbar.js:311 bibliograph/ui/main/Toolbar.js:330
 msgid "Enter search term"
 msgstr ""
 

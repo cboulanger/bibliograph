@@ -354,7 +354,7 @@ msgstr "Ein Problem melden oder einen Verbesserungsvorschlag machen"
 msgid "About Bibliograph"
 msgstr "Über Bibliograph"
 
-#: bibliograph/ui/main/Toolbar.js:311
+#: bibliograph/ui/main/Toolbar.js:311 bibliograph/ui/main/Toolbar.js:330
 msgid "Enter search term"
 msgstr "Bitte geben sie einen Suchausdruck ein"
 
