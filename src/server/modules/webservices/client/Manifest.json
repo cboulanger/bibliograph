@@ -11,7 +11,7 @@
         "email": "info@bibliograph.org"
       }
     ],
-    "version": "0.0.1",
+    "version": "0.0.2",
     "qooxdoo-range": "6.0.0 || 6.0.0-*"
   },
   "provides": {

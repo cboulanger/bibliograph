@@ -9,6 +9,7 @@ declare -a arr=(
   "cboulanger/qx-contrib-Dialog"
   "cboulanger/qx-contrib-TokenField"
   "cboulanger/worldcat-linkeddata-php"
+  "serratus/quaggaJS"
 )
 for repo in "${arr[@]}"
 do
@@ -40,6 +41,8 @@ done
 cd qooxdoo-compiler
 npm link
 cd ..
+
+# QuaggaJS
 
 # use specific branches
 cd yii2-json-rpc-2.0

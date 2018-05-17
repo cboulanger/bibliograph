@@ -3,7 +3,6 @@
 namespace app\modules\webservices\controllers;
 
 use app\models\User;
-use app\modules\webservices\connectors\Worldcat;
 use lib\cql\Diagnostic;
 use lib\cql\Parser;
 use lib\exceptions\TimeoutException;
@@ -15,7 +14,6 @@ use app\models\Datasource;
 use app\modules\webservices\models\{ Record, Search, Datasource as WebservicesDatasource };
 use lib\dialog\ServerProgress;
 use lib\exceptions\UserErrorException;
-use lib\bibtex\BibtexParser;
 
 /**
  * Class ProgressController
@@ -28,10 +26,10 @@ class SearchController extends \yii\web\Controller
   use AuthTrait;
   use DatasourceTrait;
 
-  protected function getNoAuthActions()
-  {
-    return ['index','test'];
-  }
+  /**
+   * @var array
+   */
+  protected $noAuthActions = ['index','test'];
 
   public function actionIndex()
   {
@@ -40,8 +38,37 @@ class SearchController extends \yii\web\Controller
 
   public function actionTest()
   {
+    if( ! YII_ENV_DEV ) die("Not allowed");
+    $max = 200; $skip = 0;
+    $count=0; $success = 0; $failed = 0;
+    Yii::info("Testing ISBN import");
     Yii::$app->user->login(User::findByNamedId("admin"));
-    $this->actionProgress("webservices_crossref","9780804767712","1234");
+    $isbns = file(__DIR__ . "/../test/test-isbn-list.txt",FILE_IGNORE_NEW_LINES);
+    $time_start = microtime(true);
+    Yii::getLogger()->flushInterval = 1;
+    foreach ($isbns as $isbn) {
+      $count++;
+      if( $count < $skip ) continue;
+      try {
+        Yii::info("Searching data for '$isbn' ($count/$max) ...");
+        $this->sendRequest("webservices_worldcat", $isbn);
+        $success++;
+        Yii::info("[√] ISBN $isbn successfully imported");
+      } catch( \GuzzleHttp\Exception\ClientException $e){
+        Yii::info("(X) ISBN $isbn could not be found.");
+      } catch (\Throwable $e) {
+        $failed++;
+        Yii::error("Error trying to import ISBN $isbn:");
+        Yii::error( $e);
+      }
+      if( $max and $count > $max ) break;
+      // pause for a few seconds  to not be considered a bot
+      sleep(rand(1,5));
+    }
+
+    $time_end = microtime(true);
+    $seconds = round($time_end - $time_start);
+    return "Done in $seconds s. $success searches were successful, $failed failed.";
   }
 
   /**

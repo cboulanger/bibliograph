@@ -3,7 +3,6 @@
 ## v3.0.0-beta
 
 ### Priority: urgent
-- [ ] BUG: Remove UTF-8 hack from EventResponse, remove non-UTF-8 chars from Z39.50 import, see also https://github.com/cboulanger/bibliograph/issues/189
 
 ### Priority: high
 - [ ] FEAT: User::getAllPermissions returns always the highest available set of permissions, regardless of the permissions of the group the current datasource belongs to. Requires rewriting of  `$this->requirePermission` to pass the datasource / datasource name
@@ -31,6 +30,7 @@
 - [ ] FEAT: Alert errors during import ("x references skipped...")
 
 ### Priority: low
+- [ ] BUG: Remove non-printable chars from Z39.50 import, see also https://github.com/cboulanger/bibliograph/issues/189
 - [ ] FEAT: Add "serverOnly" column to data_Config (true/false/null) and remove from config data sent to client
 - [ ] FEAT: Backend: Streamline API to get Datasource & typed model
 - [ ] FEAT: Frontend: Rename widget ids, replace with native qooxdoo ids, see https://github.com/qooxdoo/qooxdoo/issues/9422
@@ -49,6 +49,7 @@
 - [ ] FEAT: Click on "Citation key" refreshes it
 
 ### Code cleanup / refactoring
+- [ ] Remove UTF-8 hack from EventResponse
 - [ ] Fix compiler warnings
 - [ ] Exclude .todo files from being copied into the distribution package
 - [ ] Clear up the conceptual mess concerning "schema": datasource schema/reference schema -> "repository"?

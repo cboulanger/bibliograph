@@ -5,19 +5,20 @@
 $log_config = [
   'targets' => [
     // exceptions go into error.log
-    [
+    'error' => [
       'class' => \yii\log\FileTarget::class,
       'levels' => ['error'],
       'logFile' => '@runtime/logs/error.log',
       'logVars' => [],
+      'exportInterval' => 1
     ],
     // everything else into app.log
-    [
+    'app' => [
       'class' => \yii\log\FileTarget::class,
       'levels' => ['trace','info', 'warning'],
       'except' => ['yii\*','auth'],
       'logVars' => [],
-      //'exportInterval' => 1
+      'exportInterval' => 1
     ],
   ]
 ];

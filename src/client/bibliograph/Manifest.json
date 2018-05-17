@@ -1,39 +1,35 @@
 {
-  "info" : 
-  {
-    "name" : "Bibliograph",
-
-    "summary" : "Open source online bibliographic data manager",
-    "description" : "Bibliograph is a powerful open source web application for the collaborative collection, editing and publishing of bibliographic data",
-    
-    "homepage" : "http://www.bibliograph.org",
-
-    "license" : "MIT license",
-    "authors" : [
-  {
-    "name": "Christian Boulanger (cboulanger)",
-    "email": "info@bibliograph.org"
-  }
-],
-
-    "version" : "3.0.0-alpha",
+  "info": {
+    "name": "Bibliograph",
+    "summary": "Open source online bibliographic data manager",
+    "description": "Bibliograph is a powerful open source web application for the collaborative collection, editing and publishing of bibliographic data",
+    "homepage": "http://www.bibliograph.org",
+    "license": "MIT license",
+    "authors": [
+      {
+        "name": "Christian Boulanger (cboulanger)",
+        "email": "info@bibliograph.org"
+      }
+    ],
+    "version": "3.0.0-alpha",
     "qooxdoo-range": "6.0.0-alpha"
   },
-  
-  "provides" : 
-  {
-    "namespace"   : "bibliograph",
-    "encoding"    : "utf-8",
-    "class"       : "source/class",
-    "resource"    : "source/resource",
-    "translation" : "source/translation",
-    "boot"        : "source/boot",
-    "type"        : "application"
+  "provides": {
+    "namespace": "bibliograph",
+    "encoding": "utf-8",
+    "class": "source/class",
+    "resource": "source/resource",
+    "translation": "source/translation",
+    "boot": "source/boot",
+    "type": "application"
   },
-
   "externalResources": {
     "script": [
-       "js/raptor-client.js"
-     ]
+      "js/raptor-client.js",
+      "js/quagga.min.js"
+    ],
+    "css": [
+      "css/quagga.css"
+    ]
   }
 }

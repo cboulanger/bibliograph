@@ -25,11 +25,11 @@ trait AuthTrait
 
   /**
    * Array of action names that can be accessed without authentication
-   * Overwrite this propery in subclasses or define a getter for dynamic
+   * Implement this propery in subclasses or define a getter for dynamic
    * definition
    * @var array
    */
-  protected $noAuthActions = [];
+  //protected $noAuthActions = [];
 
   /**
    * @return array

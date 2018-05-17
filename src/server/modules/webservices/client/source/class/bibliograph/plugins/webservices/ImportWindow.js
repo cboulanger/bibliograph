@@ -70,15 +70,16 @@ qx.Class.define("bibliograph.plugins.webservices.ImportWindow",
    */
   construct: function () {
     this.base(arguments);
-
-    this.setWidth(700);
-    this.setCaption(this.tr('Import from webservices'));
-    this.setShowMinimize(false);
-    this.setVisibility("excluded");
-    this.setHeight(500);
+    this.set({
+      width:700,
+      height:500,
+      caption:this.tr('Import from webservices'),
+      showMinimize:false,
+      visibility:"excluded"
+    });
     this.addListener("appear", ()=>this.center() );
-
     this.createUi();
+    this.setupScanner();
     this.createPopup();
     qx.event.message.Bus
       .getInstance()
@@ -124,6 +125,7 @@ qx.Class.define("bibliograph.plugins.webservices.ImportWindow",
     datasourceSelectBox: null,
     searchBox: null,
     searchButton: null,
+    scannerButton : null,
     statusTextLabel: null,
 
     _applyDatasource : function(value, old)
@@ -212,7 +214,11 @@ qx.Class.define("bibliograph.plugins.webservices.ImportWindow",
       this.searchButton = new qx.ui.form.Button(this.tr('Search'));
       this.searchButton.addListener("execute", e => this.startSearch() );
       composite1.add(this.searchButton);
-
+      
+      // scanner button
+      this.scannerButton = new qx.ui.form.Button("|||");
+      composite1.add(this.scannerButton);
+      
       // help button
       let helpButton = new qx.ui.toolbar.Button(this.tr('Help'));
       composite1.add(helpButton);
@@ -264,6 +270,21 @@ qx.Class.define("bibliograph.plugins.webservices.ImportWindow",
       let button1 = new qx.ui.form.Button(this.tr('Close'));
       composite2.add(button1);
       button1.addListener("execute", e => this.close() );
+    },
+  
+    /**
+     * Sets up the built-in barcode scanner
+     */
+    setupScanner : function()
+    {
+      let scanner = new bibliograph.plugins.webservices.Scanner(this.scannerButton);
+      scanner.addListener('changeResult', e => {
+        let result = e.getData();
+        if( result && result.length === 13 ){
+          this.searchBox.setValue(result);
+          this.startSearch();
+        }
+      });
     },
     
 
