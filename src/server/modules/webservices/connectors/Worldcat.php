@@ -63,14 +63,28 @@ class Worldcat extends AbstractConnector
     $manifestation = new Manifestation();
     switch ($searchClause->index->value) {
       case 'isbn':
-        $manifestation->findByIsbn($searchTerm);
+        try{
+          $manifestation->findByIsbn($searchTerm);
+          return $manifestation->getWork()->getWorkExample();
+        } catch( \GuzzleHttp\Exception\ClientException $e){
+          Yii::debug($e->getMessage());
+          throw new \lib\exceptions\UserErrorException(
+            Yii::t(
+              Module::CATEGORY, 
+              "'Could not find information for ISBN {isbn}",
+              [ 'isbn' => $searchTerm ]
+            )
+          );
+        }
         break;
-      default:
-        throw new \InvalidArgumentException(Yii::t(Module::CATEGORY, "'{field} is not a valid search field",[
-          'field' => $searchClause->index->value
-        ]));
     }
-    return $manifestation->getWork()->getWorkExample();
+    throw new \InvalidArgumentException(
+      Yii::t(
+        Module::CATEGORY, 
+        "'{field} is not a valid search field",
+        [ 'field' => $searchClause->index->value ]
+      )
+    );
   }
 
 

@@ -20,9 +20,6 @@
 /**
  * see https://github.com/serratus/quaggaJS/blob/1.0/example/scan-to-input/index.js
  *
- * todo: manually set styles
- * http://www.qooxdoo.org/current/api/#qx.bom.element.Style~setCss!method_public
- * https://github.com/serratus/quaggaJS/blob/1.0/example/css/styles.css
  */
 qx.Class.define("bibliograph.plugins.webservices.Scanner",
 {

@@ -201,8 +201,8 @@ qx.Class.define("bibliograph.plugins.webservices.ImportWindow",
       let searchBox = new qx.ui.form.TextField();
       this.searchBox = searchBox;
       searchBox.setPadding(2);
+      searchBox.setMarginTop(5);
       searchBox.setPlaceholder(this.tr('Enter search terms'));
-      searchBox.setHeight(26);
       composite1.add(searchBox, {flex: 1});
       searchBox.addListener("input", e => this.setSearch(e.getData()));
       searchBox.addListener("changeValue", e => this.setSearch(e.getData()));
@@ -211,13 +211,24 @@ qx.Class.define("bibliograph.plugins.webservices.ImportWindow",
       searchBox.addListener("dblclick", e => e.stopPropagation() );
       
       // search button
-      this.searchButton = new qx.ui.form.Button(this.tr('Search'));
+      this.searchButton = new qx.ui.toolbar.Button();
+      this.searchButton.setIcon("bibliograph/icon/16/search.png");
       this.searchButton.addListener("execute", e => this.startSearch() );
       composite1.add(this.searchButton);
       
       // scanner button
-      this.scannerButton = new qx.ui.form.Button("|||");
+      this.scannerButton = new qx.ui.toolbar.Button("|||");
       composite1.add(this.scannerButton);
+
+      // cancel button
+      let cancelButton = new qx.ui.toolbar.Button();
+      cancelButton.setIcon("bibliograph/icon/16/cancel.png");
+      cancelButton.setMarginRight(5);
+      cancelButton.addListener("execute", () => {
+        this.searchBox.setValue("");
+        this.searchBox.focus();
+      });
+      composite1.add(cancelButton);
       
       // help button
       let helpButton = new qx.ui.toolbar.Button(this.tr('Help'));
