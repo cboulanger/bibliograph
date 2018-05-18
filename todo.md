@@ -10,8 +10,7 @@
 ### Priority: normal
 - [ ] FEAT: Cache export formats for HTML view, make configurable 
 - [ ] FEAT: Disallow drop of references on folders in which they are already contained.
-- [ ] FEAT: Reimplement Search Help
-- [ ] FEAT: Make UserErrorException a JSONRPC error which is caught on the client, instead of a Dialog event. 
+- [ ] FEAT: Reimplement Search Help 
 - [ ] FEAT: Re-implement Backup
 - [ ] FEAT: Reimplement "New User" in Access Control Tool and System dialogs
 - [ ] FEAT: Reimplement account management via email
@@ -21,7 +20,6 @@
 - [ ] FEAT: Config key change should be broadcasted
 - [ ] FEAT: Implement setup Wizard
 - [ ] FEAT: Allow migrations via permission, not prod/dev-mode
-- [ ] FEAT: Check log email target to report fatal errors
 
 ### Priority: low
 - [ ] BUG: Remove non-printable chars from Z39.50 import, see also https://github.com/cboulanger/bibliograph/issues/189
@@ -45,8 +43,10 @@
 - [ ] FEAT: Remove migrations table for deleted datasources
 - [ ] FEAT: Add "Active" Checkbox to user editor
 - [ ] FEAT: Alert errors during import ("x references skipped...")
+- [ ] FEAT: Add a silent abort error that can be used to terminate a request without an error message
 
 ### Code cleanup / refactoring
+- [ ] Make UserErrorException a JSONRPC error which is caught on the client, instead of a Dialog event.
 - [ ] Use Session Cache instead of File Cache for Storing file path in importer
 - [ ] Transform compile.json into compile.js (to allow to update env var "app.version" etc.)
 - [ ] Remove UTF-8 hack from EventResponse
@@ -88,6 +88,7 @@
 - [ ] Tests: Fix bootstrap loading issue
 - [ ] Move config/test.php to tests/config.php 
 - [ ] Replace compile.json by compile.js to dynamically include plugin code
+- [ ] Check log email target to be able to remotely monitor fatal errors
 
 ## v3.0.0.RC.X (only bug fixes)
 
@@ -104,6 +105,7 @@
 - [ ] Re-implement message broadcast
 
 ### Priority: normal
+- [ ] Improve keyword import from webservices
 - [ ] Implement boolean database columns (supported by Yii)
 - [ ] Reimplement HTML editor integration for notes
 - [ ] Implement drag&drop folder positioning
