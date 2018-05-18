@@ -74,7 +74,8 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
       'month',
       'pages',
       'translator',
-      'url'
+      'url',
+      'doi'
     ],
     'book' => [
       'author',
@@ -85,10 +86,11 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
       'publisher',
       'edition',
       'translator',
-      'url',
       'series',
       'volume',
       'isbn',
+      'url',
+      'doi',
       'lccn'
     ],
     'booklet' => [
@@ -98,10 +100,11 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
       'address',
       'publisher',
       'edition',
-      'url',
       'series',
       'volume',
       'isbn',
+      'url',
+      'doi',
       'lccn'
     ],
     'collection' => [
@@ -115,8 +118,9 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
       'edition',
       'series',
       'volume',
-      'url',
       'isbn',
+      'url',
+      'doi',
       'lccn'
     ],
     // non-standard use to create conference paper type
@@ -140,7 +144,8 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
       'series',
       'volume',
       'translator',
-      'url'
+      'url',
+      'doi'
     ],
     'incollection' => [
       'author',
@@ -155,7 +160,8 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
       'crossref',
       'series',
       'volume',
-      'url'
+      'url',
+      'doi'
     ],
     'inproceedings' => [
       'author',
@@ -170,8 +176,10 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
       'crossref',
       'series',
       'volume',
-      'url'
+      'url',
+      'doi'
     ],
+    // non-standard journal or journal special issue
     'journal' => [
       'author',
       'year',
@@ -183,8 +191,9 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
       'month',
       'date',
       'pages',
-      'url',
       'issn',
+      'url',
+      'doi',
       'lccn'
     ],
     'manual' => [
@@ -196,6 +205,7 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
       'publisher',
       'edition',
       'url',
+      'doi',
       'lccn'
     ],
     'mastersthesis' => [
@@ -206,8 +216,7 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
       'school',
       'type',
       'address',
-      'url',
-      'lccn'
+      'url'
     ],
     'misc' => [
       'author',
@@ -216,8 +225,7 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
       'subtitle',
       'howpublished',
       'date',
-      'url',
-      'lccn'
+      'url'
     ],
     'phdthesis' => [
       'author',
@@ -241,6 +249,7 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
       'series',
       'volume',
       'url',
+      'doi',
       'lccn'
     ],
     'techreport' => [
@@ -254,6 +263,7 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
       'publisher',
       'month',
       'url',
+      'doi',
       'lccn'
     ],
     'unpublished' => [
@@ -518,6 +528,13 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
         'bibtex' => true,
         'csl' => false,
         'index' => Yii::t('app', 'Date')
+      ],
+      'doi' => [
+        'label' => Yii::t('app', 'DOI'),
+        'type' => 'string',
+        'bibtex' => true,
+        'csl' => 'doi',
+        'index' => 'DOI'
       ],
       'edition' => [
         'label' => Yii::t('app', 'Edition'),

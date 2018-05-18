@@ -25,6 +25,7 @@ use BadMethodCallException;
 /**
  * Webservices record model
  * @property integer $SearchId
+ * @property integer $quality
  */
 class Record extends Reference
 {
@@ -41,7 +42,7 @@ class Record extends Reference
   {
     return [
       [['created', 'modified','SearchId'], 'safe'],
-      [['SearchId'], 'integer'],
+      [['SearchId','quality'], 'integer'],
       [['abstract', 'annote', 'contents', 'note'], 'string'],
       [['citekey', 'affiliation', 'crossref', 'date', 'doi', 'edition', 'month', 'size', 'type', 'volume'], 'string', 'max' => 50],
       [['reftype', 'issn', 'key', 'language', 'year'], 'string', 'max' => 20],
