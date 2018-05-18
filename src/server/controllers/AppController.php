@@ -20,7 +20,9 @@
 
 namespace app\controllers;
 
-use app\controllers\{traits\AuthTrait, traits\DatasourceTrait};
+use app\controllers\{
+  traits\AuthTrait, traits\DatasourceTrait, traits\MessageTrait
+};
 use app\models\Datasource;
 use lib\dialog\Error;
 use lib\exceptions\UserErrorException;
@@ -38,6 +40,7 @@ use yii\db\ActiveQuery;
 class AppController extends \JsonRpc2\Controller
 {
   use AuthTrait;
+  use MessageTrait;
   use DatasourceTrait;
 
   /**
@@ -193,36 +196,5 @@ class AppController extends \JsonRpc2\Controller
   public function hasInShelf( $shelfId ){
     if( empty($shelfId) ) return false;
     return Yii::$app->session->has( $shelfId );
-  }
-
-  //-------------------------------------------------------------
-  // send and broadcast messages
-  // @todo reimplement and move into component
-  //-------------------------------------------------------------
-
-  /**
-   * Broadcasts a message to all connected clients.
-   * NOTE this doesn't work at the moment, the message is only sent to the 
-   * current user's client. 
-   * @todo Reimplement
-   * @param string $eventName
-   * @param mixed $data
-   * @return void
-   */
-  public function broadcastClientMessage($eventName, $data=null){
-    $this->dispatchClientMessage($eventName, $data);
-  }
-
-  /**
-   * Sends a message to the current user's application
-   * @param [type] $eventName
-   * @param [type] $data
-   * @return void
-   */
-  public function  dispatchClientMessage($eventName, $data=null){
-    Yii::$app->eventQueue->add( new \yii\base\Event([
-      "name" => $eventName,
-      "data" => $data
-    ]));
   }
 }

@@ -118,11 +118,13 @@ trait AuthTrait
 
   /**
    * Shorthand getter for active user object
-   * @return \app\models\User|\yii\web\IdentityInterface
+   * @return \app\models\User
    */
   public function getActiveUser()
   {
-    return Yii::$app->user->identity;
+    /** @var User $activeUser */
+    $activeUser = Yii::$app->user->identity;
+    return $activeUser;
   }
 
   /**

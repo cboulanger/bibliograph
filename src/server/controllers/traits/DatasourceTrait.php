@@ -7,6 +7,7 @@
  */
 
 namespace app\controllers\traits;
+use app\controllers\events\BibliographEvents;
 use app\models\Datasource;
 use lib\exceptions\UserErrorException;
 use RuntimeException;
@@ -15,7 +16,6 @@ use Yii;
 
 trait DatasourceTrait
 {
-
   /**
    * Returns the datasource instance which has the given named id.
    * By default, checks the current user's access to the datasource.
@@ -41,6 +41,9 @@ trait DatasourceTrait
     if( $checkAccess ){
       $myDatasources = $this->getActiveUser()->getAccessibleDatasourceNames();
       if( ! in_array($datasourceName, $myDatasources) ){
+        if( $this->getActiveUser()->isAnonymous()){
+          $this->dispatchClientMessage(BibliographEvents::CMD_SHOW_LOGIN);
+        }
         throw new UserErrorException(
           Yii::t('app', "You do not have access to datasource '{datasource}'",[
             'datasource' => $datasourceName
@@ -48,7 +51,6 @@ trait DatasourceTrait
         );
       }
     }
-
     return $instance;
   }
 
