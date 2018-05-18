@@ -160,6 +160,7 @@ msgstr ""
 #: bibliograph/plugins/webservices/ImportWindow.js:176
 #: bibliograph/plugins/webservices/ImportWindow.js:217
 #: bibliograph/plugins/webservices/ImportWindow.js:223
+#: bibliograph/plugins/webservices/ImportWindow.js:234
 #: bibliograph/plugins/z3950/ImportWindow.js:180
 #: bibliograph/ui/window/AccessControlTool.js:178
 msgid "Help"
@@ -335,6 +336,7 @@ msgstr ""
 #: bibliograph/plugins/webservices/ImportWindow.js:216
 #: bibliograph/plugins/webservices/ImportWindow.js:257
 #: bibliograph/plugins/webservices/ImportWindow.js:263
+#: bibliograph/plugins/webservices/ImportWindow.js:274
 #: bibliograph/plugins/z3950/ImportWindow.js:220
 #: bibliograph/ui/window/ImportWindow.js:203
 msgid "Import selected records"
@@ -343,6 +345,7 @@ msgstr ""
 #: bibliograph/plugins/webservices/ImportWindow.js:223
 #: bibliograph/plugins/webservices/ImportWindow.js:264
 #: bibliograph/plugins/webservices/ImportWindow.js:270
+#: bibliograph/plugins/webservices/ImportWindow.js:281
 #: bibliograph/plugins/z3950/ImportWindow.js:227
 #: bibliograph/ui/window/ImportWindow.js:210
 msgid "Close"
@@ -456,6 +459,7 @@ msgstr ""
 #: bibliograph/plugins/webservices/ImportWindow.js:260
 #: bibliograph/plugins/webservices/ImportWindow.js:301
 #: bibliograph/plugins/webservices/ImportWindow.js:322
+#: bibliograph/plugins/webservices/ImportWindow.js:333
 #: bibliograph/plugins/z3950/ImportWindow.js:264
 #: bibliograph/ui/window/ImportWindow.js:307
 msgid "You have to select one or more reference to import."
@@ -464,6 +468,7 @@ msgstr ""
 #: bibliograph/plugins/webservices/ImportWindow.js:267
 #: bibliograph/plugins/webservices/ImportWindow.js:308
 #: bibliograph/plugins/webservices/ImportWindow.js:329
+#: bibliograph/plugins/webservices/ImportWindow.js:340
 #: bibliograph/plugins/z3950/ImportWindow.js:271
 #: bibliograph/ui/window/ImportWindow.js:314
 msgid "Please select a folder first."
@@ -472,6 +477,7 @@ msgstr ""
 #: bibliograph/plugins/webservices/ImportWindow.js:274
 #: bibliograph/plugins/webservices/ImportWindow.js:315
 #: bibliograph/plugins/webservices/ImportWindow.js:336
+#: bibliograph/plugins/webservices/ImportWindow.js:347
 #: bibliograph/plugins/z3950/ImportWindow.js:278
 #: bibliograph/ui/window/ImportWindow.js:321
 msgid "Cannot determine selected folder. Please reload the folders."
@@ -480,6 +486,7 @@ msgstr ""
 #: bibliograph/plugins/webservices/ImportWindow.js:278
 #: bibliograph/plugins/webservices/ImportWindow.js:319
 #: bibliograph/plugins/webservices/ImportWindow.js:340
+#: bibliograph/plugins/webservices/ImportWindow.js:351
 #: bibliograph/plugins/z3950/ImportWindow.js:282
 #: bibliograph/ui/window/ImportWindow.js:325
 msgid "Invalid target folder. You can only import into normal folders."
@@ -488,6 +495,7 @@ msgstr ""
 #: bibliograph/plugins/webservices/ImportWindow.js:285
 #: bibliograph/plugins/webservices/ImportWindow.js:326
 #: bibliograph/plugins/webservices/ImportWindow.js:347
+#: bibliograph/plugins/webservices/ImportWindow.js:358
 #: bibliograph/plugins/z3950/ImportWindow.js:289
 #: bibliograph/ui/window/ImportWindow.js:331
 msgid "Importing references..."
@@ -853,6 +861,7 @@ msgstr ""
 #: bibliograph/plugins/webservices/ImportWindow.js:165
 #: bibliograph/plugins/webservices/ImportWindow.js:202
 #: bibliograph/plugins/webservices/ImportWindow.js:204
+#: bibliograph/plugins/webservices/ImportWindow.js:205
 #: bibliograph/plugins/z3950/ImportWindow.js:169
 msgid "Enter search terms"
 msgstr ""
@@ -867,6 +876,7 @@ msgstr ""
 #: bibliograph/plugins/webservices/ImportWindow.js:246
 #: bibliograph/plugins/webservices/ImportWindow.js:287
 #: bibliograph/plugins/webservices/ImportWindow.js:308
+#: bibliograph/plugins/webservices/ImportWindow.js:319
 #: bibliograph/plugins/z3950/ImportWindow.js:250
 #: bibliograph/ui/main/Toolbar.js:279 bibliograph/ui/main/Toolbar.js:289
 #: bibliograph/ui/main/Toolbar.js:297 bibliograph/ui/main/Toolbar.js:298
