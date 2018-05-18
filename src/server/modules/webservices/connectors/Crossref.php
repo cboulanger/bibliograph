@@ -10,6 +10,7 @@ use Illuminate\Support\Arr;
 use lib\cql\Prefixable;
 use lib\cql\SearchClause;
 use lib\cql\Triple;
+use lib\exceptions\UserErrorException;
 use RenanBr\CrossRefClient;
 use voku\cache\CachePsr16;
 use Yii;
@@ -64,6 +65,15 @@ class Crossref extends AbstractConnector
     $searchTerm = $searchClause->term->value;
     switch ($searchClause->index->value) {
       case "doi":
+        if( ! preg_match("/^10.\d{4,9}\/[-._;()\/:A-Z0-9]+$/i", $searchTerm) ){
+          throw new UserErrorException(
+            Yii::t(
+            Module::CATEGORY,
+            "'{searchterm}' does not seem to be a valid DOI.",
+            ['searchterm'=> $searchTerm]
+            )
+          );
+        }
         $path = "works/$searchTerm";
         break;
       default:

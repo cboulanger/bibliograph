@@ -75,6 +75,10 @@ class SearchController extends \yii\web\Controller
           return $progressBar->error(Yii::t("webservices", "Server timed out."));
         }
       } catch (UserErrorException $e) {
+        Yii::debug($e->getMessage());
+        return $progressBar->error($e->getMessage());
+      } catch (RecordNotFoundException $e) {
+        Yii::debug($e->getMessage());
         return $progressBar->error($e->getMessage());
       } catch (\Throwable $e) {
         Yii::error($e);

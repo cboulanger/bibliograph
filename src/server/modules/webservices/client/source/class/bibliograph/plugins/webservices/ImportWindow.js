@@ -362,6 +362,8 @@ qx.Class.define("bibliograph.plugins.webservices.ImportWindow",
         .then(()=>{
           this.importButton.setEnabled(true);
           this.hidePopup();
+          this.searchBox.setValue("");
+          this.searchBox.focus();
         });
     },
 
