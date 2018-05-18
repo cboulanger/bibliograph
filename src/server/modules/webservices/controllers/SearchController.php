@@ -3,6 +3,7 @@
 namespace app\modules\webservices\controllers;
 
 use app\models\User;
+use app\modules\webservices\RecordNotFoundException;
 use lib\cql\Diagnostic;
 use lib\cql\Parser;
 use lib\exceptions\TimeoutException;
@@ -36,41 +37,6 @@ class SearchController extends \yii\web\Controller
     return "nothing here";
   }
 
-  public function actionTest()
-  {
-    if( ! YII_ENV_DEV ) die("Not allowed");
-    $max = 200; $skip = 0;
-    $count=0; $success = 0; $failed = 0;
-    Yii::info("Testing ISBN import");
-    Yii::$app->user->login(User::findByNamedId("admin"));
-    $isbns = file(__DIR__ . "/../test/test-isbn-list.txt",FILE_IGNORE_NEW_LINES);
-    $time_start = microtime(true);
-    Yii::getLogger()->flushInterval = 1;
-    foreach ($isbns as $isbn) {
-      $count++;
-      if( $count < $skip ) continue;
-      try {
-        Yii::info("Searching data for '$isbn' ($count/$max) ...");
-        $this->sendRequest("webservices_worldcat", $isbn);
-        $success++;
-        Yii::info("[√] ISBN $isbn successfully imported");
-      } catch( \GuzzleHttp\Exception\ClientException $e){
-        Yii::info("(X) ISBN $isbn could not be found.");
-      } catch (\Throwable $e) {
-        $failed++;
-        Yii::error("Error trying to import ISBN $isbn:");
-        Yii::error( $e);
-      }
-      if( $max and $count > $max ) break;
-      // pause for a few seconds  to not be considered a bot
-      sleep(rand(1,5));
-    }
-
-    $time_end = microtime(true);
-    $seconds = round($time_end - $time_start);
-    return "Done in $seconds s. $success searches were successful, $failed failed.";
-  }
-
   /**
    * Executes a request on the remote server. Called
    * by the ServerProgress widget on the client. If server times out
@@ -89,24 +55,31 @@ class SearchController extends \yii\web\Controller
     if( ! $progressBar ){
       $progressBar = new ServerProgress($id);
     }
-    try {
-      $this->sendRequest($datasource, $query, $progressBar);
-      $progressBar->dispatchClientMessage("webservices.dataReady", $query);
-      return $progressBar->complete();
-    } catch (TimeoutException $e) {
-      // retry
-      if( $retries < 4){
-        $progressBar->setProgress(0, Yii::t("webservices", "Server timed out. Trying again..."));
-        sleep(rand(1,3));
-        return $this->actionProgress($datasource, $query, $id, $progressBar );
-      } else {
-        return $progressBar->error(Yii::t("webservices", "Server timed out."));
+
+//    $datasourceNames = $datasource === "all"
+//      ? Datasource::find()->select("namedId")->where(['schema'=> 'webservices'])->column();
+//      :[$datasource];
+
+    foreach ( [$datasource] as $datasource) {
+      try {
+        $this->sendRequest($datasource, $query, $progressBar);
+        $progressBar->dispatchClientMessage("webservices.dataReady", $query);
+        return $progressBar->complete();
+      } catch (TimeoutException $e) {
+        // retry
+        if( $retries < 4){
+          $progressBar->setProgress(0, Yii::t("webservices", "Server timed out. Trying again..."));
+          sleep(rand(1,3));
+          return $this->actionProgress($datasource, $query, $id, $progressBar );
+        } else {
+          return $progressBar->error(Yii::t("webservices", "Server timed out."));
+        }
+      } catch (UserErrorException $e) {
+        return $progressBar->error($e->getMessage());
+      } catch (\Throwable $e) {
+        Yii::error($e);
+        return $progressBar->error($e->getMessage());
       }
-    } catch (UserErrorException $e) {
-      return $progressBar->error($e->getMessage());
-    } catch (\Throwable $e) {
-      Yii::error($e);
-      return $progressBar->error($e->getMessage());
     }
   }
 
@@ -211,5 +184,47 @@ class SearchController extends \yii\web\Controller
       $record->SearchId = $searchId;
       $record->save();
     }
+  }
+
+  public function actionTest($max=null)
+  {
+    if( ! YII_ENV_DEV ) die("Not allowed");
+    $count=0; $success = 0; $failed = []; $errors=[];
+    Yii::info("==========================================================");
+    Yii::info("                    Testing ISBN import");
+    Yii::info("==========================================================");
+    Yii::$app->user->login(User::findByNamedId("admin"));
+    $isbns = file(__DIR__ . "/../test/test-isbn-list.txt",FILE_IGNORE_NEW_LINES);
+    if(!$max) $max = count($isbns);
+    $time_start = microtime(true);
+    Yii::getLogger()->flushInterval = 1;
+    foreach ($isbns as $isbn) {
+      $count++;
+      try {
+        Yii::info("Searching data for '$isbn' ($count/$max) ...", Module::CATEGORY);
+        $this->sendRequest("webservices_worldcat", $isbn);
+        $success++;
+        Yii::info("[√] ISBN $isbn successfully imported",Module::CATEGORY);
+      } catch( RecordNotFoundException $e) {
+        Yii::info("(!) " . $e->getMessage(), Module::CATEGORY);
+        $failed[] = $isbn;
+      } catch ( \yii\db\Exception $e ){
+        Yii::info("(!) Error trying to save data for ISBN $isbn.",Module::CATEGORY);
+      } catch (\Throwable $e) {
+        $errors[] = $e->getMessage();
+        Yii::info("(!) Error trying to import ISBN $isbn: " . $e->getMessage(),Module::CATEGORY);
+        Yii::error("Error trying to import ISBN $isbn:",Module::CATEGORY);
+        Yii::error( $e, Module::CATEGORY);
+      }
+      if( $max and $count > $max ) break;
+    }
+    $time_end = microtime(true);
+    $seconds = round($time_end - $time_start);
+    return [
+      'timeInSeconds' => $seconds,
+      'success' => $success,
+      'failedIsbns' => $failed,
+      'errors' => $errors
+    ];
   }
 }

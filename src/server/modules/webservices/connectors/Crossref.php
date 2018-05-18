@@ -3,16 +3,17 @@
 namespace app\modules\webservices\connectors;
 
 use app\models\Reference;
-use app\modules\converters\import\BibtexUtf8;
+use app\modules\webservices\AbstractConnector;
 use app\modules\webservices\models\Record;
 use app\modules\webservices\Module;
-use app\modules\webservices\AbstractConnector;
+use Illuminate\Support\Arr;
 use lib\cql\Prefixable;
 use lib\cql\SearchClause;
 use lib\cql\Triple;
 use RenanBr\CrossRefClient;
 use voku\cache\CachePsr16;
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * Class Crossref Connector
@@ -46,46 +47,116 @@ class Crossref extends AbstractConnector
   /**
    * @var Reference[]
    */
-  private $references = [];
+  private $records = [];
 
   /**
    * @inheritdoc
    */
-  public function search( Prefixable $cql ) : int {
+  public function search(Prefixable $cql): int
+  {
 
-    if( $cql instanceof Triple ){
+    if ($cql instanceof Triple) {
       throw new \InvalidArgumentException("Triple not implemented.");
     }
     /** @var SearchClause $searchClause */
     $searchClause = $cql;
-    $searchTerm = $searchClause->term;
+    $searchTerm = $searchClause->term->value;
     switch ($searchClause->index->value) {
       case "doi":
-        $path = "works/$searchTerm/transform/application/x-bibtex";
+        $path = "works/$searchTerm";
         break;
       default:
-      throw new \InvalidArgumentException(Yii::t(Module::CATEGORY, "'{field} is not a valid search field",[
-        'field' => $searchClause->index->value
-      ]));
+        throw new \InvalidArgumentException(Yii::t(Module::CATEGORY, "'{field} is not a valid search field", [
+          'field' => $searchClause->index->value
+        ]));
     }
     $client = new CrossRefClient();
     $client->setCache(new CachePsr16());
     $client->setUserAgent('Bibliograph/3.x (http://www.bibliograph.org; mailto:info@bibliograph.org)');
-    $bibtex = $client->request( $path );
-    Yii::debug($bibtex);
+    $result = $client->request($path);
+    //Yii::debug($result);
+    $data = $result['message'] ?? null;
+    //Yii::debug($data);
+    if( ! is_array($data) ) return 0;
+    $map = [
+      'reftype'     => 'type',
+      'year'        => ['issued','date-parts'],
+      'url'         => 'URL',
+      'isbn'        => 'ISBN',
+      'subtitle'    => 'subtitle',
+      'author'      => 'author',
+      'editor'      => 'editor',
+      'pages'       => 'page',
+      'doi'         => 'DOI',
+      'publisher'   => 'publisher',
+      'address'     => 'publisher-location',
+      'title'       => 'title',
+      'volume'      => 'volume',
+      'number'      =>  'issue',
+      'language'    => 'language',
+      'journal'     => 'container-title',
+      'booktitle'   => 'container-title',
+    ];
+    $r=[];
+    $quality=0;
+    foreach ($map as $myKey => $path) {
+      $value = ArrayHelper::getValue($data,$path);
+      if( ! $value ) continue;
+      switch ($myKey){
+        case 'reftype':
+          $value = [
+              'book' => 'book',
+              'book-chapter' => 'inbook',
+              'journal-article' => 'article'
+            ][$value] ?? 'article';
+          break;
+        case 'year':
+          $value = (string) $value[0][0];
+          break;
+        case "isbn":
+          $value = implode("; ", array_slice( (array) $value, 0,2));
+          break;
+        case 'title':
+        case 'subtitle':
+        case 'journal':
+        case 'booktitle':
+          $value = implode(". ", (array) $value);
+          break;
+        case 'author':
+        case 'editor':
+          $value = implode("; ", array_map(function($person){
+            return
+              $this->uppercase_first($person['family'] ?? "??")
+              . ", "
+              . $this->uppercase_first( $person['given'] ?? "??");
+          }, (array) $value));
+          break;
+        default:
+          if( ! is_scalar($value) ) {
+            $value = json_encode($value);
+          }
+      }
+      $r[$myKey] = $value;
+      $quality++;
+    }
+    $r['quality'] = $quality;
+    $this->records[0] = $r;
+    return 1;
+  }
 
-    //$this->references = (new BibtexUtf8())->parse($bibtex);
-    return count($this->references);
+  protected function uppercase_first( $string ){
+    return
+      mb_convert_case($string, MB_CASE_TITLE, 'UTF-8');
+      //. mb_strtolower( substr($string,1) );
   }
 
   /**
    * @inheritdoc
    */
-  public function recordIterator() : \Iterator {
-    foreach ($this->references as $reference){
-      yield new Record(
-        $reference->getAttributes( $reference->getAttributes() )
-      );
+  public function recordIterator(): \Iterator
+  {
+    foreach ($this->records as $data) {
+      yield new Record($data);
     }
   }
 }

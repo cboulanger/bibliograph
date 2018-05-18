@@ -1755,7 +1755,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/cboulanger/worldcat-linkeddata-php.git",
-                "reference": "8c490205e2e8749dfc4f52954e6543083ab782fd"
+                "reference": "3b345069fc8493f208ea8ecf205726562bb88799"
             },
             "require": {
                 "guzzlehttp/guzzle": "~6.2",
@@ -1793,7 +1793,7 @@
                 "php",
                 "xisbn"
             ],
-            "time": "2018-05-16T20:35:27+00:00"
+            "time": "2018-05-17T20:12:02+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -2906,16 +2906,16 @@
         },
         {
             "name": "codeception/stub",
-            "version": "1.0.3",
+            "version": "1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/Stub.git",
-                "reference": "36981f59f7a29180aa8fecd0a4dc6250a2cc5fb1"
+                "reference": "681b62348837a5ef07d10d8a226f5bc358cc8805"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/Stub/zipball/36981f59f7a29180aa8fecd0a4dc6250a2cc5fb1",
-                "reference": "36981f59f7a29180aa8fecd0a4dc6250a2cc5fb1",
+                "url": "https://api.github.com/repos/Codeception/Stub/zipball/681b62348837a5ef07d10d8a226f5bc358cc8805",
+                "reference": "681b62348837a5ef07d10d8a226f5bc358cc8805",
                 "shasum": ""
             },
             "require": {
@@ -2935,7 +2935,7 @@
                 "MIT"
             ],
             "description": "Flexible Stub wrapper for PHPUnit's Mock Builder",
-            "time": "2018-05-16T17:03:58+00:00"
+            "time": "2018-05-17T09:31:08+00:00"
         },
         {
             "name": "codeception/verify",

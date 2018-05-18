@@ -71,7 +71,6 @@ class TableController extends AppController
     ];
   }
 
-
   /**
    * Service method that returns ListItem model data on the available library servers
    * @param boolean $all

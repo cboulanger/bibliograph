@@ -9,25 +9,19 @@
  
 ### Priority: normal
 - [ ] FEAT: Cache export formats for HTML view, make configurable 
-- [ ] BUG: Use Session Cache instead of File Cache for Storing file path in importer
 - [ ] FEAT: Disallow drop of references on folders in which they are already contained.
-- [ ] FEAT: Transform compile.json into compile.js (to allow to update env var "app.version" etc.)
-- [ ] FEAT: Check log email target to report fatal errors
 - [ ] FEAT: Reimplement Search Help
 - [ ] FEAT: Make UserErrorException a JSONRPC error which is caught on the client, instead of a Dialog event. 
 - [ ] FEAT: Re-implement Backup
 - [ ] FEAT: Reimplement "New User" in Access Control Tool and System dialogs
-- [ ] FEAT: Add "Re-install modules" button in Systems menu
-- [ ] FEAT: Remove migrations table for deleted datasources
-- [ ] FEAT: Allow migrations via permission, not prod/dev-mode
-- [ ] FEAT: Implement setup Wizard
 - [ ] FEAT: Reimplement account management via email
 - [ ] FEAT: "Orphaned" folder should contain references that do not have a parent
-- [ ] FEAT: Add "Active" Checkbox to user editor
 - [ ] FEAT: Reimplement Search Help window
 - [ ] FEAT: Update CQL operators to conform to the specs (http://www.loc.gov/standards/sru/cql/contextSets/theCqlContextSet.html)
 - [ ] FEAT: Config key change should be broadcasted
-- [ ] FEAT: Alert errors during import ("x references skipped...")
+- [ ] FEAT: Implement setup Wizard
+- [ ] FEAT: Allow migrations via permission, not prod/dev-mode
+- [ ] FEAT: Check log email target to report fatal errors
 
 ### Priority: low
 - [ ] BUG: Remove non-printable chars from Z39.50 import, see also https://github.com/cboulanger/bibliograph/issues/189
@@ -38,7 +32,7 @@
 - [ ] FEAT: Re-implement reference editor title label
 - [ ] FEAT: Re-implement Docker image for testing
 - [ ] FEAT: Frontend: Rename item view "metadata" page
-- [ ] FEAT: Implement field selection for editor as checkboxes
+- [ ] FEAT: Preferences: Implement field selection for editor as checkboxes
 - [ ] FEAT: Reimplememt help window
 - [ ] FEAT: validate email configuration 
 - [ ] FEAT: Change virtual folder icon
@@ -47,8 +41,14 @@
 - [ ] FEAT: Change URL params separators to & and = 
 - [ ] FEAT: Broadcast "reference.changeData" message (with datasource info) to update connected clients' tableView
 - [ ] FEAT: Click on "Citation key" refreshes it
+- [ ] FEAT: Add "Re-install modules" button in Systems menu
+- [ ] FEAT: Remove migrations table for deleted datasources
+- [ ] FEAT: Add "Active" Checkbox to user editor
+- [ ] FEAT: Alert errors during import ("x references skipped...")
 
 ### Code cleanup / refactoring
+- [ ] Use Session Cache instead of File Cache for Storing file path in importer
+- [ ] Transform compile.json into compile.js (to allow to update env var "app.version" etc.)
 - [ ] Remove UTF-8 hack from EventResponse
 - [ ] Fix compiler warnings
 - [ ] Exclude .todo files from being copied into the distribution package

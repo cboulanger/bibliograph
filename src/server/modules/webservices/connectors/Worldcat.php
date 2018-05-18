@@ -4,6 +4,7 @@ namespace app\modules\webservices\connectors;
 
 use app\modules\webservices\models\Record;
 use app\modules\webservices\Module;
+use app\modules\webservices\RecordNotFoundException;
 use Iterator;
 use lib\cql\Prefixable;
 use lib\cql\SearchClause;
@@ -53,7 +54,7 @@ class Worldcat extends AbstractConnector
    * @param Prefixable $cql
    * @return Manifestation[]
    */
-  protected function createManifestations( Prefixable $cql ) : array {
+  protected function createManifestations( Prefixable $cql, $retry=0 ) : array {
     if( $cql instanceof Triple ){
       throw new \InvalidArgumentException("Triple not implemented.");
     }
@@ -63,15 +64,28 @@ class Worldcat extends AbstractConnector
     $manifestation = new Manifestation();
     switch ($searchClause->index->value) {
       case 'isbn':
-        try{
+        try {
           $manifestation->findByIsbn($searchTerm);
           return $manifestation->getWork()->getWorkExample();
+        } catch( \GuzzleHttp\Exception\ServerException $e ){
+          if( $retry > 3 ){
+            throw new RecordNotFoundException(
+              Yii::t(
+                Module::CATEGORY,
+                "Server error trying to retrieve information on ISBN '{isbn}' (Tried 3 times)",
+                [ 'isbn' => $searchTerm ]
+              )
+            );
+          }
+          // try again
+          sleep(2);
+          Yii::debug("Server error, retrying...",Module::CATEGORY);
+          return $this->createManifestations($cql, $retry+1);
         } catch( \GuzzleHttp\Exception\ClientException $e){
-          Yii::debug($e->getMessage());
-          throw new \lib\exceptions\UserErrorException(
+          throw new RecordNotFoundException(
             Yii::t(
               Module::CATEGORY, 
-              "'Could not find information for ISBN {isbn}",
+              "Could not find information for ISBN '{isbn}'",
               [ 'isbn' => $searchTerm ]
             )
           );

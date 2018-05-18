@@ -38,10 +38,10 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   open -a "Google Chrome" http://$HOST/$APP_PATH
   # send Alt+Command+I to open Web inspector
   osascript -e 'tell application "System Events" to keystroke "i" using {option down, command down}'
-  echo ">>> Waiting 2 minutes until page is loaded..."
+  echo " >>> Waiting 2 minutes until page is loaded..."
   sleep 120s
   echo " >>> Start continuous compilation..."
   pushd $COMPILE_PATH > /dev/null
-  qx compile --target=$TARGET --watch
+  qx compile --target=$TARGET --watch --clean=false
   popd > /dev/null
 fi
