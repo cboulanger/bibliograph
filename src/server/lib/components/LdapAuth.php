@@ -20,9 +20,7 @@
 
 namespace lib\components;
 
-use Adldap\Adldap;
 use Adldap\Auth\BindException;
-use lib\exceptions\UserErrorException;
 use Yii;
 use app\models\User;
 use app\models\Group;
@@ -34,6 +32,7 @@ use app\models\Role;
  */
 class LdapAuth extends \yii\base\Component
 {
+  const CATEGORY = "ldap";
 
   /**
    * Checks if LDAP is enabled and that a connection can be established
@@ -83,14 +82,20 @@ class LdapAuth extends \yii\base\Component
    */
   public function authenticate( $username, $password )
   {
+    $user_base_dn = Yii::$app->config->getIniValue( "ldap.user_base_dn" );
     $user_id_attr = Yii::$app->config->getIniValue("ldap.user_id_attr");
-    $bind_attrs = [$user_id_attr, "cn"];
-    $i=0;
-    foreach( $bind_attrs as $attr ) {
+    $alternative_auth_attrs = Yii::$app->config->getIniValue("ldap.alternative_auth_attrs");
+    $bind_attrs = [$user_id_attr];
+    if (is_array($alternative_auth_attrs)){
+      $bind_attrs = array_merge( $bind_attrs, $alternative_auth_attrs);
+    }
+    $ldap = Yii::$app->ldap;
+    $attr = array_shift($bind_attrs);
+    do {
       $bind_dn = "$attr=$username";
-      Yii::debug("Trying to bind $bind_dn with LDAP Server...", 'ldap');
+      Yii::debug("Trying to bind $bind_dn with LDAP Server...", self::CATEGORY);
       try {
-        if (Yii::$app->ldap->auth()->attempt($bind_dn, $password, true)) {
+        if ($ldap->auth()->attempt($bind_dn, $password, true)) {
           Yii::debug("Success!", 'ldap');
           break;
         }
@@ -101,11 +106,31 @@ class LdapAuth extends \yii\base\Component
           ])
         );
       }
-      if (++$i === count($bind_attrs)) {
-        Yii::debug("User/Password combination is wrong.", 'ldap');
-        return null;
+      // auth failed, but maybe we can get the id from this attribute and try again
+      if ($attr !== $user_id_attr){
+        $records = $ldap->search()
+          ->in( $user_base_dn )
+          ->select([ $user_id_attr ])
+          ->where( $attr, "=", $username )
+          ->recursive()
+          ->get();
+        if (count($records)){
+          $data = $records[0]->jsonSerialize();
+          if (isset($data[$user_id_attr][0] )){
+            $username = $data[$user_id_attr][0];
+            Yii::debug("Found entry for $attr=$username in $user_base_dn", self::CATEGORY);
+            array_unshift($bind_attrs, $user_id_attr);
+          }
+        }
       }
+    } while ($attr = array_shift($bind_attrs));
+
+    // we've run out of attributes to match, authentication failed
+    if (! $attr ) {
+      Yii::debug("User/Password combination is wrong.", 'ldap');
+      return null;
     }
+
     // if LDAP authentication succeeds, assume we have a valid
     // user. if this user does not exist, create it with "user" role
     // and assign it to the groups specified by the ldap source

@@ -115,6 +115,9 @@ group_member_attr = "memberUid"
 # attribute for the group name, usually description or displayName
 group_name_attr = "description"
 
+# attributes that are used to authenticate the user in addition to 'ldap.user_id_attr'
+alternative_auth_attrs = ["cn","mail","displayName"]
+
 # if the LDAP database only stores the user name part of the users'
 # e-mail address, you can provide the domain part here
 mail_domain = "example.com"
@@ -130,12 +133,12 @@ global_roles_only = false
 # whether authentication should be possible only via https.
 # this option gets set as a read-only configuration value
 # (access.enforce_https_login) also which is available on the
-# client.
+# client. (boolean)
 enforce_https_login = false
 
 [service]
 # service.event_transport
 # Whether the server response should contain messages and events
 # for the qooxdoo application
-# values are on/off
+# (boolean)
 event_transport = true

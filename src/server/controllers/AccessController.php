@@ -20,6 +20,7 @@
 
 namespace app\controllers;
 
+use lib\exceptions\UserErrorException;
 use Yii;
 use \JsonRpc2\Exception;
 use app\controllers\dto\AuthResult;
@@ -169,7 +170,7 @@ class AccessController extends AppController
       // login using token
       $user = User::findIdentityByAccessToken($first);
       if (is_null($user)) {
-        throw new Exception( "Invalid token", Exception::INVALID_AUTH);
+        throw new UserErrorException( "Invalid token");
       }
       Yii::info("Authenticated user '{$user->namedId}' via auth token.");
     } 
