@@ -14,6 +14,7 @@ use RenanBr\CrossRefClient;
 use voku\cache\CachePsr16;
 use Yii;
 use yii\helpers\ArrayHelper;
+use yii\validators\StringValidator;
 
 /**
  * Class Crossref Connector
@@ -96,16 +97,21 @@ class Crossref extends AbstractConnector
       'language'    => 'language',
       'journal'     => 'container-title',
       'booktitle'   => 'container-title',
+      'abstract'    => 'abstract'
     ];
     $r=[];
     $quality=0;
-    foreach ($map as $myKey => $path) {
+    $record = new Record();
+    foreach ($map as $attribute => $path) {
       $value = ArrayHelper::getValue($data,$path);
       if( ! $value ) continue;
-      switch ($myKey){
+      switch ($attribute){
+        case 'abstract':
+          $value = strip_tags($value);
+          break;
         case 'reftype':
           $value = [
-              'book' => 'book',
+              'book' => isset($data['editor']) ? 'collection' : 'book',
               'book-chapter' => 'inbook',
               'journal-article' => 'article'
             ][$value] ?? 'article';
@@ -136,11 +142,17 @@ class Crossref extends AbstractConnector
             $value = json_encode($value);
           }
       }
-      $r[$myKey] = $value;
+      $validators = $record->getActiveValidators($attribute);
+      foreach ($validators as $validator) {
+        if( $validator instanceof StringValidator and $validator->max ){
+          $data[$attribute] = substr($value, 0, $validator->max);
+        }
+      }
+      $record->$attribute = $value;
       $quality++;
     }
-    $r['quality'] = $quality;
-    $this->records[0] = $r;
+    $record->quality = $quality;
+    $this->records[] = $record;
     return 1;
   }
 
@@ -155,8 +167,8 @@ class Crossref extends AbstractConnector
    */
   public function recordIterator(): \Iterator
   {
-    foreach ($this->records as $data) {
-      yield new Record($data);
+    foreach ($this->records as $record) {
+      yield $record;
     }
   }
 }

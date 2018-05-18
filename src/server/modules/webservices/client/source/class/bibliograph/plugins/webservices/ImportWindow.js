@@ -72,7 +72,7 @@ qx.Class.define("bibliograph.plugins.webservices.ImportWindow",
     this.base(arguments);
     this.set({
       width:700,
-      height:500,
+      height:300,
       caption:this.tr('Import from webservices'),
       showMinimize:false,
       visibility:"excluded"

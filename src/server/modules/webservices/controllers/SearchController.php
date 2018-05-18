@@ -189,6 +189,7 @@ class SearchController extends \yii\web\Controller
   public function actionTest($max=null)
   {
     if( ! YII_ENV_DEV ) die("Not allowed");
+    \Yii::$app->log->targets['app']->levels = ['info', 'warning'];
     $count=0; $success = 0; $failed = []; $errors=[];
     Yii::info("==========================================================");
     Yii::info("                    Testing ISBN import");
@@ -201,10 +202,10 @@ class SearchController extends \yii\web\Controller
     foreach ($isbns as $isbn) {
       $count++;
       try {
-        Yii::info("Searching data for '$isbn' ($count/$max) ...", Module::CATEGORY);
+        Yii::debug("Searching data for '$isbn' ...", Module::CATEGORY);
         $this->sendRequest("webservices_worldcat", $isbn);
         $success++;
-        Yii::info("[√] ISBN $isbn successfully imported",Module::CATEGORY);
+        Yii::info("[√] ISBN $isbn successfully imported ($count/$max)",Module::CATEGORY);
       } catch( RecordNotFoundException $e) {
         Yii::info("(!) " . $e->getMessage(), Module::CATEGORY);
         $failed[] = $isbn;

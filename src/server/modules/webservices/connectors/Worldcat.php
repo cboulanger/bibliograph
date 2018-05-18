@@ -13,6 +13,7 @@ use app\modules\webservices\AbstractConnector;
 use WorldCatLD\Entity;
 use WorldCatLD\Manifestation;
 use Yii;
+use yii\validators\StringValidator;
 
 /**
 
@@ -50,6 +51,11 @@ class Worldcat extends AbstractConnector
   private $manifestations = [];
 
   /**
+   * @var null
+   */
+  private $isbn = null;
+
+  /**
    *
    * @param Prefixable $cql
    * @return Manifestation[]
@@ -62,9 +68,11 @@ class Worldcat extends AbstractConnector
     $searchClause = $cql;
     $searchTerm = $searchClause->term->value;
     $manifestation = new Manifestation();
+    $this->isbn = null;
     switch ($searchClause->index->value) {
       case 'isbn':
         try {
+          $this->isbn = $searchTerm;
           $manifestation->findByIsbn($searchTerm);
           return $manifestation->getWork()->getWorkExample();
         } catch( \GuzzleHttp\Exception\ServerException $e ){
@@ -101,7 +109,6 @@ class Worldcat extends AbstractConnector
     );
   }
 
-
   /**
    * @param Prefixable $cql
    * @return  int number of records
@@ -125,6 +132,7 @@ class Worldcat extends AbstractConnector
       'title'     => 'name'
     ];
     foreach ($this->manifestations as $id => $m) {
+      $record = new Record();
       $data = [
         'reftype'   => 'book',
         'quality'   => 0,
@@ -146,7 +154,13 @@ class Worldcat extends AbstractConnector
       }
       if (count( $m->getIsbns()) ){
         $data['isbn'] = implode("; ", array_slice( $m->getIsbns(), 0,2));
-        $data['quality']++;
+        // since we retrieve many manifestations of the item, we need to priviledge the ones
+        // that have the ISBN that we were looking for originally
+        if( $this->isbn and in_array($this->isbn, $m->getIsbns()) ){
+          $data['quality'] += 10;
+        } else {
+          $data['quality']++;
+        }
       }
       $authors = [];
       $editors = [];
@@ -201,7 +215,16 @@ class Worldcat extends AbstractConnector
           $data['quality']++;
         }
       }
-      yield new Record($data);
+      foreach ($data as $attribute => $value) {
+        $validators = $record->getActiveValidators($attribute);
+        foreach ($validators as $validator) {
+          if( $validator instanceof StringValidator and $validator->max ){
+            $data[$attribute] = substr($value, 0, $validator->max);
+          }
+        }
+      }
+      $record->setAttributes($data);
+      yield $record;
     }
   }
 }
