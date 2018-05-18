@@ -5,6 +5,7 @@
 ### Priority: urgent
 
 ### Priority: high
+- [ ] FEAT: Reimplement "Loading folders..." to avoid blank screen
 - [ ] FEAT: User::getAllPermissions returns always the highest available set of permissions, regardless of the permissions of the group the current datasource belongs to. Requires rewriting of  `$this->requirePermission` to pass the datasource / datasource name
  
 ### Priority: normal

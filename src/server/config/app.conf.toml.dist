@@ -106,6 +106,10 @@ user_base_dn = "ou=people,dc=example,dc=com"
 # attribute name that is used for the user name, usually uid.
 user_id_attr = "uid"
 
+# attributes that are used to authenticate the user in addition to 'ldap.user_id_attr'
+# for example, ["cn","mail","displayName"]
+alternative_auth_attrs = []
+
 # base dn of group data
 group_base_dn = "ou=groups,dc=example,dc=com"
 
@@ -114,9 +118,6 @@ group_member_attr = "memberUid"
 
 # attribute for the group name, usually description or displayName
 group_name_attr = "description"
-
-# attributes that are used to authenticate the user in addition to 'ldap.user_id_attr'
-alternative_auth_attrs = ["cn","mail","displayName"]
 
 # if the LDAP database only stores the user name part of the users'
 # e-mail address, you can provide the domain part here

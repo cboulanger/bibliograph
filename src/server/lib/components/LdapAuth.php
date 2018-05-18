@@ -96,7 +96,7 @@ class LdapAuth extends \yii\base\Component
       Yii::debug("Trying to bind $bind_dn with LDAP Server...", self::CATEGORY);
       try {
         if ($ldap->auth()->attempt($bind_dn, $password, true)) {
-          Yii::debug("Success!", 'ldap');
+          Yii::debug("Success!", self::CATEGORY);
           break;
         }
       } catch (BindException $e) {
