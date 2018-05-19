@@ -1755,7 +1755,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/cboulanger/worldcat-linkeddata-php.git",
-                "reference": "3b345069fc8493f208ea8ecf205726562bb88799"
+                "reference": "6d24569ff15e19caff8d172e11b4b6d091802b78"
             },
             "require": {
                 "guzzlehttp/guzzle": "~6.2",
@@ -1793,7 +1793,7 @@
                 "php",
                 "xisbn"
             ],
-            "time": "2018-05-17T20:12:02+00:00"
+            "time": "2018-05-18T19:13:11+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",

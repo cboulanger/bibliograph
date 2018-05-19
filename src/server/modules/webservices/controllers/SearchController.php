@@ -205,6 +205,7 @@ class SearchController extends \yii\web\Controller
     Yii::getLogger()->flushInterval = 1;
     foreach ($isbns as $isbn) {
       $count++;
+      if( $max and $count > $max ) break;
       try {
         Yii::debug("Searching data for '$isbn' ...", Module::CATEGORY);
         $this->sendRequest("webservices_worldcat", $isbn);
@@ -221,7 +222,6 @@ class SearchController extends \yii\web\Controller
         Yii::error("Error trying to import ISBN $isbn:",Module::CATEGORY);
         Yii::error( $e, Module::CATEGORY);
       }
-      if( $max and $count > $max ) break;
     }
     $time_end = microtime(true);
     $seconds = round($time_end - $time_start);

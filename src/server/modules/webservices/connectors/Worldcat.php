@@ -59,6 +59,7 @@ class Worldcat extends AbstractConnector
    *
    * @param Prefixable $cql
    * @return Manifestation[]
+   * @throws \Throwable
    */
   protected function createManifestations( Prefixable $cql, $retry=0 ) : array {
     if( $cql instanceof Triple ){
@@ -89,14 +90,18 @@ class Worldcat extends AbstractConnector
           sleep(2);
           Yii::debug("Server error, retrying...",Module::CATEGORY);
           return $this->createManifestations($cql, $retry+1);
-        } catch( \GuzzleHttp\Exception\ClientException $e){
-          throw new RecordNotFoundException(
-            Yii::t(
-              Module::CATEGORY, 
-              "Could not find information for ISBN '{isbn}'",
-              [ 'isbn' => $searchTerm ]
-            )
-          );
+        } catch( \Throwable $e){
+          if( $e instanceof \WorldCatLD\exceptions\ResourceNotFoundException
+           or $e instanceof \GuzzleHttp\Exception\ClientException ){
+            throw new RecordNotFoundException(
+              Yii::t(
+                Module::CATEGORY,
+                "Could not find information for ISBN '{isbn}'",
+                [ 'isbn' => $searchTerm ]
+              )
+            );
+          }
+          throw $e;
         }
         break;
     }
@@ -174,7 +179,7 @@ class Worldcat extends AbstractConnector
               $name = implode(" ",(array)$entity->familyName) . ", " . implode(" ", (array) $entity->givenName);
               $data['quality'] += 5;
             } elseif( $entity->name ){
-              $name = $entity->name;
+              $name = implode( ", ", (array) $entity->name);
               $data['quality']++;
             } else {
               continue;
@@ -202,7 +207,7 @@ class Worldcat extends AbstractConnector
       }
       if (count($authors)) $data['author'] = implode("; ", $authors);
       if (count($editors)) $data['editor'] = implode("; ", $editors);
-      $data['translator'] = implode("; ", $translators);
+      if (count($translators)) $data['translator'] = implode("; ", $translators);
       if( $m->publisher instanceof Entity ){
         $data['publisher'] = $m->publisher->name;
         $data['quality']++;
