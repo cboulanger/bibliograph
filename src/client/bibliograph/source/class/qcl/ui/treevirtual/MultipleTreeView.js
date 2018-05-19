@@ -241,10 +241,18 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
   *****************************************************************************
   */
   events: {
+  
+    /**
+     * Dispatched when the tree is being loaded
+     */
+    loading: "qx.event.type.Event",
+    
+    
     /**
      * Dispatched when the tree data has been fully loaded
      */
     loaded: "qx.event.type.Event"
+    
   },
   
   /*
@@ -261,16 +269,7 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
     
     // server databinding
     this.__lastTransactionId = 0;
-  
-    // @todo get constants from generated file
-    // @todo move to bibliograph implementation
-    let bus = qx.event.message.Bus;
-    bus.subscribe( "folder.node.update", this._updateNode, this );
-    bus.subscribe( "folder.node.add", this._addNode, this);
-    bus.subscribe( "folder.node.delete", this._deleteNode, this );
-    bus.subscribe( "folder.node.move", this._moveNode, this);
-    bus.subscribe( "folder.node.reorder", this._reorderNodeChildren, this);
-    bus.subscribe( "folder.node.select", this._selectNode, this);
+    
   },
   
   /*
@@ -503,10 +502,8 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
      * @param nodeId {Integer}
      */
     _loadTreeData: async function (datasource, nodeId) {
-      this.info("Loading tree data...");
-      datasource = this.getDatasource(); // TODO fix parameter
-      
-      let app = qx.core.Init.getApplication();
+      this.debug("Loading tree data...");
+      this.fireEvent("loading");
       let store = this.getStore();
       let tree = this.getTree();
       let controller = this.getController();
@@ -534,11 +531,14 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
       
       // load raw data
       let model = await store.loadRaw("load", [datasource]);// @todo unhardcode service method
+
       // since this is a raw load, we need to manually set the mode and fire the event
       store.fireDataEvent("loaded", model);
       store.setModel(model);
+
       this.setEnabled(true);
       this.__loadingTreeData = false;
+      this.fireEvent("loaded");
     },
     
     /**

@@ -3,9 +3,13 @@
 ## v3.0.0-beta
 
 ### Priority: urgent
+- [ ] Test anonymous LDAP binding @HU
 
 ### Priority: high
-- [ ] FEAT: Reimplement "Loading folders..." to avoid blank screen
+- [x] FEAT: Reimplement "Loading folders..." to avoid blank screen
+- [ ] FEAT: Reimplement "In which folders..."
+- [ ] FEAT: Reimplement Deleting References from searches
+- [ ] BUG: Drag & drop into Trash
 - [ ] FEAT: User::getAllPermissions returns always the highest available set of permissions, regardless of the permissions of the group the current datasource belongs to. Requires rewriting of  `$this->requirePermission` to pass the datasource / datasource name
  
 ### Priority: normal
@@ -45,6 +49,7 @@
 - [ ] FEAT: Add "Active" Checkbox to user editor
 - [ ] FEAT: Alert errors during import ("x references skipped...")
 - [ ] FEAT: Add a silent abort error that can be used to terminate a request without an error message
+- [ ] FEAT: Reimplement support for the admindb, userdb and tmpdb settings in app.conf.toml -> use DSNs instead of single settings or TOML nested arrays.
 
 ### Code cleanup / refactoring
 - [ ] Make UserErrorException a JSONRPC error which is caught on the client, instead of a Dialog event.

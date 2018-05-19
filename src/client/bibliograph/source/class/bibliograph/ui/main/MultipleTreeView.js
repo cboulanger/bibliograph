@@ -54,6 +54,17 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
       this.bindState(this.permissions.move_folder,this,"enableDragDrop");
       this.setDebugDragSession(qx.core.Environment.get("qx.debug"));
     });
+    
+    this.addListener("loading", () => this._isWaiting(true) );
+    this.addListener("loaded", () => this._isWaiting(false) );
+  
+    // @todo get constants from generated file
+    bus.subscribe( "folder.node.update", this._updateNode, this );
+    bus.subscribe( "folder.node.add", this._addNode, this);
+    bus.subscribe( "folder.node.delete", this._deleteNode, this );
+    bus.subscribe( "folder.node.move", this._moveNode, this);
+    bus.subscribe( "folder.node.reorder", this._reorderNodeChildren, this);
+    bus.subscribe( "folder.node.select", this._selectNode, this);
   },
   
   members:
@@ -291,18 +302,21 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
   
     /**
      * Method to indicate that server action is happening
-     * @param waiting
+     * @param waiting {Boolean}
      * @private
      */
     _isWaiting : function(waiting){
       this.setEnabled(waiting);
+      this.getApplication().showPopup(this.tr("Loading folders. Please wait..."));
       if( waiting ){
         // create a timer to re-enable even if an error occurred,
         // so that we don't get stuck in disabled mode.
         this.__timer = qx.event.Timer.once(()=>{
           this.setEnabled(true);
+          this.getApplication().hidePopup();
         },this,5000)
       } else {
+        this.getApplication().hidePopup();
         if( this.__timer ){
           this.__timer.stop();
           this.__timer = null;
