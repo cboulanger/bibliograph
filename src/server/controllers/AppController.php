@@ -44,6 +44,11 @@ class AppController extends \JsonRpc2\Controller
   use DatasourceTrait;
 
   /**
+   * The category of this class
+   */
+  const CATEGORY = "app";
+
+  /**
    * Overridden to add functionality:
    * - catch User exception and convert it into an error dialog widget on the client
    * @inheritDoc

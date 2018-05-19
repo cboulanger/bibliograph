@@ -205,6 +205,15 @@ qx.Class.define("qcl.ui.table.TableView",
       check: "Boolean",
       init: false,
       event: "changeDebugDragSession"
+    },
+  
+    /**
+     * Array of drop target types (String[])
+     */
+    allowDropTargetTypes:
+    {
+      check: "Array",
+      nullable: true
     }
   },
   
@@ -792,7 +801,7 @@ qx.Class.define("qcl.ui.table.TableView",
       tree._openNodeAfterTimeout(dropModel);
     
       // set flag whether drop is allowed
-      let validDropTarget = (dropModel.data.type === "folder");
+      let validDropTarget = this.getAllowDropTargetTypes().includes(dropModel.data.type);
       
       // show drag session visually
       e.getManager().setDropAllowed(validDropTarget);

@@ -26,6 +26,8 @@ use app\models\Folder;
 use app\models\Reference;
 use app\schema\BibtexSchema;
 use lib\cql\NaturalLanguageQuery;
+use lib\dialog\Confirm;
+use lib\dialog\Dialog;
 use lib\exceptions\UserErrorException;
 use lib\Validate;
 use Yii;
@@ -41,7 +43,7 @@ class ReferenceController extends AppController
    * Used by confirmation actions
    * @var bool
    */
-  protected $confirm = false;
+  protected $confirmed = false;
 
   /*
   ---------------------------------------------------------------------------
@@ -513,8 +515,14 @@ class ReferenceController extends AppController
   {
     $this->requirePermission("reference.remove");
 
-    if( $folderId === 0){
-      throw new UserErrorException("Removing a search result is not impemented yet.");
+    if( $folderId === 0 and $this->confirmed !== "all" ){
+      Confirm::create(
+        Yii::t(self::CATEGORY, "Do you really want to move all copies of the reference(s) to the trash?"),
+        null,
+        "reference", "confirm-move-to-trash",
+        [$datasource, $ids]
+      );
+      return "Created confirmation dialog.";
     }
 
     /** @var Reference $referenceClass */
@@ -532,41 +540,47 @@ class ReferenceController extends AppController
       throw new UserErrorException("Reference #$id does not exist.");
     }
     $containedFolderIds = $reference->getReferenceFolders()->select("FolderId")->column();
+    $foldersToUpdate = $containedFolderIds;
     $folderCount = count($containedFolderIds);
 
-    // unlink
     /** @var Folder $folder */
-    $folder = $folderClass::findOne(intval($folderId));
-    $reference->unlink("folders", $folder, true);
-    // update folders
-    $foldersToUpdate = $containedFolderIds;
+    if( $folderId === 0 and $this->confirmed==="all" ){
+      // unlink all folders
+      foreach ($containedFolderIds as $fid) {
+        $folder = $folderClass::findOne(intval($fid));
+        $reference->unlink("folders", $folder, true);
+        $folderCount--;
+      }
+    } else {
+      // unlink only the current one
+      $folder = $folderClass::findOne(intval($folderId));
+      $reference->unlink("folders", $folder, true);
+    }
 
     // move to trash if it was contained in one or less folders
-    if ($folderCount < 2) {
-      if ($trashFolder) {
-        if( $folder->id === $trashFolder->id ){
-          // reference is already in the trash, delete
-          try {
-            $reference->delete();
-          } catch (\Throwable $e) {
-            Yii::error($e);
-          }
-        } else {
-          // link with trash folder
-          try{
-            $trashFolder->link("references", $reference);
-          } catch (Exception $e) {
-            Yii::error($e);
-          }
-          // mark as deleted
-          $reference->markedDeleted = 1;
-          try {
-            $reference->save();
-          } catch (Exception $e) {
-            Yii::error($e->getMessage());
-          }
-          $foldersToUpdate[] = $trashFolder->id;
+    if ( $trashFolder and $folderCount < 2) {
+      if( $folder->id === $trashFolder->id ){
+        // reference is already in the trash, delete
+        try {
+          $reference->delete();
+        } catch (\Throwable $e) {
+          Yii::error($e);
         }
+      } else {
+        // link with trash folder
+        try{
+          $trashFolder->link("references", $reference);
+        } catch (Exception $e) {
+          Yii::error($e);
+        }
+        // mark as deleted
+        $reference->markedDeleted = 1;
+        try {
+          $reference->save();
+        } catch (Exception $e) {
+          Yii::error($e->getMessage());
+        }
+        $foldersToUpdate[] = $trashFolder->id;
       }
     }
 
@@ -590,9 +604,9 @@ class ReferenceController extends AppController
     foreach ($containedFolderIds as $fid) {
       $this->broadcastClientMessage("reference.removeRows", array(
         'datasource' => $datasource,
-        'folderId' => $fid,
+        'folderId' => intval($fid),
         'query' => null,
-        'ids' => array($id)
+        'ids' => [intval($id)]
       ));
     }
     // if there are references left, repeat
@@ -611,11 +625,11 @@ class ReferenceController extends AppController
    * @return string Diagnostic message
    * @throws \JsonRpc2\Exception
    */
-  public function actionConfirmMoveToTrash($confirmed, string $datasource, int $folderId, $ids )
+  public function actionConfirmMoveToTrash($confirmed, string $datasource, $ids )
   {
     if( ! $confirmed ) return "Remove action was cancelled.";
-    $this->confirm = true;
-    return $this->actionRemove($datasource, $folderId, $ids );
+    $this->confirmed = "all";
+    return $this->actionRemove($datasource, 0, $ids );
   }
 
   /**
@@ -639,6 +653,11 @@ class ReferenceController extends AppController
     /** @var Folder $targetFolder */
     $targetFolder = $folderClass::findOne($targetFolderId);
 
+    $trashFolder = TrashController::getTrashFolder($datasource);
+    if( $trashFolder and $targetFolder->id === $trashFolder->id){
+      return $this->actionRemove( $datasource, 0, $ids );
+    }
+
     try {
       Validate::isNotNull($targetFolder, "Folder #$targetFolderId does not exist");
       Validate::isNotNull($sourceFolder, "Folder #$folderId does not exist");
@@ -647,7 +666,6 @@ class ReferenceController extends AppController
     }
     /** @var ActiveQuery $query */
     $query = $referenceClass::find()->where(['in', 'id', explode(",",$ids)]);
-    Yii::info($query->createCommand()->getRawSql());
     $references = $query->all();
     return $this->move($references, $datasource, $sourceFolder, $targetFolder);
   }

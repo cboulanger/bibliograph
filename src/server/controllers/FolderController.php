@@ -471,8 +471,10 @@ class FolderController extends AppController //implements ITreeController
     } else {
       $position = $folderClass::find()->where(['parentId' => 0])->count()-1;
       $trashFolder = TrashController::getTrashFolder($datasource);
-      $trashFolder->position = $position+1;
-      $trashFolder->save();
+      if( $trashFolder ){
+        $trashFolder->position = $position+1;
+        $trashFolder->save();
+      }
     }
 
     // child folder

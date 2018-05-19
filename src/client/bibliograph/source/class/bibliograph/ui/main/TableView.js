@@ -29,23 +29,26 @@ qx.Class.define("bibliograph.ui.main.TableView",
       this.createMenuEntries();
     });
 
+    // TODO use constants
     let bus = qx.event.message.Bus.getInstance();
     bus.subscribe("folder.reload", this._on_reloadFolder, this);
     bus.subscribe("reference.changeData", this._on_changeReferenceData, this);
     bus.subscribe("reference.removeRows", this._on_removeRows, this);
     bus.subscribe(bibliograph.AccessManager.messages.LOGOUT, ()=> this.clearTable());
     
-    // create reference type list
+    // create reference type list, TODO rewrite this
     this.addListener("tableReady",e =>{
       let data = e.getData();
       if (data.addItems && data.addItems.length) {
         this.setAddItems(qx.data.marshal.Json.createModel(data.addItems));
       }
     });
+    
     // drag & drop
     this.addListener(qcl.access.MPermissions.events.permissionsReady, e => {
       this.bindState(this.permissions.move_selected_references,this,"enableDragDrop");
       this.setDebugDragSession(qx.core.Environment.get("qx.debug"));
+      this.setAllowDropTargetTypes(['folder','trash']);
     });
     
   },
