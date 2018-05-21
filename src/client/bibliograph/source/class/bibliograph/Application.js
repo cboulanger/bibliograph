@@ -27,6 +27,13 @@ qx.Class.define("bibliograph.Application",
       app : {
         treeview : "app/treeview"
       }
+    },
+  
+    /**
+     * Messages
+     */
+    messages: {
+      TERMINATE : "app.terminate"
     }
   },
   
@@ -254,6 +261,13 @@ qx.Class.define("bibliograph.Application",
     getWidgetById : function(id)
     {
       return this.__widgets[id];
+    },
+  
+    /**
+     * Called when the applicatin shuts down
+     */
+    terminate : function(){
+      qx.event.message.Bus.dispatchByName(bibliograph.Application.messages.TERMINATE);
     }
   }
 });

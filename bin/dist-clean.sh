@@ -17,3 +17,6 @@ rm -f $DIST_DIR/{version.txt,readme.md,release-notes.md} || true
 
 # ZIPs
 rm -f $DIST_DIR/*.zip || true
+
+# Plugins
+rm -rf $DIST_DIR/plugins/* || true

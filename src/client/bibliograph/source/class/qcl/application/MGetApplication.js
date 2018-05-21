@@ -19,15 +19,35 @@
 
 /**
  * A mixin for to qx.core.Object that provides a shortcut
- * to the application instance
+ * to the application instance and its message bus
  */
 qx.Mixin.define("qcl.application.MGetApplication",
 {
   members :
   {
-    getApplication : function()
+    /**
+     * Return the main application instance. In dependend popup-windows with separately loaded
+     * applications, this will return the application instance in the main window.
+     * @return {qx.application.Standalone}
+     */
+    getApplication: function()
     {
+      if( window.opener ){
+        return  window.opener.qx.core.Init.getApplication();
+      }
       return qx.core.Init.getApplication();
+    },
+  
+    /**
+     * Return the main application's message bus. In dependend popup-windows with separately loaded
+     * applications, this will return the message bus of the main window.
+     * @return {qx.event.message.Bus}
+     */
+    getMessageBus:  function(){
+      if( window.opener ){
+        return  window.opener.qx.event.message.Bus.getInstance();
+      }
+      return qx.event.message.Bus.getInstance();
     }
   }
 });
