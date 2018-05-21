@@ -212,8 +212,15 @@ qx.Class.define("qcl.ui.table.TableView",
      */
     allowDropTargetTypes:
     {
-      check: "Array",
-      nullable: true
+      check: "Array"
+    },
+  
+    /**
+     * Drag actions
+     */
+    dragActions:
+    {
+      check: "Array"
     }
   },
   
@@ -233,9 +240,13 @@ qx.Class.define("qcl.ui.table.TableView",
    */
   construct: function () {
     this.base(arguments);
-    this.setSelectedRowData([]);
-    this.setSelectedIds([]);
-    this.setColumnIds([]);
+    this.set({
+      selectedRowData : [],
+      selectedIds: [],
+      columnIds: [],
+      allowDropTargetTypes: [],
+      dragActions : ['move','copy']
+    });
     this.__tableModelTypes = {};
     this.createUi();
   },
@@ -752,9 +763,9 @@ qx.Class.define("qcl.ui.table.TableView",
      * @param e {qx.event.type.Drag} the drag event fired
      */
     __onDragStart: function (e) {
-      this.dragDebug("Table drag start...");
-      e.addAction("copy");
-      e.addAction("move");
+      let actions = this.getDragActions();
+      this.dragDebug("Table drag start with actions " + actions.join(", ") );
+      actions.forEach(action => e.addAction(action));
       e.addType(qcl.ui.table.TableView.types.ROWDATA);
     },
   

@@ -46,11 +46,15 @@ qx.Class.define("bibliograph.ui.main.TableView",
     
     // drag & drop
     this.addListener(qcl.access.MPermissions.events.permissionsReady, e => {
-      this.bindState(this.permissions.move_selected_references,this,"enableDragDrop");
-      this.setDebugDragSession(qx.core.Environment.get("qx.debug"));
-      this.setAllowDropTargetTypes(['folder','trash']);
+      this.set({
+        enableDragDrop: true,
+        debugDragSession: qx.core.Environment.get("qx.debug"),
+        allowDropTargetTypes: ['folder','trash']
+      });
+      this.bind("folderId", this, "dragActions",{
+        converter : value => value > 0 ? ['move','copy'] : ['copy']
+      });
     });
-    
   },
 
   /*
@@ -110,7 +114,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
       remove_selected_references : {
         depends: "reference.remove",
         updateEvent : "changeSelectedIds",
-        condition : self => self.getSelectedIds().length > 0 && self.getFolderId() >0
+        condition : self => self.getSelectedIds().length > 0
       },
       move_reference : {
         aliasOf : "reference.move"
@@ -118,7 +122,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
       move_selected_references :{
         depends: "reference.move",
         updateEvent : "changeSelectedIds",
-        condition : self => self.getSelectedIds().length > 0 &&  self.getFolderId() >0
+        condition : self => self.getSelectedIds().length > 0 && self.getFolderId() > 0
       },
       copy_selected_references :{
         depends: "reference.move",
@@ -463,7 +467,11 @@ qx.Class.define("bibliograph.ui.main.TableView",
         await this.rpc.remove( this.getDatasource(), this.getFolderId(), this.getSelectedIds().join(",") );
         app.hidePopup();
       } else {
-        dialog.Dialog.error("Funktion noch nicht implementiert...");
+        let msg = this.tr("Do your really want to move the selected references to the trash?");
+        if( ! await dialog.Dialog.confirm(msg).promise() ) return;
+        app.showPopup(this.tr("Deleting references..."));
+        await this.rpc.remove( this.getDatasource(), 0, this.getSelectedIds().join(",") );
+        app.hidePopup();
       }
     },
   

@@ -8,7 +8,7 @@
 ### Priority: high
 - [x] FEAT: Reimplement "Loading folders..." to avoid blank screen
 - [x] BUG: Drag & drop into Trash
-- [ ] FEAT: Reimplement Deleting References from searches
+- [ ] FEAT: Reimplement Deleting & Copying References from searches
 - [ ] FEAT: Reimplement "In which folders..."
 - [ ] FEAT: User::getAllPermissions returns always the highest available set of permissions, regardless of the permissions of the group the current datasource belongs to. Requires rewriting of  `$this->requirePermission` to pass the datasource / datasource name
  
