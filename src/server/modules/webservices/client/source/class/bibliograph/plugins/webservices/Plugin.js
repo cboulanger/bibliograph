@@ -44,15 +44,56 @@ qx.Class.define("bibliograph.plugins.webservices.Plugin",
       let permMgr = app.getAccessManager().getPermissionManager();
       let confMgr = app.getConfigManager();
       
+      // remote search progress indicator widget
+      let progress = new qcl.ui.dialog.ServerProgress(
+        "plugins/webservices/searchProgress",
+        "webservices/search",
+        "progress"
+      );
+      progress.set({
+        hideWhenCompleted: true,
+        allowCancel : true
+      });
       
       // add window
-      let importWindow = new bibliograph.plugins.webservices.ImportWindow();
-      app.getRoot().add(importWindow);
+      //let importWindow = new bibliograph.plugins.webservices.ImportWindow();
+      //app.getRoot().add(importWindow);
+      //let windowOpener = () => importWindow.show();
+      
+      let url = "../../plugins/webservices/index.html";
+      let windowOptions = {
+        width: 700,
+        height: 300,
+        dependent: true,
+        resizable: true,
+        status: false,
+        location: false,
+        menubar: false,
+        scrollbars: false,
+        toolbar: false
+      };
+      let win;
+      let windowOpener = () => {
+        if( ! win || win.closed ) {
+          win = qx.bom.Window.open(url,"webservices", windowOptions, false, false);
+          this.getMessageBus().subscribe(
+            bibliograph.Application.messages.TERMINATE,
+            () => win.close()
+          );
+          this.getMessageBus().subscribe(
+            bibliograph.AccessManager.messages.LOGOUT,
+            () => win.close()
+          );
+        }
+        setTimeout(function() {
+          win.focus();
+        }, 1);
+      }
       
       // add a new menu button
       let importMenu = app.getWidgetById("app/toolbar/menus/import");
       let menuButton = new qx.ui.menu.Button(this.tr("Import from webservices"));
-      menuButton.addListener("execute", () => importWindow.show() );
+      menuButton.addListener("execute", windowOpener );
       importMenu.add(menuButton);
       
       // Overlays for preference window @todo rename
@@ -147,13 +188,6 @@ qx.Class.define("bibliograph.plugins.webservices.Plugin",
       
       // add tab to tabview (must be done at the end)
       prefsTabView.add(pluginTab);
-      
-      // remote search progress indicator widget
-      let progress = new qcl.ui.dialog.ServerProgress( "plugins/webservices/searchProgress", "webservices/search", "progress");
-      progress.set({
-        hideWhenCompleted: true,
-        allowCancel : true
-      });
     }
   }
 });
