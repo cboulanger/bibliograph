@@ -56,38 +56,54 @@ qx.Class.define("bibliograph.plugins.webservices.Plugin",
       });
       
       // add window
-      //let importWindow = new bibliograph.plugins.webservices.ImportWindow();
-      //app.getRoot().add(importWindow);
-      //let windowOpener = () => importWindow.show();
-      
-      let url = "../../plugins/webservices/index.html";
-      let windowOptions = {
-        width: 700,
-        height: 300,
-        dependent: true,
-        resizable: true,
-        status: false,
-        location: false,
-        menubar: false,
-        scrollbars: false,
-        toolbar: false
-      };
-      let win;
-      let windowOpener = () => {
-        if( ! win || win.closed ) {
-          win = qx.bom.Window.open(url,"webservices", windowOptions, false, false);
-          this.getMessageBus().subscribe(
-            bibliograph.Application.messages.TERMINATE,
-            () => win.close()
-          );
-          this.getMessageBus().subscribe(
-            bibliograph.AccessManager.messages.LOGOUT,
-            () => win.close()
-          );
+      let win, windowOpener;
+      let native = false;
+      if ( native ){
+        let url = "../../plugins/webservices/index.html";
+        let windowOptions = {
+          width: 700,
+          height: 300,
+          dependent: true,
+          resizable: true,
+          status: false,
+          location: false,
+          menubar: false,
+          scrollbars: false,
+          toolbar: false
+        };
+        windowOpener = () => {
+          if( ! win || win.closed ) {
+            win = qx.bom.Window.open(url,"webservices", windowOptions, false, false);
+            this.getMessageBus().subscribe(
+              bibliograph.Application.messages.TERMINATE,
+              () => win.close()
+            );
+            this.getMessageBus().subscribe(
+              bibliograph.AccessManager.messages.LOGOUT,
+              () => win.close()
+            );
+          }
+          setTimeout(function() {
+            win.focus();
+          }, 1);
         }
-        setTimeout(function() {
+      } else {
+        windowOpener = () => {
+          if( ! win ){
+            win = new bibliograph.plugins.webservices.ImportWindow();
+            app.getRoot().add(win);
+            this.getMessageBus().subscribe(
+              bibliograph.Application.messages.TERMINATE,
+              () => win.close()
+            );
+            this.getMessageBus().subscribe(
+              bibliograph.AccessManager.messages.LOGOUT,
+              () => win.close()
+            );
+          }
+          win.show();
           win.focus();
-        }, 1);
+        }
       }
       
       // add a new menu button

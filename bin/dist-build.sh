@@ -27,8 +27,8 @@ if ! [[ $BUILD_TARGET == *"build"* ]]; then
 fi
 cp $BUILD_TARGET-compiled/index.html $DIST_DIR
 
-cd $TOP_DIR
-bash bin/modules-compile-apps.sh $BUILD_TARGET
+# cd $TOP_DIR
+# bash bin/modules-compile.sh $BUILD_TARGET
 
 echo " >>> Building server ..."
 cd $DIST_DIR/server
