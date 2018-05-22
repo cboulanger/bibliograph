@@ -10,6 +10,7 @@ msgstr ""
 
 #: dialog/Dialog.js:443 bibliograph/ui/window/FolderTreeWindow.js:107
 #: bibliograph/ui/main/TableView.js:328 bibliograph/ui/main/TableView.js:319
+#: bibliograph/ui/main/TableView.js:326
 msgid "Cancel"
 msgstr ""
 
@@ -73,7 +74,7 @@ msgstr ""
 msgid "Next year"
 msgstr ""
 
-#: bibliograph/Application.js:187
+#: bibliograph/Application.js:187 bibliograph/Application.js:194
 msgid "Missing server address. Please contact administrator."
 msgstr ""
 
@@ -163,6 +164,7 @@ msgstr ""
 #: bibliograph/plugins/webservices/ImportWindow.js:234
 #: bibliograph/plugins/z3950/ImportWindow.js:180
 #: bibliograph/ui/window/AccessControlTool.js:178
+#: bibliograph/plugins/webservices/View.js:227
 msgid "Help"
 msgstr ""
 
@@ -339,6 +341,7 @@ msgstr ""
 #: bibliograph/plugins/webservices/ImportWindow.js:274
 #: bibliograph/plugins/z3950/ImportWindow.js:220
 #: bibliograph/ui/window/ImportWindow.js:203
+#: bibliograph/plugins/webservices/View.js:267
 msgid "Import selected records"
 msgstr ""
 
@@ -348,6 +351,7 @@ msgstr ""
 #: bibliograph/plugins/webservices/ImportWindow.js:281
 #: bibliograph/plugins/z3950/ImportWindow.js:227
 #: bibliograph/ui/window/ImportWindow.js:210
+#: bibliograph/plugins/webservices/View.js:274
 msgid "Close"
 msgstr ""
 
@@ -462,6 +466,7 @@ msgstr ""
 #: bibliograph/plugins/webservices/ImportWindow.js:333
 #: bibliograph/plugins/z3950/ImportWindow.js:264
 #: bibliograph/ui/window/ImportWindow.js:307
+#: bibliograph/plugins/webservices/View.js:326
 msgid "You have to select one or more reference to import."
 msgstr ""
 
@@ -471,6 +476,7 @@ msgstr ""
 #: bibliograph/plugins/webservices/ImportWindow.js:340
 #: bibliograph/plugins/z3950/ImportWindow.js:271
 #: bibliograph/ui/window/ImportWindow.js:314
+#: bibliograph/plugins/webservices/View.js:333
 msgid "Please select a folder first."
 msgstr ""
 
@@ -480,6 +486,7 @@ msgstr ""
 #: bibliograph/plugins/webservices/ImportWindow.js:347
 #: bibliograph/plugins/z3950/ImportWindow.js:278
 #: bibliograph/ui/window/ImportWindow.js:321
+#: bibliograph/plugins/webservices/View.js:340
 msgid "Cannot determine selected folder. Please reload the folders."
 msgstr ""
 
@@ -489,6 +496,7 @@ msgstr ""
 #: bibliograph/plugins/webservices/ImportWindow.js:351
 #: bibliograph/plugins/z3950/ImportWindow.js:282
 #: bibliograph/ui/window/ImportWindow.js:325
+#: bibliograph/plugins/webservices/View.js:344
 msgid "Invalid target folder. You can only import into normal folders."
 msgstr ""
 
@@ -498,10 +506,11 @@ msgstr ""
 #: bibliograph/plugins/webservices/ImportWindow.js:358
 #: bibliograph/plugins/z3950/ImportWindow.js:289
 #: bibliograph/ui/window/ImportWindow.js:331
+#: bibliograph/plugins/webservices/View.js:351
 msgid "Importing references..."
 msgstr ""
 
-#: qcl/ui/table/TableView.js:367
+#: qcl/ui/table/TableView.js:367 qcl/ui/table/TableView.js:387
 msgid "Query"
 msgstr ""
 
@@ -509,7 +518,7 @@ msgstr ""
 msgid "Loading table ..."
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:442
+#: bibliograph/ui/main/TableView.js:442 bibliograph/ui/main/TableView.js:449
 msgid "You cannot create an item outside a folder"
 msgstr ""
 
@@ -517,11 +526,11 @@ msgstr ""
 msgid "Do your really want to remove the selected references from this folder?"
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:457
+#: bibliograph/ui/main/TableView.js:457 bibliograph/ui/main/TableView.js:464
 msgid "Do your really want to remove the selected references?"
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:493
+#: bibliograph/ui/main/TableView.js:493 bibliograph/ui/main/TableView.js:504
 msgid "Do your really want to move the selected references to '%1'?"
 msgstr ""
 
@@ -529,62 +538,75 @@ msgstr ""
 msgid "Do your really want to copy the selected referencesto '%1'?"
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:569 bibliograph/ui/item/RecordInfo.js:167
+#: bibliograph/ui/main/TableView.js:569 bibliograph/ui/main/TableView.js:580
+#: bibliograph/ui/item/RecordInfo.js:167
 #: bibliograph/ui/item/DuplicatesView.js:162
 msgid "Processing request..."
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:583
+#: bibliograph/ui/main/TableView.js:583 bibliograph/ui/main/TableView.js:594
 msgid "Do you really want to make the folder empty, moving all references to the trash that are not in other folders?"
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:586
+#: bibliograph/ui/main/TableView.js:586 bibliograph/ui/main/TableView.js:597
 msgid "Emptying the folder ..."
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:179
 #: bibliograph/ui/main/MultipleTreeView.js:180
+#: bibliograph/ui/main/MultipleTreeView.js:190
+#: bibliograph/ui/main/MultipleTreeView.js:191
 msgid "Empty trash..."
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:191
+#: bibliograph/ui/main/MultipleTreeView.js:202
 msgid "Move folder..."
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:202
+#: bibliograph/ui/main/MultipleTreeView.js:213
 msgid "Edit folder data"
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:213
 #: bibliograph/ui/main/MultipleTreeView.js:214
+#: bibliograph/ui/main/MultipleTreeView.js:224
+#: bibliograph/ui/main/MultipleTreeView.js:225
 msgid "Change visibility"
 msgstr ""
 
 #: bibliograph/ui/main/TableView.js:291 bibliograph/ui/main/TableView.js:282
+#: bibliograph/ui/main/TableView.js:289
 msgid "Create new reference type"
 msgstr ""
 
 #: bibliograph/ui/main/TableView.js:316 bibliograph/ui/main/TableView.js:307
+#: bibliograph/ui/main/TableView.js:314
 msgid "Create"
 msgstr ""
 
 #: bibliograph/ui/main/TableView.js:221 bibliograph/ui/main/TableView.js:212
+#: bibliograph/ui/main/TableView.js:219
 msgid "Move reference(s)..."
 msgstr ""
 
 #: bibliograph/ui/main/TableView.js:228 bibliograph/ui/main/TableView.js:219
+#: bibliograph/ui/main/TableView.js:226
 msgid "Copy reference(s)..."
 msgstr ""
 
 #: bibliograph/ui/main/TableView.js:235 bibliograph/ui/main/TableView.js:226
+#: bibliograph/ui/main/TableView.js:233
 msgid "Export references"
 msgstr ""
 
 #: bibliograph/ui/main/TableView.js:243 bibliograph/ui/main/TableView.js:234
+#: bibliograph/ui/main/TableView.js:241
 msgid "Export selected references"
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:240
+#: bibliograph/ui/main/TableView.js:240 bibliograph/ui/main/TableView.js:247
 msgid "Export folder"
 msgstr ""
 
@@ -678,6 +700,7 @@ msgid "No folder selected. Try again"
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:390
+#: bibliograph/ui/main/MultipleTreeView.js:404
 msgid "Do your really want to move folder '%1' to '%2'?"
 msgstr ""
 
@@ -686,6 +709,7 @@ msgid "Moving folder ..."
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:456
+#: bibliograph/ui/main/MultipleTreeView.js:470
 msgid "Do you really want to delete all references and folders in the trash folder? This cannot be undone."
 msgstr ""
 
@@ -710,6 +734,7 @@ msgid "Creating form, please wait ..."
 msgstr ""
 
 #: bibliograph/plugins/webservices/Plugin.js:129
+#: bibliograph/plugins/webservices/Plugin.js:186
 #: bibliograph/plugins/z3950/Plugin.js:134
 #: bibliograph/ui/item/ReferenceEditor.js:733
 #: bibliograph/ui/item/ReferenceEditor.js:885
@@ -767,7 +792,7 @@ msgstr ""
 msgid "Do you really want to remove the reference from folder '%1'?"
 msgstr ""
 
-#: qcl/ui/table/TableView.js:510
+#: qcl/ui/table/TableView.js:510 qcl/ui/table/TableView.js:530
 msgid "Loading table layout ..."
 msgstr ""
 
@@ -840,16 +865,19 @@ msgid "Z39.50 Import"
 msgstr ""
 
 #: bibliograph/plugins/webservices/Plugin.js:107
+#: bibliograph/plugins/webservices/Plugin.js:164
 #: bibliograph/plugins/z3950/Plugin.js:112
 msgid "(Un-)Select All"
 msgstr ""
 
 #: bibliograph/plugins/webservices/Plugin.js:119
+#: bibliograph/plugins/webservices/Plugin.js:176
 #: bibliograph/plugins/z3950/Plugin.js:124
 msgid "Save"
 msgstr ""
 
 #: bibliograph/plugins/webservices/Plugin.js:137
+#: bibliograph/plugins/webservices/Plugin.js:194
 #: bibliograph/plugins/z3950/Plugin.js:142
 msgid "Reload"
 msgstr ""
@@ -863,6 +891,7 @@ msgstr ""
 #: bibliograph/plugins/webservices/ImportWindow.js:204
 #: bibliograph/plugins/webservices/ImportWindow.js:205
 #: bibliograph/plugins/z3950/ImportWindow.js:169
+#: bibliograph/plugins/webservices/View.js:198
 msgid "Enter search terms"
 msgstr ""
 
@@ -880,50 +909,57 @@ msgstr ""
 #: bibliograph/plugins/z3950/ImportWindow.js:250
 #: bibliograph/ui/main/Toolbar.js:279 bibliograph/ui/main/Toolbar.js:289
 #: bibliograph/ui/main/Toolbar.js:297 bibliograph/ui/main/Toolbar.js:298
+#: bibliograph/plugins/webservices/View.js:312
 msgid "Searching..."
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:129
+#: bibliograph/ui/main/MultipleTreeView.js:140
 msgid "Add folder"
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:161
+#: bibliograph/ui/main/MultipleTreeView.js:172
 msgid "Remove folder"
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:462
+#: bibliograph/ui/main/MultipleTreeView.js:476
 msgid "Emptying the trash ..."
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:383
+#: bibliograph/ui/main/MultipleTreeView.js:397
 msgid "No folder selected."
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:445
+#: bibliograph/ui/main/TableView.js:445 bibliograph/ui/main/TableView.js:452
 msgid "Creating reference..."
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:459
+#: bibliograph/ui/main/TableView.js:459 bibliograph/ui/main/TableView.js:466
 msgid "Removing references..."
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:499
+#: bibliograph/ui/main/TableView.js:499 bibliograph/ui/main/TableView.js:510
 msgid "Moving references..."
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:516
+#: bibliograph/ui/main/TableView.js:516 bibliograph/ui/main/TableView.js:527
 msgid "Do your really want to copy the selected references to '%1'?"
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:519
+#: bibliograph/ui/main/TableView.js:519 bibliograph/ui/main/TableView.js:530
 msgid "Copying references..."
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:417
+#: bibliograph/ui/main/MultipleTreeView.js:431
 msgid "Do your really want to move %1 references to '%2'?"
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:439
+#: bibliograph/ui/main/MultipleTreeView.js:453
 msgid "Do your really want to copy %1 references to '%2'?"
 msgstr ""
 
@@ -949,18 +985,19 @@ msgid "Export selected folder"
 msgstr ""
 
 #: bibliograph/ui/main/TableView.js:255 bibliograph/ui/main/TableView.js:246
+#: bibliograph/ui/main/TableView.js:253
 msgid "Export current query"
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:531
+#: bibliograph/ui/main/TableView.js:531 bibliograph/ui/main/TableView.js:542
 msgid "Exporting the selected references..."
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:541
+#: bibliograph/ui/main/TableView.js:541 bibliograph/ui/main/TableView.js:552
 msgid "Exporting folder..."
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:553
+#: bibliograph/ui/main/TableView.js:553 bibliograph/ui/main/TableView.js:564
 msgid "Exporting query..."
 msgstr ""
 
@@ -970,10 +1007,12 @@ msgid "Enter search term or ? for suggestions"
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:140
+#: bibliograph/ui/main/MultipleTreeView.js:151
 msgid "Add top level folder"
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:150
+#: bibliograph/ui/main/MultipleTreeView.js:161
 msgid "Save current search query as top folder"
 msgstr ""
 
@@ -983,20 +1022,37 @@ msgid "No results"
 msgstr ""
 
 #: bibliograph/plugins/webservices/Plugin.js:54
+#: bibliograph/plugins/webservices/Plugin.js:111
 #: bibliograph/plugins/webservices/ImportWindow.js:75
 #: bibliograph/plugins/webservices/ImportWindow.js:76
+#: bibliograph/plugins/webservices/ImportWindow.js:28
 msgid "Import from webservices"
 msgstr ""
 
 #: bibliograph/plugins/webservices/Plugin.js:60
+#: bibliograph/plugins/webservices/Plugin.js:117
 msgid "Webservices"
 msgstr ""
 
 #: bibliograph/plugins/webservices/Plugin.js:141
+#: bibliograph/plugins/webservices/Plugin.js:198
 msgid "Reloading services..."
 msgstr ""
 
 #: bibliograph/plugins/webservices/ImportWindow.js:187
 #: bibliograph/plugins/webservices/ImportWindow.js:189
+#: bibliograph/plugins/webservices/View.js:182
 msgid "Auto-import best result"
+msgstr ""
+
+#: bibliograph/ui/main/MultipleTreeView.js:310
+msgid "Loading folders. Please wait..."
+msgstr ""
+
+#: bibliograph/ui/main/TableView.js:470
+msgid "Do your really want to move the selected references to the trash?"
+msgstr ""
+
+#: bibliograph/ui/main/TableView.js:472
+msgid "Deleting references..."
 msgstr ""
