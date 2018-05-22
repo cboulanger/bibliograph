@@ -8,7 +8,8 @@
 ### Priority: high
 - [x] FEAT: Reimplement "Loading folders..." to avoid blank screen
 - [x] BUG: Drag & drop into Trash
-- [ ] FEAT: Reimplement Deleting & Copying References from searches
+- [x] FEAT: Reimplement Deleting & Copying References from searches
+- [ ] FEAT: Implement copy reference to folder via drag & drop 
 - [ ] FEAT: Reimplement "In which folders..."
 - [ ] FEAT: User::getAllPermissions returns always the highest available set of permissions, regardless of the permissions of the group the current datasource belongs to. Requires rewriting of  `$this->requirePermission` to pass the datasource / datasource name
  
@@ -25,6 +26,7 @@
 - [ ] FEAT: Config key change should be broadcasted
 - [ ] FEAT: Implement setup Wizard
 - [ ] FEAT: Allow migrations via permission, not prod/dev-mode
+- [ ] FEAT: Z39.50 Plugin: Preference option to configure timeout 
 
 ### Priority: low
 - [ ] BUG: Remove non-printable chars from Z39.50 import, see also https://github.com/cboulanger/bibliograph/issues/189

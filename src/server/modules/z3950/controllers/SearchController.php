@@ -166,9 +166,14 @@ class SearchController extends \yii\web\Controller
       $progressBar->setProgress(0, Yii::t(Module::CATEGORY, "Waiting for remote server..."));
     }
 
+    // @todo make configurable
+    $options = [
+      'timeout' => 120
+    ];
+
     // Result
     try {
-      $yaz->wait();
+      $yaz->wait($options);
     } catch ( YazException $e) {
       Yii::debug("Server error (yaz_wait): ". $e->getMessage(), Module::CATEGORY);
       throw new UserErrorException(
@@ -218,7 +223,7 @@ class SearchController extends \yii\web\Controller
 
     if ($progressBar) {
       $progressBar->setProgress(10, Yii::t(
-        Module::CATEGORY, "{number} records found.",
+        Module::CATEGORY, "Found {number} records. Please wait...",
         ['number'=>$hits]
       ));
     }
