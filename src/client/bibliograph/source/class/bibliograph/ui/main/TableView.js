@@ -47,10 +47,10 @@ qx.Class.define("bibliograph.ui.main.TableView",
     // drag & drop
     this.addListener(qcl.access.MPermissions.events.permissionsReady, e => {
       this.set({
-        enableDragDrop: true,
         debugDragSession: qx.core.Environment.get("qx.debug"),
         allowDropTargetTypes: ['folder','trash']
       });
+      this.bindState(this.permissions.move_reference, this, "enableDragDrop");
       this.bind("folderId", this, "dragActions",{
         converter : value => value > 0 ? ['move','copy'] : ['copy']
       });
