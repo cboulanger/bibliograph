@@ -51,7 +51,7 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
       tree.setExcludeDragTypes( new qx.data.Array('trash','top'));
     });
     this.addListener(qcl.access.MPermissions.events.permissionsReady, e => {
-      this.bindState(this.permissions.move_folder,this,"enableDragDrop");
+      this.bindState(this.permissions.move_any_folder,this,"enableDragDrop");
       this.setDebugDragSession(qx.core.Environment.get("qx.debug"));
     });
     
@@ -107,6 +107,10 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
         updateEvent : "changeSelectedNode",
         condition : tree => tree.getSelectedNode() !== null && tree.getSelectedNode().data.type !== "virtual"
       },
+      move_any_folder: {
+        aliasOf : "folder.move"
+      },
+      // TODO rename to move_selected_folder
       move_folder : {
         depends : "folder.move",
         updateEvent : "changeSelectedNode",

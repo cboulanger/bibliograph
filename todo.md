@@ -6,10 +6,6 @@
 - [ ] Test anonymous LDAP binding @HU
 
 ### Priority: high
-- [x] FEAT: Reimplement "Loading folders..." to avoid blank screen
-- [x] BUG: Drag & drop into Trash
-- [x] FEAT: Reimplement Deleting & Copying References from searches
-- [x] FEAT: Implement copy reference to folder via drag & drop 
 - [ ] FEAT: Reimplement "In which folders..."
 - [ ] FEAT: User::getAllPermissions returns always the highest available set of permissions, regardless of the permissions of the group the current datasource belongs to. Requires rewriting of  `$this->requirePermission` to pass the datasource / datasource name
  

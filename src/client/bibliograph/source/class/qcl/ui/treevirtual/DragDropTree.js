@@ -631,6 +631,7 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
       }
       
       let dropModelRowData = this.getDataModel().getRowData(positionData.row);
+      if (!dropModelRowData || ! qx.lang.Type.isArray(dropModelRowData)) return null;
       let dropModel = dropModelRowData[0];
       
       // iterate through all of the dragged models to see if
