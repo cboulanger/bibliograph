@@ -115,10 +115,9 @@ trait FolderDataTrait
     // icon & type
     $icon = static::$icon["closed"];
     $type = "folder";
-    if ( ( $folderType == "search" or !$folderType)
-      and $query and $searchFolder != false ) {
+    if (( $folderType === "search" or !$folderType or $searchFolder) and $query  ) {
       $icon = static::$icon["search"];
-      $type = "searchfolder";
+      $type = "search";
     } elseif ( $folderType == "trash" ) {
       $icon = static::$icon["trash"];
       $type = "trash";

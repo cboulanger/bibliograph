@@ -20,21 +20,17 @@
 
 namespace app\controllers;
 
-use app\controllers\TrashController;
 use app\models\Reference;
+use app\models\Datasource;
+use app\models\Folder;
 use lib\dialog\Confirm;
 use lib\dialog\Form;
 use lib\exceptions\UserErrorException;
 use RuntimeException;
-use Yii;
-
-use lib\controllers\ITreeController;
-use app\controllers\AppController;
-use app\models\Datasource;
-use app\models\Folder;
 use yii\db\ActiveQuery;
 use yii\db\Exception;
-use yii\db\StaleObjectException;
+use Yii;
+
 
 class FolderController extends AppController //implements ITreeController
 {
@@ -454,6 +450,7 @@ class FolderController extends AppController //implements ITreeController
    * @param $parentFolderId
    * @return string Diagnostic message
    * @throws \JsonRpc2\Exception
+   * @throws Exception
    */
   public function actionCreate($data, $datasource, $parentFolderId)
   {
@@ -482,12 +479,13 @@ class FolderController extends AppController //implements ITreeController
     $folder = new $folderClass([
       'parentId'      => $parentFolderId,
       'label'         => $data->label,
-      'searchfolder'  => $data->searchfolder ?? 0,
+      'searchfolder'  => $data->searchfolder ?? 0, // todo: needed -> change form to choose general type
+      'type'          => $data->searchfolder ? "search" : "folder",
       'query'         => $data->query ?? "",
       'childCount'    => 0,
       'position'      => $position,
       'public'        => 0,
-      'opened'        => 0,
+      'opened'        => 0
     ]);
 
     try {

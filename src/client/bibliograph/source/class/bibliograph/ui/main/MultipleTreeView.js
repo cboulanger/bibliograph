@@ -49,6 +49,7 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
       let tree = e.getData();
       if( ! tree ) return;
       tree.setExcludeDragTypes( new qx.data.Array('trash','top'));
+      tree.setAllowDropTypes([['folder','*'], ['search',null]]);
     });
     this.addListener(qcl.access.MPermissions.events.permissionsReady, e => {
       this.bindState(this.permissions.move_any_folder,this,"enableDragDrop");
@@ -65,6 +66,7 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
     bus.subscribe( "folder.node.move", this._moveNode, this);
     bus.subscribe( "folder.node.reorder", this._reorderNodeChildren, this);
     bus.subscribe( "folder.node.select", this._selectNode, this);
+  
   },
   
   members:

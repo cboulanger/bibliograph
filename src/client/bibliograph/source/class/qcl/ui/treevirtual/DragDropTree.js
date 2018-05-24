@@ -56,6 +56,7 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
     
     this.base(arguments, headings, custom);
     this._createIndicator();
+    // Allow everything to be dropped on the nodes
     this.setAllowDropTypes(['*']);
   },
   
@@ -120,6 +121,15 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
     },
   
     /**
+     * Saves the model data of the node(s) which was/were being dragged
+     **/
+    dragType:
+    {
+      check: "String",
+      nullable: true
+    },
+  
+    /**
      * the number of milliseconds between scrolling up a row if drag cursor
      * is on the first row or scrolling down if drag cursor is on last row
      * during a drag session. You can turn off this behaviour by setting this
@@ -148,7 +158,7 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
      * userData hash map. If null, allow any combination. "*" can be used to as a
      * wildcard, i.e. [ ['Foo','*'] ...] will allow the 'Foo' type node to be dropped on any
      * other type, and [ ['*','Bar'] ...] will allow any type to be dropped on a 'Bar' type node.
-     * The array ['*'] will allow any combination, null will deny any drop.
+     * The array ['*'] will allow any combination (default), null will deny any drop.
      **/
     allowDropTypes:
     {
@@ -415,15 +425,41 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
         return e.preventDefault();
       }
       let selection = this.getSelectedNodes();
-      if( ! selection.length ){
-        this.dragDebug("No selection");
+      let row = this._getDragCursorPositionData(e).row;
+      let rowData  = this.getDataModel().getRowData(row);
+      if (! rowData || ! qx.lang.Type.isArray(rowData) || ! rowData.length ) {
+        this.dragDebug("No valid tree row.");
+        return;
+      }
+      let nodeData = rowData[0];
+      if( ! selection.includes(nodeData) ){
+        this.dragDebug("Selecting drag source " + nodeData.label );
+        selection = [nodeData];
+      }
+      // check selection
+      if (
+        selection.some( node => this._dragTypeExcluded(node.data.nodeType) )
+        || ! selection.every( node => this._dragTypeIncluded(node.data.nodeType) )
+      ){
+        this.dragDebug('Selection contains non-draggable node.');
         e.preventDefault();
         return;
       }
+      // necessary because type and data are not available in a drag session!
+      this.setDragType(qcl.ui.treevirtual.DragDropTree.types.TREEVIRTUAL);
       this.setDragModel(selection);
+      
       e.addAction(this.getDragAction());
       e.addType(qcl.ui.treevirtual.DragDropTree.types.TREEVIRTUAL);
       e.addData(qcl.ui.treevirtual.DragDropTree.types.TREEVIRTUAL, selection);
+    },
+    
+    _dragTypeExcluded : function(type){
+      return this.getExcludeDragTypes().includes(type) || this.getExcludeDragTypes().includes("*");
+    },
+  
+    _dragTypeIncluded : function(type){
+      return this.getIncludeDragTypes().includes(type) || this.getIncludeDragTypes().includes("*");
     },
     
     /**
@@ -468,6 +504,8 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
       this.setDragModel(null);
       this.dragDebug("Tree drag end.");
       this._hideIndicator();
+      qx.ui.core.DragDropCursor.getInstance().setVisibility('hidden');
+      
     },
   
     /**
@@ -636,10 +674,11 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
       
       // iterate through all of the dragged models to see if
       // they match the drop target model
-      let sourceType;
+      
       let validDropTarget = dragModelArr.every(dragModel => {
-        
-        switch ( e.getCurrentType()){
+        let sourceType = "";
+        let dataType = this.getDragType(); // e.getCurrentType();
+        switch (dataType){
           case qcl.ui.treevirtual.DragDropTree.types.TREEVIRTUAL:
             sourceType = this.getNodeType(dragModel);
             // Whether drag & drop is limited to reordering
@@ -682,7 +721,11 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
             }
             break;
           case qcl.ui.table.TableView.types.ROWDATA:
+          default:
+            this.dragDebug(`No or unknown drag data type, assuming table data...`);
             sourceType = qcl.ui.table.TableView.types.ROWDATA;
+            break;
+          
         }
   
         // get allowed drop types. disallow drop if none
@@ -694,6 +737,7 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
   
         // everything can be dropped, allow
         if (allowDropTypes[0] === "*") {
+          this.dragDebug("All drop types allowed.");
           return true;
         }
   
@@ -710,14 +754,16 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
   
         for (let i = 0; i < allowDropTypes.length; i++) {
           if (
+            (qx.lang.Type.isArray(allowDropTypes[i]) && allowDropTypes.length > 1) &&
             (allowDropTypes[i][0] === sourceType || allowDropTypes[i][0] === "*") &&
             (allowDropTypes[i][1] === targetType || allowDropTypes[i][1] === "*")
           ) {
+            this.dragDebug(`Drop of ${sourceType} on ${targetType} allowed.`);
             return true;
           }
         }
         // do not allow any drop
-        this.dragDebug("No matching allowDropType!");
+        this.dragDebug(`Drop of ${sourceType} on ${targetType} not allowed: no matching allowDropType rule.`);
         return null;
   
       }); // end every

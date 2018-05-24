@@ -51,6 +51,7 @@
 - [ ] FEAT: Reimplement support for the admindb, userdb and tmpdb settings in app.conf.toml -> use DSNs instead of single settings or TOML nested arrays.
 
 ### Code cleanup / refactoring
+- [ ] Drag type and data not available in dragStart event handler - why? 
 - [ ] Make UserErrorException a JSONRPC error which is caught on the client, instead of a Dialog event.
 - [ ] Use Session Cache instead of File Cache for Storing file path in importer
 - [ ] Transform compile.json into compile.js (to allow to update env var "app.version" etc.)
@@ -86,6 +87,7 @@
 - [ ] Remove forks from composer.json that have been updated upstream
 - [ ] Move module translations into module https://www.yiiframework.com/doc/guide/2.0/en/tutorial-i18n#module-translation
 - [ ] Move method implementations from AccessController into AccessManager leaving only the action stubs 
+- [ ] Folder: remove "searchfolder" column, "type" column should contain all information
 
 ### Testing, CI and distribution
 - [ ] Make Travis ~~great~~ work again

@@ -786,6 +786,7 @@ qx.Class.define("qcl.ui.table.TableView",
       let relatedTarget = e.getRelatedTarget();
       if( relatedTarget ){
         relatedTarget.setDragModel(this.getSelectedRowData());
+        relatedTarget.setDragType(qcl.ui.table.TableView.types.ROWDATA);
         return relatedTarget._onDragAction(e);
       }
       // dragging over self
