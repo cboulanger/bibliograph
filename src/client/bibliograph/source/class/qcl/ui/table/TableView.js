@@ -774,8 +774,10 @@ qx.Class.define("qcl.ui.table.TableView",
      * @param e {qx.event.type.Drag} the drag event fired
      */
     _onDragOver: function (e) {
-      this.dragDebug("Table Drag over.");
-      this._onDragHandler(e);
+      //if( ! e.supportsType(qcl.ui.table.TableView.types.ROWDATA) ){
+        this.dragDebug("Table Drag: Dropping on Table not supported...");
+        e.preventDefault();
+      //}
     },
   
     /**
@@ -789,9 +791,6 @@ qx.Class.define("qcl.ui.table.TableView",
         relatedTarget.setDragType(qcl.ui.table.TableView.types.ROWDATA);
         return relatedTarget._onDragAction(e);
       }
-      // dragging over self
-      this.dragDebug("Table Drag: Dropping on Table not supported...");
-      qx.ui.core.DragDropCursor.getInstance().resetAction();
     },
   
     /**

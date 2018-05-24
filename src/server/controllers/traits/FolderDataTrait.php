@@ -126,10 +126,8 @@ trait FolderDataTrait
       $type = "favorites";
     } elseif ( $markedDeleted ) {
       $icon = static::$icon['marked-deleted'];
-      $type = "deleted";
     } elseif ( $public ) {
       $icon = static::$icon['public'];
-      $type = "folder";
     }
 
     // return node data

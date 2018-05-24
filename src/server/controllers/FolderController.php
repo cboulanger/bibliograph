@@ -592,6 +592,7 @@ class FolderController extends AppController //implements ITreeController
    * @param \app\models\Folder $folder
    * @param bool $value
    * @return void
+   * @throws Exception
    */
   public function setFolderMarkedDeleted(\app\models\Folder $folder, $value)
   {
@@ -613,22 +614,18 @@ class FolderController extends AppController //implements ITreeController
           // if it is contained in other folders, simply unlink reference and folder
           $folder->unlink("references", $reference, true);
           $folder->getReferenceCount(true);
+          continue;
         } else {
           // if it is contained in this folder only,  mark deleted 
-          $folder->markedDeleted = true;
-          try {
-            $folder->save();
-          } catch (Exception $e) {
-            Yii::error($e);
-          }
+          $reference->markedDeleted = true;
         }
       } else {
-        $folder->markedDeleted = false;
-        try {
-          $folder->save();
-        } catch (Exception $e) {
-          Yii::error($e);
-        }
+        $reference->markedDeleted = false;
+      }
+      try {
+        $reference->save();
+      } catch (Exception $e) {
+        Yii::error($e);
       }
     }
 
@@ -668,15 +665,21 @@ class FolderController extends AppController //implements ITreeController
     } while ($id !== 0);
 
     // change folder parent
+    /** @var Folder $folder */
     $folder = $this->getRecordById($datasource, $folderId);
 
     $folder->parentId = $parentId;
     $folder->save();
 
-    // mark deleted if moved into trash folder
+    // mark (un)deleted if moved into/out of trash folder
     $trashFolder = TrashController::getTrashfolder($datasource);
     if ($trashFolder) {
-      $this->setFolderMarkedDeleted($folder, $parentId === $trashFolder->id);
+      try {
+        $this->setFolderMarkedDeleted($folder, $parentId === $trashFolder->id);
+      } catch (Exception $e) {
+        Yii::warning($e);
+        throw new UserErrorException($e->getMessage());
+      }
     }
     return "OK";
   }

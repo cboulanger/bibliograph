@@ -3,7 +3,7 @@
 ## v3.0.0-beta
 
 ### Priority: urgent
-- [ ] BUG: Disallow drop of references on search folders
+- [x] BUG: Disallow drop of references on search folders
 - [ ] Test anonymous LDAP binding @HU
 
 ### Priority: high
@@ -51,7 +51,7 @@
 - [ ] FEAT: Reimplement support for the admindb, userdb and tmpdb settings in app.conf.toml -> use DSNs instead of single settings or TOML nested arrays.
 
 ### Code cleanup / refactoring
-- [ ] Drag type and data not available in dragStart event handler - why? 
+- [ ] Drag type and data not available in dragover event handler - why? 
 - [ ] Make UserErrorException a JSONRPC error which is caught on the client, instead of a Dialog event.
 - [ ] Use Session Cache instead of File Cache for Storing file path in importer
 - [ ] Transform compile.json into compile.js (to allow to update env var "app.version" etc.)

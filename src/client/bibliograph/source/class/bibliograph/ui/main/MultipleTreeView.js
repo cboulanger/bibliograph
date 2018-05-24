@@ -49,7 +49,11 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
       let tree = e.getData();
       if( ! tree ) return;
       tree.setExcludeDragTypes( new qx.data.Array('trash','top'));
-      tree.setAllowDropTypes([['folder','*'], ['search',null]]);
+      tree.setAllowDropTypes([
+        ['folder','*'],
+        ['search','*'],
+        [qcl.ui.table.TableView.types.ROWDATA,'folder']
+      ]);
     });
     this.addListener(qcl.access.MPermissions.events.permissionsReady, e => {
       this.bindState(this.permissions.move_any_folder,this,"enableDragDrop");
