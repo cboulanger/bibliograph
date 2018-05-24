@@ -20,22 +20,25 @@
 
 namespace app\controllers;
 
-use lib\exceptions\UserErrorException;
-use Yii;
-use \JsonRpc2\Exception;
+use Adldap\Models\ModelNotFoundException;
 use app\controllers\dto\AuthResult;
-
-use app\models\{
-  User, Role, Permission, Group, Session
-};
+use app\models\User;
+use app\models\Session;
+use lib\exceptions\UserErrorException;
+use InvalidArgumentException;
+use \JsonRpc2\Exception;
 use yii\db\Expression;
+use Yii;
 
 /**
  * The class used for authentication of users.
+ * @todo move implementations into AccessManager class and put only action stubs here
  */
 class AccessController extends AppController
 {
- 
+
+  const CATEGORY = "access";
+
   /**
    * @inheritDoc
    *
@@ -56,19 +59,19 @@ class AccessController extends AppController
    *    Optional user data
    * @return \app\models\User
    *    The newly created user model instance
-   * @throws \InvalidArgumentException if user does not exist
+   * @throws InvalidArgumentException
    */
-  public function actionRegister($username, $password, $data = array())
-  {
-    $data = [
-    'namedId'   => $username,
-    'password'  => $this->generateHash( $password ),
-    'name'      => $data['name'] || $username
-    ];
-    $user = new User($data);
-    $user->save();
-    return $user;
-  }
+//  public function actionRegister($username, $password, $data = array())
+//  {
+//    $data = [
+//    'namedId'   => $username,
+//    'password'  => Yii::$app->accessManager->generateHash( $password ),
+//    'name'      => $data['name'] || $username
+//    ];
+//    $user = new User($data);
+//    $user->save();
+//    return $user;
+//  }
 
   /**
    * Given a username, return a string consisting of a random hash and the salt 
@@ -89,20 +92,16 @@ class AccessController extends AppController
       $auth_method = "plaintext";
       Yii::debug("Challenge: User '$username' is not in the database, maybe first LDAP authentication.");
     }
-
     Yii::debug("Challenge: Using authentication method '$auth_method'");
-    
     switch ( $auth_method )
     {
       case "plaintext":
         return array( "method" => "plaintext" );
-        
       case "hashed":
         return array( 
           "method" => "hashed",
-          "nounce" => $this->createNonce($username)
+          "nounce" => Yii::$app->accessManager->createNonce($username)
         );
-      
       default:
         throw new InvalidArgumentException("Unknown authentication method $auth_method");
     }
@@ -117,6 +116,27 @@ class AccessController extends AppController
     return Yii::$app->ldapAuth->checkConnection();
   }
 
+
+  /**
+   * Exposes {@see AccessController::authenticate} as a controller action
+   * @param string|null $first
+   *    Either a token (then the second param must be null), a username (then the seconde
+   *    param must be the password, or null, then the user logs in anonymously
+   * @param string|null $password
+   * @return \app\controllers\dto\AuthResult
+   */
+  public function actionAuthenticate( $first=null, $password = null)
+  {
+    try{
+      return $this->authenticate($first, $password);
+    } catch( \Throwable $e){
+      // Do not log stack trace because it could contain a password
+      Yii::error($e->getMessage());
+      // Convert all errors into user errors. This might result in cryptic error messages
+      throw new UserErrorException($e->getMessage());
+    }
+  }
+
   /**
    * Identifies the current user, either by a token, a username/password, or as a
    * anonymous guest.
@@ -126,12 +146,10 @@ class AccessController extends AppController
    *    param must be the password, or null, then the user logs in anonymously
    * @param string|null $password
    * @return \app\controllers\dto\AuthResult
-   * @throws \Exception
+   * @throws \yii\db\Exception
    * @throws \Throwable
-   * @throws \yii\db\StaleObjectException
-   * @throws \LogicException
    */
-  public function actionAuthenticate($first = null, $password = null)
+  public function authenticate($first = null, $password = null)
   {
     /** @var User $user */
     $user = null;
@@ -153,7 +171,11 @@ class AccessController extends AppController
         } else {
           // shouldn't ever happen
           Yii::warning('Session has non-existing user!');
-          $session->delete();
+          try {
+            $session->delete();
+          } catch (\Throwable $e) {
+            Yii::warning($e->getMessage());
+          }
         }
       } 
       if ( ! $user ) {
@@ -193,10 +215,14 @@ class AccessController extends AppController
       $useLdap = Yii::$app->config->getIniValue("ldap.enabled");
       try {
         $user = $this->user($first);
-      } catch (\InvalidArgumentException $e) {
+      } catch (InvalidArgumentException $e) {
         if( $useLdap ){
           // this could be a LDAP user
-          $user = Yii::$app->ldapAuth->authenticate($first,$password);
+          try {
+            $user = Yii::$app->ldapAuth->authenticate($first, $password);
+          } catch (ModelNotFoundException $e) {
+            Yii::warning($e->getMessage());
+          }
         }
         if( ! $user ) {
           Yii::warning("Invalid user '$first' tried to authenticate.");
@@ -239,7 +265,7 @@ class AccessController extends AppController
               $authenticated = Yii::$app->accessManager->generateHash( $password, $storedPw ) == $storedPw;
               break;
             default:
-              throw new \InvalidArgumentException("Unknown authentication method $auth_method");
+              throw new InvalidArgumentException("Unknown authentication method $auth_method");
           }
         }
 
@@ -419,7 +445,7 @@ class AccessController extends AppController
   /**
    * Checks if the given username has to be authenticated from an LDAP server
    * @param string $username
-   * @throws \InvalidArgumentException if user does not exist
+   * @throws InvalidArgumentException if user does not exist
    * @return bool
    */
   public function isLdapUser($username)

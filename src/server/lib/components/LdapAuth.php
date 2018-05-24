@@ -152,7 +152,8 @@ class LdapAuth extends \yii\base\Component
    *
    * @param string $username
    * @return \app\models\User
-   * @throws \Adldap\Models\ModelNotFoundException 
+   * @throws \Adldap\Models\ModelNotFoundException
+   * @throws \yii\db\Exception
    */
   protected function createUser( $username )
   {
@@ -199,7 +200,7 @@ class LdapAuth extends \yii\base\Component
       'ldap'      => 1,
       'online'    => 1,
       'active'    => 1,
-      'anonmyous' => 0,
+      'anonymous' => 0,
       'confirmed' => 1 // an LDAP user needs no confirmation
     ]);
     $user->save();
@@ -214,6 +215,7 @@ class LdapAuth extends \yii\base\Component
    * @param $ldap
    * @param $username
    * @return void
+   * @throws \yii\db\Exception
    */
   protected function updateGroupMembership( $username )
   {

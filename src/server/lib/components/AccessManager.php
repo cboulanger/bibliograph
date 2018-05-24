@@ -27,6 +27,7 @@ use Yii;
 
 class AccessManager
 {
+  const CATEGORY = "access";
 
   /**
    * Calling this method with a single argument (the plain text password)

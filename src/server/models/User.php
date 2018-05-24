@@ -220,7 +220,7 @@ class User extends BaseModel implements IdentityInterface
   /**
    * @return \yii\db\ActiveQuery
    */         
-  protected function getUserRoles()
+  public function getUserRoles()
   {
     return $this->hasMany(User_Role::class, ['UserId' => 'id'] );
   } 

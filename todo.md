@@ -3,6 +3,7 @@
 ## v3.0.0-beta
 
 ### Priority: urgent
+- [ ] BUG: Disallow drop of references on search folders
 - [ ] Test anonymous LDAP binding @HU
 
 ### Priority: high
@@ -84,6 +85,7 @@
 - [ ] Remove verbose logging in Drag & Drop
 - [ ] Remove forks from composer.json that have been updated upstream
 - [ ] Move module translations into module https://www.yiiframework.com/doc/guide/2.0/en/tutorial-i18n#module-translation
+- [ ] Move method implementations from AccessController into AccessManager leaving only the action stubs 
 
 ### Testing, CI and distribution
 - [ ] Make Travis ~~great~~ work again
