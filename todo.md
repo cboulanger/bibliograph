@@ -3,11 +3,10 @@
 ## v3.0.0-beta
 
 ### Priority: urgent
-- [x] BUG: Disallow drop of references on search folders
-- [ ] Test anonymous LDAP binding @HU
+- [x] Test anonymous LDAP binding @HU
 
 ### Priority: high
-- [ ] FEAT: Reimplement "In which folders..."
+
 - [ ] FEAT: User::getAllPermissions returns always the highest available set of permissions, regardless of the permissions of the group the current datasource belongs to. Requires rewriting of  `$this->requirePermission` to pass the datasource / datasource name
  
 ### Priority: normal
@@ -24,6 +23,7 @@
 - [ ] FEAT: Implement setup Wizard
 - [ ] FEAT: Allow migrations via permission, not prod/dev-mode
 - [ ] FEAT: Z39.50 Plugin: Preference option to configure timeout 
+- [ ] FEAT: Reimplement "In which folders..."
 
 ### Priority: low
 - [ ] BUG: Remove non-printable chars from Z39.50 import, see also https://github.com/cboulanger/bibliograph/issues/189
