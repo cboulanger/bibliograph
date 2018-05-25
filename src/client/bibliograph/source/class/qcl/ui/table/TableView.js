@@ -767,6 +767,7 @@ qx.Class.define("qcl.ui.table.TableView",
       this.dragDebug("Table drag start with actions " + actions.join(", ") );
       actions.forEach(action => e.addAction(action));
       e.addType(qcl.ui.table.TableView.types.ROWDATA);
+      qx.ui.core.DragDropCursor.getInstance().setVisibility("visible");
     },
   
     /**
