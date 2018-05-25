@@ -28,6 +28,7 @@ use app\schema\BibtexSchema;
 use lib\cql\NaturalLanguageQuery;
 use lib\dialog\Confirm;
 use lib\dialog\Dialog;
+use lib\exceptions\RecordExistsException;
 use lib\exceptions\UserErrorException;
 use lib\Validate;
 use Yii;
@@ -667,7 +668,12 @@ class ReferenceController extends AppController
     /** @var ActiveQuery $query */
     $query = $referenceClass::find()->where(['in', 'id', explode(",",$ids)]);
     $references = $query->all();
-    return $this->move($references, $datasource, $sourceFolder, $targetFolder);
+
+    try {
+      return $this->move($references, $datasource, $sourceFolder, $targetFolder);
+    } catch (RecordExistsException $e) {
+      throw new UserErrorException($e->getMessage());
+    }
   }
 
   /**
@@ -679,6 +685,7 @@ class ReferenceController extends AppController
    * @param Folder $sourceFolder
    * @param Folder $targetFolder
    * @return string "OK"
+   * @throws RecordExistsException
    */
   public function move(
     array $references,
@@ -696,6 +703,15 @@ class ReferenceController extends AppController
       } else {
         throw new \InvalidArgumentException("Invalid reference '$reference'");
       }
+
+      if( $sourceFolder->id === $targetFolder->id ){
+        throw new RecordExistsException(
+          Yii::t('app',"At least one record already exists in folder {name}.",[
+            'name' => $targetFolder->label
+          ])
+        );
+      }
+
       // unlink source folder
       try{
         $sourceFolder->unlink("references", $reference, true);
