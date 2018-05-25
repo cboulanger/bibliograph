@@ -594,10 +594,11 @@ class FolderController extends AppController //implements ITreeController
    * @return void
    * @throws Exception
    */
-  public function setFolderMarkedDeleted(\app\models\Folder $folder, $value)
+  public function setFolderMarkedDeleted(\app\models\Folder $folder, bool $value)
   {
+    Yii::debug("Marking folder $folder->id as " . ($value ? "deleted" : "NOT deleted") );
     // mark folder (un)deleted
-    $folder->markedDeleted = $value;
+    $folder->markedDeleted = (integer) $value;
     try {
       $folder->save();
     } catch (Exception $e) {
@@ -617,10 +618,10 @@ class FolderController extends AppController //implements ITreeController
           continue;
         } else {
           // if it is contained in this folder only,  mark deleted 
-          $reference->markedDeleted = true;
+          $reference->markedDeleted = 1;
         }
       } else {
-        $reference->markedDeleted = false;
+        $reference->markedDeleted = 0;
       }
       try {
         $reference->save();
@@ -658,7 +659,7 @@ class FolderController extends AppController //implements ITreeController
       if( ! $folder ){
         throw new RuntimeException("Invalid parent folder id.");
       }
-      if ($folder->id == $folderId) {
+      if ($folder->id === $folderId) {
         throw new UserErrorException(Yii::t('app', "Parent node cannot be moved on a child node"));
       }
       $id = $folder->parentId;
