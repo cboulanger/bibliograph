@@ -1,6 +1,6 @@
 {
   "name": "bibliograph",
-  "version": "3.0.0-beta.32",
+  "version": "3.0.0-beta.33",
   "description": "Bibliograph is a powerful open source web application for the collaborative collection, editing and publishing of bibliographic data.",
   "main": "",
   "directories": {
@@ -35,7 +35,7 @@
     "dist-test": "bash bin/dist-test.sh",
     "dist-clean": "bash bin/dist-clean.sh",
     "release": "bash bin/dist-clean.sh && npx release-it --preRelease=beta",
-    "release-clean" : "node bin/github-release-clean.js && bash bin/github-tag-clean.sh"
+    "release-clean": "node bin/github-release-clean.js && bash bin/github-tag-clean.sh"
   },
   "author": "",
   "license": "ISC",
