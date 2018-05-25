@@ -75,6 +75,7 @@ msgid "Next year"
 msgstr ""
 
 #: bibliograph/Application.js:187 bibliograph/Application.js:194
+#: bibliograph/Application.js:201
 msgid "Missing server address. Please contact administrator."
 msgstr ""
 
@@ -126,7 +127,7 @@ msgstr ""
 msgid "Please wait ..."
 msgstr ""
 
-#: bibliograph/Commands.js:84
+#: bibliograph/Commands.js:84 bibliograph/Commands.js:85
 msgid "Logging out ..."
 msgstr ""
 
@@ -134,11 +135,11 @@ msgstr ""
 msgid "You don't have access to any datasource on the server."
 msgstr ""
 
-#: bibliograph/Commands.js:106
+#: bibliograph/Commands.js:106 bibliograph/Commands.js:107
 msgid "Cannot open window. Please disable the popup-blocker of your browser for this website."
 msgstr ""
 
-#: bibliograph/Commands.js:129
+#: bibliograph/Commands.js:129 bibliograph/Commands.js:130
 msgid "Retrieving user data..."
 msgstr ""
 

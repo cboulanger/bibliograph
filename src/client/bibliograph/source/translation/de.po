@@ -54,7 +54,7 @@ msgstr "Anmeldung ..."
 msgid "Please wait ..."
 msgstr "Bitte warten ..."
 
-#: bibliograph/Commands.js:84
+#: bibliograph/Commands.js:84 bibliograph/Commands.js:85
 msgid "Logging out ..."
 msgstr "Abmelden ..."
 
@@ -62,11 +62,11 @@ msgstr "Abmelden ..."
 msgid "You don't have access to any datasource. Reloading the page might help."
 msgstr "Sie haben im Moment keinen Zugang zu Datenbanken. Bitte laden sie die Seite erneut."
 
-#: bibliograph/Commands.js:106
+#: bibliograph/Commands.js:106 bibliograph/Commands.js:107
 msgid "Cannot open window. Please disable the popup-blocker of your browser for this website."
 msgstr "Inhalte können nicht angezeigt werden, weil Ihr Browser Popup-Fenster unterdrückt. Bitte deaktivieren Sie den Popup-Blocker."
 
-#: bibliograph/Commands.js:129
+#: bibliograph/Commands.js:129 bibliograph/Commands.js:130
 msgid "Retrieving user data..."
 msgstr "Lade Benutzerdaten ..."
 
@@ -746,6 +746,7 @@ msgid "Search Help Window"
 msgstr "Hilfe für die Suche"
 
 #: bibliograph/Application.js:187 bibliograph/Application.js:194
+#: bibliograph/Application.js:201
 msgid "Missing server address. Please contact administrator."
 msgstr "Die Serveradresse fehlt. Bitte kontaktieren Sie den/die Administrator/in."
 
