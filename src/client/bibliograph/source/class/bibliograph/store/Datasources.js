@@ -40,9 +40,8 @@ qx.Class.define("bibliograph.store.Datasources",
     {
       // call overriddden method
       this.base(arguments, data, old);
-
       let app = this.getApplication();    
-      var datasourceCount = data.length;
+      var datasourceCount = qx.lang.Type.isObject(data) ? data.length : 0;
       this.info( "User has access to " + datasourceCount + " datasources." );
       // show datasource button depending on whether there is a choice
       app.getWidgetById("app/toolbar/buttons/datasource").setVisibility(
