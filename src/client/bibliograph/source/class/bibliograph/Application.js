@@ -101,6 +101,13 @@ qx.Class.define("bibliograph.Application",
      COMPONENTS
     ---------------------------------------------------------------------------
     */
+  
+    /**
+     * @return {qcl.access.User}
+     */
+   getActiveUser : function(){
+     return this.getAccessManager().getActiveUser();
+   },
 
     /**
      * @return {bibliograph.AccessManager}

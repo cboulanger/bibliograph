@@ -80,6 +80,7 @@ qx.Class.define("bibliograph.Commands",
      */
     logout : async function( data, app )
     {
+      if(!app) app = this.getApplication();
       app.createPopup();
       app.showPopup( this.tr("Logging out ...") );
       // remove state
