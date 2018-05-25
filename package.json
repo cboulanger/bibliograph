@@ -34,7 +34,8 @@
     "dist-create": "bash bin/dist-clean.sh && bash bin/dist-build.sh $1",
     "dist-test": "bash bin/dist-test.sh",
     "dist-clean": "bash bin/dist-clean.sh",
-    "release": "bash bin/dist-clean.sh && npx release-it --preRelease=beta"
+    "release": "bash bin/dist-clean.sh && npx release-it --preRelease=beta",
+    "release-clean" : "node bin/github-release-clean.js && bash bin/github-tag-clean.sh"
   },
   "author": "",
   "license": "ISC",

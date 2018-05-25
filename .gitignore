@@ -3,6 +3,7 @@
 .c9
 .vscode
 .idea
+.env
 
 # npm
 npm-debug.log
