@@ -82,23 +82,22 @@ transport = "sendmail"
 # errors_subject = "Bibliograph error at domain.org"
 
 [ldap]
-# whether ldap authentication is enabled, values: yes/no
+# Whether ldap authentication is enabled, values: yes/no
 enabled = false
 
-# whether to use ldap groups. values yes/no
+# Whether to use ldap groups. values yes/no
 use_groups = true
 
-# the host of the ldap server
+# The host of the ldap server
 host = "ldap.example.com"
 
-# the port listening for ldap connections
+# The port listening for ldap connections
 port = 389
 
-# the dn of user that can bind to the LDAP server to do searches
-bind_dn = "cn=read-only-admin"
-
-# the password of that user
-bind_password = "password"
+# The dn/password of a user that can bind to the LDAP server to do searches.
+# Not needed if anonymous binding is allowed.
+bind_dn = ""
+bind_password = ""
 
 # base dn to which the user name is added for authentication
 user_base_dn = "ou=people,dc=example,dc=com"
