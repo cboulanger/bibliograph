@@ -266,7 +266,7 @@ qx.Class.define("qcl.data.store.JsonRpcStore",
           // fire 'loaded' event only if we created a model
           this.fireDataEvent("loaded", model);
         }
-        if (typeof finalCallback == "function") {
+        if (typeof finalCallback === "function") {
           // execute outside of the current stack so callback errors do not break the current execution context
           qx.lang.Function.delay(finalCallback, 0, context, data);
         }

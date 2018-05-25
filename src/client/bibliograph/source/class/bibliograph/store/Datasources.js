@@ -40,16 +40,18 @@ qx.Class.define("bibliograph.store.Datasources",
     {
       // call overriddden method
       this.base(arguments, data, old);
+      
       let app = this.getApplication();    
-      var datasourceCount = qx.lang.Type.isObject(data) ? data.length : 0;
+      let datasourceCount = qx.lang.Type.isObject(data) ? data.length : 0;
       this.info( "User has access to " + datasourceCount + " datasources." );
+      
       // show datasource button depending on whether there is a choice
       app.getWidgetById("app/toolbar/buttons/datasource").setVisibility(
         datasourceCount > 1 ? "visible" : "excluded"
       );      
 
       // if we have no datasource loaded, no access
-      if (datasourceCount == 0) {
+      if (datasourceCount === 0) {
         //if( !this.getApplication().getActiveUser().isAnonymous()){
           this.getApplication().getCommands().logout();
         //}
@@ -58,24 +60,25 @@ qx.Class.define("bibliograph.store.Datasources",
       }
 
       // if there is one saved in the application state, and we have access, use this
-      var datasource = app.getStateManager().getState("datasource");
+      let datasource = app.getStateManager().getState("datasource");
       let found=false;
-      data.forEach((item)=>{ if(item.getValue()==datasource) found=item;});
-      if ( datasource && found)
-      {
+      data.forEach((item)=>{
+        if (item.getValue() === datasource) found=item;
+      });
+      if ( datasource && found) {
         app.getStateManager().updateState(); 
         return;
       }
 
       // if we have access to exactly one datasource, load this one
-      if (datasourceCount == 1) {
-        var item = data.getItem(0);
+      if (datasourceCount === 1) {
+        let item = data.getItem(0);
         app.setDatasource(item.getValue());
         app.getStateManager().updateState();
       } else {
         // else, we have a choice of datasource
         app.setDatasourceLabel(app.getConfigManager().getKey("application.title"));
-        var dsWin = app.getWidgetById("app/windows/datasources");
+        let dsWin = app.getWidgetById("app/windows/datasources");
         dsWin.open();
       }
     },
