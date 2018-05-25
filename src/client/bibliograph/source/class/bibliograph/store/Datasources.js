@@ -50,7 +50,7 @@ qx.Class.define("bibliograph.store.Datasources",
 
       // if we have no datasource loaded, no access
       if (datasourceCount == 0) {
-        dialog.Dialog.alert(app.tr("You don't have access to any datasource on the server."));
+        dialog.Dialog.alert(app.tr("You don't have access to any datasource. Reloading the page might help."));
         return;
       }
 

@@ -59,8 +59,8 @@ msgid "Logging out ..."
 msgstr "Abmelden ..."
 
 #
-msgid "You don't have access to any datasource on the server."
-msgstr "Sie haben keinen Zugang zu Datenbanken auf diesem Server."
+msgid "You don't have access to any datasource. Reloading the page might help."
+msgstr "Sie haben im Moment keinen Zugang zu Datenbanken. Bitte laden sie die Seite erneut."
 
 #: bibliograph/Commands.js:106
 msgid "Cannot open window. Please disable the popup-blocker of your browser for this website."
