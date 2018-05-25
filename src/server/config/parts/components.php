@@ -56,19 +56,6 @@ $components = [
   ],
   // Cache
   'cache' => [ 'class' => yii\caching\FileCache::class ],
-  // Mailer
-  'mailer' => [
-    'class' => yii\swiftmailer\Mailer::class,
-    'transport' => isset($ini['email']['transport']) and $ini['email']['transport'] === "smtp"
-      ? [
-        'class' => 'Swift_SmtpTransport',
-        'host'        => $ini['email']['host'],
-        'username'    => $ini['email']['username'],
-        'password'    => $ini['email']['password'],
-        'port'        => $ini['email']['port'],
-        'encryption'  => $ini['email']['encryption'],
-      ] : null,
-  ],
 
   /*
    * Composer components
@@ -119,6 +106,22 @@ $components = [
     'class' => \lib\channel\Component::class
   ]
 ];
+
+// Mailer
+if (isset($ini['email']['transport'])) {
+  $components['mailer']['class'] = yii\swiftmailer\Mailer::class;
+  if ($ini['email']['transport'] === "smtp"){
+    $components['mailer']['transport'] = [
+      'class'       => 'Swift_SmtpTransport',
+      'host'        => $ini['email']['host'] ?? null,
+      'username'    => $ini['email']['username'] ?? null,
+      'password'    => $ini['email']['password'] ?? null,
+      'port'        => $ini['email']['port'] ?? null,
+      'encryption'  => $ini['email']['encryption'] ?? null,
+    ];
+  }
+}
+
 return array_merge(
   // merge db components
   require('db.php'),

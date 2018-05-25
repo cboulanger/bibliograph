@@ -39,6 +39,19 @@ use lib\channel\Channel;
  */
 class TestController extends AppController
 {
+  /**
+   * @inheritDoc
+   *
+   * @var array
+   */
+  protected $noAuthActions = ["throw-error"];
+
+  public function actionThrowError()
+  {
+    throw new \InvalidArgumentException("Testing invalid argument exception");
+  }
+
+
   public function actionError()
   {
     $exception = Yii::$app->errorHandler->exception;
