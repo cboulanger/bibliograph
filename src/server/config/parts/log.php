@@ -26,10 +26,11 @@ $log_config = [
 $ini = require('ini.php');
 $email = $ini['email'];
 if( isset($email['errors_from']) and isset($email['errors_to']) and isset($email['errors_subject']) ){
-  $log_config['targets'][] = [
+  $log_config['targets']['mail'] = [
     'class' => \yii\log\EmailTarget::class,
     'mailer' => 'mailer',
     'levels' => ['error'],
+    'except' => ['jsonrpc','yii\web\HttpException*'],
     'message' => [
       'from' => [$email['errors_from']],
       'to' => [$email['errors_to']],
