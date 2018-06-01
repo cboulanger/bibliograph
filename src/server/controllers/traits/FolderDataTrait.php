@@ -170,4 +170,35 @@ trait FolderDataTrait
       "nodeData"   => $this->getNodeData( $datasource, $folder)
     ];
   }
+
+  /**
+   * Given a folder, returns the query data that would be sent by the client to retrieve
+   * reference data
+   * @todo This has to be rewritten in its entirety
+   * @param Folder $folder
+   * @param string $modelType
+   * @param string $properties
+   * @return object
+   */
+  public function createClientQueryData(Folder $folder, string $modelType, $properties="*")
+  {
+    $clientQueryData = [
+      "properties"  => $properties,
+      "datasource"  => $folder::getDatasource(),
+      "modelType"   => $modelType,
+    ];
+    if( $folder->searchfolder && $folder->query !== "" ){
+      $clientQueryData['query'] = [
+        'cql' => $folder->query
+      ];
+    } else {
+      $clientQueryData['query'] = [
+        'relation' => [
+          'name' => 'folder',
+          'id'   => $folder->id
+        ]
+      ];
+    }
+    return (object) $clientQueryData;
+  }
 }

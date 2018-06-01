@@ -22,13 +22,13 @@ namespace app\controllers;
 
 use Adldap\Models\ModelNotFoundException;
 use app\controllers\dto\AuthResult;
-use app\models\User;
 use app\models\Session;
-use lib\exceptions\UserErrorException;
+use app\models\User;
 use InvalidArgumentException;
-use \JsonRpc2\Exception;
-use yii\db\Expression;
+use JsonRpc2\Exception;
+use lib\exceptions\UserErrorException;
 use Yii;
+use yii\db\Expression;
 
 /**
  * The class used for authentication of users.
@@ -44,7 +44,7 @@ class AccessController extends AppController
    *
    * @var array
    */
-  protected $noAuthActions = ["authenticate","ldap-support"];
+  protected $noAuthActions = ["authenticate", "ldap-support"];
 
   //-------------------------------------------------------------
   // Actions / JSONRPC API
@@ -436,6 +436,21 @@ class AccessController extends AppController
         }
       } 
     }
+  }
+
+  /**
+   * Returns information on users which are/recently have been online
+   * @throws Exception
+   */
+  public function actionUsersOnline()
+  {
+    $this->requirePermission("access.manage");
+    return User::find()
+      ->select( 'namedId')
+      ->where( ['online' => 1])
+      ->andWhere(['anonymous'=> 0])
+      ->asArray()
+      ->all();
   }
 
   //-------------------------------------------------------------

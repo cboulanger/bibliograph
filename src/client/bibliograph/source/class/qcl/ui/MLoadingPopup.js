@@ -39,7 +39,7 @@ qx.Mixin.define("qcl.ui.MLoadingPopup", {
         this.error("Invalid argument.");
       }
       if (this.__popup instanceof qx.ui.popup.Popup){
-        this.log("Popup already created.");
+        this.warn("Popup already created.");
         return;
       }
       this.__popup = new qx.ui.popup.Popup(new qx.ui.layout.Canvas()).set({

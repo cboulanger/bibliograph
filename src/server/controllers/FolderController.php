@@ -36,6 +36,7 @@ class FolderController extends AppController //implements ITreeController
 {
   use traits\FormTrait;
   use traits\FolderDataTrait;
+  use traits\TableTrait;
 
   /*
   ---------------------------------------------------------------------------
@@ -578,7 +579,11 @@ class FolderController extends AppController //implements ITreeController
       }
     }
     // mark references as deleted
-    $this->setFolderMarkedDeleted($folder, true);
+    try {
+      $this->setFolderMarkedDeleted($folder, true);
+    } catch (Exception $e) {
+      throw new UserErrorException($e->getMessage());
+    }
     return "OK";
   }
 
@@ -684,6 +689,67 @@ class FolderController extends AppController //implements ITreeController
     }
     return "OK";
   }
+
+  /**
+   * Copies the given folder into the parent folder including all references contained. If copying within the #
+   * same datasource, this creates a link, otherwise new references are created.
+   * @param string $from_datasource
+   * @param int $from_folderId
+   * @param string $to_datasource
+   * @param int $to_parentId
+   * @throws \JsonRpc2\Exception
+   */
+  public function actionCopy(string $from_datasource, int $from_folderId, string $to_datasource, int $to_parentId ){
+    $this->requirePermission("folder.move"); // Todo: needs its own permission
+
+    $from_folder = Folder::findOne($from_folderId);
+    if( ! $from_folderId ){
+      throw new \InvalidArgumentException("Source folder #$from_folderId does not exist");
+    }
+    $from_folder::setDatasource($from_datasource);
+    $to_parent = Folder::findOne($to_parentId);
+    if( ! $to_parentId ){
+      throw new \InvalidArgumentException("Target parent folder #$to_parentId does not exist");
+    }
+    $to_parent::setDatasource($to_datasource);
+
+    // create target folder
+    $to_folder = new Folder($from_folder->getAttributes());
+    $to_folder->parentId = $to_parentId;
+    $to_folder::setDatasource($to_datasource);
+    try {
+      $to_folder->save();
+    } catch (Exception $e) {
+      throw new UserErrorException($e->getMessage());
+    }
+
+    // copy references
+    $from_modelClass = $this->getModelClass($from_datasource, "reference");
+    $to_modelClass   = $this->getModelClass($to_datasource, "reference");
+    $clientQueryData = $this->createClientQueryData($from_folder,"reference");
+    $isSameDatasource = $from_datasource === $to_datasource;
+    /** @var Reference[] $references */
+    $references = $this->transformClientQuery( $clientQueryData, $from_modelClass)->all();
+    foreach ($references as $reference) {
+      if( $isSameDatasource ){
+        $to_folder->link("references", $reference);
+      } else {
+        /** @var Reference $copy */
+        $copy = new $to_modelClass();
+        $copy->setAttributes($reference->getAttributes(
+          array_intersect($copy->attributes(), $reference->attributes()) // todo: might be wasteful to compute this in each iteration
+        ));
+        try {
+          $copy->save();
+          $to_folder->link("references", $copy);
+        } catch (\Throwable $e) {
+          throw new UserErrorException($e->getMessage());
+        }
+      }
+    }
+    return sprintf("%s references copied into new folder '%s'",  count($references), $to_folder->label);
+  }
+
 
   /**
    * Changes the position of a folder within its siblings

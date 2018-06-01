@@ -34,6 +34,25 @@ qx.Class.define("bibliograph.Application",
      */
     messages: {
       TERMINATE : "app.terminate"
+    },
+  
+    /**
+     * Mime types
+     */
+    mime_types : {
+      folder : "x-bibliograph/folderdata"
+    },
+  
+    /**
+     * Configuration keys
+      */
+    config_keys : {
+      app : {
+        clipboard : {
+          type : "app.clipboard.content-type",
+          content : "app.clipboard.content",
+        }
+      }
     }
   },
   

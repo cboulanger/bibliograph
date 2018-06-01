@@ -90,7 +90,9 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
       add_child_folder : {
         depends: "folder.add",
         updateEvent : "changeSelectedNode",
-        condition : tree => tree.getSelectedNode() !== null && tree.getSelectedNode().data.type !== "virtual"
+        condition : tree =>
+          tree.getSelectedNode() !== null &&
+          tree.getSelectedNode().data.type !== "virtual"
       },
       save_search : {
         depends: "folder.add",
@@ -111,7 +113,9 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
       edit_folder : {
         depends : "folder.edit",
         updateEvent : "changeSelectedNode",
-        condition : tree => tree.getSelectedNode() !== null && tree.getSelectedNode().data.type !== "virtual"
+        condition : tree =>
+          tree.getSelectedNode() !== null &&
+          tree.getSelectedNode().data.type !== "virtual"
       },
       move_any_folder: {
         aliasOf : "folder.move"
@@ -125,19 +129,37 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
           tree.getSelectedNode().data.type !== "virtual" &&
           tree.getSelectedNode().data.type !== "trash"
       },
+      copy_folder : {
+        depends : "folder.move",
+        updateEvent : "changeSelectedNode",
+        condition : tree =>
+          tree.getSelectedNode() !== null &&
+          tree.getSelectedNode().data.type !== "virtual"
+      },
+      paste_folder : {
+        depends : "folder.move",
+        updateEvent : "changeSelectedNode",
+        condition : tree =>
+          tree.getSelectedNode() !== null &&
+          tree.getSelectedNode().data.type !== "virtual" &&
+          bibliograph.ConfigManager.getInstance()
+            .getKey(bibliograph.Application.config_keys.app.clipboard.type) === bibliograph.Application.mime_types.folder
+      },
       change_position : {
         depends : "folder.move",
         updateEvent : "changeSelectedNode",
-        condition : tree => tree.getSelectedNode() !== null && tree.getSelectedNode().data.type !== "virtual"
+        condition : tree =>
+          tree.getSelectedNode() !== null &&
+          tree.getSelectedNode().data.type !== "virtual"
       },
       empty_trash : {
         depends : "trash.empty",
         updateEvent : "changeSelectedNode",
-        condition : tree => tree.getSelectedNode() && tree.getSelectedNode().data.type === "trash"
+        condition : tree =>
+          tree.getSelectedNode() &&
+          tree.getSelectedNode().data.type === "trash"
       },
     },
-  
-   
     
     //-------------------------------------------------------------------------
     //  USER INTERFACE
@@ -215,6 +237,24 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
       this.getPermission("folder.move").bind("state", button, "visibility", {
         converter: bibliograph.Utils.bool2visibility
       });
+      return button;
+    },
+  
+    createCopyButton : function()
+    {
+      let button = new qx.ui.menu.Button(this.tr("Copy folder to Clipboard..."));
+      button.addListener("execute", ()=> this._copyFolderDialog() );
+      this.bindVisibility(this.permissions.move_any_folder, button);
+      this.bindEnabled(this.permissions.copy_folder, button)
+      return button;
+    },
+  
+    createPasteButton : function()
+    {
+      let button = new qx.ui.menu.Button(this.tr("Insert folder from Clipboard..."));
+      button.addListener("execute", ()=> this._insertFolderDialog() );
+      this.bindVisibility(this.permissions.move_any_folder, button);
+      this.bindEnabled(this.permissions.paste_folder, button)
       return button;
     },
   
@@ -470,6 +510,38 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
         }
       });
     },
+    
+    _copyFolderDialog : function()
+    {
+      let configManager = this.getApplication().getConfigManager();
+      configManager.setKey(
+        bibliograph.Application.config_keys.app.clipboard.type,
+        bibliograph.Application.mime_types.folder
+      );
+      configManager.setKey(
+        bibliograph.Application.config_keys.app.clipboard.content,
+        JSON.stringify(this.getSelectedNode())
+      );
+    },
+    
+    _insertFolderDialog : function()
+    {
+      let configManager = this.getApplication().getConfigManager();
+      let folderdata = JSON.parse(configManager.getKey(bibliograph.Application.config_keys.app.clipboard.content));
+      let message = this.tr(
+        "Do you want to insert the folder '%1' from datasource '%2'?",
+        folderdata.label, folderdata.data.datasource
+      );
+      dialog.Dialog.confirm(message).promise().then(result => {
+        if (result === true) {
+          this._isWaiting(true);
+          rpc.Folder
+            .copy(folderdata.data.datasource , folderdata.data.id, this.getDatasource(), this.getNodeId() )
+            .then(() => this._isWaiting(false))
+        }
+      });
+    },
+    
     
     /**
      * Shows dialog asking whether the user wants to empty the trash

@@ -42,7 +42,7 @@ qx.Class.define("qcl.application.ClipboardManager",
     this.base(arguments);
     this.__data = {};
     this.__actions = {};
-    var vActions = [ "move", "copy", "alias", "nodrop" ];
+    let vActions = [ "move", "copy", "alias", "nodrop" ];
   },
 
   /*
@@ -280,18 +280,17 @@ qx.Class.define("qcl.application.ClipboardManager",
     				);
     		}
          // we could successfully enable the privilege
-    	   var clip = Components.classes['@mozilla.org/widget/clipboard;1'].createInstance(Components.interfaces.nsIClipboard);
+    	   let clip = Components.classes['@mozilla.org/widget/clipboard;1'].createInstance(Components.interfaces.nsIClipboard);
     	   if (!clip) return;
-    	   var trans = Components.classes['@mozilla.org/widget/transferable;1'].createInstance(Components.interfaces.nsITransferable);
+    	   let trans = Components.classes['@mozilla.org/widget/transferable;1'].createInstance(Components.interfaces.nsITransferable);
     	   if (!trans) return;
     	   trans.addDataFlavor(flavor);
-    	   var str = new Object();
-    	   var len = new Object();
-    	   var str = Components.classes["@mozilla.org/supports-string;1"].createInstance(Components.interfaces.nsISupportsString);
-    	   var copytext=text;
+    	   let len = {};
+    	   let str = Components.classes["@mozilla.org/supports-string;1"].createInstance(Components.interfaces.nsISupportsString);
+    	   let copytext=text;
     	   str.data=copytext;
     	   trans.setTransferData(flavor,str,copytext.length*2);
-    	   var clipid=Components.interfaces.nsIClipboard;
+    	   let clipid= Components.interfaces.nsIClipboard;
     	   if (!clip) return false;
     	   clip.setData(trans,null,clipid.kGlobalClipboard);
     	   return true;
