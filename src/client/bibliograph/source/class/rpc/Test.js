@@ -12,6 +12,14 @@ qx.Class.define("rpc.Test",
   statics: {
     /**
      * @return {Promise}
+     * @see TestController::actionThrowError
+     */
+    throwError : function(){
+      return qx.core.Init.getApplication().getRpcClient("test").send("throw-error", []);
+    },
+
+    /**
+     * @return {Promise}
      * @see TestController::actionError
      */
     error : function(){

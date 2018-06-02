@@ -1,7 +1,8 @@
 /** FILE IS GENERATED, ANY CHANGES WILL BE OVERWRITTEN */
 
 /**
- * Changes the position of a folder within its siblings
+ * Returns the form layout for the given reference type and
+ * datasource
  * 
  * @see app\controllers\HelpController
  * @file HelpController.php

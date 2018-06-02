@@ -27,55 +27,6 @@ qx.Class.define("rpc.Reference",
     },
 
     /**
-     * Returns count of rows that will be retrieved when executing the current
-     * query.
-     * param object $queryData data to construct the query. Needs at least the
-     * a string property "datasource" with the name of datasource and a property
-     * "modelType" with the type of the model.
-     * @param clientQueryData 
-     * @return {Promise}
-     * @see ReferenceController::actionRowCount
-     */
-    rowCount : function(clientQueryData){
-      // @todo Document type for 'clientQueryData' in app\controllers\ReferenceController::actionRowCount
-      return qx.core.Init.getApplication().getRpcClient("reference").send("row-count", [clientQueryData]);
-    },
-
-    /**
-     * Returns row data executing a constructed query
-     * 
-     * @param firstRow {Number} First row of queried data
-     * @param lastRow {Number} Last row of queried data
-     * @param requestId {Number} Request id
-     * param object $queryData Data to construct the query
-     * @param clientQueryData 
-     * @return {Promise}
-     * @see ReferenceController::actionRowData
-     */
-    rowData : function(firstRow, lastRow, requestId, clientQueryData){
-      qx.core.Assert.assertNumber(firstRow);
-      qx.core.Assert.assertNumber(lastRow);
-      qx.core.Assert.assertNumber(requestId);
-      // @todo Document type for 'clientQueryData' in app\controllers\ReferenceController::actionRowData
-      return qx.core.Init.getApplication().getRpcClient("reference").send("row-data", [firstRow, lastRow, requestId, clientQueryData]);
-    },
-
-    /**
-     * Returns the form layout for the given reference type and
-     * datasource
-     * 
-     * @param datasource 
-     * @param reftype 
-     * @return {Promise}
-     * @see ReferenceController::actionFormLayout
-     */
-    formLayout : function(datasource, reftype){
-      // @todo Document type for 'datasource' in app\controllers\ReferenceController::actionFormLayout
-      // @todo Document type for 'reftype' in app\controllers\ReferenceController::actionFormLayout
-      return qx.core.Init.getApplication().getRpcClient("reference").send("form-layout", [datasource, reftype]);
-    },
-
-    /**
      * Returns data for the reference type select box
      * 
      * @param datasource 
@@ -150,7 +101,8 @@ qx.Class.define("rpc.Reference",
     },
 
     /**
-     * Returns data for a ComboBox widget.
+     * Returns distinct values for a field, sorted alphatbetically, in a format suitable
+     * for a ComboBox widget.
      * 
      * @param datasource 
      * @param field 
@@ -201,17 +153,15 @@ qx.Class.define("rpc.Reference",
      * 
      * @param confirmed 
      * @param datasource {String} 
-     * @param folderId {Number} 
      * @param ids {String} 
      * @return {Promise}
      * @see ReferenceController::actionConfirmMoveToTrash
      */
-    confirmMoveToTrash : function(confirmed, datasource, folderId, ids){
+    confirmMoveToTrash : function(confirmed, datasource, ids){
       // @todo Document type for 'confirmed' in app\controllers\ReferenceController::actionConfirmMoveToTrash
       qx.core.Assert.assertString(datasource);
-      qx.core.Assert.assertNumber(folderId);
       qx.core.Assert.assertString(ids);
-      return qx.core.Init.getApplication().getRpcClient("reference").send("confirm-move-to-trash", [confirmed, datasource, folderId, ids]);
+      return qx.core.Init.getApplication().getRpcClient("reference").send("confirm-move-to-trash", [confirmed, datasource, ids]);
     },
 
     /**
@@ -316,6 +266,73 @@ qx.Class.define("rpc.Reference",
       qx.core.Assert.assertString(datasource);
       qx.core.Assert.assertNumber(referenceId);
       return qx.core.Init.getApplication().getRpcClient("reference").send("duplicates-data", [datasource, referenceId]);
+    },
+
+    /**
+     * 
+     * 
+     * @param input 
+     * @param inputPosition 
+     * @param tokens 
+     * @param datasourceName 
+     * @return {Promise}
+     * @see ReferenceController::actionTokenizeQuery
+     */
+    tokenizeQuery : function(input, inputPosition, tokens, datasourceName){
+      // @todo Document type for 'input' in app\controllers\ReferenceController::actionTokenizeQuery
+      // @todo Document type for 'inputPosition' in app\controllers\ReferenceController::actionTokenizeQuery
+      // @todo Document type for 'tokens' in app\controllers\ReferenceController::actionTokenizeQuery
+      // @todo Document type for 'datasourceName' in app\controllers\ReferenceController::actionTokenizeQuery
+      return qx.core.Init.getApplication().getRpcClient("reference").send("tokenize-query", [input, inputPosition, tokens, datasourceName]);
+    },
+
+    /**
+     * Returns count of rows that will be retrieved when executing the current
+     * query.
+     * param object $queryData data to construct the query. Needs at least the
+     * a string property "datasource" with the name of datasource and a property
+     * "modelType" with the type of the model.
+     * @param clientQueryData 
+     * @return {Promise}
+     * @see ReferenceController::actionRowCount
+     */
+    rowCount : function(clientQueryData){
+      // @todo Document type for 'clientQueryData' in app\controllers\ReferenceController::actionRowCount
+      return qx.core.Init.getApplication().getRpcClient("reference").send("row-count", [clientQueryData]);
+    },
+
+    /**
+     * Returns row data executing a constructed query
+     * 
+     * @param firstRow {Number} First row of queried data
+     * @param lastRow {Number} Last row of queried data
+     * @param requestId {Number} Request id
+     * param object $queryData Data to construct the query
+     * @param clientQueryData 
+     * @return {Promise}
+     * @see ReferenceController::actionRowData
+     */
+    rowData : function(firstRow, lastRow, requestId, clientQueryData){
+      qx.core.Assert.assertNumber(firstRow);
+      qx.core.Assert.assertNumber(lastRow);
+      qx.core.Assert.assertNumber(requestId);
+      // @todo Document type for 'clientQueryData' in app\controllers\ReferenceController::actionRowData
+      return qx.core.Init.getApplication().getRpcClient("reference").send("row-data", [firstRow, lastRow, requestId, clientQueryData]);
+    },
+
+    /**
+     * Returns the form layout for the given reference type and
+     * datasource
+     * 
+     * @param datasource 
+     * @param reftype 
+     * @return {Promise}
+     * @see ReferenceController::actionFormLayout
+     */
+    formLayout : function(datasource, reftype){
+      // @todo Document type for 'datasource' in app\controllers\ReferenceController::actionFormLayout
+      // @todo Document type for 'reftype' in app\controllers\ReferenceController::actionFormLayout
+      return qx.core.Init.getApplication().getRpcClient("reference").send("form-layout", [datasource, reftype]);
     }
   }
 });

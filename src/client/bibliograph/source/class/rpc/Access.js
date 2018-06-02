@@ -11,22 +11,6 @@ qx.Class.define("rpc.Access",
   type: 'static',
   statics: {
     /**
-     * Registers a new user.
-     * 
-     * @param username {String} 
-     * @param password {String} 
-     * @param data {Array} Optional user data
-     * @return {Promise}
-     * @see AccessController::actionRegister
-     */
-    register : function(username, password, data){
-      qx.core.Assert.assertString(username);
-      qx.core.Assert.assertString(password);
-      qx.core.Assert.assertArray(data);
-      return qx.core.Init.getApplication().getRpcClient("access").send("register", [username, password, data]);
-    },
-
-    /**
      * Given a username, return a string consisting of a random hash and the salt
      * used to hash the password of that user, concatenated by "|"
      * 
@@ -50,8 +34,7 @@ qx.Class.define("rpc.Access",
     },
 
     /**
-     * Identifies the current user, either by a token, a username/password, or as a
-     * anonymous guest.
+     * Exposes {@see AccessController::authenticate} as a controller action
      * 
      * @param first {String|null} Either a token (then the second param must be null), a username (then the seconde
      * param must be the password, or null, then the user logs in anonymously
@@ -113,6 +96,16 @@ qx.Class.define("rpc.Access",
      */
     count : function(){
       return qx.core.Init.getApplication().getRpcClient("access").send("count", []);
+    },
+
+    /**
+     * Returns information on users which are/recently have been online
+     * 
+     * @return {Promise}
+     * @see AccessController::actionUsersOnline
+     */
+    usersOnline : function(){
+      return qx.core.Init.getApplication().getRpcClient("access").send("users-online", []);
     }
   }
 });

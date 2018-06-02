@@ -64,28 +64,6 @@ qx.Class.define("rpc.AccessConfig",
     },
 
     /**
-     * 
-     * 
-     * @return {Promise}
-     * @see AccessConfigController::actionCreateDatasourceDialog
-     */
-    createDatasourceDialog : function(){
-      return qx.core.Init.getApplication().getRpcClient("access-config").send("create-datasource-dialog", []);
-    },
-
-    /**
-     * 
-     * 
-     * @param formData 
-     * @return {Promise}
-     * @see AccessConfigController::actionCreateDatasourceHandler
-     */
-    createDatasourceHandler : function(formData){
-      // @todo Document type for 'formData' in app\controllers\AccessConfigController::actionCreateDatasourceHandler
-      return qx.core.Init.getApplication().getRpcClient("access-config").send("create-datasource-handler", [formData]);
-    },
-
-    /**
      * Add an empty model record. When creating a datasource,
      * a default bibliograph datasource is created.
      * Creates the form editor
@@ -154,14 +132,14 @@ qx.Class.define("rpc.AccessConfig",
     /**
      * Delete a datasource
      * 
-     * @param doDeleteModelData 
-     * @param namedId 
+     * @param doDeleteModelData {Boolean} 
+     * @param namedId {String} 
      * @return {Promise}
      * @see AccessConfigController::actionDeleteDatasource
      */
     deleteDatasource : function(doDeleteModelData, namedId){
-      // @todo Document type for 'doDeleteModelData' in app\controllers\AccessConfigController::actionDeleteDatasource
-      // @todo Document type for 'namedId' in app\controllers\AccessConfigController::actionDeleteDatasource
+      qx.core.Assert.assertBoolean(doDeleteModelData);
+      qx.core.Assert.assertString(namedId);
       return qx.core.Init.getApplication().getRpcClient("access-config").send("delete-datasource", [doDeleteModelData, namedId]);
     },
 
@@ -218,6 +196,28 @@ qx.Class.define("rpc.AccessConfig",
     addUser : function(data){
       // @todo Document type for 'data' in app\controllers\AccessConfigController::actionAddUser
       return qx.core.Init.getApplication().getRpcClient("access-config").send("add-user", [data]);
+    },
+
+    /**
+     * Creates a new datasource, allowing the user to choose the schema
+     * 
+     * @return {Promise}
+     * @see AccessConfigController::actionCreateDatasourceDialog
+     */
+    createDatasourceDialog : function(){
+      return qx.core.Init.getApplication().getRpcClient("access-config").send("create-datasource-dialog", []);
+    },
+
+    /**
+     * 
+     * 
+     * @param formData 
+     * @return {Promise}
+     * @see AccessConfigController::actionCreateDatasourceHandler
+     */
+    createDatasourceHandler : function(formData){
+      // @todo Document type for 'formData' in app\controllers\AccessConfigController::actionCreateDatasourceHandler
+      return qx.core.Init.getApplication().getRpcClient("access-config").send("create-datasource-handler", [formData]);
     },
 
     /**

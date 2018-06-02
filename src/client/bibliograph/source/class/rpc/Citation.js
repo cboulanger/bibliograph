@@ -1,7 +1,7 @@
 /** FILE IS GENERATED, ANY CHANGES WILL BE OVERWRITTEN */
 
 /**
- * The controller for PubSub communication
+ * Class CitationController
  * 
  * @see app\controllers\CitationController
  * @file CitationController.php
