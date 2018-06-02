@@ -2,6 +2,9 @@
 
 namespace app\models;
 
+use aracoool\uuid\Uuid;
+use aracoool\uuid\UuidBehavior;
+use aracoool\uuid\UuidValidator;
 use lib\models\BaseModel;
 use Yii;
 
@@ -59,6 +62,7 @@ use Yii;
  * @property string $hash
  * @property integer $markedDeleted
  * @property integer $attachments
+ * @property string $uuid
  */
 class Reference extends BaseModel
 {
@@ -87,7 +91,24 @@ class Reference extends BaseModel
       [['series'], 'string', 'max' => 200],
       [['translator'], 'string', 'max' => 100],
       [['hash'], 'string', 'max' => 40],
+      ['uuid', UuidValidator::class]
     ];
+  }
+
+  /**
+   * Class behaviours
+   * @return array
+   */
+  public function behaviors()
+  {
+    $behaviours = parent::behaviors();
+    $behaviours[] = [
+      'class'   => UuidBehavior::class,
+      'version' => Uuid::V4,
+      'defaultAttribute'        => 'uuid',
+      'preserveNonEmptyValues'  => true
+    ];
+    return $behaviours;
   }
 
   /**
@@ -147,6 +168,7 @@ class Reference extends BaseModel
       'hash' => Yii::t('app', 'Hash'),
       'markedDeleted' => Yii::t('app', 'Marked Deleted'),
       'attachments' => Yii::t('app', 'Attachments'),
+      'uuid' => Yii::t('app', 'Unique ID'),
     ];
   }
 

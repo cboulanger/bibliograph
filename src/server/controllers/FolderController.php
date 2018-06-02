@@ -20,6 +20,7 @@
 
 namespace app\controllers;
 
+use app\controllers\traits\DatasourceTrait;
 use app\models\Reference;
 use app\models\Datasource;
 use app\models\Folder;
@@ -711,7 +712,7 @@ class FolderController extends AppController //implements ITreeController
     // target
     $findInTarget = Datasource::findIn($to_datasource, "folder");
     $to_folder = $findInTarget->where(['id'=> $to_parentId])->one();
-    if( ! $to_folder ){
+    if( ! $to_folder and $to_parentId !== 0 ){
       throw new \InvalidArgumentException("Target parent folder #$to_parentId does not exist");
     }
     // create target folder
@@ -731,10 +732,11 @@ class FolderController extends AppController //implements ITreeController
     $clientQueryData = $this->createClientQueryData($from_folder,"reference");
     $from_refClass = $this->getModelClass($from_datasource, "reference");
     $refQuery = $this->transformClientQuery( $clientQueryData, $from_refClass);
-    Yii::debug($refQuery->createCommand()->getRawSql());
     /** @var Reference[] $references */
     $references = $refQuery->all();
     $to_refClass = $this->getModelClass($to_datasource, "reference");
+    $count_updated = 0;
+    $count_created = 0;
     if( count($references)) {
       /** @var Reference $copy */
       $copy = new $to_refClass();
@@ -742,17 +744,31 @@ class FolderController extends AppController //implements ITreeController
         array_intersect($copy->attributes(), $references[0]->attributes()),
         ['id', 'parentId']
       );
-      Yii::debug($common_properties);
+      $findInTarget = Datasource::findIn($to_datasource,"reference");
       foreach ($references as $reference) {
         if ($isSameDatasource) {
+          // within the same datasource, link reference to folder
           $to_folder->link("references", $reference);
         } else {
+          // try to find existing copy by UUID
           /** @var Reference $copy */
-          $copy = new $to_refClass();
+          $copy = $findInTarget->where(['uuid' => $reference->uuid])->one();
+          if( $copy ) {
+            // TODO skip when copy is newer?
+            $count_updated++;
+          } else {
+            $copy = new $to_refClass();
+            $count_created++;
+          }
           $copy->setAttributes($reference->getAttributes($common_properties));
           try {
             $copy->save();
-            $to_folder->link("references", $copy);
+            // link to folder
+            try{
+              $to_folder->link("references", $copy);
+            } catch(\Exception $e){
+              // ignore if already linked
+            }
           } catch (\Throwable $e) {
             throw new UserErrorException($e->getMessage());
           }
@@ -762,13 +778,13 @@ class FolderController extends AppController //implements ITreeController
 
     // recompute reference count
     $to_folder::setDatasource($to_datasource);
-    $to_folder->referenceCount = null;
+    $to_folder->referenceCount = 0;
     try {
       $to_folder->save();
     } catch (Exception $e) {
       throw new UserErrorException($e->getMessage());
     }
-
+    Yii::debug("$count_created reference created, $count_updated updated.");
     return sprintf("%s references copied into new folder '%s'",  count($references), $to_folder->label);
   }
 
