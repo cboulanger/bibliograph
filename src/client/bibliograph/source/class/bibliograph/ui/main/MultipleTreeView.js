@@ -129,17 +129,17 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
           tree.getSelectedNode().data.type !== "trash"
       },
       copy_any_folder: {
-        aliasOf : "folder.move" // TODO create new permission folder.copy
+        aliasOf : "folder.copy" // TODO create new permission folder.copy
       },
       copy_selected_folder : {
-        depends : "folder.move", // TODO create new permission folder.copy
+        depends : "folder.copy", // TODO create new permission folder.copy
         updateEvent : "changeSelectedNode",
         condition : tree =>
           tree.getSelectedNode() !== null &&
           tree.getSelectedNode().data.type !== "virtual"
       },
       paste_folder : {
-        depends : "folder.move",
+        depends : "folder.copy",
         updateEvent : ["changeSelectedNode","app/clipboard:changeData"],
         condition : [
           tree =>
