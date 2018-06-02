@@ -177,28 +177,30 @@ trait FolderDataTrait
    * @todo This has to be rewritten in its entirety
    * @param Folder $folder
    * @param string $modelType
-   * @param string $properties
+   * @param array $properties
    * @return object
    */
-  public function createClientQueryData(Folder $folder, string $modelType, $properties="*")
+  public function createClientQueryData(Folder $folder, string $modelType, array $properties=[])
   {
     $clientQueryData = [
-      "properties"  => $properties,
-      "datasource"  => $folder::getDatasource(),
+      "datasource"  => $folder::getDatasource()->namedId,
       "modelType"   => $modelType,
     ];
     if( $folder->searchfolder && $folder->query !== "" ){
       $clientQueryData['query'] = [
+        'properties'  => $properties,
         'cql' => $folder->query
       ];
     } else {
       $clientQueryData['query'] = [
+        'properties'  => $properties,
         'relation' => [
-          'name' => 'folder',
-          'id'   => $folder->id
+          'name'        => 'folders',
+          'id'          => $folder->id,
+          'foreignId'   => 'FolderId'
         ]
       ];
     }
-    return (object) $clientQueryData;
+    return json_decode(json_encode($clientQueryData));
   }
 }

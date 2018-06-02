@@ -120,8 +120,7 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
       move_any_folder: {
         aliasOf : "folder.move"
       },
-      // TODO rename to move_selected_folder
-      move_folder : {
+      move_selected_folder : {
         depends : "folder.move",
         updateEvent : "changeSelectedNode",
         condition : tree =>
@@ -129,8 +128,11 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
           tree.getSelectedNode().data.type !== "virtual" &&
           tree.getSelectedNode().data.type !== "trash"
       },
-      copy_folder : {
-        depends : "folder.move",
+      copy_any_folder: {
+        aliasOf : "folder.move" // TODO create new permission folder.copy
+      },
+      copy_selected_folder : {
+        depends : "folder.move", // TODO create new permission folder.copy
         updateEvent : "changeSelectedNode",
         condition : tree =>
           tree.getSelectedNode() !== null &&
@@ -138,12 +140,14 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
       },
       paste_folder : {
         depends : "folder.move",
-        updateEvent : "changeSelectedNode",
-        condition : tree =>
-          tree.getSelectedNode() !== null &&
-          tree.getSelectedNode().data.type !== "virtual" &&
-          bibliograph.ConfigManager.getInstance()
-            .getKey(bibliograph.Application.config_keys.app.clipboard.type) === bibliograph.Application.mime_types.folder
+        updateEvent : ["changeSelectedNode","app/clipboard:changeData"],
+        condition : [
+          tree =>
+            tree.getSelectedNode() !== null &&
+            tree.getSelectedNode().data.type !== "virtual" &&
+            qx.core.Init.getApplication,
+          clipboard => !! clipboard.getData( bibliograph.Application.mime_types.folder )
+        ]
       },
       change_position : {
         depends : "folder.move",
@@ -233,7 +237,7 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
     {
       let button = new qx.ui.menu.Button(this.tr("Move folder..."));
       button.addListener("execute", ()=> this._moveFolderDialog() );
-      this.permissions.move_folder.bind("state", button, "enabled");
+      this.permissions.move_selected_folder.bind("state", button, "enabled");
       this.getPermission("folder.move").bind("state", button, "visibility", {
         converter: bibliograph.Utils.bool2visibility
       });
@@ -243,17 +247,17 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
     createCopyButton : function()
     {
       let button = new qx.ui.menu.Button(this.tr("Copy folder to Clipboard..."));
-      button.addListener("execute", ()=> this._copyFolderDialog() );
-      this.bindVisibility(this.permissions.move_any_folder, button);
-      this.bindEnabled(this.permissions.copy_folder, button)
+      button.addListener("execute", ()=> this._copyFolderToClipboard() );
+      this.bindVisibility(this.permissions.copy_any_folder, button);
+      this.bindEnabled(this.permissions.copy_selected_folder, button)
       return button;
     },
   
     createPasteButton : function()
     {
       let button = new qx.ui.menu.Button(this.tr("Insert folder from Clipboard..."));
-      button.addListener("execute", ()=> this._insertFolderDialog() );
-      this.bindVisibility(this.permissions.move_any_folder, button);
+      button.addListener("execute", ()=> this._insertFolderFromClipboard() );
+      this.bindVisibility(this.permissions.copy_any_folder, button);
       this.bindEnabled(this.permissions.paste_folder, button)
       return button;
     },
@@ -296,6 +300,8 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
           contextMenu.add(this.createRemoveButton());
           contextMenu.add(this.createEditButton());
           contextMenu.add(this.createMoveButton());
+          contextMenu.add(this.createCopyButton());
+          contextMenu.add(this.createPasteButton());
           contextMenu.add(this.createVisibilityButton());
           contextMenu.add(this.createEmptyTrashButton());
           return true;
@@ -306,8 +312,7 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
     //-------------------------------------------------------------------------
     //  DRAG & DROP
     //-------------------------------------------------------------------------
-  
-  
+    
     /**
      * Called when a successful drop has happened in the current treee.
      *
@@ -443,10 +448,10 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
         qx.core.Assert.assertInstance(win, qx.ui.window.Window);
         win.addListenerOnce("nodeSelected", e => {
           let targetModel = e.getData();
-          if (!targetModel) {
-            dialog.Dialog.alert(this.tr("No folder selected."));
+          win.close();
+          if (targetModel) {
+            this._moveFolderDialog(model,targetModel);
           }
-          this._moveFolderDialog(model,targetModel);
         });
         win.show();
         return;
@@ -510,36 +515,52 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
         }
       });
     },
-    
-    _copyFolderDialog : function()
+  
+    /**
+     * Copies the currently selected folder's model to the server clipboard
+     * @private
+     */
+    _copyFolderToClipboard : function()
     {
-      let configManager = this.getApplication().getConfigManager();
-      configManager.setKey(
-        bibliograph.Application.config_keys.app.clipboard.type,
-        bibliograph.Application.mime_types.folder
-      );
-      configManager.setKey(
-        bibliograph.Application.config_keys.app.clipboard.content,
+      this._isWaiting(true);
+      rpc.Clipboard.add(
+        bibliograph.Application.mime_types.folder,
         JSON.stringify(this.getSelectedNode())
-      );
-    },
-    
-    _insertFolderDialog : function()
-    {
-      let configManager = this.getApplication().getConfigManager();
-      let folderdata = JSON.parse(configManager.getKey(bibliograph.Application.config_keys.app.clipboard.content));
-      let message = this.tr(
-        "Do you want to insert the folder '%1' from datasource '%2'?",
-        folderdata.label, folderdata.data.datasource
-      );
-      dialog.Dialog.confirm(message).promise().then(result => {
-        if (result === true) {
-          this._isWaiting(true);
-          rpc.Folder
-            .copy(folderdata.data.datasource , folderdata.data.id, this.getDatasource(), this.getNodeId() )
-            .then(() => this._isWaiting(false))
-        }
+      ).then(message => {
+        this.showMessage(message)
+        this._isWaiting(false);
       });
+    },
+  
+    /**
+     * Inserts the folder and content from the clipboard as a subfolder of the currently selected folder
+     * @return {Promise<void>}
+     * @private
+     */
+    _insertFolderFromClipboard : async function()
+    {
+      let clipboard = this.getApplication().getClipboardManager();
+      let clipboardData = clipboard.getData( bibliograph.Application.mime_types.folder);
+      if( ! clipboardData){
+        dialog.Dialog.warning("No folder data on clipboard!");
+        return;
+      }
+      let folderdata = JSON.parse(clipboardData);
+      let message;
+      if( this.getDatasource() !== folderdata.data.datasource ){
+        message = this.tr(
+          "Do you want to insert the folder '%1' from datasource '%2'?",
+          folderdata.label, folderdata.data.datasource
+        );
+      } else {
+        message = this.tr( "Do you want to insert the folder '%1'?", folderdata.label);
+      }
+      let result = await dialog.Dialog.confirm(message).promise();
+      if (result === true) {
+        this._isWaiting(true);
+        await rpc.Folder.copy(folderdata.data.datasource , folderdata.data.id, this.getDatasource(), this.getNodeId() );
+        this._isWaiting(false);
+      }
     },
     
     
@@ -558,14 +579,6 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
         app.showPopup(this.tr("Emptying the trash ..."));
         rpc.Trash.empty(this.getDatasource()).then(()=> app.hidePopup());
       });
-    },
-
-    /**
-     * Shows a status message
-     * @param msg {String}
-     */
-    showMessage: function (msg) {
-      this._statusLabel.setValue(msg);
     }
   }
 });

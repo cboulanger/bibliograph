@@ -232,6 +232,14 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
     showColumnHeaders: {
       check: "Boolean",
       init: true
+    },
+  
+    /**
+     * An (optional) label to show status messages.
+     */
+    statusLabel : {
+      check: "qx.ui.basic.Label",
+      nullable : true
     }
   },
   
@@ -891,6 +899,19 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
       this.getTree()
       .getSelectionModel()
       .resetSelection();
+    },
+  
+    /**
+     * Shows a status message
+     * @param msg {String}
+     */
+    showMessage: function (msg) {
+      let statusLabel = this.getStatusLabel();
+      if(statusLabel ){
+        statusLabel.setValue(msg);
+        // hide after three seconds
+        qx.event.Timer.once(()=>statusLabel.setValue(""),null,3000);
+      }
     }
   }
 });

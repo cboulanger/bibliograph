@@ -110,12 +110,15 @@ qx.Class.define("bibliograph.ui.main.FolderTreePanel",
       settingsMenu.add(mTree.createEditButton());
       settingsMenu.add(mTree.createVisibilityButton());
       settingsMenu.add(mTree.createMoveButton());
+      settingsMenu.add(mTree.createCopyButton());
+      settingsMenu.add(mTree.createPasteButton());
     
       // Status label
       let _statusLabel = new qx.ui.basic.Label(null);
-      this._statusLabel = _statusLabel;
+      mTree.setStatusLabel(_statusLabel);
       _statusLabel.setPadding(3);
       _statusLabel.setRich(true);
+      _statusLabel.setTextColor("#808080");
       footerMenu.add(_statusLabel, {flex: 1});
     }
   }

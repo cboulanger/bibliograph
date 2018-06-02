@@ -24,6 +24,11 @@ use Yii;
 use lib\csl\CiteProc;
 use app\models\Datasource;
 
+/**
+ * Class CitationController
+ * @package app\controllers
+ * NOT YET MIGRATED; UNFUNCTIONAL
+ */
 class CitationController extends AppController
 {
 

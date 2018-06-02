@@ -5,6 +5,7 @@ namespace app\models;
 use Yii;
 use lib\models\BaseModel;
 use app\models\Role;
+use yii\db\ActiveQuery;
 use yii\helpers\ArrayHelper;
 
 // @todo Add column `dsn` to `class`, remove columns `type`, `host`, `port`, `database`
@@ -355,6 +356,17 @@ class Datasource extends BaseModel
     return static::getInstanceFor($datasourceName)->getClassFor($modelType);
   }
 
+  /**
+   * Returns the ActiveQuery object that belongs to the class of the given model type
+   * in the given datasource
+   * @param string $datasourceName
+   * @param string $modelType
+   * @return ActiveQuery
+   */
+  public static function findIn(string $datasourceName, string $modelType)
+  {
+    return static::getInstanceFor($datasourceName)->getClassFor($modelType)::find();
+  }
 
   /**
    * Returns all Datasource instances that belong to the schema with the given name

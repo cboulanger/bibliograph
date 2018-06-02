@@ -51,6 +51,8 @@ qx.Class.define("bibliograph.Setup", {
       qx.Class.include( qx.core.Object, qcl.application.MGetApplication );
       // Mixes `widgetId` property into all qooxdoo objects
       qx.Class.include( qx.core.Object, qcl.application.MWidgetId );
+  
+      this.setupClipboard();
 
       // initialize application commands
       bibliograph.Commands.getInstance();
@@ -124,6 +126,7 @@ qx.Class.define("bibliograph.Setup", {
 
       // initialize subscribers to messages that come from server
       this.initSubscribers();
+      
 
       // message transport
       //this.startPolling();
@@ -284,6 +287,7 @@ qx.Class.define("bibliograph.Setup", {
     initSubscribers : function()
     {
       let bus = qx.event.message.Bus.getInstance();
+      let app = this.getApplication();
 
       // listen to reload event
       bus.subscribe("application.reload", function(e){
@@ -303,7 +307,6 @@ qx.Class.define("bibliograph.Setup", {
       // server message to set model type and id
       bus.subscribe("bibliograph.setModel", e => {
         let data = e.getData();
-        let app = this.getApplication();
         if ( data.datasource === app.getDatasource()) {
           app.setModelType(data.modelType);
           app.setModelId(data.modelId);
@@ -319,15 +322,37 @@ qx.Class.define("bibliograph.Setup", {
       // reload the main list view
       bus.subscribe("mainListView.reload", function(e){
         let data = e.getData();
-        let app = this.getApplication();
         if (data.datasource !== app.getDatasource())return;
         app.getWidgetById("app/tableview").reload();
       }, this);
 
       // show the login dialog
       bus.subscribe("loginDialog.show", function(){
-        this.getApplication().getWidgetById("app/windows/login").show();
+        app.getWidgetById("app/windows/login").show();
       }, this);
+      
+    },
+  
+    /**
+     * Setup clipboard synchronization with server
+     */
+    setupClipboard: function()
+    {
+      let bus = qx.event.message.Bus.getInstance();
+      let app = this.getApplication();
+      let clipboard = app.getClipboardManager();
+      this.__updatingClipboardFromServer = false;
+      bus.subscribe("clipboard.add", e => {
+        this.__updatingClipboardFromServer = true;
+        clipboard.addData( e.getData().mime_type, e.getData().data );
+        this.__updatingClipboardFromServer = false;
+      });
+      clipboard.addListener("changeData",e => {
+        let mimeType = e.getData();
+        if( ! this.__updatingClipboardFromServer ){
+          rpc.Clipboard.add(mimeType, clipboard.getData(mimeType));
+        }
+      });
     },
 
     /**

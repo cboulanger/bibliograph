@@ -701,22 +701,25 @@ class FolderController extends AppController //implements ITreeController
    */
   public function actionCopy(string $from_datasource, int $from_folderId, string $to_datasource, int $to_parentId ){
     $this->requirePermission("folder.move"); // Todo: needs its own permission
-
-    $from_folder = Folder::findOne($from_folderId);
-    if( ! $from_folderId ){
+    // source
+    $findInSource = Datasource::findIn($from_datasource, "folder");
+    /** @var Folder $from_folder */
+    $from_folder = $findInSource->where(['id'=> $from_folderId])->one();
+    if( ! $from_folder ){
       throw new \InvalidArgumentException("Source folder #$from_folderId does not exist");
     }
-    $from_folder::setDatasource($from_datasource);
-    $to_parent = Folder::findOne($to_parentId);
-    if( ! $to_parentId ){
+    // target
+    $findInTarget = Datasource::findIn($to_datasource, "folder");
+    $to_folder = $findInTarget->where(['id'=> $to_parentId])->one();
+    if( ! $to_folder ){
       throw new \InvalidArgumentException("Target parent folder #$to_parentId does not exist");
     }
-    $to_parent::setDatasource($to_datasource);
-
     // create target folder
-    $to_folder = new Folder($from_folder->getAttributes());
+    $to_folderClass = Datasource::getInstanceFor($to_datasource)->getClassFor("folder");
+    /** @var Folder $to_folder */
+    $to_folder = new $to_folderClass($from_folder->getAttributes());
+    $to_folder->id = null;
     $to_folder->parentId = $to_parentId;
-    $to_folder::setDatasource($to_datasource);
     try {
       $to_folder->save();
     } catch (Exception $e) {
@@ -724,29 +727,48 @@ class FolderController extends AppController //implements ITreeController
     }
 
     // copy references
-    $from_modelClass = $this->getModelClass($from_datasource, "reference");
-    $to_modelClass   = $this->getModelClass($to_datasource, "reference");
-    $clientQueryData = $this->createClientQueryData($from_folder,"reference");
     $isSameDatasource = $from_datasource === $to_datasource;
+    $clientQueryData = $this->createClientQueryData($from_folder,"reference");
+    $from_refClass = $this->getModelClass($from_datasource, "reference");
+    $refQuery = $this->transformClientQuery( $clientQueryData, $from_refClass);
+    Yii::debug($refQuery->createCommand()->getRawSql());
     /** @var Reference[] $references */
-    $references = $this->transformClientQuery( $clientQueryData, $from_modelClass)->all();
-    foreach ($references as $reference) {
-      if( $isSameDatasource ){
-        $to_folder->link("references", $reference);
-      } else {
-        /** @var Reference $copy */
-        $copy = new $to_modelClass();
-        $copy->setAttributes($reference->getAttributes(
-          array_intersect($copy->attributes(), $reference->attributes()) // todo: might be wasteful to compute this in each iteration
-        ));
-        try {
-          $copy->save();
-          $to_folder->link("references", $copy);
-        } catch (\Throwable $e) {
-          throw new UserErrorException($e->getMessage());
+    $references = $refQuery->all();
+    $to_refClass = $this->getModelClass($to_datasource, "reference");
+    if( count($references)) {
+      /** @var Reference $copy */
+      $copy = new $to_refClass();
+      $common_properties = array_diff(
+        array_intersect($copy->attributes(), $references[0]->attributes()),
+        ['id', 'parentId']
+      );
+      Yii::debug($common_properties);
+      foreach ($references as $reference) {
+        if ($isSameDatasource) {
+          $to_folder->link("references", $reference);
+        } else {
+          /** @var Reference $copy */
+          $copy = new $to_refClass();
+          $copy->setAttributes($reference->getAttributes($common_properties));
+          try {
+            $copy->save();
+            $to_folder->link("references", $copy);
+          } catch (\Throwable $e) {
+            throw new UserErrorException($e->getMessage());
+          }
         }
       }
     }
+
+    // recompute reference count
+    $to_folder::setDatasource($to_datasource);
+    $to_folder->referenceCount = null;
+    try {
+      $to_folder->save();
+    } catch (Exception $e) {
+      throw new UserErrorException($e->getMessage());
+    }
+
     return sprintf("%s references copied into new folder '%s'",  count($references), $to_folder->label);
   }
 

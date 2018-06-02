@@ -158,8 +158,9 @@ trait TableTrait
    *     "properties" : ["author","title","year" ...],
    *     "orderBy" : "author",
    *     "relation" : {
-   *       "name" : "folder",
-   *       "id" : 3
+   *       "name" : "folders",
+   *       "id": 3,
+   *       "foreignId" : "FolderId"
    *     }
    *
    * or
@@ -178,8 +179,7 @@ trait TableTrait
    *    The model class from which to create the query
    * @return \yii\db\ActiveQuery
    * @throws \InvalidArgumentException
-   * @todo rewrite this
-   * @todo rename to 'createQueryFromClientData()'
+   * @todo completely rewrite this
    * @todo 'properties' should be 'columns' or 'fields', 'cql' should be 'input'/'search' or similar
    */
   protected function transformClientQuery(\stdClass $clientQueryData, string $modelClass)
@@ -195,11 +195,13 @@ trait TableTrait
     if( ! is_subclass_of($modelClass,  Reference::class)){
       //throw new \InvalidArgumentException("Class '$modelClass' must be an subclass of " . Reference::class);
     }
-    if (!is_object($clientQuery) or
-      !is_array($clientQuery->properties)) {
-      throw new \InvalidArgumentException("Invalid query data");
-    }
 
+    if (!is_object($clientQuery)) {
+      throw new \InvalidArgumentException("Invalid query data: must be object");
+    }
+    if (!is_array($clientQuery->properties)) {
+      throw new \InvalidArgumentException("Invalid property information: must be array");
+    }
     // "Creator" column coalesces author and editor data
     $hasCreatorProperty = array_search("creator", $clientQuery->properties) !== false;
     if( $hasCreatorProperty ){

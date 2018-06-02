@@ -27,6 +27,7 @@ use app\models\User;
 use InvalidArgumentException;
 use JsonRpc2\Exception;
 use lib\exceptions\UserErrorException;
+use lib\models\ClipboardContent;
 use Yii;
 use yii\db\Expression;
 
@@ -435,6 +436,11 @@ class AccessController extends AppController
           $user->save(); 
         }
       } 
+    }
+
+    // cleanup clipboard
+    foreach (ClipboardContent::find()->all() as $item) {
+      if( ! User::findOne($item->UserId) ) $item->delete();
     }
   }
 

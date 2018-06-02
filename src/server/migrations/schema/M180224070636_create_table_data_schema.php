@@ -48,8 +48,8 @@ class M180224070636_create_table_data_schema extends Migration
 
   public function safeDown()
   {
-    $this->dropTable('{{%data_Schema}}');
-    $this->update('{{data_Datasource}}',['schema'=>'bibliograph.schema.bibliograph2'],['schema' => 'bibliograph_datasource']);
-    $this->update('{{data_Datasource}}',['schema'=>'qcl.schema.filesystem.local'],['schema' => 'file']);
+    echo "M180224070636_create_table_data_schema cannot be reverted.\n";
+
+    return false;
   }
 }

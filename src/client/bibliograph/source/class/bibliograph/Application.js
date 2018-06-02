@@ -12,6 +12,7 @@
  * This is the main application class of "Bibliograph"
  *
  * @asset(bibliograph/*)
+ * @require(qcl.application.ClipboardManager)
  */
 qx.Class.define("bibliograph.Application",
 {
@@ -41,18 +42,6 @@ qx.Class.define("bibliograph.Application",
      */
     mime_types : {
       folder : "x-bibliograph/folderdata"
-    },
-  
-    /**
-     * Configuration keys
-      */
-    config_keys : {
-      app : {
-        clipboard : {
-          type : "app.clipboard.content-type",
-          content : "app.clipboard.content",
-        }
-      }
     }
   },
   
@@ -185,6 +174,13 @@ qx.Class.define("bibliograph.Application",
      */
     getDatasourceStore : function(){
       return bibliograph.store.Datasources.getInstance();
+    },
+  
+    /**
+     * @return {qcl.application.ClipboardManager}
+     */
+    getClipboardManager: function(){
+      return qcl.application.ClipboardManager.getInstance();
     },
 
     /*
