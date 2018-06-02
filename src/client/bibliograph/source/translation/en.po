@@ -75,7 +75,7 @@ msgid "Next year"
 msgstr ""
 
 #: bibliograph/Application.js:187 bibliograph/Application.js:194
-#: bibliograph/Application.js:201
+#: bibliograph/Application.js:201 bibliograph/Application.js:216
 msgid "Missing server address. Please contact administrator."
 msgstr ""
 
@@ -88,14 +88,17 @@ msgid "Loading folder data ..."
 msgstr ""
 
 #: bibliograph/Setup.js:87 bibliograph/Setup.js:90 bibliograph/Setup.js:91
+#: bibliograph/Setup.js:93
 msgid "Setting up application..."
 msgstr ""
 
 #: bibliograph/Setup.js:91 bibliograph/Setup.js:94 bibliograph/Setup.js:95
+#: bibliograph/Setup.js:97
 msgid "Connecting with server..."
 msgstr ""
 
 #: bibliograph/Setup.js:96 bibliograph/Setup.js:99 bibliograph/Setup.js:100
+#: bibliograph/Setup.js:102
 msgid "Loading configuration ..."
 msgstr ""
 
@@ -563,6 +566,8 @@ msgstr ""
 #: bibliograph/ui/main/MultipleTreeView.js:197
 #: bibliograph/ui/main/MultipleTreeView.js:200
 #: bibliograph/ui/main/MultipleTreeView.js:201
+#: bibliograph/ui/main/MultipleTreeView.js:226
+#: bibliograph/ui/main/MultipleTreeView.js:227
 msgid "Empty trash..."
 msgstr ""
 
@@ -571,6 +576,7 @@ msgstr ""
 #: bibliograph/ui/main/MultipleTreeView.js:206
 #: bibliograph/ui/main/MultipleTreeView.js:208
 #: bibliograph/ui/main/MultipleTreeView.js:212
+#: bibliograph/ui/main/MultipleTreeView.js:238
 msgid "Move folder..."
 msgstr ""
 
@@ -579,6 +585,7 @@ msgstr ""
 #: bibliograph/ui/main/MultipleTreeView.js:217
 #: bibliograph/ui/main/MultipleTreeView.js:219
 #: bibliograph/ui/main/MultipleTreeView.js:223
+#: bibliograph/ui/main/MultipleTreeView.js:267
 msgid "Edit folder data"
 msgstr ""
 
@@ -592,6 +599,8 @@ msgstr ""
 #: bibliograph/ui/main/MultipleTreeView.js:231
 #: bibliograph/ui/main/MultipleTreeView.js:234
 #: bibliograph/ui/main/MultipleTreeView.js:235
+#: bibliograph/ui/main/MultipleTreeView.js:278
+#: bibliograph/ui/main/MultipleTreeView.js:279
 msgid "Change visibility"
 msgstr ""
 
@@ -723,6 +732,7 @@ msgstr ""
 #: bibliograph/ui/main/MultipleTreeView.js:408
 #: bibliograph/ui/main/MultipleTreeView.js:410
 #: bibliograph/ui/main/MultipleTreeView.js:414
+#: bibliograph/ui/main/MultipleTreeView.js:459
 msgid "Do your really want to move folder '%1' to '%2'?"
 msgstr ""
 
@@ -735,6 +745,7 @@ msgstr ""
 #: bibliograph/ui/main/MultipleTreeView.js:474
 #: bibliograph/ui/main/MultipleTreeView.js:476
 #: bibliograph/ui/main/MultipleTreeView.js:480
+#: bibliograph/ui/main/MultipleTreeView.js:573
 msgid "Do you really want to delete all references and folders in the trash folder? This cannot be undone."
 msgstr ""
 
@@ -943,6 +954,7 @@ msgstr ""
 #: bibliograph/ui/main/MultipleTreeView.js:144
 #: bibliograph/ui/main/MultipleTreeView.js:146
 #: bibliograph/ui/main/MultipleTreeView.js:150
+#: bibliograph/ui/main/MultipleTreeView.js:176
 msgid "Add folder"
 msgstr ""
 
@@ -951,6 +963,7 @@ msgstr ""
 #: bibliograph/ui/main/MultipleTreeView.js:176
 #: bibliograph/ui/main/MultipleTreeView.js:178
 #: bibliograph/ui/main/MultipleTreeView.js:182
+#: bibliograph/ui/main/MultipleTreeView.js:208
 msgid "Remove folder"
 msgstr ""
 
@@ -959,6 +972,7 @@ msgstr ""
 #: bibliograph/ui/main/MultipleTreeView.js:480
 #: bibliograph/ui/main/MultipleTreeView.js:482
 #: bibliograph/ui/main/MultipleTreeView.js:486
+#: bibliograph/ui/main/MultipleTreeView.js:579
 msgid "Emptying the trash ..."
 msgstr ""
 
@@ -995,6 +1009,7 @@ msgstr ""
 #: bibliograph/ui/main/MultipleTreeView.js:435
 #: bibliograph/ui/main/MultipleTreeView.js:437
 #: bibliograph/ui/main/MultipleTreeView.js:441
+#: bibliograph/ui/main/MultipleTreeView.js:486
 msgid "Do your really want to move %1 references to '%2'?"
 msgstr ""
 
@@ -1003,6 +1018,7 @@ msgstr ""
 #: bibliograph/ui/main/MultipleTreeView.js:457
 #: bibliograph/ui/main/MultipleTreeView.js:459
 #: bibliograph/ui/main/MultipleTreeView.js:463
+#: bibliograph/ui/main/MultipleTreeView.js:508
 msgid "Do your really want to copy %1 references to '%2'?"
 msgstr ""
 
@@ -1054,6 +1070,7 @@ msgstr ""
 #: bibliograph/ui/main/MultipleTreeView.js:155
 #: bibliograph/ui/main/MultipleTreeView.js:157
 #: bibliograph/ui/main/MultipleTreeView.js:161
+#: bibliograph/ui/main/MultipleTreeView.js:187
 msgid "Add top level folder"
 msgstr ""
 
@@ -1062,6 +1079,7 @@ msgstr ""
 #: bibliograph/ui/main/MultipleTreeView.js:165
 #: bibliograph/ui/main/MultipleTreeView.js:167
 #: bibliograph/ui/main/MultipleTreeView.js:171
+#: bibliograph/ui/main/MultipleTreeView.js:197
 msgid "Save current search query as top folder"
 msgstr ""
 
@@ -1098,6 +1116,7 @@ msgstr ""
 #: bibliograph/ui/main/MultipleTreeView.js:314
 #: bibliograph/ui/main/MultipleTreeView.js:316
 #: bibliograph/ui/main/MultipleTreeView.js:320
+#: bibliograph/ui/main/MultipleTreeView.js:365
 msgid "Loading folders. Please wait..."
 msgstr ""
 
@@ -1107,4 +1126,20 @@ msgstr ""
 
 #: bibliograph/ui/main/TableView.js:472
 msgid "Deleting references..."
+msgstr ""
+
+#: bibliograph/ui/main/MultipleTreeView.js:249
+msgid "Copy folder to Clipboard..."
+msgstr ""
+
+#: bibliograph/ui/main/MultipleTreeView.js:258
+msgid "Insert folder from Clipboard..."
+msgstr ""
+
+#: bibliograph/ui/main/MultipleTreeView.js:551
+msgid "Do you want to insert the folder '%1' from datasource '%2'?"
+msgstr ""
+
+#: bibliograph/ui/main/MultipleTreeView.js:556
+msgid "Do you want to insert the folder '%1'?"
 msgstr ""
