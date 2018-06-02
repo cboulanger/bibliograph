@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "625bdcbbf285794e8acebd6cd774d89e",
+    "content-hash": "39bf175479b72c1a6dfdcf17ec8f1299",
     "packages": [
         {
             "name": "adldap2/adldap2",
@@ -57,6 +57,53 @@
                 "windows"
             ],
             "time": "2018-04-19T15:06:54+00:00"
+        },
+        {
+            "name": "aracoool/yii2-uuid",
+            "version": "1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ARACOOOL/yii2-uuid.git",
+                "reference": "adba3102e78e7dda429a3aafc03f9b10ba1f2fdb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ARACOOOL/yii2-uuid/zipball/adba3102e78e7dda429a3aafc03f9b10ba1f2fdb",
+                "reference": "adba3102e78e7dda429a3aafc03f9b10ba1f2fdb",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0",
+                "yiisoft/yii2": "*"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.6"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "aracoool\\uuid\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Askar Fuzaylov",
+                    "email": "tkdforever@gmail.com"
+                }
+            ],
+            "description": "Yii 2 UUID Extension. A PHP 7.0+ library for generating RFC 4122 version 3, 4, and 5 universally unique identifiers (UUID).",
+            "homepage": "https://github.com/ARACOOOL/yii2-uuid",
+            "keywords": [
+                "guid",
+                "uuid",
+                "yii",
+                "yii2"
+            ],
+            "time": "2017-03-24T05:44:00+00:00"
         },
         {
             "name": "bmsrox/yii2-module-autoloader",
