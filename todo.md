@@ -3,10 +3,9 @@
 ## v3.0.0-beta
 
 ### Priority: urgent
-- [x] Test anonymous LDAP binding @HU
 
 ### Priority: high
-
+- [ ] FEAT: Re-implement Backup plugin
 - [ ] FEAT: User::getAllPermissions returns always the highest available set of permissions, regardless of the permissions of the group the current datasource belongs to. Requires rewriting of  `$this->requirePermission` to pass the datasource / datasource name
  
 ### Priority: normal
@@ -71,7 +70,7 @@
 - [ ] Datasource-specific migration namespace should be in the Datasource Schema
 - [ ] Move config data from migration to config/prefs
 - [ ] Revert return value of ConsoleAppHelper to simple string
-- [ ] Backend: Model validation: accept booleans for MySql SmallInt columns
+- [ ] Model validation: accept booleans for MySql SmallInt columns
 - [ ] Re-implement Table Actions Interface
 - [ ] Add correct @return information to the JSONRPC methods/actions
 - [ ] Convert static icon resouce paths into aliases that are resolved in bibliograph.theme.Icon
@@ -88,6 +87,7 @@
 - [ ] Move module translations into module https://www.yiiframework.com/doc/guide/2.0/en/tutorial-i18n#module-translation
 - [ ] Move method implementations from AccessController into AccessManager leaving only the action stubs 
 - [ ] Folder: remove "searchfolder" column, "type" column should contain all information
+- [ ] qcl.application.MWidgetId: put registry in mixin, not in application, and app.getWidgetById -> this.getWidgetById
 
 ### Testing, CI and distribution
 - [ ] Make Travis ~~great~~ work again
@@ -105,20 +105,18 @@
 ## v3.1
 
 ### Priority: high
-- [ ] Re-implement Backup plugin
-- [ ] Re-enable item view / formatted item
-- [ ] Re-enable item view / record info
-- [ ] Re-enable item view / duplicates search
-- [ ] Re-enable system menu commands
-- [ ] Re-implement message broadcast
+- [ ] FEAT: Re-enable item view / formatted item
+- [ ] FEAT: Re-enable item view / record info
+- [ ] FEAT: Re-enable item view / duplicates search
+- [ ] FEAT: Re-enable system menu commands
+- [ ] FEAT: Re-implement message broadcast
 
 ### Priority: normal
-- [ ] Improve keyword import from webservices
-- [ ] Implement boolean database columns (supported by Yii)
-- [ ] Reimplement HTML editor integration for notes
-- [ ] Implement drag&drop folder positioning
-- [ ] Clean, future-proof OO-Rewrite of the Rendering the tree in SimpleDataModel format
+- [ ] FEAT: Improve keyword import from webservices
+- [ ] FEAT: Reimplement HTML editor integration for notes
+- [ ] FEAT: Implement drag&drop folder positioning
+- [ ] FEAT: Clean, future-proof OO-Rewrite of the Rendering the tree in SimpleDataModel format
+- [ ] FEAT: integrate https://clipboardjs.com/
 
 ### Priority: low
-- [ ] Enable print item view: bibliograph.ui.main.ItemView#print()
-- [ ] Implement config.d - style configuration
+- [ ] FEAT: Enable print item view: bibliograph.ui.main.ItemView#print()

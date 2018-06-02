@@ -1,6 +1,6 @@
 {
   "name": "bibliograph",
-  "version": "3.0.0-beta.36",
+  "version": "3.0.0-beta.37",
   "description": "Bibliograph is a powerful open source web application for the collaborative collection, editing and publishing of bibliographic data.",
   "main": "",
   "directories": {
@@ -29,7 +29,7 @@
     "view-log": "bash bin/view-log.sh",
     "new-log": "bash bin/new-log.sh",
     "create-migration": "bash bin/create-migration.sh",
-    "create-rpcproxies": "cd src/server && php yii rpcproxy/create",
+    "create-rpcproxies": "cd src/server && php yii rpc-proxy/create",
     "translation": "cd src/server && php yii message config/i18n.php",
     "dist-create": "bash bin/dist-clean.sh && bash bin/dist-build.sh $1",
     "dist-test": "bash bin/dist-test.sh",
