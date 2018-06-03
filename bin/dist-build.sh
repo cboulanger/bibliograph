@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# dependencies: apt-get install jq (linux) / brew install jq (MacOS with homebrew)
+command -v jq >/dev/null 2>&1 || { echo >&2 "You need to install the jq command"; exit 1; }
+
 BUILD_TARGET=${1:-dist-build}
 TOP_DIR=$(pwd)
 DIST_DIR=$TOP_DIR/dist
@@ -18,6 +21,8 @@ echo "using qx executable at $QX_CMD"
 
 echo " >>> Building client ..."
 cd $CLIENT_SRC_DIR
+mv compile.json compile.old
+jq ".environment[\"app.version\"]=\"$VERSION\"" compile.old > compile.json
 $QX_CMD compile --target=$BUILD_TARGET --clean
 
 cp -a $BUILD_TARGET-compiled/bibliograph $DIST_DIR

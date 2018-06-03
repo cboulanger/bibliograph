@@ -8,13 +8,13 @@ let AUTH = {
 };
 
 // this is where the magic happens, we filter on tag.draft, if it's true, it will get deleted
-a_filter = function (tag) {
+let a_filter = function (tag) {
   let isDraft = Boolean(tag.draft || tag.prerelease);
   console.log( ` >>> ${tag.tag_name}: ${isDraft?"will be deleted...":"is kept."}` );
   return isDraft;
 };
 
-a_callback = function (result) { 
+let a_callback = function (result) {
   console.log (result ? result : "Done.");
 };
 
