@@ -44,6 +44,7 @@ class M180224070636_create_table_data_schema extends Migration
     foreach ($rows as $row) {
       $this->execute($row['sql']);
     }
+    return true;
   }
 
   public function safeDown()

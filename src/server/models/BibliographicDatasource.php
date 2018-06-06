@@ -79,9 +79,13 @@ class BibliographicDatasource
         'label' => Yii::t('app', 'Main folder'),
         'description' => Yii::t('app', 'This is the main folder of the database'),
         'searchable' => 1,
+        'searchfolder' => 0,
         'type' => "folder",
         'public' => 1,
         'opened' => 1,
+        'locked' => 0,
+        'hidden' => 0,
+        'markedDeleted' => 0,
       ],
       [
         'parentId' => 0,
@@ -93,6 +97,9 @@ class BibliographicDatasource
         'searchfolder' => 0,
         'public' => 0,
         'opened' => 0,
+        'locked' => 0,
+        'hidden' => 0,
+        'markedDeleted' => 0,
       ],
     ];
     $folderClass = $this->getClassFor('folder');

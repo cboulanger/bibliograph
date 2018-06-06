@@ -18,6 +18,7 @@ class M180602204038_table_data_Reference_add_column_uuid extends Migration
     $table_name = $this->db->quoteTableName($this->db->tablePrefix . "data_Reference");
     $this->addColumn($table_name, 'uuid', $this->string(40)->unique());
     $this->db->createCommand("update $table_name SET `uuid` = (SELECT uuid());")->execute();
+    return true;
   }
 
   /**

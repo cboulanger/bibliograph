@@ -1,5 +1,7 @@
 <?php
+
 namespace app\migrations\schema\bibliograph_datasource;
+
 use yii\db\Migration;
 
 class m171219_230854_create_table_data_Reference extends Migration
@@ -70,11 +72,13 @@ class m171219_230854_create_table_data_Reference extends Migration
       $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
     }
 
-    $this->createTable('{{%data_Reference}}', $this->getSchema() , $tableOptions);
+    $this->createTable('{{%data_Reference}}', $this->getSchema(), $tableOptions);
+    return true;
   }
 
   public function safeDown()
   {
     $this->dropTable('{{%data_Reference}}');
+    return true;
   }
 }

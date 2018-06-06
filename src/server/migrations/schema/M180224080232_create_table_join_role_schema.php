@@ -24,10 +24,12 @@ class M180224080232_create_table_join_role_schema extends Migration
     ], $tableOptions);
 
     $this->createIndex('index_Role_Schema', '{{%join_Role_Schema}}', ['RoleId','SchemaId'], true);
+    return true;
   }
 
   public function safeDown()
   {
     $this->dropTable('{{%join_Role_Schema}}');
+    return true;
   }
 }

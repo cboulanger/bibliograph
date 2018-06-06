@@ -43,7 +43,6 @@ class M180223200020_add_column_protected extends Migration
           ->execute();
       }
     }
-
     return true;
   }
 
@@ -57,19 +56,4 @@ class M180223200020_add_column_protected extends Migration
     }
     return true;
   }
-
-  /*
-  // Use up()/down() to run migration code without a transaction.
-  public function up()
-  {
-
-  }
-
-  public function down()
-  {
-      echo "M180223200020_add_column_protected cannot be reverted.\n";
-
-      return false;
-  }
-  */
 }
