@@ -7,13 +7,11 @@
 ### Priority: high
 - [ ] FEAT: Re-implement Backup plugin
 - [ ] FEAT: User::getAllPermissions returns always the highest available set of permissions, regardless of the permissions of the group the current datasource belongs to. Requires rewriting of  `$this->requirePermission` to pass the datasource / datasource name
+- [ ] FEAT: 
  
 ### Priority: normal
 - [ ] FEAT: Cache export formats for HTML view, make configurable 
 - [ ] FEAT: Disallow drop of references on folders in which they are already contained.
-- [ ] FEAT: Reimplement Search Help 
-- [ ] FEAT: Re-implement Backup
-- [ ] FEAT: Reimplement "New User" in Access Control Tool and System dialogs
 - [ ] FEAT: Reimplement account management via email
 - [ ] FEAT: "Orphaned" folder should contain references that do not have a parent
 - [ ] FEAT: Reimplement Search Help window
@@ -111,6 +109,7 @@
 - [ ] FEAT: Re-enable item view / duplicates search
 - [ ] FEAT: Re-enable system menu commands
 - [ ] FEAT: Re-implement message broadcast
+- [ ] FEAT: Reimplement "New User" in Access Control Tool and System dialog
 
 ### Priority: normal
 - [ ] FEAT: Improve keyword import from webservices
