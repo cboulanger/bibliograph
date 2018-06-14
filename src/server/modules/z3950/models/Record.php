@@ -21,6 +21,7 @@
 namespace app\modules\z3950\models;
 use app\models\Reference;
 use BadMethodCallException;
+use lib\models\BaseModel;
 
 /**
  * Z3950 record model
@@ -71,5 +72,15 @@ class Record extends Reference
   public function getFolders()
   {
     throw new BadMethodCallException("Method " . __METHOD__  . " not supported in " . self::class );
+  }
+
+  /**
+   * Class behaviours
+   * @return array
+   */
+  public function behaviors()
+  {
+    // skip Reference::behaviors() since we don't want UUID behavior
+    return BaseModel::behaviors();
   }
 }

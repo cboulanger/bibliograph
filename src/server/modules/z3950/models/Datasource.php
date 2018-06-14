@@ -19,6 +19,7 @@
 ************************************************************************ */
 
 namespace app\modules\z3950\models;
+use app\modules\z3950\lib\yaz\Result;
 use Yii;
 
 /**
@@ -85,8 +86,7 @@ class Datasource
   {
     parent::init();
     $this->addModel( 'record', Record::class, 'record');
-    $this->addModel( 'search', Seach::class,  'search');
-    $this->addModel( 'result', Result::class, 'result');
+    $this->addModel( 'search', Search::class,  'search');
   }
 
   /**

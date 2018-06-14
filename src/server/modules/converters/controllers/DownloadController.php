@@ -10,7 +10,10 @@ use app\models\Folder;
 use lib\exceptions\UserErrorException;
 use Yii;
 
-
+/**
+ * Class DownloadController
+ * @package app\modules\converters\controllers
+ */
 class DownloadController extends \yii\web\Controller
 {
   use AuthTrait;
