@@ -1143,3 +1143,31 @@ msgstr ""
 #: bibliograph/ui/main/MultipleTreeView.js:556
 msgid "Do you want to insert the folder '%1'?"
 msgstr ""
+
+#: bibliograph/plugins/backup/Plugin.js:58
+msgid "Backup"
+msgstr ""
+
+#: bibliograph/plugins/backup/Plugin.js:71
+msgid "Create Backup"
+msgstr ""
+
+#: bibliograph/plugins/backup/Plugin.js:76
+msgid "You can enter a description for this backup (optional)"
+msgstr ""
+
+#: bibliograph/plugins/backup/Plugin.js:78
+msgid "Saving backup..."
+msgstr ""
+
+#: bibliograph/plugins/backup/Plugin.js:87
+msgid "Restore Backup"
+msgstr ""
+
+#: bibliograph/plugins/backup/Plugin.js:100
+msgid "Restoring backup..."
+msgstr ""
+
+#: bibliograph/plugins/backup/Plugin.js:111
+msgid "The datasource has just been restored to a previous state and will now be reloaded."
+msgstr ""

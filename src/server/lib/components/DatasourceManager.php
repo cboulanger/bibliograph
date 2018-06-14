@@ -28,8 +28,11 @@ use fourteenmeister\helpers\Dsn;
 use lib\components\ConsoleAppHelper as Console;
 use lib\exceptions\RecordExistsException;
 use lib\exceptions\UserErrorException;
+use lib\models\BaseModel;
 use Sse\Data;
 use Yii;
+use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
 use yii\db\Exception;
 use yii\db\StaleObjectException;
 
@@ -240,5 +243,64 @@ class DatasourceManager extends \yii\base\Component
       if( ! $output->contains("up-to-date")) $count++;
     }
     return $count;
+  }
+
+  /**
+   * Returns all model classes that belong to a datasource, including the
+   * classes representing the join talbes
+   * @param string|Datasource $datasource The name of the datasource
+   * @return array
+   *    An associative array, key are the names of the model types and relation names
+   *    values are the corresponding model classes
+   */
+  public function getModelClasses( $datasource )
+  {
+    $modelClasses = [];
+    $instance = $datasource instanceof Datasource
+      ? $datasource
+      : Datasource::getInstanceFor($datasource);
+    $types = $instance->modelTypes();
+    foreach( $types as $type ) {
+      $class = $instance->getClassFor($type);
+      $modelClasses[$type] = $class;
+      /** @var BaseModel $model */
+      $model = new $class;
+      foreach( $types as $linkName ){
+        if ($linkName === $type) continue;
+        try{
+          $query = $model->getRelation( $linkName . "s");
+          $via = $query->via;
+          if( is_array($via) ){
+            /** @var ActiveQuery $relationQuery */
+            $relationQuery = $via[1];
+            if( ! in_array($relationQuery->modelClass, array_values($modelClasses)) ){
+              $modelClasses[$via[0]] = $relationQuery->modelClass;
+            }
+          } elseif (! in_array($query->modelClass, array_values($modelClasses))) {
+            $modelClasses[$type] = $query->modelClass;
+          }
+        } catch( \Exception $e){
+          continue;
+        }
+      }
+    }
+    return $modelClasses;
+  }
+
+  /**
+   * Returns an associative array, keys are the named ids of the datasources, values the
+   * integer timestamp of the most recent migration that has been applied to the tables
+   * of the datasources.
+   * @return array
+   */
+  public function getMigrationApplyTimes()
+  {
+    $apply_times = [];
+    /** @var Datasource $datasource */
+    foreach (Datasource::find()->all() as $datasource) {
+      $instance = Datasource::getInstanceFor($datasource->namedId);
+      $apply_times[$datasource->namedId] = $instance->migrationApplyTime;
+    }
+    return $apply_times;
   }
 }

@@ -27,7 +27,6 @@ use app\models\Reference;
 use app\schema\BibtexSchema;
 use lib\cql\NaturalLanguageQuery;
 use lib\dialog\Confirm;
-use lib\dialog\Dialog;
 use lib\exceptions\RecordExistsException;
 use lib\exceptions\UserErrorException;
 use lib\Validate;

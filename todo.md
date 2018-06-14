@@ -52,13 +52,14 @@
 - [ ] FEAT: Reimplement support for the admindb, userdb and tmpdb settings in app.conf.toml -> use DSNs instead of single settings or TOML nested arrays.
 
 ### Code cleanup / refactoring
-- [ ] Rename "bin" into "script"
+- [ ] Move dispatchClientMessage/broadcast to Yii::$app->message component
+- [ ] Move scripts in "bin" to "build/script" and test scripts to "test/script"; adapt npm run commands
 - [ ] Make UserErrorException a JSONRPC error which is caught on the client, instead of a Dialog event.
 - [ ] Use Session Cache instead of File Cache for Storing file path in importer
 - [ ] Transform compile.json into compile.js (to allow to update env var "app.version" etc.)
 - [ ] Remove UTF-8 hack from EventResponse
 - [ ] Fix compiler warnings
-- [ ] Exclude .todo files from being copied into the distribution package
+- [ ] Exclude .todo and test files from being copied into the distribution package
 - [ ] Clear up the conceptual mess concerning "schema": datasource schema/reference schema -> "repository"?
 - [ ] Rename "Datasource" to "Repository" (see https://dev.to/remojansen/implementing-the-onion-architecture-in-nodejs-with-typescript-and-inversifyjs-10ad)
 - [ ] FactoryClass("datasource","reference") proxying ActiveRecord methods

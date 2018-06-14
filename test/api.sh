@@ -20,7 +20,8 @@ if [ $? -eq 1 ]; then
   exit 1
 fi
 echo "Started Bibliograph test server..."
-echo 
+echo
+
 echo "Creating empty database ..."
 mysql -uroot -e "DROP DATABASE tests; CREATE DATABASE tests;"
 echo "Deleting log and output data files..."

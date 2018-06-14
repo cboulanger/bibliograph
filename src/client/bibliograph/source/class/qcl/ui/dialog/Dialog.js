@@ -59,7 +59,7 @@ qx.Class.define("qcl.ui.dialog.Dialog",
      */
     allowServerDialogs : function( value )
     {
-      var messageName = "dialog";
+      let messageName = "dialog";
       if ( value ) {
         qx.event.message.Bus.getInstance().subscribe( messageName, this._onServerDialog,this);
       } else {
@@ -81,46 +81,37 @@ qx.Class.define("qcl.ui.dialog.Dialog",
      */
     _onServerDialog : function( message )
     {
-      var that = this;
-      var app = qx.core.Init.getApplication();
-      var data = message.getData();
+      let that = this;
+      let app = qx.core.Init.getApplication();
+      let data = message.getData();
       data.properties.callback = null;
-      if ( data.service )
-      {
-        data.properties.callback = function( result )
-        {
+      if ( data.service ) {
+        data.properties.callback = result => {
           // push the result to the beginning of the parameter array
-          if ( ! qx.lang.Type.isArray( data.params ) )
-          {
+          if ( ! qx.lang.Type.isArray( data.params ) ) {
             data.params = [];
           }
           data.params.unshift(result);
-          
           // send request back to server
-          qx.core.Init.getApplication().getRpcClient(data.service).send( data.method, data.params );
+          app.getRpcClient(data.service).send( data.method, data.params );
         }
       }
       
       // turn popup on or off
       if (data.type === "popup" )
       {
-        if ( typeof app.showPopup === undefined  )
-        {
+        if ( typeof app.showPopup === undefined  ) {
           app.warn("Cannot show popup.");
           data.properties.callback(false);
           return;
         }
-        var msg = data.properties.message;
-        if( msg )
-        {
+        let msg = data.properties.message;
+        if( msg ) {
           app.showPopup(msg);
-        }
-        else
-        {
+        } else {
           app.hidePopup();
         }
-        if( typeof data.properties.callback=="function" )
-        {
+        if( typeof data.properties.callback==="function" ) {
           data.properties.callback(true);
         }
         return;
@@ -128,30 +119,22 @@ qx.Class.define("qcl.ui.dialog.Dialog",
       app.hidePopup();
       
       // create dialog according to type
-      var isNew = false, widget = qcl.ui.dialog.Dialog.__instances[data.type];
+      let isNew = false, widget = qcl.ui.dialog.Dialog.__instances[data.type];
 
       // reusing forms doesn't work
-      if( widget && data.type == "form" )
-      {
+      if( widget && data.type === "form" ) {
         //widget.dispose();
         widget = null;
       }
 
-      if( ! widget )
-      {
-        var clazz = qx.lang.String.firstUp( data.type );
-        if ( qx.lang.Type.isFunction( window.dialog[clazz] ) )
-        {
+      if( ! widget ) {
+        let clazz = qx.lang.String.firstUp( data.type );
+        if ( qx.lang.Type.isFunction( window.dialog[clazz] ) ) {
           widget = new window.dialog[clazz]();
-        }
-        else
-        {
-          if ( qx.lang.Type.isFunction( qcl.ui.dialog[clazz] ) )
-          {
+        } else {
+          if ( qx.lang.Type.isFunction( qcl.ui.dialog[clazz] ) ) {
             widget = new qcl.ui.dialog[clazz]();
-          }
-          else
-          {
+          } else {
             app.warn(data.type + " is not a valid dialog type");
             return;
           }
@@ -162,20 +145,16 @@ qx.Class.define("qcl.ui.dialog.Dialog",
       
       // marshal special datefield values
       // TODO check values
-      if( data.type == "form" )
+      if( data.type === "form" )
       {
-        if ( ! qx.lang.Type.isObject( data.properties.formData ) )
-        {
+        if ( ! qx.lang.Type.isObject( data.properties.formData ) ) {
           app.error("No form data in json response.");
           return;
         }
-        for ( var fieldName in data.properties.formData )
-        {
-          var fieldData = data.properties.formData[fieldName];
-          if ( fieldData.type == "datefield" )
-          {
-            if ( fieldData.dateFormat )
-            {
+        for ( let fieldName in data.properties.formData ) {
+          let fieldData = data.properties.formData[fieldName];
+          if ( fieldData.type === "datefield" ) {
+            if ( fieldData.dateFormat ) {
               fieldData.dateFormat = new qx.util.format.DateFormat(fieldData.dateFormat);
             }
             fieldData.value = new Date(fieldData.value);
@@ -189,9 +168,9 @@ qx.Class.define("qcl.ui.dialog.Dialog",
        */
       
       // function to call after timeout with closure vars
-      var type              = data.type;
-      var autoSubmitTimeout = data.properties.autoSubmitTimeout;
-      var requireInput      = data.properties.requireInput;
+      let type              = data.type;
+      let autoSubmitTimeout = data.properties.autoSubmitTimeout;
+      let requireInput      = data.properties.requireInput;
       function checkAutoSubmit()
       {
         switch( type )
@@ -204,8 +183,8 @@ qx.Class.define("qcl.ui.dialog.Dialog",
           case "prompt":
             if( requireInput )
             {
-              var newValue = widget._textField.getValue();
-              var oldValue = widget._textField.getUserData("oldValue");
+              let newValue = widget._textField.getValue();
+              let oldValue = widget._textField.getUserData("oldValue");
               
               //console.log("old: '" + oldValue + "', new: '"+newValue+"'."); 
               
@@ -213,7 +192,7 @@ qx.Class.define("qcl.ui.dialog.Dialog",
               {
                 widget._handleOk();
               } 
-              else if (widget.getVisibility()=="visible") 
+              else if (widget.getVisibility()==="visible")
               {
                 widget._textField.setUserData("oldValue", newValue );
                 qx.event.Timer.once(checkAutoSubmit,this,autoSubmitTimeout*1000);
@@ -239,12 +218,9 @@ qx.Class.define("qcl.ui.dialog.Dialog",
 
       //todo: show() must not create a new blocker.
       // this must be solved in the dialog contrib itself
-      if( isNew )
-      {
+      if( isNew ) {
         widget.show();
-      }
-      else if ( data.properties.show !== false )
-      {
+      } else if ( data.properties.show !== false ) {
         widget.setVisibility("visible");
       }
 
@@ -252,10 +228,10 @@ qx.Class.define("qcl.ui.dialog.Dialog",
        * Progress widget executes callback immediately, unless it is at 100% and
        * the OK Button has been activated
        */
-      if( data.type == "progress"
+      if( data.type === "progress"
         && qx.lang.Type.isFunction( widget.getCallback() )
-        && ( widget.getProgress() != 100 || widget.getOkButtonText() === null ) )
-      {
+        && ( widget.getProgress() !== 100 || widget.getOkButtonText() === null )
+      ){
         widget.getCallback()(true);
       }
 
@@ -270,7 +246,6 @@ qx.Class.define("qcl.ui.dialog.Dialog",
               try {
                 widget._okButton.focus();
               } catch(e){}
-
         }
       },1000,this);
     }

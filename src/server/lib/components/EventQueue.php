@@ -25,6 +25,7 @@ class EventQueue extends \yii\base\Component
    */
   public function add( \yii\base\Event $event )
   {
+    //\Yii::debug("Event:" . $event->name);
     $this->events[] = $event;
   }
 

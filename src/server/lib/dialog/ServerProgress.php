@@ -22,12 +22,12 @@ namespace lib\dialog;
 
 /**
  * This dialog widget is different from the others as it does not create a 
- * browser event, but a long-running chunked HTTP respose. It works only if
+ * browser event, but a long-running chunked HTTP response. It works only if
  * no headers have been sent before and must be called via a normal http
  * GET request (not in a JSONRPC request). It is the server companion of
- * the qcl.dialog.ServerProgress calls on the client. 
+ * the qcl.dialog.ServerProgress on the client.
  */
-class ServerProgress extends Dialog
+class ServerProgress extends Dialog implements \lib\interfaces\Progress
 {
   /**
    * The id of the progress widget
@@ -44,7 +44,6 @@ class ServerProgress extends Dialog
    * @var bool
    */
   private $debug = false;
-
 
   /** @noinspection PhpMissingParentConstructorInspection */
 
@@ -84,7 +83,7 @@ class ServerProgress extends Dialog
     if( strlen($chunk) < 1024){
       $chunk = str_pad( $chunk, 1024 );
     }
-    $chunk .= "<br/>"; // needed by Safari and Internet Explorer
+    $chunk .= "<br/>\n"; // needed by Safari and Internet Explorer
     echo sprintf("%x\r\n", strlen($chunk));
     echo $chunk;
     echo "\r\n";
@@ -98,7 +97,8 @@ class ServerProgress extends Dialog
    */
   protected function sendScript(array $lines)
   {
-    $this->send( $this->createScript( $lines ) );
+    $script = $this->createScript($lines);
+    $this->send($script);
   }
 
   /**
@@ -128,7 +128,7 @@ class ServerProgress extends Dialog
   /**
    * Called at the start of the transmission, sets a few global variables inside the iframe.
    */
-  protected function start()
+  public function start()
   {
     $this->sendScript([
       "window.progress=window.top.qx.core.Init.getApplication().getWidgetById('{$this->widgetId}');",
@@ -140,15 +140,20 @@ class ServerProgress extends Dialog
    * API function to set the state of the progress par 
    * @param integer $value The valeu of the progress, in percent
    */
-  public function setProgress($value, $message=null, $newLogText=null)
+  public function setProgress(int $value, string $message=null, string $newLogText=null)
   {
     // sprintf('console.log("%d, %s, %s");',$value, $message, $newLogText);
-    $data =['progress'=>$value];
-    if($message) $data['message']=$message;
-    if($newLogText) $data['newLogText']= $newLogText;
-    $this->sendScript([
-      "window.progress.set(", json_encode($data), ");"
-    ]);
+    static $oldValue = 0;
+    static $oldMessage = "";
+    // update only if necessary
+    if( $newLogText or $value !== $oldValue or $message !== $oldMessage){
+      $data =['progress'=>$value];
+      if($message) $data['message']=$message;
+      if($newLogText) $data['newLogText']= $newLogText;
+      $this->sendScript([
+        "window.progress.set(", json_encode($data), ");"
+      ]);
+    }
   }
 
   /**
@@ -181,7 +186,7 @@ class ServerProgress extends Dialog
    * API function to trigger an error alert
    * @param string $message
    */
-  public function error($message)
+  public function error(string $message)
   {
     $this->setProgress(100);
     $this->sendScript([
@@ -200,14 +205,14 @@ class ServerProgress extends Dialog
     echo "\r\n";
     flush();
     ob_flush();
-    exit();
+    //exit();
   }
 
   /**
    * Must be called on completion of the script
    * @param string|null Optional message that will be shown in an alert dialog
    */
-  public function complete($message=null)
+  public function complete(string $message=null)
   {
     $this->setProgress(100);
     if ( $message )

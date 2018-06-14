@@ -1,6 +1,6 @@
 <?php
 
-namespace app\tests\unit\controllers;
+namespace app\tests\acceptance\controllers;
 
 // for whatever reason, this is not loaded early enough
 require_once __DIR__ . '/../../_bootstrap.php';

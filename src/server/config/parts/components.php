@@ -13,8 +13,12 @@ $components = [
   ],
   // logging
   'log' => require('log.php'),
+
   // Override http response component
-  'response' => [ 'class' => \lib\components\EventTransportResponse::class  ],
+  'response' => [
+    'class' => \lib\components\EventTransportResponse::class
+  ],
+
   // Internationalization
   // @todo move module translations into module
   // https://stackoverflow.com/questions/34357254/override-translation-path-of-module-on-yii2
@@ -52,6 +56,12 @@ $components = [
         'catalog' => 'messages',
         'useMoFile' => false
       ],
+      'backup' => [
+        'class' => \yii\i18n\GettextMessageSource::class,
+        'basePath' => '@messages',
+        'catalog' => 'messages',
+        'useMoFile' => false
+      ],
     ],
   ],
   // Cache
@@ -80,11 +90,8 @@ $components = [
   'ldap' => require('ldap.php'),
   'ldapAuth'  => [
     'class' => \lib\components\LdapAuth::class
-  ],  
-  // a queue of Events to be transported to the browser
-  'eventQueue' => [
-    'class' => \lib\components\EventQueue::class
   ],
+  // a queue of Events to be transported to the browser
   // access manager, handles all things access
   'accessManager' => [
     'class' => \lib\components\AccessManager::class
@@ -96,6 +103,19 @@ $components = [
   // various utility methods
   'utils' => [ 
     'class' => \lib\components\Utils::class
+  ],
+
+  /*
+   * i/o events/message handling
+   * @todo needs to be streamlined
+   */
+
+  'eventQueue' => [
+    'class' => \lib\components\EventQueue::class
+  ],
+  // The message bus, currently only a stub
+  'message' => [
+    'class' => \lib\components\MessageBus::class
   ],
   //server-side events, not used
   'sse' => [

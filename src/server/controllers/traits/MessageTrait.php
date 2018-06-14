@@ -22,8 +22,11 @@ trait MessageTrait
    * @param mixed $data
    * @return void
    */
-  public function broadcastClientMessage($eventName, $data=null){
-    $this->dispatchClientMessage($eventName, $data);
+  public function broadcastClientMessage($eventName, $data=null, $exludeOwnSession=false){
+    if( ! $exludeOwnSession ){
+      $this->dispatchClientMessage($eventName, $data);
+    }
+    // not implemented
   }
 
   /**

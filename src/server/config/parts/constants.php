@@ -52,3 +52,12 @@ if( !defined('BIBUTILS_PATH') )
 {
   define('BIBUTILS_PATH','/usr/local/bin');
 }
+
+/**
+ * The path to a writable directory where temporary files are stored
+ * Defaults to the system temporary directory
+ */
+if( !defined('TMP_PATH') )
+{
+  define('TMP_PATH',sys_get_temp_dir());
+}

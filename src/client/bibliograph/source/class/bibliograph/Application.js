@@ -279,10 +279,15 @@ qx.Class.define("bibliograph.Application",
      * gets a reference to a widget by its id
      * @param id {String}
      * @return {qx.ui.core.Widget} The widget with the given id
+     * @throws {Error}
      */
     getWidgetById : function(id)
     {
-      return this.__widgets[id];
+      let widget =  this.__widgets[id];
+      if( ! widget ){
+        this.error(`A widget with id '${id}' does not exist.`);
+      }
+      return widget;
     },
   
     /**

@@ -77,12 +77,16 @@ trait JsonRpcTrait
   /**
    * Expects a token in the json response and caches it.
    *
-   * @return void
+   * @return string The access token
    */
   public function seeAndSaveTokenInJsonResponse()
   {
     $this->seeResponseJsonMatchesJsonPath('$.result.token');
-    $this->token($this->grabDataFromResponseByJsonPath('$.result.token')[0]);
+    $token = $this->grabDataFromResponseByJsonPath('$.result.token')[0];
+    if( ! $token ){
+      throw new RuntimeException( $this->grabDataFromResponseByJsonPath('$.result.error')[0]);
+    }
+    return $this->token($token);
   }
 
   /**
@@ -99,22 +103,22 @@ trait JsonRpcTrait
   /**
    * Log in as an Adminstrator
    *
-   * @return void
+   * @return string The Access token
    */
   public function loginAsAdmin()
   {
-    $this->loginWithPassword( "admin", "admin" );
+    return $this->loginWithPassword( "admin", "admin" );
   }
 
   /**
    * Log in with a username and password
    *
-   * @return void
+   * @return string The access token
    */
   public function loginWithPassword( $user, $password )
   {
     $this->sendJsonRpcRequest( "access","authenticate", [ $user, $password ] );
-    $this->seeAndSaveTokenInJsonResponse();
+    return $this->seeAndSaveTokenInJsonResponse();
   }
 
   /**

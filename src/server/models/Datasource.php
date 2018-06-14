@@ -2,10 +2,12 @@
 
 namespace app\models;
 
+use lib\models\Migration;
 use Yii;
 use lib\models\BaseModel;
 use app\models\Role;
 use yii\db\ActiveQuery;
+use yii\db\Expression;
 use yii\helpers\ArrayHelper;
 
 // @todo Add column `dsn` to `class`, remove columns `type`, `host`, `port`, `database`
@@ -33,6 +35,7 @@ use yii\helpers\ArrayHelper;
  * @property integer $readonly
  * @property integer $hidden
  * @property string $migrationNamespace
+ * @property int $migrationApplyTime
  */
 class Datasource extends BaseModel
 {
@@ -503,7 +506,7 @@ class Datasource extends BaseModel
 
   /**
    * Creates the tables for the models associated with this datasource
-   *
+   * @todo should this even be here?
    * @return void
    * @throws \Exception
    */
@@ -512,11 +515,27 @@ class Datasource extends BaseModel
     Yii::$app->datasourceManager->createModelTables($this);
   }
 
+  /**
+   * Returns a list of schemas as a label/value model
+   * @todo should this even be here?
+   * @return array
+   */
   public function getSchemaOptions()
   {
     return Schema::find()
       ->select("name as label, namedId as value")
       ->asArray()
       ->all();
+  }
+
+  /**
+   * Returns the integer timestamp of the most recent migration that has
+   * been run on the tables of this database
+   * @return int
+   * @throws \Exception
+   */
+  public function getMigrationApplyTime()
+  {
+    return Migration::find()->max('apply_time', $this->getConnection());
   }
 }

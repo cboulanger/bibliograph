@@ -3,6 +3,10 @@
 set -o errexit # Exit on error
 YIICMD="php yii-test"
 
+echo "Creating empty database ..."
+mysql -uroot -e "DROP DATABASE tests;" || true
+mysql -uroot -e "CREATE DATABASE tests;"
+
 pushd ./src/server > /dev/null
 echo "Setting up database ..."
 $YIICMD migrate/fresh --interactive=0 --db=testdb --migrationNamespaces=app\\migrations\\schema  > /dev/null
@@ -17,8 +21,8 @@ rm tests/_output/*fail* &> /dev/null || true
 echo "Running tests..."
 php vendor/bin/codecept $@
 
-echo "Cleanup database ..."
-$YIICMD migrate/down all --interactive=0 --db=testdb  > /dev/null
+#echo "Cleanup database ..."
+#$YIICMD migrate/down all --interactive=0 --db=testdb  > /dev/null
 
 popd > /dev/null
 

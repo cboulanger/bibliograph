@@ -21,6 +21,8 @@
 namespace app\controllers;
 
 use app\models\Datasource;
+use app\models\Folder;
+use app\models\Reference;
 use app\modules\z3950\models\Search;
 use Yii;
 
@@ -128,4 +130,40 @@ class TestController extends AppController
     return $search ? $search->getAttributes() : null;
   }
 
+  /**
+   * @param string $datasource
+   * @param int|null $number
+   * @throws \yii\db\Exception
+   * @return string
+   */
+  public function actionCreateFakeData(string $datasource, int $number = 100)
+  {
+    if( ! ( YII_ENV_TEST || Yii::$app->request->isConsoleRequest ) ){
+      throw new \BadMethodCallException("Not allowed.");
+    }
+    $faker = \Faker\Factory::create();
+    Yii::debug("Creating fake data in '$datasource'");
+    $folderClass = $this->getModelClass($datasource,"folder");
+    $referenceClass = $this->getModelClass($datasource, "reference");
+    for ($i=1; $i<=$number; $i++){
+      /** @var Folder $folder */
+      $folder = new $folderClass([
+        'label' => $faker->sentence(5, true),
+      ]);
+      $folder->save();
+      for ($j=1; $j<=$number; $j++){
+        /** @var Reference $reference */
+        $reference = new $referenceClass([
+          'reftype'   => "book",
+          'author'    => $faker->name,
+          'title'     => $faker->sentence(10, true),
+          'abstract'  => $faker->text,
+          'year'      => (string) rand(1970,date("Y"))
+        ]);
+        $reference->save();
+        $folder->link("references", $reference);
+      }
+    }
+    return "Created $i folders and " . $i*$j . " references";
+  }
 }

@@ -24,6 +24,7 @@ use app\models\Permission;
 use app\models\Role;
 use app\models\User;
 use Yii;
+use yii\db\Exception;
 
 class AccessManager
 {
@@ -103,7 +104,6 @@ class AccessManager
    * @param string|array $permissionNames
    * @param Role|Role[]|array $roles Optional Role models
    * @return Permission[]
-   * @throws \yii\db\Exception
    */
   public function addPermissions( $permissionNames, $roles=[] )
   {
@@ -113,9 +113,17 @@ class AccessManager
       $permission = new Permission([
         'namedId' => $permissionName
       ]);
-      $permission->save();
+      try {
+        $permission->save();
+      } catch (Exception $e) {
+        Yii::warning($e->getMessage());
+      }
       foreach ( (array) $roles as $role ){
-        $permission->link("roles",$role);
+        try{
+          $permission->link("roles",$role);
+        } catch (\Exception $e){
+          // ignore
+        }
       }
       $permissions[] = $permission;
     }

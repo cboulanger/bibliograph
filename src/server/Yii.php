@@ -40,6 +40,8 @@ class Yii extends \yii\BaseYii
  *    Server-side events. Not working
  * @property \lib\channel\Component $channel
  *    Message channels. Not working
+ * @property \lib\components\MessageBus $message
+ *    A message bus which dispatches to the requesting client and/or broadcasts to all clients
  */
 class WebApplication extends yii\web\Application
 {

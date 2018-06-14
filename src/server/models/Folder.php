@@ -68,13 +68,40 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
   public function rules()
   {
     return [
-      [['created', 'modified'], 'safe'],
-      [['parentId', 'position'], 'required'],
-      [['parentId', 'position', 'searchable', 'searchfolder', 'public', 'opened', 'locked', 'hidden', 'markedDeleted', 'childCount', 'referenceCount'], 'integer'],
-      [['label', 'description', 'path'], 'string', 'max' => 100],
-      [['type', 'createdBy'], 'string', 'max' => 20],
-      [['query'], 'string', 'max' => 255],
-      [['owner'], 'string', 'max' => 30],
+      [
+        ['created', 'modified'],
+        'safe'
+      ],
+      [
+        ['parentId','position','opened','searchfolder','locked','hidden','markedDeleted','childCount','referenceCount'],
+        'default', 'value'=> 0
+      ],
+      [
+        ['searchable','public'],
+        'default', 'value'=> 1
+      ],
+      [
+        ['parentId', 'position', 'searchable', 'searchfolder', 'public', 'opened', 'locked', 'hidden', 'markedDeleted', 'childCount', 'referenceCount'],
+        'integer'
+      ],
+      [
+        ['label', 'description', 'path'],
+        'string', 'max' => 100
+      ],
+      [
+        ['type', 'createdBy'],
+        'string',
+        'max' => 20
+      ],
+      [
+        ['query'],
+        'string',
+        'max' => 255
+      ],
+      [
+        ['owner'],
+        'string', 'max' => 30
+      ],
     ];
   }
 
@@ -299,11 +326,16 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
    * @param array $changedAttributes
    * @return boolean
    * @throws Exception
+   * @throws \Throwable
    */
   public function afterSave($insert, $changedAttributes)
   {
     // parent implemenattion
     parent::afterSave($insert, $changedAttributes);
+
+    // do no emit events if in console mode
+    if( Yii::$app->request->isConsoleRequest ) return true;
+
     // inserts
     if ($insert) {
       Yii::debug("Inserting " . $this->label);
@@ -357,11 +389,12 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
    *
    * @return void
    * @throws Exception
+   * @throws \Throwable
    */
   protected function _afterInsert()
   {
     // skip if we don't have a logged-in user (e.g. in tests)
-    if( ! Yii::$app->user->getIdentity()) return;
+    if (!Yii::$app->user->getIdentity()) return;
     if($this->parentId){
       $this->updateParentNode();
     }

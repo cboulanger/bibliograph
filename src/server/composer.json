@@ -17,7 +17,8 @@
         "voku/simple-cache": "^3.1",
         "rsinger/worldcat-linkeddata-php" : "*@dev",
         "neitanod/forceutf8": "^2.0",
-        "aracoool/yii2-uuid": "^1.1"
+        "aracoool/yii2-uuid": "^1.1",
+        "react/http-client": "^0.5.9"
     },
     "require-dev": {
         "bizley/migration": "^2.2",
@@ -29,7 +30,8 @@
         "insolita/yii2-migration-generator": "~2.3",
         "graze/guzzle-jsonrpc": "~3.0",
         "bazilio/yii2-stubs-generator": "^1.1",
-        "goaop/parser-reflection": "^1.4"
+        "goaop/parser-reflection": "^1.4",
+        "yiisoft/yii2-faker": "~2.0.0"
     },
     "repositories": [
         {

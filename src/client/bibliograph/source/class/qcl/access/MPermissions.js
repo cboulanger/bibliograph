@@ -137,7 +137,8 @@ qx.Mixin.define("qcl.access.MPermissions",
         return;
       }
       if( ! qx.lang.Type.isObject(this.permissions) ){
-        throw new Error("You need to define a 'permissions' member property object.");
+        this.warn("No 'permissions' member property object, creating enpty one.");
+        this.permissions = {};
       }
       this.$$permissionUpdaters = {};
       let manager = this.getPermissionManager();
@@ -295,46 +296,48 @@ qx.Mixin.define("qcl.access.MPermissions",
     /**
      * Bind the given property of the targetWidget to the state of
      * this permission
-     * @param permission {qcl.access.Permission}
+     * @param permission {qcl.access.Permission|string } The permission object or name
      * @param targetWidget {qx.ui.core.Widget}
      * @param targetProperty {String}
      */
     bindState : function(permission, targetWidget, targetProperty){
-      this._checkBindArguments(permission, targetWidget);
-      permission.bind("state", targetWidget, targetProperty);
+      let p = this._checkBindArguments(permission, targetWidget);
+      p.bind("state", targetWidget, targetProperty);
     },
   
     /**
      * Bind the `enabled` property of the targetWidget to the state of
      * this permission
-     * @param permission {qcl.access.Permission}
+     * @param permission {qcl.access.Permission|string} The permission object or name
      * @param targetWidget {qx.ui.core.Widget}
      */
     bindEnabled : function(permission, targetWidget){
-      this._checkBindArguments(permission, targetWidget);
-      permission.bind("state", targetWidget, "enabled");
+      let p = this._checkBindArguments(permission, targetWidget);
+      p.bind("state", targetWidget, "enabled");
     },
   
   
     /**
      * Bind the `visibility` property of the targetWidget to the state of
      * this permission. This maps `true` to `visible` and `false` to `excluded`
-     * @param permission {qcl.access.Permission}
+     * @param permission {qcl.access.Permission|string} The permission object or name
      * @param targetWidget {qx.ui.core.Widget}
      */
     bindVisibility : function(permission, targetWidget){
-      this._checkBindArguments(permission, targetWidget);
-      permission.bind("state", targetWidget, "visibility", {
+      let p = this._checkBindArguments(permission, targetWidget);
+      p.bind("state", targetWidget, "visibility", {
         converter: bibliograph.Utils.bool2visibility
       });
     },
 
 
     /**
-     * Check the arguments passed to the bindXXX methods
+     * Check the arguments passed to the bindXXX methods. If the permission is a string,
+     * it is converted into a permission object
      * @param permission {qcl.access.Permission}
      * @param targetWidget {qx.ui.core.Widget}
      * @private
+     * @return {qcl.access.Permission}
      */
     _checkBindArguments : function(permission, targetWidget)
     {
@@ -342,12 +345,14 @@ qx.Mixin.define("qcl.access.MPermissions",
       if( type === "Object" && (permission.depends||permission.updateEvent||permission.aliasOf||permission.condition) ){
         this.error("Permission object has not been set up - call setupPermissions() first.");
       }
-      if( ! (permission instanceof qcl.access.Permission ) ){
-        this.error("Permission must be instanceof qcl.access.Permission but is " + type )
+      if( typeof permission === "string" ){
+        this.debug(`Creating permission ${permission}...`);
+        permission = qcl.access.PermissionManager.getInstance().create(permission);
       }
       if( ! (targetWidget instanceof qx.ui.core.Widget ) ){
         this.error("target must be instanceof qx.ui.core.Widget but is " + qx.lang.Type.getClass(targetWidget) );
       }
+      return permission;
     },
 
     /**

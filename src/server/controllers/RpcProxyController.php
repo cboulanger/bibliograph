@@ -31,10 +31,12 @@ class RpcProxyController extends \yii\console\Controller
     // find controller source code files
     $files = [];
     $target_dir = realpath(__DIR__ . "/../../client/bibliograph/source/class/rpc");
-    $source_dirs = array_merge(
-      [__DIR__],
-      glob( dirname(__DIR__) . "/modules/*/controllers", GLOB_ONLYDIR)
-    );
+    $source_dirs = [__DIR__];
+    // todo modules do not work yet - must be put into module directories
+//    $source_dirs = array_merge(
+//      $source_dirs,
+//      glob( dirname(__DIR__) . "/modules/*/controllers", GLOB_ONLYDIR)
+//    );
     foreach ($source_dirs as $dir) {
       foreach (scandir($dir) as $file) {
         if (ends_with($file, "Controller.php")) {
@@ -72,7 +74,7 @@ class RpcProxyController extends \yii\console\Controller
           $js[] = "/**";
           $js[] = $this->formatDocblockContent($docblock->getSummary() . PHP_EOL.PHP_EOL . $docblock->getDescription());
           $js[] = " * @see " . $class->getName();
-          $js[] = " * @file " . basename($file);
+//          $js[] = " * @file " . $file; // todo: strip source root
           $js[] = " */";
           $js[] = "qx.Class.define(\"rpc.$class_name\",";
           $js[] = "{ ";

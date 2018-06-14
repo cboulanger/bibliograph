@@ -24,16 +24,18 @@ use InvalidArgumentException;
 use lib\models\BaseModel;
 use yii\helpers\ArrayHelper;
 
-class Form extends Dialog
+/**
+ * Class Form
+ * @package lib\dialog
+ * @property array $formData
+ * @property bool $allowCancel
+ * @property array $options
+ */
+class Form extends Alert
 {
   /**
-   * Returns an event to the client which prompts the user with a form.
-   *
-   * @param string $message 
-   *    The message text
-   * @param array $formData 
-   *    Arrray containing the form data. Example (using
-   *    json instead of native php array):
+   * Arrray containing the form data. Example (using
+   * json instead of native php array):
    * <pre>
    * {
    *   'username' :
@@ -69,26 +71,84 @@ class Form extends Dialog
    *   }
    * }
    * </pre>
+   * @var array
+   */
+  public $formData = [];
+
+  /**
+   * @param array $value
+   * @return $this
+   */
+  public function setFormData(array $value){$this->formData=$value; return $this;}
+
+  /**
+   * Whether cancelling of the dialog is allowed
+   * @var bool
+   */
+  public $allowCancel = false;
+
+  /**
+   * @param $value
+   * @return $this
+   */
+  public function setAllowCancel(bool $value){$this->allowCancel=$value; return $this;}
+
+  /**
+   * Optional properties of the form widget
+   * @var array
+   */
+  public $options = [];
+
+  /**
+   * @param $value
+   * @return $this
+   */
+  public function setOptions(array $value){$this->options=$value;return $this;}
+
+  /**
+   * @inheritdoc
+   */
+  public function sendToClient()
+  {
+    static::create(
+      $this->message,
+      $this->formData,
+      $this->allowCancel,
+      $this->service,
+      $this->method,
+      $this->params,
+      $this->options
+    );
+  }
+
+  /**
+   * Returns an event to the client which prompts the user with a form.
+   *
+   * @param string $message 
+   *    The message text
+   * @param array $formData
    * @param bool $allowCancel
    *    Whether the form can be cancelled
    * @param string $callbackService 
    *    Service that will be called when the user clicks on the OK button
-   * @param string $callbackMethod 
+   * @param string $callbackMethod
    *    Service method
-   * @param int $width
-   *    Width of the dialog in pixels
-   * @param array $callbackParams 
+   * @param array|null $callbackParams
    *    Optional service params
+   * @param array|null $options Optional properties of the form widget
+   * @deprecated Please use setters instead
    */
-  public static function create(
-    string $message,
-    array $formData,
-    bool $allowCancel=true,
-    string $callbackService,
-    string $callbackMethod,
-    array $callbackParams=null,
-    array $options = null )
+  public static function create()
   {
+    list(
+      $message,
+      $formData,
+      $allowCancel,
+      $callbackService,
+      $callbackMethod,
+      $callbackParams,
+      $options
+      ) = array_pad( func_get_args(), 7, null);
     $properties = [
       'message'     => $message,
       'formData'    => $formData,
@@ -103,7 +163,7 @@ class Form extends Dialog
        'properties'  => $properties,
        'service' => $callbackService,
        'method'  => $callbackMethod,
-       'params'  => $callbackParams
+       'params'  => $callbackParams ?? []
     ));
   }
 
