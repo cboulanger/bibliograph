@@ -103,7 +103,7 @@ trait ServicesTrait
    */
   protected function listBackupFiles(Datasource $datasource)
   {
-    $backupPath = BACKUP_PATH;
+    $backupPath = BACKUP_PATH ? BACKUP_PATH : TMP_PATH;
     $backupVersion = Module::BACKUP_VERSION;
     $migrationApplyTime = $datasource->migrationApplyTime;
     $ext = Module::BACKUP_FILE_EXT;
@@ -128,7 +128,8 @@ trait ServicesTrait
     $backuptime = $datetime->format('Y-m-d H:i:s');
     $migrationApplyTime = $datasource->migrationApplyTime;
     $zipFileName = $this->createBackupFileName($datasource, $timestamp);
-    $zipFilePath = BACKUP_PATH . "/$zipFileName";
+    $backupPath = BACKUP_PATH ? BACKUP_PATH : TMP_PATH;
+    $zipFilePath = "$backupPath/$zipFileName";
     $zip = new ZipArchive();
     $res = $zip->open($zipFilePath, ZipArchive::CREATE);
     if ($res !== true) {
@@ -210,7 +211,8 @@ trait ServicesTrait
   protected function restoreBackup(Datasource $datasource, string $file, Progress $progressBar = null)
   {
     list(, , , $timestamp) = $this->parseBackupFilename($file);
-    $zipFilePath = BACKUP_PATH . "/$file";
+    $backupPath = BACKUP_PATH ? BACKUP_PATH : TMP_PATH;
+    $zipFilePath = "$backupPath/$file";
     if (!file_exists($zipFilePath)) {
       throw new RuntimeException(Yii::t(Module::CATEGORY, "Backup file does not exist."));
     }
