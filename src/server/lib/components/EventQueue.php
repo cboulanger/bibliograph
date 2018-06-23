@@ -25,7 +25,7 @@ class EventQueue extends \yii\base\Component
    */
   public function add( \yii\base\Event $event )
   {
-    //\Yii::debug("Event:" . $event->name);
+    //\Yii::debug("Event:" . $event->name, __METHOD__);
     $this->events[] = $event;
   }
 
@@ -49,6 +49,13 @@ class EventQueue extends \yii\base\Component
   public function toArray()
   {
     return array_map( [$this, "_eventToArray" ], $this->events );
+  }
+
+  /**
+   * Empties the event queue
+   */
+  public function clean(){
+    $this->events = [];
   }
 
   /**

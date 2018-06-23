@@ -84,7 +84,7 @@ class Endnote extends AbstractExporter
     $bibliographBibtex = (new BibliographBibtex())->export($references);
     try {
       $mods = (new Executable("bib2xml", BIBUTILS_PATH))->call("-u", $bibliographBibtex);
-      //Yii::debug($mods, Module::CATEGORY);
+      //Yii::debug($mods, Module::CATEGORY, __METHOD__);
       $end = (new Executable("xml2end", BIBUTILS_PATH ))->call("", $mods);
     } catch (\Exception $e) {
       throw new UserErrorException($e->getMessage());

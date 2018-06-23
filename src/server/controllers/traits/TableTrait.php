@@ -270,7 +270,7 @@ trait TableTrait
     $languages=Yii::$app->utils->getLanguages();
     $indexedQueries =[];
     foreach ($languages as $language) {
-      //Yii::debug("Trying to translate query '$clientQuery->cql' from '$language'...");
+      //Yii::debug("Trying to translate query '$clientQuery->cql' from '$language'...", __METHOD__);
       /** @var ActiveQuery $activeQuery */
       $activeQuery = $modelClass::find()
         ->select($columns)

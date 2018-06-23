@@ -67,13 +67,13 @@ class Bibtex extends AbstractParser
   {
     try {
       $mods = (new Executable("bib2xml", BIBUTILS_PATH))->call("-u", $bibtex);
-      //Yii::debug($mods, Module::CATEGORY);
+      //Yii::debug($mods, Module::CATEGORY, __METHOD__);
       $bibtex = (new Executable("xml2bib", BIBUTILS_PATH ))->call("-sd -nl", $mods);
     } catch (\Exception $e) {
       throw new UserErrorException($e->getMessage());
     }
     $bibtex = str_replace("\nand ", "; ", $bibtex);
-    //Yii::debug($bibtex, Module::CATEGORY);
+    //Yii::debug($bibtex, Module::CATEGORY, __METHOD__);
     $references = (new BibtexUtf8())->parse($bibtex);
     return $references;
   }

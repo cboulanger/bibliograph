@@ -20,8 +20,8 @@
 
 namespace app\controllers;
 
+use lib\exceptions\UserErrorException;
 use Yii;
-use app\controllers\AppController;
 use app\models\Datasource;
 
 /**
@@ -34,14 +34,19 @@ class DatasourceController extends AppController
    * application supports
    * @param string $namedId
    * @param string $namedId
+   * @throws \JsonRpc2\Exception
    */
   public function actionCreate( $namedId, $type=null )
   {
     $this->requirePermission("datasource.create");
     // @todo handle type
-    // @tod validate input
-    $datasource = Yii::$app->datasourceManager->create($namedId);
-    $datasource->createModelTables();
+    // @todo validate input
+    try {
+      $datasource = Yii::$app->datasourceManager->create($namedId);
+      $datasource->createModelTables();
+    } catch (\Exception $e) {
+      throw new UserErrorException($e->getMessage());
+    }
     return "Datasource '$namedId' has been created";
   }
 
@@ -62,6 +67,9 @@ class DatasourceController extends AppController
         ];
       }
     }
+    usort( $availableDatasources, function($a, $b){
+      return $a['title'] > $b['title'];
+    });
     return $availableDatasources;
   }
 }

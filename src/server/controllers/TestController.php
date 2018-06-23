@@ -24,6 +24,8 @@ use app\models\Datasource;
 use app\models\Folder;
 use app\models\Reference;
 use app\modules\z3950\models\Search;
+use lib\dialog\Alert;
+use lib\exceptions\UserErrorException;
 use Yii;
 
 use app\controllers\AppController;
@@ -62,13 +64,12 @@ class TestController extends AppController
 
   public function actionTest()
   {
-    throw new \lib\exceptions\UserErrorException("This is a user error");
-    //\lib\dialog\Alert::create("It works!","test","test2",["it really does."]);
+    throw new UserErrorException("This is a user error");
   }
 
   public function actionTest2($result, $message )
   {
-    \lib\dialog\Alert::create($message);
+    (new Alert)->setMessage($message)->sendToClient();
   }  
 
   public function create_messages($sessionId)
@@ -82,7 +83,7 @@ class TestController extends AppController
 
   public function actionAlert( $message )
   {
-    \lib\dialog\Alert::create( $message );
+    (new Alert)->setMessage($message )->sendToClient();
   }
 
   public function actionSimpleEvent()
@@ -142,7 +143,7 @@ class TestController extends AppController
       throw new \BadMethodCallException("Not allowed.");
     }
     $faker = \Faker\Factory::create();
-    Yii::debug("Creating fake data in '$datasource'");
+    Yii::debug("Creating fake data in '$datasource'", __METHOD__);
     $folderClass = $this->getModelClass($datasource,"folder");
     $referenceClass = $this->getModelClass($datasource, "reference");
     for ($i=1; $i<=$number; $i++){

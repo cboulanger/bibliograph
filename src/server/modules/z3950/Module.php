@@ -217,7 +217,7 @@ class Module extends \lib\Module
         Search::setDatasource($datasource);
         $searches = Search::find()->where(['UserId'=>$user->id])->all();
         foreach ($searches as $search) $search->delete();
-        Yii::debug("Deleted search data.",self::CATEGORY);
+        Yii::debug("Deleted search data.",self::CATEGORY, __METHOD__);
       } catch (\Error $e) {
         Yii::error($e->getMessage());
       }
@@ -231,7 +231,7 @@ class Module extends \lib\Module
   {
     $z3950Datasources = $this->getDatasourceNames();
     foreach ($z3950Datasources as $namedId) {
-      Yii::debug("Deleting Z39.50 datasource '$namedId'...", self::CATEGORY);
+      Yii::debug("Deleting Z39.50 datasource '$namedId'...", self::CATEGORY, __METHOD__);
       try {
         Yii::$app->datasourceManager->delete($namedId, true);
       } catch (Exception $e) {

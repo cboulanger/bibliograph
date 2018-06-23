@@ -7,5 +7,9 @@ return [
   'app.datasource.baseclass' => [
     'type' => "string",
     'default' => \app\models\BibliographicDatasource::class
+  ],
+  'app.access.userdatabase.roles' => [
+    'type' => "list",
+    'default' => "manager,user"
   ]
 ];

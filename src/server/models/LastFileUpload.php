@@ -48,7 +48,7 @@ class LastFileUpload extends UploadedFile
       return false;
     }
     Yii::$app->cache->set(self::cacheKey(), serialize($this));
-    Yii::debug("Uploaded file was saved to '$path', object stored in cache.");
+    Yii::debug("Uploaded file was saved to '$path', object stored in cache.", __METHOD__);
     return $path;
   }
 
@@ -82,7 +82,7 @@ class LastFileUpload extends UploadedFile
    */
   public function delete()
   {
-    Yii::debug("Deleting last upload.");
+    Yii::debug("Deleting last upload.", __METHOD__);
     unlink($this->path);
     Yii::$app->cache->delete(self::cacheKey());
   }

@@ -122,7 +122,7 @@ class SearchController extends \yii\web\Controller
     $this->module->setPreference("lastDatasource", $datasourceName );
     $query = $this->module->fixQueryString($query);
 
-    Yii::debug("Executing query '$query' on remote Z39.50 database '$datasourceName' ...", Module::CATEGORY);
+    Yii::debug("Executing query '$query' on remote Z39.50 database '$datasourceName' ...", Module::CATEGORY, __METHOD__);
 
     $yaz = new YAZ($datasource->resourcepath);
     try {
@@ -157,7 +157,7 @@ class SearchController extends \yii\web\Controller
 
     try {
       $syntax = $yaz->setPreferredSyntax(["marc"]);
-      Yii::debug("Syntax is '$syntax' ...",Module::CATEGORY);
+      Yii::debug("Syntax is '$syntax' ...",Module::CATEGORY, __METHOD__);
     } catch (YazException $e) {
       throw new UserErrorException(Yii::t(Module::CATEGORY, "Server does not support a convertable format."));
     }
@@ -196,11 +196,11 @@ class SearchController extends \yii\web\Controller
         [ 'number' => $maxHits ]
       ));
     }
-    Yii::debug("Found $hits records...", Module::CATEGORY);
+    Yii::debug("Found $hits records...", Module::CATEGORY, __METHOD__);
 
     // delete existing search
     $userId = Yii::$app->user->identity->getId();
-    Yii::debug("Deleting existing search data for query '$query'...", Module::CATEGORY);
+    Yii::debug("Deleting existing search data for query '$query'...", Module::CATEGORY, __METHOD__);
     /** @var Search[] $searches */
     $searches = (array) Search::find()->where(['query' => $query, 'UserId' => $userId ])->all();
     foreach ($searches as $search) {
@@ -219,7 +219,7 @@ class SearchController extends \yii\web\Controller
     ]);
     $search->save();
     $searchId = $search->id;
-    Yii::debug("Created new search record #$searchId for query '$query' for user #$userId.", Module::CATEGORY);
+    Yii::debug("Created new search record #$searchId for query '$query' for user #$userId.", Module::CATEGORY, __METHOD__);
 
     if ($progressBar) {
       $progressBar->setProgress(10, Yii::t(
@@ -229,7 +229,7 @@ class SearchController extends \yii\web\Controller
     }
 
     // Retrieve record data
-    Yii::debug("Getting row data from remote Z39.50 database ...", Module::CATEGORY);
+    Yii::debug("Getting row data from remote Z39.50 database ...", Module::CATEGORY, __METHOD__);
     $yaz->setRange(1, $hits);
     $yaz->present();
     $error = $yaz->getError();
@@ -271,7 +271,7 @@ class SearchController extends \yii\web\Controller
     }
 
     //Yii::debug(ml("XML", $result->getXml()), Module::CATEGORY);
-    Yii::debug("Formatting data...", Module::CATEGORY);
+    Yii::debug("Formatting data...", Module::CATEGORY, __METHOD__);
 
     if ($progressBar) {
       $progressBar->setProgress(90, Yii::t(Module::CATEGORY, "Formatting records..."));
@@ -292,12 +292,12 @@ class SearchController extends \yii\web\Controller
     $records = $parser->parse($bibtex);
 
     if (count($records) === 0) {
-      Yii::debug("Empty result set, aborting...", Module::CATEGORY);
+      Yii::debug("Empty result set, aborting...", Module::CATEGORY, __METHOD__);
       throw new UserErrorException(Yii::t(Module::CATEGORY, "Cannot convert server response"));
     }
 
     // saving to local cache
-    Yii::debug("Caching records...", Module::CATEGORY);
+    Yii::debug("Caching records...", Module::CATEGORY, __METHOD__);
 
     $step = 10 / count($records);
     $i = 0;

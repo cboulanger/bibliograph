@@ -183,7 +183,7 @@ class SetupController extends \app\controllers\AppController
     // @todo validate
 
     // if application version has changed or first run, run setup methods
-    Yii::debug("Data version: $upgrade_from, code version: $upgrade_to.");
+    Yii::debug("Data version: $upgrade_from, code version: $upgrade_to.", __METHOD__);
     // visual marker in log file
     Yii::debug(
       "\n\n\n" . str_repeat("*", 80) . "\n\n BIBLIOGRAPH SETUP\n\n" . str_repeat("*", 80) . "\n\n\n",
@@ -209,7 +209,7 @@ class SetupController extends \app\controllers\AppController
       Yii::debug([
         'errors'   => $this->errors,
         'messages' => $this->messages
-      ]);
+      ], __METHOD__);
       return null;
     }
 
@@ -247,7 +247,7 @@ class SetupController extends \app\controllers\AppController
     // compile list of setup methods
     foreach (\get_class_methods($this) as $method) {
       if ( starts_with($method,"setup")) {
-        Yii::debug("Calling method '$method'...");
+        Yii::debug("Calling method '$method'...", __METHOD__);
         try {
           $result = $this->$method($upgrade_from, $upgrade_to);
         } catch (SetupException $e) {
@@ -261,7 +261,7 @@ class SetupController extends \app\controllers\AppController
           return false;
         }
         if (!$result) {
-          Yii::debug("Skipping method '$method'...");
+          Yii::debug("Skipping method '$method'...", __METHOD__);
           continue;
         }
         // @todo replace with SetupException
@@ -289,8 +289,8 @@ class SetupController extends \app\controllers\AppController
       return false;
     }
     // Everything seems to be ok
-    Yii::debug("Setup finished successfully.");
-    Yii::debug($this->messages);
+    Yii::debug("Setup finished successfully.", __METHOD__);
+    Yii::debug($this->messages, __METHOD__);
     return true;
   }
 
@@ -365,7 +365,7 @@ class SetupController extends \app\controllers\AppController
    */
   protected function setupDeleteFileCache($upgrade_from,$upgrade_to){
     if( $upgrade_from !== $upgrade_to ){
-      Yii::debug("Deleting file cache ...");
+      Yii::debug("Deleting file cache ...", __METHOD__);
       $this->emptyDir( __DIR__ . "/../runtime/cache" );
     }
     return false;
@@ -482,11 +482,11 @@ class SetupController extends \app\controllers\AppController
       "join_Datasource_Group,join_Datasource_Role,join_Datasource_User,join_Group_User,join_Permission_Role,join_User_Role");
     $allTablesExist = $this->tableExists($expectTables);
     if ($allTablesExist) {
-      Yii::debug("All relevant v2 tables exist.", 'migrations');
+      Yii::debug("All relevant v2 tables exist.", 'migrations', __METHOD__);
     } else {
       $missingTables = \array_diff($expectTables, $this->tables());
       if (count(\array_diff($expectTables, $missingTables)) == 0) {
-        Yii::debug("None of the relevant v2 tables exist.", 'migrations');
+        Yii::debug("None of the relevant v2 tables exist.", 'migrations', __METHOD__);
       } else {
         // only some exist, this cannot currently be migrated or repaired
         Yii::error("Cannot upgrade from v2, since the following tables are missing: " . implode(", ", $missingTables));
@@ -538,7 +538,7 @@ class SetupController extends \app\controllers\AppController
       ];
     }
     if ($output->contains('up-to-date')) {
-      Yii::debug('No new migrations.', 'migrations');
+      Yii::debug('No new migrations.', 'migrations', __METHOD__);
       $message = Yii::t('setup', "No updates to the databases.");
     } else {
       // unless this is a fresh installation, require admin login
@@ -566,14 +566,14 @@ class SetupController extends \app\controllers\AppController
       }
 
       // run all migrations 
-      Yii::debug("Applying migrations...", "migrations");
+      Yii::debug("Applying migrations...", "migrations", __METHOD__);
       try {
         $output = Console::runAction("migrate/up");
       } catch (MigrationException $e) {
         $output = $e->consoleOutput;
       }
       if ($output->contains('Migrated up successfully')) {
-        Yii::debug("Migrations successfully applied.", "migrations");
+        Yii::debug("Migrations successfully applied.", "migrations", __METHOD__);
         $message .= Yii::t('setup', ' and applied new migrations for version {version}', [
           'version' => $upgrade_to
         ]);
@@ -724,7 +724,7 @@ class SetupController extends \app\controllers\AppController
         $messages[] = "Module '$module->id' already installed.";
         continue;
       }
-      Yii::debug("Installing module $module->id $module->version");
+      Yii::debug("Installing module $module->id $module->version", __METHOD__);
       try{
         $enabled = $module->install();
         if( $enabled ){
@@ -752,7 +752,7 @@ class SetupController extends \app\controllers\AppController
   protected function setupDatasourceMigrations($upgrade_from,$upgrade_to)
   {
     if( ($this->isNewInstallation or $upgrade_from === $upgrade_to) and ! $this->moduleUpgrade ) {
-      Yii::debug("New installation or no new versions, skipping datasource migration.");
+      Yii::debug("New installation or no new versions, skipping datasource migration.", __METHOD__);
       return false;
     }
     $migrated = [];
@@ -778,7 +778,7 @@ class SetupController extends \app\controllers\AppController
           }
           $migration_table_exists = $datasource::getDb()->getTableSchema( $prefix . "migration");
           if( $markerClass and ! $migration_table_exists ){
-            Yii::debug("Initializing migrating for datasource table '$datasource->namedId', schema '$schema->namedId'...");
+            Yii::debug("Initializing migrating for datasource table '$datasource->namedId', schema '$schema->namedId'...", __METHOD__);
             $migrationNamespace = Datasource::getInstanceFor($datasource->namedId)->migrationNamespace;
             $fqn = "$migrationNamespace\\$markerClass";
             $params_mark = [
@@ -786,7 +786,7 @@ class SetupController extends \app\controllers\AppController
               'migrationNamespaces' => $migrationNamespace,
             ];
             $db = $datasource->getConnection();
-            Yii::debug("Marking datasource '{$datasource->namedId}' with '$fqn'...");
+            Yii::debug("Marking datasource '{$datasource->namedId}' with '$fqn'...", __METHOD__);
             Console::runAction('migrate/mark', $params_mark, null, $db);
             $migrated[] = $schema->namedId;
           }

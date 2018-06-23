@@ -84,7 +84,7 @@ class Ris extends AbstractExporter
     $bibliographBibtex = (new BibliographBibtex())->export($references);
     try {
       $mods = (new Executable("bib2xml", BIBUTILS_PATH))->call("-u", $bibliographBibtex);
-      //Yii::debug($mods, Module::CATEGORY);
+      //Yii::debug($mods, Module::CATEGORY, __METHOD__);
       $ris = (new Executable("xml2ris", BIBUTILS_PATH ))->call("", $mods);
     } catch (\Exception $e) {
       throw new UserErrorException($e->getMessage());

@@ -20,8 +20,9 @@
 
 namespace app\controllers;
 
-use Yii;
 use dto\ConfigLoadResult;
+use InvalidArgumentException;
+use Yii;
 
 /**
  * Service class providing methods to get or set configuration
@@ -34,47 +35,43 @@ class ConfigController extends \app\controllers\AppController
   // JSONRPC service methods
   //-------------------------------------------------------------
 
- /**
-  * Service method to load config data
-  * @param string|null $filter Filter
-  * xxreturn \app\controllers\dto\ConfigLoadResult
-  */
-  public function actionLoad( $filter=null )
+  /**
+   * Service method to load config data
+   * @param string|null $filter Filter
+   * xxreturn \app\controllers\dto\ConfigLoadResult
+   */
+  public function actionLoad($filter = null)
   {
-    return Yii::$app->config->getAccessibleKeys( $filter );
+    return Yii::$app->config->getAccessibleKeys($filter);
   }
 
   /**
    * Service method to set a config value
    * @param string $key Key
    * @param mixed $value Value
-   * @throws InvalidArgumentException 
+   * @throws InvalidArgumentException
    * @return bool
+   * @throws \JsonRpc2\Exception
    */
-  function actionSet( $key, $value )
+  function actionSet($key, $value)
   {
     // check key
-    if ( ! Yii::$app->config->keyExists( $key ) )
-    {
+    if (!Yii::$app->config->keyExists($key)) {
       throw new InvalidArgumentException("Configuration key '$key' does not exist");
     }
-    if ( ! Yii::$app->config->valueIsEditable( $key ) )
-    {
+    if (!Yii::$app->config->valueIsEditable($key)) {
       throw new InvalidArgumentException("The value of configuration key '$key' is not editable");
     }
 
-    // if value is customizable, set the user variant of the key
-    if ( Yii::$app->config->valueIsCustomizable( $key ) )
-    {
+    if (Yii::$app->config->valueIsCustomizable($key)) {
+      // if value is customizable, set the user variant of the key
       $this->requirePermission("config.value.edit");
-      Yii::$app->config->setKey( $key, $value );
-    }
+      Yii::$app->config->setKey($key, $value);
+    } else {
 
-    // else, you need special permission to edit the default
-    else
-    {
+      // else, you need special permission to edit the default
       $this->requirePermission("config.default.edit");
-      Yii::$app->config->setKeyDefault( $key, $value );
+      Yii::$app->config->setKeyDefault($key, $value);
     }
     return "OK";
   }
@@ -82,16 +79,15 @@ class ConfigController extends \app\controllers\AppController
   /**
    * Service method to get a config value
    * @param string $key Key
-   * @throws InvalidArgumentException 
+   * @throws InvalidArgumentException
    * @return mixed
    */
-  function actionGet( $key )
+  function actionGet($key)
   {
     // check key
-    if ( ! Yii::$app->config->keyExists( $key ) )
-    {
-      throw new InvalidArgumentException(Yii::t('app',"Configuration key '$key' does not exist"));
+    if (!Yii::$app->config->keyExists($key)) {
+      throw new InvalidArgumentException(Yii::t('app', "Configuration key '$key' does not exist"));
     }
     return Yii::$app->config->getKey($key);
-  } 
+  }
 }

@@ -76,7 +76,7 @@ class TrashController extends AppController
    */
   public function actionEmpty( string $datasource )
   {
-    $this->requirePermission("trash.empty");
+    $this->requirePermission("trash.empty", $datasource);
     // folder
     $trashfolder = static::getTrashfolder( $datasource );
 

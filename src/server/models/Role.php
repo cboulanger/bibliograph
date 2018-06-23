@@ -30,6 +30,7 @@ use app\models\User;
 
 use app\models\User_Role;
 use app\models\Permission_Role;
+use yii\db\ActiveQuery;
 
 
 /**
@@ -42,6 +43,10 @@ use app\models\Permission_Role;
  * @property string $name
  * @property string $description
  * @property integer $active
+ * @property ActiveQuery $permissions
+ * @property ActiveQuery $users
+ * @property ActiveQuery $datasources
+ *
  */
 class Role extends BaseModel
 {
@@ -129,7 +134,7 @@ class Role extends BaseModel
 
   /**
    * @return \yii\db\ActiveQuery
-   */ 
+   */
   protected function getRoleDatasources()
   {
     return $this->hasMany(Datasource_Role::className(), ['RoleId' => 'id']);
@@ -137,7 +142,7 @@ class Role extends BaseModel
 
   /**
    * @return \yii\db\ActiveQuery
-   */ 
+   */
   public function getDatasources()
   {
     return $this->hasMany(Datasource::className(), ['id' => 'DatasourceId'])->via('roleDatasources');

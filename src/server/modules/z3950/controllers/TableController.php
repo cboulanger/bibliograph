@@ -97,7 +97,11 @@ class TableController extends AppController
       ->where(['schema'=> "z3950"])
       ->asArray();
     if( $activeOnly ) $query = $query->andWhere(['active'=>1]);
-    return array_merge($list,$query->all());
+    foreach( $query->all() as $item){
+      settype($item['active'], "boolean");
+      $list[] = $item;
+    }
+    return $list;
   }
 
   /**
@@ -145,7 +149,7 @@ class TableController extends AppController
     $datasource = Datasource::getInstanceFor( $datasourceName );
     $query = $this->module->getQueryString($queryData);
     Search::setDatasource($datasource);
-    //Yii::debug("Row count query for datasource '$datasourceName', query '$query'", Module::CATEGORY);
+    //Yii::debug("Row count query for datasource '$datasourceName', query '$query'", Module::CATEGORY, __METHOD__);
     $search = Search::findOne([
       'query' => $query,
       'datasource' => $datasourceName
@@ -154,7 +158,7 @@ class TableController extends AppController
       throw new UserErrorException(Yii::t(Module::CATEGORY, "No search data exists."));
     }
     $hits = $search->hits;
-    Yii::debug("$hits hits.", Module::CATEGORY);
+    Yii::debug("$hits hits.", Module::CATEGORY, __METHOD__);
     return array(
       'rowCount' => $hits,
       'statusText' => Yii::t(Module::CATEGORY, "{number} hits", ['number' => $hits])
@@ -192,7 +196,7 @@ class TableController extends AppController
     $query = $this->module->getQueryString($queryData);
     $properties = $queryData->query->properties;
     $orderBy = $queryData->query->orderBy;
-    //Yii::debug("Row data query for datasource '$datasourceName', query '$query'.", Module::CATEGORY);
+    //Yii::debug("Row data query for datasource '$datasourceName', query '$query'.", Module::CATEGORY, __METHOD__);
     $search = Search::findOne([
       'query' => $query,
       'datasource' => $datasourceName
@@ -201,13 +205,13 @@ class TableController extends AppController
       throw new \RuntimeException(Yii::t(Module::CATEGORY, "No search data exists."));
     }
     $hits = $search->hits;
-    Yii::debug("Cache says we have $hits hits for query '$query'.", Module::CATEGORY);
+    Yii::debug("Cache says we have $hits hits for query '$query'.", Module::CATEGORY, __METHOD__);
 
     // try to find already downloaded records and return them as rowData
     $searchId = $search->id;
     $lastRow = max($lastRow, $hits - 1);
 
-    Yii::debug("Getting records from cache for search #$searchId, rows $firstRow-$lastRow...", Module::CATEGORY);
+    Yii::debug("Getting records from cache for search #$searchId, rows $firstRow-$lastRow...", Module::CATEGORY, __METHOD__);
 
     // get row data from cache
     $rowData = Record::find()
