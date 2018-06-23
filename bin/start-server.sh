@@ -12,11 +12,13 @@ APP_PATH=client/bibliograph/$TARGET-compiled/index.html
 COMPILE_PATH=$(pwd)/src/client/bibliograph
 QX_CMD=$(pwd)/src/vcslib/qooxdoo-compiler/qx
 
-echo " >>> Compiling application..."
-pushd $COMPILE_PATH > /dev/null
-#$QX_CMD clean
-$QX_CMD compile --target=$TARGET
-popd > /dev/null  
+if [[ "$TARGET" != "only" ]]; then
+    echo " >>> Compiling application..."
+    pushd $COMPILE_PATH > /dev/null
+    #$QX_CMD clean
+    $QX_CMD compile --target=$TARGET
+    popd > /dev/null
+fi
 
 ps | grep "[p]hp -S $HOST" > /dev/null
 if [ $? -eq 0 ]; then
@@ -26,6 +28,10 @@ else
   pushd $SERVER_PATH > /dev/null
   php -S $HOST &> /dev/null &
   popd > /dev/null
+fi
+
+if [[ "$TARGET" == "only" ]]; then
+  exit 0
 fi
 
 if [[ "$OSTYPE" == "darwin"* ]]; then

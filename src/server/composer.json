@@ -1,6 +1,6 @@
 {
     "require": {
-        "yiisoft/yii2": "~2.0.0",
+        "yiisoft/yii2": "dev-master",
         "cranetm/yii2-json-rpc-2.0": "dev-cboulanger-empty-request-object",
         "toriphes/yii2-console-runner": "*",
         "fourteenmeister/dsn": "@dev",
@@ -49,6 +49,10 @@
         {
           "type": "git",
           "url": "https://github.com/cboulanger/worldcat-linkeddata-php.git"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/yiisoft/yii2.git"
         }
     ]
 }
