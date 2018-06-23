@@ -35,7 +35,6 @@ class UserConfig extends BaseModel
   public function rules()
   {
     return [
-      [['created', 'modified'], 'safe'],
       [['UserId', 'ConfigId'], 'integer'],
       [['value'], 'string', 'max' => 255],
     ];

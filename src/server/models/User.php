@@ -24,6 +24,7 @@ use function GuzzleHttp\describe_type;
 use InvalidArgumentException;
 use Yii;
 use Yii\db\ActiveQuery;
+use yii\db\Expression;
 use yii\web\IdentityInterface;
 use lib\models\BaseModel;
 
@@ -66,7 +67,6 @@ class User extends BaseModel implements IdentityInterface
   public function rules()
   {
     return [
-      [['created', 'modified', 'lastAction'], 'safe'],
       [['anonymous', 'ldap', 'active', 'confirmed', 'online'], 'integer'],
       [['namedId', 'password'], 'string', 'max' => 50],
       [['name'], 'string', 'max' => 100],

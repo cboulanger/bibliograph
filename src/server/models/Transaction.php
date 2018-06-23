@@ -31,7 +31,6 @@ class Transaction extends BaseModel
     public function rules()
     {
         return [
-            [['created', 'modified'], 'safe'],
             [['transactionId'], 'integer'],
             [['datasource'], 'string', 'max' => 50],
             [['class'], 'string', 'max' => 100],

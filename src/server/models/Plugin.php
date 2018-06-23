@@ -7,10 +7,7 @@ use Yii;
 /**
  * This is the model class for table "data_Plugin".
  *
- * @property integer $id
  * @property string $namedId
- * @property string $created
- * @property string $modified
  * @property string $name
  * @property string $description
  * @property string $data
@@ -32,7 +29,6 @@ class Plugin extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['created', 'modified'], 'safe'],
             [['data'], 'string'],
             [['active'], 'integer'],
             [['namedId'], 'string', 'max' => 50],

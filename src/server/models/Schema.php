@@ -15,8 +15,6 @@ use Yii;
  *
  * @property integer $id
  * @property string $namedId
- * @property string $created
- * @property string $modified
  * @property string $class
  * @property string $description
  * @property integer $active
@@ -41,7 +39,6 @@ class Schema extends \lib\models\BaseModel
   public function rules()
   {
     return [
-      [['created', 'modified'], 'safe'],
       [['active', 'protected','id'], 'integer'],
       [['namedId'], 'string', 'max' => 50],
       [['class', 'name'], 'string', 'max' => 100],

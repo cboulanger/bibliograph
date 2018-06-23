@@ -10,14 +10,11 @@ use app\models\UserConfig;
 /**
  * This is the model class for table "data_Config".
  *
- * @property integer $id
  * @property integer $type
  * @property string $default
  * @property integer $customize
  * @property integer $final
  * @property string $namedId
- * @property string $created
- * @property string $modified
  */
 class Config extends BaseModel
 {
@@ -44,7 +41,6 @@ class Config extends BaseModel
   {
     return [
       [['type', 'customize', 'final'], 'integer'],
-      [['created', 'modified'], 'safe'],
       [['default'], 'string', 'max' => 255],
       [['namedId'], 'string', 'max' => 50],
       [['namedId'], 'unique'],

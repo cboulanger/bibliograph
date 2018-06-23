@@ -11,9 +11,6 @@ use app\models\Session;
 /**
  * This is the model class for table "data_Messages".
  *
- * @property integer $id
- * @property string $created
- * @property string $modified
  * @property string $name
  * @property resource $data
  * @property integer $SessionId
@@ -34,7 +31,6 @@ class Message extends BaseModel
   public function rules()
   {
     return [
-      [['created', 'modified'], 'safe'],
       [['data'], 'string'],
       [['SessionId'], 'integer'],
       [['name'], 'string', 'max' => 100],

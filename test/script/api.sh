@@ -33,10 +33,12 @@ echo
 echo "Running API tests..."
 $CPT_CMD run api --env $CPT_ENV || exit $?
 echo
-echo "travis_fold:start:server_log"
-echo "Server log:"
-cat server.out
-echo "travis_fold:end:server_log"
+if [[ "$USER" == "travis" ]]; then
+  echo "travis_fold:start:server_log"
+  echo "Server log:"
+  cat server.out
+  echo "travis_fold:end:server_log"
+fi
 rm server.out
 popd > /dev/null
 
@@ -48,3 +50,6 @@ popd > /dev/null
 # $YII_CMD migrate/down all $MIGRATE_ARGS > /dev/null
 # popd > /dev/null
 exit 0
+
+# ^([^\[]+)\[([^]]+)]\[([^]]+)]\[([^]]+)]\[([^]]+)]\[([^]]+)]
+# 2018-11-27 21:53:19 [::1][1][meguqdeg5k6srjh4sl3lold1gd][error][application]

@@ -11,9 +11,6 @@ use Yii;
 /**
  * This is the model class for table "database1_data_Reference".
  *
- * @property integer $id
- * @property string $created
- * @property string $modified
  * @property string $citekey
  * @property string $reftype
  * @property string $abstract
@@ -80,16 +77,15 @@ class Reference extends BaseModel
   public function rules()
   {
     return [
-      [['created', 'modified'], 'safe'],
       [['abstract', 'annote', 'contents', 'note'], 'string'],
       [['markedDeleted', 'attachments'], 'integer'],
       [['citekey', 'affiliation', 'crossref', 'date', 'doi', 'edition', 'month', 'size', 'type', 'volume', 'createdBy', 'modifiedBy'], 'string', 'max' => 50],
       [['reftype', 'issn', 'key', 'language'], 'string', 'max' => 20],
       [['address', 'author', 'booktitle', 'subtitle', 'editor', 'howpublished', 'institution', 'keywords', 'lccn', 'title', 'url'], 'string', 'max' => 255],
       [['copyright', 'journal', 'location', 'organization', 'publisher', 'school'], 'string', 'max' => 150],
-      [['isbn', 'number', 'pages', 'price', 'year'], 'string', 'max' => 30],
+      [['number', 'pages', 'price', 'year'], 'string', 'max' => 30],
       [['series'], 'string', 'max' => 200],
-      [['translator'], 'string', 'max' => 100],
+      [['isbn','translator'], 'string', 'max' => 100],
       [['hash'], 'string', 'max' => 40],
       ['uuid', UuidValidator::class]
     ];

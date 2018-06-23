@@ -7,9 +7,6 @@ use Yii;
 /**
  * This is the model class for table "join_Datasource_User".
  *
- * @property integer $id
- * @property string $created
- * @property string $modified
  * @property integer $DatasourceId
  * @property integer $UserId
  */
@@ -29,7 +26,6 @@ class Datasource_User extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['created', 'modified'], 'safe'],
             [['DatasourceId', 'UserId'], 'integer'],
             [['DatasourceId', 'UserId'], 'unique', 'targetAttribute' => ['DatasourceId', 'UserId'], 'message' => 'The combination of Datasource ID and User ID has already been taken.'],
         ];

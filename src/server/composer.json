@@ -23,7 +23,9 @@
     "rsinger/worldcat-linkeddata-php" : "*@dev",
     "neitanod/forceutf8": "^2.0",
     "aracoool/yii2-uuid": "^1.1",
-    "react/http-client": "^0.5.9"
+    "react/http-client": "^0.5.9",
+    "ext-json": "*",
+    "ext-pdo": "*"
   },
   "require-dev": {
     "bizley/migration": "^2.2",

@@ -7,9 +7,6 @@ use Yii;
 /**
  * This is the model class for table "join_Group_User".
  *
- * @property integer $id
- * @property string $created
- * @property string $modified
  * @property integer $UserId
  * @property integer $GroupId
  */
@@ -29,7 +26,6 @@ class Group_User extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['created', 'modified'], 'safe'],
             [['UserId', 'GroupId'], 'integer'],
             [['GroupId', 'UserId'], 'unique', 'targetAttribute' => ['GroupId', 'UserId'], 'message' => 'The combination of User ID and Group ID has already been taken.'],
         ];

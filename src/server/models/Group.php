@@ -32,10 +32,7 @@ use app\models\Datasource_Group;
 /**
  * This is the model class for table "data_Group".
  *
- * @property integer $id
  * @property string $namedId
- * @property string $created
- * @property string $modified
  * @property string $name
  * @property string $description
  * @property integer $ldap
@@ -58,7 +55,6 @@ class Group extends BaseModel
   public function rules()
   {
     return [
-      [['created', 'modified'], 'safe'],
       [['ldap', 'active'], 'integer'],
       [['namedId'], 'string', 'max' => 50],
       [['name', 'description'], 'string', 'max' => 100],

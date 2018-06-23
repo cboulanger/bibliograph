@@ -15,10 +15,7 @@ use yii\helpers\ArrayHelper;
 /**
  * This is the model class for table "data_Datasource".
  *
- * @property integer $id
  * @property string $namedId
- * @property string $created
- * @property string $modified
  * @property string $title
  * @property string $description
  * @property string $schema
@@ -101,7 +98,6 @@ class Datasource extends BaseModel
   public function rules()
   {
     return [
-      [['created', 'modified'], 'safe'],
       [['port', 'active', 'readonly', 'hidden'], 'integer'],
       [['namedId', 'username', 'password'], 'string', 'max' => 50],
       [['title', 'schema', 'database','prefix'], 'string', 'max' => 100],

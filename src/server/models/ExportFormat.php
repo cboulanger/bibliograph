@@ -10,10 +10,7 @@ use Yii;
 /**
  * This is the model class for table "data_ExportFormat".
  *
- * @property integer $id
  * @property string $namedId
- * @property string $created
- * @property string $modified
  * @property string $class
  * @property string $name
  * @property string $description
@@ -37,7 +34,6 @@ class ExportFormat extends BaseModel
   public function rules()
   {
     return [
-      [['created', 'modified'], 'safe'],
       [['active'], 'integer'],
       [['namedId'], 'string', 'max' => 50],
       [['class', 'name'], 'string', 'max' => 100],

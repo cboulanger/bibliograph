@@ -31,6 +31,9 @@ use app\models\Datasource;
 
 
 /**
+ * @property integer $id
+ * @property string $created
+ * @property string $modified
  * @property array $formData
  *    A associative array of arrays containing data for the
  *    dialog.Form widget
@@ -166,6 +169,21 @@ class BaseModel extends ActiveRecord
   //-------------------------------------------------------------
   // Overridden methods
   //-------------------------------------------------------------  
+
+  /**
+   * Fix values before model is saved
+   *
+   * @inheritdoc
+   * @throws \yii\base\Exception
+   */
+  public function beforeSave($insert)
+  {
+    if (parent::beforeSave($insert)) {
+      // add fixes here...
+      return true;
+    }
+    return false;
+  }
 
   /**
    * Overridden to log validation errors

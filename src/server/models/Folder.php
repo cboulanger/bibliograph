@@ -17,9 +17,6 @@ use yii\db\Exception;
 /**
  * This is the model class for table "database1_data_Folder".
  *
- * @property integer $id
- * @property string $created
- * @property string $modified
  * @property integer $parentId
  * @property integer $position
  * @property string $label
@@ -68,10 +65,6 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
   public function rules()
   {
     return [
-      [
-        ['created', 'modified'],
-        'safe'
-      ],
       [
         ['parentId','position','opened','searchfolder','locked','hidden','markedDeleted','childCount','referenceCount'],
         'default', 'value'=> 0

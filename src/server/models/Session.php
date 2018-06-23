@@ -3,63 +3,58 @@
 namespace app\models;
 
 use Yii;
+use yii\db\Exception;
 use yii\db\Expression;
-
 use lib\models\BaseModel;
-use app\models\User;
-use app\models\Message;
 
 /**
  * This is the model class for table "data_Session".
  *
  * @property integer $id
  * @property string $namedId
- * @property string $created
- * @property string $modified
  * @property string $parentSessionId
  * @property string $ip
  * @property integer $UserId
  */
 class Session extends BaseModel
 {
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
-    {
-        return 'data_Session';
-    }
+  /**
+   * @inheritdoc
+   */
+  public static function tableName()
+  {
+    return 'data_Session';
+  }
 
-    /**
-     * @inheritdoc
-     */
-    public function rules()
-    {
-        return [
-            [['created', 'modified'], 'safe'],
-            [['UserId'], 'integer'],
-            [['namedId', 'parentSessionId'], 'string', 'max' => 50],
-            [['ip'], 'string', 'max' => 32],
-            [['namedId'], 'unique'],
-            [['namedId', 'ip'], 'unique', 'targetAttribute' => ['namedId', 'ip'], 'message' => 'The combination of Named ID and Ip has already been taken.'],
-        ];
-    }
+  /**
+   * @inheritdoc
+   */
+  public function rules()
+  {
+    return [
+      [['UserId'], 'integer'],
+      [['namedId', 'parentSessionId'], 'string', 'max' => 50],
+      [['ip'], 'string', 'max' => 32],
+      [['namedId'], 'unique'],
+      [['namedId', 'ip'], 'unique', 'targetAttribute' => ['namedId', 'ip'], 'message' => 'The combination of Named ID and Ip has already been taken.'],
+    ];
+  }
 
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'ID',
-            'namedId' => 'Named ID',
-            'created' => 'Created',
-            'modified' => 'Modified',
-            'parentSessionId' => 'Parent Session ID',
-            'ip' => 'Ip',
-            'UserId' => 'User ID',
-        ];
-    }
+  /**
+   * @inheritdoc
+   */
+  public function attributeLabels()
+  {
+    return [
+      'id' => 'ID',
+      'namedId' => 'Named ID',
+      'created' => 'Created',
+      'modified' => 'Modified',
+      'parentSessionId' => 'Parent Session ID',
+      'ip' => 'Ip',
+      'UserId' => 'User ID',
+    ];
+  }
 
   //-------------------------------------------------------------
   // Relations
@@ -73,7 +68,7 @@ class Session extends BaseModel
    */
   public function getUser()
   {
-    return $this->hasOne(User::className(), ['id' => 'UserId']);
+    return $this->hasOne(User::class, ['id' => 'UserId']);
   }
 
   /**
@@ -84,7 +79,7 @@ class Session extends BaseModel
    */
   public function getMessages()
   {
-    return $this->hasMany(Messages::className(), ['SessionId' => 'id']);
+    return $this->hasMany(Message::class, ['SessionId' => 'id']);
   }
 
   //-------------------------------------------------------------

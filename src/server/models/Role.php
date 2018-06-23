@@ -38,8 +38,6 @@ use yii\db\ActiveQuery;
  *
  * @property integer $id
  * @property string $namedId
- * @property string $created
- * @property string $modified
  * @property string $name
  * @property string $description
  * @property integer $active
@@ -64,7 +62,6 @@ class Role extends BaseModel
   public function rules()
   {
     return [
-      [['created', 'modified'], 'safe'],
       [['active'], 'integer'],
       [['namedId'], 'string', 'max' => 50],
       [['name', 'description'], 'string', 'max' => 100],
