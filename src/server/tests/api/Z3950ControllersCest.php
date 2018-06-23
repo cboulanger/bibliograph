@@ -49,7 +49,7 @@ class Z3950ControllersCest
       'label' => 'string',
       'value' => 'string',
       'active' => 'boolean',
-      'selected' => 'boolean'],
+      ],
       '$.result[0]'
     );
   }
@@ -62,22 +62,4 @@ class Z3950ControllersCest
     $I->sendGET("/z3950/search");
     $I->seeResponseContains("nothing here");
   }
-
-  /**
-   * @param \ApiTester $I
-   */
-  public function tryToExecuteSearch(\ApiTester $I)
-  {
-    $url = $I->getBaseUrl();
-    return;
-    $loop = new StreamSelectLoop;
-
-    $source = new ReadableResourceStream(fopen('source.txt', 'r'), $loop);
-
-    $loop->run();
-    $loop->stop();
-
-  }
-
-
 }

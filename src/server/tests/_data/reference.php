@@ -49,7 +49,7 @@ return [
     'modifiedBy' => 'admin',
     'hash' => null,
     'markedDeleted' => 0,
-    'attachments' => null,
+    'attachments' => 0,
   ],
   [
     'id' => 2,
@@ -99,7 +99,7 @@ return [
     'modifiedBy' => 'admin',
     'hash' => null,
     'markedDeleted' => 0,
-    'attachments' => null,
+    'attachments' => 0,
   ],
   [
     'id' => 3,
@@ -149,7 +149,7 @@ return [
     'modifiedBy' => 'admin',
     'hash' => null,
     'markedDeleted' => 0,
-    'attachments' => null,
+    'attachments' => 0,
   ],
   [
     'id' => 4,
@@ -199,7 +199,7 @@ return [
     'modifiedBy' => 'admin',
     'hash' => null,
     'markedDeleted' => 0,
-    'attachments' => null,
+    'attachments' => 0,
   ],
   [
     'id' => 5,
@@ -249,7 +249,7 @@ return [
     'modifiedBy' => 'admin',
     'hash' => null,
     'markedDeleted' => 0,
-    'attachments' => null,
+    'attachments' => 0,
   ],
   [
     'id' => 6,
@@ -299,7 +299,7 @@ return [
     'modifiedBy' => 'admin',
     'hash' => null,
     'markedDeleted' => 0,
-    'attachments' => null,
+    'attachments' => 0,
   ],
   [
     'id' => 7,
@@ -358,7 +358,7 @@ return [
     'modifiedBy' => 'admin',
     'hash' => null,
     'markedDeleted' => 0,
-    'attachments' => null,
+    'attachments' => 0,
   ],
   [
     'id' => 8,
@@ -408,7 +408,7 @@ return [
     'modifiedBy' => 'admin',
     'hash' => null,
     'markedDeleted' => 0,
-    'attachments' => null,
+    'attachments' => 0,
   ],
   [
     'id' => 9,
@@ -458,7 +458,7 @@ return [
     'modifiedBy' => 'admin',
     'hash' => null,
     'markedDeleted' => 0,
-    'attachments' => null,
+    'attachments' => 0,
   ],
   [
     'id' => 10,
@@ -508,7 +508,7 @@ return [
     'modifiedBy' => 'admin',
     'hash' => null,
     'markedDeleted' => 0,
-    'attachments' => null,
+    'attachments' => 0,
   ],
   [
     'id' => 11,
@@ -558,7 +558,7 @@ return [
     'modifiedBy' => 'admin',
     'hash' => null,
     'markedDeleted' => 0,
-    'attachments' => null,
+    'attachments' => 0,
   ],
   [
     'id' => 12,
@@ -608,7 +608,7 @@ return [
     'modifiedBy' => 'admin',
     'hash' => null,
     'markedDeleted' => 0,
-    'attachments' => null,
+    'attachments' => 0,
   ],
   [
     'id' => 13,
@@ -658,6 +658,6 @@ return [
     'modifiedBy' => 'admin',
     'hash' => null,
     'markedDeleted' => 0,
-    'attachments' => null,
+    'attachments' => 0,
   ]
 ];

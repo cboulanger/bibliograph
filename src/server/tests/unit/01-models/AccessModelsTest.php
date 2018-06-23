@@ -6,9 +6,9 @@ namespace app\tests\unit\models;
 require_once __DIR__ . "/../../_bootstrap.php";
 
 use app\tests\unit\Base;
-use app\models\{
-  User, Group, Permission, Role, Config, UserConfig
-};
+use app\models\User;
+use app\models\Group;
+use app\models\Role;
 
 class AccessModelsTest extends Base
 {
@@ -53,6 +53,19 @@ class AccessModelsTest extends Base
     $this->assertFalse( $user->hasPermission("does.not.exist") );
   }
 
+  public function testUserDatabaseRoles()
+  {
+    $user = User::findOne(['namedId'=>"don_draper"]);
+    $this->assertFalse($user->hasRole('user', 'group1'));
+    $this->assertTrue($user->hasRole('user', 'group3'));
+
+    $user = User::findOne(['namedId'=>"frank_underwood"]);
+    $this->assertTrue($user->hasRole('manager', 'group1'));
+    $this->assertTrue($user->hasRole('manager', 'group2'));
+    $this->assertFalse($user->hasRole('user', 'group3'));
+  }
+
+
   public function testRolePermissions()
   {
     $role = Role::findOne(['namedId'=>"user"]);
@@ -66,7 +79,7 @@ class AccessModelsTest extends Base
   {
     $user = User::findOne(['namedId'=>"admin"]);
     $permissionNames = $user->getPermissionNames();
-    $this->assertEquals(34, count($permissionNames) );
+    $this->assertEquals(1, count($permissionNames) );
     //$this->assertEquals([], $permissionNames );
     $this->assertTrue( $user->hasPermission("access.manage") );
     $this->assertTrue( $user->hasPermission("does.not.exist") ); // admin can do anything
@@ -91,13 +104,19 @@ class AccessModelsTest extends Base
   {
     $group = Group::findOne(['namedId'=>'group1']);
     $result = $group->getDatasourceNames();
-    $this->assertEquals( ["database2"], $result );
-  }    
+    $this->assertEquals( ["database1"], $result );
+  }
 
   public function testUserDatasources()
   {
     $user = User::findOne(['name'=>"Sarah Manning"]);
     $result = $user->getAccessibleDatasourceNames();
-    $this->assertEquals( 0, count( array_diff( $result, ['database2','setup','database3'] )));
+    sort($result);
+    $this->assertEquals( ['database1','database2'], $result);
+
+    $user = User::findOne(['name'=>"Jessica Jones"]);
+    $result = $user->getAccessibleDatasourceNames();
+    sort($result);
+    $this->assertEquals( ['database1','jessica'], $result);
   } 
 }

@@ -29,17 +29,7 @@ class AccessConfigControllerCest
 
   public function tryToAddUsers(ApiTester $I, \Codeception\Scenario $scenario)
   {
-    $I->amGoingTo("create users user2 and user3");
-    $I->sendJsonRpcRequest('access-config', 'add', ['user', 'user2', false]);
-    $I->sendJsonRpcRequest('access-config', 'elements', ['user']);
-    $expected = [
-      "icon" => "icon/16/apps/preferences-users.png",
-      "label" => "Normal user (user2)",
-      "params" => "user,user2",
-      "type" => "user",
-      "value" => "user2"
-    ];
-    $I->compareJsonRpcResultWith($expected, 2);
+    $I->amGoingTo("create users user3 and user4");
     $I->sendJsonRpcRequest('access-config', 'add', ['user', 'user3', false]);
     $I->sendJsonRpcRequest('access-config', 'elements', ['user']);
     $expected = [
@@ -50,16 +40,25 @@ class AccessConfigControllerCest
       "value" => "user3"
     ];
     $I->compareJsonRpcResultWith($expected, 3);
+    $I->sendJsonRpcRequest('access-config', 'add', ['user', 'user4', false]);
+    $I->sendJsonRpcRequest('access-config', 'elements', ['user']);
+    $expected = [
+      "icon" => "icon/16/apps/preferences-users.png",
+      "label" => "user4",
+      "params" => "user,user4",
+      "type" => "user",
+      "value" => "user4"
+    ];
+    $I->compareJsonRpcResultWith($expected, 4);
   }
 
   public function tryToAddExistingUser(ApiTester $I, \Codeception\Scenario $scenario)
   {
     $I->amGoingTo("create a user2, which already exists, and expect an error message");
-    $I->sendJsonRpcRequest('access-config', 'add', ['user', 'user2', false]);
-    $expected = "A user named 'user2' already exists. Please pick another name.";;
+    $I->sendJsonRpcRequest('access-config', 'add', ['user', 'user2', false],true);
+    $expected = "A user named 'user2' already exists. Please pick another name.";
     $I->compareJsonRpcResultWith($expected, "events.0.data.properties.message");
   }
-
 
   public function tryToAddDatasources(ApiTester $I, \Codeception\Scenario $scenario)
   {
@@ -119,8 +118,7 @@ class AccessConfigControllerCest
       $I->sendJsonRpcRequest('access-config', 'delete', [$type, $namedId]);
       $I->dontSeeJsonRpcError();
       $I->expect("the $type not to exist any more.");
-      $I->sendJsonRpcRequest('access-config', 'edit', [$type, $namedId]);
-      $I->dontSeeJsonRpcError();
+      $I->sendJsonRpcRequest('access-config', 'edit', [$type, $namedId], true);
       //result":{"type":"ServiceResult","events":[{"name":"dialog","data":{"type":"alert","properties":{"message":,
       $I->compareJsonRpcResultWith(
         "An object of type $type and id $namedId does not exist.",
