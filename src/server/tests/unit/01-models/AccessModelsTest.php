@@ -117,6 +117,6 @@ class AccessModelsTest extends Base
     $user = User::findOne(['name'=>"Jessica Jones"]);
     $result = $user->getAccessibleDatasourceNames();
     sort($result);
-    $this->assertEquals( ['database1','database2','jessica'], $result);
+    $this->assertEquals( ['database1','jessica'], $result);
   } 
 }

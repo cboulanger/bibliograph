@@ -48,8 +48,5 @@ popd > /dev/null
 # echo "Cleaning up database ..."
 # pushd $SERVER_PATH > /dev/null
 # $YII_CMD migrate/down all $MIGRATE_ARGS > /dev/null
-# popd > /dev/null
+#popd > /dev/null
 exit 0
-
-# ^([^\[]+)\[([^]]+)]\[([^]]+)]\[([^]]+)]\[([^]]+)]\[([^]]+)]
-# 2018-11-27 21:53:19 [::1][1][meguqdeg5k6srjh4sl3lold1gd][error][application]
