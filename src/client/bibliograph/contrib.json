@@ -1,0 +1,26 @@
+{
+  "libraries": [
+    {
+      "library_name": "Dialog",
+      "library_version": "1.3.4",
+      "repo_name": "cboulanger/qx-contrib-Dialog",
+      "repo_tag": "v1.3.4",
+      "path": "contrib/cboulanger_qx-contrib-Dialog_v1.3.4"
+    },
+    {
+      "library_name": "UploadWidget",
+      "library_version": "trunk",
+      "repo_name": "oetiker/UploadWidget",
+      "repo_tag": "v1.0.0",
+      "path": "contrib/oetiker_UploadWidget_v1.0.0"
+    },
+    {
+      "library_name": "TokenField",
+      "library_version": "1.0.0",
+      "repo_name": "cboulanger/qx-contrib-TokenField",
+      "repo_tag": "v1.0.0",
+      "path": "../../vcslib/qx-contrib-TokenField",
+      "_path": "contrib/cboulanger_qx-contrib-TokenField_v1.0.0"
+    }
+  ]
+}

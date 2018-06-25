@@ -1,0 +1,57 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: backup\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-01-22 22:37+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Backup has been created."
+msgstr "Backup wurde erstellt."
+
+msgid "Do you really want to replace Database '{datasource}' with a backup?"
+msgstr "Wollen Sie wirklich Datenbank '{datasource}' mit einer Sicherung ersetzen?"
+
+msgid "Backup from "
+msgstr "Sicherung vom"
+
+msgid "Please select the backup set to restore into database '{datasource}'"
+msgstr "Bitte wählen Sie die Sicherung aus, die in Datenbank '{datasource}' zurückgespielt werden soll."
+
+msgid "Backup file does not exist."
+msgstr "Sicherungsdatei existiert nicht."
+
+msgid "Delete backups older than"
+msgstr "Sicherungen löschen, die älter sind als"
+
+msgid "Delete backups of datasource '{datasource}':"
+msgstr "Sicherungen der Datenbank '{datasource}' löschen?"
+
+msgid "No backups found."
+msgstr "Keine Sicherungen gefunden."
+
+msgid "Really delete {count} backups?"
+msgstr "Wirklich {count} Sicherungen löschen?"
+
+msgid "{count} backups were deleted."
+msgstr "{count} Sicherungen wurden gelöscht."
+
+msgid "There was a problem. Please examine the log file."
+msgstr "Es ist ein Problem aufgetreten, das in der Logdatei protokolliert wurde."
+
+msgid "Choose file:"
+msgstr "Datei auswählen"
+
+msgid "Please select the backup set of datasource '{datasource}' to download"
+msgstr "Bitte wählen Sie die Sicherung von Datenbank '{datasource}' aus, die heruntergeladen werden soll."

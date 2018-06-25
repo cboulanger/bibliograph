@@ -1,0 +1,48 @@
+{
+  "environment": {
+    "qx.icontheme" : "Tango",
+    "qx.debug" : true
+  },
+
+  "targets": [
+    {
+      "//": "The local 'source' target",
+      "type": "source",
+      "outputPath": "../../../../client/bibliograph/plugins/webservices"
+    },
+    {
+      "//": "The local 'build' target",
+      "type": "build",
+      "outputPath": "../../../../client/bibliograph/plugins/webservices"
+    },
+    {
+      "//": "The distribution 'source' target (for debugging on deployed instances, usually not needed)",
+      "type": "dist-source",
+      "targetClass": "SourceTarget",
+      "outputPath": "../../../../../dist/plugins/webservices"
+    },
+    {
+      "//": "The final distribution 'build' target",
+      "type": "dist-build",
+      "targetClass": "BuildTarget",
+      "outputPath": "../../../../../dist/plugins/webservices"
+    }
+  ],
+  "defaultTarget": "source",
+  "locales": ["en","de"],
+
+  "applications": [
+    {
+      "class": "bibliograph.plugins.webservices.Application",
+      "theme": "bibliograph.theme.Theme",
+      "name":  "bibliograph",
+      "title": "Webservices Plugin"
+    }
+  ],
+
+  "libraries": [
+    ".",
+    "../../../../vcslib/qooxdoo/framework",
+    "../../../../client/bibliograph"
+  ]
+}

@@ -31,7 +31,7 @@ RUN /bin/ln -sf ../sites-available/default-ssl /etc/apache2/sites-enabled/001-de
   a2enmod ssl && a2enmod socache_shmcb
   
 # Environment variables for the setup
-ENV DOCKER_RESOURCES_DIR=build-env/docker
+ENV DOCKER_RESOURCES_DIR=build/environments/docker
 ENV BIB_VAR_DIR /var/lib/bibliograph
 ENV BIB_DEPLOY_DIR /var/www/html
 ENV BIB_CONF_DIR /var/www/html/bibliograph/services/config/
@@ -54,7 +54,7 @@ RUN rm -rf /var/www/html/* && \
   echo "all" > $BIB_DEPLOY_DIR/bibliograph/plugins.txt
   
 # add configuration files
-COPY $DOCKER_RESOURCES_DIR/bibliograph.ini.php $BIB_CONF_DIR/bibliograph.ini.php
+COPY $DOCKER_RESOURCES_DIR/app.conf.toml $BIB_CONF_DIR/app.conf.toml
 COPY $DOCKER_RESOURCES_DIR/server.conf.php $BIB_CONF_DIR/server.conf.php
 
 # supervisor files

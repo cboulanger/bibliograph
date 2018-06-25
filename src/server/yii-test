@@ -1,0 +1,17 @@
+#!/usr/bin/env php
+<?php
+/**
+ * Yii test console bootstrap file.
+ */
+define('YII_DEBUG', true);
+define('YII_ENV', 'test');
+define('APP_CONFIG_FILE',  __DIR__ . "/tests/test.config.toml" );
+
+require __DIR__ . '/vendor/autoload.php';
+require __DIR__ . '/vendor/yiisoft/yii2/Yii.php';
+
+$config = require __DIR__ . '/config/test.php';
+Yii::setAlias('@tests', __DIR__ . '/tests');
+$application = new yii\web\Application($config);
+$exitCode = $application->run();
+exit($exitCode);

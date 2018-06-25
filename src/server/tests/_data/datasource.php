@@ -1,0 +1,42 @@
+<?php
+
+return [
+  [
+    'id' => 1,
+    'namedId' => 'database1',
+    'title' => 'Database 1',
+    'description' => null,
+    'schema' => 'bibliograph_datasource',
+    'type' => 'mysql',
+    'host' => 'localhost',
+    'port' => 3306,
+    'database' => 'tests',
+    'username' => 'root',
+    'password' => null,
+    'encoding' => 'utf-8',
+    'prefix' => 'database1_',
+    'resourcepath' => null,
+    'active' => 1,
+    'readonly' => 0,
+    'hidden' => 0,
+  ],
+  [
+    'id' => 2,
+    'namedId' => 'database2',
+    'title' => 'Database 2',
+    'description' => null,
+    'schema' => 'bibliograph_datasource',
+    'type' => 'mysql',
+    'host' => 'localhost',
+    'port' => 3306,
+    'database' => 'tests',
+    'username' => 'root',
+    'password' => null,
+    'encoding' => 'utf-8',
+    'prefix' => 'database2_',
+    'resourcepath' => null,
+    'active' => 1,
+    'readonly' => 0,
+    'hidden' => 0,
+  ]
+];

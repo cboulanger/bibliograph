@@ -1,0 +1,5 @@
+<?php
+namespace app\modules\extendedfields\migrations;
+
+class M180301071642_Update_table_data_Reference_add_fullext_index
+  extends \app\migrations\schema\bibliograph_datasource\M180301071642_Update_table_data_Reference_add_fullext_index{}

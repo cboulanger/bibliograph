@@ -1,0 +1,1280 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: de_DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgctxt "app"
+msgid "Could not parse query: {error}"
+msgstr ""
+
+msgctxt "app"
+msgid "Creator"
+msgstr ""
+
+msgctxt "setup"
+msgid " and a connection has successfully been established."
+msgstr ""
+
+msgctxt "setup"
+msgid " and applied new migrations for version {version}"
+msgstr ""
+
+msgctxt "setup"
+msgid ", but trying to establish a connection failed with the error: {error}"
+msgstr ""
+
+msgctxt "setup"
+msgid "Admininstrator email exists."
+msgstr ""
+
+msgctxt "setup"
+msgid "Cannot connect to database: {error}"
+msgstr ""
+
+msgctxt "setup"
+msgid "Cannot run in production mode without ini file."
+msgstr ""
+
+msgctxt "setup"
+msgid "Cannot update from Bibliograph v2 data: some tables are missing."
+msgstr ""
+
+msgctxt "setup"
+msgid "Configuration values were created."
+msgstr ""
+
+msgctxt "setup"
+msgid "Created datasources."
+msgstr ""
+
+msgctxt "setup"
+msgid "Created standard schema."
+msgstr ""
+
+msgctxt "setup"
+msgid "Datasources already existed."
+msgstr ""
+
+msgctxt "setup"
+msgid "Found data for version {version}"
+msgstr ""
+
+msgctxt "setup"
+msgid "Found empty database"
+msgstr ""
+
+msgctxt "setup"
+msgid "Initializing database failed."
+msgstr ""
+
+msgctxt "setup"
+msgid "Invalid database setup. Please contact the adminstrator."
+msgstr ""
+
+msgctxt "setup"
+msgid "LDAP authentication is enabled"
+msgstr ""
+
+msgctxt "setup"
+msgid "LDAP authentication is not enabled."
+msgstr ""
+
+msgctxt "setup"
+msgid "Migrated data from Bibliograph v2"
+msgstr ""
+
+msgctxt "setup"
+msgid "Migrated schema(s) {schemas}."
+msgstr ""
+
+msgctxt "setup"
+msgid "Migrating data from Bibliograph v2 failed."
+msgstr ""
+
+msgctxt "setup"
+msgid "Migrating schema(s) failed: {errinfo}"
+msgstr ""
+
+msgctxt "setup"
+msgid "Missing administrator email in app.conf.toml."
+msgstr ""
+
+msgctxt "setup"
+msgid "No database connection. "
+msgstr ""
+
+msgctxt "setup"
+msgid "No schema migrations necessary."
+msgstr ""
+
+msgctxt "setup"
+msgid "No updates to the databases."
+msgstr ""
+
+msgctxt "setup"
+msgid "Setup failed. Please fix the following problems:"
+msgstr ""
+
+msgctxt "setup"
+msgid "Standard schema existed."
+msgstr ""
+
+msgctxt "setup"
+msgid "The application needs to be upgraded from '{oldversion}' to '{newversion}'. Please log in as administrator."
+msgstr ""
+
+msgctxt "setup"
+msgid "The configuration directory must not be writable in production mode {config_dir}."
+msgstr ""
+
+msgctxt "setup"
+msgid "The configuration directory needs to be writable in order to create an .ini file: {config_dir}."
+msgstr ""
+
+msgctxt "setup"
+msgid "The database must be upgraded. Confirm that you have made a database backup and now are ready to run the upgrade."
+msgstr ""
+
+msgctxt "app"
+msgid "2. Choose import format"
+msgstr "2. Wählen Sie das Importformat aus"
+
+msgctxt "app"
+msgid "A descriptive title, e.g. Database of Research Group 1"
+msgstr "Ein beschreibender Titel, z.B. Literaturdatenbank Forschungsgruppe 1"
+
+msgctxt "app"
+msgid "A {type} named '{name}' already exists. Please pick another name."
+msgstr "Ein/e {type} mit dem Namen  '{name}' existiert bereits. Bitte verwenden Sie einen anderen Namen."
+
+msgctxt "app"
+msgid "Abstract"
+msgstr "Zusammenfassung"
+
+msgctxt "app"
+msgid "Active"
+msgstr "Aktiv"
+
+msgctxt "app"
+msgid "Address"
+msgstr "Adresse"
+
+msgctxt "app"
+msgid "Affiliation"
+msgstr "Zugehörigkeit"
+
+msgctxt "app"
+msgid "All data"
+msgstr "Alle Daten"
+
+msgctxt "app"
+msgid "An object of type {type} and id {namedId} does not exist."
+msgstr "Ein Objekt vom Typ {type} und mit der ID {namedId} existiert nicht."
+
+msgctxt "app"
+msgid "Annotation"
+msgstr "Annotationen"
+
+msgctxt "app"
+msgid "Annote"
+msgstr "Anmerkungen"
+
+msgctxt "app"
+msgid "Anonymous"
+msgstr "Gastbenutzer"
+
+msgctxt "app"
+msgid "Apply only to the selected folder"
+msgstr "Nur auf den ausgewählten Ordner anwenden"
+
+msgctxt "app"
+msgid "Apply to the selected folder and its subfolders"
+msgstr "Auf den ausgewählten Ordner und alle Unterordner anwenden"
+
+msgctxt "app"
+msgid "Article"
+msgstr "Artikel"
+
+msgctxt "app"
+msgid "Attachments"
+msgstr "Anhänge"
+
+msgctxt "app"
+msgid "Author"
+msgstr "Autor/in"
+
+msgctxt "app"
+msgid "Authors"
+msgstr "Autor/inn/en"
+
+msgctxt "app"
+msgid "Book (Edited)"
+msgstr "Sammelband"
+
+msgctxt "app"
+msgid "Book (Monograph)"
+msgstr "Buch (Monographie)"
+
+msgctxt "app"
+msgid "Book Chapter"
+msgstr "Buchkapitel"
+
+msgctxt "app"
+msgid "Book Title"
+msgstr "Sammelbandtitel"
+
+msgctxt "app"
+msgid "Booklet"
+msgstr "Broschüre"
+
+msgctxt "app"
+msgid "Booktitle"
+msgstr "Buchtitel"
+
+msgctxt "app"
+msgid "Boolean operators"
+msgstr "Logische Verknüpfungen"
+
+msgctxt "app"
+msgid "Call Number"
+msgstr "Signatur"
+
+msgctxt "app"
+msgid "Cannot connect to the LDAP server: {reason}"
+msgstr "Keine Verbindung mit dem LDAP-Server: {reason}"
+
+msgctxt "app"
+msgid "Category"
+msgstr "Kategorie"
+
+msgctxt "app"
+msgid "Change the visibility of the folder"
+msgstr "Die Sichtbarkeit des Ordners ändern"
+
+msgctxt "app"
+msgid "Chapter in Edited Book"
+msgstr "Kapitel in Sammelband"
+
+msgctxt "app"
+msgid "Child Count"
+msgstr "Zahl der Unterordner"
+
+msgctxt "app"
+msgid "Choose the export format"
+msgstr "Exportformat auswählen"
+
+msgctxt "app"
+msgid "Citation Key"
+msgstr "Zitierschlüssel"
+
+msgctxt "app"
+msgid "Citation key"
+msgstr "Zitierschlüssel"
+
+msgctxt "app"
+msgid "Citekey"
+msgstr "Zitierschlüssel"
+
+msgctxt "app"
+msgid "Class"
+msgstr "Klasse"
+
+msgctxt "app"
+msgid "Comparison modifiers"
+msgstr "Vergleichsoperatoren"
+
+msgctxt "app"
+msgid "Conference Paper"
+msgstr "Konferenzpapier"
+
+msgctxt "app"
+msgid "Conference Proceedings"
+msgstr "Konferenzbeiträge"
+
+msgctxt "app"
+msgid "Config ID"
+msgstr "Konfigurations-ID"
+
+msgctxt "app"
+msgid "Confirmed"
+msgstr "Bestätigt"
+
+msgctxt "app"
+msgid "Contents"
+msgstr "Inhaltsverzeichnis"
+
+msgctxt "app"
+msgid "Copyright"
+msgstr "Urheberrechtsangaben"
+
+msgctxt "app"
+msgid "Create a new datasource"
+msgstr "Neue Datanequelle anlegen"
+
+msgctxt "app"
+msgid "Created"
+msgstr "Angelegt am"
+
+msgctxt "app"
+msgid "Created By"
+msgstr "Angelegt von"
+
+msgctxt "app"
+msgid "Created by"
+msgstr "Angelegt von"
+
+msgctxt "app"
+msgid "Cross Reference"
+msgstr "Querverweis"
+
+msgctxt "app"
+msgid "Crossref"
+msgstr "Querverweis"
+
+msgctxt "app"
+msgid "Data"
+msgstr "Daten"
+
+msgctxt "app"
+msgid "Database"
+msgstr "Datenbank"
+
+msgctxt "app"
+msgid "Database encoding"
+msgstr "Zeichenkodierung"
+
+msgctxt "app"
+msgid "Database name"
+msgstr "Datenbankname"
+
+msgctxt "app"
+msgid "Database user name"
+msgstr "Datenbank Nutzername"
+
+msgctxt "app"
+msgid "Database user password"
+msgstr "Datenbank Passwort"
+
+msgctxt "app"
+msgid "Database {datasource} does not exist."
+msgstr "Die Datenquelle ‚{datasource}‘  existiert nicht."
+
+msgctxt "app"
+msgid "Datasource"
+msgstr "Datenquelle"
+
+msgctxt "app"
+msgid "Datasource '{datasource}' does not exist"
+msgstr "Datenquelle '{datasource}' existiert nicht"
+
+msgctxt "app"
+msgid "Datasource '{datasource}' does not have a trash folder."
+msgstr "Datenquelle  '{datasource}' hat keinen Ordner für gelöschte Objekte."
+
+msgctxt "app"
+msgid "Datasource '{datasource}' has been created. By default, it will not be visible to anyone. You have to link it with a group, a role, or a user first."
+msgstr "Die Datenquelle '{datasource}' wurde angelegt. Sie ist standardmäßig für niemanden sichtbar. Sie müssen die Datenquelle zuerst mit einer Gruppe, einer Rolle, oder einer Benutzerin verbinden."
+
+msgctxt "app"
+msgid "Datasource '{datasource}' successfully deleted ... "
+msgstr "Datenquelle '{datasource}' wurde gelöscht ... "
+
+msgctxt "app"
+msgid "Datasource name '{1}' already exists. Please choose a different one."
+msgstr "Der Name '{1}' existiert bereits. Bitte wählen Sie einen anderen."
+
+msgctxt "app"
+msgid "Datasource prefix"
+msgstr "Tabellenpräfix"
+
+msgctxt "app"
+msgid "Datasources"
+msgstr "Datenbanken"
+
+msgctxt "app"
+msgid "Date"
+msgstr "Datum"
+
+msgctxt "app"
+msgid "Date Ordered"
+msgstr "Datum der Bestellung"
+
+msgctxt "app"
+msgid "Date Received"
+msgstr "Datum Eingang"
+
+msgctxt "app"
+msgid "Date Reimbursement Requested"
+msgstr "Datum Erstattung beantragt"
+
+msgctxt "app"
+msgid "Default Role"
+msgstr "Standardrolle für neue Benutzer/innen"
+
+msgctxt "app"
+msgid "Default role for new users"
+msgstr "Standardrolle für neue Benutzer/innen"
+
+msgctxt "app"
+msgid "Deleting datasource '{datasource}' failed... "
+msgstr "Das Löschen der Datenquelle ‚{datasource}' schlug fehl. "
+
+msgctxt "app"
+msgid "Deleting of this object is not allowed."
+msgstr "Das Löschen dieses Objekts ist nicht erlaubt."
+
+msgctxt "app"
+msgid "Depth"
+msgstr "Reichweite"
+
+msgctxt "app"
+msgid "Description"
+msgstr "Beschreibung"
+
+msgctxt "app"
+msgid "Do you really want to move the folder '{name}' into the trash?"
+msgstr "Wollen Sie wirklich den Ordner '%s' in den Mülleimer legen?"
+
+msgctxt "app"
+msgid "Do you want to remove only the datasource entry or all associated data?"
+msgstr "Wollen Sie nur die Datenquellen-Eintrag entfernen oder alle zugehörigen Daten löschen?"
+
+msgctxt "app"
+msgid "Doi"
+msgstr "DOI"
+
+msgctxt "app"
+msgid "Edition"
+msgstr "Auflage"
+
+msgctxt "app"
+msgid "Editor"
+msgstr "Herausgeber/in"
+
+msgctxt "app"
+msgid "Editors"
+msgstr "Herausgeber/innen"
+
+msgctxt "app"
+msgid "Either you simply type in keywords like you would do in a google search."
+msgstr "Entweder tippen Sie einfach Schlagwörter in das Suchfeld, wie Sie es von einer Google-Suche gewöhnt sind."
+
+msgctxt "app"
+msgid "Email"
+msgstr "E-Mail"
+
+msgctxt "app"
+msgid "Email address"
+msgstr "Emailadresse"
+
+msgctxt "app"
+msgid "Encoding"
+msgstr "Zeichenkodierung"
+
+msgctxt "app"
+msgid "Enter a valid Email address"
+msgstr "Geben Sie eine gültige E-Mailadresse ein"
+
+msgctxt "app"
+msgid "Enter the full name of the user"
+msgstr "Der vollständige Name, z.B. Klaus Müller"
+
+msgctxt "app"
+msgid "Enter the short login name"
+msgstr "Der kurze Benutzername, z.B. kmueller"
+
+msgctxt "app"
+msgid "Entry only"
+msgstr "Nur den Eintrag"
+
+msgctxt "app"
+msgid "Error saving {type} named '{name}':"
+msgstr "Das Speichern von  {type} mit der ID '{name}' schlug fehl:"
+
+msgctxt "app"
+msgid "Export citation as "
+msgstr "Eintrag exportieren als "
+
+msgctxt "app"
+msgid "Export references"
+msgstr "Exportieren"
+
+msgctxt "app"
+msgid "Extension"
+msgstr "Erweiterung"
+
+msgctxt "app"
+msgid "Field names"
+msgstr "Feldnamen"
+
+msgctxt "app"
+msgid "File extensions"
+msgstr "Dateiendung"
+
+msgctxt "app"
+msgid "Folder Title"
+msgstr "Ordnertitel"
+
+msgctxt "app"
+msgid "Folder cannot be moved on itself."
+msgstr "Ein Ordner kann nicht auf sich selbst verschoben werden."
+
+msgctxt "app"
+msgid "Folder is closed by default"
+msgstr "Nein, Ordner ist geschlossen"
+
+msgctxt "app"
+msgid "Folder is not publically visible"
+msgstr "Ordner ist nicht öffentlich sichtbar"
+
+msgctxt "app"
+msgid "Folder is opened by default"
+msgstr "Ja, Ordner öffnet sich automatisch"
+
+msgctxt "app"
+msgid "Folder is publically visible"
+msgstr "Ordner ist öffentlich sichtbar"
+
+msgctxt "app"
+msgid "Format '{format}' expects file extension(s) '{allowedExtensions}'. The file you uploaded has extension '{givenExtension}'."
+msgstr "Format '{format}' erwartet die Dateiendungen ’{allowedExtensions}'. Die von Ihnen hochgeladene Datei endet mit '{givenExtension}'."
+
+msgctxt "app"
+msgid "Full Name"
+msgstr "Vollständiger Name"
+
+msgctxt "app"
+msgid "Full name"
+msgstr "Vollständiger Name"
+
+msgctxt "app"
+msgid "Group"
+msgstr "Gruppe"
+
+msgctxt "app"
+msgid "Group ID"
+msgstr "Gruppen-ID"
+
+msgctxt "app"
+msgid "Groups"
+msgstr "Gruppen"
+
+msgctxt "app"
+msgid "Handbook"
+msgstr "Handbuch"
+
+msgctxt "app"
+msgid "Hash"
+msgstr "Hash"
+
+msgctxt "app"
+msgid "Hidden"
+msgstr "Versteckt"
+
+msgctxt "app"
+msgid "Host"
+msgstr "Server Hostadresse"
+
+msgctxt "app"
+msgid "Howpublished"
+msgstr "Publikationsnachweis"
+
+msgctxt "app"
+msgid "ID"
+msgstr "Datensatz-ID"
+
+msgctxt "app"
+msgid "ID of the datasource"
+msgstr "ID der Datenquelle"
+
+msgctxt "app"
+msgid "ISBN"
+msgstr "ISBN"
+
+msgctxt "app"
+msgid "ISSN"
+msgstr "ISSN"
+
+msgctxt "app"
+msgid "In all groups"
+msgstr "In allen Gruppen"
+
+msgctxt "app"
+msgid "In {group}"
+msgstr "In {group}"
+
+msgctxt "app"
+msgid "Institution"
+msgstr "Institution"
+
+msgctxt "app"
+msgid "Insufficient permissions. If this is unexpected, contact the administrator."
+msgstr "Unzureichende Berechtigungen. Kontaktieren Sie ggf. den/die Administrator/in."
+
+msgctxt "app"
+msgid "Internet Link"
+msgstr "URL"
+
+msgctxt "app"
+msgid "Invalid datasource name '{name}': Must only contain alphanumeric characters or '_'."
+msgstr "Die Eingabe '{name}' ist nicht erlaubt: Verwenden Sie nur Buchstaben, Zahlen und '_'."
+
+msgctxt "app"
+msgid "Invalid export request parameters."
+msgstr "Die Aufrufparameter für den Export sind unzulässig."
+
+msgctxt "app"
+msgid "Invalid name '{name}': Must only contain alphanumeric characters or '_'."
+msgstr "Die Eingabe '{name}' ist nicht erlaubt: Verwenden Sie nur Buchstaben, Zahlen und '_'."
+
+msgctxt "app"
+msgid "Invalid username or password"
+msgstr "Benutzername oder Passwort sind ungültig"
+
+msgctxt "app"
+msgid "Inventory"
+msgstr "Inventarisiert durch"
+
+msgctxt "app"
+msgid "Is folder publically visible?"
+msgstr "Ist der Ordner öffentlich?"
+
+msgctxt "app"
+msgid "Isbn"
+msgstr "ISBN"
+
+msgctxt "app"
+msgid "Issn"
+msgstr "ISSN"
+
+msgctxt "app"
+msgid "Journal"
+msgstr "Zeitschrift"
+
+msgctxt "app"
+msgid "Journal Issue"
+msgstr "Zeitschriftenausgabe"
+
+msgctxt "app"
+msgid "Key"
+msgstr "Schlüssel"
+
+msgctxt "app"
+msgid "Keywords"
+msgstr "Schlagwörter"
+
+msgctxt "app"
+msgid "Label"
+msgstr "Feldbezeichner"
+
+msgctxt "app"
+msgid "Language"
+msgstr "Sprache"
+
+msgctxt "app"
+msgid "Last Action"
+msgstr "Letzte Aktion"
+
+msgctxt "app"
+msgid "Lccn"
+msgstr "LCCN"
+
+msgctxt "app"
+msgid "Ldap"
+msgstr "Die Benutzerdaten stammen aus einem LDAP-Server und können nicht verändert werden"
+
+msgctxt "app"
+msgid "Loaded records {firstRow} - {lastRow} ..."
+msgstr "Datensätze {firstRow} - {lastRow} wurden geladen …"
+
+msgctxt "app"
+msgid "Location"
+msgstr "Standort"
+
+msgctxt "app"
+msgid "Locked"
+msgstr "Gesperrt"
+
+msgctxt "app"
+msgid "Login name"
+msgstr "Benutzername"
+
+msgctxt "app"
+msgid "Login name '{1}' already exists. Please choose a different one."
+msgstr "Der Benutzername '{1}' kann nicht verwendet werden. Bitte wählen Sie einen anderen."
+
+msgctxt "app"
+msgid "Main folder"
+msgstr "Hauptordner"
+
+msgctxt "app"
+msgid "Marked Deleted"
+msgstr "Der Datensatz ist zur Löschung vorgesehen"
+
+msgctxt "app"
+msgid "Master's Thesis"
+msgstr "Masterarbeit"
+
+msgctxt "app"
+msgid "Miscellaneous"
+msgstr "Sonstige Veröffentlichung"
+
+msgctxt "app"
+msgid "Missing login name"
+msgstr "Login-Name fehlt"
+
+msgctxt "app"
+msgid "Modified"
+msgstr "Verändert am"
+
+msgctxt "app"
+msgid "Modified By"
+msgstr "Verändert von"
+
+msgctxt "app"
+msgid "Modified by"
+msgstr "Verändert von"
+
+msgctxt "app"
+msgid "Month"
+msgstr "Monat"
+
+msgctxt "app"
+msgid "Name"
+msgstr "Name"
+
+msgctxt "app"
+msgid "Named ID"
+msgstr "Nichtnumerische ID"
+
+msgctxt "app"
+msgid "No"
+msgstr "Nein"
+
+msgctxt "app"
+msgid "No recognized query format in request."
+msgstr "Das Abfrageformat kann nicht erkannt werden."
+
+msgctxt "app"
+msgid "No role"
+msgstr "Keine Rolle"
+
+msgctxt "app"
+msgid "No virtual subfolders"
+msgstr "Keine"
+
+msgctxt "app"
+msgid "Normal folder"
+msgstr "Normaler Ordner"
+
+msgctxt "app"
+msgid "Note"
+msgstr "Anmerkungen"
+
+msgctxt "app"
+msgid "Number"
+msgstr "Nummer"
+
+msgctxt "app"
+msgid "Off"
+msgstr "Aus"
+
+msgctxt "app"
+msgid "On, Use query to determine content"
+msgstr "Ja, mit Suchausdruck filtern"
+
+msgctxt "app"
+msgid "Online"
+msgstr "Online"
+
+msgctxt "app"
+msgid "Opened"
+msgstr "Geöffnet"
+
+msgctxt "app"
+msgid "Opened?"
+msgstr "Geöffnet?"
+
+msgctxt "app"
+msgid "Or you compose complex queries using field names, comparison operators, and boolean connectors (for example: title contains constitution and year=1981)."
+msgstr "Oder Sie erstellen komplexere Abfrage unter Verwendung von Feldnamen, Vergleichsoperatoren und logischen Verknüpfungen (Zum Beispiel: titel enthält verfassung und jahr = 1981)."
+
+msgctxt "app"
+msgid "Organization"
+msgstr "Organisation"
+
+msgctxt "app"
+msgid "Orphaned"
+msgstr "Verwaist"
+
+msgctxt "app"
+msgid "Owner"
+msgstr "Besitzer/in"
+
+msgctxt "app"
+msgid "Pages"
+msgstr "Seiten"
+
+msgctxt "app"
+msgid "Paper in Conference Proceedings"
+msgstr "Konferenzpapier"
+
+msgctxt "app"
+msgid "Parent ID"
+msgstr "Eltern-ID"
+
+msgctxt "app"
+msgid "Parent node cannot be moved on a child node"
+msgstr "Ein übergeordneter Ordner kann nicht in einen untergeordneten Ordner verschoben werden"
+
+msgctxt "app"
+msgid "Password"
+msgstr "Passwort"
+
+msgctxt "app"
+msgid "Password must be at least 8 characters long"
+msgstr "Das Passwort muss mindestens 8 Zeichen lang sein"
+
+msgctxt "app"
+msgid "Password must be at least 8 characters long."
+msgstr "Das Passwort muss mindestens 8 Zeichen lang sein."
+
+msgctxt "app"
+msgid "Passwords did not match."
+msgstr "Passwörter stimmen nicht überein."
+
+msgctxt "app"
+msgid "Passwords do not match..."
+msgstr "Passwörter stimmen nicht überein."
+
+msgctxt "app"
+msgid "Path"
+msgstr "Pfad"
+
+msgctxt "app"
+msgid "Permission"
+msgstr "Berechtigung"
+
+msgctxt "app"
+msgid "Permission ID"
+msgstr "Berechtigung"
+
+msgctxt "app"
+msgid "Permissions"
+msgstr "Berechtigungen"
+
+msgctxt "app"
+msgid "Ph.D. Thesis"
+msgstr "Doktorarbeit"
+
+msgctxt "app"
+msgid "Place"
+msgstr "Ort"
+
+msgctxt "app"
+msgid "Please enter a valid class name"
+msgstr "Bitte geben Sie einen gültigen Klassennahmen ein"
+
+msgctxt "app"
+msgid "Please enter the information on the new datasource."
+msgstr "Bitte geben Sie die Informationen zur neuen Datenquelle ein."
+
+msgctxt "app"
+msgid "Please enter the name and type of the new folder:"
+msgstr "Bitte wählen Sie den Namen und den Typ des neuen Ordners:"
+
+msgctxt "app"
+msgid "Please enter the user data. A random password will be generated and sent to the user."
+msgstr "Bitte geben Sie die Nutzerdaten ein. Der/die neue Benutzer/in erhält ein temporäres Passwort per E-Mail."
+
+msgctxt "app"
+msgid "Port"
+msgstr "Server-Port"
+
+msgctxt "app"
+msgid "Position"
+msgstr "Position"
+
+msgctxt "app"
+msgid "Prefix"
+msgstr "Tabellenpräfix"
+
+msgctxt "app"
+msgid "Preparing export data. Please wait..."
+msgstr "Exportdaten werden verarbeitet. Bitte warten…"
+
+msgctxt "app"
+msgid "Price"
+msgstr "Preis"
+
+msgctxt "app"
+msgid "Protected"
+msgstr "Geschützt"
+
+msgctxt "app"
+msgid "Public"
+msgstr "Öffentlich"
+
+msgctxt "app"
+msgid "Published As"
+msgstr "Publikationsangaben"
+
+msgctxt "app"
+msgid "Publisher"
+msgstr "Verlag"
+
+msgctxt "app"
+msgid "Query"
+msgstr "Suchausdruck"
+
+msgctxt "app"
+msgid "Readonly"
+msgstr "Nur Lesezugriff"
+
+msgctxt "app"
+msgid "Record is marked for deletion"
+msgstr "Der Datensatz ist zur Löschung vorgesehen"
+
+msgctxt "app"
+msgid "Reference Count"
+msgstr "Anzahl der Datensätze"
+
+msgctxt "app"
+msgid "Reference Type"
+msgstr "Werktyp"
+
+msgctxt "app"
+msgid "Reference id"
+msgstr "Datensatz-ID"
+
+msgctxt "app"
+msgid "Reftype"
+msgstr "Werktyp"
+
+msgctxt "app"
+msgid "Relations"
+msgstr "Beziehungen"
+
+msgctxt "app"
+msgid "Report/Working Paper"
+msgstr "Arbeitspapier/Report"
+
+msgctxt "app"
+msgid "Resource path"
+msgstr "Ressourcenpfad"
+
+msgctxt "app"
+msgid "Resourcepath"
+msgstr "Ressourcenpfad"
+
+msgctxt "app"
+msgid "Role"
+msgstr "Rolle"
+
+msgctxt "app"
+msgid "Role ID"
+msgstr "Keine Rolle"
+
+msgctxt "app"
+msgid "Roles"
+msgstr "Rollen"
+
+msgctxt "app"
+msgid "Schema"
+msgstr "Schema"
+
+msgctxt "app"
+msgid "Schemas"
+msgstr "Schemata"
+
+msgctxt "app"
+msgid "School"
+msgstr "Universität"
+
+msgctxt "app"
+msgid "Search folder"
+msgstr "Suchordner"
+
+msgctxt "app"
+msgid "Search folder?"
+msgstr "Suchordner?"
+
+msgctxt "app"
+msgid "Searchable"
+msgstr "Durchsuchbar"
+
+msgctxt "app"
+msgid "Searchfolder"
+msgstr "Suchordner"
+
+msgctxt "app"
+msgid "Series"
+msgstr "Serie"
+
+msgctxt "app"
+msgid "Server host"
+msgstr "Server Hostadresse"
+
+msgctxt "app"
+msgid "Server port"
+msgstr "Server-Port"
+
+msgctxt "app"
+msgid "Size"
+msgstr "Größe"
+
+msgctxt "app"
+msgid "Source"
+msgstr "Quelle"
+
+msgctxt "app"
+msgid "Sponsor"
+msgstr "Zuwendungsgeber"
+
+msgctxt "app"
+msgid "State"
+msgstr "Status"
+
+msgctxt "app"
+msgid "Status"
+msgstr "Status"
+
+msgctxt "app"
+msgid "Subtitle"
+msgstr "Untertitel"
+
+msgctxt "app"
+msgid "The reference is already contained in that folder."
+msgstr "Der Datensatz ist schon in diesem Ordner vorhanden."
+
+msgctxt "app"
+msgid "The short name, e.g. researchgroup1"
+msgstr "Kurzname, z.B. forschungsgruppe1"
+
+msgctxt "app"
+msgid "This folder contains deleted items"
+msgstr "Dieser Ordner enthält gelöschte Objekte"
+
+msgctxt "app"
+msgid "This is the main folder of the database"
+msgstr "Der Hauptordner der Datenbank"
+
+msgctxt "app"
+msgid "Title"
+msgstr "Titel"
+
+msgctxt "app"
+msgid "To change the password, enter new password."
+msgstr "Zum ändern bitte ein neues Passwort eingeben."
+
+msgctxt "app"
+msgid "To change the password, repeat new password"
+msgstr "Zum ändern des Passwortes bitte das neue Passwort erneut eingeben"
+
+msgctxt "app"
+msgid "Translator"
+msgstr "Übersetzer"
+
+msgctxt "app"
+msgid "Trash"
+msgstr "Mülleimer"
+
+msgctxt "app"
+msgid "Type"
+msgstr "Typ"
+
+msgctxt "app"
+msgid "University"
+msgstr "Universität"
+
+msgctxt "app"
+msgid "Unknown format '{format}'."
+msgstr "Unbekanntes Format '{format}'."
+
+msgctxt "app"
+msgid "Unpublished Manuscript"
+msgstr "Unveröffentlichtes Manuskript"
+
+msgctxt "app"
+msgid "Url"
+msgstr "URL"
+
+msgctxt "app"
+msgid "User"
+msgstr "Benutzer/in"
+
+msgctxt "app"
+msgid "User ID"
+msgstr "Benutzer-ID"
+
+msgctxt "app"
+msgid "User data is from an LDAP server and cannot be changed."
+msgstr "Die Benutzerdaten stammen aus einem LDAP-Server und können nicht verändert werden."
+
+msgctxt "app"
+msgid "User is deactivated"
+msgstr "Dieser Benutzer ist deaktiviert"
+
+msgctxt "app"
+msgid "Username"
+msgstr "Benutzername"
+
+msgctxt "app"
+msgid "Users"
+msgstr "Benutzer/innen"
+
+msgctxt "app"
+msgid "Value"
+msgstr "Wert"
+
+msgctxt "app"
+msgid "Virtual subfolders"
+msgstr "Virtuelle Unterordner"
+
+msgctxt "app"
+msgid "Volume"
+msgstr "Band"
+
+msgctxt "app"
+msgid "Welcome, {0}!"
+msgstr "Willkommen, {0}"
+
+msgctxt "app"
+msgid "When using more than one word, the phrase has to be quoted (For example, title startswith \"Recent developments\")."
+msgstr "Wenn Sie mehr als ein Wort verwenden, müssen sie den Ausdruck mit Anführungszeichen einschließen (Zum Beispiel: titel beginntmit „Neuere Entwicklungen“)."
+
+msgctxt "app"
+msgid "Year"
+msgstr "Jahr"
+
+msgctxt "app"
+msgid "Yes"
+msgstr "Ja"
+
+msgctxt "app"
+msgid "You can click on any of the terms below to insert them into the query field."
+msgstr "Klicken Sie auf eine der Begriffe weiter unten, um diese in das Suchfeld einzufügen."
+
+msgctxt "app"
+msgid "You can use the search features of this application in two ways."
+msgstr "Sie können sie Suchfunktion dieser Anwendung auf zwei verschiedene Arten nutzen."
+
+msgctxt "app"
+msgid "You can use wildcard characters: '?' for a single character and '*' for any amount of characters."
+msgstr "Sie können auch Ersetzungszeichen verwenden: ‚?‘ für einen einzelnen Buchstaben und ‚*‘ für eine beliebige Anzahl von Buchstaben."
+
+msgctxt "app"
+msgid "You do not have access to datasource '{datasource}'"
+msgstr "Sie haben keinen Zugang zur Datenquelle {datasource}"
+
+msgctxt "app"
+msgid "You must convert file to UTF-8 before importing."
+msgstr "Sie müssen die Datei nach UTF-8 konvertieren, bevor Sie sie importieren."
+
+msgctxt "app"
+msgid "You need to set a password."
+msgstr "Sie müssen ein neues Passwort eingeben."
+
+msgctxt "app"
+msgid "Your password has been changed."
+msgstr "Ihr Passwort wurde geändert."
+
+msgctxt "app"
+msgid "and"
+msgstr "und"
+
+msgctxt "app"
+msgid "deactivated"
+msgstr "deaktiviert"
+
+msgctxt "app"
+msgid "{field} contains {value}"
+msgstr "{field} enthält {value}"
+
+msgctxt "app"
+msgid "{field} does not contain {value}"
+msgstr "{field} enthält nicht {value}"
+
+msgctxt "app"
+msgid "{field} is not {value}"
+msgstr "{field} ist ungleich {value}"
+
+msgctxt "app"
+msgid "{field} is {value}"
+msgstr "{field} ist {value}"
+
+msgctxt "app"
+msgid "{field} starts with {value}"
+msgstr "{field} beginnt mit {value}"
+
+msgctxt "app"
+msgid "{leftOperand} and {rightOperand}"
+msgstr "{leftOperand} und {rightOperand}"
+
+msgctxt "app"
+msgid "{leftOperand} or {rightOperand}"
+msgstr "{leftOperand} oder {rightOperand}"
+
+msgctxt "app"
+msgid "{numberOfRecords} records"
+msgstr "{numberOfRecords} Datensätze"
+
+msgctxt "extendedfields"
+msgid "Category"
+msgstr "Kategorie"
+
+msgctxt "extendedfields"
+msgid "Date ordered"
+msgstr "Datum bestellt"
+
+msgctxt "extendedfields"
+msgid "Date received"
+msgstr "Datum erhalten"
+
+msgctxt "extendedfields"
+msgid "Location"
+msgstr "Standort"
+
+msgctxt "extendedfields"
+msgid "Owner"
+msgstr "Besitzer/in"
+
+msgctxt "extendedfields"
+msgid "Type"
+msgstr "Typ"
+
+msgctxt "webservices"
+msgid "Server timed out."
+msgstr "Zeitüberschreitung bei der Anfrage."
+
+msgctxt "webservices"
+msgid "Server timed out. Trying again..."
+msgstr "Zeitüberschreitung. Anfrage wird wiederholt…"
+
+msgctxt "z3950"
+msgid "Cannot connect to server: '{error}'."
+msgstr "Kann mich nicht mit dem Server verbinden: '{error}'."
+
+msgctxt "z3950"
+msgid "Invalid query '{query}'"
+msgstr "Ungültige Abfrage '{query}'"
+
+msgctxt "z3950"
+msgid "Server timed out."
+msgstr "Zeitüberschreitung bei der Anfrage."
+
+msgctxt "z3950"
+msgid "Server timed out. Trying again..."
+msgstr "Zeitüberschreitung bei der Anfrage. Versuche es erneut…"
+
+msgctxt "z3950"
+msgid "The server does not understand the query '{query}'. Please try a different query."
+msgstr "Der Server versteht die Anfrage '{query}' nicht. Versuchen Sie es mit einer anderen Anfrage."
+

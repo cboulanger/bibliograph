@@ -1,0 +1,80 @@
+{
+  "name": "bibliograph",
+  "version": "3.0.0-beta.41",
+  "description": "Bibliograph is a powerful open source web application for the collaborative collection, editing and publishing of bibliographic data.",
+  "main": "",
+  "directories": {
+    "test": "test"
+  },
+  "homepage": "http://www.bibliograph.org",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://github.com/caolan/async/raw/master/LICENSE"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/cboulanger/bibliograph.git"
+  },
+  "scripts": {
+    "start": "bash bin/start-server.sh",
+    "list": "node_modules/.bin/ls-scripts",
+    "postinstall": "bash bin/update-dependencies.sh",
+    "server": "bash bin/start-server.sh",
+    "test": "bash test/codeception-all.sh && bash test/api.sh || exit $?",
+    "test-dev": "bash test/codeception-all.sh && bash test/api.sh development",
+    "clean": "cd src/client/bibliograph && qx clean",
+    "compile": "cd src/client/bibliograph && qx compile --watch",
+    "view-log": "bash bin/view-log.sh",
+    "new-log": "bash bin/new-log.sh",
+    "create-migration": "bash bin/create-migration.sh",
+    "create-rpcproxies": "cd src/server && php yii rpc-proxy/create",
+    "translation": "cd src/server && php yii message config/i18n.php",
+    "dist-create": "bash bin/dist-clean.sh && bash bin/dist-build.sh $1",
+    "dist-test": "bash bin/dist-test.sh",
+    "dist-clean": "bash bin/dist-clean.sh",
+    "release": "bash bin/dist-clean.sh && npx release-it --preRelease=beta",
+    "release-clean": "node bin/github-release-clean.js && bash bin/github-tag-clean.sh"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "qooxdoo": "^6.0.1",
+    "qooxdoo-sdk": "^6.0.0-alpha",
+    "qxcompiler": "^0.2.10",
+    "raptor-client": "github:cboulanger/raptor-client"
+  },
+  "devDependencies": {
+    "array-equal": "^1.0.0",
+    "dotenv": "^5.0.1",
+    "eslint": "^4.16.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eventsource": "^1.0.5",
+    "github-remove-all-releases": "^1.0.1",
+    "json-diff": "^0.5.2",
+    "mocha": "^4.1.0",
+    "npm-ls-scripts": "^0.1.2",
+    "r2": "^2.0.0",
+    "release-it": "^7.3.0",
+    "run-script-os": "^1.0.3",
+    "standard": "^11.0.0",
+    "webpack": "^3.10.0"
+  },
+  "eslintConfig": {
+    "parserOptions": {
+      "ecmaVersion": 2018
+    },
+    "env": {
+      "browser": true,
+      "node": true
+    },
+    "globals": {
+      "qx": true,
+      "qcl": true,
+      "dialog": true,
+      "bibliograph": true
+    }
+  }
+}

@@ -1,20 +1,11 @@
-.c9
 .DS_Store
 .nvm
+.c9
+.vscode
+.idea
+.env
 
-/qooxdoo/
-/bibliograph/services/config/*.php
-
-# compiler
-/bibliograph/*-output/
-db.json
-resource-db.json
+# npm
+npm-debug.log
 node_modules/
-
-# generator
-/bibliograph/build/
-/bibliograph/**/api/
-/bibliograph/**/test/
-/bibliograph/source/script/*
-
-*.zip
+package-lock.json

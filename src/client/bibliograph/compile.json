@@ -1,0 +1,79 @@
+{
+  "environment": {
+    "app.version": "3.0.0-beta.41",
+    "qx.icontheme": "Tango",
+    "qx.debug": true
+  },
+  "targets": [
+    {
+      "//": "The local 'source' target",
+      "type": "source",
+      "outputPath": "source-compiled",
+      "environment": {
+        "app.serverUrl": "../../../../server/web/?r=",
+        "app.mode": "development"
+      }
+    },
+    {
+      "//": "The local 'build' target",
+      "type": "build",
+      "outputPath": "build-compiled",
+      "environment": {
+        "app.serverUrl": "../../../../server/web/?r=",
+        "app.mode": "production"
+      }
+    },
+    {
+      "//": "The distribution 'source' target (for debugging on deployed instances, usually not needed)",
+      "type": "dist-source",
+      "targetClass": "SourceTarget",
+      "outputPath": "dist-source-compiled",
+      "environment": {
+        "app.serverUrl": "../server.php?r=",
+        "app.mode": "development"
+      }
+    },
+    {
+      "//": "The final distribution 'build' target",
+      "type": "dist-build",
+      "targetClass": "BuildTarget",
+      "outputPath": "dist-build-compiled",
+      "environment": {
+        "app.serverUrl": "../server.php?r=",
+        "app.mode": "production",
+        "qx.debug": false
+      }
+    }
+  ],
+  "defaultTarget": "source",
+  "locales": [
+    "en",
+    "de"
+  ],
+  "applications": [
+    {
+      "class": "bibliograph.Application",
+      "theme": "bibliograph.theme.Theme",
+      "name": "bibliograph",
+      "title": "Bibliograph Bibliographic Data Manager",
+      "include": [
+        "bibliograph.plugins.*"
+      ]
+    }
+  ],
+  "libraries": [
+    "../../vcslib/qooxdoo/framework",
+    "../../server/modules/z3950/client",
+    "../../server/modules/webservices/client",
+    "../../server/modules/backup/client",
+    "."
+  ],
+  "eslintConfig": {
+    "parserOptions": {
+      "ecmaVersion": 2017
+    },
+    "globals": {
+      "JSZip": false
+    }
+  }
+}

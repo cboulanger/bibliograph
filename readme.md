@@ -1,13 +1,12 @@
-# Bibliograph: Open Source Online Citation & Library Management
+# Bibliograph: Open Source Online Citation & Library Management (Development Branch)
 
-Master (PHP5): [![Build Status](https://travis-ci.org/cboulanger/bibliograph.svg?branch=master)](https://travis-ci.org/cboulanger/bibliograph) | PHP7 [![Build Status](https://travis-ci.org/cboulanger/bibliograph.svg?branch=branch_php7)](https://travis-ci.org/cboulanger/bibliograph) | [![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=panyasan&url=https://github.com/cboulanger/bibliograph&title=Bibliograph&language=javascript&tags=github&category=software)
+[![Build Status](https://travis-ci.org/cboulanger/bibliograph.svg?branch=develop)](https://travis-ci.org/cboulanger/bibliograph) | [![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=panyasan&url=https://github.com/cboulanger/bibliograph&title=Bibliograph&language=javascript&tags=github&category=software)
 
 Bibliograph is a powerful open source web application for the collaborative
 collection, editing and publishing of bibliographic data.
 
-- [Demo installation](http://demo.bibliograph.org)
-- [End User Documentation](http://help.bibliograph.org)
-- [Download](http://sourceforge.net/projects/bibliograph/files/latest/download)
+> **NOTE: This is the development version based on Yii2 and PHP7, which can be incomplete, unstable or even completely unfunctional. If you want a stable working version of Bibliograph, use the [current master version](https://github.com/cboulanger/bibliograph/tree/master)**
+
 - [Installation](doc/install.md)
 - [Release Notes](release-notes.md)
 
@@ -52,20 +51,11 @@ Bibliograph can be used by
 - Optionally provides a user forum;
 - Fully open source, can be easily adapted and extended by plugins. 
 
-## Plugins
-Bibliograph implements most advanced features through plugins. For a list of
-Plugins, see [here](doc/plugins.md).
-
 ## Installation and Deployment
 See [here](doc/install.md).
 
 ## Support
-- See the extensive [end user online documentation](http://help.bibliograph.org).
-- For general questions, please write to info at bibliograph dot org or send 
-  a tweet to @bibliograph2.
 - Bugs and feature requests should be registered as [github issues](https://github.com/cboulanger/bibliograph/issues).
-- Paid support for installation or hosting is available, also if you need a plugin
-  to support your particular collection.
 
 ## Development & Roadmap
 - You can [hack the code](doc/development.md) and make it better;
@@ -89,16 +79,17 @@ project needs your help. Even if you are not a developer, you can contribute:
 ## Credits
 Open source libraries/applications
 - [qooxdoo JavaScript framework](http://www.qooxdoo.org): (c) 1&1 Internet AG 
+- [Yii2 Framework](http://www.yiiframework.com) by Yii Software LLC. 
 - [CSL - The Citation Style Language](http://www.citationstyles.org).
 - [CiteProc-PHP](https://bitbucket.org/rjerome/citeproc-php/) by Ron Jerome
 - [CQL/SRU parser](https://github.com/simar0at/sru-cql-parser) by Robert Sanderson and Omar Siam
-- [NoNonsense Forum](http://camendesign.com/nononsense_forum) (CC-BY) Kroc Camen 2010-2015 
 
-Partial funding was provided by
+Funding provided by
 - [Department of Law, Humboldt-Universität zu Berlin](http://www.rewi.hu-berlin.de)
-- [Organized Crime Research Project](http://www.organized-crime.de/) (Version 1.0)
 
 Bibliograph is developed using
+- [Codeception](https://codeception.com) and [PHPUnit](https://phpunit.de) (Testing libraries)
+- [Visual Studio Code](https://code.visualstudio.com)
 - [Cloud9 IDE](http://c9.io) (Cloud-based coding and testing environment)
 - [GitHub](http://github.com) (Version control and code hosting)
 - [BrowserStack](http://browserstack.com) (Browser testing service - sponsored Open Source license)
