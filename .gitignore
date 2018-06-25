@@ -1,6 +1,10 @@
 .c9
 .DS_Store
 .nvm
+.idea
+.vscode
+.env
+package*.json
 
 /qooxdoo/
 /bibliograph/services/config/*.php
@@ -18,3 +22,9 @@ node_modules/
 /bibliograph/source/script/*
 
 *.zip
+
+# current master
+/dist/
+/src/
+/build/
+/test/
