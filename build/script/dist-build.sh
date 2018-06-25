@@ -43,14 +43,15 @@ if ! [[ $BUILD_TARGET == *"build"* ]]; then
 fi
 mkdir -p runtime/{cache,logs}
 rm -f config/{app.conf.toml,message.php,test.php}
+( find $DIST_DIR -type d -name ".git" ) | xargs rm -rf
 
 cp -a $SERVER_SRC_DIR/composer.* .
 if [[ $BUILD_TARGET == *"source"* ]]; then
   composer install > /dev/null
 else 
-  composer install --no-dev  &> /dev/null
+  composer install --no-dev  #&> /dev/null
 fi
-rm -f ./composer.* &> /dev/null
+#rm -f ./composer.* &> /dev/null
 
 echo " >>> Adding documentation ..."
 cp $TOP_DIR/{readme.md,release-notes.md} $DIST_DIR

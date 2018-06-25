@@ -155,7 +155,7 @@ class DatasourceManager extends \yii\base\Component
     Yii::debug([
       "migrationNamespace" => $migrationNamespace,
       "dsn" => $db->dsn
-    ]);
+    ], __METHOD__);
     Console::runAction('migrate/up', $params, null, $db);
     Yii::info("Created model tables for {$datasource->namedId}.");
   }
@@ -185,7 +185,7 @@ class DatasourceManager extends \yii\base\Component
           Yii::error($e->getMessage());
         }
       }
-      Yii::debug("Deleting model tables for '$namedId', migration namespace '$migrationNamespace'...");
+      Yii::debug("Deleting model tables for '$namedId', migration namespace '$migrationNamespace'...", __METHOD__);
       $db = $datasource->getConnection();
       $params = [
         'all',
@@ -234,8 +234,8 @@ class DatasourceManager extends \yii\base\Component
     foreach ($datasources as $datasource) {
       $instance = Datasource::getInstanceFor($datasource->namedId);
       $migrationNamespace = $instance->migrationNamespace;
-      Yii::debug("Migrating datasource '{$instance->namedId}'...");
-      Yii::debug("Migration namespace: $migrationNamespace");
+      Yii::debug("Migrating datasource '{$instance->namedId}'...", __METHOD__);
+      Yii::debug("Migration namespace: $migrationNamespace", __METHOD__);
       $params = [ 'all', 'migrationNamespaces' => $migrationNamespace ];
       /** @var \yii\db\Connection $db */
       $db = $instance->getConnection();

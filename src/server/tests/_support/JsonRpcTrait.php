@@ -150,7 +150,7 @@ trait JsonRpcTrait
   public function grabRpcData()
   {
     $result = $this->grabJsonRpcResult();
-    if( isset($result['type']) and $result['type']==="ServiceResult"){
+    if (isset($result['type']) and $result['type'] === "ServiceResult"){
       return $result['data'];
     }
     return $result;
@@ -163,7 +163,7 @@ trait JsonRpcTrait
   public function grabRpcEvents()
   {
     $result = $this->grabJsonRpcResult();
-    if( isset($result['type']) and $result['type']==="ServiceResult"){
+    if (isset($result['type']) and $result['type']==="ServiceResult"){
       return $result['events'];
     }
     return [];
@@ -178,28 +178,29 @@ trait JsonRpcTrait
   public function seeJsonRpcError($message=null, $code=null)
   {
     $this->seeResponseJsonMatchesJsonPath('$.error');
-    if( $message){
+    if ($message){
       $this->assertContains( $message, $this->grabDataFromResponseByJsonPath('$.error.message')[0] );
     }
-    if( $code){
+    if ($code){
       $this->assertEquals( $this->grabDataFromResponseByJsonPath('$.error.code')[0], $code );
     }
   }
 
   /**
    * Throws if the RPC method does not return an error
-   *
+   * @param bool $includeUserError Also throw if a runtime error occurs that is caused by user input
    * @return void
-   */  
-  public function dontSeeJsonRpcError()
+   */
+  public function dontSeeJsonRpcError($includeUserError=true)
   {
-    $error = $this->grabDataFromResponseByJsonPath('$.error');
+    //codecept_debug($this->grabDataFromResponseByJsonPath('$.error'));
     //if( count($error) ) codecept_debug(json_decode($error[0]));
     $this->dontSeeResponseJsonMatchesJsonPath('$.error');
+    if($includeUserError) $this->dontSeeUserError();
   }
 
   /**
-   * Returns the jsonrpc result
+   * Returns the jsonrpc error
    *
    * @return mixed
    */
@@ -210,14 +211,37 @@ trait JsonRpcTrait
   }
 
   /**
-   * Throws if the RPC method does not return an error
-   *
+   * Throws if the RPC method returns a user error, which is currently
+   * an error dialog event. This will change!
+   * FIXME Once User errors are handled differently....
    * @return void
+   * @throws RuntimeException
    */
   public function dontSeeUserError()
   {
-    $error = $this->grabDataFromResponseByJsonPath('$.result');
+    $events = $this->grabRpcEvents();
+    if (count($events) and $event = array_first($events, function($item){
+      return $item['name'] === "dialog"
+        and $item['data']['type'] === "alert"
+        and $item['data']['properties']['image'] ?? null === "dialog.icon.error";
+    })){
+      throw new RuntimeException($event['data']['properties']['message']);
+    };
+  }
 
+
+  /**
+   * Throws if the RPC method does not return a user error
+   * @throws RuntimeException
+   */
+  public function seeUserError()
+  {
+    try{
+      $this->dontSeeUserError();
+    } catch (RuntimeException $e) {
+      return;
+    }
+    throw new RuntimeException("Expected User Error was not thrown");
   }
 
   /**
@@ -291,6 +315,5 @@ trait JsonRpcTrait
   public function logout()
   {
     $this->sendJsonRpcRequest('access','logout');
-    $this->assertSame( $this->grabJsonRpcResult(), "OK" );   
   }
 }

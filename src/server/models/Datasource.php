@@ -36,6 +36,10 @@ use yii\helpers\ArrayHelper;
  * @property integer $hidden
  * @property string $migrationNamespace
  * @property int $migrationApplyTime
+ * @property ActiveQuery $groups
+ * @property ActiveQuery $users
+ * @property ActiveQuery $roles
+ *
  */
 class Datasource extends BaseModel
 {
@@ -215,7 +219,7 @@ class Datasource extends BaseModel
   /**
    * @return \yii\db\ActiveQuery
    */
-  protected function getDatasourceRoles()
+  public function getDatasourceRoles()
   {
     return $this->hasMany(Datasource_Role::class, ['DatasourceId' => 'id']);
   }
@@ -223,7 +227,7 @@ class Datasource extends BaseModel
   /**
    * @return \yii\db\ActiveQuery
    */
-  protected function getRoles()
+  public function getRoles()
   {
     return $this->hasMany(Role::class, ['id' => 'RoleId'])->via('datasourceRoles');
   }
@@ -231,7 +235,7 @@ class Datasource extends BaseModel
   /**
    * @return \yii\db\ActiveQuery
    */
-  protected function getDatasourceUsers()
+  public function getDatasourceUsers()
   {
     return $this->hasMany(Datasource_User::class, ['DatasourceId' => 'id']);
   }
@@ -239,7 +243,7 @@ class Datasource extends BaseModel
   /**
    * @return \yii\db\ActiveQuery
    */
-  protected function getUsers()
+  public function getUsers()
   {
     return $this->hasMany(User::class, ['id' => 'UserId'])->via('datasourceUsers');
   }
@@ -247,7 +251,7 @@ class Datasource extends BaseModel
   /**
    * @return \yii\db\ActiveQuery
    */
-  protected function getDatasourceGroups()
+  public function getDatasourceGroups()
   {
     return $this->hasMany(Datasource_Group::class, ['DatasourceId' => 'id']);
   }
@@ -255,7 +259,7 @@ class Datasource extends BaseModel
   /**
    * @return \yii\db\ActiveQuery
    */
-  protected function getGroups()
+  public function getGroups()
   {
     return $this->hasMany(Group::class, ['id' => 'GroupId'])->via('datasourceGroups');
   }

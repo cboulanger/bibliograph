@@ -40,7 +40,7 @@ class UiController extends AppController
    */
   public function actionConfirmRestore($datasource, $token)
   {
-    $this->requirePermission("backup.restore");
+    $this->requirePermission("backup.restore", $datasource);
     $msg = Yii::t(Module::CATEGORY, "Do you really want to replace Database '{datasource}' with a backup?", [
       'datasource' => $datasource
     ]);
@@ -64,7 +64,7 @@ class UiController extends AppController
     if ($form === false) {
       return "ABORTED";
     }
-    $this->requirePermission("backup.restore");
+    $this->requirePermission("backup.restore", $datasource);
 
     $files = $this->listBackupFiles($this->datasource($datasource));
     rsort($files);
@@ -126,7 +126,7 @@ class UiController extends AppController
    */
   public function actionChooseDelete($datasource)
   {
-    $this->requirePermission("backup.delete");
+    $this->requirePermission("backup.delete", $datasource);
     $days = Yii::$app->config->getPreference("backup.daysToKeepBackupFor");
     $timestamp = time() - ($days * 84400);
     $formData = [
@@ -159,7 +159,7 @@ class UiController extends AppController
   {
     if (!$data) return "CANCELLED";
 
-    $this->requirePermission("backup.delete");
+    $this->requirePermission("backup.delete", $datasource);
 
     $date = strtotime($data->date);
     $files = $this->listBackupFiles($datasource);
@@ -229,7 +229,7 @@ class UiController extends AppController
    */
   public function actionChooseDownload($datasource)
   {
-    $this->requirePermission("backup.download");
+    $this->requirePermission("backup.download", $datasource);
 
     $files = $this->listBackupFiles($datasource);
     rsort($files);

@@ -133,7 +133,7 @@ class ImportController extends AppController
    */
   public function actionParseUpload( string $format )
   {
-    $this->requirePermission("reference.import");
+    $this->requirePermission("reference.import", $this->datasource);
 
     // load importer object according to format
     /** @var ImportFormat $importFormatModel */
@@ -256,7 +256,7 @@ class ImportController extends AppController
    */
   public function actionImport( string $ids, string $targetDatasource, int $targetFolderId )
   {
-    $this->requirePermission("reference.import");
+    $this->requirePermission("reference.import", $targetDatasource);
     $ids = explode(',',$ids);
     $refs = $this->findIn($this->datasource,"reference")
       ->where(['in','id',$ids])

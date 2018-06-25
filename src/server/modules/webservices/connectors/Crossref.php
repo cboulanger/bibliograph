@@ -85,9 +85,9 @@ class Crossref extends AbstractConnector
     $client->setCache(new CachePsr16());
     $client->setUserAgent('Bibliograph/3.x (http://www.bibliograph.org; mailto:info@bibliograph.org)');
     $result = $client->request($path);
-    //Yii::debug($result);
+    //Yii::debug($result, __METHOD__);
     $data = $result['message'] ?? null;
-    //Yii::debug($data);
+    //Yii::debug($data, __METHOD__);
     if( ! is_array($data) ) return 0;
     $map = [
       'reftype'     => 'type',

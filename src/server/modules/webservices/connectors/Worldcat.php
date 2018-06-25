@@ -88,7 +88,7 @@ class Worldcat extends AbstractConnector
           }
           // try again
           sleep(2);
-          Yii::debug("Server error, retrying...",Module::CATEGORY);
+          Yii::debug("Server error, retrying...",Module::CATEGORY, __METHOD__);
           return $this->createManifestations($cql, $retry+1);
         } catch( \Throwable $e){
           if( $e instanceof \WorldCatLD\exceptions\ResourceNotFoundException

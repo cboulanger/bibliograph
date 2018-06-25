@@ -17,8 +17,7 @@ port = 3306
 
 # database.adminname and database.adminpassw
 # The name and password of the database user. Both "normal" user and admin must be the same for the moment.
-# This user needs ALL rights in the databases named below. If you want to make backup snapshots, it also
-# needs the global RELOAD privilege
+# This user needs ALL rights in the databases named below.
 adminname  = "bibliograph"
 adminpassw = "bibliograph"
 username  = "%$database.adminname%"

@@ -18,9 +18,7 @@ use ZipArchive;
  * Defaults to the system temporary directory, which is fine, since
  * backups are not meant to be permanently stored.
  */
-if (!defined('BACKUP_PATH')) {
-  define('BACKUP_PATH', TMP_PATH);
-}
+defined('BACKUP_PATH') or define('BACKUP_PATH', TMP_PATH);
 
 /**
  * webservices module definition class
@@ -34,7 +32,6 @@ class Module extends \lib\Module
    * @var string
    */
   protected $version = "0.0.2";
-
 
   /**
    * A string constant defining the category for logging and translation

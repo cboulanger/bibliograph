@@ -5,53 +5,42 @@
 ### Priority: urgent
 
 ### Priority: high
-- [ ] FEAT: Re-implement Backup plugin
-- [ ] FEAT: User::getAllPermissions returns always the highest available set of permissions, regardless of the permissions of the group the current datasource belongs to. Requires rewriting of  `$this->requirePermission` to pass the datasource / datasource name
-- [ ] BUG: Module::$version conflicts with Module::getVersion -> overrride Module::defaultVersion()
+- [x] FEAT: User::getAllPermissions returns always the highest available set of permissions, regardless of the permissions of the group the current datasource belongs to. Requires rewriting of  `$this->requirePermission` to pass the datasource / datasource name
+- [ ] BUG: Test if translations work in searches (it doesn't in unit test)
+- [ ] FEAT: Reimplement account management via email
 
 ### Priority: normal
-- [ ] BUG: use DatasourceTrait::datasource() consistently instead of Dataource::getInstanceFor(), since it provides access control!
+- [ ] BUG: Reimplement User::checkFormPassword
 - [ ] FEAT: Cache export formats for HTML view, make configurable 
-- [ ] FEAT: Disallow drop of references on folders in which they are already contained.
 - [ ] FEAT: Reimplement Search Help 
-- [ ] FEAT: Re-implement Backup
 - [ ] FEAT: Reimplement "New User" in Access Control Tool and System dialogs
-- [ ] FEAT: Reimplement account management via email
 - [ ] FEAT: "Orphaned" folder should contain references that do not have a parent
 - [ ] FEAT: Reimplement Search Help window
-- [ ] FEAT: Update CQL operators to conform to the specs (http://www.loc.gov/standards/sru/cql/contextSets/theCqlContextSet.html)
-- [ ] FEAT: Config key change should be broadcasted
-- [ ] FEAT: Implement setup Wizard
-- [ ] FEAT: Allow migrations via permission, not prod/dev-mode
 - [ ] FEAT: Z39.50 Plugin: Preference option to configure timeout 
 - [ ] FEAT: Reimplement "In which folders..."
+- [ ] FEAT: add GUI for 'app.access.userdatabase.defaultrole' config
+- [ ] FEAT: Change app state separator and assignment chars, i.e. to ; and = 
 
 ### Priority: low
 - [ ] BUG: Remove non-printable chars from Z39.50 import, see also https://github.com/cboulanger/bibliograph/issues/189
-- [ ] FEAT: Add "serverOnly" column to data_Config (true/false/null) and remove from config data sent to client
-- [ ] FEAT: Backend: Streamline API to get Datasource & typed model
-- [ ] FEAT: Frontend: Rename widget ids, replace with native qooxdoo ids, see https://github.com/qooxdoo/qooxdoo/issues/9422
-- [ ] FEAT: Change app state separator and assignment chars
 - [ ] FEAT: Re-implement reference editor title label
-- [ ] FEAT: Re-implement Docker image for testing
 - [ ] FEAT: Frontend: Rename item view "metadata" page
 - [ ] FEAT: Preferences: Implement field selection for editor as checkboxes
 - [ ] FEAT: Reimplememt help window
-- [ ] FEAT: validate email configuration 
+- [ ] FEAT: Validate email configuration 
 - [ ] FEAT: Change virtual folder icon
 - [ ] FEAT: Rewrite Yii2 configuration using M1/Var, maybe convert config to YAML: https://packagist.org/packages/sergeymakinen/yii2-config ?
-- [ ] FEAT: Ctrl+A to select all (visible?) references.
-- [ ] FEAT: Change URL params separators to & and = 
-- [ ] FEAT: Broadcast "reference.changeData" message (with datasource info) to update connected clients' tableView
-- [ ] FEAT: Click on "Citation key" refreshes it
 - [ ] FEAT: Add "Re-install modules" button in Systems menu
 - [ ] FEAT: Remove migrations table for deleted datasources
 - [ ] FEAT: Add "Active" Checkbox to user editor
 - [ ] FEAT: Alert errors during import ("x references skipped...")
 - [ ] FEAT: Add a silent abort error that can be used to terminate a request without an error message
 - [ ] FEAT: Reimplement support for the admindb, userdb and tmpdb settings in app.conf.toml -> use DSNs instead of single settings or TOML nested arrays.
+- [ ] FEAT: Add some initial references
 
 ### Code cleanup / refactoring
+- [ ] use DatasourceTrait::datasource() consistently instead of Dataource::getInstanceFor(), since it provides access control!
+- [ ] run npm audit fix on all npm dependencies, change where possible, or change in global package.json
 - [ ] Move dispatchClientMessage/broadcast to Yii::$app->message component
 - [ ] Move scripts in "bin" to "build/script" and test scripts to "test/script"; adapt npm run commands
 - [ ] Make UserErrorException a JSONRPC error which is caught on the client, instead of a Dialog event.
@@ -92,9 +81,13 @@
 - [ ] Folder: remove "searchfolder" column, "type" column should contain all information
 - [ ] qcl.application.MWidgetId: put registry in mixin, not in application, and app.getWidgetById -> this.getWidgetById
 - [ ] Update D&D when drag type and data are available in dragover event handler
+- [ ] Move general traits into lib/traits
+- [ ] Module::$version conflicts with Module::getVersion -> overrride Module::defaultVersion()
+- [ ] Remove datasource_role link
 
 ### Testing, CI and distribution
 - [ ] Make Travis ~~great~~ work again
+- [ ] FEAT: Re-implement Docker image for testing
 - [ ] Use eslint on Travis: see https://github.com/ITISFoundation/qx-iconfont-material/blob/master/package.json
 - [ ] Add dockerized setup, see https://github.com/ITISFoundation/qx-iconfont-material
 - [ ] Tests: Fix bootstrap loading issue
@@ -109,18 +102,30 @@
 ## v3.1
 
 ### Priority: high
+- [ ] FEAT: Implement setup Wizard
+- [ ] FEAT: Allow migrations via permission, not prod/dev-mode
 - [ ] FEAT: Re-enable item view / formatted item
 - [ ] FEAT: Re-enable item view / record info
 - [ ] FEAT: Re-enable item view / duplicates search
 - [ ] FEAT: Re-enable system menu commands
 - [ ] FEAT: Re-implement message broadcast
+    - [ ] FEAT: Config key change should be broadcasted
+    - [ ] FEAT: Broadcast "reference.changeData" message (with datasource info) to update connected clients' tableView
+- [ ] FEAT: Ctrl+A to select all (visible?) references.
+
 
 ### Priority: normal
+- [ ] FEAT: Add "serverOnly" column to data_Config (true/false/null) and remove from config data sent to client
+- [ ] FEAT: Disallow drop of references on folders in which they are already contained.
 - [ ] FEAT: Improve keyword import from webservices
+- [ ] FEAT: Update CQL operators to conform to the specs (http://www.loc.gov/standards/sru/cql/contextSets/theCqlContextSet.html)
 - [ ] FEAT: Reimplement HTML editor integration for notes
 - [ ] FEAT: Implement drag&drop folder positioning
 - [ ] FEAT: Clean, future-proof OO-Rewrite of the Rendering the tree in SimpleDataModel format
 - [ ] FEAT: integrate https://clipboardjs.com/
+- [ ] FEAT: rewrite build scripts with node, using https://codewithhugo.com/how-to-make-beautiful-simple-cli-apps-with-node/
+- [ ] FEAT: Frontend: Rename widget ids, replace with native qooxdoo ids, see https://github.com/qooxdoo/qooxdoo/issues/9422
 
 ### Priority: low
 - [ ] FEAT: Enable print item view: bibliograph.ui.main.ItemView#print()
+- [ ] FEAT: Click on "Citation key" refreshes it

@@ -8,6 +8,7 @@ declare -a arr=(
   "cboulanger/raptor-client"
   "cboulanger/qx-contrib-Dialog"
   "cboulanger/qx-contrib-TokenField"
+  "cboulanger/dsn"
   "cboulanger/worldcat-linkeddata-php"
   "serratus/quaggaJS"
 )

@@ -17,35 +17,6 @@ class Base extends \Codeception\Test\Unit
    */
   protected $tester;
 
-  //static $migrationsApplied = false;
-
-  //static $migrationError = false;
-
-  //static $migrationOutput = null;
-
-  /**
-   * Run migrations
-   *
-   * @return void
-   */
-  //public static function setUpBeforeClass(){
-    // if( self::$migrationsApplied ) return;
-    // $output = '';
-    // $runner = new \toriphes\console\Runner();
-    // $runner->run('migrate/fresh --interactive=0 --db=testdb -p=@app/migrations/schema' , $output);
-    // self::$migrationsApplied = true;
-    // self::$migrationOutput = $output;
-    // if( strstr($output,"failed" )) self::$migrationError = true;
-    // codecept_debug($output);
-  //}
-
-  // public function testMigrations(){
-  //   if( self::$migrationError == true ){
-  //     $this->fail("Migrations failed: " . self::$migrationOutput );
-  //   }
-  // }
-
-
   /**
    * Count elements of an object
    * @link http://php.net/manual/en/countable.count.php
@@ -57,7 +28,7 @@ class Base extends \Codeception\Test\Unit
    */
   public function count()
   {
-    return parent::count();
+    return (int) parent::count();
   }
 
   /**
@@ -65,7 +36,7 @@ class Base extends \Codeception\Test\Unit
    *
    * @param TestResult $result
    *
-   * @return TestResult
+   * @return TestResult|null
    */
   public function run(TestResult $result = null)
   {

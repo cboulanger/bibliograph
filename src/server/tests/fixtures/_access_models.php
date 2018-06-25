@@ -1,4 +1,5 @@
 <?php
+
 namespace tests\fixtures;
 
 return [
@@ -15,12 +16,12 @@ return [
     'dataFile' => '@tests/_data/role.php',
   ],
   'permission' => [
-      'class' => PermissionFixture::class,
-      'dataFile' => '@tests/_data/permission.php',
+    'class' => PermissionFixture::class,
+    'dataFile' => '@tests/_data/permission.php',
   ],
   'config' => [
-      'class' => ConfigFixture::class,
-      'dataFile' => '@tests/_data/config.php',
+    'class' => ConfigFixture::class,
+    'dataFile' => '@tests/_data/config.php',
   ],
   'userconfig' => [
     'class' => UserConfigFixture::class,
@@ -29,30 +30,30 @@ return [
   'session' => [
     'class' => SessionFixture::class,
     'dataFile' => '@tests/_data/session.php',
-  ],  
+  ],
   'datasource' => [
     'class' => DatasourceFixture::class,
     'dataFile' => '@tests/_data/datasource.php',
   ],
   'datasource_group' => [
-      'class' => DatasourceGroupFixture::class,
-      'dataFile' => '@tests/_data/datasource_group.php',
+    'class' => DatasourceGroupFixture::class,
+    'dataFile' => '@tests/_data/datasource_group.php',
   ],
   'datasource_role' => [
-      'class' => DatasourceRoleFixture::class,
-      'dataFile' => '@tests/_data/datasource_role.php',
+    'class' => DatasourceRoleFixture::class,
+    'dataFile' => '@tests/_data/datasource_role.php',
   ],
   'datasource_user' => [
-      'class' => DatasourceUserFixture::class,
-      'dataFile' => '@tests/_data/datasource_user.php',
+    'class' => DatasourceUserFixture::class,
+    'dataFile' => '@tests/_data/datasource_user.php',
   ],
   'group_user' => [
-      'class' => GroupUserFixture::class,
-      'dataFile' => '@tests/_data/group_user.php',
+    'class' => GroupUserFixture::class,
+    'dataFile' => '@tests/_data/group_user.php',
   ],
   'permission_role' => [
-      'class' => PermissionRoleFixture::class,
-      'dataFile' => '@tests/_data/permission_role.php',
+    'class' => PermissionRoleFixture::class,
+    'dataFile' => '@tests/_data/permission_role.php',
   ],
   'schema' => [
     'class' => SchemaFixture::class,
@@ -63,7 +64,7 @@ return [
     'dataFile' => '@tests/_data/role_schema.php',
   ],
   'user_role' => [
-      'class' => UserRoleFixture::class,
-      'dataFile' => '@tests/_data/user_role.php',
+    'class' => UserRoleFixture::class,
+    'dataFile' => '@tests/_data/user_role.php',
   ],
 ];

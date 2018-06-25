@@ -2,6 +2,12 @@
 
 namespace app\modules\bibutils;
 
+/**
+ * The path to the bibutils executables. If set to empty,
+ * the bibutils executables must be on the PATH
+ */
+defined('BIBUTILS_PATH') or define('BIBUTILS_PATH','/usr/local/bin');
+
 class Module extends \app\modules\converters\Module
 {
   /**

@@ -307,13 +307,13 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
     }
     $parent = static::findOne(['id' => $parentId]);
     if( ! $parent ) return;
-    //Yii::debug("Updating parent node " . $parent->label);
+    //Yii::debug("Updating parent node " . $parent->label, __METHOD__, __METHOD__);
     $parent->getChildCount(true); // this saves the parent
     $nodeData = FolderController::getNodeDataStatic($parent);
     if( $openNode ){
       $nodeData['bOpened'] = true;
     }
-    //Yii::debug($nodeData);
+    //Yii::debug($nodeData, __METHOD__);
     // update new parent on client
     Yii::$app->eventQueue->add($this->createUpdateNodeEvent($nodeData));
   }
@@ -338,12 +338,12 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
 
     // inserts
     if ($insert) {
-      Yii::debug("Inserting " . $this->label);
+      //Yii::debug("Inserting " . $this->label, __METHOD__);
       $this->_afterInsert();
       return true;
     }
     // dispatch events
-    Yii::debug("Updating " . $this->label . " " . json_encode($changedAttributes));
+    //Yii::debug("Updating " . $this->label . " " . json_encode($changedAttributes));
     foreach ($changedAttributes as $key => $oldValue) {
       switch ($key) {
         case "parentId":

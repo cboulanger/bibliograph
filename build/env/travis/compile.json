@@ -1,6 +1,6 @@
 {
   "environment": {
-    "bibliograph.version" : "3.0.0-alpha"
+    "bibliograph.version" : "3.0.0-beta"
   },
 
   "targets": [

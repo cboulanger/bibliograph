@@ -24,7 +24,7 @@ class ServiceController extends AppController
    */
   public function actionList($datasource)
   {
-    $this->requirePermission("backup.restore");
+    $this->requirePermission("backup.restore", $datasource);
     $files = $this->listBackupFiles($this->datasource($datasource));
     rsort($files);
     return $this->createFormOptions($files);

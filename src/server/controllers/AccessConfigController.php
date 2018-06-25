@@ -271,7 +271,7 @@ class AccessConfigController extends AppController
     $records = $query->all();
     // create result from record data
     $result = [];
-    //Yii::debug($elementData);
+    //Yii::debug($elementData, __METHOD__);
     foreach ($records as $record) {
       $value = $record->namedId;
       if( in_array($type, ['permission','role' ])){
@@ -422,7 +422,7 @@ class AccessConfigController extends AppController
             'children' => []
           );
           /** @var \app\models\Role[] $roles */
-          $roles = $user->getGroupRoles($group->id)->all();
+          $roles = $user->getGroupRoles($group)->all();
           foreach ($roles as $role) {
             $roleNode = array(
               'icon' => $modelData['role']['icon'],
@@ -498,7 +498,7 @@ class AccessConfigController extends AppController
       ));
     }
 
-    if ($type == "datasource") {
+    if ($type === "datasource") {
       try {
         $model = Yii::$app->datasourceManager->create($namedId, $schema);
       } catch (RecordExistsException $e) {

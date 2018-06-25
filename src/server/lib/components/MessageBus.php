@@ -31,6 +31,6 @@ class MessageBus extends BaseObject
   public function broadcast(string $name, $data, $selfAlso=false )
   {
     if( $selfAlso ) $this->dispatch($name, $data);
-    Yii::debug("Broadcasting not implemented");
+    Yii::debug("Broadcasting not implemented", __METHOD__);
   }
 }

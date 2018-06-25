@@ -70,7 +70,7 @@ class ConsoleController extends \yii\console\Controller
     $progressBar = new Progress();
     try {
       $result = $this->restoreBackup($datasource, $file, $progressBar);
-      Yii::debug($result,Module::CATEGORY);
+      Yii::debug($result,Module::CATEGORY, __METHOD__);
       if( $result['errors'] > 0 ){
         throw new \RuntimeException("Restore unsuccessful. Please check log files.");
       }

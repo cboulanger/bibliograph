@@ -11,7 +11,7 @@ class EventTransportCest
     return require __DIR__ . '/../fixtures/_combined_models.php';
   }
 
-  public function trySimpleEvent(FunctionalTester $I)
+  public function sendSimpleEvent(FunctionalTester $I)
   {
     $I->loginAnonymously();
     $I->sendJsonRpcRequest('test','simple-event');

@@ -440,7 +440,7 @@ class ReferenceController extends AppController
    */
   public function actionCreate($datasource, $folderId, $data )
   {
-    $this->requirePermission("reference.add");
+    $this->requirePermission("reference.add", $datasource);
     $modelClass = $this->getControlledModel($datasource);
 
     switch( gettype( $data )){
@@ -513,7 +513,7 @@ class ReferenceController extends AppController
    */
   public function actionRemove(string $datasource, int $folderId, string $ids )
   {
-    $this->requirePermission("reference.remove");
+    $this->requirePermission("reference.remove", $datasource);
 
     if( $folderId === 0 and $this->confirmed !== "all" ){
       Confirm::create(
@@ -644,7 +644,7 @@ class ReferenceController extends AppController
    */
   public function actionMove(string $datasource, int $folderId, int $targetFolderId, string $ids)
   {
-    $this->requirePermission("reference.move");
+    $this->requirePermission("reference.move", $datasource);
 
     $referenceClass = $this->getControlledModel($datasource);
     $folderClass = static:: getFolderModel($datasource);
@@ -758,7 +758,7 @@ class ReferenceController extends AppController
    */
   public function actionCopy(string $datasource, int $targetFolderId, string $ids)
   {
-    $this->requirePermission("reference.move");
+    $this->requirePermission("reference.move", $datasource);
     $folderModel = static::getFolderModel($datasource);
     $targetFolder = $folderModel::findOne($targetFolderId);
 
@@ -816,7 +816,7 @@ class ReferenceController extends AppController
    */
   public function actionEmptyFolder($datasource, $folderId)
   {
-    $this->requirePermission("reference.batchedit");
+    $this->requirePermission("reference.batchedit", $datasource);
 
     $folderModel = static::getFolderModel($datasource);
     /** @var Folder $folder */
@@ -1035,7 +1035,7 @@ class ReferenceController extends AppController
    * return TokenFieldDto[]
    */
   public function actionTokenizeQuery( $input, $inputPosition, $tokens, $datasourceName ){
-    Yii::debug(func_get_args());
+    //Yii::debug(func_get_args());
     $input = trim($input);
     $modelClass = Datasource::in($datasourceName,"reference");
     $tokens[] = $input;
@@ -1049,7 +1049,7 @@ class ReferenceController extends AppController
       'verbose' => true
     ]);
     $translatedQuery = $nlq->translate();
-    Yii::debug("User search query '$query' was translated to '$translatedQuery'.");
+    Yii::debug("User search query '$query' was translated to '$translatedQuery'.", __METHOD__, __METHOD__);
     $matches=[];
     switch ($inputPosition){
       case 0:

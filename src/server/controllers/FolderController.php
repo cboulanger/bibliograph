@@ -295,7 +295,7 @@ class FolderController extends AppController //implements ITreeController
    */
   public function actionEdit($datasource, $folderId)
   {
-    $this->requirePermission("folder.edit");
+    $this->requirePermission("folder.edit", $datasource);
     $model = $this->getRecordById($datasource, $folderId);
     $formData = Form::getDataFromModel($model);
     $label = $model->label;
@@ -319,7 +319,7 @@ class FolderController extends AppController //implements ITreeController
   public function actionSave($data=null, string $datasource=null, int $folderId=null)
   {
     if ($data === null) return "ABORTED";
-    $this->requirePermission("folder.edit");
+    $this->requirePermission("folder.edit", $datasource);
     /** @var Folder $folder */
     $folder = static::getRecordById($datasource, $folderId);
     try {
@@ -345,7 +345,7 @@ class FolderController extends AppController //implements ITreeController
    */
   public function actionVisibilityDialog($datasource, $folderId)
   {
-    $this->requirePermission("folder.edit");
+    $this->requirePermission("folder.edit", $datasource);
     $folder = $this->getRecordById($datasource, $folderId);
     Form::create(
       Yii::t('app', "Change the visibility of the folder"),
@@ -386,7 +386,7 @@ class FolderController extends AppController //implements ITreeController
   public function actionVisibilityChange($data=null, string $datasource=null, int $folderId=null)
   {
     if ($data === null) return "ABORTED";
-    $this->requirePermission("folder.edit");
+    $this->requirePermission("folder.edit", $datasource);
     $data = json_decode(json_encode($data), true); // convert to array
 
     $folderClass = $this->getControlledModel($datasource);
@@ -421,7 +421,7 @@ class FolderController extends AppController //implements ITreeController
    */
   public function actionAddDialog($datasource, $folderId)
   {
-    $this->requirePermission("folder.add");
+    $this->requirePermission("folder.add", $datasource);
     Form::create(
       Yii::t('app', "Please enter the name and type of the new folder:"),
       [
@@ -456,7 +456,7 @@ class FolderController extends AppController //implements ITreeController
    */
   public function actionCreate($data, $datasource, $parentFolderId)
   {
-    $this->requirePermission("folder.add");
+    $this->requirePermission("folder.add", $datasource);
     if ($data === null or $data->label == "") return "ABORTED";
     $folderClass = $this->getControlledModel($datasource);
     $position = 0;
@@ -536,7 +536,7 @@ class FolderController extends AppController //implements ITreeController
    */
   public function actionRemoveDialog($datasource, $folderId)
   {
-    $this->requirePermission("folder.remove");
+    $this->requirePermission("folder.remove", $datasource);
     /** @var Folder $folder */
     $folder = $this->getRecordById($datasource, $folderId);
     // create dialog
@@ -561,7 +561,7 @@ class FolderController extends AppController //implements ITreeController
   public function actionRemove($data, $datasource, $folderId)
   {
     if (!$data) return "ABORTED";
-    $this->requirePermission("folder.remove");
+    $this->requirePermission("folder.remove", $datasource);
     /** @var Folder $folder */
     $folder = $this->getRecordById($datasource, $folderId);
 
@@ -655,7 +655,7 @@ class FolderController extends AppController //implements ITreeController
    */
   public function actionMove(string $datasource, int $folderId, int $parentId)
   {
-    $this->requirePermission("folder.move");
+    $this->requirePermission("folder.move", $datasource);
     if ($folderId === $parentId) {
       throw new UserErrorException(Yii::t('app', "Folder cannot be moved on itself."));
     }
@@ -701,7 +701,8 @@ class FolderController extends AppController //implements ITreeController
    * @throws \JsonRpc2\Exception
    */
   public function actionCopy(string $from_datasource, int $from_folderId, string $to_datasource, int $to_parentId ){
-    $this->requirePermission("folder.move"); // Todo: needs its own permission
+    $this->requirePermission("folder.move", $from_datasource); // Todo: needs its own permission
+    $this->requirePermission("folder.move", $to_datasource); // Todo: needs its own permission
     // source
     $findInSource = Datasource::findIn($from_datasource, "folder");
     /** @var Folder $from_folder */
@@ -784,7 +785,7 @@ class FolderController extends AppController //implements ITreeController
     } catch (Exception $e) {
       throw new UserErrorException($e->getMessage());
     }
-    Yii::debug("$count_created reference created, $count_updated updated.");
+    Yii::debug("$count_created reference created, $count_updated updated.", __METHOD__);
     return sprintf("%s references copied into new folder '%s'",  count($references), $to_folder->label);
   }
 
@@ -799,7 +800,7 @@ class FolderController extends AppController //implements ITreeController
    */
   public function actionPositionChange($datasource, $folderId, $position)
   {
-    $this->requirePermission("folder.move");
+    $this->requirePermission("folder.move", $datasource);
     /** @var Folder $folder */
     $folder = $this->getRecordById($datasource, $folderId);
     $folder->changePosition($position);

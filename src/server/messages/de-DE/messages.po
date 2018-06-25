@@ -519,6 +519,10 @@ msgid "File extensions"
 msgstr "Dateiendung"
 
 msgctxt "app"
+msgid "Folder"
+msgstr "Ordner"
+
+msgctxt "app"
 msgid "Folder Title"
 msgstr "Ordnertitel"
 

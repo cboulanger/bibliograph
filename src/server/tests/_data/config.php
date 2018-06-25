@@ -8,8 +8,6 @@ return [
     'customize' => 1,
     'final' => 0,
     'namedId' => 'csl.style.default',
-    'created' => '2017-12-20 13:56:47',
-    'modified' => '2017-12-20 14:56:47',
   ],
   [
     'id' => 2,
@@ -18,8 +16,6 @@ return [
     'customize' => 1,
     'final' => 0,
     'namedId' => 'application.locale',
-    'created' => '2017-12-20 13:56:47',
-    'modified' => '2017-12-20 14:56:47',
   ],
   [
     'id' => 3,
@@ -28,8 +24,6 @@ return [
     'customize' => 0,
     'final' => 0,
     'namedId' => 'application.title',
-    'created' => '2017-12-20 13:56:47',
-    'modified' => '2017-12-20 14:56:47',
   ],
   [
     'id' => 4,
@@ -38,8 +32,6 @@ return [
     'customize' => 0,
     'final' => 0,
     'namedId' => 'application.logo',
-    'created' => '2017-12-20 13:56:47',
-    'modified' => '2017-12-20 14:56:47',
   ],
   [
     'id' => 5,
@@ -48,18 +40,14 @@ return [
     'customize' => 0,
     'final' => 0,
     'namedId' => 'bibliograph.access.mode',
-    'created' => '2017-12-20 13:56:47',
-    'modified' => '2017-12-20 14:56:47',
   ],
   [
     'id' => 6,
-    'type' => 0,
-    'default' => null,
+    'type' => 3,
+    'default' => 'manager,user',
     'customize' => 0,
     'final' => 0,
-    'namedId' => 'bibliograph.access.no-access-message',
-    'created' => '2017-12-20 13:56:47',
-    'modified' => '2017-12-20 14:56:47',
+    'namedId' => 'app.access.userdatabase.roles',
   ],
   [
     'id' => 7,
@@ -68,8 +56,6 @@ return [
     'customize' => 0,
     'final' => 0,
     'namedId' => 'bibliograph.duplicates.threshold',
-    'created' => '2017-12-20 13:56:47',
-    'modified' => '2017-12-20 14:56:47',
   ],
   [
     'id' => 8,
@@ -78,8 +64,6 @@ return [
     'customize' => 0,
     'final' => 0,
     'namedId' => 'plugin.csl.bibliography.maxfolderrecords',
-    'created' => '2017-12-20 13:56:47',
-    'modified' => '2017-12-20 14:56:47',
   ],
   [
     'id' => 9,
@@ -88,8 +72,6 @@ return [
     'customize' => 0,
     'final' => 0,
     'namedId' => 'access.enforce_https_login',
-    'created' => '2017-12-20 13:56:47',
-    'modified' => '2017-12-20 14:56:47',
   ],
   [
     'id' => 10,
@@ -98,8 +80,6 @@ return [
     'customize' => 0,
     'final' => 0,
     'namedId' => 'authentication.method',
-    'created' => '2017-12-20 13:56:47',
-    'modified' => '2017-12-20 14:56:47',
   ],
   [
     'id' => 11,
@@ -108,8 +88,6 @@ return [
     'customize' => 0,
     'final' => 0,
     'namedId' => 'app.datasource.baseclass',
-    'created' => '2017-12-21 11:40:26',
-    'modified' => '2017-12-21 12:40:26',
   ],
   [
     'id' => 12,
@@ -118,7 +96,5 @@ return [
     'customize' => 0,
     'final' => 0,
     'namedId' => 'app.datasource.baseschema',
-    'created' => '2017-12-21 11:40:26',
-    'modified' => '2017-12-21 12:40:26',
   ],
 ];

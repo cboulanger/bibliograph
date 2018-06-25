@@ -115,7 +115,7 @@ class BaseModel extends ActiveRecord
     } else {
       $db = parent::getDb();
     }
-    //Yii::debug(">>>>>>>>>>>>> " . static::class . " :  " . $db->dsn);
+    //Yii::debug(">>>>>>>>>>>>> " . static::class . " :  " . $db->dsn, __METHOD__);
     return $db;
   }
 
@@ -154,9 +154,9 @@ class BaseModel extends ActiveRecord
 
   /**
    * Shorthand method to find ActiveRecord with the given named id
-   *
+   * Returns null if it doesn't exist.
    * @param string $namedId
-   * @return \lib\models\BaseModel
+   * @return \lib\models\BaseModel|null
    */
   public static function findByNamedId( $namedId )
   {
