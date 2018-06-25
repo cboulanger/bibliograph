@@ -1,11 +1,9 @@
 # Bibliograph: Open Source Online Citation & Library Management (Development Branch)
 
-[![Build Status](https://travis-ci.org/cboulanger/bibliograph.svg?branch=develop)](https://travis-ci.org/cboulanger/bibliograph) | [![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=panyasan&url=https://github.com/cboulanger/bibliograph&title=Bibliograph&language=javascript&tags=github&category=software)
+Master [![Build Status](https://travis-ci.org/cboulanger/bibliograph.svg?branch=master)](https://github.com/cboulanger/bibliograph/tree/master) | Development [![Build Status](https://travis-ci.org/cboulanger/bibliograph.svg?branch=develop)](https://github.com/cboulanger/bibliograph/tree/develop) | [![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=panyasan&url=https://github.com/cboulanger/bibliograph&title=Bibliograph&language=javascript&tags=github&category=software)
 
 Bibliograph is a powerful open source web application for the collaborative
 collection, editing and publishing of bibliographic data.
-
-> **NOTE: This is the development version based on Yii2 and PHP7, which can be incomplete, unstable or even completely unfunctional. If you want a stable working version of Bibliograph, use the [current master version](https://github.com/cboulanger/bibliograph/tree/master)**
 
 - [Installation](doc/install.md)
 - [Release Notes](release-notes.md)
@@ -20,6 +18,8 @@ Bibliograph
   without having to install software locally;
 - is fully open source and free to download, install, use and adapt to your 
   particular need.
+- is based on rock-solid libraries with a large developer communities 
+  ([qooxdoo](https://www.qooxdoo.org) for the user interface and [Yii2] for the backend).
 
 Bibliograph can be used by
 
@@ -35,21 +35,19 @@ Bibliograph can be used by
   on queries;
 - Rich metadata, Autocompletion and duplicate detection;
 - Allows natural language queries like "title contains hamlet and author 
-  beginswith shake";
+  begins with shake";
 - Fine-grained access control system with users, roles, groups and permissions 
   allows flexible user management and contol of who is allowed to view, enter, 
   edit and delete data;
 - Unlimited amount of separate databases;
 - Imports data from library catalogues (through Z39.50 interface), from 
   various file-based data formats (RIS, BibTeX, Endnote, MODS, and more), and
-  from RSS feeds.
-- Export into various open formats and publish folders as RSS feeds;
+  from web services.
+- LDAP integration to connect to existing LDAP servers;  
 - Formats bibliographic records with various citation styles (APA, Chicago, ...) 
   using CSL templates and the citeproc style processor (http://citationstyles.org);
 - Ability to create and restore snapshot backups of individual databases;
-- LDAP integration to connect to existing LDAP servers;
-- Optionally provides a user forum;
-- Fully open source, can be easily adapted and extended by plugins. 
+- Easily extendable with custom plugins.
 
 ## Installation and Deployment
 See [here](doc/install.md).
