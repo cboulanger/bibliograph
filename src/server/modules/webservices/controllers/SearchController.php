@@ -46,7 +46,6 @@ class SearchController extends \yii\web\Controller
    * @param string $query The cql query
    * @param string $id The id of the progress widget
    * @param ServerProgress|null $progressBar Only used internally
-   * @return string Chunked HTTP response
    * @todo use DTO
    */
   public function actionProgress(string $datasource, string $query, string $id, ServerProgress $progressBar=null)
@@ -64,15 +63,15 @@ class SearchController extends \yii\web\Controller
       try {
         $this->sendRequest($datasource, $query, $progressBar);
         $progressBar->dispatchClientMessage("webservices.dataReady", $query);
-        return $progressBar->complete();
+        $progressBar->complete();
       } catch (TimeoutException $e) {
         // retry
         if( $retries < 4){
           $progressBar->setProgress(0, Yii::t("webservices", "Server timed out. Trying again..."));
           sleep(rand(1,3));
-          return $this->actionProgress($datasource, $query, $id, $progressBar );
+          $this->actionProgress($datasource, $query, $id, $progressBar );
         } else {
-          return $progressBar->error(Yii::t("webservices", "Server timed out."));
+          $progressBar->error(Yii::t("webservices", "Server timed out."));
         }
       } catch (UserErrorException $e) {
         Yii::debug($e->getMessage());
@@ -82,11 +81,11 @@ class SearchController extends \yii\web\Controller
         return $progressBar->error($e->getMessage());
       } catch (\Throwable $e) {
         Yii::error($e);
-        return $progressBar->error($e->getMessage());
+        $progressBar->error($e->getMessage());
       }
     }
+    Yii::$app->getResponse()->isSent = true;
   }
-
 
   /**
    * Does the actual work of executing the request on the remote server.
@@ -139,11 +138,11 @@ class SearchController extends \yii\web\Controller
         ['number'=>$hits]
       ));
     }
-    Yii::debug("Found $hits records...", Module::CATEGORY, __METHOD__);
+    Yii::debug("Found $hits records...", Module::CATEGORY);
 
     // delete existing search
     $userId = Yii::$app->user->identity->getId();
-    Yii::debug("Deleting existing search data for query '$query'...", Module::CATEGORY, __METHOD__);
+    Yii::debug("Deleting existing search data for query '$query'...", Module::CATEGORY);
     /** @var Search[] $searches */
     $searches = (array) Search::find()->where(['query' => $query, 'UserId' => $userId ])->all();
     foreach ($searches as $search) {
@@ -162,15 +161,15 @@ class SearchController extends \yii\web\Controller
     ]);
     $search->save();
     $searchId = $search->id;
-    Yii::debug("Created new search record #$searchId for query '$query' for user #$userId.", Module::CATEGORY, __METHOD__);
+    Yii::debug("Created new search record #$searchId for query '$query' for user #$userId.", Module::CATEGORY);
 
     if ( $hits === 0) {
-      Yii::debug("Empty result set, aborting...", Module::CATEGORY, __METHOD__);
+      Yii::debug("Empty result set, aborting...", Module::CATEGORY);
       return;
     }
 
     // saving to local cache
-    Yii::debug("Caching records...", Module::CATEGORY, __METHOD__);
+    Yii::debug("Caching records...", Module::CATEGORY);
 
     $step = 50 / $hits;
     $i = 0;
@@ -207,7 +206,7 @@ class SearchController extends \yii\web\Controller
       $count++;
       if( $max and $count > $max ) break;
       try {
-        Yii::debug("Searching data for '$isbn' ...", Module::CATEGORY, __METHOD__);
+        Yii::debug("Searching data for '$isbn' ...", Module::CATEGORY);
         $this->sendRequest("webservices_worldcat", $isbn);
         $success++;
         Yii::info("[√] ISBN $isbn successfully imported ($count/$max)",Module::CATEGORY);
