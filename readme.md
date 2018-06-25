@@ -1,11 +1,15 @@
-# Bibliograph: Open Source Online Citation & Library Management (Development Branch)
+# Bibliograph: Open Source Online Citation & Library Management
 
-Master [![Build Status](https://travis-ci.org/cboulanger/bibliograph.svg?branch=master)](https://github.com/cboulanger/bibliograph/tree/master) | Development [![Build Status](https://travis-ci.org/cboulanger/bibliograph.svg?branch=develop)](https://github.com/cboulanger/bibliograph/tree/develop) | [![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=panyasan&url=https://github.com/cboulanger/bibliograph&title=Bibliograph&language=javascript&tags=github&category=software)
+[![Build Status](https://travis-ci.org/cboulanger/bibliograph.svg?branch=master)](https://github.com/cboulanger/bibliograph/tree/master) 
+[![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=panyasan&url=https://github.com/cboulanger/bibliograph&title=Bibliograph&language=javascript&tags=github&category=software)
+
+> NOTE: This is v3.0.0-beta, with a completely rewritten backend. Not all the features of 
+version 2 have been reimplemented, and documentation still has to be updated and added.  
 
 Bibliograph is a powerful open source web application for the collaborative
 collection, editing and publishing of bibliographic data.
 
-- [Installation](doc/install.md)
+- [Installation](doc/install.md) 
 - [Release Notes](release-notes.md)
 
 Bibliograph

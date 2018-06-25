@@ -28,7 +28,6 @@ RUN \
 # Environment variables for the setup. Leave here so changes won't invalidate the cache
 ENV DOCKER_RESOURCES_DIR=build/env/docker
 ENV BIB_DIST_DIR=dist
-ENV BIB_VAR_DIR /var/lib/bibliograph
 ENV BIB_DEPLOY_DIR /var/www/html
 
 # copy dist directory, remove unneeded files
@@ -37,6 +36,7 @@ COPY $BIB_DIST_DIR/ $BIB_DEPLOY_DIR/
 
 # add configuration files
 COPY $DOCKER_RESOURCES_DIR/app.conf.toml $BIB_DEPLOY_DIR/server/config/
+COPY $DOCKER_RESOURCES_DIR/server.php $BIB_DEPLOY_DIR/
 # RUN chmod -R 0777 $BIB_DEPLOY_DIR/server/runtime/*
 
 # supervisor files

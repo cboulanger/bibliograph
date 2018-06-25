@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-default_namespace="app\migrations\schema"
-cd src/server
+default_namespace="app\\migrations\\schema"
+cd src/server || exit 1
 read -p 'Please enter a short descriptive name of the migration: ' name
 read -p "Please enter the namespace of the migration [$default_namespace]:" -r -e namespace
 namespace=${namespace:-$default_namespace}

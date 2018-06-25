@@ -71,23 +71,25 @@ class Module extends \lib\Module
   protected function _install()
   {
     // Check prerequisites
+    $backupPath = BACKUP_PATH ? BACKUP_PATH : TMP_PATH;
     $error = array();
     if (!class_exists("ZipArchive")) {
       array_push($error, "You must install the ZIP extension.");
     }
-    if (!file_exists(BACKUP_PATH) or !is_writable(BACKUP_PATH)) {
-      array_push($error, "Directory '" . BACKUP_PATH . "' needs to exist and be writable");
+    if (!file_exists($backupPath) or !is_writable($backupPath)) {
+      array_push($error, "Directory '$backupPath' needs to exist and be writable");
     }
     if (count($error) == 0) {
       $zip = new ZipArchive();
-      $testfile = BACKUP_PATH . "/test.zip";
+      $testfile = "$backupPath/test.zip";
       if ($zip->open($testfile, ZIPARCHIVE::CREATE) !== TRUE) {
         array_push($error, "Cannot create backup archive in backup folder - please check file permissions.");
       } else {
         $zip->addFile(Yii::getAlias('@runtime/logs/app.log'));
         $zip->close();
         if (@unlink($testfile) === false) {
-          array_push($error, "Cannot delete files in backup folder - please check file permissions.");
+          Yii::warning("Cannot delete files in backup folder - please check file permissions.", Module::CATEGORY);
+          //array_push($error, "Cannot delete files in backup folder - please check file permissions.");
         }
       }
     }

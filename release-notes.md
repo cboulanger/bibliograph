@@ -1,5 +1,12 @@
 # Release notes
 
+## Version 3.0.0-beta (Summer 2018)
+- Completely rewrote backend, replacing homegrown framework with Yii2-based backend
+- Upgraded client to qooxdoo 6.0.0
+- Many changes under the hood (> 600 commits)
+- Reduced functionality to concentrate on making main features work and testing them
+- Added building of docker image to Travis CI
+
 ## Version 2.3 (October 2017)
 - added Debugging plugin with a server log window, log filter selection and recording of 
   JSONRPC traffic for later replay.

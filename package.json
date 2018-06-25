@@ -37,8 +37,9 @@
     "dist-clean": "build/script/dist-clean.sh",
     "release": "build/script/dist-clean.sh && npx release-it --preRelease=beta",
     "release-clean": "node build/script/github-release-clean.js && build/script/github-tag-clean.sh",
-    "docker-build": "docker build -f build/env/docker/Dockerfile -t cboulanger/bibliograph .",
-    "docker-start": "docker run -d -p 127.0.0.1:7070:80 cboulanger/bibliograph",
+    "docker-build": "build/script/docker-build.sh",
+    "docker-start": "build/script/docker-run.sh",
+    "docker-all": "npm run dist-create && npm run docker-build && npm run docker-start",
     "docker-clean": "docker container prune && docker image prune"
   },
   "author": "",
