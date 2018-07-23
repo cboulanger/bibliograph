@@ -8,10 +8,9 @@
 
 namespace app\controllers\traits;
 
-use lib\exceptions\UserErrorException;
 use Yii;
 use app\models\{
-  User, Role, Session, Permission
+  User, Role, Session
 };
 
 
@@ -147,52 +146,6 @@ trait AuthTrait
     $user->save();
     $user->link("roles", $anonRole);
     return $user;
-  }
-
-  /**
-   * Returns true if a permission with the given named id exists and false if
-   * not.
-   * @param string $namedId The named id of the permission
-   * @return bool
-   */
-  public function permissionExists($namedId)
-  {
-    return (bool) Permission::findOne(['namedId' => $namedId]);
-  }
-
-  /**
-   * Checks if active user has the given permission and aborts if
-   * permission is not granted.
-   *
-   * @param string $permission
-   * @throws \JsonRpc2\Exception
-   */
-  public function requirePermission($permission)
-  {
-    if (! $this->getActiveUser()->hasPermission( $permission )) {
-      Yii::warning( sprintf(
-        "Active user %s does not have required permission %s",
-        $this->getActiveUser()->namedId, $permission
-      ) );
-      throw new UserErrorException(Yii::t("app","Insufficient permissions. If this is unexpected, contact the administrator."));
-      //throw new \JsonRpc2\Exception("Not allowed.", \JsonRpc2\Exception::INVALID_REQUEST);
-    }
-  }
-
-  /**
-   * Shorthand method to enforce if active user has a role
-   * @param string $role
-   * @throws \JsonRpc2\Exception
-   */
-  public function requireRole($role)
-  {
-    if (! $this->getActiveUser()->hasRole( $role )) {
-      Yii::warning( sprintf(
-        "Active user %s does hat required role %s",
-        $this->getActiveUser()->namedId, $role
-      ) );
-      throw new \JsonRpc2\Exception("Not allowed.", \JsonRpc2\Exception::INVALID_REQUEST);
-    }
   }
 
   /**

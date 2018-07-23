@@ -203,18 +203,18 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
           'translation' => Yii::t('app', "{field} starts with {value}"),
           'type' => self::TYPE_COMPARATOR
         ],
-//        ">" => [
-//          'translation' => Yii::t('app', "{field} is greater than {value}"),
-//          'type' => self::TYPE_COMPARATOR
-//        ],
+        ">" => [
+          'translation' => Yii::t('app', "{field} is greater than {value}"),
+          'type' => self::TYPE_COMPARATOR
+        ],
 //        ">=" => [
 //          'translation' => Yii::t('app', "{field} is greater than or equal to {value}"),
 //          'type' => self::TYPE_COMPARATOR
 //        ],
-//        "<" => [
-//          'translation' => Yii::t('app', "{field} is smaller than {value}"),
-//          'type' => self::TYPE_COMPARATOR
-//        ],
+        "<" => [
+          'translation' => Yii::t('app', "{field} is smaller than {value}"),
+          'type' => self::TYPE_COMPARATOR
+        ],
 //        "<=" => [
 //          'translation' => Yii::t('app', "{field} is smaller than or equal to {value}"),
 //          'type' => self::TYPE_COMPARATOR
@@ -296,7 +296,7 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
       foreach ( $this->operators as $operator) {
         // save the lowercase version of the translation for fast lookup
         $translations = $this->getOperatorData($operator)['translation'];
-        //Yii::debug([Yii::$app->language, $operator, $translations ]);
+        //Yii::info([Yii::$app->language, $operator, $translations ]);
         foreach ((array) $translations as $translation) {
           // remove placeholder tokens
           $replace_placeholders = ['{leftOperand}','{rightOperand}','{field}','{value}'];
@@ -305,7 +305,7 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
         }
       }
       $this->dictionary[$key] = $dict;
-      //if( $locale!="en-US") Yii::debug($dict);
+      //if( $locale!="en-US") Yii::debug($dict, __METHOD__, __METHOD__);
     }
     return $this->dictionary[$key];
   }
@@ -318,7 +318,7 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
   public function translate()
   {
     $query = $this->query;
-    if($this->verbose) Yii::debug(" *** Query is '$query', using language '$this->language'... ***");
+    if($this->verbose) Yii::debug(" *** Query is '$query', using language '$this->language'... ***", __METHOD__, __METHOD__);
     if( ! $query ) return "";
     $tokenizer = new Tokenizer($query);
     $tokens = $tokenizer->tokenize();
@@ -326,10 +326,10 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
     $hasOperator = false;
     $parsedTokens = [];
     $dict = $this->getDictionary();
-    if($this->verbose) Yii::debug($dict);
+    if($this->verbose) Yii::debug($dict, __METHOD__, __METHOD__);
     do {
       $token = isset($tokens[0]) ? $tokens[0] : "";
-      if($this->verbose) Yii::debug("Looking at '$token'...");
+      if($this->verbose) Yii::debug("Looking at '$token'...", __METHOD__, __METHOD__);
       // do not translate quoted expressions
       if ( in_array( $token[0], ["'", '"']) ) {
         array_shift($tokens);
@@ -339,7 +339,7 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
         for($i=0; $i<count($tokens); $i++){
           $compare = implode( " ", array_slice( $tokens, 0, $i+1 ));
           $compare = mb_strtolower( $compare, "UTF-8");
-          if ($this->verbose) Yii::debug("Comparing '$compare'...");
+          if ($this->verbose) Yii::debug("Comparing '$compare'...", __METHOD__, __METHOD__);
           if ($pos = strpos($compare, "/") or $pos = strpos($compare, "*")){
             $compare_key = substr( $compare, 0, $pos);
           } else {
@@ -350,7 +350,7 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
             if( $compare_key == $compare){
               $offset = $i+1;
             }
-            if($this->verbose) Yii::debug("Found '$token'.");
+            if($this->verbose) Yii::debug("Found '$token'.", __METHOD__, __METHOD__);
           }
         }
         $tokens = array_slice($tokens, $offset);
@@ -434,29 +434,29 @@ class NaturalLanguageQuery extends \yii\base\BaseObject
       } else {
         // else, translate index into property
         $dict = $this->getDictionary();
-        if($this->verbose) Yii::debug($dict);
+        if($this->verbose) Yii::debug($dict, __METHOD__, __METHOD__);
         $fields = $this->schema->fields();
         $column = isset($dict[$index])? $dict[$index]:null ;
         // is the index a schema field?
         if ( $column ) {
           if (!in_array($column, $fields)) {
-            if($this->verbose) Yii::debug("Index '$index' translates to column '$column', which does not exist.");
+            if($this->verbose) Yii::debug("Index '$index' translates to column '$column', which does not exist.", __METHOD__, __METHOD__);
             // add impossible condition to return zero rows
             $activeQuery = $activeQuery->andWhere(new Expression("TRUE = FALSE"));
             $this->containsOperators=false;
             return;
           }
-          Yii::debug("Index '$index' successfully translated to column '$column'...");
+          Yii::debug("Index '$index' successfully translated to column '$column'...", __METHOD__, __METHOD__);
         } else {
           $column = $index;
           if ( ! in_array($index, $fields)) {
-            if($this->verbose) Yii::debug("Index '$index' refers to a non-existing column.");
+            if($this->verbose) Yii::debug("Index '$index' refers to a non-existing column.", __METHOD__);
             // add impossible condition to return zero rows
             $activeQuery = $activeQuery->andWhere(new Expression("TRUE = FALSE"));
             $this->containsOperators=false;
             return;
           }
-          if($this->verbose) Yii::debug("Index '$index' is column '$column'...");
+          if($this->verbose) Yii::debug("Index '$index' is column '$column'...", __METHOD__);
         }
         $condition=[];
         switch ($relation) {

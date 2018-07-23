@@ -20,9 +20,9 @@
 
 namespace app\modules\backup\controllers;
 
+use app\controllers\traits\AccessControlTrait;
 use app\controllers\traits\AuthTrait;
 use app\controllers\traits\DatasourceTrait;
-use app\controllers\traits\MessageTrait;
 use app\modules\backup\Module;
 use lib\dialog\ServerProgress;
 use Yii;
@@ -38,6 +38,7 @@ class ProgressController extends \yii\web\Controller
   use ServicesTrait;
   use DatasourceTrait;
   use AuthTrait;
+  use AccessControlTrait;
 
   /**
    * Service to backup a datasource's model data
@@ -71,7 +72,7 @@ class ProgressController extends \yii\web\Controller
     $progressBar = new ServerProgress($id);
     try {
       $result = $this->restoreBackup($this->datasource($datasource, true), $file, $progressBar);
-      Yii::debug($result,Module::CATEGORY);
+      Yii::debug($result,Module::CATEGORY, __METHOD__);
       if( $result['errors'] > 0 ){
         throw new \RuntimeException("Restore unsuccessful. Please check log files.");
       }

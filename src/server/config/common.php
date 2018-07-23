@@ -57,7 +57,7 @@ $config =  [
           }
         }
         Yii::$app->language = $language;
-        //Yii::debug("Setting language from user setting to " . $language );
+        //Yii::debug("Setting language from user setting to " . $language , __METHOD__);
       }
     } catch( Exception $e ){
       Yii::$app->utils->setLanguageFromBrowser();

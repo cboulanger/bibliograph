@@ -69,7 +69,7 @@ class ConsoleAppHelper extends \yii\base\Component
         $consoleOutput . "\n".
         "---------------------------------------------------------\n",
         "console" 
-      );      
+      , __METHOD__);
     } catch ( \Exception $e ) {
       Yii::$app = $oldApp;
       throw $e;

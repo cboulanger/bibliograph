@@ -66,7 +66,7 @@ class BibtexUtf8 extends AbstractParser
     $parser = new BibtexParser();
     $records = $parser->parse($bibtex);
     if (count($records) === 0) {
-      Yii::debug("Data did not contain any parseable records.");
+      Yii::debug("Data did not contain any parseable records.", __METHOD__);
       return [];
     }
     $references = [];

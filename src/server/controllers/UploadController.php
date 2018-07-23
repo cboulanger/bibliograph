@@ -32,7 +32,7 @@ class UploadController extends \yii\web\Controller
       if ( $path === false ){
         Yii::warning('Saving file failed: ' . $file->error);
       } else {
-        Yii::debug("Uploaded file successfully saved to '$path'");
+        Yii::debug("Uploaded file successfully saved to '$path'", __METHOD__);
       }
     } else {
       Yii::warning('File upload failed: ' . $file->error);

@@ -5,12 +5,13 @@
 ### Priority: urgent
 
 ### Priority: high
-- [ ] FEAT: Re-implement Backup plugin
+- [x] FEAT: Re-implement Backup plugin
 - [ ] FEAT: User::getAllPermissions returns always the highest available set of permissions, regardless of the permissions of the group the current datasource belongs to. Requires rewriting of  `$this->requirePermission` to pass the datasource / datasource name
-- [ ] BUG: Module::$version conflicts with Module::getVersion -> overrride Module::defaultVersion()
+- [ ] BUG: Test if translations work (it doesn't in unit test)
 
 ### Priority: normal
 - [ ] BUG: use DatasourceTrait::datasource() consistently instead of Dataource::getInstanceFor(), since it provides access control!
+- [ ] BUG: Reimplement User::checkFormPassword
 - [ ] FEAT: Cache export formats for HTML view, make configurable 
 - [ ] FEAT: Disallow drop of references on folders in which they are already contained.
 - [ ] FEAT: Reimplement Search Help 
@@ -25,6 +26,7 @@
 - [ ] FEAT: Allow migrations via permission, not prod/dev-mode
 - [ ] FEAT: Z39.50 Plugin: Preference option to configure timeout 
 - [ ] FEAT: Reimplement "In which folders..."
+- [ ] FEAT: add GUI for 'app.access.userdatabase.defaultrole' config
 
 ### Priority: low
 - [ ] BUG: Remove non-printable chars from Z39.50 import, see also https://github.com/cboulanger/bibliograph/issues/189
@@ -52,6 +54,7 @@
 - [ ] FEAT: Reimplement support for the admindb, userdb and tmpdb settings in app.conf.toml -> use DSNs instead of single settings or TOML nested arrays.
 
 ### Code cleanup / refactoring
+- [ ] run npm audit fix on all npm dependencies, change where possible, or change in global package.json
 - [ ] Move dispatchClientMessage/broadcast to Yii::$app->message component
 - [ ] Move scripts in "bin" to "build/script" and test scripts to "test/script"; adapt npm run commands
 - [ ] Make UserErrorException a JSONRPC error which is caught on the client, instead of a Dialog event.
@@ -92,6 +95,9 @@
 - [ ] Folder: remove "searchfolder" column, "type" column should contain all information
 - [ ] qcl.application.MWidgetId: put registry in mixin, not in application, and app.getWidgetById -> this.getWidgetById
 - [ ] Update D&D when drag type and data are available in dragover event handler
+- [ ] Move general traits into lib/traits
+- [ ] Module::$version conflicts with Module::getVersion -> overrride Module::defaultVersion()
+- [ ] Remove datasource_role link
 
 ### Testing, CI and distribution
 - [ ] Make Travis ~~great~~ work again
@@ -121,6 +127,7 @@
 - [ ] FEAT: Implement drag&drop folder positioning
 - [ ] FEAT: Clean, future-proof OO-Rewrite of the Rendering the tree in SimpleDataModel format
 - [ ] FEAT: integrate https://clipboardjs.com/
+- [ ] FEAT: rewrite build scripts with node, using https://codewithhugo.com/how-to-make-beautiful-simple-cli-apps-with-node/
 
 ### Priority: low
 - [ ] FEAT: Enable print item view: bibliograph.ui.main.ItemView#print()

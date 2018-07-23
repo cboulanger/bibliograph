@@ -171,7 +171,7 @@ trait ServicesTrait
         $step2 = $step1 / $total;
         $index2 = 0;
         foreach ( $query->asArray()->each() as $row) {
-          Yii::debug($row);
+          //Yii::debug($row, __METHOD__);
           // marshal data to be stored as CSV, converting booleans to integers
           $data = array_map($converter, array_values($row));
           fputcsv($tmpFileHandle, $data);
@@ -244,7 +244,7 @@ trait ServicesTrait
       Yii::debug(
         "Restoring backup to '$datasource->namedId', model type '$type', backup version $version, $total records, note: '$comment'.",
         Module::CATEGORY
-      );
+      , __METHOD__);
       // restore records
       if( $total > 0 ){
         // columns

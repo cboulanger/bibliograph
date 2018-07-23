@@ -9,6 +9,7 @@
 namespace app\controllers\traits;
 use app\controllers\events\BibliographEvents;
 use app\models\Datasource;
+use app\models\User;
 use lib\exceptions\UserErrorException;
 use RuntimeException;
 use yii\db\ActiveQuery;
@@ -25,7 +26,7 @@ trait DatasourceTrait
    *    Optional. Whether to check the current user's access to the datasource
    *    Defaults to true
    * @return \app\models\Datasource
-   * @throws RuntimeException
+   * @throws UserErrorException
    */
   public function datasource($datasourceName, $checkAccess=true)
   {
@@ -39,9 +40,11 @@ trait DatasourceTrait
       );
     }
     if( $checkAccess ){
-      $myDatasources = $this->getActiveUser()->getAccessibleDatasourceNames();
+      /** @var User $user */
+      $user =  $this->getActiveUser();
+      $myDatasources = $user->getAccessibleDatasourceNames();
       if( ! in_array($datasourceName, $myDatasources) ){
-        if( $this->getActiveUser()->isAnonymous()){
+        if( $user->isAnonymous()){
           $this->dispatchClientMessage(BibliographEvents::CMD_SHOW_LOGIN);
         }
         throw new UserErrorException(

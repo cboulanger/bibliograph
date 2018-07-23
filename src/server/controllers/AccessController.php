@@ -22,6 +22,9 @@ namespace app\controllers;
 
 use Adldap\Models\ModelNotFoundException;
 use app\controllers\dto\AuthResult;
+use app\models\Datasource;
+use app\models\Group;
+use app\models\Role;
 use app\models\Session;
 use app\models\User;
 use InvalidArgumentException;
@@ -85,15 +88,15 @@ class AccessController extends AppController
     if( $user ){
       if( Yii::$app->config->getIniValue("ldap.enabled") and $user->isLdapUser() ) 
       {
-        Yii::debug("Challenge: User '$username' needs to be authenticated by LDAP.");
+        Yii::debug("Challenge: User '$username' needs to be authenticated by LDAP.", __METHOD__);
         $auth_method = "plaintext";
       }      
     } else {
       // if the user is not in the database (for example, first LDAP auth), use plaintext authentication
       $auth_method = "plaintext";
-      Yii::debug("Challenge: User '$username' is not in the database, maybe first LDAP authentication.");
+      Yii::debug("Challenge: User '$username' is not in the database, maybe first LDAP authentication.", __METHOD__);
     }
-    Yii::debug("Challenge: Using authentication method '$auth_method'");
+    Yii::debug("Challenge: Using authentication method '$auth_method'", __METHOD__);
     switch ( $auth_method )
     {
       case "plaintext":
@@ -164,11 +167,11 @@ class AccessController extends AppController
       // see if we have a session id that we can link to a user
       $session = Session::findOne( [ 'namedId' => $this->getSessionId() ] );
       if( $session ){
-        Yii::debug('PHP session exists in database...');
+        Yii::debug('PHP session exists in database...', __METHOD__);
         // find a user that belongs to this session
         $user = User::findOne( [ 'id' => $session->UserId ] );
         if ( $user ) {          
-          Yii::debug('Session belongs to user ' . $user->namedId);
+          Yii::debug('Session belongs to user ' . $user->namedId, __METHOD__);
         } else {
           // shouldn't ever happen
           Yii::warning('Session has non-existing user!');
@@ -256,13 +259,13 @@ class AccessController extends AppController
           $storedPw = $user->password;
           switch ($auth_method) {
             case "hashed":
-              Yii::debug("Client sent hashed password: $password.");
+              Yii::debug("Client sent hashed password: $password.", __METHOD__);
               $randSalt   = Yii::$app->accessManager->getLoginSalt();
               $serverHash = substr( $storedPw, ACCESS_SALT_LENGTH );
               $authenticated = $password == sha1( $randSalt . $serverHash );
               break;
             case "plaintext":
-              Yii::debug("Client sent plaintext password." );
+              Yii::debug("Client sent plaintext password." , __METHOD__);
               $authenticated = Yii::$app->accessManager->generateHash( $password, $storedPw ) == $storedPw;
               break;
             default:
@@ -302,7 +305,7 @@ class AccessController extends AppController
       $session->link('user',$user);
       $session->save();
       $sessionId = $this->getSessionId();
-      Yii::debug("Started sesssion {$sessionId}");
+      Yii::debug("Started sesssion {$sessionId}", __METHOD__);
     }
 
     // renew the token
@@ -377,7 +380,7 @@ class AccessController extends AppController
   }
 
   /**
-   * Returns the data of the current user, including permissions.
+   * Returns the data of the current user, including global permissions.
    */
   public function actionUserdata()
   {
@@ -386,6 +389,48 @@ class AccessController extends AppController
     $data['anonymous'] = (bool) $data['anonymous'];
     $data['permissions'] = $activeUser->getAllPermissionNames();
     return $data;
+  }
+
+  /**
+   * Updates the current user's permissions based on the given datasource. This
+   * will grant all the permissions given to the role which the user has in the
+   * group that both the user and the datasource belong to, or grant the permissions
+   * linked to the default role of user databases.
+   * @param string $datasource
+   * return array
+   */
+  public function actionUpdatePermissions(string $datasource){
+    $user = $this->getActiveUser();
+    /** @var Datasource $datasource */
+    $datasource = $this->datasource($datasource);
+    // global permissions
+    $permissions = $user->getPermissionNames();
+    // add default role if datasource is linked to user
+    if ($datasource->getUsers()->where(['id' => $user->id])->exists()){
+      $roles = Yii::$app->config->getPreference('app.access.userdatabase.roles');
+      foreach ($roles as $namedId) {
+        /** @var Role $role */
+        $role = Role::findByNamedId($namedId);
+        $permissions = array_merge(
+          $permissions,
+          $role->getPermissionNames()
+        );
+      }
+      return array_values(array_unique($permissions));
+    }
+    // add permissions of the groups that are linked both to the user and the datasource
+    $datasourceGroups = $datasource->getGroups()->where(['active'=>1])->all();
+    $userGroupNames =  $user->getGroupNames();
+    /** @var Group $group */
+    foreach( $datasourceGroups as $group){
+      if( ! in_array($group->namedId, $userGroupNames)) continue;
+      //Yii::info("Datasource {$datasource->namedId} is linked to group {$group->namedId}");
+      $permissions = array_merge(
+        $permissions,
+        $user->getPermissionNames($group)
+      );
+    }
+    return array_values(array_unique($permissions));
   }
 
   /**

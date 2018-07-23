@@ -98,7 +98,7 @@ class Confirm extends Alert
         'message'        => $message,
         'yesButtonLabel' => $choices[0],
         'noButtonLabel'  => $choices[1],
-        'allowCancel'    => $choices[2]
+        'allowCancel'    => $choices[2] ?? false
       ),
      'service' => $callbackService,
      'method'  => $callbackMethod,
