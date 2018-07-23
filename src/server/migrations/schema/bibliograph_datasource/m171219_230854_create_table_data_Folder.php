@@ -33,7 +33,7 @@ class m171219_230854_create_table_data_Folder extends Migration
       'hidden' => $this->smallInteger()->notNull()->defaultValue(0),
       'createdBy' => $this->string(20),
       'markedDeleted' => $this->smallInteger(1)->notNull()->defaultValue(0),
-      'childCount' => $this->smallInteger(1)->notNull()->defaultValue(0),
+      'childCount' => $this->integer(11)->notNull()->defaultValue(0),
       'referenceCount' => $this->integer(11)->notNull()->defaultValue(0),
     ], $tableOptions);
     return true;

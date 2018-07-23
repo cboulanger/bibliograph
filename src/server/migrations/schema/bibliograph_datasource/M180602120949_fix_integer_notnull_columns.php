@@ -27,8 +27,9 @@ class M180602120949_fix_integer_notnull_columns extends Migration
     $columns = ['searchable', 'searchfolder', 'public', 'opened', 'locked', 'hidden', 'markedDeleted'];
     foreach ( $columns as $column) {
       $this->db->createCommand("update $table_name set `$column` = 0 where `$column` IS NULL;")->execute();
-      $this->alterColumn($table_name, $column, $this->smallInteger(1)->notNull());
+      $this->alterColumn($table_name, $column, $this->smallInteger(1)->notNull()->defaultValue(0));
     }
+    $this->alterColumn( $table_name, 'childCount', $this->integer(11)->notNull()->defaultValue(0));
     return true;
   }
 
