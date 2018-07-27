@@ -57,6 +57,7 @@
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.8.0",
     "eventsource": "^1.0.5",
+    "git-hooks": "^1.1.10",
     "github-remove-all-releases": "^1.0.1",
     "json-diff": "^0.5.2",
     "mocha": "^4.1.0",
@@ -64,7 +65,6 @@
     "r2": "^2.0.0",
     "release-it": "^7.3.0",
     "run-script-os": "^1.0.3",
-    "shared-git-hooks": "^1.2.1",
     "standard": "^11.0.0",
     "webpack": "^3.10.0"
   },
