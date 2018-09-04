@@ -533,7 +533,7 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
         // drag cursor
         qx.ui.core.DragDropCursor.getInstance().setAction(e.getCurrentAction());
       }  else {
-        e.preventDefault();
+        //e.preventDefault();
         e.getManager().setDropAllowed(false);
         //qx.ui.core.DragDropCursor.getInstance().resetAction();
       }
