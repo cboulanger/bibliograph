@@ -281,7 +281,7 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
     /**
      * Outputs verbose drag session debug messages, suppressing duplicate
      * messages. Can be turned off using the `debugDragSession` property.
-     * @param msg
+     * @param msg {String}
      */
     dragDebug : function(msg){
       if( msg !== this.__lastDebugMessage && this.getDebugDragSession()){
@@ -398,8 +398,8 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
   
     /**
      * Applies the "dragAction" property
-     * @param value {Boolean}
-     * @param old {Boolean}
+     * @param value {String}
+     * @param old {String}
      * @private
      */
     _applyDragAction: function (value, old) {
@@ -592,7 +592,7 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
     /**
      * Opens a node if the cursor hovers over it for a certain amount of
      * time (currently, 500ms)
-     * @param node
+     * @param node {Object}
      * @private
      */
     _openNodeAfterTimeout : function(node){
