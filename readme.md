@@ -7,7 +7,7 @@ collection, editing and publishing of bibliographic data.
 
 > **NOTE: This is the development version based on Yii2 and PHP7, which can be incomplete, unstable or even completely unfunctional. If you want a stable working version of Bibliograph, use the [current master version](https://github.com/cboulanger/bibliograph/tree/master)**
 
-- [Installation](doc/install.md)
+- [Installation](doc/dev/install.md)
 - [Release Notes](release-notes.md)
 
 Bibliograph
@@ -52,14 +52,14 @@ Bibliograph can be used by
 - Fully open source, can be easily adapted and extended by plugins. 
 
 ## Installation and Deployment
-See [here](doc/install.md).
+See [here](doc/dev/install.md).
 
 ## Support
 - Bugs and feature requests should be registered as [github issues](https://github.com/cboulanger/bibliograph/issues).
 
 ## Development & Roadmap
-- You can [hack the code](doc/development.md) and make it better;
-- The current roadmap is [here](doc/roadmap.md);
+- You can [hack the code](doc/dev/development.md) and make it better;
+- The current roadmap is [here](doc/dev/roadmap.md);
 - If you wish to sponsor a feature, please contact info at bibliograph dot org.
 
 ## How to contribute
