@@ -306,7 +306,7 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
         maxHeight : 5,
         anonymous : true,
         backgroundColor : "black",
-        droppable: true,
+        droppable: true
       });
       this._hideIndicator();
       
@@ -335,7 +335,7 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
      * @param y {Number}
      * @private
      */
-    _setIndicatorPosition( x,y  ){
+    _setIndicatorPosition: function( x,y  ){
       //this.__indicator.setDomTop(y);
     },
     
