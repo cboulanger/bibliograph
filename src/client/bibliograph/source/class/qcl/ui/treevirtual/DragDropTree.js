@@ -271,7 +271,10 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
      * The indicator widget
      */
     __indicator: null,
-    
+
+    __dragActionTimeout: null,
+    __lastDebugMessage: null,
+    __scrollFunctionId: null,
     /*
     ---------------------------------------------------------------------------
        INTERNAL METHODS
