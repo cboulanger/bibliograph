@@ -51,7 +51,10 @@ if [[ $BUILD_TARGET == *"source"* ]]; then
 else 
   composer install --no-dev  #&> /dev/null
 fi
-[[ -d ./vendor ]] || echo "composer install failed!" && exit 1
+if [[ -d ./vendor ]]; then
+ echo "composer install failed!"
+ exit 1
+fi
 rm -f ./composer.* &> /dev/null
 
 echo " >>> Adding documentation ..."
