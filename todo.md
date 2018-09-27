@@ -99,6 +99,23 @@
 - [ ] Module::$version conflicts with Module::getVersion -> overrride Module::defaultVersion()
 - [ ] Remove datasource_role link
 
+### Compiler errors
+
+qcl.access.MPermissions: [275,51] Unresolved use of symbol permission.update
+qcl.access.MPermissions: [285,14] Unresolved use of symbol permission.addCondition
+qcl.access.MPermissions: [286,73] Unresolved use of symbol permission.getNamedId
+qcl.ui.dialog.ServerProgress: [122,6] Unresolved use of symbol params.id
+qcl.ui.dialog.ServerProgress: [123,6] Unresolved use of symbol params.auth_token
+bibliograph.ui.window.AccessControlTool: [128,4] Unresolved use of symbol bibliograph._actRpcSendProxy
+biblograph.ui.main.MultipleTreeView: [461,8] Unresolved use of symbol model.label
+bibliograph.ui.main.MultipleTreeView: [467,38] Unresolved use of symbol model.data.id
+bibliograph.ui.main.TableView: [506,9] Unresolved use of symbol node.label
+bibliograph.ui.main.TableView: [527,93] Unresolved use of symbol node.label
+bibliograph.ui.main.TableView: [509,36] Unresolved use of symbol node.data.id
+bibliograph.ui.main.TableView: [529,36] Unresolved use of symbol node.data.id
+qcl.ui.MChildWidget: [44,36] Unresolved use of symbol id.charAt
+
+
 ### Testing, CI and distribution
 - [ ] Make Travis ~~great~~ work again
 - [ ] Use eslint on Travis: see https://github.com/ITISFoundation/qx-iconfont-material/blob/master/package.json
