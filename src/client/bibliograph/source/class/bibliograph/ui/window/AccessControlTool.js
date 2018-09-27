@@ -265,8 +265,6 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
       treeStore.set("autoLoadParams", sel.getLength() > 0 ? sel.getItem(0).getParams() : null );
     });
     
-
-    
     // button pane
     let hbox2 = new qx.ui.layout.HBox(10, null, null);
     let composite3 = new qx.ui.container.Composite();

@@ -47,11 +47,12 @@ rm -f config/{app.conf.toml,message.php,test.php}
 
 cp -a $SERVER_SRC_DIR/composer.* .
 if [[ $BUILD_TARGET == *"source"* ]]; then
-  composer install > /dev/null
+  composer install #> /dev/null
 else 
   composer install --no-dev  #&> /dev/null
 fi
-#rm -f ./composer.* &> /dev/null
+[[ -d ./vendor ]] || echo "composer install failed!" && exit 1
+rm -f ./composer.* &> /dev/null
 
 echo " >>> Adding documentation ..."
 cp $TOP_DIR/{readme.md,release-notes.md} $DIST_DIR
