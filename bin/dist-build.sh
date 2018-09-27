@@ -46,11 +46,11 @@ rm -f config/{app.conf.toml,message.php,test.php}
 
 cp -a $SERVER_SRC_DIR/composer.* .
 if [[ $BUILD_TARGET == *"source"* ]]; then
-  composer install > /dev/null
+  composer install
 else 
-  composer install --no-dev > /dev/null
+  composer install --no-dev
 fi
-if [[ -d ./vendor ]]; then
+if ! [[ -d ./vendor ]]; then
  echo "composer install failed!"
  exit 1
 fi
@@ -65,4 +65,4 @@ cd $DIST_DIR
 zip -q -r bibliograph-$VERSION.zip *
 
 echo "Done."
-
+exit 0
