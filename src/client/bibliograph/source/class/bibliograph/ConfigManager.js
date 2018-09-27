@@ -258,9 +258,12 @@ qx.Class.define("bibliograph.ConfigManager", {
      * @param targetPath {String}
      * @param bidirectional {Boolean} Optional, defaults to false.
      *    If true, change the config value if the target property changes
+     * @param converter {Function} An optional converter function. Takes two parameters: the
+     *    value to be converted and a boolean which, if true, indicates that the reverse direction
+     *    is to be converted.
      * @return {void}
      */
-    bindKey: function (key, targetObject, targetPath, bidirectional=false) {
+    bindKey: function (key, targetObject, targetPath, bidirectional=false, converter) {
       if (!this.getModel()) {
         this.addListenerOnce("ready", e => {
           this.bindKey(key, targetObject, targetPath, bidirectional);
@@ -286,12 +289,15 @@ qx.Class.define("bibliograph.ConfigManager", {
         targetObject.set(targetPath, this.getKey(key));
 
         // add a listener to update the target widget property when config value changes
-        // @todo: add converter
         this.addListener( "change", e => {
           let changeKey = e.getData();
           if (changeKey === key) {
-            //console.warn("Updating property "+targetPath+" from config key "+key+":"+this.getValue(key));
-            targetObject.set(targetPath, this.getKey(key));
+            let value = this.getKey(key);
+            if (typeof converter === "function"){
+              value = converter(value, false);
+            }
+            //console.warn("Updating property "+targetPath+" from config key "+key+":"+this.getKey(key));
+            targetObject.set(targetPath, value);
           }
         });
         // update config value if target widget property changes
@@ -299,6 +305,9 @@ qx.Class.define("bibliograph.ConfigManager", {
           let eventName =  "change" + targetPath.substr(0, 1).toUpperCase() + targetPath.substr(1);
           targetObject.addListener( eventName, e => {
             let value = e.getData();
+            if (typeof converter === "function"){
+              value = converter(value, true);
+            }
             //console.warn("Updating config key "+key+" with "+value);
             this.setKey(key, value);
           });
@@ -327,6 +336,7 @@ qx.Class.define("bibliograph.ConfigManager", {
     {
       throw new Error("Not implemented");
     }
+
   },
 
   /*

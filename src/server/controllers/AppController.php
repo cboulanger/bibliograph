@@ -75,7 +75,7 @@ class AppController extends \JsonRpc2\Controller
    * @param string|null $reason (optional) reason for the abort
    * @return string
    */
-  public function successfulActionResult($reason=null)
+  public function successfulActionResult()
   {
     return Yii::$app->requestedRoute . " was successful.";
   }

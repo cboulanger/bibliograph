@@ -11,5 +11,9 @@ return [
   'app.access.userdatabase.roles' => [
     'type' => "list",
     'default' => "manager,user"
+  ],
+  'ldap.enabled' => [
+    'type' => "boolean",
+    'default' => false
   ]
 ];

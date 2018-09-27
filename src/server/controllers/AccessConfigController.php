@@ -22,13 +22,14 @@ namespace app\controllers;
 
 use app\models\Schema;
 use lib\dialog\{
-  Alert, Confirm, Error, Form
+  Alert, Confirm, Error, Form, Progress, Prompt
 };
 use lib\exceptions\{
   RecordExistsException, UserErrorException
 };
 use lib\schema\ISchema;
 use Yii;
+use yii\helpers\Html;
 
 /**
  * Backend service class for the access control tool widget
@@ -497,7 +498,6 @@ class AccessConfigController extends AppController
         "Invalid name '{name}': Must only contain alphanumeric characters or '_'.", [ 'name' => $namedId]
       ));
     }
-
     if ($type === "datasource") {
       try {
         $model = Yii::$app->datasourceManager->create($namedId, $schema);
@@ -841,10 +841,11 @@ class AccessConfigController extends AppController
 
   /**
    * Presents the user with a form to enter user data
-   *
+   * @param $data Optional object with properties that are prefilled in the form
    */
-  public function actionNewUserDialog()
+  public function actionNewUserDialog($dummy=null, $data=null)
   {
+    if (!$data) $data = new \stdClass();
     $message = Yii::t(
       'app',
       "Please enter the user data. A random password will be generated and sent to the user."
@@ -853,6 +854,7 @@ class AccessConfigController extends AppController
       'namedId' => [
         'label' => Yii::t('app', "Login name"),
         'type' => "textfield",
+        'value' => $data->namedId ?? null,
         'placeholder' => Yii::t('app', "Enter the short login name"),
         'validation' => [
           'required' => true,
@@ -863,6 +865,7 @@ class AccessConfigController extends AppController
         'type' => "textfield",
         'label' => Yii::t('app', "Full name"),
         'placeholder' => Yii::t('app', "Enter the full name of the user"),
+        'value' => $data->name ?? null,
         'validation' => [
           'required' => true,
           'validator' => "string"
@@ -872,6 +875,7 @@ class AccessConfigController extends AppController
         'type' => "textfield",
         'label' => Yii::t('app', "Email address"),
         'placeholder' => Yii::t('app', "Enter a valid Email address"),
+        'value' => $data->email ?? null,
         'validation' => [
           'required' => true,
           'validator' => "email"
@@ -889,13 +893,13 @@ class AccessConfigController extends AppController
   /**
    * Action to add a new user
    *
-   * @param \stdClass $data
+   * @param $data
    * @return string
    * @throws \JsonRpc2\Exception
    * @throws UserErrorException
    * @throws \yii\base\Exception
    */
-  public function actionAddUser(\stdClass $data)
+  public function actionAddUser($data)
   {
     $this->requirePermission("access.manage");
 
@@ -905,19 +909,20 @@ class AccessConfigController extends AppController
       throw new UserErrorException(Yii::t('app', "Missing login name"));
     }
 
-    $user = $this->getModelInstance("user", $data->namedId);
-    if ($user) {
-      Alert::create(Yii::t(
-        'app',
-        "Login name '{1}' already exists. Please choose a different one.",
-        [$data->namedId]
-      ));
-      return $this->abortedActionResult("User entered existing login name.");
+    try {
+      $this->actionAdd("user", $data->namedId,null, false);
+    } catch (UserErrorException $e) {
+      (new Alert)
+        ->setMessage($e->getMessage())
+        ->setService(Yii::$app->controller->id)
+        ->setMethod("new-user-dialog")
+        ->setParams([$data])
+        ->sendToClient();
+      return $this->abortedActionResult($e->getMessage());
     }
 
     /** @var \app\models\User $user */
-    $userClass = get_class($user);
-    $user = new $userClass;
+    $user = $this->getModelInstance("user", $data->namedId);
     $user->setAttributes((array)$data);
 
     // give it the 'user' role
@@ -935,13 +940,50 @@ class AccessConfigController extends AppController
     //$data = (object) $user->getAttributes();
     //$this->sendConfirmationLinkEmail($data->email, $data->namedId, $data->name, $tmpPasswd);
 
-    $this->dispatchClientMessage("accessControlTool.reloadLeftList");
+    //@todo: more verbose email message
+    $body = Yii::t(
+      'email',
+      "Url: {url} Username: {username} Password: {password}",
+      [
+        'username' => $user->namedId,
+        'password' => $user->password,
+        'url' => Yii::$app->utils->getFrontendUrl()
+      ]
+    );
+    $email_with_querystring =
+      $user->name .
+      "<" . $data->email . ">?" .
+      "subject=" . Yii::t('email', "New Bibliograph account") . "&" .
+      "body=" . htmlentities($body);
+    $mailtolink = Html::mailto(Yii::t(
+      "app",
+      "Click on this link to send email"),
+      $email_with_querystring
+    );
+    $message = Yii::t( 'app',
+      'User has been created. {mailtolink}. Then configure user roles and/or groups.',
+      [ 'mailtolink' => $mailtolink ]
+    );
 
-//    Alert::create(Yii::t(
-//      'app',
-//      "An email has been sent to {1} ({2}) with information on the registration.", [$data->name, $data->email])
-//    );
+    // client events
+    $this->dispatchClientMessage("accessControlTool.reloadLeftList");
+    (new Alert)
+      ->setMessage($message)
+      ->setService(Yii::$app->controller->id)
+      ->setMethod("filter-by-user")
+      ->setParams([$user->name])
+      ->sendToClient();
+
     return $this->successfulActionResult();
+  }
+
+  /**
+   * Sets the left filter in the GUI
+   * @param $dummy
+   * @param string $name
+   */
+  public function actionFilterByUser($dummy, $name) {
+    $this->dispatchClientMessage("acltool.searchbox-left.set", $name);
   }
 
   /**
@@ -1070,6 +1112,40 @@ class AccessConfigController extends AppController
     }
     // @todo Use Interface instead
     return $schema instanceof ISchema;
+  }
+
+
+  /**
+   * Allows to search for LDAP users and, if found, to add them to the local list of users
+   */
+  public function actionFindLdapUserDialog()
+  {
+    (new Prompt())
+      ->setMessage(Yii::t(self::CATEGORY, 'Please enter an identifier (name, username, email address)'))
+      ->setService(Yii::$app->controller->id)
+      ->setMethod("import-ldap-user")
+      ->sendToClient();
+  }
+
+  /**
+   * @param $username
+   * @return string
+   * @throws \Adldap\Models\ModelNotFoundException
+   * @throws \yii\db\Exception
+   */
+  public function actionImportLdapUser($username){
+    if (!$username) return $this->abortedActionResult();
+    $user = Yii::$app->ldapAuth->identify($username);
+    if ($user) {
+      $message = 'User {user} has been imported from LDAP database.';
+      $this->dispatchClientMessage("acltool.searchbox-left.set", $user->name);
+    } else {
+      $message = 'User {user} was not found in LDAP database.';
+    }
+    (new Alert)->setMessage(Yii::t(self::CATEGORY,$message, [
+      'user' => $user->name
+    ]));
+    return $this->successfulActionResult();
   }
 
   /*
