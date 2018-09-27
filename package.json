@@ -42,7 +42,7 @@
   "dependencies": {
     "qooxdoo": "^6.0.1",
     "qooxdoo-sdk": "^6.0.0-alpha",
-    "qxcompiler": "^0.2.10",
+    "qxcompiler": "^0.2.15",
     "raptor-client": "github:cboulanger/raptor-client"
   },
   "devDependencies": {

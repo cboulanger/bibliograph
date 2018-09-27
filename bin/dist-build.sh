@@ -48,8 +48,9 @@ cp -a $SERVER_SRC_DIR/composer.* .
 if [[ $BUILD_TARGET == *"source"* ]]; then
   composer install > /dev/null
 else 
-  composer install --no-dev  &> /dev/null
+  composer install --no-dev > /dev/null
 fi
+[[ -d ./vendor ]] || echo "composer install failed!" && exit 1
 rm -f ./composer.* &> /dev/null
 
 echo " >>> Adding documentation ..."
