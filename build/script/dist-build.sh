@@ -43,7 +43,6 @@ if ! [[ $BUILD_TARGET == *"build"* ]]; then
 fi
 mkdir -p runtime/{cache,logs}
 rm -f config/{app.conf.toml,message.php,test.php}
-( find $DIST_DIR -type d -name ".git" ) | xargs rm -rf
 
 cp -a $SERVER_SRC_DIR/composer.* .
 if [[ $BUILD_TARGET == *"source"* ]]; then

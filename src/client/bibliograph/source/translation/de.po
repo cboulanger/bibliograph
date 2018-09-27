@@ -1,6 +1,7 @@
-#: bibliograph/Application.js:216
+#: bibliograph/Application.js:187 bibliograph/Application.js:194
+#: bibliograph/Application.js:201 bibliograph/Application.js:216
 msgid "Missing server address. Please contact administrator."
-msgstr ""
+msgstr "Die Serveradresse fehlt. Bitte kontaktieren Sie den/die Administrator/in."
 
 #: bibliograph/plugins/backup/Plugin.js:58
 msgid "Backup"
@@ -30,121 +31,169 @@ msgstr ""
 msgid "The datasource has just been restored to a previous state and will now be reloaded."
 msgstr ""
 
-#: bibliograph/plugins/webservices/ImportWindow.js:28
 #: bibliograph/plugins/webservices/Plugin.js:111
+#: bibliograph/plugins/webservices/ImportWindow.js:28
 msgid "Import from webservices"
-msgstr ""
+msgstr "Von einem Webdienst importieren"
 
+#: bibliograph/plugins/webservices/ImportWindow.js:189
 #: bibliograph/plugins/webservices/View.js:182
 msgid "Auto-import best result"
 msgstr ""
 
-#: bibliograph/plugins/webservices/View.js:198
+#: bibliograph/plugins/webservices/ImportWindow.js:165
+#: bibliograph/plugins/webservices/ImportWindow.js:202
+#: bibliograph/plugins/webservices/ImportWindow.js:204
+#: bibliograph/plugins/webservices/ImportWindow.js:205
 #: bibliograph/plugins/z3950/ImportWindow.js:169
+#: bibliograph/plugins/webservices/View.js:198
 msgid "Enter search terms"
-msgstr ""
+msgstr "Bitte Suchausdruck eingeben"
 
-#: bibliograph/plugins/webservices/View.js:227
+#: bibliograph/plugins/webservices/ImportWindow.js:234
 #: bibliograph/plugins/z3950/ImportWindow.js:180
 #: bibliograph/ui/window/AccessControlTool.js:189
+#: bibliograph/plugins/webservices/View.js:227
 msgid "Help"
-msgstr ""
+msgstr "Hilfe"
 
-#: bibliograph/plugins/webservices/View.js:267
+#: bibliograph/plugins/webservices/ImportWindow.js:263
+#: bibliograph/plugins/webservices/ImportWindow.js:274
 #: bibliograph/plugins/z3950/ImportWindow.js:220
+#: bibliograph/ui/window/ImportWindow.js:203
 #: bibliograph/ui/window/ImportWindow.js:204
+#: bibliograph/plugins/webservices/View.js:267
 msgid "Import selected records"
-msgstr ""
+msgstr "Augewählte Datensätze importieren"
 
-#: bibliograph/plugins/webservices/View.js:274
+#: bibliograph/plugins/webservices/ImportWindow.js:281
 #: bibliograph/plugins/z3950/ImportWindow.js:227
+#: bibliograph/ui/window/ImportWindow.js:210
 #: bibliograph/ui/window/ImportWindow.js:211
+#: bibliograph/plugins/webservices/View.js:274
 msgid "Close"
-msgstr ""
+msgstr "Schließen"
 
-#: bibliograph/plugins/webservices/View.js:312
+#: bibliograph/plugins/webservices/ImportWindow.js:319
 #: bibliograph/plugins/z3950/ImportWindow.js:250
+#: bibliograph/ui/main/Toolbar.js:279 bibliograph/ui/main/Toolbar.js:289
+#: bibliograph/ui/main/Toolbar.js:297 bibliograph/ui/main/Toolbar.js:298
 #: bibliograph/ui/main/Toolbar.js:294
+#: bibliograph/plugins/webservices/View.js:312
 msgid "Searching..."
-msgstr ""
+msgstr "Suchabfrage wird ausgeführt…"
 
-#: bibliograph/plugins/webservices/View.js:326
+#: bibliograph/plugins/webservices/ImportWindow.js:260
+#: bibliograph/plugins/webservices/ImportWindow.js:301
+#: bibliograph/plugins/webservices/ImportWindow.js:322
+#: bibliograph/plugins/webservices/ImportWindow.js:333
 #: bibliograph/plugins/z3950/ImportWindow.js:264
+#: bibliograph/ui/window/ImportWindow.js:307
 #: bibliograph/ui/window/ImportWindow.js:309
+#: bibliograph/plugins/webservices/View.js:326
 msgid "You have to select one or more reference to import."
-msgstr ""
+msgstr "Sie müssen eine oder mehr Datensätze zum importieren auswählen."
 
-#: bibliograph/plugins/webservices/View.js:333
+#: bibliograph/plugins/webservices/ImportWindow.js:267
+#: bibliograph/plugins/webservices/ImportWindow.js:308
+#: bibliograph/plugins/webservices/ImportWindow.js:329
+#: bibliograph/plugins/webservices/ImportWindow.js:340
 #: bibliograph/plugins/z3950/ImportWindow.js:271
+#: bibliograph/ui/window/ImportWindow.js:314
 #: bibliograph/ui/window/ImportWindow.js:316
+#: bibliograph/plugins/webservices/View.js:333
 msgid "Please select a folder first."
-msgstr ""
+msgstr "Bitte wählen sie einen Ordner aus, in den importiert werden soll."
 
-#: bibliograph/plugins/webservices/View.js:340
+#: bibliograph/plugins/webservices/ImportWindow.js:274
+#: bibliograph/plugins/webservices/ImportWindow.js:315
+#: bibliograph/plugins/webservices/ImportWindow.js:336
+#: bibliograph/plugins/webservices/ImportWindow.js:347
 #: bibliograph/plugins/z3950/ImportWindow.js:278
+#: bibliograph/ui/window/ImportWindow.js:321
 #: bibliograph/ui/window/ImportWindow.js:323
+#: bibliograph/plugins/webservices/View.js:340
 msgid "Cannot determine selected folder. Please reload the folders."
-msgstr ""
+msgstr "Kann den ausgewählten Ordner nicht finden. Bitte die Ordner neu laden."
 
-#: bibliograph/plugins/webservices/View.js:344
+#: bibliograph/plugins/webservices/ImportWindow.js:278
+#: bibliograph/plugins/webservices/ImportWindow.js:319
+#: bibliograph/plugins/webservices/ImportWindow.js:340
+#: bibliograph/plugins/webservices/ImportWindow.js:351
 #: bibliograph/plugins/z3950/ImportWindow.js:282
+#: bibliograph/ui/window/ImportWindow.js:325
 #: bibliograph/ui/window/ImportWindow.js:327
+#: bibliograph/plugins/webservices/View.js:344
 msgid "Invalid target folder. You can only import into normal folders."
-msgstr ""
+msgstr "Ungültiger Zielordner. Sie können nur in normale Ordner importieren."
 
-#: bibliograph/plugins/webservices/View.js:351
+#: bibliograph/plugins/webservices/ImportWindow.js:285
+#: bibliograph/plugins/webservices/ImportWindow.js:326
+#: bibliograph/plugins/webservices/ImportWindow.js:347
+#: bibliograph/plugins/webservices/ImportWindow.js:358
 #: bibliograph/plugins/z3950/ImportWindow.js:289
+#: bibliograph/ui/window/ImportWindow.js:331
 #: bibliograph/ui/window/ImportWindow.js:333
+#: bibliograph/plugins/webservices/View.js:351
 msgid "Importing references..."
-msgstr ""
+msgstr "Importiere die Datensätze ..."
 
 #: bibliograph/plugins/webservices/Plugin.js:117
 msgid "Webservices"
-msgstr ""
+msgstr "Webdienste"
 
+#: bibliograph/plugins/webservices/Plugin.js:107
 #: bibliograph/plugins/webservices/Plugin.js:164
 #: bibliograph/plugins/z3950/Plugin.js:112
 msgid "(Un-)Select All"
-msgstr ""
+msgstr "Alles aus-/abwählen"
 
+#: bibliograph/plugins/webservices/Plugin.js:119
 #: bibliograph/plugins/webservices/Plugin.js:176
 #: bibliograph/plugins/z3950/Plugin.js:124
 msgid "Save"
-msgstr ""
+msgstr "Speichern"
 
+#: bibliograph/plugins/webservices/Plugin.js:129
 #: bibliograph/plugins/webservices/Plugin.js:186
 #: bibliograph/plugins/z3950/Plugin.js:134
 #: bibliograph/ui/item/ReferenceEditor.js:733
 #: bibliograph/ui/item/ReferenceEditor.js:885
 msgid "Saving..."
-msgstr ""
+msgstr "Speichern ..."
 
+#: bibliograph/plugins/webservices/Plugin.js:137
 #: bibliograph/plugins/webservices/Plugin.js:194
 #: bibliograph/plugins/z3950/Plugin.js:142
 msgid "Reload"
-msgstr ""
+msgstr "Aktualisieren"
 
 #: bibliograph/plugins/webservices/Plugin.js:198
 msgid "Reloading services..."
-msgstr ""
+msgstr "Aktualisiere Liste der Webdienste"
 
+#: bibliograph/plugins/webservices/ImportWindow.js:53
+#: bibliograph/plugins/webservices/ImportWindow.js:307
 #: bibliograph/plugins/z3950/ImportWindow.js:57
 #: bibliograph/plugins/z3950/ImportWindow.js:311
 #: bibliograph/plugins/z3950/Plugin.js:59
 msgid "Import from library catalog"
-msgstr ""
+msgstr "Aus einem Bibliothekskatalog importieren"
 
+#: bibliograph/plugins/webservices/ImportWindow.js:171
+#: bibliograph/plugins/webservices/ImportWindow.js:212
+#: bibliograph/plugins/webservices/ImportWindow.js:214
 #: bibliograph/plugins/z3950/ImportWindow.js:175
 msgid "Search"
-msgstr ""
+msgstr "Suche"
 
 #: bibliograph/plugins/z3950/Plugin.js:65
 msgid "Z39.50 Import"
-msgstr ""
+msgstr "Z39.50 Import"
 
 #: bibliograph/plugins/z3950/Plugin.js:146
 msgid "Reloading library metadata..."
-msgstr ""
+msgstr "Katalogdaten werden aktualisiert…"
 
 #: bibliograph/Setup.js:37
 msgid "No connection to server."
@@ -292,8 +341,8 @@ msgstr "Lösche Ordner ..."
 msgid "Purging deleted references ..."
 msgstr "Lösche Datensätze ..."
 
-
 #: bibliograph/ui/main/MultipleTreeView.js:227
+#: bibliograph/ui/main/MultipleTreeView.js:226
 msgid "Empty trash..."
 msgstr "Den Papierkorb leeren ..."
 
@@ -306,6 +355,7 @@ msgid "Edit folder data"
 msgstr "Ordnereigenschaften bearbeiten"
 
 #: bibliograph/ui/main/MultipleTreeView.js:279
+#: bibliograph/ui/main/MultipleTreeView.js:278
 msgid "Change visibility"
 msgstr "Sichtbarkeit verändern"
 
@@ -391,14 +441,6 @@ msgstr "Lade Editor ..."
 msgid "Creating form, please wait ..."
 msgstr "Erzeuge das Formular, bitte warten ..."
 
-#: bibliograph/plugins/webservices/Plugin.js:129
-#: bibliograph/plugins/webservices/Plugin.js:186
-#: bibliograph/plugins/z3950/Plugin.js:134
-#: bibliograph/ui/item/ReferenceEditor.js:733
-#: bibliograph/ui/item/ReferenceEditor.js:885
-msgid "Saving..."
-msgstr "Speichern ..."
-
 #: bibliograph/ui/item/ReferenceEditorUi.js:138
 msgid "Abstract"
 msgstr "Zusammenfassung"
@@ -480,13 +522,6 @@ msgstr "Importieren"
 #: bibliograph/ui/main/Toolbar.js:200 bibliograph/ui/main/Toolbar.js:196
 msgid "Import text file"
 msgstr "Aus Text/Datei importieren"
-
-#: bibliograph/plugins/webservices/ImportWindow.js:234
-#: bibliograph/plugins/z3950/ImportWindow.js:180
-#: bibliograph/ui/window/AccessControlTool.js:189
-#: bibliograph/plugins/webservices/View.js:227
-msgid "Help"
-msgstr "Hilfe"
 
 #: bibliograph/ui/main/Toolbar.js:233 bibliograph/ui/main/Toolbar.js:234
 #: bibliograph/ui/main/Toolbar.js:230
@@ -601,6 +636,7 @@ msgid "New User"
 msgstr "Neue/r Benutzer/in"
 
 #: bibliograph/ui/window/AccessControlTool.js:166
+#: bibliograph/ui/window/AccessControlTool.js:177
 msgid "New Datasource"
 msgstr "Neue Datenbank"
 
@@ -609,15 +645,18 @@ msgid "Export to filesystem"
 msgstr "Ins Dateisystem exportieren"
 
 #: bibliograph/ui/window/AccessControlTool.js:188
+#: bibliograph/ui/window/AccessControlTool.js:199
 msgid "Exit"
 msgstr "Schließen"
 
 #: bibliograph/ui/window/AccessControlTool.js:278
 #: bibliograph/ui/window/AccessControlTool.js:489
+#: bibliograph/ui/window/AccessControlTool.js:294
 msgid "Please enter the id of the new '%1'-Object"
 msgstr "Bitte geben sie die ID für das neue '%1'-Objekt ein"
 
 #: bibliograph/ui/window/AccessControlTool.js:299
+#: bibliograph/ui/window/AccessControlTool.js:315
 msgid "Do you really want to delete '%1'?"
 msgstr "Wollen Sie wirklich '%1' löschen?"
 
@@ -626,20 +665,26 @@ msgid "Loading data ..."
 msgstr "Lade die Daten ..."
 
 #: bibliograph/ui/window/AccessControlTool.js:341
+#: bibliograph/ui/window/AccessControlTool.js:357
 msgid "Edited element"
 msgstr "Bearbeitetes Element"
 
 #: bibliograph/ui/window/AccessControlTool.js:390
 #: bibliograph/ui/window/AccessControlTool.js:392
+#: bibliograph/ui/window/AccessControlTool.js:406
+#: bibliograph/ui/window/AccessControlTool.js:408
 msgid "Link"
 msgstr "Verknüpfen"
 
 #: bibliograph/ui/window/AccessControlTool.js:403
 #: bibliograph/ui/window/AccessControlTool.js:405
+#: bibliograph/ui/window/AccessControlTool.js:419
+#: bibliograph/ui/window/AccessControlTool.js:421
 msgid "Unlink"
 msgstr "Lösen"
 
 #: bibliograph/ui/window/AccessControlTool.js:430
+#: bibliograph/ui/window/AccessControlTool.js:446
 msgid "Linkable items"
 msgstr "Verknüpfbare Elemente"
 
@@ -662,66 +707,19 @@ msgid "Select"
 msgstr "Auswählen"
 
 #: bibliograph/ui/window/ImportWindow.js:235
+#: bibliograph/ui/window/ImportWindow.js:236
 msgid "1. Choose file"
 msgstr "1. Datei auswählen"
 
 #: bibliograph/ui/window/ImportWindow.js:257
+#: bibliograph/ui/window/ImportWindow.js:258
 msgid "Uploading file..."
 msgstr "Lade Datei auf den Server ..."
 
 #: bibliograph/ui/window/ImportWindow.js:280
+#: bibliograph/ui/window/ImportWindow.js:281
 msgid "Processing references..."
 msgstr "Verarbeite die Dateisätze ..."
-
-#: bibliograph/plugins/webservices/ImportWindow.js:260
-#: bibliograph/plugins/webservices/ImportWindow.js:301
-#: bibliograph/plugins/webservices/ImportWindow.js:322
-#: bibliograph/plugins/webservices/ImportWindow.js:333
-#: bibliograph/plugins/z3950/ImportWindow.js:264
-#: bibliograph/ui/window/ImportWindow.js:307
-#: bibliograph/plugins/webservices/View.js:326
-msgid "You have to select one or more reference to import."
-msgstr "Sie müssen eine oder mehr Datensätze zum importieren auswählen."
-
-#: bibliograph/plugins/webservices/ImportWindow.js:267
-#: bibliograph/plugins/webservices/ImportWindow.js:308
-#: bibliograph/plugins/webservices/ImportWindow.js:329
-#: bibliograph/plugins/webservices/ImportWindow.js:340
-#: bibliograph/plugins/z3950/ImportWindow.js:271
-#: bibliograph/ui/window/ImportWindow.js:314
-#: bibliograph/plugins/webservices/View.js:333
-msgid "Please select a folder first."
-msgstr "Bitte wählen sie einen Ordner aus, in den importiert werden soll."
-
-#: bibliograph/plugins/webservices/ImportWindow.js:274
-#: bibliograph/plugins/webservices/ImportWindow.js:315
-#: bibliograph/plugins/webservices/ImportWindow.js:336
-#: bibliograph/plugins/webservices/ImportWindow.js:347
-#: bibliograph/plugins/z3950/ImportWindow.js:278
-#: bibliograph/ui/window/ImportWindow.js:321
-#: bibliograph/plugins/webservices/View.js:340
-msgid "Cannot determine selected folder. Please reload the folders."
-msgstr "Kann den ausgewählten Ordner nicht finden. Bitte die Ordner neu laden."
-
-#: bibliograph/plugins/webservices/ImportWindow.js:278
-#: bibliograph/plugins/webservices/ImportWindow.js:319
-#: bibliograph/plugins/webservices/ImportWindow.js:340
-#: bibliograph/plugins/webservices/ImportWindow.js:351
-#: bibliograph/plugins/z3950/ImportWindow.js:282
-#: bibliograph/ui/window/ImportWindow.js:325
-#: bibliograph/plugins/webservices/View.js:344
-msgid "Invalid target folder. You can only import into normal folders."
-msgstr "Ungültiger Zielordner. Sie können nur in normale Ordner importieren."
-
-#: bibliograph/plugins/webservices/ImportWindow.js:285
-#: bibliograph/plugins/webservices/ImportWindow.js:326
-#: bibliograph/plugins/webservices/ImportWindow.js:347
-#: bibliograph/plugins/webservices/ImportWindow.js:358
-#: bibliograph/plugins/z3950/ImportWindow.js:289
-#: bibliograph/ui/window/ImportWindow.js:331
-#: bibliograph/plugins/webservices/View.js:351
-msgid "Importing references..."
-msgstr "Importiere die Datensätze ..."
 
 #: bibliograph/ui/window/ImportWindow.js:97
 msgid "Import from file"
@@ -729,27 +727,14 @@ msgstr "Aus Datei importieren"
 
 #: bibliograph/ui/window/ImportWindow.js:136
 #: bibliograph/ui/window/ImportWindow.js:139
+#: bibliograph/ui/window/ImportWindow.js:137
+#: bibliograph/ui/window/ImportWindow.js:140
 msgid "3. Upload file"
 msgstr "3. Datei hochladen"
 
 #
 msgid "Select all"
 msgstr "Alle auswählen"
-
-#: bibliograph/plugins/webservices/ImportWindow.js:263
-#: bibliograph/plugins/webservices/ImportWindow.js:274
-#: bibliograph/plugins/z3950/ImportWindow.js:220
-#: bibliograph/ui/window/ImportWindow.js:203
-#: bibliograph/plugins/webservices/View.js:267
-msgid "Import selected records"
-msgstr "Augewählte Datensätze importieren"
-
-#: bibliograph/plugins/webservices/ImportWindow.js:281
-#: bibliograph/plugins/z3950/ImportWindow.js:227
-#: bibliograph/ui/window/ImportWindow.js:210
-#: bibliograph/plugins/webservices/View.js:274
-msgid "Close"
-msgstr "Schließen"
 
 #: bibliograph/ui/window/PreferencesWindow.js:57
 msgid "General"
@@ -764,7 +749,7 @@ msgid "Application logo"
 msgstr "Anwendungslogo"
 
 #: bibliograph/ui/window/PreferencesWindow.js:86
-#: bibliograph/ui/main/Toolbar.js:217
+#: bibliograph/ui/main/Toolbar.js:217 bibliograph/ui/main/Toolbar.js:213
 msgid "Language"
 msgstr "Sprache"
 
@@ -781,6 +766,7 @@ msgid "Database"
 msgstr "Datenbank"
 
 #: bibliograph/ui/window/PreferencesWindow.js:133
+#: bibliograph/ui/window/PreferencesWindow.js:132
 msgid "Exclude fields"
 msgstr "Felder ausschließen"
 
@@ -832,9 +818,10 @@ msgstr "Normal"
 msgid "Read-Only"
 msgstr "Nur-Lese-Modus"
 
+#: bibliograph/ui/window/ImportWindow.js:250
 #: bibliograph/ui/window/ImportWindow.js:251
 msgid "Please select the file with data to import..."
-msgstr ""
+msgstr "Bitte wählen Sie die Datei aus, deren Inhalt importiert werden soll …"
 
 #
 msgid "Shown to users in read-only and no-access mode."
@@ -843,11 +830,6 @@ msgstr "Wird den Benutzern im Nur-Lese-Modus und bei Zugangssperre angezeigt."
 #: bibliograph/ui/window/SearchHelpWindow.js:25
 msgid "Search Help Window"
 msgstr "Hilfe für die Suche"
-
-#: bibliograph/Application.js:187 bibliograph/Application.js:194
-#: bibliograph/Application.js:201 bibliograph/Application.js:216
-msgid "Missing server address. Please contact administrator."
-msgstr "Die Serveradresse fehlt. Bitte kontaktieren Sie den/die Administrator/in."
 
 #: qx/util/Validate.js:90
 msgid "%1 is not a number."
@@ -890,6 +872,7 @@ msgid "no"
 msgstr "nein"
 
 #: bibliograph/ui/window/ImportWindow.js:195
+#: bibliograph/ui/window/ImportWindow.js:196
 msgid "Import all records"
 msgstr "Alle Datensätze importieren"
 
@@ -941,13 +924,13 @@ msgstr "Nächstes Jahr"
 msgid "Reset column widths"
 msgstr "Spaltenbreite zurücksetzen"
 
-#: qx/ui/table/Table.js:1974
+#: qx/ui/table/Table.js:1974 qx/ui/table/Table.js:1987
 msgid "one row"
 msgid_plural "%1 rows"
 msgstr[0] "eine Zeile"
 msgstr[1] "%1 Zeilen"
 
-#: qx/ui/table/Table.js:1976
+#: qx/ui/table/Table.js:1976 qx/ui/table/Table.js:1989
 msgid "one of one row"
 msgid_plural "%1 of %2 rows"
 msgstr[0] "Eine von einer Zeile"
@@ -991,70 +974,13 @@ msgid "No selectable items"
 msgstr "Keine auswählbaren Objekte"
 
 #: bibliograph/ui/window/AccessControlTool.js:436
+#: bibliograph/ui/window/AccessControlTool.js:452
 msgid "No linkable items"
 msgstr "Keine vereinbaren Objekte"
 
 #: dialog/Form.js:394
 msgid "Value is invalid"
 msgstr "Der Wert ist ungültig"
-
-#: bibliograph/plugins/webservices/ImportWindow.js:53
-#: bibliograph/plugins/webservices/ImportWindow.js:307
-#: bibliograph/plugins/z3950/ImportWindow.js:57
-#: bibliograph/plugins/z3950/ImportWindow.js:311
-#: bibliograph/plugins/z3950/Plugin.js:59
-msgid "Import from library catalog"
-msgstr "Aus einem Bibliothekskatalog importieren"
-
-#: bibliograph/plugins/z3950/Plugin.js:65
-msgid "Z39.50 Import"
-msgstr "Z39.50 Import"
-
-#: bibliograph/plugins/webservices/Plugin.js:107
-#: bibliograph/plugins/webservices/Plugin.js:164
-#: bibliograph/plugins/z3950/Plugin.js:112
-msgid "(Un-)Select All"
-msgstr "Alles aus-/abwählen"
-
-#: bibliograph/plugins/webservices/Plugin.js:119
-#: bibliograph/plugins/webservices/Plugin.js:176
-#: bibliograph/plugins/z3950/Plugin.js:124
-msgid "Save"
-msgstr "Speichern"
-
-#: bibliograph/plugins/webservices/Plugin.js:137
-#: bibliograph/plugins/webservices/Plugin.js:194
-#: bibliograph/plugins/z3950/Plugin.js:142
-msgid "Reload"
-msgstr "Aktualisieren"
-
-#: bibliograph/plugins/z3950/Plugin.js:146
-msgid "Reloading library metadata..."
-msgstr "Katalogdaten werden aktualisiert…"
-
-#: bibliograph/plugins/webservices/ImportWindow.js:165
-#: bibliograph/plugins/webservices/ImportWindow.js:202
-#: bibliograph/plugins/webservices/ImportWindow.js:204
-#: bibliograph/plugins/webservices/ImportWindow.js:205
-#: bibliograph/plugins/z3950/ImportWindow.js:169
-#: bibliograph/plugins/webservices/View.js:198
-msgid "Enter search terms"
-msgstr "Bitte Suchausdruck eingeben"
-
-#: bibliograph/plugins/webservices/ImportWindow.js:171
-#: bibliograph/plugins/webservices/ImportWindow.js:212
-#: bibliograph/plugins/webservices/ImportWindow.js:214
-#: bibliograph/plugins/z3950/ImportWindow.js:175
-msgid "Search"
-msgstr "Suche"
-
-#: bibliograph/plugins/webservices/ImportWindow.js:319
-#: bibliograph/plugins/z3950/ImportWindow.js:250
-#: bibliograph/ui/main/Toolbar.js:279 bibliograph/ui/main/Toolbar.js:289
-#: bibliograph/ui/main/Toolbar.js:297 bibliograph/ui/main/Toolbar.js:298
-#: bibliograph/plugins/webservices/View.js:312
-msgid "Searching..."
-msgstr "Suchabfrage wird ausgeführt…"
 
 #: bibliograph/ui/main/MultipleTreeView.js:176
 msgid "Add folder"
@@ -1116,20 +1042,20 @@ msgstr "Möchten Sie %1 Datensätze nach ‚%2‘ kopieren?"
 
 #: bibliograph/ui/window/AccessControlTool.js:229
 #: bibliograph/ui/window/AccessControlTool.js:444
+#: bibliograph/ui/window/AccessControlTool.js:243
+#: bibliograph/ui/window/AccessControlTool.js:460
 msgid "Filter by name here..."
 msgstr "Einträge hier eingrenzen…"
 
 #: bibliograph/ui/window/ImportWindow.js:148
+#: bibliograph/ui/window/ImportWindow.js:149
 msgid "Select the file with data to import ..."
 msgstr "Bitte wählen Sie die Datei aus, deren Inhalt importiert werden soll …"
 
 #: bibliograph/ui/window/ImportWindow.js:247
+#: bibliograph/ui/window/ImportWindow.js:248
 msgid "Choose import format of '%1'"
 msgstr "Wählen Sie das Importformat von '%1' aus"
-
-#: bibliograph/ui/window/ImportWindow.js:250
-msgid "Please select the file with data to import..."
-msgstr "Bitte wählen Sie die Datei aus, deren Inhalt importiert werden soll …"
 
 #: bibliograph/ui/main/TableView.js:249 bibliograph/ui/main/TableView.js:240
 msgid "Export selected folder"
@@ -1154,6 +1080,7 @@ msgstr "Das aktuelle Suchergebnis exportieren"
 
 #: bibliograph/ui/main/Toolbar.js:280 bibliograph/ui/main/Toolbar.js:290
 #: bibliograph/ui/main/Toolbar.js:298 bibliograph/ui/main/Toolbar.js:299
+#: bibliograph/ui/main/Toolbar.js:295
 msgid "Enter search term or ? for suggestions"
 msgstr "Geben Sie einen Suchausdruck ein oder ? für eine Auswahl an Suchfeldern"
 
@@ -1166,26 +1093,9 @@ msgid "Save current search query as top folder"
 msgstr "Die aktuelle Suche als obersten Ordner speichern"
 
 #: bibliograph/ui/main/Toolbar.js:296 bibliograph/ui/main/Toolbar.js:297
+#: bibliograph/ui/main/Toolbar.js:293
 msgid "No results"
 msgstr "Keine Ergebnisse"
-
-#: bibliograph/plugins/webservices/Plugin.js:111
-#: bibliograph/plugins/webservices/ImportWindow.js:28
-msgid "Import from webservices"
-msgstr "Von einem Webdienst importieren"
-
-#: bibliograph/plugins/webservices/Plugin.js:117
-msgid "Webservices"
-msgstr "Webdienste"
-
-#: bibliograph/plugins/webservices/Plugin.js:198
-msgid "Reloading services..."
-msgstr "Aktualisiere Liste der Webdienste"
-
-#: bibliograph/plugins/webservices/ImportWindow.js:189
-#: bibliograph/plugins/webservices/View.js:182
-msgid "Auto-import best result"
-msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:365
 msgid "Loading folders. Please wait..."
@@ -1213,34 +1123,6 @@ msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:556
 msgid "Do you want to insert the folder '%1'?"
-msgstr ""
-
-#: bibliograph/plugins/backup/Plugin.js:58
-msgid "Backup"
-msgstr ""
-
-#: bibliograph/plugins/backup/Plugin.js:71
-msgid "Create Backup"
-msgstr ""
-
-#: bibliograph/plugins/backup/Plugin.js:76
-msgid "You can enter a description for this backup (optional)"
-msgstr ""
-
-#: bibliograph/plugins/backup/Plugin.js:78
-msgid "Saving backup..."
-msgstr ""
-
-#: bibliograph/plugins/backup/Plugin.js:87
-msgid "Restore Backup"
-msgstr ""
-
-#: bibliograph/plugins/backup/Plugin.js:100
-msgid "Restoring backup..."
-msgstr ""
-
-#: bibliograph/plugins/backup/Plugin.js:111
-msgid "The datasource has just been restored to a previous state and will now be reloaded."
 msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:178
