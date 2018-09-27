@@ -970,10 +970,9 @@ class AccessConfigController extends AppController
     (new Alert)
       ->setMessage($message)
       ->setService(Yii::$app->controller->id)
-      ->setMethod("filter-by-user")
+      ->setMethod("select-user")
       ->setParams([$user->name])
       ->sendToClient();
-
     return $this->successfulActionResult();
   }
 
@@ -982,7 +981,7 @@ class AccessConfigController extends AppController
    * @param $dummy
    * @param string $name
    */
-  public function actionFilterByUser($dummy, $name) {
+  public function actionSelectUser($dummy, $name) {
     $this->dispatchClientMessage("acltool.searchbox-left.set", $name);
   }
 
@@ -1138,13 +1137,17 @@ class AccessConfigController extends AppController
     $user = Yii::$app->ldapAuth->identify($username);
     if ($user) {
       $message = 'User {user} has been imported from LDAP database.';
-      $this->dispatchClientMessage("acltool.searchbox-left.set", $user->name);
+      $this->dispatchClientMessage("accessControlTool.reloadLeftList");
     } else {
       $message = 'User {user} was not found in LDAP database.';
     }
-    (new Alert)->setMessage(Yii::t(self::CATEGORY,$message, [
-      'user' => $user->name
-    ]));
+    $message = Yii::t(self::CATEGORY, $message, [ 'user' => $user->name ]);
+    (new Alert)
+      ->setMessage($message)
+      ->setService(Yii::$app->controller->id)
+      ->setMethod("select-user")
+      ->setParams([$user->name])
+      ->sendToClient();
     return $this->successfulActionResult();
   }
 

@@ -188,7 +188,7 @@ class LdapAuth extends \yii\base\Component
 
     // if user does not exist locally, create it with "user" role
     // and assign it to the groups specified by the ldap source
-    $user = User::findOne(['namedId'=>$username]);
+    $user = User::findOne(['namedId' => $username]);
     if( ! $user) {
       $user = $this->createUser( $username );
     }
