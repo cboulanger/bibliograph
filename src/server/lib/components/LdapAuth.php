@@ -75,6 +75,7 @@ class LdapAuth extends \yii\base\Component
    * @return \app\models\User|null User or null if authentication failed
    * @throws \RuntimeException
    * @throws \Adldap\Models\ModelNotFoundException
+   * @throws \yii\db\Exception
    */
   public function authenticate( $username, $password )
   {
@@ -89,10 +90,10 @@ class LdapAuth extends \yii\base\Component
     $attr = array_shift($bind_attrs);
     do {
       $bind_dn = "$attr=$username";
-      Yii::debug("Trying to bind $bind_dn with LDAP Server...", self::CATEGORY, __METHOD__);
+      Yii::debug("Trying to bind $bind_dn with LDAP Server...", self::CATEGORY);
       try {
         if ($ldap->auth()->attempt($bind_dn, $password, true)) {
-          Yii::debug("Success!", self::CATEGORY, __METHOD__);
+          Yii::debug("Success!", self::CATEGORY);
           break;
         }
       } catch (BindException $e) {
@@ -114,7 +115,7 @@ class LdapAuth extends \yii\base\Component
           $data = $records[0]->jsonSerialize();
           if (isset($data[$user_id_attr][0] )){
             $username = $data[$user_id_attr][0];
-            Yii::debug("Found entry for $attr=$username in $user_base_dn", self::CATEGORY, __METHOD__);
+            Yii::debug("Found entry for $attr=$username in $user_base_dn", self::CATEGORY);
             array_unshift($bind_attrs, $user_id_attr);
           }
         }
@@ -123,7 +124,7 @@ class LdapAuth extends \yii\base\Component
 
     // we've run out of attributes to match, authentication failed
     if (! $attr ) {
-      Yii::debug("User/Password combination is wrong.", 'ldap', __METHOD__);
+      Yii::debug("User/Password combination is wrong.", 'ldap');
       return null;
     }
 
@@ -141,7 +142,65 @@ class LdapAuth extends \yii\base\Component
   }
 
   /**
-   * Creates a new user from an authenticated LDAP connection. The
+   * Identifies a user at a remote LDAP server and creates local user if they exist.
+   * Returns the user model instance
+   * @param $username
+   * @return \app\models\User|null User or null if user does not exist
+   * @throws \RuntimeException
+   * @throws \Adldap\Models\ModelNotFoundException
+   * @todo code duplication with authenticate() method
+   * @throws \yii\db\Exception
+   */
+  public function identify($username)
+  {
+    $user_base_dn = Yii::$app->config->getIniValue( "ldap.user_base_dn" );
+    $user_id_attr = Yii::$app->config->getIniValue("ldap.user_id_attr");
+    $alternative_auth_attrs = Yii::$app->config->getIniValue("ldap.alternative_auth_attrs");
+    $bind_attrs = [$user_id_attr];
+    if (is_array($alternative_auth_attrs)){
+      $bind_attrs = array_merge( $bind_attrs, $alternative_auth_attrs);
+    }
+    $ldap = Yii::$app->ldap;
+    $attr = array_shift($bind_attrs);
+    do {
+      Yii::debug("Searching for $attr=$username in $user_base_dn ...", self::CATEGORY);
+      $records = $ldap->search()
+        ->in( $user_base_dn )
+        ->select([ $user_id_attr ])
+        ->where( $attr, "=", $username )
+        ->recursive()
+        ->get();
+      if (count($records)){
+        $data = $records[0]->jsonSerialize();
+        if (isset($data[$user_id_attr][0] )){
+          $username = $data[$user_id_attr][0];
+          Yii::debug("Found user '$username'", self::CATEGORY);
+          break;
+        }
+      }
+    } while ($attr = array_shift($bind_attrs));
+
+    // we've run out of attributes to match, search failed
+    if (! $attr ) {
+      Yii::debug("No user '$username' can be found", self::CATEGORY);
+      return null;
+    }
+
+    // if user does not exist locally, create it with "user" role
+    // and assign it to the groups specified by the ldap source
+    $user = User::findOne(['namedId'=>$username]);
+    if( ! $user) {
+      $user = $this->createUser( $username );
+    }
+
+    // update group membership
+    $this->updateGroupMembership( $username );
+    return $user;
+  }
+
+
+  /**
+   * Creates a new user from a LDAP database. The
    * default behavior is to use the attributes "cn", "sn","givenName"
    * to determine the user's full name and the "mail" attribute to
    * determine the user's email address. Returns the newly created local user.
@@ -312,5 +371,36 @@ class LdapAuth extends \yii\base\Component
       }
     }
     Yii::debug( "User '$username' is member of the following groups: " . implode(",", $user->getGroupNames() ), 'ldap' );
+  }
+
+  /**
+   * Returns an array LDAP records that match a certain name, or an empty array if none matches
+   * UNTESTED!
+   * @param $name
+   * @return array
+   * @throws \RuntimeException
+   */
+  public function browse( $name )
+  {
+    $user_base_dn = Yii::$app->config->getIniValue( "ldap.user_base_dn" );
+    $user_id_attr = Yii::$app->config->getIniValue("ldap.user_id_attr");
+    $ldap = Yii::$app->ldap;
+    $records = $ldap->search()
+      ->in( $user_base_dn )
+      ->select([ "cn", $user_id_attr ])
+      ->where( "cn", "=", $name )
+      ->recursive()
+      ->get();
+    $data =[];
+    if (count($records)){
+      foreach ($records as $record){
+        $d = $record->jsonSerialize();
+        $data[] = [
+          "username"  => $d[$user_id_attr][0],
+          "fullname"  => $d['cn'][0]
+        ];
+      }
+    }
+    return $data;
   }
 }

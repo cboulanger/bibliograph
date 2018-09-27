@@ -147,22 +147,33 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     this.add(toolBar1);
     
     // user button
-    let addUserButton = new qx.ui.toolbar.Button(this.tr('New User'), "icon/22/apps/preferences-users.png");
-    //toolBar1.add(addUserButton);
-    addUserButton.setEnabled(false);
+    let addUserButton = new qx.ui.toolbar.Button(this.tr('New local user'), "icon/22/apps/preferences-users.png");
+    toolBar1.add(addUserButton);
     pm.create("access.manage").bind("state", addUserButton, "visibility", {
       converter: bibliograph.Utils.bool2visibility
     });
     addUserButton.addListener("execute", function (e) {
       this.leftSelectBox.setSelection([this.leftSelectBox.getSelectables()[0]]);
       this.getApplication().showPopup(this.tr("Please wait ..."));
-      this.getApplication().getRpcClient("actool").send("newUserDialog");
+      rpc.AccessConfig.newUserDialog();
     }, this);
-    bus.subscribe("ldap.enabled", function (e) {
-      addUserButton.setVisibility(e.getData() ? "excluded" : "visible");
+  
+    //  import LDAP user button
+    let findLdapUserButton = new qx.ui.toolbar.Button(this.tr('Import LDAP user'));
+    toolBar1.add(findLdapUserButton);
+    pm.create("access.manage").bind("state", findLdapUserButton, "enabled");
+    let cm = app.getConfigManager();
+    cm.addListener("ready", ()=> {
+      findLdapUserButton.setVisibility(bibliograph.Utils.bool2visibility(cm.getKey("ldap.enabled")));
+    });
+    findLdapUserButton.addListener("execute", async function (e) {
+      leftSelectBox.setSelection([this.leftSelectBox.getSelectables()[0]]);
+      //findLdapUserButton.setEnabled(false);
+      await rpc.AccessConfig.findLdapUserDialog();
+      //findLdapUserButton.setEnabled(true);
     }, this);
-    
-    //  datasource button
+  
+    // datasource button
     let addDatasourceButton = new qx.ui.toolbar.Button(this.tr('New Datasource'), "icon/22/apps/internet-transfer.png");
     toolBar1.add(addDatasourceButton);
     pm.create("access.manage").bind("state", addDatasourceButton, "visibility", {
@@ -226,9 +237,12 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
   
     // left search box
     let searchbox1 = new qx.ui.form.TextField();
-    searchbox1.setPlaceholder(this.tr("Filter by name here..."));
+    searchbox1.set({
+      placeholder: this.tr("Filter by name here..."),
+      liveUpdate: true
+    });
     composite2.add(searchbox1);
-    searchbox1.addListener("input",e =>{
+    searchbox1.addListener("changeValue",e =>{
       let input = (e.getData()||"").toLocaleLowerCase();
       if( input ){
         let len = input.length;
@@ -238,6 +252,8 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
       }
     });
     leftSelectBox.addListener("changeSelection",()=> {searchbox1.setValue(""); leftList.setDelegate(null);});
+    // server command
+    bus.subscribe("acltool.searchbox-left.set", e => searchbox1.setValue(e.getData()));
     
     // left list
     let leftList = new qx.ui.list.List();

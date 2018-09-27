@@ -213,8 +213,11 @@ class SetupController extends \app\controllers\AppController
       return null;
     }
 
+    // let application know if LDAP is enabled
+    $ldapEnabled =  Yii::$app->config->getIniValue("ldap.enabled");
+    Yii::$app->config->setKeyDefault("ldap.enabled",$ldapEnabled);
+
     // notify client that setup it done
-    $this->dispatchClientMessage("ldap.enabled", Yii::$app->config->getIniValue("ldap.enabled"));
     $this->dispatchClientMessage("bibliograph.setup.done"); // @todo rename
 
     // return errors and messages

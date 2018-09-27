@@ -127,6 +127,7 @@ msgid "The application is currently in a read-only state. Only the administrator
 msgstr ""
 
 #: bibliograph/Commands.js:72 bibliograph/ui/window/AccessControlTool.js:158
+#: bibliograph/ui/window/AccessControlTool.js:157
 msgid "Please wait ..."
 msgstr ""
 
@@ -159,6 +160,14 @@ msgid "New User"
 msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:166
+#: bibliograph/ui/window/AccessControlTool.js:184
+#: bibliograph/ui/window/AccessControlTool.js:185
+#: bibliograph/ui/window/AccessControlTool.js:183
+#: bibliograph/ui/window/AccessControlTool.js:181
+#: bibliograph/ui/window/AccessControlTool.js:179
+#: bibliograph/ui/window/AccessControlTool.js:180
+#: bibliograph/ui/window/AccessControlTool.js:178
+#: bibliograph/ui/window/AccessControlTool.js:177
 msgid "New Datasource"
 msgstr ""
 
@@ -168,6 +177,15 @@ msgstr ""
 #: bibliograph/plugins/webservices/ImportWindow.js:234
 #: bibliograph/plugins/z3950/ImportWindow.js:180
 #: bibliograph/ui/window/AccessControlTool.js:178
+#: bibliograph/ui/window/AccessControlTool.js:199
+#: bibliograph/ui/window/AccessControlTool.js:200
+#: bibliograph/ui/window/AccessControlTool.js:198
+#: bibliograph/ui/window/AccessControlTool.js:196
+#: bibliograph/ui/window/AccessControlTool.js:194
+#: bibliograph/ui/window/AccessControlTool.js:195
+#: bibliograph/ui/window/AccessControlTool.js:193
+#: bibliograph/ui/window/AccessControlTool.js:192
+#: bibliograph/ui/window/AccessControlTool.js:189
 #: bibliograph/plugins/webservices/View.js:227
 msgid "Help"
 msgstr ""
@@ -177,19 +195,64 @@ msgid "Export to filesystem"
 msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:188
+#: bibliograph/ui/window/AccessControlTool.js:209
+#: bibliograph/ui/window/AccessControlTool.js:210
+#: bibliograph/ui/window/AccessControlTool.js:208
+#: bibliograph/ui/window/AccessControlTool.js:206
+#: bibliograph/ui/window/AccessControlTool.js:204
+#: bibliograph/ui/window/AccessControlTool.js:205
+#: bibliograph/ui/window/AccessControlTool.js:203
+#: bibliograph/ui/window/AccessControlTool.js:202
+#: bibliograph/ui/window/AccessControlTool.js:199
 msgid "Exit"
 msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:278
 #: bibliograph/ui/window/AccessControlTool.js:489
+#: bibliograph/ui/window/AccessControlTool.js:299
+#: bibliograph/ui/window/AccessControlTool.js:510
+#: bibliograph/ui/window/AccessControlTool.js:300
+#: bibliograph/ui/window/AccessControlTool.js:511
+#: bibliograph/ui/window/AccessControlTool.js:298
+#: bibliograph/ui/window/AccessControlTool.js:509
+#: bibliograph/ui/window/AccessControlTool.js:296
+#: bibliograph/ui/window/AccessControlTool.js:507
+#: bibliograph/ui/window/AccessControlTool.js:297
+#: bibliograph/ui/window/AccessControlTool.js:508
+#: bibliograph/ui/window/AccessControlTool.js:293
+#: bibliograph/ui/window/AccessControlTool.js:504
+#: bibliograph/ui/window/AccessControlTool.js:292
+#: bibliograph/ui/window/AccessControlTool.js:503
+#: bibliograph/ui/window/AccessControlTool.js:291
+#: bibliograph/ui/window/AccessControlTool.js:502
+#: bibliograph/ui/window/AccessControlTool.js:294
+#: bibliograph/ui/window/AccessControlTool.js:505
 msgid "Please enter the id of the new '%1'-Object"
 msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:299
+#: bibliograph/ui/window/AccessControlTool.js:320
+#: bibliograph/ui/window/AccessControlTool.js:321
+#: bibliograph/ui/window/AccessControlTool.js:319
+#: bibliograph/ui/window/AccessControlTool.js:317
+#: bibliograph/ui/window/AccessControlTool.js:318
+#: bibliograph/ui/window/AccessControlTool.js:314
+#: bibliograph/ui/window/AccessControlTool.js:313
+#: bibliograph/ui/window/AccessControlTool.js:312
+#: bibliograph/ui/window/AccessControlTool.js:315
 msgid "Do you really want to delete '%1'?"
 msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:538
+#: bibliograph/ui/window/AccessControlTool.js:559
+#: bibliograph/ui/window/AccessControlTool.js:560
+#: bibliograph/ui/window/AccessControlTool.js:558
+#: bibliograph/ui/window/AccessControlTool.js:556
+#: bibliograph/ui/window/AccessControlTool.js:557
+#: bibliograph/ui/window/AccessControlTool.js:553
+#: bibliograph/ui/window/AccessControlTool.js:552
+#: bibliograph/ui/window/AccessControlTool.js:551
+#: bibliograph/ui/window/AccessControlTool.js:554
 msgid "Loading data ..."
 msgstr ""
 
@@ -198,24 +261,75 @@ msgid "Please wait..."
 msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:341
+#: bibliograph/ui/window/AccessControlTool.js:362
+#: bibliograph/ui/window/AccessControlTool.js:363
+#: bibliograph/ui/window/AccessControlTool.js:361
+#: bibliograph/ui/window/AccessControlTool.js:359
+#: bibliograph/ui/window/AccessControlTool.js:360
+#: bibliograph/ui/window/AccessControlTool.js:356
+#: bibliograph/ui/window/AccessControlTool.js:355
+#: bibliograph/ui/window/AccessControlTool.js:354
+#: bibliograph/ui/window/AccessControlTool.js:357
 msgid "Edited element"
 msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:390
 #: bibliograph/ui/window/AccessControlTool.js:392
+#: bibliograph/ui/window/AccessControlTool.js:411
+#: bibliograph/ui/window/AccessControlTool.js:413
+#: bibliograph/ui/window/AccessControlTool.js:412
+#: bibliograph/ui/window/AccessControlTool.js:414
+#: bibliograph/ui/window/AccessControlTool.js:410
+#: bibliograph/ui/window/AccessControlTool.js:408
+#: bibliograph/ui/window/AccessControlTool.js:409
+#: bibliograph/ui/window/AccessControlTool.js:405
+#: bibliograph/ui/window/AccessControlTool.js:407
+#: bibliograph/ui/window/AccessControlTool.js:404
+#: bibliograph/ui/window/AccessControlTool.js:406
+#: bibliograph/ui/window/AccessControlTool.js:403
 msgid "Link"
 msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:403
 #: bibliograph/ui/window/AccessControlTool.js:405
+#: bibliograph/ui/window/AccessControlTool.js:424
+#: bibliograph/ui/window/AccessControlTool.js:426
+#: bibliograph/ui/window/AccessControlTool.js:425
+#: bibliograph/ui/window/AccessControlTool.js:427
+#: bibliograph/ui/window/AccessControlTool.js:423
+#: bibliograph/ui/window/AccessControlTool.js:421
+#: bibliograph/ui/window/AccessControlTool.js:422
+#: bibliograph/ui/window/AccessControlTool.js:418
+#: bibliograph/ui/window/AccessControlTool.js:420
+#: bibliograph/ui/window/AccessControlTool.js:417
+#: bibliograph/ui/window/AccessControlTool.js:419
+#: bibliograph/ui/window/AccessControlTool.js:416
 msgid "Unlink"
 msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:430
+#: bibliograph/ui/window/AccessControlTool.js:451
+#: bibliograph/ui/window/AccessControlTool.js:452
+#: bibliograph/ui/window/AccessControlTool.js:450
+#: bibliograph/ui/window/AccessControlTool.js:448
+#: bibliograph/ui/window/AccessControlTool.js:449
+#: bibliograph/ui/window/AccessControlTool.js:445
+#: bibliograph/ui/window/AccessControlTool.js:444
+#: bibliograph/ui/window/AccessControlTool.js:443
+#: bibliograph/ui/window/AccessControlTool.js:446
 msgid "Linkable items"
 msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:514
+#: bibliograph/ui/window/AccessControlTool.js:535
+#: bibliograph/ui/window/AccessControlTool.js:536
+#: bibliograph/ui/window/AccessControlTool.js:534
+#: bibliograph/ui/window/AccessControlTool.js:532
+#: bibliograph/ui/window/AccessControlTool.js:533
+#: bibliograph/ui/window/AccessControlTool.js:529
+#: bibliograph/ui/window/AccessControlTool.js:528
+#: bibliograph/ui/window/AccessControlTool.js:527
+#: bibliograph/ui/window/AccessControlTool.js:530
 msgid "Do you really want to delete the objects '%1'?"
 msgstr ""
 
@@ -224,7 +338,7 @@ msgid "Select"
 msgstr ""
 
 #: bibliograph/ui/window/PreferencesWindow.js:31
-#: bibliograph/ui/main/Toolbar.js:144
+#: bibliograph/ui/main/Toolbar.js:144 bibliograph/ui/main/Toolbar.js:140
 msgid "Preferences"
 msgstr ""
 
@@ -241,7 +355,7 @@ msgid "Application logo"
 msgstr ""
 
 #: bibliograph/ui/window/PreferencesWindow.js:86
-#: bibliograph/ui/main/Toolbar.js:217
+#: bibliograph/ui/main/Toolbar.js:217 bibliograph/ui/main/Toolbar.js:213
 msgid "Language"
 msgstr ""
 
@@ -361,7 +475,7 @@ msgstr ""
 
 #: bibliograph/ui/window/AboutWindow.js:27 bibliograph/ui/main/Toolbar.js:223
 #: bibliograph/ui/main/Toolbar.js:233 bibliograph/ui/main/Toolbar.js:241
-#: bibliograph/ui/main/Toolbar.js:242
+#: bibliograph/ui/main/Toolbar.js:242 bibliograph/ui/main/Toolbar.js:238
 msgid "About Bibliograph"
 msgstr ""
 
@@ -401,19 +515,19 @@ msgstr ""
 msgid "Loading..."
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:111
+#: bibliograph/ui/main/Toolbar.js:111 bibliograph/ui/main/Toolbar.js:107
 msgid "Datasources"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:126
+#: bibliograph/ui/main/Toolbar.js:126 bibliograph/ui/main/Toolbar.js:122
 msgid "System"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:157
+#: bibliograph/ui/main/Toolbar.js:157 bibliograph/ui/main/Toolbar.js:153
 msgid "Access management"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:170
+#: bibliograph/ui/main/Toolbar.js:170 bibliograph/ui/main/Toolbar.js:166
 msgid "Plugins"
 msgstr ""
 
@@ -425,16 +539,17 @@ msgstr ""
 msgid "This will reset and reload the application"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:183
+#: bibliograph/ui/main/Toolbar.js:183 bibliograph/ui/main/Toolbar.js:179
 msgid "Import"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:200
+#: bibliograph/ui/main/Toolbar.js:200 bibliograph/ui/main/Toolbar.js:196
 msgid "Import text file"
 msgstr ""
 
 #: bibliograph/ui/main/Toolbar.js:216 bibliograph/ui/main/Toolbar.js:225
 #: bibliograph/ui/main/Toolbar.js:233 bibliograph/ui/main/Toolbar.js:234
+#: bibliograph/ui/main/Toolbar.js:230
 msgid "Online Help"
 msgstr ""
 
@@ -443,6 +558,7 @@ msgid "Report a problem or request a feature"
 msgstr ""
 
 #: bibliograph/ui/main/Toolbar.js:311 bibliograph/ui/main/Toolbar.js:330
+#: bibliograph/ui/main/Toolbar.js:326
 msgid "Enter search term"
 msgstr ""
 
@@ -864,11 +980,13 @@ msgstr ""
 
 #: bibliograph/ui/main/Toolbar.js:241 bibliograph/ui/main/Toolbar.js:251
 #: bibliograph/ui/main/Toolbar.js:259 bibliograph/ui/main/Toolbar.js:260
+#: bibliograph/ui/main/Toolbar.js:256
 msgid "Run RPC method test.test"
 msgstr ""
 
 #: bibliograph/ui/main/Toolbar.js:235 bibliograph/ui/main/Toolbar.js:245
 #: bibliograph/ui/main/Toolbar.js:253 bibliograph/ui/main/Toolbar.js:254
+#: bibliograph/ui/main/Toolbar.js:250
 msgid "Developer"
 msgstr ""
 
@@ -881,6 +999,15 @@ msgid "No selectable items"
 msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:436
+#: bibliograph/ui/window/AccessControlTool.js:457
+#: bibliograph/ui/window/AccessControlTool.js:458
+#: bibliograph/ui/window/AccessControlTool.js:456
+#: bibliograph/ui/window/AccessControlTool.js:454
+#: bibliograph/ui/window/AccessControlTool.js:455
+#: bibliograph/ui/window/AccessControlTool.js:451
+#: bibliograph/ui/window/AccessControlTool.js:450
+#: bibliograph/ui/window/AccessControlTool.js:449
+#: bibliograph/ui/window/AccessControlTool.js:452
 msgid "No linkable items"
 msgstr ""
 
@@ -945,6 +1072,7 @@ msgstr ""
 #: bibliograph/plugins/z3950/ImportWindow.js:250
 #: bibliograph/ui/main/Toolbar.js:279 bibliograph/ui/main/Toolbar.js:289
 #: bibliograph/ui/main/Toolbar.js:297 bibliograph/ui/main/Toolbar.js:298
+#: bibliograph/ui/main/Toolbar.js:294
 #: bibliograph/plugins/webservices/View.js:312
 msgid "Searching..."
 msgstr ""
@@ -1024,6 +1152,25 @@ msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:229
 #: bibliograph/ui/window/AccessControlTool.js:444
+#: bibliograph/ui/window/AccessControlTool.js:250
+#: bibliograph/ui/window/AccessControlTool.js:465
+#: bibliograph/ui/window/AccessControlTool.js:251
+#: bibliograph/ui/window/AccessControlTool.js:466
+#: bibliograph/ui/window/AccessControlTool.js:249
+#: bibliograph/ui/window/AccessControlTool.js:464
+#: bibliograph/ui/window/AccessControlTool.js:247
+#: bibliograph/ui/window/AccessControlTool.js:462
+#: bibliograph/ui/window/AccessControlTool.js:245
+#: bibliograph/ui/window/AccessControlTool.js:246
+#: bibliograph/ui/window/AccessControlTool.js:244
+#: bibliograph/ui/window/AccessControlTool.js:463
+#: bibliograph/ui/window/AccessControlTool.js:243
+#: bibliograph/ui/window/AccessControlTool.js:240
+#: bibliograph/ui/window/AccessControlTool.js:459
+#: bibliograph/ui/window/AccessControlTool.js:458
+#: bibliograph/ui/window/AccessControlTool.js:457
+#: bibliograph/ui/window/AccessControlTool.js:241
+#: bibliograph/ui/window/AccessControlTool.js:460
 msgid "Filter by name here..."
 msgstr ""
 
@@ -1062,6 +1209,7 @@ msgstr ""
 
 #: bibliograph/ui/main/Toolbar.js:280 bibliograph/ui/main/Toolbar.js:290
 #: bibliograph/ui/main/Toolbar.js:298 bibliograph/ui/main/Toolbar.js:299
+#: bibliograph/ui/main/Toolbar.js:295
 msgid "Enter search term or ? for suggestions"
 msgstr ""
 
@@ -1085,6 +1233,7 @@ msgstr ""
 
 #: bibliograph/ui/main/Toolbar.js:278 bibliograph/ui/main/Toolbar.js:288
 #: bibliograph/ui/main/Toolbar.js:296 bibliograph/ui/main/Toolbar.js:297
+#: bibliograph/ui/main/Toolbar.js:293
 msgid "No results"
 msgstr ""
 
@@ -1170,4 +1319,18 @@ msgstr ""
 
 #: bibliograph/plugins/backup/Plugin.js:111
 msgid "The datasource has just been restored to a previous state and will now be reloaded."
+msgstr ""
+
+#: bibliograph/ui/window/AccessControlTool.js:178
+msgid "Find LDAP user"
+msgstr ""
+
+#: bibliograph/ui/window/AccessControlTool.js:150
+msgid "New local user"
+msgstr ""
+
+#: bibliograph/ui/window/AccessControlTool.js:163
+#: bibliograph/ui/window/AccessControlTool.js:164
+#: bibliograph/ui/window/AccessControlTool.js:162
+msgid "Import LDAP user"
 msgstr ""
