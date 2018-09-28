@@ -375,29 +375,34 @@ class LdapAuth extends \yii\base\Component
 
   /**
    * Returns an array LDAP records that match a certain name, or an empty array if none matches
-   * UNTESTED!
-   * @param $name
-   * @return array
+   * @param $identifier
+   * @return array Array of associative arrays with the keys "namedId" (the LDAP user id) and "name" (taken from the
+   * CN attribute)
    * @throws \RuntimeException
+   * @todo Make "name" attribute configurable in ini file
    */
-  public function browse( $name )
+  public function find($identifier )
   {
     $user_base_dn = Yii::$app->config->getIniValue( "ldap.user_base_dn" );
     $user_id_attr = Yii::$app->config->getIniValue("ldap.user_id_attr");
+    $alternative_auth_attrs = Yii::$app->config->getIniValue("ldap.alternative_auth_attrs");
+    $auth_attrs = [$user_id_attr];
+    if (is_array($alternative_auth_attrs) ) {
+      $auth_attrs = array_merge($auth_attrs, $alternative_auth_attrs);
+    }
     $ldap = Yii::$app->ldap;
-    $records = $ldap->search()
-      ->in( $user_base_dn )
-      ->select([ "cn", $user_id_attr ])
-      ->where( "cn", "=", $name )
-      ->recursive()
-      ->get();
+    $search = $ldap->search()->in( $user_base_dn )->select($auth_attrs);
+    foreach ($auth_attrs as $attr){
+      $search = $search->orWhere( $attr, "contains", $identifier);
+    }
+    $records = $search->recursive()->get();
     $data =[];
     if (count($records)){
       foreach ($records as $record){
         $d = $record->jsonSerialize();
         $data[] = [
-          "username"  => $d[$user_id_attr][0],
-          "fullname"  => $d['cn'][0]
+          'namedId' => $d[$user_id_attr][0],
+          'name'    => isset($d['cn'][0]) ?  $d['cn'][0] : ""
         ];
       }
     }

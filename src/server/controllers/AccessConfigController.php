@@ -21,6 +21,7 @@
 namespace app\controllers;
 
 use app\models\Schema;
+use InvalidArgumentException;
 use lib\dialog\{
   Alert, Confirm, Error, Form, Progress, Prompt
 };
@@ -125,12 +126,12 @@ class AccessConfigController extends AppController
    *
    * @param string $ype
    * @return array
-   * @throws \InvalidArgumentException
+   * @throws InvalidArgumentException
    */
   protected function getModelDataFor($type)
   {
     if (!isset($this->modelData[$type])) {
-      throw new \InvalidArgumentException("Invalid type '$type'");
+      throw new InvalidArgumentException("Invalid type '$type'");
     }
     return $this->modelData[$type];
   }
@@ -140,7 +141,7 @@ class AccessConfigController extends AppController
    *
    * @param string $ype
    * @return string
-   * @throws \InvalidArgumentException
+   * @throws InvalidArgumentException
    */
   protected function getModelClassFor($type)
   {
@@ -161,7 +162,7 @@ class AccessConfigController extends AppController
    * @param bool $link
    *    If true, link the models, if false, unlink them
    * @return void
-   * @throws \InvalidArgumentException
+   * @throws InvalidArgumentException
    * @throws UserErrorException
    */
   protected function linkOrUnlink($linkedModelData, $type, $namedId, $link = true)
@@ -175,7 +176,7 @@ class AccessConfigController extends AppController
       /** @var \lib\models\BaseModel $depModel */
       $depModel = $this->getModelInstance(trim($depModelType), trim($depModelNamedId));
       if ($depModelType != "group") {
-        throw new \InvalidArgumentException("Invalid dependent model type '$depModelType'");
+        throw new InvalidArgumentException("Invalid dependent model type '$depModelType'");
       }
       $extraColumns = ['GroupId' => $depModel->id];
     } else {
@@ -246,7 +247,7 @@ class AccessConfigController extends AppController
     // query
     try {
       $elementData = $this->getModelDataFor($type);
-    } catch (\InvalidArgumentException $e) {
+    } catch (InvalidArgumentException $e) {
       throw new UserErrorException($e->getMessage());
     }
     $modelClass = $elementData['class'];
@@ -812,7 +813,7 @@ class AccessConfigController extends AppController
    *    The named id of the current element
    * @return string Diagnostic message
    * @throws \JsonRpc2\Exception
-   * @throws \InvalidArgumentException
+   * @throws InvalidArgumentException
    * @throws UserErrorException
    */
   public function actionLink($linkedModelData, $type, $namedId)
@@ -977,7 +978,8 @@ class AccessConfigController extends AppController
   }
 
   /**
-   * Sets the left filter in the GUI
+   * Sets a user by setting the filter in the GUI
+   * @todo implement actual selection
    * @param $dummy
    * @param string $name
    */
@@ -1116,38 +1118,104 @@ class AccessConfigController extends AppController
 
   /**
    * Allows to search for LDAP users and, if found, to add them to the local list of users
+   * @throws \JsonRpc2\Exception
    */
   public function actionFindLdapUserDialog()
   {
+    $this->requirePermission("access.manage");
     (new Prompt())
-      ->setMessage(Yii::t(self::CATEGORY, 'Please enter an identifier (name, username, email address)'))
+      ->setMessage(Yii::t(self::CATEGORY, 'Please enter an identifier (name, username) or part of it:'))
       ->setService(Yii::$app->controller->id)
-      ->setMethod("import-ldap-user")
+      ->setMethod("find-ldap-user")
       ->sendToClient();
   }
 
   /**
-   * @param $username
+   * @param $identifier
+   * @return string
+   * @throws \Adldap\Models\ModelNotFoundException
+   * @throws \JsonRpc2\Exception
+   * @throws \yii\db\Exception
+   */
+  public function actionFindLdapUser($identifier) {
+    $this->requirePermission("access.manage");
+    $options = array_map( function($item){
+      return [
+        'value' => $item['namedId'],
+        'label' => $item['name']
+      ];
+    }, Yii::$app->ldapAuth->find($identifier));
+    switch (count($options)) {
+      case 0:
+        (new Alert())
+          ->setMessage(Yii::t('app', "No matching user found."))
+          ->sendToClient();
+        return $this->abortedActionResult("No matching user found.");
+
+      case 1:
+        return $this->actionImportLdapUser($options[0]['namedId']);
+
+      default:
+        $formData = [
+          'username' => [
+            'type' => "selectbox",
+            'label' => Yii::t('app', "Please select"),
+            'options' => $options
+          ]
+        ];
+        (new Form())
+          ->setMessage(Yii::t(
+            'app',
+            'Found {number} users that match "{identifier}." ',
+            ['number' => count($options), 'identifier' => $identifier]
+          ))
+          ->setService(Yii::$app->controller->id)
+          ->setMethod("import-ldap-user")
+          ->setFormData($formData)
+          ->sendToClient();
+    }
+    return $this->successfulActionResult();
+  }
+
+  /**
+   * @param $data
    * @return string
    * @throws \Adldap\Models\ModelNotFoundException
    * @throws \yii\db\Exception
+   * @throws \JsonRpc2\Exception
+   * @throws InvalidArgumentException
    */
-  public function actionImportLdapUser($username){
-    if (!$username) return $this->abortedActionResult();
+  public function actionImportLdapUser($data){
+    $this->requirePermission("access.manage");
+    if (!$data) {
+      return $this->abortedActionResult();
+    } elseif (is_object($data) && isset($data->username) ){
+      $username = $data->username;
+    } elseif (is_string($data)){
+      $username = $data;
+    } else {
+      throw new InvalidArgumentException("Argument must be object or string");
+    }
     $user = Yii::$app->ldapAuth->identify($username);
     if ($user) {
-      $message = 'User {user} has been imported from LDAP database.';
       $this->dispatchClientMessage("accessControlTool.reloadLeftList");
+      (new Alert)
+        ->setMessage(Yii::t(
+          self::CATEGORY,
+          '{user} has been imported from LDAP database. Please assign the required roles.',
+          [ 'user' => $user->name ]))
+        ->setService(Yii::$app->controller->id)
+        ->setMethod("select-user")
+        ->setParams([$user->name])
+        ->sendToClient();
     } else {
-      $message = 'User {user} was not found in LDAP database.';
+      (new Alert)
+        ->setMessage(Yii::t(
+          self::CATEGORY,
+          '{user} was not found in LDAP database.',
+          [ 'user' => $user->name ]))
+        ->sendToClient();
     }
-    $message = Yii::t(self::CATEGORY, $message, [ 'user' => $user->name ]);
-    (new Alert)
-      ->setMessage($message)
-      ->setService(Yii::$app->controller->id)
-      ->setMethod("select-user")
-      ->setParams([$user->name])
-      ->sendToClient();
     return $this->successfulActionResult();
   }
 
