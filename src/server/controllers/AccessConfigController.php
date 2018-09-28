@@ -1153,7 +1153,7 @@ class AccessConfigController extends AppController
         return $this->abortedActionResult("No matching user found.");
 
       case 1:
-        return $this->actionImportLdapUser($options[0]['namedId']);
+        return $this->actionImportLdapUser($options[0]['value']);
 
       default:
         $formData = [
