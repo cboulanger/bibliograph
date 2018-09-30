@@ -224,6 +224,8 @@ class User extends BaseModel implements IdentityInterface
   //-------------------------------------------------------------
 
   /**
+   * Helper method - do not use since the result does not make sense as it is not
+   * filtered by the GroupId column
    * @return ActiveQuery
    */         
   public function getUserRoles()
@@ -251,21 +253,19 @@ class User extends BaseModel implements IdentityInterface
     if( $group instanceof Group ) {
       $groupId = $group->id;
     } elseif (is_string($group)){
-      $groupId = Group::findByNamedId($group)->id;
-      if ($groupId === null){
+      $groupObj = Group::findByNamedId($group);
+      if ($groupObj === null){
         throw new InvalidArgumentException("Group '$group' does not exist");
       }
-    } elseif ( ! is_null($group) and ! is_int($group) ){
-      throw new InvalidArgumentException("Argument must be null, string, integer or instanceof Group");
-    } else {
+      $groupId=$groupObj->id;
+    } elseif ( is_null($group) or is_int($group) ){
       $groupId = $group;
+    } else {
+      throw new InvalidArgumentException("Argument must be null, string, integer or instanceof Group");
     }
-    return $this
-      ->hasMany(Role::class, ['id' => 'RoleId' ])
-      ->via('userRoles', function( ActiveQuery $query) use ($groupId) {
-          return $query->andWhere([ 'GroupId' => $groupId ]);
-        }
-      );
+    return Role::find()
+      ->joinWith('roleUsers')
+      ->where([ 'GroupId' => $groupId, 'UserId' => $this->id ]);
   }
 
   /**

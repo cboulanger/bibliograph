@@ -164,6 +164,7 @@ class AccessConfigController extends AppController
    * @return void
    * @throws InvalidArgumentException
    * @throws UserErrorException
+   * @throws \Exception
    */
   protected function linkOrUnlink($linkedModelData, $type, $namedId, $link = true)
   {
@@ -196,9 +197,10 @@ class AccessConfigController extends AppController
       try {
         $model->link($linkedModelRelation, $linkedModel, $extraColumns);
       } catch (\Exception $e) {
-        if ($e instanceof yii\base\InvalidCallException or $e instanceof \PDOException) {
+        if ($e instanceof yii\db\IntegrityException or $e instanceof \PDOException) {
           throw new UserErrorException("Models are already linked");
         }
+        throw $e;
       }
     } else {
       $model->unlink($linkedModelRelation, $linkedModel, true);
@@ -423,8 +425,10 @@ class AccessConfigController extends AppController
             'value' => "group=" . $group->namedId . ",user=" . $user->namedId,
             'children' => []
           );
+          $query = $user->getGroupRoles($group);
+          Yii::debug($query->createCommand()->getRawSql());
           /** @var \app\models\Role[] $roles */
-          $roles = $user->getGroupRoles($group)->all();
+          $roles = $query->all();
           foreach ($roles as $role) {
             $roleNode = array(
               'icon' => $modelData['role']['icon'],
