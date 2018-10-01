@@ -224,6 +224,12 @@ class User extends BaseModel implements IdentityInterface
   //-------------------------------------------------------------
 
   /**
+   * Internal. Populated temporarily during relational queries.
+   * @var int|null
+   */
+  public $groupId = null;
+
+  /**
    * Helper method - do not use since the result does not make sense as it is not
    * filtered by the GroupId column
    * @return ActiveQuery
@@ -234,12 +240,16 @@ class User extends BaseModel implements IdentityInterface
   } 
 
   /**
-   * Returns the global roles of the user.
+   * Returns the roles of the user, depending on the groupId property.
    * @return ActiveQuery
    */
   public function getRoles()
   {
-    return $this->getGroupRoles(null);
+    return $this
+      ->hasMany( Role::class, ['id' => 'RoleId'] )
+      ->via('userRoles', function(ActiveQuery $query){
+        return $query->andWhere(['GroupId' => $this->groupId]);
+      });
   }
 
   /**
@@ -282,7 +292,8 @@ class User extends BaseModel implements IdentityInterface
    */      
   public function getGroups()
   {
-    return $this->hasMany(Group::class, ['id' => 'GroupId'])
+    return $this
+      ->hasMany(Group::class, ['id' => 'GroupId'])
       ->via('userGroups');
   } 
 
