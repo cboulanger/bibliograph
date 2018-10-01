@@ -21,6 +21,7 @@
 namespace app\controllers;
 
 use app\models\Schema;
+use app\models\User;
 use InvalidArgumentException;
 use lib\dialog\{
   Alert, Confirm, Error, Form, Progress, Prompt
@@ -194,6 +195,7 @@ class AccessConfigController extends AppController
       ($link ? "Linking" : "Unlinking") . " $type '$namedId' with $linkedModelType '$linkedModelNamedId' via '$linkedModelRelation' relation" .
       ($extraColumns ? " with extra columns " . \json_encode($extraColumns) : ".")
     );
+
     if ($link) {
       try {
         $model->link($linkedModelRelation, $linkedModel, $extraColumns);
@@ -205,8 +207,8 @@ class AccessConfigController extends AppController
       }
     } else {
       // hack to work around the fact that unlink doesn't have extraColumns
-      if( isset($extraColumns['GroupId']) ) {
-        $model->groupId = $extraColumns['GroupId'];
+      if( $model instanceof User ) {
+        $model->groupId = $extraColumns['GroupId'] ?? null;
       }
       $model->unlink($linkedModelRelation, $linkedModel, true);
     }

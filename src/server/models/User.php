@@ -236,7 +236,10 @@ class User extends BaseModel implements IdentityInterface
    */         
   public function getUserRoles()
   {
-    return $this->hasMany(User_Role::class, ['UserId' => 'id', "GroupId" => 'groupId'] );
+    $link = ['UserId' => 'id'];
+    // FIXME: This removes all identical roles in all groups.
+    if( $this->groupId) $link['GroupId'] = "groupId";
+    return $this->hasMany(User_Role::class, $link );
   } 
 
   /**
@@ -248,6 +251,7 @@ class User extends BaseModel implements IdentityInterface
     return $this
       ->hasMany( Role::class, ['id' => 'RoleId'] )
       ->via('userRoles', function(ActiveQuery $query){
+        Yii::debug($query->createCommand()->getRawSql());
         return $query->andWhere(['GroupId' => $this->groupId]);
       });
   }
