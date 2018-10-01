@@ -236,7 +236,7 @@ class User extends BaseModel implements IdentityInterface
    */         
   public function getUserRoles()
   {
-    return $this->hasMany(User_Role::class, ['UserId' => 'id'] );
+    return $this->hasMany(User_Role::class, ['UserId' => 'id', "GroupId" => 'groupId'] );
   } 
 
   /**
