@@ -176,7 +176,8 @@ class AccessConfigController extends AppController
       $linkedModelInfo = explode("=", $elementParts[1]);
       /** @var \lib\models\BaseModel $depModel */
       $depModel = $this->getModelInstance(trim($depModelType), trim($depModelNamedId));
-      if ($depModelType != "group") {
+      // we only support group dependencies at the moment
+      if ($depModelType !== "group") {
         throw new InvalidArgumentException("Invalid dependent model type '$depModelType'");
       }
       $extraColumns = ['GroupId' => $depModel->id];
@@ -203,6 +204,10 @@ class AccessConfigController extends AppController
         throw $e;
       }
     } else {
+      // hack to work around the fact that unlink doesn't have extraColumns
+      if( isset($extraColumns['GroupId']) ) {
+        $model->groupId = $extraColumns['GroupId'];
+      }
       $model->unlink($linkedModelRelation, $linkedModel, true);
     }
   }
@@ -388,7 +393,7 @@ class AccessConfigController extends AppController
         $node['action'] = null;
         $node['value'] = null;
 
-        // pseudo group node -> no group dependency
+        // global roles -> no group dependency
         $groupNode = [
           'icon' => $modelData['group']['icon'],
           'label' => Yii::t('app', "In all groups"),
@@ -397,7 +402,8 @@ class AccessConfigController extends AppController
           'value' => "user=" . $user->namedId,
           'children' => []
         ];
-        $roles = $user->getGroupRoles(null)->all();
+        $user->groupId = null;
+        $roles = $user->getRoles()->all();
         foreach ($roles as $role) {
           $roleNode = [
             'icon' => $modelData['role']['icon'],
@@ -425,8 +431,8 @@ class AccessConfigController extends AppController
             'value' => "group=" . $group->namedId . ",user=" . $user->namedId,
             'children' => []
           );
+          // group roles
           $query = $user->getGroupRoles($group);
-          Yii::debug($query->createCommand()->getRawSql());
           /** @var \app\models\Role[] $roles */
           $roles = $query->all();
           foreach ($roles as $role) {
