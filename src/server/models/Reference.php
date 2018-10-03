@@ -289,7 +289,7 @@ class Reference extends BaseModel
     $citekey .= "-" . (count($t)?$t[0]:$titlewords[0]);
     $citekey= preg_replace("/[^[:alnum:][:space:]\-\+]/u", '', $citekey);
     $citekey= str_replace(" ","_",$citekey);
-    $length = 50; // @todo get from column schema
+    $length = self::getDb()->getTableSchema(self::tableName())->columns['citekey']->size;
     return substr($citekey,0,$length);
   }
 
