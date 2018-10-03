@@ -277,20 +277,20 @@ class Reference extends BaseModel
       $lastName= substr( trim($parts[0]),0, 20);
       $lastNames[] = str_replace(" ", "-", $lastName);
     }
+    if(count($lastNames)>2){
+      $lastNames = [$lastNames[0],"et-al"];
+    }
     $citekey = implode("+", $lastNames);
-
     $citekey .= "-" . $this->year;
-
-    $titlewords = explode(" ", $this->title);
-    while (count($titlewords) and strlen($titlewords[0]) < 4) {
-      array_shift($titlewords);
+    $titlewords = $t = explode(" ", $this->title);
+    while (count($t) and strlen($t[0]) < 4) {
+      array_shift($t);
     }
-    if (count($titlewords)) {
-      $citekey .= "-" . $titlewords[0];
-    }
+    $citekey .= "-" . (count($t)?$t[0]:$titlewords[0]);
     $citekey= preg_replace("/[^[:alnum:][:space:]\-\+]/u", '', $citekey);
     $citekey= str_replace(" ","_",$citekey);
-    return $citekey;
+    $length = 50; // @todo get from column schema
+    return substr($citekey,0,$length);
   }
 
   /**
