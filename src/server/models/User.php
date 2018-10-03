@@ -251,7 +251,6 @@ class User extends BaseModel implements IdentityInterface
     return $this
       ->hasMany( Role::class, ['id' => 'RoleId'] )
       ->via('userRoles', function(ActiveQuery $query){
-        Yii::debug($query->createCommand()->getRawSql());
         return $query->andWhere(['GroupId' => $this->groupId]);
       });
   }
