@@ -20,8 +20,10 @@
 
 namespace app\controllers;
 
+use app\models\Role;
 use app\models\Schema;
 use app\models\User;
+use app\models\User_Role;
 use InvalidArgumentException;
 use lib\dialog\{
   Alert, Confirm, Error, Form, Progress, Prompt
@@ -183,7 +185,7 @@ class AccessConfigController extends AppController
       }
       $extraColumns = ['GroupId' => $depModel->id];
     } else {
-      $depModelArray = null;
+      $depModel = null;
       $linkedModelInfo = explode("=", $elementParts[0]);
     }
     $model = $this->getModelInstance($type, $namedId);
@@ -206,9 +208,15 @@ class AccessConfigController extends AppController
         throw $e;
       }
     } else {
-      // hack to work around the fact that unlink doesn't have extraColumns
-      if( $model instanceof User ) {
-        $model->groupId = $extraColumns['GroupId'] ?? null;
+      // work around the fact that unlink doesn't have extraColumns
+      if( $model instanceof User && $linkedModel instanceof Role) {
+        $where = [
+          'UserId'  => $model->id,
+          'RoleId'  => $linkedModel->id,
+          'GroupId' => $depModel ? $depModel->id : null
+        ];
+        User_Role::deleteAll($where);
+        return;
       }
       $model->unlink($linkedModelRelation, $linkedModel, true);
     }
