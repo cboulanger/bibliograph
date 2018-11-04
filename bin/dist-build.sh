@@ -50,7 +50,7 @@ if [[ $BUILD_TARGET == *"source"* ]]; then
 else 
   composer install --no-dev
 fi
-if ! [[ -d ./vendor ]]; then
+if ! [ -d ./vendor ] || ! [ -f ./vendor/autoload.php ]; then
  echo "composer install failed!"
  exit 1
 fi

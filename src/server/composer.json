@@ -3,7 +3,7 @@
         "yiisoft/yii2": "dev-master",
         "cranetm/yii2-json-rpc-2.0": "dev-cboulanger-empty-request-object",
         "toriphes/yii2-console-runner": "*",
-        "fourteenmeister/dsn": "@dev",
+        "fourteenmeister/dsn": "dev-master",
         "odannyc/yii2-sse": "^0.1.0",
         "flow/jsonpath": "^0.3.4",
         "danielstjules/stringy": "^3.1",
@@ -49,6 +49,10 @@
         {
           "type": "git",
           "url": "https://github.com/cboulanger/worldcat-linkeddata-php.git"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/cboulanger/dsn.git"
         },
         {
             "type": "git",
