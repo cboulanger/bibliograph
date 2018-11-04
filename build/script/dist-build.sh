@@ -51,7 +51,7 @@ if [[ $BUILD_TARGET == *"source"* ]]; then
 else 
   composer install --no-dev  #&> /dev/null
 fi
-if [[ -d ./vendor ]]; then
+if ! [ -d ./vendor ] || ! [ -f ./vendor/autoload.php ]; then
  echo "composer install failed!"
  exit 1
 fi
@@ -66,4 +66,4 @@ cd $DIST_DIR
 zip -q -r bibliograph-$VERSION.zip *
 
 echo "Done."
-
+exit 0
