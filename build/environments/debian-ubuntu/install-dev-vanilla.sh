@@ -1,7 +1,10 @@
+#!/usr/bin/env bash
+
 # Bibliograph - Online Bibliographic Data Manager
-# Build script to set up a development environment on Debian/Ubuntu with PHP 7.0
+# Build script to set up a development environment on a vanilla Debian/Ubuntu
 
 set -o errexit # Exit on error
+PHPVERSION=7.0
 
 # Colorize output, see https://linuxtidbits.wordpress.com/2008/08/11/output-color-on-bash-scripts/
 txtbld=$(tput bold)             # Bold
@@ -24,13 +27,8 @@ apt-get update && apt-get install -y \
   build-essential
 
 # Apache / PHP
-apt-get install -y \
-  apache2 mysql-server \
-  php7.0 php7.0-dev php-pear \
-  php7.0-cli php7.0-ldap php7.0-curl php7.0-gd \
-  php7.0-intl php7.0-json php7.0-mbstring \
-  php7.0-mcrypt php7.0-mysql php7.0-opcache \
-  php7.0-readline php7.0-xml php7.0-xsl php7.0-zip
+apt-get install -y  apache2 mysql-server php7.0 php-pear
+apt-get install -y php$PHPVERSION-{dev,ldap,curl,gd,intl,mbstring,mcrypt,xml,xsl,zip}
 
 section "Installing bibliographic tools..."
 sudo apt-get install -y yaz libyaz4-dev bibutils
