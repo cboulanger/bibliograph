@@ -6,7 +6,7 @@
 
 ### Priority: high
 - [x] FEAT: Re-implement Backup plugin
-- [ ] BUG: Removing a role in "grobal group" removes it from all groups. see \app\models\User, line 240
+- [x] BUG: Removing a role in "grobal group" removes it from all groups. see \app\models\User, line 240
 - [ ] FEAT: User::getAllPermissions returns always the highest available set of permissions, regardless of the permissions of the group the current datasource belongs to. Requires rewriting of  `$this->requirePermission` to pass the datasource / datasource name
 - [ ] BUG: Test if translations work (it doesn't in unit test)
 
@@ -16,8 +16,8 @@
 - [ ] FEAT: Cache export formats for HTML view, make configurable 
 - [ ] FEAT: Disallow drop of references on folders in which they are already contained.
 - [ ] FEAT: Reimplement Search Help 
-- [ ] FEAT: Re-implement Backup
-- [ ] FEAT: Reimplement "New User" in Access Control Tool and System dialogs
+- [x] FEAT: Re-implement Backup
+- [x] FEAT: Reimplement "New User" in Access Control Tool and System dialogs
 - [ ] FEAT: Reimplement account management via email
 - [ ] FEAT: "Orphaned" folder should contain references that do not have a parent
 - [ ] FEAT: Reimplement Search Help window
@@ -99,8 +99,10 @@
 - [ ] Move general traits into lib/traits
 - [ ] Module::$version conflicts with Module::getVersion -> overrride Module::defaultVersion()
 - [ ] Remove datasource_role link
+- [ ] Remove unneccessary composer packages
+- [ ] `npm audit fix`
 
-### Compiler errors
+### Comnopiler errors
 
 qcl.access.MPermissions: [275,51] Unresolved use of symbol permission.update
 qcl.access.MPermissions: [285,14] Unresolved use of symbol permission.addCondition
