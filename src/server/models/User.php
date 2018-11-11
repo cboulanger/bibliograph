@@ -230,15 +230,16 @@ class User extends BaseModel implements IdentityInterface
   public $groupId = null;
 
   /**
-   * Helper method - do not use since the result does not make sense as it is not
-   * filtered by the GroupId column
+   * Returns User_Role records
+   * @todo this needs to be looked at since this method AND the getRoles() method filters by group id
    * @return ActiveQuery
    */         
   public function getUserRoles()
   {
-    $link = ['UserId' => 'id'];
-    // FIXME: This removes all identical roles in all groups.
-    if( $this->groupId) $link['GroupId'] = "groupId";
+    $link = [
+      'UserId'  => 'id',
+      'GroupId' => 'groupId'
+    ];
     return $this->hasMany(User_Role::class, $link );
   } 
 

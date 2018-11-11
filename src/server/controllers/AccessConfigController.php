@@ -793,15 +793,18 @@ class AccessConfigController extends AppController
    * Delete a datasource
    *
    * @param bool|null $doDeleteModelData
-   * @param string $namedId
+   * @param string|null $namedId
    * @return string Diagnostic message
    * @throws UserErrorException
    * @throws \JsonRpc2\Exception
    */
-  public function actionDeleteDatasource(bool $doDeleteModelData=null, string $namedId)
+  public function actionDeleteDatasource(bool $doDeleteModelData=null, string $namedId=null)
   {
     if ( $doDeleteModelData === null ) {
       return "ABORTED";
+    }
+    if (! $namedId or ! is_string($namedId)) {
+      throw new UserErrorException("Invalid datasource id");
     }
     $this->requirePermission("access.manage");
 
