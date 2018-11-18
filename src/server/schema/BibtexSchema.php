@@ -188,7 +188,6 @@ class BibtexSchema extends \app\schema\AbstractReferenceSchema
       'journal',
       'volume',
       'number',
-      'month',
       'date',
       'pages',
       'issn',
