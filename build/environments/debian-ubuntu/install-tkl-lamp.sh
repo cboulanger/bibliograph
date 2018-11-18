@@ -28,13 +28,13 @@ section "Installing bibliographic tools..."
 apt-get install -y yaz libyaz4-dev bibutils
 pear channel-update pear.php.net && yes $'\n' | pecl install yaz && \
   pear install Structures_LinkedList-0.2.2 && pear install File_MARC
-echo "extension=yaz.so" >> /etc/php/$PHPVERSION/mods-available/yaz.ini
-ln -s /etc/php/7.0/mods-available/yaz.ini /etc/php/7.0/cli/conf.d/
-ln -s /etc/php/7.0/mods-available/yaz.ini /etc/php/7.0/apache2/conf.d/
+echo "extension=yaz.so" > /etc/php/$PHPVERSION/mods-available/yaz.ini
+[ -f /etc/php/7.0/cli/conf.d/yaz.ini ] || ln -s /etc/php/7.0/mods-available/yaz.ini /etc/php/7.0/cli/conf.d/
+[ -f /etc/php/7.0/cli/conf.d/yaz.ini ] || ln -s /etc/php/7.0/mods-available/yaz.ini /etc/php/7.0/apache2/conf.d/
 service apache2 restart
 if php -i | grep yaz --quiet && echo '<?php exit(function_exists("yaz_connect")?0:1);' | php ; then echo "YAZ is installed"; else echo "YAZ installation failed"; exit 1; fi;
 
-section "Starting MySql Server"
+section "Configuring MySql Server"
 service mysql start
 mysql -e 'CREATE DATABASE IF NOT EXISTS bibliograph;'
 mysql -e "DROP USER IF EXISTS 'bibliograph'@'localhost';"
@@ -46,8 +46,3 @@ echo "Please review and adapt the 'src/server/config/app.conf.toml' config file:
 echo "- Enter the email address of the administrator in the [email] section (The application"
 echo "  won't start otherwise) "
 echo "- If you use an LDAP server for authentication, adapt the settings in the [ldap] section."
-echo
-echo "You can now execute:"
-echo "- 'npm test': run unit, functional and api tests"
-echo "- 'npm run test-dev': run unit, functional and api tests in development mode"
-echo "- 'npm run server source': start a development server on localhost:9090"
