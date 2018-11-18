@@ -3,12 +3,8 @@
 ## v3.0.0-beta
 
 ### Priority: urgent
-
-### Priority: high
-- [x] FEAT: Re-implement Backup plugin
-- [x] BUG: Removing a role in "grobal group" removes it from all groups. see \app\models\User, line 240
 - [ ] FEAT: User::getAllPermissions returns always the highest available set of permissions, regardless of the permissions of the group the current datasource belongs to. Requires rewriting of  `$this->requirePermission` to pass the datasource / datasource name
-- [ ] BUG: Test if translations work (it doesn't in unit test)
+- [x] BUG: Test if translations work (it doesn't in unit test)
 
 ### Priority: normal
 - [ ] BUG: use DatasourceTrait::datasource() consistently instead of Dataource::getInstanceFor(), since it provides access control!
@@ -16,22 +12,18 @@
 - [ ] FEAT: Cache export formats for HTML view, make configurable 
 - [ ] FEAT: Disallow drop of references on folders in which they are already contained.
 - [ ] FEAT: Reimplement Search Help 
-- [x] FEAT: Re-implement Backup
-- [x] FEAT: Reimplement "New User" in Access Control Tool and System dialogs
 - [ ] FEAT: Reimplement account management via email
-- [ ] FEAT: "Orphaned" folder should contain references that do not have a parent
 - [ ] FEAT: Reimplement Search Help window
-- [ ] FEAT: Update CQL operators to conform to the specs (http://www.loc.gov/standards/sru/cql/contextSets/theCqlContextSet.html)
 - [ ] FEAT: Config key change should be broadcasted
 - [ ] FEAT: Implement setup Wizard
 - [ ] FEAT: Allow migrations via permission, not prod/dev-mode
 - [ ] FEAT: Z39.50 Plugin: Preference option to configure timeout 
 - [ ] FEAT: Reimplement "In which folders..."
 - [ ] FEAT: add GUI for 'app.access.userdatabase.defaultrole' config
+- [ ] FEAT: "Orphaned" folder should contain references that do not have a parent
 
 ### Priority: low
 - [ ] BUG: Remove non-printable chars from Z39.50 import, see also https://github.com/cboulanger/bibliograph/issues/189
-- [ ] FEAT: Add "serverOnly" column to data_Config (true/false/null) and remove from config data sent to client
 - [ ] FEAT: Backend: Streamline API to get Datasource & typed model
 - [ ] FEAT: Frontend: Rename widget ids, replace with native qooxdoo ids, see https://github.com/qooxdoo/qooxdoo/issues/9422
 - [ ] FEAT: Change app state separator and assignment chars
@@ -42,8 +34,6 @@
 - [ ] FEAT: Reimplememt help window
 - [ ] FEAT: validate email configuration 
 - [ ] FEAT: Change virtual folder icon
-- [ ] FEAT: Rewrite Yii2 configuration using M1/Var, maybe convert config to YAML: https://packagist.org/packages/sergeymakinen/yii2-config ?
-- [ ] FEAT: Ctrl+A to select all (visible?) references.
 - [ ] FEAT: Change URL params separators to & and = 
 - [ ] FEAT: Broadcast "reference.changeData" message (with datasource info) to update connected clients' tableView
 - [ ] FEAT: Click on "Citation key" refreshes it
@@ -55,6 +45,7 @@
 - [ ] FEAT: Reimplement support for the admindb, userdb and tmpdb settings in app.conf.toml -> use DSNs instead of single settings or TOML nested arrays.
 
 ### Code cleanup / refactoring
+- [ ] rename "build" dir to "install" 
 - [ ] run npm audit fix on all npm dependencies, change where possible, or change in global package.json
 - [ ] Move dispatchClientMessage/broadcast to Yii::$app->message component
 - [ ] Move scripts in "bin" to "build/script" and test scripts to "test/script"; adapt npm run commands
@@ -142,12 +133,17 @@ qcl.ui.MChildWidget: [44,36] Unresolved use of symbol id.charAt
 - [ ] FEAT: Re-implement message broadcast
 
 ### Priority: normal
+- [ ] FEAT: Update CQL operators to conform to the specs (http://www.loc.gov/standards/sru/cql/contextSets/theCqlContextSet.html)
 - [ ] FEAT: Improve keyword import from webservices
 - [ ] FEAT: Reimplement HTML editor integration for notes
 - [ ] FEAT: Implement drag&drop folder positioning
 - [ ] FEAT: Clean, future-proof OO-Rewrite of the Rendering the tree in SimpleDataModel format
 - [ ] FEAT: integrate https://clipboardjs.com/
 - [ ] FEAT: rewrite build scripts with node, using https://codewithhugo.com/how-to-make-beautiful-simple-cli-apps-with-node/
+- [ ] FEAT: Add "serverOnly" column to data_Config (true/false/null) and remove from config data sent to client
+
 
 ### Priority: low
 - [ ] FEAT: Enable print item view: bibliograph.ui.main.ItemView#print()
+- [ ] FEAT: Rewrite Yii2 configuration using M1/Var, maybe convert config to YAML: https://packagist.org/packages/sergeymakinen/yii2-config ?
+- [ ] FEAT: Ctrl+A to select all (visible?) references.
