@@ -63,6 +63,8 @@ echo $VERSION > $DIST_DIR/version.txt
 
 echo " >>> Creating ZIP file ..."
 cd $DIST_DIR
+# remove git folders
+( find . -type d -name ".git" ) | xargs rm -rf
 zip -q -r bibliograph-$VERSION.zip *
 
 echo "Done."

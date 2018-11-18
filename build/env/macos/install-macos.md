@@ -1,8 +1,9 @@
-# Installing the development environment on MacOS with Homebrew
+# Installing the dependencies on MacOS
 
-## PHP 
+## PHP (7.1) via Homebrew
 
-Homebrew completely changed the way to install PHP, PECL and PEAR in April 2018. Here's how it currently seems to work (June 2018), with no guarantees that it will work for you. You might want to consider to use https://php-osx.liip.ch/ instead.
+Homebrew completely changed the way to install PHP, PECL and PEAR in April 2018. Here's how it currently seems to work
+(June 2018), with no guarantees that it will work for you. You might want to consider to use https://php-osx.liip.ch/ instead.
 
 https://medium.com/@jjdanek/installing-php-extensions-on-mac-after-homebrew-acfddd6be602
 https://rinkovec.com/brew-missing-php-extensions/
@@ -36,17 +37,8 @@ cp /usr/local/Cellar/php@7.1/7.1.18_1/pecl/20160303/yaz.so /usr/local/Cellar/php
 ```
 Check with `php -i | grep yaz` if yaz has been correctly installed.
 
-## Linters
-- `brew install shellcheck`
-- Travis (see below)
-
 ## Node
 - `brew install nvm`
 - `nvm install 8` 
 
-## Travis
-The [travis command line client](https://github.com/travis-ci/travis.rb/blob/master/README.md) is used to
-lint the .travis.yaml file. `gem install travis` should work on any recent Mac OS version.
 
-## Install git hooks
-`echo "export GIT_HOOKS_DIR=./build/hooks" >> ~/.bash_profile`
