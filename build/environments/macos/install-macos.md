@@ -1,6 +1,6 @@
 # Installing the dependencies on MacOS
 
-## PHP via Homebrew
+## PHP (7.1) via Homebrew
 
 Homebrew completely changed the way to install PHP, PECL and PEAR in April 2018. Here's how it currently seems to work
 (June 2018), with no guarantees that it will work for you. You might want to consider to use https://php-osx.liip.ch/ instead.
