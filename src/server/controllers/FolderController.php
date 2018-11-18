@@ -216,19 +216,23 @@ class FolderController extends AppController //implements ITreeController
           $separatedValues[]=$value;
         }
       }
-      $separatedValues = array_unique($separatedValues);
-      sort($separatedValues);
-      foreach( $separatedValues as $value){
+      $separatedValues = array_map(function($v){ return trim($v);}, array_unique($separatedValues));
+      $collator = new \Collator(str_replace("-","_",Yii::$app->language));
+      $collator->asort ($separatedValues);
+      foreach ($separatedValues as $value){
         $value = trim($value);
-        if(!$value) continue;
+        if (!$value) continue;
         $this->virtualFolderId-=1;
+        $referenceCount = (int) $referenceClass::find()->where(['like', $field, $value])->count();
         $node = $this->createVirtualFolder([
-          'type'        => 'virtual',
-          'id'          => $this->virtualFolderId,
-          'parentId'    => $data['id'],
-          'query'       => $field . ' contains "' . $value . '"',
-          'icon'        => "icon/16/apps/utilities-graphics-viewer.png",
-          'label'       => $value,
+          'type'      => 'virtual',
+          'id'        => $this->virtualFolderId,
+          'parentId'  => $data['id'],
+          'query'     => $field . ' contains "' . $value . '"',
+          'icon'      => "icon/16/apps/utilities-graphics-viewer.png",
+          'label'     => $value,
+          'referenceCount'  => $referenceCount,
+          'columnData'      => $referenceCount,
         ]);
         $orderedNodeData[] = $node;
       }
@@ -268,6 +272,7 @@ class FolderController extends AppController //implements ITreeController
       'icon'            => $data['icon'],
       'iconSelected'    => $data['icon'],
       'bHideOpenClose'  => true,
+      // todo: this should take its value from 'columnContent' or similar
       'columnData'      => [ null, isset($data['columnData']) ? $data['columnData']:"" ],
       'data'            => [
         'type'            => isset($data['type']) ? $data['type']:"virtual",

@@ -500,7 +500,7 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
   public function getChildCount($update = false)
   {
     if ($update or $this->childCount === null) {
-      $this->childCount = $this->getChildrenQuery()->count();
+      $this->childCount = (int) $this->getChildrenQuery()->count();
       $this->save();
     }
     return $this->childCount;

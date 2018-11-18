@@ -88,7 +88,7 @@ trait FolderDataTrait
     $parentId       = $folder->parentId;
 
     $childCount     = $folder->getChildCount();
-    $referenceCount = $folder->getReferences()->count();
+    $referenceCount = (int) $folder->getReferences()->count();
     $markedDeleted  = $folder->markedDeleted;
     $public         = $folder->public;
     $opened         = $folder->opened;
