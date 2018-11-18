@@ -580,7 +580,7 @@ class User extends BaseModel implements IdentityInterface
     }
     // add the datasources that are available to the user via his/her global roles
     /** @var Role $role */
-    foreach( $this->getRoles()->all() as $role){
+    foreach( $this->getGroupRoles(null)->all() as $role){
       /** @var Datasource $datasource */
       foreach( $role->getDatasources()->all() as $datasource){
         $datasourceNames[] = $datasource->namedId;

@@ -205,7 +205,7 @@ class ServerProgress extends Dialog implements \lib\interfaces\Progress
     echo "\r\n";
     flush();
     ob_flush();
-    //exit();
+    exit();
   }
 
   /**
