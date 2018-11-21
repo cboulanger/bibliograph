@@ -923,11 +923,11 @@ class AccessConfigController extends AppController
    * @throws UserErrorException
    * @throws \yii\base\Exception
    */
-  public function actionAddUser($data)
+  public function actionAddUser($data=null)
   {
     $this->requirePermission("access.manage");
 
-    if ($data === null) $this->cancelledActionResult();
+    if (!$data) return $this->cancelledActionResult();
 
     if (empty($data->namedId)) {
       throw new UserErrorException(Yii::t('app', "Missing login name"));
@@ -1085,13 +1085,13 @@ class AccessConfigController extends AppController
   /**
    * Action to add a new datasource from client-supplied data
    *
-   * @param object $data
+   * @param $data
    * @return string
    * @throws \Exception
    * @throws \JsonRpc2\Exception
    * @throws \yii\db\Exception
    */
-  public function actionAddDatasource($data)
+  public function actionAddDatasource($data=null)
   {
     $this->requirePermission("access.manage");
 
@@ -1208,7 +1208,7 @@ class AccessConfigController extends AppController
    * @throws \JsonRpc2\Exception
    * @throws InvalidArgumentException
    */
-  public function actionImportLdapUser($data){
+  public function actionImportLdapUser($data=null){
     $this->requirePermission("access.manage");
     if (!$data) {
       return $this->abortedActionResult();
