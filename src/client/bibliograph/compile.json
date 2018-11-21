@@ -1,6 +1,6 @@
 {
   "environment": {
-    "app.version": "3.0.0-beta.52",
+    "app.version": "3.0.0-beta.53",
     "qx.icontheme": "Tango",
     "qx.debug": true
   },
