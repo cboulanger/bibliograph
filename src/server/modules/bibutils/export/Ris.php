@@ -27,7 +27,7 @@ use lib\exceptions\UserErrorException;
 use lib\util\Executable;
 
 /**
- * Exports RIS
+ * Exports RIS-formatted data
  * @see https://en.wikipedia.org/wiki/RIS_(file_format)
  */
 class Ris extends AbstractExporter

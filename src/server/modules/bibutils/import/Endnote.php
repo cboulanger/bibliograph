@@ -19,18 +19,21 @@
 
 ************************************************************************ */
 
-namespace app\modules\bibutils\export;
-use app\modules\converters\export\AbstractExporter;
-use app\modules\converters\export\BibliographBibtex;
-use app\models\Reference;
+namespace app\modules\bibutils\import;
+
+use app\modules\bibutils\Module;
+use app\modules\converters\import\AbstractParser;
+use app\modules\converters\import\BibtexUtf8;
 use lib\exceptions\UserErrorException;
 use lib\util\Executable;
+use lib\bibtex\BibtexParser;
+use Yii;
 
 /**
- * Exports in a format that can be imported by Endnote
+ * Imports from Endnote tagged format
  * @see https://en.wikipedia.org/wiki/EndNote#Tags_and_fields
  */
-class Endnote extends AbstractExporter
+class Endnote extends AbstractParser
 {
 
   /**
@@ -41,27 +44,17 @@ class Endnote extends AbstractExporter
   /**
    * @inheritdoc
    */
-  public $preferBatch = true;
+  public $name = "Endnote tagged format (UTF-8)";
 
   /**
    * @inheritdoc
    */
-  public $name = "Endnote";
+  public $type = "bibutils";
 
   /**
    * @inheritdoc
    */
-  public $type = "export";
-
-  /**
-   * @inheritdoc
-   */
-  public $mimeType = "application/x-endnote";
-
-  /**
-   * @inheritdoc
-   */
-  public $extension = "enw";
+  public $extension = "enw,end";
 
   /**
    * @inheritdoc
@@ -71,24 +64,16 @@ class Endnote extends AbstractExporter
   /**
    * @inheritdoc
    */
-  public function exportOne( Reference $reference )
+  public function parse( string $data ) : array
   {
-    return $this->export([$reference]);
-  }
-
-  /**
-   * @inheritdoc
-   */
-  public function export(array $references)
-  {
-    $bibliographBibtex = (new BibliographBibtex())->export($references);
     try {
-      $mods = (new Executable("bib2xml", BIBUTILS_PATH))->call("-u", $bibliographBibtex);
+      $mods = (new Executable("end2xml", BIBUTILS_PATH))->call("-u", $data);
       //Yii::debug($mods, Module::CATEGORY, __METHOD__);
-      $end = (new Executable("xml2end", BIBUTILS_PATH ))->call("", $mods);
+      $data = (new Executable("xml2bib", BIBUTILS_PATH ))->call("-sd -nl", $mods);
     } catch (\Exception $e) {
       throw new UserErrorException($e->getMessage());
     }
-    return $end;
+    $references = (new BibtexUtf8())->parse($data);
+    return $references;
   }
 }

@@ -30,20 +30,21 @@ use lib\bibtex\BibtexParser;
 use Yii;
 
 /**
- * Parser for UTF-8 encoded BibTeX files
+ * Imports RIS-formatted data
+ * @see https://en.wikipedia.org/wiki/RIS_(file_format)
  */
-class Biblatex extends AbstractParser
+class Ris extends AbstractParser
 {
 
   /**
    * @inheritdoc
    */
-  public $id = "biblatex";
+  public $id = "ris";
 
   /**
    * @inheritdoc
    */
-  public $name = "Biblatex/Biber (UTF-8)";
+  public $name = "RIS (UTF-8)";
 
   /**
    * @inheritdoc
@@ -53,12 +54,12 @@ class Biblatex extends AbstractParser
   /**
    * @inheritdoc
    */
-  public $extension = "bbl,bib";
+  public $extension = "ris";
 
   /**
    * @inheritdoc
    */
-  public $description = "Biblatex/Biber (UTF-8), see http://texdoc.net/texmf-dist/doc/latex/biblatex/biblatex.pdf";
+  public $description = "Bibliographic data exchange format by Research Information Systems";
 
   /**
    * @inheritdoc
@@ -66,14 +67,13 @@ class Biblatex extends AbstractParser
   public function parse( string $data ) : array
   {
     try {
-      $mods = (new Executable("biblatex2xml", BIBUTILS_PATH))->call("-u", $data);
+      $mods = (new Executable("ris2xml", BIBUTILS_PATH))->call("-u", $data);
       //Yii::debug($mods, Module::CATEGORY, __METHOD__);
       $data = (new Executable("xml2bib", BIBUTILS_PATH ))->call("-sd -nl", $mods);
+      Yii::debug($data, Module::CATEGORY, __METHOD__);
     } catch (\Exception $e) {
       throw new UserErrorException($e->getMessage());
     }
-    $data = str_replace("\nand ", "; ", $data);
-    //Yii::debug($bibtex, Module::CATEGORY, __METHOD__);
     $references = (new BibtexUtf8())->parse($data);
     return $references;
   }

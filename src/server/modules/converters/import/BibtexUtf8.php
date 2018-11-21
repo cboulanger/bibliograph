@@ -61,10 +61,10 @@ class BibtexUtf8 extends AbstractParser
    * @inheritdoc
    * The parser (inofficially) supports parts of the BibLaTeX schema.
    */
-  public function parse( string $bibtex ) : array
+  public function parse( string $data ) : array
   {
     $parser = new BibtexParser();
-    $records = $parser->parse($bibtex);
+    $records = $parser->parse($data);
     if (count($records) === 0) {
       Yii::debug("Data did not contain any parseable records.", __METHOD__);
       return [];
