@@ -446,10 +446,16 @@ msgstr ""
 
 #: bibliograph/ui/window/ImportWindow.js:136
 #: bibliograph/ui/window/ImportWindow.js:139
+#: bibliograph/ui/window/ImportWindow.js:137
+#: bibliograph/ui/window/ImportWindow.js:140
+#: bibliograph/ui/window/ImportWindow.js:138
+#: bibliograph/ui/window/ImportWindow.js:141
 msgid "3. Upload file"
 msgstr ""
 
 #: bibliograph/ui/window/ImportWindow.js:195
+#: bibliograph/ui/window/ImportWindow.js:196
+#: bibliograph/ui/window/ImportWindow.js:197
 msgid "Import all records"
 msgstr ""
 
@@ -459,6 +465,8 @@ msgstr ""
 #: bibliograph/plugins/webservices/ImportWindow.js:274
 #: bibliograph/plugins/z3950/ImportWindow.js:220
 #: bibliograph/ui/window/ImportWindow.js:203
+#: bibliograph/ui/window/ImportWindow.js:204
+#: bibliograph/ui/window/ImportWindow.js:205
 #: bibliograph/plugins/webservices/View.js:267
 msgid "Import selected records"
 msgstr ""
@@ -469,6 +477,8 @@ msgstr ""
 #: bibliograph/plugins/webservices/ImportWindow.js:281
 #: bibliograph/plugins/z3950/ImportWindow.js:227
 #: bibliograph/ui/window/ImportWindow.js:210
+#: bibliograph/ui/window/ImportWindow.js:211
+#: bibliograph/ui/window/ImportWindow.js:212
 #: bibliograph/plugins/webservices/View.js:274
 msgid "Close"
 msgstr ""
@@ -569,14 +579,20 @@ msgid "Folders"
 msgstr ""
 
 #: bibliograph/ui/window/ImportWindow.js:235
+#: bibliograph/ui/window/ImportWindow.js:236
+#: bibliograph/ui/window/ImportWindow.js:237
 msgid "1. Choose file"
 msgstr ""
 
 #: bibliograph/ui/window/ImportWindow.js:257
+#: bibliograph/ui/window/ImportWindow.js:258
+#: bibliograph/ui/window/ImportWindow.js:259
 msgid "Uploading file..."
 msgstr ""
 
 #: bibliograph/ui/window/ImportWindow.js:280
+#: bibliograph/ui/window/ImportWindow.js:281
+#: bibliograph/ui/window/ImportWindow.js:282
 msgid "Processing references..."
 msgstr ""
 
@@ -586,6 +602,9 @@ msgstr ""
 #: bibliograph/plugins/webservices/ImportWindow.js:333
 #: bibliograph/plugins/z3950/ImportWindow.js:264
 #: bibliograph/ui/window/ImportWindow.js:307
+#: bibliograph/ui/window/ImportWindow.js:308
+#: bibliograph/ui/window/ImportWindow.js:309
+#: bibliograph/ui/window/ImportWindow.js:310
 #: bibliograph/plugins/webservices/View.js:326
 msgid "You have to select one or more reference to import."
 msgstr ""
@@ -596,6 +615,9 @@ msgstr ""
 #: bibliograph/plugins/webservices/ImportWindow.js:340
 #: bibliograph/plugins/z3950/ImportWindow.js:271
 #: bibliograph/ui/window/ImportWindow.js:314
+#: bibliograph/ui/window/ImportWindow.js:315
+#: bibliograph/ui/window/ImportWindow.js:316
+#: bibliograph/ui/window/ImportWindow.js:317
 #: bibliograph/plugins/webservices/View.js:333
 msgid "Please select a folder first."
 msgstr ""
@@ -606,6 +628,9 @@ msgstr ""
 #: bibliograph/plugins/webservices/ImportWindow.js:347
 #: bibliograph/plugins/z3950/ImportWindow.js:278
 #: bibliograph/ui/window/ImportWindow.js:321
+#: bibliograph/ui/window/ImportWindow.js:322
+#: bibliograph/ui/window/ImportWindow.js:323
+#: bibliograph/ui/window/ImportWindow.js:324
 #: bibliograph/plugins/webservices/View.js:340
 msgid "Cannot determine selected folder. Please reload the folders."
 msgstr ""
@@ -616,6 +641,9 @@ msgstr ""
 #: bibliograph/plugins/webservices/ImportWindow.js:351
 #: bibliograph/plugins/z3950/ImportWindow.js:282
 #: bibliograph/ui/window/ImportWindow.js:325
+#: bibliograph/ui/window/ImportWindow.js:326
+#: bibliograph/ui/window/ImportWindow.js:327
+#: bibliograph/ui/window/ImportWindow.js:328
 #: bibliograph/plugins/webservices/View.js:344
 msgid "Invalid target folder. You can only import into normal folders."
 msgstr ""
@@ -626,6 +654,9 @@ msgstr ""
 #: bibliograph/plugins/webservices/ImportWindow.js:358
 #: bibliograph/plugins/z3950/ImportWindow.js:289
 #: bibliograph/ui/window/ImportWindow.js:331
+#: bibliograph/ui/window/ImportWindow.js:332
+#: bibliograph/ui/window/ImportWindow.js:333
+#: bibliograph/ui/window/ImportWindow.js:334
 #: bibliograph/plugins/webservices/View.js:351
 msgid "Importing references..."
 msgstr ""
@@ -1175,14 +1206,20 @@ msgid "Filter by name here..."
 msgstr ""
 
 #: bibliograph/ui/window/ImportWindow.js:148
+#: bibliograph/ui/window/ImportWindow.js:149
+#: bibliograph/ui/window/ImportWindow.js:150
 msgid "Select the file with data to import ..."
 msgstr ""
 
 #: bibliograph/ui/window/ImportWindow.js:247
+#: bibliograph/ui/window/ImportWindow.js:248
+#: bibliograph/ui/window/ImportWindow.js:249
 msgid "Choose import format of '%1'"
 msgstr ""
 
 #: bibliograph/ui/window/ImportWindow.js:250
+#: bibliograph/ui/window/ImportWindow.js:251
+#: bibliograph/ui/window/ImportWindow.js:252
 msgid "Please select the file with data to import..."
 msgstr ""
 

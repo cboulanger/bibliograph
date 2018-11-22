@@ -126,6 +126,7 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
       importFilterSelectBox.setWidth(200);
       importFilterSelectBox.setMaxHeight(25);
       toolBar.add(importFilterSelectBox,{ flex : 1 });
+      this.importFilterSelectBox=importFilterSelectBox;
       let selectboxController1 = new qx.data.controller.List(null, importFilterSelectBox, "label");
       importFilterStore.bind("model", selectboxController1, "model");
       importFilterSelectBox.bind("selection", this, "filter", {
@@ -282,6 +283,7 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
       app.getRpcClient("import")
         .send( "parse-upload", [this.getFilter()])
         .then( data => {
+          this.importFilterSelectBox.resetSelection();
           if( data && data.datasource && data.folderId){
             this.listView.setDatasource(data.datasource);
             this.listView.setFolderId(data.folderId);

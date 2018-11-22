@@ -91,6 +91,18 @@ class BibtexUtf8 extends AbstractParser
                 str_replace(' and ', '; ',
                   str_replace(  PHP_EOL .'and ', '; ',$value)))); // TODO use RegExpr
             break;
+          case "chapter":
+            unset($p[$key]);
+            $key = 'title';
+            $p[$key]=$value;
+            break;
+          case "series":
+            if ($item->getItemType()=="inbook"){
+              unset($p[$key]);
+              $key = 'booktitle';
+              $p[$key]=$value;
+            }
+            break;
           case "date":
             // BibLaTeX
             $year = date( "Y", strtotime($p[$key]));
@@ -114,11 +126,13 @@ class BibtexUtf8 extends AbstractParser
             // BibLaTeX
             unset($p[$key]);
             $key = "number";
+            $p[$key]=$value;
             break;
           case "booksubtitle":
             // BibLaTeX
             unset($p[$key]);
             $key = "subtitle";
+            $p[$key]=$value;
             break;
           case "shortjournal":
             // BibLaTeX
@@ -126,6 +140,7 @@ class BibtexUtf8 extends AbstractParser
             unset($p["shortjournal"]);
             if( isset($p['journal'])) continue;
             $key = "journal";
+            $p[$key]=$value;
             break;
         }
         // remove "opt" prefix
