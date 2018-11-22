@@ -24,16 +24,17 @@ echo 'export PATH="/usr/local/opt/php@7.1/sbin:$PATH"' >> ~/.bash_profile
 source ~/.bash_profile
 curl -O http://pear.php.net/go-pear.phar
 yes $'\n' | php -d detect_unicode=0 go-pear.phar
-pear_old channel-update pear.php.net
-pear_old config-set temp_dir /tmp
-pear_old config-set download_dir /tmp
-pear_old install Structures_LinkedList-0.2.2
-pear_old install File_MARC
+pear channel-update pear.php.net
+pear config-set temp_dir /tmp
+pear config-set download_dir /tmp
+pear install Structures_LinkedList-0.2.2
+pear install File_MARC
 pecl update-channels
 yes $'\n' | pecl install yaz
-# As of now (June 2018), you need to manually copy the built extension to the php extension dir
-# Find out with `php -i | grep extension_dir`. 
-cp /usr/local/Cellar/php@7.1/7.1.18_1/pecl/20160303/yaz.so /usr/local/Cellar/php@7.1/7.1.18_1/lib/php/20160303
+# As of now (November 2018), you need to manually copy the built extension (look for the line 
+# "Installing 'user/local/Cellar/.../yaz.so'" to the php extension dir which you can find out 
+# with `php -i | grep extension_dir`. 
+cp <install dir> <extension dir>
 ```
 Check with `php -i | grep yaz` if yaz has been correctly installed.
 

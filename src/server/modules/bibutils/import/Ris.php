@@ -69,8 +69,10 @@ class Ris extends AbstractParser
     try {
       $mods = (new Executable("ris2xml", BIBUTILS_PATH))->call("-u", $data);
       //Yii::debug($mods, Module::CATEGORY, __METHOD__);
-      $data = (new Executable("xml2bib", BIBUTILS_PATH ))->call("-sd -nl", $mods);
-      Yii::debug($data, Module::CATEGORY, __METHOD__);
+      $data = (new Executable("xml2bib", BIBUTILS_PATH ))->call("-sd -nl -nb", $mods);
+      //Yii::debug($data, Module::CATEGORY, __METHOD__);
+      // Temporary Utf-8 Fix
+      $data = $this->fixUtf8($data);
     } catch (\Exception $e) {
       throw new UserErrorException($e->getMessage());
     }

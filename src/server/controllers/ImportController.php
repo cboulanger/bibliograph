@@ -233,10 +233,10 @@ class ImportController extends AppController
       }
       try {
         $reference->save();
+        $reference->link("folders", $folder );
       } catch (Exception $e) {
-        Yii::warning($e->getMessage());
+        throw new UserErrorException($e->getMessage());
       }
-      $reference->link("folders", $folder );
     }
 
     // return information on containing folder
