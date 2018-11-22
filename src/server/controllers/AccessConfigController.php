@@ -413,7 +413,7 @@ class AccessConfigController extends AppController
           'children' => []
         ];
         $user->groupId = null;
-        $roles = $user->getRoles()->all();
+        $roles = $user->getGroupRoles(null)->all();
         foreach ($roles as $role) {
           $roleNode = [
             'icon' => $modelData['role']['icon'],
@@ -692,33 +692,35 @@ class AccessConfigController extends AppController
       }
     }
 
-    // parse form and save in model
-    try {
-      $parsed = Form::parseResultData($model, $data);
-      $model->setAttributes($parsed);
-      $model->save();
-    } catch (\Exception $e) {
-      // make user errors return to the edit method
-      $message = $e->getMessage();
-      $shelfId = $this->shelve($data, $type, $namedId);
-      Alert::create(
-        $message,
-        Yii::$app->controller->id, "edit", [$shelfId]
-      );
-      return "User error '$message', reopening editor form.";
-    }
-
-    // enforce setting of password
-    if ($model->hasAttribute("password") and !$model->password) {
-      $validationError = Yii::t('app', "You need to set a password.");
-    }
-
-    if ($passwordChanged) {
-      //  @todo reimplement if password has changed, inform user, unless the old password was a temporary password
-      if (strlen($oldData->password) > 7) {
-        //return $this->sendInformationEmail($model->data());
+    if (!$validationError){
+      // parse form and save in model
+      try {
+        $parsed = Form::parseResultData($model, $data);
+        $model->setAttributes($parsed);
+        $model->save();
+      } catch (\Exception $e) {
+        // make user errors return to the edit method
+        $message = $e->getMessage();
+        $shelfId = $this->shelve($data, $type, $namedId);
+        Alert::create(
+          $message,
+          Yii::$app->controller->id, "edit", [$shelfId]
+        );
+        return "User error '$message', reopening editor form.";
       }
-      Alert::create(Yii::t('app', "Your password has been changed."));
+
+      // enforce setting of password
+      if ($model->hasAttribute("password") and !$model->password) {
+        $validationError = Yii::t('app', "You need to set a password.");
+      }
+
+      if ($passwordChanged) {
+        //  @todo reimplement if password has changed, inform user, unless the old password was a temporary password
+        if (strlen($oldData->password) > 7) {
+          //return $this->sendInformationEmail($model->data());
+        }
+        Alert::create(Yii::t('app', "Your password has been changed."));
+      }
     }
 
     if ($validationError) {

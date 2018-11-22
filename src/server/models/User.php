@@ -245,6 +245,7 @@ class User extends BaseModel implements IdentityInterface
 
   /**
    * Returns the roles of the user, depending on the groupId property.
+   * Do not use directly unless you set the groupId property first.
    * @return ActiveQuery
    */
   public function getRoles()
@@ -399,10 +400,10 @@ class User extends BaseModel implements IdentityInterface
    */
   public function hasPermission($requestedPermission, $group = null)
   {
-    if( is_string($group) ){
+    if (is_string($group) ){
       $group = Group::findByNamedId($group);
       if( ! $group ) throw new InvalidArgumentException("Invalid group name '$group'");
-    } elseif ( ! is_null($group) ){
+    } elseif (!($group instanceof Group or is_null($group))) {
       throw new InvalidArgumentException("Second argument must be null, string or instanceof Group");
     }
     return $this->_hasPermission($requestedPermission, $group );
@@ -488,7 +489,7 @@ class User extends BaseModel implements IdentityInterface
   public function getGroupNames()
   {
     $result = $this->getGroups()->all();
-    if( is_null( $result ) ) return [];
+    if (!is_array($result)) return [];
     return array_map( function($o) {return $o->namedId;}, $result );
   }
 
@@ -520,18 +521,29 @@ class User extends BaseModel implements IdentityInterface
    *    group, which can also be specified with the given (numeric) id.
    *    If the application is configured to only use global roles, the
    *    group is ignored.
+   *    If no parameter is passed, return all permissions the user has in
+   *    all groups s/he belongs to.
    * @return array
    */
-  public function getAllPermissionNames($group=null)
+  public function getAllPermissionNames($group="all")
   {
     // global roles
-    $permissions= $this->getPermissionNames();
-    // group roles
-    if( $group and ! Yii::$app->config->getIniValue("global_roles_only") ){
-      $permissions=array_merge(
-        $permissions,
-        $this->getPermissionNames($group)
-      );
+    $permissions= $this->getPermissionNames(null);
+    if ( $group and ! Yii::$app->config->getIniValue("global_roles_only") ){
+      // group-specific roles
+      if ($group instanceof Group or is_int($group)){
+        $groups = [$group];
+      } elseif ($group==="all") {
+        $groups = $this->getGroups()->all();
+      } else {
+        throw new \InvalidArgumentException("Argument must be instanceof Group or integer");
+      }
+      foreach( $groups as $group){
+        $permissions = array_merge(
+          $permissions,
+          $this->getPermissionNames($group)
+        );
+      }
     }
     return array_values(array_unique($permissions));
   }
@@ -545,11 +557,12 @@ class User extends BaseModel implements IdentityInterface
    * @return string[]
    *    Array of permission names
    */
-  public function getPermissionNames( $group = null )
+  public function getPermissionNames( $group=null )
   {
     $permissions = [];
     /** @var Role[] $roles */
     $roles = $this->getGroupRoles($group)->all();
+    //$groupName = $group instanceof Group ? $group->name : ( is_int($group) ? Group::findOne($group)->name : "all groups");
     //Yii::info("{$this->namedId} has " . count( $roles). " roles in group {$groupName}");
     foreach( $roles as $role) {
       //Yii::info("{$this->namedId} has role {$role->namedId} in group {$groupName}");
@@ -591,6 +604,11 @@ class User extends BaseModel implements IdentityInterface
     /** @var Group $group */
     foreach( $groups as $group){
       $datasourceNames = array_merge( $datasourceNames, $group->getDatasourceNames());
+    }
+    // finally, add the datasources that are accessible to the anonymous role
+    /** @var Datasource $datasource */
+    foreach( Role::findByNamedId('anonymous')->getDatasources()->all() as $datasource){
+      $datasourceNames[] = $datasource->namedId;
     }
     $names = array_unique($datasourceNames);
     sort($names);

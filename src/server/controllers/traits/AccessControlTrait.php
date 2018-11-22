@@ -83,9 +83,10 @@ trait AccessControlTrait
   protected function getDatasourceUserGroups( User $user, Datasource $datasource){
     $groups = [];
     $userGroups = $user->getGroupNames();
+    $datasourceGroups = $datasource->groups;
     /** @var Group $group */
-    foreach( $datasource->groups as $group){
-      if( in_array($group->namedId,$userGroups)){
+    foreach( $datasourceGroups as $group){
+      if (in_array($group->namedId,$userGroups)){
         $groups[]= $group;
       }
     }
@@ -119,7 +120,7 @@ trait AccessControlTrait
       $groups = $this->getDatasourceUserGroups($user, $datasource);
       /** @var Group $group */
       foreach ($groups as $group) {
-        if( $user->hasPermission($permission, $group)) return;
+        if ($user->hasPermission($permission, $group)) return;
       }
       Yii::warning( sprintf(
         "User %s does not have required permission %s in datasource %s",
@@ -127,7 +128,7 @@ trait AccessControlTrait
       ));
     } else {
       // global permissions
-      if( $user->hasPermission($permission) ) return;
+      if ($user->hasPermission($permission) ) return;
       Yii::warning( sprintf(
         "Active user %s does not have required permission %s",
         $this->getActiveUser()->namedId, $permission
