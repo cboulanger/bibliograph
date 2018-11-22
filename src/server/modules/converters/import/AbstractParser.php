@@ -8,6 +8,7 @@
 
 namespace app\modules\converters\import;
 use app\models\Reference;
+use ForceUTF8\Encoding;
 use lib\exceptions\UserErrorException;
 use Yii;
 use yii\base\BaseObject;
@@ -64,6 +65,18 @@ abstract class AbstractParser extends BaseObject
     {
       throw new UserErrorException(Yii::t('app',"You must convert file to UTF-8 before importing."));
     }
+  }
+
+  /**
+   * @param $data
+   * @return mixed
+   */
+  protected function fixUtf8($data)
+  {
+    if( ! preg_match("//u", $data) ) {
+      return Encoding::fixUTF8($data);
+    }
+    return $data;
   }
 
   /**
