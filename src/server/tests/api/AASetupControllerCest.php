@@ -56,10 +56,6 @@ class AASetupControllerCest
       "type": "ServiceResult",
       "events": [
         {
-          "name": "ldap.enabled",
-          "data": false
-        },
-        {
           "name": "bibliograph.setup.done",
           "data": null
         }
@@ -102,10 +98,6 @@ class AASetupControllerCest
     $I->compareJsonRpcResultWith( json_decode('{
       "type": "ServiceResult",
       "events": [
-        {
-          "name": "ldap.enabled",
-          "data": false
-        },
         {
           "name": "bibliograph.setup.done",
           "data": null
@@ -150,10 +142,6 @@ class AASetupControllerCest
     $I->compareJsonRpcResultWith( json_decode('{
       "type": "ServiceResult",
       "events": [
-        {
-          "name": "ldap.enabled",
-          "data": false
-        },
         {
           "name": "bibliograph.setup.done",
           "data": null
