@@ -290,19 +290,13 @@ qx.Class.define("bibliograph.Setup", {
       let app = this.getApplication();
 
       // listen to reload event
-      bus.subscribe("application.reload", function(e){
-        window.location.reload();
-      }, this);
+      bus.subscribe("application.reload", () => window.location.reload() );
 
       // remotely log to the browser console
-      bus.subscribe("console.log", function(e){
-        console.log(e.getData());
-      }, this);
+      bus.subscribe("console.log", e => console.log(e.getData()) );
 
       // server message to force logout the user
-      bus.subscribe("client.logout", function(e){
-        this.logout();
-      }, this);
+      bus.subscribe("client.logout", () => this.logout());
 
       // server message to set model type and id
       bus.subscribe("bibliograph.setModel", e => {
@@ -314,22 +308,28 @@ qx.Class.define("bibliograph.Setup", {
       });
 
       // used by the bibliograph.export.exportReferencesHandleDialogData
-      bus.subscribe("window.location.replace", function(e){
+      bus.subscribe("window.location.replace", e => {
         let data = e.getData();
         window.location.replace(data.url);
-      }, this);
+      });
 
       // reload the main list view
-      bus.subscribe("mainListView.reload", function(e){
+      bus.subscribe("mainListView.reload", e => {
         let data = e.getData();
         if (data.datasource !== app.getDatasource())return;
         app.getWidgetById("app/tableview").reload();
-      }, this);
+      });
 
       // show the login dialog
-      bus.subscribe("loginDialog.show", function(){
+      bus.subscribe("loginDialog.show", ()=>{
         app.getWidgetById("app/windows/login").show();
-      }, this);
+      });
+      
+      // execute an arbitrary JSONRPC method 
+      bus.subscribe("jsonrpc.execute", e => {
+        let [service,method,params] = e.getData();
+        app.getRpcClient(service).send(method,params);
+      });
       
     },
   

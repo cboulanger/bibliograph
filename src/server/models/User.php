@@ -554,20 +554,22 @@ class User extends BaseModel implements IdentityInterface
          $this->getPermissionNames($group)
       );
     }
-    // if the user has access to the given database, find the role that the database and 
-    // the user have in common and add its properties
+    // if the user has access to the given database, find the role(s) that the user has in this
+    // database and add the corresponding permissions
     if ($datasource and in_array($datasource->namedId, $this->accessibleDatasourceNames)) {
-      $dsRoleNames = array_map(function($role){return $role->namedId;}, $datasource->roles);
-      $myRoleNames = array_intersect($this->roleNames, $dsRoleNames);
-      foreach ($myRoleNames as $name){
-        $rolePermissions = Role::findByNamedId($name)->permissions;
-        $permissions = array_merge($permissions, $rolePermissions);
+      $groupIds = $datasource->getGroups()->select('id')->column();
+      $roleIds = User_Role::find()
+        ->select('RoleId')
+        ->where(['UserId'=>$this->id])
+        ->andWhere(['in', 'GroupId', $groupIds])
+        ->column();
+      foreach ($roleIds as $id) {
+        foreach (Role::findOne($id)->permissions as $permission) {
+          $permissions[] = $permission->namedId;
+        }
       }
     }
-    $permissions = array_values(array_unique($permissions));
-    //###################
-    Yii::info($permissions);
-    //#####################
+    $permissions = array_values(array_unique($permissions));       
     return $permissions;
   }
 
