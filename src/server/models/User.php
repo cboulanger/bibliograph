@@ -571,10 +571,14 @@ class User extends BaseModel implements IdentityInterface
           ->andWhere(['in', 'GroupId', $groupIds])
           ->column(),
         // via the role's databases
-        $datasource->getRoles()->select('id')->column()
+        array_filter(
+          $datasource->getRoles()->select('id')->column(),
+          function($id){return $this->hasRole(Role::findOne($id)->namedId);}
+        )
       ));
       foreach ($roleIds as $id) {
-        foreach (Role::findOne($id)->permissions as $permission) {
+        $role = Role::findOne($id);
+        foreach ($role->permissions as $permission) {
           $permissions[] = $permission->namedId;
         }
       }
