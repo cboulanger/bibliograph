@@ -116,7 +116,8 @@ trait AccessControlTrait
       } elseif (!($datasource instanceof Datasource)) {
         throw new \InvalidArgumentException("Second argument must be null, string or instanceof Datasource");
       }
-      // group datasource permissions
+
+      // permissions via group roles
       $groups = $this->getDatasourceUserGroups($user, $datasource);
       /** @var Group $group */
       foreach ($groups as $group) {
@@ -132,6 +133,11 @@ trait AccessControlTrait
           return;
         }
       }
+      // if the user has access to the given database, grant if the user has a role in this database 
+      // which contains this permission
+      if ( $user->hasPermission($permission,null,$datasource)) return;
+
+      // permission not found
       Yii::warning( sprintf(
         "User '%s' does not have required permission '%s' in datasource '%s'",
         $this->getActiveUser()->namedId, $permission, $datasource->namedId
