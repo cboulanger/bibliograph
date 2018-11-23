@@ -846,13 +846,13 @@ msgstr ""
 msgid "Reset column widths"
 msgstr ""
 
-#: qx/ui/table/Table.js:1974
+#: qx/ui/table/Table.js:1974 qx/ui/table/Table.js:1987
 msgid "one row"
 msgid_plural "%1 rows"
 msgstr[0] ""
 msgstr[1] ""
 
-#: qx/ui/table/Table.js:1976
+#: qx/ui/table/Table.js:1976 qx/ui/table/Table.js:1989
 msgid "one of one row"
 msgid_plural "%1 of %2 rows"
 msgstr[0] ""
