@@ -174,10 +174,12 @@ qx.Mixin.define("bibliograph.MApplicationState", {
             this.__setApplicationTitleFromDatasourceModel(e.getData(), value);
           });
         }
-        return;
+      } else {
+        stateMgr.removeState("datasource");
+        this.setDatasourceLabel(this.getApplication().getConfigManager().getKey("application.title"));        
       }
-      stateMgr.removeState("datasource");
-      this.setDatasourceLabel(this.getApplication().getConfigManager().getKey("application.title"));
+      // Since permissions depend on the datasource, reload them. 
+      this.getAccessManager().load();
     },
     
     __setApplicationTitleFromDatasourceModel : function(model,value){

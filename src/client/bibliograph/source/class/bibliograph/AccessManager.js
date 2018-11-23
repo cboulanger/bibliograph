@@ -170,7 +170,7 @@ qx.Class.define("bibliograph.AccessManager",
      */
     load : async function(){
       this.getPermissionManager().getAll().map( permission => permission.setGranted(false) );
-      await this.getStore().load();
+      await this.getStore().load("userdata", $this->getDatasource());
     },
 
     /**
