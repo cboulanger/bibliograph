@@ -380,14 +380,21 @@ class AccessController extends AppController
   }
 
   /**
-   * Returns the data of the current user, including global permissions.
+   * Returns the data of the current user, including the current permissions.
+   * @param string|null $datasource 
+   *    If string, return global permissions plus permissions given via the datasource
+   *    If no argument or null, return global permissions only
    */
-  public function actionUserdata()
+  public function actionUserdata($datasource=null)
   {
     $activeUser = $this->getActiveUser();
     $data = $activeUser->getAttributes(['namedId','name','anonymous','ldap']);
     $data['anonymous'] = (bool) $data['anonymous'];
-    $data['permissions'] = $activeUser->getAllPermissionNames();
+    if( $datasource ){
+      // transform string name to datasource model instance and check access
+      $datasource = $this->datasource($datasource,true);
+    }
+    $data['permissions'] = $activeUser->getAllPermissionNames(null,$datasource);
     return $data;
   }
 
