@@ -406,10 +406,13 @@ class User extends BaseModel implements IdentityInterface
    * @param Group|int|null $group
    *    If Group or integer, check against the permissions granted in that group.
    *    If null or no argument, check against global roles the user has.
+   * @param Datasource|null $datasource
+   *    If given, add all permissions the user has by way of being member of a 
+   *    group that has access to the datasource.
    * @return bool
    * @throws InvalidArgumentException
    */
-  public function hasPermission($requestedPermission, $group=null)
+  public function hasPermission($requestedPermission, $group=null, Datasource $datasource=null)
   {
     if (is_integer($group) ){
       $group = Group::findOne($group);
@@ -417,7 +420,7 @@ class User extends BaseModel implements IdentityInterface
     } elseif (!($group instanceof Group or is_null($group))) {
       throw new InvalidArgumentException("Second argument must be null, string or instanceof Group");
     }
-    return $this->_hasPermission($requestedPermission, $group );
+    return $this->_hasPermission($requestedPermission, $group, $datasource );
   }
 
   /**
@@ -426,12 +429,14 @@ class User extends BaseModel implements IdentityInterface
    * @param Group|int|null $group
    *    If Group or integer, check against the permissions granted in that group.
    *    If null or no argument, check against global roles the user has.
+   * @param Datasource|null $datasource
+   *    If given, add all permissions the user has by way of being member of a 
+   *    group that has access to the datasource.
    * @return bool
    */
-  protected function _hasPermission($requestedPermission, $group=null)
+  protected function _hasPermission($requestedPermission, $group=null, Datasource $datasource=null)
   {
-    // get all permissions of the user
-    $permissions = $this->getAllPermissionNames($group);
+    $permissions = $this->getAllPermissionNames($group, $datasource);
 
     // use wildcard?
     $useWildcard = strstr($requestedPermission, "*");
@@ -558,18 +563,23 @@ class User extends BaseModel implements IdentityInterface
     // database and add the corresponding permissions
     if ($datasource and in_array($datasource->namedId, $this->accessibleDatasourceNames)) {
       $groupIds = $datasource->getGroups()->select('id')->column();
-      $roleIds = User_Role::find()
-        ->select('RoleId')
-        ->where(['UserId'=>$this->id])
-        ->andWhere(['in', 'GroupId', $groupIds])
-        ->column();
+      $roleIds = array_unique(array_merge(
+        // via group roles
+        User_Role::find()
+          ->select('RoleId')
+          ->where(['UserId'=>$this->id])
+          ->andWhere(['in', 'GroupId', $groupIds])
+          ->column(),
+        // via the role's databases
+        $datasource->getRoles()->select('id')->column()
+      ));
       foreach ($roleIds as $id) {
         foreach (Role::findOne($id)->permissions as $permission) {
           $permissions[] = $permission->namedId;
         }
       }
     }
-    $permissions = array_values(array_unique($permissions));       
+    $permissions = array_values(array_unique($permissions));
     return $permissions;
   }
 
