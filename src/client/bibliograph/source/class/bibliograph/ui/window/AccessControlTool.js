@@ -216,6 +216,8 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     composite1.setAllowStretchY(true);
     groupBox1.add(composite1, {flex: 1});
     hbox1.setSpacing(10);
+
+    // left column
     let vbox3 = new qx.ui.layout.VBox(10, null, null);
     let composite2 = new qx.ui.container.Composite();
     composite2.setLayout(vbox3);

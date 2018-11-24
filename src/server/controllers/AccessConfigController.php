@@ -277,7 +277,8 @@ class AccessConfigController extends AppController
         break;
       case "datasource":
         $labelProp = "title";
-        $query = $query->andWhere(['hidden' => 0]);
+        // TODO this is an ad-hoc solution that should be generalized
+        $query = $query->andWhere("hidden=0 or namedId like 'bibliograph_import'");
         break;
     }
     if ($filter) {
