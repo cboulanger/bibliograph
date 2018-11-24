@@ -20,6 +20,7 @@
 
 namespace app\models;
 
+use app\migrations\data\m180105_075537_data_RoleDataInsert;
 use function GuzzleHttp\describe_type;
 use InvalidArgumentException;
 use Yii;
@@ -561,21 +562,29 @@ class User extends BaseModel implements IdentityInterface
     }
     // if the user has access to the given database, find the role(s) that the user has in this
     // database and add the corresponding permissions
+    // TODO This is a complex algorithm. Transform this into elegant Yii2 ActiveQuery code & into a method
     if ($datasource and in_array($datasource->namedId, $this->accessibleDatasourceNames)) {
-      $groupIds = $datasource->getGroups()->select('id')->column();
-      $roleIds = array_unique(array_merge(
-        // via group roles
-        User_Role::find()
-          ->select('RoleId')
-          ->where(['UserId'=>$this->id])
-          ->andWhere(['in', 'GroupId', $groupIds])
-          ->column(),
-        // via the role's databases
-        array_filter(
-          $datasource->getRoles()->select('id')->column(),
-          function($id){return $this->hasRole(Role::findOne($id)->namedId);}
-        )
-      ));
+      $datasourceRoleIds  = $datasource->getRoles()->select('id')->column();
+      $datasourceGroupIds = $datasource->getGroups()->select('id')->column();
+      $query = User_Role::find()
+        ->select('RoleId')
+        ->where(['UserId'=>$this->id])
+        ->distinct();
+      if (count($datasourceGroupIds) and count($datasourceRoleIds)) {
+        $query = $query->andWhere("RoleId in (" . implode(",", $datasourceRoleIds) . ") or GroupId in (" . implode(",", $datasourceGroupIds) . ") or GroupId is NULL");
+      } else if (!count($datasourceGroupIds) and count($datasourceRoleIds)){
+        $query = $query->andWhere("RoleId in (" . implode(",",$datasourceRoleIds) .") or GroupId is NULL");
+      } else if (count($datasourceGroupIds) and ! count($datasourceRoleIds)){
+        $query = $query->andWhere("GroupId in (" . implode(",",$datasourceGroupIds) .") or GroupId is NULL");
+      } else {
+        $query = $query->andWhere("GroupId is NULL");
+      }
+      $userRoleIds = $query->column();
+      $dsGlobalRoleIds = array_filter(
+        $datasourceRoleIds,
+        function($id){return $this->hasRole(Role::findOne($id)->namedId);}
+      );
+      $roleIds = array_unique(array_merge($userRoleIds,$dsGlobalRoleIds));
       foreach ($roleIds as $id) {
         $role = Role::findOne($id);
         foreach ($role->permissions as $permission) {
@@ -584,6 +593,20 @@ class User extends BaseModel implements IdentityInterface
       }
     }
     $permissions = array_values(array_unique($permissions));
+//    if( $datasource) {
+//      $userGlobalRoles = $this->getGlobalRoles()->select('data_Role.id')->column();
+//      Yii::debug([
+//        'datasource' => [$datasource->namedId, $datasource->id],
+//        'user' => [$this->namedId, $this->id],
+//        "user's global role ids" => $userGlobalRoles,
+//        'role ids attached to datasource:' => $datasourceRoleIds,
+//        'group ids attached to datasource:' => $datasourceGroupIds,
+//        'role ids via global roles and groups that are attached to the database' => $userRoleIds,
+//        'datasource role ids filtered by user`s global roles' => $dsGlobalRoleIds,
+//        'combined role ids' => $roleIds,
+//        'permissions' => $permissions
+//      ]);
+//    }
     return $permissions;
   }
 

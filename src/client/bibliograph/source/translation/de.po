@@ -279,36 +279,52 @@ msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:241
 #: bibliograph/ui/window/AccessControlTool.js:458
+#: bibliograph/ui/window/AccessControlTool.js:243
+#: bibliograph/ui/window/AccessControlTool.js:463
+#: bibliograph/ui/window/AccessControlTool.js:460
 msgid "Filter by name here..."
 msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:292
+#: bibliograph/ui/window/AccessControlTool.js:294
 msgid "Please enter the id of the new '%1'-Object"
 msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:313
+#: bibliograph/ui/window/AccessControlTool.js:315
 msgid "Do you really want to delete '%1'?"
 msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:355
+#: bibliograph/ui/window/AccessControlTool.js:357
 msgid "Edited element"
 msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:404
 #: bibliograph/ui/window/AccessControlTool.js:406
+#: bibliograph/ui/window/AccessControlTool.js:409
+#: bibliograph/ui/window/AccessControlTool.js:411
+#: bibliograph/ui/window/AccessControlTool.js:408
 msgid "Link"
 msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:417
 #: bibliograph/ui/window/AccessControlTool.js:419
+#: bibliograph/ui/window/AccessControlTool.js:422
+#: bibliograph/ui/window/AccessControlTool.js:424
+#: bibliograph/ui/window/AccessControlTool.js:421
 msgid "Unlink"
 msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:444
+#: bibliograph/ui/window/AccessControlTool.js:449
+#: bibliograph/ui/window/AccessControlTool.js:446
 msgid "Linkable items"
 msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:450
+#: bibliograph/ui/window/AccessControlTool.js:455
+#: bibliograph/ui/window/AccessControlTool.js:452
 msgid "No linkable items"
 msgstr ""
 
