@@ -74,6 +74,6 @@
   "environment": {
     "qx.debug": true,
     "qx.icontheme": "Tango",
-    "app.version": "3.0.0-beta.63"
+    "app.version": "3.0.0-beta.64"
   }
 }
