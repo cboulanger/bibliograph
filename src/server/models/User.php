@@ -20,6 +20,7 @@
 
 namespace app\models;
 
+use app\migrations\data\m180105_075537_data_RoleDataInsert;
 use function GuzzleHttp\describe_type;
 use InvalidArgumentException;
 use Yii;
@@ -224,18 +225,44 @@ class User extends BaseModel implements IdentityInterface
   //-------------------------------------------------------------
 
   /**
+   * Internal. Populated temporarily during relational queries.
+   * @var int|null
+   */
+  public $groupId = null;
+
+  /**
+   * Returns User_Role records
+   * @todo this needs to be looked at since this method AND the getRoles() method filters by group id
    * @return ActiveQuery
    */         
   public function getUserRoles()
   {
-    return $this->hasMany(User_Role::class, ['UserId' => 'id'] );
+    $link = [
+      'UserId'  => 'id',
+      'GroupId' => 'groupId'
+    ];
+    return $this->hasMany(User_Role::class, $link );
   } 
 
   /**
-   * Returns the global roles of the user.
+   * Returns the roles of the user, depending on the groupId property.
+   * Do not use directly unless you set the groupId property first.
    * @return ActiveQuery
    */
   public function getRoles()
+  {
+    return $this
+      ->hasMany( Role::class, ['id' => 'RoleId'] )
+      ->via('userRoles', function(ActiveQuery $query){
+        return $query->andWhere(['GroupId' => $this->groupId]);
+      });
+  }
+
+  /**
+   * Returns the global roles of the user
+   * @return ActiveQuery
+   */ 
+  public function getGlobalRoles()
   {
     return $this->getGroupRoles(null);
   }
@@ -251,21 +278,19 @@ class User extends BaseModel implements IdentityInterface
     if( $group instanceof Group ) {
       $groupId = $group->id;
     } elseif (is_string($group)){
-      $groupId = Group::findByNamedId($group)->id;
-      if ($groupId === null){
+      $groupObj = Group::findByNamedId($group);
+      if ($groupObj === null){
         throw new InvalidArgumentException("Group '$group' does not exist");
       }
-    } elseif ( ! is_null($group) and ! is_int($group) ){
-      throw new InvalidArgumentException("Argument must be null, string, integer or instanceof Group");
-    } else {
+      $groupId=$groupObj->id;
+    } elseif ( is_null($group) or is_int($group) ){
       $groupId = $group;
+    } else {
+      throw new InvalidArgumentException("Argument must be null, string, integer or instanceof Group");
     }
-    return $this
-      ->hasMany(Role::class, ['id' => 'RoleId' ])
-      ->via('userRoles', function( ActiveQuery $query) use ($groupId) {
-          return $query->andWhere([ 'GroupId' => $groupId ]);
-        }
-      );
+    return Role::find()
+      ->joinWith('roleUsers')
+      ->where([ 'GroupId' => $groupId, 'UserId' => $this->id ]);
   }
 
   /**
@@ -282,7 +307,8 @@ class User extends BaseModel implements IdentityInterface
    */      
   public function getGroups()
   {
-    return $this->hasMany(Group::class, ['id' => 'GroupId'])
+    return $this
+      ->hasMany(Group::class, ['id' => 'GroupId'])
       ->via('userGroups');
   } 
 
@@ -378,31 +404,40 @@ class User extends BaseModel implements IdentityInterface
    * is passed as second argument, it will check if the user has the
    * permission in that group.
    * @param string $requestedPermission the permission to check
-   * @param Group|string|null $group If given, the group in which to check for the permission
+   * @param Group|int|null $group
+   *    If Group or integer, check against the permissions granted in that group.
+   *    If null or no argument, check against global roles the user has.
+   * @param Datasource|null $datasource
+   *    If given, add all permissions the user has by way of being member of a 
+   *    group that has access to the datasource.
    * @return bool
    * @throws InvalidArgumentException
    */
-  public function hasPermission($requestedPermission, $group = null)
+  public function hasPermission($requestedPermission, $group=null, Datasource $datasource=null)
   {
-    if( is_string($group) ){
-      $group = Group::findByNamedId($group);
-      if( ! $group ) throw new InvalidArgumentException("Invalid group name '$group'");
-    } elseif ( ! is_null($group) ){
+    if (is_integer($group) ){
+      $group = Group::findOne($group);
+      if( ! $group ) throw new InvalidArgumentException("Invalid group id #$group");
+    } elseif (!($group instanceof Group or is_null($group))) {
       throw new InvalidArgumentException("Second argument must be null, string or instanceof Group");
     }
-    return $this->_hasPermission($requestedPermission, $group );
+    return $this->_hasPermission($requestedPermission, $group, $datasource );
   }
 
   /**
    * The implementation of hasPermission
    * @param $requestedPermission
-   * @param Group|null $group
+   * @param Group|int|null $group
+   *    If Group or integer, check against the permissions granted in that group.
+   *    If null or no argument, check against global roles the user has.
+   * @param Datasource|null $datasource
+   *    If given, add all permissions the user has by way of being member of a 
+   *    group that has access to the datasource.
    * @return bool
    */
-  protected function _hasPermission($requestedPermission, Group $group = null)
+  protected function _hasPermission($requestedPermission, $group=null, Datasource $datasource=null)
   {
-    // get all permissions of the user
-    $permissions = $this->getAllPermissionNames($group);
+    $permissions = $this->getAllPermissionNames($group, $datasource);
 
     // use wildcard?
     $useWildcard = strstr($requestedPermission, "*");
@@ -434,9 +469,9 @@ class User extends BaseModel implements IdentityInterface
   }
 
   /**
-   * Whether the user has the given role (in a group, if given)
+   * Whether the user has the given global (or group) role
    * @param string $role
-   * @param Group|string|int $group
+   * @param Group|int|null $group
    * @return bool
    */
   public function hasRole($role, $group = null)
@@ -473,7 +508,7 @@ class User extends BaseModel implements IdentityInterface
   public function getGroupNames()
   {
     $result = $this->getGroups()->all();
-    if( is_null( $result ) ) return [];
+    if (!is_array($result)) return [];
     return array_map( function($o) {return $o->namedId;}, $result );
   }
 
@@ -501,24 +536,78 @@ class User extends BaseModel implements IdentityInterface
    * Returns the names of all permissions the user has globally AND in the
    * given group
    * @param Group|int|null $group
-   *    If given, return also the permissions that the user has in the
-   *    group, which can also be specified with the given (numeric) id.
+   *    If given, return the permissions that the user has in the given
+   *    group model instance, which can also be specified with a (numeric) id.
    *    If the application is configured to only use global roles, the
    *    group is ignored.
+   *    If not given or null, return only global permissions
+   * @param Datasource|null $datasource
+   *    If given, add all permissions the user has by way of being member of a 
+   *    group that has access to the datasource.
    * @return array
    */
-  public function getAllPermissionNames($group=null)
+  public function getAllPermissionNames($group=null, Datasource $datasource=null)
   {
     // global roles
-    $permissions= $this->getPermissionNames();
-    // group roles
-    if( $group and ! Yii::$app->config->getIniValue("global_roles_only") ){
-      $permissions=array_merge(
-        $permissions,
-        $this->getPermissionNames($group)
+    $permissions = $this->getPermissionNames(null);
+    if ($group and ! Yii::$app->config->getIniValue("global_roles_only") ){
+      // add group-specific roles
+      if (!($group instanceof Group or is_int($group))) {     
+        throw new \InvalidArgumentException("Argument must be instanceof Group, integer, null or 'all'");
+      }
+      $permissions = array_merge(
+         $permissions,
+         $this->getPermissionNames($group)
       );
     }
-    return array_values(array_unique($permissions));
+    // if the user has access to the given database, find the role(s) that the user has in this
+    // database and add the corresponding permissions
+    // TODO This is a complex algorithm. Transform this into elegant Yii2 ActiveQuery code & into a method
+    if ($datasource and in_array($datasource->namedId, $this->accessibleDatasourceNames)) {
+      $datasourceRoleIds  = $datasource->getRoles()->select('id')->column();
+      $datasourceGroupIds = $datasource->getGroups()->select('id')->column();
+      $query = User_Role::find()
+        ->select('RoleId')
+        ->where(['UserId'=>$this->id])
+        ->distinct();
+      if (count($datasourceGroupIds) and count($datasourceRoleIds)) {
+        $query = $query->andWhere("RoleId in (" . implode(",", $datasourceRoleIds) . ") or GroupId in (" . implode(",", $datasourceGroupIds) . ") or GroupId is NULL");
+      } else if (!count($datasourceGroupIds) and count($datasourceRoleIds)){
+        $query = $query->andWhere("RoleId in (" . implode(",",$datasourceRoleIds) .") or GroupId is NULL");
+      } else if (count($datasourceGroupIds) and ! count($datasourceRoleIds)){
+        $query = $query->andWhere("GroupId in (" . implode(",",$datasourceGroupIds) .") or GroupId is NULL");
+      } else {
+        $query = $query->andWhere("GroupId is NULL");
+      }
+      $userRoleIds = $query->column();
+      $dsGlobalRoleIds = array_filter(
+        $datasourceRoleIds,
+        function($id){return $this->hasRole(Role::findOne($id)->namedId);}
+      );
+      $roleIds = array_unique(array_merge($userRoleIds,$dsGlobalRoleIds));
+      foreach ($roleIds as $id) {
+        $role = Role::findOne($id);
+        foreach ($role->permissions as $permission) {
+          $permissions[] = $permission->namedId;
+        }
+      }
+    }
+    $permissions = array_values(array_unique($permissions));
+//    if( $datasource) {
+//      $userGlobalRoles = $this->getGlobalRoles()->select('data_Role.id')->column();
+//      Yii::debug([
+//        'datasource' => [$datasource->namedId, $datasource->id],
+//        'user' => [$this->namedId, $this->id],
+//        "user's global role ids" => $userGlobalRoles,
+//        'role ids attached to datasource:' => $datasourceRoleIds,
+//        'group ids attached to datasource:' => $datasourceGroupIds,
+//        'role ids via global roles and groups that are attached to the database' => $userRoleIds,
+//        'datasource role ids filtered by user`s global roles' => $dsGlobalRoleIds,
+//        'combined role ids' => $roleIds,
+//        'permissions' => $permissions
+//      ]);
+//    }
+    return $permissions;
   }
 
   /**
@@ -530,11 +619,12 @@ class User extends BaseModel implements IdentityInterface
    * @return string[]
    *    Array of permission names
    */
-  public function getPermissionNames( $group = null )
+  public function getPermissionNames( $group=null )
   {
     $permissions = [];
     /** @var Role[] $roles */
     $roles = $this->getGroupRoles($group)->all();
+    //$groupName = $group instanceof Group ? $group->name : ( is_int($group) ? Group::findOne($group)->name : "globally");
     //Yii::info("{$this->namedId} has " . count( $roles). " roles in group {$groupName}");
     foreach( $roles as $role) {
       //Yii::info("{$this->namedId} has role {$role->namedId} in group {$groupName}");
@@ -563,19 +653,29 @@ class User extends BaseModel implements IdentityInterface
     foreach( $myDatasources as $o ) {
       $datasourceNames[] = $o->namedId;
     }
-    // add the datasources that are available to the user via his/her global roles
-    /** @var Role $role */
-    foreach( $this->getRoles()->all() as $role){
-      /** @var Datasource $datasource */
-      foreach( $role->getDatasources()->all() as $datasource){
-        $datasourceNames[] = $datasource->namedId;
-      }
-    }
-    // now add those which are linked to the (active) groups that the user belongs to
+
+    // now add those which are linked to the (active) groups that the user belongs to 
+    // or through the roles that this goup gives to the user, including "global" roles
     $groups = $this->getGroups()->where(['active'=>1])->all();
+    $groups[] = null; // global group
+
     /** @var Group $group */
     foreach( $groups as $group){
-      $datasourceNames = array_merge( $datasourceNames, $group->getDatasourceNames());
+      // add group datasources
+      if ($group) foreach ($group->datasourceNames as $name) $datasourceNames[] = $name;
+      // add datasources of the users group/global roles
+      /** @var Role $role */
+      foreach ($this->getGroupRoles($group)->all() as $role){
+        /** @var Datasource $datasource */
+        foreach ($role->datasources as $datasource){
+          $datasourceNames[] = $datasource->namedId;
+        }
+      }
+    }
+    // finally, add the datasources that are accessible to the anonymous role
+    /** @var Datasource $datasource */
+    foreach( Role::findByNamedId('anonymous')->getDatasources()->all() as $datasource){
+      $datasourceNames[] = $datasource->namedId;
     }
     $names = array_unique($datasourceNames);
     sort($names);

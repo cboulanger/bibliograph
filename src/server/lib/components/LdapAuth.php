@@ -75,6 +75,7 @@ class LdapAuth extends \yii\base\Component
    * @return \app\models\User|null User or null if authentication failed
    * @throws \RuntimeException
    * @throws \Adldap\Models\ModelNotFoundException
+   * @throws \yii\db\Exception
    */
   public function authenticate( $username, $password )
   {
@@ -141,7 +142,65 @@ class LdapAuth extends \yii\base\Component
   }
 
   /**
-   * Creates a new user from an authenticated LDAP connection. The
+   * Identifies a user at a remote LDAP server and creates local user if they exist.
+   * Returns the user model instance
+   * @param $username
+   * @return \app\models\User|null User or null if user does not exist
+   * @throws \RuntimeException
+   * @throws \Adldap\Models\ModelNotFoundException
+   * @todo code duplication with authenticate() method
+   * @throws \yii\db\Exception
+   */
+  public function identify($username)
+  {
+    $user_base_dn = Yii::$app->config->getIniValue( "ldap.user_base_dn" );
+    $user_id_attr = Yii::$app->config->getIniValue("ldap.user_id_attr");
+    $alternative_auth_attrs = Yii::$app->config->getIniValue("ldap.alternative_auth_attrs");
+    $bind_attrs = [$user_id_attr];
+    if (is_array($alternative_auth_attrs)){
+      $bind_attrs = array_merge( $bind_attrs, $alternative_auth_attrs);
+    }
+    $ldap = Yii::$app->ldap;
+    $attr = array_shift($bind_attrs);
+    do {
+      Yii::debug("Searching for $attr=$username in $user_base_dn ...", self::CATEGORY);
+      $records = $ldap->search()
+        ->in( $user_base_dn )
+        ->select([ $user_id_attr ])
+        ->where( $attr, "=", $username )
+        ->recursive()
+        ->get();
+      if (count($records)){
+        $data = $records[0]->jsonSerialize();
+        if (isset($data[$user_id_attr][0] )){
+          $username = $data[$user_id_attr][0];
+          Yii::debug("Found user '$username'", self::CATEGORY);
+          break;
+        }
+      }
+    } while ($attr = array_shift($bind_attrs));
+
+    // we've run out of attributes to match, search failed
+    if (! $attr ) {
+      Yii::debug("No user '$username' can be found", self::CATEGORY);
+      return null;
+    }
+
+    // if user does not exist locally, create it with "user" role
+    // and assign it to the groups specified by the ldap source
+    $user = User::findOne(['namedId' => $username]);
+    if( ! $user) {
+      $user = $this->createUser( $username );
+    }
+
+    // update group membership
+    $this->updateGroupMembership( $username );
+    return $user;
+  }
+
+
+  /**
+   * Creates a new user from a LDAP database. The
    * default behavior is to use the attributes "cn", "sn","givenName"
    * to determine the user's full name and the "mail" attribute to
    * determine the user's email address. Returns the newly created local user.
@@ -312,5 +371,41 @@ class LdapAuth extends \yii\base\Component
       }
     }
     Yii::debug( "User '$username' is member of the following groups: " . implode(",", $user->getGroupNames() ), 'ldap' );
+  }
+
+  /**
+   * Returns an array LDAP records that match a certain name, or an empty array if none matches
+   * @param $identifier
+   * @return array Array of associative arrays with the keys "namedId" (the LDAP user id) and "name" (taken from the
+   * CN attribute)
+   * @throws \RuntimeException
+   * @todo Make "name" attribute configurable in ini file
+   */
+  public function find($identifier )
+  {
+    $user_base_dn = Yii::$app->config->getIniValue( "ldap.user_base_dn" );
+    $user_id_attr = Yii::$app->config->getIniValue("ldap.user_id_attr");
+    $alternative_auth_attrs = Yii::$app->config->getIniValue("ldap.alternative_auth_attrs");
+    $auth_attrs = [$user_id_attr];
+    if (is_array($alternative_auth_attrs) ) {
+      $auth_attrs = array_merge($auth_attrs, $alternative_auth_attrs);
+    }
+    $ldap = Yii::$app->ldap;
+    $search = $ldap->search()->in( $user_base_dn )->select($auth_attrs);
+    foreach ($auth_attrs as $attr){
+      $search = $search->orWhere( $attr, "contains", $identifier);
+    }
+    $records = $search->recursive()->get();
+    $data =[];
+    if (count($records)){
+      foreach ($records as $record){
+        $d = $record->jsonSerialize();
+        $data[] = [
+          'namedId' => $d[$user_id_attr][0],
+          'name'    => isset($d['cn'][0]) ?  $d['cn'][0] : ""
+        ];
+      }
+    }
+    return $data;
   }
 }

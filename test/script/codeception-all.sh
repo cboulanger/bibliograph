@@ -32,5 +32,6 @@ $YII_CMD migrate/up --migrationNamespaces=app\\tests\\migrations $MIGRATE_ARGS &
 echo "Running functional tests ..."
 $CPT_CMD run functional -v || exit $?
 
+echo "Tests finished."
 popd > /dev/null
 exit 0

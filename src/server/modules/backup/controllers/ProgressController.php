@@ -26,7 +26,6 @@ use app\controllers\traits\DatasourceTrait;
 use app\modules\backup\Module;
 use lib\dialog\ServerProgress;
 use Yii;
-use yii\web\Response;
 
 /**
  * Class HtmlController
@@ -51,7 +50,7 @@ class ProgressController extends \yii\web\Controller
    */
   public function actionCreate(string $datasource, string $id, string $comment = null)
   {
-    $this->requirePermission("backup.create", $datasource);
+    $this->requirePermission("backup.create");
     $progressBar = new ServerProgress($id);
     try {
       $this->createBackup($this->datasource($datasource, true), $progressBar, $comment);
@@ -59,7 +58,6 @@ class ProgressController extends \yii\web\Controller
     } catch (\RuntimeException $e) {
       $progressBar->error($e->getMessage());
     }
-    Yii::$app->getResponse()->isSent = true;
   }
 
   /**
@@ -70,10 +68,11 @@ class ProgressController extends \yii\web\Controller
    */
   public function actionRestore(string $datasource, string $file, string $id)
   {
-    $this->requirePermission("backup.restore", $datasource);
+    $this->requirePermission("backup.restore");
     $progressBar = new ServerProgress($id);
     try {
       $result = $this->restoreBackup($this->datasource($datasource, true), $file, $progressBar);
+      Yii::debug($result,Module::CATEGORY, __METHOD__);
       if( $result['errors'] > 0 ){
         throw new \RuntimeException("Restore unsuccessful. Please check log files.");
       }
@@ -83,6 +82,5 @@ class ProgressController extends \yii\web\Controller
     } catch (\RuntimeException $e) {
       $progressBar->error($e->getMessage());
     }
-    Yii::$app->getResponse()->isSent = true;
   }
 }

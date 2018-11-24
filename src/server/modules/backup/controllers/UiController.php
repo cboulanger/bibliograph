@@ -56,12 +56,13 @@ class UiController extends AppController
    * Service to present the user with a choice of backups
    * @param $form
    * @param $datasource
+   * @param $token
    * @return string Diagnostic message
    * @throws \JsonRpc2\Exception
    */
-  public function actionChooseBackup($form, string $datasource, string $token)
+  public function actionChooseBackup($form=null, $datasource=null, string $token=null)
   {
-    if ($form === false) {
+    if (!$form) {
       return "ABORTED";
     }
     $this->requirePermission("backup.restore", $datasource);
@@ -101,11 +102,12 @@ class UiController extends AppController
   /**
    * @param $data
    * @param $datasource
+   * @param $token
    * @return string
    */
-  public function actionHandleChooseBackup($data, $datasource, $token)
+  public function actionHandleChooseBackup($data=null, $datasource=null, $token=null)
   {
-    if ($data === null) {
+    if (!$data) {
       return "Aborted choose backup.";
     }
     $this->dispatchClientMessage(

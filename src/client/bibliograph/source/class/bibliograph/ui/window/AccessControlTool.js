@@ -147,22 +147,33 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     this.add(toolBar1);
     
     // user button
-    let addUserButton = new qx.ui.toolbar.Button(this.tr('New User'), "icon/22/apps/preferences-users.png");
-    //toolBar1.add(addUserButton);
-    addUserButton.setEnabled(false);
+    let addUserButton = new qx.ui.toolbar.Button(this.tr('New local user'), "icon/22/apps/preferences-users.png");
+    toolBar1.add(addUserButton);
     pm.create("access.manage").bind("state", addUserButton, "visibility", {
       converter: bibliograph.Utils.bool2visibility
     });
     addUserButton.addListener("execute", function (e) {
       this.leftSelectBox.setSelection([this.leftSelectBox.getSelectables()[0]]);
       this.getApplication().showPopup(this.tr("Please wait ..."));
-      this.getApplication().getRpcClient("actool").send("newUserDialog");
+      rpc.AccessConfig.newUserDialog();
     }, this);
-    bus.subscribe("ldap.enabled", function (e) {
-      addUserButton.setVisibility(e.getData() ? "excluded" : "visible");
+  
+    //  import LDAP user button
+    let findLdapUserButton = new qx.ui.toolbar.Button(this.tr('Import LDAP user'));
+    toolBar1.add(findLdapUserButton);
+    pm.create("access.manage").bind("state", findLdapUserButton, "enabled");
+    let cm = app.getConfigManager();
+    cm.addListener("ready", ()=> {
+      findLdapUserButton.setVisibility(bibliograph.Utils.bool2visibility(cm.getKey("ldap.enabled")));
+    });
+    findLdapUserButton.addListener("execute", async function (e) {
+      leftSelectBox.setSelection([this.leftSelectBox.getSelectables()[0]]);
+      //findLdapUserButton.setEnabled(false);
+      await rpc.AccessConfig.findLdapUserDialog();
+      //findLdapUserButton.setEnabled(true);
     }, this);
-    
-    //  datasource button
+  
+    // datasource button
     let addDatasourceButton = new qx.ui.toolbar.Button(this.tr('New Datasource'), "icon/22/apps/internet-transfer.png");
     toolBar1.add(addDatasourceButton);
     pm.create("access.manage").bind("state", addDatasourceButton, "visibility", {
@@ -205,6 +216,8 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     composite1.setAllowStretchY(true);
     groupBox1.add(composite1, {flex: 1});
     hbox1.setSpacing(10);
+
+    // left column
     let vbox3 = new qx.ui.layout.VBox(10, null, null);
     let composite2 = new qx.ui.container.Composite();
     composite2.setLayout(vbox3);
@@ -226,9 +239,12 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
   
     // left search box
     let searchbox1 = new qx.ui.form.TextField();
-    searchbox1.setPlaceholder(this.tr("Filter by name here..."));
+    searchbox1.set({
+      placeholder: this.tr("Filter by name here..."),
+      liveUpdate: true
+    });
     composite2.add(searchbox1);
-    searchbox1.addListener("input",e =>{
+    searchbox1.addListener("changeValue",e =>{
       let input = (e.getData()||"").toLocaleLowerCase();
       if( input ){
         let len = input.length;
@@ -238,6 +254,8 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
       }
     });
     leftSelectBox.addListener("changeSelection",()=> {searchbox1.setValue(""); leftList.setDelegate(null);});
+    // server command
+    bus.subscribe("acltool.searchbox-left.set", e => searchbox1.setValue(e.getData()));
     
     // left list
     let leftList = new qx.ui.list.List();
@@ -248,8 +266,6 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
       let sel = leftList.getSelection();
       treeStore.set("autoLoadParams", sel.getLength() > 0 ? sel.getItem(0).getParams() : null );
     });
-    
-
     
     // button pane
     let hbox2 = new qx.ui.layout.HBox(10, null, null);
@@ -473,73 +489,73 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     hbox4.setSpacing(10);
 
     // "Add" button
-    let button7 = new qx.ui.form.Button(null, "bibliograph/icon/button-plus.png", null);
-    button7.setEnabled(false);
-    button7.setIcon("bibliograph/icon/button-plus.png");
-    composite7.add(button7);
-    elementTree.bind("selection", button7, "enabled", {
-      converter: (s) => s.length > 0
-    });
-    button7.addListener("execute", async () => {
-      if( ! elementTree.getSelection().length ) return;
-      let type = elementTree.getSelection()[0].getModel().getType();
-      if( type === "datasource" ){
-        rpc.AccessConfig.createDatasourceDialog();
-      } else {
-        let msg = this.tr("Please enter the id of the new '%1'-Object", type );
-        let name = dialog.Dialog.prompt(msg).promise();
-        if (name) {
-          await rightListStore.execute("add", [type, name]);
-          rightListStore.reload();
-        }
-      }
-    });
-
-    // "Delete" button
-    let button8 = new qx.ui.form.Button();
-    button8.setEnabled(false);
-    button8.setIcon("bibliograph/icon/button-minus.png");
-    composite7.add(button8);
-    rightList.getSelection().addListener("change", () => {
-      button8.setEnabled(rightList.getSelection().getLength() > 0);
-    });
-    button8.addListener("execute", function (e) {
-      let selection = rightList.getSelection();
-      let names = [];
-      let types = [];
-      selection.forEach(function (item) {
-        names.push(item.getValue());
-        types.push(item.getType());
-      });
-      let msg = this.tr("Do you really want to delete the objects '%1'?", names.join(", "));
-      dialog.Dialog.confirm(msg, function (yes) {
-        if (yes) {
-          rightListStore.execute("delete", [types[0], names], function () {
-            rightListStore.reload();
-          });
-        }
-      });
-    }, this);
+    // let button7 = new qx.ui.form.Button(null, "bibliograph/icon/button-plus.png", null);
+    // button7.setEnabled(false);
+    // button7.setIcon("bibliograph/icon/button-plus.png");
+    // composite7.add(button7);
+    // elementTree.bind("selection", button7, "enabled", {
+    //   converter: (s) => s.length > 0
+    // });
+    // button7.addListener("execute", async () => {
+    //   if( ! elementTree.getSelection().length ) return;
+    //   let type = elementTree.getSelection()[0].getModel().getType();
+    //   if( type === "datasource" ){
+    //     rpc.AccessConfig.createDatasourceDialog();
+    //   } else {
+    //     let msg = this.tr("Please enter the id of the new '%1'-Object", type );
+    //     let name = dialog.Dialog.prompt(msg).promise();
+    //     if (name) {
+    //       await rightListStore.execute("add", [type, name]);
+    //       rightListStore.reload();
+    //     }
+    //   }
+    // });
+    //
+    // // "Delete" button
+    // let button8 = new qx.ui.form.Button();
+    // button8.setEnabled(false);
+    // button8.setIcon("bibliograph/icon/button-minus.png");
+    // composite7.add(button8);
+    // rightList.getSelection().addListener("change", () => {
+    //   button8.setEnabled(rightList.getSelection().getLength() > 0);
+    // });
+    // button8.addListener("execute", function (e) {
+    //   let selection = rightList.getSelection();
+    //   let names = [];
+    //   let types = [];
+    //   selection.forEach(function (item) {
+    //     names.push(item.getValue());
+    //     types.push(item.getType());
+    //   });
+    //   let msg = this.tr("Do you really want to delete the objects '%1'?", names.join(", "));
+    //   dialog.Dialog.confirm(msg, function (yes) {
+    //     if (yes) {
+    //       rightListStore.execute("delete", [types[0], names], function () {
+    //         rightListStore.reload();
+    //       });
+    //     }
+    //   });
+    // }, this);
 
     // "Edit" button
-    let button9 = new qx.ui.form.Button(null, "bibliograph/icon/button-edit.png", null);
-    button9.setEnabled(false);
-    button9.setIcon("bibliograph/icon/button-edit.png");
-    composite7.add(button9);
-    rightList.getSelection().addListener("change", () => {
-      button9.setEnabled(rightList.getSelection().getLength() > 0);
-    });
-    button9.addListener("execute", function (e) {
-      if( ! rightList.getSelection().length ) return;
-      let itemModel = rightList.getSelection().getItem(0);
-      let type = itemModel.getType();
-      let name = itemModel.getValue();
-      // this triggers a server dialog response
-      this.getApplication().showPopup(this.tr("Loading data ..."));
-      rightListStore.execute("edit", [type, name], function () {
-        this.getApplication().hidePopup();
-      }, this);
-    }, this);
+    // let button9 = new qx.ui.form.Button(null, "bibliograph/icon/button-edit.png", null);
+    // button9.setEnabled(false);
+    // button9.setIcon("bibliograph/icon/button-edit.png");
+    // composite7.add(button9);
+    // rightList.getSelection().addListener("change", () => {
+    //   button9.setEnabled(rightList.getSelection().getLength() > 0);
+    // });
+    // button9.addListener("execute", function (e) {
+    //   if( ! rightList.getSelection().length ) return;
+    //   let itemModel = rightList.getSelection().getItem(0);
+    //   let type = itemModel.getType();
+    //   let name = itemModel.getValue();
+    //   // this triggers a server dialog response
+    //   this.getApplication().showPopup(this.tr("Loading data ..."));
+    //   rightListStore.execute("edit", [type, name], function () {
+    //     this.getApplication().hidePopup();
+    //   }, this);
+    // }, this);
 
     // "Reload" button
     let button10 = new qx.ui.form.Button(null, "bibliograph/icon/button-reload.png", null);

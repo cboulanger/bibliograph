@@ -62,6 +62,12 @@ $components = [
         'catalog' => 'messages',
         'useMoFile' => false
       ],
+      'email' => [
+        'class' => \yii\i18n\GettextMessageSource::class,
+        'basePath' => '@messages',
+        'catalog' => 'messages',
+        'useMoFile' => false
+      ],
     ],
   ],
   // Cache

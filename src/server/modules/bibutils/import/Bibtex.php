@@ -63,18 +63,18 @@ class Bibtex extends AbstractParser
   /**
    * @inheritdoc
    */
-  public function parse( string $bibtex ) : array
+  public function parse( string $data ) : array
   {
     try {
-      $mods = (new Executable("bib2xml", BIBUTILS_PATH))->call("-u", $bibtex);
+      $mods = (new Executable("bib2xml", BIBUTILS_PATH))->call("-u", $data);
       //Yii::debug($mods, Module::CATEGORY, __METHOD__);
-      $bibtex = (new Executable("xml2bib", BIBUTILS_PATH ))->call("-sd -nl", $mods);
+      $data = (new Executable("xml2bib", BIBUTILS_PATH ))->call("-sd -nl", $mods);
     } catch (\Exception $e) {
       throw new UserErrorException($e->getMessage());
     }
-    $bibtex = str_replace("\nand ", "; ", $bibtex);
+    $data = str_replace("\nand ", "; ", $data);
     //Yii::debug($bibtex, Module::CATEGORY, __METHOD__);
-    $references = (new BibtexUtf8())->parse($bibtex);
+    $references = (new BibtexUtf8())->parse($data);
     return $references;
   }
 }

@@ -95,13 +95,9 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       button.setIcon("icon/16/apps/preferences-users.png");
       this.userMgr.bind("activeUser.fullname", button, "label" );
       this.getApplication().getAccessManager().bind("authenticatedUser", button, "visibility", {
-        converter : function(v) {
-          return v ? 'visible' : 'excluded'
-        }
+        converter : v => v ? 'visible' : 'excluded'
       });
-      button.addListener("execute", function(e) {
-        this.getApplication().cmd("editUserData");
-      }, this);
+      button.addListener("execute", () => this.getApplication().cmd("editUserData"));
       return button;
     },
 

@@ -84,10 +84,10 @@ class Reference extends BaseModel
       [['abstract', 'annote', 'contents', 'note'], 'string'],
       [['markedDeleted', 'attachments'], 'integer'],
       [['citekey', 'affiliation', 'crossref', 'date', 'doi', 'edition', 'month', 'size', 'type', 'volume', 'createdBy', 'modifiedBy'], 'string', 'max' => 50],
-      [['reftype', 'issn', 'key', 'language', 'year'], 'string', 'max' => 20],
+      [['reftype', 'issn', 'key', 'language'], 'string', 'max' => 20],
       [['address', 'author', 'booktitle', 'subtitle', 'editor', 'howpublished', 'institution', 'keywords', 'lccn', 'title', 'url'], 'string', 'max' => 255],
       [['copyright', 'journal', 'location', 'organization', 'publisher', 'school'], 'string', 'max' => 150],
-      [['isbn', 'number', 'pages', 'price'], 'string', 'max' => 30],
+      [['isbn', 'number', 'pages', 'price', 'year'], 'string', 'max' => 30],
       [['series'], 'string', 'max' => 200],
       [['translator'], 'string', 'max' => 100],
       [['hash'], 'string', 'max' => 40],
@@ -277,20 +277,20 @@ class Reference extends BaseModel
       $lastName= substr( trim($parts[0]),0, 20);
       $lastNames[] = str_replace(" ", "-", $lastName);
     }
+    if(count($lastNames)>2){
+      $lastNames = [$lastNames[0],"et-al"];
+    }
     $citekey = implode("+", $lastNames);
-
     $citekey .= "-" . $this->year;
-
-    $titlewords = explode(" ", $this->title);
-    while (count($titlewords) and strlen($titlewords[0]) < 4) {
-      array_shift($titlewords);
+    $titlewords = $t = explode(" ", $this->title);
+    while (count($t) and strlen($t[0]) < 4) {
+      array_shift($t);
     }
-    if (count($titlewords)) {
-      $citekey .= "-" . $titlewords[0];
-    }
+    $citekey .= "-" . (count($t)?$t[0]:$titlewords[0]);
     $citekey= preg_replace("/[^[:alnum:][:space:]\-\+]/u", '', $citekey);
     $citekey= str_replace(" ","_",$citekey);
-    return $citekey;
+    $length = self::getDb()->getTableSchema(self::tableName())->columns['citekey']->size;
+    return substr($citekey,0,$length);
   }
 
   /**

@@ -44,6 +44,14 @@ class Utils extends \yii\base\Component
   }
 
   /**
+   * Returns the URL of the HTML user interface
+   */
+  public function getFrontendUrl()
+  {
+    return dirname(dirname(dirname(Yii::$app->request->absoluteUrl)));
+  }
+
+  /**
    * Returns the content of package.json as an object structure
    * @return object
    */

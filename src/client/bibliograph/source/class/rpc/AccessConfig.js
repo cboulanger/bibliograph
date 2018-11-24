@@ -4,7 +4,6 @@
  * Backend service class for the access control tool widget
  * 
  * @see app\controllers\AccessConfigController
- * @file AccessConfigController.php
  */
 qx.Class.define("rpc.AccessConfig",
 { 
@@ -252,6 +251,28 @@ qx.Class.define("rpc.AccessConfig",
     schemaclassExists : function($class){
       qx.core.Assert.assertString($class);
       return qx.core.Init.getApplication().getRpcClient("access-config").send("schemaclass-exists", [$class]);
+    },
+
+    /**
+     * Allows to search for LDAP users and, if found, to add them to the local list of users
+     * 
+     * @return {Promise}
+     * @see AccessConfigController::actionFindLdapUserDialog
+     */
+    findLdapUserDialog : function(){
+      return qx.core.Init.getApplication().getRpcClient("access-config").send("find-ldap-user-dialog", []);
+    },
+
+    /**
+     * 
+     * 
+     * @param username 
+     * @return {Promise}
+     * @see AccessConfigController::actionImportLdapUser
+     */
+    importLdapUser : function(username){
+      // @todo Document type for 'username' in app\controllers\AccessConfigController::actionImportLdapUser
+      return qx.core.Init.getApplication().getRpcClient("access-config").send("import-ldap-user", [username]);
     }
   }
 });

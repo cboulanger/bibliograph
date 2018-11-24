@@ -1,63 +1,67 @@
 {
-    "require": {
-        "yiisoft/yii2": "dev-master",
-        "cranetm/yii2-json-rpc-2.0": "dev-cboulanger-empty-request-object",
-        "toriphes/yii2-console-runner": "*",
-        "fourteenmeister/dsn": "*@dev",
-        "odannyc/yii2-sse": "^0.1.0",
-        "flow/jsonpath": "^0.3.4",
-        "danielstjules/stringy": "^3.1",
-        "edvlerblog/yii2-adldap-module": "^4.0.0",
-        "bmsrox/yii2-module-autoloader": "dev-cboulanger-fix-mac-hidden-dir",
-        "react/stream": "^0.7.7",
-        "yiisoft/yii2-swiftmailer": "^2.1",
-        "m1/vars": "^1.1",
-        "yosymfony/toml": "^0.3.3",
-        "renanbr/crossref-client": "^1",
-        "voku/simple-cache": "^3.1",
-        "rsinger/worldcat-linkeddata-php" : "*@dev",
-        "neitanod/forceutf8": "^2.0",
-        "aracoool/yii2-uuid": "^1.1",
-        "react/http-client": "^0.5.9"
+  "config": {
+    "platform": {
+      "php": "7.0"
+    }
+  },
+  "require": {
+    "yiisoft/yii2": "dev-master",
+    "cranetm/yii2-json-rpc-2.0": "dev-cboulanger-empty-request-object",
+    "toriphes/yii2-console-runner": "*",
+    "fourteenmeister/dsn": "dev-master",
+    "odannyc/yii2-sse": "^0.1.0",
+    "flow/jsonpath": "^0.3.4",
+    "danielstjules/stringy": "^3.1",
+    "edvlerblog/yii2-adldap-module": "^4.0.0",
+    "bmsrox/yii2-module-autoloader": "dev-cboulanger-fix-mac-hidden-dir",
+    "react/stream": "^0.7.7",
+    "yiisoft/yii2-swiftmailer": "^2.1",
+    "m1/vars": "^1.1",
+    "yosymfony/toml": "^0.3.3",
+    "renanbr/crossref-client": "^1",
+    "voku/simple-cache": "^3.1",
+    "rsinger/worldcat-linkeddata-php" : "*@dev",
+    "neitanod/forceutf8": "^2.0",
+    "aracoool/yii2-uuid": "^1.1",
+    "react/http-client": "^0.5.9"
+  },
+  "require-dev": {
+    "bizley/migration": "^2.2",
+    "yiisoft/yii2-gii": "~2.0.0",
+    "codeception/codeception": "^2.3",
+    "codeception/specify": "^1.0",
+    "codeception/verify": "^1.0",
+    "elisdn/yii2-gii-fixture-generator": "^1.1",
+    "insolita/yii2-migration-generator": "~2.3",
+    "graze/guzzle-jsonrpc": "~3.0",
+    "bazilio/yii2-stubs-generator": "^1.1",
+    "goaop/parser-reflection": "^1.4",
+    "yiisoft/yii2-faker": "~2.0.0"
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
     },
-    "require-dev": {
-        "bizley/migration": "^2.2",
-        "yiisoft/yii2-gii": "~2.0.0",
-        "codeception/codeception": "^2.3",
-        "codeception/specify": "^1.0",
-        "codeception/verify": "^1.0",
-        "elisdn/yii2-gii-fixture-generator": "^1.1",
-        "insolita/yii2-migration-generator": "~2.3",
-        "graze/guzzle-jsonrpc": "~3.0",
-        "bazilio/yii2-stubs-generator": "^1.1",
-        "goaop/parser-reflection": "^1.4",
-        "yiisoft/yii2-faker": "~2.0.0",
-        "overtrue/phplint": "^1.1"
+    {
+      "type": "git",
+      "url": "https://github.com/cboulanger//yii2-json-rpc-2.0"
     },
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://asset-packagist.org"
-        },
-        {
-            "type": "git",
-            "url": "https://github.com/cboulanger//yii2-json-rpc-2.0"
-        },
-        {
-            "type": "git",
-            "url": "https://github.com/cboulanger/yii2-module-autoloader.git"
-        },
-        {
-          "type": "git",
-          "url": "https://github.com/cboulanger/worldcat-linkeddata-php.git"
-        },
-        {
-            "type": "git",
-            "url": "https://github.com/cboulanger/dsn.git"
-        },
-        {
-            "type": "git",
-            "url": "https://github.com/yiisoft/yii2.git"
-        }
-    ]
+    {
+      "type": "git",
+      "url": "https://github.com/cboulanger/yii2-module-autoloader.git"
+    },
+    {
+      "type": "git",
+      "url": "https://github.com/cboulanger/worldcat-linkeddata-php.git"
+    },
+    {
+      "type": "git",
+      "url": "https://github.com/cboulanger/dsn.git"
+    },
+    {
+      "type": "git",
+      "url": "https://github.com/yiisoft/yii2.git"
+    }
+  ]
 }

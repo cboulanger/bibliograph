@@ -136,9 +136,10 @@ class BibtexParser
    */
   private function getItemProperty()
   {
-
+    if ($this->cursor >= strlen($this->fileContent) ){
+      return false;
+    }
     // First, check if we reached the end of the bib item.
-
     if ($this->fileContent[$this->cursor] == "@") {
       return (FALSE);
     }

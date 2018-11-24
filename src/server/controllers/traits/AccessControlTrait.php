@@ -83,9 +83,10 @@ trait AccessControlTrait
   protected function getDatasourceUserGroups( User $user, Datasource $datasource){
     $groups = [];
     $userGroups = $user->getGroupNames();
+    $datasourceGroups = $datasource->groups;
     /** @var Group $group */
-    foreach( $datasource->groups as $group){
-      if( in_array($group->namedId,$userGroups)){
+    foreach( $datasourceGroups as $group){
+      if (in_array($group->namedId,$userGroups)){
         $groups[]= $group;
       }
     }
@@ -106,30 +107,46 @@ trait AccessControlTrait
     /** @var User $user */
     $user =  $this->getActiveUser();
 
-    if( $user->isAdmin() ) return;
+    if ($user->isAdmin()) return;
 
-    if( $datasource ) {
+    if ($datasource ) {
       if (is_string($datasource)) {
         /** @var Datasource $datasource */
-        $datasource = $this->datasource($datasource);
+        $datasource = $this->datasource($datasource); // In DatasourceTrait
       } elseif (!($datasource instanceof Datasource)) {
         throw new \InvalidArgumentException("Second argument must be null, string or instanceof Datasource");
       }
-      // group permissions
+
+      // permissions via group roles
       $groups = $this->getDatasourceUserGroups($user, $datasource);
       /** @var Group $group */
       foreach ($groups as $group) {
-        if( $user->hasPermission($permission, $group)) return;
+        // grant if the user has the permission in that group (or globally)
+        if ($user->hasPermission($permission, $group)) {
+          return;
+        }      
       }
+      // granted if the user's global roles are linked to the datasource and the permission
+      /** Role $role **/
+      foreach ($user->getGlobalRoles()->all() as $role) {
+        if (in_array($datasource->namedId, $role->datasourceNames) and $role->hasPermission($permission)){
+          return;
+        }
+      }
+      // if the user has access to the given database, grant if the user has a role in this database 
+      // which contains this permission
+      if ( $user->hasPermission($permission,null,$datasource)) return;
+
+      // permission not found
       Yii::warning( sprintf(
-        "User %s does not have required permission %s in datasource %s",
+        "User '%s' does not have required permission '%s' in datasource '%s'",
         $this->getActiveUser()->namedId, $permission, $datasource->namedId
       ));
     } else {
       // global permissions
-      if( $user->hasPermission($permission) ) return;
+      if ($user->hasPermission($permission) ) return;
       Yii::warning( sprintf(
-        "Active user %s does not have required permission %s",
+        "User '%s' does not have required permission '%s'.",
         $this->getActiveUser()->namedId, $permission
       ));
     }

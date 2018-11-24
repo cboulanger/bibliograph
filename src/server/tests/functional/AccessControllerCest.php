@@ -65,8 +65,8 @@ class AccessControllerCest
     $I->amGoingTo("update permissions for database1 and expect those for normal user.");
     $I->sendJsonRpcRequest('access', 'update-permissions', ['database1']);
     $I->assertEquals(14, count($I->grabRpcData()));
-    $I->amGoingTo("update permissions for database2 and expect to be denied access.");
-    $I->sendJsonRpcRequest('access', 'update-permissions', ['database2'], true);
+    $I->amGoingTo("update permissions for database3 and expect to be denied access.");
+    $I->sendJsonRpcRequest('access', 'update-permissions', ['database3'], true);
     $I->seeUserError();
     $I->amGoingTo("update permissions for user database and expect those for manager.");
     $I->sendJsonRpcRequest('access', 'update-permissions', ['jessica']);

@@ -222,6 +222,7 @@ class ImportController extends AppController
     /** @var AbstractParser $parser */
     $parser = new $parserClass();
     $records = $parser->parse( $data );
+    /** @var array $record */
     foreach( $records as $record )
     {
       $referenceClass = Datasource::in($this->datasource,"reference");
@@ -233,10 +234,11 @@ class ImportController extends AppController
       }
       try {
         $reference->save();
+        $reference->link("folders", $folder );
       } catch (Exception $e) {
         Yii::warning($e->getMessage());
+        throw new UserErrorException(Yii::t(self::CATEGORY, "Error during import. Maybe wrong file encoding?"));
       }
-      $reference->link("folders", $folder );
     }
 
     // return information on containing folder

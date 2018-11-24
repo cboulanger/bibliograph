@@ -138,11 +138,11 @@ class SearchController extends \yii\web\Controller
         ['number'=>$hits]
       ));
     }
-    Yii::debug("Found $hits records...", Module::CATEGORY);
+    Yii::debug("Found $hits records...", Module::CATEGORY, __METHOD__);
 
     // delete existing search
     $userId = Yii::$app->user->identity->getId();
-    Yii::debug("Deleting existing search data for query '$query'...", Module::CATEGORY);
+    Yii::debug("Deleting existing search data for query '$query'...", Module::CATEGORY, __METHOD__);
     /** @var Search[] $searches */
     $searches = (array) Search::find()->where(['query' => $query, 'UserId' => $userId ])->all();
     foreach ($searches as $search) {
@@ -161,15 +161,15 @@ class SearchController extends \yii\web\Controller
     ]);
     $search->save();
     $searchId = $search->id;
-    Yii::debug("Created new search record #$searchId for query '$query' for user #$userId.", Module::CATEGORY);
+    Yii::debug("Created new search record #$searchId for query '$query' for user #$userId.", Module::CATEGORY, __METHOD__);
 
     if ( $hits === 0) {
-      Yii::debug("Empty result set, aborting...", Module::CATEGORY);
+      Yii::debug("Empty result set, aborting...", Module::CATEGORY, __METHOD__);
       return;
     }
 
     // saving to local cache
-    Yii::debug("Caching records...", Module::CATEGORY);
+    Yii::debug("Caching records...", Module::CATEGORY, __METHOD__);
 
     $step = 50 / $hits;
     $i = 0;
@@ -206,7 +206,7 @@ class SearchController extends \yii\web\Controller
       $count++;
       if( $max and $count > $max ) break;
       try {
-        Yii::debug("Searching data for '$isbn' ...", Module::CATEGORY);
+        Yii::debug("Searching data for '$isbn' ...", Module::CATEGORY, __METHOD__);
         $this->sendRequest("webservices_worldcat", $isbn);
         $success++;
         Yii::info("[√] ISBN $isbn successfully imported ($count/$max)",Module::CATEGORY);

@@ -63,7 +63,7 @@ class M180307221505_create_table_data_Record extends Migration
       'url' => $this->string(255),
       'volume' => $this->string(50),
       'year' => $this->string(20),
-
+      'uuid' => $this->string(40)->unique(),
     ], $tableOptions);
   }
 

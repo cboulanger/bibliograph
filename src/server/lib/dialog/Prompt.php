@@ -20,8 +20,63 @@
 
 namespace lib\dialog;
 
-class Prompt extends Dialog
+class Prompt extends Alert
 {
+
+  /**
+   * The default text for the prompt
+   * @var string|null
+   */
+  public $default = null;
+
+  /**
+   * Set the default text for the prompt
+   * @param string $value
+   * @return $this
+   */
+  public function setDefault($value){$this->default = $value; return $this;}
+
+  /**
+   * Set whether input is required
+   * @var bool
+   */
+  public $requireInput = false;
+
+  /**
+   * Whether input is required
+   * @param bool $value
+   * @return $this
+   */
+  public function setRequireInput($value){$this->default = $value; return $this;}
+
+  /**
+   * The timeout in seconds before the prompt is auto-submitted after a value has been entered
+   * @var bool
+   */
+  public $autoSubmitTimeout = false;
+
+  /**
+   * Set the timeout in seconds before the prompt is auto-submitted after a value has been entered
+   * @param int $value
+   * @return $this
+   */
+  public function setAutoSubmitTimeout($value){$this->default = $value; return $this;}
+
+  /**
+   * @inheritdoc
+   */
+  public function sendToClient()
+  {
+    static::create(
+      $this->message,
+      $this->default,
+      $this->service,
+      $this->method,
+      $this->params,
+      $this->requireInput,
+      $this->autoSubmitTimeout
+    );
+  }
 
   /**
    * Returns a message to the client which prompts the user with an message and
@@ -42,20 +97,22 @@ class Prompt extends Dialog
    *    after the given timeout. If the $requireInput flag is set to true, this
    *    happens only if input has been entered and this input hasn't changed
    *    for the duration of the timeout
+   * @deprecated Please use setters instead
    */
-  public static function create(
-    $message,
-    $default,
-    $callbackService = null,
-    $callbackMethod = null,
-    $callbackParams = null,
-    $requireInput = null,
-    $autoSubmitTimeout = null
-  ) {
-  
+  public static function create() {
+    list(
+      $message,
+      $default,
+      $callbackService,
+      $callbackMethod,
+      $callbackParams,
+      $requireInput,
+      $autoSubmitTimeout
+    ) = array_pad( func_get_args(), 7, null);
+
     $properties = array(
-    'message'           => $message,
-    'value'             => $default,
+      'message'           => $message,
+      'value'             => $default,
     );
   
     if ($requireInput !== null) {

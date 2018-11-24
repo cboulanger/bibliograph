@@ -31,7 +31,7 @@ class Module extends \lib\Module
    * The version of the module
    * @var string
    */
-  protected $version = "0.0.2";
+  protected $version = "0.0.3";
 
   /**
    * A string constant defining the category for logging and translation
@@ -80,6 +80,9 @@ class Module extends \lib\Module
       array_push($error, "Directory '$backupPath' needs to exist and be writable");
     }
     if (count($error) == 0) {
+      if( ! @chmod(BACKUP_PATH,0777) ){
+        Yii::warning("Cannot make Backup folder world-writable.");
+      };
       $zip = new ZipArchive();
       $testfile = "$backupPath/test.zip";
       if ($zip->open($testfile, ZIPARCHIVE::CREATE) !== TRUE) {

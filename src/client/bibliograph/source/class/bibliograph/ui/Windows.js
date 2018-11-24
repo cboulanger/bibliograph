@@ -100,17 +100,14 @@ qx.Class.define("bibliograph.ui.Windows",
         }
       });
 
-      // bind messages to configuration values
+      // configuration-dependent UI elements
       let cm = app.getConfigManager();
       cm.addListener("ready", ()=> {
         cm.bindKey("application.title", loginDialog, "text", false);
-      });
-      cm.addListener("ready", () => {
         cm.bindKey("application.logo", loginDialog, "image", false);
+        // hide forgot password button if ldap is enabled @todo - make this configurable
+        loginDialog.setShowForgotPassword(!cm.getKey("ldap.enabled"));
       });
-      
-      // hide forgot password button if ldap is enabled
-      bus.subscribe( "ldap.enabled",(e) => loginDialog.setShowForgotPassword(!e.getData()));
     }
   }
 });
