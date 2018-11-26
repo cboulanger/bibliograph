@@ -20,7 +20,6 @@
 
 namespace app\models;
 
-use app\migrations\data\m180105_075537_data_RoleDataInsert;
 use function GuzzleHttp\describe_type;
 use InvalidArgumentException;
 use Yii;

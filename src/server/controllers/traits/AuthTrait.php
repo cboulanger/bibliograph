@@ -102,7 +102,10 @@ trait AuthTrait
     }
 
     // log in user
-    $user->online = true;
+    $user->online = 1;
+    // FIXME!
+    $user->anonymous = (int)$user->anonymous;
+    $user->active = (int) $user->active;
     $user->save();
     Yii::$app->user->setIdentity($user);
     /** @var Session $session */
