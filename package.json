@@ -1,6 +1,6 @@
 {
   "name": "bibliograph",
-  "version": "3.0.0-beta.66",
+  "version": "3.0.0-beta.67",
   "description": "Bibliograph is a powerful open source web application for the collaborative collection, editing and publishing of bibliographic data.",
   "main": "",
   "directories": {
@@ -41,7 +41,7 @@
     "docker-start": "build/script/docker-run.sh",
     "docker-all": "npm run dist-create && npm run docker-build && npm run docker-start",
     "docker-clean": "docker container prune && docker image prune",
-    "deploy" : "build/script/deploy"
+    "deploy": "build/script/deploy"
   },
   "author": "",
   "license": "ISC",

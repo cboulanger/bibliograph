@@ -33,7 +33,7 @@ fi
 cp $BUILD_TARGET-compiled/index.html $DIST_DIR
 
 # cd $TOP_DIR
-# bash bin/modules-compile.sh $BUILD_TARGET
+# bash build/script/modules-compile.sh $BUILD_TARGET
 
 echo " >>> Building server ..."
 cd $DIST_DIR/server
