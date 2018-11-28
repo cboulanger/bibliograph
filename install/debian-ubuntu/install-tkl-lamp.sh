@@ -25,7 +25,7 @@ apt-get install -y zip build-essential php-pear
 apt-get install -y php$PHPVERSION-{dev,ldap,curl,gd,intl,mbstring,mcrypt,xml,xsl,zip}
 
 section "Installing bibliographic tools..."
-apt-get install -y yaz libyaz4-dev bibutils
+apt-get install -y yaz libyaz4-dev bibutils jq
 pear channel-update pear.php.net && yes $'\n' | pecl install yaz && \
   pear install Structures_LinkedList-0.2.2 && pear install File_MARC
 echo "extension=yaz.so" > /etc/php/$PHPVERSION/mods-available/yaz.ini

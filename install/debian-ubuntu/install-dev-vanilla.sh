@@ -23,7 +23,7 @@ section "Installing LAMP server..."
 
 # General packages
 apt-get update && apt-get install -y \
-  wget curl zip \
+  wget curl zip jq \
   build-essential
 
 # Apache / PHP

@@ -2,6 +2,7 @@
 
 PHPVERSION="7.1"
 brew update
+brew install jq
 brew install mysql
 mysql.server start
 mysql -u root -e 'CREATE DATABASE IF NOT EXISTS bibliograph;'
