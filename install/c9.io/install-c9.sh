@@ -1,12 +1,12 @@
 # Bibliograph - Online Bibliographic Data Manager
 # Build script for c9.io (Ubuntu) - currently needs a VM with at least 1GB RAM
-# Call with bash build/environments/c9.io/install-c9.sh
+# Call with bash install/c9.io/install-c9.sh
 
 set -o errexit # Exit on error
 
 # Paths
 ROOT_DIR=/home/ubuntu/workspace
-THIS_DIR=$ROOT_DIR/build/environments/c9.io
+THIS_DIR=$ROOT_DIR/install/c9.io
 BIB_CONF_DIR=$ROOT_DIR/src/server/config/
 BIB_CONF_FILE=app.conf.toml
 PHP_VERSION=7.0.29

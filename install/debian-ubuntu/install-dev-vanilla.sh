@@ -54,9 +54,9 @@ npm link mocha
 pushd src/client/bibliograph
 qx contrib update
 qx contrib install
-qx compile ../../../build/environments/debian-ubuntu/compile.json --all-targets
+qx compile ../../../install/debian-ubuntu/compile.json --all-targets
 popd
-cp build/environments/debian-ubuntu/app.conf.toml.dist src/server/config/app.conf.toml
+cp install/debian-ubuntu/app.conf.toml.dist src/server/config/app.conf.toml
 
 section "Setting up Yii2 backend..."
 pushd src/server/vendor

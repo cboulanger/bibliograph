@@ -27,7 +27,7 @@ RUN \
   pear install File_MARC
 
 # Environment variables for the setup. Leave here so changes won't invalidate the cache
-ENV DOCKER_RESOURCES_DIR=build/env/docker
+ENV DOCKER_RESOURCES_DIR=install/docker
 ENV BIB_DIST_DIR=dist
 ENV BIB_DEPLOY_DIR /var/www/html
 
