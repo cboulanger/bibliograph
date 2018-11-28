@@ -735,7 +735,7 @@ class CqlObject
   public function toCQL()
   {
     $txt = $this->value;
-    if (count($this->modifiers) > 0) {
+    if (is_array($this->modifiers) && count($this->modifiers) > 0) {
       foreach ($this->modifiers as $mod) {
         $txt .= "/" . $mod->toCQL();
       }
@@ -873,7 +873,7 @@ class Prefixed extends CqlObject
     } else {
       $txt = $this->value;
     }
-    if (count($this->modifiers) > 0) {
+    if (is_array($this->modifiers) && count($this->modifiers) > 0) {
       foreach ($this->modifiers as $mod) {
         $txt .= "/" . $mod->toCQL();
       }
@@ -1129,7 +1129,7 @@ class Boolean extends CqlObject
   public function toCQL()
   {
     $txt = strtoupper($this->value);
-    if (count($this->modifiers) > 0) {
+    if (is_array($this->modifiers) && count($this->modifiers) > 0) {
       foreach ($this->modifiers as $mod) {
         $txt .= "/" . $mod->toCQL();
       }
