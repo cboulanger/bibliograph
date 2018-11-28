@@ -46,7 +46,7 @@ script:
 
 deploy:
   provider: script
-  script: bash install/docker/docker_push.sh
+  script: build/script/docker_push.sh
   skip_cleanup: true
   on:
     all_branches: true
