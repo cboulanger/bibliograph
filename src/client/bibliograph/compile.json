@@ -52,7 +52,7 @@
     {
       "environment": {
         "app.mode": "development",
-        "app.serverUrl": "../server.php?r="
+        "app.serverUrl": "server.php?r="
       },
       "outputPath": "dist-source-compiled",
       "targetClass": "SourceTarget",
@@ -63,7 +63,7 @@
       "environment": {
         "qx.debug": false,
         "app.mode": "production",
-        "app.serverUrl": "../server.php?r="
+        "app.serverUrl": "server.php?r="
       },
       "outputPath": "dist-build-compiled",
       "targetClass": "BuildTarget",
