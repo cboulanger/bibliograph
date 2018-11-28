@@ -24,6 +24,7 @@
    - port to PHP5/7
    - utf-8 support
    - resolve_prefix()
+   - Renamed Object to CqlObject for PHP7.2 compatibility
 
  */
 
@@ -640,7 +641,7 @@ class SimpleLex
  * Object which is returned if a problem occurs
  * @author Robert Sanderson
  */
-class Diagnostic extends Object
+class Diagnostic extends CqlObject
 {
   /**
    * @var string
@@ -697,13 +698,13 @@ class Diagnostic extends Object
  * @author Robert Sanderson
  *
  */
-class Object
+class CqlObject
 {
   /** @var string */
   public $value;
   /** @var ModifierClause[] */
   public $modifiers;
-  /** @var \lib\cql\Object */
+  /** @var \lib\cql\CqlObject */
   public $parentNode;
   /** @var Config */
   protected $config;
@@ -773,7 +774,7 @@ class Object
 
 }
 
-class Prefixable extends Object
+class Prefixable extends CqlObject
 {
   /** @var array */
   public $prefixes;
@@ -835,7 +836,7 @@ class Prefixable extends Object
   }
 }
 
-class Prefixed extends Object
+class Prefixed extends CqlObject
 {
   public $prefix;
   public $uri;
@@ -903,16 +904,16 @@ class Prefixed extends Object
 
 class Triple extends Prefixable
 {
-  /** @var \lib\cql\Object */
+  /** @var \lib\cql\CqlObject */
   public $leftOperand;
-  /** @var \lib\cql\Object */
+  /** @var \lib\cql\CqlObject */
   public $rightOperand;
   /** @var \lib\cql\Boolean */
   public $boolean;
   /** @var SortKey[] */
   public $sortKeys;
 
-  public function __construct( \lib\cql\Object &$left, \lib\cql\Object &$right, \lib\cql\Boolean &$boolean)
+  public function __construct(\lib\cql\CqlObject &$left, \lib\cql\CqlObject &$right, \lib\cql\Boolean &$boolean)
   {
     $this->prefixes = [];
     $this->parentNode = null;
@@ -961,7 +962,7 @@ class Triple extends Prefixable
   public function toTxt($depth = 0)
   {
     $space = str_repeat("  ", $depth);
-    $txt = Object::toTxt($depth);
+    $txt = CqlObject::toTxt($depth);
     $txt .= $this->leftOperand->toTxt($depth + 1);
     $txt .= $this->boolean->toTxt($depth + 1);
     $txt .= $this->rightOperand->toTxt($depth + 1);
@@ -1033,7 +1034,7 @@ class SearchClause extends Prefixable
   public function toTxt($depth = 0)
   {
     $space = str_repeat("  ", $depth);
-    $txt = Object::toTXT($depth);
+    $txt = CqlObject::toTXT($depth);
     $txt .= $this->index->toTxt($depth + 1);
     $txt .= $this->relation->toTxt($depth + 1);
     $txt .= $this->term->toTxt($depth + 1);
@@ -1093,7 +1094,7 @@ class Relation extends Prefixed
  * A CQL Term
  * @author Robert Sanderson
  */
-class Term extends Object
+class Term extends CqlObject
 {
   public function __construct($data)
   {
@@ -1110,7 +1111,7 @@ class Term extends Object
   }
 }
 
-class Boolean extends Object
+class Boolean extends CqlObject
 {
   public function __construct($data)
   {
@@ -1166,7 +1167,7 @@ class ModifierType extends Prefixed
   }
 }
 
-class ModifierClause extends Object
+class ModifierClause extends CqlObject
 {
   public $type;
   public $comparison;
@@ -1200,7 +1201,7 @@ class ModifierClause extends Object
   public function toTxt($depth = 0)
   {
     $space = str_repeat("  ", $depth);
-    $txt = $space . Object::toTxt();
+    $txt = $space . CqlObject::toTxt();
     $t = $this->type->toCQL();
     $txt .= "{$space}  type: $t\n";
     if ($this->value) {
@@ -1212,7 +1213,7 @@ class ModifierClause extends Object
 }
 
 
-class SortKey extends Object
+class SortKey extends CqlObject
 {
   /** @var Index */
   public $index;
