@@ -3,28 +3,24 @@
 ## v3.0.0-beta
 
 ### Priority: urgent
-- [ ] FEAT: User::getAllPermissions returns always the highest available set of permissions, regardless of the permissions of the group the current datasource belongs to. Requires rewriting of  `$this->requirePermission` to pass the datasource / datasource name
-- [x] BUG: Test if translations work (it doesn't in unit test)
+- [ ] BUG: "Forgot Password" doesn't work: repair or disable
+- [ ] BUG: Import-Window: Import All doesn't select all references if they haven't been loaded. This needs to be done on the server. 
+- [ ] BUG: Create new datasource results in "User Error: Running 'migrate/up' failed."
+- [ ] BUG: Delete datasource: "Running 'migrate/down' failed"
 
 ### Priority: normal
-- [ ] BUG: use DatasourceTrait::datasource() consistently instead of Dataource::getInstanceFor(), since it provides access control!
 - [ ] BUG: Reimplement User::checkFormPassword
 - [ ] FEAT: Cache export formats for HTML view, make configurable 
 - [ ] FEAT: Disallow drop of references on folders in which they are already contained.
 - [ ] FEAT: Reimplement Search Help 
 - [ ] FEAT: Reimplement account management via email
 - [ ] FEAT: Reimplement Search Help window
-- [ ] FEAT: Config key change should be broadcasted
-- [ ] FEAT: Implement setup Wizard
-- [ ] FEAT: Allow migrations via permission, not prod/dev-mode
-- [ ] FEAT: Z39.50 Plugin: Preference option to configure timeout 
 - [ ] FEAT: Reimplement "In which folders..."
 - [ ] FEAT: add GUI for 'app.access.userdatabase.defaultrole' config
 - [ ] FEAT: "Orphaned" folder should contain references that do not have a parent
 
 ### Priority: low
 - [ ] BUG: Remove non-printable chars from Z39.50 import, see also https://github.com/cboulanger/bibliograph/issues/189
-- [ ] FEAT: Backend: Streamline API to get Datasource & typed model
 - [ ] FEAT: Frontend: Rename widget ids, replace with native qooxdoo ids, see https://github.com/qooxdoo/qooxdoo/issues/9422
 - [ ] FEAT: Change app state separator and assignment chars
 - [ ] FEAT: Re-implement reference editor title label
@@ -45,7 +41,9 @@
 - [ ] FEAT: Reimplement support for the admindb, userdb and tmpdb settings in app.conf.toml -> use DSNs instead of single settings or TOML nested arrays.
 
 ### Code cleanup / refactoring
-- [ ] rename "build" dir to "install" 
+- [ ] fix compiler errors
+- [x] rename "build" dir to "install"
+- [ ] use DatasourceTrait::datasource() consistently instead of Dataource::getInstanceFor(), since it provides access control!
 - [ ] run npm audit fix on all npm dependencies, change where possible, or change in global package.json
 - [ ] Move dispatchClientMessage/broadcast to Yii::$app->message component
 - [ ] Move scripts in "bin" to "build/script" and test scripts to "test/script"; adapt npm run commands
@@ -92,40 +90,7 @@
 - [ ] Remove datasource_role link
 - [ ] Remove unneccessary composer packages
 - [ ] `npm audit fix`
-
-### Comnopiler errors
-
-qcl.access.MPermissions: [275,51] Unresolved use of symbol permission.update
-qcl.access.MPermissions: [285,14] Unresolved use of symbol permission.addCondition
-qcl.access.MPermissions: [286,73] Unresolved use of symbol permission.getNamedId
-qcl.ui.dialog.ServerProgress: [122,6] Unresolved use of symbol params.id
-qcl.ui.dialog.ServerProgress: [123,6] Unresolved use of symbol params.auth_token
-bibliograph.ui.window.AccessControlTool: [128,4] Unresolved use of symbol bibliograph._actRpcSendProxy
-biblograph.ui.main.MultipleTreeView: [461,8] Unresolved use of symbol model.label
-bibliograph.ui.main.MultipleTreeView: [467,38] Unresolved use of symbol model.data.id
-bibliograph.ui.main.TableView: [506,9] Unresolved use of symbol node.label
-bibliograph.ui.main.TableView: [527,93] Unresolved use of symbol node.label
-bibliograph.ui.main.TableView: [509,36] Unresolved use of symbol node.data.id
-bibliograph.ui.main.TableView: [529,36] Unresolved use of symbol node.data.id
-qcl.ui.MChildWidget: [44,36] Unresolved use of symbol id.charAt
-
-
-### Compiler errors
-
-qcl.access.MPermissions: [275,51] Unresolved use of symbol permission.update
-qcl.access.MPermissions: [285,14] Unresolved use of symbol permission.addCondition
-qcl.access.MPermissions: [286,73] Unresolved use of symbol permission.getNamedId
-qcl.ui.dialog.ServerProgress: [122,6] Unresolved use of symbol params.id
-qcl.ui.dialog.ServerProgress: [123,6] Unresolved use of symbol params.auth_token
-bibliograph.ui.window.AccessControlTool: [128,4] Unresolved use of symbol bibliograph._actRpcSendProxy
-biblograph.ui.main.MultipleTreeView: [461,8] Unresolved use of symbol model.label
-bibliograph.ui.main.MultipleTreeView: [467,38] Unresolved use of symbol model.data.id
-bibliograph.ui.main.TableView: [506,9] Unresolved use of symbol node.label
-bibliograph.ui.main.TableView: [527,93] Unresolved use of symbol node.label
-bibliograph.ui.main.TableView: [509,36] Unresolved use of symbol node.data.id
-bibliograph.ui.main.TableView: [529,36] Unresolved use of symbol node.data.id
-qcl.ui.MChildWidget: [44,36] Unresolved use of symbol id.charAt
-
+- [ ] Backend: Streamline API to get Datasource & typed model
 
 ### Testing, CI and distribution
 - [ ] Make Travis ~~great~~ work again
@@ -143,11 +108,16 @@ qcl.ui.MChildWidget: [44,36] Unresolved use of symbol id.charAt
 ## v3.1
 
 ### Priority: high
+- [ ] FEAT: Implement setup Wizard
 - [ ] FEAT: Re-enable item view / formatted item
 - [ ] FEAT: Re-enable item view / record info
 - [ ] FEAT: Re-enable item view / duplicates search
 - [ ] FEAT: Re-enable system menu commands
 - [ ] FEAT: Re-implement message broadcast
+- [ ] FEAT: Allow migrations via permission, not prod/dev-mode
+- [ ] FEAT: Config key change should be broadcasted
+- [ ] FEAT: Z39.50 Plugin: Preference option to configure timeout 
+
 
 ### Priority: normal
 - [ ] FEAT: Update CQL operators to conform to the specs (http://www.loc.gov/standards/sru/cql/contextSets/theCqlContextSet.html)
