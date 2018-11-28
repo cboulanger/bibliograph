@@ -6,6 +6,7 @@
 FROM ubuntu:18.04
 MAINTAINER Christian Boulanger <info@bibliograph.org>
 ENV DEBIAN_FRONTEND noninteractive
+ENV PHPVERSION=7.2
 
 # Packages
 RUN apt-get update && apt-get install -y \
@@ -18,8 +19,8 @@ RUN apt-get update && apt-get install -y \
 
 # Install php-yaz
 RUN \
-  pecl config-set php_ini /etc/php/7.2/apache2/php.ini && \
-  pear config-set php_ini /etc/php/7.2/apache2/php.ini && \
+  pecl config-set php_ini /etc/php/${PHPVERSION}/apache2/php.ini && \
+  pear config-set php_ini /etc/php/${PHPVERSION}/apache2/php.ini && \
   pecl install yaz && \
   pear channel-update pear.php.net && \
   pear install Structures_LinkedList-0.2.2 && \
