@@ -145,7 +145,7 @@ trait AuthTrait
     $user->save();
     $user->namedId = "guest" . $user->getPrimaryKey();
     $user->name = "Guest";
-    $user->anonymous = $user->active = true;
+    $user->anonymous = $user->active = 1;
     $user->save();
     $user->link("roles", $anonRole);
     return $user;

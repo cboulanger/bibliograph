@@ -20,6 +20,7 @@
 
 namespace lib\models;
 
+use lib\exceptions\UserErrorException;
 use Yii;
 use yii\base\ModelEvent;
 use yii\db\ActiveRecord;
@@ -195,12 +196,12 @@ class BaseModel extends ActiveRecord
    */
   public function save( $runValidation = true, $attributeNames = null )
   {
-    if( parent::save( $runValidation, $attributeNames ) ){
+    if (parent::save($runValidation, $attributeNames)) {
       return true;
     }
-    $exception =  new \yii\db\Exception("Error saving model " . get_class($this));
+    $message = sprintf("Saving model %s failed: %s", static::class, json_encode($this->getFirstErrors()));
+    $exception = new \yii\db\Exception($message);
     $exception->errorInfo = $this->getFirstErrors();
-    Yii::error($this->getFirstErrors());
     throw $exception;
   }
 

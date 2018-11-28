@@ -144,7 +144,7 @@ class Module extends \lib\Module
       $datasource = $manager->create($datasourceName, "z3950");
       $datasource->setAttributes([
         'title' => $title,
-        'hidden' => true, // should not show up as selectable datasource
+        'hidden' => 1, // should not show up as selectable datasource
         'resourcepath' => $filepath,
       ]);
       $datasource->save();

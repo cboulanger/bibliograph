@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7060ab9a3757f43f7e7abec8ac11a2f1",
+    "content-hash": "9795c6b89145aafc39438347077a9b92",
     "packages": [
         {
             "name": "adldap2/adldap2",
@@ -1328,16 +1328,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "1.36.0",
+            "version": "1.36.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "f5e9fa283fa389ffa49e58391a02f063dcdd1815"
+                "reference": "63da8cdf89d7a5efe43aabc794365f6e7b7b8983"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/f5e9fa283fa389ffa49e58391a02f063dcdd1815",
-                "reference": "f5e9fa283fa389ffa49e58391a02f063dcdd1815",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/63da8cdf89d7a5efe43aabc794365f6e7b7b8983",
+                "reference": "63da8cdf89d7a5efe43aabc794365f6e7b7b8983",
                 "shasum": ""
             },
             "require": {
@@ -1382,7 +1382,7 @@
                 "datetime",
                 "time"
             ],
-            "time": "2018-11-16T11:47:11+00:00"
+            "time": "2018-11-22T18:23:02+00:00"
         },
         {
             "name": "odannyc/yii2-sse",
@@ -2579,12 +2579,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-framework.git",
-                "reference": "6317bc9789efabfa535fe141267e3f81a3f3fe8c"
+                "reference": "ffa06c0fc6fae7cb23e17def6e238bb8077c1ff4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/6317bc9789efabfa535fe141267e3f81a3f3fe8c",
-                "reference": "6317bc9789efabfa535fe141267e3f81a3f3fe8c",
+                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/ffa06c0fc6fae7cb23e17def6e238bb8077c1ff4",
+                "reference": "ffa06c0fc6fae7cb23e17def6e238bb8077c1ff4",
                 "shasum": ""
             },
             "require": {
@@ -2671,7 +2671,7 @@
                 "framework",
                 "yii2"
             ],
-            "time": "2018-11-21T16:32:24+00:00"
+            "time": "2018-11-28T07:22:04+00:00"
         },
         {
             "name": "yiisoft/yii2-composer",
@@ -2930,16 +2930,16 @@
         },
         {
             "name": "bizley/migration",
-            "version": "2.3.4",
+            "version": "2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bizley/yii2-migration.git",
-                "reference": "238cc74049cfa26c8f6e4442e8bcf8224ea60e1d"
+                "reference": "13c9054db27b020991bdca11b30b5768637faff1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bizley/yii2-migration/zipball/238cc74049cfa26c8f6e4442e8bcf8224ea60e1d",
-                "reference": "238cc74049cfa26c8f6e4442e8bcf8224ea60e1d",
+                "url": "https://api.github.com/repos/bizley/yii2-migration/zipball/13c9054db27b020991bdca11b30b5768637faff1",
+                "reference": "13c9054db27b020991bdca11b30b5768637faff1",
                 "shasum": ""
             },
             "require": {
@@ -2975,7 +2975,7 @@
                 "migration",
                 "yii2"
             ],
-            "time": "2018-10-29T11:02:42+00:00"
+            "time": "2018-11-24T09:04:46+00:00"
         },
         {
             "name": "bower-asset/bootstrap",
@@ -5810,7 +5810,10 @@
     },
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "ext-json": "*",
+        "ext-pdo": "*"
+    },
     "platform-dev": [],
     "platform-overrides": {
         "php": "7.0"
