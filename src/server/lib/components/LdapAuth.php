@@ -252,7 +252,7 @@ class LdapAuth extends \yii\base\Component
       'namedId'   => $username,
       'name'      => $name,
       'email'     => $email,
-      'ldap'      => 1,
+      self::CATEGORY      => 1,
       'online'    => 1,
       'active'    => 1,
       'anonymous' => 0,
