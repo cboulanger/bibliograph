@@ -12,7 +12,6 @@
 - [ ] BUG: Reimplement User::checkFormPassword
 - [ ] FEAT: Cache export formats for HTML view, make configurable 
 - [ ] FEAT: Disallow drop of references on folders in which they are already contained.
-- [ ] FEAT: Reimplement Search Help 
 - [ ] FEAT: Reimplement account management via email
 - [ ] FEAT: Reimplement Search Help window
 - [ ] FEAT: Reimplement "In which folders..."
@@ -24,8 +23,6 @@
 - [ ] FEAT: Frontend: Rename widget ids, replace with native qooxdoo ids, see https://github.com/qooxdoo/qooxdoo/issues/9422
 - [ ] FEAT: Change app state separator and assignment chars
 - [ ] FEAT: Re-implement reference editor title label
-- [ ] FEAT: Re-implement Docker image for testing
-- [ ] FEAT: Frontend: Rename item view "metadata" page
 - [ ] FEAT: Preferences: Implement field selection for editor as checkboxes
 - [ ] FEAT: Reimplememt help window
 - [ ] FEAT: validate email configuration 
@@ -93,13 +90,11 @@
 - [ ] Backend: Streamline API to get Datasource & typed model
 
 ### Testing, CI and distribution
-- [ ] Make Travis ~~great~~ work again
-- [ ] Use eslint on Travis: see https://github.com/ITISFoundation/qx-iconfont-material/blob/master/package.json
-- [ ] Add dockerized setup, see https://github.com/ITISFoundation/qx-iconfont-material
+- [x] Make Travis ~~great~~ work again
 - [ ] Tests: Fix bootstrap loading issue
 - [ ] Move config/test.php to tests/config.php 
-- [ ] Replace compile.json by compile.js to dynamically include plugin code
 - [ ] Check log email target to be able to remotely monitor fatal errors
+- [ ] Setup API tests using https://medium.com/mop-developers/testing-your-api-with-dredd-c02e6ca151f2
 
 ## v3.0.0.RC.X (only bug fixes)
 
@@ -117,7 +112,7 @@
 - [ ] FEAT: Allow migrations via permission, not prod/dev-mode
 - [ ] FEAT: Config key change should be broadcasted
 - [ ] FEAT: Z39.50 Plugin: Preference option to configure timeout 
-
+- [ ] FEAT: Replace compile.json by compile.js to dynamically include plugin code
 
 ### Priority: normal
 - [ ] FEAT: Update CQL operators to conform to the specs (http://www.loc.gov/standards/sru/cql/contextSets/theCqlContextSet.html)
@@ -134,3 +129,5 @@
 - [ ] FEAT: Enable print item view: bibliograph.ui.main.ItemView#print()
 - [ ] FEAT: Rewrite Yii2 configuration using M1/Var, maybe convert config to YAML: https://packagist.org/packages/sergeymakinen/yii2-config ?
 - [ ] FEAT: Ctrl+A to select all (visible?) references.
+- [ ] FEAT: Use eslint on Travis: see https://github.com/ITISFoundation/qx-iconfont-material/blob/master/package.json
+- [ ] FEAT: Add dockerized setup, see https://github.com/ITISFoundation/qx-iconfont-material
