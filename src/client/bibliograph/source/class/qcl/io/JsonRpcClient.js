@@ -92,11 +92,10 @@ qx.Class.define("qcl.io.JsonRpcClient", {
       this.setError(null);
       try{
         let result = await this.__client.send( method, params);
-        return this._handleResult(result);
+        return this._handleResult(result, method);
       } catch( e ) {
         this.setError(e);
-        let msg = `Error calling remote method '${method}': `+this.getErrorMessage();
-        dialog.Dialog.error( msg ); // @todo use one instance!
+        this._showMethodCallErrorMessage(method);
         return null;
       }
     },
@@ -116,8 +115,7 @@ qx.Class.define("qcl.io.JsonRpcClient", {
          await this.__client.notify( method, params );
       } catch( e ) {
         this.setError(e);
-        let msg = `Error calling remote method '${method}': `+this.getErrorMessage();
-        dialog.Dialog.error( msg ); // @todo use one instance!
+        this._showMethodCallErrorMessage(method);
         return null;
       }
     }, 
@@ -163,6 +161,48 @@ qx.Class.define("qcl.io.JsonRpcClient", {
     _applyToken : function( value, old ){
       this.__client.setAuthToken(value);
     },
+  
+    /**
+     * Displays an error that the method call failed.
+     * @param method
+     * @private
+     */
+    _showMethodCallErrorMessage : function(method)
+    {
+      let app = this.getApplication();
+      let msg =
+            app.tr( "Error calling remote method '%1': %2.", method, this.getErrorMessage()) + " " +
+            app.tr("If the error persists, contact the administrator.");
+      dialog.Dialog.error( msg ); // @todo use one instance!
+    },
+  
+    /**
+     * Shows error dialog when authentication failed
+     * @param method
+     * @private
+     */
+    _showAuthErrorMessageAndLogOut : function(method)
+    {
+      let app = this.getApplication();
+      if (app.__authErrorDialog) {
+        this.error(`Authentication failed for method '${method}.'`);
+        return;
+      }
+      let msg =
+            app.tr("A login problem occurred, which is usually due to a database upgrade. Press 'OK' to reload the application.") + " " +
+            app.tr("If the error persists, contact the administrator.");
+      app.__authErrorDialog = dialog.Dialog.error( msg );
+      app.__authErrorDialog.promise()
+        .then(()=>
+          app.getAccessManager().logout()
+            .then(()=>window.location.reload())
+            .catch(()=>
+              app.getAccessManager().logout()
+              .then(()=>window.location.reload())
+            )
+        );
+      this.warn(`Authentication failed for method '${method}.'`);
+    },
 
     /**
      * Event Transport protocol:
@@ -172,13 +212,18 @@ qx.Class.define("qcl.io.JsonRpcClient", {
      *   "data" : <result data>
      * }
      */
-    _handleResult : function( result ){
+    _handleResult : function( result, method ){
+      // a null result is typically a token problem
+      if (result===null){
+        this._showAuthErrorMessageAndLogOut(method);
+        this.error(`Authentication failed for method '${method}.'`);
+      }
       // we are only interested in objects (but not arrays)
       if(  qx.lang.Type.isArray(result) || ! qx.lang.Type.isObject(result) ){
         return result;
       }
       // we're only interested in ServiceResult DTOs
-      if( result.type != "ServiceResult" ) return result;
+      if( result.type !== "ServiceResult" ) return result;
       // dispatch events as messages
       if( ! qx.lang.Type.isArray(result.events) ){
         this.warn("Invalid event property in ServiceResult DTO!");
