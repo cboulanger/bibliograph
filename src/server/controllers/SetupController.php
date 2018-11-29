@@ -485,11 +485,11 @@ class SetupController extends \app\controllers\AppController
       "join_Datasource_Group,join_Datasource_Role,join_Datasource_User,join_Group_User,join_Permission_Role,join_User_Role");
     $allTablesExist = $this->tableExists($expectTables);
     if ($allTablesExist) {
-      Yii::debug("All relevant v2 tables exist.", 'migrations', __METHOD__);
+      Yii::debug("All relevant v2 tables exist.", 'migrations');
     } else {
       $missingTables = \array_diff($expectTables, $this->tables());
       if (count(\array_diff($expectTables, $missingTables)) == 0) {
-        Yii::debug("None of the relevant v2 tables exist.", 'migrations', __METHOD__);
+        Yii::debug("None of the relevant v2 tables exist.", 'migrations');
       } else {
         // only some exist, this cannot currently be migrated or repaired
         Yii::error("Cannot upgrade from v2, since the following tables are missing: " . implode(", ", $missingTables));
@@ -499,7 +499,7 @@ class SetupController extends \app\controllers\AppController
       }
     }
     // fresh installation
-    if ($upgrade_from == "0.0.0") {
+    if ($this->isNewInstallation) {
       $message = Yii::t('setup', 'Found empty database');
     } // if this is an upgrade from a v2 installation, manually add migration history
     elseif ($upgrade_from == "2.x") {
@@ -541,42 +541,46 @@ class SetupController extends \app\controllers\AppController
       ];
     }
     if ($output->contains('up-to-date')) {
-      Yii::debug('No new migrations.', 'migrations', __METHOD__);
+      Yii::debug('No new migrations.', 'migrations');
       $message = Yii::t('setup', "No updates to the databases.");
     } else {
-      // unless this is a fresh installation, require admin login
-      /** @var \app\models\User $activeUser */
-      $activeUser = Yii::$app->user->identity;
-      // if the current version is >= 3.0.0 and no user is logged in, show a login screen
-      if (version_compare($upgrade_from, "3.0.0", ">=") and (!$activeUser or !$activeUser->hasRole('admin'))) {
-        $message = Yii::t('setup', "The application needs to be upgraded from '{oldversion}' to '{newversion}'. Please log in as administrator.", [
-          'oldversion' => $upgrade_from,
-          'newversion' => $upgrade_to
-        ]);
-        Login::create($message, "setup", "setup");
-        return [
-          "abort" => "Login required."
-        ];
-      };
 
-      // unless we're in test mode, let the admin confirm 
-      if (version_compare($upgrade_from, "3.0.0", ">=") and !$this->migrationConfirmed and !YII_ENV_TEST) {
-        $message = Yii::t('setup', "The database must be upgraded. Confirm that you have made a database backup and now are ready to run the upgrade."); // or face eternal damnation.
-        Confirm::create($message, null, "setup", "setup-confirm-migration");
-        return [
-          "abort" => "Admin needs to confirm the migrations"
-        ];
-      }
+// @todo
+//      if (!$this->isNewInstallation) {
+//        // require admin login
+//        /** @var \app\models\User $activeUser */
+//        $activeUser = Yii::$app->user->identity;
+//        // if the current version is >= 3.0.0 and no user is logged in, show a login screen
+//        if (version_compare($upgrade_from, "3.0.0", ">=") and (!$activeUser or !$activeUser->hasRole('admin'))) {
+//          $message = Yii::t('setup', "The application needs to be upgraded from '{oldversion}' to '{newversion}'. Please log in as administrator.", [
+//            'oldversion' => $upgrade_from,
+//            'newversion' => $upgrade_to
+//          ]);
+//          Login::create($message, "setup", "setup");
+//          return [
+//            "abort" => "Login required."
+//          ];
+//        };
+//        // admin confirm update
+//        if (version_compare($upgrade_from, "3.0.0", ">=") and !$this->migrationConfirmed and !YII_ENV_TEST) {
+//          $message = Yii::t('setup', "The database must be upgraded. Confirm that you have made a database backup and now are ready to run the upgrade."); // or face eternal damnation.
+//          Confirm::create($message, null, "setup", "setup-confirm-migration");
+//          return [
+//            "abort" => "Admin needs to confirm the migrations"
+//          ];
+//        }
+//      }
+
 
       // run all migrations 
-      Yii::debug("Applying migrations...", "migrations", __METHOD__);
+      Yii::debug("Applying migrations...", "migrations");
       try {
         $output = Console::runAction("migrate/up");
       } catch (MigrationException $e) {
         $output = $e->consoleOutput;
       }
       if ($output->contains('Migrated up successfully')) {
-        Yii::debug("Migrations successfully applied.", "migrations", __METHOD__);
+        Yii::debug("Migrations successfully applied.", "migrations");
         $message .= Yii::t('setup', ' and applied new migrations for version {version}', [
           'version' => $upgrade_to
         ]);
