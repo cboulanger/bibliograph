@@ -1138,3 +1138,15 @@ msgstr ""
 #: bibliograph/ui/window/AccessControlTool.js:162
 msgid "Import LDAP user"
 msgstr "LDAP-Konto importieren"
+
+#: qcl/io/JsonRpcClient.js:120
+msgid "Error calling remote method '%s': %s."
+msgstr ""
+
+#: qcl/io/JsonRpcClient.js:121 qcl/io/JsonRpcClient.js:182
+msgid "If the error persists, contact the administrator."
+msgstr ""
+
+#: qcl/io/JsonRpcClient.js:181
+msgid "A login problem occurred. Please reload the page and log off, repeatedly if neccessary."
+msgstr ""

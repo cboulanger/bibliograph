@@ -33,7 +33,7 @@ ENV BIB_DEPLOY_DIR /var/www/html
 
 # copy dist directory, remove unneeded files
 COPY $BIB_DIST_DIR/ $BIB_DEPLOY_DIR/
-# RUN rm $BIB_DEPLOY_DIR/*.zip
+RUN rm $BIB_DEPLOY_DIR/*.zip
 
 # add configuration files
 COPY $DOCKER_RESOURCES_DIR/app.conf.toml $BIB_DEPLOY_DIR/server/config/
