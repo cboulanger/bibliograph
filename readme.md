@@ -3,13 +3,13 @@
 [![Build Status](https://travis-ci.org/cboulanger/bibliograph.svg?branch=master)](https://github.com/cboulanger/bibliograph/tree/master) 
 [![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=panyasan&url=https://github.com/cboulanger/bibliograph&title=Bibliograph&language=javascript&tags=github&category=software)
 
-> NOTE: This is v3.0.0-beta, with a completely rewritten backend. Not all the features of 
-version 2 have been reimplemented, and documentation still has to be updated and added.  
+> NOTE: This is v3.0.0-beta, compatible with PHP 7, featuring a completely rewritten backend. Not all the features of 
+version 2 have been reimplemented, and documentation still has to be updated and added. The release is planned for easrly 2019.
 
 Bibliograph is a powerful open source web application for the collaborative
 collection, editing and publishing of bibliographic data.
 
-- [Installation](doc/install.md) 
+- [Installation](doc/dev/install.md) 
 - [Release Notes](release-notes.md)
 
 Bibliograph
@@ -54,13 +54,13 @@ Bibliograph can be used by
 - Easily extendable with custom plugins.
 
 ## Installation and Deployment
-See [here](doc/install.md).
+See [here](doc/dev/install.md).
 
 ## Support
 - Bugs and feature requests should be registered as [github issues](https://github.com/cboulanger/bibliograph/issues).
 
 ## Development & Roadmap
-- You can [hack the code](doc/development.md) and make it better;
+- You can [hack the code](doc/dev/development.md) and make it better;
 - The current roadmap is [here](doc/roadmap.md);
 - If you wish to sponsor a feature, please contact info at bibliograph dot org.
 

@@ -15,7 +15,7 @@
 
 ### Installation 
 - At them moment, there is no built package available. You'll have to clone the repository,
-  replicate the steps in [the Debian/Ubuntu install script](../install/debian-ubuntu/install.sh) 
+  replicate the steps in [the Debian/Ubuntu install script](../../install/debian-ubuntu/install-dev-vanilla.sh) 
   adapted to your local environment.
 
 ### Post-Installation 

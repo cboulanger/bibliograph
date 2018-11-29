@@ -1,10 +1,11 @@
 # Release notes
 
-## Version 3.0.0-beta (Summer 2018)
-- Completely rewrote backend, replacing homegrown framework with Yii2-based backend
-- Upgraded client to qooxdoo 6.0.0
-- Many changes under the hood (> 600 commits)
-- Reduced functionality to concentrate on making main features work and testing them
+## Version 3.0.0-beta (Summer 2018, stable release planned for early 2019)
+- Completely rewrote server part, replacing homegrown framework with Yii2-based backend
+- Upgraded client to qooxdoo 6.0.0 and its new javascript compiler toolchain
+- Many changes under the hood
+- Somewhat reduced functionality and number of plugins in order to concentrate on making main features rock-solid
+- Added extensive test suite based on the Codeception testing framework 
 - Added building of docker image to Travis CI
 
 ## Version 2.3 (October 2017)
@@ -23,8 +24,6 @@
 - Removed the annoying "No connection to server" alert if a server request fails
 
 ## Version 2.1 (Mid-2015)
-A [large number](https://github.com/cboulanger/bibliograph/issues?q=milestone%3Av2.1+is%3Aclosed)
-of changes, fixes, improvements and refactoring under the hood.
 - Upgraded to qooxdoo 4 on the frontend and to PHP > 5.3. on the backend
 - Clean-up and refactoring of the backend and the qcl library. Fixed various problems 
   related to session management.
