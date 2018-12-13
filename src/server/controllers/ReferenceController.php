@@ -24,6 +24,7 @@ use app\models\Datasource;
 use app\models\ExportFormat;
 use app\models\Folder;
 use app\models\Reference;
+use app\models\User;
 use app\schema\BibtexSchema;
 use lib\cql\NaturalLanguageQuery;
 use lib\dialog\Confirm;
@@ -1036,6 +1037,7 @@ class ReferenceController extends AppController
    */
   public function actionTokenizeQuery( $input, $inputPosition, $tokens, $datasourceName ){
     //Yii::debug(func_get_args());
+    $debug = false; 
     $input = trim($input);
     $modelClass = Datasource::in($datasourceName,"reference");
     $tokens[] = $input;
@@ -1046,17 +1048,17 @@ class ReferenceController extends AppController
       'query'     => $query,
       'schema'    => $schema,
       'language'  => Yii::$app->language,
-      'verbose' => true
+      'verbose'   => false
     ]);
     $translatedQuery = $nlq->translate();
-    Yii::debug("User search query '$query' was translated to '$translatedQuery'.", __METHOD__, __METHOD__);
+    if ($debug) Yii::debug("User search query '$query' was translated to '$translatedQuery'.", __METHOD__);
     $matches=[];
     switch ($inputPosition){
       case 0:
         // the first token is either a field name (or a search expression)
         $matches = array_filter($schema->getIndexNames(), function($index) use($input,$schema) {
           foreach ($schema->getIndexFields($index) as $indexField) {
-            if( ! $schema->isPublicField($indexField) ) return false;
+            if( Yii::$app->user->getIdentity()->isAnonymous()  && ! $schema->isPublicField($indexField) ) return false;
           }
           return $input === "?" or str_contains( mb_strtolower($index, 'UTF-8'),  mb_strtolower($input, 'UTF-8') );
         });
