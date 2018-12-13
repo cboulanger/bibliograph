@@ -264,13 +264,19 @@ trait TableTrait
    * @todo rewrite this
    * @todo modelClass can probably be determined by the datasource and be removed from params
    */
-  protected function createActiveQueryFromNaturalLanguageQuery( string $modelClass,string $datasourceName, string $naturalLanguageQuery, $columns="*")
+  protected function createActiveQueryFromNaturalLanguageQuery(
+    string $modelClass,
+    string $datasourceName,
+    string $naturalLanguageQuery,
+    $columns="*",
+    bool $debug = false,
+    bool $verbose = false)
   {
     // use the language that works/yields most hits
     $languages=Yii::$app->utils->getLanguages();
-    $indexedQueries =[];
+    $hits = 0;
+    $bestQuery = null;
     foreach ($languages as $language) {
-      //Yii::debug("Trying to translate query '$clientQuery->cql' from '$language'...", __METHOD__);
       /** @var ActiveQuery $activeQuery */
       $activeQuery = $modelClass::find()
         ->select($columns)
@@ -280,27 +286,28 @@ trait TableTrait
         'query'     => $naturalLanguageQuery,
         'schema'    => $schema,
         'language'  => $language,
-        'verbose'   => false
+        'verbose'   => $verbose
       ]);
+      if ($debug) Yii::debug(">>> Translating query '$naturalLanguageQuery' from '$language'...", __METHOD__);
       try {
         $nlq->injectIntoYiiQuery($activeQuery);
       } catch (\Exception $e) {
-        throw new UserErrorException($e->getMessage());
+        // error parsing the query
+        if ($debug) Yii::debug($e->getMessage(), __METHOD__);
+        $activeQuery->where("TRUE = FALSE");
       }
       try{
-        if( $nlq->containsOperators() ){
-          break;
-        }
-        if( $activeQuery->exists() ){
-          $indexedQueries[] = $activeQuery;
-        }
+        if ($debug) Yii::debug($activeQuery->createCommand()->rawSql, __METHOD__);
+        $h = $activeQuery->count();
+        if ($debug) Yii::debug("$h hits", __METHOD__);
+        if ( $h > $hits) {
+          $hits = $h;
+          $bestQuery = $activeQuery;
+        };
       } catch (\Exception $e){
         Yii::warning($e->getMessage());
       }
     }
-    if( ! $nlq->containsOperators() ){
-      if( count($indexedQueries) ) $activeQuery = $indexedQueries[0];
-    }
-    return $activeQuery;
+    return $bestQuery ? $bestQuery : $activeQuery;
   }
 }
