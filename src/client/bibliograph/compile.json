@@ -9,6 +9,7 @@
   },
   "libraries": [
     "../../vcslib/qooxdoo/framework",
+    "../../vcslib/qx-contrib-recorder",
     "../../server/modules/z3950/client",
     "../../server/modules/webservices/client",
     "../../server/modules/backup/client",
@@ -74,6 +75,7 @@
   "environment": {
     "qx.debug": true,
     "qx.icontheme": "Tango",
+    "module.objectid" : true,
     "app.version": "3.0.0-beta.70"
   }
 }
