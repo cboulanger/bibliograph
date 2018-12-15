@@ -75,6 +75,6 @@
     "qx.debug": true,
     "qx.icontheme": "Tango",
     "module.objectid": true,
-    "app.version": "3.0.0-beta.71"
+    "app.version": "3.0.0-beta.72"
   }
 }
