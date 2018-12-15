@@ -18,7 +18,7 @@ use yii\helpers\Html;
     <title>Bibliograph report</title>
 </head>
 <body>
-<?php foreach ($folders as [$level,$folderId]): ?>
+<?php foreach ($folders as $folder): list($level,$folderId) = $folder; ?>
 <?= "<h$level>{$controller->getFolder($datasource, $folderId)->label}</h$level>";?>
 <ol><?php foreach ($controller->getReferences($datasource, $folderId) as $record): ?>
     <li>
