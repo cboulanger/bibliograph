@@ -10,7 +10,7 @@ SERVER_PATH=src/
 TARGET=${1:-source}
 APP_PATH=client/bibliograph/$TARGET-compiled/index.html
 COMPILE_PATH=$(pwd)/src/client/bibliograph
-QX_CMD=qx
+QX_CMD=$(which qx)
 
 if [[ "$TARGET" != "only" ]]; then
     echo " >>> Compiling application..."

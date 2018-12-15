@@ -9,7 +9,7 @@ DIST_DIR=$TOP_DIR/dist
 CLIENT_SRC_DIR=$TOP_DIR/src/client/bibliograph
 SERVER_SRC_DIR=$TOP_DIR/src/server
 VERSION=$(node -p -e "require('$TOP_DIR/package.json').version")
-QX_CMD=$TOP_DIR/src/vcslib/qooxdoo-compiler/qx
+QX_CMD=$(which qx)
 
 if [[ ! -d "$DIST_DIR" ]]; then
     echo "Cannot find 'dist' subdirectory - are you in the top folder?"
