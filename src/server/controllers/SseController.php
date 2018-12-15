@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\controllers\traits\AuthTrait;
 use Yii;
 
 use lib\channel\Channel;
@@ -25,6 +26,7 @@ class TimeEvent implements Event {
 
 class SseController extends \yii\web\Controller
 {
+  use AuthTrait;
   /**
    * Renders a pure HTML test client
    *
@@ -62,7 +64,9 @@ class SseController extends \yii\web\Controller
    * @return void
    */
   public function actionIndex()
-  { 
+  {
+    throw new \BadMethodCallException("Not implemented");
+
     try{
       $headers = getallheaders();
 

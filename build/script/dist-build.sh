@@ -37,7 +37,7 @@ cp $BUILD_TARGET-compiled/index.html $DIST_DIR
 
 echo " >>> Building server ..."
 cd $DIST_DIR/server
-cp -a $SERVER_SRC_DIR/{config,controllers,lib,messages,migrations,models,modules,schema} .
+cp -a $SERVER_SRC_DIR/{config,controllers,lib,messages,migrations,models,modules,schema,views} .
 if ! [[ $BUILD_TARGET == *"build"* ]]; then
   cp -a $SERVER_SRC_DIR/web .
 fi
