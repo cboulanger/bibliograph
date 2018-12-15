@@ -46,9 +46,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "qooxdoo": "^6.0.1",
-    "qooxdoo-sdk": "^6.0.0-alpha",
-    "qxcompiler": "^0.2.14",
+    "qxcompiler": "^0.2.25",
     "raptor-client": "github:cboulanger/raptor-client"
   },
   "devDependencies": {

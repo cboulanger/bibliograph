@@ -8,7 +8,6 @@
     }
   },
   "libraries": [
-    "../../vcslib/qooxdoo/framework",
     "../../vcslib/qx-contrib-recorder",
     "../../server/modules/z3950/client",
     "../../server/modules/webservices/client",

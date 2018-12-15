@@ -2,8 +2,6 @@
 
 ## list of git clone targets
 declare -a arr=(
-  "qooxdoo/qooxdoo" 
-  "qooxdoo/qooxdoo-compiler"
   "cboulanger/yii2-json-rpc-2.0"
   "cboulanger/raptor-client"
   "cboulanger/qx-contrib-Dialog"
@@ -38,8 +36,3 @@ do
     cd ..
   fi
 done
-
-# link qooxdoo-compiler development version
-cd qooxdoo-compiler
-npm link
-cd ..

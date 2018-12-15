@@ -10,12 +10,13 @@ SERVER_PATH=src/
 TARGET=${1:-source}
 APP_PATH=client/bibliograph/$TARGET-compiled/index.html
 COMPILE_PATH=$(pwd)/src/client/bibliograph
-QX_CMD=$(pwd)/src/vcslib/qooxdoo-compiler/qx
+QX_CMD=qx
 
 if [[ "$TARGET" != "only" ]]; then
     echo " >>> Compiling application..."
     pushd $COMPILE_PATH > /dev/null
     #$QX_CMD clean
+    which $QX_CMD
     $QX_CMD compile --target=$TARGET
     popd > /dev/null
 fi
