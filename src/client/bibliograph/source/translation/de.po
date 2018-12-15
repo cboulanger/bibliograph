@@ -322,6 +322,7 @@ msgid "No folder selected. Try again"
 msgstr "Bitte erst einen Ordner auswählen"
 
 #: bibliograph/ui/main/MultipleTreeView.js:459
+#: bibliograph/ui/main/MultipleTreeView.js:470
 msgid "Do your really want to move folder '%1' to '%2'?"
 msgstr "Wollen Sie wirklich Ordner  '%1' in Ordner '%2' verschieben?"
 
@@ -330,6 +331,7 @@ msgid "Moving folder ..."
 msgstr "Verschiebe Ordner ..."
 
 #: bibliograph/ui/main/MultipleTreeView.js:573
+#: bibliograph/ui/main/MultipleTreeView.js:584
 msgid "Do you really want to delete all references and folders in the trash folder? This cannot be undone."
 msgstr "Wollen sie wirklich alle Datensätze und Ordner im Mülleimer endgültig löschen? Das kann nicht rückgängig gemacht werden."
 
@@ -991,6 +993,7 @@ msgid "Remove folder"
 msgstr "Ordner entfernen"
 
 #: bibliograph/ui/main/MultipleTreeView.js:579
+#: bibliograph/ui/main/MultipleTreeView.js:590
 msgid "Emptying the trash ..."
 msgstr "Der Papierkorb wird geleert…"
 
@@ -1028,6 +1031,7 @@ msgstr "Die Datensätze werden kopiert…"
 #: bibliograph/ui/main/MultipleTreeView.js:437
 #: bibliograph/ui/main/MultipleTreeView.js:441
 #: bibliograph/ui/main/MultipleTreeView.js:486
+#: bibliograph/ui/main/MultipleTreeView.js:497
 msgid "Do your really want to move %1 references to '%2'?"
 msgstr "Möchten Sie %1 Datensätze nach '%2' verschieben?"
 
@@ -1037,6 +1041,7 @@ msgstr "Möchten Sie %1 Datensätze nach '%2' verschieben?"
 #: bibliograph/ui/main/MultipleTreeView.js:459
 #: bibliograph/ui/main/MultipleTreeView.js:463
 #: bibliograph/ui/main/MultipleTreeView.js:508
+#: bibliograph/ui/main/MultipleTreeView.js:519
 msgid "Do your really want to copy %1 references to '%2'?"
 msgstr "Möchten Sie %1 Datensätze nach ‚%2‘ kopieren?"
 
@@ -1098,6 +1103,7 @@ msgid "No results"
 msgstr "Keine Ergebnisse"
 
 #: bibliograph/ui/main/MultipleTreeView.js:365
+#: bibliograph/ui/main/MultipleTreeView.js:376
 msgid "Loading folders. Please wait..."
 msgstr ""
 
@@ -1118,10 +1124,12 @@ msgid "Insert folder from Clipboard..."
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:551
+#: bibliograph/ui/main/MultipleTreeView.js:562
 msgid "Do you want to insert the folder '%1' from datasource '%2'?"
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:556
+#: bibliograph/ui/main/MultipleTreeView.js:567
 msgid "Do you want to insert the folder '%1'?"
 msgstr ""
 
@@ -1150,3 +1158,7 @@ msgstr ""
 #: qcl/io/JsonRpcClient.js:181
 msgid "A login problem occurred. Please reload the page and log off, repeatedly if neccessary."
 msgstr ""
+
+#: bibliograph/ui/main/MultipleTreeView.js:289
+msgid "Create report"
+msgstr "Bericht erstellen"

@@ -276,8 +276,18 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
     createVisibilityButton : function()
     {
       let button = new qx.ui.menu.Button(this.tr("Change visibility"));
-      button.setLabel(this.tr("Change visibility"));
       button.addListener("execute", ()=>this._changePublicState());
+      this.permissions.edit_folder.bind("state", button, "enabled");
+      this.getPermission("folder.edit").bind("state", button, "visibility", {
+        converter: bibliograph.Utils.bool2visibility
+      });
+      return button;
+    },
+    
+    createReportButton: function()
+    {
+      let button = new qx.ui.menu.Button(this.tr("Create report"));
+      button.addListener("execute", ()=>this._createReport());
       this.permissions.edit_folder.bind("state", button, "enabled");
       this.getPermission("folder.edit").bind("state", button, "visibility", {
         converter: bibliograph.Utils.bool2visibility
@@ -304,6 +314,7 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
           contextMenu.add(this.createPasteButton());
           contextMenu.add(this.createVisibilityButton());
           contextMenu.add(this.createEmptyTrashButton());
+          contextMenu.add(this.createReportButton());
           return true;
         });
       });
@@ -579,6 +590,17 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
         app.showPopup(this.tr("Emptying the trash ..."));
         rpc.Trash.empty(this.getDatasource()).then(()=> app.hidePopup());
       });
+    },
+  
+    _createReport: function () {
+      let app = qx.core.Init.getApplication();
+      let params = {};
+      params.datasource = this.getDatasource();
+      params.nodeId = this.getNodeId();
+      params.auth_token = app.getAccessManager().getToken();
+      let url = app.getServerUrl() + "/report/create&";
+      url += qx.util.Uri.toParameter(params) + "&nocache=" + Math.random();
+      window.open(url);
     }
   }
 });
