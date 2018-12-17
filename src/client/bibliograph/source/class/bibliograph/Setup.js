@@ -27,6 +27,46 @@ qx.Class.define("bibliograph.Setup", {
   type: "singleton",
   include : [qcl.ui.MLoadingPopup, qx.locale.MTranslation],
 
+  statics: {
+    messages: {
+      /**
+       * Exececute an arbitrary jsonrpc call.
+       * @param {[service,method,params]}
+       */
+      EXECUTE_JSONRPC: "jsonrpc.execute",
+      /**
+       * Shows the login dialog
+       */
+      SHOW_LOGIN_DIALOG: "loginDialog.show",
+      /**
+       * Reload the main list
+       */
+      RELOAD_LISTVIEW: "mainListView.reload",
+      /**
+       * Loads an URL, replacing the current page
+       */
+      REPLACE_URL: "window.location.replace",
+      /**
+       * Sets the current record model
+       * @todo
+       */
+      SET_MODEL: "bibliograph.setModel",
+      /**
+       * Logout the current user
+       */
+      LOGOUT: "client.logout",
+      /**
+       * Logs a message to the console
+       * @param {String}
+       */
+      LOG_TO_CONSOLE: "console.log",
+      /**
+       * Reloads the application
+       */
+      RELOAD_APPLICATION: "application.reload"
+    }
+  },
+
   members: {
 
     /**
@@ -51,7 +91,7 @@ qx.Class.define("bibliograph.Setup", {
       qx.Class.include( qx.core.Object, qcl.application.MGetApplication );
       // Mixes `widgetId` property into all qooxdoo objects
       qx.Class.include( qx.core.Object, qcl.application.MWidgetId );
-  
+
       this.setupClipboard();
 
       // initialize application commands
@@ -64,7 +104,7 @@ qx.Class.define("bibliograph.Setup", {
 
       // save state from querystring
       this.saveApplicationState();
-      
+
       // User interface translations
       this.setupUiTranslations();
 
@@ -126,7 +166,7 @@ qx.Class.define("bibliograph.Setup", {
 
       // initialize subscribers to messages that come from server
       this.initSubscribers();
-      
+
 
       // message transport
       //this.startPolling();
@@ -151,7 +191,7 @@ qx.Class.define("bibliograph.Setup", {
       this.__query    = app.getStateManager().getState("query");
       this.__modelId  = app.getStateManager().getState("modelId");
     },
-  
+
     /**
      * Creates the blocker for modal popupus
      */
@@ -162,7 +202,7 @@ qx.Class.define("bibliograph.Setup", {
       blocker.setColor( "black" );
       app.__blocker = blocker;
     },
-  
+
     /**
      * Sets the locale according to the browser settings.
      * This can be overridden by a config value
@@ -184,7 +224,7 @@ qx.Class.define("bibliograph.Setup", {
         }
       });
     },
-    
+
     /**
      * Returns the message displayed below the splash screen icon.
      * By default, return the version and copyright text.
@@ -235,7 +275,7 @@ qx.Class.define("bibliograph.Setup", {
       this.info("Got access token from session storage" );
       }
     },
-  
+
     /**
      * Loads the configuration values
      * @return {Promise<void>}
@@ -245,7 +285,7 @@ qx.Class.define("bibliograph.Setup", {
       await this.getApplication().getConfigManager().init().load();
       this.info("Config values loaded.");
     },
-  
+
     /**
      * Loads user data including permissions
      * @return {Promise<void>}
@@ -290,16 +330,16 @@ qx.Class.define("bibliograph.Setup", {
       let app = this.getApplication();
 
       // listen to reload event
-      bus.subscribe("application.reload", () => window.location.reload() );
+      bus.subscribe(bibliograph.Setup.messages.RELOAD_APPLICATION, () => window.location.reload() );
 
       // remotely log to the browser console
-      bus.subscribe("console.log", e => console.log(e.getData()) );
+      bus.subscribe(bibliograph.Setup.messages.LOG_TO_CONSOLE, e => console.log(e.getData()) );
 
       // server message to force logout the user
-      bus.subscribe("client.logout", () => this.logout());
+      bus.subscribe(bibliograph.Setup.messages.LOGOUT, () => this.logout());
 
       // server message to set model type and id
-      bus.subscribe("bibliograph.setModel", e => {
+      bus.subscribe(bibliograph.Setup.messages.SET_MODEL, e => {
         let data = e.getData();
         if ( data.datasource === app.getDatasource()) {
           app.setModelType(data.modelType);
@@ -308,31 +348,31 @@ qx.Class.define("bibliograph.Setup", {
       });
 
       // used by the bibliograph.export.exportReferencesHandleDialogData
-      bus.subscribe("window.location.replace", e => {
+      bus.subscribe(bibliograph.Setup.messages.REPLACE_URL, e => {
         let data = e.getData();
         window.location.replace(data.url);
       });
 
       // reload the main list view
-      bus.subscribe("mainListView.reload", e => {
+      bus.subscribe(bibliograph.Setup.messages.RELOAD_LISTVIEW, e => {
         let data = e.getData();
         if (data.datasource !== app.getDatasource())return;
         app.getWidgetById("app/tableview").reload();
       });
 
       // show the login dialog
-      bus.subscribe("loginDialog.show", ()=>{
+      bus.subscribe(bibliograph.Setup.messages.SHOW_LOGIN_DIALOG, ()=>{
         app.getWidgetById("app/windows/login").show();
       });
-      
-      // execute an arbitrary JSONRPC method 
-      bus.subscribe("jsonrpc.execute", e => {
+
+      // execute an arbitrary JSONRPC method
+      bus.subscribe(bibliograph.Setup.messages.EXECUTE_JSONRPC, e => {
         let [service,method,params] = e.getData();
         app.getRpcClient(service).send(method,params);
       });
-      
+
     },
-  
+
     /**
      * Setup clipboard synchronization with server
      */

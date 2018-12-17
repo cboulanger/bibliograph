@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
     "content-hash": "9795c6b89145aafc39438347077a9b92",
@@ -2621,12 +2621,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-framework.git",
-                "reference": "c4345681983543a6dad920975b0df5e666ca75ca"
+                "reference": "dbb4627ff471ced32b49336ed2a6967d5f1fc1bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/c4345681983543a6dad920975b0df5e666ca75ca",
-                "reference": "c4345681983543a6dad920975b0df5e666ca75ca",
+                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/dbb4627ff471ced32b49336ed2a6967d5f1fc1bf",
+                "reference": "dbb4627ff471ced32b49336ed2a6967d5f1fc1bf",
                 "shasum": ""
             },
             "require": {
@@ -2713,7 +2713,7 @@
                 "framework",
                 "yii2"
             ],
-            "time": "2018-12-12T19:57:24+00:00"
+            "time": "2018-12-15T22:54:00+00:00"
         },
         {
             "name": "yiisoft/yii2-composer",

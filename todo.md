@@ -3,6 +3,7 @@
 ## v3.0.0-beta
 
 ### Priority: urgent
+- [ ] FEAT: omit user/password in data_Datasources and use app.conf.toml-supplied values
 - [ ] BUG: "Forgot Password" doesn't work: repair or disable
 - [ ] BUG: Import-Window: Import All doesn't select all references if they haven't been loaded. This needs to be done on the server. 
 - [ ] BUG: Create new datasource results in "User Error: Running 'migrate/up' failed."
@@ -39,7 +40,7 @@
 
 ### Code cleanup / refactoring
 - [ ] fix compiler errors
-- [x] rename "build" dir to "install"
+- [ ] Refactor (bus).subscribe("xxx") calls to use static constants
 - [ ] use DatasourceTrait::datasource() consistently instead of Dataource::getInstanceFor(), since it provides access control!
 - [ ] run npm audit fix on all npm dependencies, change where possible, or change in global package.json
 - [ ] Move dispatchClientMessage/broadcast to Yii::$app->message component
