@@ -532,6 +532,11 @@ msgid "Enter search term"
 msgstr ""
 
 #: bibliograph/ui/main/FolderTreePanel.js:70
+#: bibliograph/ui/main/FolderTreePanel.js:85
+#: bibliograph/ui/main/FolderTreePanel.js:103
+#: bibliograph/ui/main/FolderTreePanel.js:111
+#: bibliograph/ui/main/FolderTreePanel.js:87
+#: bibliograph/ui/main/FolderTreePanel.js:84
 #: bibliograph/ui/item/RecordInfoUi.js:59
 #: bibliograph/ui/item/RecordInfoUi.js:60
 msgid "Folders"
@@ -543,84 +548,103 @@ msgid "Formatted View"
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:176
+#: bibliograph/ui/main/MultipleTreeView.js:188
 msgid "Add folder"
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:187
+#: bibliograph/ui/main/MultipleTreeView.js:199
 msgid "Add top level folder"
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:197
+#: bibliograph/ui/main/MultipleTreeView.js:209
 msgid "Save current search query as top folder"
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:208
+#: bibliograph/ui/main/MultipleTreeView.js:220
 msgid "Remove folder"
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:226
 #: bibliograph/ui/main/MultipleTreeView.js:227
+#: bibliograph/ui/main/MultipleTreeView.js:238
+#: bibliograph/ui/main/MultipleTreeView.js:239
 msgid "Empty trash..."
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:238
+#: bibliograph/ui/main/MultipleTreeView.js:250
 msgid "Move folder..."
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:249
+#: bibliograph/ui/main/MultipleTreeView.js:261
 msgid "Copy folder to Clipboard..."
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:258
+#: bibliograph/ui/main/MultipleTreeView.js:270
 msgid "Insert folder from Clipboard..."
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:267
+#: bibliograph/ui/main/MultipleTreeView.js:279
 msgid "Edit folder data"
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:278
 #: bibliograph/ui/main/MultipleTreeView.js:279
+#: bibliograph/ui/main/MultipleTreeView.js:290
 msgid "Change visibility"
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:365
 #: bibliograph/ui/main/MultipleTreeView.js:376
+#: bibliograph/ui/main/MultipleTreeView.js:388
 msgid "Loading folders. Please wait..."
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:459
 #: bibliograph/ui/main/MultipleTreeView.js:470
+#: bibliograph/ui/main/MultipleTreeView.js:482
 msgid "Do your really want to move folder '%1' to '%2'?"
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:486
 #: bibliograph/ui/main/MultipleTreeView.js:497
+#: bibliograph/ui/main/MultipleTreeView.js:509
 msgid "Do your really want to move %1 references to '%2'?"
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:508
 #: bibliograph/ui/main/MultipleTreeView.js:519
+#: bibliograph/ui/main/MultipleTreeView.js:531
 msgid "Do your really want to copy %1 references to '%2'?"
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:551
 #: bibliograph/ui/main/MultipleTreeView.js:562
+#: bibliograph/ui/main/MultipleTreeView.js:574
 msgid "Do you want to insert the folder '%1' from datasource '%2'?"
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:556
 #: bibliograph/ui/main/MultipleTreeView.js:567
+#: bibliograph/ui/main/MultipleTreeView.js:579
 msgid "Do you want to insert the folder '%1'?"
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:573
 #: bibliograph/ui/main/MultipleTreeView.js:584
+#: bibliograph/ui/main/MultipleTreeView.js:596
 msgid "Do you really want to delete all references and folders in the trash folder? This cannot be undone."
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:579
 #: bibliograph/ui/main/MultipleTreeView.js:590
+#: bibliograph/ui/main/MultipleTreeView.js:602
 msgid "Emptying the trash ..."
 msgstr ""
 
@@ -883,5 +907,12 @@ msgid "Create report from subtree"
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:289
+#: bibliograph/ui/main/MultipleTreeView.js:301
 msgid "Create report"
+msgstr ""
+
+#: bibliograph/ui/main/FolderTreePanel.js:159
+#: bibliograph/ui/main/FolderTreePanel.js:156
+#: bibliograph/ui/main/FolderTreePanel.js:157
+msgid "No match for \"%1\""
 msgstr ""

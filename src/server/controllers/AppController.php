@@ -48,6 +48,11 @@ class AppController extends \JsonRpc2\Controller
   const CATEGORY = "app";
 
   /**
+   * A message name that triggers a jsonrpc request from the client
+   */
+  const MESSAGE_EXECUTE_JSONRPC = "jsonrpc.execute";
+
+  /**
    * Overridden to add functionality:
    * - catch User exception and convert it into an error dialog widget on the client
    * @inheritDoc

@@ -2,7 +2,9 @@
 
 namespace app\models;
 
+use app\controllers\AppController;
 use lib\channel\BroadcastEvent;
+use lib\channel\MessageEvent;
 use lib\exceptions\UserErrorException;
 use Yii;
 use InvalidArgumentException;
@@ -38,10 +40,12 @@ use yii\db\Exception;
  */
 class Folder extends \lib\models\BaseModel //implements ITreeNode
 {
-  const EVENT_CLIENT_UPDATE = "folder.node.update";
-  const EVENT_CLIENT_ADD    = "folder.node.add";
-  const EVENT_CLIENT_DELETE = "folder.node.delete";
-  const EVENT_CLIENT_MOVE   = "folder.node.move";
+  //@todo: name as client-side message?
+  const MESSAGE_CLIENT_UPDATE = "folder.node.update";
+  const MESSAGE_CLIENT_ADD    = "folder.node.add";
+  const MESSAGE_CLIENT_DELETE = "folder.node.delete";
+  const MESSAGE_CLIENT_MOVE   = "folder.node.move";
+  const MESSAGE_CLIENT_PRUNE  = "folder.node.prune";
 
   /**
    * The type of the model when part of a datasource
@@ -273,7 +277,7 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
   protected function createUpdateNodeEvent($nodeData)
   {
     return new BroadcastEvent([
-      'name' => static::EVENT_CLIENT_UPDATE,
+      'name' => static::MESSAGE_CLIENT_UPDATE,
       'data' => [
         'datasource' => static::getDatasource()->namedId,
         'modelType' => static::$modelType,
@@ -354,7 +358,7 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
           }
           // move node
           Yii::$app->eventQueue->add(new BroadcastEvent([
-            'name' => static::EVENT_CLIENT_MOVE,
+            'name' => static::MESSAGE_CLIENT_MOVE,
             'data' => [
               'datasource' => static::getDatasource()->namedId,
               'modelType' => "folder",
@@ -362,6 +366,7 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
               'parentId' => $this->parentId,
               'transactionId' => $this->getTransactionId()
             ]]));
+          break;
       } // end switch
     } // end foreach
 
@@ -374,7 +379,29 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
       }
       Yii::$app->eventQueue->add($this->createUpdateNodeEvent($nodeData));
     }
+    // add virtual subfolders
+    $this->_createVirtualSubfoldersOnDemand(!!$insert);
     return true;
+  }
+
+  /**
+   * Dispatches a message that initiates the loading of the virtual subfolders of this node,
+   * if it has any.
+   * @param bool $pruneFirst If true, remove existing subfolders first. Defaults to false.
+   */
+  protected function _createVirtualSubfoldersOnDemand($pruneFirst=false){
+    if (str_contains( $this->query, "virtsub:" )){
+      if ($pruneFirst) {
+        Yii::$app->eventQueue->add(new MessageEvent([
+          'name' => static::MESSAGE_CLIENT_PRUNE,
+          'data' => [ 'datasource' => static::getDatasource()->namedId, 'id' => $this->id]
+        ]));
+      }
+      Yii::$app->eventQueue->add(new MessageEvent([
+        'name' => AppController::MESSAGE_EXECUTE_JSONRPC,
+        'data' => ["folder", "createVirtualFolders", [static::getDatasource()->namedId, $this->id]]
+      ]));
+    }
   }
 
   /**
@@ -391,8 +418,9 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
     if($this->parentId){
       $this->updateParentNode();
     }
+    //@todo move to method
     Yii::$app->eventQueue->add(new BroadcastEvent([
-      'name' => static::EVENT_CLIENT_ADD,
+      'name' => static::MESSAGE_CLIENT_ADD,
       'data' => [
         'datasource'  => static::getDatasource()->namedId,
         'modelType'   => static::$modelType,
@@ -412,7 +440,7 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
     parent::afterDelete();
     $this->updateParentNode();
     Yii::$app->eventQueue->add(new BroadcastEvent([
-      'name' => static::EVENT_CLIENT_DELETE,
+      'name' => static::MESSAGE_CLIENT_DELETE,
       'data' => [
         'datasource' => static::getDatasource()->namedId,
         'modelType' => static::$modelType,
@@ -576,11 +604,11 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
 
   /**
    * Set parent node
-   * @param \app\models\Folder
+   * @param Folder
    * @return int Old parent id
    * @throws Exception
    */
-  public function setParent(\app\models\Folder $parentFolder)
+  public function setParent(Folder $parentFolder)
   {
     $oldParentId = $this->parentId;
     $this->parentId = $parentFolder->id;

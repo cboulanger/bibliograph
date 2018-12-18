@@ -20,6 +20,7 @@
 /*global qx qcl virtualdata dialog*/
 
 // noinspection JSUnusedLocalSymbols
+nodeData = undefined
 /**
  * Base class for virtual tree widgets which load their data from different
  * datasources. The data is cached for performance, so that switching the
@@ -650,11 +651,30 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
     /**
      * Selects a node triggered by a message
      * @param e {qx.event.message.Message}
-     * @param e
      * @private
      */
     _selectNode: function (e) {
       this.setNodeId(e.getData());
+    },
+  
+    /**
+     * Prunes a node triggered by a message
+     * @param e {qx.event.message.Message} with data {datasource {String}, id {Number}}
+     * @private
+     */
+    _pruneNode: function (e) {
+      let data = e.getData();
+      let tree = this.getTree();
+      if ( this._notForMe(tree,data) )return;
+      let dataModel = tree.getDataModel();
+      let controller = this.getController();
+      let nodeId = controller.getClientNodeId(data.id);
+      if (!nodeId) {
+        this.warn(`Node #${data.id} doesn't exist."`);
+        return;
+      }
+      this.debug("Pruning tree node, client #" + nodeId + " server #" + data.id);
+      this.getDataModel().prune(nodeId);
     },
     
     /**
@@ -682,28 +702,33 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
   
     /**
      * Adds a node, triggered by a message
-     * @param e {qx.event.message.Message}
-     * @private
+     * @param e {qx.event.message.Message} Event containing the data on the node(s) to add.
+     * @todo define DTO
      */
     _addNode: function (e) {
       let data = e.getData();
       let tree = this.getTree();
-      if ( this._notForMe(tree,data) )return;
+      if (this._notForMe(tree,data))return;
       let dataModel = tree.getDataModel();
       let controller = this.getController();
-      let parentNodeId = controller.getClientNodeId(data.nodeData.data.parentId);
-      if (parentNodeId===undefined){
-        this.warn("Parent node doesn't exist.");
-        return;
+      let nodeData = data.nodeData;
+      if (! qx.lang.Type.isArray(nodeData)){
+        nodeData = [nodeData];
       }
-      this.debug("Adding new tree node to #" + parentNodeId);
-      let nodeId;
-      if (data.nodeData.isBranch) {
-        nodeId = dataModel.addBranch(parentNodeId);
-      } else {
-        nodeId = dataModel.addLeaf(parentNodeId);
+      for (let node of nodeData){
+        let parentNodeId = controller.getClientNodeId(node.data.parentId);
+        if (parentNodeId === undefined){
+          this.warn(`Cannot add node: parent node ${parentNodeId} doesn't exist.`);
+          continue;
+        }
+        let nodeId;
+        if (node.isBranch) {
+          nodeId = dataModel.addBranch(parentNodeId);
+        } else {
+          nodeId = dataModel.addLeaf(parentNodeId);
+        }
+        dataModel.setState(nodeId, node);
       }
-      dataModel.setState(nodeId, data.nodeData);
       dataModel.setData();
       controller.setTransactionId(data.transactionId);
       controller.remapNodeIds();

@@ -30,6 +30,18 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
   extend: qcl.ui.treevirtual.MultipleTreeView,
   include : [qcl.access.MPermissions],
   
+  statics: {
+    messages: {
+      UPDATE: "folder.node.update",
+      ADD: "folder.node.add",
+      DELETE: "folder.node.delete",
+      MOVE: "folder.node.move",
+      REORDER: "folder.node.reorder",
+      SELECT: "folder.node.select",
+      PRUNE: "folder.node.prune"
+    }
+  },
+  
   construct: function () {
     this.base(arguments);
     this.setServiceName("folder"); // @todo remove?
@@ -59,18 +71,18 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
       this.bindState(this.permissions.move_any_folder,this,"enableDragDrop");
       this.setDebugDragSession(qx.core.Environment.get("qx.debug"));
     });
-    
+    // events
     this.addListener("loading", () => this._isWaiting(true) );
     this.addListener("loaded", () => this._isWaiting(false) );
-  
-    // @todo get constants from generated file
-    bus.subscribe( "folder.node.update", this._updateNode, this );
-    bus.subscribe( "folder.node.add", this._addNode, this);
-    bus.subscribe( "folder.node.delete", this._deleteNode, this );
-    bus.subscribe( "folder.node.move", this._moveNode, this);
-    bus.subscribe( "folder.node.reorder", this._reorderNodeChildren, this);
-    bus.subscribe( "folder.node.select", this._selectNode, this);
-  
+    // messages
+    let messages = bibliograph.ui.main.MultipleTreeView.messages;
+    bus.subscribe(messages.UPDATE, this._updateNode, this );
+    bus.subscribe(messages.ADD, this._addNode, this);
+    bus.subscribe(messages.DELETE, this._deleteNode, this );
+    bus.subscribe(messages.MOVE, this._moveNode, this);
+    bus.subscribe(messages.REORDER, this._reorderNodeChildren, this);
+    bus.subscribe(messages.SELECT, this._selectNode, this);
+    bus.subscribe(messages.PRUNE, this._pruneNode, this);
   },
   
   members:

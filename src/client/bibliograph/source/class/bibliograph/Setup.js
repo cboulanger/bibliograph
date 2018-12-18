@@ -328,18 +328,19 @@ qx.Class.define("bibliograph.Setup", {
     {
       let bus = qx.event.message.Bus.getInstance();
       let app = this.getApplication();
+      let messages = bibliograph.Setup.messages;
 
       // listen to reload event
-      bus.subscribe(bibliograph.Setup.messages.RELOAD_APPLICATION, () => window.location.reload() );
+      bus.subscribe(messages.RELOAD_APPLICATION, () => window.location.reload() );
 
       // remotely log to the browser console
-      bus.subscribe(bibliograph.Setup.messages.LOG_TO_CONSOLE, e => console.log(e.getData()) );
+      bus.subscribe(messages.LOG_TO_CONSOLE, e => console.log(e.getData()) );
 
       // server message to force logout the user
-      bus.subscribe(bibliograph.Setup.messages.LOGOUT, () => this.logout());
+      bus.subscribe(messages.LOGOUT, () => this.logout());
 
       // server message to set model type and id
-      bus.subscribe(bibliograph.Setup.messages.SET_MODEL, e => {
+      bus.subscribe(messages.SET_MODEL, e => {
         let data = e.getData();
         if ( data.datasource === app.getDatasource()) {
           app.setModelType(data.modelType);
@@ -348,25 +349,25 @@ qx.Class.define("bibliograph.Setup", {
       });
 
       // used by the bibliograph.export.exportReferencesHandleDialogData
-      bus.subscribe(bibliograph.Setup.messages.REPLACE_URL, e => {
+      bus.subscribe(messages.REPLACE_URL, e => {
         let data = e.getData();
         window.location.replace(data.url);
       });
 
       // reload the main list view
-      bus.subscribe(bibliograph.Setup.messages.RELOAD_LISTVIEW, e => {
+      bus.subscribe(messages.RELOAD_LISTVIEW, e => {
         let data = e.getData();
         if (data.datasource !== app.getDatasource())return;
         app.getWidgetById("app/tableview").reload();
       });
 
       // show the login dialog
-      bus.subscribe(bibliograph.Setup.messages.SHOW_LOGIN_DIALOG, ()=>{
+      bus.subscribe(messages.SHOW_LOGIN_DIALOG, ()=>{
         app.getWidgetById("app/windows/login").show();
       });
 
       // execute an arbitrary JSONRPC method
-      bus.subscribe(bibliograph.Setup.messages.EXECUTE_JSONRPC, e => {
+      bus.subscribe(messages.EXECUTE_JSONRPC, e => {
         let [service,method,params] = e.getData();
         app.getRpcClient(service).send(method,params);
       });

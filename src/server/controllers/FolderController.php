@@ -20,10 +20,10 @@
 
 namespace app\controllers;
 
-use app\controllers\traits\DatasourceTrait;
 use app\models\Reference;
 use app\models\Datasource;
 use app\models\Folder;
+use lib\channel\MessageEvent;
 use lib\dialog\Confirm;
 use lib\dialog\Form;
 use lib\exceptions\UserErrorException;
@@ -56,6 +56,11 @@ class FolderController extends AppController //implements ITreeController
    */
   static $modelClass = Folder::class;
 
+  /**
+   * Virtual folders have an id that counts down from this
+   * value, which is the highest value a javascript integer can have
+   */
+  const VIRTUAL_FOLDER_ID = 9007199254740991;
 
   /*
   ---------------------------------------------------------------------------
@@ -100,9 +105,6 @@ class FolderController extends AppController //implements ITreeController
   {
     throw new \BadMethodCallException("Not implemented");
   }
-
-  // FIXME
-  protected $virtualFolderId = 9007199254740991; // highest javascript value
 
   /**
    * Returns all nodes of a tree in a given datasource
@@ -162,8 +164,7 @@ class FolderController extends AppController //implements ITreeController
         if ($isGuestUser) continue;
         if (!$orphanedFolder) {
           // create this folder first
-          $this->virtualFolderId-=1;
-          $orphanedFolderId = $this->virtualFolderId;
+          $orphanedFolderId = $this->getVirtualFolderId();
           $orphanedFolder = $this->createOrphanedFolder($orphanedFolderId);
           $orderedNodeData[] = &$orphanedFolder;
           $loaded[$orphanedFolderId] = &$orphanedFolder;
@@ -175,9 +176,12 @@ class FolderController extends AppController //implements ITreeController
       $orderedNodeData[] = $node;
       $loaded[$id] = $node;
 
-      // virtual subfolders
-      if( str_contains( $node['data']['query'], "virtsub:" )){
-        $this->createVirtualSubfolders($node['data'], $orderedNodeData, $datasource);
+      // virtual subfolders, too costly in case of large data, query on demand
+      if (str_contains( $node['data']['query'], "virtsub:" )){
+//        Yii::$app->eventQueue->add(new MessageEvent([
+//          'name' => static::MESSAGE_EXECUTE_JSONRPC,
+//          'data' => ["folder", "create-virtual-folders", [$datasource, $id]]
+//        ]));
       }
     }
     //$this->addLostAndFound($orderedNodeData);
@@ -188,74 +192,130 @@ class FolderController extends AppController //implements ITreeController
   }
 
   /**
-   * EXPERIMENTAL
-   * @param array $data
-   * @param array $orderedNodeData
+   * Given a datasource and a folder id, return an event that will retrieve the virtual subfolders
+   * of that folder
+   * @param string $datasource
+   * @param int $parentId
+   * @param int|null $offset
+   * @param int|null $limit
+   * @param int|null $count
+   * @return string
    */
-  protected function createVirtualSubfolders(array $data, array &$orderedNodeData, string $datasource)
+  public function actionCreateVirtualFolders(
+    string $datasource,
+    int $parentId,
+    int $offset=null,
+    int $limit=null,
+    int $count=null)
   {
-    $query = $data['query'];
-    if( str_contains($query, "virtsub:") ){
-      $field = trim(substr($query,strpos($query,":")+1));
-      $referenceClass = Datasource::in($datasource,"reference");
-      try{
-        $values = $referenceClass::find()
-          ->select($field)
-          ->distinct()
-          ->column();
-      } catch (\Exception $e){
-        Yii::warning($e->getMessage());
-        return;
-      }
-      $separatedValues = [];
-      foreach ($values as $value) {
-        if( ! $value ) continue;
-        if( str_contains($value, ";") ){
-          $separatedValues = array_merge($separatedValues, explode(";",$value) );
-        } else {
-          $separatedValues[]=$value;
-        }
-      }
-      $separatedValues = array_map(function($v){ return trim($v);}, array_unique($separatedValues));
-      $collator = new \Collator(str_replace("-","_",Yii::$app->language));
-      $collator->asort ($separatedValues);
-      foreach ($separatedValues as $value){
-        $value = trim($value);
-        if (!$value) continue;
-        $this->virtualFolderId-=1;
-        $referenceCount = (int) $referenceClass::find()->where(['like', $field, $value])->count();
-        $node = $this->createVirtualFolder([
-          'type'      => 'virtual',
-          'id'        => $this->virtualFolderId,
-          'parentId'  => $data['id'],
-          'query'     => $field . ' contains "' . $value . '"',
-          'icon'      => "icon/16/apps/utilities-graphics-viewer.png",
-          'label'     => $value,
-          'referenceCount'  => $referenceCount,
-          'columnData'      => $referenceCount,
-        ]);
-        $orderedNodeData[] = $node;
-      }
-    }
+    $folder = (Datasource::in($datasource, "folder"))::findOne($parentId);
+    if (!$folder) throw new UserErrorException("Invalid folder Id $parentId");
+    Yii::$app->eventQueue->add(new MessageEvent([
+      'name' => Folder::MESSAGE_CLIENT_ADD,
+      'data' => [
+        'datasource'  => $datasource,
+        'modelType'   => "folder",
+        'nodeData'    => $this->createVirtualSubfolders($datasource, $parentId, $folder->query, $offset, $limit, $count),
+        'transactionId' => 0
+      ]]));
+    return "Returned node data of virtual folders";
   }
 
   /**
-   * Create a virtual folder for orphaned folders and references
-   * @param int $id The id of the folder
-   * @return array The node data
+   * Return an integer that decrements from the highest javascript integer value
+   * @return int
    */
-  protected function createOrphanedFolder(int $id)
+  protected function getVirtualFolderId(){
+    $n = 'VIRTUAL_FOLDER_ID';
+    $_SESSION[$n] =
+      ($_SESSION[$n] ?? null )
+        ? $_SESSION[$n]-1
+        : self::VIRTUAL_FOLDER_ID;
+    return $_SESSION[$n];
+  }
+
+  /**
+   * Creates "virtual" subfolders, i.e. subfolders that are generated on-the-fly based and contain
+   * queries.
+   * @param string $datasource
+   * @param int $parentId
+   * @param string $query
+   * @param int|null $offset
+   * @param int|null $limit
+   * @param int|null $count
+   * @return array  An array of node data
+   */
+  protected function createVirtualSubfolders(
+    string $datasource,
+    int $parentId,
+    string $query,
+    int $offset=null,
+    int $limit=null,
+    int $count=null)
   {
-    return $this->createVirtualFolder([
-      'type'        => "virtual",
-      'isBranch'    => true,
-      'id'          => $id,
-      'parentId'    => 0,
-      'query'       => null,
-      'icon'        => "icon/16/emblems/emblem-important.png",
-      'label'       => Yii::t('app', "Orphaned"),
-      'childCount'  => 1
-    ]);
+    //return [];
+    $nodeData = [];
+    if(!starts_with($query,"virtsub:")){
+      throw new UserErrorException("Invalid folder query for virtual folders: $query");
+    }
+    $field = trim(substr($query,strpos($query,":")+1));
+    $referenceClass = Datasource::in($datasource,"reference");
+    try{
+      /** @var ActiveQuery $query */
+      $query = $referenceClass::find()
+        ->select($field)
+        ->distinct();
+      if (is_null($offset)){
+        // this is the first request, count results
+        $count = $query->count();
+        $offset = 0;
+        if (!$limit) $limit=100; //@todo make configurable
+      }
+      $values = $query
+        ->orderBy($field)
+        ->offset($offset)
+        ->limit($limit)
+        ->column();
+      // if there are folders left, create new request
+      if ($offset < $count - $limit) {
+        Yii::$app->eventQueue->add(new MessageEvent([
+          'name' => static::MESSAGE_EXECUTE_JSONRPC,
+          'data' => ["folder", "create-virtual-folders", [$datasource, $parentId, $offset+$limit, $limit, $count  ]]
+        ]));
+      }
+    } catch (\Exception $e){
+      Yii::warning($e->getMessage());
+      return [];
+    }
+    $separatedValues = [];
+    foreach ($values as $value) {
+      if( ! $value ) continue;
+      if( str_contains($value, ";") ){
+        $separatedValues = array_merge($separatedValues, explode(";",$value) );
+      } else {
+        $separatedValues[]=$value;
+      }
+    }
+    $separatedValues = array_map(function($v){ return trim($v);}, array_unique($separatedValues));
+    $collator = new \Collator(str_replace("-","_",Yii::$app->language));
+    $collator->asort ($separatedValues);
+    foreach ($separatedValues as $value){
+      $value = trim($value);
+      if (!$value) continue;
+      $referenceCount = (int) $referenceClass::find()->where(['like', $field, $value])->count();
+      $node = $this->createVirtualFolder([
+        'type'      => 'virtual',
+        'id'        => $this->getVirtualFolderId(),
+        'parentId'  => $parentId,
+        'query'     => $field . ' contains "' . $value . '"',
+        'icon'      => "icon/16/apps/utilities-graphics-viewer.png",
+        'label'     => $value,
+        'referenceCount'  => $referenceCount,
+        'columnData'      => $referenceCount,
+      ]);
+      $nodeData[] = $node;
+    }
+    return $nodeData;
   }
 
   /**
@@ -288,6 +348,25 @@ class FolderController extends AppController //implements ITreeController
         'markedDeleted'   => false
       ]
     ];
+  }
+
+  /**
+   * Create a virtual folder for orphaned folders and references
+   * @param int $id The id of the folder
+   * @return array The node data
+   */
+  protected function createOrphanedFolder(int $id)
+  {
+    return $this->createVirtualFolder([
+      'type'        => "virtual",
+      'isBranch'    => true,
+      'id'          => $id,
+      'parentId'    => 0,
+      'query'       => null,
+      'icon'        => "icon/16/emblems/emblem-important.png",
+      'label'       => Yii::t('app', "Orphaned"),
+      'childCount'  => 1
+    ]);
   }
 
   /**
