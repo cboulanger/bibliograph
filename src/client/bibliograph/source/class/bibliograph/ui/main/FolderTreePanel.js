@@ -41,9 +41,6 @@ qx.Class.define("bibliograph.ui.main.FolderTreePanel",
     /** @var {bibliograph.ui.main.MultipleTreeView} */
     treeWidget : null,
     titleLabel : null,
-  
-    /** @var int */
-    __startSearchIndex: 0,
     
     /**
      * Create the UI
@@ -77,7 +74,10 @@ qx.Class.define("bibliograph.ui.main.FolderTreePanel",
       headerMenu.add(searchBox, {flex: 1});
       searchBox.addListener("keypress", e => {
         if (e.getKeyIdentifier() === "Enter") {
-          this.search(searchBox.getValue());
+          if (! this.treeWidget || !this.treeWidget.getTree() ) return;
+          if (! this.treeWidget.isSearching()){
+            this.treeWidget.searchAndSelectNext(searchBox.getValue());
+          }
         }
       });
       this.getApplication().bind("datasource", headerMenu, "enabled", {
@@ -142,57 +142,6 @@ qx.Class.define("bibliograph.ui.main.FolderTreePanel",
       _statusLabel.setRich(true);
       _statusLabel.setTextColor("#808080");
       footerMenu.add(_statusLabel, {flex: 1});
-    },
-  
-    /**
-     * Searches the folder labels and selects the next matching folder
-     * @param searchtext {String}
-     * @return {void}
-     */
-    search : function(searchtext){
-      /** @var {qcl.ui.treevirtual.DragDropTree} */
-      let tree = this.treeWidget.getTree();
-      if (!tree) return;
-      
-      let model = tree.getDataModel();
-      let data = model.getData();
-  
-      // search the tree @todo make this async for really large trees
-      let node, id, found = false;
-      for (id= this.__startSearchIndex; id < data.length; id++ ){
-        node = data[id];
-        if (qx.lang.Type.isObject(node.data) && node.data.markedDeleted) continue;
-        if (node.label.toLocaleLowerCase().includes(searchtext.toLocaleLowerCase())) {
-          found = true;
-          this.__startSearchIndex = id+1;
-          break;
-        }
-      }
-      if (!found) {
-        if (this.__startSearchIndex === 0){
-          this.treeWidget.showMessage(this.tr('No match for "%1"', searchtext));
-          this.__startSearchIndex = 0;
-          return;
-        }
-        this.__startSearchIndex = 0;
-        return this.search(searchtext);
-      }
-  
-      // open the tree so that the node is rendered
-      for (let parentId = node.parentNodeId; parentId; parentId = node.parentNodeId) {
-        node = tree.nodeGet(parentId);
-        model.setState(node, {bOpened: true});
-      }
-      model.setData();
-      // we need a timeout because tree rendering also uses timeouts, so this is not synchronous
-      qx.event.Timer.once(() => {
-        let row = model.getRowFromNodeId(id);
-        if (row) {
-          tree.getSelectionModel().resetSelection();
-          tree.getSelectionModel().setSelectionInterval(row, row);
-          tree.scrollCellVisible(0, row);
-        }
-      }, this, 200);
     }
   }
 });

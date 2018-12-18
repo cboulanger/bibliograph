@@ -178,10 +178,10 @@ class FolderController extends AppController //implements ITreeController
 
       // virtual subfolders, too costly in case of large data, query on demand
       if (str_contains( $node['data']['query'], "virtsub:" )){
-//        Yii::$app->eventQueue->add(new MessageEvent([
-//          'name' => static::MESSAGE_EXECUTE_JSONRPC,
-//          'data' => ["folder", "create-virtual-folders", [$datasource, $id]]
-//        ]));
+        Yii::$app->eventQueue->add(new MessageEvent([
+          'name' => static::MESSAGE_EXECUTE_JSONRPC,
+          'data' => ["folder", "create-virtual-folders", [$datasource, $id]]
+        ]));
       }
     }
     //$this->addLostAndFound($orderedNodeData);
@@ -196,26 +196,20 @@ class FolderController extends AppController //implements ITreeController
    * of that folder
    * @param string $datasource
    * @param int $parentId
-   * @param int|null $offset
-   * @param int|null $limit
-   * @param int|null $count
    * @return string
    */
   public function actionCreateVirtualFolders(
     string $datasource,
-    int $parentId,
-    int $offset=null,
-    int $limit=null,
-    int $count=null)
+    int $parentId)
   {
-    $folder = (Datasource::in($datasource, "folder"))::findOne($parentId);
+    $folder = Datasource::findOneIn($datasource, "folder", $parentId);
     if (!$folder) throw new UserErrorException("Invalid folder Id $parentId");
     Yii::$app->eventQueue->add(new MessageEvent([
       'name' => Folder::MESSAGE_CLIENT_ADD,
       'data' => [
         'datasource'  => $datasource,
         'modelType'   => "folder",
-        'nodeData'    => $this->createVirtualSubfolders($datasource, $parentId, $folder->query, $offset, $limit, $count),
+        'nodeData'    => $this->createVirtualSubfolders($datasource, $parentId, $folder->query),
         'transactionId' => 0
       ]]));
     return "Returned node data of virtual folders";
@@ -240,21 +234,15 @@ class FolderController extends AppController //implements ITreeController
    * @param string $datasource
    * @param int $parentId
    * @param string $query
-   * @param int|null $offset
-   * @param int|null $limit
-   * @param int|null $count
    * @return array  An array of node data
    */
   protected function createVirtualSubfolders(
     string $datasource,
     int $parentId,
-    string $query,
-    int $offset=null,
-    int $limit=null,
-    int $count=null)
+    string $query)
   {
     //return [];
-    $nodeData = [];
+
     if(!starts_with($query,"virtsub:")){
       throw new UserErrorException("Invalid folder query for virtual folders: $query");
     }
@@ -264,25 +252,9 @@ class FolderController extends AppController //implements ITreeController
       /** @var ActiveQuery $query */
       $query = $referenceClass::find()
         ->select($field)
-        ->distinct();
-      if (is_null($offset)){
-        // this is the first request, count results
-        $count = $query->count();
-        $offset = 0;
-        if (!$limit) $limit=100; //@todo make configurable
-      }
-      $values = $query
-        ->orderBy($field)
-        ->offset($offset)
-        ->limit($limit)
-        ->column();
-      // if there are folders left, create new request
-      if ($offset < $count - $limit) {
-        Yii::$app->eventQueue->add(new MessageEvent([
-          'name' => static::MESSAGE_EXECUTE_JSONRPC,
-          'data' => ["folder", "create-virtual-folders", [$datasource, $parentId, $offset+$limit, $limit, $count  ]]
-        ]));
-      }
+        ->distinct()
+        ->orderBy($field);
+      $values = $query->column();
     } catch (\Exception $e){
       Yii::warning($e->getMessage());
       return [];
@@ -299,21 +271,57 @@ class FolderController extends AppController //implements ITreeController
     $separatedValues = array_map(function($v){ return trim($v);}, array_unique($separatedValues));
     $collator = new \Collator(str_replace("-","_",Yii::$app->language));
     $collator->asort ($separatedValues);
-    foreach ($separatedValues as $value){
-      $value = trim($value);
-      if (!$value) continue;
-      $referenceCount = (int) $referenceClass::find()->where(['like', $field, $value])->count();
-      $node = $this->createVirtualFolder([
-        'type'      => 'virtual',
-        'id'        => $this->getVirtualFolderId(),
-        'parentId'  => $parentId,
-        'query'     => $field . ' contains "' . $value . '"',
-        'icon'      => "icon/16/apps/utilities-graphics-viewer.png",
-        'label'     => $value,
-        'referenceCount'  => $referenceCount,
-        'columnData'      => $referenceCount,
-      ]);
-      $nodeData[] = $node;
+    $separatedValues= array_values($separatedValues);
+
+    $limit = 100;
+    $count = count($separatedValues);
+    $sections = ceil($count/$limit);
+    $index = 0;
+    $nodeData = [];
+    Yii::debug("$count entries, $sections sections", __METHOD__);
+
+    for ($outer=0; $outer <= $sections and $index < $count; $outer++){
+      $sectionId = null;
+      if ($sections > 1) {
+        // compute label
+        $sectionId = $this->getVirtualFolderId();
+        $first = trim($separatedValues[$index]);
+        $last  = trim($separatedValues[min($index + $limit, $count)-1]);
+        list($first,) = explode(",", $first);
+        list($last,) = explode(",",$last);
+        //mb_strimwidth("Hello World", 0, 10, "...");
+        $label =
+          mb_strimwidth(trim($first),0,15, "...") .
+          " - " .
+          mb_strimwidth(trim($last),0,15, "...");
+        // create section node
+        $node = $this->createVirtualFolder([
+          'type'      => 'virtual',
+          'id'        => $sectionId,
+          'parentId'  => $parentId,
+          'icon'      => "icon/16/apps/utilities-graphics-viewer.png",
+          'label'     => $label,
+          'childCount'  => $limit
+        ]);
+        $nodeData[] = $node;
+      }
+      for ($inner=0; $inner < $limit and $index < $count; $inner++){
+        $value = trim($separatedValues[$index++]);
+        if (!$value) continue;
+        // computation of reference count is too expensive for large datasets
+        $referenceCount = null; //(int) $referenceClass::find()->where(['like', $field, $value])->count();
+        $node = $this->createVirtualFolder([
+          'type'      => 'virtual',
+          'id'        => $this->getVirtualFolderId(),
+          'parentId'  => $sectionId ? $sectionId : $parentId,
+          'query'     => $field . ' contains "' . $value . '"',
+          'icon'      => "icon/16/apps/utilities-graphics-viewer.png",
+          'label'     => $value,
+          'referenceCount'  => $referenceCount,
+          'columnData'      => $referenceCount,
+        ]);
+        $nodeData[] = $node;
+      }
     }
     return $nodeData;
   }
@@ -326,19 +334,19 @@ class FolderController extends AppController //implements ITreeController
   protected function createVirtualFolder(array $data)
   {
     return [
-      'isBranch'        => isset($data['isBranch']) ? $data['isBranch']:false,
+      'isBranch'        => true, //isset($data['isBranch']) ? $data['isBranch']:false,
       'label'           => $data['label'],
       'bOpened'         => false,
       'icon'            => $data['icon'],
       'iconSelected'    => $data['icon'],
-      'bHideOpenClose'  => true,
+      'bHideOpenClose'  => isset($data['childCount']) ? $data['childCount'] === 0 : true,
       // todo: this should take its value from 'columnContent' or similar
       'columnData'      => [ null, isset($data['columnData']) ? $data['columnData']:"" ],
       'data'            => [
         'type'            => isset($data['type']) ? $data['type']:"virtual",
         'id'              => $data['id'],
         'parentId'        => $data['parentId'],
-        'query'           => $data['query'],
+        'query'           => isset($data['query']) ? $data['query'] : null,
         'public'          => false,
         'owner'           => "admin",
         'description'     => isset($data['description']) ? $data['description']:"",

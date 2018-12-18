@@ -399,7 +399,7 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
       }
       Yii::$app->eventQueue->add(new MessageEvent([
         'name' => AppController::MESSAGE_EXECUTE_JSONRPC,
-        'data' => ["folder", "createVirtualFolders", [static::getDatasource()->namedId, $this->id]]
+        'data' => ["folder", "create-virtual-folders", [static::getDatasource()->namedId, $this->id]]
       ]));
     }
   }

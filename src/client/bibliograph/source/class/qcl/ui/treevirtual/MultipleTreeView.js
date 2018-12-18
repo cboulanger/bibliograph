@@ -323,6 +323,15 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
      * The transaction id records the "state" of the current tree
      */
     __lastTransactionId: 0,
+  
+    /** @var {Number} */
+    __startSearchIndex: 1,
+  
+    /** @var {Boolean} */
+    __searchingFolders: false,
+  
+    /** @var {Boolean} */
+    __selectingNode: false,
     
     /*
     ---------------------------------------------------------------------------
@@ -352,7 +361,7 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
     },
     
     /**
-     * Applies the node id
+     * Applies the node id. When set manually, this selects the corresponding node
      */
     _applyNodeId: function (value, old) {
       void(old);
@@ -728,6 +737,10 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
           nodeId = dataModel.addLeaf(parentNodeId);
         }
         dataModel.setState(nodeId, node);
+        // update id index if node has children
+        if (node.data.childCount) {
+          controller.remapNodeIds();
+        }
       }
       dataModel.setData();
       controller.setTransactionId(data.transactionId);
@@ -893,9 +906,14 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
      * @param serverNodeId {Integer}  TODOC
      */
     _selectByServerNodeId: function (serverNodeId) {
+      if (this.__selectingNode) {
+        this.debug("Node selection in process...");
+        return;
+      }
       let id = this.getController().getClientNodeId(serverNodeId);
       if (!id) return;
       
+      this.__selectingNode = true;
       let tree = this.getTree();
       let model = tree.getDataModel();
       let node = tree.nodeGet(id);
@@ -914,6 +932,7 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
           this.clearSelection();
           tree.getSelectionModel().setSelectionInterval(row, row);
         }
+        this.__selectingNode = false;
       }, this, 500);
     },
     
@@ -937,6 +956,69 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
         // hide after three seconds
         qx.event.Timer.once(()=>statusLabel.setValue(""),null,3000);
       }
+    },
+  
+    /**
+     * Searches the folder labels and selects the next matching folder
+     * @param searchtext {String}
+     * @return {Boolean} True if search is successful, false if not
+     */
+    searchAndSelectNext : function(searchtext)
+    {
+      /** @var {qcl.ui.treevirtual.DragDropTree} */
+      let tree = this.getTree();
+      if (!tree) return false;
+    
+      let model = tree.getDataModel();
+      let data = model.getData();
+    
+      // search the tree @todo make this async for really large trees
+      let node, id, found = false;
+      this.__searchingFolders = true;
+      for (id= this.__startSearchIndex; id < data.length; id++ ){
+        node = data[id];
+        if (qx.lang.Type.isObject(node.data) && node.data.markedDeleted) continue;
+        if (node.label.toLocaleLowerCase().includes(searchtext.toLocaleLowerCase())) {
+          found = true;
+          this.__startSearchIndex = id+1;
+          break;
+        }
+      }
+      if (!found) {
+        this.__searchingFolders = false;
+        if (this.__startSearchIndex === 0){
+          this.treeWidget.showMessage(this.tr('No match for "%1"', searchtext));
+          this.__startSearchIndex = 1;
+          return false;
+        }
+        this.__startSearchIndex = 1;
+        return this.searchAndSelectNext(searchtext);
+      }
+    
+      // open the tree so that the node is rendered
+      for (let parentId = node.parentNodeId; parentId; parentId = node.parentNodeId) {
+        node = tree.nodeGet(parentId);
+        model.setState(node, {bOpened: true});
+      }
+      model.setData();
+      // we need a timeout because tree rendering also uses timeouts, so this is not synchronous
+      qx.event.Timer.once(() => {
+        let row = model.getRowFromNodeId(id);
+        if (row !== undefined) {
+          tree.getSelectionModel().resetSelection();
+          tree.getSelectionModel().setSelectionInterval(row, row);
+          tree.scrollCellVisible(0, row);
+        }
+        this.__searchingFolders = false;
+      }, this, 200);
+    },
+  
+    /**
+     * if a search is currently happening
+     * @return {Boolean}
+     */
+    isSearching: function () {
+      return this.__searchingFolders;
     }
   }
 });

@@ -423,6 +423,9 @@ msgstr "Datensatzinfo"
 #: bibliograph/ui/main/FolderTreePanel.js:88
 #: bibliograph/ui/main/FolderTreePanel.js:89
 #: bibliograph/ui/main/FolderTreePanel.js:92
+#: bibliograph/ui/main/FolderTreePanel.js:90
+#: bibliograph/ui/main/FolderTreePanel.js:91
+#: bibliograph/ui/main/FolderTreePanel.js:94
 #: bibliograph/ui/item/RecordInfoUi.js:59
 #: bibliograph/ui/item/RecordInfoUi.js:60
 msgid "Folders"
@@ -1180,13 +1183,22 @@ msgstr "Bericht erstellen"
 
 #: bibliograph/ui/main/FolderTreePanel.js:170
 #: bibliograph/ui/main/FolderTreePanel.js:173
+#: qcl/ui/treevirtual/MultipleTreeView.js:971
+#: qcl/ui/treevirtual/MultipleTreeView.js:978
+#: qcl/ui/treevirtual/MultipleTreeView.js:976
+#: qcl/ui/treevirtual/MultipleTreeView.js:977
+#: qcl/ui/treevirtual/MultipleTreeView.js:983
+#: qcl/ui/treevirtual/MultipleTreeView.js:986
+#: qcl/ui/treevirtual/MultipleTreeView.js:990
 msgid "No match for \"%1\""
 msgstr "'%1' kann nicht gefunden werden."
 
 #: bibliograph/ui/main/FolderTreePanel.js:63
+#: bibliograph/ui/main/FolderTreePanel.js:60
 msgid "Search folders:"
 msgstr "Ordner durchsuchen:"
 
 #: bibliograph/ui/main/FolderTreePanel.js:75
+#: bibliograph/ui/main/FolderTreePanel.js:72
 msgid "Type and press enter to search"
 msgstr "Suchwort eingeben und 'Enter' drücken"

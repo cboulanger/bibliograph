@@ -26,7 +26,8 @@
     "react/http-client": "^0.5.9",
     "ext-json": "*",
     "ext-pdo": "*",
-    "ext-intl": "*"
+    "ext-intl": "*",
+    "ext-mbstring": "*"
   },
   "require-dev": {
     "bizley/migration": "^2.2",

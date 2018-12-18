@@ -7,6 +7,7 @@ use Yii;
 use lib\models\BaseModel;
 use app\models\Role;
 use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\helpers\ArrayHelper;
 
@@ -369,6 +370,19 @@ class Datasource extends BaseModel
   public static function findIn(string $datasourceName, string $modelType)
   {
     return static::getInstanceFor($datasourceName)->getClassFor($modelType)::find();
+  }
+
+  /**
+   * Returns the ActiveRecord of the given model type in the given datasource with the
+   * given id
+   * @param string $datasourceName
+   * @param string $modelType
+   * @param int|string|array $idOrWhere
+   * @return ActiveRecord|null
+   */
+  public static function findOneIn(string $datasourceName, string $modelType, $idOrWhere)
+  {
+    return static::getInstanceFor($datasourceName)->getClassFor($modelType)::findOne($idOrWhere);
   }
 
   /**
