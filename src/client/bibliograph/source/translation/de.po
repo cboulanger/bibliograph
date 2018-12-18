@@ -420,6 +420,9 @@ msgstr "Datensatzinfo"
 #: bibliograph/ui/main/FolderTreePanel.js:111
 #: bibliograph/ui/main/FolderTreePanel.js:87
 #: bibliograph/ui/main/FolderTreePanel.js:84
+#: bibliograph/ui/main/FolderTreePanel.js:88
+#: bibliograph/ui/main/FolderTreePanel.js:89
+#: bibliograph/ui/main/FolderTreePanel.js:92
 #: bibliograph/ui/item/RecordInfoUi.js:59
 #: bibliograph/ui/item/RecordInfoUi.js:60
 msgid "Folders"
@@ -1175,8 +1178,15 @@ msgstr "Wenn der Fehler weiterhin auftritt, bitte den Administrator benachrichti
 msgid "Create report"
 msgstr "Bericht erstellen"
 
-#: bibliograph/ui/main/FolderTreePanel.js:159
-#: bibliograph/ui/main/FolderTreePanel.js:156
-#: bibliograph/ui/main/FolderTreePanel.js:157
+#: bibliograph/ui/main/FolderTreePanel.js:170
+#: bibliograph/ui/main/FolderTreePanel.js:173
 msgid "No match for \"%1\""
-msgstr ""
+msgstr "'%1' kann nicht gefunden werden."
+
+#: bibliograph/ui/main/FolderTreePanel.js:63
+msgid "Search folders:"
+msgstr "Ordner durchsuchen:"
+
+#: bibliograph/ui/main/FolderTreePanel.js:75
+msgid "Type and press enter to search"
+msgstr "Suchwort eingeben und 'Enter' drücken"

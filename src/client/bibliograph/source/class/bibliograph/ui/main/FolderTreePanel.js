@@ -54,27 +54,35 @@ qx.Class.define("bibliograph.ui.main.FolderTreePanel",
       let vbox1 = new qx.ui.layout.VBox(null, null, null);
       this.setLayout(vbox1);
       
-      // search bar
+      // menu bar
+      let headerMenu = new qx.ui.menubar.MenuBar();
+      headerMenu.setHeight(22);
+      this.add(headerMenu);
+      
+      // title label
+      let label = new qx.ui.basic.Label(this.tr('Search folders:'));
+      this.titleLabel = label;
+      label.setPadding(3);
+      label.setRich(true);
+      headerMenu.add(label);
+  
+      // search box
       let searchBox = new qx.ui.form.TextField();
-      searchBox.setHeight(22);
-      this.add(searchBox);
+      searchBox.set({
+        height: 20,
+        margin: 1,
+        padding:0,
+        placeholder: this.tr('Type and press enter to search')
+      })
+      headerMenu.add(searchBox, {flex: 1});
       searchBox.addListener("keypress", e => {
         if (e.getKeyIdentifier() === "Enter") {
           this.search(searchBox.getValue());
         }
       });
-  
-      // menu bar
-      // let headerMenu = new qx.ui.menubar.MenuBar();
-      // headerMenu.setHeight(22);
-      // this.add(headerMenu);
-      
-      // title label
-      let titleLabel = new qx.ui.basic.Label(null);
-      this.titleLabel = titleLabel;
-      titleLabel.setPadding(3);
-      titleLabel.setRich(true);
-      //headerMenu.add(titleLabel);
+      this.getApplication().bind("datasource", headerMenu, "enabled", {
+        converter: v => !!v
+      });
   
       // multiple tree widget
       let mTree = new bibliograph.ui.main.MultipleTreeView();
@@ -135,10 +143,17 @@ qx.Class.define("bibliograph.ui.main.FolderTreePanel",
       _statusLabel.setTextColor("#808080");
       footerMenu.add(_statusLabel, {flex: 1});
     },
-    
+  
+    /**
+     * Searches the folder labels and selects the next matching folder
+     * @param searchtext {String}
+     * @return {void}
+     */
     search : function(searchtext){
       /** @var {qcl.ui.treevirtual.DragDropTree} */
       let tree = this.treeWidget.getTree();
+      if (!tree) return;
+      
       let model = tree.getDataModel();
       let data = model.getData();
   
@@ -146,6 +161,7 @@ qx.Class.define("bibliograph.ui.main.FolderTreePanel",
       let node, id, found = false;
       for (id= this.__startSearchIndex; id < data.length; id++ ){
         node = data[id];
+        if (qx.lang.Type.isObject(node.data) && node.data.markedDeleted) continue;
         if (node.label.toLocaleLowerCase().includes(searchtext.toLocaleLowerCase())) {
           found = true;
           this.__startSearchIndex = id+1;
@@ -174,8 +190,9 @@ qx.Class.define("bibliograph.ui.main.FolderTreePanel",
         if (row) {
           tree.getSelectionModel().resetSelection();
           tree.getSelectionModel().setSelectionInterval(row, row);
+          tree.scrollCellVisible(0, row);
         }
-      }, this, 500);
+      }, this, 200);
     }
   }
 });

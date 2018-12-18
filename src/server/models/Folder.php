@@ -143,7 +143,7 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
       'label' => [
         'label' => Yii::t('app', "Folder Title"),
         'type' => "TextField",
-        'width' => 500
+        'width' => 800
       ],
       'description' => [
         'label' => Yii::t('app', "Description"),
@@ -196,7 +196,7 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
       'query' => [
         'label' => Yii::t('app', "Query"),
         'type' => "TextArea",
-        'lines' => 3
+        'lines' => 5
       ],
       'opened' => [
         'label' => Yii::t('app', "Opened?"),

@@ -64,7 +64,7 @@ class ReportController extends \yii\web\Controller
    * @param int $folderId
    * @return array
    */
-  public function getReferences($datasourceName, $folderId) {
+  public function getReferences($datasourceName, $folderId, $orderBy="author") {
     $folder = $this->getFolder($datasourceName, $folderId);
     $datasource = Datasource::getInstanceFor($datasourceName);
     if ($folder->searchfolder && $folder->query){
@@ -74,14 +74,14 @@ class ReportController extends \yii\web\Controller
         $folder->query
       );
     } else {
-      $query = (Datasource::in($datasourceName, "reference"))::find()
+      $query = (Datasource::findIn($datasourceName, "reference"))
         ->select('references.*')
         ->alias('references')
         ->joinWith('folders',false)
         ->onCondition(['folderId' => (int) $folderId]);
     }
     //echo $query->createCommand()->rawSql;
-    return $query->asArray()->all();
+    return $query->orderBy($orderBy)->asArray()->all();
   }
 
   /**
@@ -90,7 +90,7 @@ class ReportController extends \yii\web\Controller
    * @return array
    */
   public function getChildFolderIds($datasourceName, $folderId){
-    return (Datasource::in($datasourceName, "folder"))::find()
+    return (Datasource::findIn($datasourceName, "folder"))
       ->select('id')
       ->where(['parentId'=>$folderId])
       ->column();
