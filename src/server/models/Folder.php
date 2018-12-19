@@ -334,11 +334,15 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
     if( Yii::$app->request->isConsoleRequest ) return true;
 
     // inserts
+
     if ($insert) {
       //Yii::debug("Inserting " . $this->label, __METHOD__);
       $this->_afterInsert();
       return true;
     }
+
+    // updates
+
     // dispatch events
     //Yii::debug("Updating " . $this->label . " " . json_encode($changedAttributes));
     foreach ($changedAttributes as $key => $oldValue) {
@@ -380,7 +384,7 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
       Yii::$app->eventQueue->add($this->createUpdateNodeEvent($nodeData));
     }
     // add virtual subfolders
-    $this->_createVirtualSubfoldersOnDemand(!!$insert);
+    $this->_createVirtualSubfoldersOnDemand(true);
     return true;
   }
 
@@ -394,7 +398,7 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
       if ($pruneFirst) {
         Yii::$app->eventQueue->add(new MessageEvent([
           'name' => static::MESSAGE_CLIENT_PRUNE,
-          'data' => [ 'datasource' => static::getDatasource()->namedId, 'id' => $this->id]
+          'data' => [ 'datasource' => static::getDatasource()->namedId, 'modelType' => 'folder', 'id' => $this->id]
         ]));
       }
       Yii::$app->eventQueue->add(new MessageEvent([
@@ -427,6 +431,8 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
         'nodeData'    => FolderController::getNodeDataStatic($this),
         'transactionId' => $this->getTransactionId()
       ]]));
+    // add virtual subfolders
+    $this->_createVirtualSubfoldersOnDemand();
   }
 
   /**
@@ -520,7 +526,9 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
    */
   public function getChildCount($update = false)
   {
-    if ($update or $this->childCount === null) {
+    if (str_contains( $this->query, "virtsub:" )){
+      $this->childCount = 100; // TODO calculate properly
+    } elseif ($update or $this->childCount === null) {
       $this->childCount = (int) $this->getChildrenQuery()->count();
       $this->save();
     }

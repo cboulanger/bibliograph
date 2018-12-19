@@ -652,7 +652,8 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
       }
       let notForMe = !(data.datasource === this.getDatasource() &&  data.modelType === this.getModelType());
       if (notForMe) {
-        this.debug("Ignoring irrelevant message...");
+        console.log(data);
+        this.debug(`Ignoring message: Datasource '${data.datasource}' must be '${this.getDatasource()}' and model type '${data.modelType}' must be '${this.getModelType()}'.`);
       }
       return notForMe;
     },
@@ -683,7 +684,7 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
         return;
       }
       this.debug("Pruning tree node, client #" + nodeId + " server #" + data.id);
-      this.getDataModel().prune(nodeId);
+      this.getTree().getDataModel().prune(nodeId);
     },
     
     /**

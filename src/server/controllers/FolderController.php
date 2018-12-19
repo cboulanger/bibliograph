@@ -247,10 +247,8 @@ class FolderController extends AppController //implements ITreeController
       throw new UserErrorException("Invalid folder query for virtual folders: $query");
     }
     $field = trim(substr($query,strpos($query,":")+1));
-    $referenceClass = Datasource::in($datasource,"reference");
     try{
-      /** @var ActiveQuery $query */
-      $query = $referenceClass::find()
+      $query = Datasource::findIn($datasource,"reference")
         ->select($field)
         ->distinct()
         ->orderBy($field);
@@ -268,17 +266,15 @@ class FolderController extends AppController //implements ITreeController
         $separatedValues[]=$value;
       }
     }
-    $separatedValues = array_map(function($v){ return trim($v);}, array_unique($separatedValues));
+    $separatedValues = array_unique(array_map(function($v){ return trim($v);}, $separatedValues));
     $collator = new \Collator(str_replace("-","_",Yii::$app->language));
-    $collator->asort ($separatedValues);
-    $separatedValues= array_values($separatedValues);
+    $collator->sort($separatedValues);
 
     $limit = 100;
     $count = count($separatedValues);
     $sections = ceil($count/$limit);
     $index = 0;
     $nodeData = [];
-    Yii::debug("$count entries, $sections sections", __METHOD__);
 
     for ($outer=0; $outer <= $sections and $index < $count; $outer++){
       $sectionId = null;
@@ -289,7 +285,6 @@ class FolderController extends AppController //implements ITreeController
         $last  = trim($separatedValues[min($index + $limit, $count)-1]);
         list($first,) = explode(",", $first);
         list($last,) = explode(",",$last);
-        //mb_strimwidth("Hello World", 0, 10, "...");
         $label =
           mb_strimwidth(trim($first),0,15, "...") .
           " - " .
@@ -309,7 +304,9 @@ class FolderController extends AppController //implements ITreeController
         $value = trim($separatedValues[$index++]);
         if (!$value) continue;
         // computation of reference count is too expensive for large datasets
-        $referenceCount = null; //(int) $referenceClass::find()->where(['like', $field, $value])->count();
+        $referenceCount = $count < $limit
+          ? (int) Datasource::findIn($datasource,"reference")->where(['like', $field, $value])->count()
+          : null;
         $node = $this->createVirtualFolder([
           'type'      => 'virtual',
           'id'        => $this->getVirtualFolderId(),
