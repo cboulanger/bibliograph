@@ -933,6 +933,7 @@ msgstr ""
 #: qcl/ui/treevirtual/MultipleTreeView.js:983
 #: qcl/ui/treevirtual/MultipleTreeView.js:986
 #: qcl/ui/treevirtual/MultipleTreeView.js:990
+#: qcl/ui/treevirtual/MultipleTreeView.js:991
 msgid "No match for \"%1\""
 msgstr ""
 
