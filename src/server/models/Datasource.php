@@ -444,10 +444,10 @@ class Datasource extends BaseModel
    * @return void
    * @throws \Exception
    */
-  protected function useDsnDefaults()
+  public function useDsnDefaults()
   {
+    $connection = Yii::$app->datasourceManager->parseDsn();
     foreach (["host", "port", "database", "username", "password"] as $key) {
-      $connection = Yii::$app->datasourceManager->parseDsn();
       if (!$this->$key) {
         $this->$key = $connection[$key];
       }
@@ -551,5 +551,25 @@ class Datasource extends BaseModel
   public function getMigrationApplyTime()
   {
     return Migration::find()->max('apply_time', $this->getConnection());
+  }
+
+  /**
+   * Overrridden to set properties to null that are identical to those of the default connection
+   * This makes the Datasource model data more portable, since it allows to copy it to different
+   * database and create links to the copies, not the original datasources
+   * @param bool $runValidation
+   * @param null $attributeNames
+   * @return bool
+   * @throws \yii\db\Exception
+   */
+  public function save($runValidation = true, $attributeNames = null)
+  {
+    $connection = Yii::$app->datasourceManager->parseDsn();
+    foreach (["host", "port", "database", "username", "password"] as $key) {
+      if ($this->$key == $connection[$key]) {
+        $this->$key = null;
+      }
+    }
+    return parent::save($runValidation, $attributeNames);
   }
 }

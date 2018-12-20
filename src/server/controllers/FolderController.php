@@ -269,6 +269,7 @@ class FolderController extends AppController //implements ITreeController
     $separatedValues = array_unique(array_map(function($v){ return trim($v);}, $separatedValues));
     $collator = new \Collator(str_replace("-","_",Yii::$app->language));
     $collator->sort($separatedValues);
+    $separatedValues = array_values($separatedValues); // redundant, bug in PHP7.0?
 
     $limit = 100;
     $count = count($separatedValues);
@@ -303,8 +304,8 @@ class FolderController extends AppController //implements ITreeController
       for ($inner=0; $inner < $limit and $index < $count; $inner++){
         $value = trim($separatedValues[$index++]);
         if (!$value) continue;
-        // computation of reference count is too expensive for large datasets
-        $referenceCount = $count < $limit
+        // computation of reference count is too expensive for large datasets, so do it only in small sets
+        $referenceCount = $count < $limit*3
           ? (int) Datasource::findIn($datasource,"reference")->where(['like', $field, $value])->count()
           : null;
         $node = $this->createVirtualFolder([

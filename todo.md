@@ -3,7 +3,7 @@
 ## v3.0.0-beta
 
 ### Priority: urgent
-- [ ] FEAT: omit user/password in data_Datasources and use app.conf.toml-supplied values
+- [x] FEAT: omit user/password in data_Datasources and use app.conf.toml-supplied values
 - [ ] BUG: "Forgot Password" doesn't work: repair or disable
 - [ ] BUG: Import-Window: Import All doesn't select all references if they haven't been loaded. This needs to be done on the server. 
 - [ ] BUG: Create new datasource results in "User Error: Running 'migrate/up' failed."

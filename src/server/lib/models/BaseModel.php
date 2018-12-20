@@ -38,6 +38,7 @@ use app\models\Datasource;
  * @property array $formData
  *    A associative array of arrays containing data for the
  *    dialog.Form widget
+ * @method useDsnDefaults()
  */
 class BaseModel extends ActiveRecord
 {

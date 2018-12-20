@@ -20,6 +20,7 @@
 
 namespace app\controllers;
 
+use app\models\Datasource;
 use app\models\Role;
 use app\models\Schema;
 use app\models\User;
@@ -603,6 +604,13 @@ class AccessConfigController extends AppController
 
     // create form
     $model = $this->getModelInstance($type, $namedId);
+    switch ($type) {
+      case "datasource":
+        /** @var Datasource */
+        $model->useDsnDefaults();
+        break;
+    }
+
     try {
       $formData = Form::getDataFromModel($model);
     } catch (\Exception $e) {
@@ -711,7 +719,7 @@ class AccessConfigController extends AppController
       }
 
       // enforce setting of password
-      if ($model->hasAttribute("password") and !$model->password) {
+      if ($type == "user" and !$model->password) {
         $validationError = Yii::t('app', "You need to set a password.");
       }
 
