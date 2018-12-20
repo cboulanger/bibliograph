@@ -106,7 +106,8 @@ qx.Class.define("bibliograph.ui.Windows",
         cm.bindKey("application.title", loginDialog, "text", false);
         cm.bindKey("application.logo", loginDialog, "image", false);
         // hide forgot password button if ldap is enabled @todo - make this configurable
-        loginDialog.setShowForgotPassword(!cm.getKey("ldap.enabled"));
+        // FIXME Re-enable when email-controller has been reimplemented
+        //loginDialog.setShowForgotPassword(!cm.getKey("ldap.enabled"));
       });
     }
   }

@@ -216,7 +216,7 @@ qx.Class.define("qcl.io.JsonRpcClient", {
       // a null result is typically a token problem
       if (result===null){
         this._showAuthErrorMessageAndLogOut(method);
-        this.error(`Authentication failed for method '${method}.'`);
+        return null;
       }
       // we are only interested in objects (but not arrays)
       if(  qx.lang.Type.isArray(result) || ! qx.lang.Type.isObject(result) ){
@@ -234,8 +234,6 @@ qx.Class.define("qcl.io.JsonRpcClient", {
       });
       return result.data;
     }
-
-
   },
 
   /**

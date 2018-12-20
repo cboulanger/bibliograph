@@ -4,7 +4,7 @@
 
 ### Priority: urgent
 - [x] FEAT: omit user/password in data_Datasources and use app.conf.toml-supplied values
-- [ ] BUG: "Forgot Password" doesn't work: repair or disable
+- [x] BUG: "Forgot Password" doesn't work: repair or disable
 - [ ] BUG: Import-Window: Import All doesn't select all references if they haven't been loaded. This needs to be done on the server. 
 - [ ] BUG: Create new datasource results in "User Error: Running 'migrate/up' failed."
 - [ ] BUG: Delete datasource: "Running 'migrate/down' failed"
@@ -13,7 +13,7 @@
 - [ ] BUG: Reimplement User::checkFormPassword
 - [ ] FEAT: Cache export formats for HTML view, make configurable 
 - [ ] FEAT: Disallow drop of references on folders in which they are already contained.
-- [ ] FEAT: Reimplement account management via email
+- [ ] FEAT: Reimplement account management via email & reenable "Forgot password" in login dialog
 - [ ] FEAT: Reimplement Search Help window
 - [ ] FEAT: Reimplement "In which folders..."
 - [ ] FEAT: add GUI for 'app.access.userdatabase.defaultrole' config
@@ -37,6 +37,7 @@
 - [ ] FEAT: Alert errors during import ("x references skipped...")
 - [ ] FEAT: Add a silent abort error that can be used to terminate a request without an error message
 - [ ] FEAT: Reimplement support for the admindb, userdb and tmpdb settings in app.conf.toml -> use DSNs instead of single settings or TOML nested arrays.
+- [ ] BUG: Fix raptor client to not choke quietly on 404s 
 
 ### Code cleanup / refactoring
 - [ ] fix compiler errors
