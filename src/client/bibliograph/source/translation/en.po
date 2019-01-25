@@ -1,4 +1,5 @@
-#: bibliograph/Application.js:216
+#: bibliograph/Application.js:216 bibliograph/Application.js:219
+#: bibliograph/Application.js:223 bibliograph/Application.js:220
 msgid "Missing server address. Please contact administrator."
 msgstr ""
 
@@ -77,6 +78,7 @@ msgstr ""
 #: bibliograph/plugins/webservices/View.js:227
 #: bibliograph/plugins/z3950/ImportWindow.js:180
 #: bibliograph/ui/window/AccessControlTool.js:189
+#: bibliograph/ui/window/AccessControlTool.js:190
 msgid "Help"
 msgstr ""
 
@@ -94,7 +96,8 @@ msgstr ""
 
 #: bibliograph/plugins/webservices/View.js:312
 #: bibliograph/plugins/z3950/ImportWindow.js:250
-#: bibliograph/ui/main/Toolbar.js:294
+#: bibliograph/ui/main/Toolbar.js:294 bibliograph/ui/main/Toolbar.js:283
+#: bibliograph/ui/main/Toolbar.js:282
 msgid "Searching..."
 msgstr ""
 
@@ -171,6 +174,7 @@ msgid "To log in, you need a secure connection. After you press 'OK', the applic
 msgstr ""
 
 #: bibliograph/Commands.js:72 bibliograph/ui/window/AccessControlTool.js:157
+#: bibliograph/ui/window/AccessControlTool.js:158
 msgid "Please wait ..."
 msgstr ""
 
@@ -278,18 +282,22 @@ msgid "Access control tool"
 msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:150
+#: bibliograph/ui/window/AccessControlTool.js:151
 msgid "New local user"
 msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:162
+#: bibliograph/ui/window/AccessControlTool.js:163
 msgid "Import LDAP user"
 msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:177
+#: bibliograph/ui/window/AccessControlTool.js:178
 msgid "New Datasource"
 msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:199
+#: bibliograph/ui/window/AccessControlTool.js:201
 msgid "Exit"
 msgstr ""
 
@@ -298,21 +306,26 @@ msgstr ""
 #: bibliograph/ui/window/AccessControlTool.js:243
 #: bibliograph/ui/window/AccessControlTool.js:463
 #: bibliograph/ui/window/AccessControlTool.js:460
+#: bibliograph/ui/window/AccessControlTool.js:245
+#: bibliograph/ui/window/AccessControlTool.js:468
 msgid "Filter by name here..."
 msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:292
 #: bibliograph/ui/window/AccessControlTool.js:294
+#: bibliograph/ui/window/AccessControlTool.js:298
 msgid "Please enter the id of the new '%1'-Object"
 msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:313
 #: bibliograph/ui/window/AccessControlTool.js:315
+#: bibliograph/ui/window/AccessControlTool.js:321
 msgid "Do you really want to delete '%1'?"
 msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:355
 #: bibliograph/ui/window/AccessControlTool.js:357
+#: bibliograph/ui/window/AccessControlTool.js:365
 msgid "Edited element"
 msgstr ""
 
@@ -321,6 +334,8 @@ msgstr ""
 #: bibliograph/ui/window/AccessControlTool.js:409
 #: bibliograph/ui/window/AccessControlTool.js:411
 #: bibliograph/ui/window/AccessControlTool.js:408
+#: bibliograph/ui/window/AccessControlTool.js:414
+#: bibliograph/ui/window/AccessControlTool.js:416
 msgid "Link"
 msgstr ""
 
@@ -329,23 +344,27 @@ msgstr ""
 #: bibliograph/ui/window/AccessControlTool.js:422
 #: bibliograph/ui/window/AccessControlTool.js:424
 #: bibliograph/ui/window/AccessControlTool.js:421
+#: bibliograph/ui/window/AccessControlTool.js:427
+#: bibliograph/ui/window/AccessControlTool.js:429
 msgid "Unlink"
 msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:444
 #: bibliograph/ui/window/AccessControlTool.js:449
 #: bibliograph/ui/window/AccessControlTool.js:446
+#: bibliograph/ui/window/AccessControlTool.js:454
 msgid "Linkable items"
 msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:450
 #: bibliograph/ui/window/AccessControlTool.js:455
 #: bibliograph/ui/window/AccessControlTool.js:452
+#: bibliograph/ui/window/AccessControlTool.js:460
 msgid "No linkable items"
 msgstr ""
 
 #: bibliograph/ui/window/PreferencesWindow.js:31
-#: bibliograph/ui/main/Toolbar.js:140
+#: bibliograph/ui/main/Toolbar.js:140 bibliograph/ui/main/Toolbar.js:133
 msgid "Preferences"
 msgstr ""
 
@@ -440,6 +459,7 @@ msgid "Processing references..."
 msgstr ""
 
 #: bibliograph/ui/window/AboutWindow.js:27 bibliograph/ui/main/Toolbar.js:238
+#: bibliograph/ui/main/Toolbar.js:229 bibliograph/ui/main/Toolbar.js:228
 msgid "About Bibliograph"
 msgstr ""
 
@@ -464,6 +484,7 @@ msgid "Password"
 msgstr ""
 
 #: dialog/Login.js:200 bibliograph/ui/main/Toolbar.js:64
+#: bibliograph/ui/main/Toolbar.js:60
 msgid "Login"
 msgstr ""
 
@@ -471,59 +492,67 @@ msgstr ""
 msgid "Forgot Password?"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:78
+#: bibliograph/ui/main/Toolbar.js:78 bibliograph/ui/main/Toolbar.js:73
 msgid "Logout"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:94
+#: bibliograph/ui/main/Toolbar.js:94 bibliograph/ui/main/Toolbar.js:88
 msgid "Loading..."
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:107
+#: bibliograph/ui/main/Toolbar.js:107 bibliograph/ui/main/Toolbar.js:101
 msgid "Datasources"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:122
+#: bibliograph/ui/main/Toolbar.js:122 bibliograph/ui/main/Toolbar.js:116
 msgid "System"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:153
+#: bibliograph/ui/main/Toolbar.js:153 bibliograph/ui/main/Toolbar.js:145
 msgid "Access management"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:166
+#: bibliograph/ui/main/Toolbar.js:166 bibliograph/ui/main/Toolbar.js:157
 msgid "Plugins"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:179
+#: bibliograph/ui/main/Toolbar.js:179 bibliograph/ui/main/Toolbar.js:170
+#: bibliograph/ui/main/Toolbar.js:169
 msgid "Import"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:196
+#: bibliograph/ui/main/Toolbar.js:196 bibliograph/ui/main/Toolbar.js:186
+#: bibliograph/ui/main/Toolbar.js:185
 msgid "Import text file"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:213
+#: bibliograph/ui/main/Toolbar.js:213 bibliograph/ui/main/Toolbar.js:203
+#: bibliograph/ui/main/Toolbar.js:202
 msgid "Language"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:230
+#: bibliograph/ui/main/Toolbar.js:230 bibliograph/ui/main/Toolbar.js:221
+#: bibliograph/ui/main/Toolbar.js:220
 msgid "Online Help"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:250
+#: bibliograph/ui/main/Toolbar.js:250 bibliograph/ui/main/Toolbar.js:240
+#: bibliograph/ui/main/Toolbar.js:239
 msgid "Developer"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:256
+#: bibliograph/ui/main/Toolbar.js:256 bibliograph/ui/main/Toolbar.js:246
+#: bibliograph/ui/main/Toolbar.js:245
 msgid "Run RPC method test.test"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:293
+#: bibliograph/ui/main/Toolbar.js:293 bibliograph/ui/main/Toolbar.js:282
+#: bibliograph/ui/main/Toolbar.js:281
 msgid "No results"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:295
+#: bibliograph/ui/main/Toolbar.js:295 bibliograph/ui/main/Toolbar.js:284
+#: bibliograph/ui/main/Toolbar.js:283
 msgid "Enter search term or ? for suggestions"
 msgstr ""
 

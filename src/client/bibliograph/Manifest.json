@@ -11,8 +11,7 @@
         "email": "info@bibliograph.org"
       }
     ],
-    "version": "3.0.0-alpha",
-    "qooxdoo-range": "6.0.0-alpha"
+    "version": "3.0.0-alpha"
   },
   "provides": {
     "namespace": "bibliograph",
@@ -22,6 +21,11 @@
     "translation": "source/translation",
     "boot": "source/boot",
     "type": "application"
+  },
+  "requires": {
+    "qooxdoo-compiler": "^0.2.52",
+    "qooxdoo-sdk": "^6.0.0-alpha",
+    "cboulanger/qx-contrib-TokenField": "^1.2.1"
   },
   "externalResources": {
     "script": [

@@ -1,5 +1,7 @@
 #: bibliograph/Application.js:187 bibliograph/Application.js:194
 #: bibliograph/Application.js:201 bibliograph/Application.js:216
+#: bibliograph/Application.js:219 bibliograph/Application.js:223
+#: bibliograph/Application.js:220
 msgid "Missing server address. Please contact administrator."
 msgstr "Die Serveradresse fehlt. Bitte kontaktieren Sie den/die Administrator/in."
 
@@ -50,6 +52,7 @@ msgstr "Bitte Suchausdruck eingeben"
 #: bibliograph/plugins/webservices/ImportWindow.js:234
 #: bibliograph/plugins/z3950/ImportWindow.js:180
 #: bibliograph/ui/window/AccessControlTool.js:189
+#: bibliograph/ui/window/AccessControlTool.js:190
 #: bibliograph/plugins/webservices/View.js:227
 msgid "Help"
 msgstr "Hilfe"
@@ -75,7 +78,8 @@ msgstr "Schließen"
 #: bibliograph/plugins/z3950/ImportWindow.js:250
 #: bibliograph/ui/main/Toolbar.js:279 bibliograph/ui/main/Toolbar.js:289
 #: bibliograph/ui/main/Toolbar.js:297 bibliograph/ui/main/Toolbar.js:298
-#: bibliograph/ui/main/Toolbar.js:294
+#: bibliograph/ui/main/Toolbar.js:294 bibliograph/ui/main/Toolbar.js:283
+#: bibliograph/ui/main/Toolbar.js:282
 #: bibliograph/plugins/webservices/View.js:312
 msgid "Searching..."
 msgstr "Suchabfrage wird ausgeführt…"
@@ -492,35 +496,41 @@ msgid "Duplicates"
 msgstr "Dubletten"
 
 #: dialog/Login.js:200 bibliograph/ui/main/Toolbar.js:64
+#: bibliograph/ui/main/Toolbar.js:60
 msgid "Login"
 msgstr "Anmelden"
 
-#: bibliograph/ui/main/Toolbar.js:78
+#: bibliograph/ui/main/Toolbar.js:78 bibliograph/ui/main/Toolbar.js:73
 msgid "Logout"
 msgstr "Abmelden"
 
-#: bibliograph/ui/main/Toolbar.js:94
+#: bibliograph/ui/main/Toolbar.js:94 bibliograph/ui/main/Toolbar.js:88
 msgid "Loading..."
 msgstr "Lade ..."
 
 #: bibliograph/ui/main/Toolbar.js:111 bibliograph/ui/main/Toolbar.js:107
+#: bibliograph/ui/main/Toolbar.js:101
 msgid "Datasources"
 msgstr "Datenbanken"
 
 #: bibliograph/ui/main/Toolbar.js:126 bibliograph/ui/main/Toolbar.js:122
+#: bibliograph/ui/main/Toolbar.js:116
 msgid "System"
 msgstr "System"
 
 #: bibliograph/ui/window/PreferencesWindow.js:31
 #: bibliograph/ui/main/Toolbar.js:144 bibliograph/ui/main/Toolbar.js:140
+#: bibliograph/ui/main/Toolbar.js:133
 msgid "Preferences"
 msgstr "Optionen"
 
 #: bibliograph/ui/main/Toolbar.js:157 bibliograph/ui/main/Toolbar.js:153
+#: bibliograph/ui/main/Toolbar.js:145
 msgid "Access management"
 msgstr "Zugangskontrolle"
 
 #: bibliograph/ui/main/Toolbar.js:170 bibliograph/ui/main/Toolbar.js:166
+#: bibliograph/ui/main/Toolbar.js:157
 msgid "Plugins"
 msgstr "Plugins"
 
@@ -533,15 +543,18 @@ msgid "This will reset and reload the application"
 msgstr "Die Anwendung wird zurückgesetzt"
 
 #: bibliograph/ui/main/Toolbar.js:183 bibliograph/ui/main/Toolbar.js:179
+#: bibliograph/ui/main/Toolbar.js:170 bibliograph/ui/main/Toolbar.js:169
 msgid "Import"
 msgstr "Importieren"
 
 #: bibliograph/ui/main/Toolbar.js:200 bibliograph/ui/main/Toolbar.js:196
+#: bibliograph/ui/main/Toolbar.js:186 bibliograph/ui/main/Toolbar.js:185
 msgid "Import text file"
 msgstr "Aus Text/Datei importieren"
 
 #: bibliograph/ui/main/Toolbar.js:233 bibliograph/ui/main/Toolbar.js:234
-#: bibliograph/ui/main/Toolbar.js:230
+#: bibliograph/ui/main/Toolbar.js:230 bibliograph/ui/main/Toolbar.js:221
+#: bibliograph/ui/main/Toolbar.js:220
 msgid "Online Help"
 msgstr "Online-Hilfe"
 
@@ -551,7 +564,8 @@ msgstr "Ein Problem melden oder einen Verbesserungsvorschlag machen"
 
 #: bibliograph/ui/main/Toolbar.js:223 bibliograph/ui/main/Toolbar.js:233
 #: bibliograph/ui/main/Toolbar.js:241 bibliograph/ui/main/Toolbar.js:242
-#: bibliograph/ui/main/Toolbar.js:238 bibliograph/ui/window/AboutWindow.js:27
+#: bibliograph/ui/main/Toolbar.js:238 bibliograph/ui/main/Toolbar.js:229
+#: bibliograph/ui/main/Toolbar.js:228 bibliograph/ui/window/AboutWindow.js:27
 msgid "About Bibliograph"
 msgstr "Über Bibliograph"
 
@@ -654,6 +668,7 @@ msgstr "Neue/r Benutzer/in"
 
 #: bibliograph/ui/window/AccessControlTool.js:166
 #: bibliograph/ui/window/AccessControlTool.js:177
+#: bibliograph/ui/window/AccessControlTool.js:178
 msgid "New Datasource"
 msgstr "Neue Datenbank"
 
@@ -663,17 +678,20 @@ msgstr "Ins Dateisystem exportieren"
 
 #: bibliograph/ui/window/AccessControlTool.js:188
 #: bibliograph/ui/window/AccessControlTool.js:199
+#: bibliograph/ui/window/AccessControlTool.js:201
 msgid "Exit"
 msgstr "Schließen"
 
 #: bibliograph/ui/window/AccessControlTool.js:278
 #: bibliograph/ui/window/AccessControlTool.js:489
 #: bibliograph/ui/window/AccessControlTool.js:294
+#: bibliograph/ui/window/AccessControlTool.js:298
 msgid "Please enter the id of the new '%1'-Object"
 msgstr "Bitte geben sie die ID für das neue '%1'-Objekt ein"
 
 #: bibliograph/ui/window/AccessControlTool.js:299
 #: bibliograph/ui/window/AccessControlTool.js:315
+#: bibliograph/ui/window/AccessControlTool.js:321
 msgid "Do you really want to delete '%1'?"
 msgstr "Wollen Sie wirklich '%1' löschen?"
 
@@ -683,6 +701,7 @@ msgstr "Lade die Daten ..."
 
 #: bibliograph/ui/window/AccessControlTool.js:341
 #: bibliograph/ui/window/AccessControlTool.js:357
+#: bibliograph/ui/window/AccessControlTool.js:365
 msgid "Edited element"
 msgstr "Bearbeitetes Element"
 
@@ -690,6 +709,8 @@ msgstr "Bearbeitetes Element"
 #: bibliograph/ui/window/AccessControlTool.js:392
 #: bibliograph/ui/window/AccessControlTool.js:406
 #: bibliograph/ui/window/AccessControlTool.js:408
+#: bibliograph/ui/window/AccessControlTool.js:414
+#: bibliograph/ui/window/AccessControlTool.js:416
 msgid "Link"
 msgstr "Verknüpfen"
 
@@ -697,11 +718,14 @@ msgstr "Verknüpfen"
 #: bibliograph/ui/window/AccessControlTool.js:405
 #: bibliograph/ui/window/AccessControlTool.js:419
 #: bibliograph/ui/window/AccessControlTool.js:421
+#: bibliograph/ui/window/AccessControlTool.js:427
+#: bibliograph/ui/window/AccessControlTool.js:429
 msgid "Unlink"
 msgstr "Lösen"
 
 #: bibliograph/ui/window/AccessControlTool.js:430
 #: bibliograph/ui/window/AccessControlTool.js:446
+#: bibliograph/ui/window/AccessControlTool.js:454
 msgid "Linkable items"
 msgstr "Verknüpfbare Elemente"
 
@@ -767,6 +791,7 @@ msgstr "Anwendungslogo"
 
 #: bibliograph/ui/window/PreferencesWindow.js:86
 #: bibliograph/ui/main/Toolbar.js:217 bibliograph/ui/main/Toolbar.js:213
+#: bibliograph/ui/main/Toolbar.js:203 bibliograph/ui/main/Toolbar.js:202
 msgid "Language"
 msgstr "Sprache"
 
@@ -972,13 +997,15 @@ msgstr "Entwicklung"
 
 #: bibliograph/ui/main/Toolbar.js:241 bibliograph/ui/main/Toolbar.js:251
 #: bibliograph/ui/main/Toolbar.js:259 bibliograph/ui/main/Toolbar.js:260
-#: bibliograph/ui/main/Toolbar.js:256
+#: bibliograph/ui/main/Toolbar.js:256 bibliograph/ui/main/Toolbar.js:246
+#: bibliograph/ui/main/Toolbar.js:245
 msgid "Run RPC method test.test"
 msgstr ""
 
 #: bibliograph/ui/main/Toolbar.js:235 bibliograph/ui/main/Toolbar.js:245
 #: bibliograph/ui/main/Toolbar.js:253 bibliograph/ui/main/Toolbar.js:254
-#: bibliograph/ui/main/Toolbar.js:250
+#: bibliograph/ui/main/Toolbar.js:250 bibliograph/ui/main/Toolbar.js:240
+#: bibliograph/ui/main/Toolbar.js:239
 msgid "Developer"
 msgstr "Entwickler"
 
@@ -992,6 +1019,7 @@ msgstr "Keine auswählbaren Objekte"
 
 #: bibliograph/ui/window/AccessControlTool.js:436
 #: bibliograph/ui/window/AccessControlTool.js:452
+#: bibliograph/ui/window/AccessControlTool.js:460
 msgid "No linkable items"
 msgstr "Keine vereinbaren Objekte"
 
@@ -1069,6 +1097,8 @@ msgstr "Möchten Sie %1 Datensätze nach ‚%2‘ kopieren?"
 #: bibliograph/ui/window/AccessControlTool.js:444
 #: bibliograph/ui/window/AccessControlTool.js:243
 #: bibliograph/ui/window/AccessControlTool.js:460
+#: bibliograph/ui/window/AccessControlTool.js:245
+#: bibliograph/ui/window/AccessControlTool.js:468
 msgid "Filter by name here..."
 msgstr "Einträge hier eingrenzen…"
 
@@ -1105,7 +1135,8 @@ msgstr "Das aktuelle Suchergebnis exportieren"
 
 #: bibliograph/ui/main/Toolbar.js:280 bibliograph/ui/main/Toolbar.js:290
 #: bibliograph/ui/main/Toolbar.js:298 bibliograph/ui/main/Toolbar.js:299
-#: bibliograph/ui/main/Toolbar.js:295
+#: bibliograph/ui/main/Toolbar.js:295 bibliograph/ui/main/Toolbar.js:284
+#: bibliograph/ui/main/Toolbar.js:283
 msgid "Enter search term or ? for suggestions"
 msgstr "Geben Sie einen Suchausdruck ein oder ? für eine Auswahl an Suchfeldern"
 
@@ -1120,7 +1151,8 @@ msgid "Save current search query as top folder"
 msgstr "Die aktuelle Suche als obersten Ordner speichern"
 
 #: bibliograph/ui/main/Toolbar.js:296 bibliograph/ui/main/Toolbar.js:297
-#: bibliograph/ui/main/Toolbar.js:293
+#: bibliograph/ui/main/Toolbar.js:293 bibliograph/ui/main/Toolbar.js:282
+#: bibliograph/ui/main/Toolbar.js:281
 msgid "No results"
 msgstr "Keine Ergebnisse"
 
@@ -1161,10 +1193,12 @@ msgid "Find LDAP user"
 msgstr "LDAP-Konto finden"
 
 #: bibliograph/ui/window/AccessControlTool.js:150
+#: bibliograph/ui/window/AccessControlTool.js:151
 msgid "New local user"
 msgstr "Neuer lokaler Benutzer"
 
 #: bibliograph/ui/window/AccessControlTool.js:162
+#: bibliograph/ui/window/AccessControlTool.js:163
 msgid "Import LDAP user"
 msgstr "LDAP-Konto importieren"
 

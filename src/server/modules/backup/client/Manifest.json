@@ -18,13 +18,17 @@
       }
     ],
 
-    "version" : "trunk",
-    "qooxdoo-range": "6.0.0-* || 6.0.x"
+    "version" : "trunk"
+  },
+
+  "requires": {
+    "qooxdoo-sdk": "^6.0.0-alpha",
+    "qooxdoo-compiler": "^0.2.52"
   },
 
   "provides" :
   {
-    "namespace"   : "backup",
+    "namespace"   : "bibliograph.plugins.backup",
     "encoding"    : "utf-8",
     "class"       : "source/class",
     "resource"    : "source/resource",

@@ -14,10 +14,9 @@
  * @asset(bibliograph/*)
  * @require(qcl.application.ClipboardManager)
  */
-qx.Class.define("bibliograph.Application",
-{
+qx.Class.define("bibliograph.Application", {
   extend : qx.application.Standalone,
-  include : [ bibliograph.MApplicationState, qcl.ui.MLoadingPopup ],
+  include : [bibliograph.MApplicationState, qcl.ui.MLoadingPopup],
   
   statics:{
     /**
@@ -48,15 +47,18 @@ qx.Class.define("bibliograph.Application",
   members :
   {
     /**
-     * This method contains the initial application code and gets called 
+     * This method contains the initial application code and gets called
      * during startup of the application
      */
-    main : function()
-    {
+    main : function() {
       this.base(arguments);
       
-      if (qx.core.Environment.get("qx.debug")){
-        void qx.log.appender.Native;
+      this.__clients = {};
+      this.__widgets = {};
+      
+      
+      if (qx.core.Environment.get("qx.debug")) {
+        qx.log.appender.Native;
       }
       
       // application startup
@@ -73,7 +75,7 @@ qx.Class.define("bibliograph.Application",
      * The version of the application. The version will be automatically replaced
      * by the script that creates the distributable zip file. Do not change.
      * @return {String}
-     */    
+     */
     getVersion : function() {
       return qx.core.Environment.get("app.version");
     },
@@ -83,9 +85,9 @@ qx.Class.define("bibliograph.Application",
      * @return {String}
      */
     getCopyright : function() {
-      let year = (new Date).getFullYear();
+      let year = (new Date()).getFullYear();
       return "2003-" + year + " (c) Christian Boulanger";
-    },         
+    },
 
     /*
     ---------------------------------------------------------------------------
@@ -96,13 +98,13 @@ qx.Class.define("bibliograph.Application",
     /** @var {qx.bom.storage.Web} */
     __storage : null,
     /** @var {Object} */
-    __clients : {},
+    __clients : null,
     /** {qx.ui.core.Blocker} */
     __blocker : null,
     /** @var {String} */
     __url : null,
     /** @var {Object} */
-    __widgets : {},
+    __widgets : null,
 
    /*
     ---------------------------------------------------------------------------
@@ -113,73 +115,73 @@ qx.Class.define("bibliograph.Application",
     /**
      * @return {qcl.access.User}
      */
-   getActiveUser : function(){
+   getActiveUser : function() {
      return this.getAccessManager().getActiveUser();
    },
 
     /**
      * @return {bibliograph.AccessManager}
      */
-    getAccessManager : function(){
+    getAccessManager : function() {
       return bibliograph.AccessManager.getInstance();
     },
 
     /**
      * @return {qcl.access.PermissionManager}
      */
-    getPermissionManager : function(){
+    getPermissionManager : function() {
       return this.getAccessManager().getPermissionManager();
     },
 
     /**
      * @return {bibliograph.ConfigManager}
      */
-    getConfigManager : function(){
+    getConfigManager : function() {
       return bibliograph.ConfigManager.getInstance();
     },
 
     /**
      * @return {qcl.application.StateManager}
      */
-    getStateManager : function(){
+    getStateManager : function() {
       return qcl.application.StateManager.getInstance();
-    },    
+    },
 
     /**
      * @return {qx.bom.storage.Web}
      */
-    getStorage : function(){
-      if ( ! this.__storage ){
-        this.__storage = new qx.bom.Storage.getSession();
+    getStorage : function() {
+      if (!this.__storage) {
+        this.__storage = qx.bom.Storage.getSession();
       }
-      return this.__storage;  
+      return this.__storage;
     },
 
     /**
      * @return {qx.ui.core.Blocker}
      */
-    getBlocker : function (){
+    getBlocker : function () {
       return this.__blocker;
     },
 
     /**
      * @return {bibliograph.Commands}
      */
-    getCommands : function(){
+    getCommands : function() {
       return bibliograph.Commands.getInstance();
     },
 
     /**
      * @return {bibliograph.store.Datasources}
      */
-    getDatasourceStore : function(){
+    getDatasourceStore : function() {
       return bibliograph.store.Datasources.getInstance();
     },
   
     /**
      * @return {qcl.application.ClipboardManager}
      */
-    getClipboardManager: function(){
+    getClipboardManager: function() {
       return qcl.application.ClipboardManager.getInstance();
     },
 
@@ -187,12 +189,12 @@ qx.Class.define("bibliograph.Application",
     ---------------------------------------------------------------------------
      COMMANDS
     ---------------------------------------------------------------------------
-    */ 
+    */
 
     /**
      * Run command by dispatching a message
      */
-    cmd : function( command, value ){
+    cmd : function(command, value) {
       qx.event.message.Bus.dispatchByName(`bibliograph.command.${command}`, value);
     },
 
@@ -200,7 +202,7 @@ qx.Class.define("bibliograph.Application",
     ---------------------------------------------------------------------------
        I/O
     ---------------------------------------------------------------------------
-    */   
+    */
     
     /**
      * Returns the URL to the JSONRPC server
@@ -208,7 +210,9 @@ qx.Class.define("bibliograph.Application",
      */
     getServerUrl: function() {
       // cache
-      if( this.__url ) return this.__url;
+      if (this.__url) {
+       return this.__url;
+      }
 
       let serverUrl = qx.core.Environment.get("app.serverUrl");
       if (!serverUrl) {
@@ -217,29 +221,28 @@ qx.Class.define("bibliograph.Application",
         );
         throw new Error("No server address set.");
       }
-      if( ! serverUrl.startsWith("http") ){
-        // assume relative path 
-        let href = document.location.href;
-        serverUrl = qx.util.Uri.getAbsolute( serverUrl );
+      if (!serverUrl.startsWith("http")) {
+        // assume relative path
+        serverUrl = qx.util.Uri.getAbsolute(serverUrl);
       }
       this.info("Server Url is " + serverUrl);
       this.__url = serverUrl;
       return serverUrl;
-    },    
+    },
     
     /**
      * Returns a jsonrpc client object with the current auth token already set
      * @param {String} service The name of the service to get the client for
      * @return {qcl.io.JsonRpcClient}
      */
-    getRpcClient : function(service){
-      qx.core.Assert.assert(!!service, "Service parameter cannot be empty");
+    getRpcClient : function(service) {
+      qx.core.Assert.assert(Boolean(service), "Service parameter cannot be empty");
       qx.util.Validate.checkString(service, "Service parameter must be a string");
-      if( ! this.__clients[service] ){
-        this.__clients[service] = new qcl.io.JsonRpcClient(this.getServerUrl() + service );
+      if (!this.__clients[service]) {
+        this.__clients[service] = new qcl.io.JsonRpcClient(this.getServerUrl() + service);
       }
       let client = this.__clients[service];
-      client.setToken( this.getAccessManager().getToken() );
+      client.setToken(this.getAccessManager().getToken());
       return client;
     },
 
@@ -249,15 +252,15 @@ qx.Class.define("bibliograph.Application",
      * @param {String} message The name of the message
      * @return {Promise<true>}
      */
-    resolveOnMessage: function( message ){
+    resolveOnMessage: function(message) {
       let bus = qx.event.message.Bus;
-      return new Promise((resolve,reject)=>{
-        bus.subscribe(message,function(){
+      return new Promise((resolve, reject) => {
+        bus.subscribe(message, function() {
           bus.unsubscribe(message);
           resolve();
         });
-      }) 
-    },   
+      });
+    },
 
     /*
     ---------------------------------------------------------------------------
@@ -270,8 +273,7 @@ qx.Class.define("bibliograph.Application",
      * @param id {String}
      * @param widget {qx.ui.core.Widget}
      */
-    setWidgetById : function(id,widget)
-    {
+    setWidgetById : function(id, widget) {
       this.__widgets[id] = widget;
     },
     
@@ -281,10 +283,9 @@ qx.Class.define("bibliograph.Application",
      * @return {qx.ui.core.Widget} The widget with the given id
      * @throws {Error}
      */
-    getWidgetById : function(id)
-    {
-      let widget =  this.__widgets[id];
-      if( ! widget ){
+    getWidgetById : function(id) {
+      let widget = this.__widgets[id];
+      if (!widget) {
         this.error(`A widget with id '${id}' does not exist.`);
       }
       return widget;
@@ -293,7 +294,7 @@ qx.Class.define("bibliograph.Application",
     /**
      * Called when the applicatin shuts down
      */
-    terminate : function(){
+    terminate : function() {
       qx.event.message.Bus.dispatchByName(bibliograph.Application.messages.TERMINATE);
     }
   }

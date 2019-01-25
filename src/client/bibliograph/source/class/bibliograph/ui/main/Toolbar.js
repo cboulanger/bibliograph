@@ -12,16 +12,13 @@
  *
  ******************************************************************************/
 
-/*global qx dialog qcl*/
-
 /**
  * The main toolbar
  */
 qx.Class.define("bibliograph.ui.main.Toolbar",
 {
   extend : qx.ui.toolbar.ToolBar,
-  construct : function()
-  {
+  construct : function() {
     this.base(arguments);
 
     // shorthand vars
@@ -52,74 +49,71 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
     toolBar.add(new qx.ui.basic.Atom(), { flex : 10 }); // why not a spacer?
     toolBar.add(this.createTitleLabel());
     toolBar.add(this.createSearchBox(), { flex : 1 });
-    this.createSearchButtons().map( button => toolBar.add(button) );
+    this.createSearchButtons().map(button => toolBar.add(button));
   },
 
   members :
   {
-    createLoginButton : function()
-    {
+    createLoginButton : function() {
       let button = new qx.ui.toolbar.Button();
       button.setIcon("icon/16/status/dialog-password.png");
-      button.setLabel(this.tr('Login'));
+      button.setLabel(this.tr("Login"));
       button.setVisibility("excluded");
       this.accsMgr.bind("authenticatedUser", button, "visibility", {
         converter : function(v) {
-          return v ? 'excluded' : 'visible'
+          return v ? "excluded" : "visible";
         }
       });
-      button.addListener("execute", () => this.getApplication().cmd("showLoginDialog") );
+      button.addListener("execute", () => this.getApplication().cmd("showLoginDialog"));
       return button;
     },
     
-    createLogoutButton : function()
-    {
+    createLogoutButton : function() {
       let button = new qx.ui.toolbar.Button();
-      button.setLabel(this.tr('Logout'));
+      button.setLabel(this.tr("Logout"));
       button.setIcon("icon/16/actions/application-exit.png");
       button.setVisibility("excluded");
       this.accsMgr.bind("authenticatedUser", button, "visibility", {
         converter : function(v) {
-          return v ? 'visible' : 'excluded'
+          return v ? "visible" : "excluded";
         }
       });
-      button.addListener("execute", () => this.getApplication().cmd("logout") );
+      button.addListener("execute", () => this.getApplication().cmd("logout"));
       return button;
     },
 
-    createUserButton : function()
-    {
+    createUserButton : function() {
       // User button
       let button = new qx.ui.toolbar.Button();
-      button.setLabel(this.tr('Loading...'));
+      button.setLabel(this.tr("Loading..."));
       button.setIcon("icon/16/apps/preferences-users.png");
-      this.userMgr.bind("activeUser.fullname", button, "label" );
-      this.getApplication().getAccessManager().bind("authenticatedUser", button, "visibility", {
-        converter : v => v ? 'visible' : 'excluded'
+      this.userMgr.bind("activeUser.fullname", button, "label");
+      this.getApplication().getAccessManager()
+.bind("authenticatedUser", button, "visibility", {
+        converter : v => v ? "visible" : "excluded"
       });
       button.addListener("execute", () => this.getApplication().cmd("editUserData"));
       return button;
     },
 
-    createDatasourceButton : function()
-    {
+    createDatasourceButton : function() {
       let button = new qx.ui.toolbar.Button();
-      button.setLabel(this.tr('Datasources'));
+      button.setLabel(this.tr("Datasources"));
       button.setWidgetId("app/toolbar/buttons/datasource");
       button.setVisibility("excluded");
       button.setIcon("icon/16/apps/utilities-archiver.png");
       button.addListener("execute", function(e) {
-        this.getApplication().getWidgetById("app/windows/datasources").show();
+        this.getApplication().getWidgetById("app/windows/datasources")
+.show();
       }, this);
       return button;
     },
 
-    createSystemMenu : function()
-    {
+    createSystemMenu : function() {
       let button = new qx.ui.toolbar.MenuButton();
       button.setIcon("icon/22/categories/system.png");
       button.setVisibility("excluded");
-      button.setLabel(this.tr('System'));
+      button.setLabel(this.tr("System"));
       this.permMgr.create("system.menu.view").bind("state", button, "visibility", {
         converter : bibliograph.Utils.bool2visibility
       });
@@ -134,49 +128,45 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       return button;
     },
 
-    createPreferencesButton : function()
-    {
+    createPreferencesButton : function() {
       let button = new qx.ui.menu.Button();
-      button.setLabel(this.tr('Preferences'));
+      button.setLabel(this.tr("Preferences"));
       this.permMgr.create("preferences.view").bind("state", button, "visibility", {
         converter : bibliograph.Utils.bool2visibility
       });
       button.addListener("execute", function(e) {
-        let win = this.getApplication().getWidgetById("app/windows/preferences").show();
+        this.getApplication().getWidgetById("app/windows/preferences").show();
       }, this);
       return button;
     },
 
-    createAccessManagementButton : function()
-    {
+    createAccessManagementButton : function() {
       let button = new qx.ui.menu.Button();
-      button.setLabel(this.tr('Access management'));
+      button.setLabel(this.tr("Access management"));
       this.permMgr.create("access.manage").bind("state", button, "visibility", {
         converter : bibliograph.Utils.bool2visibility
       });
       button.addListener("execute", function(e) {
-        let win = this.getApplication().getWidgetById("app/windows/access-control").show();
+        this.getApplication().getWidgetById("app/windows/access-control").show();
       }, this);
       return button;
     },
 
-    createPluginButton : function()
-    {
+    createPluginButton : function() {
       let button = new qx.ui.menu.Button();
-      button.setLabel(this.tr('Plugins'));
+      button.setLabel(this.tr("Plugins"));
       this.permMgr.create("plugin.manage").bind("state", button, "visibility", {
         converter : bibliograph.Utils.bool2visibility
       });
       button.addListener("execute", function(e) {
-        this.getApplication().getRpcClient("plugin").send( "manage");
+        this.getApplication().getRpcClient("plugin").send("manage");
       }, this);
       return button;
     },
 
-    createImportMenu : function()
-    {
+    createImportMenu : function() {
       let button = new qx.ui.toolbar.MenuButton();
-      button.setLabel(this.tr('Import'));
+      button.setLabel(this.tr("Import"));
       button.setIcon("icon/22/places/network-server.png");
       this.permMgr.create("reference.import").bind("state", button, "visibility", {
         converter : bibliograph.Utils.bool2visibility
@@ -186,22 +176,21 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       button.setMenu(menu);
 
       // menu content
-      menu.add( this.createImportTextButton() );
+      menu.add(this.createImportTextButton());
 
       return button;
     },
 
-    createImportTextButton : function()
-    {
-      let button = new qx.ui.menu.Button(this.tr('Import text file'));
+    createImportTextButton : function() {
+      let button = new qx.ui.menu.Button(this.tr("Import text file"));
       button.addListener("execute", function(e) {
-        this.getApplication().getWidgetById("app/windows/import").show();
+        this.getApplication().getWidgetById("app/windows/import")
+.show();
       }, this);
       return button;
     },
  
-    createHelpMenu : function()
-    {
+    createHelpMenu : function() {
       let menuButton = new qx.ui.toolbar.MenuButton();
       menuButton.setIcon("icon/22/apps/utilities-help.png");
 
@@ -210,7 +199,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       menu.setWidgetId("app/toolbar/menus/help");
 
       // Manually set locale
-      let localeMenuButton = new qx.ui.menu.Button(this.tr('Language'));
+      let localeMenuButton = new qx.ui.menu.Button(this.tr("Language"));
       let localeMenu = new qx.ui.menu.Menu();
       localeMenuButton.setMenu(localeMenu);
       menu.add(localeMenuButton);
@@ -220,14 +209,15 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       locales.forEach(locale => {
         let localeButton = new qx.ui.menu.Button(locale);
         localeMenu.add(localeButton);
-        localeButton.addListener("execute", ()=>{
+        localeButton.addListener("execute", () => {
           localeManager.setLocale(locale);
-          this.getApplication().getConfigManager().setKey("application.locale", locale);
+          this.getApplication().getConfigManager()
+.setKey("application.locale", locale);
         });
       });
       
       // Help
-      let button1 = new qx.ui.menu.Button(this.tr('Online Help'));
+      let button1 = new qx.ui.menu.Button(this.tr("Online Help"));
       menu.add(button1);
       button1.addListener("execute", function(e) {
         this.getApplication().cmd("showHelpWindow");
@@ -235,7 +225,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
 
       // About
       let button2 = new qx.ui.menu.Button();
-      button2.setLabel(this.tr('About Bibliograph'));
+      button2.setLabel(this.tr("About Bibliograph"));
       menu.add(button2);
       button2.addListener("execute", function(e) {
         this.getApplication().cmd("showAboutWindow");
@@ -244,26 +234,25 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       return menuButton;
     },
 
-    createDeveloperMenu : function()
-    {
+    createDeveloperMenu : function() {
       let menuButton = new qx.ui.toolbar.MenuButton();
-      menuButton.setLabel(this.tr('Developer'));
+      menuButton.setLabel(this.tr("Developer"));
 
       let menu = new qx.ui.menu.Menu();
       menuButton.setMenu(menu);
       menu.setWidgetId("app/toolbar/menus/developer");
 
-      let button1 = new qx.ui.menu.Button(this.tr('Run RPC method test.test'));
+      let button1 = new qx.ui.menu.Button(this.tr("Run RPC method test.test"));
       menu.add(button1);
       button1.addListener("execute", function(e) {
-        this.getApplication().getRpcClient("test").send("test");
+        this.getApplication().getRpcClient("test")
+.send("test");
       }, this);
 
       return menuButton;
     },
 
-    createTitleLabel : function()
-    {
+    createTitleLabel : function() {
       let label = new qx.ui.basic.Label();
       label.setPadding(10);
       label.setRich(true);
@@ -274,8 +263,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       return label;
     },
 
-    createSearchBox : function()
-    {
+    createSearchBox : function() {
       let searchbox;
       if (true) { // todo make configurable
         searchbox = new tokenfield.Token();
@@ -283,18 +271,18 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
           marginTop: 8,
           maxHeight: 24,
           width: 400,
-          selectionMode: 'multi',
+          selectionMode: "multi",
           closeWhenNoResults: true,
           showCloseButton: false,
           minChars : 1,
           selectOnce: false,
-          labelPath: 'token',
-          wildcards : ['?'],
+          labelPath: "token",
+          wildcards : ["?"],
           noResultsText : this.tr("No results"),
           searchingText : this.tr("Searching..."),
-          typeInText: this.tr('Enter search term or ? for suggestions')
+          typeInText: this.tr("Enter search term or ? for suggestions")
         });
-        searchbox.addListener("loadData", async (e) =>  {
+        searchbox.addListener("loadData", async e => {
           let input = e.getData();
           let tokens = searchbox.getTokenLabels();
           let inputPosition = searchbox.getInputPosition();
@@ -303,7 +291,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
             .send("tokenize-query", [ input, inputPosition, tokens, this.getApplication().getDatasource() ]);
           searchbox.populateList(input, data);
         });
-        searchbox.addListener('enterKeyWithContent',e => {
+        searchbox.addListener("enterKeyWithContent", e => {
           let app = this.getApplication();
           let query = searchbox.getTextContent();
           searchbox.close();
@@ -313,17 +301,18 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
           app.getWidgetById("app/windows/help-search").hide();
         });
         this.getApplication().addListener("changeQuery", e => {
-          if( e.getData() === searchbox.getTextContent() ) return;
+          if (e.getData() === searchbox.getTextContent()) {
+ return;
+}
           searchbox.reset();
           //searchbox.getChildControl('textfield').setWidth(null);
           //searchbox.getChildControl('textfield').setValue(e.getData());
           //searchbox.search(e.getData());
         });
-        
       } else {
         searchbox = new qx.ui.form.TextField();
         searchbox.setMarginTop(8);
-        searchbox.setPlaceholder(this.tr('Enter search term'));
+        searchbox.setPlaceholder(this.tr("Enter search term"));
         this.permMgr.create("reference.search").bind("state", searchbox, "visibility", {
           converter : bibliograph.Utils.bool2visibility
         });
@@ -337,27 +326,26 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
             app.getWidgetById("app/windows/help-search").hide();
           }
         });
-        searchbox.addListener("dblclick", e =>  e.stopPropagation());
+        searchbox.addListener("dblclick", e => e.stopPropagation());
       }
       this.searchbox = searchbox;
       searchbox.setWidgetId("app/toolbar/searchbox");
       searchbox.addListener("focus", e => {
-        searchbox.setLayoutProperties( { flex : 10 });
+        searchbox.setLayoutProperties({ flex : 10 });
         //this.getApplication().setInsertTarget(searchbox);
       });
       searchbox.addListener("blur", e => {
         let timer = qx.util.TimerManager.getInstance();
         timer.start(function() {
           if (!qx.ui.core.FocusHandler.getInstance().isFocused(searchbox)) {
-            searchbox.setLayoutProperties( { flex : 1 });
+            searchbox.setLayoutProperties({ flex : 1 });
           }
         }, null, this, null, 5000);
       });
-      return searchbox
+      return searchbox;
     },
 
-    createSearchButtons : function()
-    {
+    createSearchButtons : function() {
       // search button
       let searchButton = new qx.ui.toolbar.Button();
       searchButton.setIcon("bibliograph/icon/16/search.png");
@@ -366,7 +354,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       });
       searchButton.addListener("execute", () => {
         let query;
-        if( this.searchbox instanceof qx.ui.form.TextField ){
+        if (this.searchbox instanceof qx.ui.form.TextField) {
           query = this.searchbox.getValue();
         } else {
           query = this.searchbox.getTextContent();
@@ -391,7 +379,8 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
         this.searchbox.reset ? this.searchbox.reset() : null;
         this.searchbox.setValue ? this.searchbox.setValue("") : null;
         this.searchbox.focus();
-        this.getApplication().getWidgetById("app/windows/help-search").hide();
+        this.getApplication().getWidgetById("app/windows/help-search")
+.hide();
       });
       
       // search help button

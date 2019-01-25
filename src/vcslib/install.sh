@@ -4,9 +4,6 @@
 declare -a arr=(
   "cboulanger/yii2-json-rpc-2.0"
   "cboulanger/raptor-client"
-  "cboulanger/qx-contrib-Dialog"
-  "cboulanger/qx-contrib-TokenField"
-  "cboulanger/qx-contrib-recorder"
   "cboulanger/dsn"
   "cboulanger/worldcat-linkeddata-php"
   "serratus/quaggaJS"
@@ -27,7 +24,7 @@ do
 #      uri="git@github.com:$repo.git"
 #      git clone $uri
 #    else
-      # otherwise, just clone a shallow read-only copy 
+      # otherwise, just clone a shallow read-only copy
       uri="https://github.com/$repo.git"
       git clone $uri --depth 1
 #    fi

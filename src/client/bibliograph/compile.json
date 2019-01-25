@@ -8,11 +8,10 @@
     }
   },
   "libraries": [
-    "../../vcslib/qx-contrib-recorder",
+    ".",
     "../../server/modules/z3950/client",
     "../../server/modules/webservices/client",
-    "../../server/modules/backup/client",
-    "."
+    "../../server/modules/backup/client"
   ],
   "applications": [
     {
@@ -32,34 +31,43 @@
   "defaultTarget": "source",
   "targets": [
     {
+      "//": "The local 'source' target",
+      "type": "source",
       "environment": {
         "app.mode": "development",
         "app.serverUrl": "../../../../server/web/?r="
       },
       "outputPath": "source-compiled",
-      "type": "source",
-      "//": "The local 'source' target"
+      "bundle": {
+        "include": [ "qx.*" ],
+        "exclude": [ "qx.util.*" ]
+      }
     },
     {
+      "//": "The local 'build' target",
+      "type": "build",
       "environment": {
         "app.mode": "production",
         "app.serverUrl": "../../../../server/web/?r="
       },
-      "outputPath": "build-compiled",
-      "type": "build",
-      "//": "The local 'build' target"
+      "outputPath": "build-compiled"
     },
     {
+      "//": "The 'source' target for debugging on deployed instances, usually not needed",
+      "type": "dist-source",
       "environment": {
         "app.mode": "development",
         "app.serverUrl": "server.php?r="
       },
       "outputPath": "dist-source-compiled",
       "targetClass": "SourceTarget",
-      "type": "dist-source",
-      "//": "The distribution 'source' target (for debugging on deployed instances, usually not needed)"
+      "bundle": {
+        "include": [ "qx.*" ],
+        "exclude": [ "qx.util.*" ]
+      }
     },
     {
+      "//": "The final 'build' target for deployment",
       "environment": {
         "qx.debug": false,
         "app.mode": "production",
@@ -67,8 +75,7 @@
       },
       "outputPath": "dist-build-compiled",
       "targetClass": "BuildTarget",
-      "type": "dist-build",
-      "//": "The final distribution 'build' target"
+      "type": "dist-build"
     }
   ],
   "environment": {

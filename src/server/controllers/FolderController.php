@@ -257,6 +257,7 @@ class FolderController extends AppController //implements ITreeController
       Yii::warning($e->getMessage());
       return [];
     }
+    // TODO: only for fields that have a separator!! See ReferenceController line 239!
     $separatedValues = [];
     foreach ($values as $value) {
       if( ! $value ) continue;
@@ -266,11 +267,9 @@ class FolderController extends AppController //implements ITreeController
         $separatedValues[]=$value;
       }
     }
-    $separatedValues = array_unique(array_map(function($v){ return trim($v);}, $separatedValues));
-    $collator = new \Collator(str_replace("-","_",Yii::$app->language));
-    $collator->sort($separatedValues);
-    $separatedValues = array_values($separatedValues); // redundant, bug in PHP7.0?
-
+    $separatedValues = array_values(array_unique(array_map(function($v){ return trim($v);}, $separatedValues)));
+    $collator = new \Collator("de_DE");
+    $collator->sortWithSortKeys($separatedValues);
     $limit = 100;
     $count = count($separatedValues);
     $sections = ceil($count/$limit);
@@ -284,8 +283,11 @@ class FolderController extends AppController //implements ITreeController
         $sectionId = $this->getVirtualFolderId();
         $first = trim($separatedValues[$index]);
         $last  = trim($separatedValues[min($index + $limit, $count)-1]);
-        list($first,) = explode(",", $first);
-        list($last,) = explode(",",$last);
+        // this shows that we need a "creator having a role" approach (like in mods/zotero)
+        if (in_array($field, ["author","editor","creator","translator"])){
+          list($first,) = explode(",", $first);
+          list($last,) = explode(",",$last);
+        }
         $label =
           mb_strimwidth(trim($first),0,15, "...") .
           " - " .
@@ -304,7 +306,8 @@ class FolderController extends AppController //implements ITreeController
       for ($inner=0; $inner < $limit and $index < $count; $inner++){
         $value = trim($separatedValues[$index++]);
         if (!$value) continue;
-        // computation of reference count is too expensive for large datasets, so do it only in small sets
+        // computation of reference count is too expensive for large datasets
+        // needs to be configurable since it is machine-dependent
         $referenceCount = $count < $limit*3
           ? (int) Datasource::findIn($datasource,"reference")->where(['like', $field, $value])->count()
           : null;
@@ -437,9 +440,9 @@ class FolderController extends AppController //implements ITreeController
   {
     $this->requirePermission("folder.edit", $datasource);
     $folder = $this->getRecordById($datasource, $folderId);
-    Form::create(
-      Yii::t('app', "Change the visibility of the folder"),
-      [
+    (new Form())
+      ->setMessage(Yii::t('app', "Change the visibility of the folder"))
+      ->setFormData([
         'state' => [
           'label' => Yii::t('app', "State"),
           'type' => "SelectBox",
@@ -459,9 +462,12 @@ class FolderController extends AppController //implements ITreeController
           ],
           'value' => false
         ]
-      ], true,
-      Yii::$app->controller->id, "visibility-change", [$datasource, $folderId]
-    );
+      ])
+      ->setAllowCancel(true)
+      ->setService(Yii::$app->controller->id)
+      ->setMethod("visibility-change")
+      ->setParams([$datasource, $folderId])
+      ->sendToClient();
   }
 
   /**
@@ -713,7 +719,7 @@ class FolderController extends AppController //implements ITreeController
           $folder->getReferenceCount(true);
           continue;
         } else {
-          // if it is contained in this folder only,  mark deleted 
+          // if it is contained in this folder only,  mark deleted
           $reference->markedDeleted = 1;
         }
       } else {
