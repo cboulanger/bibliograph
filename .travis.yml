@@ -22,14 +22,15 @@ before_install:
   - PHPVERSION=$(phpenv version-name)
   - sudo add-apt-repository -y ppa:ondrej/php && sudo apt-get update
   - sudo apt-get install -y php${PHPVERSION}-xsl php${PHPVERSION}-intl
-  - sudo apt-get install -y yaz libyaz4-dev
-  - pear channel-update pear.php.net && yes $'\n' | pecl install yaz && pear install Structures_LinkedList-0.2.2 && pear install File_MARC
-  - if php -i | grep yaz --quiet && echo '<?php exit(function_exists("yaz_connect")?0:1);' | php ; then echo "YAZ is installed"; else echo "YAZ installation failed"; exit 1; fi;
+# PEAR currently doesn't work
+#  - sudo apt-get install -y yaz libyaz4-dev
+#  - pear channel-update pear.php.net && yes $'\n' | pecl install yaz && pear install Structures_LinkedList-0.2.2 && pear install File_MARC
+#  - if php -i | grep yaz --quiet && echo '<?php exit(function_exists("yaz_connect")?0:1);' | php ; then echo "YAZ is installed"; else echo "YAZ installation failed"; exit 1; fi;
 
 install:
   - echo "travis_fold:start:npm_install"
   - echo "Installing dependencies..."
-  - if [[ -f package-lock.json ]]; then rm package-lock.json; fi 
+  - if [[ -f package-lock.json ]]; then rm package-lock.json; fi
 #  - rm -rf node_modules
   - npm install npm@latest -g
   - npm install
@@ -39,7 +40,7 @@ install:
 before_script:
   - mysql -e 'CREATE DATABASE IF NOT EXISTS tests;'
   - cp install/travis/app.conf.toml src/server/config
-  
+
 script:
   - npm test
   - npm run dist-create
