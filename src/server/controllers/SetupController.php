@@ -725,10 +725,17 @@ class SetupController extends \app\controllers\AppController
     foreach( Yii::$app->modules as $id => $info){
       /** @var Module $module */
       $module = Yii::$app->getModule($id);
-      if( ! $module instanceof \lib\Module or $module->disabled === true) continue;
-      if( $module->version === $module->installedVersion ){
-        Yii::debug("Module $module->id ($module->name) is already at version $module->version ...");
-        $messages[] = "Module '$module->id' already installed.";
+      $msg = null;
+      if (! $module instanceof \lib\Module) continue;
+      if ($module->disabled === true) {
+        $msg = "Module $module->id ($module->name) is disabled.";
+      }
+      if ($module->version === $module->installedVersion ){
+        $msg = "Module $module->id ($module->name) is already at version $module->version.";
+      }
+      if ($msg){
+        Yii::debug($msg, __METHOD__);
+        $messages[] = $msg;
         continue;
       }
       Yii::debug("Installing module $module->id $module->version", __METHOD__);

@@ -25,7 +25,7 @@ class Module extends \lib\Module
    * The version of the module
    * @var string
    */
-  protected $version = "1.0.3";
+  protected $version = "1.0.4";
 
   /**
    * A string constant defining the category for logging and translation
@@ -52,7 +52,7 @@ class Module extends \lib\Module
   public function __construct(string $id, $parent = null, array $config = [])
   {
     parent::__construct($id, $parent, $config);
-    if ($_ENV['CI']) $this->disabled = true; // FIXME Workaround to keep Travis tests running during PEAR outage.
+    if (!function_exists("yaz_connect")) $this->disabled = true; // FIXME Workaround to keep Travis tests running during PEAR outage.
   }
 
   /**

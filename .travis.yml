@@ -43,6 +43,10 @@ before_script:
 
 script:
   - npm test
+  - echo "travis_fold:start:logs"
+  - cat src/server/runtime/logs/app.log
+  - [[ -f src/server/runtime/logs/error.log ]] && cat src/server/runtime/logs/error.log
+  - echo "travis_fold:end:logs"
   - npm run dist-create
 
 deploy:
