@@ -23,6 +23,62 @@
       "repo_name": "cboulanger/qx-contrib-TokenField",
       "repo_tag": "v1.2.1",
       "path": "contrib/cboulanger_qx-contrib-TokenField_v1.2.1"
+    },
+    {
+      "library_name": "Qookery",
+      "library_version": "0.5.0",
+      "uri": "ergobyte/qookery/qookery",
+      "repo_name": "ergobyte/qookery",
+      "repo_tag": "v0.5.0",
+      "path": "contrib/ergobyte_qookery_v0.5.0/qookery"
+    },
+    {
+      "library_name": "Qookery Ace",
+      "library_version": "0.5.0",
+      "uri": "ergobyte/qookery/qookeryace",
+      "repo_name": "ergobyte/qookery",
+      "repo_tag": "v0.5.0",
+      "path": "contrib/ergobyte_qookery_v0.5.0/qookeryace"
+    },
+    {
+      "library_name": "Qookery Calendar",
+      "library_version": "0.5.0",
+      "uri": "ergobyte/qookery/qookerycalendar",
+      "repo_name": "ergobyte/qookery",
+      "repo_tag": "v0.5.0",
+      "path": "contrib/ergobyte_qookery_v0.5.0/qookerycalendar"
+    },
+    {
+      "library_name": "Qookery Maps",
+      "library_version": "0.5.0",
+      "uri": "ergobyte/qookery/qookerymaps",
+      "repo_name": "ergobyte/qookery",
+      "repo_tag": "v0.5.0",
+      "path": "contrib/ergobyte_qookery_v0.5.0/qookerymaps"
+    },
+    {
+      "library_name": "Qookery Mobile",
+      "library_version": "0.5.0",
+      "uri": "ergobyte/qookery/qookerymobile",
+      "repo_name": "ergobyte/qookery",
+      "repo_tag": "v0.5.0",
+      "path": "contrib/ergobyte_qookery_v0.5.0/qookerymobile"
+    },
+    {
+      "library_name": "Qookery Rich Text",
+      "library_version": "0.5.0",
+      "uri": "ergobyte/qookery/qookeryrichtext",
+      "repo_name": "ergobyte/qookery",
+      "repo_tag": "v0.5.0",
+      "path": "contrib/ergobyte_qookery_v0.5.0/qookeryrichtext"
+    },
+    {
+      "library_name": "UI Event Recorder Contrib",
+      "library_version": "0.2.0",
+      "uri": "cboulanger/eventrecorder",
+      "repo_name": "cboulanger/eventrecorder",
+      "repo_tag": "v0.2.0",
+      "path": "contrib/cboulanger_eventrecorder_v0.2.0"
     }
   ]
 }

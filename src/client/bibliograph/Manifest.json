@@ -25,7 +25,14 @@
   "requires": {
     "qooxdoo-compiler": "^0.2.52",
     "qooxdoo-sdk": "^6.0.0-alpha",
-    "cboulanger/qx-contrib-TokenField": "^1.2.1"
+    "cboulanger/qx-contrib-TokenField": "^1.2.1",
+    "ergobyte/qookery/qookery": "^0.5.0",
+    "ergobyte/qookery/qookeryace": "^0.5.0",
+    "ergobyte/qookery/qookerycalendar": "^0.5.0",
+    "ergobyte/qookery/qookerymaps": "^0.5.0",
+    "ergobyte/qookery/qookerymobile": "^0.5.0",
+    "ergobyte/qookery/qookeryrichtext": "^0.5.0",
+    "cboulanger/eventrecorder": "^0.2.0"
   },
   "externalResources": {
     "script": [

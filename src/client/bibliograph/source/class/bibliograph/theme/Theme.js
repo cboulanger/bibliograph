@@ -8,10 +8,8 @@
 
 ************************************************************************ */
 
-qx.Theme.define("bibliograph.theme.Theme",
-{
-  meta :
-  {
+qx.Theme.define("bibliograph.theme.Theme", {
+  meta : {
     color : bibliograph.theme.Color,
     decoration : bibliograph.theme.Decoration,
     font : bibliograph.theme.Font,

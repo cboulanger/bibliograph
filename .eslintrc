@@ -1,0 +1,14 @@
+{
+  "parserOptions": {
+      "ecmaVersion": 2017
+  },
+  "extends": "qx",
+  "globals": {
+    "bibliograph" : true,
+    "qcl": true,
+    "rpc": true,
+    "cboulanger": true,
+    "dialog": true,
+    "tokenfield": true
+  }
+}
