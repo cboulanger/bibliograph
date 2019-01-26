@@ -93,7 +93,7 @@ class SetupController extends \app\controllers\AppController
 
   /**
    * Whether we upgrade from legacy version v2
-   * @var 
+   * @var
    */
   protected $isV2Upgrade = false;
 
@@ -106,7 +106,7 @@ class SetupController extends \app\controllers\AppController
 
   //-------------------------------------------------------------
   // ACTIONS
-  //-------------------------------------------------------------  
+  //-------------------------------------------------------------
 
   /**
    * Returns the application verision as per package.json
@@ -172,7 +172,7 @@ class SetupController extends \app\controllers\AppController
         $this->isNewInstallation = true;
       } catch (yii\base\InvalidConfigException $e) {
         // this happens deleting the tables in the database during development
-        // @todo 
+        // @todo
         $upgrade_from = "0.0.0";
         $this->isNewInstallation = true;
       }
@@ -299,7 +299,7 @@ class SetupController extends \app\controllers\AppController
 
   //-------------------------------------------------------------
   // HELPERS
-  //-------------------------------------------------------------  
+  //-------------------------------------------------------------
 
   /**
    * Returns the names of all tables in the current database
@@ -572,7 +572,7 @@ class SetupController extends \app\controllers\AppController
 //      }
 
 
-      // run all migrations 
+      // run all migrations
       Yii::debug("Applying migrations...", "migrations");
       try {
         $output = Console::runAction("migrate/up");
@@ -725,7 +725,7 @@ class SetupController extends \app\controllers\AppController
     foreach( Yii::$app->modules as $id => $info){
       /** @var Module $module */
       $module = Yii::$app->getModule($id);
-      if( ! $module instanceof \lib\Module ) continue;
+      if( ! $module instanceof \lib\Module or $module->disabled === true) continue;
       if( $module->version === $module->installedVersion ){
         Yii::debug("Module $module->id ($module->name) is already at version $module->version ...");
         $messages[] = "Module '$module->id' already installed.";

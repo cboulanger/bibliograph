@@ -45,6 +45,11 @@ class Module extends \yii\base\Module
    */
   protected $version = "";
 
+  /**
+   * Whether the module is disabled and should not be installed
+   * @var bool
+   */
+  public $disabled = false;
 
   /**
    * An array of strings containing error messages.
