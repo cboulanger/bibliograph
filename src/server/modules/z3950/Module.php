@@ -46,10 +46,10 @@ class Module extends \lib\Module
   /**
    * Module constructor.
    * @param string $id
-   * @param Module|null $parent
+   * @param $parent
    * @param array $config
    */
-  public function __construct(string $id, Module $parent = null, array $config = [])
+  public function __construct(string $id, $parent = null, array $config = [])
   {
     parent::__construct($id, $parent, $config);
     if ($_ENV['CI']) $this->disabled = true; // FIXME Workaround to keep Travis tests running during PEAR outage.
