@@ -22,7 +22,7 @@ before_install:
   - PHPVERSION=$(phpenv version-name)
   - sudo add-apt-repository -y ppa:ondrej/php && sudo apt-get update
   - sudo apt-get install -y php${PHPVERSION}-xsl php${PHPVERSION}-intl
-# checking if PEAR works again
+  - # checking if PEAR works again
   - sudo apt-get install -y yaz libyaz4-dev
   - pear channel-update pear.php.net && yes $'\n' | pecl install yaz && pear install Structures_LinkedList-0.2.2 && pear install File_MARC
   - if php -i | grep yaz --quiet && echo '<?php exit(function_exists("yaz_connect")?0:1);' | php ; then echo "YAZ is installed"; else echo "YAZ installation failed"; exit 1; fi;
@@ -55,4 +55,4 @@ deploy:
   skip_cleanup: true
   on:
     all_branches: true
-#    branch: master
+    branch: master
