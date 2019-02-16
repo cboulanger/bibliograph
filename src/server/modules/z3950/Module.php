@@ -14,6 +14,9 @@ use Exception;
 use lib\exceptions\RecordExistsException;
 use yii\web\UserEvent;
 
+if (!defined('BIBUTILS_PATH')) {
+  define("BIBUTILS_PATH",'');
+}
 
 /**
  * z3950 module definition class
@@ -25,7 +28,7 @@ class Module extends \lib\Module
    * The version of the module
    * @var string
    */
-  protected $version = "1.0.4";
+  protected $version = "1.0.5";
 
   /**
    * A string constant defining the category for logging and translation
@@ -52,7 +55,11 @@ class Module extends \lib\Module
   public function __construct(string $id, $parent = null, array $config = [])
   {
     parent::__construct($id, $parent, $config);
-    if (!function_exists("yaz_connect")) $this->disabled = true; // FIXME Workaround to keep Travis tests running during PEAR outage.
+    if (!function_exists("yaz_connect")) {
+      $this->disabled = true;
+      Yii::warning("YAZ not enabled, disabled Z39.50 module.");
+      //Yii::debug(php_ini_loaded_file()  . " and " . php_ini_scanned_files()) ;
+    }
   }
 
   /**
@@ -64,7 +71,6 @@ class Module extends \lib\Module
    */
   public function install($enabled = false)
   {
-
     // check prerequisites
     if (!function_exists("yaz_connect")) {
       $this->errors[] = "Missing PHP-YAZ extension. ";

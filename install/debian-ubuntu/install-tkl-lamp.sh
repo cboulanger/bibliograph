@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
 # Bibliograph - Online Bibliographic Data Manager
-# Build script to set up a development environment on a TurnkeyLinux LAMP appliance ($PHPVERSION)
+# Build script to set up a development environment on a TurnkeyLinux LAMP appliance
+# with MySQL < 8.0
 
-PHPVERSION=7.0
+PHPVERSION=7.3
 
 set -o errexit # Exit on error
 
@@ -21,16 +22,22 @@ function section {
 }
 
 section "Installing prerequisites and PHP extensions..."
-apt-get install -y zip build-essential php-pear
-apt-get install -y php$PHPVERSION-{dev,ldap,curl,gd,intl,mbstring,mcrypt,xml,xsl,zip}
+sudo apt update -y && sudo apt upgrade -y
+if [ "$(apt list php | grep ${PHPVERSION})" == "" ]; then
+    apt -y install software-properties-common dirmngr apt-transport-https lsb-release ca-certificates
+    add-apt-repository ppa:ondrej/php
+    apt update
+fi
+apt-get install -y zip build-essential php${PHPVERSION} php-pear
+apt-get install -y php${PHPVERSION}-{dev,ldap,curl,gd,intl,mbstring,mcrypt,xml,xsl,zip}
 
 section "Installing bibliographic tools..."
 apt-get install -y yaz libyaz4-dev bibutils jq
 pear channel-update pear.php.net && yes $'\n' | pecl install yaz && \
   pear install Structures_LinkedList-0.2.2 && pear install File_MARC
-echo "extension=yaz.so" > /etc/php/$PHPVERSION/mods-available/yaz.ini
-[ -f /etc/php/7.0/cli/conf.d/yaz.ini ] || ln -s /etc/php/7.0/mods-available/yaz.ini /etc/php/7.0/cli/conf.d/
-[ -f /etc/php/7.0/cli/conf.d/yaz.ini ] || ln -s /etc/php/7.0/mods-available/yaz.ini /etc/php/7.0/apache2/conf.d/
+[ -f /etc/php/${PHPVERSION}/mods-available/yaz.ini ] || echo "extension=yaz.so" > /etc/php/${PHPVERSION}/mods-available/yaz.ini
+[ -f /etc/php/${PHPVERSION}/cli/conf.d/yaz.ini ] || ln -s /etc/php/${PHPVERSION}/mods-available/yaz.ini /etc/php/${PHPVERSION}/cli/conf.d/
+[ -f /etc/php/${PHPVERSION}/cli/conf.d/yaz.ini ] || ln -s /etc/php/${PHPVERSION}/mods-available/yaz.ini /etc/php/${PHPVERSION}/apache2/conf.d/
 service apache2 restart
 if php -i | grep yaz --quiet && echo '<?php exit(function_exists("yaz_connect")?0:1);' | php ; then echo "YAZ is installed"; else echo "YAZ installation failed"; exit 1; fi;
 

@@ -20,7 +20,7 @@ $config =  [
     'migrate' => [
       'class' => 'yii\console\controllers\MigrateController',
       'migrationNamespaces' => [
-        'app\migrations\schema', 
+        'app\migrations\schema',
         'app\migrations\data'
       ],
       'migrationPath' => null

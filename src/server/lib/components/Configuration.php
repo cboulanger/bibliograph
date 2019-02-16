@@ -23,8 +23,8 @@ namespace lib\components;
 use app\models\Config;
 use app\models\UserConfig;
 use lib\exceptions\RecordExistsException;
-use M1\Vars\Vars;
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * Component class providing methods to get or set configuration
@@ -40,7 +40,7 @@ class Configuration extends \yii\base\Component
   protected $types = array(
     "string","number","boolean","list"
   );
-  
+
   //-------------------------------------------------------------
   // API methods
   //-------------------------------------------------------------
@@ -63,21 +63,21 @@ class Configuration extends \yii\base\Component
   {
     switch( gettype( $default) )
     {
-      case "boolean": 
+      case "boolean":
         $type = "boolean"; break;
-      case "integer":    
-      case "double":  
+      case "integer":
+      case "double":
         $type =  "number"; break;
-      case "string": 
+      case "string":
         $type = "string"; break;
-      case "array": 
+      case "array":
         $type = "list"; break;
-      default: 
+      default:
         throw new \InvalidArgumentException("Invalid default value for preference key '$key'");
     }
     return $this->createKeyIfNotExists($key, $type, $customize, $default, $final);
   }
-  
+
   /**
    * Returns the value of the given preference key. Alias of #getKey()
    * @param string $key The name of the preference
@@ -87,7 +87,7 @@ class Configuration extends \yii\base\Component
   {
     return $this->getKey( $key );
   }
-  
+
   /**
    * Sets the value of the given preference key. Alias of #setKey()
    * @param string $key The name of the preference
@@ -433,10 +433,10 @@ class Configuration extends \yii\base\Component
   {
     if( ! $user ) $user = $this->getActiveUser();
     $config = $this->getConfigModel( $key );
-    return $this->castType( 
+    return $this->castType(
       $config->getUserConfigValue($user),
       $this->keyType( $key ),
-      true 
+      true
     );
   }
 
@@ -473,7 +473,7 @@ class Configuration extends \yii\base\Component
         'ConfigId' => $config->id,
         'value'   => $storeValue
       ]);
-      $userConfig->save(); 
+      $userConfig->save();
     }
     return $this;
   }
@@ -498,7 +498,7 @@ class Configuration extends \yii\base\Component
   /**
    * Resets the user variant of a config value to the default value.
    * @param string $key
-   * @param \app\models\User $user (optional) user 
+   * @param \app\models\User $user (optional) user
    * @return void
    */
   public function resetKey( $key, $user = false )
@@ -527,7 +527,7 @@ class Configuration extends \yii\base\Component
    * Returns the data of config keys that are readable by the active user.
    *
    * @param string $mask return only a subset of entries that start with $mask
-   * @param \app\models\User $user (optional) user 
+   * @param \app\models\User $user (optional) user
    * @return array Map with the keys 'keys', 'types' and 'values', each
    *  having an index array with all the values.
    */
@@ -552,7 +552,7 @@ class Configuration extends \yii\base\Component
 		  'types'   => $types
 		);
   }
-  
+
   //-------------------------------------------------------------
   // ini values
   //-------------------------------------------------------------
@@ -565,8 +565,8 @@ class Configuration extends \yii\base\Component
   public function getIniValue( $key )
   {
     static $ini = null;
-    if( is_null($ini) ) $ini = new Vars( APP_CONFIG_FILE, ['cache' => false] );
-    return $ini->get($key);
+    if (is_null($ini)) $ini = require __DIR__ . "/../../config/parts/ini.php"; // FIXME Use class
+    return ArrayHelper::getValue($ini, $key);
   }
 
   /**

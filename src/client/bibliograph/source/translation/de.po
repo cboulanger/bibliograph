@@ -196,26 +196,26 @@ msgstr "Z39.50 Import"
 msgid "Reloading library metadata..."
 msgstr "Katalogdaten werden aktualisiert…"
 
-#: bibliograph/Setup.js:37 bibliograph/Setup.js:77
+#: bibliograph/Setup.js:37 bibliograph/Setup.js:77 bibliograph/Setup.js:78
 msgid "No connection to server."
 msgstr "Keine Verbindung zum Server."
 
-#: bibliograph/Setup.js:38 bibliograph/Setup.js:78
+#: bibliograph/Setup.js:38 bibliograph/Setup.js:78 bibliograph/Setup.js:79
 msgid "Loading folder data ..."
 msgstr "Lade die Ordner ..."
 
 #: bibliograph/Setup.js:87 bibliograph/Setup.js:90 bibliograph/Setup.js:91
-#: bibliograph/Setup.js:93 bibliograph/Setup.js:133
+#: bibliograph/Setup.js:93 bibliograph/Setup.js:133 bibliograph/Setup.js:134
 msgid "Setting up application..."
 msgstr "Konfiguriere die Anwendung ..."
 
 #: bibliograph/Setup.js:91 bibliograph/Setup.js:94 bibliograph/Setup.js:95
-#: bibliograph/Setup.js:97 bibliograph/Setup.js:137
+#: bibliograph/Setup.js:97 bibliograph/Setup.js:137 bibliograph/Setup.js:138
 msgid "Connecting with server..."
 msgstr "Verbinde mit dem Server ..."
 
 #: bibliograph/Setup.js:96 bibliograph/Setup.js:99 bibliograph/Setup.js:100
-#: bibliograph/Setup.js:102 bibliograph/Setup.js:142
+#: bibliograph/Setup.js:102 bibliograph/Setup.js:142 bibliograph/Setup.js:143
 msgid "Loading configuration ..."
 msgstr "Lade Konfiguration ..."
 

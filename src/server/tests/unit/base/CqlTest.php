@@ -9,6 +9,11 @@ use app\models\Reference;
 use lib\cql\NaturalLanguageQuery;
 use lib\cql\Parser;
 use yii\db\ActiveQuery;
+use Yii;
+
+codecept_debug("------");
+codecept_debug(Yii::getAlias("@app"));
+codecept_debug("------");
 
 class CqlTest extends \app\tests\unit\Base
 {

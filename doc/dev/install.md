@@ -10,13 +10,14 @@
 - PHP >= 7.0 with the following extensions: intl, gettext, yaz/xsl (optional), 
   ldap  (optional), zip (optional). For optimal performance, it is advised to enable 
   OPcache (http://php.net/manual/en/intro.opcache.php)
-- MySql >= 5.3 
+- MySQL v5.x (>= v5.3). MySQL v8 is backwards-incompatible and currently not supported.
 - A web server, such as apache, or use the built-in server with `php -S`.
 
-### Installation 
-- At them moment, there is no built package available. You'll have to clone the repository,
-  replicate the steps in [the Debian/Ubuntu install script](../../install/debian-ubuntu/install-dev-vanilla.sh) 
-  adapted to your local environment.
+### Installation
+- The latest prebuilt package of the current beta releases can be 
+  [downloaded from GitHub](https://github.com/cboulanger/bibliograph/releases/).
+  Unpack, follow the post-installation instructions, and you should be ready to.
+- To install a development environment, see the instructions [here](../../install/)
 
 ### Post-Installation 
 - In `src/server/config/`, rename `app.conf.toml.dist` to `app.conf.toml`

@@ -1,17 +1,17 @@
 #!/bin/bash
 
 # This test runs a temporary server on localhost:8080 and
-# then runs the codeception API test suite. 
+# then runs the codeception API test suite.
 
 YII_CMD="php yii-test"
 CPT_CMD="php vendor/bin/codecept"
 CPT_ENV=${1:-setup}
 SERVER_PATH=src/server
-SERVER_CMD="yii serve 127.0.0.1:8080 -t=@app/tests"
+SERVER_CMD="${YII_CMD} serve 127.0.0.1:8080 -t=@app/tests"
 
 # Start a PHP server and finish it when the script ends
 pushd $SERVER_PATH > /dev/null
-php $SERVER_CMD &> server.out &
+$SERVER_CMD &> server.out &
 bg_pid=$!
 trap "kill -2 $bg_pid" 2
 # ps ax | grep "[p]hp $SERVER_CMD" > /dev/null

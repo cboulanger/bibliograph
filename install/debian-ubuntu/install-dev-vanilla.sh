@@ -4,7 +4,8 @@
 # Build script to set up a development environment on a vanilla Debian/Ubuntu
 
 set -o errexit # Exit on error
-PHPVERSION=7.0
+PHPVERSION=7.3
+MYSQLVERSION=5.*
 
 # Colorize output, see https://linuxtidbits.wordpress.com/2008/08/11/output-color-on-bash-scripts/
 txtbld=$(tput bold)             # Bold
@@ -26,13 +27,22 @@ apt-get update && apt-get install -y \
   wget curl zip jq \
   build-essential
 
-# Apache / PHP
-apt-get install -y  apache2 mysql-server php7.0 php-pear
-apt-get install -y php$PHPVERSION-{dev,ldap,curl,gd,intl,mbstring,mcrypt,xml,xsl,zip}
+# Apache / PHP / MySQL
+if [ "$(apt list php | grep ${PHPVERSION})" == "" ]; then
+    apt -y install software-properties-common dirmngr apt-transport-https lsb-release ca-certificates
+    add-apt-repository ppa:ondrej/php
+    apt update
+fi
+apt-get install -y  apache2 mysql-server=${MYSQLVERSION} php${PHPVERSION} php-pear
+apt-get install -y php${PHPVERSION}-{dev,ldap,curl,gd,intl,mbstring,mcrypt,xml,xsl,zip}
 
 section "Installing bibliographic tools..."
 sudo apt-get install -y yaz libyaz4-dev bibutils
 pear channel-update pear.php.net && yes $'\n' | pecl install yaz && pear install Structures_LinkedList-0.2.2 && pear install File_MARC
+[ -f /etc/php/${PHPVERSION}/mods-available/yaz.ini ] || echo "extension=yaz.so" > /etc/php/${PHPVERSION}/mods-available/yaz.ini
+[ -f /etc/php/${PHPVERSION}/cli/conf.d/yaz.ini ] || ln -s /etc/php/${PHPVERSION}/mods-available/yaz.ini /etc/php/${PHPVERSION}/cli/conf.d/
+[ -f /etc/php/${PHPVERSION}/cli/conf.d/yaz.ini ] || ln -s /etc/php/${PHPVERSION}/mods-available/yaz.ini /etc/php/${PHPVERSION}/apache2/conf.d/
+service apache2 restart
 sudo service apache2 restart
 if php -i | grep yaz --quiet && echo '<?php exit(function_exists("yaz_connect")?0:1);' | php ; then echo "YAZ is installed"; else echo "YAZ installation failed"; exit 1; fi;
 
@@ -76,7 +86,7 @@ echo "Please review and adapt the 'src/server/config/app.conf.toml' config file:
 echo "- Enter the email address of the administrator in the [email] section (The application"
 echo "  won't start otherwise) "
 echo "- If you use an LDAP server for authentication, adapt the settings in the [ldap] section."
-echo 
+echo
 echo "You can now execute:"
 echo "- 'npm test': run unit, functional and api tests"
 echo "- 'npm run test-dev': run unit, functional and api tests in development mode"

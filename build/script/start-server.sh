@@ -1,14 +1,14 @@
 #!/bin/bash
 
 # Compiles and starts the application from the source dir
-# This is currently MacOS only and should probably be a node script. 
+# This is currently MacOS only and should probably be a node script.
 
 #set -o errexit
 
 HOST=localhost:9090
 SERVER_PATH=src/
 TARGET=${1:-source}
-APP_PATH=client/bibliograph/$TARGET-compiled/index.html
+APP_PATH=client/bibliograph/compiled/$TARGET/index.html
 COMPILE_PATH=$(pwd)/src/client/bibliograph
 QX_CMD=$(which qx)
 

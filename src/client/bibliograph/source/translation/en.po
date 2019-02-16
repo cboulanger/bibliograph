@@ -149,23 +149,23 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-#: bibliograph/Setup.js:37 bibliograph/Setup.js:77
+#: bibliograph/Setup.js:37 bibliograph/Setup.js:77 bibliograph/Setup.js:78
 msgid "No connection to server."
 msgstr ""
 
-#: bibliograph/Setup.js:38 bibliograph/Setup.js:78
+#: bibliograph/Setup.js:38 bibliograph/Setup.js:78 bibliograph/Setup.js:79
 msgid "Loading folder data ..."
 msgstr ""
 
-#: bibliograph/Setup.js:93 bibliograph/Setup.js:133
+#: bibliograph/Setup.js:93 bibliograph/Setup.js:133 bibliograph/Setup.js:134
 msgid "Setting up application..."
 msgstr ""
 
-#: bibliograph/Setup.js:97 bibliograph/Setup.js:137
+#: bibliograph/Setup.js:97 bibliograph/Setup.js:137 bibliograph/Setup.js:138
 msgid "Connecting with server..."
 msgstr ""
 
-#: bibliograph/Setup.js:102 bibliograph/Setup.js:142
+#: bibliograph/Setup.js:102 bibliograph/Setup.js:142 bibliograph/Setup.js:143
 msgid "Loading configuration ..."
 msgstr ""
 

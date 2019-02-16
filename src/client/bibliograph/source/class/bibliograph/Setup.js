@@ -28,6 +28,7 @@ qx.Class.define("bibliograph.Setup", {
   include : [qcl.ui.MLoadingPopup, qx.locale.MTranslation],
 
   statics: {
+    // TODO move messages in own class
     messages: {
       /**
        * Exececute an arbitrary jsonrpc call.

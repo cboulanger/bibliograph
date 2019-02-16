@@ -1,7 +1,6 @@
 #!/bin/bash
 echo " >>> Updating contribs..."
 pushd src/client/bibliograph >/dev/null
-qx contrib update
 qx contrib install
 popd >/dev/null
 

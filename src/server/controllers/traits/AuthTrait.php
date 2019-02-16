@@ -181,7 +181,7 @@ trait AuthTrait
     if ($session) {
       // manually set session id to recover the session data
       // TODO this doesn't work if old stale sessions are still in the database, revisit this
-      //session_id( $session->namedId );
+      // YII::$app->session->setId( $session->namedId );
     }
     Yii::$app->session->open();
     return $session;

@@ -37,7 +37,7 @@
         "app.mode": "development",
         "app.serverUrl": "../../../../server/web/?r="
       },
-      "outputPath": "source-compiled",
+      "outputPath": "compiled/source",
       "bundle": {
         "include": [ "qx.*" ],
         "exclude": [ "qx.util.*" ]
@@ -50,7 +50,7 @@
         "app.mode": "production",
         "app.serverUrl": "../../../../server/web/?r="
       },
-      "outputPath": "build-compiled"
+      "outputPath": "compiled/build"
     },
     {
       "//": "The 'source' target for debugging on deployed instances, usually not needed",
@@ -59,7 +59,7 @@
         "app.mode": "development",
         "app.serverUrl": "server.php?r="
       },
-      "outputPath": "dist-source-compiled",
+      "outputPath": "compiled/dist-source",
       "targetClass": "SourceTarget",
       "bundle": {
         "include": [ "qx.*" ],
@@ -73,7 +73,7 @@
         "app.mode": "production",
         "app.serverUrl": "server.php?r="
       },
-      "outputPath": "dist-build-compiled",
+      "outputPath": "compiled/dist-build",
       "targetClass": "BuildTarget",
       "type": "dist-build"
     }

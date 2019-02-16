@@ -25,12 +25,12 @@ mv compile.json compile.old
 jq ".environment[\"app.version\"]=\"$VERSION\"" compile.old > compile.json
 $QX_CMD compile --target=$BUILD_TARGET --clean
 
-cp -a $BUILD_TARGET-compiled/bibliograph $DIST_DIR
-cp -a $BUILD_TARGET-compiled/resource $DIST_DIR
+cp -a compiled/$BUILD_TARGET/bibliograph $DIST_DIR
+cp -a compiled/$BUILD_TARGET/resource $DIST_DIR
 if ! [[ $BUILD_TARGET == *"build"* ]]; then
-  cp -a $BUILD_TARGET-compiled/transpiled $DIST_DIR
+  cp -a compiled/$BUILD_TARGET/transpiled $DIST_DIR
 fi
-cp $BUILD_TARGET-compiled/index.html $DIST_DIR
+cp compiled/$BUILD_TARGET/index.html $DIST_DIR
 
 # cd $TOP_DIR
 # bash build/script/modules-compile.sh $BUILD_TARGET
@@ -47,7 +47,7 @@ rm -f config/{app.conf.toml,message.php,test.php}
 cp -a $SERVER_SRC_DIR/composer.* .
 if [[ $BUILD_TARGET == *"source"* ]]; then
   composer install #> /dev/null
-else 
+else
   composer install --no-dev  #&> /dev/null
 fi
 if ! [ -d ./vendor ] || ! [ -f ./vendor/autoload.php ]; then

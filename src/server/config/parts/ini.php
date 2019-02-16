@@ -1,2 +1,3 @@
 <?php
-return new \M1\Vars\Vars(APP_CONFIG_FILE,['cache' => false]);
+use Yosymfony\Toml\Toml;
+return Toml::parseFile(APP_CONFIG_FILE);

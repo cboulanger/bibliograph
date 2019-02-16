@@ -84,15 +84,15 @@ $components = [
       '@app/modules'
     ]
   ],
-  
+
   /*
    * Custom applications components
-   */  
+   */
 
   // The application configuration
   'config' => [
     'class' => \lib\components\Configuration::class
-  ],    
+  ],
   'ldap' => require('ldap.php'),
   'ldapAuth'  => [
     'class' => \lib\components\LdapAuth::class
@@ -105,9 +105,9 @@ $components = [
   // datasource manager, handles creation and migration of datasource tables
   'datasourceManager' => [
     'class' => \lib\components\DatasourceManager::class
-  ],  
+  ],
   // various utility methods
-  'utils' => [ 
+  'utils' => [
     'class' => \lib\components\Utils::class
   ],
 

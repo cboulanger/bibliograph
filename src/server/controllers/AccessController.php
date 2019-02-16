@@ -52,8 +52,8 @@ class AccessController extends AppController
 
   //-------------------------------------------------------------
   // Actions / JSONRPC API
-  //-------------------------------------------------------------  
-  
+  //-------------------------------------------------------------
+
   /**
    * Registers a new user.
    *
@@ -78,7 +78,7 @@ class AccessController extends AppController
 //  }
 
   /**
-   * Given a username, return a string consisting of a random hash and the salt 
+   * Given a username, return a string consisting of a random hash and the salt
    * used to hash the password of that user, concatenated by "|"
    */
   public function actionChallenge($username)
@@ -86,11 +86,11 @@ class AccessController extends AppController
     $auth_method = Yii::$app->config->getPreference("authentication.method");
     $user = User::findOne(['namedId'=> $username]);
     if( $user ){
-      if( Yii::$app->config->getIniValue("ldap.enabled") and $user->isLdapUser() ) 
+      if( Yii::$app->config->getIniValue("ldap.enabled") and $user->isLdapUser() )
       {
         Yii::debug("Challenge: User '$username' needs to be authenticated by LDAP.", __METHOD__);
         $auth_method = "plaintext";
-      }      
+      }
     } else {
       // if the user is not in the database (for example, first LDAP auth), use plaintext authentication
       $auth_method = "plaintext";
@@ -102,7 +102,7 @@ class AccessController extends AppController
       case "plaintext":
         return array( "method" => "plaintext" );
       case "hashed":
-        return array( 
+        return array(
           "method" => "hashed",
           "nounce" => Yii::$app->accessManager->createNonce($username)
         );
@@ -170,7 +170,7 @@ class AccessController extends AppController
         Yii::debug('PHP session exists in database...', __METHOD__);
         // find a user that belongs to this session
         $user = User::findOne( [ 'id' => $session->UserId ] );
-        if ( $user ) {          
+        if ( $user ) {
           Yii::debug('Session belongs to user ' . $user->namedId, __METHOD__);
         } else {
           // shouldn't ever happen
@@ -181,17 +181,17 @@ class AccessController extends AppController
             Yii::warning($e->getMessage());
           }
         }
-      } 
+      }
       if ( ! $user ) {
         // login anonymously
         $user = $this->createAnonymous();
-        Yii::info("Created anonymous user '{$user->namedId}'.");  
+        Yii::info("Created anonymous user '{$user->namedId}'.");
       }
-    } 
+    }
 
     /*
      * token authentication
-     */    
+     */
     elseif (is_string($first) and empty($password)) {
       // login using token
       $user = User::findIdentityByAccessToken($first);
@@ -199,11 +199,11 @@ class AccessController extends AppController
         throw new UserErrorException( "Invalid token");
       }
       Yii::info("Authenticated user '{$user->namedId}' via auth token.");
-    } 
+    }
 
     /*
      * username / password authentication
-     */    
+     */
     else {
 
       // @todo: update to yii functions:
@@ -241,8 +241,8 @@ class AccessController extends AppController
       if ( ! $user->active ) {
         return new AuthResult([
           'error' => Yii::t('app', "User is deactivated"),
-        ]);  
-      } 
+        ]);
+      }
 
       if ( ! $authenticated ) {
 
@@ -278,26 +278,28 @@ class AccessController extends AppController
           Yii::info("User supplied wrong password.");
           return new AuthResult([
             'error' => Yii::t('app', "Invalid username or password"),
-          ]);  
+          ]);
         }
       }
       Yii::info("Authenticated user '{$user->namedId}' via auth username/password.");
     }
 
-    // user is authenticated, log in 
+    // user is authenticated, log in
     $user->online = 1;
-    $user->save(); 
+    $user->save();
     Yii::$app->user->login($user);
     if( ! $session ) {
       // if we don't already have a (PHP) session, try to find a saved one
       $session = $this->continueUserSession($user);
     }
     if ( $session ) {
-      // let's continue this one
+      // let's continue the given session
       $sessionId = $session->id;
       $session->touch();
-      Yii::info("Continued sesssion {$sessionId}"); 
-      session_id( $session->namedId );
+      Yii::debug("Continuing sesssion {$sessionId}");
+      Yii::$app->session->close();
+      Yii::$app->session->setId($session->namedId);
+      Yii::$app->session->open();
     } else {
       // we didn't find one, so let's start a new one
       $sessionId = $this->getSessionId();
@@ -305,7 +307,7 @@ class AccessController extends AppController
       $session->link('user',$user);
       $session->save();
       $sessionId = $this->getSessionId();
-      Yii::debug("Started sesssion {$sessionId}", __METHOD__);
+      Yii::debug("Starting sesssion {$sessionId}", __METHOD__);
     }
 
     // renew the token
@@ -328,7 +330,7 @@ class AccessController extends AppController
    */
   public function actionLogout()
   {
-    $user = $this->getActiveUser(); 
+    $user = $this->getActiveUser();
     Yii::info("Logging out user '{$user->name}'.");
     $user->online = 0;
     try {
@@ -381,7 +383,7 @@ class AccessController extends AppController
 
   /**
    * Returns the data of the current user, including the current permissions.
-   * @param string|null $datasource 
+   * @param string|null $datasource
    *    If string, return global permissions plus permissions given via the datasource
    *    If no argument or null, return global permissions only
    */
@@ -483,11 +485,11 @@ class AccessController extends AppController
           // .. delete user if guest
           $user->delete();
         } else {
-          // ... set real users to offline 
+          // ... set real users to offline
           $user->online = 0;
-          $user->save(); 
+          $user->save();
         }
-      } 
+      }
     }
 
     // cleanup clipboard
@@ -513,7 +515,7 @@ class AccessController extends AppController
 
   //-------------------------------------------------------------
   // Helper methods
-  //-------------------------------------------------------------    
+  //-------------------------------------------------------------
 
   /**
    * Checks if the given username has to be authenticated from an LDAP server
