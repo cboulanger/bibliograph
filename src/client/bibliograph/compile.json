@@ -39,8 +39,12 @@
       },
       "outputPath": "compiled/source",
       "bundle": {
-        "include": [ "qx.*" ],
-        "exclude": [ "qx.util.*" ]
+        "include": [
+          "qx.*"
+        ],
+        "exclude": [
+          "qx.util.*"
+        ]
       }
     },
     {
@@ -62,8 +66,12 @@
       "outputPath": "compiled/dist-source",
       "targetClass": "SourceTarget",
       "bundle": {
-        "include": [ "qx.*" ],
-        "exclude": [ "qx.util.*" ]
+        "include": [
+          "qx.*"
+        ],
+        "exclude": [
+          "qx.util.*"
+        ]
       }
     },
     {

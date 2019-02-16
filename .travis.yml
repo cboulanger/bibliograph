@@ -56,7 +56,7 @@ jobs:
       script: test/script/api.sh
     - stage: packaging
       name: "Create a distributable package"
-      script: build/script/dist-create
+      script: npm run dist-create
     - stage: docker
       name: "Create a docker image and push it to the docker hub"
       php: 7.2

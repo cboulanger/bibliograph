@@ -52,7 +52,7 @@ else
   composer install --no-dev  #&> /dev/null
 fi
 if ! [ -d ./vendor ] || ! [ -f ./vendor/autoload.php ]; then
- echo "composer install failed!"
+ echo " !!! Composer install failed!"
  exit 1
 fi
 rm -f ./composer.* &> /dev/null

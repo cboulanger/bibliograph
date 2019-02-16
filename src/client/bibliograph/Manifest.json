@@ -19,7 +19,6 @@
     "class": "source/class",
     "resource": "source/resource",
     "translation": "source/translation",
-    "boot": "source/boot",
     "type": "application"
   },
   "requires": {
