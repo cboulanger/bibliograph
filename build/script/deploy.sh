@@ -9,7 +9,7 @@ if [[ "$DEPLOY_TARGET" == "" ]]; then
     echo "   - name of the deployment server as configured in .ssh/config"
     echo "   - target path on that server (optional, default: /var/www/bibliograph)"
     echo "   - name of config file to copy into installation (optional)"
-    exit 1
+    exit 0
 fi
 
 echo

@@ -2,8 +2,7 @@ dist: trusty
 language: php
 php:
 #  - '7.0'
-#  - '7.1'
-#  - '7.2'
+  - '7.2'
   - '7.3'
 
 services:
@@ -15,6 +14,14 @@ cache:
     - node_modules
     - $HOME/.composer/cache/files
     - src/vcslib
+
+stages:
+  - name: tests
+  - name: packaging
+  - name: docker
+    if: (NOT type IN (pull_request))
+  - name: deploy
+    if: (NOT type IN (pull_request)) AND ( branch = master OR tag =~ ^v[0-9] )
 
 before_install:
   - echo "Installing prerequisites..."
@@ -31,28 +38,40 @@ install:
   - echo "travis_fold:start:npm_install"
   - echo "Installing dependencies..."
   - if [[ -f package-lock.json ]]; then rm package-lock.json; fi
-#  - rm -rf node_modules
-  - npm install npm@latest -g
   - npm install
   - echo "travis_fold:end:npm_install"
   - echo "Installation scripts finished successufully."
-
-before_script:
   - mysql -e 'CREATE DATABASE IF NOT EXISTS tests;'
   - cp install/travis/app.conf.toml src/server/config
 
-script:
-  - npm test
+script: skip
+
+jobs:
+  include:
+    - stage: tests
+      name: "Run unit and functional tests"
+      script: tests/script/unit-functional.sh
+    - # parallel
+      name: "Run API tests using server"
+      script: tests/script/api.sh
+    - stage: packaging
+      name: "Create a distributable package"
+      script: build/script/dist-create
+    - stage: docker
+      name: "Create a docker image and push it to the docker hub"
+      php: 7.2
+      deploy:
+        provider: script
+        script: build/script/docker-push.sh
+        skip_cleanup: true
+        on:
+          branch: master
+    - stage: deploy
+      name: "Deploy to demo server"
+      script: build/script/deploy.sh
+
+after_failure:
   - echo "travis_fold:start:logs"
   - cat src/server/runtime/logs/app.log
   - if [[ -f src/server/runtime/logs/error.log ]]; then cat src/server/runtime/logs/error.log; fi
   - echo "travis_fold:end:logs"
-  - npm run dist-create
-
-deploy:
-  provider: script
-  script: build/script/docker-push.sh
-  skip_cleanup: true
-  on:
-    all_branches: true
-    branch: master

@@ -5,17 +5,21 @@
 PHP_TARGET_VERSION=7.2
 PHP_VERSION=$(php -r "echo substr(phpversion(),0,strrpos(phpversion(),'.'));")
 REPO=cboulanger/bibliograph
-TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
+TAG=$(git rev-parse --abbrev-ref HEAD)
 
-# only build for target php version
-if [[ "$PHP_VERSION" != "$PHP_TARGET_VERSION" ]]; then
-  echo "Not generating docker image for PHP $PHP_VERSION"
-  exit 0
+# Are we running on Travis?
+if [[ "$TRAVIS" != "" ]]; then
+  TAG=`if [[ "$TRAVIS_BRANCH" == "master" ]]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
+  # only build for target php version
+  if [[ "$PHP_VERSION" != "$PHP_TARGET_VERSION" ]]; then
+    echo "Not generating docker image for PHP $PHP_VERSION"
+    exit 0
+  fi
+
+  echo "Generating docker image for PHP $PHP_VERSION..."
+  echo " >>> reverting changes to local repo ..."
+  git checkout .
 fi
-
-echo "Generating docker image for PHP $PHP_VERSION...p"
-echo " >>> reverting changes to local repo ..."
-git checkout .
 
 echo " >>> Building image $REPO:$TAG' ..."
 docker build -f ./install/docker/Dockerfile -t $REPO:$TAG .

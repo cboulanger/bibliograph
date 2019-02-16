@@ -6,22 +6,24 @@
 FROM ubuntu:18.04
 MAINTAINER Christian Boulanger <info@bibliograph.org>
 ENV DEBIAN_FRONTEND noninteractive
-ENV PHPVERSION=7.3
-
-RUN if [ "$(apt list php | grep ${PHPVERSION})" == "" ]; then \
-        apt -y install software-properties-common dirmngr apt-transport-https lsb-release ca-certificates && \
-        add-apt-repository ppa:ondrej/php && \
-        apt update; \
-    fi
+ENV PHPVERSION=7.2
 
 # Packages
-RUN apt-get update && apt-get install -y \
-  bibutils wget zip \
-  supervisor \
-  apache2 libapache2-mod-php \
-  mysql-server=5.* \
-  php${PHPVERSION} php${PHPVERSION}-{cli,intl,xsl,mbstring,mysql,zip,dev,pear} \
-  yaz libyaz5-dev
+RUN \
+  apt-get update && apt-get upgrade -y && \
+  apt-get install -y \
+    bibutils wget zip \
+    supervisor \
+    mysql-server=5.* \
+    php${PHPVERSION} \
+    php${PHPVERSION}-cli \
+    php${PHPVERSION}-intl \
+    php${PHPVERSION}-mbstring \
+    php${PHPVERSION}-mysql \
+    php${PHPVERSION}-zip \
+    php${PHPVERSION}-dev \
+    apache2 libapache2-mod-php \
+    yaz libyaz5-dev
 
 # Install php-yaz
 RUN \
