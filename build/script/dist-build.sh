@@ -24,6 +24,7 @@ cd $CLIENT_SRC_DIR
 mv compile.json compile.old
 jq ".environment[\"app.version\"]=\"$VERSION\"" compile.old > compile.json
 $QX_CMD compile --target=$BUILD_TARGET --clean
+rm compile.old
 
 cp -a compiled/$BUILD_TARGET/bibliograph $DIST_DIR
 cp -a compiled/$BUILD_TARGET/resource $DIST_DIR

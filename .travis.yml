@@ -50,10 +50,10 @@ jobs:
   include:
     - stage: tests
       name: "Run unit and functional tests"
-      script: tests/script/unit-functional.sh
+      script: test/script/unit-functional.sh
     - # parallel
       name: "Run API tests using server"
-      script: tests/script/api.sh
+      script: test/script/api.sh
     - stage: packaging
       name: "Create a distributable package"
       script: build/script/dist-create
@@ -71,6 +71,7 @@ jobs:
       script: build/script/deploy.sh
 
 after_failure:
+  - echo " === application logs ==="
   - echo "travis_fold:start:logs"
   - cat src/server/runtime/logs/app.log
   - if [[ -f src/server/runtime/logs/error.log ]]; then cat src/server/runtime/logs/error.log; fi
