@@ -52,10 +52,14 @@ jobs:
       script: test/script/unit-functional.sh
     - # parallel
       name: "Run API tests using server"
+      php:
+        - "7.2"
+        - "7.3"
       script: test/script/api.sh
 
     - stage: packaging
       name: "Create a distributable package"
+      php: "7.3"
       script: npm run dist-build
     - # php 7.0 legacy package
       name: "Create a PHP7.0-compatible legacy package"
