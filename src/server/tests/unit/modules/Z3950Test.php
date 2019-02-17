@@ -24,7 +24,7 @@ class Z3950Test extends \app\tests\unit\Base
    */
   public function testYaz()
   {
-    $this->markTestSkipped("Doesn't work on Travis...");
+    //$this->markTestSkipped("Doesn't work on Travis...");
     /** @var Module $module */
     $module = Yii::$app->getModule("z3950");
     $gbvpath = $module->serverDataPath . "/z3950.loc.gov-7090-voyager.xml";
@@ -60,6 +60,6 @@ class Z3950Test extends \app\tests\unit\Base
     $parser = new BibtexParser;
     $records =  $parser->parse( $bibtex );
     codecept_debug("Retrieved " . count($records) . " records.");
-    $this->tester->assertCount($maxNumber, $records );
+    $this->assertCount($maxNumber, $records );
   }
 }

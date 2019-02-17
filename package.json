@@ -23,7 +23,7 @@
     "postinstall": "build/script/update-dependencies.sh",
     "server": "build/script/start-server.sh",
     "test": "test/script/unit-functional.sh && test/script/api.sh || exit $?",
-    "test-dev": "test/script/codeception-all.sh && test/script/api.sh development",
+    "test-dev": "test/script/unit-functional.sh && test/script/api.sh development || exit $?",
     "clean": "cd src/client/bibliograph && qx clean",
     "compile": "cd src/client/bibliograph && qx compile --watch",
     "view-log": "build/script/view-log.sh",

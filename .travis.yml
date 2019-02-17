@@ -25,7 +25,8 @@ stages:
     if: (NOT type IN (pull_request))
 
 before_install:
-  - echo "travis_fold:start:install_prerequisites"
+  - travis_fold() { local action=$1; local name=$2; local title=$3; echo -en "travis_fold:${action}:${name}\r"; echo "$title                   "; }
+  - travis_fold start install_prerequisites "Installing prerequisites"
   - sudo apt-get install -y bibutils zip
   - PHPVERSION=$(phpenv version-name)
   - sudo add-apt-repository -y ppa:ondrej/php && sudo apt-get update
@@ -37,32 +38,30 @@ before_install:
   - mysql -e 'CREATE DATABASE IF NOT EXISTS tests;'
   - cp install/travis/app.conf.toml src/server/config
   - if [[ -f package-lock.json ]]; then rm package-lock.json; fi
-  - echo "travis_fold:end:install_prerequisites"
+  - travis_fold end install_prerequisites
 
 install:
-  - echo "travis_fold:start:install_dependencies"
+  - travis_fold start install_dependencies "Installing dependencies, using PHP${PHPVERSION}"
   - if [[ "$PHPVERSION" == "7.0" ]]; then export COMPOSER=$(pwd)/install/php7.0/composer.json; fi
   - npm install
-  - echo "travis_fold:end:install_dependencies"
+  - travis_fold end install_dependencies
 
 script: skip
 
 jobs:
   include:
     - stage: tests
-      name: "Run unit and functional tests"
-      php:
-        - "7.2"
-        - "7.3"
-        - "7.0"
-      script: test/script/unit-functional.sh
-    - # parallel
-      name: "Run API tests using server"
-      php:
-        - "7.2"
-        - "7.3"
-        - "7.0"
-      script: test/script/api.sh
+      name: "PHP 7.2"
+      php: "7.2"
+      script: npm test
+    -
+      name: "PHP 7.3"
+      php: "7.3"
+      script: npm test
+    -
+      name: "PHP 7.0"
+      php: "7.0"
+      script: npm test
 
     - stage: packaging
       name: "Create a distributable package"
@@ -85,6 +84,7 @@ jobs:
 
     - stage: deploy
       name: "Deploy to demo server"
+      php: "7.3"
       script: build/script/deploy.sh
 
 after_failure:
