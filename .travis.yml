@@ -30,7 +30,7 @@ stages:
     if: (NOT type IN (pull_request))
 
 before_install:
-  # use aws to share artifacts between jobs
+  # Use aws to share artifacts between jobs
   - pip install --user awscli
   - mkdir -p ~/$TRAVIS_BUILD_NUMBER
   - aws s3 sync s3://travis-build-stages-shared-storage-test/$TRAVIS_BUILD_NUMBER ~/$TRAVIS_BUILD_NUMBER
