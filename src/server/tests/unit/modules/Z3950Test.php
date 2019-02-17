@@ -24,7 +24,9 @@ class Z3950Test extends \app\tests\unit\Base
    */
   public function testYaz()
   {
-    //$this->markTestSkipped("Doesn't work on Travis...");
+    if ($_ENV["CI"]) {
+      $this->markTestSkipped("Doesn't work on Travis...");
+    }
     /** @var Module $module */
     $module = Yii::$app->getModule("z3950");
     $gbvpath = $module->serverDataPath . "/z3950.loc.gov-7090-voyager.xml";

@@ -9,6 +9,11 @@ addons:
   apt:
     update: true
 
+env:
+  global:
+    # include $HOME/.local/bin for `aws`
+    - PATH=$HOME/.local/bin:$PATH
+
 cache:
   directories:
     - node_modules
@@ -25,12 +30,16 @@ stages:
     if: (NOT type IN (pull_request))
 
 before_install:
-  - travis_fold() { local action=$1; local name=$2; local title=$3; echo -en "travis_fold:${action}:${name}\r"; echo "$title                   "; }
-  - travis_fold start install_prerequisites "Installing prerequisites"
+  # use aws to share artifacts between jobs
+  - pip install --user awscli
+  - mkdir -p ~/$TRAVIS_BUILD_NUMBER
+  - aws s3 sync s3://travis-build-stages-shared-storage-test/$TRAVIS_BUILD_NUMBER ~/$TRAVIS_BUILD_NUMBER
+  # install prerequisites
   - sudo apt-get install -y bibutils zip
   - PHPVERSION=$(phpenv version-name)
   - sudo add-apt-repository -y ppa:ondrej/php && sudo apt-get update
   - sudo apt-get install -y php${PHPVERSION}-xsl php${PHPVERSION}-intl
+  # Install YAZ for Z39.50
   - sudo apt-get install -y yaz libyaz4-dev
   - pear channel-update pear.php.net && yes $'\n' | pecl install yaz
   - # pear channel-update pear.php.net && yes $'\n' | pecl install yaz && pear install Structures_LinkedList-0.2.2 && pear install File_MARC
@@ -38,13 +47,10 @@ before_install:
   - mysql -e 'CREATE DATABASE IF NOT EXISTS tests;'
   - cp install/travis/app.conf.toml src/server/config
   - if [[ -f package-lock.json ]]; then rm package-lock.json; fi
-  - travis_fold end install_prerequisites
 
 install:
-  - travis_fold start install_dependencies "Installing dependencies, using PHP${PHPVERSION}"
   - if [[ "$PHPVERSION" == "7.0" ]]; then export COMPOSER=$(pwd)/install/php7.0/composer.json; fi
   - npm install
-  - travis_fold end install_dependencies
 
 script: skip
 
@@ -66,15 +72,17 @@ jobs:
     - stage: packaging
       name: "Create a distributable package"
       php: "7.3"
-      script: npm run dist-build
+      script: npm run dist-build && cp dist/*.zip ~/$TRAVIS_BUILD_NUMBER/
     - # php 7.0 legacy package
       name: "Create a PHP7.0-compatible legacy package"
       php: "7.0"
-      script: npm run dist-build-php70
+      script: npm run dist-build-php70 && cp dist/*.zip ~/$TRAVIS_BUILD_NUMBER/
 
     - stage: docker
       name: "Create a docker image and push it to the docker hub"
       php: "7.2"
+      before_install: skip
+      install: skip
       deploy:
         provider: script
         script: build/script/docker-push.sh
@@ -85,7 +93,11 @@ jobs:
     - stage: deploy
       name: "Deploy to demo server"
       php: "7.3"
-      script: build/script/deploy.sh
+      before_install: skip
+      install: skip
+      script: ls -al ~/$TRAVIS_BUILD_NUMBER/
+      after_success:
+        - aws s3 rm --recursive s3://travis-build-stages-shared-storage-test/$TRAVIS_BUILD_NUMBER # clean up after ourselves
 
 after_failure:
   - echo " === application logs ==="
@@ -93,3 +105,4 @@ after_failure:
   - cat src/server/runtime/logs/app.log
   - if [[ -f src/server/runtime/logs/error.log ]]; then cat src/server/runtime/logs/error.log; fi
   - echo "travis_fold:end:logs"
+  - aws s3 rm --recursive s3://travis-build-stages-shared-storage-test/$TRAVIS_BUILD_NUMBER # clean up after ourselves

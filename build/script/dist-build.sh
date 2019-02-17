@@ -9,6 +9,7 @@ DIST_DIR=$TOP_DIR/dist
 CLIENT_SRC_DIR=$TOP_DIR/src/client/bibliograph
 SERVER_SRC_DIR=$TOP_DIR/src/server
 VERSION=$(node -p -e "require('$TOP_DIR/package.json').version")
+PHPVERSION=$(php -r "echo substr(phpversion(),0,3);")
 QX_CMD=$(which qx)
 
 if [[ ! -d "$DIST_DIR" ]]; then
@@ -65,7 +66,7 @@ echo " >>> Creating ZIP file ..."
 cd $DIST_DIR
 # remove git folders
 ( find . -type d -name ".git" ) | xargs rm -rf
-zip -q -r bibliograph-$VERSION.zip *
+zip -q -r bibliograph-$VERSION-php${PHPVERSION}.zip *
 
 echo "Done."
 exit 0
