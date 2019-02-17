@@ -1,9 +1,7 @@
 dist: trusty
-language: php
 
 services:
   - mysql
-  - docker
 
 addons:
   apt:
@@ -26,7 +24,7 @@ stages:
     if: (NOT type IN (pull_request))
   - name: docker
     if: (NOT type IN (pull_request))
-  - name: deploy
+  - name: deployment
     if: (NOT type IN (pull_request))
 
 before_install:
@@ -34,11 +32,14 @@ before_install:
   - pip install --user awscli
   - mkdir -p ~/$TRAVIS_BUILD_NUMBER
   - aws s3 sync s3://travis-build-stages-shared-storage-test/$TRAVIS_BUILD_NUMBER ~/$TRAVIS_BUILD_NUMBER
-  # install prerequisites
+  # Installation prerequisites
   - sudo apt-get install -y bibutils zip
   - PHPVERSION=$(phpenv version-name)
   - sudo add-apt-repository -y ppa:ondrej/php && sudo apt-get update
   - sudo apt-get install -y php${PHPVERSION}-xsl php${PHPVERSION}-intl
+
+install:
+  # Runtime prerequisites
   # Install YAZ for Z39.50
   - sudo apt-get install -y yaz libyaz4-dev
   - pear channel-update pear.php.net && yes $'\n' | pecl install yaz
@@ -46,13 +47,23 @@ before_install:
   - if php -i | grep yaz --quiet && echo '<?php exit(function_exists("yaz_connect")?0:1);' | php ; then echo "YAZ is installed"; else echo "YAZ installation failed"; exit 1; fi;
   - mysql -e 'CREATE DATABASE IF NOT EXISTS tests;'
   - cp install/travis/app.conf.toml src/server/config
-  - if [[ -f package-lock.json ]]; then rm package-lock.json; fi
 
-install:
+before_script:
+  # Dependencies
   - if [[ "$PHPVERSION" == "7.0" ]]; then export COMPOSER=$(pwd)/install/php7.0/composer.json; fi
+  - if [[ -f package-lock.json ]]; then rm package-lock.json; fi
   - npm install
 
 script: skip
+
+after_failure:
+  - echo " === application logs ==="
+  - echo "travis_fold:start:logs"
+  - cat src/server/runtime/logs/app.log
+  - if [[ -f src/server/runtime/logs/error.log ]]; then cat src/server/runtime/logs/error.log; fi
+  - echo "travis_fold:end:logs"
+  - aws s3 rm --recursive s3://travis-build-stages-shared-storage-test/$TRAVIS_BUILD_NUMBER # clean up after ourselves
+
 
 jobs:
   include:
@@ -72,37 +83,35 @@ jobs:
     - stage: packaging
       name: "Create a distributable package"
       php: "7.3"
+      install: skip
+      before_script: skip
       script: npm run dist-build && cp dist/*.zip ~/$TRAVIS_BUILD_NUMBER/
+      after_failure: skip
     - # php 7.0 legacy package
       name: "Create a PHP7.0-compatible legacy package"
       php: "7.0"
-      script: npm run dist-build-php70 && cp dist/*.zip ~/$TRAVIS_BUILD_NUMBER/
-
-    - stage: docker
-      name: "Create a docker image and push it to the docker hub"
-      php: "7.2"
-      before_install: skip
       install: skip
+      before_script: skip
+      script: npm run dist-build-php70 && cp dist/*.zip ~/$TRAVIS_BUILD_NUMBER/
+      after_failure: skip
+    - # docker
+      name: "Create a docker image and push it to the docker hub"
+      services: docker
+      install: skip
+      before_script: skip
       deploy:
         provider: script
         script: build/script/docker-push.sh
         skip_cleanup: true
         on:
           branch: master
-
-    - stage: deploy
+      after_failure: skip
+    - stage: deployment
       name: "Deploy to demo server"
       php: "7.3"
-      before_install: skip
       install: skip
+      before_script: skip
       script: ls -al ~/$TRAVIS_BUILD_NUMBER/
       after_success:
         - aws s3 rm --recursive s3://travis-build-stages-shared-storage-test/$TRAVIS_BUILD_NUMBER # clean up after ourselves
-
-after_failure:
-  - echo " === application logs ==="
-  - echo "travis_fold:start:logs"
-  - cat src/server/runtime/logs/app.log
-  - if [[ -f src/server/runtime/logs/error.log ]]; then cat src/server/runtime/logs/error.log; fi
-  - echo "travis_fold:end:logs"
-  - aws s3 rm --recursive s3://travis-build-stages-shared-storage-test/$TRAVIS_BUILD_NUMBER # clean up after ourselves
+      after_failure: skip

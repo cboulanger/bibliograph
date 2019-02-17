@@ -121,7 +121,7 @@ class BibtexUtf8 extends AbstractParser
             break;
           case "journalsubtitle":
             // BibLaTeX
-            continue;
+            continue 2;
           case "issue":
             // BibLaTeX
             unset($p[$key]);
@@ -138,7 +138,7 @@ class BibtexUtf8 extends AbstractParser
             // BibLaTeX
             // use journal abbreviation only if we have no journal title
             unset($p["shortjournal"]);
-            if( isset($p['journal'])) continue;
+            if( isset($p['journal'])) continue 2;
             $key = "journal";
             $p[$key]=$value;
             break;
