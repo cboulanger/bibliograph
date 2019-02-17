@@ -24,7 +24,7 @@ class Z3950Test extends \app\tests\unit\Base
    */
   public function testYaz()
   {
-    if ($_ENV["CI"]) {
+    if (isset($_ENV["TRAVIS"]) or isset($_SERVER['TRAVIS'])) {
       $this->markTestSkipped("Doesn't work on Travis...");
     }
     /** @var Module $module */
