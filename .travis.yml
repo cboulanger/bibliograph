@@ -17,10 +17,9 @@ stages:
   - name: docker
     if: (NOT type IN (pull_request))
   - name: deploy
-    if: (NOT type IN (pull_request)) AND ( branch = master OR tag =~ ^v[0-9] )
 
 before_install:
-  - echo "Installing prerequisites..."
+  - echo "travis_fold:start:install_prerequisites"
   - sudo apt-get update -qq
   - sudo apt-get install -y bibutils zip
   - PHPVERSION=$(phpenv version-name)
@@ -29,16 +28,16 @@ before_install:
   - sudo apt-get install -y yaz libyaz4-dev
   - pear channel-update pear.php.net && yes $'\n' | pecl install yaz && pear install Structures_LinkedList-0.2.2 && pear install File_MARC
   - if php -i | grep yaz --quiet && echo '<?php exit(function_exists("yaz_connect")?0:1);' | php ; then echo "YAZ is installed"; else echo "YAZ installation failed"; exit 1; fi;
-
-install:
-  - echo "travis_fold:start:npm_install"
-  - echo "Installing dependencies..."
-  - if [[ -f package-lock.json ]]; then rm package-lock.json; fi
-  - npm install
-  - echo "travis_fold:end:npm_install"
-  - echo "Installation scripts finished successufully."
   - mysql -e 'CREATE DATABASE IF NOT EXISTS tests;'
   - cp install/travis/app.conf.toml src/server/config
+  - if [[ -f package-lock.json ]]; then rm package-lock.json; fi
+  - echo "travis_fold:end:install_prerequisites"
+
+install:
+  - echo "travis_fold:start:install_dependencies"
+  - if [[ "$PHPVERSION" == "7.0" ]]; then export COMPOSER=$(pwd)/install/php7.0/composer.json; fi
+  - npm install
+  - echo "travis_fold:end:install_dependencies"
 
 script: skip
 
@@ -47,12 +46,14 @@ jobs:
     - stage: tests
       name: "Run unit and functional tests"
       php:
+        - "7.0"
         - "7.2"
         - "7.3"
       script: test/script/unit-functional.sh
     - # parallel
       name: "Run API tests using server"
       php:
+        - "7.0"
         - "7.2"
         - "7.3"
       script: test/script/api.sh
