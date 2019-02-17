@@ -1,9 +1,5 @@
 dist: trusty
 language: php
-php:
-#  - '7.0'
-  - '7.2'
-  - '7.3'
 
 services:
   - mysql
@@ -50,22 +46,32 @@ jobs:
   include:
     - stage: tests
       name: "Run unit and functional tests"
+      php:
+        - "7.2"
+        - "7.3"
       script: test/script/unit-functional.sh
     - # parallel
       name: "Run API tests using server"
       script: test/script/api.sh
+
     - stage: packaging
       name: "Create a distributable package"
-      script: npm run dist-create
+      script: npm run dist-build
+    - # php 7.0 legacy package
+      name: "Create a PHP7.0-compatible legacy package"
+      php: "7.0"
+      script: npm run dist-build-php70
+
     - stage: docker
       name: "Create a docker image and push it to the docker hub"
-      php: 7.2
+      php: "7.2"
       deploy:
         provider: script
         script: build/script/docker-push.sh
         skip_cleanup: true
         on:
           branch: master
+
     - stage: deploy
       name: "Deploy to demo server"
       script: build/script/deploy.sh

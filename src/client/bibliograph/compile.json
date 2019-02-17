@@ -15,13 +15,14 @@
   ],
   "applications": [
     {
-      "include": [
-        "bibliograph.plugins.*"
-      ],
       "title": "Bibliograph Bibliographic Data Manager",
       "name": "bibliograph",
       "theme": "bibliograph.theme.Theme",
-      "class": "bibliograph.Application"
+      "class": "bibliograph.Application",
+      "bootPath": "source/boot",
+      "include": [
+        "bibliograph.plugins.*"
+      ]
     }
   ],
   "locales": [
