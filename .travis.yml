@@ -5,6 +5,10 @@ services:
   - mysql
   - docker
 
+addons:
+  apt:
+    update: true
+
 cache:
   directories:
     - node_modules
@@ -14,13 +18,14 @@ cache:
 stages:
   - name: tests
   - name: packaging
+    if: (NOT type IN (pull_request))
   - name: docker
     if: (NOT type IN (pull_request))
   - name: deploy
+    if: (NOT type IN (pull_request))
 
 before_install:
   - echo "travis_fold:start:install_prerequisites"
-  - sudo apt-get update -qq
   - sudo apt-get install -y bibutils zip
   - PHPVERSION=$(phpenv version-name)
   - sudo add-apt-repository -y ppa:ondrej/php && sudo apt-get update
@@ -46,16 +51,16 @@ jobs:
     - stage: tests
       name: "Run unit and functional tests"
       php:
-        - "7.0"
         - "7.2"
         - "7.3"
+        - "7.0"
       script: test/script/unit-functional.sh
     - # parallel
       name: "Run API tests using server"
       php:
-        - "7.0"
         - "7.2"
         - "7.3"
+        - "7.0"
       script: test/script/api.sh
 
     - stage: packaging
