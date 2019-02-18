@@ -130,14 +130,15 @@ jobs:
         - git remote remove gh
         # get artifacts from s3
         - aws s3 sync s3://travis.panya.de/$TRAVIS_BUILD_NUMBER  ~/$TRAVIS_BUILD_NUMBER
+        - ls -al ~/$TRAVIS_BUILD_NUMBER
       deploy:
         provider: releases
         api-key: $GITHUB_TOKEN
         file_glob: true
-        file: ~/$TRAVIS_BUILD_NUMBER/*
+        file: "~/${TRAVIS_BUILD_NUMBER}/*"
         skip_cleanup: true
-        name: Development snapshot ($TRAVIS_BRANCH)
-        body: Automatic Bibliograph development build of branch '$TRAVIS_BRANCH' ($TRAVIS_COMMIT) built by Travis CI on $(date +'%F %T %Z').
+        name: "Development snapshot ($TRAVIS_BRANCH)"
+        body: "Automatic Bibliograph development build of branch '$TRAVIS_BRANCH' ($TRAVIS_COMMIT) built by Travis CI on $(date +'%F %T %Z')."
         prerelease: true
         overwrite: true
         target_commitish: $TRAVIS_COMMIT
