@@ -24,12 +24,13 @@ cache:
 
 stages:
   - name: tests
+    if: NOT tag =~ snapshot
   - name: packaging
-    if: (NOT type IN (pull_request))
+    if: (NOT type IN (pull_request) AND NOT tag =~ snapshot)
   - name: docker
-    if: (NOT type IN (pull_request))
+    if: (NOT type IN (pull_request) AND NOT tag =~ snapshot)
   - name: deployment
-    if: (NOT type IN (pull_request))
+    if: (NOT type IN (pull_request) AND NOT tag =~ snapshot)
 
 before_install:
   # Use aws to share artifacts between jobs
@@ -127,6 +128,8 @@ jobs:
         - git remote add gh https://${TRAVIS_REPO_SLUG%/*}:${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git
         - git push -f gh $TRAVIS_BRANCH-snapshot
         - git remote remove gh
+        # get artifacts from s3
+        - aws s3 sync s3://travis.panya.de/$TRAVIS_BUILD_NUMBER  ~/$TRAVIS_BUILD_NUMBER
       deploy:
         provider: releases
         api-key: $GITHUB_TOKEN
@@ -134,7 +137,7 @@ jobs:
         file: ~/$TRAVIS_BUILD_NUMBER/*
         skip_cleanup: true
         name: Development snapshot ($TRAVIS_BRANCH)
-        body: Automatic Bibliograph development build of $TRAVIS_BRANCH ($TRAVIS_COMMIT) built by Travis CI on $(date +'%F %T %Z').
+        body: Automatic Bibliograph development build of branch '$TRAVIS_BRANCH' ($TRAVIS_COMMIT) built by Travis CI on $(date +'%F %T %Z').
         prerelease: true
         overwrite: true
         target_commitish: $TRAVIS_COMMIT
