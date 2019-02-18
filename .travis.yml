@@ -120,7 +120,7 @@ jobs:
         - aws s3 rm --recursive s3://travis.panya.de/$TRAVIS_BUILD_NUMBER # clean up after ourselves
       after_failure: skip
     - # create release
-      name: "Release $TRAVIS_BRANCH on GitHub"
+      name: "Release branch snapshot on GitHub"
       before_deploy:
         # only ever have one release of a branch
         - git tag -f $TRAVIS_BRANCH
@@ -130,6 +130,7 @@ jobs:
       deploy:
         provider: releases
         api-key: $GITHUB_TOKEN
+        file_glob: true
         file: ~/$TRAVIS_BUILD_NUMBER/*
         skip_cleanup: true
         name: Development snapshot ($TRAVIS_BRANCH)
@@ -137,3 +138,7 @@ jobs:
         prerelease: true
         overwrite: true
         target_commitish: $TRAVIS_COMMIT
+        on:
+          branch:
+            - master
+            - develop
