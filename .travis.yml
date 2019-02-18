@@ -1,5 +1,7 @@
 dist: trusty
 language: php
+python: "2.8"
+php: "7.3"
 
 services:
   - mysql
@@ -74,7 +76,6 @@ jobs:
       script: npm test
     - #
       name: "PHP 7.3"
-      php: "7.3"
       script: npm test
     - #
       name: "PHP 7.0"
@@ -83,7 +84,6 @@ jobs:
 
     - stage: packaging
       name: "Create a distributable package"
-      php: "7.3"
       install: skip
       before_script: skip
       script: npm run dist-build && cp dist/*.zip ~/$TRAVIS_BUILD_NUMBER/
@@ -98,7 +98,6 @@ jobs:
     - # docker
       name: "Create a docker image and push it to the docker hub"
       services: docker
-      php: "7.2" # we don't really need that since we're building inside the docker image
       install: skip
       before_script: skip
       deploy:
@@ -111,7 +110,6 @@ jobs:
 
     - stage: deployment
       name: "Deploy to demo server"
-      php: "7.3"
       install: skip
       before_script: skip
       script: ls -al ~/$TRAVIS_BUILD_NUMBER/
