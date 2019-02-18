@@ -61,7 +61,7 @@ before_script:
 script: skip
 
 after_success:
-  - aws s3 sync ~/$TRAVIS_BUILD_NUMBER s3://travis.panya.de/$TRAVIS_BUILD_NUMBER 
+  - aws s3 sync ~/$TRAVIS_BUILD_NUMBER s3://travis.panya.de/$TRAVIS_BUILD_NUMBER
 
 after_failure:
   - echo " === application logs ==="
@@ -112,9 +112,9 @@ jobs:
     - stage: deployment
       name: "Deploy to demo server"
       install: skip
-      before_script: 
-        - aws s3 sync s3://travis.panya.de/$TRAVIS_BUILD_NUMBER  ~/$TRAVIS_BUILD_NUMBER 
-      script: 
+      before_script:
+        - aws s3 sync s3://travis.panya.de/$TRAVIS_BUILD_NUMBER  ~/$TRAVIS_BUILD_NUMBER
+      script:
         - ls -al ~/$TRAVIS_BUILD_NUMBER/
       after_success:
         - aws s3 rm --recursive s3://travis.panya.de/$TRAVIS_BUILD_NUMBER # clean up after ourselves
@@ -139,6 +139,4 @@ jobs:
         overwrite: true
         target_commitish: $TRAVIS_COMMIT
         on:
-          branch:
-            - master
-            - develop
+          all_branches: true
