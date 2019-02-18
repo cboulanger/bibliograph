@@ -89,13 +89,13 @@ jobs:
       name: "Create a distributable package"
       install: skip
       before_script: skip
-      script: npm run dist-build && cp dist/*.zip ~/$TRAVIS_BUILD_NUMBER/
+      script: npm run dist-build && cp dist/*.zip ~/$TRAVIS_BUILD_NUMBER/ && ls -al  ~/$TRAVIS_BUILD_NUMBER/
     - # php 7.0 legacy package
       name: "Create a PHP7.0-compatible legacy package"
       php: "7.0"
       install: skip
       before_script: skip
-      script: npm run dist-build-php70 && cp dist/*.zip ~/$TRAVIS_BUILD_NUMBER/
+      script: npm run dist-build-php70 && cp dist/*.zip ~/$TRAVIS_BUILD_NUMBER/  && ls -al  ~/$TRAVIS_BUILD_NUMBER/
     - # docker
       name: "Create a docker image and push it to the docker hub"
       services: docker
