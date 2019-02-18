@@ -120,14 +120,13 @@ jobs:
         - aws s3 rm --recursive s3://travis.panya.de/$TRAVIS_BUILD_NUMBER # clean up after ourselves
       after_failure: skip
     - # create release
-      name: "Release on GitHub"
+      name: "Release $TRAVIS_BRANCH on GitHub"
       before_deploy:
         # only ever have one release of a branch
         - git tag -f $TRAVIS_BRANCH
         - git remote add gh https://${TRAVIS_REPO_SLUG%/*}:${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git
         - git push -f gh $TRAVIS_BRANCH
         - git remote remove gh
-        - export 
       deploy:
         provider: releases
         api-key: $GITHUB_TOKEN
