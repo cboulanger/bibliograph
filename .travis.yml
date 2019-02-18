@@ -1,6 +1,8 @@
 dist: trusty
+
 language: php
-php: "7.3"
+
+php: '7.3'
 
 services:
   - mysql
@@ -9,52 +11,50 @@ addons:
   apt:
     update: true
     packages:
-      - zip
-
+    - zip
 env:
   global:
-    # include $HOME/.local/bin for `aws`
-    - PATH=$HOME/.local/bin:$PATH
+  - PATH=$HOME/.local/bin:$PATH
 
 cache:
   directories:
-    - node_modules
-    - $HOME/.composer/cache/files
-    - src/vcslib
+  - node_modules
+  - "$HOME/.composer/cache/files"
+  - src/vcslib
 
 stages:
   - name: tests
     if: NOT tag =~ snapshot
   - name: packaging
-    if: (NOT type IN (pull_request) AND NOT tag =~ snapshot)
+    if: "(NOT type IN (pull_request) AND NOT tag =~ snapshot)"
   - name: docker
-    if: (NOT type IN (pull_request) AND NOT tag =~ snapshot)
+    if: "(NOT type IN (pull_request) AND NOT tag =~ snapshot)"
   - name: deployment
-    if: (NOT type IN (pull_request) AND NOT tag =~ snapshot)
+    if: "(NOT type IN (pull_request) AND NOT tag =~ snapshot)"
 
 before_install:
-  # Use aws to share artifacts between jobs
+  # encrypted SSH key
+  - openssl aes-256-cbc -K $encrypted_1e529f9a6cb9_key -iv $encrypted_1e529f9a6cb9_iv
+    -in deploy_rsa.enc -out deploy_rsa -d
+  # AWS S3 support
   - pyenv shell 3.6 && pip install --upgrade pip
   - pip install --user awscli
   - mkdir -p ~/$TRAVIS_BUILD_NUMBER
-  # Installation prerequisites
-  #- sudo apt-get install -y bibutils zip
+  # PHP version
   - PHPVERSION=$(phpenv version-name)
   - sudo add-apt-repository -y ppa:ondrej/php && sudo apt-get update
   - sudo apt-get install -y php${PHPVERSION}-xsl php${PHPVERSION}-intl
 
 install:
-  # Runtime prerequisites
-  # Install YAZ for Z39.50
   - sudo apt-get install -y yaz libyaz4-dev bibutils
   - pear channel-update pear.php.net && yes $'\n' | pecl install yaz
-  - # pear channel-update pear.php.net && yes $'\n' | pecl install yaz && pear install Structures_LinkedList-0.2.2 && pear install File_MARC
-  - if php -i | grep yaz --quiet && echo '<?php exit(function_exists("yaz_connect")?0:1);' | php ; then echo "YAZ is installed"; else echo "YAZ installation failed"; exit 1; fi;
+  - if php -i | grep yaz --quiet && echo '<?php exit(function_exists("yaz_connect")?0:1);' | php ;
+    then echo "YAZ is installed";
+    else echo "YAZ installation failed"; exit 1; fi;
   - mysql -e 'CREATE DATABASE IF NOT EXISTS tests;'
   - cp install/travis/app.conf.toml src/server/config
 
 before_script:
-  # Dependencies
   - if [[ "$PHPVERSION" == "7.0" ]]; then export COMPOSER=$(pwd)/install/php7.0/composer.json; fi
   - if [[ -f package-lock.json ]]; then rm package-lock.json; fi
   - npm install
@@ -62,85 +62,80 @@ before_script:
 script: skip
 
 after_success:
-  - aws s3 sync ~/$TRAVIS_BUILD_NUMBER s3://travis.panya.de/$TRAVIS_BUILD_NUMBER
+- aws s3 sync ~/$TRAVIS_BUILD_NUMBER s3://travis.panya.de/$TRAVIS_BUILD_NUMBER
 
 after_failure:
-  - echo " === application logs ==="
-  - echo "travis_fold:start:logs"
-  - cat src/server/runtime/logs/app.log
-  - if [[ -f src/server/runtime/logs/error.log ]]; then cat src/server/runtime/logs/error.log; fi
-  - echo "travis_fold:end:logs"
-  - aws s3 rm --recursive s3://travis.panya.de/$TRAVIS_BUILD_NUMBER  # clean up after ourselves
+- echo " === application logs ==="
+- echo "travis_fold:start:logs"
+- cat src/server/runtime/logs/app.log
+- if [[ -f src/server/runtime/logs/error.log ]]; then cat src/server/runtime/logs/error.log;
+  fi
+- echo "travis_fold:end:logs"
+- aws s3 rm --recursive s3://travis.panya.de/$TRAVIS_BUILD_NUMBER
 
 jobs:
   include:
-    - stage: tests
-      name: "PHP 7.2"
-      php: "7.2"
-      script: npm test
-    - #
-      name: "PHP 7.3"
-      script: npm test
-    - #
-      name: "PHP 7.0"
-      php: "7.0"
-      script: npm test
+  - stage: tests
+    name: PHP 7.2
+    php: '7.2'
+    script: npm test
+  - name: PHP 7.3
+    script: npm test
+  - name: PHP 7.0
+    php: '7.0'
+    script: npm test
 
-    - stage: packaging
-      name: "Create a distributable package"
-      install: skip
-      before_script: skip
-      script: npm run dist-build && cp dist/*.zip ~/$TRAVIS_BUILD_NUMBER/ && ls -al  ~/$TRAVIS_BUILD_NUMBER/
-    - # php 7.0 legacy package
-      name: "Create a PHP7.0-compatible legacy package"
-      php: "7.0"
-      install: skip
-      before_script: skip
-      script: npm run dist-build-php70 && cp dist/*.zip ~/$TRAVIS_BUILD_NUMBER/  && ls -al  ~/$TRAVIS_BUILD_NUMBER/
-    - # docker
-      name: "Create a docker image and push it to the docker hub"
-      services: docker
-      install: skip
-      before_script: skip
-      deploy:
-        provider: script
-        script: build/script/docker-push.sh
-        skip_cleanup: true
-        on:
-          branch: master
-      after_failure: skip
+  - stage: packaging
+    name: Create a distributable package
+    install: skip
+    before_script: skip
+    script: npm run dist-build && cp dist/*.zip ~/$TRAVIS_BUILD_NUMBER/ && ls -al ~/$TRAVIS_BUILD_NUMBER/
+  - name: Create a PHP7.0-compatible legacy package
+    php: '7.0'
+    install: skip
+    before_script: skip
+    script: npm run dist-build-php70 && cp dist/*.zip ~/$TRAVIS_BUILD_NUMBER/ && ls -al  ~/$TRAVIS_BUILD_NUMBER/
+  - name: Create a docker image and push it to the docker hub
+    services: docker
+    install: skip
+    before_script: skip
+    deploy:
+      provider: script
+      script: build/script/docker-push.sh
+      skip_cleanup: true
+      on:
+        branch: master
+    after_failure: skip
 
-    - stage: deployment
-      name: "Deploy to demo server"
-      install: skip
-      before_script:
-        - aws s3 sync s3://travis.panya.de/$TRAVIS_BUILD_NUMBER  ~/$TRAVIS_BUILD_NUMBER
-      script:
-        - ls -al ~/$TRAVIS_BUILD_NUMBER/
-      after_success:
-        - aws s3 rm --recursive s3://travis.panya.de/$TRAVIS_BUILD_NUMBER # clean up after ourselves
-      after_failure: skip
-    - # create release
-      name: "Release branch snapshot on GitHub"
-      before_deploy:
-        # only ever have one release of a branch
-        - git tag -f $TRAVIS_BRANCH-snapshot
-        - git remote add gh https://${TRAVIS_REPO_SLUG%/*}:${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git
-        - git push -f gh $TRAVIS_BRANCH-snapshot
-        - git remote remove gh
-        # get artifacts from s3
-        - aws s3 sync s3://travis.panya.de/$TRAVIS_BUILD_NUMBER  ~/$TRAVIS_BUILD_NUMBER
-        - ls -al ~/$TRAVIS_BUILD_NUMBER
-      deploy:
-        provider: releases
-        api-key: $GITHUB_TOKEN
-        file_glob: true
-        file: "~/${TRAVIS_BUILD_NUMBER}/*"
-        skip_cleanup: true
-        name: "Development snapshot ($TRAVIS_BRANCH)"
-        body: "Automatic Bibliograph development build of branch '$TRAVIS_BRANCH' ($TRAVIS_COMMIT) built by Travis CI on $(date +'%F %T %Z')."
-        prerelease: true
-        overwrite: true
-        target_commitish: $TRAVIS_COMMIT
-        on:
-          all_branches: true
+  - stage: deployment
+    name: Deploy to demo server
+    install: skip
+    before_script:
+    - aws s3 sync s3://travis.panya.de/$TRAVIS_BUILD_NUMBER  ~/$TRAVIS_BUILD_NUMBER
+    script:
+    - ls -al ~/$TRAVIS_BUILD_NUMBER/
+    after_failure: skip
+  - name: Release branch snapshot on GitHub
+    before_deploy:
+    - git tag -f $TRAVIS_BRANCH-snapshot
+    - git remote add gh https://${TRAVIS_REPO_SLUG%/*}:${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git
+    - git push -f gh $TRAVIS_BRANCH-snapshot
+    - git remote remove gh
+    - aws s3 sync s3://travis.panya.de/$TRAVIS_BUILD_NUMBER  ~/$TRAVIS_BUILD_NUMBER
+    - ls -al ~/$TRAVIS_BUILD_NUMBER
+    deploy:
+      provider: releases
+      api-key: "$GITHUB_TOKEN"
+      file_glob: true
+      file: "~/${TRAVIS_BUILD_NUMBER}/*"
+      skip_cleanup: true
+      name: Development snapshot ($TRAVIS_BRANCH)
+      body: Automatic Bibliograph development build of branch '$TRAVIS_BRANCH' ($TRAVIS_COMMIT)
+        built by Travis CI on $(date +'%F %T %Z').
+      prerelease: true
+      overwrite: true
+      target_commitish: "$TRAVIS_COMMIT"
+      on:
+        all_branches: true
+    after_success:
+      - aws s3 rm --recursive s3://travis.panya.de/$TRAVIS_BUILD_NUMBER
