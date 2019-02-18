@@ -33,7 +33,8 @@ stages:
 
 before_install:
   # Use aws to share artifacts between jobs
-  - pip3 install --user awscli
+  - pyenv shell 3.6
+  - pip install --user awscli
   - mkdir -p ~/$TRAVIS_BUILD_NUMBER
   - aws s3 sync s3://travis-build-stages-shared-storage-test/$TRAVIS_BUILD_NUMBER ~/$TRAVIS_BUILD_NUMBER
   # Installation prerequisites
