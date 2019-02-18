@@ -13,7 +13,7 @@ if [[ "$DEPLOY_TARGET" == "" ]]; then
 fi
 
 echo
-echo "This will deploy the current code of bibliograph to the following target:"
+echo "This will deploy the code in 'dist' to the following target:"
 echo "   Server:           $DEPLOY_TARGET"
 echo "   Path:             $TARGET_DIR"
 echo "   Config file used: $CONFIG_FILE"
