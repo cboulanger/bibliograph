@@ -33,10 +33,9 @@ stages:
 
 before_install:
   # Use aws to share artifacts between jobs
-  - pyenv shell 3.6
+  - pyenv shell 3.6 && pip install --upgrade pip
   - pip install --user awscli
   - mkdir -p ~/$TRAVIS_BUILD_NUMBER
-  - aws s3 sync s3://travis-build-stages-shared-storage-test/$TRAVIS_BUILD_NUMBER ~/$TRAVIS_BUILD_NUMBER
   # Installation prerequisites
   #- sudo apt-get install -y bibutils zip
   - PHPVERSION=$(phpenv version-name)
@@ -61,6 +60,9 @@ before_script:
 
 script: skip
 
+after_success:
+  - aws s3 sync s3://travis-build-stages-shared-storage-test/$TRAVIS_BUILD_NUMBER ~/$TRAVIS_BUILD_NUMBER
+
 after_failure:
   - echo " === application logs ==="
   - echo "travis_fold:start:logs"
@@ -68,7 +70,6 @@ after_failure:
   - if [[ -f src/server/runtime/logs/error.log ]]; then cat src/server/runtime/logs/error.log; fi
   - echo "travis_fold:end:logs"
   - aws s3 rm --recursive s3://travis-build-stages-shared-storage-test/$TRAVIS_BUILD_NUMBER # clean up after ourselves
-
 
 jobs:
   include:
@@ -89,14 +90,12 @@ jobs:
       install: skip
       before_script: skip
       script: npm run dist-build && cp dist/*.zip ~/$TRAVIS_BUILD_NUMBER/
-      after_failure: skip
     - # php 7.0 legacy package
       name: "Create a PHP7.0-compatible legacy package"
       php: "7.0"
       install: skip
       before_script: skip
       script: npm run dist-build-php70 && cp dist/*.zip ~/$TRAVIS_BUILD_NUMBER/
-      after_failure: skip
     - # docker
       name: "Create a docker image and push it to the docker hub"
       services: docker
