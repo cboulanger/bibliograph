@@ -42,7 +42,7 @@
     "docker-start": "build/script/docker-run.sh",
     "docker-all": "npm run dist-create && npm run docker-build && npm run docker-start",
     "docker-clean": "docker container prune && docker image prune",
-    "deploy": "build/script/deploy"
+    "deploy": "build/script/deploy.sh $1 $2 $3"
   },
   "author": "",
   "license": "ISC",

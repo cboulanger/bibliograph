@@ -30,7 +30,7 @@ esac
 PARENT_DIR=$(dirname $TARGET_DIR)
 ssh $DEPLOY_TARGET mkdir -p $TARGET_DIR
 scp dist/*.zip $DEPLOY_TARGET:$PARENT_DIR/bibliograph.zip
-ssh $DEPLOY_TARGET unzip -qq -u $PARENT_DIR/bibliograph.zip -d $TARGET_DIR
+ssh $DEPLOY_TARGET unzip -o -qq -u $PARENT_DIR/bibliograph.zip -d $TARGET_DIR
 [ -f $CONFIG_FILE ] && scp $CONFIG_FILE $DEPLOY_TARGET:$TARGET_DIR/server/config/app.conf.toml
 # chmod -R 0755 + chown -R www-data
 ssh $DEPLOY_TARGET chmod -R 0777 $TARGET_DIR/server/runtime

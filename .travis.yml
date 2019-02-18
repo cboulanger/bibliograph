@@ -33,7 +33,7 @@ stages:
 
 before_install:
   # Use aws to share artifacts between jobs
-  - sudo add-apt-repository ppa:fkrull/deadsnakes-python2.7 && sudo apt-get update
+  - apt-get install python3
   - pip install --user awscli
   - mkdir -p ~/$TRAVIS_BUILD_NUMBER
   - aws s3 sync s3://travis-build-stages-shared-storage-test/$TRAVIS_BUILD_NUMBER ~/$TRAVIS_BUILD_NUMBER
