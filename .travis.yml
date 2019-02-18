@@ -1,6 +1,5 @@
 dist: trusty
 language: php
-python: "2.8"
 php: "7.3"
 
 services:
@@ -9,6 +8,9 @@ services:
 addons:
   apt:
     update: true
+    packages:
+      - python2.8
+      - zip
 
 env:
   global:
@@ -36,7 +38,7 @@ before_install:
   - mkdir -p ~/$TRAVIS_BUILD_NUMBER
   - aws s3 sync s3://travis-build-stages-shared-storage-test/$TRAVIS_BUILD_NUMBER ~/$TRAVIS_BUILD_NUMBER
   # Installation prerequisites
-  - sudo apt-get install -y bibutils zip
+  #- sudo apt-get install -y bibutils zip
   - PHPVERSION=$(phpenv version-name)
   - sudo add-apt-repository -y ppa:ondrej/php && sudo apt-get update
   - sudo apt-get install -y php${PHPVERSION}-xsl php${PHPVERSION}-intl
@@ -44,7 +46,7 @@ before_install:
 install:
   # Runtime prerequisites
   # Install YAZ for Z39.50
-  - sudo apt-get install -y yaz libyaz4-dev
+  - sudo apt-get install -y yaz libyaz4-dev bibutils
   - pear channel-update pear.php.net && yes $'\n' | pecl install yaz
   - # pear channel-update pear.php.net && yes $'\n' | pecl install yaz && pear install Structures_LinkedList-0.2.2 && pear install File_MARC
   - if php -i | grep yaz --quiet && echo '<?php exit(function_exists("yaz_connect")?0:1);' | php ; then echo "YAZ is installed"; else echo "YAZ installation failed"; exit 1; fi;
