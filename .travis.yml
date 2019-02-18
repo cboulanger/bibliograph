@@ -112,8 +112,10 @@ jobs:
     - stage: deployment
       name: "Deploy to demo server"
       install: skip
-      before_script: skip
-      script: ls -al ~/$TRAVIS_BUILD_NUMBER/
+      before_script: 
+        - aws s3 sync s3://travis-build-stages-shared-storage-test/$TRAVIS_BUILD_NUMBER ~/$TRAVIS_BUILD_NUMBER 
+      script: 
+        - ls -al ~/$TRAVIS_BUILD_NUMBER/
       after_success:
         - aws s3 rm --recursive s3://travis-build-stages-shared-storage-test/$TRAVIS_BUILD_NUMBER # clean up after ourselves
       after_failure: skip
