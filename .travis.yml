@@ -123,9 +123,9 @@ jobs:
       name: "Release branch snapshot on GitHub"
       before_deploy:
         # only ever have one release of a branch
-        - git tag -f $TRAVIS_BRANCH
+        - git tag -f $TRAVIS_BRANCH-snapshot
         - git remote add gh https://${TRAVIS_REPO_SLUG%/*}:${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git
-        - git push -f gh $TRAVIS_BRANCH
+        - git push -f gh $TRAVIS_BRANCH-snapshot
         - git remote remove gh
       deploy:
         provider: releases
