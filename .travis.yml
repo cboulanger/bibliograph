@@ -77,7 +77,7 @@ jobs:
       - cp dist/*.zip ~/uploads
     after_success:
       - ls -al ~/uploads
-      - aws s3 sync ~/uploads/* s3://travis.panya.de/$TRAVIS_BUILD_NUMBER
+      - aws s3 sync ~/uploads s3://travis.panya.de/$TRAVIS_BUILD_NUMBER
 
   - name: Create a PHP7.0-compatible legacy package
     php: '7.0'
@@ -89,7 +89,7 @@ jobs:
       - cp dist/*.zip ~/uploads
     after_success:
       - ls -al ~/uploads
-      - aws s3 sync ~/uploads/* s3://travis.panya.de/$TRAVIS_BUILD_NUMBER
+      - aws s3 sync ~/uploads s3://travis.panya.de/$TRAVIS_BUILD_NUMBER
 
   - stage: docker
     name: Create a docker image and push it to the docker hub
@@ -116,8 +116,9 @@ jobs:
     install:
       - pip install --user awscli
     before_deploy:
-      - aws s3 sync s3://travis.panya.de/$TRAVIS_BUILD_NUMBER $TRAVIS_BUILD_DIR
-      - ls -al $TRAVIS_BUILD_DIR/*.zip
+      - aws s3 sync s3://travis.panya.de/$TRAVIS_BUILD_NUMBER ~/uploads
+      - ls -al ~/uploads
+      - cp ~/uploads/* $TRAVIS_BUILD_DIR
       - install/travis/script/tag-snapshot.sh
     deploy:
       provider: releases
