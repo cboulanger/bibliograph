@@ -88,8 +88,6 @@ jobs:
   - stage: docker
     name: Create a docker image and push it to the docker hub
     services: docker
-    install: skip
-    before_script: skip
     deploy:
       provider: script
       script: build/script/docker-push.sh
@@ -111,7 +109,7 @@ jobs:
     install:
       - pip install --user awscli
     before_deploy:
-      - aws s3 sync s3://travis.panya.de/$TRAVIS_BUILD_NUMBER ~/uploads && ls -al ~/uploads
+      - aws s3 sync s3://travis.panya.de/$TRAVIS_BUILD_NUMBER $TRAVIS_BUILD_DIR && ls -al $TRAVIS_BUILD_DIR/*.zip
       - install/travis/script/tag-snapshot.sh
     deploy:
       provider: releases
@@ -123,7 +121,7 @@ jobs:
       prerelease: true
       file_glob: true
       file:
-        - '~/uploads/*.*'
+        - "*.zip"
       skip_cleanup: true
       overwrite: true
       on:
