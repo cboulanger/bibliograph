@@ -116,9 +116,9 @@ jobs:
     install: skip
     before_script:
       # download built packages
-      - aws s3 sync s3://travis.panya.de/$TRAVIS_BUILD_NUMBER  ~/$TRAVIS_BUILD_NUMBER
-      - ls -al ~/$TRAVIS_BUILD_NUMBER/
-      # decrypt SSH deployment data
+      - aws s3 sync s3://travis.panya.de/$TRAVIS_BUILD_NUMBER  ~/uploads
+      - ls -al ~/uploads
+      # decrypt and use deployment SSH config
       - openssl aes-256-cbc -K $encrypted_f52210703301_key -iv $encrypted_f52210703301_iv -in install/travis/deploy_secrets.tar.enc -out deploy_secrets.tar -d
       - tar xvf deploy_secrets.tar
       - eval "$(ssh-agent -s)"
@@ -128,7 +128,18 @@ jobs:
       - rm -f ./deploy_*
       - ssh-add ~/.ssh/deploy_rsa
     script:
-      - yes | build/script/deploy.sh demoserver ~/public_html/travis/$TRAVIS_BRANCH/ /var/www/bibliograph/server/config/app.conf.toml
+      - TARGET_DIR=~/public_html/travis/$TRAVIS_BRANCH/
+      - PARENT_DIR=$(dirname $TARGET_DIR)
+      - CONFIG_FILE=/var/www/bibliograph/server/config/app.conf.toml
+      - echo " >>> Copying files..."
+      - ssh demoserver mkdir -p $TARGET_DIR
+      - scp ~/uploads/*.zip demoserver:$PARENT_DIR/bibliograph.zip
+      - echo " >>> Deploying to target directory..."
+      - ssh demoserver unzip -o -qq -u $PARENT_DIR/bibliograph.zip -d $TARGET_DIR
+      - ssh demoserver cp $CONFIG_FILE $TARGET_DIR/server/config/
+      - ssh demoserver chmod -R 0777 $TARGET_DIR/server/runtime
+      - ssh demoserver rm $PARENT_DIR/bibliograph.zip
+      - echo "Done."
     after_failure: skip
 
   - name: Release branch snapshot on GitHub
@@ -136,24 +147,23 @@ jobs:
       # download built packages
       - aws s3 sync s3://travis.panya.de/$TRAVIS_BUILD_NUMBER  ~/uploads
       - ls -al ~/uploads
-      # tag branch snapshot
-      - git tag -f $TRAVIS_BRANCH-snapshot
-      - git remote add gh https://${TRAVIS_REPO_SLUG%/*}:${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git
-      - git push -f gh $TRAVIS_BRANCH-snapshot
-      - git remote remove gh
+      # only ever have one snapshot release of each branch
+      - git tag -f $TRAVIS_BRANCH-snapshot-$TRAVIS_BUILD_NUMBER
+      #- git remote add gh https://${TRAVIS_REPO_SLUG%/*}:${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git
+      #- git push -f gh $TRAVIS_BRANCH-snapshot
+      #- git remote remove gh
     deploy:
       provider: releases
       api-key: "$GITHUB_TOKEN"
-      #file_glob: true
-      file:
-       - "~/uploads/bibliograph-3.0.0-beta.78-develop-travis-426-php7.0.zip"
       skip_cleanup: true
+      target_commitish: "$TRAVIS_COMMIT"
       name: Development snapshot ($TRAVIS_BRANCH)
       body: Automatic Bibliograph development build of branch '$TRAVIS_BRANCH' ($TRAVIS_COMMIT)
         built by Travis CI on $(date +'%F %T %Z'), build number $TRAVIS_BUILD_NUMBER.
       prerelease: true
+      file_glob: true
+      file: "~/uploads/*"
       overwrite: true
-      target_commitish: "$TRAVIS_COMMIT"
       on:
         all_branches: true
     after_failure: skip
