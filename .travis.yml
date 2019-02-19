@@ -26,13 +26,13 @@ stages:
   - name: tests
     if: "(NOT tag =~ snapshot AND NOT commit_message =~ /skip tests/)"
   - name: packaging
-    if: "(NOT type IN (pull_request) AND NOT tag =~ snapshot)"
+    if: "(NOT type IN (pull_request) AND NOT tag =~ snapshot AND NOT commit_message =~ /tests only/)"
   - name: docker
-    if: "(NOT type IN (pull_request) AND NOT tag =~ snapshot)"
+    if: "(NOT type IN (pull_request) AND NOT tag =~ snapshot AND NOT commit_message =~ /(skip docker|tests only/)"
   - name: deployment
-    if: "(NOT type IN (pull_request) AND NOT tag =~ snapshot)"
+    if: "(NOT type IN (pull_request) AND NOT tag =~ snapshot AND NOT commit_message =~ /(skip deploy|tests only/)"
   - name: cleanup
-    if: "(NOT type IN (pull_request) AND NOT tag =~ snapshot)"
+    if: "(NOT type IN (pull_request) AND NOT tag =~ snapshot AND NOT commit_message =~ /(skip cleanup|tests only/)"
 
 before_install:
   # AWS S3 support
@@ -124,7 +124,7 @@ jobs:
       - ssh-add ./deploy_rsa
       - echo -e "Host $SERVER_IP_ADDRESS\n\tStrictHostKeyChecking no\n" >> ./deploy_config
     script:
-      - ssh -vvv -F ./deploy_config demoserver pwd
+      - ssh -v -F ./deploy_config demoserver pwd
     after_failure: skip
 
   - name: Release branch snapshot on GitHub
