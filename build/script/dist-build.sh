@@ -9,12 +9,15 @@ DIST_DIR=$TOP_DIR/dist
 CLIENT_SRC_DIR=$TOP_DIR/src/client/bibliograph
 SERVER_SRC_DIR=$TOP_DIR/src/server
 VERSION=$(node -p -e "require('$TOP_DIR/package.json').version")
+PHPVERSION=$(php -r "echo substr(phpversion(),0,3);")
+ZIP_NAME=bibliograph-${VERSION}-php${PHPVERSION}.zip
+TRAVIS_BRANCH=${TRAVIS_BRANCH:-""}
+
 if [[ "$TRAVIS_BRANCH" != "" ]]; then
   VERSION="${TRAVIS_BRANCH}-snapshot"
 fi
-PHPVERSION=$(php -r "echo substr(phpversion(),0,3);")
-QX_CMD=$(which qx)
 
+QX_CMD=$(which qx)
 if [[ ! -d "$DIST_DIR" ]]; then
     echo "Cannot find 'dist' subdirectory - are you in the top folder?"
 fi
@@ -69,7 +72,7 @@ echo " >>> Creating ZIP file ..."
 cd $DIST_DIR
 # remove git folders
 ( find . -type d -name ".git" ) | xargs rm -rf
-zip -q -r bibliograph-$VERSION-php${PHPVERSION}.zip *
+zip -q -r $ZIP_NAME *
 ls -al
 echo "Done."
 exit 0
