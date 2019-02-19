@@ -31,7 +31,7 @@ stages:
     if: "(NOT type IN (pull_request) AND NOT tag =~ snapshot)"
   - name: deployment
     if: "(NOT type IN (pull_request) AND NOT tag =~ snapshot)"
-  - name: cleanup_artifacts
+#- name: cleanup_artifacts
 
 before_install:
   # AWS S3 support
