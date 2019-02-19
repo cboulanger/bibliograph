@@ -35,6 +35,7 @@ stages:
     if: "(NOT type IN (pull_request) AND NOT tag =~ snapshot AND NOT commit_message =~ /(skip cleanup|tests only)/)"
 
 before_install:
+  # Deploy-time dependencies (AWS, PHP)
   # AWS S3 support
   - pyenv shell 3.6 && pip install --upgrade pip
   - pip install --user awscli
@@ -45,6 +46,7 @@ before_install:
   - sudo apt-get install -y php${PHPVERSION}-xsl php${PHPVERSION}-intl
 
 install:
+  # Runtime dependecies (YAZ, bibutils)
   - sudo apt-get install -y yaz libyaz4-dev bibutils
   - pear channel-update pear.php.net && yes $'\n' | pecl install yaz
   - if php -i | grep yaz --quiet && echo '<?php exit(function_exists("yaz_connect")?0:1);' | php ;
@@ -54,6 +56,7 @@ install:
   - cp install/travis/app.conf.toml src/server/config
 
 before_script:
+  # Compile-time dependencies (Composer, NPM)
   - if [[ "$PHPVERSION" == "7.0" ]]; then export COMPOSER=$(pwd)/install/php7.0/composer.json; fi
   - if [[ -f package-lock.json ]]; then rm package-lock.json; fi
   - npm install
@@ -84,7 +87,6 @@ jobs:
   - stage: packaging
     name: Create a distributable package
     install: skip
-    before_script: skip
     script: npm run dist-build && cp dist/*.zip ~/$TRAVIS_BUILD_NUMBER/ && ls -al ~/$TRAVIS_BUILD_NUMBER/
     after_success:
       - aws s3 sync ~/$TRAVIS_BUILD_NUMBER s3://travis.panya.de/$TRAVIS_BUILD_NUMBER
@@ -92,7 +94,6 @@ jobs:
   - name: Create a PHP7.0-compatible legacy package
     php: '7.0'
     install: skip
-    before_script: skip
     script: npm run dist-build-php70 && cp dist/*.zip ~/$TRAVIS_BUILD_NUMBER/ && ls -al  ~/$TRAVIS_BUILD_NUMBER/
     after_success:
       - aws s3 sync ~/$TRAVIS_BUILD_NUMBER s3://travis.panya.de/$TRAVIS_BUILD_NUMBER
