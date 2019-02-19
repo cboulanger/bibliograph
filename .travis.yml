@@ -37,6 +37,7 @@ stages:
 before_install:
   - mkdir -p ~/uploads
   - install/travis/script/install-php.sh
+  - pyenv shell 3.6 && pip install --upgrade pip
 
 script: skip
 
@@ -70,19 +71,19 @@ jobs:
     name: Create a distributable package
     install:
       - install/travis/script/install-compile-deps.sh
-      - install/travis/script/install-aws.sh
+      - pip install --user awscli
     script: npm run dist-build
     after_success:
-      - aws s3 sync dist/* s3://travis.panya.de/$TRAVIS_BUILD_NUMBER
+      - aws s3 sync dist/*.zip s3://travis.panya.de/$TRAVIS_BUILD_NUMBER
 
   - name: Create a PHP7.0-compatible legacy package
     php: '7.0'
     install:
       - install/travis/script/install-compile-deps.sh
-      - install/travis/script/install-aws.sh
+      - pip install --user awscli
     script: npm run dist-build-php70
     after_success:
-      - aws s3 sync dist/* s3://travis.panya.de/$TRAVIS_BUILD_NUMBER
+      - aws s3 sync dist/*.zip s3://travis.panya.de/$TRAVIS_BUILD_NUMBER
 
   - stage: docker
     name: Create a docker image and push it to the docker hub
@@ -95,20 +96,20 @@ jobs:
       skip_cleanup: true
       on:
         branch: master
-    after_failure: skip
 
   - stage: deployment
     name: Deploy to demo server
     skip_cleanup: true
     install:
-      - install/travis/script/install-aws.sh
+      - pip install --user awscli
       - install/travis/script/ssh-config.sh
-    before_script: aws s3 sync s3://travis.panya.de/$TRAVIS_BUILD_NUMBER ~/uploads && ls -al ~/uploads
+    before_script:
+      - aws s3 sync s3://travis.panya.de/$TRAVIS_BUILD_NUMBER ~/uploads && ls -al ~/uploads
     script: install/travis/script/deploy-demo.sh
 
   - name: Release branch snapshot on GitHub
     install:
-      - install/travis/script/install-aws.sh
+      - pip install --user awscli
     before_deploy:
       - aws s3 sync s3://travis.panya.de/$TRAVIS_BUILD_NUMBER ~/uploads && ls -al ~/uploads
       - install/travis/script/tag-snapshot.sh
@@ -122,13 +123,13 @@ jobs:
       prerelease: true
       file_glob: true
       file:
-        - '~/uploads/*.zip'
+        - '~/uploads/*.*'
       skip_cleanup: true
       overwrite: true
       on:
         all_branches: true
-    after_failure: skip
 
   - stage: cleanup
     name: "Cleanup built artifacts"
+    install: pip install --user awscli
     script: aws s3 rm --recursive s3://travis.panya.de/$TRAVIS_BUILD_NUMBER
