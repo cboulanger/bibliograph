@@ -10,7 +10,7 @@ CLIENT_SRC_DIR=$TOP_DIR/src/client/bibliograph
 SERVER_SRC_DIR=$TOP_DIR/src/server
 VERSION=$(node -p -e "require('$TOP_DIR/package.json').version")
 if [[ "$TRAVIS_BRANCH" != "" ]]; then
-  VERSION="$VERSION-${TRAVIS_BRANCH}-travis-${TRAVIS_BUILD_NUMBER}"
+  VERSION="${TRAVIS_BRANCH}-snapshot"
 fi
 PHPVERSION=$(php -r "echo substr(phpversion(),0,3);")
 QX_CMD=$(which qx)
