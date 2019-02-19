@@ -145,7 +145,7 @@ jobs:
       skip_cleanup: true
       name: Development snapshot ($TRAVIS_BRANCH)
       body: Automatic Bibliograph development build of branch '$TRAVIS_BRANCH' ($TRAVIS_COMMIT)
-        built by Travis CI on $(date +'%F %T %Z').
+        built by Travis CI on $(date +'%F %T %Z'), build number $TRAVIS_BUILD_NUMBER.
       prerelease: true
       overwrite: true
       target_commitish: "$TRAVIS_COMMIT"
