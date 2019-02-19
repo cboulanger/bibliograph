@@ -114,9 +114,9 @@ jobs:
   - stage: deployment
     name: Deploy to demo server
     install: skip
+    skip_cleanup: true
     before_script:
       - aws s3 sync s3://travis.panya.de/$TRAVIS_BUILD_NUMBER  ~/uploads
-      - ls -al ~/uploads
       - install/travis/script/ssh-config.sh
     script:
       - install/travis/script/deploy-demo.sh
@@ -145,6 +145,8 @@ jobs:
 
   - stage: cleanup
     name: "Cleanup built artifacts"
+    install: skip
+    before_script: skip
     script:
       - aws s3 rm --recursive s3://travis.panya.de/$TRAVIS_BUILD_NUMBER
     after_failure: skip
