@@ -10,12 +10,13 @@ CLIENT_SRC_DIR=$TOP_DIR/src/client/bibliograph
 SERVER_SRC_DIR=$TOP_DIR/src/server
 VERSION=$(node -p -e "require('$TOP_DIR/package.json').version")
 PHPVERSION=$(php -r "echo substr(phpversion(),0,3);")
-ZIP_NAME=bibliograph-${VERSION}-php${PHPVERSION}.zip
 TRAVIS_BRANCH=${TRAVIS_BRANCH:-""}
-
 if [[ "$TRAVIS_BRANCH" != "" ]]; then
-  VERSION="${TRAVIS_BRANCH}-snapshot"
+  ZIP_NAME=bibliograph-${TRAVIS_BRANCH}-snapshot-php${PHPVERSION}.zip
+else
+  ZIP_NAME=bibliograph-${VERSION}-php${PHPVERSION}.zip
 fi
+
 
 QX_CMD=$(which qx)
 if [[ ! -d "$DIST_DIR" ]]; then
