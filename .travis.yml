@@ -72,18 +72,24 @@ jobs:
     install:
       - install/travis/script/install-compile-deps.sh
       - pip install --user awscli
-    script: npm run dist-build
+    script:
+      - npm run dist-build
+      - cp dist/*.zip ~/uploads
     after_success:
-      - aws s3 sync dist/*.zip s3://travis.panya.de/$TRAVIS_BUILD_NUMBER
+      - ls -al ~/uploads
+      - aws s3 sync ~/uploads/* s3://travis.panya.de/$TRAVIS_BUILD_NUMBER
 
   - name: Create a PHP7.0-compatible legacy package
     php: '7.0'
     install:
       - install/travis/script/install-compile-deps.sh
       - pip install --user awscli
-    script: npm run dist-build-php70
+    script:
+      - npm run dist-build-php70
+      - cp dist/*.zip ~/uploads
     after_success:
-      - aws s3 sync dist/*.zip s3://travis.panya.de/$TRAVIS_BUILD_NUMBER
+      - ls -al ~/uploads
+      - aws s3 sync ~/uploads/* s3://travis.panya.de/$TRAVIS_BUILD_NUMBER
 
   - stage: docker
     name: Create a docker image and push it to the docker hub
