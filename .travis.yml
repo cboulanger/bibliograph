@@ -108,14 +108,16 @@ jobs:
       - pip install --user awscli
       - install/travis/script/ssh-config.sh
     before_script:
-      - aws s3 sync s3://travis.panya.de/$TRAVIS_BUILD_NUMBER ~/uploads && ls -al ~/uploads
+      - aws s3 sync s3://travis.panya.de/$TRAVIS_BUILD_NUMBER ~/uploads
+      - ls -al $TRAVIS_BUILD_DIR/*.zip
     script: install/travis/script/deploy-demo.sh
 
   - name: Release branch snapshot on GitHub
     install:
       - pip install --user awscli
     before_deploy:
-      - aws s3 sync s3://travis.panya.de/$TRAVIS_BUILD_NUMBER $TRAVIS_BUILD_DIR && ls -al $TRAVIS_BUILD_DIR/*.zip
+      - aws s3 sync s3://travis.panya.de/$TRAVIS_BUILD_NUMBER $TRAVIS_BUILD_DIR
+      - ls -al $TRAVIS_BUILD_DIR/*.zip
       - install/travis/script/tag-snapshot.sh
     deploy:
       provider: releases
