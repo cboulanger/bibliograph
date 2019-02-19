@@ -38,7 +38,7 @@ before_install:
   # AWS S3 support
   - pyenv shell 3.6 && pip install --upgrade pip
   - pip install --user awscli
-  - mkdir -p ~/$TRAVIS_BUILD_NUMBER
+  - mkdir -p ~/uploads
   # PHP version
   - PHPVERSION=$(phpenv version-name)
   - sudo add-apt-repository -y ppa:ondrej/php && sudo apt-get update
@@ -134,8 +134,9 @@ jobs:
       body: Automatic Bibliograph development build of branch '$TRAVIS_BRANCH' ($TRAVIS_COMMIT)
         built by Travis CI on $(date +'%F %T %Z'), build number $TRAVIS_BUILD_NUMBER.
       prerelease: true
-      file: "~/uploads/*"
       file_glob: true
+      file:
+        - '~/uploads/*.zip'
       skip_cleanup: true
       overwrite: true
       on:
