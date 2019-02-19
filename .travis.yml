@@ -130,8 +130,8 @@ jobs:
   - name: Release branch snapshot on GitHub
     before_deploy:
       # download built packages
-      - aws s3 sync s3://travis.panya.de/$TRAVIS_BUILD_NUMBER  ~/$TRAVIS_BUILD_NUMBER
-      - ls -al ~/$TRAVIS_BUILD_NUMBER
+      - aws s3 sync s3://travis.panya.de/$TRAVIS_BUILD_NUMBER  ~/uploads
+      - ls -al ~/uploads
       # tag branch snapshot
       - git tag -f $TRAVIS_BRANCH-snapshot
       - git remote add gh https://${TRAVIS_REPO_SLUG%/*}:${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git
@@ -141,7 +141,7 @@ jobs:
       provider: releases
       api-key: "$GITHUB_TOKEN"
       file_glob: true
-      file: "~/${TRAVIS_BUILD_NUMBER}/*"
+      file: ~/uploads/*
       skip_cleanup: true
       name: Development snapshot ($TRAVIS_BRANCH)
       body: Automatic Bibliograph development build of branch '$TRAVIS_BRANCH' ($TRAVIS_COMMIT)
