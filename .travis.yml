@@ -124,7 +124,7 @@ jobs:
       - ssh-add ./deploy_rsa
       - echo -e "Host $SERVER_IP_ADDRESS\n\tStrictHostKeyChecking no\n" >> ./deploy_config
     script:
-      - ssh -F ./deploy_config demoserver pwd
+      - ssh -vvv -F ./deploy_config demoserver pwd
     after_failure: skip
 
   - name: Release branch snapshot on GitHub
