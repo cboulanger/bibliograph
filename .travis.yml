@@ -31,7 +31,7 @@ stages:
     if: "(NOT type IN (pull_request) AND NOT tag =~ snapshot)"
   - name: deployment
     if: "(NOT type IN (pull_request) AND NOT tag =~ snapshot)"
-  - name: cleanup
+  - name: cleanup_artifacts
 
 before_install:
   # AWS S3 support
@@ -152,7 +152,7 @@ jobs:
         all_branches: true
     after_failure: skip
 
-  - stage: cleanup
+  - stage: cleanup_artifacts
     name: "Cleanup built artifacts"
     script:
       - aws s3 rm --recursive s3://travis.panya.de/$TRAVIS_BUILD_NUMBER
