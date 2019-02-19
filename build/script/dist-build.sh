@@ -17,7 +17,6 @@ else
   ZIP_NAME=bibliograph-${VERSION}-php${PHPVERSION}.zip
 fi
 
-
 QX_CMD=$(which qx)
 if [[ ! -d "$DIST_DIR" ]]; then
     echo "Cannot find 'dist' subdirectory - are you in the top folder?"

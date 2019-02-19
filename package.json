@@ -47,12 +47,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "eslint-config-qx": "^0.2.4",
-    "qooxdoo-sdk": "^6.0.0-alpha-20190123-d23cc37",
-    "qxcompiler": "^0.2.52",
+    "qooxdoo-sdk": "^6.0.0-alpha-20190215-0937f6c",
+    "qxcompiler": "^0.2.73",
     "raptor-client": "github:cboulanger/raptor-client"
   },
   "devDependencies": {
+    "eslint-config-qx": "^0.2.4",
     "array-equal": "^1.0.0",
     "dotenv": "^5.0.1",
     "eslint": "^4.16.0",
