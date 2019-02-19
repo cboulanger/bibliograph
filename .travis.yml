@@ -28,7 +28,7 @@ stages:
   - name: packaging
     if: "(NOT type IN (pull_request) AND NOT tag =~ snapshot AND NOT commit_message =~ /tests only/)"
   - name: docker
-    if: "(NOT type IN (pull_request) AND NOT tag =~ snapshot AND NOT commit_message =~ /(skip docker|tests only)/)"
+    if: "(branch = master AND NOT type IN (pull_request) AND NOT tag =~ snapshot AND NOT commit_message =~ /(skip docker|tests only)/)"
   - name: deployment
     if: "(NOT type IN (pull_request) AND NOT tag =~ snapshot AND NOT commit_message =~ /(skip deploy|tests only)/)"
   - name: cleanup
@@ -97,7 +97,9 @@ jobs:
     after_success:
       - aws s3 sync ~/$TRAVIS_BUILD_NUMBER s3://travis.panya.de/$TRAVIS_BUILD_NUMBER
     after_failure: skip
-  - name: Create a docker image and push it to the docker hub
+
+  - stage: docker
+    name: Create a docker image and push it to the docker hub
     services: docker
     install: skip
     before_script: skip
@@ -141,7 +143,7 @@ jobs:
       provider: releases
       api-key: "$GITHUB_TOKEN"
       file_glob: true
-      file: ~/uploads/*
+      file: ~/uploads/*.zip
       skip_cleanup: true
       name: Development snapshot ($TRAVIS_BRANCH)
       body: Automatic Bibliograph development build of branch '$TRAVIS_BRANCH' ($TRAVIS_COMMIT)
