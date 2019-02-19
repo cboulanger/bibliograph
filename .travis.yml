@@ -132,19 +132,18 @@ jobs:
       - git remote add gh https://${TRAVIS_REPO_SLUG%/*}:${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git
       - git push -f gh $TRAVIS_BRANCH-snapshot
       - git remote remove gh
-    skip_cleanup: true
     deploy:
       provider: releases
-      api-key: "$GITHUB_TOKEN"
+      api_key: "$GITHUB_TOKEN"
       target_commitish: "$TRAVIS_COMMIT"
       name: Development snapshot ($TRAVIS_BRANCH)
       body: Automatic Bibliograph development build of branch '$TRAVIS_BRANCH' ($TRAVIS_COMMIT)
         built by Travis CI on $(date +'%F %T %Z'), build number $TRAVIS_BUILD_NUMBER.
       prerelease: true
-      file_glob: true
       file: "~/uploads/*"
-      overwrite: true
+      file_glob: true
       skip_cleanup: true
+      overwrite: true
       on:
         all_branches: true
     after_failure: skip
