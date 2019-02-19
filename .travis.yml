@@ -28,11 +28,11 @@ stages:
   - name: packaging
     if: "(NOT type IN (pull_request) AND NOT tag =~ snapshot AND NOT commit_message =~ /tests only/)"
   - name: docker
-    if: "(NOT type IN (pull_request) AND NOT tag =~ snapshot AND NOT commit_message =~ /(skip docker|tests only/)"
+    if: "(NOT type IN (pull_request) AND NOT tag =~ snapshot AND NOT commit_message =~ /(skip docker|tests only)/)"
   - name: deployment
-    if: "(NOT type IN (pull_request) AND NOT tag =~ snapshot AND NOT commit_message =~ /(skip deploy|tests only/)"
+    if: "(NOT type IN (pull_request) AND NOT tag =~ snapshot AND NOT commit_message =~ /(skip deploy|tests only)/)"
   - name: cleanup
-    if: "(NOT type IN (pull_request) AND NOT tag =~ snapshot AND NOT commit_message =~ /(skip cleanup|tests only/)"
+    if: "(NOT type IN (pull_request) AND NOT tag =~ snapshot AND NOT commit_message =~ /(skip cleanup|tests only)/)"
 
 before_install:
   # AWS S3 support
