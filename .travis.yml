@@ -150,7 +150,7 @@ jobs:
       overwrite: true
       target_commitish: "$TRAVIS_COMMIT"
       on:
-        all_branches: true
+        tags: true
     after_failure: skip
 
   - stage: cleanup
