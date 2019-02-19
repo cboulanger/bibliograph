@@ -122,11 +122,15 @@ jobs:
       - openssl aes-256-cbc -K $encrypted_f52210703301_key -iv $encrypted_f52210703301_iv -in install/travis/deploy_secrets.tar.enc -out deploy_secrets.tar -d
       - tar xvf deploy_secrets.tar
       - eval "$(ssh-agent -s)"
-      - chmod 600 ./deploy_rsa
-      - ssh-add ./deploy_rsa
-      - echo -e "Host $SERVER_IP_ADDRESS\n\tStrictHostKeyChecking no\n" >> ./deploy_config
+      - mv ./deploy_rsa ~/.ssh/
+      - chmod 600 ~/.ssh/deploy_rsa
+      - cat ./deploy_config >> ~/.ssh/config
+      - rm -f ./deploy_*
+      - ssh-add ~/.ssh/deploy_rsa
     script:
-      - ssh -v -F ./deploy_config demoserver pwd
+      - ssh -v demoserver pwd
+     # - ssh demoserver mkdir -p public_html/travis/$TRAVIS_BRANCH
+     # - ssh demoserver cp /var/www/bibliograph/server/config/
     after_failure: skip
 
   - name: Release branch snapshot on GitHub
@@ -151,6 +155,8 @@ jobs:
       prerelease: true
       overwrite: true
       target_commitish: "$TRAVIS_COMMIT"
+      on:
+        all_branches: true
     after_failure: skip
 
   - stage: cleanup
