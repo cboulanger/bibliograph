@@ -5,8 +5,7 @@
 .idea
 .env
 .phplint-cache
-deploy_rsa
-deploy_config
+
 
 # npm
 npm-debug.log

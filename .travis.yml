@@ -31,7 +31,8 @@ stages:
     if: "(NOT type IN (pull_request) AND NOT tag =~ snapshot)"
   - name: deployment
     if: "(NOT type IN (pull_request) AND NOT tag =~ snapshot)"
-#- name: cleanup_artifacts
+  - name: cleanup
+    if: "(NOT type IN (pull_request) AND NOT tag =~ snapshot)"
 
 before_install:
   # AWS S3 support
@@ -115,15 +116,15 @@ jobs:
       # download built packages
       - aws s3 sync s3://travis.panya.de/$TRAVIS_BUILD_NUMBER  ~/$TRAVIS_BUILD_NUMBER
       - ls -al ~/$TRAVIS_BUILD_NUMBER/
-      # encrypted SSH connection data
-      - openssl aes-256-cbc -K $encrypted_1e529f9a6cb9_key -iv $encrypted_1e529f9a6cb9_iv -in deploy_rsa.enc -out deploy_rsa -d
-      - openssl aes-256-cbc -K $encrypted_1e529f9a6cb9_key -iv $encrypted_1e529f9a6cb9_iv -in deploy_config.enc -out deploy_config -d
+      # decrypt SSH deployment data
+      - openssl aes-256-cbc -K $encrypted_f52210703301_key -iv $encrypted_f52210703301_iv -in install/travis/deploy_secrets.tar.enc -out deploy_secrets.tar -d
+      - tar xvf deploy_secrets.tar
       - ssh-add ./deploy_key
       - eval "$(ssh-agent -s)"
       - chmod 600 ./deploy_key
       - echo -e "Host $SERVER_IP_ADDRESS\n\tStrictHostKeyChecking no\n" >> ./deploy_config
     script:
-      - ssh -F ./deploy_config demo2.proxmox4 pwd
+      - ssh -F ./deploy_config demoserver pwd
     after_failure: skip
 
   - name: Release branch snapshot on GitHub
@@ -152,7 +153,7 @@ jobs:
         all_branches: true
     after_failure: skip
 
-  - stage: cleanup_artifacts
+  - stage: cleanup
     name: "Cleanup built artifacts"
     script:
       - aws s3 rm --recursive s3://travis.panya.de/$TRAVIS_BUILD_NUMBER
