@@ -123,6 +123,8 @@ jobs:
     after_failure: skip
 
   - name: Release branch snapshot on GitHub
+    install: skip
+    before_script: skip
     before_deploy:
       - aws s3 sync s3://travis.panya.de/$TRAVIS_BUILD_NUMBER  ~/uploads
       - install/travis/script/tag-snapshot.sh
