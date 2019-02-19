@@ -128,9 +128,7 @@ jobs:
       - rm -f ./deploy_*
       - ssh-add ~/.ssh/deploy_rsa
     script:
-      - ssh -v demoserver pwd
-     # - ssh demoserver mkdir -p public_html/travis/$TRAVIS_BRANCH
-     # - ssh demoserver cp /var/www/bibliograph/server/config/
+      - yes | build/script/deploy.sh demoserver ~/public_html/travis/$TRAVIS_BRANCH/ /var/www/bibliograph/server/config/app.conf.toml
     after_failure: skip
 
   - name: Release branch snapshot on GitHub
@@ -146,8 +144,9 @@ jobs:
     deploy:
       provider: releases
       api-key: "$GITHUB_TOKEN"
-      file_glob: true
-      file: ~/uploads/*.zip
+      #file_glob: true
+      file:
+       - "~/uploads/bibliograph-3.0.0-beta.78-develop-travis-426-php7.0.zip"
       skip_cleanup: true
       name: Development snapshot ($TRAVIS_BRANCH)
       body: Automatic Bibliograph development build of branch '$TRAVIS_BRANCH' ($TRAVIS_COMMIT)
