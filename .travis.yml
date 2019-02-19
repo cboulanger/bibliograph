@@ -151,8 +151,6 @@ jobs:
       prerelease: true
       overwrite: true
       target_commitish: "$TRAVIS_COMMIT"
-      on:
-        tags: true
     after_failure: skip
 
   - stage: cleanup
