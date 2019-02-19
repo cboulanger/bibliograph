@@ -70,6 +70,6 @@ cd $DIST_DIR
 # remove git folders
 ( find . -type d -name ".git" ) | xargs rm -rf
 zip -q -r bibliograph-$VERSION-php${PHPVERSION}.zip *
-
+ls -al
 echo "Done."
 exit 0
