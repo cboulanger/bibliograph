@@ -116,10 +116,10 @@ jobs:
     install:
       - pip install --user awscli
     before_deploy:
+      - install/travis/script/tag-snapshot.sh
       - aws s3 sync s3://travis.panya.de/$TRAVIS_BUILD_NUMBER ~/uploads
       - ls -al ~/uploads
       - cp ~/uploads/* $TRAVIS_BUILD_DIR
-      - install/travis/script/tag-snapshot.sh
     deploy:
       provider: releases
       api_key: "$GITHUB_TOKEN"
