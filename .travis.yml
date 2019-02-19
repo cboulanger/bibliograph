@@ -117,21 +117,15 @@ jobs:
     before_script:
       - aws s3 sync s3://travis.panya.de/$TRAVIS_BUILD_NUMBER  ~/uploads
       - ls -al ~/uploads
-      - install/travis/ssh-config.sh
+      - install/travis/script/ssh-config.sh
     script:
-      - install/travis/deploy-demo.sh
+      - install/travis/script/deploy-demo.sh
     after_failure: skip
 
   - name: Release branch snapshot on GitHub
     before_deploy:
-      # download built packages
       - aws s3 sync s3://travis.panya.de/$TRAVIS_BUILD_NUMBER  ~/uploads
-      - ls -al ~/uploads
-      # only ever have one snapshot release of each branch
-      - git tag -f $TRAVIS_BRANCH-snapshot
-      - git remote add gh https://${TRAVIS_REPO_SLUG%/*}:${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git
-      - git push -f gh $TRAVIS_BRANCH-snapshot
-      - git remote remove gh
+      - install/travis/script/tag-snapshot.sh
     deploy:
       provider: releases
       api_key: "$GITHUB_TOKEN"
