@@ -109,7 +109,7 @@ jobs:
       - install/travis/script/ssh-config.sh
     before_script:
       - aws s3 sync s3://travis.panya.de/$TRAVIS_BUILD_NUMBER ~/uploads
-      - ls -al $TRAVIS_BUILD_DIR/*.zip
+      - ls -al ~/uploads
     script: install/travis/script/deploy-demo.sh
 
   - name: Release branch snapshot on GitHub
