@@ -24,7 +24,7 @@ cache:
 
 stages:
   - name: tests
-    if: NOT tag =~ snapshot
+    if: "(NOT tag =~ snapshot AND commit_message =~ /skip tests/"
   - name: packaging
     if: "(NOT type IN (pull_request) AND NOT tag =~ snapshot)"
   - name: docker
@@ -119,9 +119,9 @@ jobs:
       # decrypt SSH deployment data
       - openssl aes-256-cbc -K $encrypted_f52210703301_key -iv $encrypted_f52210703301_iv -in install/travis/deploy_secrets.tar.enc -out deploy_secrets.tar -d
       - tar xvf deploy_secrets.tar
-      - ssh-add ./deploy_rsa
       - eval "$(ssh-agent -s)"
       - chmod 600 ./deploy_rsa
+      - ssh-add ./deploy_rsa
       - echo -e "Host $SERVER_IP_ADDRESS\n\tStrictHostKeyChecking no\n" >> ./deploy_config
     script:
       - ssh -F ./deploy_config demoserver pwd
