@@ -13,6 +13,7 @@ PHPVERSION=$(php -r "echo substr(phpversion(),0,3);")
 TRAVIS_BRANCH=${TRAVIS_BRANCH:-""}
 if [[ "$TRAVIS_BRANCH" != "" ]]; then
   ZIP_NAME=bibliograph-${TRAVIS_BRANCH}-snapshot-php${PHPVERSION}.zip
+  VERSION=-${TRAVIS_BRANCH}-$(date --utc +%Y%m%d_%H%M%SZ)
 else
   ZIP_NAME=bibliograph-${VERSION}-php${PHPVERSION}.zip
 fi
