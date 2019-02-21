@@ -57,15 +57,59 @@
       },
       "outputPath": "compiled/build"
     },
+
     {
-      "//": "The 'source' target for debugging on deployed instances, usually not needed",
-      "type": "dist-source",
+      "//": "A local source build inlcuding an event recorder",
+      "type": "source-eventrecorder",
       "environment": {
         "app.mode": "development",
-        "app.serverUrl": "server.php?r="
+        "app.serverUrl": "../../../../server/web/?r=",
+        "eventrecorder.enabled": true,
+        "eventrecorder.scriptable": false,
+        "eventrecorder.hidden": false,
+        "eventrecorder.mode": "presentation",
+        "eventrecorder.showProgress": false,
+        "eventrecorder.gistId": "",
+        "eventrecorder.autoplay": false,
+        "eventrecorder.playerType": "qooxdoo"
       },
-      "outputPath": "compiled/dist-source",
+      "outputPath": "compiled/source-eventrecorder",
       "targetClass": "SourceTarget",
+      "include": [
+        "cboulanger.eventrecorder.UiController",
+        "cboulanger.eventrecorder.ObjectIdGenerator"
+      ],
+      "bundle": {
+        "include": [
+          "qx.*"
+        ],
+        "exclude": [
+          "qx.util.*"
+        ]
+      }
+    },
+
+    {
+      "//": "A source build to be deployed, including an event recorder, for debugging purposes",
+      "type": "dist-debug",
+      "environment": {
+        "app.mode": "development",
+        "app.serverUrl": "server.php?r=",
+        "eventrecorder.enabled": true,
+        "eventrecorder.scriptable": false,
+        "eventrecorder.hidden": false,
+        "eventrecorder.mode": "presentation",
+        "eventrecorder.showProgress": false,
+        "eventrecorder.gistId": "",
+        "eventrecorder.autoplay": false,
+        "eventrecorder.playerType": "qooxdoo"
+      },
+      "outputPath": "compiled/dist-debug",
+      "targetClass": "SourceTarget",
+      "include": [
+        "cboulanger.eventrecorder.UiController",
+        "cboulanger.eventrecorder.ObjectIdGenerator"
+      ],
       "bundle": {
         "include": [
           "qx.*"

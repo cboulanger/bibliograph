@@ -3,25 +3,32 @@
 # dependencies: apt-get install jq (linux) / brew install jq (MacOS with homebrew)
 command -v jq >/dev/null 2>&1 || { echo >&2 "You need to install the jq command"; exit 1; }
 
+# arguments
 BUILD_TARGET=${1:-dist-build}
+PHPVERSION=${2:-$(php -r "echo substr(phpversion(),0,3);")}
+
+# configuration
+QX_CMD=$(which qx)
 TOP_DIR=$(pwd)
 DIST_DIR=$TOP_DIR/dist
 CLIENT_SRC_DIR=$TOP_DIR/src/client/bibliograph
 SERVER_SRC_DIR=$TOP_DIR/src/server
 VERSION=$(node -p -e "require('$TOP_DIR/package.json').version")
-PHPVERSION=$(php -r "echo substr(phpversion(),0,3);")
 TRAVIS_BRANCH=${TRAVIS_BRANCH:-""}
+
 if [[ "$TRAVIS_BRANCH" != "" ]]; then
   ZIP_NAME=bibliograph-${TRAVIS_BRANCH}-snapshot-php${PHPVERSION}.zip
-  VERSION=-${TRAVIS_BRANCH}-$(date --utc +%Y%m%d_%H%M%SZ)
+  VERSION=snapshot-${TRAVIS_BRANCH}-$(date --utc +%Y%m%d_%H%M%SZ)
 else
   ZIP_NAME=bibliograph-${VERSION}-php${PHPVERSION}.zip
 fi
 
-QX_CMD=$(which qx)
 if [[ ! -d "$DIST_DIR" ]]; then
     echo "Cannot find 'dist' subdirectory - are you in the top folder?"
 fi
+
+# clean build
+$TOP_DIR/build/script/dist-clean.sh
 
 echo
 echo "Building distributable package of Bibliograph from '$BUILD_TARGET' build target"

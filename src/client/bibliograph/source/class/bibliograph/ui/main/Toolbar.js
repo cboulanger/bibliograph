@@ -18,8 +18,12 @@
 qx.Class.define("bibliograph.ui.main.Toolbar",
 {
   extend : qx.ui.toolbar.ToolBar,
-  construct : function() {
+  type: "singleton",
+  construct: function() {
     this.base(arguments);
+    
+    this.setQxObjectId("toolbar");
+    this.setWidgetId("app/toolbar");
 
     // shorthand vars
     let app = qx.core.Init.getApplication();
@@ -29,26 +33,34 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
     
     // Toolbar
     let toolBar = this;
-    toolBar.setWidgetId("app/toolbar");
+    function add(id, parent, child, options) {
+      child.setQxObjectId(id);
+      parent.add(child, options);
+      toolBar.addOwnedQxObject(child);
+    }
 
     let toolBarPart = new qx.ui.toolbar.Part();
     toolBar.add(toolBarPart);
-    toolBarPart.add(this.createLoginButton());
-    toolBarPart.add(this.createLogoutButton());
-    toolBarPart.add(this.createUserButton());
+    add("login", toolBarPart, this.createLoginButton());
+    add("logout", toolBarPart, this.createLogoutButton());
+    add("user", toolBarPart, this.createUserButton());
 
     let toolBarPart2 = new qx.ui.toolbar.Part();
     toolBar.add(toolBarPart2);
-    toolBarPart2.add(this.createDatasourceButton());
-    toolBarPart2.add(this.createSystemMenu());
-    toolBarPart2.add(this.createImportMenu());
-    toolBarPart2.add(this.createHelpMenu());
+    add("datasource", toolBarPart2, this.createDatasourceButton());
+    add("system", toolBarPart2, this.createSystemMenu());
+    add("import", toolBarPart2, this.createImportMenu());
+    add("help", toolBarPart2, this.createHelpMenu());
+    
     // @todo toggle with server config
     //toolBarPart2.add(this.createDeveloperMenu());
 
+    // spacer and title
     toolBar.add(new qx.ui.basic.Atom(), { flex : 10 }); // why not a spacer?
-    toolBar.add(this.createTitleLabel());
-    toolBar.add(this.createSearchBox(), { flex : 1 });
+    add("title", toolBar, this.createTitleLabel());
+    
+    // searchbox
+    add("searchbox", toolBar, this.createSearchBox(), { flex : 1 });
     this.createSearchButtons().map(button => toolBar.add(button));
   },
 
@@ -88,8 +100,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       button.setLabel(this.tr("Loading..."));
       button.setIcon("icon/16/apps/preferences-users.png");
       this.userMgr.bind("activeUser.fullname", button, "label");
-      this.getApplication().getAccessManager()
-.bind("authenticatedUser", button, "visibility", {
+      this.getApplication().getAccessManager().bind("authenticatedUser", button, "visibility", {
         converter : v => v ? "visible" : "excluded"
       });
       button.addListener("execute", () => this.getApplication().cmd("editUserData"));
@@ -103,8 +114,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       button.setVisibility("excluded");
       button.setIcon("icon/16/apps/utilities-archiver.png");
       button.addListener("execute", function(e) {
-        this.getApplication().getWidgetById("app/windows/datasources")
-.show();
+        this.getApplication().getWidgetById("app/windows/datasources").show();
       }, this);
       return button;
     },
@@ -184,8 +194,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
     createImportTextButton : function() {
       let button = new qx.ui.menu.Button(this.tr("Import text file"));
       button.addListener("execute", function(e) {
-        this.getApplication().getWidgetById("app/windows/import")
-.show();
+        this.getApplication().getWidgetById("app/windows/import").show();
       }, this);
       return button;
     },
@@ -211,8 +220,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
         localeMenu.add(localeButton);
         localeButton.addListener("execute", () => {
           localeManager.setLocale(locale);
-          this.getApplication().getConfigManager()
-.setKey("application.locale", locale);
+          this.getApplication().getConfigManager().setKey("application.locale", locale);
         });
       });
       
@@ -245,8 +253,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       let button1 = new qx.ui.menu.Button(this.tr("Run RPC method test.test"));
       menu.add(button1);
       button1.addListener("execute", function(e) {
-        this.getApplication().getRpcClient("test")
-.send("test");
+        this.getApplication().getRpcClient("test").send("test");
       }, this);
 
       return menuButton;
@@ -302,8 +309,8 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
         });
         this.getApplication().addListener("changeQuery", e => {
           if (e.getData() === searchbox.getTextContent()) {
- return;
-}
+           return;
+          }
           searchbox.reset();
           //searchbox.getChildControl('textfield').setWidth(null);
           //searchbox.getChildControl('textfield').setValue(e.getData());
@@ -379,8 +386,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
         this.searchbox.reset ? this.searchbox.reset() : null;
         this.searchbox.setValue ? this.searchbox.setValue("") : null;
         this.searchbox.focus();
-        this.getApplication().getWidgetById("app/windows/help-search")
-.hide();
+        this.getApplication().getWidgetById("app/windows/help-search").hide();
       });
       
       // search help button

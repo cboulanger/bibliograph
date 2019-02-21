@@ -1,5 +1,6 @@
 #: bibliograph/Application.js:216 bibliograph/Application.js:219
 #: bibliograph/Application.js:223 bibliograph/Application.js:220
+#: bibliograph/Application.js:222
 msgid "Missing server address. Please contact administrator."
 msgstr ""
 
@@ -97,7 +98,8 @@ msgstr ""
 #: bibliograph/plugins/webservices/View.js:312
 #: bibliograph/plugins/z3950/ImportWindow.js:250
 #: bibliograph/ui/main/Toolbar.js:294 bibliograph/ui/main/Toolbar.js:283
-#: bibliograph/ui/main/Toolbar.js:282
+#: bibliograph/ui/main/Toolbar.js:282 bibliograph/ui/main/Toolbar.js:277
+#: bibliograph/ui/main/Toolbar.js:290 bibliograph/ui/main/Toolbar.js:289
 msgid "Searching..."
 msgstr ""
 
@@ -365,6 +367,8 @@ msgstr ""
 
 #: bibliograph/ui/window/PreferencesWindow.js:31
 #: bibliograph/ui/main/Toolbar.js:140 bibliograph/ui/main/Toolbar.js:133
+#: bibliograph/ui/main/Toolbar.js:131 bibliograph/ui/main/Toolbar.js:144
+#: bibliograph/ui/main/Toolbar.js:143
 msgid "Preferences"
 msgstr ""
 
@@ -460,6 +464,8 @@ msgstr ""
 
 #: bibliograph/ui/window/AboutWindow.js:27 bibliograph/ui/main/Toolbar.js:238
 #: bibliograph/ui/main/Toolbar.js:229 bibliograph/ui/main/Toolbar.js:228
+#: bibliograph/ui/main/Toolbar.js:224 bibliograph/ui/main/Toolbar.js:237
+#: bibliograph/ui/main/Toolbar.js:236
 msgid "About Bibliograph"
 msgstr ""
 
@@ -484,7 +490,8 @@ msgid "Password"
 msgstr ""
 
 #: dialog/Login.js:200 bibliograph/ui/main/Toolbar.js:64
-#: bibliograph/ui/main/Toolbar.js:60
+#: bibliograph/ui/main/Toolbar.js:60 bibliograph/ui/main/Toolbar.js:73
+#: bibliograph/ui/main/Toolbar.js:72
 msgid "Login"
 msgstr ""
 
@@ -493,66 +500,84 @@ msgid "Forgot Password?"
 msgstr ""
 
 #: bibliograph/ui/main/Toolbar.js:78 bibliograph/ui/main/Toolbar.js:73
+#: bibliograph/ui/main/Toolbar.js:86 bibliograph/ui/main/Toolbar.js:85
 msgid "Logout"
 msgstr ""
 
 #: bibliograph/ui/main/Toolbar.js:94 bibliograph/ui/main/Toolbar.js:88
+#: bibliograph/ui/main/Toolbar.js:101 bibliograph/ui/main/Toolbar.js:100
 msgid "Loading..."
 msgstr ""
 
 #: bibliograph/ui/main/Toolbar.js:107 bibliograph/ui/main/Toolbar.js:101
+#: bibliograph/ui/main/Toolbar.js:100 bibliograph/ui/main/Toolbar.js:113
+#: bibliograph/ui/main/Toolbar.js:112
 msgid "Datasources"
 msgstr ""
 
 #: bibliograph/ui/main/Toolbar.js:122 bibliograph/ui/main/Toolbar.js:116
+#: bibliograph/ui/main/Toolbar.js:114 bibliograph/ui/main/Toolbar.js:127
+#: bibliograph/ui/main/Toolbar.js:126
 msgid "System"
 msgstr ""
 
 #: bibliograph/ui/main/Toolbar.js:153 bibliograph/ui/main/Toolbar.js:145
+#: bibliograph/ui/main/Toolbar.js:143 bibliograph/ui/main/Toolbar.js:156
+#: bibliograph/ui/main/Toolbar.js:155
 msgid "Access management"
 msgstr ""
 
 #: bibliograph/ui/main/Toolbar.js:166 bibliograph/ui/main/Toolbar.js:157
+#: bibliograph/ui/main/Toolbar.js:155 bibliograph/ui/main/Toolbar.js:168
+#: bibliograph/ui/main/Toolbar.js:167
 msgid "Plugins"
 msgstr ""
 
 #: bibliograph/ui/main/Toolbar.js:179 bibliograph/ui/main/Toolbar.js:170
-#: bibliograph/ui/main/Toolbar.js:169
+#: bibliograph/ui/main/Toolbar.js:169 bibliograph/ui/main/Toolbar.js:167
+#: bibliograph/ui/main/Toolbar.js:180
 msgid "Import"
 msgstr ""
 
 #: bibliograph/ui/main/Toolbar.js:196 bibliograph/ui/main/Toolbar.js:186
-#: bibliograph/ui/main/Toolbar.js:185
+#: bibliograph/ui/main/Toolbar.js:185 bibliograph/ui/main/Toolbar.js:183
+#: bibliograph/ui/main/Toolbar.js:195
 msgid "Import text file"
 msgstr ""
 
 #: bibliograph/ui/main/Toolbar.js:213 bibliograph/ui/main/Toolbar.js:203
-#: bibliograph/ui/main/Toolbar.js:202
+#: bibliograph/ui/main/Toolbar.js:202 bibliograph/ui/main/Toolbar.js:199
+#: bibliograph/ui/main/Toolbar.js:212 bibliograph/ui/main/Toolbar.js:211
 msgid "Language"
 msgstr ""
 
 #: bibliograph/ui/main/Toolbar.js:230 bibliograph/ui/main/Toolbar.js:221
-#: bibliograph/ui/main/Toolbar.js:220
+#: bibliograph/ui/main/Toolbar.js:220 bibliograph/ui/main/Toolbar.js:216
+#: bibliograph/ui/main/Toolbar.js:229 bibliograph/ui/main/Toolbar.js:228
 msgid "Online Help"
 msgstr ""
 
 #: bibliograph/ui/main/Toolbar.js:250 bibliograph/ui/main/Toolbar.js:240
-#: bibliograph/ui/main/Toolbar.js:239
+#: bibliograph/ui/main/Toolbar.js:239 bibliograph/ui/main/Toolbar.js:235
+#: bibliograph/ui/main/Toolbar.js:248 bibliograph/ui/main/Toolbar.js:247
 msgid "Developer"
 msgstr ""
 
 #: bibliograph/ui/main/Toolbar.js:256 bibliograph/ui/main/Toolbar.js:246
-#: bibliograph/ui/main/Toolbar.js:245
+#: bibliograph/ui/main/Toolbar.js:245 bibliograph/ui/main/Toolbar.js:241
+#: bibliograph/ui/main/Toolbar.js:254 bibliograph/ui/main/Toolbar.js:253
 msgid "Run RPC method test.test"
 msgstr ""
 
 #: bibliograph/ui/main/Toolbar.js:293 bibliograph/ui/main/Toolbar.js:282
-#: bibliograph/ui/main/Toolbar.js:281
+#: bibliograph/ui/main/Toolbar.js:281 bibliograph/ui/main/Toolbar.js:276
+#: bibliograph/ui/main/Toolbar.js:289 bibliograph/ui/main/Toolbar.js:288
 msgid "No results"
 msgstr ""
 
 #: bibliograph/ui/main/Toolbar.js:295 bibliograph/ui/main/Toolbar.js:284
-#: bibliograph/ui/main/Toolbar.js:283
+#: bibliograph/ui/main/Toolbar.js:283 bibliograph/ui/main/Toolbar.js:278
+#: bibliograph/ui/main/Toolbar.js:291 bibliograph/ui/main/Toolbar.js:290
 msgid "Enter search term or ? for suggestions"
 msgstr ""
 
@@ -968,10 +993,12 @@ msgstr ""
 
 #: bibliograph/ui/main/FolderTreePanel.js:63
 #: bibliograph/ui/main/FolderTreePanel.js:60
+#: bibliograph/ui/main/FolderTreePanel.js:59
 msgid "Search folders:"
 msgstr ""
 
 #: bibliograph/ui/main/FolderTreePanel.js:75
 #: bibliograph/ui/main/FolderTreePanel.js:72
+#: bibliograph/ui/main/FolderTreePanel.js:71
 msgid "Type and press enter to search"
 msgstr ""

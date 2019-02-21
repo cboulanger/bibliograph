@@ -4,14 +4,14 @@
 
   http://www.bibliograph.org
 
-  Copyright: 
+  Copyright:
     2018 Christian Boulanger
 
-  License: 
+  License:
     MIT license
     See the LICENSE file in the project's top-level directory for details.
 
-  Authors: 
+  Authors:
     Christian Boulanger (@cboulanger) info@bibliograph.org
 
 ************************************************************************ */
@@ -36,73 +36,93 @@ qx.Class.define("bibliograph.ui.Windows",
     },
 
     /**
-     * Create the application windows 
+     * Create the application windows
      * @todo : move logic into class definition if window is singleton
      */
-    create: function() 
-    {
+    create: function() {
       let app = qx.core.Init.getApplication();
-      let bus = qx.event.message.Bus.getInstance();
+      this.setQxObjectId("windows");
+      qx.core.Id.getInstance().register(this);
 
       // Datasource list window
-      this.getRoot().add(bibliograph.ui.window.DatasourceListWindow.getInstance());
+      let datasourceWindow = bibliograph.ui.window.DatasourceListWindow.getInstance();
+      this.getRoot().add(datasourceWindow);
+      datasourceWindow.setQxObjectId("datasources");
+      this.addOwnedQxObject(datasourceWindow);
 
       // Access Control Tool
       let accessControlTool = new bibliograph.ui.window.AccessControlTool();
       accessControlTool.setWidgetId("app/windows/access-control");
       accessControlTool.setVisibility("excluded");
+      accessControlTool.setQxObjectId("access");
+      this.addOwnedQxObject(accessControlTool);
       this.getRoot().add(accessControlTool);
       
       // Folder Tree window
-      let folderTreeWindow = new bibliograph.ui.window
-        .FolderTreeWindow();
+      let folderTreeWindow = new bibliograph.ui.window.FolderTreeWindow();
       folderTreeWindow.setWidgetId("app/windows/folders");
       folderTreeWindow.setVisibility("excluded");
+      folderTreeWindow.setQxObjectId("folders");
+      this.addOwnedQxObject(folderTreeWindow);
       this.getRoot().add(folderTreeWindow);
 
       // Preferences window
       let preferencesWindow = new bibliograph.ui.window.PreferencesWindow();
       preferencesWindow.setWidgetId("app/windows/preferences");
       preferencesWindow.setVisibility("excluded");
+      preferencesWindow.setQxObjectId("preferences");
+      this.addOwnedQxObject(preferencesWindow);
       this.getRoot().add(preferencesWindow);
       
       // Import window
       let importWindow = new bibliograph.ui.window.ImportWindow();
       importWindow.setWidgetId("app/windows/import");
       importWindow.setVisibility("excluded");
+      importWindow.setQxObjectId("import");
+      this.addOwnedQxObject(importWindow);
       this.getRoot().add(importWindow);
 
       // About window
       let aboutWindow = new bibliograph.ui.window.AboutWindow();
       aboutWindow.setWidgetId("app/windows/about");
       aboutWindow.setVisibility("excluded");
+      aboutWindow.setQxObjectId("about");
+      this.addOwnedQxObject(aboutWindow);
       this.getRoot().add(aboutWindow);
 
       // Search help window
       let searchHelpWindow = new bibliograph.ui.window.SearchHelpWindow();
       searchHelpWindow.setWidgetId("app/windows/help-search");
       searchHelpWindow.setVisibility("excluded");
+      searchHelpWindow.setQxObjectId("search-help");
+      this.addOwnedQxObject(searchHelpWindow);
       this.getRoot().add(searchHelpWindow);
 
       // Login Dialog
       let loginDialog = new dialog.Login();
+      loginDialog.setQxObjectId("login");
+      this.addOwnedQxObject(loginDialog);
       loginDialog.set({
         widgetId: "app/windows/login",
         allowCancel: true,
         checkCredentials: bibliograph.Utils.checkLogin,
         showForgotPassword: false,
-        forgotPasswordHandler: function(){ app.cmd("forgotPassword");}
+        forgotPasswordHandler: () => {
+         app.cmd("forgotPassword");
+        }
       });
       loginDialog.setCallback(async function(err, data) {
-        if ( err ) {
+        if (err) {
           await dialog.Dialog.error(err).promise();
-          qx.event.Timer.once( () => { loginDialog._password.focus() }, null, 100);
+          qx.event.Timer.once(() => {
+           loginDialog._password.focus();
+          }, null, 100);
         }
       });
 
       // configuration-dependent UI elements
       let cm = app.getConfigManager();
-      cm.addListener("ready", ()=> {
+      cm.addListener("ready", () => {
         cm.bindKey("application.title", loginDialog, "text", false);
         cm.bindKey("application.logo", loginDialog, "image", false);
         // hide forgot password button if ldap is enabled @todo - make this configurable

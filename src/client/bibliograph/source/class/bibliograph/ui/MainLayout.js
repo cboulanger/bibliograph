@@ -17,7 +17,7 @@
 /*global bibliograph qx qcl dialog*/
 
 /**
- * This class instantiates the main application ui and sets up bindings 
+ * This class instantiates the main application ui and sets up bindings
  * between the widgets and the main application state
  */
 qx.Class.define("bibliograph.ui.MainLayout", {
@@ -36,44 +36,40 @@ qx.Class.define("bibliograph.ui.MainLayout", {
      * Create the main layout
      */
     create: function() {
-      let app = qx.core.Init.getApplication();
-      let bus = qx.event.message.Bus.getInstance();
-
-      let vbox1 = new qx.ui.layout.VBox(null, null, null);
-      let composite1 = new qx.ui.container.Composite();
-      composite1.setLayout(vbox1);
-      this.getRoot().add(composite1, { edge: 0 });
+      let appContainer = new qx.ui.container.Composite(new qx.ui.layout.VBox());
+      this.getRoot().add(appContainer, { edge: 0 });
 
       // Toolbar
-      let toolbar = new bibliograph.ui.main.Toolbar();
-      composite1.add(toolbar);
+      let toolbar = bibliograph.ui.main.Toolbar.getInstance();
+      appContainer.add(toolbar);
+      qx.core.Id.getInstance().register(toolbar);
 
       // Horizontal splitpane
-      let hsplit1 = new qx.ui.splitpane.Pane("horizontal");
-      hsplit1.setOrientation("horizontal");
-      composite1.add(hsplit1, { flex: 1 });
-      let vbox2 = new qx.ui.layout.VBox(null, null, null);
-      let composite2 = new qx.ui.container.Composite();
-      composite2.setLayout(vbox2);
-      hsplit1.add(composite2, 1);
+      let hsplit = new qx.ui.splitpane.Pane("horizontal");
+      hsplit.setOrientation("horizontal");
+      appContainer.add(hsplit, { flex: 1 });
+      
+      let leftPane = new qx.ui.container.Composite(new qx.ui.layout.VBox());
+      hsplit.add(leftPane, 1);
 
       // Folder Tree
-      composite2.add(bibliograph.ui.main.FolderTreePanel.getInstance(), { flex: 1 });
+      let folderTreePanel = bibliograph.ui.main.FolderTreePanel.getInstance();
+      leftPane.add(folderTreePanel, { flex: 1 });
 
       // Vertical splitpane
-      let vsplit1 = new qx.ui.splitpane.Pane("vertical");
-      vsplit1.setOrientation("vertical");
-      vsplit1.setDecorator(null);
-      hsplit1.add(vsplit1, 3);
+      let vsplit = new qx.ui.splitpane.Pane("vertical");
+      vsplit.setOrientation("vertical");
+      vsplit.setDecorator(null);
+      hsplit.add(vsplit, 3);
 
       // Reference table view
       let tableview = new bibliograph.ui.main.ReferenceTableView();
-      vsplit1.add(tableview);
+      vsplit.add(tableview);
 
       // Item view
       let itemview = new bibliograph.ui.main.ItemViewUi();
       itemview.setWidgetId("app/item/view");
-      vsplit1.add(itemview);
+      vsplit.add(itemview);
       itemview.bind("view", this.getApplication(), "itemView", {});
       this.getApplication().bind("itemView", itemview, "view", {});
     }

@@ -6,7 +6,8 @@
       "uri": "cboulanger/qx-contrib-Dialog",
       "repo_name": "cboulanger/qx-contrib-Dialog",
       "repo_tag": "v1.3.4",
-      "path": "contrib/cboulanger_qx-contrib-Dialog_v1.3.4"
+      "//path": "contrib/cboulanger_qx-contrib-Dialog_v1.3.4",
+      "path": "/Users/cboulanger/Code/qx-contrib-Dialog"
     },
     {
       "library_name": "UploadWidget",
@@ -73,12 +74,13 @@
       "path": "contrib/ergobyte_qookery_v0.5.0/qookeryrichtext"
     },
     {
-      "library_name": "UI Event Recorder Contrib",
-      "library_version": "0.2.0",
+      "library_name": "UI Event Recorder",
+      "library_version": "0.8.0",
       "uri": "cboulanger/eventrecorder",
       "repo_name": "cboulanger/eventrecorder",
-      "repo_tag": "v0.2.0",
-      "path": "contrib/cboulanger_eventrecorder_v0.2.0"
+      "repo_tag": "v0.8.0",
+      "//path": "contrib/cboulanger_eventrecorder_v0.8.0",
+      "path": "/Users/cboulanger/Code/eventrecorder"
     }
   ]
 }

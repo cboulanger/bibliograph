@@ -15,7 +15,7 @@
 /*global qx qcl*/
 
 /**
- * This UI class creates a panel containing a header menu bar, a tree widget and a 
+ * This UI class creates a panel containing a header menu bar, a tree widget and a
  * footer with action buttons. The menu bar contains a title label.
  */
 qx.Class.define("bibliograph.ui.main.FolderTreePanel",
@@ -23,8 +23,7 @@ qx.Class.define("bibliograph.ui.main.FolderTreePanel",
   extend : qx.ui.container.Composite,
   type : "singleton",
   
-  construct : function()
-  {
+  construct : function() {
     this.base(arguments);
     this.createUI();
   
@@ -32,11 +31,11 @@ qx.Class.define("bibliograph.ui.main.FolderTreePanel",
     qx.event.message.Bus.getInstance().subscribe("bibliograph.userquery", function() {
       try {
         this.treeWidget.getTree().resetSelection();
-      }catch (e) {}
+      } catch(e) {}
     }, this);
   },
   
-  members : 
+  members :
   {
     /** @var {bibliograph.ui.main.MultipleTreeView} */
     treeWidget : null,

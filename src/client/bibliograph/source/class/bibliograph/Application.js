@@ -56,7 +56,6 @@ qx.Class.define("bibliograph.Application", {
       this.__clients = {};
       this.__widgets = {};
       
-      
       if (qx.core.Environment.get("qx.debug")) {
         qx.log.appender.Native;
       }
