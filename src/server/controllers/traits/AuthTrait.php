@@ -206,8 +206,8 @@ trait AuthTrait
   /**
    * This deletes the given session. Unless the second argument is true, delete
    * the corresponding user if it is an anonymous user and this is the only session.
-   * @param $sessionId
-   * @param $doNotDeleteAnonymousUser
+   * @param string $sessionId
+   * @param bool $doNotDeleteAnonymousUser
    * @throws \Throwable
    * @throws \yii\db\StaleObjectException
    */

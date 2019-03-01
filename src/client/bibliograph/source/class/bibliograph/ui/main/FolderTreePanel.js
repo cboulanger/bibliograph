@@ -31,7 +31,7 @@ qx.Class.define("bibliograph.ui.main.FolderTreePanel",
     qx.event.message.Bus.getInstance().subscribe("bibliograph.userquery", function() {
       try {
         this.treeWidget.getTree().resetSelection();
-      } catch(e) {}
+      } catch (e) {}
     }, this);
   },
   
@@ -44,8 +44,7 @@ qx.Class.define("bibliograph.ui.main.FolderTreePanel",
     /**
      * Create the UI
      */
-    createUI : function()
-    {
+    createUI : function() {
       // layout
       let vbox1 = new qx.ui.layout.VBox(null, null, null);
       this.setLayout(vbox1);
@@ -56,7 +55,7 @@ qx.Class.define("bibliograph.ui.main.FolderTreePanel",
       this.add(headerMenu);
       
       // title label
-      let label = new qx.ui.basic.Label(this.tr('Search folders:'));
+      let label = new qx.ui.basic.Label(this.tr("Search folders:"));
       this.titleLabel = label;
       label.setPadding(3);
       label.setRich(true);
@@ -68,31 +67,34 @@ qx.Class.define("bibliograph.ui.main.FolderTreePanel",
         height: 20,
         margin: 1,
         padding:0,
-        placeholder: this.tr('Type and press enter to search')
-      })
+        placeholder: this.tr("Type and press enter to search")
+      });
       headerMenu.add(searchBox, {flex: 1});
       searchBox.addListener("keypress", e => {
         if (e.getKeyIdentifier() === "Enter") {
-          if (! this.treeWidget || !this.treeWidget.getTree() ) return;
-          if (! this.treeWidget.isSearching()){
+          if (!this.treeWidget || !this.treeWidget.getTree()) {
+           return;
+          }
+          if (!this.treeWidget.isSearching()) {
             this.treeWidget.searchAndSelectNext(searchBox.getValue());
           }
         }
       });
       this.getApplication().bind("datasource", headerMenu, "enabled", {
-        converter: v => !!v
+        converter: v => Boolean(v)
       });
   
       // multiple tree widget
       let mTree = new bibliograph.ui.main.MultipleTreeView();
+      this.getApplication().addOwnedQxObject(mTree);
       mTree.setShowColumnHeaders(true);
-      mTree.setWidgetId("app/treeview");
+      mTree.setWidgetId("app/treeview"); // todo remove
       mTree.setWidth(200);
-      mTree.setColumnHeaders([this.tr('Folders'), '#']);
+      mTree.setColumnHeaders([this.tr("Folders"), "#"]);
       
       // bind tree widget properties
       this.getApplication().bind("datasource", mTree, "datasource");
-      mTree.bind("nodeId", this.getApplication(), "folderId" );
+      mTree.bind("nodeId", this.getApplication(), "folderId");
       this.getApplication().bind("folderId", mTree, "nodeId");
       this.treeWidget = mTree;
       
@@ -122,7 +124,7 @@ qx.Class.define("bibliograph.ui.main.FolderTreePanel",
       // Settings button/menu
       let settingsBtn = new qx.ui.menubar.Button(null, "bibliograph/icon/button-settings-up.png");
       footerMenu.add(settingsBtn);
-      let settingsMenu =  new qx.ui.menu.Menu();
+      let settingsMenu = new qx.ui.menu.Menu();
       settingsMenu.setWidgetId("app/treeview/settings-menu");
       settingsBtn.setMenu(settingsMenu);
       settingsMenu.add(mTree.createAddTopFolderButton());

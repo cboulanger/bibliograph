@@ -2,7 +2,8 @@
 
 # This creates an empty database and runs a temporary server on localhost:8080
 TARGET=${1:-}
-HOST=${2:-127.0.0.1:8088}
+APP=${2:-bibliograph}
+HOST=${3:-127.0.0.1:9090}
 QX_CMD=$(which qx)
 COMPILE_PATH=$(pwd)/src/client/bibliograph
 DOCUMENT_ROOT=src/
@@ -16,17 +17,16 @@ if [[ "$TARGET" == "" ]]; then
   echo "You need to provide a compile target as first parameter.";
   exit 1;
 fi
-APP_PATH=client/bibliograph/compiled/$TARGET/index.html
+APP_PATH=client/bibliograph/compiled/$TARGET/$APP/index.html
+
+mysql -uroot -e "drop database if exists tests;" || (echo "MySQL server does not seem to be running" && exit 1)
+mysql -uroot -e "create database tests;"
+echo " >>> Created empty database ..."
 
 echo " >>> Compiling application..."
 pushd $COMPILE_PATH > /dev/null
-$QX_CMD clean
 $QX_CMD compile --target=$TARGET
 popd > /dev/null
-
-mysql -uroot -e "DROP DATABASE tests;" || true
-mysql -uroot -e "CREATE DATABASE tests;"
-echo " >>> Created empty database ..."
 
 # Start a PHP server and finish it when the script ends
 pushd $DOCUMENT_ROOT > /dev/null
@@ -38,7 +38,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   echo " >>> Opening app in browser at http://$HOST/$APP_PATH"
   open -a "Google Chrome" http://$HOST/$APP_PATH
   # send Alt+Command+I to open Web inspector
-  # osascript -e 'tell application "System Events" to keystroke "i" using {option down, command down}'
+  osascript -e 'tell application "System Events" to keystroke "i" using {option down, command down}'
   popd > /dev/null
 fi
 
@@ -50,7 +50,7 @@ trap ctrl_c INT
 function ctrl_c() {
   kill $PID;
   echo
-  echo "Terminated test server"
+  echo "Terminated test server."
   exit 0
 }
 

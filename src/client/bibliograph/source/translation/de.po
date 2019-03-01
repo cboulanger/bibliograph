@@ -326,6 +326,8 @@ msgstr "Bitte erst einen Ordner auswählen"
 #: bibliograph/ui/main/MultipleTreeView.js:459
 #: bibliograph/ui/main/MultipleTreeView.js:470
 #: bibliograph/ui/main/MultipleTreeView.js:482
+#: bibliograph/ui/main/MultipleTreeView.js:465
+#: bibliograph/ui/main/MultipleTreeView.js:467
 msgid "Do your really want to move folder '%1' to '%2'?"
 msgstr "Wollen Sie wirklich Ordner  '%1' in Ordner '%2' verschieben?"
 
@@ -336,6 +338,8 @@ msgstr "Verschiebe Ordner ..."
 #: bibliograph/ui/main/MultipleTreeView.js:573
 #: bibliograph/ui/main/MultipleTreeView.js:584
 #: bibliograph/ui/main/MultipleTreeView.js:596
+#: bibliograph/ui/main/MultipleTreeView.js:577
+#: bibliograph/ui/main/MultipleTreeView.js:575
 msgid "Do you really want to delete all references and folders in the trash folder? This cannot be undone."
 msgstr "Wollen sie wirklich alle Datensätze und Ordner im Mülleimer endgültig löschen? Das kann nicht rückgängig gemacht werden."
 
@@ -351,22 +355,32 @@ msgstr "Lösche Datensätze ..."
 #: bibliograph/ui/main/MultipleTreeView.js:226
 #: bibliograph/ui/main/MultipleTreeView.js:238
 #: bibliograph/ui/main/MultipleTreeView.js:239
+#: bibliograph/ui/main/MultipleTreeView.js:233
+#: bibliograph/ui/main/MultipleTreeView.js:234
+#: bibliograph/ui/main/MultipleTreeView.js:235
+#: bibliograph/ui/main/MultipleTreeView.js:236
 msgid "Empty trash..."
 msgstr "Den Papierkorb leeren ..."
 
 #: bibliograph/ui/main/MultipleTreeView.js:238
 #: bibliograph/ui/main/MultipleTreeView.js:250
+#: bibliograph/ui/main/MultipleTreeView.js:244
+#: bibliograph/ui/main/MultipleTreeView.js:246
 msgid "Move folder..."
 msgstr "Ordner verschieben ..."
 
 #: bibliograph/ui/main/MultipleTreeView.js:267
 #: bibliograph/ui/main/MultipleTreeView.js:279
+#: bibliograph/ui/main/MultipleTreeView.js:270
+#: bibliograph/ui/main/MultipleTreeView.js:272
 msgid "Edit folder data"
 msgstr "Ordnereigenschaften bearbeiten"
 
 #: bibliograph/ui/main/MultipleTreeView.js:279
 #: bibliograph/ui/main/MultipleTreeView.js:278
 #: bibliograph/ui/main/MultipleTreeView.js:290
+#: bibliograph/ui/main/MultipleTreeView.js:280
+#: bibliograph/ui/main/MultipleTreeView.js:282
 msgid "Change visibility"
 msgstr "Sichtbarkeit verändern"
 
@@ -431,6 +445,7 @@ msgstr "Datensatzinfo"
 #: bibliograph/ui/main/FolderTreePanel.js:90
 #: bibliograph/ui/main/FolderTreePanel.js:91
 #: bibliograph/ui/main/FolderTreePanel.js:94
+#: bibliograph/ui/main/FolderTreePanel.js:93
 #: bibliograph/ui/item/RecordInfoUi.js:59
 #: bibliograph/ui/item/RecordInfoUi.js:60
 msgid "Folders"
@@ -1047,17 +1062,22 @@ msgstr "Der Wert ist ungültig"
 
 #: bibliograph/ui/main/MultipleTreeView.js:176
 #: bibliograph/ui/main/MultipleTreeView.js:188
+#: bibliograph/ui/main/MultipleTreeView.js:190
 msgid "Add folder"
 msgstr "Ordner hinzufügen"
 
 #: bibliograph/ui/main/MultipleTreeView.js:208
 #: bibliograph/ui/main/MultipleTreeView.js:220
+#: bibliograph/ui/main/MultipleTreeView.js:217
+#: bibliograph/ui/main/MultipleTreeView.js:219
 msgid "Remove folder"
 msgstr "Ordner entfernen"
 
 #: bibliograph/ui/main/MultipleTreeView.js:579
 #: bibliograph/ui/main/MultipleTreeView.js:590
 #: bibliograph/ui/main/MultipleTreeView.js:602
+#: bibliograph/ui/main/MultipleTreeView.js:585
+#: bibliograph/ui/main/MultipleTreeView.js:583
 msgid "Emptying the trash ..."
 msgstr "Der Papierkorb wird geleert…"
 
@@ -1097,6 +1117,9 @@ msgstr "Die Datensätze werden kopiert…"
 #: bibliograph/ui/main/MultipleTreeView.js:486
 #: bibliograph/ui/main/MultipleTreeView.js:497
 #: bibliograph/ui/main/MultipleTreeView.js:509
+#: bibliograph/ui/main/MultipleTreeView.js:492
+#: bibliograph/ui/main/MultipleTreeView.js:491
+#: bibliograph/ui/main/MultipleTreeView.js:493
 msgid "Do your really want to move %1 references to '%2'?"
 msgstr "Möchten Sie %1 Datensätze nach '%2' verschieben?"
 
@@ -1108,6 +1131,9 @@ msgstr "Möchten Sie %1 Datensätze nach '%2' verschieben?"
 #: bibliograph/ui/main/MultipleTreeView.js:508
 #: bibliograph/ui/main/MultipleTreeView.js:519
 #: bibliograph/ui/main/MultipleTreeView.js:531
+#: bibliograph/ui/main/MultipleTreeView.js:514
+#: bibliograph/ui/main/MultipleTreeView.js:513
+#: bibliograph/ui/main/MultipleTreeView.js:515
 msgid "Do your really want to copy %1 references to '%2'?"
 msgstr "Möchten Sie %1 Datensätze nach ‚%2‘ kopieren?"
 
@@ -1161,11 +1187,14 @@ msgstr "Geben Sie einen Suchausdruck ein oder ? für eine Auswahl an Suchfeldern
 
 #: bibliograph/ui/main/MultipleTreeView.js:187
 #: bibliograph/ui/main/MultipleTreeView.js:199
+#: bibliograph/ui/main/MultipleTreeView.js:198
+#: bibliograph/ui/main/MultipleTreeView.js:200
 msgid "Add top level folder"
 msgstr "Obersten Ordner erstellen"
 
 #: bibliograph/ui/main/MultipleTreeView.js:197
 #: bibliograph/ui/main/MultipleTreeView.js:209
+#: bibliograph/ui/main/MultipleTreeView.js:207
 msgid "Save current search query as top folder"
 msgstr "Die aktuelle Suche als obersten Ordner speichern"
 
@@ -1179,6 +1208,8 @@ msgstr "Keine Ergebnisse"
 #: bibliograph/ui/main/MultipleTreeView.js:365
 #: bibliograph/ui/main/MultipleTreeView.js:376
 #: bibliograph/ui/main/MultipleTreeView.js:388
+#: bibliograph/ui/main/MultipleTreeView.js:378
+#: bibliograph/ui/main/MultipleTreeView.js:380
 msgid "Loading folders. Please wait..."
 msgstr "Die Ordner werden geladen. Bitte warten..."
 
@@ -1192,19 +1223,29 @@ msgstr "Datensätze werden gelöscht..."
 
 #: bibliograph/ui/main/MultipleTreeView.js:249
 #: bibliograph/ui/main/MultipleTreeView.js:261
+#: bibliograph/ui/main/MultipleTreeView.js:254
+#: bibliograph/ui/main/MultipleTreeView.js:256
 msgid "Copy folder to Clipboard..."
 msgstr "Den Ordner in die Zwischenablage kopieren"
 
 #: bibliograph/ui/main/MultipleTreeView.js:258
 #: bibliograph/ui/main/MultipleTreeView.js:270
+#: bibliograph/ui/main/MultipleTreeView.js:262
+#: bibliograph/ui/main/MultipleTreeView.js:264
 msgid "Insert folder from Clipboard..."
 msgstr "Ordner aus der Zwischenablage einsetzen"
 
 #: bibliograph/ui/main/MultipleTreeView.js:574
+#: bibliograph/ui/main/MultipleTreeView.js:556
+#: bibliograph/ui/main/MultipleTreeView.js:555
+#: bibliograph/ui/main/MultipleTreeView.js:557
 msgid "Do you want to insert the folder '%1' from datasource '%2'?"
 msgstr "Möchten Sie den Ordner '%1' aus der Datenquelle '%2' einfügen?"
 
 #: bibliograph/ui/main/MultipleTreeView.js:579
+#: bibliograph/ui/main/MultipleTreeView.js:561
+#: bibliograph/ui/main/MultipleTreeView.js:560
+#: bibliograph/ui/main/MultipleTreeView.js:562
 msgid "Do you want to insert the folder '%1'?"
 msgstr "Möchten Sie den Ordner '%1' einfügen?"
 
@@ -1232,6 +1273,8 @@ msgstr "Wenn der Fehler weiterhin auftritt, bitte den Administrator benachrichti
 
 #: bibliograph/ui/main/MultipleTreeView.js:289
 #: bibliograph/ui/main/MultipleTreeView.js:301
+#: bibliograph/ui/main/MultipleTreeView.js:290
+#: bibliograph/ui/main/MultipleTreeView.js:292
 msgid "Create report"
 msgstr "Bericht erstellen"
 
@@ -1251,11 +1294,13 @@ msgstr "'%1' kann nicht gefunden werden."
 #: bibliograph/ui/main/FolderTreePanel.js:63
 #: bibliograph/ui/main/FolderTreePanel.js:60
 #: bibliograph/ui/main/FolderTreePanel.js:59
+#: bibliograph/ui/main/FolderTreePanel.js:58
 msgid "Search folders:"
 msgstr "Ordner durchsuchen:"
 
 #: bibliograph/ui/main/FolderTreePanel.js:75
 #: bibliograph/ui/main/FolderTreePanel.js:72
 #: bibliograph/ui/main/FolderTreePanel.js:71
+#: bibliograph/ui/main/FolderTreePanel.js:70
 msgid "Type and press enter to search"
 msgstr "Suchwort eingeben und 'Enter' drücken"

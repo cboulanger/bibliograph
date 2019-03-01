@@ -6,8 +6,9 @@
 #set -o errexit
 
 TARGET=${1:-source}
-HOST=${2:-localhost:9090}
-APP_PATH=client/bibliograph/compiled/$TARGET/index.html
+APP=${2:-bibliograph}
+HOST=${3:-localhost:9090}
+APP_PATH=client/bibliograph/compiled/$TARGET/$APP/index.html
 COMPILE_PATH=$(pwd)/src/client/bibliograph
 QX_CMD=$(which qx)
 DOCUMENT_ROOT=src/
@@ -20,8 +21,6 @@ fi
 if [[ "$TARGET" != "only" ]]; then
     echo " >>> Compiling application..."
     pushd $COMPILE_PATH > /dev/null
-    #$QX_CMD clean
-    which $QX_CMD
     $QX_CMD compile --target=$TARGET
     popd > /dev/null
 fi

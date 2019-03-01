@@ -60,6 +60,10 @@ qx.Class.define("bibliograph.Application", {
         qx.log.appender.Native;
       }
       
+      // object id
+      this.setQxObjectId("application");
+      qx.core.Id.getInstance().register(this);
+      
       // application startup
       bibliograph.Setup.getInstance().boot();
     },

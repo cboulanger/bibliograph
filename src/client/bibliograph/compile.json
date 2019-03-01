@@ -17,10 +17,72 @@
     "qx.debug": true,
     "qx.icontheme": "Tango",
     "module.objectid": true,
-    "app.version": "3.0.0-beta.78"
+    "app.version": "3.0.0-beta.78",
+    "app.serverUrl": "/server/web/?r="
   },
+
+  "locales": [
+    "en",
+    "de"
+  ],
+  "defaultTarget": "source",
+
+  "targets": [
+    {
+      "//" : "-------------------------------------------------------------------",
+      "//title": "The local 'source' target for development",
+      "type": "source",
+      "environment": {
+        "app.mode": "development"
+      },
+      "outputPath": "compiled/source"
+    },
+    {
+      "//" : "-------------------------------------------------------------------",
+      "//title": "The local 'build' target ",
+      "type": "build",
+      "environment": {
+        "app.mode": "production"
+      },
+      "outputPath": "compiled/build"
+    },
+    {
+      "//" : "-------------------------------------------------------------------",
+      "//title": "A source build to be deployed for debugging purposes",
+      "type": "dist-debug",
+      "environment": {
+        "app.mode": "development",
+        "app.serverUrl": "server.php?r="
+      },
+      "outputPath": "compiled/dist-debug",
+      "targetClass": "SourceTarget",
+      "bundle": {
+        "include": [
+          "qx.*"
+        ],
+        "exclude": [
+          "qx.util.*"
+        ]
+      }
+    },
+    {
+      "//" : "-------------------------------------------------------------------",
+      "//title": "The final 'build' target for deployment",
+      "type": "dist-build",
+      "targetClass": "BuildTarget",
+      "outputPath": "compiled/dist-build",
+      "environment": {
+        "qx.debug": false,
+        "app.mode": "production",
+        "app.serverUrl": "server.php?r="
+      }
+    }
+  ],
+
+
   "applications": [
     {
+      "//" : "-------------------------------------------------------------------",
       "title": "Bibliograph Bibliographic Data Manager",
       "name": "bibliograph",
       "theme": "bibliograph.theme.Theme",
@@ -28,13 +90,59 @@
       "bootPath": "source/boot",
       "include": [
         "bibliograph.plugins.*"
-      ]
+      ],
+      "environment": {
+      }
     },
     {
+      "//" : "-------------------------------------------------------------------",
+      "title": "Bibliograph Bibliographic Data Manager (test mode, with event ecorder)",
+      "name": "bibliograph-recorder",
+      "theme": "bibliograph.theme.Theme",
+      "class": "bibliograph.Application",
+      "bootPath": "source/boot",
+      "include": [
+        "bibliograph.plugins.*",
+        "cboulanger.eventrecorder.UiController",
+        "cboulanger.eventrecorder.ObjectIdGenerator",
+        "cboulanger.eventrecorder.ObjectIdTooltip",
+        "qookery.*",
+        "qookery.ace.*"
+      ],
+      "environment": {
+        "app.serverUrl": "/server/tests/?r=",
+        "eventrecorder.enabled": true,
+        "eventrecorder.mode": "presentation",
+        "eventrecorder.autoplay": false
+      }
+    },
+    {
+      "//" : "-------------------------------------------------------------------",
+      "title": "Bibliograph Bibliographic Data Manager (test mode, with script player)",
+      "name": "bibliograph-player",
+      "theme": "bibliograph.theme.Theme",
+      "class": "bibliograph.Application",
+      "bootPath": "source/boot",
+      "include": [
+        "bibliograph.plugins.*",
+        "cboulanger.eventrecorder.UiController"
+      ],
+      "environment": {
+        "app.serverUrl": "/server/tests/?r=",
+        "eventrecorder.enabled": true,
+        "eventrecorder.hidden": true,
+        "eventrecorder.mode": "presentation",
+        "eventrecorder.autoplay": true,
+        "eventrecoreder.gist_id": ""
+      }
+    },
+    {
+      "//" : "-------------------------------------------------------------------",
+      "title": "Qooxdoo API Viewer",
       "class": "qxl.apiviewer.Application",
       "theme": "qxl.apiviewer.Theme",
       "name": "apiviewer",
-      "title": "Qooxdoo API Viewer",
+
       "environment": {
         "excludeFromAPIViewer": [
           "qxl.apiviewer.*"
@@ -48,91 +156,6 @@
         "qx.module.Blocker",
         "qx.module.Placement"
       ]
-    }
-  ],
-  "locales": [
-    "en",
-    "de"
-  ],
-  "defaultTarget": "source",
-  "targets": [
-    {
-      "//": "The local 'source' target",
-      "type": "source",
-      "environment": {
-        "app.mode": "development",
-        "app.serverUrl": "../../../../server/web/?r="
-      },
-      "outputPath": "compiled/source"
-    },
-    {
-      "//": "The local 'build' target",
-      "type": "build",
-      "environment": {
-        "app.mode": "production",
-        "app.serverUrl": "../../../../server/web/?r="
-      },
-      "outputPath": "compiled/build"
-    },
-    {
-      "//": "A local source build inlcuding an event recorder and an empty test database ",
-      "type": "source-recorder",
-      "environment": {
-        "app.mode": "development",
-        "app.serverUrl": "../../../../server/tests/?r=",
-        "eventrecorder.enabled": true,
-        "eventrecorder.mode": "presentation",
-        "eventrecorder.autoplay": false
-      },
-      "outputPath": "compiled/source-recorder",
-      "targetClass": "SourceTarget",
-      "include": [
-        "cboulanger.eventrecorder.UiController",
-        "cboulanger.eventrecorder.ObjectIdGenerator",
-        "qookery.*",
-        "qookery.ace.*"
-      ]
-    },
-    {
-      "//": "A source build to be deployed, including an event recorder, for debugging purposes",
-      "type": "dist-debug",
-      "environment": {
-        "app.mode": "development",
-        "app.serverUrl": "server.php?r=",
-        "eventrecorder.enabled": true,
-        "eventrecorder.scriptable": false,
-        "eventrecorder.hidden": false,
-        "eventrecorder.mode": "presentation",
-        "eventrecorder.showProgress": false,
-        "eventrecorder.gistId": "",
-        "eventrecorder.autoplay": false,
-        "eventrecorder.playerType": "qooxdoo"
-      },
-      "outputPath": "compiled/dist-debug",
-      "targetClass": "SourceTarget",
-      "include": [
-        "cboulanger.eventrecorder.UiController",
-        "cboulanger.eventrecorder.ObjectIdGenerator"
-      ],
-      "bundle": {
-        "include": [
-          "qx.*"
-        ],
-        "exclude": [
-          "qx.util.*"
-        ]
-      }
-    },
-    {
-      "//": "The final 'build' target for deployment",
-      "type": "dist-build",
-      "targetClass": "BuildTarget",
-      "outputPath": "compiled/dist-build",
-      "environment": {
-        "qx.debug": false,
-        "app.mode": "production",
-        "app.serverUrl": "server.php?r="
-      }
     }
   ]
 }
