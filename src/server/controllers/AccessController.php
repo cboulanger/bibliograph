@@ -255,7 +255,6 @@ class AccessController extends AppController
         } else {
           // check password from database
           $auth_method = Yii::$app->config->getPreference("authentication.method");
-          $authenticated = false;
           $storedPw = $user->password;
           switch ($auth_method) {
             case "hashed":
@@ -302,6 +301,8 @@ class AccessController extends AppController
       Yii::$app->session->open();
     } else {
       // we didn't find one, so let's start a new one
+      $this->deleteSessionIfExists($this->getSessionId());
+      $this->resetSession();
       $sessionId = $this->getSessionId();
       $session = new Session(['namedId' => $sessionId]);
       $session->link('user',$user);

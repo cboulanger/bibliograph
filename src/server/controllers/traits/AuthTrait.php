@@ -188,11 +188,40 @@ trait AuthTrait
   }
 
   /**
+   * Shorthand to reset the current session and generate a new session id
+   */
+  public function resetSession() {
+    Yii::$app->session->regenerateID();
+  }
+
+  /**
    * Shorthand getter for  the current session id.
    * @return string
    */
   public function getSessionId()
   {
     return Yii::$app->session->getId();
+  }
+
+  /**
+   * This deletes the given session. Unless the second argument is true, delete
+   * the corresponding user if it is an anonymous user and this is the only session.
+   * @param $sessionId
+   * @param $doNotDeleteAnonymousUser
+   * @throws \Throwable
+   * @throws \yii\db\StaleObjectException
+   */
+  public function deleteSessionIfExists($sessionId, $doNotDeleteAnonymousUser=false) {
+    $session = Session::findOne($sessionId);
+    if ($session) {
+      if (!$doNotDeleteAnonymousUser) {
+        /** @var User $user */
+        $user = $session->getUser()->one();
+        if ($user->isAnonymous() and $user->getSessions()->count() === 1) {
+          $user->delete();
+        }
+      }
+      $session->delete();
+    }
   }
 }

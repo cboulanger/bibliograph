@@ -5,12 +5,17 @@
 
 #set -o errexit
 
-HOST=localhost:9090
-SERVER_PATH=src/
 TARGET=${1:-source}
+HOST=${2:-localhost:9090}
 APP_PATH=client/bibliograph/compiled/$TARGET/index.html
 COMPILE_PATH=$(pwd)/src/client/bibliograph
 QX_CMD=$(which qx)
+DOCUMENT_ROOT=src/
+
+if ! [[ -d $COMPILE_PATH ]]; then
+  echo "Cannot find client application - are you in the repo root?";
+  exit 1;
+fi
 
 if [[ "$TARGET" != "only" ]]; then
     echo " >>> Compiling application..."
@@ -26,7 +31,7 @@ if [ $? -eq 0 ]; then
   echo " >>> PHP Server server is already running..."
 else
   echo " >>> Starting PHP server..."
-  pushd $SERVER_PATH > /dev/null
+  pushd $DOCUMENT_ROOT > /dev/null
   php -S $HOST &> /dev/null &
   popd > /dev/null
 fi

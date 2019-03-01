@@ -27,11 +27,8 @@
     "cboulanger/qx-contrib-TokenField": "^1.2.1",
     "ergobyte/qookery/qookery": "^0.5.0",
     "ergobyte/qookery/qookeryace": "^0.5.0",
-    "ergobyte/qookery/qookerycalendar": "^0.5.0",
-    "ergobyte/qookery/qookerymaps": "^0.5.0",
-    "ergobyte/qookery/qookerymobile": "^0.5.0",
-    "ergobyte/qookery/qookeryrichtext": "^0.5.0",
-    "cboulanger/eventrecorder": "^0.8.0"
+    "cboulanger/eventrecorder": "^0.8.0",
+    "cboulanger/qx-contrib-Dialog": "^2.0.0"
   },
   "externalResources": {
     "script": [
