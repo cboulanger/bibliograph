@@ -18,15 +18,15 @@
     "url": "git+ssh://git@github.com/cboulanger/bibliograph.git"
   },
   "scripts": {
+    "postinstall": "build/script/update-dependencies.sh",
     "start": "build/script/start-server.sh",
     "list": "node_modules/.bin/ls-scripts",
-    "postinstall": "build/script/update-dependencies.sh",
+    "clean": "cd src/client/bibliograph && qx clean",
+    "compile": "cd src/client/bibliograph && qx compile --watch",
     "server": "build/script/start-server.sh $1 $2 $3",
     "recorder": "test/script/start-server.sh source bibliograph-recorder",
     "test": "test/script/unit-functional.sh && test/script/api.sh || exit $?",
     "test-dev": "test/script/unit-functional.sh && test/script/api.sh development || exit $?",
-    "clean": "cd src/client/bibliograph && qx clean",
-    "compile": "cd src/client/bibliograph && qx compile --watch",
     "view-log": "build/script/view-log.sh",
     "error-log": "build/script/view-log.sh error",
     "new-log": "build/script/new-log.sh",

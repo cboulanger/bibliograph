@@ -4,14 +4,14 @@
 
   http://www.bibliograph.org
 
-  Copyright: 
+  Copyright:
     2018 Christian Boulanger
 
-  License: 
+  License:
     MIT license
     See the LICENSE file in the project's top-level directory for details.
 
-  Authors: 
+  Authors:
     Christian Boulanger (@cboulanger) info@bibliograph.org
 
 ************************************************************************ */
@@ -24,8 +24,8 @@ qx.Class.define("qcl.io.JsonRpcClient", {
   extend: qx.core.Object,
 
   /**
-   * Create a new instance  
-   * @param {String} url 
+   * Create a new instance
+   * @param {String} url
    *    The url of the endpoint of the JSONRPC service
    * @param {String} token
    *    The authorizatio token which will be sent in the Authorization header as
@@ -41,24 +41,33 @@ qx.Class.define("qcl.io.JsonRpcClient", {
 
   properties: {
 
-    /** 
+    /**
      * If the last request has resulted in an error, it is stored here.
      * The error object takes the form { message, code } */
     error: {
       nullable: true,
       check: "Object",
-      apply: "_applyError"
+      apply: "_applyError",
+      event: "changeError"
     },
 
-    /** 
+    /**
      * Set authentication token
      * */
     token: {
       nullable: true,
       check: "String",
-      apply: "_applyToken"
+      apply: "_applyToken",
+      event: "changeToken"
     },
 
+    /**
+     * The last response returned by the server
+     */
+    response: {
+      nullable: true,
+      event: "changeResponse"
+    }
   },
 
   events: {
@@ -77,11 +86,11 @@ qx.Class.define("qcl.io.JsonRpcClient", {
     ---------------------------------------------------------------------------
      API
     ---------------------------------------------------------------------------
-    */    
+    */
 
     /**
      * Sends a jsonrpc request to the server. An error will be caught
-     * and displayed in a dialog. In this case, the returned promise 
+     * and displayed in a dialog. In this case, the returned promise
      * resolves to null
      * @param method {String} The service method
      * @param params {Array} The parameters of the method
@@ -92,6 +101,7 @@ qx.Class.define("qcl.io.JsonRpcClient", {
       this.setError(null);
       try{
         let result = await this.__client.send( method, params);
+        this.setResponse(result);
         return this._handleResult(result, method);
       } catch( e ) {
         this.setError(e);
@@ -102,7 +112,7 @@ qx.Class.define("qcl.io.JsonRpcClient", {
 
     /**
      * Sends a jsonrpc notification to the server. An error will be caught
-     * and displayed in a dialog. In this case, the returned promise 
+     * and displayed in a dialog. In this case, the returned promise
      * resolves to null
      * @param method {String} The service method
      * @param params {Array} The parameters of the method
@@ -110,7 +120,7 @@ qx.Class.define("qcl.io.JsonRpcClient", {
      */
      notify : async function( method, params=[] ){
       qx.core.Assert.assertArray(params);
-      this.setError(null); 
+      this.setError(null);
       try {
          await this.__client.notify( method, params );
       } catch( e ) {
@@ -118,7 +128,7 @@ qx.Class.define("qcl.io.JsonRpcClient", {
         this._showMethodCallErrorMessage(method);
         return null;
       }
-    }, 
+    },
 
     /**
      * Returns a descriptive message of the last error, if available
@@ -148,7 +158,7 @@ qx.Class.define("qcl.io.JsonRpcClient", {
     ---------------------------------------------------------------------------
      INTERNAL METHODS
     ---------------------------------------------------------------------------
-    */    
+    */
 
     /** applys the error property */
     _applyError : function( value, old ){
@@ -161,7 +171,7 @@ qx.Class.define("qcl.io.JsonRpcClient", {
     _applyToken : function( value, old ){
       this.__client.setAuthToken(value);
     },
-  
+
     /**
      * Displays an error that the method call failed.
      * @param method
@@ -175,7 +185,7 @@ qx.Class.define("qcl.io.JsonRpcClient", {
             app.tr("If the error persists, contact the administrator.");
       dialog.Dialog.error( msg ); // @todo use one instance!
     },
-  
+
     /**
      * Shows error dialog when authentication failed
      * @param method

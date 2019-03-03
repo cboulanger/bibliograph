@@ -17,7 +17,7 @@
 qx.Class.define("bibliograph.Application", {
   extend : qx.application.Standalone,
   include : [bibliograph.MApplicationState, qcl.ui.MLoadingPopup],
-  
+
   statics:{
     /**
      * Widget ids as static constants
@@ -28,14 +28,14 @@ qx.Class.define("bibliograph.Application", {
         treeview : "app/treeview"
       }
     },
-  
+
     /**
      * Messages
      */
     messages: {
       TERMINATE : "app.terminate"
     },
-  
+
     /**
      * Mime types
      */
@@ -43,7 +43,7 @@ qx.Class.define("bibliograph.Application", {
       folder : "x-bibliograph/folderdata"
     }
   },
-  
+
   members :
   {
     /**
@@ -52,18 +52,18 @@ qx.Class.define("bibliograph.Application", {
      */
     main : function() {
       this.base(arguments);
-      
+
       this.__clients = {};
       this.__widgets = {};
-      
+
       if (qx.core.Environment.get("qx.debug")) {
         qx.log.appender.Native;
       }
-      
+
       // object id
       this.setQxObjectId("application");
       qx.core.Id.getInstance().register(this);
-      
+
       // application startup
       bibliograph.Setup.getInstance().boot();
     },
@@ -73,7 +73,7 @@ qx.Class.define("bibliograph.Application", {
         AUTHOR AND VERSION
     ---------------------------------------------------------------------------
     */
-    
+
     /**
      * The version of the application. The version will be automatically replaced
      * by the script that creates the distributable zip file. Do not change.
@@ -82,7 +82,7 @@ qx.Class.define("bibliograph.Application", {
     getVersion : function() {
       return qx.core.Environment.get("app.version");
     },
-    
+
     /**
      * Copyright notice
      * @return {String}
@@ -114,7 +114,7 @@ qx.Class.define("bibliograph.Application", {
      COMPONENTS
     ---------------------------------------------------------------------------
     */
-  
+
     /**
      * @return {qcl.access.User}
      */
@@ -180,7 +180,7 @@ qx.Class.define("bibliograph.Application", {
     getDatasourceStore : function() {
       return bibliograph.store.Datasources.getInstance();
     },
-  
+
     /**
      * @return {qcl.application.ClipboardManager}
      */
@@ -206,7 +206,7 @@ qx.Class.define("bibliograph.Application", {
        I/O
     ---------------------------------------------------------------------------
     */
-    
+
     /**
      * Returns the URL to the JSONRPC server
      * @return {String}
@@ -232,17 +232,30 @@ qx.Class.define("bibliograph.Application", {
       this.__url = serverUrl;
       return serverUrl;
     },
-    
+
     /**
-     * Returns a jsonrpc client object with the current auth token already set
+     * Returns a jsonrpc client object with the current auth token already set.
+     * The client can be referred to by the object id "application/jsonrpc/<service name>"
      * @param {String} service The name of the service to get the client for
      * @return {qcl.io.JsonRpcClient}
      */
     getRpcClient : function(service) {
       qx.core.Assert.assert(Boolean(service), "Service parameter cannot be empty");
       qx.util.Validate.checkString(service, "Service parameter must be a string");
+      // init object id access to clients
+      if (!this.__clients.__parent__) {
+        let obj = new qx.core.Object();
+        obj.setQxObjectId("jsonrpc");
+        this.addOwnedQxObject(obj);
+        qx.Class.patch(qcl.io.JsonRpcClient,cboulanger.eventrecorder.MTrackEvents);
+        this.__clients.__parent__ = obj;
+      }
       if (!this.__clients[service]) {
-        this.__clients[service] = new qcl.io.JsonRpcClient(this.getServerUrl() + service);
+        let client = new qcl.io.JsonRpcClient(this.getServerUrl() + service);
+        client.setQxObjectId(service.replace(/\//,".")); // no slash allowed
+        client.setTrackPropertyChanges(["response"]);
+        this.__clients.__parent__.addOwnedQxObject(client);
+        this.__clients[service] = client;
       }
       let client = this.__clients[service];
       client.setToken(this.getAccessManager().getToken());
@@ -279,7 +292,7 @@ qx.Class.define("bibliograph.Application", {
     setWidgetById : function(id, widget) {
       this.__widgets[id] = widget;
     },
-    
+
     /**
      * gets a reference to a widget by its id
      * @param id {String}
@@ -293,7 +306,7 @@ qx.Class.define("bibliograph.Application", {
       }
       return widget;
     },
-  
+
     /**
      * Called when the applicatin shuts down
      */
