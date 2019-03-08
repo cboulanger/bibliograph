@@ -359,7 +359,7 @@ qx.Class.define("bibliograph.Setup", {
       bus.subscribe(messages.RELOAD_LISTVIEW, e => {
         let data = e.getData();
         if (data.datasource !== app.getDatasource())return;
-        app.getWidgetById("app/tableview").reload();
+        qx.core.Id.getQxObject("table-view").reload();
       });
 
       // show the login dialog

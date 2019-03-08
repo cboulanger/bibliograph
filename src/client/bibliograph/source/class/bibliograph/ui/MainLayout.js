@@ -64,11 +64,14 @@ qx.Class.define("bibliograph.ui.MainLayout", {
 
       // Reference table view
       let tableview = new bibliograph.ui.main.ReferenceTableView();
+      tableview.setQxObjectId("table-view");
+      qx.core.Id.getInstance().register(tableview);
       vsplit.add(tableview);
 
       // Item view
       let itemview = new bibliograph.ui.main.ItemViewUi();
-      itemview.setWidgetId("app/item/view");
+      itemview.setQxObjectId("item-view");
+      qx.core.Id.getInstance().register(itemview);
       vsplit.add(itemview);
       itemview.bind("view", this.getApplication(), "itemView", {});
       this.getApplication().bind("itemView", itemview, "view", {});

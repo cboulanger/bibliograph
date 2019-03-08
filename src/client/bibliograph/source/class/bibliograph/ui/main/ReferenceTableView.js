@@ -19,28 +19,19 @@
  */
 qx.Class.define("bibliograph.ui.main.ReferenceTableView",
 {
-  extend : qx.ui.container.Composite,
-  construct : function()
-  {
+  extend : bibliograph.ui.main.TableView,
+  construct : function() {
     this.base(arguments);
-    this.setLayout(new qx.ui.layout.HBox());
-    const app = this.getApplication();
-    const tableview = new bibliograph.ui.main.TableView();
-
-    this.mainListView = tableview;
-    tableview.setWidgetId("app/tableview");
-    tableview.setAllowStretchY(true);
-    tableview.setServiceName("reference");
-
-    this.add(tableview, {flex : 1});
-    
-    app.bind("datasource", tableview, "datasource");
-    app.bind("query", tableview, "query");
-    app.bind("folderId", tableview, "folderId");
-    app.bind("modelType", tableview, "modelType");
-    tableview.bind("modelId", app, "modelId");
-    app.bind("modelId", tableview, "modelId");
-    tableview.bind("selectedIds", app, "selectedIds");
+    this.setAllowStretchY(true);
+    this.setServiceName("reference");
+    let app = this.getApplication();
+    app.bind("datasource", this, "datasource");
+    app.bind("query", this, "query");
+    app.bind("folderId", this, "folderId");
+    app.bind("modelType", this, "modelType");
+    this.bind("modelId", app, "modelId");
+    app.bind("modelId", this, "modelId");
+    this.bind("selectedIds", app, "selectedIds");
     //app.bind("selectedIds", listView, "selectedIds");
     app.setModelType("reference");
   }

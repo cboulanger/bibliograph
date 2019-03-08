@@ -484,15 +484,22 @@ qx.Class.define("qcl.ui.table.TableView",
       let headerBar = new qx.ui.menubar.MenuBar();
       this.headerBar = headerBar;
       headerBar.setHeight(22);
+      headerBar.setQxObjectId("header");
+      this.addOwnedQxObject(headerBar);
       this.add(headerBar);
+      
       let referenceViewLabel = new qx.ui.basic.Label(null);
       this.referenceViewLabel = referenceViewLabel;
       referenceViewLabel.setPadding(3);
       referenceViewLabel.setRich(true);
+      referenceViewLabel.setQxObjectId("label");
+      headerBar.addOwnedQxObject(referenceViewLabel);
       headerBar.add(referenceViewLabel);
 
       // Table container, table will be inserted here
       let tableContainer = new qx.ui.container.Stack();
+      tableContainer.setQxObjectId("tables");
+      this.addOwnedQxObject(tableContainer);
       this.add(tableContainer, {flex: 1});
       this.setTableContainer(tableContainer);
 

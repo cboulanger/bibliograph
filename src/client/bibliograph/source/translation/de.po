@@ -287,6 +287,7 @@ msgid "Tabular View"
 msgstr "Tabellarische Ansicht"
 
 #: bibliograph/ui/main/ItemViewUi.js:61 bibliograph/ui/main/ItemViewUi.js:66
+#: bibliograph/ui/main/ItemViewUi.js:69 bibliograph/ui/main/ItemViewUi.js:74
 #: bibliograph/ui/item/FormattedView.js:80
 msgid "Formatted View"
 msgstr "Formatierte Ansicht"
@@ -385,6 +386,7 @@ msgid "Change visibility"
 msgstr "Sichtbarkeit verändern"
 
 #: bibliograph/ui/main/TableView.js:569 bibliograph/ui/main/TableView.js:580
+#: bibliograph/ui/main/TableView.js:600 bibliograph/ui/main/TableView.js:599
 #: bibliograph/ui/item/RecordInfo.js:167
 #: bibliograph/ui/item/DuplicatesView.js:162
 msgid "Processing request..."
@@ -612,6 +614,7 @@ msgid "Loading table ..."
 msgstr "Lade Tabelle ..."
 
 #: bibliograph/ui/main/TableView.js:442 bibliograph/ui/main/TableView.js:449
+#: bibliograph/ui/main/TableView.js:459 bibliograph/ui/main/TableView.js:458
 msgid "You cannot create an item outside a folder"
 msgstr "Sie können keinen Datensatz außerhalb eines Ordners erstellen"
 
@@ -620,10 +623,12 @@ msgid "Do your really want to remove the selected references from this folder?"
 msgstr "Möchten Sie die ausgewählten Datensätze wirklich aus diesem Ordner entfernen?"
 
 #: bibliograph/ui/main/TableView.js:457 bibliograph/ui/main/TableView.js:464
+#: bibliograph/ui/main/TableView.js:474 bibliograph/ui/main/TableView.js:473
 msgid "Do your really want to remove the selected references?"
 msgstr "Wollen Sie wirklich die ausgewählten Datensätze entfernen?"
 
 #: bibliograph/ui/main/TableView.js:493 bibliograph/ui/main/TableView.js:504
+#: bibliograph/ui/main/TableView.js:520 bibliograph/ui/main/TableView.js:519
 msgid "Do your really want to move the selected references to '%1'?"
 msgstr "Wollen Sie wirklich die augewählten Datensätze nach '%1' verschieben?"
 
@@ -632,42 +637,43 @@ msgid "Do your really want to copy the selected referencesto '%1'?"
 msgstr "Wollen Sie wirklich die ausgewählten Datensätze nach '%1' kopieren?"
 
 #: bibliograph/ui/main/TableView.js:291 bibliograph/ui/main/TableView.js:282
-#: bibliograph/ui/main/TableView.js:289
+#: bibliograph/ui/main/TableView.js:289 bibliograph/ui/main/TableView.js:290
 msgid "Create new reference type"
 msgstr "Neuen Datensatz anlegen"
 
 #: bibliograph/ui/main/TableView.js:316 bibliograph/ui/main/TableView.js:307
-#: bibliograph/ui/main/TableView.js:314
+#: bibliograph/ui/main/TableView.js:314 bibliograph/ui/main/TableView.js:315
 msgid "Create"
 msgstr "Anlegen"
 
 #: dialog/Dialog.js:443 bibliograph/ui/window/FolderTreeWindow.js:107
 #: bibliograph/ui/main/TableView.js:328 bibliograph/ui/main/TableView.js:319
-#: bibliograph/ui/main/TableView.js:326
+#: bibliograph/ui/main/TableView.js:326 bibliograph/ui/main/TableView.js:327
 msgid "Cancel"
 msgstr "Abbrechen"
 
 #: bibliograph/ui/main/TableView.js:221 bibliograph/ui/main/TableView.js:212
-#: bibliograph/ui/main/TableView.js:219
+#: bibliograph/ui/main/TableView.js:219 bibliograph/ui/main/TableView.js:220
 msgid "Move reference(s)..."
 msgstr "Verschieben ..."
 
 #: bibliograph/ui/main/TableView.js:228 bibliograph/ui/main/TableView.js:219
-#: bibliograph/ui/main/TableView.js:226
+#: bibliograph/ui/main/TableView.js:226 bibliograph/ui/main/TableView.js:227
 msgid "Copy reference(s)..."
 msgstr "Kopieren ..."
 
 #: bibliograph/ui/main/TableView.js:235 bibliograph/ui/main/TableView.js:226
-#: bibliograph/ui/main/TableView.js:233
+#: bibliograph/ui/main/TableView.js:233 bibliograph/ui/main/TableView.js:234
 msgid "Export references"
 msgstr "Exportieren"
 
 #: bibliograph/ui/main/TableView.js:243 bibliograph/ui/main/TableView.js:234
-#: bibliograph/ui/main/TableView.js:241
+#: bibliograph/ui/main/TableView.js:241 bibliograph/ui/main/TableView.js:242
 msgid "Export selected references"
 msgstr "Ausgewählte Datensätze exportieren"
 
 #: bibliograph/ui/main/TableView.js:240 bibliograph/ui/main/TableView.js:247
+#: bibliograph/ui/main/TableView.js:248
 msgid "Export folder"
 msgstr "Ordner exportieren"
 
@@ -763,12 +769,15 @@ msgid "Do you really want to delete the objects '%1'?"
 msgstr "Wollen Sie wirklich die Objekte '%1' löschen?"
 
 #: bibliograph/ui/window/DatasourceListWindow.js:43
+#: bibliograph/ui/window/DatasourceListWindow.js:42
 msgid "Please select the datasource"
 msgstr "Bitte wählen Sie die Datenquelle aus"
 
 #: dialog/Dialog.js:417 dialog/Form.js:455
 #: bibliograph/ui/window/DatasourceListWindow.js:81
 #: bibliograph/ui/window/DatasourceListWindow.js:82
+#: bibliograph/ui/window/DatasourceListWindow.js:90
+#: bibliograph/ui/window/DatasourceListWindow.js:91
 msgid "OK"
 msgstr "OK"
 
@@ -962,10 +971,12 @@ msgid "Forgot Password?"
 msgstr "Passwort vergessen?"
 
 #: bibliograph/ui/main/TableView.js:583 bibliograph/ui/main/TableView.js:594
+#: bibliograph/ui/main/TableView.js:614 bibliograph/ui/main/TableView.js:613
 msgid "Do you really want to make the folder empty, moving all references to the trash that are not in other folders?"
 msgstr ""
 
 #: bibliograph/ui/main/TableView.js:586 bibliograph/ui/main/TableView.js:597
+#: bibliograph/ui/main/TableView.js:619 bibliograph/ui/main/TableView.js:618
 msgid "Emptying the folder ..."
 msgstr "Ordner leeren..."
 
@@ -1090,22 +1101,27 @@ msgid "No folder selected."
 msgstr "Es ist kein Ordner ausgewählt."
 
 #: bibliograph/ui/main/TableView.js:445 bibliograph/ui/main/TableView.js:452
+#: bibliograph/ui/main/TableView.js:462 bibliograph/ui/main/TableView.js:461
 msgid "Creating reference..."
 msgstr "Ein neuer Datensatz wird angelegt…"
 
 #: bibliograph/ui/main/TableView.js:459 bibliograph/ui/main/TableView.js:466
+#: bibliograph/ui/main/TableView.js:478 bibliograph/ui/main/TableView.js:477
 msgid "Removing references..."
 msgstr "Die Datensätze werden gelöscht…"
 
 #: bibliograph/ui/main/TableView.js:499 bibliograph/ui/main/TableView.js:510
+#: bibliograph/ui/main/TableView.js:526 bibliograph/ui/main/TableView.js:525
 msgid "Moving references..."
 msgstr "Die Datensätze werden verschoben…"
 
 #: bibliograph/ui/main/TableView.js:516 bibliograph/ui/main/TableView.js:527
+#: bibliograph/ui/main/TableView.js:545 bibliograph/ui/main/TableView.js:544
 msgid "Do your really want to copy the selected references to '%1'?"
 msgstr "Möchten Sie die ausgewählten Datensätze nach '%1' kopieren?"
 
 #: bibliograph/ui/main/TableView.js:519 bibliograph/ui/main/TableView.js:530
+#: bibliograph/ui/main/TableView.js:548 bibliograph/ui/main/TableView.js:547
 msgid "Copying references..."
 msgstr "Die Datensätze werden kopiert…"
 
@@ -1161,19 +1177,22 @@ msgid "Export selected folder"
 msgstr "Ausgewählte Datensätze exportieren"
 
 #: bibliograph/ui/main/TableView.js:255 bibliograph/ui/main/TableView.js:246
-#: bibliograph/ui/main/TableView.js:253
+#: bibliograph/ui/main/TableView.js:253 bibliograph/ui/main/TableView.js:254
 msgid "Export current query"
 msgstr "Das aktuelle Suchergebnis exportieren"
 
 #: bibliograph/ui/main/TableView.js:531 bibliograph/ui/main/TableView.js:542
+#: bibliograph/ui/main/TableView.js:560 bibliograph/ui/main/TableView.js:559
 msgid "Exporting the selected references..."
 msgstr "Die ausgewählten Datensätze werden exportiert…"
 
 #: bibliograph/ui/main/TableView.js:541 bibliograph/ui/main/TableView.js:552
+#: bibliograph/ui/main/TableView.js:570 bibliograph/ui/main/TableView.js:569
 msgid "Exporting folder..."
 msgstr "Der Ordner wird exportiert…"
 
 #: bibliograph/ui/main/TableView.js:553 bibliograph/ui/main/TableView.js:564
+#: bibliograph/ui/main/TableView.js:583 bibliograph/ui/main/TableView.js:582
 msgid "Exporting query..."
 msgstr "Das aktuelle Suchergebnis exportieren"
 
@@ -1213,11 +1232,13 @@ msgstr "Keine Ergebnisse"
 msgid "Loading folders. Please wait..."
 msgstr "Die Ordner werden geladen. Bitte warten..."
 
-#: bibliograph/ui/main/TableView.js:470
+#: bibliograph/ui/main/TableView.js:470 bibliograph/ui/main/TableView.js:482
+#: bibliograph/ui/main/TableView.js:481
 msgid "Do your really want to move the selected references to the trash?"
 msgstr "Wollen Sie die ausgewählten Datensätze wirklich in den Papierkorb bewegen?"
 
-#: bibliograph/ui/main/TableView.js:472
+#: bibliograph/ui/main/TableView.js:472 bibliograph/ui/main/TableView.js:486
+#: bibliograph/ui/main/TableView.js:485
 msgid "Deleting references..."
 msgstr "Datensätze werden gelöscht..."
 

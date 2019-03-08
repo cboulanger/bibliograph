@@ -195,11 +195,14 @@ msgstr ""
 #: dialog/Dialog.js:417 dialog/Form.js:455
 #: bibliograph/ui/window/DatasourceListWindow.js:81
 #: bibliograph/ui/window/DatasourceListWindow.js:82
+#: bibliograph/ui/window/DatasourceListWindow.js:90
+#: bibliograph/ui/window/DatasourceListWindow.js:91
 msgid "OK"
 msgstr ""
 
 #: dialog/Dialog.js:443 bibliograph/ui/window/FolderTreeWindow.js:107
-#: bibliograph/ui/main/TableView.js:326
+#: bibliograph/ui/main/TableView.js:326 bibliograph/ui/main/TableView.js:328
+#: bibliograph/ui/main/TableView.js:327
 msgid "Cancel"
 msgstr ""
 
@@ -276,6 +279,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: bibliograph/ui/window/DatasourceListWindow.js:43
+#: bibliograph/ui/window/DatasourceListWindow.js:42
 msgid "Please select the datasource"
 msgstr ""
 
@@ -604,6 +608,7 @@ msgid "Folders"
 msgstr ""
 
 #: bibliograph/ui/main/ItemViewUi.js:61 bibliograph/ui/main/ItemViewUi.js:66
+#: bibliograph/ui/main/ItemViewUi.js:69 bibliograph/ui/main/ItemViewUi.js:74
 #: bibliograph/ui/item/FormattedView.js:80
 msgid "Formatted View"
 msgstr ""
@@ -749,100 +754,116 @@ msgstr ""
 msgid "Emptying the trash ..."
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:219
+#: bibliograph/ui/main/TableView.js:219 bibliograph/ui/main/TableView.js:220
 msgid "Move reference(s)..."
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:226
+#: bibliograph/ui/main/TableView.js:226 bibliograph/ui/main/TableView.js:227
 msgid "Copy reference(s)..."
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:233
+#: bibliograph/ui/main/TableView.js:233 bibliograph/ui/main/TableView.js:234
 msgid "Export references"
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:241
+#: bibliograph/ui/main/TableView.js:241 bibliograph/ui/main/TableView.js:242
 msgid "Export selected references"
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:247
+#: bibliograph/ui/main/TableView.js:247 bibliograph/ui/main/TableView.js:248
 msgid "Export folder"
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:253
+#: bibliograph/ui/main/TableView.js:253 bibliograph/ui/main/TableView.js:254
 msgid "Export current query"
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:289
+#: bibliograph/ui/main/TableView.js:289 bibliograph/ui/main/TableView.js:290
 msgid "Create new reference type"
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:314
+#: bibliograph/ui/main/TableView.js:314 bibliograph/ui/main/TableView.js:315
 msgid "Create"
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:449
+#: bibliograph/ui/main/TableView.js:449 bibliograph/ui/main/TableView.js:459
+#: bibliograph/ui/main/TableView.js:458
 msgid "You cannot create an item outside a folder"
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:452
+#: bibliograph/ui/main/TableView.js:452 bibliograph/ui/main/TableView.js:462
+#: bibliograph/ui/main/TableView.js:461
 msgid "Creating reference..."
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:464
+#: bibliograph/ui/main/TableView.js:464 bibliograph/ui/main/TableView.js:474
+#: bibliograph/ui/main/TableView.js:473
 msgid "Do your really want to remove the selected references?"
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:466
+#: bibliograph/ui/main/TableView.js:466 bibliograph/ui/main/TableView.js:478
+#: bibliograph/ui/main/TableView.js:477
 msgid "Removing references..."
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:470
+#: bibliograph/ui/main/TableView.js:470 bibliograph/ui/main/TableView.js:482
+#: bibliograph/ui/main/TableView.js:481
 msgid "Do your really want to move the selected references to the trash?"
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:472
+#: bibliograph/ui/main/TableView.js:472 bibliograph/ui/main/TableView.js:486
+#: bibliograph/ui/main/TableView.js:485
 msgid "Deleting references..."
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:504
+#: bibliograph/ui/main/TableView.js:504 bibliograph/ui/main/TableView.js:520
+#: bibliograph/ui/main/TableView.js:519
 msgid "Do your really want to move the selected references to '%1'?"
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:510
+#: bibliograph/ui/main/TableView.js:510 bibliograph/ui/main/TableView.js:526
+#: bibliograph/ui/main/TableView.js:525
 msgid "Moving references..."
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:527
+#: bibliograph/ui/main/TableView.js:527 bibliograph/ui/main/TableView.js:545
+#: bibliograph/ui/main/TableView.js:544
 msgid "Do your really want to copy the selected references to '%1'?"
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:530
+#: bibliograph/ui/main/TableView.js:530 bibliograph/ui/main/TableView.js:548
+#: bibliograph/ui/main/TableView.js:547
 msgid "Copying references..."
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:542
+#: bibliograph/ui/main/TableView.js:542 bibliograph/ui/main/TableView.js:560
+#: bibliograph/ui/main/TableView.js:559
 msgid "Exporting the selected references..."
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:552
+#: bibliograph/ui/main/TableView.js:552 bibliograph/ui/main/TableView.js:570
+#: bibliograph/ui/main/TableView.js:569
 msgid "Exporting folder..."
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:564
+#: bibliograph/ui/main/TableView.js:564 bibliograph/ui/main/TableView.js:583
+#: bibliograph/ui/main/TableView.js:582
 msgid "Exporting query..."
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:580 bibliograph/ui/item/RecordInfo.js:167
+#: bibliograph/ui/main/TableView.js:580 bibliograph/ui/main/TableView.js:600
+#: bibliograph/ui/main/TableView.js:599 bibliograph/ui/item/RecordInfo.js:167
 #: bibliograph/ui/item/DuplicatesView.js:162
 msgid "Processing request..."
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:594
+#: bibliograph/ui/main/TableView.js:594 bibliograph/ui/main/TableView.js:614
+#: bibliograph/ui/main/TableView.js:613
 msgid "Do you really want to make the folder empty, moving all references to the trash that are not in other folders?"
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:597
+#: bibliograph/ui/main/TableView.js:597 bibliograph/ui/main/TableView.js:619
+#: bibliograph/ui/main/TableView.js:618
 msgid "Emptying the folder ..."
 msgstr ""
 

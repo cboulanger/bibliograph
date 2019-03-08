@@ -79,7 +79,7 @@ qx.Class.define("bibliograph.ui.item.FormattedViewUi",
       var qxMenuBarButton4 = new qx.ui.menubar.Button(this.tr('Tabular View'), null, null);
       menuBar.add(qxMenuBarButton4);
       qxMenuBarButton4.addListener("click", function(e) {
-        this.getApplication().getWidgetById("app/item/view").showTabularView();
+        qx.core.Id.getQxObject("item-view").showTabularView();
       }, this);
     }
   }

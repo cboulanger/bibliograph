@@ -14,8 +14,7 @@
      * Christian Boulanger (cboulanger)
 
 ************************************************************************ */
-/*global qx qcl dialog bibliograph virtualdata*/
-
+/*global qx qcl dialog bibliograph */
 
 qx.Class.define("bibliograph.ui.main.TableView",
 {
@@ -25,7 +24,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
   construct: function () {
     this.base(arguments);
     this.createNewReferenceWindow();
-    this.addListenerOnce("permissionsReady",()=>{
+    this.addListenerOnce("permissionsReady", () => {
       this.createMenuEntries();
     });
 
@@ -34,10 +33,10 @@ qx.Class.define("bibliograph.ui.main.TableView",
     bus.subscribe("folder.reload", this._on_reloadFolder, this);
     bus.subscribe("reference.changeData", this._on_changeReferenceData, this);
     bus.subscribe("reference.removeRows", this._on_removeRows, this);
-    bus.subscribe(bibliograph.AccessManager.messages.LOGOUT, ()=> this.clearTable());
+    bus.subscribe(bibliograph.AccessManager.messages.LOGOUT, () => this.clearTable());
     
     // create reference type list, TODO rewrite this
-    this.addListener("tableReady",e =>{
+    this.addListener("tableReady", e => {
       let data = e.getData();
       if (data.addItems && data.addItems.length) {
         this.setAddItems(qx.data.marshal.Json.createModel(data.addItems));
@@ -48,11 +47,11 @@ qx.Class.define("bibliograph.ui.main.TableView",
     this.addListener(qcl.access.MPermissions.events.permissionsReady, e => {
       this.set({
         debugDragSession: qx.core.Environment.get("qx.debug"),
-        allowDropTargetTypes: ['folder','trash']
+        allowDropTargetTypes: ["folder", "trash"]
       });
       this.bindState(this.permissions.move_reference, this, "enableDragDrop");
-      this.bind("folderId", this, "dragActions",{
-        converter : value => value > 0 ? ['move','copy'] : ['copy']
+      this.bind("folderId", this, "dragActions", {
+        converter : value => value > 0 ? ["move", "copy"] : ["copy"]
       });
     });
   },
@@ -91,7 +90,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
     
     permissions : {
       add_reference : {
-        depends: "reference.add",
+        depends: "reference.add"
       },
       add_reference_to_folder : {
         depends: "reference.add",
@@ -100,16 +99,18 @@ qx.Class.define("bibliograph.ui.main.TableView",
           "app/treeview:changeSelectedNode"
         ],
         condition : [
-          self => self.getAddItems() !== null &&  self.getFolderId() > 0,
+          self => self.getAddItems() !== null && self.getFolderId() > 0,
           treeview => {
-            if ( ! treeview.getTree() ) return false;
+            if (!treeview.getTree()) {
+              return false;
+            }
             let selection = treeview.getTree().getSelectedNodes();
-            return (selection.length && ['folder','top'].includes(selection[0].data.type) )
+            return (selection.length && ["folder", "top"].includes(selection[0].data.type));
           }
         ]
       },
       remove_reference : {
-        aliasOf : "reference.remove",
+        aliasOf : "reference.remove"
       },
       remove_selected_references : {
         depends: "reference.remove",
@@ -135,7 +136,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
         condition : self => self.getSelectedIds().length > 0
       },
       batch_edit_reference :{
-        aliasOf: "reference.batchedit",
+        aliasOf: "reference.batchedit"
       },
       export_references:{
         aliasOf : "reference.export"
@@ -153,8 +154,8 @@ qx.Class.define("bibliograph.ui.main.TableView",
       export_query :{
         depends: "reference.export",
         updateEvent: "changeQuery",
-        condition: self => !!self.getQuery()
-      },
+        condition: self => Boolean(self.getQuery())
+      }
     },
 
     /*
@@ -163,11 +164,11 @@ qx.Class.define("bibliograph.ui.main.TableView",
     ---------------------------------------------------------------------------
     */
 
-    addMenuBarButton : function(button){
-      this.menuBar.addBefore(button,this._statusLabel );
+    addMenuBarButton : function(button) {
+      this.menuBar.addBefore(button, this._statusLabel);
     },
 
-    createMenuEntries: function(){
+    createMenuEntries: function() {
       let app = qx.core.Init.getApplication();
 
       // "Add Reference" menubar button
@@ -181,7 +182,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
       this.addMenuBarButton(addButton);
       this.bindVisibility(this.permissions.add_reference, addButton);
       this.bindEnabled(this.permissions.add_reference_to_folder, addButton);
-      addButton.addListener("execute", ()=>{
+      addButton.addListener("execute", () => {
         app.getWidgetById("app/windows/new-reference").open();
       });
 
@@ -201,7 +202,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
       // Reload Button
       let reloadButton = new qx.ui.menubar.Button(null, "bibliograph/icon/button-reload.png", null, null);
       this.addMenuBarButton(reloadButton);
-      reloadButton.addListener("execute", ()=> this.reload());
+      reloadButton.addListener("execute", () => this.reload());
 
       // Options
       let optionsButton = new qx.ui.menubar.Button();
@@ -216,21 +217,21 @@ qx.Class.define("bibliograph.ui.main.TableView",
       optionsButton.setMenu(optionsMenu);
 
       // Move references
-      let moveButton = new qx.ui.menu.Button(this.tr('Move reference(s)...'));
+      let moveButton = new qx.ui.menu.Button(this.tr("Move reference(s)..."));
       optionsMenu.add(moveButton);
-      moveButton.addListener("execute", ()=>this.moveSelectedReferences());
+      moveButton.addListener("execute", () => this.moveSelectedReferences());
       this.bindEnabled(this.permissions.move_selected_references, moveButton);
       this.bindVisibility(this.permissions.move_reference, moveButton);
 
       // Copy references
-      let copyButton = new qx.ui.menu.Button(this.tr('Copy reference(s)...'));
+      let copyButton = new qx.ui.menu.Button(this.tr("Copy reference(s)..."));
       optionsMenu.add(copyButton);
-      copyButton.addListener("execute", ()=>this.copySelectedReferences());
+      copyButton.addListener("execute", () => this.copySelectedReferences());
       this.bindEnabled(this.permissions.copy_selected_references, copyButton);
       this.bindVisibility(this.permissions.move_reference, copyButton);
       
       // Export menu
-      let exportButton = new qx.ui.menu.Button(this.tr('Export references'));
+      let exportButton = new qx.ui.menu.Button(this.tr("Export references"));
       optionsMenu.add(exportButton);
       this.bindVisibility(this.permissions.export_references, copyButton);
 
@@ -238,21 +239,21 @@ qx.Class.define("bibliograph.ui.main.TableView",
       exportButton.setMenu(exportMenu);
 
       // Export selected references
-      let menuButton4 = new qx.ui.menu.Button(this.tr('Export selected references'));
+      let menuButton4 = new qx.ui.menu.Button(this.tr("Export selected references"));
       exportMenu.add(menuButton4);
       menuButton4.addListener("execute", () => this.exportSelected());
       this.bindEnabled(this.permissions.export_selected_references, menuButton4);
 
       // export selected folder
-      let menuButton5 = new qx.ui.menu.Button(this.tr('Export folder'));
+      let menuButton5 = new qx.ui.menu.Button(this.tr("Export folder"));
       exportMenu.add(menuButton5);
-      menuButton5.addListener("execute", () => this.exportFolder() );
+      menuButton5.addListener("execute", () => this.exportFolder());
       this.bindVisibility(this.permissions.export_folder, menuButton5);
   
       // export current query
-      let menuButton6 = new qx.ui.menu.Button(this.tr('Export current query'));
+      let menuButton6 = new qx.ui.menu.Button(this.tr("Export current query"));
       exportMenu.add(menuButton6);
-      menuButton6.addListener("execute", () => this.exportQuery() );
+      menuButton6.addListener("execute", () => this.exportQuery());
       this.bindVisibility(this.permissions.export_query, menuButton6);
   
   
@@ -284,7 +285,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
      * Window to create new references
      * @returns {qx.ui.window.Window}
      */
-    createNewReferenceWindow : function(){
+    createNewReferenceWindow : function() {
       let app = this.getApplication();
       let win = new qx.ui.window.Window(this.tr("Create new reference type"));
       win.setLayout(new qx.ui.layout.VBox(5));
@@ -295,11 +296,11 @@ qx.Class.define("bibliograph.ui.main.TableView",
       });
 
       // blocker
-      win.addListener("appear", ()=>{
+      win.addListener("appear", () => {
         win.center();
         app.getBlocker().blockContent(win.getZIndex() - 1);
       });
-      win.addListener("disappear", ()=>app.getBlocker().unblock());
+      win.addListener("disappear", () => app.getBlocker().unblock());
 
       // List widget, will be populated later
       let list = new qx.ui.list.List();
@@ -308,7 +309,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
         labelPath: "label"
       });
       win.add(list, {flex: 1});
-      this.bind("addItems",list, "model");
+      this.bind("addItems", list, "model");
 
       // OK button
       let okButton = new qx.ui.form.Button(this.tr("Create"));
@@ -366,21 +367,27 @@ qx.Class.define("bibliograph.ui.main.TableView",
     _on_changeReferenceData: function (e) {
       let data = e.getData();
       let table = this.getTable();
-      if (!table) return;
+      if (!table) {
+ return;
+}
       let tableModel = table.getTableModel();
       let columnName = data.name;
       switch (columnName) {
         case "author":
         case "editor":
-          if (tableModel.getColumnIndexById("creator") !== undefined ){
+          if (tableModel.getColumnIndexById("creator") !== undefined) {
             columnName = "creator";
           }
           break;
       }
       let columnIndex = tableModel.getColumnIndexById(columnName);
-      if (columnIndex === undefined) return;
+      if (columnIndex === undefined) {
+ return;
+}
       let rowIndex = tableModel.getRowById(data.referenceId);
-      if (rowIndex === undefined) return;
+      if (rowIndex === undefined) {
+ return;
+}
       tableModel.setValue(columnIndex, rowIndex, data.value.replace(/\n/, "; "));
     },
     
@@ -393,43 +400,45 @@ qx.Class.define("bibliograph.ui.main.TableView",
       
       // is this message really for me?
       let notForMe =
-        (data.datasource !== this.getDatasource())
-        || (data.folderId && data.folderId !== this.getFolderId())
-        || (data.query && data.query !== this.getQuery());
-      if( notForMe ) {
+        (data.datasource !== this.getDatasource()) ||
+        (data.folderId && data.folderId !== this.getFolderId()) ||
+        (data.query && data.query !== this.getQuery());
+      if (notForMe) {
         this.debug("Ignoring message...");
       }
       
       let table = this.getTable();
       let tableModel = table.getTableModel();
       if (!qx.lang.Type.isArray(data.ids)) {
-        this.error("Invalid id data.")
+        this.error("Invalid id data.");
       }
       this.resetSelection();
       
       // get row indexes from ids
-      let row, rows = [];
+      let row,
+rows = [];
       data.ids.forEach(function (id) {
         row = tableModel.getRowById(id);
-        if (row !== undefined) rows.push(row); // FIXME this is a bug
+        if (row !== undefined) {
+rows.push(row);
+} // FIXME this is a bug
       });
       
       // sort row indexes descending and remove them
       rows.sort(function (a, b) {
-        return b - a
+        return b - a;
       });
       
       if (rows.length) {
         rows.forEach(function (row) {
           tableModel.removeRow(row);
         });
-      }  else {
+      } else {
         this.reload();
       }
       
       // rebuild the row-id index because now rows are missing
       tableModel.rebuildIndex();
-      
     },
   
     /*
@@ -450,7 +459,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
         return;
       }
       app.showPopup(this.tr("Creating reference..."));
-      await this.rpc.create( this.getDatasource(), this.getFolderId(), reftype );
+      await this.rpc.create(this.getDatasource(), this.getFolderId(), reftype);
       app.hidePopup();
     },
     
@@ -460,17 +469,21 @@ qx.Class.define("bibliograph.ui.main.TableView",
      */
     removeSelectedReferences: async function () {
       let app = this.getApplication();
-      if( this.getFolderId()){
+      if (this.getFolderId()) {
         let msg = this.tr("Do your really want to remove the selected references?");
-        if( ! await dialog.Dialog.confirm(msg).promise() ) return;
+        if (!await dialog.Dialog.confirm(msg).promise()) {
+return;
+}
         app.showPopup(this.tr("Removing references..."));
-        await this.rpc.remove( this.getDatasource(), this.getFolderId(), this.getSelectedIds().join(",") );
+        await this.rpc.remove(this.getDatasource(), this.getFolderId(), this.getSelectedIds().join(","));
         app.hidePopup();
       } else {
         let msg = this.tr("Do your really want to move the selected references to the trash?");
-        if( ! await dialog.Dialog.confirm(msg).promise() ) return;
+        if (!await dialog.Dialog.confirm(msg).promise()) {
+ return;
+}
         app.showPopup(this.tr("Deleting references..."));
-        await this.rpc.remove( this.getDatasource(), 0, this.getSelectedIds().join(",") );
+        await this.rpc.remove(this.getDatasource(), 0, this.getSelectedIds().join(","));
         app.hidePopup();
       }
     },
@@ -480,11 +493,11 @@ qx.Class.define("bibliograph.ui.main.TableView",
      * @return {Promise<any>}
      * @private
      */
-    _showFolderDialog : function(){
-      return new Promise((resolve)=>{
+    _showFolderDialog : function() {
+      return new Promise(resolve => {
         let app = this.getApplication();
         let win = app.getWidgetById("app/windows/folders");
-        win.addListenerOnce("nodeSelected", (e) => resolve(e.getData()) );
+        win.addListenerOnce("nodeSelected", e => resolve(e.getData()));
         win.show();
       });
     },
@@ -497,9 +510,11 @@ qx.Class.define("bibliograph.ui.main.TableView",
      */
     moveSelectedReferences: async function (node=null) {
       let app = this.getApplication();
-      if( ! node){
+      if (!node) {
         node = await this._showFolderDialog();
-        if( ! node ) return;
+        if (!node) {
+ return;
+}
       }
       let message = this.tr(
         "Do your really want to move the selected references to '%1'?",
@@ -518,11 +533,13 @@ qx.Class.define("bibliograph.ui.main.TableView",
      *    Tree node model data or null to open a dialog
      * @return {Promise}
      */
-    copySelectedReferences: async function ( node=null ) {
+    copySelectedReferences: async function (node=null) {
       let app = this.getApplication();
-      if( ! node){
+      if (!node) {
         node = await this._showFolderDialog();
-        if( ! node ) return;
+        if (!node) {
+ return;
+}
       }
       let message = this.tr("Do your really want to copy the selected references to '%1'?", [node.label]);
       await dialog.Dialog.confirm(message).promise();
@@ -540,32 +557,34 @@ qx.Class.define("bibliograph.ui.main.TableView",
       let selectedIds = this.getSelectedIds();
       let app = this.getApplication();
       app.showPopup(this.tr("Exporting the selected references..."));
-      app.getRpcClient("converters/export").send( "format-dialog", [datasource, selectedIds.join(",")])
-        .then(()=>app.hidePopup());
+      app.getRpcClient("converters/export").send("format-dialog", [datasource, selectedIds.join(",")])
+        .then(() => app.hidePopup());
     },
     
     /**
      * Exports the whole folder
      */
-    exportFolder: function (){
+    exportFolder: function () {
       let app = this.getApplication();
       app.showPopup(this.tr("Exporting folder..."));
       app.getRpcClient("converters/export").send("format-dialog", [
         this.getDatasource(),
         "folder:" + this.getFolderId()
-      ]).then(()=>app.hidePopup());
+      ])
+.then(() => app.hidePopup());
     },
   
     /**
      * Exports the current query
      */
-    exportQuery: function (){
+    exportQuery: function () {
       let app = this.getApplication();
       app.showPopup(this.tr("Exporting query..."));
       app.getRpcClient("converters/export").send("format-dialog", [
         this.getDatasource(),
         "query:" + this.getQuery()
-      ]).then(()=>app.hidePopup());
+      ])
+.then(() => app.hidePopup());
     },
     
     /**
@@ -593,7 +612,9 @@ qx.Class.define("bibliograph.ui.main.TableView",
       let app = this.getApplication();
       let msg = this.tr("Do you really want to make the folder empty, moving all references to the trash that are not in other folders?");
       dialog.Dialog.confirm(msg, function (yes) {
-        if (!yes) return;
+        if (!yes) {
+ return;
+}
         app.showPopup(this.tr("Emptying the folder ..."));
         app.getRpcClient("reference").send("removeAllFromFolder", [datasource, folderId], function () {
           app.hidePopup();
