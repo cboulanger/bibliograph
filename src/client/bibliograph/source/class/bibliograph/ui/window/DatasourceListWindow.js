@@ -52,14 +52,19 @@ qx.Class.define("bibliograph.ui.window.DatasourceListWindow",
     // controller
     let dsController = new qx.data.controller.List(null, dsList, "label");
     bibliograph.store.Datasources.getInstance().bind("model", dsController, "model");
+
+    // make list items addressable with qooxdoo ids
+    // does this really make sense?
     dsController.addListener("changeModel", () => {
       qx.event.Timer.once(() => {
+        dsList.getOwnedQxObjects().map(o => dsList.removeOwnedQxObject(o));
         dsList.getChildren().forEach(item => {
           item.setQxObjectId(item.getModel().getValue());
           dsList.addOwnedQxObject(item);
         });
       }, this, 50);
     });
+
     this.getApplication().bind("datasource", dsList, "selection", {
       converter : v => bibliograph.Utils.getListElementWithValue(dsList, v)
     });

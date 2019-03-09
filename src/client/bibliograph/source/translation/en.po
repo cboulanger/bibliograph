@@ -197,6 +197,8 @@ msgstr ""
 #: bibliograph/ui/window/DatasourceListWindow.js:82
 #: bibliograph/ui/window/DatasourceListWindow.js:90
 #: bibliograph/ui/window/DatasourceListWindow.js:91
+#: bibliograph/ui/window/DatasourceListWindow.js:95
+#: bibliograph/ui/window/DatasourceListWindow.js:96
 msgid "OK"
 msgstr ""
 

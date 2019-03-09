@@ -19,7 +19,7 @@ if [[ "$TARGET" == "" ]]; then
 fi
 APP_PATH=client/bibliograph/compiled/$TARGET/$APP/index.html
 
-mysql -uroot -e "drop database if exists tests;" || (echo "MySQL server does not seem to be running" && exit 1)
+mysql -uroot -e "drop database if exists tests;" || { echo "MySQL server does not seem to be running"; exit 1;}
 mysql -uroot -e "create database tests;"
 echo " >>> Created empty database ..."
 
