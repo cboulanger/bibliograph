@@ -20,16 +20,14 @@
     "app.version": "3.0.0-beta.78",
     "app.serverUrl": "/server/web/?r="
   },
-
   "locales": [
     "en",
     "de"
   ],
   "defaultTarget": "source",
-
   "targets": [
     {
-      "//" : "-------------------------------------------------------------------",
+      "//": "-------------------------------------------------------------------",
       "//title": "The local 'source' target for development",
       "type": "source",
       "environment": {
@@ -38,7 +36,7 @@
       "outputPath": "compiled/source"
     },
     {
-      "//" : "-------------------------------------------------------------------",
+      "//": "-------------------------------------------------------------------",
       "//title": "The local 'build' target ",
       "type": "build",
       "environment": {
@@ -47,7 +45,7 @@
       "outputPath": "compiled/build"
     },
     {
-      "//" : "-------------------------------------------------------------------",
+      "//": "-------------------------------------------------------------------",
       "//title": "A source build to be deployed for debugging purposes",
       "type": "dist-debug",
       "environment": {
@@ -66,7 +64,7 @@
       }
     },
     {
-      "//" : "-------------------------------------------------------------------",
+      "//": "-------------------------------------------------------------------",
       "//title": "The final 'build' target for deployment",
       "type": "dist-build",
       "targetClass": "BuildTarget",
@@ -78,11 +76,9 @@
       }
     }
   ],
-
-
   "applications": [
     {
-      "//" : "-------------------------------------------------------------------",
+      "//": "-------------------------------------------------------------------",
       "title": "Bibliograph Bibliographic Data Manager",
       "name": "bibliograph",
       "theme": "bibliograph.theme.Theme",
@@ -91,11 +87,10 @@
       "include": [
         "bibliograph.plugins.*"
       ],
-      "environment": {
-      }
+      "environment": {}
     },
     {
-      "//" : "-------------------------------------------------------------------",
+      "//": "-------------------------------------------------------------------",
       "title": "Bibliograph Bibliographic Data Manager (test mode, with event ecorder)",
       "name": "bibliograph-recorder",
       "theme": "bibliograph.theme.Theme",
@@ -117,7 +112,7 @@
       }
     },
     {
-      "//" : "-------------------------------------------------------------------",
+      "//": "-------------------------------------------------------------------",
       "title": "Bibliograph Bibliographic Data Manager (test mode, with script player)",
       "name": "bibliograph-player",
       "theme": "bibliograph.theme.Theme",
@@ -137,12 +132,11 @@
       }
     },
     {
-      "//" : "-------------------------------------------------------------------",
+      "//": "-------------------------------------------------------------------",
       "title": "Qooxdoo API Viewer",
       "class": "qxl.apiviewer.Application",
       "theme": "qxl.apiviewer.Theme",
       "name": "apiviewer",
-
       "environment": {
         "excludeFromAPIViewer": [
           "qxl.apiviewer.*"

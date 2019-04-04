@@ -30,23 +30,32 @@ fi
 # clean build
 $TOP_DIR/build/script/dist-clean.sh
 
+echo "*****************************************************************************************"
 echo
-echo "Building distributable package of Bibliograph from '$BUILD_TARGET' build target"
-echo "using qx executable at $QX_CMD"
+echo "  Building distributable package of Bibliograph"
+echo
+echo "   - Build target: $BUILD_TARGET"
+#echo "  Compiler version $(qx --version)"
+if [[ "$COMPOSER" ]]; then
+echo "   - Composer configuration: $COMPOSER"
+fi
+echo
+echo "*****************************************************************************************"
+echo
 
 echo " >>> Building client ..."
 cd $CLIENT_SRC_DIR
 mv compile.json compile.old
 jq ".environment[\"app.version\"]=\"$VERSION\"" compile.old > compile.json
-$QX_CMD compile --target=$BUILD_TARGET --clean
+$QX_CMD compile --target=$BUILD_TARGET --clean || exit 1
 rm compile.old
 
-cp -a compiled/$BUILD_TARGET/bibliograph $DIST_DIR
-cp -a compiled/$BUILD_TARGET/resource $DIST_DIR
+cp -a compiled/$BUILD_TARGET/bibliograph $DIST_DIR || exit 1
+cp -a compiled/$BUILD_TARGET/resource $DIST_DIR || exit 1
 if ! [[ $BUILD_TARGET == *"build"* ]]; then
-  cp -a compiled/$BUILD_TARGET/transpiled $DIST_DIR
+  cp -a compiled/$BUILD_TARGET/transpiled $DIST_DIR || exit 1
 fi
-cp compiled/$BUILD_TARGET/index.html $DIST_DIR
+cp compiled/$BUILD_TARGET/index.html $DIST_DIR || exit 1
 
 # cd $TOP_DIR
 # bash build/script/modules-compile.sh $BUILD_TARGET
@@ -81,6 +90,5 @@ cd $DIST_DIR
 # remove git folders
 ( find . -type d -name ".git" ) | xargs rm -rf
 zip -q -r $ZIP_NAME *
-ls -al
 echo "Done."
 exit 0
