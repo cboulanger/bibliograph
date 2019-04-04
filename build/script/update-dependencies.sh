@@ -1,8 +1,8 @@
 #!/bin/bash
 echo " >>> Updating contribs..."
 pushd src/client/bibliograph >/dev/null
-qx contrib update
-qx contrib install
+qx contrib update --search
+qx contrib upgrade
 popd >/dev/null
 
 echo " >>> Updating composer packages..."
