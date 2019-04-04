@@ -39,6 +39,7 @@ before_install:
   - install/travis/script/install-php.sh
   - pyenv shell 3.6 && pip install --upgrade pip
   - npm install -g qxcompiler
+  - qx config set github.token $GITHUB_TOKEN
   - qx contrib update --search --all-versions
 
 script: skip
