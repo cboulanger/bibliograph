@@ -29,13 +29,13 @@ qx.Class.define("qcl.ui.dialog.Login",
     this.setCheckCredentials((username, password, callback)=>{
       let accessManager = qx.core.Init.getApplication().getAccessManager();
       let response = await accessManager.authenticate(username, password, true);
-      let { message, token, sessionId, error } = response; 
+      let { message, token, sessionId, error } = response;
       if( error ){
         this.warn(error);
         return;
       }
       this.info(message);
-      accessManager.setToken(token);
+      accessManager.setToken(token || null);
       accessManager.setSessionId(sessionId);
       // this calls the server method
       callback();

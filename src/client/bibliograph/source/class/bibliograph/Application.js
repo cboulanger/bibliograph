@@ -258,7 +258,7 @@ qx.Class.define("bibliograph.Application", {
         this.__clients[service] = client;
       }
       let client = this.__clients[service];
-      client.setToken(this.getAccessManager().getToken());
+      client.setToken(this.getAccessManager().getToken() || null);
       return client;
     },
 

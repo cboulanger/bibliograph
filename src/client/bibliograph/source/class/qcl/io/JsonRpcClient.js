@@ -35,7 +35,7 @@ qx.Class.define("qcl.io.JsonRpcClient", {
     qx.util.Validate.checkUrl(url);
     this.__client = window.raptor( url );
     qx.event.message.Bus.subscribe("bibliograph.token.change",(e) => {
-      this.setToken( e.getData() );
+      this.setToken( e.getData() || null );
     });
   },
 

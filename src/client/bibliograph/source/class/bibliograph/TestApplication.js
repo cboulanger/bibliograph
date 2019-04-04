@@ -21,9 +21,9 @@ qx.Class.define("bibliograph.TestApplication",
   members :
   {
     /**
-     * This method contains the initial application code and gets called 
+     * This method contains the initial application code and gets called
      * during startup of the application
-     * 
+     *
      * @lint ignoreDeprecated(alert)
      */
     main : function()
@@ -50,7 +50,7 @@ qx.Class.define("bibliograph.TestApplication",
         // auth as admin
         let { token } = await this.getRpcClient("access").send('authenticate',['admin','admin']);
         console.info( "token " + token );
-        am.setToken(token);
+        am.setToken(token || null);
         await am.load();
         await cm.load();
       });
@@ -64,9 +64,9 @@ qx.Class.define("bibliograph.TestApplication",
         cm.setKey(
           "application.title",
           await dialog.Dialog.prompt("Enter application title").promise()
-        ); 
+        );
       });
-      am.getPermission( 'config.default.edit' ).bind("state", button2, "enabled");     
+      am.getPermission( 'config.default.edit' ).bind("state", button2, "enabled");
       
       var button3= new qx.ui.form.Button("Logout", "bibliograph/test.png");
       button3.setEnabled(false);
@@ -79,13 +79,13 @@ qx.Class.define("bibliograph.TestApplication",
       });
       am.getUserManager().bind( 'activeUser.username', button3, "label", {
         converter : value => `Logout ${value||""}`
-      });      
+      });
 
       var label1 = new qx.ui.basic.Label("Loading...");
       doc.add(label1,  {left: 300, top: 90});
       cm.addListener("ready", () =>{
         cm.bindKey("application.title",label1,"value", true);
-      }); 
+      });
 
       /*
        * application startup

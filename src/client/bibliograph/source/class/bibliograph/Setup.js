@@ -269,7 +269,7 @@ qx.Class.define("bibliograph.Setup", {
       let { message, token, sessionId } = response;
       this.info(message);
 
-      am.setToken(token);
+      am.setToken(token || null);
       am.setSessionId(sessionId);
       this.info("Acquired access token.");
       } else {
