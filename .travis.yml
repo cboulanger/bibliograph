@@ -39,7 +39,7 @@ before_install:
   - install/travis/script/install-php.sh
   - pyenv shell 3.6 && pip install --upgrade pip
   - npm install -g qxcompiler
-  - qx contrib update --search --all-releases
+  - qx contrib update --search --all-versions
 
 script: skip
 
