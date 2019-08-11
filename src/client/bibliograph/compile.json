@@ -27,8 +27,7 @@
   "defaultTarget": "source",
   "targets": [
     {
-      "//": "-------------------------------------------------------------------",
-      "//title": "The local 'source' target for development",
+      "description": "The local 'source' target for development",
       "type": "source",
       "environment": {
         "app.mode": "development"
@@ -36,8 +35,7 @@
       "outputPath": "compiled/source"
     },
     {
-      "//": "-------------------------------------------------------------------",
-      "//title": "The local 'build' target ",
+      "description": "The local 'build' target ",
       "type": "build",
       "environment": {
         "app.mode": "production"
@@ -45,8 +43,7 @@
       "outputPath": "compiled/build"
     },
     {
-      "//": "-------------------------------------------------------------------",
-      "//title": "A source build to be deployed for debugging purposes",
+      "description": "A source build to be deployed for debugging purposes",
       "type": "dist-debug",
       "environment": {
         "app.mode": "development",
@@ -64,8 +61,7 @@
       }
     },
     {
-      "//": "-------------------------------------------------------------------",
-      "//title": "The final 'build' target for deployment",
+      "description": "The final 'build' target for deployment",
       "type": "dist-build",
       "targetClass": "BuildTarget",
       "outputPath": "compiled/dist-build",
@@ -78,7 +74,6 @@
   ],
   "applications": [
     {
-      "//": "-------------------------------------------------------------------",
       "title": "Bibliograph Bibliographic Data Manager",
       "name": "bibliograph",
       "theme": "bibliograph.theme.Theme",
@@ -90,7 +85,6 @@
       "environment": {}
     },
     {
-      "//": "-------------------------------------------------------------------",
       "title": "Bibliograph Bibliographic Data Manager (test mode, with event ecorder)",
       "name": "bibliograph-recorder",
       "theme": "bibliograph.theme.Theme",
@@ -112,7 +106,6 @@
       }
     },
     {
-      "//": "-------------------------------------------------------------------",
       "title": "Bibliograph Bibliographic Data Manager (test mode, with script player)",
       "name": "bibliograph-player",
       "theme": "bibliograph.theme.Theme",
@@ -132,12 +125,12 @@
       }
     },
     {
-      "//": "-------------------------------------------------------------------",
       "title": "Qooxdoo API Viewer",
       "class": "qxl.apiviewer.Application",
       "theme": "qxl.apiviewer.Theme",
       "name": "apiviewer",
       "environment": {
+        "qx.icontheme": "Tango",
         "excludeFromAPIViewer": [
           "qxl.apiviewer.*"
         ]
@@ -150,6 +143,30 @@
         "qx.module.Blocker",
         "qx.module.Placement"
       ]
+    },
+    {
+      "class": "qxl.widgetbrowser.Application",
+      "theme": "qx.theme.Indigo",
+      "name": "widgetbrowser",
+      "title": "WidgetBrowser",
+      "include": [
+        "qx.theme.Modern",
+        "qx.theme.Simple",
+        "qx.theme.Classic",
+        "qxl.widgetbrowser.pages.Tree",
+        "qxl.widgetbrowser.pages.List",
+        "qxl.widgetbrowser.pages.Table",
+        "qxl.widgetbrowser.pages.Form",
+        "qxl.widgetbrowser.pages.ToolBar",
+        "qxl.widgetbrowser.pages.Window",
+        "qxl.widgetbrowser.pages.Tab",
+        "qxl.widgetbrowser.pages.Control",
+        "qxl.widgetbrowser.pages.Embed",
+        "qxl.widgetbrowser.pages.EmbedFrame",
+        "qxl.widgetbrowser.pages.Basic",
+        "qxl.widgetbrowser.pages.Misc"
+      ]
     }
-  ]
+  ],
+  "$schema": "https://raw.githubusercontent.com/qooxdoo/qooxdoo-compiler/master/source/resource/qx/tool/schema/compile-1-0-0.json"
 }

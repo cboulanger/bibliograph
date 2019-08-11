@@ -5,36 +5,25 @@
     "description": "Bibliograph is a powerful open source web application for the collaborative collection, editing and publishing of bibliographic data",
     "homepage": "http://www.bibliograph.org",
     "license": "MIT license",
-    "authors": [
-      {
-        "name": "Christian Boulanger (cboulanger)",
-        "email": "info@bibliograph.org"
-      }
-    ],
-    "version": "3.0.0-alpha"
+    "authors": [],
+    "version": "3.0.0"
   },
   "provides": {
     "namespace": "bibliograph",
     "encoding": "utf-8",
     "class": "source/class",
     "resource": "source/resource",
-    "translation": "source/translation",
-    "type": "application"
+    "translation": "source/translation"
   },
   "requires": {
-    "qooxdoo-compiler": "^0.2.52",
-    "qooxdoo-sdk": "^6.0.0-alpha",
+    "@qooxdoo/compiler": "^1.0.0-beta",
+    "@qooxdoo/framework": "^6.0.0-beta",
     "cboulanger/qx-contrib-TokenField": "^1.2.1",
-    "cboulanger/qookery/qookery": "^0.6.2",
-    "cboulanger/qookery/qookeryace": "^0.6.2",
-    "cboulanger/eventrecorder": "^0.9.5",
+    "ergobyte/qookery/qookery": "^0.6.0",
+    "ergobyte/qookery/qookeryace": "^0.6.0",
     "cboulanger/qx-contrib-Dialog": "^2.0.0",
-    "qooxdoo/qxl.apiviewer": "^0.1.12",
-    "cboulanger/qookery/qookerycalendar": "^0.6.2",
-    "cboulanger/qookery/qookerydemo": "^0.6.2",
-    "cboulanger/qookery/qookerymaps": "^0.6.2",
-    "cboulanger/qookery/qookerymobile": "^0.6.2",
-    "cboulanger/qookery/qookeryrichtext": "^0.6.2"
+    "qooxdoo/qxl.apiviewer": "^1.0.0-beta.6",
+    "cboulanger/eventrecorder": "^0.11.0"
   },
   "externalResources": {
     "script": [
@@ -44,5 +33,6 @@
     "css": [
       "css/quagga.css"
     ]
-  }
+  },
+  "$schema": "https://raw.githubusercontent.com/qooxdoo/qooxdoo-compiler/master/source/resource/qx/tool/schema/Manifest-1-0-0.json"
 }

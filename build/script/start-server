@@ -40,11 +40,7 @@ if [[ "$TARGET" == "only" ]]; then
 fi
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
-  # assume we have mysql from homebrew
-  mysql.server stop &> /dev/null
-  killall mysqld &> /dev/null
-  killall mysqld_safe &> /dev/null
-  mysql.server start
+  build/script/start-mysql
   echo " >>> Opening app in browser at http://$HOST/$APP_PATH"
   open -a "Google Chrome" http://$HOST/$APP_PATH
   # send Alt+Command+I to open Web inspector
@@ -53,6 +49,6 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   sleep 120s
   echo " >>> Start continuous compilation..."
   pushd $COMPILE_PATH > /dev/null
-  qx compile --target=$TARGET --watch --clean=false
+  qx compile --target=$TARGET --watch --clean=false --warnAsError
   popd > /dev/null
 fi

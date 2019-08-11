@@ -1,0 +1,84 @@
+{
+  "libraries": [
+    {
+      "library_name": "Dialog",
+      "library_version": "2.1.1",
+      "path": "qx_packages/cboulanger_qx-contrib-Dialog_v2_1_1",
+      "uri": "cboulanger/qx-contrib-Dialog",
+      "repo_name": "cboulanger/qx-contrib-Dialog",
+      "repo_tag": "v2.1.1"
+    },
+    {
+      "library_name": "UploadWidget",
+      "library_version": "1.0.1",
+      "path": "qx_packages/oetiker_UploadWidget_v1_0_1",
+      "uri": "oetiker/UploadWidget",
+      "repo_name": "oetiker/UploadWidget",
+      "repo_tag": "v1.0.1"
+    },
+    {
+      "library_name": "TokenField",
+      "library_version": "1.3.0",
+      "path": "qx_packages/cboulanger_qx-contrib-TokenField_v1_3_0",
+      "uri": "cboulanger/qx-contrib-TokenField",
+      "repo_name": "cboulanger/qx-contrib-TokenField",
+      "repo_tag": "v1.3.0"
+    },
+    {
+      "library_name": "UI Event Recorder",
+      "library_version": "0.11.0",
+      "path": "../../../../eventrecorder",
+      "uri": "cboulanger/eventrecorder",
+      "repo_name": "cboulanger/eventrecorder"
+    },
+    {
+      "library_name": "Qookery",
+      "library_version": "0.6.0",
+      "path": "qx_packages/ergobyte_qookery_892f44d1d1ae5d65c7dd99b18da6876de2f2a920/qookery",
+      "uri": "ergobyte/qookery/qookery",
+      "repo_name": "ergobyte/qookery",
+      "repo_tag": "892f44d1d1ae5d65c7dd99b18da6876de2f2a920"
+    },
+    {
+      "library_name": "Qookery Ace",
+      "library_version": "0.6.0",
+      "path": "qx_packages/ergobyte_qookery_892f44d1d1ae5d65c7dd99b18da6876de2f2a920/qookeryace",
+      "uri": "ergobyte/qookery/qookeryace",
+      "repo_name": "ergobyte/qookery",
+      "repo_tag": "892f44d1d1ae5d65c7dd99b18da6876de2f2a920"
+    },
+    {
+      "library_name": "widgetbrowser",
+      "library_version": "1.0.0-beta.0",
+      "path": "qx_packages/qooxdoo_qxl_widgetbrowser_v1_0_0-beta_0",
+      "uri": "qooxdoo/qxl.widgetbrowser",
+      "repo_name": "qooxdoo/qxl.widgetbrowser",
+      "repo_tag": "v1.0.0-beta.0"
+    },
+    {
+      "library_name": "formdemo",
+      "library_version": "1.0.0-beta.1",
+      "path": "qx_packages/qooxdoo_qxl_formdemo_v1_0_0-beta_1",
+      "uri": "qooxdoo/qxl.formdemo",
+      "repo_name": "qooxdoo/qxl.formdemo",
+      "repo_tag": "v1.0.0-beta.1"
+    },
+    {
+      "library_name": "versionlabel",
+      "library_version": "1.0.0-beta.3",
+      "path": "qx_packages/qooxdoo_qxl_versionlabel_v1_0_0-beta_3",
+      "uri": "qooxdoo/qxl.versionlabel",
+      "repo_name": "qooxdoo/qxl.versionlabel",
+      "repo_tag": "v1.0.0-beta.3"
+    },
+    {
+      "library_name": "Qooxdoo API Viewer",
+      "library_version": "1.0.0-beta.6",
+      "path": "qx_packages/qooxdoo_qxl_apiviewer_v1_0_0-beta_6",
+      "uri": "qooxdoo/qxl.apiviewer",
+      "repo_name": "qooxdoo/qxl.apiviewer",
+      "repo_tag": "v1.0.0-beta.6"
+    }
+  ],
+  "version": "2.1.0"
+}

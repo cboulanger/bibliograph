@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 default_namespace="app\\migrations\\schema"
 cd src/server || exit 1
 read -p 'Please enter a short descriptive name of the migration: ' name

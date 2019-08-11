@@ -1,8 +1,14 @@
 {
-  "parserOptions": {
-      "ecmaVersion": 2017
+  "env": {
+    "browser": true,
+    "node": true
   },
-  "extends": "qx",
+  "parserOptions": {
+    "ecmaVersion": 2017,
+  },
+  "extends": [
+    "qx", "qx/browser"
+  ],
   "globals": {
     "bibliograph" : true,
     "qcl": true,

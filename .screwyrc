@@ -1,0 +1,15 @@
+{
+  "name": "Bibliograph Development",
+  "primary": [
+    "Start Development Server",
+    "View App Log",
+    "View Error log"
+  ],
+  "exclude": ["gui", "postinstall", "list", "test"],
+  "silent": [],
+  "alwaysOnTop": true,
+  "theme": "dark",
+  "width": 400,
+  "height": 800,
+  "watch": {}
+}

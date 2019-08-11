@@ -22,8 +22,8 @@
   },
 
   "requires": {
-    "qooxdoo-sdk": "^6.0.0-alpha",
-    "qooxdoo-compiler": "^0.2.52"
+    "@qooxdoo/compiler": "^1.0.0-beta",
+    "@qooxdoo/framework": "^6.0.0-beta"
   },
 
   "provides" :

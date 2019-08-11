@@ -4,14 +4,14 @@
 
   http://www.bibliograph.org
 
-  Copyright: 
+  Copyright:
     2018 Christian Boulanger
 
-  License: 
+  License:
     MIT license
     See the LICENSE file in the project's top-level directory for details.
 
-  Authors: 
+  Authors:
     Christian Boulanger (@cboulanger) info@bibliograph.org
 
 ************************************************************************ */
@@ -19,12 +19,12 @@
 /**
  * This singleton class contains the commands that can be executed in menus and buttons.
  * Call them via qx.core.Init.getApplication().cmd("methodName",arg)
- * 
+ *
  */
 qx.Class.define("bibliograph.Commands",
 {
   extend : qx.core.Object,
-  include : [qcl.ui.MLoadingPopup,qx.locale.MTranslation],
+  include : [qcl.ui.MLoadingPopup, qx.locale.MTranslation],
   type : "singleton",
   members :
   {
@@ -37,8 +37,7 @@ qx.Class.define("bibliograph.Commands",
     /**
      * Called when the user presses the "login" button
      */
-    showLoginDialog : async function(value, app)
-    {
+    showLoginDialog : async function(value, app) {
       // check if https login is enforced
       let l= window.location;
       var enforce_https = app.getConfigManager().getKey("access.enforce_https_login");
@@ -67,22 +66,22 @@ qx.Class.define("bibliograph.Commands",
     /**
      * called when user clicks on the "forgot password?" button
      */
-    forgotPassword : async function(data,app)
-    {
+    forgotPassword : async function(data, app) {
       app.showPopup(this.tr("Please wait ..."));
       await app.getApplication().getRpcClient("actool").send("resetPasswordDialog");
       app.hidePopup();
     },
-       
+    
     /**
      * Log out current user on the server
      * @return {Promise<Object>}
      */
-    logout : async function( data, app )
-    {
-      if(!app) app = this.getApplication();
+    logout : async function(data, app) {
+      if (!app) {
+ app = this.getApplication();
+}
       app.createPopup();
-      app.showPopup( this.tr("Logging out ...") );
+      app.showPopup(this.tr("Logging out ..."));
       // remove state
       app.setFolderId(null);
       app.setModelId(null);
@@ -102,7 +101,7 @@ qx.Class.define("bibliograph.Commands",
      */
     showHelpWindow : function(path) {
       let url = "https://sites.google.com/a/bibliograph.org/docs-v2-de/" + path;
-      this.__helpWindow = window.open(url,"bibliograph-help-window");
+      this.__helpWindow = window.open(url, "bibliograph-help-window");
       if (!this.__helpWindow) {
         dialog.Dialog.alert(this.tr("Cannot open window. Please disable the popup-blocker of your browser for this website."));
       }
@@ -112,7 +111,7 @@ qx.Class.define("bibliograph.Commands",
     /**
      * Shows the "about" window
      */
-    showAboutWindow : function(data,app) {
+    showAboutWindow : function(data, app) {
       app.getWidgetById("app/windows/about").open();
     },
   
@@ -122,16 +121,14 @@ qx.Class.define("bibliograph.Commands",
      * @param app
      * @return {Promise<void>}
      */
-    editUserData : async function(data,app)
-    {
+    editUserData : async function(data, app) {
       var activeUser = app.getAccessManager().getActiveUser();
-      if (activeUser.getEditable())
-      {
+      if (activeUser.getEditable()) {
         app.showPopup(this.tr("Retrieving user data..."));
         await rpc.AccessConfig.edit("user", activeUser.getNamedId());
         app.hidePopup();
       }
-    },    
+    },
 
     /*
     ---------------------------------------------------------------------------
@@ -145,11 +142,10 @@ qx.Class.define("bibliograph.Commands",
      * print.
      *
      * @param domElement {Element}
+     * @ignore(Element)
      */
-    print : function(domElement, app)
-    {
-      if (!domElement instanceof Element)
-      {
+    print : function(domElement, app) {
+      if (!(domElement instanceof Element)) {
         this.error("print() takes a DOM element as argument");
         return;
       }
@@ -166,28 +162,27 @@ qx.Class.define("bibliograph.Commands",
   },
 
   /**
-   * Setup event listeners in the defer function by iterating through the member methods 
-   * and setting up up a message subscriber for "bibliograph.command.{method name}". 
-   * When the message is dispatched, the method is called with the signature 
-   * ({mixed} messageData, {qx.application.Standalone} app) 
+   * Setup event listeners in the defer function by iterating through the member methods
+   * and setting up up a message subscriber for "bibliograph.command.{method name}".
+   * When the message is dispatched, the method is called with the signature
+   * ({mixed} messageData, {qx.application.Standalone} app)
    */
-  defer: function(statics, members, properties) 
-  {
-    for ( let methodName in members ){
-      if( typeof members[methodName] == "function" ) {
-        qx.event.message.Bus.subscribe("bibliograph.command." + methodName, function(e){
+  defer: function(statics, members, properties) {
+    for (let methodName in members) {
+      if (typeof members[methodName] == "function") {
+        qx.event.message.Bus.subscribe("bibliograph.command." + methodName, function(e) {
           try {
-            let maybePromise = members[methodName](e.getData(),qx.core.Init.getApplication());
-            if( maybePromise instanceof Promise || maybePromise instanceof qx.Promise ){
-              (async ()=> {
-                await maybePromise
-              })()
+            let maybePromise = members[methodName](e.getData(), qx.core.Init.getApplication());
+            if (maybePromise instanceof Promise || maybePromise instanceof qx.Promise) {
+              (async () => {
+                await maybePromise;
+              })();
             }
-          } catch (e){
+          } catch (e) {
             throw new Error(`Exception raised during call to bibliograph.command.${methodName}():${e}`);
           }
         }, this);
       }
     }
-  }  
+  }
 });
