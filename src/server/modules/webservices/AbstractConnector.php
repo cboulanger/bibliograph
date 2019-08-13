@@ -2,7 +2,7 @@
 
 namespace app\modules\webservices;
 use app\modules\webservices\models\Record;
-use app\modules\webservices\repositories\IConnector;
+use app\modules\webservices\IConnector;
 use Iterator;
 use lib\cql\Prefixable;
 use yii\base\BaseObject;
@@ -15,7 +15,7 @@ use yii\base\BaseObject;
  * @property string $description
  * @property array $indexes
  */
-abstract class AbstractConnector extends BaseObject //implements IConnector // throws!
+abstract class AbstractConnector extends BaseObject implements IConnector
 {
   /**
    * @var string
@@ -66,7 +66,7 @@ abstract class AbstractConnector extends BaseObject //implements IConnector // t
   }
 
   /**
-   * Queries
+   * Queries the data repository and returns the number of results
    * @param Prefixable $cql
    * @return int
    */

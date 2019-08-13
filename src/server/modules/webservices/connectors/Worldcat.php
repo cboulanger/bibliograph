@@ -2,6 +2,7 @@
 
 namespace app\modules\webservices\connectors;
 
+use app\modules\webservices\IConnector;
 use app\modules\webservices\models\Record;
 use app\modules\webservices\Module;
 use app\modules\webservices\RecordNotFoundException;
@@ -23,7 +24,7 @@ use yii\validators\StringValidator;
  * @package app\modules\webservices\connectors
 
  */
-class Worldcat extends AbstractConnector
+class Worldcat extends AbstractConnector implements IConnector
 {
   /**
    * @inheritdoc
@@ -107,7 +108,7 @@ class Worldcat extends AbstractConnector
     }
     throw new \InvalidArgumentException(
       Yii::t(
-        Module::CATEGORY, 
+        Module::CATEGORY,
         "'{field} is not a valid search field",
         [ 'field' => $searchClause->index->value ]
       )

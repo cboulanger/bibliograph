@@ -6,7 +6,7 @@ use app\models\Reference;
 use app\modules\webservices\AbstractConnector;
 use app\modules\webservices\models\Record;
 use app\modules\webservices\Module;
-use Illuminate\Support\Arr;
+use app\modules\webservices\IConnector;
 use lib\cql\Prefixable;
 use lib\cql\SearchClause;
 use lib\cql\Triple;
@@ -23,7 +23,7 @@ use yii\validators\StringValidator;
  * @see https://github.com/CrossRef/rest-api-doc
  * @package app\modules\webservices\connectors
  */
-class Crossref extends AbstractConnector
+class Crossref extends AbstractConnector implements IConnector
 {
 
   /**

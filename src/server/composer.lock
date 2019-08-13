@@ -4,8 +4,55 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c1a8f9516a2fb487f2433b281a1fc65b",
+    "content-hash": "5faa6c4ad71fb46b8e8b4eca2bf081f3",
     "packages": [
+        {
+            "name": "adci/full-name-parser",
+            "version": "0.2.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ADCI/full-name-parser.git",
+                "reference": "657ea52e39adce94f297970c4fbd5c70db17a3b5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ADCI/full-name-parser/zipball/657ea52e39adce94f297970c4fbd5c70db17a3b5",
+                "reference": "657ea52e39adce94f297970c4fbd5c70db17a3b5",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "phpunit/phpunit": ">=4.8.28 <5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "ADCI\\FullNameParser\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "ADCI Solutions",
+                    "homepage": "https://www.adcisolutions.com"
+                }
+            ],
+            "description": "Parses a human name",
+            "keywords": [
+                "full name",
+                "name",
+                "parse",
+                "parser",
+                "php"
+            ],
+            "time": "2019-03-25T08:56:48+00:00"
+        },
         {
             "name": "adldap2/adldap2",
             "version": "v8.1.5",

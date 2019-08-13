@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\webservices\repositories;
+namespace app\modules\webservices;
 
 use app\models\Reference;
 use app\modules\webservices\models\Record;

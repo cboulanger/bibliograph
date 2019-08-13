@@ -26,7 +26,7 @@ class Module extends \lib\Module
    * The version of the module
    * @var string
    */
-  protected $version = "0.1.0";
+  protected $version = "0.2.0";
 
   /**
    * A string constant defining the category for logging and translation
@@ -175,7 +175,7 @@ class Module extends \lib\Module
    * @param User $user
    */
   public function clearSearchData(User $user)
-  { 
+  {
     if( count($this->datasources )){
       try{
         $datasource = Datasource::getInstanceFor($this->datasources[0]->namedId);
