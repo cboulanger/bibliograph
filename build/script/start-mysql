@@ -3,7 +3,7 @@
 if hash mysql.server 2>/dev/null; then
   # assume we have mysql from homebrew
 
-  if [[ "$(mysql.server status)" =~ "running" ]]; then
+  if [[ "$(mysql.server status)" =~ "SUCCESS" ]]; then
     echo "MySQL server is running...";
   else
     mysql.server start

@@ -18,21 +18,22 @@
     "url": "git+ssh://git@github.com/cboulanger/bibliograph.git"
   },
   "scripts": {
+
     "postinstall": "build/script/update-dependencies",
     "gui": "screwy",
     "test": "build/script/start-mysql && test/script/unit-functional && test/script/api || exit $?",
 
-    "Start Development Server": "build/script/start-server",
-    "Continuous Compilation": "cd src/client/bibliograph && qx compile --watch",
-    "View App Log": "build/script/log-view",
-    "View Error log": "build/script/log-view error",
-
+    "Start Development Server": "build/script/start",
+    "Start GUI Test Recorder": "build/script/start source bibliograph-recorder",
+    "Start GUI Test Player": "build/script/start source bibliograph-player",
     "Start CLI Tests": "test",
     "Start CLI Tests (Extended)": "test/script/unit-functional && test/script/api development || exit $?",
-    "Start GUI Test Recorder": "test/script/start-server source bibliograph-recorder",
-    "Start GUI Test Player": "test/script/start-server source bibliograph-player",
 
+    "Continuous Compilation": "build/script/start server-only",
+    "View App Log": "build/script/log-view",
+    "View Error log": "build/script/log-view error",
     "Clear logs": "build/script/log-clear && build/script/log-clear error",
+
     "Create new migration": "build/script/run-in-new-terminal $(pwd)/build/script/create-migration",
     "Create JSONRPC proxy methods": "cd src/server && php yii rpc-proxy/create",
     "Extract translations": "cd src/server && php yii message config/i18n.php",

@@ -23,7 +23,7 @@
     "ergobyte/qookery/qookeryace": "^0.6.0",
     "cboulanger/qx-contrib-Dialog": "^2.0.0",
     "qooxdoo/qxl.apiviewer": "^1.0.0-beta.6",
-    "cboulanger/eventrecorder": "^0.11.0"
+    "cboulanger/eventrecorder": "^0.14.0"
   },
   "externalResources": {
     "script": [

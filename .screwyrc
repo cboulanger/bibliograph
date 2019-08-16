@@ -2,6 +2,8 @@
   "name": "Bibliograph Development",
   "primary": [
     "Start Development Server",
+    "Start GUI Test Recorder",
+    "Start GUI Test Player",
     "View App Log",
     "View Error log"
   ],
