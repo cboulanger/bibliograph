@@ -33,19 +33,11 @@
     },
     {
       "library_name": "Qookery",
-      "library_version": "0.6.0",
-      "path": "qx_packages/ergobyte_qookery_892f44d1d1ae5d65c7dd99b18da6876de2f2a920/qookery",
+      "library_version": "0.7.0",
+      "path": "qx_packages/ergobyte_qookery_v0_7_0-pre/qookery",
       "uri": "ergobyte/qookery/qookery",
       "repo_name": "ergobyte/qookery",
-      "repo_tag": "892f44d1d1ae5d65c7dd99b18da6876de2f2a920"
-    },
-    {
-      "library_name": "Qookery Ace",
-      "library_version": "0.6.0",
-      "path": "qx_packages/ergobyte_qookery_892f44d1d1ae5d65c7dd99b18da6876de2f2a920/qookeryace",
-      "uri": "ergobyte/qookery/qookeryace",
-      "repo_name": "ergobyte/qookery",
-      "repo_tag": "892f44d1d1ae5d65c7dd99b18da6876de2f2a920"
+      "repo_tag": "v0.7.0-pre"
     },
     {
       "library_name": "widgetbrowser",
@@ -73,11 +65,11 @@
     },
     {
       "library_name": "Qooxdoo API Viewer",
-      "library_version": "1.0.0-beta.6",
-      "path": "qx_packages/qooxdoo_qxl_apiviewer_v1_0_0-beta_6",
+      "library_version": "1.0.0-beta.7",
+      "path": "qx_packages/qooxdoo_qxl_apiviewer_v1_0_0-beta_7",
       "uri": "qooxdoo/qxl.apiviewer",
       "repo_name": "qooxdoo/qxl.apiviewer",
-      "repo_tag": "v1.0.0-beta.6"
+      "repo_tag": "v1.0.0-beta.7"
     }
   ],
   "version": "2.1.0"

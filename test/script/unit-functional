@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # This test runs unit and functional tests that do not need
-# a webserver.
+# a webserver. Requires a running mysql server
 
 YII_CMD="php yii-test"
 CPT_CMD="php vendor/bin/codecept"

@@ -4,10 +4,10 @@
     "node": true
   },
   "parserOptions": {
-    "ecmaVersion": 2017,
+    "ecmaVersion": 2017
   },
   "extends": [
-    "qx", "qx/browser"
+    "@qooxdoo/qx"
   ],
   "globals": {
     "bibliograph" : true,
