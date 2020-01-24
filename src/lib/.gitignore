@@ -1,0 +1,4 @@
+*
+!.gitignore
+!readme.md
+!../../tool/dev/install.sh

@@ -19,11 +19,15 @@
     "@qooxdoo/compiler": "^1.0.0-beta",
     "@qooxdoo/framework": "^6.0.0-beta",
     "cboulanger/qx-contrib-TokenField": "^1.2.1",
-    "ergobyte/qookery/qookery": "^0.6.0",
-    "ergobyte/qookery/qookeryace": "^0.6.0",
+    "ergobyte/qookery/qookery": "^0.7.0",
+    "ergobyte/qookery/qookeryace": "^0.7.0",
     "cboulanger/qx-contrib-Dialog": "^2.0.0",
     "qooxdoo/qxl.apiviewer": "^1.0.0-beta.6",
-    "cboulanger/eventrecorder": "^0.14.0"
+    "cboulanger/eventrecorder": "^0.14.0",
+    "ergobyte/qookery/qookerycalendar": "^0.7.0",
+    "ergobyte/qookery/qookerymaps": "^0.7.0",
+    "ergobyte/qookery/qookerymobile": "^0.7.0",
+    "ergobyte/qookery/qookeryrichtext": "^0.7.0"
   },
   "externalResources": {
     "script": [

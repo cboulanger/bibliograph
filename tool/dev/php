@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+DEFAULT_PHP_VERSION=7.3
+
+# read environment variables
+source ./.env || (echo "Script must be called from root dir" && exit 1)
+
+PHP_VERSION=${PHP_VERSION:=$DEFAULT_PHP_VERSION}
+
+# run php in docker image
+docker run -t -i -v $PWD:/var/www:rw cboulanger/docker-phpfarm:latest php-$PHP_VERSION "$@"

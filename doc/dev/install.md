@@ -17,7 +17,7 @@
 - The latest prebuilt package of the current beta releases can be 
   [downloaded from GitHub](https://github.com/cboulanger/bibliograph/releases/).
   Unpack, follow the post-installation instructions, and you should be ready to.
-- To install a development environment, see the instructions [here](../../install/)
+- To install a development environment, see the instructions [here](../../tool/install/)
 
 ### Post-Installation 
 - In `src/server/config/`, rename `app.conf.toml.dist` to `app.conf.toml`
