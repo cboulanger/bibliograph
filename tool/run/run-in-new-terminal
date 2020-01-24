@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-osascript -e "tell application \"Terminal\"
-  activate
-  do script \"cd $(pwd) && $1\"
-  set bounds of front window to {555, 488, 1440, 853}
-end tell"

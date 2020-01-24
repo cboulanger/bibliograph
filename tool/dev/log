@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+./tool/dev/check-env && source ./.env
+
+TARGET=${1:-app}
+LOGFILE=src/server/runtime/logs/$TARGET.log
+
+case $1 in
+view)
+  CMD="tail -F -n 1000 $LOGFILE"
+  tool/dev/terminal "$CMD"
+  ;;
+clear)
+  [[ -f $LOGFILE ]] && rm $LOGFILE
+  touch $LOGFILE
+  ;;
+*)
+  echo "Syntax: tool/dev/log (view|clear) (app|error)?"
+esac

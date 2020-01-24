@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+# controls the mysql server
+
+./tool/dev/check-env && source ./.env
+
+case $1 in
+start)
+  echo ">>> Starting mysql server..."
+  if [ "$(docker ps -f name=mysql-server -q -a)" == "" ]; then
+    docker run --name mysql-server \
+      -v $PWD/data/db:/var/lib/mysql \
+      -e MYSQL_ROOT_PASSWORD=$DB_ROOT_PASSWORD \
+      --detach \
+      mariadb > /dev/null
+  else
+    docker start mysql-server > /dev/null
+  fi
+  if [ $? != 0 ]; then
+    >&2 echo 'ERROR: mysql server could not be started.'
+    exit 1
+  fi
+  echo "Server started."
+  ;;
+stop)
+  echo ">>> Stopping mysql server..."
+  docker stop mysql-server > /dev/null
+  docker rm mysql-server > /dev/null
+  if [ $? != 0 ]; then
+    >&2 echo 'ERROR: mysql server could not be stopped.'
+    exit 1
+  fi
+  echo "Server stopped."
+  ;;
+status)
+  if [ "$(docker ps -f name=mysql-server -q -a)" != "" ]; then
+    echo "Server is running."
+  else
+    echo "Server is not running."
+  fi
+  ;;
+*)
+  echo "Syntax: tool/dev/mysql-server (start|stop|status)"
+esac

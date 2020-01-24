@@ -1,4 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# Update dependencies
+
+./tool/dev/check-env && source ./.env
+
 echo " >>> Updating packages..."
 pushd src/client/bibliograph >/dev/null
 qx pkg upgrade --prereleases --releases-only

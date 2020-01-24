@@ -12,5 +12,3 @@ npm-debug.log
 node_modules/
 package-lock.json
 
-# dir to contain import/export data
-data/*

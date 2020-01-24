@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+./tool/dev/check-env && source ./.env
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  osascript -e "tell application \"Terminal\"
+    activate
+    do script \"cd $(pwd) && $@\"
+    set bounds of front window to {555, 488, 1440, 853}
+  end tell"
+else
+  exec "$@"
+fi

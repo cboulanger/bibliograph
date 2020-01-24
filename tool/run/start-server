@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-
-HOST=${1:-localhost:9090}
-DOCUMENT_ROOT=src/
-
-cd $DOCUMENT_ROOT
-php -S $HOST &> /dev/null &
-PID=$!
-echo ">>> Started Bibliograph server with PID $PID."

@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+# controls the apache-php server in the docker-phpfarm container
+
+./tool/dev/check-env && source ./.env
+
+case $1 in
+start)
+  echo ">>> Starting apache/php server ..."
+  if [ "$(docker ps -f name=http-server -q -a)" == "" ]; then
+    docker run --name http-server \
+      -v $PWD:/var/www:rw \
+      -v $PWD/log/http:/var/log/apache2:rw \
+      -e APACHE_UID=$UID \
+      -p 8070:8070 \
+      -p 8071:8071 \
+      -p 8072:8072 \
+      -p 8073:8073 \
+      -p 8074:8074 \
+      --detach \
+      cboulanger/docker-phpfarm > /dev/null
+  else
+    docker start http-server > /dev/null
+  fi
+  if [ $? != 0 ]; then
+    >&2 echo 'ERROR: http server could not be started.'
+    exit 1
+  fi
+  echo "Server started. PHP Versions 7.0-7.4 on ports 8070-8074."
+  ;;
+stop)
+  echo ">>> Stopping http server..."
+  docker stop http-server > /dev/null
+  docker rm http-server > /dev/null
+  if [ $? != 0 ]; then
+    >&2 echo 'ERROR: http server could not be stopped.'
+    exit 1
+  fi
+  echo "Server stopped."
+  ;;
+status)
+  if [ "$(docker ps -f name=http-server -q -a)" != "" ]; then
+    echo "Server is running."
+  else
+    echo "Server is not running."
+  fi
+  ;;
+*)
+  echo "Syntax: tool/dev/http-server (start|stop|status)"
+esac

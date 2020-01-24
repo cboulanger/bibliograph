@@ -1,18 +1,16 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Install compile-time dependencies
 
 # read environment variables
-source ./.env || (echo "Script must be called from root dir" && exit 1)
-
-# check for docker
-if ! type docker > /dev/null; then
-  echo "ERROR: You need docker for the custom PHP environment"
-  exit 1
-fi
+./tool/dev/check-env && source ./.env
 
 # install multi-version php docker image
-echo " >>> Downloading Docker PHPFarm image"
+echo " >>> Downloading PHPFarm image"
 docker pull cboulanger/docker-phpfarm
+
+# install mariadb
+echo " >>> Downloading mariadb image"
+docker pull mariadb
 
 # install composer locally
 echo " >>> Installing composer locally..."
@@ -35,8 +33,10 @@ if [ $RESULT -eq 1 ]; then
   exit 1
 fi
 
-## list of git clone targets
+# Install needed GitHub repos
 echo " >>> Installing github repositories..."
+
+cd /src/lib
 declare -a arr=(
   "cboulanger/yii2-json-rpc-2.0"
   "cboulanger/raptor-client"

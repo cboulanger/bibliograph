@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+# Checks the environment in which the tool scripts can run properly
+
+if ! [ -f ./.travis.yml ]; then
+  >&2 echo 'ERROR: All tool scripts need to be executed from the bibliograph root directory'
+  exit 1
+fi
+
+if ! [ -f ./.env ]; then
+  >&2 echo 'ERROR: .env file is missing in the root directory - please rename .env.dist to .env'
+  exit 1
+fi
+
+if ! type docker > /dev/null; then
+  echo "ERROR: You need docker for the development environment"
+  exit 1
+fi

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+# read project environment variables
+source ./.env || (echo "Script must be called from root dir" && exit 1)
+# call local composer with the right working directory
+./tool/dev/php ./src/lib/composer.phar "$@" -d ./src/server
