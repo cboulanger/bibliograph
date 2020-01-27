@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# controls the mysql server
+# controls the mysql server running in a docker container
 
 ./tool/dev/check-env && source ./.env
 
@@ -10,8 +10,10 @@ start)
     docker run --name mysql-server \
       -v $PWD/data/db:/var/lib/mysql \
       -e MYSQL_ROOT_PASSWORD=$DB_ROOT_PASSWORD \
+      -p 3306:3306 \
       --detach \
-      mariadb > /dev/null
+      mariadb \
+      > /dev/null
   else
     docker start mysql-server > /dev/null
   fi

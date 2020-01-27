@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
-# read environment variables
+# check environment and read env. variables
 ./tool/dev/check-env && source ./.env
 
 # run php in docker image
-docker run --rm -t -i -v $PWD:/var/www:rw cboulanger/docker-phpfarm:latest php-$PHP_VERSION "$@"
+docker run --rm -t -i \
+  -v $PWD:/var/www:rw \
+  -p 3306:3306 \
+  cboulanger/docker-phpfarm php-$PHP_VERSION "$@"

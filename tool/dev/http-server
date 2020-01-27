@@ -17,7 +17,8 @@ start)
       -p 8073:8073 \
       -p 8074:8074 \
       --detach \
-      cboulanger/docker-phpfarm > /dev/null
+      cboulanger/docker-phpfarm \
+      > /dev/null
   else
     docker start http-server > /dev/null
   fi
@@ -38,10 +39,11 @@ stop)
   echo "Server stopped."
   ;;
 status)
+  # This only checks if the server containter is running, need to heck if mysql server is actualy running inside container
   if [ "$(docker ps -f name=http-server -q -a)" != "" ]; then
-    echo "Server is running."
+    echo "Server container is running."
   else
-    echo "Server is not running."
+    echo "Server container is not running."
   fi
   ;;
 *)
