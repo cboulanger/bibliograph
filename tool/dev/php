@@ -4,7 +4,4 @@
 ./tool/dev/check-env && source ./.env
 
 # run php in docker image
-docker run --rm -t -i \
-  -v $PWD:/var/www:rw \
-  -p 3306:3306 \
-  cboulanger/docker-phpfarm php-$PHP_VERSION "$@"
+docker exec -it http-server php-$PHP_VERSION "$@"

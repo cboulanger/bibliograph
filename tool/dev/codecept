@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+# run codecept in the php container
+tool/dev/php src/server/vendor/bin/codecept "$@"

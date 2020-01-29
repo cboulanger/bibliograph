@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+if [[ "$(tool/dev/mysql-server status)" == *"not running"* ]]; then
+  tool/dev/mysql-server start || exit 1
+fi
+
+if [[ "$(tool/dev/http-server status)" == *"not running"* ]]; then
+  tool/dev/http-server start
+fi

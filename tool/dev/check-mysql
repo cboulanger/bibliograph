@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+tool/dev/check-env && source ./.env
+tool/dev/servers-start
+source tool/lib/functions.sh
+
+# Exit on first error
+set -o errexit
+
+echo -n ">>> Checking mysql root connection from host ..."
+tool/dev/mysql-client -uroot -p$DB_ROOT_PASSWORD --version > /dev/null || (echo "${COLOR_RED}Failed." && exit 1)
+echo " ${COLOR_GREEN}√${STYLE_RESET}"
+
+echo -n ">>> Checking mysql root connection from php container ..."
+tool/dev/php -r \
+  "if(!@mysqli_connect('$DB_HOST', 'root', '$DB_ROOT_PASSWORD')) echo 'Error: Unable to connect to MySQL:'.mysqli_connect_error().PHP_EOL;" \
+  || exit 1
+echo " ${COLOR_GREEN}√${STYLE_RESET}"

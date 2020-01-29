@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# This test runs unit and functional tests that do not need a webserver
+
+# check & setup environment
+./tool/dev/check-mysql && source ./.env
+# import functions
+source ./tool/lib/functions.sh
+# Exit on first error
+set -o errexit
+
+MIGRATE_ARGS="--interactive=0"
+CODECEPT_ARGS="--fail-fast --config src/server"
+
+log_info ">>> Setting up database ..."
+mysql_root -e "DROP DATABASE tests;" || true
+mysql_root -e "CREATE DATABASE tests;"
+
+yii_test migrate/up --migrationNamespaces=app\\migrations\\schema $MIGRATE_ARGS &> /dev/null
+yii_test migrate/up --migrationNamespaces=app\\migrations\\data $MIGRATE_ARGS &> /dev/null
+yii_test migrate/up --migrationNamespaces=app\\tests\\migrations $MIGRATE_ARGS &> /dev/null
+
+log_heading "Running unit tests ..."
+codecept $CODECEPT_ARGS run unit || exit $?
+
+log_info "Restoring emtpy database ..."
+mysql_root -uroot -e "DROP DATABASE tests;" || true
+mysql_root -uroot -e "CREATE DATABASE tests;"
+
+yii_test migrate/up --migrationNamespaces=app\\migrations\\schema $MIGRATE_ARGS &> /dev/null
+yii_test migrate/up --migrationNamespaces=app\\migrations\\data $MIGRATE_ARGS &> /dev/null
+yii_test migrate/up --migrationNamespaces=app\\tests\\migrations $MIGRATE_ARGS &> /dev/null
+
+log_heading "Running functional tests ..."
+codecept $CODECEPT_ARGS run functional -v || exit $?
+
+log_info "Tests finished."
+exit 0
