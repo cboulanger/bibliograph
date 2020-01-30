@@ -1,19 +1,21 @@
 #!/usr/bin/env bash
 # Install compile-time dependencies
 
-# read environment variables
 ./tool/dev/check-env && source ./.env
+source ./tool/lib/functions.sh
 
-# install multi-version php docker image
 echo " >>> Downloading PHPFarm image"
 docker pull cboulanger/docker-phpfarm
 
-# install mariadb
 echo " >>> Downloading mariadb image"
 docker pull mariadb
 
-# install composer locally
-echo " >>> Installing composer locally..."
+echo ">>> Installing git in http-server container"
+tool/dev/http-server start
+docker exec -it http-server apt-get update
+docker exec -it http-server apt-get install git
+
+echo " >>> Installing composer ..."
 EXPECTED_SIGNATURE="$(wget -q -O - https://composer.github.io/installer.sig)"
 php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 ACTUAL_SIGNATURE="$(php -r "echo hash_file('sha384', 'composer-setup.php');")"
@@ -21,13 +23,13 @@ ACTUAL_SIGNATURE="$(php -r "echo hash_file('sha384', 'composer-setup.php');")"
 if [ "$EXPECTED_SIGNATURE" != "$ACTUAL_SIGNATURE" ]
 then
     >&2 echo 'ERROR: Invalid installer signature'
-    rm composer-setup.php
+    rm src/server/composer-setup.php
     exit 1
 fi
 
-php composer-setup.php --install-dir=./src/lib #--quiet
+php src/server/composer-setup.php --install-dir=./src/lib #--quiet
 RESULT=$?
-rm composer-setup.php
+rm src/server/composer-setup.php
 if [ $RESULT -eq 1 ]; then
   >&2 echo "ERROR: Failed to setup composer ..."
   exit 1

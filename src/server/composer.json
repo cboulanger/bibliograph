@@ -27,7 +27,8 @@
     "ext-pdo": "*",
     "ext-intl": "*",
     "ext-mbstring": "*",
-    "adci/full-name-parser": "^0.2.3"
+    "adci/full-name-parser": "^0.2.3",
+    "symfony/dotenv": "^5.0"
   },
   "require-dev": {
     "bizley/migration": "^2.2",

@@ -16,20 +16,20 @@ log_info ">>> Setting up database ..."
 mysql_root -e "DROP DATABASE tests;" || true
 mysql_root -e "CREATE DATABASE tests;"
 
-yii_test migrate/up --migrationNamespaces=app\\migrations\\schema $MIGRATE_ARGS &> /dev/null
-yii_test migrate/up --migrationNamespaces=app\\migrations\\data $MIGRATE_ARGS &> /dev/null
-yii_test migrate/up --migrationNamespaces=app\\tests\\migrations $MIGRATE_ARGS &> /dev/null
+yii_test migrate/up --migrationNamespaces=app\\migrations\\schema $MIGRATE_ARGS || exit 1 #&> /dev/null
+yii_test migrate/up --migrationNamespaces=app\\migrations\\data $MIGRATE_ARGS || exit 1 #&> /dev/null
+yii_test migrate/up --migrationNamespaces=app\\tests\\migrations $MIGRATE_ARGS || exit 1 #&> /dev/null
 
-log_heading "Running unit tests ..."
+log_info ">>> Running unit tests ..."
 codecept $CODECEPT_ARGS run unit || exit $?
 
-log_info "Restoring emtpy database ..."
+log_info ">>> Restoring emtpy database ..."
 mysql_root -uroot -e "DROP DATABASE tests;" || true
 mysql_root -uroot -e "CREATE DATABASE tests;"
 
-yii_test migrate/up --migrationNamespaces=app\\migrations\\schema $MIGRATE_ARGS &> /dev/null
-yii_test migrate/up --migrationNamespaces=app\\migrations\\data $MIGRATE_ARGS &> /dev/null
-yii_test migrate/up --migrationNamespaces=app\\tests\\migrations $MIGRATE_ARGS &> /dev/null
+yii_test migrate/up --migrationNamespaces=app\\migrations\\schema $MIGRATE_ARGS #&> /dev/null
+yii_test migrate/up --migrationNamespaces=app\\migrations\\data $MIGRATE_ARGS #&> /dev/null
+yii_test migrate/up --migrationNamespaces=app\\tests\\migrations $MIGRATE_ARGS #&> /dev/null
 
 log_heading "Running functional tests ..."
 codecept $CODECEPT_ARGS run functional -v || exit $?

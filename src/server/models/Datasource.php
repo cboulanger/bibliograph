@@ -5,10 +5,8 @@ namespace app\models;
 use lib\models\Migration;
 use Yii;
 use lib\models\BaseModel;
-use app\models\Role;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
-use yii\db\Expression;
 use yii\helpers\ArrayHelper;
 
 // @todo Add column `dsn` to `class`, remove columns `type`, `host`, `port`, `database`
@@ -135,6 +133,45 @@ class Datasource extends BaseModel
       'readonly' => Yii::t('app', 'Readonly'),
       'hidden' => Yii::t('app', 'Hidden'),
     ];
+  }
+
+  //-------------------------------------------------------------
+  // Property accessors
+  //-------------------------------------------------------------
+
+  public function getHost() {
+    if ($this->host) {
+      return $this->host;
+    }
+    return $_SERVER['DB_HOST'];
+  }
+
+  public function getPort() {
+    if ($this->port) {
+      return $this->port;
+    }
+    return $_SERVER['DB_PORT'];
+  }
+
+  public function getUsername() {
+    if ($this->username) {
+      return $this->username;
+    }
+    return $_SERVER['DB_USER'];
+  }
+
+  public function getPassword() {
+    if ($this->password) {
+      return $this->password;
+    }
+    return $_SERVER['DB_PASSWORD'];
+  }
+
+  public function getEncoding() {
+    if ($this->encoding) {
+      return $this->encoding;
+    }
+    return "utf8";
   }
 
   //-------------------------------------------------------------

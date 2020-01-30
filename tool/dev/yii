@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
 # run yii in docker image
-tool/dev/php src/server/yii "$@"
+tool/dev/php src/server/bin/yii "$@"

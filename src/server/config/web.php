@@ -1,5 +1,8 @@
 <?php
-$config = require "common.php";
+//
+// configuration for bibliograph backend
+//
+$config = require "yii-appconfig.php";
 $config['id'] = 'bibliograph-server';
 $config['components']['request'] = [
   'enableCookieValidation' => true,

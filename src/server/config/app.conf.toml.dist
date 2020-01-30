@@ -1,27 +1,9 @@
 # Bibliograph Configuration File, using the .toml format
 # See https://github.com/toml-lang/toml
 
+# Connection settings are read from one of the environment variable
+# definition files in .env/ , usually from .env/app.env
 [database]
-# database.type
-# the database type. currently, only mysql is supported and tested. Since
-# the PDO abstraction layer is used, it will be easy to support other backends.
-type = "mysql"
-
-# database.host
-# the database host, usually localhost
-host = "localhost"
-
-# database.port
-# the port on which the database listens for requests, ususally 3306
-port = 3306
-
-# database.adminname and database.adminpassw
-# The name and password of the database user. Both "normal" user and admin must be the same for the moment.
-# This user needs ALL rights in the databases named below.
-adminname  = "bibliograph"
-adminpassw = "bibliograph"
-username  = "%$database.adminname%"
-userpassw = "%$database.adminpassw%"
 
 # database.admindb
 # The name of the database holding all the tables with global and
@@ -30,15 +12,15 @@ admindb = "bibliograph"
 
 # database.userdb
 # The name of the databases that contains the user data.
-# Can be the same as database.admindb, but if you have access
-# to more than one database, is recommended to keep a separate
+# Can be the same as database.admindb, but if you can use
+# more than one database, it is recommended to keep a separate
 # database for this. Must exist before the application is started.
 userdb = "bibliograph"
 
 # database.tmpdb
 # The name of the database holding all the tables with temporary data.
-# Can be the same as database.admindb, but if you have access
-# to more than one database, is recommended to keep a separate
+# Can be the same as database.admindb, but if you can use
+# more than one database, it is recommended to keep a separate
 # database for this. Must exist before the application is started.
 tmp_db = "bibliograph"
 

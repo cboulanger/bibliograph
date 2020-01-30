@@ -1,4 +1,5 @@
 <?php
+// config for gii server
 $config = require "web.php";
 $config['id'] = 'bibliograph-dev-server';
 $config['bootstrap'][] = 'gii';

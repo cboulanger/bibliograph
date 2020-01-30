@@ -1,19 +1,16 @@
 <?php
-require "parts/constants.php";
-
-// Production
+//
+// This assembles the configuration parts
+//
 $config =  [
-
   /* The directory of the application */
-  'basePath' => dirname(__DIR__),
-
+  'basePath' => dirname(APP_BACKEND_DIR),
   /* Components that are loaded at application startup  */
   'bootstrap' => [
     'log',
     'channel',
     'moduleLoader'
   ],
-
   /* Conntroller configuration */
   'controllerNamespace' => 'app\controllers',
   'controllerMap' => [
@@ -26,21 +23,17 @@ $config =  [
       'migrationPath' => null
     ],
   ],
-
   /* Path aliases */
   'aliases' => [
-    '@lib'      => __DIR__ . "/../lib/",
-    '@messages' => __DIR__ . "/../messages/"
+    '@app'      => APP_BACKEND_DIR,
+    '@lib'      => APP_BACKEND_DIR . "/lib/",
+    '@messages' => APP_BACKEND_DIR . "/messages/"
     ],
-
   /* Application components */
-  'components' => require('parts/components.php'),
-
+  'components' => require('components.php'),
   /* Extension libraries */
-  'extensions' => require(__DIR__ . '/../vendor/yiisoft/extensions.php'),
-
+  'extensions' => require(APP_BACKEND_DIR . '/vendor/yiisoft/extensions.php'),
   /* Events */
-
   /**
    * Switch backend language based on configuration and browser settings
    */

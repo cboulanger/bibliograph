@@ -23,7 +23,7 @@ $log_config = [
   ]
 ];
 // Do we have an error email target?
-$ini = require('ini.php');
+$ini = require('../ini.php');
 $email = $ini['email'];
 if( isset($email['errors_from']) and isset($email['errors_to']) and isset($email['errors_subject']) ){
   $log_config['targets']['mail'] = [

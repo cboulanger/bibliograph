@@ -25,6 +25,7 @@ use app\models\UserConfig;
 use lib\exceptions\RecordExistsException;
 use Yii;
 use yii\helpers\ArrayHelper;
+use Yosymfony\Toml\Toml;
 
 /**
  * Component class providing methods to get or set configuration
@@ -557,6 +558,18 @@ class Configuration extends \yii\base\Component
   // ini values
   //-------------------------------------------------------------
 
+  public static function iniValue($key) {
+    static $ini = null;
+    if (!method_exists("Toml", "parseFile")) {
+      // v0.x, as long as we support PHP7.0
+      $ini = Toml::parse(file_get_contents(APP_CONFIG_FILE));
+    } else {
+      // >v1.0
+      $ini = Toml::parseFile(APP_CONFIG_FILE);
+    }
+    return ArrayHelper::getValue($ini, $key);
+  }
+
 
   /**
    * Returns a configuration value of the pattern "foo.bar.baz"
@@ -564,9 +577,7 @@ class Configuration extends \yii\base\Component
    */
   public function getIniValue( $key )
   {
-    static $ini = null;
-    if (is_null($ini)) $ini = require __DIR__ . "/../../config/parts/ini.php"; // FIXME Use class
-    return ArrayHelper::getValue($ini, $key);
+    return static::iniValue($key);
   }
 
   /**

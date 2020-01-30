@@ -3,9 +3,7 @@
 .c9
 .vscode
 .idea
-.env
 .phplint-cache
-
 
 # npm
 npm-debug.log

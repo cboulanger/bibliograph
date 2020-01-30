@@ -599,7 +599,7 @@ class SetupController extends \app\controllers\AppController
   /**
    * Create inital preference keys/values.
    * @todo modules!
-   * @return array
+   * @return array|bool
    */
   protected function setupPreferences($upgrade_from, $upgrade_to)
   {
