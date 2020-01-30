@@ -94,7 +94,7 @@
 ### Testing, building, CI and distribution
 - [ ] Move qooxdoo build files to top dir
 - [ ] Tests: Fix bootstrap loading issue
-- [ ] Move config/test.php to tests/config.php 
+- [ ] Move tests/config/web.php to tests/config.php 
 - [ ] Check log email target to be able to remotely monitor fatal errors
 - [ ] Setup API tests using https://medium.com/mop-developers/testing-your-api-with-dredd-c02e6ca151f2
 

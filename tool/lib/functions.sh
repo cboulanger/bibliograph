@@ -53,7 +53,7 @@ function log_heading {
 export -f log_heading
 
 function log_debug {
-  echo $COLOR_COLOR_GREY$1
+  echo ${COLOR_GREY}$1${STYLE_RESET}
 }
 export -f log_debug
 
@@ -63,13 +63,11 @@ function log_info {
 export -f log_info
 
 function log_warn {
-  >&2 echo $COLOR_RED$1
-  echo $STYLE_RESET
+  >&2 echo ${COLOR_RED}$1${STYLE_RESET}
 }
 export -f log_warn
 
 function log_error {
-  >&2 echo $FONT_BOLD$COLOR_RED$1
-  echo $STYLE_RESET
+  >&2 echo ${FONT_BOLD}${COLOR_RED}$1${STYLE_RESET}
 }
 export -f log_error

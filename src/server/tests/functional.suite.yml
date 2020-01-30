@@ -9,7 +9,7 @@ actor: FunctionalTester
 modules:
     enabled:
         - Yii2:
-            configFile: config/test.php
+            configFile: tests/config/web.php
             transaction: false
             parts: [orm]
         - Asserts

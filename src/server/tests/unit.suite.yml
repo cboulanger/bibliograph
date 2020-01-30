@@ -8,6 +8,6 @@ modules:
         - Asserts
         - \Helper\Unit
         - Yii2:
-            configFile: config/test.php
+            configFile: tests/config/web.php
             parts: [orm]
             transaction: false

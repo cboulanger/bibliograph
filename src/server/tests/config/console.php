@@ -1,7 +1,6 @@
 <?php
-$config = require "web.php";
-$config['id'] = 'bibliograph-test';
-Yii::setAlias('@tests', __DIR__ . '/../tests');
+$config = require __DIR__ . "/../../config/common.php";
+$config['id'] = 'bibliograph-console-test';
 $config['components']['db'] = [
   'class' => yii\db\Connection::class,
   'dsn' => "mysql:host=host.docker.internal;port=3306;dbname=tests",
@@ -9,4 +8,6 @@ $config['components']['db'] = [
   'password' => "bibliograph",
   'charset' => "utf8"
 ];
+unset($config['components']['response']);
+unset($config['on beforeRequest']);
 return $config;

@@ -1,11 +1,11 @@
 [database]
 type            = "mysql"
-host            = "127.0.0.1"
+host            = "host.docker.internal"
 port            = 3306
 adminname       = "root"
-adminpassw      = ""
+adminpassw      = "bibliograph"
 username        = "root"
-userpassw       = ""
+userpassw       = "bibliograph"
 admindb         = "tests"
 userdb          = "tests"
 tmp_db          = "tests"

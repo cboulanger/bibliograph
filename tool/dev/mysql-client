@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
 
 docker exec -it mysql-server mysql -h127.0.0.1 "$@"
+exit $?
