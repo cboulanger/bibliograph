@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+[ "$(type -t mysql_root)" == "function" ] || source tool/lib/functions.sh
+set -o errexit
+log_info ">>> Creating '$DB_DATABASE' database for user '$DB_USER' ..."
+mysql_root -e "CREATE DATABASE $DB_DATABASE;"
+mysql_root -e "GRANT SELECT, INSERT, DELETE, UPDATE, CREATE, DROP, ALTER, EXECUTE ON $DB_DATABASE.* TO $DB_USER;"
+# mysql_root -e "GRANT RELOAD ON *.* TO $DB_USER;"
+mysql_root -e "FLUSH PRIVILEGES;"

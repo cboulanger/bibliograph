@@ -1,7 +1,7 @@
 <?php
 // config for gii server
 $config = require "web.php";
-$config['id'] = 'bibliograph-dev-server';
+$config['id'] = 'bibliograph-gii-server';
 $config['bootstrap'][] = 'gii';
 $config['modules']['gii'] = [
   'class' => 'yii\gii\Module',

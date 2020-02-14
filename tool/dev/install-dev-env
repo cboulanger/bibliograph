@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Install compile-time dependencies
 
-./tool/dev/check-env && source ./.env
+source tool/dev/check-env
 source ./tool/lib/functions.sh
 
 echo " >>> Downloading PHPFarm image"

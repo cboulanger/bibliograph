@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-./tool/dev/check-env && source ./.env
+source tool/dev/check-env
 
 TARGET=${1:-app}
-LOGFILE=src/server/runtime/logs/$TARGET.log
+LOGFILE=log/app/$TARGET.log
 
 case $1 in
 view)

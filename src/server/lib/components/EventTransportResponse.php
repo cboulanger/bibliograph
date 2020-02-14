@@ -32,7 +32,7 @@ class EventTransportResponse extends \yii\web\Response
       $def = '$this->data = ' . $data . ';';
       eval($def);
     }
-    if( isset($this->data['error']) and $this->data['error'] ) {
+    if( isset($this->data->error) and $this->data->error ) {
       return parent::prepare();
     }
     //Yii::debug("has events: " . Yii::$app->eventQueue->hasEvents());
@@ -46,10 +46,10 @@ class EventTransportResponse extends \yii\web\Response
         $def = '$events = ' . $data . ';';
         eval($def);
       }
-      $this->data['result'] =[
+      $this->data->result = [
         "type"    => "ServiceResult",
         "events"  => $events,
-        "data"    => $this->data['result']
+        "data"    => $this->data->result
       ];
     }
     parent::prepare();

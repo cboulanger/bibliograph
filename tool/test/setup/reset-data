@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# This sets up the database for the model data
+source test/.env
+[ "$(type -t mysql_root)" == "function" ] || source tool/lib/functions.sh
+
+MIGRATE_ARGS="--interactive=0"
+MIGRATE_LOGFILE=log/codeception.migration.log
+[ -f $MIGRATE_LOGFILE ] && rm $MIGRATE_LOGFILE
+
+source tool/dev/drop-database
+source tool/dev/create-database
+
+log_info -n ">>> Creating model data (Logfile at ${MIGRATE_LOGFILE}) ."
+yii_test migrate/up --migrationNamespaces=app\\migrations\\schema $MIGRATE_ARGS &> $MIGRATE_LOGFILE
+log_info -n "."
+yii_test migrate/up --migrationNamespaces=app\\migrations\\data $MIGRATE_ARGS &> $MIGRATE_LOGFILE
+log_info -n "."
+yii_test migrate/up --migrationNamespaces=tests\\migrations $MIGRATE_ARGS &> $MIGRATE_LOGFILE
+log_info " ${CHECKMARK}"

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Update dependencies
 
-./tool/dev/check-env && source ./.env
+source tool/dev/check-env
 
 echo " >>> Updating packages..."
 pushd src/client/bibliograph >/dev/null

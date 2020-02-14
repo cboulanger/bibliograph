@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # controls the mysql server running in a docker container
 
-./tool/dev/check-env && source ./.env
+source tool/dev/check-env
+source tool/dev/check-envvars
 
 case $1 in
 start)

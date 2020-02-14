@@ -1,7 +1,11 @@
 <?php
-$ini = require('ini.php');
-$ldap = (object) $ini['ldap'];
-if( ! $ldap->enabled ) return;
+//
+// LDAP configuration
+//
+
+use \lib\components\Configuration;
+
+if( ! Configuration::iniValue('ldap.enabled') ) return null;
 return  [
   'class' => \Edvlerblog\Adldap2\Adldap2Wrapper::class,
 
@@ -33,13 +37,13 @@ return  [
       * $provider = \Yii::$app->ldap->getDefaultProvider();
       * or with $provider = \Yii::$app->ldap->getProvider('default');
       */
-    'default' => [ 
+    'default' => [
       // Connect this provider on initialisation of the LdapWrapper Class automatically
       // Must be false otherwise the app will break if the server isn't available
       'autoconnect' => false,
 
-      // The provider's schema. 
-      // You can make your own https://github.com/Adldap2/Adldap2/blob/master/docs/schema.md 
+      // The provider's schema.
+      // You can make your own https://github.com/Adldap2/Adldap2/blob/master/docs/schema.md
       // or use one from https://github.com/Adldap2/Adldap2/tree/master/src/Schemas
       // Example to set it to OpenLDAP:
       'schema' => new \Adldap\Schemas\OpenLDAP(),
@@ -47,43 +51,43 @@ return  [
       // The config has to be defined as described in the Adldap2 documentation.
       // https://github.com/Adldap2/Adldap2/blob/master/docs/configuration.md
       'config' => [
-        
-        // You can use the host name or the IP address of your controllers.
-        'domain_controllers' => [$ldap->host],
 
-        // the port 
-        'port' => $ldap->port,
+        // You can use the host name or the IP address of your controllers.
+        'domain_controllers' => [Configuration::iniValue('ldap.host')],
+
+        // the port
+        'port' => Configuration::iniValue('ldap.port'),
 
         // Your base DN. This is usually your account suffix.
-        'base_dn' => $ldap->user_base_dn,
+        'base_dn' => Configuration::iniValue('ldap.user_base_dn'),
 
-        // The account to use for 
+        // The account to use for
         //   a) comnecting / querying (This usually does not need to be an actual admin account)
         //   b) modifying / creating users (An account with admin priviledges is required)
         // See https://github.com/Adldap2/Adldap2/tree/master/docs
-        'admin_username' => $ldap->bind_dn,
-        'admin_password' => $ldap->bind_password,
+        'admin_username' => Configuration::iniValue('ldap.bind_dn'),
+        'admin_password' => Configuration::iniValue('ldap.bind_password'),
 
         // The account suffix, if set, will be added to all CNs
-        'account_suffix' => "," . $ldap->user_base_dn,
-        
-        // To enable SSL/TLS read 
+        'account_suffix' => "," . Configuration::iniValue('ldap.user_base_dn'),
+
+        // To enable SSL/TLS read
         // https://github.com/edvler/yii2-adldap-module/blob/master/docs/SSL_TLS_AD.md
         // and uncomment the variables below
         //'use_ssl' => true,
-        //'use_tls' => true,             
-        
+        //'use_tls' => true,
+
         // Optional Configuration Options
         //'account_prefix'        => 'ACME-',
         //'admin_account_prefix'  => 'ACME-ADMIN-',
         //'admin_account_suffix'  => '@acme.org',
         //'follow_referrals'      => false,
         //'timeout'               => 5,
-        
+
         // Custom LDAP Options
         // See: http://php.net/ldap_set_option
         //'custom_options'        => [
-        //]        
+        //]
       ]
     ]
   ], // close providers array

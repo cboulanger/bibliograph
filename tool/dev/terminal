@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-./tool/dev/check-env && source ./.env
-
 if [[ "$OSTYPE" == "darwin"* ]]; then
   osascript -e "tell application \"Terminal\"
     activate

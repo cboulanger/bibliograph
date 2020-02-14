@@ -16,6 +16,17 @@ defined("YII_ENV") or define( "YII_ENV" , isset($_SERVER['YII_ENV'])?$_SERVER['Y
 defined("APP_ROOT_DIR") or define( "APP_ROOT_DIR" , __DIR__ . "/../../..");
 
 /*
+ * The path to the directory in which the log files should be saved
+ */
+defined("APP_LOG_DIR") or define( "APP_LOG_DIR" , '@runtime/logs/error.log');
+
+//APP_ROOT_DIR . '/log/app/error.log',
+/*
+ * The path to the file containing server environment variable definitions
+ */
+defined("DOTENV_FILE") or define( "DOTENV_FILE" , YII_ENV === "test" ? APP_ROOT_DIR . "/test/.env" : APP_ROOT_DIR . "/.env");
+
+/*
  * The path to the directory with the backend code
  */
 defined("APP_BACKEND_DIR") or define( "APP_BACKEND_DIR" , __DIR__ . "/..");
@@ -26,14 +37,9 @@ defined("APP_BACKEND_DIR") or define( "APP_BACKEND_DIR" , __DIR__ . "/..");
 defined("APP_FRONTEND_DIR") or define( "APP_FRONTEND_DIR" , APP_ROOT_DIR . "/src/client/bibliograph");
 
 /*
- * The path to the file containing server environment variable definitions
- */
-defined("DOTENV_FILE") or define( "DOTENV_FILE" , "app.env");
-
-/*
  * The path to the application configuration file (as distinct from the YII application configuration)
  */
-defined("APP_CONFIG_FILE") or define( "APP_CONFIG_FILE" , APP_BACKEND_DIR . "/config/app.conf.toml");
+defined("APP_CONFIG_FILE") or define( "APP_CONFIG_FILE" , APP_ROOT_DIR . "/app.conf.toml");
 
 /*
  * the timeout of a normal session, in seconds, Defaults to 60 minutes

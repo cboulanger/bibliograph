@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-# check environment and read env. variables
-./tool/dev/check-env && source ./.env
+if [ "$PHP_VERSION" == "" ]; then
+  PHP_VERSION=7.3
+fi
 
 # run php in docker image
 docker exec -it http-server php-$PHP_VERSION "$@"

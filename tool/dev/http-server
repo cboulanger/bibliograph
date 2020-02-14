@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # controls the apache-php server in the docker-phpfarm container
 
-./tool/dev/check-env && source ./.env
+source tool/dev/check-env
 
 case $1 in
 start)
@@ -9,7 +9,6 @@ start)
   if [ "$(docker ps -f name=http-server -q -a)" == "" ]; then
     docker run --name http-server \
       -v $PWD:/var/www:rw \
-      -v $PWD/log/http:/var/log/apache2:rw \
       -e APACHE_UID=$UID \
       -p 8070:8070 \
       -p 8071:8071 \
@@ -26,6 +25,7 @@ start)
     >&2 echo 'ERROR: http server could not be started.'
     exit 1
   fi
+  docker logs -f http-server &> $PWD/log/http/combined.log &
   echo "Server started. PHP Versions 7.0-7.4 on ports 8070-8074."
   ;;
 stop)

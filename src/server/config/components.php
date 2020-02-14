@@ -7,6 +7,8 @@ return [
   ],
   // logging
   'log' => require('components/log.php'),
+  // enable json parsing
+  'request' => ['parsers' => ['application/json' => 'yii\web\JsonParser']],
   // Override http response component
   'response' => ['class' => \lib\components\EventTransportResponse::class],
   'i18n' => require "components/i18n.php",

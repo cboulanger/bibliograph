@@ -23,24 +23,25 @@ namespace app\controllers;
 use app\controllers\traits\{
   AccessControlTrait, AuthTrait, DatasourceTrait, MessageTrait, ShelfTrait
 };
-use lib\dialog\Error;
-use lib\exceptions\AccessDeniedException;
-use lib\exceptions\UserErrorException;
 use Yii;
+use yii\filters\auth\CompositeAuth;
+use yii\filters\auth\HttpBearerAuth;
 
 
 /**
  * Service class providing methods to get or set configuration
  * values
- * @todo refactor to \lib\BaseController
  */
-class AppController extends \JsonRpc2\Controller
+class AppController extends yii\web\Controller
 {
   use AuthTrait;
   use MessageTrait;
   use DatasourceTrait;
   use ShelfTrait;
   use AccessControlTrait;
+
+  // Disable CSRF validation for JSON-RPC POST requests
+  public $enableCsrfValidation = false;
 
   /**
    * The category of this class
@@ -53,21 +54,19 @@ class AppController extends \JsonRpc2\Controller
   const MESSAGE_EXECUTE_JSONRPC = "jsonrpc.execute";
 
   /**
-   * Overridden to add functionality:
-   * - catch User exception and convert it into an error dialog widget on the client
-   * @inheritDoc
+   * @inheritdoc
    */
-  protected function _runAction($method)
+  public function behaviors()
   {
-    try{
-      return parent::_runAction($method);
-    } catch (UserErrorException $e){
-      Yii::info("User Error: " . $e->getMessage());
-      Error::create($e->getMessage());
-      return null;
-    } catch (AccessDeniedException $e){
-      Yii::info("Access Denied: " . $e->getMessage());
-    }
+    $behaviors = parent::behaviors();
+    $behaviors['authenticator'] = [
+      'class' => CompositeAuth::class,
+      'authMethods' => [
+        HttpBearerAuth::class,
+      ],
+      'optional' => $this->noAuthActions
+    ];
+    return $behaviors;
   }
 
   //-------------------------------------------------------------

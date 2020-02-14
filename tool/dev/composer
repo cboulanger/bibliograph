@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 
-# read project environment variables
-source ./.env || (echo "Script must be called from root dir" && exit 1)
+# until the docker image is updated
+docker exec -it http-server git version 2&> /dev/null
+if [ $? -ne 0 ]; then
+ echo "Installing git in container, please wait... "
+ docker exec -it http-server apt update
+ docker exec -it http-server apt install git -y
+fi
+
 # call local composer with the right working directory
-./tool/dev/php ./src/lib/composer.phar "$@" -d ./src/server
+tool/dev/php src/lib/composer.phar --working-dir=src/server "$@"

@@ -38,26 +38,6 @@ trait AuthTrait
     return $this->noAuthActions ?? [];
   }
 
-  //-------------------------------------------------------------
-  // Overridden methods
-  //-------------------------------------------------------------
-
-
-  // public function behaviors()
-  // {
-  //   return [
-  //     'authenticator' => [
-  //       'class' => \yii\filters\auth\CompositeAuth::className(),
-  //       'authMethods' => [
-  //         [
-  //           'class' => \yii\filters\auth\HttpBearerAuth::className(),
-  //           'except' => ['authenticate']
-  //         ]
-  //       ],
-  //     ]
-  //   ];
-  // }
-
 
   /**
    * Filter method to protect action methods from unauthorized access.
@@ -71,6 +51,7 @@ trait AuthTrait
    */
   public function beforeAction($action)
   {
+
     if (!parent::beforeAction($action)) {
       return false;
     }

@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# This test runs unit and functional tests that do not need a webserver
+CODECEPT_ARGS="--fail-fast"
+set -o errexit
+source test/.env
+source tool/lib/functions.sh
+
+default=(unit functional)
+suites=("${@:-${default[@]}}")
+
+log_heading "Running codeception suites '$suites' "
+
+source tool/dev/check-env
+source tool/dev/check-envvars
+source tool/dev/create-mysql-user
+source tool/dev/check-mysql
+
+for suite in $suites
+do
+    source tool/test/setup/reset-data
+    log_info ">>> Running test suite: $suite ..."
+    codecept $CODECEPT_ARGS run $suite -v || exit $?
+done
+
+log_info "Tests finished."
+exit 0

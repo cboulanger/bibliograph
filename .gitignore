@@ -1,12 +1,15 @@
-.DS_Store
-.nvm
-.c9
-.vscode
-.idea
-.phplint-cache
+# configuration
+.env
+app.conf.toml
 
 # npm
 npm-debug.log
 node_modules/
 package-lock.json
 
+# other files
+.DS_Store
+.nvm
+.vscode
+.idea
+.phplint-cache

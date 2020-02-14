@@ -2,7 +2,7 @@
 //
 // yii cli configuration
 //
-$config = require "yii-appconfig.php";
+$config = require "config.php";
 $config['id'] = 'bibliograph-console';
 unset($config['components']['response']);
 unset($config['components']['request']);
