@@ -34,7 +34,7 @@ class DatasourceController extends AppController
    * application supports
    * @param string $namedId
    * @param string $namedId
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionCreate( $namedId, $type=null )
   {

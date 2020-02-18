@@ -2,10 +2,6 @@
 //
 // configuration for bibliograph backend
 //
-$config = require "config.php";
+$config = require __DIR__ . "/config.php";
 $config['id'] = 'bibliograph-server';
-$config['components']['request'] = [
-  'enableCookieValidation' => true,
-  'enableCsrfValidation' => false
-];
 return $config;

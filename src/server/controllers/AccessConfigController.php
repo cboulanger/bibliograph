@@ -255,7 +255,7 @@ class AccessConfigController extends AppController
    * @param array $filter
    *    An associative array that can be used in a ActiveQuery::where() method call
    * @throws UserErrorException
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionElements(string $type, array $filter = null)
   {
@@ -328,14 +328,14 @@ class AccessConfigController extends AppController
    * Only for testing, disabled in production
    * @param $type
    * @param $namdeId
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    * @throws UserErrorException
    */
   public function actionData($type, $namedId)
   {
     $this->requirePermission("access.manage");
     if (YII_ENV_PROD) {
-      throw new \JsonRpc2\Exception("Not allowed.", \JsonRpc2\Exception::INVALID_REQUEST);
+      throw new \lib\exceptions\AccessDeniedException();
     }
     $model = $this->getModelInstance($type, $namedId);
     return $model->getAttributes(null, ['created', 'modified']);
@@ -346,7 +346,7 @@ class AccessConfigController extends AppController
    * @param $elementType
    * @param $namedId
    * @throws \lib\exceptions\UserErrorException
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionTree($elementType, $namedId)
   {
@@ -497,7 +497,7 @@ class AccessConfigController extends AppController
    * @param string|null $schema The name of the schema (only relevant for datasource elements)
    * @param bool $edit If true (default), trigger the form to edit the data
    * @return string
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    * @throws UserErrorException
    */
   public function actionAdd($type, $namedId, $schema = null, $edit = true)
@@ -578,7 +578,7 @@ class AccessConfigController extends AppController
    *    If the first argument is boolean true, then the second and third
    *    arguments are the normal signature
    * @return string
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    * @throws UserErrorException
    */
   public function actionEdit($first, $second, $third = null)
@@ -648,7 +648,7 @@ class AccessConfigController extends AppController
    *    The namedId of the model or null if the user cancelled the form
    * @return string Diagnostic message
    * @throws \Exception
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    * @throws UserErrorException
    */
   public function actionSave(\stdClass $data = null, $type = null, $namedId = null)
@@ -754,7 +754,7 @@ class AccessConfigController extends AppController
    *    An array of ids to delete
    * @return string Diagnostic message
    * @throws UserErrorException
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    * @throws \Exception
    *
    */
@@ -807,7 +807,7 @@ class AccessConfigController extends AppController
    * @param string|null $namedId
    * @return string Diagnostic message
    * @throws UserErrorException
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionDeleteDatasource(bool $doDeleteModelData=null, string $namedId=null)
   {
@@ -846,7 +846,7 @@ class AccessConfigController extends AppController
    * @param string $namedId
    *    The named id of the current element
    * @return string Diagnostic message
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    * @throws InvalidArgumentException
    * @throws UserErrorException
    */
@@ -864,7 +864,7 @@ class AccessConfigController extends AppController
    * @param $type
    * @param $namedId
    * @return string Diagnostic message
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    * @throws UserErrorException
    */
   public function actionUnlink($linkedModelData, $type, $namedId)
@@ -930,7 +930,7 @@ class AccessConfigController extends AppController
    *
    * @param $data
    * @return string
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    * @throws UserErrorException
    * @throws \yii\base\Exception
    */
@@ -1049,7 +1049,7 @@ class AccessConfigController extends AppController
   /**
    * @param $formData
    * @return string
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionCreateDatasourceHandler(\stdClass $formData=null)
   {
@@ -1099,7 +1099,7 @@ class AccessConfigController extends AppController
    * @param $data
    * @return string
    * @throws \Exception
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    * @throws \yii\db\Exception
    */
   public function actionAddDatasource($data=null)
@@ -1152,7 +1152,7 @@ class AccessConfigController extends AppController
 
   /**
    * Allows to search for LDAP users and, if found, to add them to the local list of users
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionFindLdapUserDialog()
   {
@@ -1168,7 +1168,7 @@ class AccessConfigController extends AppController
    * @param $identifier
    * @return string
    * @throws \Adldap\Models\ModelNotFoundException
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    * @throws \yii\db\Exception
    */
   public function actionFindLdapUser($identifier) {
@@ -1216,7 +1216,7 @@ class AccessConfigController extends AppController
    * @return string
    * @throws \Adldap\Models\ModelNotFoundException
    * @throws \yii\db\Exception
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    * @throws InvalidArgumentException
    */
   public function actionImportLdapUser($data=null){

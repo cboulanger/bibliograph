@@ -13,11 +13,10 @@
     "adci/full-name-parser": "^0.2.3",
     "aracoool/yii2-uuid": "^1.1",
     "bmsrox/yii2-module-autoloader": "dev-cboulanger-fix-mac-hidden-dir",
-    "cranetm/yii2-json-rpc-2.0": "dev-cboulanger-empty-request-object",
     "danielstjules/stringy": "^3.1",
     "edvlerblog/yii2-adldap-module": "^4.0.0",
     "fourteenmeister/dsn": "dev-master",
-    "georgique/yii2-jsonrpc": "dev-master",
+    "georgique/yii2-jsonrpc": "*",
     "magp/yii2-json-schema-validator": "dev-master",
     "neitanod/forceutf8": "^2.0",
     "odannyc/yii2-sse": "^0.1.0",
@@ -28,16 +27,16 @@
     "symfony/dotenv": "^5.0",
     "toriphes/yii2-console-runner": "*",
     "voku/simple-cache": "^3.1",
-    "yiisoft/yii2": "dev-master",
+    "yiisoft/yii2": "^2.0.32",
     "yiisoft/yii2-swiftmailer": "^2.1",
     "yosymfony/toml": "^1.0.0"
   },
   "require-dev": {
-    "bazilio/yii2-stubs-generator": "^1.1",
     "bizley/migration": "^2.2",
     "codeception/codeception": "^4.0",
     "codeception/module-asserts": "^1.1",
-    "codeception/module-rest": "dev-master",
+    "codeception/module-phpbrowser": "^1.0.0",
+    "codeception/module-rest": "^1.2.0",
     "codeception/module-yii2": "^1.1",
     "codeception/specify": "*",
     "codeception/verify": "*",
@@ -47,7 +46,7 @@
     "insolita/yii2-migration-generator": "~2.3",
     "yiisoft/yii2-faker": "~2.0.0",
     "yiisoft/yii2-gii": "~2.0.0",
-    "codeception/module-phpbrowser": "dev-master"
+    "phpunit/phpunit": "<7"
   },
   "repositories": [
     {
@@ -55,8 +54,8 @@
       "url": "https://asset-packagist.org"
     },
     {
-      "type": "git",
-      "url": "https://github.com/cboulanger//yii2-json-rpc-2.0"
+      "type": "path",
+      "url": "../lib/yii2-jsonrpc"
     },
     {
       "type": "git",
@@ -69,10 +68,6 @@
     {
       "type": "git",
       "url": "https://github.com/cboulanger/dsn.git"
-    },
-    {
-      "type": "git",
-      "url": "https://github.com/yiisoft/yii2.git"
     }
   ]
 }

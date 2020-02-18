@@ -16,5 +16,4 @@ modules:
         - REST:
             depends: Yii2
             part: [json]
-            url: '?r='
         - \Helper\Api

@@ -193,8 +193,6 @@ trait JsonRpcTrait
    */
   public function dontSeeJsonRpcError($includeUserError=true)
   {
-    //codecept_debug($this->grabDataFromResponseByJsonPath('$.error'));
-    //if( count($error) ) codecept_debug(json_decode($error[0]));
     $this->dontSeeResponseJsonMatchesJsonPath('$.error');
     if($includeUserError) $this->dontSeeUserError();
   }

@@ -47,7 +47,7 @@ class ProgressController extends \yii\web\Controller
    * @param string $id The widgetId of the widget displaying
    *    the progress of the backup
    * @param string|null $comment Optional comment
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionCreate(string $datasource, string $id, string $comment = null)
   {
@@ -66,7 +66,7 @@ class ProgressController extends \yii\web\Controller
    * @param string $datasource
    * @param string $file
    * @param string $id
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionRestore(string $datasource, string $file, string $id)
   {

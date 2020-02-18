@@ -6,7 +6,11 @@ set -o errexit
 source test/.env
 source tool/lib/functions.sh
 
-default=(unit functional)
+default=(
+  unit
+  functional
+  "api --env php$PHP_VERSION,setup"
+)
 suites=("${@:-${default[@]}}")
 
 log_heading "Running codeception suites '$suites' "

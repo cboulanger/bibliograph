@@ -7,10 +7,23 @@ return [
   ],
   // logging
   'log' => require('components/log.php'),
-  // enable json parsing
-  'request' => ['parsers' => ['application/json' => 'yii\web\JsonParser']],
+  'request' => [
+    'enableCookieValidation' => false,
+    'enableCsrfValidation' => false,
+    'parsers' => ['application/json' => 'yii\web\JsonParser']
+  ],
   // Override http response component
   'response' => ['class' => \lib\components\EventTransportResponse::class],
+  'urlManager' => [
+    'showScriptName' => false,
+    'enableStrictParsing' => false,
+    'enablePrettyUrl' => true,
+    'rules' => array(
+      '<controller:\w+>/<id:\d+>' => '<controller>/view',
+      '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
+      '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
+    )
+  ],
   'i18n' => require "components/i18n.php",
   // Cache
   'cache' => [ 'class' => yii\caching\FileCache::class ],
@@ -36,10 +49,12 @@ return [
   'utils' => [ 'class' => \lib\components\Utils::class ],
   // a queue of Events to be transported to the browser
   'eventQueue' => [ 'class' => \lib\components\EventQueue::class ],
+
+
   // The message bus, currently only a stub
-  'message' => [ 'class' => \lib\components\MessageBus::class ],
-  //server-side events, not used
-  'sse' => [ 'class' => \odannyc\Yii2SSE\LibSSE::class ],
-  //message channels, not working yet
-  'channel' => [ 'class' => \lib\channel\Component::class ]
+  // 'message' => [ 'class' => \lib\components\MessageBus::class ],
+  // server-side events, not used
+  // 'sse' => [ 'class' => \odannyc\Yii2SSE\LibSSE::class ],
+  // message channels, not working yet
+  // 'channel' => [ 'class' => \lib\channel\Component::class ]
 ];

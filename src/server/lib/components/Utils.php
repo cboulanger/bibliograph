@@ -43,6 +43,11 @@ class Utils extends \yii\base\Component
     return realpath( __DIR__ . "/../../../.." );
   }
 
+  public function getJsonRpcEndpoint()
+  {
+    return dirname(Yii::$app->request->absoluteUrl);
+  }
+
   /**
    * Returns the URL of the HTML user interface
    */

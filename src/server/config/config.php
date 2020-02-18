@@ -8,7 +8,6 @@ $config =  [
   /* Components that are loaded at application startup  */
   'bootstrap' => [
     'log',
-    'channel',
     'moduleLoader'
   ],
   /* Conntroller configuration */

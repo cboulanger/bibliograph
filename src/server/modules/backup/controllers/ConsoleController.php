@@ -25,7 +25,7 @@ class ConsoleController extends \yii\console\Controller
    * @param string $id The widgetId of the widget displaying
    *    the progress of the backup
    * @param string|null $comment Optional comment
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionCreate(string $datasource, string $comment = null)
   {
@@ -57,7 +57,7 @@ class ConsoleController extends \yii\console\Controller
   /**
    * @param string $datasource
    * @param int $timestamp The timestamp of the backup
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionRestore(string $datasource, int $timestamp)
   {

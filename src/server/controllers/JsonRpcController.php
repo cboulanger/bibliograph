@@ -13,6 +13,9 @@ class JsonRpcController extends Controller
   // Disable CSRF validation for JSON-RPC POST requests
   public $enableCsrfValidation = false;
 
+  // JSON object are converted to PHP Objects, not associative arrays
+  public $requestParseAsArray = false;
+
   public function __construct($id, $module, $config = [])
   {
     Yii::debug(\Yii::$app->request->getRawBody());

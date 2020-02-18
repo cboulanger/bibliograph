@@ -104,7 +104,7 @@ class TableController extends AppController
    * Sets datasources active / inactive, so that they do not show up in the
    * list of servers
    * param array $map Maps datasource ids to status
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    * @throws UserErrorException
    * @todo add DTO
    */

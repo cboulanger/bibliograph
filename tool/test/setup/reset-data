@@ -11,6 +11,11 @@ MIGRATE_LOGFILE=log/codeception.migration.log
 source tool/dev/drop-database
 source tool/dev/create-database
 
+echo ">>> Deleting log and output data files..."
+[[ -f logs/app/app.log ]] && rm logs/app/app.log
+[[ -f logs/app/error.log ]] && rm logs/app/error.log
+rm test/codeception/_output/*fail* || true
+
 log_info -n ">>> Creating model data (Logfile at ${MIGRATE_LOGFILE}) ."
 yii_test migrate/up --migrationNamespaces=app\\migrations\\schema $MIGRATE_ARGS &> $MIGRATE_LOGFILE
 log_info -n "."

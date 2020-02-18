@@ -36,7 +36,7 @@ class UiController extends AppController
   /**
    * @param $datasource
    * @param $token
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionConfirmRestore($datasource, $token)
   {
@@ -58,7 +58,7 @@ class UiController extends AppController
    * @param $datasource
    * @param $token
    * @return string Diagnostic message
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionChooseBackup($form=null, $datasource=null, string $token=null)
   {
@@ -123,7 +123,7 @@ class UiController extends AppController
 
   /**
    * Confirmation dialog for deleting backups
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    * @return string diagnostic message
    */
   public function actionChooseDelete($datasource)
@@ -155,7 +155,7 @@ class UiController extends AppController
 
   /**
    * Service to delete all backups of this datasource older than one day
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionConfirmDelete($data, $datasource)
   {
@@ -227,7 +227,7 @@ class UiController extends AppController
    * @param $form
    * @param $datasource
    * @return string
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionChooseDownload($datasource)
   {

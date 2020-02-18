@@ -43,7 +43,7 @@ class TrashController extends AppController
       :: getInstanceFor( $datasource )
       -> getClassFor( "reference" );
   }
-  
+
   /**
    * Returns the name of the folder model class
    *
@@ -72,7 +72,7 @@ class TrashController extends AppController
    * Empties the trash folder
    * @param string $datasource
    * @return string Diagnostic message
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionEmpty( string $datasource )
   {
@@ -106,5 +106,5 @@ class TrashController extends AppController
 
     return "Trash emptied.";
   }
-  
+
 }
