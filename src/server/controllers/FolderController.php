@@ -383,7 +383,7 @@ class FolderController extends AppController //implements ITreeController
    * @param $datasource
    * @param $folderId
    * @return string Diagnostic message
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    * @throws \Exception
    */
   public function actionEdit($datasource, $folderId)
@@ -407,7 +407,7 @@ class FolderController extends AppController //implements ITreeController
    * @param string $datasource
    * @param int $folderId
    * @return string Diagnostic message
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionSave($data=null, string $datasource=null, int $folderId=null)
   {
@@ -434,7 +434,7 @@ class FolderController extends AppController //implements ITreeController
    * @param $datasource
    * @param $folderId
    * @return void
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionVisibilityDialog($datasource, $folderId)
   {
@@ -477,7 +477,7 @@ class FolderController extends AppController //implements ITreeController
    * @param string $datasource
    * @param int $folderId
    * @return string Diagnostic message
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionVisibilityChange($data=null, string $datasource=null, int $folderId=null)
   {
@@ -513,7 +513,7 @@ class FolderController extends AppController //implements ITreeController
    * @param string $datasource
    * @param int $folderId
    * @return string Diagnostic message
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionAddDialog($datasource, $folderId)
   {
@@ -547,7 +547,7 @@ class FolderController extends AppController //implements ITreeController
    * @param $datasource
    * @param $parentFolderId
    * @return string Diagnostic message
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    * @throws Exception
    */
   public function actionCreate($data, $datasource, $parentFolderId)
@@ -610,7 +610,7 @@ class FolderController extends AppController //implements ITreeController
    * @param string $query
    * @return string
    * @throws Exception
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionSaveSearch(string $datasource, int $parentFolderId, string $query)
   {
@@ -628,7 +628,7 @@ class FolderController extends AppController //implements ITreeController
    * @param $folderId
    * @return string Diagnostic message
    * @throws UserErrorException
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionRemoveDialog($datasource, $folderId)
   {
@@ -652,7 +652,7 @@ class FolderController extends AppController //implements ITreeController
    * @param $datasource
    * @param $folderId
    * @return string "OK"
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionRemove($data, $datasource, $folderId)
   {
@@ -747,7 +747,7 @@ class FolderController extends AppController //implements ITreeController
    * @param int $parentId
    * @throws UserErrorException
    * @return string Diagnostic message
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionMove(string $datasource, int $folderId, int $parentId)
   {
@@ -794,7 +794,7 @@ class FolderController extends AppController //implements ITreeController
    * @param int $from_folderId
    * @param string $to_datasource
    * @param int $to_parentId
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionCopy(string $from_datasource, int $from_folderId, string $to_datasource, int $to_parentId ){
     $this->requirePermission("folder.move", $from_datasource); // Todo: needs its own permission
@@ -892,7 +892,7 @@ class FolderController extends AppController //implements ITreeController
    * @param $folderId
    * @param $position
    * @return string "OK"
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionPositionChange($datasource, $folderId, $position)
   {

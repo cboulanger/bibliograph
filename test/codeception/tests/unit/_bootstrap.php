@@ -12,3 +12,4 @@ defined('DOTENV_FILE') or define('DOTENV_FILE', APP_ROOT_DIR . "/test/.env");
 
 require APP_BACKEND_DIR . "/bootstrap.php";
 Yii::setAlias('@tests', APP_TESTS_DIR . "/tests");
+ob_start();

@@ -129,7 +129,7 @@ class ImportController extends AppController
    * @param string $format
    *    The name of the import format
    * @throws UserErrorException
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionParseUpload( string $format )
   {
@@ -182,7 +182,7 @@ class ImportController extends AppController
         }
       }
     }
-    
+
     // empty an existing folder with the session id as label
     $sessionId = Yii::$app->session->getId();
     /** @var Folder|null $folder */
@@ -210,11 +210,11 @@ class ImportController extends AppController
         throw new UserErrorException($e->getMessage());
       }
     }
-    
+
     // convert and import data
     $data = file_get_contents( $file->path );
     $file->delete();
-    
+
     $parserClass = $importFormatModel->class;
     if( ! class_exists($parserClass) ){
       throw new UserErrorException("Importer class '$parserClass' does not exist!");
@@ -254,7 +254,7 @@ class ImportController extends AppController
    * @param string $targetDatasource
    * @param int $targetFolderId
    * @return string Diagnostic message
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionImport( string $ids, string $targetDatasource, int $targetFolderId )
   {

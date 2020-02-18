@@ -51,7 +51,7 @@ class ConfigController extends \app\controllers\AppController
    * @param mixed $value Value
    * @throws InvalidArgumentException
    * @return bool
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   function actionSet($key, $value)
   {

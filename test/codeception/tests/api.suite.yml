@@ -7,6 +7,8 @@ modules:
         - REST:
             depends: PhpBrowser
             url: '?r='
+        - PhpBrowser:
+              url: 'http://localhost:8073/test/codeception/web'
         - \Helper\Api
 env:
     php7.0:

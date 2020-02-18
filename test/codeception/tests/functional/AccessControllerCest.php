@@ -14,9 +14,8 @@ class AccessControllerCest
    */
   public function tryToAccessMethodWithoutAuthentication(FunctionalTester $I)
   {
-    $I->sendJsonRpcRequest("access","username");
-    // @todo we don't get a proper error yet, so we have to check that the result is null
-    $I->assertSame( [null], $I->grabDataFromResponseByJsonPath('$.result'));
+    $I->sendJsonRpcRequest("access","username",[],true);
+    $I->seeJsonRpcError("Unauthorized", -32600);
   }
 
   public function tryToLoginAnonymously(FunctionalTester $I)

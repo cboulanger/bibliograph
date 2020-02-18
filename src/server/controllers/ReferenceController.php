@@ -140,7 +140,7 @@ class ReferenceController extends AppController
           'width' => 50,
           'visible' => false
         ],
-//        'markedDeleted'	=> array(	
+//        'markedDeleted'	=> array(
 //        	'header' 		=> " ",
 //        	'width'	 		=> 16
 //        ),
@@ -436,7 +436,7 @@ class ReferenceController extends AppController
    * @return string Diagnostic message
    *
    * @throws \InvalidArgumentException
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    * @throws Exception
    */
   public function actionCreate($datasource, $folderId, $data )
@@ -510,7 +510,7 @@ class ReferenceController extends AppController
    * @param int $folderId The numeric id of the folder. If zero, remove from all folders
    * @param string $ids A string of the numeric ids of the references, joined by a comma
    * @return string Diagnostic message
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionRemove(string $datasource, int $folderId, string $ids )
   {
@@ -624,7 +624,7 @@ class ReferenceController extends AppController
    * @param int $folderId
    * @param string $ids
    * @return string Diagnostic message
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionConfirmMoveToTrash($confirmed, string $datasource, $ids )
   {
@@ -641,7 +641,7 @@ class ReferenceController extends AppController
    * @param int $targetFolderId The folder to move to
    * @param string $ids The ids of the references to move, joined by  a comma
    * @return string Diagnostic message
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionMove(string $datasource, int $folderId, int $targetFolderId, string $ids)
   {
@@ -755,7 +755,7 @@ class ReferenceController extends AppController
    * @param int $targetFolderId
    * @param string $ids Numeric ids joined by comma
    * @return string "OK"
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionCopy(string $datasource, int $targetFolderId, string $ids)
   {
@@ -813,7 +813,7 @@ class ReferenceController extends AppController
    *
    * @param string $datasource
    * @param int $folderId
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionEmptyFolder($datasource, $folderId)
   {
@@ -1037,7 +1037,7 @@ class ReferenceController extends AppController
    */
   public function actionTokenizeQuery( $input, $inputPosition, $tokens, $datasourceName ){
     //Yii::debug(func_get_args());
-    $debug = false; 
+    $debug = false;
     $input = trim($input);
     $modelClass = Datasource::in($datasourceName,"reference");
     $tokens[] = $input;
@@ -1134,7 +1134,7 @@ class ReferenceController extends AppController
   }
 }
 
-class TokenFieldDto extends \JsonRpc2\Dto
+class TokenFieldDto
 {
   /**
    * @var string

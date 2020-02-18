@@ -40,7 +40,7 @@ echo " >>> Installing github repositories..."
 
 cd /src/lib
 declare -a arr=(
-  "cboulanger/yii2-json-rpc-2.0"
+  "cboulanger/yii2-jsonrpc"
   "cboulanger/raptor-client"
   "cboulanger/dsn"
   "cboulanger/worldcat-linkeddata-php"

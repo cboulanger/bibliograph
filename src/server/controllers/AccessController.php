@@ -28,7 +28,7 @@ use app\models\Role;
 use app\models\Session;
 use app\models\User;
 use InvalidArgumentException;
-use JsonRpc2\Exception;
+use lib\exceptions\Exception;
 use lib\exceptions\UserErrorException;
 use lib\models\ClipboardContent;
 use Yii;

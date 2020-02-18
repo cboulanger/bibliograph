@@ -15,7 +15,7 @@ class AASetupControllerCest
   public function tryVersion(ApiTester $I)
   {
     $I->amGoingTo("test the 'setup.version' server method");
-    $I->sendJsonRpcRequest('setup','version', ["a","b","c"]);
+    $I->sendJsonRpcRequest('setup','version');
     $this->version = $I->grabJsonRpcResult();
     $I->amGoingTo("see if '$this->version' is a valid version number");
     $I->assertTrue( version_compare( $this->version, '0.0.1', '>' ), "Result should be a valid version number" );

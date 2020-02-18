@@ -2,7 +2,8 @@
 
 namespace app\controllers\dto;
 
-class ConfigLoadResult extends \JsonRpc2\Dto
+
+class ConfigLoadResult extends Base
 {
   /** @var string[] */
   public $keys;
@@ -11,5 +12,5 @@ class ConfigLoadResult extends \JsonRpc2\Dto
   public $types;
 
   /** @var mixed[] */
-  public $values;  
+  public $values;
 }

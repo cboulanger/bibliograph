@@ -7,10 +7,18 @@ return [
   ],
   // logging
   'log' => require('components/log.php'),
-  // enable json parsing
-  'request' => ['parsers' => ['application/json' => 'yii\web\JsonParser']],
+  'request' => [
+    'enableCookieValidation' => false,
+    'enableCsrfValidation' => false,
+    'parsers' => ['application/json' => 'yii\web\JsonParser']
+  ],
   // Override http response component
   'response' => ['class' => \lib\components\EventTransportResponse::class],
+  'urlManager' => [
+    'enablePrettyUrl' => false,
+    'showScriptName' => false,
+    'enableStrictParsing' => false
+  ],
   'i18n' => require "components/i18n.php",
   // Cache
   'cache' => [ 'class' => yii\caching\FileCache::class ],
