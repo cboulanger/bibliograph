@@ -53,7 +53,9 @@
       "targetClass": "SourceTarget",
       "bundle": {
         "include": [
-          "qx.*"
+          "qx.*",
+          "qxl.*",
+          "qookery.*"
         ],
         "exclude": [
           "qx.util.*"
