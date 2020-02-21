@@ -1,6 +1,6 @@
 # configuration
 .env
-app.conf.toml
+/app.conf.toml
 
 # npm
 npm-debug.log

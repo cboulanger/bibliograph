@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+# export .env variables to this shell if not in test mode, in which case they have already been set
+[[ "$YII_ENV" == "test" ]] || export $(egrep -v '^#' .env | xargs)

@@ -2,7 +2,7 @@
 # controls the mysql server running in a docker container
 
 source tool/dev/check-env
-source tool/dev/check-envvars
+source tool/dev/envvars-check
 
 case $1 in
 start)

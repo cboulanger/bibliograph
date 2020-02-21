@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 source tool/dev/check-env
-source tool/dev/check-envvars
+source tool/dev/envvars-check
 tool/dev/servers-start
 
 # Exit on first error

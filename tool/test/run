@@ -1,22 +1,27 @@
 #!/bin/bash
 
+# checks
+
+
 # This test runs unit and functional tests that do not need a webserver
 CODECEPT_ARGS="--fail-fast"
 set -o errexit
-source test/.env
+source tool/dev/envvars-load
 source tool/lib/functions.sh
 
-default=(
+tool/dev/servers-start
+
+declare -a default=(
   unit
   functional
   "api --env php$PHP_VERSION,setup"
 )
-suites=("${@:-${default[@]}}")
+declare -a suites=("${@:-${default[@]}}")
 
 log_heading "Running codeception suites '$suites' "
 
 source tool/dev/check-env
-source tool/dev/check-envvars
+source tool/dev/envvars-check
 source tool/dev/create-mysql-user
 source tool/dev/check-mysql
 

@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-# export .env variables to this shell
-export $(egrep -v '^#' .env | xargs)
+source tool/dev/envvars-check
 
 if [[ "$(tool/dev/mysql-server status)" == *"not running"* ]]; then
   tool/dev/mysql-server start || exit 1
