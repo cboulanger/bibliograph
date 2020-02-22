@@ -18,14 +18,14 @@ declare -a default=(
 )
 declare -a suites=("${@:-${default[@]}}")
 
-log_heading "Running codeception suites '$suites' "
+log_heading "Running codeception suites '${suites[*]}' "
 
 source tool/dev/check-env
 source tool/dev/envvars-check
 source tool/dev/create-mysql-user
 source tool/dev/check-mysql
 
-for suite in $suites
+for suite in "${suites[@]}"
 do
     source tool/test/setup/reset-data
     log_info ">>> Running test suite: $suite ..."

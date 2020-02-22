@@ -7,35 +7,9 @@ modules:
         - REST:
             depends: PhpBrowser
         - PhpBrowser:
-              url: 'http://localhost:8073/test/codeception/web'
+              url: "%JSONRPC_ENDPOINT%"
         - \Helper\Api
 env:
-    php7.0:
-        modules:
-            enabled:
-                - PhpBrowser:
-                      url: 'http://localhost:8070/test/codeception/web'
-    php7.1:
-        modules:
-            enabled:
-                - PhpBrowser:
-                      url: 'http://localhost:8071/test/codeception/web'
-    php7.2:
-        modules:
-            enabled:
-                - PhpBrowser:
-                      url: 'http://localhost:8073/test/codeception/web'
-
-    php7.3:
-        modules:
-            enabled:
-                - PhpBrowser:
-                      url: 'http://localhost:8073/test/codeception/web'
-    php7.4:
-        modules:
-            enabled:
-                - PhpBrowser:
-                      url: 'http://localhost:8074/test/codeception/web'
     development:
     testing:
     setup:

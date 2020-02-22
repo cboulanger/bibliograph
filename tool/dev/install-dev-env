@@ -13,14 +13,6 @@ docker pull mariadb
 echo ">>> Installing git in http-server container"
 tool/dev/http-server start
 
-# until the docker image is updated
-docker exec -it http-server git version 2&> /dev/null
-if [ $? -ne 0 ]; then
- echo "Installing git in container, please wait... "
- docker exec -it http-server apt update
- docker exec -it http-server apt install git -y
-fi
-
 if ! [ -f src/lib/composer.phar ] ; then
   echo " >>> Installing composer ..."
   EXPECTED_SIGNATURE="$(wget -q -O - https://composer.github.io/installer.sig)"

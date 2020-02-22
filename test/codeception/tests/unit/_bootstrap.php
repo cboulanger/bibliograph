@@ -1,7 +1,4 @@
 <?php
-ini_set("xdebug.cli_color",1);
-ini_set("xdebug.collect_params", 1);
-
 defined('YII_ENV') or define('YII_ENV', 'test');
 defined('YII_DEBUG') or define('YII_DEBUG', true);
 defined('APP_ROOT_DIR') or define('APP_ROOT_DIR', realpath(__DIR__ . "/../../../.."));

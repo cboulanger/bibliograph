@@ -55,17 +55,21 @@ trait JsonRpcTrait
       'id'      => $id++
     ];
 
-    $path = "json-rpc";
+    $url = "/json-rpc";
 
     // authentication
     $token = $this->token();
     if ( $token ){
       $this->haveHttpHeader('Authorization', 'Bearer ' . $token);
-     //$path .= "&auth=$token";
+    }
+
+    // enable xdebug
+    if (YII_DEBUG) {
+      $this->setCookie("XDEBUG_SESSION",1);
     }
 
     // send request and validate response
-    $this->sendPOST( $path, $json );
+    $this->sendPOST( $url, $json );
     $this->canSeeResponseCodeIs(200);
     $this->seeResponseIsJson();
     if( ! $allowError ){

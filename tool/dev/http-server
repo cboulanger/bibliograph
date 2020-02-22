@@ -39,7 +39,8 @@ stop)
   echo "Server stopped."
   ;;
 status)
-  # This only checks if the server containter is running, need to heck if mysql server is actualy running inside container
+  # This only checks if the server containter is running,
+  # there is currently no check if the server is actually running inside container
   if [ "$(docker ps -f name=http-server -q -a)" != "" ]; then
     echo "Server container is running."
   else
