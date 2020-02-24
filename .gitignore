@@ -11,5 +11,4 @@ package-lock.json
 .DS_Store
 .nvm
 .vscode
-.idea
 .phplint-cache

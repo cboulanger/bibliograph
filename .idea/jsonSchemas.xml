@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JsonSchemaMappingsProjectConfiguration">
+    <state>
+      <map>
+        <entry key="ESLint">
+          <value>
+            <SchemaInfo>
+              <option name="name" value="ESLint" />
+              <option name="relativePathToSchema" value="http://json.schemastore.org/eslintrc" />
+              <option name="applicationDefined" value="true" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value=".eslintrc" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
+        <entry key="compile-1-0-0">
+          <value>
+            <SchemaInfo>
+              <option name="name" value="compile-1-0-0" />
+              <option name="relativePathToSchema" value="../qooxdoo-compiler/source/resource/qx/tool/schema/compile-1-0-0.json" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value="src/client/bibliograph/compile.json" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
+      </map>
+    </state>
+  </component>
+</project>
