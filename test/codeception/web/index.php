@@ -15,5 +15,5 @@ define( "APP_CONFIG_FILE" , APP_ROOT_DIR . "/test/app.conf.toml");
 require APP_BACKEND_DIR  . '/bootstrap.php';
 $config = require_once __DIR__ . '/../config/web-test.php';
 $app = new yii\web\Application($config);
-#throw new Exception("foo!");
+
 $app->run();

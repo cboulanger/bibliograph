@@ -26,6 +26,7 @@ use app\controllers\traits\{
 use Yii;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBearerAuth;
+use yii\filters\auth\QueryParamAuth;
 
 
 /**
@@ -62,7 +63,7 @@ class AppController extends yii\web\Controller
     $behaviors['authenticator'] = [
       'class' => CompositeAuth::class,
       'authMethods' => [
-        HttpBearerAuth::class,
+        HttpBearerAuth::class
       ],
       'optional' => $this->noAuthActions
     ];

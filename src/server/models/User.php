@@ -21,6 +21,7 @@
 namespace app\models;
 
 use app\migrations\data\m180105_075537_data_RoleDataInsert;
+use yii\web\UnauthorizedHttpException;
 use function GuzzleHttp\describe_type;
 use InvalidArgumentException;
 use Yii;
@@ -153,7 +154,58 @@ class User extends BaseModel implements IdentityInterface
    */
   public static function findIdentityByAccessToken($token, $type = null)
   {
+    Yii::debug("passed token is: ". $token);
+    Yii::debug("user is:" . (static::findOne(['token' => $token]))->name);
     return static::findOne(['token' => $token]);
+  }
+
+  /**
+   * @param string $token
+   * @param string $authClass
+   * @return bool
+   * @throws \yii\db\Exception
+   */
+  public function loginByAccessToken($token, $authClass) {
+    $user = static::findIdentityByAccessToken($token);
+    if (!$token or ! $user or ! $user->active ) {
+      Yii::warning("No or invalid authorization token '$token'. Access denied.");
+      return false;
+    }
+
+    // log in user
+    $user->online = 1;
+    $user->anonymous = (int)$user->anonymous;
+    $user->active = (int) $user->active;
+    $user->save();
+
+    /** @var Session $session */
+    $session = $user->continueSession();
+    if ($session) {
+      $session->touch();
+    }
+    $sessionId = Yii::$app->session->getId();
+    Yii::info("Authorized user '{$user->namedId}' via auth auth token (Session {$sessionId}).","auth");
+    return true;
+  }
+
+
+  /**
+   * Tries to continue an existing session
+   *
+   * @param User $user
+   * @return Session|null
+   *    The session object to be reused, or null if none exists.
+   */
+  public function continueSession()
+  {
+    $session = Session::findOne(['UserId' => $this->id]);
+    if ($session) {
+      // manually set session id to recover the session data
+      // TODO this doesn't work if old stale sessions are still in the database, revisit this
+      // YII::$app->session->setId( $session->namedId );
+    }
+    Yii::$app->session->open();
+    return $session;
   }
 
   /**
@@ -234,7 +286,7 @@ class User extends BaseModel implements IdentityInterface
    * Returns User_Role records
    * @todo this needs to be looked at since this method AND the getRoles() method filters by group id
    * @return ActiveQuery
-   */         
+   */
   public function getUserRoles()
   {
     $link = [
@@ -242,7 +294,7 @@ class User extends BaseModel implements IdentityInterface
       'GroupId' => 'groupId'
     ];
     return $this->hasMany(User_Role::class, $link );
-  } 
+  }
 
   /**
    * Returns the roles of the user, depending on the groupId property.
@@ -261,7 +313,7 @@ class User extends BaseModel implements IdentityInterface
   /**
    * Returns the global roles of the user
    * @return ActiveQuery
-   */ 
+   */
   public function getGlobalRoles()
   {
     return $this->getGroupRoles(null);
@@ -272,7 +324,7 @@ class User extends BaseModel implements IdentityInterface
    *    If given, retrieve only the roles that the user has in the
    *    group with the given (numeric) id. Otherwise, return global roles only
    * @return ActiveQuery
-   */       
+   */
   public function getGroupRoles($group=null)
   {
     if( $group instanceof Group ) {
@@ -295,7 +347,7 @@ class User extends BaseModel implements IdentityInterface
 
   /**
    * @return ActiveQuery
-   */      
+   */
   protected function getUserGroups()
   {
     $userGroups = $this->hasMany(Group_User::class, ['UserId' => 'id']);
@@ -304,29 +356,29 @@ class User extends BaseModel implements IdentityInterface
 
   /**
    * @return ActiveQuery
-   */      
+   */
   public function getGroups()
   {
     return $this
       ->hasMany(Group::class, ['id' => 'GroupId'])
       ->via('userGroups');
-  } 
+  }
 
   /**
    * @return ActiveQuery
-   */    
+   */
   protected function getUserConfigs()
   {
     return $this->hasMany(UserConfig::class, ['UserId' => 'id']);
-  } 
+  }
 
   /**
    * @return ActiveQuery
-   */  
+   */
   public function getSessions()
   {
     return $this->hasMany(Session::class, ['UserId' => 'id']);
-  } 
+  }
 
   /**
    * @return ActiveQuery
@@ -343,7 +395,7 @@ class User extends BaseModel implements IdentityInterface
   {
     return $this->hasMany(Datasource::class, ['id' => 'DatasourceId'])
       ->via('userDatasources');
-  } 
+  }
 
   //-------------------------------------------------------------
   // Attributes/Getters
@@ -408,7 +460,7 @@ class User extends BaseModel implements IdentityInterface
    *    If Group or integer, check against the permissions granted in that group.
    *    If null or no argument, check against global roles the user has.
    * @param Datasource|null $datasource
-   *    If given, add all permissions the user has by way of being member of a 
+   *    If given, add all permissions the user has by way of being member of a
    *    group that has access to the datasource.
    * @return bool
    * @throws InvalidArgumentException
@@ -431,7 +483,7 @@ class User extends BaseModel implements IdentityInterface
    *    If Group or integer, check against the permissions granted in that group.
    *    If null or no argument, check against global roles the user has.
    * @param Datasource|null $datasource
-   *    If given, add all permissions the user has by way of being member of a 
+   *    If given, add all permissions the user has by way of being member of a
    *    group that has access to the datasource.
    * @return bool
    */
@@ -451,13 +503,13 @@ class User extends BaseModel implements IdentityInterface
       // exact match
       if ($permission === $requestedPermission) {
         return true;
-      } 
+      }
       // else if the current permission name contains a wildcard
       elseif (($pos = strpos($permission, "*")) !== false) {
         if (substr($permission, 0, $pos) == substr($requestedPermission, 0, $pos)) {
           return true;
         }
-      } 
+      }
       // else if the requested permission contains a wildcard
       elseif ($useWildcard and ($pos = strpos($requestedPermission, "*")) !== false) {
         if (substr($permission, 0, $pos) == substr($requestedPermission, 0, $pos)) {
@@ -542,7 +594,7 @@ class User extends BaseModel implements IdentityInterface
    *    group is ignored.
    *    If not given or null, return only global permissions
    * @param Datasource|null $datasource
-   *    If given, add all permissions the user has by way of being member of a 
+   *    If given, add all permissions the user has by way of being member of a
    *    group that has access to the datasource.
    * @return array
    */
@@ -552,7 +604,7 @@ class User extends BaseModel implements IdentityInterface
     $permissions = $this->getPermissionNames(null);
     if ($group and ! Yii::$app->config->getIniValue("global_roles_only") ){
       // add group-specific roles
-      if (!($group instanceof Group or is_int($group))) {     
+      if (!($group instanceof Group or is_int($group))) {
         throw new \InvalidArgumentException("Argument must be instanceof Group, integer, null or 'all'");
       }
       $permissions = array_merge(
@@ -634,7 +686,7 @@ class User extends BaseModel implements IdentityInterface
   }
 
   /**
-   * Returns list of datasources that the user has access to 
+   * Returns list of datasources that the user has access to
    * @return string[]
    *    Array of datasource names
    */
@@ -654,7 +706,7 @@ class User extends BaseModel implements IdentityInterface
       $datasourceNames[] = $o->namedId;
     }
 
-    // now add those which are linked to the (active) groups that the user belongs to 
+    // now add those which are linked to the (active) groups that the user belongs to
     // or through the roles that this goup gives to the user, including "global" roles
     $groups = $this->getGroups()->where(['active'=>1])->all();
     $groups[] = null; // global group
@@ -680,7 +732,7 @@ class User extends BaseModel implements IdentityInterface
     $names = array_unique($datasourceNames);
     sort($names);
     return $names;
-  }  
+  }
 
   /**
    * Resets the timestamp of the last action  for the current user

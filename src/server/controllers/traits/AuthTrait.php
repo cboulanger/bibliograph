@@ -49,7 +49,7 @@ trait AuthTrait
    * @throws \yii\web\BadRequestHttpException
    * @throws \yii\db\Exception
    */
-  public function beforeAction($action)
+  public function beforeAction_old($action)
   {
 
     if (!parent::beforeAction($action)) {
@@ -90,7 +90,7 @@ trait AuthTrait
     $user->save();
     Yii::$app->user->setIdentity($user);
     /** @var Session $session */
-    $session = $this->continueUserSession( $user );
+    $session = $user->continueSession();
     if ($session) {
       $session->touch();
     }
@@ -147,25 +147,6 @@ trait AuthTrait
       throw new \InvalidArgumentException( Yii::t('app',"User '$username' does not exist.") );
     }
     return $user;
-  }
-
-  /**
-   * Tries to continue an existing session
-   *
-   * @param User $user
-   * @return Session|null
-   *    The session object to be reused, or null if none exists.
-   */
-  protected function continueUserSession($user)
-  {
-    $session = Session::findOne(['UserId' => $user->id]);
-    if ($session) {
-      // manually set session id to recover the session data
-      // TODO this doesn't work if old stale sessions are still in the database, revisit this
-      // YII::$app->session->setId( $session->namedId );
-    }
-    Yii::$app->session->open();
-    return $session;
   }
 
   /**

@@ -289,7 +289,7 @@ class AccessController extends AppController
     Yii::$app->user->login($user);
     if( ! $session ) {
       // if we don't already have a (PHP) session, try to find a saved one
-      $session = $this->continueUserSession($user);
+      $session = $user->continueSession();
     }
     if ( $session ) {
       // let's continue the given session

@@ -11,7 +11,10 @@ trait JsonRpcTrait
   protected function token($t=null)
   {
     static $token = null;
-    if( ! is_null($t) ) $token = $t;
+    if( ! is_null($t) ) {
+      $token = $t;
+      $this->amBearerAuthenticated($token);
+    }
     return $token;
   }
 
@@ -40,12 +43,14 @@ trait JsonRpcTrait
    */
   public function sendJsonRpcRequest( $service, $method, array $params=[], $allowError=false )
   {
+    $I = $this;
+
     /** @var int $id the id of the request */
     static $id = 1;
 
     // headers
-    $this->haveHttpHeader('Content-Type', 'application/json');
-    $this->haveHttpHeader('Accept', 'application/json');
+    $I->haveHttpHeader('Content-Type', 'application/json');
+    $I->haveHttpHeader('Accept', 'application/json');
 
     // payload
     $json = [
@@ -55,13 +60,7 @@ trait JsonRpcTrait
       'id'      => $id++
     ];
 
-    $url = "/json-rpc";
-
-    // authentication
-    $token = $this->token();
-    if ( $token ){
-      $this->haveHttpHeader('Authorization', 'Bearer ' . $token);
-    }
+    $path = "/json-rpc";
 
     // enable xdebug
     if (YII_DEBUG) {
@@ -69,12 +68,16 @@ trait JsonRpcTrait
     }
 
     // send request and validate response
-    $this->sendPOST( $url, $json );
-    $this->canSeeResponseCodeIs(200);
-    $this->seeResponseIsJson();
-    if( ! $allowError ){
-      $this->dontSeeJsonRpcError();
-      $this->seeJsonRpcResult();
+    $this->sendPOST( $path, $json );
+    $I->canSeeResponseCodeIs(200);
+    $I->seeResponseIsJson();
+    if (! $allowError){
+      $I->dontSeeJsonRpcError();
+      $I->seeJsonRpcResult();
+      $token = $this->grabDataFromResponseByJsonPath('$.result.token');
+      if ($token) {
+        $this->token($token[0]);
+      }
     }
   }
 
@@ -83,14 +86,13 @@ trait JsonRpcTrait
    *
    * @return string The access token
    */
-  public function seeAndSaveTokenInJsonResponse()
+  public function seeTokenInResponse()
   {
     $this->seeResponseJsonMatchesJsonPath('$.result.token');
     $token = $this->grabDataFromResponseByJsonPath('$.result.token')[0];
     if( ! $token ){
       throw new RuntimeException( $this->grabDataFromResponseByJsonPath('$.result.error')[0]);
     }
-    return $this->token($token);
   }
 
   /**
@@ -101,7 +103,7 @@ trait JsonRpcTrait
   public function loginAnonymously()
   {
     $this->sendJsonRpcRequest( "access","authenticate", [] );
-    $this->seeAndSaveTokenInJsonResponse();
+    $this->seeTokenInResponse();
   }
 
   /**
@@ -122,7 +124,7 @@ trait JsonRpcTrait
   public function loginWithPassword( $user, $password )
   {
     $this->sendJsonRpcRequest( "access","authenticate", [ $user, $password ] );
-    return $this->seeAndSaveTokenInJsonResponse();
+    return $this->seeTokenInResponse();
   }
 
   /**

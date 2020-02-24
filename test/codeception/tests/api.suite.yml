@@ -5,9 +5,10 @@ modules:
     enabled:
         - Asserts
         - REST:
+            part: json
+            url: "%JSONRPC_ENDPOINT%"
             depends: PhpBrowser
-        - PhpBrowser:
-              url: "%JSONRPC_ENDPOINT%"
+        - PhpBrowser
         - \Helper\Api
 env:
     development:

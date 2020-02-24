@@ -13,6 +13,9 @@ docker pull mariadb
 echo ">>> Installing git in http-server container"
 tool/dev/http-server start
 
+# fixes
+docker exec -it http-server sh -c 'echo "FcgidIOTimeout 300" >>/etc/apache2/conf.d/phpfarm.conf'
+
 if ! [ -f src/lib/composer.phar ] ; then
   echo " >>> Installing composer ..."
   EXPECTED_SIGNATURE="$(wget -q -O - https://composer.github.io/installer.sig)"

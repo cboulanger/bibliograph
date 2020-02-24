@@ -18,8 +18,8 @@ class JsonRpcController extends Controller
 
   public function __construct($id, $module, $config = [])
   {
-    Yii::debug(\Yii::$app->request->getRawBody());
-    Yii::debug(\Yii::$app->request->post() );
+    //Yii::debug(\Yii::$app->request->getRawBody());
+    //Yii::debug(\Yii::$app->request->post() );
     parent::__construct($id, $module, $config);
   }
 
