@@ -1,0 +1,17 @@
+<component name="libraryTable">
+  <library name="qooxdoo" type="javaScript">
+    <properties>
+      <option name="frameworkName" value="qooxdoo" />
+      <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/../qooxdoo/framework/source/class/qx" />
+      </sourceFilesUrls>
+    </properties>
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../qooxdoo/framework/source/class/qx" />
+    </CLASSES>
+    <DOCUMENTATION>
+      <root url="http://demo.qooxdoo.org/current/apiviewer" />
+    </DOCUMENTATION>
+    <SOURCES />
+  </library>
+</component>
