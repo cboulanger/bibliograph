@@ -46,7 +46,6 @@ declare -a arr=(
   "cboulanger/raptor-client"
   "cboulanger/dsn"
   "cboulanger/worldcat-linkeddata-php"
-  "serratus/quaggaJS"
 )
 for repo in "${arr[@]}"
 do

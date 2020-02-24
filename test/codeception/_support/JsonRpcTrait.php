@@ -24,6 +24,7 @@ trait JsonRpcTrait
   public function clearToken()
   {
     $this->token(false);
+    $this->deleteHeader("Authorization");
   }
 
   /**
@@ -62,9 +63,10 @@ trait JsonRpcTrait
 
     $path = "/json-rpc";
 
-    // enable xdebug
+    // in debug mode, enable xdebug and pass token in json payload
     if (YII_DEBUG) {
       $this->setCookie("XDEBUG_SESSION",1);
+      $json['access-token'] = $this->token();
     }
 
     // send request and validate response

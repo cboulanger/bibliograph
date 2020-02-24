@@ -154,9 +154,10 @@ class User extends BaseModel implements IdentityInterface
    */
   public static function findIdentityByAccessToken($token, $type = null)
   {
-    Yii::debug("passed token is: ". $token);
-    Yii::debug("user is:" . (static::findOne(['token' => $token]))->name);
-    return static::findOne(['token' => $token]);
+    $user = static::findOne(['token' => $token]);
+    Yii::debug("passed token is: ". $token, __METHOD__);
+    Yii::debug( $user ? "user is: " . $user->name :  "No user has this token!" , __METHOD__);
+    return $user;
   }
 
   /**

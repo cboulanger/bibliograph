@@ -23,10 +23,10 @@ namespace app\controllers;
 use app\controllers\traits\{
   AccessControlTrait, AuthTrait, DatasourceTrait, MessageTrait, ShelfTrait
 };
+use lib\filters\auth\JsonRpcPayloadTokenAuth;
 use Yii;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBearerAuth;
-use yii\filters\auth\QueryParamAuth;
 
 
 /**
@@ -63,7 +63,8 @@ class AppController extends yii\web\Controller
     $behaviors['authenticator'] = [
       'class' => CompositeAuth::class,
       'authMethods' => [
-        HttpBearerAuth::class
+        HttpBearerAuth::class,
+        JsonRpcPayloadTokenAuth::class,
       ],
       'optional' => $this->noAuthActions
     ];

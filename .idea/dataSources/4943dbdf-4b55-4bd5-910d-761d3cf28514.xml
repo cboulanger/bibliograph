@@ -2,7 +2,7 @@
 <dataSource name="MySQL - tests@localhost">
   <database-model serializer="dbm" dbms="MARIADB" family-id="MARIADB" format-version="4.17">
     <root id="1">
-      <ServerVersion>10.4.11</ServerVersion>
+      <ServerVersion>10.4.12</ServerVersion>
       <DefaultEngine>InnoDB</DefaultEngine>
       <DefaultCasing>exact</DefaultCasing>
     </root>
