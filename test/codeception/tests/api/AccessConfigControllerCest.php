@@ -147,7 +147,7 @@ class AccessConfigControllerCest
   {
     $I->loginAsAdmin();
     $I->amGoingTo("create a datasource 'datasourceDummy'");
-    $I->sendJsonRpcRequest('access-config', 'add', ['datasource', 'datasourceDummy', false]);
+    $I->sendJsonRpcRequest('access-config', 'add', ['datasource', 'datasourceDummy', false],true);
     $I->amGoingTo("delete this datasource.");
     $I->sendJsonRpcRequest('access-config', 'delete', ['datasource', 'datasourceDummy']);
     $I->expect("to get a confirmation dialog.");
@@ -161,8 +161,8 @@ class AccessConfigControllerCest
     $I->amGoingTo("check the form dialog to edit group data");
     $I->sendJsonRpcRequest('access-config', 'edit', ['group','group1']);
     $I->expectTo("see a select box with role data");
-    $expected = $I->loadExpectedData(__METHOD__);
-    $I->seeServerEvent("dialog", $expected);
+    $expected = $I->loadExpectedData(__METHOD__,  "api", true);
+    $I->seeServerEvent("dialog", new JsonExpressionType($expected));
     $I->logout();
   }
 

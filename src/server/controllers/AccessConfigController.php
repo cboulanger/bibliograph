@@ -766,7 +766,7 @@ class AccessConfigController extends AppController
     $minId = null;
     switch ($type) {
       case "datasource":
-        return Confirm::create(
+        Confirm::create(
           Yii::t('app', "Do you want to remove only the datasource entry or all associated data?"),
           [
             Yii::t('app', "All data"),
@@ -775,6 +775,7 @@ class AccessConfigController extends AppController
           ],
           Yii::$app->controller->id, "delete-datasource", [$ids[0]]
         );
+        return "Created confirmation dialog.";
     }
 
     foreach ($ids as $namedId) {

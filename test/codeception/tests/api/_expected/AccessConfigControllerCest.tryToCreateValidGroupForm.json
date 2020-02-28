@@ -1,0 +1,63 @@
+{
+  "type": "form",
+  "properties": {
+    "message": "<h3>Group 'group1'</h3>",
+    "formData": {
+      "namedId": {
+        "enabled": false,
+        "label": "Group ID",
+        "type": "TextField",
+        "width": 300,
+        "value": "group1"
+      },
+      "name": {
+        "label": "Name",
+        "type": "TextField",
+        "width": 300,
+        "value": "group1"
+      },
+      "description": {
+        "label": "Description",
+        "type": "TextField",
+        "width": 300,
+        "value": null
+      },
+      "defaultRole": {
+        "type": "selectbox",
+        "label": "Default role for new users",
+        "options": [
+          {
+            "label": "No role",
+            "value": ""
+          },
+          {
+            "label": "Administrator role",
+            "value": "admin"
+          },
+          {
+            "label": "Anonymous user",
+            "value": "anonymous"
+          },
+          {
+            "label": "Manager role",
+            "value": "manager"
+          },
+          {
+            "label": "Normal user",
+            "value": "user"
+          }
+        ],
+        "width": 300,
+        "value": null
+      }
+    },
+    "allowCancel": true,
+    "width": 300
+  },
+  "service": "access-config",
+  "method": "save",
+  "params": [
+    "group",
+    "group1"
+  ]
+}

@@ -42,7 +42,7 @@ class ReferenceControllerCest
   {
     $I->loginAsAdmin();
     $I->sendJsonRpcRequest('reference','row-count', [$this->getQueryData()]);
-    $rowCount = (int) $I->grabDataFromResponseByJsonPath('$.result.rowCount')[0];
+    $rowCount = (int) $I->grabRequestedResponseByJsonPath('$.result.rowCount')[0];
     $I->assertSame( $rowCount, 1 );
   }
 
@@ -50,8 +50,8 @@ class ReferenceControllerCest
   {
     $I->loginAsAdmin();
     $I->sendJsonRpcRequest('reference','row-data', [0,50,0,$this->getQueryData()]);
-    $rowData = $I->grabDataFromResponseByJsonPath('$.result.rowData')[0];
+    $rowData = $I->grabRequestedResponseByJsonPath('$.result.rowData')[0];
     $I->assertSame( count($rowData), 1);
     $I->assertSame( $rowData[0]['author'], "Doe, John");
-  } 
+  }
 }

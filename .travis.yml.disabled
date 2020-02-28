@@ -62,12 +62,6 @@ jobs:
       - install/travis/script/install-runtime-deps.sh
     script: npm test
     after_failure: install/travis/script/after-test-failure.sh
-  - name: PHP 7.0
-    php: '7.0'
-    install:
-      - install/travis/script/install-compile-deps.sh
-      - install/travis/script/install-runtime-deps.sh
-    script: npm test
     after_failure: install/travis/script/after-test-failure.sh
 
   - stage: packaging
@@ -77,18 +71,6 @@ jobs:
       - pip install --user awscli
     script:
       - npm run dist-build
-      - cp dist/*.zip ~/uploads
-    after_success:
-      - ls -al ~/uploads
-      - aws s3 sync ~/uploads s3://travis.panya.de/$TRAVIS_BUILD_NUMBER
-
-  - name: Create a PHP7.0-compatible legacy package
-    php: '7.0'
-    install:
-      - install/travis/script/install-compile-deps.sh
-      - pip install --user awscli
-    script:
-      - npm run dist-build-php70
       - cp dist/*.zip ~/uploads
     after_success:
       - ls -al ~/uploads

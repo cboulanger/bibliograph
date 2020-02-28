@@ -12,3 +12,6 @@ package-lock.json
 .nvm
 .vscode
 .phplint-cache
+
+# we don't need to track changes in the workspace file of PHPStorm
+.idea/workspace.xml

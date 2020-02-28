@@ -18,11 +18,11 @@ class UtilsCest
       ];
       $I->sendJsonRpcRequest("test","shelve", [ json_encode($data)] );
       //$I->sendJsonRpcRequest("test","shelve", $data );
-      $shelfId = $I->grabRpcResult();
+      $shelfId = $I->grabJsonRpcResult();
       $I->assertTrue(!is_null($shelfId) and is_string($shelfId), "Invalid shelf id '$shelfId' returned");
       $I->amGoingTo("check if the stored data is returned properly");
       $I->sendJsonRpcRequest("test","unshelve",[$shelfId]);
-      $received = $I->grabRpcResult();
+      $received = $I->grabJsonRpcResult();
       $I->compareJsonRpcResultWith($data);
     }
 }

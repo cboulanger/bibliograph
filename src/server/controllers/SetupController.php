@@ -287,7 +287,7 @@ class SetupController extends \app\controllers\AppController
     if (count($this->errors)) {
       Yii::warning("Setup finished with errors:");
       Yii::warning($this->errors);
-      $msg = Html::tag('b', Yii::t('setup', 'Setup failed. Please fix the following problems:'));
+      $msg = Html::tag('b', 'Setup failed. Please fix the following problems:');
       ErrorDialog::create(\implode('<br>', $this->errors));
       return false;
     }
@@ -386,7 +386,7 @@ class SetupController extends \app\controllers\AppController
     $this->hasIni = file_exists(APP_CONFIG_FILE);
     if (!$this->hasIni) {
       if (YII_ENV_PROD) {
-        throw new UserErrorException(Yii::t('setup', 'Cannot run in production mode without ini file.'));
+        throw new UserErrorException('Cannot run in production mode without ini file.');
       } else {
         throw new UserErrorException( "Wizard not implemented yet. Please add ini file as per installation instructions.");
       }
@@ -405,16 +405,12 @@ class SetupController extends \app\controllers\AppController
     $config_dir = Yii::getAlias('@app/config');
     if (!$this->hasIni and YII_ENV_DEV and !\is_writable($config_dir)) {
       return [
-        'error' => Yii::t('setup', "The configuration directory needs to be writable in order to create an .ini file: {config_dir}.", [
-          'config_dir' => $config_dir
-        ])
+        'error' => "The configuration directory needs to be writable in order to create an .ini file: $config_dir"
       ];
     }
     if (YII_ENV_PROD and \is_writable($config_dir)) {
       return [
-        'error' => Yii::t('setup', "The configuration directory must not be writable in production mode {config_dir}.", [
-          'config_dir' => $config_dir
-        ])
+        'error' => "The configuration directory must not be writable in production mode: $config_dir"
       ];
     }
 
@@ -434,11 +430,11 @@ class SetupController extends \app\controllers\AppController
     $adminEmail = Yii::$app->config->getIniValue("email.admin");
     if (!$adminEmail) {
       return [
-        'error' => Yii::t('setup', "Missing administrator email in app.conf.toml.")
+        'error' => "Missing administrator email in app.conf.toml."
       ];
     }
     return [
-      'message' => Yii::t('setup', 'Admininstrator email exists.')
+      'message' => 'Admininstrator email exists.'
     ];
   }
 
@@ -451,16 +447,14 @@ class SetupController extends \app\controllers\AppController
   {
     if (!Yii::$app->db instanceof \yii\db\Connection) {
       return [
-        'fatalError' => Yii::t('setup', 'No database connection. ')
+        'fatalError' =>  'No database connection.'
       ];
     }
     try {
       Yii::$app->db->open();
     } catch (\yii\db\Exception $e) {
       return [
-        'fatalError' => Yii::t('setup', 'Cannot connect to database: {error}', [
-          'error' => $e->errorInfo
-        ])
+        'fatalError' => 'Cannot connect to database: ' . $e->errorInfo
       ];
     }
     $this->hasDb = true;
@@ -494,18 +488,18 @@ class SetupController extends \app\controllers\AppController
         // only some exist, this cannot currently be migrated or repaired
         Yii::error("Cannot upgrade from v2, since the following tables are missing: " . implode(", ", $missingTables));
         return [
-          'fatalError' => Yii::t('setup', 'Invalid database setup. Please contact the adminstrator.')
+          'fatalError' => 'Invalid database setup. Please contact the adminstrator.'
         ];
       }
     }
     // fresh installation
     if ($this->isNewInstallation) {
-      $message = Yii::t('setup', 'Found empty database');
+      $message = 'Found empty database';
     } // if this is an upgrade from a v2 installation, manually add migration history
     elseif ($upgrade_from == "2.x") {
       if (!$allTablesExist) {
         return [
-          'fatalError' => Yii::t('setup', 'Cannot update from Bibliograph v2 data: some tables are missing.')
+          'fatalError' => 'Cannot update from Bibliograph v2 data: some tables are missing.'
         ];
       }
       Yii::info('Found Bibliograph v2.x data in database. Adding migration history.', 'migrations');
@@ -514,21 +508,19 @@ class SetupController extends \app\controllers\AppController
         $output = Console::runAction('migrate/mark', ["app\\migrations\\data\\m180105_075933_join_User_RoleDataInsert"]);
       } catch (MigrationException $e) {
         return [
-          'fatalError' => Yii::t('setup', 'Migrating data from Bibliograph v2 failed.')
+          'fatalError' => 'Migrating data from Bibliograph v2 failed.'
         ];
       }
       if ($output->contains('migration history is set') or
         $output->contains('Nothing needs to be done')) {
-        $message = Yii::t('setup', 'Migrated data from Bibliograph v2');
+        $message = 'Migrated data from Bibliograph v2';
       } else {
         return [
-          'fatalError' => Yii::t('setup', 'Migrating data from Bibliograph v2 failed.')
+          'fatalError' => 'Migrating data from Bibliograph v2 failed.'
         ];
       }
     } else {
-      $message = Yii::t('setup', 'Found data for version {version}', [
-        'version' => $upgrade_from
-      ]);
+      $message = 'Found data for version $upgrade_from';
     }
 
     // run new migrations
@@ -542,7 +534,7 @@ class SetupController extends \app\controllers\AppController
     }
     if ($output->contains('up-to-date')) {
       Yii::debug('No new migrations.', 'migrations');
-      $message = Yii::t('setup', "No updates to the databases.");
+      $message = "No updates to the databases.";
     } else {
 
 // @todo
@@ -552,10 +544,7 @@ class SetupController extends \app\controllers\AppController
 //        $activeUser = Yii::$app->user->identity;
 //        // if the current version is >= 3.0.0 and no user is logged in, show a login screen
 //        if (version_compare($upgrade_from, "3.0.0", ">=") and (!$activeUser or !$activeUser->hasRole('admin'))) {
-//          $message = Yii::t('setup', "The application needs to be upgraded from '{oldversion}' to '{newversion}'. Please log in as administrator.", [
-//            'oldversion' => $upgrade_from,
-//            'newversion' => $upgrade_to
-//          ]);
+//          $message =  "The application needs to be upgraded from '{$oldversion}' to '{$newversion}'. Please log in as administrator.";
 //          Login::create($message, "setup", "setup");
 //          return [
 //            "abort" => "Login required."
@@ -563,7 +552,7 @@ class SetupController extends \app\controllers\AppController
 //        };
 //        // admin confirm update
 //        if (version_compare($upgrade_from, "3.0.0", ">=") and !$this->migrationConfirmed and !YII_ENV_TEST) {
-//          $message = Yii::t('setup', "The database must be upgraded. Confirm that you have made a database backup and now are ready to run the upgrade."); // or face eternal damnation.
+//          $message = "The database must be upgraded. Confirm that you have made a database backup and now are ready to run the upgrade."; // or face eternal damnation.
 //          Confirm::create($message, null, "setup", "setup-confirm-migration");
 //          return [
 //            "abort" => "Admin needs to confirm the migrations"
@@ -581,12 +570,10 @@ class SetupController extends \app\controllers\AppController
       }
       if ($output->contains('Migrated up successfully')) {
         Yii::debug("Migrations successfully applied.", "migrations");
-        $message .= Yii::t('setup', ' and applied new migrations for version {version}', [
-          'version' => $upgrade_to
-        ]);
+        $message .= " and applied new migrations for version {$upgrade_to}";
       } else {
         return [
-          'fatalError' => Yii::t('setup', 'Initializing database failed.'),
+          'fatalError' => 'Initializing database failed.',
           'consoleOutput' => $output
         ];
       }
@@ -618,7 +605,7 @@ class SetupController extends \app\controllers\AppController
         throw new SetupException("Creating config key '$key' failed.");
       }
     }
-    return ['message' => Yii::t('setup','Configuration values were created.')];
+    return ['message' => 'Configuration values created'];
   }
 
   /**
@@ -639,9 +626,7 @@ class SetupController extends \app\controllers\AppController
       throw new SetupException("Invalid schema class '$schemaClass" );
     }
     return [
-      'message' => $schemaExists ?
-        Yii::t('setup', 'Standard schema existed.') :
-        Yii::t('setup', 'Created standard schema.')
+      'message' => $schemaExists ? 'Standard schema existed.' : 'Created standard schema.'
     ];
   }
 
@@ -708,9 +693,7 @@ class SetupController extends \app\controllers\AppController
     }
 
     return [
-      'message' => $found == $count ?
-        Yii::t('setup', 'Datasources already existed.') :
-        Yii::t('setup', 'Created datasources.')
+      'message' => $found == $count ? 'Datasources already existed.' : 'Created datasources.'
     ];
   }
 
@@ -821,11 +804,9 @@ class SetupController extends \app\controllers\AppController
     }
     return [
       'message' => count($migrated)
-        ? Yii::t('setup','Migrated schema(s) {schemas}.', [
-          'schemas' => implode(", ", array_unique($migrated) )
-        ])
-        : Yii::t('setup', "No schema migrations necessary."),
-      'error' => count($failed) ? Yii::t('setup','Migrating schema(s) failed: {errinfo}', ['errinfo' => implode(", ", $failed)]) : null
+        ? 'Migrated schema(s) ' . implode(", ", array_unique($migrated))
+        : "No schema migrations necessary.",
+      'error' => count($failed) ? 'Migrating schema(s) failed:' . implode(", ", $failed) : null
     ];
   }
 
@@ -837,14 +818,9 @@ class SetupController extends \app\controllers\AppController
   protected function setupLdapConnection()
   {
     $ldap = Yii::$app->ldapAuth->checkConnection();
-    $message = $ldap['enabled'] ?
-      Yii::t('setup', 'LDAP authentication is enabled') :
-      Yii::t('setup', 'LDAP authentication is not enabled.');
-    $message .= ($ldap['enabled'] and $ldap['connection']) ?
-      Yii::t('setup', ' and a connection has successfully been established.') :
-      $ldap['enabled'] ? Yii::t('setup', ', but trying to establish a connection failed with the error: {error}', [
-        'error' => $ldap['error']
-      ]) : "";
+    $message = $ldap['enabled'] ?'LDAP authentication is enabled' :'LDAP authentication is not enabled.';
+    $message .= ($ldap['enabled'] and $ldap['connection']) ? ' and a connection has successfully been established.'
+      : $ldap['enabled'] ? ', but trying to establish a connection failed with the error: ' . $ldap['error'] : "";
     if ($ldap['enabled'] and $ldap['error']) {
       $result = ['error' => $message];
     } else {

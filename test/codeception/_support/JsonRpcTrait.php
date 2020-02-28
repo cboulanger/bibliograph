@@ -66,10 +66,10 @@ trait JsonRpcTrait
    *    The name of the RPC method
    * @param array $params
    *    The parameters to be passed to the method
-   * @param boolean $allowError Allow an error response. Default false
+   * @param string|false $ignoreErrors Can be false (default) "user" (user errors) or "all" (all errors including exceptions).
    * @return void
    */
-  public function sendJsonRpcRequest( $service, $method, array $params=[], $allowError=false )
+  public function sendJsonRpcRequest($service, $method, array $params=[], $ignoreErrors=false )
   {
     $I = $this;
     // headers
@@ -97,9 +97,17 @@ trait JsonRpcTrait
     $this->sendPOST( $path, $json );
     $I->canSeeResponseCodeIs(200);
     $I->seeResponseIsJson();
-    if (! $allowError){
-      $I->dontSeeJsonRpcError();
+    if ($ignoreErrors === "all" or $ignoreErrors === true) {
+      return;
     }
+    try {
+      $I->dontSeeUserError();
+    } catch (AssertionFailedError $e) {
+      if ($ignoreErrors !== "user" ){
+        throw $e;
+      }
+    }
+    $I->dontSeeJsonRpcError();
   }
 
   /*
@@ -150,6 +158,7 @@ trait JsonRpcTrait
    * @return mixed
    */
   public function grabRequestedResponseByJsonPath($jsonPath) {
+    $jsonPath = str_replace("$.","", $jsonPath);
     return (new JsonArray($this->grabResponse()))->filterByJsonPath($this->getRequestedResponsePath() . $jsonPath);
   }
 
@@ -314,13 +323,15 @@ trait JsonRpcTrait
    * Loads and returns expected data for a Cest method
    * @param string $method
    * @param string $suite Defaults to "api"
+   * @param bool $asJson Whether to return the data as a PHP data type (false-default) or as a JSON string (true)
    * @return *
    */
-  public function loadExpectedData($method, $suite = "api") {
+  public function loadExpectedData($method, $suite = "api", $asJson=false) {
     $dataFile =
       realpath( __DIR__ . "/../tests/$suite/_expected") . "/" .
       str_replace(["\\","::"], ["/","."], $method) . ".json";
-    return json_decode(file_get_contents($dataFile));
+    $data = file_get_contents($dataFile);
+    return $asJson ? $data : json_decode($data);
   }
 
   /**
