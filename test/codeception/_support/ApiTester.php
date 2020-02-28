@@ -1,6 +1,6 @@
 <?php
 
-require APP_BACKEND_DIR . "/lib/components/Utils.php";
+require __DIR__ . "/../../../src/server/lib/components/Utils.php";
 
 /**
  * Inherited Methods

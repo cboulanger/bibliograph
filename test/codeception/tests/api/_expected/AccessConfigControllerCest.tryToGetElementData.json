@@ -1,0 +1,27 @@
+{
+  "jsonrpc": "2.0",
+  "result": [
+    {
+      "icon": "icon/16/apps/preferences-users.png",
+      "label": "Administrator (admin)",
+      "params": "user,admin",
+      "type": "user",
+      "value": "admin"
+    },
+    {
+      "icon": "icon/16/apps/preferences-users.png",
+      "label": "Manager user (user1)",
+      "params": "user,user1",
+      "type": "user",
+      "value": "user1"
+    },
+    {
+      "icon": "icon/16/apps/preferences-users.png",
+      "label": "Normal user (user2)",
+      "params": "user,user2",
+      "type": "user",
+      "value": "user2"
+    }
+  ],
+  "id": 6
+}

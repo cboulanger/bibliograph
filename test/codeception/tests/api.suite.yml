@@ -1,6 +1,5 @@
 # API tests wit a webserver
 actor: ApiTester
-bootstrap: _bootstrap.php
 modules:
     enabled:
         - Asserts
@@ -11,6 +10,7 @@ modules:
         - PhpBrowser
         - \Helper\Api
 env:
+    xdebug:
     development:
     testing:
     setup:

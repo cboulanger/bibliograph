@@ -8,23 +8,23 @@ class AccessControllerCest
     $I->clearToken();
     $I->sendJsonRpcRequest("access","username");
     // @todo we don't get a proper error yet, so we have to check that the result is null
-    $I->assertSame( [null], $I->grabDataFromResponseByJsonPath('$.result')); 
+    $I->seeJsonRpcError("Not allowed", 1);
   }
 
   public function tryToLoginAnonymously(ApiTester $I, \Codeception\Scenario $scenario)
   {
     $I->loginAnonymously();
   }
- 
+
   public function tryAuthenticateWithPassword(ApiTester $I, \Codeception\Scenario $scenario)
   {
     $I->loginWithPassword('admin','admin');
     $I->sendJsonRpcRequest('access','username');
     $I->assertSame( $I->grabJsonRpcResult(), "admin" );
     // test session persistence
-    for ($i=1; $i < 4; $i++) { 
+    for ($i=1; $i < 4; $i++) {
       $I->sendJsonRpcRequest('access','count');
-      $I->assertSame( $I->grabJsonRpcResult(), $i );   
+      $I->assertSame( $I->grabJsonRpcResult(), $i );
     }
     $I->sendJsonRpcRequest('access','userdata');
     //codecept_debug($I->grabDataFromResponseByJsonPath('$.result'));

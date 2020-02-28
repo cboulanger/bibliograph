@@ -11,7 +11,7 @@ use georgique\yii2\jsonrpc\exceptions\JsonRpcException;
  */
 class AccessDeniedException extends JsonRpcException
 {
-  const CODE = -32600;
+  const CODE = 1;
 
   public function __construct(string $message = "", $data = [], \Throwable $previous = null)
   {

@@ -12,3 +12,5 @@ modules:
             parts: [orm]
             transaction: false
         - \Helper\Unit
+env:
+    xdebug:

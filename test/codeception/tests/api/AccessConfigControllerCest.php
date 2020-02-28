@@ -1,5 +1,6 @@
 <?php
 
+use lib\exceptions\UserErrorException;
 
 class AccessConfigControllerCest
 {
@@ -8,27 +9,30 @@ class AccessConfigControllerCest
   {
     $I->loginAsAdmin();
     $I->sendJsonRpcRequest('access-config', 'types');
-    $expected = '[{"icon":"icon/16/apps/preferences-users.png","label":"Users","value":"user"},{"icon":"icon/16/apps/internet-feed-reader.png","label":"Roles","value":"role"},{"icon":"icon/16/actions/address-book-new.png","label":"Groups","value":"group"},{"icon":"icon/16/apps/preferences-security.png","label":"Permissions","value":"permission"},{"icon":"icon/16/apps/internet-transfer.png","label":"Datasources","value":"datasource"}]';
-    //$I->compareJsonRpcResultWith(json_decode($expected));
+    $I->expectDataforMethod(__METHOD__);
+    $I->logout();
   }
 
   public function tryToGetElementData(ApiTester $I, \Codeception\Scenario $scenario)
   {
+    $I->loginAsAdmin();
     $I->sendJsonRpcRequest('access-config', 'elements', ['user']);
-    $expected = '[{"icon":"icon/16/apps/preferences-users.png","label":"Administrator","params":"user,admin","type":"user","value":"admin"},{"icon":"icon/16/apps/preferences-users.png","label":"Manager","params":"user,manager","type":"user","value":"manager"},{"icon":"icon/16/apps/preferences-users.png","label":"User","params":"user,user","type":"user","value":"user"}]';
-    //$I->compareJsonRpcResultWith(json_decode($expected));
+    $I->expectDataforMethod(__METHOD__);
+    $I->logout();
   }
 
   public function tryToGetTreeData(ApiTester $I, \Codeception\Scenario $scenario)
   {
+    $I->loginAsAdmin();
     $I->sendJsonRpcRequest('access-config', 'tree', ['user', 'admin']);
     $I->dontSeeJsonRpcError();
-    //$expected = '{"icon":"icon/16/apps/utilities-network-manager.png","label":"Relations","action":null,"value":null,"type":null,"children":[{"icon":"icon/16/apps/internet-feed-reader.png","label":"Roles","type":"role","action":null,"value":null,"children":[{"icon":"icon/16/actions/address-book-new.png","label":"In all groups","type":"group","action":"link","value":"user=admin","children":[{"icon":"icon/16/apps/internet-feed-reader.png","label":"Administrator role","type":"role","action":"unlink","value":"role=admin","children":[]},{"icon":"icon/16/apps/internet-feed-reader.png","label":"Manager role","type":"role","action":"unlink","value":"role=manager","children":[]},{"icon":"icon/16/apps/internet-feed-reader.png","label":"Normal user","type":"role","action":"unlink","value":"role=user","children":[]}]}]},{"icon":"icon/16/actions/address-book-new.png","label":"Groups","type":"group","action":"link","value":"user=admin","children":[]},{"icon":"icon/16/apps/internet-transfer.png","label":"Datasources","type":"datasource","action":"link","value":"user=admin","children":[]}]}';
-    //$I->compareJsonRpcResultWith(json_decode($expected));
+    $I->expectDataforMethod(__METHOD__);
+    $I->logout();
   }
 
   public function tryToAddUsers(ApiTester $I, \Codeception\Scenario $scenario)
   {
+    $I->loginAsAdmin();
     $I->amGoingTo("create users user3 and user4");
     $I->sendJsonRpcRequest('access-config', 'add', ['user', 'user3', false]);
     $I->sendJsonRpcRequest('access-config', 'elements', ['user']);
@@ -50,29 +54,44 @@ class AccessConfigControllerCest
       "value" => "user4"
     ];
     $I->compareJsonRpcResultWith($expected, 4);
+    $I->logout();
   }
 
+  /**
+   * @param ApiTester $I
+   * @param \Codeception\Scenario $scenario
+   */
   public function tryToAddExistingUser(ApiTester $I, \Codeception\Scenario $scenario)
   {
+    $I->loginAsAdmin();
     $I->amGoingTo("create a user2, which already exists, and expect an error message");
     $I->sendJsonRpcRequest('access-config', 'add', ['user', 'user2', false],true);
-    $expected = "A user named 'user2' already exists. Please pick another name.";
-    $I->compareJsonRpcResultWith($expected, "events.0.data.properties.message");
+
+    $I->seeUserError();
+    $I->logout();
   }
 
+  /**
+   * @param ApiTester $I
+   * @param \Codeception\Scenario $scenario
+   *
+   */
   public function tryToAddDatasources(ApiTester $I, \Codeception\Scenario $scenario)
   {
+    $I->loginAsAdmin();
     $I->amGoingTo("create datasources datasource3 and datasource4");
     $I->sendJsonRpcRequest('access-config', 'add', ['datasource', 'datasource3', false]);
     $I->sendJsonRpcRequest('access-config', 'elements', ['datasource']);
-    $I->seeResponseJsonMatchesJsonPath("$.result[?(@.value=datasource3)]");
+    $I->seeRequestedResponseMatchesJsonPath("$.result[?(@.value=datasource3)]");
     $I->sendJsonRpcRequest('access-config', 'add', ['datasource', 'datasource4', false]);
     $I->sendJsonRpcRequest('access-config', 'elements', ['datasource']);
-    $I->seeResponseJsonMatchesJsonPath("$.result[?(@.value=datasource4)]");
+    $I->seeRequestedResponseMatchesJsonPath("$.result[?(@.value=datasource4)]");
+    $I->logout();
   }
 
   public function tryToAddGroups(ApiTester $I, \Codeception\Scenario $scenario)
   {
+    $I->loginAsAdmin();
     $I->amGoingTo("create groups group1 and group2");
     $I->sendJsonRpcRequest('access-config', 'add', ['group', 'group1', false]);
     $I->sendJsonRpcRequest('access-config', 'elements', ['group']);
@@ -94,62 +113,62 @@ class AccessConfigControllerCest
       "value" => "group2"
     ];
     $I->compareJsonRpcResultWith($expected, 1);
+    $I->logout();
   }
 
   public function tryToCreateUserForm(ApiTester $I, \Codeception\Scenario $scenario)
   {
+    $I->loginAsAdmin();
     $I->sendJsonRpcRequest('access-config', 'edit', ['user', 'user2']);
-    $I->dontSeeJsonRpcError();
-    $I->compareJsonRpcResultWith("form", "events.0.data.type");
+    $I->seeServerEvent("dialog", new JsonPathType("$.properties.formData"));
+    $I->logout();
   }
 
   public function tryToDeleteModels(ApiTester $I, \Codeception\Scenario $scenario)
   {
+    $I->loginAsAdmin();
     foreach (['user', 'role', 'group', 'permission' ] as $type) {
       $namedId = $type . "Dummy";
       $I->amGoingTo("create a $type '$namedId'");
       $I->sendJsonRpcRequest('access-config', 'add', [$type, $namedId, false]);
-      $I->dontSeeJsonRpcError();
       $I->expect("to get a form dialog to edit $type data");
       $I->sendJsonRpcRequest('access-config', 'edit', [$type, $namedId]);
-      $I->dontSeeJsonRpcError();
-      $I->compareJsonRpcResultWith("form", "events.0.data.type");
+      $I->seeServerEvent("dialog", new JsonPathType("$.properties.formData"));
       $I->amGoingTo("delete this $type.");
       $I->sendJsonRpcRequest('access-config', 'delete', [$type, $namedId]);
-      $I->dontSeeJsonRpcError();
       $I->expect("the $type not to exist any more.");
       $I->sendJsonRpcRequest('access-config', 'edit', [$type, $namedId], true);
-      //result":{"type":"ServiceResult","events":[{"name":"dialog","data":{"type":"alert","properties":{"message":,
-      $I->compareJsonRpcResultWith(
-        "An object of type $type and id $namedId does not exist.",
-        "events.0.data.properties.message"
-      );
+      $I->seeUserError("An object of type $type and id $namedId does not exist.");
     }
+    $I->logout();
   }
 
   public function tryToDeleteDatasource(ApiTester $I, \Codeception\Scenario $scenario)
   {
+    $I->loginAsAdmin();
     $I->amGoingTo("create a datasource 'datasourceDummy'");
     $I->sendJsonRpcRequest('access-config', 'add', ['datasource', 'datasourceDummy', false]);
     $I->amGoingTo("delete this datasource.");
     $I->sendJsonRpcRequest('access-config', 'delete', ['datasource', 'datasourceDummy']);
     $I->expect("to get a confirmation dialog.");
-    //result":{"type":"ServiceResult","events":[{"name":"dialog","data":{"type":"alert","properties":{"message":,
-    $I->compareJsonRpcResultWith("confirm", "events.0.data.type");
+    $I->seeServerEvent("dialog");
+    $I->logout();
   }
 
   public function tryToCreateValidGroupForm(ApiTester $I, \Codeception\Scenario $scenario)
   {
+    $I->loginAsAdmin();
     $I->amGoingTo("check the form dialog to edit group data");
     $I->sendJsonRpcRequest('access-config', 'edit', ['group','group1']);
-    $I->dontSeeJsonRpcError();
     $I->expectTo("see a select box with role data");
-    $expected = json_decode( '{"type":"selectbox","label":"Default role for new users","options":[{"label":"No role","value":""},{"label":"Administrator role","value":"admin"},{"label":"Anonymous user","value":"anonymous"},{"label":"Manager role","value":"manager"},{"label":"Normal user","value":"user"}],"width":300,"value":null}',true);
-    $I->compareJsonRpcResultWith( $expected, "events.0.data.properties.formData.defaultRole");
+    $expected = $I->loadExpectedData(__METHOD__);
+    $I->seeServerEvent("dialog", $expected);
+    $I->logout();
   }
 
   public function tryToSaveForm(ApiTester $I, \Codeception\Scenario $scenario)
   {
+    $I->loginAsAdmin();
     $I->amGoingTo("submit form data");
     $data = json_decode('{
       "name":"Group 1",
@@ -158,7 +177,6 @@ class AccessConfigControllerCest
       "active":1
     }', true);
     $I->sendJsonRpcRequest('access-config', 'save', [$data, "group", "group1"]);
-    $I->dontSeeJsonRpcError();
     $I->expectTo("see the saved data");
     $I->sendJsonRpcRequest('access-config', 'data', [ 'group', 'group1' ]);
     $expected = [
@@ -172,10 +190,12 @@ class AccessConfigControllerCest
       'protected' => 0
     ];
     $I->compareJsonRpcResultWith( $expected );
+    $I->logout();
   }
 
   public function tryToAddUserToGroup(ApiTester $I, \Codeception\Scenario $scenario)
   {
+    $I->loginAsAdmin();
     $I->amGoingTo("Add user2 to group1");
     $I->sendJsonRpcRequest(
       "access-config",'link',
@@ -184,22 +204,26 @@ class AccessConfigControllerCest
     $I->expectTo("see them linked now.");
     $I->sendJsonRpcRequest('access-config', 'tree', ['user', 'user2']);
     $path = "$.result.children[?(@.type=group)].children[?(@.label='Group 1')]";
-    $I->seeResponseJsonMatchesJsonPath($path);
+    $I->seeRequestedResponseMatchesJsonPath($path);
+    $I->logout();
   }
 
   public function tryToAssignGlobalUserRole(ApiTester $I, \Codeception\Scenario $scenario)
   {
+    $I->loginAsAdmin();
     $I->sendJsonRpcRequest(
       "access-config",'link',
       ["role=admin","user","user2"]
     );
     $I->sendJsonRpcRequest('access-config', 'tree', ['user', 'user2']);
     $path = "$.result.children[?(@.type=role)].children[?(@.label='In all groups')].children[?(@.value='role=admin')]";
-    $I->seeResponseJsonMatchesJsonPath($path);
+    $I->seeRequestedResponseMatchesJsonPath($path);
+    $I->logout();
   }
 
   public function tryToAssignGroupRole(ApiTester $I, \Codeception\Scenario $scenario)
   {
+    $I->loginAsAdmin();
     $I->amGoingTo("assign user3 the admin role in group2.");
     $I->sendJsonRpcRequest(
       "access-config",'link',
@@ -211,11 +235,7 @@ class AccessConfigControllerCest
     );
     $I->sendJsonRpcRequest('access-config', 'tree', ['user', 'user3']);
     $path = "$.result.children[?(@.type=role)].children[?(@.label='In group2')].children[?(@.value='group=group2,role=admin')]";
-    $I->seeResponseJsonMatchesJsonPath($path);
-  }
-
-  public function tryLogout(ApiTester $I)
-  {
+    $I->seeRequestedResponseMatchesJsonPath($path);
     $I->logout();
   }
 }

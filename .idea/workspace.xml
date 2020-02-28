@@ -6,7 +6,40 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1d7efdcc-ab7b-4e93-b274-cf7be3d39986" name="Default" comment="fixes">
-      <change afterPath="$PROJECT_DIR$/.idea/phing.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/yii2-jsonrpc/responses/NotificationResponse.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/server/lib/components/FixUtf8ProblemsResponse.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/codeception/_support/DataTypes.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/codeception/tests/api/_expected/AASetupControllerCest.tryNormalSetupWithLatestMigrationsApplied.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/codeception/tests/api/_expected/AccessConfigControllerCest.tryToGetElementData.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/codeception/tests/api/_expected/AccessConfigControllerCest.tryToGetTreeData.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/codeception/tests/api/_expected/AccessConfigControllerCest.tryToGetTypeData.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/yii2-jsonrpc/Action.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/yii2-jsonrpc/Action.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/yii2-jsonrpc/Controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/yii2-jsonrpc/Controller.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/Yii.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/Yii.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/config/components.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/config/components.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/controllers/AppController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/controllers/AppController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/controllers/traits/AuthTrait.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/controllers/traits/AuthTrait.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/lib/components/EventQueue.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/lib/components/EventQueue.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/lib/components/EventTransportResponse.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/lib/exceptions/AccessDeniedException.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/lib/exceptions/AccessDeniedException.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/lib/exceptions/UserErrorException.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/lib/exceptions/UserErrorException.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/codeception/_support/ApiTester.php" beforeDir="false" afterPath="$PROJECT_DIR$/test/codeception/_support/ApiTester.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/codeception/_support/JsonRpcTrait.php" beforeDir="false" afterPath="$PROJECT_DIR$/test/codeception/_support/JsonRpcTrait.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/codeception/tests/acceptance.suite.yml.disabled" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/codeception/tests/acceptance/ServerEventsTest.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/codeception/tests/api.suite.yml" beforeDir="false" afterPath="$PROJECT_DIR$/test/codeception/tests/api.suite.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/codeception/tests/api/AASetupControllerCest.php" beforeDir="false" afterPath="$PROJECT_DIR$/test/codeception/tests/api/AASetupControllerCest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/codeception/tests/api/AccessConfigControllerCest.php" beforeDir="false" afterPath="$PROJECT_DIR$/test/codeception/tests/api/AccessConfigControllerCest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/codeception/tests/api/AccessControllerCest.php" beforeDir="false" afterPath="$PROJECT_DIR$/test/codeception/tests/api/AccessControllerCest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/codeception/tests/api/UtilsCest.php" beforeDir="false" afterPath="$PROJECT_DIR$/test/codeception/tests/api/UtilsCest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/codeception/tests/api/_bootstrap.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/codeception/tests/functional.suite.yml" beforeDir="false" afterPath="$PROJECT_DIR$/test/codeception/tests/functional.suite.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/codeception/tests/functional/AccessControllerCest.php" beforeDir="false" afterPath="$PROJECT_DIR$/test/codeception/tests/functional/AccessControllerCest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/codeception/tests/unit.suite.yml" beforeDir="false" afterPath="$PROJECT_DIR$/test/codeception/tests/unit.suite.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/codeception/web/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/test/codeception/web/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/dev/envvars-check" beforeDir="false" afterPath="$PROJECT_DIR$/tool/dev/envvars-check" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,6 +78,20 @@
         <item name="MySQL - tests@localhost" type="feb32156:DbDataSourceImpl" />
         <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
         <item name="tests: schema" type="ebfa3cd1:MariaImplModel$Schema" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="MySQL - tests@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="tests: schema" type="ebfa3cd1:MariaImplModel$Schema" />
+        <item name="data_Config: table" type="dbc44a63:MariaImplModel$Table" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="MySQL - tests@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="tests: schema" type="ebfa3cd1:MariaImplModel$Schema" />
+        <item name="data_User: table" type="dbc44a63:MariaImplModel$Table" />
       </path>
     </expand>
     <select />
@@ -322,7 +369,7 @@
     <property name="com.intellij.database.dataSource.DataSourceTemplate" value="MySQL" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="PHP" />
     <property name="jsx.switch.disabled" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/test/codeception/web" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/lib/yii2-jsonrpc/responses" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
@@ -341,21 +388,21 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/test/codeception/tests/api/_expected" />
       <recent name="$PROJECT_DIR$/tool/test" />
       <recent name="$PROJECT_DIR$/test/codeception/tests/unit" />
       <recent name="$PROJECT_DIR$/tool/test/setup" />
       <recent name="$PROJECT_DIR$/test/codeception/tests" />
-      <recent name="$PROJECT_DIR$/tool/test/rewrite" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/lib/yii2-jsonrpc/responses" />
       <recent name="$PROJECT_DIR$/test/codeception/web" />
       <recent name="$PROJECT_DIR$/tool/dev" />
       <recent name="$PROJECT_DIR$/.env" />
       <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/src/server/modules/webservices/connectors" />
     </key>
   </component>
-  <component name="RunManager" selected="Codeception.API tests">
+  <component name="RunManager" selected="Codeception.api AccessConfigControllerCest:tryToCreateUserForm --env=xdebug">
     <configuration name="API tests" type="CodeceptionConfigurationType" factoryName="Codeception">
       <CommandLine workingDirectory="$PROJECT_DIR$/test/codeception">
         <PhpTestInterpreterSettings>
@@ -383,6 +430,24 @@
       <PhpTestRunnerSettings configuration_file="$PROJECT_DIR$/test/codeception/tests/unit.suite.yml" method="" scope="Type" selected_type="unit" options="--fail-fast -vvv" />
       <method v="2" />
     </configuration>
+    <configuration name="api --env testing" type="CodeceptionConfigurationType" factoryName="Codeception">
+      <CommandLine workingDirectory="$PROJECT_DIR$/test/codeception">
+        <PhpTestInterpreterSettings>
+          <option name="interpreterName" value="PHP 7.3 (phpfarm-docker)" />
+        </PhpTestInterpreterSettings>
+      </CommandLine>
+      <PhpTestRunnerSettings configuration_file="$PROJECT_DIR$/test/codeception/codeception.yml" directory="$PROJECT_DIR$/test/codeception/tests/api" file="$PROJECT_DIR$/test/codeception/tests/api.suite.yml" method="" scope="ConfigurationFile" selected_type="All" options="api --env testing --fail-fast -vvv" use_alternative_configuration_file="true" />
+      <method v="2" />
+    </configuration>
+    <configuration name="api AccessConfigControllerCest:tryToCreateUserForm --env=xdebug" type="CodeceptionConfigurationType" factoryName="Codeception">
+      <CommandLine workingDirectory="$PROJECT_DIR$/test/codeception">
+        <PhpTestInterpreterSettings>
+          <option name="interpreterName" value="PHP 7.3 (phpfarm-docker)" />
+        </PhpTestInterpreterSettings>
+      </CommandLine>
+      <PhpTestRunnerSettings configuration_file="$PROJECT_DIR$/test/codeception/codeception.yml" directory="$PROJECT_DIR$/test/codeception/tests/api" file="$PROJECT_DIR$/test/codeception/tests/api.suite.yml" method="" scope="ConfigurationFile" selected_type="All" options="api AccessConfigControllerCest:tryToCreateUserForm --env=xdebug" use_alternative_configuration_file="true" />
+      <method v="2" />
+    </configuration>
     <configuration default="true" type="PhpBuiltInWebServerConfigurationType" factoryName="PHP Built-in Web Server" document_root="$PROJECT_DIR$/src/server/tests">
       <method v="2" />
     </configuration>
@@ -393,6 +458,8 @@
       <item itemvalue="Codeception.Unit tests" />
       <item itemvalue="Codeception.Functional tests" />
       <item itemvalue="Codeception.API tests" />
+      <item itemvalue="Codeception.api --env testing" />
+      <item itemvalue="Codeception.api AccessConfigControllerCest:tryToCreateUserForm --env=xdebug" />
     </list>
   </component>
   <component name="ServiceViewManager">
@@ -687,6 +754,7 @@
       <workItem from="1582040718060" duration="43966000" />
       <workItem from="1582559855106" duration="1432000" />
       <workItem from="1582562096778" duration="11455000" />
+      <workItem from="1582793767168" duration="23594000" />
     </task>
     <task id="LOCAL-00044" summary="Fix travis, skip tests">
       <created>1550594449319</created>
@@ -1194,10 +1262,10 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="85" y="161" key="#Log_Highlighting_(ideolog)/0.0.1440.900@0.0.1440.900" timestamp="1582536712667" />
-    <state x="394" y="40" key="#PHP" timestamp="1581407676858">
+    <state x="394" y="40" key="#PHP" timestamp="1582637106862">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="394" y="40" key="#PHP/0.0.1440.900@0.0.1440.900" timestamp="1581407676858" />
+    <state x="394" y="40" key="#PHP/0.0.1440.900@0.0.1440.900" timestamp="1582637106862" />
     <state x="320" y="117" key="#Path_mapping" timestamp="1581409288653">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -1214,10 +1282,10 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="319" y="117" key="#Volume_binding/0.0.1440.900@0.0.1440.900" timestamp="1581407663253" />
-    <state x="271" y="60" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1582561868056">
+    <state x="271" y="60" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1582839470782">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="271" y="60" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1440.900@0.0.1440.900" timestamp="1582561868056" />
+    <state x="271" y="60" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1440.900@0.0.1440.900" timestamp="1582839470782" />
     <state x="465" y="260" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1582095799165">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -1226,14 +1294,18 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="408" y="186" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1440.900@0.0.1440.900" timestamp="1581698760084" />
+    <state x="297" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1582641808270">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="297" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1440.900@0.0.1440.900" timestamp="1582641808270" />
     <state x="391" y="279" key="#com.intellij.tools.ToolEditorDialog" timestamp="1581412096484">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="391" y="279" key="#com.intellij.tools.ToolEditorDialog/0.0.1440.900@0.0.1440.900" timestamp="1581412096484" />
-    <state x="458" y="213" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1582066041896">
+    <state x="458" y="213" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1582807892719">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="458" y="213" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1440.900@0.0.1440.900" timestamp="1582066041896" />
+    <state x="458" y="213" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1440.900@0.0.1440.900" timestamp="1582807892719" />
     <state x="389" y="235" width="618" height="665" key="#com.jetbrains.php.debug.validation.PhpWebServerValidationDialog#" timestamp="1582289624788">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -1255,77 +1327,77 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="567" y="370" key="Github.Dialog.Accounts.Choose/0.0.1440.900@0.0.1440.900" timestamp="1579854753161" />
-    <state width="1640" height="354" key="GridCell.Tab.0.bottom" timestamp="1582579086727">
-      <screen x="0" y="23" width="1920" height="1057" />
+    <state width="1398" height="302" key="GridCell.Tab.0.bottom" timestamp="1582881484120">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1640" height="354" key="GridCell.Tab.0.bottom/-1680.92.1680.1027/0.23.1920.1057@0.23.1920.1057" timestamp="1582579086727" />
-    <state width="1398" height="302" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1582543761005" />
+    <state width="1398" height="302" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1582881484120" />
     <state width="1398" height="302" key="GridCell.Tab.0.bottom/0.23.1440.831@0.23.1440.831" timestamp="1582535747283" />
-    <state width="1640" height="354" key="GridCell.Tab.0.center" timestamp="1582579086726">
-      <screen x="0" y="23" width="1920" height="1057" />
+    <state width="1398" height="302" key="GridCell.Tab.0.center" timestamp="1582881484119">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1640" height="354" key="GridCell.Tab.0.center/-1680.92.1680.1027/0.23.1920.1057@0.23.1920.1057" timestamp="1582579086726" />
-    <state width="1398" height="302" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1582543761004" />
+    <state width="1398" height="302" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1582881484119" />
     <state width="1398" height="302" key="GridCell.Tab.0.center/0.23.1440.831@0.23.1440.831" timestamp="1582535747282" />
-    <state width="1640" height="354" key="GridCell.Tab.0.left" timestamp="1582579086725">
-      <screen x="0" y="23" width="1920" height="1057" />
+    <state width="1398" height="302" key="GridCell.Tab.0.left" timestamp="1582881484118">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1640" height="354" key="GridCell.Tab.0.left/-1680.92.1680.1027/0.23.1920.1057@0.23.1920.1057" timestamp="1582579086725" />
-    <state width="1398" height="302" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1582543761004" />
+    <state width="1398" height="302" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1582881484118" />
     <state width="1398" height="302" key="GridCell.Tab.0.left/0.23.1440.831@0.23.1440.831" timestamp="1582535747280" />
-    <state width="1640" height="354" key="GridCell.Tab.0.right" timestamp="1582579086726">
-      <screen x="0" y="23" width="1920" height="1057" />
+    <state width="1398" height="302" key="GridCell.Tab.0.right" timestamp="1582881484119">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1640" height="354" key="GridCell.Tab.0.right/-1680.92.1680.1027/0.23.1920.1057@0.23.1920.1057" timestamp="1582579086726" />
-    <state width="1398" height="302" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1582543761004" />
+    <state width="1398" height="302" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1582881484119" />
     <state width="1398" height="302" key="GridCell.Tab.0.right/0.23.1440.831@0.23.1440.831" timestamp="1582535747283" />
-    <state width="1640" height="354" key="GridCell.Tab.1.bottom" timestamp="1582579086731">
-      <screen x="0" y="23" width="1920" height="1057" />
+    <state width="1398" height="302" key="GridCell.Tab.1.bottom" timestamp="1582881484122">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1640" height="354" key="GridCell.Tab.1.bottom/-1680.92.1680.1027/0.23.1920.1057@0.23.1920.1057" timestamp="1582579086731" />
-    <state width="1398" height="302" key="GridCell.Tab.1.bottom/0.0.1440.900@0.0.1440.900" timestamp="1582543761006" />
+    <state width="1398" height="302" key="GridCell.Tab.1.bottom/0.0.1440.900@0.0.1440.900" timestamp="1582881484122" />
     <state width="1398" height="302" key="GridCell.Tab.1.bottom/0.23.1440.831@0.23.1440.831" timestamp="1582535747287" />
-    <state width="1640" height="354" key="GridCell.Tab.1.center" timestamp="1582579086729">
-      <screen x="0" y="23" width="1920" height="1057" />
+    <state width="1398" height="302" key="GridCell.Tab.1.center" timestamp="1582881484121">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1640" height="354" key="GridCell.Tab.1.center/-1680.92.1680.1027/0.23.1920.1057@0.23.1920.1057" timestamp="1582579086729" />
-    <state width="1398" height="302" key="GridCell.Tab.1.center/0.0.1440.900@0.0.1440.900" timestamp="1582543761005" />
+    <state width="1398" height="302" key="GridCell.Tab.1.center/0.0.1440.900@0.0.1440.900" timestamp="1582881484121" />
     <state width="1398" height="302" key="GridCell.Tab.1.center/0.23.1440.831@0.23.1440.831" timestamp="1582535747285" />
-    <state width="1640" height="354" key="GridCell.Tab.1.left" timestamp="1582579086728">
-      <screen x="0" y="23" width="1920" height="1057" />
+    <state width="1398" height="302" key="GridCell.Tab.1.left" timestamp="1582881484121">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1640" height="354" key="GridCell.Tab.1.left/-1680.92.1680.1027/0.23.1920.1057@0.23.1920.1057" timestamp="1582579086728" />
-    <state width="1398" height="302" key="GridCell.Tab.1.left/0.0.1440.900@0.0.1440.900" timestamp="1582543761005" />
+    <state width="1398" height="302" key="GridCell.Tab.1.left/0.0.1440.900@0.0.1440.900" timestamp="1582881484121" />
     <state width="1398" height="302" key="GridCell.Tab.1.left/0.23.1440.831@0.23.1440.831" timestamp="1582535747285" />
-    <state width="1640" height="354" key="GridCell.Tab.1.right" timestamp="1582579086730">
-      <screen x="0" y="23" width="1920" height="1057" />
+    <state width="1398" height="302" key="GridCell.Tab.1.right" timestamp="1582881484122">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1640" height="354" key="GridCell.Tab.1.right/-1680.92.1680.1027/0.23.1920.1057@0.23.1920.1057" timestamp="1582579086730" />
-    <state width="1398" height="302" key="GridCell.Tab.1.right/0.0.1440.900@0.0.1440.900" timestamp="1582543761006" />
+    <state width="1398" height="302" key="GridCell.Tab.1.right/0.0.1440.900@0.0.1440.900" timestamp="1582881484122" />
     <state width="1398" height="302" key="GridCell.Tab.1.right/0.23.1440.831@0.23.1440.831" timestamp="1582535747286" />
-    <state width="1640" height="354" key="GridCell.Tab.2.bottom" timestamp="1582579086734">
-      <screen x="0" y="23" width="1920" height="1057" />
+    <state width="1398" height="302" key="GridCell.Tab.2.bottom" timestamp="1582792975418">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1640" height="354" key="GridCell.Tab.2.bottom/-1680.92.1680.1027/0.23.1920.1057@0.23.1920.1057" timestamp="1582579086734" />
-    <state width="1398" height="302" key="GridCell.Tab.2.bottom/0.0.1440.900@0.0.1440.900" timestamp="1582543761008" />
+    <state width="1398" height="302" key="GridCell.Tab.2.bottom/0.0.1440.900@0.0.1440.900" timestamp="1582792975418" />
     <state width="1398" height="302" key="GridCell.Tab.2.bottom/0.23.1440.831@0.23.1440.831" timestamp="1582535747268" />
-    <state width="1640" height="354" key="GridCell.Tab.2.center" timestamp="1582579086732">
-      <screen x="0" y="23" width="1920" height="1057" />
+    <state width="1398" height="302" key="GridCell.Tab.2.center" timestamp="1582792975417">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1640" height="354" key="GridCell.Tab.2.center/-1680.92.1680.1027/0.23.1920.1057@0.23.1920.1057" timestamp="1582579086732" />
-    <state width="1398" height="302" key="GridCell.Tab.2.center/0.0.1440.900@0.0.1440.900" timestamp="1582543761007" />
+    <state width="1398" height="302" key="GridCell.Tab.2.center/0.0.1440.900@0.0.1440.900" timestamp="1582792975417" />
     <state width="1398" height="302" key="GridCell.Tab.2.center/0.23.1440.831@0.23.1440.831" timestamp="1582535747266" />
-    <state width="1640" height="354" key="GridCell.Tab.2.left" timestamp="1582579086732">
-      <screen x="0" y="23" width="1920" height="1057" />
+    <state width="1398" height="302" key="GridCell.Tab.2.left" timestamp="1582792975416">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1640" height="354" key="GridCell.Tab.2.left/-1680.92.1680.1027/0.23.1920.1057@0.23.1920.1057" timestamp="1582579086732" />
-    <state width="1398" height="302" key="GridCell.Tab.2.left/0.0.1440.900@0.0.1440.900" timestamp="1582543761007" />
+    <state width="1398" height="302" key="GridCell.Tab.2.left/0.0.1440.900@0.0.1440.900" timestamp="1582792975416" />
     <state width="1398" height="302" key="GridCell.Tab.2.left/0.23.1440.831@0.23.1440.831" timestamp="1582535747266" />
-    <state width="1640" height="354" key="GridCell.Tab.2.right" timestamp="1582579086733">
-      <screen x="0" y="23" width="1920" height="1057" />
+    <state width="1398" height="302" key="GridCell.Tab.2.right" timestamp="1582792975417">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1640" height="354" key="GridCell.Tab.2.right/-1680.92.1680.1027/0.23.1920.1057@0.23.1920.1057" timestamp="1582579086733" />
-    <state width="1398" height="302" key="GridCell.Tab.2.right/0.0.1440.900@0.0.1440.900" timestamp="1582543761008" />
+    <state width="1398" height="302" key="GridCell.Tab.2.right/0.0.1440.900@0.0.1440.900" timestamp="1582792975417" />
     <state width="1398" height="302" key="GridCell.Tab.2.right/0.23.1440.831@0.23.1440.831" timestamp="1582535747267" />
     <state width="234" height="498" key="HiddenNamespacesPopup" timestamp="1582459745573">
       <screen x="0" y="0" width="1440" height="900" />
@@ -1343,10 +1415,10 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="541" y="384" key="NewPhpFileDialog/0.0.1440.900@0.0.1440.900" timestamp="1581716320313" />
-    <state x="512" y="167" key="RollbackChangesDialog" timestamp="1581093452569">
+    <state x="512" y="167" key="RollbackChangesDialog" timestamp="1582643013941">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="512" y="167" key="RollbackChangesDialog/0.0.1440.900@0.0.1440.900" timestamp="1581093452569" />
+    <state x="512" y="167" key="RollbackChangesDialog/0.0.1440.900@0.0.1440.900" timestamp="1582643013941" />
     <state x="248" y="138" key="SettingsEditor" timestamp="1582561738288">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -1369,20 +1441,20 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="483" y="303" key="cloudConfig.SelfSettingsDialog/0.0.1440.900@0.0.1440.900" timestamp="1582201618470" />
-    <state x="679" y="462" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1582564562578">
-      <screen x="0" y="23" width="1920" height="1057" />
+    <state x="509" y="374" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1582659546332">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="679" y="462" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/-1680.92.1680.1027/0.23.1920.1057@0.23.1920.1057" timestamp="1582564562578" />
-    <state x="509" y="374" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1440.900@0.0.1440.900" timestamp="1582284517431" />
+    <state x="509" y="374" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1440.900@0.0.1440.900" timestamp="1582659546332" />
     <state x="516" y="177" key="com.intellij.tools.ToolSelectDialog.dimensionServiceKey" timestamp="1581412097827">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="516" y="177" key="com.intellij.tools.ToolSelectDialog.dimensionServiceKey/0.0.1440.900@0.0.1440.900" timestamp="1581412097827" />
-    <state x="12" y="426" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2" timestamp="1582576749569">
-      <screen x="0" y="23" width="1920" height="1057" />
+    <state x="9" y="343" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2" timestamp="1582664517396">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="12" y="426" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/-1680.92.1680.1027/0.23.1920.1057@0.23.1920.1057" timestamp="1582576749569" />
-    <state x="9" y="343" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/0.0.1440.900@0.0.1440.900" timestamp="1582543177778" />
+    <state x="9" y="343" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/0.0.1440.900@0.0.1440.900" timestamp="1582664517396" />
     <state x="381" y="121" key="com.jetbrains.php.test.PhpNewTestDialog" timestamp="1579119938358">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -1391,18 +1463,18 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="481" y="179" key="com.jetbrains.plugins.remotesdk.ui.RemoteMappingsConfiguration/0.0.1440.900@0.0.1440.900" timestamp="1582561580875" />
-    <state x="35" y="318" width="904" height="528" key="find.popup" timestamp="1582538353008">
+    <state x="35" y="318" width="904" height="528" key="find.popup" timestamp="1582797394066">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="35" y="318" width="904" height="528" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1582538353008" />
-    <state width="300" height="297" key="javadoc.popup.new" timestamp="1581057520005">
+    <state x="35" y="318" width="904" height="528" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1582797394066" />
+    <state width="300" height="297" key="javadoc.popup.new" timestamp="1582655405571">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="300" height="297" key="javadoc.popup.new/0.0.1440.900@0.0.1440.900" timestamp="1581057520005" />
-    <state x="385" y="196" width="670" height="676" key="search.everywhere.popup" timestamp="1582018033506">
+    <state width="300" height="297" key="javadoc.popup.new/0.0.1440.900@0.0.1440.900" timestamp="1582655405571" />
+    <state x="385" y="196" width="670" height="676" key="search.everywhere.popup" timestamp="1582875074553">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="385" y="196" width="670" height="676" key="search.everywhere.popup/0.0.1440.900@0.0.1440.900" timestamp="1582018033506" />
+    <state x="385" y="196" width="670" height="676" key="search.everywhere.popup/0.0.1440.900@0.0.1440.900" timestamp="1582875074553" />
     <state x="450" y="372" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1579855896193">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -1411,10 +1483,10 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint type="php">
-          <url>file://$PROJECT_DIR$/src/server/vendor/guzzlehttp/guzzle/src/Client.php</url>
-          <line>357</line>
-          <option name="timeStamp" value="2" />
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/test/codeception/_support/JsonRpcTrait.php</url>
+          <line>422</line>
+          <option name="timeStamp" value="7" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -1,0 +1,27 @@
+{
+  "result": {
+    "type": "ServiceResult",
+    "events": [
+      {
+        "name": "bibliograph.setup.done",
+        "data": null
+      }
+    ],
+    "data": {
+      "errors": [],
+      "messages": [
+        "Admininstrator email exists.",
+        "Database connection ok.",
+        "Standard schema existed.",
+        "Created datasources.",
+        "Module backup (app\\modules\\backup\\Module) is already at version 0.0.3.",
+        "Module bibutils (app\\modules\\bibutils\\Module) is already at version 0.1.1.",
+        "Module converters (app\\modules\\converters\\Module) is already at version 0.0.8.",
+        "Module extendedfields (app\\modules\\extendedfields\\Module) is already at version 0.0.8.",
+        "Module webservices (app\\modules\\webservices\\Module) is already at version 0.2.0.",
+        "Module z3950 (app\\modules\\z3950\\Module) is already at version 1.0.5.",
+        "LDAP authentication is not enabled."
+      ]
+    }
+  }
+}

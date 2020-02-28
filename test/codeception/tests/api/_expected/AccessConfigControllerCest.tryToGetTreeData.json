@@ -1,0 +1,71 @@
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "icon": "icon/16/apps/utilities-network-manager.png",
+    "label": "Relations",
+    "action": null,
+    "value": null,
+    "type": null,
+    "children": [
+      {
+        "icon": "icon/16/apps/internet-feed-reader.png",
+        "label": "Roles",
+        "type": "role",
+        "action": null,
+        "value": null,
+        "children": [
+          {
+            "icon": "icon/16/actions/address-book-new.png",
+            "label": "In all groups",
+            "type": "role",
+            "action": "link",
+            "value": "user=admin",
+            "children": [
+              {
+                "icon": "icon/16/apps/internet-feed-reader.png",
+                "label": "Administrator role",
+                "type": "role",
+                "action": "unlink",
+                "value": "role=admin",
+                "children": []
+              },
+              {
+                "icon": "icon/16/apps/internet-feed-reader.png",
+                "label": "Manager role",
+                "type": "role",
+                "action": "unlink",
+                "value": "role=manager",
+                "children": []
+              },
+              {
+                "icon": "icon/16/apps/internet-feed-reader.png",
+                "label": "Normal user",
+                "type": "role",
+                "action": "unlink",
+                "value": "role=user",
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "icon": "icon/16/actions/address-book-new.png",
+        "label": "Groups",
+        "type": "group",
+        "action": "link",
+        "value": "user=admin",
+        "children": []
+      },
+      {
+        "icon": "icon/16/apps/internet-transfer.png",
+        "label": "Datasources",
+        "type": "datasource",
+        "action": "link",
+        "value": "user=admin",
+        "children": []
+      }
+    ]
+  },
+  "id": 6
+}

@@ -17,3 +17,5 @@ modules:
             depends: Yii2
             part: [json]
         - \Helper\Api
+env:
+    xdebug:

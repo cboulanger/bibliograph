@@ -23,6 +23,7 @@ namespace app\controllers;
 use app\controllers\traits\{
   AccessControlTrait, AuthTrait, DatasourceTrait, MessageTrait, ShelfTrait
 };
+use ForceUTF8\Encoding;
 use lib\filters\auth\JsonRpcPayloadTokenAuth;
 use Yii;
 use yii\filters\auth\CompositeAuth;

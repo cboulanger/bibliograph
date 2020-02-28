@@ -11,6 +11,7 @@ class AASetupControllerCest
    *
    * @param ApiTester $I
    * @return void
+   * @throws Exception
    */
   public function tryVersion(ApiTester $I)
   {
@@ -27,20 +28,12 @@ class AASetupControllerCest
    * @param ApiTester $I
    * @env testing
    * @return void
+   * @throws Exception
    */
   public function tryNormalSetupWithLatestMigrationsApplied(ApiTester $I)
   {
     $I->sendJsonRpcRequest('setup','setup');
-    $I->compareJsonRpcResultWith( json_decode('[
-      {
-        "name": "ldap.enabled",
-        "data": false
-      },
-      {
-        "name": "bibliograph.setup.done",
-        "data": null
-      }
-    ]'),"events");
+    $I->seeServerEvent("bibliograph.setup.done");
   }
 
   /**
@@ -48,41 +41,14 @@ class AASetupControllerCest
    * @param ApiTester $I
    * @env setup
    * @return void
+   * @throws Exception
    */
   public function trySetupWithEmptyDatabase(ApiTester $I)
   {
     $I->sendJsonRpcRequest('setup','setup');
-    $I->compareJsonRpcResultWith( json_decode('{
-      "type": "ServiceResult",
-      "events": [
-        {
-          "name": "bibliograph.setup.done",
-          "data": null
-        }
-      ],
-      "data": {
-        "errors": [
-          
-        ],
-        "messages": [
-          "File permissions ok.",
-          "Admininstrator email exists.",
-          "Database connection ok.",
-          "Found empty database and applied new migrations for version ' . $this->version . '",
-          "Configuration values were created.",
-          "Created standard schema.",
-          "Created datasources.",
-          "Installed module \'backup\'.",
-          "Installed module \'bibutils\'.",
-          "Installed module \'converters\'.",
-          "Installed module \'extendedfields\'.",
-          "Installed module \'webservices\'.",
-          "Installed module \'z3950\'.",
-          "No schema migrations necessary.",
-          "LDAP authentication is not enabled."
-        ]
-      }
-    }'));
+    $I->seeJsonRpcNotification("bibliograph.setup.done");
+    $I->seeResponseContains("Found empty database and applied new migrations for version ' . $this->version . '");
+    $I->seeResponseContains("No schema migrations necessary.");
   }
 
   /**
@@ -91,83 +57,30 @@ class AASetupControllerCest
    * @param ApiTester $I
    * @env upgradev2
    * @return void
+   * @throws Exception
    */
   public function tryUpgradeFromV2(ApiTester $I)
   {
     $I->sendJsonRpcRequest('setup','setup');
-    $I->compareJsonRpcResultWith( json_decode('{
-      "type": "ServiceResult",
-      "events": [
-        {
-          "name": "bibliograph.setup.done",
-          "data": null
-        }
-      ],
-      "data": {
-        "errors": [
-          
-        ],
-        "messages": [
-          "Admininstrator email exists.",
-          "Database connection ok.",
-          "Migrated data from Bibliograph v2 and applied new migrations for version ' . $this->version . '",
-          "Configuration values were created.",
-          "Created standard schema.",
-          "Created datasources.",
-          "Installed module \'backup\'.",
-          "Installed module \'bibutils\'.",
-          "Installed module \'converters\'.",
-          "Installed module \'extendedfields\'.",
-          "Installed module \'webservices\'.",
-          "Installed module \'z3950\'.",
-          "Migrated schema(s) bibliograph_datasource.",
-          "LDAP authentication is not enabled."
-        ]
-      }
-    }'));
+    $I->seeJsonRpcNotification("bibliograph.setup.done");
+    $I->seeResponseContains("Migrated data from Bibliograph v2 and applied new migrations for version ' . $this->version . '");
+    $I->seeResponseContains("Migrated schema(s) bibliograph_datasource.");
   }
 
- /**
+  /**
    * This upgrades from 3.0.0-alpha to 3.0.0
    *
    * @param ApiTester $I
    * @env upgradev3
    * @return void
+   * @throws Exception
    */
   public function tryUpgradeV3(ApiTester $I)
   {
     $upgrade_from = $I->grabCurrentAppVersion();
     $upgrade_to = '3.0.0';
     $I->sendJsonRpcRequest('setup','setup-version',[$upgrade_to]);
-    $I->compareJsonRpcResultWith( json_decode('{
-      "type": "ServiceResult",
-      "events": [
-        {
-          "name": "bibliograph.setup.done",
-          "data": null
-        }
-      ],
-      "data": {
-        "errors": [
-          
-        ],
-        "messages": [
-          "Admininstrator email exists.",
-          "Database connection ok.",
-          "Found data for version '. $upgrade_from .' and applied new migrations for version ' . $upgrade_to . '",
-          "Configuration values were created.",
-          "Standard schema existed.",
-          "Created datasources.",
-          "Module \'backup\' already installed.",
-          "Module \'bibutils\' already installed.",
-          "Module \'converters\' already installed.",         
-          "Module \'extendedfields\' already installed.",
-          "Module \'webservices\' already installed.",
-          "Module \'z3950\' already installed.",          
-          "No schema migrations necessary.",
-          "LDAP authentication is not enabled."
-        ]
-      }
-    }'));
+    $I->seeJsonRpcNotification("bibliograph.setup.done");
+    $I->seeResponseContains("Found data for version '. $upgrade_from .' and applied new migrations for version ' . $upgrade_to . '");
   }
 }

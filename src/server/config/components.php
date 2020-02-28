@@ -13,7 +13,7 @@ return [
     'parsers' => ['application/json' => 'yii\web\JsonParser']
   ],
   // Override http response component
-  'response' => ['class' => \lib\components\EventTransportResponse::class],
+  'response' => ['class' => \lib\components\FixUtf8ProblemsResponse::class],
   'urlManager' => [
     'showScriptName' => false,
     'enableStrictParsing' => false,
