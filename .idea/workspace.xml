@@ -6,40 +6,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1d7efdcc-ab7b-4e93-b274-cf7be3d39986" name="Default" comment="fixes">
-      <change afterPath="$PROJECT_DIR$/src/lib/yii2-jsonrpc/responses/NotificationResponse.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/server/lib/components/FixUtf8ProblemsResponse.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/codeception/_support/DataTypes.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/codeception/tests/api/_expected/AASetupControllerCest.tryNormalSetupWithLatestMigrationsApplied.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/codeception/tests/api/_expected/AccessConfigControllerCest.tryToGetElementData.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/codeception/tests/api/_expected/AccessConfigControllerCest.tryToGetTreeData.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/codeception/tests/api/_expected/AccessConfigControllerCest.tryToGetTypeData.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/yii2-jsonrpc/Action.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/yii2-jsonrpc/Action.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/yii2-jsonrpc/Controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/yii2-jsonrpc/Controller.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/Yii.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/Yii.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/config/components.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/config/components.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/controllers/AppController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/controllers/AppController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/controllers/traits/AuthTrait.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/controllers/traits/AuthTrait.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/lib/components/EventQueue.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/lib/components/EventQueue.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/lib/components/EventTransportResponse.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/lib/exceptions/AccessDeniedException.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/lib/exceptions/AccessDeniedException.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/lib/exceptions/UserErrorException.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/lib/exceptions/UserErrorException.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/codeception/_support/ApiTester.php" beforeDir="false" afterPath="$PROJECT_DIR$/test/codeception/_support/ApiTester.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/codeception/_support/JsonRpcTrait.php" beforeDir="false" afterPath="$PROJECT_DIR$/test/codeception/_support/JsonRpcTrait.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/codeception/tests/acceptance.suite.yml.disabled" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/codeception/tests/acceptance/ServerEventsTest.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/codeception/tests/api.suite.yml" beforeDir="false" afterPath="$PROJECT_DIR$/test/codeception/tests/api.suite.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/codeception/tests/api/AASetupControllerCest.php" beforeDir="false" afterPath="$PROJECT_DIR$/test/codeception/tests/api/AASetupControllerCest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/codeception/tests/api/AccessConfigControllerCest.php" beforeDir="false" afterPath="$PROJECT_DIR$/test/codeception/tests/api/AccessConfigControllerCest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/codeception/tests/api/AccessControllerCest.php" beforeDir="false" afterPath="$PROJECT_DIR$/test/codeception/tests/api/AccessControllerCest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/codeception/tests/api/UtilsCest.php" beforeDir="false" afterPath="$PROJECT_DIR$/test/codeception/tests/api/UtilsCest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/codeception/tests/api/_bootstrap.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/codeception/tests/functional.suite.yml" beforeDir="false" afterPath="$PROJECT_DIR$/test/codeception/tests/functional.suite.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/codeception/tests/functional/AccessControllerCest.php" beforeDir="false" afterPath="$PROJECT_DIR$/test/codeception/tests/functional/AccessControllerCest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/codeception/tests/unit.suite.yml" beforeDir="false" afterPath="$PROJECT_DIR$/test/codeception/tests/unit.suite.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/codeception/web/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/test/codeception/web/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/dev/envvars-check" beforeDir="false" afterPath="$PROJECT_DIR$/tool/dev/envvars-check" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.travis.yml.disabled" beforeDir="false" afterPath="$PROJECT_DIR$/.travis.yml.disabled" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/lib/components/LdapAuth.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/lib/components/LdapAuth.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/lib/util/MbString.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/lib/util/MbString.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/messages/de-DE/messages.po" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/messages/de-DE/messages.po" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -580,7 +580,7 @@ msgstr "LCCN"
 
 msgctxt "app"
 msgid "Ldap"
-msgstr "Die Benutzerdaten stammen aus einem LDAP-Server und können nicht verändert werden"
+msgstr "Ldap"
 
 msgctxt "app"
 msgid "Loaded records {firstRow} - {lastRow} ..."

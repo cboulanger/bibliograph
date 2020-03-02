@@ -37,7 +37,7 @@ class LdapAuth extends \yii\base\Component
   /**
    * Checks if LDAP is enabled and that a connection can be established
    *
-   * @return array 
+   * @return array
    *    An associated array with the keys 'enabled' (bool), 'connection' (bool) and
    *    'error' (string).
    */
@@ -65,7 +65,7 @@ class LdapAuth extends \yii\base\Component
       'enabled'     => $ldapEnabled,
       'connection'  => $connection,
       'error'       => $error,
-    ];    
+    ];
   }
 
   /**
@@ -214,14 +214,14 @@ class LdapAuth extends \yii\base\Component
   {
     $app = Yii::$app;
     $config = $app->config;
-    $ldap = $app->ldap; 
+    $ldap = $app->ldap;
     $user_base_dn = $config->getIniValue( "ldap.user_base_dn" );
     $user_id_attr = $config->getIniValue( "ldap.user_id_attr" );
     $mail_domain  = $config->getIniValue( "ldap.mail_domain" );
-    
+
     $dn = "$user_id_attr=$username,$user_base_dn";
     Yii::debug("Retrieving user data from LDAP by distinguished name '$dn'",self::CATEGORY);
-  
+
     $record = $ldap->search()
       ->select(["cn", "displayName", "sn", "givenName","mail" ])
       ->findByDnOrFail($dn);
@@ -234,11 +234,11 @@ class LdapAuth extends \yii\base\Component
       $record->getFirstAttribute("givenName"),
       $record->getEmail()
     ];
-    
+
     // Full name
-    ($name = $cn ) ?: 
+    ($name = $cn ) ?:
     ($name = $displayName ) ?:
-    ($name = "$givenName $sn") ?: 
+    ($name = "$givenName $sn") ?:
     ($name = $username);
 
     // Email address
@@ -276,7 +276,7 @@ class LdapAuth extends \yii\base\Component
   {
     $app = Yii::$app;
     $config = $app->config;
-    $ldap = $app->ldap; 
+    $ldap = $app->ldap;
     if ( ! $config->getIniValue("ldap.use_groups") ){
       // don't use groups
       return;
@@ -300,8 +300,8 @@ class LdapAuth extends \yii\base\Component
 
     if ( count($ldapGroups) == 0 ) {
       Yii::debug("User '$username' belongs to no LDAP groups", self::CATEGORY);
-    }    
-    
+    }
+
     $user = User::findOne(['namedId'=>$username]);
     assert(is_object($user),"User record must exist at this point");
 
@@ -317,7 +317,7 @@ class LdapAuth extends \yii\base\Component
     foreach( $ldapGroups as $ldapGroup ) {
       $namedId = $ldapGroup->getCommonName();
       $group = Group::findByNamedId($namedId);
-      if( ! $group ){      
+      if( ! $group ){
         $name  = $ldapGroup->getFirstAttribute($group_name_attr);
         Yii::debug("Creating group '$namedId' ('$name') from LDAP", self::CATEGORY );
         $group = new Group([
@@ -359,8 +359,8 @@ class LdapAuth extends \yii\base\Component
           try {
             $user->link( 'roles', $role, [ 'GroupId' => $group->id ] );
           } catch ( \Exception $e ) {
-            Yii::warning($e->getMessage(), __METHOD__ . ":" . __LINE__);
-            Yii::error($e);
+            // do not log stack trace since it can contain sensitive information
+            Yii::error($e->getMessage(), __METHOD__ . ":" . __LINE__);
           }
         }
       }
@@ -372,7 +372,7 @@ class LdapAuth extends \yii\base\Component
     foreach( $groupNames as $namedId )
     {
       $group = Group::findByNamedId($namedId);
-      assert(\is_object($group),"Group must exist."); 
+      assert(\is_object($group),"Group must exist.");
       if ( $group->ldap ) {
         Yii::debug("Removing user '$username' from group '$namedId'", self::CATEGORY);
         $user->unlink( 'groups', $group );
