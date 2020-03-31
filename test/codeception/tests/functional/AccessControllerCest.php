@@ -50,30 +50,30 @@ class AccessControllerCest
     $I->loginWithPassword('sarah_manning','sarah_manning');
     $I->amGoingTo("update permissions for database1 and expect those for normal user.");
     $I->sendJsonRpcRequest('access', 'update-permissions', ['database1']);
-    $I->assertEquals(14, count($I->grabRpcResult()));
+    $I->assertEquals(14, count($I->grabJsonRpcResult()));
     $I->amGoingTo("update permissions for database2 and expect those for manager.");
     $I->sendJsonRpcRequest('access', 'update-permissions', ['database2']);
-    $I->assertEquals(25, count($I->grabRpcResult()));
+    $I->assertEquals(25, count($I->grabJsonRpcResult()));
     $I->logout();
 
     $I->amGoingTo("login as Jessica.");
     $I->loginWithPassword('jessica_jones','jessica_jones');
     $I->amGoingTo("update permissions for database1 and expect those for normal user.");
     $I->sendJsonRpcRequest('access', 'update-permissions', ['database1']);
-    $I->assertEquals(14, count($I->grabRpcResult()));
+    $I->assertEquals(14, count($I->grabJsonRpcResult()));
     $I->amGoingTo("update permissions for database3 and expect to be denied access.");
     $I->sendJsonRpcRequest('access', 'update-permissions', ['database3'], true);
     $I->seeUserError();
     $I->amGoingTo("update permissions for user database and expect those for manager.");
     $I->sendJsonRpcRequest('access', 'update-permissions', ['jessica']);
-    $I->assertEquals(25, count($I->grabRpcResult()));
+    $I->assertEquals(25, count($I->grabJsonRpcResult()));
     $I->logout();
 
     $I->amGoingTo("login as Frank.");
     $I->loginWithPassword('frank_underwood','frank_underwood');
     $I->amGoingTo("update permissions for database1 and expect those for manager (only).");
     $I->sendJsonRpcRequest('access', 'update-permissions', ['database1']);
-    $I->assertEquals(12, count($I->grabRpcResult()));
+    $I->assertEquals(12, count($I->grabJsonRpcResult()));
     $I->amGoingTo("update permissions for jessica's database and expect access denied.");
     $I->sendJsonRpcRequest('access', 'update-permissions', ['jessica'], true);
     $I->seeUserError();

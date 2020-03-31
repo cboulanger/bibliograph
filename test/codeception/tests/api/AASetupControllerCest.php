@@ -46,7 +46,7 @@ class AASetupControllerCest
   public function trySetupWithEmptyDatabase(ApiTester $I)
   {
     $I->sendJsonRpcRequest('setup','setup');
-    $I->seeJsonRpcNotification("bibliograph.setup.done");
+    $I->seeServerEvent("bibliograph.setup.done");
     $I->seeResponseContains("Found empty database and applied new migrations for version ' . $this->version . '");
     $I->seeResponseContains("No schema migrations necessary.");
   }
@@ -62,7 +62,7 @@ class AASetupControllerCest
   public function tryUpgradeFromV2(ApiTester $I)
   {
     $I->sendJsonRpcRequest('setup','setup');
-    $I->seeJsonRpcNotification("bibliograph.setup.done");
+    $I->seeServerEvent("bibliograph.setup.done");
     $I->seeResponseContains("Migrated data from Bibliograph v2 and applied new migrations for version ' . $this->version . '");
     $I->seeResponseContains("Migrated schema(s) bibliograph_datasource.");
   }
@@ -80,7 +80,7 @@ class AASetupControllerCest
     $upgrade_from = $I->grabCurrentAppVersion();
     $upgrade_to = '3.0.0';
     $I->sendJsonRpcRequest('setup','setup-version',[$upgrade_to]);
-    $I->seeJsonRpcNotification("bibliograph.setup.done");
+    $I->seeServerEvent("bibliograph.setup.done");
     $I->seeResponseContains("Found data for version '. $upgrade_from .' and applied new migrations for version ' . $upgrade_to . '");
   }
 }

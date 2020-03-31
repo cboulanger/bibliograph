@@ -2,10 +2,13 @@
 
 namespace tests\unit;
 
-class Base extends \Codeception\Test\Unit
+use PHPUnit\Framework\TestResult;
+
+abstract class Base extends \Codeception\Test\Unit
 {
   /**
    * @var \UnitTester
    */
   protected $tester;
+
 }

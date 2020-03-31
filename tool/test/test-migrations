@@ -11,14 +11,14 @@ BIBLIOGRAPH2_SQL_DUMP=test/data/bibliograph2.local.sql
 
 log_heading "Testing new installation"
 
-tool/test/codecept run api AASetupControllerCest --env setup $CPT_ARGS || exit $?
-tool/test/codecept run api AASetupControllerCest --env testing $CPT_ARGS || exit $?
+codecept run api AASetupControllerCest --env setup $CPT_ARGS || exit $?
+codecept run api AASetupControllerCest --env testing $CPT_ARGS || exit $?
 echo
 
 log_heading "Testing upgrade from 3.0.0-alpha to 3.0.0..."
 
 tool/test/yii migrate/create app\\migrations\\schema\\create_post_table --interactive=0 || exit $?
-tool/test/codecept run api AASetupControllerCest --env upgradev3 $CPT_ARGS
+codecept run api AASetupControllerCest --env upgradev3 $CPT_ARGS
 exitcode=$?
 rm src/server/migrations/schema/*Create_post_table.php
 if [ "$exitcode" -ne "0" ]; then
@@ -34,10 +34,10 @@ mysql_root -uroot tests < $BIBLIOGRAPH2_SQL_DUMP
 log_info ">>> Testing upgrade from v2..."
 migration_path="app\\migrations\\schema\\bibliograph_datasource"
 tool/test/yii migrate/create ${migration_path}\\new_datasource_migration --migrationNamespaces=${migration_path} --interactive=0 || exit $?
-tool/test/codecept run api AASetupControllerCest --env upgradev2 $CPT_ARGS
+codecept run api AASetupControllerCest --env upgradev2 $CPT_ARGS
 exitcode=$?
 rm migrations/schema/bibliograph_datasource/*New_datasource_migration.php
 if [ "$exitcode" -ne "0" ]; then
    exit $exitcode;
 fi
-tool/test/codecept run api AASetupControllerCest --env testing $CPT_ARGS || exit $?
+codecept run api AASetupControllerCest --env testing $CPT_ARGS || exit $?

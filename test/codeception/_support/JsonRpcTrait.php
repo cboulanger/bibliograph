@@ -6,7 +6,7 @@ use PHPUnit\Framework\ExpectationFailedException;
 
 trait JsonRpcTrait
 {
-   public $SEVER_EVENT_JSONRPC_METHOD_NAME = "dispatchServerEvent";
+   public $SERVER_EVENT_JSONRPC_METHOD_NAME = "bibliograph.jsonrpc.App.broadcastMessage";
    static protected $jsonrpc_id = 0;
 
   /*
@@ -418,7 +418,7 @@ trait JsonRpcTrait
    */
   public function seeServerEvent(string $expectedName, $expectedData=null) {
     foreach ($this->grabJsonRpcNotifications() as $notification) {
-      if ($notification->method == $this->SEVER_EVENT_JSONRPC_METHOD_NAME) {
+      if ($notification->method == $this->SERVER_EVENT_JSONRPC_METHOD_NAME) {
         if ($expectedData === null) return;
         $event = $notification->params[0];
         $receivedName = $event->name;

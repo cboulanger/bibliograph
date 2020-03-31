@@ -62,7 +62,7 @@ export -f yii_test
 
 # codecept shorthand function
 function codecept() {
-  tool/test/codecept "$@"
+  tool/dev/codecept "$@"
 }
 export -f codecept
 

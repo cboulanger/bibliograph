@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+pushd src/client/bibliograph > /dev/null
+npx qx "$@"
+popd > /dev/null

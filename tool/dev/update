@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Update dependencies
-
+echo "needs to be updated"
+exit 1
 source tool/dev/check-env
 
 echo " >>> Updating packages..."
