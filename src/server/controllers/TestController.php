@@ -48,7 +48,16 @@ class TestController extends AppController
    *
    * @var array
    */
-  protected $noAuthActions = ["throw-error"];
+  protected $noAuthActions = ["echo", "throw-error"];
+
+  /**
+   * Returns the first argument passed unchanged
+   * @param $msg
+   * @return mixed
+   */
+  public function actionEcho($msg) {
+    return $msg;
+  }
 
   public function actionThrowError()
   {
@@ -62,20 +71,27 @@ class TestController extends AppController
     return [ "message" => $exception ];
   }
 
+  /**
+   * @throws UserErrorException
+   */
   public function actionTest()
   {
     throw new UserErrorException("This is a user error");
   }
 
+  /**
+   * @param $result
+   * @param $message
+   */
   public function actionTest2($result, $message )
   {
     (new Alert)->setMessage($message)->sendToClient();
-  }  
+  }
 
   public function create_messages($sessionId)
   {
     $channel = new Channel('test', $sessionId);
-    for ($i=0; $i < 10 ; $i++) { 
+    for ($i=0; $i < 10 ; $i++) {
       $channel->send( "The time is " . date('l, F jS, Y, h:i:s A'));
     }
     $channel->send("done");
@@ -83,7 +99,7 @@ class TestController extends AppController
 
   public function actionAlert( $message )
   {
-    (new Alert)->setMessage($message )->sendToClient();
+    (new Alert)->setMessage($message)->sendToClient();
   }
 
   public function actionSimpleEvent()

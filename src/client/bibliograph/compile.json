@@ -11,7 +11,8 @@
     ".",
     "../../server/modules/z3950/client",
     "../../server/modules/webservices/client",
-    "../../server/modules/backup/client"
+    "../../server/modules/backup/client",
+    "../../lib/incubator.qx.io.jsonrpc"
   ],
   "environment": {
     "qx.debug": true,
@@ -147,27 +148,18 @@
       ]
     },
     {
-      "class": "qxl.widgetbrowser.Application",
-      "theme": "qx.theme.Indigo",
-      "name": "widgetbrowser",
-      "title": "WidgetBrowser",
+      "class": "qxl.testtapper.Application",
+      "name": "testtapper",
+      "theme": "qx.theme.Simple",
+      "title": "Qooxdoo TestTAPper",
+      "environment": {
+        "qx.icontheme": "Tango",
+        "testtapper.testNameSpace": "bibliograph.test"
+      },
       "include": [
-        "qx.theme.Modern",
-        "qx.theme.Simple",
-        "qx.theme.Classic",
-        "qxl.widgetbrowser.pages.Tree",
-        "qxl.widgetbrowser.pages.List",
-        "qxl.widgetbrowser.pages.Table",
-        "qxl.widgetbrowser.pages.Form",
-        "qxl.widgetbrowser.pages.ToolBar",
-        "qxl.widgetbrowser.pages.Window",
-        "qxl.widgetbrowser.pages.Tab",
-        "qxl.widgetbrowser.pages.Control",
-        "qxl.widgetbrowser.pages.Embed",
-        "qxl.widgetbrowser.pages.EmbedFrame",
-        "qxl.widgetbrowser.pages.Basic",
-        "qxl.widgetbrowser.pages.Misc"
-      ]
+        "bibliograph.test.*"
+      ],
+      "exclude": []
     }
   ],
   "$schema": "https://raw.githubusercontent.com/qooxdoo/qooxdoo-compiler/master/source/resource/qx/tool/schema/compile-1-0-0.json"

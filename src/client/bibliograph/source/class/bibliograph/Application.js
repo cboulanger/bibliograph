@@ -237,24 +237,13 @@ qx.Class.define("bibliograph.Application", {
      * Returns a jsonrpc client object with the current auth token already set.
      * The client can be referred to by the object id "application/jsonrpc/<service name>"
      * @param {String} service The name of the service to get the client for
-     * @return {qcl.io.JsonRpcClient}
+     * @return {qcl.io.jsonrpc.Client}
      */
     getRpcClient : function(service) {
       qx.core.Assert.assert(Boolean(service), "Service parameter cannot be empty");
       qx.util.Validate.checkString(service, "Service parameter must be a string");
-      // init object id access to clients
-      if (!this.__clients.__parent__) {
-        let obj = new qx.core.Object();
-        obj.setQxObjectId("jsonrpc");
-        this.addOwnedQxObject(obj);
-        qx.Class.patch(qcl.io.JsonRpcClient,cboulanger.eventrecorder.MTrackEvents);
-        this.__clients.__parent__ = obj;
-      }
       if (!this.__clients[service]) {
-        let client = new qcl.io.JsonRpcClient(this.getServerUrl() + service);
-        client.setQxObjectId(service.replace(/\//,".")); // no slash allowed
-        client.setTrackPropertyChanges(["response"]);
-        this.__clients.__parent__.addOwnedQxObject(client);
+        let client = new qcl.io.jsonrpc.Client(this.getServerUrl(), service);
         this.__clients[service] = client;
       }
       let client = this.__clients[service];

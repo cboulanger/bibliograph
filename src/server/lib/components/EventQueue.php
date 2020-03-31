@@ -12,7 +12,7 @@ use georgique\yii2\jsonrpc\Controller;
  */
 class EventQueue extends \yii\base\Component
 {
-  const RPC_METHOD_NAME = "dispatchServerEvent";
+  const RPC_METHOD_NAME = "bibliograph.jsonrpc.App.broadcastMessage";
 
   /**
    * Add an event to the queue.

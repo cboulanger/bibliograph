@@ -56,17 +56,24 @@ class AppController extends yii\web\Controller
   const MESSAGE_EXECUTE_JSONRPC = "jsonrpc.execute";
 
   /**
+   * @var array Array of names of the actions that are accessible without authentication
+   */
+  protected $noAuthActions = [];
+
+  /**
    * @inheritdoc
    */
   public function behaviors()
   {
+    $authMethods = [HttpBearerAuth::class];
+    // codecdeption tests do not pass the Bearer Authentication Header correctly
+    if (YII_ENV_TEST) {
+      $authMethods[] = JsonRpcPayloadTokenAuth::class;
+    }
     $behaviors = parent::behaviors();
     $behaviors['authenticator'] = [
       'class' => CompositeAuth::class,
-      'authMethods' => [
-        HttpBearerAuth::class,
-        JsonRpcPayloadTokenAuth::class,
-      ],
+      'authMethods' => $authMethods,
       'optional' => $this->noAuthActions
     ];
     return $behaviors;

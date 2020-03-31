@@ -10,7 +10,6 @@ docker pull cboulanger/docker-phpfarm
 echo " >>> Downloading mariadb image"
 docker pull mariadb
 
-echo ">>> Installing git in http-server container"
 tool/dev/http-server start
 
 # fixes
@@ -43,7 +42,7 @@ echo " >>> Installing github repositories..."
 
 declare -a arr=(
   "cboulanger/yii2-jsonrpc"
-  "cboulanger/raptor-client"
+  "qooxdoo/incubator.qx.io.jsonrpc"
   "cboulanger/dsn"
   "cboulanger/worldcat-linkeddata-php"
 )

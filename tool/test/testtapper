@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Compiles and starts the testrunner app in the browser
+set -o errexit
+source tool/dev/envvars-load
+COMPILE_PATH=src/client/bibliograph
+TESTTAPPER_PATH=$COMPILE_PATH/compiled/source/bibliograph-test
+
+echo ">>> Compiling application..."
+pushd $COMPILE_PATH > /dev/null
+(npx qx compile --target=$TARGET --watch --feedback=0 compile-test.json & ) | while read output; do
+  echo "$output"
+  # wait for "made" event message to resume script
+  if [[ $output == *"Applications are made"* ]]; then break; fi;
+done
+
+echo ">>> Started continuous compilation process."
+popd > /dev/null
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  echo ">>> Opening app in browser ..."
+  open -a "Google Chrome" $BIB_SERVER_URL/$TESTTAPPER_PATH
+  # send Alt+Command+I to open Web inspector
+  osascript -e 'tell application "System Events" to keystroke "i" using {option down, command down}'
+fi
+
+# idle waiting for abort from user
+read -r -d '' _ </dev/tty

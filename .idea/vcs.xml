@@ -3,8 +3,8 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/lib/dsn" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/lib/incubator.qx.io.jsonrpc" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/lib/quaggaJS" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/src/lib/raptor-client" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/lib/worldcat-linkeddata-php" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/lib/yii2-jsonrpc" vcs="Git" />
   </component>
