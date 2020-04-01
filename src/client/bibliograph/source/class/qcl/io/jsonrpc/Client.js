@@ -31,7 +31,7 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
   construct: function(url, service) {
     this.__dialog = dialog.Dialog.error("").hide();
     qx.util.Validate.checkUrl(url);
-    const client = this.__client = new qx.io.jsonrpc.Client(url);
+    const client = this.__client = new qx.io.jsonrpc.Client(url, service);
     client.addListener("peerRequest", this._handlePeerRequest, this);
     qx.event.message.Bus.subscribe("bibliograph.token.change", e => {
       this.setToken(e.getData() || null);
@@ -201,16 +201,35 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
         let classname = parts.join(".");
         let clazz = qx.Class.getByName(classname);
         if (!clazz) {
-          this.error(`Server notification invokes class '${classname}', which does not exist.'`);
+          this.error(`Server notification invokes class '${classname}', which does not exist.`);
         } else if (typeof clazz.getInstance != "function" ||
-          !qx.Class.isSubClassOf(clazz, qcl.io.jsonrpc.RemoteProcedure)) {
-          this.error(`Server notification invokes class ${classname}, which does not extend qcl.io.jsonrpc.AbstractProcedure and/or is not a singleton.`);
-        } else if (typeof clazz[method] != "function") {
-          this.error(`Server notification invokes non-existing method '${method}' of class '${classname}'.`);
+          !qx.Class.hasMixin(clazz, qcl.io.jsonrpc.MRemoteProcedure)) {
+          throw new Error(`Server notification invokes class ${classname}, which does not include qcl.io.jsonrpc.MAbstractProcedure and/or is not a singleton.`);
         } else {
-          // call the method
-          clazz[method].apply(message.params);
+          let instance;
+          try {
+            instance = clazz.getInstance();
+          } catch (e) {
+            throw new Error(`'${classname}' is not a singleton class.`);
+          }
+          if (typeof instance[method] != "function") {
+            throw new Error(`Server notification invokes non-existing method '${method}' of singleton class '${classname}'.`);
+          }
+          let params = message.getParams();
+          if (params) {
+            if (Array.isArray(params)) {
+              // call the method with the given arguments
+              instance[method].apply(instance, params);
+            } else {
+              throw new Error(`Invalid parameters type - must be array, is ${typeof params}.`);
+            }
+          } else {
+            // call the method
+            instance[method]();
+          }
         }
+      } else {
+        throw new Error("Incoming JSON-RPC message object must be instance of qx.io.jsonrpc.protocol.Notification.");
       }
     },
     

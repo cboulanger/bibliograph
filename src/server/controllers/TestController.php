@@ -27,15 +27,6 @@ use app\modules\z3950\models\Search;
 use lib\dialog\Alert;
 use lib\exceptions\UserErrorException;
 use Yii;
-
-use app\controllers\AppController;
-
-use app\models\User;
-use app\models\Role;
-use app\models\Permission;
-use app\models\Group;
-use app\models\Session;
-use app\models\Message;
 use lib\channel\Channel;
 
 /**
@@ -48,16 +39,7 @@ class TestController extends AppController
    *
    * @var array
    */
-  protected $noAuthActions = ["echo", "throw-error"];
-
-  /**
-   * Returns the first argument passed unchanged
-   * @param $msg
-   * @return mixed
-   */
-  public function actionEcho($msg) {
-    return $msg;
-  }
+  protected $noAuthActions = ["throw-error"];
 
   public function actionThrowError()
   {

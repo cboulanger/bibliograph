@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+source tool/dev/envvars-load
 source tool/dev/envvars-check
 
 if [[ "$(tool/dev/mysql-server status)" == *"not running"* ]]; then

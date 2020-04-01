@@ -13,7 +13,6 @@ TARGET=${3:-source}
 
 echo ">>> Compiling application '$APP', using config file '$CONFIG_FILE' and '$TARGET' target ..."
 pushd $COMPILE_PATH > /dev/null
-PID=""
 (npx qx compile --target=$TARGET --watch --feedback=0 $CONFIG_FILE & ) | while read output; do
   echo "$output"
   # wait for "made" event message to resume script

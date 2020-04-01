@@ -1,11 +1,8 @@
 {
   "name": "Bibliograph Development",
   "primary": [
-    "Start Development Server",
-    "Start GUI Test Recorder",
-    "Start GUI Test Player",
-    "View App Log",
-    "View Error log"
+    "Start Servers",
+    "Run TestTapper"
   ],
   "exclude": ["gui", "postinstall", "list", "test"],
   "silent": [],

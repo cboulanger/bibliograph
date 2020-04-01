@@ -19,6 +19,16 @@
   },
   "scripts": {
     "gui": "screwy",
+    "Start Servers": "./tool/dev/servers-start",
+    "Run TestTapper" : "./tool/test/testtapper",
+    "clean": "pushd src/client/bibliograph && npx qx clean && popd",
+    "Create new migration": "build/script/run-in-new-terminal $(pwd)/build/script/create-migration",
+    "Create JSONRPC proxy methods": "cd src/server && php yii rpc-proxy/create",
+    "Extract translations": "cd src/server && php yii message config/i18n.php"
+  },
+
+  "_scripts": {
+    "gui": "screwy",
     "clean": "pushd src/client/bibliograph && npx qx clean && popd",
     "Continuous Compilation": "/script/start server-only",
     "Create new migration": "build/script/run-in-new-terminal $(pwd)/build/script/create-migration",
