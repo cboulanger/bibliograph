@@ -61,8 +61,16 @@ class JsonRpcTestController extends AppController
     return $value;
   }
 
+  /**
+   * Sends a notification to the method of a specially marked singleton instance
+   * @param $value
+   * @return string
+   */
   public function actionNotifyMe($value) {
     JsonRpcController::addNotification("bibliograph.test.RemoteProcedure.receiveNotification", [$value]);
     return "OK";
   }
+
+
+
 }

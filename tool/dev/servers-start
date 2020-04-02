@@ -3,14 +3,5 @@
 source tool/dev/envvars-load
 source tool/dev/envvars-check
 
-if [[ "$(tool/dev/mysql-server status)" == *"not running"* ]]; then
-  tool/dev/mysql-server start || exit 1
-else
-  echo "MySQL server is running."
-fi
-
-if [[ "$(tool/dev/http-server status)" == *"not running"* ]]; then
-  tool/dev/http-server start
-else
-  echo "HTTP server is running."
-fi
+tool/dev/mysql-server start || exit 1
+tool/dev/http-server start
