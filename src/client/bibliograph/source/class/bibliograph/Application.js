@@ -244,6 +244,7 @@ qx.Class.define("bibliograph.Application", {
       qx.util.Validate.checkString(service, "Service parameter must be a string");
       if (!this.__clients[service]) {
         let client = new qcl.io.jsonrpc.Client(this.getServerUrl(), service);
+        client.setErrorBehavior("dialog");
         this.__clients[service] = client;
       }
       let client = this.__clients[service];

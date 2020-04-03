@@ -20,10 +20,6 @@ qx.Class.define("bibliograph.test.JsonRpc", {
     tearDown() {
       this.__client.dispose();
     },
-    
-    async "test: try to access method without authentication - should fail"() {
-      //
-    },
   
     async "test: receive a notification from the server"() {
       let value = Math.PI;

@@ -55,6 +55,7 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
      * */
     token: {
       nullable: true,
+      init: null,
       check: "String",
       apply: "_applyToken",
       event: "changeToken"
@@ -66,6 +67,16 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
     response: {
       nullable: true,
       event: "changeResponse"
+    },
+  
+    /**
+     * How to behave when an error occurs. "error": throw a runtime error which can be handled,
+     * "debug": like error, but output additional information about the error to the console,
+     * "dialog": show error to the user in a dialog
+     */
+    errorBehavior: {
+      check: ["error", "dialog", "debug"],
+      init: "error"
     }
   },
 
@@ -122,7 +133,7 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
           } catch (e) {}
         }
         this.setError(err);
-        this._showMethodCallErrorMessage(method);
+        this._handleJsonRpcError(method);
         return null;
       }
       return result;
@@ -149,7 +160,7 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
         await this.__client.sendNotification(method, params);
       } catch (e) {
         this.setError(e);
-        this._showMethodCallErrorMessage(method);
+        this._handleJsonRpcError(method);
       }
     },
   
@@ -234,19 +245,28 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
     },
     
     /**
-     * Displays an error that the method call failed.
+     * Handles an JSON_RPC error as configured by the errorBehavior property
      * @param method
      * @private
      */
-    _showMethodCallErrorMessage: function (method) {
+    _handleJsonRpcError: function (method) {
+      let error = this.getError();
       let message = this.tr("Error calling remote method '%1': %2.", method, this.getErrorMessage());
-      console.error(message.toString());
-      console.log(this.getError().data);
-      try {
-        console.log(this.getError().data.response.error.data.exception);
-      } catch (e) {}
-      
-      this.__dialog.set({message}).show();
+      switch (this.getErrorBehavior()) {
+        case "debug": {
+          console.error(message.toString());
+          console.log(error.data);
+          try {
+            console.log(error.data.response.error.data.exception);
+          } catch (e) {}
+        }
+        //fallthrough
+        case "error":
+          throw error;
+        case "dialog": {
+          this.__dialog.set({message}).show();
+        }
+      }
     },
   
     /**
