@@ -16,7 +16,7 @@
     "qx.icontheme": "Tango",
     "module.objectid": true,
     "app.version": "development",
-    "app.serverUrl": "src/server/web"
+    "app.serverUrl": "src/server/test"
   },
   "locales": [
     "en",

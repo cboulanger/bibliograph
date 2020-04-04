@@ -2,7 +2,7 @@
 //
 // Bibliograph server entry point
 //
-const YII_DEBUG=true;
+const YII_DEBUG=false;
 require __DIR__  . '/../bootstrap.php';
 $config = require APP_BACKEND_DIR . '/config/web.php';
 $app = new yii\web\Application($config);

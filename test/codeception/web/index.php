@@ -10,6 +10,7 @@ define('APP_BACKEND_DIR', APP_ROOT_DIR . "/src/server");
 define('APP_LOG_DIR', APP_ROOT_DIR . "/log/app");
 define('DOTENV_FILE', APP_ROOT_DIR . "/test/.env");
 define( "APP_CONFIG_FILE" , APP_ROOT_DIR . "/test/app.conf.toml");
+define('JSON_RPC_USE_PAYLOAD_TOKEN_AUTH', true);
 require APP_BACKEND_DIR  . '/bootstrap.php';
 $config = require_once __DIR__ . '/../config/web-test.php';
 $app = new yii\web\Application($config);

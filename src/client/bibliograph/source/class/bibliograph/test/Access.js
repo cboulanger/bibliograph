@@ -22,6 +22,13 @@ qx.Class.define("bibliograph.test.Access", {
       this.__client.dispose();
     },
     
+    async loginAnonymously() {
+      let result = await this.__client.request("authenticate", []);
+      this.assertString(result.token);
+      this.assertNotEquals("", result.token);
+      this.__client.setToken(result.token);
+    },
+    
     async "test: try to access method without authentication - should fail"() {
       try {
         await this.__client.request("username", []);
@@ -33,8 +40,7 @@ qx.Class.define("bibliograph.test.Access", {
     },
     
     async "test: log in anonymously and get an authentication token"() {
-      await this.__client.request("authenticate", []);
-      this.assertNotNull(this.__client.getToken());
+      await this.loginAnonymously();
     },
     
 /*

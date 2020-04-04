@@ -67,7 +67,7 @@ class AppController extends yii\web\Controller
   {
     $authMethods = [HttpBearerAuth::class];
     // codecdeption tests do not pass the Bearer Authentication Header correctly
-    if (YII_ENV_TEST) {
+    if (defined('JSON_RPC_USE_PAYLOAD_TOKEN_AUTH') AND JSON_RPC_USE_PAYLOAD_TOKEN_AUTH===true) {
       $authMethods[] = JsonRpcPayloadTokenAuth::class;
     }
     $behaviors = parent::behaviors();

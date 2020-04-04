@@ -73,3 +73,10 @@ defined('BIBLIOGRAPH_VALUE_SEPARATOR') or define('BIBLIOGRAPH_VALUE_SEPARATOR', 
  * Defaults to the system temporary directory
  */
 defined('TMP_PATH') or define('TMP_PATH', sys_get_temp_dir());
+
+
+/**
+ * Codecdeption tests do not pass the Bearer Authentication Header correctly,
+ * set true for a workaround
+ */
+defined('JSON_RPC_USE_PAYLOAD_TOKEN_AUTH') or define('JSON_RPC_USE_PAYLOAD_TOKEN_AUTH', false);

@@ -1,6 +1,16 @@
 #!/bin/bash
 
 # Compiles and starts the testrunner app in the browser
+set -o errexit
+source tool/dev/check-env
+source tool/lib/functions.sh
 source test/.env
+source tool/dev/envvars-check
+
+tool/dev/servers-start
+source tool/dev/create-mysql-user
+source tool/dev/check-mysql
 export BIB_SERVER_URL
+
+source tool/test/setup/reset-data
 tool/run/app bibliograph-test compile-test.json

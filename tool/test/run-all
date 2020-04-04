@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# checks
 source tool/dev/check-env
 
 # This test runs unit and functional tests that do not need a webserver
