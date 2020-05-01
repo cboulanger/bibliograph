@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-source tool/dev/envvars-load
-source tool/dev/envvars-check
-
-tool/dev/mysql-server start || exit 1
-tool/dev/http-server start

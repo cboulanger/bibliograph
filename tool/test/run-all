@@ -1,13 +1,14 @@
 #!/bin/bash
 
-source tool/dev/check-env
+source test/.env
+source tool/env/check
 
 # This test runs unit and functional tests that do not need a webserver
 CODECEPT_ARGS="--fail-fast"
 set -o errexit
 source tool/lib/functions.sh
 
-tool/dev/servers-start
+tool/env/servers-start
 
 declare -a default=(
   unit
@@ -18,7 +19,7 @@ declare -a suites=("${@:-${default[@]}}")
 
 log_heading "Running codeception suites '${suites[*]}' "
 
-source tool/dev/envvars-check
+source tool/env/envvars-check
 source tool/dev/create-mysql-user
 source tool/dev/check-mysql
 

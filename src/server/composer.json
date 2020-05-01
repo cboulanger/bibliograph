@@ -1,10 +1,10 @@
 {
   "config": {
     "platform": {
-      "php": "7.2"
+      "php": "7.3"
     }
   },
-  "minimum-stability": "dev",
+  "minimum-stability": "stable",
   "require": {
     "ext-intl": "*",
     "ext-json": "*",
@@ -12,7 +12,7 @@
     "ext-pdo": "*",
     "adci/full-name-parser": "^0.2.3",
     "aracoool/yii2-uuid": "^1.1",
-    "bmsrox/yii2-module-autoloader": "dev-cboulanger-fix-mac-hidden-dir",
+    "bmsrox/yii2-module-autoloader": "^1.1.1",
     "danielstjules/stringy": "^3.1",
     "edvlerblog/yii2-adldap-module": "^4.0.0",
     "fourteenmeister/dsn": "dev-master",
@@ -25,7 +25,7 @@
     "renanbr/crossref-client": "^1",
     "rsinger/worldcat-linkeddata-php": "*@dev",
     "symfony/dotenv": "^5.0",
-    "toriphes/yii2-console-runner": "*",
+    "toriphes/yii2-console-runner": "^1.2.1",
     "voku/simple-cache": "^3.1",
     "yiisoft/yii2": "^2.0.32",
     "yiisoft/yii2-swiftmailer": "^2.1",
@@ -42,10 +42,10 @@
     "codeception/verify": "*",
     "elisdn/yii2-gii-fixture-generator": "^1.1",
     "goaop/parser-reflection": "^1.4",
-    "graze/guzzle-jsonrpc": "~3.0",
-    "insolita/yii2-migration-generator": "~2.3",
-    "yiisoft/yii2-faker": "~2.0.0",
-    "yiisoft/yii2-gii": "~2.0.0",
+    "graze/guzzle-jsonrpc": "^3.0",
+    "insolita/yii2-migration-generator": "^2.3",
+    "yiisoft/yii2-faker": "^2.0.0",
+    "yiisoft/yii2-gii": "^2.0.0",
     "phpunit/phpunit": "<7"
   },
   "repositories": [
@@ -56,10 +56,6 @@
     {
       "type": "path",
       "url": "../lib/yii2-jsonrpc"
-    },
-    {
-      "type": "git",
-      "url": "https://github.com/cboulanger/yii2-module-autoloader.git"
     },
     {
       "type": "git",

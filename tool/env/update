@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Update dependencies
+
+set -e
+
+source tool/env/check
+
+echo " >>> Updating packages..."
+pushd src/client/bibliograph >/dev/null
+qx pkg upgrade --prereleases --releases-only
+popd >/dev/null
+
+echo " >>> Updating composer packages..."
+tool/dev/composer update
+
+source tool/env/install-libs

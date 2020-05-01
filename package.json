@@ -18,17 +18,17 @@
     "url": "git+ssh://git@github.com/cboulanger/bibliograph.git"
   },
   "scripts": {
-    "gui": "screwy",
-    "Start Servers": "./tool/dev/servers-start",
-    "Run TestTapper" : "./tool/test/testtapper",
-    "clean": "pushd src/client/bibliograph && npx qx clean && popd",
-    "Create new migration": "build/script/run-in-new-terminal $(pwd)/build/script/create-migration",
-    "Create JSONRPC proxy methods": "cd src/server && php yii rpc-proxy/create",
-    "Extract translations": "cd src/server && php yii message config/i18n.php"
-  },
+    "env:install": "./tool/env/install",
+    "env:update": "./tool/env/update",
+    "env:start-servers": "tool/env/servers-start",
+    "env:stop-servers": "tool/env/servers-stop",
+    "dev:compile-watch": "cd src/client/bibliograph && npx qx compile --watch",
+    "dev:cleanup": "cd src/client/bibliograph && npx qx clean",
 
-  "_scripts": {
-    "gui": "screwy",
+    "test:run-all": "./tool/test/run-all",
+    "test:testtapper": "./tool/test/testtapper"
+  },
+  "_old_scripts": {
     "clean": "pushd src/client/bibliograph && npx qx clean && popd",
     "Continuous Compilation": "/script/start server-only",
     "Create new migration": "build/script/run-in-new-terminal $(pwd)/build/script/create-migration",
@@ -42,7 +42,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@qooxdoo/compiler": "^1.0.0-beta.20200326-1746",
+    "@qooxdoo/compiler": "^1.0.0-beta.20200424-1525",
     "@qooxdoo/eslint-config-jsdoc-disable": "^1.0.2",
     "@qooxdoo/eslint-config-qx": "^1.3.5"
   },
@@ -55,8 +55,7 @@
     "eslint-plugin-import": "^2.18.2",
     "github-remove-all-releases": "^1.0.1",
     "json-diff": "^0.5.4",
-    "release-it": "^12.3.5",
-    "screwy": "^1.0.5"
+    "release-it": "^12.3.5"
   },
   "eslintConfig": {
     "parserOptions": {

@@ -2,12 +2,12 @@
 
 # Compiles and starts the testrunner app in the browser
 set -o errexit
-source tool/dev/check-env
+source tool/env/check
 source tool/lib/functions.sh
 source test/.env
-source tool/dev/envvars-check
+source tool/env/envvars-check
 
-tool/dev/servers-start
+tool/env/servers-start
 source tool/dev/create-mysql-user
 source tool/dev/check-mysql
 export BIB_SERVER_URL

@@ -1,15 +1,18 @@
 #!/usr/bin/env bash
 # controls the mysql server running in a docker container
 
-source tool/dev/check-env
-source tool/dev/envvars-check
+source tool/env/check
 
 case $1 in
 start)
   echo ">>> Starting mysql server..."
   if [ "$(docker ps -f name=mysql-server -q -a)" == "" ]; then
+    if [ "$DB_ROOT_PASSWORD" == "" ]; then
+      echo "Missing DB_ROOT_PASSWORD environment variable."
+      exit 1
+    fi
     docker run --name mysql-server \
-      -v $PWD/data/db:/var/lib/mysql \
+      -v $PWD/data/docker/mysql:/var/lib/mysql \
       -e MYSQL_ROOT_PASSWORD=$DB_ROOT_PASSWORD \
       -p 3306:3306 \
       --detach \
@@ -42,5 +45,5 @@ status)
   fi
   ;;
 *)
-  echo "Syntax: tool/dev/mysql-server (start|stop|status)"
+  echo "Syntax: tool/env/mysql-server (start|stop|status)"
 esac

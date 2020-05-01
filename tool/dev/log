@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source tool/dev/check-env
+source tool/env/check
 
 TARGET=${1:-app}
 LOGFILE=log/app/$TARGET.log

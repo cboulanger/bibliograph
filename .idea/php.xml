@@ -133,22 +133,10 @@
       <path value="$PROJECT_DIR$/src/server/vendor/magp/yii2-json-schema-validator" />
       <path value="$PROJECT_DIR$/src/server/vendor/phplang/scope-exit" />
       <path value="$PROJECT_DIR$/src/server/vendor/nikic/php-parser" />
-      <path value="$PROJECT_DIR$/src/server/vendor/symfony/deprecation-contracts" />
-      <path value="$PROJECT_DIR$/src/server/vendor/rtheunissen/guzzle-rate-limiter" />
-      <path value="$PROJECT_DIR$/src/server/vendor/cache/tag-interop" />
-      <path value="$PROJECT_DIR$/src/server/vendor/cache/adapter-common" />
-      <path value="$PROJECT_DIR$/src/server/vendor/cache/hierarchical-cache" />
-      <path value="$PROJECT_DIR$/src/server/vendor/cache/array-adapter" />
-      <path value="$PROJECT_DIR$/src/server/vendor/cache/simple-cache-bridge" />
-      <path value="$PROJECT_DIR$/src/server/vendor/psr/cache" />
       <path value="$PROJECT_DIR$/src/server/vendor/phpdocumentor/reflection-docblock" />
-      <path value="$PROJECT_DIR$/src/server/vendor/symfony/string" />
-      <path value="$PROJECT_DIR$/src/server/vendor/symfony/polyfill-intl-normalizer" />
-      <path value="$PROJECT_DIR$/src/server/vendor/symfony/polyfill-php70" />
-      <path value="$PROJECT_DIR$/src/server/vendor/symfony/polyfill-intl-grapheme" />
-      <path value="$PROJECT_DIR$/src/server/vendor/paragonie/random_compat" />
       <path value="$PROJECT_DIR$/src/server/vendor/georgique/yii2-jsonrpc" />
       <path value="$PROJECT_DIR$/src/server/vendor/phpunit/phpunit-mock-objects" />
+      <path value="$PROJECT_DIR$/src/server/vendor/symfony/mime" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.3" />

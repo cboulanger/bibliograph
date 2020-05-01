@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-source tool/dev/check-env
-source tool/dev/envvars-check
-tool/dev/servers-start
+source tool/env/check
+source tool/env/envvars-check
+tool/env/servers-start
 
 # Exit on first error
 set -o errexit

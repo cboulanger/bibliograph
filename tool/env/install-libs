@@ -1,0 +1,29 @@
+#!/bin/env bash
+
+# Install needed GitHub repos
+echo " >>> Cloning required github repositories..."
+
+declare -a arr=(
+  "cboulanger/yii2-jsonrpc"
+  "qooxdoo/incubator.qx.io.jsonrpc"
+  "cboulanger/dsn"
+  "cboulanger/worldcat-linkeddata-php"
+)
+for repo in "${arr[@]}"
+do
+  dir=./src/lib/$(basename $repo)
+  if [ -d "$dir" ]; then
+    echo "Updating $repo..."
+    pushd $dir > /dev/null || exit 1
+    git pull
+    [[ -f package.json ]] && npm install
+    popd > /dev/null
+  else
+    echo "Checking out $repo..."
+    uri="https://github.com/$repo.git"
+    git clone $uri --depth 1 $dir
+    pushd $dir > /dev/null || exit 1
+    [[ -f package.json ]] && npm install --only=prod && npm audit fix
+    popd > /dev/null
+  fi
+done
