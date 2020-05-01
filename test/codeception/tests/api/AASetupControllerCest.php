@@ -47,7 +47,7 @@ class AASetupControllerCest
   {
     $I->sendJsonRpcRequest('setup','setup');
     $I->seeServerEvent("bibliograph.setup.done");
-    $I->seeResponseContains("Found empty database and applied new migrations for version ' . $this->version . '");
+    $I->seeResponseContains("Found empty database and applied new migrations for version $this->version");
     $I->seeResponseContains("No schema migrations necessary.");
   }
 
@@ -63,7 +63,7 @@ class AASetupControllerCest
   {
     $I->sendJsonRpcRequest('setup','setup');
     $I->seeServerEvent("bibliograph.setup.done");
-    $I->seeResponseContains("Migrated data from Bibliograph v2 and applied new migrations for version ' . $this->version . '");
+    $I->seeResponseContains("Migrated data from Bibliograph v2 and applied new migrations for version $this->version");
     $I->seeResponseContains("Migrated schema(s) bibliograph_datasource.");
   }
 
@@ -81,6 +81,6 @@ class AASetupControllerCest
     $upgrade_to = '3.0.0';
     $I->sendJsonRpcRequest('setup','setup-version',[$upgrade_to]);
     $I->seeServerEvent("bibliograph.setup.done");
-    $I->seeResponseContains("Found data for version '. $upgrade_from .' and applied new migrations for version ' . $upgrade_to . '");
+    $I->seeResponseContains("Found data for version $upgrade_from and applied new migrations for version $upgrade_to");
   }
 }

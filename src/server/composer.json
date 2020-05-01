@@ -16,7 +16,7 @@
     "danielstjules/stringy": "^3.1",
     "edvlerblog/yii2-adldap-module": "^4.0.0",
     "fourteenmeister/dsn": "dev-master",
-    "georgique/yii2-jsonrpc": "*",
+    "georgique/yii2-jsonrpc": "*@dev",
     "magp/yii2-json-schema-validator": "dev-master",
     "neitanod/forceutf8": "^2.0",
     "odannyc/yii2-sse": "^0.1.0",

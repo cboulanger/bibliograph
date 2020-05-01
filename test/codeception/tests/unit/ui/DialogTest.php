@@ -2,7 +2,6 @@
 
 namespace tests\unit\models;
 
-use Yii;
 use lib\dialog\{Alert,Confirm,Form,Popup,Progress,Prompt,RemoteWizard,Select,Wizard};
 
 class DialogTest extends \tests\unit\Base

@@ -24,16 +24,16 @@
     "env:stop-servers": "tool/env/servers-stop",
     "dev:compile-watch": "cd src/client/bibliograph && npx qx compile --watch",
     "dev:cleanup": "cd src/client/bibliograph && npx qx clean",
+    "dev:extract-translations" : "cd src/server && php yii message config/i18n.php",
 
-    "test:run-all": "./tool/test/run-all",
+    "test:codeception:all": "tool/test/codeception",
+    "test:codeception:custom": "tool/test/codeception \"api modules/BackupCest --env setup -vv\"",
     "test:testtapper": "./tool/test/testtapper"
   },
   "_old_scripts": {
-    "clean": "pushd src/client/bibliograph && npx qx clean && popd",
-    "Continuous Compilation": "/script/start server-only",
+
     "Create new migration": "build/script/run-in-new-terminal $(pwd)/build/script/create-migration",
     "Create JSONRPC proxy methods": "cd src/server && php yii rpc-proxy/create",
-    "Extract translations": "cd src/server && php yii message config/i18n.php",
     "Compile modules": "build/script/modules-compile",
     "Build distributable package (PHP 7.3)": "build/script/dist-build || exit $?",
     "Run production build": "build/script/dist-run",

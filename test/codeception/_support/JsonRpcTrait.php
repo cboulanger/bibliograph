@@ -284,7 +284,7 @@ trait JsonRpcTrait
   {
     $token = $this->grabRequestedResponseByJsonPath('result.token');
     if ($token) {
-      $this->token($token[0]);
+      return $this->token($token[0]);
     } else {
       throw new AssertionFailedError("No token in response data");
     }

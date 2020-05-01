@@ -27,6 +27,7 @@ start)
     exit 1
   fi
   docker logs -f http-server &> $PWD/log/http/combined.log &
+  [ -d $PWD/data/docker/http ] || mkdir -p $PWD/data/docker/http
   echo "$!" > $PWD/data/docker/http/docker-logs.pid
   echo "Server started. PHP Versions 7.0-7.4 on ports 8070-8074."
   ;;

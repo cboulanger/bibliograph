@@ -20,12 +20,15 @@ declare -a suites=("${@:-${default[@]}}")
 log_heading "Running codeception suites '${suites[*]}' "
 
 source tool/env/envvars-check
-source tool/dev/create-mysql-user
-source tool/dev/check-mysql
+source tool/test/setup/create-mysql-user
+source tool/test/setup/check-mysql
 
 for suite in "${suites[@]}"
 do
     source tool/test/setup/reset-data
+    if [[ "$suite" != "api"* ]]; then
+      source tool/test/setup/create-model-data
+    fi
     log_info ">>> Running test suite: $suite ..."
     codecept $CODECEPT_ARGS run $suite -v || exit $?
 done

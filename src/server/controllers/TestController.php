@@ -163,6 +163,8 @@ class TestController extends AppController
         $folder->link("references", $reference);
       }
     }
-    return "Created $i folders and " . $i*$j . " references";
+    $msg = "Created $i folders and " . $i*$j . " references";
+    Yii::debug($msg, __METHOD__);
+    return $msg;
   }
 }

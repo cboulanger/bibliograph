@@ -20,13 +20,13 @@
 
 namespace app\modules\backup\controllers;
 
+use app\controllers\AppController;
 use app\controllers\traits\AccessControlTrait;
 use app\controllers\traits\AuthTrait;
 use app\controllers\traits\DatasourceTrait;
 use app\modules\backup\Module;
 use lib\dialog\ServerProgress;
 use Yii;
-use yii\web\Response;
 
 /**
  * Class HtmlController
@@ -34,7 +34,7 @@ use yii\web\Response;
  * Backup actions emit chunked response for the ProgressController Widget
  * @package app\modules\backup
  */
-class ProgressController extends \yii\web\Controller
+class ProgressController extends AppController
 {
   use ServicesTrait;
   use DatasourceTrait;
@@ -78,7 +78,9 @@ class ProgressController extends \yii\web\Controller
         throw new \RuntimeException("Restore unsuccessful. Please check log files.");
       }
       $progressBar->dispatchClientMessage("backup.restored", ["datasource" => $datasource]);
-      Yii::$app->message->broadcast("backup.restored", ["datasource" => $datasource]);
+      if (!YII_ENV_TEST) {
+        Yii::$app->message->broadcast("backup.restored", ["datasource" => $datasource]);
+      }
       $progressBar->complete();
     } catch (\RuntimeException $e) {
       $progressBar->error($e->getMessage());

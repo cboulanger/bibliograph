@@ -30,7 +30,15 @@ class BackupCest
     foreach($tables as $table){
       $dump_tables .= "{$this->datasource}_{$table} ";
     }
-    $cmd = "mysqldump --user=root --host=127.0.0.1 tests $dump_tables --result-file={$file} 2>&1";
+    $params = [
+      "--user=root",
+      "--password=" . $_SERVER['DB_ROOT_PASSWORD'],
+      "--host=" . $_SERVER['DB_HOST'],
+      "--result-file=" . $file,
+      "tests $dump_tables"
+    ];
+
+    $cmd = "mysqldump " . implode(" ", $params) . " 2>&1";
     exec($cmd, $output);
     if(count($output)) throw new RuntimeException(implode("; ", $output));
     // remove comments
@@ -45,15 +53,20 @@ class BackupCest
    * @param int $debug Whether the stream chunks should be passed to codecept_debug()
    * @return string The stream content
    */
-  protected function handleStreamResponse(array $params, ApiTester $I, $debug=false)
+  protected function handleStreamResponse($route, array $params, ApiTester $I, $debug=false)
   {
-    $url = "http://127.0.0.1:8080?" . http_build_query($params);
+    $url = $_SERVER['BIB_SERVER_URL'] . "/src/server/test/$route?" . http_build_query($params) . "&access-token=".$this->token;
+    codecept_debug("Requesting chunked response from $url");
     $loop = Factory::create();
     $content = "";
     $client = new Client($loop);
     $request = $client->request('GET', $url);
-    $request->on('response', function ( Response $response) use(&$content, $debug) {
-      $response->on('data', function ($chunk) use (&$content, $debug) {
+    $request->on('response', function ( Response $response) use(&$content, $debug, $I) {
+      $response->on('data', function ($chunk) use (&$content, $debug, $I) {
+        if ($chunk[0] == "{" ) {
+          $err = json_decode($chunk);
+          $I->fail("The server returned an error: " . $err->message);
+        };
         $content .= $chunk;
         if ($debug) codecept_debug($chunk);
       });
@@ -62,7 +75,7 @@ class BackupCest
       });
     });
     $request->on('error', function (\Exception $e) use ($I) {
-      $I->fail("An error occurred. See server log for details");
+      $I->fail("An error occurred in handling the stream response: " . $e->getMessage());
     });
     $request->end();
     $loop->run();
@@ -90,18 +103,16 @@ class BackupCest
     }
     $I->amGoingTo("create a backup of '{$this->datasource}'");
     $params = [
-      'r'           => '/backup/progress/create',
-      'datasource'  => $this->datasource,
-      'id'          => 'dummy',
-      'auth_token'  => $this->token
+      'datasource'    => $this->datasource,
+      'id'            => 'dummy'
     ];
-    $this->handleStreamResponse($params, $I);
+    $this->handleStreamResponse('backup/progress/create', $params, $I);
 
     $I->amGoingTo("change '{$this->datasource}' by adding more records");
     $I->sendJsonRpcRequest("test", "create-fake-data", [$this->datasource,5]);
 
     $I->amGoingTo("get a list of backup files for '{$this->datasource}'");
-    $I->sendJsonRpcRequest("backup/service", "list", [$this->datasource]);
+    $I->sendJsonRpcRequest("backup.service", "list", [$this->datasource]);
     $list = $I->grabJsonRpcResult();
     $I->assertTrue(count($list)>0,"List of Backups must contain at least one item.");
     $I->seeResponseMatchesJsonType(['result'=>[
@@ -114,13 +125,11 @@ class BackupCest
 
     $I->amGoingTo("restore the latest backup of '{$this->datasource}' and compare the before/after mysql dumps...");
     $params = [
-      'r'           => '/backup/progress/restore',
-      'datasource'  => $this->datasource,
-      'id'          => 'dummy',
-      'file'        => $list[0]['value'], // latest backup is first in array
-      'auth_token'  => $this->token
+      'datasource'   => $this->datasource,
+      'id'           => 'dummy',
+      'file'         => $list[0]['value'] // latest backup is first in array
     ];
-    $this->handleStreamResponse($params, $I);
+    $this->handleStreamResponse('backup/progress/restore', $params, $I);
     try{
       $this->dump_after = $this->mysqldump();
     } catch (RuntimeException $e){

@@ -1,12 +1,5 @@
 #!/usr/bin/env bash
 
-source tool/env/check
-source tool/env/envvars-check
-tool/env/servers-start
-
-# Exit on first error
-set -o errexit
-
 echo -n ">>> Checking mysql user '$DB_USER' connection from host to database ... "
 output=$(tool/dev/mysql-client -u$DB_USER -p$DB_PASSWORD --version)
 if [ $? -ne 0 ]; then echo "$CROSSMARK"; log_error $output; exit 1; fi

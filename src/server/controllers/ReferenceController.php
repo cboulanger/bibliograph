@@ -959,7 +959,7 @@ class ReferenceController extends AppController
     foreach ($formats as $format) {
       $url = Yii::$app->homeUrl .
         '?r=converters/download' .
-        '&auth_token=' . Yii::$app->user->getIdentity()->getAuthKey() .
+        '&access-token=' . Yii::$app->user->getIdentity()->getAuthKey() .
         '&format=' . $format->namedId .
         '&datasource=' . $datasource .
         '&selector=' . $id;

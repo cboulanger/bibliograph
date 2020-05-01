@@ -1,4 +1,3 @@
 #!/usr/bin/env bash
-set -o errexit
 log_info ">>> Dropping database '$DB_DATABASE'..."
 mysql_root -e "DROP DATABASE IF EXISTS $DB_DATABASE;"

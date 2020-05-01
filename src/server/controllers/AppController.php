@@ -23,18 +23,18 @@ namespace app\controllers;
 use app\controllers\traits\{
   AccessControlTrait, AuthTrait, DatasourceTrait, MessageTrait, ShelfTrait
 };
-use ForceUTF8\Encoding;
 use lib\filters\auth\JsonRpcPayloadTokenAuth;
 use Yii;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBearerAuth;
+use yii\filters\auth\QueryParamAuth;
+use yii\web\Controller;
 
 
 /**
- * Service class providing methods to get or set configuration
- * values
+ * Base class for controllers
  */
-class AppController extends yii\web\Controller
+class AppController extends Controller
 {
   use AuthTrait;
   use MessageTrait;
@@ -65,7 +65,7 @@ class AppController extends yii\web\Controller
    */
   public function behaviors()
   {
-    $authMethods = [HttpBearerAuth::class];
+    $authMethods = [HttpBearerAuth::class, QueryParamAuth::class];
     // codecdeption tests do not pass the Bearer Authentication Header correctly
     if (defined('JSON_RPC_USE_PAYLOAD_TOKEN_AUTH') AND JSON_RPC_USE_PAYLOAD_TOKEN_AUTH===true) {
       $authMethods[] = JsonRpcPayloadTokenAuth::class;

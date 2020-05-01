@@ -106,7 +106,7 @@ class ExportController extends AppController
     // todo: Use yii\helpers\Url
     $url  = Yii::$app->homeUrl .
       '?r=converters/download' .
-      '&auth_token=' . Yii::$app->user->getIdentity()->getAuthKey() .
+      '&access-token=' . Yii::$app->user->getIdentity()->getAuthKey() .
       '&format=' . $data->format .
       '&datasource=' . $datasource .
       '&selector=' . $selector;

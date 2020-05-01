@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1858489cb4c559bc151ebb12364ee34f",
+    "content-hash": "ba405089985279e84270eca6d3e7b3ae",
     "packages": [
         {
             "name": "adci/full-name-parser",
@@ -759,17 +759,11 @@
         },
         {
             "name": "georgique/yii2-jsonrpc",
-            "version": "2.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/georgique/yii2-jsonrpc.git",
-                "reference": "c6b91a8daee9c537c014d8930465a4056a5dba43"
-            },
+            "version": "dev-master",
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/georgique/yii2-jsonrpc/zipball/c6b91a8daee9c537c014d8930465a4056a5dba43",
-                "reference": "c6b91a8daee9c537c014d8930465a4056a5dba43",
-                "shasum": ""
+                "type": "path",
+                "url": "../lib/yii2-jsonrpc",
+                "reference": "5a48530b7aee4555fe7d8d058c70ab989eb5f49c"
             },
             "require": {
                 "php": "~7.0",
@@ -785,7 +779,6 @@
                     "georgique\\yii2\\jsonrpc\\": ""
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "authors": [
                 {
                     "name": "George Shestayev",
@@ -798,7 +791,9 @@
                 "json-rpc",
                 "yii2"
             ],
-            "time": "2019-09-08T22:14:55+00:00"
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -7059,6 +7054,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "fourteenmeister/dsn": 20,
+        "georgique/yii2-jsonrpc": 20,
         "magp/yii2-json-schema-validator": 20,
         "rsinger/worldcat-linkeddata-php": 20
     },
