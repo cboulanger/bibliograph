@@ -1,5 +1,6 @@
 /**
  * @require(qx.io.jsonrpc.transport.Http)
+ * @ignore(bibliograph.test.notification_received)
  */
 qx.Class.define("bibliograph.test.t1.JsonRpc", {
   extend: qx.dev.unit.TestCase,

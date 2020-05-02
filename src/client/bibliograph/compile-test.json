@@ -14,6 +14,7 @@
   "environment": {
     "qx.debug": true,
     "qx.icontheme": "Tango",
+    "qx.test.delay.scale": 2,
     "module.objectid": true,
     "app.version": "development",
     "app.serverUrl": "src/server/test"

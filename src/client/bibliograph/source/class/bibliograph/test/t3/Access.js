@@ -1,7 +1,7 @@
 /**
  * @require(qx.io.jsonrpc.transport.Http)
  */
-qx.Class.define("bibliograph.test.t2.Access", {
+qx.Class.define("bibliograph.test.t3.Access", {
   extend: qx.dev.unit.TestCase,
   include: [
     qx.test.io.jsonrpc.MAssert
@@ -22,6 +22,10 @@ qx.Class.define("bibliograph.test.t2.Access", {
       this.client.dispose();
     },
     
+    //
+    // Helper methods
+    //
+    
     async loginAnonymously() {
       let result = await this.client.request("access.authenticate");
       this.assertString(result.token);
@@ -35,6 +39,10 @@ qx.Class.define("bibliograph.test.t2.Access", {
       this.assertNotEquals("", result.token);
       this.client.setToken(result.token);
     },
+    
+    //
+    // TESTS
+    //
     
     async "test: try to access method without authentication - should fail"() {
       try {

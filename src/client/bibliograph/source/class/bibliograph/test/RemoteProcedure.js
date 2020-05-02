@@ -1,3 +1,6 @@
+/**
+ * @ignore(bibliograph.test.notification_received)
+ */
 qx.Class.define("bibliograph.test.RemoteProcedure", {
   extend: qx.core.Object,
   type: "singleton",

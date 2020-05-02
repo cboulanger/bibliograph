@@ -17,6 +17,9 @@ tool/env/http-server start
 
 # fixes
 docker exec -it http-server sh -c 'echo "FcgidIOTimeout 600" >>/etc/apache2/conf.d/phpfarm.conf'
+docker exec -it http-server sh -c 'echo "FcgidConnectTimeout 20" >>/etc/apache2/conf.d/phpfarm.conf'
+docker exec -it http-server sh -c 'echo "FcgidBusyTimeout 3600" >>/etc/apache2/conf.d/phpfarm.conf'
+
 # additional packages
 docker exec -it http-server apt-get update > /dev/null
 docker exec -it http-server apt-get install git unzip mysql-client -y > /dev/null
