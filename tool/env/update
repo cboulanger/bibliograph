@@ -5,12 +5,15 @@ set -e
 
 source tool/env/check
 
-echo " >>> Updating packages..."
+source tool/env/install-libs
+
+echo ">>> Updating qooxdoo..."
+npm install @qooxdoo/compiler
+
+echo ">>> Updating packages..."
 pushd src/client/bibliograph >/dev/null
-qx pkg upgrade --prereleases --releases-only
+npx qx pkg upgrade --prereleases --releases-only
 popd >/dev/null
 
-echo " >>> Updating composer packages..."
+echo ">>> Updating composer packages..."
 tool/dev/composer update
-
-source tool/env/install-libs

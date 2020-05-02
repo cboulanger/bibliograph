@@ -1,7 +1,7 @@
 #!/bin/env bash
 
 # Install needed GitHub repos
-echo " >>> Cloning required github repositories..."
+echo ">>> Cloning required github repositories..."
 
 declare -a arr=(
   "cboulanger/yii2-jsonrpc"
@@ -13,13 +13,13 @@ for repo in "${arr[@]}"
 do
   dir=./src/lib/$(basename $repo)
   if [ -d "$dir" ]; then
-    echo "Updating $repo..."
+    echo " - Updating $repo..."
     pushd $dir > /dev/null || exit 1
     git pull
     [[ -f package.json ]] && npm install
     popd > /dev/null
   else
-    echo "Checking out $repo..."
+    echo " - Checking out $repo..."
     uri="https://github.com/$repo.git"
     git clone $uri --depth 1 $dir
     pushd $dir > /dev/null || exit 1

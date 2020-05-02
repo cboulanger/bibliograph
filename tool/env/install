@@ -4,6 +4,9 @@
 source tool/env/check
 source ./tool/lib/functions.sh
 
+tool/env/servers-stop
+docker system prune -f
+
 echo " >>> Downloading PHPFarm image"
 docker pull cboulanger/docker-phpfarm
 
@@ -21,22 +24,21 @@ docker exec -it http-server apt-get install git unzip mysql-client -y > /dev/nul
 echo ">>> Installing composer ..."
 EXPECTED_SIGNATURE="$(wget -q -O - https://composer.github.io/installer.sig)"
 tool/dev/php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" || exit 1
-ACTUAL_SIGNATURE="$(tool/dev/php -r "echo hash_file('sha384', 'composer-setup.php');")"
+ACTUAL_SIGNATURE=$(tool/dev/php -r "echo hash_file('sha384', 'composer-setup.php');")
 
 if [ "$EXPECTED_SIGNATURE" != "$ACTUAL_SIGNATURE" ]
 then
     >&2 echo 'ERROR: Invalid installer signature'
-    rm src/server/composer-setup.php
+    rm composer-setup.php
     exit 1
 fi
 
 tool/dev/php composer-setup.php --install-dir=src/lib #--quiet
 RESULT=$?
-rm src/server/composer-setup.php
+rm composer-setup.php
 if [ $RESULT -eq 1 ]; then
   >&2 echo "ERROR: Failed to setup composer ..."
   exit 1
 fi
-
 
 source tool/env/update

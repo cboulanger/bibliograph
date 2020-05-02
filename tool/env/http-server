@@ -26,14 +26,12 @@ start)
     >&2 echo 'ERROR: http server could not be started.'
     exit 1
   fi
-  docker logs -f http-server &> $PWD/log/http/combined.log &
   [ -d $PWD/data/docker/http ] || mkdir -p $PWD/data/docker/http
-  echo "$!" > $PWD/data/docker/http/docker-logs.pid
+  docker logs -f http-server &> $PWD/log/http/combined.log &
   echo "Server started. PHP Versions 7.0-7.4 on ports 8070-8074."
   ;;
 stop)
   echo ">>> Stopping http server..."
-  kill -9 $(cat $PWD/data/docker/http/docker-logs.pid)
   docker stop http-server > /dev/null
   docker rm http-server > /dev/null
   if [ $? != 0 ]; then

@@ -19,7 +19,7 @@ declare -a suites=("${@:-${default[@]}}")
 
 log_heading "Running codeception suites '${suites[*]}' "
 
-source tool/env/envvars-check
+source tool/env/envvars-export
 source tool/test/setup/create-mysql-user
 source tool/test/setup/check-mysql
 

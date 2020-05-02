@@ -3,7 +3,7 @@
 # Compiles and starts the given app in the browser
 set -o errexit
 source tool/env/envvars-load
-source tool/env/envvars-check
+source tool/env/envvars-export
 
 COMPILE_PATH=src/client/bibliograph
 APP=${1:-bibliograph}
