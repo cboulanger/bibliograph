@@ -26,7 +26,7 @@ popd > /dev/null
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
   echo ">>> Opening app in browser ..."
-  open -a "Google Chrome" "$BIB_SERVER_URL/$APP_PATH/"
+  open -a "Google Chrome" "$BIB_SERVER_URL/$APP_PATH"
   # send Alt+Command+I to open Web inspector
   osascript -e 'tell application "System Events" to keystroke "i" using {option down, command down}'
 fi

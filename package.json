@@ -20,14 +20,15 @@
   "scripts": {
     "env:install": "./tool/env/install",
     "env:update": "./tool/env/update",
-    "env:start-servers": "tool/env/servers-start",
-    "env:stop-servers": "tool/env/servers-stop",
+    "env:servers:start": "tool/env/servers-start",
+    "env:servers:stop+remove": "tool/env/servers-stop",
     "dev:compile-watch": "cd src/client/bibliograph && npx qx compile --watch",
     "dev:cleanup": "cd src/client/bibliograph && npx qx clean",
     "dev:extract-translations": "cd src/server && php yii message config/i18n.php",
     "test:codeception:all": "tool/test/codeception",
     "test:codeception:custom": "tool/test/codeception \"api modules/BackupCest --env setup -vv\"",
-    "test:testtapper": "./tool/test/testtapper"
+    "test:testtapper:all": "./tool/test/testtapper",
+    "test:testtapper:custom": "./tool/test/testtapper bibliograph-test bibliograph.test.t2.Setup"
   },
   "_old_scripts": {
     "Create new migration": "build/script/run-in-new-terminal $(pwd)/build/script/create-migration",

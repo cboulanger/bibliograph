@@ -1,6 +1,14 @@
 #!/bin/bash
 
 # Compiles and starts the testrunner app in the browser
+# usage: tool/test/testtapper <application name> <optional: class to be tested>
+
+APP_NAME=${1:-bibliograph-test}
+TESTCLASS=$2
+if [ "$TESTCLASS" != "" ]; then
+  APP_NAME="$APP_NAME?class=$TESTCLASS"
+fi
+
 set -o errexit
 source test/.env
 source tool/env/check
@@ -13,4 +21,4 @@ source tool/test/setup/check-mysql
 source tool/test/setup/reset-data
 
 export BIB_SERVER_URL
-tool/run/app bibliograph-test compile-test.json
+tool/run/app $APP_NAME compile-test.json

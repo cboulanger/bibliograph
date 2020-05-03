@@ -2,6 +2,10 @@
 //
 // Bibliograph server entry point for tests
 //
+
+ini_set('max_execution_time', 300); //300 seconds = 5 minutes
+set_time_limit(300);
+
 const YII_DEBUG=true;
 const YII_ENV_TEST=true;
 define('APP_ROOT_DIR', realpath(__DIR__ . "/../../.."));
