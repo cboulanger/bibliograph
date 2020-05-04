@@ -6,14 +6,7 @@ use ForceUTF8\Encoding;
 use Yii;
 
 /**
- * This Response component adds an event transport layer to the
- * JSONRPC response
- * Event Transport protocol:
- * {
- *   "type" : "ServiceResult"
- *   "events" : [ { "name": "...", "data": <event data> }],
- *   "data" : <result data>
- * }
+ * This Response component wich takes care of invalid utf-8 in the data
  */
 class FixUtf8ProblemsResponse extends \yii\web\Response
 {

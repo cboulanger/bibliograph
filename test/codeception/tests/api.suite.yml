@@ -15,7 +15,7 @@ modules:
 env:
     xdebug:
     development:
-    testing:
-    setup:
+    with-data:
+    empty-database:
     upgradev2:
     upgradev3:

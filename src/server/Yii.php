@@ -17,8 +17,8 @@ class Yii extends \yii\BaseYii
  *
  * @property \yii\web\User $user
  *    The user component. This property is read-only. Extended component.
- * @property \yii\log\FileTarget $log
- *    The log component
+ * @property \yii\log\Dispatcher $log
+ *    The log dispatcher component
  * @property \lib\components\FixUtf8ProblemsResponse $response
  *    The response component. This property is read-only. Extended component.
  * @property \lib\components\Configuration $config

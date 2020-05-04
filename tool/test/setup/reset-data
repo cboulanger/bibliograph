@@ -4,6 +4,7 @@ source tool/test/setup/drop-database
 source tool/test/setup/create-database
 
 echo ">>> Deleting log and output data files..."
-[[ -f logs/app/app.log ]] && rm logs/app/app.log
-[[ -f logs/app/error.log ]] && rm logs/app/error.log
+[[ -f log/app/app.log ]] && rm log/app/app.log
+[[ -f log/app/error.log ]] && rm log/app/error.log
+[[ -f log/codeception.migration.log ]] && rm log/codeception.migration.log
 rm test/codeception/_output/*fail* || true

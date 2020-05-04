@@ -80,3 +80,9 @@ defined('TMP_PATH') or define('TMP_PATH', sys_get_temp_dir());
  * set true for a workaround
  */
 defined('JSON_RPC_USE_PAYLOAD_TOKEN_AUTH') or define('JSON_RPC_USE_PAYLOAD_TOKEN_AUTH', false);
+
+/**
+ * The time in seconds the execution of a request is allowed to last before a response is returned
+ * that will trigger a new request to handle the remaining tasks
+ */
+defined('REQUEST_EXECUTION_THRESHOLD') or define('REQUEST_EXECUTION_THRESHOLD', 10);

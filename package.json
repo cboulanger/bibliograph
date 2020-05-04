@@ -26,7 +26,7 @@
     "dev:cleanup": "cd src/client/bibliograph && npx qx clean",
     "dev:extract-translations": "cd src/server && php yii message config/i18n.php",
     "test:codeception:all": "tool/test/codeception",
-    "test:codeception:custom": "tool/test/codeception \"api modules/BackupCest --env setup -vv\"",
+    "test:codeception:custom": "tool/test/codeception \"api AASetupControllerCest --env with-data -vv\"",
     "test:testtapper:all": "./tool/test/testtapper",
     "test:testtapper:custom": "./tool/test/testtapper bibliograph-test bibliograph.test.t2.Setup"
   },
@@ -38,7 +38,7 @@
     "Run production build": "build/script/dist-run",
     "Clean up production build": "build/script/dist-clean"
   },
-  "author": "",
+  "author": "Christian Boulanger (@cboulanger) info@bibliograph.org",
   "license": "ISC",
   "dependencies": {
     "@qooxdoo/compiler": "^1.0.0-beta.20200502-0822",

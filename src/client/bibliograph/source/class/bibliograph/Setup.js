@@ -73,8 +73,7 @@ qx.Class.define("bibliograph.Setup", {
     /**
      * Dummy method to mark dynamically generated messages for translation
      */
-    markForTranslation : function()
-    {
+    markForTranslation : function() {
       this.tr("No connection to server.");
       this.tr("Loading folder data ...");
     },
@@ -85,13 +84,11 @@ qx.Class.define("bibliograph.Setup", {
     ---------------------------------------------------------------------------
     */
 
-    boot : async function()
-    {
-
+    boot : async function() {
       //  Mixes `getApplication()` into all qooxdoo objects
-      qx.Class.include( qx.core.Object, qcl.application.MGetApplication );
+      qx.Class.include(qx.core.Object, qcl.application.MGetApplication);
       // Mixes `widgetId` property into all qooxdoo objects
-      qx.Class.include( qx.core.Object, qcl.application.MWidgetId );
+      qx.Class.include(qx.core.Object, qcl.application.MWidgetId);
 
       this.setupClipboard();
 
@@ -185,22 +182,22 @@ qx.Class.define("bibliograph.Setup", {
     /**
      * Save some intial application states which would otherwise be overwritten
      */
-    saveApplicationState : function(){
+    saveApplicationState : function() {
       let app = this.getApplication();
       this.__itemView = app.getStateManager().getState("itemView");
       this.__folderId = app.getStateManager().getState("folderId");
-      this.__query    = app.getStateManager().getState("query");
-      this.__modelId  = app.getStateManager().getState("modelId");
+      this.__query = app.getStateManager().getState("query");
+      this.__modelId = app.getStateManager().getState("modelId");
     },
 
     /**
      * Creates the blocker for modal popupus
      */
-    createBlocker : function(){
+    createBlocker : function() {
       let app = this.getApplication();
       let blocker = new qx.ui.core.Blocker(app.getRoot());
-      blocker.setOpacity( 0.5 );
-      blocker.setColor( "black" );
+      blocker.setOpacity(0.5);
+      blocker.setColor("black");
       app.__blocker = blocker;
     },
 
@@ -208,16 +205,17 @@ qx.Class.define("bibliograph.Setup", {
      * Sets the locale according to the browser settings.
      * This can be overridden by a config value
      */
-    setupUiTranslations : function()
-    {
+    setupUiTranslations : function() {
       let confMgr = this.getApplication().getConfigManager();
       let localeManager = qx.locale.Manager.getInstance();
       let locales = localeManager.getAvailableLocales().sort();
       let currentLocale = localeManager.getLocale();
       this.info("Browser locale: " + currentLocale);
       // override locale from config
-      confMgr.addListenerOnce( "change", e => {
-        if (e.getData() !== "application.locale") return;
+      confMgr.addListenerOnce("change", e => {
+        if (e.getData() !== "application.locale") {
+ return;
+}
         let localeFromConfig = confMgr.getKey("application.locale");
         if (localeFromConfig && localeFromConfig !== localeManager.getLocale()) {
           this.info(`Switching locale to '${localeFromConfig}' as per user configuration.`);
@@ -242,7 +240,7 @@ qx.Class.define("bibliograph.Setup", {
      * "bibliograph.setup.done" message.
      * @return {Promise<void>}
      */
-    checkServerSetup : async function(){
+    checkServerSetup : async function() {
       // 'await' omitted in the next line, since the message is what we're waiting for
       // this allows the server to interact with the user before setup is completed
       // (i.e. through Wizard or Dialogs)
@@ -256,15 +254,15 @@ qx.Class.define("bibliograph.Setup", {
      * anomymously with the server.
      * @return {Promise<void>}
      */
-    authenticate : async function(){
+    authenticate : async function() {
       let am = bibliograph.AccessManager.getInstance();
       let token = am.getToken();
       let client = this.getApplication().getRpcClient("access");
-      if( ! token ) {
+      if (!token) {
       this.info("Authenticating with server...");
-      let response = await client.send("authenticate",[]);
-      if( ! response ) {
-        return this.error("Cannot authenticate with server: " + client.getErrorMessage() );
+      let response = await client.send("authenticate", []);
+      if (!response) {
+        return this.error("Cannot authenticate with server: " + client.getErrorMessage());
       }
       let { message, token, sessionId } = response;
       this.info(message);
@@ -273,7 +271,7 @@ qx.Class.define("bibliograph.Setup", {
       am.setSessionId(sessionId);
       this.info("Acquired access token.");
       } else {
-      this.info("Got access token from session storage" );
+      this.info("Got access token from session storage");
       }
     },
 
@@ -281,7 +279,7 @@ qx.Class.define("bibliograph.Setup", {
      * Loads the configuration values
      * @return {Promise<void>}
      */
-    loadConfig : async function(){
+    loadConfig : async function() {
       this.info("Loading config values...");
       await this.getApplication().getConfigManager().init().load();
       this.info("Config values loaded.");
@@ -291,7 +289,7 @@ qx.Class.define("bibliograph.Setup", {
      * Loads user data including permissions
      * @return {Promise<void>}
      */
-    loadUserdata : async function(){
+    loadUserdata : async function() {
       this.info("Loading userdata...");
       await this.getApplication().getAccessManager().init().load();
       this.info("Userdata loaded.");
@@ -300,21 +298,20 @@ qx.Class.define("bibliograph.Setup", {
     /**
      * Loads the plugins
      */
-    loadPlugins : async function()
-    {
-      for( let pluginNamespace in bibliograph.plugins ) {
+    loadPlugins : async function() {
+      for (let pluginNamespace in bibliograph.plugins) {
         // @todo do not initialize diabled plugins/modules
         //let key = `modules.`;
         //let enabled = this.getApplication().getConfigManager().getKey(key);
         let plugin;
         try {
           plugin = bibliograph.plugins[pluginNamespace].Plugin.getInstance();
-        } catch(e){
+        } catch (e) {
           this.warn(`Could not instantiate plugin '${pluginNamespace}': ${e}`);
         }
         try {
           let message = plugin.init();
-          this.info( message || `Initialized plugin '${plugin.getName()}'`);
+          this.info(message || `Initialized plugin '${plugin.getName()}'`);
         } catch (e) {
           console.log(e);
           this.warn(`Could not initialize plugin '${plugin.getName()}': ${e}`);
@@ -325,17 +322,16 @@ qx.Class.define("bibliograph.Setup", {
     /**
      * Initialize  subscribers for server messages
      */
-    initSubscribers : function()
-    {
+    initSubscribers : function() {
       let bus = qx.event.message.Bus.getInstance();
       let app = this.getApplication();
       let messages = bibliograph.Setup.messages;
 
       // listen to reload event
-      bus.subscribe(messages.RELOAD_APPLICATION, () => window.location.reload() );
+      bus.subscribe(messages.RELOAD_APPLICATION, () => window.location.reload());
 
       // remotely log to the browser console
-      bus.subscribe(messages.LOG_TO_CONSOLE, e => console.log(e.getData()) );
+      bus.subscribe(messages.LOG_TO_CONSOLE, e => console.log(e.getData()));
 
       // server message to force logout the user
       bus.subscribe(messages.LOGOUT, () => this.logout());
@@ -343,7 +339,7 @@ qx.Class.define("bibliograph.Setup", {
       // server message to set model type and id
       bus.subscribe(messages.SET_MODEL, e => {
         let data = e.getData();
-        if ( data.datasource === app.getDatasource()) {
+        if (data.datasource === app.getDatasource()) {
           app.setModelType(data.modelType);
           app.setModelId(data.modelId);
         }
@@ -358,40 +354,40 @@ qx.Class.define("bibliograph.Setup", {
       // reload the main list view
       bus.subscribe(messages.RELOAD_LISTVIEW, e => {
         let data = e.getData();
-        if (data.datasource !== app.getDatasource())return;
+        if (data.datasource !== app.getDatasource()) {
+         return;
+        }
         qx.core.Id.getQxObject("table-view").reload();
       });
 
       // show the login dialog
-      bus.subscribe(messages.SHOW_LOGIN_DIALOG, ()=>{
+      bus.subscribe(messages.SHOW_LOGIN_DIALOG, () => {
         app.getWidgetById("app/windows/login").show();
       });
 
       // execute an arbitrary JSONRPC method
       bus.subscribe(messages.EXECUTE_JSONRPC, e => {
-        let [service,method,params] = e.getData();
-        app.getRpcClient(service).send(method,params);
+        let [service, method, params] = e.getData();
+        app.getRpcClient(service).send(method, params);
       });
-
     },
 
     /**
      * Setup clipboard synchronization with server
      */
-    setupClipboard: function()
-    {
+    setupClipboard: function() {
       let bus = qx.event.message.Bus.getInstance();
       let app = this.getApplication();
       let clipboard = app.getClipboardManager();
       this.__updatingClipboardFromServer = false;
       bus.subscribe("clipboard.add", e => {
         this.__updatingClipboardFromServer = true;
-        clipboard.addData( e.getData().mime_type, e.getData().data );
+        clipboard.addData(e.getData().mime_type, e.getData().data);
         this.__updatingClipboardFromServer = false;
       });
-      clipboard.addListener("changeData",e => {
+      clipboard.addListener("changeData", e => {
         let mimeType = e.getData();
-        if( ! this.__updatingClipboardFromServer ){
+        if (!this.__updatingClipboardFromServer) {
           rpc.Clipboard.add(mimeType, clipboard.getData(mimeType));
         }
       });
@@ -400,8 +396,7 @@ qx.Class.define("bibliograph.Setup", {
     /**
      * Restores the state of the origininal URL
      */
-    restoreApplicationState : function()
-    {
+    restoreApplicationState : function() {
       let app = this.getApplication();
       if (this.__itemView) {
         app.setItemView(this.__itemView);
@@ -410,20 +405,22 @@ qx.Class.define("bibliograph.Setup", {
         let selectedIds = [];
         this.__selectedIds.split(",").forEach(function(id) {
           id = parseInt(id);
-          if (id && !isNaN(id))selectedIds.push(id);
+          if (id && !isNaN(id)) {
+           selectedIds.push(id);
+          }
         }, this);
         app.setSelectedIds(selectedIds);
       }
       if (this.__folderId && !isNaN(parseInt(this.__folderId))) {
         this.info("Restoring folder id: " + this.__folderId);
-        app.setFolderId(parseInt(this.__folderId))
+        app.setFolderId(parseInt(this.__folderId));
       } else if (this.__query) {
         this.info("Restoring query: " + this.__query);
         app.setQuery(this.__query);
       }
       if (this.__modelId && !isNaN(parseInt(this.__modelId))) {
         this.info("Restoring model id: " + this.__modelId);
-        app.setModelId(parseInt(this.__modelId))
+        app.setModelId(parseInt(this.__modelId));
       }
     },
 
@@ -432,15 +429,10 @@ qx.Class.define("bibliograph.Setup", {
      * happens
      */
     startPolling : async function() {
-      let delayInMs = await this.getApplication().getRpcClient("message").send("getMessages");
-      if( delayInMs ){
-        qx.lang.Function.delay(this.startPolling,delayInMs,this);
+      let delayInMs = await this.getApplication().getRpcClient("message").request("getMessages");
+      if (delayInMs) {
+        qx.lang.Function.delay(this.startPolling, delayInMs, this);
       }
-    },
-
-    /** Applies the foo property */
-    _applyFoo: function(value, old) {
-      //
     }
   }
 });

@@ -34,18 +34,31 @@ use lib\channel\Channel;
  */
 class TestController extends AppController
 {
+
+  protected $isPersistent = true;
+  protected $foo;
+  protected $bar;
+
   /**
    * @inheritDoc
    *
    * @var array
    */
-  protected $noAuthActions = ["throw-error"];
+  protected $noAuthActions = ["throw-error", "test-persistence"];
 
   public function actionThrowError()
   {
     throw new \InvalidArgumentException("Testing invalid argument exception");
   }
 
+  public function actionTestPersistence($foo = null, $bar = null) {
+    if ($foo) {
+      $this->foo = $foo;
+      $this->bar = $bar;
+      return "OK";
+    }
+    return [$this->foo, $this->bar];
+  }
 
   public function actionError()
   {

@@ -26,27 +26,36 @@ class AASetupControllerCest
    * This calls the setup action with the migrations already applied.
    *
    * @param ApiTester $I
-   * @env testing
+   * @env with-data
    * @return void
    * @throws Exception
    */
-  public function tryNormalSetupWithLatestMigrationsApplied(ApiTester $I)
+  public function tryNormalSetup(ApiTester $I)
   {
+    $I->amGoingTo("Setup the application");
     $I->sendJsonRpcRequest('setup','setup');
+    $done = false;
+    do {
+      try {
+        $I->seeServerEvent("bibliograph.setup.next");
+        $I->sendJsonRpcRequest('setup','run-next');
+      } catch (\PHPUnit\Framework\AssertionFailedError $e) {
+         $done = true;
+      }
+    } while (!$done);
     $I->seeServerEvent("bibliograph.setup.done");
   }
 
   /**
    * This calls the setup action with an empty database and no migrations applied.
    * @param ApiTester $I
-   * @env setup
+   * @env empty-database
    * @return void
    * @throws Exception
    */
   public function trySetupWithEmptyDatabase(ApiTester $I)
   {
-    $I->sendJsonRpcRequest('setup','setup');
-    $I->seeServerEvent("bibliograph.setup.done");
+    $this->tryNormalSetup($I);
     $I->seeResponseContains("Found empty database and applied new migrations for version $this->version");
     $I->seeResponseContains("No schema migrations necessary.");
   }
@@ -61,8 +70,7 @@ class AASetupControllerCest
    */
   public function tryUpgradeFromV2(ApiTester $I)
   {
-    $I->sendJsonRpcRequest('setup','setup');
-    $I->seeServerEvent("bibliograph.setup.done");
+    $this->tryNormalSetup($I);
     $I->seeResponseContains("Migrated data from Bibliograph v2 and applied new migrations for version $this->version");
     $I->seeResponseContains("Migrated schema(s) bibliograph_datasource.");
   }
