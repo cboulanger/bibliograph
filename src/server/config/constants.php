@@ -8,7 +8,7 @@ defined("YII_DEBUG") or define( "YII_DEBUG" , isset($_SERVER['YII_DEBUG'])?$_SER
 /*
  * YII environment: prod/dev/test
  */
-defined("YII_ENV") or define( "YII_ENV" , isset($_SERVER['YII_ENV'])?$_SERVER['YII_ENV']:'prod');
+defined("YII_ENV") or define( "YII_ENV", isset($_SERVER['YII_ENV']) ? $_SERVER['YII_ENV'] : 'prod');
 
 /*
  * The path to the root directory containing the complete project
@@ -85,4 +85,4 @@ defined('JSON_RPC_USE_PAYLOAD_TOKEN_AUTH') or define('JSON_RPC_USE_PAYLOAD_TOKEN
  * The time in seconds the execution of a request is allowed to last before a response is returned
  * that will trigger a new request to handle the remaining tasks
  */
-defined('REQUEST_EXECUTION_THRESHOLD') or define('REQUEST_EXECUTION_THRESHOLD', 10);
+defined('REQUEST_EXECUTION_THRESHOLD') or define('REQUEST_EXECUTION_THRESHOLD', 5);

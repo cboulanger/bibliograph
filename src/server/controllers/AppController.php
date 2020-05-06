@@ -63,16 +63,6 @@ class AppController extends Controller
   protected $noAuthActions = [];
 
   /**
-   * AppController constructor.
-   * @inheritDoc
-   */
-  function __construct($id, $module, $config = [])
-  {
-    parent::__construct($id, $module, $config);
-    $this->_restoreAttributes(static::class);
-  }
-
-  /**
    * @inheritdoc
    */
   public function behaviors()
@@ -91,74 +81,6 @@ class AppController extends Controller
     return $behaviors;
   }
 
-  //-------------------------------------------------------------
-  // persistence
-  //-------------------------------------------------------------
-
-  /**
-   * Whether the class properties should be persisted
-   * @var bool
-   */
-  protected $isPersistent = false;
-
-  /**
-   * An id to identify the persistence data. Defaults to the full class name
-   * including namespace
-   * @var string
-   */
-  protected $persistenceId;
-
-  /**
-   * The persistence mode, defaults to "session".
-   * @var string
-   */
-  protected $persistenceMode = "session";
-
-
-  /**
-   * Implememts object property persistence. Currently, only "session" is supported.
-   * @param string $persistenceId Optional id that overrides $this->persistenceId
-   * @throws Exception
-   */
-  protected function _restoreAttributes($persistenceId=null)
-  {
-    if ($persistenceId) {
-      $this->persistenceId = $persistenceId;
-    }
-    $eventName = Application::EVENT_AFTER_REQUEST;
-    if ($this->isPersistent) {
-      switch ($this->persistenceMode) {
-        case "session":
-          $properties = Yii::$app->session->get($this->persistenceId);
-          if (is_array($properties)) {
-            Yii::debug(">>> Unserializing properties for $this->persistenceId", __METHOD__);;
-            foreach ($properties as $property => $value) {
-              $this->$property = $value;
-            }
-          }
-          break;
-        default:
-          throw new Exception("Unsupported persistence mode '$this->persistenceMode'.");
-      }
-    }
-  }
-
-  protected function _saveAttributes()
-  {
-    if ($this->isPersistent) {
-      switch ($this->persistenceMode) {
-        case "session":
-          $properties = [];
-          foreach( get_object_vars($this) as $property => $value) {
-            $properties[$property] = $value;
-          }
-          Yii::$app->session->set($this->persistenceId, $properties);
-          break;
-        default:
-          throw new Exception("Unsupported persistence mode '$this->persistenceMode'.");
-      }
-    }
-  }
 
   //-------------------------------------------------------------
   // Helpers for returning data to the user

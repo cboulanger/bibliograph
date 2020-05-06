@@ -25,6 +25,7 @@ use app\models\BibliographicDatasource;
 use app\models\Datasource;
 use Illuminate\Support\Str;
 use Yii;
+use yii\base\Application;
 use yii\db\Exception;
 use Stringy\Stringy;
 use app\models\Schema;
@@ -34,6 +35,7 @@ use lib\exceptions\{RecordExistsException, SetupException, SetupFatalException, 
 use lib\components\ConsoleAppHelper as Console;
 use lib\Module;
 use yii\helpers\Html;
+use yii\web\UnauthorizedHttpException;
 
 
 /**
@@ -60,11 +62,6 @@ class SetupController extends \app\controllers\AppController
    * Log category
    */
   const CATEGORY = "setup";
-
-  /**
-   * @var bool
-   */
-  protected $isPersistent = true;
 
   /**
    * @inheritDoc
@@ -136,6 +133,13 @@ class SetupController extends \app\controllers\AppController
    * @var bool
    */
   protected $batchExecuteSetupMethods = true;
+
+  /**
+   * The session id of the client that first calls this method, blocking further calls
+   * @var string
+   */
+  protected $initiatingSessionId = null;
+
 
 //-------------------------------------------------------------
   // HELPERS
@@ -215,10 +219,71 @@ class SetupController extends \app\controllers\AppController
     return true;
   }
 
+  /**
+   * Returns an id for caching setup data
+   * @return string
+   */
+  protected function cacheId() {
+    return md5(self::class);
+  }
+
+  /**
+   * Restore scalar properties from file cache
+   * @return array
+   */
+  protected function _restoreProperties()
+  {
+    $properties = unserialize(Yii::$app->cache->get($this->cacheId()));
+    if (is_array($properties)) {
+      //Yii::debug(">>> Restoring properties", __METHOD__);
+      //Yii::debug(array_keys($properties));
+      foreach ($properties as $property => $value) {
+        $this->$property = $value;
+      }
+      return $properties;
+    }
+    //Yii::debug(">>> No properties saved yet", __METHOD__);
+    return [];
+  }
+
+  /**
+   * Save all scalar properties of this instance to a file cache
+   */
+  protected function _saveProperties()
+  {
+    function is_array_with_scalars($value) {
+      return is_array($value) and array_reduce($value, function($carry, $item){
+        return $carry && is_scalar($item);
+      }, true);
+    }
+    $properties = [];
+    foreach( get_object_vars($this) as $property => $value) {
+      if (is_scalar($value) or is_array_with_scalars($value)) {
+        $properties[$property] = $value;
+      }
+    }
+    //Yii::debug(">>> Saving properties", __METHOD__);
+    Yii::$app->cache->set($this->cacheId(), serialize($properties));
+  }
+
+  /**
+   * Reset file cache
+   */
+  protected function _resetSavedProperties()
+  {
+    Yii::debug("Resetting saved properties", __METHOD__);
+    Yii::$app->cache->delete($this->cacheId());
+  }
+
 
   //-------------------------------------------------------------
   // ACTIONS
   //-------------------------------------------------------------
+
+  public function actionReset() {
+    $this->_resetSavedProperties();
+    return "Setup cache has been reset.";
+  }
 
   /**
    * Returns the application verision as per package.json
@@ -239,7 +304,16 @@ class SetupController extends \app\controllers\AppController
   }
 
   /**
-   * The setup action. Is called as first server method from the client
+   * The setup action. Is called as first server method from the client The result returned by
+   * the server contains diagnostic messages only. More important are the messages which are
+   * returned via JSON-RPC notifications:
+   *
+   * -  bibliograph.setup.wait: A setup process in already in progress. This message
+   * is dispatched when a different client has initiated the setup. The client should wait a few seconds and try again.
+   * - bibliograph.setup.next: The setup process is not finished yet, but has ended the request to avoid a timeout.
+   * The client should simply call the action again to continue the setup process.
+   * - bibliograph.setup.done: The setup has completed, the client can begin to interact with the backend.
+   * - bibliograph.setup.error
    */
   public function actionSetup()
   {
@@ -256,60 +330,81 @@ class SetupController extends \app\controllers\AppController
     if (!YII_ENV_TEST) {
       throw new \BadMethodCallException('setup/setup-version can only be called in test mode.');
     }
-    return $this->_setup($upgrade_to, $upgrade_from);
+    $this->upgrade_from = $upgrade_from;
+    $this->upgrade_to = $upgrade_to;
+    return $this->_setup();
   }
 
   /**
    * The setup action. Is called as first server method from the client
-   * @param string $upgrade_to (optional) The version to upgrade to. You should not set
-   * this parameter unless you know what you are doing.
-   * @param string $upgrade_from (optional) The version to upgrade from.You should not set
-   * this parameter unless you know what you are doing.
-   * @return array
+   * @return string
+   * @throws UserErrorException
    */
-  protected function _setup($upgrade_to = null, $upgrade_from = null)
+  protected function _setup()
   {
-    // this throws if ini file doesn't exist
-    $this->checkIfIniFileExists();
-    if (!$upgrade_from) {
-      try {
-        $upgrade_from = Yii::$app->config->getKey('app.version');
-      } catch (\InvalidArgumentException $e) {
-        // upgrading from version 2 where the config key doesn't exist
-        $upgrade_from = "2.x";
-        $this->isV2Upgrade = true;
-      } catch (\yii\db\Exception $e) {
-        // no tables exist yet, this is the first run of a fresh installation
-        $upgrade_from = "0.0.0";
-        $this->isNewInstallation = true;
-      } catch (yii\base\InvalidConfigException $e) {
-        // this happens deleting the tables in the database during development
-        // @todo
-        $upgrade_from = "0.0.0";
-        $this->isNewInstallation = true;
+    $properties = $this->_restoreProperties();
+    // Abort if other client has already started the setup
+    if ($this->initiatingSessionId and $this->initiatingSessionId != Yii::$app->session->id) {
+      $this->dispatchClientMessage("bibliograph.setup.wait");
+      return "Setup in progress. Try again later.";
+    }
+    $this->initiatingSessionId = Yii::$app->session->id;
+    // if no setup methods have been identified, this is the start of the setup sequence
+    if (count($this->setupMethods) == 0) {
+      $upgrade_from = $this->upgrade_from;
+      $upgrade_to = $this->upgrade_to;
+      // this throws if ini file doesn't exist
+      $this->checkIfIniFileExists();
+      if (!$upgrade_from) {
+        try {
+          $upgrade_from = Yii::$app->config->getKey('app.version');
+        } catch (\InvalidArgumentException $e) {
+          // upgrading from version 2 where the config key doesn't exist
+          $upgrade_from = "2.x";
+          $this->isV2Upgrade = true;
+        } catch (\yii\db\Exception $e) {
+          // no tables exist yet, this is the first run of a fresh installation
+          $upgrade_from = "0.0.0";
+          $this->isNewInstallation = true;
+        } catch (yii\base\InvalidConfigException $e) {
+          // this happens deleting the tables in the database during development
+          // @todo
+          $upgrade_from = "0.0.0";
+          $this->isNewInstallation = true;
+        }
       }
+      if (!$upgrade_to) {
+        $upgrade_to = Yii::$app->utils->version;
+      }
+      $this->upgrade_from = $upgrade_from;
+      $this->upgrade_to = $upgrade_to;
+      // compile list of setup methods
+      foreach (\get_class_methods($this) as $method) {
+        if (Str::startsWith($method, "setup")) {
+          $this->setupMethods[] = $method;
+        }
+      }
+      if (count($this->setupMethods)===0) {
+        throw new SetupException("No setup methods");
+      }
+      // visual marker in log file
+      Yii::debug(implode("\n", [
+          "",
+          "",
+          str_repeat("*", 80),
+          "",
+          "BIBLIOGRAPH SETUP",
+          "",
+          str_repeat("*", 80),
+          "",
+          "Session ID:" . Yii::$app->session->id,
+          "Authenticated user: " . (Yii::$app->user->identity ? Yii::$app->user->identity->id : "No."),
+          "Data version: $upgrade_from, code version: $upgrade_to.",
+          "Setup methods: \n  - " . implode("\n  - ", $this->setupMethods)
+      ]), 'marker');
     }
-    if (!$upgrade_to) {
-      $upgrade_to = Yii::$app->utils->version;
-    }
-    // @todo validate
-
-    // if application version has changed or first run, run setup methods
-    Yii::debug("Data version: $upgrade_from, code version: $upgrade_to.", __METHOD__);
-    // visual marker in log file
-    Yii::debug(
-      "\n\n\n" . str_repeat("*", 80) . "\n\n BIBLIOGRAPH SETUP\n\n" . str_repeat("*", 80) . "\n\n\n",
-      'marker'
-    );
-    if ($upgrade_to !== $upgrade_from) {
-      Yii::info("Application version has changed from '$upgrade_from' to '$upgrade_to', running setup methods");
-    }
-
-    $this->upgrade_from = $upgrade_from;
-    $this->upgrade_to = $upgrade_to;
-    $this->actionRunNext();
+    return $this->_runNextMethod();
   }
-
 
   /**
    * Run the next of the existing setup methods, i.e. methods of this class that have the prefix 'setup'.
@@ -326,52 +421,44 @@ class SetupController extends \app\controllers\AppController
    *  - If a method is successful, a "bibliograph.setup.next" event is sent to the client, which then starts
    *    the next call to this action.
    *
-   * @throws SetupException
    * @return mixed
+   * @throws \yii\base\Exception
+   * @throws SetupException
    */
-  protected function actionRunNext()
+  protected function _runNextMethod()
   {
-    if (count($this->setupMethods)===0) {
-      // compile list of setup methods
-      foreach (\get_class_methods($this) as $method) {
-        if (Str::startsWith($method, "setup")) {
-          $this->setupMethods[] = $method;
-        }
-      }
-      if (count($this->setupMethods)===0) {
-        throw new SetupException("No setup methods");
-      }
-      Yii::debug("Setup methods: " . implode(", ", $this->setupMethods), __METHOD__);
-    }
     $method = array_shift($this->setupMethods);
     Yii::info("Calling '$method'...", self::CATEGORY);
     try {
       $result = $this->$method();
+      if (!$result) {
+        $result = "Setup method $method completed successfully.";
+      }
     } catch (SetupException $e) {
-      Yii::error("Collecting setup exception: " . $e->getMessage());
-      $this->errors[] = $e->getMessage();
-    }
-    if (!$result) {
-      $result = "Setup method $method completed successfully.";
+      $result = $e->getMessage();
+      Yii::error("Collecting setup exception: $result ");
+      $this->errors[] = $result;
     }
     Yii::info($result);
     $this->messages[] = $result;
-    $this->_saveAttributes(); // should be done via event:
     $time = Yii::$app->log->logger->getElapsedTime();
     if (count($this->setupMethods) > 0) {
       if ($this->batchExecuteSetupMethods and  $time < REQUEST_EXECUTION_THRESHOLD) {
         // run the next method
         Yii::debug("Execution took $time seconds so far. Running next method in same request ...");
-        return $result . "; " . $this->actionRunNext();
+        return $result . "\n" . $this->_runNextMethod();
+      } else {
+        Yii::debug(">>> Returning to client for new request to execute remaining " . count($this->setupMethods) . " methods ...");
+        $this->dispatchClientMessage("bibliograph.setup.next");
+        $this->_saveProperties();
       }
-      Yii::debug(">>> Returning to client for new request to execute remaining " . count($this->setupMethods) . " methods ...");
-      $this->dispatchClientMessage("bibliograph.setup.next");
     } else {
       if (count($this->errors) > 0) {
         $this->dispatchClientMessage("bibliograph.setup.error", $this->errors);
       } else {
         $this->dispatchClientMessage("bibliograph.setup.done");
       }
+      $this->_resetSavedProperties();
     }
     return $result;
   }
@@ -408,7 +495,8 @@ class SetupController extends \app\controllers\AppController
     if (!$this->hasIni and YII_ENV_DEV and !\is_writable($config_dir)) {
       throw new SetupFatalException("The configuration directory needs to be writable in order to create an .ini file: $config_dir");
     } else if (YII_ENV_PROD and \is_writable($config_dir)) {
-      throw new SetupException("The configuration directory must not be writable in production mode: $config_dir");
+      return "Warning: The configuration directory must not be writable in production mode";
+      //throw new SetupException("The configuration directory must not be writable in production mode: $config_dir");
     } else {
       return 'File permissions ok.';
     }

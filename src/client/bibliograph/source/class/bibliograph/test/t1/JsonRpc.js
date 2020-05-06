@@ -5,23 +5,19 @@
 qx.Class.define("bibliograph.test.t1.JsonRpc", {
   extend: qx.dev.unit.TestCase,
   include: [
-    qx.test.io.jsonrpc.MAssert
+    qx.test.io.jsonrpc.MAssert,
+    bibliograph.test.MHelpers
   ],
   members: {
-    /**
-     * @var {qcl.io.jsonrpc.Client}
-     */
-    client: null,
-    
+  
     setUp () {
-      let url =`${location.protocol}//${location.host}/${qx.core.Environment.get("app.serverUrl")}/json-rpc`;
-      this.client = new qcl.io.jsonrpc.Client(url, "json-rpc-test");
-    },
-    
-    tearDown() {
-      this.client.dispose();
+      this.createClient("json-rpc-test");
     },
   
+    tearDown() {
+      this.disposeClient();
+    },
+    
     async "test: receive a notification from the server"() {
       let value = Math.PI;
       await this.client.request("notify-me", [value]);

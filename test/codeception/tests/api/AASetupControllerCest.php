@@ -33,17 +33,16 @@ class AASetupControllerCest
   public function tryNormalSetup(ApiTester $I)
   {
     $I->amGoingTo("Setup the application");
-    $I->sendJsonRpcRequest('setup','setup');
     $done = false;
     do {
+      $I->sendJsonRpcRequest('setup','setup');
       try {
         $I->seeServerEvent("bibliograph.setup.next");
-        $I->sendJsonRpcRequest('setup','run-next');
       } catch (\PHPUnit\Framework\AssertionFailedError $e) {
-         $done = true;
+        $I->seeServerEvent("bibliograph.setup.done");
+        $done = true;
       }
     } while (!$done);
-    $I->seeServerEvent("bibliograph.setup.done");
   }
 
   /**

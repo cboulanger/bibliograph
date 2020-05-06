@@ -4,46 +4,19 @@
 qx.Class.define("bibliograph.test.t3.Access", {
   extend: qx.dev.unit.TestCase,
   include: [
-    qx.test.io.jsonrpc.MAssert
+    qx.test.io.jsonrpc.MAssert,
+    bibliograph.test.MHelpers
   ],
   members: {
-    /**
-     * @var {qcl.io.jsonrpc.Client}
-     */
-    client: null,
-    
+  
     setUp () {
-      let url =`${location.protocol}//${location.host}/${qx.core.Environment.get("app.serverUrl")}/json-rpc`;
-      this.client = new qcl.io.jsonrpc.Client(url);
-      this.client.setErrorBehavior("debug");
-    },
-    
-    tearDown() {
-      this.client.dispose();
-    },
-    
-    //
-    // Helper methods
-    //
-    
-    async loginAnonymously() {
-      let result = await this.client.request("access.authenticate");
-      this.assertString(result.token);
-      this.assertNotEquals("", result.token);
-      this.client.setToken(result.token);
+      this.createClient();
     },
   
-    async loginWithPassword(username, password) {
-      let result = await this.client.request("access.authenticate", [username, password]);
-      this.assertString(result.token);
-      this.assertNotEquals("", result.token);
-      this.client.setToken(result.token);
+    tearDown() {
+      this.disposeClient();
     },
-    
-    //
-    // TESTS
-    //
-    
+  
     async "test: try to access method without authentication - should fail"() {
       try {
         await this.client.request("access.username");
