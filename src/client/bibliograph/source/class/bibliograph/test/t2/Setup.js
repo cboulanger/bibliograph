@@ -18,6 +18,31 @@ qx.Class.define("bibliograph.test.t2.Setup", {
       this.disposeClient();
     },
     
+    async callSetupMethod() {
+      let msg_next = 0;
+      let msg_done = false;
+      const bus = qx.event.message.Bus;
+      bus.subscribe("bibliograph.setup.next", async () => {
+        msg_next++;
+        console.log(`>>> Received message 'bibliograph.setup.next' ${msg_next} times.`);
+        let result = await this.client.request("setup.setup");
+        console.log(`>>> Received result '${result}'.`);
+      });
+      bus.subscribe("bibliograph.setup.error", e => {
+        throw new Error("Setup errors!" + e.getData());
+      });
+      bus.subscribe("bibliograph.setup.done", e => {
+        console.log(">>> Setup messages:\n" + e.getData().join("\n"));
+        msg_done = true;
+        bus.unsubscribe("bibliograph.*");
+        this.resume();
+      });
+      this.client.request("setup.setup").then(result => console.log(`>>> Received result '${result}'.`));
+      this.wait(30000, () => {
+        this.assertTrue(msg_done, "Message \"bibliograph.setup.done\" was not received.");
+      });
+    },
+    
     async "test: get version"() {
       let version = await this.client.request("setup.version");
       this.assertNotEquals("", version);
@@ -27,27 +52,12 @@ qx.Class.define("bibliograph.test.t2.Setup", {
       await this.client.request("setup.reset");
     },
     
-    async "test: call setup method"() {
-      let msg_next = 0;
-      let msg_done = false;
-      qx.event.message.Bus.subscribe("bibliograph.setup.next", async () => {
-        msg_next++;
-        console.log(`>>> Received message 'bibliograph.setup.next' ${msg_next} times.`);
-        let result = await this.client.request("setup.setup");
-        console.log(`>>> Received result '${result}'.`);
-      });
-      qx.event.message.Bus.subscribe("bibliograph.setup.error", e => {
-        throw new Error("Setup errors!" + e.getData());
-      });
-      qx.event.message.Bus.subscribe("bibliograph.setup.done", e => {
-        console.log(">>> Setup messages:\n" + e.getData().join("\n"));
-        msg_done = false;
-        this.resume();
-      });
-      this.client.request("setup.setup").then(result => console.log(`>>> Received result '${result}'.`));
-      this.wait(30000, () => {
-        this.assertTrue(msg_done, "Message \"bibliograph.setup.done\" was not received.");
-      });
+    async "test: call setup method for the first time"() {
+      await this.callSetupMethod();
+    },
+  
+    async "test: call setup method for the second time"() {
+      await this.callSetupMethod();
     },
     
     eof() {}

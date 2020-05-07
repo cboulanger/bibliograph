@@ -7,4 +7,7 @@ namespace lib\exceptions;
  * already exists
  * @package lib\exceptions
  */
-class RecordExistsException extends \yii\db\Exception{}
+class RecordExistsException extends Exception
+{
+  const CODE = Exception::CODE_RECORD_EXISTS;
+}

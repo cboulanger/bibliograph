@@ -9,7 +9,7 @@
 namespace lib\exceptions;
 
 
-class TimeoutException extends \RuntimeException
+class TimeoutException extends Exception
 {
-
+  const CODE = Exception::CODE_TIMEOUT;
 }
