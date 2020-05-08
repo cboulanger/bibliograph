@@ -12,35 +12,37 @@ qx.Class.define("bibliograph.test.t2.Setup", {
   
     setUp () {
       this.createClient();
+      this.bus = qx.event.message.Bus.getInstance();
     },
   
     tearDown() {
       this.disposeClient();
+      this.bus.removeAllSubscriptions();
+      this.bus.dispose();
     },
     
-    async callSetupMethod() {
+    callSetupMethod() {
       let msg_next = 0;
       let msg_done = false;
-      const bus = qx.event.message.Bus;
-      bus.subscribe("bibliograph.setup.next", async () => {
+      this.bus.subscribe("bibliograph.setup.next", async () => {
         msg_next++;
         console.log(`>>> Received message 'bibliograph.setup.next' ${msg_next} times.`);
         let result = await this.client.request("setup.setup");
         console.log(`>>> Received result '${result}'.`);
       });
-      bus.subscribe("bibliograph.setup.error", e => {
-        throw new Error("Setup errors!" + e.getData());
-      });
-      bus.subscribe("bibliograph.setup.done", e => {
+      this.bus.subscribeOnce("bibliograph.setup.done", e => {
         console.log(">>> Setup messages:\n" + e.getData().join("\n"));
         msg_done = true;
-        bus.unsubscribe("bibliograph.*");
         this.resume();
       });
-      this.client.request("setup.setup").then(result => console.log(`>>> Received result '${result}'.`));
+      const promise = this.client.request("setup.setup").then(result => {
+        console.log(`>>> Received result '${result}'.`);
+      });
+      console.log(">>> Calling wait()");
       this.wait(30000, () => {
         this.assertTrue(msg_done, "Message \"bibliograph.setup.done\" was not received.");
       });
+      return promise;
     },
     
     async "test: get version"() {
