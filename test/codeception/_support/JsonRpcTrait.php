@@ -6,7 +6,7 @@ use PHPUnit\Framework\ExpectationFailedException;
 
 trait JsonRpcTrait
 {
-   public $SERVER_EVENT_JSONRPC_METHOD_NAME = "bibliograph.jsonrpc.App.broadcastMessage";
+   public $SERVER_EVENT_JSONRPC_METHOD_NAME = "qcl.io.jsonrpc.MessageBus.dispatch";
    static protected $jsonrpc_id = 0;
 
   /*

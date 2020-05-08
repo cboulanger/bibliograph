@@ -23,15 +23,9 @@ class AASetupControllerCest
   }
 
   /**
-   * This calls the setup action with the migrations already applied.
-   *
    * @param ApiTester $I
-   * @env with-data
-   * @return void
-   * @throws Exception
    */
-  public function tryNormalSetup(ApiTester $I)
-  {
+  protected function runSetup($I) {
     $I->amGoingTo("Setup the application");
     $done = false;
     do {
@@ -46,6 +40,19 @@ class AASetupControllerCest
   }
 
   /**
+   * This calls the setup action with the migrations already applied.
+   *
+   * @param ApiTester $I
+   * @env with-data
+   * @return void
+   * @throws Exception
+   */
+  public function tryNormalSetup(ApiTester $I)
+  {
+    $this->runSetup($I);
+  }
+
+  /**
    * This calls the setup action with an empty database and no migrations applied.
    * @param ApiTester $I
    * @env empty-database
@@ -54,7 +61,7 @@ class AASetupControllerCest
    */
   public function trySetupWithEmptyDatabase(ApiTester $I)
   {
-    $this->tryNormalSetup($I);
+    $this->runSetup($I);
     $I->seeResponseContains("Found empty database and applied new migrations for version $this->version");
     $I->seeResponseContains("No schema migrations necessary.");
   }
@@ -69,7 +76,7 @@ class AASetupControllerCest
    */
   public function tryUpgradeFromV2(ApiTester $I)
   {
-    $this->tryNormalSetup($I);
+    $this->runSetup($I);
     $I->seeResponseContains("Migrated data from Bibliograph v2 and applied new migrations for version $this->version");
     $I->seeResponseContains("Migrated schema(s) bibliograph_datasource.");
   }
@@ -86,8 +93,7 @@ class AASetupControllerCest
   {
     $upgrade_from = $I->grabCurrentAppVersion();
     $upgrade_to = '3.0.0';
-    $I->sendJsonRpcRequest('setup','setup-version',[$upgrade_to]);
-    $I->seeServerEvent("bibliograph.setup.done");
+    $this->runSetup($I);
     $I->seeResponseContains("Found data for version $upgrade_from and applied new migrations for version $upgrade_to");
   }
 }
