@@ -10,7 +10,7 @@ a dockerized setup is used. You need the following prerequisites:
  - Docker (See installation instructions on https://www.docker.com/)
  - wget (on MacOs, use Homebrew and do `brew install wget`).
  
-Execute `tool/dev/install-dev-env` in the top level directory. 
+Execute `tool/env/install` in the top level directory. 
 
 This will provide you with the following dockerized services running in separate containers:
  - PHPFarm with php versions 7.0 - 7.4

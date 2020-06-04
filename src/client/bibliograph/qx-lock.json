@@ -34,19 +34,19 @@
     },
     {
       "library_name": "Qooxdoo API Viewer",
-      "library_version": "1.0.1",
-      "path": "qx_packages/qooxdoo_qxl_apiviewer_v1_0_1",
+      "library_version": "1.0.4",
+      "path": "qx_packages/qooxdoo_qxl_apiviewer_v1_0_4",
       "uri": "qooxdoo/qxl.apiviewer",
       "repo_name": "qooxdoo/qxl.apiviewer",
-      "repo_tag": "v1.0.1"
+      "repo_tag": "v1.0.4"
     },
     {
       "library_name": "versionlabel",
-      "library_version": "1.0.0",
-      "path": "qx_packages/qooxdoo_qxl_versionlabel_v1_0_0",
+      "library_version": "1.0.1",
+      "path": "qx_packages/qooxdoo_qxl_versionlabel_v1_0_1",
       "uri": "qooxdoo/qxl.versionlabel",
       "repo_name": "qooxdoo/qxl.versionlabel",
-      "repo_tag": "v1.0.0"
+      "repo_tag": "v1.0.1"
     },
     {
       "library_name": "Commandline Testrunner for Qooxdoo Apps",
@@ -58,11 +58,11 @@
     },
     {
       "library_name": "logpane",
-      "library_version": "1.0.0",
-      "path": "qx_packages/qooxdoo_qxl_logpane_v1_0_0",
+      "library_version": "1.0.1",
+      "path": "qx_packages/qooxdoo_qxl_logpane_v1_0_1",
       "uri": "qooxdoo/qxl.logpane",
       "repo_name": "qooxdoo/qxl.logpane",
-      "repo_tag": "v1.0.0"
+      "repo_tag": "v1.0.1"
     }
   ],
   "version": "2.1.0"
