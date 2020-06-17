@@ -41,20 +41,20 @@
       "repo_tag": "v1.0.4"
     },
     {
-      "library_name": "versionlabel",
-      "library_version": "1.0.1",
-      "path": "qx_packages/qooxdoo_qxl_versionlabel_v1_0_1",
-      "uri": "qooxdoo/qxl.versionlabel",
-      "repo_name": "qooxdoo/qxl.versionlabel",
-      "repo_tag": "v1.0.1"
-    },
-    {
       "library_name": "Commandline Testrunner for Qooxdoo Apps",
       "library_version": "0.5.1",
       "path": "qx_packages/qooxdoo_qxl_testtapper_v0_5_1",
       "uri": "qooxdoo/qxl.testtapper",
       "repo_name": "qooxdoo/qxl.testtapper",
       "repo_tag": "v0.5.1"
+    },
+    {
+      "library_name": "versionlabel",
+      "library_version": "1.0.1",
+      "path": "qx_packages/qooxdoo_qxl_versionlabel_v1_0_1",
+      "uri": "qooxdoo/qxl.versionlabel",
+      "repo_name": "qooxdoo/qxl.versionlabel",
+      "repo_tag": "v1.0.1"
     },
     {
       "library_name": "logpane",

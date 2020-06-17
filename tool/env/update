@@ -2,18 +2,15 @@
 # Update dependencies
 
 set -e
-
 source tool/env/check
-
 source tool/env/install-libs
 
-echo ">>> Updating qooxdoo..."
+echo ">>> Installing/updating Qooxdoo..."
 npm install @qooxdoo/compiler
 
-echo ">>> Updating packages..."
-pushd src/client/bibliograph >/dev/null
-npx qx pkg upgrade --prereleases --releases-only
-popd >/dev/null
+echo ">>> Installing/updating Qooxdoo packages..."
+npx qx package update --quiet
+npx qx package upgrade
 
-echo ">>> Updating composer packages..."
+echo ">>> Updating Composer packages..."
 tool/dev/composer update

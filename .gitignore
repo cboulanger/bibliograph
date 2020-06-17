@@ -7,6 +7,10 @@ npm-debug.log
 node_modules/
 package-lock.json
 
+# qooxdoo
+/compiled/
+/qx_packages/
+
 # other files
 .DS_Store
 .nvm

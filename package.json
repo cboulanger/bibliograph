@@ -41,8 +41,8 @@
   "author": "Christian Boulanger (@cboulanger) info@bibliograph.org",
   "license": "ISC",
   "dependencies": {
-    "@qooxdoo/compiler": "^1.0.0-beta.20200602-1225",
-    "@qooxdoo/eslint-config-jsdoc-disable": "^1.0.2",
+    "@qooxdoo/compiler": "^1.0.0-beta.20200613-2032",
+    "@qooxdoo/eslint-config-jsdoc-disable": "^1.0.3",
     "@qooxdoo/eslint-config-qx": "^1.3.5"
   },
   "devDependencies": {
@@ -51,7 +51,7 @@
     "dotenv": "^8.0.0",
     "eslint": "^6.1.0",
     "eslint-config-qx": "^0.2.6",
-    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-import": "^2.21.2",
     "github-remove-all-releases": "^1.0.1",
     "json-diff": "^0.5.4",
     "release-it": "^12.3.5"

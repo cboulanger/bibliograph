@@ -79,7 +79,6 @@ qx.Class.define("bibliograph.plugins.webservices.View",
   construct: function () {
     this.base(arguments);
     this.createUi();
-    this.setupScanner();
     this.createPopup();
 
     qx.lang.Function.delay(() => {
@@ -90,19 +89,19 @@ qx.Class.define("bibliograph.plugins.webservices.View",
           this.searchButton.setEnabled(true);
           this.listView.setEnabled(true);
           this.hidePopup();
-          if( this.getAutoimport() && this.getSearch() ){
+          if (this.getAutoimport() && this.getSearch()) {
            this.listView
              .getTable()
              .getSelectionManager()
              .getSelectionModel()
-             .setSelectionInterval(0,0);
+             .setSelectionInterval(0, 0);
            this.importSelected();
            this.setSearch(null);
            this.searchBox.focus();
           }
         };
         controller.addListener("blockLoaded", enableButtons);
-        controller.addListener("statusMessage", (e) => {
+        controller.addListener("statusMessage", e => {
           this.showPopup(e.getData());
           qx.lang.Function.delay(enableButtons, 1000, this);
         });
@@ -124,12 +123,11 @@ qx.Class.define("bibliograph.plugins.webservices.View",
     scannerButton : null,
     statusTextLabel: null,
 
-    _applyDatasource : function(value, old)
-    {
+    _applyDatasource : function(value, old) {
       if (value) {
-        this.datasourceSelectBox.getModel().forEach((item) => {
+        this.datasourceSelectBox.getModel().forEach(item => {
           if (item.getValue() === value) {
-            this.datasourceSelectBox.getSelection().setItem(0,item);
+            this.datasourceSelectBox.getSelection().setItem(0, item);
           }
         });
         this.getApplication().getConfigManager().setKey("modules.webservices.lastDatasource", value);
@@ -140,14 +138,12 @@ qx.Class.define("bibliograph.plugins.webservices.View",
     /**
      * UI
      */
-    createUi: function()
-    {
-      let app = this.getApplication();
+    createUi: function() {
       this.setLayout(new qx.ui.layout.VBox(5));
 
       // toolbar
       let toolBar1 = new qx.ui.toolbar.ToolBar();
-      toolBar1.set({ spacing : 5 })
+      toolBar1.set({ spacing : 5 });
       this.add(toolBar1);
 
       // datasource select box
@@ -163,7 +159,7 @@ qx.Class.define("bibliograph.plugins.webservices.View",
       let model = qx.data.marshal.Json.createModel([]);
       store.setModel(model);
       store.bind("model", selectBox, "model");
-      store.addListener("loaded", ()=>{
+      store.addListener("loaded", () => {
         let lastDatasource = this.getApplication()
           .getConfigManager()
           .getKey("modules.webservices.lastDatasource");
@@ -171,7 +167,7 @@ qx.Class.define("bibliograph.plugins.webservices.View",
           this.setDatasource(lastDatasource);
         }
       });
-      this.addListener("appear", ()=>{
+      this.addListener("appear", () => {
         qx.event.message.Bus.dispatchByName("plugins.webservices.reloadDatasources");
       });
       qx.event.message.Bus.getInstance().subscribe("plugins.webservices.reloadDatasources", function (e) {
@@ -179,9 +175,9 @@ qx.Class.define("bibliograph.plugins.webservices.View",
       }, this);
 
       // auto-import
-      let autoimport = new qx.ui.form.CheckBox( this.tr("Auto-import best result") );
-      autoimport.bind("value",this,"autoimport");
-      this.bind("autoimport",autoimport,"value");
+      let autoimport = new qx.ui.form.CheckBox(this.tr("Auto-import best result"));
+      autoimport.bind("value", this, "autoimport");
+      this.bind("autoimport", autoimport, "value");
       toolBar1.add(autoimport);
       
       // search widgets container
@@ -195,23 +191,19 @@ qx.Class.define("bibliograph.plugins.webservices.View",
       this.searchBox = searchBox;
       searchBox.setPadding(2);
       searchBox.setMarginTop(5);
-      searchBox.setPlaceholder(this.tr('Enter search terms'));
+      searchBox.setPlaceholder(this.tr("Enter search terms"));
       composite1.add(searchBox, {flex: 1});
       searchBox.addListener("input", e => this.setSearch(e.getData()));
       searchBox.addListener("changeValue", e => this.setSearch(e.getData()));
       this.bind("search", searchBox, "value");
       searchBox.addListener("keypress", this._on_keypress, this);
-      searchBox.addListener("dblclick", e => e.stopPropagation() );
+      searchBox.addListener("dblclick", e => e.stopPropagation());
       
       // search button
       this.searchButton = new qx.ui.toolbar.Button();
       this.searchButton.setIcon("bibliograph/icon/16/search.png");
-      this.searchButton.addListener("execute", e => this.startSearch() );
+      this.searchButton.addListener("execute", e => this.startSearch());
       composite1.add(this.searchButton);
-      
-      // scanner button
-      this.scannerButton = new qx.ui.toolbar.Button("|||");
-      composite1.add(this.scannerButton);
 
       // cancel button
       let cancelButton = new qx.ui.toolbar.Button();
@@ -224,9 +216,9 @@ qx.Class.define("bibliograph.plugins.webservices.View",
       composite1.add(cancelButton);
       
       // help button
-      let helpButton = new qx.ui.toolbar.Button(this.tr('Help'));
+      let helpButton = new qx.ui.toolbar.Button(this.tr("Help"));
       composite1.add(helpButton);
-      helpButton.addListener("execute", e => this.getApplication().showHelpWindow("plugin/webservices/search") );
+      helpButton.addListener("execute", e => this.getApplication().showHelpWindow("plugin/webservices/search"));
 
       // table view
       let tableview = new qcl.ui.table.TableView();
@@ -264,33 +256,17 @@ qx.Class.define("bibliograph.plugins.webservices.View",
       });
 
       // import button
-      let importButton = new qx.ui.form.Button(this.tr('Import selected records'));
+      let importButton = new qx.ui.form.Button(this.tr("Import selected records"));
       this.importButton = importButton;
       importButton.setEnabled(false);
       composite2.add(importButton);
-      importButton.addListener("execute", e => this.importSelected() );
+      importButton.addListener("execute", e => this.importSelected());
 
       // close button
-      let button1 = new qx.ui.form.Button(this.tr('Close'));
+      let button1 = new qx.ui.form.Button(this.tr("Close"));
       composite2.add(button1);
-      button1.addListener("execute", e => this.getWindow().close() );
+      button1.addListener("execute", e => this.getWindow().close());
     },
-  
-    /**
-     * Sets up the built-in barcode scanner
-     */
-    setupScanner : function()
-    {
-      let scanner = new bibliograph.plugins.webservices.Scanner(this.scannerButton);
-      scanner.addListener('changeResult', e => {
-        let result = e.getData();
-        if( result && result.length === 13 ){
-          this.searchBox.setValue(result);
-          this.startSearch();
-        }
-      });
-    },
-    
 
     /**
      * Starts the search
@@ -352,7 +328,7 @@ qx.Class.define("bibliograph.plugins.webservices.View",
       this.getApplication()
         .getRpcClient("webservices/table")
         .send("import", [sourceDatasource, ids, targetDatasource, targetFolderId])
-        .then(()=>{
+        .then(() => {
           this.importButton.setEnabled(true);
           this.hidePopup();
           this.searchBox.setValue("");
@@ -369,14 +345,14 @@ qx.Class.define("bibliograph.plugins.webservices.View",
       if (e.getKeyIdentifier() === "Enter") {
         this.startSearch();
       }
-      if( false && this.getAutoimport() ){
-        let searchText = this.getSearch();
-        // auto-submit ISBNs
-        if( searchText && searchText.length > 12 && searchText.replace(/[^0-9xX]/g,'').length === 13 && searchText.substr(0,3) === "978" ){
-          this.startSearch();
-        }
-      }
+      // TODO: why is this disabled?
+      // if (this.getAutoimport()) {
+      //   let searchText = this.getSearch();
+      //   // auto-submit ISBNs
+      //   if (searchText && searchText.length > 12 && searchText.replace(/[^0-9xX]/g, "").length === 13 && searchText.substr(0, 3) === "978") {
+      //     this.startSearch();
+      //   }
+      // }
     }
-   
   }
 });

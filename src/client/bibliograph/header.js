@@ -4,14 +4,14 @@
 
   http://www.bibliograph.org
 
-  Copyright: 
+  Copyright:
     2018 Christian Boulanger
 
-  License: 
+  License:
     MIT license
     See the LICENSE file in the project's top-level directory for details.
 
-  Authors: 
+  Authors:
     Christian Boulanger (@cboulanger) info@bibliograph.org
 
 ************************************************************************ */

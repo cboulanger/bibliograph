@@ -8,14 +8,13 @@
     }
   },
   "libraries": [
-    ".",
-    "../../server/modules/z3950/client",
-    "../../server/modules/webservices/client",
-    "../../server/modules/backup/client",
-    "../../lib/incubator.qx.io.jsonrpc"
+    "src/client/bibliograph",
+    "src/server/modules/z3950/client",
+    "src/server/modules/webservices/client",
+    "src/server/modules/backup/client",
+    "src/lib/incubator.qx.io.jsonrpc"
   ],
   "environment": {
-    "qx.debug": true,
     "qx.icontheme": "Tango",
     "module.objectid": true,
     "app.version": "3.0.0-beta.79",
@@ -27,22 +26,6 @@
   ],
   "defaultTarget": "source",
   "targets": [
-    {
-      "description": "The local 'source' target for development",
-      "type": "source",
-      "environment": {
-        "app.mode": "development"
-      },
-      "outputPath": "compiled/source"
-    },
-    {
-      "description": "The local 'build' target ",
-      "type": "build",
-      "environment": {
-        "app.mode": "production"
-      },
-      "outputPath": "compiled/build"
-    },
     {
       "description": "A source build to be deployed for debugging purposes",
       "type": "dist-debug",
@@ -62,18 +45,8 @@
           "qx.util.*"
         ]
       }
-    },
-    {
-      "description": "The final 'build' target for deployment",
-      "type": "dist-build",
-      "targetClass": "BuildTarget",
-      "outputPath": "compiled/dist-build",
-      "environment": {
-        "qx.debug": false,
-        "app.mode": "production",
-        "app.serverUrl": "server.php?r="
-      }
     }
+
   ],
   "applications": [
     {
@@ -126,41 +99,7 @@
         "eventrecorder.autoplay": true,
         "eventrecoreder.gist_id": ""
       }
-    },
-    {
-      "title": "Qooxdoo API Viewer",
-      "class": "qxl.apiviewer.Application",
-      "theme": "qxl.apiviewer.Theme",
-      "name": "apiviewer",
-      "environment": {
-        "qx.icontheme": "Tango",
-        "excludeFromAPIViewer": [
-          "qxl.apiviewer.*"
-        ]
-      },
-      "include": [
-        "qx.*"
-      ],
-      "exclude": [
-        "qx.test.*",
-        "qx.module.Blocker",
-        "qx.module.Placement"
-      ]
-    },
-    {
-      "class": "qxl.testtapper.Application",
-      "name": "testtapper",
-      "theme": "qx.theme.Simple",
-      "title": "Qooxdoo TestTAPper",
-      "environment": {
-        "qx.icontheme": "Tango",
-        "testtapper.testNameSpace": "bibliograph.test"
-      },
-      "include": [
-        "bibliograph.test.*"
-      ],
-      "exclude": []
     }
   ],
-  "$schema": "https://raw.githubusercontent.com/qooxdoo/qooxdoo-compiler/master/source/resource/qx/tool/schema/compile-1-0-0.json"
+  "$schema": "https://qooxdoo.org/schema/compile-1-0-0.json"
 }

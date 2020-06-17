@@ -8,8 +8,11 @@
     }
   },
   "libraries": [
-    ".",
-    "../../../../incubator.qx.io.jsonrpc"
+    "src/client/bibliograph",
+    "src/server/modules/z3950/client",
+    "src/server/modules/webservices/client",
+    "src/server/modules/backup/client",
+    "src/lib/incubator.qx.io.jsonrpc"
   ],
   "environment": {
     "qx.debug": true,
@@ -63,5 +66,5 @@
       }
     }
   ],
-  "$schema": "https://raw.githubusercontent.com/qooxdoo/qooxdoo-compiler/master/source/resource/qx/tool/schema/compile-1-0-0.json"
+  "$schema": "https://qooxdoo.org/schema/compile-1-0-0.json"
 }

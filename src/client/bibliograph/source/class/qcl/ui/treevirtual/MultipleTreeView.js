@@ -17,10 +17,6 @@
   
 ************************************************************************ */
 
-/*global qx qcl virtualdata dialog*/
-
-// noinspection JSUnusedLocalSymbols
-nodeData = undefined
 /**
  * Base class for virtual tree widgets which load their data from different
  * datasources. The data is cached for performance, so that switching the
@@ -278,7 +274,6 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
     
     // server databinding
     this.__lastTransactionId = 0;
-    
   },
   
   /*
@@ -341,9 +336,12 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
     
     /**
      * Handles the change in the datasource property of the widget
+     *
+     * @param value
+     * @param old
      */
     _applyDatasource: function (value, old) {
-      void(old);
+      void (old);
       if (value) {
         this.info("Tree is loading datasource " + value);
         this._setupTree(value, true);
@@ -352,6 +350,9 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
     
     /**
      * Applies the new tree view
+     *
+     * @param value
+     * @param old
      */
     _applyTree: function (value, old) {
       if (old) {
@@ -362,9 +363,13 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
     
     /**
      * Applies the node id. When set manually, this selects the corresponding node
+     *
+     * @param value
+     * @param old
      */
     _applyNodeId: function (value, old) {
-      void(old);
+      // eslint-disable-next-line no-void
+      void (old);
       this.selectByServerNodeId(value);
     },
   
@@ -386,7 +391,7 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
      * @param old {qcl.ui.treevirtual.TreeAction|null}
      */
     _applyTreeAction: function (value, old) {
-      void(old);
+      void (old);
       this.info(`Tree action ${value.getAction()}`);
     },
     
@@ -443,25 +448,14 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
       this.bind("debugDragSession", tree, "debugDragSession");
       
       // configure columns
-      tree
-        .getTableColumnModel()
-        .getBehavior()
-        .setMinWidth(0, 80);
-      tree
-        .getTableColumnModel()
-        .getBehavior()
-        .setWidth(0, "6*");
-      tree
-        .getTableColumnModel()
-        .getBehavior()
-        .setMinWidth(1, 20);
-      tree
-        .getTableColumnModel()
-        .getBehavior()
-        .setWidth(1, "1*");
+      let behavior = tree.getTableColumnModel().getBehavior();
+      behavior.setMinWidth(0, 80);
+      behavior.setWidth(0, "6*");
+      behavior.setMinWidth(1, 20);
+      behavior.setWidth(1, "1*");
       
       // optionally hide header column
-      tree.addListener( "appear", () => {
+      tree.addListener("appear", () => {
         if (!this.getShowColumnHeaders()) {
           tree.setHeaderCellsVisible(false);
         }
@@ -471,7 +465,7 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
       tree.addListener("changeSelection", this._on_treeChangeSelection, this);
       tree.addListener("click", this._on_treeClick, this);
       tree.addListener("dblclick", this._on_treeDblClick, this);
-      if( this._onDropImpl ){
+      if (this._onDropImpl) {
         tree._onDropImpl = this._onDropImpl.bind(this);
       }
       
@@ -523,13 +517,13 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
       this.debug("Loading tree data...");
       this.fireEvent("loading");
       let store = this.getStore();
-      let tree = this.getTree();
-      let controller = this.getController();
+      // let tree = this.getTree();
+      // let controller = this.getController();
       nodeId = nodeId || 0;
       
       // clear all bound trees
       store.setModel(null);
-      let storeId = store.getStoreId();
+      // let storeId = store.getStoreId();
       this.clearSelection();
       
       this.setEnabled(false);
@@ -596,7 +590,9 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
      */
     _on_treeDblClick: function () {
       let selNode = this.getSelectedNode();
-      if (!selNode) return;
+      if (!selNode) {
+       return;
+      }
       let dataModel = this.getTree().getDataModel();
       dataModel.setState(selNode, {bOpened: !selNode.bOpened});
       dataModel.setData();
@@ -628,7 +624,7 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
 
       let node = selection[0];
       this.setSelectedNode(node);
-      this.setSelectedNodeType( this.getTree().getNodeType(node) );
+      this.setSelectedNodeType(this.getTree().getNodeType(node));
       this.setNodeId(parseInt(node.data.id));
     },
     
@@ -645,12 +641,12 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
      * @return {boolean} Returns true if the message is not relevant
      * @private
      */
-    _notForMe : function(tree, data){
-      if ( ! tree ){
+    _notForMe : function(tree, data) {
+      if (!tree) {
         this.debug("Ignoring message because no tree exists...");
         return true;
       }
-      let notForMe = !(data.datasource === this.getDatasource() &&  data.modelType === this.getModelType());
+      let notForMe = !(data.datasource === this.getDatasource() && data.modelType === this.getModelType());
       if (notForMe) {
         console.log(data);
         this.debug(`Ignoring message: Datasource '${data.datasource}' must be '${this.getDatasource()}' and model type '${data.modelType}' must be '${this.getModelType()}'.`);
@@ -675,8 +671,10 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
     _pruneNode: function (e) {
       let data = e.getData();
       let tree = this.getTree();
-      if ( this._notForMe(tree,data) )return;
-      let dataModel = tree.getDataModel();
+      if (this._notForMe(tree, data)) {
+       return;
+      }
+      // let dataModel = tree.getDataModel();
       let controller = this.getController();
       let nodeId = controller.getClientNodeId(data.id);
       if (!nodeId) {
@@ -696,7 +694,9 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
     _updateNode: function (e) {
       let data = e.getData();
       let tree = this.getTree();
-      if ( this._notForMe(tree,data) )return;
+      if (this._notForMe(tree, data)) {
+       return;
+      }
       let dataModel = tree.getDataModel();
       let controller = this.getController();
       let nodeId = controller.getClientNodeId(data.nodeData.data.id);
@@ -718,16 +718,18 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
     _addNode: function (e) {
       let data = e.getData();
       let tree = this.getTree();
-      if (this._notForMe(tree,data))return;
+      if (this._notForMe(tree, data)) {
+       return;
+      }
       let dataModel = tree.getDataModel();
       let controller = this.getController();
       let nodeData = data.nodeData;
-      if (! qx.lang.Type.isArray(nodeData)){
+      if (!qx.lang.Type.isArray(nodeData)) {
         nodeData = [nodeData];
       }
-      for (let node of nodeData){
+      for (let node of nodeData) {
         let parentNodeId = controller.getClientNodeId(node.data.parentId);
-        if (parentNodeId === undefined){
+        if (parentNodeId === undefined) {
           this.warn(`Cannot add node: parent node ${parentNodeId} doesn't exist.`);
           continue;
         }
@@ -757,7 +759,9 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
     _moveNode: function (e) {
       let data = e.getData();
       let tree = this.getTree();
-      if( this._notForMe(tree, data) ) return;
+      if (this._notForMe(tree, data)) {
+ return;
+}
       let dataModel = tree.getDataModel();
       let controller = this.getController();
       let nodeId = controller.getClientNodeId(data.nodeId);
@@ -783,7 +787,9 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
     _deleteNode: function (e) {
       let data = e.getData();
       let tree = this.getTree();
-      if( this._notForMe(tree, data) ) return;
+      if (this._notForMe(tree, data)) {
+ return;
+}
       let dataModel = tree.getDataModel();
       let controller = this.getController();
       let nodeId = controller.getClientNodeId(data.nodeId);
@@ -798,15 +804,17 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
     },
     
     /**
-     * Reorders node children, triggered by a message
-     * @param e {qx.event.message.Message}
-     * a given node.
-     * @param e {qx.event.message.Message}
-     */
+ * Reorders node children, triggered by a message
+ *
+ * @param e {qx.event.message.Message}
+ * a given node.
+ */
     _reorderNodeChildren: function (e) {
       let data = e.getData();
       let tree = this.getTree();
-      if( this._notForMe(tree, data) ) return;
+      if (this._notForMe(tree, data)) {
+ return;
+}
       
       // get the node data
       let dataModel = tree.getDataModel();
@@ -895,7 +903,7 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
      */
     selectByServerNodeId: function (serverNodeId) {
       if (!this.getTree() || this.isLoading()) {
-        this.addListenerOnce("loaded", () => this._selectByServerNodeId(serverNodeId))
+        this.addListenerOnce("loaded", () => this._selectByServerNodeId(serverNodeId));
       } else {
         this._selectByServerNodeId(serverNodeId);
       }
@@ -912,7 +920,9 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
         return;
       }
       let id = this.getController().getClientNodeId(serverNodeId);
-      if (!id) return;
+      if (!id) {
+ return;
+}
       
       this.__selectingNode = true;
       let tree = this.getTree();
@@ -952,10 +962,10 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
      */
     showMessage: function (msg) {
       let statusLabel = this.getStatusLabel();
-      if(statusLabel ){
+      if (statusLabel) {
         statusLabel.setValue(msg);
         // hide after three seconds
-        qx.event.Timer.once(()=>statusLabel.setValue(""),null,3000);
+        qx.event.Timer.once(() => statusLabel.setValue(""), null, 3000);
       }
     },
   
@@ -964,21 +974,25 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
      * @param searchtext {String}
      * @return {Boolean} True if search is successful, false if not
      */
-    searchAndSelectNext : function(searchtext)
-    {
+    searchAndSelectNext : function(searchtext) {
       /** @var {qcl.ui.treevirtual.DragDropTree} */
       let tree = this.getTree();
-      if (!tree) return false;
+      if (!tree) {
+ return false;
+}
     
       let model = tree.getDataModel();
       let data = model.getData();
     
       // search the tree @todo make this async for really large trees
-      let node, id, found = false;
+      let node; let id; let
+found = false;
       this.__searchingFolders = true;
-      for (id= this.__startSearchIndex; id < data.length; id++ ){
+      for (id= this.__startSearchIndex; id < data.length; id++) {
         node = data[id];
-        if (qx.lang.Type.isObject(node.data) && node.data.markedDeleted) continue;
+        if (qx.lang.Type.isObject(node.data) && node.data.markedDeleted) {
+ continue;
+}
         if (node.label.toLocaleLowerCase().includes(searchtext.toLocaleLowerCase())) {
           found = true;
           this.__startSearchIndex = id+1;
@@ -987,8 +1001,8 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
       }
       if (!found) {
         this.__searchingFolders = false;
-        if (this.__startSearchIndex === 0){
-          this.treeWidget.showMessage(this.tr('No match for "%1"', searchtext));
+        if (this.__startSearchIndex === 0) {
+          this.treeWidget.showMessage(this.tr("No match for \"%1\"", searchtext));
           this.__startSearchIndex = 1;
           return false;
         }

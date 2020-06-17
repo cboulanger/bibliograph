@@ -12,10 +12,9 @@
  *
  ******************************************************************************/
 
-/* global qcl bibliograph rpc dialog */
-
 /**
  * The Access configuration window
+ * @ignore(bibliograph._actRpcSendProxy)
  */
 qx.Class.define("bibliograph.ui.window.AccessControlTool",
 {
