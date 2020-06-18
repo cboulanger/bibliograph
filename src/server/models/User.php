@@ -21,6 +21,7 @@
 namespace app\models;
 
 use app\migrations\data\m180105_075537_data_RoleDataInsert;
+use yii\db\Exception;
 use yii\web\UnauthorizedHttpException;
 use function GuzzleHttp\describe_type;
 use InvalidArgumentException;
@@ -55,6 +56,8 @@ use lib\models\BaseModel;
  */
 class User extends BaseModel implements IdentityInterface
 {
+  const CATEGORY = "access";
+
   /**
    * @inheritdoc
    */
@@ -155,8 +158,8 @@ class User extends BaseModel implements IdentityInterface
   public static function findIdentityByAccessToken($token, $type = null)
   {
     $user = static::findOne(['token' => $token]);
-    Yii::debug("passed token is: ". $token, __METHOD__);
-    Yii::debug( $user ? "user is: " . $user->name :  "No user has this token!" , __METHOD__);
+    Yii::debug("Passed token is: ". $token, self::CATEGORY);
+    Yii::debug( $user ? "user is: " . $user->name :  "No user has this token!" , self::CATEGORY);
     return $user;
   }
 
@@ -167,9 +170,10 @@ class User extends BaseModel implements IdentityInterface
    * @throws \yii\db\Exception
    */
   public function loginByAccessToken($token, $authClass) {
+    Yii::debug("Trying to log in with access token $token", self::CATEGORY);
     $user = static::findIdentityByAccessToken($token);
     if (!$token or ! $user or ! $user->active ) {
-      Yii::warning("No or invalid authorization token '$token'. Access denied.");
+      Yii::warning("No or invalid authorization token '$token'. Access denied.", self::CATEGORY);
       return false;
     }
 
@@ -185,7 +189,7 @@ class User extends BaseModel implements IdentityInterface
       $session->touch();
     }
     $sessionId = Yii::$app->session->getId();
-    Yii::info("Authorized user '{$user->namedId}' via auth auth token (Session {$sessionId}).","auth");
+    Yii::info("Authorized user '{$user->namedId}' via auth auth token (Session {$sessionId}).",self::CATEGORY);
     return true;
   }
 
@@ -658,7 +662,7 @@ class User extends BaseModel implements IdentityInterface
 //        'datasource role ids filtered by user`s global roles' => $dsGlobalRoleIds,
 //        'combined role ids' => $roleIds,
 //        'permissions' => $permissions
-//      ]);
+//      ], self::CATEGORY);
 //    }
     return $permissions;
   }
@@ -678,9 +682,9 @@ class User extends BaseModel implements IdentityInterface
     /** @var Role[] $roles */
     $roles = $this->getGroupRoles($group)->all();
     //$groupName = $group instanceof Group ? $group->name : ( is_int($group) ? Group::findOne($group)->name : "globally");
-    //Yii::info("{$this->namedId} has " . count( $roles). " roles in group {$groupName}");
+    //Yii::debug("{$this->namedId} has " . count( $roles). " roles in group {$groupName}", self::CATEGORY);
     foreach( $roles as $role) {
-      //Yii::info("{$this->namedId} has role {$role->namedId} in group {$groupName}");
+      //Yii::debug("{$this->namedId} has role {$role->namedId} in group {$groupName}", self::CATEGORY);
       $permissions = array_merge( $permissions, $role->getPermissionNames() );
     }
     return array_values(array_unique($permissions));

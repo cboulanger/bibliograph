@@ -35,9 +35,8 @@ qx.Class.define("bibliograph.test.t2.Setup", {
         msg_done = true;
         this.resume();
       });
-      const promise = this.client.request("setup.setup").then(result => {
-        console.log(`>>> Received result '${result}'.`);
-      });
+      const promise = this.client.request("setup.setup")
+        .then(result => console.log(`>>> Received result '${result}'.`));
       console.log(">>> Calling wait()");
       this.wait(30000, () => {
         this.assertTrue(msg_done, "Message \"bibliograph.setup.done\" was not received.");
@@ -46,19 +45,27 @@ qx.Class.define("bibliograph.test.t2.Setup", {
     },
     
     async "test: get version"() {
+      // eslint-disable-next-line no-caller
+      this.showTestNameInRequest(arguments.callee.name);
       let version = await this.client.request("setup.version");
       this.assertNotEquals("", version);
     },
     
     async "test: reset"() {
+      // eslint-disable-next-line no-caller
+      this.showTestNameInRequest(arguments.callee.name);
       await this.client.request("setup.reset");
     },
     
     async "test: call setup method for the first time"() {
+      // eslint-disable-next-line no-caller
+      this.showTestNameInRequest(arguments.callee.name);
       await this.callSetupMethod();
     },
   
     async "test: call setup method for the second time"() {
+      // eslint-disable-next-line no-caller
+      this.showTestNameInRequest(arguments.callee.name);
       await this.callSetupMethod();
     },
     

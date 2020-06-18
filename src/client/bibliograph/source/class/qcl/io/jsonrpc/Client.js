@@ -18,6 +18,7 @@
 
 /**
  * A wrapper for a JSONRPC 2.0 client implementation
+ * @require(qx.io.jsonrpc.transport.Http)
  */
 qx.Class.define("qcl.io.jsonrpc.Client", {
   extend: qx.core.Object,
@@ -33,7 +34,7 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
     qx.util.Validate.checkUrl(url);
     const client = this.__client = new qx.io.jsonrpc.Client(url, service);
     client.addListener("peerRequest", this._handlePeerRequest, this);
-    qx.event.message.Bus.subscribe("bibliograph.token.change", e => {
+    qx.event.message.Bus.subscribe("qcl.token.change", e => {
       this.setToken(e.getData() || null);
     });
   },
@@ -77,6 +78,15 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
     errorBehavior: {
       check: ["error", "dialog", "debug"],
       init: "error"
+    },
+  
+    /**
+     * A map of additional query string parameters to send with the request
+     */
+    queryParams: {
+      check: "Object",
+      nullable: true,
+      apply: "_applyQueryParams"
     }
   },
 
@@ -181,6 +191,14 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
       return "Unknown Error";
     },
   
+    /**
+     * Returns the actual jsonrpc client (this being just a wrapper class)
+     * @return {qx.io.jsonrpc.Client}
+     */
+    getClientImpl() {
+      return this.__client;
+    },
+  
     /*
     ---------------------------------------------------------------------------
      INTERNAL METHODS
@@ -196,8 +214,32 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
     _applyToken: function (value, old) {
       const auth = value ? new qx.io.request.authentication.Bearer(value) : null;
       this.__client.getTransport().getTransportImpl().setAuthentication(auth);
+      if (value /* and debug mode */) {
+        this._applyQueryParams({"access-token":value});
+      }
     },
   
+    /**
+     * Apply method for queryParams
+     * @param {Object} params
+     * @private
+     */
+    _applyQueryParams(params) {
+      qx.core.Assert.assertMap(params);
+      let transportImpl = this.__client.getTransport().getTransportImpl();
+      let parsedUri = qx.util.Uri.parseUri(transportImpl.getUrl());
+      let existingParams = parsedUri.queryKey;
+      let url = [
+        parsedUri.protocol,
+        "://",
+        parsedUri.authority,
+        parsedUri.path,
+        "?",
+        qx.util.Uri.toParameter(Object.assign(existingParams, params))
+      ].join("");
+      transportImpl.setUrl(url);
+    },
+    
     /**
      * Handle a message from the server: The method name is split into
      * the name of a singleton class in the bibliograph.jsonrpc namespace

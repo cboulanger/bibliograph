@@ -44,11 +44,15 @@ class TestController extends AppController
    *
    * @var array
    */
-  protected $noAuthActions = ["throw-error", "test-persistence"];
+  protected $noAuthActions = ["throw-error", "test-persistence","notify-test-name"];
 
   public function actionThrowError()
   {
     throw new \InvalidArgumentException("Testing invalid argument exception");
+  }
+
+  public function actionNotifyTestName($testName) {
+    Yii::info("Executing test '$testName'...");
   }
 
   public function actionTestPersistence($foo = null, $bar = null) {

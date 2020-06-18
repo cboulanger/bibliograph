@@ -239,7 +239,7 @@ trait TableTrait
     // it's a freeform search query
     if ( isset ( $clientQuery->cql ) ){
       // FIXME hack to support virtual folders
-      if( str_contains( $clientQuery->cql, "virtsub:") ){
+      if( $clientQuery->cql && str_contains( $clientQuery->cql, "virtsub:") ){
         return $modelClass::find()->where(new Expression("TRUE = FALSE"));
       }
       $activeQuery = $this->createActiveQueryFromNaturalLanguageQuery(

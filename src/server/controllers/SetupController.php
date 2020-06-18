@@ -408,6 +408,12 @@ class SetupController extends \app\controllers\AppController
       if (count($this->setupMethods)===0) {
         throw new SetupException("No setup methods");
       }
+      try {
+        $userInfo = "Authenticated user: " . Yii::$app->user->identity->id;
+      } catch (\Throwable $e) {
+        $userInfo = "No authenticated user.";
+      }
+
       // visual marker in log file
       Yii::debug(implode("\n", [
           "",
@@ -419,8 +425,9 @@ class SetupController extends \app\controllers\AppController
           str_repeat("*", 80),
           "",
           "Session ID:" . Yii::$app->session->id,
-          "Authenticated user: " . (Yii::$app->user->identity ? Yii::$app->user->identity->id : "No."),
-          "Data version: $upgrade_from, code version: $upgrade_to.",
+          $userInfo,
+          "Data version: $upgrade_from",
+          "Code version: $upgrade_to.",
           "Setup methods: \n  - " . implode("\n  - ", $this->setupMethods)
       ]), 'marker');
     }
@@ -474,15 +481,41 @@ class SetupController extends \app\controllers\AppController
         $this->_saveProperties();
       }
     } else {
-      if (count($this->errors) > 0) {
-        $this->_resetSavedProperties();
-        throw new SetupException("Setup failed with errors.", $this->errors);
-      } else {
-        $this->dispatchClientMessage("bibliograph.setup.done");
-      }
-      $this->_resetSavedProperties();
+      $this->finish();
     }
     return $result;
+  }
+
+  /**
+   * Finishes the setup
+   * @return string
+   * @throws RecordExistsException
+   * @throws SetupException
+   */
+  function finish(){
+    if (count($this->errors) > 0) {
+      $msg = "Setup of version '$this->upgrade_to' failed.";
+      Yii::warning($msg);
+      Yii::warning($this->errors);
+      $this->_resetSavedProperties();
+      throw new SetupException("Setup failed with errors.", $this->errors);
+    }
+    // Everything seems to be ok
+    $msg = "Setup of version '$this->upgrade_to' finished successfully.";
+    Yii::info($msg, self::CATEGORY);
+    Yii::debug($this->messages, __METHOD__);
+    $this->_resetSavedProperties();
+    // update version
+    if (!Yii::$app->config->keyExists('app.version')) {
+      // createKey( $key, $type, $customize=false, $default=null, $final=false )
+      Yii::$app->config->createKey('app.version', 'string', false, null, false);
+    }
+    Yii::$app->config->setKeyDefault('app.version', $this->upgrade_to);
+    // let application know if LDAP is enabled
+    $ldapEnabled =  Yii::$app->config->getIniValue("ldap.enabled");
+    Yii::$app->config->setKeyDefault("ldap.enabled",$ldapEnabled);
+    $this->dispatchClientMessage("bibliograph.setup.done", $this->messages);
+    return $msg;
   }
 
   //-------------------------------------------------------------
@@ -886,31 +919,5 @@ class SetupController extends \app\controllers\AppController
     return $message;
   }
 
-  function setupFinish(){
-    if (count($this->errors)) {
-      $msg = "Setup of version '$this->upgrade_to' failed.";
-      Yii::warning($msg);
-      Yii::warning($this->errors);
-      $this->dispatchClientMessage("bibliograph.setup.error", $this->errors);
-      return $msg;
-    }
-    // Everything seems to be ok
-    $msg = "Setup of version '$this->upgrade_to' finished successfully.";
-    Yii::info($msg, self::CATEGORY);
-    Yii::debug($this->messages, __METHOD__);
-    // update version
-    if (!Yii::$app->config->keyExists('app.version')) {
-      // createKey( $key, $type, $customize=false, $default=null, $final=false )
-      Yii::$app->config->createKey('app.version', 'string', false, null, false);
-    }
-    Yii::$app->config->setKeyDefault('app.version', $this->upgrade_to);
 
-    // let application know if LDAP is enabled
-    $ldapEnabled =  Yii::$app->config->getIniValue("ldap.enabled");
-    Yii::$app->config->setKeyDefault("ldap.enabled",$ldapEnabled);
-
-    // notify client that setup it done
-    $this->dispatchClientMessage("bibliograph.setup.done", $this->messages);
-    return $msg;
-  }
 }

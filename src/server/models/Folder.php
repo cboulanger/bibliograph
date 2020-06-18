@@ -180,7 +180,7 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
         'options' => (array) $this->getIndexFieldsOptions(),
         'value' => "",
         'marshal' => function($value, $model, &$formData ){
-          if( str_contains($model->query, 'virtsub:') ){
+          if( $model->query && str_contains($model->query, 'virtsub:') ){
             $formData['query']['enabled'] = false;
             return substr($model->query,8);
           }
@@ -394,7 +394,7 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
    * @param bool $pruneFirst If true, remove existing subfolders first. Defaults to false.
    */
   protected function _createVirtualSubfoldersOnDemand($pruneFirst=false){
-    if (str_contains( $this->query, "virtsub:" )){
+    if ($this->query and str_contains( $this->query, "virtsub:" )){
       if ($pruneFirst) {
         Yii::$app->eventQueue->add(new MessageEvent([
           'name' => static::MESSAGE_CLIENT_PRUNE,
@@ -476,7 +476,7 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
 
   //-------------------------------------------------------------
   // ITreeNode Interface
-  //-------------------------------------------------------------  
+  //-------------------------------------------------------------
 
   /**
    * Returns the Folder objects of subfolders of this folder optionally ordered by a property
@@ -526,7 +526,7 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
    */
   public function getChildCount($update = false)
   {
-    if (str_contains( $this->query, "virtsub:" )){
+    if ($this->query and str_contains( $this->query, "virtsub:" )){
       $this->childCount = 100; // TODO calculate properly
     } elseif ($update or $this->childCount === null) {
       $this->childCount = (int) $this->getChildrenQuery()->count();

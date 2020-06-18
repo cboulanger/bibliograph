@@ -418,11 +418,11 @@ trait JsonRpcTrait
    */
   public function seeServerEvent(string $expectedName, $expectedData=null) {
     foreach ($this->grabJsonRpcNotifications() as $notification) {
-      if ($notification->method == $this->SERVER_EVENT_JSONRPC_METHOD_NAME) {
-        if ($expectedData === null) return;
+      if ($notification->method === $this->SERVER_EVENT_JSONRPC_METHOD_NAME) {
         $event = $notification->params[0];
         $receivedName = $event->name;
         if ($expectedName !== $receivedName ) continue;
+        if ($expectedData === null) return;
         $receivedData = $event->data;
         $receivedDataAsJson = json_encode($receivedData);
         if ($expectedData instanceof JsonExpressionType) {

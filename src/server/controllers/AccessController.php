@@ -48,7 +48,7 @@ class AccessController extends AppController
    *
    * @var array
    */
-  protected $noAuthActions = ["authenticate", "ldap-support"];
+  protected $noAuthActions = ["authenticate", "ldap-support","logout"];
 
   //-------------------------------------------------------------
   // Actions / JSONRPC API
@@ -88,7 +88,7 @@ class AccessController extends AppController
     if( $user ){
       if( Yii::$app->config->getIniValue("ldap.enabled") and $user->isLdapUser() )
       {
-        Yii::debug("Challenge: User '$username' needs to be authenticated by LDAP.", __METHOD__);
+        Yii::debug("Challenge: User '$username' needs to be authenticated by LDAP.", self::CATEGORY);
         $auth_method = "plaintext";
       }
     } else {
@@ -96,7 +96,7 @@ class AccessController extends AppController
       $auth_method = "plaintext";
       Yii::debug("Challenge: User '$username' is not in the database, maybe first LDAP authentication.", __METHOD__);
     }
-    Yii::debug("Challenge: Using authentication method '$auth_method'", __METHOD__);
+    Yii::debug("Challenge: Using authentication method '$auth_method'", self::CATEGORY);
     switch ( $auth_method )
     {
       case "plaintext":
@@ -167,11 +167,11 @@ class AccessController extends AppController
       // see if we have a session id that we can link to a user
       $session = Session::findOne( [ 'namedId' => $this->getSessionId() ] );
       if( $session ){
-        Yii::debug('PHP session exists in database...', __METHOD__);
+        Yii::debug('PHP session exists in database...', self::CATEGORY);
         // find a user that belongs to this session
         $user = User::findOne( [ 'id' => $session->UserId ] );
         if ( $user ) {
-          Yii::debug('Session belongs to user ' . $user->namedId, __METHOD__);
+          Yii::debug('Session belongs to user ' . $user->namedId, self::CATEGORY);
         } else {
           // shouldn't ever happen
           Yii::warning('Session has non-existing user!');
@@ -185,7 +185,7 @@ class AccessController extends AppController
       if ( ! $user ) {
         // login anonymously
         $user = $this->createAnonymous();
-        Yii::info("Created anonymous user '{$user->namedId}'.");
+        Yii::info("Created anonymous user '{$user->namedId}'.", self::CATEGORY);
       }
     }
 
@@ -198,7 +198,7 @@ class AccessController extends AppController
       if (is_null($user)) {
         throw new UserErrorException( "Invalid token");
       }
-      Yii::info("Authenticated user '{$user->namedId}' via auth token.");
+      Yii::info("Authenticated user '{$user->namedId}' via auth token.", self::CATEGORY);
     }
 
     /*
@@ -258,13 +258,13 @@ class AccessController extends AppController
           $storedPw = $user->password;
           switch ($auth_method) {
             case "hashed":
-              Yii::debug("Client sent hashed password: $password.", __METHOD__);
+              Yii::debug("Client sent hashed password: $password.", self::CATEGORY);
               $randSalt   = Yii::$app->accessManager->getLoginSalt();
               $serverHash = substr( $storedPw, ACCESS_SALT_LENGTH );
               $authenticated = $password == sha1( $randSalt . $serverHash );
               break;
             case "plaintext":
-              Yii::debug("Client sent plaintext password." , __METHOD__);
+              Yii::debug("Client sent plaintext password." , self::CATEGORY);
               $authenticated = Yii::$app->accessManager->generateHash( $password, $storedPw ) == $storedPw;
               break;
             default:
@@ -274,13 +274,13 @@ class AccessController extends AppController
 
         // password is wrong
         if ( $authenticated === false ){
-          Yii::info("User supplied wrong password.");
+          Yii::info("User supplied wrong password.", self::CATEGORY);
           return new AuthResult([
             'error' => Yii::t('app', "Invalid username or password"),
           ]);
         }
       }
-      Yii::info("Authenticated user '{$user->namedId}' via auth username/password.");
+      Yii::info("Authenticated user '{$user->namedId}' via auth username/password.", self::CATEGORY);
     }
 
     // user is authenticated, log in
@@ -295,7 +295,7 @@ class AccessController extends AppController
       // let's continue the given session
       $sessionId = $session->id;
       $session->touch();
-      Yii::debug("Continuing sesssion {$sessionId}");
+      Yii::debug("Continuing sesssion {$sessionId}", self::CATEGORY);
       Yii::$app->session->close();
       Yii::$app->session->setId($session->namedId);
       Yii::$app->session->open();
@@ -308,7 +308,7 @@ class AccessController extends AppController
       $session->link('user',$user);
       $session->save();
       $sessionId = $this->getSessionId();
-      Yii::debug("Starting sesssion {$sessionId}", __METHOD__);
+      Yii::debug("Starting sesssion {$sessionId}", self::CATEGORY);
     }
 
     // renew the token
@@ -317,6 +317,8 @@ class AccessController extends AppController
 
     // cleanup old sessions
     $this->cleanup();
+
+    $this->dispatchClientMessage("qcl.token.change", $user->token);
 
     // return information on user
     return new AuthResult([
@@ -331,8 +333,13 @@ class AccessController extends AppController
    */
   public function actionLogout()
   {
+    $this->dispatchClientMessage("qcl.token.change", null);
     $user = $this->getActiveUser();
-    Yii::info("Logging out user '{$user->name}'.");
+    if (!$user) {
+      return "No user is logged in.";
+    }
+    $username = $user->name;
+    Yii::info("Logging out user '{$username}'.", self::CATEGORY);
     $user->online = 0;
     try {
       $user->save();
@@ -348,7 +355,7 @@ class AccessController extends AppController
     } catch (\Throwable $e) {
       Yii::warning($e->getMessage());
     }
-    return "User logged out";
+    return "User '$username' logged out";
   }
 
   /**
@@ -375,10 +382,7 @@ class AccessController extends AppController
   public function actionUsername()
   {
     $activeUser = $this->getActiveUser();
-    if (is_null($activeUser)) {
-      throw new Exception('Missing authentication', Exception::INVALID_REQUEST);
-    }
-    Yii::info("The current user is " . $activeUser->username);
+    Yii::info("The current user is " . $activeUser->username, self::CATEGORY);
     return $activeUser->username;
   }
 
@@ -434,7 +438,7 @@ class AccessController extends AppController
     /** @var Group $group */
     foreach( $datasourceGroups as $group){
       if( ! in_array($group->namedId, $userGroupNames)) continue;
-      //Yii::info("Datasource {$datasource->namedId} is linked to group {$group->namedId}");
+      //Yii::info("Datasource {$datasource->namedId} is linked to group {$group->namedId}" , self::CATEGORY);
       $permissions = array_merge(
         $permissions,
         $user->getPermissionNames($group)
@@ -463,7 +467,7 @@ class AccessController extends AppController
    */
   public function cleanup()
   {
-    Yii::info( "Cleaning up stale session data ...." );
+    Yii::info( "Cleaning up stale session data ....", self::CATEGORY );
 
     // cleanup sessions
     foreach( Session::find()->all() as $session ){

@@ -5,14 +5,12 @@ set -o errexit
 source tool/env/envvars-load
 source tool/env/envvars-export
 
-COMPILE_PATH=src/client/bibliograph
 APP=${1:-bibliograph}
 CONFIG_FILE=${2:-compile.json}
-APP_PATH=$COMPILE_PATH/compiled/source/$APP
+APP_PATH=/compiled/source/$APP
 TARGET=${3:-source}
 
 echo ">>> Compiling application '$APP', using config file '$CONFIG_FILE' and '$TARGET' target ..."
-pushd $COMPILE_PATH > /dev/null
 (npx qx compile --target=$TARGET --watch --feedback=0 -c $CONFIG_FILE & ) | while read output; do
   echo "$output"
   # wait for "made" event message to resume script
@@ -22,7 +20,6 @@ done
 sleep 5
 
 echo ">>> Started continuous compilation process."
-popd > /dev/null
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
   echo ">>> Opening app in browser ..."

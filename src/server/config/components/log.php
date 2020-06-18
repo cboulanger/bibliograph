@@ -19,8 +19,9 @@ $log_config = [
     // everything else into app.log
     'app' => [
       'class' => FileTarget::class,
-      'levels' => ['trace','info', 'warning'],
-      'except' => YII_DEBUG ? ['yii\*','auth'] : [],
+      'levels' => YII_DEBUG ? ['trace','info', 'warning'] : ['info', 'warning'],
+      'categories' => ['application', 'access','setup', 'app\*', 'plugin*', 'yii\*'],
+      'except' => ['yii\db\*', 'yii\web\*'],
       'logFile' => APP_LOG_DIR . "/app.log",
       'logVars' => [],
       'exportInterval' => 1

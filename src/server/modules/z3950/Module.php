@@ -83,7 +83,7 @@ class Module extends \lib\Module
     $xml2bib = new Executable( "xml2bib",BIBUTILS_PATH);
     try{
       $xml2bib->call("--version");
-      if ( !str_contains( $xml2bib->getStdErr(), "bibutils")) {
+      if ( !$xml2bib->getStdErr() || !str_contains( $xml2bib->getStdErr(), "bibutils")) {
         Yii::warning("Unexpected output of xml2bib --version:" . $xml2bib->getStdErr());
         $this->errors[] = "Could not call bibutils.";
       }

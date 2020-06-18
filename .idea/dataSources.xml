@@ -7,11 +7,5 @@
       <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mysql://localhost:3306/tests</jdbc-url>
     </data-source>
-    <data-source source="LOCAL" name="tests@localhost" uuid="dc6a1eab-b2f0-4cc9-8ee0-49c75adedd4f">
-      <driver-ref>mariadb</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>org.mariadb.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mariadb://localhost:3306/tests</jdbc-url>
-    </data-source>
   </component>
 </project>

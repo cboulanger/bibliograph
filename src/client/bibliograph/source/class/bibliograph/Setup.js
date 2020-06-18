@@ -16,8 +16,6 @@
 
 ************************************************************************ */
 
-/* global qx qcl bibliograph */
-
 /**
  * This is a qooxdoo singleton class
  *

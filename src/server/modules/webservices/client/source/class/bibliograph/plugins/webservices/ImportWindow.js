@@ -15,8 +15,6 @@
 
 ************************************************************************ */
 
-/*global qx qcl dialog*/
-
 qx.Class.define("bibliograph.plugins.webservices.ImportWindow",
 {
   extend: qx.ui.window.Window,
@@ -25,14 +23,14 @@ qx.Class.define("bibliograph.plugins.webservices.ImportWindow",
     this.set({
       width:700,
       height:300,
-      caption:this.tr('Import from webservices'),
+      caption:this.tr("Import from webservices"),
       showMinimize:false,
       visibility:"excluded",
       layout: new qx.ui.layout.Canvas()
     });
-    this.addListener("appear", ()=>this.center() );
+    this.addListener("appear", () => this.center());
     let view = new bibliograph.plugins.webservices.View();
     view.setWindow(this);
-    this.add( view, {edge:0});
+    this.add(view, {edge:0});
   }
 });

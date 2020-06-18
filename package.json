@@ -21,14 +21,29 @@
     "env:install": "./tool/env/install",
     "env:update": "./tool/env/update",
     "env:servers:start": "tool/env/servers-start",
-    "env:servers:stop+remove": "tool/env/servers-stop",
-    "dev:compile-watch": "cd src/client/bibliograph && npx qx compile --watch",
-    "dev:cleanup": "cd src/client/bibliograph && npx qx clean",
+    "env:servers:stop": "tool/env/servers-stop",
+    "dev:compile-watch": "npx qx compile --watch",
+    "dev:cleanup": "npx qx clean",
     "dev:extract-translations": "cd src/server && php yii message config/i18n.php",
     "test:codeception:all": "tool/test/codeception",
     "test:codeception:custom": "tool/test/codeception \"api AASetupControllerCest --env with-data -vv\"",
     "test:testtapper:all": "./tool/test/testtapper",
-    "test:testtapper:custom": "./tool/test/testtapper bibliograph-test bibliograph.test.t2.Setup"
+    "test:testtapper:custom": "./tool/test/testtapper bibliograph-test bibliograph.test.t3.Access"
+  },
+  "ntl": {
+    "descriptions": {
+      "env:install": "Install the development environment",
+      "env:update": "Update dependencies (npm, Composer, qooxdoo packages, GitHub repos)",
+      "env:servers:start": "Start webserver and database server",
+      "env:servers:stop": "Stop webserver and database server",
+      "dev:compile-watch": "Start continous compilation",
+      "dev:cleanup": "Delete all compilation artefacts",
+      "dev:extract-translations": "Extract translations",
+      "test:codeception:all": "Run all codeption tests",
+      "test:codeception:custom": "Run custom codeception test (see package.json)",
+      "test:testtapper:all": "Run all testtapper tests",
+      "test:testtapper:custom": "Run custom testtapper test (see package.json)"
+    }
   },
   "_old_scripts": {
     "Create new migration": "build/script/run-in-new-terminal $(pwd)/build/script/create-migration",
@@ -43,7 +58,8 @@
   "dependencies": {
     "@qooxdoo/compiler": "^1.0.0-beta.20200613-2032",
     "@qooxdoo/eslint-config-jsdoc-disable": "^1.0.3",
-    "@qooxdoo/eslint-config-qx": "^1.3.5"
+    "@qooxdoo/eslint-config-qx": "^1.3.5",
+    "ntl": "^5.0.0"
   },
   "devDependencies": {
     "@qooxdoo/eslint-plugin-qx": "^1.2.1",

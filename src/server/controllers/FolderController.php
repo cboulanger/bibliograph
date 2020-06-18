@@ -177,7 +177,7 @@ class FolderController extends AppController //implements ITreeController
       $loaded[$id] = $node;
 
       // virtual subfolders, too costly in case of large data, query on demand
-      if (str_contains( $node['data']['query'], "virtsub:" )){
+      if ($node['data']['query'] && str_contains( $node['data']['query'], "virtsub:" )){
         Yii::$app->eventQueue->add(new MessageEvent([
           'name' => static::MESSAGE_EXECUTE_JSONRPC,
           'data' => ["folder", "create-virtual-folders", [$datasource, $id]]

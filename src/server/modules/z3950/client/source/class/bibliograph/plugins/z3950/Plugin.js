@@ -15,8 +15,6 @@
 
 ************************************************************************ */
 
-/*global qx qcl z3950*/
-
 /**
  * Z39.50 Plugin:
  *    This plugin allows to import references from Z39.50 datasources

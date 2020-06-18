@@ -15,8 +15,6 @@
 
 ************************************************************************ */
 
-/*global qx qcl z3950 dialog*/
-
 /**
  * Z39.50 Plugin: Application logic
  * @property {bibliograph.ConfigManager} configManager

@@ -36,6 +36,7 @@ class AASetupControllerCest
         $I->seeServerEvent("bibliograph.setup.done");
         $done = true;
       }
+
     } while (!$done);
   }
 
