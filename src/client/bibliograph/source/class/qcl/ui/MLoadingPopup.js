@@ -18,7 +18,7 @@
 ************************************************************************ */
 
 /**
- * A mixin that provides a "Loading..." popup over a widget that is 
+ * A mixin that provides a "Loading..." popup over a widget that is
  * just requesting data from the server
  * @asset(qcl/ajax-loader.gif)
  */
@@ -73,7 +73,7 @@ qx.Mixin.define("qcl.ui.MLoadingPopup", {
           left: Math.round(l.left + l.width / 2 - bounds.width / 2),
           top: Math.round(l.top + l.height / 2 - bounds.height / 2)
         });
-      } else {
+      } else if (qx.lang.Type.isObject(bounds)) {
         this.__popup.set({
           marginTop: Math.round(
             (qx.bom.Document.getHeight() - bounds.height) / 2

@@ -16,7 +16,6 @@
    *  Christian Boulanger (cboulanger)
   
 ************************************************************************ */
-/*global qx qcl*/
 
 /**
  * This object manages authentication and authorization issues.

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Compiles and starts the bibliograph app in the browser
+
+set -o errexit
+source test/.env
+source tool/env/check
+source tool/env/envvars-export
+export BIB_SERVER_URL
+tool/run/app bibliograph

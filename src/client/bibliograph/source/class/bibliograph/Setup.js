@@ -234,15 +234,18 @@ qx.Class.define("bibliograph.Setup", {
     },
 
     /**
-     * This will initiate server setup. When done, server will send a
-     * "bibliograph.setup.done" message.
+     * This will initiate server setup. Returned promise resolves when server
+     * dispatches a "bibliograph.setup.done" message.
      * @return {Promise<void>}
      */
-    checkServerSetup : async function() {
+    async checkServerSetup() {
       // 'await' omitted in the next line, since the message is what we're waiting for
       // this allows the server to interact with the user before setup is completed
       // (i.e. through Wizard or Dialogs)
-      this.getApplication().getRpcClient("setup").send("setup");
+      const bus = qx.event.message.Bus;
+      const client = this.getApplication().getRpcClient("setup");
+      bus.subscribe("bibliograph.setup.next", () => client.request("setup"));
+      client.request("setup");
       await this.getApplication().resolveOnMessage("bibliograph.setup.done");
       this.info("Server setup done.");
     },
@@ -252,15 +255,16 @@ qx.Class.define("bibliograph.Setup", {
      * anomymously with the server.
      * @return {Promise<void>}
      */
-    authenticate : async function() {
+    async authenticate() {
       let am = bibliograph.AccessManager.getInstance();
       let token = am.getToken();
       let client = this.getApplication().getRpcClient("access");
       if (!token) {
       this.info("Authenticating with server...");
-      let response = await client.send("authenticate", []);
+      let response = await client.request("authenticate", []);
       if (!response) {
-        return this.error("Cannot authenticate with server: " + client.getErrorMessage());
+        this.error("Cannot authenticate with server: " + client.getErrorMessage())
+        return;
       }
       let { message, token, sessionId } = response;
       this.info(message);
@@ -269,7 +273,7 @@ qx.Class.define("bibliograph.Setup", {
       am.setSessionId(sessionId);
       this.info("Acquired access token.");
       } else {
-      this.info("Got access token from session storage");
+        this.info("Got access token from session storage");
       }
     },
 

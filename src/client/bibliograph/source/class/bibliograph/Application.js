@@ -259,13 +259,7 @@ qx.Class.define("bibliograph.Application", {
      * @return {Promise<true>}
      */
     resolveOnMessage: function(message) {
-      let bus = qx.event.message.Bus;
-      return new Promise((resolve, reject) => {
-        bus.subscribe(message, function() {
-          bus.unsubscribe(message);
-          resolve();
-        });
-      });
+      return new Promise(resolve => qx.event.message.Bus.subscribeOnce(message, resolve));
     },
 
     /*

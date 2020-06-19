@@ -7,7 +7,7 @@ source tool/env/envvars-export
 
 APP=${1:-bibliograph}
 CONFIG_FILE=${2:-compile.json}
-APP_PATH=/compiled/source/$APP
+APP_PATH=compiled/source/$APP
 TARGET=${3:-source}
 
 echo ">>> Compiling application '$APP', using config file '$CONFIG_FILE' and '$TARGET' target ..."
@@ -22,7 +22,7 @@ sleep 5
 echo ">>> Started continuous compilation process."
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
-  echo ">>> Opening app in browser ..."
+  echo ">>> Opening app in browser at $BIB_SERVER_URL/$APP_PATH"
   open -a "Google Chrome" "$BIB_SERVER_URL/$APP_PATH"
   # send Alt+Command+I to open Web inspector
   osascript -e 'tell application "System Events" to keystroke "i" using {option down, command down}'

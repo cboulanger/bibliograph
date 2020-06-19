@@ -52,16 +52,16 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow",
     this.base(arguments);
 
     this.setWidth(700);
-    this.setCaption(this.tr('Import from library catalog'));
+    this.setCaption(this.tr("Import from library catalog"));
     this.setShowMinimize(false);
     this.setVisibility("excluded");
     this.setHeight(500);
-    this.addListener("appear", ()=>this.center() );
+    this.addListener("appear", () => this.center());
 
     this.createUi();
     this.createPopup();
     qx.event.message.Bus
-    .getInstance().subscribe(bibliograph.AccessManager.messages.LOGOUT, ()=>this.close() );
+    .getInstance().subscribe(bibliograph.AccessManager.messages.LOGOUT, () => this.close());
 
     qx.lang.Function.delay(() => {
       this.listView.addListenerOnce("tableReady", () => {
@@ -73,7 +73,7 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow",
           this.hidePopup();
         };
         controller.addListener("blockLoaded", enableButtons);
-        controller.addListener("statusMessage", (e) => {
+        controller.addListener("statusMessage", e => {
           this.showPopup(e.getData());
           qx.lang.Function.delay(enableButtons, 1000, this);
         });
@@ -95,12 +95,11 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow",
     searchButton: null,
     statusTextLabel: null,
 
-    _applyDatasource : function(value, old)
-    {
+    _applyDatasource : function(value, old) {
       if (value) {
-        this.datasourceSelectBox.getModel().forEach((item) => {
+        this.datasourceSelectBox.getModel().forEach(item => {
           if (item.getValue() === value) {
-            this.datasourceSelectBox.getSelection().setItem(0,item);
+            this.datasourceSelectBox.getSelection().setItem(0, item);
           }
         });
         this.getApplication().getConfigManager().setKey("modules.z3950.lastDatasource", value);
@@ -111,8 +110,7 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow",
     /**
      * UI
      */
-    createUi: function()
-    {
+    createUi: function() {
       let app = this.getApplication();
       this.setLayout(new qx.ui.layout.VBox(5));
 
@@ -137,13 +135,13 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow",
       let model = qx.data.marshal.Json.createModel([]);
       store.setModel(model);
       store.bind("model", selectBox, "model");
-      store.addListener("loaded", ()=>{
+      store.addListener("loaded", () => {
         let lastDatasource = this.getApplication().getConfigManager().getKey("modules.z3950.lastDatasource");
         if (lastDatasource) {
           this.setDatasource(lastDatasource);
         }
       });
-      this.addListener("appear", ()=>{
+      this.addListener("appear", () => {
         qx.event.message.Bus.dispatchByName("plugins.z3950.reloadDatasources");
       });
 
@@ -164,20 +162,20 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow",
       let searchBox = new qx.ui.form.TextField(null);
       this.searchBox = searchBox;
       searchBox.setPadding(2);
-      searchBox.setPlaceholder(this.tr('Enter search terms'));
+      searchBox.setPlaceholder(this.tr("Enter search terms"));
       searchBox.setHeight(26);
       composite1.add(searchBox, {flex: 1});
       searchBox.addListener("keypress", this._on_keypress, this);
-      searchBox.addListener("dblclick", e => e.stopPropagation() );
+      searchBox.addListener("dblclick", e => e.stopPropagation());
       // search button
-      this.searchButton = new qx.ui.form.Button(this.tr('Search'));
-      this.searchButton.addListener("execute", e => this.startSearch() );
+      this.searchButton = new qx.ui.form.Button(this.tr("Search"));
+      this.searchButton.addListener("execute", e => this.startSearch());
       composite1.add(this.searchButton);
 
       // help button
-      let helpButton = new qx.ui.toolbar.Button(this.tr('Help'));
+      let helpButton = new qx.ui.toolbar.Button(this.tr("Help"));
       composite1.add(helpButton);
-      helpButton.addListener("execute", e => this.getApplication().showHelpWindow("plugin/z3950/search") );
+      helpButton.addListener("execute", e => this.getApplication().showHelpWindow("plugin/z3950/search"));
 
       // table view
       let tableview = new qcl.ui.table.TableView();
@@ -215,16 +213,16 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow",
       });
 
       // import button
-      let importButton = new qx.ui.form.Button(this.tr('Import selected records'));
+      let importButton = new qx.ui.form.Button(this.tr("Import selected records"));
       this.importButton = importButton;
       importButton.setEnabled(false);
       composite2.add(importButton);
-      importButton.addListener("execute", e => this.importSelected() );
+      importButton.addListener("execute", e => this.importSelected());
 
       // close button
-      let button1 = new qx.ui.form.Button(this.tr('Close'));
+      let button1 = new qx.ui.form.Button(this.tr("Close"));
       composite2.add(button1);
-      button1.addListener("execute", e => this.close() );
+      button1.addListener("execute", e => this.close());
     },
     
 
@@ -288,7 +286,7 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow",
       this.getApplication()
         .getRpcClient("z3950/table")
         .send("import", [sourceDatasource, ids, targetDatasource, targetFolderId])
-        .then(()=>{
+        .then(() => {
           this.importButton.setEnabled(true);
           this.hidePopup();
         });
@@ -316,71 +314,74 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow",
      * @return {String}
      */
     normalizeForSearch: function (s) {
-      
       // ES6: @todo
       //let combining = /[\u0300-\u036F]/g;
       // return s.normalize('NFKD').replace(combining, ''));
       
-      function filter(c) {
+      /**
+ * @param c
+ */
+function filter(c) {
         switch (c) {
-          case 'ä':
-            return 'ae';
+          case "ä":
+            return "ae";
           
-          case 'å':
-            return 'aa';
+          case "å":
+            return "aa";
           
-          case 'á':
-          case 'à':
-          case 'ã':
-          case 'â':
-            return 'a';
+          case "á":
+          case "à":
+          case "ã":
+          case "â":
+            return "a";
           
-          case 'ç':
-          case 'č':
-            return 'c';
+          case "ç":
+          case "č":
+            return "c";
           
-          case 'é':
-          case 'ê':
-          case 'è':
-            return 'e';
+          case "é":
+          case "ê":
+          case "è":
+            return "e";
           
-          case 'ï':
-          case 'í':
-            return 'i';
+          case "ï":
+          case "í":
+            return "i";
           
-          case 'ö':
-            return 'oe';
+          case "ö":
+            return "oe";
           
-          case 'ó':
-          case 'õ':
-          case 'ô':
-            return 'o';
+          case "ó":
+          case "õ":
+          case "ô":
+            return "o";
           
-          case 'ś':
-          case 'š':
-            return 's';
+          case "ś":
+          case "š":
+            return "s";
           
-          case 'ü':
-            return 'ue';
+          case "ü":
+            return "ue";
           
-          case 'ú':
-            return 'u';
+          case "ú":
+            return "u";
           
-          case 'ß':
-            return 'ss';
+          case "ß":
+            return "ss";
           
-          case 'ё':
-            return 'е';
+          case "ё":
+            return "е";
           
           default:
             return c;
         }
       }
       
-      let normalized = '', i, l;
+      let normalized = "";
+let i; let l;
       s = s.toLowerCase();
-      for (i = 0, l = s.length; i < l; i = i + 1) {
-        normalized = normalized + filter(s.charAt(i));
+      for (i = 0, l = s.length; i < l; i += 1) {
+        normalized += filter(s.charAt(i));
       }
       return normalized;
     }
