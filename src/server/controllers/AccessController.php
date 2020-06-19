@@ -160,6 +160,11 @@ class AccessController extends AppController
     $session = null;
     Yii::$app->session->open();
 
+    $activeUser = $this->getActiveUser();
+    if ($activeUser) {
+      $this->logout($activeUser);
+    }
+
     /*
      * no username / password
      */
@@ -333,13 +338,21 @@ class AccessController extends AppController
    */
   public function actionLogout()
   {
-    $this->dispatchClientMessage("qcl.token.change", null);
     $user = $this->getActiveUser();
     if (!$user) {
       return "No user is logged in.";
     }
-    $username = $user->name;
-    Yii::info("Logging out user '{$username}'.", self::CATEGORY);
+    $this->logout($user);
+    $this->dispatchClientMessage("qcl.token.change", null);
+    return "User '{$user->name}' logged out";
+  }
+
+  /**
+   * Log out the given user
+   * @param User $user
+   */
+  public function logout(User $user) {
+    Yii::info("Logging out user '{$user->name}'.", self::CATEGORY);
     $user->online = 0;
     try {
       $user->save();
@@ -355,7 +368,6 @@ class AccessController extends AppController
     } catch (\Throwable $e) {
       Yii::warning($e->getMessage());
     }
-    return "User '$username' logged out";
   }
 
   /**

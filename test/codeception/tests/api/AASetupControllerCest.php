@@ -40,6 +40,11 @@ class AASetupControllerCest
     } while (!$done);
   }
 
+  public function tryReset(ApiTester $I) {
+    $I->amGoingTo("Reset the setup cache");
+    $I->sendJsonRpcRequest('setup','reset');
+  }
+
   /**
    * This calls the setup action with the migrations already applied.
    *

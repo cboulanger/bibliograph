@@ -49,21 +49,34 @@ qx.Class.define("bibliograph.test.t3.Access", {
       // eslint-disable-next-line no-caller
       this.showTestNameInRequest(arguments.callee.name);
       await this.loginAnonymously();
-      for (let i=1; i<4; i++) {
-        this.assertEquals(i, await this.client.request("access.count"));
+      let counter;
+      for (let i=1; i<5; i++) {
+        let c = await this.client.request("test.count");
+        this.assertEquals(counter || c, c);
+        counter = c+1;
       }
     },
-
-    async "test: authenticate with Password"() {
+  
+  
+    async "test: authenticate with Password and get userdata"() {
       // eslint-disable-next-line no-caller
       this.showTestNameInRequest(arguments.callee.name);
       await this.loginWithPassword("admin", "admin");
-      for (let i=1; i<4; i++) {
-        this.assertEquals(i, await this.client.request("access.count"));
-      }
       let result = await this.client.request("access.userdata");
       this.assertEquals("admin", result.namedId);
       this.assertInArray("*", result.permissions);
+    },
+
+    async "test: authenticate with Password and test persistence"() {
+      // eslint-disable-next-line no-caller
+      this.showTestNameInRequest(arguments.callee.name);
+      await this.loginWithPassword("admin", "admin");
+      let counter;
+      for (let i=1; i<5; i++) {
+        let c = await this.client.request("test.count");
+        this.assertEquals(counter || c, c);
+        counter = c+1;
+      }
     },
     
     eof() {}

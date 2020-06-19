@@ -71,6 +71,18 @@ class TestController extends AppController
   }
 
   /**
+   * Returns the times this action has been called. Only for testing session storage.
+   */
+  public function actionCount()
+  {
+    $session = Yii::$app->session;
+    $count = $session->get("counter");
+    $count = $count ? $count + 1 : 1;
+    $session->set( "counter", $count );
+    return $count;
+  }
+
+  /**
    * @throws UserErrorException
    */
   public function actionTest()

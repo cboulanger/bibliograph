@@ -26,7 +26,7 @@
     "dev:cleanup": "npx qx clean",
     "dev:extract-translations": "cd src/server && php yii message config/i18n.php",
     "test:codeception:all": "tool/test/codeception",
-    "test:codeception:custom": "tool/test/codeception \"api AASetupControllerCest --env with-data -vv\"",
+    "test:codeception:custom": "tool/test/codeception \"api AASetupControllerCest --env empty-database -vv\"",
     "test:testtapper:all": "./tool/test/testtapper",
     "test:testtapper:custom": "./tool/test/testtapper bibliograph-test bibliograph.test.t3.Access"
   },

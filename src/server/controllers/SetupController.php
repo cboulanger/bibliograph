@@ -429,7 +429,7 @@ class SetupController extends \app\controllers\AppController
           "Data version: $upgrade_from",
           "Code version: $upgrade_to.",
           "Setup methods: \n  - " . implode("\n  - ", $this->setupMethods)
-      ]), 'marker');
+      ]), 'setup');
     }
     return $this->_runNextMethod();
   }
