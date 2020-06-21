@@ -17,7 +17,6 @@
   
 ************************************************************************ */
 
-/*global bibliograph qx qcl dialog*/
 
 /**
  * Plugin Base Class
@@ -35,9 +34,8 @@ qx.Class.define("qcl.application.BasePlugin",
     }
   },
   
-  construct : function()
-  {  
-    this.base(arguments); 
+  construct : function() {
+    this.base(arguments);
   },
 
   members :
@@ -47,8 +45,7 @@ qx.Class.define("qcl.application.BasePlugin",
      * Returns the name of the plugin
      * @returns {string}
      */
-    getName : function()
-    {
+    getName : function() {
       throw new Error("Plugin must provide a name");
     }
 

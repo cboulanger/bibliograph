@@ -4,14 +4,14 @@
 
   http://www.bibliograph.org
 
-  Copyright: 
+  Copyright:
     2018 Christian Boulanger
 
-  License: 
+  License:
     MIT license
     See the LICENSE file in the project's top-level directory for details.
 
-  Authors: 
+  Authors:
     Christian Boulanger (@cboulanger) info@bibliograph.org
 
 ************************************************************************ */
@@ -200,12 +200,15 @@ qx.Class.define("qcl.data.store.JsonRpcStore",
     
     /**
      * Stub that can be overridden
+     *
+     * @param value
+     * @param old
      */
     _applyModel: function (value, old) {
     },
     
     _applyServiceName: function (value, old) {
-      if ( value ) {
+      if (value) {
         this.__client = this.getApplication().getRpcClient(value);
       }
     },
@@ -231,7 +234,7 @@ qx.Class.define("qcl.data.store.JsonRpcStore",
       if (value && qx.lang.Type.isArray(value) && this.getAutoLoadMethod()) {
         this.load(this.getAutoLoadMethod(), value);
       }
-      if (value===null){
+      if (value===null) {
         this.setModel(null);
       }
     },
@@ -252,10 +255,11 @@ qx.Class.define("qcl.data.store.JsonRpcStore",
      * @param createModel {Boolean}
      * @return {Promise<Object>} Promise that resolves with the loaded data
      */
-    _sendJsonRpcRequest: function (serviceMethod, params, finalCallback, context, createModel) {
+    async _sendJsonRpcRequest(serviceMethod, params, finalCallback, context, createModel) {
       var client = this.__client;
-      return client.send(serviceMethod, params || [])
-      .then((data) => {
+      let data;
+      try {
+        data = await client.request(serviceMethod, params || [])
         if (createModel) {
           if (!qx.lang.Type.isObject(this.getMarshaler())) {
             throw new Error("Cannot marshal data - no marshaller set!");
@@ -271,12 +275,12 @@ qx.Class.define("qcl.data.store.JsonRpcStore",
           qx.lang.Function.delay(finalCallback, 0, context, data);
         }
         return data;
-      })
-      .catch((ex) => {
+      } catch (ex) {
         this.error(ex);
         this.fireDataEvent("error", ex);
         this.fireDataEvent("loaded", null);
-      });
+        return null;
+      }
     },
     
     /*
@@ -293,7 +297,7 @@ qx.Class.define("qcl.data.store.JsonRpcStore",
      *   the result of the request
      * @param context {Object} The context of the callback function
      * @todo remove callback
-     * @param {Promise<Object>} Promise that resolves with the loaded data
+     * @return {Promise<Object>} Promise that resolves with the loaded data
      */
     load: function (serviceMethod, params = [], finalCallback, context) {
       serviceMethod = serviceMethod || this.getLoadMethod();
@@ -307,8 +311,8 @@ qx.Class.define("qcl.data.store.JsonRpcStore",
      * Returns true if method and params have been set.
      * @return {boolean}
      */
-    canReload : function(){
-      return !!this.__lastMethod && !!this.__lastParams;
+    canReload : function() {
+      return Boolean(this.__lastMethod) && Boolean(this.__lastParams);
     },
     
     /**
@@ -318,9 +322,7 @@ qx.Class.define("qcl.data.store.JsonRpcStore",
      * @param callback {function} The callback function that is called with
      *   the result of the request
      * @param context {Object} The context of the callback function
-     * @param {Promise<Object>} Promise that resolves with the loaded data
-     * @todo remove callback
-     * @return {Promise<mixed>} Promise that resolves with the data
+     * @return {Promise<*>} Promise that resolves with the data
      */
     reload: function (callback, context) {
       return this._sendJsonRpcRequest(
@@ -337,7 +339,7 @@ qx.Class.define("qcl.data.store.JsonRpcStore",
      * a qooxdoo data model.
      * @param serviceMethod {String} Method to call
      * @param params {Array} Array of arguments passed to the service method
-     * @param {Promise<Object>} Promise that resolves with the loaded data
+     * @return {Promise<*>} Promise that resolves with the data
      */
     loadRaw: function (serviceMethod, params = []) {
       serviceMethod = serviceMethod || this.getLoadMethod();
@@ -354,7 +356,7 @@ qx.Class.define("qcl.data.store.JsonRpcStore",
      * @param finalCallback {function} The callback function that is called with
      *   the result of the request
      * @param context {Object} The context of the callback function
-     * @param {Promise<Object>} Promise that resolves when the server has executed the service method
+     * @return {Promise<Object>} Promise that resolves when the server has executed the service method
      */
     execute: function (serviceMethod, params, finalCallback, context) {
       return this._sendJsonRpcRequest(

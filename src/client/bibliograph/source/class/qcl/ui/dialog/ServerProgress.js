@@ -19,7 +19,7 @@
 /*global qx qcl dialog*/
 
 /**
- * A dialog for monitoring the progress of a task that runs on the server and 
+ * A dialog for monitoring the progress of a task that runs on the server and
  * outputs a chunked http response with script tags of like this:
  * <pre>
  * <script type="text/javascript">
@@ -32,15 +32,14 @@
  * </pre>
  * Use the qcl_ui_dialog_ServerProgress PHP class to produce this output.
  */
-qx.Class.define("qcl.ui.dialog.ServerProgress",
-{
+qx.Class.define("qcl.ui.dialog.ServerProgress", {
   extend : dialog.Progress,
   
    /*
   *****************************************************************************
      PROPERTIES
   *****************************************************************************
-  */     
+  */
   properties :
   {
     /**
@@ -68,25 +67,24 @@ qx.Class.define("qcl.ui.dialog.ServerProgress",
   *****************************************************************************
      CONSTRUCTOR
   *****************************************************************************
-  */     
-  construct : function( widgetId, service, method )
-  {
+  */
+  construct : function(widgetId, service, method) {
     this.base(arguments);
-    this.setWidgetId( widgetId );
-    this.setService( service || null );
-    this.setMethod( method || null );
+    this.setWidgetId(widgetId);
+    this.setService(service || null);
+    this.setMethod(method || null);
     this.__iframe = new qx.html.Iframe();
     this.__iframe.hide();
     let app = qx.core.Init.getApplication();
     app.getRoot().getContentElement().add(this.__iframe);
     this.__sourceUrl = app.getServerUrl();
-  }, 
+  },
   
   /*
   *****************************************************************************
      MEMBERS
   *****************************************************************************
-  */     
+  */
   members :
   {
     __iframe : null,
@@ -104,11 +102,10 @@ qx.Class.define("qcl.ui.dialog.ServerProgress",
      *    The parameters passed to the controller action as a key-value map, the keys corresponding
      *    to the names of the variables in the method signature
      */
-    start : function(params={})
-    {
+    start : function(params={}) {
       // check parameters
-      if ( ! qx.lang.Type.isObject( params ) ) {
-        this.error( "Paramteters must be a map");
+      if (!qx.lang.Type.isObject(params)) {
+        this.error("Paramteters must be a map");
       }
     
       // reset
@@ -125,8 +122,8 @@ qx.Class.define("qcl.ui.dialog.ServerProgress",
         this.getService() + "/" + this.getMethod() + "&" +
         qx.util.Uri.toParameter(params) + "&nocache=" + Math.random();
       // start request and show dialog
-      this.__iframe.setSource( source );
+      this.__iframe.setSource(source);
       this.show();
     }
-  }  
+  }
 });

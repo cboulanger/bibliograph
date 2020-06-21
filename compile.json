@@ -18,7 +18,12 @@
     "qx.icontheme": "Tango",
     "module.objectid": true,
     "app.version": "3.0.0-beta.79",
-    "app.serverUrl": "../../../src/server/test"
+    "app.serverUrl": "../../../src/server/test/"
+  },
+  "babel": {
+    "options": {
+      "targets": "edge >=18, chrome >= 73, firefox >= 66"
+    }
   },
   "locales": [
     "en",

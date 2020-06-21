@@ -13,6 +13,7 @@
  *
  * @asset(bibliograph/*)
  * @require(qcl.application.ClipboardManager)
+ * @require(qcl.io.jsonrpc.MessageBus)
  */
 qx.Class.define("bibliograph.Application", {
   extend : qx.application.Standalone,
@@ -243,7 +244,7 @@ qx.Class.define("bibliograph.Application", {
       qx.core.Assert.assert(Boolean(service), "Service parameter cannot be empty");
       qx.util.Validate.checkString(service, "Service parameter must be a string");
       if (!this.__clients[service]) {
-        let client = new qcl.io.jsonrpc.Client(this.getServerUrl(), service);
+        let client = new qcl.io.jsonrpc.Client(this.getServerUrl() + "/json-rpc", service);
         client.setErrorBehavior("dialog");
         this.__clients[service] = client;
       }

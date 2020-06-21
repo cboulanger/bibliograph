@@ -23,7 +23,8 @@
   },
   "requires": {
     "@qooxdoo/compiler": "^1.0.0-beta",
-    "@qooxdoo/framework": "^6.0.0-beta"
+    "@qooxdoo/framework": "^6.0.0-beta",
+    "qooxdoo/qxl.dialog": "^3.0.2"
   },
   "$schema": "https://qooxdoo.org/schema/Manifest-1-0-0.json"
 }

@@ -153,7 +153,9 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
      * Backward-compatibility
      * @deprecated
      */
-    send : this.request,
+    async send() {
+      return this.request.apply(this, arguments);
+    },
   
     /**
      * Sends a jsonrpc notification to the server. An error will be caught
