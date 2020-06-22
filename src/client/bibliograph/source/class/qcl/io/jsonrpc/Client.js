@@ -33,7 +33,8 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
     this.__dialog = dialog.Dialog.error("").hide();
     qx.util.Validate.checkUrl(url);
     const client = this.__client = new qx.io.jsonrpc.Client(url, service);
-    client.addListener("peerRequest", this._handlePeerRequest, this);
+    client.addListener("outgoingRequest", this._configueTransport, this);
+    client.addListener("incomingRequest", this._handleIncomingRequest, this);
     qx.event.message.Bus.subscribe("qcl.token.change", e => {
       this.setToken(e.getData() || null);
     });
@@ -58,7 +59,6 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
       nullable: true,
       init: null,
       check: "String",
-      apply: "_applyToken",
       event: "changeToken"
     },
 
@@ -85,8 +85,7 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
      */
     queryParams: {
       check: "Object",
-      nullable: true,
-      apply: "_applyQueryParams"
+      nullable: true
     }
   },
 
@@ -208,38 +207,33 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
     */
     
     /**
-     * applys the token property
-     *
-     * @param value
-     * @param old
-     */
-    _applyToken: function (value, old) {
-      const auth = value ? new qx.io.request.authentication.Bearer(value) : null;
-      this.__client.getTransport().getTransportImpl().setAuthentication(auth);
-      if (value /* and debug mode */) {
-        this._applyQueryParams({"access-token":value});
-      }
-    },
-  
-    /**
-     * Apply method for queryParams
-     * @param {Object} params
+     * configure the transport object before the request is sent
      * @private
      */
-    _applyQueryParams(params) {
-      qx.core.Assert.assertMap(params);
+    _configueTransport() {
+      let token = this.getToken();
+      let queryParams = this.getQueryParams() || {};
       let transportImpl = this.__client.getTransport().getTransportImpl();
-      let parsedUri = qx.util.Uri.parseUri(transportImpl.getUrl());
-      let existingParams = parsedUri.queryKey;
-      let url = [
-        parsedUri.protocol,
-        "://",
-        parsedUri.authority,
-        parsedUri.path,
-        "?",
-        qx.util.Uri.toParameter(Object.assign(existingParams, params))
-      ].join("");
-      transportImpl.setUrl(url);
+      if (token) {
+        if (qx.core.Environment.get("qx.debug")) {
+          queryParams["access-token"] = token;
+        }
+        const auth = new qx.io.request.authentication.Bearer(token);
+        transportImpl.setAuthentication(auth);
+      }
+      if (Object.getOwnPropertyNames(queryParams).length) {
+        let parsedUri = qx.util.Uri.parseUri(transportImpl.getUrl());
+        let existingParams = parsedUri.queryKey;
+        let url = [
+          parsedUri.protocol,
+          "://",
+          parsedUri.authority,
+          parsedUri.path,
+          "?",
+          qx.util.Uri.toParameter(Object.assign(existingParams, queryParams))
+        ].join("");
+        transportImpl.setUrl(url);
+      }
     },
     
     /**
@@ -248,7 +242,7 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
      * @param evt
      * @private
      */
-    _handlePeerRequest (evt) {
+    _handleIncomingRequest (evt) {
       let message = evt.getData();
       if (message instanceof qx.io.jsonrpc.protocol.Notification) {
         let parts = message.getMethod().split(".");

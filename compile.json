@@ -36,7 +36,8 @@
       "type": "source",
       "environment": {
         "app.mode": "development",
-        "qx.debug": true
+        "qx.debug": true,
+        "qx.io.jsonrpc.debug": true
       },
       "bundle": {
         "include": [
