@@ -17,7 +17,10 @@
  */
 qx.Class.define("bibliograph.Application", {
   extend : qx.application.Standalone,
-  include : [bibliograph.MApplicationState, qcl.ui.MLoadingPopup],
+  include : [
+    bibliograph.MApplicationState,
+    qcl.ui.MLoadingPopup
+  ],
 
   statics:{
     /**
@@ -56,13 +59,14 @@ qx.Class.define("bibliograph.Application", {
 
       this.__clients = {};
       this.__widgets = {};
+      this.__blocker = new qx.ui.core.Blocker(this.getRoot());
 
       if (qx.core.Environment.get("qx.debug")) {
         qx.log.appender.Native;
       }
 
-      // object id
-      this.setQxObjectId("application");
+      // object id for main application
+      this.setQxObjectId("app");
       qx.core.Id.getInstance().register(this);
 
       // application startup

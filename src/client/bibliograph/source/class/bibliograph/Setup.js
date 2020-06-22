@@ -23,7 +23,10 @@
 qx.Class.define("bibliograph.Setup", {
   extend: qx.core.Object,
   type: "singleton",
-  include : [qcl.ui.MLoadingPopup, qx.locale.MTranslation],
+  include : [
+    qcl.ui.MLoadingPopup,
+    qx.locale.MTranslation
+  ],
 
   statics: {
     // TODO move messages in own class
