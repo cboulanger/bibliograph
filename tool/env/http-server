@@ -8,8 +8,8 @@ start)
   if [ "$(docker ps -f name=http-server -q -a)" == "" ]; then
     echo ">>> Starting apache/php server in docker container ..."
     docker run --name http-server \
-      -v $PWD:/var/www:rw \
-      -v $PWD/data/docker/http/root:/root \
+      -v $PWD:/var/www:cached \
+      -v $PWD/data/docker/http/root:/root:delegated \
       -e APACHE_UID=$UID \
       -p 8070:8070 \
       -p 8071:8071 \

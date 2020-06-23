@@ -12,7 +12,7 @@ start)
       exit 1
     fi
     docker run --name mysql-server \
-      -v $PWD/data/docker/mysql:/var/lib/mysql \
+      -v $PWD/data/docker/mysql:/var/lib/mysql:delegated \
       -e MYSQL_ROOT_PASSWORD=$DB_ROOT_PASSWORD \
       -p 3306:3306 \
       --detach \
