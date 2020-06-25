@@ -12,6 +12,7 @@
   "globals": {
     "bibliograph" : true,
     "qcl": true,
+    "qxl": true,
     "rpc": true,
     "cboulanger": true,
     "dialog": true,
