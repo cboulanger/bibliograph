@@ -4,8 +4,6 @@
 
 const fs = require("fs");
 const path = require("path");
-const COMPILER_PATH = path.join(__dirname, "..", "qooxdoo-compiler"); // todo
-const testUtils = require(path.join(COMPILER_PATH, "test", "utils.js"));
 
 qx.Class.define("qx.compiler.LibraryApi", {
   extend: qx.tool.cli.api.LibraryApi,
@@ -15,6 +13,7 @@ qx.Class.define("qx.compiler.LibraryApi", {
       let command = this.getCompilerApi().getCommand();
       if (command instanceof qx.tool.cli.commands.Test) {
         command.addListener("writtenApplication", async evt => {
+          // make sure this is run only once
           let app = evt.getData();
           if (app.getName() !== "bibliograph") {
             return;
@@ -24,7 +23,7 @@ qx.Class.define("qx.compiler.LibraryApi", {
           for (let file of files) {
             let test = path.changeExt(path.basename(file), "");
             command.addTest(new qx.tool.cli.api.Test(test, async function () {
-              let result = await testUtils.runCommand(TEST_PATH, "node", test + ".js");
+              let result = await qx.tool.utis.Utils.runCommand(TEST_PATH, "node", test + ".js");
               this.setExitCode(result.exitCode);
             })).setNeedsServer(false);
           }
