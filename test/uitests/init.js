@@ -8,7 +8,8 @@ const app_url = process.env.APP_URL || `http://localhost:8073/compiled/source/bi
 const launchArgs = {
   args: [
     "--no-sandbox",
-    "--disable-setuid-sandbox"
+    "--disable-setuid-sandbox",
+    "--allow-external-pages"
   ],
   headless: false
 };
@@ -39,9 +40,10 @@ async function init(readyConsoleMessage, timeout=60000) {
   addQxPageMethods(page);
   
   // wait for app to be ready
+  //page.logConsole(true);
   await page.goto(app_url);
   await page.waitForConsoleMessage(readyConsoleMessage, {timeout});
-  
+  console.info("### Bibliograph ready");
   return {
     browser,
     context,
@@ -106,6 +108,11 @@ function addQxPageMethods(page) {
     });
   };
   
+  page.logConsole = (() => {
+    let handler = consoleMsg => console.log(consoleMsg.text());
+    return val => val ? page.on("console", handler) : page.off("console", handler);
+  })();
+  
   /**
    * @param {String} qxId
    * @return {Promise<*>}
@@ -127,22 +134,24 @@ function addQxPageMethods(page) {
   
   /**
    * @param {String} qxId
+   * @param options
    * @return {Promise<*>}
    */
-  page.waitForWidgetByQxId = async function(qxId) {
+  page.waitForWidgetByQxId = async function(qxId, options={}) {
     let selector = qxSelector(qxId);
-    return page.waitForSelector(selector);
+    return page.waitForSelector(selector, options);
   };
   
   /**
    * @param {String} qxId
    * @param {String} text
+   * @param {Object} options Options to pass to waitForSelector
    * @return {Promise<*>}
    */
-  page.waitForTextByQxId = async function(qxId, text) {
+  page.waitForTextByQxId = async function(qxId, text, options={}) {
     text = text.replace(/"/g, "&apos;").replace(/"/g, "&quot;");
     let selector = qxSelector(qxId) + ` >> text="${text}"`;
-    return page.fill(selector, text);
+    return page.waitForSelector(selector, options);
   };
 }
 

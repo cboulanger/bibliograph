@@ -78,8 +78,9 @@ qx.Class.define("bibliograph.Commands",
      */
     logout : async function(data, app) {
       if (!app) {
- app = this.getApplication();
-}
+       app = this.getApplication();
+      }
+      qx.core.Id.getQxObject("toolbar/logout").setEnabled(false);
       app.createPopup();
       app.showPopup(this.tr("Logging out ..."));
       // remove state
@@ -87,6 +88,7 @@ qx.Class.define("bibliograph.Commands",
       app.setModelId(null);
       // logout
       await app.getAccessManager().logout();
+      qx.core.Id.getQxObject("toolbar/logout").setEnabled(true);
       app.hidePopup();
     },
 
