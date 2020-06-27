@@ -16,23 +16,13 @@ const launchArgs = {
 const browsers = {};
 
 /**
- * Returns the selector string that will select the HTML node
- * with the given qxObjectId
- * @return {String}
- */
-function qxSelector(id, childQxClass) {
-  let selector = `div[data-qx-object-id="${id}"]`;
-  if (childQxClass) {
-    selector += ` >> div[qxclass="${childQxClass}"]`;
-  }
-  return selector;
-}
-
-/**
- * Sets up the browser context
+ * Sets up the browser context and optionally waits for a
+ * console message that indicates that tests can start.
+ * @param {String?} readyConsoleMessage If provided, the function waits for the
+ * @param {Number?} timeout Time in milliseconds to wait for the console message. Defaults to 60 seconds
  * @return {Promise<{browser: *, context: *, page: *}>}
  */
-async function init() {
+async function init(readyConsoleMessage, timeout=60000) {
   // reuse the browser instance
   if (!browsers[browserType]) {
     browsers[browserType] = await playwright[browserType].launch(launchArgs);
@@ -44,8 +34,77 @@ async function init() {
     console.error(`Error on page ${page.url()}: ${e.message}`);
     process.exit(1);
   });
+  
+  // add helpers
+  addQxPageMethods(page);
+  
+  // wait for app to be ready
   await page.goto(app_url);
-  // add some qooxdoo-specific methods
+  await page.waitForConsoleMessage(readyConsoleMessage, {timeout});
+  
+  return {
+    browser,
+    context,
+    page
+  };
+}
+
+/**
+ * Returns the selector string that will select the HTML node with the given qxObjectId
+ * @return {String}
+ * @param id
+ * @param childQxClass
+ */
+function qxSelector(id, childQxClass) {
+  let selector = `[data-qx-object-id="${id}"]`;
+  if (childQxClass) {
+    selector += ` >> [qxclass="${childQxClass}"]`;
+  }
+  return selector;
+}
+
+
+/**
+ * Adds some helpers and qooxdoo-specific methods
+ * @param {Page} page
+ */
+function addQxPageMethods(page) {
+  /**
+   * Waits for a console message
+   * @param {String|Function} message A string, which is the message to check console messages against,
+   * or a function, to which the console message is passed and which must return true or false.
+   * @param {Object} options
+   * @return {Promise<{String>>}
+   */
+  page.waitForConsoleMessage = async function(message, options={}) {
+    if (!["string", "function"].includes(typeof message)) {
+      throw new Error("Invalid message argument, must be string or function");
+    }
+    return new Promise((resolve, reject) => {
+      function handler(consoleMsg) {
+        let msg =consoleMsg.text();
+        switch (typeof message) {
+          case "string":
+            if (msg === message) {
+              page.off("console", handler);
+              resolve(msg);
+            }
+            break;
+          case "function":
+            if (message(msg)) {
+              page.off("console", handler);
+              resolve(msg);
+            }
+            break;
+        }
+      }
+      page.on("console", handler);
+      if (options.timeout) {
+        let error = new Error(`Timeout of ${options.timeout} reached when waiting for console message '${message}.'`);
+        setTimeout(() => reject(error), options.timeout);
+      }
+    });
+  };
   
   /**
    * @param {String} qxId
@@ -85,16 +144,7 @@ async function init() {
     let selector = qxSelector(qxId) + ` >> text="${text}"`;
     return page.fill(selector, text);
   };
-  
-  await page.waitForEvent("bibliograph-start", {timeout: 60000});
-  return {
-    browser,
-    context,
-    page
-  };
 }
-
-
 
 /**
  * Logout and close browser

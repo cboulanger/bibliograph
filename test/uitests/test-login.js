@@ -2,7 +2,7 @@ const test = require("tape");
 const {init, shutdown} = require("./init");
 
 test("login user", async assert => {
-  const {page, browser} = await init();
+  const {page, browser} = await init("bibliograph.setup.completed");
   console.log("Bibliograph ready");
   await page.clickByQxId("toolbar/login");
   await page.waitForWidgetByQxId("windows/login");
