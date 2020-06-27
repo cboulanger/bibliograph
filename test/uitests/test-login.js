@@ -1,18 +1,15 @@
 const test = require("tape");
-const process = require("process");
-const {init, qxSelector} = require("init");
+const {init, shutdown} = require("./init");
 
 test("login user", async assert => {
-  try {
-    const {page, browser} = await init();
-    await page.click(qxSelector("toolbar/login"));
-    await page.click(qxSelector("windows/login/form/username"));
-    await page.keyboard.press("Tab");
-    await page.waitForTimeout(500);
-    assert.notEqual(page.url(), url);
-    await browser.close();
-  } catch (e) {
-    console.error(`Error: ${e.message}`);
-    process.exit(1);
-  }
+  const {page, browser} = await init();
+  console.log("Bibliograph ready");
+  await page.clickByQxId("toolbar/login");
+  await page.waitForWidgetByQxId("windows/login");
+  await page.fillByQxId("windows/login/form/username", "user2");
+  await page.fillByQxId("windows/login/form/password", "user");
+  await page.clickByQxId("windows/login/buttons/login");
+  await page.waitForTextByQxId("toolbar/user", "Normal User");
+  await page.waitForTimeout(10000);
+  shutdown(page, browser);
 });

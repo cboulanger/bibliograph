@@ -15,7 +15,7 @@ class m180105_075452_data_UserDataInsert extends Migration
         [
           'namedId' => 'admin',
           'name' => 'Administrator',
-          'password' => '273a41fc35358d3f4612b4b67c62fc9111e0d175b9d61d72a',
+          'password' => '273a41fc35358d3f4612b4b67c62fc9111e0d175b9d61d72a', // "admin"
           'email' => null,
           'anonymous' => '0',
           'ldap' => '0',
@@ -26,7 +26,7 @@ class m180105_075452_data_UserDataInsert extends Migration
         [
           'namedId' => 'user1',
           'name' => 'Manager user',
-          'password' => '200d91c0982ef9a080af57a6760b296d186cc2715437422d1',
+          'password' => '200d91c0982ef9a080af57a6760b296d186cc2715437422d1', // "manager"
           'email' => null,
           'anonymous' => '0',
           'ldap' => '0',
@@ -37,7 +37,7 @@ class m180105_075452_data_UserDataInsert extends Migration
         [
           'namedId' => 'user2',
           'name' => 'Normal user',
-          'password' => '9f64bfb103e7765db6ed68827c4b8234be18a10f04885ff83',
+          'password' => '9f64bfb103e7765db6ed68827c4b8234be18a10f04885ff83', // "user"
           'email' => null,
           'anonymous' => '0',
           'ldap' => '0',

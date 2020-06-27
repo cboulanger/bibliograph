@@ -68,9 +68,12 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
   {
     createLoginButton : function() {
       let button = new qx.ui.toolbar.Button();
-      button.setIcon("icon/16/status/dialog-password.png");
-      button.setLabel(this.tr("Login"));
-      button.setVisibility("excluded");
+      button.set({
+        icon: "icon/16/status/dialog-password.png",
+        label: this.tr("Login"),
+        visibility: "excluded",
+        enabled: false
+      });
       this.accsMgr.bind("authenticatedUser", button, "visibility", {
         converter : function(v) {
           return v ? "excluded" : "visible";
@@ -82,9 +85,12 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
     
     createLogoutButton : function() {
       let button = new qx.ui.toolbar.Button();
-      button.setLabel(this.tr("Logout"));
-      button.setIcon("icon/16/actions/application-exit.png");
-      button.setVisibility("excluded");
+      button.set({
+        icon: "icon/16/actions/application-exit.png",
+        label: this.tr("Logout"),
+        visibility: "excluded",
+        enabled: false
+      });
       this.accsMgr.bind("authenticatedUser", button, "visibility", {
         converter : function(v) {
           return v ? "visible" : "excluded";

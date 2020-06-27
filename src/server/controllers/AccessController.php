@@ -48,7 +48,7 @@ class AccessController extends AppController
    *
    * @var array
    */
-  protected $noAuthActions = ["authenticate", "ldap-support","logout"];
+  protected $noAuthActions = ["authenticate", "ldap-support","logout","challenge"];
 
   //-------------------------------------------------------------
   // Actions / JSONRPC API

@@ -110,6 +110,9 @@ qx.Class.define("bibliograph.Setup", {
       // create main UI Layout
       bibliograph.ui.Windows.getInstance().create();
       bibliograph.ui.MainLayout.getInstance().create();
+  
+      qx.core.Id.getQxObject("toolbar/login").setEnabled(false);
+      qx.core.Id.getQxObject("toolbar/logout").setEnabled(false);
 
       // show the splash screen
       this.createPopup({
@@ -165,8 +168,14 @@ qx.Class.define("bibliograph.Setup", {
 
       // initialize subscribers to messages that come from server
       this.initSubscribers();
+      
+      // enable login/logout buttons
+      qx.core.Id.getQxObject("toolbar/login").setEnabled(true);
+      qx.core.Id.getQxObject("toolbar/logout").setEnabled(true);
 
-
+      // needed for UI Testingd
+      window.dispatchEvent(new Event("bibliograph-start"));
+      
       // message transport
       //this.startPolling();
 
