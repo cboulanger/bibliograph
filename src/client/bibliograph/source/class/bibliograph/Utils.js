@@ -36,10 +36,20 @@ qx.Class.define("bibliograph.Utils",
      */
     checkLogin : async function(username, password, callback) {
       var app = qx.core.Init.getApplication();
+      qx.core.Id.getQxObject("windows/login").setEnabled(false);
+      qx.core.Id.getQxObject("toolbar/login").setEnabled(false);
       app.createPopup();
       app.showPopup(app.tr("Authenticating ..."));
-      let result = await app.getAccessManager().authenticate(username, password);
-      app.hidePopup();
+      let result;
+      try {
+        result = await app.getAccessManager().authenticate(username, password);
+      } catch (e) {
+        result = {error: e.message};
+      } finally {
+        qx.core.Id.getQxObject("windows/login").setEnabled(true);
+        qx.core.Id.getQxObject("toolbar/login").setEnabled(true);
+        app.hidePopup();
+      }
       callback(result.error, result);
     },
 

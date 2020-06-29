@@ -172,14 +172,13 @@ qx.Class.define("bibliograph.Setup", {
       // enable login/logout buttons
       qx.core.Id.getQxObject("toolbar/login").setEnabled(true);
       qx.core.Id.getQxObject("toolbar/logout").setEnabled(true);
-
-      // needed for UI Testingd
-      window.dispatchEvent(new Event("bibliograph-start"));
       
       // message transport
       //this.startPolling();
-
-      qx.event.message.Bus.dispatchByName("bibliograph.setup.completed");
+      
+      let completedMessage = "bibliograph.setup.completed";
+      qx.event.message.Bus.dispatchByName(completedMessage);
+      console.log(completedMessage); // needed for UI Testing
     },
 
     /*
@@ -224,8 +223,8 @@ qx.Class.define("bibliograph.Setup", {
       // override locale from config
       confMgr.addListenerOnce("change", e => {
         if (e.getData() !== "application.locale") {
- return;
-}
+         return;
+        }
         let localeFromConfig = confMgr.getKey("application.locale");
         if (localeFromConfig && localeFromConfig !== localeManager.getLocale()) {
           this.info(`Switching locale to '${localeFromConfig}' as per user configuration.`);

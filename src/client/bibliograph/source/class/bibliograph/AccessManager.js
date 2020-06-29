@@ -170,11 +170,11 @@ qx.Class.define("bibliograph.AccessManager",
     },
 
     /**
- * Handles the response of the access/authenticate server action:
-If authentication is successful, reload config and user data.
- *
- * @param response
- */
+     * Handles the response of the access/authenticate server action:
+     * If authentication is successful, reload config and user data.
+     *
+     * @param response
+     */
     __handleAuthenticationResponse : async function(response) {
       let { message, token, sessionId, error } = response;
       if (error) {

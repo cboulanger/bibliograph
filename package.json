@@ -29,7 +29,8 @@
     "test:codeception:all": "tool/test/codeception",
     "test:codeception:custom": "tool/test/codeception \"api AASetupControllerCest --env empty-database -vv\"",
     "test:testtapper:all": "./tool/test/testtapper",
-    "test:testtapper:custom": "./tool/test/testtapper bibliograph-test bibliograph.test.t3.Access"
+    "test:testtapper:custom": "./tool/test/testtapper bibliograph-test bibliograph.test.t3.Access",
+    "test:uitests": "node ./test/uitests/test-login.js"
   },
   "ntl": {
     "descriptions": {

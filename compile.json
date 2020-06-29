@@ -94,7 +94,7 @@
       "environment": {}
     },
     {
-      "title": "Qooxdoo API Viewer",
+      "title": "Bibliograph API Viewer",
       "class": "qxl.apiviewer.Application",
       "theme": "qxl.apiviewer.Theme",
       "name": "apiviewer",
