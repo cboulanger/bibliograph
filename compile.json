@@ -1,12 +1,4 @@
 {
-  "eslintConfig": {
-    "globals": {
-      "JSZip": false
-    },
-    "parserOptions": {
-      "ecmaVersion": 2017
-    }
-  },
   "libraries": [
     "src/client/bibliograph",
     "src/server/modules/z3950/client",
@@ -39,6 +31,7 @@
         "qx.debug": true,
         "qx.io.jsonrpc.debug": true
       },
+
       "bundle": {
         "include": [
           "qx.*",
@@ -61,24 +54,16 @@
       "outputPath": "compiled/build"
     },
     {
-      "description": "A source build to be deployed for debugging purposes",
-      "type": "dist-debug",
+      "description": "The deployment target",
+      "type": "deploy",
+      "targetClass": "BuildTarget",
       "environment": {
-        "app.mode": "development",
-        "app.serverUrl": "server.php?r="
+        "app.mode": "production",
+        "qx.debug": false,
+        "app.serverUrl": "server/web/"
       },
-      "outputPath": "compiled/dist-debug",
-      "targetClass": "SourceTarget",
-      "bundle": {
-        "include": [
-          "qx.*",
-          "qxl.*",
-          "qookery.*"
-        ],
-        "exclude": [
-          "qx.util.*"
-        ]
-      }
+      "outputPath": "compiled/build",
+      "deployPath": "compiled/deploy"
     }
   ],
   "applications": [
@@ -90,41 +75,16 @@
       "bootPath": "source/boot",
       "include": [
         "bibliograph.plugins.*"
-      ],
-      "environment": {}
-    },
-    {
-      "title": "Bibliograph API Viewer",
-      "class": "qxl.apiviewer.Application",
-      "theme": "qxl.apiviewer.Theme",
-      "name": "apiviewer",
-      "environment": {
-        "qx.icontheme": "Tango",
-        "excludeFromAPIViewer": [
-          "qx.*",
-          "qxl.apiviewer.*"
-        ]
-      },
-      "exclude": [
-        "qx.test.*",
-        "qx.module.Blocker",
-        "qx.module.Placement"
       ]
-    },
-    {
-      "class": "qxl.testtapper.Application",
-      "name": "testtapper",
-      "theme": "qx.theme.Simple",
-      "title": "Qooxdoo TestTAPper",
-      "environment": {
-        "qx.icontheme": "Tango",
-        "testtapper.testNameSpace": "bibliograph.test"
-      },
-      "include": [
-        "bibliograph.test.*"
-      ],
-      "exclude": []
     }
   ],
+  "eslintConfig": {
+    "globals": {
+      "JSZip": false
+    },
+    "parserOptions": {
+      "ecmaVersion": 2017
+    }
+  },
   "$schema": "https://qooxdoo.org/schema/compile-1-0-0.json"
 }

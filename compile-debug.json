@@ -99,7 +99,40 @@
         "eventrecorder.autoplay": true,
         "eventrecoreder.gist_id": ""
       }
+    },
+    {
+      "title": "Bibliograph API Viewer",
+      "class": "qxl.apiviewer.Application",
+      "theme": "qxl.apiviewer.Theme",
+      "name": "apiviewer",
+      "environment": {
+        "qx.icontheme": "Tango",
+        "excludeFromAPIViewer": [
+          "qx.*",
+          "qxl.apiviewer.*"
+        ]
+      },
+      "exclude": [
+        "qx.test.*",
+        "qx.module.Blocker",
+        "qx.module.Placement"
+      ]
+    },
+    {
+      "class": "qxl.testtapper.Application",
+      "name": "testtapper",
+      "theme": "qx.theme.Simple",
+      "title": "Qooxdoo TestTAPper",
+      "environment": {
+        "qx.icontheme": "Tango",
+        "testtapper.testNameSpace": "bibliograph.test"
+      },
+      "include": [
+        "bibliograph.test.*"
+      ],
+      "exclude": []
     }
+
   ],
   "$schema": "https://qooxdoo.org/schema/compile-1-0-0.json"
 }
