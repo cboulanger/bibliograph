@@ -5,7 +5,6 @@
 
 set -o errexit # Exit on error
 PHPVERSION=7.3
-MYSQLVERSION=5.*
 
 # Colorize output, see https://linuxtidbits.wordpress.com/2008/08/11/output-color-on-bash-scripts/
 txtbld=$(tput bold)             # Bold
@@ -33,7 +32,7 @@ if [ "$(apt list php | grep ${PHPVERSION})" == "" ]; then
     add-apt-repository ppa:ondrej/php
     apt update
 fi
-apt-get install -y  apache2 mysql-server=${MYSQLVERSION} php${PHPVERSION} php-pear
+apt-get install -y  apache2 mariadb-server php${PHPVERSION} php-pear
 apt-get install -y php${PHPVERSION}-{dev,ldap,curl,gd,intl,mbstring,mcrypt,xml,xsl,zip}
 
 section "Installing bibliographic tools..."

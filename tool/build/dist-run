@@ -3,7 +3,7 @@
 TOP_DIR=$(pwd)
 DIST_DIR=$(pwd)/dist
 SERVER_SRC_DIR=$(pwd)/src/server
-HOST=localhost:9091
+HOST=localhost:7073
 
 # copy config file
 cp -a $SERVER_SRC_DIR/config/app.conf.toml $DIST_DIR/server/config
