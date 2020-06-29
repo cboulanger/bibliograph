@@ -29,7 +29,7 @@ if [ "$(apt list php | grep ${PHPVERSION})" == "" ]; then
     apt update
 fi
 apt-get install -y zip build-essential php${PHPVERSION} php-pear
-apt-get install -y php${PHPVERSION}-{dev,ldap,curl,gd,intl,mbstring,mcrypt,xml,xsl,zip}
+apt-get install -y php${PHPVERSION}-{dev,ldap,curl,gd,intl,mbstring,xml,xsl,zip}
 
 section "Installing bibliographic tools..."
 apt-get install -y yaz libyaz4-dev bibutils jq
@@ -38,11 +38,11 @@ pear channel-update pear.php.net && yes $'\n' | pecl install yaz && \
 [ -f /etc/php/${PHPVERSION}/mods-available/yaz.ini ] || echo "extension=yaz.so" > /etc/php/${PHPVERSION}/mods-available/yaz.ini
 [ -f /etc/php/${PHPVERSION}/cli/conf.d/yaz.ini ] || ln -s /etc/php/${PHPVERSION}/mods-available/yaz.ini /etc/php/${PHPVERSION}/cli/conf.d/
 [ -f /etc/php/${PHPVERSION}/cli/conf.d/yaz.ini ] || ln -s /etc/php/${PHPVERSION}/mods-available/yaz.ini /etc/php/${PHPVERSION}/apache2/conf.d/
-service apache2 restart
+systemctl restart apache2.service
 if php -i | grep yaz --quiet && echo '<?php exit(function_exists("yaz_connect")?0:1);' | php ; then echo "YAZ is installed"; else echo "YAZ installation failed"; exit 1; fi;
 
 section "Configuring MySql Server"
-service mysql start
+systemctl restart mariadb.service
 mysql -e 'CREATE DATABASE IF NOT EXISTS bibliograph;'
 mysql -e "DROP USER IF EXISTS 'bibliograph'@'localhost';"
 mysql -e "CREATE USER 'bibliograph'@'localhost' IDENTIFIED BY 'bibliograph';"

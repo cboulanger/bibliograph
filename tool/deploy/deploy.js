@@ -23,12 +23,7 @@ while (true) {
       throw new Error(`Identity file ${identity} does not exist.`);
     }
     let [username, host, port] = target.match(/^([^@]+)@([^:]+):?([0-9]+)?$/).slice(1);
-    hosts.push({
-      host,
-      username,
-      port,
-      identity
-    });
+    hosts.push({ host, username, port, identity });
   }
   if (hosts.length === 0) {
     break;
@@ -36,10 +31,21 @@ while (true) {
   configs.push(hosts);
 }
 
-var ssh = new SSH2(configs[0]);
+// main
+(async () => {
+  for (let sshConfig of configs) {
+    await deployToTarget(sshConfig);
+  }
+})();
 
-(async function() {
+/**
+ * Deploys Bibliograph to the target
+ * @param sshConfig
+ * @return {Promise<void>}
+ */
+async function deployToTarget(sshConfig) {
   try {
+    let ssh=new SSH2(sshConfig);
     await ssh.connect();
     console.log("Connection established");
     var sftp = ssh.sftp();
@@ -49,5 +55,5 @@ var ssh = new SSH2(configs[0]);
   } catch (e) {
     console.error(e);
   }
-})();
+}
 
