@@ -5,8 +5,8 @@ const fs = require("fs");
 const path = require("path");
 const TEST_PATH = path.join("test", "uitests");
 
-qx.Class.define("bibliograph.LibraryApi", {
-  extend: qx.tool.cli.api.LibraryApi,
+qx.Class.define("bibliograph.CompilerApi", {
+  extend: qx.tool.cli.api.CompilerApi,
   statics: {
     TEST_PATH
   },
@@ -16,23 +16,25 @@ qx.Class.define("bibliograph.LibraryApi", {
      * @return {Promise<void>}
      */
     async load () {
-      let command = this.getCompilerApi().getCommand();
-      command.addListener("writtenApplication", async evt => {
-        // make sure this is run only once
-        let app = evt.getData();
-        console.log("*** Written app: " + app.getName());
-        console.log(command);
-        if (app.getName() === "bibliograph") {
-          switch (true) {
-            case (command instanceof qx.tool.cli.commands.Test):
-              await this.runTests(command);
-              break;
-            case (command instanceof qx.tool.cli.commands.Deploy):
-              await this.deploy(command);
-              break;
+      let config = await this.base(arguments);
+      this.addListenerOnce("changeCommand", () => {
+        let command = this.getCommand();
+        command.addListener("writtenApplication", async evt => {
+          // make sure this is run only once
+          let app = evt.getData();
+          if (app.getName() === "bibliograph") {
+            switch (true) {
+              case (command instanceof qx.tool.cli.commands.Test):
+                await this.__runTests(command);
+                break;
+              case (command instanceof qx.tool.cli.commands.Deploy):
+                await this.__deploy(command);
+                break;
+            }
           }
-        }
+        });
       });
+      return config;
     },
   
     /**
@@ -40,7 +42,7 @@ qx.Class.define("bibliograph.LibraryApi", {
      * @param command
      * @return {Promise<void>}
      */
-    async runTests(command) {
+    async __runTests(command) {
       let files =
             fs.readdirSync(this.constructor.TEST_PATH)
             .filter(file => fs.statSync(path.join(this.constructor.TEST_PATH, file)).isFile());
@@ -57,12 +59,12 @@ qx.Class.define("bibliograph.LibraryApi", {
      * Deploy the application
      * @param command
      */
-    deploy(command) {
+    async __deploy(command) {
       console.log("*************  Deploy!");
     }
   }
 });
 
 module.exports = {
-  LibraryApi: bibliograph.LibraryApi
+  CompilerApi: bibliograph.CompilerApi
 };
