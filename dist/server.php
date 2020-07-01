@@ -1,12 +1,32 @@
 <?php
-// @todo: next two lines must go away before release
-//defined('YII_ENV') or define('YII_ENV', 'dev');
-//defined('YII_DEBUG') or define('YII_DEBUG', true);
+/* ************************************************************************
 
-require('server/vendor/autoload.php');
-require('server/vendor/yiisoft/yii2/Yii.php');
+  Bibliograph. The open source online bibliographic data manager
+
+  http://www.bibliograph.org
+
+  Copyright:
+    2003-2020 Christian Boulanger
+
+  License:
+    MIT license
+    See the LICENSE file in the project's top-level directory for details.
+
+  Authors:
+    Christian Boulanger (@cboulanger) info@bibliograph.org
+
+************************************************************************ */
+
+/*
+ * Server entry point
+ */
+const APP_ROOT_DIR = __DIR__;
+const APP_FRONTEND_DIR = __DIR__ . "/bibliograph";
+
+require __DIR__  . '/server/bootstrap.php';
 $config = require 'server/config/web.php';
 $app = new yii\web\Application($config);
+
 // make sure db connection is opened with utf-8 encoding
 $app->db->on(\yii\db\Connection::EVENT_AFTER_OPEN, function ($event) {
   $event->sender->createCommand("SET NAMES utf8")->execute();

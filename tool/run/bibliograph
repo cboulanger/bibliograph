@@ -6,5 +6,11 @@ set -o errexit
 source test/.env
 source tool/env/check
 source tool/env/envvars-export
+if [ "$1" == "clean" ]; then
+  source tool/test/setup/create-mysql-user
+  source tool/test/setup/reset-data
+  npx qx clean
+fi
+source tool/test/setup/check-mysql
 export BIB_SERVER_URL
-tool/run/devel bibliograph
+tool/dev/start-app bibliograph

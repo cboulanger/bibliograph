@@ -10,7 +10,7 @@
     "qx.icontheme": "Tango",
     "module.objectid": true,
     "app.version": "development",
-    "app.serverUrl": "../../../src/server/test/"
+    "app.serverUrl": "../../../src/server/web/"
   },
   "babel": {
     "options": {

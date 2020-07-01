@@ -7,5 +7,5 @@ fi
 
 cd $DIST_DIR
 shopt -s extglob
-rm -rf !("server.php"|".gitignore")
+rm -rf !("server.php"|".gitignore"|".htaccess")
 

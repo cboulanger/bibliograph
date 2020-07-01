@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 set -e
+source tool/lib/functions.sh
 
 # dependencies: apt-get install jq (linux) / brew install jq (MacOS with homebrew)
 command -v jq >/dev/null 2>&1 || { echo >&2 "You need to install the jq command"; exit 1; }
@@ -13,7 +14,6 @@ BUILD_TARGET=${2:-build}
 QX_CMD="npx qx"
 TOP_DIR=$(pwd)
 DIST_DIR=$TOP_DIR/dist
-CLIENT_SRC_DIR=$TOP_DIR/src/client/bibliograph
 SERVER_SRC_DIR=$TOP_DIR/src/server
 VERSION=$(node -p -e "require('$TOP_DIR/package.json').version")
 
@@ -27,9 +27,6 @@ if [[ "$TRAVIS_BRANCH" != "" ]]; then
 else
   ZIP_NAME=bibliograph-${VERSION}.zip
 fi
-
-# clean build
-$TOP_DIR/tool/dist/clean
 
 echo "*****************************************************************************************"
 echo
@@ -45,7 +42,10 @@ echo
 echo "*****************************************************************************************"
 echo
 
-echo " >>> Building client ..."
+echo ">>> Cleaning up first..."
+./tool/dist/clean
+
+echo ">>> Building client ..."
 # Export current version to qooxdo environment
 jq ".environment[\"app.version\"]=\"$VERSION\"" $BUILD_FILE > $BUILD_FILE.tmp
 mv $BUILD_FILE.tmp $BUILD_FILE
@@ -54,12 +54,13 @@ mv $BUILD_FILE.tmp $BUILD_FILE
 $QX_CMD deploy --configFile=$BUILD_FILE --target=$BUILD_TARGET --clean || exit 1
 cp -a compiled/deploy/* $DIST_DIR || exit 1
 
-echo " >>> Building server ..."
+echo ">>> Building server ..."
 mkdir $DIST_DIR/server
 cd $DIST_DIR/server
-cp -a $SERVER_SRC_DIR/{config,controllers,lib,messages,migrations,models,modules,schema,views} .
+cp -a $SERVER_SRC_DIR/{config,controllers,lib,messages,migrations,models,modules,schema,views,bootstrap.php} .
 mkdir -p runtime/{cache,logs}
 rm -f config/{message.php,test.php}
+cp $SERVER_SRC_DIR/web/.htaccess .
 echo "DENY FROM ALL" >> .htaccess
 
 # install composer dependencies
@@ -71,17 +72,18 @@ if ! [ -d ./vendor ] || ! [ -f ./vendor/autoload.php ]; then
 fi
 rm -f ./composer.* &> /dev/null
 
-echo " >>> Adding startup and configuration files ..."
+echo ">>> Adding startup and configuration files ..."
 cp $TOP_DIR/config.dist/{app.conf.toml,.env} $DIST_DIR
 
-echo " >>> Adding documentation ..."
+echo ">>> Adding documentation ..."
 cp $TOP_DIR/{readme.md,release-notes.md} $DIST_DIR
 echo $VERSION > $DIST_DIR/version.txt
 
-echo " >>> Creating ZIP file ..."
+echo ">>> Creating ZIP file ..."
 cd $DIST_DIR
 # remove git folders
 ( find . -type d -name ".git" ) | xargs rm -rf
 zip -q -r $ZIP_NAME *
+mv $ZIP_NAME $TOP_DIR/
 echo "Done."
 exit 0

@@ -1,18 +1,23 @@
 #!/usr/bin/env bash
 
+# Run distributable version of Bibliograph
+
 set -o errexit
-HOST=localhost:8073/dist/bibliograph
 
 source test/.env
 DB_DATABASE=bibliograph
+APP_PATH=dist/bibliograph
 
 source tool/env/check
 source tool/lib/functions.sh
-tool/env/servers-start
 source tool/env/envvars-export
 source tool/test/setup/create-mysql-user
 source tool/test/setup/check-mysql
 source tool/test/setup/reset-data
 
-# open browser
-open -a "Google Chrome" http://$HOST
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  echo ">>> Opening app in browser at $BIB_SERVER_URL/$APP_PATH"
+  open -a "Google Chrome" "$BIB_SERVER_URL/$APP_PATH"
+  # send Alt+Command+I to open Web inspector
+  osascript -e 'tell application "System Events" to keystroke "i" using {option down, command down}'
+fi

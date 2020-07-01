@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Compiles and starts the given app in the browser
+# Compiles and starts the given app in the browser in development mode
 set -o errexit
 source tool/env/envvars-load
 source tool/env/envvars-export

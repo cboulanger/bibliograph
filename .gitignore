@@ -1,5 +1,5 @@
 # configuration
-.env
+/.env
 /app.conf.toml
 
 # npm
@@ -19,3 +19,6 @@ package-lock.json
 
 # we don't need to track changes in the workspace file of PHPStorm
 .idea/workspace.xml
+
+# Distributable ZIP File
+/*.zip
