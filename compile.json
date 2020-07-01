@@ -9,7 +9,7 @@
   "environment": {
     "qx.icontheme": "Tango",
     "module.objectid": true,
-    "app.version": "3.0.0-beta.79",
+    "app.version": "development",
     "app.serverUrl": "../../../src/server/test/"
   },
   "babel": {
@@ -52,18 +52,6 @@
         "qx.debug": false
       },
       "outputPath": "compiled/build"
-    },
-    {
-      "description": "The deployment target",
-      "type": "deploy",
-      "targetClass": "BuildTarget",
-      "environment": {
-        "app.mode": "production",
-        "qx.debug": false,
-        "app.serverUrl": "server/web/"
-      },
-      "outputPath": "compiled/build",
-      "deployPath": "compiled/deploy"
     }
   ],
   "applications": [

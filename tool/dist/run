@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+set -o errexit
+HOST=localhost:8073/dist/bibliograph
+
+source test/.env
+DB_DATABASE=bibliograph
+
+source tool/env/check
+source tool/lib/functions.sh
+tool/env/servers-start
+source tool/env/envvars-export
+source tool/test/setup/create-mysql-user
+source tool/test/setup/check-mysql
+source tool/test/setup/reset-data
+
+# open browser
+open -a "Google Chrome" http://$HOST

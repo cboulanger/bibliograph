@@ -19,7 +19,7 @@ This will provide you with the following dockerized services running in separate
 Afterwards, run `ntl` again and choose "Start webserver and database server". Alternatively, you can manually
 start the servers by executing `npm run env:servers:start`.
 
+# Deployment
 
- 
 
 

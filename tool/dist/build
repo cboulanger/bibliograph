@@ -1,40 +1,42 @@
 #!/usr/bin/env bash
 
+set -e
+
 # dependencies: apt-get install jq (linux) / brew install jq (MacOS with homebrew)
 command -v jq >/dev/null 2>&1 || { echo >&2 "You need to install the jq command"; exit 1; }
 
 # arguments
-BUILD_TARGET=${1:-dist-build}
-PHPVERSION=${2:-$(php -r "echo substr(phpversion(),0,3);")}
+BUILD_FILE=${1:-compile-dist.json}
+BUILD_TARGET=${2:-build}
 
 # configuration
-QX_CMD=$(which qx)
+QX_CMD="npx qx"
 TOP_DIR=$(pwd)
 DIST_DIR=$TOP_DIR/dist
 CLIENT_SRC_DIR=$TOP_DIR/src/client/bibliograph
 SERVER_SRC_DIR=$TOP_DIR/src/server
 VERSION=$(node -p -e "require('$TOP_DIR/package.json').version")
-TRAVIS_BRANCH=${TRAVIS_BRANCH:-""}
-
-if [[ "$TRAVIS_BRANCH" != "" ]]; then
-  ZIP_NAME=bibliograph-${TRAVIS_BRANCH}-snapshot-php${PHPVERSION}.zip
-  VERSION=snapshot-${TRAVIS_BRANCH}-$(date --utc +%Y%m%d_%H%M%SZ)
-else
-  ZIP_NAME=bibliograph-${VERSION}-php${PHPVERSION}.zip
-fi
 
 if [[ ! -d "$DIST_DIR" ]]; then
     echo "Cannot find 'dist' subdirectory - are you in the top folder?"
 fi
 
+if [[ "$TRAVIS_BRANCH" != "" ]]; then
+  ZIP_NAME=bibliograph-${TRAVIS_BRANCH}-snapshot.zip
+  VERSION=snapshot-${TRAVIS_BRANCH}-$(date --utc +%Y%m%d_%H%M%SZ)
+else
+  ZIP_NAME=bibliograph-${VERSION}.zip
+fi
+
 # clean build
-$TOP_DIR/build/script/dist-clean.sh
+$TOP_DIR/tool/dist/clean
 
 echo "*****************************************************************************************"
 echo
 echo "  Building distributable package of Bibliograph"
 echo
-echo "   - Build target: $BUILD_TARGET"
+echo "   - Qooxdoo build file:     $BUILD_FILE"
+echo "   - Qooxdoo build target:   $BUILD_TARGET"
 #echo "  Compiler version $(qx --version)"
 if [[ "$COMPOSER" ]]; then
 echo "   - Composer configuration: $COMPOSER"
@@ -44,42 +46,33 @@ echo "**************************************************************************
 echo
 
 echo " >>> Building client ..."
-cd $CLIENT_SRC_DIR
-mv compile.json compile.old
-jq ".environment[\"app.version\"]=\"$VERSION\"" compile.old > compile.json
-$QX_CMD compile --target=$BUILD_TARGET --clean || exit 1
-rm compile.old
+# Export current version to qooxdo environment
+jq ".environment[\"app.version\"]=\"$VERSION\"" $BUILD_FILE > $BUILD_FILE.tmp
+mv $BUILD_FILE.tmp $BUILD_FILE
 
-cp -a compiled/$BUILD_TARGET/bibliograph $DIST_DIR || exit 1
-cp -a compiled/$BUILD_TARGET/resource $DIST_DIR || exit 1
-if ! [[ $BUILD_TARGET == *"build"* ]]; then
-  cp -a compiled/$BUILD_TARGET/transpiled $DIST_DIR || exit 1
-fi
-cp compiled/$BUILD_TARGET/index.html $DIST_DIR || exit 1
-
-# cd $TOP_DIR
-# bash build/script/modules-compile.sh $BUILD_TARGET
+# Create deploy build and copy into dist
+$QX_CMD deploy --configFile=$BUILD_FILE --target=$BUILD_TARGET --clean || exit 1
+cp -a compiled/deploy/* $DIST_DIR || exit 1
 
 echo " >>> Building server ..."
+mkdir $DIST_DIR/server
 cd $DIST_DIR/server
 cp -a $SERVER_SRC_DIR/{config,controllers,lib,messages,migrations,models,modules,schema,views} .
-if ! [[ $BUILD_TARGET == *"build"* ]]; then
-  cp -a $SERVER_SRC_DIR/web .
-fi
 mkdir -p runtime/{cache,logs}
-rm -f config/{app.conf.toml,message.php,test.php}
+rm -f config/{message.php,test.php}
+echo "DENY FROM ALL" >> .htaccess
 
+# install composer dependencies
 cp -a $SERVER_SRC_DIR/composer.* .
-if [[ $BUILD_TARGET == *"source"* ]]; then
-  composer install #> /dev/null
-else
-  composer install --no-dev  #&> /dev/null
-fi
+composer install --no-dev  #&> /dev/null
 if ! [ -d ./vendor ] || ! [ -f ./vendor/autoload.php ]; then
  echo " !!! Composer install failed!"
  exit 1
 fi
 rm -f ./composer.* &> /dev/null
+
+echo " >>> Adding startup and configuration files ..."
+cp $TOP_DIR/config.dist/{app.conf.toml,.env} $DIST_DIR
 
 echo " >>> Adding documentation ..."
 cp $TOP_DIR/{readme.md,release-notes.md} $DIST_DIR
