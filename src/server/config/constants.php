@@ -18,7 +18,7 @@ defined("APP_ROOT_DIR") or define( "APP_ROOT_DIR" , __DIR__ . "/../../..");
 /*
  * The path to the directory in which the log files should be saved
  */
-defined("APP_LOG_DIR") or define( "APP_LOG_DIR" , '@runtime/logs/error.log');
+defined("APP_LOG_DIR") or define( "APP_LOG_DIR" , '@runtime/logs');
 
 //APP_ROOT_DIR . '/log/app/error.log',
 /*
@@ -86,3 +86,9 @@ defined('JSON_RPC_USE_PAYLOAD_TOKEN_AUTH') or define('JSON_RPC_USE_PAYLOAD_TOKEN
  * that will trigger a new request to handle the remaining tasks
  */
 defined('REQUEST_EXECUTION_THRESHOLD') or define('REQUEST_EXECUTION_THRESHOLD', 5);
+
+/**
+ * The time in seconds the execution of a request is allowed to last before it times out
+ * Will be set as set_time_limit();
+ */
+defined('MAX_EXECUTION_TIME') or define('MAX_EXECUTION_TIME', 120);

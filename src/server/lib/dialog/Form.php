@@ -108,28 +108,20 @@ class Form extends Alert
   /**
    * @inheritdoc
    */
-  public function sendToClient()
+  public function sendToClient($properties=[])
   {
-    static::create(
-      $this->message,
-      $this->formData,
-      $this->allowCancel,
-      $this->service,
-      $this->method,
-      $this->params,
-      $this->options
-    );
+    return parent::sendToClient(array_merge($properties,['formData','options','allowCancel']));
   }
 
   /**
    * Returns an event to the client which prompts the user with a form.
    *
-   * @param string $message 
+   * @param string $message
    *    The message text
    * @param array $formData
    * @param bool $allowCancel
    *    Whether the form can be cancelled
-   * @param string $callbackService 
+   * @param string $callbackService
    *    Service that will be called when the user clicks on the OK button
    * @param string $callbackMethod
    *    Service method

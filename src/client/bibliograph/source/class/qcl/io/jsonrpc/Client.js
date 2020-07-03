@@ -150,7 +150,7 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
   
     /**
      * Backward-compatibility
-     * @deprecated
+     * @deprecated Use request() instead
      */
     async send() {
       return this.request.apply(this, arguments);

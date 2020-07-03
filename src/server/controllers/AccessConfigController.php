@@ -734,10 +734,11 @@ class AccessConfigController extends AppController
 
     if ($validationError) {
       $shelfId = $this->shelve($type, $namedId);
-      Error::create(
-        $validationError,
-        Yii::$app->controller->id, "edit", [$shelfId]
-      );
+      (new Error())
+        ->setMessage($validationError)
+        ->setService(Yii::$app->controller->id)
+        ->setMessage("edit")
+        ->setParams([$shelfId]);
       return "Data validation error: $validationError";
     } else {
       // message to update the UI

@@ -32,8 +32,8 @@
     "test:testtapper:all": "./tool/test/testtapper",
     "test:testtapper:custom": "./tool/test/testtapper bibliograph-test bibliograph.test.t3.Access",
     "test:uitests": "node ./test/uitests/test-login.js",
-    "dist:build": "./tool/dist/build",
-    "dist:run": "./tool/dist/run"
+    "dist:build:local": "./tool/dist/build compile-dist.json build-debug config.dist/.env.local config.dist/app.conf.toml.local",
+    "dist:run:local": "./tool/dist/run"
   },
   "ntl": {
     "descriptions": {
@@ -49,7 +49,9 @@
       "test:codeception:all": "Run all codeption tests",
       "test:codeception:custom": "Run custom codeception test (see package.json)",
       "test:testtapper:all": "Run all testtapper tests",
-      "test:testtapper:custom": "Run custom testtapper test (see package.json)"
+      "test:testtapper:custom": "Run custom testtapper test (see package.json)",
+      "dist:build:local": "Build a distributable version that can be run locally",
+      "dist:run:local": "Run local dist build"
     }
   },
   "_old_scripts": {

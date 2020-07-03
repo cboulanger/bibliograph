@@ -4,8 +4,7 @@
 
 set -o errexit
 
-source test/.env
-DB_DATABASE=bibliograph
+source dist/config/.env
 APP_PATH=dist/bibliograph
 
 source tool/env/check

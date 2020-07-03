@@ -20,21 +20,42 @@
 
 namespace lib\dialog;
 
+/**
+ * Class Progress
+ * @todo support more properties
+ * @package lib\dialog
+ */
 class Progress extends Dialog
 {
+
   /**
-   * Returns an event to the client which shows a progress dialog message
-   * @param array|null $properties
-   *    If array, populate the properties of the widget with the key-value pairs
-   * @param string $callbackService
-   *    The name of the service to be called
-   * @param string $callbackMethod
-   *    The name of the method to be called
-   * @param array|null $callbackParams
-   *    The parameters to be passed to the service
+   * @var string
    */
-  public static function create( $properties, $callbackService, $callbackMethod, $callbackParams )
+  protected $message = "";
+
+  /**
+   * @param $value
+   * @return $this
+   */
+  public function setMessage(string $value){$this->message=$value; return $this;}
+
+  /**
+   * The type of the dialog widget
+   * @var int
+   */
+  public $progress;
+
+  /**
+   * @param int $value
+   * @return $this
+   */
+  public function setProgress(int $value){$this->progress = $value; return $this; }
+
+  /**
+   * @inheritDoc
+   */
+  public function sendToClient(array $properties=[])
   {
-    parent::createWidget("progress", $properties, $callbackService, $callbackMethod, $callbackParams );
+    return parent::sendToClient(array_merge($properties,['message', 'progress']));
   }
 }

@@ -9,11 +9,14 @@ command -v jq >/dev/null 2>&1 || { echo >&2 "You need to install the jq command"
 # arguments
 BUILD_FILE=${1:-compile-dist.json}
 BUILD_TARGET=${2:-build}
+ENV_FILE=${3:-$(pwd)/dist/.env}
+CONF_FILE=${4:-$(pwd)/dist/app.conf.toml}
 
 # configuration
 QX_CMD="npx qx"
 TOP_DIR=$(pwd)
 DIST_DIR=$TOP_DIR/dist
+CONF_DIR=$DIST_DIR/config
 SERVER_SRC_DIR=$TOP_DIR/src/server
 VERSION=$(node -p -e "require('$TOP_DIR/package.json').version")
 
@@ -34,6 +37,8 @@ echo "  Building distributable package of Bibliograph"
 echo
 echo "   - Qooxdoo build file:     $BUILD_FILE"
 echo "   - Qooxdoo build target:   $BUILD_TARGET"
+echo "   - Application .env file:  $ENV_FILE"
+echo "   - Appl. config file:      $CONF_FILE"
 #echo "  Compiler version $(qx --version)"
 if [[ "$COMPOSER" ]]; then
 echo "   - Composer configuration: $COMPOSER"
@@ -51,8 +56,8 @@ jq ".environment[\"app.version\"]=\"$VERSION\"" $BUILD_FILE > $BUILD_FILE.tmp
 mv $BUILD_FILE.tmp $BUILD_FILE
 
 # Create deploy build and copy into dist
-$QX_CMD deploy --configFile=$BUILD_FILE --target=$BUILD_TARGET --clean || exit 1
-cp -a compiled/deploy/* $DIST_DIR || exit 1
+$QX_CMD deploy --configFile=$BUILD_FILE --target=$BUILD_TARGET --clean
+cp -a compiled/deploy/* $DIST_DIR
 
 echo ">>> Building server ..."
 mkdir $DIST_DIR/server
@@ -72,8 +77,12 @@ if ! [ -d ./vendor ] || ! [ -f ./vendor/autoload.php ]; then
 fi
 rm -f ./composer.* &> /dev/null
 
-echo ">>> Adding startup and configuration files ..."
-cp $TOP_DIR/config.dist/{app.conf.toml,.env} $DIST_DIR
+echo ">>> Adding default configuration files ..."
+cd $TOP_DIR
+mkdir -p $CONF_DIR
+echo "DENY FROM ALL" >> $CONF_DIR/.htaccess
+cp $CONF_FILE $CONF_DIR/app.conf.toml
+cp $ENV_FILE $CONF_DIR/.env
 
 echo ">>> Adding documentation ..."
 cp $TOP_DIR/{readme.md,release-notes.md} $DIST_DIR

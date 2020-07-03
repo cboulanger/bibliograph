@@ -84,11 +84,12 @@ class ExportController extends AppController
     if ( $data === null ) {
       return "Dialog was cancelled.";
     }
-    Popup::create(
-      Yii::t('app',"Preparing export data. Please wait..."),
-      /*Yii::$app->controller->route*/ "converters/export", "start-export",
-      [$this->shelve($data, $datasource, $selector)]
-    );
+    (new Popup())
+      ->setMessage(Yii::t('app',"Preparing export data. Please wait..."))
+      ->setService("converters/export")
+      ->setMessage("start-export")
+      ->setParams([$this->shelve($data, $datasource, $selector)])
+      ->show();
     return "Created message to show popup.";
   }
 
@@ -110,7 +111,7 @@ class ExportController extends AppController
       '&format=' . $data->format .
       '&datasource=' . $datasource .
       '&selector=' . $selector;
-    Popup::create(""); // hide the popup
+    (new Popup())->hide();
     $this->dispatchClientMessage("window.location.replace", array(
       'url' => $url
     ) );

@@ -18,23 +18,24 @@
   ],
   "targets": [
     {
-      "description": "The deployable 'build' target ",
+      "description": "Deployment version",
       "type": "build",
       "environment": {
         "app.mode": "production",
-        "qx.debug": true
+        "qx.debug": false
       },
       "outputPath": "compiled/build",
       "deployPath": "compiled/deploy"
     },
     {
-      "description": "The deployable 'source' target for debugging",
-      "type": "source",
+      "description": "Deployment version in debug mode",
+      "type": "build-debug",
+      "targetClass": "BuildTarget",
       "environment": {
-        "app.mode": "development",
+        "app.mode": "production",
         "qx.debug": true
       },
-      "outputPath": "compiled/source",
+      "outputPath": "compiled/build",
       "deployPath": "compiled/deploy"
     }
   ],

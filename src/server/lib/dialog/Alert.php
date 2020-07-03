@@ -27,11 +27,11 @@ namespace lib\dialog;
  */
 class Alert extends Dialog
 {
+
   /**
-   * The message shown in the dialog
    * @var string
    */
-  public $message ="";
+  protected $message = "";
 
   /**
    * @param $value
@@ -40,27 +40,33 @@ class Alert extends Dialog
   public function setMessage(string $value){$this->message=$value; return $this;}
 
   /**
-   * @inheritdoc
+   * @var string
    */
-  public function sendToClient()
+  protected $image = "dialog.icon.alert";
+
+  /**
+   * @param $value
+   * @return $this
+   */
+  public function setImage(string $value){$this->image=$value; return $this;}
+
+  /**
+   * @inheritDoc
+   */
+  public function sendToClient(array $properties=[])
   {
-    static::create(
-      $this->message,
-      $this->service,
-      $this->method,
-      $this->params
-    );
+    return parent::sendToClient(array_merge($properties,['message','image']));
   }
 
   /**
    * Returns a message to the client which prompts the user with an alert message
-   * @param string $message 
+   * @param string $message
    *    The message text
-   * @param string $callbackService 
+   * @param string $callbackService
    *    Optional service that will be called when the user clicks on the OK button
-   * @param string $callbackMethod 
+   * @param string $callbackMethod
    *    Optional service method
-   * @param array $callbackParams 
+   * @param array $callbackParams
    *    Optional service params
    * @deprecated Please use setters instead
    */

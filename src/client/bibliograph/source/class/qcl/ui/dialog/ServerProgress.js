@@ -16,7 +16,7 @@
    *  Christian Boulanger (cboulanger)
   
 ************************************************************************ */
-/*global qx qcl dialog*/
+
 
 /**
  * A dialog for monitoring the progress of a task that runs on the server and
@@ -35,11 +35,6 @@
 qx.Class.define("qcl.ui.dialog.ServerProgress", {
   extend : dialog.Progress,
   
-   /*
-  *****************************************************************************
-     PROPERTIES
-  *****************************************************************************
-  */
   properties :
   {
     /**
@@ -63,11 +58,6 @@ qx.Class.define("qcl.ui.dialog.ServerProgress", {
     }
   },
  
-   /*
-  *****************************************************************************
-     CONSTRUCTOR
-  *****************************************************************************
-  */
   construct : function(widgetId, service, method) {
     this.base(arguments);
     this.setWidgetId(widgetId);
@@ -79,22 +69,11 @@ qx.Class.define("qcl.ui.dialog.ServerProgress", {
     app.getRoot().getContentElement().add(this.__iframe);
     this.__sourceUrl = app.getServerUrl();
   },
-  
-  /*
-  *****************************************************************************
-     MEMBERS
-  *****************************************************************************
-  */
+
   members :
   {
     __iframe : null,
     __sourceTemplate : "",
-    
-    /*
-    ---------------------------------------------------------------------------
-       API METHODS
-    ---------------------------------------------------------------------------
-    */
     
     /**
      * Start the server method and display progress

@@ -28,8 +28,8 @@ case "$response" in
       ;;
 esac
 PARENT_DIR=$(dirname $TARGET_DIR)
-echo " >>> Copying files..."
-ssh $DEPLOY_TARGET mkdir -p $TARGET_DIR
+echo " >>> Syncing files..."
+rsync $DEPLOY_TARGET:$TARGET_DIR
 scp dist/*.zip $DEPLOY_TARGET:$PARENT_DIR/bibliograph.zip
 echo " >>> Deploying to target directory..."
 ssh $DEPLOY_TARGET unzip -o -qq -u $PARENT_DIR/bibliograph.zip -d $TARGET_DIR

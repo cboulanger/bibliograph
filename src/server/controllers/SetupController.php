@@ -26,21 +26,17 @@ use app\models\Datasource;
 use georgique\yii2\jsonrpc\exceptions\JsonRpcException;
 use Illuminate\Support\Str;
 use Yii;
-use yii\base\Application;
 use yii\db\Exception;
-use Stringy\Stringy;
 use app\models\Schema;
 use lib\components\MigrationException;
-use lib\dialog\{Dialog, Error as ErrorDialog, Confirm, Login};
+use lib\dialog\{Dialog, Progress};
 use lib\exceptions\{RecordExistsException,
   ServerBusyException,
   SetupException,
-  SetupFatalException,
-  UserErrorException};
+  SetupFatalException};
 use lib\components\ConsoleAppHelper as Console;
 use lib\Module;
-use yii\helpers\Html;
-use yii\web\UnauthorizedHttpException;
+
 
 
 /**
@@ -78,6 +74,10 @@ class SetupController extends \app\controllers\AppController
   protected $errors = [];
 
   protected $messages = [];
+
+  protected $numberOfSetupMethods = 0;
+
+  protected $counter = 0;
 
   /**
    * Whether we have an ini file
@@ -354,6 +354,7 @@ class SetupController extends \app\controllers\AppController
    * @return string
    * @throws SetupException
    * @throws ServerBusyException
+   * @throws SetupFatalException
    */
   protected function _setup()
   {
@@ -363,75 +364,87 @@ class SetupController extends \app\controllers\AppController
       throw new ServerBusyException("Setup in progress");
     }
     $this->initiatingSessionId = Yii::$app->session->id;
-    // if no setup methods have been identified, this is the start of the setup sequence
-    if (count($this->setupMethods) == 0) {
-      $upgrade_from = $this->upgrade_from;
-      $upgrade_to = $this->upgrade_to;
-      // this throws if ini file doesn't exist
-      $this->checkIfIniFileExists();
-      // version stored in database
-      if (!$upgrade_from) {
-        try {
-          $upgrade_from = Yii::$app->config->getKey('app.version');
-        } catch (\InvalidArgumentException $e) {
-          // upgrading from version 2 where the config key doesn't exist
-          $upgrade_from = "2.x";
-          $this->isV2Upgrade = true;
-        } catch (\yii\db\Exception $e) {
-          // no tables exist yet, this is the first run of a fresh installation
-          $upgrade_from = "0.0.0";
-          $this->isNewInstallation = true;
-        } catch (yii\base\InvalidConfigException $e) {
-          // this happens deleting the tables in the database during development
-          // @todo
-          $upgrade_from = "0.0.0";
-          $this->isNewInstallation = true;
-        }
-      }
-      // Version in source code
-      if (!$upgrade_to) {
-        $upgrade_to = Yii::$app->utils->version;
-      }
-      $this->upgrade_from = $upgrade_from;
-      $this->upgrade_to = $upgrade_to;
-      if ($upgrade_to === $upgrade_from) {
-        Yii::info("Starting Bibliograph v$upgrade_to ...");
-        $this->dispatchClientMessage("bibliograph.setup.done", []);
-        return "Setup finished. No upgrade necessary.";
-      }
-      // compile list of setup methods
-      foreach (\get_class_methods($this) as $method) {
-        if (Str::startsWith($method, "setup")) {
-          $this->setupMethods[] = $method;
-        }
-      }
-      if (count($this->setupMethods)===0) {
-        throw new SetupException("No setup methods");
-      }
-      try {
-        $userInfo = "Authenticated user: " . Yii::$app->user->identity->id;
-      } catch (\Throwable $e) {
-        $userInfo = "No authenticated user.";
-      }
-
-      // visual marker in log file
-      Yii::debug(implode("\n", [
-          "",
-          "",
-          str_repeat("*", 80),
-          "",
-          "BIBLIOGRAPH SETUP",
-          "",
-          str_repeat("*", 80),
-          "",
-          "Session ID:" . Yii::$app->session->id,
-          $userInfo,
-          "Data version: $upgrade_from",
-          "Code version: $upgrade_to.",
-          "Setup methods: \n  - " . implode("\n  - ", $this->setupMethods)
-      ]), 'setup');
+    if (count($this->setupMethods) === 0) {
+      // if no setup methods have been identified, this is the start of the setup sequence
+      $this->_initSetup();
     }
     return $this->_runNextMethod();
+  }
+
+  /**
+   * Initialize the setup procedure
+   * @throws SetupException
+   */
+  protected function _initSetup()
+  {
+    $upgrade_from = $this->upgrade_from;
+    $upgrade_to = $this->upgrade_to;
+    // this throws if ini file doesn't exist
+    $this->checkIfIniFileExists();
+    // version stored in database
+    if (!$upgrade_from) {
+      try {
+        $upgrade_from = Yii::$app->config->getKey('app.version');
+      } catch (\InvalidArgumentException $e) {
+        // upgrading from version 2 where the config key doesn't exist
+        $upgrade_from = "2.x";
+        $this->isV2Upgrade = true;
+      } catch (\yii\db\Exception $e) {
+        // no tables exist yet, this is the first run of a fresh installation
+        $upgrade_from = "0.0.0";
+        $this->isNewInstallation = true;
+      } catch (yii\base\InvalidConfigException $e) {
+        // this happens deleting the tables in the database during development
+        // @todo
+        $upgrade_from = "0.0.0";
+        $this->isNewInstallation = true;
+      }
+    }
+    // Version in source code
+    if (!$upgrade_to) {
+      $upgrade_to = Yii::$app->utils->version;
+    }
+    $this->upgrade_from = $upgrade_from;
+    $this->upgrade_to = $upgrade_to;
+    if ($upgrade_to === $upgrade_from) {
+      Yii::info("Starting Bibliograph v$upgrade_to ...");
+      $this->dispatchClientMessage("bibliograph.setup.done", []);
+      return "Setup finished. No upgrade necessary.";
+    }
+    // compile list of setup methods
+    foreach (\get_class_methods($this) as $method) {
+      if (Str::startsWith($method, "setup")) {
+        $this->setupMethods[] = $method;
+      }
+    }
+    $this->numberOfSetupMethods = count($this->setupMethods);
+
+    if ($this->numberOfSetupMethods === 0) {
+      throw new SetupException("No setup methods");
+    }
+
+    try {
+      $userInfo = "Authenticated user: " . Yii::$app->user->identity->id;
+    } catch (\Throwable $e) {
+      $userInfo = "No authenticated user.";
+    }
+
+    // visual marker in log file
+    Yii::debug(implode("\n", [
+        "",
+        "",
+        str_repeat("*", 80),
+        "",
+        "BIBLIOGRAPH SETUP",
+        "",
+        str_repeat("*", 80),
+        "",
+        "Session ID:" . Yii::$app->session->id,
+        $userInfo,
+        "Data version: $upgrade_from",
+        "Code version: $upgrade_to.",
+        "Setup methods: \n  - " . implode("\n  - ", $this->setupMethods)
+    ]), 'setup');
   }
 
   /**
@@ -451,11 +464,11 @@ class SetupController extends \app\controllers\AppController
    *
    * @return mixed
    * @throws SetupException
+   * @throws SetupFatalException
    */
   protected function _runNextMethod()
   {
     $method = array_shift($this->setupMethods);
-    Yii::debug("Calling '$method'...", self::CATEGORY);
     try {
       $result = $this->$method();
       if (!$result) {
@@ -467,23 +480,54 @@ class SetupController extends \app\controllers\AppController
       $this->errors[] = $result;
     }
     # log resulting diagnostic message
-    Yii::info($result, self::CATEGORY);
-    $this->messages[] = $result;
-    $time = Yii::$app->log->logger->getElapsedTime();
-    if (count($this->setupMethods) > 0) {
-      if ($this->batchExecuteSetupMethods and  $time < REQUEST_EXECUTION_THRESHOLD) {
-        // run the next method
-        Yii::debug("Setup took $time seconds so far. Running next method in same request ...");
-        return $result . "\n" . $this->_runNextMethod();
-      } else {
-        Yii::debug("Returning to client for new request to execute remaining " . count($this->setupMethods) . " methods ...");
-        $this->dispatchClientMessage("bibliograph.setup.next");
-        $this->_saveProperties();
-      }
-    } else {
-      $this->finish();
+    if (is_string($result)) {
+      Yii::info($result, self::CATEGORY);
+      $this->messages[] = $result;
     }
-    return $result;
+    // Are we done?
+    if (count($this->setupMethods) === 0 ) {
+      $this->_finish();
+      return $result;
+    }
+    // handle remaining setup methods
+    $time = Yii::$app->log->logger->getElapsedTime();
+    if ($this->batchExecuteSetupMethods &&
+      $time < REQUEST_EXECUTION_THRESHOLD &&
+      ! $result instanceof Dialog) {
+      // run the next method in the same request
+      Yii::debug("Setup took $time seconds so far. Running next method in same request ...");
+      return $result . "\n" . $this->_runNextMethod();
+    }
+    // return to client
+    Yii::debug("Returning to client for new request to execute remaining " . count($this->setupMethods) . " methods ...");
+    $this->dispatchClientMessage("bibliograph.setup.next");
+    if ($result instanceof Dialog) {
+      $result = "Show " . get_class($result) . " dialog on client";
+    } else {
+      $this->_showProgress();
+    }
+    $this->_saveProperties();
+    return $result . " ($time)";
+  }
+
+  /**
+   * @return Progress
+   */
+  protected function _showProgress()
+  {
+    $this->counter++;
+    return (new Progress())
+      ->setMessage("Setting up application ($this->counter/$this->numberOfSetupMethods) ...")
+      ->setProgress(round(($this->counter/$this->numberOfSetupMethods)*100))
+      ->show();
+  }
+
+  /**
+   * This is the first setup function called, which just shows a progress widget
+   * @return Progress
+   */
+  public function setupStart() {
+    return $this->_showProgress();
   }
 
   /**
@@ -492,13 +536,13 @@ class SetupController extends \app\controllers\AppController
    * @throws RecordExistsException
    * @throws SetupException
    */
-  function finish(){
+  protected function _finish(){
     if (count($this->errors) > 0) {
       $msg = "Setup of version '$this->upgrade_to' failed.";
       Yii::warning($msg);
       Yii::warning($this->errors);
       $this->_resetSavedProperties();
-      throw new SetupException("Setup failed with errors.", $this->errors);
+      throw new SetupException("Setup failed with errors:" . implode("<br/>", $this->errors), $this->errors);
     }
     // Everything seems to be ok
     $msg = "Setup of version '$this->upgrade_to' finished successfully.";
@@ -515,12 +559,15 @@ class SetupController extends \app\controllers\AppController
     $ldapEnabled =  Yii::$app->config->getIniValue("ldap.enabled");
     Yii::$app->config->setKeyDefault("ldap.enabled",$ldapEnabled);
     $this->dispatchClientMessage("bibliograph.setup.done", $this->messages);
+    (new Progress())->hide();
     return $msg;
   }
 
   //-------------------------------------------------------------
   // SETUP METHODS
   //-------------------------------------------------------------
+
+
 
   /**
    * Deletes the file cache on version change

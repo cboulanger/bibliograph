@@ -20,8 +20,11 @@
 /*
  * Server entry point
  */
+
 const APP_ROOT_DIR = __DIR__;
 const APP_FRONTEND_DIR = __DIR__ . "/bibliograph";
+const DOTENV_FILE= __DIR__ . "/config/.env";
+const APP_CONFIG_FILE = __DIR__ . "/config/app.conf.toml";
 
 require __DIR__  . '/server/bootstrap.php';
 $config = require 'server/config/web.php';
