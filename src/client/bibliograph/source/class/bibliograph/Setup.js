@@ -133,12 +133,15 @@ qx.Class.define("bibliograph.Setup", {
 
       // server setup
       this.showPopup(this.getSplashMessage(this.tr("Setting up application...")));
+      qx.event.message.Bus.subscribe("jsonrpc.error", () => {
+        this.hidePopup();
+      });
       await this.checkServerSetup();
 
       // authenticate
       this.showPopup(this.getSplashMessage(this.tr("Connecting with server...")));
       await this.authenticate();
-      qx.event.message.Bus.dispatch(new qx.event.message.Message("connected"));
+      qx.event.message.Bus.dispatchByName("connected");
 
       // load config & permissions
       this.showPopup(this.getSplashMessage(this.tr("Loading configuration ...")));
@@ -255,7 +258,10 @@ qx.Class.define("bibliograph.Setup", {
       // (i.e. through Wizard or Dialogs)
       const bus = qx.event.message.Bus;
       const client = this.getApplication().getRpcClient("setup");
-      bus.subscribe("bibliograph.setup.next", () => client.request("setup"));
+      bus.subscribe("bibliograph.setup.next", () => {
+        this.hidePopup();
+        client.request("setup");
+      });
       client.request("setup");
       await this.getApplication().resolveOnMessage("bibliograph.setup.done");
       this.info("Server setup done.");

@@ -68,6 +68,9 @@ qx.Class.define("bibliograph.Application", {
       // object id for main application
       this.setQxObjectId("app");
       qx.core.Id.getInstance().register(this);
+  
+      // hide any popup when an jsonrpc error occurs
+      qx.event.message.Bus.subscribe("jsonrpc.error", () => this.hidePopup());
 
       // application startup
       bibliograph.Setup.getInstance().boot();

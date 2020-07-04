@@ -60,6 +60,15 @@ qx.Class.define("qcl.ui.dialog.Dialog",{
           qx.event.message.Bus.getInstance().unsubscribe(messageName, this._onServerDialog, this);
         }
       },
+  
+      /**
+       * Hide all server dialogs
+       */
+      hideServerDialogs: function() {
+        for (let [, instance] of Object.entries(this.__instances)) {
+          instance.hide();
+        }
+      },
       
       /**
        * Handles the dialog request from the server. The message data has to be a
@@ -93,7 +102,7 @@ qx.Class.define("qcl.ui.dialog.Dialog",{
         // turn popup on or off
         if (data.type === "popup") {
           if (app.showPopup === undefined) {
-            app.warn("Cannot show popup.");
+            app.warn("Cannot show application popup.");
             data.properties.callback(false);
             return;
           }

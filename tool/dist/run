@@ -5,7 +5,7 @@
 set -o errexit
 
 source dist/config/.env
-APP_PATH=dist/bibliograph
+APP_PATH=dist
 
 source tool/env/check
 source tool/lib/functions.sh

@@ -170,21 +170,21 @@ qx.Class.define("bibliograph.Commands",
    * ({mixed} messageData, {qx.application.Standalone} app)
    */
   defer: function(statics, members, properties) {
-    for (let methodName in members) {
-      if (typeof members[methodName] == "function") {
-        qx.event.message.Bus.subscribe("bibliograph.command." + methodName, function(e) {
-          try {
-            let maybePromise = members[methodName](e.getData(), qx.core.Init.getApplication());
-            if (maybePromise instanceof Promise || maybePromise instanceof qx.Promise) {
-              (async () => {
-                await maybePromise;
-              })();
-            }
-          } catch (e) {
-            throw new Error(`Exception raised during call to bibliograph.command.${methodName}():${e}`);
+    // todo figure out automatically
+    const methodNames = ["showLoginDialog", "forgotPassword", "logout", "showHelpWindow", "showAboutWindow", "editUserData", "print"];
+    for (let methodName of methodNames) {
+      qx.event.message.Bus.subscribe("bibliograph.command." + methodName, e => {
+        try {
+          let maybePromise = bibliograph.Commands.getInstance()[methodName](e.getData(), qx.core.Init.getApplication());
+          if (maybePromise instanceof Promise || maybePromise instanceof qx.Promise) {
+            (async () => {
+              await maybePromise;
+            })();
           }
-        }, this);
-      }
+        } catch (e) {
+          throw new Error(`Exception raised during call to bibliograph.command.${methodName}():${e}`);
+        }
+      });
     }
   }
 });

@@ -1,14 +1,16 @@
 #!/usr/bin/env bash
 DEPLOY_TARGET=$1
 TARGET_DIR=${2:-/var/www/bibliograph}
-CONFIG_FILE=${3:-none}
+TARGET_CONFIG_DIR=${3:-$TARGET_DIR/config}
+
+DIST_DIR=$(pwd)/dist
 
 if [[ "$DEPLOY_TARGET" == "" ]]; then
     echo "Usage:"
-    echo "deploy.sh <server> <path> <config file>"
+    echo "deploy.sh <server> <path> <config directory>"
     echo "   - name of the deployment server as configured in .ssh/config"
     echo "   - target path on that server (optional, default: /var/www/bibliograph)"
-    echo "   - name of config file to copy into installation (optional)"
+    echo "   - path to the directory where config files should be stored (optional)"
     exit 0
 fi
 
@@ -16,7 +18,7 @@ echo
 echo "This will deploy the code in 'dist' to the following target:"
 echo "   Server:           $DEPLOY_TARGET"
 echo "   Path:             $TARGET_DIR"
-echo "   Config file used: $CONFIG_FILE"
+echo "   Config directory: $TARGET_CONFIG_DIR"
 read -r -p "Proceed? [y/N] " response
 case "$response" in
   [yY][eE][sS]|[yY])
@@ -27,14 +29,14 @@ case "$response" in
       exit 0;
       ;;
 esac
-PARENT_DIR=$(dirname $TARGET_DIR)
+
 echo " >>> Syncing files..."
-rsync $DEPLOY_TARGET:$TARGET_DIR
-scp dist/*.zip $DEPLOY_TARGET:$PARENT_DIR/bibliograph.zip
-echo " >>> Deploying to target directory..."
-ssh $DEPLOY_TARGET unzip -o -qq -u $PARENT_DIR/bibliograph.zip -d $TARGET_DIR
-[ -f $CONFIG_FILE ] && scp $CONFIG_FILE $DEPLOY_TARGET:$TARGET_DIR/server/config/app.conf.toml
-# chmod -R 0755 + chown -R www-data
-ssh $DEPLOY_TARGET chmod -R 0777 $TARGET_DIR/server/runtime
-ssh $DEPLOY_TARGET rm $PARENT_DIR/bibliograph.zip
+ssh $DEPLOY_TARGET "mkdir -p $TARGET_DIR"
+shopt -s dotglob
+rsync -azpr $DIST_DIR/* $DEPLOY_TARGET:$TARGET_DIR
+if [ "$TARGET_CONFIG_DIR" != "$TARGET_DIR/config" ]; then
+  ssh $DEPLOY_TARGET "mv $TARGET_DIR/config $TARGET_CONFIG_DIR"
+  ssh $DEPLOY_TARGET "sed -i 's/__DIR__ \\. \\\"\\/config\\\"/$TARGET_CONFIG_DIR/' $TARGET_DIR/server.php"
+fi
+ssh $DEPLOY_TARGET "chmod -R 0777 $TARGET_DIR/server/runtime"
 echo "Done."

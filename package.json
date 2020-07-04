@@ -22,7 +22,7 @@
     "env:update": "./tool/env/update",
     "env:servers:start": "tool/env/servers-start",
     "env:servers:stop": "tool/env/servers-stop",
-    "dev:run:bibliograph-clean": "tool/run/bibliograph reset",
+    "dev:run:bibliograph-clean": "tool/run/bibliograph clean",
     "dev:run:bibliograph": "tool/run/bibliograph",
     "dev:compile-watch": "npx qx compile --watch",
     "dev:cleanup": "npx qx clean",
@@ -33,7 +33,9 @@
     "test:testtapper:custom": "./tool/test/testtapper bibliograph-test bibliograph.test.t3.Access",
     "test:uitests": "node ./test/uitests/test-login.js",
     "dist:build:local": "./tool/dist/build compile-dist.json build-debug config.dist/.env.local config.dist/app.conf.toml.local",
-    "dist:run:local": "./tool/dist/run"
+    "dist:run:local": "./tool/dist/run",
+    "dist:build:demo3": "./tool/dist/build compile-dist.json build-debug config.dist/.env config.dist/app.conf.toml",
+    "dist:deploy:demo3": "./tool/deploy/deploy demo3.proxmox4"
   },
   "ntl": {
     "descriptions": {
@@ -51,7 +53,9 @@
       "test:testtapper:all": "Run all testtapper tests",
       "test:testtapper:custom": "Run custom testtapper test (see package.json)",
       "dist:build:local": "Build a distributable version that can be run locally",
-      "dist:run:local": "Run local dist build"
+      "dist:run:local": "Run local dist build",
+      "dist:build:demo3": "Make a new build for demo.panya.de",
+      "dist:deploy:demo3": "Deploy current build to demo.panya.de"
     }
   },
   "_old_scripts": {

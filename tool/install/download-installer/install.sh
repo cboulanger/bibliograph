@@ -167,7 +167,7 @@ else
   sleep 5
 fi
 
- # ------- CODE --------
+# ------- CODE --------
 
 [[ -d $TARGET_DIR ]] && ( echo "  >>> Deleting existing installation ..." && rm -rf $TARGET_DIR ) || true
 
@@ -188,31 +188,31 @@ echo $FULL_VERSION > $INST_VER_FILE
 if [ "$DB_LIST" == "$TARGET_DB" ]; then
   echo "  >>> Source and target database are identical => no database migration necessary."
 else
-        export MYSQL_PWD=$PASSWORD
-        echo "  >>> Removing database '$TARGET_DB' if it exists..."
-        mysqladmin \
-          --user=$USERNAME -f \
-          drop $TARGET_DB || true
-        echo "  >>> Creating database '$TARGET_DB' ..."
-        mysqladmin \
-          --user=$USERNAME \
-          create $TARGET_DB || true
-        for db in $DB_LIST; do
-         echo "  >>> Cloning database '$db' into '$TARGET_DB'..."
-         mysqldump \
-           --user=$USERNAME \
-           --default-character-set=utf8 \
-           --set-charset \
-           $db \
-         | sed s/bibliograph\.schema\.huBerlinRewi/bibliograph_extended/g \
-         | sed s/$db/$TARGET_DB/g \
-         | sed s/\'0000-00-00\'/NULL/g \
-         | iconv -f utf-8 -t utf-8 -c \
-         | mysql \
-           --user=$USERNAME \
-           --default-character-set=utf8 \
-           $TARGET_DB
-        done
+  export MYSQL_PWD=$PASSWORD
+  echo "  >>> Removing database '$TARGET_DB' if it exists..."
+  mysqladmin \
+    --user=$USERNAME -f \
+    drop $TARGET_DB || true
+  echo "  >>> Creating database '$TARGET_DB' ..."
+  mysqladmin \
+    --user=$USERNAME \
+    create $TARGET_DB || true
+  for db in $DB_LIST; do
+   echo "  >>> Cloning database '$db' into '$TARGET_DB'..."
+   mysqldump \
+     --user=$USERNAME \
+     --default-character-set=utf8 \
+     --set-charset \
+     $db \
+   | sed s/bibliograph\.schema\.huBerlinRewi/bibliograph_extended/g \
+   | sed s/$db/$TARGET_DB/g \
+   | sed s/\'0000-00-00\'/NULL/g \
+   | iconv -f utf-8 -t utf-8 -c \
+   | mysql \
+     --user=$USERNAME \
+     --default-character-set=utf8 \
+     $TARGET_DB
+  done
 fi
 
 # ------- CONFIG --------

@@ -290,6 +290,7 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
     _handleJsonRpcError: function (method) {
       let error = this.getError();
       let message = this.tr("Error calling remote method '%1': %2.", method, this.getErrorMessage());
+      qx.event.message.Bus.dispatchByName("jsonrpc.error", message);
       switch (this.getErrorBehavior()) {
         case "debug": {
           console.error(message.toString());
@@ -302,6 +303,7 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
         case "error":
           throw error;
         case "dialog": {
+          qcl.ui.dialog.Dialog.hideServerDialogs();
           this.__dialog.set({message}).show();
         }
       }
