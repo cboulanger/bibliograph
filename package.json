@@ -68,9 +68,6 @@
   },
   "author": "Christian Boulanger (@cboulanger) info@bibliograph.org",
   "license": "ISC",
-  "dependencies": {
-    "playwright": "^1.1.1"
-  },
   "devDependencies": {
     "@qooxdoo/compiler": "^1.0.0-beta.20200613-2032",
     "@qooxdoo/eslint-config-jsdoc-disable": "^1.0.3",
