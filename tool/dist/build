@@ -4,23 +4,27 @@ set -e
 source tool/lib/functions.sh
 
 # dependencies: apt-get install jq (linux) / brew install jq (MacOS with homebrew)
-command -v jq >/dev/null 2>&1 || { echo >&2 "You need to install the jq command"; exit 1; }
+# command -v jq >/dev/null 2>&1 || { echo >&2 "You need to install the jq command"; exit 1; }
 
-# arguments
-BUILD_FILE=${1:-compile-dist.json}
-BUILD_TARGET=${2:-build}
-ENV_FILE=${3:-$(pwd)/dist/.env}
-CONF_FILE=${4:-$(pwd)/dist/app.conf.toml}
+# get environment variables that override the defaults
+BUILD_ENV_FILE=${1:-$(pwd)/config.dist/.env}
+source $BUILD_ENV_FILE
 
 # configuration
-QX_CMD="npx qx"
+QX_CMD=${QX_CMD:-"npx qx"}
+BUILD_FILE=${BUILD_FILE:-compile-dist.json}
+BUILD_TARGET=${BUILD_TARGET:-build}
+APP_DIST_DIR=${APP_DIST_DIR:-$(pwd)/dist}
+APP_CONF_DIR=${APP_CONF_DIR:-$APP_DIST_DIR/config}
+APP_ENV_FILE=${APP_ENV_FILE:-$(pwd)/dist/.env}
+APP_CONF_FILE=${APP_CONF_FILE:-$(pwd)/dist/app.conf.toml}
+
+# other variables
 TOP_DIR=$(pwd)
-DIST_DIR=$TOP_DIR/dist
-CONF_DIR=$DIST_DIR/config
 SERVER_SRC_DIR=$TOP_DIR/src/server
 VERSION=$(node -p -e "require('$TOP_DIR/package.json').version")
 
-if [[ ! -d "$DIST_DIR" ]]; then
+if [[ ! -d "$APP_DIST_DIR" ]]; then
     echo "Cannot find 'dist' subdirectory - are you in the top folder?"
 fi
 
@@ -37,8 +41,8 @@ echo "  Building distributable package of Bibliograph"
 echo
 echo "   - Qooxdoo build file:     $BUILD_FILE"
 echo "   - Qooxdoo build target:   $BUILD_TARGET"
-echo "   - Application .env file:  $ENV_FILE"
-echo "   - Appl. config file:      $CONF_FILE"
+echo "   - Application .env file:  $APP_ENV_FILE"
+echo "   - Appl. config file:      $APP_CONF_FILE"
 #echo "  Compiler version $(qx --version)"
 if [[ "$COMPOSER" ]]; then
 echo "   - Composer configuration: $COMPOSER"
@@ -57,11 +61,11 @@ mv $BUILD_FILE.tmp $BUILD_FILE
 
 # Create deploy build and copy into dist
 $QX_CMD deploy --configFile=$BUILD_FILE --target=$BUILD_TARGET --clean
-cp -a compiled/deploy/* $DIST_DIR
+cp -a compiled/deploy/* $APP_DIST_DIR
 
 echo ">>> Building server ..."
-mkdir $DIST_DIR/server
-cd $DIST_DIR/server
+mkdir $APP_DIST_DIR/server
+cd $APP_DIST_DIR/server
 cp -a $SERVER_SRC_DIR/{config,controllers,lib,messages,migrations,models,modules,schema,views,bootstrap.php} .
 mkdir -p runtime/{cache,logs}
 rm -f config/{message.php,test.php}
@@ -79,17 +83,17 @@ rm -f ./composer.* &> /dev/null
 
 echo ">>> Adding default configuration files ..."
 cd $TOP_DIR
-mkdir -p $CONF_DIR
-echo "DENY FROM ALL" >> $CONF_DIR/.htaccess
-cp $CONF_FILE $CONF_DIR/app.conf.toml
-cp $ENV_FILE $CONF_DIR/.env
+mkdir -p $APP_CONF_DIR
+echo "DENY FROM ALL" >> $APP_CONF_DIR/.htaccess
+cp $APP_CONF_FILE $APP_CONF_DIR/app.conf.toml
+cp $APP_ENV_FILE $APP_CONF_DIR/.env
 
 echo ">>> Adding documentation ..."
-cp $TOP_DIR/{readme.md,release-notes.md} $DIST_DIR
-echo $VERSION > $DIST_DIR/version.txt
+cp $TOP_DIR/{readme.md,release-notes.md} $APP_DIST_DIR
+echo $VERSION > $APP_DIST_DIR/version.txt
 
 echo ">>> Creating ZIP file ..."
-cd $DIST_DIR
+cd $APP_DIST_DIR
 # remove git folders
 ( find . -type d -name ".git" ) | xargs rm -rf
 zip -q -r $ZIP_NAME *

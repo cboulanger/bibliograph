@@ -33,7 +33,21 @@ sudo apt-get install -y zip jq build-essential
 # Apache / PHP / MySQL
 sudo apt-get install -y apache2 mariadb-server
 sudo /etc/init.d/mysql start
-sudo apt-get install -y php php-pear php-{dev,ldap,curl,gd,intl,mbstring,xml,zip}
+sudo apt-get install -y php php-pear php-{dev,ldap,curl,mysql,gd,intl,mbstring,xml,zip}
+
+if [ "$(a2query -m | grep rewrite)" == "" ]; then
+A2DIRCONF=<<EOF
+    <Directory /var/www/html>
+        Options Indexes FollowSymLinks MultiViews
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>
+EOF
+sed -i "s|</VirtualHost>|$A2DIRCONF|"
+sudo a2enmod rewrite
+sudo service apache2 restart
+fi
 
 section "Installing bibliographic tools..."
 sudo apt-get install -y yaz libyaz4-dev bibutils

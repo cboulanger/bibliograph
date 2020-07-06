@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Run distributable version of Bibliograph
+# Run distributable version of Bibliograph locally in the docker environment
 
 set -o errexit
 

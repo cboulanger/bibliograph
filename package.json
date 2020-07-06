@@ -18,24 +18,26 @@
     "url": "git+ssh://git@github.com/cboulanger/bibliograph.git"
   },
   "scripts": {
-    "env:install": "./tool/env/install",
-    "env:update": "./tool/env/update",
-    "env:servers:start": "tool/env/servers-start",
-    "env:servers:stop": "tool/env/servers-stop",
+    "env:install":              "tool/env/install",
+    "env:update":               "tool/env/update",
+    "env:servers:start":        "tool/env/servers-start",
+    "env:servers:stop":         "tool/env/servers-stop",
     "dev:run:bibliograph-clean": "tool/run/bibliograph clean",
-    "dev:run:bibliograph": "tool/run/bibliograph",
-    "dev:compile-watch": "npx qx compile --watch",
-    "dev:cleanup": "npx qx clean",
+    "dev:run:bibliograph":      "tool/run/bibliograph",
+    "dev:compile-watch":        "npx qx compile --watch",
+    "dev:cleanup":              "npx qx clean",
     "dev:extract-translations": "cd src/server && php yii message config/i18n.php",
-    "test:codeception:all": "tool/test/codeception",
-    "test:codeception:custom": "tool/test/codeception \"api AASetupControllerCest --env empty-database -vv\"",
-    "test:testtapper:all": "./tool/test/testtapper",
-    "test:testtapper:custom": "./tool/test/testtapper bibliograph-test bibliograph.test.t3.Access",
-    "test:uitests": "node ./test/uitests/test-login.js",
-    "dist:build:local": "./tool/dist/build compile-dist.json build-debug config.dist/.env.local config.dist/app.conf.toml.local",
-    "dist:run:local": "./tool/dist/run",
-    "dist:build:demo3": "./tool/dist/build compile-dist.json build-debug config.dist/.env config.dist/app.conf.toml",
-    "dist:deploy:demo3": "./tool/deploy/deploy demo3.proxmox4"
+    "test:codeception:all":     "tool/test/codeception",
+    "test:codeception:custom":  "tool/test/codeception \"api AASetupControllerCest --env empty-database -vv\"",
+    "test:testtapper:all":      "tool/test/testtapper",
+    "test:testtapper:custom":   "tool/test/testtapper bibliograph-test bibliograph.test.t3.Access",
+    "test:uitests":             "node ./test/uitests/test-login.js",
+    "dist:docker:build":        "tool/dist/build config.dist/.env.local.docker",
+    "dist:docker:run":          "tool/dist/run",
+    "dist:localhost:build":     "tool/dist/build config.dist/.env.local.localhost",
+    "dist:localhost:deploy-clean": "DEPLOY_CLEAN=true tool/dist/deploy config.dist/.env.local.localhost",
+    "dist:demo3:build":         "tool/dist/build config.dist/.env.demo3",
+    "dist:demo3:deploy-clean":  "DEPLOY_CLEAN=true tool/dist/deploy config.dist/.env.local.localhost"
   },
   "ntl": {
     "descriptions": {
@@ -51,11 +53,7 @@
       "test:codeception:all": "Run all codeption tests",
       "test:codeception:custom": "Run custom codeception test (see package.json)",
       "test:testtapper:all": "Run all testtapper tests",
-      "test:testtapper:custom": "Run custom testtapper test (see package.json)",
-      "dist:build:local": "Build a distributable version that can be run locally",
-      "dist:run:local": "Run local dist build",
-      "dist:build:demo3": "Make a new build for demo.panya.de",
-      "dist:deploy:demo3": "Deploy current build to demo.panya.de"
+      "test:testtapper:custom": "Run custom testtapper test (see package.json)"
     }
   },
   "_old_scripts": {
