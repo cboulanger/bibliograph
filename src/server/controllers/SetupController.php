@@ -359,14 +359,24 @@ class SetupController extends \app\controllers\AppController
   protected function _setup()
   {
     $this->_restoreProperties();
-    // Abort if other client has already started the setup
-    if ($this->initiatingSessionId and $this->initiatingSessionId != Yii::$app->session->id) {
-      throw new ServerBusyException("Setup in progress");
+
+    if ($this->initiatingSessionId) {
+      if ($this->initiatingSessionId != Yii::$app->session->id) {
+        // Abort if other client has already started the setup
+        throw new ServerBusyException("Setup in progress");
+      }
+    } else {
+      $this->initiatingSessionId = Yii::$app->session->id;
     }
-    $this->initiatingSessionId = Yii::$app->session->id;
     if (count($this->setupMethods) === 0) {
       // if no setup methods have been identified, this is the start of the setup sequence
-      $this->_initSetup();
+      $result = $this->_initSetup();
+      // no setup necessary
+      if ($this->upgrade_to === $this->upgrade_from) {
+        Yii::info("Starting Bibliograph v$this->upgrade_to ...");
+        $this->dispatchClientMessage("bibliograph.setup.done", []);
+        return "Setup already completed.";
+      }
     }
     return $this->_runNextMethod();
   }
@@ -406,21 +416,18 @@ class SetupController extends \app\controllers\AppController
     }
     $this->upgrade_from = $upgrade_from;
     $this->upgrade_to = $upgrade_to;
-    if ($upgrade_to === $upgrade_from) {
-      Yii::info("Starting Bibliograph v$upgrade_to ...");
-      $this->dispatchClientMessage("bibliograph.setup.done", []);
-      return "Setup finished. No upgrade necessary.";
-    }
-    // compile list of setup methods
-    foreach (\get_class_methods($this) as $method) {
-      if (Str::startsWith($method, "setup")) {
-        $this->setupMethods[] = $method;
+    if ( $upgrade_from !== $upgrade_to) {
+      // compile list of setup methods
+      foreach (\get_class_methods($this) as $method) {
+        if (Str::startsWith($method, "setup")) {
+          $this->setupMethods[] = $method;
+        }
       }
-    }
-    $this->numberOfSetupMethods = count($this->setupMethods);
+      $this->numberOfSetupMethods = count($this->setupMethods);
 
-    if ($this->numberOfSetupMethods === 0) {
-      throw new SetupException("No setup methods");
+      if ($this->numberOfSetupMethods === 0) {
+        throw new SetupException("No setup methods");
+      }
     }
 
     try {
@@ -443,7 +450,9 @@ class SetupController extends \app\controllers\AppController
         $userInfo,
         "Data version: $upgrade_from",
         "Code version: $upgrade_to.",
-        "Setup methods: \n  - " . implode("\n  - ", $this->setupMethods)
+        $this->numberOfSetupMethods
+          ? "Setup methods: \n  - " . implode("\n  - ", $this->setupMethods)
+          : "No setup necessary."
     ]), 'setup');
   }
 
@@ -468,21 +477,25 @@ class SetupController extends \app\controllers\AppController
    */
   protected function _runNextMethod()
   {
-    $method = array_shift($this->setupMethods);
-    try {
-      $result = $this->$method();
-      if (!$result) {
-        $result = "Setup method $method completed successfully.";
+    if (count($this->setupMethods)) {
+      $method = array_shift($this->setupMethods);
+      try {
+        $result = $this->$method();
+        if (!$result) {
+          $result = "Setup method $method completed successfully.";
+        }
+      } catch (SetupException $e) {
+        $result = $e->getMessage();
+        Yii::error("Collecting setup exception: $result ");
+        $this->errors[] = $result;
       }
-    } catch (SetupException $e) {
-      $result = $e->getMessage();
-      Yii::error("Collecting setup exception: $result ");
-      $this->errors[] = $result;
-    }
-    # log resulting diagnostic message
-    if (is_string($result)) {
-      Yii::info($result, self::CATEGORY);
-      $this->messages[] = $result;
+      # log resulting diagnostic message
+      if (is_string($result)) {
+        Yii::info($result, self::CATEGORY);
+        $this->messages[] = $result;
+      }
+    } else {
+      $result = "Setup already completed.";
     }
     // Are we done?
     if (count($this->setupMethods) === 0 ) {

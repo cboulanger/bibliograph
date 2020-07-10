@@ -43,10 +43,10 @@ class Progress extends Dialog
    * The type of the dialog widget
    * @var int
    */
-  public $progress;
+  public $progress = 0;
 
   /**
-   * @param int $value
+   * @param int $value;
    * @return $this
    */
   public function setProgress(int $value){$this->progress = $value; return $this; }
