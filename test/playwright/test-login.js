@@ -10,7 +10,7 @@ async function login(page, user, password) {
   await page.clickByQxId("windows/login/buttons/login");
   await page.waitForWidgetByQxId("toolbar/user", {timeout:60000, state:"visible" });
   console.info(`### User '${user}' authenticated. Waiting for folder to reload...`);
-  await page.waitForTimeout(10000); // loading folders
+  await page.waitForTimeout(1000); // loading folders
 }
 
 async function logout(page) {
@@ -18,7 +18,7 @@ async function logout(page) {
   await page.clickByQxId("toolbar/logout");
   await page.waitForWidgetByQxId("toolbar/user", {timeout:60000, state:"hidden" });
   console.info(`## Logged out. Waiting for folder to reload...`);
-  await page.waitForTimeout(10000); // loading folders
+  await page.waitForTimeout(1000); // loading folders
 }
 
 test("login users", async assert => {

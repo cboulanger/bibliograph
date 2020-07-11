@@ -431,7 +431,7 @@ class SetupController extends \app\controllers\AppController
     }
 
     try {
-      $userInfo = "Authenticated user: " . Yii::$app->user->identity->id;
+      $userInfo = "Authenticated user: " . Yii::$app->user->identity->name;
     } catch (\Throwable $e) {
       $userInfo = "No authenticated user.";
     }
@@ -452,7 +452,9 @@ class SetupController extends \app\controllers\AppController
         "Code version: $upgrade_to.",
         $this->numberOfSetupMethods
           ? "Setup methods: \n  - " . implode("\n  - ", $this->setupMethods)
-          : "No setup necessary."
+          : "No setup necessary.",
+        "",
+        ""
     ]), 'setup');
   }
 

@@ -31,13 +31,14 @@
     "test:codeception:custom":  "tool/test/codeception \"api AASetupControllerCest --env empty-database -vv\"",
     "test:testtapper:all":      "tool/test/testtapper",
     "test:testtapper:custom":   "tool/test/testtapper bibliograph-test bibliograph.test.t3.Access",
-    "test:uitests":             "node ./test/uitests/test-login.js",
+    "test:playwright:custom":   "node ./test/playwright/test-login.js",
     "dist:docker:build":        "tool/dist/build config.dist/.env.local.docker",
     "dist:docker:run":          "tool/dist/run",
     "dist:localhost:build":     "tool/dist/build config.dist/.env.local.localhost",
     "dist:localhost:deploy-clean": "DEPLOY_CLEAN=true tool/dist/deploy config.dist/.env.local.localhost",
     "dist:demo3:build":         "tool/dist/build config.dist/.env.demo3",
     "dist:demo3:deploy-clean":  "DEPLOY_CLEAN=true tool/dist/deploy config.dist/.env.local.localhost"
+
   },
   "ntl": {
     "descriptions": {

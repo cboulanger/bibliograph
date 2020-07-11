@@ -3,7 +3,7 @@ const playwright = require("playwright");
 
 // configuration
 const browserType = process.env.BROWSER_TYPE || "chromium";
-const app_url = process.env.APP_URL || `http://localhost:8073/compiled/source/bibliograph/`;
+const app_url = process.env.APP_URL || `http://localhost/bibliograph/`;
 
 const launchArgs = {
   args: [
@@ -83,7 +83,10 @@ function addQxPageMethods(page) {
       throw new Error("Invalid message argument, must be string or function");
     }
     return new Promise((resolve, reject) => {
-      function handler(consoleMsg) {
+      /**
+ * @param consoleMsg
+ */
+function handler(consoleMsg) {
         let msg =consoleMsg.text();
         switch (typeof message) {
           case "string":
