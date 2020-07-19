@@ -505,7 +505,7 @@ qx.Class.define("qcl.ui.table.TableView",
 
       // Footer Menu bar
       let menuBar = new qx.ui.menubar.MenuBar();
-      this.addOwnedQxObject(menuBar, "menubar");
+      this.addOwnedQxObject(menuBar, "footer");
       this.menuBar = menuBar;
       menuBar.setHeight(18);
       this.add(menuBar);

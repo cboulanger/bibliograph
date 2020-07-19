@@ -27,7 +27,7 @@ qx.Class.define("bibliograph.ui.window.ObjectIds",
   construct : function() {
     this.base(arguments);
     this.set({
-      caption: "ObjectIds",
+      caption: "Object Ids",
       layout: new qx.ui.layout.Grow(),
       showMaximize: false,
       showMinimize: false,
