@@ -10,7 +10,9 @@
     "qx.icontheme": "Tango",
     "module.objectid": true,
     "app.version": "development",
-    "app.serverUrl": "../../../src/server/web/"
+    "app.serverUrl": "../../../src/server/web/",
+    "app.taskmanager.enable": true,
+    "app.taskmanager.show": false
   },
   "babel": {
     "options": {
@@ -29,7 +31,8 @@
       "environment": {
         "app.mode": "development",
         "qx.debug": true,
-        "qx.io.jsonrpc.debug": true
+        "qx.io.jsonrpc.debug": true,
+        "app.taskmanager.show": true
       },
 
       "bundle": {

@@ -71,6 +71,11 @@
       "uri": "qooxdoo/qxl.dialog",
       "repo_name": "qooxdoo/qxl.dialog",
       "repo_tag": "v3.0.2"
+    },
+    {
+      "library_name": "qxl.taskmanager",
+      "library_version": "1.0.0",
+      "path": "../qxl.taskmanager"
     }
   ],
   "version": "2.1.0"

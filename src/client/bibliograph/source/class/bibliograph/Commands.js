@@ -36,6 +36,9 @@ qx.Class.define("bibliograph.Commands",
 
     /**
      * Called when the user presses the "login" button
+     *
+     * @param value
+     * @param app
      */
     showLoginDialog : async function(value, app) {
       // check if https login is enforced
@@ -65,6 +68,9 @@ qx.Class.define("bibliograph.Commands",
 
     /**
      * called when user clicks on the "forgot password?" button
+     *
+     * @param data
+     * @param app
      */
     forgotPassword : async function(data, app) {
       app.showPopup(this.tr("Please wait ..."));
@@ -74,7 +80,10 @@ qx.Class.define("bibliograph.Commands",
     
     /**
      * Log out current user on the server
+     *
      * @return {Promise<Object>}
+     * @param data
+     * @param app
      */
     logout : async function(data, app) {
       if (!app) {
@@ -100,6 +109,8 @@ qx.Class.define("bibliograph.Commands",
 
     /**
      * opens a window with the online help
+     *
+     * @param path
      */
     showHelpWindow : function(path) {
       let url = "https://sites.google.com/a/bibliograph.org/docs-v2-de/" + path;
@@ -112,6 +123,9 @@ qx.Class.define("bibliograph.Commands",
 
     /**
      * Shows the "about" window
+     *
+     * @param data
+     * @param app
      */
     showAboutWindow : function(data, app) {
       app.getWidgetById("app/windows/about").open();
@@ -137,13 +151,14 @@ qx.Class.define("bibliograph.Commands",
        HELPER METHODS
     ---------------------------------------------------------------------------
     */
-
+    
     /**
      * Prints the content of the given dom element, by opening up a new window,
      * copying the content of the element to this new window, and starting the
      * print.
      *
      * @param domElement {Element}
+     * @param app
      * @ignore(Element)
      */
     print : function(domElement, app) {
@@ -168,10 +183,22 @@ qx.Class.define("bibliograph.Commands",
    * and setting up up a message subscriber for "bibliograph.command.{method name}".
    * When the message is dispatched, the method is called with the signature
    * ({mixed} messageData, {qx.application.Standalone} app)
+   *
+   * @param statics
+   * @param members
+   * @param properties
    */
   defer: function(statics, members, properties) {
     // todo figure out automatically
-    const methodNames = ["showLoginDialog", "forgotPassword", "logout", "showHelpWindow", "showAboutWindow", "editUserData", "print"];
+    const methodNames = [
+      "showLoginDialog",
+      "forgotPassword",
+      "logout",
+      "showHelpWindow",
+      "showAboutWindow",
+      "editUserData",
+      "print"
+    ];
     for (let methodName of methodNames) {
       qx.event.message.Bus.subscribe("bibliograph.command." + methodName, e => {
         try {

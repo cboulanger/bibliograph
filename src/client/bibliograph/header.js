@@ -5,7 +5,7 @@
   http://www.bibliograph.org
 
   Copyright:
-    2018 Christian Boulanger
+    2003-2020 Christian Boulanger
 
   License:
     MIT license

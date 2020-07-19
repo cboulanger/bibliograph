@@ -1,18 +1,20 @@
-/*******************************************************************************
- *
- * Bibliograph: Online Collaborative Reference Management
- *
- * Copyright: 2007-2015 Christian Boulanger
- *
- * License: LGPL: http://www.gnu.org/licenses/lgpl.html EPL:
- * http://www.eclipse.org/org/documents/epl-v10.php See the LICENSE file in the
- * project's top-level directory for details.
- *
- * Authors: Christian Boulanger (cboulanger)
- *
- ******************************************************************************/
+/* ************************************************************************
 
-/*global qx qcl bibliograph*/
+  Bibliograph. The open source online bibliographic data manager
+
+  http://www.bibliograph.org
+
+  Copyright:
+    2003-2020 Christian Boulanger
+
+  License:
+    MIT license
+    See the LICENSE file in the project's top-level directory for details.
+
+  Authors:
+    Christian Boulanger (@cboulanger) info@bibliograph.org
+
+************************************************************************ */
 
 /**
  * Window with information on the application
@@ -21,10 +23,9 @@
 qx.Class.define("bibliograph.ui.window.AboutWindow",
 {
   extend : qx.ui.window.Window,
-  construct : function()
-  {
+  construct : function() {
     this.base(arguments);
-    this.setCaption(this.tr('About Bibliograph'));
+    this.setCaption(this.tr("About Bibliograph"));
     this.setShowMaximize(false);
     this.setWidth(350);
     this.setShowMinimize(false);
@@ -34,13 +35,13 @@ qx.Class.define("bibliograph.ui.window.AboutWindow",
     }, this);
     qx.event.message.Bus.getInstance().subscribe("logout", function(e) {
       this.close();
-    }, this)
+    }, this);
     var qxGrow1 = new qx.ui.layout.Grow();
     this.setLayout(qxGrow1);
     var qxTabView1 = new qx.ui.tabview.TabView(null);
     this.add(qxTabView1);
     var qxPage1 = new qx.ui.tabview.Page(null);
-    qxPage1.setLabel(this.tr('The application'));
+    qxPage1.setLabel(this.tr("The application"));
     qxTabView1.add(qxPage1);
     var qxVbox1 = new qx.ui.layout.VBox(5, null, null);
     qxVbox1.setAlignX("center");
@@ -60,7 +61,7 @@ qx.Class.define("bibliograph.ui.window.AboutWindow",
     qxLabel3.setValue(this.getApplication().getApplication().getCopyright());
     qxPage1.add(qxLabel3);
     var qxPage2 = new qx.ui.tabview.Page(null);
-    qxPage2.setLabel(this.tr('Credits'));
+    qxPage2.setLabel(this.tr("Credits"));
     qxTabView1.add(qxPage2);
     var qxVbox2 = new qx.ui.layout.VBox(5, null, null);
     qxVbox2.setAlignX("center");

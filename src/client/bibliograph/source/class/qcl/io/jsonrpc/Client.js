@@ -5,7 +5,7 @@
   http://www.bibliograph.org
 
   Copyright:
-    2018 Christian Boulanger
+    2003-2020 Christian Boulanger
 
   License:
     MIT license
@@ -116,8 +116,7 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
   
     /**
      * Sends a jsonrpc request to the server. An error will be caught
-     * and displayed in a dialog. In this case, the returned promise
-     * resolves to null
+     * and handled by {@link #_handleJsonRpcError}.
      * @param method {String} The service method
      * @param params {Array} The parameters of the method
      * @return {Promise<*>}
@@ -126,6 +125,11 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
       qx.core.Assert.assertArray(params);
       this.setError(null);
       let result;
+      let task;
+      if (qx.core.Environment.get("app.taskmanager.enable")) {
+        task = new qxl.taskmanager.Task(`JSON-RPC call '${method}'`, params);
+        this.getApplication().getTaskManager().add(task);
+      }
       try {
         result = await this.__client.sendRequest(method, params);
         this.setResponse(result);
@@ -144,6 +148,10 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
         this.setError(err);
         this._handleJsonRpcError(method);
         return null;
+      } finally {
+        if (qx.core.Environment.get("app.taskmanager.enable")) {
+          this.getApplication().getTaskManager().remove(task).dispose();
+        }
       }
       return result;
     },

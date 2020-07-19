@@ -1,12 +1,21 @@
 /* ************************************************************************
 
-   Copyright: 2018 Christian Boulanger
+  Bibliograph. The open source online bibliographic data manager
 
-   License: MIT license
+  http://www.bibliograph.org
 
-   Authors: Christian Boulanger (cboulanger) info@bibliograph.org
+  Copyright:
+    2003-2020 Christian Boulanger
+
+  License:
+    MIT license
+    See the LICENSE file in the project's top-level directory for details.
+
+  Authors:
+    Christian Boulanger (@cboulanger) info@bibliograph.org
 
 ************************************************************************ */
+
 
 /**
  * This is the main application class of "Bibliograph"
@@ -116,6 +125,8 @@ qx.Class.define("bibliograph.Application", {
     __url : null,
     /** @var {Object} */
     __widgets : null,
+    /** @var {qxl.taskmanager.Manager} */
+    __taskManager : null,
 
    /*
     ---------------------------------------------------------------------------
@@ -195,6 +206,16 @@ qx.Class.define("bibliograph.Application", {
     getClipboardManager: function() {
       return qcl.application.ClipboardManager.getInstance();
     },
+  
+    /**
+     * @return {qxl.taskmanager.Manager}
+     */
+    getTaskManager() {
+      if (!this.__taskManager) {
+        this.__taskManager = new qxl.taskmanager.Manager();
+      }
+      return this.__taskManager;
+    },
 
     /*
     ---------------------------------------------------------------------------
@@ -204,6 +225,9 @@ qx.Class.define("bibliograph.Application", {
 
     /**
      * Run command by dispatching a message
+     *
+     * @param command
+     * @param value
      */
     cmd : function(command, value) {
       qx.event.message.Bus.dispatchByName(`bibliograph.command.${command}`, value);

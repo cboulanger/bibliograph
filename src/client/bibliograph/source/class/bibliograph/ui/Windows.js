@@ -119,6 +119,21 @@ qx.Class.define("bibliograph.ui.Windows",
           }, null, 100);
         }
       });
+      
+      // initialize task manager window
+      if (qx.core.Environment.get("app.taskmanager.enable")) {
+        const tm = bibliograph.window.TaskMonitor.getInstance();
+        if (qx.core.Environment.get("app.taskmanager.show")) {
+          tm.open();
+        }
+        // add menu entry to system meny
+        let menu = qx.core.Id.getAbsoluteIdOf("app/toolbar/system");
+        let button = new qx.ui.menu.Button(this.tr("Task Monitor"));
+        button.addListener("execute", () => {
+          tm.getCommand().execute();
+        });
+        menu.add(button);
+      }
 
       // configuration-dependent UI elements
       let cm = app.getConfigManager();
