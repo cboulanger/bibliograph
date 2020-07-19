@@ -63,7 +63,7 @@ qx.Class.define("bibliograph.Application", {
      * This method contains the initial application code and gets called
      * during startup of the application
      */
-    main : function() {
+    main : async function() {
       this.base(arguments);
 
       this.__clients = {};
@@ -82,7 +82,17 @@ qx.Class.define("bibliograph.Application", {
       qx.event.message.Bus.subscribe("jsonrpc.error", () => this.hidePopup());
 
       // application startup
-      bibliograph.Setup.getInstance().boot();
+      await bibliograph.Setup.getInstance().boot();
+      
+      // enable object id window during development
+      if (qx.core.Environment.get("qx.debug")) {
+        bibliograph.ui.window.ObjectIds.getInstance();
+      }
+  
+      // log to the console to let UI testers know that setup is completed
+      let completedMessage = "bibliograph.setup.completed";
+      qx.event.message.Bus.dispatchByName(completedMessage);
+      console.log(completedMessage);
     },
 
     /*
@@ -126,7 +136,7 @@ qx.Class.define("bibliograph.Application", {
     /** @var {Object} */
     __widgets : null,
     /** @var {qxl.taskmanager.Manager} */
-    __taskManager : null,
+    __taskMonitor : null,
 
    /*
     ---------------------------------------------------------------------------
@@ -210,11 +220,11 @@ qx.Class.define("bibliograph.Application", {
     /**
      * @return {qxl.taskmanager.Manager}
      */
-    getTaskManager() {
-      if (!this.__taskManager) {
-        this.__taskManager = new qxl.taskmanager.Manager();
+    getTaskMonitor() {
+      if (!this.__taskMonitor) {
+        this.__taskMonitor = new qxl.taskmanager.Manager();
       }
-      return this.__taskManager;
+      return this.__taskMonitor;
     },
 
     /*

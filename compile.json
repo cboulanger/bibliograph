@@ -11,8 +11,8 @@
     "module.objectid": true,
     "app.version": "development",
     "app.serverUrl": "../../../src/server/web/",
-    "app.taskmanager.enable": true,
-    "app.taskmanager.show": false
+    "app.taskmonitor.enable": true,
+    "app.taskmonitor.show": false
   },
   "babel": {
     "options": {
@@ -32,7 +32,7 @@
         "app.mode": "development",
         "qx.debug": true,
         "qx.io.jsonrpc.debug": true,
-        "app.taskmanager.show": true
+        "app.taskmonitor.show": true
       },
 
       "bundle": {

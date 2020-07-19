@@ -24,6 +24,7 @@ qx.Class.define("bibliograph.ui.Windows",
 {
   extend : qx.core.Object,
   type: "singleton",
+  include: [qx.locale.MTranslation],
   members :
   {
   
@@ -121,18 +122,21 @@ qx.Class.define("bibliograph.ui.Windows",
       });
       
       // initialize task manager window
-      if (qx.core.Environment.get("app.taskmanager.enable")) {
-        const tm = bibliograph.window.TaskMonitor.getInstance();
-        if (qx.core.Environment.get("app.taskmanager.show")) {
+      if (qx.core.Environment.get("app.taskmonitor.enable")) {
+        const tm = bibliograph.ui.window.TaskMonitor.getInstance();
+        if (qx.core.Environment.get("app.taskmonitor.show")) {
           tm.open();
         }
-        // add menu entry to system meny
-        let menu = qx.core.Id.getAbsoluteIdOf("app/toolbar/system");
-        let button = new qx.ui.menu.Button(this.tr("Task Monitor"));
-        button.addListener("execute", () => {
-          tm.getCommand().execute();
-        });
-        menu.add(button);
+        // qx.bom.Lifecycle.onReady(() => {
+        //   console.warn(qx.core.Id.getInstance().getRegisteredObjects());
+        //   // add menu entry to system meny
+        //   let menu = qx.core.Id.getQxObject("app/toolbar/system");
+        //   let button = new qx.ui.menu.Button(this.tr("Task Monitor"));
+        //   button.addListener("execute", () => {
+        //     tm.getCommand().execute();
+        //   });
+        //   menu.add(button);
+        // });
       }
 
       // configuration-dependent UI elements
@@ -141,7 +145,7 @@ qx.Class.define("bibliograph.ui.Windows",
         cm.bindKey("application.title", loginDialog, "text", false);
         cm.bindKey("application.logo", loginDialog, "image", false);
         // hide forgot password button if ldap is enabled @todo - make this configurable
-        // FIXME Re-enable when email-controller has been reimplemented
+        // Re-enable when email-controller has been reimplemented
         //loginDialog.setShowForgotPassword(!cm.getKey("ldap.enabled"));
       });
     }

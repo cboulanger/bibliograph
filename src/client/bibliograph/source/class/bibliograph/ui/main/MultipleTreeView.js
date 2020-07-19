@@ -46,8 +46,6 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
     this.base(arguments);
     this.setServiceName("folder"); // @todo remove?
     this.setModelType("folder");
-
-    this.setQxObjectId("treeview");
     
     // messages
     let bus = qx.event.message.Bus.getInstance();

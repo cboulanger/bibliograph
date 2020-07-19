@@ -14,7 +14,7 @@
      * Christian Boulanger (cboulanger)
 
 ************************************************************************ */
-/*global qx qcl dialog bibliograph */
+
 
 qx.Class.define("bibliograph.ui.main.TableView",
 {
@@ -164,8 +164,9 @@ qx.Class.define("bibliograph.ui.main.TableView",
     ---------------------------------------------------------------------------
     */
 
-    addMenuBarButton : function(button) {
+    addMenuBarButton : function(button, id) {
       this.menuBar.addBefore(button, this._statusLabel);
+      this.menuBar.addOwnedQxObject(button, id);
     },
 
     createMenuEntries: function() {
@@ -179,7 +180,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
         icon: "bibliograph/icon/button-plus.png",
         enabled : false
       });
-      this.addMenuBarButton(addButton);
+      this.addMenuBarButton(addButton, "add");
       this.bindVisibility(this.permissions.add_reference, addButton);
       this.bindEnabled(this.permissions.add_reference_to_folder, addButton);
       addButton.addListener("execute", () => {
@@ -197,11 +198,11 @@ qx.Class.define("bibliograph.ui.main.TableView",
       removeButton.addListener("click", this.removeSelectedReferences, this);
       this.bindVisibility(this.permissions.remove_reference, removeButton);
       this.bindEnabled(this.permissions.remove_selected_references, removeButton);
-      this.addMenuBarButton(removeButton);
+      this.addMenuBarButton(removeButton, "remove");
 
       // Reload Button
       let reloadButton = new qx.ui.menubar.Button(null, "bibliograph/icon/button-reload.png", null, null);
-      this.addMenuBarButton(reloadButton);
+      this.addMenuBarButton(reloadButton, "reload");
       reloadButton.addListener("execute", () => this.reload());
 
       // Options
@@ -211,7 +212,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
         height:16,
         icon: "bibliograph/icon/button-settings-up.png"
       });
-      this.addMenuBarButton(optionsButton);
+      this.addMenuBarButton(optionsButton, "options");
       let optionsMenu = new qx.ui.menu.Menu();
       optionsMenu.setPosition("top-left");
       optionsButton.setMenu(optionsMenu);
@@ -219,6 +220,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
       // Move references
       let moveButton = new qx.ui.menu.Button(this.tr("Move reference(s)..."));
       optionsMenu.add(moveButton);
+      optionsButton.addOwnedQxObject(moveButton, "move");
       moveButton.addListener("execute", () => this.moveSelectedReferences());
       this.bindEnabled(this.permissions.move_selected_references, moveButton);
       this.bindVisibility(this.permissions.move_reference, moveButton);
@@ -226,6 +228,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
       // Copy references
       let copyButton = new qx.ui.menu.Button(this.tr("Copy reference(s)..."));
       optionsMenu.add(copyButton);
+      optionsButton.addOwnedQxObject(copyButton, "copy");
       copyButton.addListener("execute", () => this.copySelectedReferences());
       this.bindEnabled(this.permissions.copy_selected_references, copyButton);
       this.bindVisibility(this.permissions.move_reference, copyButton);
@@ -233,28 +236,32 @@ qx.Class.define("bibliograph.ui.main.TableView",
       // Export menu
       let exportButton = new qx.ui.menu.Button(this.tr("Export references"));
       optionsMenu.add(exportButton);
+      optionsButton.addOwnedQxObject(exportButton, "export");
       this.bindVisibility(this.permissions.export_references, copyButton);
 
       let exportMenu = new qx.ui.menu.Menu();
       exportButton.setMenu(exportMenu);
 
       // Export selected references
-      let menuButton4 = new qx.ui.menu.Button(this.tr("Export selected references"));
-      exportMenu.add(menuButton4);
-      menuButton4.addListener("execute", () => this.exportSelected());
-      this.bindEnabled(this.permissions.export_selected_references, menuButton4);
+      let exportSelectedButton = new qx.ui.menu.Button(this.tr("Export selected references"));
+      exportMenu.add(exportSelectedButton);
+      exportButton.addOwnedQxObject(exportSelectedButton, "references");
+      exportSelectedButton.addListener("execute", () => this.exportSelected());
+      this.bindEnabled(this.permissions.export_selected_references, exportSelectedButton);
 
       // export selected folder
-      let menuButton5 = new qx.ui.menu.Button(this.tr("Export folder"));
-      exportMenu.add(menuButton5);
-      menuButton5.addListener("execute", () => this.exportFolder());
-      this.bindVisibility(this.permissions.export_folder, menuButton5);
+      let exportFolderButton = new qx.ui.menu.Button(this.tr("Export folder"));
+      exportMenu.add(exportFolderButton);
+      exportButton.addOwnedQxObject(exportFolderButton, "folder");
+      exportFolderButton.addListener("execute", () => this.exportFolder());
+      this.bindVisibility(this.permissions.export_folder, exportFolderButton);
   
       // export current query
-      let menuButton6 = new qx.ui.menu.Button(this.tr("Export current query"));
-      exportMenu.add(menuButton6);
-      menuButton6.addListener("execute", () => this.exportQuery());
-      this.bindVisibility(this.permissions.export_query, menuButton6);
+      let exportQueryButton = new qx.ui.menu.Button(this.tr("Export current query"));
+      exportMenu.add(exportQueryButton);
+      exportButton.addOwnedQxObject(exportQueryButton, "query");
+      exportQueryButton.addListener("execute", () => this.exportQuery());
+      this.bindVisibility(this.permissions.export_query, exportQueryButton);
   
   
       // TODO reimplement as a plugin/module

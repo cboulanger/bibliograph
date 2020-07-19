@@ -1,18 +1,21 @@
-/*******************************************************************************
- *
- * Bibliograph: Online Collaborative Reference Management
- *
- * Copyright: 2007-2015 Christian Boulanger
- *
- * License: LGPL: http://www.gnu.org/licenses/lgpl.html EPL:
- * http://www.eclipse.org/org/documents/epl-v10.php See the LICENSE file in the
- * project's top-level directory for details.
- *
- * Authors: Christian Boulanger (cboulanger)
- *
- ******************************************************************************/
+/* ************************************************************************
 
-/*global qx qcl*/
+  Bibliograph. The open source online bibliographic data manager
+
+  http://www.bibliograph.org
+
+  Copyright:
+    2003-2020 Christian Boulanger
+
+  License:
+    MIT license
+    See the LICENSE file in the project's top-level directory for details.
+
+  Authors:
+    Christian Boulanger (@cboulanger) info@bibliograph.org
+
+************************************************************************ */
+
 
 /**
  * This UI class creates a panel containing a header menu bar, a tree widget and a
@@ -26,7 +29,8 @@ qx.Class.define("bibliograph.ui.main.FolderTreePanel",
   construct : function() {
     this.base(arguments);
     this.createUI();
-  
+    qx.core.Id.getInstance().register(this, "folder-tree-panel");
+    
     // reset selection if a user executes a search query
     qx.event.message.Bus.getInstance().subscribe("bibliograph.userquery", function() {
       try {
@@ -53,6 +57,7 @@ qx.Class.define("bibliograph.ui.main.FolderTreePanel",
       let headerMenu = new qx.ui.menubar.MenuBar();
       headerMenu.setHeight(22);
       this.add(headerMenu);
+      this.addOwnedQxObject(headerMenu, "header");
       
       // title label
       let label = new qx.ui.basic.Label(this.tr("Search folders:"));
@@ -60,6 +65,7 @@ qx.Class.define("bibliograph.ui.main.FolderTreePanel",
       label.setPadding(3);
       label.setRich(true);
       headerMenu.add(label);
+      headerMenu.addOwnedQxObject(label, "label");
   
       // search box
       let searchBox = new qx.ui.form.TextField();
@@ -70,6 +76,7 @@ qx.Class.define("bibliograph.ui.main.FolderTreePanel",
         placeholder: this.tr("Type and press enter to search")
       });
       headerMenu.add(searchBox, {flex: 1});
+      headerMenu.addOwnedQxObject(searchBox, "search-box");
       searchBox.addListener("keypress", e => {
         if (e.getKeyIdentifier() === "Enter") {
           if (!this.treeWidget || !this.treeWidget.getTree()) {
@@ -86,9 +93,9 @@ qx.Class.define("bibliograph.ui.main.FolderTreePanel",
   
       // multiple tree widget
       let mTree = new bibliograph.ui.main.MultipleTreeView();
-      this.getApplication().addOwnedQxObject(mTree);
       mTree.setShowColumnHeaders(true);
       mTree.setWidgetId("app/treeview"); // todo remove
+      this.addOwnedQxObject(mTree, "tree-view");
       mTree.setWidth(200);
       mTree.setColumnHeaders([this.tr("Folders"), "#"]);
       
@@ -117,24 +124,35 @@ qx.Class.define("bibliograph.ui.main.FolderTreePanel",
       // footer menu
       let footerMenu = new qx.ui.menubar.MenuBar();
       this.add(footerMenu);
-      footerMenu.add(mTree.createAddFolderButton(true));
-      footerMenu.add(mTree.createRemoveButton(true));
-      footerMenu.add(mTree.createReloadButton());
+      this.addOwnedQxObject(footerMenu, "footer");
+      ({add(widget, id) {
+          footerMenu.add(widget);
+          footerMenu.addOwnedQxObject(widget, id);
+          return this;
+        }}).add(mTree.createAddFolderButton(true), "add")
+        .add(mTree.createRemoveButton(true), "remove")
+        .add(mTree.createReloadButton(), "reload");
 
       // Settings button/menu
       let settingsBtn = new qx.ui.menubar.Button(null, "bibliograph/icon/button-settings-up.png");
       footerMenu.add(settingsBtn);
+      footerMenu.addOwnedQxObject(settingsBtn, "settings");
       let settingsMenu = new qx.ui.menu.Menu();
       settingsMenu.setWidgetId("app/treeview/settings-menu");
       settingsBtn.setMenu(settingsMenu);
-      settingsMenu.add(mTree.createAddTopFolderButton());
-      settingsMenu.add(mTree.createSaveSearchFolderButton());
-      settingsMenu.add(mTree.createEmptyTrashButton());
-      settingsMenu.add(mTree.createEditButton());
-      settingsMenu.add(mTree.createVisibilityButton());
-      settingsMenu.add(mTree.createMoveButton());
-      settingsMenu.add(mTree.createCopyButton());
-      settingsMenu.add(mTree.createPasteButton());
+      
+      ({add(widget, id) {
+        settingsMenu.add(widget);
+        settingsBtn.addOwnedQxObject(widget, id);
+        return this;
+      }}).add(mTree.createAddTopFolderButton(), "add-top-folder")
+        .add(mTree.createSaveSearchFolderButton(), "save-search-folder")
+        .add(mTree.createEmptyTrashButton(), "empty-trash")
+        .add(mTree.createEditButton(), "edit")
+        .add(mTree.createVisibilityButton(), "change-visibility")
+        .add(mTree.createMoveButton(), "move")
+        .add(mTree.createCopyButton(), "copy")
+        .add(mTree.createPasteButton(), "paste");
     
       // Status label
       let _statusLabel = new qx.ui.basic.Label(null);
@@ -143,6 +161,7 @@ qx.Class.define("bibliograph.ui.main.FolderTreePanel",
       _statusLabel.setRich(true);
       _statusLabel.setTextColor("#808080");
       footerMenu.add(_statusLabel, {flex: 1});
+      footerMenu.addOwnedQxObject(_statusLabel, "status");
     }
   }
 });

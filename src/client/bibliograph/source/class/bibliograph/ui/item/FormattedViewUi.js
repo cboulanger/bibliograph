@@ -50,7 +50,10 @@ qx.Class.define("bibliograph.ui.item.FormattedViewUi",
        * Menu bar
        */
       var menuBar = new qx.ui.menubar.MenuBar();
+      menuBar.setQxObjectId("menubar");
+      this.addOwnedQxObject(menuBar);
       this.menuBar = menuBar;
+      
       menuBar.setHeight(18);
       qxComposite1.add(menuBar);
       

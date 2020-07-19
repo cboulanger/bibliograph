@@ -189,8 +189,7 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     let helpButton = new qx.ui.toolbar.Button(this.tr("Help"), "icon/22/apps/utilities-help.png");
     toolBar1.add(helpButton);
     helpButton.addListener("execute", () => {
-      this.getApplication().getCommands()
-.showHelpWindow("administration/access-control");
+      this.getApplication().getCommands().showHelpWindow("administration/access-control");
     });
     
     toolBar1.addSpacer();
@@ -248,7 +247,7 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     searchbox1.addListener("changeValue", e => {
       let input = (e.getData()||"").toLocaleLowerCase();
       if (input) {
-        leftList.setDelegate({filter: item => item.getLabel().toLowerCase().includes(input) });
+        leftList.setDelegate({filter: model => model.getLabel().toLowerCase().includes(input) });
       } else {
         leftList.setDelegate(null);
       }

@@ -139,7 +139,6 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       });
       let systemMenu = new qx.ui.menu.Menu();
       button.setMenu(systemMenu);
-      systemMenu.setWidgetId("app/toolbar/menus/system");
 
       // menu content
       systemMenu.add(this.createPreferencesButton());

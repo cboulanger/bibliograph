@@ -32,6 +32,7 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
   construct: function(url, service) {
     this.__dialog = dialog.Dialog.error("").hide();
     qx.util.Validate.checkUrl(url);
+    this.__service = service;
     const client = this.__client = new qx.io.jsonrpc.Client(url, service);
     client.addListener("outgoingRequest", this._configueTransport, this);
     client.addListener("incomingRequest", this._handleIncomingRequest, this);
@@ -107,12 +108,23 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
   
     /** The url template string */
     __url: null,
+    
+    /** the name of the service */
+    __service: null,
   
     /*
     ---------------------------------------------------------------------------
      API
     ---------------------------------------------------------------------------
     */
+  
+    /**
+     * Return the name of the service
+     * @return {String}
+     */
+    getService() {
+      return this.__service;
+    },
   
     /**
      * Sends a jsonrpc request to the server. An error will be caught
@@ -126,9 +138,9 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
       this.setError(null);
       let result;
       let task;
-      if (qx.core.Environment.get("app.taskmanager.enable")) {
-        task = new qxl.taskmanager.Task(`JSON-RPC call '${method}'`, params);
-        this.getApplication().getTaskManager().add(task);
+      if (qx.core.Environment.get("app.taskmonitor.enable")) {
+        task = new qxl.taskmanager.Task(`JSON-RPC request for '${this.__service}.${method}'`, params);
+        this.getApplication().getTaskMonitor().add(task);
       }
       try {
         result = await this.__client.sendRequest(method, params);
@@ -149,8 +161,8 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
         this._handleJsonRpcError(method);
         return null;
       } finally {
-        if (qx.core.Environment.get("app.taskmanager.enable")) {
-          this.getApplication().getTaskManager().remove(task).dispose();
+        if (qx.core.Environment.get("app.taskmonitor.enable")) {
+          this.getApplication().getTaskMonitor().remove(task).dispose();
         }
       }
       return result;

@@ -17,8 +17,7 @@
 ************************************************************************ */
 
 /**
- * Window with information on the application
- * @asset(bibliograph/icon/bibliograph-logo-square.png)
+ * Window with a task monitor
  */
 qx.Class.define("bibliograph.ui.window.TaskMonitor",
 {
@@ -27,17 +26,17 @@ qx.Class.define("bibliograph.ui.window.TaskMonitor",
   construct : function() {
     this.base(arguments);
     this.set({
+      caption: "Task Monitor",
       layout: new qx.ui.layout.Grow(),
-      caption: this.tr("Background Tasks"),
-      setshowMaximize: false,
+      showMaximize: false,
       showMinimize: false,
       width: 350,
-      height: 450
+      height: 150
     });
-    // center when it is first shown
+    // position when first shown
     this.addListenerOnce("appear", () => {
       this.set();
-      this.setLayoutProperties({right: 50, top: 50});
+      this.setLayoutProperties({right: 50, top: 150});
     }, this);
     qx.event.message.Bus.getInstance().subscribe("logout", this.close, this);
     let list = new qx.ui.list.List();
@@ -64,8 +63,10 @@ qx.Class.define("bibliograph.ui.window.TaskMonitor",
       }
     };
     list.setDelegate(delegate);
-    list.setModel(this.getApplication().getTaskManager().getTasks());
+    const tm = this.getApplication().getTaskMonitor();
+    list.setModel(tm.getTasks());
     this.add(list);
+    
     // command
     let cmd = this.__cmd = new qx.ui.command.Command("Ctrl+M");
     cmd.addListener("execute", () => {

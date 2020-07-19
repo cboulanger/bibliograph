@@ -9,16 +9,16 @@ async function login(page, user, password) {
   await page.fillByQxId("windows/login/form/password", password);
   await page.clickByQxId("windows/login/buttons/login");
   await page.waitForWidgetByQxId("toolbar/user", {timeout:60000, state:"visible" });
-  console.info(`### User '${user}' authenticated. Waiting for folder to reload...`);
-  await page.waitForTimeout(1000); // loading folders
+  console.info(`### User '${user}' authenticated. Waiting for tasks to finish ...`);
+  await page.waitForFunction("!qx.core.Init.getApplication().getTaskMonitor().getBusy()", {polling: 100});
 }
 
 async function logout(page) {
   console.info(`## Logging out ...`);
   await page.clickByQxId("toolbar/logout");
   await page.waitForWidgetByQxId("toolbar/user", {timeout:60000, state:"hidden" });
-  console.info(`## Logged out. Waiting for folder to reload...`);
-  await page.waitForTimeout(1000); // loading folders
+  console.info(`## Logged out. Waiting for tasks to finish ...`);
+  await page.waitForFunction("!qx.core.Init.getApplication().getTaskMonitor().getBusy()", {polling: 100});
 }
 
 test("login users", async assert => {

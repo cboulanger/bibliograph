@@ -30,6 +30,7 @@ async function init(readyConsoleMessage, timeout=60000) {
   }
   const browser = browsers[browserType];
   const context = await browser.newContext();
+  context.clearCookies();
   const page = await context.newPage();
   page.on("pageerror", e => {
     console.error(`Error on page ${page.url()}: ${e.message}`);

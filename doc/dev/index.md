@@ -6,6 +6,8 @@ In order to be able to develop Bibliograph with the same tools regardless of the
 a dockerized setup is used. You need the following prerequisites: 
 
  - Docker - See installation instructions on https://www.docker.com
+   On the Mac, make sure to use Docker Desktop >= v2.3.3.0, otherwise
+   the performance of MariaDB/MySql is abysmal.
  - NodeJS, latest LTS - It is suggested to use [nvm](https://github.com/nvm-sh/nvm).
  
 First, run `npm install` to install all needed NPM modules.

@@ -14,7 +14,7 @@
 
    Authors:
      * Christian Boulanger (cboulanger) using code from qx.data.controller.Tree
-     * Martin Wittemann (martinwittemann) 
+     * Martin Wittemann (martinwittemann)
 
 ************************************************************************ */
 
@@ -25,13 +25,7 @@ qx.Class.define("qcl.data.controller.TreeVirtual",
 {
   extend: qx.core.Object,
   include: qx.data.controller.MSelection,
-  
-  /*
-   *****************************************************************************
-      CONSTRUCTOR
-   *****************************************************************************
-   */
-  
+ 
   /**
    * @param target {qx.ui.tree.Tree?null} The target widgets which should be a tree.
    * @param store { Object?null } The store that retrieves the data
@@ -164,7 +158,7 @@ qx.Class.define("qcl.data.controller.TreeVirtual",
         let targetModel = target.getDataModel();
         
         /*
-         * catch events like add, remove, etc. 
+         * catch events like add, remove, etc.
          */
         targetModel.getModel().addListener("change", this._targetOnChange, this);
         /*

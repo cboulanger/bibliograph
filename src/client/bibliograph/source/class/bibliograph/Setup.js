@@ -178,10 +178,6 @@ qx.Class.define("bibliograph.Setup", {
       
       // message transport
       //this.startPolling();
-      
-      let completedMessage = "bibliograph.setup.completed";
-      qx.event.message.Bus.dispatchByName(completedMessage);
-      console.log(completedMessage); // needed for UI Testing
     },
 
     /*

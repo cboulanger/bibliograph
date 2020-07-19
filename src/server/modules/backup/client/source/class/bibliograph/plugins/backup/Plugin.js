@@ -47,7 +47,7 @@ qx.Class.define("bibliograph.plugins.backup.Plugin", {
     init() {
       // vars
       let app = this.getApplication();
-      let systemMenu = app.getWidgetById("app/toolbar/menus/system");
+      let systemMenu = qx.core.Id.getQxObject("toolbar/system").getMenu();
 
       // add backup menu
       let backupMenuButton = new qx.ui.menu.Button();

@@ -431,8 +431,8 @@ qx.Class.define("qcl.ui.table.TableView",
       let table = this.getTable();
       
       // if we don't have a table yet, wait until we have one
-      if( !table ){
-        if( value ){
+      if (!table) {
+        if (value) {
           this.dragDebug("Deferring drag & drop initialization");
           this.addListenerOnce("changeTable", ()=> this._applyEnableDragDrop(value, old) );
         }
@@ -505,6 +505,7 @@ qx.Class.define("qcl.ui.table.TableView",
 
       // Footer Menu bar
       let menuBar = new qx.ui.menubar.MenuBar();
+      this.addOwnedQxObject(menuBar, "menubar");
       this.menuBar = menuBar;
       menuBar.setHeight(18);
       this.add(menuBar);
@@ -515,10 +516,13 @@ qx.Class.define("qcl.ui.table.TableView",
       statusLabel.setTextColor("#808080");
       statusLabel.setMargin(5);
       menuBar.add(statusLabel);
+      this.addOwnedQxObject(statusLabel, "status");
       this.bind("store.model.statusText", statusLabel, "value");
       statusLabel.addListener("changeValue", function (e) {
         qx.util.TimerManager.getInstance().start(function (value) {
-          if (statusLabel.getValue() === value) statusLabel.setValue("");
+          if (statusLabel.getValue() === value) {
+            statusLabel.setValue("");
+          }
         }, null, this, e.getData(), 5000);
       }, this);
     },

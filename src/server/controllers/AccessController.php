@@ -409,7 +409,7 @@ class AccessController extends AppController
     $activeUser = $this->getActiveUser();
     $data = $activeUser->getAttributes(['namedId','name','anonymous','ldap']);
     $data['anonymous'] = (bool) $data['anonymous'];
-    if( $datasource ){
+    if ($datasource){
       // transform string name to datasource model instance and check access
       $datasource = $this->datasource($datasource,true);
     }

@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Compiles and starts the playwright tests
+set -o errexit
+source test/.env
+source tool/env/check
+source tool/lib/functions.sh
+source tool/env/envvars-export
+source tool/test/setup/create-mysql-user
+source tool/test/setup/check-mysql
+source tool/test/setup/reset-data
+export APP_URL=http://localhost:8073/compiled/source/bibliograph/
+export BROWSER_TYPE="firefox";
+node test/playwright/test-login.js

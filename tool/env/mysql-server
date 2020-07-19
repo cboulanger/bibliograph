@@ -11,8 +11,9 @@ start)
       echo "Missing DB_ROOT_PASSWORD environment variable."
       exit 1
     fi
-    docker run --name mysql-server \
 #      -v $PWD/data/docker/mysql:/var/lib/mysql:delegated \
+
+    docker run --name mysql-server \
       -e MYSQL_ROOT_PASSWORD=$DB_ROOT_PASSWORD \
       -p 3306:3306 \
       --detach \
