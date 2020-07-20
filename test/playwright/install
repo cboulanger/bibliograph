@@ -1,0 +1,6 @@
+#!/bin/bash
+
+echo "Installing playwright package locally without creating a dependency..."
+echo
+npm install --no-save --no-package-lock playwright
+echo "Done."

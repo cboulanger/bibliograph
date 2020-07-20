@@ -9,6 +9,6 @@ source tool/env/envvars-export
 source tool/test/setup/create-mysql-user
 source tool/test/setup/check-mysql
 source tool/test/setup/reset-data
-export APP_URL=http://localhost:8073/compiled/source/bibliograph/
-export BROWSER_TYPE="firefox";
+export APP_URL=${1:-http://localhost:8073/compiled/source/bibliograph/}
+export BROWSER_TYPE=${2:-"firefox"}
 node test/playwright/test-login.js
