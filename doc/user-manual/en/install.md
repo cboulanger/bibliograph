@@ -16,7 +16,7 @@
 - To install a development environment, see the instructions [here](development.md)
 
 ### Post-Installation 
-- Copy `config.dist/app.conf.toml` to `app.conf.toml` in the root of the installation
+- Copy `config/app.conf.toml` to `app.conf.toml` in the root of the installation
 - Create a user "bibliograph" in your MySql-database with password "bibliograph", or,
   if you want to use a different username and password (for example, if your database
   provider assigns you fixed credetials), enter the values in the `[database]` section 

@@ -7,7 +7,7 @@ source tool/lib/functions.sh
 # command -v jq >/dev/null 2>&1 || { echo >&2 "You need to install the jq command"; exit 1; }
 
 # get environment variables that override the defaults
-BUILD_ENV_FILE=${1:-$(pwd)/config.dist/.env}
+BUILD_ENV_FILE=${1:-$(pwd)/config/.env}
 source $BUILD_ENV_FILE
 
 # configuration
