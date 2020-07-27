@@ -36,19 +36,20 @@ qx.Class.define("qcl.ui.tool.ObjectIds",
     });
     // position
     this.addListenerOnce("appear", () => {
-      this.set();
+      this.reset();
       this.setLayoutProperties({right: 20, top: 50});
     }, this);
     qx.event.message.Bus.getInstance().subscribe("logout", this.close, this);
     
     let vbox = new qx.ui.container.Composite(new qx.ui.layout.VBox(5));
     let header = new qx.ui.container.Composite(new qx.ui.layout.HBox(5));
-    
-    let searchbox = new qx.ui.form.TextField();
+    // search box
+    let searchbox = this.searchbox = new qx.ui.form.TextField();
     searchbox.set({
-      placeholder: "Type to filter"
+      placeholder: "Type to filter",
+      liveUpdate: true
     });
-    searchbox.addListener("input", evt => {
+    searchbox.addListener("changeValue", evt => {
       let input = evt.getData();
       let delegate = Object.assign({}, list.getDelegate());
       if (input && input.length > 2) {
@@ -58,54 +59,21 @@ qx.Class.define("qcl.ui.tool.ObjectIds",
       }
       list.setDelegate(delegate);
     });
-    
-    let recordButton = new qx.ui.form.ToggleButton("▶️");
+    header.add(searchbox, {flex:1});
+    // record button
+    let recordButton = this.recordButton = new qx.ui.form.ToggleButton("▶️");
     recordButton.addListener("changeValue", evt => {
       let isRecording = evt.getData();
       recordButton.setLabel(isRecording ? "⏸": "▶️");
     });
-    let exportButton = new qx.ui.form.Button("🗑");
-    exportButton.addListener("execute", () => {
-      textArea.setValue("");
-    });
-    
-    header.add(searchbox, {flex:1});
     header.add(recordButton);
-    header.add(exportButton);
+    // reset button
+    let resetButton = new qx.ui.form.Button("🔄");
+    resetButton.addListener("execute", this.reset, this);
+    header.add(resetButton);
     vbox.add(header);
-    
-    let list = new qx.ui.list.List();
-    let objectIds = [];
-    
-    (function traverseObjects(arr) {
-      arr.forEach(obj => {
-        if (obj instanceof qx.ui.core.Widget) {
-          let id = qx.core.Id.getAbsoluteIdOf(obj);
-          if (id) {
-            objectIds.push({
-              widget: obj,
-              label: id
-            });
-            obj.addListener("pointerdown", evt => {
-              evt.stopPropagation();
-              if (recordButton.getValue()) {
-                let selector = `[data-qx-object-id="${id}"]`;
-                let playwrightCmd = `await page.click("${selector}")`;
-                textArea.setValue(textArea.getValue() + "\n" + playwrightCmd);
-              }
-            });
-          } else {
-            //
-          }
-        }
-        let arr = obj.getOwnedQxObjects();
-        if (Array.isArray(arr)) {
-          traverseObjects(arr);
-        }
-      });
-    })(Object.values(qx.core.Id.getInstance().getRegisteredObjects()));
-    
-    objectIds.sort((a, b) => a.label < b.label ? -1 : 1);
+    // list
+    let list = this.list = new qx.ui.list.List();
     list.setDelegate({
       bindItem : function(controller, item, id) {
         // bind label
@@ -116,13 +84,15 @@ qx.Class.define("qcl.ui.tool.ObjectIds",
         }, item, id);
       }
     });
-    list.setModel(qx.data.marshal.Json.createModel(objectIds));
+    list.setModel(this.createListModel());
+    // handle selection change
     let handler = () => {
       if (list.getSelection().getLength()) {
         let widget = list.getSelection().getItem(0).getWidget();
-        if (!widget.__highlighted && widget.getContentElement().getDomElement()) {
+        let domElem = widget.getContentElement && widget.getContentElement() && widget.getContentElement().getDomElement();
+        if (!widget.__highlighted && domElem) {
           widget.__highlighted = true;
-          let style = widget.getContentElement().getDomElement().style;
+          let style = domElem.style;
           let border = String(style.border);
           style.border = "5px dotted yellow";
           qx.event.Timer.once(() => {
@@ -134,27 +104,23 @@ qx.Class.define("qcl.ui.tool.ObjectIds",
     };
     list.getSelection().addListener("change", handler);
     list.addListener("dblclick", handler);
-    
     // tab view
     let tabview = new qx.ui.tabview.TabView();
     let listPage = new qx.ui.tabview.Page("Object ids");
     listPage.setLayout(new qx.ui.layout.Grow());
     listPage.add(list);
     tabview.add(listPage);
-    let textArea = new qx.ui.form.TextArea("");
+    let textArea = this.textArea = new qx.ui.form.TextArea("");
     let textAreaPage = new qx.ui.tabview.Page("Recorded playwright script");
     textAreaPage.setLayout(new qx.ui.layout.Grow());
     textAreaPage.add(textArea);
     tabview.add(textAreaPage);
-    
     vbox.add(tabview, {flex:1});
-    
     // command
     let cmd = this.__cmd = new qx.ui.command.Command("Ctrl+O");
     cmd.addListener("execute", () => {
       this.isVisible() ? this.close() : this.open();
     });
-  
     // add to window
     this.add(vbox);
   },
@@ -163,12 +129,73 @@ qx.Class.define("qcl.ui.tool.ObjectIds",
     /** @var qx.ui.command.Command */
     __cmd : null,
     
+    reset() {
+      this.searchbox.setValue("");
+      this.textArea.setValue("");
+      this.list.setModel(this.createListModel());
+    },
+    
+    createListModel() {
+      let objectIds = [];
+      let that = this;
+      (function traverseObjects(arr) {
+        arr.forEach(obj => {
+          let id = qx.core.Id.getAbsoluteIdOf(obj);
+          if (id) {
+            objectIds.push({
+              widget: obj,
+              label: id
+            });
+            if (obj instanceof qx.ui.core.Widget && !obj.__listenersAdded) {
+              obj.addListener("changeValue", evt => that.__onChangeTextInput(evt, id));
+              obj.addListener("pointerdown", evt => that.__onPointerDown(evt, id));
+              obj.__listenersAdded = true;
+            }
+          } else {
+            console.warn("Cannot find id for " + obj);
+          }
+          let arr = obj.getOwnedQxObjects();
+          if (Array.isArray(arr)) {
+            traverseObjects(arr);
+          }
+        });
+      })(Object.values(qx.core.Id.getInstance().getRegisteredObjects()));
+      objectIds.sort((a, b) => a.label < b.label ? -1 : 1);
+      return qx.data.marshal.Json.createModel(objectIds);
+    },
+    
     /**
      * Returns the command for this window
      * @return {qx.ui.command.Command}
      */
     getCommand() {
       return this.__cmd;
+    },
+    
+    __getSelector(id) {
+      return `[data-qx-object-id="${id}"]`;
+    },
+    
+    __addToScript(line) {
+      if (this.recordButton.getValue()) {
+        this.textArea.setValue(this.textArea.getValue() + "\n" + line);
+      }
+    },
+    
+    __onPointerDown(evt, id) {
+      evt.stopPropagation();
+      console.log(evt.getOriginalTarget());
+      this.__addToScript(`await page.clickByQxId("${id}")`);
+    },
+  
+    __onChangeTextInput(evt, id) {
+      if (this.__timerId) {
+        clearTimeout(this.__timerId);
+      }
+      let value = evt.getData();
+      this.__timerId = setTimeout(() => {
+        this.__addToScript(`await page.fillByQxId("${id}", "${value}");`);
+      }, 500);
     }
   }
 });

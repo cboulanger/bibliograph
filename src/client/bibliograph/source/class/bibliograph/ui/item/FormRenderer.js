@@ -12,9 +12,6 @@
  *
  ******************************************************************************/
 
-/*global qx qcl bibliograph*/
-
-
 /**
  * Renderer for {@link qx.ui.form.Form}.
  */
@@ -22,8 +19,7 @@ qx.Class.define("bibliograph.ui.item.FormRenderer",
 {
   extend : qx.ui.form.renderer.Single,
   implement : qx.ui.form.renderer.IFormRenderer,
-  construct : function(form)
-  {
+  construct : function(form) {
     this.base(arguments, form);
     var layout = this.getLayout();
 
@@ -49,17 +45,15 @@ qx.Class.define("bibliograph.ui.item.FormRenderer",
      * @param names {String[]} An array of names for the form items.
      * @param title {String?} A title of the group you are adding.
      */
-    addItems : function(items, names, title)
-    {
-      if( ! qx.lang.Type.isArray(items) ){
+    addItems : function(items, names, title) {
+      if (!qx.lang.Type.isArray(items)) {
         this.warn("Cannot add non-array items");
-        return; 
+        return;
       }
       /*
        * add the header
        */
-      if (title != null)
-      {
+      if (title !== null) {
         this._add(this._createHeader(title),
         {
           row : this._row,
@@ -74,14 +68,11 @@ qx.Class.define("bibliograph.ui.item.FormRenderer",
        * of the form, userData.fullWidth is set to true
        */
       var column = 0;
-      for (var i = 0; i < items.length; i++)
-      {
+      for (var i = 0; i < items.length; i++) {
         var item = items[i];
         var label = this._createLabel(names[i], item);
-        if (item.getUserData('fullWidth'))
-        {
-          if (column == 2)
-          {
+        if (item.getUserData("fullWidth")) {
+          if (column === 2) {
             this._row++;
             column = 0;
           }
@@ -97,8 +88,7 @@ qx.Class.define("bibliograph.ui.item.FormRenderer",
             colSpan : 3
           });
           this._row++;
-        } else
-        {
+        } else {
           this._add(label,
           {
             row : this._row,
@@ -110,8 +100,7 @@ qx.Class.define("bibliograph.ui.item.FormRenderer",
             column : column + 1
           });
           column += 2;
-          if (column == 4)
-          {
+          if (column === 4) {
             column = 0;
             this._row++;
           }

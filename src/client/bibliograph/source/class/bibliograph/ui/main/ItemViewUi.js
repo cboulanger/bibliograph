@@ -31,14 +31,9 @@ qx.Class.define("bibliograph.ui.main.ItemViewUi", {
     this.add(itemViewStack, { flex: 1 });
   
     // reference editor
-    // @todo wiget id should be app/item/stack/editor
     var referenceEditor = new bibliograph.ui.item.ReferenceEditorUi();
     referenceEditor.setVisibility("hidden");
-    referenceEditor.setQxObjectId("editor");
-    this.addOwnedQxObject(referenceEditor);
-  
-    // todo
-    referenceEditor.setWidgetId("app/item/editor");
+    this.addOwnedQxObject(referenceEditor, "editor");
     this.addView("referenceEditor", referenceEditor);
     
     // setup bindings
@@ -49,8 +44,7 @@ qx.Class.define("bibliograph.ui.main.ItemViewUi", {
 
     // table view
     var tableView = new bibliograph.ui.item.TableViewUi();
-    tableView.setQxObjectId("table");
-    this.addOwnedQxObject(tableView);
+    this.addOwnedQxObject(tableView, "table");
     tableView.setVisibility("hidden");
     this.addView("tableView", tableView);
 
