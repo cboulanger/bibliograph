@@ -19,7 +19,7 @@
 /**
  * Window with a task monitor
  */
-qx.Class.define("bibliograph.ui.window.TaskMonitor",
+qx.Class.define("qcl.ui.tool.TaskMonitor",
 {
   extend : qx.ui.window.Window,
   type: "singleton",

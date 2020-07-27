@@ -123,7 +123,7 @@ qx.Class.define("bibliograph.ui.Windows",
       
       // initialize task manager window
       if (qx.core.Environment.get("app.taskmonitor.enable")) {
-        const tm = bibliograph.ui.window.TaskMonitor.getInstance();
+        const tm = qcl.ui.tool.TaskMonitor.getInstance();
         if (qx.core.Environment.get("app.taskmonitor.show")) {
           tm.open();
         }

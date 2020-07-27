@@ -26,9 +26,6 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
   construct: function() {
     this.base(arguments);
     
-    this.setQxObjectId("toolbar");
-    this.setWidgetId("app/toolbar");
-
     // shorthand vars
     let app = qx.core.Init.getApplication();
     this.accsMgr = app.getAccessManager();

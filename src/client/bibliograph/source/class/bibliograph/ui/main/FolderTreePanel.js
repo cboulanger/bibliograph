@@ -29,7 +29,6 @@ qx.Class.define("bibliograph.ui.main.FolderTreePanel",
   construct : function() {
     this.base(arguments);
     this.createUI();
-    qx.core.Id.getInstance().register(this, "folder-tree-panel");
     
     // reset selection if a user executes a search query
     qx.event.message.Bus.getInstance().subscribe("bibliograph.userquery", function() {
@@ -94,7 +93,7 @@ qx.Class.define("bibliograph.ui.main.FolderTreePanel",
       // multiple tree widget
       let mTree = new bibliograph.ui.main.MultipleTreeView();
       mTree.setShowColumnHeaders(true);
-      mTree.setWidgetId("app/treeview"); // todo remove
+      mTree.setWidgetId("app/treeview"); // to be removed
       this.addOwnedQxObject(mTree, "tree-view");
       mTree.setWidth(200);
       mTree.setColumnHeaders([this.tr("Folders"), "#"]);

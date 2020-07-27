@@ -20,7 +20,7 @@
  * Window with a list of object ids. When clicking on a list item,
  * the widget with that id is highlighted if it is visible.
  */
-qx.Class.define("bibliograph.ui.window.ObjectIds",
+qx.Class.define("qcl.ui.tool.ObjectIds",
 {
   extend : qx.ui.window.Window,
   type: "singleton",
@@ -40,8 +40,10 @@ qx.Class.define("bibliograph.ui.window.ObjectIds",
       this.setLayoutProperties({right: 20, top: 50});
     }, this);
     qx.event.message.Bus.getInstance().subscribe("logout", this.close, this);
+    
     let vbox = new qx.ui.container.Composite(new qx.ui.layout.VBox(5));
-    this.add(vbox);
+    let header = new qx.ui.container.Composite(new qx.ui.layout.HBox(5));
+    
     let searchbox = new qx.ui.form.TextField();
     searchbox.set({
       placeholder: "Type to filter"
@@ -56,16 +58,45 @@ qx.Class.define("bibliograph.ui.window.ObjectIds",
       }
       list.setDelegate(delegate);
     });
-    vbox.add(searchbox);
+    
+    let recordButton = new qx.ui.form.ToggleButton("▶️");
+    recordButton.addListener("changeValue", evt => {
+      let isRecording = evt.getData();
+      recordButton.setLabel(isRecording ? "⏸": "▶️");
+    });
+    let exportButton = new qx.ui.form.Button("🗑");
+    exportButton.addListener("execute", () => {
+      textArea.setValue("");
+    });
+    
+    header.add(searchbox, {flex:1});
+    header.add(recordButton);
+    header.add(exportButton);
+    vbox.add(header);
+    
     let list = new qx.ui.list.List();
     let objectIds = [];
+    
     (function traverseObjects(arr) {
       arr.forEach(obj => {
         if (obj instanceof qx.ui.core.Widget) {
-          objectIds.push({
-            widget: obj,
-            label: qx.core.Id.getAbsoluteIdOf(obj)
-          });
+          let id = qx.core.Id.getAbsoluteIdOf(obj);
+          if (id) {
+            objectIds.push({
+              widget: obj,
+              label: id
+            });
+            obj.addListener("pointerdown", evt => {
+              evt.stopPropagation();
+              if (recordButton.getValue()) {
+                let selector = `[data-qx-object-id="${id}"]`;
+                let playwrightCmd = `await page.click("${selector}")`;
+                textArea.setValue(textArea.getValue() + "\n" + playwrightCmd);
+              }
+            });
+          } else {
+            //
+          }
         }
         let arr = obj.getOwnedQxObjects();
         if (Array.isArray(arr)) {
@@ -73,6 +104,7 @@ qx.Class.define("bibliograph.ui.window.ObjectIds",
         }
       });
     })(Object.values(qx.core.Id.getInstance().getRegisteredObjects()));
+    
     objectIds.sort((a, b) => a.label < b.label ? -1 : 1);
     list.setDelegate({
       bindItem : function(controller, item, id) {
@@ -102,13 +134,29 @@ qx.Class.define("bibliograph.ui.window.ObjectIds",
     };
     list.getSelection().addListener("change", handler);
     list.addListener("dblclick", handler);
-    vbox.add(list, {flex:1});
+    
+    // tab view
+    let tabview = new qx.ui.tabview.TabView();
+    let listPage = new qx.ui.tabview.Page("Object ids");
+    listPage.setLayout(new qx.ui.layout.Grow());
+    listPage.add(list);
+    tabview.add(listPage);
+    let textArea = new qx.ui.form.TextArea("");
+    let textAreaPage = new qx.ui.tabview.Page("Recorded playwright script");
+    textAreaPage.setLayout(new qx.ui.layout.Grow());
+    textAreaPage.add(textArea);
+    tabview.add(textAreaPage);
+    
+    vbox.add(tabview, {flex:1});
     
     // command
     let cmd = this.__cmd = new qx.ui.command.Command("Ctrl+O");
     cmd.addListener("execute", () => {
       this.isVisible() ? this.close() : this.open();
     });
+  
+    // add to window
+    this.add(vbox);
   },
   members: {
     

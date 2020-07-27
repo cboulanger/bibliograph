@@ -42,18 +42,21 @@ qx.Class.define("bibliograph.ui.MainLayout", {
       // Toolbar
       let toolbar = bibliograph.ui.main.Toolbar.getInstance();
       appContainer.add(toolbar);
-      qx.core.Id.getInstance().register(toolbar);
+      qx.core.Id.getInstance().register(toolbar, "toolbar");
+      toolbar.setWidgetId("app/toolbar"); // to be removed
 
       // Horizontal splitpane
       let hsplit = new qx.ui.splitpane.Pane("horizontal");
       hsplit.setOrientation("horizontal");
       appContainer.add(hsplit, { flex: 1 });
+      qx.core.Id.getInstance().register(hsplit, "horizontal-splitpane");
       
       let leftPane = new qx.ui.container.Composite(new qx.ui.layout.VBox());
       hsplit.add(leftPane, 1);
 
       // Folder Tree
       let folderTreePanel = bibliograph.ui.main.FolderTreePanel.getInstance();
+      qx.core.Id.getInstance().register(folderTreePanel, "folder-tree-panel");
       leftPane.add(folderTreePanel, { flex: 1 });
 
       // Vertical splitpane
@@ -61,6 +64,7 @@ qx.Class.define("bibliograph.ui.MainLayout", {
       vsplit.setOrientation("vertical");
       vsplit.setDecorator(null);
       hsplit.add(vsplit, 3);
+      qx.core.Id.getInstance().register(vsplit, "vertical-splitpane");
 
       // Reference table view
       let tableview = new bibliograph.ui.main.ReferenceTableView();
