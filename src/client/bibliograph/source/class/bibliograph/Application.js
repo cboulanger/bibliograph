@@ -23,6 +23,7 @@
  * @asset(bibliograph/*)
  * @require(qcl.application.ClipboardManager)
  * @require(qcl.io.jsonrpc.MessageBus)
+ * @require(qxl.dialog.Dialog)
  */
 qx.Class.define("bibliograph.Application", {
   extend : qx.application.Standalone,
@@ -68,6 +69,7 @@ qx.Class.define("bibliograph.Application", {
 
       this.__clients = {};
       this.__widgets = {};
+      this.__dialogs = {};
       this.__blocker = new qx.ui.core.Blocker(this.getRoot());
 
       if (qx.core.Environment.get("qx.debug")) {
@@ -137,6 +139,8 @@ qx.Class.define("bibliograph.Application", {
     __widgets : null,
     /** @var {qxl.taskmanager.Manager} */
     __taskMonitor : null,
+    /** var {Object} **/
+    __dialogs: null,
 
    /*
     ---------------------------------------------------------------------------
@@ -225,6 +229,58 @@ qx.Class.define("bibliograph.Application", {
         this.__taskMonitor = new qxl.taskmanager.Manager();
       }
       return this.__taskMonitor;
+    },
+  
+    /**
+     * Returns a promise for a (cached) dialog
+     * @param {String} type
+     * @param {Object} config
+     * @return {Promise<Boolean>}
+     */
+    createDialog(type, config) {
+      let dialog = this.__dialogs[type];
+      if (dialog === undefined) {
+        dialog = this.__dialogs[type] = new qxl.dialog[type[0].toUpperCase() + type.slice(1)]();
+        this.addOwnedQxObject(dialog, type);
+      }
+      if (qx.lang.Type.isObject(config)) {
+        dialog.set(config);
+      }
+      dialog.open();
+      return dialog.promise();
+    },
+  
+    /**
+     * Return the promise for a (cached) alert dialog
+     * @param {String} msg The message for the user
+     * @param {Object} config Additional properties to set
+     * @return {Promise}
+     */
+    alert(msg, config= {}) {
+      config.message = msg;
+      return this.createDialog("alert", config);
+    },
+  
+    /**
+     * Return the promise for a (cached) error dialog
+     * @param {String} msg The message for the user
+     * @param {Object} config Additional properties to set
+     * @return {Promise}
+     */
+    error(msg, config= {}) {
+      config.message = msg;
+      return this.createDialog("error", config);
+    },
+  
+    /**
+     * Return the promise for a (cached) confirm dialog
+     * @param {String} msg The message for the user
+     * @param {Object} config Additional properties to set
+     * @return {Promise}
+     */
+    confirm(msg, config= {}) {
+      config.message = msg;
+      return this.createDialog("confirm", config);
     },
 
     /*

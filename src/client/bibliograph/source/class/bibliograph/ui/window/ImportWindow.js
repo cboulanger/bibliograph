@@ -15,8 +15,6 @@
 
 ************************************************************************ */
 
-/*global qx qcl bibliograph dialog */
-
 /**
  *
  */
@@ -36,7 +34,8 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
     this.base(arguments);
     this.createPopup();
     this.createUi();
-    qx.lang.Function.delay(()=>{
+    qx.event.message.Bus.getInstance().subscribe(bibliograph.AccessManager.messages.LOGOUT, this.close, this);
+    qx.lang.Function.delay(() => {
       this.listView.addListenerOnce("tableReady", () => {
         let controller = this.listView.getController();
         let enableButtons = () => {
@@ -47,7 +46,7 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
         controller.addListener("blockLoaded", enableButtons, this);
         controller.addListener("statusMessage", e => {
           this.showPopup(e.getData());
-          qx.lang.Function.delay( enableButtons, 1000, this);
+          qx.lang.Function.delay(enableButtons, 1000, this);
         });
       }, this);
     },100);
@@ -211,7 +210,7 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
       button1.setLabel(this.tr('Close'));
       composite1.add(button1);
       button1.addListener("execute", ()=>  this.close());
-    },    
+    },
     
     /**
      * Create upload widget

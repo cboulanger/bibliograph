@@ -19,6 +19,10 @@
 /**
  * Window with a list of object ids. When clicking on a list item,
  * the widget with that id is highlighted if it is visible.
+ *
+ * Depends on https://www.npmjs.com/package/unique-selector
+ *
+ * @ignore(unique)
  */
 qx.Class.define("qcl.ui.tool.ObjectIds",
 {
@@ -123,6 +127,9 @@ qx.Class.define("qcl.ui.tool.ObjectIds",
     });
     // add to window
     this.add(vbox);
+  
+    // listen for clicks
+    document.addEventListener("click", this._onClick.bind(this));
   },
   members: {
     
@@ -132,6 +139,10 @@ qx.Class.define("qcl.ui.tool.ObjectIds",
     reset() {
       this.searchbox.setValue("");
       this.textArea.setValue("");
+      this.update();
+    },
+    
+    update() {
       this.list.setModel(this.createListModel());
     },
     
@@ -147,8 +158,9 @@ qx.Class.define("qcl.ui.tool.ObjectIds",
               label: id
             });
             if (obj instanceof qx.ui.core.Widget && !obj.__listenersAdded) {
-              obj.addListener("changeValue", evt => that.__onChangeTextInput(evt, id));
-              obj.addListener("pointerdown", evt => that.__onPointerDown(evt, id));
+              if (obj instanceof qx.ui.form.AbstractField) {
+                obj.addListener("changeValue", evt => that._onChangeTextInput(evt, id));
+              }
               obj.__listenersAdded = true;
             }
           } else {
@@ -172,29 +184,97 @@ qx.Class.define("qcl.ui.tool.ObjectIds",
       return this.__cmd;
     },
     
-    __getSelector(id) {
+    _getQxObjectIdSelector(id) {
       return `[data-qx-object-id="${id}"]`;
     },
     
-    __addToScript(line) {
+    _getCssSelector(elem) {
+      // qx id
+      if (elem.hasAttributes()) {
+        var attrs = elem.attributes;
+        for (var i = attrs.length - 1; i >= 0; i--) {
+          if (attrs[i].name === "data-qx-object-id") {
+            return this._getQxObjectIdSelector(attrs[i].value);
+          } else if (attrs[i].name === "qxanonymous") {
+            return this._getCssSelector(elem.parentElement);
+          }
+        }
+      }
+      // css selector
+      // eslint-disable-next-line no-undef
+      return unique.default(elem, {
+        attributesToIgnore: this._getAttributesToIgnore(),
+        excludeRegex : /selected|checked|active|hovered|focused/,
+        selectorTypes : ["Attributes", "Class", "NthChild"]
+      });
+    },
+    
+    _getAttributesToIgnore() {
+      return [
+        "style",
+        "id",
+        "class",
+        "src",
+        "qxclass",
+        "qxselectable",
+        "tabindex",
+        "href",
+        "qxdraggable",
+        "qxkeepfocus",
+        "qxkeepactive",
+        "qxdroppable"
+      ];
+    },
+    
+    _getCheckApplicationIdleCode() {
+      return `await page.waitForApplicationIdle();`;
+      //return `await page.waitForFunction("!qx.core.Init.getApplication().getTaskMonitor().getBusy()", {polling: 100});`;
+    },
+    
+    _addToScript(line) {
       if (this.recordButton.getValue()) {
         this.textArea.setValue(this.textArea.getValue() + "\n" + line);
       }
     },
+  
+    /**
+     * This checks if the user action has initiated some async (network) activity,
+     * records this in the script and updates the id list once the
+     * activities have finished (since they might have created new widgets).
+     * @private
+     */
+    _checkApplicationIdle() {
+      const taskMonitor = qx.core.Init.getApplication().getTaskMonitor();
+      if (taskMonitor.getBusy()) {
+        this._addToScript(this._getCheckApplicationIdleCode());
+        taskMonitor.addListenerOnce("changeBusy", this.update, this);
+      }
+    },
     
-    __onPointerDown(evt, id) {
-      evt.stopPropagation();
-      console.log(evt.getOriginalTarget());
-      this.__addToScript(`await page.clickByQxId("${id}")`);
+    _onClick(evt) {
+      // ignore if not recording or if the click was on this window
+      if (!this.recordButton.getValue() || this.getContentElement().getDomElement().contains(evt.target)) {
+        return;
+      }
+      let selector = this._getCssSelector(evt.target);
+      
+      this._addToScript(`await page.click(\`${selector}\`);`);
+      // if the click has initiated i/o or other asynchronous logic, wait for it to finish
+      qx.event.Timer.once(() => this._checkApplicationIdle(), this, 500);
     },
   
-    __onChangeTextInput(evt, id) {
+    _onChangeTextInput(evt, id) {
+      // ignore if not recording
+      if (!this.recordButton.getValue()) {
+        return;
+      }
       if (this.__timerId) {
         clearTimeout(this.__timerId);
       }
       let value = evt.getData();
       this.__timerId = setTimeout(() => {
-        this.__addToScript(`await page.fillByQxId("${id}", "${value}");`);
+        this._addToScript(`await page.fillByQxId(\`${id}\`, "${value}");`);
+        this._checkApplicationIdle();
       }, 500);
     }
   }

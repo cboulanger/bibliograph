@@ -11,8 +11,6 @@
  * Authors: Christian Boulanger (cboulanger)
  *
  ******************************************************************************/
- 
-/*global bibliograph qx qcl*/
 
 /**
  * The main list of references

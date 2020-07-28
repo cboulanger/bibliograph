@@ -958,12 +958,12 @@ class ReferenceController extends AppController
     /** @var ExportFormat $format */
     foreach ($formats as $format) {
       $url = Yii::$app->homeUrl .
-        '?r=converters/download' .
-        '&access-token=' . Yii::$app->user->getIdentity()->getAuthKey() .
+        'converters/download' .
+        '?access-token=' . Yii::$app->user->getIdentity()->getAuthKey() .
         '&format=' . $format->namedId .
         '&datasource=' . $datasource .
         '&selector=' . $id;
-      $links[] = "<a href=\"$url\">{$format->name}</a>";
+      $links[] = "<a href=\"$url\" target=\"_blank\" data-id=\"{$format->name}\">{$format->name}</a>";
     }
     $html .= "<p>" . Yii::t('app','Export citation as ') . implode(" | ", $links ) . "</p>";
 

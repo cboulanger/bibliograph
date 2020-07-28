@@ -31,11 +31,8 @@ qx.Class.define("bibliograph.ui.window.PreferencesWindow", {
     qxWindow1.setCaption(this.tr("Preferences"));
     qxWindow1.setHeight(400);
     qxWindow1.setWidth(600);
-    qxWindow1.addListener( "appear",e =>  this.center() );
-    qx.event.message.Bus.getInstance().subscribe(
-      bibliograph.AccessManager.messages.LOGOUT,
-      e => this.close()
-    );
+    qxWindow1.addListener("appear", this.center, this);
+    qx.event.message.Bus.getInstance().subscribe(bibliograph.AccessManager.messages.LOGOUT, this.close, this);
     let qxVbox1 = new qx.ui.layout.VBox(5);
     qxVbox1.setSpacing(5);
     qxWindow1.setLayout(qxVbox1);

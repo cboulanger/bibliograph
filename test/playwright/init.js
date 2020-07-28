@@ -14,36 +14,41 @@ const launchArgs = {
   headless: false
 };
 
-const browsers = {};
+let browser;
+let context;
+let page;
 
 /**
  * Sets up the browser context and optionally waits for a
  * console message that indicates that tests can start.
+ * Method can be called repeatedly and will return cached objects.
+ *
  * @param {String?} readyConsoleMessage If provided, the function waits for the
  * @param {Number?} timeout Time in milliseconds to wait for the console message. Defaults to 60 seconds
  * @return {Promise<{browser: *, context: *, page: *}>}
  */
 async function init(readyConsoleMessage, timeout=60000) {
   // reuse the browser instance
-  if (!browsers[browserType]) {
-    browsers[browserType] = await playwright[browserType].launch(launchArgs);
+  if (!browser) {
+    browser = await playwright[browserType].launch(launchArgs);
+    context = await browser.newContext();
   }
-  const browser = browsers[browserType];
-  const context = await browser.newContext();
-  context.clearCookies();
-  const page = await context.newPage();
-  page.on("pageerror", e => {
-    console.error(`Error on page ${page.url()}: ${e.message}`);
-    process.exit(1);
-  });
+  if (!page) {
+    page = await context.newPage();
+    page.on("pageerror", e => {
+      console.error(`Error on page ${page.url()}: ${e.message}`);
+      process.exit(1);
+    });
+    // add helpers
+    addQxPageMethods(page);
+    // wait for app to be ready
+    //page.logConsole(true);
+    await page.goto(app_url);
+  }
+  if (readyConsoleMessage) {
+    await page.waitForConsoleMessage(readyConsoleMessage, {timeout});
+  }
   
-  // add helpers
-  addQxPageMethods(page);
-  
-  // wait for app to be ready
-  //page.logConsole(true);
-  await page.goto(app_url);
-  await page.waitForConsoleMessage(readyConsoleMessage, {timeout});
   console.info("### Bibliograph ready");
   return {
     browser,
@@ -85,9 +90,9 @@ function addQxPageMethods(page) {
     }
     return new Promise((resolve, reject) => {
       /**
- * @param consoleMsg
- */
-function handler(consoleMsg) {
+       * @param consoleMsg
+       */
+      function handler(consoleMsg) {
         let msg =consoleMsg.text();
         switch (typeof message) {
           case "string":
@@ -157,6 +162,47 @@ function handler(consoleMsg) {
     let selector = qxSelector(qxId) + ` >> text="${text}"`;
     return page.waitForSelector(selector, options);
   };
+  
+  
+  /**
+   * Waits for all running tasks to finish
+   * @return {Promise<*>}
+   */
+  page.waitForApplicationIdle = async function() {
+    await page.waitForFunction("!qx.core.Init.getApplication().getTaskMonitor().getBusy()", {polling: 100});
+  };
+}
+
+/**
+ * Logs into the application
+ * @param page
+ * @param user
+ * @param password
+ * @return {Promise<void>}
+ */
+async function login(page, user, password) {
+  console.info(`### Authenticating user '${user}'...`);
+  await page.clickByQxId("toolbar/login");
+  await page.waitForWidgetByQxId("windows/login");
+  await page.fillByQxId("windows/login/form/username", user);
+  await page.fillByQxId("windows/login/form/password", password);
+  await page.clickByQxId("windows/login/buttons/login");
+  await page.waitForWidgetByQxId("toolbar/user", {timeout:60000, state:"visible" });
+  console.info(`### User '${user}' authenticated. Waiting for tasks to finish ...`);
+  await page.waitForFunction("!qx.core.Init.getApplication().getTaskMonitor().getBusy()", {polling: 100});
+}
+
+/**
+ * Logs out of the application
+ * @param page
+ * @return {Promise<void>}
+ */
+async function logout(page) {
+  console.info(`## Logging out ...`);
+  await page.clickByQxId("toolbar/logout");
+  await page.waitForWidgetByQxId("toolbar/user", {timeout:60000, state:"hidden" });
+  console.info(`## Logged out. Waiting for tasks to finish ...`);
+  await page.waitForFunction("!qx.core.Init.getApplication().getTaskMonitor().getBusy()", {polling: 100});
 }
 
 /**
@@ -175,6 +221,8 @@ module.exports = {
   browserType,
   app_url,
   init,
+  login,
+  logout,
   qxSelector,
   shutdown
 };

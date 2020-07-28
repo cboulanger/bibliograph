@@ -23,12 +23,18 @@ qx.Class.define("bibliograph.ui.main.TableView",
   
   construct: function () {
     this.base(arguments);
-    this.createNewReferenceWindow();
+    const newRefWin = this.__newRefWin = new bibliograph.ui.main.NewReferenceWindow();
+    this.addOwnedQxObject(newRefWin, "new-reference-window");
+    this.bind("addItems", newRefWin.getQxObject("list"), "model");
+    newRefWin.addListener("referenceTypeSelected", evt => {
+      this.getApplication().setItemView("referenceEditor-main");
+      this.createReference(evt.getData());
+    });
     this.addListenerOnce("permissionsReady", () => {
       this.createMenuEntries();
     });
 
-    // TODO use constants
+    // TO DO use constants
     let bus = qx.event.message.Bus.getInstance();
     bus.subscribe("folder.reload", this._on_reloadFolder, this);
     bus.subscribe("reference.changeData", this._on_changeReferenceData, this);
@@ -74,8 +80,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
     }
   },
 
-  members:
-  {
+  members: {
   
     /**
      * The rpc proxy
@@ -170,7 +175,6 @@ qx.Class.define("bibliograph.ui.main.TableView",
     },
 
     createMenuEntries: function() {
-      let app = qx.core.Init.getApplication();
 
       // "Add Reference" menubar button
       let addButton = new qx.ui.menubar.Button();
@@ -184,7 +188,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
       this.bindVisibility(this.permissions.add_reference, addButton);
       this.bindEnabled(this.permissions.add_reference_to_folder, addButton);
       addButton.addListener("execute", () => {
-        app.getWidgetById("app/windows/new-reference").open();
+        this.__newRefWin.open();
       });
 
       // Remove button
@@ -288,56 +292,6 @@ qx.Class.define("bibliograph.ui.main.TableView",
       // this.bindVisibility(this.permissions.batch_edit_reference,emptyFldContBtn);
     },
 
-    /**
-     * Window to create new references
-     * @returns {qx.ui.window.Window}
-     */
-    createNewReferenceWindow : function() {
-      let app = this.getApplication();
-      let win = new qx.ui.window.Window(this.tr("Create new reference type"));
-      win.setLayout(new qx.ui.layout.VBox(5));
-      win.set({
-        height: 300, width: 200,
-        showMinimize: false, showMaximize: false,
-        modal: true
-      });
-
-      // blocker
-      win.addListener("appear", () => {
-        win.center();
-        app.getBlocker().blockContent(win.getZIndex() - 1);
-      });
-      win.addListener("disappear", () => app.getBlocker().unblock());
-
-      // List widget, will be populated later
-      let list = new qx.ui.list.List();
-      list.set({
-        iconPath: "icon",
-        labelPath: "label"
-      });
-      win.add(list, {flex: 1});
-      this.bind("addItems", list, "model");
-
-      // OK button
-      let okButton = new qx.ui.form.Button(this.tr("Create"));
-      okButton.addListener("execute", function () {
-        let type = list.getSelection().getItem(0).getValue();
-        qx.lang.Function.delay(function () {
-          win.close();
-          app.setItemView("referenceEditor-main");
-          this.createReference(type);
-        }, 100, this);
-      }, this);
-      win.add(okButton);
-
-      // Cancel button
-      let cancelButton = new qx.ui.form.Button(this.tr("Cancel"));
-      cancelButton.addListener("execute", () => win.close());
-      win.add(cancelButton);
-
-      app.getRoot().add(win);
-      win.setWidgetId("app/windows/new-reference");
-    },
 
 
     /*
@@ -389,12 +343,12 @@ qx.Class.define("bibliograph.ui.main.TableView",
       }
       let columnIndex = tableModel.getColumnIndexById(columnName);
       if (columnIndex === undefined) {
- return;
-}
+       return;
+      }
       let rowIndex = tableModel.getRowById(data.referenceId);
       if (rowIndex === undefined) {
- return;
-}
+       return;
+      }
       tableModel.setValue(columnIndex, rowIndex, data.value.replace(/\n/, "; "));
     },
     
@@ -422,13 +376,13 @@ qx.Class.define("bibliograph.ui.main.TableView",
       this.resetSelection();
       
       // get row indexes from ids
-      let row,
-rows = [];
+      let row;
+      let rows = [];
       data.ids.forEach(function (id) {
         row = tableModel.getRowById(id);
         if (row !== undefined) {
-rows.push(row);
-} // FIXME this is a bug
+        rows.push(row);
+        } // FIXME this is a bug
       });
       
       // sort row indexes descending and remove them
@@ -478,20 +432,23 @@ rows.push(row);
       let app = this.getApplication();
       if (this.getFolderId()) {
         let msg = this.tr("Do your really want to remove the selected references?");
-        if (!await dialog.Dialog.confirm(msg).promise()) {
-return;
-}
+        if (!await this.getApplication().confirm(msg)) {
+           return;
+        }
         app.showPopup(this.tr("Removing references..."));
         await this.rpc.remove(this.getDatasource(), this.getFolderId(), this.getSelectedIds().join(","));
         app.hidePopup();
       } else {
         let msg = this.tr("Do your really want to move the selected references to the trash?");
         if (!await dialog.Dialog.confirm(msg).promise()) {
- return;
-}
+         return;
+        }
         app.showPopup(this.tr("Deleting references..."));
         await this.rpc.remove(this.getDatasource(), 0, this.getSelectedIds().join(","));
         app.hidePopup();
+        // hide editor since the reference does not exist anymore
+        this.getApplication().setModelId(null);
+        this.getApplication().setItemView(null);
       }
     },
   
