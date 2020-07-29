@@ -19,18 +19,11 @@
  * Z39.50 Plugin: Application logic
  * @property {bibliograph.ConfigManager} configManager
  */
-qx.Class.define("bibliograph.plugins.z3950.ImportWindow",
-{
+qx.Class.define("bibliograph.plugins.z3950.ImportWindow", {
   extend: qx.ui.window.Window,
   include: [qcl.ui.MLoadingPopup],
-
-  /*
-  *****************************************************************************
-     PROPERTIES
-  *****************************************************************************
-  */
+  
   properties : {
-
     datasource : {
       check : "String",
       nullable : true,
@@ -38,12 +31,6 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow",
       apply : "_applyDatasource"
     }
   },
-
-  /*
-  *****************************************************************************
-     CONSTRUCTOR
-  *****************************************************************************
-  */
 
   /**
    * Constructor
@@ -80,13 +67,7 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow",
       });
     }, 100);
   },
-
-
-  /*
-  *****************************************************************************
-     MEMBERS
-  *****************************************************************************
-  */
+  
   members:
   {
     listView: null,
@@ -111,7 +92,6 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow",
      * UI
      */
     createUi: function() {
-      let app = this.getApplication();
       this.setLayout(new qx.ui.layout.VBox(5));
 
       // toolbar
@@ -251,54 +231,50 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow",
     /**
      * Imports the selected references
      */
-    importSelected: function () {
+    importSelected: async function () {
       let app = this.getApplication();
       
       // ids to import
       let ids = this.listView.getSelectedIds();
       if (!ids.length) {
-        dialog.Dialog.alert(this.tr("You have to select one or more reference to import."));
-        return false;
+        await this.getApplication().alert(this.tr("You have to select one or more reference to import."));
+        return;
       }
       
       // target folder
       let targetFolderId = app.getFolderId();
       if (!targetFolderId) {
-        dialog.Dialog.alert(this.tr("Please select a folder first."));
-        return false;
+        await this.getApplication().alert(this.tr("Please select a folder first."));
+        return;
       }
       let treeView = app.getWidgetById(bibliograph.Application.ids.app.treeview);
       let nodeId = treeView.getController().getClientNodeId(targetFolderId);
       let node = treeView.getTree().getDataModel().getData()[nodeId];
       if (!node) {
-        dialog.Dialog.alert(this.tr("Cannot determine selected folder. Please reload the folders."));
-        return false;
+        await this.getApplication().alert(this.tr("Cannot determine selected folder. Please reload the folders."));
+        return;
       }
       if (node.data.type !== "folder") {
-        dialog.Dialog.alert(this.tr("Invalid target folder. You can only import into normal folders."));
-        return false;
+        await this.getApplication().alert(this.tr("Invalid target folder. You can only import into normal folders."));
+        return;
       }
       
       // send to server
       let sourceDatasource = this.datasourceSelectBox.getSelection().toArray()[0].getValue();
       let targetDatasource = app.getDatasource();
       this.showPopup(this.tr("Importing references..."));
-      this.getApplication()
-        .getRpcClient("z3950/table")
-        .send("import", [sourceDatasource, ids, targetDatasource, targetFolderId])
-        .then(() => {
-          this.importButton.setEnabled(true);
-          this.hidePopup();
-        });
+      let client = this.getApplication().getRpcClient("z3950/table");
+      await client.request("import", [sourceDatasource, ids, targetDatasource, targetFolderId]);
+      this.importButton.setEnabled(true);
+      this.hidePopup();
     },
-
 
     /**
      * Called when the user presses a key in the search box
      * @param e {qx.event.type.Data}
      */
     _on_keypress: function (e) {
-      if (e.getKeyIdentifier() == "Enter") {
+      if (e.getKeyIdentifier() === "Enter") {
         this.startSearch();
       }
     },
@@ -319,9 +295,9 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow",
       // return s.normalize('NFKD').replace(combining, ''));
       
       /**
- * @param c
- */
-function filter(c) {
+       * @param c
+       */
+      function filter(c) {
         switch (c) {
           case "ä":
             return "ae";
@@ -378,7 +354,8 @@ function filter(c) {
       }
       
       let normalized = "";
-let i; let l;
+      let i;
+      let l;
       s = s.toLowerCase();
       for (i = 0, l = s.length; i < l; i += 1) {
         normalized += filter(s.charAt(i));

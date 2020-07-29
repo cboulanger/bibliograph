@@ -240,13 +240,12 @@ qx.Class.define("bibliograph.Application", {
     createDialog(type, config) {
       let dialog = this.__dialogs[type];
       if (dialog === undefined) {
-        dialog = this.__dialogs[type] = new qxl.dialog[type[0].toUpperCase() + type.slice(1)]();
+        dialog = this.__dialogs[type] = qxl.dialog.Dialog[type]();
         this.addOwnedQxObject(dialog, type);
       }
       if (qx.lang.Type.isObject(config)) {
         dialog.set(config);
       }
-      dialog.open();
       return dialog.promise();
     },
   

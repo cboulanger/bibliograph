@@ -22,15 +22,15 @@
  */
 qx.Class.define("qcl.ui.dialog.Login",
 {
-  extend : dialog.Login,
+  extend : qxl.dialog.Login,
 
-  construct : function(){
+  construct : function() {
     this.base(arguments);
-    this.setCheckCredentials((username, password, callback)=>{
+    this.setCheckCredentials(async (username, password, callback) => {
       let accessManager = qx.core.Init.getApplication().getAccessManager();
       let response = await accessManager.authenticate(username, password, true);
       let { message, token, sessionId, error } = response;
-      if( error ){
+      if (error) {
         this.warn(error);
         return;
       }

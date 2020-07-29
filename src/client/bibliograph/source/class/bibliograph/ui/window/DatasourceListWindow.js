@@ -17,7 +17,7 @@
 /**
  * UI for choosing the datasource from a list
  * @asset(bibliograph/icon/button-reload.png)
- * @asset(qx/icon/${qx.icontheme}/22/apps/utilities-archiver.png)
+ * @asset(qx/icon/Tango/22/apps/utilities-archiver.png)
  */
 qx.Class.define("bibliograph.ui.window.DatasourceListWindow",
 {

@@ -8,6 +8,7 @@
 
 ************************************************************************ */
 /**
+ *
  * @include(qxl.dialog.Dialog)
  */
 qx.Class.define("bibliograph.plugins.webservices.Application",

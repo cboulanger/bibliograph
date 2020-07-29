@@ -33,7 +33,7 @@
  * Use the qcl_ui_dialog_ServerProgress PHP class to produce this output.
  */
 qx.Class.define("qcl.ui.dialog.ServerProgress", {
-  extend : dialog.Progress,
+  extend : qxl.dialog.Progress,
   
   properties :
   {

@@ -112,11 +112,11 @@ qx.Class.define("bibliograph.Commands",
      *
      * @param path
      */
-    showHelpWindow : function(path) {
+    showHelpWindow : async function(path) {
       let url = "https://sites.google.com/a/bibliograph.org/docs-v2-de/" + path;
       this.__helpWindow = window.open(url, "bibliograph-help-window");
       if (!this.__helpWindow) {
-        this.getApplication().alert(this.tr("Cannot open window. Please disable the popup-blocker of your browser for this website."));
+        await this.getApplication().alert(this.tr("Cannot open window. Please disable the popup-blocker of your browser for this website."));
         return;
       }
       this.__helpWindow.focus();

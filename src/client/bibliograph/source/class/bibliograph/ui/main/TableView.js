@@ -79,14 +79,8 @@ qx.Class.define("bibliograph.ui.main.TableView",
       event: "changeAddItems"
     }
   },
-
   members: {
-  
-    /**
-     * The rpc proxy
-     */
-    rpc : rpc.Reference,
-  
+    
     /*
     ---------------------------------------------------------------------------
        PERMISSIONS
@@ -420,7 +414,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
         return;
       }
       app.showPopup(this.tr("Creating reference..."));
-      await this.rpc.create(this.getDatasource(), this.getFolderId(), reftype);
+      await rpc.Reference.create(this.getDatasource(), this.getFolderId(), reftype);
       app.hidePopup();
     },
     
@@ -436,7 +430,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
            return;
         }
         app.showPopup(this.tr("Removing references..."));
-        await this.rpc.remove(this.getDatasource(), this.getFolderId(), this.getSelectedIds().join(","));
+        await rpc.Reference.remove(this.getDatasource(), this.getFolderId(), this.getSelectedIds().join(","));
         app.hidePopup();
       } else {
         let msg = this.tr("Do your really want to move the selected references to the trash?");
@@ -444,7 +438,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
          return;
         }
         app.showPopup(this.tr("Deleting references..."));
-        await this.rpc.remove(this.getDatasource(), 0, this.getSelectedIds().join(","));
+        await rpc.Reference.remove(this.getDatasource(), 0, this.getSelectedIds().join(","));
         app.hidePopup();
         // hide editor since the reference does not exist anymore
         this.getApplication().setModelId(null);
@@ -487,7 +481,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
       await this.getApplication().confirm(message);
       let targetFolderId = parseInt(node.data.id);
       app.showPopup(this.tr("Moving references..."));
-      this.rpc.move(this.getDatasource(), this.getFolderId(), targetFolderId, this.getSelectedIds().join(","));
+      rpc.Reference.move(this.getDatasource(), this.getFolderId(), targetFolderId, this.getSelectedIds().join(","));
       app.hidePopup();
     },
     
@@ -502,14 +496,14 @@ qx.Class.define("bibliograph.ui.main.TableView",
       if (!node) {
         node = await this._showFolderDialog();
         if (!node) {
- return;
-}
+         return;
+        }
       }
       let message = this.tr("Do your really want to copy the selected references to '%1'?", [node.label]);
       await this.getApplication().confirm(message);
       let targetFolderId = parseInt(node.data.id);
       app.showPopup(this.tr("Copying references..."));
-      this.rpc.copy(this.getDatasource(), targetFolderId, this.getSelectedIds().join(","));
+      rpc.Reference.copy(this.getDatasource(), targetFolderId, this.getSelectedIds().join(","));
       app.hidePopup();
     },
     

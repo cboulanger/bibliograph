@@ -44,7 +44,9 @@ qx.Class.define("bibliograph.Utils",
       try {
         result = await app.getAccessManager().authenticate(username, password);
       } catch (e) {
-        result = {error: e.message};
+        result = {
+          error: e.message
+        };
       } finally {
         qx.core.Id.getQxObject("windows/login").setEnabled(true);
         qx.core.Id.getQxObject("toolbar/login").setEnabled(true);

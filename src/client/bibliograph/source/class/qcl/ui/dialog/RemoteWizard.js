@@ -23,7 +23,7 @@
  * this wizard sends each page result back to the server and gets new page data
  */
 qx.Class.define("qcl.ui.dialog.RemoteWizard", {
-  extend: dialog.Wizard,
+  extend: qxl.dialog.Wizard,
   
   properties:
     {

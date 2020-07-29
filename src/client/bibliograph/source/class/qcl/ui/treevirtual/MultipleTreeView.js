@@ -22,14 +22,14 @@
  * datasources. The data is cached for performance, so that switching the
  * datasource won't result in expensive reloads.
  *
- * @asset(icon/16/places/folder-remote.png)
- * @asset(icon/16/places/folder.png)
- * @asset(icon/16/apps/utilities-graphics-viewer.png)
- * @asset(icon/16/places/user-trash.png)
- * @asset(icon/16/places/user-trash-full.png)
- * @asset(icon/16/actions/folder-new.png)
- * @asset(icon/16/places/folder-remote.png)
- * @asset(icon/16/actions/help-about.png)
+ * @asset(qx/icon/Tango/16/places/folder-remote.png)
+ * @asset(qx/icon/Tango/16/places/folder.png)
+ * @asset(qx/icon/Tango/16/apps/utilities-graphics-viewer.png)
+ * @asset(qx/icon/Tango/16/places/user-trash.png)
+ * @asset(qx/icon/Tango/16/places/user-trash-full.png)
+ * @asset(qx/icon/Tango/16/actions/folder-new.png)
+ * @asset(qx/icon/Tango/16/places/folder-remote.png)
+ * @asset(qx/icon/Tango/16/actions/help-about.png)
  */
 qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
   extend: qx.ui.container.Composite,
@@ -269,7 +269,6 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
     this.base(arguments);
     
     this.__datasources = {};
-    this.__prompt = new dialog.Prompt();
     this.setTreeWidgetContainer(this);
     
     // server databinding
@@ -303,11 +302,6 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
      * Data sent with automatic server requests
      */
     __optionalRequestData: null,
-    
-    /**
-     * reusable prompt box
-     */
-    __prompt: null,
     
     /**
      * Attempts to select a node

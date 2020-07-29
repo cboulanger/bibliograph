@@ -233,7 +233,7 @@ qx.Class.define("bibliograph.AccessManager",
           let serverHash = sha1(storedSalt + password);
         password = sha1(randSalt + serverHash);
       }
-      let response = await client.send("authenticate", [username, password]);
+      let response = await client.request("authenticate", [username, password]);
       if (authOnly) {
         return response;
       }

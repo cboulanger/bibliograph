@@ -112,9 +112,9 @@ qx.Class.define("bibliograph.ui.Windows",
          app.cmd("forgotPassword");
         }
       });
-      loginDialog.setCallback(async function(err, data) {
+      loginDialog.setCallback((err, data) => {
         if (err) {
-          await this.getApplication().error(err);
+          this.getApplication().error(err);
           qx.event.Timer.once(() => {
            loginDialog._password.focus();
           }, null, 100);

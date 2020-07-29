@@ -21,7 +21,7 @@
  * Extends the dialog widget set to provide server-generated dialogs and popups
  */
 qx.Class.define("qcl.ui.dialog.Dialog",{
-  extend: dialog.Dialog,
+  extend: qxl.dialog.Dialog,
   statics:
     {
       /**

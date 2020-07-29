@@ -152,11 +152,11 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     pm.create("access.manage").bind("state", addUserButton, "visibility", {
       converter: bibliograph.Utils.bool2visibility
     });
-    addUserButton.addListener("execute", function (e) {
+    addUserButton.addListener("execute", async () => {
       this.leftSelectBox.setSelection([this.leftSelectBox.getSelectables()[0]]);
       this.getApplication().showPopup(this.tr("Please wait ..."));
-      rpc.AccessConfig.newUserDialog();
-    }, this);
+      await rpc.AccessConfig.newUserDialog();
+    });
   
     //  import LDAP user button
     let findLdapUserButton = new qx.ui.toolbar.Button(this.tr("Import LDAP user"));
@@ -180,10 +180,10 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
       converter: bibliograph.Utils.bool2visibility
     });
     // @todo rewrite
-    addDatasourceButton.addListener("execute", function (e) {
+    addDatasourceButton.addListener("execute", async () => {
       this.leftSelectBox.setSelection([this.leftSelectBox.getSelectables()[4]]);
-      rpc.AccessConfig.createDatasourceDialog();
-    }, this);
+      await rpc.AccessConfig.createDatasourceDialog();
+    });
     
     // help button
     let helpButton = new qx.ui.toolbar.Button(this.tr("Help"), "icon/22/apps/utilities-help.png");
