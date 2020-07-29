@@ -26,16 +26,14 @@ qx.Class.define("bibliograph.TestApplication",
      *
      * @lint ignoreDeprecated(alert)
      */
-    main : function()
-    {
+    main : function() {
       this.base(arguments);
-      if (qx.core.Environment.get("qx.debug"))
-      {
+      if (qx.core.Environment.get("qx.debug")) {
         qx.log.appender.Native;
       }
 
       //  Mixes `getApplication()` into all qooxdoo objects
-      qx.Class.include( qx.core.Object, qcl.application.MGetApplication );
+      qx.Class.include(qx.core.Object, qcl.application.MGetApplication);
 
       let setup = bibliograph.Setup.getInstance();
       let am = this.getAccessManager();
@@ -48,14 +46,14 @@ qx.Class.define("bibliograph.TestApplication",
       doc.add(button1, {left: 100, top: 50});
       button1.addListener("execute", async () => {
         // auth as admin
-        let { token } = await this.getRpcClient("access").send('authenticate',['admin','admin']);
-        console.info( "token " + token );
+        let { token } = await this.getRpcClient("access").send("authenticate", ["admin", "admin"]);
+        console.info("token " + token);
         am.setToken(token || null);
         await am.load();
         await cm.load();
       });
       //am.getPermission( 'config.value.edit' ).bind( "state", button1, "enabled" );
-      am.getUserManager().bind( 'activeUser.anonymous', button1, "enabled" );
+      am.getUserManager().bind("activeUser.anonymous", button1, "enabled");
 
       var button2= new qx.ui.form.Button("Change application title", "bibliograph/test.png");
       button2.setEnabled(false);
@@ -63,10 +61,10 @@ qx.Class.define("bibliograph.TestApplication",
       button2.addListener("execute", async () => {
         cm.setKey(
           "application.title",
-          await dialog.Dialog.prompt("Enter application title").promise()
+          await this.getApplication().prompt("Enter application title")
         );
       });
-      am.getPermission( 'config.default.edit' ).bind("state", button2, "enabled");
+      am.getPermission("config.default.edit").bind("state", button2, "enabled");
       
       var button3= new qx.ui.form.Button("Logout", "bibliograph/test.png");
       button3.setEnabled(false);
@@ -74,24 +72,23 @@ qx.Class.define("bibliograph.TestApplication",
       button3.addListener("execute", async () => {
         am.logout();
       });
-      am.getUserManager().bind( 'activeUser.anonymous', button3, "enabled", {
-        converter : value => ! value
+      am.getUserManager().bind("activeUser.anonymous", button3, "enabled", {
+        converter : value => !value
       });
-      am.getUserManager().bind( 'activeUser.username', button3, "label", {
+      am.getUserManager().bind("activeUser.username", button3, "label", {
         converter : value => `Logout ${value||""}`
       });
 
       var label1 = new qx.ui.basic.Label("Loading...");
-      doc.add(label1,  {left: 300, top: 90});
-      cm.addListener("ready", () =>{
-        cm.bindKey("application.title",label1,"value", true);
+      doc.add(label1, {left: 300, top: 90});
+      cm.addListener("ready", () => {
+        cm.bindKey("application.title", label1, "value", true);
       });
 
       /*
        * application startup
        */
-      (async ()=>{
-        
+      (async () => {
         await setup.checkServerSetup();
         await setup.authenticate();
         await setup.loadConfig();

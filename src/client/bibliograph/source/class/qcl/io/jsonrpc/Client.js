@@ -30,7 +30,7 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
    * @param {String?} service Optional service name which is prepended to the method
    */
   construct: function(url, service) {
-    this.__dialog = dialog.Dialog.error("").hide();
+    this.__dialog = qxl.dialog.Dialog.error("").hide();
     qx.util.Validate.checkUrl(url);
     this.__service = service;
     const client = this.__client = new qx.io.jsonrpc.Client(url, service);
@@ -343,7 +343,7 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
       let msg =
             app.tr("A login problem occurred, which is usually due to a database upgrade. Press 'OK' to reload the application.") + " " +
             app.tr("If the error persists, contact the administrator.");
-      app.__authErrorDialog = dialog.Dialog.error(msg);
+      app.__authErrorDialog = qxl.dialog.Dialog.error(msg);
       app.__authErrorDialog.promise()
         .then(() =>
           app.getAccessManager().logout()

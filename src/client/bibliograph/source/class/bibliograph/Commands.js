@@ -46,7 +46,7 @@ qx.Class.define("bibliograph.Commands",
       var enforce_https = app.getConfigManager().getKey("access.enforce_https_login");
       if (enforce_https && l.protocol != "https:") {
         let msg = this.tr("To log in, you need a secure connection. After you press 'OK', the application will be reloaded in secure mode. After the application finished loading, you can log in again.");
-        await dialog.Dialog.alert(msg).promise();
+        await this.getApplication().alert(msg);
         l.href = "https://" + l.host + l.pathname + l.hash;
       } else {
         // check if access is restricted
@@ -57,7 +57,7 @@ qx.Class.define("bibliograph.Commands",
         //   if (explanation) {
         //     msg += "\n" + explanation;
         //   }
-        //   await dialog.Dialog.alert(msg).promise();
+        //   await this.getApplication().alert(msg);
         //   this.__readonlyConfirmed = true
         // } else {
           // else show login dialog
@@ -116,7 +116,8 @@ qx.Class.define("bibliograph.Commands",
       let url = "https://sites.google.com/a/bibliograph.org/docs-v2-de/" + path;
       this.__helpWindow = window.open(url, "bibliograph-help-window");
       if (!this.__helpWindow) {
-        dialog.Dialog.alert(this.tr("Cannot open window. Please disable the popup-blocker of your browser for this website."));
+        this.getApplication().alert(this.tr("Cannot open window. Please disable the popup-blocker of your browser for this website."));
+        return;
       }
       this.__helpWindow.focus();
     },

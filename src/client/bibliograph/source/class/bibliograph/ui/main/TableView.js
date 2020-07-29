@@ -416,7 +416,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
       let app = this.getApplication();
       let folderId = this.getFolderId();
       if (!folderId) {
-        dialog.Dialog.error(this.tr("You cannot create an item outside a folder"));
+        await this.getApplication().error(this.tr("You cannot create an item outside a folder"));
         return;
       }
       app.showPopup(this.tr("Creating reference..."));
@@ -440,7 +440,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
         app.hidePopup();
       } else {
         let msg = this.tr("Do your really want to move the selected references to the trash?");
-        if (!await dialog.Dialog.confirm(msg).promise()) {
+        if (!await this.getApplication().confirm(msg)) {
          return;
         }
         app.showPopup(this.tr("Deleting references..."));
@@ -484,7 +484,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
         "Do your really want to move the selected references to '%1'?",
         [node.label]
       );
-      await dialog.Dialog.confirm(message).promise();
+      await this.getApplication().confirm(message);
       let targetFolderId = parseInt(node.data.id);
       app.showPopup(this.tr("Moving references..."));
       this.rpc.move(this.getDatasource(), this.getFolderId(), targetFolderId, this.getSelectedIds().join(","));
@@ -506,7 +506,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
 }
       }
       let message = this.tr("Do your really want to copy the selected references to '%1'?", [node.label]);
-      await dialog.Dialog.confirm(message).promise();
+      await this.getApplication().confirm(message);
       let targetFolderId = parseInt(node.data.id);
       app.showPopup(this.tr("Copying references..."));
       this.rpc.copy(this.getDatasource(), targetFolderId, this.getSelectedIds().join(","));
@@ -554,36 +554,32 @@ qx.Class.define("bibliograph.ui.main.TableView",
     /**
      * Finds and replaces text in the database using a service
      */
-    findReplace: function () {
-      return dialog.Dialog.error("Funktion noch nicht implementiert...");
-      let datasource = this.getDatasource();
-      let folderId = this.getFolderId();
-      let selectedIds = this.getSelectedIds();
-      let app = this.getApplication();
-      app.showPopup(this.tr("Processing request..."));
-      app.getRpcClient("reference").send("findReplaceDialog", [datasource, folderId, selectedIds], function () {
-        app.hidePopup();
-      }, this);
+    findReplace: async function () {
+      await this.getApplication().error("Funktion noch nicht implementiert...");
+      // let datasource = this.getDatasource();
+      // let folderId = this.getFolderId();
+      // let selectedIds = this.getSelectedIds();
+      // let app = this.getApplication();
+      // app.showPopup(this.tr("Processing request..."));
+      // app.getRpcClient("reference").send("findReplaceDialog", [datasource, folderId, selectedIds], function () {
+      //   app.hidePopup();
+      // }, this);
     },
     
     /**
      * Empties the current folder
      */
-    emptyFolder: function () {
-      return dialog.Dialog.error("Funktion noch nicht implementiert...");
-      let datasource = this.getDatasource();
-      let folderId = this.getFolderId();
-      let app = this.getApplication();
-      let msg = this.tr("Do you really want to make the folder empty, moving all references to the trash that are not in other folders?");
-      dialog.Dialog.confirm(msg, function (yes) {
-        if (!yes) {
- return;
-}
-        app.showPopup(this.tr("Emptying the folder ..."));
-        app.getRpcClient("reference").send("removeAllFromFolder", [datasource, folderId], function () {
-          app.hidePopup();
-        }, this);
-      }, this);
+    emptyFolder: async function () {
+      await this.getApplication().error("Funktion noch nicht implementiert...");
+      // let datasource = this.getDatasource();
+      // let folderId = this.getFolderId();
+      // let app = this.getApplication();
+      // let msg = this.tr("Do you really want to make the folder empty, moving all references to the trash that are not in other folders?");
+      // if (await this.getApplication().confirm(msg)) {
+      //   app.showPopup(this.tr("Emptying the folder ..."));
+      //   await rpc.Reference.removeAllFromFolder([datasource, folderId]);
+      //   app.hidePopup();
+      // }
     }
   }
 });

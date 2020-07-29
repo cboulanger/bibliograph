@@ -1,14 +1,6 @@
 {
   "libraries": [
     {
-      "library_name": "Dialog",
-      "library_version": "2.1.1",
-      "path": "qx_packages/cboulanger_qx-contrib-Dialog_v2_1_1",
-      "uri": "cboulanger/qx-contrib-Dialog",
-      "repo_name": "cboulanger/qx-contrib-Dialog",
-      "repo_tag": "v2.1.1"
-    },
-    {
       "library_name": "UploadWidget",
       "library_version": "1.0.1",
       "path": "qx_packages/oetiker_UploadWidget_v1_0_1",
@@ -23,14 +15,6 @@
       "uri": "cboulanger/qx-contrib-TokenField",
       "repo_name": "cboulanger/qx-contrib-TokenField",
       "repo_tag": "v1.3.0"
-    },
-    {
-      "library_name": "Qookery",
-      "library_version": "0.7.0",
-      "path": "qx_packages/ergobyte_qookery_v0_7_0-pre/qookery",
-      "uri": "ergobyte/qookery/qookery",
-      "repo_name": "ergobyte/qookery",
-      "repo_tag": "v0.7.0-pre"
     },
     {
       "library_name": "Qooxdoo API Viewer",

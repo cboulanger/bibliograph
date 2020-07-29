@@ -293,47 +293,45 @@ qx.Class.define("bibliograph.plugins.webservices.View",
     /**
      * Imports the selected references
      */
-    importSelected: function () {
+    importSelected: async function () {
       let app = this.getApplication();
       
       // ids to import
       let ids = this.listView.getSelectedIds();
       if (!ids.length) {
-        dialog.Dialog.alert(this.tr("You have to select one or more reference to import."));
-        return false;
+        await this.getApplication().alert(this.tr("You have to select one or more reference to import."));
+        return;
       }
       
       // target folder
       let targetFolderId = app.getFolderId();
       if (!targetFolderId) {
-        dialog.Dialog.alert(this.tr("Please select a folder first."));
-        return false;
+        await this.getApplication().alert(this.tr("Please select a folder first."));
+        return;
       }
       let treeView = app.getWidgetById(bibliograph.Application.ids.app.treeview);
       let nodeId = treeView.getController().getClientNodeId(targetFolderId);
       let node = treeView.getTree().getDataModel().getData()[nodeId];
       if (!node) {
-        dialog.Dialog.alert(this.tr("Cannot determine selected folder. Please reload the folders."));
-        return false;
+        await this.getApplication().alert(this.tr("Cannot determine selected folder. Please reload the folders."));
+        return;
       }
       if (node.data.type !== "folder") {
-        dialog.Dialog.alert(this.tr("Invalid target folder. You can only import into normal folders."));
-        return false;
+        await this.getApplication().alert(this.tr("Invalid target folder. You can only import into normal folders."));
+        return;
       }
       
       // send to server
       let sourceDatasource = this.datasourceSelectBox.getSelection().toArray()[0].getValue();
       let targetDatasource = app.getDatasource();
       this.showPopup(this.tr("Importing references..."));
-      this.getApplication()
+      await this.getApplication()
         .getRpcClient("webservices/table")
-        .send("import", [sourceDatasource, ids, targetDatasource, targetFolderId])
-        .then(() => {
-          this.importButton.setEnabled(true);
-          this.hidePopup();
-          this.searchBox.setValue("");
-          this.searchBox.focus();
-        });
+        .request("import", [sourceDatasource, ids, targetDatasource, targetFolderId]);
+      this.importButton.setEnabled(true);
+      this.hidePopup();
+      this.searchBox.setValue("");
+      this.searchBox.focus();
     },
 
 

@@ -262,6 +262,17 @@ qx.Class.define("bibliograph.Application", {
     },
   
     /**
+     * Return the promise for a (cached) warning dialog
+     * @param {String} msg The message for the user
+     * @param {Object} config Additional properties to set
+     * @return {Promise}
+     */
+    warning(msg, config= {}) {
+      config.message = msg;
+      return this.createDialog("warning", config);
+    },
+  
+    /**
      * Return the promise for a (cached) error dialog
      * @param {String} msg The message for the user
      * @param {Object} config Additional properties to set
@@ -281,6 +292,17 @@ qx.Class.define("bibliograph.Application", {
     confirm(msg, config= {}) {
       config.message = msg;
       return this.createDialog("confirm", config);
+    },
+  
+    /**
+     * Return the promise for a (cached) prompt dialog
+     * @param {String} msg The message for the user
+     * @param {Object} config Additional properties to set
+     * @return {Promise}
+     */
+    prompt(msg, config= {}) {
+      config.message = msg;
+      return this.createDialog("prompt", config);
     },
 
     /*
@@ -317,9 +339,7 @@ qx.Class.define("bibliograph.Application", {
 
       let serverUrl = qx.core.Environment.get("app.serverUrl");
       if (!serverUrl) {
-        dialog.Dialog.error(
-          this.tr("Missing server address. Please contact administrator.")
-        );
+        this.getApplication().error(this.tr("Missing server address. Please contact administrator."));
         throw new Error("No server address set.");
       }
       if (!serverUrl.startsWith("http")) {

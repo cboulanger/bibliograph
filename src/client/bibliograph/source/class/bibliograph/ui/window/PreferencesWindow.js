@@ -224,11 +224,8 @@ qx.Class.define("bibliograph.ui.window.PreferencesWindow", {
           let mode = e.getData()[0].getModel();
           let location = window.location;
           if (mode === "plaintext" && location.protocol !== "https:") {
-            dialog.Dialog.error(
-              this.tr(
-                "Plaintext passwords without a secure connection (HTTPS) are not allowed."
-              )
-            );
+            let msg = this.tr("Plaintext passwords without a secure connection (HTTPS) are not allowed.");
+            this.getApplication().error(msg);
             return;
           }
           this.getApplication()

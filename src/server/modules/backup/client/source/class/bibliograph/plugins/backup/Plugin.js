@@ -69,7 +69,7 @@ qx.Class.define("bibliograph.plugins.backup.Plugin", {
       backupMenu.add(createBackupButton);
       
       createBackupButton.addListener("execute", async () => {
-        let comment = await dialog.Dialog.prompt(this.tr("You can enter a description for this backup (optional)")).promise();
+        let comment = await this.getApplication().prompt(this.tr("You can enter a description for this backup (optional)"));
         if (comment === undefined) {
           return;
         }
@@ -103,17 +103,16 @@ qx.Class.define("bibliograph.plugins.backup.Plugin", {
         });
       });
       // called after a backup has been restored
-      qx.event.message.Bus.getInstance().subscribe("backup.restored", e => {
+      qx.event.message.Bus.getInstance().subscribe("backup.restored", async e => {
         let data = e.getData();
         if (data.datasource !== app.getDatasource()) {
           return;
         }
         let msg = this.tr("The datasource has just been restored to a previous state and will now be reloaded.");
-        dialog.Dialog.alert(msg, () => {
-          app.getWidgetById("app/treeview").reload();
-          app.getWidgetById("app/tableview").reload();
-          app.setModelId(0);
-        }, this);
+        await this.getApplication().alert(msg);
+        app.getWidgetById("app/treeview").reload();
+        app.getWidgetById("app/tableview").reload();
+        app.setModelId(0);
       });
       
       // delete Backup

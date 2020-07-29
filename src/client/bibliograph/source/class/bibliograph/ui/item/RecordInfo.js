@@ -142,24 +142,25 @@ qx.Class.define("bibliograph.ui.item.RecordInfo",
     /**
      *
      */
-    removeFromFolder : function() {
-      var app = this.getApplication();
-      var selectedFolders = this.getSelectedFolders();
+    removeFromFolder : async function() {
+      const app = this.getApplication();
+      let selectedFolders = this.getSelectedFolders();
       if (!selectedFolders.length) {
        return;
       }
-
       var message = this.tr("Do you really want to remove the reference from folder '%1'?", selectedFolders[0].label);
-      var handler = qx.lang.Function.bind(function(result) {
-        if (result === true) {
-          this.showPopup(this.tr("Processing request..."));
-          app.getRpcClient("reference").request("remove", [app.getDatasource(), selectedFolders[0].id, null, [app.getModelId()]], function() {
-            this.hidePopup();
-            this.reloadFolderData();
-          }, this);
-        }
-      }, this);
-      dialog.Dialog.confirm(message, handler);
+      let result = await app.confirm(message);
+      if (result === true) {
+        this.showPopup(this.tr("Processing request..."));
+        await rpc.Reference.remove(
+            app.getDatasource(),
+            selectedFolders[0].id,
+            null,
+            [app.getModelId()]
+        );
+        this.hidePopup();
+        this.reloadFolderData();
+      }
     }
   }
 });

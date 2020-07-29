@@ -100,7 +100,7 @@ qx.Class.define("bibliograph.ui.Windows",
       this.getRoot().add(searchHelpWindow);
 
       // Login Dialog
-      let loginDialog = new dialog.Login();
+      let loginDialog = new qxl.dialog.Login();
       loginDialog.setQxObjectId("login");
       this.addOwnedQxObject(loginDialog);
       loginDialog.set({
@@ -114,7 +114,7 @@ qx.Class.define("bibliograph.ui.Windows",
       });
       loginDialog.setCallback(async function(err, data) {
         if (err) {
-          await dialog.Dialog.error(err).promise();
+          await this.getApplication().error(err);
           qx.event.Timer.once(() => {
            loginDialog._password.focus();
           }, null, 100);

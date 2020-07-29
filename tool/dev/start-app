@@ -10,12 +10,24 @@ CONFIG_FILE=${2:-compile.json}
 APP_PATH=compiled/source/$APP
 TARGET=${3:-source}
 
+MADE=false
 echo ">>> Compiling application '$APP', using config file '$CONFIG_FILE' and '$TARGET' target ..."
-(npx qx compile --target=$TARGET --watch --feedback=0 -c $CONFIG_FILE & ) | while read output; do
+while read output; do
   echo "$output"
   # wait for "made" event message to resume script
-  if [[ $output == *"Applications are made"* ]]; then break; fi;
-done
+  if [[ $output == *"Applications are made"* ]]; then
+    MADE=true
+    break;
+  fi;
+  if [[ $output == *"Could not install"* ]]; then
+    break;
+  fi;
+done < <(npx qx compile --target=$TARGET --watch --feedback=0 -c $CONFIG_FILE & )
+
+if [[ $MADE == false ]]; then
+  echo "Compilation failed."
+  exit 1
+fi
 
 sleep 5
 

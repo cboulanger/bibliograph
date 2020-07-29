@@ -56,7 +56,7 @@ qx.Class.define("bibliograph.store.Datasources",
           this.__loggingout = true;
           this.getApplication().getCommands().logout();
         }
-        dialog.Dialog.alert(app.tr("You don't have access to any datasource. Reloading the page might help."));
+        this.getApplication().alert(app.tr("You don't have access to any datasource. Reloading the page might help."));
         return;
       }
       this.__loggingout = false;

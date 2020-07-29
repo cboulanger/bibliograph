@@ -444,7 +444,7 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
      * @param targetModel {Object}
      * @private
      */
-    _moveFolderDialog : function (model=null, targetModel=null) {
+    _moveFolderDialog : async function (model=null, targetModel=null) {
       if (!model) {
         model = this.getSelectedNode();
       }
@@ -466,14 +466,11 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
         "Do your really want to move folder '%1' to '%2'?",
         model.label, targetModel.label
       );
-      dialog.Dialog.confirm(message).promise().then(result => {
-        if (result === true) {
-          this._isWaiting(true);
-          this.rpc
-          .move(this.getDatasource(), model.data.id, targetModel.data.id)
-          .then(() => this._isWaiting(false));
-        }
-      });
+      if (await this.getApplication().confirm(message)) {
+        this._isWaiting(true);
+        await this.rpc.move(this.getDatasource(), model.data.id, targetModel.data.id);
+        this._isWaiting(false);
+      }
     },
   
     /**
@@ -483,21 +480,17 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
      * @param rowData {Array}
      * @private
      */
-    _moveReferencesDialog : function (sourceModel, targetModel, rowData) {
+    _moveReferencesDialog : async function (sourceModel, targetModel, rowData) {
       qx.core.Assert.assertObject(sourceModel);
       qx.core.Assert.assertObject(targetModel);
       qx.core.Assert.assertArray(rowData);
       let ids = rowData.map(row => row.id);
       let message = this.tr("Do your really want to move %1 references to '%2'?", ids.length, targetModel.label);
-      dialog.Dialog.confirm(message).promise()
-.then(result => {
-        if (result === true) {
-          this._isWaiting(true);
-          rpc.Reference
-          .move(this.getDatasource(), sourceModel.data.id, targetModel.data.id, ids.join(","))
-          .then(() => this._isWaiting(false));
-        }
-      });
+      if (await this.getApplication().confirm(message)) {
+        this._isWaiting(true);
+        await rpc.Reference.move(this.getDatasource(), sourceModel.data.id, targetModel.data.id, ids.join(","));
+        this._isWaiting(false);
+      }
     },
   
     /**
@@ -506,35 +499,30 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
      * @param rowData {Array}
      * @private
      */
-    _copyReferencesDialog : function (targetModel, rowData) {
+    _copyReferencesDialog : async function (targetModel, rowData) {
       qx.core.Assert.assertObject(targetModel);
       qx.core.Assert.assertArray(rowData);
       let ids = rowData.map(row => row.id);
       let message = this.tr("Do your really want to copy %1 references to '%2'?", ids.length, targetModel.label);
-      dialog.Dialog.confirm(message).promise()
-.then(result => {
-        if (result === true) {
-          this._isWaiting(true);
-          rpc.Reference
-          .copy(this.getDatasource(), targetModel.data.id, ids.join(","))
-          .then(() => this._isWaiting(false));
-        }
-      });
+      if (await this.getApplication().confirm(message)) {
+        this._isWaiting(true);
+        await rpc.Reference.copy(this.getDatasource(), targetModel.data.id, ids.join(","));
+        this._isWaiting(false);
+      }
     },
   
     /**
      * Copies the currently selected folder's model to the server clipboard
      * @private
      */
-    _copyFolderToClipboard : function() {
+    _copyFolderToClipboard : async function() {
       this._isWaiting(true);
-      rpc.Clipboard.add(
+      let message = await rpc.Clipboard.add(
         bibliograph.Application.mime_types.folder,
         JSON.stringify(this.getSelectedNode())
-      ).then(message => {
-        this.showMessage(message);
-        this._isWaiting(false);
-      });
+      );
+      this.showMessage(message);
+      this._isWaiting(false);
     },
   
     /**
@@ -546,7 +534,7 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
       let clipboard = this.getApplication().getClipboardManager();
       let clipboardData = clipboard.getData(bibliograph.Application.mime_types.folder);
       if (!clipboardData) {
-        dialog.Dialog.warning("No folder data on clipboard!");
+        await this.getApplication().warning("No folder data on clipboard!");
         return;
       }
       let folderdata = JSON.parse(clipboardData);
@@ -559,8 +547,7 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
       } else {
         message = this.tr("Do you want to insert the folder '%1'?", folderdata.label);
       }
-      let result = await dialog.Dialog.confirm(message).promise();
-      if (result === true) {
+      if (await this.getApplication().confirm(message)) {
         this._isWaiting(true);
         await rpc.Folder.copy(folderdata.data.datasource, folderdata.data.id, this.getDatasource(), this.getNodeId());
         this._isWaiting(false);
@@ -571,18 +558,15 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
      * Shows dialog asking whether the user wants to empty the trash
      * folder.
      */
-    _emptyTrashDialog : function() {
+    _emptyTrashDialog : async function() {
+      let app = this.getApplication();
       let msg = this.tr("Do you really want to delete all references and folders in the trash folder? This cannot be undone.");
-      dialog.Dialog.confirm(msg).promise()
-      .then(answer => {
-        if (answer === false) {
-         return;
-        }
-        let app = this.getApplication();
+      if (await app.confirm(msg)) {
         app.setModelId(0);
         app.showPopup(this.tr("Emptying the trash ..."));
-        rpc.Trash.empty(this.getDatasource()).then(() => app.hidePopup());
-      });
+        await rpc.Trash.empty(this.getDatasource());
+        app.hidePopup();
+      }
     },
   
     _createReport: function () {

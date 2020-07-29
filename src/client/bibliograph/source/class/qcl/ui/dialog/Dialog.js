@@ -147,8 +147,10 @@ qx.Class.define("qcl.ui.dialog.Dialog",{
         if (!widget) {
           let clazz = qx.lang.String.firstUp(data.type);
           if (qx.lang.Type.isFunction(window.dialog[clazz])) {
-            widget = new window.dialog[clazz]();
+            // use class from qxl.dialog package
+            widget = new qxl.dialog[clazz]();
           } else if (qx.lang.Type.isFunction(qcl.ui.dialog[clazz])) {
+              // use class from qcl.ui.dialog
               widget = new qcl.ui.dialog[clazz]();
             } else {
               app.warn(data.type + " is not a valid dialog type");

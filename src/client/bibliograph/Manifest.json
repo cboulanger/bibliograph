@@ -19,8 +19,6 @@
     "@qooxdoo/compiler": "^1.0.0-beta",
     "@qooxdoo/framework": "^6.0.0-beta",
     "cboulanger/qx-contrib-TokenField": "^1.2.1",
-    "ergobyte/qookery/qookery": "^0.7.0",
-    "cboulanger/qx-contrib-Dialog": "^2.0.0",
     "qooxdoo/qxl.dialog": "^3.0.2"
   },
   "externalResources": {
