@@ -160,11 +160,6 @@ class AccessController extends AppController
     $session = null;
     Yii::$app->session->open();
 
-    $activeUser = $this->getActiveUser();
-    if ($activeUser) {
-      $this->logout($activeUser);
-    }
-
     /*
      * no username / password
      */
@@ -285,10 +280,17 @@ class AccessController extends AppController
           ]);
         }
       }
+
+      // if a user is already logged in, log this one out
+      $activeUser = $this->getActiveUser();
+      if ($activeUser) {
+        $this->logout($activeUser);
+      }
+
       Yii::info("Authenticated user '{$user->namedId}' via auth username/password.", self::CATEGORY);
     }
 
-    // user is authenticated, log in
+    // log in new authenticate user
     $user->online = 1;
     $user->save();
     Yii::$app->user->login($user);

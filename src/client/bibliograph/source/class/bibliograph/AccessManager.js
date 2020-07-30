@@ -257,10 +257,12 @@ qx.Class.define("bibliograph.AccessManager",
       qx.event.message.Bus.dispatch(new qx.event.message.Message(bibliograph.AccessManager.messages.LOGOFF, true));
       let app = this.getApplication();
       // reset datasource
-      app.setDatasource(null);
+      try {
+        app.setDatasource(null);
+      } catch (e) {}
       qx.event.message.Bus.dispatch(new qx.event.message.Message(bibliograph.AccessManager.messages.LOGOUT));
       // notify server
-      await app.getRpcClient("access").request("logout");
+      await rpc.Access.logout();
       // re-login as guest
       await this.guestLogin();
       // load config and userdata

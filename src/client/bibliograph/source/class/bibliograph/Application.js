@@ -91,6 +91,18 @@ qx.Class.define("bibliograph.Application", {
         qcl.ui.tool.ObjectIds.getInstance();
       }
   
+      qx.event.message.Bus.subscribe("jsonrpc.error", async msg => {
+        let error = msg.getData();
+        console.warn(error.message);
+        if (error.message === "Unauthorized" && !this.__loggedOutOnUnauthorized) {
+          this.__loggedOutOnUnauthorized = true;
+          // silence the other "unauthorized" errors
+          Object.values(this.getRpcClients()).forEach(client => client.setErrorBehavior("warning"));
+          await this.getAccessManager().logout();
+          Object.values(this.getRpcClients()).forEach(client => client.setErrorBehavior("dialog"));
+        }
+      });
+      
       // log to the console to let UI testers know that setup is completed
       let completedMessage = "bibliograph.setup.completed";
       qx.event.message.Bus.dispatchByName(completedMessage);
@@ -367,6 +379,15 @@ qx.Class.define("bibliograph.Application", {
       let client = this.__clients[service];
       client.setToken(this.getAccessManager().getToken() || null);
       return client;
+    },
+  
+    /**
+     * Returns a map, keys are the service names, values the corresponding
+     * {@link qcl.io.jsonrpc.Client}.
+     * @return {Object}
+     */
+    getRpcClients() {
+      return this.__clients;
     },
 
     /**

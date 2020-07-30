@@ -72,12 +72,14 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
     },
   
     /**
-     * How to behave when an error occurs. "error": throw a runtime error which can be handled,
+     * How to behave when an error occurs.
+     * "error": throw a runtime error which can be handled,
      * "debug": like error, but output additional information about the error to the console,
      * "dialog": show error to the user in a dialog
+     * "warning": simply output a warning to the console
      */
     errorBehavior: {
-      check: ["error", "dialog", "debug"],
+      check: ["error", "dialog", "debug", "warning"],
       init: "error"
     },
   
@@ -310,7 +312,7 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
     _handleJsonRpcError: function (method) {
       let error = this.getError();
       let message = this.tr("Error calling remote method '%1': %2.", method, this.getErrorMessage());
-      qx.event.message.Bus.dispatchByName("jsonrpc.error", message);
+      qx.event.message.Bus.dispatchByName("jsonrpc.error", error);
       switch (this.getErrorBehavior()) {
         case "debug": {
           console.error(message.toString());
@@ -322,6 +324,9 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
         //fallthrough
         case "error":
           throw error;
+        case "warning":
+          this.warn(error);
+          break;
         case "dialog": {
           qcl.ui.dialog.Dialog.hideServerDialogs();
           this.__dialog.set({message}).show();
