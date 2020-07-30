@@ -273,18 +273,23 @@ qx.Class.define("bibliograph.Setup", {
       let token = am.getToken();
       let client = this.getApplication().getRpcClient("access");
       if (!token) {
-      this.info("Authenticating with server...");
-      let response = await client.request("authenticate", []);
-      if (!response) {
-        this.error("Cannot authenticate with server: " + client.getErrorMessage())
-        return;
-      }
-      let { message, token, sessionId } = response;
-      this.info(message);
-
-      am.setToken(token || null);
-      am.setSessionId(sessionId);
-      this.info("Acquired access token.");
+        this.info("Authenticating with server...");
+        let response = await client.request("authenticate", []);
+        if (!response) {
+          let msg = this.tr("Authentication failed with error:") + client.getErrorMessage();
+          this.getApplication().error(msg);
+          throw new Error(msg);
+        }
+        let { message, token, sessionId } = response;
+        if (!token) {
+          let msg = this.tr("Could not acquire access token");
+          this.getApplication().error(msg);
+          throw new Error(msg);
+        }
+        this.info(message);
+        am.setToken(token);
+        am.setSessionId(sessionId);
+        this.info("Acquired access token.");
       } else {
         this.info("Got access token from session storage");
       }

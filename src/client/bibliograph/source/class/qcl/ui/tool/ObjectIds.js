@@ -17,11 +17,13 @@
 ************************************************************************ */
 
 /**
- * Window with a list of object ids. When clicking on a list item,
- * the widget with that id is highlighted if it is visible.
+ * Tool to work with object ids and to record simple playwright script
+ * fragments. It provides a) a list of object ids; when clicking on a list item,
+ * the widget with that id is highlighted if it is visible. b) a script recorder
+ * which, when turned on, records clicks and text input that can be inserted into
+ * Playwright tests.
  *
- * Depends on https://www.npmjs.com/package/unique-selector
- *
+ * Requires an external script available at https://raw.githubusercontent.com/cboulanger/bibliograph/develop/src/client/bibliograph/source/resource/js/unique-selector.js
  * @ignore(unique)
  */
 qx.Class.define("qcl.ui.tool.ObjectIds",
@@ -65,10 +67,10 @@ qx.Class.define("qcl.ui.tool.ObjectIds",
     });
     header.add(searchbox, {flex:1});
     // record button
-    let recordButton = this.recordButton = new qx.ui.form.ToggleButton("▶️");
+    let recordButton = this.recordButton = new qx.ui.form.ToggleButton("⏺");
     recordButton.addListener("changeValue", evt => {
       let isRecording = evt.getData();
-      recordButton.setLabel(isRecording ? "⏸": "▶️");
+      recordButton.setLabel(isRecording ? "⏸": "⏺️");
     });
     header.add(recordButton);
     // reset button
@@ -127,7 +129,7 @@ qx.Class.define("qcl.ui.tool.ObjectIds",
     });
     // add to window
     this.add(vbox);
-  
+    
     // listen for clicks
     document.addEventListener("click", this._onClick.bind(this));
   },
@@ -187,7 +189,15 @@ qx.Class.define("qcl.ui.tool.ObjectIds",
     _getQxObjectIdSelector(id) {
       return `[data-qx-object-id="${id}"]`;
     },
-    
+  
+    /**
+     * Given a DOM Element, return a unique css selector that is suitable
+     * to identify a qooxdoo widget or one of its components. This will
+     * prefer qx object ids if available.
+     * @param {Element} elem
+     * @return {String|null}
+     * @private
+     */
     _getCssSelector(elem) {
       // qx id
       if (elem.hasAttributes()) {
@@ -201,14 +211,20 @@ qx.Class.define("qcl.ui.tool.ObjectIds",
         }
       }
       // css selector
-      // eslint-disable-next-line no-undef
-      return unique.default(elem, {
-        attributesToIgnore: this._getAttributesToIgnore(),
-        excludeRegex : /selected|checked|active|hovered|focused/,
-        selectorTypes : ["Attributes", "Class", "NthChild"]
-      });
+      return this._getCssSelectorImpl(
+        elem,
+        this._getAttributesToIgnore(),
+        /selected|checked|active|hovered|focused/,
+        ["Attributes", "Class", "NthChild"]
+      );
     },
-    
+  
+    /**
+     * Returns an array of attribute names that should not be
+     * used when creating the unique selector
+     * @return {string[]}
+     * @private
+     */
     _getAttributesToIgnore() {
       return [
         "style",
@@ -224,6 +240,21 @@ qx.Class.define("qcl.ui.tool.ObjectIds",
         "qxkeepactive",
         "qxdroppable"
       ];
+    },
+    
+    /**
+     * The implementation of the CSS selector algorithm.
+     * This relies on https://www.npmjs.com/package/unique-selector
+     * @param {Element} elem
+     * @param {Array} attributesToIgnore An array of attribute names to ignore
+     * @param {RegExp} excludeRegex Names of classes and tags that match this regex will be excluded
+     * @param {Array} selectorTypes An array of the types of selectors that should be used in this order (Implementation-dependent)
+     * @return {String|null}
+     * @private
+     */
+    _getCssSelectorImpl(elem, attributesToIgnore, excludeRegex, selectorTypes) {
+      // eslint-disable-next-line no-undef
+      return unique.default(elem, { attributesToIgnore, excludeRegex, selectorTypes });
     },
     
     _getCheckApplicationIdleCode() {

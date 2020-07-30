@@ -11,6 +11,7 @@
     "module.objectid": true,
     "app.version": "development",
     "app.serverUrl": "../../../src/server/web/",
+    "qcl.io.jsonrpc.token-in-params": true,
     "app.taskmonitor.enable": true,
     "app.taskmonitor.show": false
   },

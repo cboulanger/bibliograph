@@ -20,7 +20,8 @@
     "qx.test.delay.scale": 10,
     "module.objectid": true,
     "app.version": "development",
-    "app.serverUrl": "src/server/test"
+    "app.serverUrl": "src/server/test",
+    "qcl.io.jsonrpc.token-in-params": true
   },
   "locales": [
     "en",

@@ -24,7 +24,10 @@ let page;
  * Method can be called repeatedly and will return cached objects.
  *
  * @param {String?} readyConsoleMessage If provided, the function waits for the
- * @param {Number?} timeout Time in milliseconds to wait for the console message. Defaults to 60 seconds
+ * message to be printed to the console after loading the URL. This will be
+ * ignored on subsequent calls.
+ * @param {Number?} timeout Time in milliseconds to wait for the console message.
+ * Defaults to 60 seconds
  * @return {Promise<{browser: *, context: *, page: *}>}
  */
 async function init(readyConsoleMessage, timeout=60000) {
@@ -41,15 +44,13 @@ async function init(readyConsoleMessage, timeout=60000) {
     });
     // add helpers
     addQxPageMethods(page);
-    // wait for app to be ready
-    //page.logConsole(true);
+    // open URL and optionally wait for a console message
     await page.goto(app_url);
+    if (readyConsoleMessage) {
+      await page.waitForConsoleMessage(readyConsoleMessage, {timeout});
+      console.info("### Bibliograph ready");
+    }
   }
-  if (readyConsoleMessage) {
-    await page.waitForConsoleMessage(readyConsoleMessage, {timeout});
-  }
-  
-  console.info("### Bibliograph ready");
   return {
     browser,
     context,

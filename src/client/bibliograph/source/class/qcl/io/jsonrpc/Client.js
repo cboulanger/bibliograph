@@ -237,7 +237,7 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
       let queryParams = this.getQueryParams() || {};
       let transportImpl = this.__client.getTransport().getTransportImpl();
       if (token) {
-        if (qx.core.Environment.get("qx.debug")) {
+        if (qx.core.Environment.get("qcl.io.jsonrpc.token-in-params")) {
           queryParams["access-token"] = token;
         }
         const auth = new qx.io.request.authentication.Bearer(token);

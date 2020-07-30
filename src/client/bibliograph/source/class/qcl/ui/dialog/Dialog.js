@@ -146,7 +146,7 @@ qx.Class.define("qcl.ui.dialog.Dialog",{
         
         if (!widget) {
           let clazz = qx.lang.String.firstUp(data.type);
-          if (qx.lang.Type.isFunction(window.dialog[clazz])) {
+          if (qx.lang.Type.isFunction(qxl.dialog[clazz])) {
             // use class from qxl.dialog package
             widget = new qxl.dialog[clazz]();
           } else if (qx.lang.Type.isFunction(qcl.ui.dialog[clazz])) {
