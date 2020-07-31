@@ -467,6 +467,7 @@ qx.Class.define("qcl.application.StateManager",
           }
          this._set(key, value);
       }
+      history.replaceState(stateMap, "", decodeURIComponent(location.href));
       return stateMap;
     },
 
@@ -516,11 +517,7 @@ qx.Class.define("qcl.application.StateManager",
       if (bHist.length) {
         var hash = bHist.shift(); // get from backward stack
         fHist.unshift(hash); // and put on forward stack
-        
-        // for some reason, this has to be executed twice to trigger the back action
         qx.bom.History.getInstance().navigateBack();
-        qx.bom.History.getInstance().navigateBack();
-
         return true;
       }
       return false;
@@ -536,9 +533,6 @@ qx.Class.define("qcl.application.StateManager",
       if (fHist.length) {
         var hash = fHist.shift(); // get from forward stack
         bHist.unshift(hash); // and put on backward stack
-        
-        // for some reason, this has to be executed twice to trigger the forward action
-        qx.bom.History.getInstance().navigateForward();
         qx.bom.History.getInstance().navigateForward();
         return true;
       }
@@ -546,21 +540,16 @@ qx.Class.define("qcl.application.StateManager",
     },
     
     /**
-     * Wraps the qooxdoo history function
+     * Add a history entry
      * @param hash {String}
-     * @param description {String|undefined}
      */
     addToHistory : function(hash, description) {
-      history.replaceState(this._analyzeHashString(), "", decodeURIComponent(location.href));
-      // check if state has changed
-      if (hash === this.__lastHash) {
-        //console.log("Hash hasn't changed, not adding it to history...");
-        return;
+      if (hash !== this.__lastHash) {
+        this.__lastHash = hash;
+        var bHist = this.__backHistoryStack;
+        bHist.unshift(hash);
+        history.pushState(this._analyzeHashString(), "", decodeURIComponent(location.href));
       }
-      this.__lastHash = hash;
-      var bHist = this.__backHistoryStack;
-      bHist.unshift(hash);
-      qx.bom.History.getInstance().addToHistory(hash, description);
     },
 
     /**
