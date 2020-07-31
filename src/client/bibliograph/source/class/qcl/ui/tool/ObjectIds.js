@@ -305,8 +305,8 @@ qx.Class.define("qcl.ui.tool.ObjectIds",
       }
       // prefer execute event if we have a qx object id since click() doesn't always work
       let qxObjectId = this._checkQxObjectId(elem);
-      if (qxObjectId) {
-        this._addToScript(`await page.evaluate(() => qx.core.Id.getQxObject("${qxObjectId}").fireEvent("execute"));`);
+      if (qxObjectId && qx.core.Id.getQxObject(qxObjectId).hasListener("execute")) {
+        this._addToScript(`await page.evaluate(() => qx.core.Id.getQxObject("${qxObjectId}").fireNonBubblingEvent("execute"));`);
       } else {
         let selector = this._getCssSelector(elem);
         this._addToScript(`await page.click(\`${selector}\`);`);

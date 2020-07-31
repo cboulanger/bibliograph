@@ -186,7 +186,7 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
       let button = menubar ?
         new qx.ui.menubar.Button(null, "bibliograph/icon/button-plus.png") :
         new qx.ui.menu.Button(this.tr("Add folder"), "bibliograph/icon/button-plus.png");
-      button.addListener("click", () => this._addFolderDialog());
+      button.addListener("execute", () => this._addFolderDialog());
       this.bindVisibility(this.permissions.add_any_folder, button);
       this.bindEnabled(this.permissions.add_child_folder, button);
       return button;
@@ -196,7 +196,7 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
       let button = menubar ?
         new qx.ui.menubar.Button(null, "bibliograph/icon/button-plus.png") :
         new qx.ui.menu.Button(this.tr("Add top level folder"), "bibliograph/icon/button-plus.png");
-      button.addListener("click", () => this._addTopFolderDialog());
+      button.addListener("execute", () => this._addTopFolderDialog());
       this.bindVisibility(this.permissions.add_top_folder, button);
       return button;
     },
@@ -205,7 +205,7 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
       let button = menubar ?
         new qx.ui.menubar.Button(null, "bibliograph/icon/16/search.png") :
         new qx.ui.menu.Button(this.tr("Save current search query as top folder"), "bibliograph/icon/16/search.png");
-      button.addListener("click", () => this._saveSearchQuery());
+      button.addListener("execute", () => this._saveSearchQuery());
       this.bindVisibility(this.permissions.add_any_folder, button);
       this.bindEnabled(this.permissions.save_search, button);
       return button;
@@ -215,7 +215,7 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
       let button = menubar ?
         new qx.ui.menubar.Button(null, "bibliograph/icon/button-minus.png") :
         new qx.ui.menu.Button(this.tr("Remove folder"), "bibliograph/icon/button-minus.png");
-      button.addListener("click", () => this._removeFolderDialog());
+      button.addListener("execute", () => this._removeFolderDialog());
       this.getPermission("folder.remove").bind("state", button, "visibility", {
         converter: bibliograph.Utils.bool2visibility
       });

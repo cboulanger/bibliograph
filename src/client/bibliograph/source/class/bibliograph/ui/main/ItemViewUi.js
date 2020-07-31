@@ -61,12 +61,12 @@ qx.Class.define("bibliograph.ui.main.ItemViewUi", {
       var formattedViewPage = new bibliograph.ui.item.FormattedViewUi();
       // buttons
       var formattedViewButton = new qx.ui.menubar.Button(this.tr("Formatted View"));
-      formattedViewButton.addListener("click", function() {
+      formattedViewButton.addListener("execute", function() {
         this.setView("formattedView");
       });
       this.getViewByName("tableView").menuBar.add(formattedViewButton);
       var formattedViewButton2 = new qx.ui.menubar.Button(this.tr("Formatted View"));
-      formattedViewButton2.addListener("click", function() {
+      formattedViewButton2.addListener("execute", function() {
         this.setView("formattedView");
       });
       this.getViewByName("referenceEditor").menuBar.add(formattedViewButton2);

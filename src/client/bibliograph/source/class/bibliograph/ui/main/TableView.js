@@ -169,7 +169,6 @@ qx.Class.define("bibliograph.ui.main.TableView",
     },
 
     createMenuEntries: function() {
-
       // "Add Reference" menubar button
       let addButton = new qx.ui.menubar.Button();
       addButton.set({
@@ -193,7 +192,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
         enabled : false,
         icon : "bibliograph/icon/button-minus.png"
       });
-      removeButton.addListener("click", this.removeSelectedReferences, this);
+      removeButton.addListener("execute", this.removeSelectedReferences, this);
       this.bindVisibility(this.permissions.remove_reference, removeButton);
       this.bindEnabled(this.permissions.remove_selected_references, removeButton);
       this.addMenuBarButton(removeButton, "remove");
@@ -323,8 +322,8 @@ qx.Class.define("bibliograph.ui.main.TableView",
       let data = e.getData();
       let table = this.getTable();
       if (!table) {
- return;
-}
+       return;
+      }
       let tableModel = table.getTableModel();
       let columnName = data.name;
       switch (columnName) {
@@ -435,7 +434,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
       } else {
         let msg = this.tr("Do your really want to move the selected references to the trash?");
         if (!await this.getApplication().confirm(msg)) {
-         return;
+          return;
         }
         app.showPopup(this.tr("Deleting references..."));
         await rpc.Reference.remove(this.getDatasource(), 0, this.getSelectedIds().join(","));
@@ -471,8 +470,8 @@ qx.Class.define("bibliograph.ui.main.TableView",
       if (!node) {
         node = await this._showFolderDialog();
         if (!node) {
- return;
-}
+         return;
+        }
       }
       let message = this.tr(
         "Do your really want to move the selected references to '%1'?",
@@ -510,39 +509,39 @@ qx.Class.define("bibliograph.ui.main.TableView",
     /**
      * Exports the selected references via jsonrpc service
      */
-    exportSelected: function () {
+    exportSelected: async function () {
       let datasource = this.getDatasource();
       let selectedIds = this.getSelectedIds();
       let app = this.getApplication();
       app.showPopup(this.tr("Exporting the selected references..."));
-      app.getRpcClient("converters/export").send("format-dialog", [datasource, selectedIds.join(",")])
-        .then(() => app.hidePopup());
+      await app.getRpcClient("converters/export").request("format-dialog", [datasource, selectedIds.join(",")]);
+      app.hidePopup();
     },
     
     /**
      * Exports the whole folder
      */
-    exportFolder: function () {
+    exportFolder: async function () {
       let app = this.getApplication();
       app.showPopup(this.tr("Exporting folder..."));
-      app.getRpcClient("converters/export").send("format-dialog", [
+      await app.getRpcClient("converters/export").request("format-dialog", [
         this.getDatasource(),
         "folder:" + this.getFolderId()
-      ])
-.then(() => app.hidePopup());
+      ]);
+      app.hidePopup();
     },
   
     /**
      * Exports the current query
      */
-    exportQuery: function () {
+    exportQuery: async function () {
       let app = this.getApplication();
       app.showPopup(this.tr("Exporting query..."));
-      app.getRpcClient("converters/export").send("format-dialog", [
+      await app.getRpcClient("converters/export").request("format-dialog", [
         this.getDatasource(),
         "query:" + this.getQuery()
-      ])
-.then(() => app.hidePopup());
+      ]);
+      app.hidePopup();
     },
     
     /**

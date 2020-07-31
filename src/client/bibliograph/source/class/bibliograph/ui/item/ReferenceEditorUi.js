@@ -100,7 +100,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditorUi",
       button.setRich(true);
       button.setLabel(this.tr("Main"));
       this._addStackViewPage("main", page, button);
-      button.addListener("click", function(e) {
+      button.addListener("execute", function(e) {
         this._showStackViewPage("main");
       }, this);
 
@@ -166,7 +166,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditorUi",
       button.setRich(true);
       button.setLabel(this.tr("About"));
       this._addStackViewPage("about", page, button);
-      button.addListener("click", function(e) {
+      button.addListener("execute", function(e) {
         this._showStackViewPage("about");
       }, this);
 
@@ -195,7 +195,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditorUi",
       button.setVisibility("excluded");
       button.setLabel(this.tr("Contents"));
       this._addStackViewPage("contents", page, button);
-      button.addListener("click", function(e) {
+      button.addListener("execute", function(e) {
         this._showStackViewPage("contents");
       }, this);
 
@@ -222,7 +222,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditorUi",
       button.setRich(true);
       button.setLabel(this.tr("Record Info"));
       this._addStackViewPage("recordInfo", page, button);
-      button.addListener("click", function(e) {
+      button.addListener("execute", function(e) {
         this._showStackViewPage("recordInfo");
       }, this);
       var permMgr = this.getApplication().getAccessManager().getPermissionManager();
@@ -244,7 +244,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditorUi",
       button.setRich(true);
       button.setLabel(this.tr("Duplicates"));
       this._addStackViewPage("duplicates", page, button);
-      button.addListener("click", function(e) {
+      button.addListener("execute", function(e) {
         this._showStackViewPage("duplicates");
       }, this);
       var duplNumLabel = new qx.ui.basic.Label();

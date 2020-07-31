@@ -67,21 +67,21 @@ qx.Class.define("bibliograph.ui.item.FormattedViewUi",
       // All Results
       var qxMenuBarButton2 = new qx.ui.menubar.Button(this.tr('All Results'), null, null);
       menuBar.add(qxMenuBarButton2);
-      qxMenuBarButton2.addListener("click", function(e) {
+      qxMenuBarButton2.addListener("execute", function(e) {
         this.loadFolder();
       }, this);
       
       // Print
       var qxMenuBarButton3 = new qx.ui.menubar.Button(this.tr('Print'), null, null);
       menuBar.add(qxMenuBarButton3);
-      qxMenuBarButton3.addListener("click", function(e) {
+      qxMenuBarButton3.addListener("execute", function(e) {
         this.getApplication().print(viewPane.getContentElement().getDomElement());
       }, this);
       
       // Tabular View
       var qxMenuBarButton4 = new qx.ui.menubar.Button(this.tr('Tabular View'), null, null);
       menuBar.add(qxMenuBarButton4);
-      qxMenuBarButton4.addListener("click", function(e) {
+      qxMenuBarButton4.addListener("execute", function(e) {
         qx.core.Id.getQxObject("item-view").showTabularView();
       }, this);
     }

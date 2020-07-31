@@ -2,10 +2,11 @@ const test = require("tape");
 const {init, shutdown, login, logout} = require("./init");
 
 test("login users", async assert => {
-  const {page, browser} = await init("bibliograph.setup.completed");
-  await login(page, "user2", "user");
-  await logout(page);
-  await login(page, "admin", "admin");
+  await init("bibliograph.setup.completed");
+  await login("user2", "user");
+  await logout();
+  await login("admin", "admin");
+  await logout();
   assert.ok(true);
-  shutdown(page, browser);
+  await shutdown();
 });

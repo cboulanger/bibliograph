@@ -6,5 +6,6 @@ source tool/test/setup/create-database
 echo ">>> Deleting log and output data files..."
 rm log/app/*.log* || true
 rm log/http/*.log* || true
+rm -rf src/server/runtime/cache/* || true
 [[ -f log/codeception.migration.log ]] && rm log/codeception.migration.log
 rm test/codeception/_output/*fail* || true

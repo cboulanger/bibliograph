@@ -49,7 +49,7 @@ qx.Class.define("bibliograph.ui.item.TableViewUi",
       qxMenuBarButton1.setEnabled(false);
       qxMenuBarButton1.setLabel(this.tr('Print'));
       menuBar.add(qxMenuBarButton1);
-      qxMenuBarButton1.addListener("click", function(e) {
+      qxMenuBarButton1.addListener("execute", function(e) {
         //
       }, this);
     }
