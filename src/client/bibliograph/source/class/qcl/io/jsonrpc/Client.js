@@ -89,6 +89,17 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
     queryParams: {
       check: "Object",
       nullable: true
+    },
+  
+    /**
+     * An optional function which is called with the error object. If it returns
+     * an error object (usually the same that was passed in), this error is
+     * handled according to {@link #setErrorBehavior}. If the function returns
+     * false, the error is ignored.
+     */
+    handleErrorFunc: {
+      check: "Function",
+      nullable: true
     }
   },
 
@@ -311,6 +322,15 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
      */
     _handleJsonRpcError: function (method) {
       let error = this.getError();
+      if (this.getHandleErrorFunc()) {
+        error = this.getHandleErrorFunc(error);
+        if (error instanceof Error) {
+          this.setError(error);
+        } else {
+          // ignore error
+          return;
+        }
+      }
       let message = this.tr("Error calling remote method '%1': %2.", method, this.getErrorMessage());
       qx.event.message.Bus.dispatchByName("jsonrpc.error", error);
       switch (this.getErrorBehavior()) {

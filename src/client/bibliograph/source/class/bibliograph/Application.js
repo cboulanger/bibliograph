@@ -90,18 +90,6 @@ qx.Class.define("bibliograph.Application", {
       if (qx.core.Environment.get("qx.debug")) {
         qcl.ui.tool.ObjectIds.getInstance();
       }
-  
-      qx.event.message.Bus.subscribe("jsonrpc.error", async msg => {
-        let error = msg.getData();
-        console.warn(error.message);
-        if (error.message === "Unauthorized" && !this.__loggedOutOnUnauthorized) {
-          this.__loggedOutOnUnauthorized = true;
-          // silence the other "unauthorized" errors
-          Object.values(this.getRpcClients()).forEach(client => client.setErrorBehavior("warning"));
-          await this.getAccessManager().logout();
-          Object.values(this.getRpcClients()).forEach(client => client.setErrorBehavior("dialog"));
-        }
-      });
       
       // log to the console to let UI testers know that setup is completed
       let completedMessage = "bibliograph.setup.completed";
@@ -374,6 +362,19 @@ qx.Class.define("bibliograph.Application", {
       if (!this.__clients[service]) {
         let client = new qcl.io.jsonrpc.Client(this.getServerUrl() + "/json-rpc", service);
         client.setErrorBehavior("dialog");
+        client.setHandleErrorFunc(error => {
+          // handle a situation where the token is invalid and we have several requests going
+          if (error.message === "Unauthorized") {
+            if (!this.__loggingOut) {
+              this.__loggingOut = true;
+              this.getAccessManager().logout().then(() => {
+                delete this.__loggingOut;
+              });
+            }
+            return false;
+          }
+          return error;
+        });
         this.__clients[service] = client;
       }
       let client = this.__clients[service];

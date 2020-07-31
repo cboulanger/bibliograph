@@ -191,6 +191,27 @@ qx.Class.define("qcl.ui.tool.ObjectIds",
     },
   
     /**
+     * Checks if the given element has a qx object id and returns it if it exists.
+     * Otherwise returns false
+     * @param elem
+     * @return {string|boolean}
+     * @private
+     */
+    _checkQxObjectId(elem) {
+      if (elem.hasAttributes()) {
+        var attrs = elem.attributes;
+        for (var i = attrs.length - 1; i >= 0; i--) {
+          if (attrs[i].name === "data-qx-object-id") {
+            return attrs[i].value;
+          } else if (attrs[i].name === "qxanonymous") {
+            return this._checkQxObjectId(elem.parentElement);
+          }
+        }
+      }
+      return false;
+    },
+    
+    /**
      * Given a DOM Element, return a unique css selector that is suitable
      * to identify a qooxdoo widget or one of its components. This will
      * prefer qx object ids if available.
@@ -199,16 +220,10 @@ qx.Class.define("qcl.ui.tool.ObjectIds",
      * @private
      */
     _getCssSelector(elem) {
-      // qx id
-      if (elem.hasAttributes()) {
-        var attrs = elem.attributes;
-        for (var i = attrs.length - 1; i >= 0; i--) {
-          if (attrs[i].name === "data-qx-object-id") {
-            return this._getQxObjectIdSelector(attrs[i].value);
-          } else if (attrs[i].name === "qxanonymous") {
-            return this._getCssSelector(elem.parentElement);
-          }
-        }
+      // qx object id
+      let qxObjectId = this._checkQxObjectId(elem);
+      if (qxObjectId) {
+        return this._getQxObjectIdSelector(qxObjectId);
       }
       // css selector
       return this._getCssSelectorImpl(
@@ -283,13 +298,19 @@ qx.Class.define("qcl.ui.tool.ObjectIds",
     },
     
     _onClick(evt) {
+      let elem = evt.target;
       // ignore if not recording or if the click was on this window
-      if (!this.recordButton.getValue() || this.getContentElement().getDomElement().contains(evt.target)) {
+      if (!this.recordButton.getValue() || this.getContentElement().getDomElement().contains(elem)) {
         return;
       }
-      let selector = this._getCssSelector(evt.target);
-      
-      this._addToScript(`await page.click(\`${selector}\`);`);
+      // prefer execute event if we have a qx object id since click() doesn't always work
+      let qxObjectId = this._checkQxObjectId(elem);
+      if (qxObjectId) {
+        this._addToScript(`await page.evaluate(() => qx.core.Id.getQxObject("${qxObjectId}").fireEvent("execute"));`);
+      } else {
+        let selector = this._getCssSelector(elem);
+        this._addToScript(`await page.click(\`${selector}\`);`);
+      }
       // if the click has initiated i/o or other asynchronous logic, wait for it to finish
       qx.event.Timer.once(() => this._checkApplicationIdle(), this, 500);
     },

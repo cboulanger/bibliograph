@@ -22,4 +22,4 @@ npx qx compile --target=build
 export APP_URL=${1:-http://localhost:8073/compiled/build/bibliograph/}
 export BROWSER_TYPE=${2:-"chromium"}
 
-node test/playwright/test-20-reference.js
+DEBUG=pw:input node test/playwright/test-20-reference.js
