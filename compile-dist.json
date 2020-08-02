@@ -1,4 +1,5 @@
 {
+  "$schema": "https://qooxdoo.org/schema/compile-1-0-0.json",
   "libraries": [
     "src/client/bibliograph",
     "src/server/modules/z3950/client",
@@ -8,9 +9,9 @@
   ],
   "environment": {
     "app.version": "3.0.0-beta.79",
+    "app.serverUrl": ".",
     "qx.icontheme": "Tango",
-    "module.objectid": true,
-    "app.serverUrl": "."
+    "module.objectid": true
   },
   "locales": [
     "en",
@@ -56,6 +57,5 @@
     "options": {
       "targets": "edge >=18, chrome >= 73, firefox >= 66"
     }
-  },
-  "$schema": "https://qooxdoo.org/schema/compile-1-0-0.json"
+  }
 }
