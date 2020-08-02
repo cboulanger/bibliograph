@@ -1,0 +1,11 @@
+*
+!.env
+!.env.debug
+!.env.local.docker
+!.env.local.localhost
+!app.conf.local.toml
+!app.conf.toml
+!dev.env
+!compile-debug.json
+!compile-dist.json
+!compile-test.json
