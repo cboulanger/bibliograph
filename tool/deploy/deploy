@@ -34,6 +34,8 @@ while [[ $1 != "" ]] ; do
 
         "--env-file"|"-e")
             DEPLOY_ENV_FILE="$2"
+            [[ -f $DEPLOY_ENV_FILE ]] || exit_with_error "Environment variable file $DEPLOY_ENV_FILE does not exist"
+            source "$DEPLOY_ENV_FILE"
             shift
             ;;
 
@@ -94,35 +96,45 @@ while [[ $1 != "" ]] ; do
     shift
 done
 
+
 if [[ $USAGE != 0 ]] ; then
-    echo "Usage: $0 [options]"
-    echo "where options are:"
-    echo "  --env-file, -e file          - the .env file containing configuration (defaults to .env)"
-    echo "  --build-config-file, -c      - the compiler configuration file to use (defaults to compile.json)"
-    echo "  --skip-build, -k             - use the build files that already exist"
-    echo "  --deploy-host, -H path       - the host server to deploy to via SSH"
-    echo "  --deploy-dir, -D path        - the directory on the host to deploy to"
-    echo "  --deploy-config-dir, -C path - the path to the configuration dir, absolute or"
-    echo "                                 relative to the deployment dir. Defaults to 'config'"
-    echo "  --database, -N name          - the name of the database to use on the host"
-    echo "  --import-database, -I name   - the name of the database to import tables from (only remotely)"
-    echo "  --clean                      - clean the working directory"
-    echo "  --yes, -y                    - answer yes to all prompts"
-    echo "  --verbose, -v                - verbose output"
-    echo "  --help, -h                   - show usage help"
-    echo
-    echo "Some configuration values cannot be set via command line arguments."
-    echo "Make sure to put them into the environment variable file specified by --env-file:"
-    echo "  DB_TYPE           - The type of the database (only mysql supported at this point)"
-    echo "  DB_HOST           - The host on which the database server can be reached (usually localhost)"
-    echo "  DB_PORT           - Port"
-    echo "  DB_DATABASE       - The name of the database in which the application data is"
-    echo "  DB_USER           - The name of the database user for the application"
-    echo "  DB_PASSWORD       - Password of that user"
-    echo "  DB_ROOT_USER      - Only use in development mode!"
-    echo "  DB_ROOT_PASSWORD  - Only use in development mode!"
-    echo
-    exit 0
+cat << EOF
+Usage: $0 [options]
+where options are:
+  --env-file, -e file           - the .env file containing configuration
+                                 (defaults to .env). Must be the first parameter
+                                 if others are to override the settings.
+  --build-config-file, -c       - the compiler configuration file to use
+                                  (defaults to compile.json)
+  --skip-build, -k              - use the build files that already exist
+  --deploy-host, -H path        - the host server to deploy to via SSH, overrides
+                                  DEPLOY_HOST
+  --deploy-dir, -D path         - the directory on the host to deploy to,
+                                  overrides DEPLOY_DIR
+  --deploy-config-dir, -C path  - the path to the configuration dir, absolute or
+                                  relative to the deployment dir. Defaults to
+                                  'config', overrides DEPLOY_CONFIG_DIR
+  --database, -N name           - the name of the database to use on the host,
+                                  overrides DB_DATABASE
+  --import-database, -I name    - the name of the database to import tables from
+                                  (only remotely), overrides DEPLOY_IMPORT_DB_NAMES
+  --clean                       - clean the working directory
+  --yes, -y                     - answer yes to all prompts
+  --verbose, -v                 - verbose output
+  --help, -h                    - show usage help
+
+Many configuration values cannot be set via command line arguments.
+Make sure to declare them into the environment variable file specified by --env-file:
+  DB_TYPE           - The type of the database (only mysql supported at this point)
+  DB_HOST           - The host on which the database server can be reached (usually localhost)
+  DB_PORT           - Port
+  DB_DATABASE       - The name of the database in which the application data is
+  DB_USER           - The name of the database user for the application
+  DB_PASSWORD       - Password of that user
+  APP_ENV_FILE      - The .env file containg environment variables for the application
+  APP_CONF_FILE     - The .toml file containing configuration values for the application
+EOF
+  exit 0
 fi
 
 # Configure compile command
@@ -139,9 +151,7 @@ elif [[ $QUIET != 0 ]] ; then
     QX_COMPILE_ARGS="$QX_COMPILE_ARGS --quiet"
 fi
 
-# get environment variables that override the defaults
-[[ -f $DEPLOY_ENV_FILE ]] || exit_with_error "Environment variable file $DEPLOY_ENV_FILE does not exist"
-source "$DEPLOY_ENV_FILE"
+# get environment variables that override the default
 
 # override .env values
 if [[ "$DEPLOY_DB_NAME" != "" ]]; then
@@ -198,6 +208,7 @@ if [ "$YES" != 1 ]; then
 fi
 
 # Build
+export QX_COMPILE_ARGS
 if [[ $SKIP_BUILD == 0 ]]; then
  tool/dist/build $BUILD_CONFIG_FILE
 fi
@@ -205,26 +216,6 @@ fi
 # Deploy!
 RECREATE_DB_CMD_ARGS="--user=$DB_USER --password=$DB_PASSWORD -e 'drop database if exists $DB_DATABASE; create database $DB_DATABASE;'"
 # importing databases, very hacky at the moment
-IMPORT_DB_CMD=<<EOF
-  for db in "$DEPLOY_IMPORT_DB_NAMES"; do
-   echo " >>> Cloning database '\$db' into '$DB_DATABASE'..."
-   mysqldump \
-     --user=$DB_USER \
-     --password=$DB_PASSWORD \
-     --default-character-set=utf8 \
-     --set-charset \
-     \$db \
-   | sed s/bibliograph\.schema\.huBerlinRewi/bibliograph_extended/g \
-   | sed s/\$db/$DB_DATABASE/g \
-   | sed s/\'0000-00-00\'/NULL/g \
-   | iconv -f utf-8 -t utf-8 -c \
-   | mysql \
-     --user=$DB_USER \
-     --password=$DB_PASSWORD \
-     --default-character-set=utf8 \
-     $DB_DATABASE
-  done
-EOF
 
 if [ "$DEPLOY_HOST" == "local" ]; then
   # local deployment
@@ -239,14 +230,37 @@ if [ "$DEPLOY_HOST" == "local" ]; then
   chmod -R 0777 $DEPLOY_DIR/server/runtime
 else
   # remote deploment
+  echo ">>> Creating $DEPLOY_DIR ..."
   ssh $DEPLOY_HOST "mkdir -p $DEPLOY_DIR"
-  if [ "$DEPLOY_CLEAN" == true ]; then
+  if [ $CLEAN == 1 ]; then
     echo ">>> Cleaning up $DEPLOY_DIR ..."
     ssh $DEPLOY_HOST "rm -rf $DEPLOY_DIR/*"
+    echo ">>> Resetting database ..."
     ssh $DEPLOY_HOST "mysql $RECREATE_DB_CMD_ARGS"
   fi
   if [[ "$DEPLOY_IMPORT_DB_NAMES" != "" ]]; then
-    ssh $DEPLOY_HOST $IMPORT_DB_CMD
+    echo ">>> Importing database(s) $DEPLOY_IMPORT_DB_NAMES ..."
+    ssh $DEPLOY_HOST <<EOF
+      for db in "$DEPLOY_IMPORT_DB_NAMES"; do
+       echo " >>> Cloning database '\$db' into '$DB_DATABASE'..."
+       mysqldump \
+         --user=$DB_USER \
+         --password=$DB_PASSWORD \
+         --default-character-set=utf8 \
+         --set-charset \
+         \$db \
+       | sed s/bibliograph\.schema\.huBerlinRewi/bibliograph_extended/g \
+       | sed s/\$db/$DB_DATABASE/g \
+       | sed s/\'0000-00-00\'/NULL/g \
+       | iconv -f utf-8 -t utf-8 -c \
+       | mysql \
+         --user=$DB_USER \
+         --password=$DB_PASSWORD \
+         --default-character-set=utf8 \
+         $DB_DATABASE
+      done
+EOF
+
   fi
   echo ">>> Syncing files with $DEPLOY_HOST:$DEPLOY_DIR ..."
   rsync -azpr $DIST_DIR/* $DEPLOY_HOST:$DEPLOY_DIR

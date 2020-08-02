@@ -1,12 +1,5 @@
 {
-  "eslintConfig": {
-    "globals": {
-      "JSZip": false
-    },
-    "parserOptions": {
-      "ecmaVersion": 2017
-    }
-  },
+  "$schema": "https://qooxdoo.org/schema/compile-1-0-0.json",
   "libraries": [
     "src/client/bibliograph",
     "src/server/modules/z3950/client",
@@ -67,5 +60,12 @@
       }
     }
   ],
-  "$schema": "https://qooxdoo.org/schema/compile-1-0-0.json"
+  "eslintConfig": {
+    "globals": {
+      "JSZip": false
+    },
+    "parserOptions": {
+      "ecmaVersion": 2017
+    }
+  }
 }

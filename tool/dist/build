@@ -17,6 +17,7 @@ QX_CMD=${QX_CMD:-"npx qx"}
 BUILD_FILE=${BUILD_FILE:-compile-dist.json}
 BUILD_TARGET=${BUILD_TARGET:-build}
 APP_DIST_DIR=${APP_DIST_DIR:-$(pwd)/dist}
+APP_DIST_SERVER_DIR=$APP_DIST_DIR/server
 APP_CONF_DIR=${APP_CONF_DIR:-$APP_DIST_DIR/config}
 APP_ENV_FILE=${APP_ENV_FILE:-$(pwd)/dist/.env}
 APP_CONF_FILE=${APP_CONF_FILE:-$(pwd)/dist/app.conf.toml}
@@ -37,23 +38,17 @@ else
   ZIP_NAME=bibliograph-${VERSION}.zip
 fi
 
-echo "*****************************************************************************************"
 echo
-echo "  Building distributable package of Bibliograph"
+echo "  Building deployable/distributable version of Bibliograph"
 echo
 echo "   - Qooxdoo build file:     $BUILD_FILE"
 echo "   - Qooxdoo build target:   $BUILD_TARGET"
 echo "   - Application .env file:  $APP_ENV_FILE"
 echo "   - Appl. config file:      $APP_CONF_FILE"
 #echo "  Compiler version $(qx --version)"
-if [[ "$COMPOSER" ]]; then
-echo "   - Composer configuration: $COMPOSER"
-fi
-echo
-echo "*****************************************************************************************"
 echo
 
-echo ">>> Cleaning up first..."
+echo ">>> Cleaning up ..."
 ./tool/dist/clean
 
 echo ">>> Building client ..."
@@ -62,29 +57,28 @@ jq ".environment[\"app.version\"]=\"$VERSION\"" $BUILD_FILE > $BUILD_FILE.tmp
 mv $BUILD_FILE.tmp $BUILD_FILE
 
 # Create deploy build and copy into dist
-$QX_CMD deploy --configFile=$BUILD_FILE --target=$BUILD_TARGET --clean
+QX_COMPILE_ARGS=${QX_COMPILE_ARGS:-"--config-file=$BUILD_FILE --target=$BUILD_TARGET --clean"}
+echo "$QX_CMD deploy $QX_COMPILE_ARGS"
+$QX_CMD deploy $QX_COMPILE_ARGS
 cp -a compiled/deploy/* $APP_DIST_DIR
 
 echo ">>> Building server ..."
 mkdir $APP_DIST_DIR/server
-cd $APP_DIST_DIR/server
-cp -a $SERVER_SRC_DIR/{config,controllers,lib,messages,migrations,models,modules,schema,views,bootstrap.php} .
-mkdir -p runtime/{cache,logs}
-rm -f config/{message.php,test.php}
-cp $SERVER_SRC_DIR/web/.htaccess .
-echo "DENY FROM ALL" >> .htaccess
+cp -a $SERVER_SRC_DIR/{config,controllers,lib,messages,migrations,models,modules,schema,views,bootstrap.php} $APP_DIST_SERVER_DIR/
+mkdir -p $APP_DIST_SERVER_DIR/runtime/{cache,logs}
+cp $SERVER_SRC_DIR/web/.htaccess $APP_DIST_DIR/
+echo "DENY FROM ALL" >> $APP_DIST_SERVER_DIR/.htaccess
 
 # install composer dependencies
-cp -a $SERVER_SRC_DIR/composer.* .
-composer install --no-dev  #&> /dev/null
-if ! [ -d ./vendor ] || ! [ -f ./vendor/autoload.php ]; then
+cp -a $SERVER_SRC_DIR/composer.* $APP_DIST_SERVER_DIR/
+tool/dev/php src/lib/composer.phar install --no-dev --working-dir=dist/server #&> /dev/null
+if ! [ -d $APP_DIST_SERVER_DIR/vendor ] || ! [ -f $APP_DIST_SERVER_DIR/vendor/autoload.php ]; then
  echo " !!! Composer install failed!"
  exit 1
 fi
-rm -f ./composer.* &> /dev/null
+rm -f $APP_DIST_SERVER_DIR/composer.* &> /dev/null
 
 echo ">>> Adding default configuration files ..."
-cd $TOP_DIR
 mkdir -p $APP_CONF_DIR
 echo "DENY FROM ALL" >> $APP_CONF_DIR/.htaccess
 cp $APP_CONF_FILE $APP_CONF_DIR/app.conf.toml
@@ -96,8 +90,6 @@ echo $VERSION > $APP_DIST_DIR/version.txt
 
 echo ">>> Creating ZIP file ..."
 cd $APP_DIST_DIR
-# remove git folders
-( find . -type d -name ".git" ) | xargs rm -rf
 zip -q -r $ZIP_NAME *
 mv $ZIP_NAME $TOP_DIR/
 echo "Done."
