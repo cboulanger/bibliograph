@@ -42,6 +42,13 @@ function log_error {
 }
 export -f log_error
 
+function exit_with_error {
+  >&2 echo "${FONT_BOLD}${COLOR_RED}$1${STYLE_RESET}"
+  exit 1
+}
+export -f log_error
+
+
 # php shorthand function
 function php() {
   tool/dev/php "$@"

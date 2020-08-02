@@ -18,7 +18,7 @@ while (true) {
       break;
     }
     if (!identity) {
-      throw new Error("No identity information given.");
+      throw new Error("No identity data given.");
     } else if (!fs.existsSync(identity)) {
       throw new Error(`Identity file ${identity} does not exist.`);
     }
@@ -39,7 +39,7 @@ while (true) {
 })();
 
 /**
- * Deploys Bibliograph to the target
+ * Deploys application to the target
  * @param sshConfig
  * @return {Promise<void>}
  */

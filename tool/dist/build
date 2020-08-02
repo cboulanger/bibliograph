@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Usage tool/dist/build path/to/.env
+
 set -e
 source tool/lib/functions.sh
 
