@@ -223,9 +223,9 @@ if [[ $QUIET != 1 ]] ; then
   echo "   Path on host:                $DEPLOY_DIR"
   echo "   Config directory on host:    $DEPLOY_CONFIG_DIR"
   echo "   Database used:               $DB_DATABASE"
-  echo "   Database(s) to import:       $DEPLOY_IMPORT_DB_NAMES"
   echo "   Clean before build:          $([[ $CLEAN == 1 ]] && echo 'Yes' || echo 'No')"
   echo "   Clean target/database:       $([[ $DEPLOY_CLEAN == 1 ]] && echo 'Yes' || echo 'No')"
+  echo "   Import database(s) if clean: $DEPLOY_IMPORT_DB_NAMES"
   echo
 fi
 
@@ -244,6 +244,7 @@ fi
 
 # Build
 export QX_COMPILE_ARGS
+export VERBOSE
 if [[ $SKIP_BUILD == 0 ]]; then
  tool/dist/build $BUILD_ENV_FILE
 fi
@@ -296,10 +297,10 @@ if [ "$DEPLOY_HOST" == "local" ]; then
   # files
   mkdir -p $DEPLOY_DIR
   if [ $DEPLOY_CLEAN == 1 ]; then
-    echo ">>> Cleaning up $DEPLOY_DIR ..."
+    echo ">>> Cleaning up $DEPLOY_HOST:$DEPLOY_DIR ..."
     sudo rm -rf $DEPLOY_DIR/*
   fi
-  echo ">>> Copying files to $DEPLOY_DIR ..."
+  echo ">>> Copying files to $DEPLOY_HOST:$DEPLOY_DIR ..."
   cp -rf $DIST_DIR/* $DEPLOY_DIR
   chmod -R 0777 $DEPLOY_DIR/server/runtime
 
@@ -321,24 +322,24 @@ else
   remote_execute "mkdir -p $DEPLOY_DIR;"
   if [ $DEPLOY_CLEAN == 1 ]; then
     echo ">>> Cleaning up $DEPLOY_DIR ..."
-    remote_execute "rm -rf $DEPLOY_DIR/*"
+    remote_execute "rm -rf $DEPLOY_DIR/*" || true
   fi
   if remote_execute "command -v rsync"; then
     echo ">>> Syncing files with $DEPLOY_HOST:$DEPLOY_DIR ..."
-    rsync --exclude=*.zip -azpr $DIST_DIR/* $DEPLOY_HOST:$DEPLOY_DIR
+    rsync -$DEPLOY_EXCLUDE_ARGS -azpr $DIST_DIR/* $DEPLOY_HOST:$DEPLOY_DIR
   else
     echo ">>> Copying files to $DEPLOY_HOST:$DEPLOY_DIR ..."
     cd dist
-    tar $DEPLOY_EXCLUDE_ARGS -czf - * | ssh -C $DEPLOY_HOST "cd $DEPLOY_DIR; tar xzf -"
+    tar $DEPLOY_EXCLUDE_ARGS -czf - * | ssh -C $DEPLOY_HOST "cd $DEPLOY_DIR; tar --overwrite -xzf -"
     cd ..
   fi
   if [ "$DEPLOY_CONFIG_DIR" != "$DEPLOY_DIR/config" ]; then
-    echo ">>> Setting configuration directory $DEPLOY_CONFIG_DIR ..."
+    echo ">>> Moving configuration dir to $DEPLOY_CONFIG_DIR ..."
     remote_execute "mv $DEPLOY_DIR/config $DEPLOY_CONFIG_DIR"
     remote_execute "sed -i 's/__DIR__ \\. \\\"\\/config\\\"/$DEPLOY_CONFIG_DIR/' $DEPLOY_DIR/server.php"
   fi
   echo ">>> Adapting file permissions ..."
-  remote_execute "chmod -R 0777 $DEPLOY_DIR/server/runtime"
+  remote_execute "find $DEPLOY_DIR/server/runtime -type d -print0 | xargs -0 chmod 777" || true
 
   # database
   echo ">>> Setting up mysql passwordless access ..."
@@ -349,7 +350,7 @@ else
   fi
   echo ">>> Creating database if it does not already exist ..."
   remote_execute "mysql --login-path=deploy_alias -e 'create database if not exists $DB_DATABASE;'"
-  if [[ "$DEPLOY_IMPORT_DB_NAMES" != "" ]]; then
+  if [[ $DEPLOY_CLEAN == 1 ]] && [[ "$DEPLOY_IMPORT_DB_NAMES" != "" ]]; then
     echo ">>> Importing database(s)..."
     remote_execute "$(import_databases_expr)"
   fi

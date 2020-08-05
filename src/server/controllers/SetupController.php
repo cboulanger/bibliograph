@@ -303,6 +303,10 @@ class SetupController extends \app\controllers\AppController
     return Yii::$app->utils->version;
   }
 
+  public function actionResetCache() {
+
+  }
+
   /**
    * Called by the confirm dialog
    * @see actionSetup()

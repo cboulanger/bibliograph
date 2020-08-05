@@ -5,7 +5,4 @@ if [[ ! -d "$DIST_DIR" ]]; then
     echo "Cannot find 'dist' subdirectory - are you in the top folder?"
 fi
 
-cd $DIST_DIR
-shopt -s extglob
-rm -rf !("server.php"|".gitignore"|".htaccess")
-
+rm -rf ${DIST_DIR:?}/*
