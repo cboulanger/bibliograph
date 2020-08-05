@@ -51,7 +51,8 @@
         "app.mode": "production",
         "qx.debug": false
       },
-      "outputPath": "compiled/build"
+      "outputPath": "compiled/build",
+      "deployPath": "compiled/deploy"
     }
   ],
   "applications": [

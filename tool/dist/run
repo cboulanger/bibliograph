@@ -15,8 +15,8 @@ source tool/test/setup/check-mysql
 source tool/test/setup/reset-data
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
-  echo ">>> Opening app in browser at $BIB_SERVER_URL/$APP_PATH"
-  open -a "Google Chrome" "$BIB_SERVER_URL/$APP_PATH"
+  echo ">>> Opening app in browser at $APP_SERVER_URL/$APP_PATH"
+  open -a "Google Chrome" "$APP_SERVER_URL/$APP_PATH"
   # send Alt+Command+I to open Web inspector
   osascript -e 'tell application "System Events" to keystroke "i" using {option down, command down}'
 fi

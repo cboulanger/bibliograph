@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="MySQL - bibliograph@localhost" uuid="4943dbdf-4b55-4bd5-910d-761d3cf28514">
+    <data-source source="LOCAL" name="MySQL - tests@localhost" uuid="4943dbdf-4b55-4bd5-910d-761d3cf28514">
       <driver-ref>mysql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mysql://localhost:3306/</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="bibliograph.rewi.hu-berlin.de" uuid="46418144-c90c-40a4-9f22-a640ef1fe0d1">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://localhost:3306</jdbc-url>
+      <time-zone>Europe/Berlin</time-zone>
     </data-source>
   </component>
 </project>

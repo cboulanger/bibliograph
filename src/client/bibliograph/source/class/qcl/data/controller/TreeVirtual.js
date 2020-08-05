@@ -33,11 +33,11 @@ qx.Class.define("qcl.data.controller.TreeVirtual",
   construct: function (target, store) {
     this.base(arguments);
     
-    if (target != null) {
+    if (target !== null) {
       this.setTarget(target);
     }
     
-    if (store != null) {
+    if (store !== null) {
       this.setStore(store);
     }
     
@@ -48,12 +48,7 @@ qx.Class.define("qcl.data.controller.TreeVirtual",
       0: 0
     };
   },
-  
-  /*
-  *****************************************************************************
-     PROPERTIES
-  *****************************************************************************
-  */
+
   
   properties:
   {
@@ -108,20 +103,9 @@ qx.Class.define("qcl.data.controller.TreeVirtual",
     }
   },
   
-  /*
-  *****************************************************************************
-     MEMBERS
-  *****************************************************************************
-  */
   
   members:
   {
-    
-    /*
-    ---------------------------------------------------------------------------
-       PRIVATE MEMBERS
-    ---------------------------------------------------------------------------
-    */
     
     /**
      * A map connecting client-side node ids (key) with the server-side
@@ -129,11 +113,6 @@ qx.Class.define("qcl.data.controller.TreeVirtual",
      */
     __nodeIdMap: null,
     
-    /*
-    ---------------------------------------------------------------------------
-       APPLY METHODS
-    ---------------------------------------------------------------------------
-    */
     
     /**
      * If a new delegate is set, it applies the stored configuration for the
@@ -166,11 +145,13 @@ qx.Class.define("qcl.data.controller.TreeVirtual",
          */
         targetModel.getModel().addListener("changeBubble", this._targetOnChangeBubble, this);
       }
-      
     },
     
     /**
      * Set a new store and adds event listeners
+     *
+     * @param store
+     * @param old
      */
     _applyStore: function (store, old) {
       if (old) {
@@ -212,20 +193,21 @@ qx.Class.define("qcl.data.controller.TreeVirtual",
       if (!qx.lang.Type.isArray(nodeData)) {
         throw new Error("Invalid node data!");
       }
-      if (!nodeData.length) return;
+      if (!nodeData.length) {
+       return;
+      }
       
       /*
        * add tree data to the model
        */
       nodeData.forEach(function (node) {
-        
         let serverNodeId = node.data.id;
         if (!qx.lang.Type.isNumber(serverNodeId)) {
-          throw new Error("Missing  or invalid server node id in node data.")
+          throw new Error("Missing  or invalid server node id in node data.");
         }
         let serverParentId = node.data.parentId;
         if (!qx.lang.Type.isNumber(serverParentId)) {
-          throw new Error("Missing or invalid server parent node id in node data.")
+          throw new Error("Missing or invalid server parent node id in node data.");
         }
         
         let parentNodeId = this.__nodeIdMap[serverParentId];
@@ -244,8 +226,7 @@ qx.Class.define("qcl.data.controller.TreeVirtual",
             node.icon,
             node.iconSelected
           );
-        }
-        else {
+        } else {
           clientNodeId = targetModel.addLeaf(
             parentNodeId,
             node.label,
@@ -266,7 +247,6 @@ qx.Class.define("qcl.data.controller.TreeVirtual",
          * save node in map
          */
         this.__nodeIdMap[serverNodeId] = clientNodeId;
-        
       }, this);
       targetModel.setData();
     },
@@ -293,12 +273,6 @@ qx.Class.define("qcl.data.controller.TreeVirtual",
         }
       });
     },
-    
-    /*
-    ---------------------------------------------------------------------------
-       EVENT LISTENERS
-    ---------------------------------------------------------------------------
-    */
     
     /**
      * Called when the target has dispatched a "change" event.

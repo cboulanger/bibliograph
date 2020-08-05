@@ -15,5 +15,18 @@
         </introspection-scope>
       </schema-mapping>
     </data-source>
+    <data-source name="bibliograph.rewi.hu-berlin.de" uuid="46418144-c90c-40a4-9f22-a640ef1fe0d1">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="MYSQL" exact-version="0" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>bibliograph</user-name>
+      <schema-mapping />
+      <ssh-properties>
+        <enabled>true</enabled>
+        <proxy-host>quit</proxy-host>
+        <proxy-port>22</proxy-port>
+        <use-password>false</use-password>
+        <auth-type>OPEN_SSH</auth-type>
+      </ssh-properties>
+    </data-source>
   </component>
 </project>
