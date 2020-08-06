@@ -3,33 +3,26 @@
 /**
  * Returns the selector string that will select the HTML node with the given qxObjectId
  * @return {String}
- * @param id
- * @param childQxClass
+ * @param {String} id
  */
-function qxSelector(id, childQxClass) {
-  let selector = `[data-qx-object-id="${id}"]`;
-  if (childQxClass) {
-    selector += ` >> [qxclass="${childQxClass}"]`;
-  }
-  return selector;
+function getSelector(id) {
+  return `[data-qx-object-id="${id}"]`;
 }
 
-
 /**
- * Monkey-patches the playwright page object to add some
- * helpers and qooxdoo-specific methods
- *
+ * create API
  * @param {Page} page
+ * @param {Boolean} verbose Whether to be more verbose
  */
-function addQxPageHelpers(page) {
+function api(page, verbose) {
   /**
    * Waits for a console message
    * @param {String|Function} message A string, which is the message to check console messages against,
    * or a function, to which the console message is passed and which must return true or false.
    * @param {Object} options
-   * @return {Promise<{String>>}
+   * @return {Promise<String>}
    */
-  page.waitForConsoleMessage = async function(message, options={}) {
+  async function waitForConsoleMessage (message, options = {}) {
     if (!["string", "function"].includes(typeof message)) {
       throw new Error("Invalid message argument, must be string or function");
     }
@@ -37,8 +30,8 @@ function addQxPageHelpers(page) {
       /**
        * @param consoleMsg
        */
-      function handler(consoleMsg) {
-        let msg =consoleMsg.text();
+      function handler (consoleMsg) {
+        let msg = consoleMsg.text();
         switch (typeof message) {
           case "string":
             if (msg === message) {
@@ -54,18 +47,25 @@ function addQxPageHelpers(page) {
             break;
         }
       }
+      
       page.on("console", handler);
       if (options.timeout) {
         let error = new Error(`Timeout of ${options.timeout} reached when waiting for console message '${message}.'`);
         setTimeout(() => reject(error), options.timeout);
       }
     });
-  };
+  }
   
-  page.logConsole = (() => {
-    let handler = consoleMsg => console.log(consoleMsg.text());
-    return val => val ? page.on("console", handler) : page.off("console", handler);
-  })();
+  /**
+   * Turn logging of browser console messages on or off
+   * @param val
+   */
+  function logConsoleMessages (val) {
+    if (!this.___logConsoleMessages) {
+      this.___logConsoleMessages = consoleMsg => console.log(consoleMsg.text());
+    }
+    val ? page.on("console", this.___logConsoleMessages) : page.off("console", this.___logConsoleMessages);
+  }
   
   /**
    * Click on a node identified by its qx id.
@@ -73,22 +73,22 @@ function addQxPageHelpers(page) {
    * @param {Object?} options Options object
    * @return {Promise<*>}
    */
-  page.clickByQxId = async function(qxId, options={}) {
-    console.log(`# - Clicking on node with qx object id '${qxId}'`);
-    let selector = qxSelector(qxId);
+  async function click (qxId, options = {}) {
+    verbose && console.log(`# - Clicking on node with qx object id '${qxId}'`);
+    let selector = getSelector(qxId);
     await page.click(selector, options);
-  };
+  }
   
   /**
    * @param {String} qxId
    * @param {String} text
    * @return {Promise<*>}
    */
-  page.fillByQxId = async function(qxId, text) {
-    console.log(`# - Typing '${text}' into node with qx object id '${qxId}'`);
-    let selector = qxSelector(qxId);
+  async function fill (qxId, text) {
+    verbose && console.log(`# - Typing '${text}' into node with qx object id '${qxId}'`);
+    let selector = getSelector(qxId);
     await page.fill(selector, text);
-  };
+  }
   
   /**
    * Populates a qooxdoo form identified by its qx object id. The form elements
@@ -102,28 +102,28 @@ function addQxPageHelpers(page) {
    * the function is called with the CSS selector of the form field.
    * @return {Promise<*>}
    */
-  page.populateQxForm = async function(qxId, data, timeout = 0, fn) {
-    console.log(`# - Populating form '${qxId}':`);
+  async function populate (qxId, data, timeout = 0, fn) {
+    verbose && console.log(`# - Populating form '${qxId}':`);
     for (let [key, value] of Object.entries(data)) {
       console.log(`#   ${key}: "${value}"`);
-      let selector = qxSelector(qxId + "/" + key);
+      let selector = getSelector(qxId + "/" + key);
       await page.fill(selector, value);
       if (typeof fn == "function") {
         await fn(selector);
       }
     }
-  };
+  }
   
   /**
    * @param {String} qxId
    * @param options
    * @return {Promise<*>}
    */
-  page.waitForWidgetByQxId = async function(qxId, options={}) {
-    console.log(`# - Waiting for node with qx object id '${qxId}'`);
-    let selector = qxSelector(qxId);
+  async function waitFor (qxId, options = {}) {
+    verbose && console.log(`# - Waiting for node with qx object id '${qxId}'`);
+    let selector = getSelector(qxId);
     return page.waitForSelector(selector, options);
-  };
+  }
   
   /**
    * Wait for a specific text to appear in a child text node of the node identified
@@ -133,22 +133,35 @@ function addQxPageHelpers(page) {
    * @param {Object} options Options to pass to waitForSelector
    * @return {Promise<*>}
    */
-  page.waitForTextByQxId = async function(qxId, text, options={}) {
-    console.log(`# - Waiting for '${text}' to appear in node with qx object id '${qxId}'`);
+  async function waitForText (qxId, text, options = {}) {
+    verbose && console.log(`# - Waiting for '${text}' to appear in node with qx object id '${qxId}'`);
     text = text.replace(/"/g, "&apos;").replace(/"/g, "&quot;");
-    let selector = qxSelector(qxId) + ` >> text="${text}"`;
+    let selector = getSelector(qxId) + ` >> text="${text}"`;
     return page.waitForSelector(selector, options);
-  };
-  
+  }
   
   /**
    * Waits for all running tasks to finish
    * @return {Promise<*>}
    */
-  page.waitForApplicationIdle = async function() {
+  async function waitForApplicationIdle () {
     await page.waitForFunction("!qx.core.Init.getApplication().getTaskMonitor().getBusy()", {polling: 100});
     await page.waitForTimeout(100);
+  }
+  
+  return {
+    click,
+    fill,
+    populate,
+    waitFor,
+    logConsoleMessages,
+    waitForApplicationIdle,
+    waitForConsoleMessage,
+    waitForText
   };
 }
 
-module.exports = { addQxPageHelpers };
+module.exports = {
+  getSelector,
+  api
+};
