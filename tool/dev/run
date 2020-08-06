@@ -11,5 +11,5 @@ if [ "$1" == "clean" ]; then
   source tool/test/setup/reset-data
 fi
 source tool/test/setup/check-mysql
-export APP_SERVER_URL
+export APP_URL
 tool/dev/start-app bibliograph

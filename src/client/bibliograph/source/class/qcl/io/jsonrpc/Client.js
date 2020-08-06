@@ -323,12 +323,14 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
     _handleJsonRpcError: function (method) {
       let error = this.getError();
       if (this.getHandleErrorFunc()) {
-        error = this.getHandleErrorFunc(error);
+        error = this.getHandleErrorFunc()(error);
         if (error instanceof Error) {
           this.setError(error);
-        } else {
+        } else if (error === false) {
           // ignore error
           return;
+        } else {
+          throw new Error("Invalid return value from error handling function. Must be an instance of Error or false");
         }
       }
       let message = this.tr("Error calling remote method '%1': %2.", method, this.getErrorMessage());

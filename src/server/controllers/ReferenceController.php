@@ -1028,14 +1028,14 @@ class ReferenceController extends AppController
   }
 
   /**
-   * @param $input
-   * @param $inputPosition
-   * @param string[] $tokens
-   * @param $datasourceName
+   * @param string $input
+   * @param integer $inputPosition
+   * @param array $tokens
+   * @param string $datasourceName
    * @todo rename
    * return TokenFieldDto[]
    */
-  public function actionTokenizeQuery( $input, $inputPosition, $tokens, $datasourceName ){
+  public function actionTokenizeQuery( $input, $inputPosition, array $tokens, $datasourceName ){
     //Yii::debug(func_get_args());
     $debug = false;
     $input = trim($input);

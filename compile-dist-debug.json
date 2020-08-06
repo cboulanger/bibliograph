@@ -12,7 +12,7 @@
     "app.serverUrl": ".",
     "qx.icontheme": "Tango",
     "module.objectid": true,
-    "app.taskmonitor.enable": false,
+    "app.taskmonitor.enable": true,
     "qcl.io.jsonrpc.token-in-params": false
   },
   "locales": [
@@ -21,11 +21,14 @@
   ],
   "targets": [
     {
-      "description": "Deployment version",
+      "description": "Deployment version in debug mode",
       "type": "build",
+      "targetClass": "BuildTarget",
       "environment": {
         "app.mode": "production",
-        "qx.debug": false
+        "qx.debug": true,
+        "qx.io.jsonrpc.debug": true,
+        "qcl.ui.tool.ObjectIds.enable": true
       },
       "outputPath": "compiled/build",
       "deployPath": "compiled/deploy"

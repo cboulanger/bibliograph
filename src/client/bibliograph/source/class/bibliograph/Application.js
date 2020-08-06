@@ -87,7 +87,7 @@ qx.Class.define("bibliograph.Application", {
       await bibliograph.Setup.getInstance().boot();
       
       // enable object id window during development
-      if (qx.core.Environment.get("qx.debug")) {
+      if (qx.core.Environment.get("qcl.ui.tool.ObjectIds.enable")) {
         qcl.ui.tool.ObjectIds.getInstance();
       }
       

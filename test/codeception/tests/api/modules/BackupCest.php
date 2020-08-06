@@ -55,7 +55,7 @@ class BackupCest
    */
   protected function handleStreamResponse($route, array $params, ApiTester $I, $debug=false)
   {
-    $url = $_SERVER['APP_SERVER_URL'] . "/src/server/test/$route?" . http_build_query($params) . "&access-token=".$this->token;
+    $url = $_SERVER['APP_URL'] . "/src/server/test/$route?" . http_build_query($params) . "&access-token=".$this->token;
     codecept_debug("Requesting chunked response from $url");
     $loop = Factory::create();
     $content = "";

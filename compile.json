@@ -14,7 +14,8 @@
     "module.objectid": true,
     "qcl.io.jsonrpc.token-in-params": true,
     "app.taskmonitor.enable": true,
-    "app.taskmonitor.show": false
+    "app.taskmonitor.show": false,
+    "qcl.ui.tool.ObjectIds.enable": true
   },
   "locales": [
     "en",

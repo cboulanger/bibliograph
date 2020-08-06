@@ -20,7 +20,7 @@ qx.Class.define("bibliograph.CompilerApi", {
     },
 
     afterDeploy(data) {
-      console.log("afterDeploy method called");
+      //
     },
   
     /**
@@ -39,9 +39,7 @@ qx.Class.define("bibliograph.CompilerApi", {
           this.setExitCode(result.exitCode);
         })).setNeedsServer(false);
       }
-    },
-  
-
+    }
   }
 });
 

@@ -90,11 +90,6 @@ qx.Class.define("qcl.data.controller.AutoComplete",
 {
   extend : qx.core.Object,
   
-  /*
-  *****************************************************************************
-     PROPERTIES
-  *****************************************************************************
-  */
 
   properties :
   {
@@ -229,18 +224,13 @@ qx.Class.define("qcl.data.controller.AutoComplete",
     /**
      * Apply the target
      *
-     * @param model {qx.core.Object ? null}
      * @param target
      * @param old {qx.core.Object ? null}
      */
     _applyTarget : function(target, old) {
-      /*
-       * to what widget has this mixin been applied?
-       */
+      // to what widget has this mixin been applied?
       switch (target.classname) {
-        /*
-         * valid widgets
-         */
+        // valid widgets
         case "qx.ui.form.TextField":
         case "qx.ui.form.TextArea":
           this.setTextField(target);
@@ -248,7 +238,6 @@ qx.Class.define("qcl.data.controller.AutoComplete",
         case "qx.ui.form.ComboBox":
           this.setTextField(target.getChildControl("textfield"));
           break;
-          
         default:
           this.error("Invalid widget!");
           return;
@@ -274,7 +263,7 @@ qx.Class.define("qcl.data.controller.AutoComplete",
     /**
      * Handles the keypress event of the textfield
      *
-     * @param e {qx.event.type.KeyEvent} keyPress event
+     * @param e {qx.event.type.KeyInput}
      * @return {void}
      */
     _handleTextFieldKeypress : function(e) {
@@ -285,12 +274,8 @@ qx.Class.define("qcl.data.controller.AutoComplete",
       //console.log("Selection length:" + selLength);
       
       switch (key) {
-        /*
-         * pressing enter when text is selected should
-         * not delete the text, this is the common
-         * user experience for autocomplete, i.e. in
-         * openoffice
-         */
+        // pressing enter when text is selected should
+        // not delete the text
         case "Enter":
           
           if (selLength > 0) {
@@ -301,17 +286,12 @@ qx.Class.define("qcl.data.controller.AutoComplete",
           }
           break;
         
-        /*
-         * Pressing backspace should prevent autocomplete
-         */
+        // Pressing backspace should prevent autocomplete
         case "Backspace":
           this.__preventAutocomplete = true;
           break;
           
-        /*
-         * Pressing the down and up keys cycles through the
-         * suggestions
-         */
+        // Pressing the down and up keys cycles through the suggestions
         case "Down":
           if (selLength > 0) {
             e.preventDefault();
@@ -325,9 +305,7 @@ qx.Class.define("qcl.data.controller.AutoComplete",
           }
           break;
           
-        /*
-         * turn off the prevent flag on next keystroke
-         */
+        // turn off the prevent flag on next keystroke
         default:
           this.__preventAutocomplete = false;
           break;
@@ -347,9 +325,7 @@ qx.Class.define("qcl.data.controller.AutoComplete",
       
       var tf = this.getTextField();
       
-      /*
-       * get and save current content of text field
-       */
+      // get and save current content of text field
       var content = e.getData();
       if (!content) {
        return;
@@ -448,9 +424,7 @@ qx.Class.define("qcl.data.controller.AutoComplete",
         }
       }
       
-      /*
-       * Send request if we have enough characters
-       */
+      // Send request if we have enough characters
       if (input.length >= this.getMinCharNumber()) {
         //console.log( "sending request for " + input );
         this.setInput(input);
@@ -494,10 +468,7 @@ qx.Class.define("qcl.data.controller.AutoComplete",
      * Called when autocomplete data is available
      */
     _handleModelChange : function () {
-      /*
-       * compare the input that was used to query
-       * the autocompletion data and the current input
-       */
+      // compare the input that was used to query the autocompletion data and the current input
       var tf = this.getTextField();
       
       if (!qx.ui.core.FocusHandler.getInstance().isFocused(this.getTarget())) {
@@ -506,31 +477,29 @@ qx.Class.define("qcl.data.controller.AutoComplete",
       }
       
       var content = tf.getValue() || "";
-      
       var model = this.getModel();
       var input = model.getInput();
-      
       var suggestions = model.getSuggestions().toArray();
+  
+      //console.log( [model,content,input,suggestions]);
       
       // if nothing to match, abort
       if (!model || !content || !input || !suggestions || suggestions.length === 0) {
-        //console.log( [model,content,input,suggestions]);
         //console.log( "Nothing to match, aborting...");
         return;
       }
-      //console.log( suggestions.toString() );
+      if (!qx.lang.Type.isString(content)) {
+        console.warn(`${tf} 'value' is not autocompleteable: ${content}`);
+        return;
+      }
       
       var match;
       var start;
       var end;
+      let debug=false;
       
-      /*
-       * separator for multi-value fields
-       */
+      // separator for multi-value fields
       var sep = this.getSeparator();
-      if (!(content instanceof String)) {
-       return;
-      }
       // HACK to suppress strange error
       if (sep && content) {
         // rewind
@@ -544,7 +513,7 @@ qx.Class.define("qcl.data.controller.AutoComplete",
         while (end < content.length && content.charAt(end) !== sep) {
          end++;
         }
-        //console.log("Selecting from " + start + " to " + end);
+        debug && console.log("Selecting from " + start + " to " + end);
       } else {
         start = 0;
         end = content.length;
@@ -552,11 +521,11 @@ qx.Class.define("qcl.data.controller.AutoComplete",
       
       // get text fragment
       match = qx.lang.String.trimLeft(qx.lang.String.trimRight(content.substring(start, end)));
-      //console.log ("trying to match response '" +  match + "' with input '" + input  + "'." );
+      debug && console.log("trying to match response '" + match + "' with input '" + input + "'.");
       
       // check whether input is still the same so that latecoming request; do not mess up the content
       if (input.toLowerCase() !== match.toLowerCase()) {
-        //console.log ("Response doesn't fit current input: '" +   match + "' != '" + input + "'." );
+        debug && console.log("Response doesn't fit current input: '" +   match + "' != '" + input + "'." );
         return;
       }
       
@@ -569,23 +538,18 @@ qx.Class.define("qcl.data.controller.AutoComplete",
         pre += " ";
       }
       end = (pre + suggestion).length;
-      //console.log( "'" + pre + "' + '"+ suggestion + "' + '" + post +"'" );
+      debug && console.log("'" + pre + "' + '"+ suggestion + "' + '" + post +"'");
       
-      /*
-       * set value, preventing that other parts of this
-       * controller to mess this up.
-       */
+      // set value, preventing that other parts of this controller to mess this up.
       this.__preventAutocomplete = true;
       qcl.data.controller.AutoComplete.active = true;
       tf.setValue(pre + suggestion + post);
       qcl.data.controller.AutoComplete.active = false;
       this.__preventAutocomplete = false;
       
-      /*
-       * select the added text
-       */
+      // select the added text
       qx.event.Timer.once(function() {
-        //console.log("TextSelection: " + start+input.length + " - " + end );
+        debug && console.log("TextSelection: " + start+input.length + " - " + end );
         tf.setTextSelection(start+input.length, end);
       }, this, 10);
     }

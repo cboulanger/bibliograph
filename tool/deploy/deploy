@@ -157,8 +157,8 @@ Make sure to declare them into the environment variable file specified by --env-
   DB_DATABASE       - The name of the database in which the application data is
   DB_USER           - The name of the database user for the application
   DB_PASSWORD       - Password of that user
-  APP_ENV_FILE      - The .env file containg environment variables for the application
-  APP_CONF_FILE     - The .toml file containing configuration values for the application
+  APP_ENV_FILE      - Path to the .env file containg environment variables for the application
+  APP_CONF_FILE     - Path to the .toml file containing configuration values for the application
 EOF
   exit 0
 fi
@@ -355,4 +355,4 @@ else
     remote_execute "$(import_databases_expr)"
   fi
 fi
-echo "Done. Open app at $APP_SERVER_URL"
+echo "Done. Open app at $APP_URL"

@@ -47,6 +47,17 @@ async function init(readyConsoleMessage, timeout=60000) {
       console.error(`Error on page ${page.url()}: ${e.message}`);
       throw e;
     });
+    page.on("response", response => {
+      if (!response.ok()) {
+        let e = new Error(response.statusText());
+        try {
+          console.error(response.json());
+        } catch (e) {
+          console.error(response.body());
+        }
+        throw e;
+      }
+    });
     // add helpers
     addQxPageHelpers(page);
     // open URL and optionally wait for a console message

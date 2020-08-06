@@ -18,5 +18,5 @@ source tool/test/setup/create-mysql-user
 source tool/test/setup/check-mysql
 source tool/test/setup/reset-data
 
-export APP_SERVER_URL
+export APP_URL
 tool/run/app $APP_NAME compile-test.json
