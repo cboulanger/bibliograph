@@ -30,7 +30,7 @@ qx.Class.define("bibliograph.Commands",
   {
     /*
     ---------------------------------------------------------------------------
-       LOGIN & LOGOUT
+       AFTER_LOGIN & AFTER_LOGOUT
     ---------------------------------------------------------------------------
     */
 
@@ -92,6 +92,10 @@ qx.Class.define("bibliograph.Commands",
       qx.core.Id.getQxObject("toolbar/logout").setEnabled(false);
       app.createPopup();
       app.showPopup(this.tr("Logging out ..."));
+      // reset datasource
+      try {
+        app.setDatasource(null);
+      } catch (e) {}
       // remove state
       app.setFolderId(null);
       app.setModelId(null);

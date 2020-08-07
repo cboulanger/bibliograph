@@ -30,14 +30,46 @@ qx.Class.define("bibliograph.AccessManager",
    */
   construct : function() {
     this.base(arguments);
+    // server message to force logout the user
+    qx.event.message.Bus.subscribe(this.constructor.messages.FORCE_LOGOUT, () => this.logout());
   },
 
   statics : {
     messages : {
-      LOGIN  : "user.loggedin",
-      LOGOUT : "user.loggedout",
-      LOGOFF : "user.logoff"
+      /**
+       * Message dispatchded when the user has logged in
+       */
+      AFTER_LOGIN  : "afterLogin",
+      /**
+       * Message dispatched before the user has logged out
+       */
+      BEFORE_LOGOUT : "beforeLogout",
+      /**
+       * Message dispatched after the user has logged out
+       */
+      AFTER_LOGOUT : "afterLogout",
+      /**
+       * Message dispatched to force a logout
+       */
+      FORCE_LOGOUT : "forceLogout"
     }
+  },
+  
+  events: {
+    /**
+     * Fired after the user has logged in
+     */
+    "afterLogin" : "qx.event.type.Event",
+  
+    /**
+     * Fired before the user logs out
+     */
+    "beforeLogin" : "qx.event.type.Event",
+  
+    /**
+     * Fired after the user has logged out
+     */
+    "afterLogout" : "qx.event.type.Event"
   },
 
 
@@ -66,11 +98,6 @@ qx.Class.define("bibliograph.AccessManager",
   
   members :
   {
-    /*
-    ---------------------------------------------------------------------------
-       PRIVATES
-    ---------------------------------------------------------------------------
-    */
 
     _authenticationSetup : false,
     
@@ -178,17 +205,20 @@ qx.Class.define("bibliograph.AccessManager",
     __handleAuthenticationResponse : async function(response) {
       let { message, token, sessionId, error } = response;
       if (error) {
-        this.warn(error);
-        return response;
+        this.warn("AuthenticationError:" + error);
+      } else if (!token) {
+        response.error = "Server returned null token on successful authentication";
+      } else {
+        // load user config & userdata
+        this.info(message);
+        this.setToken(token);
+        this.setSessionId(sessionId);
+        await this.getApplication().getConfigManager().load();
+        await this.load();
+        // notify subscribers
+        qx.event.message.Bus.dispatchByName(bibliograph.AccessManager.messages.AFTER_LOGIN, this.getUserManager().getActiveUser());
+        this.fireEvent("afterLogin");
       }
-      // load user config & userdata
-      this.info(message);
-      this.setToken(token);
-      this.setSessionId(sessionId);
-      await this.getApplication().getConfigManager().load();
-      await this.load();
-      // notify subscribers
-      qx.event.message.Bus.dispatchByName(bibliograph.AccessManager.messages.LOGIN, this.getUserManager().getActiveUser());
       return response;
     },
 
@@ -198,9 +228,13 @@ qx.Class.define("bibliograph.AccessManager",
      */
     guestLogin : async function() {
       this.info("Logging in as a guest...");
-      let client = this.getApplication().getRpcClient("access");
-      let response = await client.send("authenticate", []);
-      return await this.__handleAuthenticationResponse(response);
+      try {
+        let response = await rpc.Access.authenticate(null, null);
+        return await this.__handleAuthenticationResponse(response);
+      } catch (e) {
+        console.error(e);
+        return null;
+      }
     },
 
     /**
@@ -224,8 +258,7 @@ qx.Class.define("bibliograph.AccessManager",
      */
     authenticate : async function(username, password, authOnly) {
       let sha1 = qcl.crypto.Sha1.hex_sha1.bind(qcl.crypto.Sha1);
-      let client = this.getApplication().getRpcClient("access");
-      let challenge = await client.send("challenge", [username]);
+      let challenge = await rpc.Access.challenge(username);
       if (challenge.method === "hashed") {
         let nounce = challenge.nounce.split(/\|/);
           let randSalt = nounce[0];
@@ -233,7 +266,7 @@ qx.Class.define("bibliograph.AccessManager",
           let serverHash = sha1(storedSalt + password);
         password = sha1(randSalt + serverHash);
       }
-      let response = await client.request("authenticate", [username, password]);
+      let response = await rpc.Access.authenticate(username, password);
       if (authOnly) {
         return response;
       }
@@ -247,27 +280,40 @@ qx.Class.define("bibliograph.AccessManager",
     getActiveUser : function() {
       return this.getUserManager().getActiveUser();
     },
-
-
+    
     /**
      * Logs out the current user
      * @return {Promise<void>}
      */
     logout : async function() {
-      qx.event.message.Bus.dispatch(new qx.event.message.Message(bibliograph.AccessManager.messages.LOGOFF, true));
-      let app = this.getApplication();
-      // reset datasource
+      if (this.__isLoggingOut) {
+        this.warn("Already logging out...");
+        return;
+      }
+      this.__isLoggingOut = true;
       try {
-        app.setDatasource(null);
-      } catch (e) {}
-      qx.event.message.Bus.dispatch(new qx.event.message.Message(bibliograph.AccessManager.messages.LOGOUT));
-      // notify server
-      await rpc.Access.logout();
-      // re-login as guest
-      await this.guestLogin();
-      // load config and userdata
-      await this.load();
-      await app.getConfigManager().load();
+        let app = this.getApplication();
+        // only do a server logout if we have a token
+        if (this.getToken()) {
+          qx.event.message.Bus.dispatchByName(bibliograph.AccessManager.messages.BEFORE_LOGOUT);
+          this.fireEvent("beforeLogout");
+          // log out on server
+          await rpc.Access.logout();
+          // reset token
+          this.setToken(null);
+          qx.event.message.Bus.dispatchByName(bibliograph.AccessManager.messages.AFTER_LOGOUT);
+          this.fireEvent("afterLogout");
+        }
+        // re-login as guest
+        await this.guestLogin();
+        // load config and userdata
+        await this.load();
+        await app.getConfigManager().load();
+      } catch (e) {
+        this.error(e);
+      } finally {
+        this.__isLoggingOut = false;
+      }
     }
   }
 });

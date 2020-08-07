@@ -28,19 +28,15 @@ qx.Class.define("bibliograph.store.Datasources",
   
   construct : function() {
     this.base(arguments, "datasource");
-    qx.event.message.Bus.subscribe("datasources.reload", () => {
-      this.load();
-    });
-    qx.event.message.Bus.subscribe("user.loggedin", () => {
-      this.load();
-    });
+    let bus = qx.event.message.Bus.getInstance();
+    bus.subscribe("datasources.reload", this.load, this);
+    bus.subscribe(bibliograph.AccessManager.messages.AFTER_LOGIN, () => this.load());
   },
   
   members : {
     _applyModel : function(data, old) {
       // call overriddden method
       this.base(arguments, data, old);
-      
       let app = this.getApplication();
       let datasourceCount = qx.lang.Type.isObject(data) ? data.length : 0;
       this.info("User has access to " + datasourceCount + " datasources.");

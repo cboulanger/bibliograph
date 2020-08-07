@@ -70,7 +70,7 @@ qx.Class.define("bibliograph.TestApplication",
       button3.setEnabled(false);
       doc.add(button3, {left: 100, top: 150});
       button3.addListener("execute", async () => {
-        am.logout();
+        await am.logout();
       });
       am.getUserManager().bind("activeUser.anonymous", button3, "enabled", {
         converter : value => !value

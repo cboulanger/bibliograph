@@ -1,4 +1,5 @@
 const playwright = require("playwright");
+const process = require("process");
 
 /**
  * This class models a qooxdoo application running in a browser
@@ -29,6 +30,9 @@ class Application {
     if (!this.url) {
       throw new Error("Missing application URL");
     }
+    if (!this.browserType) {
+      throw new Error("Missing browser type");
+    }
   }
   
   /**
@@ -36,7 +40,8 @@ class Application {
    * @return {String}
    * @param {String} id
    */
-  static getSelector(id) {
+  // eslint-disable-next-line class-methods-use-this
+  getSelector(id) {
     return `[data-qx-object-id="${id}"]`;
   }
   
@@ -54,6 +59,15 @@ class Application {
   }
   
   /**
+   * Wether the application is to be run headless (i.e. without a browser window),
+   * or not
+   * @param val
+   */
+  set headless(val) {
+    this.browserOptions.headless = val;
+  }
+  
+  /**
    * Sets up the browser context and optionally waits for a
    * console message that indicates that tests can start.
    * Method can be called repeatedly and will return cached objects.
@@ -68,7 +82,12 @@ class Application {
   async init(readyConsoleMessage, timeout=60000) {
     if (!this.browser) {
       this.verbose && console.log(`# - Launching new browser (${this.browserType}) ...`);
-      this.browser = await playwright[this.browserType].launch(this.browserOptions);
+      try {
+        this.browser = await playwright[this.browserType].launch(this.browserOptions);
+      } catch (e) {
+        console.error(`Error when trying to launch browser: ${e.message}`);
+        process.exit(1);
+      }
     }
     if (!this.context) {
       this.verbose && console.log(`# - Creating new context...`);
@@ -78,22 +97,37 @@ class Application {
       this.page = await this.context.newPage();
       this.page.on("pageerror", e => {
         console.error(`Error on page ${this.page.url()}: ${e.message}`);
-        throw e;
+        process.exit(1);
       });
-      this.page.on("response", response => {
-        if (!response.ok()) {
-          let e = new Error(response.statusText());
+      this.page.on("response", async response => {
+        if (response.status >= 400) {
+          console.error(response.statusText());
           try {
-            console.error(response.json());
+            console.error(await response.json());
           } catch (e) {
-            console.error(response.body());
+            try {
+              console.error(await response.body());
+            } catch (e) {
+              console.error(await response.text());
+            }
           }
-          throw e;
+          process.exit(1);
+        }
+      });
+      this.page.on("console", consoleMsg => {
+        if (consoleMsg.text().includes("AuthenticationError")) {
+          console.error(consoleMsg.getText());
+          process.exit(1);
         }
       });
       // open URL and optionally wait for a console message
       this.verbose && console.log(`# - Opening new page at ${this.url}...`);
-      await this.page.goto(this.url);
+      try {
+        await this.page.goto(this.url);
+      } catch (e) {
+        console.error(`Error when trying to open page: ${e.message}`);
+        process.exit(1);
+      }
       if (readyConsoleMessage) {
         this.verbose && console.log(`# - Waiting for console message "${readyConsoleMessage}"...`);
         await this.waitForConsoleMessage(readyConsoleMessage, {timeout});
@@ -270,15 +304,6 @@ class Application {
     text = text.replace(/"/g, "&apos;").replace(/"/g, "&quot;");
     let selector = this.getSelector(qxId) + ` >> text="${text}"`;
     return this.page.waitForSelector(selector, options);
-  }
-  
-  /**
-   * Waits for all running tasks to finish
-   * @return {Promise<*>}
-   */
-  async waitForIdle () {
-    await this.page.waitForFunction("!qx.core.Init.getApplication().getTaskMonitor().getBusy()", {polling: 100});
-    await this.page.waitForTimeout(100);
   }
 }
 

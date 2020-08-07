@@ -79,7 +79,7 @@ qx.Class.define("bibliograph.plugins.webservices.Plugin",
               () => win.close()
             );
             this.getMessageBus().subscribe(
-              bibliograph.AccessManager.messages.LOGOUT,
+              bibliograph.AccessManager.messages.AFTER_LOGOUT,
               () => win.close()
             );
           }
@@ -97,7 +97,7 @@ qx.Class.define("bibliograph.plugins.webservices.Plugin",
               () => win.close()
             );
             this.getMessageBus().subscribe(
-              bibliograph.AccessManager.messages.LOGOUT,
+              bibliograph.AccessManager.messages.AFTER_LOGOUT,
               () => win.close()
             );
           }

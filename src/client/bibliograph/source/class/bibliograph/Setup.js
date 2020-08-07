@@ -353,9 +353,6 @@ qx.Class.define("bibliograph.Setup", {
       // remotely log to the browser console
       bus.subscribe(messages.LOG_TO_CONSOLE, e => console.log(e.getData()));
 
-      // server message to force logout the user
-      bus.subscribe(messages.LOGOUT, () => this.logout());
-
       // server message to set model type and id
       bus.subscribe(messages.SET_MODEL, e => {
         let data = e.getData();

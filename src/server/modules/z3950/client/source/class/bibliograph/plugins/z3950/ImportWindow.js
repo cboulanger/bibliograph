@@ -48,7 +48,7 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow", {
     this.createUi();
     this.createPopup();
     qx.event.message.Bus
-    .getInstance().subscribe(bibliograph.AccessManager.messages.LOGOUT, () => this.close());
+    .getInstance().subscribe(bibliograph.AccessManager.messages.AFTER_LOGOUT, () => this.close());
 
     qx.lang.Function.delay(() => {
       this.listView.addListenerOnce("tableReady", () => {

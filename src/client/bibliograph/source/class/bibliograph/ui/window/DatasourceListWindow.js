@@ -31,7 +31,7 @@ qx.Class.define("bibliograph.ui.window.DatasourceListWindow",
     this.addListener("appear", e => this.center());
 
     let app = this.getApplication();
-    //qx.event.message.Bus.getInstance().subscribe(bibliograph.AccessManager.messages.LOGOUT, () => this.close());
+    //qx.event.message.Bus.getInstance().subscribe(bibliograph.AccessManager.messages.AFTER_LOGOUT, () => this.close());
 
     let vbox1 = new qx.ui.layout.VBox(5);
     vbox1.setSpacing(5);

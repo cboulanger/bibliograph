@@ -33,7 +33,7 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
     this.base(arguments);
     this.createPopup();
     this.createUi();
-    qx.event.message.Bus.getInstance().subscribe(bibliograph.AccessManager.messages.LOGOUT, this.close, this);
+    qx.event.message.Bus.getInstance().subscribe(bibliograph.AccessManager.messages.AFTER_LOGOUT, this.close, this);
     qx.lang.Function.delay(() => {
       this.listView.addListenerOnce("tableReady", () => {
         let controller = this.listView.getController();
@@ -99,7 +99,7 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
       this.setWidth(700);
       this.setHeight(500);
       
-      qx.event.message.Bus.getInstance().subscribe(bibliograph.AccessManager.messages.LOGOUT, () => this.close());
+      qx.event.message.Bus.getInstance().subscribe(bibliograph.AccessManager.messages.AFTER_LOGOUT, () => this.close());
       this.addListener("appear", () => this.center());
       
       let vbox1 = new qx.ui.layout.VBox(5, null, null);

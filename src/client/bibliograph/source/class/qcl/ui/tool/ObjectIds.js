@@ -45,7 +45,7 @@ qx.Class.define("qcl.ui.tool.ObjectIds",
       this.reset();
       this.setLayoutProperties({right: 20, top: 50});
     }, this);
-    qx.event.message.Bus.getInstance().subscribe("logout", this.close, this);
+    qx.event.message.Bus.getInstance().subscribe(bibliograph.AccessManager.messages.AFTER_LOGOUT, this.close, this);
     
     let vbox = new qx.ui.container.Composite(new qx.ui.layout.VBox(5));
     let header = new qx.ui.container.Composite(new qx.ui.layout.HBox(5));
@@ -273,8 +273,7 @@ qx.Class.define("qcl.ui.tool.ObjectIds",
     },
     
     _getCheckApplicationIdleCode() {
-      return `await page.waitForApplicationIdle();`;
-      //return `await page.waitForFunction("!qx.core.Init.getApplication().getTaskMonitor().getBusy()", {polling: 100});`;
+      return `await app.waitForIdle();`;
     },
     
     _addToScript(line) {
@@ -306,10 +305,10 @@ qx.Class.define("qcl.ui.tool.ObjectIds",
       // prefer execute event if we have a qx object id since click() doesn't always work
       let qxObjectId = this._checkQxObjectId(elem);
       if (qxObjectId && qx.core.Id.getQxObject(qxObjectId).hasListener("execute")) {
-        this._addToScript(`await page.evaluate(() => qx.core.Id.getQxObject("${qxObjectId}").fireNonBubblingEvent("execute"));`);
+        this._addToScript(`await app.fireEvent("${qxObjectId}"), "execute");`);
       } else {
         let selector = this._getCssSelector(elem);
-        this._addToScript(`await page.click(\`${selector}\`);`);
+        this._addToScript(`await app.page.click(\`${selector}\`);`);
       }
       // if the click has initiated i/o or other asynchronous logic, wait for it to finish
       qx.event.Timer.once(() => this._checkApplicationIdle(), this, 500);
@@ -325,7 +324,7 @@ qx.Class.define("qcl.ui.tool.ObjectIds",
       }
       let value = evt.getData();
       this.__timerId = setTimeout(() => {
-        this._addToScript(`await page.fillByQxId(\`${id}\`, "${value}");`);
+        this._addToScript(`await app.fill(\`${id}\`, "${value}");`);
         this._checkApplicationIdle();
       }, 500);
     }

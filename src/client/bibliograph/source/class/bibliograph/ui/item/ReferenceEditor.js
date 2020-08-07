@@ -404,9 +404,6 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
   
         // skip if no matching form element
         if (!formElement) {
-          if (debugMode) {
-            this.warn(`No matching form element for "${property}"`);
-          }
           continue;
         }
         if (debugMode) {

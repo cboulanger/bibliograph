@@ -318,8 +318,10 @@ class AccessController extends AppController
       Yii::debug("Starting sesssion {$sessionId}", self::CATEGORY);
     }
 
-    // renew the token
-    $user->token = null;
+    // create a token
+    if (!$user->token) {
+      $user->token = null;
+    }
     $user->save();
 
     // cleanup old sessions
@@ -355,15 +357,22 @@ class AccessController extends AppController
    */
   public function logout(User $user) {
     Yii::info("Logging out user '{$user->name}'.", self::CATEGORY);
+    // set the user offline
     $user->online = 0;
+    // delete the token,
+    $user->token = null;
     try {
       $user->save();
     } catch (\yii\db\Exception $e) {
       Yii::warning($e->getMessage());
     }
+    // delete all session, this shoudl force logout users but probably won't
     Session::deleteAll(['UserId' => $user->id ]);
+
     Yii::$app->user->logout();
     Yii::$app->session->destroy();
+
+
     // cleanup old sessions
     try {
       $this->cleanup();

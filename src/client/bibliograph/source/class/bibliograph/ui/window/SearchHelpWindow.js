@@ -34,9 +34,7 @@ qx.Class.define("bibliograph.ui.window.SearchHelpWindow",
       searchHelpWindow.setCaption(this.tr("Search Help Window"));
       searchHelpWindow.setShowMinimize(false);
       searchHelpWindow.setHeight(500);
-      qx.event.message.Bus.getInstance().subscribe("logout", function(e) {
-        this.close();
-      }, this);
+      qx.event.message.Bus.getInstance().subscribe(bibliograph.AccessManager.messages.AFTER_LOGOUT, () => this.close());
       var qxVbox1 = new qx.ui.layout.VBox(null, null, null);
       searchHelpWindow.setLayout(qxVbox1);
       var helpPane = new qx.ui.embed.Html(null);

@@ -32,7 +32,7 @@ qx.Class.define("bibliograph.ui.window.PreferencesWindow", {
     qxWindow1.setHeight(400);
     qxWindow1.setWidth(600);
     qxWindow1.addListener("appear", this.center, this);
-    qx.event.message.Bus.getInstance().subscribe(bibliograph.AccessManager.messages.LOGOUT, this.close, this);
+    qx.event.message.Bus.getInstance().subscribe(bibliograph.AccessManager.messages.AFTER_LOGOUT, this.close, this);
     let qxVbox1 = new qx.ui.layout.VBox(5);
     qxVbox1.setSpacing(5);
     qxWindow1.setLayout(qxVbox1);

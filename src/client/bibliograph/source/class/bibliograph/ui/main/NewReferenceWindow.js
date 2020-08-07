@@ -18,7 +18,7 @@ qx.Class.define("bibliograph.ui.main.NewReferenceWindow", {
     });
   
     // close on logout
-    qx.event.message.Bus.getInstance().subscribe(bibliograph.AccessManager.messages.LOGOUT, this.close, this);
+    qx.event.message.Bus.getInstance().subscribe(bibliograph.AccessManager.messages.AFTER_LOGOUT, this.close, this);
   
     // blocker
     this.addListener("appear", () => {

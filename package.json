@@ -34,10 +34,9 @@
     "test:playwright:custom": "node ./test/playwright/test-login.js",
     "dist:docker:build": "tool/dist/build config/.env.local.docker",
     "dist:docker:run": "tool/dist/run",
-    "dist:localhost:build": "tool/dist/build config/.env.local.localhost",
-    "dist:localhost:deploy-clean": "DEPLOY_CLEAN=true tool/dist/deploy config/.env.local.localhost",
-    "dist:demo3:build": "tool/dist/build config/.env.demo3",
-    "dist:demo3:deploy-clean": "DEPLOY_CLEAN=true tool/dist/deploy config/.env.local.localhost"
+    "deploy:rewi:test": "tool/deploy/deploy -e config/deploy/rewi/bibliograph-test.env -v",
+    "test:rewi:test": "config/deploy/rewi/run-tests.sh"
+
   },
   "ntl": {
     "descriptions": {

@@ -38,7 +38,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditorUi",
     qxMenuBar1.add(itemViewTitleLabel, {
       flex : 2
     });
-    qx.event.message.Bus.getInstance().subscribe("logout", function(e) {
+    qx.event.message.Bus.getInstance().subscribe(bibliograph.AccessManager.messages.AFTER_LOGOUT, function(e) {
       itemViewTitleLabel.setValue("");
     }, this);
     var qxSpacer1 = new qx.ui.core.Spacer(null, null);
@@ -202,7 +202,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditorUi",
       // Handler to react to reference Type change
       this.addListener("changeReferenceType", function(e) {
         var refType = e.getData();
-        button.setVisibility((refType == "book" || refType == "collection") ? "visible" : "excluded");
+        button.setVisibility((refType === "book" || refType === "collection") ? "visible" : "excluded");
       }, this);
 
       return {page, button};

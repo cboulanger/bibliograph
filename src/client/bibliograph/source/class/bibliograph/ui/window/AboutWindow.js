@@ -33,9 +33,7 @@ qx.Class.define("bibliograph.ui.window.AboutWindow",
     this.addListener("appear", function(e) {
       this.center();
     }, this);
-    qx.event.message.Bus.getInstance().subscribe("logout", function(e) {
-      this.close();
-    }, this);
+    qx.event.message.Bus.getInstance().subscribe(bibliograph.AccessManager.messages.AFTER_LOGOUT, () => this.close());
     var qxGrow1 = new qx.ui.layout.Grow();
     this.setLayout(qxGrow1);
     var qxTabView1 = new qx.ui.tabview.TabView(null);

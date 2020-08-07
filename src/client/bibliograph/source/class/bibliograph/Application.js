@@ -29,7 +29,9 @@ qx.Class.define("bibliograph.Application", {
   extend : qx.application.Standalone,
   include : [
     bibliograph.MApplicationState,
-    qcl.ui.MLoadingPopup
+    qcl.ui.MLoadingPopup,
+    qcl.ui.dialog.MDialog,
+    qcl.io.jsonrpc.MClientCache
   ],
 
   statics:{
@@ -66,12 +68,8 @@ qx.Class.define("bibliograph.Application", {
      */
     main : async function() {
       this.base(arguments);
-
-      this.__clients = {};
       this.__widgets = {};
-      this.__dialogs = {};
       this.__blocker = new qx.ui.core.Blocker(this.getRoot());
-
       if (qx.core.Environment.get("qx.debug")) {
         qx.log.appender.Native;
       }
@@ -129,8 +127,6 @@ qx.Class.define("bibliograph.Application", {
 
     /** @var {qx.bom.storage.Web} */
     __storage : null,
-    /** @var {Object} */
-    __clients : null,
     /** {qx.ui.core.Blocker} */
     __blocker : null,
     /** @var {String} */
@@ -230,80 +226,7 @@ qx.Class.define("bibliograph.Application", {
       }
       return this.__taskMonitor;
     },
-  
-    /**
-     * Returns a promise for a (cached) dialog
-     * @param {String} type
-     * @param {Object} config
-     * @return {Promise<Boolean>}
-     */
-    createDialog(type, config) {
-      let dialog = this.__dialogs[type];
-      if (dialog === undefined) {
-        dialog = this.__dialogs[type] = qxl.dialog.Dialog[type]();
-        this.addOwnedQxObject(dialog, type);
-      }
-      if (qx.lang.Type.isObject(config)) {
-        dialog.set(config);
-      }
-      return dialog.promise();
-    },
-  
-    /**
-     * Return the promise for a (cached) alert dialog
-     * @param {String} msg The message for the user
-     * @param {Object} config Additional properties to set
-     * @return {Promise}
-     */
-    alert(msg, config= {}) {
-      config.message = msg;
-      return this.createDialog("alert", config);
-    },
-  
-    /**
-     * Return the promise for a (cached) warning dialog
-     * @param {String} msg The message for the user
-     * @param {Object} config Additional properties to set
-     * @return {Promise}
-     */
-    warning(msg, config= {}) {
-      config.message = msg;
-      return this.createDialog("warning", config);
-    },
-  
-    /**
-     * Return the promise for a (cached) error dialog
-     * @param {String} msg The message for the user
-     * @param {Object} config Additional properties to set
-     * @return {Promise}
-     */
-    error(msg, config= {}) {
-      config.message = msg;
-      return this.createDialog("error", config);
-    },
-  
-    /**
-     * Return the promise for a (cached) confirm dialog
-     * @param {String} msg The message for the user
-     * @param {Object} config Additional properties to set
-     * @return {Promise}
-     */
-    confirm(msg, config= {}) {
-      config.message = msg;
-      return this.createDialog("confirm", config);
-    },
-  
-    /**
-     * Return the promise for a (cached) prompt dialog
-     * @param {String} msg The message for the user
-     * @param {Object} config Additional properties to set
-     * @return {Promise}
-     */
-    prompt(msg, config= {}) {
-      config.message = msg;
-      return this.createDialog("prompt", config);
-    },
-
+    
     /*
     ---------------------------------------------------------------------------
      COMMANDS
@@ -319,78 +242,7 @@ qx.Class.define("bibliograph.Application", {
     cmd : function(command, value) {
       qx.event.message.Bus.dispatchByName(`bibliograph.command.${command}`, value);
     },
-
-   /*
-    ---------------------------------------------------------------------------
-       I/O
-    ---------------------------------------------------------------------------
-    */
-
-    /**
-     * Returns the URL to the JSONRPC server
-     * @return {String}
-     */
-    getServerUrl: function() {
-      // cache
-      if (this.__url) {
-       return this.__url;
-      }
-
-      let serverUrl = qx.core.Environment.get("app.serverUrl");
-      if (!serverUrl) {
-        this.getApplication().error(this.tr("Missing server address. Please contact administrator."));
-        throw new Error("No server address set.");
-      }
-      if (!serverUrl.startsWith("http")) {
-        // assume relative path
-        serverUrl = qx.util.Uri.getAbsolute(serverUrl);
-      }
-      this.info("Server Url is " + serverUrl);
-      this.__url = serverUrl;
-      return serverUrl;
-    },
-
-    /**
-     * Returns a jsonrpc client object with the current auth token already set.
-     * The client can be referred to by the object id "application/jsonrpc/<service name>"
-     * @param {String} service The name of the service to get the client for
-     * @return {qcl.io.jsonrpc.Client}
-     */
-    getRpcClient : function(service) {
-      qx.core.Assert.assert(Boolean(service), "Service parameter cannot be empty");
-      qx.util.Validate.checkString(service, "Service parameter must be a string");
-      if (!this.__clients[service]) {
-        let client = new qcl.io.jsonrpc.Client(this.getServerUrl() + "/json-rpc", service);
-        client.setErrorBehavior("dialog");
-        client.setHandleErrorFunc(error => {
-          // handle a situation where the token is invalid and we have several requests going
-          if (error.message === "Unauthorized") {
-            if (!this.__loggingOut) {
-              this.__loggingOut = true;
-              this.getAccessManager().logout().then(() => {
-                delete this.__loggingOut;
-              });
-            }
-            return false;
-          }
-          return error;
-        });
-        this.__clients[service] = client;
-      }
-      let client = this.__clients[service];
-      client.setToken(this.getAccessManager().getToken() || null);
-      return client;
-    },
-  
-    /**
-     * Returns a map, keys are the service names, values the corresponding
-     * {@link qcl.io.jsonrpc.Client}.
-     * @return {Object}
-     */
-    getRpcClients() {
-      return this.__clients;
-    },
-
+    
     /**
      * Returns a promise that resolves when a message of that name has
      * been dispatched.

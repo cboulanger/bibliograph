@@ -38,7 +38,7 @@ qx.Class.define("qcl.ui.tool.TaskMonitor",
       this.set();
       this.setLayoutProperties({right: 50, top: 150});
     }, this);
-    qx.event.message.Bus.getInstance().subscribe("logout", this.close, this);
+    qx.event.message.Bus.getInstance().subscribe(bibliograph.AccessManager.messages.AFTER_LOGOUT, this.close, this);
     let list = new qx.ui.list.List();
     var delegate = {
       // create a list item

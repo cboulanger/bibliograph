@@ -112,6 +112,8 @@ qx.Class.define("bibliograph.ui.Windows",
          app.cmd("forgotPassword");
         }
       });
+      // Callback that is called from checkCredetials function with
+      // authentication result
       loginDialog.setCallback((err, data) => {
         if (err) {
           this.getApplication().error(err);

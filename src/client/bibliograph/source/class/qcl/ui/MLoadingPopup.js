@@ -35,11 +35,9 @@ qx.Mixin.define("qcl.ui.MLoadingPopup", {
     createPopup: function(options) {
       if (options === undefined) {
         options = {};
-      } else if (!qx.lang.Type.isObject(options)) {
-        this.error("Invalid argument.");
       }
-      if (this.__popup instanceof qx.ui.popup.Popup){
-        this.warn("Popup already created.");
+      qx.core.Assert.assertObject(options);
+      if (this.__popup instanceof qx.ui.popup.Popup) {
         return;
       }
       this.__popup = new qx.ui.popup.Popup(new qx.ui.layout.Canvas()).set({

@@ -49,8 +49,8 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
     
     // messages
     let bus = qx.event.message.Bus.getInstance();
-    bus.subscribe(bibliograph.AccessManager.messages.LOGIN, () => this.reload());
-    bus.subscribe(bibliograph.AccessManager.messages.LOGOUT, () => this.reload());
+    bus.subscribe(bibliograph.AccessManager.messages.AFTER_LOGIN, () => this.reload());
+    bus.subscribe(bibliograph.AccessManager.messages.AFTER_LOGOUT, () => this.reload());
     
     // context menu
     this.setupTreeCtxMenu();

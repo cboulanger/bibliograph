@@ -5,14 +5,7 @@
       <driver-ref>mysql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306/</jdbc-url>
-    </data-source>
-    <data-source source="LOCAL" name="bibliograph.rewi.hu-berlin.de" uuid="46418144-c90c-40a4-9f22-a640ef1fe0d1">
-      <driver-ref>mysql.8</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306</jdbc-url>
-      <time-zone>Europe/Berlin</time-zone>
+      <jdbc-url>jdbc:mysql://localhost:3306/tests</jdbc-url>
     </data-source>
   </component>
 </project>

@@ -107,7 +107,11 @@ EOF
 echo " - Adding dependencies ..."
 # install composer dependencies
 cp -a $SERVER_SRC_DIR/composer.* $DIST_SERVER_DIR/
-tool/dev/php src/lib/composer.phar install --no-dev --working-dir=dist/server &> /dev/null
+if [[ VERBOSE == 1 ]]; then
+  tool/dev/php src/lib/composer.phar install --no-dev --working-dir=dist/server  &> /dev/null
+else
+  tool/dev/php src/lib/composer.phar install --no-dev --working-dir=dist/server
+fi
 if ! [ -d $DIST_SERVER_DIR/vendor ] || ! [ -f $DIST_SERVER_DIR/vendor/autoload.php ]; then
  echo " !!! Composer install failed!"
  exit 1
