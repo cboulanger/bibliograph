@@ -1,6 +1,6 @@
 const process = require("process");
 const playwright = require("playwright");
-const {api} = require("../playwright/api");
+const {api} = require("../../playwright/api");
 
 // configuration
 const browserType = process.env.BROWSER_TYPE || "chromium";
@@ -79,7 +79,8 @@ async function init(readyConsoleMessage, timeout=60000, verbose = true) {
     browser,
     context,
     page,
-    qxPage
+    qxPage,
+    verbose
   };
 }
 

@@ -1,10 +1,11 @@
 
 /**
- * @param {Browser} browser
- * @param {Page} page
- * @param {Context} context
+ * @param {Object} config A map containing all needed objects as properties
  */
-function api(browser, page, context) {
+function api(config) {
+  
+  let {page, qxPage, context, verbose} = config;
+  
   /**
    * Logs into the application
    * @param user
@@ -12,15 +13,15 @@ function api(browser, page, context) {
    * @return {Promise<void>}
    */
   async function login(user, password) {
-    console.info(`# - Authenticating user '${user}'...`);
-    await page.clickByQxId("toolbar/login");
-    await page.waitForWidgetByQxId("windows/login");
-    await page.fillByQxId("windows/login/form/username", user);
-    await page.fillByQxId("windows/login/form/password", password);
-    await page.clickByQxId("windows/login/buttons/login");
-    await page.waitForWidgetByQxId("toolbar/user", {timeout:60000, state:"visible" });
-    console.info(`# - User '${user}' authenticated. Waiting for tasks to finish ...`);
-    await page.waitForFunction("!qx.core.Init.getApplication().getTaskMonitor().getBusy()", {polling: 100});
+    verbose && console.info(`# - Authenticating user '${user}'...`);
+    await qxPage.click("toolbar/login");
+    await qxPage.waitFor("windows/login");
+    await qxPage.fill("windows/login/form/username", user);
+    await qxPage.fill("windows/login/form/password", password);
+    await qxPage.click("windows/login/buttons/login");
+    await qxPage.waitFor("toolbar/user", {timeout:60000, state:"visible" });
+    verbose && console.info(`# - User '${user}' authenticated. Waiting for tasks to finish ...`);
+    await qxPage.waitForApplicationIdle();
     await page.waitForTimeout(500);
   }
   
@@ -29,11 +30,11 @@ function api(browser, page, context) {
    * @return {Promise<void>}
    */
   async function logout() {
-    console.info(`# - Logging out ...`);
-    await page.clickByQxId("toolbar/logout");
-    await page.waitForWidgetByQxId("toolbar/user", {timeout:60000, state:"hidden" });
-    console.info(`# - Logged out. Waiting for tasks to finish ...`);
-    await page.waitForFunction("!qx.core.Init.getApplication().getTaskMonitor().getBusy()", {polling: 100});
+    verbose && console.info(`# - Logging out ...`);
+    await qxPage.click("toolbar/logout");
+    await qxPage.waitFor("toolbar/user", {timeout:60000, state:"hidden" });
+    verbose && console.info(`# - Logged out. Waiting for tasks to finish ...`);
+    await qxPage.waitForApplicationIdle();
     await page.waitForTimeout(500);
   }
   
@@ -42,9 +43,10 @@ function api(browser, page, context) {
    * @return {Promise<void>}
    */
   async function shutdown() {
-    console.info("# - Shutting down ...");
+    verbose && console.info("# - Shutting down ...");
     await page.close();
-    page = context = null;
+    page = null;
+    context = null;
   }
   
   return {
