@@ -2,7 +2,7 @@
 
 namespace app\migrations\schema\bibliograph_datasource;
 
-use lib\exceptions\Exception;
+use Yii;
 use yii\db\Migration;
 
 /**
@@ -31,13 +31,13 @@ class M180602120949_fix_integer_notnull_columns extends Migration
       try {
         $this->alterColumn($table_name, $column, $this->smallInteger(1)->notNull()->defaultValue(0));
       } catch (\PDOException $e) {
-        //if (!strstr($e->getMessage(), "Warning:")) throw $e;
+        Yii::warning($e->getMessage());
       }
     }
     try {
       $this->alterColumn( $table_name, 'childCount', $this->integer(11)->notNull()->defaultValue(0));
     } catch (\Throwable $e) {
-      //if (!strstr($e->getMessage(), "Warning:")) throw $e;
+      Yii::warning($e->getMessage());
     }
     return true;
   }

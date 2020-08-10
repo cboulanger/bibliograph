@@ -199,10 +199,16 @@ qx.Class.define("bibliograph.AccessManager",
     /**
      * Handles the response of the access/authenticate server action:
      * If authentication is successful, reload config and user data.
+     * Returns the authentication response or an object containing an error property.
      *
-     * @param response
+     * @param {Object} response
      */
     __handleAuthenticationResponse : async function(response) {
+      if (!response) {
+        return {
+          error: "Server return null"
+        };
+      }
       let { message, token, sessionId, error } = response;
       if (error) {
         this.warn("AuthenticationError:" + error);
@@ -213,17 +219,14 @@ qx.Class.define("bibliograph.AccessManager",
         this.info(message);
         this.setToken(token);
         this.setSessionId(sessionId);
-        await this.getApplication().getConfigManager().load();
-        await this.load();
-        // notify subscribers
-        qx.event.message.Bus.dispatchByName(bibliograph.AccessManager.messages.AFTER_LOGIN, this.getUserManager().getActiveUser());
-        this.fireEvent("afterLogin");
       }
+      this.afterAuthentication();
       return response;
     },
 
     /**
-     * Authenticate anomymously with the server.
+     * Authenticate anomymously with the server.  Returns the authentication
+     * response or an object containing an error property.
      * @return {Promise<Object>}
      */
     guestLogin : async function() {
@@ -232,8 +235,10 @@ qx.Class.define("bibliograph.AccessManager",
         let response = await rpc.Access.authenticate(null, null);
         return await this.__handleAuthenticationResponse(response);
       } catch (e) {
-        console.error(e);
-        return null;
+        this.error(e);
+        return {
+          error: e.message
+        };
       }
     },
 
@@ -271,6 +276,18 @@ qx.Class.define("bibliograph.AccessManager",
         return response;
       }
       return await this.__handleAuthenticationResponse(response);
+    },
+  
+    /**
+     * Things to do after authentication via login or with stored credentials
+     * @return {Promise<void>}
+     */
+    async afterAuthentication() {
+      await this.getApplication().getConfigManager().load();
+      await this.load();
+      // notify subscribers
+      qx.event.message.Bus.dispatchByName(bibliograph.AccessManager.messages.AFTER_LOGIN, this.getUserManager().getActiveUser());
+      this.fireEvent("afterLogin");
     },
     
     /**

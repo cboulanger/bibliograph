@@ -51,8 +51,8 @@ qx.Class.define("bibliograph.ui.main.ItemView",
     // setup event handlers
     let bus = qx.event.message.Bus.getInstance();
     let app = this.getApplication();
-    bus.subscribe("user.loggedin", this.toggleReferenceView, this);
-    bus.subscribe("user.loggedout", () => this.setView(null));
+    bus.subscribe(bibliograph.AccessManager.messages.AFTER_LOGIN, this.toggleReferenceView, this);
+    bus.subscribe(bibliograph.AccessManager.messages.AFTER_LOGOUT, () => this.setView(null));
     app.addListener("changeModelId", e => {
       this.toggleReferenceView();
       this.setVisibility(e.getData() ? "visible" : "hidden");

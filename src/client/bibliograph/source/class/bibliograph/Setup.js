@@ -138,24 +138,16 @@ qx.Class.define("bibliograph.Setup", {
       });
       await this.checkServerSetup();
 
+      // initialize managers, they will automatically load after authentication
+      app.getConfigManager().init();
+      app.getAccessManager().init();
+      
       // authenticate
-      this.showPopup(this.getSplashMessage(this.tr("Connecting with server...")));
+      this.showPopup(this.getSplashMessage(this.tr("Loading user data...")));
       await this.authenticate();
-      qx.event.message.Bus.dispatchByName("connected");
-
-      // load config & permissions
-      this.showPopup(this.getSplashMessage(this.tr("Loading configuration ...")));
-      await this.loadConfig();
-      await this.loadUserdata();
-
-      // notify about user login
-      qx.event.message.Bus.dispatchByName(
-        "user.loggedin",
-        // @todo - we need a shortcut for this
-        this.getApplication().getAccessManager().getUserManager().getActiveUser()
-      );
 
       // load plugins
+      this.showPopup(this.getSplashMessage(this.tr("Loading plugins...")));
       this.loadPlugins();
 
       // initialize application state
@@ -216,7 +208,6 @@ qx.Class.define("bibliograph.Setup", {
     setupUiTranslations : function() {
       let confMgr = this.getApplication().getConfigManager();
       let localeManager = qx.locale.Manager.getInstance();
-      let locales = localeManager.getAvailableLocales().sort();
       let currentLocale = localeManager.getLocale();
       this.info("Browser locale: " + currentLocale);
       // override locale from config
@@ -244,6 +235,26 @@ qx.Class.define("bibliograph.Setup", {
     },
 
     /**
+     * Unless we have a token in the session storage, authenticate
+     * anomymously with the server.
+     * @return {Promise<void>}
+     */
+    async authenticate() {
+      let authManager = bibliograph.AccessManager.getInstance();
+      let token = authManager.getToken();
+      if (token) {
+        this.info("Got access token from session storage");
+      } else {
+        let {error} = await authManager.guestLogin();
+        if (error) {
+          this.getApplication().error(error);
+          return;
+        }
+      }
+      await authManager.afterAuthentication();
+    },
+
+    /**
      * This will initiate server setup. Returned promise resolves when server
      * dispatches a "bibliograph.setup.done" message.
      * @return {Promise<void>}
@@ -262,58 +273,7 @@ qx.Class.define("bibliograph.Setup", {
       await this.getApplication().resolveOnMessage("bibliograph.setup.done");
       this.info("Server setup done.");
     },
-
-    /**
-     * Unless we have a token in the session storage, authenticate
-     * anomymously with the server.
-     * @return {Promise<void>}
-     */
-    async authenticate() {
-      let am = bibliograph.AccessManager.getInstance();
-      let token = am.getToken();
-      let client = this.getApplication().getRpcClient("access");
-      if (!token) {
-        this.info("Authenticating with server...");
-        let response = await client.request("authenticate", []);
-        if (!response) {
-          let msg = this.tr("Authentication failed with error:") + client.getErrorMessage();
-          this.getApplication().error(msg);
-          throw new Error(msg);
-        }
-        let { message, token, sessionId } = response;
-        if (!token) {
-          let msg = this.tr("Could not acquire access token");
-          this.getApplication().error(msg);
-          throw new Error(msg);
-        }
-        this.info(message);
-        am.setToken(token);
-        am.setSessionId(sessionId);
-        this.info("Acquired access token.");
-      } else {
-        this.info("Got access token from session storage");
-      }
-    },
-
-    /**
-     * Loads the configuration values
-     * @return {Promise<void>}
-     */
-    loadConfig : async function() {
-      this.info("Loading config values...");
-      await this.getApplication().getConfigManager().init().load();
-      this.info("Config values loaded.");
-    },
-
-    /**
-     * Loads user data including permissions
-     * @return {Promise<void>}
-     */
-    loadUserdata : async function() {
-      this.info("Loading userdata...");
-      await this.getApplication().getAccessManager().init().load();
-      this.info("Userdata loaded.");
-    },
+    
 
     /**
      * Loads the plugins

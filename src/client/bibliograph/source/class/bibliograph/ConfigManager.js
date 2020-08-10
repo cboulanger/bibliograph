@@ -102,7 +102,9 @@ qx.Class.define("bibliograph.ConfigManager", {
    */
     
     _applyModel: function (model, old) {
-      if (model === null) return;
+      if (model === null) {
+       return;
+      }
       
       // create index
       this._index = {};
@@ -150,7 +152,7 @@ qx.Class.define("bibliograph.ConfigManager", {
         this.error("Model has not yet finished loading.");
       }
       let index = this._index[key];
-      if (index == undefined) {
+      if (index === undefined) {
         throw new Error("Invalid config key '" + key + "'.");
       }
       return index;
@@ -164,7 +166,9 @@ qx.Class.define("bibliograph.ConfigManager", {
     
     /**
      * Initializes the manager
+     *
      * @return bibliograph.ConfigManager Returns itself
+     * @param service
      */
     init: function (service) {
       // avoid duplicate bindings
@@ -195,13 +199,16 @@ qx.Class.define("bibliograph.ConfigManager", {
      * Loads configuration values from the server and configures auto-update
      * whenever the a value changes on the server. The config data has to be sent
      * in the following format:
-     * <pre>
+     * ````javascript
      * {
-     *   keys : [ ... array of the names of the configuration keys ],
+     *   keys : [ ... array of the names of the configuration keys ]
      *   values : [ ... array of the configuration values ... ]
      * }
-     * </pre>
+     * ```
+     *
      * @return {Promise<Object>}
+     * @param callback
+     * @param context
      */
     load: function (callback, context) {
       return this.getStore().load(null, null, callback, context);
@@ -234,7 +241,7 @@ qx.Class.define("bibliograph.ConfigManager", {
     /**
      * Sets a config value and fire a 'clientChange' event.
      * @param key {String}
-     * @param value {Mixed}
+     * @param value {*}
      */
     setKey: function (key, value) {
       let index = this._getIndex(key);
@@ -278,12 +285,12 @@ qx.Class.define("bibliograph.ConfigManager", {
       if (!qx.lang.Type.isString(targetPath)) {
         this.error("Invalid target path.");
       }
-      /*
-       * if the target path is a property and not a property chain,
-       * use event listeners. This also solves a problem with a bug
-       * in the SigleValueBinding implementation,
-       * see http://www.nabble.com/Databinding-td24099676.html
-       */
+      
+      // if the target path is a property and not a property
+      // chain, use event listeners. This also solves a problem
+      // with a bug in the SigleValueBinding implementation,
+      // see http://www.nabble.com/Databinding-td24099676.html
+      
       if (targetPath.indexOf(".") === -1) {
         // set the initial value
         targetObject.set(targetPath, this.getKey(key));
@@ -336,13 +343,6 @@ qx.Class.define("bibliograph.ConfigManager", {
     }
     
   },
-  
-  /*
-  *****************************************************************************
-      DESTRUCTOR
-  *****************************************************************************
-  */
-  
   destruct: function () {
     this._disposeArray("_index");
   }
