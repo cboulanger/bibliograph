@@ -3,6 +3,11 @@
 //
 // Yii console bootstrap file.
 //
+const YII_DEBUG = true;
+const APP_ROOT_DIR = __DIR__ . "/../../..";
+const APP_LOG_DIR = APP_ROOT_DIR . "/log/app";
+const APP_LOG_NAME = "console.log";
+const DOTENV_FILE = APP_ROOT_DIR . "/test/.env";
 require __DIR__  . '/../bootstrap.php';
 $config = require APP_BACKEND_DIR . '/config/console.php';
 $application = new yii\console\Application($config);

@@ -17,8 +17,7 @@
 ************************************************************************ */
 
 /**
- * This is a qooxdoo singleton class
- *
+ * This class manages the datasources that the user has access to
  */
 qx.Class.define("bibliograph.store.Datasources",
 {

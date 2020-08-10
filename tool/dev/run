@@ -3,13 +3,25 @@
 # Compiles and starts the bibliograph app in the browser
 
 set -o errexit
+source tool/lib/functions.sh
+
 source test/.env
 source tool/env/check
 source tool/env/envvars-export
-if [ "$1" == "clean" ]; then
+source tool/test/setup/check-mysql
+
+if [ "$1" != "" ]; then
   source tool/test/setup/create-mysql-user
   source tool/test/setup/reset-data
+  if [ "$1" == "clean" ]; then
+    echo ">>> Starting with empty database"
+  else
+    tool/dev/mysql-import $1 $DB_DATABASE
+  fi
 fi
-source tool/test/setup/check-mysql
+
 export APP_URL
-tool/dev/start-app bibliograph
+export APP_NAME
+export BUILD_CONFIG_FILE
+
+tool/dev/start-app

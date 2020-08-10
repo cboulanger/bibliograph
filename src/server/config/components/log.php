@@ -26,7 +26,7 @@ $log_config = [
         ? ['application', 'access','setup', 'app\*', 'plugin*', 'jsonrpc']
         : ['application', 'app\*', 'plugin*', 'jsonrpc'],
       'except' => [],
-      'logFile' => APP_LOG_DIR . "/app.log",
+      'logFile' => APP_LOG_DIR . "/" . APP_LOG_NAME,
       'logVars' => [],
       'exportInterval' => 1
     ],

@@ -20,7 +20,11 @@ defined("APP_ROOT_DIR") or define( "APP_ROOT_DIR" , __DIR__ . "/../../..");
  */
 defined("APP_LOG_DIR") or define( "APP_LOG_DIR" , '@runtime/logs');
 
-//APP_ROOT_DIR . '/log/app/error.log',
+/*
+ * The name of the logfile
+ */
+defined("APP_LOG_NAME") or define( "APP_LOG_NAME" , 'app.log');
+
 /*
  * The path to the file containing server environment variable definitions
  */

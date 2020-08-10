@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+# Usage: tool/dev/mysql-import mydata.sql database_name
+
+set -o errexit
+source tool/lib/functions.sh
+
+SQL_FILE=$1
+DATABASE_NAME=$2
+
+if ! [ -f $SQL_FILE ]; then
+  exit_with_error "sql data file '$SQL_FILE' does not exist."
+fi
+
+log_info -n ">>> Importing $SQL_FILE into $DATABASE_NAME"
+docker exec -i http-server bash <<-EOF
+CMD=\$([ -x "$(command -v pv)" ] && echo "pv -f -s57" || echo "cat")
+\$CMD $SQL_FILE \
+  | sed s/localhost/$DB_HOST/g \
+  | sed s/\'0000-00-00\'/NULL/g \
+  | iconv -f utf-8 -t utf-8 -c \
+  | mysql -h$DB_HOST -u$DB_USER -p$DB_PASSWORD $DATABASE_NAME
+EOF
+
+log_info " ${CHECKMARK}"

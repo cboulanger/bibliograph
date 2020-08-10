@@ -1,17 +1,22 @@
 #!/bin/bash
 
 # Compiles and starts the given app in the browser in development mode
-set -o errexit
-source tool/env/envvars-load
-source tool/env/envvars-export
 
-APP=${1:-bibliograph}
-CONFIG_FILE=${2:-compile.json}
-APP_PATH=compiled/source/$APP
-TARGET=${3:-source}
+set -o errexit
+source tool/lib/functions.sh
+
+APP_NAME=${1:-$APP_NAME}
+[ -z "$APP_NAME" ] && exit_with_error "You must pass the application name as an argument or set the APP_NAME environment var."
+[ -z "$BUILD_CONFIG_FILE" ] && exit_with_error "You need to set the BUILD_CONFIG_FILE environment var."
+
+BUILD_TARGET=${BUILD_TARGET:-source}
+if [[ -z "$APP_URL" ]]; then
+  PORT="80${PHP_VERSION/\./}"
+  APP_URL=http://localhost:$PORT/compiled/$BUILD_TARGET/$APP_NAME
+fi
 
 MADE=false
-echo ">>> Compiling application '$APP', using config file '$CONFIG_FILE' and '$TARGET' target ..."
+echo ">>> Compiling application '$APP_NAME', using config file '$BUILD_CONFIG_FILE' and '$BUILD_TARGET' target ..."
 while read output; do
   echo "$output"
   # wait for "made" event message to resume script
@@ -22,7 +27,7 @@ while read output; do
   if [[ $output == *"Could not install"* ]]; then
     break;
   fi;
-done < <(npx qx compile --target=$TARGET --watch --feedback=0 -c $CONFIG_FILE & )
+done < <(npx qx compile --target=$BUILD_TARGET --watch --feedback=0 -c $BUILD_CONFIG_FILE & )
 
 if [[ $MADE == false ]]; then
   echo "Compilation failed."
@@ -34,8 +39,8 @@ sleep 5
 echo ">>> Started continuous compilation process."
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
-  echo ">>> Opening app in browser at $APP_URL/$APP_PATH"
-  open -a "Google Chrome" "$APP_URL/$APP_PATH"
+  echo ">>> Opening app in browser at $APP_URL"
+  open -a "Google Chrome" "$APP_URL"
   # send Alt+Command+I to open Web inspector
   osascript -e 'tell application "System Events" to keystroke "i" using {option down, command down}'
 fi

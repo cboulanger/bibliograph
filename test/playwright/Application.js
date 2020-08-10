@@ -137,44 +137,6 @@ class Application {
   }
   
   /**
-   * Waits for a console message
-   * @param {String|Function} message A string, which is the message to check console messages against,
-   * or a function, to which the console message is passed and which must return true or false.
-   * @param {Object} options
-   * @return {Promise<String>}
-   */
-  async waitForConsoleMessage (message, options = {}) {
-    if (!["string", "function"].includes(typeof message)) {
-      throw new Error("Invalid message argument, must be string or function");
-    }
-    return new Promise((resolve, reject) => {
-      let handler = consoleMsg => {
-        let msg = consoleMsg.text();
-        switch (typeof message) {
-          case "string":
-            if (msg === message) {
-              this.page.off("console", handler);
-              resolve(msg);
-            }
-            break;
-          case "function":
-            if (message(msg)) {
-              this.page.off("console", handler);
-              resolve(msg);
-            }
-            break;
-        }
-      };
-      
-      this.page.on("console", handler);
-      if (options.timeout) {
-        let error = new Error(`Timeout of ${options.timeout} reached when waiting for console message '${message}.'`);
-        setTimeout(() => reject(error), options.timeout);
-      }
-    });
-  }
-  
-  /**
    * Turn logging of browser console messages on or off
    * @param val
    */
@@ -304,6 +266,43 @@ class Application {
     text = text.replace(/"/g, "&apos;").replace(/"/g, "&quot;");
     let selector = this.getSelector(qxId) + ` >> text="${text}"`;
     return this.page.waitForSelector(selector, options);
+  }
+  
+  /**
+   * Waits for a console message
+   * @param {String|Function} message A string, which is the message to check console messages against,
+   * or a function, to which the console message is passed and which must return true or false.
+   * @param {Object} options
+   * @return {Promise<String>}
+   */
+  async waitForConsoleMessage (message, options = {}) {
+    if (!["string", "function"].includes(typeof message)) {
+      throw new Error("Invalid message argument, must be string or function");
+    }
+    return new Promise((resolve, reject) => {
+      let handler = consoleMsg => {
+        let msg = consoleMsg.text();
+        switch (typeof message) {
+          case "string":
+            if (msg === message) {
+              this.page.off("console", handler);
+              resolve(msg);
+            }
+            break;
+          case "function":
+            if (message(msg)) {
+              this.page.off("console", handler);
+              resolve(msg);
+            }
+            break;
+        }
+      };
+      this.page.on("console", handler);
+      if (options.timeout) {
+        let error = new Error(`Timeout of ${options.timeout} reached when waiting for console message '${message}.'`);
+        setTimeout(() => reject(error), options.timeout);
+      }
+    });
   }
 }
 

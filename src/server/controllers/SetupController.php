@@ -463,23 +463,27 @@ class SetupController extends \app\controllers\AppController
   }
 
   /**
-   * Run the next of the existing setup methods, i.e. methods of this class that have the prefix 'setup'.
-   * Note the following:
+   * Run the next of the existing setup methods, i.e. methods of this class
+   * that have the prefix 'setup'. Note the following:
    *  - Each method must be executable regardless of application setup state.
-   *  - If a particular setup method encounters an error which does not prevent other methods from running,
-   *    throw a lib\exceptions\SetupException. These errors will be collected and passed as data
-   *    of the "bibliograph.setup.done" event sent to the client.
-   *  - In case of errors that are not recoverable, throw a lib\exceptions\SetupFatalException, which will stop
-   *    execution of the setup procedure.
-   *  - Once all setup methods are run, the "bibliograph.setup.done" event is sent to the client
-   *    with recoverable errors and messages as data.
-   *  - It is possible to return control to the client by instantiating a Dialog object.
-   *  - If a method is successful, a "bibliograph.setup.next" event is sent to the client, which then starts
-   *    the next call to this action.
+   *  - If a particular setup method encounters an error which does not prevent
+   * other methods from running, throw a lib\exceptions\SetupException. These
+   * errors will be collected and passed as data of the
+   * "bibliograph.setup.done" event sent to the client.
+   *  - In case of errors that are not recoverable, throw a
+   * lib\exceptions\SetupFatalException, which will stop execution of the setup
+   * procedure.
+   *  - Once all setup methods are run, the "bibliograph.setup.done" event is
+   * sent to the client with recoverable errors and messages as data.
+   *  - It is possible to return control to the client by instantiating a
+   * Dialog object.
+   *  - If a method is successful, a "bibliograph.setup.next" event is sent to
+   * the client, which then starts the next call to this action.
    *
    * @return mixed
    * @throws SetupException
    * @throws SetupFatalException
+   * @throws RecordExistsException
    */
   protected function _runNextMethod()
   {

@@ -233,6 +233,8 @@ qx.Class.define("qcl.ui.tool.ObjectIds",
         ["Attributes", "Class", "NthChild"]
       );
     },
+    
+    
   
     /**
      * Returns an array of attribute names that should not be
@@ -304,8 +306,12 @@ qx.Class.define("qcl.ui.tool.ObjectIds",
       }
       // prefer execute event if we have a qx object id since click() doesn't always work
       let qxObjectId = this._checkQxObjectId(elem);
-      if (qxObjectId && qx.core.Id.getQxObject(qxObjectId).hasListener("execute")) {
-        this._addToScript(`await app.fireEvent("${qxObjectId}"), "execute");`);
+      if (qxObjectId) {
+        if (qx.core.Id.getQxObject(qxObjectId).hasListener("execute")) {
+          this._addToScript(`await app.fireEvent("${qxObjectId}"), "execute");`);
+        } else {
+          this._addToScript(`await app.click(\`${qxObjectId}\`);`);
+        }
       } else {
         let selector = this._getCssSelector(elem);
         this._addToScript(`await app.page.click(\`${selector}\`);`);

@@ -2,6 +2,7 @@
 
 namespace app\migrations\schema\bibliograph_datasource;
 
+use lib\exceptions\Exception;
 use yii\db\Migration;
 
 /**
@@ -27,9 +28,17 @@ class M180602120949_fix_integer_notnull_columns extends Migration
     $columns = ['searchable', 'searchfolder', 'public', 'opened', 'locked', 'hidden', 'markedDeleted'];
     foreach ( $columns as $column) {
       $this->db->createCommand("update $table_name set `$column` = 0 where `$column` IS NULL;")->execute();
-      $this->alterColumn($table_name, $column, $this->smallInteger(1)->notNull()->defaultValue(0));
+      try {
+        $this->alterColumn($table_name, $column, $this->smallInteger(1)->notNull()->defaultValue(0));
+      } catch (\PDOException $e) {
+        //if (!strstr($e->getMessage(), "Warning:")) throw $e;
+      }
     }
-    $this->alterColumn( $table_name, 'childCount', $this->integer(11)->notNull()->defaultValue(0));
+    try {
+      $this->alterColumn( $table_name, 'childCount', $this->integer(11)->notNull()->defaultValue(0));
+    } catch (\Throwable $e) {
+      //if (!strstr($e->getMessage(), "Warning:")) throw $e;
+    }
     return true;
   }
 
