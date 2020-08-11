@@ -36,7 +36,6 @@
     "dist:docker:run": "tool/dist/run",
     "deploy:rewi:test": "tool/deploy/deploy -e config/deploy/rewi/bibliograph-test.env -v",
     "test:rewi:test": "config/deploy/rewi/run-tests.sh"
-
   },
   "ntl": {
     "descriptions": {
@@ -75,13 +74,9 @@
     "eslint": "^6.1.0",
     "eslint-config-qx": "^0.2.6",
     "eslint-plugin-import": "^2.21.2",
-    "github-remove-all-releases": "^1.0.1",
     "json-diff": "^0.5.4",
     "ntl": "^5.0.0",
-    "release-it": "^12.3.5",
-    "ssh2-promise": "^0.1.7",
-    "tape": "^5.0.1",
-    "unique-selector": "^0.4.1"
+    "tape": "^5.0.1"
   },
   "eslintConfig": {
     "parserOptions": {

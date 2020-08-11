@@ -23,8 +23,6 @@
  * which, when turned on, records clicks and text input that can be inserted into
  * Playwright tests.
  *
- * Requires an external script available at https://raw.githubusercontent.com/cboulanger/bibliograph/develop/src/client/bibliograph/source/resource/js/unique-selector.js
- * @ignore(unique)
  */
 qx.Class.define("qcl.ui.tool.ObjectIds",
 {
@@ -193,17 +191,18 @@ qx.Class.define("qcl.ui.tool.ObjectIds",
     /**
      * Checks if the given element has a qx object id and returns it if it exists.
      * Otherwise returns false
-     * @param elem
+     * @param {Element} elem The DOM element to check
+     * @param {Boolean} ignoreAnonymous Whether to skip elements that have a "qxanonymous" attribute. Defaults to true.
      * @return {string|boolean}
      * @private
      */
-    _checkQxObjectId(elem) {
+    _checkQxObjectId(elem, ignoreAnonymous= true) {
       if (elem.hasAttributes()) {
         var attrs = elem.attributes;
         for (var i = attrs.length - 1; i >= 0; i--) {
           if (attrs[i].name === "data-qx-object-id") {
             return attrs[i].value;
-          } else if (attrs[i].name === "qxanonymous") {
+          } else if (ignoreAnonymous && attrs[i].name === "qxanonymous") {
             return this._checkQxObjectId(elem.parentElement);
           }
         }
@@ -222,56 +221,24 @@ qx.Class.define("qcl.ui.tool.ObjectIds",
     _getCssSelector(elem) {
       // qx object id
       let qxObjectId = this._checkQxObjectId(elem);
-      if (qxObjectId) {
-        return this._getQxObjectIdSelector(qxObjectId);
+      let nodePath = [];
+      let node = elem;
+      while (!qxObjectId && node.parentElement) {
+        nodePath.unshift(node);
+        node = node.parentElement;
+        qxObjectId = this._checkQxObjectId(node, false);
       }
-      // css selector
-      return this._getCssSelectorImpl(
-        elem,
-        this._getAttributesToIgnore(),
-        /selected|checked|active|hovered|focused/,
-        ["Attributes", "Class", "NthChild"]
-      );
-    },
-    
-    
-  
-    /**
-     * Returns an array of attribute names that should not be
-     * used when creating the unique selector
-     * @return {string[]}
-     * @private
-     */
-    _getAttributesToIgnore() {
-      return [
-        "style",
-        "id",
-        "class",
-        "src",
-        "qxclass",
-        "qxselectable",
-        "tabindex",
-        "href",
-        "qxdraggable",
-        "qxkeepfocus",
-        "qxkeepactive",
-        "qxdroppable"
-      ];
-    },
-    
-    /**
-     * The implementation of the CSS selector algorithm.
-     * This relies on https://www.npmjs.com/package/unique-selector
-     * @param {Element} elem
-     * @param {Array} attributesToIgnore An array of attribute names to ignore
-     * @param {RegExp} excludeRegex Names of classes and tags that match this regex will be excluded
-     * @param {Array} selectorTypes An array of the types of selectors that should be used in this order (Implementation-dependent)
-     * @return {String|null}
-     * @private
-     */
-    _getCssSelectorImpl(elem, attributesToIgnore, excludeRegex, selectorTypes) {
-      // eslint-disable-next-line no-undef
-      return unique.default(elem, { attributesToIgnore, excludeRegex, selectorTypes });
+      if (qxObjectId && nodePath.length) {
+        nodePath.unshift();
+        return this._getQxObjectIdSelector(qxObjectId) + " > " + nodePath
+          .map(node => {
+            let i = Array.prototype.findIndex.call(node.parentElement.children, n => n === node) +1;
+            let tag = node.tagName.toLowerCase();
+            return i === 1 ? tag : `${tag}:nth-child(${i})`;
+          })
+          .join(" > ");
+      }
+      return qxObjectId ? this._getQxObjectIdSelector(qxObjectId) : null;
     },
     
     _getCheckApplicationIdleCode() {
