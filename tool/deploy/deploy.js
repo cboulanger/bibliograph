@@ -1,3 +1,5 @@
+// not used
+
 require("dotenv").config();
 const fs = require("fs");
 const SSH2 = require("ssh2-promise");

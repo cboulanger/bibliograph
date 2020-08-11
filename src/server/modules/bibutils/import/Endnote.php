@@ -67,9 +67,9 @@ class Endnote extends AbstractParser
   public function parse( string $data ) : array
   {
     try {
-      $mods = (new Executable("end2xml", BIBUTILS_PATH))->call("-u", $data);
+      $mods = Module::createCmd("end2xml")->call("-u", $data);
       //Yii::debug($mods, Module::CATEGORY, __METHOD__);
-      $data = (new Executable("xml2bib", BIBUTILS_PATH ))->call("-sd -nl", $mods);
+      $data = Module::createCmd("xml2bib")->call("-sd -nl", $mods);
     } catch (\Exception $e) {
       throw new UserErrorException($e->getMessage());
     }

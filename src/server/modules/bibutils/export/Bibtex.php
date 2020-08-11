@@ -20,6 +20,7 @@
 ************************************************************************ */
 
 namespace app\modules\bibutils\export;
+use app\modules\bibutils\Module;
 use app\modules\converters\export\AbstractExporter;
 use app\modules\converters\export\BibliographBibtex;
 use app\models\Reference;
@@ -82,9 +83,9 @@ class Bibtex extends AbstractExporter
   {
     $bibliographBibtex = (new BibliographBibtex())->export($references);
     try {
-      $mods = (new Executable("bib2xml", BIBUTILS_PATH))->call("-u", $bibliographBibtex);
+      $mods = Module::createCmd("bib2xml")->call("-u", $bibliographBibtex);
       //Yii::debug($mods, Module::CATEGORY, __METHOD__);
-      $bibtex = (new Executable("xml2bib", BIBUTILS_PATH ))->call("-sd -w", $mods);
+      $bibtex = Module::createCmd("bib2xml")->call("-sd -w", $mods);
     } catch (\Exception $e) {
       throw new UserErrorException($e->getMessage());
     }

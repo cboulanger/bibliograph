@@ -14,7 +14,7 @@ BUILD_CLEAN=0
 BUILD_ENV_FILE=test/.env
 BUILD_ENV_FILE_LOADED=0
 DATABASE_EMPTY=0
-DATABASE_IMPORT=""
+SQL_IMPORT=""
 
 #
 # Process command line
@@ -22,7 +22,7 @@ DATABASE_IMPORT=""
 while [[ $1 != "" ]] ; do
     case "$1" in
 
-        "--env-file"|"-e")
+        "--env-file"|"-f")
             BUILD_ENV_FILE="$2"
             [[ -f $BUILD_ENV_FILE ]] || exit_with_error "File $BUILD_ENV_FILE does not exist"
             source $BUILD_ENV_FILE
@@ -58,9 +58,17 @@ while [[ $1 != "" ]] ; do
             DATABASE_EMPTY=1
             ;;
 
-        "--import-database"|"-I")
-            DATABASE_IMPORT="$2"
+        "--import-sql"|"-I")
+            SQL_IMPORT="$2"
             DATABASE_EMPTY=1
+            shift
+            ;;
+
+        "--set-env"|"-e")
+            ENV_VAR_NAME="$2"
+            ENV_VAR_VALUE="$2"
+            export $ENV_VAR_NAME=$ENV_VAR_VALUE
+            shift
             shift
             ;;
 
@@ -97,15 +105,17 @@ where options are:
                                   compiler configuration
   --app-url, -u URL             - The URL of the application as specified in the
                                   compiler configuration
-  --env-file, -e file           - the .env file containing configuration
+  --env-file, -f file           - the .env file containing configuration
                                  (defaults to .env). Must be the first parameter
                                  if others are to override the settings.
   --config-file, -c             - the compiler configuration file to use
                                   (defaults to compile.json)
   --skip-build, -k              - use the build files that already exist
   --empty-database, -E          - start with an empty database
-  --import-database, -I name    - the name of the database to import into the
-                                  empty database (implies -E)
+  --import-sql, -I name         - the path to an .sql file containing data to be
+                                  import into the empty database (implies -E)
+  --set-env                     - set environment variables, overriding values
+                                  loaded from --env-file
   --clean                       - clean the working directory befor building
   --verbose, -v                 - verbose output
   --help, -h                    - show usage help
@@ -131,8 +141,8 @@ if [[ $DATABASE_EMPTY == 1 ]]; then
   source tool/test/setup/create-mysql-user
   source tool/test/setup/reset-data
 fi
-if [[ "$DATABASE_IMPORT" != "" ]]; then
-  tool/dev/mysql-import $DATABASE_IMPORT $DB_DATABASE
+if [[ "$SQL_IMPORT" != "" ]]; then
+  tool/dev/mysql-import $SQL_IMPORT $DB_DATABASE
 fi
 
 # go!

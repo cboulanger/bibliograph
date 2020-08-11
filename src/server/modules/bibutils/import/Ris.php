@@ -67,9 +67,9 @@ class Ris extends AbstractParser
   public function parse( string $data ) : array
   {
     try {
-      $data = (new Executable("ris2xml", BIBUTILS_PATH))->call("-u -nt", $data);
+      $data = Module::createCmd("ris2xml")->call("-u -nt", $data);
       //Yii::debug($data, Module::CATEGORY, __METHOD__);
-      $data = (new Executable("xml2bib", BIBUTILS_PATH ))->call("-sd -nl -nb", $data);
+      $data = Module::createCmd("xml2bib")->call("-sd -nl -nb", $data);
       //Yii::debug($data, Module::CATEGORY, __METHOD__);
     } catch (\Exception $e) {
       throw new UserErrorException($e->getMessage());

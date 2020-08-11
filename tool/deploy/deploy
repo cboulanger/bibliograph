@@ -35,7 +35,7 @@ DEPLOY_EXCLUDE_ARGS="--exclude=*.zip --exclude=._* --exclude=.DS_Store --exclude
 while [[ $1 != "" ]] ; do
     case "$1" in
 
-        "--env-file"|"-e")
+        "--env-file"|"-f")
             BUILD_ENV_FILE="$2"
             [[ -f $BUILD_ENV_FILE ]] || exit_with_error "File $BUILD_ENV_FILE does not exist"
             DEPLOY_ENV_FILE=$BUILD_ENV_FILE
@@ -97,6 +97,14 @@ while [[ $1 != "" ]] ; do
             DEPLOY_CLEAN=1
             ;;
 
+        "--set-env"|"-e")
+            ENV_VAR_NAME="$2"
+            ENV_VAR_VALUE="$2"
+            export $ENV_VAR_NAME=$ENV_VAR_VALUE
+            shift
+            shift
+            ;;
+
         "--verbose"|"-v")
             VERBOSE=1
             ;;
@@ -121,7 +129,7 @@ if [[ $USAGE != 0 ]] ; then
 cat << EOF
 Usage: $0 [options]
 where options are:
-  --env-file, -e file           - the .env file containing configuration
+  --env-file, -f file           - the .env file containing configuration
                                  (defaults to .env). Must be the first parameter
                                  if others are to override the settings.
   --deploy-env-file, -E file    - (optional) A stripped-down .env file which will
@@ -145,6 +153,8 @@ where options are:
   --clean                       - clean the working directory befor building
   --deploy-clean                - clean files and database on the deploy target
                                   before deployment
+  --set-env                     - set environment variables, overriding values
+                                  loaded from --env-file
   --yes, -y                     - answer yes to all prompts
   --verbose, -v                 - verbose output
   --help, -h                    - show usage help
@@ -229,7 +239,7 @@ if [[ $QUIET != 1 ]] ; then
   echo
 fi
 
-if [ "$YES" != 1 ]; then
+if [ "$ANSWER_YES" != 1 ]; then
   read -r -p "Proceed? [y/N] " response
   case "$response" in
     [yY][eE][sS]|[yY])

@@ -21,10 +21,5 @@
     "cboulanger/qx-contrib-TokenField": "^1.2.1",
     "qooxdoo/qxl.dialog": "^3.0.2"
   },
-  "externalResources": {
-    "script": [
-      "js/unique-selector.js"
-    ]
-  },
   "$schema": "https://qooxdoo.org/schema/Manifest-1-0-0.json"
 }

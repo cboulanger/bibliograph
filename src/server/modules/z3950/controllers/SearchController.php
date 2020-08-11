@@ -282,7 +282,7 @@ class SearchController extends \yii\web\Controller
     //Yii::debug(ml("MODS", $mods), Module::CATEGORY);
 
     // convert to bibtex and fix some issues
-    $xml2bib = new Executable( "xml2bib", BIBUTILS_PATH );
+    $xml2bib = \app\modules\bibutils\Module::createCmd("xml2bib");
     $bibtex = $xml2bib->call("-nl -fc -o unicode", $mods);
     $bibtex = str_replace("\nand ", "; ", $bibtex);
     //Yii::debug(ml("BibTeX", $bibtex), Module::CATEGORY);

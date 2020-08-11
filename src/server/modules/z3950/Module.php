@@ -14,10 +14,6 @@ use Exception;
 use lib\exceptions\RecordExistsException;
 use yii\web\UserEvent;
 
-if (!defined('BIBUTILS_PATH')) {
-  define("BIBUTILS_PATH",'');
-}
-
 /**
  * z3950 module definition class
  * @property Z3950Datasource[] $datasources
@@ -80,16 +76,20 @@ class Module extends \lib\Module
       $this->errors[] = "Missing XSL extension. ";
     }
 
-    $xml2bib = new Executable( "xml2bib",BIBUTILS_PATH);
-    try{
-      $xml2bib->call("--version");
-      if ( !$xml2bib->getStdErr() || !str_contains( $xml2bib->getStdErr(), "bibutils")) {
-        Yii::warning("Unexpected output of xml2bib --version:" . $xml2bib->getStdErr());
+    if (!class_exists('\\app\\modules\\bibutils\\Module')) {
+      $this->errors[] = "You need to install & activate the bibutils module.";
+    } else {
+      $xml2bib = \app\modules\bibutils\Module::createCmd("xml2bib");
+      try{
+        $xml2bib->call("--version");
+        if ( !$xml2bib->getStdErr() || !str_contains( $xml2bib->getStdErr(), "bibutils")) {
+          Yii::warning("Unexpected output of xml2bib --version:" . $xml2bib->getStdErr());
+          $this->errors[] = "Could not call bibutils.";
+        }
+      } catch ( Exception $e){
+        Yii::warning("Error calling xml2bib --version:" . $e->getMessage());
         $this->errors[] = "Could not call bibutils.";
       }
-    } catch ( Exception $e){
-      Yii::warning("Error calling xml2bib --version:" . $e->getMessage());
-      $this->errors[] = "Could not call bibutils.";
     }
 
     if ( count ( $this->errors )) {
