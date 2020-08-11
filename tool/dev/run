@@ -5,23 +5,135 @@
 set -o errexit
 source tool/lib/functions.sh
 
-source test/.env
-source tool/env/check
-source tool/env/envvars-export
-source tool/test/setup/check-mysql
+# Preset default command line args
+VERBOSE=0
+USAGE=0
+APP_NAME=""
+APP_URL=""
+BUILD_CLEAN=0
+BUILD_ENV_FILE=test/.env
+BUILD_ENV_FILE_LOADED=0
+DATABASE_EMPTY=0
+DATABASE_IMPORT=""
 
-if [ "$1" != "" ]; then
-  source tool/test/setup/create-mysql-user
-  source tool/test/setup/reset-data
-  if [ "$1" == "clean" ]; then
-    echo ">>> Starting with empty database"
-  else
-    tool/dev/mysql-import $1 $DB_DATABASE
-  fi
+#
+# Process command line
+#
+while [[ $1 != "" ]] ; do
+    case "$1" in
+
+        "--env-file"|"-e")
+            BUILD_ENV_FILE="$2"
+            [[ -f $BUILD_ENV_FILE ]] || exit_with_error "File $BUILD_ENV_FILE does not exist"
+            source $BUILD_ENV_FILE
+            BUILD_ENV_FILE_LOADED=1
+            shift
+            ;;
+
+        "--app-name"|"-a")
+            APP_NAME="$2"
+            shift
+            ;;
+
+        "--app-url"|"-u")
+            APP_URL="$2"
+            shift
+            ;;
+
+        "--config-file"|"-c")
+            BUILD_CONFIG_FILE="$2"
+            shift
+            ;;
+
+        "--build-target"|"-t")
+            BUILD_TARGET="$2"
+            shift
+            ;;
+
+        "--skip-build"|"-k")
+            SKIP_BUILD=1
+            ;;
+
+        "--empty-database"|"-E")
+            DATABASE_EMPTY=1
+            ;;
+
+        "--import-database"|"-I")
+            DATABASE_IMPORT="$2"
+            DATABASE_EMPTY=1
+            shift
+            ;;
+
+        "--clean")
+            BUILD_CLEAN=1
+            ;;
+
+        "--verbose"|"-v")
+            VERBOSE=1
+            ;;
+
+        "--help"|"-h")
+            USAGE=1
+            ;;
+    esac
+    shift
+done
+
+# load defaults from .env file if not already loaded
+if [[ $BUILD_ENV_FILE_LOADED == 0 ]]; then
+  source $BUILD_ENV_FILE
 fi
 
+# check requirements
+source tool/env/check
+[[ "$APP_NAME" == "" ]] && log_error "Missing application name" && USAGE=1
+
+# help
+if [[ $USAGE != 0 ]] ; then
+cat << EOF
+Usage: $0 [options]
+where options are:
+  --app-name, -a name           - The name of the application as specified in the
+                                  compiler configuration
+  --app-url, -u URL             - The URL of the application as specified in the
+                                  compiler configuration
+  --env-file, -e file           - the .env file containing configuration
+                                 (defaults to .env). Must be the first parameter
+                                 if others are to override the settings.
+  --config-file, -c             - the compiler configuration file to use
+                                  (defaults to compile.json)
+  --skip-build, -k              - use the build files that already exist
+  --empty-database, -E          - start with an empty database
+  --import-database, -I name    - the name of the database to import into the
+                                  empty database (implies -E)
+  --clean                       - clean the working directory befor building
+  --verbose, -v                 - verbose output
+  --help, -h                    - show usage help
+
+EOF
+  exit 0
+fi
+
+# export all needed environment variables
+source tool/env/envvars-export
 export APP_URL
 export APP_NAME
+export BUILD_TARGET
 export BUILD_CONFIG_FILE
+export BUILD_CLEAN
+export VERBOSE
+export SKIP_BUILD
 
+# prepare database
+source tool/test/setup/check-mysql
+if [[ $DATABASE_EMPTY == 1 ]]; then
+  echo ">>> Starting with empty database"
+  source tool/test/setup/create-mysql-user
+  source tool/test/setup/reset-data
+fi
+if [[ "$DATABASE_IMPORT" != "" ]]; then
+  tool/dev/mysql-import $DATABASE_IMPORT $DB_DATABASE
+fi
+
+# go!
 tool/dev/start-app
