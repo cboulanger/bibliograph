@@ -9,10 +9,10 @@ shopt -s dotglob
 
 source tool/lib/functions.sh
 
-# Preset default command line args
-ANSWER_YES=${ANSWER_YES:-0}
+# Configuration
 QUIET=0
-USAGE=0
+ANSWER_YES=${ANSWER_YES:-0}
+USAGE=${USAGE:-0}
 
 BUILD_ENV_FILE=${BUILD_ENV_FILE:-""}
 BUILD_SKIP=${BUILD_SKIP:-0}
@@ -23,14 +23,16 @@ BUILD_CLEAN=0
 BUILD_VERBOSE=${BUILD_VERBOSE:-0}
 QX_COMPILE_ARGS=""
 
-DEPLOY_CLEAN=0
+
 DEPLOY_ENV_FILE=""
 DEPLOY_HOST=""
 DEPLOY_DIR=""
 DEPLOY_CONFIG_DIR=config
 DEPLOY_DB_NAME=""
 DEPLOY_IMPORT_DB_NAMES=""
+DEPLOY_EMPTY_DATABASE=0
 DEPLOY_EXCLUDE_ARGS="--exclude=*.zip --exclude=._* --exclude=.DS_Store --exclude=.git*"
+DEPLOY_CLEAN=0
 
 # load .env file if defined as an environment variable (so that this script can be sourced)
 if [[ "$BUILD_ENV_FILE" != "" ]]; then
@@ -39,9 +41,7 @@ if [[ "$BUILD_ENV_FILE" != "" ]]; then
   source "$BUILD_ENV_FILE"
 fi
 
-#
 # Process command line
-#
 while [[ $1 != "" ]] ; do
     case "$1" in
 
@@ -53,7 +53,7 @@ while [[ $1 != "" ]] ; do
             shift
             ;;
 
-        "--deploy-env-file"|"-E")
+        "--deploy-env-file"|"-F")
             [[ "$BUILD_ENV_FILE" == "" ]] && exit_with_error "You have to set --env-file first"
             DEPLOY_ENV_FILE="$2"
             [[ -f $DEPLOY_ENV_FILE ]] || exit_with_error "File $DEPLOY_ENV_FILE does not exist"
@@ -96,7 +96,12 @@ while [[ $1 != "" ]] ; do
 
         "--import-database"|"-I")
             DEPLOY_IMPORT_DB_NAMES="$2"
+            DEPLOY_EMPTY_DATABASE=1
             shift
+            ;;
+
+        "--empty-database"|"-E")
+            DEPLOY_EMPTY_DATABASE=1
             ;;
 
         "--clean")
@@ -139,13 +144,12 @@ if [[ $USAGE != 0 ]] ; then
 cat << EOF
 Usage: $0 [options]
 where options are:
+${HELP_ADDITIONAL_TEXT}
   --env-file, -f file           - the .env file containing configuration
                                  (defaults to .env). Must be the first parameter
                                  if others are to override the settings.
-  --deploy-env-file, -E file    - (optional) A stripped-down .env file which will
-                                  be copied to the deploy target, in case the
-                                  --env-file contains information that should not
-                                  be published.
+  --deploy-env-file, -F file    - (optional) A stripped-down .env file which will
+                                  be copied to the deploy target
   --build-config-file, -c       - the compiler configuration file to use
                                   (defaults to compile.json)
   --skip-build, -k              - use the build files that already exist
@@ -158,8 +162,10 @@ where options are:
                                   'config', overrides DEPLOY_CONFIG_DIR
   --database, -N name           - the name of the database to use on the host,
                                   overrides DB_DATABASE
+  --empty-database, -E          - empty the database
   --import-database, -I name    - the name of the database to import tables from
                                   (only remotely), overrides DEPLOY_IMPORT_DB_NAMES
+                                  implies -E
   --clean                       - clean the working directory befor building
   --deploy-clean                - clean files and database on the deploy target
                                   before deployment
@@ -323,8 +329,8 @@ if [ "$DEPLOY_HOST" == "local" ]; then
   chmod -R 0777 $DEPLOY_DIR/server/runtime
 
   # database
-  if [ $DEPLOY_CLEAN == 1 ]; then
-    echo ">>> Resetting database ..."
+  if [ $DEPLOY_EMPTY_DATABASE == 1 ]; then
+    echo ">>> Deleting database ..."
     mysql --user=$DB_USER --password=$DB_PASSWORD -e "drop database if exists $DB_DATABASE;"
   fi
   echo ">>> Creating database if it does not already exist ..."
@@ -362,13 +368,13 @@ else
   # database
   echo ">>> Setting up mysql passwordless access ..."
   setup_mysql_credentials
-  if [ $DEPLOY_CLEAN == 1 ]; then
-    echo ">>> Resetting database ..."
+  if [ $DEPLOY_EMPTY_DATABASE == 1 ]; then
+    echo ">>> Deleting database ..."
     remote_execute "mysql --login-path=deploy_alias -e 'drop database if exists $DB_DATABASE;'"
   fi
   echo ">>> Creating database if it does not already exist ..."
   remote_execute "mysql --login-path=deploy_alias -e 'create database if not exists $DB_DATABASE;'"
-  if [[ $DEPLOY_CLEAN == 1 ]] && [[ "$DEPLOY_IMPORT_DB_NAMES" != "" ]]; then
+  if [[ "$DEPLOY_IMPORT_DB_NAMES" != "" ]]; then
     echo ">>> Importing database(s)..."
     remote_execute "$(import_databases_expr)"
   fi

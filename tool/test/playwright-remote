@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+
+# this has the same CLI options as tool/deploy/deploy
+set -e
+
+USAGE=0;
+
+# Process command line
+while [[ $1 != "" ]] ; do
+    case "$1" in
+
+        "--skip-deploy"|"-K")
+            DEPLOY_SKIP=1
+            ;;
+
+        "--test-file-pattern"|"-t")
+            TEST_FILE_PATTERN="$2"
+            shift
+            ;;
+
+        "--help"|"-h")
+            USAGE=1
+            ;;
+    esac
+    shift
+done
+
+HELP_ADDITIONAL_TEXT=$(cat << EOF
+  --test-file-pattern, -t       - pattern of test files, can contain * wildcard
+                                  (required)
+  --skip-deploy, -K             - skip deploy step, start tests right away
+EOF
+)
+
+if [[ $DEPLOY_SKIP == 1 ]] && [[ $USAGE == 0 ]]; then
+  [[ -f $BUILD_ENV_FILE ]] || exit_with_error "File $BUILD_ENV_FILE does not exist"
+  source $BUILD_ENV_FILE
+else
+  ANSWER_YES=1
+  source tool/deploy/deploy
+fi
+
+[[ "$TEST_FILE_PATTERN" == "" ]] && exit_with_error "You need to set the TEST_FILE_PATTERN environment variable or pass it via --run-tests"
+
+export APP_URL
+export BROWSER_TYPE="chromium"
+export NODE_PATH=${NODE_PATH:+$NODE_PATH:}$PWD:$PWD/node_modules
+tape $TEST_FILE_PATTERN
