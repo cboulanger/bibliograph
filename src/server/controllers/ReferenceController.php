@@ -963,7 +963,7 @@ class ReferenceController extends AppController
         '&format=' . $format->namedId .
         '&datasource=' . $datasource .
         '&selector=' . $id;
-      $links[] = "<a href=\"$url\" target=\"_blank\" data-id=\"{$format->name}\">{$format->name}</a>";
+      $links[] = "<a href=\"$url\" target=\"_blank\" data-id=\"{$format->namedId}\">{$format->name}</a>";
     }
     $html .= "<p>" . Yii::t('app','Export citation as ') . implode(" | ", $links ) . "</p>";
 

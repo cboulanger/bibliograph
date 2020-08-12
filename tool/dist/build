@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 # Usage tool/dist/build path/to/.env
+# Script can also be sourced
 
 set -e
 source tool/lib/functions.sh
@@ -8,23 +9,33 @@ source tool/lib/functions.sh
 # dependencies: apt-get install jq (linux) / brew install jq (MacOS with homebrew)
 # command -v jq >/dev/null 2>&1 || { echo >&2 "You need to install the jq command"; exit 1; }
 
-# get environment variables that override the defaults
-BUILD_ENV_FILE=${1:-$(pwd)/config/.env}
-source $BUILD_ENV_FILE
+# get environment variables defaults
+if [[ "$1" != "" ]]; then
+  BUILD_ENV_FILE=${1}
+  [[ -f "$BUILD_ENV_FILE" ]] || exit_with_error "File $BUILD_ENV_FILE does not exist"
+  source $BUILD_ENV_FILE
+fi
 
-# configuration
+# configurable variables
 QX_CMD=${QX_CMD:-"npx qx"}
 APP_ENV_FILE=${APP_ENV_FILE:-$(pwd)/dist/.env}
 APP_CONF_FILE=${APP_CONF_FILE:-$(pwd)/dist/app.conf.toml}
 BUILD_FILE=${BUILD_FILE:-compile-dist.json}
 BUILD_TARGET=${BUILD_TARGET:-build}
+BUILD_VERBOSE=${BUILD_VERBOSE:-0}
+BUILD_CLEAN=${BUILD_CLEAN:-0}
 DIST_DIR=${DIST_DIR:-$(pwd)/dist}
-DIST_SERVER_DIR=$DIST_DIR/server
 DIST_CONF_DIR=${DIST_CONF_DIR:-$DIST_DIR/config}
 DEPLOY_CONFIG_DIR=${DEPLOY_CONFIG_DIR:-"./config"}
 
-# other variables
+# checks
+[[ -f "$APP_ENV_FILE" ]] || exit_with_error "APP_ENV_FILE: File '$APP_ENV_FILE' does not exist"
+[[ -f "$APP_CONF_FILE" ]] || exit_with_error "APP_CONF_FILE: File '$APP_CONF_FILE' does not exist"
+[[ -f "$BUILD_FILE" ]] || exit_with_error "BUILD_FILE: File '$BUILD_FILE' does not exist"
+
+# other internal variables
 TOP_DIR=$(pwd)
+DIST_SERVER_DIR=$DIST_DIR/server
 SERVER_SRC_DIR=$TOP_DIR/src/server
 VERSION=$(node -p -e "require('$TOP_DIR/package.json').version")
 
@@ -42,12 +53,14 @@ fi
 echo
 echo "  Building deployable/distributable version of Bibliograph"
 echo
-echo "   - Qooxdoo build file:     $BUILD_FILE"
-echo "   - Qooxdoo build target:   $BUILD_TARGET"
-echo "   - Application .env file:  $APP_ENV_FILE"
-echo "   - Appl. config file:      $APP_CONF_FILE"
-echo "   - Deployment config dir:  $DEPLOY_CONFIG_DIR"
-#echo "  Compiler version $(qx --version)"
+if [[ $BUILD_VERBOSE == 1 ]]; then
+  echo "   - Qooxdoo build file:     $BUILD_FILE"
+  echo "   - Qooxdoo build target:   $BUILD_TARGET"
+  echo "   - Application .env file:  $APP_ENV_FILE"
+  echo "   - Appl. config file:      $APP_CONF_FILE"
+  echo "   - Deployment config dir:  $DEPLOY_CONFIG_DIR"
+  echo "   - Compiler version:       $($QX_CMD --version)"
+fi
 echo
 
 echo ">>> Cleaning up dist folder..."
@@ -60,7 +73,7 @@ mv $BUILD_FILE.tmp $BUILD_FILE
 
 # Create deploy build and copy into dist
 QX_COMPILE_ARGS=${QX_COMPILE_ARGS:-"--config-file=$BUILD_FILE --target=$BUILD_TARGET --clean"}
-[[ $VERBOSE == 1 ]] && echo "$QX_CMD deploy $QX_COMPILE_ARGS"
+[[ $BUILD_VERBOSE == 1 ]] && echo "$QX_CMD deploy $QX_COMPILE_ARGS"
 $QX_CMD deploy $QX_COMPILE_ARGS
 cp -a compiled/deploy/* $DIST_DIR
 
@@ -107,11 +120,17 @@ EOF
 echo " - Adding dependencies ..."
 # install composer dependencies
 cp -a $SERVER_SRC_DIR/composer.* $DIST_SERVER_DIR/
-if [[ VERBOSE == 1 ]]; then
-  tool/dev/php src/lib/composer.phar install --no-dev --working-dir=dist/server  &> /dev/null
-else
-  tool/dev/php src/lib/composer.phar install --no-dev --working-dir=dist/server
+COMPOSER_ARGS="--no-dev --working-dir=dist/server --no-plugins"
+if [[ $BUILD_CLEAN != 0 ]]; then
+  tool/dev/php src/lib/composer.phar clearcache
 fi
+if [[ $BUILD_VERBOSE != 0 ]]; then
+  COMPOSER_ARGS="$COMPOSER_ARGS -v"
+  tool/dev/php src/lib/composer.phar install $COMPOSER_ARGS
+else
+  tool/dev/php src/lib/composer.phar install $COMPOSER_ARGS &> /dev/null
+fi
+
 if ! [ -d $DIST_SERVER_DIR/vendor ] || ! [ -f $DIST_SERVER_DIR/vendor/autoload.php ]; then
  echo " !!! Composer install failed!"
  exit 1
@@ -127,4 +146,3 @@ cd $DIST_DIR
 zip -q -r $ZIP_NAME *
 mv $ZIP_NAME $TOP_DIR/
 echo "Done."
-exit 0

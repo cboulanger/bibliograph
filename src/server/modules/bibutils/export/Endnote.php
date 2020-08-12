@@ -23,8 +23,8 @@ namespace app\modules\bibutils\export;
 use app\modules\converters\export\AbstractExporter;
 use app\modules\converters\export\BibliographBibtex;
 use app\models\Reference;
+use app\modules\bibutils\Module;
 use lib\exceptions\UserErrorException;
-use lib\util\Executable;
 
 /**
  * Exports in a format that can be imported by Endnote

@@ -25,9 +25,7 @@ use app\modules\bibutils\Module;
 use app\modules\converters\import\AbstractParser;
 use app\modules\converters\import\BibtexUtf8;
 use lib\exceptions\UserErrorException;
-use lib\util\Executable;
-use lib\bibtex\BibtexParser;
-use Yii;
+
 
 /**
  * Imports from Endnote tagged format

@@ -92,5 +92,8 @@
       "dialog": true,
       "bibliograph": true
     }
+  },
+  "dependencies": {
+    "playwright": "^1.3.0"
   }
 }

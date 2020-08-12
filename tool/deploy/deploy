@@ -10,14 +10,19 @@ shopt -s dotglob
 source tool/lib/functions.sh
 
 # Preset default command line args
-ANSWER_YES=0
-CLEAN=0
-VERBOSE=0
+ANSWER_YES=${ANSWER_YES:-0}
 QUIET=0
 USAGE=0
-SKIP_BUILD=0
-DIST_DIR=$(pwd)/dist
-BUILD_ENV_FILE=""
+
+BUILD_ENV_FILE=${BUILD_ENV_FILE:-""}
+BUILD_SKIP=${BUILD_SKIP:-0}
+BUILD_CONFIG_FILE="compile.json"
+BUILD_TARGET="build"
+BUILD_DIST_DIR=$(pwd)/dist
+BUILD_CLEAN=0
+BUILD_VERBOSE=${BUILD_VERBOSE:-0}
+QX_COMPILE_ARGS=""
+
 DEPLOY_CLEAN=0
 DEPLOY_ENV_FILE=""
 DEPLOY_HOST=""
@@ -25,10 +30,15 @@ DEPLOY_DIR=""
 DEPLOY_CONFIG_DIR=config
 DEPLOY_DB_NAME=""
 DEPLOY_IMPORT_DB_NAMES=""
-BUILD_CONFIG_FILE="compile.json"
-BUILD_TARGET="build"
-QX_COMPILE_ARGS=""
 DEPLOY_EXCLUDE_ARGS="--exclude=*.zip --exclude=._* --exclude=.DS_Store --exclude=.git*"
+
+# load .env file if defined as an environment variable (so that this script can be sourced)
+if [[ "$BUILD_ENV_FILE" != "" ]]; then
+  [[ -f $BUILD_ENV_FILE ]] || exit_with_error "File $BUILD_ENV_FILE does not exist"
+  DEPLOY_ENV_FILE=$BUILD_ENV_FILE
+  source "$BUILD_ENV_FILE"
+fi
+
 #
 # Process command line
 #
@@ -61,7 +71,7 @@ while [[ $1 != "" ]] ; do
             ;;
 
         "--skip-build"|"-k")
-            SKIP_BUILD=1
+            BUILD_SKIP=1
             ;;
 
         "--deploy-host"|"-H")
@@ -90,7 +100,7 @@ while [[ $1 != "" ]] ; do
             ;;
 
         "--clean")
-            CLEAN=1
+            BUILD_CLEAN=1
             ;;
 
         "--deploy-clean")
@@ -106,7 +116,7 @@ while [[ $1 != "" ]] ; do
             ;;
 
         "--verbose"|"-v")
-            VERBOSE=1
+            BUILD_VERBOSE=1
             ;;
 
         "--quiet"|"-q")
@@ -183,10 +193,10 @@ fi
 if [[ "$BUILD_TARGET" != "" ]]; then
   QX_COMPILE_ARGS="$QX_COMPILE_ARGS --target=$BUILD_TARGET"
 fi
-if [[ $CLEAN != 0 ]] ; then
+if [[ $BUILD_CLEAN != 0 ]] ; then
     QX_COMPILE_ARGS="$QX_COMPILE_ARGS --clean"
 fi
-if [[ $VERBOSE != 0 ]] ; then
+if [[ $BUILD_VERBOSE != 0 ]] ; then
     QX_COMPILE_ARGS="$QX_COMPILE_ARGS --verbose"
 elif [[ $QUIET != 0 ]] ; then
     QX_COMPILE_ARGS="$QX_COMPILE_ARGS --quiet"
@@ -208,13 +218,13 @@ if [[ "$DEPLOY_CONFIG_DIR" != /* ]]; then
 fi
 
 # verbose display of configuration
-if [[ $VERBOSE != 0 ]] ; then
+if [[ $BUILD_VERBOSE != 0 ]] ; then
     echo "DEPLOY_CONFIG_DIR=$DEPLOY_CONFIG_DIR"
-    echo "SKIP_BUILD=$SKIP_BUILD"
+    echo "BUILD_SKIP=$BUILD_SKIP"
     echo "ANSWER_YES=$ANSWER_YES"
     echo "BUILD_DEBUG_TARGET=$BUILD_DEBUG_TARGET"
-    echo "CLEAN=$CLEAN"
-    echo "VERBOSE=$VERBOSE"
+    echo "BUILD_CLEAN=$BUILD_CLEAN"
+    echo "BUILD_VERBOSE=$BUILD_VERBOSE"
     echo "QUIET=$QUIET"
     echo "ANSWER_YES=$ANSWER_YES"
     echo "QX_COMPILE_ARGS=$QX_COMPILE_ARGS"
@@ -227,13 +237,13 @@ if [[ $QUIET != 1 ]] ; then
   echo "   Deploy environment file:     $DEPLOY_ENV_FILE"
   echo "   Compiler configuration file: $BUILD_CONFIG_FILE"
   echo "   Build target:                $BUILD_TARGET"
-  echo "   Build directory:             $DIST_DIR"
-  echo "   Skip build step:             $([[ $SKIP_BUILD == 1 ]] && echo 'Yes' || echo 'No')"
+  echo "   Build directory:             $BUILD_DIST_DIR"
+  echo "   Skip build step:             $([[ $BUILD_SKIP == 1 ]] && echo 'Yes' || echo 'No')"
   echo "   Deployment host:             $DEPLOY_HOST"
   echo "   Path on host:                $DEPLOY_DIR"
   echo "   Config directory on host:    $DEPLOY_CONFIG_DIR"
   echo "   Database used:               $DB_DATABASE"
-  echo "   Clean before build:          $([[ $CLEAN == 1 ]] && echo 'Yes' || echo 'No')"
+  echo "   Clean before build:          $([[ $BUILD_CLEAN == 1 ]] && echo 'Yes' || echo 'No')"
   echo "   Clean target/database:       $([[ $DEPLOY_CLEAN == 1 ]] && echo 'Yes' || echo 'No')"
   echo "   Import database(s) if clean: $DEPLOY_IMPORT_DB_NAMES"
   echo
@@ -253,16 +263,14 @@ if [ "$ANSWER_YES" != 1 ]; then
 fi
 
 # Build
-export QX_COMPILE_ARGS
-export VERBOSE
-if [[ $SKIP_BUILD == 0 ]]; then
- tool/dist/build $BUILD_ENV_FILE
+if [[ $BUILD_SKIP == 0 ]]; then
+  source tool/dist/build
 fi
 
 # Deploy!
 
 function remote_execute(){
-  [[ $VERBOSE == 1 ]] && echo $1
+  [[ $BUILD_VERBOSE == 1 ]] && echo $1
   echo "$1" | ssh -q -T $DEPLOY_HOST bash
 }
 
@@ -311,7 +319,7 @@ if [ "$DEPLOY_HOST" == "local" ]; then
     sudo rm -rf $DEPLOY_DIR/*
   fi
   echo ">>> Copying files to $DEPLOY_HOST:$DEPLOY_DIR ..."
-  cp -rf $DIST_DIR/* $DEPLOY_DIR
+  cp -rf $BUILD_DIST_DIR/* $DEPLOY_DIR
   chmod -R 0777 $DEPLOY_DIR/server/runtime
 
   # database
@@ -336,10 +344,10 @@ else
   fi
   if remote_execute "command -v rsync"; then
     echo ">>> Syncing files with $DEPLOY_HOST:$DEPLOY_DIR ..."
-    rsync -$DEPLOY_EXCLUDE_ARGS -azpr $DIST_DIR/* $DEPLOY_HOST:$DEPLOY_DIR
+    rsync -$DEPLOY_EXCLUDE_ARGS -azpr $BUILD_DIST_DIR/* $DEPLOY_HOST:$DEPLOY_DIR
   else
     echo ">>> Copying files to $DEPLOY_HOST:$DEPLOY_DIR ..."
-    cd dist
+    cd $BUILD_DIST_DIR
     tar $DEPLOY_EXCLUDE_ARGS -czf - * | ssh -C $DEPLOY_HOST "cd $DEPLOY_DIR; tar --overwrite -xzf -"
     cd ..
   fi

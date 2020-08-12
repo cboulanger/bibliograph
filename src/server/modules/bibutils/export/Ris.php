@@ -25,7 +25,6 @@ use app\modules\converters\export\AbstractExporter;
 use app\modules\converters\export\BibliographBibtex;
 use app\models\Reference;
 use lib\exceptions\UserErrorException;
-use lib\util\Executable;
 
 /**
  * Exports RIS-formatted data
