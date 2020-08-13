@@ -105,7 +105,10 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
 
   events: {
     /** Fired when something happens */
-    changeSituation: "qx.event.type.Data"
+    changeSituation: "qx.event.type.Data",
+    
+    /** Fired when an error occurs */
+    error: "qx.event.type.Data"
   },
 
   members: {
@@ -334,7 +337,12 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
         }
       }
       let message = this.tr("Error calling remote method '%1': %2.", method, this.getErrorMessage());
+      // inform message subscribers
       qx.event.message.Bus.dispatchByName("jsonrpc.error", error);
+      // inform event listeners
+      this.fireDataEvent("error", error);
+      // log to console for UI test runners
+      this.error("JsonRpcError: " + message);
       switch (this.getErrorBehavior()) {
         case "debug": {
           console.error(message.toString());

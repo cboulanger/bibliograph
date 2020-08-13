@@ -99,25 +99,15 @@ class Application {
         console.error(`Error on page ${this.page.url()}: ${e.message}`);
         process.exit(1);
       });
-      this.page.on("response", async response => {
-        if (response.status >= 400) {
-          console.error(response.statusText());
-          try {
-            console.error(await response.json());
-          } catch (e) {
-            try {
-              console.error(await response.body());
-            } catch (e) {
-              console.error(await response.text());
-            }
-          }
-          process.exit(1);
+      this.page.on("response", response => {
+        if (response.status() >= 400) {
+          this.error(response.statusText());
         }
       });
       this.page.on("console", consoleMsg => {
-        if (consoleMsg.text().includes("AuthenticationError")) {
-          console.error(consoleMsg.getText());
-          process.exit(1);
+        let text = consoleMsg.text();
+        if (text.match(/(AuthenticationError|JsonRpcError)/)) {
+          this.error(text);
         }
       });
       // open URL and optionally wait for a console message
@@ -126,7 +116,6 @@ class Application {
         await this.page.goto(this.url);
       } catch (e) {
         console.error(`Error when trying to open page: ${e.message}`);
-        process.exit(1);
       }
       if (readyConsoleMessage) {
         this.verbose && console.log(`# - Waiting for console message "${readyConsoleMessage}"...`);
@@ -142,9 +131,40 @@ class Application {
    */
   set logConsole (val) {
     if (!this.___logConsoleMessages) {
-      this.___logConsoleMessages = consoleMsg => console.log(consoleMsg.text());
+      this.___logConsoleMessages = consoleMsg => console.log("# Browser Console: " + consoleMsg.text());
     }
     val ? this.page.on("console", this.___logConsoleMessages) : this.page.off("console", this.___logConsoleMessages);
+  }
+  
+  /**
+   * If verbose mode is turned on, log a tap-conformant message
+   * to the console, i.e output the message as a TAP comment
+   *
+   * @param {String} message
+   */
+  log(message) {
+    this.verbose && console.log(`# - ${message}`);
+  }
+  
+  /**
+   *Log a tap-conformant message to the console,
+   *i.e output the message as a TAP comment
+   *
+   * @param {String} message
+   */
+  // eslint-disable-next-line class-methods-use-this
+  info(message) {
+    console.info(`# - ${message}`);
+  }
+  
+  /**
+   * Log a tap-conformant error message to the console and exits the process
+   * @param {String} message
+   */
+  // eslint-disable-next-line class-methods-use-this
+  error(message) {
+    console.error(`not ok - ${message}`);
+    process.exit(1);
   }
   
   /**
@@ -154,7 +174,7 @@ class Application {
    * @return {Promise<*>}
    */
   async click (qxId, options = {}) {
-    this.verbose && console.log(`# - Clicking on node with qx object id '${qxId}'`);
+    this.log(`Click on node with qx object id '${qxId}'`);
     let selector = this.getSelector(qxId);
     await this.page.click(selector, options);
   }
@@ -164,18 +184,14 @@ class Application {
    * Fire an event on an object identified by its qx id
    * @param {String} qxId
    * @param {String} eventType the event name
-   * @param {Boolean?} canBubble (Optional) Whether the event bubbles. Default is false.
    * @return {Promise<void>}
    */
-  async fireEvent (qxId, eventType, canBubble=false) {
-    this.verbose && console.log(`# - Firing ${canBubble? "":"non-"}bubbling '${eventType}' event qx object id '${qxId}'.`);
-    await this.page.evaluate((qxId, eventType, canBubble) => {
-      let obj = qx.core.Id.getQxObject(qxId);
-      let event = new qx.event.type.Event();
-      event.setType(eventType);
-      event.init(canBubble);
-      obj.dispatchEvent(event);
-    }, arguments);
+  async fireEvent (qxId, eventType) {
+    this.log(`Fire '${eventType}' event on qx object id '${qxId}'.`);
+    await this.waitForWidget(qxId);
+    await this.page.evaluate(([qxId, eventType]) => {
+      qx.core.Id.getQxObject(qxId).fireEvent(eventType);
+    }, [qxId, eventType]);
   }
   
   /**
@@ -186,14 +202,11 @@ class Application {
    * @return {Promise<void>}
    */
   async fireDataEvent (qxId, eventType, data) {
-    this.verbose && console.log(`# - Firing '${eventType}' data event on qx object id '${qxId}' with data ${JSON.stringify(data)}.`);
-    await this.page.evaluate((qxId, eventType, data) => {
-      let obj = qx.core.Id.getQxObject(qxId);
-      let event = new qx.event.type.Data();
-      event.setType(eventType);
-      event.init(data);
-      obj.dispatchEvent(event);
-    }, arguments);
+    this.log(`Fire '${eventType}' data event on qx object id '${qxId}' with data ${JSON.stringify(data)}.`);
+    await this.waitForWidget(qxId);
+    await this.page.evaluate(([qxId, eventType, data]) => {
+      qx.core.Id.getQxObject(qxId).fireDataEvent(eventType, data);
+    }, [qxId, eventType, data]);
   }
   
   /**
@@ -202,7 +215,7 @@ class Application {
    * @return {Promise<*>}
    */
   async fill (qxId, text) {
-    this.verbose && console.log(`# - Typing '${text}' into node with qx object id '${qxId}'`);
+    this.log(`Type '${text}' into node with qx object id '${qxId}'`);
     let selector = this.getSelector(qxId);
     await this.page.fill(selector, text);
   }
@@ -215,18 +228,17 @@ class Application {
    * the value is to be entered into the form.
    * @param {Number} timeout Timeout in microseconds that should be waited between
    * filling the form fields. Default is 0ms.
-   * @param {Function?} fn Optional async function that is run after filling out a form field;
-   * the function is called with the CSS selector of the form field.
+   * @param {Function?} fn Optional *async* function that is run after filling out a form field;
+   * the function is called with the qx id of the form field.
    * @return {Promise<*>}
    */
   async populate (qxId, data, timeout = 0, fn) {
-    this.verbose && console.log(`# - Populating form '${qxId}':`);
+    this.log(`Populate form '${qxId}':`);
     for (let [key, value] of Object.entries(data)) {
-      console.log(`#   ${key}: "${value}"`);
-      let selector = this.getSelector(qxId + "/" + key);
-      await this.page.fill(selector, value);
+      let fieldQxId = qxId + "/" + key;
+      await this.fill(fieldQxId, value);
       if (typeof fn == "function") {
-        await fn(selector);
+        await fn(fieldQxId);
       }
     }
   }
@@ -237,7 +249,7 @@ class Application {
    * @return {Promise<*>}
    */
   async wait (timeout) {
-    this.verbose && console.log(`# - Waiting for '${timeout} milliseconds'`);
+    this.log(`Wait for '${timeout} milliseconds'`);
     await this.page.waitForTimeout(timeout);
   }
   
@@ -248,9 +260,9 @@ class Application {
    * @return {Promise<*>}
    */
   async waitForWidget (qxId, options = {}) {
-    this.verbose && console.log(`# - Waiting for node with qx object id '${qxId}'`);
+    this.log(`Wait for node with qx object id '${qxId}'`);
     let selector = this.getSelector(qxId);
-    return this.page.waitForSelector(selector, options);
+    await this.page.waitForSelector(selector, options);
   }
   
   /**
@@ -262,10 +274,10 @@ class Application {
    * @return {Promise<*>}
    */
   async waitForText (qxId, text, options = {}) {
-    this.verbose && console.log(`# - Waiting for '${text}' to appear in node with qx object id '${qxId}'`);
+    this.log(`Wait for '${text}' to appear in node with qx object id '${qxId}'`);
     text = text.replace(/"/g, "&apos;").replace(/"/g, "&quot;");
     let selector = this.getSelector(qxId) + ` >> text="${text}"`;
-    return this.page.waitForSelector(selector, options);
+    await this.page.waitForSelector(selector, options);
   }
   
   /**
@@ -279,7 +291,7 @@ class Application {
     if (!["string", "function"].includes(typeof message)) {
       throw new Error("Invalid message argument, must be string or function");
     }
-    return new Promise((resolve, reject) => {
+    return await new Promise((resolve, reject) => {
       let handler = consoleMsg => {
         let msg = consoleMsg.text();
         switch (typeof message) {

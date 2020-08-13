@@ -117,7 +117,7 @@ require './server/bootstrap.php';
 \$app->run();
 EOF
 
-echo " - Adding dependencies ..."
+echo " - Adding composer dependencies ..."
 # install composer dependencies
 cp -a $SERVER_SRC_DIR/composer.* $DIST_SERVER_DIR/
 COMPOSER_ARGS="--no-dev --working-dir=dist/server --no-plugins"

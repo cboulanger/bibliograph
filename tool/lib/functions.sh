@@ -88,3 +88,8 @@ function mysql_root() {
   tool/dev/mysql-client -uroot -p$DB_ROOT_PASSWORD "$@"
 }
 export -f mysql_root
+
+function hr() {
+  printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
+}
+export hr

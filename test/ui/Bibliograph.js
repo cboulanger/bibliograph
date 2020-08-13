@@ -61,6 +61,8 @@ class Bibliograph extends Application {
     await this.page.close();
     this.page = null;
     this.context = null;
+    this.browser.close();
+    this.browser = null;
   }
 }
 

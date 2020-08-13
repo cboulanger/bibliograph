@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 # this has the same CLI options as tool/deploy/deploy
+# exports the TEST_EXIT_CODE environment variable
 set -e
 
 USAGE=0;
@@ -45,4 +46,13 @@ fi
 export APP_URL
 export BROWSER_TYPE="chromium"
 export NODE_PATH=${NODE_PATH:+$NODE_PATH:}$PWD:$PWD/node_modules
-tape $TEST_FILE_PATTERN
+tape $TEST_FILE_PATTERN || export TEST_EXIT_CODE=$?
+if [[ $TEST_EXIT_CODE != 0 ]] && [[ "$ERROR_LOG_PATH" != "" ]]; then
+  echo
+  echo "${COLOR_RED}$ERROR_LOG_PATH"
+  hr
+  ssh $DEPLOY_HOST tail -n 30 $ERROR_LOG_PATH
+  hr
+  echo "${STYLE_RESET}"
+fi
+exit $TEST_EXIT_CODE
