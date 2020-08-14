@@ -6,7 +6,6 @@ echo ">>> Cloning required github repositories..."
 declare -a arr=(
   "cboulanger/yii2-jsonrpc"
   "qooxdoo/incubator.qx.io.jsonrpc"
-  "cboulanger/dsn"
   "cboulanger/worldcat-linkeddata-php"
 )
 for repo in "${arr[@]}"

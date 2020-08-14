@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use lib\components\Configuration;
 use lib\models\Migration;
 use Yii;
 use lib\models\BaseModel;
@@ -14,24 +15,24 @@ use yii\helpers\ArrayHelper;
 /**
  * This is the model class for table "data_Datasource".
  *
- * @property string $namedId
- * @property string $title
- * @property string $description
- * @property string $schema
- * @property string $type
- * @property string $host
- * @property integer $port
- * @property string $database
- * @property string $username
- * @property string $password
- * @property string $encoding
- * @property string $prefix
- * @property string $resourcepath
- * @property integer $active
- * @property integer $readonly
- * @property integer $hidden
- * @property string $migrationNamespace
- * @property int $migrationApplyTime
+ * @property string   $namedId
+ * @property string   $title
+ * @property string   $description
+ * @property string   $schema
+ * @property string   $type
+ * @property string   $host
+ * @property integer  $port
+ * @property string   $database
+ * @property string   $username
+ * @property string   $password
+ * @property string   $encoding
+ * @property string   $prefix
+ * @property string   $resourcepath
+ * @property integer  $active
+ * @property integer  $readonly
+ * @property integer  $hidden
+ * @property string   $migrationNamespace
+ * @property integer  $migrationApplyTime
  * @property ActiveQuery $groups
  * @property ActiveQuery $users
  * @property ActiveQuery $roles
@@ -139,6 +140,13 @@ class Datasource extends BaseModel
   // Property accessors
   //-------------------------------------------------------------
 
+  public function getType() {
+    if ($this->type) {
+      return $this->type;
+    }
+    return "mysql";
+  }
+
   public function getHost() {
     if ($this->host) {
       return $this->host;
@@ -167,9 +175,19 @@ class Datasource extends BaseModel
     return $_SERVER['DB_PASSWORD'];
   }
 
+  public function getDatabase() {
+    if ($this->database) {
+      return $this->database;
+    }
+    return $_SERVER['DB_DATABASE'];
+  }
+
   public function getEncoding() {
     if ($this->encoding) {
       return $this->encoding;
+    }
+    if (Configuration::iniValue('database.encoding')) {
+      return Configuration::iniValue('database.encoding');
     }
     return "utf8";
   }
@@ -444,51 +462,32 @@ class Datasource extends BaseModel
     // cache
     static $connections = [];
     if (!isset($connections[$this->namedId])) {
-      $this->useDsnDefaults();
-
-      switch ($this->type) {
+      switch ($this->getType()) {
         case "mysql":
-          $dsn = "{$this->type}:host={$this->host};port={$this->port};dbname={$this->database}";
+          $dsn = "{$this->getType()}:host={$this->getHost()};port={$this->getPort()};dbname={$this->getDatabase()};charset={$this->getEncoding()}";
           break;
         default:
-          throw new \RuntimeException("Support for datasource type '{$this->type}' has not been implemented yet.");
+          throw new \RuntimeException("Support for datasource type '{$this->getType()}' has not been implemented yet.");
       }
       // determine table prefix from database or datasource name
-      $global_prefix = trim(Yii::$app->config->getIniValue("database.tableprefix"));
-      if (!is_null($this->prefix)) {
+      $global_prefix = trim(Configuration::iniValue("database.tableprefix"));
+      if ($this->prefix) {
         $prefix = $global_prefix . $this->prefix;
       } else {
-        $prefix = $global_prefix . $this->namedId . "_"; //@todo: shouldn't default be just global prefix?
+        $prefix = $global_prefix . $this->namedId . "_";
       }
-
-      $connection = new \yii\db\Connection([
-        'dsn' => $dsn,
-        'username' => $this->username,
-        'password' => $this->password,
+      $config = [
+        'dsn'         => $dsn,
+        'username'    => $this->getUsername(),
+        'password'    => $this->getPassword(),
+        'charset'     => $this->getEncoding(),
         'tablePrefix' => $prefix
-      ]);
-
+      ];
+      $connection = new \yii\db\Connection($config);
       $connections[$this->namedId] = $connection;
       return $connection;
     }
     return $connections[$this->namedId];
-  }
-
-  /**
-   * Uses the application dsn defaults if the datasource information doesn't
-   * contain it.
-   *
-   * @return void
-   * @throws \Exception
-   */
-  public function useDsnDefaults()
-  {
-    $connection = Yii::$app->datasourceManager->parseDsn();
-    foreach (["host", "port", "database", "username", "password"] as $key) {
-      if (!$this->$key) {
-        $this->$key = $connection[$key];
-      }
-    }
   }
 
   /**
@@ -588,25 +587,5 @@ class Datasource extends BaseModel
   public function getMigrationApplyTime()
   {
     return Migration::find()->max('apply_time', $this->getConnection());
-  }
-
-  /**
-   * Overrridden to set properties to null that are identical to those of the default connection
-   * This makes the Datasource model data more portable, since it allows to copy it to different
-   * database and create links to the copies, not the original datasources
-   * @param bool $runValidation
-   * @param null $attributeNames
-   * @return bool
-   * @throws \yii\db\Exception
-   */
-  public function save($runValidation = true, $attributeNames = null)
-  {
-    $connection = Yii::$app->datasourceManager->parseDsn();
-    foreach (["host", "port", "database", "username", "password"] as $key) {
-      if ($this->$key == $connection[$key]) {
-        $this->$key = null;
-      }
-    }
-    return parent::save($runValidation, $attributeNames);
   }
 }

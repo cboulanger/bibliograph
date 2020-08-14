@@ -15,7 +15,6 @@
     "bmsrox/yii2-module-autoloader": "^1.1.1",
     "danielstjules/stringy": "^3.1",
     "edvlerblog/yii2-adldap-module": "^4.0.0",
-    "fourteenmeister/dsn": "dev-master",
     "georgique/yii2-jsonrpc": "*@dev",
     "magp/yii2-json-schema-validator": "dev-master",
     "neitanod/forceutf8": "^2.0",
@@ -60,10 +59,6 @@
     {
       "type": "git",
       "url": "https://github.com/cboulanger/worldcat-linkeddata-php.git"
-    },
-    {
-      "type": "git",
-      "url": "https://github.com/cboulanger/dsn.git"
     }
   ]
 }

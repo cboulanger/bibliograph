@@ -30,7 +30,7 @@ class DatasourceTest extends Base
   {
     $datasource = Datasource::getInstanceFor('database1');
     $this->assertEquals(BibliographicDatasource::class, \get_class($datasource));
-    $this->assertEquals('mysql:host=host.docker.internal;port=3306;dbname=tests', $datasource->getConnection()->dsn);
+    $this->assertEquals('mysql:host=host.docker.internal;port=3306;dbname=tests;charset=utf8', $datasource->getConnection()->dsn);
   }
 
   public function testDatasourceModels()

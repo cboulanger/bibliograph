@@ -1,7 +1,4 @@
 [database]
-type            = "mysql"
-host            = "host.docker.internal"
-port            = 3306
 admindb         = "tests"
 userdb          = "tests"
 tmp_db          = "tests"

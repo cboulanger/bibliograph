@@ -15,6 +15,31 @@ declare -a default=(
   functional
   "api --env empty-database"
 )
+
+#USAGE=0;
+#VERBOSE=0;
+#
+## Process command line
+#while [[ $1 != "" ]] ; do
+#    case "$1" in
+#
+#        "--run"|"-r")
+#            RUN_ARGS=$2
+#            shift;
+#            ;;
+#
+#        "--verbose"|"-v")
+#            VERBOSE=1
+#            shift
+#            ;;
+#
+#        "--help"|"-h")
+#            USAGE=1
+#            ;;
+#    esac
+#    shift
+#done
+
 declare -a suites=("${@:-${default[@]}}")
 
 log_heading "Running codeception suites '${suites[*]}' "
@@ -30,7 +55,7 @@ do
       source tool/test/setup/create-model-data
     fi
     log_info ">>> Running test suite: $suite ..."
-    codecept $CODECEPT_ARGS run $suite -v || exit $?
+    codecept $CODECEPT_ARGS run $suite -vvv || exit $?
 done
 
 log_info "Tests finished."

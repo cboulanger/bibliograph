@@ -125,9 +125,9 @@ class BaseModel extends ActiveRecord
   }
 
   /**
-   * Sets the datasource that all models based on the class will use. If you use several 
+   * Sets the datasource that all models based on the class will use. If you use several
    * instances of the same class, you need to set the datasource explicitly before each
-   * query, since the datasource is a static property of the class. 
+   * query, since the datasource is a static property of the class.
    * MyClass::setDatasource("datasource")::find()->...
    * @return string|Datasource $datasource The Datasource object or the namedId of the datasource
    */
@@ -155,7 +155,7 @@ class BaseModel extends ActiveRecord
 
   //-------------------------------------------------------------
   // Shorthand methods
-  //-------------------------------------------------------------  
+  //-------------------------------------------------------------
 
   /**
    * Shorthand method to find ActiveRecord with the given named id
@@ -163,14 +163,14 @@ class BaseModel extends ActiveRecord
    * @param string $namedId
    * @return \lib\models\BaseModel|null
    */
-  public static function findByNamedId( $namedId )
+  public static function findByNamedId($namedId)
   {
     return static::findOne( ['namedId' => $namedId ] );
   }
 
   //-------------------------------------------------------------
   // Overridden methods
-  //-------------------------------------------------------------  
+  //-------------------------------------------------------------
 
   /**
    * Fix values before model is saved

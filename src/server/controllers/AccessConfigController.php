@@ -604,12 +604,6 @@ class AccessConfigController extends AppController
 
     // create form
     $model = $this->getModelInstance($type, $namedId);
-    switch ($type) {
-      case "datasource":
-        /** @var Datasource */
-        $model->useDsnDefaults();
-        break;
-    }
 
     try {
       $formData = Form::getDataFromModel($model);

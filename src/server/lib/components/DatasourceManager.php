@@ -90,8 +90,6 @@ class DatasourceManager extends \yii\base\Component
       'readonly' => 0,
       'hidden'  => 0
     ]);
-    $dsnAttributes = $this->parseDsn();
-    $datasource->setAttributes($dsnAttributes);
     $datasource->save();
     Yii::info("Created datasource '$datasourceName'.");
     //Yii::debug($datasource->getAttributes());
@@ -110,29 +108,6 @@ class DatasourceManager extends \yii\base\Component
       }
     }
     return $instance;
-  }
-
-  /**
-   * Parses a DSN string in a way that can be stored in the datasource db record.
-   * If no DSN string is passed, the app default dsn is used.
-   * @param string|null $dsn
-   * @throws \Exception
-   * @return array
-   */
-  public function parseDsn($dsn = null)
-  {
-    $dsn = ($dsn ? $dsn : Yii::$app->db->dsn);
-    $dsn = Dsn::parse($dsn);
-    $db = Yii::$app->db;
-    return [
-      'type' => $dsn->sheme,
-      'host' => $dsn->host,
-      'port' => $dsn->port,
-      'database' => $dsn->database,
-      'username' => $db->username,
-      'password' => $db->password,
-      'encoding' => $db->charset,
-    ];
   }
 
   /**
