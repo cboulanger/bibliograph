@@ -8,7 +8,6 @@ class Bibliograph extends Application {
    */
   async init(readyConsoleMessage="bibliograph.setup.completed") {
     await super.init(readyConsoleMessage);
-    
   }
   
   /**

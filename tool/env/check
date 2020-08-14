@@ -5,11 +5,9 @@
 [ "$(type -t mysql_root)" == "function" ] || source tool/lib/functions.sh
 
 if ! type docker > /dev/null; then
-  echo "ERROR: You need docker for the development environment"
-  exit 1
+  exit_with_error "ERROR: You need docker for the development environment"
 fi
 
 if ! [ -f "./package.json" ]; then
-  >&2 echo 'ERROR: All tool scripts need to be executed from the bibliograph root directory'
-  exit 1
+  exit_with_error 'ERROR: All tool scripts need to be executed from the bibliograph root directory'
 fi

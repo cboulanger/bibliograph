@@ -5,6 +5,7 @@
 
 set -e
 source tool/lib/functions.sh
+tool/env/http-server start
 
 # dependencies: apt-get install jq (linux) / brew install jq (MacOS with homebrew)
 # command -v jq >/dev/null 2>&1 || { echo >&2 "You need to install the jq command"; exit 1; }
@@ -128,7 +129,7 @@ if [[ $BUILD_VERBOSE != 0 ]]; then
   COMPOSER_ARGS="$COMPOSER_ARGS -v"
   tool/dev/php src/lib/composer.phar install $COMPOSER_ARGS
 else
-  tool/dev/php src/lib/composer.phar install $COMPOSER_ARGS &> /dev/null
+  OUTPUT=$(tool/dev/php src/lib/composer.phar install $COMPOSER_ARGS)
 fi
 
 if ! [ -d $DIST_SERVER_DIR/vendor ] || ! [ -f $DIST_SERVER_DIR/vendor/autoload.php ]; then

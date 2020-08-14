@@ -3,6 +3,8 @@
 # Usage
 # tool/test/playwright [keep] [URL] [browser-type]
 
+[ -d node_modules/playwright ] || test/playwright/install
+
 # Compiles and starts the playwright tests
 set -o errexit
 source test/.env

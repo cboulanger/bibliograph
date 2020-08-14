@@ -1,6 +1,7 @@
 <?php
 
 namespace lib\components;
+use app\controllers\dto\AuthResult;
 use app\controllers\dto\Base;
 use ForceUTF8\Encoding;
 use georgique\yii2\jsonrpc\responses\JsonRpcResponse;
@@ -15,18 +16,46 @@ class FixUtf8ProblemsResponse extends \yii\web\Response
   public $format = yii\web\Response::FORMAT_JSON;
 
   /**
-   * @inheritDoc
+   * @param mixed $data
+   * @return mixed
+   */
+  protected function fixUtf8($data) {
+    if ($data instanceof Base) {
+      $data = (array)$data;
+      Yii::error($data);
+    }
+    $serialized = var_export($data, true);
+    if (!preg_match("//u", $serialized) ) {
+      Yii::error($serialized);
+      // try to fix them
+      $serialized = Encoding::fixUTF8($serialized);
+      // if this doesn't fix it, remove invalid characters
+      if (!preg_match("//u", $serialized) ) {
+        $serialized = iconv("UTF-8", "UTF-8//IGNORE", $serialized);
+        $serialized = mb_convert_encoding($serialized , 'UTF-8', 'UTF-8');
+      }
+      $def = '$data = ' . $serialized . ';';
+      eval($def);
+    }
+    return $data;
+  }
+
+  /**
+   * This is a bad hack working around a broken mysql server setup
    */
   protected function prepare()
   {
     //Yii::debug("prepare for " . Yii::$app->requestedRoute . "." . Yii::$app->requestedAction->id, __METHOD__);
-    if ($this->data instanceof SuccessResponse && isset($_SERVER['BIBLIOGRAPH_FIX_UTF8']) && $_SERVER['BIBLIOGRAPH_FIX_UTF8']) {
-      // This is a bad hack working around a broken mysql server setup
-      $data = var_export($this->data->result, true);
-      if( ! preg_match("//u", $data) ) {
-        $data = Encoding::fixUTF8($data);
-        $def = '$this->data->result = ' . $data . ';';
-        eval($def);
+    if (isset($_SERVER['BIBLIOGRAPH_FIX_UTF8']) && $_SERVER['BIBLIOGRAPH_FIX_UTF8']) {
+      //
+      if (is_array($this->data)) {
+        for ($i=0; $i < count($this->data); $i++) {
+          if ($this->data[$i] instanceof SuccessResponse) {
+            $this->data[$i]->result = $this->fixUtf8($this->data[$i]->result);
+          }
+        }
+      } elseif ($this->data instanceof SuccessResponse) {
+        $this->data->result = $this->fixUtf8($this->data->result);
       }
     }
     parent::prepare();

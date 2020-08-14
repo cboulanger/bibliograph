@@ -12,11 +12,8 @@ qx.Mixin.define("qcl.ui.dialog.MDialog", {
       }
       let dialog = this.__dialogs[type];
       if (dialog === undefined) {
-        dialog = this.__dialogs[type] = qxl.dialog.Dialog[type]();
+        dialog = this.__dialogs[type] = new qxl.dialog[type[0].toUpperCase() + type.slice(1)](config);
         this.addOwnedQxObject(dialog, type);
-      }
-      if (qx.lang.Type.isObject(config)) {
-        dialog.set(config);
       }
       dialog.open();
       return dialog.promise();
@@ -29,7 +26,7 @@ qx.Mixin.define("qcl.ui.dialog.MDialog", {
      * @return {Promise}
      */
     alert(msg, config= {}) {
-      config.message = msg;
+      config.message = String(msg);
       return this.createDialog("alert", config);
     },
   
@@ -40,7 +37,7 @@ qx.Mixin.define("qcl.ui.dialog.MDialog", {
      * @return {Promise}
      */
     warning(msg, config= {}) {
-      config.message = msg;
+      config.message = String(msg);
       return this.createDialog("warning", config);
     },
   
@@ -51,7 +48,7 @@ qx.Mixin.define("qcl.ui.dialog.MDialog", {
      * @return {Promise}
      */
     error(msg, config= {}) {
-      config.message = msg;
+      config.message = String(msg);
       return this.createDialog("error", config);
     },
   
@@ -62,7 +59,7 @@ qx.Mixin.define("qcl.ui.dialog.MDialog", {
      * @return {Promise}
      */
     confirm(msg, config= {}) {
-      config.message = msg;
+      config.message = String(msg);
       return this.createDialog("confirm", config);
     },
   
@@ -73,7 +70,7 @@ qx.Mixin.define("qcl.ui.dialog.MDialog", {
      * @return {Promise}
      */
     prompt(msg, config= {}) {
-      config.message = msg;
+      config.message = String(msg);
       return this.createDialog("prompt", config);
     }
   }

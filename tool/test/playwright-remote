@@ -4,7 +4,10 @@
 # exports the TEST_EXIT_CODE environment variable
 set -e
 
+[ -d node_modules/playwright ] || test/playwright/install
+
 USAGE=0;
+ARGS=("$@")
 
 # Process command line
 while [[ $1 != "" ]] ; do
@@ -25,6 +28,8 @@ while [[ $1 != "" ]] ; do
     esac
     shift
 done
+# reset arguments
+set -- "${ARGS[@]}"
 
 HELP_ADDITIONAL_TEXT=$(cat << EOF
   --test-file-pattern, -t       - pattern of test files, can contain * wildcard

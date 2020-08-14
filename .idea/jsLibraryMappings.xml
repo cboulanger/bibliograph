@@ -3,6 +3,5 @@
   <component name="JavaScriptLibraryMappings">
     <file url="PROJECT" libraries="{qooxdoo}" />
     <includedPredefinedLibrary name="Node.js Core" />
-    <excludedPredefinedLibrary name="bibliograph/node_modules" />
   </component>
 </project>

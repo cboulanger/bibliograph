@@ -11,6 +11,8 @@ const process = require("process");
  * @property {Boolean} logConsole Whether to mirror the browser console messages
  * @property {String} browserType The type of browser. Defaults to "chromium"
  * @property {Object} browserOptions Options for launching the browser, see...
+ * @property {RegExp} consoleErrorRegExp A regular expression that, if a console
+ * message matches it, terminates the test. Defaults to /Error/
  */
 class Application {
   constructor (props) {
@@ -24,6 +26,8 @@ class Application {
       ],
       headless: true
     };
+    //(AuthenticationError|JsonRpcError|Unhandled promise)
+    this.consoleErrorRegExp = /Error/;
     if (props && typeof props == "object") {
       this.set(props);
     }
@@ -106,7 +110,7 @@ class Application {
       });
       this.page.on("console", consoleMsg => {
         let text = consoleMsg.text();
-        if (text.match(/(AuthenticationError|JsonRpcError)/)) {
+        if (text.match(this.consoleErrorRegExp)) {
           this.error(text);
         }
       });
