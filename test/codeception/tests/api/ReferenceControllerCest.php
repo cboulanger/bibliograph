@@ -24,9 +24,9 @@ class ReferenceControllerCest
 
   public function tryCreateDatasourceAndReferences(ApiTester $I){
     $datasourceName = $this->getQueryData()['datasource'];
-    $I->loginAsAdmin();
     $I->amGoingTo("call the setup method");
     $I->sendJsonRpcRequest("setup","setup");
+    $I->loginAsAdmin();
     $I->amGoingTo("create a datasource '$datasourceName'");
     $I->sendJsonRpcRequest("datasource", "create",[$datasourceName]);
     $I->amGoingTo("create a book record");

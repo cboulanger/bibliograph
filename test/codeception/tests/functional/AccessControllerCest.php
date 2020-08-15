@@ -8,11 +8,17 @@ class AccessControllerCest
     return require APP_TESTS_DIR . '/tests/fixtures/_access_models.php';
   }
 
+
+  public function tryToAccessPublicMethodWithoutAuthentication(FunctionalTester $I){
+    $I->sendJsonRpcRequest("test","echo",["Hello World!"]);
+    $I->assertEquals('{"jsonrpc":"2.0","result":"Hello World!","id":1}', $I->grabResponse());
+  }
+
   /**
    * @param FunctionalTester $I
    * @throws Exception
    */
-  public function tryToAccessMethodWithoutAuthentication(FunctionalTester $I)
+  public function tryToAccessProtectedMethodWithoutAuthentication(FunctionalTester $I)
   {
     $I->sendJsonRpcRequest("access","username",[],true);
     $I->seeJsonRpcError("Unauthorized", -32600);
@@ -39,8 +45,8 @@ class AccessControllerCest
     }
     $I->sendJsonRpcRequest('access','userdata');
     //codecept_debug($I->grabDataFromResponseByJsonPath('$.result'));
-    $I->assertSame('admin', $I->grabDataFromResponseByJsonPath('$.result.namedId')[0] );
-    $I->assertSame(1, count( $I->grabDataFromResponseByJsonPath('$.result.permissions')[0] ));
+    $I->seeResponseContains('"namedId":"admin"');
+    $I->seeResponseContains('"permissions":["*"]}');
     $I->logout();
   }
 

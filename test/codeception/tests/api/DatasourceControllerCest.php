@@ -6,5 +6,6 @@ class DatasourceControllerCest
   {
     $I->loginWithPassword('admin','admin');
     $I->sendJsonRpcRequest('datasource','create', ["test123"]);
+    $I->logout();
   }
 }

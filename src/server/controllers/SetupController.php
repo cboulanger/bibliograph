@@ -21,6 +21,7 @@
 namespace app\controllers;
 
 
+use app\controllers\traits\PropertyPersistenceTrait;
 use app\models\BibliographicDatasource;
 use app\models\Datasource;
 use georgique\yii2\jsonrpc\exceptions\JsonRpcException;
@@ -45,6 +46,8 @@ use lib\Module;
  */
 class SetupController extends \app\controllers\AppController
 {
+  use PropertyPersistenceTrait;
+
   /**
    * The name of the default datasource schema.
    * Initial value of the app.datasource.baseschema preference.
@@ -224,64 +227,6 @@ class SetupController extends \app\controllers\AppController
     return true;
   }
 
-  /**
-   * Returns a id for caching setup data which needs to be unique and always identical.
-   * Currently an MD5 hash of the class name
-   * @return string
-   */
-  protected function cacheId() {
-    return md5(self::class);
-  }
-
-  /**
-   * Restore cached properties
-   * @return array
-   */
-  protected function _restoreProperties()
-  {
-    $properties = unserialize(Yii::$app->cache->get($this->cacheId()));
-    if (is_array($properties)) {
-      //Yii::debug(">>> Restoring properties", __METHOD__);
-      //Yii::debug(array_keys($properties));
-      foreach ($properties as $property => $value) {
-        $this->$property = $value;
-      }
-      return $properties;
-    }
-    //Yii::debug(">>> No properties saved yet", __METHOD__);
-    return [];
-  }
-
-  /**
-   * Save all properties of this instance to a file cache which are
-   * scalar values or arrays of scalar values
-   */
-  protected function _saveProperties()
-  {
-    function is_array_with_scalars($value) {
-      return is_array($value) and array_reduce($value, function($carry, $item){
-        return $carry && is_scalar($item);
-      }, true);
-    }
-    $properties = [];
-    foreach( get_object_vars($this) as $property => $value) {
-      if (is_scalar($value) or is_array_with_scalars($value)) {
-        $properties[$property] = $value;
-      }
-    }
-    //Yii::debug(">>> Saving properties", __METHOD__);
-    Yii::$app->cache->set($this->cacheId(), serialize($properties));
-  }
-
-  /**
-   * Reset file cache
-   */
-  protected function _resetSavedProperties()
-  {
-    Yii::debug("Resetting saved properties", __METHOD__);
-    Yii::$app->cache->delete($this->cacheId());
-  }
-
 
   //-------------------------------------------------------------
   // ACTIONS
@@ -291,7 +236,7 @@ class SetupController extends \app\controllers\AppController
     if (!YII_ENV_TEST) {
       throw new \BadMethodCallException('setup/reset can only be called in test mode.');
     }
-    $this->_resetSavedProperties();
+    $this->resetSavedProperties();
     return "Setup cache has been reset.";
   }
 
@@ -362,7 +307,7 @@ class SetupController extends \app\controllers\AppController
    */
   protected function _setup()
   {
-    $this->_restoreProperties();
+    $this->restoreProperties();
 
     if ($this->initiatingSessionId) {
       if ($this->initiatingSessionId != Yii::$app->session->id) {
@@ -529,7 +474,7 @@ class SetupController extends \app\controllers\AppController
     } else {
       $this->_showProgress();
     }
-    $this->_saveProperties();
+    $this->saveProperties();
     return $result . " ($time)";
   }
 
@@ -564,14 +509,14 @@ class SetupController extends \app\controllers\AppController
       $msg = "Setup of version '$this->upgrade_to' failed.";
       Yii::warning($msg);
       Yii::warning($this->errors);
-      $this->_resetSavedProperties();
+      $this->resetSavedProperties();
       throw new SetupException("Setup failed with errors:" . implode("<br/>", $this->errors), $this->errors);
     }
     // Everything seems to be ok
     $msg = "Setup of version '$this->upgrade_to' finished successfully.";
     Yii::info($msg, self::CATEGORY);
     Yii::debug($this->messages, __METHOD__);
-    $this->_resetSavedProperties();
+    $this->resetSavedProperties();
     // update version
     if (!Yii::$app->config->keyExists('app.version')) {
       // createKey( $key, $type, $customize=false, $default=null, $final=false )

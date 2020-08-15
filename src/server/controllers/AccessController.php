@@ -282,10 +282,10 @@ class AccessController extends AppController
       }
 
       // if a user is already logged in, log this one out
-      $activeUser = $this->getActiveUser();
-      if ($activeUser) {
-        $this->logout($activeUser);
-      }
+//      $activeUser = $this->getActiveUser();
+//      if ($activeUser ) {
+//        $this->logout($activeUser);
+//      }
 
       Yii::info("Authenticated user '{$user->namedId}' via auth username/password.", self::CATEGORY);
     }

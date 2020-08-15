@@ -20,6 +20,7 @@
 
 namespace app\controllers;
 
+use app\controllers\traits\PropertyPersistenceTrait;
 use app\models\Datasource;
 use app\models\Folder;
 use app\models\Reference;
@@ -28,6 +29,7 @@ use lib\dialog\Alert;
 use lib\exceptions\UserErrorException;
 use Yii;
 use lib\channel\Channel;
+use yii\web\UnauthorizedHttpException;
 
 /**
  * A controller for JSONRPC methods intended to test the application.
@@ -35,7 +37,8 @@ use lib\channel\Channel;
 class TestController extends AppController
 {
 
-  protected $isPersistent = true;
+  use PropertyPersistenceTrait;
+
   protected $foo;
   protected $bar;
 
@@ -44,14 +47,24 @@ class TestController extends AppController
    *
    * @var array
    */
-  protected $noAuthActions = ["throw-error", "test-persistence","notify-test-name"];
+  protected $noAuthActions = ["echo", "throw-error","notify-test-name"];
 
   public function actionThrowError()
   {
     throw new \InvalidArgumentException("Testing invalid argument exception");
   }
 
+  public function actionEcho($message) {
+    if (!YII_ENV_TEST) {
+      throw new UnauthorizedHttpException("Unauthorized");
+    }
+    return $message;
+  }
+
   public function actionNotifyTestName($testName) {
+    if (!YII_ENV_TEST) {
+      throw new UnauthorizedHttpException("Unauthorized");
+    }
     Yii::info("Executing test '$testName'...");
   }
 
@@ -59,8 +72,10 @@ class TestController extends AppController
     if ($foo) {
       $this->foo = $foo;
       $this->bar = $bar;
+      $this->saveProperties();
       return "OK";
     }
+    $this->restoreProperties();
     return [$this->foo, $this->bar];
   }
 

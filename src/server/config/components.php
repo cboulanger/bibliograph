@@ -26,7 +26,10 @@ return [
   ],
   'i18n' => require "components/i18n.php",
   // Cache
-  'cache' => [ 'class' => yii\caching\FileCache::class ],
+  'cache' => [
+    'class'     => yii\caching\FileCache::class,
+    'cachePath' => sys_get_temp_dir()
+  ],
   // Module autoloader
   'moduleLoader' => [
     'class' => bmsrox\autoloader\ModuleLoader::class,

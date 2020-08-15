@@ -6,6 +6,7 @@ use lib\components\Configuration;
 use lib\models\Migration;
 use Yii;
 use lib\models\BaseModel;
+use yii\base\ErrorException;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
@@ -140,6 +141,22 @@ class Datasource extends BaseModel
   // Property accessors
   //-------------------------------------------------------------
 
+  /**
+   * Returns the value of an environment variable
+   * @param $name
+   * @return mixed
+   * @throws ErrorException
+   */
+  protected function _getFromEnvironment($name) {
+    if (isset($_SERVER[$name]) && $_SERVER[$name]) {
+      return $_SERVER[$name];
+    }
+    if (isset($_ENV[$name]) && $_ENV[$name]) {
+      return $_ENV[$name];
+    }
+    throw new ErrorException("Environment variable '$name' is not set.");
+  }
+
   public function getType() {
     if ($this->type) {
       return $this->type;
@@ -151,35 +168,35 @@ class Datasource extends BaseModel
     if ($this->host) {
       return $this->host;
     }
-    return $_SERVER['DB_HOST'];
+    return $this->_getFromEnvironment("DB_HOST");
   }
 
   public function getPort() {
     if ($this->port) {
       return $this->port;
     }
-    return $_SERVER['DB_PORT'];
+    return $this->_getFromEnvironment("DB_PORT");
   }
 
   public function getUsername() {
     if ($this->username) {
       return $this->username;
     }
-    return $_SERVER['DB_USER'];
+    return $this->_getFromEnvironment("DB_USER");
   }
 
   public function getPassword() {
     if ($this->password) {
       return $this->password;
     }
-    return $_SERVER['DB_PASSWORD'];
+    return $this->_getFromEnvironment("DB_PASSWORD");
   }
 
   public function getDatabase() {
     if ($this->database) {
       return $this->database;
     }
-    return $_SERVER['DB_DATABASE'];
+    return $this->_getFromEnvironment("DB_DATABASE");
   }
 
   public function getEncoding() {

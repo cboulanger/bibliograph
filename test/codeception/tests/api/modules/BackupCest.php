@@ -7,6 +7,22 @@ use React\HttpClient\Response;
 class BackupCest
 {
 
+  /**
+   * Returns the value of an environment variable
+   * @param $name
+   * @return mixed
+   * @throws \Exception
+   */
+  protected function _getFromEnvironment($name) {
+    if (isset($_SERVER[$name]) && $_SERVER[$name]) {
+      return $_SERVER[$name];
+    }
+    if (isset($_ENV[$name]) && $_ENV[$name]) {
+      return $_ENV[$name];
+    }
+    throw new \Exception("Environment variable '$name' is not set.");
+  }
+
   protected $token;
 
   protected $datasource = "datasource1";
@@ -32,8 +48,8 @@ class BackupCest
     }
     $params = [
       "--user=root",
-      "--password=" . $_SERVER['DB_ROOT_PASSWORD'],
-      "--host=" . $_SERVER['DB_HOST'],
+      "--password=" . $this->_getFromEnvironment('DB_ROOT_PASSWORD'),
+      "--host=" . $this->_getFromEnvironment('DB_HOST'),
       "--result-file=" . $file,
       "tests $dump_tables"
     ];
@@ -55,8 +71,7 @@ class BackupCest
    */
   protected function handleStreamResponse($route, array $params, ApiTester $I, $debug=false)
   {
-    $url = $_SERVER['APP_URL'] . "/src/server/test/$route?" . http_build_query($params) . "&access-token=".$this->token;
-    codecept_debug("Requesting chunked response from $url");
+    $url = $this->_getFromEnvironment("SERVER_URL") . "/$route?" . http_build_query($params) . "&access-token=".$this->token;
     $loop = Factory::create();
     $content = "";
     $client = new Client($loop);

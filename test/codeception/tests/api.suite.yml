@@ -5,10 +5,10 @@ modules:
         - Asserts
         - REST:
             part: json
-            url: "%JSONRPC_ENDPOINT%"
+            url: "%SERVER_URL%"
             depends: PhpBrowser
         - PhpBrowser:
-            url: "%JSONRPC_ENDPOINT%"
+            url: "%SERVER_URL%"
             curl:
                 CURLOPT_TIMEOUT: 500
         - \Helper\Api
