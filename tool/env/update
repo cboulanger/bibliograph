@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+y#!/usr/bin/env bash
 # Update dependencies
 
 set -e

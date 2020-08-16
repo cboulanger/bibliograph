@@ -27,10 +27,6 @@
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/bower-asset/jquery" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/bower-asset/punycode" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/bower-asset/yii2-pjax" />
-      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/bower/inputmask" />
-      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/bower/jquery" />
-      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/bower/punycode" />
-      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/bower/yii2-pjax" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/cebe/markdown" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/codeception/codeception" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/codeception/lib-asserts" />
@@ -56,8 +52,8 @@
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/evenement/evenement" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/ezyang/htmlpurifier" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/flow/jsonpath" />
-      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/fourteenmeister/dsn" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/fzaninotto/faker" />
+      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/georgique/yii2-jsonrpc" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/goaop/parser-reflection" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/graze/guzzle-jsonrpc" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/guzzlehttp/guzzle" />
@@ -75,6 +71,7 @@
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/nesbot/carbon" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/nikic/php-parser" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/odannyc/yii2-sse" />
+      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/paragonie/random_compat" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/phar-io/manifest" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/phar-io/version" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/phpdocumentor/reflection-common" />
@@ -125,6 +122,7 @@
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/symfony/browser-kit" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/symfony/console" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/symfony/css-selector" />
+      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/symfony/deprecation-contracts" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/symfony/dom-crawler" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/symfony/dotenv" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/symfony/event-dispatcher" />
@@ -134,11 +132,16 @@
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/symfony/mime" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/symfony/polyfill-ctype" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/symfony/polyfill-iconv" />
+      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/symfony/polyfill-intl-grapheme" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/symfony/polyfill-intl-idn" />
+      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/symfony/polyfill-intl-normalizer" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/symfony/polyfill-mbstring" />
+      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/symfony/polyfill-php70" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/symfony/polyfill-php72" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/symfony/polyfill-php73" />
+      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/symfony/polyfill-php80" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/symfony/service-contracts" />
+      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/symfony/string" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/symfony/translation" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/symfony/translation-contracts" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/symfony/yaml" />

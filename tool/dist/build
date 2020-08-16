@@ -112,9 +112,6 @@ define("APP_CONFIG_FILE", realpath("$DEPLOY_CONFIG_DIR/app.conf.toml"));
 require './server/bootstrap.php';
 \$config = require './server/config/web.php';
 \$app = new yii\web\Application(\$config);
-\$app->db->on(\yii\db\Connection::EVENT_AFTER_OPEN, function (\$event) {
-  \$event->sender->createCommand("SET NAMES utf8")->execute();
-});
 \$app->run();
 EOF
 
@@ -129,12 +126,11 @@ if [[ $BUILD_VERBOSE != 0 ]]; then
   COMPOSER_ARGS="$COMPOSER_ARGS -v"
   tool/dev/php src/lib/composer.phar install $COMPOSER_ARGS
 else
-  OUTPUT=$(tool/dev/php src/lib/composer.phar install $COMPOSER_ARGS)
+  tool/dev/php src/lib/composer.phar install $COMPOSER_ARGS #> /dev/null
 fi
 
 if ! [ -d $DIST_SERVER_DIR/vendor ] || ! [ -f $DIST_SERVER_DIR/vendor/autoload.php ]; then
- echo " !!! Composer install failed!"
- exit 1
+ exit_with_error "Composer install failed!"
 fi
 rm -f $DIST_SERVER_DIR/composer.* &> /dev/null
 

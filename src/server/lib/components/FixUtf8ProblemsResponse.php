@@ -22,11 +22,9 @@ class FixUtf8ProblemsResponse extends \yii\web\Response
   protected function fixUtf8($data) {
     if ($data instanceof Base) {
       $data = (array)$data;
-      Yii::error($data);
     }
     $serialized = var_export($data, true);
     if (!preg_match("//u", $serialized) ) {
-      Yii::error($serialized);
       // try to fix them
       $serialized = Encoding::fixUTF8($serialized);
       // if this doesn't fix it, remove invalid characters
