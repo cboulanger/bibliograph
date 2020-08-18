@@ -111,7 +111,7 @@ where options are:
   --config-file, -c             - the compiler configuration file to use
                                   (defaults to compile.json)
   --skip-build, -k              - use the build files that already exist
-  --empty-database, -E          - start with an empty database
+  --empty-database, -E          - start with, or assume, an empty database
   --import-sql, -I name         - the path to an .sql file containing data to be
                                   import into the empty database (implies -E)
   --set-env                     - set environment variables, overriding values
@@ -135,12 +135,14 @@ export VERBOSE
 export SKIP_BUILD
 
 # prepare database
-source tool/test/setup/check-mysql
 if [[ $DATABASE_EMPTY == 1 ]]; then
   echo ">>> Starting with empty database"
   source tool/test/setup/create-mysql-user
   source tool/test/setup/reset-data
 fi
+# to do: better error message if database is empty
+#tool/env/envvars-export
+source tool/test/setup/check-mysql #|| exit_with_error "Please check the MySQL credentials or run with --empty-database/-E"
 if [[ "$SQL_IMPORT" != "" ]]; then
   tool/dev/mysql-import $SQL_IMPORT $DB_DATABASE
 fi

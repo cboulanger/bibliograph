@@ -150,9 +150,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       this.permMgr.create("preferences.view").bind("state", button, "visibility", {
         converter : bibliograph.Utils.bool2visibility
       });
-      button.addListener("execute", function(e) {
-        this.getApplication().getWidgetById("app/windows/preferences").show();
-      }, this);
+      button.addListener("execute", () => qx.core.Id.getQxObject("windows/preferences").show());
       return button;
     },
 
@@ -162,9 +160,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       this.permMgr.create("access.manage").bind("state", button, "visibility", {
         converter : bibliograph.Utils.bool2visibility
       });
-      button.addListener("execute", function(e) {
-        this.getApplication().getWidgetById("app/windows/access-control").show();
-      }, this);
+      button.addListener("execute", () => qx.core.Id.getQxObject("windows/access-control").show());
       return button;
     },
 

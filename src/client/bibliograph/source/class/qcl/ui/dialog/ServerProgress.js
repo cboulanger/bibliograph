@@ -23,8 +23,7 @@
  * outputs a chunked http response with script tags of like this:
  * <pre>
  * <script type="text/javascript">
- *    top.qx.core.Init.getApplication()
- *     .getWidgetById("(widget id)").set({
+ *    top.qx.core.Id.getQxObject("(object id)").set({
  *        progress:(progress in percent, integer),
  *        message:"(optional message)"
  *      });
@@ -38,31 +37,29 @@ qx.Class.define("qcl.ui.dialog.ServerProgress", {
   properties :
   {
     /**
-     * The service name
+     * The route name
      */
-    service :
+    route :
     {
       check : "String",
-      nullable : true,
-      event : "changeService"
-    },
-    
-    /**
-     * The method name
-     */
-    method :
-    {
-      check : "String",
-      nullable : true,
-      event : "changeMethod"
+      nullable : false
     }
   },
- 
-  construct : function(widgetId, service, method) {
+  
+  /**
+   * Constructor
+   * @param {String} objectId An arbitrary string (must not contain a slash) which
+   * will be registered as a top-level widget
+   * @param {String} route The route to the server action that returns the chunked http response
+   */
+  construct : function(objectId, route) {
     this.base(arguments);
-    this.setWidgetId(widgetId);
-    this.setService(service || null);
-    this.setMethod(method || null);
+    if (!objectId.match(/^[a-zA-Z0-9-]+$/)) {
+      throw new Error(`Invalid object id "${objectId}"`);
+    }
+    this.setQxObjectId(objectId);
+    qx.core.Id.getInstance().register(this);
+    this.setRoute(route);
     this.__iframe = new qx.html.Iframe();
     this.__iframe.hide();
     let app = qx.core.Init.getApplication();
@@ -86,23 +83,27 @@ qx.Class.define("qcl.ui.dialog.ServerProgress", {
       if (!qx.lang.Type.isObject(params)) {
         this.error("Paramteters must be a map");
       }
-    
       // reset
       this.set({
         progress : 0,
         message : "",
         logContent : ""
       });
-      
       // format source string
-      params.id = this.getWidgetId();
-      params.auth_token = qx.core.Init.getApplication().getAccessManager().getToken();
-      let source = this.__sourceUrl +
-        this.getService() + "/" + this.getMethod() + "&" +
-        qx.util.Uri.toParameter(params) + "&nocache=" + Math.random();
+      const app = qx.core.Init.getApplication();
+      params.id = this.getQxObjectId();
+      params.auth_token = app.getAccessManager().getToken();
+      let source = this.__sourceUrl + "/" + this.getRoute() + app.formatParams(params);
       // start request and show dialog
       this.__iframe.setSource(source);
       this.show();
     }
+  },
+  
+  /**
+   * On dispose, unregister this object
+   */
+  destruct: function() {
+    qx.core.Id.getInstance().unregister(this);
   }
 });

@@ -31,8 +31,7 @@ qx.Class.define("bibliograph.plugins.z3950.Plugin",
      * Returns the name of the plugin
      * @returns {string}
      */
-    getName : function()
-    {
+    getName : function() {
       return "Z39.50 Datasource Connector";
     },
 
@@ -41,26 +40,23 @@ qx.Class.define("bibliograph.plugins.z3950.Plugin",
      * @return void
      */
     init: function () {
-      
       // Manager shortcuts
       let app = qx.core.Init.getApplication();
       let permMgr = app.getAccessManager().getPermissionManager();
-      let confMgr = app.getConfigManager();
-      
       
       // add window
       let importWindow = new bibliograph.plugins.z3950.ImportWindow();
+      qx.core.Id.getQxObject("windows").addOwnedQxObject(importWindow, "plugin-z3950-import");
       app.getRoot().add(importWindow);
-      
+
       // add a new menu button
-      let importMenu = app.getWidgetById("app/toolbar/menus/import");
-      let menuButton = new qx.ui.menu.Button(this.tr("Import from library catalog"));
-      menuButton.addListener("execute", () => importWindow.show() );
-      importMenu.add(menuButton);
       
-      // Overlays for preference window @todo rename
-      let prefsTabView = app.getWidgetById("app/windows/preferences/tabview");
-      let pluginTab = new qx.ui.tabview.Page(this.tr('Z39.50 Import'));
+      let menuButton = new qx.ui.menu.Button(this.tr("Import from library catalog"));
+      menuButton.addListener("execute", () => importWindow.show());
+      qx.core.Id.getQxObject("toolbar/import").getMenu().add(menuButton);
+      
+      let prefsTabView = qx.core.Id.getQxObject("windows/preferences").tabView; // to do use child widget
+      let pluginTab = new qx.ui.tabview.Page(this.tr("Z39.50 Import"));
       
       // ACL
       permMgr.create("z3950.manage").bind("state", pluginTab.getChildControl("button"), "visibility", {
@@ -84,19 +80,19 @@ qx.Class.define("bibliograph.plugins.z3950.Plugin",
         },
         bindItem: function (controller, item, id) {
           controller.bindProperty("label", "label", null, item, id);
-          controller.bindProperty("active", "value", { converter: v => v==1 }, item, id);
-          controller.bindPropertyReverse("active", "value", { converter: v => v==1 }, item, id);
+          controller.bindProperty("active", "value", { converter: v => v === 1 }, item, id);
+          controller.bindPropertyReverse("active", "value", { converter: v => v === 1 }, item, id);
         }
       };
       list.setDelegate(delegate);
       
-      let store = new qcl.data.store.JsonRpcStore("z3950/table");
+      let store = new qcl.data.store.JsonRpcStore("z3950.table");
       store.setModel(qx.data.marshal.Json.createModel([]));
       store.bind("model", list, "model");
-      pluginTab.addListener("appear",e =>{
+      pluginTab.addListener("appear", e => {
         store.load("server-list", [false]);
       });
-      qx.event.message.Bus.getInstance().subscribe("plugins.z3950.reloadDatasources", e =>{
+      qx.event.message.Bus.getInstance().subscribe("plugins.z3950.reloadDatasources", e => {
         store.load("server-list", [false]);
       });
       
@@ -152,7 +148,7 @@ qx.Class.define("bibliograph.plugins.z3950.Plugin",
       prefsTabView.add(pluginTab);
       
       // remote search progress indicator widget
-      let z3950Progress = new qcl.ui.dialog.ServerProgress( "plugins/z3950/searchProgress", "z3950/search", "progress");
+      let z3950Progress = new qcl.ui.dialog.ServerProgress("plugins-z3950-progress", "z3950/search/progress");
       z3950Progress.set({
         hideWhenCompleted: true,
         allowCancel : true

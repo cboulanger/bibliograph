@@ -48,6 +48,9 @@ qx.Class.define("qcl.data.store.JsonRpcStore",
     if (!serviceName) {
       throw new Error("Missing service name");
     }
+    if (!serviceName.match(/^[\d\w_\-.]+$/)) {
+      throw new Error("Invalid service name: " + serviceName);
+    }
     this.setServiceName(serviceName);
   },
   

@@ -15,8 +15,6 @@
 
 ************************************************************************ */
 
-/*global qx qcl*/
-
 qx.Class.define("bibliograph.plugins.webservices.Plugin",
 {
   extend: qcl.application.BasePlugin,
@@ -28,8 +26,7 @@ qx.Class.define("bibliograph.plugins.webservices.Plugin",
      * Returns the name of the plugin
      * @returns {string}
      */
-    getName : function()
-    {
+    getName : function() {
       return "Bibliographic webservices";
     },
 
@@ -38,27 +35,22 @@ qx.Class.define("bibliograph.plugins.webservices.Plugin",
      * @return void
      */
     init: function () {
-      
       // Manager shortcuts
       let app = qx.core.Init.getApplication();
       let permMgr = app.getAccessManager().getPermissionManager();
-      let confMgr = app.getConfigManager();
       
       // remote search progress indicator widget
-      let progress = new qcl.ui.dialog.ServerProgress(
-        "plugins/webservices/searchProgress",
-        "webservices/search",
-        "progress"
-      );
+      let progress = new qcl.ui.dialog.ServerProgress("plugins-webservices-progress", "webservices/search/progress");
       progress.set({
         hideWhenCompleted: true,
         allowCancel : true
       });
       
       // add window
-      let win, windowOpener;
+      let win;
+      let windowOpener;
       let native = false;
-      if ( native ){
+      if (native) {
         let url = "../../plugins/webservices/index.html";
         let windowOptions = {
           width: 700,
@@ -72,8 +64,8 @@ qx.Class.define("bibliograph.plugins.webservices.Plugin",
           toolbar: false
         };
         windowOpener = () => {
-          if( ! win || win.closed ) {
-            win = qx.bom.Window.open(url,"webservices", windowOptions, false, false);
+          if (!win || win.closed) {
+            win = qx.bom.Window.open(url, "webservices", windowOptions, false, false);
             this.getMessageBus().subscribe(
               bibliograph.Application.messages.TERMINATE,
               () => win.close()
@@ -86,10 +78,10 @@ qx.Class.define("bibliograph.plugins.webservices.Plugin",
           setTimeout(function() {
             win.focus();
           }, 1);
-        }
+        };
       } else {
         windowOpener = () => {
-          if( ! win ){
+          if (!win) {
             win = new bibliograph.plugins.webservices.ImportWindow();
             app.getRoot().add(win);
             this.getMessageBus().subscribe(
@@ -103,18 +95,17 @@ qx.Class.define("bibliograph.plugins.webservices.Plugin",
           }
           win.show();
           win.focus();
-        }
+        };
       }
       
       // add a new menu button
-      let importMenu = app.getWidgetById("app/toolbar/menus/import");
       let menuButton = new qx.ui.menu.Button(this.tr("Import from webservices"));
-      menuButton.addListener("execute", windowOpener );
-      importMenu.add(menuButton);
+      menuButton.addListener("execute", windowOpener);
+      qx.core.Id.getQxObject("toolbar/import").getMenu().add(menuButton);
       
       // Overlays for preference window @todo rename
-      let prefsTabView = app.getWidgetById("app/windows/preferences/tabview");
-      let pluginTab = new qx.ui.tabview.Page(this.tr('Webservices'));
+      let prefsTabView = qx.core.Id.getQxObject("windows/preferences").tabView;
+      let pluginTab = new qx.ui.tabview.Page(this.tr("Webservices"));
       
       // ACL
       permMgr.create("webservices.manage").bind("state", pluginTab.getChildControl("button"), "visibility", {
@@ -136,7 +127,7 @@ qx.Class.define("bibliograph.plugins.webservices.Plugin",
         createItem: function () {
           return new qx.ui.form.CheckBox();
         },
-        bindItem: function (controller, item, id){
+        bindItem: function (controller, item, id) {
           controller.bindProperty("label", "label", null, item, id);
           controller.bindProperty("active", "value", { converter: v => v==1 }, item, id);
           controller.bindPropertyReverse("active", "value", { converter: v => v==1 }, item, id);
@@ -144,13 +135,13 @@ qx.Class.define("bibliograph.plugins.webservices.Plugin",
       };
       list.setDelegate(delegate);
       
-      let store = new qcl.data.store.JsonRpcStore("webservices/table");
+      let store = new qcl.data.store.JsonRpcStore("webservices.table");
       store.setModel(qx.data.marshal.Json.createModel([]));
       store.bind("model", list, "model");
-      pluginTab.addListener("appear",e =>{
+      pluginTab.addListener("appear", e => {
         store.load("server-list", [false]);
       });
-      qx.event.message.Bus.getInstance().subscribe("plugins.webservices.reloadDatasources", e =>{
+      qx.event.message.Bus.getInstance().subscribe("plugins.webservices.reloadDatasources", e => {
         store.load("server-list", [false]);
       });
       

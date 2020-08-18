@@ -3,6 +3,7 @@ qx.Mixin.define("qcl.io.jsonrpc.MClientCache", {
   members: {
     /**
      * Returns the URL to the JSONRPC server
+     * TO DO: move into own protocol-indipendent mixin
      * @return {String}
      */
     getServerUrl: function() {
@@ -23,6 +24,18 @@ qx.Mixin.define("qcl.io.jsonrpc.MClientCache", {
       this.info("Server Url is " + serverUrl);
       this.__url = serverUrl;
       return serverUrl;
+    },
+  
+    /**
+     * Format parameters so that they are correctly appended to the Server URL
+     * @param {Object} params The parameters map
+     * @param {Boolean} addNoCache Whether to apped a string that prevents caching of the response (defaults to true)
+     * @return {string}
+     */
+    formatParams(params, addNoCache=true) {
+      let uriParams = qx.util.Uri.toParameter(params);
+      let joinSymbol = this.getServerUrl().includes("?") ? "&" : "?";
+      return joinSymbol + uriParams + (addNoCache ? `&nocache=${Math.random()}` : "");
     },
   
     /**

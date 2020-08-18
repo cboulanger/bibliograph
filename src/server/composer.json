@@ -10,6 +10,7 @@
     "ext-json": "*",
     "ext-mbstring": "*",
     "ext-pdo": "*",
+    "ext-gettext": "*",
     "adci/full-name-parser": "^0.2.3",
     "aracoool/yii2-uuid": "^1.1",
     "bmsrox/yii2-module-autoloader": "^1.1.1",

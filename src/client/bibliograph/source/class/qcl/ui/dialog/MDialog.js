@@ -12,7 +12,23 @@ qx.Mixin.define("qcl.ui.dialog.MDialog", {
       }
       let dialog = this.__dialogs[type];
       if (dialog === undefined) {
-        dialog = this.__dialogs[type] = new qxl.dialog[type[0].toUpperCase() + type.slice(1)](config);
+        switch (type) {
+          case "error":
+          case "warning":
+            dialog = new qxl.dialog.Alert(config);
+            if (!config.image) {
+              dialog.setImage("qxl.dialog.icon." + type);
+            }
+            break;
+          default: {
+            let ucType = type[0].toUpperCase() + type.slice(1);
+            let Clazz = qxl.dialog[ucType];
+            if (!Clazz) {
+              throw new Error(`No dialog of type "${type}" exists.`);
+            }
+            dialog = this.__dialogs[type] = new Clazz(config);
+          }
+        }
         this.addOwnedQxObject(dialog, type);
       }
       dialog.open();

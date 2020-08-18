@@ -67,12 +67,6 @@ qx.Class.define("bibliograph.plugins.webservices.View",
     }
   },
 
-  /*
-  *****************************************************************************
-     CONSTRUCTOR
-  *****************************************************************************
-  */
-
   /**
    * Constructor
    */
@@ -109,11 +103,6 @@ qx.Class.define("bibliograph.plugins.webservices.View",
     }, 100);
   },
   
-  /*
-  *****************************************************************************
-     MEMBERS
-  *****************************************************************************
-  */
   members:
   {
     listView: null,
@@ -155,7 +144,7 @@ qx.Class.define("bibliograph.plugins.webservices.View",
       toolBar1.add(selectBox, {flex:1});
       selectBox.bind("selection[0].label", selectBox, "toolTipText");
       selectBox.bind("selection[0].value", this, "datasource");
-      let store = new qcl.data.store.JsonRpcStore("webservices/table");
+      let store = new qcl.data.store.JsonRpcStore("webservices.table");
       let model = qx.data.marshal.Json.createModel([]);
       store.setModel(model);
       store.bind("model", selectBox, "model");
@@ -225,7 +214,7 @@ qx.Class.define("bibliograph.plugins.webservices.View",
       this.listView = tableview;
       tableview.setDecorator("main"); //??
       tableview.setModelType("record");
-      tableview.setServiceName("webservices/table");
+      tableview.setServiceName("webservices.table");
       tableview.headerBar.setVisibility("excluded");
       tableview.menuBar.setVisibility("excluded");
       this.add(tableview, {flex: 1});
@@ -284,7 +273,7 @@ qx.Class.define("bibliograph.plugins.webservices.View",
       //this.searchButton.setEnabled(false);
       
       // open the ServerProgress widget and initiate the remote search
-      let p = this.getApplication().getWidgetById("plugins/webservices/searchProgress");
+      let p = qx.core.Id.getQxObject("plugins-webservices-progress");
       p.setMessage(this.tr("Searching..."));
       p.start({ datasource, query });
     },
@@ -326,7 +315,7 @@ qx.Class.define("bibliograph.plugins.webservices.View",
       let targetDatasource = app.getDatasource();
       this.showPopup(this.tr("Importing references..."));
       await this.getApplication()
-        .getRpcClient("webservices/table")
+        .getRpcClient("webservices.table")
         .request("import", [sourceDatasource, ids, targetDatasource, targetFolderId]);
       this.importButton.setEnabled(true);
       this.hidePopup();

@@ -37,7 +37,6 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow", {
    */
   construct: function () {
     this.base(arguments);
-
     this.setWidth(700);
     this.setCaption(this.tr("Import from library catalog"));
     this.setShowMinimize(false);
@@ -47,8 +46,7 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow", {
 
     this.createUi();
     this.createPopup();
-    qx.event.message.Bus
-    .getInstance().subscribe(bibliograph.AccessManager.messages.AFTER_LOGOUT, () => this.close());
+    qx.event.message.Bus.getInstance().subscribe(bibliograph.AccessManager.messages.AFTER_LOGOUT, () => this.close());
 
     qx.lang.Function.delay(() => {
       this.listView.addListenerOnce("tableReady", () => {
@@ -111,7 +109,7 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow", {
       selectBox.bind("selection[0].value", this, "datasource");
 
       // store
-      let store = new qcl.data.store.JsonRpcStore("z3950/table");
+      let store = new qcl.data.store.JsonRpcStore("z3950.table");
       let model = qx.data.marshal.Json.createModel([]);
       store.setModel(model);
       store.bind("model", selectBox, "model");
@@ -162,7 +160,7 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow", {
       this.listView = tableview;
       tableview.setDecorator("main"); //??
       tableview.setModelType("record");
-      tableview.setServiceName("z3950/table");
+      tableview.setServiceName("z3950.table");
       tableview.headerBar.setVisibility("excluded");
       tableview.menuBar.setVisibility("excluded");
       this.add(tableview, {flex: 1});
@@ -222,7 +220,7 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow", {
       //this.searchButton.setEnabled(false);
       
       // open the ServerProgress widget and initiate the remote search
-      let p = this.getApplication().getWidgetById("plugins/z3950/searchProgress");
+      let p = qx.core.Id.getQxObject("plugins-z3950-progress");
       p.setMessage(this.tr("Searching..."));
       p.start({ datasource, query });
     },
@@ -263,7 +261,7 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow", {
       let sourceDatasource = this.datasourceSelectBox.getSelection().toArray()[0].getValue();
       let targetDatasource = app.getDatasource();
       this.showPopup(this.tr("Importing references..."));
-      let client = this.getApplication().getRpcClient("z3950/table");
+      let client = this.getApplication().getRpcClient("z3950.table");
       await client.request("import", [sourceDatasource, ids, targetDatasource, targetFolderId]);
       this.importButton.setEnabled(true);
       this.hidePopup();

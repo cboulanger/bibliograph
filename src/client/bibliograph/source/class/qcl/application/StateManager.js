@@ -18,12 +18,20 @@
 ************************************************************************ */
 
 /**
- * Provides synchronization between the application's properties and the
- * application state saved in the URL hash.
- * The syntax is the similar to the URL GET parameters, i.e. state values are
- * saved as key-value pairs. You can freely choose the characters that represent
- * the "equal" and "ampersand" characters (including those), however the default
- * are "." and "!"   #key1.value1!key2.value2!key3.value3 etc.
+ * A singleton that provides synchronization between the application's
+ * properties and the application state saved in the URL hash. The syntax
+ * is the similar to the URL GET parameters, i.e. state values are saved
+ * as key-value pairs.
+ *
+ * You can freely choose the characters that represent
+ * the "equal" and "ampersand" characters (including those), however the
+ * default are ":" and "|", starting with a forward-slash (which can also be
+ * replaced with a different character.
+ *
+ * #/key1:value1|key2:value2|key3:value3 etc.
+ *
+ * All characters are URI-encoded, but stored in the history and shown in the
+ * browser as pretty human-readable characters.
  *
  * Any change to the state values (for example, by using the back or forward
  * buttons or by manually changing the URL) will update a corresponding property,
@@ -105,12 +113,12 @@ qx.Class.define("qcl.application.StateManager",
     },
   
     /**
-     * The charactera after the hash "#" that indicates that the has contains
-     * state information. Defaults to ""
+     * The charactera after the hash "#" that indicates that the hash contains
+     * state information. Defaults to "/"
      */
     hashBang: {
       check: "String",
-      init: "!"
+      init: "/"
     }
   },
   

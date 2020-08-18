@@ -22,16 +22,10 @@ use yii\db\Exception;
 class TableController extends AppController
 {
 
-
   /**
    * The main model type of this controller
    */
   static $modelType = "record";
-
-  //---------------------------------------------------------------------------
-  //  ACTIONS
-  //---------------------------------------------------------------------------
-
 
   /**
    * Returns the layout of the columns of the table displaying

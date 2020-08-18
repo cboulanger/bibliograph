@@ -21,7 +21,7 @@
 namespace lib\dialog;
 
 /**
- * This dialog widget is different from the others as it does not create a 
+ * This dialog widget is different from the others as it does not create a
  * browser event, but a long-running chunked HTTP response. It works only if
  * no headers have been sent before and must be called via a normal http
  * GET request (not in a JSONRPC request). It is the server companion of
@@ -73,9 +73,9 @@ class ServerProgress extends Dialog implements \lib\interfaces\Progress
     flush();
     $this->start();
   }
-  
+
   /**
-   * Internal function to send a chunk of data 
+   * Internal function to send a chunk of data
    */
   protected function send($chunk)
   {
@@ -131,13 +131,13 @@ class ServerProgress extends Dialog implements \lib\interfaces\Progress
   public function start()
   {
     $this->sendScript([
-      "window.progress=window.top.qx.core.Init.getApplication().getWidgetById('{$this->widgetId}');",
+      "window.progress=window.top.qx.core.Id.getQxObject('{$this->widgetId}');",
       "window.bus=top.qx.event.message.Bus.getInstance();",
     ]);
   }
 
   /**
-   * API function to set the state of the progress par 
+   * API function to set the state of the progress par
    * @param integer $value The valeu of the progress, in percent
    */
   public function setProgress(int $value, string $message=null, string $newLogText=null)
@@ -168,7 +168,7 @@ class ServerProgress extends Dialog implements \lib\interfaces\Progress
       "window.bus.dispatchByName('$name',", json_encode($data), ");"
     ]);
   }
-  
+
   /**
    * API function to dispatch a event (scope: progress widget)
    * @param string $name Name of event
@@ -180,7 +180,7 @@ class ServerProgress extends Dialog implements \lib\interfaces\Progress
     $this->sendScript([
       "window.progress.fireDataEvent('$name',", json_encode($data), ");"
     ]);
-  }  
+  }
 
   /**
    * API function to trigger an error alert

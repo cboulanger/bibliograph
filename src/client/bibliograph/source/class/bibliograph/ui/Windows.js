@@ -53,7 +53,7 @@ qx.Class.define("bibliograph.ui.Windows",
 
       // Access Control Tool
       let accessControlTool = new bibliograph.ui.window.AccessControlTool();
-      accessControlTool.setWidgetId("app/windows/access-control");
+      this.addOwnedQxObject(accessControlTool, "access-control");
       accessControlTool.setVisibility("excluded");
       accessControlTool.setQxObjectId("access");
       this.addOwnedQxObject(accessControlTool);
@@ -69,7 +69,7 @@ qx.Class.define("bibliograph.ui.Windows",
 
       // Preferences window
       let preferencesWindow = new bibliograph.ui.window.PreferencesWindow();
-      preferencesWindow.setWidgetId("app/windows/preferences");
+      this.addOwnedQxObject(preferencesWindow, "preferences");
       preferencesWindow.setVisibility("excluded");
       preferencesWindow.setQxObjectId("preferences");
       this.addOwnedQxObject(preferencesWindow);

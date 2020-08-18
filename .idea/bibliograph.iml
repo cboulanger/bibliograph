@@ -53,6 +53,7 @@
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/ezyang/htmlpurifier" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/flow/jsonpath" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/fzaninotto/faker" />
+      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/georgique" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/georgique/yii2-jsonrpc" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/goaop/parser-reflection" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/graze/guzzle-jsonrpc" />

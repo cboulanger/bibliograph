@@ -148,7 +148,7 @@ qx.Class.define("bibliograph.Setup", {
 
       // load plugins
       this.showPopup(this.getSplashMessage(this.tr("Loading plugins...")));
-      this.loadPlugins();
+      this.initializePlugins();
 
       // initialize application state
       app.getStateManager().setHistorySupport(true);
@@ -278,8 +278,8 @@ qx.Class.define("bibliograph.Setup", {
     /**
      * Loads the plugins
      */
-    loadPlugins : async function() {
-      for (let pluginNamespace in bibliograph.plugins) {
+    initializePlugins : function() {
+      for (let pluginNamespace of Object.keys(bibliograph.plugins)) {
         // @todo do not initialize diabled plugins/modules
         //let key = `modules.`;
         //let enabled = this.getApplication().getConfigManager().getKey(key);
@@ -287,14 +287,15 @@ qx.Class.define("bibliograph.Setup", {
         try {
           plugin = bibliograph.plugins[pluginNamespace].Plugin.getInstance();
         } catch (e) {
+          console.error(e);
           this.warn(`Could not instantiate plugin '${pluginNamespace}': ${e}`);
         }
         try {
           let message = plugin.init();
           this.info(message || `Initialized plugin '${plugin.getName()}'`);
         } catch (e) {
-          console.log(e);
-          this.warn(`Could not initialize plugin '${plugin.getName()}': ${e}`);
+          console.error(e);
+          this.error(`Could not initialize plugin '${plugin.getName()}': ${e}`);
         }
       }
     },

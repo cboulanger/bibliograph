@@ -26,6 +26,7 @@ qx.Class.define("bibliograph.plugins.backup.Plugin", {
     qcl.access.MPermissions
   ],
   type: "singleton",
+  
   members: {
     permissions: {
       create_backup: {
@@ -58,7 +59,7 @@ qx.Class.define("bibliograph.plugins.backup.Plugin", {
       systemMenu.add(backupMenuButton);
       
       // backup progress widget
-      let progressMeter = new qcl.ui.dialog.ServerProgress("backupProgressDialog", "backup/progress");
+      let progressMeter = new qcl.ui.dialog.ServerProgress("plugin-backup-progress", "backup/progress/progress");
       progressMeter.set({
         hideWhenCompleted : true
       });
@@ -87,7 +88,7 @@ qx.Class.define("bibliograph.plugins.backup.Plugin", {
       restoreBackupButton.addListener("execute", () => {
         let token = Math.random().toString().substring(2);
         this.__token= token;
-        app.getRpcClient("backup/ui").send("confirm-restore", [app.getDatasource(), token]);
+        app.getRpcClient("backup.ui").request("confirm-restore", [app.getDatasource(), token]);
       });
       qx.event.message.Bus.getInstance().subscribe("backup.restore", e => {
         let data = e.getData();
@@ -121,7 +122,7 @@ qx.Class.define("bibliograph.plugins.backup.Plugin", {
       // this.bindVisibility("backup.delete", deleteBackupButton);
       // backupMenu.add(deleteBackupButton);
       // deleteBackupButton.addListener("execute", () => {
-      //   app.getRpcClient('backup/ui').send('choose-delete',[app.getDatasource()]);
+      //   app.getRpcClient('backup.ui').request('choose-delete',[app.getDatasource()]);
       // }, this);
   
       // download Backup
@@ -130,7 +131,7 @@ qx.Class.define("bibliograph.plugins.backup.Plugin", {
       // this.bindVisibility("backup.download", downloadBackupButton);
       // backupMenu.add(downloadBackupButton);
       // downloadBackupButton.addListener("execute", function(e) {
-      //   app.getRpcClient('backup/ui').send('choose-download',[app.getDatasource()]);
+      //   app.getRpcClient('backup.ui').request('choose-download',[app.getDatasource()]);
       // }, this);
     }
   }

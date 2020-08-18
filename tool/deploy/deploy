@@ -32,7 +32,7 @@ DEPLOY_DB_NAME=""
 DEPLOY_IMPORT_DB_NAMES=""
 DEPLOY_EMPTY_DATABASE=0
 DEPLOY_EXCLUDE_ARGS="--exclude=*.zip --exclude=._* --exclude=.DS_Store --exclude=.git*"
-DEPLOY_CLEAN=0
+DEPLOY_CLEAN=1
 
 # load .env file if defined as an environment variable (so that this script can be sourced)
 if [[ "$BUILD_ENV_FILE" != "" ]]; then
@@ -108,8 +108,8 @@ while [[ $1 != "" ]] ; do
             BUILD_CLEAN=1
             ;;
 
-        "--deploy-clean")
-            DEPLOY_CLEAN=1
+        "--no-deploy-clean")
+            DEPLOY_CLEAN=0
             ;;
 
         "--set-env"|"-e")
@@ -167,7 +167,7 @@ ${HELP_ADDITIONAL_TEXT}
                                   (only remotely), overrides DEPLOY_IMPORT_DB_NAMES
                                   implies -E
   --clean                       - clean the working directory befor building
-  --deploy-clean                - clean files and database on the deploy target
+  --no-deploy-clean             - do not clean files on the deploy target
                                   before deployment
   --set-env                     - set environment variables, overriding values
                                   loaded from --env-file
