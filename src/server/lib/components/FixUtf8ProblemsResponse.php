@@ -1,15 +1,14 @@
 <?php
 
 namespace lib\components;
-use app\controllers\dto\AuthResult;
 use app\controllers\dto\Base;
 use ForceUTF8\Encoding;
-use georgique\yii2\jsonrpc\responses\JsonRpcResponse;
 use georgique\yii2\jsonrpc\responses\SuccessResponse;
 use Yii;
 
 /**
- * This Response component wich takes care of invalid utf-8 in the data
+ * This Response component wich takes care of invalid utf-8 in the data.
+ * This is a bad hack working around a broken mysql server setup
  */
 class FixUtf8ProblemsResponse extends \yii\web\Response
 {
@@ -25,12 +24,11 @@ class FixUtf8ProblemsResponse extends \yii\web\Response
     }
     $serialized = var_export($data, true);
     if (!mb_detect_encoding($serialized, 'UTF-8', true)) {
-    //if (!preg_match("//u", $serialized) ) {
       Yii::error("*** INVALID UTF-8: " . $serialized);
       // try to fix them
       $serialized = Encoding::fixUTF8($serialized);
       // if this doesn't fix it, remove invalid characters
-      if (!preg_match("//u", $serialized) ) {
+      if (!mb_detect_encoding($serialized, 'UTF-8', true)) {
         $serialized = iconv("UTF-8", "UTF-8//IGNORE", $serialized);
         $serialized = mb_convert_encoding($serialized , 'UTF-8', 'UTF-8');
       }
@@ -41,7 +39,7 @@ class FixUtf8ProblemsResponse extends \yii\web\Response
   }
 
   /**
-   * This is a bad hack working around a broken mysql server setup
+   * @overridden
    */
   protected function prepare()
   {
