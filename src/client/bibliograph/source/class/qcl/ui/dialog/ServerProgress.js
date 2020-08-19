@@ -29,7 +29,7 @@
  *      });
  *  </script>
  * </pre>
- * Use the qcl_ui_dialog_ServerProgress PHP class to produce this output.
+ * Use the lib\dialog\ServerProgress PHP class to produce this output.
  */
 qx.Class.define("qcl.ui.dialog.ServerProgress", {
   extend : qxl.dialog.Progress,
@@ -39,11 +39,45 @@ qx.Class.define("qcl.ui.dialog.ServerProgress", {
     /**
      * The route name
      */
-    route :
-    {
+    route: {
       check : "String",
       nullable : false
+    },
+  
+    /**
+     * What to do if the server sends an message event: a) show a dialog, b)
+     * ignore the message and let client code handle it
+     */
+    messageBehavior: {
+      check: ["dialog", "ignore"],
+      init: "dialog"
+    },
+    
+    /**
+     * What to do if the server sends an error event: a) show a dialog, b)
+     * ignore the error and let client code handle it, c) throw an error
+     */
+    errorBehavior: {
+      check: ["dialog", "ignore", "error"],
+      init: "dialog"
     }
+  },
+  
+  events:{
+    /**
+     * An arbitrary message passed by the server
+     */
+    "message": "qx.event.type.Data",
+    
+    /**
+     * An error event sent by the server
+     */
+    "error": "qx.event.type.Data",
+  
+    /**
+     * Fired when the Progress job has successfully completed
+     */
+    "done": "qx.event.type.Event"
   },
   
   /**
@@ -65,6 +99,28 @@ qx.Class.define("qcl.ui.dialog.ServerProgress", {
     let app = qx.core.Init.getApplication();
     app.getRoot().getContentElement().add(this.__iframe);
     this.__sourceUrl = app.getServerUrl();
+  
+    // errors
+    this.addListener("message", e => {
+      let message = e.getData();
+      switch (this.getMessageBehavior()) {
+        case "dialog":
+          qxl.dialog.Dialog.alert(message);
+          break;
+      }
+    });
+    
+    // errors
+    this.addListener("error", e => {
+      let message = e.getData();
+      switch (this.getErrorBehavior()) {
+        case "dialog":
+          qxl.dialog.Dialog.error(message);
+          break;
+        case "error":
+          throw new Error(message);
+      }
+    });
   },
 
   members :

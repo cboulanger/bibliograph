@@ -52,7 +52,11 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow", {
   
     // create toolbar with selectbox and search bar
     this.add(this.getQxObject("toolbar"));
-    this.__helpButton.addListener("execute", () => this.getApplication().showHelpWindow("plugin/z3950/search"));
+    this.__helpButton.addListener("execute", () =>
+      this.getApplication()
+        .getCommands()
+        .showHelpWindow("plugin/z3950/search"));
+    
     // selectbox with list of datasources
     this.__selectBox.bind("selection[0].label", this.__selectBox, "toolTipText");
     this.__selectBox.bind("selection[0].value", this, "datasource");
@@ -110,9 +114,6 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow", {
     this.__importButton.addListener("execute", () => this.importSelected());
     this.__closeButton.addListener("execute", () => this.close());
     this.__listView.bind("store.model.statusText", this.__status, "value");
-    
-    // close on logout
-    qx.event.message.Bus.getInstance().subscribe(bibliograph.AccessManager.messages.AFTER_LOGOUT, () => this.close());
   },
   
   members:
@@ -230,6 +231,9 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow", {
       let p = qx.core.Id.getQxObject("plugins-z3950-progress");
       p.setMessage(this.tr("Searching..."));
       p.start({ datasource, query });
+  
+      // close on logout
+      qx.event.message.Bus.getInstance().subscribe(bibliograph.AccessManager.messages.AFTER_LOGOUT, () => this.close());
     },
     
     

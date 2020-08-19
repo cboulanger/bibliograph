@@ -26,6 +26,10 @@ use yii\validators\StringValidator;
 class Crossref extends AbstractConnector implements IConnector
 {
 
+  const DOI_LONG_PATTERN = "/^10.\d{4,9}\/[-._;()\/:A-Z0-9]+$/i";
+
+  const DOI_SHORT_PATTERN = "/^10\/[a-z0-9]+$/i";
+
   /**
    * @inheritdoc
    */
@@ -65,15 +69,19 @@ class Crossref extends AbstractConnector implements IConnector
     $searchTerm = $searchClause->term->value;
     switch ($searchClause->index->value) {
       case "doi":
-        if( ! preg_match("/^10.\d{4,9}\/[-._;()\/:A-Z0-9]+$/i", $searchTerm) ){
+        if(
+          ! preg_match(static::DOI_LONG_PATTERN, $searchTerm) and
+          ! preg_match(static::DOI_SHORT_PATTERN, $searchTerm)
+        ){
           throw new UserErrorException(
             Yii::t(
             Module::CATEGORY,
-            "'{searchterm}' does not seem to be a valid DOI.",
+            "'{searchterm}' does not seem to be a valid long or short DOI.",
             ['searchterm'=> $searchTerm]
             )
           );
         }
+
         $path = "works/$searchTerm";
         break;
       default:

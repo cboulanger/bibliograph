@@ -25,7 +25,7 @@ class Config extends BaseModel
     2 => "boolean",
     3 => "list"
   ];
-  
+
   /**
    * @inheritdoc
    */
@@ -63,7 +63,7 @@ class Config extends BaseModel
       'modified' => 'Modified',
     ];
   }
-  
+
   //-------------------------------------------------------------
   // Relations
   //-------------------------------------------------------------
@@ -72,43 +72,45 @@ class Config extends BaseModel
    * @param int $userId
    * @return \yii\db\ActiveQuery
    */
-  protected function getUserConfigs( $userId )
+  protected function getUserConfigs($userId)
   {
     return $this
       ->hasMany(UserConfig::className(), ['ConfigId' => 'id'])
-      ->onCondition( ['UserId' => $userId ]);
+      ->onCondition(['UserId' => $userId]);
   }
 
   /**
    * @param int|\app\models\User $user Either a numeric id or the user model
-   * @return \app\models\UserConfig|null 
-   *    Returns the instance of the UserConfig linked to the particular user or null
-   *    if none exists
+   * @return \app\models\UserConfig|null
+   *    Returns the instance of the UserConfig linked to the particular user or
+   *   null if none exists
    * @throws \LogicException
    */
-  public function getUserConfig( $user )
+  public function getUserConfig($user)
   {
     $userId = $user instanceof \app\models\User ? $user->id : $user;
-    if( ! is_numeric($userId) ) throw new \InvalidArgumentException("Invalid user/user id");
-    $query = $this->getUserConfigs( $userId );
+    if (!is_numeric($userId)) throw new \InvalidArgumentException("Invalid user/user id");
+    $query = $this->getUserConfigs($userId);
     //codecept_debug($query->createCommand()->getRawSql());
     $result = $query->one();
     return $result;
   }
 
   /**
-   * Returns the customized user configuration or the config default if no 
+   * Returns the customized user configuration or the config default if no
    * user object has been passed.
    *
-   * @param int|\app\models\User|null $user Either a numeric id or the user model
+   * @param int|\app\models\User|null $user Either a numeric id or the user
+   *   model
    * @return mixed
    */
-  public function getUserConfigValue( $user ){
-    if ( ! $user ){
+  public function getUserConfigValue($user)
+  {
+    if (!$user) {
       return $this->default;
     }
-    $userConfig = $this->getUserConfig( $user );
-    if( is_null($userConfig) ){
+    $userConfig = $this->getUserConfig($user);
+    if (is_null($userConfig)) {
       // no user config exists, return default value
       return $this->default;
     }

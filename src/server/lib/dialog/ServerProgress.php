@@ -40,17 +40,6 @@ class ServerProgress extends Dialog implements \lib\interfaces\Progress
   const BUS_VAR_NAME = "window.__qx_bus";
 
   /**
-   * The command used to display an alert box
-   */
-  const ALERT_DIALOG_CMD = "window.top.qxl.dialog.Dialog.alert";
-
-  /**
-   * The command used to display an error
-   */
-  const ERROR_DIALOG_CMD = "window.top.qxl.dialog.Dialog.error";
-
-
-  /**
    * The id of the progress widget
    */
   protected $widgetId;
@@ -193,14 +182,20 @@ class ServerProgress extends Dialog implements \lib\interfaces\Progress
   /**
    * API function to dispatch a event (scope: progress widget)
    * @param string $name Name of event
-   * @param mixed|null $data event data
+   * @param mixed|null $data event data. If null, a non-data event is fired.
    *
    */
   public function dispatchClientEvent($name,$data=null)
   {
-    $this->sendScript([
-      static::PROGRESS_VAR_NAME . ".fireDataEvent('$name',", json_encode($data), ");"
-    ]);
+    if ($data !== null) {
+      $this->sendScript([
+        static::PROGRESS_VAR_NAME . ".fireDataEvent('$name',", json_encode($data), ");"
+      ]);
+    } else {
+      $this->sendScript([
+        static::PROGRESS_VAR_NAME . ".fireEvent('$name');"
+      ]);
+    }
   }
 
   /**
@@ -210,23 +205,8 @@ class ServerProgress extends Dialog implements \lib\interfaces\Progress
   public function error(string $message)
   {
     $this->setProgress(100);
-    $this->sendScript([
-      static::PROGRESS_VAR_NAME . ".hide();",
-      static::ERROR_DIALOG_CMD . "('" . addslashes($message) . "');"
-    ]);
+    $this->dispatchClientEvent("error", $message);
     $this->close();
-  }
-
-  /**
-   * Closes the chunked transfer connection
-   */
-  public function close()
-  {
-    echo sprintf("%x\r\n", 0);
-    echo "\r\n";
-    flush();
-    ob_flush();
-    exit();
   }
 
   /**
@@ -236,12 +216,27 @@ class ServerProgress extends Dialog implements \lib\interfaces\Progress
   public function complete(string $message=null)
   {
     $this->setProgress(100);
-    if ( $message )
-    {
-      $this->sendScript([
-        static::ALERT_DIALOG_CMD . "('$message');"
-      ]);
+    if ( $message ) {
+      $this->dispatchClientEvent("message", $message);
     }
+    $this->dispatchClientEvent("done");
     $this->close();
   }
+
+  /**
+   * Closes the chunked transfer connection
+   */
+  public function close()
+  {
+    $this->sendScript([
+      static::PROGRESS_VAR_NAME . ".hide();"
+    ]);
+    echo sprintf("%x\r\n", 0);
+    echo "\r\n";
+    flush();
+    ob_flush();
+    exit();
+  }
+
+
 }

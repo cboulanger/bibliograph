@@ -96,12 +96,15 @@ qx.Class.define("bibliograph.plugins.webservices.View",
     qx.event.message.Bus.getInstance().subscribe("plugins.webservices.reloadDatasources", () => store.load("server-list"));
     
     // help button
-    this.__helpButton.addListener("execute", () => this.getApplication().showHelpWindow("plugin/webservices/search"));
+    this.__helpButton.addListener("execute", () =>
+      this.getApplication()
+        .getCommands()
+        .showHelpWindow("plugin/webservices/search"));
     
     // searchbox
     this.__searchBox.addListener("input", e => this.setSearch(e.getData()));
     this.__searchBox.addListener("changeValue", e => this.setSearch(e.getData()));
-    this.__searchBox.addListener("keypress", this._on_keypress, this);
+    this.__searchBox.addListener("keypress", this.__onKeypress, this);
     this.bind("search", this.__searchBox, "value");
     
     // create and configure listview
@@ -122,8 +125,8 @@ qx.Class.define("bibliograph.plugins.webservices.View",
       this.__listView.addListenerOnce("tableReady", () => {
         let controller = this.__listView.getController();
         let enableButtons = () => {
+          this.__searchBar.setEnabled(true);
           this.__importButton.setEnabled(true);
-          this.__searchButton.setEnabled(true);
           this.__listView.setEnabled(true);
           this.hidePopup();
           if (this.getAutoimport() && this.getSearch()) {
@@ -150,9 +153,16 @@ qx.Class.define("bibliograph.plugins.webservices.View",
     this.__importButton.addListener("execute", () => this.importSelected());
     this.__closeButton.addListener("execute", () => this.getWindow().close());
     this.__listView.bind("store.model.statusText", this.__status, "value");
-  
-    // close on logout
-    qx.event.message.Bus.getInstance().subscribe(bibliograph.AccessManager.messages.AFTER_LOGOUT, () => this.close());
+    
+    // progress bar
+    this.__serverProgress = qx.core.Id.getQxObject("plugins-webservices-progress");
+    // re-enable searchbar after a progress request
+    this.__serverProgress.addListener("error", () => this.__searchBar.setEnabled(true));
+    this.__serverProgress.addListener("message", () => this.__searchBar.setEnabled(true));
+    this.__serverProgress.addListener("done", () => {
+      this.__searchBar.setEnabled(true);
+      this.__searchBox.setValue("");
+    });
   },
   
   members:
@@ -172,7 +182,9 @@ qx.Class.define("bibliograph.plugins.webservices.View",
           control.set({
             labelPath: "label",
             width: 300,
-            maxHeight: 25
+            maxHeight: 30,
+            marginTop: 8,
+            marginLeft: 4
           });
           this.__selectBox = control;
           break;
@@ -180,8 +192,8 @@ qx.Class.define("bibliograph.plugins.webservices.View",
           control = new qx.ui.container.Composite(new qx.ui.layout.HBox(5));
           control.setPadding(4);
           control.add(this.getQxObject("search-box"), {flex: 1});
-          control.add(this.getQxObject("search-button"));
           control.add(this.getQxObject("search-clear-button"));
+          control.add(this.getQxObject("search-button"));
           control.add(this.getQxObject("help-button"));
           this.__searchBar = control;
           break;
@@ -189,7 +201,8 @@ qx.Class.define("bibliograph.plugins.webservices.View",
           control = new qx.ui.form.TextField();
           control.set({
             padding: 2,
-            height: 26,
+            margin: 4,
+            height: 30,
             placeholder: this.tr("Enter search terms")
           });
           control.addListener("dblclick", e => e.stopPropagation());
@@ -203,11 +216,15 @@ qx.Class.define("bibliograph.plugins.webservices.View",
         case "search-clear-button":
           control = new qx.ui.toolbar.Button();
           control.setIcon("bibliograph/icon/16/cancel.png");
-          control.setMarginRight(5);
-          control.addListener("execute", () => {
-            this.getQxObject("search-button").setValue("");
-            this.getQxObject("search-button").focus();
+          control.set({
+            margin: 4,
+            height: 30
           });
+          control.addListener("execute", () => {
+            this.getQxObject("search-box").setValue("");
+            this.getQxObject("search-box").focus();
+          });
+          this.__searchClearButton = control;
           break;
         case "autoimport":
           control = new qx.ui.form.CheckBox(this.tr("Auto-import best result"));
@@ -246,13 +263,10 @@ qx.Class.define("bibliograph.plugins.webservices.View",
           break;
         case "close-button":
           control = new qx.ui.form.Button(this.tr("Close"));
-          control.addListener("execute", () => this.close());
+          control.addListener("execute", () => this.getWindow().close());
           this.__closeButton = control;
           break;
       }
-      // if (control) {
-      //   this.addOwnedQxObject(control, id);
-      // }
       return control || this.base(arguments, id);
     },
 
@@ -268,8 +282,6 @@ qx.Class.define("bibliograph.plugins.webservices.View",
       this.info("Webservices datasource is now: " + value);
     },
 
-
-
     /**
      * Starts the search
      */
@@ -281,14 +293,12 @@ qx.Class.define("bibliograph.plugins.webservices.View",
       let lv = this.__listView;
       lv.setDatasource(datasource);
       lv.clearTable();
-      //lv.setEnabled(false);
-      //this.__importButton.setEnabled(false);
-      //this.__searchButton.setEnabled(false);
-      
+      lv.setEnabled(false);
+      this.__searchBar.setEnabled(false);
       // open the ServerProgress widget and initiate the remote search
-      let p = qx.core.Id.getQxObject("plugins-webservices-progress");
-      p.setMessage(this.tr("Searching..."));
-      p.start({ datasource, query });
+      this.__serverProgress
+        .set({message: this.tr("Searching...")})
+        .start({ datasource, query });
     },
     
     
@@ -326,14 +336,18 @@ qx.Class.define("bibliograph.plugins.webservices.View",
       // send to server
       let sourceDatasource = this.__selectBox.getSelection().toArray()[0].getValue();
       let targetDatasource = app.getDatasource();
+      this.__importButton.setEnabled(false);
       this.showPopup(this.tr("Importing references..."));
-      await this.getApplication()
-        .getRpcClient("webservices.table")
-        .request("import", [sourceDatasource, ids, targetDatasource, targetFolderId]);
-      this.__importButton.setEnabled(true);
-      this.hidePopup();
-      this.__searchBox.setValue("");
-      this.__searchBox.focus();
+      try {
+        await this.getApplication()
+          .getRpcClient("webservices.table")
+          .request("import", [sourceDatasource, ids, targetDatasource, targetFolderId]);
+      } finally {
+        this.__importButton.setEnabled(true);
+        this.hidePopup();
+        this.__searchBox.setValue("");
+        this.__searchBox.focus();
+      }
     },
 
 
@@ -341,7 +355,7 @@ qx.Class.define("bibliograph.plugins.webservices.View",
      * Called when the user presses a key in the search box
      * @param e {qx.event.type.Data}
      */
-    _on_keypress: function (e) {
+    __onKeypress: function (e) {
       if (e.getKeyIdentifier() === "Enter") {
         this.startSearch();
       }
