@@ -30,6 +30,27 @@ namespace lib\dialog;
 class ServerProgress extends Dialog implements \lib\interfaces\Progress
 {
   /**
+   * The global variable for the progress widget
+   */
+  const PROGRESS_VAR_NAME = "window.__qx_progress";
+
+  /**
+   * The global variable for the message bus
+   */
+  const BUS_VAR_NAME = "window.__qx_bus";
+
+  /**
+   * The command used to display an alert box
+   */
+  const ALERT_DIALOG_CMD = "window.top.qxl.dialog.Dialog.alert";
+
+  /**
+   * The command used to display an error
+   */
+  const ERROR_DIALOG_CMD = "window.top.qxl.dialog.Dialog.error";
+
+
+  /**
    * The id of the progress widget
    */
   protected $widgetId;
@@ -131,8 +152,8 @@ class ServerProgress extends Dialog implements \lib\interfaces\Progress
   public function start()
   {
     $this->sendScript([
-      "window.progress=window.top.qx.core.Id.getQxObject('{$this->widgetId}');",
-      "window.bus=top.qx.event.message.Bus.getInstance();",
+      static::PROGRESS_VAR_NAME . " = window.top.qx.core.Id.getQxObject('{$this->widgetId}');",
+      static::BUS_VAR_NAME . " = top.qx.event.message.Bus.getInstance();",
     ]);
   }
 
@@ -151,7 +172,7 @@ class ServerProgress extends Dialog implements \lib\interfaces\Progress
       if($message) $data['message']=$message;
       if($newLogText) $data['newLogText']= $newLogText;
       $this->sendScript([
-        "window.progress.set(", json_encode($data), ");"
+        static::PROGRESS_VAR_NAME . ".set(", json_encode($data), ");"
       ]);
     }
   }
@@ -165,7 +186,7 @@ class ServerProgress extends Dialog implements \lib\interfaces\Progress
   public function dispatchClientMessage($name,$data=null)
   {
     $this->sendScript([
-      "window.bus.dispatchByName('$name',", json_encode($data), ");"
+      static::BUS_VAR_NAME . ".dispatchByName('$name',", json_encode($data), ");"
     ]);
   }
 
@@ -178,7 +199,7 @@ class ServerProgress extends Dialog implements \lib\interfaces\Progress
   public function dispatchClientEvent($name,$data=null)
   {
     $this->sendScript([
-      "window.progress.fireDataEvent('$name',", json_encode($data), ");"
+      static::PROGRESS_VAR_NAME . ".fireDataEvent('$name',", json_encode($data), ");"
     ]);
   }
 
@@ -190,8 +211,8 @@ class ServerProgress extends Dialog implements \lib\interfaces\Progress
   {
     $this->setProgress(100);
     $this->sendScript([
-      "window.progress.hide();",
-      "window.top.dialog.Dialog.error('" . addslashes($message) . "');"
+      static::PROGRESS_VAR_NAME . ".hide();",
+      static::ERROR_DIALOG_CMD . "('" . addslashes($message) . "');"
     ]);
     $this->close();
   }
@@ -218,7 +239,7 @@ class ServerProgress extends Dialog implements \lib\interfaces\Progress
     if ( $message )
     {
       $this->sendScript([
-        "window.top.dialog.Dialog.alert('$message');"
+        static::ALERT_DIALOG_CMD . "('$message');"
       ]);
     }
     $this->close();

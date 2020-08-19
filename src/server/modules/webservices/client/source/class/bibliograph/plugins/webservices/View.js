@@ -75,6 +75,7 @@ qx.Class.define("bibliograph.plugins.webservices.View",
     
     // create toolbar with select box and search bar
     this.add(this.getQxObject("toolbar"));
+    this.add(this.getQxObject("autoimport"));
     
     // select box with list of datasources
     this.__selectBox.bind("selection[0].label", this.__selectBox, "toolTipText");
@@ -181,7 +182,6 @@ qx.Class.define("bibliograph.plugins.webservices.View",
           control.add(this.getQxObject("search-box"), {flex: 1});
           control.add(this.getQxObject("search-button"));
           control.add(this.getQxObject("search-clear-button"));
-          control.add(this.getQxObject("autoimport"));
           control.add(this.getQxObject("help-button"));
           this.__searchBar = control;
           break;
