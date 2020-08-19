@@ -15,8 +15,6 @@
 
 ************************************************************************ */
 
-/*global qx qcl dialog*/
-
 qx.Class.define("bibliograph.plugins.webservices.View",
 {
   extend: qx.ui.container.Composite,
@@ -72,26 +70,70 @@ qx.Class.define("bibliograph.plugins.webservices.View",
    */
   construct: function () {
     this.base(arguments);
-    this.createUi();
+    this.setLayout(new qx.ui.layout.VBox(5));
     this.createPopup();
-
+    
+    // create toolbar with select box and search bar
+    this.add(this.getQxObject("toolbar"));
+    
+    // select box with list of datasources
+    this.__selectBox.bind("selection[0].label", this.__selectBox, "toolTipText");
+    this.__selectBox.bind("selection[0].value", this, "datasource");
+    // store for selectbox
+    let store = new qcl.data.store.JsonRpcStore("webservices.table");
+    store.setModel(qx.data.marshal.Json.createModel([]));
+    store.bind("model", this.__selectBox, "model");
+    store.addListener("loaded", () => {
+      let lastDatasource = this.getApplication()
+        .getConfigManager()
+        .getKey("modules.webservices.lastDatasource");
+      if (lastDatasource) {
+        this.setDatasource(lastDatasource);
+      }
+    });
+    this.addListener("appear", () => store.load("server-list"));
+    qx.event.message.Bus.getInstance().subscribe("plugins.webservices.reloadDatasources", () => store.load("server-list"));
+    
+    // help button
+    this.__helpButton.addListener("execute", () => this.getApplication().showHelpWindow("plugin/webservices/search"));
+    
+    // searchbox
+    this.__searchBox.addListener("input", e => this.setSearch(e.getData()));
+    this.__searchBox.addListener("changeValue", e => this.setSearch(e.getData()));
+    this.__searchBox.addListener("keypress", this._on_keypress, this);
+    this.bind("search", this.__searchBox, "value");
+    
+    // create and configure listview
+    let listview = this.getQxObject("listview");
+    this.add(listview, {flex: 1});
+    listview.set({
+      modelType: "record",
+      serviceName: "webservices.table"
+    });
+    // populate the list when the data is ready
+    qx.event.message.Bus.getInstance().subscribe("webservices.dataReady", e => {
+      listview.setQuery(null);
+      listview.setQuery(e.getData());
+    });
+    
+    // when table is ready
     qx.lang.Function.delay(() => {
-      this.listView.addListenerOnce("tableReady", () => {
-        let controller = this.listView.getController();
+      this.__listView.addListenerOnce("tableReady", () => {
+        let controller = this.__listView.getController();
         let enableButtons = () => {
-          this.importButton.setEnabled(true);
-          this.searchButton.setEnabled(true);
-          this.listView.setEnabled(true);
+          this.__importButton.setEnabled(true);
+          this.__searchButton.setEnabled(true);
+          this.__listView.setEnabled(true);
           this.hidePopup();
           if (this.getAutoimport() && this.getSearch()) {
-           this.listView
+           this.__listView
              .getTable()
              .getSelectionManager()
              .getSelectionModel()
              .setSelectionInterval(0, 0);
            this.importSelected();
            this.setSearch(null);
-           this.searchBox.focus();
+           this.__searchBox.focus();
           }
         };
         controller.addListener("blockLoaded", enableButtons);
@@ -101,22 +143,124 @@ qx.Class.define("bibliograph.plugins.webservices.View",
         });
       });
     }, 100);
+  
+    // create __footer with status and import/close buttons
+    this.add(this.getQxObject("footer"));
+    this.__importButton.addListener("execute", () => this.importSelected());
+    this.__closeButton.addListener("execute", () => this.getWindow().close());
+    this.__listView.bind("store.model.statusText", this.__status, "value");
+  
+    // close on logout
+    qx.event.message.Bus.getInstance().subscribe(bibliograph.AccessManager.messages.AFTER_LOGOUT, () => this.close());
   },
   
   members:
   {
-    listView: null,
-    datasourceSelectBox: null,
-    searchBox: null,
-    searchButton: null,
-    scannerButton : null,
-    statusTextLabel: null,
+    _createQxObjectImpl(id) {
+      let control;
+      switch (id) {
+        case "toolbar":
+          control = new qx.ui.toolbar.ToolBar();
+          control.add(this.getQxObject("selectbox"));
+          control.addSpacer();
+          control.add(this.getQxObject("search-bar"), {flex: 1});
+          this.___toolbar = control;
+          break;
+        case "selectbox":
+          control = new qx.ui.form.VirtualSelectBox();
+          control.set({
+            labelPath: "label",
+            width: 300,
+            maxHeight: 25
+          });
+          this.__selectBox = control;
+          break;
+        case "search-bar":
+          control = new qx.ui.container.Composite(new qx.ui.layout.HBox(5));
+          control.setPadding(4);
+          control.add(this.getQxObject("search-box"), {flex: 1});
+          control.add(this.getQxObject("search-button"));
+          control.add(this.getQxObject("search-clear-button"));
+          control.add(this.getQxObject("autoimport"));
+          control.add(this.getQxObject("help-button"));
+          this.__searchBar = control;
+          break;
+        case "search-box":
+          control = new qx.ui.form.TextField();
+          control.set({
+            padding: 2,
+            height: 26,
+            placeholder: this.tr("Enter search terms")
+          });
+          control.addListener("dblclick", e => e.stopPropagation());
+          this.__searchBox = control;
+          break;
+        case "search-button":
+          control = new qx.ui.form.Button(this.tr("Search"));
+          control.addListener("execute", () => this.startSearch());
+          this.__searchButton = control;
+          break;
+        case "search-clear-button":
+          control = new qx.ui.toolbar.Button();
+          control.setIcon("bibliograph/icon/16/cancel.png");
+          control.setMarginRight(5);
+          control.addListener("execute", () => {
+            this.getQxObject("search-button").setValue("");
+            this.getQxObject("search-button").focus();
+          });
+          break;
+        case "autoimport":
+          control = new qx.ui.form.CheckBox(this.tr("Auto-import best result"));
+          control.bind("value", this, "autoimport");
+          this.bind("autoimport", control, "value");
+          this.__autoimport = control;
+          break;
+        case "help-button":
+          control = new qx.ui.toolbar.Button(this.tr("Help"));
+          this.__helpButton = control;
+          break;
+        case "listview":
+          control = new qcl.ui.table.TableView();
+          control.setDecorator("main"); //??
+          control.headerBar.setVisibility("excluded");
+          control.menuBar.setVisibility("excluded");
+          this.__listView = control;
+          break;
+        case "footer":
+          control = new qx.ui.container.Composite(new qx.ui.layout.HBox(5));
+          control.add(this.getQxObject("status-label"));
+          control.add(new qx.ui.core.Spacer(), { flex: 10 });
+          control.add(this.getQxObject("import-button"));
+          control.add(this.getQxObject("close-button"));
+          this.__footer = control;
+          break;
+        case "status-label":
+          control = new qx.ui.basic.Label();
+          control.setTextColor("#808080");
+          this.__status = control;
+          break;
+        case "import-button":
+          control = new qx.ui.form.Button(this.tr("Import selected records"));
+          control.setEnabled(false);
+          this.__importButton = control;
+          break;
+        case "close-button":
+          control = new qx.ui.form.Button(this.tr("Close"));
+          control.addListener("execute", () => this.close());
+          this.__closeButton = control;
+          break;
+      }
+      // if (control) {
+      //   this.addOwnedQxObject(control, id);
+      // }
+      return control || this.base(arguments, id);
+    },
 
     _applyDatasource : function(value, old) {
       if (value) {
-        this.datasourceSelectBox.getModel().forEach(item => {
+        this.__selectBox.getModel().forEach(item => {
           if (item.getValue() === value) {
-            this.datasourceSelectBox.getSelection().setItem(0, item);
+            this.__selectBox.getSelection().setItem(0, item);
           }
         });
         this.getApplication().getConfigManager().setKey("modules.webservices.lastDatasource", value);
@@ -124,153 +268,22 @@ qx.Class.define("bibliograph.plugins.webservices.View",
       this.info("Webservices datasource is now: " + value);
     },
 
-    /**
-     * UI
-     */
-    createUi: function() {
-      this.setLayout(new qx.ui.layout.VBox(5));
 
-      // toolbar
-      let toolBar1 = new qx.ui.toolbar.ToolBar();
-      toolBar1.set({ spacing : 5 });
-      this.add(toolBar1);
-
-      // datasource select box
-      let selectBox = new qx.ui.form.VirtualSelectBox();
-      selectBox.setLabelPath("label");
-      this.datasourceSelectBox = selectBox;
-      //selectBox.setWidth(300);
-      selectBox.setMaxHeight(30);
-      toolBar1.add(selectBox, {flex:1});
-      selectBox.bind("selection[0].label", selectBox, "toolTipText");
-      selectBox.bind("selection[0].value", this, "datasource");
-      let store = new qcl.data.store.JsonRpcStore("webservices.table");
-      let model = qx.data.marshal.Json.createModel([]);
-      store.setModel(model);
-      store.bind("model", selectBox, "model");
-      store.addListener("loaded", () => {
-        let lastDatasource = this.getApplication()
-          .getConfigManager()
-          .getKey("modules.webservices.lastDatasource");
-        if (lastDatasource) {
-          this.setDatasource(lastDatasource);
-        }
-      });
-      this.addListener("appear", () => {
-        qx.event.message.Bus.dispatchByName("plugins.webservices.reloadDatasources");
-      });
-      qx.event.message.Bus.getInstance().subscribe("plugins.webservices.reloadDatasources", function (e) {
-        store.load("server-list");
-      }, this);
-
-      // auto-import
-      let autoimport = new qx.ui.form.CheckBox(this.tr("Auto-import best result"));
-      autoimport.bind("value", this, "autoimport");
-      this.bind("autoimport", autoimport, "value");
-      toolBar1.add(autoimport);
-      
-      // search widgets container
-      let composite1 = new qx.ui.container.Composite();
-      composite1.setLayout(new qx.ui.layout.HBox(5));
-      composite1.setPadding(4);
-      toolBar1.add(composite1, {flex: 1});
-      
-      // searchbox
-      let searchBox = new qx.ui.form.TextField();
-      this.searchBox = searchBox;
-      searchBox.setPadding(2);
-      searchBox.setMarginTop(5);
-      searchBox.setPlaceholder(this.tr("Enter search terms"));
-      composite1.add(searchBox, {flex: 1});
-      searchBox.addListener("input", e => this.setSearch(e.getData()));
-      searchBox.addListener("changeValue", e => this.setSearch(e.getData()));
-      this.bind("search", searchBox, "value");
-      searchBox.addListener("keypress", this._on_keypress, this);
-      searchBox.addListener("dblclick", e => e.stopPropagation());
-      
-      // search button
-      this.searchButton = new qx.ui.toolbar.Button();
-      this.searchButton.setIcon("bibliograph/icon/16/search.png");
-      this.searchButton.addListener("execute", e => this.startSearch());
-      composite1.add(this.searchButton);
-
-      // cancel button
-      let cancelButton = new qx.ui.toolbar.Button();
-      cancelButton.setIcon("bibliograph/icon/16/cancel.png");
-      cancelButton.setMarginRight(5);
-      cancelButton.addListener("execute", () => {
-        this.searchBox.setValue("");
-        this.searchBox.focus();
-      });
-      composite1.add(cancelButton);
-      
-      // help button
-      let helpButton = new qx.ui.toolbar.Button(this.tr("Help"));
-      composite1.add(helpButton);
-      helpButton.addListener("execute", e => this.getApplication().showHelpWindow("plugin/webservices/search"));
-
-      // table view
-      let tableview = new qcl.ui.table.TableView();
-      this.listView = tableview;
-      tableview.setDecorator("main"); //??
-      tableview.setModelType("record");
-      tableview.setServiceName("webservices.table");
-      tableview.headerBar.setVisibility("excluded");
-      tableview.menuBar.setVisibility("excluded");
-      this.add(tableview, {flex: 1});
-
-      // populate the list when the data is ready
-      qx.event.message.Bus.getInstance().subscribe("webservices.dataReady", e => {
-        tableview.setQuery(null);
-        tableview.setQuery(e.getData());
-      });
-
-      // footer
-      let hbox2 = new qx.ui.layout.HBox(5, null, null);
-      let composite2 = new qx.ui.container.Composite();
-      composite2.setLayout(hbox2);
-      this.add(composite2);
-      hbox2.setSpacing(5);
-
-      // status label
-      this.statusTextLabel = new qx.ui.basic.Label(null);
-      this.statusTextLabel.setTextColor("#808080");
-      composite2.add(this.statusTextLabel);
-      this.listView.bind("store.model.statusText", this.statusTextLabel, "value");
-
-      // spacer
-      let spacer2 = new qx.ui.core.Spacer(null, null);
-      composite2.add(spacer2, {
-        flex: 10
-      });
-
-      // import button
-      let importButton = new qx.ui.form.Button(this.tr("Import selected records"));
-      this.importButton = importButton;
-      importButton.setEnabled(false);
-      composite2.add(importButton);
-      importButton.addListener("execute", e => this.importSelected());
-
-      // close button
-      let button1 = new qx.ui.form.Button(this.tr("Close"));
-      composite2.add(button1);
-      button1.addListener("execute", e => this.getWindow().close());
-    },
 
     /**
      * Starts the search
      */
     startSearch: function () {
-      let datasource = this.datasourceSelectBox.getSelection().getItem(0).getValue();
-      let query = this.searchBox.getValue();
+      let datasource = this.__selectBox.getSelection().getItem(0).getValue();
+      let query = this.__searchBox.getValue();
 
       // update the UI
-      let lv = this.listView;
+      let lv = this.__listView;
       lv.setDatasource(datasource);
       lv.clearTable();
       //lv.setEnabled(false);
-      //this.importButton.setEnabled(false);
-      //this.searchButton.setEnabled(false);
+      //this.__importButton.setEnabled(false);
+      //this.__searchButton.setEnabled(false);
       
       // open the ServerProgress widget and initiate the remote search
       let p = qx.core.Id.getQxObject("plugins-webservices-progress");
@@ -286,7 +299,7 @@ qx.Class.define("bibliograph.plugins.webservices.View",
       let app = this.getApplication();
       
       // ids to import
-      let ids = this.listView.getSelectedIds();
+      let ids = this.__listView.getSelectedIds();
       if (!ids.length) {
         await this.getApplication().alert(this.tr("You have to select one or more reference to import."));
         return;
@@ -311,16 +324,16 @@ qx.Class.define("bibliograph.plugins.webservices.View",
       }
       
       // send to server
-      let sourceDatasource = this.datasourceSelectBox.getSelection().toArray()[0].getValue();
+      let sourceDatasource = this.__selectBox.getSelection().toArray()[0].getValue();
       let targetDatasource = app.getDatasource();
       this.showPopup(this.tr("Importing references..."));
       await this.getApplication()
         .getRpcClient("webservices.table")
         .request("import", [sourceDatasource, ids, targetDatasource, targetFolderId]);
-      this.importButton.setEnabled(true);
+      this.__importButton.setEnabled(true);
       this.hidePopup();
-      this.searchBox.setValue("");
-      this.searchBox.focus();
+      this.__searchBox.setValue("");
+      this.__searchBox.focus();
     },
 
 

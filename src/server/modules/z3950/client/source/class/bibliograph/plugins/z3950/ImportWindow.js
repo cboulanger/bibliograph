@@ -51,29 +51,32 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow", {
     this.createPopup();
   
     // create toolbar with selectbox and search bar
-    this.add(this.getChildControl("toolbar"));
-    this.helpButton.addListener("execute", () => this.getApplication().showHelpWindow("plugin/z3950/search"));
+    this.add(this.getQxObject("toolbar"));
+    this.__helpButton.addListener("execute", () => this.getApplication().showHelpWindow("plugin/z3950/search"));
     // selectbox with list of datasources
-    this.selectBox.bind("selection[0].label", this.selectBox, "toolTipText");
-    this.selectBox.bind("selection[0].value", this, "datasource");
+    this.__selectBox.bind("selection[0].label", this.__selectBox, "toolTipText");
+    this.__selectBox.bind("selection[0].value", this, "datasource");
+    
+    // store for selectbox
     let store = new qcl.data.store.JsonRpcStore("z3950.table");
     store.setModel(qx.data.marshal.Json.createModel([]));
-    store.bind("model", this.getChildControl("selectbox"), "model");
+    store.bind("model", this.getQxObject("selectbox"), "model");
     store.addListener("loaded", () => {
       let lastDatasource = this.getApplication().getConfigManager().getKey("modules.z3950.lastDatasource");
       if (lastDatasource) {
         this.setDatasource(lastDatasource);
       }
     });
+    
     // (re-)load datasources on message
-    qx.event.message.Bus.getInstance().subscribe("plugins.z3950.reloadDatasources", function (e) {
-      store.load("server-list");
-    }, this);
-    this.searchBox.addListener("keypress", this._on_keypress, this);
-    this.searchBox.addListener("dblclick", e => e.stopPropagation());
+    qx.event.message.Bus.getInstance().subscribe("plugins.z3950.reloadDatasources",  () => store.load("server-list"));
+    
+    // searchbox
+    this.__searchBox.addListener("keypress", this._on_keypress, this);
+    
     
     // create and configure listview
-    let listview = this.getChildControl("listview");
+    let listview = this.getQxObject("listview");
     this.add(listview, {flex: 1});
     listview.set({
       modelType: "record",
@@ -86,11 +89,11 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow", {
     });
     // when table is ready, configure buttons
     qx.lang.Function.delay(() => {
-      this.listView.addListenerOnce("tableReady", () => {
-        let controller = this.listView.getController();
+      this.__listView.addListenerOnce("tableReady", () => {
+        let controller = this.__listView.getController();
         let enableButtons = () => {
-          this.importButton.setEnabled(true);
-          this.searchButton.setEnabled(true);
+          this.__importButton.setEnabled(true);
+          this.__searchButton.setEnabled(true);
           listview.setEnabled(true);
           this.hidePopup();
         };
@@ -103,9 +106,10 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow", {
     }, 100);
 
     // create footer with status and import/close buttons
-    this.add(this.getChildControl("footer"));
-    this.importButton.addListener("execute", () => this.importSelected());
-    this.listView.bind("store.model.statusText", this.statusTextLabel, "value");
+    this.add(this.getQxObject("footer"));
+    this.__importButton.addListener("execute", () => this.importSelected());
+    this.__closeButton.addListener("execute", () => this.close());
+    this.__listView.bind("store.model.statusText", this.__status, "value");
     
     // close on logout
     qx.event.message.Bus.getInstance().subscribe(bibliograph.AccessManager.messages.AFTER_LOGOUT, () => this.close());
@@ -113,15 +117,15 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow", {
   
   members:
   {
-    _createChildControlImpl(id) {
+    _createQxObjectImpl(id) {
       let control;
       switch (id) {
         case "toolbar":
           control = new qx.ui.toolbar.ToolBar();
-          control.add(this.getChildControl("selectbox"));
+          control.add(this.getQxObject("selectbox"));
           control.addSpacer();
-          control.add(this.getChildControl("search-bar"), {flex: 1});
-          this.toolbar = control;
+          control.add(this.getQxObject("search-bar"), {flex: 1});
+          this.__toolbar = control;
           break;
         case "selectbox":
           control = new qx.ui.form.VirtualSelectBox();
@@ -130,15 +134,15 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow", {
             width: 300,
             maxHeight: 25
           });
-          this.selectBox = control;
+          this.__selectBox = control;
           break;
         case "search-bar":
           control = new qx.ui.container.Composite(new qx.ui.layout.HBox(5));
           control.setPadding(4);
-          control.add(this.getChildControl("search-box"), {flex: 1});
-          control.add(this.getChildControl("search-button"));
-          control.add(this.getChildControl("help-button"));
-          this.searchBar = control;
+          control.add(this.getQxObject("search-box"), {flex: 1});
+          control.add(this.getQxObject("search-button"));
+          control.add(this.getQxObject("help-button"));
+          this.__searchBar = control;
           break;
         case "search-box":
           control = new qx.ui.form.TextField();
@@ -147,57 +151,57 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow", {
             height: 26,
             placeholder: this.tr("Enter search terms"),
           });
-          this.searchBox = control;
+          control.addListener("dblclick", e => e.stopPropagation());
+          this.__searchBox = control;
           break;
         case "search-button":
           control = new qx.ui.form.Button(this.tr("Search"));
           control.addListener("execute", () => this.startSearch());
-          this.searchButton = control;
+          this.__searchButton = control;
           break;
         case "help-button":
           control = new qx.ui.toolbar.Button(this.tr("Help"));
-          this.helpButton = control;
+          this.__helpButton = control;
           break;
         case "listview":
           control = new qcl.ui.table.TableView();
           control.setDecorator("main"); //??
           control.headerBar.setVisibility("excluded");
           control.menuBar.setVisibility("excluded");
-          this.listView = control;
+          this.__listView = control;
           break;
         case "footer":
           control = new qx.ui.container.Composite(new qx.ui.layout.HBox(5));
-          control.add(this.getChildControl("status-label"));
+          control.add(this.getQxObject("status-label"));
           control.add(new qx.ui.core.Spacer(), { flex: 10 });
-          control.add(this.getChildControl("import-button"));
-          control.add(this.getChildControl("close-button"));
-          this.footer = control;
+          control.add(this.getQxObject("import-button"));
+          control.add(this.getQxObject("close-button"));
+          this.__footer = control;
           break;
         case "status-label":
           control = new qx.ui.basic.Label();
           control.setTextColor("#808080");
-          this.statusTextLabel = control;
+          this.__status = control;
           break;
         case "import-button":
           control = new qx.ui.form.Button(this.tr("Import selected records"));
           control.setEnabled(false);
-          this.importButton = control;
+          this.__importButton = control;
           break;
         case "close-button":
           control = new qx.ui.form.Button(this.tr("Close"));
-          control.addListener("execute", () => this.close());
-          this.closeButton = control;
+          this.__closeButton = control;
           break;
       }
-      if (control) {
-        this.addOwnedQxObject(control, id);
-      }
+      // if (control) {
+      //   this.addOwnedQxObject(control, id);
+      // }
       return control || this.base(arguments, id);
     },
   
     _applyDatasource : function(value, old) {
       if (value) {
-        let sb = this.getChildControl("selectbox");
+        let sb = this.getQxObject("selectbox");
         sb.getModel().forEach(item => {
           if (item.getValue() === value) {
             sb.getSelection().setItem(0, item);
@@ -212,12 +216,12 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow", {
      * Starts the search
      */
     startSearch: function () {
-      let datasource = this.selectBox.getSelection().getItem(0).getValue();
-      let query = this.normalizeForSearch(this.searchBox.getValue());
+      let datasource = this.__selectBox.getSelection().getItem(0).getValue();
+      let query = this.normalizeForSearch(this.__searchBox.getValue());
 
       // update the UI
-      this.listView.setDatasource(datasource);
-      this.listView.clearTable();
+      this.__listView.setDatasource(datasource);
+      this.__listView.clearTable();
       //this.listView.setEnabled(false);
       //this.importButton.setEnabled(false);
       //this.searchButton.setEnabled(false);
@@ -236,7 +240,7 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow", {
       let app = this.getApplication();
       
       // ids to import
-      let ids = this.listView.getSelectedIds();
+      let ids = this.__listView.getSelectedIds();
       if (!ids.length) {
         await this.getApplication().alert(this.tr("You have to select one or more reference to import."));
         return;
@@ -261,12 +265,12 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow", {
       }
       
       // send to server
-      let sourceDatasource = this.getChildControl("selectbox").getSelection().toArray()[0].getValue();
+      let sourceDatasource = this.getQxObject("selectbox").getSelection().toArray()[0].getValue();
       let targetDatasource = app.getDatasource();
       this.showPopup(this.tr("Importing references..."));
       let client = this.getApplication().getRpcClient("z3950.table");
       await client.request("import", [sourceDatasource, ids, targetDatasource, targetFolderId]);
-      this.importButton.setEnabled(true);
+      this.__importButton.setEnabled(true);
       this.hidePopup();
     },
 
