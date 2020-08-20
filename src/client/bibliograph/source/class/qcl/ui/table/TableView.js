@@ -14,7 +14,6 @@
      * Christian Boulanger (cboulanger)
 
 ************************************************************************ */
-/*global qx qcl dialog bibliograph virtualdata*/
 
 /**
  * Base class for Table widgets
@@ -245,7 +244,7 @@ qx.Class.define("qcl.ui.table.TableView",
       selectedIds: [],
       columnIds: [],
       allowDropTargetTypes: [],
-      dragActions : ['move','copy']
+      dragActions : ["move", "copy"]
     });
     this.__tableModelTypes = {};
     this.createUi();
@@ -324,7 +323,6 @@ qx.Class.define("qcl.ui.table.TableView",
      * @param old {Integer}
      */
     _applyFolderId: function (folderId, old) {
-      
       if (!folderId) {
         this.clearTable();
         return;
@@ -338,15 +336,14 @@ qx.Class.define("qcl.ui.table.TableView",
       /*
        * use a small timeout to avoid rapid reloads
        */
-      qx.util.TimerManager.getInstance().start( () => {
-        
+      qx.util.TimerManager.getInstance().start(() => {
         // if the folder id has already changed, do not load
         if (folderId != this.getFolderId()) {
           return;
         }
         
         // show breadcrumb
-        let mainFolderTree = this.getApplication().getWidgetById("app/treeview");
+        let mainFolderTree = qx.core.Id.getQxObject("folder-tree-panel/tree-view");
         let selectedNode = mainFolderTree.getSelectedNode();
         
         if (selectedNode && selectedNode.data.id == folderId) {
@@ -376,13 +373,16 @@ qx.Class.define("qcl.ui.table.TableView",
     
     /**
      * Reloads the folder when the search query has changed
+     *
+     * @param query
+     * @param old
      */
     _applyQuery: function (query, old) {
-      if (!query) return;
-      
+      if (!query) {
+        return;
+      }
       // clear folder Id
       this.setFolderId(null);
-      
       // show breadcrumb and load
       let breadcrumb = this.tr("Query") + ": " + query;
       if (this.referenceViewLabel) {
@@ -392,19 +392,26 @@ qx.Class.define("qcl.ui.table.TableView",
     },
     
     /**
-     * Reacts to a change in the "selectedIds" state of the applicationby selecting
-     * the values. does nothing at the moment, since async selection with the remote
-     * table model is very tricky.
-     */
+ * Reacts to a change in the "selectedIds" state of the applicationby selecting
+the values. does nothing at the moment, since async selection with the remote
+table model is very tricky.
+ *
+ * @param value
+ * @param old
+ */
     _applySelectedIds: function (value, old) {
       
       //
     },
     
     /**
-     * Reacts to a change in the "modelId" state of the application by selecting the row
-     * that corresponds to the id.
-     */
+ * Reacts to a change in the "modelId" state of the application by selecting the row
+that corresponds to the id.
+ *
+ * @param value
+ * @param old
+ * @param counter
+ */
     _applyModelId: function (value, old, counter) {
       if (counter === "modelId") {
         counter = 0;
@@ -427,14 +434,13 @@ qx.Class.define("qcl.ui.table.TableView",
      * @private
      */
     _applyEnableDragDrop: function (value, old) {
-      
       let table = this.getTable();
       
       // if we don't have a table yet, wait until we have one
       if (!table) {
         if (value) {
           this.dragDebug("Deferring drag & drop initialization");
-          this.addListenerOnce("changeTable", ()=> this._applyEnableDragDrop(value, old) );
+          this.addListenerOnce("changeTable", () => this._applyEnableDragDrop(value, old));
         }
         return;
       }
@@ -442,25 +448,25 @@ qx.Class.define("qcl.ui.table.TableView",
       if (old && !value) {
         table.setDraggable(false);
         table.setDroppable(false);
-        table.removeListener("dragstart",    this._onDragStart,   this);
-        table.removeListener("drag",         this._onDragHandler, this);
-        table.removeListener("dragover",     this._onDragOver,    this);
-        table.removeListener("dragend",      this._onDragEnd,     this);
-        table.removeListener("dragleave",    this._onDragEnd,     this);
-        table.removeListener("dragchange",   this._onDragChange,  this);
-        table.removeListener("drop",         this._onDrop,        this);
-        table.removeListener("droprequest",  this._onDropRequest, this);
+        table.removeListener("dragstart", this._onDragStart, this);
+        table.removeListener("drag", this._onDragHandler, this);
+        table.removeListener("dragover", this._onDragOver, this);
+        table.removeListener("dragend", this._onDragEnd, this);
+        table.removeListener("dragleave", this._onDragEnd, this);
+        table.removeListener("dragchange", this._onDragChange, this);
+        table.removeListener("drop", this._onDrop, this);
+        table.removeListener("droprequest", this._onDropRequest, this);
         table.info("Drag & Drop disabled.");
       }
     
       if (value && !old) {
-        table.addListener("dragstart",   this._onDragStart,   this);
-        table.addListener("dragover",    this._onDragOver,    this); // dragover handler must be called *before* drag handler
-        table.addListener("drag",        this._onDragHandler, this);
-        table.addListener("dragleave",   this._onDragEnd,     this);
-        table.addListener("dragend",     this._onDragEnd,     this);
-        table.addListener("dragchange",  this._onDragChange,  this);
-        table.addListener("drop",        this._onDrop,        this);
+        table.addListener("dragstart", this._onDragStart, this);
+        table.addListener("dragover", this._onDragOver, this); // dragover handler must be called *before* drag handler
+        table.addListener("drag", this._onDragHandler, this);
+        table.addListener("dragleave", this._onDragEnd, this);
+        table.addListener("dragend", this._onDragEnd, this);
+        table.addListener("dragchange", this._onDragChange, this);
+        table.addListener("drop", this._onDrop, this);
         table.addListener("droprequest", this._onDropRequest, this);
         table.setDraggable(true);
         table.setDroppable(true);
@@ -477,7 +483,7 @@ qx.Class.define("qcl.ui.table.TableView",
     /**
      * @todo rewrite using child controls
      */
-    createUi: function(){
+    createUi: function() {
       this.setLayout(new qx.ui.layout.VBox());
 
       // Top menu bar
@@ -556,7 +562,7 @@ qx.Class.define("qcl.ui.table.TableView",
       // notify listeners that the table is ready
       this.__tableReady = true;
       this.__loadingTableStructure = false;
-      this.fireDataEvent("tableReady",data);
+      this.fireDataEvent("tableReady", data);
       this.getTable().setVisibility("visible");
     },
     
@@ -585,7 +591,7 @@ qx.Class.define("qcl.ui.table.TableView",
       // save columns
       let columnIds = [];
       for (let columnId in data.columnLayout) {
-        columnIds.push(columnId)
+        columnIds.push(columnId);
       }
       this.setColumnIds(columnIds);
       
@@ -641,7 +647,8 @@ qx.Class.define("qcl.ui.table.TableView",
      */
     _createTable: function (columnLayout) {
       // analyze table info
-      let columnIds = [], columnHeaders = [];
+      let columnIds = []; let
+columnHeaders = [];
       for (let columnId in columnLayout) {
         columnIds.push(columnId);
         columnHeaders.push(columnLayout[columnId].header);
@@ -709,9 +716,11 @@ qx.Class.define("qcl.ui.table.TableView",
     
 
     /**
-     * Called when user clicks on a table cell.
-     * Unused.
-     */
+ * Called when user clicks on a table cell.
+Unused.
+ *
+ * @param e
+ */
     _on_table_cellClick: function (e) {
       //let table = e.getTarget();
       //let row = e.getRow();
@@ -762,8 +771,8 @@ qx.Class.define("qcl.ui.table.TableView",
      * messages. Can be turned off using the `debugDragSession` property.
      * @param msg
      */
-    dragDebug : function(msg){
-      if( msg !== this.__lastDebugMessage && this.getDebugDragSession()){
+    dragDebug : function(msg) {
+      if (msg !== this.__lastDebugMessage && this.getDebugDragSession()) {
         console.log(msg);
         this.__lastDebugMessage = msg;
       }
@@ -775,7 +784,7 @@ qx.Class.define("qcl.ui.table.TableView",
      */
     _onDragStart: function (e) {
       let actions = this.getDragActions();
-      this.dragDebug("Table drag start with actions " + actions.join(", ") );
+      this.dragDebug("Table drag start with actions " + actions.join(", "));
       actions.forEach(action => e.addAction(action));
       e.addType(qcl.ui.table.TableView.types.ROWDATA);
       qx.ui.core.DragDropCursor.getInstance().setVisibility("visible");
@@ -798,7 +807,7 @@ qx.Class.define("qcl.ui.table.TableView",
      */
     _onDragHandler: function (e) {
       let relatedTarget = e.getRelatedTarget();
-      if( relatedTarget ){
+      if (relatedTarget) {
         relatedTarget.setDragModel(this.getSelectedRowData());
         relatedTarget.setDragType(qcl.ui.table.TableView.types.ROWDATA);
         return relatedTarget._onDragAction(e);
@@ -811,7 +820,7 @@ qx.Class.define("qcl.ui.table.TableView",
      * @param e {qx.event.type.Drag}
      * @private
      */
-    _onDragChange : function(e){
+    _onDragChange : function(e) {
       this.dragDebug("Table drag change...");
     },
   
@@ -836,10 +845,10 @@ qx.Class.define("qcl.ui.table.TableView",
      * @param e {qx.event.type.Drag}
      * @private
      */
-    _onDropRequest : function(e){
+    _onDropRequest : function(e) {
       this.dragDebug("Table Drop request");
       let type = e.getCurrentType();
-      if (type === qcl.ui.table.TableView.types.ROWDATA ) {
+      if (type === qcl.ui.table.TableView.types.ROWDATA) {
         e.addData(qcl.ui.table.TableView.types.ROWDATA, this.getSelectedRowData());
       }
     },
@@ -852,10 +861,12 @@ qx.Class.define("qcl.ui.table.TableView",
     */
     
     /**
-     * Tries to select the rows with the given ids.
-     * @return {Boolean} Returns true if successful
-     * and false if the ids could not be determined
-     */
+ * Tries to select the rows with the given ids.
+ *
+ * @return {Boolean} Returns true if successful
+ * and false if the ids could not be determined
+ * @param ids
+ */
     _selectIds: function (ids) {
       if (this.__ignoreChangeSelection) {
         return;
@@ -867,7 +878,7 @@ qx.Class.define("qcl.ui.table.TableView",
       }
 
       //console.log("old selection is " + this.__selectedIds + ", new selection is " + ids);
-      if (this.__selectedIds && "" + ids == "" + this.__selectedIds) {
+      if (this.__selectedIds && String(ids) == String(this.__selectedIds)) {
         //console.log("Same, same");
         return;
       }
@@ -892,7 +903,7 @@ qx.Class.define("qcl.ui.table.TableView",
         }
       }, this);
       this.__ignoreChangeSelection = false;
-      return !! this.__selectedIds;
+      return Boolean(this.__selectedIds);
     },
 
     /*
@@ -924,9 +935,7 @@ qx.Class.define("qcl.ui.table.TableView",
      * @return {void}
      */
     load: function () {
-      
       this.clearTable();
-      
       // if we don't have a model type yet, wait until we have one
       if (!this.getModelType()) {
         this.info("No model type for the table, waiting...");
@@ -938,13 +947,13 @@ qx.Class.define("qcl.ui.table.TableView",
       
       try {
         if (this.__loadingTableStructure) {
-          this.info("We're still loading, ignoring load request...");
+          this.debug("We're still loading, ignoring load request...");
           return;
         }
         
         // if the table is not set up, wait for corresponding event
         if (!this.isTableReady()) {
-          this.info("Table is not ready - deferring load request ...");
+          this.debug("Table is not ready - deferring load request ...");
           this.addListenerOnce("tableReady", this.load, this);
           this._loadTableLayout();
           return;
@@ -954,13 +963,13 @@ qx.Class.define("qcl.ui.table.TableView",
         if (this.getQuery()) {
           this.getMarshaler().setQueryParams([
             {
-              'datasource': this.getDatasource(),
-              'modelType': this.getModelType(),
-              'query':
+              "datasource": this.getDatasource(),
+              "modelType": this.getModelType(),
+              "query":
               {
-                'properties': this.getColumnIds(),
-                'orderBy': this.getQueryData().orderBy,
-                'cql': this.getQuery()
+                "properties": this.getColumnIds(),
+                "orderBy": this.getQueryData().orderBy,
+                "cql": this.getQuery()
               }
             }]);
           this.getController().reload();
@@ -971,17 +980,17 @@ qx.Class.define("qcl.ui.table.TableView",
         if (this.getFolderId()) {
           this.getMarshaler().setQueryParams([
             {
-              'datasource': this.getDatasource(),
-              'modelType': this.getModelType(),
-              'query':
+              "datasource": this.getDatasource(),
+              "modelType": this.getModelType(),
+              "query":
               {
-                'properties': this.getColumnIds(),
-                'orderBy': this.getQueryData().orderBy,
-                'relation':
+                "properties": this.getColumnIds(),
+                "orderBy": this.getQueryData().orderBy,
+                "relation":
                 {
-                  'name': this.getQueryData().relation.name,
-                  'foreignId': this.getQueryData().relation.foreignId,
-                  'id': this.getFolderId()
+                  "name": this.getQueryData().relation.name,
+                  "foreignId": this.getQueryData().relation.foreignId,
+                  "id": this.getFolderId()
                 }
               }
             }]);

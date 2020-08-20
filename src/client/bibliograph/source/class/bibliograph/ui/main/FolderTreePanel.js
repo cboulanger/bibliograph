@@ -93,7 +93,7 @@ qx.Class.define("bibliograph.ui.main.FolderTreePanel",
       // multiple tree widget
       let mTree = new bibliograph.ui.main.MultipleTreeView();
       mTree.setShowColumnHeaders(true);
-      mTree.setWidgetId("app/treeview"); // to be removed
+      mTree.setWidgetId("app/treeview"); // needed for permission system
       this.addOwnedQxObject(mTree, "tree-view");
       mTree.setWidth(200);
       mTree.setColumnHeaders([this.tr("Folders"), "#"]);

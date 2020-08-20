@@ -161,7 +161,7 @@ qx.Mixin.define("bibliograph.MApplicationState", {
       // has been loaded
       // @todo hide search box when no datasource is selected
       if (old) {
-        this.getWidgetById("app/treeview").clearSelection();
+        qx.core.Id.getQxObject("folder-tree-panel/tree-view").clearSelection();
         this.setModelId(0);
         this.setFolderId(0);
         this.setSelectedIds([]);
@@ -184,7 +184,7 @@ qx.Mixin.define("bibliograph.MApplicationState", {
       }
       // Since permissions depend on the datasource, reload them.
       this.getAccessManager().load().then(() => {
-        qx.event.Timer.once(() => this.getWidgetById("app/treeview").setSelectedNode(null), null, 1000);
+        qx.event.Timer.once(() => qx.core.Id.getQxObject("folder-tree-panel/tree-view").setSelectedNode(null), null, 1000);
       });
     },
     

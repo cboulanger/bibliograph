@@ -40,7 +40,7 @@ qx.Class.define("bibliograph.plugins.webservices.Plugin",
       let permMgr = app.getAccessManager().getPermissionManager();
       
       // remote search progress indicator widget
-      let progress = new qcl.ui.dialog.ServerProgress("plugins-webservices-progress", "webservices/search/progress");
+      let progress = new qcl.ui.dialog.ServerProgress("plugin-webservices-progress", "webservices/search/progress");
       progress.set({
         hideWhenCompleted: true,
         allowCancel : true

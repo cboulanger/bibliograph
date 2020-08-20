@@ -315,7 +315,7 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
         await this.getApplication().alert(this.tr("Please select a folder first."));
         return;
       }
-      let treeView = app.getWidgetById("app/treeview");
+      let treeView = qx.core.Id.getQxObject("folder-tree-panel/tree-view");
       let nodeId = treeView.getController().getClientNodeId(targetFolderId);
       let node = treeView.getTree().getDataModel().getData()[nodeId];
       if (!node) {

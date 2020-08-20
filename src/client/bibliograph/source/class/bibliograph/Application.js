@@ -40,9 +40,7 @@ qx.Class.define("bibliograph.Application", {
      * @todo use or remove
      */
     ids : {
-      app : {
-        treeview : "app/treeview"
-      }
+    
     },
 
     /**

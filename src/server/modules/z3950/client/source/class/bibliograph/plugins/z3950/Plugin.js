@@ -43,11 +43,19 @@ qx.Class.define("bibliograph.plugins.z3950.Plugin",
       // Manager shortcuts
       let app = qx.core.Init.getApplication();
       let permMgr = app.getAccessManager().getPermissionManager();
+  
+      // remote search progress indicator widget
+      let z3950Progress = new qcl.ui.dialog.ServerProgress("plugin-z3950-progress", "z3950/search/progress");
+      z3950Progress.set({
+        hideWhenCompleted: true,
+        allowCancel : true
+      });
       
       // add window
       let importWindow = new bibliograph.plugins.z3950.ImportWindow();
       qx.core.Id.getQxObject("windows").addOwnedQxObject(importWindow, "plugin-z3950-import");
       app.getRoot().add(importWindow);
+  
 
       // add a new menu button
       
@@ -146,13 +154,6 @@ qx.Class.define("bibliograph.plugins.z3950.Plugin",
       
       // add tab to tabview (must be done at the end)
       prefsTabView.add(pluginTab);
-      
-      // remote search progress indicator widget
-      let z3950Progress = new qcl.ui.dialog.ServerProgress("plugins-z3950-progress", "z3950/search/progress");
-      z3950Progress.set({
-        hideWhenCompleted: true,
-        allowCancel : true
-      });
     }
   }
 });

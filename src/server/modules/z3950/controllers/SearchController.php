@@ -57,7 +57,6 @@ class SearchController extends \yii\web\Controller
     $progressBar = new ServerProgress($id);
     try {
       $this->sendRequest($datasource, $query, $progressBar);
-      $progressBar->dispatchClientMessage("z3950.dataReady", $query);
       $progressBar->complete();
     } catch (YazTimeoutException $e) {
       // retry

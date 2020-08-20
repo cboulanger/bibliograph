@@ -111,7 +111,7 @@ qx.Class.define("bibliograph.plugins.backup.Plugin", {
         }
         let msg = this.tr("The datasource has just been restored to a previous state and will now be reloaded.");
         await this.getApplication().alert(msg);
-        app.getWidgetById("app/treeview").reload();
+        qx.core.Id.getQxObject("folder-tree-panel/tree-view").reload();
         app.getWidgetById("app/tableview").reload();
         app.setModelId(0);
       });

@@ -62,7 +62,6 @@ class SearchController extends \yii\web\Controller
     foreach ( [$datasource] as $datasource) {
       try {
         $this->sendRequest($datasource, $query, $progressBar);
-        $progressBar->dispatchClientMessage("webservices.dataReady", $query);
         $progressBar->complete();
       } catch (TimeoutException $e) {
         // retry

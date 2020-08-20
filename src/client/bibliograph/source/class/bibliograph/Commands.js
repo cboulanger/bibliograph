@@ -117,7 +117,9 @@ qx.Class.define("bibliograph.Commands",
      * @param path
      */
     showHelpWindow : async function(path) {
-      let url = "https://sites.google.com/a/bibliograph.org/docs-v2-de/" + path;
+      let locale = qx.locale.Manager().getInstance().getLocale().slice(0, 1);
+      let sites_root = "https://sites.google.com/a/bibliograph.org/docs-v2-";
+      let url = sites_root + locale + "/" + path;
       this.__helpWindow = window.open(url, "bibliograph-help-window");
       if (!this.__helpWindow) {
         await this.getApplication().alert(this.tr("Cannot open window. Please disable the popup-blocker of your browser for this website."));
