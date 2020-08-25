@@ -75,7 +75,6 @@ class AppController extends Controller
   public function behaviors()
   {
     $oldSessionId = Yii::$app->session->id;
-    Yii::debug("Old session id: $oldSessionId", self::DEBUG);
     $authMethods = [HttpBearerAuth::class, QueryParamAuth::class, SessionIdAuth::class];
     // codecdeption tests do not pass the Bearer Authentication Header correctly
     if (defined('JSON_RPC_USE_PAYLOAD_TOKEN_AUTH') AND JSON_RPC_USE_PAYLOAD_TOKEN_AUTH===true) {

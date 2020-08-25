@@ -21,10 +21,7 @@
 namespace app\models;
 
 use app\controllers\AppController;
-use app\migrations\data\m180105_075537_data_RoleDataInsert;
-use yii\base\Event;
 use yii\db\Expression;
-use yii\db\StaleObjectException;
 use yii\web\Request;
 use yii\web\UnauthorizedHttpException;
 use function GuzzleHttp\describe_type;
@@ -60,6 +57,8 @@ use lib\models\BaseModel;
 class User extends BaseModel implements IdentityInterface
 {
   const CATEGORY = "access";
+
+  const ANTI_CSRF_TOKEN_NAME = "anti_csrf_token";
 
   /**
    * @inheritdoc
@@ -154,11 +153,26 @@ class User extends BaseModel implements IdentityInterface
   }
 
   /**
-   * Returns a MD5 hash of the token plus the request's IP address
+   * Returns a MD5 hash of the token plus a random value to avoid XSS attacks
    * @return string
    */
   public function getHashedToken() {
-    return md5($this->token . Yii::$app->request->userIP);
+    return md5($this->token . self::getAntiCsrfToken());
+  }
+
+  /**
+   * Returns a random MD5 string that is stored in the session and is never
+   * passed to the client
+   * @return string
+   * @throws \Exception
+   */
+  protected static function getAntiCsrfToken() {
+    $anti_csrf_token = Yii::$app->session->get(self::ANTI_CSRF_TOKEN_NAME);
+    if (!$anti_csrf_token) {
+      $anti_csrf_token = md5(random_int(PHP_INT_MIN, PHP_INT_MAX));
+      Yii::$app->session->set(self::ANTI_CSRF_TOKEN_NAME, $anti_csrf_token);
+    }
+    return $anti_csrf_token;
   }
 
   /**
@@ -168,12 +182,12 @@ class User extends BaseModel implements IdentityInterface
    */
   public static function findIdentityByAccessToken($hashedToken, $type = null)
   {
-    $ip = Yii::$app->request->userIP;
-    $expr = new Expression("MD5(CONCAT(token,'$ip')) = '$hashedToken'");
+    $anti_csrf_token = self::getAntiCsrfToken();
+    $expr = new Expression("MD5(CONCAT(token,'$anti_csrf_token')) = '$hashedToken'");
     $user = static::find()->where($expr)->one();
-    Yii::debug("Passed hashed token is: ". $hashedToken, self::CATEGORY);
-    Yii::debug("Mysql 'where' Expression: $expr", AppController::DEBUG);
-    Yii::debug( $user ? "user is: " . $user->name :  "No user has this token!" , self::CATEGORY);
+    if ($user) {
+      Yii::debug("Authenticated user '$user->name' using a token." , self::CATEGORY);
+    }
     return $user;
   }
 
