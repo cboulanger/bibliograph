@@ -20,8 +20,10 @@
 
 namespace app\models;
 
+use app\controllers\AppController;
 use app\migrations\data\m180105_075537_data_RoleDataInsert;
 use yii\base\Event;
+use yii\db\Expression;
 use yii\db\StaleObjectException;
 use yii\web\Request;
 use yii\web\UnauthorizedHttpException;
@@ -152,12 +154,25 @@ class User extends BaseModel implements IdentityInterface
   }
 
   /**
+   * Returns a MD5 hash of the token plus the request's IP address
+   * @return string
+   */
+  public function getHashedToken() {
+    return md5($this->token . Yii::$app->request->userIP);
+  }
+
+  /**
+   * Compare the given access token with the one in the database, hashed together#
+   * with the user's IP to avoid token hijacking
    * @inheritdoc
    */
-  public static function findIdentityByAccessToken($token, $type = null)
+  public static function findIdentityByAccessToken($hashedToken, $type = null)
   {
-    $user = static::findOne(['token' => $token]);
-    Yii::debug("Passed token is: ". $token, self::CATEGORY);
+    $ip = Yii::$app->request->userIP;
+    $expr = new Expression("MD5(CONCAT(token,'$ip')) = '$hashedToken'");
+    $user = static::find()->where($expr)->one();
+    Yii::debug("Passed hashed token is: ". $hashedToken, self::CATEGORY);
+    Yii::debug("Mysql 'where' Expression: $expr", AppController::DEBUG);
     Yii::debug( $user ? "user is: " . $user->name :  "No user has this token!" , self::CATEGORY);
     return $user;
   }

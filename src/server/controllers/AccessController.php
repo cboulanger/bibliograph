@@ -220,7 +220,7 @@ class AccessController extends AppController
     // return information on user
     return new AuthResult([
       'message' => Yii::t('app', "Welcome, {0}!", [$user->name]),
-      'token' => $user->token,
+      'token' => $user->getHashedToken(),
       'sessionId' => Yii::$app->session->getId()
     ]);
   }
