@@ -299,8 +299,6 @@ function import_databases_expr(){
          --default-character-set=utf8 \
          --set-charset \
          \$db \
-       | sed s/\$db/$DB_DATABASE/g \
-       | sed s/\'0000-00-00\'/NULL/g \
        | php -r "require '$FIXUTF8PATH'; echo ForceUTF8\Encoding::fixUTF8(stream_get_contents(STDIN));" \
        | mysql \
          --login-path=deploy_alias \

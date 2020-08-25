@@ -7,6 +7,7 @@
  */
 
 namespace lib;
+use ReflectionClass;
 use Yii;
 
 /**
@@ -126,11 +127,22 @@ class Module extends \yii\base\Module
       Yii::$app->config->getPreference($this->configKeyPrefix . "version") : "";
   }
 
+  /**
+   * @inheritDoc
+   */
   public function init()
   {
     //$not = $this->enabled ? "" : "not";
     //Yii::debug("Module '{$this->id}' is $not enabled.", __METHOD__, __METHOD__);
     parent::init();
+
+    // add translations
+    Yii::$app->i18n->translations[static::CATEGORY] = [
+      'class' => \yii\i18n\GettextMessageSource::class,
+      'basePath' => dirname((new ReflectionClass($this))->getFileName()) . "/messages",
+      'catalog' => 'messages',
+      'useMoFile' => false
+    ];
   }
 
   /**

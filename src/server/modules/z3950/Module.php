@@ -164,7 +164,7 @@ class Module extends \lib\Module
       $datasource->setAttributes([
         'title' => $title,
         'hidden' => 1, // should not show up as selectable datasource
-        'resourcepath' => $filepath,
+        'resourcepath' => str_replace(getcwd(), "", $filepath)
       ]);
       $datasource->save();
       Yii::info("Added Z39.50 datasource '$title'", self::CATEGORY);

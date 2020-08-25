@@ -222,8 +222,7 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
       }
       if (typeof e.message == "string") {
         // shorten message
-        let msg = e.message.substring(0, 100);
-        return msg;
+        return e.message.substring(0, 100);
       }
       return "Unknown Error";
     },

@@ -1,0 +1,36 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: z3950\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-01-22 22:37+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgctxt "plugin.extendedfields"
+msgid "Category"
+msgstr "Kategorie"
+
+msgctxt "plugin.extendedfields"
+msgid "Date ordered"
+msgstr "Datum bestellt"
+
+msgctxt "plugin.extendedfields"
+msgid "Date received"
+msgstr "Datum erhalten"
+
+msgctxt "plugin.extendedfields"
+msgid "Location"
+msgstr "Standort"
+
+msgctxt "plugin.extendedfields"
+msgid "Owner"
+msgstr "Besitzer/in"
+
+msgctxt "plugin.extendedfields"
+msgid "Type"
+msgstr "Typ"

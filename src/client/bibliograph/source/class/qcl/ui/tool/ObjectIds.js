@@ -151,6 +151,9 @@ qx.Class.define("qcl.ui.tool.ObjectIds",
       let that = this;
       (function traverseObjects(arr) {
         arr.forEach(obj => {
+          if (!(obj instanceof qx.core.Object)) {
+            return;
+          }
           let id = qx.core.Id.getAbsoluteIdOf(obj);
           if (id) {
             objectIds.push({

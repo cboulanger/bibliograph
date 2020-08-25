@@ -161,16 +161,16 @@ class User extends BaseModel implements IdentityInterface
   }
 
   /**
-   * Returns a random MD5 string that is stored in the session and is never
+   * Returns a random MD5 string that is stored in the cache and is never
    * passed to the client
    * @return string
    * @throws \Exception
    */
   protected static function getAntiCsrfToken() {
-    $anti_csrf_token = Yii::$app->session->get(self::ANTI_CSRF_TOKEN_NAME);
+    $anti_csrf_token = Yii::$app->cache->get(self::ANTI_CSRF_TOKEN_NAME);
     if (!$anti_csrf_token) {
       $anti_csrf_token = md5(random_int(PHP_INT_MIN, PHP_INT_MAX));
-      Yii::$app->session->set(self::ANTI_CSRF_TOKEN_NAME, $anti_csrf_token);
+      Yii::$app->cache->set(self::ANTI_CSRF_TOKEN_NAME, $anti_csrf_token);
     }
     return $anti_csrf_token;
   }

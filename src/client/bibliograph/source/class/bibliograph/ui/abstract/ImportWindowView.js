@@ -33,7 +33,8 @@ qx.Class.define("bibliograph.ui.abstract.ImportWindowView",
      * Window object
      */
     window:{
-      check: "Object"
+      check: "Object",
+      apply: "_applyWindow"
     },
   
     /**
@@ -74,6 +75,12 @@ qx.Class.define("bibliograph.ui.abstract.ImportWindowView",
     _applySearch(value) {
       if (!value && this._listView) {
         this._listView.clearTable();
+      }
+    },
+    
+    _applyWindow(value) {
+      if (value) {
+        value.addOwnedQxObject(this, "view");
       }
     },
     
@@ -210,8 +217,15 @@ qx.Class.define("bibliograph.ui.abstract.ImportWindowView",
           this.setDatasource(lastDatasource);
         }
       });
-      store.load("server-list");
-      qx.event.message.Bus.getInstance().subscribe(`plugins.${this.getModuleName()}.reloadDatasources`, () => store.load("server-list"));
+      const bus = qx.event.message.Bus.getInstance();
+      let reload_messages = [
+        bibliograph.AccessManager.messages.AFTER_LOGIN,
+        `plugins.${this.getModuleName()}.reloadDatasources`
+      ];
+      reload_messages.forEach(message => {
+        bus.subscribe(message, () => store.load("server-list"));
+      });
+      store.load("server-list").catch(() => {});
     },
     
     /**
@@ -294,7 +308,7 @@ qx.Class.define("bibliograph.ui.abstract.ImportWindowView",
      */
     _selectFirstRow() {
       let table = this._listView.getTable();
-      if (table.getDataModel().getRowCount() > 0) {
+      if (table.getTableModel().getRowCount() > 0) {
         table.getSelectionManager().getSelectionModel().setSelectionInterval(0, 0);
         return true;
       }

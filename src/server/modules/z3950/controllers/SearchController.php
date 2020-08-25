@@ -13,7 +13,7 @@ use app\modules\z3950\lib\yaz\{ CclQuery, MarcXmlResult, Yaz, YazException, YazT
 use lib\dialog\ServerProgress;
 use lib\exceptions\UserErrorException;
 use lib\bibtex\BibtexParser;
-use lib\util\Executable;
+
 
 /**
  * Class ProgressController

@@ -34,8 +34,8 @@
     "test:playwright:custom": "node ./test/playwright/test-login.js",
     "dist:docker:build": "tool/dist/build config/.env.local.docker",
     "dist:docker:run": "tool/dist/run",
-    "deploy:rewi:test": "tool/deploy/deploy -e config/deploy/rewi/bibliograph-test.env -v",
-    "test:rewi:test": "config/deploy/rewi/run-tests.sh"
+    "deploy:rewi:devel": "tool/deploy/deploy -f config/deploy/rewi/bibliograph-test.env -v -y",
+    "test:rewi:devel": "config/deploy/rewi/run-tests.sh"
   },
   "ntl": {
     "descriptions": {

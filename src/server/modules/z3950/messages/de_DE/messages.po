@@ -1,9 +1,3 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: z3950\n"
@@ -17,74 +11,71 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../plugins/z3950/services/class/z3950/Service.php:124
-msgid "Author"
-msgstr "Autor"
-
-#: ../plugins/z3950/services/class/z3950/Service.php:128
-msgid "Year"
-msgstr "Jahr"
-
-#: ../plugins/z3950/services/class/z3950/Service.php:132
-msgid "Title"
-msgstr "Titel"
-
-#: ../plugins/z3950/services/class/z3950/Service.php:326
-#, php-format
+msgctxt "plugin.z3950"
 msgid "The server does not understand the query \"%s\". Please try a different query."
 msgstr "Der Server versteht die Abfrage '%s' nicht. Bitte versuchen Sie eine andere Abfrage."
 
-#: ../plugins/z3950/services/class/z3950/Service.php:336
+msgctxt "plugin.z3950"
 msgid "Server does not support a convertable format."
 msgstr "Der Server unterstützt das gewählte Format nicht."
 
-#: ../plugins/z3950/services/class/z3950/Service.php:339
+msgctxt "plugin.z3950"
 msgid "Waiting for remote server..."
 msgstr "Abfrage läuft, bitte warten..."
 
-#: ../plugins/z3950/services/class/z3950/Service.php:350
-#, php-format
+msgctxt "plugin.z3950"
 msgid "Server error: %s"
 msgstr "Serverfehler: %s"
 
-#: ../plugins/z3950/services/class/z3950/Service.php:363
+msgctxt "plugin.z3950"
 msgid "No results."
 msgstr "Keine Ergebnisse."
 
-#: ../plugins/z3950/services/class/z3950/Service.php:367
-#, php-format
+msgctxt "plugin.z3950"
 msgid "The number of results is higher than %s records. Please narrow down your search."
 msgstr "Die Anzahl der Ergebnisse übersteigt %s. Bitte grenzen Sie ihre Abfrage ein."
 
-#: ../plugins/z3950/services/class/z3950/Service.php:392
-#, php-format
+msgctxt "plugin.z3950"
 msgid "%s records found."
 msgstr "%s Datensätze wurden gefunden."
 
-#: ../plugins/z3950/services/class/z3950/Service.php:416
-#, php-format
+msgctxt "plugin.z3950"
 msgid "Retrieving %s of %s records..."
 msgstr "Datensatz %s/%s wird abgerufen..."
 
-#: ../plugins/z3950/services/class/z3950/Service.php:422
-#, php-format
+msgctxt "plugin.z3950"
 msgid "Server timeout trying to retrieve %s records: try a more narrow search"
 msgstr "Der Server braucht zu lange, um %s Datensätze zur übertragen. Bitte grenzen Sie Ihre Abfrage ein."
 
-#: ../plugins/z3950/services/class/z3950/Service.php:424
-#, php-format
-msgid "Server error: %s."
-msgstr "Serverfehler: %s."
-
-#: ../plugins/z3950/services/class/z3950/Service.php:437
-#: ../plugins/z3950/services/class/z3950/Service.php:478
+msgctxt "plugin.z3950"
 msgid "Formatting records..."
 msgstr "Die Datensätze werden formatiert..."
 
-#: ../plugins/z3950/services/class/z3950/Service.php:462
+msgctxt "plugin.z3950"
 msgid "Cannot convert server response"
 msgstr "Die Antwort des Servers kann nicht konvertiert werden."
 
-#: ../plugins/z3950/services/class/z3950/Service.php:567
+msgctxt "plugin.z3950"
 msgid "hits"
 msgstr "Ergebnisse"
+
+msgctxt "plugin.z3950"
+msgid "Cannot connect to server: '{error}'."
+msgstr "Kann mich nicht mit dem Server verbinden: '{error}'."
+
+msgctxt "plugin.z3950"
+msgid "Invalid query '{query}'"
+msgstr "Ungültige Abfrage '{query}'"
+
+msgctxt "plugin.z3950"
+msgid "Server timed out."
+msgstr "Zeitüberschreitung bei der Anfrage."
+
+msgctxt "plugin.z3950"
+msgid "Server timed out. Trying again..."
+msgstr "Zeitüberschreitung bei der Anfrage. Versuche es erneut…"
+
+msgctxt "plugin.z3950"
+msgid "The server does not understand the query '{query}'. Please try a different query."
+msgstr "Der Server versteht die Anfrage '{query}' nicht. Versuchen Sie es mit einer anderen Anfrage."
+

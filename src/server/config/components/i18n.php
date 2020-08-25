@@ -11,42 +11,6 @@ return [
       'basePath' => '@messages',
       'catalog' => 'messages',
       'useMoFile' => false
-    ],
-    'extendedfields' => [
-      'class' => \yii\i18n\GettextMessageSource::class,
-      'basePath' => '@messages',
-      'catalog' => 'messages',
-      'useMoFile' => false
-    ],
-    'z3950' => [
-      'class' => \yii\i18n\GettextMessageSource::class,
-      'basePath' => '@messages',
-      'catalog' => 'messages',
-      'useMoFile' => false
-    ],
-    'webservices' => [
-      'class' => \yii\i18n\GettextMessageSource::class,
-      'basePath' => '@messages',
-      'catalog' => 'messages',
-      'useMoFile' => false
-    ],
-    'setup' => [
-      'class' => \yii\i18n\GettextMessageSource::class,
-      'basePath' => '@messages',
-      'catalog' => 'messages',
-      'useMoFile' => false
-    ],
-    'backup' => [
-      'class' => \yii\i18n\GettextMessageSource::class,
-      'basePath' => '@messages',
-      'catalog' => 'messages',
-      'useMoFile' => false
-    ],
-    'email' => [
-      'class' => \yii\i18n\GettextMessageSource::class,
-      'basePath' => '@messages',
-      'catalog' => 'messages',
-      'useMoFile' => false
-    ],
+    ]
   ],
 ];

@@ -215,7 +215,6 @@ class AccessController extends AppController
 
     // cleanup old sessions
     $this->cleanup();
-    $this->dispatchClientMessage("qcl.token.change", $user->token); // Hm, do we need this?
 
     // return information on user
     return new AuthResult([

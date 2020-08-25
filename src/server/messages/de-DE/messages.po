@@ -1138,179 +1138,119 @@ msgctxt "app"
 msgid "{numberOfRecords} records"
 msgstr "{numberOfRecords} Datensätze"
 
-msgctxt "extendedfields"
-msgid "Category"
-msgstr "Kategorie"
 
-msgctxt "extendedfields"
-msgid "Date ordered"
-msgstr "Datum bestellt"
-
-msgctxt "extendedfields"
-msgid "Date received"
-msgstr "Datum erhalten"
-
-msgctxt "extendedfields"
-msgid "Location"
-msgstr "Standort"
-
-msgctxt "extendedfields"
-msgid "Owner"
-msgstr "Besitzer/in"
-
-msgctxt "extendedfields"
-msgid "Type"
-msgstr "Typ"
-
-msgctxt "setup"
+msgctxt "app"
 msgid " and a connection has successfully been established."
 msgstr ""
 
-msgctxt "setup"
+msgctxt "app"
 msgid " and applied new migrations for version {version}"
 msgstr ""
 
-msgctxt "setup"
+msgctxt "app"
 msgid ", but trying to establish a connection failed with the error: {error}"
 msgstr ""
 
-msgctxt "setup"
+msgctxt "app"
 msgid "Admininstrator email exists."
 msgstr ""
 
-msgctxt "setup"
+msgctxt "app"
 msgid "Cannot connect to database: {error}"
 msgstr ""
 
-msgctxt "setup"
+msgctxt "app"
 msgid "Cannot run in production mode without ini file."
 msgstr ""
 
-msgctxt "setup"
+msgctxt "app"
 msgid "Cannot update from Bibliograph v2 data: some tables are missing."
 msgstr ""
 
-msgctxt "setup"
+msgctxt "app"
 msgid "Configuration values were created."
 msgstr ""
 
-msgctxt "setup"
+msgctxt "app"
 msgid "Created datasources."
 msgstr ""
 
-msgctxt "setup"
+msgctxt "app"
 msgid "Created standard schema."
 msgstr ""
 
-msgctxt "setup"
+msgctxt "app"
 msgid "Datasources already existed."
 msgstr ""
 
-msgctxt "setup"
+msgctxt "app"
 msgid "Found data for version {version}"
 msgstr ""
 
-msgctxt "setup"
+msgctxt "app"
 msgid "Found empty database"
 msgstr ""
 
-msgctxt "setup"
+msgctxt "app"
 msgid "Initializing database failed."
 msgstr ""
 
-msgctxt "setup"
+msgctxt "app"
 msgid "Invalid database setup. Please contact the adminstrator."
 msgstr ""
 
-msgctxt "setup"
+msgctxt "app"
 msgid "LDAP authentication is enabled"
 msgstr ""
 
-msgctxt "setup"
+msgctxt "app"
 msgid "LDAP authentication is not enabled."
 msgstr ""
 
-msgctxt "setup"
+msgctxt "app"
 msgid "Migrated data from Bibliograph v2"
 msgstr ""
 
-msgctxt "setup"
+msgctxt "app"
 msgid "Migrated schema(s) {schemas}."
 msgstr ""
 
-msgctxt "setup"
+msgctxt "app"
 msgid "Migrating data from Bibliograph v2 failed."
 msgstr ""
 
-msgctxt "setup"
+msgctxt "app"
 msgid "Migrating schema(s) failed: {errinfo}"
 msgstr ""
 
-msgctxt "setup"
+msgctxt "app"
 msgid "Missing administrator email in app.conf.toml."
 msgstr ""
 
-msgctxt "setup"
+msgctxt "app"
 msgid "No database connection. "
 msgstr ""
 
-msgctxt "setup"
+msgctxt "app"
 msgid "No schema migrations necessary."
 msgstr ""
 
-msgctxt "setup"
+msgctxt "app"
 msgid "No updates to the databases."
 msgstr ""
 
-msgctxt "setup"
+msgctxt "app"
 msgid "Setup failed. Please fix the following problems:"
 msgstr ""
 
-msgctxt "setup"
+msgctxt "app"
 msgid "Standard schema existed."
 msgstr ""
 
-msgctxt "setup"
+msgctxt "app"
 msgid "The configuration directory must not be writable in production mode {config_dir}."
 msgstr ""
 
-msgctxt "setup"
+msgctxt "app"
 msgid "The configuration directory needs to be writable in order to create an .ini file: {config_dir}."
 msgstr ""
-
-msgctxt "webservices"
-msgid "Server timed out."
-msgstr "Zeitüberschreitung bei der Anfrage."
-
-msgctxt "webservices"
-msgid "Server timed out. Trying again..."
-msgstr "Zeitüberschreitung. Anfrage wird wiederholt…"
-
-msgctxt "z3950"
-msgid "Cannot connect to server: '{error}'."
-msgstr "Kann mich nicht mit dem Server verbinden: '{error}'."
-
-msgctxt "z3950"
-msgid "Invalid query '{query}'"
-msgstr "Ungültige Abfrage '{query}'"
-
-msgctxt "z3950"
-msgid "Server timed out."
-msgstr "Zeitüberschreitung bei der Anfrage."
-
-msgctxt "z3950"
-msgid "Server timed out. Trying again..."
-msgstr "Zeitüberschreitung bei der Anfrage. Versuche es erneut…"
-
-msgctxt "z3950"
-msgid "The server does not understand the query '{query}'. Please try a different query."
-msgstr "Der Server versteht die Anfrage '{query}' nicht. Versuchen Sie es mit einer anderen Anfrage."
-
-msgctxt "email"
-msgid "New Bibliograph account"
-msgstr ""
-
-msgctxt "email"
-msgid "Url: {url} Username: {username} Password: {password}"
-msgstr ""
-

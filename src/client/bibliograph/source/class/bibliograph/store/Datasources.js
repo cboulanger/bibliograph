@@ -47,10 +47,10 @@ qx.Class.define("bibliograph.store.Datasources",
 
       // if we have no datasource loaded, no access
       if (datasourceCount === 0 && !this.__loggingout) {
-        if (!this.getApplication().getActiveUser().isAnonymous()) {
-          this.__loggingout = true;
-          this.getApplication().getCommands().logout();
-        }
+        // if (!this.getApplication().getActiveUser() || !this.getApplication().getActiveUser().isAnonymous()) {
+        //   this.__loggingout = true;
+        //   this.getApplication().getCommands().logout();
+        // }
         this.getApplication().alert(app.tr("You don't have access to any datasource. Reloading the page might help."));
         return;
       }
