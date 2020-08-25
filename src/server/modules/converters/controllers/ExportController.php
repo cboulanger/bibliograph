@@ -87,7 +87,7 @@ class ExportController extends AppController
     (new Popup())
       ->setMessage(Yii::t('app',"Preparing export data. Please wait..."))
       ->setService("converters/export")
-      ->setMessage("start-export")
+      ->setMethod("start-export")
       ->setParams([$this->shelve($data, $datasource, $selector)])
       ->show();
     return "Created message to show popup.";
@@ -104,13 +104,12 @@ class ExportController extends AppController
   {
     $shelfData = $this->unshelve( $shelfId );
     list( $data, $datasource, $selector ) = $shelfData;
-    // todo: Use yii\helpers\Url
-    $url  = Yii::$app->homeUrl .
-      '?r=converters/download' .
-      '&access-token=' . Yii::$app->user->getIdentity()->getAuthKey() .
-      '&format=' . $data->format .
-      '&datasource=' . $datasource .
-      '&selector=' . $selector;
+    $url = Yii::$app->utils->makeUrl('converters/download', [
+      'access-token'  => Yii::$app->user->getIdentity()->getAuthKey(),
+      'format'        => $data->format,
+      'datasource'    => $datasource,
+      'selector'      => $selector
+    ]);
     (new Popup())->hide();
     $this->dispatchClientMessage("window.location.replace", array(
       'url' => $url

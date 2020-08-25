@@ -36,7 +36,7 @@ class Module extends \lib\Module
   /**
    * A string constant defining the category for logging and translation
    */
-  const CATEGORY = "backup";
+  const CATEGORY = "plugin.backup";
 
   /**
    * The extension of the backup file without the preceding period.

@@ -20,8 +20,11 @@
 
 namespace lib\models;
 
+use lib\channel\BroadcastEvent;
+use lib\channel\MessageEvent;
 use lib\exceptions\UserErrorException;
 use Yii;
+use yii\base\Event;
 use yii\base\ModelEvent;
 use yii\db\ActiveRecord;
 use yii\db\BaseActiveRecord;
@@ -38,10 +41,15 @@ use app\models\Datasource;
  * @property array $formData
  *    A associative array of arrays containing data for the
  *    dialog.Form widget
- * @method useDsnDefaults()
  */
 class BaseModel extends ActiveRecord
 {
+
+  /**
+   * @var bool Whether to dispatch client or broadcast
+   * events when the model changes
+   */
+  public $dipatchChangeMessages = true;
 
   /**
    * @todo generic table name algorithm
@@ -167,6 +175,19 @@ class BaseModel extends ActiveRecord
   {
     return static::findOne( ['namedId' => $namedId ] );
   }
+
+  /**
+   * Dispatches an change event as a message to the
+   * authenticated client or to all connected clients
+   *
+   * @param MessageEvent|BroadcastEvent $event
+   */
+  public function dispatchChangeMessage(MessageEvent $event) {
+    if ($this->dipatchChangeMessages) {
+      Yii::$app->eventQueue->add($event);
+    }
+  }
+
 
   //-------------------------------------------------------------
   // Overridden methods

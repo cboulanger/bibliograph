@@ -49,6 +49,17 @@ class Utils extends \yii\base\Component
   }
 
   /**
+   * Returns the url to the yii2 server
+   * @param string $route
+   * @param array|object $params
+   * @return string
+   */
+  public function makeUrl($route, $params) {
+    $url = Yii::$app->request->baseUrl;
+    return $url . "/" . $route . (strstr($url, "?") ? "&" : "?") . http_build_query($params);
+  }
+
+  /**
    * Returns the URL of the HTML user interface
    */
   public function getFrontendUrl()

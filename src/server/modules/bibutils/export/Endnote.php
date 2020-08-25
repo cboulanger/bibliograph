@@ -24,7 +24,9 @@ use app\modules\converters\export\AbstractExporter;
 use app\modules\converters\export\BibliographBibtex;
 use app\models\Reference;
 use app\modules\bibutils\Module;
+use ForceUTF8\Encoding;
 use lib\exceptions\UserErrorException;
+use Yii;
 
 /**
  * Exports in a format that can be imported by Endnote
@@ -82,10 +84,12 @@ class Endnote extends AbstractExporter
   public function export(array $references)
   {
     $bibliographBibtex = (new BibliographBibtex())->export($references);
+    //$this->debugEncoding($bibliographBibtex);
     try {
       $mods = Module::createCmd("bib2xml")->call("-u", $bibliographBibtex);
-      //Yii::debug($mods, Module::CATEGORY, __METHOD__);
-      $end = Module::createCmd("xml2end")->call("", $mods);
+      //$this->debugEncoding($mods);
+      $end = Module::createCmd("xml2end")->call("",  $mods);
+      //$this->debugEncoding($end);
     } catch (\Exception $e) {
       throw new UserErrorException($e->getMessage());
     }

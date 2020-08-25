@@ -154,8 +154,8 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
         let s = e.getData();
         let description = s.length && s[0].getModel().getDescription();
         if (description) {
- helpText.setValue(description);
-}
+         helpText.setValue(description);
+        }
       });
       
       // stack - don't remember what that was for
@@ -227,7 +227,9 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
         throw new Error(msg);
       }
 
-      let url = this.getApplication().getServerUrl() + "upload";
+      let app = this.getApplication();
+      let token = app.getAccessManager().getToken();
+      let url = app.getServerUrl() + "upload?access-token=" + token;
 
       // form
       let form = new uploadwidget.UploadForm("uploadForm", url);

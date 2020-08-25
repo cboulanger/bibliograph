@@ -12,6 +12,8 @@ defined('BIBUTILS_PATH') or define('BIBUTILS_PATH', $_SERVER['BIBUTILS_PATH']);
 
 class Module extends \app\modules\converters\Module
 {
+  const CATEGORY = "plugin.bibutils";
+
   /**
    * The version of the module
    * @var string
@@ -35,5 +37,4 @@ class Module extends \app\modules\converters\Module
   static function createCmd($cmd) {
     return new Executable($cmd, BIBUTILS_PATH);
   }
-
 }

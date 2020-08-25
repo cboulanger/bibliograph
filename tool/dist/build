@@ -5,7 +5,7 @@
 
 set -e
 source tool/lib/functions.sh
-tool/env/http-server start
+tool/env/http-server start > /dev/null
 
 # dependencies: apt-get install jq (linux) / brew install jq (MacOS with homebrew)
 # command -v jq >/dev/null 2>&1 || { echo >&2 "You need to install the jq command"; exit 1; }
@@ -118,7 +118,7 @@ EOF
 echo " - Adding composer dependencies ..."
 # install composer dependencies
 cp -a $SERVER_SRC_DIR/composer.* $DIST_SERVER_DIR/
-COMPOSER_ARGS="--no-dev --working-dir=dist/server --no-plugins"
+COMPOSER_ARGS="--no-dev --working-dir=dist/server"
 if [[ $BUILD_CLEAN != 0 ]]; then
   tool/dev/php src/lib/composer.phar clearcache
 fi

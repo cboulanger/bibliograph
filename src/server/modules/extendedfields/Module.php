@@ -12,6 +12,9 @@ use lib\exceptions\RecordExistsException;
 
 class Module extends \lib\Module
 {
+
+  const CATEGORY = "plugin.extendedfields";
+
   /**
    * The version of the module
    * @var string

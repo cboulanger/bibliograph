@@ -23,14 +23,16 @@ namespace app\controllers;
 use app\controllers\traits\{
   AccessControlTrait, AuthTrait, DatasourceTrait, MessageTrait, ShelfTrait
 };
+use app\models\Session;
 use lib\filters\auth\JsonRpcPayloadTokenAuth;
+use lib\filters\auth\SessionIdAuth;
 use Yii;
-use yii\base\Application;
-use yii\base\Exception;
+use yii\base\Event;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBearerAuth;
 use yii\filters\auth\QueryParamAuth;
 use yii\web\Controller;
+use yii\web\User;
 
 
 /**
@@ -53,6 +55,11 @@ class AppController extends Controller
   const CATEGORY = "app";
 
   /**
+   * Category for debug messages
+   */
+  const DEBUG = "debug";
+
+  /**
    * A message name that triggers a jsonrpc request from the client
    */
   const MESSAGE_EXECUTE_JSONRPC = "jsonrpc.execute";
@@ -67,7 +74,9 @@ class AppController extends Controller
    */
   public function behaviors()
   {
-    $authMethods = [HttpBearerAuth::class, QueryParamAuth::class];
+    $oldSessionId = Yii::$app->session->id;
+    Yii::debug("Old session id: $oldSessionId", self::DEBUG);
+    $authMethods = [HttpBearerAuth::class, QueryParamAuth::class, SessionIdAuth::class];
     // codecdeption tests do not pass the Bearer Authentication Header correctly
     if (defined('JSON_RPC_USE_PAYLOAD_TOKEN_AUTH') AND JSON_RPC_USE_PAYLOAD_TOKEN_AUTH===true) {
       $authMethods[] = JsonRpcPayloadTokenAuth::class;
@@ -78,6 +87,25 @@ class AppController extends Controller
       'authMethods' => $authMethods,
       'optional' => $this->noAuthActions
     ];
+    Event::on(User::class, User::EVENT_AFTER_LOGIN, function($event) use ($oldSessionId){
+      $user = $event->identity;
+      //Yii::debug("User: $user->name ", self::DEBUG);
+      $newSessionId = Yii::$app->session->id;
+      //Yii::debug("New session id: $newSessionId", self::DEBUG);
+      if ($session = Session::findOne(['namedId' => $oldSessionId])) {
+        // contiunue session
+        $session->namedId = $newSessionId;
+        $session->save();
+        //Yii::debug("Renamed session $oldSessionId into $newSessionId", self::DEBUG);
+      } else {
+        // create new session
+        $sessionId = $this->getSessionId();
+        $session = new Session(['namedId' => $sessionId]);
+        $session->link('user',$user);
+        $session->save();
+        //Yii::debug("Starting sesssion {$sessionId}", self::CATEGORY);
+      }
+    });
     return $behaviors;
   }
 

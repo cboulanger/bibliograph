@@ -40,7 +40,7 @@ use yii\db\Exception;
  */
 class Folder extends \lib\models\BaseModel //implements ITreeNode
 {
-  //@todo: name as client-side message?
+  //@todo: name as client-side event?
   const MESSAGE_CLIENT_UPDATE = "folder.node.update";
   const MESSAGE_CLIENT_ADD    = "folder.node.add";
   const MESSAGE_CLIENT_DELETE = "folder.node.delete";
@@ -312,7 +312,7 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
     }
     //Yii::debug($nodeData, __METHOD__);
     // update new parent on client
-    Yii::$app->eventQueue->add($this->createUpdateNodeEvent($nodeData));
+    $this->dispatchChangeMessage($this->createUpdateNodeEvent($nodeData));
   }
 
   /**
@@ -331,10 +331,11 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
     parent::afterSave($insert, $changedAttributes);
 
     // do no emit events if in console mode
-    if( Yii::$app->request->isConsoleRequest ) return true;
+    if( Yii::$app->request->isConsoleRequest ) {
+      return true;
+    }
 
     // inserts
-
     if ($insert) {
       //Yii::debug("Inserting " . $this->label, __METHOD__);
       $this->_afterInsert();
@@ -361,7 +362,7 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
             Yii::error($e);
           }
           // move node
-          Yii::$app->eventQueue->add(new BroadcastEvent([
+          $this->dispatchChangeMessage(new BroadcastEvent([
             'name' => static::MESSAGE_CLIENT_MOVE,
             'data' => [
               'datasource' => static::getDatasource()->namedId,
@@ -381,7 +382,7 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
       } catch (Exception $e) {
         throw new UserErrorException($e->getMessage(),null, $e);
       }
-      Yii::$app->eventQueue->add($this->createUpdateNodeEvent($nodeData));
+      $this->dispatchChangeMessage($this->createUpdateNodeEvent($nodeData));
     }
     // add virtual subfolders
     $this->_createVirtualSubfoldersOnDemand(true);
@@ -396,12 +397,12 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
   protected function _createVirtualSubfoldersOnDemand($pruneFirst=false){
     if ($this->query and str_contains( $this->query, "virtsub:" )){
       if ($pruneFirst) {
-        Yii::$app->eventQueue->add(new MessageEvent([
+        $this->dispatchChangeMessage(new MessageEvent([
           'name' => static::MESSAGE_CLIENT_PRUNE,
           'data' => [ 'datasource' => static::getDatasource()->namedId, 'modelType' => 'folder', 'id' => $this->id]
         ]));
       }
-      Yii::$app->eventQueue->add(new MessageEvent([
+      $this->dispatchChangeMessage(new MessageEvent([
         'name' => AppController::MESSAGE_EXECUTE_JSONRPC,
         'data' => ["folder", "create-virtual-folders", [static::getDatasource()->namedId, $this->id]]
       ]));
@@ -423,7 +424,7 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
       $this->updateParentNode();
     }
     //@todo move to method
-    Yii::$app->eventQueue->add(new BroadcastEvent([
+    $this->dispatchChangeMessage(new BroadcastEvent([
       'name' => static::MESSAGE_CLIENT_ADD,
       'data' => [
         'datasource'  => static::getDatasource()->namedId,
@@ -445,7 +446,7 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
   {
     parent::afterDelete();
     $this->updateParentNode();
-    Yii::$app->eventQueue->add(new BroadcastEvent([
+    $this->dispatchChangeMessage(new BroadcastEvent([
       'name' => static::MESSAGE_CLIENT_DELETE,
       'data' => [
         'datasource' => static::getDatasource()->namedId,

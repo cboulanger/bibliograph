@@ -31,7 +31,7 @@ class Module extends \lib\Module
   /**
    * A string constant defining the category for logging and translation
    */
-  const CATEGORY="webservices";
+  const CATEGORY="plugin.webservices";
 
   /**
    * @inheritdoc

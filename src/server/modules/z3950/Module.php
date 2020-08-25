@@ -29,7 +29,7 @@ class Module extends \lib\Module
   /**
    * A string constant defining the category for logging and translation
    */
-  const CATEGORY="z3950";
+  const CATEGORY="plugin.z3950";
 
   /**
    * @inheritdoc

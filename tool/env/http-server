@@ -28,7 +28,7 @@ start)
       #
       # additional packages
       docker exec -it http-server apt-get update > /dev/null
-      docker exec -it http-server apt-get install mysql-client unzip -y > /dev/null
+      docker exec -it http-server apt-get install mysql-client unzip locales -y > /dev/null
       # if composer needs to install packages from github repositories
       docker exec -it http-server apt-get install git -y > /dev/null
   else

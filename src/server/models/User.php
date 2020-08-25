@@ -21,13 +21,14 @@
 namespace app\models;
 
 use app\migrations\data\m180105_075537_data_RoleDataInsert;
-use yii\db\Exception;
+use yii\base\Event;
+use yii\db\StaleObjectException;
+use yii\web\Request;
 use yii\web\UnauthorizedHttpException;
 use function GuzzleHttp\describe_type;
 use InvalidArgumentException;
 use Yii;
 use Yii\db\ActiveQuery;
-use yii\db\Expression;
 use yii\web\IdentityInterface;
 use lib\models\BaseModel;
 
@@ -138,8 +139,6 @@ class User extends BaseModel implements IdentityInterface
     ];
   }
 
-
-
   //-------------------------------------------------------------
   // Indentity Interface
   //-------------------------------------------------------------
@@ -164,12 +163,44 @@ class User extends BaseModel implements IdentityInterface
   }
 
   /**
+   * @param string $sessionId
+   * @param Request $request
+   * @return User
+   * @throws \yii\db\Exception
+   * @throws UnauthorizedHttpException
+   */
+  static function findIdentityBySessionId(string $sessionId, Request $request) {
+    Yii::debug("Trying to use session id '$sessionId' to log in...", self::CATEGORY);
+    $session = Session::findOne(['namedId' => $sessionId]);
+    if (!$session) {
+      Yii::warning("Session $sessionId does not exist", self::CATEGORY);
+    } else if ($session->ip !== $request->getRemoteIP()) {
+      Yii::warning("Wrong remote IP for session $sessionId: " . $request->getRemoteIP());
+    } else {
+      $session->touch();
+      $identity = User::findOne($session->UserId);
+      if (!$identity) {
+        Yii::warning("Invalid session id: User does not exist", self::CATEGORY);
+        try {
+          $session->delete();
+        } catch (\Throwable $e) {
+          Yii::warning($e);
+        }
+        return null;
+      }
+      Yii::info("Authorized user '{$identity->namedId}' via session id '{$sessionId}'.",self::CATEGORY);
+      return $identity;
+    }
+    return null;
+  }
+
+  /**
    * @param string $token
    * @param string $authClass
    * @return bool
    * @throws \yii\db\Exception
    */
-  public function loginByAccessToken($token, $authClass) {
+  static function loginByAccessToken($token, $authClass) {
     Yii::debug("Trying to log in with access token $token", self::CATEGORY);
     $user = static::findIdentityByAccessToken($token);
     if (!$token or ! $user or ! $user->active ) {
@@ -191,26 +222,6 @@ class User extends BaseModel implements IdentityInterface
     $sessionId = Yii::$app->session->getId();
     Yii::info("Authorized user '{$user->namedId}' via auth auth token (Session {$sessionId}).",self::CATEGORY);
     return true;
-  }
-
-
-  /**
-   * Tries to continue an existing session
-   *
-   * @param User $user
-   * @return Session|null
-   *    The session object to be reused, or null if none exists.
-   */
-  public function continueSession()
-  {
-    $session = Session::findOne(['UserId' => $this->id]);
-    if ($session) {
-      // manually set session id to recover the session data
-      // TODO this doesn't work if old stale sessions are still in the database, revisit this
-      // YII::$app->session->setId( $session->namedId );
-    }
-    Yii::$app->session->open();
-    return $session;
   }
 
   /**

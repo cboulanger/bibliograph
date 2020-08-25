@@ -192,18 +192,21 @@ class FolderController extends AppController //implements ITreeController
   }
 
   /**
-   * Given a datasource and a folder id, return an event that will retrieve the virtual subfolders
-   * of that folder
+   * Given a datasource and a folder id, return an event that will retrieve the
+   * virtual subfolders of that folder
    * @param string $datasource
    * @param int $parentId
    * @return string
+   * @throws UserErrorException
    */
   public function actionCreateVirtualFolders(
     string $datasource,
     int $parentId)
   {
     $folder = Datasource::findOneIn($datasource, "folder", $parentId);
-    if (!$folder) throw new UserErrorException("Invalid folder Id $parentId");
+    if (!$folder) {
+      throw new UserErrorException("Invalid folder Id $parentId");
+    }
     Yii::$app->eventQueue->add(new MessageEvent([
       'name' => Folder::MESSAGE_CLIENT_ADD,
       'data' => [

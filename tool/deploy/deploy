@@ -290,6 +290,7 @@ function setup_mysql_credentials(){
 
 
 function import_databases_expr(){
+  FIXUTF8PATH="$DEPLOY_DIR/server/vendor/neitanod/forceutf8/src/ForceUTF8/Encoding.php"
   cat << EOF
       for db in "$DEPLOY_IMPORT_DB_NAMES"; do
        echo " - Cloning database '\$db' into '$DB_DATABASE'..."
@@ -300,7 +301,7 @@ function import_databases_expr(){
          \$db \
        | sed s/\$db/$DB_DATABASE/g \
        | sed s/\'0000-00-00\'/NULL/g \
-       | iconv -f utf-8 -t utf-8 -c \
+       | php -r "require '$FIXUTF8PATH'; echo ForceUTF8\Encoding::fixUTF8(stream_get_contents(STDIN));" \
        | mysql \
          --login-path=deploy_alias \
          --default-character-set=utf8 \

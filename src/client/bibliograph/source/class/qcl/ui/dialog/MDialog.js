@@ -26,9 +26,10 @@ qx.Mixin.define("qcl.ui.dialog.MDialog", {
             if (!Clazz) {
               throw new Error(`No dialog of type "${type}" exists.`);
             }
-            dialog = this.__dialogs[type] = new Clazz(config);
+            dialog = new Clazz(config);
           }
         }
+        this.__dialogs[type] = dialog;
         this.addOwnedQxObject(dialog, type);
       }
       dialog.open();

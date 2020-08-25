@@ -27,7 +27,17 @@ qx.Class.define("bibliograph.plugins.webservices.View",
     autoimport : {
       check: "Boolean",
       init: false,
-      event: "changeAutomimport"
+      event: "changeAutomimport",
+      apply: "_applyAutoimport"
+    },
+  
+    /**
+     * Whether to autostart the search when recognizing a valid pattern
+     */
+    autostart : {
+      check: "Boolean",
+      init: false,
+      event: "changeAutostart"
     }
   },
   /**
@@ -36,13 +46,19 @@ qx.Class.define("bibliograph.plugins.webservices.View",
   construct: function () {
     this.base(arguments);
     this.setModuleName("webservices");
-    this.setLayout(new qx.ui.layout.VBox(5));
+    this.set({
+      layout: new qx.ui.layout.VBox(5),
+      allowStretchY: true
+    });
     this.createPopup();
     this.add(this.getQxObject("toolbar"));
-    this.add(this.getQxObject("autoimport"));
+    this.add(this.getQxObject("toolbar2"));
     this.add(this.getQxObject("listview"), {flex: 1});
     this.add(this.getQxObject("footer"));
     this._setupProgressWidget();
+    qx.lang.Function.delay(() => {
+      this.getWindow().setAllowStretchY(true);
+    }, 100, this);
   },
   members:
   {
@@ -55,14 +71,29 @@ qx.Class.define("bibliograph.plugins.webservices.View",
     _createQxObjectImpl(id) {
       let control;
       switch (id) {
+        case "toolbar2":
+          control = new qx.ui.container.Composite(new qx.ui.layout.HBox(5));
+          control.add(this.getQxObject("autoimport"));
+          control.add(this.getQxObject("autostart"));
+          break;
         case "autoimport":
           control = new qx.ui.form.CheckBox(this.tr("Auto-import best result"));
           control.bind("value", this, "autoimport");
           this.bind("autoimport", control, "value");
-          this._autoimport = control;
+          break;
+        case "autostart":
+          control = new qx.ui.form.CheckBox(this.tr("Autostart search"));
+          control.bind("value", this, "autostart");
+          this.bind("autostart", control, "value");
           break;
       }
       return control || this.base(arguments, id);
+    },
+  
+    _applyAutoimport(value) {
+      // let visibility = value ? "excluded" : "visible";
+      // this.getQxObject("listview").setVisibility(visibility);
+      // this.getQxObject("footer").setVisibility(visibility);
     },
   
     /**
@@ -71,9 +102,7 @@ qx.Class.define("bibliograph.plugins.webservices.View",
     _on_tableReady () {
       this.base(arguments);
       this._listView.getController().addListener("blockLoaded", () => {
-        console.warn("Block loaded!");
-        if (this.getAutoimport() && this.getSearch()) {
-          this._selectFirstRow();
+        if (this._selectFirstRow() && this.getAutoimport()) {
           this.importSelected();
           this.setSearch(null);
           this._searchBox.focus();
@@ -86,16 +115,35 @@ qx.Class.define("bibliograph.plugins.webservices.View",
      * @override
      * @param e {qx.event.type.Data}
      */
-    _onKeypress: function (e) {
-      if (e.getKeyIdentifier() === "Enter") {
-        this.startSearch();
-      }
-      if (this.getAutoimport()) {
-        let searchText = this.getSearch();
-        // auto-submit ISBNs
-        if (searchText && searchText.length > 12 && searchText.replace(/[^0-9xX]/g, "").length === 13 && searchText.substr(0, 3) === "978") {
-          this.startSearch();
+    _on_input: function (e) {
+      console.warn("input:" + e.getData())
+      if (this.getAutostart()) {
+        let searchText = this._searchBox.getValue();
+        if (this.__timer) {
+          this.__timer.restart();
+        } else {
+          this.__timer = qx.event.Timer.once(() => {
+            delete this.__timer;
+            if (this._searchBox.getValue() === searchText) {
+              this.startSearch();
+            }
+          }, null, 1000);
         }
+      }
+    },
+    
+    __checkForIdentifiers(text) {
+      let id;
+      switch (true) {
+        case (text.substr(0, 3) === "978"):
+          id = text.replace(/[^0-9xX]/g, "");
+          break;
+        case (text.match(bibliograph.plugins.webservices.Plugin.DOI_LONG_REGEX)):
+          id = text;
+          break;
+      }
+      if (id) {
+        this.startSearch(id);
       }
     }
   }

@@ -50,26 +50,26 @@ class ImportController extends AppController
    *
    * @param $datasource
    */
-  public function actionTableLayout( $datasource )
+  public function actionTableLayout($datasource)
   {
     return [
       'columnLayout' => [
         'id' => [
-          'header'  => "ID",
-          'width'   => 50,
+          'header' => "ID",
+          'width' => 50,
           'visible' => false
         ],
         'author' => [
-          'header'  => Yii::t('app', "Author"),
-          'width'   => "1*"
+          'header' => Yii::t('app', "Author"),
+          'width' => "1*"
         ],
         'year' => [
-          'header'  => Yii::t('app', "Year"),
-          'width'   => 50
+          'header' => Yii::t('app', "Year"),
+          'width' => 50
         ],
         'title' => [
-          'header'  => Yii::t('app', "Title"),
-          'width'   => "3*"
+          'header' => Yii::t('app', "Title"),
+          'width' => "3*"
         ]
       ],
       'queryData' => [
@@ -87,8 +87,9 @@ class ImportController extends AppController
    * Shorthand method
    * @return \yii\db\ActiveQuery
    */
-  protected function findInFolders() {
-    return $this->findIn($this->datasource,"folder");
+  protected function findInFolders()
+  {
+    return $this->findIn($this->datasource, "folder");
   }
 
 
@@ -106,11 +107,11 @@ class ImportController extends AppController
     $importFormats = ImportFormat::find()->where(['active' => 1])->orderBy("name")->all();
     $listData = [[
       'value' => null,
-      'label' => Yii::t('app', "2. Choose import format" ),
+      'label' => Yii::t('app', "2. Choose import format"),
       'description' => "",
     ]];
     /** @var ImportFormat $format */
-    foreach( $importFormats as $format ){
+    foreach ($importFormats as $format) {
       $listData[] = [
         'value' => $format->namedId,
         'label' => $format->name,
@@ -122,53 +123,52 @@ class ImportController extends AppController
 
   /**
    * Parse the data from the last uploaded file with the given format.
-   * Returns an associative array containing the keys "datasource" with the name of the
-   * datasource (usually "bibliograph_import") and "folderId" containing
-   * the numeric value of the folder containing the processed references.
+   * Returns an associative array containing the keys "datasource" with the
+   * name of the datasource (usually "bibliograph_import") and "folderId"
+   * containing the numeric value of the folder containing the processed
+   * references.
    *
    * @param string $format
    *    The name of the import format
    * @throws UserErrorException
    * @throws \lib\exceptions\Exception
    */
-  public function actionParseUpload( string $format )
+  public function actionParseUpload(string $format)
   {
     $this->requirePermission("reference.import", $this->datasource);
 
     // load importer object according to format
     /** @var ImportFormat $importFormatModel */
     $importFormatModel = ImportFormat::findByNamedId($format);
-    if(! $importFormatModel ){
-      throw new UserErrorException( Yii::t('app',
-        "Unknown format '{format}'.", [ 'format' => $format]
+    if (!$importFormatModel) {
+      throw new UserErrorException(Yii::t('app',
+        "Unknown format '{format}'.", ['format' => $format]
       ));
     }
-    try{
+    try {
       $file = LastFileUpload::instance();
-    } catch (\RuntimeException $e){
+    } catch (\RuntimeException $e) {
       throw new UserErrorException("No file was uploaded");
     }
-
     $givenExtension = $file->extension;
     $allowedExtensions = $importFormatModel->getExtensions();
-    if( ! in_array( $givenExtension,$allowedExtensions ) )
-    {
+    if (!in_array($givenExtension, $allowedExtensions)) {
       throw new UserErrorException(
         Yii::t('app',
-          "Format '{format}' expects file extension(s) '{allowedExtensions}'. The file you uploaded has extension '{givenExtension}'.",[
-            'format'            => $format,
+          "Format '{format}' expects file extension(s) '{allowedExtensions}'. The file you uploaded has extension '{givenExtension}'.", [
+            'format' => $format,
             'allowedExtensions' => implode("', '", $allowedExtensions),
-            'givenExtension'    => $givenExtension
+            'givenExtension' => $givenExtension
           ])
       );
     }
 
     // cleanup unused data: purge all folders with names of sessions that no longer exist
     /** @var Folder $folder */
-    foreach ($this->findInFolders()->all() as $folder)
-    {
-      if ( ! Session::find()->where( ['id' => $folder->label ])->exists() ){
-        foreach( $folder->getReferences()->all() as $reference ){
+    foreach ($this->findInFolders()->all() as $folder) {
+      $folder->dipatchChangeMessages = false;
+      if (!Session::find()->where(['id' => $folder->label])->exists()) {
+        foreach ($folder->getReferences()->all() as $reference) {
           try {
             $reference->delete();
           } catch (\Throwable $e) {
@@ -187,9 +187,9 @@ class ImportController extends AppController
     $sessionId = Yii::$app->session->getId();
     /** @var Folder|null $folder */
     $folder = $this->findInFolders()
-      ->where(['id'=>$sessionId])
+      ->where(['id' => $sessionId])
       ->one();
-    if( $folder ){
+    if ($folder) {
       /** @var Reference $reference */
       foreach ($folder->getReferences() as $reference) {
         try {
@@ -200,10 +200,11 @@ class ImportController extends AppController
       }
     } else {
       $folder = new Folder([
-        'label'    => $sessionId,
+        'label' => $sessionId,
         'parentId' => 0,
         'position' => 0
       ]);
+      $folder->dipatchChangeMessages = false;
       try {
         $folder->save();
       } catch (Exception $e) {
@@ -212,29 +213,33 @@ class ImportController extends AppController
     }
 
     // convert and import data
-    $data = file_get_contents( $file->path );
+    try {
+      $data = file_get_contents($file->path);
+    } catch (\Throwable $e) {
+      throw new UserErrorException($e->getMessage());
+    }
+
     $file->delete();
 
     $parserClass = $importFormatModel->class;
-    if( ! class_exists($parserClass) ){
+    if (!class_exists($parserClass)) {
       throw new UserErrorException("Importer class '$parserClass' does not exist!");
     }
     /** @var AbstractParser $parser */
     $parser = new $parserClass();
-    $records = $parser->parse( $data );
+    $records = $parser->parse($data);
     /** @var array $record */
-    foreach( $records as $record )
-    {
-      $referenceClass = Datasource::in($this->datasource,"reference");
+    foreach ($records as $record) {
+      $referenceClass = Datasource::in($this->datasource, "reference");
       /** @var Reference $reference */
       $reference = new $referenceClass();
-      $reference->setAttributes( $record );
-      if( ! $reference->citekey ){
+      $reference->setAttributes($record);
+      if (!$reference->citekey) {
         $reference->citekey = $reference->computeCitekey();
       }
       try {
         $reference->save();
-        $reference->link("folders", $folder );
+        $reference->link("folders", $folder);
       } catch (Exception $e) {
         Yii::warning($e->getMessage());
         throw new UserErrorException(Yii::t(self::CATEGORY, "Error during import. Maybe wrong file encoding?"));
@@ -243,7 +248,7 @@ class ImportController extends AppController
 
     // return information on containing folder
     return [
-      'folderId'   => $folder->id,
+      'folderId' => $folder->id,
       'datasource' => $this->datasource
     ];
   }
@@ -256,20 +261,20 @@ class ImportController extends AppController
    * @return string Diagnostic message
    * @throws \lib\exceptions\Exception
    */
-  public function actionImport( string $ids, string $targetDatasource, int $targetFolderId )
+  public function actionImport(string $ids, string $targetDatasource, int $targetFolderId)
   {
     $this->requirePermission("reference.import", $targetDatasource);
-    $ids = explode(',',$ids);
-    $refs = $this->findIn($this->datasource,"reference")
-      ->where(['in','id',$ids])
+    $ids = explode(',', $ids);
+    $refs = $this->findIn($this->datasource, "reference")
+      ->where(['in', 'id', $ids])
       ->all();
 
-    $targetReferenceClass = Datasource::in($targetDatasource,"reference");
+    $targetReferenceClass = Datasource::in($targetDatasource, "reference");
     /** @var Folder $targetFolder */
-    $targetFolder = $this->findIn($targetDatasource,"folder")
-      ->where(['id'=>$targetFolderId])
+    $targetFolder = $this->findIn($targetDatasource, "folder")
+      ->where(['id' => $targetFolderId])
       ->one();
-    if( ! $targetFolder){
+    if (!$targetFolder) {
       throw new UserErrorException("The target folder #$targetFolderId does not exist.");
     }
 
@@ -286,13 +291,13 @@ class ImportController extends AppController
     /** @var Reference $ref */
     foreach ($refs as $ref) {
       /** @var Reference $importedReference */
-       $importedReference = new $targetReferenceClass();
-       $importedReference->setAttributes(
-         $ref->getAttributes($commonAttributes)
-       );
+      $importedReference = new $targetReferenceClass();
+      $importedReference->setAttributes(
+        $ref->getAttributes($commonAttributes)
+      );
       try {
         $importedReference->save();
-        $importedReference->link("folders", $targetFolder );
+        $importedReference->link("folders", $targetFolder);
         $count++;
       } catch (Exception $e) {
         Yii::warning($e->getMessage());
@@ -301,9 +306,9 @@ class ImportController extends AppController
     // update child count and reload folders
     $targetFolder->getChildCount(true);
     $this->dispatchClientMessage("folder.reload", array(
-      'datasource'  => $targetDatasource,
-      'folderId'    => $targetFolderId
-    ) );
+      'datasource' => $targetDatasource,
+      'folderId' => $targetFolderId
+    ));
 
     return "$count references imported.";
   }

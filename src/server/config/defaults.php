@@ -96,3 +96,29 @@ defined('REQUEST_EXECUTION_THRESHOLD') or define('REQUEST_EXECUTION_THRESHOLD', 
  * Will be set as set_time_limit();
  */
 defined('MAX_EXECUTION_TIME') or define('MAX_EXECUTION_TIME', 120);
+
+/**
+ * The debug levels
+ */
+if (!defined("YII_DEBUG_LEVELS")) {
+  if (isset($_SERVER['YII_DEBUG_LEVELS'])) {
+    define("YII_DEBUG_LEVELS", $_SERVER['YII_DEBUG_LEVELS']);
+  } else if (YII_DEBUG) {
+    define("YII_DEBUG_LEVELS", ['trace','info', 'warning']);
+  } else {
+    define("YII_DEBUG_LEVELS", ['info', 'warning']);
+  }
+}
+
+/**
+ * Debug categories
+ */
+if (!defined("YII_DEBUG_CATEGORIES")) {
+  if (isset($_SERVER['YII_DEBUG_CATEGORIES'])) {
+    define("YII_DEBUG_CATEGORIES", $_SERVER['YII_DEBUG_CATEGORIES']);
+  } else if (YII_DEBUG) {
+    define("YII_DEBUG_CATEGORIES", ['application', 'access','setup', 'app\*', 'plugin*', 'jsonrpc', "debug", "yii\\web\\User\\*"]);
+  } else {
+    define("YII_DEBUG_CATEGORIES", ['application', 'app\*', 'plugin*', 'jsonrpc']);
+  }
+}

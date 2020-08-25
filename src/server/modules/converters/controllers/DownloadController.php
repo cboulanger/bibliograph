@@ -83,17 +83,18 @@ class DownloadController extends \yii\web\Controller
 
     //
     $response = Yii::$app->response;
+    $response->format = \yii\web\Response::FORMAT_RAW;
     $filename = $datasource . '.' . $exporter->extension;
 
     // todo count results, and use paged batches,
     // todo use streaming? see https://www.yiiframework.com/doc/api/2.0/yii-web-response#sendStreamAsFile()-detail
     // if batch processing is preferred, load result into memory
     //if( $exporter->preferBatch ){
-      $data = $exporter->export($query->all());
-      $response->sendContentAsFile($data, $filename, [
-        'mimeType' => $exporter->mimeType
-      ]);
-      return;
+    $data = $exporter->export($query->all());
+    $response->sendContentAsFile($data, $filename, [
+      'mimeType' => $exporter->mimeType
+    ]);
+    return;
     //}
   }
 }

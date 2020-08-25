@@ -12,7 +12,7 @@ class Module extends \lib\Module
   /**
    * A string constant defining the category for logging and translation
    */
-  const CATEGORY="converters";
+  const CATEGORY="plugin.converters";
 
   /**
    * The version of the module

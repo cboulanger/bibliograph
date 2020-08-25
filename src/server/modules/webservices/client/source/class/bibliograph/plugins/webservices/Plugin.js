@@ -20,6 +20,10 @@ qx.Class.define("bibliograph.plugins.webservices.Plugin",
   extend: qcl.application.BasePlugin,
   include: [qx.locale.MTranslation],
   type: "singleton",
+  statics: {
+    DOI_LONG_REGEX: /^10.\d{4,9}\/[-._;()\/:A-Z0-9]+$/i,
+    DOI_SHORT_REGEX: /^10\/[a-z0-9]+$/i
+  },
   members: {
 
     /**

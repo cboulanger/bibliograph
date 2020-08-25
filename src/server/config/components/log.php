@@ -19,12 +19,8 @@ $log_config = [
     // everything else into app.log
     'app' => [
       'class' => FileTarget::class,
-      'levels' => YII_DEBUG
-        ? ['trace','info', 'warning']
-        : ['info', 'warning'],
-      'categories' => YII_DEBUG
-        ? ['application', 'access','setup', 'app\*', 'plugin*', 'jsonrpc']
-        : ['application', 'app\*', 'plugin*', 'jsonrpc'],
+      'levels' => YII_DEBUG_LEVELS,
+      'categories' => YII_DEBUG_CATEGORIES,
       'except' => [],
       'logFile' => APP_LOG_DIR . "/" . APP_LOG_NAME,
       'logVars' => [],

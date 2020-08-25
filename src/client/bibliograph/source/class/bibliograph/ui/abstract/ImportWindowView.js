@@ -19,12 +19,6 @@ qx.Class.define("bibliograph.ui.abstract.ImportWindowView",
 {
   extend: qx.ui.container.Composite,
   include: [qcl.ui.MLoadingPopup],
-
-  /*
-  *****************************************************************************
-     PROPERTIES
-  *****************************************************************************
-  */
   properties : {
   
     /**
@@ -78,7 +72,7 @@ qx.Class.define("bibliograph.ui.abstract.ImportWindowView",
     },
   
     _applySearch(value) {
-      if (!value) {
+      if (!value && this._listView) {
         this._listView.clearTable();
       }
     },
@@ -89,7 +83,6 @@ qx.Class.define("bibliograph.ui.abstract.ImportWindowView",
         case "toolbar":
           control = new qx.ui.toolbar.ToolBar();
           control.add(this.getQxObject("selectbox"));
-          control.addSpacer();
           control.add(this.getQxObject("search-bar"), {flex: 1});
           this._toolbar = control;
           break;
@@ -122,10 +115,11 @@ qx.Class.define("bibliograph.ui.abstract.ImportWindowView",
             height: 30,
             placeholder: this.tr("Enter search terms")
           });
+          control.bind("value", this, "search");
+          this.bind("search", control, "value");
           control.addListener("dblclick", e => e.stopPropagation());
           control.addListener("keypress", this._on_keypress, this);
-          control.addListener("changeValue", e => this.setSearch(e.getData()));
-          this.bind("search", control, "value");
+          control.addListener("input", this._on_input, this);
           this._searchBox = control;
           break;
         case "search-button":
@@ -243,6 +237,14 @@ qx.Class.define("bibliograph.ui.abstract.ImportWindowView",
         this.startSearch();
       }
     },
+  
+    /**
+     * Called when the "input" event is fired on the searchbox
+     * @param {qx.event.type.Data} e
+     * Empty stub to be overridden
+     * @private
+     */
+    _on_input(e) {},
     
     _setupProgressWidget() {
       this._serverProgress = qx.core.Id.getQxObject(`plugin-${this.getModuleName()}-progress`);
@@ -283,13 +285,20 @@ qx.Class.define("bibliograph.ui.abstract.ImportWindowView",
         .set({message: this.tr("Searching...")})
         .start({ datasource, query });
     },
-    
+  
+    /**
+     * If the table has any rows, select the first one and return true,
+     * Otherwise, return false
+     * @private
+     * @return {Boolean}
+     */
     _selectFirstRow() {
-      this._listView
-        .getTable()
-        .getSelectionManager()
-        .getSelectionModel()
-        .setSelectionInterval(0, 0);
+      let table = this._listView.getTable();
+      if (table.getDataModel().getRowCount() > 0) {
+        table.getSelectionManager().getSelectionModel().setSelectionInterval(0, 0);
+        return true;
+      }
+      return false;
     },
     
     /**

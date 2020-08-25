@@ -32,8 +32,8 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
   construct: function(url, service) {
     this.__dialog = qxl.dialog.Dialog.error("").hide();
     qx.util.Validate.checkUrl(url);
-    this.__service = service;
-    const client = this.__client = new qx.io.jsonrpc.Client(url, service);
+    this.__service = service.replace(/\//g, ".");
+    const client = this.__client = new qx.io.jsonrpc.Client(url, this.__service);
     client.addListener("outgoingRequest", this._configueTransport, this);
     client.addListener("incomingRequest", this._handleIncomingRequest, this);
     qx.event.message.Bus.subscribe("qcl.token.change", e => {

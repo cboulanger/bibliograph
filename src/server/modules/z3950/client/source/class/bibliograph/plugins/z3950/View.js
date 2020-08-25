@@ -44,7 +44,7 @@ qx.Class.define("bibliograph.plugins.z3950.View", {
      * @override
      */
     startSearch: function () {
-      this.base(arguments).startSearch(this.normalizeForSearch(this.getSearch()));
+      this.base(arguments, this.normalizeForSearch(this.getSearch()));
     },
     
     markForTranslation: function () {
@@ -58,9 +58,17 @@ qx.Class.define("bibliograph.plugins.z3950.View", {
      * @return {String}
      */
     normalizeForSearch: function (s) {
+      
+      if (!s) {
+        return "";
+      }
+      
+      
       // ES6: @todo
       //let combining = /[\u0300-\u036F]/g;
       // return s.normalize('NFKD').replace(combining, ''));
+      
+      
       
       /**
        * @param c

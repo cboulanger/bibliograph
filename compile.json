@@ -29,8 +29,7 @@
       "environment": {
         "app.mode": "development",
         "qx.debug": true,
-        "qx.io.jsonrpc.debug": true,
-        "app.taskmonitor.show": true
+        "qx.io.jsonrpc.debug": true
       },
       "bundle": {
         "include": [
