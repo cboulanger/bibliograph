@@ -605,7 +605,10 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
         this.__dragActionTimeout.stop();
       }
       this.__dragActionTimeout = qx.event.Timer.once(()=>{
-        if( ! node.bOpened ){
+        if (!this.getDragModel()) {
+          return;
+        }
+        if (!node.bOpened && node.type === qx.ui.treevirtual.SimpleTreeDataModel.Type.BRANCH) {
           let model = this.getDataModel();
           model.setState(node, {bOpened: true});
           model.setData();
