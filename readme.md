@@ -61,7 +61,7 @@ See [here](doc/dev/install.md).
 
 ## Development & Roadmap
 - You can [hack the code](doc/dev/development.md) and make it better;
-- The current roadmap is [here](doc/roadmap.md);
+- The current roadmap is [here](doc/dev/roadmap.md);
 - If you wish to sponsor a feature, please contact info at bibliograph dot org.
 
 ## How to contribute
