@@ -84,7 +84,7 @@ qx.Class.define("qcl.ui.dialog.ServerProgress", {
    * Constructor
    * @param {String} objectId An arbitrary string (must not contain a slash) which
    * will be registered as a top-level widget
-   * @param {String} route The route to the server action that returns the chunked http response
+   * @param {String?} route The route to the server action that returns the chunked http response
    */
   construct : function(objectId, route) {
     this.base(arguments);
@@ -93,7 +93,9 @@ qx.Class.define("qcl.ui.dialog.ServerProgress", {
     }
     this.setQxObjectId(objectId);
     qx.core.Id.getInstance().register(this);
-    this.setRoute(route);
+    if (route) {
+      this.setRoute(route);
+    }
     this.__iframe = new qx.html.Iframe();
     this.__iframe.hide();
     let app = qx.core.Init.getApplication();
@@ -148,7 +150,7 @@ qx.Class.define("qcl.ui.dialog.ServerProgress", {
       // format source string
       const app = qx.core.Init.getApplication();
       params.id = this.getQxObjectId();
-      params.auth_token = app.getAccessManager().getToken();
+      params["access-token"] = app.getAccessManager().getToken();
       let source = this.__sourceUrl + "/" + this.getRoute() + app.formatParams(params);
       // start request and show dialog
       this.__iframe.setSource(source);

@@ -106,25 +106,8 @@ qx.Class.define("qcl.ui.tool.ObjectIdsView",
               }
             });
             control.setModel(this.createListModel());
-            // handle selection change
-            let handler = () => {
-              if (control.getSelection().getLength()) {
-                let widget = control.getSelection().getItem(0).getWidget();
-                let domElem = widget.getContentElement && widget.getContentElement() && widget.getContentElement().getDomElement();
-                if (!widget.__highlighted && domElem) {
-                  widget.__highlighted = true;
-                  let style = domElem.style;
-                  let border = String(style.border);
-                  style.border = "5px dotted yellow";
-                  qx.event.Timer.once(() => {
-                    style.border = border;
-                    widget.__highlighted = false;
-                  }, null, 1000);
-                }
-              }
-            };
-            control.getSelection().addListener("change", handler);
-            control.addListener("dblclick", handler);
+            control.getSelection().addListener("change", this.__handleChangeListSelection, this);
+            control.addListener("dblclick", this.__handleChangeListSelection, this);
             break;
           }
           case "tab-editor": {
@@ -135,6 +118,24 @@ qx.Class.define("qcl.ui.tool.ObjectIdsView",
           }
         }
         return control || this.base(arguments, id);
+      },
+      
+      __handleChangeListSelection() {
+        let list = this.list;
+        if (list.getSelection().getLength()) {
+          let widget = list.getSelection().getItem(0).getWidget();
+          let domElem = widget.getContentElement && widget.getContentElement() && widget.getContentElement().getDomElement();
+          if (!widget.__highlighted && domElem) {
+            widget.__highlighted = true;
+            let style = domElem.style;
+            let border = String(style.border);
+            style.border = "5px dotted yellow";
+            qx.event.Timer.once(() => {
+              style.border = border;
+              widget.__highlighted = false;
+            }, null, 1000);
+          }
+        }
       },
   
       /**
