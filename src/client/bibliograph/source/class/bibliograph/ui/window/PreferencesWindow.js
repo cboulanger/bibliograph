@@ -230,7 +230,7 @@ qx.Class.define("bibliograph.ui.window.PreferencesWindow", {
           }
           this.getApplication()
             .getConfigManager()
-            .setKey("authentication.method", mode);
+            .setKeyAsync("authentication.method", mode);
         }
       },
       this

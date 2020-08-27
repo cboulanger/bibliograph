@@ -33,6 +33,7 @@ use lib\exceptions\UserErrorException;
 use lib\models\ClipboardContent;
 use Yii;
 use yii\db\Expression;
+use yii\db\StaleObjectException;
 use yii\web\UnauthorizedHttpException;
 
 /**
@@ -308,11 +309,19 @@ class AccessController extends AppController
   public function actionLogout()
   {
     $user = $this->getActiveUser();
+    $this->dispatchClientMessage("qcl.token.change", null);
     if (!$user) {
+      $session = Session::findByNamedId(Yii::$app->session->id);
+      if ($session) {
+        try {
+          $session->delete();
+        } catch (\Throwable $e) {
+          Yii::warning($e->getMessage());
+        }
+      }
       return "No user is logged in.";
     }
     $this->logout($user);
-    $this->dispatchClientMessage("qcl.token.change", null);
     return "User '{$user->name}' logged out";
   }
 

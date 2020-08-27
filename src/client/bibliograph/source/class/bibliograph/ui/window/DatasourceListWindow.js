@@ -25,7 +25,6 @@ qx.Class.define("bibliograph.ui.window.DatasourceListWindow",
   type : "singleton",
   construct : function() {
     this.base(arguments);
-    this.setWidgetId("app/windows/datasources");
     this.setWidth(300);
     this.setVisibility("excluded");
     this.addListener("appear", e => this.center());

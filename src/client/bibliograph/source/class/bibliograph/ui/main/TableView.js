@@ -453,7 +453,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
     _showFolderDialog : function() {
       return new Promise(resolve => {
         let app = this.getApplication();
-        let win = app.getWidgetById("app/windows/folders");
+        let win = qx.core.Id.getQxObject("windows/folders");
         win.addListenerOnce("nodeSelected", e => resolve(e.getData()));
         win.show();
       });

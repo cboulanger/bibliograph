@@ -111,8 +111,8 @@ qx.Class.define("bibliograph.Setup", {
       bibliograph.ui.Windows.getInstance().create();
       bibliograph.ui.MainLayout.getInstance().create();
   
-      qx.core.Id.getQxObject("toolbar/login").setEnabled(false);
-      qx.core.Id.getQxObject("toolbar/logout").setEnabled(false);
+      qx.core.Id.getQxObject("toolbar/login-button").setEnabled(false);
+      qx.core.Id.getQxObject("toolbar/logout-button").setEnabled(false);
 
       // show the splash screen
       this.createPopup({
@@ -165,8 +165,8 @@ qx.Class.define("bibliograph.Setup", {
       this.initSubscribers();
       
       // enable login/logout buttons
-      qx.core.Id.getQxObject("toolbar/login").setEnabled(true);
-      qx.core.Id.getQxObject("toolbar/logout").setEnabled(true);
+      qx.core.Id.getQxObject("toolbar/login-button").setEnabled(true);
+      qx.core.Id.getQxObject("toolbar/logout-button").setEnabled(true);
       
       // message transport
       //this.startPolling();

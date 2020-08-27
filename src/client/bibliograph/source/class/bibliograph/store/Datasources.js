@@ -41,7 +41,7 @@ qx.Class.define("bibliograph.store.Datasources",
       this.info("User has access to " + datasourceCount + " datasources.");
       
       // show datasource button depending on whether there is a choice
-      app.getWidgetById("app/toolbar/buttons/datasource").setVisibility(
+      qx.core.Id.getQxObject("toolbar/datasource-button").setVisibility(
         datasourceCount > 1 ? "visible" : "excluded"
       );
 
@@ -77,8 +77,7 @@ qx.Class.define("bibliograph.store.Datasources",
       } else {
         // else, we have a choice of datasource
         app.setDatasourceLabel(app.getConfigManager().getKey("application.title"));
-        let dsWin = app.getWidgetById("app/windows/datasources");
-        dsWin.open();
+        qx.core.Id.getQxObject("windows/datasources").open();
       }
     }
   }

@@ -13,7 +13,8 @@ tool/env/http-server start > /dev/null
 # get environment variables defaults
 if [[ "$1" != "" ]]; then
   BUILD_ENV_FILE=${1}
-  [[ -f "$BUILD_ENV_FILE" ]] || exit_with_error "File $BUILD_ENV_FILE does not exist"
+  [[ "$1" != "" ]] || exit_with_error "Missing configuration file. Pass as first argument or set BUILD_ENV_FILE environment variable."
+  [[ -f "$BUILD_ENV_FILE" ]] || exit_with_error "Config file $BUILD_ENV_FILE does not exist"
   source $BUILD_ENV_FILE
 fi
 

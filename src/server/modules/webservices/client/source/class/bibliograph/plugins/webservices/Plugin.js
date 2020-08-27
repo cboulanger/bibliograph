@@ -105,7 +105,7 @@ qx.Class.define("bibliograph.plugins.webservices.Plugin",
       // add a new menu button
       let menuButton = new qx.ui.menu.Button(this.tr("Import from webservices"));
       menuButton.addListener("execute", windowOpener);
-      qx.core.Id.getQxObject("toolbar/import").getMenu().add(menuButton);
+      qx.core.Id.getQxObject("toolbar/import-button").getMenu().add(menuButton);
       
       // Overlays for preference window @todo rename
       let prefsTabView = qx.core.Id.getQxObject("windows/preferences").tabView;

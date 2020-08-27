@@ -61,7 +61,7 @@ qx.Class.define("bibliograph.plugins.z3950.Plugin",
       
       let menuButton = new qx.ui.menu.Button(this.tr("Import from library catalog"));
       menuButton.addListener("execute", () => importWindow.show());
-      qx.core.Id.getQxObject("toolbar/import").getMenu().add(menuButton);
+      qx.core.Id.getQxObject("toolbar/import-button").getMenu().add(menuButton);
       
       let prefsTabView = qx.core.Id.getQxObject("windows/preferences").tabView; // to do use child widget
       let pluginTab = new qx.ui.tabview.Page(this.tr("Z39.50 Import"));

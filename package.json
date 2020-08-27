@@ -32,8 +32,8 @@
     "test:testtapper:all": "tool/test/testtapper",
     "test:testtapper:custom": "tool/test/testtapper bibliograph-test bibliograph.test.t3.Access",
     "test:playwright:custom": "node ./test/playwright/test-login.js",
-    "dist:docker:build": "tool/dist/build config/.env.local.docker",
-    "dist:docker:run": "tool/dist/run",
+    "dist:local.docker:build": "tool/dist/build test/.env",
+    "dist:local.docker:run": "tool/dist/run",
     "deploy:rewi:devel": "tool/deploy/deploy -f config/deploy/rewi/bibliograph-test.env -v -y",
     "test:rewi:devel": "config/deploy/rewi/run-tests.sh"
   },

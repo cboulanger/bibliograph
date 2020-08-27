@@ -450,7 +450,7 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
       }
       if (!targetModel) {
         let app = this.getApplication();
-        let win = app.getWidgetById("app/windows/folders");
+        let win = qx.core.Id.getQxObject("windows/folders");
         qx.core.Assert.assertInstance(win, qx.ui.window.Window);
         win.addListenerOnce("nodeSelected", e => {
           let targetModel = e.getData();

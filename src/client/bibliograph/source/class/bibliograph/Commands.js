@@ -44,7 +44,7 @@ qx.Class.define("bibliograph.Commands",
       // check if https login is enforced
       let l= window.location;
       var enforce_https = app.getConfigManager().getKey("access.enforce_https_login");
-      if (enforce_https && l.protocol != "https:") {
+      if (enforce_https && l.protocol !== "https:") {
         let msg = this.tr("To log in, you need a secure connection. After you press 'OK', the application will be reloaded in secure mode. After the application finished loading, you can log in again.");
         await this.getApplication().alert(msg);
         l.href = "https://" + l.host + l.pathname + l.hash;
@@ -89,7 +89,7 @@ qx.Class.define("bibliograph.Commands",
       if (!app) {
        app = this.getApplication();
       }
-      qx.core.Id.getQxObject("toolbar/logout").setEnabled(false);
+      qx.core.Id.getQxObject("toolbar/logout-button").setEnabled(false);
       app.createPopup();
       app.showPopup(this.tr("Logging out ..."));
       // reset datasource
@@ -101,7 +101,7 @@ qx.Class.define("bibliograph.Commands",
       app.setModelId(null);
       // logout
       await app.getAccessManager().logout();
-      qx.core.Id.getQxObject("toolbar/logout").setEnabled(true);
+      qx.core.Id.getQxObject("toolbar/logout-button").setEnabled(true);
       app.hidePopup();
     },
 
@@ -135,7 +135,7 @@ qx.Class.define("bibliograph.Commands",
      * @param app
      */
     showAboutWindow : function(data, app) {
-      app.getWidgetById("app/windows/about").open();
+      qx.core.Id.getQxObject("windows/about").open();
     },
   
     /**

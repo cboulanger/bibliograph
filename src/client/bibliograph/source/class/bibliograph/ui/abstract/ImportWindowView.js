@@ -68,7 +68,8 @@ qx.Class.define("bibliograph.ui.abstract.ImportWindowView",
             this._selectBox.getSelection().setItem(0, item);
           }
         });
-        this.getApplication().getConfigManager().setKey(`modules.${this.getModuleName()}.lastDatasource`, value);
+        let cm = this.getApplication().getConfigManager();
+        cm.setKeyAsync(`modules.${this.getModuleName()}.lastDatasource`, value);
       }
     },
   

@@ -183,7 +183,7 @@ qx.Class.define("bibliograph.ui.item.FormattedView",
         })
         .catch((err)=>{
           this.warn(err);
-        });            
+        });
       }
       else if ( query )
       {
@@ -196,7 +196,7 @@ qx.Class.define("bibliograph.ui.item.FormattedView",
         })
         .catch((err)=>{
           this.warn(err);
-        });    
+        });
       }
     },
 
@@ -215,7 +215,7 @@ qx.Class.define("bibliograph.ui.item.FormattedView",
       this.styleRadioGroup = new qx.ui.form.RadioGroup;
       var app = this.getApplication();
       var configManager = app.getConfigManager();
-      configManager.addListener("ready", ()=>{
+      configManager.addListener("ready", () => {
         var defaultStyle = configManager.getKey("csl.style.default");
         this.styleRadioGroup.addListener("changeSelection", (e) => {
           var sel = e.getData();

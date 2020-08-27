@@ -149,7 +149,7 @@ qx.Class.define("bibliograph.ConfigManager", {
      */
     _getIndex: function (key) {
       if (!this._index) {
-        this.error("Model has not yet finished loading.");
+        throw new Error("Configuration data has not loaded yet.");
       }
       let index = this._index[key];
       if (index === undefined) {
@@ -190,8 +190,6 @@ qx.Class.define("bibliograph.ConfigManager", {
         let data = e.getData();
         this.getStore().execute("set", [data.key, data.value]);
       });
-      
-      //@todo subscribe to server message with config value change
       return this;
     },
     
@@ -237,6 +235,21 @@ qx.Class.define("bibliograph.ConfigManager", {
       let index = this._getIndex(key);
       return this.getModel().getValues().getItem(index);
     },
+  
+    /**
+     * Returns a config value asynchronously once the configuration
+     * data has been loaded.
+     * @param key
+     * @return {Promise<*>}
+     */
+    getKeyAsync(key) {
+      return new Promise(resolve => {
+        if (this.getModel()) {
+          resolve(this.getKey(key));
+        }
+        this.addListener("ready", () => resolve(this.getKey(key)));
+      });
+    },
     
     /**
      * Sets a config value and fire a 'clientChange' event.
@@ -255,6 +268,22 @@ qx.Class.define("bibliograph.ConfigManager", {
           old: old
         });
       }
+    },
+  
+    /**
+     * Sets a config value asynchronously once the configuration
+     * data has been loaded.
+     * @param key {String}
+     * @param value {*}
+     * @return {Promise<void>}
+     */
+    setKeyAsync(key, value) {
+      return new Promise(resolve => {
+        if (this.getModel()) {
+          resolve(this.setKey(key, value));
+        }
+        this.addListener("ready", () => resolve(this.setKey(key, value)));
+      });
     },
     
     /**

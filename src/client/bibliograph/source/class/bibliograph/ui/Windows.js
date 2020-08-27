@@ -27,7 +27,6 @@ qx.Class.define("bibliograph.ui.Windows",
   include: [qx.locale.MTranslation],
   members :
   {
-  
     /**
      * Returns application ui root
      * @return {*}
@@ -61,7 +60,6 @@ qx.Class.define("bibliograph.ui.Windows",
       
       // Folder Tree window
       let folderTreeWindow = new bibliograph.ui.window.FolderTreeWindow();
-      folderTreeWindow.setWidgetId("app/windows/folders");
       folderTreeWindow.setVisibility("excluded");
       folderTreeWindow.setQxObjectId("folders");
       this.addOwnedQxObject(folderTreeWindow);
@@ -77,7 +75,6 @@ qx.Class.define("bibliograph.ui.Windows",
       
       // Import window
       let importWindow = new bibliograph.ui.window.ImportWindow();
-      importWindow.setWidgetId("app/windows/import");
       importWindow.setVisibility("excluded");
       importWindow.setQxObjectId("import");
       this.addOwnedQxObject(importWindow);
@@ -85,7 +82,6 @@ qx.Class.define("bibliograph.ui.Windows",
 
       // About window
       let aboutWindow = new bibliograph.ui.window.AboutWindow();
-      aboutWindow.setWidgetId("app/windows/about");
       aboutWindow.setVisibility("excluded");
       aboutWindow.setQxObjectId("about");
       this.addOwnedQxObject(aboutWindow);
@@ -93,7 +89,6 @@ qx.Class.define("bibliograph.ui.Windows",
 
       // Search help window
       let searchHelpWindow = new bibliograph.ui.window.SearchHelpWindow();
-      searchHelpWindow.setWidgetId("app/windows/help-search");
       searchHelpWindow.setVisibility("excluded");
       searchHelpWindow.setQxObjectId("search-help");
       this.addOwnedQxObject(searchHelpWindow);
@@ -129,16 +124,6 @@ qx.Class.define("bibliograph.ui.Windows",
         if (qx.core.Environment.get("app.taskmonitor.show")) {
           tm.open();
         }
-        // qx.bom.Lifecycle.onReady(() => {
-        //   console.warn(qx.core.Id.getInstance().getRegisteredObjects());
-        //   // add menu entry to system meny
-        //   let menu = qx.core.Id.getQxObject("app/toolbar/system");
-        //   let button = new qx.ui.menu.Button(this.tr("Task Monitor"));
-        //   button.addListener("execute", () => {
-        //     tm.getCommand().execute();
-        //   });
-        //   menu.add(button);
-        // });
       }
 
       // configuration-dependent UI elements
