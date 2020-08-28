@@ -58,7 +58,6 @@ qx.Class.define("bibliograph.plugins.z3950.Plugin",
   
 
       // add a new menu button
-      
       let menuButton = new qx.ui.menu.Button(this.tr("Import from library catalog"));
       menuButton.addListener("execute", () => importWindow.show());
       let importMenu = qx.core.Id.getQxObject("toolbar/import-menu");
