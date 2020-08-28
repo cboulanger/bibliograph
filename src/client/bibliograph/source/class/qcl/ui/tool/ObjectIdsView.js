@@ -179,7 +179,7 @@ qx.Class.define("qcl.ui.tool.ObjectIdsView",
                 obj.__listenersAdded = true;
               }
             } else {
-              console.warn("Cannot find id for " + obj);
+              this.warn("Cannot find id for " + obj);
             }
             let arr = obj.getOwnedQxObjects();
             if (Array.isArray(arr)) {
@@ -204,7 +204,6 @@ qx.Class.define("qcl.ui.tool.ObjectIdsView",
        * @private
        */
       _checkQxObjectId(elem, ignoreAnonymous= true) {
-        console.log(elem);
         let qxObjectId = elem.getAttribute("data-qx-object-id");
         if (qxObjectId) {
           return qxObjectId;

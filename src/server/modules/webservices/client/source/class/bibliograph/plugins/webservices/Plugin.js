@@ -15,6 +15,12 @@
 
 ************************************************************************ */
 
+/**
+ * Plugin initializer
+ * to do:
+ * - convert to use _createQxObjectImpl
+ * - use MPermissions
+ */
 qx.Class.define("bibliograph.plugins.webservices.Plugin",
 {
   extend: qcl.application.BasePlugin,
@@ -105,11 +111,14 @@ qx.Class.define("bibliograph.plugins.webservices.Plugin",
       // add a new menu button
       let menuButton = new qx.ui.menu.Button(this.tr("Import from webservices"));
       menuButton.addListener("execute", windowOpener);
-      qx.core.Id.getQxObject("toolbar/import-button").getMenu().add(menuButton);
+      let importMenu = qx.core.Id.getQxObject("toolbar/import-menu");
+      importMenu.add(menuButton);
+      importMenu.addOwnedQxObject(menuButton, "plugin.webservices");
       
       // Overlays for preference window @todo rename
-      let prefsTabView = qx.core.Id.getQxObject("windows/preferences").tabView;
+      let prefsTabView = qx.core.Id.getQxObject("windows/preferences/tabview");
       let pluginTab = new qx.ui.tabview.Page(this.tr("Webservices"));
+      prefsTabView.addOwnedQxObject(pluginTab, "plugin.webservices");
       
       // ACL
       permMgr.create("webservices.manage").bind("state", pluginTab.getChildControl("button"), "visibility", {

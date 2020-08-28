@@ -47,57 +47,47 @@ qx.Class.define("bibliograph.ui.Windows",
       // Datasource list window
       let datasourceWindow = bibliograph.ui.window.DatasourceListWindow.getInstance();
       this.getRoot().add(datasourceWindow);
-      datasourceWindow.setQxObjectId("datasources");
-      this.addOwnedQxObject(datasourceWindow);
+      this.addOwnedQxObject(datasourceWindow, "datasources");
 
       // Access Control Tool
       let accessControlTool = new bibliograph.ui.window.AccessControlTool();
       this.addOwnedQxObject(accessControlTool, "access-control");
       accessControlTool.setVisibility("excluded");
-      accessControlTool.setQxObjectId("access");
-      this.addOwnedQxObject(accessControlTool);
       this.getRoot().add(accessControlTool);
       
       // Folder Tree window
       let folderTreeWindow = new bibliograph.ui.window.FolderTreeWindow();
       folderTreeWindow.setVisibility("excluded");
-      folderTreeWindow.setQxObjectId("folders");
-      this.addOwnedQxObject(folderTreeWindow);
+      this.addOwnedQxObject(folderTreeWindow, "folders");
       this.getRoot().add(folderTreeWindow);
 
       // Preferences window
       let preferencesWindow = new bibliograph.ui.window.PreferencesWindow();
-      this.addOwnedQxObject(preferencesWindow, "preferences");
       preferencesWindow.setVisibility("excluded");
-      preferencesWindow.setQxObjectId("preferences");
-      this.addOwnedQxObject(preferencesWindow);
+      this.addOwnedQxObject(preferencesWindow, "preferences");
       this.getRoot().add(preferencesWindow);
       
       // Import window
       let importWindow = new bibliograph.ui.window.ImportWindow();
       importWindow.setVisibility("excluded");
-      importWindow.setQxObjectId("import");
-      this.addOwnedQxObject(importWindow);
+      this.addOwnedQxObject(importWindow, "import");
       this.getRoot().add(importWindow);
 
       // About window
       let aboutWindow = new bibliograph.ui.window.AboutWindow();
       aboutWindow.setVisibility("excluded");
-      aboutWindow.setQxObjectId("about");
-      this.addOwnedQxObject(aboutWindow);
+      this.addOwnedQxObject(aboutWindow, "about");
       this.getRoot().add(aboutWindow);
 
       // Search help window
       let searchHelpWindow = new bibliograph.ui.window.SearchHelpWindow();
       searchHelpWindow.setVisibility("excluded");
-      searchHelpWindow.setQxObjectId("search-help");
-      this.addOwnedQxObject(searchHelpWindow);
+      this.addOwnedQxObject(searchHelpWindow, "search-help");
       this.getRoot().add(searchHelpWindow);
 
       // Login Dialog
       let loginDialog = new qxl.dialog.Login();
-      loginDialog.setQxObjectId("login");
-      this.addOwnedQxObject(loginDialog);
+      this.addOwnedQxObject(loginDialog, "login");
       loginDialog.set({
         widgetId: "app/windows/login",
         allowCancel: true,

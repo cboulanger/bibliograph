@@ -129,7 +129,7 @@ qx.Class.define("bibliograph.Setup", {
       this.createBlocker();
 
       //  allow incoming server dialogs
-      qcl.ui.dialog.Dialog.allowServerDialogs(true);
+      qcl.ui.dialog.ServerDialog.getInstance().setEnabled(true);
 
       // server setup
       this.showPopup(this.getSplashMessage(this.tr("Setting up application...")));

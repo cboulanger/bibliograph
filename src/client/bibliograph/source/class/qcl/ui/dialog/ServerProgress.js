@@ -102,7 +102,7 @@ qx.Class.define("qcl.ui.dialog.ServerProgress", {
     app.getRoot().getContentElement().add(this.__iframe);
     this.__sourceUrl = app.getServerUrl();
   
-    // errors
+    // messages
     this.addListener("message", e => {
       let message = e.getData();
       switch (this.getMessageBehavior()) {

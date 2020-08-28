@@ -357,7 +357,7 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
           this.warn(error);
           break;
         case "dialog": {
-          qcl.ui.dialog.Dialog.hideServerDialogs();
+          qcl.ui.dialog.ServerDialog.getInstance().hideServerDialogs();
           this.__dialog.set({message}).show();
         }
       }

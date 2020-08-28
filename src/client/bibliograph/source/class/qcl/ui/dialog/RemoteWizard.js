@@ -24,24 +24,18 @@
  */
 qx.Class.define("qcl.ui.dialog.RemoteWizard", {
   extend: qxl.dialog.Wizard,
-  
-  properties:
-    {
-      serviceName:
-        {
-          check: "String",
-          nullable: false
-        },
-      
-      serviceMethod:
-        {
-          check: "String",
-          nullable: false
-        }
+  properties: {
+    serviceName: {
+      check: "String",
+      nullable: false
     },
+    serviceMethod: {
+      check: "String",
+      nullable: false
+    }
+  },
 
-  members:
-    {
+  members: {
       
       /**
        * Goes to the previous wizard button
