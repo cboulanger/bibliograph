@@ -22,5 +22,5 @@ namespace lib\dialog;
 
 class Error extends Alert
 {
-  protected $image="dialog.icon.error";
+  protected $image="qxl.dialog.icon.error";
 }

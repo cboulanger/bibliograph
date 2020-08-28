@@ -79,7 +79,7 @@ class ProgressController extends AppController
       }
       $progressBar->dispatchClientMessage("backup.restored", ["datasource" => $datasource]);
       if (!YII_ENV_TEST) {
-        Yii::$app->message->broadcast("backup.restored", ["datasource" => $datasource]);
+        $this->broadcastClientMessage("backup.restored", ["datasource" => $datasource]);
       }
       $progressBar->complete();
     } catch (\RuntimeException $e) {

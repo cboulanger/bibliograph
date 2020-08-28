@@ -37,23 +37,6 @@
     "deploy:rewi:devel": "tool/deploy/deploy -f config/deploy/rewi/bibliograph-test.env -v -y",
     "test:rewi:devel": "config/deploy/rewi/run-tests.sh"
   },
-  "ntl": {
-    "descriptions": {
-      "env:install": "Install the development environment",
-      "env:update": "Update dependencies (npm, Composer, qooxdoo packages, GitHub repos)",
-      "env:servers:start": "Start webserver and database server",
-      "env:servers:stop": "Stop webserver and database server",
-      "dev:run:clean": "Delete all data, compile app from scratch, and open it in new tab",
-      "dev:run": "Re-open already compiled app in a new tab",
-      "dev:compile-watch": "Start continous compilation",
-      "dev:cleanup": "Delete all compilation artefacts",
-      "dev:extract-translations": "Extract translations",
-      "test:codeception:all": "Run all codeption tests",
-      "test:codeception:custom": "Run custom codeception test (see package.json)",
-      "test:testtapper:all": "Run all testtapper tests",
-      "test:testtapper:custom": "Run custom testtapper test (see package.json)"
-    }
-  },
   "_old_scripts": {
     "Create new migration": "build/script/run-in-new-terminal $(pwd)/build/script/create-migration",
     "Create JSONRPC proxy methods": "cd src/server && php yii rpc-proxy/create",
@@ -75,7 +58,6 @@
     "eslint-config-qx": "^0.2.6",
     "eslint-plugin-import": "^2.21.2",
     "json-diff": "^0.5.4",
-    "ntl": "^5.0.0",
     "tape": "^5.0.1"
   },
   "eslintConfig": {

@@ -47,6 +47,7 @@ class UiController extends AppController
     (new Confirm())
       ->setMessage($msg)
       ->setRoute("backup/ui/choose-backup")
+      ->setAllowCancel(false)
       ->setParams([$datasource, $token])
       ->sendToClient();
     return "Created confirmation dialog";
@@ -85,11 +86,12 @@ class UiController extends AppController
     ];
     $message = Yii::t(Module::CATEGORY,
       "Please select the backup set to restore into database '{datasource}'",
-      [ 'datatsource' => $datasource ]
+      [ 'datasource' => $datasource ]
     );
 
     (new Form())
       ->setFormData($formData)
+      ->setCaption(Yii::t(Module::CATEGORY, "Restore backup"))
       ->setMessage($message)
       ->setAllowCancel(true)
       ->setRoute("backup/ui/handle-choose-backup")

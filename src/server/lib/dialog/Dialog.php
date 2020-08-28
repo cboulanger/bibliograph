@@ -34,13 +34,19 @@ use yii\base\Event;
 class Dialog extends \yii\base\BaseObject
 {
   const EVENT_DIALOG = "dialog";
-
   /**
    * The properties that will be set on the widget
    * @var array
    */
   protected $properties = [];
   public function setProperties(array $value){$this->properties = $value; return $this;}
+
+  /**
+   * The caption of the dialog
+   * @var string|null
+   */
+  protected $caption = null;
+  public function setCaption($value){$this->caption = $value; return $this;}
 
   /**
    * Whether to show or hide the dialog widget
@@ -96,7 +102,9 @@ class Dialog extends \yii\base\BaseObject
   {
     if (count($properties)) {
       foreach ($properties as $key) {
-        $this->properties[$key] = $this->$key;
+        if ($this->$key !== null) {
+          $this->properties[$key] = $this->$key;
+        }
       }
     }
     static::addToEventQueue( array(

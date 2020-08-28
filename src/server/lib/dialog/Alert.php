@@ -42,7 +42,7 @@ class Alert extends Dialog
   /**
    * @var string
    */
-  protected $image = "dialog.icon.alert";
+  protected $image = "qxl.dialog.icon.alert";
 
   /**
    * @param $value

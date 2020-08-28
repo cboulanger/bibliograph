@@ -31,8 +31,19 @@ use yii\helpers\ArrayHelper;
  * @property bool $allowCancel
  * @property array $options
  */
-class Form extends Alert
+class Form extends Dialog
 {
+  /**
+   * @var string
+   */
+  protected $message = "";
+
+  /**
+   * @param $value
+   * @return $this
+   */
+  public function setMessage(string $value){$this->message=$value; return $this;}
+
   /**
    * Arrray containing the form data. Example (using
    * json instead of native php array):
@@ -94,23 +105,11 @@ class Form extends Alert
   public function setAllowCancel(bool $value){$this->allowCancel=$value; return $this;}
 
   /**
-   * Optional properties of the form widget
-   * @var array
-   */
-  public $options = [];
-
-  /**
-   * @param $value
-   * @return $this
-   */
-  public function setOptions(array $value){$this->options=$value;return $this;}
-
-  /**
    * @inheritdoc
    */
   public function sendToClient($properties=[])
   {
-    return parent::sendToClient(array_merge($properties,['formData','options','allowCancel']));
+    return parent::sendToClient(array_merge($properties,['formData','message','allowCancel']));
   }
 
   /**
