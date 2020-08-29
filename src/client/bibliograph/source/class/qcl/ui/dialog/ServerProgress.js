@@ -107,22 +107,22 @@ qx.Class.define("qcl.ui.dialog.ServerProgress", {
       let message = e.getData();
       switch (this.getMessageBehavior()) {
         case "dialog":
-          qxl.dialog.Dialog.alert(message);
+          this.getApplication().alert(message);
           break;
       }
-    });
+    }, this);
     
     // errors
     this.addListener("error", e => {
       let message = e.getData();
       switch (this.getErrorBehavior()) {
         case "dialog":
-          qxl.dialog.Dialog.error(message);
+          this.getApplication().error(message);
           break;
         case "error":
           throw new Error(message);
       }
-    });
+    }, this);
   },
 
   members :

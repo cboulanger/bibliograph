@@ -62,12 +62,12 @@ qx.Class.define("qcl.ui.dialog.ServerDialog", {
      * Hide all server dialogs
      */
     hideServerDialogs: function() {
-      for (let instance of Object.values(this.__instances)) {
+      for (let instance of this.getOwnedQxObjects()) {
         instance.hide();
       }
     },
     
-    createQxObject(id) {
+    _createQxObjectImpl(id) {
       let control;
       let clazz = qx.lang.String.firstUp(id);
       if (qx.lang.Type.isFunction(qxl.dialog[clazz])) {

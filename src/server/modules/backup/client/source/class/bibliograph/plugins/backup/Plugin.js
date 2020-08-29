@@ -48,7 +48,7 @@ qx.Class.define("bibliograph.plugins.backup.Plugin", {
       let menu = qx.core.Id.getQxObject("toolbar/system-menu");
       let button = this.getQxObject("backup-button");
       menu.add(button);
-      menu.addOwnedQxObject(button);
+      menu.addOwnedQxObject(this, "plugin-backup");
       this.progress = new qcl.ui.dialog.ServerProgress("plugin-backup-progress").set({
         hideWhenCompleted : true
       });

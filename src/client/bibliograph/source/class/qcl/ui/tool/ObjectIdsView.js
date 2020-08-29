@@ -225,37 +225,32 @@ qx.Class.define("qcl.ui.tool.ObjectIdsView",
        * @private
        */
       _getCssSelector(elem, rootElem) {
-        // qx object id
+        if (rootElem) {
+          if (!this._checkQxObjectId(rootElem, false)) {
+            throw new Error("Root element must have an object id.");
+          }
+        } else {
+          rootElem = document.body;
+        }
         let qxObjectId = this._checkQxObjectId(elem);
         let nodePath = [];
         let node = elem;
-        while (!qxObjectId && node.parentElement && node !== rootElem) {
+        while (!qxObjectId && node !== rootElem) {
           nodePath.unshift(node);
           node = node.parentElement;
           qxObjectId = this._checkQxObjectId(node, false);
         }
-        let selector = qxObjectId ? this._getQxObjectIdSelector(qxObjectId) : null;
+        let selector = qxObjectId ? this._getQxObjectIdSelector(qxObjectId) : "body";
         if (nodePath.length) {
-          nodePath.unshift();
           nodePath = nodePath
             .map(node => {
-              let nodeArray = [...node.parentElement.children];
-              let qxClass = node.getAttribute("qxclass");
-              if (!qxClass || nodeArray.find(n => n !== node && n.getAttribute("qxclass") === qxClass)) {
-                // qxclass is not unique, use nth-child
-                let i = nodeArray.findIndex(n => n === node) +1;
-                let tag = node.tagName.toLowerCase();
-                return i === 1 ? tag : `${tag}:nth-child(${i})`;
-              }
-              // use qxclass selector
-              return `[qxclass="${qxClass}"]`;
-            })
-            .join(" > ");
-          return (selector ? selector + " > " : "") + nodePath;
+              let siblings = [...node.parentElement.children];
+              return siblings.findIndex(n => n === node) + 1;
+            });
+          nodePath = "${\"" + nodePath.join(">") + "\".replace(/(\\d)/g,\":nth-child(\$1)\")}";
         }
-        return selector;
+        return selector + ">" + nodePath;
       },
-      
       _getCheckApplicationIdleCode() {
         return `await app.waitForIdle();`;
       },

@@ -90,8 +90,8 @@ qx.Class.define("bibliograph.plugins.z3950.Plugin",
         },
         bindItem: function (controller, item, id) {
           controller.bindProperty("label", "label", null, item, id);
-          controller.bindProperty("active", "value", { converter: v => v === 1 }, item, id);
-          controller.bindPropertyReverse("active", "value", { converter: v => v === 1 }, item, id);
+          controller.bindProperty("active", "value", { converter: v => Boolean(v) }, item, id);
+          controller.bindPropertyReverse("active", "value", { converter: v => Boolean(v) }, item, id);
         }
       };
       list.setDelegate(delegate);
@@ -142,7 +142,7 @@ qx.Class.define("bibliograph.plugins.z3950.Plugin",
         });
       }, this);
       
-      // Reload datassources Button
+      // Reload datasources Button
       let reloadButton = new qx.ui.form.Button(this.tr("Reload"));
       buttons.add(reloadButton);
       reloadButton.addListener("execute", () => {
