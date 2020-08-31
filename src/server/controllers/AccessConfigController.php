@@ -1050,7 +1050,7 @@ class AccessConfigController extends AppController
   public function actionCreateDatasourceHandler(\stdClass $formData=null)
   {
     if (!$formData or ! $formData->namedId ) return "Action cancelled";
-    $this->actionAdd("datasource", $formData->namedId, $formData->schema);
+    return $this->actionAdd("datasource", $formData->namedId, $formData->schema);
   }
 
 

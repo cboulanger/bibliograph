@@ -259,6 +259,7 @@ qx.Class.define("qcl.data.store.JsonRpcStore",
      * @return {Promise<Object>} Promise that resolves with the loaded data
      */
     async _sendJsonRpcRequest(serviceMethod, params, finalCallback, context, createModel) {
+      qx.core.Assert.assertString(serviceMethod);
       var client = this.__client;
       let data;
       try {
@@ -281,7 +282,7 @@ qx.Class.define("qcl.data.store.JsonRpcStore",
       } catch (ex) {
         this.error(ex);
         this.fireDataEvent("error", ex);
-        this.fireDataEvent("loaded", null);
+        //this.fireDataEvent("loaded", null);
         return null;
       }
     },
@@ -304,6 +305,9 @@ qx.Class.define("qcl.data.store.JsonRpcStore",
      */
     load: function (serviceMethod, params = [], finalCallback, context) {
       serviceMethod = serviceMethod || this.getLoadMethod();
+      params = params || [];
+      qx.core.Assert.assertString(serviceMethod, "Method must be a string");
+      qx.core.Assert.assertArray(params, "Params must be an array");
       this.__lastMethod = serviceMethod;
       this.__lastParams = params;
       this.__lastCreateModel = true;

@@ -29,6 +29,11 @@ class Module extends \yii\base\Module
 {
 
   /**
+   * @var bool Wether the module has already been initialized.
+   */
+  protected $initialized = false;
+
+  /**
    * A string constant defining the category for logging and translation
    * Should be overridden by subclasses
    */
@@ -129,9 +134,15 @@ class Module extends \yii\base\Module
 
   /**
    * @inheritDoc
+   * @throws \ReflectionException
    */
   public function init()
   {
+    if ($this->initialized) {
+      $module_name = get_called_class();
+      Yii::warning("Module '$module_name' has already been initialized.");
+      return;
+    }
     //$not = $this->enabled ? "" : "not";
     //Yii::debug("Module '{$this->id}' is $not enabled.", __METHOD__, __METHOD__);
     parent::init();
@@ -143,7 +154,27 @@ class Module extends \yii\base\Module
       'catalog' => 'messages',
       'useMoFile' => false
     ];
+    $this->initialized = true;
   }
+
+  /**
+   * Returns true if the module has already been initialized
+   * @return bool
+   */
+  public function isInitialized() {
+    return $this->initialized;
+  }
+
+  /**
+   * Initializes the module unless it has already been initialized
+   * @throws \ReflectionException
+   */
+  public function safeInit() {
+    if (!$this->initialized) {
+      $this->init();
+    }
+  }
+
 
   /**
    * Overriding methods must call `parent::install()` when installation succeeds.

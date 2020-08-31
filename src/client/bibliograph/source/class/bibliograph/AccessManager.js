@@ -31,7 +31,7 @@ qx.Class.define("bibliograph.AccessManager",
   construct : function() {
     this.base(arguments);
     // server message to force logout the user
-    qx.event.message.Bus.subscribe(this.constructor.messages.FORCE_LOGOUT, () => this.logout());
+    qx.event.message.Bus.subscribe(this.constructor.messages.FORCE_LOGOUT, this.__onForceLogout, this);
   },
 
   statics : {
@@ -331,6 +331,18 @@ qx.Class.define("bibliograph.AccessManager",
       } finally {
         this.__isLoggingOut = false;
       }
+    },
+  
+    /**
+     * Reacts to a logout message from the server
+     * @param reason
+     * @return {Promise<void>}
+     */
+    async __onForceLogout(e) {
+      this.setToken(false);
+      let defaultMsg = this.tr("You will be logged out.");
+      await this.getApplication().alert(e.getData() || defaultMsg);
+      await this.logout();
     }
   }
 });

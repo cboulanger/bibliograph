@@ -141,6 +141,7 @@ class DatasourceManager extends \yii\base\Component
    * @param bool $deleteData
    *    Whether all connected models and their data should be deleted, too.
    * @throws \Exception
+   * @throws MigrationException
    */
   public function delete($namedId, $deleteData = false)
   {
@@ -166,7 +167,12 @@ class DatasourceManager extends \yii\base\Component
         'all',
         'migrationNamespaces' => $migrationNamespace,
       ];
-      Console::runAction('migrate/down', $params, null, $db);
+      try {
+        Console::runAction('migrate/down', $params, null, $db);
+      } catch (MigrationException $e) {
+        Yii::error("Console output: \n" . $e->consoleOutput);
+        throw $e;
+      }
       Yii::info("Deleted model tables for '$namedId''.");
     }
   }

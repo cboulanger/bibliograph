@@ -41,15 +41,15 @@ class Reference extends \app\models\Reference
     {
       return array_merge(
         parent::rules(),
-        [ 
-          '_category' => Yii::t('app', 'Category'),
-          '_owner' => Yii::t('app', 'Owner'),
-          '_source' => Yii::t('app', 'Source'),
-          '_sponsor' => Yii::t('app', 'Sponsor'),
-          '_date_ordered' => Yii::t('app', 'Date Ordered'),
-          '_date_received' => Yii::t('app', 'Date Received'),
-          '_date_reimbursement_requested' => Yii::t('app', 'Date Reimbursement Requested'),
-          '_inventory' => Yii::t('app', 'Inventory'),
+        [
+          '_category' => Yii::t('plugin.extendedfields', 'Category'),
+          '_owner' => Yii::t('plugin.extendedfields', 'Owner'),
+          '_source' => Yii::t('plugin.extendedfields', 'Source'),
+          '_sponsor' => Yii::t('plugin.extendedfields', 'Sponsor'),
+          '_date_ordered' => Yii::t('plugin.extendedfields', 'Date Ordered'),
+          '_date_received' => Yii::t('plugin.extendedfields', 'Date Received'),
+          '_date_reimbursement_requested' => Yii::t('plugin.extendedfields', 'Date Reimbursement Requested'),
+          '_inventory' => Yii::t('plugin.extendedfields', 'Inventory'),
         ]
       );
     }

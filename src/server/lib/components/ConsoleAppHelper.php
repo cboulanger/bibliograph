@@ -26,10 +26,10 @@ class ConsoleAppHelper extends \yii\base\Component
    * @throws MigrationException
    * @throws \Exception
    */
-  public static function runAction( 
-    $route, 
-    $params = [ ], 
-    $controllerNamespace = null, 
+  public static function runAction(
+    $route,
+    $params = [ ],
+    $controllerNamespace = null,
     yii\db\Connection $customDb = null )
   {
     $oldApp = Yii::$app;
@@ -68,8 +68,7 @@ class ConsoleAppHelper extends \yii\base\Component
         "---------------------------------------------------------\n" .
         $consoleOutput . "\n".
         "---------------------------------------------------------\n",
-        "console" 
-      , __METHOD__);
+        "app");
     } catch ( \Exception $e ) {
       Yii::$app = $oldApp;
       throw $e;

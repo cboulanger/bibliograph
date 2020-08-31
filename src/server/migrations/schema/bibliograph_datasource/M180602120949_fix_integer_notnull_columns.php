@@ -43,11 +43,12 @@ class M180602120949_fix_integer_notnull_columns extends Migration
   }
 
   /**
+   * This exists so that migrate/down can delete the model tables, not for downgrading
+   * the database
    * {@inheritdoc}
    */
   public function safeDown()
   {
-    echo "M180602120949_fix_integer_notnull_columns cannot be reverted.\n";
-    return false;
+    return true;
   }
 }

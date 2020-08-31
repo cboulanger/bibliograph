@@ -66,11 +66,11 @@ class SearchController extends \yii\web\Controller
       } catch (TimeoutException $e) {
         // retry
         if( $retries < 4){
-          $progressBar->setProgress(0, Yii::t("webservices", "Server timed out. Trying again..."));
+          $progressBar->setProgress(0, Yii::t("plugin.webservices", "Server timed out. Trying again..."));
           sleep(rand(1,3));
           $this->actionProgress($datasource, $query, $id, $progressBar );
         } else {
-          $progressBar->error(Yii::t("webservices", "Server timed out."));
+          $progressBar->error(Yii::t("plugin.webservices", "Server timed out."));
         }
       } catch (UserErrorException $e) {
         Yii::debug($e->getMessage());

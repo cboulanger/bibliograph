@@ -642,7 +642,6 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
       }
       let notForMe = !(data.datasource === this.getDatasource() && data.modelType === this.getModelType());
       if (notForMe) {
-        console.log(data);
         this.debug(`Ignoring message: Datasource '${data.datasource}' must be '${this.getDatasource()}' and model type '${data.modelType}' must be '${this.getModelType()}'.`);
       }
       return notForMe;

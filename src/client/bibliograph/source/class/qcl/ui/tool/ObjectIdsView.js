@@ -262,7 +262,10 @@ qx.Class.define("qcl.ui.tool.ObjectIdsView",
        */
       _addToScript(line) {
         if (this.recordButton.getValue()) {
-          this.textArea.setValue(this.textArea.getValue() + "\n" + line);
+          let currValue = this.textArea.getValue();
+          this.textArea.setValue(currValue + "\n" + line);
+          let textarea = this.textArea.getContentElement().getDomElement();
+          textarea.scrollTop = textarea.scrollHeight;
         }
       },
       
@@ -325,7 +328,7 @@ qx.Class.define("qcl.ui.tool.ObjectIdsView",
         this.__timerId = setTimeout(() => {
           this._addToScript(`await app.fill(\`${id}\`, "${value}");`);
           this._checkApplicationIdle();
-        }, 500);
+        }, 1000);
       }
     }
   });

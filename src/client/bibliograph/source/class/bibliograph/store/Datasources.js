@@ -28,7 +28,7 @@ qx.Class.define("bibliograph.store.Datasources",
   construct : function() {
     this.base(arguments, "datasource");
     let bus = qx.event.message.Bus.getInstance();
-    bus.subscribe("datasources.reload", this.load, this);
+    bus.subscribe("datasources.reload", this.reload, this);
     bus.subscribe(bibliograph.AccessManager.messages.AFTER_LOGIN, () => this.load());
   },
   

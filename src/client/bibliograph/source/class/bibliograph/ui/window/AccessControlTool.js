@@ -19,7 +19,7 @@
 qx.Class.define("bibliograph.ui.window.AccessControlTool",
 {
   extend: qx.ui.window.Window,
-  
+  include: [qcl.ui.MLoadingPopup],
   construct: function () {
     this.base(arguments);
   
@@ -31,6 +31,7 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     //this.setVisibility("excluded");
     this.setWidth(800);
     this.addListener("appear", e => this.center());
+    this.createPopup();
     
     // close on logout
     bus.subscribe("user.loggedout", function (e) {
@@ -322,9 +323,10 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
       let type = itemModel.getType();
       let msg = this.tr("Do you really want to delete '%1'?", name);
       if (await this.getApplication().confirm(msg)) {
-        leftListStore.execute("delete", [type, name], function () {
-          leftListStore.reload();
-        });
+        this.showPopup(this.tr("Deleting database..."));
+        await leftListStore.execute("delete", [type, name]);
+        this.hidePopup();
+        leftListStore.reload();
       }
     });
     
@@ -476,7 +478,7 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     // right list
     let rightList = new qx.ui.list.List();
     rightList.setSelectionMode("multi");
-    rightList.setWidgetId("app/windows/acltool/rightList");
+    this.addOwnedQxObject(rightList, "right-list");
     rightContainer.add(rightList, {flex: 1});
     rightList.set({iconPath: "icon", labelPath: "label"});
     rightListStore.bind("model", rightList, "model");

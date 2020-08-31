@@ -117,8 +117,8 @@ if (!defined("YII_DEBUG_CATEGORIES")) {
   if (isset($_SERVER['YII_DEBUG_CATEGORIES'])) {
     define("YII_DEBUG_CATEGORIES", $_SERVER['YII_DEBUG_CATEGORIES']);
   } else if (YII_DEBUG) {
-    define("YII_DEBUG_CATEGORIES", ['application', 'access','setup', 'app\*', 'plugin*', 'jsonrpc', "debug", "yii\\web\\User\\*"]);
+    define("YII_DEBUG_CATEGORIES", ['access','setup', 'app*', 'plugin*', 'jsonrpc', "debug", "yii\\web\\User*", "yii\\base\\Module*"]);
   } else {
-    define("YII_DEBUG_CATEGORIES", ['application', 'app\*', 'plugin*', 'jsonrpc']);
+    define("YII_DEBUG_CATEGORIES", ['app*', 'plugin*', 'jsonrpc']);
   }
 }

@@ -4,6 +4,7 @@ namespace app\models;
 
 use lib\components\Configuration;
 use lib\models\Migration;
+use lib\Module;
 use Yii;
 use lib\models\BaseModel;
 use yii\base\ErrorException;
@@ -16,24 +17,24 @@ use yii\helpers\ArrayHelper;
 /**
  * This is the model class for table "data_Datasource".
  *
- * @property string   $namedId
- * @property string   $title
- * @property string   $description
- * @property string   $schema
- * @property string   $type
- * @property string   $host
- * @property integer  $port
- * @property string   $database
- * @property string   $username
- * @property string   $password
- * @property string   $encoding
- * @property string   $prefix
- * @property string   $resourcepath
- * @property integer  $active
- * @property integer  $readonly
- * @property integer  $hidden
- * @property string   $migrationNamespace
- * @property integer  $migrationApplyTime
+ * @property string $namedId
+ * @property string $title
+ * @property string $description
+ * @property string $schema
+ * @property string $type
+ * @property string $host
+ * @property integer $port
+ * @property string $database
+ * @property string $username
+ * @property string $password
+ * @property string $encoding
+ * @property string $prefix
+ * @property string $resourcepath
+ * @property integer $active
+ * @property integer $readonly
+ * @property integer $hidden
+ * @property string $migrationNamespace
+ * @property integer $migrationApplyTime
  * @property ActiveQuery $groups
  * @property ActiveQuery $users
  * @property ActiveQuery $roles
@@ -63,8 +64,8 @@ class Datasource extends BaseModel
   public static $description = "";
 
   /**
-   * By default, the migration namespace is a subfolder of the @app/migrations directory that
-   * corresponds to the schema's namedId.
+   * By default, the migration namespace is a subfolder of the @app/migrations
+   * directory that corresponds to the schema's namedId.
    * @return string
    */
   public function getMigrationNamespace()
@@ -83,7 +84,7 @@ class Datasource extends BaseModel
    * @todo move to manager
    * @var array
    */
-  public static $instances =[];
+  public static $instances = [];
 
   /**
    * @inheritdoc
@@ -101,7 +102,7 @@ class Datasource extends BaseModel
     return [
       [['port', 'active', 'readonly', 'hidden'], 'integer'],
       [['namedId', 'username', 'password'], 'string', 'max' => 50],
-      [['title', 'schema', 'database','prefix'], 'string', 'max' => 100],
+      [['title', 'schema', 'database', 'prefix'], 'string', 'max' => 100],
       [['description', 'resourcepath'], 'string', 'max' => 255],
       [['type', 'encoding'], 'string', 'max' => 20],
       [['host'], 'string', 'max' => 200],
@@ -147,7 +148,8 @@ class Datasource extends BaseModel
    * @return mixed
    * @throws ErrorException
    */
-  protected function _getFromEnvironment($name) {
+  protected function _getFromEnvironment($name)
+  {
     if (isset($_SERVER[$name]) && $_SERVER[$name]) {
       return $_SERVER[$name];
     }
@@ -157,49 +159,56 @@ class Datasource extends BaseModel
     throw new ErrorException("Environment variable '$name' is not set.");
   }
 
-  public function getType() {
+  public function getType()
+  {
     if ($this->type) {
       return $this->type;
     }
     return "mysql";
   }
 
-  public function getHost() {
+  public function getHost()
+  {
     if ($this->host) {
       return $this->host;
     }
     return $this->_getFromEnvironment("DB_HOST");
   }
 
-  public function getPort() {
+  public function getPort()
+  {
     if ($this->port) {
       return $this->port;
     }
     return $this->_getFromEnvironment("DB_PORT");
   }
 
-  public function getUsername() {
+  public function getUsername()
+  {
     if ($this->username) {
       return $this->username;
     }
     return $this->_getFromEnvironment("DB_USER");
   }
 
-  public function getPassword() {
+  public function getPassword()
+  {
     if ($this->password) {
       return $this->password;
     }
     return $this->_getFromEnvironment("DB_PASSWORD");
   }
 
-  public function getDatabase() {
+  public function getDatabase()
+  {
     if ($this->database) {
       return $this->database;
     }
     return $this->_getFromEnvironment("DB_DATABASE");
   }
 
-  public function getEncoding() {
+  public function getEncoding()
+  {
     if ($this->encoding) {
       return $this->encoding;
     }
@@ -226,14 +235,17 @@ class Datasource extends BaseModel
       ],
       'schema' => [
         'type' => "selectbox",
-        'enabled' => false,
         'label' => Yii::t('app', "Schema"),
         'delegate' => [
           'options' => "getSchemaOptions"
         ]
       ],
+//      'database_group' => [
+//        'type' => 'groupheader',
+//        'value' => "Optional Database Information"
+//      ],
       'type' => [
-        'label' => Yii::t('app', "Type")
+        'label' => Yii::t('app', "Type"),
       ],
       'host' => [
         'label' => Yii::t('app', "Server host"),
@@ -241,16 +253,17 @@ class Datasource extends BaseModel
       ],
       'port' => [
         'label' => Yii::t('app', "Server port"),
-        'marshal' => function($v){ return (string) $v;},
-        'unmarshal' => function($v){ return (int) $v;},
+        'marshal' => function ($v) {
+          return (string)$v;
+        },
+        'unmarshal' => function ($v) {
+          return (int)$v;
+        },
         'placeholder' => "The database server port, usually 3306 for MySql"
       ],
       'database' => [
         'label' => Yii::t('app', "Database name"),
-        'placeholder' => "The name of the database",
-        'validation' => [
-          'required' => true
-        ]
+        'placeholder' => "The name of the database"
       ],
       'username' => [
         'label' => Yii::t('app', "Database user name")
@@ -273,10 +286,12 @@ class Datasource extends BaseModel
         'type' => "SelectBox",
         'label' => Yii::t('app', "Status"),
         'options' => [
-          ['label' => "Disabled", 'value' => 0 ],
-          ['label' => "Active", 'value' => 1 ]
+          ['label' => "Disabled", 'value' => 0],
+          ['label' => "Active", 'value' => 1]
         ],
-        'marshal' => function($v){ return $v ? 1:0;}
+        'marshal' => function ($v) {
+          return $v ? 1 : 0;
+        }
       ]
     ];
   }
@@ -340,7 +355,7 @@ class Datasource extends BaseModel
    */
   public function getSchema()
   {
-    return $this->hasOne(Schema::class, [ 'namedId' => 'schema' ] );
+    return $this->hasOne(Schema::class, ['namedId' => 'schema']);
   }
 
   /*
@@ -352,8 +367,8 @@ class Datasource extends BaseModel
   /**
    * Returns the prefix for the model table. Default is the named
    * plus an underscore
-   * @property string modelTablePrefix
    * @return string
+   * @property string modelTablePrefix
    */
   public static function createTablePrefix($namedId)
   {
@@ -381,16 +396,31 @@ class Datasource extends BaseModel
     if (is_null($datasource)) {
       throw new \InvalidArgumentException("Datasource '$datasourceName' does not exist.");
     }
-    if( ! $datasource->schema ){
+    if (!$datasource->schema) {
       throw new \RuntimeException("Datasource '$datasourceName' has no linked schema.");
     }
     $schema = $datasource->getSchema()->one();
-    if( ! $schema ){
+    if (!$schema) {
       throw new \RuntimeException("Schema '{$datasource->schema}' does not exist.");
     }
     $class = $schema->class;
-    if( ! \class_exists($class) ){
+    if (!\class_exists($class)) {
       throw new \RuntimeException("Schema '{$datasource->schema}' does not have a valid datasource class.");
+    }
+
+    // is the class from a module, then load and initialize it
+    $parts = explode("\\", $class);
+    if ($parts[0] === "app" and $parts[1] == "modules") {
+      $id = $parts[2];
+      $module_class = "\\app\\modules\\$id\\Module";
+      Yii::debug("Initializing module {$module_class}", "app");
+      /** @var Module $module */
+      $module = $module_class::getInstance();
+      if ($module === null) {
+        $module = new $module_class($id);
+        $module_class::setInstance($module);
+      }
+      $module->safeInit();
     }
 
     // create instance of subclass
@@ -417,9 +447,9 @@ class Datasource extends BaseModel
    * Static shorthand method to get the classname of the datasource's model of
    * the given type.
    *
-   * @param string $datasourceName The Name of the datasource. Can also be a string
-   * composed of the datasource name and the model type, separated by a dot. In this
-   * case, the model type can be left empty.
+   * @param string $datasourceName The Name of the datasource. Can also be a
+   *   string composed of the datasource name and the model type, separated by
+   *   a dot. In this case, the model type can be left empty.
    * @param string $modelType
    * @return string The name of the class
    * @todo  move to datasourceManager and rename to getClassFor()
@@ -433,8 +463,8 @@ class Datasource extends BaseModel
   }
 
   /**
-   * Returns the ActiveQuery object that belongs to the class of the given model type
-   * in the given datasource
+   * Returns the ActiveQuery object that belongs to the class of the given
+   * model type in the given datasource
    * @param string $datasourceName
    * @param string $modelType
    * @return ActiveQuery
@@ -445,8 +475,8 @@ class Datasource extends BaseModel
   }
 
   /**
-   * Returns the ActiveRecord of the given model type in the given datasource with the
-   * given id
+   * Returns the ActiveRecord of the given model type in the given datasource
+   * with the given id
    * @param string $datasourceName
    * @param string $modelType
    * @param int|string|array $idOrWhere
@@ -458,13 +488,14 @@ class Datasource extends BaseModel
   }
 
   /**
-   * Returns all Datasource instances that belong to the schema with the given name
+   * Returns all Datasource instances that belong to the schema with the given
+   * name
    * @param $schemaName
    * @return Datasource[]
    */
-  public static function findBySchema( $schemaName )
+  public static function findBySchema($schemaName)
   {
-    return static :: find()->where(['schema'=>$schemaName])->all();
+    return static:: find()->where(['schema' => $schemaName])->all();
   }
 
   /**
@@ -494,10 +525,10 @@ class Datasource extends BaseModel
         $prefix = $global_prefix . $this->namedId . "_";
       }
       $config = [
-        'dsn'         => $dsn,
-        'username'    => $this->getUsername(),
-        'password'    => $this->getPassword(),
-        'charset'     => $this->getEncoding(),
+        'dsn' => $dsn,
+        'username' => $this->getUsername(),
+        'password' => $this->getPassword(),
+        'charset' => $this->getEncoding(),
         'tablePrefix' => $prefix
       ];
       $connection = new \yii\db\Connection($config);
@@ -511,10 +542,10 @@ class Datasource extends BaseModel
    * Registers a models that is part of the datasource
    * @param string $type The name of the type
    * @param string $class The class of the model
-   * @param string|null $service (optional) The service that provides access to model data
-   * type of model to the model classes
-   * @throws \InvalidArgumentException
+   * @param string|null $service (optional) The service that provides access to
+   *   model data type of model to the model classes
    * @return void
+   * @throws \InvalidArgumentException
    */
   public function addModel($type, $class, $service = null)
   {
@@ -538,11 +569,11 @@ class Datasource extends BaseModel
    * Returns the class name of the model of the given type, which can be used
    * to create instances of this class via
    * Datasource::getInstanceFor('database1')::getClassFor('reference')::find()->...
-   * This implicitly sets the static property 'datasource' of the class to the current
-   * datasource name.
+   * This implicitly sets the static property 'datasource' of the class to the
+   * current datasource name.
    * @param string $type
-   * @throws \InvalidArgumentException
    * @return string The class name
+   * @throws \InvalidArgumentException
    */
   public function getClassFor($type)
   {
@@ -573,9 +604,9 @@ class Datasource extends BaseModel
 
   /**
    * Creates the tables for the models associated with this datasource
-   * @todo should this even be here?
    * @return void
    * @throws \Exception
+   * @todo should this even be here?
    */
   public function createModelTables()
   {
@@ -584,8 +615,8 @@ class Datasource extends BaseModel
 
   /**
    * Returns a list of schemas as a label/value model
-   * @todo should this even be here?
    * @return array
+   * @todo should this even be here?
    */
   public function getSchemaOptions()
   {

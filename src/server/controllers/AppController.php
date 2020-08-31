@@ -86,6 +86,7 @@ class AppController extends Controller
       'authMethods' => $authMethods,
       'optional' => $this->noAuthActions
     ];
+    // this changes the session id in the database to automatically renewed one
     Event::on(User::class, User::EVENT_AFTER_LOGIN, function($event) use ($oldSessionId){
       $user = $event->identity;
       //Yii::debug("User: $user->name ", self::DEBUG);

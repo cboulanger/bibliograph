@@ -165,9 +165,9 @@ class AccessController extends AppController
     Yii::$app->session->open();
 
     /*
-     * 1) no username / password: session authentication or guest login
+     * 1) username / password are NULL: session authentication or guest login
      */
-    if (empty($first) and empty($password)) {
+    if ($first === null and $password === null) {
       // see if we have a session id that we can link to a user
       $user = User::findIdentityBySessionId($this->getSessionId(), Yii::$app->request);
       if ( ! $user ) {
@@ -184,7 +184,8 @@ class AccessController extends AppController
       // login using token
       $user = User::findIdentityByAccessToken($first);
       if (!$user) {
-        $this->dispatchClientMessage(self::MESSAGE_FORCE_LOGOUT);
+        $msg = Yii::t("app", "Invalid token. This might be due to a database upgrade. Please log in again.");
+        $this->dispatchClientMessage(self::MESSAGE_FORCE_LOGOUT, $msg);
         throw new UserErrorException( "Invalid token");
       }
       Yii::info("Authenticated user '{$user->namedId}' via auth token.", self::CATEGORY);
