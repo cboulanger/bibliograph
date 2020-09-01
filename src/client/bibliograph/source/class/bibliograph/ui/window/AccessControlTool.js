@@ -323,9 +323,7 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
       let type = itemModel.getType();
       let msg = this.tr("Do you really want to delete '%1'?", name);
       if (await this.getApplication().confirm(msg)) {
-        this.showPopup(this.tr("Deleting database..."));
         await leftListStore.execute("delete", [type, name]);
-        this.hidePopup();
         leftListStore.reload();
       }
     });

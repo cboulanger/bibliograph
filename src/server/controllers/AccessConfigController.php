@@ -964,7 +964,7 @@ class AccessConfigController extends AppController
     // generate temporary password
     $tmpPasswd = Yii::$app->getSecurity()->generateRandomString(7);
     $user->password = $tmpPasswd;
-    $user->confirmed = true;  // @todo Remove when email confirmation is reimplemented
+    $user->confirmed = 1;  // @todo Remove when email confirmation is reimplemented
     $user->save();
 
     // @todo Reimplement: send confirmation link for new users
@@ -974,8 +974,9 @@ class AccessConfigController extends AppController
     //@todo: more verbose email message
     $body = Yii::t(
       'email',
-      "Url: {url} Username: {username} Password: {password}",
+      "NEW_USER_MESSAGE{name}{url}{username}{password}",
       [
+        'name' => $user->name,
         'username' => $user->namedId,
         'password' => $user->password,
         'url' => Yii::$app->utils->getFrontendUrl()

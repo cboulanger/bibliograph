@@ -291,7 +291,9 @@ qx.Class.define("qcl.ui.tool.ObjectIdsView",
         evt.stopPropagation();
         let elem = evt.target;
         // ignore if not recording or if the click was on this window
-        if (!this.recordButton.getValue() || this.getContentElement().getDomElement().contains(elem)) {
+        if (!this.recordButton.getValue() || (
+          this.getContentElement() && this.getContentElement().getDomElement() &&
+          this.getContentElement().getDomElement().contains(elem))) {
           return;
         }
         // prefer execute event if we have a qx object id since click() doesn't always work
