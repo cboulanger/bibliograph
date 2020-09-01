@@ -46,15 +46,13 @@ qx.Class.define("bibliograph.store.Datasources",
       );
 
       // if we have no datasource loaded, no access
-      if (datasourceCount === 0 && !this.__loggingout) {
+      if (datasourceCount === 0 /*&& !this.__loggingout*/) {
         // if (!this.getApplication().getActiveUser() || !this.getApplication().getActiveUser().isAnonymous()) {
         //   this.__loggingout = true;
         //   this.getApplication().getCommands().logout();
-        // }
-        this.getApplication().alert(app.tr("You don't have access to any datasource. Reloading the page might help."));
         return;
       }
-      this.__loggingout = false;
+      //this.__loggingout = false;
 
       // if there is one saved in the application state, and we have access, use this
       let datasource = app.getStateManager().getState("datasource");

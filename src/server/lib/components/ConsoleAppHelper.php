@@ -32,11 +32,16 @@ class ConsoleAppHelper extends \yii\base\Component
     $controllerNamespace = null,
     yii\db\Connection $customDb = null )
   {
-    $oldApp = Yii::$app;
-
     // fcgi doesn't have STDIN and STDOUT defined by default
     defined( 'STDIN' ) or define( 'STDIN', fopen( 'php://stdin', 'r' ) );
     defined( 'STDOUT' ) or define( 'STDOUT', fopen('php://output', 'w') );
+    defined( 'STDERR' ) or define( 'STDERR', fopen('php://stderr', 'w') );
+
+    // puffer output
+    ob_start();
+    $oldApp = Yii::$app;
+
+
 
     $config = require( Yii::getAlias( '@app/config/console.php' ) );
     $consoleApp = new \yii\console\Application( $config );
@@ -55,8 +60,6 @@ class ConsoleAppHelper extends \yii\base\Component
         // use current connection to DB
         Yii::$app->set( 'db', $oldApp->db );
       }
-
-      ob_start();
 
       $exitCode = $consoleApp->runAction(
         $route,

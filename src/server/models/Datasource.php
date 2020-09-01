@@ -210,6 +210,10 @@ class Datasource extends BaseModel
   public function getEncoding()
   {
     if ($this->encoding) {
+      if ($this->encoding === "utf-8") {
+        $this->encoding = "utf8";
+        $this->save();
+      }
       return $this->encoding;
     }
     if (Configuration::iniValue('database.encoding')) {
@@ -244,6 +248,10 @@ class Datasource extends BaseModel
 //        'type' => 'groupheader',
 //        'value' => "Optional Database Information"
 //      ],
+//      'database_heading' => [
+//        'type'  => 'label',
+//        'label' => 'Optional database settings'
+//      ],
       'type' => [
         'label' => Yii::t('app', "Type"),
       ],
@@ -273,8 +281,7 @@ class Datasource extends BaseModel
         'label' => Yii::t('app', "Database user password")
       ],
       'encoding' => [
-        'label' => Yii::t('app', "Database encoding"),
-        'default' => 'utf-8'
+        'label' => Yii::t('app', "Database encoding")
       ],
       'prefix' => [
         'label' => Yii::t('app', "Datasource prefix")
