@@ -10,6 +10,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgctxt "app"
+msgctxt "email"
 msgid "NEW_USER_MESSAGE{name}{url}{username}{password}"
-msgstr "Willkommen, {name}! \n\n Wir haben für Sie ein neues Konto eingerichtet unter {url}.\n\nBitte loggen Sie sich dort mit {username} und dem Password {password} ein."
+msgstr "Willkommen, {name}!\n\nWir haben für Sie ein neues Konto eingerichtet unter {url}. \n\nBitte loggen Sie sich dort unter '{username}' und dem Password '{password}' ein."

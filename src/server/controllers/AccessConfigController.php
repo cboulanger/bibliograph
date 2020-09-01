@@ -35,6 +35,7 @@ use lib\exceptions\{
 use lib\schema\ISchema;
 use Yii;
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 /**
  * Backend service class for the access control tool widget
@@ -972,6 +973,8 @@ class AccessConfigController extends AppController
     //$this->sendConfirmationLinkEmail($data->email, $data->namedId, $data->name, $tmpPasswd);
 
     //@todo: more verbose email message
+
+    $url = Yii::$app->utils->getFrontendUrl();
     $body = Yii::t(
       'email',
       "NEW_USER_MESSAGE{name}{url}{username}{password}",
@@ -979,14 +982,14 @@ class AccessConfigController extends AppController
         'name' => $user->name,
         'username' => $user->namedId,
         'password' => $user->password,
-        'url' => Yii::$app->utils->getFrontendUrl()
+        'url' => $url
       ]
     );
     $email_with_querystring =
       $user->name .
-      "<" . $data->email . ">?" .
-      "subject=" . Yii::t('email', "New Bibliograph account") . "&" .
-      "body=" . htmlentities($body);
+      "<" . $user->email . ">?" .
+      "subject=" . rawurlencode(Yii::t('email', "New Bibliograph account"))  . "&" .
+      "body=" . rawurlencode($body);
     $mailtolink = Html::mailto(Yii::t(
       "app",
       "Click on this link to send email"),
@@ -1016,6 +1019,7 @@ class AccessConfigController extends AppController
    */
   public function actionSelectUser($dummy, $name) {
     $this->dispatchClientMessage("acltool.searchbox-left.set", $name);
+    return $this->successfulActionResult();
   }
 
   /**

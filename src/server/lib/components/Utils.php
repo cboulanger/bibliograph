@@ -20,6 +20,7 @@
 
 namespace lib\components;
 
+use app\controllers\AppController;
 use Yii;
 use lib\exceptions\UserErrorException;
 
@@ -64,7 +65,7 @@ class Utils extends \yii\base\Component
    */
   public function getFrontendUrl()
   {
-    return dirname(dirname(dirname(Yii::$app->request->absoluteUrl)));
+    return Yii::$app->request->referrer;
   }
 
   /**
