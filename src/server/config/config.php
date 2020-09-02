@@ -28,6 +28,7 @@ $config =  [
     '@lib'      => APP_BACKEND_DIR . '/lib/',
     '@messages' => APP_BACKEND_DIR . '/messages/',
     '@runtime'  => APP_BACKEND_DIR . '/runtime',
+    '@views'    => APP_BACKEND_DIR . '/views',
     ],
   /* Application components */
   'components' => require('components.php'),

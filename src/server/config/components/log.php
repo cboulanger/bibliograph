@@ -28,22 +28,23 @@ $log_config = [
     ],
   ]
 ];
-// Do we have an error email target?
 
-if (Configuration::iniValue('email.errors_from')
-  and Configuration::iniValue('email.errors_to')
-  and Configuration::iniValue('email.errors_subject') )
-{
+// Do we have an error email target?
+$from     = Configuration::get('email.errors_from');
+$to       = Configuration::get('email.errors_to');
+$subject  = Configuration::get('email.errors_subject');
+$except   = ['jsonrpc','yii\web\HttpException*'];
+if ($from and $to and $subject) {
   $log_config['targets']['mail'] = [
     'class' => \yii\log\EmailTarget::class,
     'mailer' => 'mailer',
     'levels' => ['error'],
-    'except' => ['jsonrpc','yii\web\HttpException*'],
+    'except' => $except,
     'message' => [
-      'from' => [Configuration::iniValue('email.errors_from')],
-      'to' => [Configuration::iniValue('email.errors_to')],
-      'subject' => Configuration::iniValue('email.errors_subject'),
-    ],
+      'from' => [$from],
+      'to' => [$to],
+      'subject' => $subject,
+    ]
   ];
 }
 return $log_config;

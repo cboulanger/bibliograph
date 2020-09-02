@@ -88,6 +88,10 @@ qx.Mixin.define("qcl.ui.dialog.MDialog", {
      */
     prompt(msg, config= {}) {
       config.message = String(msg);
+      config.value = config.value || null;
+      config.filter = config.filter || null;
+      config.placeholder = config.placeholder || null;
+      //config.maxLength = config.maxLength || null; // todo change in qxl.dialog.Prompt
       return this.createDialog("prompt", config);
     }
   }

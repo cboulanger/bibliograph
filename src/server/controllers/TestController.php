@@ -25,6 +25,7 @@ use app\models\Datasource;
 use app\models\Folder;
 use app\models\Reference;
 use app\modules\z3950\models\Search;
+use lib\components\Configuration as Conf;
 use lib\dialog\Alert;
 use lib\exceptions\UserErrorException;
 use Yii;
@@ -51,7 +52,9 @@ class TestController extends AppController
 
   public function actionThrowError()
   {
-    throw new \InvalidArgumentException("Testing invalid argument exception");
+    $e = new \Exception("Exception thrown on purpose");
+    Yii::error($e);
+    throw $e;
   }
 
   public function actionEcho($message) {
@@ -95,14 +98,6 @@ class TestController extends AppController
     $count = $count ? $count + 1 : 1;
     $session->set( "counter", $count );
     return $count;
-  }
-
-  /**
-   * @throws UserErrorException
-   */
-  public function actionTest()
-  {
-    throw new UserErrorException("This is a user error");
   }
 
   /**
@@ -210,5 +205,21 @@ class TestController extends AppController
     $msg = "Created $i folders and " . $i*$j . " references";
     Yii::debug($msg, __METHOD__);
     return $msg;
+  }
+
+  /**
+   * @throws \yii\base\InvalidConfigException
+   */
+  public function actionSendEmail() {
+    if (!Conf::get("email.transport", true)) {
+      throw new UserErrorException("No email transport has been configured");
+    }
+    Yii::$app->mailer->compose()
+      ->setFrom(Conf::get("email.errors_from"))
+      ->setTo(Conf::get("email.errors_to"))
+      ->setSubject(Conf::get("email.errors_subject"))
+      ->setTextBody("This is a test")
+      ->send();
+    return "Successfully sent E-mail";
   }
 }

@@ -105,11 +105,11 @@ qx.Mixin.define("qcl.access.MPermissions",
     },
 
     /**
- * Shorthand method to return a permission object by name
- *
- * @return {qcl.access.Permission}
- * @param name
- */
+     * Shorthand method to return a permission object by name
+     *
+     * @return {qcl.access.Permission}
+     * @param name
+     */
     getPermission : function(name) {
       return this.getPermissionManager().create(name);
     },
@@ -336,11 +336,26 @@ qx.Mixin.define("qcl.access.MPermissions",
      * this permission. This maps `true` to `visible` and `false` to `excluded`
      * @param permission {qcl.access.Permission|string} The permission object or name
      * @param targetWidget {qx.ui.core.Widget}
+     * @param {Boolean} reverse If true, hide the widget if permission is granted
      */
-    bindVisibility : function(permission, targetWidget) {
+    bindVisibility : function(permission, targetWidget, reverse=false) {
       let p = this._checkBindArguments(permission, targetWidget);
       p.bind("state", targetWidget, "visibility", {
-        converter: bibliograph.Utils.bool2visibility
+        converter: value => (reverse ? !value : value) ? "visible" : "excluded"
+      });
+    },
+  
+    /**
+     * Binds a boolean property of the source object to the visibility property
+     * of the target widget.
+     * @param {qx.core.Object} source
+     * @param {String} bProperty
+     * @param {qx.ui.core.Widget} target
+     * @param {Boolean} reverse If true, hide the widget if bProperty is true
+     */
+    bindVisibilityToProp(source, bProperty, target, reverse=false) {
+      source.bind(bProperty, target, "visibility", {
+        converter: value => (reverse ? !value : value) ? "visible" : "excluded"
       });
     },
     

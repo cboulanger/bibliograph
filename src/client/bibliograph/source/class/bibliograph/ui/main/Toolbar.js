@@ -22,6 +22,7 @@
 qx.Class.define("bibliograph.ui.main.Toolbar",
 {
   extend : qx.ui.toolbar.ToolBar,
+  include: [qcl.access.MPermissions],
   type: "singleton",
   construct: function() {
     this.base(arguments);
@@ -52,6 +53,9 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
           control.add(this.getQxObject("system-button"));
           control.add(this.getQxObject("import-button"));
           control.add(this.getQxObject("help-button"));
+          if (qx.core.Environment.get("qx.debug")) {
+            control.add(this.getQxObject("developer-button"));
+          }
           break;
         case "login-button":
           control = new qx.ui.toolbar.Button();
@@ -61,7 +65,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
             visibility: "excluded",
             enabled: false
           });
-          this.bindVisibility(this.__am, "authenticatedUser", control, true);
+          this.bindVisibilityToProp(this.__am, "authenticatedUser", control, true);
           control.addListener("execute", () => this.getApplication().cmd("showLoginDialog"));
           break;
         case "logout-button":
@@ -72,15 +76,14 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
             visibility: "excluded",
             enabled: false
           });
-          this.bindVisibility(this.__am, "authenticatedUser", control);
+          this.bindVisibilityToProp(this.__am, "authenticatedUser", control);
           control.addListener("execute", () => this.getApplication().cmd("logout"));
           break;
         case "user-button":
-          control = new qx.ui.toolbar.Button();
-          control.setLabel(this.tr("Loading..."));
+          control = new qx.ui.toolbar.Button(this.tr("Loading..."));
           control.setIcon("icon/16/apps/preferences-users.png");
           this.__um.bind("activeUser.fullname", control, "label");
-          this.bindVisibility(this.__am, "authenticatedUser", control);
+          this.bindVisibilityToProp(this.__am, "authenticatedUser", control);
           control.addListener("execute", () => this.getApplication().cmd("editUserData"));
           break;
         case "datasource-button":
@@ -91,11 +94,10 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
           control.addListener("execute", () => qx.core.Id.getQxObject("windows/datasources").open());
           break;
         case "system-button":
-          control = new qx.ui.toolbar.MenuButton();
-          control.setLabel(this.tr("System"));
+          control = new qx.ui.toolbar.MenuButton(this.tr("System"));
           control.setIcon("icon/22/categories/system.png");
           control.setVisibility("excluded");
-          this.bindVisibility(this.__pm.create("system.menu.view"), "state", control);
+          this.bindVisibilityToProp(this.__pm.create("system.menu.view"), "state", control);
           control.setMenu(this.getQxObject("system-menu"));
           break;
         case "system-menu":
@@ -105,27 +107,27 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
           //control.add(this.getQxObject("plugin-button");
           break;
         case "preferences-button":
-          control = new qx.ui.menu.Button();
-          control.setLabel(this.tr("Preferences"));
-          this.bindVisibility(this.__pm.create("preferences.view"), "state", control);
+          control = new qx.ui.menu.Button(this.tr("Preferences"));
+          this.bindVisibilityToProp(this.__pm.create("preferences.view"), "state", control);
           control.addListener("execute", () => qx.core.Id.getQxObject("windows/preferences").show());
           break;
         case "access-management-button":
           control = new qx.ui.menu.Button(this.tr("Access management"));
-          this.bindVisibility(this.__pm.create("access.manage"), "state", control);
+          this.bindVisibilityToProp(this.__pm.create("access.manage"), "state", control);
           control.addListener("execute", () => qx.core.Id.getQxObject("windows/access-control").show());
           break;
         case "plugin-button":
           control = new qx.ui.menu.Button();
           control.setLabel(this.tr("Plugins"));
-          this.bindVisibility(this.__pm.create("plugin.manage"), "state", control);
+          this.bindVisibilityToProp(this.__pm.create("plugin.manage"), "state", control);
           this.getApplication().alert("Not implemented");
           //control.addListener("execute", () => rpc.Plugin.manage());
           break;
         case "import-button":
           control = new qx.ui.toolbar.MenuButton(this.tr("Import"));
+          control.setVisibility("excluded");
           control.setIcon("icon/22/places/network-server.png");
-          this.bindVisibility(this.__pm.create("reference.import"), "state", control);
+          this.bindVisibilityToProp(this.__pm.create("reference.import"), "state", control);
           control.setMenu(this.getQxObject("import-menu"));
           break;
         case "import-menu":
@@ -179,6 +181,8 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
           break;
         case "developer-button":
           control = new qx.ui.toolbar.MenuButton(this.tr("Developer"));
+          control.setVisibility("excluded");
+          this.bindVisibilityToProp(this.__am, "authenticatedUser", control);
           control.setMenu(this.getQxObject("developer-menu"));
           break;
         case "developer-menu":
@@ -186,9 +190,10 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
           control.add(this.getQxObject("developer-rpc-test"));
           break;
         case "developer-rpc-test":
-          control = new qx.ui.menu.Button(this.tr("Run RPC method test.test"));
-          control.addListener("execute", function(e) {
-            this.getApplication().getRpcClient("test").send("test");
+          control = new qx.ui.menu.Button(this.tr("Run method of 'test' service"));
+          control.addListener("execute", async () => {
+            let method = await this.getApplication().prompt("Enter method name");
+            this.getApplication().getRpcClient("test").request(method);
           }, this);
           break;
         case "title":
@@ -201,7 +206,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
           break;
         case "search-bar":
           control = new qx.ui.container.Composite(new qx.ui.layout.HBox(5));
-          this.bindVisibility(this.__pm.create("reference.search"), "state", control);
+          this.bindVisibilityToProp(this.__pm.create("reference.search"), "state", control);
           control.add(this.getQxObject("search-box"));
           control.add(this.getQxObject("search-button"));
           control.add(this.getQxObject("search-clear"));
@@ -242,20 +247,7 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
       }
       return control || this.base(arguments, id);
     },
-  
-    /**
-     * Binds a boolean property of the source object to the visibility property
-     * of the target widget.
-     * @param {qx.core.Object} source
-     * @param {String} bProperty
-     * @param {qx.ui.core.Widget} target
-     * @param {Boolean} reverse If true, hide the widget if bProperty is true
-     */
-    bindVisibility(source, bProperty, target, reverse) {
-      source.bind(bProperty, target, "visibility", {
-        converter: value => (reverse ? !value : value) ? "visible" : "excluded"
-      });
-    },
+    
     
     createTextFieldSearch() {
       let control = new qx.ui.form.TextField();

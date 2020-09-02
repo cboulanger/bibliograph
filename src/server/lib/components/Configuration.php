@@ -24,6 +24,7 @@ use app\models\Config;
 use app\models\UserConfig;
 use lib\exceptions\RecordExistsException;
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
 use Yosymfony\Toml\Toml;
 
@@ -558,22 +559,57 @@ class Configuration extends \yii\base\Component
   // ini values
   //-------------------------------------------------------------
 
+  /**
+   * Return the value of the configuration key
+   * @param $key
+   * @return mixed
+   * @throws \Exception
+   */
   public static function iniValue($key) {
     static $ini = null;
-    if (!method_exists("Toml", "parseFile")) {
-      // v0.x, as long as we support PHP7.0
-      $ini = Toml::parse(file_get_contents(APP_CONFIG_FILE));
-    } else {
-      // >v1.0
+    if ($ini === null) {
       $ini = Toml::parseFile(APP_CONFIG_FILE);
     }
     return ArrayHelper::getValue($ini, $key);
   }
 
+  /**
+   * Returns the value of the environment variable, if set, otherwise null
+   * @param $name
+   * @return mixed|null
+   */
+  public static function env($name) {
+    return isset($_SERVER[$name]) ? $_SERVER[$name] : null;
+  }
+
+  /**
+   * Given a number of key names, returns the value of the environment variable
+   * with the name of that key, or the ini value with that key, whichever is found
+   * first.
+   * @param string $key1
+   * @param string? $key2
+   * @param string? $key3
+   * @return mixed|null
+   * @throws \Exception
+   * @throws InvalidConfigException
+   */
+  public static function anyOf() {
+    $args = func_get_args();
+    foreach ($args as $key) {
+      if (self::env($key) !== null ) {
+        return self::env($key);
+      }
+      if (self::iniValue($key) !== null) {
+        return self::iniValue($key);
+      }
+    }
+    throw new InvalidConfigException("No environment variable or ini setting with the key(s) " . implode(",", $args));
+  }
 
   /**
    * Returns a configuration value of the pattern "foo.bar.baz"
    * This retrieves the values set in the application config/ini file.
+   * @throws \Exception
    */
   public function getIniValue( $key )
   {
@@ -591,5 +627,29 @@ class Configuration extends \yii\base\Component
     return array_map( function($elem) {
       return $this->getIniValue( $elem );
     }, $arr );
+  }
+
+
+  /**
+   * Gets the value given configuration key. It will first try the environment,
+   * converting a key "foo.bar" to "FOO_BAR", then try the ini file with the
+   * given key. Will throw a InvalidConfigException if the key cannot be found
+   * in either of the configuration sources, unless you specify silent=true, in
+   * which case it will return null
+   * @param string $key
+   * @param bool $silent
+   * @return mixed|null
+   * @throws InvalidConfigException
+   */
+  static public function get(string $key, bool $silent=false) {
+    $env_key = strtoupper(str_replace(".", "_", $key));
+    if ($silent) {
+      try {
+        return self::anyOf($env_key, $key);
+      } catch (InvalidConfigException $e) {
+        return null;
+      }
+    }
+    return self::anyOf($env_key, $key);
   }
 }

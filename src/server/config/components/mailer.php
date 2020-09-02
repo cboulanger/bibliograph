@@ -2,18 +2,28 @@
 use \lib\components\Configuration;
 
 // Mailer component configuration
-$mailer =[];
-if (Configuration::iniValue('email.transport')) {
-  $mailer['class'] = yii\swiftmailer\Mailer::class;
-  if (Configuration::iniValue('email.transport') === "smtp"){
-    $mailer['transport'] = [
-      'class'       => 'Swift_SmtpTransport',
-      'host'        => Configuration::iniValue('email.host') ?? null,
-      'port'        => Configuration::iniValue('email.port') ?? null,
-      'username'    => Configuration::iniValue('email.username') ?? null,
-      'password'    => Configuration::iniValue('email.password') ?? null,
-      'encryption'  => Configuration::iniValue('email.encryption') ?? null,
-    ];
-  }
+try {
+  $transport = Configuration::anyOf('EMAIL_TRANSPORT', 'email.transport');
+} catch (Exception $e) {
+  $transport = null;
 }
-return $mailer;
+switch ($transport) {
+  case null:
+    return [];
+  case "SMTP":
+  case "smtp":
+    return [
+      'class' => yii\swiftmailer\Mailer::class,
+      'transport' => [
+        'class' => 'Swift_SmtpTransport',
+        'host' => Configuration::anyOf('EMAIL_HOST', 'email.host'),
+        'port' => Configuration::anyOf('EMAIL_PORT', 'email.port'),
+        'username' => Configuration::anyOf('EMAIL_USERNAME', 'email.username'),
+        'password' => Configuration::anyOf('EMAIL_PASSWORD', 'email.password'),
+        'encryption' => Configuration::anyOf('EMAIL_ENCRYPTION', 'email.encryption'),
+      ]
+    ];
+  default:
+    throw new \yii\base\InvalidConfigException("Transport '$transport' not supported.");
+}
+

@@ -15,6 +15,9 @@ enforce_https_login = false
 [email]
 admin      = "info@bibliograph.org"
 developer  = "info@bibliograph.org"
+errors_from = "info@bibliograph.org"
+errors_to =  "info@bibliograph.org"
+errors_subject = "Bibliograph error"
 
 [ldap]
 enabled             = false#!ldap! leave this exactly like it is since tests rely on it
