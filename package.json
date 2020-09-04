@@ -23,7 +23,7 @@
     "env:servers:start": "tool/env/servers-start",
     "env:servers:stop": "tool/env/servers-stop",
     "dev:run": "tool/dev/run",
-    "dev:run:clean": "tool/dev/run clean",
+    "dev:run:clean": "tool/dev/run --empty-database --clean",
     "dev:compile-watch": "npx qx compile --watch",
     "dev:cleanup": "npx qx clean",
     "dev:extract-translations": "cd src/server && php yii message config/i18n.php",

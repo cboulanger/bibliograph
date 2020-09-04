@@ -35,19 +35,19 @@ use lib\models\BaseModel;
 /**
  * This is the model class for table "data_User".
  *
- * @property integer $id
+ * @property int $id
  * @property string $namedId
  * @property string $created
  * @property string $modified
  * @property string $name
  * @property string $password
  * @property string $email
- * @property integer $anonymous
- * @property integer $ldap
- * @property integer $active
+ * @property int $anonymous
+ * @property int $ldap
+ * @property int $active
  * @property string $lastAction
- * @property integer $confirmed
- * @property integer $online
+ * @property int $confirmed
+ * @property int $online
  * @property string $token
  * @property ActiveQuery $groups
  * @property ActiveQuery $roles

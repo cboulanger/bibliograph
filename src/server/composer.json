@@ -30,7 +30,9 @@
     "yiisoft/yii2": "^2.0.32",
     "yiisoft/yii2-swiftmailer": "^2.1",
     "yosymfony/toml": "^1.0.0",
-    "ext-simplexml": "*"
+    "ext-simplexml": "*",
+    "tsingsun/yii2-graphql": "dev-master"
+
   },
   "require-dev": {
     "bizley/migration": "^2.2",

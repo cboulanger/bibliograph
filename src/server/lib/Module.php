@@ -178,7 +178,7 @@ class Module extends \yii\base\Module
 
   /**
    * Overriding methods must call `parent::install()` when installation succeeds.
-   * @param boolean $enabled
+   * @param boolean? $enabled
    *    Whether the module should be enabled after installation (defaults to false)
    * @return bool
    */

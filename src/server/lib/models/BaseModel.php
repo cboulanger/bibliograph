@@ -22,9 +22,7 @@ namespace lib\models;
 
 use lib\channel\BroadcastEvent;
 use lib\channel\MessageEvent;
-use lib\exceptions\UserErrorException;
 use Yii;
-use yii\base\Event;
 use yii\base\ModelEvent;
 use yii\db\ActiveRecord;
 use yii\db\BaseActiveRecord;

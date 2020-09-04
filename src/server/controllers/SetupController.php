@@ -24,6 +24,7 @@ namespace app\controllers;
 use app\controllers\traits\PropertyPersistenceTrait;
 use app\models\BibliographicDatasource;
 use app\models\Datasource;
+use app\models\User;
 use georgique\yii2\jsonrpc\exceptions\JsonRpcException;
 use Illuminate\Support\Str;
 use Yii;
@@ -74,12 +75,28 @@ class SetupController extends \app\controllers\AppController
    */
   protected $noAuthActions = ["setup", "version", "setup-version", "reset"];
 
+  /**
+   * Setup errors
+   * @var array
+   */
   protected $errors = [];
 
+  /**
+   * Setup messages
+   * @var array
+   */
   protected $messages = [];
 
+  /**
+   * The number of setup methods in total
+   * @var int
+   */
   protected $numberOfSetupMethods = 0;
 
+  /**
+   * Counter for the number of setup methods left
+   * @var int
+   */
   protected $counter = 0;
 
   /**
@@ -148,8 +165,14 @@ class SetupController extends \app\controllers\AppController
    */
   protected $initiatingSessionId = null;
 
+  /**
+   * Wether the property cache has been reset
+   * @var bool
+   */
+  protected $isReset = false;
 
-//-------------------------------------------------------------
+
+  //-------------------------------------------------------------
   // HELPERS
   //-------------------------------------------------------------
 
@@ -226,7 +249,6 @@ class SetupController extends \app\controllers\AppController
     }
     return true;
   }
-
 
   //-------------------------------------------------------------
   // ACTIONS
@@ -307,6 +329,13 @@ class SetupController extends \app\controllers\AppController
    */
   protected function _setup()
   {
+    if (strstr(Yii::$app->request->referrer, "?reset") && !$this->isReset) {
+      Yii::info("Resetting application...");
+      $this->resetSavedProperties();
+      $this->isReset = true;
+    } else {
+      $this->isReset = false;
+    }
     $this->restoreProperties();
 
     if ($this->initiatingSessionId) {
@@ -319,7 +348,7 @@ class SetupController extends \app\controllers\AppController
     }
     if (count($this->setupMethods) === 0) {
       // if no setup methods have been identified, this is the start of the setup sequence
-      $result = $this->_initSetup();
+      $this->_initSetup();
       // no setup necessary
       if ($this->upgrade_to === $this->upgrade_from) {
         Yii::info("Starting Bibliograph v$this->upgrade_to ...");
@@ -354,7 +383,6 @@ class SetupController extends \app\controllers\AppController
         $this->isNewInstallation = true;
       } catch (yii\base\InvalidConfigException $e) {
         // this happens deleting the tables in the database during development
-        // @todo
         $upgrade_from = "0.0.0";
         $this->isNewInstallation = true;
       }

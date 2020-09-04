@@ -98,7 +98,7 @@ class Module extends \lib\Module
   {
     $manager = Yii::$app->datasourceManager;
     foreach ($this->getConnectors() as $connector) {
-      $repoNamedId = self::CATEGORY . '_' . $connector->id;
+      $repoNamedId = 'webservices_' . $connector->id;
       $repoModel = Datasource::findByNamedId($repoNamedId);
       if( ! $repoModel ){
         $repoModel = $manager->create($repoNamedId, "webservices");
