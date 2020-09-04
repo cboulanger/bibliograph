@@ -7,8 +7,8 @@ use Yii;
 /**
  * This is the model class for table "join_Datasource_User".
  *
- * @property integer $DatasourceId
- * @property integer $UserId
+ * @property int $DatasourceId
+ * @property int $UserId
  */
 class Datasource_User extends \yii\db\ActiveRecord
 {

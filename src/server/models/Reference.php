@@ -7,6 +7,7 @@ use aracoool\uuid\UuidBehavior;
 use aracoool\uuid\UuidValidator;
 use lib\models\BaseModel;
 use Yii;
+use yii\web\BadRequestHttpException;
 
 /**
  * This is the model class for table "database1_data_Reference".
@@ -57,8 +58,8 @@ use Yii;
  * @property string $createdBy
  * @property string $modifiedBy
  * @property string $hash
- * @property integer $markedDeleted
- * @property integer $attachments
+ * @property int $markedDeleted
+ * @property int $attachments
  * @property string $uuid
  */
 class Reference extends BaseModel
@@ -298,38 +299,39 @@ class Reference extends BaseModel
    */
   function findPotentialDuplicates_todo($threshold = 50)
   {
-    $author = $this->author;
-    $title = $this->title;
-    $year = $this->year();
-
-    $match = $adapter->fullTextSql(
-      $queryBehavior->getTableName(),
-      "basic", "$author $title $year", "fuzzy"
-    );
-    $table = $queryBehavior->getTableName();
-    $id = $this->id();
-    $sql = "
-      SELECT id,
-        $match AS score,
-        ($match / maxScore)*100 AS normalisedScore
-      FROM $table,
-        (SELECT MAX($match) AS maxScore FROM $table) AS maxScoreTable
-      WHERE
-        $match
-      HAVING normalisedScore > $threshold AND id != $id
-      ORDER BY score DESC
-    ";
-    $rows = $adapter->fetchAll($sql);
-
-    $ids = array();
-    $scores = array();
-    foreach ($rows as $row) {
-      $ids[] = $row['id'];
-      $scores[] = $row['normalisedScore'];
-    }
-    if (count($ids)) {
-      $this->lastQuery = $queryBehavior->selectIds($ids);
-    }
-    return $scores;
+    throw new BadRequestHttpException("Not implemented.");
+//    $author = $this->author;
+//    $title = $this->title;
+//    $year = $this->year();
+//
+//    $match = $adapter->fullTextSql(
+//      $queryBehavior->getTableName(),
+//      "basic", "$author $title $year", "fuzzy"
+//    );
+//    $table = $queryBehavior->getTableName();
+//    $id = $this->id();
+//    $sql = "
+//      SELECT id,
+//        $match AS score,
+//        ($match / maxScore)*100 AS normalisedScore
+//      FROM $table,
+//        (SELECT MAX($match) AS maxScore FROM $table) AS maxScoreTable
+//      WHERE
+//        $match
+//      HAVING normalisedScore > $threshold AND id != $id
+//      ORDER BY score DESC
+//    ";
+//    $rows = $adapter->fetchAll($sql);
+//
+//    $ids = array();
+//    $scores = array();
+//    foreach ($rows as $row) {
+//      $ids[] = $row['id'];
+//      $scores[] = $row['normalisedScore'];
+//    }
+//    if (count($ids)) {
+//      $this->lastQuery = $queryBehavior->selectIds($ids);
+//    }
+//    return $scores;
   }
 }

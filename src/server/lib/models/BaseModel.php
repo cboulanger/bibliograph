@@ -146,7 +146,7 @@ class BaseModel extends ActiveRecord
     } elseif ( ! $datasource instanceof Datasource ){
       throw new \InvalidArgumentException("Passed object must be an instance of " . Datasource::class);
     }
-    static :: $datasource = $datasource;
+    static::$datasource = $datasource;
     return \get_called_class();
   }
 

@@ -35,9 +35,9 @@ use app\models\Datasource_Group;
  * @property string $namedId
  * @property string $name
  * @property string $description
- * @property integer $ldap
+ * @property int $ldap
  * @property string $defaultRole
- * @property integer $active
+ * @property int $active
  */
 class Group extends BaseModel
 {
@@ -106,7 +106,7 @@ class Group extends BaseModel
 
   /**
    * @return \yii\db\ActiveQuery
-   */           
+   */
   protected function getGroupUsers()
   {
     return $this->hasMany(Group_User::className(), ['GroupId' => 'id']);
@@ -114,7 +114,7 @@ class Group extends BaseModel
 
   /**
    * @return \yii\db\ActiveQuery
-   */           
+   */
   public function getUsers()
   {
     return $this->hasMany(User::className(), ['id' => 'UserId'])->via('groupUsers');
@@ -122,7 +122,7 @@ class Group extends BaseModel
 
   /**
    * @return \yii\db\ActiveQuery
-   */           
+   */
   protected function getGroupDatasources()
   {
     return $this->hasMany(Datasource_Group::className(), ['GroupId' => 'id']);
@@ -130,7 +130,7 @@ class Group extends BaseModel
 
   /**
    * @return \yii\db\ActiveQuery
-   */           
+   */
   public function getDatasources()
   {
     return $this->hasMany(Datasource::className(), ['id' => 'DatasourceId'])->via('groupDatasources');
@@ -139,13 +139,13 @@ class Group extends BaseModel
   /**
    * Returns the usernames of the members of the group
    * @return string[]
-   */           
+   */
   public function getUserNames()
   {
     $result = $this->getUsers()->all();
     if( is_null( $result ) ) return [];
     return array_map( function($o) {return $o->namedId;}, $result );
-  } 
+  }
 
   /**
    * Returns the names of the datasources that are accessible to this groupo

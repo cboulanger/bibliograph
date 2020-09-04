@@ -10,10 +10,10 @@ use app\models\UserConfig;
 /**
  * This is the model class for table "data_Config".
  *
- * @property integer $type
+ * @property int $type
  * @property string $default
- * @property integer $customize
- * @property integer $final
+ * @property int $customize
+ * @property int $final
  * @property string $namedId
  */
 class Config extends BaseModel

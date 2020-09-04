@@ -7,8 +7,8 @@ use Yii;
 /**
  * This is the model class for table "database1_join_Folder_Reference".
  *
- * @property integer $FolderId
- * @property integer $ReferenceId
+ * @property int $FolderId
+ * @property int $ReferenceId
  */
 class Folder_Reference extends \lib\models\BaseModel
 {

@@ -5,8 +5,8 @@ namespace app\models;
 /**
  * This is the model class for table "join_Datasource_Role".
  *
- * @property integer $DatasourceId
- * @property integer $RoleId
+ * @property int $DatasourceId
+ * @property int $RoleId
  */
 class Datasource_Role extends \yii\db\ActiveRecord
 {

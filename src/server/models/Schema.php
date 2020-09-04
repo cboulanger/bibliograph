@@ -13,11 +13,11 @@ use Yii;
  * @todo this but could be used for any model that uses a "schema" of some sort, which can be registered using this
  * model. This requires addition of a "type" column.
  *
- * @property integer $id
+ * @property int $id
  * @property string $namedId
  * @property string $class
  * @property string $description
- * @property integer $active
+ * @property int $active
  * @property Datasource[] $datasources
  * @property Role_Schema[] $roleSchemas
  * @property Role[] $roles

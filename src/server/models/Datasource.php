@@ -23,18 +23,18 @@ use yii\helpers\ArrayHelper;
  * @property string $schema
  * @property string $type
  * @property string $host
- * @property integer $port
+ * @property int $port
  * @property string $database
  * @property string $username
  * @property string $password
  * @property string $encoding
  * @property string $prefix
  * @property string $resourcepath
- * @property integer $active
- * @property integer $readonly
- * @property integer $hidden
+ * @property int $active
+ * @property int $readonly
+ * @property int $hidden
  * @property string $migrationNamespace
- * @property integer $migrationApplyTime
+ * @property int $migrationApplyTime
  * @property ActiveQuery $groups
  * @property ActiveQuery $users
  * @property ActiveQuery $roles
@@ -584,13 +584,28 @@ class Datasource extends BaseModel
    */
   public function getClassFor($type)
   {
-    if (!$type or !is_string($type)) throw new \InvalidArgumentException("Invalid type");
+    if (!$type or !is_string($type)) throw new \InvalidArgumentException("Invalid type $type");
     if (!isset($this->modelMap[$type])) {
       throw new \InvalidArgumentException("Model of type '$type' is not registered");
     }
     $class = $this->modelMap[$type]['model']['class'];
     $class::setDatasource($this);
     return $class;
+  }
+
+  /**
+   * Given a class name, return the type under which is has been registered
+   * @param string $class
+   * @return int|string|null
+   */
+  public function getTypeFor($class) {
+    if (!$class or !class_exists($class)) throw new \InvalidArgumentException("Invalid class $class");
+    foreach ($this->modelMap as $type => $data) {
+      if ($data['model']['class'] === $class) {
+        return $type;
+      }
+    }
+    return null;
   }
 
   /**

@@ -19,24 +19,24 @@ use yii\db\Exception;
 /**
  * This is the model class for table "database1_data_Folder".
  *
- * @property integer $parentId
- * @property integer $position
+ * @property int $parentId
+ * @property int $position
  * @property string $label
  * @property string $type
  * @property string $description
- * @property integer $searchable
- * @property integer $searchfolder
+ * @property int $searchable
+ * @property int $searchfolder
  * @property string $query
- * @property integer $public
- * @property integer $opened
- * @property integer $locked
+ * @property int $public
+ * @property int $opened
+ * @property int $locked
  * @property string $path
  * @property string $owner
- * @property integer $hidden
+ * @property int $hidden
  * @property string $createdBy
- * @property integer $markedDeleted
- * @property integer $childCount
- * @property integer $referenceCount
+ * @property int $markedDeleted
+ * @property int $childCount
+ * @property int $referenceCount
  */
 class Folder extends \lib\models\BaseModel //implements ITreeNode
 {

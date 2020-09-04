@@ -13,7 +13,7 @@ use app\models\Session;
  *
  * @property string $name
  * @property resource $data
- * @property integer $SessionId
+ * @property int $SessionId
  */
 class Message extends BaseModel
 {
@@ -55,10 +55,10 @@ class Message extends BaseModel
   //-------------------------------------------------------------
   // Relations
   //-------------------------------------------------------------
-  
+
   /**
-   * Returns a yii\db\ActiveQuery to find the session object linked to 
-   * the message instance 
+   * Returns a yii\db\ActiveQuery to find the session object linked to
+   * the message instance
    *
    * @return \yii\db\ActiveQuery
    */
@@ -79,7 +79,7 @@ class Message extends BaseModel
    * @return void
    */
   public static function broadcast($channel, $data){
-    $name = $channel instanceof \lib\channel\Channel ? $channel->getName() : $channel; 
+    $name = $channel instanceof \lib\channel\Channel ? $channel->getName() : $channel;
     foreach( Session::find()->all() as $session ){
       $message = new static([ 'name' => $name, 'data' => json_encode($data), 'SessionId' => $session->id ]);
       $message->save();
@@ -97,7 +97,7 @@ class Message extends BaseModel
   public static function send($channel, $data, $sessionId=null )
   {
     // @todo: validate channel name
-    $name = $channel instanceof \lib\channel\Channel ? $channel->getName() : $channel;     
+    $name = $channel instanceof \lib\channel\Channel ? $channel->getName() : $channel;
     if( is_null( $sessionId ) ){
       $sessionId = Yii::$app->session->getId();
     }

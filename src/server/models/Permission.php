@@ -11,7 +11,7 @@ use Yii;
  * @property string $modified
  * @property string $name
  * @property string $description
- * @property integer $active
+ * @property int $active
  */
 class Permission extends BaseModel
 {

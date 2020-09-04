@@ -5,8 +5,8 @@ namespace app\models;
 /**
  * This is the model class for table "join_Permission_Role".
  *
- * @property integer $RoleId
- * @property integer $PermissionId
+ * @property int $RoleId
+ * @property int $PermissionId
  */
 class Role_Schema extends \lib\models\BaseJunctionModel
 {

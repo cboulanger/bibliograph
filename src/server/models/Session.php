@@ -10,11 +10,11 @@ use lib\models\BaseModel;
 /**
  * This is the model class for table "data_Session".
  *
- * @property integer $id
+ * @property int $id
  * @property string $namedId
  * @property string $parentSessionId
  * @property string $ip
- * @property integer $UserId
+ * @property int $UserId
  */
 class Session extends BaseModel
 {
@@ -59,10 +59,10 @@ class Session extends BaseModel
   //-------------------------------------------------------------
   // Relations
   //-------------------------------------------------------------
-  
+
   /**
-   * Returns a yii\db\ActiveQuery to find the user object linked to 
-   * the session instance 
+   * Returns a yii\db\ActiveQuery to find the user object linked to
+   * the session instance
    *
    * @return \yii\db\ActiveQuery
    */
@@ -72,8 +72,8 @@ class Session extends BaseModel
   }
 
   /**
-   * Returns a yii\db\ActiveQuery to find the message objects linked to 
-   * the session instance 
+   * Returns a yii\db\ActiveQuery to find the message objects linked to
+   * the session instance
    *
    * @return \yii\db\ActiveQuery
    */
@@ -85,7 +85,7 @@ class Session extends BaseModel
   //-------------------------------------------------------------
   // API
   //-------------------------------------------------------------
-  
+
   /**
    * Overridden method to update the `modified` property.
    *

@@ -36,11 +36,11 @@ use yii\db\ActiveQuery;
 /**
  * This is the model class for table "data_Role".
  *
- * @property integer $id
+ * @property int $id
  * @property string $namedId
  * @property string $name
  * @property string $description
- * @property integer $active
+ * @property int $active
  * @property ActiveQuery $permissions
  * @property ActiveQuery $users
  * @property ActiveQuery $datasources
@@ -99,7 +99,7 @@ class Role extends BaseModel
 
   /**
    * @return \yii\db\ActiveQuery
-   */           
+   */
   protected function getRolePermissions()
   {
     return $this->hasMany(Permission_Role::className(), ['RoleId' => 'id']);
@@ -107,7 +107,7 @@ class Role extends BaseModel
 
   /**
    * @return \yii\db\ActiveQuery
-   */ 
+   */
   public function getPermissions()
   {
     return $this->hasMany(Permission::className(), ['id' => 'PermissionId'])->via('rolePermissions');
@@ -115,7 +115,7 @@ class Role extends BaseModel
 
   /**
    * @return \yii\db\ActiveQuery
-   */ 
+   */
   protected function getRoleUsers()
   {
     return $this->hasMany(User_Role::className(), ['RoleId' => 'id']);
@@ -123,11 +123,11 @@ class Role extends BaseModel
 
   /**
    * @return \yii\db\ActiveQuery
-   */ 
+   */
   protected function getUsers()
   {
     return $this->hasMany(User::className(), ['id' => 'UserId'])->via('roleUsers');
-  }  
+  }
 
   /**
    * @return \yii\db\ActiveQuery
@@ -148,17 +148,17 @@ class Role extends BaseModel
   //-------------------------------------------------------------
   // API
   //-------------------------------------------------------------
-  
+
   /**
    * Returns the usernames of the users with this role
    * @return string[]
-   */           
+   */
   public function getUserNames()
   {
     $result = $this->getUsers()->all();
     if( is_null( $result ) ) return [];
     return array_map( function($o) {return $o->namedId;}, $result );
-  } 
+  }
 
   /**
    * Returns the names of the datasources that are accessible to this role
@@ -169,7 +169,7 @@ class Role extends BaseModel
     $result = $this->getDatasources()->all();
     if( is_null( $result ) ) return [];
     return array_map( function($o) {return $o->namedId;}, $result );
-  } 
+  }
 
   /**
    * Returns the names of permissions connected to the active record.

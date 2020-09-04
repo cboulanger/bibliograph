@@ -7,12 +7,12 @@ use Yii;
 /**
  * This is the model class for table "join_User_Role".
  *
- * @property integer $id
+ * @property int $id
  * @property string $created
  * @property string $modified
- * @property integer $UserId
- * @property integer $RoleId
- * @property integer $GroupId
+ * @property int $UserId
+ * @property int $RoleId
+ * @property int $GroupId
  */
 class User_Role extends \yii\db\ActiveRecord
 {

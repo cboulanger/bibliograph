@@ -44,9 +44,6 @@ trait DatasourceTrait
       $user =  $this->getActiveUser();
       $myDatasources = $user->getAccessibleDatasourceNames();
       if( ! in_array($datasourceName, $myDatasources) ){
-        if( $user->isAnonymous()){
-          $this->dispatchClientMessage(BibliographEvents::CMD_SHOW_LOGIN);
-        }
         throw new UserErrorException(
           Yii::t('app', "You do not have access to datasource '{datasource}'",[
             'datasource' => $datasourceName

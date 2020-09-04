@@ -11,7 +11,7 @@ use Yii;
  * @property string $name
  * @property string $description
  * @property string $data
- * @property integer $active
+ * @property int $active
  */
 class Plugin extends \yii\db\ActiveRecord
 {

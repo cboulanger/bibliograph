@@ -12,12 +12,12 @@ use app\models\Config;
 /**
  * This is the model class for table "data_UserConfig".
  *
- * @property integer $id
+ * @property int $id
  * @property string $value
  * @property string $created
  * @property string $modified
- * @property integer $UserId
- * @property integer $ConfigId
+ * @property int $UserId
+ * @property int $ConfigId
  */
 class UserConfig extends BaseModel
 {
