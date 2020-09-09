@@ -1,5 +1,5 @@
 /**
- * @require(qx.io.jsonrpc.transport.Http)
+ * @require(qx.io.transport.Http)
  */
 qx.Class.define("bibliograph.test.t3.Access", {
   extend: qx.dev.unit.TestCase,
@@ -31,7 +31,7 @@ qx.Class.define("bibliograph.test.t3.Access", {
         await this.client.request("access.username");
         throw new Error("Unauthenticated access should throw");
       } catch (e) {
-        this.assertInstance(e, qx.io.jsonrpc.exception.JsonRpc);
+        this.assertInstance(e, qx.io.exception.Protocol);
         this.assertEquals("Unauthorized: Your request was made with invalid credentials.", e.message);
       }
     },

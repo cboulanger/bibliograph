@@ -20,6 +20,7 @@
 
 namespace app\controllers;
 
+use lib\controllers\ITableController;
 use app\models\Datasource;
 use app\models\ExportFormat;
 use app\models\Folder;
@@ -35,7 +36,7 @@ use Yii;
 use yii\db\ActiveQuery;
 use yii\db\Exception;
 
-class ReferenceController extends AppController
+class ReferenceController extends AppController implements ITableController
 {
   use traits\FolderDataTrait;
   use traits\TableTrait;

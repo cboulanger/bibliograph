@@ -1,5 +1,5 @@
 /**
- * @require(qx.io.jsonrpc.transport.Http)
+ * @require(qx.io.transport.Http)
  * @ignore(bibliograph.test.notification_received)
  */
 qx.Class.define("bibliograph.test.t1.JsonRpc", {

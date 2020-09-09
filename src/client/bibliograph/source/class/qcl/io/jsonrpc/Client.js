@@ -18,7 +18,7 @@
 
 /**
  * A wrapper for a JSONRPC 2.0 client implementation
- * @require(qx.io.jsonrpc.transport.Http)
+ * @require(qx.io.transport.Xhr)
  */
 qx.Class.define("qcl.io.jsonrpc.Client", {
   extend: qx.core.Object,
@@ -163,12 +163,12 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
         this.setResponse(result);
       } catch (e) {
         let err = e;
-        if (e instanceof qx.io.jsonrpc.exception.Transport &&
-                e.code === qx.io.jsonrpc.exception.Transport.INVALID_MSG_DATA &&
+        if (e instanceof qx.io.exception.Transport &&
+                e.code === qx.io.exception.Transport.INVALID_MSG_DATA &&
                   qx.lang.Type.isObject(e.data.message) &&
                     "message" in e.data.message && "code" in e.data.message) {
           err = e.data.message;
-        } else if (e instanceof qx.io.jsonrpc.exception.JsonRpc) {
+        } else if (e instanceof qx.io.exception.Protocol) {
           try {
             err.message = `${e.message}: ${e.data.response.error.data.human_message}`;
           } catch (e) {}

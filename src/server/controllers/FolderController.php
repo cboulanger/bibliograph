@@ -24,6 +24,7 @@ use app\models\Reference;
 use app\models\Datasource;
 use app\models\Folder;
 use lib\channel\MessageEvent;
+use lib\controllers\ITreeController;
 use lib\dialog\Confirm;
 use lib\dialog\Form;
 use lib\exceptions\UserErrorException;
@@ -33,7 +34,7 @@ use yii\db\Exception;
 use Yii;
 
 
-class FolderController extends AppController //implements ITreeController
+class FolderController extends AppController implements ITreeController
 {
   use traits\FormTrait;
   use traits\FolderDataTrait;

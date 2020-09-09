@@ -1,5 +1,5 @@
 /**
- * @require(qx.io.jsonrpc.transport.Http)
+ * @require(qx.io.transport.Http)
  * @require(qcl.io.jsonrpc.MessageBus)
  */
 qx.Class.define("bibliograph.test.t2.Setup", {

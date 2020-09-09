@@ -7,12 +7,7 @@ use GraphQL\Type\Definition\ObjectType;
 /**
  *
  */
-class ModelProxyQuery extends ObjectType {
-
-  /**
-   * @var ModelProxyType
-   */
-  protected $type;
+class ActiveRecordQuery extends ObjectType {
 
   /**
    * ModelProxyQuery constructor.
@@ -30,7 +25,7 @@ class ModelProxyQuery extends ObjectType {
    */
   private function createFields(array $config) {
     $fields = [];
-    /** @var ModelProxyType $type */
+    /** @var ActiveRecordType $type */
     foreach ($config as $name => $type) {
       $fields[$name] = [
         'type' => $type,

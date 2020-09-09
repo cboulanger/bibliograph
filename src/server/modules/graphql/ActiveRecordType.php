@@ -4,7 +4,6 @@ namespace app\modules\graphql;
 
 use app\controllers\traits\AuthTrait;
 use app\controllers\traits\DatasourceTrait;
-use app\modules\z3950\models\Datasource;
 use Exception;
 use GraphQL\Server\RequestError;
 use GraphQL\Type\Definition\ObjectType;
@@ -17,41 +16,36 @@ use Yii;
 /**
  *
  */
-class ModelProxyType extends ObjectType {
+class ActiveRecordType extends ObjectType {
 
   use DatasourceTrait;
   use AuthTrait;
 
   /**
-   * Classes providing the GraphQl type classes. Must be manually included
-   * above.
-   */
-  protected const TYPE_CONTAINER_CLASSES = [
-    Type::class
-  ];
-
-  /**
    * Creates the type instances of the given class and caches it or returns the
    * cached version.
    * @param $class
-   * @return ModelProxyType
+   * @return ActiveRecordType
    * @throws ReflectionException
    */
   public static function getInstance($class) {
-    if (!isset(self::$instances[$class])) {
-      self::$instances[$class] = new self($class);
+    $index = static::class . "<$class>";
+    if (!isset(self::$instances[$index])) {
+      self::$instances[$index] = new static($class);
+      //Yii::debug(static::class . " created object of class " . get_class( self::$instances[$index]) . " from class $class");
     }
-    return self::$instances[$class];
+    return self::$instances[$index];
   }
 
   /**
    * @param string $class
-   * @return ModelProxyListOfType
+   * @return ActiveRecordListType
    */
   public static function listOf($class)
   {
-    return new ModelProxyListOfType(self::getInstance($class));
+    return new ActiveRecordListType(static::getInstance($class));
   }
+
 
   /**
    * A registry of type instances
@@ -81,14 +75,16 @@ class ModelProxyType extends ObjectType {
   /**
    * YiiModelType constructor.
    * @param $class
+   * @param array|null $fields
    * @throws ReflectionException
    */
-  function __construct($class) {
+  function __construct($class, array $fields=null) {
     $this->modelClass = $class;
-    parent::__construct([
+    $fields = $fields ?? [
       'name' => get_called_class() . "<$class>",
       'fields' => $this->fields()
-    ]);
+    ];
+    parent::__construct($fields);
   }
 
   /**
@@ -129,16 +125,13 @@ class ModelProxyType extends ObjectType {
     preg_match_all($regex, $doc, $matches, PREG_SET_ORDER);
     foreach ($matches as $property) {
       $type = $property['type'];
+      $name = $property['name'];
       $graphql_type = null;
-      /** @var Type $class */
-      foreach (self::TYPE_CONTAINER_CLASSES as $class) {
-        if (method_exists($class, $type)) {
-          $graphql_type = $class::{$type}();
-          break;
-        }
+      if (method_exists(Types::class, $type)) {
+        $graphql_type = Types::{$type}();
       }
       if ($graphql_type) {
-        $fields[$property['name']] = [
+        $fields[$name] = [
           'type' => $graphql_type,
           'description' => $property['description']
         ];

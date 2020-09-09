@@ -43,7 +43,7 @@ abstract class AbstractReferenceSchema extends yii\base\BaseObject implements IS
    * to the record-specific fields
    * @var array
    */
-  protected $defaultFieldsBefore = array();
+  protected $defaultFieldsBefore = [];
 
   /**
    * An array of fields that are part of the data
@@ -51,32 +51,32 @@ abstract class AbstractReferenceSchema extends yii\base\BaseObject implements IS
    * to the record-specific fields
    * @var array
    */
-  protected $defaultFieldsAfter = array();
+  protected $defaultFieldsAfter = [];
 
   /**
    * The fields that are part of the form by default,
    * regardless of record type
    * @var array
    */
-  protected $defaultFormFields = array();
+  protected $defaultFormFields = [];
 
   /**
    * The reference types with their fields
    * @var array
    */
-  protected $type_fields;
+  protected $type_fields = [];
 
   /**
    * The reference type fields
    * @var array
    */
-  protected $field_data;
+  protected $field_data = [];
 
   /**
    * The metadata of the types
    * @var array
    */
-  protected $type_data;
+  protected $type_data = [];
 
   /**
    * The default reference type
@@ -113,8 +113,17 @@ abstract class AbstractReferenceSchema extends yii\base\BaseObject implements IS
   public function addTypes($types)
   {
     foreach ($types as $name => $data) {
-      $this->type_data[$name] = $data;
+      $this->addType($name, $data);
     }
+  }
+
+  /**
+   * Add a reference type description
+   * @param string $name
+   * @param array $data
+   */
+  public function addType(string $name, array $data) {
+    $this->type_data[$name] = $data;
   }
 
   /**
@@ -346,10 +355,19 @@ abstract class AbstractReferenceSchema extends yii\base\BaseObject implements IS
    * @param string $index
    * @return bool
    */
-  public function hasIndex($index)
+  public function hasIndex(string $index)
   {
     $indexMap = $this->getIndexMap();
     return isset($indexMap[$index]);
+  }
+
+  /**
+   * Check whether a field of that name exists
+   * @param string $field
+   * @return bool
+   */
+  public function hasField(string $field) {
+    return isset($this->field_data[$field]);
   }
 
   /**
