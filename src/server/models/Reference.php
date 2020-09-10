@@ -2,10 +2,12 @@
 
 namespace app\models;
 
+use app\schema\BibtexSchema;
 use aracoool\uuid\Uuid;
 use aracoool\uuid\UuidBehavior;
 use aracoool\uuid\UuidValidator;
 use lib\models\BaseModel;
+use lib\models\IHasSchema;
 use Yii;
 use yii\web\BadRequestHttpException;
 
@@ -62,7 +64,9 @@ use yii\web\BadRequestHttpException;
  * @property int $attachments
  * @property string $uuid
  */
-class Reference extends BaseModel
+class Reference
+  extends BaseModel
+  implements IHasSchema
 {
   /**
    * @inheritdoc
@@ -219,7 +223,7 @@ class Reference extends BaseModel
    * Returns the schema object used by this model
    * @return \app\schema\BibtexSchema
    */
-  public static function getSchema()
+  public static function getSchema() : BibtexSchema
   {
     static $schema = null;
     if (is_null($schema)) {

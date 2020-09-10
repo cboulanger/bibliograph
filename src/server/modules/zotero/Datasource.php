@@ -11,6 +11,7 @@ namespace app\modules\zotero;
 use app\models\BibliographicDatasource;
 use app\modules\zotero\models\Collection;
 use app\modules\zotero\models\Item;
+use Hedii\ZoteroApi\ZoteroApi;
 
 /**
  * Class Datasource
@@ -18,6 +19,7 @@ use app\modules\zotero\models\Item;
  */
 class Datasource extends BibliographicDatasource
 {
+
   /**
    * The named id of the datasource schema
    */
@@ -36,13 +38,21 @@ class Datasource extends BibliographicDatasource
   static $description = "A proxy for a library hosted at zotero.org ";
 
   /**
+   * @var ZoteroApi
+   */
+  private $api;
+
+  /**
    * Initialize the datasource, registers the models
    * @throws \InvalidArgumentException
    */
   public function init()
   {
     parent::init();
-    $this->addModel( 'folder',   Collection::class,   'folder');
-    $this->addModel( 'reference',   Item::class,   'reference');
+    $this->addModel( 'folder',   Collection::class,   'collection');
+    $this->addModel( 'reference',   Item::class,   'item');
+    $this->api = new ZoteroApi($this->apiKey);
   }
+
+
 }

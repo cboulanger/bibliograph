@@ -61,6 +61,7 @@
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/guzzlehttp/guzzle" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/guzzlehttp/promises" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/guzzlehttp/psr7" />
+      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/hedii/zotero-api" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/illuminate/contracts" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/illuminate/support" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/insolita/yii2-migration-generator" />

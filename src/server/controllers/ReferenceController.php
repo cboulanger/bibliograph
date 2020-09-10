@@ -20,6 +20,7 @@
 
 namespace app\controllers;
 
+use lib\controllers\IItemController;
 use lib\controllers\ITableController;
 use app\models\Datasource;
 use app\models\ExportFormat;
@@ -36,7 +37,9 @@ use Yii;
 use yii\db\ActiveQuery;
 use yii\db\Exception;
 
-class ReferenceController extends AppController implements ITableController
+class ReferenceController
+  extends AppController
+  implements ITableController, IItemController
 {
   use traits\FolderDataTrait;
   use traits\TableTrait;
@@ -213,11 +216,11 @@ class ReferenceController extends AppController implements ITableController
   /**
    * Returns the requested or all accessible properties of a reference
    * @param string $datasource
-   * @param $arg2
-   * @param null $arg3
-   * @param null $arg4
+   * @param $arg2 if numeric, the id of the reference
+   * @param $arg3
+   * @param $arg4
    * @throws \InvalidArgumentException
-   *
+   * @return string
    * @todo: this method is called with different signatures!
    */
   function actionItem($datasource, $arg2, $arg3 = null, $arg4 = null)
@@ -908,7 +911,7 @@ class ReferenceController extends AppController implements ITableController
    * Returns a HTML table with the reference data
    * @param $datasource
    * @param $id
-   *
+   * @return string
    */
   public function actionItemHtml($datasource, $id)
   {

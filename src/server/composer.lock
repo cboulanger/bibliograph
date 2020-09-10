@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f781243fca84bbd69323c446821ce557",
+    "content-hash": "ddd02b2c2875eafeab7b5ea81681b207",
     "packages": [
         {
             "name": "adci/full-name-parser",
@@ -201,7 +201,7 @@
             "version": "3.3.11",
             "source": {
                 "type": "git",
-                "url": "https://github.com/RobinHerbots/Inputmask.git",
+                "url": "git@github.com:RobinHerbots/Inputmask.git",
                 "reference": "5e670ad62f50c738388d4dcec78d2888505ad77b"
             },
             "dist": {
@@ -222,7 +222,7 @@
             "version": "3.5.1",
             "source": {
                 "type": "git",
-                "url": "git@github.com:jquery/jquery-dist.git",
+                "url": "https://github.com/jquery/jquery-dist.git",
                 "reference": "4c0e4becb8263bb5b3e6dadc448d8e7305ef8215"
             },
             "dist": {
@@ -1028,6 +1028,54 @@
                 "url"
             ],
             "time": "2019-07-01T23:21:34+00:00"
+        },
+        {
+            "name": "hedii/zotero-api",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hedii/zotero-api.git",
+                "reference": "d7f49ae15899aa31b63a5f38018565dafeeef1a6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hedii/zotero-api/zipball/d7f49ae15899aa31b63a5f38018565dafeeef1a6",
+                "reference": "d7f49ae15899aa31b63a5f38018565dafeeef1a6",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.2",
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Hedii\\ZoteroApi\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "hedii",
+                    "email": "hedi.chaibs@gmail.com",
+                    "homepage": "https://hedichaibi.com"
+                }
+            ],
+            "description": "A php wrapper for zotero web api.",
+            "homepage": "https://github.com/hedii/zotero-api",
+            "keywords": [
+                "hedii",
+                "php",
+                "zotero",
+                "zotero-api"
+            ],
+            "time": "2016-09-28T08:11:17+00:00"
         },
         {
             "name": "illuminate/contracts",

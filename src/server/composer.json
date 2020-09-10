@@ -31,7 +31,8 @@
     "yiisoft/yii2-swiftmailer": "^2.1",
     "yosymfony/toml": "^1.0.0",
     "ext-simplexml": "*",
-    "tsingsun/yii2-graphql": "dev-master"
+    "tsingsun/yii2-graphql": "dev-master",
+    "hedii/zotero-api": "^1.1"
 
   },
   "require-dev": {

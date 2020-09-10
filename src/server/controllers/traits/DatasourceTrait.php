@@ -41,7 +41,7 @@ trait DatasourceTrait
     }
     if( $checkAccess ){
       /** @var User $user */
-      $user =  $this->getActiveUser();
+      $user =  Yii::$app->user->identity;
       $myDatasources = $user->getAccessibleDatasourceNames();
       if( ! in_array($datasourceName, $myDatasources) ){
         throw new UserErrorException(

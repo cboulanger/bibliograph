@@ -3,9 +3,14 @@
 namespace app\modules\zotero\controllers;
 
 use app\controllers\AppController;
+use lib\controllers\IItemController;
 use lib\controllers\ITableController;
+use Yii;
 
-class ItemController extends AppController implements ITableController {
+class ItemController
+  extends AppController
+  implements ITableController, IItemController
+{
 
   /**
    * Returns the layout of the columns of the table displaying
@@ -22,10 +27,6 @@ class ItemController extends AppController implements ITableController {
           'width' => 50,
           'visible' => false
         ],
-//        'markedDeleted'	=> array(
-//        	'header' 		=> " ",
-//        	'width'	 		=> 16
-//        ),
         'creator' => [
           'header' => Yii::t('app', "Creator"),
           'width' => "1*"
@@ -45,12 +46,12 @@ class ItemController extends AppController implements ITableController {
        */
       'queryData' => [
         'relation' => [
-          'name' => "folders",
-          'foreignId' => 'FolderId'
+          'name' => "collections",
+          'foreignId' => 'CollectionId'
         ],
         'orderBy' => "author,year,title",
       ],
-      'addItems' => $this->getReferenceTypeListData($datasource)
+      'addItems' => []
     ];
   }
 
@@ -81,6 +82,31 @@ class ItemController extends AppController implements ITableController {
    *                string  statusText  Optional text to display in a status bar
    */
   function actionRowData(int $firstRow, int $lastRow, int $requestId, \stdClass $clientQueryData){
+
+  }
+
+  /**
+   * Returns the requested or all accessible properties of a reference
+   * @param string $datasource
+   * @param $arg2 if numeric, the id of the reference
+   * @param $arg3
+   * @param $arg4
+   * @return array
+   * @throws \InvalidArgumentException
+   *
+   * @todo: this method is called with different signatures!
+   */
+  function actionItem($datasource, $arg2, $arg3 = null, $arg4 = null){
+    throw new \BadMethodCallException("Editing Zotero Items not implemented.");
+  }
+
+  /**
+   * Returns a HTML table with the reference data
+   * @param $datasource
+   * @param $id
+   * @return string
+   */
+  public function actionItemHtml($datasource, $id){
 
   }
 

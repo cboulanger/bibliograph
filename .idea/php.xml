@@ -146,9 +146,10 @@
       <path value="$PROJECT_DIR$/src/server/vendor/psr/http-factory" />
       <path value="$PROJECT_DIR$/src/server/vendor/ecodev/graphql-upload" />
       <path value="$PROJECT_DIR$/src/server/vendor/zendframework/zend-diactoros" />
+      <path value="$PROJECT_DIR$/src/server/vendor/hedii/zotero-api" />
     </include_path>
   </component>
-  <component name="PhpProjectSharedConfiguration" php_language_level="7.3" />
+  <component name="PhpProjectSharedConfiguration" php_language_level="7.4" />
   <component name="PhpRuntimeConfiguration">
     <extensions>
       <extension name="Ev" enabled="false" />

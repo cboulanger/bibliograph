@@ -22,18 +22,21 @@ namespace app\schema;
 
 use InvalidArgumentException;
 use lib\schema\ISchema;
+use RuntimeException;
 use Yii;
 
 
 /**
  * Base class for schemas
  */
-abstract class AbstractReferenceSchema extends yii\base\BaseObject implements ISchema
+abstract class AbstractReferenceSchema
+  extends yii\base\BaseObject
+  implements ISchema
 {
 
   /**
    * The default record type
-   * @var string
+   * @type string
    */
   protected $defaultType = "";
 
@@ -208,7 +211,6 @@ abstract class AbstractReferenceSchema extends yii\base\BaseObject implements IS
     }
   }
 
-
   /**
    * Returns the definition of a field
    * @param string $field
@@ -243,7 +245,7 @@ abstract class AbstractReferenceSchema extends yii\base\BaseObject implements IS
    * @param string $field
    * @param string|null $reftype Optional reference type if there are different
    * labels for different reference types
-   * @throws \RuntimeException
+   * @throws RuntimeException
    * @return string
    */
   public function getFieldLabel($field, $reftype = null)
@@ -260,7 +262,7 @@ abstract class AbstractReferenceSchema extends yii\base\BaseObject implements IS
       if (isset($formData['label'])) {
         $label = $formData['label'];
       } else {
-        throw new \RuntimeException("Field '$field' has no label information!");
+        throw new RuntimeException("Field '$field' has no label information!");
       }
     }
 
