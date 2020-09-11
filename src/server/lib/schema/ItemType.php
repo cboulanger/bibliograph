@@ -3,7 +3,7 @@
 namespace lib\schema;
 
 use InvalidArgumentException;
-use yii\base\BaseObject;
+use JsonSerializable;
 
 /**
  * Class Type
@@ -11,7 +11,10 @@ use yii\base\BaseObject;
  * @property Field[] $fields
  * @property Schema[] $schemas
  */
-class ItemType extends SchemaItem {
+class ItemType
+  extends SchemaItem
+  implements JsonSerializable
+{
 
   /**
    * The schemas the itemType belangs to
@@ -58,5 +61,14 @@ class ItemType extends SchemaItem {
     }
     $field->addItemType($this);
     $this->fields[] = $field;
+  }
+
+  public function jsonSerialize()
+  {
+    return [
+      'name'    => $this->name,
+      'label'   => $this->label,
+      'fields'  => $this->getFields()
+    ];
   }
 }

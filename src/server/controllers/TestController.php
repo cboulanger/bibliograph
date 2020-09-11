@@ -225,8 +225,6 @@ class TestController extends AppController
 
   public function actionZoteroSchema(){
     $schema = new \app\modules\zotero\Schema();
-    Yii::debug(json_encode($schema));
-    return "OK";
+    return json_decode(json_encode($schema));
   }
-
 }

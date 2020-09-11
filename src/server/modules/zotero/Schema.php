@@ -2,6 +2,7 @@
 
 namespace app\modules\zotero;
 
+use lib\schema\Field;
 use lib\schema\ItemType;
 
 class Schema extends \lib\schema\Schema {
@@ -23,10 +24,28 @@ class Schema extends \lib\schema\Schema {
     $locales = $zotero_schema['locales'];
     foreach($zotero_types as $type) {
       $name = $type['itemType'];
-      $this->addItemType(ItemType::createInstance([
+      $itemType = ItemType::createInstance([
         'name'  => $name,
         'label' => $locales['en-US']['itemTypes'][$name]
-      ]));
+      ]);
+      foreach ($type['fields'] as $data) {
+        $name = $data['field'];
+        $field = Field::createInstance([
+            'name'  => $name,
+            'label' => $locales['en-US']['fields'][$name]
+          ], Field::DUPLICATE_IGNORE);
+        $field->addItemType($itemType);
+        $itemType->addField($field);
+        if (isset($data['baseField'])) {
+          $name = $data['baseField'];
+          $alias = Field::createInstance([
+            'name'  => $name,
+            'label' => $locales['en-US']['fields'][$name] ?? $name
+          ], Field::DUPLICATE_IGNORE);
+          $field->setAlias($alias);
+        }
+      }
+      $this->addItemType($itemType);
     }
   }
 }

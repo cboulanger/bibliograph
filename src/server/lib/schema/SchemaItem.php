@@ -3,6 +3,7 @@
 namespace lib\schema;
 
 use JsonSerializable;
+use RuntimeException;
 use yii\base\BaseObject;
 use yii\base\InvalidArgumentException;
 
@@ -14,6 +15,18 @@ use yii\base\InvalidArgumentException;
 class SchemaItem
   extends BaseObject
 {
+
+  /**
+   * Behaviour when {@link SchemaItem::createInstance()} encounters an existing
+   * instance: ignore it
+   */
+  const DUPLICATE_IGNORE = "ignore";
+
+  /**
+   * Behaviour when {@link SchemaItem::createInstance()} encounters an existing
+   * instance: throw an error
+   */
+  const DUPLICATE_ERROR = "error";
 
   /**
    * @var int
@@ -78,8 +91,7 @@ class SchemaItem
    * @return static
    */
   static public function getInstance($name) {
-
-    if (!isset(self::$instances[self::cacheId($name)])) {
+    if (!self::instanceExists($name)) {
       return self::createInstance(['name' => $name]);
     }
     return self::$instances[self::cacheId($name)];
@@ -87,16 +99,36 @@ class SchemaItem
 
   /**
    * Creates a new singleton instance of this class with the given "name" property
+   * unless such instance exists already, in which case the existing one is returned,
    * @param array $config
+   * @param string $behavior One of {@link SchemaItem::DUPLICATE_IGNORE} or
+   * {@link SchemaItem::DUPLICATE_ERROR} (default)
    * @return static
+   *
    */
-  static public function createInstance($config=[]) {
+  static public function createInstance($config=[], $behavior = SchemaItem::DUPLICATE_ERROR ) {
     if (!isset($config['name'])) {
       throw new InvalidArgumentException("Config array must have a 'name' key");
     }
-    $cacheId = self::cacheId($config['name']);
-    self::$instances[$cacheId] = new static($config);
+    $name = $config['name'];
+    if (self::instanceExists($name)) {
+      if ($behavior === SchemaItem::DUPLICATE_IGNORE) {
+        return self::getInstance($name);
+      } else {
+        throw new RuntimeException("An instance of " . static::class . " with the name '$name' already exists.");
+      }
+    }
+    $cacheId = self::cacheId($name);
+    self::$instances[$cacheId] = new static($config); // this throws if instance already exists
     return self::$instances[$cacheId];
+  }
+
+  /**
+   * @param string $name
+   * @return bool
+   */
+  static public function instanceExists($name) {
+    return isset(self::$instances[self::cacheId($name)]);
   }
 
   public function __construct($config = [])
@@ -155,7 +187,7 @@ class SchemaItem
    * @param SchemaItem $item
    */
   public function addRelation(SchemaItem $item, Relation $relation) {
-    $this->labels[$item->getIndexName()] = $relation;
+    $this->relations[$item->getIndexName()] = $relation;
   }
 
   /**

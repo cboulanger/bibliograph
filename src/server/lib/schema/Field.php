@@ -2,16 +2,26 @@
 
 namespace lib\schema;
 
-
-use InvalidArgumentException;
+use JsonSerializable;
+use Yii;
 
 /**
  * Class Field
  * @package lib\schema
  * @property Field $parent
- * @property Field[] $children
+ * @property Field[] $children readonly
+ * @property Field $alias
+ * @property ItemType[] $itemTypes readonly
  */
-class Field extends SchemaItem {
+class Field
+  extends SchemaItem
+  implements JsonSerializable
+{
+
+  /**
+   * @var Field
+   */
+  protected $alias;
 
   /**
    * If the field is a subfield, the parent is stored here
@@ -29,16 +39,37 @@ class Field extends SchemaItem {
    * The item types the field belongs to
    * @var ItemType[]
    */
-  protected $itemTypes;
+  protected $itemTypes = [];
 
   /**
-   * @param ItemType $type
+   * @param ItemType $itemType
    */
-  public function addItemType(ItemType $type) {
-    if (in_array($type, $this->itemTypes)) {
-      throw new InvalidArgumentException("Type '{$type->name}' has already been added");
+  public function addItemType(ItemType $itemType) {
+    if (in_array($itemType, $this->itemTypes)) {
+      Yii::debug("itemType '{$itemType->name}' has already been added to field '{$this->name}'");
     }
-    $this->itemTypes[] = $type;
+    $this->itemTypes[] = $itemType;
+  }
+
+  /**
+   * @return ItemType[]
+   */
+  public function getItemTypes() {
+    return $this->itemTypes;
+  }
+
+  /**
+   * @param Field $field
+   */
+  public function setAlias(Field $field) {
+    $this->alias = $field;
+  }
+
+  /**
+   * @return Field
+   */
+  public function getAlias() : Field {
+    return $this->alias;
   }
 
   /**
@@ -68,5 +99,15 @@ class Field extends SchemaItem {
    */
   public function getChildren() {
     return $this->children;
+  }
+
+  public function jsonSerialize()
+  {
+    return [
+      'name'      => $this->name,
+      'label'     => $this->label,
+      'children'  => $this->children,
+      'alias'     => $this->alias
+    ];
   }
 }
