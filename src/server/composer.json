@@ -6,17 +6,19 @@
   },
   "minimum-stability": "stable",
   "require": {
-    "ext-intl": "*",
-    "ext-json": "*",
-    "ext-mbstring": "*",
-    "ext-pdo": "*",
-    "ext-gettext": "*",
     "adci/full-name-parser": "^0.2.3",
     "aracoool/yii2-uuid": "^1.1",
     "bmsrox/yii2-module-autoloader": "^1.1.1",
     "danielstjules/stringy": "^3.1",
     "edvlerblog/yii2-adldap-module": "^4.0.0",
+    "ext-gettext": "*",
+    "ext-intl": "*",
+    "ext-json": "*",
+    "ext-mbstring": "*",
+    "ext-pdo": "*",
+    "ext-simplexml": "*",
     "georgique/yii2-jsonrpc": "*@dev",
+    "hedii/zotero-api": "^1.1",
     "magp/yii2-json-schema-validator": "dev-master",
     "neitanod/forceutf8": "^2.0",
     "odannyc/yii2-sse": "^0.1.0",
@@ -29,11 +31,7 @@
     "voku/simple-cache": "^3.1",
     "yiisoft/yii2": "^2.0.32",
     "yiisoft/yii2-swiftmailer": "^2.1",
-    "yosymfony/toml": "^1.0.0",
-    "ext-simplexml": "*",
-    "tsingsun/yii2-graphql": "dev-master",
-    "hedii/zotero-api": "^1.1"
-
+    "yosymfony/toml": "^1.0.0"
   },
   "require-dev": {
     "bizley/migration": "^2.2",
@@ -48,9 +46,9 @@
     "goaop/parser-reflection": "^1.4",
     "graze/guzzle-jsonrpc": "^3.0",
     "insolita/yii2-migration-generator": "^2.3",
+    "phpunit/phpunit": "<7",
     "yiisoft/yii2-faker": "^2.0.0",
-    "yiisoft/yii2-gii": "^2.0.0",
-    "phpunit/phpunit": "<7"
+    "yiisoft/yii2-gii": "^2.0.0"
   },
   "repositories": [
     {

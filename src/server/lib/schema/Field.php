@@ -5,31 +5,31 @@ namespace lib\schema;
 
 use InvalidArgumentException;
 
+/**
+ * Class Field
+ * @package lib\schema
+ * @property Field $parent
+ * @property Field[] $children
+ */
 class Field extends SchemaItem {
 
   /**
    * If the field is a subfield, the parent is stored here
    * @var Field
    */
-  public Field $parent;
+  protected $parent;
 
   /**
    * The child fields, if any
    * @var Field[]
    */
-  public array $children = [];
-
-  /**
-   * An array of field aliases
-   * @var Field[]
-   */
-  public array $aliases;
+  protected $children = [];
 
   /**
    * The item types the field belongs to
    * @var ItemType[]
    */
-  public array $itemTypes;
+  protected $itemTypes;
 
   /**
    * @param ItemType $type
@@ -44,8 +44,29 @@ class Field extends SchemaItem {
   /**
    * @param Field $field
    */
+  public function setParent(Field $field) {
+    $this->parent = $field;
+  }
+
+  /**
+   * @return Field
+   */
+  public function getParent(): Field {
+    return $this->parent;
+  }
+
+  /**
+   * @param Field $field
+   */
   public function addChild(Field $field) {
     $field->parent = $this;
     $this->children[] = $field;
+  }
+
+  /**
+   * @return Field[]
+   */
+  public function getChildren() {
+    return $this->children;
   }
 }

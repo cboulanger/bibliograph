@@ -16,5 +16,5 @@ interface IHasSchema {
    * Returns the schema object used by this model
    * @return ISchema
    */
-  public static function getSchema(): ISchema;
+  public static function getSchema();
 }

@@ -2,11 +2,18 @@
 
 namespace app\modules\zotero;
 
-use app\schema\AbstractReferenceSchema;
+use lib\schema\ItemType;
 
-class Schema extends AbstractReferenceSchema {
+class Schema extends \lib\schema\Schema {
+
+  public function __construct($config = [])
+  {
+    $config['name'] = 'zotero';
+    parent::__construct($config);
+  }
+
   /**
-   * Constructor
+   * Initialization
    */
   function init()
   {
@@ -16,15 +23,10 @@ class Schema extends AbstractReferenceSchema {
     $locales = $zotero_schema['locales'];
     foreach($zotero_types as $type) {
       $name = $type['itemType'];
-      $translation = $locales['en-US']['itemTypes'][$name];
-      $data = [
-        'label' => $translation,
-        'type'  => "string",
-        'public' => true,
-        'formData' => [],
-        'index' => $translation
-      ];
-      $this->addType($name, $data);
+      $this->addItemType(ItemType::createInstance([
+        'name'  => $name,
+        'label' => $locales['en-US']['itemTypes'][$name]
+      ]));
     }
   }
 }

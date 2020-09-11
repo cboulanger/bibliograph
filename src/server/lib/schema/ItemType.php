@@ -9,6 +9,7 @@ use yii\base\BaseObject;
  * Class Type
  * @package lib\schema
  * @property Field[] $fields
+ * @property Schema[] $schemas
  */
 class ItemType extends SchemaItem {
 
@@ -16,13 +17,13 @@ class ItemType extends SchemaItem {
    * The schemas the itemType belangs to
    * @var Schema[]
    */
-  protected array $schemas;
+  protected $schemas = [];
 
   /**
    * The fields of this type
    * @var Field[]
    */
-  protected array $fields;
+  protected $fields = [];
 
   /**
    * @return Schema[]

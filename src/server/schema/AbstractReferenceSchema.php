@@ -31,7 +31,6 @@ use Yii;
  */
 abstract class AbstractReferenceSchema
   extends yii\base\BaseObject
-  implements ISchema
 {
 
   /**

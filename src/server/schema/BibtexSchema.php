@@ -21,12 +21,15 @@
 namespace app\schema;
 
 use InvalidArgumentException;
+use lib\schema\ISchema;
 use Yii;
 
 /**
  * Class containing data on the BibTex Format
  */
-class BibtexSchema extends AbstractReferenceSchema
+class BibtexSchema
+  extends AbstractReferenceSchema
+  implements ISchema
 {
   /**
    * The default reference type

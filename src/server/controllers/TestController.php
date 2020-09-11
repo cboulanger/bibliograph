@@ -222,4 +222,11 @@ class TestController extends AppController
       ->send();
     return "Successfully sent E-mail";
   }
+
+  public function actionZoteroSchema(){
+    $schema = new \app\modules\zotero\Schema();
+    Yii::debug(json_encode($schema));
+    return "OK";
+  }
+
 }

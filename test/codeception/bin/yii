@@ -3,11 +3,13 @@
 //
 // Yii console tests bootstrap file.
 //
-define('YII_ENV', "test");
-define('YII_DEBUG' , true);
+const YII_ENV = "test";
+const YII_DEBUG = true;
 define('APP_ROOT_DIR', realpath(__DIR__ . "/../../.."));
-define('APP_BACKEND_DIR', APP_ROOT_DIR . "/src/server");
-define('DOTENV_FILE',APP_ROOT_DIR . "/test/.env");
+const APP_BACKEND_DIR = APP_ROOT_DIR . "/src/server";
+const DOTENV_FILE = APP_ROOT_DIR . "/test/.env";
+const APP_CONFIG_FILE = APP_ROOT_DIR . "/test/app.conf.toml";
+
 // run app
 require APP_BACKEND_DIR  . '/bootstrap.php';
 Yii::setAlias('@tests', dirname(__DIR__));

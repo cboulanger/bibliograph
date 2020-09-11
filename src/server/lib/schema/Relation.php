@@ -2,14 +2,14 @@
 
 namespace lib\schema;
 
-class Translator extends SchemaItem {
+use yii\base\BaseObject;
 
-  public Schema $fromSchema;
-
-  public Schema $toSchema;
+class Relation extends BaseObject {
 
   public SchemaItem $fromItem;
 
   public SchemaItem $toItem;
+
+
 
 }
