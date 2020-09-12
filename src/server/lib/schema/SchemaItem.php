@@ -86,15 +86,25 @@ class SchemaItem
 
   /**
    * Returns a singleton instance for the given name, creating it if it does
-   * not exist already
-   * @param string $name
+   * not exist already. If no name is given, return the singleton for the class
+   * @param string|null $name
    * @return static
    */
-  static public function getInstance($name) {
+  static public function getInstance($name=null) {
+    if ($name === null) {
+      $name = static::class;
+    }
     if (!self::instanceExists($name)) {
       return self::createInstance(['name' => $name]);
     }
     return self::$instances[self::cacheId($name)];
+  }
+
+  /**
+   * @return static[];
+   */
+  static public function getInstances() {
+    return self::$instances;
   }
 
   /**

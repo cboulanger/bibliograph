@@ -34,7 +34,6 @@ class Schema extends \lib\schema\Schema {
             'name'  => $name,
             'label' => $locales['en-US']['fields'][$name]
           ], Field::DUPLICATE_IGNORE);
-        $field->addItemType($itemType);
         $itemType->addField($field);
         if (isset($data['baseField'])) {
           $name = $data['baseField'];

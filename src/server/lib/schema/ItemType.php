@@ -46,7 +46,7 @@ class ItemType
    * @param Schema $schema
    */
   public function addSchema(Schema $schema){
-    if (in_array($schema, $this->schemas)) {
+    if (in_array($schema, $this->schemas, true)) {
       throw new InvalidArgumentException("Schema '{$schema->name}' has already been added");
     }
     $this->schemas[] = $schema;
@@ -56,7 +56,7 @@ class ItemType
    * @param Field $field
    */
   public function addField(Field $field){
-    if (in_array($field, $this->fields)) {
+    if (in_array($field, $this->fields, true)) {
       throw new InvalidArgumentException("Field '{$field->name}' has already been added");
     }
     $field->addItemType($this);

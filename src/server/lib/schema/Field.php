@@ -45,8 +45,9 @@ class Field
    * @param ItemType $itemType
    */
   public function addItemType(ItemType $itemType) {
-    if (in_array($itemType, $this->itemTypes)) {
+    if (in_array($itemType, $this->itemTypes, true)) {
       Yii::debug("itemType '{$itemType->name}' has already been added to field '{$this->name}'");
+      return;
     }
     $this->itemTypes[] = $itemType;
   }
@@ -107,7 +108,8 @@ class Field
       'name'      => $this->name,
       'label'     => $this->label,
       'children'  => $this->children,
-      'alias'     => $this->alias
+      'alias'     => $this->alias,
+      'itemTypeNames' => array_map(function(ItemType $itemType){return $itemType->name;}, $this->itemTypes)
     ];
   }
 }

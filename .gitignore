@@ -1,6 +1,7 @@
 # configuration
 /.env
 /app.conf.toml
+*.local
 
 # npm
 npm-debug.log
