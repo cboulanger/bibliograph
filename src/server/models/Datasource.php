@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use InvalidArgumentException;
 use lib\components\Configuration;
 use lib\models\Migration;
 use lib\Module;
@@ -62,6 +63,15 @@ class Datasource extends BaseModel
    * @var string
    */
   public static $description = "";
+
+  /**
+   * If the datasource is part of the module, return the module instance, otherwise
+   * return null
+   * @return Module|null
+   */
+  public function getModule() {
+    return null;
+  }
 
   /**
    * By default, the migration namespace is a subfolder of the @app/migrations
@@ -388,7 +398,7 @@ class Datasource extends BaseModel
    *
    * @param string $datasourceName
    * @return \app\models\Datasource
-   * @throws \InvalidArgumentException
+   * @throws InvalidArgumentException
    * @todo move to manager
    */
   public static function getInstanceFor($datasourceName)
@@ -401,7 +411,7 @@ class Datasource extends BaseModel
     /** @var Datasource $datasource */
     $datasource = Datasource::findByNamedId($datasourceName);
     if (is_null($datasource)) {
-      throw new \InvalidArgumentException("Datasource '$datasourceName' does not exist.");
+      throw new InvalidArgumentException("Datasource '$datasourceName' does not exist.");
     }
     if (!$datasource->schema) {
       throw new \RuntimeException("Datasource '$datasourceName' has no linked schema.");
@@ -435,7 +445,7 @@ class Datasource extends BaseModel
     $instance = $class::findOne(['namedId' => $datasourceName]);
 
     if (is_null($instance)) {
-      throw new \InvalidArgumentException("Datasource '$datasourceName' does not exist.");
+      throw new InvalidArgumentException("Datasource '$datasourceName' does not exist.");
     }
     static::$instances[$datasourceName] = $instance;
     return $instance;
@@ -552,12 +562,12 @@ class Datasource extends BaseModel
    * @param string|null $service (optional) The service that provides access to
    *   model data type of model to the model classes
    * @return void
-   * @throws \InvalidArgumentException
+   * @throws InvalidArgumentException
    */
   public function addModel($type, $class, $service = null)
   {
-    if (!$type or !is_string($type)) throw new \InvalidArgumentException("Invalid type");
-    if (!$class or !is_string($class)) throw new \InvalidArgumentException("Invalid class");
+    if (!$type or !is_string($type)) throw new InvalidArgumentException("Invalid type");
+    if (!$class or !is_string($class)) throw new InvalidArgumentException("Invalid class");
 
     ArrayHelper::setValue($this->modelMap, [$type, "model", "class"], $class);
     ArrayHelper::setValue($this->modelMap, [$type, "controller", "service"], $service);
@@ -580,13 +590,13 @@ class Datasource extends BaseModel
    * current datasource name.
    * @param string $type
    * @return string The class name
-   * @throws \InvalidArgumentException
+   * @throws InvalidArgumentException
    */
   public function getClassFor($type)
   {
-    if (!$type or !is_string($type)) throw new \InvalidArgumentException("Invalid type $type");
+    if (!$type or !is_string($type)) throw new InvalidArgumentException("Invalid type $type");
     if (!isset($this->modelMap[$type])) {
-      throw new \InvalidArgumentException("Model of type '$type' is not registered");
+      throw new InvalidArgumentException("Model of type '$type' is not registered");
     }
     $class = $this->modelMap[$type]['model']['class'];
     $class::setDatasource($this);
@@ -599,7 +609,7 @@ class Datasource extends BaseModel
    * @return int|string|null
    */
   public function getTypeFor($class) {
-    if (!$class or !class_exists($class)) throw new \InvalidArgumentException("Invalid class $class");
+    if (!$class or !class_exists($class)) throw new InvalidArgumentException("Invalid class $class");
     foreach ($this->modelMap as $type => $data) {
       if ($data['model']['class'] === $class) {
         return $type;
@@ -617,7 +627,7 @@ class Datasource extends BaseModel
    */
   public function getServiceName($type)
   {
-    if (!$type or !is_string($type)) throw new \InvalidArgumentException("Invalid type");
+    if (!$type or !is_string($type)) throw new InvalidArgumentException("Invalid type");
     if (!isset($this->modelMap[$type]['controller']['service'])) {
       return null;
     }

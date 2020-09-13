@@ -335,7 +335,6 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
      * @param old
      */
     _applyDatasource: function (value, old) {
-      void (old);
       if (value) {
         this.info("Tree is loading datasource " + value);
         this._setupTree(value, true);
@@ -635,7 +634,7 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
      * @return {boolean} Returns true if the message is not relevant
      * @private
      */
-    _notForMe : function(tree, data) {
+    _messageIsNotForMe : function(tree, data) {
       if (!tree) {
         this.debug("Ignoring message because no tree exists...");
         return true;
@@ -652,7 +651,7 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
      * @param e {qx.event.message.Message}
      * @private
      */
-    _selectNode: function (e) {
+    _onSelectNode: function (e) {
       this.setNodeId(e.getData());
     },
   
@@ -661,10 +660,10 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
      * @param e {qx.event.message.Message} with data {datasource {String}, id {Number}}
      * @private
      */
-    _pruneNode: function (e) {
+    _onPruneNode: function (e) {
       let data = e.getData();
       let tree = this.getTree();
-      if (this._notForMe(tree, data)) {
+      if (this._messageIsNotForMe(tree, data)) {
        return;
       }
       // let dataModel = tree.getDataModel();
@@ -684,10 +683,10 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
      * @todo rewrite the cache stuff! if the transaction id doesnt'change,
      * no need to update the cache!
      */
-    _updateNode: function (e) {
+    _onUpdateNode: function (e) {
       let data = e.getData();
       let tree = this.getTree();
-      if (this._notForMe(tree, data)) {
+      if (this._messageIsNotForMe(tree, data)) {
        return;
       }
       let dataModel = tree.getDataModel();
@@ -704,16 +703,30 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
     },
   
     /**
-     * Adds a node, triggered by a message
+     * Adds a node or an array of nodes, triggered by a message
      * @param e {qx.event.message.Message} Event containing the data on the node(s) to add.
-     * @todo define DTO
      */
-    _addNode: function (e) {
+    _onAddNode(e) {
       let data = e.getData();
-      let tree = this.getTree();
-      if (this._notForMe(tree, data)) {
-       return;
+      if (qx.lang.Type.isArray(data)) {
+        for (let node of data) {
+          this._addNode(node);
+        }
+        return;
       }
+      if (this._messageIsNotForMe(this.getTree(), data)) {
+        return;
+      }
+      this._addNode(data);
+    },
+  
+    /**
+     * Add a node
+     * @param {Object} data
+     * @private
+     */
+    _addNode: function (data) {
+      let tree = this.getTree();
       let dataModel = tree.getDataModel();
       let controller = this.getController();
       let nodeData = data.nodeData;
@@ -749,12 +762,12 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
      * @param {qx.event.message.Message} e
      * @private
      */
-    _moveNode: function (e) {
+    _onMoveNode: function (e) {
       let data = e.getData();
       let tree = this.getTree();
-      if (this._notForMe(tree, data)) {
- return;
-}
+      if (this._messageIsNotForMe(tree, data)) {
+       return;
+      }
       let dataModel = tree.getDataModel();
       let controller = this.getController();
       let nodeId = controller.getClientNodeId(data.nodeId);
@@ -777,12 +790,12 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
      * Deletes a node, triggered by a message
      * @param {qx.event.message.Message} e
      */
-    _deleteNode: function (e) {
+    _onDeleteNode: function (e) {
       let data = e.getData();
       let tree = this.getTree();
-      if (this._notForMe(tree, data)) {
- return;
-}
+      if (this._messageIsNotForMe(tree, data)) {
+        return;
+      }
       let dataModel = tree.getDataModel();
       let controller = this.getController();
       let nodeId = controller.getClientNodeId(data.nodeId);
@@ -797,17 +810,17 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
     },
     
     /**
- * Reorders node children, triggered by a message
- *
- * @param e {qx.event.message.Message}
- * a given node.
- */
-    _reorderNodeChildren: function (e) {
+     * Reorders node children, triggered by a message
+     *
+     * @param e {qx.event.message.Message}
+     * a given node.
+     */
+    _onReorderNodeChildren: function (e) {
       let data = e.getData();
       let tree = this.getTree();
-      if (this._notForMe(tree, data)) {
- return;
-}
+      if (this._messageIsNotForMe(tree, data)) {
+        return;
+      }
       
       // get the node data
       let dataModel = tree.getDataModel();

@@ -45,13 +45,9 @@ qx.Class.define("qcl.data.store.JsonRpcStore",
     } else {
       this.setMarshaler(marshaler);
     }
-    if (!serviceName) {
-      throw new Error("Missing service name");
+    if (serviceName) {
+      this.setServiceName(serviceName);
     }
-    if (!serviceName.match(/^[\d\w_\-.]+$/)) {
-      throw new Error("Invalid service name: " + serviceName);
-    }
-    this.setServiceName(serviceName);
   },
   
   /*
@@ -124,7 +120,7 @@ qx.Class.define("qcl.data.store.JsonRpcStore",
      */
     serviceName:
     {
-      check: "String",
+      check: serviceName => serviceName.match(/^[\d\w_\-.]+$/),
       nullable: false,
       event: "changeServiceName",
       apply: "_applyServiceName"

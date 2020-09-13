@@ -5,6 +5,20 @@
     }
   },
   "minimum-stability": "stable",
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
+    },
+    {
+      "type": "git",
+      "url": "https://github.com/cboulanger/yii2-jsonrpc.git"
+    },
+    {
+      "type": "git",
+      "url": "https://github.com/cboulanger/worldcat-linkeddata-php.git"
+    }
+  ],
   "require": {
     "adci/full-name-parser": "^0.2.3",
     "aracoool/yii2-uuid": "^1.1",
@@ -31,7 +45,8 @@
     "voku/simple-cache": "^3.1",
     "yiisoft/yii2": "^2.0.32",
     "yiisoft/yii2-swiftmailer": "^2.1",
-    "yosymfony/toml": "^1.0.0"
+    "yosymfony/toml": "^1.0.0",
+    "ext-zip": "*"
   },
   "require-dev": {
     "bizley/migration": "^2.2",
@@ -49,19 +64,5 @@
     "phpunit/phpunit": "<7",
     "yiisoft/yii2-faker": "^2.0.0",
     "yiisoft/yii2-gii": "^2.0.0"
-  },
-  "repositories": [
-    {
-      "type": "composer",
-      "url": "https://asset-packagist.org"
-    },
-    {
-      "type": "git",
-      "url": "https://github.com/cboulanger/yii2-jsonrpc.git"
-    },
-    {
-      "type": "git",
-      "url": "https://github.com/cboulanger/worldcat-linkeddata-php.git"
-    }
-  ]
+  }
 }

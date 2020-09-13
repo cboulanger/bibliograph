@@ -20,13 +20,12 @@
 
 namespace app\controllers;
 
-
 use app\controllers\traits\PropertyPersistenceTrait;
 use app\models\BibliographicDatasource;
 use app\models\Datasource;
-use app\models\User;
 use georgique\yii2\jsonrpc\exceptions\JsonRpcException;
 use Illuminate\Support\Str;
+use lib\plugin\PluginInterface;
 use Yii;
 use yii\db\Exception;
 use app\models\Schema;
@@ -250,6 +249,28 @@ class SetupController extends \app\controllers\AppController
     return true;
   }
 
+  /**
+   * Returns true if one of the plugins needs an upgrade, otherwise returns false
+   * @return bool
+   */
+  protected function checkModuleNeedsUpgrade()
+  {
+    $this->moduleUpgrade = false;
+    foreach(Yii::$app->modules as $id => $info) {
+      /** @var Module $module */
+      $module = Yii::$app->getModule($id);
+      Yii::debug("Module $module->id: Code version $module->version, installed version $module->installedVersion");
+      if (
+        $module instanceof PluginInterface
+        && $module->disabled === false
+        && $module->version !== $module->installedVersion
+      ) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   //-------------------------------------------------------------
   // ACTIONS
   //-------------------------------------------------------------
@@ -349,8 +370,8 @@ class SetupController extends \app\controllers\AppController
     if (count($this->setupMethods) === 0) {
       // if no setup methods have been identified, this is the start of the setup sequence
       $this->_initSetup();
-      // no setup necessary
-      if ($this->upgrade_to === $this->upgrade_from) {
+      // if we still have no setup methods, return to client
+      if ($this->numberOfSetupMethods === 0) {
         Yii::info("Starting Bibliograph v$this->upgrade_to ...");
         $this->dispatchClientMessage("bibliograph.setup.done", []);
         return "Setup already completed.";
@@ -393,6 +414,7 @@ class SetupController extends \app\controllers\AppController
     }
     $this->upgrade_from = $upgrade_from;
     $this->upgrade_to = $upgrade_to;
+    // if we have a version change, run setup methods again
     if ( $upgrade_from !== $upgrade_to) {
       // compile list of setup methods
       foreach (\get_class_methods($this) as $method) {
@@ -400,12 +422,12 @@ class SetupController extends \app\controllers\AppController
           $this->setupMethods[] = $method;
         }
       }
-      $this->numberOfSetupMethods = count($this->setupMethods);
-
-      if ($this->numberOfSetupMethods === 0) {
-        throw new SetupException("No setup methods");
-      }
+    } elseif ($this->checkModuleNeedsUpgrade()) {
+      // setup the modules since a version has changed
+      $this->setupMethods[] = "setupModules";
+      $this->numberOfSetupMethods = 1;
     }
+    $this->numberOfSetupMethods = count($this->setupMethods);
 
     try {
       $userInfo = "Authenticated user: " . Yii::$app->user->identity->name;
@@ -841,6 +863,10 @@ class SetupController extends \app\controllers\AppController
     return $found == $count ? 'Datasources already existed.' : 'Created datasources.';
   }
 
+  /**
+   * Installs and upgrades modules,
+   * @return string
+   */
   protected function setupModules()
   {
     $this->moduleUpgrade = false;
@@ -954,13 +980,14 @@ class SetupController extends \app\controllers\AppController
   {
     $ldap = Yii::$app->ldapAuth->checkConnection();
     $message = $ldap['enabled'] ?'LDAP authentication is enabled' :'LDAP authentication is not enabled.';
-    $message .= ($ldap['enabled'] and $ldap['connection']) ? ' and a connection has successfully been established.'
-      : $ldap['enabled'] ? ', but trying to establish a connection failed with the error: ' . $ldap['error'] : "";
+    $message .= ($ldap['enabled'] and $ldap['connection'])
+      ? ' and a connection has successfully been established.'
+      : ($ldap['enabled']
+        ? (', but trying to establish a connection failed with the error: ' . $ldap['error'])
+        : "");
     if ($ldap['enabled'] and $ldap['error']) {
       throw new SetupException($message);
     }
     return $message;
   }
-
-
 }

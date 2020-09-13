@@ -8,7 +8,7 @@ use lib\controllers\ITableController;
 use Yii;
 
 class ItemController
-  extends AppController
+  extends Controller
   implements ITableController, IItemController
 {
 

@@ -2,6 +2,7 @@
 
 namespace app\modules\bibutils;
 
+use lib\plugin\PluginInterface;
 use lib\util\Executable;
 
 /**
@@ -10,7 +11,9 @@ use lib\util\Executable;
  */
 defined('BIBUTILS_PATH') or define('BIBUTILS_PATH', $_SERVER['BIBUTILS_PATH']);
 
-class Module extends \app\modules\converters\Module
+class Module
+  extends \app\modules\converters\Module
+  implements PluginInterface
 {
   const CATEGORY = "plugin.bibutils";
 

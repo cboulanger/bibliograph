@@ -2,8 +2,7 @@
 
 namespace app\modules\webservices;
 
-use app\modules\webservices\repositories\IConnector;
-use lib\util\Executable;
+use lib\plugin\PluginInterface;
 use Yii;
 use app\models\{
   Datasource, Role, Schema, User
@@ -20,7 +19,9 @@ use yii\web\UserEvent;
  * webservices module definition class
  * @property WebservicesDatasource[] $datasources
  */
-class Module extends \lib\Module
+class Module
+  extends \lib\Module
+  implements PluginInterface
 {
   /**
    * The version of the module

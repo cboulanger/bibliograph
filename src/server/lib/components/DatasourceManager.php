@@ -91,6 +91,7 @@ class DatasourceManager extends \yii\base\Component
       'hidden'  => 0
     ]);
     $datasource->save();
+    $datasourceName = $datasource->namedId; // in case the named id has changed during save
     Yii::info("Created datasource '$datasourceName'.");
     //Yii::debug($datasource->getAttributes());
 

@@ -21,6 +21,8 @@
 namespace app\controllers;
 
 use app\models\Datasource;
+use app\models\Group;
+use app\models\Permission;
 use app\models\Role;
 use app\models\Schema;
 use app\models\User;
@@ -52,35 +54,35 @@ class AccessConfigController extends AppController
     /** @noinspection MissedFieldInspection */
     return [
       'user' => [
-        'class' => \app\models\User::class,
+        'class' => User::class,
         'label' => Yii::t('app', "Users"),
         'dialogLabel' => Yii::t('app', "User"),
         'labelProp' => "name",
         'icon' => "icon/16/apps/preferences-users.png"
       ],
       'role' => [
-        'class' => \app\models\Role::class,
+        'class' => Role::class,
         'label' => Yii::t('app', "Roles"),
         'dialogLabel' => Yii::t('app', "Role"),
         'labelProp' => "name",
         'icon' => "icon/16/apps/internet-feed-reader.png"
       ],
       'group' => [
-        'class' => \app\models\Group::class,
+        'class' => Group::class,
         'label' => Yii::t('app', "Groups"),
         'dialogLabel' => Yii::t('app', "Group"),
         'labelProp' => "name",
         'icon' => "icon/16/actions/address-book-new.png"
       ],
       'permission' => [
-        'class' => \app\models\Permission::class,
+        'class' => Permission::class,
         'label' => Yii::t('app', "Permissions"),
         'dialogLabel' => Yii::t('app', "Permission"),
         'labelProp' => "name",
         'icon' => "icon/16/apps/preferences-security.png"
       ],
       'datasource' => [
-        'class' => \app\models\Datasource::class,
+        'class' => Datasource::class,
         'label' => Yii::t('app', "Datasources"),
         'dialogLabel' => Yii::t('app', "Datasource"),
         'labelProp' => "title",
@@ -112,15 +114,19 @@ class AccessConfigController extends AppController
    */
   protected function getModelInstance($type, $namedId)
   {
-    $modelClass = $this->getModelDataFor($type)['class'];
-    $model = $modelClass::findByNamedId($namedId);
+    if ($type === "datasource") {
+      $model = $this->datasource($namedId);
+    } else {
+      $modelClass = $this->getModelDataFor($type)['class'];
+      $model = $modelClass::findByNamedId($namedId);
+    }
     if ($model) {
       return $model;
     }
     throw new UserErrorException(
       Yii::t(
         'app',
-        "An object of type {type} and id {namedId} does not exist.",
+        "An model of type {type} and id {namedId} does not exist.",
         ['type' => $type, 'namedId' => $namedId]
       )
     );
@@ -400,7 +406,7 @@ class AccessConfigController extends AppController
 
       // user -> roles
       if ($elementType == "user" and $linkedType == "role") {
-        /** @var \app\models\User $user */
+        /** @var User $user */
         $user = $model;
         // you cannot link to this node
         $node['action'] = null;
@@ -431,7 +437,7 @@ class AccessConfigController extends AppController
         $node['children'][] = $groupNode;
 
         // one node for each existing group
-        /** @var \app\models\Group[] $userGroups */
+        /** @var Group[] $userGroups */
         $userGroups = $user->getGroups()->all();
         foreach ($userGroups as $group) {
           $groupNode = array(
@@ -446,7 +452,7 @@ class AccessConfigController extends AppController
           );
           // group roles
           $query = $user->getGroupRoles($group);
-          /** @var \app\models\Role[] $roles */
+          /** @var Role[] $roles */
           $roles = $query->all();
           foreach ($roles as $role) {
             $roleNode = array(
@@ -953,12 +959,12 @@ class AccessConfigController extends AppController
       return $this->abortedActionResult($e->getMessage());
     }
 
-    /** @var \app\models\User $user */
+    /** @var User $user */
     $user = $this->getModelInstance("user", $data->namedId);
     $user->setAttributes((array)$data);
 
     // give it the 'user' role
-    /** @var \app\models\Role $roleClass */
+    /** @var Role $roleClass */
     $roleClass = $this->getModelClassFor('role');
     $user->link('roles', $roleClass::findByNamedId("user"));
 

@@ -3,6 +3,6 @@
 namespace app\modules\zotero\models;
 
 
-class Collection extends ZoteroRecord {
+class Collection extends Model {
 
 }

@@ -2,7 +2,6 @@
 
 namespace app\modules\z3950;
 
-use lib\util\Executable;
 use Yii;
 use app\models\{
   Datasource, Role, Schema, User
@@ -13,12 +12,15 @@ use app\modules\z3950\models\{
 use Exception;
 use lib\exceptions\RecordExistsException;
 use yii\web\UserEvent;
+use lib\plugin\PluginInterface;
 
 /**
  * z3950 module definition class
  * @property Z3950Datasource[] $datasources
  */
-class Module extends \lib\Module
+class Module
+  extends \lib\Module
+  implements PluginInterface
 {
   /**
    * The version of the module

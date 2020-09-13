@@ -44,7 +44,7 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
   
   construct: function () {
     this.base(arguments);
-    this.setServiceName("folder"); // @todo remove?
+    this.setServiceName("folder");
     this.setModelType("folder");
     
     // messages
@@ -76,15 +76,15 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
     // events
     this.addListener("loading", () => this._isWaiting(true));
     this.addListener("loaded", () => this._isWaiting(false));
-    // messages
+    // connect server messages with handlers
     let messages = bibliograph.ui.main.MultipleTreeView.messages;
-    bus.subscribe(messages.UPDATE, this._updateNode, this);
-    bus.subscribe(messages.ADD, this._addNode, this);
-    bus.subscribe(messages.DELETE, this._deleteNode, this);
-    bus.subscribe(messages.MOVE, this._moveNode, this);
-    bus.subscribe(messages.REORDER, this._reorderNodeChildren, this);
-    bus.subscribe(messages.SELECT, this._selectNode, this);
-    bus.subscribe(messages.PRUNE, this._pruneNode, this);
+    bus.subscribe(messages.UPDATE, this._onUpdateNode, this);
+    bus.subscribe(messages.ADD, this._onAddNode, this);
+    bus.subscribe(messages.DELETE, this._onDeleteNode, this);
+    bus.subscribe(messages.MOVE, this._onMoveNode, this);
+    bus.subscribe(messages.REORDER, this._onReorderNodeChildren, this);
+    bus.subscribe(messages.SELECT, this._onSelectNode, this);
+    bus.subscribe(messages.PRUNE, this._onPruneNode, this);
   },
   
   members: {

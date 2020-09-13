@@ -2,19 +2,22 @@
 
 namespace app\modules\zotero;
 
-
 use app\models\Schema;
-
+use app\modules\zotero\models\Datasource;
 use lib\exceptions\RecordExistsException;
+use lib\plugin\PluginInterface;
 use Yii;
 
-class Module extends \lib\Module {
+class Module
+  extends \lib\Module
+  implements PluginInterface
+{
 
   /**
    * The version of the module
    * @var string
    */
-  protected $version = "0.0.1";
+  protected $version = "0.0.5";
 
   /**
    * Installs the plugin.

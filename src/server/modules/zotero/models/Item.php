@@ -4,18 +4,22 @@ namespace app\modules\zotero\models;
 
 use app\modules\zotero\Schema;
 use lib\models\IHasSchema;
-use yii\base\BaseObject;
-use yii\base\Model as ModelAlias;
 
 class Item
-  extends ModelAlias
+  extends Model
   implements IHasSchema
 {
 
+  /**
+   * @var Schema
+   */
   private static $schema;
 
-  public function attributes()
-  {
+  /**
+   * @overridden
+   * @return array|\lib\schema\Field[]
+   */
+  public function attributes() {
     return self::getSchema()->fields;
   }
 

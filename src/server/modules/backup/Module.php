@@ -2,6 +2,7 @@
 
 namespace app\modules\backup;
 
+use lib\plugin\PluginInterface;
 use app\models\{
   Role
 };
@@ -25,7 +26,9 @@ defined('BACKUP_PATH') or define('BACKUP_PATH', TMP_PATH);
  * @property WebservicesDatasource[] $datasources
  * @property int backupVersion
  */
-class Module extends \lib\Module
+class Module
+  extends \lib\Module
+  implements PluginInterface
 {
   /**
    * The version of the module

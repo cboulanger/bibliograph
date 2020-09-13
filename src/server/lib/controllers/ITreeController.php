@@ -31,13 +31,13 @@ interface ITreeController
   /**
    * Returns the number of nodes in a given datasource
    *
-   * @param string $datasource
+   * @param string $datasourceName
    * @param mixed|null $options Optional data, for example, when nodes
    *   should be filtered by a certain criteria
    * @return array containing the keys 'nodeCount', 'transactionId'
    *   and (optionally) 'statusText'.
    */
-  function actionNodeCount(string $datasource, array $options = null);
+  function actionNodeCount(string $datasourceName, array $options = null);
 
   /**
    * Returns the number of children of a node with the given id
@@ -54,12 +54,12 @@ interface ITreeController
 
   /**
    * Returns all nodes of a tree in a given datasource
-   * @param string $datasource
+   * @param string $datasourceName
    * @param mixed|null $options Optional data, for example, when nodes
    *   should be filtered by a certain criteria
    * //return { nodeData : [], statusText: [] }.
    */
-  function actionLoad($datasource, $options = null);
+  function actionLoad($datasourceName, $options = null);
 
 //  /**
 //   * Returns the data of child nodes of a branch ordered by the order field

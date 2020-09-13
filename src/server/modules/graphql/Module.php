@@ -2,13 +2,12 @@
 
 namespace app\modules\graphql;
 
-//use GraphQL\Type\Definition\ObjectType;
-//use GraphQL\Type\Definition\Type;
-//use yii\graphql\GraphQLModuleTrait;
-//use GraphQL\Type\Schema;
-//use GraphQL\GraphQL;
+use lib\plugin\PluginInterface;
 
-class Module extends \lib\Module {
+class Module
+  extends \lib\Module
+  implements PluginInterface
+{
 
   /**
    * @inheritdoc

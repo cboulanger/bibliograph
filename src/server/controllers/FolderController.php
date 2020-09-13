@@ -28,6 +28,7 @@ use lib\controllers\ITreeController;
 use lib\dialog\Confirm;
 use lib\dialog\Form;
 use lib\exceptions\UserErrorException;
+use lib\models\BaseModel;
 use RuntimeException;
 use yii\db\ActiveQuery;
 use yii\db\Exception;
@@ -72,13 +73,13 @@ class FolderController extends AppController implements ITreeController
   /**
    * Returns the number of nodes in a given datasource
    *
-   * @param string $datasource
+   * @param string $datasourceName
    * @param mixed|null $options Optional data, for example, when nodes
    *   should be filtered by a certain criteria
    * @return array containing the keys 'nodeCount', 'transactionId'
    *   and (optionally) 'statusText'.
    */
-  function actionNodeCount(string $datasource, array $options = null)
+  function actionNodeCount(string $datasourceName, array $options = null)
   {
     $query = Folder::find();
     if ($this->getActiveUser()->isAnonymous()) {
@@ -109,20 +110,31 @@ class FolderController extends AppController implements ITreeController
 
   /**
    * Returns all nodes of a tree in a given datasource
-   * @param string $datasource
+   * @param string $datasourceName
    * @param mixed|null $options Optional data, for example, when nodes
    *   should be filtered by a certain criteria
    * //return { nodeData : [], statusText: [] }.
    */
-  function actionLoad($datasource, $options = null)
+  function actionLoad($datasourceName, $options = null)
   {
     try {
-      $modelClass = $this->getControlledModel($datasource);
+      /** @var BaseModel $modelClass */
+      $modelClass = $this->getControlledModel($datasourceName);
     } catch (\InvalidArgumentException $e) {
       throw new UserErrorException(Yii::t('app', "Database {datasource} does not exist.", [
-        'datasource' => $datasource
+        'datasource' => $datasourceName
       ]));
     }
+
+    // if datasource belongs to a module, forward request to module controller
+    $datasource = $this->datasource($datasourceName);
+    $module = $datasource->getModule();
+    if ($module) {
+      $service = $datasource->getServiceName(self::$modelType);
+      $controller = $module->createControllerByID($service);
+      return $controller->actionLoad($datasourceName, $options);
+    }
+
     /** @var ActiveQuery $query */
     $query = $modelClass::find();
     $query->select("id")->orderBy("parentId,position");
@@ -130,8 +142,8 @@ class FolderController extends AppController implements ITreeController
       $query = $query->where(['public' => true]);
     }
     $nodeIds = $query->column();
-    $nodeData = array_map(function ($id) use ($datasource) {
-      return $this->getNodeData($datasource, $id);
+    $nodeData = array_map(function ($id) use ($datasourceName) {
+      return $this->getNodeData($datasourceName, $id);
     }, $nodeIds);
 
     // make sure that parents are placed before their children
@@ -181,7 +193,7 @@ class FolderController extends AppController implements ITreeController
       if ($node['data']['query'] && str_contains( $node['data']['query'], "virtsub:" )){
         Yii::$app->eventQueue->add(new MessageEvent([
           'name' => static::MESSAGE_EXECUTE_JSONRPC,
-          'data' => ["folder", "create-virtual-folders", [$datasource, $id]]
+          'data' => ["folder", "create-virtual-folders", [$datasourceName, $id]]
         ]));
       }
     }

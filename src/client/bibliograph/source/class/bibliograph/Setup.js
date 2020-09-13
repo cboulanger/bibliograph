@@ -344,9 +344,9 @@ qx.Class.define("bibliograph.Setup", {
       });
 
       // execute an arbitrary JSONRPC method
-      bus.subscribe(messages.EXECUTE_JSONRPC, e => {
+      bus.subscribe(messages.EXECUTE_JSONRPC, async e => {
         let [service, method, params] = e.getData();
-        app.getRpcClient(service).send(method, params);
+        await app.getRpcClient(service).request(method, params);
       });
     },
 

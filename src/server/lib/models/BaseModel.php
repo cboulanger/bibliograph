@@ -20,6 +20,7 @@
 
 namespace lib\models;
 
+use Illuminate\Support\Str;
 use lib\channel\BroadcastEvent;
 use lib\channel\MessageEvent;
 use Yii;
@@ -172,7 +173,6 @@ class BaseModel
       return true;
     }
     return false;
-    $this->getAttribute("foo");
   }
 
   /**

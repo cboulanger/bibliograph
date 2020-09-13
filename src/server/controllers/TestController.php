@@ -227,10 +227,10 @@ class TestController extends AppController
     //$schema = new \app\modules\zotero\Schema();
     //return json_decode(json_encode($schema));
     $api = new \Hedii\ZoteroApi\ZoteroApi($_SERVER['ZOTERO_API_KEY']);
-    $respnse = $api->user($_SERVER['ZOTERO_USER_ID'])
+    $response = $api->user($_SERVER['ZOTERO_USER_ID'])
       ->collections()
-      ->top()
+      ->limit(1)
       ->send();
-    return $respnse->getBody();
+    return $response->getHeaders()['Total-Results'][0];
   }
 }

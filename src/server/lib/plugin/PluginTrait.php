@@ -1,17 +1,13 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: cboulanger
- * Date: 08.03.18
- * Time: 18:52
- */
 
-namespace lib;
+// TODO move methods from lib\Module to here and use the trait.
+
+namespace lib\plugin;
 use ReflectionClass;
 use Yii;
 
 /**
- * Class Module
+ * Plugin Trait
  * @package lib
  * @property string $name
  * @property boolean $enabled
@@ -25,19 +21,13 @@ use Yii;
  * @property string $configKeyEnabled
  *
  */
-class Module extends \yii\base\Module
+trait PluginTrait
 {
 
   /**
    * @var bool Wether the module has already been initialized.
    */
   protected $initialized = false;
-
-  /**
-   * A string constant defining the category for logging and translation
-   * Should be overridden by subclasses
-   */
-  const CATEGORY="module";
 
   /**
    * The name of the module
