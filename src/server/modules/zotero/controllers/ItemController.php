@@ -65,7 +65,7 @@ class ItemController
    * @throws \InvalidArgumentException
    */
   public function actionRowCount(\stdClass $clientQueryData){
-
+    return 0;
   }
 
   /**
@@ -82,7 +82,7 @@ class ItemController
    *                string  statusText  Optional text to display in a status bar
    */
   function actionRowData(int $firstRow, int $lastRow, int $requestId, \stdClass $clientQueryData){
-
+    return [];
   }
 
   /**
@@ -93,8 +93,6 @@ class ItemController
    * @param $arg4
    * @return array
    * @throws \InvalidArgumentException
-   *
-   * @todo: this method is called with different signatures!
    */
   function actionItem($datasource, $arg2, $arg3 = null, $arg4 = null){
     throw new \BadMethodCallException("Editing Zotero Items not implemented.");
@@ -102,12 +100,12 @@ class ItemController
 
   /**
    * Returns a HTML table with the reference data
-   * @param $datasource
-   * @param $id
-   * @return string
+   * @param string $datasource
+   * @param int $id
+   * @return array
    */
   public function actionItemHtml($datasource, $id){
-
+    return ['html' => "Hello World"];
   }
 
 }

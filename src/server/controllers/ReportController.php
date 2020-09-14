@@ -9,7 +9,7 @@
 namespace app\controllers;
 
 use app\controllers\traits\AuthTrait;
-use app\controllers\traits\TableTrait;
+use app\controllers\traits\TableControllerTrait;
 use app\models\Datasource;
 use app\models\Folder;
 use app\models\Reference;
@@ -21,7 +21,7 @@ class ReportController extends \yii\web\Controller
 {
 
   use AuthTrait;
-  use TableTrait;
+  use TableControllerTrait;
 
   public function actionCreate($datasource, $nodeId)
   {

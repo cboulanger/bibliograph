@@ -37,7 +37,7 @@ use Yii;
  */
 class ImportController extends AppController
 {
-  use traits\TableTrait;
+  use traits\TableControllerTrait;
 
   /**
    * @var string The name of the datasource which is used for importing

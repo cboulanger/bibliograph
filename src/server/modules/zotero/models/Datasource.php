@@ -97,8 +97,8 @@ class Datasource extends \app\models\Datasource
   public function init()
   {
     parent::init();
-    $this->addModel( 'folder',   Collection::class,   'collection');
-    $this->addModel( 'reference',   Item::class,   'item');
+    $this->addModel( 'folder',   Collection::class,   'zotero.collection');
+    $this->addModel( 'reference',   Item::class,   'zotero.item');
   }
 
   /**
@@ -122,6 +122,7 @@ class Datasource extends \app\models\Datasource
     if ($this->namedId && !Str::startsWith($this->namedId, "zotero_")) {
       $this->namedId = "zotero_" . $this->namedId;
     }
+    $this->readonly = true;
     return parent::beforeSave($insert);
   }
 }

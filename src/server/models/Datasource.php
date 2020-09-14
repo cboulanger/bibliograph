@@ -39,6 +39,7 @@ use yii\helpers\ArrayHelper;
  * @property ActiveQuery $groups
  * @property ActiveQuery $users
  * @property ActiveQuery $roles
+ * @property array $services
  *
  */
 class Datasource extends BaseModel
@@ -571,6 +572,21 @@ class Datasource extends BaseModel
 
     ArrayHelper::setValue($this->modelMap, [$type, "model", "class"], $class);
     ArrayHelper::setValue($this->modelMap, [$type, "controller", "service"], $service);
+  }
+
+  /**
+   * Returns an associative array of the services exposed by this datasource
+   * @return array
+   */
+  public function getServices()
+  {
+    $serviceMap = [];
+    foreach ($this->modelTypes() as $modelType) {
+      $serviceMap[$modelType] = [
+        'service' => $this->getServiceName($modelType)
+      ];
+    }
+    return $serviceMap;
   }
 
   /**

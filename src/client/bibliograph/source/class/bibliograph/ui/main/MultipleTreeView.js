@@ -42,6 +42,17 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
     }
   },
   
+  properties: {
+    /**
+     * Whether the tree is editable
+     */
+    editable: {
+      check: "Boolean",
+      init: true,
+      event: "changeEditable"
+    }
+  },
+  
   construct: function () {
     this.base(arguments);
     this.setServiceName("folder");
@@ -74,20 +85,18 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
       this.bindState(this.permissions.move_any_folder, this, "enableDragDrop");
       this.setDebugDragSession(qx.core.Environment.get("qx.debug"));
     });
-    
-    // store
-    this.addListener("changeStore", e => {
-      let store = e.getData();
-      if (!store || store.__listenersAdded) {
-        return;
-      }
-      store.__listenersAdded = true;
-      store.bind("editable", this, "tree.editable");
+  
+    // datasource
+    let dsStore = bibliograph.store.Datasources.getInstance();
+    dsStore.bind("selected.services.folder.service", this, "serviceName");
+    dsStore.bind("selected.readOnly", this, "editable", {
+      converter: v => !v
     });
     
     // events
     this.addListener("loading", () => this._isWaiting(true));
     this.addListener("loaded", () => this._isWaiting(false));
+   
     // connect server messages with handlers
     let messages = bibliograph.ui.main.MultipleTreeView.messages;
     bus.subscribe(messages.UPDATE, this._onUpdateNode, this);
@@ -111,14 +120,14 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
     permissions: {
       add_any_folder: {
         aliasOf: "folder.add",
-        condition: tree => tree.isEditable()
+        condition: self => self.isEditable()
       },
       add_child_folder : {
         depends: "folder.add",
         updateEvent : "changeSelectedNode",
-        condition : tree =>
-          tree.getSelectedNode() !== null &&
-          tree.getSelectedNode().data.type !== "virtual"
+        condition : self =>
+          self.getSelectedNode() !== null &&
+          self.getSelectedNode().data.type !== "virtual"
       },
       save_search : {
         depends: "folder.add",
@@ -132,50 +141,50 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
       remove_folder : {
         depends: "folder.remove",
         updateEvent : "changeSelectedNode",
-        condition : tree =>
-          tree.isEditable() &&
-          tree.getSelectedNode() !== null &&
-          tree.getSelectedNode().data.type !== "virtual" &&
-          tree.getSelectedNode().data.type !== "trash"
+        condition : self =>
+          self.isEditable() &&
+          self.getSelectedNode() !== null &&
+          self.getSelectedNode().data.type !== "virtual" &&
+          self.getSelectedNode().data.type !== "trash"
       },
       edit_folder : {
         depends : "folder.edit",
         updateEvent : "changeSelectedNode",
-        condition : tree =>
-          tree.isEditable() &&
-          tree.getSelectedNode() !== null &&
-          tree.getSelectedNode().data.type !== "virtual"
+        condition : self =>
+          self.isEditable() &&
+          self.getSelectedNode() !== null &&
+          self.getSelectedNode().data.type !== "virtual"
       },
       move_any_folder: {
         aliasOf : "folder.move",
-        condition: tree => tree.isEditable()
+        condition: self => self.isEditable()
       },
       move_selected_folder : {
         depends : "folder.move",
         updateEvent : "changeSelectedNode",
-        condition : tree =>
-          tree.getSelectedNode() !== null &&
-          tree.getSelectedNode().data.type !== "virtual" &&
-          tree.getSelectedNode().data.type !== "trash"
+        condition : self =>
+          self.getSelectedNode() !== null &&
+          self.getSelectedNode().data.type !== "virtual" &&
+          self.getSelectedNode().data.type !== "trash"
       },
       copy_any_folder: {
         aliasOf : "folder.copy",
-        condition: tree => tree.isEditable()
+        condition: self => self.isEditable()
       },
       copy_selected_folder : {
         depends : "folder.copy",
         updateEvent : "changeSelectedNode",
-        condition : tree =>
-          tree.getSelectedNode() !== null &&
-          tree.getSelectedNode().data.type !== "virtual"
+        condition : self =>
+          self.getSelectedNode() !== null &&
+          self.getSelectedNode().data.type !== "virtual"
       },
       paste_folder : {
         depends : "folder.copy",
         updateEvent : ["changeSelectedNode", "app/clipboard:changeData"],
         condition : [
-          tree =>
-            tree.getSelectedNode() !== null &&
-            tree.getSelectedNode().data.type !== "virtual" &&
+          self =>
+            self.getSelectedNode() !== null &&
+            self.getSelectedNode().data.type !== "virtual" &&
             qx.core.Init.getApplication,
           clipboard => Boolean(clipboard.getData(bibliograph.Application.mime_types.folder))
         ]
@@ -183,17 +192,17 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
       change_position : {
         depends : "folder.move",
         updateEvent : "changeSelectedNode",
-        condition : tree =>
-          tree.getSelectedNode() !== null &&
-          tree.getSelectedNode().data.type !== "virtual"
+        condition : self =>
+          self.getSelectedNode() !== null &&
+          self.getSelectedNode().data.type !== "virtual"
       },
       empty_trash : {
         depends : "trash.empty",
         updateEvent : "changeSelectedNode",
-        condition : tree =>
-          tree.isEditable() &&
-          tree.getSelectedNode() &&
-          tree.getSelectedNode().data.type === "trash"
+        condition : self =>
+          self.isEditable() &&
+          self.getSelectedNode() &&
+          self.getSelectedNode().data.type === "trash"
       }
     },
     
@@ -323,7 +332,7 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
       // context menu
       this.addListener("changeTree", e => {
         let tree = e.getData();
-        if (!tree || !tree.isEditable()) {
+        if (!tree) {
          return;
         }
         tree.setContextMenuHandler(0, (col, row, table, dataModel, contextMenu) => {

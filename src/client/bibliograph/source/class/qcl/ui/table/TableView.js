@@ -171,7 +171,8 @@ qx.Class.define("qcl.ui.table.TableView",
     serviceName:
     {
       check: "String",
-      nullable: true
+      nullable: true,
+      event: "changeServiceName"
     },
     
     /**

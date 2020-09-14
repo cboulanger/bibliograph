@@ -3,7 +3,7 @@
 namespace app\modules\converters\controllers;
 use app\controllers\traits\AuthTrait;
 use app\controllers\traits\DatasourceTrait;
-use app\controllers\traits\TableTrait;
+use app\controllers\traits\TableControllerTrait;
 use app\models\Datasource;
 use app\models\ExportFormat;
 use app\models\Folder;
@@ -18,7 +18,7 @@ class DownloadController extends \yii\web\Controller
 {
   use AuthTrait;
   use DatasourceTrait;
-  use TableTrait;
+  use TableControllerTrait;
 
   /**
    * FIXME Fix to suppress Error, probably very bad.

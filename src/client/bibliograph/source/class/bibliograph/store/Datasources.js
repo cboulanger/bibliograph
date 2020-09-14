@@ -30,6 +30,24 @@ qx.Class.define("bibliograph.store.Datasources",
     let bus = qx.event.message.Bus.getInstance();
     bus.subscribe("datasources.reload", this.reload, this);
     bus.subscribe(bibliograph.AccessManager.messages.AFTER_LOGIN, () => this.load());
+    this.getApplication().addListener("changeDatasource", async e => {
+      let datasourceId = e.getData();
+      if (!datasourceId) {
+        return;
+      }
+      await new Promise(resolve => {
+        this.getModel() ? resolve() : this.addListenerOnce("changeModel", resolve);
+      });
+      this.setSelected(this.getById(datasourceId));
+    });
+  },
+  
+  properties: {
+    selected: {
+      check: "qx.core.Object",
+      event: "changeSelected",
+      nullable: true
+    }
   },
   
   members : {
@@ -77,6 +95,15 @@ qx.Class.define("bibliograph.store.Datasources",
         app.setDatasourceLabel(app.getConfigManager().getKey("application.title"));
         qx.core.Id.getQxObject("windows/datasources").open();
       }
+    },
+  
+    /**
+     * Returns the datasource data
+     * @param {String }datasourceId
+     * @return {Object|undefined}
+     */
+    getById(datasourceId) {
+      return this.getModel().toArray().find(model => model.getValue() === datasourceId);
     }
   }
 });

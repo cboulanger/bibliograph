@@ -112,6 +112,7 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
      */
     controller: {
       check: "qx.core.Object",
+      event: "changeController",
       nullable: true
     },
     
@@ -120,6 +121,7 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
      */
     store: {
       check: "qx.core.Object",
+      event: "changeStore",
       nullable: true
     },
     
@@ -129,7 +131,8 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
      */
     serviceName: {
       check: "String",
-      nullable: false
+      nullable: false,
+      event: "changeServiceName"
     },
     
     /**
@@ -237,15 +240,6 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
     statusLabel : {
       check: "qx.ui.basic.Label",
       nullable : true
-    },
-  
-    /**
-     * This property is used by extending classes, does not have
-     * an effect by itself.
-     */
-    editable: {
-      check: "Boolean",
-      init: true
     }
   },
   

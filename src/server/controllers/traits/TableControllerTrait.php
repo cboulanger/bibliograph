@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: cboulanger
- * Date: 18.04.18
- * Time: 23:48
- */
 
 namespace app\controllers\traits;
 
@@ -16,8 +10,57 @@ use Yii;
 use yii\db\ActiveQuery;
 use yii\db\Expression;
 
-trait TableTrait
+trait TableControllerTrait
 {
+
+  /**
+   * Returns the layout of the columns of the table displaying
+   * the records
+   *
+   * @param $datasourceName
+   * @param null|string $modelClassType
+   */
+  public function actionTableLayout($datasourceName, $modelClassType = null)
+  {
+    return [
+      'columnLayout' => [
+        'id' => [
+          'header' => "ID",
+          'width' => 50,
+          'visible' => false
+        ],
+//        'markedDeleted'	=> array(
+//        	'header' 		=> " ",
+//        	'width'	 		=> 16
+//        ),
+        'creator' => [
+          'header' => Yii::t('app', "Creator"),
+          'width' => "1*"
+        ],
+        'year' => [
+          'header' => Yii::t('app', "Year"),
+          'width' => 50
+        ],
+        'title' => [
+          'header' => Yii::t('app', "Title"),
+          'width' => "3*"
+        ]
+      ],
+      /**
+       * This will feed back into addQueryConditions()
+       * @todo implement differently
+       */
+      'queryData' => [
+        'relation' => [
+          'name' => "folders",
+          'foreignId' => 'FolderId'
+        ],
+        'orderBy' => "author,year,title",
+      ],
+      'addItems' => $this->getReferenceTypeListData($datasourceName)
+    ];
+  }
+
   /**
    * Returns count of rows that will be retrieved when executing the current
    * query.
@@ -34,7 +77,7 @@ trait TableTrait
     $modelClass::setDatasource($clientQueryData->datasource);
 
     // add additional conditions from the client query
-    $query = $this->transformClientQuery( $clientQueryData, $modelClass);
+    $query = $this->transformClientQuery($clientQueryData, $modelClass);
 
     //Yii::info($query->createCommand()->getRawSql());
 
@@ -55,16 +98,16 @@ trait TableTrait
    * param object $queryData Data to construct the query
    * @throws \InvalidArgumentException
    * return array Array containing the keys
-   *                int     requestId   The request id identifying the request (mandatory)
-   *                array   rowData     The actual row data (mandatory)
-   *                string  statusText  Optional text to display in a status bar
+   *                int     requestId   The request id identifying the request
+   *   (mandatory) array   rowData     The actual row data (mandatory) string
+   *   statusText  Optional text to display in a status bar
    */
   function actionRowData(int $firstRow, int $lastRow, int $requestId, \stdClass $clientQueryData)
   {
     /** @var Reference $modelClass */
     $modelClass = $this->getModelClass($clientQueryData->datasource, $clientQueryData->modelType);
     /** @var ActiveQuery $query */
-    $query = $this->transformClientQuery( $clientQueryData, $modelClass)
+    $query = $this->transformClientQuery($clientQueryData, $modelClass)
       ->orderBy($clientQueryData->query->orderBy)
       ->offset($firstRow)
       ->limit($lastRow - $firstRow + 1);
@@ -170,8 +213,8 @@ trait TableTrait
    *     "cql" : "..."
    *    }
    *
-   * The cql string can be localized, i.e. the indexes and operators can be in the
-   * current application locale
+   * The cql string can be localized, i.e. the indexes and operators can be in
+   * the current application locale
    *
    * @param \stdClass $clientQueryData
    *    The query data object from the json-rpc request
@@ -180,7 +223,8 @@ trait TableTrait
    * @return \yii\db\ActiveQuery
    * @throws \InvalidArgumentException
    * @todo completely rewrite this
-   * @todo 'properties' should be 'columns' or 'fields', 'cql' should be 'input'/'search' or similar
+   * @todo 'properties' should be 'columns' or 'fields', 'cql' should be
+   *   'input'/'search' or similar
    */
   protected function transformClientQuery(\stdClass $clientQueryData, string $modelClass)
   {
@@ -188,11 +232,11 @@ trait TableTrait
     $datasourceName = $clientQueryData->datasource;
 
     // params validation
-    if( ! class_exists($modelClass) ){
+    if (!class_exists($modelClass)) {
       throw new \InvalidArgumentException("Class '$modelClass' does not exist.");
     }
     // @todo doesn't work! use interface instead of base class
-    if( ! is_subclass_of($modelClass,  Reference::class)){
+    if (!is_subclass_of($modelClass, Reference::class)) {
       //throw new \InvalidArgumentException("Class '$modelClass' must be an subclass of " . Reference::class);
     }
 
@@ -204,10 +248,10 @@ trait TableTrait
     }
     // "Creator" column coalesces author and editor data
     $hasCreatorProperty = array_search("creator", $clientQuery->properties) !== false;
-    if( $hasCreatorProperty ){
+    if ($hasCreatorProperty) {
       $clientQuery->properties = array_merge(
-        ['author','editor',new Expression('coalesce(`author`,`editor`) as creator')],
-        array_diff($clientQuery->properties,['creator'])
+        ['author', 'editor', new Expression('coalesce(`author`,`editor`) as creator')],
+        array_diff($clientQuery->properties, ['creator'])
       );
     }
 
@@ -215,7 +259,7 @@ trait TableTrait
     if (isset($clientQuery->relation)) {
 
       // FIXME hack to support virtual folders
-      if( $clientQuery->relation->id > 9007199254740991 - 10000 ){
+      if ($clientQuery->relation->id > 9007199254740991 - 10000) {
         return $modelClass::find()->where(new Expression("TRUE = FALSE"));
       }
 
@@ -228,7 +272,7 @@ trait TableTrait
       $activeQuery = $modelClass::find()
         ->select($columns)
         ->alias('references')
-        ->joinWith($clientQuery->relation->name,false)
+        ->joinWith($clientQuery->relation->name, false)
         ->onCondition([$clientQuery->relation->foreignId => $clientQuery->relation->id]);
 
       //Yii::debug($activeQuery->createCommand()->getRawSql());
@@ -237,9 +281,9 @@ trait TableTrait
     }
 
     // it's a freeform search query
-    if ( isset ( $clientQuery->cql ) ){
+    if (isset ($clientQuery->cql)) {
       // FIXME hack to support virtual folders
-      if( $clientQuery->cql && str_contains( $clientQuery->cql, "virtsub:") ){
+      if ($clientQuery->cql && str_contains($clientQuery->cql, "virtsub:")) {
         return $modelClass::find()->where(new Expression("TRUE = FALSE"));
       }
       $activeQuery = $this->createActiveQueryFromNaturalLanguageQuery(
@@ -252,62 +296,5 @@ trait TableTrait
       return $activeQuery;
     }
     throw new UserErrorException(Yii::t('app', "No recognized query format in request."));
-  }
-
-  /**
-   * Given a natural language query, return the Yii ActiveQuery instance that satisfies the query terms
-   * @param string $modelClass
-   * @param string $datasourceName
-   * @param string $naturalLanguageQuery
-   * @param string|array $columns
-   * @return ActiveQuery
-   * @todo rewrite this
-   * @todo modelClass can probably be determined by the datasource and be removed from params
-   */
-  protected function createActiveQueryFromNaturalLanguageQuery(
-    string $modelClass,
-    string $datasourceName,
-    string $naturalLanguageQuery,
-    $columns="*",
-    bool $debug = false,
-    bool $verbose = false)
-  {
-    // use the language that works/yields most hits
-    $languages=Yii::$app->utils->getLanguages();
-    $hits = 0;
-    $bestQuery = null;
-    foreach ($languages as $language) {
-      /** @var ActiveQuery $activeQuery */
-      $activeQuery = $modelClass::find()
-        ->select($columns)
-        ->where(['markedDeleted' => 0]);
-      $schema = Datasource::in($datasourceName,"reference")::getSchema();
-      $nlq = new NaturalLanguageQuery([
-        'query'     => $naturalLanguageQuery,
-        'schema'    => $schema,
-        'language'  => $language,
-        'verbose'   => $verbose
-      ]);
-      if ($debug) Yii::debug(">>> Translating query '$naturalLanguageQuery' from '$language'...", __METHOD__);
-      try {
-        $nlq->injectIntoYiiQuery($activeQuery);
-      } catch (\Exception $e) {
-        // error parsing the query
-        if ($debug) Yii::debug($e->getMessage(), __METHOD__);
-        $activeQuery->where("TRUE = FALSE");
-      }
-      try{
-        if ($debug) Yii::debug($activeQuery->createCommand()->rawSql, __METHOD__);
-        $h = $activeQuery->count();
-        if ($debug) Yii::debug("$h hits", __METHOD__);
-        if ( $h > $hits) {
-          $hits = $h;
-          $bestQuery = $activeQuery;
-        };
-      } catch (\Exception $e){
-        Yii::warning($e->getMessage());
-      }
-    }
-    return $bestQuery ? $bestQuery : $activeQuery;
   }
 }

@@ -217,7 +217,6 @@ qx.Mixin.define("qcl.access.MPermissions",
               eventName = eventName.substr(splitPos+1);
               let obj = qx.core.Id.getQxObject(objectId);
               // backwards compatibility to deprecated widget ids
-              // todo remove when all widget ids are gone
               if (!obj) {
                 obj = objectId === "app" ?
                   this.getApplication() :
@@ -243,14 +242,12 @@ qx.Mixin.define("qcl.access.MPermissions",
           let count=0;
           this._castToArray(permData.condition).forEach((fn, index) => {
             let instance = permissionUpdaters[index];
-            if (instance instanceof qx.core.Object) {
-              permission.addCondition(fn, instance);
-              count++;
-            } else if (qx.lang.Type.isArray(instance)) {
+            if (qx.lang.Type.isArray(instance)) {
               this.debug(` - Deferred adding of condition in context of object with object id '${instance[0]}'...`);
               permissionUpdaters[index].push(fn);
             } else {
-              this.error("Invalid instance data");
+              permission.addCondition(fn, instance || this);
+              count++;
             }
           });
           if (count) {
@@ -291,16 +288,19 @@ qx.Mixin.define("qcl.access.MPermissions",
               this.debug(` - (Finalize) Added update event listener '${eventName}' to object with widget id '${widgetId}'...`);
             } else if (elem.length === 4) {
               // condition
-              let [widgetId, eventName, permission, fn] = elem;
+              let [objectId, , permission, fn] = elem;
               let app = qx.core.Init.getApplication();
-              let instance = widgetId === "app" ? app : app.getWidgetById(widgetId);
+              let instance = objectId === "app" ? app : qx.core.Id.getQxObject(objectId);
               if (!instance) {
-                this.error(`Object with id '${widgetId}' does not exist.`);
+                instance = app.getWidgetById(objectId);
+              }
+              if (!instance) {
+                this.error(`Object with id '${objectId}' does not exist.`);
               }
               permission.addCondition(fn, instance);
-              this.debug(` - (Finalize) Added condition to permission '${permission.getNamedId()}' ('${widgetId}')...`);
+              this.debug(` - (Finalize) Added condition to permission '${permission.getNamedId()}' ('${objectId}')...`);
             } else {
-              this.error("Invalid instance data");
+              this.error(`Invalid permission updater for ${permissionName}`);
             }
           }
         });

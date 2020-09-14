@@ -39,7 +39,7 @@ class FolderController extends AppController implements ITreeController
 {
   use traits\FormTrait;
   use traits\FolderDataTrait;
-  use traits\TableTrait;
+  use traits\TableControllerTrait;
 
   /*
   ---------------------------------------------------------------------------

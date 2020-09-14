@@ -60,6 +60,13 @@ qx.Class.define("bibliograph.ui.main.TableView",
         converter : value => value > 0 ? ["move", "copy"] : ["copy"]
       });
     });
+  
+    // datasource
+    let dsStore = bibliograph.store.Datasources.getInstance();
+    dsStore.bind("selected.services.reference.service", this, "serviceName");
+    dsStore.bind("selected.readOnly", this, "editable", {
+      converter: v => !v
+    });
   },
 
   /*
@@ -77,8 +84,14 @@ qx.Class.define("bibliograph.ui.main.TableView",
       check: "qx.data.Array",
       nullable: true,
       event: "changeAddItems"
+    },
+    
+    editable: {
+      check: "Boolean",
+      init: true
     }
   },
+  
   members: {
     
     /*
@@ -95,12 +108,15 @@ qx.Class.define("bibliograph.ui.main.TableView",
         depends: "reference.add",
         updateEvent: [
           "changeAddItems",
-          "app/treeview:changeSelectedNode"
+          "folder-tree-panel/tree-view:changeSelectedNode"
         ],
         condition : [
-          self => self.getAddItems() !== null && self.getFolderId() > 0,
+          self =>
+            self.isEditable() &&
+            self.getAddItems() !== null &&
+            self.getFolderId() > 0,
           treeview => {
-            if (!treeview.getTree()) {
+            if (!treeview.getTree() || treeview.isEditable()) {
               return false;
             }
             let selection = treeview.getTree().getSelectedNodes();
@@ -114,46 +130,62 @@ qx.Class.define("bibliograph.ui.main.TableView",
       remove_selected_references : {
         depends: "reference.remove",
         updateEvent : "changeSelectedIds",
-        condition : self => self.getSelectedIds().length > 0
+        condition : self =>
+          self.isEditable() &&
+          self.getSelectedIds().length > 0
       },
       move_reference : {
-        aliasOf : "reference.move"
+        aliasOf : "reference.move",
+        condition: self => self.isEditable()
       },
       move_selected_references :{
         depends: "reference.move",
         updateEvent : "changeSelectedIds",
-        condition : self => self.getSelectedIds().length > 0 && self.getFolderId() > 0
+        condition : self =>
+          self.getSelectedIds().length > 0 &&
+          self.getFolderId() > 0
       },
       copy_selected_references :{
         depends: "reference.move",
         updateEvent : "changeSelectedIds",
-        condition : self => self.getSelectedIds().length > 0
+        condition : self =>
+          self.getSelectedIds().length > 0
       },
       edit_reference :{
         depends: "reference.edit",
         updateEvent : "changeSelectedIds",
-        condition : self => self.getSelectedIds().length > 0
+        condition : self =>
+          self.isEditable() &&
+          self.getSelectedIds().length > 0
       },
       batch_edit_reference :{
-        aliasOf: "reference.batchedit"
+        aliasOf: "reference.batchedit",
+        condition: self => self.isEditable()
       },
       export_references:{
-        aliasOf : "reference.export"
+        aliasOf : "reference.export",
+        condition: self => self.isEditable()
       },
       export_selected_references :{
         depends: "reference.export",
         updateEvent : "changeSelectedIds",
-        condition : self => self.getSelectedIds().length > 0
+        condition : self =>
+          self.isEditable() &&
+          self.getSelectedIds().length > 0
       },
       export_folder :{
         depends: "reference.export",
         updateEvent: "app/treeview:changeSelectedNode",
-        condition: treeview => treeview.getSelectedNode() !== null
+        condition: treeview =>
+          treeview.isEditable() &&
+          treeview.getSelectedNode() !== null
       },
       export_query :{
         depends: "reference.export",
         updateEvent: "changeQuery",
-        condition: self => Boolean(self.getQuery())
+        condition: self =>
+          self.isEditable() &&
+          Boolean(self.getQuery())
       }
     },
 
@@ -260,8 +292,7 @@ qx.Class.define("bibliograph.ui.main.TableView",
       exportQueryButton.addListener("execute", () => this.exportQuery());
       this.bindVisibility(this.permissions.export_query, exportQueryButton);
   
-  
-      // TODO reimplement as a plugin/module
+      
       // // Edit menu
       // let editButton = new qx.ui.menu.Button();
       // editButton.setLabel(this.tr('Edit references'));
