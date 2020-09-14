@@ -59,9 +59,10 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
     this.addListener("changeTree", e => {
       /** @var {qcl.ui.treevirtual.DragDropTree}  */
       let tree = e.getData();
-      if (!tree) {
-       return;
+      if (!tree || tree.__listenersAdded) {
+        return;
       }
+      tree.__listenersAdded = true;
       tree.setExcludeDragTypes(new qx.data.Array("trash", "top"));
       tree.setAllowDropTypes([
         ["folder", "*"],
@@ -73,6 +74,17 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
       this.bindState(this.permissions.move_any_folder, this, "enableDragDrop");
       this.setDebugDragSession(qx.core.Environment.get("qx.debug"));
     });
+    
+    // store
+    this.addListener("changeStore", e => {
+      let store = e.getData();
+      if (!store || store.__listenersAdded) {
+        return;
+      }
+      store.__listenersAdded = true;
+      store.bind("editable", this, "tree.editable");
+    });
+    
     // events
     this.addListener("loading", () => this._isWaiting(true));
     this.addListener("loaded", () => this._isWaiting(false));
@@ -98,7 +110,8 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
      */
     permissions: {
       add_any_folder: {
-        aliasOf: "folder.add"
+        aliasOf: "folder.add",
+        condition: tree => tree.isEditable()
       },
       add_child_folder : {
         depends: "folder.add",
@@ -110,7 +123,8 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
       save_search : {
         depends: "folder.add",
         updateEvent : "app:changeQuery",
-        condition : app => Boolean(app.getQuery())
+        condition :
+            app => Boolean(app.getQuery())
       },
       add_top_folder : {
         depends: "folder.add"
@@ -119,6 +133,7 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
         depends: "folder.remove",
         updateEvent : "changeSelectedNode",
         condition : tree =>
+          tree.isEditable() &&
           tree.getSelectedNode() !== null &&
           tree.getSelectedNode().data.type !== "virtual" &&
           tree.getSelectedNode().data.type !== "trash"
@@ -127,11 +142,13 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
         depends : "folder.edit",
         updateEvent : "changeSelectedNode",
         condition : tree =>
+          tree.isEditable() &&
           tree.getSelectedNode() !== null &&
           tree.getSelectedNode().data.type !== "virtual"
       },
       move_any_folder: {
-        aliasOf : "folder.move"
+        aliasOf : "folder.move",
+        condition: tree => tree.isEditable()
       },
       move_selected_folder : {
         depends : "folder.move",
@@ -142,10 +159,11 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
           tree.getSelectedNode().data.type !== "trash"
       },
       copy_any_folder: {
-        aliasOf : "folder.copy" // TODO create new permission folder.copy
+        aliasOf : "folder.copy",
+        condition: tree => tree.isEditable()
       },
       copy_selected_folder : {
-        depends : "folder.copy", // TODO create new permission folder.copy
+        depends : "folder.copy",
         updateEvent : "changeSelectedNode",
         condition : tree =>
           tree.getSelectedNode() !== null &&
@@ -173,6 +191,7 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
         depends : "trash.empty",
         updateEvent : "changeSelectedNode",
         condition : tree =>
+          tree.isEditable() &&
           tree.getSelectedNode() &&
           tree.getSelectedNode().data.type === "trash"
       }
@@ -181,6 +200,7 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
     //-------------------------------------------------------------------------
     //  USER INTERFACE
     //-------------------------------------------------------------------------
+    
     
     createAddFolderButton : function(menubar =false) {
       let button = menubar ?
@@ -303,7 +323,7 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
       // context menu
       this.addListener("changeTree", e => {
         let tree = e.getData();
-        if (!tree) {
+        if (!tree || !tree.isEditable()) {
          return;
         }
         tree.setContextMenuHandler(0, (col, row, table, dataModel, contextMenu) => {

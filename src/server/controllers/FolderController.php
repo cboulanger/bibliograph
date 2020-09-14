@@ -200,7 +200,8 @@ class FolderController extends AppController implements ITreeController
     //$this->addLostAndFound($orderedNodeData);
     return [
       'nodeData' => $orderedNodeData,
-      'statusText' => count($orderedNodeData) . " Folders loaded."
+      'statusText' => count($orderedNodeData) . " Folders loaded.",
+      'editable' => true
     ];
   }
 

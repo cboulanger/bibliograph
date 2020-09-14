@@ -233,4 +233,14 @@ class TestController extends AppController
       ->send();
     return $response->getHeaders()['Total-Results'][0];
   }
+
+  public function actionZoteroVersions() {
+    $api = new \Hedii\ZoteroApi\ZoteroApi($_SERVER['ZOTERO_API_KEY']);
+    return $api
+      ->user($_SERVER['ZOTERO_USER_ID'])
+      ->collections()
+      ->versions()
+      ->send()
+      ->getBody();
+  }
 }

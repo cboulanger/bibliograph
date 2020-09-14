@@ -132,10 +132,10 @@ class ReferenceController
    * Returns the layout of the columns of the table displaying
    * the records
    *
-   * @param $datasource
+   * @param $datasourceName
    * @param null|string $modelClassType
    */
-  public function actionTableLayout($datasource, $modelClassType = null)
+  public function actionTableLayout($datasourceName, $modelClassType = null)
   {
     return [
       'columnLayout' => [
@@ -172,7 +172,7 @@ class ReferenceController
         ],
         'orderBy' => "author,year,title",
       ],
-      'addItems' => $this->getReferenceTypeListData($datasource)
+      'addItems' => $this->getReferenceTypeListData($datasourceName)
     ];
   }
 

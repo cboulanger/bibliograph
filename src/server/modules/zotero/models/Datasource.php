@@ -40,12 +40,6 @@ class Datasource extends \app\models\Datasource
   static $description = "A proxy for a library hosted at zotero.org ";
 
   /**
-   * @var ZoteroApi
-   */
-  protected $zoteroApi;
-
-
-  /**
    * @inheritDoc
    * @return \lib\Module|\yii\base\Module|Module
    */
@@ -108,14 +102,13 @@ class Datasource extends \app\models\Datasource
   }
 
   /**
+   * This will alwas return a new object!
    * @return ZoteroApi
    */
   public function getZoteroApi() : ZoteroApi {
-    if (!$this->zoteroApi) {
-      $this->zoteroApi = new ZoteroApi($this->password);
-      $this->zoteroApi->setPath($this->database);
-    }
-    return $this->zoteroApi;
+    $zoteroApi = new ZoteroApi($this->password);
+    $zoteroApi->setPath($this->database);
+    return $zoteroApi;
   }
 
   /**

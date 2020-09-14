@@ -237,6 +237,15 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
     statusLabel : {
       check: "qx.ui.basic.Label",
       nullable : true
+    },
+  
+    /**
+     * This property is used by extending classes, does not have
+     * an effect by itself.
+     */
+    editable: {
+      check: "Boolean",
+      init: true
     }
   },
   
@@ -479,7 +488,7 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
      * @param doLoad {Boolean|undefined}
      * @todo rewrite
      */
-    _setupTree: function (datasource, doLoad) {
+    async _setupTree(datasource, doLoad) {
       //try{
       let loadData = false;
       if (datasource) {
@@ -494,7 +503,7 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
         this.setTree(ds.treeWidget);
         
         if (doLoad && loadData) {
-          this._loadTreeData(datasource, 0);
+          await this._loadTreeData(datasource, 0);
         }
       }
       //}catch(e){console.warn(e);}
@@ -502,7 +511,7 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
     
     /**
      * Retrieve tree data from the server, and synchronize the
-     * attached trees
+     * attached trees. Assumes that the tree is already setup
      * @param datasource {String}
      * @param nodeId {Integer}
      */
@@ -721,7 +730,7 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
     },
   
     /**
-     * Add a node
+     * Add a node or an array of nodes
      * @param {Object} data
      * @private
      */

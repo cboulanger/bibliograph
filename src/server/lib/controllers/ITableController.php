@@ -33,11 +33,11 @@ interface ITableController
    * the records
    *
    *
-   * @param $datasource
+   * @param $datasourceName
    * @param null|string $modelClassType
    * @return array ['columnLayout' => [], 'queryData' => [], 'addItens' => []]
    */
-  public function actionTableLayout($datasource, $modelClassType = null);
+  public function actionTableLayout($datasourceName, $modelClassType = null);
 
   /**
    * Returns count of rows that will be retrieved when executing the current

@@ -16,10 +16,10 @@ class ItemController
    * Returns the layout of the columns of the table displaying
    * the records
    *
-   * @param $datasource
+   * @param $datasourceName
    * @param null|string $modelClassType
    */
-  public function actionTableLayout($datasource, $modelClassType = null){
+  public function actionTableLayout($datasourceName, $modelClassType = null){
     return [
       'columnLayout' => [
         'id' => [
