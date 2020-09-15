@@ -43,12 +43,12 @@ interface ITableController
    * Returns count of rows that will be retrieved when executing the current
    * query.
    *
-   * param object $queryData data to construct the query. Needs at least the
+   * @param object $queryData data to construct the query. Needs at least the
    * a string property "datasource" with the name of datasource and a property
    * "modelType" with the type of the model.
    * @throws \InvalidArgumentException
    */
-  public function actionRowCount(\stdClass $clientQueryData);
+  public function actionRowCount(\stdClass $queryData);
 
  /**
   * Returns row data executing a constructed query
@@ -56,12 +56,12 @@ interface ITableController
   * @param int $firstRow First row of queried data
   * @param int $lastRow Last row of queried data
   * @param int $requestId Request id
-  * param object $queryData Data to construct the query
+  * @param object $queryData Data to construct the query
   * @throws \InvalidArgumentException
   * return array Array containing the keys
   *                int     requestId   The request id identifying the request (mandatory)
   *                array   rowData     The actual row data (mandatory)
   *                string  statusText  Optional text to display in a status bar
   */
-  function actionRowData(int $firstRow, int $lastRow, int $requestId, \stdClass $clientQueryData);
+  function actionRowData(int $firstRow, int $lastRow, int $requestId, \stdClass $queryData);
 }

@@ -202,12 +202,12 @@ qx.Class.define("qcl.data.controller.TreeVirtual",
        */
       nodeData.forEach(function (node) {
         let serverNodeId = node.data.id;
-        if (!qx.lang.Type.isNumber(serverNodeId)) {
-          throw new Error("Missing  or invalid server node id in node data.");
+        if (serverNodeId === undefined) {
+          throw new Error("Missing node id in node data.");
         }
         let serverParentId = node.data.parentId;
-        if (!qx.lang.Type.isNumber(serverParentId)) {
-          throw new Error("Missing or invalid server parent node id in node data.");
+        if (serverParentId === undefined) {
+          throw new Error("Missing node id in node data.");
         }
         
         let parentNodeId = this.__nodeIdMap[serverParentId];

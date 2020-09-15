@@ -33,6 +33,11 @@ class CollectionController
    */
   static $modelClass = Collection::class;
 
+  const CACHE_VERSIONS = "versions";
+  const CACHE_NODES = "nodes";
+  const CACHE_COLLECTIONS = "collections";
+  const CACHE_KEYS2IDS = "keys2ids";
+
   /*
    ---------------------------------------------------------------------------
       INTERFACE ITreeController
@@ -66,7 +71,7 @@ class CollectionController
    */
   protected function nodeCount(string $datasourceName, $parentKey=null) {
     $api = $this->getZoteroApi($datasourceName);
-    $response = $api->collections($parentKey)->limit(1)->send();
+    $response = $api->collections()->limit(1)->send();
     return (int) $response->getHeaders()['Total-Results'][0];
   }
 
@@ -74,28 +79,30 @@ class CollectionController
    * Returns the number of children of a node with the given id
    * in the given datasource.
    *
-   * @param $datasource
-   * @param $nodeId
+   * @param string $datasourceId
+   * @param string|int $nodeId
    * @param mixed|null $options Optional data, for example, when nodes
    *   should be filtered by a certain criteria
-   * @return array
+   * @return int
    */
-  function actionChildCount($datasource, $nodeId, $options = null)
+  function actionChildCount($datasourceId, $nodeId, $options = null)
   {
-    throw new \BadMethodCallException("Not implemented");
+    $api = $this->getZoteroApi($datasourceId);
+    $response = $api->collections($nodeId)->send();
+    return (int) $response->getBody()[0]['meta']['numCollections'];
   }
 
   /**
    * Returns all nodes of a tree in a given datasource. This won't work for
    * Zotero because at most 100 nodes will be sent by the server at once.
-   * @param string $datasourceNameName
+   * @param string $datasourceNameId
    * @param mixed|null $options Optional data, for example, when nodes
    *   should be filtered by a certain criteria
    * //return { nodeData : [], statusText: [] }.
    */
-  function actionLoad($datasourceNameName, $options = null)
+  function actionLoad($datasourceNameId, $options = null)
   {
-    $nodeDataList = $this->nodeDataList($datasourceNameName);
+    $nodeDataList = $this->nodeDataList($datasourceNameId);
     return [
       'nodeData' => $nodeDataList,
       'statusText' => count($nodeDataList) . " Folders",
@@ -107,29 +114,32 @@ class CollectionController
    * Given a datasource name and parent key, returns an array of Tree nodes
    * conformant to the SimpleTreeDataMaodel. The data is cached and reloaded
    * only if the version changed.
-   * @param $datasourceName
+   * @param string $datasourceId
    * @return array
    * @throws \lib\exceptions\UserErrorException
    */
-  protected function nodeDataList($datasourceName) {
+  protected function nodeDataList(string $datasourceId) {
     $versions =
-      $this->getZoteroApi($datasourceName)
+      $this->getZoteroApi($datasourceId)
       ->collections()
       ->versions()
       ->send()
       ->getBody();
 
-    $cachedVersions = Yii::$app->cache->get("zotero-$datasourceName-versions");
-    $cachedNodeDataList = Yii::$app->cache->get("zotero-$datasourceName-nodes");
-    $cachedCollections = Yii::$app->cache->get("zotero-$datasourceName-collections");
+    $cachedVersions = self::getCached(self::CACHE_VERSIONS, $datasourceId);
+    $cachedNodeDataList = self::getCached(self::CACHE_NODES, $datasourceId);
+    $cachedCollections = self::getCached(self::CACHE_COLLECTIONS, $datasourceId);
 
     // if versions changed,invalidate cache
-    $countDiff = count(array_diff_assoc($versions, $cachedVersions));
-    if (is_array($cachedVersions) and $countDiff > 0) {
-      Yii::debug("Invalidating cache since $countDiff collections have changed.");
-      $cachedVersions = null;
-      $cachedCollections = null;
-      $cachedNodeDataList = null;
+    if (count($cachedVersions)) {
+      $countDiff = count(array_diff_assoc($versions, $cachedVersions));
+      if (is_array($cachedVersions) and $countDiff > 0) {
+        Yii::debug("Invalidating cache since $countDiff collections have changed.");
+        $cachedVersions = null;
+        $cachedCollections = null;
+        $cachedNodeDataList = null;
+        self::deleteCached(self::CACHE_KEYS2IDS, $datasourceId);
+      }
     }
 
     if (is_array($cachedNodeDataList)) {
@@ -142,7 +152,7 @@ class CollectionController
       $count = 0;
       do {
         $newCollections =
-          $this->getZoteroApi($datasourceName)
+          $this->getZoteroApi($datasourceId)
             ->collections()
             ->start($count)
             ->limit(100)
@@ -155,7 +165,7 @@ class CollectionController
         $count += count($newCollections);
         Yii::debug("Retrieved $count of $nodeCount collections...");
       } while (count($collections) < $nodeCount);
-      Yii::$app->cache->set("zotero-$datasourceName-collections", $collections);
+      self::setCached(self::CACHE_COLLECTIONS, $datasourceId, $collections);
     } else {
       Yii::debug("Using cached collection data...");
       $collections = $cachedCollections;
@@ -165,14 +175,12 @@ class CollectionController
     $parents= [];
     foreach ($collections as $collection) {
       $parentKey = $collection['data']['parentCollection'];
-      $parentNodeId = $this->getNodeIdFromKey($parentKey);
-      $parents[$parentNodeId][] = $collection;
+      $parents[$parentKey][] = $collection;
     }
     // transform into simple tree model, starting with the root node
     $cachedNodeDataList = [];
-    $createChildNodes = function($parentKey) use (&$parents, $datasourceName, &$createChildNodes, &$cachedNodeDataList) {
-      $parentNodeId = $this->getNodeIdFromKey($parentKey);
-      $children = $parents[$parentNodeId];
+    $createChildNodes = function($parentKey) use (&$parents, $datasourceId, &$createChildNodes, &$cachedNodeDataList) {
+      $children = $parents[$parentKey];
       // sort by name
       usort($children, function ($a, $b) {
         $an = $a['data']['name'];
@@ -182,7 +190,7 @@ class CollectionController
         return strcmp($an, $bn);
       });
       foreach ($children as $child) {
-        $cachedNodeDataList[] = $this->nodeData($child, $datasourceName);
+        $cachedNodeDataList[] = $this->nodeData($child, $datasourceId);
       }
       foreach ($children as $child) {
         $childCount = $child['meta']['numCollections'];
@@ -193,8 +201,8 @@ class CollectionController
       }
     };
     $createChildNodes(0);
-    Yii::$app->cache->set("zotero-$datasourceName-versions", $versions);
-    Yii::$app->cache->set("zotero-$datasourceName-nodes", $cachedNodeDataList);
+    self::setCached(self::CACHE_VERSIONS, $datasourceId, $versions);
+    self::setCached(self::CACHE_NODES, $datasourceId, $cachedNodeDataList);
     return $cachedNodeDataList;
   }
 
@@ -205,7 +213,7 @@ class CollectionController
    * @return int
    */
   protected function getNodeIdFromKey($key) {
-    static $map=[];
+    $map=[];
     static $index=0;
     if (!$key) return 0;
     if (!isset($map[$key])) {
@@ -230,8 +238,8 @@ class CollectionController
       'columnData'      => [ null, $data['meta']['numItems'] ? $data['meta']['numItems'] : null ],
       'data'            => [
         'type'            => "folder",
-        'id'              => $this->getNodeIdFromKey($data['data']['key']),
-        'parentId'        => $this->getNodeIdFromKey($data['data']['parentCollection']),
+        'id'              => $data['data']['key'],
+        'parentId'        => $data['data']['parentCollection'],
         'query'           => null,
         'public'          => true,
         'owner'           => null,

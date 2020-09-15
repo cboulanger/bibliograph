@@ -43,23 +43,23 @@ interface ITreeController
    * Returns the number of children of a node with the given id
    * in the given datasource.
    *
-   * @param $datasource
-   * @param $nodeId
+   * @param string $datasourceId
+   * @param string/int $nodeId
    * @param mixed|null $options Optional data, for example, when nodes
    *   should be filtered by a certain criteria
    * @return array
    */
-  function actionChildCount($datasource, $nodeId, $options = null);
+  function actionChildCount($datasourceId, $nodeId, $options = null);
 
 
   /**
    * Returns all nodes of a tree in a given datasource
-   * @param string $datasourceName
+   * @param string $datasourceId
    * @param mixed|null $options Optional data, for example, when nodes
    *   should be filtered by a certain criteria
    * //return { nodeData : [], statusText: [] }.
    */
-  function actionLoad($datasourceName, $options = null);
+  function actionLoad($datasourceId, $options = null);
 
 //  /**
 //   * Returns the data of child nodes of a branch ordered by the order field

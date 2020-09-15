@@ -11,8 +11,6 @@ interface IItemController {
    * @param $arg4
    * @return array
    * @throws \InvalidArgumentException
-   *
-   * @todo: this method is called with different signatures!
    */
   function actionItem($datasource, $arg2, $arg3 = null, $arg4 = null);
 

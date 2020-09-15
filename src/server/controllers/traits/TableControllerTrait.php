@@ -65,19 +65,19 @@ trait TableControllerTrait
    * Returns count of rows that will be retrieved when executing the current
    * query.
    *
-   * param object $queryData data to construct the query. Needs at least the
+   * @param object $queryData data to construct the query. Needs at least the
    * a string property "datasource" with the name of datasource and a property
    * "modelType" with the type of the model.
    * @throws \InvalidArgumentException
    */
-  public function actionRowCount(\stdClass $clientQueryData)
+  public function actionRowCount(\stdClass $queryData)
   {
     /** @var Reference $modelClass */
-    $modelClass = $this->getModelClass($clientQueryData->datasource, $clientQueryData->modelType);
-    $modelClass::setDatasource($clientQueryData->datasource);
+    $modelClass = $this->getModelClass($queryData->datasource, $queryData->modelType);
+    $modelClass::setDatasource($queryData->datasource);
 
     // add additional conditions from the client query
-    $query = $this->transformClientQuery($clientQueryData, $modelClass);
+    $query = $this->transformClientQuery($queryData, $modelClass);
 
     //Yii::info($query->createCommand()->getRawSql());
 
@@ -95,20 +95,20 @@ trait TableControllerTrait
    * @param int $firstRow First row of queried data
    * @param int $lastRow Last row of queried data
    * @param int $requestId Request id
-   * param object $queryData Data to construct the query
+   * @param object $queryData Data to construct the query
    * @throws \InvalidArgumentException
    * return array Array containing the keys
    *                int     requestId   The request id identifying the request
    *   (mandatory) array   rowData     The actual row data (mandatory) string
    *   statusText  Optional text to display in a status bar
    */
-  function actionRowData(int $firstRow, int $lastRow, int $requestId, \stdClass $clientQueryData)
+  function actionRowData(int $firstRow, int $lastRow, int $requestId, \stdClass $queryData)
   {
     /** @var Reference $modelClass */
-    $modelClass = $this->getModelClass($clientQueryData->datasource, $clientQueryData->modelType);
+    $modelClass = $this->getModelClass($queryData->datasource, $queryData->modelType);
     /** @var ActiveQuery $query */
-    $query = $this->transformClientQuery($clientQueryData, $modelClass)
-      ->orderBy($clientQueryData->query->orderBy)
+    $query = $this->transformClientQuery($queryData, $modelClass)
+      ->orderBy($queryData->query->orderBy)
       ->offset($firstRow)
       ->limit($lastRow - $firstRow + 1);
     //Yii::info($query->createCommand()->getRawSql());

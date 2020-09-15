@@ -2,7 +2,6 @@
 
 namespace app\modules\zotero\controllers;
 
-use app\controllers\AppController;
 use lib\controllers\IItemController;
 use lib\controllers\ITableController;
 use Yii;
@@ -31,8 +30,8 @@ class ItemController
           'header' => Yii::t('app', "Creator"),
           'width' => "1*"
         ],
-        'year' => [
-          'header' => Yii::t('app', "Year"),
+        'date' => [
+          'header' => Yii::t('app', "Date"),
           'width' => 50
         ],
         'title' => [
@@ -40,6 +39,7 @@ class ItemController
           'width' => "3*"
         ]
       ],
+
       /**
        * This will feed back into addQueryConditions()
        * @todo implement differently
@@ -47,9 +47,9 @@ class ItemController
       'queryData' => [
         'relation' => [
           'name' => "collections",
-          'foreignId' => 'CollectionId'
+          'foreignId' => ''
         ],
-        'orderBy' => "author,year,title",
+        'orderBy' => "creator,date,title",
       ],
       'addItems' => []
     ];
@@ -59,13 +59,21 @@ class ItemController
    * Returns count of rows that will be retrieved when executing the current
    * query.
    *
-   * param object $queryData data to construct the query. Needs at least the
+   * @param object $queryData data to construct the query. Needs at least the
    * a string property "datasource" with the name of datasource and a property
    * "modelType" with the type of the model.
    * @throws \InvalidArgumentException
    */
-  public function actionRowCount(\stdClass $clientQueryData){
-    return 0;
+  public function actionRowCount(\stdClass $queryData){
+    $datasourceId = $queryData->datasource;
+    $collectionKey = $queryData->relation->id;
+    $api = $this->getZoteroApi($datasourceId);
+    $response = $api
+      ->collections($collectionKey)
+      ->items()
+      ->limit(1)
+      ->send();
+    return (int) $response->getHeaders()['Total-Results'][0];
   }
 
   /**
@@ -74,15 +82,36 @@ class ItemController
    * @param int $firstRow First row of queried data
    * @param int $lastRow Last row of queried data
    * @param int $requestId Request id
-   * param object $queryData Data to construct the query
+   * @param object $queryData Data to construct the query
    * @throws \InvalidArgumentException
    * return array Array containing the keys
    *                int     requestId   The request id identifying the request (mandatory)
    *                array   rowData     The actual row data (mandatory)
    *                string  statusText  Optional text to display in a status bar
    */
-  function actionRowData(int $firstRow, int $lastRow, int $requestId, \stdClass $clientQueryData){
-    return [];
+  function actionRowData(int $firstRow, int $lastRow, int $requestId, \stdClass $queryData){
+    $datasourceId = $queryData->datasource;
+    $collectionKey = $queryData->relation->id;
+    $api = $this->getZoteroApi($datasourceId);
+    $response = $api
+      ->collections($collectionKey)
+      ->items()
+      ->start($firstRow)
+      ->limit($lastRow-$firstRow+1)
+      ->send();
+    $items = $response->getBody();
+    $rowData = [];
+    foreach ($items as $item) {
+      $rowData[] = [
+        'creator' => json_encode($item['data']['creator']),
+        'date'    => $item['data']['date'],
+        'title'   => $item['data']['title']
+      ];
+    }
+    return [
+      'requestId' => $requestId,
+      'rowData'   => $rowData
+    ];
   }
 
   /**
