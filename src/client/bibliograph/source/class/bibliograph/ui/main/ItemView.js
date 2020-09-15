@@ -11,7 +11,7 @@
  * Authors: Christian Boulanger (cboulanger)
  *
  ******************************************************************************/
-/*global qx qcl*/
+
 /**
  * Base class for Table widgets
  */
@@ -107,7 +107,6 @@ qx.Class.define("bibliograph.ui.main.ItemView",
           }
         } else {
           this.warn("Invalid item view name " + value);
-          return;
         }
       } else {
         this.getItemViewStack().setSelection([]);
@@ -156,25 +155,21 @@ qx.Class.define("bibliograph.ui.main.ItemView",
      * already showing
      */
     toggleReferenceView : function() {
-      if (!this.getView() || this.getView() == "referenceEditor" || this.getView() == "tableView") {
+      if (!this.getView() || this.getView() === "referenceEditor" || this.getView() === "tableView") {
         this.showTabularView();
       }
     },
 
     /**
      * Shows the tabular view according to the given permissions
-     *
      */
     showTabularView : function() {
-      var type = this.getApplication().getModelType();
-      switch (type) {
-        default:
-          var allowEditReference =
-            qcl.access.PermissionManager.getInstance()
-              .create("reference.edit")
-.getState();
-          this.setView(allowEditReference ? "referenceEditor" : "tableView");
-      }
+      //var type = this.getApplication().getModelType();
+      const pm = qcl.access.PermissionManager.getInstance();
+      const ds = bibliograph.store.Datasources.getInstance();
+      let readOnlyDatasource = ds.getSelected() && ds.getSelected().getReadOnly();
+      let allowEditReference = pm.create("reference.edit").getState();
+      this.setView(allowEditReference && !readOnlyDatasource ? "referenceEditor" : "tableView");
     },
 
     /**

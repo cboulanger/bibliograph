@@ -90,14 +90,6 @@ qx.Class.define("bibliograph.Utils",
       return state ? "visible" : "excluded";
     },
     
-    utf8_encode : function (string) {
-      return unescape(encodeURIComponent(string));
-    },
-
-    utf8_decode : function(string) {
-      return decodeURIComponent(escape(string));
-    },
-    
     html_entity_decode : function(str) {
       var ta=document.createElement("textarea");
       ta.innerHTML=str.replace(/</g, "&lt;").replace(/>/g, "&gt;");

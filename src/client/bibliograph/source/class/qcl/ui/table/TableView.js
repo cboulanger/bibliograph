@@ -47,7 +47,7 @@ qx.Class.define("qcl.ui.table.TableView",
      */
     folderId:
     {
-      check: "Integer",
+      check: qcl.util.Check.isNumberOrStringNullable,
       nullable: true,
       event: "changeFolderId",
       apply: "_applyFolderId"
@@ -79,7 +79,7 @@ qx.Class.define("qcl.ui.table.TableView",
      */
     modelId:
     {
-      check: "Integer",
+      check: qcl.util.Check.isNumberOrStringNullable,
       nullable: true,
       event: "changeModelId",
       apply: "_applyModelId"
@@ -544,12 +544,16 @@ that corresponds to the id.
      * Loads table layout from the server
      */
     _loadTableLayout: async function () {
+      if (!this.getDatasource()) {
+        return;
+      }
       this.__loadingTableStructure = true;
       this.showMessage(this.tr("Loading table layout ..."));
       
       //console.log([this.getServiceName(), this.getDatasource(), this.getModelType() ]);
       let client = this.getApplication().getRpcClient(this.getServiceName());
-      let data = await client.send("table-layout", [this.getDatasource(), this.getModelType()]);
+      let params = [this.getDatasource(), this.getModelType()];
+      let data = await client.request("table-layout", params);
       if (data === null) {
         this.warn("Loading table layout failed.");
         this.__loadingTableStructure = false;

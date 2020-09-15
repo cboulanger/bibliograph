@@ -51,7 +51,7 @@ qx.Mixin.define("bibliograph.MApplicationState", {
      * The id of the currently displayed model record
      */
     modelId: {
-      check: "Integer",
+      check: qcl.util.Check.isNumberOrStringNullable,
       nullable: true,
       apply: "_applyModelId",
       event: "changeModelId"
@@ -71,7 +71,7 @@ qx.Mixin.define("bibliograph.MApplicationState", {
      * The current folder id
      */
     folderId: {
-      check: "Integer",
+      check: qcl.util.Check.isNumberOrStringNullable,
       nullable: true,
       apply: "_applyFolderId",
       event: "changeFolderId"
@@ -162,8 +162,8 @@ qx.Mixin.define("bibliograph.MApplicationState", {
       // @todo hide search box when no datasource is selected
       if (old) {
         qx.core.Id.getQxObject("folder-tree-panel/tree-view").clearSelection();
-        this.setModelId(0);
-        this.setFolderId(0);
+        this.setModelId(null);
+        this.setFolderId(null);
         this.setSelectedIds([]);
         this.setQuery(null);
       }
@@ -274,7 +274,7 @@ qx.Mixin.define("bibliograph.MApplicationState", {
      * @param old
      */
     _applyModelId: function (value, old) {
-      if (parseInt(value)) {
+      if (value) {
         this.getStateManager().setState("modelId", value);
       } else {
         this.getStateManager().removeState("modelId");

@@ -2,6 +2,7 @@
 
 namespace app\modules\zotero\controllers;
 
+use GuzzleHttp\Exception\ConnectException;
 use lib\controllers\IItemController;
 use lib\controllers\ITableController;
 use Yii;
@@ -26,7 +27,7 @@ class ItemController
           'width' => 50,
           'visible' => false
         ],
-        'creator' => [
+        'creators' => [
           'header' => Yii::t('app', "Creator"),
           'width' => "1*"
         ],
@@ -49,7 +50,7 @@ class ItemController
           'name' => "collections",
           'foreignId' => ''
         ],
-        'orderBy' => "creator,date,title",
+        'orderBy' => "creators,date,title",
       ],
       'addItems' => []
     ];
@@ -66,14 +67,22 @@ class ItemController
    */
   public function actionRowCount(\stdClass $queryData){
     $datasourceId = $queryData->datasource;
-    $collectionKey = $queryData->relation->id;
+    $collectionKey = $queryData->query->relation->id;
     $api = $this->getZoteroApi($datasourceId);
-    $response = $api
-      ->collections($collectionKey)
-      ->items()
-      ->limit(1)
-      ->send();
-    return (int) $response->getHeaders()['Total-Results'][0];
+    try {
+      $response = $api
+        ->collections($collectionKey)
+        ->items()
+        ->limit(1)
+        ->send();
+    } catch (ConnectException $e) {
+      $this->throwConnectionError();
+    }
+    $rowCount = (int) $response->getHeaders()['Total-Results'][0];
+    return [
+      "rowCount" => $rowCount,
+      'statusText' => Yii::t('app', "{numberOfRecords} records", ['numberOfRecords' => $rowCount])
+    ];
   }
 
   /**
@@ -91,21 +100,36 @@ class ItemController
    */
   function actionRowData(int $firstRow, int $lastRow, int $requestId, \stdClass $queryData){
     $datasourceId = $queryData->datasource;
-    $collectionKey = $queryData->relation->id;
+    $collectionKey = $queryData->query->relation->id;
     $api = $this->getZoteroApi($datasourceId);
-    $response = $api
-      ->collections($collectionKey)
-      ->items()
-      ->start($firstRow)
-      ->limit($lastRow-$firstRow+1)
-      ->send();
+    try {
+      $response = $api
+        ->collections($collectionKey)
+        ->items()
+        ->start($firstRow)
+        ->limit($lastRow-$firstRow+1)
+        ->send();
+    } catch (ConnectException $e) {
+      $this->throwConnectionError();
+    }
     $items = $response->getBody();
     $rowData = [];
     foreach ($items as $item) {
+      $creators = array_reduce(
+        $item['data']['creators'] ?? [],
+        function ($prev, $curr){
+          if (isset($curr['lastName']) && isset($curr['lastName'])) {
+            $name = $curr['lastName'] . ", " . $curr['lastName'];
+            return $prev ? "$prev; $name" : $name;
+          }
+          return "";
+        },
+        ""
+      );
       $rowData[] = [
-        'creator' => json_encode($item['data']['creator']),
-        'date'    => $item['data']['date'],
-        'title'   => $item['data']['title']
+        'creators' => $creators,
+        'date'     => $item['data']['date'] ?? "",
+        'title'    => $item['data']['title'] ?? ""
       ];
     }
     return [
@@ -116,15 +140,13 @@ class ItemController
 
   /**
    * Returns the requested or all accessible properties of a reference
-   * @param string $datasource
-   * @param $arg2 if numeric, the id of the reference
-   * @param $arg3
-   * @param $arg4
+   * @param string $datasourceId
+   * @param string $arg2 the id of the reference
    * @return array
    * @throws \InvalidArgumentException
    */
-  function actionItem($datasource, $arg2, $arg3 = null, $arg4 = null){
-    throw new \BadMethodCallException("Editing Zotero Items not implemented.");
+  function actionItem($datasourceId, $arg2, $arg3 = null, $arg4 = null){
+    throw new \BadMethodCallException("Not implemented");
   }
 
   /**

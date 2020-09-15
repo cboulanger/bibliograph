@@ -4,6 +4,7 @@ namespace app\modules\zotero\controllers;
 
 use app\controllers\AppController;
 use Hedii\ZoteroApi\ZoteroApi;
+use lib\exceptions\UserErrorException;
 use Yii;
 
 abstract class Controller extends AppController {
@@ -47,5 +48,9 @@ abstract class Controller extends AppController {
    */
   protected function getZoteroApi(string $datasourceName) : ZoteroApi{
     return $this->datasource($datasourceName)->zoteroApi;
+  }
+
+  protected function throwConnectionError() {
+    throw new UserErrorException(Yii::t("zotero", "Cannot connect to Zotero server."));
   }
 }

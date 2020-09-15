@@ -5,14 +5,14 @@ namespace lib\controllers;
 interface IItemController {
   /**
    * Returns the requested or all accessible properties of a reference
-   * @param string $datasource
-   * @param $arg2 if numeric, the id of the reference
-   * @param $arg3
-   * @param $arg4
+   * @param string $datasourceId
+   * @param mixed $arg2
+   * @param mixed $arg3
+   * @param mixed $arg4
    * @return array
    * @throws \InvalidArgumentException
    */
-  function actionItem($datasource, $arg2, $arg3 = null, $arg4 = null);
+  function actionItem($datasourceId, $arg2, $arg3 = null, $arg4 = null);
 
   /**
    * Returns a HTML table with the reference data

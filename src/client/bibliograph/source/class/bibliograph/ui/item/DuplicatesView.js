@@ -40,24 +40,12 @@ qx.Class.define("bibliograph.ui.item.DuplicatesView",
       event : "changeNumberOfDuplicates"
     }
   },
-
-  /*
-   *****************************************************************************
-   CONSTRUCTOR
-   *****************************************************************************
-   */
-
-  construct : function()
-  {
+  
+  construct : function() {
     this.base(arguments);
-    qx.event.message.Bus.subscribe("reference.changeData",this.reloadData, this);
+    qx.event.message.Bus.subscribe("reference.changeData", this.reloadData, this);
   },
-
-  /*
-   *****************************************************************************
-   MEMBERS
-   *****************************************************************************
-   */
+  
   members :
   {
     duplicatesTable : null,
@@ -68,11 +56,9 @@ qx.Class.define("bibliograph.ui.item.DuplicatesView",
      *
      * @return {void}
      */
-    _on_appear : function()
-    {
+    _on_appear : function() {
       var app = this.getApplication();
-      if (app.getModelId() !== this.__modelId)
-      {
+      if (app.getModelId() !== this.__modelId) {
         this.__modelId = app.getModelId();
         this.reloadData();
       }
@@ -90,20 +76,20 @@ qx.Class.define("bibliograph.ui.item.DuplicatesView",
      *
      * @return {void}
      */
-    reloadData : function()
-    {
+    reloadData : function() {
       var app = this.getApplication();
       var permMgr = app.getAccessManager().getPermissionManager();
-      if ( ! app.getModelId() ||
-           ! permMgr.getByName("reference.remove").isGranted() )  // todo permission name
+      if (!app.getModelId() ||
+           !permMgr.getByName("reference.remove").isGranted()) // todo permission name
       {
         return;
       }
 
       var id = app.getModelId();
-      var timeoutId = qx.lang.Function.delay(function()
-      {
-        if (id != app.getModelId() || timeoutId != this.__timeoutId) return;
+      var timeoutId = qx.lang.Function.delay(function() {
+        if (id !== app.getModelId() || timeoutId !== this.__timeoutId) {
+       return;
+      }
         this._reloadData();
       }, 500, this);
       this.__timeoutId = timeoutId;
@@ -114,13 +100,14 @@ qx.Class.define("bibliograph.ui.item.DuplicatesView",
      *
      * @return {void}
      */
-    _reloadData : function()
-    {
+    _reloadData : function() {
       var app = this.getApplication();
       this.duplicatesTable.getSelectionModel().resetSelection();
       this.duplicatesTable.getTableModel().setData([]);
       this.setEnabled(false);
-      if( !app.getDatasource() || !app.getModelId() ) return;
+      if (!app.getDatasource() || !app.getModelId()) {
+       return;
+      }
       app.getRpcClient("reference").send(
           "duplicates-data",
           [app.getDatasource(), app.getModelId()],
@@ -137,8 +124,7 @@ qx.Class.define("bibliograph.ui.item.DuplicatesView",
      *
      * @return {var} TODOC
      */
-    getSelectedRefIds : function()
-    {
+    getSelectedRefIds : function() {
       var selectedRefIds = [];
       var selectionModel = this.duplicatesTable.getSelectionModel();
       var tableModel = this.duplicatesTable.getTableModel();
@@ -153,11 +139,12 @@ qx.Class.define("bibliograph.ui.item.DuplicatesView",
      *
      * @return {void}
      */
-    _deleteDuplicate : function()
-    {
+    _deleteDuplicate : function() {
       var app = this.getApplication();
       var selectedRefIds = this.getSelectedRefIds();
-      if (!selectedRefIds.length)return;
+      if (!selectedRefIds.length) {
+       return;
+      }
 
       app.showPopup(this.tr("Processing request..."));
       this.duplicatesTable.getSelectionModel().resetSelection();
@@ -174,22 +161,20 @@ qx.Class.define("bibliograph.ui.item.DuplicatesView",
      * Displays the selected duplicate
      * @private
      */
-    _displayDuplicate : function()
-    {
+    _displayDuplicate : function() {
       var selectedRefIds = this.getSelectedRefIds();
-      if (!selectedRefIds.length)return;
+      if (!selectedRefIds.length) {
+       return;
+      }
       var id= selectedRefIds[0];
       var app = this.getApplication();
       app.setQuery("id="+id); // todo: open in new window
       app.setModelId(id);
       this.duplicatesTable.getSelectionModel().resetSelection();
-      qx.lang.Function.delay(function(){
+      qx.lang.Function.delay(function() {
         app.setItemView("referenceEditor-recordInfo");
-      },100);
-
+      }, 100);
     },
-
-
     endOfFile : true
   }
 });

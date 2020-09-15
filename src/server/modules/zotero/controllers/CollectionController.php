@@ -143,7 +143,7 @@ class CollectionController
     }
 
     if (is_array($cachedNodeDataList)) {
-      //return $cachedNodeDataList;
+      return $cachedNodeDataList;
     }
 
     $nodeCount = count($versions);
@@ -239,7 +239,7 @@ class CollectionController
       'data'            => [
         'type'            => "folder",
         'id'              => $data['data']['key'],
-        'parentId'        => $data['data']['parentCollection'],
+        'parentId'        => $data['data']['parentCollection'] ?: 0,
         'query'           => null,
         'public'          => true,
         'owner'           => null,

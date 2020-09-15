@@ -15,28 +15,24 @@
 
  ************************************************************************ */
 
-/*global qx csl*/
-
 /**
  * The UI for displaying formatted references
  */
 qx.Class.define("bibliograph.ui.item.FormattedViewUi",
 {
   extend : bibliograph.ui.item.FormattedView,
-  construct : function()
-  {
+  construct : function() {
     this.base(arguments);
     this.__qxtCreateUI();
   },
   members : {
-    __qxtCreateUI : function()
-    {
+    __qxtCreateUI : function() {
       /*
        * View
        */
       var qxVbox1 = new qx.ui.layout.VBox(null, null, null);
       var qxComposite1 = this;
-      this.setLayout(qxVbox1)
+      this.setLayout(qxVbox1);
       var viewPane = new qx.ui.embed.Html(null);
       this.viewPane = viewPane;
       viewPane.setPadding(5);
@@ -58,28 +54,28 @@ qx.Class.define("bibliograph.ui.item.FormattedViewUi",
       qxComposite1.add(menuBar);
       
       // Stil
-      var qxMenuBarButton1 = new qx.ui.menubar.Button(this.tr('Style'), null, null);
+      var qxMenuBarButton1 = new qx.ui.menubar.Button(this.tr("Style"), null, null);
       menuBar.add(qxMenuBarButton1);
       var styleMenu = new qx.ui.menu.Menu();
       this.styleMenu = styleMenu;
       qxMenuBarButton1.setMenu(styleMenu);
       
       // All Results
-      var qxMenuBarButton2 = new qx.ui.menubar.Button(this.tr('All Results'), null, null);
+      var qxMenuBarButton2 = new qx.ui.menubar.Button(this.tr("All Results"), null, null);
       menuBar.add(qxMenuBarButton2);
       qxMenuBarButton2.addListener("execute", function(e) {
         this.loadFolder();
       }, this);
       
       // Print
-      var qxMenuBarButton3 = new qx.ui.menubar.Button(this.tr('Print'), null, null);
+      var qxMenuBarButton3 = new qx.ui.menubar.Button(this.tr("Print"), null, null);
       menuBar.add(qxMenuBarButton3);
       qxMenuBarButton3.addListener("execute", function(e) {
         this.getApplication().print(viewPane.getContentElement().getDomElement());
       }, this);
       
       // Tabular View
-      var qxMenuBarButton4 = new qx.ui.menubar.Button(this.tr('Tabular View'), null, null);
+      var qxMenuBarButton4 = new qx.ui.menubar.Button(this.tr("Tabular View"), null, null);
       menuBar.add(qxMenuBarButton4);
       qxMenuBarButton4.addListener("execute", function(e) {
         qx.core.Id.getQxObject("item-view").showTabularView();

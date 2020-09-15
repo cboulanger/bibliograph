@@ -14,7 +14,6 @@
      * Christian Boulanger (cboulanger)
 
 ************************************************************************ */
-/*global qx csl*/
 
 /**
  * Application logic

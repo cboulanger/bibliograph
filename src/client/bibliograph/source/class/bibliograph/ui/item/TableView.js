@@ -34,8 +34,7 @@ qx.Class.define("bibliograph.ui.item.TableView",
      *
      * @return {void}
      */
-    _on_appear : function()
-    {
+    _on_appear : function() {
       var app = this.getApplication();
       if (app.getDatasource() && app.getModelId()) {
         this._load(app.getDatasource(), app.getModelId());
@@ -44,21 +43,23 @@ qx.Class.define("bibliograph.ui.item.TableView",
 
     /**
      * loads the HTML from the server
+     *
+     * @param datasource
+     * @param id
      */
-    _load : function(datasource,id)
-    {
+    _load : function(datasource, id) {
       this.setEnabled(false);
       this.viewPane.setHtml("");
       this.getApplication()
       .getRpcClient("reference")
-      .send( "item-html", [datasource, id])
-      .then((data)=>{
+      .send("item-html", [datasource, id])
+      .then(data => {
         this.viewPane.setHtml(qx.lang.Type.isObject(data) ? data.html : "");
         this.setEnabled(true);
       })
-      .catch((err)=>{
+      .catch(err => {
         this.warn(err);
-      });      
+      });
     },
 
     /*
@@ -67,8 +68,7 @@ qx.Class.define("bibliograph.ui.item.TableView",
     ---------------------------------------------------------------------------
     */
 
-    loadHtml : function()
-    {
+    loadHtml : function() {
       var app = this.getApplication();
       var id = app.getModelId();
       if (!id) {
@@ -77,8 +77,8 @@ qx.Class.define("bibliograph.ui.item.TableView",
       }
       if (this.isVisible() && app.getDatasource()) {
         qx.event.Timer.once(function() {
-          if (id == app.getModelId()) {
-            this._load( app.getDatasource(), id);
+          if (id === app.getModelId()) {
+            this._load(app.getDatasource(), id);
           }
         }, this, 500);
       }

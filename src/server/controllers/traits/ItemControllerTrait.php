@@ -98,15 +98,15 @@ trait ItemControllerTrait {
 
   /**
    * Returns the requested or all accessible properties of a reference
-   * @param string $datasource
+   * @param string $datasourceId
    * @param mixed $arg2 if numeric, the id of the reference
    * @param mixed $arg3
    * @param mixed $arg4
-   * @throws \InvalidArgumentException
    * @return string
+   * @throws \InvalidArgumentException
    * @todo: this method is called with different signatures!
    */
-  function actionItem($datasource, $arg2, $arg3 = null, $arg4 = null)
+  function actionItem($datasourceId, $arg2, $arg3 = null, $arg4 = null)
   {
     if (is_numeric($arg2)) {
       //$type   = "reference";
@@ -118,12 +118,12 @@ trait ItemControllerTrait {
       $fields = null;
     }
 
-    if (!$datasource or !is_numeric($id)) {
+    if (!$datasourceId or !is_numeric($id)) {
       throw new \InvalidArgumentException("Invalid arguments.");
     }
 
     // load model record and get reference type
-    $modelClass = $this->getControlledModel($datasource);
+    $modelClass = $this->getControlledModel($datasourceId);
     /** @var Reference $item */
     $model = $modelClass::findOne($id);
     /** @var \app\schema\AbstractReferenceSchema $schema */
@@ -139,8 +139,8 @@ trait ItemControllerTrait {
 
     // exclude fields
     // @todo create UI for this
-    if (Yii::$app->config->keyExists("datasource.$datasource.fields.exclude")) {
-      $excludeFields = Yii::$app->config->getPreference("datasource.$datasource.fields.exclude");
+    if (Yii::$app->config->keyExists("datasource.$datasourceId.fields.exclude")) {
+      $excludeFields = Yii::$app->config->getPreference("datasource.$datasourceId.fields.exclude");
       if (count($excludeFields)) {
         $fields = array_diff($fields, $excludeFields);
       }
@@ -148,7 +148,7 @@ trait ItemControllerTrait {
 
     // prepare record data for the form
     $item = array(
-      'datasource' => $datasource,
+      'datasource' => $datasourceId,
       'referenceId' => $id, // todo: replace by "id"
       //'titleLabel' => $this->getTitleLabel($model)
     );

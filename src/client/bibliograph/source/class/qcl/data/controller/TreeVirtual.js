@@ -209,7 +209,6 @@ qx.Class.define("qcl.data.controller.TreeVirtual",
         if (serverParentId === undefined) {
           throw new Error("Missing node id in node data.");
         }
-        
         let parentNodeId = this.__nodeIdMap[serverParentId];
         let clientNodeId;
         if (parentNodeId === undefined) {
@@ -235,17 +234,13 @@ qx.Class.define("qcl.data.controller.TreeVirtual",
           );
         }
         
-        /*
-         * set column und node data
-         */
+        // set column und node data
         targetModel.setState(clientNodeId, {
           columnData: node.columnData,
           data: node.data
         });
         
-        /*
-         * save node in map
-         */
+        // save node in map
         this.__nodeIdMap[serverNodeId] = clientNodeId;
       }, this);
       targetModel.setData();

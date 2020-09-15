@@ -12,25 +12,21 @@
  *
  ******************************************************************************/
 
-/*global qx qcl bibliograph*/
-
 /**
  * The table view of the reference
  */
 qx.Class.define("bibliograph.ui.item.TableViewUi",
 {
   extend : bibliograph.ui.item.TableView,
-  construct : function()
-  {
+  construct : function() {
     this.base(arguments);
     this.__qxtCreateUI();
   },
   members : {
-    __qxtCreateUI : function()
-    {
+    __qxtCreateUI : function() {
       var qxVbox1 = new qx.ui.layout.VBox(null, null, null);
       var qxComposite1 = this;
-      this.setLayout(qxVbox1)
+      this.setLayout(qxVbox1);
       var viewPane = new qx.ui.embed.Html(null);
       this.viewPane = viewPane;
       viewPane.setPadding(5);
@@ -45,9 +41,9 @@ qx.Class.define("bibliograph.ui.item.TableViewUi",
       this.menuBar = menuBar;
       menuBar.setHeight(18);
       qxComposite1.add(menuBar);
-      var qxMenuBarButton1 = new qx.ui.menubar.Button(this.tr('Print'), null, null);
+      var qxMenuBarButton1 = new qx.ui.menubar.Button(this.tr("Print"), null, null);
       qxMenuBarButton1.setEnabled(false);
-      qxMenuBarButton1.setLabel(this.tr('Print'));
+      qxMenuBarButton1.setLabel(this.tr("Print"));
       menuBar.add(qxMenuBarButton1);
       qxMenuBarButton1.addListener("execute", function(e) {
         //

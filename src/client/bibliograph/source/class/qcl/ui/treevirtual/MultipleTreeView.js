@@ -63,7 +63,7 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
      * The server-side id of the currently selected node
      */
     nodeId: {
-      check: "Integer",
+      check: qcl.util.Check.isNumberOrStringNullable,
       init: null,
       nullable: true,
       event: "changeNodeId",
@@ -621,7 +621,7 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
       let node = selection[0];
       this.setSelectedNode(node);
       this.setSelectedNodeType(this.getTree().getNodeType(node));
-      this.setNodeId(parseInt(node.data.id));
+      this.setNodeId(node.data.id);
     },
     
     /*
@@ -930,8 +930,8 @@ qx.Class.define("qcl.ui.treevirtual.MultipleTreeView", {
       }
       let id = this.getController().getClientNodeId(serverNodeId);
       if (!id) {
- return;
-}
+        return;
+      }
       
       this.__selectingNode = true;
       let tree = this.getTree();

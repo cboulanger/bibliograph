@@ -57,7 +57,7 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
      */
     referenceId :
     {
-      check : "Integer",
+      check : qcl.util.Check.isNumberOrStringNullable,
       nullable : true,
       event : "changeReferenceId",
       apply : "_applyReferenceId"
@@ -269,14 +269,14 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
      * @param referenceId {Integer}
      */
     _load : function(referenceId) {
-      // debug
-      if (this.__isLoading) {
+      var datasource = this.getDatasource();
+      
+      if (!datasource || this.__isLoading) {
         return;
       }
-
-      //debug
       if (!referenceId) {
-        this.warn("reference editor: no reference id.");
+        this.warn("Cannot load: Missing reference id.");
+        return;
       }
 
       // we still have to wait for the service name to be set
@@ -295,7 +295,6 @@ qx.Class.define("bibliograph.ui.item.ReferenceEditor",
       // load data
       this.showMessage(this.tr("Loading item data..."));
       this.__isLoading = true;
-      var datasource = this.getDatasource();
       this.getStore().load("item", [datasource, referenceId], function(data) {
         this.__isLoading = false;
         this.showMessage(null);
