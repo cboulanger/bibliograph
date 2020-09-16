@@ -387,6 +387,10 @@ qx.Class.define("qcl.application.StateManager",
       if (this.__setInProgress) {
         return;
       }
+      if (!name) {
+        console.warn("Missing state name");
+        return;
+      }
       var app = qx.core.Init.getApplication();
       var clazz = qx.Class.getByName(app.classname);
       if (qx.Class.hasProperty(clazz, name)) {
@@ -414,9 +418,13 @@ qx.Class.define("qcl.application.StateManager",
           case "Object":
             break;
           case qcl.util.Check.isNumberOrString:
+          case qcl.util.Check.isScalarNullable:
+            if (value === "null") {
+              value = null;
+            }
+            // fallthrough
           case qcl.util.Check.isNumberOrStringNullable:
           case qcl.util.Check.isScalar:
-          case qcl.util.Check.isScalarNullable:
             if (qx.lang.Type.isString(value) &&
               !isNaN(parseInt(value, 10)) &&
               String(parseInt(value, 10)).length === value.length) {
@@ -424,8 +432,7 @@ qx.Class.define("qcl.application.StateManager",
             }
             if (value === "true") {
               value = true;
-            }
-            if (value === "false") {
+            } else if (value === "false") {
               value = false;
             }
             break;

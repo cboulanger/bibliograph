@@ -330,17 +330,17 @@ trait ItemControllerTrait {
 
   /**
    * Returns a HTML table with the reference data
-   * @param $datasource
-   * @param $id
+   * @param $datasourceId
+   * @param $itemId
    * @return array
    */
-  public function actionItemHtml($datasource, $id)
+  public function actionItemHtml($datasourceId, $itemId)
   {
-    $modelClass = $this->getControlledModel($datasource);
+    $modelClass = $this->getControlledModel($datasourceId);
     /** @var \app\schema\AbstractReferenceSchema $schema */
     $schema = $modelClass::getSchema();
     /** @var Reference $reference */
-    $reference = $modelClass::findOne($id);
+    $reference = $modelClass::findOne($itemId);
     $reftype = $reference->reftype;
 
     $fields = array_merge(
@@ -386,8 +386,8 @@ trait ItemControllerTrait {
         'converters/download' .
         '?access-token=' . Yii::$app->user->getIdentity()->getAuthKey() .
         '&format=' . $format->namedId .
-        '&datasource=' . $datasource .
-        '&selector=' . $id;
+        '&datasource=' . $datasourceId .
+        '&selector=' . $itemId;
       $links[] = "<a href=\"$url\" target=\"_blank\" data-id=\"{$format->namedId}\">{$format->name}</a>";
     }
     $html .= "<p>" . Yii::t('app','Export citation as ') . implode(" | ", $links ) . "</p>";

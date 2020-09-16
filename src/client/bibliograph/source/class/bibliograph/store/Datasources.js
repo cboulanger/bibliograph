@@ -25,6 +25,22 @@ qx.Class.define("bibliograph.store.Datasources",
   include : [],
   type : "singleton",
   
+  statics: {
+    /**
+     * Returns the name of the service that executes methods for the given
+     * data model type
+     * @param {String} type
+     * @return {Promise<String>}
+     */
+    async getServiceFor(type) {
+      if (!this.getInstance().getSelected()) {
+        await new Promise(resolve =>
+          this.getInstance().addListenerOnce("changeSelected", resolve));
+      }
+      return this.getInstance().getSelected().getServices().get(type).getService();
+    }
+  },
+  
   construct : function() {
     this.base(arguments, "datasource");
     let bus = qx.event.message.Bus.getInstance();

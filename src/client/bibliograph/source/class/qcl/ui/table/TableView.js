@@ -393,31 +393,29 @@ qx.Class.define("qcl.ui.table.TableView",
     },
     
     /**
- * Reacts to a change in the "selectedIds" state of the applicationby selecting
-the values. does nothing at the moment, since async selection with the remote
-table model is very tricky.
- *
- * @param value
- * @param old
- */
+     * Reacts to a change in the "selectedIds" state of the applicationby selecting
+    the values. does nothing at the moment, since async selection with the remote
+    table model is very tricky.
+     *
+     * @param value
+     * @param old
+     */
     _applySelectedIds: function (value, old) {
-      
       //
     },
     
     /**
- * Reacts to a change in the "modelId" state of the application by selecting the row
-that corresponds to the id.
- *
- * @param value
- * @param old
- * @param counter
- */
+     * Reacts to a change in the "modelId" state of the application by selecting the row
+     * that corresponds to the id.
+     *
+     * @param value
+     * @param old
+     * @param counter
+     */
     _applyModelId: function (value, old, counter) {
       if (counter === "modelId") {
         counter = 0;
       }
-      
       //console.log("Model id changed to " + value);
       if (value && value === this.getModelId()) {
         //console.log("Trying to select id " + value + ", attempt " + counter);
@@ -594,11 +592,7 @@ that corresponds to the id.
       table.getSelectionModel().addListener("changeSelection", this._on_table_changeSelection, this);
       
       // save columns
-      let columnIds = [];
-      for (let columnId in data.columnLayout) {
-        columnIds.push(columnId);
-      }
-      this.setColumnIds(columnIds);
+      this.setColumnIds(Object.keys(data.columnLayout));
       
       // query data
       this.setQueryData(data.queryData);
@@ -651,16 +645,11 @@ that corresponds to the id.
      * @return {qx.ui.table.Table}
      */
     _createTable: function (columnLayout) {
-      // analyze table info
-      let columnIds = []; let
-columnHeaders = [];
-      for (let columnId in columnLayout) {
-        columnIds.push(columnId);
-        columnHeaders.push(columnLayout[columnId].header);
-      }
       let tableModel = new qcl.data.model.Table();
       
       // set column labels and id
+      let columnIds = Object.keys(columnLayout);
+      let columnHeaders = columnIds.map(id => columnLayout[id].header);
       tableModel.setColumns(columnHeaders, columnIds);
       
       // set columns (un-)editable and unsortable
@@ -708,8 +697,7 @@ columnHeaders = [];
       
       // listeners
       //tableModel.addListener("dataChanged", this._retryApplySelection, this);
-  
-
+      
       return table;
     },
     
@@ -720,18 +708,16 @@ columnHeaders = [];
     */
     
 
-    /**
- * Called when user clicks on a table cell.
-Unused.
- *
- * @param e
- */
-    _on_table_cellClick: function (e) {
-      //let table = e.getTarget();
-      //let row = e.getRow();
-      //let data = table.getUserData("data");
-      //console.log([table,data,row]);
-    },
+    // /**
+    //  * Called when user clicks on a table cell.
+    //  * @param e
+    //  */
+    // _on_table_cellClick: function (e) {
+    //   let table = e.getTarget();
+    //   let row = e.getRow();
+    //   let data = table.getUserData("data");
+    //   console.log([table, data, row]);
+    // },
     
     /**
      * Called when the selection in the table changes
@@ -751,7 +737,7 @@ Unused.
         let rowData = table.getTableModel().getRowData(index);
         if (qx.lang.Type.isObject(rowData)) {
           selectedRowData.push(rowData);
-          selectedIds.push(parseInt(rowData.id));
+          selectedIds.push(rowData.id);
         }
       }, this);
       
@@ -799,7 +785,7 @@ Unused.
      * Fired when dragging over another widget.
      * @param e {qx.event.type.Drag} the drag event fired
      */
-    _onDragOver: function (e) {
+    _onDragOver: function(e) {
       //if( ! e.supportsType(qcl.ui.table.TableView.types.ROWDATA) ){
         this.dragDebug("Table Drag: Dropping on Table not supported...");
         e.preventDefault();
@@ -810,12 +796,12 @@ Unused.
      * Fired when dragging over the source widget.
      * @param e {qx.event.type.Drag} the drag event fired
      */
-    _onDragHandler: function (e) {
+    _onDragHandler: function(e) {
       let relatedTarget = e.getRelatedTarget();
       if (relatedTarget) {
         relatedTarget.setDragModel(this.getSelectedRowData());
         relatedTarget.setDragType(qcl.ui.table.TableView.types.ROWDATA);
-        return relatedTarget._onDragAction(e);
+        relatedTarget._onDragAction(e);
       }
     },
   
@@ -857,7 +843,6 @@ Unused.
         e.addData(qcl.ui.table.TableView.types.ROWDATA, this.getSelectedRowData());
       }
     },
-
     
     /*
     ---------------------------------------------------------------------------
@@ -939,7 +924,7 @@ Unused.
      * Loads list item content
      * @return {void}
      */
-    load: function () {
+      load: function () {
       this.clearTable();
       // if we don't have a model type yet, wait until we have one
       if (!this.getModelType()) {
@@ -970,8 +955,7 @@ Unused.
             {
               "datasource": this.getDatasource(),
               "modelType": this.getModelType(),
-              "query":
-              {
+              "query": {
                 "properties": this.getColumnIds(),
                 "orderBy": this.getQueryData().orderBy,
                 "cql": this.getQuery()

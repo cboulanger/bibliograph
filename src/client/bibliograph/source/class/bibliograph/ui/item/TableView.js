@@ -47,19 +47,15 @@ qx.Class.define("bibliograph.ui.item.TableView",
      * @param datasource
      * @param id
      */
-    _load : function(datasource, id) {
+    async _load(datasource, id) {
       this.setEnabled(false);
       this.viewPane.setHtml("");
-      this.getApplication()
-      .getRpcClient("reference")
-      .send("item-html", [datasource, id])
-      .then(data => {
-        this.viewPane.setHtml(qx.lang.Type.isObject(data) ? data.html : "");
-        this.setEnabled(true);
-      })
-      .catch(err => {
-        this.warn(err);
-      });
+      let service = await bibliograph.store.Datasources.getServiceFor("reference");
+      let data = await this.getApplication()
+        .getRpcClient(service)
+        .request("item-html", [datasource, id]);
+      this.viewPane.setHtml(qx.lang.Type.isObject(data) ? data.html : "");
+      this.setEnabled(true);
     },
 
     /*

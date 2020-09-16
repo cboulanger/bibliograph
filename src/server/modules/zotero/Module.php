@@ -13,6 +13,8 @@ class Module
   implements PluginInterface
 {
 
+  const CATEGORY = "plugin.zotero";
+
   /**
    * The version of the module
    * @var string

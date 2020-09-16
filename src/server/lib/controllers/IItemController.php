@@ -16,9 +16,9 @@ interface IItemController {
 
   /**
    * Returns a HTML table with the reference data
-   * @param $datasource
-   * @param $id
+   * @param string $datasourceId
+   * @param string|int $itemId
    * @return string
    */
-  public function actionItemHtml($datasource, $id);
+  public function actionItemHtml($datasourceId, $itemId);
 }

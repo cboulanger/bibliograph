@@ -218,7 +218,7 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
     getErrorMessage () {
       let e = this.getError();
       if (!e) {
-        return undefined;
+        return "Unknown error";
       }
       if (typeof e.message == "string") {
         // shorten message
@@ -335,22 +335,30 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
           throw new Error("Invalid return value from error handling function. Must be an instance of Error or false");
         }
       }
-      let message = this.tr("Error calling remote method '%1': %2.", method, this.getErrorMessage());
+      let message = qx.core.Environment.select("qx.debug", {
+        "true": this.tr("Error calling remote method '%1': %2.", method, this.getErrorMessage()),
+        "false": this.getErrorMessage()
+      });
       // inform message subscribers
       qx.event.message.Bus.dispatchByName("jsonrpc.error", error);
       // inform event listeners
       this.fireDataEvent("error", error);
-      // log to console for UI test runners
+      // log to console for UI test runners, TO DO this should be done by emnvironment variable
       this.error("JsonRpcError: " + message);
-      switch (this.getErrorBehavior()) {
-        case "debug": {
-          console.error(message.toString());
-          console.log(error.data);
-          try {
-            console.log(error.data.response.error.data.exception);
-          } catch (e) {}
+      // log to console
+      if (qx.core.Environment.get("qx.debug")) {
+        try {
+          let exception = error.data.response.error.data.exception;
+          while (exception.previous) {
+            exception = exception.previous.data.exception;
+          }
+          console.error(JSON.stringify(exception, null, 2));
+        } catch (e) {
+          console.error(JSON.stringify(error, null, 2));
         }
-        //fallthrough
+      }
+      // handle error
+      switch (this.getErrorBehavior()) {
         case "error":
           throw error;
         case "warning":

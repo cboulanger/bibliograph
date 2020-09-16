@@ -51,6 +51,6 @@ abstract class Controller extends AppController {
   }
 
   protected function throwConnectionError() {
-    throw new UserErrorException(Yii::t("zotero", "Cannot connect to Zotero server."));
+    throw new UserErrorException(Yii::t("plugin.zotero", "Cannot connect to Zotero server"));
   }
 }

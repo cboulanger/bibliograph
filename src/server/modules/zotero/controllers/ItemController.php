@@ -56,6 +56,7 @@ class ItemController
     ];
   }
 
+
   /**
    * Returns count of rows that will be retrieved when executing the current
    * query.
@@ -73,6 +74,7 @@ class ItemController
       $response = $api
         ->collections($collectionKey)
         ->items()
+        ->top()
         ->limit(1)
         ->send();
     } catch (ConnectException $e) {
@@ -81,7 +83,7 @@ class ItemController
     $rowCount = (int) $response->getHeaders()['Total-Results'][0];
     return [
       "rowCount" => $rowCount,
-      'statusText' => Yii::t('app', "{numberOfRecords} records", ['numberOfRecords' => $rowCount])
+      'statusText' => Yii::t('plugin.zotero', "{numberOfRecords} records", ['numberOfRecords' => $rowCount])
     ];
   }
 
@@ -106,6 +108,7 @@ class ItemController
       $response = $api
         ->collections($collectionKey)
         ->items()
+        ->top()
         ->start($firstRow)
         ->limit($lastRow-$firstRow+1)
         ->send();
@@ -127,6 +130,7 @@ class ItemController
         ""
       );
       $rowData[] = [
+        'id'       => $item['data']['key'],
         'creators' => $creators,
         'date'     => $item['data']['date'] ?? "",
         'title'    => $item['data']['title'] ?? ""
@@ -151,12 +155,48 @@ class ItemController
 
   /**
    * Returns a HTML table with the reference data
-   * @param string $datasource
-   * @param int $id
+   * @param string $datasourceId
+   * @param string $itemId
    * @return array
    */
-  public function actionItemHtml($datasource, $id){
-    return ['html' => "Hello World"];
+  public function actionItemHtml($datasourceId, $itemId){
+    $api = $this->getZoteroApi($datasourceId);
+    try {
+      $response = $api
+        ->items($itemId)
+        ->send();
+    } catch (ConnectException $e) {
+      $this->throwConnectionError();
+    }
+    $item = $response->getBody()['data'];
+    $html = "<pre>" . json_encode($item, JSON_PRETTY_PRINT) . "</pre>";
+
+//
+//
+//    // create html table
+//    $html = "<table>";
+//    foreach ($fields as $field) {
+//      $value = $reference->$field;
+//      if (!$value or !$schema->isPublicField($field)) continue;
+//      $label = $modelClass::getSchema()->getFieldLabel($field, $reftype);
+//
+//      // special fields
+//      switch ($field) {
+//        case "reftype":
+//          $value = $schema->getTypeLabel($value);
+//          break;
+//        case "url":
+//          $urls = explode(";", $value);
+//          $value = implode("<br/>", array_map(function ($url) {
+//            return "<a href='$url' target='_blank'>$url</a>";
+//          }, $urls));
+//          break;
+//      }
+//
+//      $html .= "<tr><td><b>$label</b></td><td>$value</td></tr>";
+//    }
+//    $html .= "</table>";
+    return ['html' => $html];
   }
 
 }
