@@ -36,7 +36,6 @@ class CollectionController
   const CACHE_VERSIONS = "versions";
   const CACHE_NODES = "nodes";
   const CACHE_COLLECTIONS = "collections";
-  const CACHE_KEYS2IDS = "keys2ids";
 
   /*
    ---------------------------------------------------------------------------

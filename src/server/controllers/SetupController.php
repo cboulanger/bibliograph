@@ -30,7 +30,7 @@ use Yii;
 use yii\db\Exception;
 use app\models\Schema;
 use lib\components\MigrationException;
-use lib\dialog\{Dialog, Progress};
+use lib\dialog\{Alert, Dialog, Progress};
 use lib\exceptions\{RecordExistsException,
   ServerBusyException,
   SetupException,
@@ -72,7 +72,7 @@ class SetupController extends \app\controllers\AppController
    *
    * @var array
    */
-  protected $noAuthActions = ["setup", "version", "setup-version", "reset"];
+  protected $noAuthActions = ["setup", "version", "setup-version"];
 
   /**
    * Setup errors
@@ -276,10 +276,10 @@ class SetupController extends \app\controllers\AppController
   //-------------------------------------------------------------
 
   public function actionReset() {
-    if (!YII_ENV_TEST) {
-      throw new \BadMethodCallException('setup/reset can only be called in test mode.');
-    }
     $this->resetSavedProperties();
+    (new Alert())
+      ->setMessage(Yii::t("app", "The setup cache has been reset. Reload the application."))
+      ->sendToClient();
     return "Setup cache has been reset.";
   }
 
@@ -291,9 +291,6 @@ class SetupController extends \app\controllers\AppController
     return Yii::$app->utils->version;
   }
 
-  public function actionResetCache() {
-
-  }
 
   /**
    * Called by the confirm dialog
@@ -350,23 +347,20 @@ class SetupController extends \app\controllers\AppController
    */
   protected function _setup()
   {
-    if (strstr(Yii::$app->request->referrer, "?reset") && !$this->isReset) {
-      Yii::info("Resetting application...");
-      $this->resetSavedProperties();
-      $this->isReset = true;
-    } else {
-      $this->isReset = false;
+    if (strstr(Yii::$app->request->referrer, "?reset")) {
+      return $this->actionReset();
     }
     $this->restoreProperties();
 
-    if ($this->initiatingSessionId) {
-      if ($this->initiatingSessionId != Yii::$app->session->id) {
-        // Abort if other client has already started the setup
-        throw new ServerBusyException("Setup in progress");
-      }
-    } else {
-      $this->initiatingSessionId = Yii::$app->session->id;
-    }
+//    if ($this->initiatingSessionId) {
+//      if ($this->initiatingSessionId != Yii::$app->session->id) {
+//        // Abort if other client has already started the setup
+//        throw new ServerBusyException("Setup in progress");
+//      }
+//    } else {
+//      $this->initiatingSessionId = Yii::$app->session->id;
+//    }
+
     if (count($this->setupMethods) === 0) {
       // if no setup methods have been identified, this is the start of the setup sequence
       $this->_initSetup();
@@ -394,6 +388,8 @@ class SetupController extends \app\controllers\AppController
     if (!$upgrade_from) {
       try {
         $upgrade_from = Yii::$app->config->getKey('app.version');
+        // we have a stored version, so this is a reset
+        $this->isReset = true;
       } catch (\InvalidArgumentException $e) {
         // upgrading from version 2 where the config key doesn't exist
         $upgrade_from = "2.x";
@@ -412,10 +408,11 @@ class SetupController extends \app\controllers\AppController
     if (!$upgrade_to) {
       $upgrade_to = Yii::$app->utils->version;
     }
+
     $this->upgrade_from = $upgrade_from;
     $this->upgrade_to = $upgrade_to;
-    // if we have a version change, run setup methods again
-    if ( $upgrade_from !== $upgrade_to) {
+    // if we have a version change or reset, run setup methods again
+    if ( $upgrade_from !== $upgrade_to or $this->isReset) {
       // compile list of setup methods
       foreach (\get_class_methods($this) as $method) {
         if (Str::startsWith($method, "setup")) {
@@ -566,7 +563,7 @@ class SetupController extends \app\controllers\AppController
     $msg = "Setup of version '$this->upgrade_to' finished successfully.";
     Yii::info($msg, self::CATEGORY);
     Yii::debug($this->messages, __METHOD__);
-    $this->resetSavedProperties();
+    $this->saveProperties();
     // update version
     if (!Yii::$app->config->keyExists('app.version')) {
       // createKey( $key, $type, $customize=false, $default=null, $final=false )

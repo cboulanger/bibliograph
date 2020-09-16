@@ -10,34 +10,34 @@ use Yii;
 abstract class Controller extends AppController {
 
   /**
-   * @param string $type
+   * @param string $cacheId
    * @param string $datasourceId
    * @return mixed
    */
-  static function getCached(string $type, string $datasourceId){
-    return Yii::$app->cache->get("zotero-$datasourceId-$type");
+  static function getCached(string $cacheId, string $datasourceId){
+    return Yii::$app->cache->get("zotero-$datasourceId-$cacheId");
   }
 
   /**
-   * @param string $type
+   * @param string $cacheId
    * @param string $datasourceId
    * @param mixed $value
    */
-  static function setCached(string $type, string $datasourceId, $value){
-    Yii::$app->cache->set("zotero-$datasourceId-$type", $value);
+  static function setCached(string $cacheId, string $datasourceId, $value){
+    Yii::$app->cache->set("zotero-$datasourceId-$cacheId", $value);
   }
 
   /**
-   * @param string|array $types
+   * @param string|array $cacheIds
    * @param string $datasourceId
    * @param mixed $value
    */
-  static function deleteCached($types, string $datasourceId){
-    if (!is_array($types)) {
-      $types = [$types];
+  static function deleteCached($cacheIds, string $datasourceId){
+    if (!is_array($cacheIds)) {
+      $cacheIds = [$cacheIds];
     }
-    foreach ($types as $type) {
-      Yii::$app->cache->delete("zotero-$datasourceId-$type");
+    foreach ($cacheIds as $id) {
+      Yii::$app->cache->delete("zotero-$datasourceId-$id");
     }
   }
 

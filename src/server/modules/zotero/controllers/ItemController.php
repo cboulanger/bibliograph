@@ -5,12 +5,17 @@ namespace app\modules\zotero\controllers;
 use GuzzleHttp\Exception\ConnectException;
 use lib\controllers\IItemController;
 use lib\controllers\ITableController;
+use lib\exceptions\UserErrorException;
 use Yii;
 
 class ItemController
   extends Controller
   implements ITableController, IItemController
 {
+
+  const CACHE_LAST_CACHED_VERSION = "last-cached-version";
+  const CACHE_LAST_MODIFIED_VERSION = "last-modified-version";
+  const CACHE_ROWDATA = "row-data";
 
   /**
    * Returns the layout of the columns of the table displaying
@@ -68,7 +73,7 @@ class ItemController
    */
   public function actionRowCount(\stdClass $queryData){
     $datasourceId = $queryData->datasource;
-    $collectionKey = $queryData->query->relation->id;
+    $collectionKey = $queryData->query->relation->id ?? null;
     $api = $this->getZoteroApi($datasourceId);
     try {
       $response = $api
@@ -80,7 +85,10 @@ class ItemController
     } catch (ConnectException $e) {
       $this->throwConnectionError();
     }
-    $rowCount = (int) $response->getHeaders()['Total-Results'][0];
+    $headers = $response->getHeaders();
+    $rowCount = (int) $headers['Total-Results'][0];
+    $lastModifiedVersion = $headers['Last-Modified-Version'][0];
+    self::setCached(self::CACHE_LAST_MODIFIED_VERSION, $datasourceId, $lastModifiedVersion);
     return [
       "rowCount" => $rowCount,
       'statusText' => Yii::t('plugin.zotero', "{numberOfRecords} records", ['numberOfRecords' => $rowCount])
@@ -102,7 +110,21 @@ class ItemController
    */
   function actionRowData(int $firstRow, int $lastRow, int $requestId, \stdClass $queryData){
     $datasourceId = $queryData->datasource;
-    $collectionKey = $queryData->query->relation->id;
+    $collectionKey = $queryData->query->relation->id ?? null;
+    $lastCachedVersion   = self::getCached(self::CACHE_LAST_CACHED_VERSION, $datasourceId);
+    $lastModifiedVersion = self::getCached(self::CACHE_LAST_MODIFIED_VERSION, $datasourceId);
+    $rowDataCacheId = self::CACHE_ROWDATA . "-$collectionKey-$firstRow-$lastRow";
+    if ($lastModifiedVersion === $lastCachedVersion) {
+      $cachedRowData = self::getCached($rowDataCacheId, $datasourceId);
+      if ($cachedRowData) {
+        return [
+          'requestId' => $requestId,
+          'rowData'   => $cachedRowData
+        ];
+      }
+    } else {
+      self::deleteCached($rowDataCacheId, $datasourceId);
+    }
     $api = $this->getZoteroApi($datasourceId);
     try {
       $response = $api
@@ -122,20 +144,29 @@ class ItemController
         $item['data']['creators'] ?? [],
         function ($prev, $curr){
           if (isset($curr['lastName']) && isset($curr['lastName'])) {
-            $name = $curr['lastName'] . ", " . $curr['lastName'];
+            $name = $curr['lastName'] . ", " . $curr['firstName'];
             return $prev ? "$prev; $name" : $name;
           }
           return "";
         },
         ""
       );
+      $date = $item['data']['date'] ?? "";
+      if ($date) {
+        try {
+          $date = (new \DateTime($date))->format("Y");
+        } catch (\Exception $e) {}
+      }
       $rowData[] = [
         'id'       => $item['data']['key'],
         'creators' => $creators,
-        'date'     => $item['data']['date'] ?? "",
+        'date'     => $date,
         'title'    => $item['data']['title'] ?? ""
       ];
     }
+    // cache
+    self::setCached($rowDataCacheId, $datasourceId, $rowData);
+    self::setCached(self::CACHE_LAST_CACHED_VERSION, $datasourceId, $lastModifiedVersion);
     return [
       'requestId' => $requestId,
       'rowData'   => $rowData

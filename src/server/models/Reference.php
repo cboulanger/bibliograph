@@ -223,7 +223,7 @@ class Reference
    * Returns the schema object used by this model
    * @return \app\schema\BibtexSchema
    */
-  public static function getSchema() : BibtexSchema
+  public static function getSchema()
   {
     static $schema = null;
     if (is_null($schema)) {

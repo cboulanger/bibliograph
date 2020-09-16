@@ -188,12 +188,19 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
         case "developer-menu":
           control = new qx.ui.menu.Menu();
           control.add(this.getQxObject("developer-rpc-test"));
+          control.add(this.getQxObject("developer-reset"));
           break;
         case "developer-rpc-test":
           control = new qx.ui.menu.Button(this.tr("Run method of 'test' service"));
           control.addListener("execute", async () => {
             let method = await this.getApplication().prompt("Enter method name");
             this.getApplication().getRpcClient("test").request(method);
+          }, this);
+          break;
+        case "developer-reset":
+          control = new qx.ui.menu.Button(this.tr("Reset application"));
+          control.addListener("execute", async () => {
+            this.getApplication().getRpcClient("setup").request("reset");
           }, this);
           break;
         case "title":
@@ -204,14 +211,19 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
           this.applicationTitleLabel = control;
           control.setWidgetId("app/toolbar/title");
           break;
-        case "search-bar":
+        case "search-bar": {
           control = new qx.ui.container.Composite(new qx.ui.layout.HBox(5));
-          this.bindVisibilityToProp(this.__pm.create("reference.search"), "state", control);
+          control.setVisibility("excluded");
+          let ds = bibliograph.store.Datasources.getInstance();
+          let searchPermisssion = this.__pm.create("reference.search")
+            .bindTo(ds, "selected.readOnly", state => !state);
+          this.bindVisibilityToProp(searchPermisssion, "state", control);
           control.add(this.getQxObject("search-box"));
           control.add(this.getQxObject("search-button"));
           control.add(this.getQxObject("search-clear"));
           //...control.add(this.getQxObject("search-help"));
           break;
+        }
         case "search-box":
           control = this.creakenTokenFieldSearch();
           this.searchbox = control;

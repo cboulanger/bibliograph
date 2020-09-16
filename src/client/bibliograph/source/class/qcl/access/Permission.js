@@ -131,17 +131,15 @@ qx.Class.define("qcl.access.Permission",
       
       if (this.hasCondition(conditionFunc, context)) {
         this.warn("Condition has already been added.");
-      }
-      else {
+      } else {
         // add a condition
         this.getConditions().push({
-          'condition': conditionFunc,
-          'context': context || null
+          "condition": conditionFunc,
+          "context": context || null
         });
       }
       return this;
     },
-    
     
     /**
      * checks if condition has already been added
@@ -153,10 +151,10 @@ qx.Class.define("qcl.access.Permission",
     hasCondition: function (conditionFunc, context) {
       let conditions = this.getConditions();
       for (let i = 0; i < conditions.length; i++) {
-        if (conditionFunc
-        && typeof conditionFunc === "object"
-        && conditions[i].condition === conditionFunc
-        && conditions[i].context === (context || null)) {
+        if (conditionFunc &&
+        typeof conditionFunc === "object" &&
+        conditions[i].condition === conditionFunc &&
+        conditions[i].context === (context || null)) {
           return true;
         }
       }
@@ -175,8 +173,8 @@ qx.Class.define("qcl.access.Permission",
       let conditions = this.getConditions();
       
       for (let i = 0; i < conditions.length; i++) {
-        if (conditions[i].condition === conditionFunc
-        && conditions[i].context === (context || null)) {
+        if (conditions[i].condition === conditionFunc &&
+        conditions[i].context === (context || null)) {
           conditions.splice(i, 1);
           return true;
         }
@@ -195,7 +193,7 @@ qx.Class.define("qcl.access.Permission",
       //console.log("Checking conditions for " + this.getNamedId() + ", context " + context );
       
       /*
-       * loop through all conditions 
+       * loop through all conditions
        */
       for (let i = 0; i < conditions.length; i++) {
         let condFunc = conditions[i].condition;
@@ -234,7 +232,7 @@ qx.Class.define("qcl.access.Permission",
             if (name.indexOf("*") < 0) // other wildcard permissions do not need to be updated
             {
               let permission = this.getManager().getByName(name);
-              if( permission) {
+              if (permission) {
                 permission.setGranted(granted);
               } else {
                 this.warn(`Permission '${permission}' does not exist.`);
@@ -285,8 +283,45 @@ qx.Class.define("qcl.access.Permission",
       let state = this.getState(context);
       //console.log("Updating "+ this.getNamedId() + ": " + state);
       this.fireDataEvent("changeState", state);
+    },
+  
+    /**
+     * Registers an event listener to update the permission each time
+     * the given event is fired on the given object
+     * @param {qx.core.Object} obj
+     * @param {String} eventName
+     * @return {qcl.access.Permission}
+     */
+    updateOn(obj, eventName) {
+      qx.core.Assert.assertInstance(obj, qx.core.Object);
+      obj.addListener(eventName, () => this.update());
+      return this;
+    },
+  
+    /**
+     * Binds the property of the given object identified by the given property path
+     * to the state of this permission. Added conditions are respected, i.e.
+     * the permission is granted only if both the property is truthy and the
+     * conditions are satisfied.
+     * @param {qx.core.Object} obj
+     * @param {String} propertyPath
+     * @param {Function} Optional converter function. Must return a boolean value
+     * @return {this}
+     */
+    bindTo(obj, propertyPath, converterFunc) {
+      qx.core.Assert.assertInstance(obj, qx.core.Object);
+      if (!converterFunc) {
+        converterFunc = state => Boolean(state);
+      }
+      let proxyObj = qx.data.marshal.Json.createModel({state:false}, true);
+      obj.bind(propertyPath, proxyObj, "state", {
+        converter: converterFunc
+      });
+      this.addCondition(() => proxyObj.getState());
+      this.updateOn(proxyObj, "changeState");
+      return this;
     }
-    
+  
   },
   
   /*

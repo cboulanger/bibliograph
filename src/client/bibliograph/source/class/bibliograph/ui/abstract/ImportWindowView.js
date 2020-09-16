@@ -208,8 +208,10 @@ qx.Class.define("bibliograph.ui.abstract.ImportWindowView",
       this._selectBox.bind("selection[0].value", this, "datasource");
       // store for selectbox
       let store = new qcl.data.store.JsonRpcStore(`${this.getModuleName()}.table`);
-      store.setModel(qx.data.marshal.Json.createModel([]));
-      store.bind("model", this._selectBox, "model");
+      store.bind("model", this._selectBox, "model", {
+        converter: value => value === null ? qx.data.marshal.Json.createModel([]) : value
+      });
+      store.setModel(null);
       store.addListener("loaded", () => {
         let lastDatasource = this.getApplication()
           .getConfigManager()

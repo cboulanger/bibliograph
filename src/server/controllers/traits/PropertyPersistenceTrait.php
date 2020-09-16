@@ -18,7 +18,7 @@ trait PropertyPersistenceTrait
    * @return string
    */
   protected function getPropertyCacheId() {
-    return md5(self::class);
+    return md5(get_called_class());
   }
 
   /**
@@ -76,8 +76,7 @@ trait PropertyPersistenceTrait
    */
   protected function resetSavedProperties()
   {
-    Yii::debug("Resetting saved properties", __METHOD__);
+    Yii::debug("Resetting saved properties", self::CATEGORY);
     Yii::$app->cache->delete($this->getPropertyCacheId());
   }
-
 }
