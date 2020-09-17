@@ -567,6 +567,8 @@ class AccessConfigController extends AppController
         throw new UserErrorException($errorMessage . $e->getMessage());
       }
     }
+    // the id might have changed
+    $namedId = $model->namedId;
     if ($edit) {
       $this->actionEdit($type, $namedId);
       return "Created record and form for $type $namedId.";

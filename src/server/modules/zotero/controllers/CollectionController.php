@@ -230,7 +230,7 @@ class CollectionController
     return [
       'isBranch'        => true,
       'label'           => $data['data']['name'],
-      'bOpened'         => false,
+      'bOpened'         => true,
       'icon'            => null,
       'iconSelected'    => null,
       'bHideOpenClose'  => ($data['meta']['numCollections'] === 0),
