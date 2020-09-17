@@ -215,8 +215,10 @@ qx.Class.define("bibliograph.ui.main.Toolbar",
           control = new qx.ui.container.Composite(new qx.ui.layout.HBox(5));
           control.setVisibility("excluded");
           let ds = bibliograph.store.Datasources.getInstance();
-          let searchPermisssion = this.__pm.create("reference.search")
-            .bindTo(ds, "selected.readOnly", state => !state);
+          let searchPermisssion =
+            this.__pm.create("reference.search")
+              .addCondition(() => ds.getSelected() && !ds.getSelected().getReadOnly())
+              .updateOn(ds, "changeSelected");
           this.bindVisibilityToProp(searchPermisssion, "state", control);
           control.add(this.getQxObject("search-box"));
           control.add(this.getQxObject("search-button"));

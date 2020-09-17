@@ -618,6 +618,30 @@ qx.Class.define("qcl.ui.table.TableView",
       controller.addListener("statusMessage", function (e) {
         this.showMessage(e.getData());
       }, this);
+  
+      // prevent selection when loading data
+      controller.addListener("blockLoading", e => {
+        let {firstRow, lastRow} = e.getData();
+        let pane = table.getPaneScroller(0).getTablePane();
+        let numRows = lastRow-firstRow+1;
+        let firstVisibleRow = pane.getFirstVisibleRow();
+        let visibleRowCount = pane.getVisibleRowCount();
+        if (firstVisibleRow >= firstRow && visibleRowCount <= numRows) {
+          this.debug("Preventing selection during block load...");
+          let selectionModel = table.getSelectionModel();
+          let selectionMode = selectionModel.getSelectionMode();
+          selectionModel.setSelectionMode(qx.ui.table.selection.Model.NO_SELECTION);
+          let handler = e => {
+            let {firstRow:firstRow2, lastRow:lastRow2} = e.getData();
+            if (firstRow2 === firstRow && lastRow2 === lastRow) {
+              selectionModel.setSelectionMode(selectionMode);
+              controller.removeListener("blockLoaded", handler);
+              this.debug("Block loaded - allowing selection.");
+            }
+          };
+          controller.addListener("blockLoaded", handler);
+        }
+      });
     },
     
     /**
@@ -922,7 +946,7 @@ qx.Class.define("qcl.ui.table.TableView",
      * Loads list item content
      * @return {void}
      */
-      load: function () {
+    load: function () {
       this.clearTable();
       // if we don't have a model type yet, wait until we have one
       if (!this.getModelType()) {
@@ -990,7 +1014,6 @@ qx.Class.define("qcl.ui.table.TableView",
       } catch (e) {
         // debug
         this.warn(e);
-        return;
       }
     },
     

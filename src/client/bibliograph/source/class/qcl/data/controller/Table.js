@@ -37,18 +37,15 @@ qx.Class.define("qcl.data.controller.Table",
     * @param target {qx.ui.table.Table} The target table.
     * @param store {Object?null} The store that retrieves the data
     */
-  construct : function( target, store )
-  {
+  construct : function(target, store) {
     this.base(arguments);
     
-    if( target != undefined )
-    {
-       this.setTarget( target );
+    if (target !== undefined) {
+       this.setTarget(target);
     }
     
-    if( store != undefined )
-    {
-       this.setStore( store );
+    if (store !== undefined) {
+       this.setStore(store);
     }
     
     this.__currentRequestIds = [];
@@ -108,15 +105,21 @@ qx.Class.define("qcl.data.controller.Table",
   
   events :
   {
+  
+    /**
+     * Fired before a block is being loaded from the server
+     */
+    "blockLoading": "qx.event.type.Data",
+    
     /**
      * Fired when a block has been loaded from the server
      */
-    "blockLoaded" : "qx.event.type.Data",
+    "blockLoaded": "qx.event.type.Data",
 
     /**
      * Fired when a message should be displayed
      */
-    "statusMessage" : "qx.event.type.Data"
+    "statusMessage": "qx.event.type.Data"
   },
 
   /*
@@ -155,16 +158,16 @@ qx.Class.define("qcl.data.controller.Table",
      
      /**
       * Set a new Table as target
+      *
+      * @param target
+      * @param old
       */
-     _applyTarget : function( target, old )
-     {
-       if ( old )
-       {
+     _applyTarget : function(target, old) {
+       if (old) {
          // @todo remove listeners
        }
        
-       if ( target )
-       {
+       if (target) {
          // catch the dataEdited event which is fired when the
          // user has made a manual change to the data
          //target.addListener("dataEdited", this._targetOnDataEdited, this );
@@ -176,15 +179,16 @@ qx.Class.define("qcl.data.controller.Table",
          // problematic if several Tables share a datasource.
          target.getTableModel().setController(this);
        }
-       
      },
      
      
      /**
       * Set a new store and adds event listeners
+      *
+      * @param store
+      * @param old
       */
-     _applyStore : function ( store, old )
-     {
+     _applyStore : function (store, old) {
 
      
      },
@@ -195,15 +199,14 @@ qx.Class.define("qcl.data.controller.Table",
       * controlled widget's data model.
       *
       * @param value {qx.core.Object|null} The model contaning the new nodes.
+      * @param model
       * @param old {qx.core.Object|null} The old model, if any.
       */
-     _applyModel: function( model, old )
-     {
-       var targetModel  = this.getTarget().getTableModel();
+     _applyModel: function(model, old) {
+       var targetModel = this.getTarget().getTableModel();
        
        // clear the table if the model is set to null
-       if ( model === null )
-       {
+       if (model === null) {
          targetModel.clearCache();
          this.__rowCountRequest = false;
          this.__currentRequestIds = [];
@@ -213,17 +216,14 @@ qx.Class.define("qcl.data.controller.Table",
        var requestId = model.getRequestId();
        
        // was this a row count request?
-       if ( model.getRowCount() !== null && this.__rowCountRequest ) {
-         targetModel._onRowCountLoaded( model.getRowCount() );
+       if (model.getRowCount() !== null && this.__rowCountRequest) {
+         targetModel._onRowCountLoaded(model.getRowCount());
          this.__rowCountRequest = false;
-       }
-       
-       // was this a row data request? if yes, does the requestId fit?
-       else if ( model.getRowData() !== null
-           && qx.lang.Array.contains( this.__currentRequestIds, requestId ) )
-       {
-         targetModel._onRowDataLoaded( model.getRowData() );
-         qx.lang.Array.remove( this.__currentRequestIds, requestId );
+       } else if (model.getRowData() !== null &&
+         qx.lang.Array.contains(this.__currentRequestIds, requestId)) {
+         // was this a row data request? if yes, does the requestId fit?
+         targetModel._onRowDataLoaded(model.getRowData());
+         qx.lang.Array.remove(this.__currentRequestIds, requestId);
        }
      },
      
@@ -237,15 +237,14 @@ qx.Class.define("qcl.data.controller.Table",
       * Reloads the data of the target model
       * @return {Void}
       */
-     reload : function()
-     {
-       if( this.getTarget() && this.getStore() ) {
+     reload : function() {
+       if (this.getTarget() && this.getStore()) {
         // visually reset the table
          var table = this.getTarget();
          var model = table.getTableModel();
          table.resetSelection();
          model.reloadData();
-         table.scrollCellVisible(0,0);
+         table.scrollCellVisible(0, 0);
        }
      },
      
@@ -261,42 +260,49 @@ qx.Class.define("qcl.data.controller.Table",
       * is provided by the store.
       * @return {void}
       */
-     _loadRowCount : function()
-     {
-       if ( ! this.getTarget() ) return;
+     _loadRowCount : function() {
+       if (!this.getTarget()) {
+         return;
+       }
        
-       var store      = this.getStore();
+       var store = this.getStore();
        var tableModel = this.getTarget().getTableModel();
-       var marshaler  = store.getMarshaler();
-       var params     = marshaler.getQueryParams();
-       var app        = qx.core.Init.getApplication();
+       var marshaler = store.getMarshaler();
+       var params = marshaler.getQueryParams();
+       var app = qx.core.Init.getApplication();
       
        delete this.__firstRow;
-       
-      this.fireDataEvent("statusMessage", app.tr( "Getting number of rows..." ) );
+       this.fireDataEvent("statusMessage", app.tr("Getting number of rows..."));
 
        // load the row count and pass it to th model
-       store.load( marshaler.getMethodGetRowCount(), params, function(){
-         this.fireDataEvent( "statusMessage", null );
+       store.load(marshaler.getMethodGetRowCount(), params, function() {
+         this.fireDataEvent("statusMessage", null);
          this.__rowCount = store.getModel().getRowCount();
-         tableModel._onRowCountLoaded( this.__rowCount );
-       },this );
+         tableModel._onRowCountLoaded(this.__rowCount);
+       }, this);
      },
-     
-     
+    
     /**
      * Triggers the request for row data through the store.
      * The data will be in the rowData property of the model that
      * is provided by the store.
+     *
      * @return {void}
+     * @param firstRow
+     * @param lastRow
      */
-     _loadRowData : function( firstRow, lastRow )
-     {
+    _loadRowData : function(firstRow, lastRow) {
+      // fire event
+      this.fireDataEvent("blockLoading", {
+        "firstRow" : firstRow,
+        "lastRow"  : lastRow
+      });
+      
       //if ( this.__rowDataRequest ) return;
       //this.info( "Requesting " + firstRow + " - " + lastRow );
     
       // prevent retrieving the same data more than once
-      if ( firstRow === this.__firstRow ) {
+      if (firstRow === this.__firstRow) {
         return;
       }
       this.__firstRow = firstRow;
@@ -309,45 +315,44 @@ qx.Class.define("qcl.data.controller.Table",
       // tables connected to the same store
       //var requestId = store.getNextRequestId();
       var requestId = this.__requestId++;
-      this.__currentRequestIds.push( requestId );
+      this.__currentRequestIds.push(requestId);
       
       // add firstRow, lastRow, requestId at the beginning of the
       // parameters
       // @todo do we really need the request id?
-      var params = [firstRow, lastRow, requestId].concat( marshaler.getQueryParams() );
+      var params = [firstRow, lastRow, requestId].concat(marshaler.getQueryParams());
 
       this.fireDataEvent("statusMessage",
         this.tr(
           "Loading rows %1 - %2 of %3 ...",
-          firstRow, Math.min( lastRow, this.__rowCount), this.__rowCount
+          firstRow, Math.min(lastRow, this.__rowCount), this.__rowCount
         )
       );
       
       // load data
-      store.load( marshaler.getMethodGetRowData(), params)
-      .then(()=>{
-        this.fireDataEvent("statusMessage",null);
+      store.load(marshaler.getMethodGetRowData(), params)
+      .then(() => {
+        this.fireDataEvent("statusMessage", null);
         
         // check data
         var rowData = store.getModel().getRowData();
-        if ( ! qx.lang.Type.isArray( rowData ) || ! rowData.length )
-        {
+        if (!qx.lang.Type.isArray(rowData) || !rowData.length) {
           this.warn("Invalid server response");
           rowData = null;
         }
         
         // pass data to the table model
-        tableModel._onRowDataLoaded( rowData );
+        tableModel._onRowDataLoaded(rowData);
         
         // fire event
-        this.fireDataEvent("blockLoaded",{
-          'firstRow' : firstRow,
-          'lastRow'  : lastRow
+        this.fireDataEvent("blockLoaded", {
+          "firstRow" : firstRow,
+          "lastRow"  : lastRow
         });
       })
-      .catch((err)=>{
+      .catch(err => {
         this.warn(err);
-        tableModel._onRowDataLoaded( null );
+        tableModel._onRowDataLoaded(null);
       });
      },
      

@@ -201,7 +201,7 @@ class ItemController
       $this->throwConnectionError();
     }
     $body = $response->getBody();
-    $formatted = $body['bib'];
+    $formatted = $body['bib'] ?? "";
     $abstract = $body['data']['abstractNote'] ?? "";
     $html = "<p>$formatted</p>";
     if ($abstract) {
