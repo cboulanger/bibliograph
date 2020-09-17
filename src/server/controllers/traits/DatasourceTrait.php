@@ -22,7 +22,7 @@ trait DatasourceTrait
   /**
    * @return User
    */
-  abstract function getActiveUser(): User;
+  abstract function getActiveUser();
 
   /**
    * Returns the datasource instance which has the given named id.

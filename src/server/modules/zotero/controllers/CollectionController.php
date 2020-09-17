@@ -130,7 +130,7 @@ class CollectionController
     $cachedCollections = self::getCached(self::CACHE_COLLECTIONS, $datasourceId);
 
     // if versions changed,invalidate cache
-    if (count($cachedVersions)) {
+    if (is_array($cachedVersions) and count($cachedVersions) > 0) {
       $countDiff = count(array_diff_assoc($versions, $cachedVersions));
       if (is_array($cachedVersions) and $countDiff > 0) {
         Yii::debug("Invalidating cache since $countDiff collections have changed.");

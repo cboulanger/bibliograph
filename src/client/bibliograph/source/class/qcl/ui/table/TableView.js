@@ -329,17 +329,13 @@ qx.Class.define("qcl.ui.table.TableView",
         return;
       }
       
-      /*
-       * clear query
-       */
+      // clear query
       this.setQuery(null);
       
-      /*
-       * use a small timeout to avoid rapid reloads
-       */
+      // use a small timeout to avoid rapid reloads
       qx.util.TimerManager.getInstance().start(() => {
         // if the folder id has already changed, do not load
-        if (folderId != this.getFolderId()) {
+        if (folderId !== this.getFolderId()) {
           return;
         }
         
@@ -347,7 +343,7 @@ qx.Class.define("qcl.ui.table.TableView",
         let mainFolderTree = qx.core.Id.getQxObject("folder-tree-panel/tree-view");
         let selectedNode = mainFolderTree.getSelectedNode();
         
-        if (selectedNode && selectedNode.data.id == folderId) {
+        if (selectedNode && selectedNode.data.id === folderId) {
           // we can get the folder hierarchy for the breadcrumb
           let hierarchy = mainFolderTree.getTree().getHierarchy(selectedNode);
           hierarchy.unshift(this.getApplication().getDatasourceLabel());
@@ -543,6 +539,8 @@ qx.Class.define("qcl.ui.table.TableView",
      */
     _loadTableLayout: async function () {
       if (!this.getDatasource()) {
+        this.debug("Deferring loading of table layout until datasource has been set");
+        this.addListenerOnce("changeDatasource", () => this._loadTableLayout());
         return;
       }
       this.__loadingTableStructure = true;

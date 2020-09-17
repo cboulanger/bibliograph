@@ -382,23 +382,20 @@ qx.Class.define("bibliograph.Setup", {
       if (this.__selectedIds) {
         let selectedIds = [];
         this.__selectedIds.split(",").forEach(function(id) {
-          id = parseInt(id);
-          if (id && !isNaN(id)) {
-           selectedIds.push(id);
-          }
+          selectedIds.push(id);
         }, this);
         app.setSelectedIds(selectedIds);
       }
-      if (this.__folderId && !isNaN(parseInt(this.__folderId))) {
+      if (this.__folderId) {
         this.info("Restoring folder id: " + this.__folderId);
-        app.setFolderId(parseInt(this.__folderId));
+        app.setFolderId(this.__folderId);
       } else if (this.__query) {
         this.info("Restoring query: " + this.__query);
         app.setQuery(this.__query);
       }
-      if (this.__modelId && !isNaN(parseInt(this.__modelId))) {
+      if (this.__modelId) {
         this.info("Restoring model id: " + this.__modelId);
-        app.setModelId(parseInt(this.__modelId));
+        app.setModelId(this.__modelId);
       }
     },
 

@@ -396,9 +396,9 @@ qx.Class.define("qcl.application.StateManager",
       if (qx.Class.hasProperty(clazz, name)) {
         var type = qx.Class.getPropertyDefinition(clazz, name).check;
         switch (type) {
-          case "Integer":
+          case "Number":
             if (isNaN(parseInt(value))) {
-              this.error("Trying to set non-integer state property to integer application property");
+              this.error("Trying to set non-number state property to number application property");
               return;
             }
             value = parseInt(value);
@@ -434,6 +434,8 @@ qx.Class.define("qcl.application.StateManager",
               value = true;
             } else if (value === "false") {
               value = false;
+            } else if (value === "0") {
+              value = 0;
             }
             break;
           default:

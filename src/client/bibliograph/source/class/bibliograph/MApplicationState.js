@@ -226,7 +226,7 @@ qx.Mixin.define("bibliograph.MApplicationState", {
     _applyFolderId: function (value, old) {
       var stmgr = this.getStateManager();
       stmgr.setState("modelId", 0);
-      if (parseInt(value)) {
+      if (value && value !== "null" && value !== "0") {
         stmgr.setState("folderId", value);
         stmgr.setState("query", "");
         stmgr.removeState("query");
@@ -274,7 +274,7 @@ qx.Mixin.define("bibliograph.MApplicationState", {
      * @param old
      */
     _applyModelId: function (value, old) {
-      if (value) {
+      if (value && value !== "null" && value !== "0") {
         this.getStateManager().setState("modelId", value);
       } else {
         this.getStateManager().removeState("modelId");
