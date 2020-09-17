@@ -7,7 +7,10 @@
  */
 
 namespace app\controllers\traits;
+use ReflectionClass;
+use ReflectionProperty;
 use Yii;
+use Yii\base\UnknownPropertyException;
 
 trait PropertyPersistenceTrait
 {
@@ -30,9 +33,13 @@ trait PropertyPersistenceTrait
     $properties = unserialize(Yii::$app->cache->get($this->getPropertyCacheId()));
     if (is_array($properties)) {
       //Yii::debug(">>> Restoring properties", __METHOD__);
-      //Yii::debug(array_keys($properties));
+      //Yii::debug($properties);
       foreach ($properties as $property => $value) {
-        $this->$property = $value;
+        try {
+          $this->$property = $value;
+        } catch (UnknownPropertyException $e) {
+          Yii::error($e);
+        }
       }
       return $properties;
     }
@@ -43,8 +50,9 @@ trait PropertyPersistenceTrait
   /**
    * Save all properties of this instance to a file cache which are
    * scalar values or arrays of scalar values
+   * @param array $keys If given, only save the properties in this array
    */
-  protected function saveProperties()
+  protected function saveProperties(array $keys=[])
   {
     function is_serializable($value) {
       if (is_object($value)) {
@@ -61,14 +69,33 @@ trait PropertyPersistenceTrait
       }
       return is_scalar($value);
     }
-    $properties = [];
-    foreach( get_object_vars($this) as $property => $value) {
+    $objectProperties = get_object_vars($this);
+    $keys = count($keys) ? $keys : array_keys($objectProperties);
+    $savedProperties = [];
+    foreach ($keys as $key) {
+      $value = $objectProperties[$key];
       if (is_serializable($value)) {
-        $properties[$property] = $value;
+        $savedProperties[$key] = $value;
       }
     }
     //Yii::debug(">>> Saving properties", __METHOD__);
-    Yii::$app->cache->set($this->getPropertyCacheId(), serialize($properties));
+    Yii::$app->cache->set($this->getPropertyCacheId(), serialize($savedProperties));
+  }
+
+  /**
+   * Saves only the properties of the calling class, not of its parents
+   */
+  protected function saveOwnProperties() {
+    $properties = (new ReflectionClass(self::class))->getProperties();
+    $ownPropertyNames = array_map(
+      function(ReflectionProperty $property) {
+        return $property->getName();
+      },
+      array_filter($properties, function(ReflectionProperty $property) {
+        return $property->getDeclaringClass() == get_called_class();
+      })
+    );
+    $this->saveProperties($ownPropertyNames);
   }
 
   /**

@@ -69,6 +69,7 @@ class Datasource extends \app\models\Datasource
     return $al;
   }
 
+
   /**
    * @inheritDoc
    */
@@ -122,6 +123,7 @@ class Datasource extends \app\models\Datasource
     if ($this->namedId && !Str::startsWith($this->namedId, "zotero_")) {
       $this->namedId = "zotero_" . $this->namedId;
     }
+    $this->type = "zotero";
     $this->readonly = true;
     return parent::beforeSave($insert);
   }

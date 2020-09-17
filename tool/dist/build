@@ -27,6 +27,7 @@ BUILD_TARGET=${BUILD_TARGET:-build}
 BUILD_VERBOSE=${BUILD_VERBOSE:-0}
 BUILD_CLEAN=${BUILD_CLEAN:-0}
 DIST_DIR=${DIST_DIR:-$(pwd)/dist}
+DIST_SERVER_DIR=${DIST_SERVER_DIR:-$DIST_DIR/server}
 DIST_CONF_DIR=${DIST_CONF_DIR:-$DIST_DIR/config}
 DEPLOY_CONFIG_DIR=${DEPLOY_CONFIG_DIR:-"./config"}
 
@@ -84,7 +85,7 @@ echo ">>> Building server ..."
 echo " - Copy/create files ..."
 
 # application files
-mkdir $DIST_DIR/server
+mkdir -p $DIST_SERVER_DIR
 cp -a $SERVER_SRC_DIR/{config,controllers,lib,messages,migrations,models,modules,schema,views,bootstrap.php} $DIST_SERVER_DIR/
 mkdir -p $DIST_SERVER_DIR/runtime/{cache,logs}
 
@@ -106,6 +107,7 @@ echo "DENY FROM ALL" >> $DIST_CONF_DIR/.htaccess
 # create server.php
 cat << EOF > $DIST_DIR/server.php
 <?php
+const YII_DEBUG=${YII_DEBUG:-false};
 const APP_ROOT_DIR = __DIR__;
 define("APP_FRONTEND_DIR", realpath("./bibliograph"));
 define("DOTENV_FILE" , realpath("$DEPLOY_CONFIG_DIR/.env"));

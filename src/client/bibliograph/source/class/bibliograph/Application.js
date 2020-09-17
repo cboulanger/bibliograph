@@ -24,6 +24,7 @@
  * @require(qcl.application.ClipboardManager)
  * @require(qcl.io.jsonrpc.MessageBus)
  * @require(qxl.dialog.Dialog)
+ * @require(bibliograph.rpc.Commands)
  */
 qx.Class.define("bibliograph.Application", {
   extend : qx.application.Standalone,
@@ -127,8 +128,6 @@ qx.Class.define("bibliograph.Application", {
     __storage : null,
     /** {qx.ui.core.Blocker} */
     __blocker : null,
-    /** @var {String} */
-    __url : null,
     /** @var {Object} */
     __widgets : null,
     /** @var {qxl.taskmanager.Manager} */

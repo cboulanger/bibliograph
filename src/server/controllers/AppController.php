@@ -24,6 +24,7 @@ use app\controllers\traits\{
   AccessControlTrait, AuthTrait, DatasourceTrait, MessageTrait, ShelfTrait
 };
 use app\models\Session;
+use app\controllers\traits\JsonRpcTrait;
 use lib\filters\auth\JsonRpcPayloadTokenAuth;
 use lib\filters\auth\SessionIdAuth;
 use Yii;
@@ -45,6 +46,7 @@ class AppController extends Controller
   use DatasourceTrait;
   use ShelfTrait;
   use AccessControlTrait;
+  use JsonRpcTrait;
 
   // Disable CSRF validation for JSON-RPC POST requests
   public $enableCsrfValidation = false;

@@ -82,13 +82,14 @@ class DatasourceManager extends \yii\base\Component
     }
     /** @noinspection MissedFieldInspection */
     $datasource = new Datasource([
-      'namedId' => $datasourceName,
-      'title'   => $datasourceName,
-      'schema'  => $schemaName,
-      'prefix'  => $class::createTablePrefix($datasourceName),
-      'active'  => 1,
-      'readonly' => 0,
-      'hidden'  => 0
+      'namedId'   => $datasourceName,
+      'title'     => $datasourceName,
+      'schema'    => $schemaName,
+      'prefix'    => $class::createTablePrefix($datasourceName),
+      'type'      => '',
+      'active'    => 1,
+      'readonly'  => 0,
+      'hidden'    => 0
     ]);
     $datasource->save();
     $datasourceName = $datasource->namedId; // in case the named id has changed during save

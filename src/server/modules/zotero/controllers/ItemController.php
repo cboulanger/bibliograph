@@ -195,12 +195,21 @@ class ItemController
     try {
       $response = $api
         ->items($itemId)
+        ->setPath($api->getPath() . "?include=bib,data&linkwrap=1")
         ->send();
     } catch (ConnectException $e) {
       $this->throwConnectionError();
     }
-    $item = $response->getBody()['data'];
-    $html = "<pre>" . json_encode($item, JSON_PRETTY_PRINT) . "</pre>";
+    $body = $response->getBody();
+    $formatted = $body['bib'];
+    $abstract = $body['data']['abstractNote'] ?? "";
+    $html = "<p>$formatted</p>";
+    if ($abstract) {
+      $html .= "<p><b>Abstract:</b> $abstract";
+    }
+    //$html = $response->getBody()['data'];
+//    $item = $response->getBody(); //['data'];
+//    $html = "<pre>" . json_encode($item, JSON_PRETTY_PRINT) . "</pre>";
 
 //
 //

@@ -39,7 +39,7 @@ trait AuthTrait
 
   /**
    * Shorthand getter for active user object
-   * @return \app\models\User
+   * @return User
    */
   public function getActiveUser()
   {

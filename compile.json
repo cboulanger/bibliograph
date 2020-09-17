@@ -29,7 +29,7 @@
       "environment": {
         "app.mode": "development",
         "qx.debug": true,
-        "qx.io.jsonrpc.debug": true
+        "qx.io.jsonrpc.debug": false
       },
       "bundle": {
         "include": [

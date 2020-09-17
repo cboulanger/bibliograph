@@ -275,10 +275,20 @@ class SetupController extends \app\controllers\AppController
   // ACTIONS
   //-------------------------------------------------------------
 
-  public function actionReset() {
-    $this->resetSavedProperties();
+  public function actionReset($confirmed=false) {
+    if ($confirmed) {
+      $this->addNotification("bibliograph.rpc.Commands.reload", [true]);
+      return "OK";
+    }
+    try {
+      Yii::$app->cache->flush();
+    } catch (\Exception $e) {}
+
     (new Alert())
-      ->setMessage(Yii::t("app", "The setup cache has been reset. Reload the application."))
+      ->setMessage(Yii::t("app", "The setup cache has been reset. The application will be reloaded."))
+      ->setService("setup")
+      ->setMethod("reset")
+      ->setParams([true])
       ->sendToClient();
     return "Setup cache has been reset.";
   }
@@ -419,6 +429,8 @@ class SetupController extends \app\controllers\AppController
           $this->setupMethods[] = $method;
         }
       }
+      // mark that reset has been done
+      $this->isReset = false;
     } elseif ($this->checkModuleNeedsUpgrade()) {
       // setup the modules since a version has changed
       $this->setupMethods[] = "setupModules";
@@ -563,7 +575,9 @@ class SetupController extends \app\controllers\AppController
     $msg = "Setup of version '$this->upgrade_to' finished successfully.";
     Yii::info($msg, self::CATEGORY);
     Yii::debug($this->messages, __METHOD__);
-    $this->saveProperties();
+    $this->messages=[];
+    $this->errors=[];
+    $this->saveOwnProperties();
     // update version
     if (!Yii::$app->config->keyExists('app.version')) {
       // createKey( $key, $type, $customize=false, $default=null, $final=false )
