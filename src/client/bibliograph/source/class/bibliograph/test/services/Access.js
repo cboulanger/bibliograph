@@ -1,7 +1,7 @@
 /**
  * @require(qx.io.transport.Http)
  */
-qx.Class.define("bibliograph.test.t3.Access", {
+qx.Class.define("bibliograph.test.services.Access", {
   extend: qx.dev.unit.TestCase,
   include: [
     qx.test.io.MAssert,
@@ -21,7 +21,6 @@ qx.Class.define("bibliograph.test.t3.Access", {
       // eslint-disable-next-line no-caller
       this.showTestNameInRequest(arguments.callee.name);
       await this.logout();
-      this.assertEquals(null, this.client.getToken(), "Client token should be null");
     },
   
     async "test: try to access method without authentication - should fail"() {
@@ -32,7 +31,7 @@ qx.Class.define("bibliograph.test.t3.Access", {
         throw new Error("Unauthenticated access should throw");
       } catch (e) {
         this.assertInstance(e, qx.io.exception.Protocol);
-        this.assertEquals("Unauthorized: Your request was made with invalid credentials.", e.message);
+        this.assertContains("Unauthorized", e.message);
       }
     },
     
@@ -43,6 +42,7 @@ qx.Class.define("bibliograph.test.t3.Access", {
       let username = await this.client.request("access.username");
       console.log(`Username is ${username}.`);
       this.assertString(username);
+      await this.logout();
     },
   
     async "test: log in anonymously and test persistence"() {
@@ -55,6 +55,7 @@ qx.Class.define("bibliograph.test.t3.Access", {
         this.assertEquals(counter || c, c);
         counter = c+1;
       }
+      await this.logout();
     },
   
   
@@ -65,6 +66,7 @@ qx.Class.define("bibliograph.test.t3.Access", {
       let result = await this.client.request("access.userdata");
       this.assertEquals("admin", result.namedId);
       this.assertInArray("*", result.permissions);
+      await this.logout();
     },
 
     async "test: authenticate with Password and test persistence"() {
@@ -77,6 +79,7 @@ qx.Class.define("bibliograph.test.t3.Access", {
         this.assertEquals(counter || c, c);
         counter = c+1;
       }
+      await this.logout();
     },
     
     eof() {}

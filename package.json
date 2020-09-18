@@ -33,7 +33,7 @@
     "test:codeception:api": "tool/test/codeception \"api --env empty-database\"",
     "test:codeception:custom": "tool/test/codeception \"api AccessControllerCest\"",
     "test:testtapper:all": "tool/test/testtapper",
-    "test:testtapper:custom": "tool/test/testtapper -a testtapper?class=bibliograph.test.t3.Access",
+    "test:testtapper:custom": "tool/test/testtapper -Q ?class=bibliograph.test.services",
     "test:playwright:custom": "node ./test/playwright/test-login.js",
     "dist:local.docker:build": "tool/dist/build test/.env",
     "dist:local.docker:run": "tool/dist/run",

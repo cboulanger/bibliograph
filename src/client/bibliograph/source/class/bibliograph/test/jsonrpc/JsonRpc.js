@@ -3,7 +3,7 @@
  * @require(qx.test.io.jsonrpc.MAssert)
  * @ignore(bibliograph.test.notification_received)
  */
-qx.Class.define("bibliograph.test.t1.JsonRpc", {
+qx.Class.define("bibliograph.test.jsonrpc.JsonRpc", {
   extend: qx.dev.unit.TestCase,
   include: [
     qx.test.io.MAssert,

@@ -11,7 +11,8 @@
     "app.version": "development",
     "app.serverUrl": "../../../src/server/web/",
     "qx.icontheme": "Tango",
-    "module.objectid": true
+    "module.objectid": true,
+    "qcl.io.jsonrpc.token-in-params": true
   },
   "locales": [
     "en",
@@ -66,7 +67,6 @@
       "environment": {
         "app.taskmonitor.enable": true,
         "app.taskmonitor.show": false,
-        "qcl.io.jsonrpc.token-in-params": true,
         "qcl.ui.tool.ObjectIds.enable": true
       }
     },
@@ -77,7 +77,9 @@
       "title": "Qooxdoo TestTAPper",
       "environment": {
         "qx.icontheme": "Tango",
-        "testtapper.testNameSpace": "bibliograph.test"
+        "app.serverUrl": "../../../src/server/test/",
+        "testtapper.testNameSpace": "bibliograph.test",
+        "qx.test.delay.scale" : 0
       },
       "include": [
         "bibliograph.test.*",

@@ -2,7 +2,7 @@
  * @require(qx.io.transport.Http)
  * @require(qcl.io.jsonrpc.MessageBus)
  */
-qx.Class.define("bibliograph.test.t2.Setup", {
+qx.Class.define("bibliograph.test.services.AASetup", {
   extend: qx.dev.unit.TestCase,
   include: [
     qx.test.io.MAssert,

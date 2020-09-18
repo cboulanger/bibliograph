@@ -21,7 +21,7 @@ if [[ -z "$APP_URL" ]]; then
 fi
 
 # Attach query string if set
-if [[ -z "$APP_URL_QUERY" ]]; then
+if [[ "$APP_URL_QUERY" != "" ]]; then
   APP_URL=${APP_URL}${APP_URL_QUERY}
 fi
 

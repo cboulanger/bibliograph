@@ -32,8 +32,13 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
   construct: function(url, service) {
     this.__dialog = qxl.dialog.Dialog.error("").hide();
     qx.util.Validate.checkUrl(url);
-    this.__service = service.replace(/\//g, ".");
-    const client = this.__client = new qx.io.jsonrpc.Client(url, this.__service);
+    let methodPrefix;
+    if (service) {
+      // the service, can contain "." or "/" as path separators
+      this.__service = service.replace(/\//g, ".").replace(/\.$/, "");
+      methodPrefix = this.__service + ".";
+    }
+    const client = this.__client = new qx.io.jsonrpc.Client(url, methodPrefix);
     client.addListener("outgoingRequest", this._configueTransport, this);
     client.addListener("incomingRequest", this._handleIncomingRequest, this);
     qx.event.message.Bus.subscribe("qcl.token.change", e => {
@@ -154,9 +159,12 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
       this.setError(null);
       let result;
       let task;
+      let app = qx.core.Init.getApplication();
       if (qx.core.Environment.get("app.taskmonitor.enable")) {
-        task = new qxl.taskmanager.Task(`JSON-RPC request for '${this.__service}.${method}'`, params);
-        qx.core.Init.getApplication().getTaskMonitor().add(task);
+        if (app.getTaskMonitor) {
+          task = new qxl.taskmanager.Task(`JSON-RPC request for '${this.__service}.${method}'`, params);
+          app.getTaskMonitor().add(task);
+        }
       }
       try {
         result = await this.__client.sendRequest(method, params);
@@ -178,7 +186,9 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
         return null;
       } finally {
         if (qx.core.Environment.get("app.taskmonitor.enable")) {
-          qx.core.Init.getApplication().getTaskMonitor().remove(task).dispose();
+          if (app.getTaskMonitor) {
+            app.getTaskMonitor().remove(task).dispose();
+          }
         }
       }
       return result;
