@@ -1,11 +1,12 @@
 /**
  * @require(qx.io.transport.Http)
+ * @require(qx.test.io.jsonrpc.MAssert)
  * @ignore(bibliograph.test.notification_received)
  */
 qx.Class.define("bibliograph.test.t1.JsonRpc", {
   extend: qx.dev.unit.TestCase,
   include: [
-    qx.test.io.jsonrpc.MAssert,
+    qx.test.io.MAssert,
     bibliograph.test.MHelpers
   ],
   members: {

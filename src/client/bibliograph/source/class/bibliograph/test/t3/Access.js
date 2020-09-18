@@ -4,7 +4,7 @@
 qx.Class.define("bibliograph.test.t3.Access", {
   extend: qx.dev.unit.TestCase,
   include: [
-    qx.test.io.jsonrpc.MAssert,
+    qx.test.io.MAssert,
     bibliograph.test.MHelpers
   ],
   members: {

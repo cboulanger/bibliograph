@@ -1,13 +1,8 @@
 #!/bin/bash
 
 # Compiles and starts the testrunner app in the browser
-# usage: tool/test/testtapper <application name> <optional: class to be tested>
-
-APP_NAME=${1:-bibliograph-test}
-TESTCLASS=$2
-if [ "$TESTCLASS" != "" ]; then
-  APP_NAME="$APP_NAME?class=$TESTCLASS"
-fi
+# it takes the same arguments as tool/dev/run, execute tool/dev/run --help for more
+# to test an individual class, use tool/test/testtapper -Q ?class=XXX
 
 set -o errexit
 source test/.env
@@ -18,5 +13,4 @@ source tool/test/setup/create-mysql-user
 source tool/test/setup/check-mysql
 source tool/test/setup/reset-data
 
-export APP_URL
-tool/run/app $APP_NAME compile-test.json
+tool/dev/run -f test/.env -a testtapper -v "$@"

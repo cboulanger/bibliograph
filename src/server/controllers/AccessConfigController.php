@@ -126,7 +126,7 @@ class AccessConfigController extends AppController
     throw new UserErrorException(
       Yii::t(
         'app',
-        "An model of type {type} and id {namedId} does not exist.",
+        "An object of type {type} and id {namedId} does not exist.",
         ['type' => $type, 'namedId' => $namedId]
       )
     );

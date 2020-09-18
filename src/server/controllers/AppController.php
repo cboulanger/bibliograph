@@ -38,6 +38,8 @@ use yii\web\User;
 
 /**
  * Base class for controllers
+ * @param bool $allowSessionAuth Whether this controller allows to authenticate
+ * via the session id
  */
 class AppController extends Controller
 {
@@ -72,6 +74,11 @@ class AppController extends Controller
   protected $noAuthActions = [];
 
   /**
+   * @var bool
+   */
+  protected $allowSessionAuth = false;
+
+  /**
    * @inheritdoc
    */
   public function behaviors()
@@ -99,10 +106,12 @@ class AppController extends Controller
         $session->namedId = $newSessionId;
         $session->save();
         //Yii::debug("Renamed session $oldSessionId into $newSessionId", self::DEBUG);
+      } else if ($session = Session::findOne(['namedId' => $newSessionId])) {
+        // reuse existing session
+        $session->touch();
       } else {
         // create new session
-        $sessionId = $this->getSessionId();
-        $session = new Session(['namedId' => $sessionId]);
+        $session = new Session(['namedId' => $newSessionId]);
         $session->link('user',$user);
         $session->save();
         //Yii::debug("Starting sesssion {$sessionId}", self::CATEGORY);
@@ -111,6 +120,12 @@ class AppController extends Controller
     return $behaviors;
   }
 
+  /**
+   * @return bool
+   */
+  function getAllowSessionAuth() {
+    return $this->allowSessionAuth;
+  }
 
   //-------------------------------------------------------------
   // Helpers for returning data to the user

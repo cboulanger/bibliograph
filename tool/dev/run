@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Compiles and starts the bibliograph app in the browser
-
+echo "$0 $@"
 set -o errexit
 source tool/lib/functions.sh
 
@@ -10,6 +10,7 @@ VERBOSE=0
 USAGE=0
 APP_NAME=""
 APP_URL=""
+APP_URL_QUERY=""
 BUILD_CLEAN=0
 BUILD_ENV_FILE=test/.env
 BUILD_ENV_FILE_LOADED=0
@@ -37,6 +38,11 @@ while [[ $1 != "" ]] ; do
 
         "--app-url"|"-u")
             APP_URL="$2"
+            shift
+            ;;
+
+        "--app-url-query"|"-Q")
+            APP_URL_QUERY="$2"
             shift
             ;;
 
@@ -87,10 +93,14 @@ while [[ $1 != "" ]] ; do
     shift
 done
 
-# load defaults from .env file if not already loaded
+# load defaults from .env file if not already loaded, which will override any
+# CLI parameters. If this shouldn't happen, use the "-f" option to load the
+# .env file first
 if [[ $BUILD_ENV_FILE_LOADED == 0 ]]; then
   source $BUILD_ENV_FILE
 fi
+
+[[ VERBOSE == 1 ]] && echo "@0 $@"
 
 # check requirements
 source tool/env/check
@@ -105,6 +115,7 @@ where options are:
                                   compiler configuration
   --app-url, -u URL             - The URL of the application as specified in the
                                   compiler configuration
+  --app-url-query, -Q           - Optional query string/hash to attach to the URL
   --env-file, -f file           - the .env file containing configuration
                                  (defaults to .env). Must be the first parameter
                                  if others are to override the settings.
@@ -127,6 +138,7 @@ fi
 # export all needed environment variables
 source tool/env/envvars-export
 export APP_URL
+export APP_URL_QUERY
 export APP_NAME
 export BUILD_TARGET
 export BUILD_CONFIG_FILE

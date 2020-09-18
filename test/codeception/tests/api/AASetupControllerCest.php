@@ -40,6 +40,9 @@ class AASetupControllerCest
     } while (!$done);
   }
 
+  /**
+   * @param ApiTester $I
+   */
   public function tryReset(ApiTester $I) {
     $I->amGoingTo("Reset the setup cache");
     $I->sendJsonRpcRequest('setup','reset');

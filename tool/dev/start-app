@@ -20,6 +20,11 @@ if [[ -z "$APP_URL" ]]; then
   APP_URL=http://localhost:$PORT/compiled/$BUILD_TARGET/$APP_NAME
 fi
 
+# Attach query string if set
+if [[ -z "$APP_URL_QUERY" ]]; then
+  APP_URL=${APP_URL}${APP_URL_QUERY}
+fi
+
 # Compiler arguments
 COMPILE_ARGS="--target=$BUILD_TARGET --watch --feedback=0 -c $BUILD_CONFIG_FILE"
 if [[ $VERBOSE == 1 ]]; then

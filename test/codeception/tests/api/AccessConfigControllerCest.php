@@ -138,7 +138,7 @@ class AccessConfigControllerCest
       $I->sendJsonRpcRequest('access-config', 'delete', [$type, $namedId]);
       $I->expect("the $type not to exist any more.");
       $I->sendJsonRpcRequest('access-config', 'edit', [$type, $namedId], true);
-      $I->seeUserError("An object of type $type and id $namedId does not exist.");
+      $I->seeUserError("type $type and id $namedId does not exist");
     }
     $I->logout();
   }

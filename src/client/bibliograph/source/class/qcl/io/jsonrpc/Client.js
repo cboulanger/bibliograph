@@ -156,7 +156,7 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
       let task;
       if (qx.core.Environment.get("app.taskmonitor.enable")) {
         task = new qxl.taskmanager.Task(`JSON-RPC request for '${this.__service}.${method}'`, params);
-        this.getApplication().getTaskMonitor().add(task);
+        qx.core.Init.getApplication().getTaskMonitor().add(task);
       }
       try {
         result = await this.__client.sendRequest(method, params);
@@ -178,7 +178,7 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
         return null;
       } finally {
         if (qx.core.Environment.get("app.taskmonitor.enable")) {
-          this.getApplication().getTaskMonitor().remove(task).dispose();
+          qx.core.Init.getApplication().getTaskMonitor().remove(task).dispose();
         }
       }
       return result;
@@ -377,7 +377,7 @@ qx.Class.define("qcl.io.jsonrpc.Client", {
      * @private
      */
     _showAuthErrorMessageAndLogOut: function (method) {
-      let app = this.getApplication();
+      let app = qx.core.Init.getApplication();
       if (app.__authErrorDialog) {
         this.error(`Authentication failed for method '${method}.'`);
         return;

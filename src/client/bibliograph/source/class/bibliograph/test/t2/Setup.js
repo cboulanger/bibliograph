@@ -5,7 +5,7 @@
 qx.Class.define("bibliograph.test.t2.Setup", {
   extend: qx.dev.unit.TestCase,
   include: [
-    qx.test.io.jsonrpc.MAssert,
+    qx.test.io.MAssert,
     bibliograph.test.MHelpers
   ],
   members: {

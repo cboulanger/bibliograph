@@ -11,11 +11,7 @@
     "app.version": "development",
     "app.serverUrl": "../../../src/server/web/",
     "qx.icontheme": "Tango",
-    "module.objectid": true,
-    "qcl.io.jsonrpc.token-in-params": true,
-    "app.taskmonitor.enable": true,
-    "app.taskmonitor.show": false,
-    "qcl.ui.tool.ObjectIds.enable": true
+    "module.objectid": true
   },
   "locales": [
     "en",
@@ -63,29 +59,16 @@
       "bootPath": "source/boot",
       "include": [
         "bibliograph.plugins.*"
-      ]
-    },
-    {
-      "class": "qxl.apiviewer.Application",
-      "theme": "qxl.apiviewer.Theme",
-      "name": "apiviewer",
-      "title": "Qooxdoo API Viewer",
-      "environment": {
-        "qx.icontheme": "Tango",
-        "qxl.apiviewer.applicationName": "",
-        "qxl.apiviewer.exclude": [
-          "qxl.apiviewer.*"
-        ],
-        "qxl.apiviewer.include": []
-      },
-      "include": [
-        "qx.*"
       ],
       "exclude": [
-        "qx.test.*",
-        "qx.module.Blocker",
-        "qx.module.Placement"
-      ]
+        "qx.theme.tangible.*"
+      ],
+      "environment": {
+        "app.taskmonitor.enable": true,
+        "app.taskmonitor.show": false,
+        "qcl.io.jsonrpc.token-in-params": true,
+        "qcl.ui.tool.ObjectIds.enable": true
+      }
     },
     {
       "class": "qxl.testtapper.Application",
@@ -94,12 +77,15 @@
       "title": "Qooxdoo TestTAPper",
       "environment": {
         "qx.icontheme": "Tango",
-        "testtapper.testNameSpace": "qx.test"
+        "testtapper.testNameSpace": "bibliograph.test"
       },
       "include": [
-        "qx.test.*"
+        "bibliograph.test.*",
+        "bibliograph.Application"
       ],
-      "exclude": []
+      "exclude": [
+        "qx.theme.tangible.*"
+      ]
     }
   ],
   "babel": {

@@ -37,14 +37,14 @@ use lib\exceptions\{RecordExistsException,
   SetupFatalException};
 use lib\components\ConsoleAppHelper as Console;
 use lib\Module;
-
+use yii\web\UnauthorizedHttpException;
 
 
 /**
  * Setup controller. Needs to be the first controller called
  * by the application after loading
  */
-class SetupController extends \app\controllers\AppController
+class SetupController extends AppController
 {
   use PropertyPersistenceTrait;
 
@@ -72,7 +72,7 @@ class SetupController extends \app\controllers\AppController
    *
    * @var array
    */
-  protected $noAuthActions = ["setup", "version", "setup-version"];
+  protected $noAuthActions = ["setup", "version", "setup-version", "reset"];
 
   /**
    * Setup errors
@@ -276,6 +276,9 @@ class SetupController extends \app\controllers\AppController
   //-------------------------------------------------------------
 
   public function actionReset($confirmed=false) {
+    if (!YII_ENV_TEST and !$this->getActiveUser()) {
+      throw new UnauthorizedHttpException("Unauthorized");
+    }
     if ($confirmed) {
       $this->addNotification("bibliograph.rpc.Commands.reload", [true]);
       return "OK";
@@ -574,9 +577,7 @@ class SetupController extends \app\controllers\AppController
     // Everything seems to be ok
     $msg = "Setup of version '$this->upgrade_to' finished successfully.";
     Yii::info($msg, self::CATEGORY);
-    Yii::debug($this->messages, __METHOD__);
-    $this->messages=[];
-    $this->errors=[];
+    Yii::info($this->messages, self::CATEGORY);
     $this->saveOwnProperties();
     // update version
     if (!Yii::$app->config->keyExists('app.version')) {
