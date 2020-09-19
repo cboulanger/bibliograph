@@ -32,4 +32,4 @@ jobs:
       - name: Test connection
         uses: wei/curl@master
         with:
-          args: http://localhost:7073
+          args: http://localhost:8073
