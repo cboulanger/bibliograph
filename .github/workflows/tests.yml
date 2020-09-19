@@ -26,7 +26,6 @@ jobs:
       - name: Install Dependencies
         run: |
           tool/env/install
+          source test/.env
           tool/env/servers-start
           curl -s localhost:7073
-
-
