@@ -1,9 +1,10 @@
 #!/bin/bash
 
 # Compiles and starts the bibliograph app in the browser
-echo "$0 $@"
 set -o errexit
 source tool/lib/functions.sh
+
+echo "Command: $0 $*"
 
 # Preset default command line args
 VERBOSE=0
@@ -26,6 +27,7 @@ while [[ $1 != "" ]] ; do
         "--env-file"|"-f")
             BUILD_ENV_FILE="$2"
             [[ -f $BUILD_ENV_FILE ]] || exit_with_error "File $BUILD_ENV_FILE does not exist"
+            [[ $VERBOSE == 1 ]] && echo ">>> Loading environment variables from $BUILD_ENV_FILE"
             source $BUILD_ENV_FILE
             BUILD_ENV_FILE_LOADED=1
             shift
@@ -93,14 +95,15 @@ while [[ $1 != "" ]] ; do
     shift
 done
 
+
+
 # load defaults from .env file if not already loaded, which will override any
 # CLI parameters. If this shouldn't happen, use the "-f" option to load the
 # .env file first
 if [[ $BUILD_ENV_FILE_LOADED == 0 ]]; then
+  [[ $VERBOSE == 1 ]] && echo ">>> Loading environment variables from $BUILD_ENV_FILE"
   source $BUILD_ENV_FILE
 fi
-
-[[ VERBOSE == 1 ]] && echo "@0 $@"
 
 # check requirements
 source tool/env/check

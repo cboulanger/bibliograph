@@ -5,6 +5,12 @@
 # to test an individual class, use tool/test/testtapper -Q ?class=XXX
 
 set -o errexit
+
+APP_PARAM=""
+if [[ "$*" != *"--app-name"* ]]; then
+  APP_PARAM="--app-name=testtapper"
+fi
+
 source test/.env
 source tool/env/check
 source tool/lib/functions.sh
@@ -13,4 +19,4 @@ source tool/test/setup/create-mysql-user
 source tool/test/setup/check-mysql
 source tool/test/setup/reset-data
 
-tool/dev/run -f test/.env -a testtapper -v "$@"
+tool/dev/run -f test/.env -v "$APP_PARAM" "$@"

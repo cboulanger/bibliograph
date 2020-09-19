@@ -74,12 +74,12 @@
       "class": "qxl.testtapper.Application",
       "name": "testtapper",
       "theme": "qx.theme.Simple",
-      "title": "Qooxdoo TestTAPper",
+      "title": "Bibliograph Testtapper Tests",
       "environment": {
         "qx.icontheme": "Tango",
         "app.serverUrl": "../../../src/server/test/",
         "testtapper.testNameSpace": "bibliograph.test",
-        "qx.test.delay.scale" : 0
+        "qx.test.delay.scale" : 10
       },
       "include": [
         "bibliograph.test.*",

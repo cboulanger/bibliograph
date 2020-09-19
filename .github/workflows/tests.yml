@@ -1,0 +1,32 @@
+name: Bibliograph Tests
+
+on:
+  push:
+    paths-ignore:
+      - '**.md'
+  pull_request:
+    paths-ignore:
+      - '**.md'
+
+jobs:
+
+  run_tests:
+
+    name: Run tests
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Setup Node
+        uses: actions/setup-node@v1
+
+      - name: Install Dependencies
+        run: |
+          tool/env/install
+          tool/env/servers-start
+          curl -s localhost:7073
+
+

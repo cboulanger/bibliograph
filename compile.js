@@ -28,18 +28,20 @@ qx.Class.define("bibliograph.CompilerApi", {
      * @param command
      * @return {Promise<void>}
      */
-    async __runTests(command) {
-      let files =
-            fs.readdirSync(this.constructor.TEST_PATH)
-            .filter(file => fs.statSync(path.join(this.constructor.TEST_PATH, file)).isFile());
-      for (let file of files) {
-        let test = path.changeExt(path.basename(file), "");
-        command.addTest(new qx.tool.cli.api.Test(test, async () => {
-          let result = await qx.tool.utis.Utils.runCommand(this.constructor.TEST_PATH, "node", test + ".js");
-          this.setExitCode(result.exitCode);
-        })).setNeedsServer(false);
-      }
-    }
+    // async __runTests(command) {
+    //   let files =
+    //         fs.readdirSync(this.constructor.TEST_PATH)
+    //         .filter(file => fs.statSync(path.join(this.constructor.TEST_PATH, file)).isFile());
+    //   for (let file of files) {
+    //     let test = path.changeExt(path.basename(file), "");
+    //     command.addTest(new qx.tool.cli.api.Test(test, async () => {
+    //       let result = await qx.tool.utis.Utils.runCommand(this.constructor.TEST_PATH, "node", test + ".js");
+    //       this.setExitCode(result.exitCode);
+    //     })).setNeedsServer(false);
+    //   }
+    // },
+    
+    eof() {}
   }
 });
 
