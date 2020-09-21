@@ -17,7 +17,8 @@ jobs:
     services:
       phpfarm:
         image: cboulanger/docker-phpfarm
-        ports: 8073:8073
+        ports:
+         - 8073:8073
     steps:
       - name: Checkout
         uses: actions/checkout@v1
