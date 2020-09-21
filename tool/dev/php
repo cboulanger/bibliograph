@@ -5,4 +5,4 @@ if [ "$PHP_VERSION" == "" ]; then
 fi
 
 # run php in docker image
-docker exec -t http-server php-$PHP_VERSION "$@"
+docker exec http-server php-$PHP_VERSION "$@"
