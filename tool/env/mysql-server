@@ -26,7 +26,7 @@ start)
     >&2 echo 'ERROR: mysql server could not be started.'
     exit 1
   fi
-  echo "Server started."
+  echo "Server started: $(docker port mysql-server)"
   ;;
 stop)
   echo ">>> Stopping mysql server..."

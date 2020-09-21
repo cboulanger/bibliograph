@@ -2,6 +2,10 @@
 # function library for scripts in tool/ dir
 #
 
+if [[ "$TERM" == "" ]]; then
+  TERM=xterm-256color
+fi
+
 # Colorize output
 # shellcheck disable=SC2155
 export FONT_BOLD=$(tput bold)
