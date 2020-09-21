@@ -9,9 +9,7 @@ on:
       - '**.md'
 
 jobs:
-
   run_tests:
-
     name: Run tests
     runs-on: ubuntu-latest
     steps:
@@ -21,9 +19,8 @@ jobs:
         uses: actions/setup-node@v1
       - name: Install Dependencies
         run: tool/env/install
-
-          tool/env/servers-start
-
+      - name: Run Tests
+        run: tool/test/codeception
 
 
 
