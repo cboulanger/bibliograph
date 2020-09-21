@@ -14,22 +14,22 @@ jobs:
 
     name: Run tests
     runs-on: ubuntu-latest
-
+    services:
+      phpfarm:
+        image: cboulanger/docker-phpfarm
+        ports: 8073:8073
     steps:
-
       - name: Checkout
         uses: actions/checkout@v1
-
       - name: Setup Node
         uses: actions/setup-node@v1
-
       - name: Install Dependencies
         run: |
           tool/env/install
-          source test/.env
-          tool/env/servers-start
-
       - name: Test connection
         uses: wei/curl@master
         with:
           args: http://localhost:8073
+
+
+
