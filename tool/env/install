@@ -7,12 +7,13 @@ source ./tool/lib/functions.sh
 tool/env/servers-stop
 docker system prune -f
 
-echo " >>> Downloading PHPFarm image"
-docker pull cboulanger/docker-phpfarm
-
 echo " >>> Downloading mariadb image"
 docker pull mariadb
 
+echo " >>> Downloading and starting PHPFarm docker container"
+docker pull cboulanger/docker-phpfarm
+
+tool/env/http-test
 tool/env/http-server start
 
 echo ">>> Installing composer ..."
