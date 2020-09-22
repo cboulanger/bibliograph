@@ -31,17 +31,7 @@ jobs:
           DB_PORT: ${{ job.services.mariadb.ports[3306] }}
         run: |
           echo ">>> Trying to connect to MariaDB on port $DB_HOST:$DB_PORT..."
-          COUNTER=0
-          TIMEOUT=20
-          while ! mysqladmin ping -h"$DB_HOST" -P"$DB_PORT" --silent; do
-            sleep 1
-            let "COUNTER+=1"
-            if [[ $COUNTER == $TIMEOUT ]]; then
-              echo "Could not establish a connection to MariaDB."
-              exit 1;
-            fi
-          done
-
+          while ! mysqladmin ping -h"$DB_HOST" -P"$DB_PORT" --silent; do sleep 1; done
       - name: Checkout
         uses: actions/checkout@v1
       - name: Setup Node
@@ -50,11 +40,12 @@ jobs:
         run: tool/env/install
       - name: Run Tests
         run: |
-          DB_PORT=${{ job.services.mariadb.ports[3306] }}
-          DB_HOST=`docker exec http-server echo "$(ip route show | awk '/default/ {print $3}')"`
-          echo "DB_HOST=$DB_HOST" >> test/.env.github
-          echo "DB_PORT=$DB_PORT" >> test/.env.github
-          cat test/.env.github
+          export DB_HOST_GITHUB=127.0.0.1
+          export DB_PORT_GITHUB=${{ job.services.mariadb.ports[3306] }}
+#          DB_HOST=`docker exec http-server echo "$(ip route show | awk '/default/ {print $3}')"`
+#          echo "DB_HOST=$DB_HOST" >> test/.env.github
+#          echo "DB_PORT=$DB_PORT" >> test/.env.github
+#          cat test/.env.github
           source tool/env/envvars-load
           source tool/test/setup/check-mysql
 
