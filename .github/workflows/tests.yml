@@ -48,7 +48,9 @@ jobs:
       - name: Install Dependencies
         run: tool/env/install
       - name: Run Tests
-        run: tool/test/codeception
+        run: |
+          export DB_PORT
+          tool/test/codeception
 
 
 
