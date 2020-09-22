@@ -17,7 +17,7 @@ jobs:
       mariadb:
         image: mariadb:latest
         ports:
-          - 3306:3306
+          - 3306
         env:
           MYSQL_USER: bibliograph
           MYSQL_PASSWORD: bibliograph
@@ -32,8 +32,15 @@ jobs:
           DB_PORT: ${{ job.services.mariadb.ports[3306] }}
         run: |
           echo ">>> Trying to connect to MariaDB on port $DB_PORT..."
+          COUNTER=0
+          TIMEOUT=20
           while ! mysqladmin ping -h"$DB_HOST" -P"$DB_PORT" --silent; do
             sleep 1
+            let "COUNTER+=1"
+            if [[ $COUNTER == $TIMEOUT ]]; then
+              echo "Could not establish a connection to MariaDB."
+              exit 1;
+            fi
           done
       - name: Setup Node
         uses: actions/setup-node@v1
