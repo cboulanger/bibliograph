@@ -56,6 +56,6 @@ jobs:
           echo "DB_PORT=$DB_PORT" >> test/.env.github
           cat test/.env.github
           source tool/env/envvars-load
-          source test/setup/check-mysql
+          source tool/test/setup/check-mysql
 
   #       tool/test/codeception
