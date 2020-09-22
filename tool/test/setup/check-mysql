@@ -7,5 +7,5 @@ echo "${CHECKMARK}"
 echo "$output"
 
 echo -n ">>> Checking mysql user '$DB_USER' connection from php container ... "
-tool/dev/php -r "if(!@mysqli_connect('$DB_HOST', '$DB_USER', '$DB_PASSWORD')){echo '$CROSSMARK' . PHP_EOL .'${COLOR_RED}Error: Unable to connect to MySQL: '.mysqli_connect_error().PHP_EOL.'${STYLE_RESET}';exit(1);}"
+tool/dev/php -r "if(!@mysqli_connect('$DB_HOST', '$DB_USER', '$DB_PASSWORD', $DB_PORT)){echo '$CROSSMARK' . PHP_EOL .'${COLOR_RED}Error: Unable to connect to MySQL: '.mysqli_connect_error().PHP_EOL.'${STYLE_RESET}';exit(1);}"
 echo "${CHECKMARK}"
