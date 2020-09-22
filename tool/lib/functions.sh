@@ -8,12 +8,12 @@ fi
 
 # Colorize output
 # shellcheck disable=SC2155
-export FONT_BOLD=$(tput bold)
-export COLOR_RED=$(tput setaf 1)
-export COLOR_GREEN=$(tput setaf 2)
-export COLOR_BLUE=$(tput setaf 4)
-export COLOR_GREY=$(tput setaf 8)
-export STYLE_RESET=$(tput sgr0)
+export FONT_BOLD=$(tput -T $TERM bold)
+export COLOR_RED=$(tput -T $TERM setaf 1)
+export COLOR_GREEN=$(tput -T $TERM setaf 2)
+export COLOR_BLUE=$(tput -T $TERM setaf 4)
+export COLOR_GREY=$(tput -T $TERM setaf 8)
+export STYLE_RESET=$(tput -T $TERM sgr0)
 export CHECKMARK="${COLOR_GREEN}✔${STYLE_RESET}"
 export CROSSMARK="${COLOR_RED}x${STYLE_RESET}"
 
@@ -94,6 +94,6 @@ function mysql_root() {
 export -f mysql_root
 
 function hr() {
-  printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
+  printf '%*s\n' "${COLUMNS:-$(tput -T $TERM cols)}" '' | tr ' ' -
 }
 export hr

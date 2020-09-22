@@ -5,6 +5,7 @@ if [[ "$GITHUB_WORKFLOW" != "" ]] && ! [[ -f test/.env.moved ]]; then
   echo ">>> Using GitHub environment"
   mv test/.env test/.env.moved
   cp test/.env.github test/.env
+  export DB_PORT
 fi
 
 # export .env variables to this shell
