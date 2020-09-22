@@ -25,13 +25,12 @@ jobs:
           MYSQL_ROOT_PASSWORD: bibliograph
         options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
     steps:
-      - name: Checkout
-        uses: actions/checkout@v1
       - name: Verify MariaDB connection
         env:
+          DB_HOST: "127.0.0.1"
           DB_PORT: ${{ job.services.mariadb.ports[3306] }}
         run: |
-          echo ">>> Trying to connect to MariaDB on port $DB_PORT..."
+          echo ">>> Trying to connect to MariaDB on port $DB_HOST:$DB_PORT..."
           COUNTER=0
           TIMEOUT=20
           while ! mysqladmin ping -h"$DB_HOST" -P"$DB_PORT" --silent; do
@@ -42,6 +41,8 @@ jobs:
               exit 1;
             fi
           done
+      - name: Checkout
+        uses: actions/checkout@v1
       - name: Setup Node
         uses: actions/setup-node@v1
       - name: Install Dependencies
