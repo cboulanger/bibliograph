@@ -37,7 +37,11 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v1
       - name: Install Dependencies
-        run: tool/env/install
+        run: |
+          docker pull cboulanger/docker-phpfarm
+          tool/env/http-test
+          tool/env/http-server start
+#          tool/env/install
       - name: Run Tests
         run: |
           export DB_HOST_GITHUB=127.0.0.1
