@@ -42,11 +42,6 @@ jobs:
         run: |
           export DB_HOST_GITHUB=127.0.0.1
           export DB_PORT_GITHUB=${{ job.services.mariadb.ports[3306] }}
-#          DB_HOST=`docker exec http-server echo "$(ip route show | awk '/default/ {print $3}')"`
-#          echo "DB_HOST=$DB_HOST" >> test/.env.github
-#          echo "DB_PORT=$DB_PORT" >> test/.env.github
-#          cat test/.env.github
           source tool/env/envvars-load
           source tool/test/setup/check-mysql
-
   #       tool/test/codeception
