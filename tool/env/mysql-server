@@ -5,6 +5,10 @@ source tool/env/check
 
 case $1 in
 start)
+  if [[ "$GITHUB_WORKFLOW" != "" ]]; then
+    echo ">>> Using MariaDB service."
+    exit 0
+  fi
   echo ">>> Starting mysql server..."
   if [ "$(docker ps -f name=mysql-server -q -a)" == "" ]; then
     if [ "$DB_ROOT_PASSWORD" == "" ]; then
@@ -29,6 +33,9 @@ start)
   echo "Server started: $(docker port mysql-server)"
   ;;
 stop)
+  if [[ "$GITHUB_WORKFLOW" != "" ]]; then
+    exit 0
+  fi
   echo ">>> Stopping mysql server..."
   docker stop mysql-server > /dev/null
   docker rm mysql-server > /dev/null
@@ -39,6 +46,9 @@ stop)
   echo "Server stopped."
   ;;
 status)
+  if [[ "$GITHUB_WORKFLOW" != "" ]]; then
+    exit 0
+  fi
   if [ "$(docker ps -f name=mysql-server -q -a)" != "" ]; then
     echo "Server is running."
   else

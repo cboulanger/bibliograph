@@ -12,9 +12,29 @@ jobs:
   run_tests:
     name: Run tests
     runs-on: ubuntu-latest
+    # see https://firefart.at/post/using-mysql-service-with-github-actions/
+    services:
+      mariadb:
+        image: mariadb:latest
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_USER: bibliograph
+          MYSQL_PASSWORD: bibliograph
+          MYSQL_DATABASE: tests
+          MYSQL_ROOT_PASSWORD: bibliograph
+        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+      - name: Verify MariaDB connection
+        env:
+          DB_PORT: ${{ job.services.mariadb.ports[3306] }}
+        run: |
+          echo ">>> Trying to connect to MariaDB on port $DB_PORT..."
+          while ! mysqladmin ping -h"127.0.0.1" -P"$DB_PORT" --silent; do
+            sleep 1
+          done
       - name: Setup Node
         uses: actions/setup-node@v1
       - name: Install Dependencies

@@ -1,3 +1,8 @@
 #!/usr/bin/env bash
 
-docker exec mysql-server mysql -h127.0.0.1 "$@"
+if [[ "$GITHUB_WORKFLOW" != "" ]]; then
+  mysql -h127.0.0.1 "$@"
+else
+  docker exec mysql-server mysql -h127.0.0.1 "$@"
+fi
+
