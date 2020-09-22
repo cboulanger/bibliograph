@@ -41,6 +41,7 @@ jobs:
               exit 1;
             fi
           done
+
       - name: Checkout
         uses: actions/checkout@v1
       - name: Setup Node
@@ -49,7 +50,7 @@ jobs:
         run: tool/env/install
       - name: Run Tests
         run: |
-          export DB_PORT
+          export DB_PORT=${{ job.services.mariadb.ports[3306] }}
           tool/test/codeception
 
 
