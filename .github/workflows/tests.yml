@@ -51,8 +51,11 @@ jobs:
       - name: Run Tests
         run: |
           DB_PORT=${{ job.services.mariadb.ports[3306] }}
-          DB_IP=${{ job.services.mariadb.ip }}
-          echo "MariaDb: $DB_IP:$DB_PORT"
+          DB_HOST=`docker exec http-server echo "$(ip route show | awk '/default/ {print $3}')"`
+          echo "DB_HOST=$DB_HOST" >> test/.env.github
           echo "DB_PORT=$DB_PORT" >> test/.env.github
-          docker exec http-server echo "$(ip route show | awk '/default/ {print $3}')"
+          cat test/.env.github
+          source tool/env/envvars-load
+          source test/setup/check-mysql
+
   #       tool/test/codeception
