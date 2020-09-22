@@ -50,6 +50,6 @@ jobs:
         run: tool/env/install
       - name: Run Tests
         run: |
-          echo "DB_PORT=${{ job.services.mariadb.ports[3306] }}" >> test/.env
+          echo "DB_PORT=${{ job.services.mariadb.ports[3306] }}" >> test/.env.github
           cat test/.env
           tool/test/codeception
