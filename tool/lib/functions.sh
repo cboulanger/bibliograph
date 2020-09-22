@@ -3,7 +3,7 @@
 #
 
 if [[ "$TERM" == "" ]]; then
-  TERM=xterm-256color
+  export TERM=xterm-256color
 fi
 
 # Colorize output

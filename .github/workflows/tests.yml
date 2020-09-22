@@ -32,7 +32,7 @@ jobs:
           DB_PORT: ${{ job.services.mariadb.ports[3306] }}
         run: |
           echo ">>> Trying to connect to MariaDB on port $DB_PORT..."
-          while ! mysqladmin ping -h"127.0.0.1" -P"$DB_PORT" --silent; do
+          while ! mysqladmin ping -h"$DB_HOST" -P"$DB_PORT" --silent; do
             sleep 1
           done
       - name: Setup Node

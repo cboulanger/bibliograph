@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
 # run codecept in the php container
-source test/.env
+source tool/env/envvars-load
 export PHP_VERSION
 tool/dev/php src/server/vendor/codeception/codeception/codecept --config test/codeception "$@"

@@ -11,7 +11,7 @@ if [[ "$*" != *"--app-name"* ]]; then
   APP_PARAM="--app-name=testtapper"
 fi
 
-source test/.env
+source tool/env/envvars-load
 source tool/env/check
 source tool/lib/functions.sh
 source tool/env/envvars-export
@@ -19,4 +19,9 @@ source tool/test/setup/create-mysql-user
 source tool/test/setup/check-mysql
 source tool/test/setup/reset-data
 
-tool/dev/run -f test/.env -v "$APP_PARAM" "$@"
+if [[ "$GITHUB_WORKFLOW" != "" ]]; then
+  ENV_FILE=test/.env.github
+else
+  ENV_FILE=test/.env
+fi
+tool/dev/run -f $ENV_FILE -v "$APP_PARAM" "$@"

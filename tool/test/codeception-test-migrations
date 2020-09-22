@@ -3,7 +3,7 @@
 # This tests database setup and migrations
 
 CPT_ARGS="--fail-fast"
-source test/.env
+source tool/env/envvars-load
 source tool/lib/functions.sh
 
 BIBLIOGRAPH2_SQL_DUMP=test/data/bibliograph2.local.sql

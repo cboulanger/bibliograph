@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source test/.env
+source tool/env/envvars-load
 source tool/env/check
 
 # This test runs unit and functional tests that do not need a webserver
