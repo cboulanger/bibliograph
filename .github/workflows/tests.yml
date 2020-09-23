@@ -33,15 +33,17 @@ jobs:
           - 8074:8074
         options: --name=http_server
         volumes:
-          - /home/runner/work/bibliograph/bibliograph:/github/workspace
+          - /home/runner/work/bibliograph:/github/workspace
     steps:
       - name: Checkout
         uses: actions/checkout@v1
       - name: Mount workspace dirs into apache document root
         run: |
           docker exec http_server ls -al /github/workspace
+          docker exec http_server rm -rf /var/www
+          docker exec http_server ln -s /github/workspace/bibliograph /var/www
+          docker exec http_server ls -al /var/www
           exit 1
-          docker exec http_server ln -s /github/workspace/{src,compiled,test} /var/www/
           tool/dev/php -r "echo implode(PHP_EOL, scandir('/github/workspace'));"
       - name: Check Services
         env:
