@@ -39,11 +39,10 @@ jobs:
         uses: actions/checkout@v1
       - name: Mount workspace dir into apache document root
         run: |
-          docker exec http_server ls -al /github/workspace
-          docker exec http_server cd /var && rm -rf /var/www && ln -s /github/workspace/bibliograph /var/www
-          docker exec http_server ls -al /var/www
+          docker exec http_server ls -al /github/workspace/bibliograph
+          docker exec http_server ln -s /github/workspace/bibliograph/{compiled,dist,src,test} /var/www
+          docker exec http_server tree -L3 .
           exit 1
-          tool/dev/php -r "echo implode(PHP_EOL, scandir('/github/workspace'));"
       - name: Check Services
         env:
           DB_HOST_GITHUB: 127.0.0.1
