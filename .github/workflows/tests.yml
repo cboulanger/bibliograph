@@ -28,7 +28,7 @@ jobs:
         ports:
           - 8070:8070
           - 8071:8071
-          - 8072:8082
+          - 8072:8072
           - 8073:8073
           - 8074:8074
         options: --name=http_server
@@ -36,8 +36,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
       - name: Mount workspace dirs into apache document root
-        run: |
-          docker exec http_server ln -s /github/workspace/{src,compiled,test} /var/www/
+        run: docker exec http_server ln -s /github/workspace/{src,compiled,test} /var/www/
       - name: Check Services
         env:
           DB_HOST_GITHUB: 127.0.0.1
