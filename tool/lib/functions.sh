@@ -97,3 +97,4 @@ function hr() {
   printf '%*s\n' "${COLUMNS:-$(tput -T $TERM cols)}" '' | tr ' ' -
 }
 export hr
+export FUNCTIONS_LOADED=1

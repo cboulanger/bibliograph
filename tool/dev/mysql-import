@@ -13,7 +13,7 @@ if ! [ -f $SQL_FILE ]; then
 fi
 
 log_info -n ">>> Importing $SQL_FILE into $DATABASE_NAME"
-docker exec -i http-server bash <<-EOF
+docker exec -i http_server bash <<-EOF
 CMD=\$([ -x "$(command -v pv)" ] && echo "pv -f -s57" || echo "cat")
 \$CMD $SQL_FILE \
   | sed s/localhost/$DB_HOST/g \

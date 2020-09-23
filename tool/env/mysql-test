@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 
+[[ -z "$FUNCTIONS_LOADED" ]] && source tool/lib/functions.sh
 source tool/env/envvars-load
 
 if [[ "$GITHUB_WORKFLOW" != "" ]]; then
-  echo ">>> Trying to connect to MySQL service on port $DB_HOST:$DB_PORT..."
+  echo ">>> Checking connection from the HTTP service container to the MySQL service container using $DB_HOST:$DB_PORT..."
   COUNTER=0
   TIMEOUT=20
-  while ! mysqladmin ping -h"$DB_HOST" -P"$DB_PORT" --silent; do
+  while ! docker exec http_server mysqladmin ping -h"$DB_HOST" -P"$DB_PORT" --silent; do
     sleep 1
     let "COUNTER+=1"
     if [[ $COUNTER == $TIMEOUT ]]; then
@@ -15,9 +16,13 @@ if [[ "$GITHUB_WORKFLOW" != "" ]]; then
     fi
   done
 fi
-echo -n ">>> Checking mysql root access from host to database ... "
+
+echo -n ">>> Checking mysql root access via the MySQL service container ... "
 output=$(tool/dev/mysql-client -uroot -p$DB_ROOT_PASSWORD --version)
 if [ $? -ne 0 ]; then echo "$CROSSMARK"; log_error $output; exit 1; fi
 echo "${CHECKMARK}"
 echo "$output"
 
+echo -n ">>> Checking mysql root access connection from PHP in the HTTP-Server container using $DB_HOST:$DB_PORT ... "
+tool/dev/php -r "if(!@mysqli_connect('$DB_HOST', 'root', '$DB_ROOT_PASSWORD', '', $DB_PORT)){echo '$CROSSMARK' . PHP_EOL .'${COLOR_RED}Error: '.mysqli_connect_error().PHP_EOL.'${STYLE_RESET}';exit(1);}"
+echo "${CHECKMARK}"

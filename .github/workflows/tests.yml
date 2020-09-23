@@ -37,6 +37,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+      - name:
+        run: docker exec mysql_server mysql --version
       - name: Check Services
         run: tool/env/services-test
       - name: Setup Node
@@ -44,8 +46,4 @@ jobs:
       - name: Install Prerequisites
         run: tool/env/install
       - name: Run Tests
-        run: |
-          docker exec mysql_server mysql --version
-          export DB_HOST_GITHUB=127.0.0.1
-          export DB_PORT_GITHUB=${{ job.services.mysql_server.ports[3306] }}
-          tool/test/codeception
+        run: tool/test/codeception
