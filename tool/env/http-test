@@ -12,7 +12,8 @@ portTestResult=0
 
 # Test if all required ports are showing a PHP version.
 for port in $ports; do
-  result=$(curl --silent http://localhost:$port/test/phpinfo.php | grep -Eo 'PHP Version [0-9]+\.[0-9]+\.[0-9]+')
+  # PHP Version </td><td class="v">7.0.33
+  result=$(curl --silent http://localhost:$port/test/phpinfo.php | grep -Eo 'PHP Version[^0-9]+[0-9]+\.[0-9]+\.[0-9]+')
   if [[ "$result" == "" ]]; then
     echo "Port $port is not working";
     echo "$(curl --silent http://localhost:$port)" | cut -c 1-500
