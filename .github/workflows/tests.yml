@@ -35,10 +35,10 @@ jobs:
         volumes:
           - ${{ github.workspace }}:/var/www
     steps:
-      - name: Check Services
-        run: tool/env/services-test
       - name: Checkout
         uses: actions/checkout@v1
+      - name: Check Services
+        run: tool/env/services-test
       - name: Setup Node
         uses: actions/setup-node@v1
       - name: Install Prerequisites
