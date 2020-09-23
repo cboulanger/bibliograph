@@ -3,7 +3,7 @@
 # Test the Docker image to see if it runs PHP successfully.
 
 echo ">>> Testing HTTP/PHP service"
-docker exec -it http_server cat /etc/os-release | grep VERSION=
+docker exec http_server cat /etc/os-release | grep VERSION=
 
 # ports
 ports='8070 8071 8072 8073 8074'
@@ -15,6 +15,7 @@ for port in $ports; do
   result=$(curl --silent http://localhost:$port/test/phpinfo.php | grep -Eo 'PHP Version [0-9]+\.[0-9]+\.[0-9]+')
   if [[ "$result" == "" ]]; then
     echo "Port $port is not working";
+    echo "$(curl --silent http://localhost:$port/test/phpinfo.php)" | cut -c 1-200
     portTestResult=1
   else
     echo "Port $port ✓";

@@ -4,10 +4,10 @@
 source tool/env/envvars-load
 
 echo ">>> Testing MySQL service"
-docker exec -it mysql_server cat /etc/os-release | grep VERSION=
+docker exec mysql_server cat /etc/os-release | grep VERSION=
 
 if [[ "$GITHUB_WORKFLOW" != "" ]]; then
-  echo -n ">>> Checking connection from the host to the MySQL service container using $DB_HOST:$DB_PORT..."
+  echo -n ">>> Checking connection from the host to the MySQL service container using $DB_HOST_GITHUB:$DB_PORT_GITHUB..."
   COUNTER=0
   TIMEOUT=20
   while ! mysqladmin ping -h"$DB_HOST_GITHUB" -P"$DB_PORT_GITHUB" --silent; do
