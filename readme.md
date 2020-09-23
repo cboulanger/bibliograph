@@ -1,10 +1,9 @@
 # Bibliograph: Open Source Online Citation & Library Management
 
-[![Build Status](https://travis-ci.org/cboulanger/bibliograph.svg?branch=master)](https://github.com/cboulanger/bibliograph/tree/master) 
+![Bibliograph Tests](https://github.com/cboulanger/bibliograph/workflows/Bibliograph%20Tests/badge.svg) 
 [![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=panyasan&url=https://github.com/cboulanger/bibliograph&title=Bibliograph&language=javascript&tags=github&category=software)
 
-> NOTE: This is v3.0.0-beta, compatible with PHP 7, featuring a completely rewritten backend. Not all the features of 
-version 2 have been reimplemented, and documentation still has to be updated and added. The release is planned for easrly 2019.
+> NOTE: This is v3.0.0-beta, compatible with PHP 7.3, featuring a completely rewritten backend.
 
 Bibliograph is a powerful open source web application for the collaborative
 collection, editing and publishing of bibliographic data.
@@ -75,8 +74,7 @@ project needs your help. Even if you are not a developer, you can contribute:
   added - so please let your followers on Twitter, Facebook etc. know about
   Bibliograph
 - [Flattr me](https://flattr.com/submit/auto?user_id=panyasan&url=https://github.com/cboulanger/bibliograph&title=Bibliograph&language=javascript&tags=github&category=software)  
-- You can also [donate](http://sourceforge.net/p/bibliograph/donate) and make sure 
-  development continues
+
 
 ## Credits
 Open source libraries/applications
