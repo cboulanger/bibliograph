@@ -31,10 +31,14 @@ jobs:
           - 8072:8082
           - 8073:8073
           - 8074:8074
-        options: --name=http_server -v /home/runner/work/bibliograph/bibliograph:/var/www
+        options: --name=http_server
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+      - name: Mount workspace as document root
+        run: |
+          docker exec http_server rm -rf /var/www
+          docker exec http_server ln -s /github/workspace /var/www
       - name: Check Services
         env:
           DB_HOST_GITHUB: 127.0.0.1
