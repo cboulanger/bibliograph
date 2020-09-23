@@ -35,6 +35,7 @@ jobs:
           - ${{ github.workspace }}:/var/www
         options: --name=http_server
     steps:
+      - run: echo "${{ github.workspace }}"; exit 1
       - name: Checkout
         uses: actions/checkout@v1
       - name: Check Services
