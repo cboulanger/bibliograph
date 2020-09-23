@@ -35,9 +35,12 @@ jobs:
           - ${{ github.workspace }}:/var/www
         options: --name=http_server
     steps:
-      - run: echo "${{ github.workspace }}"; exit 1
       - name: Checkout
         uses: actions/checkout@v1
+      - name: Show paths
+        run: |
+          echo $(pwd)
+          echo "${{ github.workspace }}"
       - name: Check Services
         env:
           DB_HOST_GITHUB: 127.0.0.1
