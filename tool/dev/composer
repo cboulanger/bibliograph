@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
 # call local composer with the right working directory
-tool/dev/php /var/www/src/lib/composer.phar --working-dir=/var/www/src/server "$@"
+tool/dev/php src/lib/composer.phar --working-dir=src/server "$@"

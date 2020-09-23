@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
-if [ "$PHP_VERSION" == "" ]; then
-  PHP_VERSION=7.3
-fi
+PHP_VERSION=${PHP_VERSION:-7.3}
+BUILD_ROOT=${BUILD_ROOT:-"/var/www"}
 
 # run php in docker image
-docker exec http_server php-$PHP_VERSION "$@"
+docker exec -w $BUILD_ROOT http_server php-$PHP_VERSION "$@"

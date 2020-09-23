@@ -5,7 +5,7 @@
 # can be passed via argument
 
 set -o errexit
-source tool/lib/functions.sh
+[ -z "$FUNCTIONS_LOADED" ] && source tool/lib/functions.sh
 
 BUILD_TARGET=${BUILD_TARGET:-source}
 
