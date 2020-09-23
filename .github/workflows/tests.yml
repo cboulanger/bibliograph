@@ -40,9 +40,8 @@ jobs:
       - name: Mount workspace dirs into apache document root
         run: |
           docker exec http_server ls -al /github/workspace
-          docker exec http_server rm -rf /var/www
-          docker exec http_server ln -s /github/workspace/bibliograph /var/www
-          docker exec http_server ls -al /var/www
+          docker exec http_server cd .. && rm -rf ./www && ln -s /github/workspace/bibliograph www
+          docker exec http_server ls -al .
           exit 1
           tool/dev/php -r "echo implode(PHP_EOL, scandir('/github/workspace'));"
       - name: Check Services
