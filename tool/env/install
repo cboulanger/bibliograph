@@ -10,14 +10,13 @@ EXPECTED_SIGNATURE="$(wget -q -O - https://composer.github.io/installer.sig)"
 tool/dev/php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" || exit 1
 ACTUAL_SIGNATURE=$(tool/dev/php -r "echo hash_file('sha384', 'composer-setup.php');")
 
-if [ "$EXPECTED_SIGNATURE" != "$ACTUAL_SIGNATURE" ]
-then
+if [ "$EXPECTED_SIGNATURE" != "$ACTUAL_SIGNATURE" ]; then
     >&2 echo 'ERROR: Invalid installer signature'
     rm composer-setup.php
     exit 1
 fi
 
-tool/dev/php composer-setup.php --install-dir=src/lib #--quiet
+tool/dev/php composer-setup.php --install-dir=/var/www/src/lib #--quiet
 RESULT=$?
 rm composer-setup.php
 if [ $RESULT -eq 1 ]; then

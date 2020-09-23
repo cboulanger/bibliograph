@@ -38,7 +38,6 @@ jobs:
       - name: Mount workspace dirs into apache document root
         run: |
           docker exec http_server ln -s /github/workspace/{src,compiled,test} /var/www/
-          docker exec http_server ln -s /github/workspace/{src} /
       - name: Check Services
         env:
           DB_HOST_GITHUB: 127.0.0.1
