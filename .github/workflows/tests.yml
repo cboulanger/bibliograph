@@ -37,7 +37,7 @@ jobs:
         uses: actions/checkout@v1
       - name: Mount workspace dirs into apache document root
         run: |
-          docker exec http_server ls -al /github/workspace
+          docker exec http_server ls -al /github/workspace/bibliograph
           exit 1
           docker exec http_server ln -s /github/workspace/{src,compiled,test} /var/www/
           tool/dev/php -r "echo implode(PHP_EOL, scandir('/github/workspace'));"
