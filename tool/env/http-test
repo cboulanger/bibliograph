@@ -2,6 +2,9 @@
 
 # Test the Docker image to see if it runs PHP successfully.
 
+echo ">>> Testing HTTP/PHP service"
+docker exec -it http_server cat /etc/os-release | grep VERSION=
+
 # ports
 ports='8070 8071 8072 8073 8074'
 # Record results of the port test.

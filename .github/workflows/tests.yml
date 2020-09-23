@@ -23,7 +23,7 @@ jobs:
           MYSQL_PASSWORD: bibliograph
           MYSQL_DATABASE: tests
           MYSQL_ROOT_PASSWORD: bibliograph
-        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
+        options: --name=mysql_server --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
       http_server:
         image: cboulanger/docker-phpfarm
         ports:
@@ -34,16 +34,21 @@ jobs:
           - 8074:8074
         volumes:
           - ${{ github.workspace }}:/var/www
+        options: --name=http_server
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-      - name:
-        run: docker exec mysql_server mysql --version
       - name: Check Services
+        env:
+         - DB_HOST_GITHUB=127.0.0.1
+         - DB_PORT_GITHUB=${{ job.services.mysql_server.ports[3306] }}
         run: tool/env/services-test
       - name: Setup Node
         uses: actions/setup-node@v1
       - name: Install Prerequisites
         run: tool/env/install
       - name: Run Tests
+        env:
+          - DB_HOST_GITHUB=127.0.0.1
+          - DB_PORT_GITHUB=${{ job.services.mysql_server.ports[3306] }}
         run: tool/test/codeception
