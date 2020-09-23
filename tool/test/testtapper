@@ -7,8 +7,8 @@
 set -o errexit
 
 APP_PARAM=""
-if [[ "$*" != *"--app-name"* ]]; then
-  APP_PARAM="--app-name=testtapper"
+if [[ "$*" != *"---app-name"* ]]; then
+  APP_PARAM="--app-name testtapper"
 fi
 
 source tool/env/envvars-load
@@ -19,9 +19,4 @@ source tool/test/setup/create-mysql-user
 source tool/test/setup/check-mysql
 source tool/test/setup/reset-data
 
-if [[ "$GITHUB_WORKFLOW" != "" ]]; then
-  ENV_FILE=test/.env.github
-else
-  ENV_FILE=test/.env
-fi
-tool/dev/run -f $ENV_FILE -v "$APP_PARAM" "$@"
+tool/dev/run --verbose --env-file test/.env $APP_PARAM $*

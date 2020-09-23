@@ -24,7 +24,7 @@ SQL_IMPORT=""
 while [[ $1 != "" ]] ; do
     case "$1" in
 
-        "--env-file"|"-f")
+        "--env-file" | "-f")
             BUILD_ENV_FILE="$2"
             [[ -f $BUILD_ENV_FILE ]] || exit_with_error "File $BUILD_ENV_FILE does not exist"
             [[ $VERBOSE == 1 ]] && echo ">>> Loading environment variables from $BUILD_ENV_FILE"
@@ -33,46 +33,47 @@ while [[ $1 != "" ]] ; do
             shift
             ;;
 
-        "--app-name"|"-a")
-            APP_NAME="$2"
+        "--app-name" | "-a")
+            export APP_NAME="$2"
+            [[ $VERBOSE == 1 ]] && echo ">>> Using APP_NAME $APP_NAME"
             shift
             ;;
 
-        "--app-url"|"-u")
-            APP_URL="$2"
+        "--app-url" | "-u")
+            export APP_URL="$2"
             shift
             ;;
 
-        "--app-url-query"|"-Q")
+        "--app-url-query" | "-Q")
             APP_URL_QUERY="$2"
             shift
             ;;
 
-        "--config-file"|"-c")
+        "--config-file" | "-c")
             BUILD_CONFIG_FILE="$2"
             shift
             ;;
 
-        "--build-target"|"-t")
+        "--build-target" | "-t")
             BUILD_TARGET="$2"
             shift
             ;;
 
-        "--skip-build"|"-k")
+        "--skip-build" | "-k")
             SKIP_BUILD=1
             ;;
 
-        "--empty-database"|"-E")
+        "--empty-database" | "-E")
             DATABASE_EMPTY=1
             ;;
 
-        "--import-sql"|"-I")
+        "--import-sql" | "-I")
             SQL_IMPORT="$2"
             DATABASE_EMPTY=1
             shift
             ;;
 
-        "--set-env"|"-e")
+        "--set-env" | "-e")
             ENV_VAR_NAME="$2"
             ENV_VAR_VALUE="$2"
             export $ENV_VAR_NAME=$ENV_VAR_VALUE
@@ -84,11 +85,11 @@ while [[ $1 != "" ]] ; do
             BUILD_CLEAN=1
             ;;
 
-        "--verbose"|"-v")
+        "--verbose" | "-v")
             VERBOSE=1
             ;;
 
-        "--help"|"-h")
+        "--help" | "-h")
             USAGE=1
             ;;
     esac
@@ -136,6 +137,18 @@ where options are:
 
 EOF
   exit 0
+fi
+
+if [[ $VERBOSE == 1 ]]; then
+cat << EOF
+APP_URL=$APP_URL
+APP_URL_QUERY=$APP_URL_QUERY
+APP_NAME=$APP_NAME
+BUILD_TARGET=$BUILD_TARGET
+BUILD_CONFIG_FILE=$BUILD_CONFIG_FILE
+BUILD_CLEAN=$BUILD_CLEAN
+SKIP_BUILD=$SKIP_BUILD
+EOF
 fi
 
 # export all needed environment variables

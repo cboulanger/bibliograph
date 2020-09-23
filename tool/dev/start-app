@@ -11,6 +11,7 @@ BUILD_TARGET=${BUILD_TARGET:-source}
 
 # Application name
 APP_NAME=${1:-$APP_NAME}
+
 [ -z "$APP_NAME" ] && exit_with_error "You must pass the application name as an argument or set the APP_NAME environment var."
 [ -z "$BUILD_CONFIG_FILE" ] && exit_with_error "You need to set the BUILD_CONFIG_FILE environment var."
 
