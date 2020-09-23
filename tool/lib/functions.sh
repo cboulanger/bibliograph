@@ -32,7 +32,7 @@ function log_debug {
 export -f log_debug
 
 function log_info {
-  echo $@
+  echo "$@"
 }
 export -f log_info
 
@@ -76,6 +76,8 @@ function codecept() {
   tool/dev/codecept "$@"
 }
 export -f codecept
+
+# MySQL access
 
 # mysql normal user access shorthand function
 function mysql_user() {

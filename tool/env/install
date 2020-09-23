@@ -6,7 +6,7 @@ source tool/env/check
 source tool/env/envvars-load
 source tool/env/services-install
 
-echo ">>> Installing composer ..."
+log_info ">>> Installing composer ..."
 EXPECTED_SIGNATURE="$(wget -q -O - https://composer.github.io/installer.sig)"
 tool/dev/php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" || exit 1
 ACTUAL_SIGNATURE=$(tool/dev/php -r "echo hash_file('sha384', 'composer-setup.php');")
@@ -21,8 +21,7 @@ tool/dev/php composer-setup.php --install-dir=src/lib #--quiet
 RESULT=$?
 rm composer-setup.php
 if [ $RESULT -eq 1 ]; then
-  >&2 echo "ERROR: Failed to setup composer ..."
-  exit 1
+  exit_with_error "ERROR: Failed to setup composer ..."
 fi
 
 source tool/env/update
