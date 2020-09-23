@@ -32,15 +32,11 @@ jobs:
           - 8073:8073
           - 8074:8074
         volumes:
-          - ${{ github.workspace }}:/var/www
+          - /home/runner/work/bibliograph/bibliograph:/var/www
         options: --name=http_server
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-      - name: Show paths
-        run: |
-          echo $(pwd)
-          echo "${{ github.workspace }}"
       - name: Check Services
         env:
           DB_HOST_GITHUB: 127.0.0.1
