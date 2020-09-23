@@ -32,7 +32,8 @@ jobs:
           - 8072:8082
           - 8073:8073
           - 8074:8074
-        options: -v .:/var/www:cached
+        volumes:
+          - ${{ github.workspace }}:/var/www
     steps:
       - name: Check Services
         run: tool/env/services-test
