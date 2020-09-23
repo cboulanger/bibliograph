@@ -31,7 +31,9 @@ jobs:
           - 8072:8072
           - 8073:8073
           - 8074:8074
-        options: --name=http_server -v "/home/runner/work/bibliograph":"/github/workspace"
+        options: --name=http_server
+        volumes:
+          - "/home/runner/work/bibliograph":"/github/workspace"
     steps:
       - name: Checkout
         uses: actions/checkout@v1
