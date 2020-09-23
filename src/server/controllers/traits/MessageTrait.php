@@ -9,6 +9,7 @@
 namespace app\controllers\traits;
 
 use Yii;
+use yii\base\Event;
 
 trait MessageTrait
 {
@@ -36,7 +37,7 @@ trait MessageTrait
    * @return void
    */
   public function  dispatchClientMessage($eventName, $data=null){
-    Yii::$app->eventQueue->add( new \yii\base\Event([
+    Yii::$app->eventQueue->add(new Event([
       "name" => $eventName,
       "data" => $data
     ]));

@@ -20,7 +20,9 @@
 
 namespace lib\models;
 
-use lib\exceptions\UserErrorException;
+use Illuminate\Support\Str;
+use lib\channel\BroadcastEvent;
+use lib\channel\MessageEvent;
 use Yii;
 use yii\base\ModelEvent;
 use yii\db\ActiveRecord;
@@ -39,8 +41,18 @@ use app\models\Datasource;
  *    A associative array of arrays containing data for the
  *    dialog.Form widget
  */
-class BaseModel extends ActiveRecord
+class BaseModel
+  extends ActiveRecord
+  implements IHasDatasource
 {
+
+  use ModelDatasourceTrait;
+
+  /**
+   * @var bool Whether to dispatch client or broadcast
+   * events when the model changes
+   */
+  public $dipatchChangeMessages = true;
 
   /**
    * @todo generic table name algorithm
@@ -89,14 +101,6 @@ class BaseModel extends ActiveRecord
   // Datasource feature
   //-------------------------------------------------------------
 
-  /**
-   * The Datasource instance to which the model is attached
-   * and which provides the database connection for all attached models
-   * the "datasource" in bibliograph parlance refers to a named collection
-   * of models within a database
-   * @var Datasource
-   */
-  protected static $datasource = null;
 
   /**
    * Flag to prevent infinite recursion
@@ -123,38 +127,10 @@ class BaseModel extends ActiveRecord
     return $db;
   }
 
-  /**
-   * Sets the datasource that all models based on the class will use. If you use several 
-   * instances of the same class, you need to set the datasource explicitly before each
-   * query, since the datasource is a static property of the class. 
-   * MyClass::setDatasource("datasource")::find()->...
-   * @return string|Datasource $datasource The Datasource object or the namedId of the datasource
-   */
-  public static function setDatasource($datasource)
-  {
-    if (is_string($datasource) ){
-      static::$__lookingUpDatasource = true;
-      $datasource = Datasource::getInstanceFor($datasource);
-      static::$__lookingUpDatasource = false;
-    } elseif ( ! $datasource instanceof Datasource ){
-      throw new \InvalidArgumentException("Passed object must be an instance of " . Datasource::class);
-    }
-    static :: $datasource = $datasource;
-    return \get_called_class();
-  }
-
-  /**
-   * Gets the name of  the datasource that the model belongs to
-   * @return Datasource
-   */
-  public static function getDatasource() : Datasource
-  {
-    return static::$datasource;
-  }
 
   //-------------------------------------------------------------
   // Shorthand methods
-  //-------------------------------------------------------------  
+  //-------------------------------------------------------------
 
   /**
    * Shorthand method to find ActiveRecord with the given named id
@@ -162,14 +138,27 @@ class BaseModel extends ActiveRecord
    * @param string $namedId
    * @return \lib\models\BaseModel|null
    */
-  public static function findByNamedId( $namedId )
+  public static function findByNamedId($namedId)
   {
     return static::findOne( ['namedId' => $namedId ] );
   }
 
+  /**
+   * Dispatches an change event as a message to the
+   * authenticated client or to all connected clients
+   *
+   * @param MessageEvent|BroadcastEvent $event
+   */
+  public function dispatchChangeMessage(MessageEvent $event) {
+    if ($this->dipatchChangeMessages) {
+      Yii::$app->eventQueue->add($event);
+    }
+  }
+
+
   //-------------------------------------------------------------
   // Overridden methods
-  //-------------------------------------------------------------  
+  //-------------------------------------------------------------
 
   /**
    * Fix values before model is saved

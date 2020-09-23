@@ -8,13 +8,11 @@
 
 ************************************************************************ */
 
-qx.Theme.define("bibliograph.theme.Theme",
-{
-  meta :
-  {
-    color : bibliograph.theme.Color,
-    decoration : bibliograph.theme.Decoration,
-    font : bibliograph.theme.Font,
+qx.Theme.define("bibliograph.theme.Theme", {
+  meta : {
+    color :  qx.theme.modern.Color,
+    decoration : qx.theme.modern.Decoration,
+    font : qx.theme.modern.Font,
     icon : bibliograph.theme.Icon,
     appearance : bibliograph.theme.Appearance
   }

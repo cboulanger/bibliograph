@@ -12,4 +12,6 @@ namespace lib\schema;
  * Marker Interface to make a class a schema
  * @package lib\schema
  */
-interface ISchema{}
+interface ISchema {
+
+}

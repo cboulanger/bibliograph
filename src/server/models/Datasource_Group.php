@@ -7,8 +7,8 @@ use Yii;
 /**
  * This is the model class for table "join_Datasource_Group".
  *
- * @property integer $DatasourceId
- * @property integer $GroupId
+ * @property int $DatasourceId
+ * @property int $GroupId
  */
 class Datasource_Group extends \yii\db\ActiveRecord
 {

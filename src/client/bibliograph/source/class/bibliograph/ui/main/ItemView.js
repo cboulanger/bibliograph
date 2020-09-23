@@ -11,7 +11,7 @@
  * Authors: Christian Boulanger (cboulanger)
  *
  ******************************************************************************/
-/*global qx qcl*/
+
 /**
  * Base class for Table widgets
  */
@@ -44,17 +44,16 @@ qx.Class.define("bibliograph.ui.main.ItemView",
     }
   },
 
-  construct : function()
-  {
+  construct : function() {
     this.base(arguments);
     this._itemViews = {};
 
     // setup event handlers
     let bus = qx.event.message.Bus.getInstance();
     let app = this.getApplication();
-    bus.subscribe( "user.loggedin", this.toggleReferenceView, this);
-    bus.subscribe( "user.loggedout", () => this.setView(null) );
-    app.addListener( "changeModelId", (e) => {
+    bus.subscribe(bibliograph.AccessManager.messages.AFTER_LOGIN, this.toggleReferenceView, this);
+    bus.subscribe(bibliograph.AccessManager.messages.AFTER_LOGOUT, () => this.setView(null));
+    app.addListener("changeModelId", e => {
       this.toggleReferenceView();
       this.setVisibility(e.getData() ? "visible" : "hidden");
     });
@@ -90,11 +89,10 @@ qx.Class.define("bibliograph.ui.main.ItemView",
      *            {String|null}
      * @return {void}
      */
-    _applyView : function(value, old)
-    {
+    _applyView : function(value, old) {
       if (value) {
         var subView;
-        if( value.indexOf("-") !== -1 ) {
+        if (value.indexOf("-") !== -1) {
           var parts = value.split("-");
           value = parts[0];
           subView = parts[1];
@@ -102,16 +100,15 @@ qx.Class.define("bibliograph.ui.main.ItemView",
         var itemViewWidget = this.getViewByName(value);
         if (itemViewWidget) {
           this.itemViewStack.setSelection([itemViewWidget]);
-          if( subView ) {
-            if( typeof itemViewWidget.setPage == "function" ) {
+          if (subView) {
+            if (typeof itemViewWidget.setPage == "function") {
               itemViewWidget.setPage(subView);
             }
           }
         } else {
           this.warn("Invalid item view name " + value);
-          return; 
         }
-      } else  {
+      } else {
         this.getItemViewStack().setSelection([]);
       }
     },
@@ -127,8 +124,7 @@ qx.Class.define("bibliograph.ui.main.ItemView",
      * @param name {String}
      * @param widget {qx.ui.core.Widget}
      */
-    addView : function(name, widget)
-    {
+    addView : function(name, widget) {
       widget.setUserData("name", name);
       this.getItemViewStack().add(widget);
     },
@@ -143,11 +139,10 @@ qx.Class.define("bibliograph.ui.main.ItemView",
     /**
      * Returns the view identified by the userdata "name" value
      */
-    getViewByName : function(name)
-    {
+    getViewByName : function(name) {
       var children = this.getItemViewStack().getChildren();
       for (var i = 0; i < children.length; i++) {
-        if (children[i].getUserData("name") == name) {
+        if (children[i].getUserData("name") === name) {
           return children[i];
         }
       }
@@ -160,26 +155,21 @@ qx.Class.define("bibliograph.ui.main.ItemView",
      * already showing
      */
     toggleReferenceView : function() {
-      if (!this.getView() || this.getView() == "referenceEditor" || this.getView() == "tableView") {
+      if (!this.getView() || this.getView() === "referenceEditor" || this.getView() === "tableView") {
         this.showTabularView();
       }
     },
 
     /**
      * Shows the tabular view according to the given permissions
-     *
      */
-    showTabularView : function()
-    {
-      var type = this.getApplication().getModelType();
-      switch (type)
-      {
-        default:
-          var allowEditReference = 
-            qcl.access.PermissionManager.getInstance().
-              create("reference.edit").getState();
-          this.setView(allowEditReference ? "referenceEditor" : "tableView");
-      }
+    showTabularView : function() {
+      //var type = this.getApplication().getModelType();
+      const pm = qcl.access.PermissionManager.getInstance();
+      const ds = bibliograph.store.Datasources.getInstance();
+      let readOnlyDatasource = ds.getSelected() && ds.getSelected().getReadOnly();
+      let allowEditReference = pm.create("reference.edit").getState();
+      this.setView(allowEditReference && !readOnlyDatasource ? "referenceEditor" : "tableView");
     },
 
     /**

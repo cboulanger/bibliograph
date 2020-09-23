@@ -25,42 +25,38 @@ namespace lib\dialog;
  * functionality from qcl.ui.dialog.Form. In contrast to qcl.ui.dialog.Wizard,
  * this wizard sends each page result back to the server and gets new page data
  */
-class RemoteWizard extends Dialog
+class RemoteWizard extends Wizard
 {
+
   /**
-   * Returns an event to the client which prompts the user with a remote wizard widget.
-   *
-   * @param array $pageData 
-   *    Array containing the page data (see qcl.ui.dialog.Wizard#pageData)
-   * @param int $page 
-   *    The wizard page to open
-   * @param bool $allowCancel 
-   *    Whether to show a "Cancel" button. (Default: false)
-   * @param bool $allowFinish 
-   *    Whether to allow the user to skip the remaining pages and finish the wizard (Default: false).
-   * @param string $callbackService 
-   *    Service that will be called when the user clicks on the OK button
-   * @param string $callbackMethod 
-   *    Service method
+   * Whether cancelling of the dialog is allowed
+   * @var int
    */
-  public static function create(
-    $pageData,
-    $page,
-    $allowCancel = true,
-    $allowFinish = false,
-    $callbackService,
-    $callbackMethod
-  ) {
-    static::addToEventQueue( [
-     'type'       => "remoteWizard",
-     'properties' => [
-        'serviceName'   => $callbackService,
-        'serviceMethod' => $callbackMethod,
-        'pageData'      => $pageData,
-        'page'          => $page,
-        'allowCancel'   => $allowCancel,
-        'allowFinish'   => $allowFinish
-     ]
-    ]);
+  public $page = 0;
+
+  /**
+   * @param $value
+   * @return $this
+   */
+  public function setPage(int $value){$this->page=$value; return $this;}
+
+  /**
+   * Whether finishing the wizard prematurely is allowed
+   * @var bool
+   */
+  public $allowFinish = false;
+
+  /**
+   * @param $value
+   * @return $this
+   */
+  public function setAllowFinish(bool $value){$this->allowFinish=$value; return $this;}
+
+  /**
+   * @inheritdoc
+   */
+  public function sendToClient($properties=[])
+  {
+    return parent::sendToClient(array_merge($properties,['page','allowFinish']));
   }
 }

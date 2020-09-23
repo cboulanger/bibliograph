@@ -20,13 +20,13 @@
 
 namespace app\modules\backup\controllers;
 
+use app\controllers\AppController;
 use app\controllers\traits\AccessControlTrait;
 use app\controllers\traits\AuthTrait;
 use app\controllers\traits\DatasourceTrait;
 use app\modules\backup\Module;
 use lib\dialog\ServerProgress;
 use Yii;
-use yii\web\Response;
 
 /**
  * Class HtmlController
@@ -34,7 +34,7 @@ use yii\web\Response;
  * Backup actions emit chunked response for the ProgressController Widget
  * @package app\modules\backup
  */
-class ProgressController extends \yii\web\Controller
+class ProgressController extends AppController
 {
   use ServicesTrait;
   use DatasourceTrait;
@@ -47,7 +47,7 @@ class ProgressController extends \yii\web\Controller
    * @param string $id The widgetId of the widget displaying
    *    the progress of the backup
    * @param string|null $comment Optional comment
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionCreate(string $datasource, string $id, string $comment = null)
   {
@@ -66,7 +66,7 @@ class ProgressController extends \yii\web\Controller
    * @param string $datasource
    * @param string $file
    * @param string $id
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionRestore(string $datasource, string $file, string $id)
   {
@@ -78,7 +78,9 @@ class ProgressController extends \yii\web\Controller
         throw new \RuntimeException("Restore unsuccessful. Please check log files.");
       }
       $progressBar->dispatchClientMessage("backup.restored", ["datasource" => $datasource]);
-      Yii::$app->message->broadcast("backup.restored", ["datasource" => $datasource]);
+      if (!YII_ENV_TEST) {
+        $this->broadcastClientMessage("backup.restored", ["datasource" => $datasource]);
+      }
       $progressBar->complete();
     } catch (\RuntimeException $e) {
       $progressBar->error($e->getMessage());

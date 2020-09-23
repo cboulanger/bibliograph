@@ -20,6 +20,7 @@
 
 namespace app\controllers;
 
+use app\models\BibliographicDatasource;
 use lib\exceptions\UserErrorException;
 use Yii;
 use app\models\Datasource;
@@ -34,7 +35,7 @@ class DatasourceController extends AppController
    * application supports
    * @param string $namedId
    * @param string $namedId
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionCreate( $namedId, $type=null )
   {
@@ -57,18 +58,21 @@ class DatasourceController extends AppController
     $activeUser = $this->getActiveUser();
     $datasourceNames = $activeUser->getAccessibleDatasourceNames();
     $availableDatasources = [];
-    foreach ($datasourceNames as $datasourceName ) {
-      $datasource = Datasource::findByNamedId( $datasourceName );
+    foreach ($datasourceNames as $datasourceId ) {
+      /** @var BibliographicDatasource $datasource */
+      $datasource = $this->datasource($datasourceId);
       if($datasource->active == 1 and $datasource->hidden == 0){
         $availableDatasources[] = [
           'value' => $datasource->namedId,
           'title' => $datasource->title,
-          'label' => $datasource->title
+          'label' => $datasource->title,
+          'services' => $datasource->services,
+          'readOnly' => (boolean) $datasource->readonly
         ];
       }
     }
     usort( $availableDatasources, function($a, $b){
-      return $a['title'] > $b['title'];
+      return strcmp($a['title'], $b['title']);
     });
     return $availableDatasources;
   }

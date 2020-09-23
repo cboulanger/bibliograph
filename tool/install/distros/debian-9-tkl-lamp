@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+
+# Bibliograph - Online Bibliographic Data Manager
+# Build script to set up a development environment on a TurnkeyLinux LAMP appliance (Debian 9)
+
+PHPVERSION=7.3
+CURRENT_PHPVERSION=$(a2query -m | grep php | awk '{print $1;}')
+
+set -o errexit # Exit on error
+
+# Colorize output, see https://linuxtidbits.wordpress.com/2008/08/11/output-color-on-bash-scripts/
+txtbld=$(tput bold)             # Bold
+bldred=${txtbld}$(tput setaf 1) #  red
+bldblu=${txtbld}$(tput setaf 4) #  blue
+txtrst=$(tput sgr0)             # Reset
+function section {
+  echo $bldblu
+  echo ==============================================================================
+  echo $1
+  echo ==============================================================================
+  echo $txtrst
+}
+
+section "Installing prerequisites and PHP extensions..."
+sudo apt update && sudo apt upgrade -y
+
+if [ "$CURRENT_PHPVERSION" != "php$PHPVERSION" ]; then
+  apt -y install software-properties-common dirmngr apt-transport-https lsb-release ca-certificates
+  wget -q https://packages.sury.org/php/apt.gpg -O- | apt-key add -
+  echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php.list
+  apt update
+  apt -y install php${PHPVERSION} apt-get install libapache2-mod-php${PHPVERSION} php-pear
+  apt-get install -y php${PHPVERSION}-{dev,mysql,ldap,curl,gd,intl,mbstring,xml,xsl,zip}
+  a2dismod $CURRENT_PHPVERSION
+  a2enmod php${PHPVERSION}
+  apache2ctl restart
+
+fi
+
+section "Installing bibliographic tools..."
+apt-get bibutils jq
+if ! [ -f /etc/php/${PHPVERSION}/apache2/conf.d/yaz.ini ]; then
+  apt-get install -y build-essential zip yaz libyaz4-dev
+  pear channel-update pear.php.net && yes $'\n' | pecl install yaz && \
+    pear install Structures_LinkedList-0.2.2 && pear install File_MARC
+  [ -f /etc/php/${PHPVERSION}/mods-available/yaz.ini ] || echo "extension=yaz.so" > /etc/php/${PHPVERSION}/mods-available/yaz.ini
+  [ -f /etc/php/${PHPVERSION}/cli/conf.d/yaz.ini ] || ln -s /etc/php/${PHPVERSION}/mods-available/yaz.ini /etc/php/${PHPVERSION}/cli/conf.d/
+  [ -f /etc/php/${PHPVERSION}/apache2/conf.d/yaz.ini ] || ln -s /etc/php/${PHPVERSION}/mods-available/yaz.ini /etc/php/${PHPVERSION}/apache2/conf.d/
+  apache2ctl restart
+fi
+if php -i | grep yaz --quiet echo '<?php exit(function_exists("yaz_connect")?0:1);' | php ; then echo "YAZ is installed"; else echo "YAZ installation failed"; exit 1; fi;
+
+section "Preparing Database"
+apt-get -y install mariadb-server
+mysql -e 'CREATE DATABASE IF NOT EXISTS bibliograph;'
+mysql -e "DROP USER IF EXISTS 'bibliograph'@'localhost';"
+mysql -e "CREATE USER 'bibliograph'@'localhost' IDENTIFIED BY 'bibliograph';"
+mysql -e "GRANT ALL PRIVILEGES ON bibliograph.* TO 'bibliograph'@'localhost';"
+
+echo "Installation finished."

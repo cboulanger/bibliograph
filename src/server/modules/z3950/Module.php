@@ -2,7 +2,6 @@
 
 namespace app\modules\z3950;
 
-use lib\util\Executable;
 use Yii;
 use app\models\{
   Datasource, Role, Schema, User
@@ -13,24 +12,26 @@ use app\modules\z3950\models\{
 use Exception;
 use lib\exceptions\RecordExistsException;
 use yii\web\UserEvent;
-
+use lib\plugin\PluginInterface;
 
 /**
  * z3950 module definition class
  * @property Z3950Datasource[] $datasources
  */
-class Module extends \lib\Module
+class Module
+  extends \lib\Module
+  implements PluginInterface
 {
   /**
    * The version of the module
    * @var string
    */
-  protected $version = "1.0.3";
+  protected $version = "1.0.5";
 
   /**
    * A string constant defining the category for logging and translation
    */
-  const CATEGORY="z3950";
+  const CATEGORY="plugin.z3950";
 
   /**
    * @inheritdoc
@@ -42,6 +43,22 @@ class Module extends \lib\Module
    * @var string
    */
   public $serverDataPath = __DIR__ . '/data/servers';
+
+  /**
+   * Module constructor.
+   * @param string $id
+   * @param $parent
+   * @param array $config
+   */
+  public function __construct(string $id, $parent = null, array $config = [])
+  {
+    parent::__construct($id, $parent, $config);
+    if (!function_exists("yaz_connect")) {
+      $this->disabled = true;
+      Yii::warning("YAZ not enabled, disabled Z39.50 module.");
+      //Yii::debug(php_ini_loaded_file()  . " and " . php_ini_scanned_files()) ;
+    }
+  }
 
   /**
    * Installs the plugin.
@@ -61,16 +78,20 @@ class Module extends \lib\Module
       $this->errors[] = "Missing XSL extension. ";
     }
 
-    $xml2bib = new Executable( "xml2bib",BIBUTILS_PATH);
-    try{
-      $xml2bib->call("--version");
-      if ( !str_contains( $xml2bib->getStdErr(), "bibutils")) {
-        Yii::warning("Unexpected output of xml2bib --version:" . $xml2bib->getStdErr());
+    if (!class_exists('\\app\\modules\\bibutils\\Module')) {
+      $this->errors[] = "You need to install & activate the bibutils module.";
+    } else {
+      $xml2bib = \app\modules\bibutils\Module::createCmd("xml2bib");
+      try{
+        $xml2bib->call("--version");
+        if ( !$xml2bib->getStdErr() || !str_contains( $xml2bib->getStdErr(), "bibutils")) {
+          Yii::warning("Unexpected output of xml2bib --version:" . $xml2bib->getStdErr());
+          $this->errors[] = "Could not call bibutils.";
+        }
+      } catch ( Exception $e){
+        Yii::warning("Error calling xml2bib --version:" . $e->getMessage());
         $this->errors[] = "Could not call bibutils.";
       }
-    } catch ( Exception $e){
-      Yii::warning("Error calling xml2bib --version:" . $e->getMessage());
-      $this->errors[] = "Could not call bibutils.";
     }
 
     if ( count ( $this->errors )) {
@@ -145,7 +166,7 @@ class Module extends \lib\Module
       $datasource->setAttributes([
         'title' => $title,
         'hidden' => 1, // should not show up as selectable datasource
-        'resourcepath' => $filepath,
+        'resourcepath' => str_replace(getcwd(), "", $filepath)
       ]);
       $datasource->save();
       Yii::info("Added Z39.50 datasource '$title'", self::CATEGORY);
@@ -210,7 +231,7 @@ class Module extends \lib\Module
    * @param User $user
    */
   public function clearSearchData(User $user)
-  { 
+  {
     if( count($this->datasources )){
       try{
         $datasource = Datasource::getInstanceFor($this->datasources[0]->namedId);

@@ -1,0 +1,97 @@
+#!/usr/bin/env bash
+
+# Bibliograph - Online Bibliographic Data Manager
+# Build script to set up a development environment on Ubuntu 20.04
+
+set -o errexit # Exit on error
+if [[  "$(pwd)" != *"bibliograph" ]] ; then
+  echo "You must be in the bibliograph root dir."
+  exit 1
+fi
+
+PHPVERSION=7.4
+
+# Colorize output, see https://linuxtidbits.wordpress.com/2008/08/11/output-color-on-bash-scripts/
+txtbld=$(tput bold)             # Bold
+bldred=${txtbld}$(tput setaf 1) #  red
+bldblu=${txtbld}$(tput setaf 4) #  blue
+txtrst=$(tput sgr0)             # Reset
+function section {
+  echo $bldblu
+  echo ==============================================================================
+  echo $1
+  echo ==============================================================================
+  echo $txtrst
+}
+
+section "Installing LAMP server..."
+
+# General packages
+sudo apt-get update
+sudo apt-get install -y zip jq build-essential
+
+# Apache / PHP / MySQL
+sudo apt-get install -y apache2 mariadb-server
+sudo /etc/init.d/mysql start
+sudo apt-get install -y php php-pear php-{dev,ldap,curl,mysql,gd,intl,mbstring,xml,zip}
+
+if [ "$(a2query -m | grep rewrite)" == "" ]; then
+A2DIRCONF=<<EOF
+    <Directory /var/www/html>
+        Options Indexes FollowSymLinks MultiViews
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>
+EOF
+sed -i "s|</VirtualHost>|$A2DIRCONF|"
+sudo a2enmod rewrite
+sudo service apache2 restart
+fi
+
+section "Installing bibliographic tools..."
+sudo apt-get install -y yaz libyaz4-dev bibutils
+sudo pear channel-update pear.php.net
+[ "$(pecl search yaz | grep yaz)" == "" ] && yes $'\n' | sudo pecl install yaz
+sudo pear install Structures_LinkedList-0.2.2 || true
+sudo pear install File_MARC || true
+PHP_CONF_PATH=/etc/php/${PHPVERSION}
+YAZ_INI=$PHP_CONF_PATH/mods-available/yaz.ini
+[ -f $YAZ_INI ] || echo "extension=yaz.so" | sudo tee $YAZ_INI
+[ -f $PHP_CONF_PATH/cli/conf.d/20-yaz.ini ] || sudo ln -s $YAZ_INI $PHP_CONF_PATH/cli/conf.d/20-yaz.ini
+[ -f $PHP_CONF_PATH/apache2/conf.d/20-yaz.ini ] || sudo ln -s $YAZ_INI $PHP_CONF_PATH/apache2/conf.d/20-yaz.ini
+sudo apache2ctl restart
+if php -i | grep yaz --quiet && echo '<?php exit(function_exists("yaz_connect")?0:1);' | php ; then echo "YAZ is installed"; else echo "YAZ installation failed"; exit 1; fi;
+
+section "Installing composer..."
+php -r "copy('https://getcomposer.org/installer', '/tmp/composer-setup.php');"
+sudo php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer
+rm /tmp/composer-setup.php
+composer --version
+
+section "Installing node and npm ..."
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+nvm install 12
+
+section "Installing qooxdoo and qxcompiler libraries..."
+npm install
+npx qx pkg install
+
+section "Setting up Yii2 backend..."
+pushd src/server
+composer install
+popd
+
+section "Install libraries from GitHub"
+tool/env/install-libs
+
+section "Preparing DATABASE..."
+sudo mysql -uroot -e "\
+  CREATE DATABASE IF NOT EXISTS tests; \
+  CREATE DATABASE IF NOT EXISTS bibliograph;\
+  DROP USER IF EXISTS 'bibliograph'@'localhost';\
+  CREATE USER 'bibliograph'@'localhost' IDENTIFIED BY 'bibliograph';\
+  GRANT ALL PRIVILEGES ON bibliograph.* TO 'bibliograph'@'localhost';\
+  GRANT ALL PRIVILEGES ON tests.* TO 'bibliograph'@'localhost';"

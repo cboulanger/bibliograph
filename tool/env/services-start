@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+if [[ "$GITHUB_WORKFLOW" != "" ]]; then
+  echo ">>> No need to start service containers on GitHub"
+  exit 0
+fi
+
+source tool/env/envvars-load
+source tool/env/envvars-export
+
+tool/env/mysql-server start || exit 1
+tool/env/http-server start

@@ -1,16 +1,15 @@
 <?php
+//
+// Bibliograph development server entry point
+//
 
-defined('YII_DEBUG') or define('YII_DEBUG', true);
-defined('YII_ENV') or define('YII_ENV', 'dev');
+const YII_DEBUG = true;
+const APP_ROOT_DIR = __DIR__ . "/../../..";
+const APP_LOG_DIR = APP_ROOT_DIR . "/log/app";
+const DOTENV_FILE = APP_ROOT_DIR . "/test/.env";
+const APP_CONFIG_FILE = APP_ROOT_DIR . "/test/app.conf.toml";
 
-require(__DIR__ . '/../vendor/autoload.php');
-require(__DIR__ . '/../vendor/yiisoft/yii2/Yii.php');
-
-$config = require __DIR__ . '/../config/dev.php';
-Yii::setAlias('@tests', dirname(__DIR__) . '/tests');
+require __DIR__  . '/../bootstrap.php';
+$config = require APP_BACKEND_DIR . '/config/web.php';
 $app = new yii\web\Application($config);
-// make sure db connection is opened with utf-8 encoding
-$app->db->on(\yii\db\Connection::EVENT_AFTER_OPEN, function ($event) {
-  $event->sender->createCommand("SET NAMES utf8")->execute();
-});
 $app->run();

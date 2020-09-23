@@ -1,0 +1,21 @@
+# API tests wit a webserver
+actor: ApiTester
+modules:
+    enabled:
+        - Asserts
+        - REST:
+            part: json
+            url: "%SERVER_URL%"
+            depends: PhpBrowser
+        - PhpBrowser:
+            url: "%SERVER_URL%"
+            curl:
+                CURLOPT_TIMEOUT: 500
+        - \Helper\Api
+env:
+    xdebug:
+    development:
+    with-data:
+    empty-database:
+    upgradev2:
+    upgradev3:

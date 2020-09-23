@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# check & setup environment
+./tool/dev/check-mysql
+# import functions
+source ./tool/lib/functions.sh
+# Exit on first error
+set -o errexit
+
+log_error "Not yet working."
+exit 1
+
+
+#set -o errexit # Exit on error
+YIICMD="php yii-test"
+
+echo "Creating empty database ..."
+mysql -uroot -e "DROP DATABASE tests;" || true
+mysql -uroot -e "CREATE DATABASE tests;"
+
+pushd ./src/server > /dev/null
+echo "Setting up database ..."
+$YIICMD migrate/up --interactive=0 --migrationNamespaces=app\\migrations\\schema  > /dev/null
+$YIICMD migrate/up --interactive=0 --migrationNamespaces=app\\migrations\\data    > /dev/null
+$YIICMD migrate/up --interactive=0 --migrationNamespaces=app\\tests\\migrations   > /dev/null
+
+echo "Deleting log and output data files..."
+[[ -f runtime/logs/app.log ]] && rm runtime/logs/app.log
+[[ -f runtime/logs/error.log ]] && rm runtime/logs/error.log
+rm tests/_output/*fail* &> /dev/null || true
+
+echo "Running tests..."
+php vendor/bin/codecept $@
+
+popd > /dev/null
+

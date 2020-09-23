@@ -23,11 +23,12 @@ class M180301071642_Update_table_data_Reference_add_fullext_index extends Migrat
   }
 
   /**
+   * This exists so that migrate/down can delete the model tables, not for downgrading
+   * the database
    * {@inheritdoc}
    */
   public function safeDown()
   {
-    $this->dropIndex("fulltext", "{{%data_Reference}}");
     return true;
   }
 }

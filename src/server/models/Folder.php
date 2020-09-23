@@ -2,7 +2,9 @@
 
 namespace app\models;
 
+use app\controllers\AppController;
 use lib\channel\BroadcastEvent;
+use lib\channel\MessageEvent;
 use lib\exceptions\UserErrorException;
 use Yii;
 use InvalidArgumentException;
@@ -17,31 +19,33 @@ use yii\db\Exception;
 /**
  * This is the model class for table "database1_data_Folder".
  *
- * @property integer $parentId
- * @property integer $position
+ * @property int $parentId
+ * @property int $position
  * @property string $label
  * @property string $type
  * @property string $description
- * @property integer $searchable
- * @property integer $searchfolder
+ * @property int $searchable
+ * @property int $searchfolder
  * @property string $query
- * @property integer $public
- * @property integer $opened
- * @property integer $locked
+ * @property int $public
+ * @property int $opened
+ * @property int $locked
  * @property string $path
  * @property string $owner
- * @property integer $hidden
+ * @property int $hidden
  * @property string $createdBy
- * @property integer $markedDeleted
- * @property integer $childCount
- * @property integer $referenceCount
+ * @property int $markedDeleted
+ * @property int $childCount
+ * @property int $referenceCount
  */
 class Folder extends \lib\models\BaseModel //implements ITreeNode
 {
-  const EVENT_CLIENT_UPDATE = "folder.node.update";
-  const EVENT_CLIENT_ADD    = "folder.node.add";
-  const EVENT_CLIENT_DELETE = "folder.node.delete";
-  const EVENT_CLIENT_MOVE   = "folder.node.move";
+  //@todo: name as client-side event?
+  const MESSAGE_CLIENT_UPDATE = "folder.node.update";
+  const MESSAGE_CLIENT_ADD    = "folder.node.add";
+  const MESSAGE_CLIENT_DELETE = "folder.node.delete";
+  const MESSAGE_CLIENT_MOVE   = "folder.node.move";
+  const MESSAGE_CLIENT_PRUNE  = "folder.node.prune";
 
   /**
    * The type of the model when part of a datasource
@@ -139,7 +143,7 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
       'label' => [
         'label' => Yii::t('app', "Folder Title"),
         'type' => "TextField",
-        'width' => 500
+        'width' => 800
       ],
       'description' => [
         'label' => Yii::t('app', "Description"),
@@ -176,7 +180,7 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
         'options' => (array) $this->getIndexFieldsOptions(),
         'value' => "",
         'marshal' => function($value, $model, &$formData ){
-          if( str_contains($model->query, 'virtsub:') ){
+          if( $model->query && str_contains($model->query, 'virtsub:') ){
             $formData['query']['enabled'] = false;
             return substr($model->query,8);
           }
@@ -192,7 +196,7 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
       'query' => [
         'label' => Yii::t('app', "Query"),
         'type' => "TextArea",
-        'lines' => 3
+        'lines' => 5
       ],
       'opened' => [
         'label' => Yii::t('app', "Opened?"),
@@ -273,7 +277,7 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
   protected function createUpdateNodeEvent($nodeData)
   {
     return new BroadcastEvent([
-      'name' => static::EVENT_CLIENT_UPDATE,
+      'name' => static::MESSAGE_CLIENT_UPDATE,
       'data' => [
         'datasource' => static::getDatasource()->namedId,
         'modelType' => static::$modelType,
@@ -308,7 +312,7 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
     }
     //Yii::debug($nodeData, __METHOD__);
     // update new parent on client
-    Yii::$app->eventQueue->add($this->createUpdateNodeEvent($nodeData));
+    $this->dispatchChangeMessage($this->createUpdateNodeEvent($nodeData));
   }
 
   /**
@@ -327,7 +331,9 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
     parent::afterSave($insert, $changedAttributes);
 
     // do no emit events if in console mode
-    if( Yii::$app->request->isConsoleRequest ) return true;
+    if( Yii::$app->request->isConsoleRequest ) {
+      return true;
+    }
 
     // inserts
     if ($insert) {
@@ -335,6 +341,9 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
       $this->_afterInsert();
       return true;
     }
+
+    // updates
+
     // dispatch events
     //Yii::debug("Updating " . $this->label . " " . json_encode($changedAttributes));
     foreach ($changedAttributes as $key => $oldValue) {
@@ -353,8 +362,8 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
             Yii::error($e);
           }
           // move node
-          Yii::$app->eventQueue->add(new BroadcastEvent([
-            'name' => static::EVENT_CLIENT_MOVE,
+          $this->dispatchChangeMessage(new BroadcastEvent([
+            'name' => static::MESSAGE_CLIENT_MOVE,
             'data' => [
               'datasource' => static::getDatasource()->namedId,
               'modelType' => "folder",
@@ -362,6 +371,7 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
               'parentId' => $this->parentId,
               'transactionId' => $this->getTransactionId()
             ]]));
+          break;
       } // end switch
     } // end foreach
 
@@ -372,9 +382,31 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
       } catch (Exception $e) {
         throw new UserErrorException($e->getMessage(),null, $e);
       }
-      Yii::$app->eventQueue->add($this->createUpdateNodeEvent($nodeData));
+      $this->dispatchChangeMessage($this->createUpdateNodeEvent($nodeData));
     }
+    // add virtual subfolders
+    $this->_createVirtualSubfoldersOnDemand(true);
     return true;
+  }
+
+  /**
+   * Dispatches a message that initiates the loading of the virtual subfolders of this node,
+   * if it has any.
+   * @param bool $pruneFirst If true, remove existing subfolders first. Defaults to false.
+   */
+  protected function _createVirtualSubfoldersOnDemand($pruneFirst=false){
+    if ($this->query and str_contains( $this->query, "virtsub:" )){
+      if ($pruneFirst) {
+        $this->dispatchChangeMessage(new MessageEvent([
+          'name' => static::MESSAGE_CLIENT_PRUNE,
+          'data' => [ 'datasource' => static::getDatasource()->namedId, 'modelType' => 'folder', 'id' => $this->id]
+        ]));
+      }
+      $this->dispatchChangeMessage(new MessageEvent([
+        'name' => AppController::MESSAGE_EXECUTE_JSONRPC,
+        'data' => ["folder", "create-virtual-folders", [static::getDatasource()->namedId, $this->id]]
+      ]));
+    }
   }
 
   /**
@@ -391,14 +423,17 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
     if($this->parentId){
       $this->updateParentNode();
     }
-    Yii::$app->eventQueue->add(new BroadcastEvent([
-      'name' => static::EVENT_CLIENT_ADD,
+    //@todo move to method
+    $this->dispatchChangeMessage(new BroadcastEvent([
+      'name' => static::MESSAGE_CLIENT_ADD,
       'data' => [
         'datasource'  => static::getDatasource()->namedId,
         'modelType'   => static::$modelType,
         'nodeData'    => FolderController::getNodeDataStatic($this),
         'transactionId' => $this->getTransactionId()
       ]]));
+    // add virtual subfolders
+    $this->_createVirtualSubfoldersOnDemand();
   }
 
   /**
@@ -411,8 +446,8 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
   {
     parent::afterDelete();
     $this->updateParentNode();
-    Yii::$app->eventQueue->add(new BroadcastEvent([
-      'name' => static::EVENT_CLIENT_DELETE,
+    $this->dispatchChangeMessage(new BroadcastEvent([
+      'name' => static::MESSAGE_CLIENT_DELETE,
       'data' => [
         'datasource' => static::getDatasource()->namedId,
         'modelType' => static::$modelType,
@@ -442,7 +477,7 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
 
   //-------------------------------------------------------------
   // ITreeNode Interface
-  //-------------------------------------------------------------  
+  //-------------------------------------------------------------
 
   /**
    * Returns the Folder objects of subfolders of this folder optionally ordered by a property
@@ -492,7 +527,9 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
    */
   public function getChildCount($update = false)
   {
-    if ($update or $this->childCount === null) {
+    if ($this->query and str_contains( $this->query, "virtsub:" )){
+      $this->childCount = 100; // TODO calculate properly
+    } elseif ($update or $this->childCount === null) {
       $this->childCount = (int) $this->getChildrenQuery()->count();
       $this->save();
     }
@@ -576,11 +613,11 @@ class Folder extends \lib\models\BaseModel //implements ITreeNode
 
   /**
    * Set parent node
-   * @param \app\models\Folder
+   * @param Folder
    * @return int Old parent id
    * @throws Exception
    */
-  public function setParent(\app\models\Folder $parentFolder)
+  public function setParent(Folder $parentFolder)
   {
     $oldParentId = $this->parentId;
     $this->parentId = $parentFolder->id;

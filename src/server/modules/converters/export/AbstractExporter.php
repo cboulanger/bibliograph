@@ -9,6 +9,7 @@
 namespace app\modules\converters\export;
 
 use app\models\Reference;
+use Yii;
 use yii\base\BaseObject;
 
 
@@ -36,6 +37,9 @@ use yii\base\BaseObject;
  */
 abstract class AbstractExporter extends BaseObject
 {
+
+  const CATEGORY = "plugin.converters";
+
   /**
    * The id of the exporter
    * @var string
@@ -86,6 +90,11 @@ abstract class AbstractExporter extends BaseObject
       throw new \RuntimeException(self::class . " does not define a file extension");
     }
     return $this->extension;
+  }
+
+  protected function debugEncoding($string) {
+    Yii::debug("Encoding:" . mb_detect_encoding($string), static::CATEGORY);
+    Yii::debug($string, static::CATEGORY);
   }
 
   /**

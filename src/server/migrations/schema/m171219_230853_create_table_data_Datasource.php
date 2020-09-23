@@ -27,7 +27,7 @@ class m171219_230853_create_table_data_Datasource extends Migration
       'database' => $this->string(100),
       'username' => $this->string(50),
       'password' => $this->string(50),
-      'encoding' => $this->string(20)->notNull()->defaultValue('utf-8'),
+      'encoding' => $this->string(10),
       'prefix' => $this->string(20),
       'resourcepath' => $this->string(255),
       'active' => $this->smallInteger(1)->notNull()->defaultValue(1),

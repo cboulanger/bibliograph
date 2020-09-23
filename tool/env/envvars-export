@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+[ "$(type -t log_error)" == "function" ] || source tool/lib/functions.sh
+
+# check and export environment variables for use in scripts
+envvars="PHP_VERSION DB_TYPE DB_HOST DB_PORT DB_USER DB_PASSWORD DB_DATABASE"
+for envvar in $envvars; do
+  #echo "$envvar is ${!envvar}"
+  if [ "${!envvar}" == "" ]; then
+    log_error "You need to set the '$envvar' environment variable."
+    exit 1
+  fi
+  export ${envvar?}
+done

@@ -20,29 +20,30 @@
 
 namespace lib\dialog;
 
+/**
+ * Class Login
+ * @package lib\dialog
+ * Needs some more love
+ */
 class Login extends Dialog
 {
+
   /**
-   * Returns a message to the client which prompts the user with an login dialog
-   * @param string $message 
-   *    The message text
-   * @param string $callbackService 
-   *    Optional service that will be called when the user clicks on the OK button
-   * @param string $callbackMethod 
-   *    Optional service method
-   * @param array $callbackParams 
-   *    Optional service params
+   * @var string
    */
-  public static function create( $message, $callbackService=null, $callbackMethod=null, array $callbackParams=[] )
+  protected $text = "";
+
+  /**
+   * @param $value
+   * @return $this
+   */
+  public function setText(string $value){$this->message=$value; return $this;}
+
+  /**
+   * @inheritDoc
+   */
+  public function sendToClient(array $properties=[])
   {
-    static::addToEventQueue( array(
-     'type' => "login",
-     'properties' => array(
-        'text' => $message
-      ),
-     'service' => $callbackService,
-     'method'  => $callbackMethod,
-     'params'  => $callbackParams
-    ));
+    return parent::sendToClient(array_merge($properties,['text']));
   }
 }

@@ -30,11 +30,11 @@ qx.Class.define("bibliograph.ui.window.FolderTreeWindow",
   {
     this.base(arguments);
     this.createUi();
-  },  
+  },
   
   members : {
   
-    createUi: function () 
+    createUi: function ()
     {
       this.setWidth(300);
       this.setHeight(400);
@@ -60,7 +60,7 @@ qx.Class.define("bibliograph.ui.window.FolderTreeWindow",
       }, this);
     
       qx.event.message.Bus.getInstance()
-        .subscribe(bibliograph.AccessManager.messages.LOGOUT, ()=> this.close());
+        .subscribe(bibliograph.AccessManager.messages.AFTER_LOGOUT, ()=> this.close());
     
       // tree widget
       let treeWidget = new qcl.ui.treevirtual.MultipleTreeView();

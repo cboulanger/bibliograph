@@ -37,8 +37,7 @@ qx.Class.define("bibliograph.ui.item.RecordInfo",
       CONSTRUCTOR
   *****************************************************************************
   */
-  construct : function()
-  {
+  construct : function() {
     this.base(arguments);
     this.createPopup();
   },
@@ -50,62 +49,30 @@ qx.Class.define("bibliograph.ui.item.RecordInfo",
   */
   members :
   {
-    /*
-    ---------------------------------------------------------------------------
-       WIDGETS
-    ---------------------------------------------------------------------------
-    */
     recordInfoHtml : null,
     containingFoldersTable : null,
 
-    /*
-    ---------------------------------------------------------------------------
-       PRIVATE MEMBERS
-    ---------------------------------------------------------------------------
-    */
-
-    /*
-    ---------------------------------------------------------------------------
-       APPLY METHODS
-    ---------------------------------------------------------------------------
-    */
-
-    /*
-    ---------------------------------------------------------------------------
-       EVENT HANDLERS
-    ---------------------------------------------------------------------------
-    */
-    _on_appear : function()
-    {
+    _on_appear : function() {
       var app = this.getApplication();
-      if (app.getModelId() !== this.__modelId)
-      {
+      if (app.getModelId() !== this.__modelId) {
         this.__modelId = app.getModelId();
         this.reloadData();
       }
     },
-
-    /*
-    ---------------------------------------------------------------------------
-       INTERNAL METHODS
-    ---------------------------------------------------------------------------
-    */
-
-    /*
-    ---------------------------------------------------------------------------
-       API METHODS
-    ---------------------------------------------------------------------------
-    */
-    reloadData : function()
-    {
+  
+    /**
+     *
+     */
+    reloadData : function() {
       var app = this.getApplication();
       if (!this.isVisible()) {
         return;
       }
       var id = app.getModelId();
-      qx.event.Timer.once(function()
-      {
-        if (!id || id != app.getModelId())return;
+      qx.event.Timer.once(function() {
+        if (!id || id !== app.getModelId()) {
+         return;
+        }
 
         this.recordInfoHtml.setHtml("");
         this.containingFoldersTable.getTableModel().setData([]);
@@ -113,28 +80,42 @@ qx.Class.define("bibliograph.ui.item.RecordInfo",
         this.reloadFolderData();
       }, this, 100);
     },
-    reloadRecordInfo : function()
-    {
+  
+    /**
+     *
+     */
+    reloadRecordInfo : function() {
       var app = this.getApplication();
       var modelId = app.getModelId();
-      if (!modelId)return;
+      if (!modelId) {
+       return;
+      }
 
-      app.getRpcClient("reference").send( "getRecordInfoHtml", [app.getDatasource(), modelId], function(data) {
+      app.getRpcClient("reference").send("getRecordInfoHtml", [app.getDatasource(), modelId], function(data) {
         this.recordInfoHtml.setHtml(data.html);
       }, this);
     },
-    reloadFolderData : function()
-    {
+  
+    /**
+     *
+     */
+    reloadFolderData : function() {
       var app = this.getApplication();
       var modelId = app.getModelId();
-      if (!modelId)return;
+      if (!modelId) {
+       return;
+      }
 
-      app.getRpcClient("reference").send( "getContainingFolderData", [app.getDatasource(), modelId], function(data) {
+      app.getRpcClient("reference").send("getContainingFolderData", [app.getDatasource(), modelId], function(data) {
         this.containingFoldersTable.getTableModel().setData(data);
       }, this);
     },
-    getSelectedFolders : function()
-    {
+  
+    /**
+     *
+     * @return {[]}
+     */
+    getSelectedFolders : function() {
       var selectedFolders = [];
       var selectionModel = this.containingFoldersTable.getSelectionModel();
       var tableModel = this.containingFoldersTable.getTableModel();
@@ -147,33 +128,39 @@ qx.Class.define("bibliograph.ui.item.RecordInfo",
       });
       return selectedFolders;
     },
-    openFolder : function()
-    {
+  
+    /**
+     *
+     */
+    openFolder : function() {
       var selectedFolders = this.getSelectedFolders();
       if (selectedFolders.length) {
         this.getApplication().setFolderId(selectedFolders[0].id);
       }
     },
-    removeFromFolder : function()
-    {
-      var app = this.getApplication();
-      var selectedFolders = this.getSelectedFolders();
-      if (!selectedFolders.length)return;
-
+  
+    /**
+     *
+     */
+    removeFromFolder : async function() {
+      const app = this.getApplication();
+      let selectedFolders = this.getSelectedFolders();
+      if (!selectedFolders.length) {
+       return;
+      }
       var message = this.tr("Do you really want to remove the reference from folder '%1'?", selectedFolders[0].label);
-      var handler = qx.lang.Function.bind(function(result) {
-        if (result === true)
-        {
-          this.showPopup(this.tr("Processing request..."));
-          app.getRpcClient("reference").send( "remove", [app.getDatasource(), selectedFolders[0].id, null, [app.getModelId()]], function()
-          {
-            this.hidePopup();
-            this.reloadFolderData();
-          }, this);
-        }
-      }, this);
-      dialog.Dialog.confirm(message, handler);
-    },
-    endOfFile : true
+      let result = await app.confirm(message);
+      if (result === true) {
+        this.showPopup(this.tr("Processing request..."));
+        await rpc.Reference.remove(
+            app.getDatasource(),
+            selectedFolders[0].id,
+            null,
+            [app.getModelId()]
+        );
+        this.hidePopup();
+        this.reloadFolderData();
+      }
+    }
   }
 });

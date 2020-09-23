@@ -11,138 +11,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 msgctxt "app"
-msgid "Could not parse query: {error}"
-msgstr ""
-
-msgctxt "app"
-msgid "Creator"
-msgstr ""
-
-msgctxt "setup"
-msgid " and a connection has successfully been established."
-msgstr ""
-
-msgctxt "setup"
-msgid " and applied new migrations for version {version}"
-msgstr ""
-
-msgctxt "setup"
-msgid ", but trying to establish a connection failed with the error: {error}"
-msgstr ""
-
-msgctxt "setup"
-msgid "Admininstrator email exists."
-msgstr ""
-
-msgctxt "setup"
-msgid "Cannot connect to database: {error}"
-msgstr ""
-
-msgctxt "setup"
-msgid "Cannot run in production mode without ini file."
-msgstr ""
-
-msgctxt "setup"
-msgid "Cannot update from Bibliograph v2 data: some tables are missing."
-msgstr ""
-
-msgctxt "setup"
-msgid "Configuration values were created."
-msgstr ""
-
-msgctxt "setup"
-msgid "Created datasources."
-msgstr ""
-
-msgctxt "setup"
-msgid "Created standard schema."
-msgstr ""
-
-msgctxt "setup"
-msgid "Datasources already existed."
-msgstr ""
-
-msgctxt "setup"
-msgid "Found data for version {version}"
-msgstr ""
-
-msgctxt "setup"
-msgid "Found empty database"
-msgstr ""
-
-msgctxt "setup"
-msgid "Initializing database failed."
-msgstr ""
-
-msgctxt "setup"
-msgid "Invalid database setup. Please contact the adminstrator."
-msgstr ""
-
-msgctxt "setup"
-msgid "LDAP authentication is enabled"
-msgstr ""
-
-msgctxt "setup"
-msgid "LDAP authentication is not enabled."
-msgstr ""
-
-msgctxt "setup"
-msgid "Migrated data from Bibliograph v2"
-msgstr ""
-
-msgctxt "setup"
-msgid "Migrated schema(s) {schemas}."
-msgstr ""
-
-msgctxt "setup"
-msgid "Migrating data from Bibliograph v2 failed."
-msgstr ""
-
-msgctxt "setup"
-msgid "Migrating schema(s) failed: {errinfo}"
-msgstr ""
-
-msgctxt "setup"
-msgid "Missing administrator email in app.conf.toml."
-msgstr ""
-
-msgctxt "setup"
-msgid "No database connection. "
-msgstr ""
-
-msgctxt "setup"
-msgid "No schema migrations necessary."
-msgstr ""
-
-msgctxt "setup"
-msgid "No updates to the databases."
-msgstr ""
-
-msgctxt "setup"
-msgid "Setup failed. Please fix the following problems:"
-msgstr ""
-
-msgctxt "setup"
-msgid "Standard schema existed."
-msgstr ""
-
-msgctxt "setup"
-msgid "The application needs to be upgraded from '{oldversion}' to '{newversion}'. Please log in as administrator."
-msgstr ""
-
-msgctxt "setup"
-msgid "The configuration directory must not be writable in production mode {config_dir}."
-msgstr ""
-
-msgctxt "setup"
-msgid "The configuration directory needs to be writable in order to create an .ini file: {config_dir}."
-msgstr ""
-
-msgctxt "setup"
-msgid "The database must be upgraded. Confirm that you have made a database backup and now are ready to run the upgrade."
-msgstr ""
-
-msgctxt "app"
 msgid "2. Choose import format"
 msgstr "2. Wählen Sie das Importformat aus"
 
@@ -201,6 +69,10 @@ msgstr "Auf den ausgewählten Ordner und alle Unterordner anwenden"
 msgctxt "app"
 msgid "Article"
 msgstr "Artikel"
+
+msgctxt "app"
+msgid "At least one record already exists in folder {name}."
+msgstr ""
 
 msgctxt "app"
 msgid "Attachments"
@@ -287,6 +159,10 @@ msgid "Class"
 msgstr "Klasse"
 
 msgctxt "app"
+msgid "Click on this link to send email"
+msgstr ""
+
+msgctxt "app"
 msgid "Comparison modifiers"
 msgstr "Vergleichsoperatoren"
 
@@ -315,6 +191,10 @@ msgid "Copyright"
 msgstr "Urheberrechtsangaben"
 
 msgctxt "app"
+msgid "Could not parse query: {error}"
+msgstr ""
+
+msgctxt "app"
 msgid "Create a new datasource"
 msgstr "Neue Datanequelle anlegen"
 
@@ -331,12 +211,20 @@ msgid "Created by"
 msgstr "Angelegt von"
 
 msgctxt "app"
+msgid "Creator"
+msgstr ""
+
+msgctxt "app"
 msgid "Cross Reference"
 msgstr "Querverweis"
 
 msgctxt "app"
 msgid "Crossref"
 msgstr "Querverweis"
+
+msgctxt "app"
+msgid "DOI"
+msgstr ""
 
 msgctxt "app"
 msgid "Data"
@@ -692,7 +580,7 @@ msgstr "LCCN"
 
 msgctxt "app"
 msgid "Ldap"
-msgstr "Die Benutzerdaten stammen aus einem LDAP-Server und können nicht verändert werden"
+msgstr "Ldap"
 
 msgctxt "app"
 msgid "Loaded records {firstRow} - {lastRow} ..."
@@ -1083,6 +971,10 @@ msgid "To change the password, repeat new password"
 msgstr "Zum ändern des Passwortes bitte das neue Passwort erneut eingeben"
 
 msgctxt "app"
+msgid "Token"
+msgstr ""
+
+msgctxt "app"
 msgid "Translator"
 msgstr "Übersetzer"
 
@@ -1093,6 +985,10 @@ msgstr "Mülleimer"
 msgctxt "app"
 msgid "Type"
 msgstr "Typ"
+
+msgctxt "app"
+msgid "Unique ID"
+msgstr ""
 
 msgctxt "app"
 msgid "University"
@@ -1121,6 +1017,10 @@ msgstr "Benutzer-ID"
 msgctxt "app"
 msgid "User data is from an LDAP server and cannot be changed."
 msgstr "Die Benutzerdaten stammen aus einem LDAP-Server und können nicht verändert werden."
+
+msgctxt "app"
+msgid "User has been created. {mailtolink}. Then configure user roles and/or groups."
+msgstr ""
 
 msgctxt "app"
 msgid "User is deactivated"
@@ -1207,8 +1107,16 @@ msgid "{field} does not contain {value}"
 msgstr "{field} enthält nicht {value}"
 
 msgctxt "app"
+msgid "{field} is greater than {value}"
+msgstr ""
+
+msgctxt "app"
 msgid "{field} is not {value}"
 msgstr "{field} ist ungleich {value}"
+
+msgctxt "app"
+msgid "{field} is smaller than {value}"
+msgstr ""
 
 msgctxt "app"
 msgid "{field} is {value}"
@@ -1230,55 +1138,119 @@ msgctxt "app"
 msgid "{numberOfRecords} records"
 msgstr "{numberOfRecords} Datensätze"
 
-msgctxt "extendedfields"
-msgid "Category"
-msgstr "Kategorie"
 
-msgctxt "extendedfields"
-msgid "Date ordered"
-msgstr "Datum bestellt"
+msgctxt "app"
+msgid " and a connection has successfully been established."
+msgstr ""
 
-msgctxt "extendedfields"
-msgid "Date received"
-msgstr "Datum erhalten"
+msgctxt "app"
+msgid " and applied new migrations for version {version}"
+msgstr ""
 
-msgctxt "extendedfields"
-msgid "Location"
-msgstr "Standort"
+msgctxt "app"
+msgid ", but trying to establish a connection failed with the error: {error}"
+msgstr ""
 
-msgctxt "extendedfields"
-msgid "Owner"
-msgstr "Besitzer/in"
+msgctxt "app"
+msgid "Admininstrator email exists."
+msgstr ""
 
-msgctxt "extendedfields"
-msgid "Type"
-msgstr "Typ"
+msgctxt "app"
+msgid "Cannot connect to database: {error}"
+msgstr ""
 
-msgctxt "webservices"
-msgid "Server timed out."
-msgstr "Zeitüberschreitung bei der Anfrage."
+msgctxt "app"
+msgid "Cannot run in production mode without ini file."
+msgstr ""
 
-msgctxt "webservices"
-msgid "Server timed out. Trying again..."
-msgstr "Zeitüberschreitung. Anfrage wird wiederholt…"
+msgctxt "app"
+msgid "Cannot update from Bibliograph v2 data: some tables are missing."
+msgstr ""
 
-msgctxt "z3950"
-msgid "Cannot connect to server: '{error}'."
-msgstr "Kann mich nicht mit dem Server verbinden: '{error}'."
+msgctxt "app"
+msgid "Configuration values were created."
+msgstr ""
 
-msgctxt "z3950"
-msgid "Invalid query '{query}'"
-msgstr "Ungültige Abfrage '{query}'"
+msgctxt "app"
+msgid "Created datasources."
+msgstr ""
 
-msgctxt "z3950"
-msgid "Server timed out."
-msgstr "Zeitüberschreitung bei der Anfrage."
+msgctxt "app"
+msgid "Created standard schema."
+msgstr ""
 
-msgctxt "z3950"
-msgid "Server timed out. Trying again..."
-msgstr "Zeitüberschreitung bei der Anfrage. Versuche es erneut…"
+msgctxt "app"
+msgid "Datasources already existed."
+msgstr ""
 
-msgctxt "z3950"
-msgid "The server does not understand the query '{query}'. Please try a different query."
-msgstr "Der Server versteht die Anfrage '{query}' nicht. Versuchen Sie es mit einer anderen Anfrage."
+msgctxt "app"
+msgid "Found data for version {version}"
+msgstr ""
 
+msgctxt "app"
+msgid "Found empty database"
+msgstr ""
+
+msgctxt "app"
+msgid "Initializing database failed."
+msgstr ""
+
+msgctxt "app"
+msgid "Invalid database setup. Please contact the adminstrator."
+msgstr ""
+
+msgctxt "app"
+msgid "LDAP authentication is enabled"
+msgstr ""
+
+msgctxt "app"
+msgid "LDAP authentication is not enabled."
+msgstr ""
+
+msgctxt "app"
+msgid "Migrated data from Bibliograph v2"
+msgstr ""
+
+msgctxt "app"
+msgid "Migrated schema(s) {schemas}."
+msgstr ""
+
+msgctxt "app"
+msgid "Migrating data from Bibliograph v2 failed."
+msgstr ""
+
+msgctxt "app"
+msgid "Migrating schema(s) failed: {errinfo}"
+msgstr ""
+
+msgctxt "app"
+msgid "Missing administrator email in app.conf.toml."
+msgstr ""
+
+msgctxt "app"
+msgid "No database connection. "
+msgstr ""
+
+msgctxt "app"
+msgid "No schema migrations necessary."
+msgstr ""
+
+msgctxt "app"
+msgid "No updates to the databases."
+msgstr ""
+
+msgctxt "app"
+msgid "Setup failed. Please fix the following problems:"
+msgstr ""
+
+msgctxt "app"
+msgid "Standard schema existed."
+msgstr ""
+
+msgctxt "app"
+msgid "The configuration directory must not be writable in production mode {config_dir}."
+msgstr ""
+
+msgctxt "app"
+msgid "The configuration directory needs to be writable in order to create an .ini file: {config_dir}."
+msgstr ""

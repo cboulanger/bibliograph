@@ -29,26 +29,12 @@ class M180511110319_move_editor_data_in_collections extends Migration
   }
 
   /**
+   * This exists so that migrate/down can delete the model tables, not for downgrading
+   * the database
    * {@inheritdoc}
    */
   public function safeDown()
   {
-    echo "M180511110319_move_editor_data_in_collections cannot be reverted.\n";
-    return false;
+    return true;
   }
-
-  /*
-  // Use up()/down() to run migration code without a transaction.
-  public function up()
-  {
-
-  }
-
-  public function down()
-  {
-      echo "M180511110319_move_editor_data_in_collections cannot be reverted.\n";
-
-      return false;
-  }
-  */
 }

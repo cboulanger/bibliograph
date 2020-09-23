@@ -31,8 +31,19 @@ use yii\helpers\ArrayHelper;
  * @property bool $allowCancel
  * @property array $options
  */
-class Form extends Alert
+class Form extends Dialog
 {
+  /**
+   * @var string
+   */
+  protected $message = "";
+
+  /**
+   * @param $value
+   * @return $this
+   */
+  public function setMessage(string $value){$this->message=$value; return $this;}
+
   /**
    * Arrray containing the form data. Example (using
    * json instead of native php array):
@@ -94,42 +105,22 @@ class Form extends Alert
   public function setAllowCancel(bool $value){$this->allowCancel=$value; return $this;}
 
   /**
-   * Optional properties of the form widget
-   * @var array
-   */
-  public $options = [];
-
-  /**
-   * @param $value
-   * @return $this
-   */
-  public function setOptions(array $value){$this->options=$value;return $this;}
-
-  /**
    * @inheritdoc
    */
-  public function sendToClient()
+  public function sendToClient($properties=[])
   {
-    static::create(
-      $this->message,
-      $this->formData,
-      $this->allowCancel,
-      $this->service,
-      $this->method,
-      $this->params,
-      $this->options
-    );
+    return parent::sendToClient(array_merge($properties,['formData','message','allowCancel']));
   }
 
   /**
    * Returns an event to the client which prompts the user with a form.
    *
-   * @param string $message 
+   * @param string $message
    *    The message text
    * @param array $formData
    * @param bool $allowCancel
    *    Whether the form can be cancelled
-   * @param string $callbackService 
+   * @param string $callbackService
    *    Service that will be called when the user clicks on the OK button
    * @param string $callbackMethod
    *    Service method

@@ -20,42 +20,36 @@
 
 namespace lib\dialog;
 
-class Select extends Dialog
+class Select extends Alert
 {
+  /**
+   * @var bool
+   */
+  protected $allowCancel = true;
 
   /**
-   * Returns an event to the client which prompts the user with a choice of options.
-   *
-   * @param string $message 
-   *    The message text
-   * @param array $options 
-   *    Arrray containing maps of button data with the keys "label", "value", "icon"
-   * @param bool $allowCancel
-   * @param string $callbackService 
-   *    Service that will be called when the user clicks on the selected button
-   * @param string $callbackMethod 
-   *    Service method
-   * @param array $callbackParams 
-   *    Optional service params
+   * @param bool $value
+   * @return $this
    */
-  public static function create(
-    $message,
-    $options,
-    $allowCancel = true,
-    $callbackService,
-    $callbackMethod,
-    $callbackParams = null
-  ) {
-    static::addToEventQueue( array(
-    'type' => "select",
-    'properties' => array(
-      'message'     => $message,
-      'options'     => $options,
-      'allowCancel' => $allowCancel
-     ),
-    'service' => $callbackService,
-    'method'  => $callbackMethod,
-    'params'  => $callbackParams
-    ));
+  public function setAllowCancel(bool $value){$this->allowCancel = $value; return $this;}
+
+  /**
+   * Optional properties of the form widget
+   * @var array
+   */
+  public $options = [];
+
+  /**
+   * @param $value
+   * @return $this
+   */
+  public function setOptions(array $value){$this->options=$value;return $this;}
+
+  /**
+   * @inheritDoc
+   */
+  public function sendToClient(array $properties=[])
+  {
+    return parent::sendToClient(array_merge($properties,['allowCancel','options']));
   }
 }

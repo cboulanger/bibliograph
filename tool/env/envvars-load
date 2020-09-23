@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# overwrite environment file in github actions
+if [[ "$GITHUB_WORKFLOW" != "" ]] && ! [[ -f test/.env.moved ]]; then
+  echo ">>> Using GitHub environment"
+  mv test/.env test/.env.moved
+  cp test/.env.github test/.env
+fi
+
+# export .env variables to this shell
+export $(egrep -v '^#' test/.env | xargs)

@@ -12,7 +12,6 @@
  *
  ******************************************************************************/
 
-/*global qx qcl dialog bibliograph*/
 
 /**
  * The window containing the preferences
@@ -27,24 +26,18 @@ qx.Class.define("bibliograph.ui.window.PreferencesWindow", {
     let confMgr = app.getConfigManager();
 
     // Window
-    let qxWindow1 = this;
-    qxWindow1.setCaption(this.tr("Preferences"));
-    qxWindow1.setHeight(400);
-    qxWindow1.setWidth(600);
-    qxWindow1.addListener( "appear",e =>  this.center() );
-    qx.event.message.Bus.getInstance().subscribe(
-      bibliograph.AccessManager.messages.LOGOUT,
-      e => this.close()
-    );
-    let qxVbox1 = new qx.ui.layout.VBox(5);
-    qxVbox1.setSpacing(5);
-    qxWindow1.setLayout(qxVbox1);
+    this.setCaption(this.tr("Preferences"));
+    this.setHeight(400);
+    this.setWidth(600);
+    this.addListener("appear", this.center, this);
+    qx.event.message.Bus.getInstance().subscribe(bibliograph.AccessManager.messages.AFTER_LOGOUT, this.close, this);
+    this.setLayout(new qx.ui.layout.VBox(5));
 
     // Tabview
     let tabView = new qx.ui.tabview.TabView();
     this.tabView = tabView;
-    tabView.setWidgetId("app/windows/preferences/tabview");
-    qxWindow1.add(tabView, { flex: 1 });
+    this.addOwnedQxObject(tabView, "tabview");
+    this.add(tabView, { flex: 1 });
 
     // work around strange bug that displays first and second tab simultaneously
     tabView.addListener("appear", function() {
@@ -73,7 +66,7 @@ qx.Class.define("bibliograph.ui.window.PreferencesWindow", {
       row: 0,
       column: 1
     });
-    confMgr.addListener("ready", e =>  confMgr.bindKey("application.title", qxTextarea1, "value", true));
+    confMgr.addListener("ready", e => confMgr.bindKey("application.title", qxTextarea1, "value", true));
 
     // logo
     let qxLabel2 = new qx.ui.basic.Label(this.tr("Application logo"));
@@ -102,15 +95,19 @@ qx.Class.define("bibliograph.ui.window.PreferencesWindow", {
     qxPage2.add(qxLabel3b, { row: 0, column: 0 });
     let datasourceSelectBox = new qx.ui.form.SelectBox();
     qxPage2.add(datasourceSelectBox, { row: 0, column: 1 });
-    let dsController = new qx.data.controller.List(  null, datasourceSelectBox, "label" );
+    let dsController = new qx.data.controller.List(null, datasourceSelectBox, "label");
     app.getDatasourceStore().bind("model", dsController, "model");
     datasourceSelectBox.addListener(
       "changeSelection",
       function(e) {
         let selection = e.getData()[0];
-        if( ! selection ) return;
+        if (!selection) {
+         return;
+        }
         let model = selection.getModel();
-        if ( typeof model.getValue !== "function" ) return; // @todo Hack!
+        if (typeof model.getValue !== "function") {
+         return;
+        }
         let datasource = model.getValue();
         let key = (this.__datasourceExcludeFieldsKey =
           "datasource." + datasource + ".fields.exclude");
@@ -141,7 +138,7 @@ qx.Class.define("bibliograph.ui.window.PreferencesWindow", {
       this.tr("Enter the names of fields to exclude.")
     );
     qxPage2.add(excludeFieldsTextArea, { row: 1, column: 1 });
-    excludeFieldsTextArea.addListener( "changeValue", e => {
+    excludeFieldsTextArea.addListener("changeValue", e => {
       let key = this.__datasourceExcludeFieldsKey;
       let value = e.getData().split("\n");
       if (
@@ -214,8 +211,9 @@ qx.Class.define("bibliograph.ui.window.PreferencesWindow", {
           .getConfigManager()
           .getKey("authentication.method");
         authModeSelBox.getSelectables().forEach(function(elem) {
-          if (elem.getModel("value") === mode)
-            authModeSelBox.setSelection([elem]);
+          if (elem.getModel("value") === mode) {
+           authModeSelBox.setSelection([elem]);
+          }
         }, this);
       },
       this
@@ -227,16 +225,13 @@ qx.Class.define("bibliograph.ui.window.PreferencesWindow", {
           let mode = e.getData()[0].getModel();
           let location = window.location;
           if (mode === "plaintext" && location.protocol !== "https:") {
-            dialog.Dialog.error(
-              this.tr(
-                "Plaintext passwords without a secure connection (HTTPS) are not allowed."
-              )
-            );
+            let msg = this.tr("Plaintext passwords without a secure connection (HTTPS) are not allowed.");
+            this.getApplication().error(msg);
             return;
           }
           this.getApplication()
             .getConfigManager()
-            .setKey("authentication.method", mode);
+            .setKeyAsync("authentication.method", mode);
         }
       },
       this

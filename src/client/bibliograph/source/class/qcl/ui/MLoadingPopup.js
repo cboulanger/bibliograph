@@ -18,7 +18,7 @@
 ************************************************************************ */
 
 /**
- * A mixin that provides a "Loading..." popup over a widget that is 
+ * A mixin that provides a "Loading..." popup over a widget that is
  * just requesting data from the server
  * @asset(qcl/ajax-loader.gif)
  */
@@ -35,11 +35,9 @@ qx.Mixin.define("qcl.ui.MLoadingPopup", {
     createPopup: function(options) {
       if (options === undefined) {
         options = {};
-      } else if (!qx.lang.Type.isObject(options)) {
-        this.error("Invalid argument.");
       }
-      if (this.__popup instanceof qx.ui.popup.Popup){
-        this.warn("Popup already created.");
+      qx.core.Assert.assertObject(options);
+      if (this.__popup instanceof qx.ui.popup.Popup) {
         return;
       }
       this.__popup = new qx.ui.popup.Popup(new qx.ui.layout.Canvas()).set({
@@ -67,22 +65,33 @@ qx.Mixin.define("qcl.ui.MLoadingPopup", {
       */
     _centerPopup: function() {
       var bounds = this.__popup.getBounds();
-      if (this.__target && "left" in this.__target.getLayoutProperties()) {
-        var l = this.__target.getLayoutProperties();
-        this.__popup.placeToPoint({
-          left: Math.round(l.left + l.width / 2 - bounds.width / 2),
-          top: Math.round(l.top + l.height / 2 - bounds.height / 2)
-        });
-      } else {
-        this.__popup.set({
-          marginTop: Math.round(
-            (qx.bom.Document.getHeight() - bounds.height) / 2
-          ),
-          marginLeft: Math.round(
-            (qx.bom.Document.getWidth() - bounds.width) / 2
-          )
-        });
+      if (!bounds) {
+        // need one more tick to appear
+        qx.event.Timer.once(this._centerPopup, this, 0);
+        return;
       }
+      if (this.__target) {
+        // center popup inside target
+        var layoutProps = this.__target.getLayoutProperties();
+        if (!layoutProps) {
+          // needs one more tick to appear
+          qx.event.Timer.once(this._centerPopup, this, 0);
+        }
+        this.__popup.placeToPoint({
+          left: Math.round(layoutProps.left + layoutProps.width / 2 - bounds.width / 2),
+          top: Math.round(layoutProps.top + layoutProps.height / 2 - bounds.height / 2)
+        });
+        return;
+      }
+      // center popup inside viewport
+      this.__popup.set({
+        marginTop: Math.round(
+          (qx.bom.Document.getHeight() - bounds.height) / 2
+        ),
+        marginLeft: Math.round(
+          (qx.bom.Document.getWidth() - bounds.width) / 2
+        )
+      });
     },
 
     /**

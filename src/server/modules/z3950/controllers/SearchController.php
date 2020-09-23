@@ -13,7 +13,7 @@ use app\modules\z3950\lib\yaz\{ CclQuery, MarcXmlResult, Yaz, YazException, YazT
 use lib\dialog\ServerProgress;
 use lib\exceptions\UserErrorException;
 use lib\bibtex\BibtexParser;
-use lib\util\Executable;
+
 
 /**
  * Class ProgressController
@@ -57,20 +57,19 @@ class SearchController extends \yii\web\Controller
     $progressBar = new ServerProgress($id);
     try {
       $this->sendRequest($datasource, $query, $progressBar);
-      $progressBar->dispatchClientMessage("z3950.dataReady", $query);
       $progressBar->complete();
     } catch (YazTimeoutException $e) {
       // retry
       if( $retries < 4){
-        $progressBar->setProgress(0, Yii::t("z3950", "Server timed out. Trying again..."));
+        $progressBar->setProgress(0, Yii::t("plugin.z3950", "Server timed out. Trying again..."));
         sleep(rand(1,3));
         $this->actionProgress($datasource, $query, $progressBar );
       } else {
-        $progressBar->error(Yii::t("z3950", "Server timed out."));
+        $progressBar->error(Yii::t("plugin.z3950", "Server timed out."));
       }
     } catch (UserErrorException $e) {
       $progressBar->error($e->getMessage());
-    } catch (Exception $e) {
+    } catch (\Throwable $e) {
       Yii::error($e);
       $progressBar->error($e->getMessage());
     }
@@ -129,7 +128,7 @@ class SearchController extends \yii\web\Controller
       $yaz->connect();
     } catch (YazException $e) {
       throw new UserErrorException(
-        Yii::t('z3950', "Cannot connect to server: '{error}'.", [ 'error' => $yaz->getError() ] ),
+        Yii::t("plugin.z3950", "Cannot connect to server: '{error}'.", [ 'error' => $yaz->getError() ] ),
         null, $e
       );
     }
@@ -140,7 +139,7 @@ class SearchController extends \yii\web\Controller
       $ccl->toRpn($yaz);
     } catch (YazException $e) {
       throw new UserErrorException(
-        Yii::t('z3950', "Invalid query '{query}'", [ 'query' => $query ] ), null, $e
+        Yii::t("plugin.z3950", "Invalid query '{query}'", [ 'query' => $query ] ), null, $e
       );
     }
 
@@ -148,7 +147,7 @@ class SearchController extends \yii\web\Controller
       $yaz->search($ccl);
     } catch (YazException $e) {
       throw new UserErrorException(
-        Yii::t('z3950',
+        Yii::t("plugin.z3950",
           "The server does not understand the query '{query}'. Please try a different query.",
           [ 'query' => $query ]
         ), null, $e
@@ -282,7 +281,7 @@ class SearchController extends \yii\web\Controller
     //Yii::debug(ml("MODS", $mods), Module::CATEGORY);
 
     // convert to bibtex and fix some issues
-    $xml2bib = new Executable( "xml2bib", BIBUTILS_PATH );
+    $xml2bib = \app\modules\bibutils\Module::createCmd("xml2bib");
     $bibtex = $xml2bib->call("-nl -fc -o unicode", $mods);
     $bibtex = str_replace("\nand ", "; ", $bibtex);
     //Yii::debug(ml("BibTeX", $bibtex), Module::CATEGORY);

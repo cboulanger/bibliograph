@@ -63,71 +63,10 @@ class Prompt extends Alert
   public function setAutoSubmitTimeout($value){$this->default = $value; return $this;}
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
-  public function sendToClient()
+  public function sendToClient(array $properties=[])
   {
-    static::create(
-      $this->message,
-      $this->default,
-      $this->service,
-      $this->method,
-      $this->params,
-      $this->requireInput,
-      $this->autoSubmitTimeout
-    );
-  }
-
-  /**
-   * Returns a message to the client which prompts the user with an message and
-   * an input field.
-   * @param string $message
-   *    The message text
-   * @param string|null $default
-   *    The default value
-   * @param string|null $callbackService
-   *    Optional service that will be called when the user clicks on the OK button
-   * @param string|null $callbackMethod Optional service method
-   * @param array|null $callbackParams
-   *    Optional service params
-   * @param bool|null $requireInput
-   *    Optional flag to prevent user from submitting an empty response
-   * @param number|null $autoSubmitTimeout
-   *    Optional timeout in seconds If provided, the prompt dialog "submits itself"
-   *    after the given timeout. If the $requireInput flag is set to true, this
-   *    happens only if input has been entered and this input hasn't changed
-   *    for the duration of the timeout
-   * @deprecated Please use setters instead
-   */
-  public static function create() {
-    list(
-      $message,
-      $default,
-      $callbackService,
-      $callbackMethod,
-      $callbackParams,
-      $requireInput,
-      $autoSubmitTimeout
-    ) = array_pad( func_get_args(), 7, null);
-
-    $properties = array(
-      'message'           => $message,
-      'value'             => $default,
-    );
-  
-    if ($requireInput !== null) {
-      $properties['requireInput'] = $requireInput;
-    }
-    if ($autoSubmitTimeout !== null) {
-      $properties['autoSubmitTimeout'] = $autoSubmitTimeout;
-    }
-    
-    static::addToEventQueue( array(
-      'type' => "prompt",
-      'properties' => $properties,
-      'service' => $callbackService,
-      'method'  => $callbackMethod,
-      'params'  => $callbackParams
-    ));
+    return parent::sendToClient(array_merge($properties,['default','requireInput', 'autoSubmitTimeout']));
   }
 }

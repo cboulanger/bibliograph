@@ -1,0 +1,21 @@
+# Codeception Test Suite Configuration
+#
+# Suite for functional tests
+# Emulate web requests and make application process them
+# Include one of framework modules (Symfony2, Yii2, Laravel5) to use it
+
+actor: FunctionalTester
+bootstrap: ../unit/_bootstrap.php
+modules:
+    enabled:
+        - Yii2:
+            configFile: config/web-test.php
+            transaction: false
+            parts: [orm]
+        - Asserts
+        - REST:
+            depends: Yii2
+            part: [json]
+        - \Helper\Api
+env:
+    xdebug:

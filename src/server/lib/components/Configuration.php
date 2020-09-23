@@ -23,8 +23,10 @@ namespace lib\components;
 use app\models\Config;
 use app\models\UserConfig;
 use lib\exceptions\RecordExistsException;
-use M1\Vars\Vars;
 use Yii;
+use yii\base\InvalidConfigException;
+use yii\helpers\ArrayHelper;
+use Yosymfony\Toml\Toml;
 
 /**
  * Component class providing methods to get or set configuration
@@ -40,7 +42,7 @@ class Configuration extends \yii\base\Component
   protected $types = array(
     "string","number","boolean","list"
   );
-  
+
   //-------------------------------------------------------------
   // API methods
   //-------------------------------------------------------------
@@ -63,21 +65,21 @@ class Configuration extends \yii\base\Component
   {
     switch( gettype( $default) )
     {
-      case "boolean": 
+      case "boolean":
         $type = "boolean"; break;
-      case "integer":    
-      case "double":  
+      case "integer":
+      case "double":
         $type =  "number"; break;
-      case "string": 
+      case "string":
         $type = "string"; break;
-      case "array": 
+      case "array":
         $type = "list"; break;
-      default: 
+      default:
         throw new \InvalidArgumentException("Invalid default value for preference key '$key'");
     }
     return $this->createKeyIfNotExists($key, $type, $customize, $default, $final);
   }
-  
+
   /**
    * Returns the value of the given preference key. Alias of #getKey()
    * @param string $key The name of the preference
@@ -87,7 +89,7 @@ class Configuration extends \yii\base\Component
   {
     return $this->getKey( $key );
   }
-  
+
   /**
    * Sets the value of the given preference key. Alias of #setKey()
    * @param string $key The name of the preference
@@ -433,10 +435,10 @@ class Configuration extends \yii\base\Component
   {
     if( ! $user ) $user = $this->getActiveUser();
     $config = $this->getConfigModel( $key );
-    return $this->castType( 
+    return $this->castType(
       $config->getUserConfigValue($user),
       $this->keyType( $key ),
-      true 
+      true
     );
   }
 
@@ -473,7 +475,7 @@ class Configuration extends \yii\base\Component
         'ConfigId' => $config->id,
         'value'   => $storeValue
       ]);
-      $userConfig->save(); 
+      $userConfig->save();
     }
     return $this;
   }
@@ -498,7 +500,7 @@ class Configuration extends \yii\base\Component
   /**
    * Resets the user variant of a config value to the default value.
    * @param string $key
-   * @param \app\models\User $user (optional) user 
+   * @param \app\models\User $user (optional) user
    * @return void
    */
   public function resetKey( $key, $user = false )
@@ -527,7 +529,7 @@ class Configuration extends \yii\base\Component
    * Returns the data of config keys that are readable by the active user.
    *
    * @param string $mask return only a subset of entries that start with $mask
-   * @param \app\models\User $user (optional) user 
+   * @param \app\models\User $user (optional) user
    * @return array Map with the keys 'keys', 'types' and 'values', each
    *  having an index array with all the values.
    */
@@ -552,21 +554,66 @@ class Configuration extends \yii\base\Component
 		  'types'   => $types
 		);
   }
-  
+
   //-------------------------------------------------------------
   // ini values
   //-------------------------------------------------------------
 
+  /**
+   * Return the value of the configuration key
+   * @param $key
+   * @return mixed
+   * @throws \Exception
+   */
+  public static function iniValue($key) {
+    static $ini = null;
+    if ($ini === null) {
+      $ini = Toml::parseFile(APP_CONFIG_FILE);
+    }
+    return ArrayHelper::getValue($ini, $key);
+  }
+
+  /**
+   * Returns the value of the environment variable, if set, otherwise null
+   * @param $name
+   * @return mixed|null
+   */
+  public static function env($name) {
+    return isset($_SERVER[$name]) ? $_SERVER[$name] : null;
+  }
+
+  /**
+   * Given a number of key names, returns the value of the environment variable
+   * with the name of that key, or the ini value with that key, whichever is found
+   * first.
+   * @param string $key1
+   * @param string? $key2
+   * @param string? $key3
+   * @return mixed|null
+   * @throws \Exception
+   * @throws InvalidConfigException
+   */
+  public static function anyOf() {
+    $args = func_get_args();
+    foreach ($args as $key) {
+      if (self::env($key) !== null ) {
+        return self::env($key);
+      }
+      if (self::iniValue($key) !== null) {
+        return self::iniValue($key);
+      }
+    }
+    throw new InvalidConfigException("No environment variable or ini setting with the key(s) " . implode(",", $args));
+  }
 
   /**
    * Returns a configuration value of the pattern "foo.bar.baz"
    * This retrieves the values set in the application config/ini file.
+   * @throws \Exception
    */
   public function getIniValue( $key )
   {
-    static $ini = null;
-    if( is_null($ini) ) $ini = new Vars( APP_CONFIG_FILE, ['cache' => false] );
-    return $ini->get($key);
+    return static::iniValue($key);
   }
 
   /**
@@ -580,5 +627,29 @@ class Configuration extends \yii\base\Component
     return array_map( function($elem) {
       return $this->getIniValue( $elem );
     }, $arr );
+  }
+
+
+  /**
+   * Gets the value given configuration key. It will first try the environment,
+   * converting a key "foo.bar" to "FOO_BAR", then try the ini file with the
+   * given key. Will throw a InvalidConfigException if the key cannot be found
+   * in either of the configuration sources, unless you specify silent=true, in
+   * which case it will return null
+   * @param string $key
+   * @param bool $silent
+   * @return mixed|null
+   * @throws InvalidConfigException
+   */
+  static public function get(string $key, bool $silent=false) {
+    $env_key = strtoupper(str_replace(".", "_", $key));
+    if ($silent) {
+      try {
+        return self::anyOf($env_key, $key);
+      } catch (InvalidConfigException $e) {
+        return null;
+      }
+    }
+    return self::anyOf($env_key, $key);
   }
 }

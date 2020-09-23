@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+# Run mysql command in mysql service container
+docker exec mysql_server mysql "$@"
+

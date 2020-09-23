@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+if [[ "$(tool/env/mysql-server status)" == *"is running"* ]]; then
+  tool/env/mysql-server stop
+fi
+
+if [[ "$(tool/env/http-server status)" == *"is running"* ]]; then
+  tool/env/http-server stop
+fi

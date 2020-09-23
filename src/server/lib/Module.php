@@ -7,6 +7,7 @@
  */
 
 namespace lib;
+use ReflectionClass;
 use Yii;
 
 /**
@@ -28,6 +29,11 @@ class Module extends \yii\base\Module
 {
 
   /**
+   * @var bool Wether the module has already been initialized.
+   */
+  protected $initialized = false;
+
+  /**
    * A string constant defining the category for logging and translation
    * Should be overridden by subclasses
    */
@@ -45,6 +51,11 @@ class Module extends \yii\base\Module
    */
   protected $version = "";
 
+  /**
+   * Whether the module is disabled and should not be installed
+   * @var bool
+   */
+  public $disabled = false;
 
   /**
    * An array of strings containing error messages.
@@ -121,16 +132,53 @@ class Module extends \yii\base\Module
       Yii::$app->config->getPreference($this->configKeyPrefix . "version") : "";
   }
 
+  /**
+   * @inheritDoc
+   * @throws \ReflectionException
+   */
   public function init()
   {
+    if ($this->initialized) {
+      $module_name = get_called_class();
+      Yii::warning("Module '$module_name' has already been initialized.");
+      return;
+    }
     //$not = $this->enabled ? "" : "not";
     //Yii::debug("Module '{$this->id}' is $not enabled.", __METHOD__, __METHOD__);
     parent::init();
+
+    // add translations
+    Yii::$app->i18n->translations[static::CATEGORY] = [
+      'class' => \yii\i18n\GettextMessageSource::class,
+      'basePath' => dirname((new ReflectionClass($this))->getFileName()) . "/messages",
+      'catalog' => 'messages',
+      'useMoFile' => false
+    ];
+    $this->initialized = true;
   }
 
   /**
+   * Returns true if the module has already been initialized
+   * @return bool
+   */
+  public function isInitialized() {
+    return $this->initialized;
+  }
+
+  /**
+   * Initializes the module unless it has already been initialized
+   * @throws \ReflectionException
+   */
+  public function safeInit() {
+    if (!$this->initialized) {
+      $this->init();
+    }
+  }
+
+
+  /**
    * Overriding methods must call `parent::install()` when installation succeeds.
-   * @param boolean $enabled
+   * @param boolean? $enabled
    *    Whether the module should be enabled after installation (defaults to false)
    * @return bool
    */
@@ -188,5 +236,12 @@ class Module extends \yii\base\Module
   public function setPreference($key, $value )
   {
     Yii::$app->config->setPreference( $this->configKeyPrefix . $key, $value );
+  }
+
+  /**
+   * Uninstalls the plugin.
+   */
+  public function uninstall() {
+    throw new \BadMethodCallException("Uninstall not implemented");
   }
 }

@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# Checks the environment in which the tool scripts can run properly
+
+[ "$(type -t mysql_root)" == "function" ] || source tool/lib/functions.sh
+
+if ! type docker > /dev/null; then
+  exit_with_error "ERROR: You need docker for the development environment"
+fi
+
+if ! [ -f "./package.json" ]; then
+  exit_with_error 'ERROR: All tool scripts need to be executed from the bibliograph root directory'
+fi

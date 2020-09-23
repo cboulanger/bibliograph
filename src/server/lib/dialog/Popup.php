@@ -20,30 +20,4 @@
 
 namespace lib\dialog;
 
-class Popup extends Dialog
-{
-
-  /**
-   * Returns an event to the client which displays or hides the application popup
-   * @param string $message 
-   *    The message text
-   * @param string $callbackService 
-   *    Optional service that will be called when the user clicks on the OK button
-   * @param string $callbackMethod 
-   *    Optional service method
-   * @param array $callbackParams 
-   *    Optional service params
-   */
-  public static function create( $message, $callbackService=null, $callbackMethod=null, $callbackParams=null )
-  {
-    static::addToEventQueue( array(
-     'type' => "popup",
-     'properties' => array(
-        'message' => $message
-      ),
-     'service' => $callbackService,
-     'method'  => $callbackMethod,
-     'params'  => $callbackParams
-    ));
-  }
-}
+class Popup extends Alert {}

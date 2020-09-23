@@ -1,0 +1,19 @@
+<component name="libraryTable">
+  <library name="qooxdoo" type="javaScript">
+    <properties>
+      <option name="frameworkName" value="qooxdoo" />
+      <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/node_modules/@qooxdoo/compiler/node_modules/@qooxdoo/framework/source/class/qx" />
+        <item url="file://$PROJECT_DIR$/../qxl.taskmanager/source/class/qxl" />
+      </sourceFilesUrls>
+    </properties>
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/node_modules/@qooxdoo/compiler/node_modules/@qooxdoo/framework/source/class/qx" />
+      <root url="file://$PROJECT_DIR$/../qxl.taskmanager/source/class/qxl" />
+    </CLASSES>
+    <DOCUMENTATION>
+      <root url="http://demo.qooxdoo.org/current/apiviewer" />
+    </DOCUMENTATION>
+    <SOURCES />
+  </library>
+</component>

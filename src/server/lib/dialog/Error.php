@@ -20,30 +20,7 @@
 
 namespace lib\dialog;
 
-class Error extends Dialog
+class Error extends Alert
 {
-  /**
-   * Returns a message to the client which prompts the user with an error message
-   * @param string $message 
-   *    The message text
-   * @param string $callbackService 
-   *    Optional service that will be called when the user clicks on the OK button
-   * @param string $callbackMethod 
-   *    Optional service method
-   * @param array $callbackParams 
-   *    Optional service params
-   */
-  public static function create( $message, $callbackService=null, $callbackMethod=null, array $callbackParams=[] )
-  {
-    static::addToEventQueue( array(
-     'type' => "alert",
-     'properties' => array(
-        'message' => $message,
-        'image'   => "dialog.icon.error"
-      ),
-     'service' => $callbackService,
-     'method'  => $callbackMethod,
-     'params'  => $callbackParams
-    ));
-  }
+  protected $image="qxl.dialog.icon.error";
 }

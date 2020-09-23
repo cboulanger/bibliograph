@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+# stop all containers and cleanup all unused docker data
+docker stop $(docker ps -a -q)
+docker rm $(docker ps -a -q)
+docker system prune

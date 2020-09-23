@@ -22,36 +22,35 @@ namespace lib\dialog;
 
 class Wizard extends Dialog
 {
+
   /**
-   * Returns a message to the client which prompts the user with a wizard widget.
-   *
-   * @param array $pageData 
-   *    Array containing the page data (see qcl.ui.dialog.Wizard#pageData)
-   * @param bool $allowCancel
-   *    Wheter the Wizard can be cancelled
-   * @param string $callbackService 
-   *    Service that will be called when the user clicks on the OK button
-   * @param string $callbackMethod 
-   *    Service method
-   * @param array $callbackParams 
-   *    Optional service params
+   * @var array
    */
-  public static function create(
-    $pageData,
-    $allowCancel=true,
-    $callbackService,
-    $callbackMethod,
-    $callbackParams=null )
+  public $pageData = [];
+
+  /**
+   * @param array $value
+   * @return $this
+   */
+  public function setPageData(array $value){$this->pageData=$value; return $this;}
+
+  /**
+   * Whether cancelling of the dialog is allowed
+   * @var bool
+   */
+  public $allowCancel = false;
+
+  /**
+   * @param $value
+   * @return $this
+   */
+  public function setAllowCancel(bool $value){$this->allowCancel=$value; return $this;}
+
+  /**
+   * @inheritdoc
+   */
+  public function sendToClient($properties=[])
   {
-    static::addToEventQueue( array(
-       'type' => "wizard",
-       'properties'  => array(
-          'pageData'    => $pageData,
-          'allowCancel' => $allowCancel
-        ),
-       'service' => $callbackService,
-       'method'  => $callbackMethod,
-       'params'  => $callbackParams
-    ));
+    return parent::sendToClient(array_merge($properties,['pageData','allowCancel']));
   }
 }

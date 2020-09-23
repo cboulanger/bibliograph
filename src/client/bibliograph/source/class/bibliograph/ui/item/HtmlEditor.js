@@ -15,7 +15,7 @@
 
 ************************************************************************ */
 
-/*global qx qcl bibliograph htmleditor*/
+
 
 qx.Theme.include(qx.theme.modern.Appearance, htmleditor.htmlarea.theme.Appearance);
 

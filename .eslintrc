@@ -1,0 +1,21 @@
+{
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2017
+  },
+  "extends": [
+    "@qooxdoo/qx"
+  ],
+  "globals": {
+    "bibliograph" : true,
+    "qcl": true,
+    "qxl": true,
+    "rpc": true,
+    "cboulanger": true,
+    "dialog": true,
+    "tokenfield": true
+  }
+}

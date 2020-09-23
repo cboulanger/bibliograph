@@ -5,31 +5,21 @@
     "description": "Bibliograph is a powerful open source web application for the collaborative collection, editing and publishing of bibliographic data",
     "homepage": "http://www.bibliograph.org",
     "license": "MIT license",
-    "authors": [
-      {
-        "name": "Christian Boulanger (cboulanger)",
-        "email": "info@bibliograph.org"
-      }
-    ],
-    "version": "3.0.0-alpha",
-    "qooxdoo-range": "6.0.0-alpha"
+    "authors": [],
+    "version": "3.0.0"
   },
   "provides": {
     "namespace": "bibliograph",
     "encoding": "utf-8",
     "class": "source/class",
     "resource": "source/resource",
-    "translation": "source/translation",
-    "boot": "source/boot",
-    "type": "application"
+    "translation": "source/translation"
   },
-  "externalResources": {
-    "script": [
-      "js/raptor-client.js",
-      "js/quagga.min.js"
-    ],
-    "css": [
-      "css/quagga.css"
-    ]
-  }
+  "requires": {
+    "@qooxdoo/compiler": "^1.0.0-beta",
+    "@qooxdoo/framework": "^6.0.0-beta",
+    "cboulanger/qx-contrib-TokenField": "^1.2.1",
+    "qooxdoo/qxl.dialog": "^3.0.2"
+  },
+  "$schema": "https://qooxdoo.org/schema/Manifest-1-0-0.json"
 }

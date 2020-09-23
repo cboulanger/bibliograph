@@ -20,41 +20,67 @@
 
 namespace app\controllers;
 
+use app\controllers\traits\PropertyPersistenceTrait;
 use app\models\Datasource;
 use app\models\Folder;
 use app\models\Reference;
 use app\modules\z3950\models\Search;
+use lib\components\Configuration as Conf;
 use lib\dialog\Alert;
 use lib\exceptions\UserErrorException;
 use Yii;
-
-use app\controllers\AppController;
-
-use app\models\User;
-use app\models\Role;
-use app\models\Permission;
-use app\models\Group;
-use app\models\Session;
-use app\models\Message;
 use lib\channel\Channel;
+use yii\web\UnauthorizedHttpException;
 
 /**
  * A controller for JSONRPC methods intended to test the application.
  */
 class TestController extends AppController
 {
+
+  use PropertyPersistenceTrait;
+
+  protected $foo;
+  protected $bar;
+
   /**
    * @inheritDoc
    *
    * @var array
    */
-  protected $noAuthActions = ["throw-error"];
+  protected $noAuthActions = ["echo", "throw-error","notify-test-name"];
 
   public function actionThrowError()
   {
-    throw new \InvalidArgumentException("Testing invalid argument exception");
+    $e = new \Exception("Exception thrown on purpose");
+    Yii::error($e);
+    throw $e;
   }
 
+  public function actionEcho($message) {
+    if (!YII_ENV_TEST) {
+      throw new UnauthorizedHttpException("Unauthorized");
+    }
+    return $message;
+  }
+
+  public function actionNotifyTestName($testName) {
+    if (!YII_ENV_TEST) {
+      throw new UnauthorizedHttpException("Unauthorized");
+    }
+    Yii::info("Executing test '$testName'...");
+  }
+
+  public function actionTestPersistence($foo = null, $bar = null) {
+    if ($foo) {
+      $this->foo = $foo;
+      $this->bar = $bar;
+      $this->saveProperties();
+      return "OK";
+    }
+    $this->restoreProperties();
+    return [$this->foo, $this->bar];
+  }
 
   public function actionError()
   {
@@ -62,20 +88,31 @@ class TestController extends AppController
     return [ "message" => $exception ];
   }
 
-  public function actionTest()
+  /**
+   * Returns the times this action has been called. Only for testing session storage.
+   */
+  public function actionCount()
   {
-    throw new UserErrorException("This is a user error");
+    $session = Yii::$app->session;
+    $count = $session->get("counter");
+    $count = $count ? $count + 1 : 1;
+    $session->set( "counter", $count );
+    return $count;
   }
 
+  /**
+   * @param $result
+   * @param $message
+   */
   public function actionTest2($result, $message )
   {
     (new Alert)->setMessage($message)->sendToClient();
-  }  
+  }
 
   public function create_messages($sessionId)
   {
     $channel = new Channel('test', $sessionId);
-    for ($i=0; $i < 10 ; $i++) { 
+    for ($i=0; $i < 10 ; $i++) {
       $channel->send( "The time is " . date('l, F jS, Y, h:i:s A'));
     }
     $channel->send("done");
@@ -83,7 +120,7 @@ class TestController extends AppController
 
   public function actionAlert( $message )
   {
-    (new Alert)->setMessage($message )->sendToClient();
+    (new Alert)->setMessage($message)->sendToClient();
   }
 
   public function actionSimpleEvent()
@@ -165,6 +202,45 @@ class TestController extends AppController
         $folder->link("references", $reference);
       }
     }
-    return "Created $i folders and " . $i*$j . " references";
+    $msg = "Created $i folders and " . $i*$j . " references";
+    Yii::debug($msg, __METHOD__);
+    return $msg;
+  }
+
+  /**
+   * @throws \yii\base\InvalidConfigException
+   */
+  public function actionSendEmail() {
+    if (!Conf::get("email.transport", true)) {
+      throw new UserErrorException("No email transport has been configured");
+    }
+    Yii::$app->mailer->compose()
+      ->setFrom(Conf::get("email.errors_from"))
+      ->setTo(Conf::get("email.errors_to"))
+      ->setSubject(Conf::get("email.errors_subject"))
+      ->setTextBody("This is a test")
+      ->send();
+    return "Successfully sent E-mail";
+  }
+
+  public function actionZoteroSchema(){
+    //$schema = new \app\modules\zotero\Schema();
+    //return json_decode(json_encode($schema));
+    $api = new \Hedii\ZoteroApi\ZoteroApi($_SERVER['ZOTERO_API_KEY']);
+    $response = $api->user($_SERVER['ZOTERO_USER_ID'])
+      ->collections()
+      ->limit(1)
+      ->send();
+    return $response->getHeaders()['Total-Results'][0];
+  }
+
+  public function actionZoteroVersions() {
+    $api = new \Hedii\ZoteroApi\ZoteroApi($_SERVER['ZOTERO_API_KEY']);
+    return $api
+      ->user($_SERVER['ZOTERO_USER_ID'])
+      ->collections()
+      ->versions()
+      ->send()
+      ->getBody();
   }
 }

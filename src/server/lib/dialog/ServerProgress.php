@@ -21,7 +21,7 @@
 namespace lib\dialog;
 
 /**
- * This dialog widget is different from the others as it does not create a 
+ * This dialog widget is different from the others as it does not create a
  * browser event, but a long-running chunked HTTP response. It works only if
  * no headers have been sent before and must be called via a normal http
  * GET request (not in a JSONRPC request). It is the server companion of
@@ -29,6 +29,16 @@ namespace lib\dialog;
  */
 class ServerProgress extends Dialog implements \lib\interfaces\Progress
 {
+  /**
+   * The global variable for the progress widget
+   */
+  const PROGRESS_VAR_NAME = "window.__qx_progress";
+
+  /**
+   * The global variable for the message bus
+   */
+  const BUS_VAR_NAME = "window.__qx_bus";
+
   /**
    * The id of the progress widget
    */
@@ -73,9 +83,9 @@ class ServerProgress extends Dialog implements \lib\interfaces\Progress
     flush();
     $this->start();
   }
-  
+
   /**
-   * Internal function to send a chunk of data 
+   * Internal function to send a chunk of data
    */
   protected function send($chunk)
   {
@@ -131,13 +141,13 @@ class ServerProgress extends Dialog implements \lib\interfaces\Progress
   public function start()
   {
     $this->sendScript([
-      "window.progress=window.top.qx.core.Init.getApplication().getWidgetById('{$this->widgetId}');",
-      "window.bus=top.qx.event.message.Bus.getInstance();",
+      static::PROGRESS_VAR_NAME . " = window.top.qx.core.Id.getQxObject('{$this->widgetId}');",
+      static::BUS_VAR_NAME . " = top.qx.event.message.Bus.getInstance();",
     ]);
   }
 
   /**
-   * API function to set the state of the progress par 
+   * API function to set the state of the progress par
    * @param integer $value The valeu of the progress, in percent
    */
   public function setProgress(int $value, string $message=null, string $newLogText=null)
@@ -151,7 +161,7 @@ class ServerProgress extends Dialog implements \lib\interfaces\Progress
       if($message) $data['message']=$message;
       if($newLogText) $data['newLogText']= $newLogText;
       $this->sendScript([
-        "window.progress.set(", json_encode($data), ");"
+        static::PROGRESS_VAR_NAME . ".set(", json_encode($data), ");"
       ]);
     }
   }
@@ -165,22 +175,28 @@ class ServerProgress extends Dialog implements \lib\interfaces\Progress
   public function dispatchClientMessage($name,$data=null)
   {
     $this->sendScript([
-      "window.bus.dispatchByName('$name',", json_encode($data), ");"
+      static::BUS_VAR_NAME . ".dispatchByName('$name',", json_encode($data), ");"
     ]);
   }
-  
+
   /**
    * API function to dispatch a event (scope: progress widget)
    * @param string $name Name of event
-   * @param mixed|null $data event data
+   * @param mixed|null $data event data. If null, a non-data event is fired.
    *
    */
   public function dispatchClientEvent($name,$data=null)
   {
-    $this->sendScript([
-      "window.progress.fireDataEvent('$name',", json_encode($data), ");"
-    ]);
-  }  
+    if ($data !== null) {
+      $this->sendScript([
+        static::PROGRESS_VAR_NAME . ".fireDataEvent('$name',", json_encode($data), ");"
+      ]);
+    } else {
+      $this->sendScript([
+        static::PROGRESS_VAR_NAME . ".fireEvent('$name');"
+      ]);
+    }
+  }
 
   /**
    * API function to trigger an error alert
@@ -189,23 +205,8 @@ class ServerProgress extends Dialog implements \lib\interfaces\Progress
   public function error(string $message)
   {
     $this->setProgress(100);
-    $this->sendScript([
-      "window.progress.hide();",
-      "window.top.dialog.Dialog.error('" . addslashes($message) . "');"
-    ]);
+    $this->dispatchClientEvent("error", $message);
     $this->close();
-  }
-
-  /**
-   * Closes the chunked transfer connection
-   */
-  public function close()
-  {
-    echo sprintf("%x\r\n", 0);
-    echo "\r\n";
-    flush();
-    ob_flush();
-    exit();
   }
 
   /**
@@ -215,12 +216,27 @@ class ServerProgress extends Dialog implements \lib\interfaces\Progress
   public function complete(string $message=null)
   {
     $this->setProgress(100);
-    if ( $message )
-    {
-      $this->sendScript([
-        "window.top.dialog.Dialog.alert('$message');"
-      ]);
+    if ( $message ) {
+      $this->dispatchClientEvent("message", $message);
     }
+    $this->dispatchClientEvent("done");
     $this->close();
   }
+
+  /**
+   * Closes the chunked transfer connection
+   */
+  public function close()
+  {
+    $this->sendScript([
+      static::PROGRESS_VAR_NAME . ".hide();"
+    ]);
+    echo sprintf("%x\r\n", 0);
+    echo "\r\n";
+    flush();
+    ob_flush();
+    exit();
+  }
+
+
 }

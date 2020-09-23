@@ -14,15 +14,15 @@
 
    Authors:
      * Christian Boulanger (cboulanger) using code from qx.data.controller.Tree
-     * Martin Wittemann (martinwittemann) 
+     * Martin Wittemann (martinwittemann)
 
 ************************************************************************ */
 
 /**
  * Controller for Table widget
- * @asset(virtualdata/ajax-loader.gif)
+ * @asset(qcl/icon/ajax-loader.gif)
  */
-qx.Class.define("qcl.data.controller.Table", 
+qx.Class.define("qcl.data.controller.Table",
 {
   extend : qx.core.Object,
   include: [ qx.data.controller.MSelection, qx.locale.MTranslation ],
@@ -37,20 +37,17 @@ qx.Class.define("qcl.data.controller.Table",
     * @param target {qx.ui.table.Table} The target table.
     * @param store {Object?null} The store that retrieves the data
     */
-  construct : function( target, store )  
-  {
+  construct : function(target, store) {
     this.base(arguments);
     
-    if( target != undefined ) 
-    {
-       this.setTarget( target );
+    if (target !== undefined) {
+       this.setTarget(target);
     }
-     
-    if( store != undefined ) 
-    {
-       this.setStore( store );
-    }     
-     
+    
+    if (store !== undefined) {
+       this.setStore(store);
+    }
+    
     this.__currentRequestIds = [];
   },
 
@@ -58,12 +55,12 @@ qx.Class.define("qcl.data.controller.Table",
    *****************************************************************************
       PROPERTIES
    *****************************************************************************
-   */  
+   */
    
-   properties : 
+   properties :
    {
      /** The data supplied by the store */
-     model : 
+     model :
      {
        check: "qx.core.Object",
        apply: "_applyModel",
@@ -72,7 +69,7 @@ qx.Class.define("qcl.data.controller.Table",
      },
      
      /** The tree to bind the data to. */
-     target : 
+     target :
      {
        check: "qx.ui.table.Table",
        event: "changeTarget",
@@ -81,7 +78,7 @@ qx.Class.define("qcl.data.controller.Table",
      },
      
      /** The store to get the data from */
-     store : 
+     store :
      {
        event: "changeStore",
        apply: "_applyStore",
@@ -90,9 +87,9 @@ qx.Class.define("qcl.data.controller.Table",
      
      /**
       * Delegation object, which can have one ore more function defined by the
-      * {@link #IControllerDelegate} Interface.  
+      * {@link #IControllerDelegate} Interface.
       */
-     delegate : 
+     delegate :
      {
        apply: "_applyDelegate",
        init: null,
@@ -108,15 +105,21 @@ qx.Class.define("qcl.data.controller.Table",
   
   events :
   {
+  
+    /**
+     * Fired before a block is being loaded from the server
+     */
+    "blockLoading": "qx.event.type.Data",
+    
     /**
      * Fired when a block has been loaded from the server
      */
-    "blockLoaded" : "qx.event.type.Data",
+    "blockLoaded": "qx.event.type.Data",
 
     /**
      * Fired when a message should be displayed
      */
-    "statusMessage" : "qx.event.type.Data"
+    "statusMessage": "qx.event.type.Data"
   },
 
   /*
@@ -131,7 +134,7 @@ qx.Class.define("qcl.data.controller.Table",
      ---------------------------------------------------------------------------
         PRIVATE MEMBERS
      ---------------------------------------------------------------------------
-     */          
+     */
      __currentRequestIds : null,
      __requestId : 0,
      __rowCount : null,
@@ -140,12 +143,12 @@ qx.Class.define("qcl.data.controller.Table",
      ---------------------------------------------------------------------------
         APPLY METHODS
      ---------------------------------------------------------------------------
-     */   
+     */
      
      /**
       * If a new delegate is set, it applies the stored configuration for the
       * tree folder to the already created folders once.
-      * 
+      *
       * @param value {qx.core.Object|null} The new delegate.
       * @param old {qx.core.Object|null} The old delegate.
       */
@@ -155,55 +158,55 @@ qx.Class.define("qcl.data.controller.Table",
      
      /**
       * Set a new Table as target
+      *
+      * @param target
+      * @param old
       */
-     _applyTarget : function( target, old )
-     {
-       if ( old )
-       {
+     _applyTarget : function(target, old) {
+       if (old) {
          // @todo remove listeners
        }
        
-       if ( target )
-       {
+       if (target) {
          // catch the dataEdited event which is fired when the
          // user has made a manual change to the data
          //target.addListener("dataEdited", this._targetOnDataEdited, this );
          
-         // catch events like add, remove, etc. 
+         // catch events like add, remove, etc.
          //target.getTableModel().addListener("change", this._targetOnChange, this );
          
          // store a reference to controller in the model. This can be
          // problematic if several Tables share a datasource.
          target.getTableModel().setController(this);
        }
-       
      },
      
      
      /**
       * Set a new store and adds event listeners
+      *
+      * @param store
+      * @param old
       */
-     _applyStore : function ( store, old )
-     {
+     _applyStore : function (store, old) {
 
-       
+     
      },
      
-     /**  
-      * Apply-method which will be called after the model had been 
+     /**
+      * Apply-method which will be called after the model had been
       * changed. This forwards the data sent by the server to the
       * controlled widget's data model.
-      * 
+      *
       * @param value {qx.core.Object|null} The model contaning the new nodes.
+      * @param model
       * @param old {qx.core.Object|null} The old model, if any.
-      */    
-     _applyModel: function( model, old ) 
-     {
-       var targetModel  = this.getTarget().getTableModel();
-        
+      */
+     _applyModel: function(model, old) {
+       var targetModel = this.getTarget().getTableModel();
+       
        // clear the table if the model is set to null
-       if ( model === null )
-       {
+       if (model === null) {
          targetModel.clearCache();
          this.__rowCountRequest = false;
          this.__currentRequestIds = [];
@@ -213,17 +216,14 @@ qx.Class.define("qcl.data.controller.Table",
        var requestId = model.getRequestId();
        
        // was this a row count request?
-       if ( model.getRowCount() !== null && this.__rowCountRequest ) {
-         targetModel._onRowCountLoaded( model.getRowCount() );
+       if (model.getRowCount() !== null && this.__rowCountRequest) {
+         targetModel._onRowCountLoaded(model.getRowCount());
          this.__rowCountRequest = false;
-       }
-       
-       // was this a row data request? if yes, does the requestId fit?
-       else if ( model.getRowData() !== null 
-           && qx.lang.Array.contains( this.__currentRequestIds, requestId ) )
-       {
-         targetModel._onRowDataLoaded( model.getRowData() );
-         qx.lang.Array.remove( this.__currentRequestIds, requestId );
+       } else if (model.getRowData() !== null &&
+         qx.lang.Array.contains(this.__currentRequestIds, requestId)) {
+         // was this a row data request? if yes, does the requestId fit?
+         targetModel._onRowDataLoaded(model.getRowData());
+         qx.lang.Array.remove(this.__currentRequestIds, requestId);
        }
      },
      
@@ -231,21 +231,20 @@ qx.Class.define("qcl.data.controller.Table",
      ---------------------------------------------------------------------------
         API METHODS
      ---------------------------------------------------------------------------
-     */       
+     */
      
      /**
       * Reloads the data of the target model
       * @return {Void}
       */
-     reload : function()
-     {
-       if( this.getTarget() && this.getStore() ) { 
+     reload : function() {
+       if (this.getTarget() && this.getStore()) {
         // visually reset the table
          var table = this.getTarget();
          var model = table.getTableModel();
          table.resetSelection();
          model.reloadData();
-         table.scrollCellVisible(0,0);
+         table.scrollCellVisible(0, 0);
        }
      },
      
@@ -253,52 +252,59 @@ qx.Class.define("qcl.data.controller.Table",
      ---------------------------------------------------------------------------
         METHODS CALLED BY THE CONTROLLED TABLE'S DATA MODEL
      ---------------------------------------------------------------------------
-     */        
+     */
      
      /**
-      * Triggers the request for  the number of rows through the store. 
-      * The value will be in the rowCount property of the model that 
+      * Triggers the request for  the number of rows through the store.
+      * The value will be in the rowCount property of the model that
       * is provided by the store.
       * @return {void}
       */
-     _loadRowCount : function()
-     {
-       if ( ! this.getTarget() ) return;
+     _loadRowCount : function() {
+       if (!this.getTarget()) {
+         return;
+       }
        
-       var store      = this.getStore();
+       var store = this.getStore();
        var tableModel = this.getTarget().getTableModel();
-       var marshaler  = store.getMarshaler();
-       var params     = marshaler.getQueryParams();
-       var app        = qx.core.Init.getApplication();
+       var marshaler = store.getMarshaler();
+       var params = marshaler.getQueryParams();
+       var app = qx.core.Init.getApplication();
       
        delete this.__firstRow;
-       
-      this.fireDataEvent("statusMessage", app.tr( "Getting number of rows..." ) );
+       this.fireDataEvent("statusMessage", app.tr("Getting number of rows..."));
 
        // load the row count and pass it to th model
-       store.load( marshaler.getMethodGetRowCount(), params, function(){
-         this.fireDataEvent( "statusMessage", null );
+       store.load(marshaler.getMethodGetRowCount(), params, function() {
+         this.fireDataEvent("statusMessage", null);
          this.__rowCount = store.getModel().getRowCount();
-         tableModel._onRowCountLoaded( this.__rowCount );
-       },this );
+         tableModel._onRowCountLoaded(this.__rowCount);
+       }, this);
      },
-     
-     
+    
     /**
-     * Triggers the request for row data through the store. 
-     * The data will be in the rowData property of the model that 
+     * Triggers the request for row data through the store.
+     * The data will be in the rowData property of the model that
      * is provided by the store.
+     *
      * @return {void}
+     * @param firstRow
+     * @param lastRow
      */
-     _loadRowData : function( firstRow, lastRow ) 
-     {
+    _loadRowData : function(firstRow, lastRow) {
+      // fire event
+      this.fireDataEvent("blockLoading", {
+        "firstRow" : firstRow,
+        "lastRow"  : lastRow
+      });
+      
       //if ( this.__rowDataRequest ) return;
       //this.info( "Requesting " + firstRow + " - " + lastRow );
     
       // prevent retrieving the same data more than once
-      if ( firstRow === this.__firstRow ) {
+      if (firstRow === this.__firstRow) {
         return;
-      }      
+      }
       this.__firstRow = firstRow;
       
       var store = this.getStore();
@@ -307,47 +313,46 @@ qx.Class.define("qcl.data.controller.Table",
 
       // store request id so that we can differentiate different
       // tables connected to the same store
-      //var requestId = store.getNextRequestId(); 
+      //var requestId = store.getNextRequestId();
       var requestId = this.__requestId++;
-      this.__currentRequestIds.push( requestId );
+      this.__currentRequestIds.push(requestId);
       
-      // add firstRow, lastRow, requestId at the beginning of the 
+      // add firstRow, lastRow, requestId at the beginning of the
       // parameters
       // @todo do we really need the request id?
-      var params = [firstRow, lastRow, requestId].concat( marshaler.getQueryParams() );
+      var params = [firstRow, lastRow, requestId].concat(marshaler.getQueryParams());
 
-      this.fireDataEvent("statusMessage", 
+      this.fireDataEvent("statusMessage",
         this.tr(
           "Loading rows %1 - %2 of %3 ...",
-          firstRow, Math.min( lastRow, this.__rowCount), this.__rowCount 
-        ) 
+          firstRow, Math.min(lastRow, this.__rowCount), this.__rowCount
+        )
       );
-       
+      
       // load data
-      store.load( marshaler.getMethodGetRowData(), params)
-      .then(()=>{
-        this.fireDataEvent("statusMessage",null);
+      store.load(marshaler.getMethodGetRowData(), params)
+      .then(() => {
+        this.fireDataEvent("statusMessage", null);
         
         // check data
         var rowData = store.getModel().getRowData();
-        if ( ! qx.lang.Type.isArray( rowData ) || ! rowData.length )
-        {
-          this.warn("Invalid server response"); 
+        if (!qx.lang.Type.isArray(rowData) || !rowData.length) {
+          this.warn("Invalid server response");
           rowData = null;
         }
         
         // pass data to the table model
-        tableModel._onRowDataLoaded( rowData );
+        tableModel._onRowDataLoaded(rowData);
         
         // fire event
-        this.fireDataEvent("blockLoaded",{
-          'firstRow' : firstRow,
-          'lastRow'  : lastRow
+        this.fireDataEvent("blockLoaded", {
+          "firstRow" : firstRow,
+          "lastRow"  : lastRow
         });
       })
-      .catch((err)=>{
+      .catch(err => {
         this.warn(err);
-        tableModel._onRowDataLoaded( null );
+        tableModel._onRowDataLoaded(null);
       });
      },
      

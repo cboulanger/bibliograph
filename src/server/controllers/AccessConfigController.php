@@ -20,6 +20,9 @@
 
 namespace app\controllers;
 
+use app\models\Datasource;
+use app\models\Group;
+use app\models\Permission;
 use app\models\Role;
 use app\models\Schema;
 use app\models\User;
@@ -34,6 +37,7 @@ use lib\exceptions\{
 use lib\schema\ISchema;
 use Yii;
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 /**
  * Backend service class for the access control tool widget
@@ -50,35 +54,35 @@ class AccessConfigController extends AppController
     /** @noinspection MissedFieldInspection */
     return [
       'user' => [
-        'class' => \app\models\User::class,
+        'class' => User::class,
         'label' => Yii::t('app', "Users"),
         'dialogLabel' => Yii::t('app', "User"),
         'labelProp' => "name",
         'icon' => "icon/16/apps/preferences-users.png"
       ],
       'role' => [
-        'class' => \app\models\Role::class,
+        'class' => Role::class,
         'label' => Yii::t('app', "Roles"),
         'dialogLabel' => Yii::t('app', "Role"),
         'labelProp' => "name",
         'icon' => "icon/16/apps/internet-feed-reader.png"
       ],
       'group' => [
-        'class' => \app\models\Group::class,
+        'class' => Group::class,
         'label' => Yii::t('app', "Groups"),
         'dialogLabel' => Yii::t('app', "Group"),
         'labelProp' => "name",
         'icon' => "icon/16/actions/address-book-new.png"
       ],
       'permission' => [
-        'class' => \app\models\Permission::class,
+        'class' => Permission::class,
         'label' => Yii::t('app', "Permissions"),
         'dialogLabel' => Yii::t('app', "Permission"),
         'labelProp' => "name",
         'icon' => "icon/16/apps/preferences-security.png"
       ],
       'datasource' => [
-        'class' => \app\models\Datasource::class,
+        'class' => Datasource::class,
         'label' => Yii::t('app', "Datasources"),
         'dialogLabel' => Yii::t('app', "Datasource"),
         'labelProp' => "title",
@@ -110,8 +114,12 @@ class AccessConfigController extends AppController
    */
   protected function getModelInstance($type, $namedId)
   {
-    $modelClass = $this->getModelDataFor($type)['class'];
-    $model = $modelClass::findByNamedId($namedId);
+    if ($type === "datasource") {
+      $model = $this->datasource($namedId);
+    } else {
+      $modelClass = $this->getModelDataFor($type)['class'];
+      $model = $modelClass::findByNamedId($namedId);
+    }
     if ($model) {
       return $model;
     }
@@ -254,7 +262,7 @@ class AccessConfigController extends AppController
    * @param array $filter
    *    An associative array that can be used in a ActiveQuery::where() method call
    * @throws UserErrorException
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionElements(string $type, array $filter = null)
   {
@@ -327,14 +335,14 @@ class AccessConfigController extends AppController
    * Only for testing, disabled in production
    * @param $type
    * @param $namdeId
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    * @throws UserErrorException
    */
   public function actionData($type, $namedId)
   {
     $this->requirePermission("access.manage");
     if (YII_ENV_PROD) {
-      throw new \JsonRpc2\Exception("Not allowed.", \JsonRpc2\Exception::INVALID_REQUEST);
+      throw new \lib\exceptions\AccessDeniedException();
     }
     $model = $this->getModelInstance($type, $namedId);
     return $model->getAttributes(null, ['created', 'modified']);
@@ -345,7 +353,7 @@ class AccessConfigController extends AppController
    * @param $elementType
    * @param $namedId
    * @throws \lib\exceptions\UserErrorException
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionTree($elementType, $namedId)
   {
@@ -398,7 +406,7 @@ class AccessConfigController extends AppController
 
       // user -> roles
       if ($elementType == "user" and $linkedType == "role") {
-        /** @var \app\models\User $user */
+        /** @var User $user */
         $user = $model;
         // you cannot link to this node
         $node['action'] = null;
@@ -429,7 +437,7 @@ class AccessConfigController extends AppController
         $node['children'][] = $groupNode;
 
         // one node for each existing group
-        /** @var \app\models\Group[] $userGroups */
+        /** @var Group[] $userGroups */
         $userGroups = $user->getGroups()->all();
         foreach ($userGroups as $group) {
           $groupNode = array(
@@ -444,7 +452,7 @@ class AccessConfigController extends AppController
           );
           // group roles
           $query = $user->getGroupRoles($group);
-          /** @var \app\models\Role[] $roles */
+          /** @var Role[] $roles */
           $roles = $query->all();
           foreach ($roles as $role) {
             $roleNode = array(
@@ -496,7 +504,7 @@ class AccessConfigController extends AppController
    * @param string|null $schema The name of the schema (only relevant for datasource elements)
    * @param bool $edit If true (default), trigger the form to edit the data
    * @return string
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    * @throws UserErrorException
    */
   public function actionAdd($type, $namedId, $schema = null, $edit = true)
@@ -559,6 +567,8 @@ class AccessConfigController extends AppController
         throw new UserErrorException($errorMessage . $e->getMessage());
       }
     }
+    // the id might have changed
+    $namedId = $model->namedId;
     if ($edit) {
       $this->actionEdit($type, $namedId);
       return "Created record and form for $type $namedId.";
@@ -577,7 +587,7 @@ class AccessConfigController extends AppController
    *    If the first argument is boolean true, then the second and third
    *    arguments are the normal signature
    * @return string
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    * @throws UserErrorException
    */
   public function actionEdit($first, $second, $third = null)
@@ -603,6 +613,7 @@ class AccessConfigController extends AppController
 
     // create form
     $model = $this->getModelInstance($type, $namedId);
+
     try {
       $formData = Form::getDataFromModel($model);
     } catch (\Exception $e) {
@@ -640,7 +651,7 @@ class AccessConfigController extends AppController
    *    The namedId of the model or null if the user cancelled the form
    * @return string Diagnostic message
    * @throws \Exception
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    * @throws UserErrorException
    */
   public function actionSave(\stdClass $data = null, $type = null, $namedId = null)
@@ -711,7 +722,7 @@ class AccessConfigController extends AppController
       }
 
       // enforce setting of password
-      if ($model->hasAttribute("password") and !$model->password) {
+      if ($type == "user" and !$model->password) {
         $validationError = Yii::t('app', "You need to set a password.");
       }
 
@@ -726,10 +737,11 @@ class AccessConfigController extends AppController
 
     if ($validationError) {
       $shelfId = $this->shelve($type, $namedId);
-      Error::create(
-        $validationError,
-        Yii::$app->controller->id, "edit", [$shelfId]
-      );
+      (new Error())
+        ->setMessage($validationError)
+        ->setService(Yii::$app->controller->id)
+        ->setMessage("edit")
+        ->setParams([$shelfId]);
       return "Data validation error: $validationError";
     } else {
       // message to update the UI
@@ -746,7 +758,7 @@ class AccessConfigController extends AppController
    *    An array of ids to delete
    * @return string Diagnostic message
    * @throws UserErrorException
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    * @throws \Exception
    *
    */
@@ -758,7 +770,7 @@ class AccessConfigController extends AppController
     $minId = null;
     switch ($type) {
       case "datasource":
-        return Confirm::create(
+        Confirm::create(
           Yii::t('app', "Do you want to remove only the datasource entry or all associated data?"),
           [
             Yii::t('app', "All data"),
@@ -767,6 +779,7 @@ class AccessConfigController extends AppController
           ],
           Yii::$app->controller->id, "delete-datasource", [$ids[0]]
         );
+        return "Created confirmation dialog.";
     }
 
     foreach ($ids as $namedId) {
@@ -799,7 +812,7 @@ class AccessConfigController extends AppController
    * @param string|null $namedId
    * @return string Diagnostic message
    * @throws UserErrorException
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionDeleteDatasource(bool $doDeleteModelData=null, string $namedId=null)
   {
@@ -838,7 +851,7 @@ class AccessConfigController extends AppController
    * @param string $namedId
    *    The named id of the current element
    * @return string Diagnostic message
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    * @throws InvalidArgumentException
    * @throws UserErrorException
    */
@@ -856,7 +869,7 @@ class AccessConfigController extends AppController
    * @param $type
    * @param $namedId
    * @return string Diagnostic message
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    * @throws UserErrorException
    */
   public function actionUnlink($linkedModelData, $type, $namedId)
@@ -922,7 +935,7 @@ class AccessConfigController extends AppController
    *
    * @param $data
    * @return string
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    * @throws UserErrorException
    * @throws \yii\base\Exception
    */
@@ -948,19 +961,19 @@ class AccessConfigController extends AppController
       return $this->abortedActionResult($e->getMessage());
     }
 
-    /** @var \app\models\User $user */
+    /** @var User $user */
     $user = $this->getModelInstance("user", $data->namedId);
     $user->setAttributes((array)$data);
 
     // give it the 'user' role
-    /** @var \app\models\Role $roleClass */
+    /** @var Role $roleClass */
     $roleClass = $this->getModelClassFor('role');
     $user->link('roles', $roleClass::findByNamedId("user"));
 
     // generate temporary password
     $tmpPasswd = Yii::$app->getSecurity()->generateRandomString(7);
     $user->password = $tmpPasswd;
-    $user->confirmed = true;  // @todo Remove when email confirmation is reimplemented
+    $user->confirmed = 1;  // @todo Remove when email confirmation is reimplemented
     $user->save();
 
     // @todo Reimplement: send confirmation link for new users
@@ -968,20 +981,23 @@ class AccessConfigController extends AppController
     //$this->sendConfirmationLinkEmail($data->email, $data->namedId, $data->name, $tmpPasswd);
 
     //@todo: more verbose email message
+
+    $url = Yii::$app->utils->getFrontendUrl();
     $body = Yii::t(
       'email',
-      "Url: {url} Username: {username} Password: {password}",
+      "NEW_USER_MESSAGE{name}{url}{username}{password}",
       [
+        'name' => $user->name,
         'username' => $user->namedId,
         'password' => $user->password,
-        'url' => Yii::$app->utils->getFrontendUrl()
+        'url' => $url
       ]
     );
     $email_with_querystring =
       $user->name .
-      "<" . $data->email . ">?" .
-      "subject=" . Yii::t('email', "New Bibliograph account") . "&" .
-      "body=" . htmlentities($body);
+      "<" . $user->email . ">?" .
+      "subject=" . rawurlencode(Yii::t('email', "New Bibliograph account"))  . "&" .
+      "body=" . rawurlencode($body);
     $mailtolink = Html::mailto(Yii::t(
       "app",
       "Click on this link to send email"),
@@ -1011,6 +1027,7 @@ class AccessConfigController extends AppController
    */
   public function actionSelectUser($dummy, $name) {
     $this->dispatchClientMessage("acltool.searchbox-left.set", $name);
+    return $this->successfulActionResult();
   }
 
   /**
@@ -1041,12 +1058,12 @@ class AccessConfigController extends AppController
   /**
    * @param $formData
    * @return string
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionCreateDatasourceHandler(\stdClass $formData=null)
   {
     if (!$formData or ! $formData->namedId ) return "Action cancelled";
-    $this->actionAdd("datasource", $formData->namedId, $formData->schema);
+    return $this->actionAdd("datasource", $formData->namedId, $formData->schema);
   }
 
 
@@ -1091,7 +1108,7 @@ class AccessConfigController extends AppController
    * @param $data
    * @return string
    * @throws \Exception
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    * @throws \yii\db\Exception
    */
   public function actionAddDatasource($data=null)
@@ -1144,7 +1161,7 @@ class AccessConfigController extends AppController
 
   /**
    * Allows to search for LDAP users and, if found, to add them to the local list of users
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionFindLdapUserDialog()
   {
@@ -1160,7 +1177,7 @@ class AccessConfigController extends AppController
    * @param $identifier
    * @return string
    * @throws \Adldap\Models\ModelNotFoundException
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    * @throws \yii\db\Exception
    */
   public function actionFindLdapUser($identifier) {
@@ -1208,7 +1225,7 @@ class AccessConfigController extends AppController
    * @return string
    * @throws \Adldap\Models\ModelNotFoundException
    * @throws \yii\db\Exception
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    * @throws InvalidArgumentException
    */
   public function actionImportLdapUser($data=null){

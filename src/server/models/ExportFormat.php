@@ -14,7 +14,7 @@ use Yii;
  * @property string $class
  * @property string $name
  * @property string $description
- * @property integer $active
+ * @property int $active
  * @property string $type
  * @property string $extension
  */

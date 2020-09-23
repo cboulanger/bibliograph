@@ -271,7 +271,10 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
      * The indicator widget
      */
     __indicator: null,
-    
+
+    __dragActionTimeout: null,
+    __lastDebugMessage: null,
+    __scrollFunctionId: null,
     /*
     ---------------------------------------------------------------------------
        INTERNAL METHODS
@@ -281,7 +284,7 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
     /**
      * Outputs verbose drag session debug messages, suppressing duplicate
      * messages. Can be turned off using the `debugDragSession` property.
-     * @param msg
+     * @param msg {String}
      */
     dragDebug : function(msg){
       if( msg !== this.__lastDebugMessage && this.getDebugDragSession()){
@@ -303,7 +306,7 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
         maxHeight : 5,
         anonymous : true,
         backgroundColor : "black",
-        droppable: true,
+        droppable: true
       });
       this._hideIndicator();
       
@@ -332,7 +335,7 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
      * @param y {Number}
      * @private
      */
-    _setIndicatorPosition( x,y  ){
+    _setIndicatorPosition: function( x,y  ){
       //this.__indicator.setDomTop(y);
     },
     
@@ -398,8 +401,8 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
   
     /**
      * Applies the "dragAction" property
-     * @param value {Boolean}
-     * @param old {Boolean}
+     * @param value {String}
+     * @param old {String}
      * @private
      */
     _applyDragAction: function (value, old) {
@@ -530,7 +533,7 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
         // drag cursor
         qx.ui.core.DragDropCursor.getInstance().setAction(e.getCurrentAction());
       }  else {
-        e.preventDefault();
+        //e.preventDefault();
         e.getManager().setDropAllowed(false);
         //qx.ui.core.DragDropCursor.getInstance().resetAction();
       }
@@ -592,7 +595,7 @@ qx.Class.define("qcl.ui.treevirtual.DragDropTree",
     /**
      * Opens a node if the cursor hovers over it for a certain amount of
      * time (currently, 500ms)
-     * @param node
+     * @param node {Object}
      * @private
      */
     _openNodeAfterTimeout : function(node){

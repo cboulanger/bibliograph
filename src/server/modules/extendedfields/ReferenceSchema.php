@@ -25,11 +25,11 @@ class ReferenceSchema extends BibtexSchema
          * The type of publication
          */
         'type' => [
-          'label'     => Yii::t('extendedfields', "Type"),
+          'label'     => Yii::t('plugin.extendedfields', "Type"),
           'type'      => "string",
           'public'    => false,
           'formData'  => [
-            'label'     => Yii::t('extendedfields', "Type"),
+            'label'     => Yii::t('plugin.extendedfields', "Type"),
             'type'      => "combobox",
             'bindStore' => [
               'serviceName'   => "reference",
@@ -41,18 +41,18 @@ class ReferenceSchema extends BibtexSchema
               'separator' => null
             ]
           ],
-          'index' => Yii::t('extendedfields', "Type")
+          'index' => Yii::t('plugin.extendedfields', "Type")
         ],
 
         /*
          * Where it is stored
          */
         'location' => [
-          'label'     => Yii::t('extendedfields', "Location"),
+          'label'     => Yii::t('plugin.extendedfields', "Location"),
           'type'      => "string",
           'public'    => false,
           'formData'  => [
-            'label'     => Yii::t('extendedfields', "Location"),
+            'label'     => Yii::t('plugin.extendedfields', "Location"),
             'type'      => "combobox",
             'bindStore' => [
               'serviceName'   => "reference",
@@ -64,18 +64,18 @@ class ReferenceSchema extends BibtexSchema
               'separator' => null
             ]
           ],
-          'index' => Yii::t('extendedfields', "Location")
+          'index' => Yii::t('plugin.extendedfields', "Location")
         ],
 
         /*
          * A thematic category
          */
         '_category' => [
-          'label'     => Yii::t('extendedfields', "Category"),
+          'label'     => Yii::t('plugin.extendedfields', "Category"),
           'type'      => "string",
           'public'    => false,
           'formData'  => [
-            'label'     => Yii::t('extendedfields', "Category"),
+            'label'     => Yii::t('plugin.extendedfields', "Category"),
             'type'      => "combobox",
             'bindStore' => [
               'serviceName'   => "reference",
@@ -87,18 +87,18 @@ class ReferenceSchema extends BibtexSchema
               'separator' => null
             ]
           ],
-          'index' => Yii::t('extendedfields', "Category")
+          'index' => Yii::t('plugin.extendedfields', "Category")
         ],
 
         /*
          * who owns it
          */
         '_owner' => [
-          'label'     => Yii::t('extendedfields', "Owner"),
+          'label'     => Yii::t('plugin.extendedfields', "Owner"),
           'type'      => "string",
           'public'    => false,
           'formData'  => [
-            'label'     => Yii::t('extendedfields', "Owner"),
+            'label'     => Yii::t('plugin.extendedfields', "Owner"),
             'type'      => "combobox",
             'bindStore' => [
               'serviceName'   => "reference",
@@ -110,35 +110,35 @@ class ReferenceSchema extends BibtexSchema
               'separator' => null
             ]
           ],
-          'index' => Yii::t('extendedfields', "Owner")
+          'index' => Yii::t('plugin.extendedfields', "Owner")
         ],
 
         /*
          * When was it ordered
          */
         '_date_ordered' => [
-          'label'     => Yii::t('extendedfields', "Date ordered"),
+          'label'     => Yii::t('plugin.extendedfields', "Date ordered"),
           'type'      => "string",
           'public'    => false,
           'formData'  => [
-            'label'     => Yii::t('extendedfields', "Date ordered"),
+            'label'     => Yii::t('plugin.extendedfields', "Date ordered"),
             'type'      => "datefield"
           ],
-          'index' => Yii::t('extendedfields', "Date ordered")
+          'index' => Yii::t('plugin.extendedfields', "Date ordered")
         ],
 
         /*
          * when was it received
          */
         '_date_received' => [
-          'label'     => Yii::t('extendedfields', "Date received"),
+          'label'     => Yii::t('plugin.extendedfields', "Date received"),
           'type'      => "string",
           'public'    => false,
           'formData'  => [
-            'label'     => Yii::t('extendedfields', "Date received"),
+            'label'     => Yii::t('plugin.extendedfields', "Date received"),
             'type'      => "datefield"
           ],
-          'index' => Yii::t('extendedfields', "Date received")
+          'index' => Yii::t('plugin.extendedfields', "Date received")
         ]
       ]
     );

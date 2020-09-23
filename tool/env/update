@@ -1,0 +1,16 @@
+y#!/usr/bin/env bash
+# Update dependencies
+
+set -e
+source tool/env/check
+source tool/env/install-libs
+
+echo ">>> Installing/updating Qooxdoo..."
+npm install @qooxdoo/compiler
+
+echo ">>> Installing/updating Qooxdoo packages..."
+npx qx package update --quiet
+npx qx package upgrade
+
+echo ">>> Updating Composer packages..."
+tool/dev/composer update

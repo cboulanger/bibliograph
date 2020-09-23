@@ -1,9 +1,13 @@
 <?php
-$config = require "common.php";
+//
+// configuration for bibliograph backend
+//
+try {
+  $config = require __DIR__ . "/config.php";
+} catch (\Throwable $e) {
+  require __DIR__ . "/../lib/util/Server.php";
+  die(\lib\util\Server::createExceptionResponse($e));
+}
+
 $config['id'] = 'bibliograph-server';
-$config['components']['request'] = [
-  'enableCookieValidation' => true,
-  'enableCsrfValidation' => true,
-  'cookieValidationKey' => 'a1a2a3a3d3d4g5g4hfgfh4g',
-];
 return $config;

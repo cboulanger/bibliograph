@@ -1,0 +1,127 @@
+dist: trusty
+
+language: php
+
+php: '7.2'
+
+services:
+  - mysql
+
+addons:
+  apt:
+    update: true
+    packages:
+    - zip
+env:
+  global:
+  - PATH=$HOME/.local/bin:$PATH
+
+cache:
+  directories:
+  - node_modules
+  - "$HOME/.composer/cache/files"
+  - src/vcslib
+
+stages:
+  - name: tests
+    if: "(NOT tag =~ snapshot AND NOT commit_message =~ /skip tests/)"
+  - name: packaging
+    if: "(NOT type IN (pull_request) AND NOT tag =~ snapshot AND NOT commit_message =~ /tests only/)"
+  - name: docker
+    if: "(branch = master AND NOT type IN (pull_request) AND NOT tag =~ snapshot AND NOT commit_message =~ /(skip docker|tests only)/)"
+  - name: deployment
+    if: "(NOT type IN (pull_request) AND NOT tag =~ snapshot AND NOT commit_message =~ /(skip deploy|tests only)/)"
+  - name: cleanup
+    if: "(NOT type IN (pull_request) AND NOT tag =~ snapshot AND NOT commit_message =~ /(skip cleanup|tests only)/)"
+
+before_install:
+  - mkdir -p ~/uploads
+  - install/travis/script/install-php.sh
+  - pyenv shell 3.6 && pip install --upgrade pip
+  - npm install -g qxcompiler
+  - qx config set github.token $GITHUB_TOKEN
+  - qx contrib update #--search --all-versions
+
+script: skip
+
+jobs:
+  include:
+
+  - stage: tests
+    name: PHP 7.2
+    php: '7.2'
+    install:
+      - install/travis/script/install-compile-deps.sh
+      - install/travis/script/install-runtime-deps.sh
+    script: npm test
+    after_failure: install/travis/script/after-test-failure.sh
+  - name: PHP 7.3
+    php: '7.3'
+    install:
+      - install/travis/script/install-compile-deps.sh
+      - install/travis/script/install-runtime-deps.sh
+    script: npm test
+    after_failure: install/travis/script/after-test-failure.sh
+    after_failure: install/travis/script/after-test-failure.sh
+
+  - stage: packaging
+    name: Create a distributable package
+    install:
+      - install/travis/script/install-compile-deps.sh
+      - pip install --user awscli
+    script:
+      - npm run dist-build
+      - cp dist/*.zip ~/uploads
+    after_success:
+      - ls -al ~/uploads
+      - aws s3 sync ~/uploads s3://travis.panya.de/$TRAVIS_BUILD_NUMBER
+
+  - stage: docker
+    name: Create a docker image and push it to the docker hub
+    services: docker
+    deploy:
+      provider: script
+      script: build/script/docker-push.sh
+      skip_cleanup: true
+      on:
+        branch: master
+
+  - stage: deployment
+    name: Deploy to demo server
+    skip_cleanup: true
+    install:
+      - pip install --user awscli
+      - install/travis/script/ssh-config.sh
+    before_script:
+      - aws s3 sync s3://travis.panya.de/$TRAVIS_BUILD_NUMBER ~/uploads
+      - ls -al ~/uploads
+    script: install/travis/script/deploy-demo.sh
+
+  - name: Release branch snapshot on GitHub
+    install:
+      - pip install --user awscli
+    before_deploy:
+      - install/travis/script/tag-snapshot.sh
+      - aws s3 sync s3://travis.panya.de/$TRAVIS_BUILD_NUMBER ~/uploads
+      - ls -al ~/uploads
+      - cp ~/uploads/* $TRAVIS_BUILD_DIR
+    deploy:
+      provider: releases
+      api_key: "$GITHUB_TOKEN"
+      target_commitish: "$TRAVIS_COMMIT"
+      name: Development snapshot ($TRAVIS_BRANCH)
+      body: Automatic Bibliograph development build of branch '$TRAVIS_BRANCH' ($TRAVIS_COMMIT)
+        built by Travis CI on $(date +'%F %T %Z'), build number $TRAVIS_BUILD_NUMBER.
+      prerelease: true
+      file_glob: true
+      file:
+        - "*.zip"
+      skip_cleanup: true
+      overwrite: true
+      on:
+        all_branches: true
+
+  - stage: cleanup
+    name: "Cleanup built artifacts"
+    install: pip install --user awscli
+    script: aws s3 rm --recursive s3://travis.panya.de/$TRAVIS_BUILD_NUMBER

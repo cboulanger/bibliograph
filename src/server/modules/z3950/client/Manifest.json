@@ -11,8 +11,7 @@
         "email": "info@bibliograph.org"
       }
     ],
-    "version": "1.0.0",
-    "qooxdoo-range": "6.0.0-alpha"
+    "version": "1.0.0"
   },
   "provides": {
     "namespace": "bibliograph.plugins.z3950",
@@ -21,5 +20,9 @@
     "resource": "source/resource",
     "translation": "source/translation",
     "type": "library"
+  },
+  "requires": {
+    "@qooxdoo/compiler": "^1.0.0-beta",
+    "@qooxdoo/framework": "^6.0.0-beta"
   }
 }

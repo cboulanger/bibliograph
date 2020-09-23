@@ -7,8 +7,8 @@ use Yii;
 /**
  * This is the model class for table "join_Permission_Role".
  *
- * @property integer $RoleId
- * @property integer $PermissionId
+ * @property int $RoleId
+ * @property int $PermissionId
  */
 class Permission_Role extends \yii\db\ActiveRecord
 {

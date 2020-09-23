@@ -4,14 +4,18 @@ namespace app\modules\extendedfields;
 
 
 use app\models\Schema;
-use app\modules\extendedfields\Datasource;
-use lib\exceptions\UserErrorException;
+use lib\plugin\PluginInterface;
 use Yii;
 use lib\exceptions\RecordExistsException;
 
 
-class Module extends \lib\Module
+class Module
+  extends \lib\Module
+  implements PluginInterface
 {
+
+  const CATEGORY = "plugin.extendedfields";
+
   /**
    * The version of the module
    * @var string

@@ -7,6 +7,7 @@
  */
 
 namespace app\controllers\traits;
+use Illuminate\Support\Str;
 use Yii;
 use yii\base\Exception;
 
@@ -25,7 +26,7 @@ trait ShelfTrait
     try {
       $shelfId = Yii::$app->security->generateRandomString();
     } catch (Exception $e) {
-      $shelfId = str_random();
+      $shelfId = Str::random();
     }
     Yii::$app->session->set($shelfId,func_get_args());
     //$_SESSION[$shelfId] = func_get_args();

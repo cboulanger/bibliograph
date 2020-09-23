@@ -1,4 +1,6 @@
-#: bibliograph/Application.js:216
+#: bibliograph/Application.js:216 bibliograph/Application.js:219
+#: bibliograph/Application.js:223 bibliograph/Application.js:220
+#: bibliograph/Application.js:222
 msgid "Missing server address. Please contact administrator."
 msgstr ""
 
@@ -77,6 +79,7 @@ msgstr ""
 #: bibliograph/plugins/webservices/View.js:227
 #: bibliograph/plugins/z3950/ImportWindow.js:180
 #: bibliograph/ui/window/AccessControlTool.js:189
+#: bibliograph/ui/window/AccessControlTool.js:190
 msgid "Help"
 msgstr ""
 
@@ -94,7 +97,9 @@ msgstr ""
 
 #: bibliograph/plugins/webservices/View.js:312
 #: bibliograph/plugins/z3950/ImportWindow.js:250
-#: bibliograph/ui/main/Toolbar.js:294
+#: bibliograph/ui/main/Toolbar.js:294 bibliograph/ui/main/Toolbar.js:283
+#: bibliograph/ui/main/Toolbar.js:282 bibliograph/ui/main/Toolbar.js:277
+#: bibliograph/ui/main/Toolbar.js:290 bibliograph/ui/main/Toolbar.js:289
 msgid "Searching..."
 msgstr ""
 
@@ -146,23 +151,23 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-#: bibliograph/Setup.js:37
+#: bibliograph/Setup.js:37 bibliograph/Setup.js:77 bibliograph/Setup.js:78
 msgid "No connection to server."
 msgstr ""
 
-#: bibliograph/Setup.js:38
+#: bibliograph/Setup.js:38 bibliograph/Setup.js:78 bibliograph/Setup.js:79
 msgid "Loading folder data ..."
 msgstr ""
 
-#: bibliograph/Setup.js:93
+#: bibliograph/Setup.js:93 bibliograph/Setup.js:133 bibliograph/Setup.js:134
 msgid "Setting up application..."
 msgstr ""
 
-#: bibliograph/Setup.js:97
+#: bibliograph/Setup.js:97 bibliograph/Setup.js:137 bibliograph/Setup.js:138
 msgid "Connecting with server..."
 msgstr ""
 
-#: bibliograph/Setup.js:102
+#: bibliograph/Setup.js:102 bibliograph/Setup.js:142 bibliograph/Setup.js:143
 msgid "Loading configuration ..."
 msgstr ""
 
@@ -171,6 +176,7 @@ msgid "To log in, you need a secure connection. After you press 'OK', the applic
 msgstr ""
 
 #: bibliograph/Commands.js:72 bibliograph/ui/window/AccessControlTool.js:157
+#: bibliograph/ui/window/AccessControlTool.js:158
 msgid "Please wait ..."
 msgstr ""
 
@@ -189,11 +195,16 @@ msgstr ""
 #: dialog/Dialog.js:417 dialog/Form.js:455
 #: bibliograph/ui/window/DatasourceListWindow.js:81
 #: bibliograph/ui/window/DatasourceListWindow.js:82
+#: bibliograph/ui/window/DatasourceListWindow.js:90
+#: bibliograph/ui/window/DatasourceListWindow.js:91
+#: bibliograph/ui/window/DatasourceListWindow.js:95
+#: bibliograph/ui/window/DatasourceListWindow.js:96
 msgid "OK"
 msgstr ""
 
 #: dialog/Dialog.js:443 bibliograph/ui/window/FolderTreeWindow.js:107
-#: bibliograph/ui/main/TableView.js:326
+#: bibliograph/ui/main/TableView.js:326 bibliograph/ui/main/TableView.js:328
+#: bibliograph/ui/main/TableView.js:327
 msgid "Cancel"
 msgstr ""
 
@@ -270,6 +281,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: bibliograph/ui/window/DatasourceListWindow.js:43
+#: bibliograph/ui/window/DatasourceListWindow.js:42
 msgid "Please select the datasource"
 msgstr ""
 
@@ -278,18 +290,22 @@ msgid "Access control tool"
 msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:150
+#: bibliograph/ui/window/AccessControlTool.js:151
 msgid "New local user"
 msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:162
+#: bibliograph/ui/window/AccessControlTool.js:163
 msgid "Import LDAP user"
 msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:177
+#: bibliograph/ui/window/AccessControlTool.js:178
 msgid "New Datasource"
 msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:199
+#: bibliograph/ui/window/AccessControlTool.js:201
 msgid "Exit"
 msgstr ""
 
@@ -298,21 +314,26 @@ msgstr ""
 #: bibliograph/ui/window/AccessControlTool.js:243
 #: bibliograph/ui/window/AccessControlTool.js:463
 #: bibliograph/ui/window/AccessControlTool.js:460
+#: bibliograph/ui/window/AccessControlTool.js:245
+#: bibliograph/ui/window/AccessControlTool.js:468
 msgid "Filter by name here..."
 msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:292
 #: bibliograph/ui/window/AccessControlTool.js:294
+#: bibliograph/ui/window/AccessControlTool.js:298
 msgid "Please enter the id of the new '%1'-Object"
 msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:313
 #: bibliograph/ui/window/AccessControlTool.js:315
+#: bibliograph/ui/window/AccessControlTool.js:321
 msgid "Do you really want to delete '%1'?"
 msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:355
 #: bibliograph/ui/window/AccessControlTool.js:357
+#: bibliograph/ui/window/AccessControlTool.js:365
 msgid "Edited element"
 msgstr ""
 
@@ -321,6 +342,8 @@ msgstr ""
 #: bibliograph/ui/window/AccessControlTool.js:409
 #: bibliograph/ui/window/AccessControlTool.js:411
 #: bibliograph/ui/window/AccessControlTool.js:408
+#: bibliograph/ui/window/AccessControlTool.js:414
+#: bibliograph/ui/window/AccessControlTool.js:416
 msgid "Link"
 msgstr ""
 
@@ -329,23 +352,29 @@ msgstr ""
 #: bibliograph/ui/window/AccessControlTool.js:422
 #: bibliograph/ui/window/AccessControlTool.js:424
 #: bibliograph/ui/window/AccessControlTool.js:421
+#: bibliograph/ui/window/AccessControlTool.js:427
+#: bibliograph/ui/window/AccessControlTool.js:429
 msgid "Unlink"
 msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:444
 #: bibliograph/ui/window/AccessControlTool.js:449
 #: bibliograph/ui/window/AccessControlTool.js:446
+#: bibliograph/ui/window/AccessControlTool.js:454
 msgid "Linkable items"
 msgstr ""
 
 #: bibliograph/ui/window/AccessControlTool.js:450
 #: bibliograph/ui/window/AccessControlTool.js:455
 #: bibliograph/ui/window/AccessControlTool.js:452
+#: bibliograph/ui/window/AccessControlTool.js:460
 msgid "No linkable items"
 msgstr ""
 
 #: bibliograph/ui/window/PreferencesWindow.js:31
-#: bibliograph/ui/main/Toolbar.js:140
+#: bibliograph/ui/main/Toolbar.js:140 bibliograph/ui/main/Toolbar.js:133
+#: bibliograph/ui/main/Toolbar.js:131 bibliograph/ui/main/Toolbar.js:144
+#: bibliograph/ui/main/Toolbar.js:143
 msgid "Preferences"
 msgstr ""
 
@@ -440,6 +469,9 @@ msgid "Processing references..."
 msgstr ""
 
 #: bibliograph/ui/window/AboutWindow.js:27 bibliograph/ui/main/Toolbar.js:238
+#: bibliograph/ui/main/Toolbar.js:229 bibliograph/ui/main/Toolbar.js:228
+#: bibliograph/ui/main/Toolbar.js:224 bibliograph/ui/main/Toolbar.js:237
+#: bibliograph/ui/main/Toolbar.js:236
 msgid "About Bibliograph"
 msgstr ""
 
@@ -464,6 +496,8 @@ msgid "Password"
 msgstr ""
 
 #: dialog/Login.js:200 bibliograph/ui/main/Toolbar.js:64
+#: bibliograph/ui/main/Toolbar.js:60 bibliograph/ui/main/Toolbar.js:73
+#: bibliograph/ui/main/Toolbar.js:72
 msgid "Login"
 msgstr ""
 
@@ -471,59 +505,85 @@ msgstr ""
 msgid "Forgot Password?"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:78
+#: bibliograph/ui/main/Toolbar.js:78 bibliograph/ui/main/Toolbar.js:73
+#: bibliograph/ui/main/Toolbar.js:86 bibliograph/ui/main/Toolbar.js:85
 msgid "Logout"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:94
+#: bibliograph/ui/main/Toolbar.js:94 bibliograph/ui/main/Toolbar.js:88
+#: bibliograph/ui/main/Toolbar.js:101 bibliograph/ui/main/Toolbar.js:100
 msgid "Loading..."
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:107
+#: bibliograph/ui/main/Toolbar.js:107 bibliograph/ui/main/Toolbar.js:101
+#: bibliograph/ui/main/Toolbar.js:100 bibliograph/ui/main/Toolbar.js:113
+#: bibliograph/ui/main/Toolbar.js:112
 msgid "Datasources"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:122
+#: bibliograph/ui/main/Toolbar.js:122 bibliograph/ui/main/Toolbar.js:116
+#: bibliograph/ui/main/Toolbar.js:114 bibliograph/ui/main/Toolbar.js:127
+#: bibliograph/ui/main/Toolbar.js:126
 msgid "System"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:153
+#: bibliograph/ui/main/Toolbar.js:153 bibliograph/ui/main/Toolbar.js:145
+#: bibliograph/ui/main/Toolbar.js:143 bibliograph/ui/main/Toolbar.js:156
+#: bibliograph/ui/main/Toolbar.js:155
 msgid "Access management"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:166
+#: bibliograph/ui/main/Toolbar.js:166 bibliograph/ui/main/Toolbar.js:157
+#: bibliograph/ui/main/Toolbar.js:155 bibliograph/ui/main/Toolbar.js:168
+#: bibliograph/ui/main/Toolbar.js:167
 msgid "Plugins"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:179
+#: bibliograph/ui/main/Toolbar.js:179 bibliograph/ui/main/Toolbar.js:170
+#: bibliograph/ui/main/Toolbar.js:169 bibliograph/ui/main/Toolbar.js:167
+#: bibliograph/ui/main/Toolbar.js:180
 msgid "Import"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:196
+#: bibliograph/ui/main/Toolbar.js:196 bibliograph/ui/main/Toolbar.js:186
+#: bibliograph/ui/main/Toolbar.js:185 bibliograph/ui/main/Toolbar.js:183
+#: bibliograph/ui/main/Toolbar.js:195
 msgid "Import text file"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:213
+#: bibliograph/ui/main/Toolbar.js:213 bibliograph/ui/main/Toolbar.js:203
+#: bibliograph/ui/main/Toolbar.js:202 bibliograph/ui/main/Toolbar.js:199
+#: bibliograph/ui/main/Toolbar.js:212 bibliograph/ui/main/Toolbar.js:211
 msgid "Language"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:230
+#: bibliograph/ui/main/Toolbar.js:230 bibliograph/ui/main/Toolbar.js:221
+#: bibliograph/ui/main/Toolbar.js:220 bibliograph/ui/main/Toolbar.js:216
+#: bibliograph/ui/main/Toolbar.js:229 bibliograph/ui/main/Toolbar.js:228
 msgid "Online Help"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:250
+#: bibliograph/ui/main/Toolbar.js:250 bibliograph/ui/main/Toolbar.js:240
+#: bibliograph/ui/main/Toolbar.js:239 bibliograph/ui/main/Toolbar.js:235
+#: bibliograph/ui/main/Toolbar.js:248 bibliograph/ui/main/Toolbar.js:247
 msgid "Developer"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:256
+#: bibliograph/ui/main/Toolbar.js:256 bibliograph/ui/main/Toolbar.js:246
+#: bibliograph/ui/main/Toolbar.js:245 bibliograph/ui/main/Toolbar.js:241
+#: bibliograph/ui/main/Toolbar.js:254 bibliograph/ui/main/Toolbar.js:253
 msgid "Run RPC method test.test"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:293
+#: bibliograph/ui/main/Toolbar.js:293 bibliograph/ui/main/Toolbar.js:282
+#: bibliograph/ui/main/Toolbar.js:281 bibliograph/ui/main/Toolbar.js:276
+#: bibliograph/ui/main/Toolbar.js:289 bibliograph/ui/main/Toolbar.js:288
 msgid "No results"
 msgstr ""
 
-#: bibliograph/ui/main/Toolbar.js:295
+#: bibliograph/ui/main/Toolbar.js:295 bibliograph/ui/main/Toolbar.js:284
+#: bibliograph/ui/main/Toolbar.js:283 bibliograph/ui/main/Toolbar.js:278
+#: bibliograph/ui/main/Toolbar.js:291 bibliograph/ui/main/Toolbar.js:290
 msgid "Enter search term or ? for suggestions"
 msgstr ""
 
@@ -532,184 +592,280 @@ msgid "Enter search term"
 msgstr ""
 
 #: bibliograph/ui/main/FolderTreePanel.js:70
+#: bibliograph/ui/main/FolderTreePanel.js:85
+#: bibliograph/ui/main/FolderTreePanel.js:103
+#: bibliograph/ui/main/FolderTreePanel.js:111
+#: bibliograph/ui/main/FolderTreePanel.js:87
+#: bibliograph/ui/main/FolderTreePanel.js:84
+#: bibliograph/ui/main/FolderTreePanel.js:88
+#: bibliograph/ui/main/FolderTreePanel.js:89
+#: bibliograph/ui/main/FolderTreePanel.js:92
+#: bibliograph/ui/main/FolderTreePanel.js:90
+#: bibliograph/ui/main/FolderTreePanel.js:91
+#: bibliograph/ui/main/FolderTreePanel.js:94
+#: bibliograph/ui/main/FolderTreePanel.js:93
 #: bibliograph/ui/item/RecordInfoUi.js:59
 #: bibliograph/ui/item/RecordInfoUi.js:60
 msgid "Folders"
 msgstr ""
 
 #: bibliograph/ui/main/ItemViewUi.js:61 bibliograph/ui/main/ItemViewUi.js:66
+#: bibliograph/ui/main/ItemViewUi.js:69 bibliograph/ui/main/ItemViewUi.js:74
 #: bibliograph/ui/item/FormattedView.js:80
 msgid "Formatted View"
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:176
+#: bibliograph/ui/main/MultipleTreeView.js:188
+#: bibliograph/ui/main/MultipleTreeView.js:190
 msgid "Add folder"
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:187
+#: bibliograph/ui/main/MultipleTreeView.js:199
+#: bibliograph/ui/main/MultipleTreeView.js:198
+#: bibliograph/ui/main/MultipleTreeView.js:200
 msgid "Add top level folder"
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:197
+#: bibliograph/ui/main/MultipleTreeView.js:209
+#: bibliograph/ui/main/MultipleTreeView.js:207
 msgid "Save current search query as top folder"
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:208
+#: bibliograph/ui/main/MultipleTreeView.js:220
+#: bibliograph/ui/main/MultipleTreeView.js:217
+#: bibliograph/ui/main/MultipleTreeView.js:219
 msgid "Remove folder"
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:226
 #: bibliograph/ui/main/MultipleTreeView.js:227
+#: bibliograph/ui/main/MultipleTreeView.js:238
+#: bibliograph/ui/main/MultipleTreeView.js:239
+#: bibliograph/ui/main/MultipleTreeView.js:233
+#: bibliograph/ui/main/MultipleTreeView.js:234
+#: bibliograph/ui/main/MultipleTreeView.js:235
+#: bibliograph/ui/main/MultipleTreeView.js:236
 msgid "Empty trash..."
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:238
+#: bibliograph/ui/main/MultipleTreeView.js:250
+#: bibliograph/ui/main/MultipleTreeView.js:244
+#: bibliograph/ui/main/MultipleTreeView.js:246
 msgid "Move folder..."
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:249
+#: bibliograph/ui/main/MultipleTreeView.js:261
+#: bibliograph/ui/main/MultipleTreeView.js:254
+#: bibliograph/ui/main/MultipleTreeView.js:256
 msgid "Copy folder to Clipboard..."
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:258
+#: bibliograph/ui/main/MultipleTreeView.js:270
+#: bibliograph/ui/main/MultipleTreeView.js:262
+#: bibliograph/ui/main/MultipleTreeView.js:264
 msgid "Insert folder from Clipboard..."
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:267
+#: bibliograph/ui/main/MultipleTreeView.js:279
+#: bibliograph/ui/main/MultipleTreeView.js:270
+#: bibliograph/ui/main/MultipleTreeView.js:272
 msgid "Edit folder data"
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:278
 #: bibliograph/ui/main/MultipleTreeView.js:279
+#: bibliograph/ui/main/MultipleTreeView.js:290
+#: bibliograph/ui/main/MultipleTreeView.js:280
+#: bibliograph/ui/main/MultipleTreeView.js:282
 msgid "Change visibility"
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:365
+#: bibliograph/ui/main/MultipleTreeView.js:376
+#: bibliograph/ui/main/MultipleTreeView.js:388
+#: bibliograph/ui/main/MultipleTreeView.js:378
+#: bibliograph/ui/main/MultipleTreeView.js:380
 msgid "Loading folders. Please wait..."
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:459
+#: bibliograph/ui/main/MultipleTreeView.js:470
+#: bibliograph/ui/main/MultipleTreeView.js:482
+#: bibliograph/ui/main/MultipleTreeView.js:465
+#: bibliograph/ui/main/MultipleTreeView.js:467
 msgid "Do your really want to move folder '%1' to '%2'?"
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:486
+#: bibliograph/ui/main/MultipleTreeView.js:497
+#: bibliograph/ui/main/MultipleTreeView.js:509
+#: bibliograph/ui/main/MultipleTreeView.js:492
+#: bibliograph/ui/main/MultipleTreeView.js:491
+#: bibliograph/ui/main/MultipleTreeView.js:493
 msgid "Do your really want to move %1 references to '%2'?"
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:508
+#: bibliograph/ui/main/MultipleTreeView.js:519
+#: bibliograph/ui/main/MultipleTreeView.js:531
+#: bibliograph/ui/main/MultipleTreeView.js:514
+#: bibliograph/ui/main/MultipleTreeView.js:513
+#: bibliograph/ui/main/MultipleTreeView.js:515
 msgid "Do your really want to copy %1 references to '%2'?"
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:551
+#: bibliograph/ui/main/MultipleTreeView.js:562
+#: bibliograph/ui/main/MultipleTreeView.js:574
+#: bibliograph/ui/main/MultipleTreeView.js:556
+#: bibliograph/ui/main/MultipleTreeView.js:555
+#: bibliograph/ui/main/MultipleTreeView.js:557
 msgid "Do you want to insert the folder '%1' from datasource '%2'?"
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:556
+#: bibliograph/ui/main/MultipleTreeView.js:567
+#: bibliograph/ui/main/MultipleTreeView.js:579
+#: bibliograph/ui/main/MultipleTreeView.js:561
+#: bibliograph/ui/main/MultipleTreeView.js:560
+#: bibliograph/ui/main/MultipleTreeView.js:562
 msgid "Do you want to insert the folder '%1'?"
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:573
+#: bibliograph/ui/main/MultipleTreeView.js:584
+#: bibliograph/ui/main/MultipleTreeView.js:596
+#: bibliograph/ui/main/MultipleTreeView.js:577
+#: bibliograph/ui/main/MultipleTreeView.js:575
 msgid "Do you really want to delete all references and folders in the trash folder? This cannot be undone."
 msgstr ""
 
 #: bibliograph/ui/main/MultipleTreeView.js:579
+#: bibliograph/ui/main/MultipleTreeView.js:590
+#: bibliograph/ui/main/MultipleTreeView.js:602
+#: bibliograph/ui/main/MultipleTreeView.js:585
+#: bibliograph/ui/main/MultipleTreeView.js:583
 msgid "Emptying the trash ..."
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:219
+#: bibliograph/ui/main/TableView.js:219 bibliograph/ui/main/TableView.js:220
 msgid "Move reference(s)..."
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:226
+#: bibliograph/ui/main/TableView.js:226 bibliograph/ui/main/TableView.js:227
 msgid "Copy reference(s)..."
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:233
+#: bibliograph/ui/main/TableView.js:233 bibliograph/ui/main/TableView.js:234
 msgid "Export references"
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:241
+#: bibliograph/ui/main/TableView.js:241 bibliograph/ui/main/TableView.js:242
 msgid "Export selected references"
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:247
+#: bibliograph/ui/main/TableView.js:247 bibliograph/ui/main/TableView.js:248
 msgid "Export folder"
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:253
+#: bibliograph/ui/main/TableView.js:253 bibliograph/ui/main/TableView.js:254
 msgid "Export current query"
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:289
+#: bibliograph/ui/main/TableView.js:289 bibliograph/ui/main/TableView.js:290
 msgid "Create new reference type"
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:314
+#: bibliograph/ui/main/TableView.js:314 bibliograph/ui/main/TableView.js:315
 msgid "Create"
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:449
+#: bibliograph/ui/main/TableView.js:449 bibliograph/ui/main/TableView.js:459
+#: bibliograph/ui/main/TableView.js:458
 msgid "You cannot create an item outside a folder"
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:452
+#: bibliograph/ui/main/TableView.js:452 bibliograph/ui/main/TableView.js:462
+#: bibliograph/ui/main/TableView.js:461
 msgid "Creating reference..."
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:464
+#: bibliograph/ui/main/TableView.js:464 bibliograph/ui/main/TableView.js:474
+#: bibliograph/ui/main/TableView.js:473
 msgid "Do your really want to remove the selected references?"
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:466
+#: bibliograph/ui/main/TableView.js:466 bibliograph/ui/main/TableView.js:478
+#: bibliograph/ui/main/TableView.js:477
 msgid "Removing references..."
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:470
+#: bibliograph/ui/main/TableView.js:470 bibliograph/ui/main/TableView.js:482
+#: bibliograph/ui/main/TableView.js:481
 msgid "Do your really want to move the selected references to the trash?"
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:472
+#: bibliograph/ui/main/TableView.js:472 bibliograph/ui/main/TableView.js:486
+#: bibliograph/ui/main/TableView.js:485
 msgid "Deleting references..."
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:504
+#: bibliograph/ui/main/TableView.js:504 bibliograph/ui/main/TableView.js:520
+#: bibliograph/ui/main/TableView.js:519
 msgid "Do your really want to move the selected references to '%1'?"
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:510
+#: bibliograph/ui/main/TableView.js:510 bibliograph/ui/main/TableView.js:526
+#: bibliograph/ui/main/TableView.js:525
 msgid "Moving references..."
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:527
+#: bibliograph/ui/main/TableView.js:527 bibliograph/ui/main/TableView.js:545
+#: bibliograph/ui/main/TableView.js:544
 msgid "Do your really want to copy the selected references to '%1'?"
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:530
+#: bibliograph/ui/main/TableView.js:530 bibliograph/ui/main/TableView.js:548
+#: bibliograph/ui/main/TableView.js:547
 msgid "Copying references..."
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:542
+#: bibliograph/ui/main/TableView.js:542 bibliograph/ui/main/TableView.js:560
+#: bibliograph/ui/main/TableView.js:559
 msgid "Exporting the selected references..."
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:552
+#: bibliograph/ui/main/TableView.js:552 bibliograph/ui/main/TableView.js:570
+#: bibliograph/ui/main/TableView.js:569
 msgid "Exporting folder..."
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:564
+#: bibliograph/ui/main/TableView.js:564 bibliograph/ui/main/TableView.js:583
+#: bibliograph/ui/main/TableView.js:582
 msgid "Exporting query..."
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:580 bibliograph/ui/item/RecordInfo.js:167
+#: bibliograph/ui/main/TableView.js:580 bibliograph/ui/main/TableView.js:600
+#: bibliograph/ui/main/TableView.js:599 bibliograph/ui/item/RecordInfo.js:167
 #: bibliograph/ui/item/DuplicatesView.js:162
 msgid "Processing request..."
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:594
+#: bibliograph/ui/main/TableView.js:594 bibliograph/ui/main/TableView.js:614
+#: bibliograph/ui/main/TableView.js:613
 msgid "Do you really want to make the folder empty, moving all references to the trash that are not in other folders?"
 msgstr ""
 
-#: bibliograph/ui/main/TableView.js:597
+#: bibliograph/ui/main/TableView.js:597 bibliograph/ui/main/TableView.js:619
+#: bibliograph/ui/main/TableView.js:618
 msgid "Emptying the folder ..."
 msgstr ""
 
@@ -868,4 +1024,49 @@ msgstr ""
 
 #: qcl/io/JsonRpcClient.js:181
 msgid "A login problem occurred. Please reload the page and log off, repeatedly if neccessary."
+msgstr ""
+
+#: bibliograph/ui/main/MultipleTreeView.js:289
+msgid "Create report from subtree"
+msgstr ""
+
+#: bibliograph/ui/main/MultipleTreeView.js:289
+#: bibliograph/ui/main/MultipleTreeView.js:301
+#: bibliograph/ui/main/MultipleTreeView.js:290
+#: bibliograph/ui/main/MultipleTreeView.js:292
+msgid "Create report"
+msgstr ""
+
+#: bibliograph/ui/main/FolderTreePanel.js:159
+#: bibliograph/ui/main/FolderTreePanel.js:156
+#: bibliograph/ui/main/FolderTreePanel.js:157
+#: bibliograph/ui/main/FolderTreePanel.js:162
+#: bibliograph/ui/main/FolderTreePanel.js:163
+#: bibliograph/ui/main/FolderTreePanel.js:167
+#: bibliograph/ui/main/FolderTreePanel.js:168
+#: bibliograph/ui/main/FolderTreePanel.js:170
+#: bibliograph/ui/main/FolderTreePanel.js:173
+#: qcl/ui/treevirtual/MultipleTreeView.js:971
+#: qcl/ui/treevirtual/MultipleTreeView.js:978
+#: qcl/ui/treevirtual/MultipleTreeView.js:976
+#: qcl/ui/treevirtual/MultipleTreeView.js:977
+#: qcl/ui/treevirtual/MultipleTreeView.js:983
+#: qcl/ui/treevirtual/MultipleTreeView.js:986
+#: qcl/ui/treevirtual/MultipleTreeView.js:990
+#: qcl/ui/treevirtual/MultipleTreeView.js:991
+msgid "No match for \"%1\""
+msgstr ""
+
+#: bibliograph/ui/main/FolderTreePanel.js:63
+#: bibliograph/ui/main/FolderTreePanel.js:60
+#: bibliograph/ui/main/FolderTreePanel.js:59
+#: bibliograph/ui/main/FolderTreePanel.js:58
+msgid "Search folders:"
+msgstr ""
+
+#: bibliograph/ui/main/FolderTreePanel.js:75
+#: bibliograph/ui/main/FolderTreePanel.js:72
+#: bibliograph/ui/main/FolderTreePanel.js:71
+#: bibliograph/ui/main/FolderTreePanel.js:70
+msgid "Type and press enter to search"
 msgstr ""

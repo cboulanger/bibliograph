@@ -4,14 +4,14 @@
 
   http://www.bibliograph.org
 
-  Copyright: 
+  Copyright:
     2018 Christian Boulanger
 
-  License: 
+  License:
     MIT license
     See the LICENSE file in the project's top-level directory for details.
 
-  Authors: 
+  Authors:
     Christian Boulanger (@cboulanger) info@bibliograph.org
 
 ************************************************************************ */
@@ -47,7 +47,7 @@ qx.Class.define("bibliograph.ConfigManager", {
       nullable: true,
       event: "changeStore"
     },
-
+    
     /*
     * The config manager's data model which can be
     * bound to a data store.
@@ -59,86 +59,88 @@ qx.Class.define("bibliograph.ConfigManager", {
       apply: "_applyModel"
     }
   },
-
+  
   /*
   *****************************************************************************
     EVENTS
   *****************************************************************************
   */
   events: {
-    /* 
+    /*
     * Dispatched when the configuration data is ready
     */
     ready: "qx.event.type.Event",
-
-    /* 
+    
+    /*
     * Dispatched with the name of the changed config key when
     * the config value changes, regardless of whether the change
     * was caused be the client or server.
     */
     change: "qx.event.type.Data",
-
-    /* 
+    
+    /*
     * Dispatched  when the config value changes on the client.
-    * The evend data is a map with the keys 'key','value','old' 
+    * The evend data is a map with the keys 'key','value','old'
     */
     clientChange: "qx.event.type.Data"
   },
-
+  
   members: {
     /*
    ---------------------------------------------------------------------------
       PRIVATE MEMBERS
    ---------------------------------------------------------------------------
    */
-
+    
     _configSetup: false,
     _index: null,
-
+    
     /*
    ---------------------------------------------------------------------------
       APPLY METHODS
    ---------------------------------------------------------------------------
    */
-
+    
     _applyModel: function (model, old) {
-      if (model === null) return;
-
+      if (model === null) {
+       return;
+      }
+      
       // create index
       this._index = {};
-
+      
       let keys = model.getKeys();
       for (let i = 0; i < keys.length; i++) {
         let key = keys.getItem(i);
         this._index[key] = i;
         this.fireDataEvent("change", key);
       }
-
+      
       // attach event listener
       model.getValues().addListener(
-      "changeBubble",
-      function (event) {
-        let data = event.getData();
-        let key = model.getKeys().getItem(data.name);
-        if (data.value !== data.old) {
-          this.fireDataEvent("change", key);
-        }
-      },
-      this
+        "changeBubble",
+        function (event) {
+          let data = event.getData();
+          let key = model.getKeys().getItem(data.name);
+          if (data.value !== data.old) {
+            this.fireDataEvent("change", key);
+          }
+        },
+        this
       );
-
+      
       /*
        * inform the listeners that we're ready
        */
       this.fireEvent("ready");
     },
-
+    
     /*
    ---------------------------------------------------------------------------
      PRIVATE METHODS
    ---------------------------------------------------------------------------
    */
-
+    
     /**
      * Returns the numerical index for a config key
      * name
@@ -147,24 +149,26 @@ qx.Class.define("bibliograph.ConfigManager", {
      */
     _getIndex: function (key) {
       if (!this._index) {
-        this.error("Model has not yet finished loading.");
+        throw new Error("Configuration data has not loaded yet.");
       }
       let index = this._index[key];
-      if (index == undefined) {
+      if (index === undefined) {
         throw new Error("Invalid config key '" + key + "'.");
       }
       return index;
     },
-
+    
     /*
      ---------------------------------------------------------------------------
         API METHODS
      ---------------------------------------------------------------------------
      */
-
+    
     /**
      * Initializes the manager
+     *
      * @return bibliograph.ConfigManager Returns itself
+     * @param service
      */
     init: function (service) {
       // avoid duplicate bindings
@@ -173,40 +177,41 @@ qx.Class.define("bibliograph.ConfigManager", {
         return this;
       }
       this._configSetup = true;
-
+      
       // set default config store
       this.setStore(new qcl.data.store.JsonRpcStore("config"));
-
+      
       // bind the configuration store's data model to the manager's data model
       // so that it is copied over when loaded
       this.bind("store.model", this, "model");
-
+      
       // whenever a config value changes on the server, send it to server
-      this.addListener( "clientChange", e => {
+      this.addListener("clientChange", e => {
         let data = e.getData();
         this.getStore().execute("set", [data.key, data.value]);
       });
-      
-      //@todo subscribe to server message with config value change
       return this;
     },
-
+    
     /**
      * Loads configuration values from the server and configures auto-update
      * whenever the a value changes on the server. The config data has to be sent
      * in the following format:
-     * <pre>
+     * ````javascript
      * {
-    *   keys : [ ... array of the names of the configuration keys ],
-    *   values : [ ... array of the configuration values ... ]
-    * }
-     * </pre>
+     *   keys : [ ... array of the names of the configuration keys ]
+     *   values : [ ... array of the configuration values ... ]
+     * }
+     * ```
+     *
      * @return {Promise<Object>}
+     * @param callback
+     * @param context
      */
     load: function (callback, context) {
       return this.getStore().load(null, null, callback, context);
     },
-
+    
     /**
      * Checks if a config key exists
      * @param key {String}
@@ -220,7 +225,7 @@ qx.Class.define("bibliograph.ConfigManager", {
         return false;
       }
     },
-
+    
     /**
      * Returns a config value
      * @param key {String}
@@ -230,11 +235,26 @@ qx.Class.define("bibliograph.ConfigManager", {
       let index = this._getIndex(key);
       return this.getModel().getValues().getItem(index);
     },
-
+  
+    /**
+     * Returns a config value asynchronously once the configuration
+     * data has been loaded.
+     * @param key
+     * @return {Promise<*>}
+     */
+    getKeyAsync(key) {
+      return new Promise(resolve => {
+        if (this.getModel()) {
+          resolve(this.getKey(key));
+        }
+        this.addListener("ready", () => resolve(this.getKey(key)));
+      });
+    },
+    
     /**
      * Sets a config value and fire a 'clientChange' event.
      * @param key {String}
-     * @param value {Mixed}
+     * @param value {*}
      */
     setKey: function (key, value) {
       let index = this._getIndex(key);
@@ -249,7 +269,23 @@ qx.Class.define("bibliograph.ConfigManager", {
         });
       }
     },
-
+  
+    /**
+     * Sets a config value asynchronously once the configuration
+     * data has been loaded.
+     * @param key {String}
+     * @param value {*}
+     * @return {Promise<void>}
+     */
+    setKeyAsync(key, value) {
+      return new Promise(resolve => {
+        if (this.getModel()) {
+          resolve(this.setKey(key, value));
+        }
+        this.addListener("ready", () => resolve(this.setKey(key, value)));
+      });
+    },
+    
     /**
      * Binds a config value to a target widget property, optionally in both
      * directions.
@@ -263,37 +299,37 @@ qx.Class.define("bibliograph.ConfigManager", {
      *    is to be converted.
      * @return {void}
      */
-    bindKey: function (key, targetObject, targetPath, bidirectional=false, converter) {
+    bindKey: function (key, targetObject, targetPath, bidirectional = false, converter) {
       if (!this.getModel()) {
         this.addListenerOnce("ready", e => {
           this.bindKey(key, targetObject, targetPath, bidirectional);
         });
         return;
       }
-
+      
       if (!targetObject instanceof qx.core.Object) {
         this.error("Invalid target object.");
       }
-
+      
       if (!qx.lang.Type.isString(targetPath)) {
         this.error("Invalid target path.");
       }
-      /*
-       * if the target path is a property and not a property chain,
-       * use event listeners. This also solves a problem with a bug
-       * in the SigleValueBinding implementation,
-       * see http://www.nabble.com/Databinding-td24099676.html
-       */
+      
+      // if the target path is a property and not a property
+      // chain, use event listeners. This also solves a problem
+      // with a bug in the SigleValueBinding implementation,
+      // see http://www.nabble.com/Databinding-td24099676.html
+      
       if (targetPath.indexOf(".") === -1) {
         // set the initial value
         targetObject.set(targetPath, this.getKey(key));
-
+        
         // add a listener to update the target widget property when config value changes
-        this.addListener( "change", e => {
+        this.addListener("change", e => {
           let changeKey = e.getData();
           if (changeKey === key) {
             let value = this.getKey(key);
-            if (typeof converter === "function"){
+            if (typeof converter === "function") {
               value = converter(value, false);
             }
             //console.warn("Updating property "+targetPath+" from config key "+key+":"+this.getKey(key));
@@ -302,10 +338,10 @@ qx.Class.define("bibliograph.ConfigManager", {
         });
         // update config value if target widget property changes
         if (bidirectional) {
-          let eventName =  "change" + targetPath.substr(0, 1).toUpperCase() + targetPath.substr(1);
-          targetObject.addListener( eventName, e => {
+          let eventName = "change" + targetPath.substr(0, 1).toUpperCase() + targetPath.substr(1);
+          targetObject.addListener(eventName, e => {
             let value = e.getData();
-            if (typeof converter === "function"){
+            if (typeof converter === "function") {
               value = converter(value, true);
             }
             //console.warn("Updating config key "+key+" with "+value);
@@ -322,8 +358,7 @@ qx.Class.define("bibliograph.ConfigManager", {
         }
       }
     },
-
-
+    
     /**
      * Binds a config value to the selection of a widget that has a 'model' and
      * a 'selection' property (both must be a qx.data.Array).
@@ -332,19 +367,11 @@ qx.Class.define("bibliograph.ConfigManager", {
      * @param bidirectional
      * @todo implement
      */
-    bindKeyToSelection : function( key, target, bidirectional=false)
-    {
+    bindKeyToSelection: function (key, target, bidirectional = false) {
       throw new Error("Not implemented");
     }
-
+    
   },
-
-  /*
-  *****************************************************************************
-      DESTRUCTOR
-  *****************************************************************************
-  */
-
   destruct: function () {
     this._disposeArray("_index");
   }

@@ -2,8 +2,7 @@
 
 namespace app\modules\webservices;
 
-use app\modules\webservices\repositories\IConnector;
-use lib\util\Executable;
+use lib\plugin\PluginInterface;
 use Yii;
 use app\models\{
   Datasource, Role, Schema, User
@@ -20,18 +19,20 @@ use yii\web\UserEvent;
  * webservices module definition class
  * @property WebservicesDatasource[] $datasources
  */
-class Module extends \lib\Module
+class Module
+  extends \lib\Module
+  implements PluginInterface
 {
   /**
    * The version of the module
    * @var string
    */
-  protected $version = "0.1.0";
+  protected $version = "0.2.0";
 
   /**
    * A string constant defining the category for logging and translation
    */
-  const CATEGORY="webservices";
+  const CATEGORY="plugin.webservices";
 
   /**
    * @inheritdoc
@@ -98,7 +99,7 @@ class Module extends \lib\Module
   {
     $manager = Yii::$app->datasourceManager;
     foreach ($this->getConnectors() as $connector) {
-      $repoNamedId = self::CATEGORY . '_' . $connector->id;
+      $repoNamedId = 'webservices_' . $connector->id;
       $repoModel = Datasource::findByNamedId($repoNamedId);
       if( ! $repoModel ){
         $repoModel = $manager->create($repoNamedId, "webservices");
@@ -175,7 +176,7 @@ class Module extends \lib\Module
    * @param User $user
    */
   public function clearSearchData(User $user)
-  { 
+  {
     if( count($this->datasources )){
       try{
         $datasource = Datasource::getInstanceFor($this->datasources[0]->namedId);

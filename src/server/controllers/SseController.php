@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\controllers\traits\AuthTrait;
 use Yii;
 
 use lib\channel\Channel;
@@ -12,7 +13,7 @@ use app\models\Message;
 use app\controllers\AppController;
 use Sse\Event;
 
-// A simple time event to push server time to clients 
+// A simple time event to push server time to clients
 class TimeEvent implements Event {
   public function check(){
     return true;
@@ -25,6 +26,7 @@ class TimeEvent implements Event {
 
 class SseController extends \yii\web\Controller
 {
+  use AuthTrait;
   /**
    * Renders a pure HTML test client
    *
@@ -62,16 +64,18 @@ class SseController extends \yii\web\Controller
    * @return void
    */
   public function actionIndex()
-  { 
+  {
+    throw new \BadMethodCallException("Not implemented");
+
     try{
       $headers = getallheaders();
 
       $headers['X-Auth-Token'] = User::findOne(1)->token;
       $sessionId = $headers['X-Auth-Session-Id'] = Session::findOne(['UserId' => 1])->namedId;
-      for ($i=0; $i < 10; $i++) { 
+      for ($i=0; $i < 10; $i++) {
         (new Channel("foo",$sessionId ))->send("bar $i");
       }
-      
+
       if( ! isset( $headers['X-Auth-Token'] ) ){
         return $this->addData("No auth token. Pass it in the X-Auth-Token header.")
           ->addError("Access denied")->getResponse();
@@ -79,7 +83,7 @@ class SseController extends \yii\web\Controller
       if( ! isset( $headers['X-Auth-Session-Id'] ) ){
         return $this->addData("No session id. Pass it in the X-Auth-Session-Id header.")
           ->addError("Access denied")->getResponse();
-      }    
+      }
       $token = $headers['X-Auth-Token'];
       $user = User::findOne(['token' => $token]);
       if( ! $user ){
@@ -89,10 +93,12 @@ class SseController extends \yii\web\Controller
       if ( ! $user->active) {
         return $this->addData("User is deactivated.")
           ->addError("Access denied")->getResponse();
-      }    
+      }
       $session = Session::findOne(['UserId' => $user->id]);
       if( $session ) {
-        session_id( $session->namedId );      
+        Yii::$app->session->close();
+        Yii::$app->session->setId($session->namedId);
+        Yii::$app->session->open();
       } else {
         return $this->addData("data: No valid session id.")
           ->addError("Access denied")->getResponse();
@@ -109,7 +115,7 @@ class SseController extends \yii\web\Controller
   }
 
   /**
-   * Server Side Events source mainly for testing that will 
+   * Server Side Events source mainly for testing that will
    * return the current time
    * @return void
    */

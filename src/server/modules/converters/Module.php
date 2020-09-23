@@ -2,17 +2,21 @@
 
 namespace app\modules\converters;
 
+
 use app\models\ImportFormat;
 use app\modules\converters\import\AbstractParser;
+use lib\plugin\PluginInterface;
 use Yii;
 
-class Module extends \lib\Module
+class Module
+  extends \lib\Module
+  implements PluginInterface
 {
 
   /**
    * A string constant defining the category for logging and translation
    */
-  const CATEGORY="converters";
+  const CATEGORY="plugin.converters";
 
   /**
    * The version of the module

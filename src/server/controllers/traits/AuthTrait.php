@@ -17,7 +17,6 @@ use app\models\{
 /**
  * Trait AuthTrait
  * @package app\controllers\traits
- * @todo Rework "noAuthActions" property
  */
 trait AuthTrait
 {
@@ -38,89 +37,9 @@ trait AuthTrait
     return $this->noAuthActions ?? [];
   }
 
-  //-------------------------------------------------------------
-  // Overridden methods
-  //-------------------------------------------------------------
-
-
-  // public function behaviors()
-  // {
-  //   return [
-  //     'authenticator' => [
-  //       'class' => \yii\filters\auth\CompositeAuth::className(),
-  //       'authMethods' => [
-  //         [
-  //           'class' => \yii\filters\auth\HttpBearerAuth::className(),
-  //           'except' => ['authenticate']
-  //         ]
-  //       ],
-  //     ]
-  //   ];
-  // }
-
-
-  /**
-   * Filter method to protect action methods from unauthorized access.
-   * Uses the JSONRPC 2.0 auth extension or the 'auth' query string parameter
-   * as fallback.
-   *
-   * @param \yii\base\Action $action
-   * @return bool True if action can proceed, false if not
-   * @throws \yii\web\BadRequestHttpException
-   * @throws \yii\db\Exception
-   */
-  public function beforeAction($action)
-  {
-    if (!parent::beforeAction($action)) {
-      return false;
-    }
-
-    // actions without authentication
-    if (in_array($action->id, $this->noAuthActions)) {
-      return true;
-    }
-
-    // on-the-fly authentication with access token
-    // first try GET Parameter, then headers
-    $token = Yii::$app->request->get('auth_token')
-          ?? Yii::$app->request->post('auth_token');
-    if ( ! $token ){
-      $headers = Yii::$app->request->headers;
-      $tryHeaders = ["Authorization","X-Authorization"];
-      foreach ($tryHeaders as $header) {
-        if ($headers->has($header)) {
-          $token = trim( str_replace("Bearer", "", $headers->get($header) ) );
-        }
-      }
-    }
-    $user = User::findIdentityByAccessToken($token);
-    if (!$token or ! $user or ! $user->active ) {
-      Yii::info("No or invalid authorization token '$token'. Access denied.");
-      return false;
-      // @todo this doesn't work:
-      // throw new Exception('Missing authentication', AuthException::INVALID_REQUEST);
-    }
-
-    // log in user
-    $user->online = 1;
-    // FIXME!
-    $user->anonymous = (int)$user->anonymous;
-    $user->active = (int) $user->active;
-    $user->save();
-    Yii::$app->user->setIdentity($user);
-    /** @var Session $session */
-    $session = $this->continueUserSession( $user );
-    if ($session) {
-      $session->touch();
-    }
-    $sessionId = $this->getSessionId();
-    Yii::info("Authorized user '{$user->namedId}' via auth auth token (Session {$sessionId}).","auth");
-    return true;
-  }
-
   /**
    * Shorthand getter for active user object
-   * @return \app\models\User
+   * @return User
    */
   public function getActiveUser()
   {
@@ -169,22 +88,10 @@ trait AuthTrait
   }
 
   /**
-   * Tries to continue an existing session
-   *
-   * @param User $user
-   * @return Session|null
-   *    The session object to be reused, or null if none exists.
+   * Shorthand to reset the current session and generate a new session id
    */
-  protected function continueUserSession($user)
-  {
-    $session = Session::findOne(['UserId' => $user->id]);
-    if ($session) {
-      // manually set session id to recover the session data
-      // TODO this doesn't work if old stale sessions are still in the database, revisit this
-      //session_id( $session->namedId );
-    }
-    Yii::$app->session->open();
-    return $session;
+  public function resetSession() {
+    Yii::$app->session->regenerateID();
   }
 
   /**
@@ -194,5 +101,27 @@ trait AuthTrait
   public function getSessionId()
   {
     return Yii::$app->session->getId();
+  }
+
+  /**
+   * This deletes the given session. Unless the second argument is true, delete
+   * the corresponding user if it is an anonymous user and this is the only session.
+   * @param string $sessionId
+   * @param bool $doNotDeleteAnonymousUser
+   * @throws \Throwable
+   * @throws \yii\db\StaleObjectException
+   */
+  public function deleteSessionIfExists($sessionId, $doNotDeleteAnonymousUser=false) {
+    $session = Session::findOne($sessionId);
+    if ($session) {
+      if (!$doNotDeleteAnonymousUser) {
+        /** @var User $user */
+        $user = $session->getUser()->one();
+        if ($user->isAnonymous() and $user->getSessions()->count() === 1) {
+          $user->delete();
+        }
+      }
+      $session->delete();
+    }
   }
 }

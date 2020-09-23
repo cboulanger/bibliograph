@@ -1,0 +1,81 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: z3950\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-01-22 22:37+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgctxt "plugin.z3950"
+msgid "The server does not understand the query \"%s\". Please try a different query."
+msgstr "Der Server versteht die Abfrage '%s' nicht. Bitte versuchen Sie eine andere Abfrage."
+
+msgctxt "plugin.z3950"
+msgid "Server does not support a convertable format."
+msgstr "Der Server unterstützt das gewählte Format nicht."
+
+msgctxt "plugin.z3950"
+msgid "Waiting for remote server..."
+msgstr "Abfrage läuft, bitte warten..."
+
+msgctxt "plugin.z3950"
+msgid "Server error: %s"
+msgstr "Serverfehler: %s"
+
+msgctxt "plugin.z3950"
+msgid "No results."
+msgstr "Keine Ergebnisse."
+
+msgctxt "plugin.z3950"
+msgid "The number of results is higher than %s records. Please narrow down your search."
+msgstr "Die Anzahl der Ergebnisse übersteigt %s. Bitte grenzen Sie ihre Abfrage ein."
+
+msgctxt "plugin.z3950"
+msgid "%s records found."
+msgstr "%s Datensätze wurden gefunden."
+
+msgctxt "plugin.z3950"
+msgid "Retrieving %s of %s records..."
+msgstr "Datensatz %s/%s wird abgerufen..."
+
+msgctxt "plugin.z3950"
+msgid "Server timeout trying to retrieve %s records: try a more narrow search"
+msgstr "Der Server braucht zu lange, um %s Datensätze zur übertragen. Bitte grenzen Sie Ihre Abfrage ein."
+
+msgctxt "plugin.z3950"
+msgid "Formatting records..."
+msgstr "Die Datensätze werden formatiert..."
+
+msgctxt "plugin.z3950"
+msgid "Cannot convert server response"
+msgstr "Die Antwort des Servers kann nicht konvertiert werden."
+
+msgctxt "plugin.z3950"
+msgid "hits"
+msgstr "Ergebnisse"
+
+msgctxt "plugin.z3950"
+msgid "Cannot connect to server: '{error}'."
+msgstr "Kann mich nicht mit dem Server verbinden: '{error}'."
+
+msgctxt "plugin.z3950"
+msgid "Invalid query '{query}'"
+msgstr "Ungültige Abfrage '{query}'"
+
+msgctxt "plugin.z3950"
+msgid "Server timed out."
+msgstr "Zeitüberschreitung bei der Anfrage."
+
+msgctxt "plugin.z3950"
+msgid "Server timed out. Trying again..."
+msgstr "Zeitüberschreitung bei der Anfrage. Versuche es erneut…"
+
+msgctxt "plugin.z3950"
+msgid "The server does not understand the query '{query}'. Please try a different query."
+msgstr "Der Server versteht die Anfrage '{query}' nicht. Versuchen Sie es mit einer anderen Anfrage."
+

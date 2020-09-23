@@ -77,7 +77,7 @@ qx.Class.define("qcl.access.UserManager",
     _applyModel: function (model, old) {
       if (model) {
         if (this.getActiveUser()) {
-          this.logout();
+          this.reset();
         }
         
         // create user
@@ -121,7 +121,7 @@ qx.Class.define("qcl.access.UserManager",
     /**
      * removes all permission, role and user information
      */
-    logout: function () {
+    reset: function () {
       if (this.getActiveUser()) {
         this.getActiveUser().revokePermissions();
         this.setActiveUser(null);

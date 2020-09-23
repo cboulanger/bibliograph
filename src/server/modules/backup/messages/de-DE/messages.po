@@ -4,6 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
+msgctxt "plugin.backup"
 msgid ""
 msgstr ""
 "Project-Id-Version: backup\n"
@@ -17,41 +18,54 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgctxt "plugin.backup"
 msgid "Backup has been created."
 msgstr "Backup wurde erstellt."
 
+msgctxt "plugin.backup"
 msgid "Do you really want to replace Database '{datasource}' with a backup?"
 msgstr "Wollen Sie wirklich Datenbank '{datasource}' mit einer Sicherung ersetzen?"
 
+msgctxt "plugin.backup"
 msgid "Backup from "
 msgstr "Sicherung vom"
 
+msgctxt "plugin.backup"
 msgid "Please select the backup set to restore into database '{datasource}'"
 msgstr "Bitte wählen Sie die Sicherung aus, die in Datenbank '{datasource}' zurückgespielt werden soll."
 
+msgctxt "plugin.backup"
 msgid "Backup file does not exist."
 msgstr "Sicherungsdatei existiert nicht."
 
+msgctxt "plugin.backup"
 msgid "Delete backups older than"
 msgstr "Sicherungen löschen, die älter sind als"
 
+msgctxt "plugin.backup"
 msgid "Delete backups of datasource '{datasource}':"
 msgstr "Sicherungen der Datenbank '{datasource}' löschen?"
 
+msgctxt "plugin.backup"
 msgid "No backups found."
 msgstr "Keine Sicherungen gefunden."
 
+msgctxt "plugin.backup"
 msgid "Really delete {count} backups?"
 msgstr "Wirklich {count} Sicherungen löschen?"
 
+msgctxt "plugin.backup"
 msgid "{count} backups were deleted."
 msgstr "{count} Sicherungen wurden gelöscht."
 
+msgctxt "plugin.backup"
 msgid "There was a problem. Please examine the log file."
 msgstr "Es ist ein Problem aufgetreten, das in der Logdatei protokolliert wurde."
 
+msgctxt "plugin.backup"
 msgid "Choose file:"
 msgstr "Datei auswählen"
 
+msgctxt "plugin.backup"
 msgid "Please select the backup set of datasource '{datasource}' to download"
 msgstr "Bitte wählen Sie die Sicherung von Datenbank '{datasource}' aus, die heruntergeladen werden soll."

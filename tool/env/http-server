@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+# controls the apache-php server in the docker-phpfarm container
+
+source tool/env/check
+
+case $1 in
+start)
+  if [ "$(docker ps -f name=http_server -q -a)" == "" ]; then
+    echo ">>> Starting apache/php server in docker container ..."
+    docker run --name http_server \
+      -v $PWD:/var/www:cached \
+      -v $PWD/data/docker/http/root:/root:delegated \
+      -e APACHE_UID=$UID \
+      -p 8070:8070 \
+      -p 8071:8071 \
+      -p 8072:8072 \
+      -p 8073:8073 \
+      -p 8074:8074 \
+      --detach \
+      cboulanger/docker-phpfarm \
+      > /dev/null
+  else
+    echo ">>> Restarting apache/php server ..."
+    docker start http_server > /dev/null
+  fi
+  if [ $? != 0 ]; then
+    >&2 echo 'ERROR: http server could not be started.'
+    exit 1
+  fi
+  [ -d $PWD/data/docker/http ] || mkdir -p $PWD/data/docker/http
+  docker logs -f http_server &> $PWD/log/http/combined.log &
+  echo "Server started. PHP Versions 7.0-7.4 on ports 8070-8074."
+  ;;
+stop)
+  echo ">>> Stopping http server..."
+  docker stop http_server > /dev/null
+  docker rm http_server > /dev/null
+  if [ $? != 0 ]; then
+    >&2 echo 'ERROR: http server could not be stopped.'
+    exit 1
+  fi
+  echo "Server stopped."
+  ;;
+status)
+  # This only checks if the server containter is running,
+  # there is currently no check if the server is actually running inside container
+  if [ "$(docker ps -f name=http_server -q -a)" != "" ]; then
+    echo "Server container is running."
+  else
+    echo "Server container is not running."
+  fi
+  ;;
+*)
+  echo "Syntax: tool/env/http_server (start|stop|status)"
+esac

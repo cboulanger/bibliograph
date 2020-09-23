@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+[[ -z "$FUNCTIONS_LOADED" ]] && source tool/lib/functions.sh
+source tool/env/envvars-load
+
+echo ">>> Testing MySQL service"
+docker exec mysql_server cat /etc/os-release | grep VERSION=
+
+echo -n ">>> Checking if MySQL server is ready..."
+COUNTER=0
+TIMEOUT=10
+while ! docker exec mysql_server mysqladmin ping --silent; do
+  sleep 1
+  let "COUNTER+=1"
+  if [[ $COUNTER == $TIMEOUT ]]; then
+    echo "Timeout."
+    exit 1
+  fi
+done
+echo "${CHECKMARK}"
+
+echo -n ">>> Checking mysql root access via the MySQL service container ... "
+output=$(tool/dev/mysql-client -uroot -p$DB_ROOT_PASSWORD --version)
+if [ $? -ne 0 ]; then echo "$CROSSMARK"; log_error $output; exit 1; fi
+echo "${CHECKMARK}"
+echo "$output"
+
+echo -n ">>> Checking mysql root access connection from PHP in the HTTP-Server container using $DB_HOST:$DB_PORT ... "
+tool/dev/php -r "if(!@mysqli_connect('$DB_HOST', 'root', '$DB_ROOT_PASSWORD', '', $DB_PORT)){echo '$CROSSMARK' . PHP_EOL .'${COLOR_RED}Error: '.mysqli_connect_error().PHP_EOL.'${STYLE_RESET}';exit(1);}"
+echo "${CHECKMARK}"

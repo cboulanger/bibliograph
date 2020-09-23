@@ -1,0 +1,138 @@
+{
+  "eslintConfig": {
+    "globals": {
+      "JSZip": false
+    },
+    "parserOptions": {
+      "ecmaVersion": 2017
+    }
+  },
+  "libraries": [
+    "src/client/bibliograph",
+    "src/server/modules/z3950/client",
+    "src/server/modules/webservices/client",
+    "src/server/modules/backup/client",
+    "src/lib/incubator.qx.io.jsonrpc"
+  ],
+  "environment": {
+    "qx.icontheme": "Tango",
+    "module.objectid": true,
+    "app.version": "3.0.0-beta.79",
+    "app.serverUrl": "/server/web/?r="
+  },
+  "locales": [
+    "en",
+    "de"
+  ],
+  "defaultTarget": "source",
+  "targets": [
+    {
+      "description": "A source build to be deployed for debugging purposes",
+      "type": "dist-debug",
+      "environment": {
+        "app.mode": "development",
+        "app.serverUrl": "server.php?r="
+      },
+      "outputPath": "compiled/dist-debug",
+      "targetClass": "SourceTarget",
+      "bundle": {
+        "include": [
+          "qx.*",
+          "qxl.*",
+          "qookery.*"
+        ],
+        "exclude": [
+          "qx.util.*"
+        ]
+      }
+    }
+
+  ],
+  "applications": [
+    {
+      "title": "Bibliograph Bibliographic Data Manager",
+      "name": "bibliograph",
+      "theme": "bibliograph.theme.Theme",
+      "class": "bibliograph.Application",
+      "bootPath": "source/boot",
+      "include": [
+        "bibliograph.plugins.*"
+      ],
+      "environment": {}
+    },
+    {
+      "title": "Bibliograph Bibliographic Data Manager (test mode, with event ecorder)",
+      "name": "bibliograph-recorder",
+      "theme": "bibliograph.theme.Theme",
+      "class": "bibliograph.Application",
+      "bootPath": "source/boot",
+      "include": [
+        "bibliograph.plugins.*",
+        "cboulanger.eventrecorder.UiController",
+        "cboulanger.eventrecorder.ObjectIdGenerator",
+        "cboulanger.eventrecorder.ObjectIdTooltip",
+        "qookery.*",
+        "qookery.ace.*"
+      ],
+      "environment": {
+        "app.serverUrl": "/server/tests/?r=",
+        "eventrecorder.enabled": true,
+        "eventrecorder.mode": "presentation",
+        "eventrecorder.autoplay": false
+      }
+    },
+    {
+      "title": "Bibliograph Bibliographic Data Manager (test mode, with script player)",
+      "name": "bibliograph-player",
+      "theme": "bibliograph.theme.Theme",
+      "class": "bibliograph.Application",
+      "bootPath": "source/boot",
+      "include": [
+        "bibliograph.plugins.*",
+        "cboulanger.eventrecorder.UiController"
+      ],
+      "environment": {
+        "app.serverUrl": "/server/tests/?r=",
+        "eventrecorder.enabled": true,
+        "eventrecorder.hidden": true,
+        "eventrecorder.mode": "presentation",
+        "eventrecorder.autoplay": true,
+        "eventrecoreder.gist_id": ""
+      }
+    },
+    {
+      "title": "Bibliograph API Viewer",
+      "class": "qxl.apiviewer.Application",
+      "theme": "qxl.apiviewer.Theme",
+      "name": "apiviewer",
+      "environment": {
+        "qx.icontheme": "Tango",
+        "excludeFromAPIViewer": [
+          "qx.*",
+          "qxl.apiviewer.*"
+        ]
+      },
+      "exclude": [
+        "qx.test.*",
+        "qx.module.Blocker",
+        "qx.module.Placement"
+      ]
+    },
+    {
+      "class": "qxl.testtapper.Application",
+      "name": "testtapper",
+      "theme": "qx.theme.Simple",
+      "title": "Qooxdoo TestTAPper",
+      "environment": {
+        "qx.icontheme": "Tango",
+        "testtapper.testNameSpace": "bibliograph.test"
+      },
+      "include": [
+        "bibliograph.test.*"
+      ],
+      "exclude": []
+    }
+
+  ],
+  "$schema": "https://qooxdoo.org/schema/compile-1-0-0.json"
+}

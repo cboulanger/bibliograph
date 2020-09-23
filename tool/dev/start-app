@@ -1,0 +1,71 @@
+#!/bin/bash
+
+# Compiles and starts the given app in the browser in development mode
+# Requires that all environment variables are set beforehand, only the application name
+# can be passed via argument
+
+set -o errexit
+[ -z "$FUNCTIONS_LOADED" ] && source tool/lib/functions.sh
+
+BUILD_TARGET=${BUILD_TARGET:-source}
+
+# Application name
+APP_NAME=${1:-$APP_NAME}
+
+[ -z "$APP_NAME" ] && exit_with_error "You must pass the application name as an argument or set the APP_NAME environment var."
+[ -z "$BUILD_CONFIG_FILE" ] && exit_with_error "You need to set the BUILD_CONFIG_FILE environment var."
+
+# Application URL
+if [[ -z "$APP_URL" ]]; then
+  PORT="80${PHP_VERSION/\./}"
+  APP_URL=http://localhost:$PORT/compiled/$BUILD_TARGET/$APP_NAME
+fi
+
+# Attach query string if set
+if [[ "$APP_URL_QUERY" != "" ]]; then
+  APP_URL=${APP_URL}${APP_URL_QUERY}
+fi
+
+# Compiler arguments
+COMPILE_ARGS="--target=$BUILD_TARGET --watch --feedback=0 -c $BUILD_CONFIG_FILE"
+if [[ $VERBOSE == 1 ]]; then
+  COMPILE_ARGS="--verbose $COMPILE_ARGS"
+fi
+if [[ $BUILD_CLEAN == 1 ]]; then
+  COMPILE_ARGS="--clean $COMPILE_ARGS"
+fi
+
+# Run continuous compilation
+MADE=false
+echo ">>> Compiling application '$APP_NAME', using config file '$BUILD_CONFIG_FILE' and '$BUILD_TARGET' target ..."
+while read output; do
+  echo "$output"
+  # wait for "made" event message to resume script
+  if [[ $output == *"Applications are made"* ]]; then
+    MADE=true
+    break;
+  fi;
+  if [[ $output == *"Could not install"* ]]; then
+    break;
+  fi;
+done < <(npx qx compile $COMPILE_ARGS & )
+
+if [[ $MADE == false ]]; then
+  echo "Compilation failed."
+  exit 1
+fi
+
+sleep 3
+
+echo ">>> Started continuous compilation process."
+
+# Open app in browser
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  echo ">>> Opening app in browser at $APP_URL"
+  open -a "Google Chrome" "$APP_URL"
+  # send Alt+Command+I to open Web inspector
+  osascript -e 'tell application "System Events" to keystroke "i" using {option down, command down}'
+fi
+
+# idle waiting for abort from user
+read -r -d '' _ </dev/tty

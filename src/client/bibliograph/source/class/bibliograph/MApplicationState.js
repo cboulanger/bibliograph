@@ -4,22 +4,22 @@
 
   http://www.bibliograph.org
 
-  Copyright: 
+  Copyright:
     2018 Christian Boulanger
 
-  License: 
+  License:
     MIT license
     See the LICENSE file in the project's top-level directory for details.
 
-  Authors: 
+  Authors:
     Christian Boulanger (@cboulanger) info@bibliograph.org
 
 ************************************************************************ */
 
 /**
  * This mixin holds the properties and logic of the application state, which
- * is stores as properties of the application object. This should really be 
- * its own class. 
+ * is stores as properties of the application object. This should really be
+ * its own class.
  */
 qx.Mixin.define("bibliograph.MApplicationState", {
   /**
@@ -35,7 +35,7 @@ qx.Mixin.define("bibliograph.MApplicationState", {
       apply: "_applyDatasource",
       event: "changeDatasource"
     },
-
+    
     /**
      * The name of the datasource as it should appear in the UI
      * @todo remove
@@ -46,17 +46,17 @@ qx.Mixin.define("bibliograph.MApplicationState", {
       event: "changeDatasourceLabel",
       apply: "_applyDatasourceLabel"
     },
-
+    
     /**
      * The id of the currently displayed model record
      */
     modelId: {
-      check: "Integer",
+      check: qcl.util.Check.isNumberOrStringNullable,
       nullable: true,
       apply: "_applyModelId",
       event: "changeModelId"
     },
-
+    
     /**
      * The type of the currently displayed model record
      */
@@ -66,17 +66,17 @@ qx.Mixin.define("bibliograph.MApplicationState", {
       apply: "_applyModelType",
       event: "changeModelType"
     },
-
+    
     /**
      * The current folder id
      */
     folderId: {
-      check: "Integer",
+      check: qcl.util.Check.isNumberOrStringNullable,
       nullable: true,
       apply: "_applyFolderId",
       event: "changeFolderId"
     },
-
+    
     /**
      * The current query
      */
@@ -86,7 +86,7 @@ qx.Mixin.define("bibliograph.MApplicationState", {
       apply: "_applyQuery",
       event: "changeQuery"
     },
-
+    
     /**
      * The currently active item view
      */
@@ -96,7 +96,7 @@ qx.Mixin.define("bibliograph.MApplicationState", {
       event: "changeItemView",
       apply: "_applyItemView"
     },
-
+    
     /**
      * The ids of the currently selected rows
      */
@@ -106,7 +106,7 @@ qx.Mixin.define("bibliograph.MApplicationState", {
       event: "changeSelectedIds",
       apply: "_applySelectedIds"
     },
-
+    
     /**
      * The name of the theme
      * currently not used, because only the modern theme functions
@@ -118,7 +118,7 @@ qx.Mixin.define("bibliograph.MApplicationState", {
       apply: "_applyTheme",
       init: "Modern"
     },
-
+    
     /**
      * Target for inserting something from an external source into a
      * TextField or TextArea widget
@@ -128,15 +128,15 @@ qx.Mixin.define("bibliograph.MApplicationState", {
       nullable: true
     }
   },
-
+  
   /**
-   * Events provided by this mixin 
+   * Events provided by this mixin
    */
   events: {
     /** Fired when something happens */
     changeState: "qx.event.type.Data"
   },
-
+  
   /**
    * Methods provided by this mixin
    */
@@ -146,21 +146,24 @@ qx.Mixin.define("bibliograph.MApplicationState", {
        APPLY METHODS: synchronize state with property etc.
     ---------------------------------------------------------------------------
     */
-
+    
     /**
      * Applies the datasource property
+     *
+     * @param value
+     * @param old
      */
-    _applyDatasource: function(value, old) {
+    _applyDatasource: function (value, old) {
       var stateMgr = this.getStateManager();
-
+      
       // reset all states that have been connected
       // with the datasource if a previous datasource
       // has been loaded
       // @todo hide search box when no datasource is selected
       if (old) {
-        this.getWidgetById("app/treeview").clearSelection();
-        this.setModelId(0);
-        this.setFolderId(0);
+        qx.core.Id.getQxObject("folder-tree-panel/tree-view").clearSelection();
+        this.setModelId(null);
+        this.setFolderId(null);
         this.setSelectedIds([]);
         this.setQuery(null);
       }
@@ -168,57 +171,62 @@ qx.Mixin.define("bibliograph.MApplicationState", {
         stateMgr.setState("datasource", value);
         let datasourcesStore = bibliograph.store.Datasources.getInstance();
         let model = datasourcesStore.getModel();
-        if( model ) {
+        if (model) {
           this.__setApplicationTitleFromDatasourceModel(model, value);
         } else {
-          datasourcesStore.addListenerOnce("loaded", e =>{
+          datasourcesStore.addListenerOnce("loaded", e => {
             this.__setApplicationTitleFromDatasourceModel(e.getData(), value);
           });
         }
       } else {
         stateMgr.removeState("datasource");
-        this.setDatasourceLabel(this.getApplication().getConfigManager().getKey("application.title"));        
+        this.setDatasourceLabel(this.getApplication().getConfigManager().getKey("application.title"));
       }
-      // Since permissions depend on the datasource, reload them. 
-      this.getAccessManager().load().then(()=>{
-        qx.event.Timer.once(()=>this.getWidgetById("app/treeview").setSelectedNode(null),null,1000);
+      // Since permissions depend on the datasource, reload them.
+      this.getAccessManager().load().then(() => {
+        qx.event.Timer.once(() => qx.core.Id.getQxObject("folder-tree-panel/tree-view").setSelectedNode(null), null, 1000);
       });
     },
     
-    __setApplicationTitleFromDatasourceModel : function(model,value){
-      if( model ){
-        model.forEach( item => {
-          if(item.getValue()===value) {
+    __setApplicationTitleFromDatasourceModel: function (model, value) {
+      if (model) {
+        model.forEach(item => {
+          if (item.getValue() === value) {
             this.getApplication().setDatasourceLabel(item.getTitle());
           }
         });
       }
     },
     
-
     /**
      * Displays the name of the current datasource
+     *
+     * @param value
+     * @param old
      */
-    _applyDatasourceLabel: function(value, old) {
+    _applyDatasourceLabel: function (value, old) {
       if (!value) {
         value = this.getConfigManager().getKey("application.title");
       }
-      if( qx.core.Environment.get("app.mode")==="development"){
+      if (qx.core.Environment.get("app.mode") === "development") {
         value += " (DEVELOPMENT)";
       }
       window.document.title = value;
       this.getWidgetById("app/toolbar/title").setValue(
-        '<span style="font-size:1.2em;font-weight:bold">' + value + "</spsn>"
+        "<span style=\"font-size:1.2em;font-weight:bold\">" + value + "</spsn>"
       );
     },
-
+    
     /**
      * Applies the folderId property
+     *
+     * @param value
+     * @param old
      */
-    _applyFolderId: function(value, old) {
+    _applyFolderId: function (value, old) {
       var stmgr = this.getStateManager();
       stmgr.setState("modelId", 0);
-      if (parseInt(value)) {
+      if (value && value !== "null" && value !== "0") {
         stmgr.setState("folderId", value);
         stmgr.setState("query", "");
         stmgr.removeState("query");
@@ -226,23 +234,29 @@ qx.Mixin.define("bibliograph.MApplicationState", {
         stmgr.removeState("folderId");
       }
     },
-
+    
     /**
      * Applies the query property
+     *
      * @todo Searchbox widget should observe query state instead of
      * query state binding the searchbox.
+     * @param value
+     * @param old
      */
-    _applyQuery: function(value, old) {
+    _applyQuery: function (value, old) {
       this.getStateManager().setState("query", value);
-      if (! value ||! this.getDatasource()) {
+      if (!value || !this.getDatasource()) {
         this.getStateManager().removeState("query");
       }
     },
-
+    
     /**
      * Applies the modelType property
+     *
+     * @param value
+     * @param old
      */
-    _applyModelType: function(value, old) {
+    _applyModelType: function (value, old) {
       if (old) {
         this.getStateManager().setState("modelId", 0);
       }
@@ -252,40 +266,52 @@ qx.Mixin.define("bibliograph.MApplicationState", {
         this.getStateManager().removeState("modelType");
       }
     },
-
+    
     /**
      * Applies the modelId property
+     *
+     * @param value
+     * @param old
      */
-    _applyModelId: function(value, old) {
-      if (parseInt(value)) {
+    _applyModelId: function (value, old) {
+      if (value && value !== "null" && value !== "0") {
         this.getStateManager().setState("modelId", value);
       } else {
         this.getStateManager().removeState("modelId");
       }
     },
-
+    
     /**
      * Applies the itemView property
+     *
+     * @param value
+     * @param old
      */
-    _applyItemView: function(value, old) {
+    _applyItemView: function (value, old) {
       if (value) {
         this.getStateManager().setState("itemView", value);
       } else {
         this.getStateManager().removeState("itemView");
       }
     },
-
+    
     /**
      * Applies the selectedIds property. Does nothing.
+     *
+     * @param value
+     * @param old
      */
-    _applySelectedIds: function(value, old) {
+    _applySelectedIds: function (value, old) {
       //console.log(value);
     },
-
+    
     /**
      * Applies the theme property. Does nothing.
+     *
+     * @param value
+     * @param old
      */
-    _applyTheme: function(value, old) {
+    _applyTheme: function (value, old) {
       //qx.theme.manager.Meta.getInstance().setTheme(qx.theme[value]);
     }
   }

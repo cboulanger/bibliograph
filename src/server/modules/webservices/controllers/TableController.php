@@ -104,7 +104,7 @@ class TableController extends AppController
    * Sets datasources active / inactive, so that they do not show up in the
    * list of servers
    * param array $map Maps datasource ids to status
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    * @throws UserErrorException
    * @todo add DTO
    */
@@ -137,7 +137,6 @@ class TableController extends AppController
    *   )
    * )
    * return array ( 'rowCount' => row count )
-   * @todo Add DTOs
    */
   function actionRowCount(\stdClass $queryData)
   {
@@ -154,7 +153,7 @@ class TableController extends AppController
       throw new UserErrorException(Yii::t(Module::CATEGORY, "No search data exists."));
     }
     $hits = $search->hits;
-    Yii::debug("$hits hits.", Module::CATEGORY, __METHOD__);
+    Yii::debug("$hits hits.", Module::CATEGORY);
     return array(
       'rowCount' => $hits,
       'statusText' => Yii::t(Module::CATEGORY, "{number} hits", ['number' => $hits])
@@ -204,17 +203,17 @@ class TableController extends AppController
       'datasource' => $datasourceName
     ]);
     if (!$search) {
-      Yii::debug("Cache says we have no entry for query '$query'. Aborting.", Module::CATEGORY, __METHOD__);
+      Yii::debug("Cache says we have no entry for query '$query'. Aborting.", Module::CATEGORY);
       throw new \RuntimeException(Yii::t(Module::CATEGORY, "No search data exists."));
     }
     $hits = $search->hits;
-    Yii::debug("Cache says we have $hits hits for query '$query'.", Module::CATEGORY, __METHOD__);
+    Yii::debug("Cache says we have $hits hits for query '$query'.", Module::CATEGORY);
 
     // try to find already downloaded records and return them as rowData
     $searchId = $search->id;
     $lastRow = max($lastRow, $hits - 1);
 
-    Yii::debug("Getting records from cache for search #$searchId, rows $firstRow-$lastRow...", Module::CATEGORY, __METHOD__);
+    Yii::debug("Getting records from cache for search #$searchId, rows $firstRow-$lastRow...", Module::CATEGORY);
 
     // get row data from cache
     $rowData = Record::find()

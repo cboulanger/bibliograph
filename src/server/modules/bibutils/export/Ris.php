@@ -20,11 +20,11 @@
 ************************************************************************ */
 
 namespace app\modules\bibutils\export;
+use app\modules\bibutils\Module;
 use app\modules\converters\export\AbstractExporter;
 use app\modules\converters\export\BibliographBibtex;
 use app\models\Reference;
 use lib\exceptions\UserErrorException;
-use lib\util\Executable;
 
 /**
  * Exports RIS-formatted data
@@ -83,9 +83,9 @@ class Ris extends AbstractExporter
   {
     $bibliographBibtex = (new BibliographBibtex())->export($references);
     try {
-      $mods = (new Executable("bib2xml", BIBUTILS_PATH))->call("-u", $bibliographBibtex);
+      $mods = Module::createCmd("bib2xml")->call("-u", $bibliographBibtex);
       //Yii::debug($mods, Module::CATEGORY, __METHOD__);
-      $ris = (new Executable("xml2ris", BIBUTILS_PATH ))->call("", $mods);
+      $ris = Module::createCmd("xml2ris")->call("", $mods);
     } catch (\Exception $e) {
       throw new UserErrorException($e->getMessage());
     }

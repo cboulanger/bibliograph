@@ -16,14 +16,12 @@
  * Christian Boulanger (cboulanger)
 
  ************************************************************************ */
- 
-/*global qx qcl*/
 
 /**
  * Marshaler for data for qx.ui.treevirtual.Table
  * @ignore(qx.data.model.Table)
  */
-qx.Class.define("qcl.data.marshal.Table", 
+qx.Class.define("qcl.data.marshal.Table",
 {
   extend : qx.core.Object,
 
@@ -35,11 +33,10 @@ qx.Class.define("qcl.data.marshal.Table",
   */
   
   /**
-   * @param delegate {Object} An object containing one of the methods described 
+   * @param delegate {Object} An object containing one of the methods described
    *   in {@link qx.data.store.IStoreDelegate}.
    */
-  construct : function(delegate)
-  {
+  construct : function(delegate) {
     this.base(arguments);
     this.__delegate = delegate;
     this.setQueryParams([]);
@@ -49,11 +46,11 @@ qx.Class.define("qcl.data.marshal.Table",
   *****************************************************************************
      PROPERTIES
   *****************************************************************************
-  */  
+  */
   
   properties :
   {
-    /**  
+    /**
     * Additional parameters passed to both "getRowCount" and "getRowData"
     * methods.
     */
@@ -62,9 +59,9 @@ qx.Class.define("qcl.data.marshal.Table",
      check : "Array",
      nullable : true,
      init : null
-   },    
+   },
 
-   /** 
+   /**
     * name of the jsonrpc service method that determines row count
     * defaults to "getRowCount"
     */
@@ -75,7 +72,7 @@ qx.Class.define("qcl.data.marshal.Table",
      init : "row-count"
    },
 
-   /** 
+   /**
     * Name of the jsonrpc service method that retrieves the row data
     * defaults to "getRowData"
     */
@@ -84,7 +81,7 @@ qx.Class.define("qcl.data.marshal.Table",
      check : "String",
      nullable : false,
      init : "row-data"
-   }   
+   }
   },
 
   /*
@@ -98,18 +95,17 @@ qx.Class.define("qcl.data.marshal.Table",
     __delegate : null,
 
     /**
-     * Creates for the given data the needed classes. 
-     * 
+     * Creates for the given data the needed classes.
+     *
      * @see qx.data.store.IStoreDelegate
-     * 
+     *
      * @param data {Object} The object for which classes should be created.
      * @param includeBubbleEvents {Boolean} Whether the model should support
      *   the bubbling of change events or not.
      */
     toClass: function(data) {
-
       // class already exists
-      if (qx.Class.isDefined("qx.data.model.Table" )) {
+      if (qx.Class.isDefined("qx.data.model.Table")) {
         return;
       }
 
@@ -123,27 +119,26 @@ qx.Class.define("qcl.data.marshal.Table",
         requestId : { check: "Integer", nullable : true },
         transactionId : { check: "Integer", nullable : true, event: "changeTransactionId" },
         columnLayout : { check: "Map", nullable: true },
-        statusText : { check: "String", init : "", event: "changeStatusText"  }
+        statusText : { check: "String", init : "", event: "changeStatusText" }
       }
       });
     },
 
 
-   /** 
+   /**
     * Creates for the given data the needed models. Be sure to have the classes
-    * created with {@link #jsonToClass} before calling this method. The creation 
+    * created with {@link #jsonToClass} before calling this method. The creation
     * of the class itself is delegated to the {@link #__createInstance} method,
-    * which could use the {@link qx.data.store.IStoreDelegate} methods, if 
+    * which could use the {@link qx.data.store.IStoreDelegate} methods, if
     * given.
-    * 
+    *
     * @param data {Object} The object for which models should be created.
     * @return {qx.data.model.Table}
     */
-    toModel: function(data) 
-    {   
-      var model = new qx.data.model.Table;
+    toModel: function(data) {
+      var model = new qx.data.model.Table();
       model.set(data);
       return model;
-    }    
+    }
   }
 });

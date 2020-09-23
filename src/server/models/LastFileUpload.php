@@ -1,6 +1,7 @@
 <?php
 namespace app\models;
 
+use app\controllers\AppController;
 use RuntimeException;
 use Yii;
 use yii\web\UploadedFile;
@@ -14,12 +15,21 @@ use yii\web\UploadedFile;
 class LastFileUpload extends UploadedFile
 {
 
+  const CATEGORY = "app";
+
   /**
-   * Returns the path to the uploaded file
-   * @readonly
+   * @var string The path to the file which has been copied from the temporary
+   * file that is provided by PHP. Needs to be discarded after use with
+   * {@link LastFileUpload::delete()}
+   */
+  public $path;
+
+  /**
+   * Creates a unique path to the uploaded file in the system
+   * temp dir
    * @return string
    */
-  public function getPath()
+  protected function createPath()
   {
     return sys_get_temp_dir() .
       DIRECTORY_SEPARATOR .
@@ -32,7 +42,7 @@ class LastFileUpload extends UploadedFile
    */
   private static function cacheKey()
   {
-    return Yii::$app->session->id . "_last_upload_info";
+    return "__last_upload_info";
   }
 
   /**
@@ -43,13 +53,12 @@ class LastFileUpload extends UploadedFile
    */
   public function save()
   {
-    $path = $this->path;
-    if( ! parent::saveAs($path) ){
+    $this->path = $this->createPath();
+    if (!parent::saveAs($this->path)) {
       return false;
     }
-    Yii::$app->cache->set(self::cacheKey(), serialize($this));
-    Yii::debug("Uploaded file was saved to '$path', object stored in cache.", __METHOD__);
-    return $path;
+    Yii::$app->session->set(self::cacheKey(), serialize($this));
+    return $this->path;
   }
 
   /**
@@ -61,8 +70,6 @@ class LastFileUpload extends UploadedFile
     throw new \BadMethodCallException("Not allowed for " . self::class);
   }
 
-  /** @noinspection PhpSignatureMismatchDuringInheritanceInspection */
-
   /**
    * Return the instance for the last uploaded file
    * @return LastFileUpload
@@ -70,7 +77,8 @@ class LastFileUpload extends UploadedFile
    */
   static function instance()
   {
-    $instance = unserialize( Yii::$app->cache->get(self::cacheKey()));
+    $serialized = Yii::$app->session->get(self::cacheKey());
+    $instance = unserialize($serialized);
     if( ! $instance ){
       throw new RuntimeException("No cached instance of " . self::class );
     }
@@ -82,8 +90,8 @@ class LastFileUpload extends UploadedFile
    */
   public function delete()
   {
-    Yii::debug("Deleting last upload.", __METHOD__);
+    Yii::debug("Deleting last upload.", self::CATEGORY);
     unlink($this->path);
-    Yii::$app->cache->delete(self::cacheKey());
+    Yii::$app->session->remove(self::cacheKey());
   }
 }

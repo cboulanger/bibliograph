@@ -38,9 +38,8 @@ use yii\db\StaleObjectException;
 
 /**
  * Component class providing methods to create and migrate datasource tables,
- * i.e. model tables that have a common prefix and are meant to be used together to
- * form a complex source of data
- * values
+ * i.e. model tables that have a common prefix and are meant to be used
+ * together to form a complex source of data values
  */
 class DatasourceManager extends \yii\base\Component
 {
@@ -53,28 +52,32 @@ class DatasourceManager extends \yii\base\Component
    * @param string $schemaName |null
    *    Optional name of a schema. If not given, the default schema is used.
    * @return Datasource
-   *    The instance for the given schema sub-class, not the \app\models\Datasource instance created.
+   *    The instance for the given schema sub-class, not the
+   *   \app\models\Datasource instance created.
    * @throws \Exception
    * @throws RecordExistsException
    */
-  public function create( $datasourceName, $schemaName = null)
+  public function create($datasourceName, $schemaName = null)
   {
     if (!$datasourceName or !is_string($datasourceName)) {
       throw new \InvalidArgumentException("Invalid datasource name");
     }
 
-    if( ! $schemaName ){
-      $schemaName = Yii::$app->config->getPreference('app.datasource.baseschema' );
+    if (!$schemaName) {
+      $schemaName = Yii::$app->config->getPreference('app.datasource.baseschema');
     }
 
     $schema = Schema::findByNamedId($schemaName);
-    if( ! $schema ){
+    if (!$schema) {
       throw new \InvalidArgumentException("Schema '$schemaName' does not exist.");
     }
 
     $class = $schema->class;
-    if (!is_subclass_of($class, Datasource::class)) {
-      throw new \InvalidArgumentException("Invalid schema class '$class'. Must be subclass of " . Datasource::class);
+    if (!class_exists($class)) {
+      throw new \InvalidArgumentException("Schema datasource class '$class' does not exist.");
+    }
+    if (!is_a($class, Datasource::class, true)) {
+      throw new \InvalidArgumentException("Invalid schema datsource class '$class'. Must be subclass of " . Datasource::class);
     }
 
     if (Datasource::findByNamedId($datasourceName)) {
@@ -83,16 +86,16 @@ class DatasourceManager extends \yii\base\Component
     /** @noinspection MissedFieldInspection */
     $datasource = new Datasource([
       'namedId' => $datasourceName,
-      'title'   => $datasourceName,
-      'schema'  => $schemaName,
-      'prefix'  => $class::createTablePrefix($datasourceName),
-      'active'  => 1,
+      'title' => $datasourceName,
+      'schema' => $schemaName,
+      'prefix' => $class::createTablePrefix($datasourceName),
+      'type' => '',
+      'active' => 1,
       'readonly' => 0,
-      'hidden'  => 0
+      'hidden' => 0
     ]);
-    $dsnAttributes = $this->parseDsn();
-    $datasource->setAttributes($dsnAttributes);
     $datasource->save();
+    $datasourceName = $datasource->namedId; // in case the named id has changed during save
     Yii::info("Created datasource '$datasourceName'.");
     //Yii::debug($datasource->getAttributes());
 
@@ -103,36 +106,13 @@ class DatasourceManager extends \yii\base\Component
     // @todo work with interface instead
     if ($instance instanceof BibliographicDatasource) {
       $instance->addDefaultFolders();
-      try{
-        Yii::$app->config->createKey("datasource.$datasourceName.fields.exclude","list");
-      } catch( RecordExistsException $e ){
+      try {
+        Yii::$app->config->createKey("datasource.$datasourceName.fields.exclude", "list");
+      } catch (RecordExistsException $e) {
         Yii::warning($e->getMessage());
       }
     }
     return $instance;
-  }
-
-  /**
-   * Parses a DSN string in a way that can be stored in the datasource db record.
-   * If no DSN string is passed, the app default dsn is used.
-   * @param string|null $dsn
-   * @throws \Exception
-   * @return array
-   */
-  public function parseDsn($dsn = null)
-  {
-    $dsn = ($dsn ? $dsn : Yii::$app->db->dsn);
-    $dsn = Dsn::parse($dsn);
-    $db = Yii::$app->db;
-    return [
-      'type' => $dsn->sheme,
-      'host' => $dsn->host,
-      'port' => $dsn->port,
-      'database' => $dsn->database,
-      'username' => $db->username,
-      'password' => $db->password,
-      'encoding' => $db->charset,
-    ];
   }
 
   /**
@@ -142,7 +122,7 @@ class DatasourceManager extends \yii\base\Component
    * @return void
    * @throws \Exception if console action fails
    */
-  public function createModelTables(Datasource $datasource )
+  public function createModelTables(Datasource $datasource)
   {
     $migrationNamespace = $datasource->migrationNamespace;
     $params = [
@@ -166,6 +146,7 @@ class DatasourceManager extends \yii\base\Component
    * @param bool $deleteData
    *    Whether all connected models and their data should be deleted, too.
    * @throws \Exception
+   * @throws MigrationException
    */
   public function delete($namedId, $deleteData = false)
   {
@@ -175,7 +156,7 @@ class DatasourceManager extends \yii\base\Component
     try {
       $datasource->delete();
     } catch (\Throwable $e) {
-      throw new \Exception($e->getMessage(),$e->getCode(),$e);
+      throw new \Exception($e->getMessage(), $e->getCode(), $e);
     }
     if ($deleteData) {
       if ($datasource instanceof BibliographicDatasource) {
@@ -191,7 +172,12 @@ class DatasourceManager extends \yii\base\Component
         'all',
         'migrationNamespaces' => $migrationNamespace,
       ];
-      Console::runAction('migrate/down', $params, null, $db);
+      try {
+        Console::runAction('migrate/down', $params, null, $db);
+      } catch (MigrationException $e) {
+        Yii::error("Console output: \n" . $e->consoleOutput);
+        throw $e;
+      }
       Yii::info("Deleted model tables for '$namedId''.");
     }
   }
@@ -212,7 +198,7 @@ class DatasourceManager extends \yii\base\Component
     ];
     $db = $datasource->getConnection();
     $output = Console::runAction('migrate/new', $params, null, $db);
-    return ! $output->contains("up-to-date");
+    return !$output->contains("up-to-date");
   }
 
   /**
@@ -236,11 +222,11 @@ class DatasourceManager extends \yii\base\Component
       $migrationNamespace = $instance->migrationNamespace;
       Yii::debug("Migrating datasource '{$instance->namedId}'...", __METHOD__);
       Yii::debug("Migration namespace: $migrationNamespace", __METHOD__);
-      $params = [ 'all', 'migrationNamespaces' => $migrationNamespace ];
+      $params = ['all', 'migrationNamespaces' => $migrationNamespace];
       /** @var \yii\db\Connection $db */
       $db = $instance->getConnection();
       $output = Console::runAction('migrate/up', $params, null, $db);
-      if( ! $output->contains("up-to-date")) $count++;
+      if (!$output->contains("up-to-date")) $count++;
     }
     return $count;
   }
@@ -250,36 +236,36 @@ class DatasourceManager extends \yii\base\Component
    * classes representing the join talbes
    * @param string|Datasource $datasource The name of the datasource
    * @return array
-   *    An associative array, key are the names of the model types and relation names
-   *    values are the corresponding model classes
+   *    An associative array, key are the names of the model types and relation
+   *   names values are the corresponding model classes
    */
-  public function getModelClasses( $datasource )
+  public function getModelClasses($datasource)
   {
     $modelClasses = [];
     $instance = $datasource instanceof Datasource
       ? $datasource
       : Datasource::getInstanceFor($datasource);
     $types = $instance->modelTypes();
-    foreach( $types as $type ) {
+    foreach ($types as $type) {
       $class = $instance->getClassFor($type);
       $modelClasses[$type] = $class;
       /** @var BaseModel $model */
       $model = new $class;
-      foreach( $types as $linkName ){
+      foreach ($types as $linkName) {
         if ($linkName === $type) continue;
-        try{
-          $query = $model->getRelation( $linkName . "s");
+        try {
+          $query = $model->getRelation($linkName . "s");
           $via = $query->via;
-          if( is_array($via) ){
+          if (is_array($via)) {
             /** @var ActiveQuery $relationQuery */
             $relationQuery = $via[1];
-            if( ! in_array($relationQuery->modelClass, array_values($modelClasses)) ){
+            if (!in_array($relationQuery->modelClass, array_values($modelClasses))) {
               $modelClasses[$via[0]] = $relationQuery->modelClass;
             }
-          } elseif (! in_array($query->modelClass, array_values($modelClasses))) {
+          } elseif (!in_array($query->modelClass, array_values($modelClasses))) {
             $modelClasses[$type] = $query->modelClass;
           }
-        } catch( \Exception $e){
+        } catch (\Exception $e) {
           continue;
         }
       }
@@ -288,9 +274,9 @@ class DatasourceManager extends \yii\base\Component
   }
 
   /**
-   * Returns an associative array, keys are the named ids of the datasources, values the
-   * integer timestamp of the most recent migration that has been applied to the tables
-   * of the datasources.
+   * Returns an associative array, keys are the named ids of the datasources,
+   * values the integer timestamp of the most recent migration that has been
+   * applied to the tables of the datasources.
    * @return array
    */
   public function getMigrationApplyTimes()

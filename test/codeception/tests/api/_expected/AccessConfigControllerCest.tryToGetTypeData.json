@@ -1,0 +1,32 @@
+[
+  {
+    "icon": "icon/16/apps/preferences-users.png",
+    "label": "User",
+    "value": "user"
+  },
+  {
+    "icon": "icon/16/apps/internet-feed-reader.png",
+    "label": "Role",
+    "value": "role"
+  },
+  {
+    "icon": "icon/16/actions/address-book-new.png",
+    "label": "Group",
+    "value": "group"
+  },
+  {
+    "icon": "icon/16/apps/preferences-security.png",
+    "label": "Permission",
+    "value": "permission"
+  },
+  {
+    "icon": "icon/16/apps/internet-transfer.png",
+    "label": "Datasource",
+    "value": "datasource"
+  },
+  {
+    "icon": "icon/16/apps/internet-transfer.png",
+    "label": "Schema",
+    "value": "schema"
+  }
+]

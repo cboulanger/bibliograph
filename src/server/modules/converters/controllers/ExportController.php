@@ -84,11 +84,12 @@ class ExportController extends AppController
     if ( $data === null ) {
       return "Dialog was cancelled.";
     }
-    Popup::create(
-      Yii::t('app',"Preparing export data. Please wait..."),
-      /*Yii::$app->controller->route*/ "converters/export", "start-export",
-      [$this->shelve($data, $datasource, $selector)]
-    );
+    (new Popup())
+      ->setMessage(Yii::t('app',"Preparing export data. Please wait..."))
+      ->setService("converters/export")
+      ->setMethod("start-export")
+      ->setParams([$this->shelve($data, $datasource, $selector)])
+      ->show();
     return "Created message to show popup.";
   }
 
@@ -103,14 +104,13 @@ class ExportController extends AppController
   {
     $shelfData = $this->unshelve( $shelfId );
     list( $data, $datasource, $selector ) = $shelfData;
-    // todo: Use yii\helpers\Url
-    $url  = Yii::$app->homeUrl .
-      '?r=converters/download' .
-      '&auth_token=' . Yii::$app->user->getIdentity()->getAuthKey() .
-      '&format=' . $data->format .
-      '&datasource=' . $datasource .
-      '&selector=' . $selector;
-    Popup::create(""); // hide the popup
+    $url = Yii::$app->utils->makeUrl('converters/download', [
+      'access-token'  => Yii::$app->user->getIdentity()->getAuthKey(),
+      'format'        => $data->format,
+      'datasource'    => $datasource,
+      'selector'      => $selector
+    ]);
+    (new Popup())->hide();
     $this->dispatchClientMessage("window.location.replace", array(
       'url' => $url
     ) );

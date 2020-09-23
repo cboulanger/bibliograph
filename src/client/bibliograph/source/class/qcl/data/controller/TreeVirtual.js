@@ -14,7 +14,7 @@
 
    Authors:
      * Christian Boulanger (cboulanger) using code from qx.data.controller.Tree
-     * Martin Wittemann (martinwittemann) 
+     * Martin Wittemann (martinwittemann)
 
 ************************************************************************ */
 
@@ -25,13 +25,7 @@ qx.Class.define("qcl.data.controller.TreeVirtual",
 {
   extend: qx.core.Object,
   include: qx.data.controller.MSelection,
-  
-  /*
-   *****************************************************************************
-      CONSTRUCTOR
-   *****************************************************************************
-   */
-  
+ 
   /**
    * @param target {qx.ui.tree.Tree?null} The target widgets which should be a tree.
    * @param store { Object?null } The store that retrieves the data
@@ -39,11 +33,11 @@ qx.Class.define("qcl.data.controller.TreeVirtual",
   construct: function (target, store) {
     this.base(arguments);
     
-    if (target != null) {
+    if (target !== null) {
       this.setTarget(target);
     }
     
-    if (store != null) {
+    if (store !== null) {
       this.setStore(store);
     }
     
@@ -54,12 +48,7 @@ qx.Class.define("qcl.data.controller.TreeVirtual",
       0: 0
     };
   },
-  
-  /*
-  *****************************************************************************
-     PROPERTIES
-  *****************************************************************************
-  */
+
   
   properties:
   {
@@ -114,20 +103,9 @@ qx.Class.define("qcl.data.controller.TreeVirtual",
     }
   },
   
-  /*
-  *****************************************************************************
-     MEMBERS
-  *****************************************************************************
-  */
   
   members:
   {
-    
-    /*
-    ---------------------------------------------------------------------------
-       PRIVATE MEMBERS
-    ---------------------------------------------------------------------------
-    */
     
     /**
      * A map connecting client-side node ids (key) with the server-side
@@ -135,11 +113,6 @@ qx.Class.define("qcl.data.controller.TreeVirtual",
      */
     __nodeIdMap: null,
     
-    /*
-    ---------------------------------------------------------------------------
-       APPLY METHODS
-    ---------------------------------------------------------------------------
-    */
     
     /**
      * If a new delegate is set, it applies the stored configuration for the
@@ -164,7 +137,7 @@ qx.Class.define("qcl.data.controller.TreeVirtual",
         let targetModel = target.getDataModel();
         
         /*
-         * catch events like add, remove, etc. 
+         * catch events like add, remove, etc.
          */
         targetModel.getModel().addListener("change", this._targetOnChange, this);
         /*
@@ -172,11 +145,13 @@ qx.Class.define("qcl.data.controller.TreeVirtual",
          */
         targetModel.getModel().addListener("changeBubble", this._targetOnChangeBubble, this);
       }
-      
     },
     
     /**
      * Set a new store and adds event listeners
+     *
+     * @param store
+     * @param old
      */
     _applyStore: function (store, old) {
       if (old) {
@@ -218,22 +193,22 @@ qx.Class.define("qcl.data.controller.TreeVirtual",
       if (!qx.lang.Type.isArray(nodeData)) {
         throw new Error("Invalid node data!");
       }
-      if (!nodeData.length) return;
+      if (!nodeData.length) {
+       return;
+      }
       
       /*
        * add tree data to the model
        */
       nodeData.forEach(function (node) {
-        
         let serverNodeId = node.data.id;
-        if (!qx.lang.Type.isNumber(serverNodeId)) {
-          throw new Error("Missing  or invalid server node id in node data.")
+        if (serverNodeId === undefined) {
+          throw new Error("Missing node id in node data.");
         }
         let serverParentId = node.data.parentId;
-        if (!qx.lang.Type.isNumber(serverParentId)) {
-          throw new Error("Missing or invalid server parent node id in node data.")
+        if (serverParentId === undefined) {
+          throw new Error("Missing node id in node data.");
         }
-        
         let parentNodeId = this.__nodeIdMap[serverParentId];
         let clientNodeId;
         if (parentNodeId === undefined) {
@@ -250,8 +225,7 @@ qx.Class.define("qcl.data.controller.TreeVirtual",
             node.icon,
             node.iconSelected
           );
-        }
-        else {
+        } else {
           clientNodeId = targetModel.addLeaf(
             parentNodeId,
             node.label,
@@ -260,19 +234,14 @@ qx.Class.define("qcl.data.controller.TreeVirtual",
           );
         }
         
-        /*
-         * set column und node data
-         */
+        // set column und node data
         targetModel.setState(clientNodeId, {
           columnData: node.columnData,
           data: node.data
         });
         
-        /*
-         * save node in map
-         */
+        // save node in map
         this.__nodeIdMap[serverNodeId] = clientNodeId;
-        
       }, this);
       targetModel.setData();
     },
@@ -299,12 +268,6 @@ qx.Class.define("qcl.data.controller.TreeVirtual",
         }
       });
     },
-    
-    /*
-    ---------------------------------------------------------------------------
-       EVENT LISTENERS
-    ---------------------------------------------------------------------------
-    */
     
     /**
      * Called when the target has dispatched a "change" event.

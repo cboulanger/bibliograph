@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+log_info -n ">>> Creating mysql user '$DB_USER' "
+mysql_root -e "DROP USER IF EXISTS '$DB_USER';"
+mysql_root -e "CREATE USER '$DB_USER' IDENTIFIED BY '$DB_PASSWORD';"
+echo "${CHECKMARK}"

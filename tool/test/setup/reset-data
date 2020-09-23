@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+# This file is to be sourced.
+
+source tool/test/setup/drop-database
+source tool/test/setup/create-database
+
+echo -n ">>> Deleting log and output data files..."
+[[ $(ls log/app/*.log 2> /dev/null) ]] && rm log/app/*.log*
+[[ $(ls src/server/runtime/cache/* 2> /dev/null) ]] && rm -rf src/server/runtime/cache/*
+[[ -f log/codeception.migration.log ]] && rm log/codeception.migration.log
+[[ $(ls test/codeception/_output/*fail* 2> /dev/null) ]] && rm test/codeception/_output/*fail*
+
+log_info " ${CHECKMARK}"

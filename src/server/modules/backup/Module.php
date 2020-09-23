@@ -2,6 +2,7 @@
 
 namespace app\modules\backup;
 
+use lib\plugin\PluginInterface;
 use app\models\{
   Role
 };
@@ -25,7 +26,9 @@ defined('BACKUP_PATH') or define('BACKUP_PATH', TMP_PATH);
  * @property WebservicesDatasource[] $datasources
  * @property int backupVersion
  */
-class Module extends \lib\Module
+class Module
+  extends \lib\Module
+  implements PluginInterface
 {
   /**
    * The version of the module
@@ -36,7 +39,7 @@ class Module extends \lib\Module
   /**
    * A string constant defining the category for logging and translation
    */
-  const CATEGORY = "backup";
+  const CATEGORY = "plugin.backup";
 
   /**
    * The extension of the backup file without the preceding period.
@@ -88,7 +91,7 @@ class Module extends \lib\Module
       if ($zip->open($testfile, ZIPARCHIVE::CREATE) !== TRUE) {
         array_push($error, "Cannot create backup archive in backup folder - please check file permissions.");
       } else {
-        $zip->addFile(Yii::getAlias('@runtime/logs/app.log'));
+        $zip->addFile(APP_LOG_DIR . '/app.log');
         $zip->close();
         if (@unlink($testfile) === false) {
           Yii::warning("Cannot delete files in backup folder - please check file permissions.", Module::CATEGORY);

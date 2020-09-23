@@ -1,0 +1,179 @@
+#!/bin/bash
+
+# Compiles and starts the bibliograph app in the browser
+set -o errexit
+source tool/lib/functions.sh
+
+echo "Command: $0 $*"
+
+# Preset default command line args
+VERBOSE=0
+USAGE=0
+APP_NAME=""
+APP_URL=""
+APP_URL_QUERY=""
+BUILD_CLEAN=0
+BUILD_ENV_FILE=test/.env
+BUILD_ENV_FILE_LOADED=0
+DATABASE_EMPTY=0
+SQL_IMPORT=""
+
+#
+# Process command line
+#
+while [[ $1 != "" ]] ; do
+    case "$1" in
+
+        "--env-file" | "-f")
+            BUILD_ENV_FILE="$2"
+            [[ -f $BUILD_ENV_FILE ]] || exit_with_error "File $BUILD_ENV_FILE does not exist"
+            [[ $VERBOSE == 1 ]] && echo ">>> Loading environment variables from $BUILD_ENV_FILE"
+            source $BUILD_ENV_FILE
+            BUILD_ENV_FILE_LOADED=1
+            shift
+            ;;
+
+        "--app-name" | "-a")
+            export APP_NAME="$2"
+            [[ $VERBOSE == 1 ]] && echo ">>> Using APP_NAME $APP_NAME"
+            shift
+            ;;
+
+        "--app-url" | "-u")
+            export APP_URL="$2"
+            shift
+            ;;
+
+        "--app-url-query" | "-Q")
+            APP_URL_QUERY="$2"
+            shift
+            ;;
+
+        "--config-file" | "-c")
+            BUILD_CONFIG_FILE="$2"
+            shift
+            ;;
+
+        "--build-target" | "-t")
+            BUILD_TARGET="$2"
+            shift
+            ;;
+
+        "--skip-build" | "-k")
+            SKIP_BUILD=1
+            ;;
+
+        "--empty-database" | "-E")
+            DATABASE_EMPTY=1
+            ;;
+
+        "--import-sql" | "-I")
+            SQL_IMPORT="$2"
+            DATABASE_EMPTY=1
+            shift
+            ;;
+
+        "--set-env" | "-e")
+            ENV_VAR_NAME="$2"
+            ENV_VAR_VALUE="$2"
+            export $ENV_VAR_NAME=$ENV_VAR_VALUE
+            shift
+            shift
+            ;;
+
+        "--clean")
+            BUILD_CLEAN=1
+            ;;
+
+        "--verbose" | "-v")
+            VERBOSE=1
+            ;;
+
+        "--help" | "-h")
+            USAGE=1
+            ;;
+    esac
+    shift
+done
+
+
+
+# load defaults from .env file if not already loaded, which will override any
+# CLI parameters. If this shouldn't happen, use the "-f" option to load the
+# .env file first
+if [[ $BUILD_ENV_FILE_LOADED == 0 ]]; then
+  [[ $VERBOSE == 1 ]] && echo ">>> Loading environment variables from $BUILD_ENV_FILE"
+  source $BUILD_ENV_FILE
+fi
+
+# check requirements
+source tool/env/check
+[[ "$APP_NAME" == "" ]] && log_error "Missing application name" && USAGE=1
+
+# help
+if [[ $USAGE != 0 ]] ; then
+cat << EOF
+Usage: $0 [options]
+where options are:
+  --app-name, -a name           - The name of the application as specified in the
+                                  compiler configuration
+  --app-url, -u URL             - The URL of the application as specified in the
+                                  compiler configuration
+  --app-url-query, -Q           - Optional query string/hash to attach to the URL
+  --env-file, -f file           - the .env file containing configuration
+                                 (defaults to .env). Must be the first parameter
+                                 if others are to override the settings.
+  --config-file, -c             - the compiler configuration file to use
+                                  (defaults to compile.json)
+  --skip-build, -k              - use the build files that already exist
+  --empty-database, -E          - start with, or assume, an empty database
+  --import-sql, -I name         - the path to an .sql file containing data to be
+                                  import into the empty database (implies -E)
+  --set-env                     - set environment variables, overriding values
+                                  loaded from --env-file
+  --clean                       - clean the working directory befor building
+  --verbose, -v                 - verbose output
+  --help, -h                    - show usage help
+
+EOF
+  exit 0
+fi
+
+if [[ $VERBOSE == 1 ]]; then
+cat << EOF
+APP_URL=$APP_URL
+APP_URL_QUERY=$APP_URL_QUERY
+APP_NAME=$APP_NAME
+BUILD_TARGET=$BUILD_TARGET
+BUILD_CONFIG_FILE=$BUILD_CONFIG_FILE
+BUILD_CLEAN=$BUILD_CLEAN
+SKIP_BUILD=$SKIP_BUILD
+EOF
+fi
+
+# export all needed environment variables
+source tool/env/envvars-export
+export APP_URL
+export APP_URL_QUERY
+export APP_NAME
+export BUILD_TARGET
+export BUILD_CONFIG_FILE
+export BUILD_CLEAN
+export VERBOSE
+export SKIP_BUILD
+
+# prepare database
+if [[ $DATABASE_EMPTY == 1 ]]; then
+  echo ">>> Starting with empty database"
+  source tool/test/setup/create-mysql-user
+  source tool/test/setup/reset-data
+fi
+# to do: better error message if database is empty
+#tool/env/envvars-export
+source tool/test/setup/check-mysql #|| exit_with_error "Please check the MySQL credentials or run with --empty-database/-E"
+if [[ "$SQL_IMPORT" != "" ]]; then
+  tool/dev/mysql-import $SQL_IMPORT $DB_DATABASE
+fi
+
+# go!
+tool/dev/start-app

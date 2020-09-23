@@ -1,4 +1,5 @@
 <?php
+// user-configurable preferences stored in the database
 return [
   'app.datasource.baseschema' => [
     'type' => "string",

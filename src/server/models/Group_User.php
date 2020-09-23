@@ -7,8 +7,8 @@ use Yii;
 /**
  * This is the model class for table "join_Group_User".
  *
- * @property integer $UserId
- * @property integer $GroupId
+ * @property int $UserId
+ * @property int $GroupId
  */
 class Group_User extends \yii\db\ActiveRecord
 {

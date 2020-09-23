@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+# Run distributable version of Bibliograph locally in the docker environment
+
+set -o errexit
+
+source dist/config/.env
+APP_PATH=dist
+
+source tool/env/check
+source tool/lib/functions.sh
+source tool/env/envvars-export
+source tool/test/setup/create-mysql-user
+source tool/test/setup/check-mysql
+source tool/test/setup/reset-data
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  echo ">>> Opening app in browser at $APP_URL/$APP_PATH"
+  open -a "Google Chrome" "$APP_URL/$APP_PATH"
+  # send Alt+Command+I to open Web inspector
+  osascript -e 'tell application "System Events" to keystroke "i" using {option down, command down}'
+fi

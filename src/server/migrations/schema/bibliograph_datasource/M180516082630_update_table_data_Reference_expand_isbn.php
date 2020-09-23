@@ -20,11 +20,12 @@ class M180516082630_update_table_data_Reference_expand_isbn extends Migration
   }
 
   /**
+   * This exists so that migrate/down can delete the model tables, not for downgrading
+   * the database
    * {@inheritdoc}
    */
   public function safeDown()
   {
-    echo "M180516082630_update_table_data_Reference_expand_isbn cannot be reverted.\n";
-    return false;
+    return true;
   }
 }

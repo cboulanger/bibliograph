@@ -19,24 +19,20 @@
 
 /**
  * A template class for cell renderers, which display links.
+ * @asset(qx/icon/Tango/16/places/folder-remote.png)
  */
 qx.Class.define("qcl.ui.table.cellrenderer.Link",
 {
   extend : qx.ui.table.cellrenderer.Abstract,
-
-
-  /*
-  *****************************************************************************
-     CONSTRUCTOR
-  *****************************************************************************
-  */
-
-  construct : function()
-  {
+  
+  /**
+   * Constructor
+   */
+  construct : function() {
     this.base(arguments);
     this.IMG_LINK = qx.io.Alias.getInstance().resolve("icon/16/places/folder-remote.png");
  
-     /**   
+     /**
     // the following doesn't work
     var clazz = this.self(arguments);
 
@@ -50,12 +46,6 @@ qx.Class.define("qcl.ui.table.cellrenderer.Link",
       );
     }**/
   },
-
-  /*
-  *****************************************************************************
-     MEMBERS
-  *****************************************************************************
-  */
 
   members :
   {
@@ -75,7 +65,7 @@ qx.Class.define("qcl.ui.table.cellrenderer.Link",
       {
         
         // because the stylesheet/class stuff doesn't work, do it manually
-        content.push('<div style="padding-left: 20px; background: url(' );  
+        content.push('<div style="padding-left: 20px; background: url(' );
         content.push(this.IMG_LINK);
         content.push(') top left no-repeat;">');
         
@@ -84,7 +74,7 @@ qx.Class.define("qcl.ui.table.cellrenderer.Link",
         content.push('onclick="window.open(\'' + cellInfo.value + '\');";');
         content.push(">");
         content.push(cellInfo.value)
-        content.push("</a>");  
+        content.push("</a>");
         
         content.push("</div>");
        
@@ -92,9 +82,8 @@ qx.Class.define("qcl.ui.table.cellrenderer.Link",
       }
       return content.join("");
       **/
-      content = cellInfo.value || "";
+      let content = cellInfo.value || "";
       return content.replace(/(http:\/\/[\w\-\.]+)([^\s;]*)/g, '<a target="_blank" href="$1$2">$1/...<\/a>');
-   
     }
   }
 });

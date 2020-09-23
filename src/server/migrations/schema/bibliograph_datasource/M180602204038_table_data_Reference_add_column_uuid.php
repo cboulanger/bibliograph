@@ -22,11 +22,12 @@ class M180602204038_table_data_Reference_add_column_uuid extends Migration
   }
 
   /**
+   * This exists so that migrate/down can delete the model tables, not for downgrading
+   * the database
    * {@inheritdoc}
    */
   public function safeDown()
   {
-    echo "M180602204038_table_data_Reference_add_column_uuid cannot be reverted.\n";
-    return false;
+    return true;
   }
 }

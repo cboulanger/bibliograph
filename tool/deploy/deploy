@@ -1,0 +1,380 @@
+#!/usr/bin/env bash
+
+# This script is partly based on code copied from
+# https://github.com/qooxdoo/deployment/blob/master/deployer.sh
+# by @johnspackman
+
+set -e
+shopt -s dotglob
+
+source tool/lib/functions.sh
+
+# Configuration
+QUIET=0
+ANSWER_YES=${ANSWER_YES:-0}
+USAGE=${USAGE:-0}
+
+BUILD_ENV_FILE=${BUILD_ENV_FILE:-""}
+BUILD_SKIP=${BUILD_SKIP:-0}
+BUILD_CONFIG_FILE="compile.json"
+BUILD_TARGET="build"
+BUILD_DIST_DIR=$(pwd)/dist
+BUILD_CLEAN=0
+BUILD_VERBOSE=${BUILD_VERBOSE:-0}
+QX_COMPILE_ARGS=""
+
+
+DEPLOY_ENV_FILE=""
+DEPLOY_HOST=""
+DEPLOY_DIR=""
+DEPLOY_CONFIG_DIR=config
+DEPLOY_DB_NAME=""
+DEPLOY_IMPORT_DB_NAMES=""
+DEPLOY_EMPTY_DATABASE=0
+DEPLOY_EXCLUDE_ARGS="--exclude=*.zip --exclude=._* --exclude=.DS_Store --exclude=.git*"
+DEPLOY_CLEAN=1
+
+# load .env file if defined as an environment variable (so that this script can be sourced)
+if [[ "$BUILD_ENV_FILE" != "" ]]; then
+  [[ -f $BUILD_ENV_FILE ]] || exit_with_error "File $BUILD_ENV_FILE does not exist"
+  DEPLOY_ENV_FILE=$BUILD_ENV_FILE
+  source "$BUILD_ENV_FILE"
+fi
+
+# Process command line
+while [[ $1 != "" ]] ; do
+    case "$1" in
+
+        "--env-file"|"-f")
+            BUILD_ENV_FILE="$2"
+            [[ -f $BUILD_ENV_FILE ]] || exit_with_error "File $BUILD_ENV_FILE does not exist"
+            DEPLOY_ENV_FILE=$BUILD_ENV_FILE
+            source "$BUILD_ENV_FILE"
+            shift
+            ;;
+
+        "--deploy-env-file"|"-F")
+            [[ "$BUILD_ENV_FILE" == "" ]] && exit_with_error "You have to set --env-file first"
+            DEPLOY_ENV_FILE="$2"
+            [[ -f $DEPLOY_ENV_FILE ]] || exit_with_error "File $DEPLOY_ENV_FILE does not exist"
+            shift
+            ;;
+
+        "--build-config-file"|"-c")
+            BUILD_CONFIG_FILE="$2"
+            shift
+            ;;
+
+        "--build-target"|"-t")
+            BUILD_TARGET="$2"
+            shift
+            ;;
+
+        "--skip-build"|"-k")
+            BUILD_SKIP=1
+            ;;
+
+        "--deploy-host"|"-H")
+            DEPLOY_HOST="$2"
+            shift
+            ;;
+
+        "--deploy-config-dir"|"-C")
+            DEPLOY_CONFIG_DIR="$2"
+            shift
+            ;;
+
+        "--deploy-dir"|"-D")
+            DEPLOY_DIR="$2"
+            shift
+            ;;
+
+        "--database"|"-B")
+            DEPLOY_DB_NAME="$2"
+            shift
+            ;;
+
+        "--import-database"|"-I")
+            DEPLOY_IMPORT_DB_NAMES="$2"
+            DEPLOY_EMPTY_DATABASE=1
+            shift
+            ;;
+
+        "--empty-database"|"-E")
+            DEPLOY_EMPTY_DATABASE=1
+            ;;
+
+        "--clean")
+            BUILD_CLEAN=1
+            ;;
+
+        "--no-deploy-clean")
+            DEPLOY_CLEAN=0
+            ;;
+
+        "--set-env"|"-e")
+            ENV_VAR_NAME="$2"
+            ENV_VAR_VALUE="$2"
+            export $ENV_VAR_NAME=$ENV_VAR_VALUE
+            shift
+            shift
+            ;;
+
+        "--verbose"|"-v")
+            BUILD_VERBOSE=1
+            ;;
+
+        "--quiet"|"-q")
+            QUIET=1
+            ;;
+
+        "--yes"|"-y")
+            ANSWER_YES=1
+            ;;
+
+        "--help"|"-h")
+            USAGE=1
+            ;;
+    esac
+    shift
+done
+
+
+if [[ $USAGE != 0 ]] ; then
+cat << EOF
+Usage: $0 [options]
+where options are:
+${HELP_ADDITIONAL_TEXT}
+  --env-file, -f file           - the .env file containing configuration
+                                 (defaults to .env). Must be the first parameter
+                                 if others are to override the settings.
+  --deploy-env-file, -F file    - (optional) A stripped-down .env file which will
+                                  be copied to the deploy target
+  --build-config-file, -c       - the compiler configuration file to use
+                                  (defaults to compile.json)
+  --skip-build, -k              - use the build files that already exist
+  --deploy-host, -H path        - the host server to deploy to via SSH, overrides
+                                  DEPLOY_HOST
+  --deploy-dir, -D path         - the directory on the host to deploy to,
+                                  overrides DEPLOY_DIR
+  --deploy-config-dir, -C path  - the path to the configuration dir, absolute or
+                                  relative to the deployment dir. Defaults to
+                                  'config', overrides DEPLOY_CONFIG_DIR
+  --database, -N name           - the name of the database to use on the host,
+                                  overrides DB_DATABASE
+  --empty-database, -E          - empty the database
+  --import-database, -I name    - the name of the database to import tables from
+                                  (only remotely), overrides DEPLOY_IMPORT_DB_NAMES
+                                  implies -E
+  --clean                       - clean the working directory befor building
+  --no-deploy-clean             - do not clean files on the deploy target
+                                  before deployment
+  --set-env                     - set environment variables, overriding values
+                                  loaded from --env-file
+  --yes, -y                     - answer yes to all prompts
+  --verbose, -v                 - verbose output
+  --help, -h                    - show usage help
+
+Many configuration values cannot be set via command line arguments.
+Make sure to declare them into the environment variable file specified by --env-file:
+  DB_TYPE           - The type of the database (only mysql supported at this point)
+  DB_HOST           - The host on which the database server can be reached (usually localhost)
+  DB_PORT           - Port
+  DB_DATABASE       - The name of the database in which the application data is
+  DB_USER           - The name of the database user for the application
+  DB_PASSWORD       - Password of that user
+  APP_ENV_FILE      - Path to the .env file containg environment variables for the application
+  APP_CONF_FILE     - Path to the .toml file containing configuration values for the application
+EOF
+  exit 0
+fi
+
+[[ "$BUILD_ENV_FILE" == "" ]] && exit_with_error "No environment file given. Set it with --env-file / -e"
+
+# Configure compile command
+
+if [[ "$BUILD_CONFIG_FILE" != "" ]]; then
+  QX_COMPILE_ARGS="$QX_COMPILE_ARGS --config-file=$BUILD_CONFIG_FILE"
+fi
+if [[ "$BUILD_TARGET" != "" ]]; then
+  QX_COMPILE_ARGS="$QX_COMPILE_ARGS --target=$BUILD_TARGET"
+fi
+if [[ $BUILD_CLEAN != 0 ]] ; then
+    QX_COMPILE_ARGS="$QX_COMPILE_ARGS --clean"
+fi
+if [[ $BUILD_VERBOSE != 0 ]] ; then
+    QX_COMPILE_ARGS="$QX_COMPILE_ARGS --verbose"
+elif [[ $QUIET != 0 ]] ; then
+    QX_COMPILE_ARGS="$QX_COMPILE_ARGS --quiet"
+fi
+
+# get environment variables that override the default
+
+# override .env values
+if [[ "$DEPLOY_DB_NAME" != "" ]]; then
+  DB_DATABASE=$DEPLOY_DB_NAME
+fi
+
+# check variables
+[[ "$DEPLOY_HOST" == "" ]] && exit_with_error "No deploy host given."
+[[ "$DEPLOY_DIR" == "" ]] && exit_with_error "No deploy dir given."
+
+if [[ "$DEPLOY_CONFIG_DIR" != /* ]]; then
+  DEPLOY_CONFIG_DIR=$DEPLOY_DIR/$DEPLOY_CONFIG_DIR
+fi
+
+# verbose display of configuration
+if [[ $BUILD_VERBOSE != 0 ]] ; then
+    echo "DEPLOY_CONFIG_DIR=$DEPLOY_CONFIG_DIR"
+    echo "BUILD_SKIP=$BUILD_SKIP"
+    echo "ANSWER_YES=$ANSWER_YES"
+    echo "BUILD_DEBUG_TARGET=$BUILD_DEBUG_TARGET"
+    echo "BUILD_CLEAN=$BUILD_CLEAN"
+    echo "QUIET=$QUIET"
+    echo "ANSWER_YES=$ANSWER_YES"
+    echo "QX_COMPILE_ARGS=$QX_COMPILE_ARGS"
+fi
+
+if [[ $QUIET != 1 ]] ; then
+  echo
+  echo "Deployment configuration:"
+  echo "   Build environment file:      $BUILD_ENV_FILE"
+  echo "   Deploy environment file:     $DEPLOY_ENV_FILE"
+  echo "   Compiler configuration file: $BUILD_CONFIG_FILE"
+  echo "   Build target:                $BUILD_TARGET"
+  echo "   Build directory:             $BUILD_DIST_DIR"
+  echo "   Skip build step:             $([[ $BUILD_SKIP == 1 ]] && echo 'Yes' || echo 'No')"
+  echo "   Deployment host:             $DEPLOY_HOST"
+  echo "   Path on host:                $DEPLOY_DIR"
+  echo "   Config directory on host:    $DEPLOY_CONFIG_DIR"
+  echo "   Database used:               $DB_DATABASE"
+  echo "   Clean before build:          $([[ $BUILD_CLEAN == 1 ]] && echo 'Yes' || echo 'No')"
+  echo "   Clean target/database:       $([[ $DEPLOY_CLEAN == 1 ]] && echo 'Yes' || echo 'No')"
+  echo "   Import database(s) if clean: $DEPLOY_IMPORT_DB_NAMES"
+  echo
+fi
+
+if [ "$ANSWER_YES" != 1 ]; then
+  read -r -p "Proceed? [y/N] " response
+  case "$response" in
+    [yY][eE][sS]|[yY])
+        # pass
+        ;;
+    *)
+        echo "Aborted."
+        exit 0;
+        ;;
+  esac
+fi
+
+# Build
+if [[ $BUILD_SKIP == 0 ]]; then
+  source tool/dist/build
+fi
+
+# Deploy!
+
+function remote_execute(){
+  [[ $BUILD_VERBOSE == 1 ]] && echo $1
+  echo "$1" | ssh -q -T $DEPLOY_HOST bash
+}
+
+function setup_mysql_credentials(){
+  remote_execute "mysql --login-path=deploy_alias -e \"quit\" || \
+    mysql_config_editor set \
+    --login-path=deploy_alias \
+    --host=$DB_HOST \
+    --user=$DB_USER \
+    --password" || exit 1
+}
+
+
+function import_databases_expr(){
+  FIXUTF8PATH="$DEPLOY_DIR/server/vendor/neitanod/forceutf8/src/ForceUTF8/Encoding.php"
+  cat << EOF
+      for db in "$DEPLOY_IMPORT_DB_NAMES"; do
+       echo " - Cloning database '\$db' into '$DB_DATABASE'..."
+       mysqldump \
+         --login-path=deploy_alias \
+         --default-character-set=utf8 \
+         --set-charset \
+         \$db \
+       | php -r "require '$FIXUTF8PATH'; echo ForceUTF8\Encoding::fixUTF8(stream_get_contents(STDIN));" \
+       | mysql \
+         --login-path=deploy_alias \
+         --default-character-set=utf8 \
+         $DB_DATABASE
+      done
+EOF
+}
+
+
+# importing databases, very hacky at the moment
+
+if [ "$DEPLOY_HOST" == "local" ]; then
+  #
+  # local deployment, assumes development server
+  #
+
+  # files
+  mkdir -p $DEPLOY_DIR
+  if [ $DEPLOY_CLEAN == 1 ]; then
+    echo ">>> Cleaning up $DEPLOY_HOST:$DEPLOY_DIR ..."
+    sudo rm -rf $DEPLOY_DIR/*
+  fi
+  echo ">>> Copying files to $DEPLOY_HOST:$DEPLOY_DIR ..."
+  cp -rf $BUILD_DIST_DIR/* $DEPLOY_DIR
+  chmod -R 0777 $DEPLOY_DIR/server/runtime
+
+  # database
+  if [ $DEPLOY_EMPTY_DATABASE == 1 ]; then
+    echo ">>> Deleting database ..."
+    mysql --user=$DB_USER --password=$DB_PASSWORD -e "drop database if exists $DB_DATABASE;"
+  fi
+  echo ">>> Creating database if it does not already exist ..."
+  mysql --user=$DB_USER --password=$DB_PASSWORD  -e "create database if not exists $DB_DATABASE;"
+
+else
+  #
+  # remote deploment
+  #
+
+  # files
+  echo ">>> Creating $DEPLOY_DIR if not exists..."
+  remote_execute "mkdir -p $DEPLOY_DIR;"
+  if [ $DEPLOY_CLEAN == 1 ]; then
+    echo ">>> Cleaning up $DEPLOY_DIR ..."
+    remote_execute "rm -rf $DEPLOY_DIR/*" || true
+  fi
+  if remote_execute "command -v rsync"; then
+    echo ">>> Syncing files with $DEPLOY_HOST:$DEPLOY_DIR ..."
+    rsync -$DEPLOY_EXCLUDE_ARGS -azpr $BUILD_DIST_DIR/* $DEPLOY_HOST:$DEPLOY_DIR
+  else
+    echo ">>> Copying files to $DEPLOY_HOST:$DEPLOY_DIR ..."
+    cd $BUILD_DIST_DIR
+    tar $DEPLOY_EXCLUDE_ARGS -czf - * | ssh -C $DEPLOY_HOST "cd $DEPLOY_DIR; tar --overwrite -xzf -"
+    cd ..
+  fi
+  if [ "$DEPLOY_CONFIG_DIR" != "$DEPLOY_DIR/config" ]; then
+    echo ">>> Moving configuration dir to $DEPLOY_CONFIG_DIR ..."
+    remote_execute "mv $DEPLOY_DIR/config $DEPLOY_CONFIG_DIR"
+    remote_execute "sed -i 's/__DIR__ \\. \\\"\\/config\\\"/$DEPLOY_CONFIG_DIR/' $DEPLOY_DIR/server.php"
+  fi
+  echo ">>> Adapting file permissions ..."
+  remote_execute "find $DEPLOY_DIR/server/runtime -type d -print0 | xargs -0 chmod 777" || true
+
+  # database
+  echo ">>> Setting up mysql passwordless access ..."
+  setup_mysql_credentials
+  if [ $DEPLOY_EMPTY_DATABASE == 1 ]; then
+    echo ">>> Deleting database ..."
+    remote_execute "mysql --login-path=deploy_alias -e 'drop database if exists $DB_DATABASE;'"
+  fi
+  echo ">>> Creating database if it does not already exist ..."
+  remote_execute "mysql --login-path=deploy_alias -e 'create database if not exists $DB_DATABASE;'"
+  if [[ "$DEPLOY_IMPORT_DB_NAMES" != "" ]]; then
+    echo ">>> Importing database(s)..."
+    remote_execute "$(import_databases_expr)"
+  fi
+fi
+echo "Done. Open app at $APP_URL"

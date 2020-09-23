@@ -36,7 +36,7 @@ class UiController extends AppController
   /**
    * @param $datasource
    * @param $token
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionConfirmRestore($datasource, $token)
   {
@@ -47,6 +47,7 @@ class UiController extends AppController
     (new Confirm())
       ->setMessage($msg)
       ->setRoute("backup/ui/choose-backup")
+      ->setAllowCancel(false)
       ->setParams([$datasource, $token])
       ->sendToClient();
     return "Created confirmation dialog";
@@ -58,7 +59,7 @@ class UiController extends AppController
    * @param $datasource
    * @param $token
    * @return string Diagnostic message
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionChooseBackup($form=null, $datasource=null, string $token=null)
   {
@@ -85,11 +86,12 @@ class UiController extends AppController
     ];
     $message = Yii::t(Module::CATEGORY,
       "Please select the backup set to restore into database '{datasource}'",
-      [ 'datatsource' => $datasource ]
+      [ 'datasource' => $datasource ]
     );
 
     (new Form())
       ->setFormData($formData)
+      ->setCaption(Yii::t(Module::CATEGORY, "Restore backup"))
       ->setMessage($message)
       ->setAllowCancel(true)
       ->setRoute("backup/ui/handle-choose-backup")
@@ -123,7 +125,7 @@ class UiController extends AppController
 
   /**
    * Confirmation dialog for deleting backups
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    * @return string diagnostic message
    */
   public function actionChooseDelete($datasource)
@@ -155,7 +157,7 @@ class UiController extends AppController
 
   /**
    * Service to delete all backups of this datasource older than one day
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionConfirmDelete($data, $datasource)
   {
@@ -227,7 +229,7 @@ class UiController extends AppController
    * @param $form
    * @param $datasource
    * @return string
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionChooseDownload($datasource)
   {

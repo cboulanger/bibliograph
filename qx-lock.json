@@ -1,0 +1,66 @@
+{
+  "libraries": [
+    {
+      "library_name": "UploadWidget",
+      "library_version": "1.0.1",
+      "path": "qx_packages/oetiker_UploadWidget_v1_0_1",
+      "uri": "oetiker/UploadWidget",
+      "repo_name": "oetiker/UploadWidget",
+      "repo_tag": "v1.0.1"
+    },
+    {
+      "library_name": "TokenField",
+      "library_version": "1.3.0",
+      "path": "qx_packages/cboulanger_qx-contrib-TokenField_v1_3_0",
+      "uri": "cboulanger/qx-contrib-TokenField",
+      "repo_name": "cboulanger/qx-contrib-TokenField",
+      "repo_tag": "v1.3.0"
+    },
+    {
+      "library_name": "Qooxdoo API Viewer",
+      "library_version": "1.0.11",
+      "path": "qx_packages/qooxdoo_qxl_apiviewer_v1_0_11",
+      "uri": "qooxdoo/qxl.apiviewer",
+      "repo_name": "qooxdoo/qxl.apiviewer",
+      "repo_tag": "v1.0.11"
+    },
+    {
+      "library_name": "Commandline Testrunner for Qooxdoo Apps",
+      "library_version": "0.5.2",
+      "path": "qx_packages/qooxdoo_qxl_testtapper_v0_5_2",
+      "uri": "qooxdoo/qxl.testtapper",
+      "repo_name": "qooxdoo/qxl.testtapper",
+      "repo_tag": "v0.5.2"
+    },
+    {
+      "library_name": "versionlabel",
+      "library_version": "1.0.1",
+      "path": "qx_packages/qooxdoo_qxl_versionlabel_v1_0_1",
+      "uri": "qooxdoo/qxl.versionlabel",
+      "repo_name": "qooxdoo/qxl.versionlabel",
+      "repo_tag": "v1.0.1"
+    },
+    {
+      "library_name": "logpane",
+      "library_version": "1.0.1",
+      "path": "qx_packages/qooxdoo_qxl_logpane_v1_0_1",
+      "uri": "qooxdoo/qxl.logpane",
+      "repo_name": "qooxdoo/qxl.logpane",
+      "repo_tag": "v1.0.1"
+    },
+    {
+      "library_name": "qxl.dialog",
+      "library_version": "3.0.3",
+      "path": "qx_packages/qooxdoo_qxl_dialog_v3_0_3",
+      "uri": "qooxdoo/qxl.dialog",
+      "repo_name": "qooxdoo/qxl.dialog",
+      "repo_tag": "v3.0.3"
+    },
+    {
+      "library_name": "qxl.taskmanager",
+      "library_version": "1.0.0",
+      "path": "../qxl.taskmanager"
+    }
+  ],
+  "version": "2.1.0"
+}

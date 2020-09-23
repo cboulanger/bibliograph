@@ -4,18 +4,17 @@
 
   http://www.bibliograph.org
 
-  Copyright: 
+  Copyright:
     2018 Christian Boulanger
 
-  License: 
+  License:
     MIT license
     See the LICENSE file in the project's top-level directory for details.
 
-  Authors: 
+  Authors:
     Christian Boulanger (@cboulanger) info@bibliograph.org
 
 ************************************************************************ */
-/*global qx qcl */
 
 /**
  * Mixin providing methodds to deal with child widgets
@@ -27,40 +26,42 @@ qx.Mixin.define("qcl.ui.MChildWidget",
     /**
      * Adds child views to given parent widgets by calling methods of the class
      * that are named similar to "createFooView", "foo" being the id of the
-     * child view. The method must return an array of childViews that matches in 
-     * length to the number of passed parents.
-     * @param {Array} parentViews An array of instances of widget classes that have a 
-     *    `add()` method.  
-     * @param {Array} childData An array of maps, each containing at least an `id` 
-     *    property with a string value
-     * @param {String} widgetIdPath The path to the child view. The id will be appended
-     *    to it, separated with a slash. 
+     * child view. The method must return a map with ids that map the childViews
+     * to the parentViews.
+     *
+     * @param {Object} parentViews A map of instances of widget classes that have a
+     *    `add()` method. The keys are the ids that determine which child widget
+     *    will be added to which parent
+     * @param {Array} childData An array of maps, each containing at least an `name`
+     *    property with a string value.
      */
-    addChildViews: function( parentViews, childData, widgetIdPath )
-    {
-      qx.core.Assert.assertArray( parentViews );
-      qx.core.Assert.assertArray( childData );
-      for( let {id} of childData ){
-        let methodName = 'create' + id.charAt(0).toUpperCase() + id.substr(1) + "View";
-        if( typeof this[methodName] != "function" ){
-          this.error( `Cannot add child view ${id}: method ${methodName}() does not exist.`);
+    addChildViews: function(parentViews, childData) {
+      qx.core.Assert.assertMap(parentViews);
+      qx.core.Assert.assertArray(childData);
+      for (let {name} of childData) {
+        let methodName = "create" + name.charAt(0).toUpperCase() + name.substr(1) + "View";
+        if (typeof this[methodName] != "function") {
+          this.error(`Cannot add child view ${name}: method ${methodName}() does not exist.`);
         }
         let childViews = this[methodName]();
-        if( ! qx.lang.Type.isArray(childViews) || childViews.length !== parentViews.length ){
-          this.error( `Method ${methodName}() does not return an array of length ${parentViews.length}.`);
+        let expected = Object.entries(parentViews).length;
+        if (!qx.lang.Type.isObject(childViews) || Object.keys(childViews).length !== expected) {
+          this.error(`Method ${methodName}() does not return an map with ${expected} entries.`);
+          continue;
         }
-        let i=0;
-        for( let childView of childViews){
-          let parentView = parentViews[i++];
-          if( typeof parentView.add != "function"){
-            this.error(`${parentView} does not have an add() method.`);
+        for (let [childId, childView] of Object.entries(childViews)) {
+          let parentView = parentViews[childId];
+          if (!parentView) {
+            this.error(`Child id "${childId}" does not match any parent id.`);
+            continue;
+          }
+          if (typeof parentView.add != "function") {
+            this.error(`Parent view ${parentView} (id "${childId}") does not have an add() method.`);
           }
           parentView.add(childView);
-          if( widgetIdPath ){
-            childView.setWidgetId(`${widgetIdPath}/${id}`.replace(/\/\//g,"/"));
-          }
+          this.addOwnedQxObject(childView, `${name}-${childId}`);
         }
       }
-    } 
+    }
   }
 });

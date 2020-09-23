@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+# controls the mysql server running in a docker container
+
+source tool/env/check
+
+case $1 in
+start)
+  if [[ "$GITHUB_WORKFLOW" != "" ]]; then
+    echo ">>> Using MariaDB service."
+    exit 0
+  fi
+  echo ">>> Starting mysql server..."
+  if [ "$(docker ps -f name=mysql_server -q -a)" == "" ]; then
+    if [ "$DB_ROOT_PASSWORD" == "" ]; then
+      echo "Missing DB_ROOT_PASSWORD environment variable."
+      exit 1
+    fi
+#      -v $PWD/data/docker/mysql:/var/lib/mysql:delegated \
+
+    docker run --name mysql_server \
+      -e MYSQL_ROOT_PASSWORD=$DB_ROOT_PASSWORD \
+      -p 3306:3306 \
+      --detach \
+      mariadb \
+      > /dev/null
+  else
+    docker start mysql_server > /dev/null
+  fi
+  if [ $? != 0 ]; then
+    >&2 echo 'ERROR: mysql server could not be started.'
+    exit 1
+  fi
+  echo "Server started: $(docker port mysql_server)"
+  ;;
+stop)
+  if [[ "$GITHUB_WORKFLOW" != "" ]]; then
+    exit 0
+  fi
+  echo ">>> Stopping mysql server..."
+  docker stop mysql_server > /dev/null
+  docker rm mysql_server > /dev/null
+  if [ $? != 0 ]; then
+    >&2 echo 'ERROR: mysql server could not be stopped.'
+    exit 1
+  fi
+  echo "Server stopped."
+  ;;
+status)
+  if [[ "$GITHUB_WORKFLOW" != "" ]]; then
+    exit 0
+  fi
+  if [ "$(docker ps -f name=mysql_server -q -a)" != "" ]; then
+    echo "Server is running."
+  else
+    echo "Server is not running."
+  fi
+  ;;
+*)
+  echo "Syntax: tool/env/mysql-server (start|stop|status)"
+esac

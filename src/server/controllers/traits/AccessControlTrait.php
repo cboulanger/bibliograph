@@ -100,7 +100,7 @@ trait AccessControlTrait
    *
    * @param string $permission
    * @param Datasource|string|null $datasource
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   protected function requirePermission($permission, $datasource = null)
   {
@@ -124,7 +124,7 @@ trait AccessControlTrait
         // grant if the user has the permission in that group (or globally)
         if ($user->hasPermission($permission, $group)) {
           return;
-        }      
+        }
       }
       // granted if the user's global roles are linked to the datasource and the permission
       /** Role $role **/
@@ -133,7 +133,7 @@ trait AccessControlTrait
           return;
         }
       }
-      // if the user has access to the given database, grant if the user has a role in this database 
+      // if the user has access to the given database, grant if the user has a role in this database
       // which contains this permission
       if ( $user->hasPermission($permission,null,$datasource)) return;
 
@@ -150,7 +150,7 @@ trait AccessControlTrait
         $this->getActiveUser()->namedId, $permission
       ));
     }
-    throw new \JsonRpc2\Exception("Not allowed.", \JsonRpc2\Exception::INVALID_REQUEST);
+    throw new \lib\exceptions\AccessDeniedException();
   }
 
   /**
@@ -158,7 +158,7 @@ trait AccessControlTrait
    * specified, check if user has the given role in this database. If not, throw.
    * @param string $role
    * @param Datasource|string|null $datasource
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   protected function requireRole($role, $datasource = null)
   {
@@ -189,6 +189,6 @@ trait AccessControlTrait
         $this->getActiveUser()->namedId, $role
       ));
     }
-    throw new \JsonRpc2\Exception("Not allowed.", \JsonRpc2\Exception::INVALID_REQUEST);
+    throw new \lib\exceptions\AccessDeniedException();
   }
 }

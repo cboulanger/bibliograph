@@ -20,7 +20,7 @@ class ServiceController extends AppController
 
   /**
    * @param $datasource
-   * @throws \JsonRpc2\Exception
+   * @throws \lib\exceptions\Exception
    */
   public function actionList($datasource)
   {

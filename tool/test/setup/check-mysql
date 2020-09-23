@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+echo -n ">>> Checking mysql user '$DB_USER' connection from host to database ... "
+output=$(tool/dev/mysql-client -u$DB_USER -p$DB_PASSWORD --version)
+if [ $? -ne 0 ]; then echo "$CROSSMARK"; log_error $output; exit 1; fi
+echo "${CHECKMARK}"
+echo "$output"
+
+echo -n ">>> Checking mysql user '$DB_USER' connection from php container ... "
+tool/dev/php -r "if(!@mysqli_connect('$DB_HOST', '$DB_USER', '$DB_PASSWORD', '', $DB_PORT)){echo '$CROSSMARK' . PHP_EOL .'${COLOR_RED}Error: '.mysqli_connect_error().PHP_EOL.'${STYLE_RESET}';exit(1);}"
+echo "${CHECKMARK}"

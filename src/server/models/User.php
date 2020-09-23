@@ -20,12 +20,14 @@
 
 namespace app\models;
 
-use app\migrations\data\m180105_075537_data_RoleDataInsert;
+use app\controllers\AppController;
+use yii\db\Expression;
+use yii\web\Request;
+use yii\web\UnauthorizedHttpException;
 use function GuzzleHttp\describe_type;
 use InvalidArgumentException;
 use Yii;
 use Yii\db\ActiveQuery;
-use yii\db\Expression;
 use yii\web\IdentityInterface;
 use lib\models\BaseModel;
 
@@ -33,19 +35,19 @@ use lib\models\BaseModel;
 /**
  * This is the model class for table "data_User".
  *
- * @property integer $id
+ * @property int $id
  * @property string $namedId
  * @property string $created
  * @property string $modified
  * @property string $name
  * @property string $password
  * @property string $email
- * @property integer $anonymous
- * @property integer $ldap
- * @property integer $active
+ * @property int $anonymous
+ * @property int $ldap
+ * @property int $active
  * @property string $lastAction
- * @property integer $confirmed
- * @property integer $online
+ * @property int $confirmed
+ * @property int $online
  * @property string $token
  * @property ActiveQuery $groups
  * @property ActiveQuery $roles
@@ -54,6 +56,10 @@ use lib\models\BaseModel;
  */
 class User extends BaseModel implements IdentityInterface
 {
+  const CATEGORY = "access";
+
+  const ANTI_CSRF_TOKEN_NAME = "anti_csrf_token";
+
   /**
    * @inheritdoc
    */
@@ -134,8 +140,6 @@ class User extends BaseModel implements IdentityInterface
     ];
   }
 
-
-
   //-------------------------------------------------------------
   // Indentity Interface
   //-------------------------------------------------------------
@@ -149,11 +153,104 @@ class User extends BaseModel implements IdentityInterface
   }
 
   /**
+   * Returns a MD5 hash of the token plus a random value to avoid XSS attacks
+   * @return string
+   */
+  public function getHashedToken() {
+    return md5($this->token . self::getAntiCsrfToken());
+  }
+
+  /**
+   * Returns a random MD5 string that is stored in the cache and is never
+   * passed to the client
+   * @return string
+   * @throws \Exception
+   */
+  protected static function getAntiCsrfToken() {
+    $anti_csrf_token = Yii::$app->cache->get(self::ANTI_CSRF_TOKEN_NAME);
+    if (!$anti_csrf_token) {
+      $anti_csrf_token = md5(random_int(PHP_INT_MIN, PHP_INT_MAX));
+      Yii::$app->cache->set(self::ANTI_CSRF_TOKEN_NAME, $anti_csrf_token);
+    }
+    return $anti_csrf_token;
+  }
+
+  /**
+   * Compare the given access token with the one in the database, hashed together#
+   * with the user's IP to avoid token hijacking
    * @inheritdoc
    */
-  public static function findIdentityByAccessToken($token, $type = null)
+  public static function findIdentityByAccessToken($hashedToken, $type = null)
   {
-    return static::findOne(['token' => $token]);
+    $anti_csrf_token = self::getAntiCsrfToken();
+    $expr = new Expression("MD5(CONCAT(token,'$anti_csrf_token')) = '$hashedToken'");
+    $user = static::find()->where($expr)->one();
+    if ($user) {
+      Yii::debug("Authenticated user '$user->name' using a token." , self::CATEGORY);
+    }
+    return $user;
+  }
+
+  /**
+   * @param string $sessionId
+   * @param Request $request
+   * @return User
+   * @throws \yii\db\Exception
+   * @throws UnauthorizedHttpException
+   */
+  static function findIdentityBySessionId(string $sessionId, Request $request) {
+    Yii::debug("Trying to use session id '$sessionId' to log in...", self::CATEGORY);
+    $session = Session::findOne(['namedId' => $sessionId]);
+    if (!$session) {
+      Yii::warning("Session $sessionId does not exist", self::CATEGORY);
+    } else if ($session->ip !== $request->getRemoteIP()) {
+      Yii::warning("Wrong remote IP for session $sessionId: " . $request->getRemoteIP());
+    } else {
+      $session->touch();
+      $identity = User::findOne($session->UserId);
+      if (!$identity) {
+        Yii::warning("Invalid session id: User does not exist", self::CATEGORY);
+        try {
+          $session->delete();
+        } catch (\Throwable $e) {
+          Yii::warning($e);
+        }
+        return null;
+      }
+      Yii::info("Authorized user '{$identity->namedId}' via session id '{$sessionId}'.",self::CATEGORY);
+      return $identity;
+    }
+    return null;
+  }
+
+  /**
+   * @param string $token
+   * @param string $authClass
+   * @return bool
+   * @throws \yii\db\Exception
+   */
+  static function loginByAccessToken($token, $authClass) {
+    Yii::debug("Trying to log in with access token $token", self::CATEGORY);
+    $user = static::findIdentityByAccessToken($token);
+    if (!$token or ! $user or ! $user->active ) {
+      Yii::warning("No or invalid authorization token '$token'. Access denied.", self::CATEGORY);
+      return false;
+    }
+
+    // log in user
+    $user->online = 1;
+    $user->anonymous = (int)$user->anonymous;
+    $user->active = (int) $user->active;
+    $user->save();
+
+    /** @var Session $session */
+    $session = $user->continueSession();
+    if ($session) {
+      $session->touch();
+    }
+    $sessionId = Yii::$app->session->getId();
+    Yii::info("Authorized user '{$user->namedId}' via auth auth token (Session {$sessionId}).",self::CATEGORY);
+    return true;
   }
 
   /**
@@ -234,7 +331,7 @@ class User extends BaseModel implements IdentityInterface
    * Returns User_Role records
    * @todo this needs to be looked at since this method AND the getRoles() method filters by group id
    * @return ActiveQuery
-   */         
+   */
   public function getUserRoles()
   {
     $link = [
@@ -242,7 +339,7 @@ class User extends BaseModel implements IdentityInterface
       'GroupId' => 'groupId'
     ];
     return $this->hasMany(User_Role::class, $link );
-  } 
+  }
 
   /**
    * Returns the roles of the user, depending on the groupId property.
@@ -261,7 +358,7 @@ class User extends BaseModel implements IdentityInterface
   /**
    * Returns the global roles of the user
    * @return ActiveQuery
-   */ 
+   */
   public function getGlobalRoles()
   {
     return $this->getGroupRoles(null);
@@ -272,7 +369,7 @@ class User extends BaseModel implements IdentityInterface
    *    If given, retrieve only the roles that the user has in the
    *    group with the given (numeric) id. Otherwise, return global roles only
    * @return ActiveQuery
-   */       
+   */
   public function getGroupRoles($group=null)
   {
     if( $group instanceof Group ) {
@@ -295,7 +392,7 @@ class User extends BaseModel implements IdentityInterface
 
   /**
    * @return ActiveQuery
-   */      
+   */
   protected function getUserGroups()
   {
     $userGroups = $this->hasMany(Group_User::class, ['UserId' => 'id']);
@@ -304,29 +401,29 @@ class User extends BaseModel implements IdentityInterface
 
   /**
    * @return ActiveQuery
-   */      
+   */
   public function getGroups()
   {
     return $this
       ->hasMany(Group::class, ['id' => 'GroupId'])
       ->via('userGroups');
-  } 
+  }
 
   /**
    * @return ActiveQuery
-   */    
+   */
   protected function getUserConfigs()
   {
     return $this->hasMany(UserConfig::class, ['UserId' => 'id']);
-  } 
+  }
 
   /**
    * @return ActiveQuery
-   */  
+   */
   public function getSessions()
   {
     return $this->hasMany(Session::class, ['UserId' => 'id']);
-  } 
+  }
 
   /**
    * @return ActiveQuery
@@ -343,7 +440,7 @@ class User extends BaseModel implements IdentityInterface
   {
     return $this->hasMany(Datasource::class, ['id' => 'DatasourceId'])
       ->via('userDatasources');
-  } 
+  }
 
   //-------------------------------------------------------------
   // Attributes/Getters
@@ -408,7 +505,7 @@ class User extends BaseModel implements IdentityInterface
    *    If Group or integer, check against the permissions granted in that group.
    *    If null or no argument, check against global roles the user has.
    * @param Datasource|null $datasource
-   *    If given, add all permissions the user has by way of being member of a 
+   *    If given, add all permissions the user has by way of being member of a
    *    group that has access to the datasource.
    * @return bool
    * @throws InvalidArgumentException
@@ -431,7 +528,7 @@ class User extends BaseModel implements IdentityInterface
    *    If Group or integer, check against the permissions granted in that group.
    *    If null or no argument, check against global roles the user has.
    * @param Datasource|null $datasource
-   *    If given, add all permissions the user has by way of being member of a 
+   *    If given, add all permissions the user has by way of being member of a
    *    group that has access to the datasource.
    * @return bool
    */
@@ -451,13 +548,13 @@ class User extends BaseModel implements IdentityInterface
       // exact match
       if ($permission === $requestedPermission) {
         return true;
-      } 
+      }
       // else if the current permission name contains a wildcard
       elseif (($pos = strpos($permission, "*")) !== false) {
         if (substr($permission, 0, $pos) == substr($requestedPermission, 0, $pos)) {
           return true;
         }
-      } 
+      }
       // else if the requested permission contains a wildcard
       elseif ($useWildcard and ($pos = strpos($requestedPermission, "*")) !== false) {
         if (substr($permission, 0, $pos) == substr($requestedPermission, 0, $pos)) {
@@ -542,7 +639,7 @@ class User extends BaseModel implements IdentityInterface
    *    group is ignored.
    *    If not given or null, return only global permissions
    * @param Datasource|null $datasource
-   *    If given, add all permissions the user has by way of being member of a 
+   *    If given, add all permissions the user has by way of being member of a
    *    group that has access to the datasource.
    * @return array
    */
@@ -552,7 +649,7 @@ class User extends BaseModel implements IdentityInterface
     $permissions = $this->getPermissionNames(null);
     if ($group and ! Yii::$app->config->getIniValue("global_roles_only") ){
       // add group-specific roles
-      if (!($group instanceof Group or is_int($group))) {     
+      if (!($group instanceof Group or is_int($group))) {
         throw new \InvalidArgumentException("Argument must be instanceof Group, integer, null or 'all'");
       }
       $permissions = array_merge(
@@ -605,7 +702,7 @@ class User extends BaseModel implements IdentityInterface
 //        'datasource role ids filtered by user`s global roles' => $dsGlobalRoleIds,
 //        'combined role ids' => $roleIds,
 //        'permissions' => $permissions
-//      ]);
+//      ], self::CATEGORY);
 //    }
     return $permissions;
   }
@@ -625,16 +722,16 @@ class User extends BaseModel implements IdentityInterface
     /** @var Role[] $roles */
     $roles = $this->getGroupRoles($group)->all();
     //$groupName = $group instanceof Group ? $group->name : ( is_int($group) ? Group::findOne($group)->name : "globally");
-    //Yii::info("{$this->namedId} has " . count( $roles). " roles in group {$groupName}");
+    //Yii::debug("{$this->namedId} has " . count( $roles). " roles in group {$groupName}", self::CATEGORY);
     foreach( $roles as $role) {
-      //Yii::info("{$this->namedId} has role {$role->namedId} in group {$groupName}");
+      //Yii::debug("{$this->namedId} has role {$role->namedId} in group {$groupName}", self::CATEGORY);
       $permissions = array_merge( $permissions, $role->getPermissionNames() );
     }
     return array_values(array_unique($permissions));
   }
 
   /**
-   * Returns list of datasources that the user has access to 
+   * Returns list of datasources that the user has access to
    * @return string[]
    *    Array of datasource names
    */
@@ -654,7 +751,7 @@ class User extends BaseModel implements IdentityInterface
       $datasourceNames[] = $o->namedId;
     }
 
-    // now add those which are linked to the (active) groups that the user belongs to 
+    // now add those which are linked to the (active) groups that the user belongs to
     // or through the roles that this goup gives to the user, including "global" roles
     $groups = $this->getGroups()->where(['active'=>1])->all();
     $groups[] = null; // global group
@@ -680,7 +777,7 @@ class User extends BaseModel implements IdentityInterface
     $names = array_unique($datasourceNames);
     sort($names);
     return $names;
-  }  
+  }
 
   /**
    * Resets the timestamp of the last action  for the current user

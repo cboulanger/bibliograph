@@ -28,11 +28,13 @@ use app\models\Role;
 use app\models\Session;
 use app\models\User;
 use InvalidArgumentException;
-use JsonRpc2\Exception;
+use lib\exceptions\Exception;
 use lib\exceptions\UserErrorException;
 use lib\models\ClipboardContent;
 use Yii;
 use yii\db\Expression;
+use yii\db\StaleObjectException;
+use yii\web\UnauthorizedHttpException;
 
 /**
  * The class used for authentication of users.
@@ -43,17 +45,19 @@ class AccessController extends AppController
 
   const CATEGORY = "access";
 
+  const MESSAGE_FORCE_LOGOUT = "forceLogout";
+
   /**
    * @inheritDoc
    *
    * @var array
    */
-  protected $noAuthActions = ["authenticate", "ldap-support"];
+  protected $noAuthActions = ["authenticate", "ldap-support","logout","challenge"];
 
   //-------------------------------------------------------------
   // Actions / JSONRPC API
-  //-------------------------------------------------------------  
-  
+  //-------------------------------------------------------------
+
   /**
    * Registers a new user.
    *
@@ -78,7 +82,7 @@ class AccessController extends AppController
 //  }
 
   /**
-   * Given a username, return a string consisting of a random hash and the salt 
+   * Given a username, return a string consisting of a random hash and the salt
    * used to hash the password of that user, concatenated by "|"
    */
   public function actionChallenge($username)
@@ -86,23 +90,23 @@ class AccessController extends AppController
     $auth_method = Yii::$app->config->getPreference("authentication.method");
     $user = User::findOne(['namedId'=> $username]);
     if( $user ){
-      if( Yii::$app->config->getIniValue("ldap.enabled") and $user->isLdapUser() ) 
+      if( Yii::$app->config->getIniValue("ldap.enabled") and $user->isLdapUser() )
       {
-        Yii::debug("Challenge: User '$username' needs to be authenticated by LDAP.", __METHOD__);
+        Yii::debug("Challenge: User '$username' needs to be authenticated by LDAP.", self::CATEGORY);
         $auth_method = "plaintext";
-      }      
+      }
     } else {
       // if the user is not in the database (for example, first LDAP auth), use plaintext authentication
       $auth_method = "plaintext";
       Yii::debug("Challenge: User '$username' is not in the database, maybe first LDAP authentication.", __METHOD__);
     }
-    Yii::debug("Challenge: Using authentication method '$auth_method'", __METHOD__);
+    Yii::debug("Challenge: Using authentication method '$auth_method'", self::CATEGORY);
     switch ( $auth_method )
     {
       case "plaintext":
         return array( "method" => "plaintext" );
       case "hashed":
-        return array( 
+        return array(
           "method" => "hashed",
           "nounce" => Yii::$app->accessManager->createNonce($username)
         );
@@ -161,155 +165,54 @@ class AccessController extends AppController
     Yii::$app->session->open();
 
     /*
-     * no username / password
+     * 1) username / password are NULL: session authentication or guest login
      */
-    if (empty($first) and empty($password)) {
+    if ($first === null and $password === null) {
       // see if we have a session id that we can link to a user
-      $session = Session::findOne( [ 'namedId' => $this->getSessionId() ] );
-      if( $session ){
-        Yii::debug('PHP session exists in database...', __METHOD__);
-        // find a user that belongs to this session
-        $user = User::findOne( [ 'id' => $session->UserId ] );
-        if ( $user ) {          
-          Yii::debug('Session belongs to user ' . $user->namedId, __METHOD__);
-        } else {
-          // shouldn't ever happen
-          Yii::warning('Session has non-existing user!');
-          try {
-            $session->delete();
-          } catch (\Throwable $e) {
-            Yii::warning($e->getMessage());
-          }
-        }
-      } 
+      $user = User::findIdentityBySessionId($this->getSessionId(), Yii::$app->request);
       if ( ! $user ) {
         // login anonymously
         $user = $this->createAnonymous();
-        Yii::info("Created anonymous user '{$user->namedId}'.");  
+        Yii::info("Created anonymous user '{$user->namedId}'.", self::CATEGORY);
       }
-    } 
+    }
 
     /*
-     * token authentication
-     */    
+     * 2) token authentication
+     */
     elseif (is_string($first) and empty($password)) {
       // login using token
       $user = User::findIdentityByAccessToken($first);
-      if (is_null($user)) {
+      if (!$user) {
+        $msg = Yii::t("app", "Invalid token. This might be due to a database upgrade. Please log in again.");
+        $this->dispatchClientMessage(self::MESSAGE_FORCE_LOGOUT, $msg);
         throw new UserErrorException( "Invalid token");
       }
-      Yii::info("Authenticated user '{$user->namedId}' via auth token.");
-    } 
+      Yii::info("Authenticated user '{$user->namedId}' via auth token.", self::CATEGORY);
+    }
 
     /*
-     * username / password authentication
-     */    
+     * 3) username / password authentication
+     */
     else {
-
-      // @todo: update to yii functions:
-      // $hash = Yii::$app->getSecurity()->generatePasswordHash($password);
-      // if (Yii::$app->getSecurity()->validatePassword($password, $hash)) {
-      //     // all good, logging user in
-      // } else {
-      //     // wrong password
-      // }
-
-      // identify user
-      $authenticated = false;
-      $useLdap = Yii::$app->config->getIniValue("ldap.enabled");
       try {
-        $user = $this->user($first);
-      } catch (InvalidArgumentException $e) {
-        if( $useLdap ){
-          // this could be a LDAP user
-          try {
-            $user = Yii::$app->ldapAuth->authenticate($first, $password);
-          } catch (ModelNotFoundException $e) {
-            Yii::warning($e->getMessage());
-          }
-        }
-        if( ! $user ) {
-          Yii::warning("Invalid user '$first' tried to authenticate.");
-          return new AuthResult([
-            'error' => Yii::t('app', "Invalid username or password")
-          ]);
-        }
-        $authenticated = true;
-      }
-
-      // inactive users cannot log in
-      if ( ! $user->active ) {
+        $user = $this->authenticateWithPassword($first, $password);
+      } catch (UnauthorizedHttpException $e) {
         return new AuthResult([
-          'error' => Yii::t('app', "User is deactivated"),
-        ]);  
-      } 
-
-      if ( ! $authenticated ) {
-
-        // if the user has been authenticated via ldap before
-        if( $useLdap and $user->ldap ){
-          if ( Yii::$app->ldapAuth->authenticate($first,$password) ){
-            $authenticated = true;
-          }
-          // authentication failed
-        } else {
-          // check password from database
-          $auth_method = Yii::$app->config->getPreference("authentication.method");
-          $authenticated = false;
-          $storedPw = $user->password;
-          switch ($auth_method) {
-            case "hashed":
-              Yii::debug("Client sent hashed password: $password.", __METHOD__);
-              $randSalt   = Yii::$app->accessManager->getLoginSalt();
-              $serverHash = substr( $storedPw, ACCESS_SALT_LENGTH );
-              $authenticated = $password == sha1( $randSalt . $serverHash );
-              break;
-            case "plaintext":
-              Yii::debug("Client sent plaintext password." , __METHOD__);
-              $authenticated = Yii::$app->accessManager->generateHash( $password, $storedPw ) == $storedPw;
-              break;
-            default:
-              throw new InvalidArgumentException("Unknown authentication method $auth_method");
-          }
-        }
-
-        // password is wrong
-        if ( $authenticated === false ){
-          Yii::info("User supplied wrong password.");
-          return new AuthResult([
-            'error' => Yii::t('app', "Invalid username or password"),
-          ]);  
-        }
+          "error" => $e->getMessage()
+        ]);
       }
-      Yii::info("Authenticated user '{$user->namedId}' via auth username/password.");
     }
 
-    // user is authenticated, log in 
+    // log in new authenticate user
     $user->online = 1;
-    $user->save(); 
+    $user->save();
     Yii::$app->user->login($user);
-    if( ! $session ) {
-      // if we don't already have a (PHP) session, try to find a saved one
-      $session = $this->continueUserSession($user);
-    }
-    if ( $session ) {
-      // let's continue this one
-      $sessionId = $session->id;
-      $session->touch();
-      Yii::info("Continued sesssion {$sessionId}"); 
-      session_id( $session->namedId );
-    } else {
-      // we didn't find one, so let's start a new one
-      $sessionId = $this->getSessionId();
-      $session = new Session(['namedId' => $sessionId]);
-      $session->link('user',$user);
-      $session->save();
-      $sessionId = $this->getSessionId();
-      Yii::debug("Started sesssion {$sessionId}", __METHOD__);
-    }
 
-    // renew the token
-    $user->token = null;
+    // create a token
+    if (!$user->token) {
+      $user->token = null;
+    }
     $user->save();
 
     // cleanup old sessions
@@ -318,9 +221,87 @@ class AccessController extends AppController
     // return information on user
     return new AuthResult([
       'message' => Yii::t('app', "Welcome, {0}!", [$user->name]),
-      'token' => $user->token,
+      'token' => $user->getHashedToken(),
       'sessionId' => Yii::$app->session->getId()
     ]);
+  }
+
+  /**
+   * Authenticate with password and username
+   * @param string $username
+   * @param string $password
+   * @return User|null
+   * @throws ModelNotFoundException
+   * @throws UnauthorizedHttpException
+   * @throws \yii\db\Exception
+   */
+  protected function authenticateWithPassword(string $username, string $password) {
+    // @todo: update to yii functions:
+    // $hash = Yii::$app->getSecurity()->generatePasswordHash($password);
+    // if (Yii::$app->getSecurity()->validatePassword($password, $hash)) {
+    //     // all good, logging user in
+    // } else {
+    //     // wrong password
+    // }
+
+    // identify user
+    $authenticated = false;
+    $useLdap = Yii::$app->config->getIniValue("ldap.enabled");
+    try {
+      $user = $this->user($username);
+    } catch (InvalidArgumentException $e) {
+      if( $useLdap ){
+        // this could be a LDAP user
+        try {
+          $user = Yii::$app->ldapAuth->authenticate($username, $password);
+        } catch (ModelNotFoundException $e) {
+          Yii::warning($e->getMessage());
+        }
+      }
+      if( ! $user ) {
+        Yii::warning("Invalid user '$username' tried to authenticate.");
+        throw new UnauthorizedHttpException(Yii::t('app', "Invalid username or password"));
+      }
+      $authenticated = true;
+    }
+    // inactive users cannot log in
+    if ( ! $user->active ) {
+      throw new UnauthorizedHttpException(Yii::t('app', "User is deactivated"));
+    }
+    if ( ! $authenticated ) {
+      // if the user has been authenticated via ldap before
+      if( $useLdap and $user->ldap ){
+        if ( Yii::$app->ldapAuth->authenticate($username,$password) ){
+          $authenticated = true;
+        }
+        // authentication failed
+      } else {
+        // check password from database
+        $auth_method = Yii::$app->config->getPreference("authentication.method");
+        $storedPw = $user->password;
+        switch ($auth_method) {
+          case "hashed":
+            Yii::debug("Client sent hashed password: $password.", self::CATEGORY);
+            $randSalt   = Yii::$app->accessManager->getLoginSalt();
+            $serverHash = substr( $storedPw, ACCESS_SALT_LENGTH );
+            $authenticated = $password == sha1( $randSalt . $serverHash );
+            break;
+          case "plaintext":
+            Yii::debug("Client sent plaintext password." , self::CATEGORY);
+            $authenticated = Yii::$app->accessManager->generateHash( $password, $storedPw ) == $storedPw;
+            break;
+          default:
+            throw new InvalidArgumentException("Unknown authentication method $auth_method");
+        }
+      }
+      // password is wrong
+      if ( $authenticated === false ){
+        Yii::info("User supplied wrong password.", self::CATEGORY);
+        throw new UnauthorizedHttpException(Yii::t('app', "Invalid username or password"));
+      }
+    }
+    Yii::info("Authenticated user '{$user->namedId}' via auth username/password.", self::CATEGORY);
+    return $user;
   }
 
   /**
@@ -328,24 +309,51 @@ class AccessController extends AppController
    */
   public function actionLogout()
   {
-    $user = $this->getActiveUser(); 
-    Yii::info("Logging out user '{$user->name}'.");
+    $user = $this->getActiveUser();
+    $this->dispatchClientMessage("qcl.token.change", null);
+    if (!$user) {
+      $session = Session::findByNamedId(Yii::$app->session->id);
+      if ($session) {
+        try {
+          $session->delete();
+        } catch (\Throwable $e) {
+          Yii::warning($e->getMessage());
+        }
+      }
+      return "No user is logged in.";
+    }
+    $this->logout($user);
+    return "User '{$user->name}' logged out";
+  }
+
+  /**
+   * Log out the given user
+   * @param User $user
+   */
+  public function logout(User $user) {
+    Yii::info("Logging out user '{$user->name}'.", self::CATEGORY);
+    // set the user offline
     $user->online = 0;
+    // delete the token,
+    $user->token = null;
     try {
       $user->save();
     } catch (\yii\db\Exception $e) {
       Yii::warning($e->getMessage());
     }
+    // delete all session, this shoudl force logout users but probably won't
     Session::deleteAll(['UserId' => $user->id ]);
+
     Yii::$app->user->logout();
     Yii::$app->session->destroy();
+
+
     // cleanup old sessions
     try {
       $this->cleanup();
     } catch (\Throwable $e) {
       Yii::warning($e->getMessage());
     }
-    return "User logged out";
   }
 
   /**
@@ -372,16 +380,13 @@ class AccessController extends AppController
   public function actionUsername()
   {
     $activeUser = $this->getActiveUser();
-    if (is_null($activeUser)) {
-      throw new Exception('Missing authentication', Exception::INVALID_REQUEST);
-    }
-    Yii::info("The current user is " . $activeUser->username);
+    Yii::info("The current user is " . $activeUser->username, self::CATEGORY);
     return $activeUser->username;
   }
 
   /**
    * Returns the data of the current user, including the current permissions.
-   * @param string|null $datasource 
+   * @param string|null $datasource
    *    If string, return global permissions plus permissions given via the datasource
    *    If no argument or null, return global permissions only
    */
@@ -390,7 +395,7 @@ class AccessController extends AppController
     $activeUser = $this->getActiveUser();
     $data = $activeUser->getAttributes(['namedId','name','anonymous','ldap']);
     $data['anonymous'] = (bool) $data['anonymous'];
-    if( $datasource ){
+    if ($datasource){
       // transform string name to datasource model instance and check access
       $datasource = $this->datasource($datasource,true);
     }
@@ -431,7 +436,7 @@ class AccessController extends AppController
     /** @var Group $group */
     foreach( $datasourceGroups as $group){
       if( ! in_array($group->namedId, $userGroupNames)) continue;
-      //Yii::info("Datasource {$datasource->namedId} is linked to group {$group->namedId}");
+      //Yii::info("Datasource {$datasource->namedId} is linked to group {$group->namedId}" , self::CATEGORY);
       $permissions = array_merge(
         $permissions,
         $user->getPermissionNames($group)
@@ -460,7 +465,7 @@ class AccessController extends AppController
    */
   public function cleanup()
   {
-    Yii::info( "Cleaning up stale session data ...." );
+    Yii::info( "Cleaning up stale session data ....", self::CATEGORY );
 
     // cleanup sessions
     foreach( Session::find()->all() as $session ){
@@ -483,11 +488,11 @@ class AccessController extends AppController
           // .. delete user if guest
           $user->delete();
         } else {
-          // ... set real users to offline 
+          // ... set real users to offline
           $user->online = 0;
-          $user->save(); 
+          $user->save();
         }
-      } 
+      }
     }
 
     // cleanup clipboard
@@ -513,7 +518,7 @@ class AccessController extends AppController
 
   //-------------------------------------------------------------
   // Helper methods
-  //-------------------------------------------------------------    
+  //-------------------------------------------------------------
 
   /**
    * Checks if the given username has to be authenticated from an LDAP server

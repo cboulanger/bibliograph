@@ -1,0 +1,29 @@
+{
+  "info": {
+    "name": "Bibliograph",
+    "summary": "Open source online bibliographic data manager",
+    "description": "Bibliograph is a powerful open source web application for the collaborative collection, editing and publishing of bibliographic data",
+    "homepage": "http://www.bibliograph.org",
+    "license": "MIT license",
+    "authors": [
+      {
+        "name": "Christian Boulanger",
+        "githubUser": "cboulanger",
+        "email": "info@bibliograph.org"
+      }
+    ],
+    "version": "3.0.0"
+  },
+  "provides": {
+    "namespace": "bibliograph",
+    "encoding": "utf-8",
+    "class": "src/client/bibliograph/source/class",
+    "resource": "src/client/bibliograph/source/resource",
+    "translation": "source/translation"
+  },
+  "requires": {
+    "@qooxdoo/compiler": "^1.0.0-beta",
+    "@qooxdoo/framework": "^6.0.0-beta"
+  },
+  "$schema": "https://qooxdoo.org/schema/Manifest-1-0-0.json"
+}

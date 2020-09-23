@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+source tool/lib/functions.sh
+
+DIST_DIR=${DIST_DIR:-$(pwd)/dist}
+if [[ ! -d "$DIST_DIR" ]]; then
+    exit_with_error "Cannot locate build target directory '$DIST_DIR'."
+fi
+
+rm -rf ${DIST_DIR:?}/*

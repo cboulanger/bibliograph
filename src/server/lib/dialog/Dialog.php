@@ -34,27 +34,32 @@ use yii\base\Event;
 class Dialog extends \yii\base\BaseObject
 {
   const EVENT_DIALOG = "dialog";
-
-  /**
-   * The type of the dialog widget
-   * @var string
-   */
-  public $type;
-  public function setType(string $value){$this->type = $value; return $this; }
-
   /**
    * The properties that will be set on the widget
    * @var array
    */
-  public $properties = [];
+  protected $properties = [];
   public function setProperties(array $value){$this->properties = $value; return $this;}
 
+  /**
+   * The caption of the dialog
+   * @var string|null
+   */
+  protected $caption = null;
+  public function setCaption($value){$this->caption = $value; return $this;}
+
+  /**
+   * Whether to show or hide the dialog widget
+   * @var bool
+   */
+  protected $show = true;
+  public function setShow(bool $value){$this->show = $value; return $this; }
 
   /**
    * The callback service (=>controller id)
    * @var string
    */
-  public $service;
+  protected $service;
   public function setService(string $value){$this->service = $value; return $this;}
 
 
@@ -62,14 +67,14 @@ class Dialog extends \yii\base\BaseObject
    * The callback method (=>controller action id)
    * @var string
    */
-  public $method;
+  protected $method;
   public function setMethod(string $value){$this->method=$value;return $this;}
 
   /**
    * The parameters passed to the method/action
    * @var array
    */
-  public $params = [];
+  protected $params = [];
   public function setParams(array $value){$this->params=$value; return $this;}
 
 
@@ -89,41 +94,37 @@ class Dialog extends \yii\base\BaseObject
 
   /**
    * Sends the dialog data to the client
+   * @param array $properties The name of the properties that are to be sent in the
+   * `properties` object
+   * @return $this
    */
-  public function sendToClient()
+  public function sendToClient(array $properties=[])
   {
-    static::createWidget(
-      $this->type,
-      $this->properties,
-      $this->service,
-      $this->method,
-      $this->params
-    );
+    if (count($properties)) {
+      foreach ($properties as $key) {
+        if ($this->$key !== null) {
+          $this->properties[$key] = $this->$key;
+        }
+      }
+    }
+    static::addToEventQueue( array(
+      'type' => lcfirst((new \ReflectionClass($this))->getShortName()),
+      'properties' => $this->properties,
+      'service' => $this->service,
+      'method'  => $this->method,
+      'params'  => $this->params,
+      'show'    => $this->show
+    ));
+    return $this;
   }
 
   /**
-   * Returns an event to the client which shows a widget of the given type, having the
-   * given properties
-   * @param string $type
-   *    The type of the dialog widget
-   * @param array|null $properties
-   *    If array, populate the properties of the widget with the key-value pairs
-   * @param string $callbackService
-   *    The name of the service to be called
-   * @param string $callbackMethod
-   *    The name of the method to be called
-   * @param array|null $callbackParams
-   *    The parameters to be passed to the service
+   * Shows the widget on the client
+   * Alias of #sendToClient()
    */
-  public static function createWidget( $type, array $properties, $callbackService, $callbackMethod, $callbackParams=array() )
+  public function show()
   {
-    static::addToEventQueue( array(
-      'type'        => $type,
-      'properties'  => $properties,
-      'service'     => $callbackService,
-      'method'      => $callbackMethod,
-      'params'      => $callbackParams
-    ));
+    return $this->sendToClient();
   }
 
   /**
@@ -134,5 +135,13 @@ class Dialog extends \yii\base\BaseObject
   {
     $event = new Event([ 'name' => Dialog::EVENT_DIALOG, 'data' => $data ]);
     \Yii::$app->eventQueue->add( $event );
+  }
+
+  /**
+   * Hides the widget. Does not require #sendToClient();
+   */
+  public function hide() {
+    $this->setShow(false);
+    $this->sendToClient();
   }
 }

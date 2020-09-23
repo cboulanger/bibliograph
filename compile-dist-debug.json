@@ -1,0 +1,55 @@
+{
+  "$schema": "https://qooxdoo.org/schema/compile-1-0-0.json",
+  "libraries": [
+    "src/client/bibliograph",
+    "src/server/modules/z3950/client",
+    "src/server/modules/webservices/client",
+    "src/server/modules/backup/client",
+    "src/lib/incubator.qx.io.jsonrpc"
+  ],
+  "environment": {
+    "app.version": "3.0.0-beta.79",
+    "app.serverUrl": ".",
+    "qx.icontheme": "Tango",
+    "module.objectid": true,
+    "app.taskmonitor.enable": true,
+    "qcl.io.jsonrpc.token-in-params": false
+  },
+  "locales": [
+    "en",
+    "de"
+  ],
+  "targets": [
+    {
+      "description": "Deployment version in debug mode",
+      "type": "build",
+      "targetClass": "BuildTarget",
+      "environment": {
+        "app.mode": "production",
+        "qx.debug": true,
+        "qx.io.jsonrpc.debug": true,
+        "qcl.ui.tool.ObjectIds.enable": true
+      },
+      "outputPath": "compiled/build",
+      "deployPath": "compiled/deploy"
+    }
+  ],
+  "defaultTarget": "build",
+  "applications": [
+    {
+      "title": "Bibliograph Bibliographic Data Manager",
+      "name": "bibliograph",
+      "theme": "bibliograph.theme.Theme",
+      "class": "bibliograph.Application",
+      "bootPath": "source/boot",
+      "include": [
+        "bibliograph.plugins.*"
+      ]
+    }
+  ],
+  "babel": {
+    "options": {
+      "targets": "edge >=18, chrome >= 73, firefox >= 66"
+    }
+  }
+}

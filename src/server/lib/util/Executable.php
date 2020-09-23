@@ -134,7 +134,7 @@ class Executable extends BaseObject
       2 => ["pipe", "w"]  // STDERR
     ], $pipes, $this->cwd, $this->env, $this->options);
     // make STDERR non-blocking
-    //stream_set_blocking($pipes[2], 0);
+    stream_set_blocking($pipes[2], 0);
     // handle streams if we have a resource
     if (is_resource($proc)) {
       if ($input) fwrite($pipes[0], $input);
@@ -156,19 +156,20 @@ class Executable extends BaseObject
   /**
    * Calls the executable, returning the exit code. The
    * stdout and stderr data can be retrieved using the
-   * getStdOut() and getStdErr() methods.
+   * getStdOut() and getStdErr() methods. Set
    *
-   * @param string $arguments|null Optional command-line arguements
-   * @param string $stdin|null Optional data fed into the executable
+   * @param string $arguments |null Optional command-line arguements
+   * @param string $stdin |null Optional data fed into the executable
+   * @param string $lang The encoding of the text (via the LANG env variables, defaults to "en_US.UTF-8"
    * @return int Exit code
    * @throws Exception
    */
-  public function exec(string $arguments = null, string $stdin = null)
+  public function exec(string $arguments = null, string $stdin = null, $lang = "en_US.UTF-8")
   {
     $this->arguments = $arguments;
     $this->stdin = $stdin;
     $result = $this->call_executable(
-      $this->cmd . " " . $arguments,
+      "export LC_ALL=$lang; $this->cmd $arguments",
       $stdin
     );
     $this->stdout = $result['stdout'];

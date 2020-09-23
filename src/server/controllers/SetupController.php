@@ -20,31 +20,34 @@
 
 namespace app\controllers;
 
-
+use app\controllers\traits\PropertyPersistenceTrait;
 use app\models\BibliographicDatasource;
 use app\models\Datasource;
+use georgique\yii2\jsonrpc\exceptions\JsonRpcException;
+use Illuminate\Support\Str;
+use lib\plugin\PluginInterface;
 use Yii;
 use yii\db\Exception;
-use Stringy\Stringy;
 use app\models\Schema;
 use lib\components\MigrationException;
-use lib\dialog\{
-  Error as ErrorDialog, Confirm, Login
-};
-use lib\exceptions\{
-  RecordExistsException, SetupException, UserErrorException
-};
+use lib\dialog\{Alert, Dialog, Progress};
+use lib\exceptions\{RecordExistsException,
+  ServerBusyException,
+  SetupException,
+  SetupFatalException};
 use lib\components\ConsoleAppHelper as Console;
 use lib\Module;
-use yii\helpers\Html;
+use yii\web\UnauthorizedHttpException;
 
 
 /**
  * Setup controller. Needs to be the first controller called
  * by the application after loading
  */
-class SetupController extends \app\controllers\AppController
+class SetupController extends AppController
 {
+  use PropertyPersistenceTrait;
+
   /**
    * The name of the default datasource schema.
    * Initial value of the app.datasource.baseschema preference.
@@ -60,15 +63,40 @@ class SetupController extends \app\controllers\AppController
   const DATASOURCE_DEFAULT_CLASS = \app\models\BibliographicDatasource::class;
 
   /**
+   * Log category
+   */
+  const CATEGORY = "setup";
+
+  /**
    * @inheritDoc
    *
    * @var array
    */
-  protected $noAuthActions = ["setup", "version", "setup-version"];
+  protected $noAuthActions = ["setup", "version", "setup-version", "reset"];
 
+  /**
+   * Setup errors
+   * @var array
+   */
   protected $errors = [];
 
+  /**
+   * Setup messages
+   * @var array
+   */
   protected $messages = [];
+
+  /**
+   * The number of setup methods in total
+   * @var int
+   */
+  protected $numberOfSetupMethods = 0;
+
+  /**
+   * Counter for the number of setup methods left
+   * @var int
+   */
+  protected $counter = 0;
 
   /**
    * Whether we have an ini file
@@ -93,7 +121,7 @@ class SetupController extends \app\controllers\AppController
 
   /**
    * Whether we upgrade from legacy version v2
-   * @var 
+   * @var
    */
   protected $isV2Upgrade = false;
 
@@ -104,202 +132,48 @@ class SetupController extends \app\controllers\AppController
    */
   protected $moduleUpgrade = false;
 
-  //-------------------------------------------------------------
-  // ACTIONS
-  //-------------------------------------------------------------  
+  /**
+   * The current version of the application as stored in the database
+   * @var string
+   */
+  protected $upgrade_from;
 
   /**
-   * Returns the application verision as per package.json
+   * The version in package.json, i.e. of the code, which can be higher than of
+   * the data
+   * @var string
    */
-  public function actionVersion()
-  {
-    return Yii::$app->utils->version;
-  }
+  protected $upgrade_to;
 
   /**
-   * Called by the confirm dialog
-   * @see actionSetup()
+   * A list of setup method names
+   * @var array
    */
-  public function actionConfirmMigrations()
-  {
-    $this->migrationConfirmed = true;
-    return $this->actionSetup();
-  }
+  protected $setupMethods = [];
 
   /**
-   * The setup action. Is called as first server method from the client
+   * If true, execute setup methods consecutively until REQUEST_EXECUTION_THRESHOLD is reached,
+   * otherwise, return response to client immediately after execution of one method.
+   * @var bool
    */
-  public function actionSetup()
-  {
-    return $this->_setup();
-  }
+  protected $batchExecuteSetupMethods = true;
 
   /**
-   * A setup a specific version of the application. This is mainly for testing.
-   * @param string $upgrade_to (optional) The version to upgrade from.
-   * @param string $upgrade_from (optional) The version to upgrade to.
+   * The session id of the client that first calls this method, blocking further calls
+   * @var string
    */
-  public function actionSetupVersion($upgrade_to, $upgrade_from = null)
-  {
-    if (!YII_ENV_TEST) {
-      throw new \BadMethodCallException('setup/setup-version can only be called in test mode.');
-    }
-    return $this->_setup($upgrade_to, $upgrade_from);
-  }
+  protected $initiatingSessionId = null;
 
   /**
-   * The setup action. Is called as first server method from the client
-   * @param string $upgrade_to (optional) The version to upgrade to. You should not set
-   * this parameter unless you know what you are doing.
-   * @param string $upgrade_from (optional) The version to upgrade from.You should not set
-   * this parameter unless you know what you are doing.
-   * @return array
+   * Wether the property cache has been reset
+   * @var bool
    */
-  protected function _setup($upgrade_to = null, $upgrade_from = null)
-  {
-    // this throws if ini file doesn't exist
-    $this->checkIfIniFileExists();
-    if (!$upgrade_from) {
-      try {
-        $upgrade_from = Yii::$app->config->getKey('app.version');
-      } catch (\InvalidArgumentException $e) {
-        // upgrading from version 2 where the config key doesn't exist
-        $upgrade_from = "2.x";
-        $this->isV2Upgrade = true;
-      } catch (\yii\db\Exception $e) {
-        // no tables exist yet, this is the first run of a fresh installation
-        $upgrade_from = "0.0.0";
-        $this->isNewInstallation = true;
-      } catch (yii\base\InvalidConfigException $e) {
-        // this happens deleting the tables in the database during development
-        // @todo 
-        $upgrade_from = "0.0.0";
-        $this->isNewInstallation = true;
-      }
-    }
-    if (!$upgrade_to) {
-      $upgrade_to = Yii::$app->utils->version;
-    }
-    // @todo validate
+  protected $isReset = false;
 
-    // if application version has changed or first run, run setup methods
-    Yii::debug("Data version: $upgrade_from, code version: $upgrade_to.", __METHOD__);
-    // visual marker in log file
-    Yii::debug(
-      "\n\n\n" . str_repeat("*", 80) . "\n\n BIBLIOGRAPH SETUP\n\n" . str_repeat("*", 80) . "\n\n\n",
-      'marker'
-    );
-    if ($upgrade_to !== $upgrade_from) {
-      Yii::info("Application version has changed from '$upgrade_from' to '$upgrade_to', running setup methods");
-    }
-    // run methods. If any of them returns a fatal error, abort and alert the user
-    // if any non-fatal errors occur, collect them and display them to the user at the
-    // end, then consider setup unsuccessful
-    $success = $this->runSetupMethods($upgrade_from, $upgrade_to);
-    if ($success) {
-      $upgrade_from = $upgrade_to;
-      Yii::info("Setup of version '$upgrade_from' finished successfully.");
-      if (!Yii::$app->config->keyExists('app.version')) {
-        // createKey( $key, $type, $customize=false, $default=null, $final=false )
-        Yii::$app->config->createKey('app.version', 'string', false, null, false);
-      }
-      Yii::$app->config->setKeyDefault('app.version', $upgrade_from);
-    } else {
-      Yii::warning("Setup of version '$upgrade_to' failed.");
-      Yii::debug([
-        'errors'   => $this->errors,
-        'messages' => $this->messages
-      ], __METHOD__);
-      return null;
-    }
-
-    // let application know if LDAP is enabled
-    $ldapEnabled =  Yii::$app->config->getIniValue("ldap.enabled");
-    Yii::$app->config->setKeyDefault("ldap.enabled",$ldapEnabled);
-
-    // notify client that setup it done
-    $this->dispatchClientMessage("bibliograph.setup.done"); // @todo rename
-
-    // return errors and messages
-    return [
-      'errors' => $this->errors,
-      'messages' => $this->messages
-    ];
-  }
-
-  /**
-   * Run all existing setup methods, i.e. methods of this class that have the prefix 'setup'.
-   * Each method must be executable regardless of application setup state and will be called
-   * with the same parameters as this method. The must return one of these value types:
-   *
-   * - false : do nothing
-   * - [ 'fatalError'] => "Fatal error message" ] This will end the setup process and alert a
-   *   message to the user
-   * - [ 'error' => "Error message", 'message' => "Result message' ] This will let the setup
-   *   process continue. Messages are stored in the 'messages' member property, errors in the
-   *   'error' member property of this object
-   *
-   * @param string $upgrade_from
-   *    The current version of the application as stored in the database
-   * @param string $upgrade_to The version in package.json, i.e. of the code, which can be
-   *    higher than the
-   * @return bool
-   */
-  protected function runSetupMethods($upgrade_from, $upgrade_to)
-  {
-    // compile list of setup methods
-    foreach (\get_class_methods($this) as $method) {
-      if ( starts_with($method,"setup")) {
-        Yii::debug("Calling method '$method'...", __METHOD__);
-        try {
-          $result = $this->$method($upgrade_from, $upgrade_to);
-        } catch (SetupException $e) {
-          ErrorDialog::create($e->getMessage());
-          Yii::error("Setup exception: " . $e->getMessage());
-          // @todo deal with diagnostic output
-          return false;
-        } catch (\Exception $e) {
-          ErrorDialog::create($e->getMessage());
-          Yii::error($e);
-          return false;
-        }
-        if (!$result) {
-          Yii::debug("Skipping method '$method'...", __METHOD__);
-          continue;
-        }
-        // @todo replace with SetupException
-        if (isset($result['fatalError'])) {
-          $fatalError = $result['fatalError'];
-          Yii::error($fatalError);
-          ErrorDialog::create($fatalError);
-          return false;
-        }
-        if (isset($result['error'])) {
-          foreach ( (array) $result['error'] as $error) {
-            $this->errors[] = "$method: $error";
-          }
-        }
-        if (isset($result['message'])) {
-          $this->messages = array_merge( $this->messages, (array) $result['message']);
-        }
-      }
-    }
-    if (count($this->errors)) {
-      Yii::warning("Setup finished with errors:");
-      Yii::warning($this->errors);
-      $msg = Html::tag('b', Yii::t('setup', 'Setup failed. Please fix the following problems:'));
-      ErrorDialog::create(\implode('<br>', $this->errors));
-      return false;
-    }
-    // Everything seems to be ok
-    Yii::debug("Setup finished successfully.", __METHOD__);
-    Yii::debug($this->messages, __METHOD__);
-    return true;
-  }
 
   //-------------------------------------------------------------
   // HELPERS
-  //-------------------------------------------------------------  
+  //-------------------------------------------------------------
 
   /**
    * Returns the names of all tables in the current database
@@ -357,89 +231,420 @@ class SetupController extends \app\controllers\AppController
     }
   }
 
-  //-------------------------------------------------------------
-  // SETUP METHODS
-  //-------------------------------------------------------------
-
-  /**
-   * Deletes the file cache on version change
-   * @return boolean
-   * @throws \Exception
-   */
-  protected function setupDeleteFileCache($upgrade_from,$upgrade_to){
-    if( $upgrade_from !== $upgrade_to ){
-      Yii::debug("Deleting file cache ...", __METHOD__);
-      $this->emptyDir( __DIR__ . "/../runtime/cache" );
-    }
-    return false;
-  }
-
-
   /**
    * Check if an ini file exists
    *
-   * @return array
-   * @throws UserErrorException
+   * @throws SetupException
    */
   protected function checkIfIniFileExists()
   {
     $this->hasIni = file_exists(APP_CONFIG_FILE);
     if (!$this->hasIni) {
       if (YII_ENV_PROD) {
-        throw new UserErrorException(Yii::t('setup', 'Cannot run in production mode without ini file.'));
+        throw new SetupException('Cannot run in production mode without ini file.');
       } else {
-        throw new UserErrorException( "Wizard not implemented yet. Please add ini file as per installation instructions.");
+        throw new SetupException( "Wizard not implemented yet. Please add ini file as per installation instructions.");
       }
     }
+    return true;
+  }
+
+  /**
+   * Returns true if one of the plugins needs an upgrade, otherwise returns false
+   * @return bool
+   */
+  protected function checkModuleNeedsUpgrade()
+  {
+    $this->moduleUpgrade = false;
+    foreach(Yii::$app->modules as $id => $info) {
+      /** @var Module $module */
+      $module = Yii::$app->getModule($id);
+      Yii::debug("Module $module->id: Code version $module->version, installed version $module->installedVersion");
+      if (
+        $module instanceof PluginInterface
+        && $module->disabled === false
+        && $module->version !== $module->installedVersion
+      ) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  //-------------------------------------------------------------
+  // ACTIONS
+  //-------------------------------------------------------------
+
+  public function actionReset($confirmed=false) {
+    if (!YII_ENV_TEST and !$this->getActiveUser()) {
+      throw new UnauthorizedHttpException("Unauthorized");
+    }
+    if ($confirmed) {
+      $this->addNotification("bibliograph.rpc.Commands.reload", [true]);
+      return "OK";
+    }
+    try {
+      Yii::$app->cache->flush();
+    } catch (\Exception $e) {}
+
+    (new Alert())
+      ->setMessage(Yii::t("app", "The setup cache has been reset. The application will be reloaded."))
+      ->setService("setup")
+      ->setMethod("reset")
+      ->setParams([true])
+      ->sendToClient();
+    return "Setup cache has been reset.";
+  }
+
+  /**
+   * Returns the application verision as per package.json
+   */
+  public function actionVersion()
+  {
+    return Yii::$app->utils->version;
+  }
+
+
+  /**
+   * Called by the confirm dialog
+   * @see actionSetup()
+   */
+  public function actionConfirmMigrations()
+  {
+    $this->migrationConfirmed = true;
+    return $this->actionSetup();
+  }
+
+  /**
+   * The setup action. Is called as first server method from the client The result returned by
+   * the server contains diagnostic messages only. More important are the messages which are
+   * returned via JSON-RPC notifications:
+   *
+   * - bibliograph.setup.next: The setup process is not finished yet, but has ended the request to avoid a timeout.
+   * The client should simply call the action again to continue the setup process.
+   * - bibliograph.setup.done: The setup has completed, the client can begin to interact with the backend.
+   *
+   * Errors thrown: {@link JsonRpcException} with Codes {@link}
+   * @throws SetupException
+   * @throws ServerBusyException
+   */
+  public function actionSetup()
+  {
+    return $this->_setup();
+  }
+
+  /**
+   * A setup a specific version of the application. Not allowed in production mode.
+   * @see {@link SetupController::actionSetup} for details
+   * @param string $upgrade_to (optional) The version to upgrade from.
+   * @param string $upgrade_from (optional) The version to upgrade to.
+   * @throws SetupException
+   * @throws ServerBusyException
+   */
+  public function actionSetupVersion($upgrade_to, $upgrade_from = null)
+  {
+    if (!YII_ENV_TEST) {
+      throw new \BadMethodCallException('setup/setup-version can only be called in test mode.');
+    }
+    $this->upgrade_from = $upgrade_from;
+    $this->upgrade_to = $upgrade_to;
+    return $this->_setup();
+  }
+
+  /**
+   * The setup action. Is called as first server method from the client
+   * @return string
+   * @throws SetupException
+   * @throws ServerBusyException
+   * @throws SetupFatalException
+   */
+  protected function _setup()
+  {
+    if (strstr(Yii::$app->request->referrer, "?reset")) {
+      return $this->actionReset();
+    }
+    $this->restoreProperties();
+
+//    if ($this->initiatingSessionId) {
+//      if ($this->initiatingSessionId != Yii::$app->session->id) {
+//        // Abort if other client has already started the setup
+//        throw new ServerBusyException("Setup in progress");
+//      }
+//    } else {
+//      $this->initiatingSessionId = Yii::$app->session->id;
+//    }
+
+    if (count($this->setupMethods) === 0) {
+      // if no setup methods have been identified, this is the start of the setup sequence
+      $this->_initSetup();
+      // if we still have no setup methods, return to client
+      if ($this->numberOfSetupMethods === 0) {
+        Yii::info("Starting Bibliograph v$this->upgrade_to ...");
+        $this->dispatchClientMessage("bibliograph.setup.done", []);
+        return "Setup already completed.";
+      }
+    }
+    return $this->_runNextMethod();
+  }
+
+  /**
+   * Initialize the setup procedure
+   * @throws SetupException
+   */
+  protected function _initSetup()
+  {
+    $upgrade_from = $this->upgrade_from;
+    $upgrade_to = $this->upgrade_to;
+    // this throws if ini file doesn't exist
+    $this->checkIfIniFileExists();
+    // version stored in database
+    if (!$upgrade_from) {
+      try {
+        $upgrade_from = Yii::$app->config->getKey('app.version');
+        // we have a stored version, so this is a reset
+        $this->isReset = true;
+      } catch (\InvalidArgumentException $e) {
+        // upgrading from version 2 where the config key doesn't exist
+        $upgrade_from = "2.x";
+        $this->isV2Upgrade = true;
+      } catch (\yii\db\Exception $e) {
+        // no tables exist yet, this is the first run of a fresh installation
+        $upgrade_from = "0.0.0";
+        $this->isNewInstallation = true;
+      } catch (yii\base\InvalidConfigException $e) {
+        // this happens deleting the tables in the database during development
+        $upgrade_from = "0.0.0";
+        $this->isNewInstallation = true;
+      }
+    }
+    // Version in source code
+    if (!$upgrade_to) {
+      $upgrade_to = Yii::$app->utils->version;
+    }
+
+    $this->upgrade_from = $upgrade_from;
+    $this->upgrade_to = $upgrade_to;
+    // if we have a version change or reset, run setup methods again
+    if ( $upgrade_from !== $upgrade_to or $this->isReset) {
+      // compile list of setup methods
+      foreach (\get_class_methods($this) as $method) {
+        if (Str::startsWith($method, "setup")) {
+          $this->setupMethods[] = $method;
+        }
+      }
+      // mark that reset has been done
+      $this->isReset = false;
+    } elseif ($this->checkModuleNeedsUpgrade()) {
+      // setup the modules since a version has changed
+      $this->setupMethods[] = "setupModules";
+      $this->numberOfSetupMethods = 1;
+    }
+    $this->numberOfSetupMethods = count($this->setupMethods);
+
+    try {
+      $userInfo = "Authenticated user: " . Yii::$app->user->identity->name;
+    } catch (\Throwable $e) {
+      $userInfo = "No authenticated user.";
+    }
+
+    // visual marker in log file
+    Yii::debug(implode("\n", [
+        "",
+        "",
+        str_repeat("*", 80),
+        "",
+        "BIBLIOGRAPH SETUP",
+        "",
+        str_repeat("*", 80),
+        "",
+        "Session ID:" . Yii::$app->session->id,
+        $userInfo,
+        "Data version: $upgrade_from",
+        "Code version: $upgrade_to.",
+        $this->numberOfSetupMethods
+          ? "Setup methods: \n  - " . implode("\n  - ", $this->setupMethods)
+          : "No setup necessary.",
+        "",
+        ""
+    ]), 'setup');
+  }
+
+  /**
+   * Run the next of the existing setup methods, i.e. methods of this class
+   * that have the prefix 'setup'. Note the following:
+   *  - Each method must be executable regardless of application setup state.
+   *  - If a particular setup method encounters an error which does not prevent
+   * other methods from running, throw a lib\exceptions\SetupException. These
+   * errors will be collected and passed as data of the
+   * "bibliograph.setup.done" event sent to the client.
+   *  - In case of errors that are not recoverable, throw a
+   * lib\exceptions\SetupFatalException, which will stop execution of the setup
+   * procedure.
+   *  - Once all setup methods are run, the "bibliograph.setup.done" event is
+   * sent to the client with recoverable errors and messages as data.
+   *  - It is possible to return control to the client by instantiating a
+   * Dialog object.
+   *  - If a method is successful, a "bibliograph.setup.next" event is sent to
+   * the client, which then starts the next call to this action.
+   *
+   * @return mixed
+   * @throws SetupException
+   * @throws SetupFatalException
+   * @throws RecordExistsException
+   */
+  protected function _runNextMethod()
+  {
+    if (count($this->setupMethods)) {
+      $method = array_shift($this->setupMethods);
+      try {
+        $result = $this->$method();
+        if (!$result) {
+          $result = "Setup method $method completed successfully.";
+        }
+      } catch (SetupException $e) {
+        $result = $e->getMessage();
+        Yii::error("Collecting setup exception: $result ");
+        $this->errors[] = $result;
+      }
+      # log resulting diagnostic message
+      if (is_string($result)) {
+        Yii::info($result, self::CATEGORY);
+        $this->messages[] = $result;
+      }
+    } else {
+      $result = "Setup already completed.";
+    }
+    // Are we done?
+    if (count($this->setupMethods) === 0 ) {
+      $this->_finish();
+      return $result;
+    }
+    // handle remaining setup methods
+    $time = Yii::$app->log->logger->getElapsedTime();
+    if ($this->batchExecuteSetupMethods &&
+      $time < REQUEST_EXECUTION_THRESHOLD &&
+      ! $result instanceof Dialog) {
+      // run the next method in the same request
+      Yii::debug("Setup took $time seconds so far. Running next method in same request ...");
+      return $result . "\n" . $this->_runNextMethod();
+    }
+    // return to client
+    Yii::debug("Returning to client for new request to execute remaining " . count($this->setupMethods) . " methods ...");
+    $this->dispatchClientMessage("bibliograph.setup.next");
+    if ($result instanceof Dialog) {
+      $result = "Show " . get_class($result) . " dialog on client";
+    } else {
+      $this->_showProgress();
+    }
+    $this->saveProperties();
+    return $result . " ($time)";
+  }
+
+  /**
+   * @return Progress
+   */
+  protected function _showProgress()
+  {
+    $this->counter++;
+    return (new Progress())
+      ->setMessage("Setting up application ($this->counter/$this->numberOfSetupMethods) ...")
+      ->setProgress(round(($this->counter/$this->numberOfSetupMethods)*100))
+      ->show();
+  }
+
+  /**
+   * This is the first setup function called, which just shows a progress widget
+   * @return Progress
+   */
+  public function setupStart() {
+    return $this->_showProgress();
+  }
+
+  /**
+   * Finishes the setup
+   * @return string
+   * @throws RecordExistsException
+   * @throws SetupException
+   */
+  protected function _finish(){
+    if (count($this->errors) > 0) {
+      $msg = "Setup of version '$this->upgrade_to' failed.";
+      Yii::warning($msg);
+      Yii::warning($this->errors);
+      $this->resetSavedProperties();
+      throw new SetupException("Setup failed with errors:" . implode("<br/>", $this->errors), $this->errors);
+    }
+    // Everything seems to be ok
+    $msg = "Setup of version '$this->upgrade_to' finished successfully.";
+    Yii::info($msg, self::CATEGORY);
+    Yii::info($this->messages, self::CATEGORY);
+    $this->saveOwnProperties();
+    // update version
+    if (!Yii::$app->config->keyExists('app.version')) {
+      // createKey( $key, $type, $customize=false, $default=null, $final=false )
+      Yii::$app->config->createKey('app.version', 'string', false, null, false);
+    }
+    Yii::$app->config->setKeyDefault('app.version', $this->upgrade_to);
+    // let application know if LDAP is enabled
+    $ldapEnabled =  Yii::$app->config->getIniValue("ldap.enabled");
+    Yii::$app->config->setKeyDefault("ldap.enabled",$ldapEnabled);
+    $this->dispatchClientMessage("bibliograph.setup.done", $this->messages);
+    (new Progress())->hide();
+    return $msg;
+  }
+
+  //-------------------------------------------------------------
+  // SETUP METHODS
+  //-------------------------------------------------------------
+
+
+
+  /**
+   * Deletes the file cache on version change
+   * @throws \Exception
+   */
+  protected function setupDeleteFileCache(){
+    $upgrade_from = $this->upgrade_from;
+    $upgrade_to = $this->upgrade_to;
+    if( $upgrade_from !== $upgrade_to ){
+      Yii::debug("Deleting file cache ...", __METHOD__);
+      $this->emptyDir( __DIR__ . "/../runtime/cache" );
+    }
+    return "Deleted file cache.";
   }
 
   /**
    * Check if the file permissions are correct
    *
-   * @return array
+   * @return mixed
    */
   protected function setupCheckFilePermissions()
   {
-    if( ! $this->isNewInstallation ) return false;
-
+    if( ! $this->isNewInstallation ){
+      return "Skipping file permissions check.";
+    };
     $config_dir = Yii::getAlias('@app/config');
     if (!$this->hasIni and YII_ENV_DEV and !\is_writable($config_dir)) {
-      return [
-        'error' => Yii::t('setup', "The configuration directory needs to be writable in order to create an .ini file: {config_dir}.", [
-          'config_dir' => $config_dir
-        ])
-      ];
+      throw new SetupFatalException("The configuration directory needs to be writable in order to create an .ini file: $config_dir");
+    } else if (YII_ENV_PROD and \is_writable($config_dir)) {
+      return "Warning: The configuration directory must not be writable in production mode";
+      //throw new SetupException("The configuration directory must not be writable in production mode: $config_dir");
+    } else {
+      return 'File permissions ok.';
     }
-    if (YII_ENV_PROD and \is_writable($config_dir)) {
-      return [
-        'error' => Yii::t('setup', "The configuration directory must not be writable in production mode {config_dir}.", [
-          'config_dir' => $config_dir
-        ])
-      ];
-    }
-
-    // OK
-    return [
-      'message' => 'File permissions ok.'
-    ];
   }
 
   /**
    * Check if we have an admin email address
-   *
-   * @return array
    */
   protected function setupCheckAdminEmail()
   {
     $adminEmail = Yii::$app->config->getIniValue("email.admin");
     if (!$adminEmail) {
-      return [
-        'error' => Yii::t('setup', "Missing administrator email in app.conf.toml.")
-      ];
+      $this->errors[] = "Missing administrator email in app.conf.toml.";
+    } else {
+      return 'Admininstrator email exists.';
     }
-    return [
-      'message' => Yii::t('setup', 'Admininstrator email exists.')
-    ];
   }
 
   /**
@@ -450,35 +655,27 @@ class SetupController extends \app\controllers\AppController
   protected function setupCheckDbConnection()
   {
     if (!Yii::$app->db instanceof \yii\db\Connection) {
-      return [
-        'fatalError' => Yii::t('setup', 'No database connection. ')
-      ];
+      throw new SetupFatalException('No database connection.');
     }
     try {
       Yii::$app->db->open();
     } catch (\yii\db\Exception $e) {
-      return [
-        'fatalError' => Yii::t('setup', 'Cannot connect to database: {error}', [
-          'error' => $e->errorInfo
-        ])
-      ];
+      throw new SetupFatalException('Cannot connect to database: ' . $e->errorInfo);
     }
     $this->hasDb = true;
-    return [
-      'message' => 'Database connection ok.'
-    ];
+    return  'Database connection ok.';
   }
 
   /**
    * Run migrations
-   * @param $upgrade_from
-   * @param $upgrade_to
-   * @return array|false
+   * @return string
    * @throws \Exception
    */
-  protected function setupDoMigrations($upgrade_from, $upgrade_to)
+  protected function setupDoMigrations()
   {
-    if( $upgrade_from == $upgrade_to ) return false;
+    $upgrade_from = $this->upgrade_from;
+    $upgrade_to = $this->upgrade_to;
+    if( $upgrade_from == $upgrade_to ) return "No migration neccessary";
 
     $expectTables = explode(",",
       "data_Config,data_Datasource,data_Group,data_Messages,data_Permission,data_Role,data_Session,data_User,data_UserConfig," .
@@ -493,56 +690,45 @@ class SetupController extends \app\controllers\AppController
       } else {
         // only some exist, this cannot currently be migrated or repaired
         Yii::error("Cannot upgrade from v2, since the following tables are missing: " . implode(", ", $missingTables));
-        return [
-          'fatalError' => Yii::t('setup', 'Invalid database setup. Please contact the adminstrator.')
-        ];
+        throw new SetupFatalException('Invalid database setup. Please contact the adminstrator.');
       }
     }
     // fresh installation
     if ($this->isNewInstallation) {
-      $message = Yii::t('setup', 'Found empty database');
+      $message = 'Found empty database';
     } // if this is an upgrade from a v2 installation, manually add migration history
     elseif ($upgrade_from == "2.x") {
       if (!$allTablesExist) {
-        return [
-          'fatalError' => Yii::t('setup', 'Cannot update from Bibliograph v2 data: some tables are missing.')
-        ];
+        throw new SetupFatalException('Cannot update from Bibliograph v2 data: some tables are missing.');
       }
       Yii::info('Found Bibliograph v2.x data in database. Adding migration history.', 'migrations');
       // set migration history to match the existing data
       try {
         $output = Console::runAction('migrate/mark', ["app\\migrations\\data\\m180105_075933_join_User_RoleDataInsert"]);
       } catch (MigrationException $e) {
-        return [
-          'fatalError' => Yii::t('setup', 'Migrating data from Bibliograph v2 failed.')
-        ];
+        throw new SetupFatalException('Migrating data from Bibliograph v2 failed.');
       }
       if ($output->contains('migration history is set') or
         $output->contains('Nothing needs to be done')) {
-        $message = Yii::t('setup', 'Migrated data from Bibliograph v2');
+        $message = 'Migrated data from Bibliograph v2';
       } else {
-        return [
-          'fatalError' => Yii::t('setup', 'Migrating data from Bibliograph v2 failed.')
-        ];
+        throw new SetupFatalException('Migrating data from Bibliograph v2 failed.');
       }
     } else {
-      $message = Yii::t('setup', 'Found data for version {version}', [
-        'version' => $upgrade_from
-      ]);
+      $message = 'Found data for version $upgrade_from';
     }
 
     // run new migrations
     try {
       $output = Console::runAction('migrate/new');
     } catch (MigrationException $e) {
-      return [
-        'fatalError' => "migrate/new failed",
-        'consoleOutput' => $e->consoleOutput
-      ];
+      $error = new SetupFatalException("migrate/new failed");
+      $error->diagnosticOutput = $e->consoleOutput;
+      throw $error;
     }
     if ($output->contains('up-to-date')) {
       Yii::debug('No new migrations.', 'migrations');
-      $message = Yii::t('setup', "No updates to the databases.");
+      $message = "No updates to the databases.";
     } else {
 
 // @todo
@@ -552,10 +738,7 @@ class SetupController extends \app\controllers\AppController
 //        $activeUser = Yii::$app->user->identity;
 //        // if the current version is >= 3.0.0 and no user is logged in, show a login screen
 //        if (version_compare($upgrade_from, "3.0.0", ">=") and (!$activeUser or !$activeUser->hasRole('admin'))) {
-//          $message = Yii::t('setup', "The application needs to be upgraded from '{oldversion}' to '{newversion}'. Please log in as administrator.", [
-//            'oldversion' => $upgrade_from,
-//            'newversion' => $upgrade_to
-//          ]);
+//          $message =  "The application needs to be upgraded from '{$oldversion}' to '{$newversion}'. Please log in as administrator.";
 //          Login::create($message, "setup", "setup");
 //          return [
 //            "abort" => "Login required."
@@ -563,7 +746,7 @@ class SetupController extends \app\controllers\AppController
 //        };
 //        // admin confirm update
 //        if (version_compare($upgrade_from, "3.0.0", ">=") and !$this->migrationConfirmed and !YII_ENV_TEST) {
-//          $message = Yii::t('setup', "The database must be upgraded. Confirm that you have made a database backup and now are ready to run the upgrade."); // or face eternal damnation.
+//          $message = "The database must be upgraded. Confirm that you have made a database backup and now are ready to run the upgrade."; // or face eternal damnation.
 //          Confirm::create($message, null, "setup", "setup-confirm-migration");
 //          return [
 //            "abort" => "Admin needs to confirm the migrations"
@@ -572,7 +755,7 @@ class SetupController extends \app\controllers\AppController
 //      }
 
 
-      // run all migrations 
+      // run all migrations
       Yii::debug("Applying migrations...", "migrations");
       try {
         $output = Console::runAction("migrate/up");
@@ -581,29 +764,22 @@ class SetupController extends \app\controllers\AppController
       }
       if ($output->contains('Migrated up successfully')) {
         Yii::debug("Migrations successfully applied.", "migrations");
-        $message .= Yii::t('setup', ' and applied new migrations for version {version}', [
-          'version' => $upgrade_to
-        ]);
+        $message .= " and applied new migrations for version {$upgrade_to}";
       } else {
-        return [
-          'fatalError' => Yii::t('setup', 'Initializing database failed.'),
-          'consoleOutput' => $output
-        ];
+        $error = new SetupFatalException('Initializing database failed.');
+        $error->diagnosticOutput = $output;
+        throw $error;
       }
     }
-    return [
-      'message' => $message
-    ];
+    return $message;
   }
 
-  /**
-   * Create inital preference keys/values.
-   * @todo modules!
-   * @return array
-   */
-  protected function setupPreferences($upgrade_from, $upgrade_to)
+
+  protected function setupPreferences()
   {
-    if( $upgrade_from == $upgrade_to ) return false;
+    $upgrade_from = $this->upgrade_from;
+    $upgrade_to = $this->upgrade_to;
+    if( $upgrade_from == $upgrade_to ) return "No config update necessary.";
     $prefs = require Yii::getAlias('@app/config/prefs.php');
     foreach ($prefs as $key => $value) {
       try{
@@ -618,13 +794,10 @@ class SetupController extends \app\controllers\AppController
         throw new SetupException("Creating config key '$key' failed.");
       }
     }
-    return ['message' => Yii::t('setup','Configuration values were created.')];
+    return 'Configuration values created';
   }
 
-  /**
-   * Create initial schema(s)
-   * @return array
-   */
+
   protected function setupSchemas()
   {
     $schemaClass = Yii::$app->config->getPreference('app.datasource.baseclass');
@@ -638,18 +811,10 @@ class SetupController extends \app\controllers\AppController
     } catch (\ReflectionException $e) {
       throw new SetupException("Invalid schema class '$schemaClass" );
     }
-    return [
-      'message' => $schemaExists ?
-        Yii::t('setup', 'Standard schema existed.') :
-        Yii::t('setup', 'Created standard schema.')
-    ];
+    return $schemaExists ? 'Standard schema existed.' : 'Created standard schema.';
   }
 
-  /**
-   * Setup datasources
-   * @todo change name
-   * @return array|boolean
-   */
+
   protected function setupDatasources()
   {
     // only create example databases if this is a new installation
@@ -707,60 +872,60 @@ class SetupController extends \app\controllers\AppController
       $count++;
     }
 
-    return [
-      'message' => $found == $count ?
-        Yii::t('setup', 'Datasources already existed.') :
-        Yii::t('setup', 'Created datasources.')
-    ];
+    return $found == $count ? 'Datasources already existed.' : 'Created datasources.';
   }
 
   /**
-   * @return array
+   * Installs and upgrades modules,
+   * @return string
    */
   protected function setupModules()
   {
-    $errors = [];
-    $messages = [];
     $this->moduleUpgrade = false;
     foreach( Yii::$app->modules as $id => $info){
       /** @var Module $module */
       $module = Yii::$app->getModule($id);
-      if( ! $module instanceof \lib\Module ) continue;
-      if( $module->version === $module->installedVersion ){
-        Yii::debug("Module $module->id ($module->name) is already at version $module->version ...");
-        $messages[] = "Module '$module->id' already installed.";
+      $msg = null;
+      if (! $module instanceof \lib\Module) continue;
+      if ($module->disabled === true) {
+        $msg = "Module $module->id ($module->name) is disabled.";
+      }
+      if ($module->version === $module->installedVersion ){
+        $msg = "Module $module->id ($module->name) is already at version $module->version.";
+      }
+      if ($msg){
+        Yii::debug($msg, __METHOD__);
+        $this->messages[] = $msg;
         continue;
       }
       Yii::debug("Installing module $module->id $module->version", __METHOD__);
       try{
         $enabled = $module->install();
         if( $enabled ){
-          $messages[] = "Installed module '{$module->id}'.";
+          $this->messages[] = "Installed module '{$module->id}'.";
           $this->moduleUpgrade = true;
         } else {
-          $errors = array_merge($errors, $module->errors );
+          $this->errors = array_merge($this->errors, $module->errors );
         }
       } catch (\Exception $e) {
         Yii::error($e);
-        $errors[] = "Installing module '{$module->id}' failed: " . $e->getMessage();
+        $this->errors[] = "Installing module '{$module->id}' failed: " . $e->getMessage();
       }
     }
-    return [
-      'message' => $messages,
-      'error' => $errors
-    ];
+    return "Module initialization done";
   }
 
   /**
    * Migrates datasources
-   * @return array|boolean
-   * @throws \Exception
    */
-  protected function setupDatasourceMigrations($upgrade_from,$upgrade_to)
+  protected function setupDatasourceMigrations()
   {
+    $upgrade_from = $this->upgrade_from;
+    $upgrade_to = $this->upgrade_to;
     if( ($this->isNewInstallation or $upgrade_from === $upgrade_to) and ! $this->moduleUpgrade ) {
-      Yii::debug("New installation or no new versions, skipping datasource migration.", __METHOD__);
-      return false;
+      $msg = "New installation or no new versions, skipping datasource migration.";
+      Yii::debug($msg, __METHOD__);
+      return $msg;
     }
     $migrated = [];
     $failed = [];
@@ -812,37 +977,29 @@ class SetupController extends \app\controllers\AppController
       }
       // other errors will not be caught
     }
-    return [
-      'message' => count($migrated)
-        ? Yii::t('setup','Migrated schema(s) {schemas}.', [
-          'schemas' => implode(", ", array_unique($migrated) )
-        ])
-        : Yii::t('setup', "No schema migrations necessary."),
-      'error' => count($failed) ? Yii::t('setup','Migrating schema(s) failed: {errinfo}', ['errinfo' => implode(", ", $failed)]) : null
-    ];
+
+    if (count($failed)) {
+      throw new SetupException('Migrating schema(s) failed:' . implode(", ", $failed));
+    }
+    return count($migrated) ? 'Migrated schema(s) ' . implode(", ", array_unique($migrated))
+        : "No schema migrations necessary.";
   }
 
   /**
    * Check the LDAP connection
-   *
-   * @return array
    */
   protected function setupLdapConnection()
   {
     $ldap = Yii::$app->ldapAuth->checkConnection();
-    $message = $ldap['enabled'] ?
-      Yii::t('setup', 'LDAP authentication is enabled') :
-      Yii::t('setup', 'LDAP authentication is not enabled.');
-    $message .= ($ldap['enabled'] and $ldap['connection']) ?
-      Yii::t('setup', ' and a connection has successfully been established.') :
-      $ldap['enabled'] ? Yii::t('setup', ', but trying to establish a connection failed with the error: {error}', [
-        'error' => $ldap['error']
-      ]) : "";
+    $message = $ldap['enabled'] ?'LDAP authentication is enabled' :'LDAP authentication is not enabled.';
+    $message .= ($ldap['enabled'] and $ldap['connection'])
+      ? ' and a connection has successfully been established.'
+      : ($ldap['enabled']
+        ? (', but trying to establish a connection failed with the error: ' . $ldap['error'])
+        : "");
     if ($ldap['enabled'] and $ldap['error']) {
-      $result = ['error' => $message];
-    } else {
-      $result = ['message' => $message];
+      throw new SetupException($message);
     }
-    return $result;
+    return $message;
   }
 }

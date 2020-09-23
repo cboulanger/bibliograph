@@ -3,7 +3,8 @@
 ## v3.0.0-beta
 
 ### Priority: urgent
-- [ ] BUG: "Forgot Password" doesn't work: repair or disable
+- [x] FEAT: omit user/password in data_Datasources and use app.conf.toml-supplied values
+- [x] BUG: "Forgot Password" doesn't work: repair or disable
 - [ ] BUG: Import-Window: Import All doesn't select all references if they haven't been loaded. This needs to be done on the server. 
 - [ ] BUG: Create new datasource results in "User Error: Running 'migrate/up' failed."
 - [ ] BUG: Delete datasource: "Running 'migrate/down' failed"
@@ -12,8 +13,7 @@
 - [ ] BUG: Reimplement User::checkFormPassword
 - [ ] FEAT: Cache export formats for HTML view, make configurable 
 - [ ] FEAT: Disallow drop of references on folders in which they are already contained.
-- [ ] FEAT: Reimplement Search Help 
-- [ ] FEAT: Reimplement account management via email
+- [ ] FEAT: Reimplement account management via email & reenable "Forgot password" in login dialog
 - [ ] FEAT: Reimplement Search Help window
 - [ ] FEAT: Reimplement "In which folders..."
 - [ ] FEAT: add GUI for 'app.access.userdatabase.defaultrole' config
@@ -24,8 +24,6 @@
 - [ ] FEAT: Frontend: Rename widget ids, replace with native qooxdoo ids, see https://github.com/qooxdoo/qooxdoo/issues/9422
 - [ ] FEAT: Change app state separator and assignment chars
 - [ ] FEAT: Re-implement reference editor title label
-- [ ] FEAT: Re-implement Docker image for testing
-- [ ] FEAT: Frontend: Rename item view "metadata" page
 - [ ] FEAT: Preferences: Implement field selection for editor as checkboxes
 - [ ] FEAT: Reimplememt help window
 - [ ] FEAT: validate email configuration 
@@ -39,10 +37,11 @@
 - [ ] FEAT: Alert errors during import ("x references skipped...")
 - [ ] FEAT: Add a silent abort error that can be used to terminate a request without an error message
 - [ ] FEAT: Reimplement support for the admindb, userdb and tmpdb settings in app.conf.toml -> use DSNs instead of single settings or TOML nested arrays.
+- [ ] BUG: Fix raptor client to not choke quietly on 404s 
 
 ### Code cleanup / refactoring
 - [ ] fix compiler errors
-- [x] rename "build" dir to "install"
+- [ ] Refactor (bus).subscribe("xxx") calls to use static constants
 - [ ] use DatasourceTrait::datasource() consistently instead of Dataource::getInstanceFor(), since it provides access control!
 - [ ] run npm audit fix on all npm dependencies, change where possible, or change in global package.json
 - [ ] Move dispatchClientMessage/broadcast to Yii::$app->message component
@@ -92,14 +91,12 @@
 - [ ] `npm audit fix`
 - [ ] Backend: Streamline API to get Datasource & typed model
 
-### Testing, CI and distribution
-- [ ] Make Travis ~~great~~ work again
-- [ ] Use eslint on Travis: see https://github.com/ITISFoundation/qx-iconfont-material/blob/master/package.json
-- [ ] Add dockerized setup, see https://github.com/ITISFoundation/qx-iconfont-material
+### Testing, building, CI and distribution
+- [ ] Move qooxdoo build files to top dir
 - [ ] Tests: Fix bootstrap loading issue
-- [ ] Move config/test.php to tests/config.php 
-- [ ] Replace compile.json by compile.js to dynamically include plugin code
+- [ ] Move tests/config/web.php to tests/config.php 
 - [ ] Check log email target to be able to remotely monitor fatal errors
+- [ ] Setup API tests using https://medium.com/mop-developers/testing-your-api-with-dredd-c02e6ca151f2
 
 ## v3.0.0.RC.X (only bug fixes)
 
@@ -117,7 +114,7 @@
 - [ ] FEAT: Allow migrations via permission, not prod/dev-mode
 - [ ] FEAT: Config key change should be broadcasted
 - [ ] FEAT: Z39.50 Plugin: Preference option to configure timeout 
-
+- [ ] FEAT: Replace compile.json by compile.js to dynamically include plugin code
 
 ### Priority: normal
 - [ ] FEAT: Update CQL operators to conform to the specs (http://www.loc.gov/standards/sru/cql/contextSets/theCqlContextSet.html)
@@ -134,3 +131,5 @@
 - [ ] FEAT: Enable print item view: bibliograph.ui.main.ItemView#print()
 - [ ] FEAT: Rewrite Yii2 configuration using M1/Var, maybe convert config to YAML: https://packagist.org/packages/sergeymakinen/yii2-config ?
 - [ ] FEAT: Ctrl+A to select all (visible?) references.
+- [ ] FEAT: Use eslint on Travis: see https://github.com/ITISFoundation/qx-iconfont-material/blob/master/package.json
+- [ ] FEAT: Add dockerized setup, see https://github.com/ITISFoundation/qx-iconfont-material

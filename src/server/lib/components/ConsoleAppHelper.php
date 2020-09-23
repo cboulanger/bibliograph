@@ -26,17 +26,22 @@ class ConsoleAppHelper extends \yii\base\Component
    * @throws MigrationException
    * @throws \Exception
    */
-  public static function runAction( 
-    $route, 
-    $params = [ ], 
-    $controllerNamespace = null, 
+  public static function runAction(
+    $route,
+    $params = [ ],
+    $controllerNamespace = null,
     yii\db\Connection $customDb = null )
   {
-    $oldApp = Yii::$app;
-
     // fcgi doesn't have STDIN and STDOUT defined by default
     defined( 'STDIN' ) or define( 'STDIN', fopen( 'php://stdin', 'r' ) );
     defined( 'STDOUT' ) or define( 'STDOUT', fopen('php://output', 'w') );
+    defined( 'STDERR' ) or define( 'STDERR', fopen('php://stderr', 'w') );
+
+    // puffer output
+    ob_start();
+    $oldApp = Yii::$app;
+
+
 
     $config = require( Yii::getAlias( '@app/config/console.php' ) );
     $consoleApp = new \yii\console\Application( $config );
@@ -56,8 +61,6 @@ class ConsoleAppHelper extends \yii\base\Component
         Yii::$app->set( 'db', $oldApp->db );
       }
 
-      ob_start();
-
       $exitCode = $consoleApp->runAction(
         $route,
         array_merge( $params, [ 'interactive' => false, 'color' => false ] )
@@ -68,8 +71,7 @@ class ConsoleAppHelper extends \yii\base\Component
         "---------------------------------------------------------\n" .
         $consoleOutput . "\n".
         "---------------------------------------------------------\n",
-        "console" 
-      , __METHOD__);
+        "app");
     } catch ( \Exception $e ) {
       Yii::$app = $oldApp;
       throw $e;

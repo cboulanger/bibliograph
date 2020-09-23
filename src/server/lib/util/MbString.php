@@ -25,8 +25,8 @@ class MbString
     if( $encoding === true ){
       $encoding = mb_detect_encoding($string);
     }
-    mb_internal_encoding($encoding);
-    mb_regex_encoding($encoding);
+    \mb_internal_encoding($encoding);
+    \mb_regex_encoding($encoding);
     $this->string = $string;
   }
 
@@ -57,11 +57,11 @@ class MbString
   {
     if ( $casesensitive )
     {
-      return mb_strpos( $this->string, $needle, $offset );
+      return \mb_strpos( $this->string, $needle, $offset );
     }
     else
     {
-      return mb_stripos( $this->string, $needle, $offset );
+      return \mb_stripos( $this->string, $needle, $offset );
     }
   }
 
@@ -83,11 +83,11 @@ class MbString
   {
     if ( $casesensitive )
     {
-      return mb_strrpos( $this->string, $needle, $offset );
+      return \mb_strrpos( $this->string, $needle, $offset );
     }
     else
     {
-      return mb_strripos( $this->string, $needle, $offset );
+      return \mb_strripos( $this->string, $needle, $offset );
     }
   }
 
@@ -113,7 +113,7 @@ class MbString
    */
   public function substr( $start, $length=null )
   {
-    return mb_substr ($this->string, $start, $length );
+    return \mb_substr ($this->string, $start, $length );
   }
 
   /**
@@ -136,7 +136,7 @@ class MbString
    */
   public function count( $needle )
   {
-    return mb_substr_count ($this->string, $needle);
+    return \mb_substr_count ($this->string, $needle);
   }
 
 
@@ -146,7 +146,7 @@ class MbString
    */
   public function getEncoding()
   {
-    return mb_detect_encoding ( $this->string );
+    return \mb_detect_encoding ( $this->string );
   }
 
 
@@ -164,11 +164,11 @@ class MbString
   {
     if ( substr($pattern,-1) == "i" )
     {
-      return mb_eregi ( substr($pattern,1,-2),  $this->string, $matches );
+      return \mb_eregi ( substr($pattern,1,-2),  $this->string, $matches );
     }
     else
     {
-      return mb_ereg ( substr($pattern,1,-1), $this->string, $matches );
+      return \mb_ereg ( substr($pattern,1,-1), $this->string, $matches );
     }
   }
 
@@ -192,11 +192,11 @@ class MbString
     {
       $option = $pattern[strlen($pattern)-1];
       $pattern = substr($pattern,1,-2);
-      return mb_ereg_replace ( $pattern, $replacement, $this->string, $option );
+      return \mb_ereg_replace ( $pattern, $replacement, $this->string, $option );
     }
     else
     {
-      return mb_ereg_replace ( substr($pattern,1,-1), $replacement, $this->string);
+      return \mb_ereg_replace ( substr($pattern,1,-1), $replacement, $this->string);
     }
   }
 
@@ -213,7 +213,7 @@ class MbString
    */
   public function split( $pattern, $limit = null)
   {
-    return mb_split ( substr($pattern,1-1), $this->string, $limit );
+    return \mb_split ( substr($pattern,1-1), $this->string, $limit );
   }
 
   /**

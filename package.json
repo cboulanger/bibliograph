@@ -1,6 +1,6 @@
 {
   "name": "bibliograph",
-  "version": "3.0.0-beta.69",
+  "version": "3.0.0-beta.79",
   "description": "Bibliograph is a powerful open source web application for the collaborative collection, editing and publishing of bibliographic data.",
   "main": "",
   "directories": {
@@ -18,56 +18,50 @@
     "url": "git+ssh://git@github.com/cboulanger/bibliograph.git"
   },
   "scripts": {
-    "start": "build/script/start-server.sh",
-    "list": "node_modules/.bin/ls-scripts",
-    "postinstall": "build/script/update-dependencies.sh",
-    "server": "build/script/start-server.sh",
-    "test": "test/script/codeception-all.sh && test/script/api.sh || exit $?",
-    "test-dev": "test/script/codeception-all.sh && test/script/api.sh development",
-    "clean": "cd src/client/bibliograph && qx clean",
-    "compile": "cd src/client/bibliograph && qx compile --watch",
-    "view-log": "build/script/view-log.sh",
-    "error-log": "build/script/view-log.sh error",
-    "new-log": "build/script/new-log.sh",
-    "create-migration": "build/script/create-migration.sh",
-    "create-rpcproxies": "cd src/server && php yii rpc-proxy/create",
-    "translation": "cd src/server && php yii message config/i18n.php",
-    "dist-create": "build/script/dist-clean.sh && build/script/dist-build.sh $1",
-    "dist-test": "build/script/dist-test.sh",
-    "dist-clean": "build/script/dist-clean.sh",
-    "release": "build/script/dist-clean.sh && npx release-it --preRelease=beta",
-    "release-clean": "node build/script/github-release-clean.js && build/script/github-tag-clean.sh",
-    "docker-build": "build/script/docker-build.sh",
-    "docker-start": "build/script/docker-run.sh",
-    "docker-all": "npm run dist-create && npm run docker-build && npm run docker-start",
-    "docker-clean": "docker container prune && docker image prune",
-    "deploy": "build/script/deploy"
+    "env:install": "tool/env/install",
+    "env:update": "tool/env/update",
+    "env:services:start": "tool/env/services-start",
+    "env:services:stop": "tool/env/services-stop",
+    "dev:run": "tool/dev/run",
+    "dev:run:clean": "tool/dev/run --empty-database --clean",
+    "dev:compile-watch": "npx qx compile --watch",
+    "dev:cleanup": "npx qx clean",
+    "dev:extract-translations": "cd src/server && php yii message config/i18n.php",
+    "test:codeception:all": "tool/test/codeception",
+    "test:codeception:unit": "tool/test/codeception unit",
+    "test:codeception:functional": "tool/test/codeception functional",
+    "test:codeception:api": "tool/test/codeception \"api --env empty-database\"",
+    "test:codeception:custom": "tool/test/codeception \"api AccessControllerCest\"",
+    "test:testtapper": "tool/test/testtapper",
+    "test:testtapper:custom": "tool/test/testtapper -Q ?class=bibliograph.test.services",
+    "test:playwright:custom": "node ./test/playwright/test-login.js",
+    "dist:local.docker:build": "tool/dist/build test/.env",
+    "dist:local.docker:run": "tool/dist/run",
+    "deploy:rewi:devel": "tool/deploy/deploy -f config/deploy/rewi/bibliograph-test.env -v -y",
+    "test:rewi:devel": "config/deploy/rewi/run-tests.sh"
   },
-  "author": "",
+  "_old_scripts": {
+    "Create new migration": "build/script/run-in-new-terminal $(pwd)/build/script/create-migration",
+    "Create JSONRPC proxy methods": "cd src/server && php yii rpc-proxy/create",
+    "Compile modules": "build/script/modules-compile",
+    "Build distributable package (PHP 7.3)": "build/script/dist-build || exit $?",
+    "Run production build": "build/script/dist-run",
+    "Clean up production build": "build/script/dist-clean"
+  },
+  "author": "Christian Boulanger (@cboulanger) info@bibliograph.org",
   "license": "ISC",
-  "dependencies": {
-    "qooxdoo": "^6.0.1",
-    "qooxdoo-sdk": "^6.0.0-alpha",
-    "qxcompiler": "^0.2.14",
-    "raptor-client": "github:cboulanger/raptor-client"
-  },
   "devDependencies": {
+    "@qooxdoo/compiler": "^1.0.0-beta-20200812-2003",
+    "@qooxdoo/eslint-config-jsdoc-disable": "^1.0.3",
+    "@qooxdoo/eslint-config-qx": "^1.3.5",
+    "@qooxdoo/eslint-plugin-qx": "^1.2.1",
     "array-equal": "^1.0.0",
-    "dotenv": "^5.0.1",
-    "eslint": "^4.16.0",
-    "eslint-config-airbnb-base": "^12.1.0",
-    "eslint-plugin-import": "^2.8.0",
-    "eventsource": "^1.0.5",
-    "git-hooks": "^1.1.10",
-    "github-remove-all-releases": "^1.0.1",
-    "json-diff": "^0.5.2",
-    "mocha": "^4.1.0",
-    "npm-ls-scripts": "^0.1.2",
-    "r2": "^2.0.0",
-    "release-it": "^7.3.0",
-    "run-script-os": "^1.0.3",
-    "standard": "^11.0.0",
-    "webpack": "^3.10.0"
+    "dotenv": "^8.0.0",
+    "eslint": "^6.1.0",
+    "eslint-config-qx": "^0.2.6",
+    "eslint-plugin-import": "^2.21.2",
+    "json-diff": "^0.5.4",
+    "tape": "^5.0.1"
   },
   "eslintConfig": {
     "parserOptions": {
@@ -83,5 +77,6 @@
       "dialog": true,
       "bibliograph": true
     }
-  }
+  },
+  "dependencies": {}
 }

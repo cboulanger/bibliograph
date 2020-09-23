@@ -4,14 +4,14 @@
 
   http://www.bibliograph.org
 
-  Copyright: 
+  Copyright:
     2018 Christian Boulanger
 
-  License: 
+  License:
     MIT license
     See the LICENSE file in the project's top-level directory for details.
 
-  Authors: 
+  Authors:
     Christian Boulanger (@cboulanger) info@bibliograph.org
 
 ************************************************************************ */
@@ -34,15 +34,26 @@ qx.Class.define("bibliograph.Utils",
      * @param callback {Function}
      * @return {Promise<void>}
      */
-    checkLogin : async function(username, password, callback)
-    {
+    checkLogin : async function(username, password, callback) {
       var app = qx.core.Init.getApplication();
+      qx.core.Id.getQxObject("windows/login").setEnabled(false);
+      qx.core.Id.getQxObject("toolbar/login-button").setEnabled(false);
       app.createPopup();
       app.showPopup(app.tr("Authenticating ..."));
-      let result = await app.getAccessManager().authenticate(username, password);
-      app.hidePopup();
-      callback( result.error, result );
-    },    
+      let result;
+      try {
+        result = await app.getAccessManager().authenticate(username, password);
+      } catch (e) {
+        result = {
+          error: e.message
+        };
+      } finally {
+        qx.core.Id.getQxObject("windows/login").setEnabled(true);
+        qx.core.Id.getQxObject("toolbar/login-button").setEnabled(true);
+        app.hidePopup();
+      }
+      callback(result.error, result);
+    },
 
     /**
      * Helper function for converters in list databinding. If a selected element
@@ -60,51 +71,38 @@ qx.Class.define("bibliograph.Utils",
      * matching model value wrapped in an array. If nothing
      * has been found, return an empty array
      *
-     * @param value {String} TODOC
-     * @return {Array} TODOC
+     * @param list {qx.ui.form.List}
+     * @param value {String}
+     * @return {Array}
      */
-    getListElementWithValue : function(list, value)
-    {
-      for (var i = 0, c = list.getChildren(); i < c.length; i++) {
-        if (c[i].getModel().getValue() == value) {
-          return [c[i]];
+    getListElementWithValue : function(list, value) {
+      for (let i = 0, children = list.getChildren(); i < children.length; i++) {
+        let child = children[i];
+        if (child.getModel().getValue() === value) {
+          return [child];
         }
       }
       // console.warn( "Did not find " + value );
       return [];
     },
 
-    bool2visibility : function(state)
-    {
-      return state ? 'visible' : 'excluded';
+    bool2visibility : function(state) {
+      return state ? "visible" : "excluded";
     },
     
-    utf8_encode : function ( string )
-    {
-      return unescape( encodeURIComponent( string ) );
-    },
-
-    utf8_decode : function( string )
-    {
-      return decodeURIComponent( escape( string ) );
-    },
-    
-    html_entity_decode : function(str) 
-    {
+    html_entity_decode : function(str) {
       var ta=document.createElement("textarea");
-      ta.innerHTML=str.replace(/</g,"&lt;").replace(/>/g,"&gt;");
+      ta.innerHTML=str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
       return ta.value;
     },
     
-    strip_tags : function (html)
-    {
-      return html.replace(/(<([^>]+)>)/ig,"");
+    strip_tags : function (html) {
+      return html.replace(/(<([^>]+)>)/ig, "");
     },
     
-    br2nl : function( html )
-    {
-      return html.replace(/<br[\s]*\/?>/ig,"\n");
+    br2nl : function(html) {
+      return html.replace(/<br[\s]*\/?>/ig, "\n");
     }
-  },  
+  }
 
 });

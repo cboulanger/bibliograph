@@ -8,12 +8,12 @@ use Yii;
 /**
  * This is the model class for table "database1_data_Transaction".
  *
- * @property integer $id
+ * @property int $id
  * @property string $created
  * @property string $modified
  * @property string $datasource
  * @property string $class
- * @property integer $transactionId
+ * @property int $transactionId
  */
 class Transaction extends BaseModel
 {
