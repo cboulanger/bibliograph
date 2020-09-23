@@ -31,9 +31,7 @@ jobs:
           - 8072:8082
           - 8073:8073
           - 8074:8074
-        volumes:
-          - /home/runner/work/bibliograph/bibliograph:/var/www
-        options: --name=http_server
+        options: --name=http_server -v /home/runner/work/bibliograph/bibliograph:/var/www
     steps:
       - name: Checkout
         uses: actions/checkout@v1
