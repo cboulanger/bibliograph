@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 if [[ "$GITHUB_WORKFLOW" != "" ]]; then
+  # really needed? check if the other option just works on github, too
   mysql -h$DB_HOST_GITHUB -P$DB_PORT_GITHUB "$@"
 else
-  docker exec mysql-server mysql -h$DB_HOST -P$DB_PORT "$@"
+  docker exec mysql_server mysql "$@"
 fi
-

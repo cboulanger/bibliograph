@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+if [[ "$GITHUB_WORKFLOW" == "" ]]; then
+  echo ">>> No need to install service containers on GitHub"
+  exit 0
+fi
+tool/env/servers-stop
+docker system prune -f
+echo " >>> Downloading mariadb image"
+docker pull mariadb
+
+echo " >>> Downloading and starting PHPFarm docker container"
+docker pull cboulanger/docker-phpfarm

@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+source tool/env/mysql-test
+source tool/env/http-test

@@ -20,8 +20,8 @@
   "scripts": {
     "env:install": "tool/env/install",
     "env:update": "tool/env/update",
-    "env:servers:start": "tool/env/servers-start",
-    "env:servers:stop": "tool/env/servers-stop",
+    "env:services:start": "tool/env/services-start",
+    "env:services:stop": "tool/env/services-stop",
     "dev:run": "tool/dev/run",
     "dev:run:clean": "tool/dev/run --empty-database --clean",
     "dev:compile-watch": "npx qx compile --watch",

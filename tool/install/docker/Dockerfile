@@ -14,7 +14,7 @@ RUN \
   apt-get install -y \
     bibutils wget zip \
     supervisor \
-    mysql-server=5.* \
+    mysql_server=5.* \
     php${PHPVERSION} \
     php${PHPVERSION}-cli \
     php${PHPVERSION}-intl \

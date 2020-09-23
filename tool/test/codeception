@@ -3,19 +3,18 @@
 source tool/env/envvars-load
 source tool/env/check
 
-# This test runs unit and functional tests that do not need a webserver
 CODECEPT_ARGS="--fail-fast"
 set -o errexit
 source tool/lib/functions.sh
 
-tool/env/servers-start
+tool/env/services-start
+tool/env/services-test
 
 declare -a default=(
   unit
   functional
   "api --env empty-database"
 )
-
 declare -a suites=("${@:-${default[@]}}")
 
 log_heading "Running codeception suites '${suites[*]}' "

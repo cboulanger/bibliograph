@@ -6,6 +6,5 @@
   <component name="ProjectPlainTextFileTypeManager">
     <file url="file://$PROJECT_DIR$/src/server/vendor/yiisoft/yii2/Yii.php" />
     <file url="file://$PROJECT_DIR$/test/.env" />
-    <file url="file://$PROJECT_DIR$/tool/env/http-test" />
   </component>
 </project>

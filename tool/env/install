@@ -3,20 +3,7 @@
 
 source tool/env/check
 source ./tool/lib/functions.sh
-
-if [[ "$GITHUB_WORKFLOW" == "" ]]; then
-  # we're not on github
-  tool/env/servers-stop
-  docker system prune -f
-  echo " >>> Downloading mariadb image"
-  docker pull mariadb
-fi
-
-echo " >>> Downloading and starting PHPFarm docker container"
-docker pull cboulanger/docker-phpfarm
-
-tool/env/http-test
-tool/env/http-server start
+source tool/env/services-install
 
 echo ">>> Installing composer ..."
 EXPECTED_SIGNATURE="$(wget -q -O - https://composer.github.io/installer.sig)"

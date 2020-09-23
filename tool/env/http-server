@@ -8,10 +8,14 @@ start)
   if [ "$(docker ps -f name=http-server -q -a)" == "" ]; then
     echo ">>> Starting apache/php server in docker container ..."
     docker run --name http-server \
-      --network="host" \
       -v $PWD:/var/www:cached \
       -v $PWD/data/docker/http/root:/root:delegated \
       -e APACHE_UID=$UID \
+      -p 8070:8070 \
+      -p 8071:8071 \
+      -p 8072:8072 \
+      -p 8073:8073 \
+      -p 8074:8074 \
       --detach \
       cboulanger/docker-phpfarm \
       > /dev/null

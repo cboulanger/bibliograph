@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+source tool/env/envvars-load
+
+if [[ "$GITHUB_WORKFLOW" != "" ]]; then
+  echo ">>> Trying to connect to MySQL service on port $DB_HOST:$DB_PORT..."
+  COUNTER=0
+  TIMEOUT=20
+  while ! mysqladmin ping -h"$DB_HOST" -P"$DB_PORT" --silent; do
+    sleep 1
+    let "COUNTER+=1"
+    if [[ $COUNTER == $TIMEOUT ]]; then
+      echo "Timeout."
+      exit 1
+    fi
+  done
+fi
+echo -n ">>> Checking mysql root access from host to database ... "
+output=$(tool/dev/mysql-client -uroot -p$DB_ROOT_PASSWORD --version)
+if [ $? -ne 0 ]; then echo "$CROSSMARK"; log_error $output; exit 1; fi
+echo "${CHECKMARK}"
+echo "$output"
+
