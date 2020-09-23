@@ -7,7 +7,6 @@ on:
   pull_request:
     paths-ignore:
       - '**.md'
-
 jobs:
   run_tests:
     name: Run tests
@@ -37,12 +36,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-      - name: Mount workspace dir into apache document root
-        run: |
-          docker exec http_server ln -s /github/workspace/bibliograph/{compiled,dist,src,test} /var/www
-          docker exec http_server ls -al /var/www/src/client/bibliograph
-          tool/dev/php test/phpversion.php
-          exit 1
+      - name: Mount workspace dirs into /var/www of http service container
+        run: docker exec http_server ln -s /github/workspace/bibliograph/{compiled,dist,src,test} /var/www
       - name: Check Services
         env:
           DB_HOST_GITHUB: 127.0.0.1
