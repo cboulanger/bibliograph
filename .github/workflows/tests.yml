@@ -35,10 +35,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-      - name: Mount workspace as document root
+      - name: Mount workspace dirs into apache document root
         run: |
-          docker exec http_server rm -rf /var/www
-          docker exec http_server ln -s /github/workspace /var/www
+          docker exec http_server ln -s /github/workspace/{src,compiled,test} /var/www/
       - name: Check Services
         env:
           DB_HOST_GITHUB: 127.0.0.1
