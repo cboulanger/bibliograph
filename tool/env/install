@@ -16,7 +16,7 @@ if [ "$EXPECTED_SIGNATURE" != "$ACTUAL_SIGNATURE" ]; then
     exit 1
 fi
 
-tool/dev/php composer-setup.php --install-dir=/var/www/src/lib #--quiet
+tool/dev/php composer-setup.php --install-dir=src/lib #--quiet
 RESULT=$?
 rm composer-setup.php
 if [ $RESULT -eq 1 ]; then
