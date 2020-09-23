@@ -4,10 +4,17 @@ MIGRATE_ARGS="--interactive=0"
 MIGRATE_LOGFILE=log/codeception.migration.log
 [ -f $MIGRATE_LOGFILE ] && rm $MIGRATE_LOGFILE
 
-log_info -n ">>> Creating model data (Logfile at ${MIGRATE_LOGFILE}) ."
-yii_test migrate/up --migrationNamespaces=app\\migrations\\schema $MIGRATE_ARGS &> $MIGRATE_LOGFILE
-log_info -n "."
-yii_test migrate/up --migrationNamespaces=app\\migrations\\data $MIGRATE_ARGS &> $MIGRATE_LOGFILE
-log_info -n "."
-yii_test migrate/up --migrationNamespaces=tests\\migrations $MIGRATE_ARGS &> $MIGRATE_LOGFILE
-log_info " ${CHECKMARK}"
+if [[ "$GITHUB_WORKFLOW" != "" ]]; then
+  log_info -n ">>> Creating model data"
+  yii_test migrate/up --migrationNamespaces=app\\migrations\\schema $MIGRATE_ARGS
+  yii_test migrate/up --migrationNamespaces=app\\migrations\\data $MIGRATE_ARGS
+  yii_test migrate/up --migrationNamespaces=tests\\migrations $MIGRATE_ARGS
+else
+  log_info -n ">>> Creating model data (Logfile at ${MIGRATE_LOGFILE}) ."
+  yii_test migrate/up --migrationNamespaces=app\\migrations\\schema $MIGRATE_ARGS &> $MIGRATE_LOGFILE
+  log_info -n "."
+  yii_test migrate/up --migrationNamespaces=app\\migrations\\data $MIGRATE_ARGS &> $MIGRATE_LOGFILE
+  log_info -n "."
+  yii_test migrate/up --migrationNamespaces=tests\\migrations $MIGRATE_ARGS &> $MIGRATE_LOGFILE
+  log_info " ${CHECKMARK}"
+fi
