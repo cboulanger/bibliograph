@@ -39,9 +39,9 @@ jobs:
         uses: actions/checkout@v1
       - name: Mount workspace dir into apache document root
         run: |
-          docker exec http_server ls -al /github/workspace/bibliograph
           docker exec http_server ln -s /github/workspace/bibliograph/{compiled,dist,src,test} /var/www
-          docker exec http_server tree -L3 .
+          docker exec http_server ls -al /var/www/src/client/bibliograph
+          tool/dev/php test/phpversion.php
           exit 1
       - name: Check Services
         env:
