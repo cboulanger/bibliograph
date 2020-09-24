@@ -57,6 +57,6 @@ jobs:
           wget -qO - https://api.bintray.com/users/sobolevn/keys/gpg/public.key | sudo apt-key add -
           sudo apt-get update && sudo apt-get install git-secret
           export GPG_TTY=$(tty)
-          echo "${{ secrets.GPG_PRIVATE_KEY }}" | base64 --decode | gpg --import --batch --yes
+          echo "${{ secrets.GPG_PRIVATE_KEY }}" | base64 --decode | gpg --no-tty --import --batch --yes
           git secret reveal
           cat deploy/test
