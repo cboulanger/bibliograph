@@ -59,4 +59,4 @@ jobs:
           echo $GPG_PRIVATE_KEY > ./private_key.gpg
           gpg --import ./private_key.gpg
           git secret reveal
-          cat deploy/test.secret
+          cat deploy/test

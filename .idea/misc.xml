@@ -4,6 +4,7 @@
     <option name="languageLevel" value="ES6" />
   </component>
   <component name="ProjectPlainTextFileTypeManager">
+    <file url="file://$PROJECT_DIR$/deploy/test" />
     <file url="file://$PROJECT_DIR$/src/server/vendor/yiisoft/yii2/Yii.php" />
     <file url="file://$PROJECT_DIR$/test/.env" />
   </component>

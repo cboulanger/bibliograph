@@ -34,6 +34,22 @@
             </SchemaInfo>
           </value>
         </entry>
+        <entry key="github-workflow">
+          <value>
+            <SchemaInfo>
+              <option name="name" value="github-workflow" />
+              <option name="relativePathToSchema" value="https://json.schemastore.org/github-workflow" />
+              <option name="applicationDefined" value="true" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value=".github/workflows/tests.yml" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
       </map>
     </state>
   </component>
