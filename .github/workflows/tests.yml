@@ -56,7 +56,7 @@ jobs:
           echo "deb https://dl.bintray.com/sobolevn/deb git-secret main" | sudo tee -a /etc/apt/sources.list
           wget -qO - https://api.bintray.com/users/sobolevn/keys/gpg/public.key | sudo apt-key add -
           sudo apt-get update && sudo apt-get install git-secret
-          echo $GPG_PRIVATE_KEY > ./private_key.gpg
+          echo "${{ secrets.GPG_PRIVATE_KEY }}" > ./private_key.gpg
           gpg --import ./private_key.gpg
           git secret reveal
           cat deploy/test
