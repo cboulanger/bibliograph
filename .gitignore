@@ -19,3 +19,5 @@ package-lock.json
 
 # Distributable ZIP File
 /*.zip
+.gitsecret/keys/random_seed
+!*.secret
