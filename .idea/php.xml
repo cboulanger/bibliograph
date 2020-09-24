@@ -93,7 +93,6 @@
       <path value="$PROJECT_DIR$/src/server/vendor/symfony/finder" />
       <path value="$PROJECT_DIR$/src/server/vendor/codeception/lib-asserts" />
       <path value="$PROJECT_DIR$/src/server/vendor/codeception/codeception" />
-      <path value="$PROJECT_DIR$/src/server/vendor/georgique/yii2-jsonrpc" />
       <path value="$PROJECT_DIR$/src/server/vendor/adci/full-name-parser" />
       <path value="$PROJECT_DIR$/src/server/vendor/react/socket" />
       <path value="$PROJECT_DIR$/src/server/vendor/react/dns" />
@@ -139,14 +138,8 @@
       <path value="$PROJECT_DIR$/src/server/vendor/graze/guzzle-jsonrpc" />
       <path value="$PROJECT_DIR$/src/server/vendor/yiisoft/yii2-faker" />
       <path value="$PROJECT_DIR$/src/server/vendor/fzaninotto/faker" />
-      <path value="$PROJECT_DIR$/src/server/vendor/webonyx/graphql-php" />
-      <path value="$PROJECT_DIR$/src/server/vendor/tsingsun/yii2-graphql" />
-      <path value="$PROJECT_DIR$/src/server/vendor/psr/http-server-handler" />
-      <path value="$PROJECT_DIR$/src/server/vendor/psr/http-server-middleware" />
-      <path value="$PROJECT_DIR$/src/server/vendor/psr/http-factory" />
-      <path value="$PROJECT_DIR$/src/server/vendor/ecodev/graphql-upload" />
-      <path value="$PROJECT_DIR$/src/server/vendor/zendframework/zend-diactoros" />
       <path value="$PROJECT_DIR$/src/server/vendor/hedii/zotero-api" />
+      <path value="$PROJECT_DIR$/src/server/vendor/georgique/yii2-jsonrpc" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.4" />

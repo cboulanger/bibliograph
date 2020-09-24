@@ -47,7 +47,6 @@
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/doctrine/inflector" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/doctrine/instantiator" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/doctrine/lexer" />
-      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/ecodev/graphql-upload" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/edvlerblog/yii2-adldap-module" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/egulias/email-validator" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/elisdn/yii2-gii-fixture-generator" />
@@ -55,7 +54,6 @@
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/ezyang/htmlpurifier" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/flow/jsonpath" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/fzaninotto/faker" />
-      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/georgique" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/georgique/yii2-jsonrpc" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/goaop/parser-reflection" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/graze/guzzle-jsonrpc" />
@@ -94,10 +92,7 @@
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/pimple/pimple" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/psr/container" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/psr/event-dispatcher" />
-      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/psr/http-factory" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/psr/http-message" />
-      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/psr/http-server-handler" />
-      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/psr/http-server-middleware" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/psr/log" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/psr/simple-cache" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/ralouphie/getallheaders" />
@@ -155,10 +150,8 @@
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/theseer/tokenizer" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/tonyhhyip/sse" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/toriphes/yii2-console-runner" />
-      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/tsingsun/yii2-graphql" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/voku/simple-cache" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/webmozart/assert" />
-      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/webonyx/graphql-php" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/yiisoft/yii2" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/yiisoft/yii2-composer" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/yiisoft/yii2-faker" />
@@ -166,7 +159,6 @@
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/yiisoft/yii2-swiftmailer" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/yosymfony/parser-utils" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/yosymfony/toml" />
-      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/zendframework/zend-diactoros" />
       <excludeFolder url="file://$MODULE_DIR$/src/vcslib/yii2-json-rpc-2.0" />
       <excludeFolder url="file://$MODULE_DIR$/test/codeception/_output" />
     </content>
