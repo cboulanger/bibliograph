@@ -5,7 +5,7 @@ namespace app\modules\z3950\controllers;
 use app\models\User;
 use Yii;
 use Exception;
-use app\controllers\{ traits\AuthTrait, traits\DatasourceTrait };
+use app\controllers\{AppController, traits\AuthTrait, traits\DatasourceTrait};
 use app\modules\z3950\Module;
 use app\models\Datasource;
 use app\modules\z3950\models\{ Record, Search, Datasource as Z3950Datasource };
@@ -13,6 +13,7 @@ use app\modules\z3950\lib\yaz\{ CclQuery, MarcXmlResult, Yaz, YazException, YazT
 use lib\dialog\ServerProgress;
 use lib\exceptions\UserErrorException;
 use lib\bibtex\BibtexParser;
+use yii\web\UnauthorizedHttpException;
 
 
 /**
@@ -20,7 +21,7 @@ use lib\bibtex\BibtexParser;
  * @package modules\z3950\controllers
  * @property Module $module
  */
-class SearchController extends \yii\web\Controller
+class SearchController extends AppController
 {
   use AuthTrait;
   use DatasourceTrait;
@@ -37,6 +38,9 @@ class SearchController extends \yii\web\Controller
 
   public function actionTest()
   {
+    if (!YII_ENV_TEST) {
+      throw new UnauthorizedHttpException("Unauthorized");
+    }
     Yii::$app->user->login(User::findByNamedId("admin"));
     $this->actionProgress("z3950_voyager","shakespeare's english","1234");
   }

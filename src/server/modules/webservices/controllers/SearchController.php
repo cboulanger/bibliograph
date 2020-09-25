@@ -9,7 +9,7 @@ use lib\cql\Parser;
 use lib\exceptions\TimeoutException;
 use Yii;
 use Exception;
-use app\controllers\{ traits\AuthTrait, traits\DatasourceTrait };
+use app\controllers\{AppController, traits\AuthTrait, traits\DatasourceTrait};
 use app\modules\webservices\Module;
 use app\models\Datasource;
 use app\modules\webservices\models\{ Record, Search, Datasource as WebservicesDatasource };
@@ -21,7 +21,7 @@ use lib\exceptions\UserErrorException;
  * @package modules\webservices\controllers
  * @property Module $module
  */
-class SearchController extends \yii\web\Controller
+class SearchController extends AppController
 {
 
   use AuthTrait;

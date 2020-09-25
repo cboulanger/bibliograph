@@ -40,7 +40,7 @@ class Configuration extends \yii\base\Component
    * @var array
    */
   protected $types = array(
-    "string","number","boolean","list"
+    "string", "number", "boolean", "list"
   );
 
   //-------------------------------------------------------------
@@ -58,22 +58,26 @@ class Configuration extends \yii\base\Component
    *     own variant of the configuration setting
    * @param bool $final
    *     If true, the value cannot be modified after creation
-   * @return bool True if preference was added, false if preference already existed
+   * @return bool True if preference was added, false if preference already
+   *   existed
    * @throws \InvalidArgumentException
    */
-  public function addPreference( $key, $default, $customize=false,  $final=false )
+  public function addPreference($key, $default, $customize = false, $final = false)
   {
-    switch( gettype( $default) )
-    {
+    switch (gettype($default)) {
       case "boolean":
-        $type = "boolean"; break;
+        $type = "boolean";
+        break;
       case "integer":
       case "double":
-        $type =  "number"; break;
+        $type = "number";
+        break;
       case "string":
-        $type = "string"; break;
+        $type = "string";
+        break;
       case "array":
-        $type = "list"; break;
+        $type = "list";
+        break;
       default:
         throw new \InvalidArgumentException("Invalid default value for preference key '$key'");
     }
@@ -85,9 +89,9 @@ class Configuration extends \yii\base\Component
    * @param string $key The name of the preference
    * @return mixed
    */
-  public function getPreference( $key )
+  public function getPreference($key)
   {
-    return $this->getKey( $key );
+    return $this->getKey($key);
   }
 
   /**
@@ -96,9 +100,9 @@ class Configuration extends \yii\base\Component
    * @return void
    * @throws \InvalidArgumentException
    */
-  public function setPreference( $key, $value )
+  public function setPreference($key, $value)
   {
-    $this->setKey( $key, $value );
+    $this->setKey($key, $value);
   }
 
   //-------------------------------------------------------------
@@ -120,27 +124,25 @@ class Configuration extends \yii\base\Component
    *
    * @param mixed $value
    * @param string $type
-   * @param bool $phpType If false, convert the value for saving in the database,
-   *   if true (default), convert them into the corresponding php type
-   * @throws \InvalidArgumentException
+   * @param bool $phpType If false, convert the value for saving in the
+   *   database, if true (default), convert them into the corresponding php
+   *   type
    * @return mixed $value
+   * @throws \InvalidArgumentException
    * @todo rewrite the typecasting stuff, this is confusing.
    */
-  protected function castType( $value, $type, $phpType = true )
+  protected function castType($value, $type, $phpType = true)
   {
-    switch ( $type )
-    {
+    switch ($type) {
       case "number"  :
-        if ( $phpType ) return floatval($value);
-        return (string) $value;
+        if ($phpType) return floatval($value);
+        return (string)$value;
       case "boolean" :
-        if ( $phpType ) return $value == "true" ? true : false;
-        return $value ? "true":"false";
+        if ($phpType) return $value == "true" ? true : false;
+        return $value ? "true" : "false";
       case "list" :
-        if ( $phpType )
-        {
-          switch ( gettype( $value ) )
-          {
+        if ($phpType) {
+          switch (gettype($value)) {
             case "string":
               return explode(",", $value);
             case "array":
@@ -148,23 +150,20 @@ class Configuration extends \yii\base\Component
             default:
               return [];
           }
-        }
-        else
-        {
-          switch ( gettype( $value ) )
-          {
+        } else {
+          switch (gettype($value)) {
             case "string":
               return $value;
             case "array":
-              return implode( ",", $value );
+              return implode(",", $value);
             default:
               return "";
           }
         }
 
       case "string":
-        if ( $phpType ) return strval($value);
-        return (string) $value;
+        if ($phpType) return strval($value);
+        return (string)$value;
       default:
         throw new \InvalidArgumentException("Invalid type '$type'");
     }
@@ -174,21 +173,20 @@ class Configuration extends \yii\base\Component
    * Checks if the type of the configuration value is correct
    * @param mixed $value
    * @param string $type
-   * @throws \InvalidArgumentException
    * @return bool True if correct
+   * @throws \InvalidArgumentException
    */
-  protected function isType( $value, $type )
+  protected function isType($value, $type)
   {
-    switch ( $type )
-    {
+    switch ($type) {
       case "number"  :
         return is_numeric($value);
       case "boolean" :
-        return is_bool( $value );
+        return is_bool($value);
       case "list" :
-        return is_array( $value );
+        return is_array($value);
       case "string":
-        return is_string( $value );
+        return is_string($value);
       default:
         throw new \InvalidArgumentException("Invalid type '$type'");
     }
@@ -201,13 +199,12 @@ class Configuration extends \yii\base\Component
    * @return void
    * @throws \InvalidArgumentException
    */
-  protected function checkType( $value, $type )
+  protected function checkType($value, $type)
   {
-    if ( ! $this->isType( $value, $type ) )
-    {
-      throw new \InvalidArgumentException( sprintf(
-        "Incorrect type. Expected '%s', got '%s'", $type, typeof( $value )
-      ) );
+    if (!$this->isType($value, $type)) {
+      throw new \InvalidArgumentException(sprintf(
+        "Incorrect type. Expected '%s', got '%s'", $type, typeof($value)
+      ));
     }
   }
 
@@ -216,9 +213,9 @@ class Configuration extends \yii\base\Component
    * @param string $type
    * @return number
    */
-  protected function getTypeIndex( $type )
+  protected function getTypeIndex($type)
   {
-    return array_search( $type, $this->types );
+    return array_search($type, $this->types);
   }
 
   /**
@@ -226,7 +223,7 @@ class Configuration extends \yii\base\Component
    * @param number $index
    * @return string
    */
-  protected function getTypeString( $index )
+  protected function getTypeString($index)
   {
     return $this->types[$index];
   }
@@ -234,18 +231,17 @@ class Configuration extends \yii\base\Component
   /**
    * Checks if a configuration key exists and throws an exception if not.
    * @param $key
-   * @throws \InvalidArgumentException
    * @return void
+   * @throws \InvalidArgumentException
    * @todo This is inefficient. Methods should try to load the record and
    * abort if not found.
    */
-  protected function checkKey( $key )
+  protected function checkKey($key)
   {
-    if ( ! $this->keyExists( $key ) )
-    {
-      throw new \InvalidArgumentException( sprintf(
+    if (!$this->keyExists($key)) {
+      throw new \InvalidArgumentException(sprintf(
         "Configuration key '%s' does not exist.", $key
-      ) );
+      ));
     }
   }
 
@@ -254,9 +250,9 @@ class Configuration extends \yii\base\Component
    * @param string $key
    * @return bool True if it does.
    */
-  public function keyExists( $key )
+  public function keyExists($key)
   {
-    return (boolean) Config::findOne(['namedId'=>$key]);
+    return (boolean)Config::findOne(['namedId' => $key]);
   }
 
   /**
@@ -265,13 +261,13 @@ class Configuration extends \yii\base\Component
    * @return \app\models\Config
    * @throws \InvalidArgumentException If key does not exist
    */
-  protected function getConfigModel( $key )
+  protected function getConfigModel($key)
   {
-    $config = Config::findOne(['namedId'=>$key]);
-    if ( ! $config  ) {
-      throw new \InvalidArgumentException( sprintf(
+    $config = Config::findOne(['namedId' => $key]);
+    if (!$config) {
+      throw new \InvalidArgumentException(sprintf(
         "Configuration key '%s' does not exist.", $key
-      ) );
+      ));
     }
     return $config;
   }
@@ -297,63 +293,63 @@ class Configuration extends \yii\base\Component
    * @throws \InvalidArgumentException
    * @throws RecordExistsException
    */
-	public function createKey( $key, $type, $customize=false, $default=null, $final=false )
-	{
-		// Check type
-		if ( ! in_array( $type, $this->types ) ) {
-			throw new \InvalidArgumentException("Invalid type '$type' for key '$key'");
-		}
+  public function createKey($key, $type, $customize = false, $default = null, $final = false)
+  {
+    // Check type
+    if (!in_array($type, $this->types)) {
+      throw new \InvalidArgumentException("Invalid type '$type' for key '$key'");
+    }
     // check if key exists
-    if ( $this->keyExists( $key ) ) {
+    if ($this->keyExists($key)) {
       throw new RecordExistsException("Config key '$key' already exists.");
     }
     // prepare config data
     $data = array(
-      'namedId'   => $key,
-      'type'      => $this->getTypeIndex( $type ),
-      'customize' => $customize ? 1:0,
-      'final'     => $final ? 1:0
+      'namedId' => $key,
+      'type' => $this->getTypeIndex($type),
+      'customize' => $customize ? 1 : 0,
+      'final' => $final ? 1 : 0
     );
-    if ( $default !== null ) {
-      $data['default'] = $this->castType( $default, $type, false );
+    if ($default !== null) {
+      $data['default'] = $this->castType($default, $type, false);
     }
     // create new entry
-    $config = new Config( $data );
+    $config = new Config($data);
     try {
       if ($config->save()) return true;
     } catch (\yii\db\Exception $e) {
-      throw new \InvalidArgumentException($e->getMessage(),null, $e);
+      throw new \InvalidArgumentException($e->getMessage(), null, $e);
     }
     // validation failed
     //throw new \LogicException("Validation failed for config data.");
     return false;
 
-	}
+  }
 
-	/**
-	 * Create a config key if it doesn't exist already.
-	 *
-	 * @param $key
-	 *     The name ("key") of the config value
-	 * @param $type
-	 *     The type of the config value
-	 *     @see qcl_config_ConfigModel::$types
+  /**
+   * Create a config key if it doesn't exist already.
+   *
+   * @param $key
+   *     The name ("key") of the config value
+   * @param $type
+   *     The type of the config value
    * @param boolean $customize
    *     If true, allow users to create their
    *     own variant of the configuration setting
    * @param mixed|null $default
    *     If not null, set a default value
-	 * @param bool $final
-	 *     If true, the value cannot be modified after creation
-	 * @return int|bool
-	 *     Returns the id of the newly created record, or false if
-	 *     key was not created.
-	 * @throws \InvalidArgumentException
-	 */
-	public function createKeyIfNotExists( $key, $type, $customize=false, $default=null, $final=false )
-	{
-    if ( ! $this->keyExists( $key ) ) {
-      return $this->createKey( $key, $type, $customize, $default, $final );
+   * @param bool $final
+   *     If true, the value cannot be modified after creation
+   * @return int|bool
+   *     Returns the id of the newly created record, or false if
+   *     key was not created.
+   * @throws \InvalidArgumentException
+   * @see qcl_config_ConfigModel::$types
+   */
+  public function createKeyIfNotExists($key, $type, $customize = false, $default = null, $final = false)
+  {
+    if (!$this->keyExists($key)) {
+      return $this->createKey($key, $type, $customize, $default, $final);
     }
     return false;
   }
@@ -371,19 +367,16 @@ class Configuration extends \yii\base\Component
    * Sets a default value for a config key
    * @param string $key
    * @param mixed $value
-   * @throws \InvalidArgumentException
    * @return void
+   * @throws \InvalidArgumentException
    */
-  public function setKeyDefault( $key, $value )
+  public function setKeyDefault($key, $value)
   {
     $config = $this->getConfigModel($key);
-    if ( ! $config->final )
-    {
-      $config->default = $this->castType( $value, $this->keyType($key), false );
+    if (!$config->final) {
+      $config->default = $this->castType($value, $this->keyType($key), false);
       $config->save();
-    }
-    else
-    {
+    } else {
       throw new \InvalidArgumentException("Config key '$key' cannot be changed.");
     }
   }
@@ -393,10 +386,10 @@ class Configuration extends \yii\base\Component
    * @param $key
    * @return bool
    */
-  public function valueIsEditable( $key )
+  public function valueIsEditable($key)
   {
     $config = $this->getConfigModel($key);
-    return ! $config->final;
+    return !$config->final;
   }
 
   /**
@@ -404,7 +397,7 @@ class Configuration extends \yii\base\Component
    * @param $key
    * @return bool
    */
-  public function valueIsCustomizable( $key )
+  public function valueIsCustomizable($key)
   {
     $config = $this->getConfigModel($key);
     return $config->customize;
@@ -416,64 +409,63 @@ class Configuration extends \yii\base\Component
    * @return mixed
    * @throws \InvalidArgumentException
    */
-  public function getKeyDefault( $key )
+  public function getKeyDefault($key)
   {
-    $config = $this->getConfigModel( $key );
-    return $this->castType( $config->default, $this->keyType( $key ), true );
+    $config = $this->getConfigModel($key);
+    return $this->castType($config->default, $this->keyType($key), true);
   }
 
   /**
    * Returns config property value. Raises an error if key does not exist.
-   * @param string $key The name of the property (i.e., myapplication.config.locale)
+   * @param string $key The name of the property (i.e.,
+   *   myapplication.config.locale)
    * @param \app\models\User $user (optional) user. If not given,
-   *   get the config key for the current user. If no custom value exists for the given
-   *   user, return the default value.
+   *   get the config key for the current user. If no custom value exists for
+   *   the given user, return the default value.
    * @return bool|array|string|int value of property.
    * @throws \InvalidArgumentException
    */
-  public function getKey( $key, $user=null )
+  public function getKey($key, $user = null)
   {
-    if( ! $user ) $user = $this->getActiveUser();
-    $config = $this->getConfigModel( $key );
+    if (!$user) $user = $this->getActiveUser();
+    $config = $this->getConfigModel($key);
     return $this->castType(
       $config->getUserConfigValue($user),
-      $this->keyType( $key ),
+      $this->keyType($key),
       true
     );
   }
 
   /**
    * Sets config property
-   * @param string $key The name of the config key  (i.e., myapplication.config.locale)
+   * @param string $key The name of the config key  (i.e.,
+   *   myapplication.config.locale)
    * @param string $value The value of the property.
    * @param \app\models\User $user (optional) user.
    * @throws \InvalidArgumentException
    */
-  public function setKey( $key, $value, $user=false)
+  public function setKey($key, $value, $user = false)
   {
-    $config = $this->getConfigModel( $key );
-    if( ! $user ) $user = $this->getActiveUser();
-    if( ! $config->customize ) {
-      throw new \LogicException( sprintf(
+    $config = $this->getConfigModel($key);
+    if (!$user) $user = $this->getActiveUser();
+    if (!$config->customize) {
+      throw new \LogicException(sprintf(
         "Config key '%s' does not allow user values.", $key
-      ) );
+      ));
     }
-    if ( $config->final ) {
+    if ($config->final) {
       throw new \LogicException("Config key '$key' cannot be changed.");
     }
-    $storeValue = $this->castType( $value, $this->keyType($key), false );
+    $storeValue = $this->castType($value, $this->keyType($key), false);
     $userConfig = $config->getUserConfig($user);
-    if ( $userConfig )
-    {
+    if ($userConfig) {
       $userConfig->value = $storeValue;
       $userConfig->save();
-    }
-    else
-    {
+    } else {
       $userConfig = new UserConfig([
         'UserId' => $user->id,
         'ConfigId' => $config->id,
-        'value'   => $storeValue
+        'value' => $storeValue
       ]);
       $userConfig->save();
     }
@@ -489,13 +481,13 @@ class Configuration extends \yii\base\Component
    * @return void
    * @throws \yii\db\Exception
    */
-	public function deleteKey( $key, $user= false )
-	{
-    $config = $this->getConfigModel( $key );
-    if( ! $user ) $user = $this->getActiveUser();
+  public function deleteKey($key, $user = false)
+  {
+    $config = $this->getConfigModel($key);
+    if (!$user) $user = $this->getActiveUser();
     $userConfig = $config->getUserConfig($user);
-	  if( $userConfig) $userConfig->delete();
-	}
+    if ($userConfig) $userConfig->delete();
+  }
 
   /**
    * Resets the user variant of a config value to the default value.
@@ -503,12 +495,12 @@ class Configuration extends \yii\base\Component
    * @param \app\models\User $user (optional) user
    * @return void
    */
-  public function resetKey( $key, $user = false )
+  public function resetKey($key, $user = false)
   {
-    $config = $this->getConfigModel( $key );
-    if( ! $user ) $user = $this->getActiveUser();
+    $config = $this->getConfigModel($key);
+    if (!$user) $user = $this->getActiveUser();
     $userConfig = $config->getUserConfig($user);
-    if( $userConfig ){
+    if ($userConfig) {
       $userConfig->value = $config->default;
       $userConfig->save();
     }
@@ -519,10 +511,10 @@ class Configuration extends \yii\base\Component
    * @param string $key
    * @return string
    */
-  public function keyType( $key )
+  public function keyType($key)
   {
-    $config = $this->getConfigModel( $key );
-    return $this->getTypeString( $config->type );
+    $config = $this->getConfigModel($key);
+    return $this->getTypeString($config->type);
   }
 
   /**
@@ -533,26 +525,25 @@ class Configuration extends \yii\base\Component
    * @return array Map with the keys 'keys', 'types' and 'values', each
    *  having an index array with all the values.
    */
-	public function getAccessibleKeys( $mask=null, $user = false  )
-	{
-    if( ! $user ) $user = $this->getActiveUser();
+  public function getAccessibleKeys($mask = null, $user = false)
+  {
+    if (!$user) $user = $this->getActiveUser();
 
-    $keys   = array();
-    $types  = array();
+    $keys = array();
+    $types = array();
     $values = array();
 
-    foreach ( $this->keys() as $key )
-    {
-      $keys[]   = $key;
-      $values[] = $this->getKey( $key, $user );
-      $types[]  = $this->keyType( $key );
+    foreach ($this->keys() as $key) {
+      $keys[] = $key;
+      $values[] = $this->getKey($key, $user);
+      $types[] = $this->keyType($key);
     }
 
-		return array(
-		  'keys'    => $keys,
-		  'values'  => $values,
-		  'types'   => $types
-		);
+    return array(
+      'keys' => $keys,
+      'values' => $values,
+      'types' => $types
+    );
   }
 
   //-------------------------------------------------------------
@@ -565,7 +556,8 @@ class Configuration extends \yii\base\Component
    * @return mixed
    * @throws \Exception
    */
-  public static function iniValue($key) {
+  public static function iniValue($key)
+  {
     static $ini = null;
     if ($ini === null) {
       $ini = Toml::parseFile(APP_CONFIG_FILE);
@@ -578,14 +570,15 @@ class Configuration extends \yii\base\Component
    * @param $name
    * @return mixed|null
    */
-  public static function env($name) {
+  public static function env($name)
+  {
     return isset($_SERVER[$name]) ? $_SERVER[$name] : null;
   }
 
   /**
    * Given a number of key names, returns the value of the environment variable
-   * with the name of that key, or the ini value with that key, whichever is found
-   * first.
+   * with the name of that key, or the ini value with that key, whichever is
+   * found first.
    * @param string $key1
    * @param string? $key2
    * @param string? $key3
@@ -593,10 +586,11 @@ class Configuration extends \yii\base\Component
    * @throws \Exception
    * @throws InvalidConfigException
    */
-  public static function anyOf() {
+  public static function anyOf()
+  {
     $args = func_get_args();
     foreach ($args as $key) {
-      if (self::env($key) !== null ) {
+      if (self::env($key) !== null) {
         return self::env($key);
       }
       if (self::iniValue($key) !== null) {
@@ -611,22 +605,22 @@ class Configuration extends \yii\base\Component
    * This retrieves the values set in the application config/ini file.
    * @throws \Exception
    */
-  public function getIniValue( $key )
+  public function getIniValue($key)
   {
     return static::iniValue($key);
   }
 
   /**
-   * Returns an array of values corresponding to the given array of keys from the
-   * initialization configuration data.
+   * Returns an array of values corresponding to the given array of keys from
+   * the initialization configuration data.
    * @param array $arr
    * @return array
    */
-  public function getIniValues( $arr )
+  public function getIniValues($arr)
   {
-    return array_map( function($elem) {
-      return $this->getIniValue( $elem );
-    }, $arr );
+    return array_map(function ($elem) {
+      return $this->getIniValue($elem);
+    }, $arr);
   }
 
 
@@ -641,7 +635,8 @@ class Configuration extends \yii\base\Component
    * @return mixed|null
    * @throws InvalidConfigException
    */
-  static public function get(string $key, bool $silent=false) {
+  static public function get(string $key, bool $silent = false)
+  {
     $env_key = strtoupper(str_replace(".", "_", $key));
     if ($silent) {
       try {
