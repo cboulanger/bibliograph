@@ -35,4 +35,4 @@ if [[ "$1" == "prerelease " ]]; then
   git tag -l | grep -E 'alpha|beta' | xargs git tag -d
 fi
 
-npm version $BUMPED_VERSION
+npm version $BUMPED_VERSION --allow-same-version
