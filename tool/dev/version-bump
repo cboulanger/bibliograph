@@ -28,10 +28,11 @@ fi
 #  jq '.environment["app.version"] = "'$BUMPED_VERSION'"' $file
 #done
 
-#Delete remote prerelease tags.
-git fetch && git tag -l | grep -E 'alpha|beta' | xargs -n 1 git push --delete origin
-
-#Delete local prerelease tags.
-git tag -l | grep -E 'alpha|beta' | xargs git tag -d
+if [[ "$1" == "prerelease " ]]; then
+  # delete local and remote prerelease tags
+  git tag -l | grep -E 'alpha|beta' | xargs git tag -d
+  git fetch && git tag -l | grep -E 'alpha|beta' | xargs -n 1 git push --delete origin
+  git tag -l | grep -E 'alpha|beta' | xargs git tag -d
+fi
 
 npm version $BUMPED_VERSION
