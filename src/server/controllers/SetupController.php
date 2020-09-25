@@ -152,14 +152,16 @@ class SetupController extends AppController
   protected $setupMethods = [];
 
   /**
-   * If true, execute setup methods consecutively until REQUEST_EXECUTION_THRESHOLD is reached,
-   * otherwise, return response to client immediately after execution of one method.
+   * If true, execute setup methods consecutively until
+   * REQUEST_EXECUTION_THRESHOLD is reached, otherwise, return response to
+   * client immediately after execution of one method.
    * @var bool
    */
   protected $batchExecuteSetupMethods = true;
 
   /**
-   * The session id of the client that first calls this method, blocking further calls
+   * The session id of the client that first calls this method, blocking
+   * further calls
    * @var string
    */
   protected $initiatingSessionId = null;
@@ -250,7 +252,8 @@ class SetupController extends AppController
   }
 
   /**
-   * Returns true if one of the plugins needs an upgrade, otherwise returns false
+   * Returns true if one of the plugins needs an upgrade, otherwise returns
+   * false
    * @return bool
    */
   protected function checkModuleNeedsUpgrade()
@@ -316,13 +319,15 @@ class SetupController extends AppController
   }
 
   /**
-   * The setup action. Is called as first server method from the client The result returned by
-   * the server contains diagnostic messages only. More important are the messages which are
-   * returned via JSON-RPC notifications:
+   * The setup action. Is called as first server method from the client The
+   * result returned by the server contains diagnostic messages only. More
+   * important are the messages which are returned via JSON-RPC notifications:
    *
-   * - bibliograph.setup.next: The setup process is not finished yet, but has ended the request to avoid a timeout.
-   * The client should simply call the action again to continue the setup process.
-   * - bibliograph.setup.done: The setup has completed, the client can begin to interact with the backend.
+   * - bibliograph.setup.next: The setup process is not finished yet, but has
+   * ended the request to avoid a timeout. The client should simply call the
+   * action again to continue the setup process.
+   * - bibliograph.setup.done: The setup has completed, the client can begin to
+   * interact with the backend.
    *
    * Errors thrown: {@link JsonRpcException} with Codes {@link}
    * @throws SetupException
@@ -334,7 +339,8 @@ class SetupController extends AppController
   }
 
   /**
-   * A setup a specific version of the application. Not allowed in production mode.
+   * A setup a specific version of the application. Not allowed in production
+   * mode.
    * @see {@link SetupController::actionSetup} for details
    * @param string $upgrade_to (optional) The version to upgrade from.
    * @param string $upgrade_from (optional) The version to upgrade to.
@@ -927,6 +933,19 @@ class SetupController extends AppController
       Yii::debug($msg, __METHOD__);
       return $msg;
     }
+
+    // remove obsolete datasources
+    $obsolete = array_merge(
+      Datasource::findBySchema("file"),
+      Datasource::findBySchema("none")
+    );
+    /** @var Datasource $ds */
+    foreach( $obsolete as $ds) {
+      $ds->delete();
+      Yii::info("Deleted obsolete datasource $ds->namedId.");
+    }
+
+    // upgrade datasources
     $migrated = [];
     $failed = [];
     /** @var Schema[] $schemas */

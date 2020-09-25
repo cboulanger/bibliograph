@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+# bumps the version in package.json and all compile.json files
+# might be unneccessary
+
+set -o errexit
+[ -z "$FUNCTIONS_LOADED" ] && source tool/lib/functions.sh
+
+# Checks
+LEVELS="major, minor, patch, premajor, preminor, prepatch, prerelease"
+[[ -z "$1" ]] && exit_with_error "You must provide a level (any of $LEVELS)"
+[[ "$LEVELS" == *"$1"* ]] || exit_with_error "Unknown level (must be any of $LEVELS)"
+
+CURRENT_VERSION="$(jq '.version' package.json | sed 's/\"//g' )"
+echo ">>> Current version is: $CURRENT_VERSION"
+
+BUMPED_VERSION="$(semver -i $1 $CURRENT_VERSION)"
+echo ">>> Bumped version is: $BUMPED_VERSION"
+
+for file in compile-*.json ; do
+  jq '.environment["app.version"] = "'$BUMPED_VERSION'"' $file
+done
+#npm version "$*"

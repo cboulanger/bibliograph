@@ -1,8 +1,9 @@
 #!/bin/bash
 
 # Compiles and starts the bibliograph app in the browser
+
 set -o errexit
-source tool/lib/functions.sh
+[ -z "$FUNCTIONS_LOADED" ] && source tool/lib/functions.sh
 
 echo "Command: $0 $*"
 

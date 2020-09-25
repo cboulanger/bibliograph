@@ -469,7 +469,7 @@ class Datasource extends BaseModel
    *   string composed of the datasource name and the model type, separated by
    *   a dot. In this case, the model type can be left empty.
    * @param string $modelType
-   * @return string The name of the class
+   * @return BaseModel
    * @todo  move to datasourceManager and rename to getClassFor()
    */
   public static function in($datasourceName, $modelType = null)
@@ -605,7 +605,7 @@ class Datasource extends BaseModel
    * This implicitly sets the static property 'datasource' of the class to the
    * current datasource name.
    * @param string $type
-   * @return string The class name
+   * @return BaseModel
    * @throws InvalidArgumentException
    */
   public function getClassFor($type)

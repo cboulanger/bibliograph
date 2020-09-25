@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: cboulanger
- * Date: 15.06.18
- * Time: 08:26
- */
 
 namespace app\controllers\traits;
 use ReflectionClass;
@@ -12,6 +6,13 @@ use ReflectionProperty;
 use Yii;
 use Yii\base\UnknownPropertyException;
 
+/**
+ * Trait PropertyPersistenceTrait
+ * Persists the properties of the given class instance. Currently works only
+ * on the class level, i.e. all class instances will have the same properties
+ * persisted.
+ * @package app\controllers\traits
+ */
 trait PropertyPersistenceTrait
 {
 

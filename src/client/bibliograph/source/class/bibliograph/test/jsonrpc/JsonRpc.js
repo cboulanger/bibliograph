@@ -1,5 +1,5 @@
 /**
- * @require(qx.io.transport.Http)
+ * @use(qx.io.transport.Xhr)
  * @require(qx.test.io.jsonrpc.MAssert)
  * @ignore(bibliograph.test.notification_received)
  */

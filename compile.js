@@ -1,15 +1,23 @@
 /**
  * Runs UI tests for Bibliograph
  */
-// const path = require("path");
-//const TEST_PATH = path.join("test", "uitests");
+const fs = require("fs");
 
 qx.Class.define("bibliograph.CompilerApi", {
   extend: qx.tool.cli.api.CompilerApi,
-  statics: {
-//    TEST_PATH
-  },
   members: {
+  
+    /**
+     * Load the compiler data from a compile*.json file and sets the
+     * "app.version" environment key from package.json
+     * @return {Promise<{environment}|*>}
+     */
+    async load() {
+      let data = await this.base(arguments);
+      let packageJson = await qx.tool.utils.Json.loadJsonAsync("package.json");
+      data.environment["app.version"] = packageJson.version;
+      return data;
+    },
     
     async beforeTests(command) {
       command.addTest(new qx.tool.cli.api.Test("Browser tests", async function() {

@@ -3,7 +3,7 @@
 # Usage: tool/dev/mysql-import mydata.sql database_name
 
 set -o errexit
-source tool/lib/functions.sh
+[ -z "$FUNCTIONS_LOADED" ] && source tool/lib/functions.sh
 
 SQL_FILE=$1
 DATABASE_NAME=$2

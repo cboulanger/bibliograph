@@ -6,6 +6,7 @@ qx.Class.define("bibliograph.rpc.Commands", {
     reload(resetState) {
       if (resetState) {
         location.href = location.protocol + "//" + location.host + location.pathname;
+        return;
       }
       location.reload(true);
     }

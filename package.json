@@ -38,6 +38,7 @@
     "dist:local.docker:build": "tool/dist/build test/.env",
     "dist:local.docker:run": "tool/dist/run",
     "deploy:rewi:devel": "tool/deploy/deploy -f config/deploy/rewi/bibliograph-test.env -v -y",
+    "deploy:rewi:staging": "tool/deploy/deploy -f config/deploy/rewi/bibliograph-staging-build.env -v -y",
     "test:rewi:devel": "config/deploy/rewi/run-tests.sh"
   },
   "_old_scripts": {
