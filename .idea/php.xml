@@ -140,6 +140,25 @@
       <path value="$PROJECT_DIR$/src/server/vendor/fzaninotto/faker" />
       <path value="$PROJECT_DIR$/src/server/vendor/hedii/zotero-api" />
       <path value="$PROJECT_DIR$/src/server/vendor/georgique/yii2-jsonrpc" />
+      <path value="$PROJECT_DIR$/src/server/vendor/webonyx/graphql-php" />
+      <path value="$PROJECT_DIR$/src/server/vendor/tsingsun/yii2-graphql" />
+      <path value="$PROJECT_DIR$/src/server/vendor/psr/http-server-handler" />
+      <path value="$PROJECT_DIR$/src/server/vendor/psr/http-server-middleware" />
+      <path value="$PROJECT_DIR$/src/server/vendor/psr/http-factory" />
+      <path value="$PROJECT_DIR$/src/server/vendor/ecodev/graphql-upload" />
+      <path value="$PROJECT_DIR$/src/server/vendor/zendframework/zend-diactoros" />
+      <path value="$PROJECT_DIR$/src/server/vendor/bower/punycode" />
+      <path value="$PROJECT_DIR$/src/server/vendor/bower/yii2-pjax" />
+      <path value="$PROJECT_DIR$/src/server/vendor/bower/jquery" />
+      <path value="$PROJECT_DIR$/src/server/vendor/bower/inputmask" />
+      <path value="$PROJECT_DIR$/src/server/vendor/fourteenmeister/dsn" />
+      <path value="$PROJECT_DIR$/src/server/vendor/rtheunissen/guzzle-rate-limiter" />
+      <path value="$PROJECT_DIR$/src/server/vendor/cache/tag-interop" />
+      <path value="$PROJECT_DIR$/src/server/vendor/cache/adapter-common" />
+      <path value="$PROJECT_DIR$/src/server/vendor/cache/hierarchical-cache" />
+      <path value="$PROJECT_DIR$/src/server/vendor/cache/array-adapter" />
+      <path value="$PROJECT_DIR$/src/server/vendor/cache/simple-cache-bridge" />
+      <path value="$PROJECT_DIR$/src/server/vendor/psr/cache" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.4" />

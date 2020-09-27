@@ -34,7 +34,8 @@ use lib\dialog\{Alert, Dialog, Progress};
 use lib\exceptions\{RecordExistsException,
   ServerBusyException,
   SetupException,
-  SetupFatalException};
+  SetupFatalException,
+  UserErrorException};
 use lib\components\ConsoleAppHelper as Console;
 use lib\Module;
 use yii\web\UnauthorizedHttpException;
@@ -430,6 +431,7 @@ class SetupController extends AppController
 
     $this->upgrade_from = $upgrade_from;
     $this->upgrade_to = $upgrade_to;
+
     // if we have a version change or reset, run setup methods again
     if ( $upgrade_from !== $upgrade_to or $this->isReset) {
       // compile list of setup methods

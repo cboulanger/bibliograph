@@ -122,7 +122,7 @@ where options are:
                                   compiler configuration
   --app-url-query, -Q           - Optional query string/hash to attach to the URL
   --env-file, -f file           - the .env file containing configuration
-                                 (defaults to .env). Must be the first parameter
+                                 (defaults to test/.env). Must be the first parameter
                                  if others are to override the settings.
   --config-file, -c             - the compiler configuration file to use
                                   (defaults to compile.json)

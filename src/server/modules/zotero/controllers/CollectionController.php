@@ -137,7 +137,7 @@ class CollectionController
         $cachedVersions = null;
         $cachedCollections = null;
         $cachedNodeDataList = null;
-        self::deleteCached(self::CACHE_KEYS2IDS, $datasourceId);
+        self::deleteCached(self::CACHE_VERSIONS, $datasourceId);
       }
     }
 

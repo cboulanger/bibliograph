@@ -220,6 +220,10 @@ class DatasourceManager extends \yii\base\Component
     foreach ($datasources as $datasource) {
       $instance = Datasource::getInstanceFor($datasource->namedId);
       $migrationNamespace = $instance->migrationNamespace;
+      if ($migrationNamespace === null) {
+        Yii::debug("Datasource '{$instance->namedId}' does not support migrations", __METHOD__);
+        continue;
+      }
       Yii::debug("Migrating datasource '{$instance->namedId}'...", __METHOD__);
       Yii::debug("Migration namespace: $migrationNamespace", __METHOD__);
       $params = ['all', 'migrationNamespaces' => $migrationNamespace];

@@ -311,8 +311,8 @@ function setup_mysql_credentials() {
     --password" || exit 1
 }
 
+#  if utf-8 chars are corrupted, add  | php -r "require '$DEPLOY_DIR/server/lib/fix-utf8.php';" \
 function import_databases_expr() {
-  FIXUTF8PATH="$DEPLOY_DIR/server/vendor/neitanod/forceutf8/src/ForceUTF8/Encoding.php"
   cat <<EOF
     for db in "$DEPLOY_IMPORT_DB_NAMES"; do
       echo " - Cloning database '\$db' into '$DB_DATABASE'..."
@@ -321,7 +321,6 @@ function import_databases_expr() {
        --default-character-set=utf8 \
        --set-charset \
        \$db \
-      | php -r "require '$FIXUTF8PATH'; echo ForceUTF8\Encoding::fixUTF8(stream_get_contents(STDIN));" \
       | mysql \
        --login-path=deploy_alias \
        --default-character-set=utf8 \

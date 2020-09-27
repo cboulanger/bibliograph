@@ -8,11 +8,11 @@
     "src/lib/incubator.qx.io.jsonrpc"
   ],
   "environment": {
+    "app.version": "set by compile.js",
     "qx.debug": true,
     "qx.icontheme": "Tango",
     "qx.test.delay.scale": 10,
     "module.objectid": true,
-    "app.version": "development",
     "app.serverUrl": "src/server/test",
     "qcl.io.jsonrpc.token-in-params": true
   },

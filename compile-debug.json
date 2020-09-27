@@ -15,9 +15,9 @@
     "src/lib/incubator.qx.io.jsonrpc"
   ],
   "environment": {
+    "app.version": "set by compile.js",
     "qx.icontheme": "Tango",
     "module.objectid": true,
-    "app.version": "3.0.0-beta.79",
     "app.serverUrl": "/server/web/?r="
   },
   "locales": [

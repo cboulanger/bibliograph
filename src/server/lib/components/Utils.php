@@ -34,16 +34,8 @@ class Utils extends \yii\base\Component
 {
 
   /**
-   * Returns the absolute path to the project's root
-   * directory
-   *
    * @return string
    */
-  public function getProjectRootDir()
-  {
-    return realpath( __DIR__ . "/../../../.." );
-  }
-
   public function getJsonRpcEndpoint()
   {
     return dirname(Yii::$app->request->absoluteUrl);
@@ -74,26 +66,25 @@ class Utils extends \yii\base\Component
    */
   public function getNpmPackageData()
   {
-    $package_json_path = $this->getProjectRootDir() . "/package.json";
+    $package_json_path = APP_ROOT_DIR .DIRECTORY_SEPARATOR . "package.json";
     return json_decode( file_get_contents( $package_json_path ) );
   }
 
 
   /**
    * Returns the version of the application
-   * @todo Rewrite in "production first" mode
    * @return string
    */
   public function getVersion()
   {
+    $versionTxtPath = APP_ROOT_DIR . DIRECTORY_SEPARATOR . "version.txt";
+    if (file_exists($versionTxtPath)) {
+      return trim(file_get_contents($versionTxtPath));
+    }
     try{
       return trim($this->getNpmPackageData()->version);
     } catch( \Exception $e){
-      try{
-        return trim(file_get_contents(__DIR__ . "/../../../version.txt"));
-      } catch( \Exception $e) {
-        throw new UserErrorException("Cannot read package.json or version.txt",null, $e);
-      }
+      throw new UserErrorException("Cannot read package.json or version.txt",null, $e);
     }
   }
 

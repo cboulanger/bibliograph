@@ -40,6 +40,15 @@ class Datasource extends \app\models\Datasource
   static $description = "A proxy for a library hosted at zotero.org ";
 
   /**
+   * This datasource does not support migrations
+   * @override
+   */
+  public function getMigrationNamespace()
+  {
+    return null;
+  }
+
+  /**
    * @inheritDoc
    * @return \lib\Module|\yii\base\Module|Module
    */
