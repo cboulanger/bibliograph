@@ -51,15 +51,15 @@ jobs:
           DB_HOST_GITHUB: 127.0.0.1
           DB_PORT_GITHUB: ${{ job.services.mysql_server.ports[3306] }}
         run: tool/test/codeception
-      - name: Install git-secrets
-        if:
-        run: |
-          echo "deb https://dl.bintray.com/sobolevn/deb git-secret main" | sudo tee -a /etc/apt/sources.list
-          wget -qO - https://api.bintray.com/users/sobolevn/keys/gpg/public.key | sudo apt-key add -
-          sudo apt-get update && sudo apt-get install git-secret
-          gpg --version
-          echo "TTY: $(tty)"
-          export GPG_TTY=$(tty)
-          echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --no-tty --import --batch
-          git secret reveal
-          cat deploy/test
+#      - name: Install git-secrets
+#        if:
+#        run: |
+#          echo "deb https://dl.bintray.com/sobolevn/deb git-secret main" | sudo tee -a /etc/apt/sources.list
+#          wget -qO - https://api.bintray.com/users/sobolevn/keys/gpg/public.key | sudo apt-key add -
+#          sudo apt-get update && sudo apt-get install git-secret
+#          gpg --version
+#          echo "TTY: $(tty)"
+#          export GPG_TTY=$(tty)
+#          echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --no-tty --import --batch
+#          git secret reveal
+#          cat deploy/test
