@@ -23,7 +23,6 @@ BUILD_CLEAN=0
 BUILD_VERBOSE=${BUILD_VERBOSE:-0}
 QX_COMPILE_ARGS=""
 
-
 DEPLOY_ENV_FILE=""
 DEPLOY_HOST=""
 DEPLOY_DIR=""
@@ -31,6 +30,8 @@ DEPLOY_CONFIG_DIR=config
 DEPLOY_DB_NAME=""
 DEPLOY_IMPORT_DB_NAMES=""
 DEPLOY_EMPTY_DATABASE=0
+DEPLOY_BACKUP_DATABASE=""
+DEPLOY_DROP_DATABASE_PREFIX=""
 DEPLOY_EXCLUDE_ARGS="--exclude=*.zip --exclude=._* --exclude=.DS_Store --exclude=.git*"
 DEPLOY_CLEAN=1
 
@@ -42,106 +43,123 @@ if [[ "$BUILD_ENV_FILE" != "" ]]; then
 fi
 
 # Process command line
-while [[ $1 != "" ]] ; do
-    case "$1" in
+while [[ $1 != "" ]]; do
+  case "$1" in
 
-        "--env-file"|"-f")
-            BUILD_ENV_FILE="$2"
-            [[ -f $BUILD_ENV_FILE ]] || exit_with_error "File $BUILD_ENV_FILE does not exist"
-            DEPLOY_ENV_FILE=$BUILD_ENV_FILE
-            source "$BUILD_ENV_FILE"
-            shift
-            ;;
-
-        "--deploy-env-file"|"-F")
-            [[ "$BUILD_ENV_FILE" == "" ]] && exit_with_error "You have to set --env-file first"
-            DEPLOY_ENV_FILE="$2"
-            [[ -f $DEPLOY_ENV_FILE ]] || exit_with_error "File $DEPLOY_ENV_FILE does not exist"
-            shift
-            ;;
-
-        "--build-config-file"|"-c")
-            BUILD_CONFIG_FILE="$2"
-            shift
-            ;;
-
-        "--build-target"|"-t")
-            BUILD_TARGET="$2"
-            shift
-            ;;
-
-        "--skip-build"|"-k")
-            BUILD_SKIP=1
-            ;;
-
-        "--deploy-host"|"-H")
-            DEPLOY_HOST="$2"
-            shift
-            ;;
-
-        "--deploy-config-dir"|"-C")
-            DEPLOY_CONFIG_DIR="$2"
-            shift
-            ;;
-
-        "--deploy-dir"|"-D")
-            DEPLOY_DIR="$2"
-            shift
-            ;;
-
-        "--database"|"-B")
-            DEPLOY_DB_NAME="$2"
-            shift
-            ;;
-
-        "--import-database"|"-I")
-            DEPLOY_IMPORT_DB_NAMES="$2"
-            DEPLOY_EMPTY_DATABASE=1
-            shift
-            ;;
-
-        "--empty-database"|"-E")
-            DEPLOY_EMPTY_DATABASE=1
-            ;;
-
-        "--clean")
-            BUILD_CLEAN=1
-            ;;
-
-        "--no-deploy-clean")
-            DEPLOY_CLEAN=0
-            ;;
-
-        "--set-env"|"-e")
-            ENV_VAR_NAME="$2"
-            ENV_VAR_VALUE="$2"
-            export $ENV_VAR_NAME=$ENV_VAR_VALUE
-            shift
-            shift
-            ;;
-
-        "--verbose"|"-v")
-            BUILD_VERBOSE=1
-            ;;
-
-        "--quiet"|"-q")
-            QUIET=1
-            ;;
-
-        "--yes"|"-y")
-            ANSWER_YES=1
-            ;;
-
-        "--help"|"-h")
-            USAGE=1
-            ;;
-    esac
+  "--env-file" | "-f")
+    BUILD_ENV_FILE="$2"
+    [[ -f $BUILD_ENV_FILE ]] || exit_with_error "File $BUILD_ENV_FILE does not exist"
+    DEPLOY_ENV_FILE=$BUILD_ENV_FILE
+    source "$BUILD_ENV_FILE"
     shift
+    ;;
+
+  "--deploy-env-file" | "-F")
+    [[ "$BUILD_ENV_FILE" == "" ]] && exit_with_error "You have to set --env-file first"
+    DEPLOY_ENV_FILE="$2"
+    [[ -f $DEPLOY_ENV_FILE ]] || exit_with_error "File $DEPLOY_ENV_FILE does not exist"
+    shift
+    ;;
+
+  "--build-config-file" | "-c")
+    BUILD_CONFIG_FILE="$2"
+    shift
+    ;;
+
+  "--build-target" | "-t")
+    BUILD_TARGET="$2"
+    shift
+    ;;
+
+  "--skip-build" | "-k")
+    BUILD_SKIP=1
+    ;;
+
+  "--deploy-host" | "-H")
+    DEPLOY_HOST="$2"
+    shift
+    ;;
+
+  "--deploy-config-dir" | "-C")
+    DEPLOY_CONFIG_DIR="$2"
+    shift
+    ;;
+
+  "--deploy-dir" | "-D")
+    DEPLOY_DIR="$2"
+    shift
+    ;;
+
+  "--database" | "-B")
+    DEPLOY_DB_NAME="$2"
+    shift
+    ;;
+
+  "--import-database" | "-I")
+    DEPLOY_IMPORT_DB_NAMES="$2"
+    DEPLOY_EMPTY_DATABASE=1
+    shift
+    ;;
+
+  "--backup" | "-b")
+    DBNAME=${DEPLOY_DB_NAME:-$DB_DATABASE}
+    if [[ "$2" == "" || ${2:0:1} == "-" ]]; then
+      if [[ "$DBNAME" == "" ]]; then
+        exit_with_error "You must set the database name before requesting a backup"
+      fi
+      DEPLOY_BACKUP_DATABASE="${DBNAME}_$(date '+%Y%m%d_%H%M%S')"
+    else
+      DEPLOY_BACKUP_DATABASE="$2"
+      shift
+    fi
+    ;;
+
+  "--empty-database" | "-E")
+    DEPLOY_EMPTY_DATABASE=1
+    ;;
+
+  "--drop-database-prefix" | "-X")
+    DEPLOY_DROP_DATABASE_PREFIX="$2"
+    shift
+    ;;
+
+  "--clean")
+    BUILD_CLEAN=1
+    ;;
+
+  "--no-deploy-clean")
+    DEPLOY_CLEAN=0
+    ;;
+
+  "--set-env" | "-e")
+    ENV_VAR_NAME="$2"
+    ENV_VAR_VALUE="$2"
+    export $ENV_VAR_NAME=$ENV_VAR_VALUE
+    shift
+    shift
+    ;;
+
+  "--verbose" | "-v")
+    BUILD_VERBOSE=1
+    ;;
+
+  "--quiet" | "-q")
+    QUIET=1
+    ;;
+
+  "--yes" | "-y")
+    ANSWER_YES=1
+    ;;
+
+  "--help" | "-h")
+    USAGE=1
+    ;;
+  esac
+  shift
 done
 
-
-if [[ $USAGE != 0 ]] ; then
-cat << EOF
+if [[ $USAGE != 0 ]]; then
+  cat <<EOF
 Usage: $0 [options]
 where options are:
 ${HELP_ADDITIONAL_TEXT}
@@ -166,6 +184,13 @@ ${HELP_ADDITIONAL_TEXT}
   --import-database, -I name    - the name of the database to import tables from
                                   (only remotely), overrides DEPLOY_IMPORT_DB_NAMES
                                   implies -E
+  --backup, -b [name]           - create a backup of the database before emptying it.
+                                  If a name is provided, use that name for the backup
+                                  (note that any existing database with that name
+                                  will be deleted). Otherwise, use the database
+                                  name with an appended timestamp (only remotely).
+  --drop-database-prefix, -X    - Drops all databases with this prefix. Handle
+                                  with care! (only remotely)
   --clean                       - clean the working directory befor building
   --no-deploy-clean             - do not clean files on the deploy target
                                   before deployment
@@ -199,13 +224,13 @@ fi
 if [[ "$BUILD_TARGET" != "" ]]; then
   QX_COMPILE_ARGS="$QX_COMPILE_ARGS --target=$BUILD_TARGET"
 fi
-if [[ $BUILD_CLEAN != 0 ]] ; then
-    QX_COMPILE_ARGS="$QX_COMPILE_ARGS --clean"
+if [[ $BUILD_CLEAN != 0 ]]; then
+  QX_COMPILE_ARGS="$QX_COMPILE_ARGS --clean"
 fi
-if [[ $BUILD_VERBOSE != 0 ]] ; then
-    QX_COMPILE_ARGS="$QX_COMPILE_ARGS --verbose"
-elif [[ $QUIET != 0 ]] ; then
-    QX_COMPILE_ARGS="$QX_COMPILE_ARGS --quiet"
+if [[ $BUILD_VERBOSE != 0 ]]; then
+  QX_COMPILE_ARGS="$QX_COMPILE_ARGS --verbose"
+elif [[ $QUIET != 0 ]]; then
+  QX_COMPILE_ARGS="$QX_COMPILE_ARGS --quiet"
 fi
 
 # get environment variables that override the default
@@ -224,18 +249,14 @@ if [[ "$DEPLOY_CONFIG_DIR" != /* ]]; then
 fi
 
 # verbose display of configuration
-if [[ $BUILD_VERBOSE != 0 ]] ; then
-    echo "DEPLOY_CONFIG_DIR=$DEPLOY_CONFIG_DIR"
-    echo "BUILD_SKIP=$BUILD_SKIP"
-    echo "ANSWER_YES=$ANSWER_YES"
-    echo "BUILD_DEBUG_TARGET=$BUILD_DEBUG_TARGET"
-    echo "BUILD_CLEAN=$BUILD_CLEAN"
-    echo "QUIET=$QUIET"
-    echo "ANSWER_YES=$ANSWER_YES"
-    echo "QX_COMPILE_ARGS=$QX_COMPILE_ARGS"
+if [[ $BUILD_VERBOSE != 0 ]]; then
+  echo "DEPLOY_CONFIG_DIR=$DEPLOY_CONFIG_DIR"
+  echo "ANSWER_YES=$ANSWER_YES"
+  echo "QUIET=$QUIET"
+  echo "QX_COMPILE_ARGS=$QX_COMPILE_ARGS"
 fi
 
-if [[ $QUIET != 1 ]] ; then
+if [[ $QUIET != 1 ]]; then
   echo
   echo "Deployment configuration:"
   echo "   Build environment file:      $BUILD_ENV_FILE"
@@ -250,20 +271,22 @@ if [[ $QUIET != 1 ]] ; then
   echo "   Database used:               $DB_DATABASE"
   echo "   Clean before build:          $([[ $BUILD_CLEAN == 1 ]] && echo 'Yes' || echo 'No')"
   echo "   Clean target/database:       $([[ $DEPLOY_CLEAN == 1 ]] && echo 'Yes' || echo 'No')"
-  echo "   Import database(s) if clean: $DEPLOY_IMPORT_DB_NAMES"
-  echo
+  echo "   Empty database:              $([[ $DEPLOY_EMPTY_DATABASE == 1 ]] && echo 'Yes' || echo 'No')"
+  echo "   Import database(s):          $([[ "$DEPLOY_IMPORT_DB_NAMES" != "" ]] && echo "$DEPLOY_IMPORT_DB_NAMES" || echo '-')"
+  echo "   Backup database into:        $([[ "$DEPLOY_BACKUP_DATABASE" != "" ]] && echo "$DEPLOY_BACKUP_DATABASE" || echo '-')"
+  echo "   Drop databases with prefix:  $([[ "$DEPLOY_DROP_DATABASE_PREFIX" != "" ]] && echo "$DEPLOY_DROP_DATABASE_PREFIX" || echo '-')"
 fi
 
 if [ "$ANSWER_YES" != 1 ]; then
   read -r -p "Proceed? [y/N] " response
   case "$response" in
-    [yY][eE][sS]|[yY])
-        # pass
-        ;;
-    *)
-        echo "Aborted."
-        exit 0;
-        ;;
+  [yY][eE][sS] | [yY])
+    # pass
+    ;;
+  *)
+    echo "Aborted."
+    exit 0
+    ;;
   esac
 fi
 
@@ -274,12 +297,12 @@ fi
 
 # Deploy!
 
-function remote_execute(){
-  [[ $BUILD_VERBOSE == 1 ]] && echo $1
+function remote_execute() {
+  [[ $BUILD_VERBOSE == 1 ]] && echo ">>> CMD: $1"
   echo "$1" | ssh -q -T $DEPLOY_HOST bash
 }
 
-function setup_mysql_credentials(){
+function setup_mysql_credentials() {
   remote_execute "mysql --login-path=deploy_alias -e \"quit\" || \
     mysql_config_editor set \
     --login-path=deploy_alias \
@@ -288,26 +311,49 @@ function setup_mysql_credentials(){
     --password" || exit 1
 }
 
-
-function import_databases_expr(){
+function import_databases_expr() {
   FIXUTF8PATH="$DEPLOY_DIR/server/vendor/neitanod/forceutf8/src/ForceUTF8/Encoding.php"
-  cat << EOF
-      for db in "$DEPLOY_IMPORT_DB_NAMES"; do
-       echo " - Cloning database '\$db' into '$DB_DATABASE'..."
-       mysqldump \
-         --login-path=deploy_alias \
-         --default-character-set=utf8 \
-         --set-charset \
-         \$db \
-       | php -r "require '$FIXUTF8PATH'; echo ForceUTF8\Encoding::fixUTF8(stream_get_contents(STDIN));" \
-       | mysql \
-         --login-path=deploy_alias \
-         --default-character-set=utf8 \
-         $DB_DATABASE
-      done
+  cat <<EOF
+    for db in "$DEPLOY_IMPORT_DB_NAMES"; do
+      echo " - Cloning database '\$db' into '$DB_DATABASE'..."
+      mysqldump \
+       --login-path=deploy_alias \
+       --default-character-set=utf8 \
+       --set-charset \
+       \$db \
+      | php -r "require '$FIXUTF8PATH'; echo ForceUTF8\Encoding::fixUTF8(stream_get_contents(STDIN));" \
+      | mysql \
+       --login-path=deploy_alias \
+       --default-character-set=utf8 \
+       $DB_DATABASE
+    done
 EOF
 }
 
+function clone_database_expr() {
+  cat <<EOF
+   echo " - Cloning database '$1' into '$2'..."
+   mysqldump \
+     --login-path=deploy_alias \
+     --default-character-set=utf8 \
+     --set-charset \
+     $1 \
+   | mysql \
+     --login-path=deploy_alias \
+     --default-character-set=utf8 \
+     $2
+EOF
+}
+
+function find_databases_with_prefix_expr() {
+ cat <<EOF
+  mysql --login-path=deploy_alias \
+    -e "SELECT schema_name \
+    FROM information_schema.schemata \
+    WHERE schema_name LIKE '$1%' \
+    ORDER BY schema_name"
+EOF
+}
 
 # importing databases, very hacky at the moment
 
@@ -332,7 +378,7 @@ if [ "$DEPLOY_HOST" == "local" ]; then
     mysql --user=$DB_USER --password=$DB_PASSWORD -e "drop database if exists $DB_DATABASE;"
   fi
   echo ">>> Creating database if it does not already exist ..."
-  mysql --user=$DB_USER --password=$DB_PASSWORD  -e "create database if not exists $DB_DATABASE;"
+  mysql --user=$DB_USER --password=$DB_PASSWORD -e "create database if not exists $DB_DATABASE;"
 
 else
   #
@@ -366,11 +412,29 @@ else
   # database
   echo ">>> Setting up mysql passwordless access ..."
   setup_mysql_credentials
+  if [[ "$DEPLOY_BACKUP_DATABASE" != "" ]]; then
+    db_exists=$(remote_execute "mysql --login-path=deploy_alias -e \"show databases like '$DB_DATABASE';\"")
+    if [[ "$db_exists" == *"$DB_DATABASE"* ]]; then
+      echo ">>> Backing up database $DB_DATABASE ..."
+      remote_execute "mysql --login-path=deploy_alias -e 'drop database if exists $DEPLOY_BACKUP_DATABASE;'"
+      remote_execute "mysql --login-path=deploy_alias -e 'create database if not exists $DEPLOY_BACKUP_DATABASE;'"
+      remote_execute "$(clone_database_expr $DB_DATABASE $DEPLOY_BACKUP_DATABASE)"
+    fi
+  fi
+  if [[ "$DEPLOY_DROP_DATABASE_PREFIX" != "" ]]; then
+    echo ">>> Dropping all database with prefix '$DEPLOY_DROP_DATABASE_PREFIX'..."
+    databases=$(remote_execute "$(find_databases_with_prefix_expr $DEPLOY_DROP_DATABASE_PREFIX)")
+    for db in $databases; do
+      if [[ "$db" != "schema_name" ]]; then
+        remote_execute "mysql --login-path=deploy_alias -e 'drop database $db;'"
+      fi
+    done
+  fi
   if [ $DEPLOY_EMPTY_DATABASE == 1 ]; then
-    echo ">>> Deleting database ..."
+    echo ">>> Deleting database $DB_DATABASE..."
     remote_execute "mysql --login-path=deploy_alias -e 'drop database if exists $DB_DATABASE;'"
   fi
-  echo ">>> Creating database if it does not already exist ..."
+  echo ">>> Creating database $DB_DATABASE if it does not already exist ..."
   remote_execute "mysql --login-path=deploy_alias -e 'create database if not exists $DB_DATABASE;'"
   if [[ "$DEPLOY_IMPORT_DB_NAMES" != "" ]]; then
     echo ">>> Importing database(s)..."

@@ -52,6 +52,7 @@ jobs:
           DB_PORT_GITHUB: ${{ job.services.mysql_server.ports[3306] }}
         run: tool/test/codeception
       - name: Install git-secrets
+        if:
         run: |
           echo "deb https://dl.bintray.com/sobolevn/deb git-secret main" | sudo tee -a /etc/apt/sources.list
           wget -qO - https://api.bintray.com/users/sobolevn/keys/gpg/public.key | sudo apt-key add -

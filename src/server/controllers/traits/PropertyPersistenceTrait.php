@@ -22,7 +22,7 @@ trait PropertyPersistenceTrait
    * @return string
    */
   protected function getPropertyCacheId() {
-    return md5(get_called_class());
+    return md5(get_called_class()."-".Yii::$app->utils->version);
   }
 
   /**

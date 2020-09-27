@@ -363,7 +363,6 @@ qx.Class.define("bibliograph.ui.abstract.ImportWindowView",
       } finally {
         this._importButton.setEnabled(true);
         this.hidePopup();
-        this._searchBox.setValue("");
         this._searchBox.focus();
       }
     }

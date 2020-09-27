@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source tool/lib/functions.sh
+[ -z "$FUNCTIONS_LOADED" ] && source tool/lib/functions.sh
 
 DIST_DIR=${DIST_DIR:-$(pwd)/dist}
 if [[ ! -d "$DIST_DIR" ]]; then

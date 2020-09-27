@@ -35,19 +35,17 @@
     "test:testtapper": "tool/test/testtapper",
     "test:testtapper:custom": "tool/test/testtapper -Q ?class=bibliograph.test.services",
     "test:playwright:custom": "node ./test/playwright/test-login.js",
+    "dist:version:bump": "tool/dev/version-bump prerelease",
     "dist:local.docker:build": "tool/dist/build test/.env",
     "dist:local.docker:run": "tool/dist/run",
     "deploy:rewi:devel": "tool/deploy/deploy -f config/deploy/rewi/bibliograph-test.env -v -y",
     "deploy:rewi:staging": "tool/deploy/deploy -f config/deploy/rewi/bibliograph-staging-build.env -v -y",
+    "deploy:rewi:production": "tool/deploy/deploy -f config/deploy/rewi/bibliograph-production-build.env -y -b bibliograph_backup_$(date '+%Y%m%d_%H%M%S')",
     "test:rewi:devel": "config/deploy/rewi/run-tests.sh"
   },
   "_old_scripts": {
     "Create new migration": "build/script/run-in-new-terminal $(pwd)/build/script/create-migration",
-    "Create JSONRPC proxy methods": "cd src/server && php yii rpc-proxy/create",
-    "Compile modules": "build/script/modules-compile",
-    "Build distributable package (PHP 7.3)": "build/script/dist-build || exit $?",
-    "Run production build": "build/script/dist-run",
-    "Clean up production build": "build/script/dist-clean"
+    "Create JSONRPC proxy methods": "cd src/server && php yii rpc-proxy/create"
   },
   "author": "Christian Boulanger (@cboulanger) info@bibliograph.org",
   "license": "ISC",

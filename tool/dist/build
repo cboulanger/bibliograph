@@ -4,7 +4,7 @@
 # Script can also be sourced
 
 set -e
-source tool/lib/functions.sh
+[ -z "$FUNCTIONS_LOADED" ] && source tool/lib/functions.sh
 tool/env/http-server start > /dev/null
 
 # dependencies: apt-get install jq (linux) / brew install jq (MacOS with homebrew)
@@ -26,6 +26,7 @@ BUILD_FILE=${BUILD_FILE:-compile-dist.json}
 BUILD_TARGET=${BUILD_TARGET:-build}
 BUILD_VERBOSE=${BUILD_VERBOSE:-0}
 BUILD_CLEAN=${BUILD_CLEAN:-0}
+BUILD_ZIP_FILE=${BUILD_ZIP_FILE:-0}
 DIST_DIR=${DIST_DIR:-$(pwd)/dist}
 DIST_SERVER_DIR=${DIST_SERVER_DIR:-$DIST_DIR/server}
 DIST_CONF_DIR=${DIST_CONF_DIR:-$DIST_DIR/config}
@@ -46,10 +47,7 @@ if [[ ! -d "$DIST_DIR" ]]; then
     echo "Cannot find 'dist' subdirectory - are you in the top folder?"
 fi
 
-if [[ "$TRAVIS_BRANCH" != "" ]]; then
-  ZIP_NAME=bibliograph-${TRAVIS_BRANCH}-snapshot.zip
-  VERSION=snapshot-${TRAVIS_BRANCH}-$(date --utc +%Y%m%d_%H%M%SZ)
-else
+if [[ $BUILD_ZIP_FILE == 1 ]]; then
   ZIP_NAME=bibliograph-${VERSION}.zip
 fi
 
@@ -63,6 +61,8 @@ if [[ $BUILD_VERBOSE == 1 ]]; then
   echo "   - Appl. config file:      $APP_CONF_FILE"
   echo "   - Deployment config dir:  $DEPLOY_CONFIG_DIR"
   echo "   - Compiler version:       $($QX_CMD --version)"
+  echo "   - Custom Logo:            $([[ $BUILD_LOGO_PATH != "" ]] && echo "$BUILD_LOGO_PATH" || echo "No")"
+  echo "   - Build ZIP file:         $([[ $ZIP_NAME != "" ]] && echo "$ZIP_NAME" || echo "No")"
 fi
 echo
 
@@ -79,6 +79,13 @@ QX_COMPILE_ARGS=${QX_COMPILE_ARGS:-"--config-file=$BUILD_FILE --target=$BUILD_TA
 [[ $BUILD_VERBOSE == 1 ]] && echo "$QX_CMD deploy $QX_COMPILE_ARGS"
 $QX_CMD deploy $QX_COMPILE_ARGS
 cp -a compiled/deploy/* $DIST_DIR
+
+# Replace logo file
+if [[ "$BUILD_LOGO_PATH" != "" ]]; then
+  [[ -f "$BUILD_LOGO_PATH" ]] || exit_with_error "Logo file $BUILD_LOGO_PATH does not exist"
+  echo ">>> Using custom logo file at $BUILD_LOGO_PATH ..."
+  cp $BUILD_LOGO_PATH $DIST_DIR/resource/bibliograph/icon/bibliograph-logo.png
+fi
 
 echo ">>> Building server ..."
 
@@ -141,8 +148,10 @@ echo " - Adding documentation ..."
 cp $TOP_DIR/{readme.md,release-notes.md} $DIST_DIR
 echo $VERSION > $DIST_DIR/version.txt
 
-echo ">>> Creating ZIP file ..."
-cd $DIST_DIR
-zip -q -r $ZIP_NAME *
-mv $ZIP_NAME $TOP_DIR/
+if [[ "$ZIP_NAME" != "" ]]; then
+  echo ">>> Building ZIP file ..."
+  cd $DIST_DIR
+  zip -q -r $ZIP_NAME *
+  mv $ZIP_NAME $TOP_DIR/
+fi
 echo "Done."

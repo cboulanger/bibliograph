@@ -221,10 +221,6 @@ qx.Class.define("qcl.application.StateManager",
      */
     _analyzeHashString : function(string) {
       var hash = string || window.location.hash.substr(1) || "";
-      
-      if (this.getHashBang()) {
-        hash = hash.substr(this.getHashBang().length);
-      }
 
       /*
        * Safari bug
@@ -234,6 +230,10 @@ qx.Class.define("qcl.application.StateManager",
       }
       
       hash = decodeURIComponent(hash);
+  
+      if (this.getHashBang()) {
+        hash = hash.substr(this.getHashBang().length);
+      }
 
       var hashParams = {};
       if (hash) {

@@ -243,4 +243,8 @@ class TestController extends AppController
       ->send()
       ->getBody();
   }
+
+  public function actionVersion() {
+    return Yii::$app->version;
+  }
 }

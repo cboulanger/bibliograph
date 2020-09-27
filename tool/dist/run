@@ -8,7 +8,7 @@ source dist/config/.env
 APP_PATH=dist
 
 source tool/env/check
-source tool/lib/functions.sh
+[ -z "$FUNCTIONS_LOADED" ] && source tool/lib/functions.sh
 source tool/env/envvars-export
 source tool/test/setup/create-mysql-user
 source tool/test/setup/check-mysql
