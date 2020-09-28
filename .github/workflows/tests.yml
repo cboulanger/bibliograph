@@ -10,6 +10,7 @@ jobs:
   run_tests:
     name: Run tests
     runs-on: ubuntu-latest
+    if: "!(github.event.head_commit && contains(github.event.head_commit.message, 'ci skip'))"
     services:
       mysql_server:
         image: mariadb:latest
