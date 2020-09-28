@@ -36,12 +36,11 @@
     "test:testtapper:custom": "tool/test/testtapper -Q ?class=bibliograph.test.services",
     "test:playwright:custom": "node ./test/playwright/test-login.js",
     "dist:version:bump": "tool/dev/version-bump prerelease",
+    "dist:local.docker:build": "tool/dist/build test/.env",
+    "dist:local.docker:run": "tool/dist/run",
     "deploy:rewi:devel": "tool/deploy/deploy -f config/deploy/rewi/bibliograph-test.env -v -y",
     "deploy:rewi:staging": "tool/deploy/deploy -f config/deploy/rewi/bibliograph-staging-build.env -v -y",
-    "deploy:rewi:staging:no-build": "tool/deploy/deploy -f config/deploy/rewi/bibliograph-staging-build.env -v -y -k",
     "deploy:rewi:production": "tool/deploy/deploy -f config/deploy/rewi/bibliograph-production-build.env -y -b bibliograph_backup_$(date '+%Y%m%d_%H%M%S')",
-    "deploy:rewi:production:no-backup": "tool/deploy/deploy -f config/deploy/rewi/bibliograph-production-build.env -y",
-    "deploy:rewi:production:no-build-no-backup": "tool/deploy/deploy -f config/deploy/rewi/bibliograph-production-build.env -y -k",
     "test:rewi:devel": "config/deploy/rewi/run-tests.sh"
   },
   "_old_scripts": {
@@ -51,7 +50,7 @@
   "author": "Christian Boulanger (@cboulanger) info@bibliograph.org",
   "license": "ISC",
   "devDependencies": {
-    "@qooxdoo/compiler": "^1.0.0-beta-20200904-1332",
+    "@qooxdoo/compiler": "^1.0.0-beta-20200812-2003",
     "@qooxdoo/eslint-config-jsdoc-disable": "^1.0.3",
     "@qooxdoo/eslint-config-qx": "^1.3.5",
     "@qooxdoo/eslint-plugin-qx": "^1.2.1",

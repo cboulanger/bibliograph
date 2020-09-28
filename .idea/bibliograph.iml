@@ -24,10 +24,6 @@
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/behat/gherkin" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/bizley/migration" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/bmsrox/yii2-module-autoloader" />
-      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/bower-asset/inputmask" />
-      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/bower-asset/jquery" />
-      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/bower-asset/punycode" />
-      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/bower-asset/yii2-pjax" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/cebe/markdown" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/codeception/codeception" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/codeception/lib-asserts" />

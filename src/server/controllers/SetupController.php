@@ -584,8 +584,9 @@ class SetupController extends AppController
     }
     // Everything seems to be ok
     $msg = "Setup of version '$this->upgrade_to' finished successfully.";
+    $this->upgrade_from = $this->upgrade_to;
     Yii::info($msg, self::CATEGORY);
-    Yii::info($this->messages, self::CATEGORY);
+    Yii::debug($this->messages, self::CATEGORY);
     $this->saveOwnProperties();
     // update version
     if (!Yii::$app->config->keyExists('app.version')) {
