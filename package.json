@@ -40,7 +40,8 @@
     "deploy:rewi:staging": "tool/deploy/deploy -f config/deploy/rewi/bibliograph-staging-build.env -v -y",
     "deploy:rewi:staging:no-build": "tool/deploy/deploy -f config/deploy/rewi/bibliograph-staging-build.env -v -y -k",
     "deploy:rewi:production": "tool/deploy/deploy -f config/deploy/rewi/bibliograph-production-build.env -y -b bibliograph_backup_$(date '+%Y%m%d_%H%M%S')",
-    "deploy:rewi:production:no-build-no-backup": "tool/deploy/deploy -f config/deploy/rewi/bibliograph-staging-build.env -v -y -k",
+    "deploy:rewi:production:no-backup": "tool/deploy/deploy -f config/deploy/rewi/bibliograph-staging-build.env -y",
+    "deploy:rewi:production:no-build-no-backup": "tool/deploy/deploy -f config/deploy/rewi/bibliograph-staging-build.env -y -k",
     "test:rewi:devel": "config/deploy/rewi/run-tests.sh"
   },
   "_old_scripts": {
