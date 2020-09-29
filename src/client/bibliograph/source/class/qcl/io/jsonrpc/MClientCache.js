@@ -71,11 +71,14 @@ qx.Mixin.define("qcl.io.jsonrpc.MClientCache", {
       if (error.message === "Unauthorized") {
         if (!this.__loggingOut) {
           this.__loggingOut = true;
+          this.showPopup(this.tr("Please wait ..."));
           // wait 5 seconds, then log out
           qx.event.Timer.once(() => {
             if (this.__loggingOut) {
+              this.showPopup(this.tr("Please wait ..."));
               this.getAccessManager().logout().then(() => {
                 delete this.__loggingOut;
+                this.hidePopup();
               });
             }
           }, this, 5000);

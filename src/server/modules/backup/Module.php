@@ -15,11 +15,12 @@ use Yii;
 use ZipArchive;
 
 /**
- * The path to a writable directory where backups are stored
- * Defaults to the system temporary directory, which is fine, since
- * backups are not meant to be permanently stored.
+ * The path to a writable directory where backups are stored. To configure,
+ * set the BACKUP_PATH constant in your startup script or the BACKUP_PATH
+ * environment variable (defined constant takes precedence). If both are not
+ * set, the temporary directory is used.
  */
-defined('BACKUP_PATH') or define('BACKUP_PATH', TMP_PATH);
+defined('BACKUP_PATH') or define('BACKUP_PATH', $_SERVER['BACKUP_PATH'] ?? TMP_PATH);
 
 /**
  * webservices module definition class
