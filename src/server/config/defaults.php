@@ -26,16 +26,6 @@ defined("APP_LOG_DIR") or define( "APP_LOG_DIR" , '@runtime/logs');
 defined("APP_LOG_NAME") or define( "APP_LOG_NAME" , 'app.log');
 
 /*
- * The path to the file containing server environment variable definitions
- */
-defined("DOTENV_FILE") or define( "DOTENV_FILE" , YII_ENV === "test" ? APP_ROOT_DIR . "/test/.env" : APP_ROOT_DIR . "/.env");
-
-/*
- * The path to the directory with the backend code
- */
-defined("APP_BACKEND_DIR") or define( "APP_BACKEND_DIR" , __DIR__ . "/..");
-
-/*
  * The path to the directory with the frontend code
  */
 defined("APP_FRONTEND_DIR") or define( "APP_FRONTEND_DIR" , APP_ROOT_DIR . "/src/client/bibliograph");

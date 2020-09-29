@@ -1,5 +1,4 @@
 #!/bin/bash
-
 source tool/env/envvars-load
 source tool/env/check
 
