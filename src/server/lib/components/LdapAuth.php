@@ -360,7 +360,7 @@ class LdapAuth extends \yii\base\Component
             $user->link( 'roles', $role, [ 'GroupId' => $group->id ] );
           } catch ( \Exception $e ) {
             // do not log stack trace since it can contain sensitive information
-            Yii::error($e->getMessage(), __METHOD__ . ":" . __LINE__);
+            Yii::error("Error (not shown to user):" . $e->getMessage(), __METHOD__ . ":" . __LINE__);
           }
         }
       }
