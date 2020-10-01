@@ -50,7 +50,7 @@
   "author": "Christian Boulanger (@cboulanger) info@bibliograph.org",
   "license": "ISC",
   "devDependencies": {
-    "@qooxdoo/compiler": "^1.0.0-beta-20200812-2003",
+    "@qooxdoo/compiler": "^1.0.0-beta-20200929-1741",
     "@qooxdoo/eslint-config-jsdoc-disable": "^1.0.3",
     "@qooxdoo/eslint-config-qx": "^1.3.5",
     "@qooxdoo/eslint-plugin-qx": "^1.2.1",

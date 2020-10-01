@@ -24,7 +24,7 @@
   "requires": {
     "@qooxdoo/compiler": "^1.0.0-beta",
     "@qooxdoo/framework": "^6.0.0-beta",
-    "qooxdoo/qxl.apiviewer": "^1.0.12"
+    "qooxdoo/qxl.apiviewer": "^1.0.13"
   },
   "$schema": "https://qooxdoo.org/schema/Manifest-1-0-0.json"
 }

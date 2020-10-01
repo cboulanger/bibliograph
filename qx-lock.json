@@ -18,11 +18,11 @@
     },
     {
       "library_name": "Qooxdoo API Viewer",
-      "library_version": "1.0.12",
-      "path": "qx_packages/qooxdoo_qxl_apiviewer_v1_0_12",
+      "library_version": "1.0.13",
+      "path": "qx_packages/qooxdoo_qxl_apiviewer_v1_0_13",
       "uri": "qooxdoo/qxl.apiviewer",
       "repo_name": "qooxdoo/qxl.apiviewer",
-      "repo_tag": "v1.0.12"
+      "repo_tag": "v1.0.13"
     },
     {
       "library_name": "Commandline Testrunner for Qooxdoo Apps",
