@@ -220,10 +220,10 @@ qx.Class.define("bibliograph.ui.abstract.ImportWindowView",
         converter: value => value === null ? qx.data.marshal.Json.createModel([]) : value
       });
       store.setModel(null);
-      store.addListener("loaded", () => {
-        let lastDatasource = this.getApplication()
+      store.addListener("loaded", async () => {
+        let lastDatasource = await this.getApplication()
           .getConfigManager()
-          .getKey(`modules.${this.getModuleName()}.lastDatasource`);
+          .getKeyAsync(`modules.${this.getModuleName()}.lastDatasource`);
         if (lastDatasource) {
           this.setDatasource(lastDatasource);
         }

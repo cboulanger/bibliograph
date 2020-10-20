@@ -116,7 +116,6 @@ qx.Class.define("bibliograph.plugins.webservices.View",
      * @param e {qx.event.type.Data}
      */
     _on_input: function (e) {
-      console.warn("input:" + e.getData())
       if (this.getAutostart()) {
         let searchText = this._searchBox.getValue();
         if (this.__timer) {

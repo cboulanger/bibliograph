@@ -19,9 +19,7 @@
 ************************************************************************ */
 
 namespace app\modules\webservices\models;
-use app\modules\webservices\repositories\IConnector;
-use lib\exceptions\UserErrorException;
-use Yii;
+use app\modules\webservices\IConnector;
 
 /**
  * Datasource model for webservices datasources
@@ -72,10 +70,10 @@ class Datasource
 
   /**
    * Returns static string, so that all results are stored in one table
-   * @param $datasourceName
+   * @param null $datasourceName Ignored
    * @return string
    */
-  public static function createTablePrefix($datasourceName){
+  public static function createTablePrefix($datasourceName=null){
     return "webservices_";
   }
 

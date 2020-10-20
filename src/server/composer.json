@@ -5,6 +5,12 @@
     }
   },
   "minimum-stability": "stable",
+  "replace": {
+    "bower-asset/inputmask": "*",
+    "bower-asset/jquery": "*",
+    "bower-asset/punycode": "*",
+    "bower-asset/yii2-pjax": "*"
+  },
   "repositories": [
     {
       "type": "composer",
@@ -37,9 +43,6 @@
     "hedii/zotero-api": "^1.1",
     "magp/yii2-json-schema-validator": "dev-master",
     "neitanod/forceutf8": "^2.0",
-    "odannyc/yii2-sse": "^0.1.0",
-    "react/http-client": "^0.5.9",
-    "react/stream": "^0.7.7",
     "renanbr/crossref-client": "^1",
     "rsinger/worldcat-linkeddata-php": "dev-master",
     "symfony/dotenv": "^5.0",
@@ -64,12 +67,9 @@
     "insolita/yii2-migration-generator": "^2.3",
     "phpunit/phpunit": "<7",
     "yiisoft/yii2-faker": "^2.0.0",
-    "yiisoft/yii2-gii": "^2.0.0"
-  },
-  "replace": {
-    "bower-asset/inputmask": "*",
-    "bower-asset/jquery": "*",
-    "bower-asset/punycode": "*",
-    "bower-asset/yii2-pjax": "*"
+    "yiisoft/yii2-gii": "^2.0.0",
+    "odannyc/yii2-sse": "^0.1.0",
+    "react/http-client": "^0.5.9",
+    "react/stream": "^0.7.7"
   }
 }

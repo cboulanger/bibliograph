@@ -112,7 +112,7 @@ class SearchController extends AppController
     // remember last datasource used
     $this->module->setPreference("lastDatasource", $datasourceName );
 
-    $connectorId = str_replace(Module::CATEGORY . "_", "", $datasourceName);
+    $connectorId = str_replace(WebservicesDatasource::createTablePrefix(), "", $datasourceName);
     $connector = $datasource->createConnector($connectorId);
 
     $fixedQuery = Module::fixQuery($query, $connector);
@@ -122,9 +122,7 @@ class SearchController extends AppController
         'error' => $cql->toTxt()
         ]));
     }
-
     Yii::debug("Executing query '{$cql->toCQL()}' on webservice '$datasourceName' ...", Module::CATEGORY);
-
     if ($progressBar) {
       $progressBar->setProgress(10, Yii::t(Module::CATEGORY, "Waiting for webservice..."));
     }

@@ -259,9 +259,10 @@ qx.Class.define("qcl.data.store.JsonRpcStore",
       var client = this.__client;
       let data;
       try {
-        data = await client.request(serviceMethod, params || [])
+        data = await client.request(serviceMethod, params || []);
         if (createModel) {
           if (!qx.lang.Type.isObject(this.getMarshaler())) {
+            // noinspection ExceptionCaughtLocallyJS
             throw new Error("Cannot marshal data - no marshaller set!");
           }
           this.getMarshaler().toClass(data, true);

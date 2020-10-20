@@ -41,7 +41,7 @@ qx.Class.define("qcl.ui.dialog.ServerProgress", {
      */
     route: {
       check : "String",
-      nullable : false
+      nullable : true
     },
   
     /**
@@ -69,7 +69,8 @@ qx.Class.define("qcl.ui.dialog.ServerProgress", {
      */
     cancelled: {
       check: "Boolean",
-      event: "changeCancelled"
+      event: "changeCancelled",
+      init: false
     }
   },
   

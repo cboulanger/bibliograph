@@ -6,12 +6,10 @@ use ADCI\FullNameParser\Parser;
 use app\models\Reference;
 use app\modules\webservices\AbstractConnector;
 use app\modules\webservices\models\Record;
-use app\modules\webservices\Module;
 use app\modules\webservices\IConnector;
 use lib\cql\Prefixable;
 use lib\cql\Triple;
 use lib\exceptions\UserErrorException;
-use Yii;
 
 
 /**
@@ -21,7 +19,7 @@ use Yii;
  * todo: For name parsing, switch from adci/full-name-parser to https://github.com/theiconic/name-parser once we drop PHP 7.0 support
  * @package app\modules\webservices\connectors
  */
-class OpenLibraryBooks extends AbstractConnector implements IConnector
+class Openlibrarybooks extends AbstractConnector implements IConnector
 {
 
   /**

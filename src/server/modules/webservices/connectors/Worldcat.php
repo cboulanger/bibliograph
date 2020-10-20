@@ -6,6 +6,7 @@ use app\modules\webservices\IConnector;
 use app\modules\webservices\models\Record;
 use app\modules\webservices\Module;
 use app\modules\webservices\RecordNotFoundException;
+use GuzzleHttp\Exception\ServerException;
 use Iterator;
 use lib\cql\Prefixable;
 use lib\cql\SearchClause;
@@ -77,7 +78,7 @@ class Worldcat extends AbstractConnector implements IConnector
           $this->isbn = $searchTerm;
           $manifestation->findByIsbn($searchTerm);
           return $manifestation->getWork()->getWorkExample();
-        } catch( \GuzzleHttp\Exception\ServerException $e ){
+        } catch( ServerException $e ){
           if( $retry > 3 ){
             throw new RecordNotFoundException(
               Yii::t(

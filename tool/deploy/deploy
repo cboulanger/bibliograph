@@ -413,6 +413,15 @@ else
   # database
   echo ">>> Setting up mysql passwordless access ..."
   setup_mysql_credentials
+  if [[ "$DEPLOY_DROP_DATABASE_PREFIX" != "" ]]; then
+    echo ">>> Dropping all database with prefix '$DEPLOY_DROP_DATABASE_PREFIX'..."
+    databases=$(remote_execute "$(find_databases_with_prefix_expr $DEPLOY_DROP_DATABASE_PREFIX)")
+    for db in $databases; do
+      if [[ "$db" != "schema_name" && "$db" != "$DEPLOY_IMPORT_DB_NAMES" ]]; then
+        remote_execute "mysql --login-path=deploy_alias -e 'drop database $db;'"
+      fi
+    done
+  fi
   if [[ "$DEPLOY_BACKUP_DATABASE" != "" ]]; then
     db_exists=$(remote_execute "mysql --login-path=deploy_alias -e \"show databases like '$DB_DATABASE';\"")
     if [[ "$db_exists" == *"$DB_DATABASE"* ]]; then
@@ -421,15 +430,6 @@ else
       remote_execute "mysql --login-path=deploy_alias -e 'create database if not exists $DEPLOY_BACKUP_DATABASE;'"
       remote_execute "$(clone_database_expr $DB_DATABASE $DEPLOY_BACKUP_DATABASE)"
     fi
-  fi
-  if [[ "$DEPLOY_DROP_DATABASE_PREFIX" != "" ]]; then
-    echo ">>> Dropping all database with prefix '$DEPLOY_DROP_DATABASE_PREFIX'..."
-    databases=$(remote_execute "$(find_databases_with_prefix_expr $DEPLOY_DROP_DATABASE_PREFIX)")
-    for db in $databases; do
-      if [[ "$db" != "schema_name" ]]; then
-        remote_execute "mysql --login-path=deploy_alias -e 'drop database $db;'"
-      fi
-    done
   fi
   if [ $DEPLOY_EMPTY_DATABASE == 1 ]; then
     echo ">>> Deleting database $DB_DATABASE..."

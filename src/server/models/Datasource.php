@@ -385,6 +385,7 @@ class Datasource extends BaseModel
   /**
    * Returns the prefix for the model table. Default is the named
    * plus an underscore
+   * @param string $namedId
    * @return string
    * @property string modelTablePrefix
    */

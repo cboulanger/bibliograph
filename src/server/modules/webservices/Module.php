@@ -153,10 +153,10 @@ class Module
   /**
    * Used to transform query before it is converted to a CQL object, depending on the connector
    * @param string $query
-   * @param AbstractConnector $connector
+   * @param IConnector $connector
    * @return string
    */
-  public static function fixQuery(string $query, AbstractConnector $connector) : string
+  public static function fixQuery(string $query, IConnector $connector) : string
   {
     // if the connector only has one index, and it is not in the query, use this one
     $indexes = $connector->indexes;
@@ -183,7 +183,7 @@ class Module
         Search::setDatasource($datasource);
         $searches = Search::find()->where(['UserId'=>$user->id])->all();
         foreach ($searches as $search) $search->delete();
-        Yii::debug("Deleted search data.",self::CATEGORY, __METHOD__);
+        Yii::debug("Deleted search data.",self::CATEGORY);
       } catch (\Error $e) {
         Yii::error($e->getMessage());
       }
@@ -197,7 +197,7 @@ class Module
   {
     $names = $this->getDatasourceNames();
     foreach ($names as $namedId) {
-      Yii::debug("Deleting webservices datasource '$namedId'...", self::CATEGORY, __METHOD__);
+      Yii::debug("Deleting webservices datasource '$namedId'...", self::CATEGORY);
       try {
         Yii::$app->datasourceManager->delete($namedId, true);
       } catch (Exception $e) {

@@ -58,7 +58,7 @@ class Datasource extends \app\models\Datasource
 
   /**
    * Make sure the datasource has a "zotero_" prefix
-   * @param $datasourceName
+   * @param string $datasourceName
    * @return string
    */
   public static function createTablePrefix($datasourceName){
