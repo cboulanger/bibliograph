@@ -34,9 +34,7 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
     this.createPopup();
     
     // close on logout
-    bus.subscribe("user.loggedout", function (e) {
-      this.close();
-    }, this);
+    qx.event.message.Bus.getInstance().subscribe(bibliograph.AccessManager.messages.AFTER_LOGOUT, () => this.close());
   
     /*
      ---------------------------------------------------------------------------
