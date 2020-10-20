@@ -131,7 +131,7 @@ class Openlibrarybooks extends AbstractConnector implements IConnector
           $value = $targetProperty[1]($value);
           $targetProperty = $targetProperty[0];
         }
-        $record->$targetProperty = (string) $value;
+        $record->$targetProperty = is_array($value) ? implode("", $value) : (string) $value;
       }
     }
     $this->records = [$record];
