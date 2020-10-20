@@ -31,6 +31,8 @@ qx.Mixin.define("qcl.ui.dialog.MDialog", {
         }
         this.__dialogs[type] = dialog;
         this.addOwnedQxObject(dialog, type);
+      } else {
+        dialog.set(config);
       }
       dialog.open();
       return dialog.promise();
