@@ -65,7 +65,7 @@ class ConfigController extends \app\controllers\AppController
 
     if (Yii::$app->config->valueIsCustomizable($key)) {
       // if value is customizable, set the user variant of the key
-      $this->requirePermission("config.value.edit");
+      //$this->requirePermission("config.value.edit"); // even anonymous has this permission, therefore redundant.
       Yii::$app->config->setKey($key, $value);
     } else {
 
