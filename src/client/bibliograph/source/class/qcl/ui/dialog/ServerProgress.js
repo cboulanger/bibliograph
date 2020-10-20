@@ -60,6 +60,16 @@ qx.Class.define("qcl.ui.dialog.ServerProgress", {
     errorBehavior: {
       check: ["dialog", "ignore", "error"],
       init: "dialog"
+    },
+  
+    /**
+     * Whether the current progress request has been cancelled. Should be treated
+     * like a read-only property, i.e. cannot be used to actively cancel the
+     * request. For this, use {@link #cancel()}.
+     */
+    cancelled: {
+      check: "Boolean",
+      event: "changeCancelled"
     }
   },
   
@@ -123,6 +133,9 @@ qx.Class.define("qcl.ui.dialog.ServerProgress", {
           throw new Error(message);
       }
     }, this);
+    
+    // cancellation status
+    this.addListener("cancel", () => this.cancel());
   },
 
   members :
@@ -145,7 +158,8 @@ qx.Class.define("qcl.ui.dialog.ServerProgress", {
       this.set({
         progress : 0,
         message : "",
-        logContent : ""
+        logContent : "",
+        cancelled: false
       });
       // format source string
       const app = qx.core.Init.getApplication();
@@ -155,6 +169,14 @@ qx.Class.define("qcl.ui.dialog.ServerProgress", {
       // start request and show dialog
       this.__iframe.setSource(source);
       this.show();
+    },
+  
+    /**
+     * Cancel the current progress request
+     */
+    cancel() {
+      this.__iframe.setSource(null);
+      this.setCancelled(true);
     }
   },
   

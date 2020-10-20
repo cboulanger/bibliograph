@@ -71,6 +71,12 @@ qx.Class.define("bibliograph.ui.abstract.ImportWindowView",
         let cm = this.getApplication().getConfigManager();
         cm.setKeyAsync(`modules.${this.getModuleName()}.lastDatasource`, value);
       }
+      if (old) {
+        this._serverProgress.cancel();
+        this._listView.clearTable();
+      }
+      this._searchBar.setEnabled(true);
+      this._listView.setEnabled(true);
     },
   
     _applySearch(value) {
@@ -276,10 +282,18 @@ qx.Class.define("bibliograph.ui.abstract.ImportWindowView",
       });
       // after success
       this._serverProgress.addListener("done", () => {
+        if (this._serverProgress.isCancelled()) {
+          return;
+        }
         this._searchBar.setEnabled(true);
         this._listView.setEnabled(true);
         this._listView.setQuery(null);
         this._listView.setQuery(this.getSearch());
+      });
+      // after cancel
+      this._serverProgress.addListener("cancel", () => {
+        this._searchBar.setEnabled(true);
+        this._listView.setEnabled(true);
       });
     },
 
