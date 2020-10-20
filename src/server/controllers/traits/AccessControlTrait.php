@@ -105,7 +105,7 @@ trait AccessControlTrait
   protected function requirePermission($permission, $datasource = null)
   {
     /** @var User $user */
-    $user =  $this->getActiveUser();
+    $user = $this->getActiveUser();
 
     if ($user->isAdmin()) return;
 

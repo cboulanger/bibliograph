@@ -14,6 +14,7 @@ $log_config = [
       'levels' => ['error'],
       'logFile' => APP_LOG_DIR . "/error.log",
       'logVars' => [],
+      'except' => ['yii\web\HttpException*'],
       'exportInterval' => 1
     ],
     // everything else into app.log
@@ -21,7 +22,6 @@ $log_config = [
       'class' => FileTarget::class,
       'levels' => YII_DEBUG_LEVELS,
       'categories' => YII_DEBUG_CATEGORIES,
-      'except' => [],
       'logFile' => APP_LOG_DIR . "/" . APP_LOG_NAME,
       'logVars' => [],
       'exportInterval' => 1

@@ -15,7 +15,7 @@ class AccessDeniedException extends Exception
 
   public function __construct(string $message = "", $data = [], \Throwable $previous = null)
   {
-    parent::__construct($message, static::CODE, $data, $previous);
+    parent::__construct($message, $data, $previous);
   }
 
   /**
