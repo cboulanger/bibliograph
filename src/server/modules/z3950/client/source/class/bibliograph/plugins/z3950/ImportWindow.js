@@ -31,6 +31,7 @@ qx.Class.define("bibliograph.plugins.z3950.ImportWindow", {
       layout: new qx.ui.layout.Canvas()
     });
     this.addListener("appear", () => this.center());
+    qx.event.message.Bus.getInstance().subscribe(bibliograph.AccessManager.messages.AFTER_LOGOUT, () => this.close());
     let view = new bibliograph.plugins.z3950.View();
     view.setWindow(this);
     this.add(view, {edge:0});

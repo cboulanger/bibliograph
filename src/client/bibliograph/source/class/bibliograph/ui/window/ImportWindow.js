@@ -47,6 +47,7 @@ qx.Class.define("bibliograph.ui.window.ImportWindow",
           this.showPopup(e.getData());
           qx.lang.Function.delay(enableButtons, 1000, this);
         });
+        qx.event.message.Bus.getInstance().subscribe(bibliograph.AccessManager.messages.AFTER_LOGOUT, () => this.close());
       }, this);
     }, 100);
   },

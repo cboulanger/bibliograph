@@ -30,7 +30,7 @@ qx.Class.define("bibliograph.ui.window.PreferencesWindow", {
     this.setHeight(400);
     this.setWidth(600);
     this.addListener("appear", this.center, this);
-    qx.event.message.Bus.getInstance().subscribe(bibliograph.AccessManager.messages.AFTER_LOGOUT, this.close, this);
+    qx.event.message.Bus.getInstance().subscribe(bibliograph.AccessManager.messages.AFTER_LOGOUT, () => this.close());
     this.setLayout(new qx.ui.layout.VBox(5));
 
     // Tabview

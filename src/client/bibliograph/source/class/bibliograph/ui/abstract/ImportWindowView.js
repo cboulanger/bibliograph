@@ -251,7 +251,7 @@ qx.Class.define("bibliograph.ui.abstract.ImportWindowView",
      */
     _on_keypress: function (e) {
       if (e.getKeyIdentifier() === "Enter") {
-        this.startSearch();
+        qx.event.Timer.once(() => this.startSearch(), null, 100);
       }
     },
   
