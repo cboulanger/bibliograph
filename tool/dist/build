@@ -20,8 +20,8 @@ fi
 
 # configurable variables
 QX_CMD=${QX_CMD:-"npx qx"}
-APP_ENV_FILE=${APP_ENV_FILE:-$(pwd)/dist/.env}
-APP_CONF_FILE=${APP_CONF_FILE:-$(pwd)/dist/app.conf.toml}
+APP_ENV_FILE=${APP_ENV_FILE:-$(pwd)/test/.env}
+APP_CONF_FILE=${APP_CONF_FILE:-$(pwd)/test/app.conf.toml}
 BUILD_FILE=${BUILD_FILE:-compile-dist.json}
 BUILD_TARGET=${BUILD_TARGET:-build}
 BUILD_VERBOSE=${BUILD_VERBOSE:-0}
@@ -127,8 +127,8 @@ EOF
 echo " - Adding composer dependencies ..."
 # install composer dependencies
 cp -a $SERVER_SRC_DIR/composer.* $DIST_SERVER_DIR/
-# TODO: need relative path here!
-COMPOSER_ARGS="--no-dev --working-dir=dist/$BUILD_TARGET/server"
+# TODO this works only if $DIST_SERVER_DIR is below the cwd!
+COMPOSER_ARGS="--no-dev --working-dir=${DIST_SERVER_DIR#$(pwd)/}"
 if [[ $BUILD_CLEAN != 0 ]]; then
   tool/dev/php src/lib/composer.phar clearcache
 fi
