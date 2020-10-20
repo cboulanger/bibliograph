@@ -61,7 +61,7 @@ qx.Class.define("qcl.ui.dialog.ServerProgress", {
       check: ["dialog", "ignore", "error"],
       init: "dialog"
     },
-  
+    
     /**
      * Whether the current progress request has been cancelled. Should be treated
      * like a read-only property, i.e. cannot be used to actively cancel the
@@ -175,8 +175,10 @@ qx.Class.define("qcl.ui.dialog.ServerProgress", {
      * Cancel the current progress request
      */
     cancel() {
-      this.__iframe.setSource(null);
-      this.setCancelled(true);
+      if (!this.isCancelled() && this.getProgress() && this.getProgress() !== 100) {
+        this.__iframe.setSource(null);
+        this.setCancelled(true);
+      }
     }
   },
   

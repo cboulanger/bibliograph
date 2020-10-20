@@ -74,6 +74,7 @@ qx.Class.define("bibliograph.ui.abstract.ImportWindowView",
       if (old) {
         this._serverProgress.cancel();
         this._listView.clearTable();
+        this._importButton.setEnabled(false);
       }
       this._searchBar.setEnabled(true);
       this._listView.setEnabled(true);
@@ -82,6 +83,7 @@ qx.Class.define("bibliograph.ui.abstract.ImportWindowView",
     _applySearch(value) {
       if (!value && this._listView) {
         this._listView.clearTable();
+        this._importButton.setEnabled(false);
       }
     },
     
@@ -308,6 +310,7 @@ qx.Class.define("bibliograph.ui.abstract.ImportWindowView",
       // update the UI
       this._listView.setDatasource(datasource);
       this._listView.clearTable();
+      this._importButton.setEnabled(false);
       this._listView.setEnabled(false);
       this._searchBar.setEnabled(false);
       this._importButton.setEnabled(false);
