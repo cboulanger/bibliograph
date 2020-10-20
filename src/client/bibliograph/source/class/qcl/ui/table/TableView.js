@@ -1026,7 +1026,6 @@ qx.Class.define("qcl.ui.table.TableView",
         table.getTableModel().clearCache();
         table.getTableModel()._onRowCountLoaded(0);
       }
-      console.warn("CLEAR TABLE!!!");
     },
     
     /**
