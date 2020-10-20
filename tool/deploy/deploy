@@ -18,7 +18,6 @@ BUILD_ENV_FILE=${BUILD_ENV_FILE:-""}
 BUILD_SKIP=${BUILD_SKIP:-0}
 BUILD_CONFIG_FILE="compile.json"
 BUILD_TARGET="build"
-BUILD_DIST_DIR=$(pwd)/dist
 BUILD_CLEAN=0
 BUILD_VERBOSE=${BUILD_VERBOSE:-0}
 QX_COMPILE_ARGS=""
@@ -214,6 +213,9 @@ EOF
   exit 0
 fi
 
+# Directory for the dist build
+DIST_DIR=${DIST_DIR:-$(pwd)/dist/$BUILD_TARGET}
+
 [[ "$BUILD_ENV_FILE" == "" ]] && exit_with_error "No environment file given. Set it with --env-file / -e"
 
 # Configure compile command
@@ -263,7 +265,7 @@ if [[ $QUIET != 1 ]]; then
   echo "   Deploy environment file:     $DEPLOY_ENV_FILE"
   echo "   Compiler configuration file: $BUILD_CONFIG_FILE"
   echo "   Build target:                $BUILD_TARGET"
-  echo "   Build directory:             $BUILD_DIST_DIR"
+  echo "   Build directory:             $DIST_DIR"
   echo "   Skip build step:             $([[ $BUILD_SKIP == 1 ]] && echo 'Yes' || echo 'No')"
   echo "   Deployment host:             $DEPLOY_HOST"
   echo "   Path on host:                $DEPLOY_DIR"
@@ -368,7 +370,7 @@ if [ "$DEPLOY_HOST" == "local" ]; then
     sudo rm -rf $DEPLOY_DIR/*
   fi
   echo ">>> Copying files to $DEPLOY_HOST:$DEPLOY_DIR ..."
-  cp -rf $BUILD_DIST_DIR/* $DEPLOY_DIR
+  cp -rf $DIST_DIR/* $DEPLOY_DIR
   chmod -R 0777 $DEPLOY_DIR/server/runtime
 
   # database
@@ -393,10 +395,10 @@ else
   fi
   if remote_execute "command -v rsync"; then
     echo ">>> Syncing files with $DEPLOY_HOST:$DEPLOY_DIR ..."
-    rsync -$DEPLOY_EXCLUDE_ARGS -azpr $BUILD_DIST_DIR/* $DEPLOY_HOST:$DEPLOY_DIR
+    rsync -$DEPLOY_EXCLUDE_ARGS -azpr $DIST_DIR/* $DEPLOY_HOST:$DEPLOY_DIR
   else
     echo ">>> Copying files to $DEPLOY_HOST:$DEPLOY_DIR ..."
-    cd $BUILD_DIST_DIR
+    cd $DIST_DIR
     tar $DEPLOY_EXCLUDE_ARGS -czf - * | ssh -C $DEPLOY_HOST "cd $DEPLOY_DIR; tar --overwrite -xzf -"
     cd ..
   fi

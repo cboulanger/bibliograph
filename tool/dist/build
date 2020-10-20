@@ -27,7 +27,7 @@ BUILD_TARGET=${BUILD_TARGET:-build}
 BUILD_VERBOSE=${BUILD_VERBOSE:-0}
 BUILD_CLEAN=${BUILD_CLEAN:-0}
 BUILD_ZIP_FILE=${BUILD_ZIP_FILE:-0}
-DIST_DIR=${DIST_DIR:-$(pwd)/dist}
+DIST_DIR=${DIST_DIR:-$(pwd)/dist/$BUILD_TARGET}
 DIST_SERVER_DIR=${DIST_SERVER_DIR:-$DIST_DIR/server}
 DIST_CONF_DIR=${DIST_CONF_DIR:-$DIST_DIR/config}
 DEPLOY_CONFIG_DIR=${DEPLOY_CONFIG_DIR:-"./config"}
@@ -43,10 +43,6 @@ DIST_SERVER_DIR=$DIST_DIR/server
 SERVER_SRC_DIR=$TOP_DIR/src/server
 VERSION=$(node -p -e "require('$TOP_DIR/package.json').version")
 
-if [[ ! -d "$DIST_DIR" ]]; then
-    echo "Cannot find 'dist' subdirectory - are you in the top folder?"
-fi
-
 if [[ $BUILD_ZIP_FILE == 1 ]]; then
   ZIP_NAME=bibliograph-${VERSION}.zip
 fi
@@ -58,6 +54,7 @@ if [[ $BUILD_VERBOSE == 1 ]]; then
   echo "   - Qooxdoo build file:     $BUILD_FILE"
   echo "   - Qooxdoo build target:   $BUILD_TARGET"
   echo "   - Application .env file:  $APP_ENV_FILE"
+  echo "   - Build directory:        $DIST_DIR"
   echo "   - Appl. config file:      $APP_CONF_FILE"
   echo "   - Deployment config dir:  $DEPLOY_CONFIG_DIR"
   echo "   - Compiler version:       $($QX_CMD --version)"
@@ -66,8 +63,13 @@ if [[ $BUILD_VERBOSE == 1 ]]; then
 fi
 echo
 
-echo ">>> Cleaning up dist folder..."
-./tool/dist/clean
+if [[ ! -d "$DIST_DIR" ]]; then
+  echo ">>> Creating dist folder..."
+  mkdir -p $DIST_DIR
+else
+  echo ">>> Cleaning up dist folder..."
+  source ./tool/dist/clean
+fi
 
 echo ">>> Building client ..."
 
@@ -125,7 +127,8 @@ EOF
 echo " - Adding composer dependencies ..."
 # install composer dependencies
 cp -a $SERVER_SRC_DIR/composer.* $DIST_SERVER_DIR/
-COMPOSER_ARGS="--no-dev --working-dir=dist/server"
+# TODO: need relative path here!
+COMPOSER_ARGS="--no-dev --working-dir=dist/$BUILD_TARGET/server"
 if [[ $BUILD_CLEAN != 0 ]]; then
   tool/dev/php src/lib/composer.phar clearcache
 fi
