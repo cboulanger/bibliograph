@@ -22,6 +22,7 @@ fi
 QX_CMD=${QX_CMD:-"npx qx"}
 APP_ENV_FILE=${APP_ENV_FILE:-$(pwd)/test/.env}
 APP_CONF_FILE=${APP_CONF_FILE:-$(pwd)/test/app.conf.toml}
+BUILD_SKIP=${BUILD_SKIP:-no}
 BUILD_FILE=${BUILD_FILE:-compile-dist.json}
 BUILD_TARGET=${BUILD_TARGET:-build}
 BUILD_VERBOSE=${BUILD_VERBOSE:-0}
@@ -31,6 +32,8 @@ DIST_DIR=${DIST_DIR:-$(pwd)/dist/$BUILD_TARGET}
 DIST_SERVER_DIR=${DIST_SERVER_DIR:-$DIST_DIR/server}
 DIST_CONF_DIR=${DIST_CONF_DIR:-$DIST_DIR/config}
 DEPLOY_CONFIG_DIR=${DEPLOY_CONFIG_DIR:-"./config"}
+
+[[ "$BUILD_SKIP" == "all" ]] && exit_with_error "Build script called although build should be skipped (BUILD_SKIP==all)"
 
 # checks
 [[ -f "$APP_ENV_FILE" ]] || exit_with_error "APP_ENV_FILE: File '$APP_ENV_FILE' does not exist"
@@ -60,98 +63,105 @@ if [[ $BUILD_VERBOSE == 1 ]]; then
   echo "   - Compiler version:       $($QX_CMD --version)"
   echo "   - Custom Logo:            $([[ $BUILD_LOGO_PATH != "" ]] && echo "$BUILD_LOGO_PATH" || echo "No")"
   echo "   - Build ZIP file:         $([[ $ZIP_NAME != "" ]] && echo "$ZIP_NAME" || echo "No")"
+  echo "   - Skip build parts:       $BUILD_SKIP"
 fi
 echo
 
-if [[ ! -d "$DIST_DIR" ]]; then
-  echo ">>> Creating dist folder..."
-  mkdir -p $DIST_DIR
-else
-  echo ">>> Cleaning up dist folder..."
-  source ./tool/dist/clean
+if [[ "$BUILD_SKIP" == "" ]]; then
+  if [[ ! -d "$DIST_DIR" ]]; then
+    echo ">>> Creating dist folder..."
+    mkdir -p $DIST_DIR
+  else
+    echo ">>> Cleaning up dist folder..."
+    source ./tool/dist/clean
+  fi
 fi
 
-echo ">>> Building client ..."
+if [[ "$BUILD_SKIP" != *"client"* ]]; then
+  echo ">>> Building client ..."
+  # Create deploy build and copy into dist
+  QX_COMPILE_ARGS=${QX_COMPILE_ARGS:-"--config-file=$BUILD_FILE --target=$BUILD_TARGET --clean"}
+  [[ $BUILD_VERBOSE == 1 ]] && echo "$QX_CMD deploy $QX_COMPILE_ARGS"
+  $QX_CMD deploy $QX_COMPILE_ARGS
+  cp -a compiled/deploy/* $DIST_DIR
 
-# Create deploy build and copy into dist
-QX_COMPILE_ARGS=${QX_COMPILE_ARGS:-"--config-file=$BUILD_FILE --target=$BUILD_TARGET --clean"}
-[[ $BUILD_VERBOSE == 1 ]] && echo "$QX_CMD deploy $QX_COMPILE_ARGS"
-$QX_CMD deploy $QX_COMPILE_ARGS
-cp -a compiled/deploy/* $DIST_DIR
-
-# Replace logo file
-if [[ "$BUILD_LOGO_PATH" != "" ]]; then
-  [[ -f "$BUILD_LOGO_PATH" ]] || exit_with_error "Logo file $BUILD_LOGO_PATH does not exist"
-  echo ">>> Using custom logo file at $BUILD_LOGO_PATH ..."
-  cp $BUILD_LOGO_PATH $DIST_DIR/resource/bibliograph/icon/bibliograph-logo.png
+  # Replace logo file
+  if [[ "$BUILD_LOGO_PATH" != "" ]]; then
+    [[ -f "$BUILD_LOGO_PATH" ]] || exit_with_error "Logo file $BUILD_LOGO_PATH does not exist"
+    echo ">>> Using custom logo file at $BUILD_LOGO_PATH ..."
+    cp $BUILD_LOGO_PATH $DIST_DIR/resource/bibliograph/icon/bibliograph-logo.png
+  fi
 fi
 
-echo ">>> Building server ..."
+if [[ "$BUILD_SKIP" != *"server"* ]]; then
+  echo ">>> Building server ..."
+  echo " - Copy/create files ..."
+  # application files
+  mkdir -p $DIST_SERVER_DIR
+  cp -a $SERVER_SRC_DIR/{config,controllers,lib,messages,migrations,models,modules,schema,views,bootstrap.php} $DIST_SERVER_DIR/
+  mkdir -p $DIST_SERVER_DIR/runtime/{cache,logs}
 
-echo " - Copy/create files ..."
+  # configuration files
+  mkdir -p $DIST_CONF_DIR
+  cp $APP_CONF_FILE $DIST_CONF_DIR/app.conf.toml
+  cp $APP_ENV_FILE $DIST_CONF_DIR/.env
 
-# application files
-mkdir -p $DIST_SERVER_DIR
-cp -a $SERVER_SRC_DIR/{config,controllers,lib,messages,migrations,models,modules,schema,views,bootstrap.php} $DIST_SERVER_DIR/
-mkdir -p $DIST_SERVER_DIR/runtime/{cache,logs}
-
-# configuration files
-mkdir -p $DIST_CONF_DIR
-cp $APP_CONF_FILE $DIST_CONF_DIR/app.conf.toml
-cp $APP_ENV_FILE $DIST_CONF_DIR/.env
-
-# .htaccess files
-cat << EOF > $DIST_DIR/.htaccess
-RewriteEngine on
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule . server.php
+  # .htaccess files
+  cat << EOF > $DIST_DIR/.htaccess
+  RewriteEngine on
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . server.php
 EOF
-echo "DENY FROM ALL" >> $DIST_SERVER_DIR/.htaccess
-echo "DENY FROM ALL" >> $DIST_CONF_DIR/.htaccess
+  echo "DENY FROM ALL" >> $DIST_SERVER_DIR/.htaccess
+  echo "DENY FROM ALL" >> $DIST_CONF_DIR/.htaccess
 
-# create server.php
-cat << EOF > $DIST_DIR/server.php
-<?php
-const YII_DEBUG=${YII_DEBUG:-false};
-const APP_ROOT_DIR = __DIR__;
-define("APP_FRONTEND_DIR", realpath("./bibliograph"));
-define("DOTENV_FILE" , realpath("$DEPLOY_CONFIG_DIR/.env"));
-define("APP_CONFIG_FILE", realpath("$DEPLOY_CONFIG_DIR/app.conf.toml"));
-require './server/bootstrap.php';
-\$config = require './server/config/web.php';
-\$app = new yii\web\Application(\$config);
-\$app->run();
+  # create server.php
+  cat << EOF > $DIST_DIR/server.php
+  <?php
+  const YII_DEBUG=${YII_DEBUG:-false};
+  const APP_ROOT_DIR = __DIR__;
+  define("APP_FRONTEND_DIR", realpath("./bibliograph"));
+  define("DOTENV_FILE" , realpath("$DEPLOY_CONFIG_DIR/.env"));
+  define("APP_CONFIG_FILE", realpath("$DEPLOY_CONFIG_DIR/app.conf.toml"));
+  require './server/bootstrap.php';
+  \$config = require './server/config/web.php';
+  \$app = new yii\web\Application(\$config);
+  \$app->run();
 EOF
 
-echo " - Adding composer dependencies ..."
-# install composer dependencies
-cp -a $SERVER_SRC_DIR/composer.* $DIST_SERVER_DIR/
-# TODO this works only if $DIST_SERVER_DIR is below the cwd!
-COMPOSER_ARGS="--no-dev --working-dir=${DIST_SERVER_DIR#$(pwd)/}"
-if [[ $BUILD_CLEAN != 0 ]]; then
-  tool/dev/php src/lib/composer.phar clearcache
-fi
-if [[ $BUILD_VERBOSE != 0 ]]; then
-  COMPOSER_ARGS="$COMPOSER_ARGS -v"
-  tool/dev/php src/lib/composer.phar install $COMPOSER_ARGS
-else
-  tool/dev/php src/lib/composer.phar install $COMPOSER_ARGS #> /dev/null
-fi
+  if [[ "$BUILD_SKIP" != *"composer"* ]]; then
+    echo " - Adding composer dependencies ..."
+    # install composer dependencies
+    cp -a $SERVER_SRC_DIR/composer.* $DIST_SERVER_DIR/
+    # TODO this works only if $DIST_SERVER_DIR is below the cwd!
+    COMPOSER_ARGS="--no-dev --working-dir=${DIST_SERVER_DIR#$(pwd)/}"
+    if [[ $BUILD_CLEAN != 0 ]]; then
+      tool/dev/php src/lib/composer.phar clearcache
+    fi
+    if [[ $BUILD_VERBOSE != 0 ]]; then
+      COMPOSER_ARGS="$COMPOSER_ARGS -v"
+      tool/dev/php src/lib/composer.phar install $COMPOSER_ARGS
+    else
+      tool/dev/php src/lib/composer.phar install $COMPOSER_ARGS #> /dev/null
+    fi
 
-if ! [ -d $DIST_SERVER_DIR/vendor ] || ! [ -f $DIST_SERVER_DIR/vendor/autoload.php ]; then
- exit_with_error "Composer install failed!"
-fi
-rm -f $DIST_SERVER_DIR/composer.* &> /dev/null
+    if ! [ -d $DIST_SERVER_DIR/vendor ] || ! [ -f $DIST_SERVER_DIR/vendor/autoload.php ]; then
+     exit_with_error "Composer install failed!"
+    fi
+    rm -f $DIST_SERVER_DIR/composer.* &> /dev/null
+  fi
 
-echo " - Adding documentation ..."
-cp $TOP_DIR/{readme.md,release-notes.md} $DIST_DIR
-echo $VERSION > $DIST_DIR/version.txt
+  echo " - Adding documentation ..."
+  cp $TOP_DIR/{readme.md,release-notes.md} $DIST_DIR
+  echo $VERSION > $DIST_DIR/version.txt
+fi
 
 if [[ "$ZIP_NAME" != "" ]]; then
   echo ">>> Building ZIP file ..."
   cd $DIST_DIR
   zip -q -r $ZIP_NAME *
-  mv $ZIP_NAME $TOP_DIR/
+  mv $ZIP_NAME $DIST_DIR/
 fi
+
 echo "Done."
