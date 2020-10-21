@@ -18,6 +18,7 @@ BUILD_ENV_FILE=${BUILD_ENV_FILE:-""}
 BUILD_SKIP=${BUILD_SKIP:-""}
 BUILD_CONFIG_FILE="compile.json"
 BUILD_TARGET="build"
+BUILD_NAME=""
 BUILD_CLEAN=0
 BUILD_VERBOSE=${BUILD_VERBOSE:-0}
 QX_COMPILE_ARGS=""
@@ -67,6 +68,11 @@ while [[ $1 != "" ]]; do
 
   "--build-target" | "-t")
     BUILD_TARGET="$2"
+    shift
+    ;;
+
+  "--build-name" | "-n")
+    BUILD_NAME="$2"
     shift
     ;;
 
@@ -181,6 +187,8 @@ ${HELP_ADDITIONAL_TEXT}
                                   be copied to the deploy target
   --build-config-file, -c       - the compiler configuration file to use
                                   (defaults to compile.json)
+  --build-name, -n name         - an optional name for the subfolder for the build,
+                                  defaults to the name of the build target
   --skip-build, -k              - use the build files that already exist
   --skip-build-client           - skip building of the client
   --skip-build-server           - skip building of the server
@@ -228,10 +236,11 @@ EOF
   exit 0
 fi
 
-# Directory for the dist build
-DIST_DIR=${DIST_DIR:-$(pwd)/dist/$BUILD_TARGET}
-
 [[ "$BUILD_ENV_FILE" == "" ]] && exit_with_error "No environment file given. Set it with --env-file / -e"
+if [[ "$BUILD_NAME" == "" ]]; then BUILD_NAME=$BUILD_TARGET; fi
+
+# Directory for the dist build
+DIST_DIR=${DIST_DIR:-$(pwd)/dist/$BUILD_NAME}
 
 # Configure compile command
 
@@ -280,6 +289,7 @@ if [[ $QUIET != 1 ]]; then
   echo "   Deploy environment file:     $DEPLOY_ENV_FILE"
   echo "   Compiler configuration file: $BUILD_CONFIG_FILE"
   echo "   Build target:                $BUILD_TARGET"
+  echo "   Build name:                  $BUILD_NAME"
   echo "   Build directory:             $DIST_DIR"
   echo "   Skip build step(s):          $([[ $BUILD_SKIP == "" ]] && echo 'No' || echo $BUILD_SKIP)"
   echo "   Deployment host:             $DEPLOY_HOST"

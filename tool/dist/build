@@ -22,13 +22,13 @@ fi
 QX_CMD=${QX_CMD:-"npx qx"}
 APP_ENV_FILE=${APP_ENV_FILE:-$(pwd)/test/.env}
 APP_CONF_FILE=${APP_CONF_FILE:-$(pwd)/test/app.conf.toml}
-BUILD_SKIP=${BUILD_SKIP:-no}
 BUILD_FILE=${BUILD_FILE:-compile-dist.json}
 BUILD_TARGET=${BUILD_TARGET:-build}
 BUILD_VERBOSE=${BUILD_VERBOSE:-0}
 BUILD_CLEAN=${BUILD_CLEAN:-0}
 BUILD_ZIP_FILE=${BUILD_ZIP_FILE:-0}
-DIST_DIR=${DIST_DIR:-$(pwd)/dist/$BUILD_TARGET}
+BUILD_NAME=${BUILD_NAME:-$BUILD_TARGET}
+DIST_DIR=${DIST_DIR:-$(pwd)/dist/$BUILD_NAME}
 DIST_SERVER_DIR=${DIST_SERVER_DIR:-$DIST_DIR/server}
 DIST_CONF_DIR=${DIST_CONF_DIR:-$DIST_DIR/config}
 DEPLOY_CONFIG_DIR=${DEPLOY_CONFIG_DIR:-"./config"}
@@ -63,7 +63,7 @@ if [[ $BUILD_VERBOSE == 1 ]]; then
   echo "   - Compiler version:       $($QX_CMD --version)"
   echo "   - Custom Logo:            $([[ $BUILD_LOGO_PATH != "" ]] && echo "$BUILD_LOGO_PATH" || echo "No")"
   echo "   - Build ZIP file:         $([[ $ZIP_NAME != "" ]] && echo "$ZIP_NAME" || echo "No")"
-  echo "   - Skip build parts:       $BUILD_SKIP"
+  echo "   - Skip build parts:       $([[ $BUILD_SKIP != "" ]] && echo "$BUILD_SKIP" || echo "No")"
 fi
 echo
 
