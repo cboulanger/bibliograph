@@ -256,7 +256,8 @@ class TableController extends AppController
       /** @var Record $sourceModel */
       $sourceModel = $sourceModelClass::findOne(['id' => $id]);
       if (!$sourceModel) {
-        throw new \RuntimeException("No record with id $id exists in datasource '$sourceDatasource'.");
+        $dsn = $sourceModelClass::getDb()->dsn;
+        throw new \RuntimeException("No record with id $id exists in datasource '$sourceDatasource' ($dsn).");
       }
       $copiedAttributes = $sourceModel->getAttributes();
       // target
