@@ -103,9 +103,10 @@ qx.Class.define("bibliograph.plugins.webservices.View",
       this.base(arguments);
       this._listView.getController().addListener("blockLoaded", () => {
         if (this._selectFirstRow() && this.getAutoimport()) {
-          this.importSelected();
-          this.setSearch(null);
-          this._searchBox.focus();
+          if (this.importSelected()) {
+            this.setSearch(null);
+            this._searchBox.focus();
+          }
         }
       });
     },

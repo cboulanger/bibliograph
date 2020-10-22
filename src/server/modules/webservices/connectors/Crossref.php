@@ -4,6 +4,7 @@ namespace app\modules\webservices\connectors;
 
 use app\models\Reference;
 use app\modules\webservices\AbstractConnector;
+use app\modules\webservices\InvalidIndexException;
 use app\modules\webservices\models\Record;
 use app\modules\webservices\Module;
 use app\modules\webservices\IConnector;
@@ -38,7 +39,7 @@ class Crossref extends AbstractConnector implements IConnector
   /**
    * @inheritdoc
    */
-  protected $name = "CrossRef (DOI only)";
+  protected $name = "CrossRef";
 
   /**
    * @inheritdoc
@@ -62,7 +63,7 @@ class Crossref extends AbstractConnector implements IConnector
   {
 
     if ($cql instanceof Triple) {
-      throw new \InvalidArgumentException("Triple not implemented.");
+      throw new \InvalidArgumentException("Complex queries are not supported.");
     }
     /** @var SearchClause $searchClause */
     $searchClause = $cql;
@@ -85,7 +86,7 @@ class Crossref extends AbstractConnector implements IConnector
         $path = "works/$searchTerm";
         break;
       default:
-        throw new \InvalidArgumentException(Yii::t(Module::CATEGORY, "'{field} is not a valid search field", [
+        throw new InvalidIndexException(Yii::t(Module::CATEGORY, "'{field} is not a valid search field", [
           'field' => $searchClause->index->value
         ]));
     }
@@ -171,7 +172,8 @@ class Crossref extends AbstractConnector implements IConnector
     }
     $record->quality = $quality;
     $this->records[] = $record;
-    return 1;
+    $this->hits = 1;
+    return $this->hits;
   }
 
   protected function uppercase_first( $string ){

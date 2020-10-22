@@ -3,6 +3,7 @@
 namespace app\modules\webservices\connectors;
 
 use app\modules\webservices\IConnector;
+use app\modules\webservices\InvalidIndexException;
 use app\modules\webservices\models\Record;
 use app\modules\webservices\Module;
 use app\modules\webservices\RecordNotFoundException;
@@ -35,7 +36,7 @@ class Worldcat extends AbstractConnector implements IConnector
   /**
    * @inheritdoc
    */
-  protected $name = "WorldCat (ISBN only)";
+  protected $name = "WorldCat";
 
   /**
    * @inheritdoc
@@ -65,7 +66,7 @@ class Worldcat extends AbstractConnector implements IConnector
    */
   protected function createManifestations( Prefixable $cql, $retry=0 ) : array {
     if( $cql instanceof Triple ){
-      throw new \InvalidArgumentException("Triple not implemented.");
+      throw new \InvalidArgumentException("Complex queries are not yet implemented.");
     }
     /** @var SearchClause $searchClause */
     $searchClause = $cql;
@@ -75,7 +76,7 @@ class Worldcat extends AbstractConnector implements IConnector
     switch ($searchClause->index->value) {
       case 'isbn':
         try {
-          $this->isbn = $searchTerm;
+          $this->isbn = $searchTerm = str_replace("-", "", $searchTerm);
           $manifestation->findByIsbn($searchTerm);
           return $manifestation->getWork()->getWorkExample();
         } catch( ServerException $e ){
@@ -90,24 +91,18 @@ class Worldcat extends AbstractConnector implements IConnector
           }
           // try again
           sleep(2);
-          Yii::debug("Server error, retrying...",Module::CATEGORY, __METHOD__);
+          Yii::debug("Server error, retrying...",__METHOD__);
           return $this->createManifestations($cql, $retry+1);
         } catch( \Throwable $e){
           if( $e instanceof \WorldCatLD\exceptions\ResourceNotFoundException
            or $e instanceof \GuzzleHttp\Exception\ClientException ){
-            throw new RecordNotFoundException(
-              Yii::t(
-                Module::CATEGORY,
-                "Could not find information for ISBN '{isbn}'",
-                [ 'isbn' => $searchTerm ]
-              )
-            );
+            return [];
           }
           throw $e;
         }
         break;
     }
-    throw new \InvalidArgumentException(
+    throw new InvalidIndexException(
       Yii::t(
         Module::CATEGORY,
         "'{field} is not a valid search field",
@@ -123,7 +118,8 @@ class Worldcat extends AbstractConnector implements IConnector
   public function search( Prefixable $cql ) : int
   {
     $this->manifestations = $this->createManifestations($cql);
-    return count($this->manifestations);
+    $this->hits = count($this->manifestations);
+    return $this->hits;
   }
 
   /**

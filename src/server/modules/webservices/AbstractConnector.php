@@ -38,6 +38,11 @@ abstract class AbstractConnector extends BaseObject implements IConnector
   protected $indexes = [];
 
   /**
+   * @var int
+   */
+  protected $hits = 0;
+
+  /**
    * @return string
    */
   public function getId(){
@@ -63,6 +68,14 @@ abstract class AbstractConnector extends BaseObject implements IConnector
    */
   public function getIndexes(){
     return $this->indexes;
+  }
+
+  /**
+   * Get the number of hits of the last search
+   * @return int
+   */
+  public function getHits(){
+    return $this->hits;
   }
 
   /**

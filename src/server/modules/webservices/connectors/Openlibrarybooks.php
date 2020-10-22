@@ -30,7 +30,7 @@ class Openlibrarybooks extends AbstractConnector implements IConnector
   /**
    * @inheritdoc
    */
-  protected $name = "Open Library Books (ISBN, OCLC, LCCN, OLID)";
+  protected $name = "Open Library Books";
 
   /**
    * @inheritdoc
@@ -53,8 +53,12 @@ class Openlibrarybooks extends AbstractConnector implements IConnector
   {
     parent::__construct($config);
     $this->records = [];
+    $this->map = $this->createMap();
+  }
+
+  private function createMap() {
     $parser = new Parser();
-    $this->map = [
+    return [
       "abstract" => "description",
       "authors" => ["author", function($arr) use ($parser){
         return implode("; ", array_map(function($item) use ($parser){
@@ -135,7 +139,8 @@ class Openlibrarybooks extends AbstractConnector implements IConnector
       }
     }
     $this->records = [$record];
-    return 1;
+    $this->hits = count($this->records);
+    return $this->hits;
   }
 
   /**

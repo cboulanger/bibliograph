@@ -31,6 +31,12 @@ interface IConnector
   public function getIndexes();
 
   /**
+   * Get the number of hits of the last search
+   * @return int
+   */
+  public function getHits();
+
+  /**
    * Queries the data repository and returns the number of results
    * @param Prefixable $cql
    * @return int

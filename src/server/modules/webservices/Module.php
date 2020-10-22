@@ -2,6 +2,7 @@
 
 namespace app\modules\webservices;
 
+use Illuminate\Support\Str;
 use lib\plugin\PluginInterface;
 use Yii;
 use app\models\{
@@ -18,6 +19,7 @@ use yii\web\UserEvent;
 /**
  * webservices module definition class
  * @property WebservicesDatasource[] $datasources
+ * @property IConnector[] $connectors
  */
 class Module
   extends \lib\Module
@@ -39,6 +41,7 @@ class Module
    */
   public $controllerNamespace = 'app\modules\webservices\controllers';
 
+  private $connectors = null;
 
   /**
    * Installs the plugin.
@@ -74,21 +77,27 @@ class Module
     return parent::install(true);
   }
 
-  /**
-   * Returns an array of connector objects
-   * @return IConnector[]
-   */
-  protected function getConnectors()
+  public function init()
   {
+    parent::init();
     $connectors = [];
     foreach (scandir(__DIR__ . "/connectors") as $file ){
       if ( $file[0]==='.' ) continue;
-      if ( ends_with($file,'.php' ) ) {
+      if ( Str::endsWith($file,'.php' ) ) {
         $class = __NAMESPACE__ . "\\connectors\\" . basename( $file, ".php");
         $connectors[] = new $class();
       }
     }
-    return $connectors;
+    $this->connectors = $connectors;
+  }
+
+  /**
+   * Returns an array of connector objects
+   * @return IConnector[]
+   */
+  public function getConnectors()
+  {
+    return $this->connectors;
   }
 
   /**
@@ -98,14 +107,15 @@ class Module
   public function createDatasources()
   {
     $manager = Yii::$app->datasourceManager;
-    foreach ($this->getConnectors() as $connector) {
+    foreach ($this->connectors as $connector) {
       $repoNamedId = 'webservices_' . $connector->id;
       $repoModel = Datasource::findByNamedId($repoNamedId);
       if( ! $repoModel ){
         $repoModel = $manager->create($repoNamedId, "webservices");
       }
+      $title = $connector->name . " (" . implode(", ", $connector->indexes) . ")";
       $repoModel->setAttributes([
-        'title'       => $connector->name,
+        'title'       => $title,
         'description' => $connector->description,
         'hidden'      => 1 // should not show up as selectable datasource
       ]);

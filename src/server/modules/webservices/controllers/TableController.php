@@ -93,8 +93,9 @@ class TableController extends AppController
     // Return list of Datasources
     $list = [];
     $query = Datasource::find()
-      ->select("title as label, namedId as value, active")
+      ->select("title as label, namedId as value, description, active")
       ->where(['schema'=> 'webservices'])
+      ->orderBy("value")
       ->asArray();
     if( $activeOnly ) $query = $query->andWhere(['active'=>1]);
     return array_merge($list,$query->all());

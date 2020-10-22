@@ -337,6 +337,7 @@ qx.Class.define("bibliograph.ui.abstract.ImportWindowView",
     
     /**
      * Imports the selected references
+     * @return {Boolean} Whether the import was successful
      */
     importSelected: async function () {
       let app = this.getApplication();
@@ -347,25 +348,25 @@ qx.Class.define("bibliograph.ui.abstract.ImportWindowView",
       let ids = this._listView.getSelectedIds();
       if (!ids.length) {
         await this.getApplication().alert(this.tr("You have to select one or more reference to import."));
-        return;
+        return false;
       }
       
       // target folder
       let targetFolderId = app.getFolderId();
       if (!targetFolderId) {
         await this.getApplication().alert(this.tr("Please select a folder first."));
-        return;
+        return false;
       }
       let treeView = qx.core.Id.getQxObject("folder-tree-panel/tree-view");
       let nodeId = treeView.getController().getClientNodeId(targetFolderId);
       let node = treeView.getTree().getDataModel().getData()[nodeId];
       if (!node) {
         await this.getApplication().alert(this.tr("Cannot determine selected folder. Please reload the folders."));
-        return;
+        return false;
       }
       if (node.data.type !== "folder") {
         await this.getApplication().alert(this.tr("Invalid target folder. You can only import into normal folders."));
-        return;
+        return false;
       }
       
       // send to server
@@ -382,6 +383,7 @@ qx.Class.define("bibliograph.ui.abstract.ImportWindowView",
         this.hidePopup();
         this._searchBox.focus();
       }
+      return true;
     }
   }
 });
