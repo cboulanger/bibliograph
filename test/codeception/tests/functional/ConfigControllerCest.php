@@ -33,7 +33,7 @@ class ConfigControllerCest
     $I->loginWithPassword('sarah_manning','sarah_manning');
     $I->amGoingTo("try to set the application title, which I am not allowed to, and which should fail.");
     $I->sendJsonRpcRequest('config','set', ['application.title','Ha! I shouldn\'t be allowed to change the application title!'], true);
-    $I->seeJsonRpcError("Internal error");
+    $I->seeJsonRpcError("Not allowed");
     $I->amGoingTo("change a config setting");
     $I->sendJsonRpcRequest('config','set', ['csl.style.default','APA'], true);
     $I->dontSeeJsonRpcError();
