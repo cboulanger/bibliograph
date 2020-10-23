@@ -34,6 +34,8 @@ DEPLOY_BACKUP_DATABASE=""
 DEPLOY_DROP_DATABASE_PREFIX=""
 DEPLOY_EXCLUDE_ARGS="--exclude=*.zip --exclude=._* --exclude=.DS_Store --exclude=.git*"
 DEPLOY_CLEAN=1
+DEPLOY_MYSQL_CREDENTIAL_FILE="~/db_config.cnf"
+DEPLOY_MYSQL_CREDENTIAL_OPT="--defaults-extra-file=$DEPLOY_MYSQL_CREDENTIAL_FILE"
 
 # load .env file if defined as an environment variable (so that this script can be sourced)
 if [[ "$BUILD_ENV_FILE" != "" ]]; then
@@ -325,17 +327,22 @@ fi
 # Deploy!
 
 function remote_execute() {
-  [[ $BUILD_VERBOSE == 1 ]] && echo ">>> CMD: $1"
+  [[ $BUILD_VERBOSE == 1 && "$1" != *"password"* ]] && echo ">>> CMD: $1"
   echo "$1" | ssh -q -T $DEPLOY_HOST bash
 }
 
 function setup_mysql_credentials() {
-  remote_execute "mysql --login-path=deploy_alias -e \"quit\" || \
-    mysql_config_editor set \
-    --login-path=deploy_alias \
-    --host=$DB_HOST \
-    --user=$DB_USER \
-    --password" || exit 1
+  remote_execute "echo \"$(defaults_extra_file_content)\" > $DEPLOY_MYSQL_CREDENTIAL_FILE"
+}
+
+function defaults_extra_file_content() {
+  cat <<EOF
+[client]
+host='$DB_HOST'
+port='$DB_PORT'
+user='$DB_USER'
+password='$DB_PASSWORD'
+EOF
 }
 
 #  if utf-8 chars are corrupted, add  | php -r "require '$DEPLOY_DIR/server/lib/fix-utf8.php';" \
@@ -344,12 +351,12 @@ function import_databases_expr() {
     for db in "$DEPLOY_IMPORT_DB_NAMES"; do
       echo " - Cloning database '\$db' into '$DB_DATABASE'..."
       mysqldump \
-       --login-path=deploy_alias \
+       $DEPLOY_MYSQL_CREDENTIAL_OPT \
        --default-character-set=utf8 \
        --set-charset \
        \$db \
       | mysql \
-       --login-path=deploy_alias \
+       $DEPLOY_MYSQL_CREDENTIAL_OPT \
        --default-character-set=utf8 \
        $DB_DATABASE
     done
@@ -360,12 +367,12 @@ function clone_database_expr() {
   cat <<EOF
    echo " - Cloning database '$1' into '$2'..."
    mysqldump \
-     --login-path=deploy_alias \
+     $DEPLOY_MYSQL_CREDENTIAL_OPT \
      --default-character-set=utf8 \
      --set-charset \
      $1 \
    | mysql \
-     --login-path=deploy_alias \
+     $DEPLOY_MYSQL_CREDENTIAL_OPT \
      --default-character-set=utf8 \
      $2
 EOF
@@ -373,7 +380,7 @@ EOF
 
 function find_databases_with_prefix_expr() {
  cat <<EOF
-  mysql --login-path=deploy_alias \
+  mysql $DEPLOY_MYSQL_CREDENTIAL_OPT \
     -e "SELECT schema_name \
     FROM information_schema.schemata \
     WHERE schema_name LIKE '$1%' \
@@ -418,7 +425,7 @@ else
     echo ">>> Cleaning up $DEPLOY_DIR ..."
     remote_execute "rm -rf $DEPLOY_DIR/*" || true
   fi
-  if remote_execute "command -v rsync"; then
+  if remote_execute "command -v rsync > /dev/null"; then
     echo ">>> Syncing files with $DEPLOY_HOST:$DEPLOY_DIR ..."
     rsync -$DEPLOY_EXCLUDE_ARGS -azpr $DIST_DIR/* $DEPLOY_HOST:$DEPLOY_DIR
   else
@@ -442,26 +449,26 @@ else
     echo ">>> Dropping all database with prefix '$DEPLOY_DROP_DATABASE_PREFIX'..."
     databases=$(remote_execute "$(find_databases_with_prefix_expr $DEPLOY_DROP_DATABASE_PREFIX)")
     for db in $databases; do
-      if [[ "$db" != "schema_name" && "$db" != "$DEPLOY_IMPORT_DB_NAMES" ]]; then
-        remote_execute "mysql --login-path=deploy_alias -e 'drop database $db;'"
+      if [[ "$db" != "schema_name" ]]; then
+        remote_execute "mysql $DEPLOY_MYSQL_CREDENTIAL_OPT -e 'drop database $db;'"
       fi
     done
   fi
   if [[ "$DEPLOY_BACKUP_DATABASE" != "" ]]; then
-    db_exists=$(remote_execute "mysql --login-path=deploy_alias -e \"show databases like '$DB_DATABASE';\"")
+    db_exists=$(remote_execute "mysql $DEPLOY_MYSQL_CREDENTIAL_OPT -e \"show databases like '$DB_DATABASE';\"")
     if [[ "$db_exists" == *"$DB_DATABASE"* ]]; then
       echo ">>> Backing up database $DB_DATABASE ..."
-      remote_execute "mysql --login-path=deploy_alias -e 'drop database if exists $DEPLOY_BACKUP_DATABASE;'"
-      remote_execute "mysql --login-path=deploy_alias -e 'create database if not exists $DEPLOY_BACKUP_DATABASE;'"
+      remote_execute "mysql $DEPLOY_MYSQL_CREDENTIAL_OPT -e 'drop database if exists $DEPLOY_BACKUP_DATABASE;'"
+      remote_execute "mysql $DEPLOY_MYSQL_CREDENTIAL_OPT -e 'create database if not exists $DEPLOY_BACKUP_DATABASE;'"
       remote_execute "$(clone_database_expr $DB_DATABASE $DEPLOY_BACKUP_DATABASE)"
     fi
   fi
   if [ $DEPLOY_EMPTY_DATABASE == 1 ]; then
     echo ">>> Deleting database $DB_DATABASE..."
-    remote_execute "mysql --login-path=deploy_alias -e 'drop database if exists $DB_DATABASE;'"
+    remote_execute "mysql $DEPLOY_MYSQL_CREDENTIAL_OPT -e 'drop database if exists $DB_DATABASE;'"
   fi
   echo ">>> Creating database $DB_DATABASE if it does not already exist ..."
-  remote_execute "mysql --login-path=deploy_alias -e 'create database if not exists $DB_DATABASE;'"
+  remote_execute "mysql $DEPLOY_MYSQL_CREDENTIAL_OPT -e 'create database if not exists $DB_DATABASE;'"
   if [[ "$DEPLOY_IMPORT_DB_NAMES" != "" ]]; then
     echo ">>> Importing database(s)..."
     remote_execute "$(import_databases_expr)"
