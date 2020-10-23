@@ -11,19 +11,20 @@ if [[ "$GITHUB_WORKFLOW" != "" ]]; then
 fi
 
 log_info ">>> Installing composer ..."
+COMPOSER_SETUP_SCRIPT=src/lib/composer-setup.php
 EXPECTED_SIGNATURE="$(wget -q -O - https://composer.github.io/installer.sig)"
-wget https://getcomposer.org/installer -O composer-setup.php
-ACTUAL_SIGNATURE=$(tool/dev/php -r "echo hash_file('sha384', 'composer-setup.php');")
+wget https://getcomposer.org/installer -O $COMPOSER_SETUP_SCRIPT
+ACTUAL_SIGNATURE=$(tool/dev/php -r "echo hash_file('sha384', '$COMPOSER_SETUP_SCRIPT');")
 
 if [ "$EXPECTED_SIGNATURE" != "$ACTUAL_SIGNATURE" ]; then
     >&2 echo 'ERROR: Invalid installer signature'
-    rm composer-setup.php
+    rm $COMPOSER_SETUP_SCRIPT
     exit 1
 fi
 
-tool/dev/php composer-setup.php --install-dir=src/lib #--quiet
+tool/dev/php $COMPOSER_SETUP_SCRIPT --install-dir=src/lib #--quiet
 RESULT=$?
-rm composer-setup.php
+rm $COMPOSER_SETUP_SCRIPT
 if [ $RESULT -eq 1 ]; then
   exit_with_error "ERROR: Failed to setup composer ..."
 fi
