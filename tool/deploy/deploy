@@ -36,6 +36,9 @@ DEPLOY_EXCLUDE_ARGS="--exclude=*.zip --exclude=._* --exclude=.DS_Store --exclude
 DEPLOY_CLEAN=1
 DEPLOY_MYSQL_CREDENTIAL_FILE="~/db_config.cnf"
 DEPLOY_MYSQL_CREDENTIAL_OPT="--defaults-extra-file=$DEPLOY_MYSQL_CREDENTIAL_FILE"
+DB_ROOT_USER=${DB_ROOT_USER:-root}
+DEPLOY_MYSQL_ROOT_CREDENTIAL_FILE="~/db_config_root.cnf"
+DEPLOY_MYSQL_ROOT_CREDENTIAL_OPT="--defaults-extra-file=$DEPLOY_MYSQL_ROOT_CREDENTIAL_FILE"
 
 # load .env file if defined as an environment variable (so that this script can be sourced)
 if [[ "$BUILD_ENV_FILE" != "" ]]; then
@@ -137,6 +140,12 @@ while [[ $1 != "" ]]; do
     DEPLOY_EMPTY_DATABASE=1
     ;;
 
+  "--create-user" | "-U")
+    [[ "$DB_ROOT_PASSWORD" != "" ]] || exit_with_error "You need to set DB_ROOT_PASSWORD"
+    DEPLOY_DB_CREATE_USER=1
+    shift
+    ;;
+
   "--drop-database-prefix" | "-X")
     DEPLOY_DROP_DATABASE_PREFIX="$2"
     shift
@@ -202,6 +211,7 @@ ${HELP_ADDITIONAL_TEXT}
   --deploy-config-dir, -C path  - the path to the configuration dir, absolute or
                                   relative to the deployment dir. Defaults to
                                   'config', overrides DEPLOY_CONFIG_DIR
+  --create-user, -U             - create the user DB_USER with password DB_PASSWORD
   --database, -N name           - the name of the database to use on the host,
                                   overrides DB_DATABASE
   --empty-database, -E          - empty the database
@@ -224,14 +234,17 @@ ${HELP_ADDITIONAL_TEXT}
   --verbose, -v                 - verbose output
   --help, -h                    - show usage help
 
-Many configuration values cannot be set via command line arguments.
-Make sure to declare them into the environment variable file specified by --env-file:
+Not all configuration values can be set via command line arguments. Instead, they
+need to be set as environment variables before running this script or
+need to be declared in the environment variable file specified by --env-file or
+--deploy-env-file:
   DB_TYPE           - The type of the database (only mysql supported at this point)
   DB_HOST           - The host on which the database server can be reached (usually localhost)
   DB_PORT           - Port
   DB_DATABASE       - The name of the database in which the application data is
   DB_USER           - The name of the database user for the application
   DB_PASSWORD       - Password of that user
+  DB_ROOT_PASSWORD  - Password of root user, needed only for --
   APP_ENV_FILE      - Path to the .env file containg environment variables for the application
   APP_CONF_FILE     - Path to the .toml file containing configuration values for the application
 EOF
@@ -328,11 +341,7 @@ fi
 
 function remote_execute() {
   [[ $BUILD_VERBOSE == 1 && "$1" != *"password"* ]] && echo ">>> CMD: $1"
-  echo "$1" | ssh -q -T $DEPLOY_HOST bash
-}
-
-function setup_mysql_credentials() {
-  remote_execute "echo \"$(defaults_extra_file_content)\" > $DEPLOY_MYSQL_CREDENTIAL_FILE"
+  echo "$1" |ssh -q -T $DEPLOY_HOST bash
 }
 
 function defaults_extra_file_content() {
@@ -343,6 +352,23 @@ port='$DB_PORT'
 user='$DB_USER'
 password='$DB_PASSWORD'
 EOF
+}
+
+function root_defaults_extra_file_content() {
+  cat <<EOF
+[client]
+host='$DB_HOST'
+port='$DB_PORT'
+user='$DB_ROOT_USER'
+password='$DB_ROOT_PASSWORD'
+EOF
+}
+
+function setup_mysql_credentials() {
+  remote_execute "echo \"$(defaults_extra_file_content)\" > $DEPLOY_MYSQL_CREDENTIAL_FILE"
+  if [[ "$DB_ROOT_PASSWORD" != "" ]] ; then
+    remote_execute "echo \"$(root_defaults_extra_file_content)\" > $DEPLOY_MYSQL_ROOT_CREDENTIAL_FILE"
+  fi
 }
 
 #  if utf-8 chars are corrupted, add  | php -r "require '$DEPLOY_DIR/server/lib/fix-utf8.php';" \
@@ -417,6 +443,9 @@ else
   #
   # remote deploment
   #
+  echo ">>> Checking access to $DEPLOY_HOST..."
+  output=$(remote_execute "echo \"hello world\"")
+  [[ "$output" == *"hello world"* ]] || exit_with_error "Failed"
 
   # files
   echo ">>> Creating $DEPLOY_DIR if not exists..."
@@ -427,7 +456,7 @@ else
   fi
   if remote_execute "command -v rsync > /dev/null"; then
     echo ">>> Syncing files with $DEPLOY_HOST:$DEPLOY_DIR ..."
-    rsync -$DEPLOY_EXCLUDE_ARGS -azpr $DIST_DIR/* $DEPLOY_HOST:$DEPLOY_DIR
+    rsync $DEPLOY_EXCLUDE_ARGS -azpr $DIST_DIR/* $DEPLOY_HOST:$DEPLOY_DIR
   else
     echo ">>> Copying files to $DEPLOY_HOST:$DEPLOY_DIR ..."
     cd $DIST_DIR
@@ -445,6 +474,13 @@ else
   # database
   echo ">>> Setting up mysql passwordless access ..."
   setup_mysql_credentials
+
+  if [[ $DEPLOY_DB_CREATE_USER == 1 ]]; then
+    echo ">>> Creating database user '$DB_USER' with access to '$DB_DATABASE' ..."
+    PRIVS="SELECT, INSERT, DELETE, UPDATE, CREATE, DROP, ALTER, EXECUTE"
+    remote_execute "mysql $DEPLOY_MYSQL_ROOT_CREDENTIAL_OPT -e \"CREATE USER IF NOT EXISTS ${DB_USER}@l‚ocalhost IDENTIFIED BY '${DB_PASSWORD}';\"#password"
+    remote_execute "mysql $DEPLOY_MYSQL_ROOT_CREDENTIAL_OPT -e \"GRANT $PRIVS ON $DB_DATABASE.* TO ${DB_USER}@localhost; FLUSH PRIVILEGES;\""
+  fi
   if [[ "$DEPLOY_DROP_DATABASE_PREFIX" != "" ]]; then
     echo ">>> Dropping all database with prefix '$DEPLOY_DROP_DATABASE_PREFIX'..."
     databases=$(remote_execute "$(find_databases_with_prefix_expr $DEPLOY_DROP_DATABASE_PREFIX)")
