@@ -114,9 +114,10 @@ qx.Class.define("bibliograph.ui.main.TableView",
           self =>
             self.isEditable() &&
             self.getAddItems() !== null &&
-            self.getFolderId() > 0,
+            self.getFolderId() !== null &&
+            self.getFolderId() !== 0,
           treeview => {
-            if (!treeview.getTree() || treeview.isEditable()) {
+            if (!treeview.getTree() || !treeview.isEditable()) {
               return false;
             }
             let selection = treeview.getTree().getSelectedNodes();

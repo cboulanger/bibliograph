@@ -188,23 +188,23 @@ qx.Class.define("qcl.application.StateManager",
      * if the parameter has changed
      *
      * @param first {String|Map} If a map, set each key-value pair, if a string, treat as key and set the value
-     * @param second {String|null} If first parameter is a string, use this as value.
+     * @param second {String|undefined} If first parameter is a string, use this as value.
      * @return {void}
      */
     setGetParam : function(first, second) {
-      var getParams = this._analyzeSearchString();
+      let params = this._analyzeSearchString();
       if (typeof first == "object") {
-        for (var key in first) {
-          getParams[key] = first[key];
+        for (let [key, value] of Object.entries(first)) {
+          params[key] = value;
         }
       } else {
-        getParams[first] = second;
+        params[first] = second;
       }
-      var p = [];
-      for (let [key, value] of Object.entries(getParams)) {
+      let p = [];
+      for (let [key, value] of Object.entries(params)) {
         p.push(key + this.getStateDefineChar() + encodeURIComponent(value));
       }
-      window.location.search = p.join(this.getStateSeparatorChar());
+      window.location.search = p.sort().join(this.getStateSeparatorChar());
     },
 
     /*

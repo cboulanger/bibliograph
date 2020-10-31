@@ -386,14 +386,14 @@ qx.Class.define("bibliograph.Setup", {
         }, this);
         app.setSelectedIds(selectedIds);
       }
-      if (this.__folderId) {
+      if (this.__folderId && this.__folderId !== "0") {
         this.info("Restoring folder id: " + this.__folderId);
         app.setFolderId(this.__folderId);
       } else if (this.__query) {
         this.info("Restoring query: " + this.__query);
         app.setQuery(this.__query);
       }
-      if (this.__modelId) {
+      if (this.__modelId && this.__modelId !== "0") {
         this.info("Restoring model id: " + this.__modelId);
         app.setModelId(this.__modelId);
       }

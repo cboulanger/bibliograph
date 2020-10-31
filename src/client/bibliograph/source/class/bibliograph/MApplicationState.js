@@ -52,6 +52,7 @@ qx.Mixin.define("bibliograph.MApplicationState", {
      */
     modelId: {
       check: qcl.util.Check.isNumberOrStringNullable,
+      transform: "_transformNonStringValues",
       nullable: true,
       apply: "_applyModelId",
       event: "changeModelId"
@@ -72,6 +73,7 @@ qx.Mixin.define("bibliograph.MApplicationState", {
      */
     folderId: {
       check: qcl.util.Check.isNumberOrStringNullable,
+      transform: "_transformNonStringValues",
       nullable: true,
       apply: "_applyFolderId",
       event: "changeFolderId"
@@ -225,8 +227,8 @@ qx.Mixin.define("bibliograph.MApplicationState", {
      */
     _applyFolderId: function (value, old) {
       var stmgr = this.getStateManager();
-      stmgr.setState("modelId", 0);
-      if (value && value !== "null" && value !== "0") {
+      stmgr.setState("modelId", null);
+      if (value) {
         stmgr.setState("folderId", value);
         stmgr.setState("query", "");
         stmgr.removeState("query");
@@ -256,15 +258,15 @@ qx.Mixin.define("bibliograph.MApplicationState", {
      * @param value
      * @param old
      */
-    _applyModelType: function (value, old) {
+    _applyModelType(value, old) {
       if (old) {
         this.getStateManager().setState("modelId", 0);
       }
-      if (value) {
-        this.getStateManager().setState("modelType", value);
-      } else {
-        this.getStateManager().removeState("modelType");
-      }
+      // if (value) {
+      //   this.getStateManager().setState("modelType", value);
+      // } else {
+      //   this.getStateManager().removeState("modelType");
+      // }
     },
     
     /**
@@ -273,12 +275,22 @@ qx.Mixin.define("bibliograph.MApplicationState", {
      * @param value
      * @param old
      */
-    _applyModelId: function (value, old) {
-      if (value && value !== "null" && value !== "0") {
+    _applyModelId(value, old) {
+      if (value) {
         this.getStateManager().setState("modelId", value);
       } else {
         this.getStateManager().removeState("modelId");
       }
+    },
+    
+    _transformNonStringValues(value) {
+      if (["null", "0"].includes(value)) {
+        return null;
+      }
+      if (!isNaN(parseInt(value, 10))) {
+        return parseInt(value, 10);
+      }
+      return value;
     },
     
     /**
@@ -287,7 +299,7 @@ qx.Mixin.define("bibliograph.MApplicationState", {
      * @param value
      * @param old
      */
-    _applyItemView: function (value, old) {
+    _applyItemView(value, old) {
       if (value) {
         this.getStateManager().setState("itemView", value);
       } else {
