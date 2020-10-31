@@ -75,6 +75,10 @@ if [[ "$BUILD_SKIP" == "" ]]; then
     echo ">>> Cleaning up dist folder..."
     source ./tool/dist/clean
   fi
+else
+  if [[ ! -d "$DIST_DIR" ]]; then
+    exit_with_error "Build directory $DIST_DIR does not exist, run full build first."
+  fi
 fi
 
 if [[ "$BUILD_SKIP" != *"client"* ]]; then
@@ -83,7 +87,7 @@ if [[ "$BUILD_SKIP" != *"client"* ]]; then
   QX_COMPILE_ARGS=${QX_COMPILE_ARGS:-"--config-file=$BUILD_FILE --target=$BUILD_TARGET --clean"}
   [[ $BUILD_VERBOSE == 1 ]] && echo "$QX_CMD deploy $QX_COMPILE_ARGS"
   $QX_CMD deploy $QX_COMPILE_ARGS
-  cp -a compiled/deploy/* $DIST_DIR
+  cp -a compiled/deploy/* "$DIST_DIR"
 
   # Replace logo file
   if [[ "$BUILD_LOGO_PATH" != "" ]]; then

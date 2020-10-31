@@ -35,7 +35,7 @@
     "test:testtapper": "tool/test/testtapper",
     "test:testtapper:custom": "tool/test/testtapper -Q ?class=bibliograph.test.services",
     "test:playwright:custom": "node ./test/playwright/test-login.js",
-    "dist:version:bump": "tool/dev/version-bump prerelease",
+    "dist:version:bump:beta": "tool/dev/version-bump prerelease",
     "dist:local.docker:build": "tool/dist/build test/.env",
     "dist:local.docker:run": "tool/dist/run"
   },
@@ -46,7 +46,7 @@
   "author": "Christian Boulanger (@cboulanger) info@bibliograph.org",
   "license": "ISC",
   "devDependencies": {
-    "@qooxdoo/compiler": "^1.0.0-beta-20201003-1033",
+    "@qooxdoo/compiler": "^1.0.0-beta-20201026-2041",
     "@qooxdoo/eslint-config-jsdoc-disable": "^1.0.3",
     "@qooxdoo/eslint-config-qx": "^1.3.5",
     "@qooxdoo/eslint-plugin-qx": "^1.2.1",

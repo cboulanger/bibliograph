@@ -57,7 +57,7 @@
       "name": "bibliograph",
       "theme": "bibliograph.theme.Theme",
       "class": "bibliograph.Application",
-      "bootPath": "source/boot",
+      "bootPath": "source/bootDevel",
       "include": [
         "bibliograph.plugins.*"
       ],
