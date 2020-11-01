@@ -6,8 +6,7 @@
 
 set -e
 shopt -s dotglob
-
-source tool/lib/functions.sh
+[ -z "$FUNCTIONS_LOADED" ] && source tool/lib/functions.sh
 
 # Configuration
 QUIET=0
@@ -79,6 +78,10 @@ while [[ $1 != "" ]]; do
   "--build-name" | "-n")
     BUILD_NAME="$2"
     shift
+    ;;
+
+  "--build-in-debug-mode" | "-M")
+    export BUILD_DEBUG_MODE=1
     ;;
 
   "--skip-build" | "-k")
@@ -200,6 +203,7 @@ ${HELP_ADDITIONAL_TEXT}
                                   (defaults to compile.json)
   --build-name, -n name         - an optional name for the subfolder for the build,
                                   defaults to the name of the build target
+  --build-in-debug-mode, M      - turn on debugging features in build (BUILD_DEBUG_MODE=1)
   --skip-build, -k              - use the build files that already exist
   --skip-build-client           - skip building of the client
   --skip-build-server           - skip building of the server

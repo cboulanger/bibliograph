@@ -27,6 +27,7 @@ BUILD_TARGET=${BUILD_TARGET:-build}
 BUILD_VERBOSE=${BUILD_VERBOSE:-0}
 BUILD_CLEAN=${BUILD_CLEAN:-0}
 BUILD_ZIP_FILE=${BUILD_ZIP_FILE:-0}
+BUILD_DEBUG_MODE=${BUILD_DEBUG_MODE:-0}
 BUILD_NAME=${BUILD_NAME:-$BUILD_TARGET}
 DIST_DIR=${DIST_DIR:-$(pwd)/dist/$BUILD_NAME}
 DIST_SERVER_DIR=${DIST_SERVER_DIR:-$DIST_DIR/server}
@@ -51,19 +52,19 @@ if [[ $BUILD_ZIP_FILE == 1 ]]; then
 fi
 
 echo
-echo "  Building deployable/distributable version of Bibliograph"
-echo
+echo "Building deployable/distributable version of Bibliograph"
 if [[ $BUILD_VERBOSE == 1 ]]; then
-  echo "   - Qooxdoo build file:     $BUILD_FILE"
-  echo "   - Qooxdoo build target:   $BUILD_TARGET"
-  echo "   - Application .env file:  $APP_ENV_FILE"
-  echo "   - Build directory:        $DIST_DIR"
-  echo "   - Appl. config file:      $APP_CONF_FILE"
-  echo "   - Deployment config dir:  $DEPLOY_CONFIG_DIR"
-  echo "   - Compiler version:       $($QX_CMD --version)"
-  echo "   - Custom Logo:            $([[ $BUILD_LOGO_PATH != "" ]] && echo "$BUILD_LOGO_PATH" || echo "No")"
-  echo "   - Build ZIP file:         $([[ $ZIP_NAME != "" ]] && echo "$ZIP_NAME" || echo "No")"
-  echo "   - Skip build parts:       $([[ $BUILD_SKIP != "" ]] && echo "$BUILD_SKIP" || echo "No")"
+  echo "   Qooxdoo build file:     $BUILD_FILE"
+  echo "   Qooxdoo build target:   $BUILD_TARGET"
+  echo "   Application .env file:  $APP_ENV_FILE"
+  echo "   Build directory:        $DIST_DIR"
+  echo "   Appl. config file:      $APP_CONF_FILE"
+  echo "   Deployment config dir:  $DEPLOY_CONFIG_DIR"
+  echo "   Compiler version:       $($QX_CMD --version)"
+  echo "   Custom Logo:            $([[ $BUILD_LOGO_PATH != "" ]] && echo "$BUILD_LOGO_PATH" || echo "No")"
+  echo "   Build ZIP file:         $([[ $ZIP_NAME != "" ]] && echo "$ZIP_NAME" || echo "No")"
+  echo "   Skip build parts:       $([[ $BUILD_SKIP != "" ]] && echo "$BUILD_SKIP" || echo "No")"
+  echo "   Build in debug mode:    $([[ $BUILD_DEBUG_MODE == 1 ]] && echo "Yes" || echo "No")"
 fi
 echo
 
@@ -122,8 +123,8 @@ EOF
 
   # create server.php
   cat << EOF > $DIST_DIR/server.php
-  <?php
-  const YII_DEBUG=${YII_DEBUG:-false};
+<?php
+  const YII_DEBUG=$BUILD_DEBUG_MODE;
   const APP_ROOT_DIR = __DIR__;
   define("APP_FRONTEND_DIR", realpath("./bibliograph"));
   define("DOTENV_FILE" , realpath("$DEPLOY_CONFIG_DIR/.env"));
