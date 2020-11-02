@@ -54,12 +54,6 @@ jobs:
         run: |
           echo "skipping test..."
 #          tool/test/codeception
-  deploy:
-    name: Deploy to demo.bibliograph.org
-    runs-on: ubuntu-latest
-    needs: run_tests
-    if: "!(github.event.head_commit && contains(github.event.head_commit.message, 'deploy skip'))"
-    steps:
       - name: Setup SSH
         env:
           SSH_PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
