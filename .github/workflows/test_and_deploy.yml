@@ -66,8 +66,9 @@ jobs:
           SSH_KEY: ${{ secrets.SSH_KEY }}
           SSH_CONFIG: ${{ secrets.SSH_CONFIG }}
         run: |
-          echo "$SSH_CONFIG" >> ~/.ssh/config
-          echo "$SSH_KEY" >> ~/.ssh/key
+          mkdir ~/.ssh
+          echo "$SSH_CONFIG" > ~/.ssh/config
+          echo "$SSH_KEY" > ~/.ssh/key
           tool/deploy/start-ssh-agent  ~/.ssh/key
       - name: Deploy
         run: |
