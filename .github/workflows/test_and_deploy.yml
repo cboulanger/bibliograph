@@ -66,14 +66,13 @@ jobs:
           SSH_KEY: ${{ secrets.SSH_KEY }}
           SSH_CONFIG: ${{ secrets.SSH_CONFIG }}
         run: |
-          cd $GITHUB_WORKSPACE
+          ls -al
           mkdir ~/.ssh
           echo "$SSH_CONFIG" > ~/.ssh/config
           echo "$SSH_KEY" > ~/.ssh/key
           tool/deploy/start-ssh-agent  ~/.ssh/key
       - name: Deploy
         run: |
-          cd $GITHUB_WORKSPACE
           tool/deploy/deploy \
             --env-file .github/workflows/testing-github-build.env
             --verbose \
