@@ -58,16 +58,14 @@ jobs:
         env:
           SSH_PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
           SSH_KEY: ${{ secrets.SSH_KEY }}
-          SSH_KEY_FILE: "~/.ssh/key"
           SSH_CONFIG: ${{ secrets.SSH_CONFIG }}
-
         run: |
           mkdir ~/.ssh
           echo "$SSH_CONFIG" > ~/.ssh/config
-          echo "$SSH_KEY" > $SSH_KEY_FILE
-          chmod 0600 $SSH_KEY_FILE
+          echo "$SSH_KEY" > $HOME/key
+          chmod 0600 $HOME/key
           sudo apt-get install -y expect
-          tool/deploy/start-ssh-agent $SSH_KEY_FILE
+          tool/deploy/start-ssh-agent $HOME/key
       - name: Deploy
         run: |
           tool/deploy/deploy \
