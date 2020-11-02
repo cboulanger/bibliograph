@@ -69,7 +69,7 @@ jobs:
       - name: Deploy
         run: |
           tool/deploy/deploy \
-            --env-file .github/workflows/testing-github-build.env
+            --env-file .github/workflows/testing-github-build.env \
             --verbose \
             --build-in-debug-mode \
             --yes \
