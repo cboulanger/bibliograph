@@ -43,7 +43,7 @@
               <option name="patterns">
                 <list>
                   <Item>
-                    <option name="path" value=".github/workflows/tests.yml" />
+                    <option name="path" value=".github/workflows/test_and_deploy.yml" />
                   </Item>
                 </list>
               </option>
