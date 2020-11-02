@@ -60,11 +60,10 @@ jobs:
           SSH_KEY: ${{ secrets.SSH_KEY }}
           SSH_CONFIG: ${{ secrets.SSH_CONFIG }}
         run: |
-          ls -al
           mkdir ~/.ssh
           echo "$SSH_CONFIG" > ~/.ssh/config
           echo "$SSH_KEY" > ~/.ssh/key
-          apt-get install -y expect
+          sudo apt-get install -y expect
           tool/deploy/start-ssh-agent  ~/.ssh/key
       - name: Deploy
         run: |
