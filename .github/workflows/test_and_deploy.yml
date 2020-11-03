@@ -8,9 +8,9 @@ on:
       - '**.md'
 jobs:
   run_tests:
-    name: Run tests
+    name: Run tests & deploy to demo.bibliograph.org
     runs-on: ubuntu-latest
-    if: "!(github.event.head_commit && contains(github.event.head_commit.message, 'ci skip'))"
+    if: "!(github.event.head_commit && contains(github.event.head_commit.message, 'skip ci'))"
     services:
       mysql_server:
         image: mariadb:latest
@@ -48,6 +48,7 @@ jobs:
       - name: Install Prerequisites
         run: tool/env/install
       - name: Run Tests
+        if: "!(github.event.head_commit && contains(github.event.head_commit.message, 'skip tests'))"
         env:
           DB_HOST_GITHUB: 127.0.0.1
           DB_PORT_GITHUB: ${{ job.services.mysql_server.ports[3306] }}
@@ -59,8 +60,6 @@ jobs:
           SSH_PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
           SSH_KEY: ${{ secrets.SSH_KEY }}
           SSH_CONFIG: ${{ secrets.SSH_CONFIG }}
-          DB_ROOT_USER: ${{ secrets.DB_ROOT_USER }}
-          DB_ROOT_PASSWORD: ${{ secrets.DB_ROOT_PASSWORD }}
         run: |
           mkdir ~/.ssh
           echo "$SSH_CONFIG" > ~/.ssh/config
@@ -69,6 +68,10 @@ jobs:
           sudo apt-get install -y expect
           tool/deploy/start-ssh-agent $HOME/key
       - name: Deploy
+        env:
+          DB_ROOT_USER: ${{ secrets.DB_ROOT_USER }}
+          DB_ROOT_PASSWORD: ${{ secrets.DB_ROOT_PASSWORD }}
+        if: "!(github.event.head_commit && contains(github.event.head_commit.message, 'skip deploy'))"
         run: |
           tool/deploy/deploy \
             --env-file .github/workflows/testing-github-build.env \
