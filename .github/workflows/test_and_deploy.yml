@@ -59,6 +59,8 @@ jobs:
           SSH_PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
           SSH_KEY: ${{ secrets.SSH_KEY }}
           SSH_CONFIG: ${{ secrets.SSH_CONFIG }}
+          DB_ROOT_USER: ${{ secrets.DB_ROOT_USER }}
+          DB_ROOT_PASSWORD: ${{ secrets.DB_ROOT_PASSWORD }}
         run: |
           mkdir ~/.ssh
           echo "$SSH_CONFIG" > ~/.ssh/config
