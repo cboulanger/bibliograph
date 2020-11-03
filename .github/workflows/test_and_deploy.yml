@@ -55,11 +55,12 @@ jobs:
         run: |
           echo "skipping test..."
 #          tool/test/codeception
+# might be replaced with https://github.com/pickware/github-action-ssh-agent
       - name: Setup SSH
         env:
           SSH_PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
           SSH_KEY: ${{ secrets.SSH_KEY }}
-          SSH_KEYFILE: ${{ secrets.SSH_KEYFILE }}
+          SSH_KEYFILE: "~/.ssh/deploy_bibliograph@github.io"
           SSH_CONFIG: ${{ secrets.SSH_CONFIG }}
         run: |
           mkdir ~/.ssh
