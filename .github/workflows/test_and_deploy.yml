@@ -66,6 +66,7 @@ jobs:
           mkdir ~/.ssh
           echo "${SSH_CONFIG/SSH_KEYFILE/$SSH_KEYFILE}" > ~/.ssh/config
           echo "$SSH_KEY" > $SSH_KEYFILE
+          chmod 0600 $SSH_KEYFILE
           sudo apt-get install -y expect
           tool/deploy/start-ssh-agent $SSH_KEYFILE
       - name: Deploy
