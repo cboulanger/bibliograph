@@ -60,13 +60,11 @@ jobs:
         env:
           SSH_PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
           SSH_KEY: ${{ secrets.SSH_KEY }}
-          SSH_KEYFILE: "${{ github.workspace }}/key"
+          SSH_KEYFILE: "/home/runner/work/bibliograph/bibliograph/key"
           SSH_CONFIG: ${{ secrets.SSH_CONFIG }}
         run: |
           mkdir ~/.ssh
-          echo "${SSH_CONFIG/SSH_KEYFILE/$SSH_KEYFILE}" > ~/.ssh/config
-          echo $SSH_KEYFILE
-          cat ~/.ssh/config
+          echo "$SSH_CONFIG" > ~/.ssh/config
           echo "$SSH_KEY" > $SSH_KEYFILE
           chmod 0600 $SSH_KEYFILE
           sudo apt-get install -y expect
