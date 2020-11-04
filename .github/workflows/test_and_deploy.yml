@@ -65,6 +65,8 @@ jobs:
         run: |
           mkdir ~/.ssh
           echo "${SSH_CONFIG/SSH_KEYFILE/$SSH_KEYFILE}" > ~/.ssh/config
+          echo $SSH_KEYFILE
+          cat ~/.ssh/config
           echo "$SSH_KEY" > $SSH_KEYFILE
           chmod 0600 $SSH_KEYFILE
           sudo apt-get install -y expect
