@@ -69,6 +69,8 @@ jobs:
           chmod 0600 $SSH_KEYFILE
           sudo apt-get install -y expect
           tool/deploy/start-ssh-agent $SSH_KEYFILE
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
       - name: Deploy
         env:
           DB_ROOT_USER: ${{ secrets.DB_ROOT_USER }}
