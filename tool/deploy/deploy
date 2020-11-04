@@ -345,7 +345,7 @@ fi
 
 function remote_execute() {
   [[ $BUILD_VERBOSE == 1 && "$1" != *"password"* ]] && echo ">>> CMD: $1"
-  echo "$1" |ssh -q -T -vv -o StrictHostKeyChecking=no $DEPLOY_HOST bash
+  echo "$1" |ssh -q -T -vvv -o StrictHostKeyChecking=no $DEPLOY_HOST bash
 }
 
 function defaults_extra_file_content() {
