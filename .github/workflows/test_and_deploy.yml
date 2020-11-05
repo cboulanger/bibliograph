@@ -55,22 +55,14 @@ jobs:
         run: |
           echo "skipping test..."
 #          tool/test/codeception
-# might be replaced with https://github.com/pickware/github-action-ssh-agent
-      - name: Setup SSH
-        env:
-          SSH_PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
-          SSH_KEY: ${{ secrets.SSH_KEY }}
-          SSH_CONFIG: ${{ secrets.SSH_CONFIG }}
-          SSH_KEYFILE: "${{ github.workspace }}/.github/workflows/key"
-        run: |
-          mkdir ~/.ssh
-          echo "$SSH_CONFIG" > ~/.ssh/config
-          echo "$SSH_KEY" > $SSH_KEYFILE
-          chmod 0600 $SSH_KEYFILE
-          sudo apt-get install -y expect
-          tool/deploy/start-ssh-agent $SSH_KEYFILE
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
+      - name: Setup SSH config
+        run: mkdir ~/.ssh && echo "${{ secrets.SSH_CONFIG }}" > ~/.ssh/config
+      - name: Start SSH agent
+        uses: webfactory/ssh-agent@v0.1.1
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+#      - name: Setup tmate session
+#        uses: mxschmitt/action-tmate@v3
       - name: Deploy
         env:
           DB_ROOT_USER: ${{ secrets.DB_ROOT_USER }}
