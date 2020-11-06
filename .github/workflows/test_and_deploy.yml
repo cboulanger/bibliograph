@@ -61,6 +61,8 @@ jobs:
         uses: webfactory/ssh-agent@v0.1.1
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Test connection
+        run: ssh demo.bibliograph.org
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v3
 #      - name: Deploy
