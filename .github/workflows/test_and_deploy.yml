@@ -52,9 +52,7 @@ jobs:
         env:
           DB_HOST_GITHUB: 127.0.0.1
           DB_PORT_GITHUB: ${{ job.services.mysql_server.ports[3306] }}
-        run: |
-          echo "skipping test..."
-#          tool/test/codeception
+        run: tool/test/codeception
       - name: Setup SSH config
         run: mkdir ~/.ssh && echo "${{ secrets.SSH_CONFIG }}" > ~/.ssh/config
       - name: Start SSH agent
