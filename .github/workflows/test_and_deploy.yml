@@ -58,7 +58,7 @@ jobs:
       - name: Setup SSH config
         run: mkdir ~/.ssh && echo "${{ secrets.SSH_CONFIG }}" > ~/.ssh/config
       - name: Start SSH agent
-        uses: webfactory/ssh-agent@v0.1.1
+        uses: webfactory/ssh-agent@v0.4.1
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Test connection
