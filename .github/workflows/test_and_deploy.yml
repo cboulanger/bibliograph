@@ -67,6 +67,8 @@ jobs:
 #        uses: mxschmitt/action-tmate@v3
       - name: Deploy
         env:
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           DB_ROOT_USER: ${{ secrets.DB_ROOT_USER }}
           DB_ROOT_PASSWORD: ${{ secrets.DB_ROOT_PASSWORD }}
           TESTING_ENV: ${{ secrets.TESTING_ENV }}
