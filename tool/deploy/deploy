@@ -162,9 +162,14 @@ while [[ $1 != "" ]]; do
     DEPLOY_CLEAN=0
     ;;
 
+  "--deploy-clean-dir-prefix")
+    DEPLOY_CLEAN_DIR_PREFIX="$2"
+    shift
+    ;;
+
   "--set-env" | "-e")
     ENV_VAR_NAME="$2"
-    ENV_VAR_VALUE="$2"
+    ENV_VAR_VALUE="$3"
     export $ENV_VAR_NAME=$ENV_VAR_VALUE
     shift
     shift
@@ -204,6 +209,8 @@ ${HELP_ADDITIONAL_TEXT}
   --build-name, -n name         - an optional name for the subfolder for the build,
                                   defaults to the name of the build target
   --build-in-debug-mode, M      - turn on debugging features in build (BUILD_DEBUG_MODE=1)
+  --clean                       - clean the build directories and caches
+                                  before building
   --skip-build, -k              - use the build files that already exist
   --skip-build-client           - skip building of the client
   --skip-build-server           - skip building of the server
@@ -227,9 +234,9 @@ ${HELP_ADDITIONAL_TEXT}
                                   (note that any existing database with that name
                                   will be deleted). Otherwise, use the database
                                   name with an appended timestamp (only remotely).
-  --drop-database-prefix, -X    - Drops all databases with this prefix. Handle
-                                  with care! (only remotely)
-  --clean                       - clean the working directory befor building
+  --drop-database-prefix, -X    - Drops all databases with this prefix. (only remotely)
+  --deploy-clean-dir-prefix     - Deletes all directories in the parent folder of
+                                  the deployment directory that have this prefix
   --no-deploy-clean             - do not clean files on the deploy target
                                   before deployment
   --set-env                     - set environment variables, overriding values
@@ -245,7 +252,6 @@ need to be declared in the environment variable file specified by --env-file or
   DB_TYPE           - The type of the database (only mysql supported at this point)
   DB_HOST           - The host on which the database server can be reached (usually localhost)
   DB_PORT           - Port
-  DB_DATABASE       - The name of the database in which the application data is
   DB_USER           - The name of the database user for the application
   DB_PASSWORD       - Password of that user
   DB_ROOT_PASSWORD  - Password of root user, needed only for --
@@ -321,6 +327,7 @@ if [[ $QUIET != 1 ]]; then
   echo "   Import database(s):          $([[ "$DEPLOY_IMPORT_DB_NAMES" != "" ]] && echo "$DEPLOY_IMPORT_DB_NAMES" || echo '-')"
   echo "   Backup database into:        $([[ "$DEPLOY_BACKUP_DATABASE" != "" ]] && echo "$DEPLOY_BACKUP_DATABASE" || echo '-')"
   echo "   Drop databases with prefix:  $([[ "$DEPLOY_DROP_DATABASE_PREFIX" != "" ]] && echo "$DEPLOY_DROP_DATABASE_PREFIX" || echo '-')"
+  echo "   Delete dirs with prefix:     $([[ "$DEPLOY_CLEAN_DIR_PREFIX" != "" ]] && echo "$DEPLOY_CLEAN_DIR_PREFIX" || echo '-')"
 fi
 
 if [ "$ANSWER_YES" != 1 ]; then
@@ -452,6 +459,10 @@ else
   [[ "$output" == *"hello world"* ]] || exit_with_error "Failed"
 
   # files
+  if [ $DEPLOY_CLEAN_DIR_PREFIX != "" ]; then
+    echo ">>> Deleting deployment directories with prefix $DEPLOY_CLEAN_DIR_PREFIX..."
+    remote_execute "rm -rf $(dirname $DEPLOY_DIR)/$(echo $DEPLOY_CLEAN_DIR_PREFIX | sed 's/[./]//g')*" || true
+  fi
   echo ">>> Creating $DEPLOY_DIR if not exists..."
   remote_execute "mkdir -p $DEPLOY_DIR;"
   if [ $DEPLOY_CLEAN == 1 ]; then

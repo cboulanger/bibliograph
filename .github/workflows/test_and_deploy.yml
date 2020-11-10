@@ -72,13 +72,4 @@ jobs:
           TESTING_ENV: ${{ secrets.TESTING_ENV }}
           TESTING_TOML: ${{ secrets.TESTING_TOML }}
         if: "!(github.event.head_commit && contains(github.event.head_commit.message, 'skip deploy'))"
-        run: |
-          echo "$TESTING_ENV" > $HOME/testing.env
-          echo "$TESTING_TOML" > $HOME/testing.toml
-          tool/deploy/deploy \
-            --env-file .github/workflows/testing-github-build.env \
-            --verbose \
-            --build-in-debug-mode \
-            --yes \
-            --create-user \
-            --empty-database
+        run: .github/workflows/deploy

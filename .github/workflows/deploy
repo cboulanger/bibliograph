@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+echo "$TESTING_ENV" > $HOME/testing.env
+echo "$TESTING_TOML" > $HOME/testing.toml
+CLEANUP=""
+case "$GIHUB_REF" in
+  *"master"*)
+    DEPLOY_NAME="bibliograph_master"
+    # cleanup
+    CLEANUP="--drop-database-prefix bibliograph_testing_ --deploy-clean-dir-prefix bibliograph_testing_"
+    ;;
+  *"tags"*)
+    DEPLOY_NAME="bibliograph_latest"
+    ;;
+  *)
+    DEPLOY_NAME="bibliograph_testing_${GIHUB_REF##*/}"
+    ;;
+esac
+tool/deploy/deploy \
+  --env-file .github/workflows/testing-github-build.env \
+  --deploy-dir /home/bibliograph/public_html/$DEPLOY_NAME \
+  --database $DEPLOY_NAME \
+  --verbose \
+  --build-in-debug-mode \
+  --yes \
+  --create-user \
+  --empty-database \
+  --set-env APP_URL http://demo.panya.de/$DEPLOY_NAME \
+  $CLEANUP
