@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 
-echo "$TESTING_ENV" > $HOME/testing.env
-echo "$TESTING_TOML" > $HOME/testing.toml
 CLEANUP=""
-case "$GIHUB_REF" in
+case "$GITHUB_REF" in
   *"master"*)
     DEPLOY_NAME="bibliograph_master"
     # cleanup
@@ -13,9 +11,23 @@ case "$GIHUB_REF" in
     DEPLOY_NAME="bibliograph_latest"
     ;;
   *)
-    DEPLOY_NAME="bibliograph_testing_${GIHUB_REF##*/}"
+    DEPLOY_NAME="bibliograph_testing_${GITHUB_REF##*/}"
     ;;
 esac
+
+cat <<EOF > $HOME/deploy.env
+DB_TYPE=mysql
+DB_HOST=localhost
+DB_PORT=3306
+DB_DATABASE=$DEPLOY_NAME
+DB_USER=$DB_USER
+DB_PASSWORD=$DB_PASSWORD
+BIBUTILS_PATH=$BIBUTILS_PATH
+BACKUP_PATH=$BACKUP_PATH
+EOF
+echo "$DEPLOY_TOML" > $HOME/deploy.toml
+export APP_URL=$DEPLOY_HOST/$DEPLOY_NAME
+export DEPLOY_DIR=$DEPLOY_PARENT_DIR/$DEPLOY_NAME
 tool/deploy/deploy \
   --env-file .github/workflows/testing-github-build.env \
   --deploy-dir /home/bibliograph/public_html/$DEPLOY_NAME \
@@ -25,5 +37,4 @@ tool/deploy/deploy \
   --yes \
   --create-user \
   --empty-database \
-  --set-env APP_URL http://demo.panya.de/$DEPLOY_NAME \
   $CLEANUP

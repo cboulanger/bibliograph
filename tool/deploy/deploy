@@ -452,7 +452,7 @@ if [ "$DEPLOY_HOST" == "local" ]; then
 
 else
   #
-  # remote deploment
+  # remote deployment
   #
   echo ">>> Checking access to $DEPLOY_HOST..."
   output=$(remote_execute "echo \"hello world\"")
