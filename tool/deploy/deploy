@@ -350,7 +350,7 @@ fi
 # Deploy!
 
 function remote_execute() {
-  [[ $BUILD_VERBOSE == 1 ]] && echo ">>> CMD: $1"
+  [[ $BUILD_VERBOSE == 1 && "$1" != "\$"* ]] && echo ">>> CMD: $1"
   echo "$1" |ssh -T $DEPLOY_HOST bash
 }
 
