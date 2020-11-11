@@ -350,7 +350,7 @@ fi
 # Deploy!
 
 function remote_execute() {
-  [[ $BUILD_VERBOSE == 1 && "$1" != "\$"* ]] && echo ">>> CMD: $1"
+  [[ $BUILD_VERBOSE == 1 ]] && echo ">>> CMD: $1"
   echo "$1" |ssh -T $DEPLOY_HOST bash
 }
 
@@ -497,7 +497,7 @@ else
   fi
   if [[ "$DEPLOY_DROP_DATABASE_PREFIX" != "" ]]; then
     echo ">>> Dropping all database with prefix '$DEPLOY_DROP_DATABASE_PREFIX'..."
-    databases=$(remote_execute "$(find_databases_with_prefix_expr $DEPLOY_DROP_DATABASE_PREFIX)")
+    BUILD_VERBOSE=0 databases=$(remote_execute "$(find_databases_with_prefix_expr $DEPLOY_DROP_DATABASE_PREFIX)")
     for db in $databases; do
       if [[ "$db" != "schema_name" ]]; then
         remote_execute "mysql $DEPLOY_MYSQL_CREDENTIAL_OPT -e 'drop database $db;'"
