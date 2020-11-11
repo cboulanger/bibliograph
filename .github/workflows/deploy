@@ -26,8 +26,8 @@ BIBUTILS_PATH=$BIBUTILS_PATH
 BACKUP_PATH=$BACKUP_PATH
 EOF
 echo "$DEPLOY_TOML" > $HOME/deploy.toml
-export APP_URL=$DEPLOY_HOST/$DEPLOY_NAME
-export DEPLOY_DIR=$DEPLOY_PARENT_DIR/$DEPLOY_NAME
+APP_URL=$DEPLOY_HOST/$DEPLOY_NAME
+DEPLOY_DIR=$DEPLOY_PARENT_DIR/$DEPLOY_NAME
 tool/deploy/deploy \
   --env-file .github/workflows/testing-github-build.env \
   --deploy-dir /home/bibliograph/public_html/$DEPLOY_NAME \
