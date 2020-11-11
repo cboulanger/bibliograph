@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
-# This script is partly based on code copied from
-# https://github.com/qooxdoo/deployment/blob/master/deployer.sh
-# by @johnspackman
+# This script builds the application and deploys the application to a remote
+# server based on environment variables or command line values
 
 set -e
 shopt -s dotglob
@@ -351,7 +350,7 @@ fi
 # Deploy!
 
 function remote_execute() {
-  [[ $BUILD_VERBOSE == 1 && "$1" != *"password"* ]] && echo ">>> CMD: $1"
+  [[ $BUILD_VERBOSE == 1 ]] && echo ">>> CMD: $1"
   echo "$1" |ssh -T $DEPLOY_HOST bash
 }
 
@@ -493,7 +492,7 @@ else
   if [[ $DEPLOY_DB_CREATE_USER == 1 ]]; then
     echo ">>> Creating database user '$DB_USER' with access to '$DB_DATABASE' ..."
     PRIVS="SELECT, INSERT, DELETE, UPDATE, CREATE, DROP, ALTER, EXECUTE"
-    remote_execute "mysql $DEPLOY_MYSQL_ROOT_CREDENTIAL_OPT -e \"CREATE USER IF NOT EXISTS ${DB_USER}@l‚ocalhost IDENTIFIED BY '${DB_PASSWORD}';\"#password"
+    remote_execute "mysql $DEPLOY_MYSQL_ROOT_CREDENTIAL_OPT -e \"CREATE USER IF NOT EXISTS ${DB_USER}@localhost IDENTIFIED BY '${DB_PASSWORD}'; FLUSH PRIVILEGES;\""
     remote_execute "mysql $DEPLOY_MYSQL_ROOT_CREDENTIAL_OPT -e \"GRANT $PRIVS ON $DB_DATABASE.* TO ${DB_USER}@localhost; FLUSH PRIVILEGES;\""
   fi
   if [[ "$DEPLOY_DROP_DATABASE_PREFIX" != "" ]]; then
