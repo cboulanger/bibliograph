@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# credit: https://stackoverflow.com/a/13034313
+
+set -e
+[ -z "$FUNCTIONS_LOADED" ] && source tool/lib/functions.sh
+
+if [ "$1" == "" ] ; then
+  exit_with_error "Usage: ssh-start-agent <path to keyfile>"
+fi
+
+if [ "$SSH_PASSPHRASE" == "" ]; then
+  exit_with_error "You must set the SSH_PASSPHRASE environment variable"
+fi
+
+eval $(ssh-agent)
+
+expect << EOF
+  spawn ssh-add $1
+  expect "Enter passphrase"
+  send "$SSH_PASSPHRASE\r"
+  expect eof
+EOF

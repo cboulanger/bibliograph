@@ -1,0 +1,87 @@
+name: Bibliograph Tests & Deployment
+on: [push, pull_request]
+
+jobs:
+
+  # see https://github.com/marketplace/actions/skip-duplicate-actions
+  pre_job:
+    # continue-on-error: true # Uncomment once integration is finished
+    runs-on: ubuntu-latest
+    # Map a step output to a job output
+    outputs:
+      should_skip: ${{ steps.skip_check.outputs.should_skip }}
+    steps:
+      - id: skip_check
+        uses: fkirc/skip-duplicate-actions@master
+        with:
+          github_token: ${{ github.token }}
+          paths_ignore: '["**.md"]'
+
+  run_tests:
+    needs: pre_job
+    if: needs.pre_job.outputs.should_skip != 'true' && !(github.event.head_commit && contains(github.event.head_commit.message, 'skip ci'))
+    name: Run tests & deploy
+    runs-on: ubuntu-latest
+    services:
+      mysql_server:
+        image: mariadb:latest
+        ports:
+          - 3306
+        env:
+          MYSQL_USER: bibliograph
+          MYSQL_PASSWORD: bibliograph
+          MYSQL_DATABASE: tests
+          MYSQL_ROOT_PASSWORD: bibliograph
+        options: --name=mysql_server --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
+      http_server:
+        image: cboulanger/docker-phpfarm
+        ports:
+          - 8070:8070
+          - 8071:8071
+          - 8072:8072
+          - 8073:8073
+          - 8074:8074
+        options: --name=http_server
+        volumes:
+          - /home/runner/work/bibliograph:/github/workspace
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Mount workspace dirs into /var/www of http service container
+        run: docker exec http_server ln -s /github/workspace/bibliograph/{compiled,dist,src,test} /var/www
+      - name: Check Services
+        env:
+          DB_HOST_GITHUB: 127.0.0.1
+          DB_PORT_GITHUB: ${{ job.services.mysql_server.ports[3306] }}
+        run: tool/env/services-test
+      - name: Setup Node
+        uses: actions/setup-node@v1
+      - name: Install Prerequisites
+        run: tool/env/install
+      - name: Run Tests
+        if: "!(github.event.head_commit && contains(github.event.head_commit.message, 'skip tests'))"
+        env:
+          DB_HOST_GITHUB: 127.0.0.1
+          DB_PORT_GITHUB: ${{ job.services.mysql_server.ports[3306] }}
+        run: tool/test/codeception
+      - name: Setup SSH config
+        run: mkdir ~/.ssh && echo "${{ secrets.SSH_CONFIG }}" > ~/.ssh/config
+      - name: Start SSH agent
+        uses: webfactory/ssh-agent@v0.4.1
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+#      - name: Test connection
+#        run: ssh demo.bibliograph.org
+#      - name: Setup tmate session
+#        uses: mxschmitt/action-tmate@v3
+      - name: Deploy
+        env:
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_ROOT_USER: ${{ secrets.DB_ROOT_USER }}
+          DB_ROOT_PASSWORD: ${{ secrets.DB_ROOT_PASSWORD }}
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_TOML: ${{ secrets.DEPLOY_TOML }}
+          DEPLOY_PARENT_DIR: $${{ secrets.DEPLOY_PARENT_DIR }}
+        if: "!(github.event.head_commit && contains(github.event.head_commit.message, 'skip deploy'))"
+        run: .github/workflows/deploy
