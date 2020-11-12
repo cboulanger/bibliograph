@@ -82,6 +82,6 @@ jobs:
           DB_ROOT_PASSWORD: ${{ secrets.DB_ROOT_PASSWORD }}
           DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
           DEPLOY_TOML: ${{ secrets.DEPLOY_TOML }}
-          DEPLOY_PARENT_DIR: $${{ secrets.DEPLOY_PARENT_DIR }}
+          DEPLOY_PARENT_DIR: ${{ secrets.DEPLOY_PARENT_DIR }}
         if: "!(github.event.head_commit && contains(github.event.head_commit.message, 'skip deploy'))"
         run: .github/workflows/deploy
