@@ -239,16 +239,16 @@ ${HELP_ADDITIONAL_TEXT}
                                   the deployment directory that have this prefix
   --no-deploy-clean             - do not clean files on the deploy target
                                   before deployment
-  --set-env                     - set environment variables, overriding values
-                                  loaded from --env-file
+  --set-env, -e VAR value       - set environment variables, overriding values
+                                  loaded from --env-file or existing in environment
   --yes, -y                     - answer yes to all prompts
   --verbose, -v                 - verbose output
   --help, -h                    - show usage help
 
 Not all configuration values can be set via command line arguments. Instead, they
-need to be set as environment variables before running this script or
-need to be declared in the environment variable file specified by --env-file or
---deploy-env-file:
+need to be a) set as environment variables before running this script or
+b) to be declared in the environment variable file specified by --env-file or
+--deploy-env-file, or c) to be set with --set-env :
   DB_TYPE           - The type of the database (only mysql supported at this point)
   DB_HOST           - The host on which the database server can be reached (usually localhost)
   DB_PORT           - Port
