@@ -2,6 +2,10 @@
 
 CLEANUP=""
 case "$GITHUB_REF" in
+  *"merge"*)
+    echo "Not deploying merge."
+    exit 0
+    ;;
   *"master"*)
     DEPLOY_NAME="bibliograph_master"
     # cleanup
