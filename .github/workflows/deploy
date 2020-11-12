@@ -30,12 +30,12 @@ BIBUTILS_PATH=$BIBUTILS_PATH
 BACKUP_PATH=$BACKUP_PATH
 EOF
 echo "$DEPLOY_TOML" > $HOME/deploy.toml
-APP_URL=$DEPLOY_HOST/$DEPLOY_NAME
 DEPLOY_DIR=$DEPLOY_PARENT_DIR/$DEPLOY_NAME
 tool/deploy/deploy \
   --env-file .github/workflows/testing-github-build.env \
-  --deploy-dir /home/bibliograph/public_html/$DEPLOY_NAME \
+  --deploy-dir $DEPLOY_DIR \
   --database $DEPLOY_NAME \
+  --set-env APP_URL $DEPLOY_HOST/$DEPLOY_NAME\
   --verbose \
   --build-in-debug-mode \
   --yes \
