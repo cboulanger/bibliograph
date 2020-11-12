@@ -2,6 +2,7 @@
 
 # This script builds the application and deploys the application to a remote
 # server based on environment variables or command line values
+# run tool/deploy/deploy --help to see a list of options
 
 set -e
 shopt -s dotglob
