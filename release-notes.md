@@ -1,12 +1,15 @@
 # Release notes
 
-## Version 3.0.0-beta (Summer 2018, stable release planned for early 2019)
+## Version 3.0.0 (currently in beta)
+Features:
+- New Plugin to support Zotero databases (read-only)
+- Removed experimental plugins that have not been used much
+Backend/Development
 - Completely rewrote server part, replacing homegrown framework with Yii2-based backend
 - Upgraded client to qooxdoo 6.0.0 and its new javascript compiler toolchain
-- Many changes under the hood
-- Somewhat reduced functionality and number of plugins in order to concentrate on making main features rock-solid
-- Added extensive test suite based on the Codeception testing framework 
-- Added building of docker image to Travis CI
+- Added extensive test suite based on the Codeception testing framework
+- CI moved from Travis to GitHub Actions, powerful deployment automation
+- Added Browser-based tests based on Microsoft Playwright  
 
 ## Version 2.3 (October 2017)
 - added Debugging plugin with a server log window, log filter selection and recording of 
