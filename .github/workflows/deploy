@@ -35,7 +35,7 @@ tool/deploy/deploy \
   --env-file .github/workflows/testing-github-build.env \
   --deploy-dir $DEPLOY_DIR \
   --database $DEPLOY_NAME \
-  --set-env APP_URL $DEPLOY_HOST/$DEPLOY_NAME\
+  --set-env APP_URL $DEPLOY_HOST/$DEPLOY_NAME \
   --verbose \
   --build-in-debug-mode \
   --yes \
