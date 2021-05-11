@@ -1,10 +1,8 @@
 # TODO
 
-## v3.0.0-beta
+## v3.x
 
 ### Priority: urgent
-- [x] FEAT: omit user/password in data_Datasources and use app.conf.toml-supplied values
-- [x] BUG: "Forgot Password" doesn't work: repair or disable
 - [ ] BUG: Import-Window: Import All doesn't select all references if they haven't been loaded. This needs to be done on the server. 
 - [ ] BUG: Create new datasource results in "User Error: Running 'migrate/up' failed."
 - [ ] BUG: Delete datasource: "Running 'migrate/down' failed"
@@ -92,17 +90,10 @@
 - [ ] Backend: Streamline API to get Datasource & typed model
 
 ### Testing, building, CI and distribution
-- [ ] Move qooxdoo build files to top dir
+- [x] Check log email target to be able to remotely monitor fatal errors
 - [ ] Tests: Fix bootstrap loading issue
-- [ ] Move tests/config/web.php to tests/config.php 
-- [ ] Check log email target to be able to remotely monitor fatal errors
+- [ ] Move tests/config/web.php to tests/config.php
 - [ ] Setup API tests using https://medium.com/mop-developers/testing-your-api-with-dredd-c02e6ca151f2
-
-## v3.0.0.RC.X (only bug fixes)
-
-## v3.0.0
-
-## v3.1
 
 ### Priority: high
 - [ ] FEAT: Implement setup Wizard

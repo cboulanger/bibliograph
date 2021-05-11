@@ -48,8 +48,6 @@
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/elisdn/yii2-gii-fixture-generator" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/evenement/evenement" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/ezyang/htmlpurifier" />
-      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/flow/jsonpath" />
-      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/fzaninotto/faker" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/georgique/yii2-jsonrpc" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/goaop/parser-reflection" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/graze/guzzle-jsonrpc" />
@@ -69,7 +67,6 @@
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/nesbot/carbon" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/nikic/php-parser" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/odannyc/yii2-sse" />
-      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/paragonie/random_compat" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/phar-io/manifest" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/phar-io/version" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/phpdocumentor/reflection-common" />
@@ -134,7 +131,6 @@
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/symfony/polyfill-intl-idn" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/symfony/polyfill-intl-normalizer" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/symfony/polyfill-mbstring" />
-      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/symfony/polyfill-php70" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/symfony/polyfill-php72" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/symfony/polyfill-php73" />
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/symfony/polyfill-php80" />
@@ -157,6 +153,8 @@
       <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/yosymfony/toml" />
       <excludeFolder url="file://$MODULE_DIR$/src/vcslib/yii2-json-rpc-2.0" />
       <excludeFolder url="file://$MODULE_DIR$/test/codeception/_output" />
+      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/softcreatr/jsonpath" />
+      <excludeFolder url="file://$MODULE_DIR$/src/server/vendor/fakerphp/faker" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

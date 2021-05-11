@@ -39,10 +39,6 @@
     "dist:local.docker:build": "tool/dist/build test/.env",
     "dist:local.docker:run": "tool/dist/run"
   },
-  "_old_scripts": {
-    "Create new migration": "build/script/run-in-new-terminal $(pwd)/build/script/create-migration",
-    "Create JSONRPC proxy methods": "cd src/server && php yii rpc-proxy/create"
-  },
   "author": "Christian Boulanger (@cboulanger) info@bibliograph.org",
   "license": "ISC",
   "devDependencies": {
@@ -55,7 +51,8 @@
     "eslint": "^6.1.0",
     "eslint-plugin-import": "^2.21.2",
     "json-diff": "^0.5.4",
-    "tape": "^5.0.1"
+    "tape": "^5.0.1",
+    "semver": "^7.3.5"
   },
   "eslintConfig": {
     "parserOptions": {
@@ -68,9 +65,9 @@
     "globals": {
       "qx": true,
       "qcl": true,
-
       "bibliograph": true
     }
   },
-  "dependencies": {}
+  "dependencies": {
+  }
 }

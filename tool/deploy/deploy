@@ -460,7 +460,7 @@ else
   [[ "$output" == *"hello world"* ]] || exit_with_error "Failed"
 
   # files
-  if [ $DEPLOY_CLEAN_DIR_PREFIX != "" ]; then
+  if [[ "$DEPLOY_CLEAN_DIR_PREFIX" != "" ]]; then
     echo ">>> Deleting deployment directories with prefix $DEPLOY_CLEAN_DIR_PREFIX..."
     remote_execute "rm -rf $(dirname $DEPLOY_DIR)/$(echo $DEPLOY_CLEAN_DIR_PREFIX | sed 's/[./]//g')*" || true
   fi

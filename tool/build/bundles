@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-
-# npm -g install parcel
-
-# unique-selector
-pushd node_modules/unique-selector
-parcel build lib/index.js --out-file=unique-selector.js  --global unique --no-minify --no-source-maps --no-content-hash
-cp dist/* ../../src/client/bibliograph/source/resource/js
-popd

@@ -40,7 +40,6 @@
       <path value="$PROJECT_DIR$/src/server/vendor/phpdocumentor/type-resolver" />
       <path value="$PROJECT_DIR$/src/server/vendor/phpdocumentor/reflection-common" />
       <path value="$PROJECT_DIR$/src/server/vendor/psr/event-dispatcher" />
-      <path value="$PROJECT_DIR$/src/server/vendor/paragonie/random_compat" />
       <path value="$PROJECT_DIR$/src/server/vendor/sebastian/global-state" />
       <path value="$PROJECT_DIR$/src/server/vendor/webmozart/assert" />
       <path value="$PROJECT_DIR$/src/server/vendor/psr/simple-cache" />
@@ -84,7 +83,6 @@
       <path value="$PROJECT_DIR$/src/server/vendor/phar-io/version" />
       <path value="$PROJECT_DIR$/src/server/vendor/symfony/yaml" />
       <path value="$PROJECT_DIR$/src/server/vendor/phar-io/manifest" />
-      <path value="$PROJECT_DIR$/src/server/vendor/symfony/polyfill-php70" />
       <path value="$PROJECT_DIR$/src/server/vendor/symfony/event-dispatcher-contracts" />
       <path value="$PROJECT_DIR$/src/server/vendor/magp/yii2-json-schema-validator" />
       <path value="$PROJECT_DIR$/src/server/vendor/symfony/css-selector" />
@@ -126,7 +124,6 @@
       <path value="$PROJECT_DIR$/src/server/vendor/codeception/module-asserts" />
       <path value="$PROJECT_DIR$/src/server/vendor/codeception/module-phpbrowser" />
       <path value="$PROJECT_DIR$/src/server/vendor/justinrainbow/json-schema" />
-      <path value="$PROJECT_DIR$/src/server/vendor/flow/jsonpath" />
       <path value="$PROJECT_DIR$/src/server/vendor/codeception/specify" />
       <path value="$PROJECT_DIR$/src/server/vendor/codeception/module-rest" />
       <path value="$PROJECT_DIR$/src/server/vendor/codeception/verify" />
@@ -137,7 +134,6 @@
       <path value="$PROJECT_DIR$/src/server/vendor/goaop/parser-reflection" />
       <path value="$PROJECT_DIR$/src/server/vendor/graze/guzzle-jsonrpc" />
       <path value="$PROJECT_DIR$/src/server/vendor/yiisoft/yii2-faker" />
-      <path value="$PROJECT_DIR$/src/server/vendor/fzaninotto/faker" />
       <path value="$PROJECT_DIR$/src/server/vendor/hedii/zotero-api" />
       <path value="$PROJECT_DIR$/src/server/vendor/georgique/yii2-jsonrpc" />
       <path value="$PROJECT_DIR$/src/server/vendor/webonyx/graphql-php" />
@@ -159,6 +155,8 @@
       <path value="$PROJECT_DIR$/src/server/vendor/cache/array-adapter" />
       <path value="$PROJECT_DIR$/src/server/vendor/cache/simple-cache-bridge" />
       <path value="$PROJECT_DIR$/src/server/vendor/psr/cache" />
+      <path value="$PROJECT_DIR$/src/server/vendor/softcreatr/jsonpath" />
+      <path value="$PROJECT_DIR$/src/server/vendor/fakerphp/faker" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.4" />

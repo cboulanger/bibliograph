@@ -1,4 +1,6 @@
-#!/bin/env bash
+#!/bin/bash
 
-echo "not implemented"
-exit 1
+cd src/lib
+rm composer.phar
+wget https://getcomposer.org/download/latest-2.x/composer.phar
+
