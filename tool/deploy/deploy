@@ -9,6 +9,11 @@ set -e
 shopt -s dotglob
 [ -z "$FUNCTIONS_LOADED" ] && source tool/lib/functions.sh
 
+# avoid open file limit on Mac
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  ulimit unlimited
+fi
+
 # Preset or set by loaded env file:
 BUILD_ENV_FILE=${BUILD_ENV_FILE:-""}
 BUILD_SKIP=${BUILD_SKIP:-""}

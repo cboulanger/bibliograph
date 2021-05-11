@@ -103,8 +103,11 @@ if [[ "$BUILD_SKIP" != *"server"* ]]; then
   echo " - Copy/create files ..."
   # application files
   mkdir -p $DIST_SERVER_DIR
-  cp -a $SERVER_SRC_DIR/{config,bin,controllers,lib,messages,migrations,models,modules,schema,views,bootstrap.php} $DIST_SERVER_DIR/
+  cp -a $SERVER_SRC_DIR/{config,controllers,lib,messages,migrations,models,modules,schema,views,bootstrap.php} $DIST_SERVER_DIR/
   mkdir -p $DIST_SERVER_DIR/runtime/{cache,logs}
+
+  # remove unneeded classes
+  rm $DIST_SERVER_DIR/{SseController,RpcProxyController}.php
 
   # configuration files
   mkdir -p $DIST_CONF_DIR
@@ -134,6 +137,25 @@ EOF
   \$app = new yii\web\Application(\$config);
   \$app->run();
 EOF
+
+  # create yii executable for maintenance tasks
+  mkdir $DIST_DIR/server/bin
+  cat << EOF > $DIST_DIR/server/bin/yii
+#!/usr/bin/env php
+<?php
+  const YII_DEBUG=$BUILD_DEBUG_MODE;
+  const APP_ROOT_DIR = __DIR__;
+  const APP_LOG_NAME = "console.log";
+  define("DOTENV_FILE" , realpath("$DEPLOY_CONFIG_DIR/.env"));
+  define("APP_CONFIG_FILE", realpath("$DEPLOY_CONFIG_DIR/app.conf.toml"));
+  require './server/bootstrap.php';
+  \$config = require './server/config/console.php';
+  \$application = new yii\console\Application(\$config);
+  \$exitCode = \$application->run();
+  exit(\$exitCode);
+EOF
+  chmod +x $DIST_DIR/server/bin/yii
+  echo "DENY FROM ALL" >> $DIST_DIR/server/bin/.htaccess
 
   if [[ "$BUILD_SKIP" != *"composer"* ]]; then
     echo " - Adding composer dependencies ..."

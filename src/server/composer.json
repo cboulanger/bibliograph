@@ -4,7 +4,9 @@
       "php": "7.3"
     }
   },
+  "description": "PHP Backend for Bibliograph",
   "minimum-stability": "stable",
+  "name": "cboulanger/bibliograph",
   "replace": {
     "bower-asset/inputmask": "*",
     "bower-asset/jquery": "*",
@@ -51,7 +53,8 @@
     "voku/simple-cache": "^3.1",
     "yiisoft/yii2": "^2.0.32",
     "yiisoft/yii2-swiftmailer": "^2.1",
-    "yosymfony/toml": "^1.0.0"
+    "yosymfony/toml": "^1.0.0",
+    "ext-mysqli": "*"
   },
   "require-dev": {
     "bizley/migration": "^2.2",
