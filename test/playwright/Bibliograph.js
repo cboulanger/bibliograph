@@ -1,4 +1,4 @@
-const Application = require("../playwright/Application");
+const Application = require("./Application");
 
 class Bibliograph extends Application {
   /**

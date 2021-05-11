@@ -4,6 +4,7 @@
 # exports the TEST_EXIT_CODE environment variable
 set -e
 
+# install playwright library if not present
 [ -d node_modules/playwright ] || test/playwright/install
 
 USAGE=0;

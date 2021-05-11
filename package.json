@@ -68,8 +68,9 @@
     "globals": {
       "qx": true,
       "qcl": true,
-      "dialog": true,
+
       "bibliograph": true
     }
-  }
+  },
+  "dependencies": {}
 }
