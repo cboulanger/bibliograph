@@ -2,7 +2,7 @@
 
 namespace app\migrations\schema\bibliograph_datasource;
 
-use yii\db\Migration;
+use lib\migrations\Migration;
 
 /**
  * Class M180602204038_table_data_Reference_add_column_uuid

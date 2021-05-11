@@ -2,7 +2,7 @@
 
 namespace app\migrations\schema;
 
-use yii\db\Migration;
+use lib\migrations\Migration;
 
 /**
  * Class M180225162012_update_table_data_Datasource_expand_prefix

@@ -2,7 +2,7 @@
 
 namespace app\migrations\schema\bibliograph_datasource;
 
-use yii\db\Migration;
+use lib\migrations\Migration;
 
 /**
  * Class M180516082630_update_table_data_Reference_expand_isbn

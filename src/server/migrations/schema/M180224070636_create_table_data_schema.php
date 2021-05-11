@@ -3,7 +3,7 @@
 namespace app\migrations\schema;
 
 use lib\components\MigrationException;
-use yii\db\Migration;
+use lib\migrations\Migration;
 
 /**
  * Class M180224070636_create_table_data_schema
@@ -12,10 +12,7 @@ class M180224070636_create_table_data_schema extends Migration
 {
   public function safeUp()
   {
-    $tableOptions = null;
-    if ($this->db->driverName === 'mysql') {
-      $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
-    }
+    $tableOptions = $this->getTableOptions();
 
     $this->createTable('{{%data_Schema}}', [
       'id' => $this->integer(11)->notNull()->append('AUTO_INCREMENT PRIMARY KEY'),

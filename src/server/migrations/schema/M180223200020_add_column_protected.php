@@ -2,7 +2,7 @@
 
 namespace app\migrations\schema;
 
-use yii\db\Migration;
+use lib\migrations\Migration;
 
 /**
  * Class M180223200020_add_column_protected

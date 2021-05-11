@@ -3,7 +3,7 @@
 namespace app\migrations\schema\bibliograph_datasource;
 
 use Yii;
-use yii\db\Migration;
+use lib\migrations\Migration;
 
 /**
  * Class M180602120949_fix_integer_notnull_columns

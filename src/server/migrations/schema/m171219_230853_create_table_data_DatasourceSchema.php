@@ -1,6 +1,6 @@
 <?php
 namespace app\migrations\schema;
-use yii\db\Migration;
+use lib\migrations\Migration;
 
 class m171219_230853_create_table_data_DatasourceSchema extends Migration
 {

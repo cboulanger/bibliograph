@@ -2,7 +2,7 @@
 
 namespace app\migrations\schema\bibliograph_datasource;
 
-use yii\db\Migration;
+use lib\migrations\Migration;
 
 /**
  * Class M180511110319_move_editor_data_in_collections

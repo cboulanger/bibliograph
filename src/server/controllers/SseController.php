@@ -37,7 +37,7 @@ class SseController extends \yii\web\Controller
     return $this->renderPartial('test');
   }
 
-  protected $response;
+  public $response;
 
   protected function addToResponse( $line ){
     $this->response .= $line;

@@ -46,14 +46,13 @@
   "author": "Christian Boulanger (@cboulanger) info@bibliograph.org",
   "license": "ISC",
   "devDependencies": {
-    "@qooxdoo/compiler": "^1.0.0-beta-20201026-2041",
+    "@qooxdoo/compiler": "^1.0.0",
     "@qooxdoo/eslint-config-jsdoc-disable": "^1.0.3",
     "@qooxdoo/eslint-config-qx": "^1.3.5",
     "@qooxdoo/eslint-plugin-qx": "^1.2.1",
     "array-equal": "^1.0.0",
     "dotenv": "^8.0.0",
     "eslint": "^6.1.0",
-    "eslint-config-qx": "^0.2.6",
     "eslint-plugin-import": "^2.21.2",
     "json-diff": "^0.5.4",
     "tape": "^5.0.1"
@@ -72,6 +71,5 @@
       "dialog": true,
       "bibliograph": true
     }
-  },
-  "dependencies": {}
+  }
 }

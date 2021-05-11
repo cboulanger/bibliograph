@@ -2,7 +2,7 @@
 
 namespace app\migrations\schema\bibliograph_datasource;
 
-use yii\db\Migration;
+use lib\migrations\Migration;
 
 /**
  * Class M180301071642Update_table_data_Reference_add_fullext_index
