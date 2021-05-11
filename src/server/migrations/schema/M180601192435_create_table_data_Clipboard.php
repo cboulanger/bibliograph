@@ -2,7 +2,7 @@
 
 namespace app\migrations\schema;
 
-use yii\db\Migration;
+use lib\migrations\Migration;
 
 /**
  * Class M180601192435_create_table_data_Clipboard
@@ -14,10 +14,7 @@ class M180601192435_create_table_data_Clipboard extends Migration
    */
   public function safeUp()
   {
-    $tableOptions = null;
-    if ($this->db->driverName === 'mysql') {
-      $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
-    }
+    $tableOptions = $this->getTableOptions();
 
     $this->createTable('{{%data_Clipboard}}', [
       'id' => $this->integer(11)->notNull()->append('AUTO_INCREMENT PRIMARY KEY'),

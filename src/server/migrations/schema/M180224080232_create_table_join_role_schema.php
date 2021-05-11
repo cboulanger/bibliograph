@@ -2,7 +2,7 @@
 
 namespace app\migrations\schema;
 
-use yii\db\Migration;
+use lib\migrations\Migration;
 
 /**
  * Class M180224080232_create_table_join_role_schema
@@ -11,10 +11,7 @@ class M180224080232_create_table_join_role_schema extends Migration
 {
   public function safeUp()
   {
-    $tableOptions = null;
-    if ($this->db->driverName === 'mysql') {
-      $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
-    }
+    $tableOptions = $this->getTableOptions();
 
     $this->createTable('{{%join_Role_Schema}}', [
       'created' => $this->timestamp(),

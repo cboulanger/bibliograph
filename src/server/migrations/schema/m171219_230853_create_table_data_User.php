@@ -2,16 +2,13 @@
 
 namespace app\migrations\schema;
 
-use yii\db\Migration;
+use lib\migrations\Migration;
 
 class m171219_230853_create_table_data_User extends Migration
 {
   public function safeUp()
   {
-    $tableOptions = null;
-    if ($this->db->driverName === 'mysql') {
-      $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
-    }
+    $tableOptions = $this->getTableOptions();
 
     $this->createTable('{{%data_User}}', [
       'id' => $this->integer(11)->notNull()->append('AUTO_INCREMENT PRIMARY KEY'),
