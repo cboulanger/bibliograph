@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+CLEANUP=""
+case "$GITHUB_REF" in
+  *"merge"*)
+    echo "Not deploying merge."
+    exit 0
+    ;;
+  *"master"*)
+    DEPLOY_NAME="bibliograph_master"
+    # cleanup
+    CLEANUP="--drop-database-prefix bibliograph_testing_ --deploy-clean-dir-prefix bibliograph_testing_"
+    ;;
+  *"tags"*)
+    DEPLOY_NAME="bibliograph_latest"
+    ;;
+  *)
+    DEPLOY_NAME="bibliograph_testing_${GITHUB_REF##*/}"
+    ;;
+esac
+
+cat <<EOF > $HOME/deploy.env
+DB_TYPE=mysql
+DB_HOST=localhost
+DB_PORT=3306
+DB_DATABASE=$DEPLOY_NAME
+DB_USER=$DB_USER
+DB_PASSWORD=$DB_PASSWORD
+BIBUTILS_PATH=$BIBUTILS_PATH
+BACKUP_PATH=$BACKUP_PATH
+EOF
+echo "$DEPLOY_TOML" > $HOME/deploy.toml
+DEPLOY_DIR=$DEPLOY_PARENT_DIR/$DEPLOY_NAME
+tool/deploy/deploy \
+  --env-file .github/workflows/testing-github-build.env \
+  --deploy-dir $DEPLOY_DIR \
+  --database $DEPLOY_NAME \
+  --set-env APP_URL $DEPLOY_HOST/$DEPLOY_NAME \
+  --verbose \
+  --build-in-debug-mode \
+  --yes \
+  --create-user \
+  --empty-database \
+  $CLEANUP
