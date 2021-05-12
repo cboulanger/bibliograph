@@ -107,7 +107,7 @@ if [[ "$BUILD_SKIP" != *"server"* ]]; then
   mkdir -p $DIST_SERVER_DIR/runtime/{cache,logs}
 
   # remove unneeded classes
-  rm $DIST_SERVER_DIR/{SseController,RpcProxyController}.php
+  rm $DIST_SERVER_DIR/controllers/{SseController,RpcProxyController}.php
 
   # configuration files
   mkdir -p $DIST_CONF_DIR

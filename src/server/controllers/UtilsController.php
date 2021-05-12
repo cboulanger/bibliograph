@@ -5,22 +5,55 @@ namespace app\controllers;
 use lib\exceptions\Exception;
 use yii\console\ExitCode;
 use Yii;
+use function GuzzleHttp\default_ca_bundle;
 
 class UtilsController extends \yii\console\Controller
 {
+
+  /**
+   * @var string The name of the user, having sufficient privileges for the appropriate action
+   */
+  public $username;
+
+  /**
+   * @var string The passsword for the database
+   */
+  public $password;
+
+  /**
+   * @var string The host on which the database server is running
+   */
+  public $host;
+
+  /**
+   * @var string Any non-standard port number for the database server
+   */
+  public $port;
+
+  /**
+   * @var int The maximal index key length supported by the database engine
+   */
+  public $maxKeyLength = 3072;
+
+  /**
+   * Command line options
+   * @param string $actionID
+   * @return array|string[]
+   */
+  public function options($actionID)
+  {
+    // to do switch on action id
+    return ['username', 'password', 'host', 'port'];
+  }
+
   /**
    * Converts legacy databases to default encoding (utf8mb4). Works only with
-   * MySql/MariaDB. All parameters except $database_name are optional and will be
-   * taken from the application configuration if not provided
+   * MySql/MariaDB. All options are optional, if not provided, the information will be
+   * taken from the application configuration
    * @param string $database_name The name of the database to convert
-   * @param string $username The name of the user having sufficient access
-   *   rights to do the conversion
-   * @param string $password The password of that user
-   * @param string|null $host Optional host
-   * @param int|null $port Optional (non-standard) port
    * @return int
    */
-  public function actionUpdateEncoding(string $database_name, string $username=null, string $password=null, string $host=null, int $port=null)
+  public function actionUpdateEncoding(string $database_name)
   {
     // code is adapted from https://stackoverflow.com/questions/105572/a-script-to-change-all-tables-and-fields-to-the-utf-8-bin-collation-in-mysql
 
@@ -28,14 +61,17 @@ class UtilsController extends \yii\console\Controller
     $db = $database_name;
     preg_match("/host=([^;]+)/", Yii::$app->db->dsn, $h);
     preg_match("/port=([0-9]+)/", Yii::$app->db->dsn, $p);
-    $host = $host ?? $h[1];
-    $port = $port ?? $p[1];
-    $username = $username ?? Yii::$app->db->username;
-    $password = $password ?? Yii::$app->db->password;
-    // target
+    $host = $this->host ?? $h[1];
+    $port = $this->port ?? $p[1];
+    $username = $this->username ?? Yii::$app->db->username;
+    $password = $this->password ?? Yii::$app->db->password;
+
+    // target encoding
     $target_charset = "utf8mb4";
     $target_collation = "utf8mb4_unicode_ci";
     $target_bin_collation = "utf8mb4_bin";
+    $target_number_bytes=4;
+
     /**
      * @param $conn
      * @param $query
@@ -78,9 +114,7 @@ class UtilsController extends \yii\console\Controller
 
     try {
       // Connect to database
-      $conn = mysqli_connect($host, $username, $password, $port);
-      mysqli_select_db($conn, $db);
-      query($conn, "USE `$database_name`;");
+      $conn = mysqli_connect($host, $username, $password, $database_name, $port);
 
       // Get list of tables
       $tabs = array();
@@ -99,6 +133,7 @@ class UtilsController extends \yii\console\Controller
             foreach ($indices as $i => $index) {
               if ($index["name"] == $row['Key_name']) {
                 $indices[$i]["col"][] = $row['Column_name'];
+                $indices[$i]["length"][$row['Column_name']] = 0;
                 $append = false;
               }
             }
@@ -106,7 +141,8 @@ class UtilsController extends \yii\console\Controller
               $indices[] = [
                 "name" => $row['Key_name'],
                 "unique" => !($row['Non_unique'] == "1"),
-                "col" => [$row['Column_name']]
+                "col" => [$row['Column_name']],
+                "length" => [$row['Column_name'] => 0]
               ];
             }
           }
@@ -114,7 +150,7 @@ class UtilsController extends \yii\console\Controller
         // drop index
         foreach ($indices as $index) {
           query($conn, "ALTER TABLE `{$tab}` DROP INDEX `{$index["name"]}`");
-          echo "Dropped index {$index["name"]} of {$tab}. Unique: {$index["unique"]}\n";
+          echo "Dropped " . ($index["unique"] ? "unique" : "") . " index `{$index["name"]}` of `{$tab}`\n";
         }
         // analyze columns
         $res = query($conn, "SHOW FULL COLUMNS FROM `{$tab}`");
@@ -122,10 +158,13 @@ class UtilsController extends \yii\console\Controller
           $name = $row[0];
           $type = $row[1];
           // add length information to index
-          if (preg_match("/varchar\(([0-9]+)\)/", $type, $m)) {
-            foreach($indices as $i => $index) {
-              if (array_search($name, $index['col'])) {
-                $indices[$i]['length'] = $m[1];
+          foreach($indices as $i => $index) {
+            if (array_search($name, $index['col']) !== false) {
+              if (preg_match("/varchar\(([0-9]+)\)/i", $type, $m)) {
+                $indices[$i]['length'][$name] = $m[1];
+              } else if (stripos("text", $type) !== false) {
+                // only index the first 500 characters of the text field, unfortunate but a restriction of the engine
+                $indices[$i]['length'][$name] = 500;
               }
             }
           }
@@ -139,7 +178,7 @@ class UtilsController extends \yii\console\Controller
             query($conn, "ALTER TABLE `{$tab}` MODIFY `{$name}` {$binary_typename}");
             query($conn, "ALTER TABLE `{$tab}` MODIFY `{$name}` {$type} CHARACTER SET '{$target_charset}' COLLATE '{$target_collation}'");
             $set = true;
-            echo "Altered field {$name} on {$tab} of type {$type}\n";
+            echo "Altered field `{$name}` on `{$tab}` of type {$type}\n";
           }
           $target_collation = $target_collation_bak;
         }
@@ -147,9 +186,16 @@ class UtilsController extends \yii\console\Controller
         foreach ($indices as $index) {
           // Handle multi-column indices
           $joined_col_str = "";
+          $total_length = 0;
+          foreach ($index['length'] as $col => $length) {
+            $total_length += $length;
+          }
           foreach ($index["col"] as $col) {
-            if ($index['name'] == "fulltext" ){
-              $joined_col_str = $joined_col_str . ", `" . $col . "` ({$index['length']})";
+            if (isset($index['length'][$col]) and $index['length'][$col] > 0){
+              // decrease indexing lengths proportionally to the available length
+              $fraction = min(1,$this->maxKeyLength/($total_length*$target_number_bytes));
+              $length = max(4, floor( $index['length'][$col] * $fraction));
+              $joined_col_str = $joined_col_str . ", `" . $col . "`($length)";
             } else {
               $joined_col_str = $joined_col_str . ", `" . $col . "`";
             }
@@ -162,7 +208,7 @@ class UtilsController extends \yii\console\Controller
             $query = "CREATE INDEX `{$index["name"]}` ON `{$tab}` ({$joined_col_str})";
           }
           query($conn, $query);
-          echo "Created index {$index["name"]} on {$tab}. Unique: {$index["unique"]}\n";
+          echo "Created " . ($index["unique"] ? "unique" : "") . " `{$index["name"]}` on `{$tab}` with columns {$joined_col_str}. \n";
         }
         // Set default character set and collation for table
         query($conn, "ALTER TABLE `{$tab}`  DEFAULT CHARACTER SET '{$target_charset}' COLLATE '{$target_collation}'");
