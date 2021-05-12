@@ -27,41 +27,18 @@ qx.Class.define("qcl.access.AbstractManager",
   
   extend: qx.core.Object,
   
-  /*
-  *****************************************************************************
-     CONSTRUCTOR
-  *****************************************************************************
-  */
-  
   construct: function () {
     this.base(arguments);
     this._index = {};
     this._objects = {};
   },
   
-  /*
-  *****************************************************************************
-     MEMBERS
-  *****************************************************************************
-  */
-  
   members:
   {
-    /*
-    ---------------------------------------------------------------------------
-      PRIVATE MEMBERS
-    ---------------------------------------------------------------------------
-    */
     _index: null,
     _objects: null,
     _managedObjectClassName: null,
     _instance: null,
-    
-    /*
-    ---------------------------------------------------------------------------
-      USER API
-    ---------------------------------------------------------------------------
-    */
     
     /**
      * Adds managed object
@@ -103,11 +80,7 @@ qx.Class.define("qcl.access.AbstractManager",
      * @return {Array}
      */
     getAll: function () {
-      let list = [];
-      for (let key in Object.getOwnPropertyNames(this._objects)) {
-        list.push(this._objects[key] );
-      }
-      return list;
+      return Object.values(this._objects);
     },
     
     /**
@@ -119,12 +92,10 @@ qx.Class.define("qcl.access.AbstractManager",
       if (typeof ref === "object") {
         let obj = this.get(ref);
         return obj ? obj : null;
-      }
-      else if (typeof ref === "string") {
+      } else if (typeof ref === "string") {
         let hashCode = this._index[ref];
         return hashCode ? this._objects[hashCode] : null;
       }
-      
       return null;
     },
     
@@ -156,12 +127,7 @@ qx.Class.define("qcl.access.AbstractManager",
      * @return {Array}
      */
     getNamedIds: function () {
-      let objects = this._objects;
-      let names = [];
-      for (let key in objects) {
-        names.push(objects[key].getNamedId());
-      }
-      return names;
+      return Object.values(this._objects).map(obj => obj.getNamedId());
     },
     
     /**
@@ -171,12 +137,9 @@ qx.Class.define("qcl.access.AbstractManager",
      * @return {Object} Reference to created or existing object
      */
     create: function (name) {
-      
       if (typeof name !== "string") {
-        this.warn("Argument for create method must be a string, got '" + name + "'.");
-        return;
+        throw new TypeError("Argument for create method must be a string.");
       }
-      
       let obj = this.getObject(name);
       if (!qx.lang.Type.isObject(obj)) {
         obj = new qcl.access[this._type](name);
@@ -193,27 +156,16 @@ qx.Class.define("qcl.access.AbstractManager",
      * deletes all managed objects
      */
     deleteAll: function () {
-      let objects = this._objects;
-      for (let hashCode in objects) {
-        if (objects[hashCode]) {
-          objects[hashCode].dispose();
-        }
-        delete objects[hashCode];
-        objects = [];
-      }
+      Object.values(this._objects).forEach(obj => {
+        this.remove(obj);
+        obj.dispose();
+      });
+      this._objects = {};
+      this._index = {};
     }
   },
   
-  
-  /*
-  *****************************************************************************
-     DESTRUCTOR
-  *****************************************************************************
-  */
-  
   destruct: function () {
-    this._disposeArray("_index");
-    this._disposeMap("_objects");
+    this.deleteAll();
   }
 });
-

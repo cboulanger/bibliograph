@@ -71,6 +71,7 @@ class UtilsController extends \yii\console\Controller
     $target_collation = "utf8mb4_unicode_ci";
     $target_bin_collation = "utf8mb4_bin";
     $target_number_bytes=4;
+    $target_engine="InnoDB";
 
     /**
      * @param $conn
@@ -124,9 +125,13 @@ class UtilsController extends \yii\console\Controller
         $tabs[] = $row[0];
 
       // Now fix tables
-      foreach ($tabs as $tab) {
+      foreach ($tabs as $table) {
+        // change database engine
+        query($conn, "ALTER TABLE `$table` ENGINE = $target_engine;");
+        echo "Changed database engine of `$table` to $target_engine\n";
+        // indexes
         $indices = [];
-        $res = query($conn, "SHOW INDEX FROM `{$tab}`");
+        $res = query($conn, "SHOW INDEX FROM `{$table}`");
         while (($row = mysqli_fetch_array($res)) != null) {
           if ($row['Key_name'] != "PRIMARY") {
             $append = true;
@@ -138,9 +143,16 @@ class UtilsController extends \yii\console\Controller
               }
             }
             if ($append) {
+              $type = "";
+              if ($row['Non_unique'] != "1") {
+                $type = "UNIQUE";
+              } else if ($row['Index_type'] === "FULLTEXT") {
+                $type = "FULLTEXT";
+              }
               $indices[] = [
                 "name" => $row['Key_name'],
-                "unique" => !($row['Non_unique'] == "1"),
+                "type" => $type,
+                "typeLabel" => $type ? strtolower($type) . " " : "",
                 "col" => [$row['Column_name']],
                 "length" => [$row['Column_name'] => 0]
               ];
@@ -149,22 +161,24 @@ class UtilsController extends \yii\console\Controller
         }
         // drop index
         foreach ($indices as $index) {
-          query($conn, "ALTER TABLE `{$tab}` DROP INDEX `{$index["name"]}`");
-          echo "Dropped " . ($index["unique"] ? "unique" : "") . " index `{$index["name"]}` of `{$tab}`\n";
+          query($conn, "ALTER TABLE `{$table}` DROP INDEX `{$index["name"]}`");
+          echo "Dropped {$index["typeLabel"]}index `{$index["name"]}` of `{$table}`\n";
         }
         // analyze columns
-        $res = query($conn, "SHOW FULL COLUMNS FROM `{$tab}`");
+        $res = query($conn, "SHOW FULL COLUMNS FROM `{$table}`");
         while (($row = mysqli_fetch_array($res)) != null) {
           $name = $row[0];
           $type = $row[1];
           // add length information to index
           foreach($indices as $i => $index) {
-            if (array_search($name, $index['col']) !== false) {
+            $pos = array_search($name, $index['col']);
+            if ($pos !== false && $indices[$i]['type'] !== "FULLTEXT") {
               if (preg_match("/varchar\(([0-9]+)\)/i", $type, $m)) {
                 $indices[$i]['length'][$name] = $m[1];
               } else if (stripos("text", $type) !== false) {
-                // only index the first 500 characters of the text field, unfortunate but a restriction of the engine
-                $indices[$i]['length'][$name] = 500;
+                // convert to fulltext index
+                $indices[$i]['type'] = "FULLTEXT";
+                $indices[$i]['typeLabel'] = "fulltext ";
               }
             }
           }
@@ -175,10 +189,10 @@ class UtilsController extends \yii\console\Controller
           $set = false;
           $binary_typename = binary_typename($type);
           if ($binary_typename != "") {
-            query($conn, "ALTER TABLE `{$tab}` MODIFY `{$name}` {$binary_typename}");
-            query($conn, "ALTER TABLE `{$tab}` MODIFY `{$name}` {$type} CHARACTER SET '{$target_charset}' COLLATE '{$target_collation}'");
+            query($conn, "ALTER TABLE `{$table}` MODIFY `{$name}` {$binary_typename}");
+            query($conn, "ALTER TABLE `{$table}` MODIFY `{$name}` {$type} CHARACTER SET '{$target_charset}' COLLATE '{$target_collation}'");
             $set = true;
-            echo "Altered field `{$name}` on `{$tab}` of type {$type}\n";
+            echo "Altered field `{$name}` on `{$table}` of type {$type}\n";
           }
           $target_collation = $target_collation_bak;
         }
@@ -191,27 +205,22 @@ class UtilsController extends \yii\console\Controller
             $total_length += $length;
           }
           foreach ($index["col"] as $col) {
-            if (isset($index['length'][$col]) and $index['length'][$col] > 0){
-              // decrease indexing lengths proportionally to the available length
+            if (isset($index['length'][$col]) and $index['length'][$col] !== 0){
+              // decrease key length proportional to the available length
               $fraction = min(1,$this->maxKeyLength/($total_length*$target_number_bytes));
-              $length = max(4, floor( $index['length'][$col] * $fraction));
+              $length = floor( $index['length'][$col] * $fraction);
               $joined_col_str = $joined_col_str . ", `" . $col . "`($length)";
             } else {
               $joined_col_str = $joined_col_str . ", `" . $col . "`";
             }
           }
           $joined_col_str = substr($joined_col_str, 2);
-          $query = "";
-          if ($index["unique"]) {
-            $query = "CREATE UNIQUE INDEX `{$index["name"]}` ON `{$tab}` ({$joined_col_str})";
-          } else {
-            $query = "CREATE INDEX `{$index["name"]}` ON `{$tab}` ({$joined_col_str})";
-          }
+          $query = "CREATE {$index['type']} INDEX `{$index["name"]}` ON `{$table}` ({$joined_col_str})";
           query($conn, $query);
-          echo "Created " . ($index["unique"] ? "unique" : "") . " `{$index["name"]}` on `{$tab}` with columns {$joined_col_str}. \n";
+          echo "Created {$index["typeLabel"]}index `{$index["name"]}` on `{$table}` with columns {$joined_col_str}. \n";
         }
         // Set default character set and collation for table
-        query($conn, "ALTER TABLE `{$tab}`  DEFAULT CHARACTER SET '{$target_charset}' COLLATE '{$target_collation}'");
+        query($conn, "ALTER TABLE `{$table}`  DEFAULT CHARACTER SET '{$target_charset}' COLLATE '{$target_collation}'");
         $indices = null;
       }
       // Set default character set and collation for database

@@ -31,6 +31,7 @@ BUILD_DEBUG_MODE=${BUILD_DEBUG_MODE:-0}
 BUILD_NAME=${BUILD_NAME:-$BUILD_TARGET}
 DIST_DIR=${DIST_DIR:-$(pwd)/dist/$BUILD_NAME}
 DIST_SERVER_DIR=${DIST_SERVER_DIR:-$DIST_DIR/server}
+DEPLOY_DIR=${DEPLOY_DIR:-""}
 DIST_CONF_DIR=${DIST_CONF_DIR:-$DIST_DIR/config}
 DEPLOY_CONFIG_DIR=${DEPLOY_CONFIG_DIR:-"./config"}
 
@@ -59,6 +60,7 @@ if [[ $BUILD_VERBOSE == 1 ]]; then
   echo "   Application .env file:  $APP_ENV_FILE"
   echo "   Build directory:        $DIST_DIR"
   echo "   Appl. config file:      $APP_CONF_FILE"
+  echo "   Deployment directory:   $DEPLOY_DIR"
   echo "   Deployment config dir:  $DEPLOY_CONFIG_DIR"
   echo "   Compiler version:       $($QX_CMD --version)"
   echo "   Custom Logo:            $([[ $BUILD_LOGO_PATH != "" ]] && echo "$BUILD_LOGO_PATH" || echo "No")"
@@ -116,10 +118,10 @@ if [[ "$BUILD_SKIP" != *"server"* ]]; then
 
   # .htaccess files
   cat << EOF > $DIST_DIR/.htaccess
-  RewriteEngine on
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule . server.php
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . server.php
 EOF
   echo "DENY FROM ALL" >> $DIST_SERVER_DIR/.htaccess
   echo "DENY FROM ALL" >> $DIST_CONF_DIR/.htaccess
@@ -127,32 +129,32 @@ EOF
   # create server.php
   cat << EOF > $DIST_DIR/server.php
 <?php
-  const YII_DEBUG=$BUILD_DEBUG_MODE;
-  const APP_ROOT_DIR = __DIR__;
-  define("APP_FRONTEND_DIR", realpath("./bibliograph"));
-  define("DOTENV_FILE" , realpath("$DEPLOY_CONFIG_DIR/.env"));
-  define("APP_CONFIG_FILE", realpath("$DEPLOY_CONFIG_DIR/app.conf.toml"));
-  require './server/bootstrap.php';
-  \$config = require './server/config/web.php';
-  \$app = new yii\web\Application(\$config);
-  \$app->run();
+const YII_DEBUG=$BUILD_DEBUG_MODE;
+const APP_ROOT_DIR = __DIR__;
+const DOTENV_FILE = "$DEPLOY_CONFIG_DIR/.env";
+const APP_CONFIG_FILE = "$DEPLOY_CONFIG_DIR/app.conf.toml";
+const APP_FRONTEND_DIR = "$DEPLOY_DIR/bibliograph";
+require './server/bootstrap.php';
+\$config = require './server/config/web.php';
+\$app = new yii\web\Application(\$config);
+\$app->run();
 EOF
 
   # create yii executable for maintenance tasks
-  mkdir $DIST_DIR/server/bin
+  mkdir -p $DIST_DIR/server/bin
   cat << EOF > $DIST_DIR/server/bin/yii
 #!/usr/bin/env php
 <?php
-  const YII_DEBUG=$BUILD_DEBUG_MODE;
-  const APP_ROOT_DIR = __DIR__;
-  const APP_LOG_NAME = "console.log";
-  define("DOTENV_FILE" , realpath("$DEPLOY_CONFIG_DIR/.env"));
-  define("APP_CONFIG_FILE", realpath("$DEPLOY_CONFIG_DIR/app.conf.toml"));
-  require './server/bootstrap.php';
-  \$config = require './server/config/console.php';
-  \$application = new yii\console\Application(\$config);
-  \$exitCode = \$application->run();
-  exit(\$exitCode);
+const YII_DEBUG=$BUILD_DEBUG_MODE;
+const APP_ROOT_DIR = __DIR__;
+const APP_LOG_NAME = "console.log";
+const DOTENV_FILE = "$DEPLOY_CONFIG_DIR/.env";
+const APP_CONFIG_FILE = "$DEPLOY_CONFIG_DIR/app.conf.toml";
+require './server/bootstrap.php';
+\$config = require './server/config/console.php';
+\$application = new yii\console\Application(\$config);
+\$exitCode = \$application->run();
+exit(\$exitCode);
 EOF
   chmod +x $DIST_DIR/server/bin/yii
   echo "DENY FROM ALL" >> $DIST_DIR/server/bin/.htaccess
