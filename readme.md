@@ -53,7 +53,7 @@ Bibliograph can be used by
 - Easily extendable with custom plugins.
 
 ## Installation and Deployment
-See [here](doc/dev/install.md).
+See [here](doc/dev/index.md).
 
 ## Support
 - Bugs and feature requests should be registered as [github issues](https://github.com/cboulanger/bibliograph/issues).

@@ -2,12 +2,10 @@
 
 namespace app\controllers;
 
-use lib\exceptions\Exception;
 use yii\console\ExitCode;
 use Yii;
-use function GuzzleHttp\default_ca_bundle;
 
-class UtilsController extends \yii\console\Controller
+class DatabaseController extends \yii\console\Controller
 {
 
   /**

@@ -32,13 +32,14 @@ BUILD_NAME=${BUILD_NAME:-$BUILD_TARGET}
 DIST_DIR=${DIST_DIR:-$(pwd)/dist/$BUILD_NAME}
 DIST_SERVER_DIR=${DIST_SERVER_DIR:-$DIST_DIR/server}
 DEPLOY_DIR=${DEPLOY_DIR:-""}
+DEPLOY_ENV_FILE=${DEPLOY_ENV_FILE:-$APP_ENV_FILE}
 DIST_CONF_DIR=${DIST_CONF_DIR:-$DIST_DIR/config}
 DEPLOY_CONFIG_DIR=${DEPLOY_CONFIG_DIR:-"./config"}
 
 [[ "$BUILD_SKIP" == "all" ]] && exit_with_error "Build script called although build should be skipped (BUILD_SKIP==all)"
 
 # checks
-[[ -f "$APP_ENV_FILE" ]] || exit_with_error "APP_ENV_FILE: File '$APP_ENV_FILE' does not exist"
+[[ -f "$DEPLOY_ENV_FILE" ]] || exit_with_error "APP_ENV_FILE/DEPLOY_ENV_FILE: File '$DEPLOY_ENV_FILE' does not exist"
 [[ -f "$APP_CONF_FILE" ]] || exit_with_error "APP_CONF_FILE: File '$APP_CONF_FILE' does not exist"
 [[ -f "$BUILD_FILE" ]] || exit_with_error "BUILD_FILE: File '$BUILD_FILE' does not exist"
 
@@ -57,11 +58,11 @@ echo "Building deployable/distributable version of Bibliograph"
 if [[ $BUILD_VERBOSE == 1 ]]; then
   echo "   Qooxdoo build file:     $BUILD_FILE"
   echo "   Qooxdoo build target:   $BUILD_TARGET"
-  echo "   Application .env file:  $APP_ENV_FILE"
   echo "   Build directory:        $DIST_DIR"
   echo "   Appl. config file:      $APP_CONF_FILE"
   echo "   Deployment directory:   $DEPLOY_DIR"
   echo "   Deployment config dir:  $DEPLOY_CONFIG_DIR"
+  echo "   Deployed .env file:     $DEPLOY_ENV_FILE"
   echo "   Compiler version:       $($QX_CMD --version)"
   echo "   Custom Logo:            $([[ $BUILD_LOGO_PATH != "" ]] && echo "$BUILD_LOGO_PATH" || echo "No")"
   echo "   Build ZIP file:         $([[ $ZIP_NAME != "" ]] && echo "$ZIP_NAME" || echo "No")"
@@ -114,7 +115,7 @@ if [[ "$BUILD_SKIP" != *"server"* ]]; then
   # configuration files
   mkdir -p $DIST_CONF_DIR
   cp $APP_CONF_FILE $DIST_CONF_DIR/app.conf.toml
-  cp $APP_ENV_FILE $DIST_CONF_DIR/.env
+  cp $DEPLOY_ENV_FILE $DIST_CONF_DIR/.env
 
   # .htaccess files
   cat << EOF > $DIST_DIR/.htaccess
