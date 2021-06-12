@@ -99,17 +99,30 @@ class Form extends Dialog
   public $allowCancel = false;
 
   /**
-   * @param $value
+   * @param bool $value
    * @return $this
    */
   public function setAllowCancel(bool $value){$this->allowCancel=$value; return $this;}
+
+  /**
+   * The width of the form, defaults to 300px
+   * @var int
+   */
+  public $width = 300;
+
+  /**
+   * @param int $value
+   * @return $this
+   */
+  public function setWidth(int $value){$this->width=$value; return $this;}
+
 
   /**
    * @inheritdoc
    */
   public function sendToClient($properties=[])
   {
-    return parent::sendToClient(array_merge($properties,['formData','message','allowCancel']));
+    return parent::sendToClient(array_merge($properties,['formData','message','allowCancel','width']));
   }
 
   /**

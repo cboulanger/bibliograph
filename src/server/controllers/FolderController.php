@@ -535,26 +535,30 @@ class FolderController extends AppController implements ITreeController
   public function actionAddDialog($datasource, $folderId)
   {
     $this->requirePermission("folder.add", $datasource);
-    Form::create(
-      Yii::t('app', "Please enter the name and type of the new folder:"),
-      [
-        'label' => [
-          'label' => Yii::t('app', "Name"),
-          'type' => "textfield",
-          'width' => 200
-        ],
-        'searchfolder' => [
-          'label' => Yii::t('app', "Type"),
-          'type' => "SelectBox",
-          'options' => [
-            ['label' => Yii::t('app', "Normal folder"), 'value' => 0],
-            ['label' => Yii::t('app', "Search folder"), 'value' => 1]
+    (new Form())
+      ->setMessage(Yii::t('app', "Please enter the name and type of the new folder:"))
+      ->setFormData([
+          'label' => [
+            'label' => Yii::t('app', "Name"),
+            'type' => "textfield",
+            'width' => 200
           ],
-          'value' => false
+          'searchfolder' => [
+            'label' => Yii::t('app', "Type"),
+            'type' => "SelectBox",
+            'options' => [
+              ['label' => Yii::t('app', "Normal folder"), 'value' => 0],
+              ['label' => Yii::t('app', "Search folder"), 'value' => 1]
+            ],
+            'value' => false
+          ]
         ]
-      ], true,
-      Yii::$app->controller->id, "create", array($datasource, $folderId)
-    );
+      )
+      ->setAllowCancel(true)
+      ->setService(Yii::$app->controller->id)
+      ->setMethod( "create")
+      ->setParams(array($datasource, $folderId))
+      ->sendToClient();
     return "Created dialog to add new folder";
   }
 

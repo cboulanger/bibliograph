@@ -96,7 +96,7 @@ qx.Class.define("qcl.ui.dialog.ServerDialog", {
      */
     __onServerDialog(message) {
       if (!this.getEnabled()) {
-        console.warn("Not enabled!");
+        console.warn("Server dialogs disabled!");
         return;
       }
       let app = qx.core.Init.getApplication();
@@ -231,6 +231,7 @@ qx.Class.define("qcl.ui.dialog.ServerDialog", {
       delete data.properties.requireInput;
       
       // set all properties
+      
       widget.set(data.properties);
       
       //todo: show() must not create a new blocker.
