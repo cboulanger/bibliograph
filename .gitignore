@@ -14,8 +14,8 @@ package-lock.json
 .phplint-cache
 .nyc_output
 
-# we don't need to track changes in the workspace file of PHPStorm
-.idea/workspace.xml
+# IDEs
+.idea/
 
 # Distributable ZIP File
 /*.zip
