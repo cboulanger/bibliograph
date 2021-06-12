@@ -24,7 +24,7 @@ class m180105_075452_data_UserDataInsert extends Migration
           'online' => '0',
         ],
         [
-          'namedId' => 'user1',
+          'namedId' => 'manager',
           'name' => 'Manager user',
           'password' => '200d91c0982ef9a080af57a6760b296d186cc2715437422d1', // "manager"
           'email' => null,
@@ -35,7 +35,7 @@ class m180105_075452_data_UserDataInsert extends Migration
           'online' => '0',
         ],
         [
-          'namedId' => 'user2',
+          'namedId' => 'user',
           'name' => 'Normal user',
           'password' => '9f64bfb103e7765db6ed68827c4b8234be18a10f04885ff83', // "user"
           'email' => null,
