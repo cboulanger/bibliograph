@@ -34,14 +34,7 @@ $from     = Configuration::get('email.errors_from');
 $to       = Configuration::get('email.errors_to');
 $subject  = Configuration::get('email.errors_subject');
 $except   = ['jsonrpc','yii\web\HttpException*'];
-$logVars = [
-  '_GET',
-//  '_POST',  reveal passwords if error occurs during authentication
-  '_FILES',
-  '_COOKIE',
-  '_SESSION',
-  '_SERVER',
-];
+$logVars = []; // don't log any, might contain passwords etc.
 if ($from and $to and $subject) {
   $log_config['targets']['mail'] = [
     'class' => \yii\log\EmailTarget::class,
