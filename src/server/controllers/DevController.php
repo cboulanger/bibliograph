@@ -85,7 +85,7 @@ class DevController extends \yii\console\Controller
   public function actionReset() {
     $this->actionResetCaches();
     $this->actionResetDatabase();
-    echo "Application reset to factory state. Clear your browser cookies to finishe the reset.\n";
+    echo "Application reset to factory state. In your browser, clear cookies AND session/local storage to finish the reset.\n";
   }
 
 }
