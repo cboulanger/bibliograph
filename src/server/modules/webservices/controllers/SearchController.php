@@ -74,10 +74,12 @@ class SearchController extends AppController
         }
       } catch (UserErrorException $e) {
         Yii::debug($e->getMessage());
-        return $progressBar->error($e->getMessage());
+        $progressBar->error($e->getMessage());
+        return;
       } catch (RecordNotFoundException $e) {
         Yii::debug($e->getMessage());
-        return $progressBar->error($e->getMessage());
+        $progressBar->error($e->getMessage());
+        return;
       } catch (\Throwable $e) {
         Yii::error($e);
         $progressBar->error($e->getMessage());

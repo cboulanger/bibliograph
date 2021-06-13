@@ -68,7 +68,9 @@ class All extends AbstractConnector implements IConnector
     }
     $count = 0;
     foreach (Module::getInstance()->getConnectors() as &$connector) {
-      if ($connector->getId() === $this->id) {
+      $datasourceName = "webservices_" . $connector->getId();
+      $datasource = Datasource::getInstanceFor($datasourceName);
+      if (!$datasource or !$datasource->active or $connector->id === $this->id) {
         continue;
       }
       try {
