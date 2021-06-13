@@ -399,6 +399,25 @@ qx.Class.define("bibliograph.ui.window.AccessControlTool",
       allowLinkPermission.update();
       allowUnlinkPermission.update();
     });
+    // double click on element in the tree selects it in the left pane
+    elementTree.addListener("dblclick", e => {
+      let model = elementTree.getSelection()[0].getModel();
+      let value = model.getValue();
+      if (value && value.includes("=")) {
+        let [type, id] = value.split("=");
+        let sel = leftSelectBoxController.getModel().filter(item => item.getValue() === type);
+        if (sel.length) {
+          leftSelectBoxController.getSelection().replace(sel);
+          leftListStore.addListenerOnce("changeModel", e => {
+            let model = e.getData();
+            if (model){
+              sel = model.filter(item => item.getValue() === id);
+              leftList.getSelection().replace(sel);
+            }
+          });
+        }
+      }
+    });
 
     // tree button pane
     let treeBtnPane = new qx.ui.container.Composite(new qx.ui.layout.HBox(10));
