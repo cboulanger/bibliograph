@@ -125,7 +125,10 @@ trait TableCommandActionsTrait {
       try{
         $targetFolder->link("references", $reference);
       } catch (Exception $e){
-        Yii::error($e);
+        // ignore duplicate links
+        if ($e->getCode() !== 1062){
+          Yii::error($e);
+        }
       }
     }
 
