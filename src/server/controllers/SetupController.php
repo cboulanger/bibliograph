@@ -27,6 +27,7 @@ use georgique\yii2\jsonrpc\exceptions\JsonRpcException;
 use Illuminate\Support\Str;
 use lib\plugin\PluginInterface;
 use Yii;
+use yii\base\BaseObject;
 use yii\db\Exception;
 use app\models\Schema;
 use lib\components\MigrationException;
@@ -86,6 +87,13 @@ class SetupController extends AppController
    * @var array
    */
   protected $messages = [];
+
+  /**
+   * As array of strings containing messages that are shown to the user
+   * at the end of the setup process
+   * @var array
+   */
+  protected $userFeedback = [];
 
   /**
    * The number of setup methods in total
@@ -555,8 +563,11 @@ class SetupController extends AppController
   {
     $this->counter++;
     return (new Progress())
+      ->setCaption(Yii::t("app", "Application setup"))
       ->setMessage("Setting up application ($this->counter/$this->numberOfSetupMethods) ...")
+      ->setShowProgressBar(true)
       ->setProgress(round(($this->counter/$this->numberOfSetupMethods)*100))
+      ->setOkButtonText(null)
       ->show();
   }
 
@@ -587,6 +598,22 @@ class SetupController extends AppController
     $this->upgrade_from = $this->upgrade_to;
     Yii::info($msg, self::CATEGORY);
     Yii::debug($this->messages, self::CATEGORY);
+
+    // user feedback
+    if (count($this->userFeedback)) {
+      (new Progress())
+        ->setCaption(Yii::t("app", "Setup complete."))
+        ->setShowLog(true)
+        ->setProgress(100)
+        ->setShowProgressBar(false)
+        ->setOkButtonText(Yii::t("app", "Finish setup"))
+        ->setLogContent(implode("\n\n", $this->userFeedback))
+        ->sendToClient();
+      $this->userFeedback = [];
+    } else {
+      (new Progress())->hide();
+    }
+    // save the modified properties
     $this->saveOwnProperties();
     // update version
     if (!Yii::$app->config->keyExists('app.version')) {
@@ -598,7 +625,6 @@ class SetupController extends AppController
     $ldapEnabled =  Yii::$app->config->getIniValue("ldap.enabled");
     Yii::$app->config->setKeyDefault("ldap.enabled",$ldapEnabled);
     $this->dispatchClientMessage("bibliograph.setup.done", $this->messages);
-    (new Progress())->hide();
     return $msg;
   }
 
@@ -702,11 +728,16 @@ class SetupController extends AppController
         throw new SetupFatalException('Invalid database setup. Please contact the adminstrator.');
       }
     }
-    // fresh installation
+
     if ($this->isNewInstallation) {
+      // fresh installation
       $message = 'Found empty database';
-    } // if this is an upgrade from a v2 installation, manually add migration history
+      $this->userFeedback[] = Yii::t("app",
+        "Created users 'admin', 'manager' and 'user' with passwords 'admin', 'manager' and 'user'." +
+        "Please log in as admin, set new passwords and/or remove users that you don't need.");
+    }
     elseif ($upgrade_from == "2.x") {
+      // if this is an upgrade from a v2 installation, manually add migration history
       if (!$allTablesExist) {
         throw new SetupFatalException('Cannot update from Bibliograph v2 data: some tables are missing.');
       }

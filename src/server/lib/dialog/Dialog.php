@@ -100,6 +100,8 @@ class Dialog extends \yii\base\BaseObject
    */
   public function sendToClient(array $properties=[])
   {
+    $properties = array_merge($properties, ['caption']);
+    // shouldn't this send all public properties by default?
     if (count($properties)) {
       foreach ($properties as $key) {
         if ($this->$key !== null) {

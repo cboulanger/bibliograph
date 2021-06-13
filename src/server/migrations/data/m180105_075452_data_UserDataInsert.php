@@ -15,6 +15,7 @@ class m180105_075452_data_UserDataInsert extends Migration
         [
           'namedId' => 'admin',
           'name' => 'Administrator',
+          // Yii::$app->accessManager->generateHash($data->password)
           'password' => '273a41fc35358d3f4612b4b67c62fc9111e0d175b9d61d72a', // "admin"
           'email' => null,
           'anonymous' => '0',
