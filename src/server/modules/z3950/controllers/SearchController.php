@@ -282,6 +282,8 @@ class SearchController extends AppController
 
     // convert to MODS
     $mods = $result->toMods();
+    // remove control characters
+    $mods = preg_replace('/[[:^print:]]/u', '', $mods);
     //Yii::debug(ml("MODS", $mods), Module::CATEGORY);
 
     // convert to bibtex and fix some issues
@@ -299,14 +301,16 @@ class SearchController extends AppController
       throw new UserErrorException(Yii::t(Module::CATEGORY, "Cannot convert server response"));
     }
 
+    // save record info which is not translated into BibTeX
+    $modsCollection = new \SimpleXMLElement($mods);
+
     // saving to local cache
     Yii::debug("Caching records...", Module::CATEGORY);
 
     $step = 10 / count($records);
     $i = 0;
 
-
-    foreach ($records as $item) {
+    foreach ($records as $index => $item) {
       if ($progressBar) {
         $progressBar->setProgress(
           round (90 + ($step * $i++)),
@@ -316,7 +320,16 @@ class SearchController extends AppController
 
       $p = $item->getProperties();
 
-      // fix bibtex parser issues and prevemt validation errors
+      // record identifier
+      $col = "lccn";
+      $identifier = (string) $modsCollection->mods[$index]->recordInfo->recordIdentifier;
+      if ($identifier) {
+        $v = isset($p[$col]) ? $p[$col] : "";
+        $p[$col] = $v ? "$v; $identifier" : $identifier;
+      }
+
+
+      // fix bibtex parser issues and prevent validation errors
       foreach ( $p as $key => $value ) {
         switch ($key){
           case "author":
