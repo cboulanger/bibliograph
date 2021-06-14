@@ -604,8 +604,8 @@ qx.Class.define("bibliograph.ui.main.MultipleTreeView",
       params.datasource = this.getDatasource();
       params.nodeId = this.getNodeId();
       params.auth_token = app.getAccessManager().getToken();
-      let url = app.getServerUrl() + "/report/create&";
-      url += qx.util.Uri.toParameter(params) + "&nocache=" + Math.random();
+      let url = app.getServerUrl() + "/report/create";
+      url += (url.includes("?") ? "&" : "?" ) + qx.util.Uri.toParameter(params) + "&nocache=" + Math.random();
       window.open(url);
     }
   }

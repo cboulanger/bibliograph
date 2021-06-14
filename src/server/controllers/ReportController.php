@@ -9,6 +9,8 @@
 namespace app\controllers;
 
 use app\controllers\traits\AuthTrait;
+use app\controllers\traits\DatasourceTrait;
+use app\controllers\traits\QueryActionsTrait;
 use app\controllers\traits\TableControllerTrait;
 use app\models\Datasource;
 use app\models\Folder;
@@ -22,6 +24,8 @@ class ReportController extends \yii\web\Controller
 
   use AuthTrait;
   use TableControllerTrait;
+  use QueryActionsTrait;
+  use DatasourceTrait;
 
   public function actionCreate($datasource, $nodeId)
   {
@@ -43,7 +47,7 @@ class ReportController extends \yii\web\Controller
       'level'      => 1,
       'controller' => $this
     ];
-    return $this->renderPartial('subtree', $params);
+    return $this->renderPartial('@views/report/subtree', $params);
   }
 
   /**
@@ -52,6 +56,7 @@ class ReportController extends \yii\web\Controller
    * @return Folder
    */
   public function getFolder($datasourceName, $folderId) {
+    /** @var Folder $folder */
     $folder =  (Datasource::in($datasourceName, "folder"))::findOne($folderId);
     if (!$folder){
       throw new UserErrorException("Invalid folder id $folderId");
