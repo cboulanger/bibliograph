@@ -606,7 +606,7 @@ class Datasource extends BaseModel
    * This implicitly sets the static property 'datasource' of the class to the
    * current datasource name.
    * @param string $type
-   * @return BaseModel
+   * @return string
    * @throws InvalidArgumentException
    */
   public function getClassFor($type)
