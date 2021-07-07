@@ -8,8 +8,8 @@ use Exception;
 use app\controllers\{AppController, traits\AuthTrait, traits\DatasourceTrait};
 use app\modules\z3950\Module;
 use app\models\Datasource;
-use app\modules\z3950\models\{ Record, Search, Datasource as Z3950Datasource };
-use app\modules\z3950\lib\yaz\{ CclQuery, MarcXmlResult, Yaz, YazException, YazTimeoutException };
+use app\modules\z3950\models\{Record, Search, Datasource as Z3950Datasource};
+use app\modules\z3950\lib\yaz\{CclQuery, MarcXmlResult, Yaz, YazException, YazTimeoutException};
 use lib\dialog\ServerProgress;
 use lib\exceptions\UserErrorException;
 use lib\bibtex\BibtexParser;
@@ -28,7 +28,7 @@ class SearchController extends AppController
 
   protected function getNoAuthActions()
   {
-    return ['index','test'];
+    return ['index', 'test'];
   }
 
   public function actionIndex()
@@ -42,7 +42,7 @@ class SearchController extends AppController
       throw new UnauthorizedHttpException("Unauthorized");
     }
     Yii::$app->user->login(User::findByNamedId("admin"));
-    $this->actionProgress("z3950_voyager","shakespeare's english","1234");
+    $this->actionProgress("z3950_voyager", "shakespeare's english", "1234");
   }
 
   /**
@@ -64,10 +64,10 @@ class SearchController extends AppController
       $progressBar->complete();
     } catch (YazTimeoutException $e) {
       // retry
-      if( $retries < 4){
+      if ($retries < 4) {
         $progressBar->setProgress(0, Yii::t("plugin.z3950", "Server timed out. Trying again..."));
-        sleep(rand(1,3));
-        $this->actionProgress($datasource, $query, $progressBar );
+        sleep(rand(1, 3));
+        $this->actionProgress($datasource, $query, $progressBar);
       } else {
         $progressBar->error(Yii::t("plugin.z3950", "Server timed out."));
       }
@@ -111,10 +111,10 @@ class SearchController extends AppController
    * @throws UserErrorException
    * @throws Exception
    */
-  public function sendRequest( string $datasourceName, $query, ServerProgress $progressBar = null)
+  public function sendRequest(string $datasourceName, $query, ServerProgress $progressBar = null)
   {
     $datasource = Datasource::getInstanceFor($datasourceName);
-    if( ! $datasource or ! $datasource instanceof Z3950Datasource ){
+    if (!$datasource or !$datasource instanceof Z3950Datasource) {
       throw new \InvalidArgumentException("Invalid datasource '$datasourceName'.");
     }
     // set datasource table prefixes
@@ -122,7 +122,7 @@ class SearchController extends AppController
     Record::setDatasource($datasource);
 
     // remember last datasource used
-    $this->module->setPreference("lastDatasource", $datasourceName );
+    $this->module->setPreference("lastDatasource", $datasourceName);
     $query = $this->module->fixQueryString($query);
 
     Yii::debug("Executing query '$query' on remote Z39.50 database '$datasourceName' ...", Module::CATEGORY);
@@ -132,7 +132,7 @@ class SearchController extends AppController
       $yaz->connect();
     } catch (YazException $e) {
       throw new UserErrorException(
-        Yii::t("plugin.z3950", "Cannot connect to server: '{error}'.", [ 'error' => $yaz->getError() ] ),
+        Yii::t("plugin.z3950", "Cannot connect to server: '{error}'.", ['error' => $yaz->getError()]),
         null, $e
       );
     }
@@ -143,7 +143,7 @@ class SearchController extends AppController
       $ccl->toRpn($yaz);
     } catch (YazException $e) {
       throw new UserErrorException(
-        Yii::t("plugin.z3950", "Invalid query '{query}'", [ 'query' => $query ] ), null, $e
+        Yii::t("plugin.z3950", "Invalid query '{query}'", ['query' => $query]), null, $e
       );
     }
 
@@ -153,14 +153,14 @@ class SearchController extends AppController
       throw new UserErrorException(
         Yii::t("plugin.z3950",
           "The server does not understand the query '{query}'. Please try a different query.",
-          [ 'query' => $query ]
+          ['query' => $query]
         ), null, $e
       );
     }
 
     try {
       $syntax = $yaz->setPreferredSyntax(["marc"]);
-      Yii::debug("Syntax is '$syntax' ...",Module::CATEGORY);
+      Yii::debug("Syntax is '$syntax' ...", Module::CATEGORY);
     } catch (YazException $e) {
       throw new UserErrorException(Yii::t(Module::CATEGORY, "Server does not support a convertable format."));
     }
@@ -177,8 +177,8 @@ class SearchController extends AppController
     // Result
     try {
       $yaz->wait($options);
-    } catch ( YazException $e) {
-      Yii::debug("Server error (yaz_wait): ". $e->getMessage(), Module::CATEGORY);
+    } catch (YazException $e) {
+      Yii::debug("Server error (yaz_wait): " . $e->getMessage(), Module::CATEGORY);
       throw new UserErrorException(
         Yii::t(Module::CATEGORY, "Server error: {error}", ['error' => $e->getMessage()])
       );
@@ -196,7 +196,7 @@ class SearchController extends AppController
       throw new UserErrorException(Yii::t(
         Module::CATEGORY,
         "The number of results is higher than {number} records. Please narrow down your search.",
-        [ 'number' => $maxHits ]
+        ['number' => $maxHits]
       ));
     }
     Yii::debug("Found $hits records...", Module::CATEGORY);
@@ -205,12 +205,12 @@ class SearchController extends AppController
     $userId = Yii::$app->user->identity->getId();
     Yii::debug("Deleting existing search data for query '$query'...", Module::CATEGORY);
     /** @var Search[] $searches */
-    $searches = (array) Search::find()->where(['query' => $query, 'UserId' => $userId ])->all();
+    $searches = (array)Search::find()->where(['query' => $query, 'UserId' => $userId])->all();
     foreach ($searches as $search) {
       try {
         $search->delete();
       } catch (\Throwable $e) {
-        Yii::debug($e->getMessage(),Module::CATEGORY);
+        Yii::debug($e->getMessage(), Module::CATEGORY);
       }
     }
     // create new search
@@ -227,7 +227,7 @@ class SearchController extends AppController
     if ($progressBar) {
       $progressBar->setProgress(10, Yii::t(
         Module::CATEGORY, "Found {number} records. Please wait...",
-        ['number'=>$hits]
+        ['number' => $hits]
       ));
     }
 
@@ -246,22 +246,22 @@ class SearchController extends AppController
     for ($i = 1; $i <= $hits; $i++) {
       try {
         $result->addRecord($i);
-        if ($progressBar){
+        if ($progressBar) {
           $progressBar->setProgress(10 + (($i / $hits) * 80),
-            Yii::t( Module::CATEGORY,"Retrieving {index} of {number} records...",   [ 'index' =>$i, 'number' => $hits])
+            Yii::t(Module::CATEGORY, "Retrieving {index} of {number} records...", ['index' => $i, 'number' => $hits])
           );
         }
       } catch (YazException $e) {
         if (stristr($e->getMessage(), "timeout")) {
           throw new UserErrorException(
-            Yii::t( Module::CATEGORY,
+            Yii::t(Module::CATEGORY,
               "Server timeout trying to retrieve {number} records: try a more narrow search",
-              ['number'=>$hits]
+              ['number' => $hits]
             )
           );
         }
         throw new UserErrorException(
-          Yii::t(Module::CATEGORY,"Server error: {error}.", ['error' => $e->getMessage()])
+          Yii::t(Module::CATEGORY, "Server error: {error}.", ['error' => $e->getMessage()])
         );
       }
     }
@@ -313,7 +313,7 @@ class SearchController extends AppController
     foreach ($records as $index => $item) {
       if ($progressBar) {
         $progressBar->setProgress(
-          round (90 + ($step * $i++)),
+          round(90 + ($step * $i++)),
           Yii::t(Module::CATEGORY, "Caching records...")
         );
       }
@@ -322,7 +322,7 @@ class SearchController extends AppController
 
       // record identifier
       $col = "lccn";
-      $identifier = (string) $modsCollection->mods[$index]->recordInfo->recordIdentifier;
+      $identifier = (string)$modsCollection->mods[$index]->recordInfo->recordIdentifier;
       if ($identifier) {
         $v = isset($p[$col]) ? $p[$col] : "";
         $p[$col] = $v ? "$v; $identifier" : $identifier;
@@ -330,19 +330,19 @@ class SearchController extends AppController
 
 
       // fix bibtex parser issues and prevent validation errors
-      foreach ( $p as $key => $value ) {
-        switch ($key){
+      foreach ($p as $key => $value) {
+        switch ($key) {
           case "author":
           case "editor":
             $p[$key] = str_replace("{", "", $p[$key]);
             $p[$key] = str_replace("}", "", $p[$key]);
         }
         $columnSchema = Record::getDb()->getTableSchema(Record::tableName())->getColumn($key);
-        if( $columnSchema === null ) {
+        if ($columnSchema === null) {
           Yii::warning("Skipping non-existent column '$key'...");
           unset($p[$key]);
-        } elseif( is_string($value) and $columnSchema->size ){
-          $p[$key] = substr( $value, 0, $columnSchema->size );
+        } elseif (is_string($value) and $columnSchema->size) {
+          $p[$key] = substr($value, 0, $columnSchema->size);
         }
       }
 
