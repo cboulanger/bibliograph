@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a09671457ea9f441abf10bf2add59a62",
+    "content-hash": "08a3089b6ccb8081f89f009460c21077",
     "packages": [
         {
             "name": "adci/full-name-parser",
@@ -4826,25 +4826,27 @@
         },
         {
             "name": "insolita/yii2-migration-generator",
-            "version": "2.3",
+            "version": "3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Insolita/yii2-migrik.git",
-                "reference": "455c8dfc035085d56051a16b3cfc5f010662170d"
+                "reference": "f7584aba1d0d0879f566189812c988b4fc7f2cb8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Insolita/yii2-migrik/zipball/455c8dfc035085d56051a16b3cfc5f010662170d",
-                "reference": "455c8dfc035085d56051a16b3cfc5f010662170d",
+                "url": "https://api.github.com/repos/Insolita/yii2-migrik/zipball/f7584aba1d0d0879f566189812c988b4fc7f2cb8",
+                "reference": "f7584aba1d0d0879f566189812c988b4fc7f2cb8",
                 "shasum": ""
             },
             "require": {
-                "yiisoft/yii2": "*"
+                "yiisoft/yii2": ">=2.0.14"
             },
             "require-dev": {
-                "nesbot/carbon": "*",
-                "vlucas/phpdotenv": "*",
                 "yiisoft/yii2-gii": "*"
+            },
+            "suggest": {
+                "nesbot/carbon": "for testing ",
+                "vlucas/phpdotenv": "for testing"
             },
             "type": "yii2-extension",
             "extra": {
@@ -4872,9 +4874,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Insolita/yii2-migrik/issues",
-                "source": "https://github.com/Insolita/yii2-migrik/tree/2.3"
+                "source": "https://github.com/Insolita/yii2-migrik/tree/3.2"
             },
-            "time": "2017-04-29T12:37:47+00:00"
+            "time": "2019-07-26T10:58:40+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
