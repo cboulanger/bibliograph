@@ -733,7 +733,7 @@ class SetupController extends AppController
       // fresh installation
       $message = 'Found empty database';
       $this->userFeedback[] = Yii::t("app",
-        "Created users 'admin', 'manager' and 'user' with passwords 'admin', 'manager' and 'user'." +
+        "Created users 'admin', 'manager' and 'user' with passwords 'admin', 'manager' and 'user'." .
         "Please log in as admin, set new passwords and/or remove users that you don't need.");
     }
     elseif ($upgrade_from == "2.x") {

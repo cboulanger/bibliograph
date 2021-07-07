@@ -4,4 +4,4 @@
 source tool/env/envvars-load
 export PHP_VERSION
 
-tool/dev/php src/server/vendor/codeception/codeception/codecept --config test/codeception "$@"
+tool/bin/php src/server/vendor/codeception/codeception/codecept --config test/codeception "$@"

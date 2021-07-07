@@ -3803,25 +3803,34 @@
         },
         {
             "name": "bizley/migration",
-            "version": "2.3.1",
+            "version": "4.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bizley/yii2-migration.git",
-                "reference": "65f5581a3c2a93cd654829433ea5ff47b3894e78"
+                "reference": "35607a3154a1ab130548608d591d0e64bfa392fe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bizley/yii2-migration/zipball/65f5581a3c2a93cd654829433ea5ff47b3894e78",
-                "reference": "65f5581a3c2a93cd654829433ea5ff47b3894e78",
+                "url": "https://api.github.com/repos/bizley/yii2-migration/zipball/35607a3154a1ab130548608d591d0e64bfa392fe",
+                "reference": "35607a3154a1ab130548608d591d0e64bfa392fe",
                 "shasum": ""
             },
             "require": {
-                "yiisoft/yii2": ">=2.0.11 <2.1.0"
+                "ext-mbstring": "*",
+                "ext-pdo": "*",
+                "php": ">=7.2",
+                "yiisoft/yii2": "^2.0.19"
+            },
+            "require-dev": {
+                "infection/infection": "*",
+                "phpstan/phpstan": "*",
+                "phpunit/phpunit": "*",
+                "roave/security-advisories": "dev-latest"
             },
             "type": "yii2-extension",
             "autoload": {
                 "psr-4": {
-                    "bizley\\migration\\": ""
+                    "bizley\\migration\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -3830,7 +3839,7 @@
             ],
             "authors": [
                 {
-                    "name": "Pawel Bizley Brzozowski",
+                    "name": "Paweł Bizley Brzozowski",
                     "email": "pawel@positive.codes"
                 }
             ],
@@ -3840,13 +3849,20 @@
                 "generator",
                 "migrate",
                 "migration",
+                "updater",
                 "yii2"
             ],
             "support": {
                 "issues": "https://github.com/bizley/yii2-migration/issues",
                 "source": "https://github.com/bizley/yii2-migration"
             },
-            "time": "2018-07-01T14:37:16+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/sponsors/bizley",
+                    "type": "github"
+                }
+            ],
+            "time": "2021-06-10T09:49:38+00:00"
         },
         {
             "name": "codeception/codeception",

@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-
-# call local composer with the right working directory
-tool/dev/php -d memory_limit=-1 src/lib/composer.phar --working-dir=src/server "$@"

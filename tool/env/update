@@ -18,4 +18,4 @@ npx qx package update --quiet
 npx qx package upgrade
 
 echo ">>> Updating Composer packages..."
-tool/dev/composer update
+tool/bin/composer update
