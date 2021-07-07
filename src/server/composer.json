@@ -68,7 +68,7 @@
     "elisdn/yii2-gii-fixture-generator": "^1.1",
     "goaop/parser-reflection": "^1.4",
     "graze/guzzle-jsonrpc": "^3.0",
-    "insolita/yii2-migration-generator": "^2.3",
+    "insolita/yii2-migration-generator": "^3.2",
     "phpunit/phpunit": "<7",
     "yiisoft/yii2-faker": "^2.0.0",
     "yiisoft/yii2-gii": "^2.0.0",
