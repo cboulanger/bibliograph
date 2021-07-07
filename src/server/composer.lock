@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ec815c614f25f9ca936fce25863c1592",
+    "content-hash": "2f49b89f13af6ac9b2a15f357604ec0c",
     "packages": [
         {
             "name": "adci/full-name-parser",
@@ -3042,16 +3042,16 @@
         },
         {
             "name": "voku/simple-cache",
-            "version": "3.2.2",
+            "version": "4.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/voku/simple-cache.git",
-                "reference": "b08d16b4bd802f43f963c2209049f874df83ce56"
+                "reference": "416cf88902991f3bf6168b71c0683e6dabb3d5e1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/voku/simple-cache/zipball/b08d16b4bd802f43f963c2209049f874df83ce56",
-                "reference": "b08d16b4bd802f43f963c2209049f874df83ce56",
+                "url": "https://api.github.com/repos/voku/simple-cache/zipball/416cf88902991f3bf6168b71c0683e6dabb3d5e1",
+                "reference": "416cf88902991f3bf6168b71c0683e6dabb3d5e1",
                 "shasum": ""
             },
             "require": {
@@ -3062,7 +3062,11 @@
                 "psr/simple-cache-implementation": "1.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "~6.0"
+                "phpunit/phpunit": "~6.0 || ~7.0"
+            },
+            "suggest": {
+                "predis/predis": "~1.1",
+                "symfony/var-exporter": "~3.0 || ~4.0 || ~5.0"
             },
             "type": "library",
             "autoload": {
@@ -3093,7 +3097,25 @@
                 "issues": "https://github.com/voku/simple-cache/issues",
                 "source": "https://github.com/voku/simple-cache/tree/master"
             },
-            "time": "2018-12-21T07:48:39+00:00"
+            "funding": [
+                {
+                    "url": "https://www.paypal.me/moelleken",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/voku",
+                    "type": "github"
+                },
+                {
+                    "url": "https://www.patreon.com/voku",
+                    "type": "patreon"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/voku/simple-cache",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2020-03-15T21:00:57+00:00"
         },
         {
             "name": "yiisoft/yii2",
