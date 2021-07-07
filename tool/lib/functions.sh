@@ -55,13 +55,13 @@ export -f log_error
 
 # php shorthand function
 function php() {
-  tool/dev/php "$@"
+  tool/bin/php "$@"
 }
 export -f php
 
 # yii shorthand function
 function yii() {
-  tool/dev/yii "$@"
+  tool/bin/yii "$@"
 }
 export -f yii
 
@@ -73,7 +73,7 @@ export -f yii_test
 
 # codecept shorthand function
 function codecept() {
-  tool/dev/codecept "$@"
+  tool/bin/codecept "$@"
 }
 export -f codecept
 
