@@ -74,6 +74,6 @@
     "yiisoft/yii2-gii": "^2.0.0",
     "odannyc/yii2-sse": "^0.1.0",
     "react/http-client": "^0.5.9",
-    "react/stream": "^0.7.7"
+    "react/stream": "^1.1.1"
   }
 }
