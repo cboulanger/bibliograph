@@ -221,13 +221,15 @@ trait JsonRpcTrait
   public function seeJsonRpcError($message=null, $code=null)
   {
     if ($message){
-      $this->assertContains( $message, $this->grabRequestedResponseByJsonPath('error.message')[0]);
+      $this->assertNotEmpty($this->grabRequestedResponseByJsonPath('error.message'),"Response does not contain error.message property");
+      $this->assertContains( $message, $this->grabRequestedResponseByJsonPath('error.message')[0], "Error message is not '$message'");
     }
     if ($code){
-      $this->assertEquals( $code, $this->grabRequestedResponseByJsonPath('error.code')[0] );
+      $this->assertNotEmpty($this->grabRequestedResponseByJsonPath('error.code'),"Response does not contain error.code property");
+      $this->assertEquals( $code, $this->grabRequestedResponseByJsonPath('error.code')[0], "Error code is not $code");
     }
     if (is_null($message) and is_null($code)) {
-      $this->assertEmpty($this->grabRequestedResponseByJsonPath('error'));
+      $this->assertNotEmpty($this->grabRequestedResponseByJsonPath('error'), "Response does not contain error property");
     }
   }
 
@@ -242,7 +244,7 @@ trait JsonRpcTrait
     if ($code) {
       $responseErrorCode = $this->grabRequestedResponseByJsonPath('error.code');
       if ($responseErrorCode) {
-        $this->assertNotEquals($code, $responseErrorCode[0]);
+        $this->assertNotEquals($code, $responseErrorCode[0], "Error code is not $code");
       }
     } else {
       $this->dontSeeRequestedResponseMatchesJsonPath('error');

@@ -10,18 +10,18 @@
     },
     {
       "icon": "icon/16/apps/preferences-users.png",
-      "label": "Manager user (user1)",
-      "params": "user,user1",
+      "label": "Manager user (manager)",
+      "params": "user,manager",
       "type": "user",
-      "value": "user1"
+      "value": "manager"
     },
     {
       "icon": "icon/16/apps/preferences-users.png",
-      "label": "Normal user (user2)",
-      "params": "user,user2",
+      "label": "Normal user (user)",
+      "params": "user,user",
       "type": "user",
-      "value": "user2"
+      "value": "user"
     }
   ],
-  "id": 6
+  "id": 11
 }

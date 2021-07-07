@@ -64,8 +64,8 @@ class AccessConfigControllerCest
   public function tryToAddExistingUser(ApiTester $I, \Codeception\Scenario $scenario)
   {
     $I->loginAsAdmin();
-    $I->amGoingTo("create a user2, which already exists, and expect an error message");
-    $I->sendJsonRpcRequest('access-config', 'add', ['user', 'user2', false],true);
+    $I->amGoingTo("create a user 'user', which already exists, and expect an error message");
+    $I->sendJsonRpcRequest('access-config', 'add', ['user', 'user', false],true);
 
     $I->seeUserError();
     $I->logout();
@@ -119,7 +119,7 @@ class AccessConfigControllerCest
   public function tryToCreateUserForm(ApiTester $I, \Codeception\Scenario $scenario)
   {
     $I->loginAsAdmin();
-    $I->sendJsonRpcRequest('access-config', 'edit', ['user', 'user2']);
+    $I->sendJsonRpcRequest('access-config', 'edit', ['user', 'user']);
     $I->seeServerEvent("dialog", new JsonPathType("$.properties.formData"));
     $I->logout();
   }
@@ -196,13 +196,13 @@ class AccessConfigControllerCest
   public function tryToAddUserToGroup(ApiTester $I, \Codeception\Scenario $scenario)
   {
     $I->loginAsAdmin();
-    $I->amGoingTo("Add user2 to group1");
+    $I->amGoingTo("Add user to group1");
     $I->sendJsonRpcRequest(
       "access-config",'link',
-      ["group=group1","user","user2"]
+      ["group=group1","user","user"]
     );
     $I->expectTo("see them linked now.");
-    $I->sendJsonRpcRequest('access-config', 'tree', ['user', 'user2']);
+    $I->sendJsonRpcRequest('access-config', 'tree', ['user', 'user']);
     $path = "$.result.children[?(@.type=group)].children[?(@.label='Group 1')]";
     $I->seeRequestedResponseMatchesJsonPath($path);
     $I->logout();
@@ -213,9 +213,9 @@ class AccessConfigControllerCest
     $I->loginAsAdmin();
     $I->sendJsonRpcRequest(
       "access-config",'link',
-      ["role=admin","user","user2"]
+      ["role=admin","user","user"]
     );
-    $I->sendJsonRpcRequest('access-config', 'tree', ['user', 'user2']);
+    $I->sendJsonRpcRequest('access-config', 'tree', ['user', 'user']);
     $path = "$.result.children[?(@.type=role)].children[?(@.label='In all groups')].children[?(@.value='role=admin')]";
     $I->seeRequestedResponseMatchesJsonPath($path);
     $I->logout();
