@@ -66,7 +66,7 @@
     "codeception/specify": "*",
     "codeception/verify": "*",
     "elisdn/yii2-gii-fixture-generator": "^1.1",
-    "goaop/parser-reflection": "^1.4",
+    "goaop/parser-reflection": "^3.0",
     "graze/guzzle-jsonrpc": "^3.0",
     "insolita/yii2-migration-generator": "^3.2",
     "phpunit/phpunit": "<7",
