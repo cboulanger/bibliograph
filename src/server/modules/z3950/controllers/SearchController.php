@@ -75,7 +75,8 @@ class SearchController extends AppController
       $progressBar->error($e->getMessage());
     } catch (\Throwable $e) {
       Yii::error($e);
-      $progressBar->error($e->getMessage());
+      $message = $e->getMessage();
+      $progressBar->error($message ? $message : "Unknown error");
     }
     Yii::$app->getResponse()->isSent = true;
   }
@@ -328,7 +329,6 @@ class SearchController extends AppController
         $p[$col] = $v ? "$v; $identifier" : $identifier;
       }
 
-
       // fix bibtex parser issues and prevent validation errors
       foreach ($p as $key => $value) {
         switch ($key) {
@@ -342,7 +342,9 @@ class SearchController extends AppController
           Yii::warning("Skipping non-existent column '$key'...");
           unset($p[$key]);
         } elseif (is_string($value) and $columnSchema->size) {
-          $p[$key] = substr($value, 0, $columnSchema->size);
+          // Shorten data to column length
+          Yii::debug("Shortening '$key' data to {$columnSchema->size} characters...");
+          $p[$key] = mb_substr($value, 0, $columnSchema->size, "utf8");
         }
       }
 

@@ -187,12 +187,20 @@ class BaseModel
    */
   public function save($runValidation = true, $attributeNames = null)
   {
-    if (parent::save($runValidation, $attributeNames)) {
-      return true;
+    try {
+      if (parent::save($runValidation, $attributeNames)) {
+        return true;
+      }
+      $message = sprintf("Saving model %s failed: %s", static::class, json_encode($this->getFirstErrors()));
+      $exception = new \yii\db\Exception($message, $this->getFirstErrors());
+    } catch (\Throwable $exception) {
+      // ignore oversize column data, will be truncated automatically
+      $message = $exception->getMessage();
+      if (Str::contains($message, "Data too long for column")){
+        Yii::error($message . " (Not shown to user)");
+        return true;
+      }
     }
-    $message = sprintf("Saving model %s failed: %s", static::class, json_encode($this->getFirstErrors()));
-    $exception = new \yii\db\Exception($message);
-    $exception->errorInfo = $this->getFirstErrors();
     throw $exception;
   }
 
