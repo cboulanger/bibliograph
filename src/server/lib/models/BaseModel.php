@@ -55,8 +55,8 @@ class BaseModel
   public $dipatchChangeMessages = true;
 
   /**
-   * @todo generic table name algorithm
    * @return string
+   * @todo generic table name algorithm
    */
 //  static function tableName()
 //  {
@@ -76,10 +76,10 @@ class BaseModel
   {
     return [
       [
-        'class'               => TimestampBehavior::class,
-        'createdAtAttribute'  => 'created',
-        'updatedAtAttribute'  => 'modified',
-        'value'               => new Expression('NOW()'),
+        'class' => TimestampBehavior::class,
+        'createdAtAttribute' => 'created',
+        'updatedAtAttribute' => 'modified',
+        'value' => new Expression('NOW()'),
       ],
     ];
   }
@@ -93,7 +93,8 @@ class BaseModel
    * model data can be edited or null if the model cannot be edited
    * @return array|null
    */
-  public function getFormData(){
+  public function getFormData()
+  {
     return null;
   }
 
@@ -115,10 +116,10 @@ class BaseModel
    */
   public static function getDb()
   {
-    if(static::$__lookingUpDatasource ){
+    if (static::$__lookingUpDatasource) {
       throw new \RuntimeException("Please instantiate datasource first");
     }
-    if( static::$datasource ){
+    if (static::$datasource) {
       $db = static::$datasource->getConnection();
     } else {
       $db = parent::getDb();
@@ -140,7 +141,7 @@ class BaseModel
    */
   public static function findByNamedId($namedId)
   {
-    return static::findOne( ['namedId' => $namedId ] );
+    return static::findOne(['namedId' => $namedId]);
   }
 
   /**
@@ -149,7 +150,8 @@ class BaseModel
    *
    * @param MessageEvent|BroadcastEvent $event
    */
-  public function dispatchChangeMessage(MessageEvent $event) {
+  public function dispatchChangeMessage(MessageEvent $event)
+  {
     if ($this->dipatchChangeMessages) {
       Yii::$app->eventQueue->add($event);
     }
@@ -183,7 +185,7 @@ class BaseModel
    * @return boolean
    * @throws \yii\db\Exception
    */
-  public function save( $runValidation = true, $attributeNames = null )
+  public function save($runValidation = true, $attributeNames = null)
   {
     if (parent::save($runValidation, $attributeNames)) {
       return true;
@@ -200,7 +202,7 @@ class BaseModel
    */
   public function afterDelete()
   {
-    Yii::$app->trigger( BaseActiveRecord::EVENT_AFTER_DELETE, new ModelEvent([
+    Yii::$app->trigger(BaseActiveRecord::EVENT_AFTER_DELETE, new ModelEvent([
       'sender' => $this
     ]));
     parent::afterDelete();
