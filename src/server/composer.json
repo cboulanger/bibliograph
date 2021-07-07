@@ -34,7 +34,7 @@
     "aracoool/yii2-uuid": "^1.1",
     "bmsrox/yii2-module-autoloader": "^1.1.1",
     "danielstjules/stringy": "^3.1",
-    "edvlerblog/yii2-adldap-module": "^4.0.0",
+    "edvlerblog/yii2-adldap-module": "^6.0.0",
     "ext-gettext": "*",
     "ext-intl": "*",
     "ext-json": "*",
