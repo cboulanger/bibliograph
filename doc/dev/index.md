@@ -26,6 +26,10 @@ following dockerized services running in separate containers:
  - PHPFarm with php versions 7.0 - 7.4 via Apache on localhost:8070-8074 (8.x will be added shortly) 
    
  - MariaDB on localhost:3036
+
+Since the backend is dockerized, you need to use wrapper scripts to
+call the underlying basic executables, such as `php`, `composer`,
+`codecept`, or `yii`. They can be found in [tool/bin](tool/bin) directory.
  
 To start the services, run `pnpm run services:start`. Afterwards,
 you need to run `pnpm run dev:clean` to run the application in
@@ -41,13 +45,42 @@ have to reload the application to see the changes, however.
 To restart the application and continous compilation without
 resetting the backend data, run `pnpm run dev`.
 
-> Sometimes, and for unknown reasons, changed backend code isn't properly
-synchronized and the Apache/PHP server still executes a previous
+> Sometimes, and for unknown reasons, changed backend code isn't
+properly synchronized and the Apache/PHP server still executes a previous
 version of the code. If you feel that this happens, execute `pnpm run
-services:apache:restart`, which restarts Apache and will force it to use the new state. 
+services:apache:restart`, which restarts Apache and will force it to use
+the new state (Using docker-sync might fix the problem - see to-do below).
 
 If you want to restart the continuous compilation process
 without opening a browser window, use `pnpm run compile:watch`.
+
+## Internationalization
+
+Using Yii2's and Qooxdoo's internationalization API, Bibliograph can
+easily support any language for which translation strings are supplied. 
+
+### Yii2
+- [Tutorial](https://www.yiiframework.com/doc/guide/2.0/en/tutorial-i18n)
+- [frontend translations strings](src/client/bibliograph/source/translation)
+- To update the files from the source automatically, run `pnpm run translation:backend` 
+  
+### Qooxdoo
+- [Documentation](https://qooxdoo.org/documentation/6.0/#/development/howto/internationalization)
+- [Backend translation strings](src/server/messages/)
+- To update the files from the source automatically, run `pnpm run translation:frontend`
+
+## Update dependencies
+
+The project has the following dependencies:
+
+- [NPM packages](package.json)
+- [Composer packages](src/server/composer.json)
+- [Individual GitHub repositories](src/lib)
+
+To update these dependencies their latest compatible version, use `pnpm run update`.
+
+If you update the npm or composer dependencies manually (or via the GitHub
+dependabot mechanism), run `pnpm install`.
 
 ## Testing code changes
 
@@ -57,10 +90,16 @@ running this suite, and any non-trivial addition to it should come with an indiv
 test for each new feature. You can also run unit, functional and API tests separately
 with `pnpm runn test:codeception:(unit|functional|api)`.
 
-## Deployment
+Frontend tests using [Playwright](https://playwright.dev/) are in preparation. 
+
+## Production testing and deployment 
+
+Once you've tested Bibliograph in development mode locally, you can deploy it to the target server
+for testing and production deployment. This process is made easy by using the `pnpm run deploy` script
+
 
 ## Publishing a new version
-
+ -tbd
 
 ## To do
- - use docker-sync instead of mounted volumes: https://docker-sync.readthedocs.io/en/latest/getting-started/installation.html
+ - Use [docker-sync](https://docker-sync.readthedocs.io/en/latest/getting-started/installation.html) instead of mounted volumes.
