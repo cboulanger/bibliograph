@@ -134,7 +134,7 @@ class Module
       $data = array();
       $serverDataPath = $this->serverDataPath;
       foreach (scandir($serverDataPath) as $file) {
-        if ($file[0] == "." or !ends_with($file, ".xml")) continue;
+        if ($file[0] == "." or !str_ends_with($file, ".xml")) continue;
         $path = "$serverDataPath/$file";
         $explain = simplexml_load_file($path);
         $serverInfo = $explain->serverInfo;

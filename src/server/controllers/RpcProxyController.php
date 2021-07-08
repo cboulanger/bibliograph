@@ -13,16 +13,16 @@ use yii\helpers\Inflector;
  */
 class RpcProxyController extends \yii\console\Controller
 {
-  
+
   const ECMASCRIPT_RESERVED_KEYWORDS = [
     'do', 'if', 'in', 'for', 'let', 'new', 'try', 'var', 'case', 'else', 'enum', 'eval', 'null', 'this', 'true', 'void',
-    'with', 'await', 'break', 'catch', 'class', 'const', 'false', 'super', 'throw', 'while', 'yield', 'delete', 
+    'with', 'await', 'break', 'catch', 'class', 'const', 'false', 'super', 'throw', 'while', 'yield', 'delete',
     'export', 'import', 'public', 'return', 'static', 'switch', 'typeof', 'default', 'extends', 'finally', 'package',
     'private', 'continue', 'debugger', 'function', 'arguments', 'interface', 'protected', 'implements', 'instanceof', 'const'
   ];
 
 
-  
+
   /**
    * Creates stubs
    */
@@ -39,7 +39,7 @@ class RpcProxyController extends \yii\console\Controller
 //    );
     foreach ($source_dirs as $dir) {
       foreach (scandir($dir) as $file) {
-        if (ends_with($file, "Controller.php")) {
+        if (str_ends_with($file, "Controller.php")) {
           $files[] = "$dir/$file";
         }
       }
