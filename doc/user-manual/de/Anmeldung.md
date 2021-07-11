@@ -7,4 +7,4 @@ Wenn Sie Ihr Passwort vergessen haben, können Sie dieses über die Schaltfläch
 weiter zu
 -   [Datensätze anlegen](../../manage-records/create-records.html)
 -   [Probleme mit der Anmeldung](../../problems.html)
-:::
+

@@ -92,14 +92,9 @@ with `pnpm runn test:codeception:(unit|functional|api)`.
 
 Frontend tests using [Playwright](https://playwright.dev/) are in preparation. 
 
-## Production testing and deployment 
+## Deployment
 
-Once you've tested Bibliograph in development mode locally, you can deploy it to the target server
-for testing and production deployment. This process is made easy by using the `pnpm run deploy` script
-
-
-## Publishing a new version
- -tbd
+See [Testing and production deployment](./deployment.md) 
 
 ## To do
  - Use [docker-sync](https://docker-sync.readthedocs.io/en/latest/getting-started/installation.html) instead of mounted volumes.

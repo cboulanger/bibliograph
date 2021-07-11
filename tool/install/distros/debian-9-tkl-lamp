@@ -25,6 +25,10 @@ section "Installing prerequisites and PHP extensions..."
 sudo apt update && sudo apt upgrade -y
 
 if [ "$CURRENT_PHPVERSION" != "php$PHPVERSION" ]; then
+  echo "$bldred The required PHP version is $PHPVERSION, but you have ${CURRENT_PHPVERSION}."
+  echo "Please upgrade your PHP or adapt this script. ${txtrst}"
+  exit 1
+  # todo: interactively install required php version
   apt -y install software-properties-common dirmngr apt-transport-https lsb-release ca-certificates
   wget -q https://packages.sury.org/php/apt.gpg -O- | apt-key add -
   echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php.list
@@ -34,7 +38,6 @@ if [ "$CURRENT_PHPVERSION" != "php$PHPVERSION" ]; then
   a2dismod $CURRENT_PHPVERSION
   a2enmod php${PHPVERSION}
   apache2ctl restart
-
 fi
 
 section "Installing bibliographic tools..."

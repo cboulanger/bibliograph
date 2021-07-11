@@ -14,26 +14,75 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   ulimit unlimited
 fi
 
-# Preset or set by loaded env file:
+# ------------------------------------------------------------------------------------------
+#
+# Environment variables used by this script
+# which are preset and/or can be set/overridden via .env files
+#
+# ------------------------------------------------------------------------------------------
+
+# If set, the values in this file will override any previous value
 BUILD_ENV_FILE=${BUILD_ENV_FILE:-""}
+
+# Skip parts of the build process, see below
 BUILD_SKIP=${BUILD_SKIP:-""}
+
+# The Qooxdoo compilation configuration file
 BUILD_CONFIG_FILE=${BUILD_CONFIG_FILE:-"compile.json"}
+
+# The Qooxdoo compiler target
 BUILD_TARGET=${BUILD_TARGET:-"build"}
+
+# A name that identifies the build, will also be used as name of folder containing the build
 BUILD_NAME=${BUILD_NAME:-""}
+
+# Whether to clear all cached data - this will increase buid time
 BUILD_CLEAN=${BUILD_CLEAN:-0}
+
+# Whether to output additional debug messages
 BUILD_VERBOSE=${BUILD_VERBOSE:-0}
+
+# The path to the .env file deployed to the target server
 DEPLOY_ENV_FILE=${DEPLOY_ENV_FILE:-""}
+
+# The deployment host
 DEPLOY_HOST=${DEPLOY_HOST:-""}
+
+# The path to the (parent) directory in which to deploy the build
 DEPLOY_DIR=${DEPLOY_DIR:-""}
+
+# The path to the directory containing configuration data (optional)
 DEPLOY_CONFIG_DIR=${DEPLOY_CONFIG_DIR:-config}
-DEPLOY_DB_NAME=${DEPLOY_DB_NAME:-""}
-DEPLOY_IMPORT_DB_NAMES=${DEPLOY_IMPORT_DB_NAMES:-""}
-DEPLOY_EMPTY_DATABASE=${DEPLOY_EMPTY_DATABASE:-0}
-DEPLOY_BACKUP_DATABASE=${DEPLOY_BACKUP_DATABASE:-""}
-DEPLOY_DROP_DATABASE_PREFIX=${DEPLOY_DROP_DATABASE_PREFIX:-""}
-DEPLOY_EXCLUDE_ARGS=${DEPLOY_EXCLUDE_ARGS:-"--exclude=*.zip --exclude=._* --exclude=.DS_Store --exclude=.git*"}
-DEPLOY_CLEAN=${DEPLOY_CLEAN:-1}
+
+# Whether to create the DB user (requires DB_ROOT_PASSWORD)
+DEPLOY_DB_CREATE_USER=${DEPLOY_DB_CREATE_USER:-0}
+
+# The name of the root user (defaults to root)
 DB_ROOT_USER=${DB_ROOT_USER:-root}
+
+# The password of the root user (only needed if DEPLOY_DB_CREATE_USER=1)
+DB_ROOT_PASSWORD=${DB_ROOT_PASSWORD:-""}
+
+# The name of the database to use
+DEPLOY_DB_NAME=${DEPLOY_DB_NAME:-""}
+
+# If set, a comma-separated list of databases to import into that database (usually onen or just one)
+DEPLOY_IMPORT_DB_NAMES=${DEPLOY_IMPORT_DB_NAMES:-""}
+
+# Whether to start with an empty database
+DEPLOY_EMPTY_DATABASE=${DEPLOY_EMPTY_DATABASE:-0}
+
+# The name of a database into which the target database is saved before being overwritten
+DEPLOY_BACKUP_DATABASE=${DEPLOY_BACKUP_DATABASE:-""}
+
+# Whether to delete the target folders before copying the build
+DEPLOY_CLEAN=${DEPLOY_CLEAN:-1}
+
+# Use the following vars only if you know what you are doing
+DEPLOY_EXCLUDE_ARGS=${DEPLOY_EXCLUDE_ARGS:-"--exclude=*.zip --exclude=._* --exclude=.DS_Store --exclude=.git*"}
+DEPLOY_DROP_DATABASE_PREFIX=${DEPLOY_DROP_DATABASE_PREFIX:-""}
+
+# ------------------------------------------------------------------------------------------
 
 # internal config values
 QUIET=0
@@ -228,10 +277,11 @@ ${HELP_ADDITIONAL_TEXT}
   --deploy-config-dir, -C path  - the path to the configuration dir, absolute or
                                   relative to the deployment dir. Defaults to
                                   'config', overrides DEPLOY_CONFIG_DIR
-  --create-user, -U             - create the user DB_USER with password DB_PASSWORD
+  --create-user, -U             - create the user DB_USER with password DB_PASSWORD,
+                                  can be set with DEPLOY_DB_CREATE_USER=1
   --database, -N name           - the name of the database to use on the host,
                                   overrides DB_DATABASE
-  --empty-database, -E          - empty the database
+  --empty-database, -E          - empty the database (DEPLOY_EMPTY_DATABASE=1)
   --import-database, -I name    - the name of the database to import tables from
                                   (only remotely), overrides DEPLOY_IMPORT_DB_NAMES
                                   implies -E
@@ -260,7 +310,8 @@ b) to be declared in the environment variable file specified by --env-file or
   DB_PORT           - Port
   DB_USER           - The name of the database user for the application
   DB_PASSWORD       - Password of that user
-  DB_ROOT_PASSWORD  - Password of root user, needed only for --
+  DB_ROOT_USER      - The name of the root user, usually "root"
+  DB_ROOT_PASSWORD  - Password of root user (necessary only if DEPLOY_DB_CREATE_USER=1)
   APP_ENV_FILE      - Path to the .env file containg environment variables for the application
   APP_CONF_FILE     - Path to the .toml file containing configuration values for the application
 EOF

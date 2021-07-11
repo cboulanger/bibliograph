@@ -52,7 +52,7 @@ Bibliograph can be used by
 - Ability to create and restore snapshot backups of individual databases;
 - Easily extendable with custom plugins.
 
-## Installation and Deployment
+## Prerequisites, Installation and Deployment
 See [here](doc/dev/index.md).
 
 ## Support
@@ -73,8 +73,7 @@ project needs your help. Even if you are not a developer, you can contribute:
   likely it is that development continues and new features/plugins will be 
   added - so please let your followers on Twitter, Facebook etc. know about
   Bibliograph
-- [Flattr me](https://flattr.com/submit/auto?user_id=panyasan&url=https://github.com/cboulanger/bibliograph&title=Bibliograph&language=javascript&tags=github&category=software)  
-
+- [Flattr me](https://flattr.com/submit/auto?user_id=panyasan&url=https://github.com/cboulanger/bibliograph&title=Bibliograph&language=javascript&tags=github&category=software)
 
 ## Credits
 Open source libraries/applications

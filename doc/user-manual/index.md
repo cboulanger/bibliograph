@@ -1,4 +1,6 @@
-# Bibliograph v3
+# Bibliograph User Manual
 
-- [User manual (English)](en/index.md)
-- [Bedienungsanleitung](de/index.md)
+The repository-based documentation is not yet finished. Until it is,
+please refer to the online documentation:
+
+http://help.bibliograph.org
