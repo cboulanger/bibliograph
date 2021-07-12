@@ -66,16 +66,16 @@ easily support any language for which translation strings are supplied.
   
 ### Qooxdoo
 - [Documentation](https://qooxdoo.org/documentation/6.0/#/development/howto/internationalization)
-- [Backend translation strings](src/server/messages/)
+- [Backend translation strings](/src/server/messages/)
 - To update the files from the source automatically, run `pnpm run translation:frontend`
 
 ## Update dependencies
 
 The project has the following dependencies:
 
-- [NPM packages](package.json)
-- [Composer packages](src/server/composer.json)
-- [Individual GitHub repositories](src/lib)
+- [NPM packages](/package.json)
+- [Composer packages](/src/server/composer.json)
+- [Individual GitHub repositories](/src/lib)
 
 To update these dependencies their latest compatible version, use `pnpm run update`.
 
