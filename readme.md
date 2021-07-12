@@ -59,8 +59,8 @@ See [here](doc/dev/index.md).
 - Bugs and feature requests should be registered as [github issues](https://github.com/cboulanger/bibliograph/issues).
 
 ## Development & Roadmap
-- You can [hack the code](doc/dev/development.md) and make it better;
-- The current roadmap is [here](doc/dev/roadmap.md);
+- You can [hack the code](doc/dev/index.md) and make it better;
+- The current roadmap is [here](roadmap.md);
 - If you wish to sponsor a feature, please contact info at bibliograph dot org.
 
 ## How to contribute
