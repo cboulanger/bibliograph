@@ -83,7 +83,7 @@ by `--env-file` or `--deploy-env-file`, or c) to be set with `--set-env`:
 Instead of providing all the options at the command line on each invocation
 of the script, the configuration values should be set in an environment
 variable (`.env`) file, which is passed to the script with `tool/deploy/deploy
--e /path/to/.env`. This also allows to write specialized configuration
+-f /path/to/.env`. This also allows to write specialized configuration
 files for about any type of deployment scenario from testing to production.
 
 In the following example, we create three scenarios:
