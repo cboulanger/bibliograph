@@ -154,7 +154,6 @@ to import the current production database ("production") or one that contains te
 `testing-build.env`
 ```dotenv
 # Build
-APP_ENV_FILE=/path/to/testing-deploy.env # see below
 APP_CONF_FILE=/path/to/testing.conf.toml
 BUILD_CONFIG_FILE=compile.json
 BUILD_TARGET=source # would be "build" for staging/production
@@ -164,6 +163,7 @@ BUILD_LOGO_PATH=/path/to/logo.jpg
 # Deployment
 DEPLOY_HOST=bibliograph.example.org
 DEPLOY_DIR=/path/to/server/webroot/bibliograph-testing # change for staging/production
+DEPLOY_ENV_FILE=/path/to/testing-deploy.env # see below
 DEPLOY_EMPTY_DATABASE=1 # Alternatively: DEPLOY_IMPORT_DB_NAMES=production
 
 # Database
