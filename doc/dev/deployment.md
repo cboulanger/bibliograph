@@ -7,6 +7,8 @@ server for testing and production deployment.
 The production server must be configured to fulfill the [software
 prerequisites](/doc/installation.md#prerequisites).
 
+## Using the `deploy` script
+
 The deployment process is facilitated by the `tool/deploy/deploy`
 script (this only works on Linux & MacOS). You can see the
 available options by running `tool/deploy/deploy --help`:
@@ -18,8 +20,11 @@ where options are:
   --env-file, -f file           - the .env file containing configuration
                                  (defaults to .env). Must be the first parameter
                                  if others are to override the settings.
-  --deploy-env-file, -F file    - (optional) A stripped-down .env file which will
-                                  be copied to the deploy target
+  --deploy-env-file, -F file    - A stripped-down .env file which will
+                                  be copied to the deploy target, overrides
+                                  DEPLOY_ENV_FILE
+  --app-config-file, a file     - The app.conf.toml file to be deployed, overrides
+                                  APP_CONF_FILE
   --build-config-file, -c       - the compiler configuration file to use
                                   (defaults to compile.json)
   --build-name, -n name         - an optional name for the subfolder for the build,
@@ -37,7 +42,7 @@ where options are:
                                   overrides DEPLOY_DIR
   --deploy-config-dir, -C path  - the path to the configuration dir, absolute or
                                   relative to the deployment dir. Defaults to
-                                  'config', overrides DEPLOY_CONFIG_DIR
+                                  'config', overrides DEPLOY_CONFIG_DIR                            
   --create-user, -U             - create the user DB_USER with password DB_PASSWORD,
                                   can be set with DEPLOY_DB_CREATE_USER=1
   --database, -N name           - the name of the database to use on the host,
@@ -76,9 +81,11 @@ by `--env-file`, or c) to be set with `--set-env`:
    DB_PASSWORD       - Password of that user
    DB_ROOT_USER      - The name of the root user, usually "root"
    DB_ROOT_PASSWORD  - Password of root user (necessary only if DEPLOY_DB_CREATE_USER=1)
-   APP_ENV_FILE      - Path to the .env file containg environment variables for the application
-   APP_CONF_FILE     - Path to the .toml file containing configuration values for the application
+   COMPOSER          - path to composer.json, if different from the one in the source (this might
+                       be necessary if the target server has a legacy PHP version)
 ```
+
+## Deployment scenarios
 
 In fact, instead of providing all the options at the command line
 on each invocation of the script, all configuration values should
@@ -217,3 +224,43 @@ does not already exist. Afterwards, you can simply run
 For the staging and production scenarios, you can now duplicate the
 files, rename them and adapt the values. For a full list of available
 environment variables, see the [script code](/tool/deploy/deploy).
+
+## Using a package.json file for convenience
+
+You can make your deploy setup even more convenient
+by using a special `package.json` file like so:
+
+```json
+{
+  "name": "bibliograph-deployment-example-org",
+  "description": "Contains npm scripts that help with deploying Bibliograph to example.org",
+  "config": {
+    "BASE_PATH": "/path/to/bibliograph",
+    "CONFIG_PATH": "/path/to/deploy/example-org",
+    "TEST_LOG_PATH": "~/public_html/bibliograph-testing/server/runtime/logs"
+  },
+  "scripts": {
+    "test": "echo $npm_package_config_CONFIG_PATH",
+    "deploy": "cd $npm_package_config_BASE_PATH && tool/deploy/deploy",
+    "deploy:help": "pnpm run deploy -- --help",
+    "testing:deploy": "npm run deploy -- -f $npm_package_config_CONFIG_PATH/testing-build.env -v -y -M",
+    "testing:deploy:no-rebuild" : "npm run testing:deploy -- -k",
+    "testing:log:app": "ssh example.org tail -n 1000 -f $npm_package_config_TEST_LOG_PATH/app.log",
+    "testing:log:error": "ssh example.org tail -n 1000 -f $npm_package_config_TEST_LOG_PATH/error.log"
+  }
+}
+```
+
+`config.CONFIG_PATH` must be set to an absolute path to a directory
+containing the `package.json` file and the other configuration files,
+`config.BASE_PATH` to the directory that contains the bibliograph repo checkout.
+
+Using this setup, you can `cd` to the config path and then execute `npm run testing:deploy`
+or any other script command that you have configured. 
+
+## Known issues
+
+- Installing composer dependencies sometimes crashes with the error `[RuntimeException]                                                       
+  /<some path>/server/vendor exists and is not a directory.` The source of this error is unknown,
+  but simply restarting the deploy script normally fixes the issue. 
+
