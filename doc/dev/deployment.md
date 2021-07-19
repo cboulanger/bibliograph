@@ -66,7 +66,7 @@ where options are:
 Not all configuration values can be set via command line arguments.
 Instead, they need to be a) set as environment variables before running
 this script or b) to be declared in the environment variable file specified
-by `--env-file` or `--deploy-env-file`, or c) to be set with `--set-env`:
+by `--env-file`, or c) to be set with `--set-env`:
 
 ```text
    DB_TYPE           - The type of the database (only mysql supported at this point)
@@ -80,11 +80,12 @@ by `--env-file` or `--deploy-env-file`, or c) to be set with `--set-env`:
    APP_CONF_FILE     - Path to the .toml file containing configuration values for the application
 ```
 
-Instead of providing all the options at the command line on each invocation
-of the script, the configuration values should be set in an environment
-variable (`.env`) file, which is passed to the script with `tool/deploy/deploy
--f /path/to/.env`. This also allows to write specialized configuration
-files for about any type of deployment scenario from testing to production.
+In fact, instead of providing all the options at the command line
+on each invocation of the script, all configuration values should
+better be set in an environment variable (`.env`) file, which is
+passed to the script with `tool/deploy/deploy -f /path/to/.env`.
+This also allows to write specialized configuration files for
+about any type of deployment scenario from testing to production.
 
 In the following example, we create three scenarios:
 
@@ -110,11 +111,14 @@ file for each setup that contains the configuration values for the build
 process (e.g. `testing-build.env`, which won't be part of the deployed
 code, and b) one `<scenario>-deploy.env` with the environment variables for
 running the app on the server (e.g. `testing-deploy.env`), which will be
-copied to the target directory during the deployment process. Alternatively,
-you can set the environment values for the build process in a different
-way, for example, in an CI environment, by setting environment variables
-beforehand. It is also possible to use just one file for building and
-deployment; however, this is strongly discouraged for security reasons.
+copied to the target directory during the deployment process. This file needs
+to be referenced by setting the `DEPLOY_ENV_FILE` environment variable
+in `<scenario>-build.env` to the path of this file.
+   
+Alternatively, you can set the environment values for the build process in
+a different way, for example, in an CI environment, by setting environment
+variables beforehand. It is also possible to use just one file for building
+and deployment; however, this is strongly discouraged for security reasons.
    
 3. You need to set up server access via SSH in the local user's
 `~/.ssh/config` so that specifying the `DEPLOY_HOST` environment
