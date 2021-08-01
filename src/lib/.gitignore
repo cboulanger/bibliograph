@@ -1,3 +1,4 @@
 *
 !.gitignore
 !readme.md
+!composer-*/composer.*

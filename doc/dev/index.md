@@ -16,7 +16,8 @@ setup is used. You need the following prerequisites:
    
  - NodeJS, latest LTS - It is suggested to use [nvm](https://github.com/nvm-sh/nvm).
    
- - [PNPM](https://github.com/pnpm/pnpm) - Install with `npm install -g pnpm` - you can also use NPM, if you prefer.
+ - [PNPM](https://github.com/pnpm/pnpm): Install with `npm
+   install -g pnpm` - you can also use NPM, if you prefer.
  
 First, run `pnpm install` to install all needed NPM modules.
 Then, run `pnpm run install` to set up the docker containers

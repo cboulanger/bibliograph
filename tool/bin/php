@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
-PHP_VERSION=${PHP_VERSION:-7.3}
+if [[ "$PHP_VERSION" == "" ]]; then
+  >&2 echo "PHP_VERSION must be defined"
+  exit 1
+fi
 
 # run php in docker image
 docker exec http_server php-$PHP_VERSION "$@"
+

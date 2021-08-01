@@ -17,8 +17,26 @@ updates:
     schedule:
       interval: "daily"
 
-  # Maintain dependencies for Composer
+  # Maintain dependencies for Composer for PHP 7.2
   - package-ecosystem: "composer"
-    directory: "/src/server"
+    directory: "/src/lib/composer-7.2"
+    schedule:
+      interval: "daily"
+
+  # Maintain dependencies for Composer for PHP 7.3
+  - package-ecosystem: "composer"
+    directory: "/src/lib/composer-7.3"
+    schedule:
+      interval: "daily"
+
+  # Maintain dependencies for Composer for PHP 7.4
+  - package-ecosystem: "composer"
+    directory: "/src/lib/composer-7.4"
+    schedule:
+      interval: "daily"
+
+  # Maintain dependencies for Composer for PHP 8.0
+  - package-ecosystem: "composer"
+    directory: "/src/lib/composer-8.0"
     schedule:
       interval: "daily"

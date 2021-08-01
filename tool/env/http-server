@@ -1,20 +1,22 @@
 #!/usr/bin/env bash
 # controls the apache-php server in the docker-phpfarm container
 
+PHPFARM_PORTS=${PHPFARM_PORTS:-'8071 8072 8073 8074 8080'}
+
 source tool/env/check
 
 start_httpd() {
   if [ "$(docker ps -f name=http_server -q -a)" == "" ]; then
     echo ">>> Starting apache/php server in docker container ..."
+    publishOption=''
+    for port in $PHPFARM_PORTS; do
+      publishOption="$publishOption -p ${port}:${port}"
+    done
     docker run --name http_server \
       -v $PWD:/var/www:cached \
       -v $PWD/data/docker/http/root:/root:delegated \
       -e APACHE_UID=$UID \
-      -p 8070:8070 \
-      -p 8071:8071 \
-      -p 8072:8072 \
-      -p 8073:8073 \
-      -p 8074:8074 \
+      $publishOption \
       --detach \
       cboulanger/docker-phpfarm \
       > /dev/null
@@ -27,8 +29,9 @@ start_httpd() {
     exit 1
   fi
   [ -d $PWD/data/docker/http ] || mkdir -p $PWD/data/docker/http
+
+  echo "Server started."
   docker logs -f http_server &> $PWD/log/http/combined.log &
-  echo "Server started. PHP Versions 7.0-7.4 on ports 8070-8074."
 }
 
 stop_httpd() {
@@ -41,8 +44,6 @@ stop_httpd() {
   fi
   echo "Server stopped."
 }
-
-
 
 case $1 in
   start)

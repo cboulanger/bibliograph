@@ -1,7 +1,7 @@
 {
   "config": {
     "platform": {
-      "php": "7.3"
+      "php": "8.0"
     }
   },
   "description": "PHP Backend for Bibliograph",
@@ -44,7 +44,6 @@
     "ext-zip": "*",
     "georgique/yii2-jsonrpc": "dev-bibliograph",
     "hedii/zotero-api": "^1.1",
-    "magp/yii2-json-schema-validator": "dev-master",
     "neitanod/forceutf8": "^2.0",
     "renanbr/crossref-client": "^1",
     "rsinger/worldcat-linkeddata-php": "dev-master",
@@ -55,7 +54,7 @@
     "yiisoft/yii2-swiftmailer": "^2.1",
     "yosymfony/toml": "^1.0.0",
     "ext-mysqli": "*",
-    "illuminate/support": "^8.49"
+    "illuminate/support": "^8.0"
   },
   "require-dev": {
     "bizley/migration": "^4.2",

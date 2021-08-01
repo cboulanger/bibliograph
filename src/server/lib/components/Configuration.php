@@ -48,7 +48,7 @@ class Configuration extends \yii\base\Component
   //-------------------------------------------------------------
 
   /**
-   * Creates a preference enty with the given properties
+   * Creates a preference entry with the given properties
    * @param $key
    *     The name ("key") of the config value
    * @param mixed $default

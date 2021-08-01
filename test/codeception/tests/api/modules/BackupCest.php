@@ -1,6 +1,6 @@
 <?php
 
-use React\EventLoop\Factory;
+use React\EventLoop\Loop;
 use React\HttpClient\Client;
 use React\HttpClient\Response;
 
@@ -72,7 +72,7 @@ class BackupCest
   protected function handleStreamResponse($route, array $params, ApiTester $I, $debug=false)
   {
     $url = $this->_getFromEnvironment("SERVER_URL") . "/$route?" . http_build_query($params) . "&access-token=".$this->token;
-    $loop = Factory::create();
+    $loop = Loop::get();
     $content = "";
     $client = new Client($loop);
     $request = $client->request('GET', $url);

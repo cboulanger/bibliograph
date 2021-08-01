@@ -7,5 +7,6 @@ if [[ "$GITHUB_WORKFLOW" != "" ]] && ! [[ -f test/.env.moved ]]; then
   cp test/.env.github test/.env
 fi
 
-# export .env variables to this shell
-export $(egrep -v '^#' test/.env | xargs)
+set -a
+source test/.env
+set +a

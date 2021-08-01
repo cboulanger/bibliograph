@@ -1,4 +1,15 @@
 #!/usr/bin/env bash
 
-# call local composer with the right working directory
-tool/bin/php -d memory_limit=-1 src/lib/composer.phar --working-dir=src/server "$@"
+if [[ "$PHP_VERSION" == "" ]]; then
+  >&2 echo "PHP_VERSION must be defined"
+  exit 1
+fi
+
+VENDOR_DIR=src/lib/composer-$PHP_VERSION
+
+# copy generic or custom composer.json
+if ! [[ -f $VENDOR_DIR/composer.json ]]; then
+    >&2 echo "Missing Composer configuration file at $VENDOR_DIR/composer.json"
+    exit 1
+fi
+tool/bin/php -d memory_limit=-1 src/lib/composer.phar --working-dir=$VENDOR_DIR "$@"

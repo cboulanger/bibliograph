@@ -1,6 +1,7 @@
 #!/bin/bash
-source tool/env/envvars-load
+
 source tool/env/check
+source tool/env/envvars-load
 
 CODECEPT_ARGS="--fail-fast"
 set -o errexit
@@ -16,22 +17,37 @@ declare -a default=(
 )
 declare -a suites=("${@:-${default[@]}}")
 
-log_heading "Running codeception suites '${suites[*]}' "
+# shellcheck disable=SC2206
+php_versions=(${PHP_TEST_VERSIONS:-$PHP_VERSION})
 
+log_heading "Running codeception suites '${suites[*]}' in PHP versions ${php_versions[*]}"
+
+# mysql setup
 source tool/env/envvars-export
 source tool/test/setup/create-mysql-user
 source tool/test/setup/check-mysql
 
-export APP_URL=http://localhost:$PORT/compiled/$BUILD_TARGET/$APP_NAME
-
-for suite in "${suites[@]}"
+for php_version in "${php_versions[@]}"
 do
-    source tool/test/setup/reset-data
-    if [[ "$suite" != *"--env empty-database"* ]]; then
-      source tool/test/setup/create-model-data
-    fi
-    log_info ">>> Running test suite: $suite ..."
-    codecept $CODECEPT_ARGS run $suite || exit $?
+  # override PHP-version specific variables and re-export env vars
+  source tool/env/envvars-load
+  export PHP_VERSION=$php_version
+  source tool/env/envvars-export
+  # build composer packages for PHP version, if they do not already exist
+  if ! [[ -f "src/lib/composer-$PHP_VERSION/vendor/autoload.php" ]]; then
+    log_info "Installing composer dependencies for PHP $PHP_VERSION"
+    tool/bin/composer install
+  fi
+  # Run test suites
+  for suite in "${suites[@]}"
+  do
+      source tool/test/setup/reset-data
+      if [[ "$suite" != *"--env empty-database"* ]]; then
+        source tool/test/setup/create-model-data
+      fi
+      log_info ">>> Running test suite: $suite ..."
+      codecept $CODECEPT_ARGS run $suite || exit $?
+  done
 done
 
 log_info "Tests finished."

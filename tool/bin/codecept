@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
-# run codecept in the php container
-source tool/env/envvars-load
-export PHP_VERSION
+if [[ "$PHP_VERSION" == "" ]]; then
+  >&2 echo "PHP_VERSION must be defined"
+  exit 1
+fi
 
-tool/bin/php src/server/vendor/codeception/codeception/codecept --config test/codeception "$@"
+VENDOR_DIR=src/lib/composer-$PHP_VERSION/vendor
+
+tool/bin/php $VENDOR_DIR/codeception/codeception/codecept --config test/codeception "$@"

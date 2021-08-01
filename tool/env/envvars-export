@@ -2,7 +2,7 @@
 [ "$(type -t log_error)" == "function" ] || source tool/lib/functions.sh
 
 # check and export environment variables for use in scripts
-envvars="PHP_VERSION DB_TYPE DB_HOST DB_PORT DB_USER DB_PASSWORD DB_DATABASE"
+envvars="PHP_VERSION PHP_PORT DB_TYPE DB_HOST DB_PORT DB_USER DB_PASSWORD DB_DATABASE"
 for envvar in $envvars; do
   #echo "$envvar is ${!envvar}"
   if [ "${!envvar}" == "" ]; then
