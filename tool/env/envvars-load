@@ -1,12 +1,7 @@
 #!/usr/bin/env bash
 
-# overwrite environment file in github actions
-if [[ "$GITHUB_WORKFLOW" != "" ]] && ! [[ -f test/.env.moved ]]; then
-  echo ">>> Using GitHub environment"
-  mv test/.env test/.env.moved
-  cp test/.env.github test/.env
-fi
-
 set -a
 source test/.env
+[[ "$GITHUB_WORKFLOW" != "" ]] && source test/.env.github
+[[ -f "test/.env.local" ]] && source test/.env.local
 set +a

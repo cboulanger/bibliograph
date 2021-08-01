@@ -5,7 +5,7 @@ set -e
 source tool/env/check
 source tool/env/install-libs
 
-echo ">>> Installing/updating Qooxdoo..."
+echo ">>> Updating Qooxdoo..."
 
 if command -v "pnpm" >/dev/null ; then
   pnpm add @qooxdoo/compiler
@@ -18,4 +18,4 @@ npx qx package update --quiet
 npx qx package upgrade
 
 echo ">>> Updating Composer packages..."
-tool/bin/composer update
+tool/env/composer-update

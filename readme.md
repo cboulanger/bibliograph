@@ -3,8 +3,6 @@
 ![Bibliograph Tests](https://github.com/cboulanger/bibliograph/workflows/Bibliograph%20Tests/badge.svg) 
 [![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=panyasan&url=https://github.com/cboulanger/bibliograph&title=Bibliograph&language=javascript&tags=github&category=software)
 
-> NOTE: This is v3.0.0-beta, compatible with PHP 7.3, featuring a completely rewritten backend.
-
 Bibliograph is a powerful open source web application for the collaborative
 collection, editing and publishing of bibliographic data.
 
@@ -78,20 +76,15 @@ project needs your help. Even if you are not a developer, you can contribute:
 ## Credits
 Open source libraries/applications
 - [qooxdoo JavaScript framework](http://www.qooxdoo.org): (c) 1&1 Internet AG 
-- [Yii2 Framework](http://www.yiiframework.com) by Yii Software LLC. 
-- [CSL - The Citation Style Language](http://www.citationstyles.org).
-- [CiteProc-PHP](https://bitbucket.org/rjerome/citeproc-php/) by Ron Jerome
-- [CQL/SRU parser](https://github.com/simar0at/sru-cql-parser) by Robert Sanderson and Omar Siam
+- [Yii2 Framework](http://www.yiiframework.com) by Yii Software LLC.
+- [Codeception](https://codeception.com) 
 
 Funding provided by
 - [Department of Law, Humboldt-Universität zu Berlin](http://www.rewi.hu-berlin.de)
 
 Bibliograph is developed using
-- [Codeception](https://codeception.com) and [PHPUnit](https://phpunit.de) (Testing libraries)
-- [Visual Studio Code](https://code.visualstudio.com)
-- [Cloud9 IDE](http://c9.io) (Cloud-based coding and testing environment)
+- [PHPStorm](https://www.jetbrains.com/phpstorm/) (IDE)
 - [GitHub](http://github.com) (Version control and code hosting)
-- [BrowserStack](http://browserstack.com) (Browser testing service - sponsored Open Source license)
 
 In particular, the author wishes to thank:
 - Gerrit Oldenburg (Humboldt Universität zu Berlin) for finding and fixing various

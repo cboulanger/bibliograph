@@ -18,6 +18,11 @@ if [[ "$1" != "" ]]; then
   source $BUILD_ENV_FILE
 fi
 
+if [[ "$PHP_VERSION" == "" ]]; then
+  >&2 echo "PHP_VERSION must be defined"
+  exit 1
+fi
+
 # configurable variables
 QX_CMD=${QX_CMD:-"npx qx"}
 APP_ENV_FILE=${APP_ENV_FILE:-$(pwd)/test/.env}
@@ -29,6 +34,7 @@ BUILD_CLEAN=${BUILD_CLEAN:-0}
 BUILD_ZIP_FILE=${BUILD_ZIP_FILE:-0}
 BUILD_DEBUG_MODE=${BUILD_DEBUG_MODE:-0}
 BUILD_NAME=${BUILD_NAME:-$BUILD_TARGET}
+VENDOR_DIR=${VENDOR_DIR:-src/lib/composer-$PHP_VERSION}
 DIST_DIR=${DIST_DIR:-$(pwd)/dist/$BUILD_NAME}
 DIST_SERVER_DIR=${DIST_SERVER_DIR:-$DIST_DIR/server}
 DEPLOY_DIR=${DEPLOY_DIR:-""}
@@ -60,6 +66,8 @@ if [[ $BUILD_VERBOSE == 1 ]]; then
   echo "   Qooxdoo build target:   $BUILD_TARGET"
   echo "   Build directory:        $DIST_DIR"
   echo "   Appl. config file:      $APP_CONF_FILE"
+  echo "   PHP version:            $PHP_VERSION"
+  echo "   Vendor directory:       $VENDOR_DIR"
   echo "   Deployment directory:   $DEPLOY_DIR"
   echo "   Deployment config dir:  $DEPLOY_CONFIG_DIR"
   echo "   Deployed .env file:     $DEPLOY_ENV_FILE"
@@ -168,7 +176,7 @@ EOF
       echo " - Adding custom composer.json from $COMPOSER ..."
       cp $COMPOSER $DIST_SERVER_DIR/composer.json
     else
-      cp -a $SERVER_SRC_DIR/composer.* $DIST_SERVER_DIR
+      cp -a $VENDOR_DIR/composer.* $DIST_SERVER_DIR
     fi
     # TODO this works only if $DIST_SERVER_DIR is below the cwd!
     COMPOSER_ARGS="--no-dev --working-dir=${DIST_SERVER_DIR#$(pwd)/}"

@@ -136,7 +136,7 @@ trait JsonRpcTrait
   public function getRequestedResponsePath()
   {
     $path= null;
-    $data = json_decode($this->grabResponse(), false, 512, JSON_THROW_ON_ERROR);
+    $data = json_decode($this->grabResponse(), false, 512, defined("JSON_THROW_ON_ERROR") ? JSON_THROW_ON_ERROR:0);
     if (is_array($data)) {
       foreach ($data as $index => $rpc) {
         if (isset($rpc->id) and $rpc->id == $this->getCurrentJsonRpcId()) {
@@ -222,7 +222,7 @@ trait JsonRpcTrait
   {
     if ($message){
       $this->assertNotEmpty($this->grabRequestedResponseByJsonPath('error.message'),"Response does not contain error.message property");
-      $this->assertContains( $message, $this->grabRequestedResponseByJsonPath('error.message')[0], "Error message is not '$message'");
+      $this->assertStringContainsString($message, $this->grabRequestedResponseByJsonPath('error.message')[0], "Error message is not '$message'");
     }
     if ($code){
       $this->assertNotEmpty($this->grabRequestedResponseByJsonPath('error.code'),"Response does not contain error.code property");
@@ -357,7 +357,7 @@ trait JsonRpcTrait
    */
   public function grabJsonRpcNotifications()
   {
-    $data = json_decode($this->grabResponse(), false, 512, JSON_THROW_ON_ERROR);
+    $data = json_decode($this->grabResponse(), false, 512, defined("JSON_THROW_ON_ERROR") ? JSON_THROW_ON_ERROR:0);
     $notifications = [];
     if (is_array($data)) {
       foreach ($data as $rpc) {

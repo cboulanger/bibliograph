@@ -92,7 +92,7 @@ class Module
       if ($zip->open($testfile, ZIPARCHIVE::CREATE) !== TRUE) {
         array_push($error, "Cannot create backup archive in backup folder - please check file permissions.");
       } else {
-        $zip->addFile(APP_LOG_DIR . '/app.log');
+        $zip->addFile(__FILE__);
         $zip->close();
         if (@unlink($testfile) === false) {
           Yii::warning("Cannot delete files in backup folder - please check file permissions.", Module::CATEGORY);

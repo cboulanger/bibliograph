@@ -42,7 +42,6 @@
     "ext-pdo": "*",
     "ext-simplexml": "*",
     "ext-zip": "*",
-    "georgique/yii2-jsonrpc": "dev-bibliograph",
     "hedii/zotero-api": "^1.1",
     "magp/yii2-json-schema-validator": "dev-master",
     "neitanod/forceutf8": "^2.0",
@@ -54,7 +53,8 @@
     "yiisoft/yii2": "^2.0.32",
     "yiisoft/yii2-swiftmailer": "^2.1",
     "yosymfony/toml": "^1.0.0",
-    "ext-mysqli": "*"
+    "ext-mysqli": "*",
+    "georgique/yii2-jsonrpc": "dev-bibliograph"
   },
   "require-dev": {
     "bizley/migration": "^2.2",

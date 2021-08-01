@@ -6,6 +6,8 @@ on GitHub, check it out locally and start hacking away...
 
 ## Setup development environment
 
+### Prerequisites
+
 In order to be able to develop Bibliograph with the same
 tools regardless of the development environment, a dockerized
 setup is used. You need the following prerequisites:
@@ -18,20 +20,38 @@ setup is used. You need the following prerequisites:
    
  - [PNPM](https://github.com/pnpm/pnpm): Install with `npm
    install -g pnpm` - you can also use NPM, if you prefer.
- 
-First, run `pnpm install` to install all needed NPM modules.
-Then, run `pnpm run install` to set up the docker containers
-with the development environment. This will provide you with the
-following dockerized services running in separate containers:
-
- - PHPFarm with php versions 7.0 - 7.4 via Apache on localhost:8070-8074 (8.x will be added shortly) 
    
+### Install frontend and backend development environment
+   
+First, run `pnpm install` to install all needed NPM modules. 
+
+The backend consists of the following dockerized
+services running in separate containers:
+
+ - PHPFarm with php versions 7.2 - 8.0 via Apache on localhost:8072-8080
  - MariaDB on localhost:3036
 
-Since the backend is dockerized, you need to use wrapper scripts to
-call the underlying basic executables, such as `php`, `composer`,
+If you don't need to support the whole range of PHP versions listed above,
+override the `PHP_TEST_VERSIONS` environment variable defined in `test/.env` by
+redefining it in a new file `test/.env.local`. This will speed up installation
+and testing considerably. In the same file, you can set the version of PHP
+you primarily want to work with in the `PHP_VERSION` environment variable.
+
+Installing the composer dependencies is much faster if you
+configure Composer with a GitHub Personal Access Token. Go to
+https://github.com/settings/tokens and generate a new token.
+Then execute
+```bash
+tool/bin/composer config -g github-oauth.github.com <PAT>
+```
+
+Then, run `pnpm run install:server` to set up the docker containers with the
+backend services. Since the backend is dockerized, you need to use wrapper
+scripts to call the underlying basic executables, such as `php`, `composer`,
 `codecept`, or `yii`. They can be found in [tool/bin](tool/bin) directory.
- 
+
+### Start the backend services and run the application
+
 To start the services, run `pnpm run services:start`. Afterwards,
 you need to run `pnpm run dev:clean` to run the application in
 development mode for the first time, setting up the MariaDB server
@@ -85,13 +105,14 @@ dependabot mechanism), run `pnpm install`.
 
 ## Testing code changes
 
-The PHP backend is covered by a fairly extensive test suite which can be run with
-`pnpm runn test:codeception:all`. Any changes to the backend should be checked by
-running this suite, and any non-trivial addition to it should come with an individual
-test for each new feature. You can also run unit, functional and API tests separately
-with `pnpm runn test:codeception:(unit|functional|api)`.
+The PHP backend is covered by a fairly extensive test suite which
+can be run with `pnpm runn test:codeception:all`. Any changes
+to the backend should be checked by running this suite, and any
+non-trivial addition to it should come with an individual test for
+each new feature. You can also run unit, functional and API tests
+separately with `pnpm run test:codeception:(unit|functional|api)`.
 
-Frontend tests using [Playwright](https://playwright.dev/) are in preparation. 
+Frontend tests using [Playwright](https://playwright.dev/) are in preparation.
 
 ## Deployment
 

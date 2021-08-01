@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+set -o errexit
+source tool/env/check
+source tool/env/envvars-load
+source tool/lib/functions.sh
+
+# shellcheck disable=SC2206
+php_versions=(${PHP_TEST_VERSIONS:-$PHP_VERSION})
+
+for php_version in "${php_versions[@]}"
+do
+  log_info "Updating composer dependencies for PHP $php_version..."
+  export PHP_VERSION=$php_version
+  tool/bin/composer --prefer-source update
+done

@@ -10,7 +10,16 @@ if [[ "$GITHUB_WORKFLOW" == "" ]]; then
   source tool/env/services-start
 fi
 
+echo ">>> Installing Qooxdoo..."
+
+if command -v "pnpm" >/dev/null ; then
+  pnpm add @qooxdoo/compiler
+else
+  npm install @qooxdoo/compiler
+fi
+
 log_info ">>> Installing composer ..."
+
 COMPOSER_SETUP_SCRIPT=src/lib/composer-setup.php
 EXPECTED_SIGNATURE="$(wget -q -O - https://composer.github.io/installer.sig)"
 wget https://getcomposer.org/installer -O $COMPOSER_SETUP_SCRIPT
@@ -29,4 +38,9 @@ if [ $RESULT -eq 1 ]; then
   exit_with_error "ERROR: Failed to setup composer ..."
 fi
 
-source tool/env/update
+log_info ">>> Installing Qooxdoo packages..."
+npx qx package update --quiet
+npx qx package install
+
+log_info ">>> Installing Composer packages..."
+tool/env/composer-install

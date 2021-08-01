@@ -38,8 +38,10 @@ where options are:
   --skip-composer               - skip building of the composer dependencies
   --deploy-host, -H path        - the host server to deploy to via SSH, overrides
                                   DEPLOY_HOST
-  --deploy-dir, -D path         - the directory on the host to deploy to,
-                                  overrides DEPLOY_DIR
+  --deploy-php, -P version      - the PHP version used on the host server, overrides
+                                  PHP_VERSION
+  --deploy-dir, -D path         - the directory on the host to deploy to, overrides
+                                  DEPLOY_DIR
   --deploy-config-dir, -C path  - the path to the configuration dir, absolute or
                                   relative to the deployment dir. Defaults to
                                   'config', overrides DEPLOY_CONFIG_DIR                            
@@ -81,8 +83,7 @@ by `--env-file`, or c) to be set with `--set-env`:
    DB_PASSWORD       - Password of that user
    DB_ROOT_USER      - The name of the root user, usually "root"
    DB_ROOT_PASSWORD  - Password of root user (necessary only if DEPLOY_DB_CREATE_USER=1)
-   COMPOSER          - path to composer.json, if different from the one in the source (this might
-                       be necessary if the target server has a legacy PHP version)
+   COMPOSER          - path to composer.json, if different from the ones in the sources 
 ```
 
 ## Deployment scenarios

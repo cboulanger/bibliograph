@@ -33,7 +33,7 @@ $config =  [
   /* Application components */
   'components' => require('components.php'),
   /* Extension libraries */
-  'extensions' => require(APP_BACKEND_DIR . '/vendor/yiisoft/extensions.php'),
+  'extensions' => require(VENDOR_DIR . '/yiisoft/extensions.php'),
   /* Events */
   /**
    * Switch backend language based on configuration and browser settings

@@ -357,7 +357,7 @@ class Parser
         $identifier = $this->current;
         $this->fetch_token();
       }
-      if ($identifier{0} == '"' && $identifier{strlen($identifier) - 1} == '"') {
+      if ($identifier[0] == '"' && $identifier[strlen($identifier) - 1] == '"') {
         $identifier = substr($identifier, 1, strlen($identifier) - 2);
       }
       $prefs[strtolower($name)] = $identifier;
@@ -847,7 +847,7 @@ class Prefixed extends CqlObject
     if ($c > 1) {
       /* NASTY! */
       $diag = new Diagnostic("Too many .s in value: $this->value");
-    } elseif ($this->value{0} == '.') {
+    } elseif ($this->value[0] == '.') {
       throw new LogicException("Null prefix");
     } elseif ($c > 0) {
       list($pref, $data) = explode('.', $this->value);
@@ -1098,7 +1098,7 @@ class Term extends CqlObject
 {
   public function __construct($data)
   {
-    if ($data{0} == '"' && $data{strlen($data) - 1} == '"') {
+    if ($data[0] == '"' && $data[strlen($data) - 1] == '"') {
       $data = substr($data, 1, strlen($data) - 1);
     }
     $this->value = $data;

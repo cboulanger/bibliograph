@@ -14,9 +14,6 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   ulimit unlimited
 fi
 
-# Local PHP version, cannot be overridden
-PHP_VERSION=$(tool/bin/php -r 'echo PHP_MAJOR_VERSION . "." . PHP_MINOR_VERSION;')
-
 # ------------------------------------------------------------------------------------------
 #
 # Environment variables used by this script
@@ -168,6 +165,11 @@ while [[ $1 != "" ]]; do
     shift
     ;;
 
+  "--deploy-php" | "-P")
+    PHP_VERSION="$2"
+    shift
+    ;;
+
   "--deploy-config-dir" | "-C")
     DEPLOY_CONFIG_DIR="$2"
     shift
@@ -283,8 +285,10 @@ ${HELP_ADDITIONAL_TEXT}
   --skip-composer               - skip building of the composer dependencies
   --deploy-host, -H path        - the host server to deploy to via SSH, overrides
                                   DEPLOY_HOST
-  --deploy-dir, -D path         - the directory on the host to deploy to,
-                                  overrides DEPLOY_DIR
+  --deploy-php, -P version      - the PHP version used on the host server, overrides
+                                  PHP_VERSION
+  --deploy-dir, -D path         - the directory on the host to deploy to, overrides
+                                  DEPLOY_DIR
   --deploy-config-dir, -C path  - the path to the configuration dir, absolute or
                                   relative to the deployment dir. Defaults to
                                   'config', overrides DEPLOY_CONFIG_DIR
