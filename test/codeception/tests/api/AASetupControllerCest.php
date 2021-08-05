@@ -5,6 +5,16 @@ class AASetupControllerCest
 
   protected $version;
 
+  /**
+   * @param ApiTester $I
+   */
+  public function tryPhpVersion(ApiTester $I)
+  {
+    $expected_php_version = $_SERVER['PHP_VERSION'];
+    $I->expectTo("find PHP version $expected_php_version");
+    $actual_php_version = PHP_MAJOR_VERSION . "." . PHP_MINOR_VERSION;
+    $I->assertTrue($expected_php_version === $actual_php_version,"Wrong PHP version $actual_php_version, expected $expected_php_version");
+  }
 
   /**
    * Getting application version
@@ -13,7 +23,7 @@ class AASetupControllerCest
    * @return void
    * @throws Exception
    */
-  public function tryVersion(ApiTester $I)
+  public function tryAppVersion(ApiTester $I)
   {
     $I->amGoingTo("test the 'setup.version' server method");
     $I->sendJsonRpcRequest('setup','version');

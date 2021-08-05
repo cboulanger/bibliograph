@@ -54,7 +54,8 @@
     "yiisoft/yii2-swiftmailer": "^2.1",
     "yosymfony/toml": "^1.0.0",
     "ext-mysqli": "*",
-    "illuminate/support": "^8.0"
+    "illuminate/support": "^8.0",
+    "phpunit/phpunit": "^9.5"
   },
   "require-dev": {
     "bizley/migration": "^4.2",
@@ -69,7 +70,6 @@
     "goaop/parser-reflection": "^3.0",
     "graze/guzzle-jsonrpc": "^3.0",
     "insolita/yii2-migration-generator": "^3.2",
-    "phpunit/phpunit": "*",
     "yiisoft/yii2-faker": "^2.0.0",
     "yiisoft/yii2-gii": "^2.0.0",
     "odannyc/yii2-sse": "^0.1.0",

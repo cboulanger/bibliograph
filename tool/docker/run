@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 HOST=127.0.0.1
-PORT=7070
+PORT=7080
 docker run -d -p $HOST:$PORT:80 cboulanger/bibliograph:$(git describe --tags)
 if [[ "$OSTYPE" == "darwin"* ]]; then
   open -a "Google Chrome" http://$HOST:$PORT

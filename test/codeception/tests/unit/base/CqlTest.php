@@ -40,7 +40,7 @@ class CqlTest extends \tests\unit\Base
         'query' => $query,
         'schema' => new \app\schema\BibtexSchema()
       ]);
-      $activeQuery = new ActiveQuery(new Reference());
+      $activeQuery = new ActiveQuery(Reference::class);
       $nlquery->injectIntoYiiQuery($activeQuery);
       $expected = "SELECT * FROM `data_Reference` WHERE " . $where;
       $this->tester->assertEquals($expected, $activeQuery->createCommand()->rawSql);

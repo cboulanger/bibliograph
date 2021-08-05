@@ -118,7 +118,7 @@ if [[ "$BUILD_SKIP" != *"server"* ]]; then
   cp -a $SERVER_SRC_DIR/{config,controllers,lib,messages,migrations,models,modules,schema,views,bootstrap.php} $DIST_SERVER_DIR/
   mkdir -p $DIST_SERVER_DIR/runtime/{cache,logs}
 
-  # remove uclasses that should not be deployed
+  # remove classes that should not be deployed
   rm $DIST_SERVER_DIR/controllers/{SseController,RpcProxyController,DevController}.php
 
   # configuration files

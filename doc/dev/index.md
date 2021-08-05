@@ -42,7 +42,8 @@ configure Composer with a GitHub Personal Access Token. Go to
 https://github.com/settings/tokens and generate a new token.
 Then execute
 ```bash
-tool/bin/composer config -g github-oauth.github.com <PAT>
+export PHP_VERSION=7.3 # or any other or the supported versions
+tool/bin/composer config -g github-oauth.github.com <TOKEN>
 ```
 
 Then, run `pnpm run install:server` to set up the docker containers with the
