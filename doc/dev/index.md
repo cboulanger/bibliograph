@@ -39,10 +39,8 @@ you primarily want to work with in the `PHP_VERSION` environment variable.
 
 Installing the composer dependencies is much faster if you
 configure Composer with a GitHub Personal Access Token. Go to
-https://github.com/settings/tokens and generate a new token.
-Then execute
+https://github.com/settings/tokens and generate a new token, then execute
 ```bash
-export PHP_VERSION=7.3 # or any other or the supported versions
 tool/bin/composer config -g github-oauth.github.com <TOKEN>
 ```
 
@@ -50,6 +48,17 @@ Then, run `pnpm run install:server` to set up the docker containers with the
 backend services. Since the backend is dockerized, you need to use wrapper
 scripts to call the underlying basic executables, such as `php`, `composer`,
 `codecept`, or `yii`. They can be found in [tool/bin](tool/bin) directory.
+
+
+Finally, run
+
+```bash
+tool/env/select-php-version  
+```
+
+This will present you with a choice of PHP versions supported by the
+development environment. Select the version that is running on the deployment
+server. You can switch the version any time by re-running the script.
 
 ### Start the backend services and run the application
 

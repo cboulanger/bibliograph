@@ -1,17 +1,18 @@
 #!/bin/bash
-
 # Compiles and starts the bibliograph app in the browser
 
 set -o errexit
+
+tool/env/check-php-version
 [ -z "$FUNCTIONS_LOADED" ] && source tool/lib/functions.sh
 
-echo "Command: $0 $*"
-
-# Preset default command line args
+# defaults to be overwritten by CLI args
 VERBOSE=0
 USAGE=0
-APP_NAME=""
-APP_URL=""
+APP_NAME=${APP_NAME:-bibliograph}
+BUILD_TARGET=${BUILD_TARGET:-source}
+PHP_PORT=8$(printf %03d ${PHP_VERSION/\./})
+APP_URL=http://localhost:$PHP_PORT/compiled/$BUILD_TARGET/$APP_NAME
 APP_URL_QUERY=""
 BUILD_CLEAN=0
 BUILD_ENV_FILE=test/.env

@@ -27,27 +27,29 @@ source tool/env/envvars-export
 source tool/test/setup/create-mysql-user
 source tool/test/setup/check-mysql
 
-for php_version in "${php_versions[@]}"
+PREV_PHP_VERSION=$PHP_VERSION
+for curr_php_version in "${php_versions[@]}"
 do
   rm -f $LOGFILE
-  log_heading "Running tests for PHP version $php_version (see logfile log/codeception.log for details)"
+  log_heading "Running tests for PHP version $curr_php_version (see logfile log/codeception.log for details)"
+  # set the PHP version that is used when executing php commands
+  tool/env/select-php-version $curr_php_version
   # load default values
   source tool/env/envvars-load
-  # override values in .env via .env.dev
-  PHP_VERSION=$php_version
+  # overwrite the ones needed in the tests
+  export PHP_VERSION=$curr_php_version
   PHP_PORT=8$(printf %03d ${PHP_VERSION/\./})
   APP_URL=http://localhost:$PHP_PORT/compiled/$BUILD_TARGET/$APP_NAME
   SERVER_URL=http://host.docker.internal:$PHP_PORT/test/codeception/web
+  # override values in .env via .env.dev
   cat << EOF > test/.env.dev
 PHP_VERSION=$PHP_VERSION
-PHP_PORT=$PHP_PORT
 APP_URL=$APP_URL
 SERVER_URL=$SERVER_URL
 EOF
-  source tool/env/envvars-export
   # Install composer dependencies if necessary
-  if ! [ -f "src/lib/composer-$php_version/vendor/autoload.php" ]; then
-    log_info "Installing composer dependencies for PHP $php_version..."
+  if ! [ -f "src/lib/composer-$curr_php_version/vendor/autoload.php" ]; then
+    log_info "Installing composer dependencies for PHP $curr_php_version..."
     tool/bin/composer install
   fi
   # Run test suites
@@ -65,8 +67,8 @@ EOF
         exit 1
       fi
   done
-  rm test/.env.dev
 done
-
+rm test/.env.dev
+tool/env/select-php-version $PREV_PHP_VERSION
 log_info "Tests finished."
 exit 0

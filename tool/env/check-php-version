@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+[[ -f test/.env.local ]] || tool/env/select-php-version
+source test/.env.local

@@ -1,11 +1,6 @@
 #!/usr/bin/env bash
 
-if [[ "$PHP_VERSION" == "" ]]; then
-  >&2 echo "PHP_VERSION must be defined"
-  exit 1
-fi
-
-echo $PHP_VERSION > test/php_version.txt
+source tool/env/check-php-version
 
 VENDOR_DIR=src/lib/composer-$PHP_VERSION/vendor
 tool/bin/php $VENDOR_DIR/codeception/codeception/codecept --config test/codeception "$@"

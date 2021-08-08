@@ -1,10 +1,6 @@
 #!/usr/bin/env bash
 
-if [[ "$PHP_VERSION" == "" ]]; then
-  >&2 echo "PHP_VERSION must be defined"
-  exit 1
-fi
+source tool/env/check-php-version
 
 # run php in docker image
 docker exec http_server php-$PHP_VERSION "$@"
-

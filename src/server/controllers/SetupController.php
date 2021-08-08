@@ -74,7 +74,7 @@ class SetupController extends AppController
    *
    * @var array
    */
-  protected $noAuthActions = ["setup", "version", "setup-version", "reset"];
+  protected $noAuthActions = ["setup", "version", "php-version", "setup-version", "reset"];
 
   /**
    * Setup errors
@@ -306,6 +306,17 @@ class SetupController extends AppController
       ->setParams([true])
       ->sendToClient();
     return "Setup cache has been reset.";
+  }
+
+  /**
+   * Returns the application verision as per package.json
+   */
+  public function actionPhpVersion()
+  {
+    if (!YII_ENV_TEST) {
+      throw new \BadMethodCallException('setup/php-version can only be called in test mode.');
+    }
+    return PHP_MAJOR_VERSION . "." . PHP_MINOR_VERSION;
   }
 
   /**

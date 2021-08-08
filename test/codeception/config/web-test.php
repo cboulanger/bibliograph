@@ -3,7 +3,9 @@
 // configuration for test backend
 //
 
-// the environment variables must be read again because they are overwritten in functional testing
-(new Symfony\Component\Dotenv\Dotenv())->load( DOTENV_FILE);
+$dotenvLoader = new Symfony\Component\Dotenv\Dotenv();
+$dotenvLoader->load(DOTENV_FILE);
+// PHP-Version-dependent variables
+$dotenvLoader->overload(DOTENV_FILE . ".dev");
 $config = require APP_BACKEND_DIR . '/config/web.php';
 return $config;

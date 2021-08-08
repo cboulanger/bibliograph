@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+if [[ "$1" != "" ]] ; then
+  PHP_VERSION=$1
+else
+  echo
+  echo "Select the PHP version you want to use for development"
+  echo "  1) PHP 7.2"
+  echo "  2) PHP 7.3"
+  echo "  3) PHP 7.4"
+  echo "  4) PHP 8.0"
+  read n
+  case $n in
+    1) PHP_VERSION=7.2;;
+    2) PHP_VERSION=7.3;;
+    3) PHP_VERSION=7.4;;
+    4) PHP_VERSION=8.0;;
+    *) echo "Invalid option. Nothing selected."
+       exit
+       ;;
+  esac
+fi
+echo "Using PHP version $PHP_VERSION"
+echo "PHP_VERSION=$PHP_VERSION" > test/.env.local
+

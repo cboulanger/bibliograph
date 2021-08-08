@@ -7,6 +7,6 @@ if(!file_exists(VENDOR_DIR . '/autoload.php')) throw new \Exception("Missing com
 require VENDOR_DIR . '/autoload.php';
 require VENDOR_DIR . '/yiisoft/yii2/Yii.php';
 require APP_BACKEND_DIR . '/lib/components/Configuration.php';
-(new Symfony\Component\Dotenv\Dotenv())->loadEnv( DOTENV_FILE);
+(new Symfony\Component\Dotenv\Dotenv())->loadEnv(DOTENV_FILE);
 require __DIR__ . '/config/defaults.php';
 set_time_limit(MAX_EXECUTION_TIME);

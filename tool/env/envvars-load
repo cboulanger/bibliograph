@@ -7,4 +7,6 @@ source test/.env
 [[ -f "test/.env.local" ]] && source test/.env.local
 # override with development vars (set dynamically by tests)
 [[ -f "test/.env.dev" ]] && source test/.env.dev
+# override with local development vars
+[[ -f "test/.env.dev.local" ]] && source test/.env.dev.local
 set +a

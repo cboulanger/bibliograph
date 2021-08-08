@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 
-if [[ "$PHP_VERSION" == "" ]]; then
-  >&2 echo "PHP_VERSION must be defined"
-  exit 1
-fi
+source tool/env/check-php-version
 
 VENDOR_DIR=src/lib/composer-$PHP_VERSION
 
