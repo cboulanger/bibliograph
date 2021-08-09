@@ -3,7 +3,7 @@ name: Deploy to demo server
 on:
   create:
     tags:
-      - *
+      - '*'
 
 jobs:
   # see https://github.com/marketplace/actions/skip-duplicate-actions
