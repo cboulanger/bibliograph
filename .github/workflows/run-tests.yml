@@ -52,6 +52,8 @@ jobs:
         uses: actions/checkout@v1
       - name: Mount workspace dirs into /var/www of http service container
         run: docker exec http_server ln -s /github/workspace/bibliograph/{compiled,dist,src,test} /var/www
+      - name: Set PHP version for command line
+        run: tool/env/select-php-version 7.3
       - name: Check Services
         env:
           DB_HOST_GITHUB: 127.0.0.1
