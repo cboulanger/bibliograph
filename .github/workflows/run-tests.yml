@@ -1,5 +1,8 @@
 name: Run Bibliograph tests on a pull request
-on: [pull_request]
+on:
+  pull_request:
+    paths-ignore:
+      - doc/*
 
 jobs:
 
