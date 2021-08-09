@@ -15,17 +15,20 @@ The prerequisites are:
 
 - A weberver such as Apache configured to run PHP
   
-- PHP (>=v7.3) with PEAR and with the following extensions: 
-    - dev, mysql, (ldap), curl, gd, intl, mbstring, xml, xsl, (yaz), zip
-    - ldap is required only if you want to connect an LDAP server
-    - yaz is required only if you want to import from library catalogues
+- PHP (>=v7.2) with PEAR and with the following extensions: 
+    - dev, mysql, curl, gd, intl, mbstring, xml, xsl, zip
+    - you need the ldap extension if you want to connect an LDAP server
+    - the [phpyaz extension](https://www.indexdata.com/resources/software/phpyaz/) 
+      is required  if you want to import from library catalogues
   
-- bibutils, (jq): installable via Linux package managers
-or Homebrew on MacOS. `jq` is only required for development.
+- the [bibutils package](https://sourceforge.net/p/bibutils/home/Bibutils/): 
+  installable via Linux package managers or Homebrew on MacOS.
+  
+- `jq` is only required for development.
   
 - A dedicated MySQL/MariaDB database and user account. The user
-must have all privileges for the database. It is also possible, but
-not recommended, to use a shared database by setting a table prefix.
+  must have all privileges for the database. It is also possible, if necessary, 
+  to use a shared database by setting a table prefix.
 
 ## Install scripts
 

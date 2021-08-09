@@ -34,8 +34,7 @@ services running in separate containers:
 If you don't need to support the whole range of PHP versions listed above,
 override the `PHP_TEST_VERSIONS` environment variable defined in `test/.env` by
 redefining it in a new file `test/.env.local`. This will speed up installation
-and testing considerably. In the same file, you can set the version of PHP
-you primarily want to work with in the `PHP_VERSION` environment variable.
+and testing considerably.
 
 Installing the composer dependencies is much faster if you
 configure Composer with a GitHub Personal Access Token. Go to
@@ -44,13 +43,8 @@ https://github.com/settings/tokens and generate a new token, then execute
 tool/bin/composer config -g github-oauth.github.com <TOKEN>
 ```
 
-Then, run `pnpm run install:server` to set up the docker containers with the
-backend services. Since the backend is dockerized, you need to use wrapper
-scripts to call the underlying basic executables, such as `php`, `composer`,
-`codecept`, or `yii`. They can be found in [tool/bin](tool/bin) directory.
-
-
-Finally, run
+Now run `tool/env/install` to set up the docker containers with the
+backend services. Finally, run
 
 ```bash
 tool/env/select-php-version  
@@ -59,6 +53,10 @@ tool/env/select-php-version
 This will present you with a choice of PHP versions supported by the
 development environment. Select the version that is running on the deployment
 server. You can switch the version any time by re-running the script.
+
+Since the backend is dockerized, you need to use wrapper scripts to
+call the underlying basic executables, such as `php`, `composer`,
+`codecept`, or `yii`. They can be found in [tool/bin](tool/bin) directory.
 
 ### Start the backend services and run the application
 
@@ -74,16 +72,9 @@ each time you change anything in the frontend code. You will
 have to reload the application to see the changes, however.
 
 To restart the application and continous compilation without
-resetting the backend data, run `pnpm run dev`.
-
-> In rare cases, changed backend code isn't
-properly synchronized and the Apache/PHP server still executes a previous
-version of the code. If you feel that this happens, execute `pnpm run
-services:apache:restart`, which restarts Apache and will force it to use
-the new state (Using docker-sync might fix the problem - see to-do below).
-
-If you want to restart the continuous compilation process
-without opening a browser window, use `pnpm run compile:watch`.
+resetting the backend data, run `pnpm run dev`. If you
+want to restart the continuous compilation process without
+opening a browser window, use `pnpm run compile:watch`.
 
 ## Internationalization
 
@@ -127,6 +118,14 @@ Frontend tests using [Playwright](https://playwright.dev/) are in preparation.
 ## Deployment
 
 See [Testing and production deployment](./deployment.md) 
+
+## Known issues
+
+- In rare cases, changed backend code isn't properly synchronized between the
+main file system and the docker container; this causes the Apache/PHP server to
+executes a previous version of the code. If you experience this, execute
+`pnpm run services:apache:restart`, which restarts Apache and will force it to
+use the new state (Using docker-sync might fix the problem - see to-do below).
 
 ## To do
  - Use [docker-sync](https://docker-sync.readthedocs.io/en/latest/getting-started/installation.html) instead of mounted volumes.

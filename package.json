@@ -18,7 +18,6 @@
     "url": "git+ssh://git@github.com/cboulanger/bibliograph.git"
   },
   "scripts": {
-    "install:server": "tool/env/install",
     "update": "tool/env/update",
     "services:start": "tool/env/services-start",
     "services:stop": "tool/env/services-stop",
