@@ -3,7 +3,7 @@
 
 set -o errexit
 
-tool/env/check-php-version
+source tool/env/check-php-version
 [ -z "$FUNCTIONS_LOADED" ] && source tool/lib/functions.sh
 
 # defaults to be overwritten by CLI args

@@ -99,11 +99,12 @@ In the following example, we create three scenarios:
 
 1. A "testing" setup, in which the app is build in "source" and debug mode
 similar to the local development version. This allows to do testing and
-debugging new features on the target server in a production environment
+debugging new features on the target server in a production environment.
 
 2. A "staging" setup, which is almost like the production version,
 but with additional debug output, and can be used to run UI tests
-against. Once this version is verified to work, we can proceed to upload
+against. Once this version has been verified to work, we can proceed to upload
+the production version.   
 
 3. The user-facing "production" setup.
 

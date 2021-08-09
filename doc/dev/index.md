@@ -76,7 +76,7 @@ have to reload the application to see the changes, however.
 To restart the application and continous compilation without
 resetting the backend data, run `pnpm run dev`.
 
-> Sometimes, and for unknown reasons, changed backend code isn't
+> In rare cases, changed backend code isn't
 properly synchronized and the Apache/PHP server still executes a previous
 version of the code. If you feel that this happens, execute `pnpm run
 services:apache:restart`, which restarts Apache and will force it to use
