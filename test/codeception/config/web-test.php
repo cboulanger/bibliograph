@@ -6,6 +6,6 @@
 $dotenvLoader = new Symfony\Component\Dotenv\Dotenv();
 $dotenvLoader->load(DOTENV_FILE);
 // PHP-Version-dependent variables
-$dotenvLoader->overload(DOTENV_FILE . ".dev");
+$dotenvLoader->overload(DOTENV_FILE . ".dev.local");
 $config = require APP_BACKEND_DIR . '/config/web.php';
 return $config;

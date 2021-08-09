@@ -6,10 +6,9 @@ paths:
     output: _output
     data: _data
     support: _support
-    envs: codeception/_envs
 extensions:
     enabled:
         - Codeception\Extension\RunFailed
 params:
     - ../.env
-    - ../.env.dev
+    - ../.env.dev.local

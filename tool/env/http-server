@@ -13,8 +13,7 @@ start_httpd() {
       publishOption="$publishOption -p ${port}:${port}"
     done
     docker run --name http_server \
-      -v $PWD:/var/www:cached \
-      -v $PWD/data/docker/http/root:/root:delegated \
+      -v $PWD:/var/www:delegated \
       -e APACHE_UID=$UID \
       $publishOption \
       --detach \

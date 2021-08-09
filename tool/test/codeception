@@ -39,14 +39,10 @@ do
   # overwrite the ones needed in the tests
   export PHP_VERSION=$curr_php_version
   PHP_PORT=8$(printf %03d ${PHP_VERSION/\./})
-  APP_URL=http://localhost:$PHP_PORT/compiled/$BUILD_TARGET/$APP_NAME
-  SERVER_URL=http://host.docker.internal:$PHP_PORT/test/codeception/web
-  # override values in .env via .env.dev
-  cat << EOF > test/.env.dev
-PHP_VERSION=$PHP_VERSION
-APP_URL=$APP_URL
-SERVER_URL=$SERVER_URL
-EOF
+  export APP_URL=http://localhost:$PHP_PORT/compiled/$BUILD_TARGET/$APP_NAME
+  export SERVER_URL=http://host.docker.internal:$PHP_PORT/test/codeception/web
+  # override values in .env via .env.dev.local in docker (because of slow volume sync)
+  tool/bin/php -r "file_put_contents('test/.env.dev.local', \"PHP_VERSION=$PHP_VERSION\nAPP_URL=$APP_URL\nSERVER_URL=$SERVER_URL\n\");"
   # Install composer dependencies if necessary
   if ! [ -f "src/lib/composer-$curr_php_version/vendor/autoload.php" ]; then
     log_info "Installing composer dependencies for PHP $curr_php_version..."
@@ -68,7 +64,6 @@ EOF
       fi
   done
 done
-rm test/.env.dev
 tool/env/select-php-version $PREV_PHP_VERSION
 log_info "Tests finished."
 exit 0
