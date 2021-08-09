@@ -62,9 +62,10 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v1
       - name: Install Prerequisites
-        run: tool/env/install
+        run: |
+          tool/bin/composer config -g github-oauth.github.com ${{ secrets.COMPOSER_TOKEN }}
+          tool/env/install
       - name: Run Tests
-        if: "!(github.event.head_commit && contains(github.event.head_commit.message, 'skip tests'))"
         env:
           DB_HOST_GITHUB: 127.0.0.1
           DB_PORT_GITHUB: ${{ job.services.mysql_server.ports[3306] }}
