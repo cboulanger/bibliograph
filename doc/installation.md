@@ -4,7 +4,7 @@
 
 Bibliograph should work on any platform that can run an [officially supported
 version of PHP](https://www.php.net/supported-versions.php) and a Webserver.
-However, testing and development is done with Debian & Ubuntu & MacOS, and I can
+However, testing and development is done with Debian & Ubuntu & MacOS. I can
 only provide support for these platforms. 
 
 Because Bibliograph makes heavy use of PHP extensions, root access

@@ -4,8 +4,6 @@
 
 ### Priority: urgent
 - [ ] BUG: Import-Window: Import All doesn't select all references if they haven't been loaded. This needs to be done on the server. 
-- [ ] BUG: Create new datasource results in "User Error: Running 'migrate/up' failed."
-- [ ] BUG: Delete datasource: "Running 'migrate/down' failed"
 
 ### Priority: normal
 - [ ] BUG: Reimplement User::checkFormPassword
@@ -92,10 +90,7 @@
 - [ ] FEAT: rewrite build scripts with node, using https://codewithhugo.com/how-to-make-beautiful-simple-cli-apps-with-node/
 - [ ] FEAT: Add "serverOnly" column to data_Config (true/false/null) and remove from config data sent to client
 
-
 ### Priority: low
 - [ ] FEAT: Enable print item view: bibliograph.ui.main.ItemView#print()
 - [ ] FEAT: Rewrite Yii2 configuration using M1/Var, maybe convert config to YAML: https://packagist.org/packages/sergeymakinen/yii2-config ?
 - [ ] FEAT: Ctrl+A to select all (visible?) references.
-- [ ] FEAT: Use eslint on Travis: see https://github.com/ITISFoundation/qx-iconfont-material/blob/master/package.json
-- [ ] FEAT: Add dockerized setup, see https://github.com/ITISFoundation/qx-iconfont-material

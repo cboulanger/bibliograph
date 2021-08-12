@@ -82,8 +82,7 @@ by `--env-file`, or c) to be set with `--set-env`:
    DB_USER           - The name of the database user for the application
    DB_PASSWORD       - Password of that user
    DB_ROOT_USER      - The name of the root user, usually "root"
-   DB_ROOT_PASSWORD  - Password of root user (necessary only if DEPLOY_DB_CREATE_USER=1)
-   COMPOSER          - path to composer.json, if different from the ones in the sources 
+   DB_ROOT_PASSWORD  - Password of root user (necessary only if DEPLOY_DB_CREATE_USER=1) 
 ```
 
 ## Deployment scenarios
@@ -149,7 +148,7 @@ handle more complex situations such as if the target server is behind a bastion 
 Host bastion-server
 Hostname bastion.example.org
 User bastion
-IdentityFile ~/.ssh/bastion@example.org
+IdentityFile ~/.ssh/bastion@bastion.example.org
 
 Host bibliograph.example.org
 Hostname bibliograph.example.org
