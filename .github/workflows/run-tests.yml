@@ -5,6 +5,7 @@ jobs:
 
   # see https://github.com/marketplace/actions/skip-duplicate-actions
   pre_job:
+    name: Checks
     # continue-on-error: true # Uncomment once integration is finished
     runs-on: ubuntu-latest
     # Map a step output to a job output
@@ -20,7 +21,7 @@ jobs:
   run_tests:
     needs: pre_job
     if: needs.pre_job.outputs.should_skip != 'true' && !(github.event.head_commit && contains(github.event.head_commit.message, 'skip ci'))
-    name: Run tests & deploy
+    name: Run tests
     runs-on: ubuntu-latest
     services:
       mysql_server:
@@ -36,7 +37,6 @@ jobs:
       http_server:
         image: cboulanger/docker-phpfarm
         ports:
-          - 8071:8071
           - 8072:8072
           - 8073:8073
           - 8074:8074
@@ -49,6 +49,10 @@ jobs:
         uses: actions/checkout@v1
       - name: Mount workspace dirs into /var/www of http service container
         run: docker exec http_server ln -s /github/workspace/bibliograph/{compiled,dist,src,test} /var/www
+      - name: Configure PHP
+        run: |
+          tool/env/select-php-version 8.0
+          tool/bin/composer config -g github-oauth.github.com ${{ secrets.COMPOSER_TOKEN }}
       - name: Check Services
         env:
           DB_HOST_GITHUB: 127.0.0.1
