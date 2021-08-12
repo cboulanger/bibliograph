@@ -96,12 +96,11 @@ easily support any language for which translation strings are supplied.
 The project has the following dependencies:
 
 - [NPM packages](/package.json)
-- [Composer packages](/src/server/composer.json)
-- [Individual GitHub repositories](/src/lib)
+- [Composer packages and individual GitHub repositories](/src/lib)
 
 To update these dependencies their latest compatible version, use `pnpm run update`.
 
-If you update the npm or composer dependencies manually (or via the GitHub
+After you update the npm or composer dependencies manually (or via the GitHub
 dependabot mechanism), run `pnpm install`.
 
 ## Testing code changes
@@ -126,6 +125,3 @@ main file system and the docker container; this causes the Apache/PHP server to
 executes a previous version of the code. If you experience this, execute
 `pnpm run services:apache:restart`, which restarts Apache and will force it to
 use the new state (Using docker-sync might fix the problem - see to-do below).
-
-## To do
- - Use [docker-sync](https://docker-sync.readthedocs.io/en/latest/getting-started/installation.html) instead of mounted volumes.

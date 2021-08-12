@@ -1,9 +1,20 @@
 # TODO
 
-## v3.x
+## Application
 
 ### Priority: urgent
 - [ ] BUG: Import-Window: Import All doesn't select all references if they haven't been loaded. This needs to be done on the server. 
+- [ ] FEAT: Implement setup Wizard
+- [ ] FEAT: Hierarchical roles which inherit permissions from each other  
+- [ ] FEAT: Re-enable item view / formatted item
+- [ ] FEAT: Re-enable item view / record info
+- [ ] FEAT: Re-enable item view / duplicates search
+- [ ] FEAT: Re-enable system menu commands
+- [ ] FEAT: Re-implement message broadcast
+- [ ] FEAT: Allow migrations via permission, not prod/dev-mode
+- [ ] FEAT: Config key change should be broadcasted
+- [ ] FEAT: Z39.50 Plugin: Preference option to configure timeout
+- [ ] FEAT: Replace compile.json by compile.js to dynamically include plugin code
 
 ### Priority: normal
 - [ ] BUG: Reimplement User::checkFormPassword
@@ -14,6 +25,14 @@
 - [ ] FEAT: Reimplement "In which folders..."
 - [ ] FEAT: add GUI for 'app.access.userdatabase.defaultrole' config
 - [ ] FEAT: "Orphaned" folder should contain references that do not have a parent
+- [ ] FEAT: Update CQL operators to conform to the specs (http://www.loc.gov/standards/sru/cql/contextSets/theCqlContextSet.html)
+- [ ] FEAT: Improve keyword import from webservices
+- [ ] FEAT: Reimplement HTML editor integration for notes
+- [ ] FEAT: Implement drag&drop folder positioning
+- [ ] FEAT: Clean, future-proof OO-Rewrite of the Rendering the tree in SimpleDataModel format
+- [ ] FEAT: integrate https://clipboardjs.com/
+- [ ] FEAT: rewrite build scripts with node, using https://codewithhugo.com/how-to-make-beautiful-simple-cli-apps-with-node/
+- [ ] FEAT: Add "serverOnly" column to data_Config (true/false/null) and remove from config data sent to client
 
 ### Priority: low
 - [ ] BUG: Remove non-printable chars from Z39.50 import, see also https://github.com/cboulanger/bibliograph/issues/189
@@ -31,6 +50,8 @@
 - [ ] FEAT: Add "Active" Checkbox to user editor
 - [ ] FEAT: Alert errors during import ("x references skipped...")
 - [ ] FEAT: Add a silent abort error that can be used to terminate a request without an error message
+- [ ] FEAT: Enable print item view: bibliograph.ui.main.ItemView#print()
+- [ ] FEAT: Ctrl+A to select all (visible?) references.
 
 ### Code cleanup / refactoring
 - [ ] use DatasourceTrait::datasource() consistently instead of Dataource::getInstanceFor(), since it provides access control!
@@ -66,31 +87,7 @@
 - [ ] `npm audit fix`
 - [ ] Backend: Streamline API to get Datasource & typed model
 
-## v4.x
+### Development/Toolchain
 
-### Priority: high
-- [ ] FEAT: Implement setup Wizard
-- [ ] FEAT: Re-enable item view / formatted item
-- [ ] FEAT: Re-enable item view / record info
-- [ ] FEAT: Re-enable item view / duplicates search
-- [ ] FEAT: Re-enable system menu commands
-- [ ] FEAT: Re-implement message broadcast
-- [ ] FEAT: Allow migrations via permission, not prod/dev-mode
-- [ ] FEAT: Config key change should be broadcasted
-- [ ] FEAT: Z39.50 Plugin: Preference option to configure timeout 
-- [ ] FEAT: Replace compile.json by compile.js to dynamically include plugin code
-
-### Priority: normal
-- [ ] FEAT: Update CQL operators to conform to the specs (http://www.loc.gov/standards/sru/cql/contextSets/theCqlContextSet.html)
-- [ ] FEAT: Improve keyword import from webservices
-- [ ] FEAT: Reimplement HTML editor integration for notes
-- [ ] FEAT: Implement drag&drop folder positioning
-- [ ] FEAT: Clean, future-proof OO-Rewrite of the Rendering the tree in SimpleDataModel format
-- [ ] FEAT: integrate https://clipboardjs.com/
-- [ ] FEAT: rewrite build scripts with node, using https://codewithhugo.com/how-to-make-beautiful-simple-cli-apps-with-node/
-- [ ] FEAT: Add "serverOnly" column to data_Config (true/false/null) and remove from config data sent to client
-
-### Priority: low
-- [ ] FEAT: Enable print item view: bibliograph.ui.main.ItemView#print()
-- [ ] FEAT: Rewrite Yii2 configuration using M1/Var, maybe convert config to YAML: https://packagist.org/packages/sergeymakinen/yii2-config ?
-- [ ] FEAT: Ctrl+A to select all (visible?) references.
+- [ ] Use [docker-sync](https://docker-sync.readthedocs.io/en/latest/getting-started/installation.html) instead of mounted volumes.
+- [ ] Rewrite Yii2 configuration using M1/Var, maybe convert config to YAML: https://packagist.org/packages/sergeymakinen/yii2-config ?
