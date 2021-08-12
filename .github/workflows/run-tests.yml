@@ -54,10 +54,6 @@ jobs:
         uses: actions/checkout@v1
       - name: Mount workspace dirs into /var/www of http service container
         run: docker exec http_server ln -s /github/workspace/bibliograph/{compiled,dist,src,test} /var/www
-      - name: Configure PHP
-        run: |
-          tool/env/select-php-version 8.0
-          tool/bin/composer config -g github-oauth.github.com ${{ secrets.COMPOSER_TOKEN }}
       - name: Check Services
         env:
           DB_HOST_GITHUB: 127.0.0.1
@@ -67,6 +63,10 @@ jobs:
         uses: actions/setup-node@v1
       - name: Install Prerequisites
         run: tool/env/install
+      - name: Configure PHP
+        run: |
+          tool/env/select-php-version 8.0
+          tool/bin/composer config -g github-oauth.github.com ${{ secrets.COMPOSER_TOKEN }}
       - name: Run Tests
         if: "!(github.event.head_commit && contains(github.event.head_commit.message, 'skip tests'))"
         env:
