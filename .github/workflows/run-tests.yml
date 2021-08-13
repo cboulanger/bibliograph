@@ -57,9 +57,8 @@ jobs:
           docker exec http_server ln -s /github/workspace/bibliograph/{compiled,dist,src,test} /var/www
           DOCKER_HOST_IP=`docker exec http_server echo -e "$(/sbin/ip route|awk '/default/ { print $3 }')"`
           echo $DOCKER_HOST_IP
-          exit 1
-      - name: Set environment variables
-        run: cp test/.env.github test/.env
+          cp test/.env.github test/.env
+          echo "DB_HOST=$DOCKER_HOST_IP" >> test/.env
       - name: Select PHP version
         run: tool/env/select-php-version 8.0
       - name: Check Services
