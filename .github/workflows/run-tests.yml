@@ -55,7 +55,9 @@ jobs:
       - name: Configure httpd container
         run: |
           docker exec http_server ln -s /github/workspace/bibliograph/{compiled,dist,src,test} /var/www
-          docker exec http_server "echo -e \"$(/sbin/ip route|awk '/default/ { print $3 }')\tdocker.host.internal\" | sudo tee -a /etc/hosts > /dev/null"
+          DOCKER_HOST_IP=`docker exec http_server echo -e "$(/sbin/ip route|awk '/default/ { print $3 }')"`
+          echo $DOCKER_HOST_IP
+          exit 1
       - name: Set environment variables
         run: cp test/.env.github test/.env
       - name: Select PHP version
