@@ -3,12 +3,6 @@
 [[ -z "$FUNCTIONS_LOADED" ]] && source tool/lib/functions.sh
 source tool/env/envvars-load
 
-echo "-----------------------------------------"
-cat test/.env
-echo "-----------------------------------------"
-printenv
-echo "-----------------------------------------"
-
 echo ">>> Testing MySQL service"
 docker exec mysql_server cat /etc/os-release | grep VERSION=
 
