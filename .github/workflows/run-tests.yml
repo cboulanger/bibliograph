@@ -54,13 +54,8 @@ jobs:
         uses: actions/checkout@v1
       - name: Configure httpd container
         run: |
-          DOCKER_HOST_IP=172.17.0.1
           rm test/.env && cp test/.env.github test/.env
-          echo "DB_HOST=$DOCKER_HOST_IP" >> test/.env
-          cat test/.env
-          echo "in vm"
           docker exec http_server ln -s /github/workspace/bibliograph/{compiled,dist,src,test} /var/www
-          docker exec http_server cat /var/www/test/.env
       - name: Select PHP version
         run: tool/env/select-php-version 8.0
       - name: Check Services
