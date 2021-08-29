@@ -42,7 +42,7 @@ do
   # The URL of the application used in frontend tests
   export APP_URL=http://$LOCAL_HOST:$PHP_PORT/compiled/$BUILD_TARGET/$APP_NAME
   # The URL of the server used in backend tests
-  export SERVER_URL=http://$DOCKER_HOST:$PHP_PORT/test/codeception/web
+  export SERVER_URL=http://$HOST_DOCKER_INTERNAL:$PHP_PORT/test/codeception/web
   # override values in .env via .env.dev.local in docker (because of slow volume sync)
   tool/bin/php -r "file_put_contents('test/.env.dev.local', \"PHP_VERSION=$PHP_VERSION\nAPP_URL=$APP_URL\nSERVER_URL=$SERVER_URL\n\");"
   # Install composer dependencies if necessary
