@@ -1,6 +1,6 @@
 # Bibliograph: Open Source Online Citation & Library Management
 
-![Bibliograph Tests](https://github.com/cboulanger/bibliograph/workflows/Bibliograph%20Tests/badge.svg) 
+[![Run Bibliograph tests](https://github.com/cboulanger/bibliograph/actions/workflows/run-tests.yml/badge.svg)](https://github.com/cboulanger/bibliograph/actions/workflows/run-tests.yml) 
 [![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=panyasan&url=https://github.com/cboulanger/bibliograph&title=Bibliograph&language=javascript&tags=github&category=software)
 
 Bibliograph is a powerful open source web application for the collaborative
@@ -43,13 +43,13 @@ collection, editing and publishing of bibliographic data.
 - Organize bibliographic records in static folders or dynamic collections based 
   on queries;
   
-- Rich metadata, Autocompletion and duplicate detection;
+- Rich metadata, autocompletion and duplicate detection;
 
 - Allows natural language queries like "title contains hamlet and author 
   begins with shake";
 
 - Fine-grained access control system with users, roles, groups and permissions 
-  allows flexible user management and contol of who is allowed to view, enter, 
+  allows flexible user management and control of who is allowed to view, enter, 
   edit and delete data;
 
 - Unlimited amount of separate databases;
@@ -60,12 +60,17 @@ collection, editing and publishing of bibliographic data.
 
 - LDAP integration to connect to existing LDAP servers;  
 
-- Formats bibliographic records with various citation styles (APA, Chicago, ...) 
-  using CSL templates and the citeproc style processor (http://citationstyles.org);
-
 - Ability to create and restore snapshot backups of individual databases;
 
-- Easily extendable with custom plugins.
+- Easily extendable with custom plugins, for example to connect to other bibliographic 
+  databases (experimental support for Zotero is available)
+
+Currently disabled features, can be reimplemented on demand: 
+
+- Formatting of bibliographic records with various citation styles (APA, Chicago, ...)
+  using CSL templates and the citeproc style processor (http://citationstyles.org)
+
+- Duplicate detection and display
 
 ## Prerequisites, Installation and Deployment
 See [here](doc/dev/readme.md).
@@ -75,7 +80,7 @@ See [here](doc/dev/readme.md).
 - Bugs and feature requests should be registered as [github
 issues](https://github.com/cboulanger/bibliograph/issues).
 
-## Development & Roadmap
+## Development 
 
 - You can [hack the code](doc/dev/readme.md) and make it better;
 
