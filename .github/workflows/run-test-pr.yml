@@ -1,10 +1,11 @@
-name: Run Bibliograph tests
+name: Run Bibliograph tests on a PR
 on:
-  push:
+  pull_request:
     branches:
       - master
     paths-ignore:
       - "doc/*"
+      - "package.json"
       - "**.md"
       - "**.js"
 
