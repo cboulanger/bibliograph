@@ -2,7 +2,6 @@
 
 set -a
 source test/.env
-[[ "$GITHUB_WORKFLOW" != "" ]] && source test/.env.github
 # override with user vars
 [[ -f "test/.env.local" ]] && source test/.env.local
 # override with development vars (set dynamically by tests)

@@ -6,7 +6,7 @@ echo ">>> Testing HTTP/PHP service"
 docker exec http_server cat /etc/os-release | grep VERSION=
 
 # ports
-ports='8071 8072 8073 8074'
+ports='8072 8073 8074 8080'
 # Record results of the port test.
 portTestResult=0
 

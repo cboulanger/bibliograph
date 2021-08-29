@@ -1,9 +1,9 @@
 # This most likely doesn't work yet
 name: Deploy to demo server
 on:
-  create:
+  push:
     tags:
-      - '*'
+      - 'v*'
 
 jobs:
   # see https://github.com/marketplace/actions/skip-duplicate-actions
