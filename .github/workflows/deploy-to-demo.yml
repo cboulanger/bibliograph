@@ -34,7 +34,7 @@ jobs:
       - name: Mount workspace dirs into /var/www of http service container
         run: docker exec http_server ln -s /github/workspace/bibliograph/{compiled,dist,src,test} /var/www
       - name: Setup Node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2.4.0
       - name: Install Prerequisites
         run: tool/env/install
       - name: Setup SSH config
