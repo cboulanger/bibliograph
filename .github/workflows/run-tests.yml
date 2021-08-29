@@ -55,10 +55,12 @@ jobs:
       - name: Configure httpd container
         run: |
           docker exec http_server ln -s /github/workspace/bibliograph/{compiled,dist,src,test} /var/www
-          DOCKER_HOST_IP=`docker exec http_server echo -e "$(/sbin/ip route|awk '/default/ { print $3 }')"`
-          echo $DOCKER_HOST_IP
+          #DOCKER_HOST_IP=`docker exec http_server echo -e "$(/sbin/ip route|awk '/default/ { print $3 }')"`
+          DOCKER_HOST_IP=172.17.0.1
+          echo "Docker Host IP: $DOCKER_HOST_IP"
           cp test/.env.github test/.env
           echo "DB_HOST=$DOCKER_HOST_IP" >> test/.env
+          cat test/.env
       - name: Select PHP version
         run: tool/env/select-php-version 8.0
       - name: Check Services
