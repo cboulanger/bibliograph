@@ -60,7 +60,7 @@
   "require-dev": {
     "bizley/migration": "^4.2",
     "codeception/codeception": "^4.1",
-    "codeception/module-asserts": "^1.1",
+    "codeception/module-asserts": "^2.0",
     "codeception/module-phpbrowser": "^1.0.0",
     "codeception/module-rest": "^1.2.0",
     "codeception/module-yii2": "^1.1",
