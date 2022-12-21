@@ -49,7 +49,7 @@
     "rsinger/worldcat-linkeddata-php": "dev-master",
     "symfony/dotenv": "^5.0",
     "toriphes/yii2-console-runner": "^1.2.1",
-    "voku/simple-cache": "^3.1",
+    "voku/simple-cache": "^4.1",
     "yiisoft/yii2": "^2.0.32",
     "yiisoft/yii2-swiftmailer": "^2.1",
     "yosymfony/toml": "^1.0.0",
