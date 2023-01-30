@@ -69,7 +69,7 @@
     "goaop/parser-reflection": "^1.4",
     "graze/guzzle-jsonrpc": "^3.0",
     "insolita/yii2-migration-generator": "^2.3",
-    "phpunit/phpunit": "<7",
+    "phpunit/phpunit": "<9",
     "yiisoft/yii2-faker": "^2.0.0",
     "yiisoft/yii2-gii": "^2.0.0",
     "odannyc/yii2-sse": "^0.1.0",
