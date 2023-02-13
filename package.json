@@ -48,7 +48,7 @@
     "dotenv": "^16.0.2",
     "eslint": "^8.32.0",
     "eslint-plugin-import": "^2.21.2",
-    "json-diff": "^0.7.1",
+    "json-diff": "^1.0.2",
     "tape": "^5.0.1",
     "semver": "^7.3.5"
   },
