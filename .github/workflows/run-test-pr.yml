@@ -54,7 +54,7 @@ jobs:
           - /home/runner/work/bibliograph:/github/workspace
     steps:
       - name: Checkout
-        uses: actions/checkout@v3.3.0
+        uses: actions/checkout@v3.5.0
       - name: Configure httpd container
         run: |
           rm test/.env && cp test/.env.github test/.env
