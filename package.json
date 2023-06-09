@@ -46,7 +46,7 @@
     "@qooxdoo/eslint-plugin-qx": "^1.2.1",
     "array-equal": "^1.0.0",
     "dotenv": "^16.0.2",
-    "eslint": "^8.32.0",
+    "eslint": "^7.32.0",
     "eslint-plugin-import": "^2.21.2",
     "json-diff": "^1.0.3",
     "tape": "^5.0.1",
